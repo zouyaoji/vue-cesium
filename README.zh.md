@@ -18,7 +18,7 @@
 
 ## 文档
 
-[https://zouyaoji.top/vue-baidu-map](https://zouyaoji.top/vue-baidu-map)
+[https://zouyaoji.top/vue-supermap-cesium](https://zouyaoji.top/vue-supermap-cesium)
 
 ## 开始
 

@@ -87,7 +87,7 @@ export default {
 
 ```html
 <template>
-  <sm-viewer :animation="animation" :camera="camera"></baidu-map>
+  <sm-viewer :animation="animation" :camera="camera"></sm-viewer>
 </template>
 <script>
 export default {

@@ -1,7 +1,7 @@
 # VUE SUPERMAP CESIUM
 
 <p align="center">
-  <img src="https://zouyaoji.top/vue-baidu-map/favicon.png" width="200px">
+  <img src="https://zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px">
 </p>
 <p align="center">SuperMap WebGL3D components for Vue 2.x</p>
 
