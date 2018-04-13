@@ -1,0 +1,26 @@
+language: node_js
+node_js:		
+  - "6.7.0"
+addons:
+  apt:
+    packages:
+      - xvfb
+install:
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+  - npm install
+branches:
+  only: master
+script:
+  - npm run lint
+  # - npm test
+  - npm run build:docs
+after_script:
+  - cp ./docs/favicon.png ./dist/
+  - cd dist
+  - git init
+  - git config user.name "zouyaoji"
+  - git config user.email "370681295@qq.com"
+  - git add .
+  - git commit -m "Travis build docs"
+  - git push  --force --quiet "https://${GITHUB_TOKEN}@github.com/zouyaoji/vue-supermap-cesium.git" master:gh-pages
