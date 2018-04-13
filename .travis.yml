@@ -1,6 +1,5 @@
 language: node_js
-node_js:		
-  - "6.7.0"
+node_js: node
 addons:
   apt:
     packages:
@@ -17,7 +16,7 @@ script:
   - npm run build:docs
 after_script:
   - cp ./docs/favicon.png ./dist/
-  - cp -a -r ./docs/Cesium ./dist/Cesium
+  - cp -rf ./docs/Cesium ./dist/
   - cd dist
   - git init
   - git config user.name "zouyaoji"
