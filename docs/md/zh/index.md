@@ -2,7 +2,7 @@
 
 <p align="center"><img src="//zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px"></p>
 
-<p align="center">基于 VUE 2.x 的超图WEBGL组件</p>
+<p align="center">基于 VUE 2.x 的超图WEBGL3D组件</p>
 
 <!-- [![npm](https://img.shields.io/npm/v/vue-baidu-map.svg)]() -->
 <!-- [![Travis](https://img.shields.io/travis/Dafrok/vue-baidu-map.svg)]() -->
