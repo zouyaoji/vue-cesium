@@ -18,7 +18,7 @@
 
 ## Documentation
 
-[https://zouyaoji.top/vue-supermap-cesium](https://zouyaoji.github.io/vue-supermap-cesium)
+[https://zouyaoji.top/vue-supermap-cesium](https://zouyaoji.top/vue-supermap-cesium)
 
 ## Get Start
 

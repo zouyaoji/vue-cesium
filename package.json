@@ -1,7 +1,7 @@
 {
   "name": "vue-supermap-cesium",
   "version": "0.0.1",
-  "description": "Cesium Component for Vue 2.0",
+  "description": "SuperMap Cesium(WebGL3D) Component for Vue 2.0",
   "main": "index.js",
   "scripts": {
     "build:docs": "webpack -p --config ./build/webpack.docs.config.js",

@@ -97,8 +97,8 @@ export default {
           latitude: 30.67,
           height: 2000
         },
-        heading: 6.283185307179586,
-        pitch: -1.5707963267948966,
+        heading: 360,
+        pitch: -90,
         roll: 0
       },
       animation: false
@@ -130,8 +130,8 @@ export default {
           latitude: 30.67,
           height: 2000
         },
-        heading: 6.283185307179586,
-        pitch: -1.5707963267948966,
+        heading: 360,
+        pitch: -90,
         roll: 0
       },
       animation: false
