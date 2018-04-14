@@ -17,7 +17,7 @@ import './fonts/iconfont.css'
 Vue.use(VueMaterial)
 Vue.use(VueRouter)
 Vue.use(SuperMapCesium, {
-  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium/Cesium'
+  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium'
 })
 
 Vue.material.registerTheme({
