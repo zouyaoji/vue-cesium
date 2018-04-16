@@ -2,13 +2,17 @@
 
 <p align="center"><img src="//zouyaoji.github.io/vue-supermap-cesium/favicon.png" width="200px"></p>
 
-<p align="center">SuperMap WebGL3D components for Vue 2.x</p>
+<p align="center">SuperMap iClient 3D for WebGL(built on Cesium) components for Vue 2.x</p>
 
-<!-- [![npm](https://img.shields.io/npm/v/vue-baidu-map.svg)]()
-[![Travis](https://img.shields.io/travis/Dafrok/vue-baidu-map.svg)]()
-[![license](https://img.shields.io/github/license/dafrok/vue-baidu-map.svg)]()
-[![Package Quality](https://camo.githubusercontent.com/288996eeba7c6433cb9a72caf2385913f2ceebb2/687474703a2f2f6e706d2e7061636b6167657175616c6974792e636f6d2f736869656c642f7675652d62616964752d6d61702e737667)](http://packagequality.com/#?package=vue-baidu-map)
-[![npm](https://img.shields.io/npm/dm/vue-baidu-map.svg)]() -->
+[![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-supermap-cesium.svg)](http://packagequality.com/#?package=vue-supermap-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-supermap-cesium.svg)]()
+[![license](https://img.shields.io/github/license/zouyaoji/vue-supermap-cesium.svg)]()
+
+## Introduction
+
+SuperMap iClient 3D for WebGL, which is built on Cesium, allows users to upload and visualize a variety of 3D data types, including BIM, point clouds, 3ds max models, and oblique photographic models. Users can take advantage of the application’s measurement tools, including measuring length, area, and height. The application also offers analysis, such as viewshed, line of sight, and skyline.
 
 ## Contributing
 

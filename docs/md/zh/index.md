@@ -2,13 +2,29 @@
 
 <p align="center"><img src="//zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px"></p>
 
-<p align="center">基于 VUE 2.x 的超图WEBGL3D组件</p>
+<p align="center">基于 VUE 2.x 的 SuperMap iClient 3D for WebGL(built on Cesium)组件</p>
 
-<!-- [![npm](https://img.shields.io/npm/v/vue-baidu-map.svg)]() -->
-<!-- [![Travis](https://img.shields.io/travis/Dafrok/vue-baidu-map.svg)]() -->
-<!-- [![license](https://img.shields.io/github/license/dafrok/vue-baidu-map.svg)]() -->
-<!-- [![Package Quality](https://camo.githubusercontent.com/288996eeba7c6433cb9a72caf2385913f2ceebb2/687474703a2f2f6e706d2e7061636b6167657175616c6974792e636f6d2f736869656c642f7675652d62616964752d6d61702e737667)](http://packagequality.com/#?package=vue-baidu-map) -->
-<!-- [![npm](https://img.shields.io/npm/dm/vue-baidu-map.svg)]() -->
+[![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-supermap-cesium.svg)](http://packagequality.com/#?package=vue-supermap-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-supermap-cesium.svg)]()
+[![license](https://img.shields.io/github/license/zouyaoji/vue-supermap-cesium.svg)]()
+
+## 介绍
+
+<p style="text-indent:2em;">SuperMap iClient 3D for WebGL 一款在服务式 GIS 架构体系中， 无任何插件，跨浏览器的客户端产品。它基于Cesium开源框架,面向 HTML 5 的三维应用开发，快速构建内容丰富、响应迅速、体验流畅的三维真空间应用。支持加载：</p>
+
+- SuperMap iServer 服务
+- 地图服务
+- 数据服务
+- 量算服务
+- 查询服务
+- 空间关系服务
+- 专题图服务
+- 空间分析服务类
+- SuperMap 云服务
+- OGC 标准的服务 (WMS、WFS、WMTS、KML)
+- 其他第三方服务，如天地图等
 
 ## 贡献
 

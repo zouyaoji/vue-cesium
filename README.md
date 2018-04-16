@@ -3,13 +3,13 @@
 <p align="center">
   <img src="https://zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px">
 </p>
-<p align="center">SuperMap WebGL3D components for Vue 2.x</p>
+<p align="center">SuperMap iClient 3D for WebGL(built on Cesium) components for Vue 2.x</p>
 
-<!-- [![npm](https://img.shields.io/npm/v/vue-baidu-map.svg)]()
-[![Travis](https://img.shields.io/travis/Dafrok/vue-baidu-map.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-baidu-map.svg)](http://packagequality.com/#?package=vue-baidu-map)
-[![npm](https://img.shields.io/npm/dm/vue-baidu-map.svg)]()
-[![license](https://img.shields.io/github/license/dafrok/vue-baidu-map.svg)]() -->
+[![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-supermap-cesium.svg)](http://packagequality.com/#?package=vue-supermap-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-supermap-cesium.svg)]()
+[![license](https://img.shields.io/github/license/zouyaoji/vue-supermap-cesium.svg)]()
 
 ## Languages
 
@@ -35,10 +35,12 @@ import Vue from 'vue'
 import SuperMapCesium from 'vue-supermap-cesium'
 
 Vue.use(SuperMapCesium, {
-  // cesiumPath 是指引用的Cesium的文件夹路径， 如
-  // cesiumPath: './statics/Cesium' ， 或者在线引用
+  // cesiumPath is the path of the Cesium library, such as
+  // cesiumPath: './statics/Cesium'
+  // use online reference for http
   // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
-  cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
+  // use online reference for https
+  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium'
 })
 ```
 
@@ -46,10 +48,10 @@ Vue.use(SuperMapCesium, {
 
 ```vue
 <template>
-<div class="content">
-  <sm-viewer>
-  </sm-viewer>
-</div>
+  <div class="content">
+    <sm-viewer>
+    </sm-viewer>
+  </div>
 </template>
 
 <style>
