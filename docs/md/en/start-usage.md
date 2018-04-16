@@ -11,10 +11,12 @@ import Vue from 'vue'
 import SuperMapCesium from 'vue-supermap-cesium'
 
 Vue.use(SuperMapCesium, {
-  // cesiumPath 是指引用的Cesium的文件夹路径， 如
-  // cesiumPath: './statics/Cesium' ， 或者在线引用
+  // cesiumPath is the path of the Cesium library, such as
+  // cesiumPath: './statics/Cesium'
+  // use online reference for http
   // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
-  cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
+  // use online reference for https
+  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium'
 })
 ```
 
