@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px">
 </p>
-<p align="center">基于 VUE 2.x 的超图三维场景组件</p>
+<p align="center">基于 VUE 2.x 的 SuperMap iClient 3D for WebGL(built on Cesium)组件</p>
 
 [![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
