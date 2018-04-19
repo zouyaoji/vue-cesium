@@ -4,25 +4,29 @@ import Issues from './components/Issues.vue'
 
 const langs = ['zh', 'en']
 
-const genRouteMap = (routeMap, lang, isChild) => routeMap.reduce((res, item) => {
-  const route = {
-    path: isChild ? item.path : `/${lang}/${item.path}`,
-    name: item.name[lang],
-    component: typeof item.component === 'string' ? () => import(`./md/${lang}/${item.component}.md`) : item.component,
-    meta: Object.assign({lang}, item.meta),
-    children: genRouteMap(item.children || [], lang, true)
-  }
-  res.push(route)
-  return res
-}, [])
+const genRouteMap = (routeMap, lang, isChild) =>
+  routeMap.reduce((res, item) => {
+    const route = {
+      path: isChild ? item.path : `/${lang}/${item.path}`,
+      name: item.name[lang],
+      component:
+        typeof item.component === 'string'
+          ? () => import(`./md/${lang}/${item.component}.md`)
+          : item.component,
+      meta: Object.assign({ lang }, item.meta),
+      children: genRouteMap(item.children || [], lang, true)
+    }
+    res.push(route)
+    return res
+  }, [])
 
 const routeMap = [
   {
     // 首页
     path: 'index',
     name: {
-      'zh': '文档',
-      'en': 'Documentation'
+      zh: '文档',
+      en: 'Documentation'
     },
     component: 'index',
     meta: {
@@ -71,7 +75,7 @@ const routeMap = [
         }
       }
     ]
-  }
+  },
   // {
   //   // 指南
   //   path: 'guide',
@@ -91,32 +95,24 @@ const routeMap = [
   //     }
   //   ]
   // },
-  // {
-  //   path: 'map',
-  //   name: {
-  //     zh: '地图',
-  //     en: 'Map'
-  //   },
-  //   component: CateView,
-  //   children: [
-  //     {
-  //       path: 'baidu-map',
-  //       component: 'baidu-map',
-  //       name: {
-  //         zh: '地图容器',
-  //         en: 'Map Container'
-  //       }
-  //     },
-  //     {
-  //       path: 'bm-view',
-  //       component: 'bm-view',
-  //       name: {
-  //         zh: '地图视图',
-  //         en: 'Map View'
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: 'viewer',
+    name: {
+      zh: '场景',
+      en: 'Viewer'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'sm-viewer',
+        component: 'sm-viewer',
+        name: {
+          zh: '场景容器',
+          en: 'viewer'
+        }
+      }
+    ]
+  }
   // {
   //   path: 'control',
   //   name: {

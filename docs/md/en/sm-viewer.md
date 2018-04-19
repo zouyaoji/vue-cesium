@@ -1,13 +1,11 @@
-# 场景容器
+# SmViewer
 
-`SmViewer`是用于构建 Cesium 应用程序的基础部件，它将所有标准的 Cesium 部件组合成一个可重复使用的包。 此部件通常可以利用 mixin 来扩展，以此增加对各种应用程序有用的功能函数。\
-场景容器的实质是通过 Cesium.Viewer 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者组件。此部件初始化完成后默认会有 Cesiumwidget, dataSources、 如果需要二次开发或者手动控制其子组件，可以在 `ready` 事件中使用返回的 `Cesium` 和 `Viewer` 实例进行手动控制。
+`SmViewer` is a container of Cesium core class and instance. It's the root component of other components of vue-supermap-cesium.\
+The container is an empty DOM node which used to mount other components or DOM nodes.
 
-每一个 Viewer 都会自动初始化一个 CesiumWidget.
+## Instance Properties
 
-## 实例属性
-
-### 静态属性
+### Static Properties
 
 仅且可以初始化配置，不支持响应式。
 
@@ -45,36 +43,38 @@
 
 ---
 
-### 响应式属性
+### Responsive Properties
 
-可以初始化配置，也支持响应式。
+可以初始化配置，支持响应式。
 
 ---
 
 | Name                 | Type      | Default           | Description                                                                                         |
 | -------------------- | --------- | ----------------- | --------------------------------------------------------------------------------------------------- |
-| selectionIndicator   | Boolean   | true              | `optional` 是否显示选择指示符                                                                       |
-| infoBox              | Boolean   | true              | `optional` 是否显示信息框                                                                           |
-| geocoder             | Boolean   | false             | `optional` 是否显示地理编码器搜索框                                                                 |
-| homeButton           | Boolean   | false             | `optional` 是否显示主页按钮                                                                         |
-| sceneModePicker      | Boolean   | false             | `optional` 是否显示场景模式切换按钮                                                                 |
-| projectionPicker     | Boolean   | false             | `optional` 是否显示投影切换按钮                                                                     |
-| baseLayerPicker      | Boolean   | false             | `optional` 是否显示基础图层切换按钮                                                                 |
-| navigationHelpButton | Boolean   | false             | `optional` 是否显示导航帮助按钮                                                                     |
-| animation            | Boolean   | false             | `optional` 是否显示动画控件                                                                         |
-| timeline             | Boolean   | false             | `optional` 是否显示时间轴控件                                                                       |
-| fullscreenButton     | Boolean   | false             | `optional` 是否显示全屏切换按钮                                                                     |
-| vrButton             | Boolean   | false             | `optional` 是否显示 VR 功能按钮                                                                     |
-| navigation           | Boolean   | false             | `optional` 是否显示导航控件                                                                         |
-| sceneMode            | SceneMode | SceneMode.SCENE3D | `optional` 场景模式.                                                                                |
+| selectionIndicator   | Boolean   | true              | `optional` If set to false, the SelectionIndicator widget will not be created.                      |
+| infoBox              | Boolean   | true              | `optional` If set to false, the InfoBox widget will not be created.                                 |
+| geocoder             | Boolean   | false             | `optional` If set to false, the Geocoder widget will not be created.                                |
+| homeButton           | Boolean   | true              | `optional` If set to false, the HomeButton widget will not be created.                              |
+| sceneModePicker      | Boolean   | false             | `optional` If set to false, the SceneModePicker widget will not be created.                         |
+| projectionPicker     | Boolean   | false             | `optional` If set to true, the ProjectionPicker widget will be created.                             |
+| baseLayerPicker      | Boolean   | false             | `optional` If set to false, the BaseLayerPicker widget will not be created.                         |
+| navigationHelpButton | Boolean   | false             | `optional` If set to false, the navigation help button will not be created.                         |
+| animation            | Boolean   | false             | `optional` If set to false, the Animation widget will not be created.                               |
+| timeline             | Boolean   | false             | `optional` If set to false, the Timeline widget will not be created.                                |
+| fullscreenButton     | Boolean   | false             | `optional` If set to false, the FullscreenButton widget will not be created.                        |
+| vrButton             | Boolean   | false             | `optional` If set to true, the VRButton widget will be created.                                     |
+| navigation           | Boolean   | false             | `optional` If set to true, the Navigation widget will be created.                                   |
+| sceneMode            | SceneMode | SceneMode.SCENE3D | `optional` The initial scene mode.                                                                  |
 | shouldAnimate        | Boolean   | false             | `optional` true if the clock should attempt to advance simulation time by default, false otherwise. |
-| terrainExaggeration  | Number    | 1.0               | `optional` 地形缩放比例                                                                             |
-| shadows              | Boolean   | false             | `optional` 是否显示太阳阴影                                                                         |
-| camera               | Object    |                   | `optional` 场景相机位置.                                                                            |
+| terrainExaggeration  | Number    | 1.0               | `optional` A scalar used to exaggerate the terrain.                                                 |
+| shadows              | Boolean   | false             | `optional` Determines if shadows are cast by the sun.                                               |
+| camera               | Object    |                   | `optional` sets the camera of scene.                                                                 |
 
 ---
 
 ## 事件
+
+Viewer 是个基础部件，除了能够响应自己的事件外，把 dataSources, entities, imageryLayers, scene 等属性的事件也挂这儿，方便使用。
 
 | 事件名                | 参数       | 描述                               | 来源   |
 | --------------------- | ---------- | ---------------------------------- | ------ |

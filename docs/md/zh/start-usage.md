@@ -189,7 +189,7 @@ export default {
 
 <doc-preview>
   <template>
-    <sm-viewer class="viewer" :animation="true" :camera="camera" >
+    <sm-viewer class="viewer" :animation="true" :camera="camera" @ready="ready">
     </sm-viewer>
   </template>
   <script>
@@ -200,12 +200,42 @@ export default {
           position: {
             longitude: 104.06,
             latitude: 30.67,
-            height: 1000
+            height: 100000
           },
           heading: 360,
           pitch: -90,
           roll: 0
         }
+      }
+    },
+    methods: {
+      ready (param) {
+        let imageryLayers = param.viewer.imageryLayers
+           let imagery = new Cesium.TiandituImageryProvider({
+            mapStyle : Cesium.TiandituMapsStyle.IMG_C
+        })
+        imageryLayers.addImageryProvider(imagery)
+        let labelImagery = new Cesium.TiandituImageryProvider({
+            mapStyle : Cesium.TiandituMapsStyle.CIA_C
+        })
+        imageryLayers.addImageryProvider(labelImagery)
+        param.viewer.entities.add({
+          id: '成都欢迎你',
+          position: param.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new param.Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-supermap-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new param.Cesium.LabelGraphics ({
+            text: 'Hello Word',
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
       }
     }
   }

@@ -70,9 +70,12 @@ Vue.use(SuperMapCesium, {
 
 [Contributing Guide](https://github.com/zouyaoji/vue-supermap-cesium/blob/master/CONTRIBUTING.md)
 
-
 ## License
 
 [MIT License](https://opensource.org/licenses/MIT)
 
 Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
+
+## Thanks
+
+I referenced a lot from the [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) project. Thanks very much!

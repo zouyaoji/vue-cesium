@@ -1,5 +1,5 @@
 import { version } from '../package.json'
-import SmViewer from './cesium/viewer.vue'
+import SmViewer from './viewer/viewer.vue'
 export default {
   install (Vue, options) {
     const { cesiumPath } = options
