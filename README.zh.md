@@ -1,50 +1,50 @@
 # VUE SUPERMAP CESIUM
 
 <p align="center">
-  <img src="https://zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px">
+  <img src="https://zouyaoji.top/vue-cesium/favicon.png" width="200px">
 </p>
-<p align="center">基于 VUE 2.x 的 SuperMap iClient 3D for WebGL(built on Cesium)组件</p>
+<p align="center">加载Cesium官方离线包或者其他第三方Cesium包（如超图WebGL包）到Vue组件。</p>
 
-[![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
-[![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-supermap-cesium.svg)](http://packagequality.com/#?package=vue-supermap-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-supermap-cesium.svg)]()
-[![license](https://img.shields.io/github/license/zouyaoji/vue-supermap-cesium.svg)]()
+[![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
+[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
 
 ## 语言
 
-- [中文](https://github.com/zouyaoji/vue-supermap-cesium/blob/master/README.zh.md)
-- [English](https://github.com/zouyaoji/vue-supermap-cesium/blob/master/README.md)
+- [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
+- [English](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
 
 ## 文档
 
-[https://zouyaoji.top/vue-supermap-cesium](https://zouyaoji.top/vue-supermap-cesium)
+[https://zouyaoji.top/vue-cesium](https://zouyaoji.top/vue-cesium)
 
 ## 开始
 
 打包后的Cesium没办法再通过import方式直接导入到项目中，详见[ISSUE](https://github.com/AnalyticalGraphicsInc/cesium/issues/5278)。故造此轮子可以把打包后的Cesium以动态形式引入你的Vue项目。
 
-本人工作目前主要弄CS项目，此项目更新得慢，请谅解。
+本人工作目前主要弄CS项目，此项目更新得慢，有啥问题可以直接联系我沟通。
 
 ### 安装
 
 ```bash
-npm i --save vue-supermap-cesium
+npm i --save vue-cesium
 ```
 
 ### 初始化
 
 ```javascript
 import Vue from 'vue'
-import SuperMapCesium from 'vue-supermap-cesium'
+import VueCesium from 'vue-cesium'
 
-Vue.use(SuperMapCesium, {
+Vue.use(VueCesium, {
   // cesiumPath 是指引用的Cesium的文件夹路径， 如
   // cesiumPath: './statics/Cesium'
   // 或者在线引用(http)
   // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
   // 在线引用(https)
-  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium'
 })
 ```
 
@@ -53,8 +53,8 @@ Vue.use(SuperMapCesium, {
 ```vue
 <template>
   <div class="content">
-    <sm-viewer>
-    </sm-viewer>
+    <cesium-viewer>
+    </cesium-viewer>
   </div>
 </template>
 
@@ -72,7 +72,7 @@ Vue.use(SuperMapCesium, {
 
 ## 贡献
 
-[贡献指南](https://github.com/zouyaoji/vue-supermap-cesium/blob/master/CONTRIBUTING.md)
+[贡献指南](https://github.com/zouyaoji/vue-cesium/blob/master/CONTRIBUTING.md)
 
 ## 协议
 

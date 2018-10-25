@@ -1,18 +1,18 @@
 # VUE SUPERMAP CESIUM
 
-<p align="center"><img src="//zouyaoji.top/vue-supermap-cesium/favicon.png" width="200px"></p>
+<p align="center"><img src="//zouyaoji.top/vue-cesium/favicon.png" width="200px"></p>
 
-<p align="center">基于 VUE 2.x 的 SuperMap iClient 3D for WebGL(built on Cesium)组件</p>
+<p align="center">加载Cesium官方离线包或者其他第三方Cesium包（如超图WebGL包）到Vue组件。</p>
 
-[![npm](https://img.shields.io/npm/v/vue-supermap-cesium.svg)]()
-[![Travis](https://img.shields.io/travis/zouyaoji/vue-supermap-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-supermap-cesium.svg)](http://packagequality.com/#?package=vue-supermap-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-supermap-cesium.svg)]()
-[![license](https://img.shields.io/github/license/zouyaoji/vue-supermap-cesium.svg)]()
+[![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
+[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
 
 ## 介绍
 
-<p style="text-indent:2em;">SuperMap iClient 3D for WebGL 一款在服务式 GIS 架构体系中， 无任何插件，跨浏览器的客户端产品。它基于Cesium开源框架,面向 HTML 5 的三维应用开发，快速构建内容丰富、响应迅速、体验流畅的三维真空间应用。支持加载：</p>
+<p style="text-indent:2em;">加载Cesium官方离线包或者其他第三方Cesium包（如超图WebGL包）到Vue组件。我主要用来加载超图WebGL：</p>
 
 - SuperMap iServer 服务
 - 地图服务
@@ -28,7 +28,7 @@
 
 ## 贡献
 
-[贡献指南](https://github.com/zouyaoji/vue-supermap-cesium/blob/master/CONTRIBUTING.md)
+[贡献指南](https://github.com/zouyaoji/vue-cesium/blob/master/CONTRIBUTING.md)
 
 ## 协议
 

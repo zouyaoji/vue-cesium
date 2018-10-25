@@ -1,23 +1,23 @@
 <template lang="pug">
-div
-  md-whiteframe(md-tag="md-toolbar").top
-    .md-toolbar-container
-      md-button.menu-button.md-icon-button(@click="$refs.sidenav.toggle()")
-        md-icon menu
-      span.md-title(v-text="title") VUE SUPERMAP CESIUM
-      md-button.md-icon-button
-        router-link.link(:to="`/${otherLang}/index`", @click="changeLang")
-        md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
-      md-button.md-icon-button(href="https://github.com/zouyaoji/vue-supermap-cesium")
-        md-icon(md-iconset="iconfont icon-github")
-  md-sidenav.md-left.md-fixed.main-nav(ref="sidenav")
-    md-toolbar(md-theme="white").logo
-      router-link.link(:to="`/`")
-        img(src="//zouyaoji.top/vue-supermap-cesium/favicon.png")
-        div Vue SuperMap Cesium
-    slot(name="side-nav")
-  .page-content
-    slot(name="page-content")
+  div
+    md-whiteframe(md-tag="md-toolbar").top
+      .md-toolbar-container
+        md-button.menu-button.md-icon-button(@click="$refs.sidenav.toggle()")
+          md-icon menu
+        span.md-title(v-text="title") VUE CESIUM
+        md-button.md-icon-button
+          router-link.link(:to="`/${otherLang}/index`", @click="changeLang")
+          md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
+        md-button.md-icon-button(href="https://github.com/zouyaoji/vue-cesium")
+          md-icon(md-iconset="iconfont icon-github")
+    md-sidenav.md-left.md-fixed.main-nav(ref="sidenav")
+      md-toolbar(md-theme="white").logo
+        router-link.link(:to="`/`")
+          img(src="//zouyaoji.top/vue-cesium/favicon.png")
+          div Vue Cesium
+      slot(name="side-nav")
+    .page-content
+      slot(name="page-content")
 </template>
 
 <style lang="stylus" scoped>

@@ -2,19 +2,19 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-04-13 14:05:24
+ * @Last Modified time: 2018-10-25 14:10:25
  */
 
 <template>
-  <div id="cesiumContainer" ref="viewer" style="width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden">
+  <div id="cesiumContainer" ref="viewer">
     <slot></slot>
   </div>
 </template>
 
 <script>
   import bindEvents from '../base/bindEvent'
-  import {getDocumentByClassName} from '../base/util'
-  import {createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels} from '../base/providerViewModels'
+  import { getDocumentByClassName } from '../base/util'
+  import { createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels } from '../base/providerViewModels'
   // const sceneEventList = [
   //   'morphComplete',
   //   'morphStart',
@@ -29,7 +29,7 @@
   //   'dataSourceRemoved'
   // ]
   export default {
-    name: 'sm-viewer',
+    name: 'cesium-viewer',
     props: {
       cesiumPath: {
         type: String
@@ -233,7 +233,7 @@
         }
       },
       geocoder (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.geocoder) && !viewer.geocoder.isDestroyed() && !val) {
           viewer.geocoder.destroy()
@@ -256,7 +256,7 @@
         }
       },
       homeButton (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.homeButton) && !viewer.homeButton.isDestroyed() && !val) {
           viewer.homeButton.destroy()
@@ -278,7 +278,7 @@
         }
       },
       sceneModePicker (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.sceneModePicker) && !viewer.sceneModePicker.isDestroyed() && !val) {
           viewer.sceneModePicker.destroy()
@@ -295,7 +295,7 @@
         }
       },
       projectionPicker (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.projectionPicker) && !viewer.projectionPicker.isDestroyed() && !val) {
           viewer.projectionPicker.destroy()
@@ -307,7 +307,7 @@
         }
       },
       baseLayerPicker (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.baseLayerPicker) && !viewer.baseLayerPicker.isDestroyed() && !val) {
           viewer.baseLayerPicker.destroy()
@@ -378,7 +378,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       navigationHelpButton (val) {
-        const {Cesium, viewer, resizeToolbar} = this
+        const { Cesium, viewer, resizeToolbar } = this
         let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
         if (Cesium.defined(viewer.navigationHelpButton) && !viewer.navigationHelpButton.isDestroyed() && !val) {
           viewer.navigationHelpButton.destroy()
@@ -406,7 +406,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       animation (val) {
-        const {Cesium, viewer, viewerContainer, resizeControl} = this
+        const { Cesium, viewer, viewerContainer, resizeControl } = this
         if (Cesium.defined(viewer.animation) && !viewer.animation.isDestroyed() && !val) {
           viewer.animation.destroy()
           let animationContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-animationContainer')
@@ -434,7 +434,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       timeline (val) {
-        const {Cesium, viewer, viewerContainer, onTimelineScrubfunction, resizeControl} = this
+        const { Cesium, viewer, viewerContainer, onTimelineScrubfunction, resizeControl } = this
         if (Cesium.defined(viewer.timeline) && !viewer.timeline.isDestroyed() && !val) {
           viewer.timeline.destroy()
           viewer._timeline = undefined
@@ -453,7 +453,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       fullscreenButton (val) {
-        const {Cesium, viewer, viewerContainer, resizeControl} = this
+        const { Cesium, viewer, viewerContainer, resizeControl } = this
         if (Cesium.defined(viewer.fullscreenButton) && !viewer.fullscreenButton.isDestroyed() && !val) {
           viewer.fullscreenButton.destroy()
           viewer._fullscreenButton = undefined
@@ -470,7 +470,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       'viewer.fullscreenButton.viewModel.isFullscreenEnabled' (val) {
-        const {Cesium, viewer} = this
+        const { Cesium, viewer } = this
         if (viewer.fullscreenButton) {
           viewer.fullscreenButton.container.style.display = val ? 'block' : 'none'
           let right = 0
@@ -487,7 +487,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       vrButton (val) {
-        const {Cesium, viewer, viewerContainer, resizeControl, enableVRUI} = this
+        const { Cesium, viewer, viewerContainer, resizeControl, enableVRUI } = this
         if (Cesium.defined(viewer.vrButton) && !viewer.vrButton.isDestroyed() && !val) {
           viewer.vrButton.destroy()
           viewer._vrButton = undefined
@@ -509,7 +509,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       'viewer.vrButton.viewModel.isVREnabled' (val) {
-        const {Cesium, viewer} = this
+        const { Cesium, viewer } = this
         if (viewer.vrButton) {
           viewer.vrButton.container.style.display = val ? 'block' : 'none'
           let right = 0
@@ -524,7 +524,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       navigation (val) {
-        const {Cesium, viewer, viewerContainer, resizeControl} = this
+        const { Cesium, viewer, viewerContainer, resizeControl } = this
         if (Cesium.defined(viewer.navigation) && !val) {
           viewer.navigation.viewModel.eventHelper.removeAll()
           Cesium.destroyObject(viewer.navigation.viewModel)
@@ -535,13 +535,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           let navigationContainer = document.createElement('div')
           navigationContainer.className = 'cesium-viewer-navigationContainer'
           viewerContainer.appendChild(navigationContainer)
-          let navigation = new Cesium.Navigation({container: navigationContainer, viewer: viewer, scene: viewer.scene})
+          let navigation = new Cesium.Navigation({ container: navigationContainer, viewer: viewer, scene: viewer.scene })
           viewer._navigation = navigation
           resizeControl()
         }
       },
       sceneMode (val) {
-        const {Cesium, viewer} = this
+        const { Cesium, viewer } = this
         if (Cesium.SceneMode.COLUMBUS_VIEW === val ||
           Cesium.SceneMode.MORPHING === val ||
           Cesium.SceneMode.SCENE2D === val ||
@@ -550,15 +550,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       shouldAnimate (val) {
-        const {viewer} = this
+        const { viewer } = this
         viewer.clock.shouldAnimate = val
       },
       terrainExaggeration (val) {
-        const {viewer} = this
+        const { viewer } = this
         viewer.scene._terrainExaggeration = val
       },
       shadows (val) {
-        const {viewer} = this
+        const { viewer } = this
         viewer.scene.shadowMap.enabled = val
       },
       'camera': {
@@ -618,7 +618,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       },
       resizeControl () {
-        const {Cesium, viewer, viewerContainer} = this
+        const { Cesium, viewer, viewerContainer } = this
         let animationExists = Cesium.defined(viewer._animation)
         let timelineExists = Cesium.defined(viewer._timeline)
         let timeline = viewer._timeline
@@ -831,7 +831,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
           }
         }
-        this.$emit('ready', {Cesium, viewer})
+        this.$emit('ready', { Cesium, viewer })
         this.viewerContainer = this.$refs.viewer.firstChild
         this.resizeControl()
         window.someObject = this.someObject

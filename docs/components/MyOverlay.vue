@@ -21,8 +21,8 @@ export default {
     handleClick () {
       global.alert('Well done.')
     },
-    draw ({el, BMap, map}) {
-      const {lng, lat} = this.position
+    draw ({ el, BMap, map }) {
+      const { lng, lat } = this.position
       const pixel = map.pointToOverlayPixel(new BMap.Point(lng, lat))
       el.style.left = pixel.x - 60 + 'px'
       el.style.top = pixel.y - 20 + 'px'

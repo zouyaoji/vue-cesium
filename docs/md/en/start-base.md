@@ -4,7 +4,7 @@
 
 |name|parameter|description|
 |---|------|---|
-|ready |{Cesium, viewer}|Triggers when viewer is ready. It returns a core class of Cesium and a instance which is binding on the component `SmViewer`. Please **DON'T** access the core class and the instance in lifecycle.|
+|ready |{Cesium, viewer}|Triggers when viewer is ready. It returns a core class of Cesium and a instance which is binding on the component `CesiumViewer`. Please **DON'T** access the core class and the instance in lifecycle.|
 
 ## Global Component Instance Methods
 

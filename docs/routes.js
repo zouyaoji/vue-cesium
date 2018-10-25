@@ -104,8 +104,8 @@ const routeMap = [
     component: CateView,
     children: [
       {
-        path: 'sm-viewer',
-        component: 'sm-viewer',
+        path: 'cesium-viewer',
+        component: 'cesium-viewer',
         name: {
           zh: '场景容器',
           en: 'viewer'

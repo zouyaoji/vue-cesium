@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './components/App.vue'
 import routes from './routes'
-import SuperMapCesium from '../components/index.js'
+import VueCesium from '../components/index.js'
 import DocPreview from './components/DocPreview.vue'
 import TextField from './components/TextField.vue'
 import VueMaterial from 'vue-material'
@@ -16,8 +16,8 @@ import './fonts/iconfont.css'
 
 Vue.use(VueMaterial)
 Vue.use(VueRouter)
-Vue.use(SuperMapCesium, {
-  cesiumPath: 'https://zouyaoji.top/vue-supermap-cesium'
+Vue.use(VueCesium, {
+  cesiumPath: 'https://zouyaoji.top/vue-cesium'
 })
 
 Vue.material.registerTheme({

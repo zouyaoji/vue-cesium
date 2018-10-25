@@ -168,21 +168,21 @@ export default {
     },
     openIssue () {
       let isValid = true
-      const {issueType, content, formTypes, formData, openDialog} = this
+      const { issueType, content, formTypes, formData, openDialog } = this
       const data = formData[formTypes[issueType].name]
       for (const key in data) {
         if (!data[key]) {
           isValid = false
         }
       }
-      const url = 'https://github.com/zouyaoji/vue-supermap-cesium/issues/new?title=' + encodeURIComponent(data.title) + '&body=' + encodeURIComponent(content)
+      const url = 'https://github.com/zouyaoji/vue-cesium/issues/new?title=' + encodeURIComponent(data.title) + '&body=' + encodeURIComponent(content)
       isValid ? global.open(url) : openDialog('dialog')
     }
   },
   computed: {
     content () {
       let lines = []
-      const {formTypes, issueType, formData} = this
+      const { formTypes, issueType, formData } = this
       const formType = formTypes[issueType]
       formType.items.forEach(item => {
         if (item.name === 'title') {

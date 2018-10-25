@@ -1,11 +1,10 @@
 const path = require('path')
-
 module.exports = {
   entry: './components/index.js',
   output: {
     path: path.resolve(__dirname, './'),
     filename: '../index.js',
-    library: 'SuperMapCesium',
+    library: 'VueCesium',
     libraryTarget: 'umd'
   },
   module: {

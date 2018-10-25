@@ -3,7 +3,7 @@
 ## NPM
 
 ```bash
-$ npm install vue-supermap-cesium --save
+$ npm install vue-cesium --save
 ```
 
 ## CDN

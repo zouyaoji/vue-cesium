@@ -1,12 +1,14 @@
 import { version } from '../package.json'
-import SmViewer from './viewer/viewer.vue'
+import CesiumViewer from './viewer/viewer.vue'
 export default {
   install (Vue, options) {
     const { cesiumPath } = options
     Vue.prototype._Cesium = () => ({ cesiumPath })
-    Vue.component('sm-viewer', SmViewer)
+    Vue.component('cesium-viewer', CesiumViewer)
   },
   version
 }
 
-export { SmViewer }
+export {
+  CesiumViewer
+}

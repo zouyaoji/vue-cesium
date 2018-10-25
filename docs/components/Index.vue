@@ -1,8 +1,8 @@
 <template lang="pug">
 section.index
   .content
-    img(src='//zouyaoji.top/vue-supermap-cesium/favicon.png')
-    h1 Vue SuperMap Cesium
+    img(src='//zouyaoji.top/vue-cesium/favicon.png')
+    h1 Vue Cesium
     .links
       router-link(to="/zh/index") 中文
       router-link(to="/en/index") English

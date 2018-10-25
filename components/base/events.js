@@ -1,9 +1,9 @@
 export default {
-  'sm-viewer': [
+  'cesium-viewer': [
     'selectedEntityChanged',
     'trackedEntityChanged'
   ],
-  'sm-cesiumWidget': [
+  'cesium-cesiumWidget': [
     'morphComplete',
     'morphStart',
     'postRender',

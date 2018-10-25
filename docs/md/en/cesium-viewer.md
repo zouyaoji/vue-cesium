@@ -1,6 +1,6 @@
-# SmViewer
+# CesiumViewer
 
-`SmViewer` is a container of Cesium core class and instance. It's the root component of other components of vue-supermap-cesium.\
+`CesiumViewer` is a container of Cesium core class and instance. It's the root component of other components of vue-cesium.\
 The container is an empty DOM node which used to mount other components or DOM nodes.
 
 ## Instance Properties
@@ -74,7 +74,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 
 ## 事件
 
-Viewer 是个基础部件，除了能够响应自己的事件外，把 dataSources, entities, imageryLayers, scene 等属性的事件也挂这儿，方便使用。
+`CesiumViewer` 是个基础部件，除了能够响应自己的事件外，把 dataSources, entities, imageryLayers, scene 等属性的事件也挂这儿，方便使用。
 
 | 事件名                | 参数       | 描述                               | 来源   |
 | --------------------- | ---------- | ---------------------------------- | ------ |
