@@ -1,4 +1,4 @@
-# VUE SUPERMAP CESIUM
+# VUE CESIUM
 
 <p align="center"><img src="//zouyaoji.top/vue-cesium/favicon.png" width="200px"></p>
 
