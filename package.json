@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Load the Cesium official offline package or other third-party Cesium packages (such as the SuperMap WebGL package) to the Vue component.",
   "main": "index.js",
   "scripts": {

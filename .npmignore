@@ -1,4 +1,8 @@
+build
+components
 dist
 docs
 coverage
 .babelrc
+.travis.yml
+CONTRIBUTING.md
