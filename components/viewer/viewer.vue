@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-10-25 14:10:25
+ * @Last Modified time: 2018-10-30 11:45:05
  */
 
 <template>
@@ -864,11 +864,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             $script.src = `${cesiumPath}Cesium.js`
             $script.onload = function () {
               global._initCesium()
-            }
 
-            const $scriptZlib = document.createElement('script')
-            global.document.body.appendChild($scriptZlib)
-            $scriptZlib.src = `${cesiumPath}/Workers/zlib.min.js`
+              // 超图WebGL3D需要引入zlib.min.js
+              if (global.Cesium.SuperMapImageryProvider) {
+                const $scriptZlib = document.createElement('script')
+                global.document.body.appendChild($scriptZlib)
+                $scriptZlib.src = `${cesiumPath}/Workers/zlib.min.js`
+              }
+            }
           })
           return global.Cesium._preloader
         } else if (!global.Cesium._preloader) {
