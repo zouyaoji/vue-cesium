@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-10-30 11:45:05
+ * @Last Modified time: 2018-11-02 09:08:00
  */
 
 <template>
@@ -574,6 +574,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           })
         },
         deep: true
+      },
+      imageryProvider (val) {
+        const { Cesium, viewer } = this
+        if (Cesium.defined(val)) {
+          viewer.imageryLayers.removeAll()
+          viewer.imageryLayers.addImageryProvider(val, 0)
+        }
       },
       'viewer.imageryLayers' (val) {
       }
