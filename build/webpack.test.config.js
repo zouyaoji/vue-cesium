@@ -3,7 +3,7 @@ module.exports = {
   // output: {
   //   path: path.resolve(__dirname, './'),
   //   filename: '../index.js',
-  //   library: 'VueBaiduMap',
+  //   library: 'VueCesium',
   //   libraryTarget: 'umd'
   // },
   module: {
