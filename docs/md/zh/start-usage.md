@@ -4,7 +4,7 @@
 
 ### 全局注册
 
-全局注册将一次性引入超图 Cesium 组件库的所有组件。
+全局注册将一次性引入 Cesium 组件库的所有组件。
 
 ```javascript
 import Vue from 'vue'
@@ -42,7 +42,7 @@ Vue.use(VueCesium, {
 
 ### 局部注册
 
-如果有按需引入组件的需要，可以选择局部注册超图 Cesium 组件，这将减少工程打包后的容量尺寸。局部注册的 `CesiumViewer` 组件**必须**声明 `cesiumPath` 属性。所有的独立组件均存放在 `vue-cesium/components` 文件夹下，按需引用即可。由于未编译的 ES 模块不能在大多数浏览器中直接运行，如果引入组件时发生运行时错误，请检查 webpack 的 loader 配置，确认 `include` 和 `exclude` 选项命中了组件库。
+如果有按需引入组件的需要，可以选择局部注册 Cesium 组件，这将减少工程打包后的容量尺寸。局部注册的 `CesiumViewer` 组件**必须**声明 `cesiumPath` 属性。所有的独立组件均存放在 `vue-cesium/components` 文件夹下，按需引用即可。由于未编译的 ES 模块不能在大多数浏览器中直接运行，如果引入组件时发生运行时错误，请检查 webpack 的 loader 配置，确认 `include` 和 `exclude` 选项命中了组件库。
 
 ```html
 <template>
