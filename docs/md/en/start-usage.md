@@ -120,7 +120,7 @@ export default {
 
 ```html
 <template>
-  <cesium-viewer :animation="animation" :camera="camera" @ready="ready"></baidu-map>
+  <cesium-viewer :animation="animation" :camera="camera" @ready="ready"></cesium-viewer>
 </template>
 <script>
 export default {
@@ -151,27 +151,59 @@ export default {
 </script>
 ```
 
-## Hello world
+# Hello world
 
 ```html
 <template>
-  <cesium-viewer class="viewer" :animation="true" :camera="camera">
+  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready" >
   </cesium-viewer>
 </template>
 <script>
 export default {
   data () {
     return {
+      animation: true,
+      timeline: true,
       camera: {
         position: {
           longitude: 104.06,
           latitude: 30.67,
-          height: 1000
+          height: 100000
         },
         heading: 360,
         pitch: -90,
         roll: 0
       }
+    }
+  },
+  methods: {
+    ready (cesiumInstance) {
+      let imageryLayers = cesiumInstance.viewer.imageryLayers
+      let imagery = new cesiumInstance.Cesium.TiandituImageryProvider({
+        mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.IMG_C
+      })
+      imageryLayers.addImageryProvider(imagery)
+      let labelImagery = new cesiumInstance.Cesium.TiandituImageryProvider({
+          mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.CIA_C
+      })
+      imageryLayers.addImageryProvider(labelImagery)
+      cesiumInstance.viewer.entities.add({
+        id: '成都欢迎你',
+        position: cesiumInstance.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+        billboard: new cesiumInstance.Cesium.BillboardGraphics({
+          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+          scale: 0.1
+        }),
+        label: new cesiumInstance.Cesium.LabelGraphics ({
+          text: 'Hello Word',
+          font: '24px sans-serif',
+          horizontalOrigin: 1,
+          outlineColor: new cesiumInstance.Cesium.Color(0, 0, 0, 1),
+          outlineWidth: 2,
+          pixelOffset: new cesiumInstance.Cesium.Cartesian2(17, -5),
+          style: cesiumInstance.Cesium.LabelStyle.FILL
+        })
+      })
     }
   }
 }
@@ -184,15 +216,18 @@ export default {
 }
 </style>
 ```
+
 <doc-preview>
   <template>
-    <cesium-viewer class="viewer" :animation="true" :camera="camera" @ready="ready">
+    <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
     </cesium-viewer>
   </template>
   <script>
   export default {
     data () {
       return {
+        animation: true,
+        timeline: true,
         camera: {
           position: {
             longitude: 104.06,
@@ -206,31 +241,31 @@ export default {
       }
     },
     methods: {
-      ready (param) {
-        let imageryLayers = param.viewer.imageryLayers
-            let imagery = new Cesium.TiandituImageryProvider({
-            mapStyle : Cesium.TiandituMapsStyle.IMG_C
+      ready (cesiumInstance) {
+        let imageryLayers = cesiumInstance.viewer.imageryLayers
+           let imagery = new cesiumInstance.Cesium.TiandituImageryProvider({
+            mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.IMG_C
         })
         imageryLayers.addImageryProvider(imagery)
-        let labelImagery = new Cesium.TiandituImageryProvider({
-            mapStyle : Cesium.TiandituMapsStyle.CIA_C
+        let labelImagery = new cesiumInstance.Cesium.TiandituImageryProvider({
+            mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.CIA_C
         })
         imageryLayers.addImageryProvider(labelImagery)
-        param.viewer.entities.add({
-          id: 'welcome to ChengDu',
-          position: param.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-          billboard: new param.Cesium.BillboardGraphics({
+        cesiumInstance.viewer.entities.add({
+          id: '成都欢迎你',
+          position: cesiumInstance.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new cesiumInstance.Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png',
             scale: 0.1
           }),
-          label: new param.Cesium.LabelGraphics ({
+          label: new cesiumInstance.Cesium.LabelGraphics ({
             text: 'Hello Word',
             font: '24px sans-serif',
             horizontalOrigin: 1,
-            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineColor: new cesiumInstance.Cesium.Color(0, 0, 0, 1),
             outlineWidth: 2,
-            pixelOffset: new Cesium.Cartesian2(17, -5),
-            style: Cesium.LabelStyle.FILL
+            pixelOffset: new cesiumInstance.Cesium.Cartesian2(17, -5),
+            style: cesiumInstance.Cesium.LabelStyle.FILL
           })
         })
       }
