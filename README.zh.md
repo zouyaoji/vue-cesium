@@ -24,7 +24,7 @@
 
 打包后的Cesium没办法再通过import方式直接导入到项目中，详见[ISSUE](https://github.com/AnalyticalGraphicsInc/cesium/issues/5278)。故造此轮子可以把打包后的Cesium以动态形式引入你的Vue项目。
 
-本人工作目前主要弄CS项目，此项目更新得慢，有啥问题可以直接联系我沟通。
+本人工作目前主要弄CS项目，此项目更新得慢，有啥问题可以直接联系我沟通。<370681295@qq.com>
 
 ### 安装
 
