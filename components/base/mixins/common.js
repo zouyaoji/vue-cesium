@@ -1,4 +1,8 @@
-const types = {}
+const types = {
+  imageryLayers: {
+    unload: 'remove'
+  }
+}
 
 const getParent = $component =>
   $component.abstract || $component.$el === $component.$children[0].$el
@@ -10,12 +14,14 @@ class Mixin {
     this.methods = {
       ready () {
         const $parent = getParent(this.$parent)
-        const Cesium = (this.BMap = $parent.Cesium)
+        const Cesium = (this.Cesium = $parent.Cesium)
         const viewer = (this.viewer = $parent.viewer)
         this.load()
+        const { originInstance } = this
         this.$emit('ready', {
           Cesium,
-          viewer
+          viewer,
+          originInstance
         })
       },
       transmitEvent (e) {
@@ -41,7 +47,7 @@ class Mixin {
             case 'markerClusterer':
               return originInstance.clearMarkers()
             default:
-              viewer[types[prop.type].unload](originInstance)
+              viewer[prop.type][types[prop.type].unload](originInstance)
           }
         } catch (e) {}
       }

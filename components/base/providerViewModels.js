@@ -54,8 +54,7 @@ export const createDefaultImageryProviderViewModels = (Cesium, cesiumPath) => {
         tooltip: '全球天地图影像服务',
         creationFunction: () => {
           return new Cesium.WebMapTileServiceImageryProvider({
-            url:
-              'http://t0.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+            url: 'http://t0.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
             layer: 'img',
             style: 'default',
             format: 'tiles',
@@ -111,8 +110,7 @@ export const createDefaultImageryProviderViewModels = (Cesium, cesiumPath) => {
       tooltip: '高德矢量',
       creationFunction: function () {
         return createAMapByUrl(Cesium, {
-          url:
-            'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+          url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
         })
       }
     })
@@ -175,8 +173,7 @@ export const createDefaultImageryProviderViewModels = (Cesium, cesiumPath) => {
     new Cesium.ProviderViewModel({
       name: 'Bing Maps Aerial with Labels',
       iconUrl: `${cesiumPath}Widgets/Images/ImageryProviders/bingAerialLabels.png`,
-      tooltip:
-        'Bing Maps aerial imagery with label overlays \nhttp://www.bing.com/maps',
+      tooltip: 'Bing Maps aerial imagery with label overlays \nhttp://www.bing.com/maps',
       creationFunction: function () {
         return new Cesium.BingMapsImageryProvider({
           url: 'https://dev.virtualearth.net',
@@ -240,8 +237,7 @@ i-cubed Nationwide Prime, Getmapping, AeroGRID, IGN Spain, and IGP Portugal.  Ad
 contributed by the GIS User Community.\nhttp://www.esri.com`,
       creationFunction: function () {
         return new Cesium.ArcGisMapServerImageryProvider({
-          url:
-            'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
           enablePickFeatures: false
         })
       }
@@ -259,8 +255,7 @@ Chile, Colombia, and Venezuela; Ghana; and parts of southern Africa including Bo
 http://www.esri.com`,
       creationFunction: function () {
         return new Cesium.ArcGisMapServerImageryProvider({
-          url:
-            'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer',
+          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer',
           enablePickFeatures: false
         })
       }
@@ -277,8 +272,7 @@ for informational and educational purposes as well as a basemap by GIS professio
 mapping applications.\nhttp://www.esri.com`,
       creationFunction: function () {
         return new Cesium.ArcGisMapServerImageryProvider({
-          url:
-            'https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/',
+          url: 'https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/',
           enablePickFeatures: false
         })
       }
@@ -308,8 +302,7 @@ area washes and organic edges over a paper texture to add warm pop to any map.\n
       creationFunction: function () {
         return Cesium.createOpenStreetMapImageryProvider({
           url: 'https://stamen-tiles.a.ssl.fastly.net/watercolor/',
-          credit:
-            'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'
+          credit: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'
         })
       }
     })
@@ -323,8 +316,7 @@ area washes and organic edges over a paper texture to add warm pop to any map.\n
       creationFunction: function () {
         return Cesium.createOpenStreetMapImageryProvider({
           url: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
-          credit:
-            'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'
+          credit: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'
         })
       }
     })
@@ -350,8 +342,7 @@ Earth at night as seen by NASA/NOAA's Suomi NPP satellite.`,
     new Cesium.ProviderViewModel({
       name: 'Natural Earth\u00a0II',
       iconUrl: `${cesiumPath}Widgets/Images/ImageryProviders/naturalEarthII.png`,
-      tooltip:
-        'Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/',
+      tooltip: 'Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/',
       creationFunction: function () {
         return Cesium.createTileMapServiceImageryProvider({
           url: `${cesiumPath}Assets/Textures/NaturalEarthII`
@@ -592,8 +583,7 @@ export const createDefaultTerrainProviderViewModels = (Cesium, cesiumPath) => {
     new Cesium.ProviderViewModel({
       name: 'STK World Terrain meshes',
       iconUrl: `${cesiumPath}Widgets/Images/TerrainProviders/STK.png`,
-      tooltip:
-        'High-resolution, mesh-based terrain for the entire globe. Free for use on the Internet. Closed-network options are available.\nhttp://www.agi.com',
+      tooltip: 'High-resolution, mesh-based terrain for the entire globe. Free for use on the Internet. Closed-network options are available.\nhttp://www.agi.com',
       creationFunction: function () {
         return new Cesium.CesiumTerrainProvider({
           url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
@@ -647,8 +637,8 @@ function createAMapByUrl (Cesium, options) {
   if (tileCount > 4) {
     throw new Cesium.DeveloperError(
       'The rectangle and minimumLevel indicate that there are ' +
-        tileCount +
-        ' tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.'
+      tileCount +
+      ' tiles at the minimum level. Imagery providers with more than four tiles at the minimum level are not supported.'
     )
   }
   // >>includeEnd('debug');

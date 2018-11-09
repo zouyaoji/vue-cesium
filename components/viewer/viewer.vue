@@ -2,11 +2,11 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-02 09:08:00
+ * @Last Modified time: 2018-11-08 11:55:14
  */
 
 <template>
-  <div id="cesiumContainer" ref="viewer">
+  <div ref="viewer" style="width: 100%; height: 100%">
     <slot></slot>
   </div>
 </template>

@@ -22,20 +22,16 @@ Vue.use(VueCesium, {
 
 ```html
 <template>
-<div class="content">
+<div class="viewer">
   <cesium-viewer>
   </cesium-viewer>
 </div>
 </template>
 
-<style>
-.content {
-  background-color: #f9f9f9;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+<style scoped>
+.viewer {
+  width: 100%;
+  height: 400px;
 }
 </style>
 ```
@@ -46,7 +42,7 @@ Vue.use(VueCesium, {
 
 ```html
 <template>
-  <div class="content">
+  <div class="viewer">
     <cesium-viewer cesiumPath="YOUR_CESIUM_LIB_PATH"></cesium-viewer>
   </div>
 </template>
@@ -60,14 +56,10 @@ export default {
 }
 </script>
 
-<style>
-.content {
-  background-color: #f9f9f9;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+<style scoped>
+.viewer {
+  width: 100%;
+  height: 400px;
 }
 </style>
 ```
@@ -142,7 +134,9 @@ export default {
     }
   },
   methods: {
-    ready (param) {
+    ready (cesiumInstance) {
+      const { Cesium, viewer } = cesiumInstance
+      // 在这儿获取Cesium和viewer实例，再执行相关逻辑代码
       this.camera.position.longitude = 116.46
       this.camera.position.latitude = 39.92
       this.camera.position.height = 500
@@ -180,30 +174,31 @@ export default {
   },
   methods: {
     ready (cesiumInstance) {
-      let imageryLayers = cesiumInstance.viewer.imageryLayers
-      let imagery = new cesiumInstance.Cesium.TiandituImageryProvider({
-        mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.IMG_C
+      const { Cesium, viewer } = cesiumInstance
+      let imageryLayers = viewer.imageryLayers
+      let imagery = new Cesium.TiandituImageryProvider({
+        mapStyle : Cesium.TiandituMapsStyle.IMG_C
       })
       imageryLayers.addImageryProvider(imagery)
-      let labelImagery = new cesiumInstance.Cesium.TiandituImageryProvider({
-          mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.CIA_C
+      let labelImagery = new Cesium.TiandituImageryProvider({
+          mapStyle : Cesium.TiandituMapsStyle.CIA_C
       })
       imageryLayers.addImageryProvider(labelImagery)
-      cesiumInstance.viewer.entities.add({
+      viewer.entities.add({
         id: '成都欢迎你',
-        position: cesiumInstance.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-        billboard: new cesiumInstance.Cesium.BillboardGraphics({
+        position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+        billboard: new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
           scale: 0.1
         }),
-        label: new cesiumInstance.Cesium.LabelGraphics ({
+        label: new Cesium.LabelGraphics ({
           text: 'Hello Word',
           font: '24px sans-serif',
           horizontalOrigin: 1,
-          outlineColor: new cesiumInstance.Cesium.Color(0, 0, 0, 1),
+          outlineColor: new Cesium.Color(0, 0, 0, 1),
           outlineWidth: 2,
-          pixelOffset: new cesiumInstance.Cesium.Cartesian2(17, -5),
-          style: cesiumInstance.Cesium.LabelStyle.FILL
+          pixelOffset: new Cesium.Cartesian2(17, -5),
+          style: Cesium.LabelStyle.FILL
         })
       })
     }
@@ -211,7 +206,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .viewer {
   width: 100%;
   height: 400px;
@@ -244,37 +239,38 @@ export default {
     },
     methods: {
       ready (cesiumInstance) {
-        let imageryLayers = cesiumInstance.viewer.imageryLayers
-           let imagery = new cesiumInstance.Cesium.TiandituImageryProvider({
-            mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.IMG_C
+        const { Cesium, viewer } = cesiumInstance
+        let imageryLayers = viewer.imageryLayers
+           let imagery = new Cesium.TiandituImageryProvider({
+            mapStyle : Cesium.TiandituMapsStyle.IMG_C
         })
         imageryLayers.addImageryProvider(imagery)
-        let labelImagery = new cesiumInstance.Cesium.TiandituImageryProvider({
-            mapStyle : cesiumInstance.Cesium.TiandituMapsStyle.CIA_C
+        let labelImagery = new Cesium.TiandituImageryProvider({
+            mapStyle : Cesium.TiandituMapsStyle.CIA_C
         })
         imageryLayers.addImageryProvider(labelImagery)
-        cesiumInstance.viewer.entities.add({
+        viewer.entities.add({
           id: '成都欢迎你',
-          position: cesiumInstance.Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-          billboard: new cesiumInstance.Cesium.BillboardGraphics({
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png',
             scale: 0.1
           }),
-          label: new cesiumInstance.Cesium.LabelGraphics ({
+          label: new Cesium.LabelGraphics ({
             text: 'Hello Word',
             font: '24px sans-serif',
             horizontalOrigin: 1,
-            outlineColor: new cesiumInstance.Cesium.Color(0, 0, 0, 1),
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
             outlineWidth: 2,
-            pixelOffset: new cesiumInstance.Cesium.Cartesian2(17, -5),
-            style: cesiumInstance.Cesium.LabelStyle.FILL
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
           })
         })
       }
     }
   }
   </script>
-  <style>
+  <style scoped>
   .viewer {
     width: 100%;
     height: 400px;

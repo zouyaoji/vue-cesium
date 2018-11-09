@@ -58,14 +58,6 @@ const routeMap = [
           en: 'Usage'
         }
       },
-      // {
-      //   path: 'third-party',
-      //   component: 'start-third-party',
-      //   name: {
-      //     zh: '第三方组件',
-      //     en: 'Third Party Components'
-      //   }
-      // },
       {
         path: 'base',
         component: 'start-base',
@@ -76,25 +68,6 @@ const routeMap = [
       }
     ]
   },
-  // {
-  //   // 指南
-  //   path: 'guide',
-  //   component: CateView,
-  //   name: {
-  //     zh: '指南',
-  //     en: 'Guide'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'painting',
-  //       component: 'guide-painting',
-  //       name: {
-  //         zh: '图形绘制',
-  //         en: 'Painting'
-  //       }
-  //     }
-  //   ]
-  // },
   {
     path: 'viewer',
     name: {
@@ -112,197 +85,41 @@ const routeMap = [
         }
       }
     ]
+  },
+  {
+    path: 'layer',
+    name: {
+      zh: '图层',
+      en: 'Layer'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'supermap-imagery-layer',
+        component: 'supermap-imagery-layer',
+        name: {
+          zh: '超图影像服务图层',
+          en: 'SuperMapImageryLayer'
+        }
+      },
+      {
+        path: 'arcgis-imagery-layer',
+        component: 'arcgis-imagery-layer',
+        name: {
+          zh: 'ArcGIS影像服务图层',
+          en: 'ArcGISImageryLayer'
+        }
+      },
+      {
+        path: 'tianditu-imagery-layer',
+        component: 'tianditu-imagery-layer',
+        name: {
+          zh: '天地图服务图层',
+          en: 'TiandituImageryLayer'
+        }
+      }
+    ]
   }
-  // {
-  //   path: 'control',
-  //   name: {
-  //     zh: '控件',
-  //     en: 'Control'
-  //   },
-  //   component: CateView,
-  //   children: [
-  //     {
-  //       path: 'scale',
-  //       component: 'bm-scale',
-  //       name: {
-  //         zh: '比例尺',
-  //         en: 'Scale'
-  //       }
-  //     },
-  //     {
-  //       path: 'navigation',
-  //       component: 'bm-navigation',
-  //       name: {
-  //         zh: '缩放',
-  //         en: 'Navigation'
-  //       }
-  //     },
-  //     {
-  //       path: 'map-type',
-  //       component: 'bm-map-type',
-  //       name: {
-  //         zh: '地图类型',
-  //         en: 'Map Type'
-  //       }
-  //     },
-  //     {
-  //       path: 'overview-map',
-  //       component: 'bm-overview-map',
-  //       name: {
-  //         zh: '缩略图',
-  //         en: 'Overview Map'
-  //       }
-  //     },
-  //     {
-  //       path: 'geolocation',
-  //       component: 'bm-geolocation',
-  //       name: {
-  //         zh: '定位',
-  //         en: 'Geolocation'
-  //       }
-  //     },
-  //     {
-  //       path: 'copyright',
-  //       component: 'bm-copyright',
-  //       name: {
-  //         zh: '版权',
-  //         en: 'Copyright'
-  //       }
-  //     },
-  //     {
-  //       path: 'city-list',
-  //       component: 'bm-city-list',
-  //       name: {
-  //         zh: '城市列表',
-  //         en: 'City List'
-  //       }
-  //     },
-  //     {
-  //       path: 'panorama',
-  //       component: 'bm-panorama',
-  //       name: {
-  //         zh: '全景',
-  //         en: 'Panorama'
-  //       }
-  //     },
-  //     {
-  //       path: 'control',
-  //       component: 'bm-control',
-  //       name: {
-  //         zh: '自定义控件',
-  //         en: 'Custom Control'
-  //       }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: 'overlay',
-  //   name: {
-  //     zh: '覆盖物',
-  //     en: 'Overlay'
-  //   },
-  //   component: CateView,
-  //   children: [
-  //     {
-  //       path: 'marker',
-  //       component: 'bm-marker',
-  //       name: {
-  //         zh: '点',
-  //         en: 'Marker'
-  //       }
-  //     },
-  //     {
-  //       path: 'point-collection',
-  //       component: 'bm-point-collection',
-  //       name: {
-  //         zh: '海量点',
-  //         en: 'Point Collection'
-  //       }
-  //     },
-  //     {
-  //       path: 'polyline',
-  //       component: 'bm-polyline',
-  //       name: {
-  //         zh: '折线',
-  //         en: 'Polyline'
-  //       }
-  //     },
-  //     {
-  //       path: 'polygon',
-  //       component: 'bm-polygon',
-  //       name: {
-  //         zh: '多边形',
-  //         en: 'Polygon'
-  //       }
-  //     },
-  //     {
-  //       path: 'circle',
-  //       component: 'bm-circle',
-  //       name: {
-  //         zh: '圆形',
-  //         en: 'Circle'
-  //       }
-  //     },
-  //     {
-  //       path: 'ground',
-  //       component: 'bm-ground',
-  //       name: {
-  //         zh: '地面',
-  //         en: 'Ground'
-  //       }
-  //     },
-  //     {
-  //       path: 'label',
-  //       component: 'bm-label',
-  //       name: {
-  //         zh: '标签',
-  //         en: 'Label'
-  //       }
-  //     },
-  //     {
-  //       path: 'info-window',
-  //       component: 'bm-info-window',
-  //       name: {
-  //         zh: '信息窗体',
-  //         en: 'Info Window'
-  //       }
-  //     },
-  //     {
-  //       path: 'overlay',
-  //       component: 'bm-overlay',
-  //       name: {
-  //         zh: '自定义覆盖物',
-  //         en: 'Custom Overlay'
-  //       }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: 'layer',
-  //   name: {
-  //     zh: '图层',
-  //     en: 'Layer'
-  //   },
-  //   component: CateView,
-  //   children: [
-  //     {
-  //       path: 'tile',
-  //       component: 'bm-tile',
-  //       name: {
-  //         zh: '瓦片图层',
-  //         en: 'Tile'
-  //       }
-  //     },
-  //     {
-  //       path: 'traffic',
-  //       component: 'bm-traffic',
-  //       name: {
-  //         zh: '交通流量图层',
-  //         en: 'Traffic'
-  //       }
-  //     }
-  //   ]
-  // },
   // {
   //   path: 'search',
   //   name: {

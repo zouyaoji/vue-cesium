@@ -1,11 +1,11 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Load the Cesium official build package or other third-party Cesium packages (such as the Superap WebGL build package) to the Vue component.",
   "main": "index.js",
   "scripts": {
     "build:docs": "webpack -p --config ./build/webpack.docs.config.js",
-    "build": "webpack --config ./build/webpack.prod.config.js",
+    "build": "webpack -p --config ./build/webpack.prod.config.js",
     "dev": "webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline",
     "deploy": "npm run build && npm run build:docs",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -98,6 +98,7 @@
     "bmaplib.heatmap": "^1.0.4",
     "bmaplib.lushu": "^1.0.7",
     "bmaplib.markerclusterer": "^1.0.13",
+    "element-ui": "^2.4.9",
     "markdown-it": "^8.4.2"
   }
 }
