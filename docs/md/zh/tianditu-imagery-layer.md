@@ -25,7 +25,7 @@
 
 |事件名|参数|描述|
 |------|----|----|
-|ready|{Cesium, viewer, originInstance}|返回Cesium类, viewer实例, 以及添加的图层对象originInstance, 也就是ImageryLayer。|
+|ready|{Cesium, viewer, originInstance}|返回Cesium类, viewer实例。|
 
 ## 示例
 
@@ -79,8 +79,7 @@
     },
     methods: {
       ready (cesiumInstance) {
-        const {Cesium, viewer, originInstance} = cesiumInstance
-        // viewer.zoomTo(originInstance)
+        const {Cesium, viewer} = cesiumInstance
       }
     }
   }
@@ -142,8 +141,7 @@
       },
       methods: {
         ready (cesiumInstance) {
-          const {Cesium, viewer, originInstance} = cesiumInstance
-          // viewer.zoomTo(originInstance)
+          const {Cesium, viewer} = cesiumInstance
         }
       }
     }

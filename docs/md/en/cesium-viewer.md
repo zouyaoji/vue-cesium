@@ -1,83 +1,188 @@
 # CesiumViewer
 
-`CesiumViewer` is a container of Cesium core class and instance. It's the root component of other components of vue-cesium.\
+`CesiumViewer`is a container of Cesium core class and instance. It's the root component of other components of vue-cesium.
 The container is an empty DOM node which used to mount other components or DOM nodes.
 
 ## Instance Properties
 
-### Static Properties
-
-仅且可以初始化配置，不支持响应式。
-
+|name|type|default|description|
+|------|------|-----|---|
+|animation|Boolean|false|`optional`If set to false, the Animation widget will not be created.|
+|baseLayerPicker| Boolean|false|`optional`If set to false, the BaseLayerPicker widget will not be created.|
+|fullscreenButton|Boolean| false| `optional`If set to false, the FullscreenButton widget will not be created.|
+|vrButton|Boolean|false|`optional`If set to true, the VRButton widget will be created.|
+|geocoder|Boolean|false|`optional`If set to false, the Geocoder widget will not be created.|
+|homeButton|Boolean|false|`optional`If set to false, the HomeButton widget will not be created.|
+|infoBox|Boolean|true|`optional`If set to false, the InfoBox widget will not be created.|
+|sceneModePicker|Boolean|false|`optional`If set to false, the SceneModePicker widget will not be created.|
+|selectionIndicator|Boolean|true|`optional`If set to false, the SelectionIndicator widget will not be created.|
+|timeline|Boolean|false|`optional`If set to false, the Timeline widget will not be created.|
+|navigation|Boolean|false|`optional`是否显示导航控件（SuperMap）|
+|navigationHelpButton|Boolean|false|`optional`If set to false, the navigation help button will not be created.|
+|navigationInstructionsInitiallyVisible|Boolean|false|`optional`True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.|
+|scene3DOnly|Boolean|false|`optional`When true, each geometry instance will only be rendered in 3D to save GPU memory.|
+|shouldAnimate|Boolean|false|`optional`true if the clock should attempt to advance simulation time by default, false otherwise. |
+|fullscreenElement|Element|document.body|`optional`The element or id to be placed into fullscreen mode when the full screen button is pressed.|
+|useDefaultRenderLoop|Boolean|true|`optional`True if this widget should control the render loop, false otherwise.|
+|targetFrameRate|Number||`optional`The target frame rate when using the default render loop.|
+|showRenderLoopErrors|Boolean|true|`optional`If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.|
+|automaticallyTrackDataSourceClocks|Boolean|true|`optional`If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.|
+|contextOptions|Object||`optional`Context and WebGL creation properties corresponding to options passed to Scene.|
+|orderIndependentTranslucency|Boolean|true|`optional`If true and the configuration supports it, use order independent translucency.|
+|creditContainer|Element \| String||`optional`The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.|
+|creditViewport|Element \| String||`optional`The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.|
+|terrainExaggeration|Number|1.0|`optional`A scalar used to exaggerate the terrain. Note that terrain exaggeration will not modify any other primitive as they are positioned relative to the ellipsoid.|
+|shadows|Boolean|false|`optional`Determines if shadows are cast by the sun.|
+|terrainShadows|Number|3|`optional`Determines if the terrain casts or receives shadows from the sun.|
+|mapMode2D|Number|1|`optional`Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.|
+|projectionPicker|Boolean|false|`optional`If set to true, the ProjectionPicker widget will be created.|
 ---
 
-| Name                                   | Type                       | Default                                  | Description                                                                                                                                                                                                                                                                                                                                                                                               |
-| -------------------------------------- | -------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| navigationInstructionsInitiallyVisible | Boolean                    | false                                    | `optional` True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.                                                                                                                                                                                                                                              |
-| scene3DOnly                            | Boolean                    | false                                    | `optional` When true, each geometry instance will only be rendered in 3D to save GPU memory.                                                                                                                                                                                                                                                                                                              |
-| clockViewModel                         | ClockViewModel             | new ClockViewModel(options.clock)        | `optional` The clock view model to use to control current time.                                                                                                                                                                                                                                                                                                                                           |
-| selectedImageryProviderViewModel       | ProviderViewModel          |                                          | `optional` The view model for the current base imagery layer, if not supplied the first available base layer is used. This value is only valid if options.baseLayerPicker is set to true.                                                                                                                                                                                                                 |
-| imageryProviderViewModels              | Array.\<ProviderViewModel> | createDefaultImageryProviderViewModels() | `optional` The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if options.baseLayerPicker is set to true.                                                                                                                                                                                                                                                 |
-| selectedTerrainProviderViewModel       | ProviderViewModel          |                                          | `optional` The view model for the current base terrain layer, if not supplied the first available base layer is used. This value is only valid if options.baseLayerPicker is set to true.                                                                                                                                                                                                                 |
-| terrainProviderViewModels              | Array.\<ProviderViewModel> | createDefaultTerrainProviderViewModels() | `optional` The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if options.baseLayerPicker is set to true.                                                                                                                                                                                                                                                 |
-| imageryProvider                        | ImageryProvider            | new BingMapsImageryProvider()            | `optional` The imagery provider to use. This value is only valid if options.baseLayerPicker is set to false.                                                                                                                                                                                                                                                                                              |
-| terrainProvider                        | TerrainProvider            | new EllipsoidTerrainProvider()           | `optional` The terrain provider to use                                                                                                                                                                                                                                                                                                                                                                    |
-| skyBox                                 | SkyBox                     |                                          | `optional` The skybox used to render the stars. When undefined, the default stars are used.                                                                                                                                                                                                                                                                                                               |
-| skyAtmosphere                          | SkyAtmosphere              |                                          | `optional` Blue sky, and the glow around the Earth's limb. Set to false to turn it off.                                                                                                                                                                                                                                                                                                                   |
-| fullscreenElement                      | Element &#124; String      | document.body                            | `optional` The element or id to be placed into fullscreen mode when the full screen button is pressed.                                                                                                                                                                                                                                                                                                    |
-| useDefaultRenderLoop                   | Boolean                    | true                                     | `optional` True if this widget should control the render loop, false otherwise.                                                                                                                                                                                                                                                                                                                           |
-| targetFrameRate                        | Number                     |                                          | `optional` The target frame rate when using the default render loop.                                                                                                                                                                                                                                                                                                                                      |
-| showRenderLoopErrors                   | Boolean                    | true                                     | `optional` If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.                                                                                                                                                                                                                                                                 |
-| automaticallyTrackDataSourceClocks     | Boolean                    | true                                     | `optional` If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.                                                                                                                                                                                   |
-| contextOptions                         | Object                     | `optional`                               | Context and WebGL creation properties corresponding to options passed to Scene.                                                                                                                                                                                                                                                                                                                           |
-| mapProjection                          | MapProjection              | new GeographicProjection()               | `optional` The map projection to use in 2D and Columbus View modes.                                                                                                                                                                                                                                                                                                                                       |
-| globe                                  | Globe                      | new Globe(mapProjection.ellipsoid)       | `optional` The globe to use in the scene. If set to false, no globe will be added.                                                                                                                                                                                                                                                                                                                        |
-| orderIndependentTranslucency           | Boolean                    | true                                     | `optional` If true and the configuration supports it, use order independent translucency.                                                                                                                                                                                                                                                                                                                 |
-| creditContainer                        | Element &#124; String      |                                          | `optional` The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.                                                                                                                                                                                                                                                         |
-| creditViewport                         | Element &#124; String      |                                          | `optional` The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.                                                                                                                                                                                                                                               |
-| dataSources                            | DataSourceCollection       | new DataSourceCollection()               | `optional` The collection of data sources visualized by the widget. If this parameter is provided, the instance is assumed to be owned by the caller and will not be destroyed when the viewer is destroyed.                                                                                                                                                                                              |
-| terrainShadows                         | ShadowMode                 | ShadowMode.RECEIVE_ONLY                  | `optional` Determines if the terrain casts or receives shadows from the sun.                                                                                                                                                                                                                                                                                                                              |
-| mapMode2D                              | MapMode2D                  | MapMode2D.INFINITE_SCROLL                | `optional` Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.                                                                                                                                                                                                                                                                                               |
-| requestRenderMode                      | Boolean                    | false                                    | `optional` If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling improves performance of the application, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering. |  |  |
-| maximumRenderTimeChange                | Number                     | 0.0                                      | `optional` If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.                                                                                                                                                                                                                |
+## Events
 
----
+|name|parameter|description|
+|---|------|---|
+|selectedEntityChanged|Entity| Gets the event that is raised when the selected entity changes. |
+|trackedEntityChanged|Entity| Gets the event that is raised when the tracked entity changes. |
+|dataSourceAdded|DataSource| An event that is raised when a data source is added to the collection. Event handlers are passed the data source that was added.|
 
-### Responsive Properties
+## Examples
 
-可以初始化配置，支持响应式。
+### Init CesiumViewer and control Widget
 
----
+#### Code
 
-| Name                 | Type      | Default           | Description                                                                                         |
-| -------------------- | --------- | ----------------- | --------------------------------------------------------------------------------------------------- |
-| selectionIndicator   | Boolean   | true              | `optional` If set to false, the SelectionIndicator widget will not be created.                      |
-| infoBox              | Boolean   | true              | `optional` If set to false, the InfoBox widget will not be created.                                 |
-| geocoder             | Boolean   | false             | `optional` If set to false, the Geocoder widget will not be created.                                |
-| homeButton           | Boolean   | true              | `optional` If set to false, the HomeButton widget will not be created.                              |
-| sceneModePicker      | Boolean   | false             | `optional` If set to false, the SceneModePicker widget will not be created.                         |
-| projectionPicker     | Boolean   | false             | `optional` If set to true, the ProjectionPicker widget will be created.                             |
-| baseLayerPicker      | Boolean   | false             | `optional` If set to false, the BaseLayerPicker widget will not be created.                         |
-| navigationHelpButton | Boolean   | false             | `optional` If set to false, the navigation help button will not be created.                         |
-| animation            | Boolean   | false             | `optional` If set to false, the Animation widget will not be created.                               |
-| timeline             | Boolean   | false             | `optional` If set to false, the Timeline widget will not be created.                                |
-| fullscreenButton     | Boolean   | false             | `optional` If set to false, the FullscreenButton widget will not be created.                        |
-| vrButton             | Boolean   | false             | `optional` If set to true, the VRButton widget will be created.                                     |
-| navigation           | Boolean   | false             | `optional` If set to true, the Navigation widget will be created.                                   |
-| sceneMode            | SceneMode | SceneMode.SCENE3D | `optional` The initial scene mode.                                                                  |
-| shouldAnimate        | Boolean   | false             | `optional` true if the clock should attempt to advance simulation time by default, false otherwise. |
-| terrainExaggeration  | Number    | 1.0               | `optional` A scalar used to exaggerate the terrain.                                                 |
-| shadows              | Boolean   | false             | `optional` Determines if shadows are cast by the sun.                                               |
-| camera               | Object    |                   | `optional` sets the camera of scene.                                                                 |
+```html
+<template>
+  <div class="viewer" ref="myViewer">
+    <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
+      <span>animation</span>
+      <el-switch v-model="animation"></el-switch>
+      <span>timeline</span>
+      <el-switch v-model="timeline"></el-switch>
+      <span>baseLayerPicker</span>
+      <el-switch v-model="baseLayerPicker"></el-switch>
+      <span>fullscreenButton</span>
+      <el-switch v-model="fullscreenButton"></el-switch>
+      <span>infoBox</span>
+      <el-switch v-model="infoBox"></el-switch>
+    </div>
+    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+      :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+    </cesium-viewer>
+  </div>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        animation: true,
+        timeline: true,
+        baseLayerPicker: false,
+        fullscreenButton: true,
+        infoBox: true,
+        fullscreenElement: document.body
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.fullscreenElement = this.$refs.myViewer
+        viewer.entities.add({
+          id: '成都欢迎你',
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new Cesium.LabelGraphics ({
+            text: 'Hello Word',
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
+      }
+    }
+  }
+</script>
 
----
+<style scoped>
+.viewer {
+  width: 100%;
+  height: 400px;
+}
+</style>
+```
 
-## 事件
+#### Preview
 
-`CesiumViewer` 是个基础部件，除了能够响应自己的事件外，把 dataSources, entities, imageryLayers, scene 等属性的事件也挂这儿，方便使用。
+<doc-preview>
+  <template>
+    <div class="viewer" ref="myViewer">
+      <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
+        <span>animation</span>
+        <el-switch v-model="animation"></el-switch>
+        <span>timeline</span>
+        <el-switch v-model="timeline"></el-switch>
+        <span>baseLayerPicker</span>
+        <el-switch v-model="baseLayerPicker"></el-switch>
+        <span>fullscreenButton</span>
+        <el-switch v-model="fullscreenButton"></el-switch>
+        <span>infoBox</span>
+        <el-switch v-model="infoBox"></el-switch>
+      </div>
+      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+        :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+      </cesium-viewer>
+    </div>
+  </template>
 
-| 事件名                | 参数       | 描述                               | 来源   |
-| --------------------- | ---------- | ---------------------------------- | ------ |
-| selectedEntityChanged | Entity     | 场景选中实体发生改变时触发此事件。 | Viewer |
-| trackedEntityChanged  | Entity     | 场景跟踪实体发生改变时触发此事件。 | Viewer |
-| dataSourceAdded       | DataSource | 场景添加一个数据源时触发此事件。   |
+  <script>
+    export default {
+      data () {
+        return {
+          animation: true,
+          timeline: true,
+          baseLayerPicker: false,
+          fullscreenButton: true,
+          infoBox: true,
+          fullscreenElement: document.body
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          const {Cesium, viewer} = cesiumInstance
+          this.fullscreenElement = this.$refs.myViewer
+          viewer.entities.add({
+            id: '成都欢迎你',
+            position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+            billboard: new Cesium.BillboardGraphics({
+              image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+              scale: 0.1
+            }),
+            label: new Cesium.LabelGraphics ({
+              text: 'Hello Word',
+              font: '24px sans-serif',
+              horizontalOrigin: 1,
+              outlineColor: new Cesium.Color(0, 0, 0, 1),
+              outlineWidth: 2,
+              pixelOffset: new Cesium.Cartesian2(17, -5),
+              style: Cesium.LabelStyle.FILL
+            })
+          })
+        }
+      }
+    }
+  </script>
+
+  <style scoped>
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
+  </style>
+</doc-preview>

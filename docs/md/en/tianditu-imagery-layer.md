@@ -25,7 +25,7 @@
 
 |name|parameter|description|
 |------|----|----|
-|ready|{Cesium, viewer, originInstance}|Triggers when TiandituImageryLayer is ready. It returns a core class of Cesium, a viewer instance and the layer instance.|
+|ready|{Cesium, viewer, originInstance}|Triggers when ArcGISImageryLayer is ready. It returns a core class of Cesium, a viewer instance.|
 
 ## Examples
 
@@ -79,8 +79,7 @@
     },
     methods: {
       ready (cesiumInstance) {
-        const {Cesium, viewer, originInstance} = cesiumInstance
-        // viewer.zoomTo(originInstance)
+        const {Cesium, viewer} = cesiumInstance
       }
     }
   }
@@ -142,8 +141,7 @@
       },
       methods: {
         ready (cesiumInstance) {
-          const {Cesium, viewer, originInstance} = cesiumInstance
-          // viewer.zoomTo(originInstance)
+          const {Cesium, viewer} = cesiumInstance
         }
       }
     }

@@ -12,19 +12,9 @@
 
 ## 介绍
 
-<p style="text-indent:2em;">加载Cesium官方Build包或者其他第三方Cesium包（如超图WebGL的Build包）到Vue组件。我主要用来加载超图WebGL：</p>
-
-- SuperMap iServer 服务
-- 地图服务
-- 数据服务
-- 量算服务
-- 查询服务
-- 空间关系服务
-- 专题图服务
-- 空间分析服务类
-- SuperMap 云服务
-- OGC 标准的服务 (WMS、WFS、WMTS、KML)
-- 其他第三方服务，如天地图等
+- 加载Cesium官方Build包或者其他第三方Cesium包（如超图WebGL的Build包）到Vue组件。我主要用来加载超图WebGL。
+- 持续开发中...
+- [更多例子](https://github.com/zouyaoji/vue-cesium-demo)
 
 ## 贡献
 

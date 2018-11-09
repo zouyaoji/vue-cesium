@@ -28,7 +28,7 @@
 
 |name|parameter|description|
 |------|----|----|
-|ready|{Cesium, viewer, originInstance}|Triggers when SuperMapImageryLayer is ready. It returns a core class of Cesium, a viewer instance and the layer instance.|
+|ready|{Cesium, viewer, originInstance}|Triggers when ArcGISImageryLayer is ready. It returns a core class of Cesium, a viewer instance.|
 
 ## Examples
 
@@ -57,7 +57,7 @@
       </el-select>
     </div>
     <cesium-viewer>
-      <supermap-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" 
+      <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
       :contrast="contrast" @ready="ready" />
     </cesium-viewer>
   </div>
@@ -82,8 +82,8 @@
     },
     methods: {
       ready (cesiumInstance) {
-        const {Cesium, viewer, originInstance} = cesiumInstance
-        viewer.zoomTo(originInstance)
+        const {Cesium, viewer} = cesiumInstance
+        viewer.zoomTo(this.$refs.supermapLayer.originInstance)
       }
     }
   }
@@ -120,7 +120,7 @@
         </el-select>
       </div>
       <cesium-viewer>
-       <supermap-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" 
+       <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
         :contrast="contrast" @ready="ready" />
       </cesium-viewer>
     </div>
@@ -145,8 +145,8 @@
       },
       methods: {
         ready (cesiumInstance) {
-          const {Cesium, viewer, originInstance} = cesiumInstance
-          viewer.zoomTo(originInstance)
+          const {Cesium, viewer} = cesiumInstance
+          viewer.zoomTo(this.$refs.supermapLayer.originInstance)
         }
       }
     }

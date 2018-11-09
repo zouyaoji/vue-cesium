@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-09 10:34:47
+ * @Last Modified time: 2018-11-09 15:39:00
  */
 
 <template>
@@ -118,7 +118,8 @@
         type: Object
       },
       fullscreenElement: {
-        type: String
+        /* eslint-disable no-undef */
+        type: [Element]
       },
       useDefaultRenderLoop: {
         type: Boolean,
@@ -467,6 +468,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           let fullscreenButton = new Cesium.FullscreenButton(fullscreenContainer, document.body)
           viewer._fullscreenButton = fullscreenButton
           resizeControl()
+        }
+      },
+      fullscreenElement (val) {
+        const { Cesium, viewer } = this
+        if (!Cesium.defined(viewer.fullscreenButton)) {
+          return
+        }
+        if (Cesium.defined(val)) {
+          this.viewer.fullscreenButton.viewModel.fullscreenElement = val
         }
       },
       'viewer.fullscreenButton.viewModel.isFullscreenEnabled' (val) {
@@ -839,7 +849,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         }
         this.$emit('ready', { Cesium, viewer })
-        this.viewerContainer = this.$refs.viewer.firstChild
+        this.viewerContainer = this.$refs.viewer.children[0]
         this.resizeControl()
         window.someObject = this.someObject
       },

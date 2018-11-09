@@ -69,7 +69,7 @@ const routeMap = [
     ]
   },
   {
-    path: 'viewer',
+    path: 'CesiumViewer',
     name: {
       zh: '场景',
       en: 'Viewer'
@@ -81,7 +81,7 @@ const routeMap = [
         component: 'cesium-viewer',
         name: {
           zh: '场景容器',
-          en: 'viewer'
+          en: 'CesiumViewer'
         }
       }
     ]

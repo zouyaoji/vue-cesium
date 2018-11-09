@@ -12,7 +12,9 @@
 
 ## Introduction
 
-Cesium, allows users to upload and visualize a variety of 3D data types, including BIM, point clouds, 3ds max models, and oblique photographic models. Users can take advantage of the application’s measurement tools, including measuring length, area, and height. The application also offers analysis, such as viewshed, line of sight, and skyline.
+- Load the Cesium official build package or other third-party Cesium packages (such as the SuperMap WebGL build package) to the Vue component. I mainly used to load SuperMap WebGL.
+- Continuous development...
+- [For more examples](https://github.com/zouyaoji/vue-cesium-demo)
 
 ## Contributing
 

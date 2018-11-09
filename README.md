@@ -18,9 +18,12 @@
 
 ## Documentation
 
-[https://zouyaoji.top/vue-cesium](https://zouyaoji.top/vue-cesium)
+- [Online Documentation](https://zouyaoji.top/vue-cesium)
+- [For more examples](https://github.com/zouyaoji/vue-cesium-demo)
 
 ## Get Start
+
+Amateur learning Vue component development, continuous development.
 
 ### Installation
 

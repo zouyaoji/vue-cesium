@@ -17,11 +17,9 @@ class Mixin {
         const Cesium = (this.Cesium = $parent.Cesium)
         const viewer = (this.viewer = $parent.viewer)
         this.load()
-        const { originInstance } = this
         this.$emit('ready', {
           Cesium,
-          viewer,
-          originInstance
+          viewer
         })
       },
       transmitEvent (e) {
