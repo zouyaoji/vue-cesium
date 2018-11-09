@@ -48,20 +48,16 @@ Vue.use(VueCesium, {
 
 ```vue
 <template>
-  <div class="content">
+  <div class="viewer">
     <cesium-viewer>
     </cesium-viewer>
   </div>
 </template>
 
 <style>
-.content {
-  background-color: #f9f9f9;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.viewer {
+  width: 100%;
+  height: 400px;
 }
 </style>
 ```

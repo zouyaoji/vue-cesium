@@ -2,11 +2,11 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-08 11:55:14
+ * @Last Modified time: 2018-11-09 10:34:47
  */
 
 <template>
-  <div ref="viewer" style="width: 100%; height: 100%">
+  <div ref="viewer" style="width:100%; height:100%;">
     <slot></slot>
   </div>
 </template>
