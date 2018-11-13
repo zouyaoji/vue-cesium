@@ -16,7 +16,7 @@ export default {
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component('supermap-imagery-layer', SuperMapImageryLayer)
     Vue.component('arcgis-imagery-layer', ArcGisMapServerImageryLayer)
-    Vue.component('bingmap-imagery-layer', BingMapsImageryLayer)
+    Vue.component('bingmaps-imagery-layer', BingMapsImageryLayer)
     Vue.component('tianditu-imagery-layer', TiandituImageryLayer)
     Vue.component('urltemplate-imagery-layer', UrlTemplateImageryLayer)
     Vue.component('singletile-imagery-layer', SingleTileImageryLayer)

@@ -6,6 +6,13 @@ export const Events = {
   ]
 }
 
+export const ImageryLayerEvents = {
+  // Vue组件
+  'imagery-layer': [
+    'errorEvent'
+  ]
+}
+
 export const CollectionEvents = [
   {
     // viewer.imageryLayers

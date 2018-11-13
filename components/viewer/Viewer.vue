@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-13 13:56:52
+ * @Last Modified time: 2018-11-13 15:01:14
  */
 
 <template>
@@ -12,9 +12,8 @@
 </template>
 
 <script>
-
-import { CollectionEvents } from '../base/events.js'
 import bindEvents from '../base/bindEvent'
+import { CollectionEvents } from '../base/events.js'
 import { getDocumentByClassName } from '../base/util'
 import { createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels } from '../base/providerViewModels'
 
