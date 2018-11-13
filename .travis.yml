@@ -16,6 +16,7 @@ script:
   - npm run build:docs
 after_script:
   - cp ./docs/favicon.png ./dist/
+  - cp ./docs/worldimage.jpg ./dist/
   - cp -rf ./docs/Cesium/* ./dist/
   - cd dist
   - git init
