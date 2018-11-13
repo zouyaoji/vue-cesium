@@ -57,7 +57,8 @@ export default {
       type: String
     },
     mapStyle: {
-      type: String
+      type: String,
+      default: 'Aerial'
     },
     culture: {
       type: String
