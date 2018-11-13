@@ -1,18 +1,17 @@
 <template lang="markdown">
 
-# SuperMap影像服务图层
+# 单文件影像图层
 
-`supermap-imagery-layer`加载超图iserver影像服务。
+`singletile-imagery-layer`用该图层组件添加单个图片做为影像底图，仅支持经纬度投影，图片宽高比最好为2：1，否则会有拉伸。
 
 ## 属性
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|url|String||`required`超图iserver影像服务地址。|
-|name|String|超图iserver服务名称|`optional`影像图层名称。|
-|minimumLevel|Number|0|`optional`最小层级。|
-|maximumLevel|Number|20|`optional`最大层级。|
-|rectangle|Cesium.Rectangle||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
+|url|String||`required`指定服务地址。|
+|rectangle|Object||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
+|credit|String||`optional`指定服务的描述信息|
+|ellipsoid|Object||`optional`参考椭球体。|
 |alpha|Number\|function|1.0|`optional`图层透明度值，取值范围为0.0~1.0。|
 |brightness|Number\|function|1.0|`optional`图层亮度值。值为1.0表示使用原图；值大于1.0时图像将变亮；值小于1.0时图像将变暗。|
 |contrast|Number\|function|1.0|`optional`图层对比度。值为1.0表示使用原图；值大于1.0表示增加对比度；值小于1.0表示降低对比度。|
@@ -33,7 +32,7 @@
 
 ## 示例
 
-### 超图iserver影像服务
+### 单文件影像图层
 
 #### 代码
 
@@ -47,19 +46,10 @@
       <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
       <span>对比度</span>
       <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-      <span>切换服务</span>
-      <el-select v-model="url" placeholder="请选择服务">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
     </div>
-    <cesium-viewer>
-      <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
-      :contrast="contrast" @ready="ready" />
+    <cesium-viewer @ready="ready">
+      <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+        :contrast="contrast" />
     </cesium-viewer>
   </div>
 </template>
@@ -68,14 +58,7 @@
   export default {
     data () {
       return {
-        options: [{
-          value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-          label: '四川地图'
-        }, {
-          value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-          label: '谷歌地图'
-        }],
-        url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+        url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -84,17 +67,16 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        viewer.zoomTo(this.$refs.supermapLayer.originInstance)
       }
     }
   }
 </script>
 
 <style scoped>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
@@ -110,19 +92,10 @@
         <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
         <span>对比度</span>
         <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-        <span>切换服务</span>
-        <el-select v-model="url" placeholder="请选择服务">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
       </div>
-      <cesium-viewer>
-       <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
-        :contrast="contrast" @ready="ready" />
+      <cesium-viewer @ready="ready">
+        <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+          :contrast="contrast" />
       </cesium-viewer>
     </div>
   </template>
@@ -131,14 +104,7 @@
     export default {
       data () {
         return {
-          options: [{
-            value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-            label: '四川地图'
-          }, {
-            value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-            label: '谷歌地图'
-          }],
-          url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+          url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
           alpha: 1,
           brightness: 1,
           contrast: 1
@@ -147,16 +113,15 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(this.$refs.supermapLayer.originInstance)
         }
       }
     }
   </script>
 
   <style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
+    .viewer {
+      width: 100%;
+      height: 400px;
+    }
   </style>
 </doc-preview>

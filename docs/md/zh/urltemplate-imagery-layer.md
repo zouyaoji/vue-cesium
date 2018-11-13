@@ -20,7 +20,7 @@
 |ellipsoid|Object||`optional`参考椭球体。|
 |tileWidth|Number|256|`optional`像元宽度。|
 |tileHeight|Number|256|`optional`像元高度。|
-|hasAlphaChannel|Boolean|true|`optional`设置为true表示图层包含alpha透明通道，反正没有。|
+|hasAlphaChannel|Boolean|true|`optional`设置为true表示图层包含alpha透明通道，反之没有。|
 |getFeatureInfoFormats|Array||`optional`格式化拾取对象属性时提示信息位置，该项要设置pickFeaturesUrl且起作用时才起作用。|
 |enablePickFeatures|Boolean|true|`optional`是否开启图层拾取。|
 |customTags|Object||`optional`替换url模板中的自定义关键字。|
@@ -68,10 +68,9 @@
         </el-option>
       </el-select>
     </div>
-    <cesium-viewer>
-      <urltemplate-imagery-layer :url="urlAMapImage" :alpha="alpha" :brightness="brightness"
-        :contrast="contrast" @ready="ready" :maximumLevel="18" />
-      <urltemplate-imagery-layer :url="urlAMapUrlText" :maximumLevel="18" />
+    <cesium-viewer @ready="ready">
+      <urltemplate-imagery-layer :url="urlAMapImage" credit="高德地图服务" :alpha="alpha" :brightness="brightness"
+        :contrast="contrast" :maximumLevel="18" />
     </cesium-viewer>
   </div>
 </template>
@@ -80,8 +79,7 @@
   export default {
     data () {
       return {
-        urlAMapImage: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-        urlAMapUrlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+        urlAMapImage: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
         options: [{
           value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
           label: '高德影像地图服务'
@@ -102,11 +100,11 @@
   }
 </script>
 
-<style>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+<style scoped>
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
@@ -123,18 +121,18 @@
         <span>对比度</span>
         <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
         <span>切换服务</span>
-        <!-- <el-select v-model="urlAMapImage" placeholder="请选择服务">
+        <el-select v-model="urlAMapImage" placeholder="请选择服务">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select> -->
+        </el-select>
       </div>
       <cesium-viewer @ready="ready">
-        <urltemplate-imagery-layer :url="urlAMapImage" :minimumLevel="0" :maximumLevel="18" />
-        <urltemplate-imagery-layer :url="urlAMapUrlText" :minimumLevel="0" :maximumLevel="18" />
+        <urltemplate-imagery-layer :url="urlAMapImage" credit="高德地图服务" :alpha="alpha" :brightness="brightness"
+         :contrast="contrast" :maximumLevel="18" />
       </cesium-viewer>
     </div>
   </template>
@@ -143,8 +141,7 @@
     export default {
       data () {
         return {
-          urlAMapImage: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          urlAMapUrlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+          urlAMapImage: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
           options: [{
             value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
             label: '高德影像地图服务'
@@ -165,10 +162,10 @@
     }
   </script>
 
-  <style>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
+  <style scoped>
+    .viewer {
+      width: 100%;
+      height: 400px;
+    }
   </style>
 </doc-preview>

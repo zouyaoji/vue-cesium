@@ -1,15 +1,17 @@
 <template lang="markdown">
 
-# TiandituImageryLayer
+# SingleTileImageryLayer
 
-`tianditu-imagery-layer`
+`singletile-imagery-layer`Use this layer component to add a single image as the image basemap. It only supports latitude and longitude projection. The aspect ratio of the image is preferably 2:1, otherwise there will be stretching.
 
 ## Instance Properties
 
 |name|type|default|description|
 |------|-----|-----|----|
-|mapStyle|String|img_w|`optional`TiandituImageryLayer Type.|
-|rectangle|Cesium.Rectangle||`optional`The rectangle of the layer. This rectangle can limit the visible portion of the imagery provider.|
+|url|String||`required`The url for the tile.|
+|rectangle|Object||`optional`The rectangle, in radians, covered by the image.|
+|credit|String||`optional`A credit for the data source, which is displayed on the canvas.|
+|ellipsoid|Object||`optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used.|
 |alpha|Number\|function|1.0|`optional`The alpha blending value of this layer, from 0.0 to 1.0. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the alpha is required, and it is expected to return the alpha value to use for the tile.|
 |brightness|Number\|function|1.0|`optional`The brightness of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 makes the imagery darker while greater than 1.0 makes it brighter. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the brightness is required, and it is expected to return the brightness value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.|
 |contrast|Number\|function|1.0|`optional`The contrast of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the contrast while greater than 1.0 increases it. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the contrast is required, and it is expected to return the contrast value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.|
@@ -26,14 +28,14 @@
 
 |name|parameter|description|
 |------|----|----|
-|ready|{Cesium, viewer}|Triggers when TiandituImageryLayer is ready. It returns a core class of Cesium, a viewer instance.|
+|ready|{Cesium, viewer}|Triggers when SingleTileImageryLayer is ready. It returns a core class of Cesium, a viewer instance.|
 |errorEvent|TileProviderError|Gets an event that is raised when the imagery provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|
 
-## Examples
+## 示例
 
-### TiandituImageryLayer
+### 单文件影像图层
 
-#### Code
+#### 代码
 
 ```html
 <template>
@@ -45,19 +47,10 @@
       <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
       <span>contrast</span>
       <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-      <span>change mapStyle</span>
-      <el-select v-model="mapStyle" placeholder="change mapStyle">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
     </div>
-    <cesium-viewer>
-      <tianditu-imagery-layer :mapStyle="mapStyle" :alpha="alpha" :brightness="brightness" 
-      :contrast="contrast" @ready="ready" />
+    <cesium-viewer @ready="ready">
+      <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+        :contrast="contrast" />
     </cesium-viewer>
   </div>
 </template>
@@ -66,14 +59,7 @@
   export default {
     data () {
       return {
-        options: [{
-          value: 'img_c',
-          label: '天地图全球影像地图服务（经纬度投影）'
-        }, {
-          value: 'vec_c',
-          label: '天地图全球矢量地图服务（经纬度投影）'
-        }],
-        mapStyle: 'vec_c',
+        url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -88,14 +74,14 @@
 </script>
 
 <style scoped>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
-#### Preview
+#### 预览
 
 <doc-preview>
   <template>
@@ -107,19 +93,10 @@
         <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
         <span>contrast</span>
         <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-        <span>mapStyle</span>
-        <el-select v-model="mapStyle" placeholder="mapStyle">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
       </div>
-      <cesium-viewer>
-        <tianditu-imagery-layer :mapStyle="mapStyle" :alpha="alpha" :brightness="brightness" 
-        :contrast="contrast" @ready="ready" />
+      <cesium-viewer @ready="ready">
+        <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+          :contrast="contrast" />
       </cesium-viewer>
     </div>
   </template>
@@ -128,14 +105,7 @@
     export default {
       data () {
         return {
-          options: [{
-            value: 'img_c',
-            label: '天地图全球影像地图服务（经纬度投影）'
-          }, {
-            value: 'vec_c',
-            label: '天地图全球矢量地图服务（经纬度投影）'
-          }],
-          mapStyle: 'vec_c',
+          url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
           alpha: 1,
           brightness: 1,
           contrast: 1
@@ -150,9 +120,9 @@
   </script>
 
   <style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
+    .viewer {
+      width: 100%;
+      height: 400px;
+    }
   </style>
 </doc-preview>

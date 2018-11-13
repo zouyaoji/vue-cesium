@@ -23,6 +23,7 @@
 |splitDirection|Number||`optional`The ImagerySplitDirection split to apply to this layer.|
 |minimumTerrainLevel|Number||`optional`The minimum terrain level-of-detail at which to show this imagery layer, or undefined to show it at all levels. Level zero is the least-detailed level.|
 |maximumTerrainLevel|Number||`optional`The maximum terrain level-of-detail at which to show this imagery layer, or undefined to show it at all levels. Level zero is the least-detailed level.|
+---
 
 ## Events
 
@@ -90,7 +91,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 .viewer {
   width: 100%;
   height: 400px;

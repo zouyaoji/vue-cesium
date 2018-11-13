@@ -1,18 +1,22 @@
 <template lang="markdown">
 
-# SuperMap影像服务图层
+# BingMaps影像服务图层
 
-`supermap-imagery-layer`加载超图iserver影像服务。
+`bingmaps-imagery-layer`
 
 ## 属性
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|url|String||`required`超图iserver影像服务地址。|
-|name|String|超图iserver服务名称|`optional`影像图层名称。|
-|minimumLevel|Number|0|`optional`最小层级。|
-|maximumLevel|Number|20|`optional`最大层级。|
-|rectangle|Cesium.Rectangle||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
+|url|String||`required`指定服务地址。|
+|bmKey|String||`optional`指定BingMaps地图API秘钥，可到[https://www.bingmapsportal.com/](https://www.bingmapsportal.com/)申请Key。|
+|tileProtocol|String||`optional`指定地图是http还是https加载，默认与页面相同。|
+|mapStyle|String|'Aerial'|`optional`指定加载的BingMaps类型。|
+|culture|String||`optional`指定服务的描述信息。|
+|ellipsoid|Number|0|`optional`参考椭球体|
+|maximumLevel|Number||`optional`最大层级。|
+|rectangle|Object||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
+|tileDiscardPolicy|Object||`optional`The policy that determines if a tile is invalid and should be discarded.|
 |alpha|Number\|function|1.0|`optional`图层透明度值，取值范围为0.0~1.0。|
 |brightness|Number\|function|1.0|`optional`图层亮度值。值为1.0表示使用原图；值大于1.0时图像将变亮；值小于1.0时图像将变暗。|
 |contrast|Number\|function|1.0|`optional`图层对比度。值为1.0表示使用原图；值大于1.0表示增加对比度；值小于1.0表示降低对比度。|
@@ -33,7 +37,7 @@
 
 ## 示例
 
-### 超图iserver影像服务
+### 通用模板影像图层
 
 #### 代码
 
@@ -48,7 +52,7 @@
       <span>对比度</span>
       <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
       <span>切换服务</span>
-      <el-select v-model="url" placeholder="请选择服务">
+      <el-select v-model="mapStyle" placeholder="请选择服务">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -57,9 +61,9 @@
         </el-option>
       </el-select>
     </div>
-    <cesium-viewer>
-      <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
-      :contrast="contrast" @ready="ready" />
+    <cesium-viewer @ready="ready">
+      <bingmaps-imagery-layer :url="url" :bmKey="bmKey" :mapStyle="mapStyle"  :alpha="alpha" :brightness="brightness"
+        :contrast="contrast" />
     </cesium-viewer>
   </div>
 </template>
@@ -68,14 +72,22 @@
   export default {
     data () {
       return {
+        url: 'https://dev.virtualearth.net',
+        bmKey: 'AqgBIfrBG50dl7Ykc9nANoj5UJnIxg5YyEZu-UE7sY_sHoZT1db1jGZAalBsU73w', // 可到(https://www.bingmapsportal.com/)申请Key。
+        mapStyle: 'Aerial',
         options: [{
-          value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-          label: '四川地图'
+          value: 'Aerial',
+          label: 'Aerial'
         }, {
-          value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-          label: '谷歌地图'
+          value: 'AerialWithLabels',
+          label: 'AerialWithLabels'
+        },{
+          value: 'Road',
+          label: 'Road'
+        }, {
+          value: 'CanvasDark',
+          label: 'CanvasDark'
         }],
-        url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -84,17 +96,16 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        viewer.zoomTo(this.$refs.supermapLayer.originInstance)
       }
     }
   }
 </script>
 
 <style scoped>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
@@ -111,7 +122,7 @@
         <span>对比度</span>
         <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
         <span>切换服务</span>
-        <el-select v-model="url" placeholder="请选择服务">
+        <el-select v-model="mapStyle" placeholder="请选择服务">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -120,9 +131,9 @@
           </el-option>
         </el-select>
       </div>
-      <cesium-viewer>
-       <supermap-imagery-layer ref="supermapLayer" :url="url" :alpha="alpha" :brightness="brightness" 
-        :contrast="contrast" @ready="ready" />
+      <cesium-viewer @ready="ready">
+        <bingmaps-imagery-layer :url="url" :bmKey="bmKey" :mapStyle="mapStyle"  :alpha="alpha" :brightness="brightness"
+         :contrast="contrast" />
       </cesium-viewer>
     </div>
   </template>
@@ -131,14 +142,22 @@
     export default {
       data () {
         return {
+          url: 'https://dev.virtualearth.net',
+          bmKey: 'AqgBIfrBG50dl7Ykc9nANoj5UJnIxg5YyEZu-UE7sY_sHoZT1db1jGZAalBsU73w', // 可到(https://www.bingmapsportal.com/)申请Key。
+          mapStyle: 'Aerial',
           options: [{
-            value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-            label: '四川地图'
+            value: 'Aerial',
+            label: 'Aerial'
           }, {
-            value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-            label: '谷歌地图'
+            value: 'AerialWithLabels',
+            label: 'AerialWithLabels'
+          },{
+            value: 'Road',
+            label: 'Road'
+          }, {
+            value: 'CanvasDark',
+            label: 'CanvasDark'
           }],
-          url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           alpha: 1,
           brightness: 1,
           contrast: 1
@@ -147,16 +166,15 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(this.$refs.supermapLayer.originInstance)
         }
       }
     }
   </script>
 
   <style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
+    .viewer {
+      width: 100%;
+      height: 400px;
+    }
   </style>
 </doc-preview>
