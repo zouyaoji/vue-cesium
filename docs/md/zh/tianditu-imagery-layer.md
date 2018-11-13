@@ -2,7 +2,7 @@
 
 # 天地图服务图层
 
-`TiandituImageryLayer`
+`tianditu-imagery-layer`
 
 ## 属性
 
@@ -25,7 +25,8 @@
 
 |事件名|参数|描述|
 |------|----|----|
-|ready|{Cesium, viewer, originInstance}|返回Cesium类, viewer实例。|
+|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+|errorEvent|TileProviderError|当图层的提供者发生异步错误时触发, 返回一个TileProviderError实例。|
 
 ## 示例
 

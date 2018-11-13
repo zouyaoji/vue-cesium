@@ -14,7 +14,7 @@ Vue.use(VueCesium, {
   // cesiumPath 是指引用的Cesium的文件夹路径， 如
   // cesiumPath: '/statics/Cesium'
   // 或者在线引用(http)
-  // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build'
+  // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build/Cesium'
   // 在线引用(https)
   cesiumPath: 'https://zouyaoji.top/vue-cesium'
 })

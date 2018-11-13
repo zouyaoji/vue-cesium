@@ -95,19 +95,27 @@ const routeMap = [
     component: CateView,
     children: [
       {
-        path: 'supermap-imagery-layer',
-        component: 'supermap-imagery-layer',
-        name: {
-          zh: '超图影像服务图层',
-          en: 'SuperMapImageryLayer'
-        }
-      },
-      {
         path: 'arcgis-imagery-layer',
         component: 'arcgis-imagery-layer',
         name: {
           zh: 'ArcGIS影像服务图层',
           en: 'ArcGISImageryLayer'
+        }
+      },
+      {
+        path: 'supermap-imagery-layer',
+        component: 'supermap-imagery-layer',
+        name: {
+          zh: 'SuperMap影像服务图层',
+          en: 'SuperMapImageryLayer'
+        }
+      },
+      {
+        path: 'urltemplate-imagery-layer',
+        component: 'urltemplate-imagery-layer',
+        name: {
+          zh: '通用模板影像图层',
+          en: 'UrlTemplateImageryLayer'
         }
       },
       {
