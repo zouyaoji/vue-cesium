@@ -34,18 +34,40 @@
 |terrainExaggeration|Number|1.0|`optional`用于夸大地形的标量。请注意，设置地形夸张不会修改其它任何数据。|
 |shadows|Boolean|false|`optional`确定阴影是否由太阳投射形成。|
 |terrainShadows|Number|3|`optional`确定地形是否投射或接受来自太阳的阴影。|
-|mapMode2D|Number|1|`optional`确定地形是否投射或接受来自太阳的阴影。|
+|mapMode2D|Number|1|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。|
 |projectionPicker|Boolean|false|`optional`是否显示投影切换按钮|
 |camera|Object|| `optional` 场景相机位置.|
 ---
 
 ## 事件
 
-| 事件名|参数|描述|
-|---|------|---|
-| selectedEntityChanged| Entity| 场景选中实体发生改变时触发此事件。 |
-| trackedEntityChanged| Entity| 场景跟踪实体发生改变时触发此事件。 |
-| dataSourceAdded|DataSource| 场景添加一个数据源时触发此事件。   |
+| 事件名|参数|描述|来源|
+|------|----|----|---|
+|selectedEntityChanged|entity|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（为选中）|Viewer|
+|trackedEntityChanged|entity|场景跟踪实体发生改变时触发此事件。事件参数表示跟踪的实体。|Viewer|
+|layerAdded|imageryLayer, index|场景添加某影像图层后触发该事件。事件参数表示改图层和它的索引。|Viewer.imageryLayers|
+|layerMoved|imageryLayer, newIndex, oldIndex|场景某影像图层发生移动后触发该事件。事件参数表示该图层和它以前的索引以及新索引。|Viewer.imageryLayers|
+|layerRemoved|imageryLayer, index|场景移除某影像图层后触发该事件。事件参数表示该图层和它的索引。|Viewer.imageryLayers|
+|layerShownOrHidden|imageryLayer, index, flag|场景中某图层可见性设置ImageryLayer#show发生改变时触发该事件。事件参数表示发生改变的图层，图层索引，以及图层是否可见。|iewer.imageryLayers|
+|dataSourceAdded|dataSource|场景添加某数据源后触发该事件。事件参数表示该数据源。|Viewer.dataSources|
+|dataSourceMoved|dataSource|场景移动某数据源后发生后触发该事件。事件参数表示该数据源和它以前的索引以及新索引。|Viewer.dataSources|
+|dataSourceRemoved|dataSource|场景移除某数据源后触发该事件。事件参数表示该数据源。|Viewer.entities|
+|collectionChanged|collection, added, removed, changed|场景实体集合添加、移除或者改变实体后触发该事件。事件参数表示该实体集合，以及添加的实体数组、移除的实体数组、改变的实体数组。|Viewer.entities|
+|morphComplete|object|场景投影转换完成后触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
+|morphStart|object|场景投影转换开始时触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
+|postRender|scene, currentTime|场景每帧渲染结束后触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|preRender|scene, currentTime|场景刷新后但在每帧渲染开始时触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|postUpdate|scene, currentTime|场景刷新后但在每帧渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|preUpdate|scene, currentTime|场景刷新或者渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|renderError|scene, error|场景抛出渲染异常时触发该事件。事件参数是scene实例和异常。|Viewer.scene|
+|terrainProviderChanged||场景地形提供者发生改变时触发该事件。|Viewer.scene|
+|changed|number|场景相机按percentageChanged设定比例改变后触发该事件。|Viewer.camera|
+|moveEnd||场景相机停止移动后触发该事件。|Viewer.camera|
+|moveStart||场景相机开始移动时触发该事件。|Viewer.camera|
+|onStop||场景时钟每当到达停止时间时触发该事件。|Viewer.clock|
+|onTick||场景时钟每当调用Clock#tick触发该事件。|Viewer.clock|
+|errorEvent||场景地形提供者遇到异步错误时触发该事件。|Viewer.terrainProvider|
+---
 
 ## 示例
 

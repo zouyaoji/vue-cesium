@@ -40,11 +40,33 @@ The container is an empty DOM node which used to mount other components or DOM n
 
 ## Events
 
-|name|parameter|description|
-|---|------|---|
-|selectedEntityChanged|Entity| Gets the event that is raised when the selected entity changes. |
-|trackedEntityChanged|Entity| Gets the event that is raised when the tracked entity changes. |
-|dataSourceAdded|DataSource| An event that is raised when a data source is added to the collection. Event handlers are passed the data source that was added.|
+|name|parameter|description|source|
+|----|---------|-----------|------|
+|selectedEntityChanged|Entity| Gets the event that is raised when the selected entity changes. |Viewer|
+|trackedEntityChanged|Entity| Gets the event that is raised when the tracked entity changes. |Viewer|
+|layerAdded|imageryLayer, index|An event that is raised when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.|Viewer.imageryLayers|
+|layerMoved|imageryLayer, newIndex, oldIndex|An event that is raised when a layer changes position in the collection. Event handlers are passed the layer that was moved, its new index after the move, and its old index prior to the move.|Viewer.imageryLayers|
+|layerRemoved|imageryLayer, index|An event that is raised when a layer is removed from the collection. Event handlers are passed the layer that was removed and the index from which it was removed.|Viewer.imageryLayers|
+|layerShownOrHidden|imageryLayer, index, flag|An event that is raised when a layer is shown or hidden by setting the ImageryLayer#show property. Event handlers are passed a reference to this layer, the index of the layer in the collection, and a flag that is true if the layer is now shown or false if it is now hidden.|iewer.imageryLayers|
+|dataSourceAdded|dataSource|An event that is raised when a data source is added to the collection. Event handlers are passed the data source that was added.|Viewer.dataSources|
+|dataSourceMoved|dataSource|An event that is raised when a data source changes position in the collection. Event handlers are passed the data source that was moved, its new index after the move, and its old index prior to the move.|Viewer.dataSources|
+|dataSourceRemoved|dataSource|An event that is raised when a data source is removed from the collection. Event handlers are passed the data source that was removed.|Viewer.entities|
+|collectionChanged|collection, added, removed, changed|Gets the event that is fired when entities are added or removed from the collection. The generated event is a EntityCollection.collectionChangedEventCallback.|Viewer.entities|
+|morphComplete|object|The event fired at the completion of a scene transition.|Viewer.scene|
+|morphStart|object|The event fired at the beginning of a scene transition.|Viewer.scene|
+|postRender|scene|Gets the event that will be raised immediately after the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|preRender|scene|Gets the event that will be raised after the scene is updated and immediately before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|postUpdate|scene|Gets the event that will be raised immediately after the scene is updated and before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|preUpdate|scene|Gets the event that will be raised before the scene is updated or rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|renderError|scene, error|Gets the event that will be raised when an error is thrown inside the render function. The Scene instance and the thrown error are the only two parameters passed to the event handler. By default, errors are not rethrown after this event is raised, but that can be changed by setting the rethrowRenderErrors property.|Viewer.scene|
+|terrainProviderChanged||Gets an event that's raised when the terrain provider is changed.|Viewer.scene|
+|changed|number|Gets the event that will be raised when the camera has changed by percentageChanged.|Viewer.camera|
+|moveEnd||Gets the event that will be raised when the camera has stopped moving.|Viewer.camera|
+|moveStart||Gets the event that will be raised at when the camera starts to move.|Viewer.camera|
+|onStop||An Event that is fired whenever Clock#stopTime is reached.|Viewer.clock|
+|onTick||An Event that is fired whenever Clock#tick is called.|Viewer.clock|
+|errorEvent||Gets an event that is raised when the terrain provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|Viewer.terrainProvider|
+---
 
 ## Examples
 
