@@ -1,17 +1,22 @@
 <template lang="markdown">
 
-# Singletile影像图层
+# MapBox影像图层
 
-`singletile-imagery-layer`用该图层组件添加单个图片做为影像底图，仅支持经纬度投影，图片宽高比最好为2：1，否则会有拉伸。
+`mapbox-imagery-layer`加载由Mapbox托管的影像。
 
 ## 属性
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|url|String||`required`指定服务地址。|
+|url|String|`https://api.mapbox.com/v4/`|`optional`指定Mapbox服务地址。|
+|mapId|String||`required`Mapbox地图ID。|
+|accessToken|Object||`optional`加载的Mapbox影像秘钥。|
+|format|String|'png'|`optional`请求返回的影像图片格式。|
+|ellipsoid|String||`optional`参考椭球体，没指定的话默认WGS84。|
+|minimumLevel|Number|0|`optional`最小层级。|
+|maximumLevel|Number||`optional`最大层级。|
 |rectangle|Object||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
-|credit|String||`optional`指定服务的描述信息|
-|ellipsoid|Object||`optional`参考椭球体。|
+|credit|String||`optional`服务描述信息。|
 |alpha|Number\|function|1.0|`optional`图层透明度值，取值范围为0.0~1.0。|
 |brightness|Number\|function|1.0|`optional`图层亮度值。值为1.0表示使用原图；值大于1.0时图像将变亮；值小于1.0时图像将变暗。|
 |contrast|Number\|function|1.0|`optional`图层对比度。值为1.0表示使用原图；值大于1.0表示增加对比度；值小于1.0表示降低对比度。|
@@ -32,7 +37,7 @@
 
 ## 示例
 
-### Singletile影像图层
+### MapBox影像图层
 
 #### 代码
 
@@ -46,9 +51,18 @@
       <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
       <span>对比度</span>
       <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+      <span>切换服务</span>
+      <el-select v-model="mapId" placeholder="切换影像">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </div>
     <cesium-viewer @ready="ready">
-      <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+      <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
         :contrast="contrast" />
     </cesium-viewer>
   </div>
@@ -58,7 +72,14 @@
   export default {
     data () {
       return {
-        url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
+        mapId: 'mapbox.streets',
+        options: [{
+          value: 'mapbox.satellite',
+          label: '卫星'
+        }, {
+          value: 'mapbox.streets',
+          label: '地图'
+        }],
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -92,9 +113,18 @@
         <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
         <span>对比度</span>
         <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+        <span>切换服务</span>
+        <el-select v-model="mapId" placeholder="切换影像">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </div>
       <cesium-viewer @ready="ready">
-        <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
+        <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
           :contrast="contrast" />
       </cesium-viewer>
     </div>
@@ -104,7 +134,14 @@
     export default {
       data () {
         return {
-          url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
+          mapId: 'mapbox.streets',
+          options: [{
+            value: 'mapbox.satellite',
+            label: '卫星'
+          }, {
+            value: 'mapbox.streets',
+            label: '地图'
+          }],
           alpha: 1,
           brightness: 1,
           contrast: 1

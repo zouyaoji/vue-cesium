@@ -103,6 +103,38 @@ const routeMap = [
         }
       },
       {
+        path: 'bingmaps-imagery-layer',
+        component: 'bingmaps-imagery-layer',
+        name: {
+          zh: 'BingMaps影像服务图层',
+          en: 'BingMapsImageryLayer'
+        }
+      },
+      {
+        path: 'mapbox-imagery-layer',
+        component: 'mapbox-imagery-layer',
+        name: {
+          zh: 'Mapbox影像服务图层',
+          en: 'MapboxImageryLayer'
+        }
+      },
+      {
+        path: 'openstreetmap-imagery-layer',
+        component: 'openstreetmap-imagery-layer',
+        name: {
+          zh: 'Openstreetmap影像服务图层',
+          en: 'OpenStreetMapImageryLayer'
+        }
+      },
+      {
+        path: 'singletile-imagery-layer',
+        component: 'singletile-imagery-layer',
+        name: {
+          zh: 'Singletile影像图层',
+          en: 'SingleTileImageryLayer'
+        }
+      },
+      {
         path: 'supermap-imagery-layer',
         component: 'supermap-imagery-layer',
         name: {
@@ -124,22 +156,6 @@ const routeMap = [
         name: {
           zh: '天地图服务图层',
           en: 'TiandituImageryLayer'
-        }
-      },
-      {
-        path: 'bingmaps-imagery-layer',
-        component: 'bingmaps-imagery-layer',
-        name: {
-          zh: 'BingMaps影像服务图层',
-          en: 'BingMapsImageryLayer'
-        }
-      },
-      {
-        path: 'singletile-imagery-layer',
-        component: 'singletile-imagery-layer',
-        name: {
-          zh: '单文件影像图层',
-          en: 'SingleTileImageryLayer'
         }
       }
     ]
