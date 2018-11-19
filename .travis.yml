@@ -16,9 +16,7 @@ script:
   - npm run build:docs
 after_script:
   - cp ./docs/favicon.png ./dist/
-  - cp ./docs/worldimage.jpg ./dist/
-  - cp -rf ./docs/Cesium/* ./dist/
-  - cp -rf ./docs/SampleData/* ./dist/
+  - cp -rf ./docs/statics/* ./dist/statics/
   - cd dist
   - git init
   - git config user.name "zouyaoji"
