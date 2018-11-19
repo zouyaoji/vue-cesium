@@ -127,10 +127,11 @@ export default {
       const { Cesium, viewer, url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, alpha,
         brightness, contrast, hue, saturation, gamma, show, splitDirection, minimumTerrainLevel, maximumTerrainLevel } = this
 
-      if (!Cesium.defined(Cesium.OpenStreetMapImageryLayer)) {
-        throw new Cesium.DeveloperError('Your Cesium Package is not included OpenStreetMapImageryLayer!')
+      if (!Cesium.defined(Cesium.createOpenStreetMapImageryProvider)) {
+        throw new Cesium.DeveloperError('Your Cesium Package is not included createOpenStreetMapImageryProvider!')
       }
-      let imageryProvider = new Cesium.OpenStreetMapImageryLayer({
+      /* eslint-disable new-cap */
+      let imageryProvider = new Cesium.createOpenStreetMapImageryProvider({
         url: url,
         fileExtension: fileExtension,
         rectangle: rectangle,
