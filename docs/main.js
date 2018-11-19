@@ -17,7 +17,7 @@ Vue.use(ElementUI)
 Vue.use(VueMaterial)
 Vue.use(VueRouter)
 Vue.use(VueCesium, {
-  cesiumPath: 'https://zouyaoji.top/vue-cesium'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/'
 })
 
 Vue.material.registerTheme({
