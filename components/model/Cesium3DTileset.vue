@@ -234,7 +234,7 @@ export default {
   },
   methods: {
     load () {
-      const { Cesium, viewer, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
+      const { Cesium, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
         dynamicScreenSpaceErrorDensity, dynamicScreenSpaceErrorFactor, dynamicScreenSpaceErrorHeightFalloff, skipLevelOfDetail, baseScreenSpaceError,
         skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid,
         pointCloudShading, imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume,
@@ -280,11 +280,6 @@ export default {
       })
 
       bindEvents.call(this, this.originInstance)
-      this.originInstance.readyPromise.then(tileset => {
-        viewer.scene.primitives.add(tileset)
-      }).otherwise(error => {
-        throw new Cesium.DeveloperError(error)
-      })
     }
   }
 }
