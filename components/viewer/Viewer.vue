@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-13 15:01:14
+ * @Last Modified time: 2018-11-19 14:33:05
  */
 
 <template>
@@ -843,8 +843,11 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       this.$emit('ready', { Cesium, viewer })
       this.viewerContainer = this.$refs.viewer.children[0]
+      if (Cesium.defined(Cesium.SuperMapImageryProvider)) {
+        let credit = viewer.scene.frameState.creditDisplay
+        credit.container.removeChild(credit._imageContainer)
+      }
       this.resizeControl()
-      window.someObject = this.someObject
     },
     initViewer (Cesium) {
       this.Cesium = Cesium
