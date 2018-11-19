@@ -18,6 +18,7 @@ after_script:
   - cp ./docs/favicon.png ./dist/
   - cp ./docs/worldimage.jpg ./dist/
   - cp -rf ./docs/Cesium/* ./dist/
+  - cp -rf ./docs/SampleData/* ./dist/
   - cd dist
   - git init
   - git config user.name "zouyaoji"
