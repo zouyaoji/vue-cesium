@@ -65,15 +65,9 @@
 ```html
 <template>
   <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-      <span>透明度</span>
-      <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
-      <span>亮度</span>
-      <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
-      <span>对比度</span>
-      <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-      <span>切换服务</span>
-      <el-select v-model="mapId" placeholder="切换影像">
+    <!-- <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <span>切换地址</span>
+      <el-select v-model="url" placeholder="切换地址">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -81,10 +75,9 @@
           :value="item.value">
         </el-option>
       </el-select>
-    </div>
-    <cesium-viewer @ready="ready">
-      <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
-        :contrast="contrast" />
+    </div> -->
+    <cesium-viewer>
+      <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
     </cesium-viewer>
   </div>
 </template>
@@ -93,13 +86,13 @@
   export default {
     data () {
       return {
-        mapId: 'mapbox.streets',
+        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         options: [{
-          value: 'mapbox.satellite',
-          label: '卫星'
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          label: '数据1'
         }, {
-          value: 'mapbox.streets',
-          label: '地图'
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+          label: '数据2'
         }],
         alpha: 1,
         brightness: 1,
@@ -109,6 +102,12 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
+        this.$refs.tileset.originInstance.readyPromise.then(tileset => {
+          viewer.scene.primitives.add(tileset)
+          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+        }).otherwise(error => {
+          throw new Cesium.DeveloperError(error)
+        })
       }
     }
   }
@@ -127,15 +126,9 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-        <span>透明度</span>
-        <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
-        <span>亮度</span>
-        <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
-        <span>对比度</span>
-        <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
-        <span>切换服务</span>
-        <el-select v-model="mapId" placeholder="切换影像">
+      <!-- <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+        <span>切换地址</span>
+        <el-select v-model="url" placeholder="切换地址">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -143,9 +136,9 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </div>
-      <cesium-viewer @ready="ready">
-        <cesium-3dtileset url="https://zouyaoji.top/vue-cesium/Cesium3DTiles/Tilesets/Tileset/tileset.json"></cesium-3dtileset>
+      </div> -->
+      <cesium-viewer>
+        <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
       </cesium-viewer>
     </div>
   </template>
@@ -154,13 +147,13 @@
     export default {
       data () {
         return {
-          mapId: 'mapbox.streets',
+          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           options: [{
-            value: 'mapbox.satellite',
-            label: '卫星'
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+            label: '数据1'
           }, {
-            value: 'mapbox.streets',
-            label: '地图'
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+            label: '数据2'
           }],
           alpha: 1,
           brightness: 1,
@@ -170,6 +163,12 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          this.$refs.tileset.originInstance.readyPromise.then(tileset => {
+            viewer.scene.primitives.add(tileset)
+            viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+          }).otherwise(error => {
+            throw new Cesium.DeveloperError(error)
+          })
         }
       }
     }

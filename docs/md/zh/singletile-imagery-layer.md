@@ -58,7 +58,7 @@
   export default {
     data () {
       return {
-        url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
+        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/worldimage.jpg',
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -104,7 +104,7 @@
     export default {
       data () {
         return {
-          url: 'https://zouyaoji.top/vue-cesium/worldimage.jpg',
+          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/worldimage.jpg',
           alpha: 1,
           brightness: 1,
           contrast: 1
