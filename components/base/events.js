@@ -3,6 +3,15 @@ export const Events = {
   'cesium-viewer': [
     'selectedEntityChanged',
     'trackedEntityChanged'
+  ],
+  'cesium-3dtileset': [
+    'allTilesLoaded',
+    'initialTilesLoaded',
+    'loadProgress',
+    'tileFailed',
+    'tileLoad',
+    'tileUnload',
+    'tileVisible'
   ]
 }
 

@@ -159,6 +159,22 @@ const routeMap = [
         }
       }
     ]
+  },
+  {
+    path: 'model',
+    name: {
+      zh: '模型',
+      en: 'Model'
+    },
+    component: CateView,
+    children: [{
+      path: 'cesium-3dtileset',
+      component: 'cesium-3dtileset',
+      name: {
+        zh: '3DTiles',
+        en: '3DTiles'
+      }
+    }]
   }
 ]
 

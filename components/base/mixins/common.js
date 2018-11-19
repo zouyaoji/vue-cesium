@@ -1,6 +1,9 @@
 const types = {
   imageryLayers: {
     unload: 'remove'
+  },
+  primitives: {
+    unload: 'remove'
   }
 }
 
@@ -37,8 +40,9 @@ class Mixin {
         const { viewer, originInstance } = this
         try {
           switch (prop.type) {
-            case 'search':
-              return originInstance.clearResults()
+            case 'primitives':
+              viewer.scene[prop.type][types[prop.type].unload](originInstance)
+              break
             case 'autoComplete':
             case 'lushu':
               return originInstance.dispose()

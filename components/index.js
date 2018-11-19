@@ -8,6 +8,7 @@ import UrlTemplateImageryLayer from './layers/UrlTemplateImageryLayer.vue'
 import SingleTileImageryLayer from './layers/SingleTileImageryLayer.vue'
 import MapboxImageryLayer from './layers/MapboxImageryLayer.vue'
 import OpenStreetMapImageryLayer from './layers/OpenStreetMapImageryLayer.vue'
+import Cesium3DTileset from './model/Cesium3DTileset.vue'
 
 export default {
   install (Vue, options) {
@@ -22,11 +23,12 @@ export default {
     Vue.component('singletile-imagery-layer', SingleTileImageryLayer)
     Vue.component('mapbox-imagery-layer', MapboxImageryLayer)
     Vue.component('openstreetmap-imagery-layer', OpenStreetMapImageryLayer)
+    Vue.component('cesium-3dtileset', Cesium3DTileset)
   },
   version
 }
 
 export {
   CesiumViewer, SuperMapImageryLayer, ArcGisMapServerImageryLayer, BingMapsImageryLayer, TiandituImageryLayer, UrlTemplateImageryLayer,
-  SingleTileImageryLayer, MapboxImageryLayer, OpenStreetMapImageryLayer
+  SingleTileImageryLayer, MapboxImageryLayer, OpenStreetMapImageryLayer, Cesium3DTileset
 }
