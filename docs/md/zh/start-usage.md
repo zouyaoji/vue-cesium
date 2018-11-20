@@ -30,7 +30,6 @@ Vue.use(VueCesium, {
   // 个人在线SuperMap Cesium Build包（在官方基础上二次开发出来的）：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // 官方在线Cesium Build包，有CDN加速，推荐用这个：
-  // https://unpkg.com/cesium/Build/Cesium/Cesium.js
   cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 })
 ```

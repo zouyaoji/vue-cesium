@@ -135,19 +135,19 @@ const routeMap = [
         }
       },
       {
+        path: 'urltemplate-imagery-layer',
+        component: 'urltemplate-imagery-layer',
+        name: {
+          zh: 'UrlTemplate影像图层',
+          en: 'UrlTemplateImageryLayer'
+        }
+      },
+      {
         path: 'supermap-imagery-layer',
         component: 'supermap-imagery-layer',
         name: {
           zh: 'SuperMap影像服务图层',
           en: 'SuperMapImageryLayer'
-        }
-      },
-      {
-        path: 'urltemplate-imagery-layer',
-        component: 'urltemplate-imagery-layer',
-        name: {
-          zh: '通用模板影像图层',
-          en: 'UrlTemplateImageryLayer'
         }
       },
       {

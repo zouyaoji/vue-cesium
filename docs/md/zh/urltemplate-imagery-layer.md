@@ -1,6 +1,6 @@
 <template lang="markdown">
 
-# 通用模板影像图层
+# UrlTemplate影像图层
 
 `urltemplate-imagery-layer`方便用户通过一个约定的URL模板来请求影像图层。比如加载国内的高德，腾讯等影像服务，URL都是一个固定的规范，都可以通过该组件轻松实现。
 
