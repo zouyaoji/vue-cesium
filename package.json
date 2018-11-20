@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Load the Cesium official build package or other third-party Cesium packages (such as the Superap WebGL build package) to the Vue component.",
   "main": "index.js",
   "scripts": {
