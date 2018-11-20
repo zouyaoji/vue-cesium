@@ -1,5 +1,5 @@
 import { version } from '../package.json'
-import CesiumViewer from './viewer/Viewer.vue'
+import CesiumViewer from './viewer/CesiumViewer.vue'
 import SuperMapImageryLayer from './layers/SuperMapImageryLayer.vue'
 import ArcGisMapServerImageryLayer from './layers/ArcGisMapServerImageryLayer.vue'
 import BingMapsImageryLayer from './layers/BingMapsImageryLayer.vue'
