@@ -48,19 +48,18 @@ Vue.use(VueCesium, {
 
 ### Local Registration
 
-A locally registered `CesiumViewer` component **must** declare the `cesiumPath` attribute.
 All components are stored in the `vue-cesium / components` folder.
 As ES module can't be run directly in most browsers, if importing component causes some runtime errors, please check the webpack's loader configuration whethor the `include` and `exclude` options hits this library.
 
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer cesiumPath="YOUR_CESIUM_LIB_PATH"></cesium-viewer>
+    <cesium-viewer></cesium-viewer>
   </div>
 </template>
 
 <script>
-import CesiumViewer from 'vue-cesium/components/cesium/viewer.vue'
+import CesiumViewer from 'vue-cesium/components/viewer/CesiumViewer.vue'
 export default {
   components: {
     CesiumViewer
