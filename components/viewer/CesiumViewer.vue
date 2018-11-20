@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-20 09:20:17
+ * @Last Modified time: 2018-11-20 14:22:28
  */
 
 <template>
@@ -186,7 +186,19 @@ export default {
       default: false
     },
     camera: {
-      type: Object
+      type: Object,
+      default: function () {
+        return {
+          position: {
+            longitude: 105,
+            latitude: 29.999999999999993,
+            height: 19059568.497290563
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
+        }
+      }
     }
   },
   watch: {
@@ -225,8 +237,8 @@ export default {
       }
     },
     geocoder (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.geocoder) && !viewer.geocoder.isDestroyed() && !val) {
         viewer.geocoder.destroy()
         viewer._geocoder = undefined
@@ -248,8 +260,8 @@ export default {
       }
     },
     homeButton (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.homeButton) && !viewer.homeButton.isDestroyed() && !val) {
         viewer.homeButton.destroy()
         viewer._homeButton = undefined
@@ -270,8 +282,8 @@ export default {
       }
     },
     sceneModePicker (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.sceneModePicker) && !viewer.sceneModePicker.isDestroyed() && !val) {
         viewer.sceneModePicker.destroy()
         viewer._sceneModePicker = undefined
@@ -287,8 +299,8 @@ export default {
       }
     },
     projectionPicker (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.projectionPicker) && !viewer.projectionPicker.isDestroyed() && !val) {
         viewer.projectionPicker.destroy()
         viewer._projectionPicker = undefined
@@ -299,23 +311,37 @@ export default {
       }
     },
     baseLayerPicker (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.baseLayerPicker) && !viewer.baseLayerPicker.isDestroyed() && !val) {
         viewer.baseLayerPicker.destroy()
         viewer._baseLayerPicker = undefined
         viewer.imageryLayers.removeAll()
-        let cesiumPath = this.cesiumPath || this._Cesium().cesiumPath
-        if (cesiumPath.charAt(cesiumPath.length - 1) !== '/') {
-          cesiumPath = cesiumPath + '/'
-        }
-        viewer.imageryLayers.add(
-          new Cesium.ImageryLayer(
-            new Cesium.SingleTileImageryProvider({
-              url: `${cesiumPath}Assets/Textures/GlobalBkLayer.jpg`
-            })
+        if (Cesium.defined(Cesium.SuperMapImageryProvider)) {
+          let cesiumPath
+          if (this._Cesium) {
+            cesiumPath = this._Cesium().cesiumPath
+          } else {
+            cesiumPath = this.cesiumPath
+          }
+          let dirName = path.dirname(cesiumPath)
+          viewer.imageryLayers.add(
+            new Cesium.ImageryLayer(
+              new Cesium.SingleTileImageryProvider({
+                url: `${dirName}/Assets/Textures/GlobalBkLayer.jpg`
+              })
+            )
           )
-        )
+        } else {
+          let dirName = `https://zouyaoji.top/vue-cesium/statics/SuperMapCesium`
+          viewer.imageryLayers.add(
+            new Cesium.ImageryLayer(
+              new Cesium.SingleTileImageryProvider({
+                url: `${dirName}/Assets/Textures/GlobalBkLayer.jpg`
+              })
+            )
+          )
+        }
       } else if (!Cesium.defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
         let createBaseLayerPicker = (!Cesium.defined(viewer.globe) || this.globe !== false) &&
                                     (!Cesium.defined(viewer.baseLayerPicker) || this.baseLayerPicker !== false)
@@ -347,12 +373,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
 
         if (createBaseLayerPicker) {
           viewer.imageryLayers.removeAll()
-          let cesiumPath = this.cesiumPath || this._Cesium().cesiumPath
-          if (cesiumPath.charAt(cesiumPath.length - 1) !== '/') {
-            cesiumPath = cesiumPath + '/'
+          let cesiumPath
+          if (this._Cesium) {
+            cesiumPath = this._Cesium().cesiumPath
+          } else {
+            cesiumPath = this.cesiumPath
           }
-          let imageryProviderViewModels = Cesium.defaultValue(this.imageryProviderViewModels, createDefaultImageryProviderViewModels(Cesium, cesiumPath))
-          let terrainProviderViewModels = Cesium.defaultValue(this.terrainProviderViewModels, createDefaultTerrainProviderViewModels(Cesium, cesiumPath))
+          let dirName = path.dirname(cesiumPath) + '/'
+          let imageryProviderViewModels = Cesium.defaultValue(this.imageryProviderViewModels, createDefaultImageryProviderViewModels(Cesium, dirName))
+          let terrainProviderViewModels = Cesium.defaultValue(this.terrainProviderViewModels, createDefaultTerrainProviderViewModels(Cesium, dirName))
           let baseLayerPicker = new Cesium.BaseLayerPicker(toolbar, {
             globe: viewer.scene.globe,
             imageryProviderViewModels: imageryProviderViewModels,
@@ -370,8 +399,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
     },
     navigationHelpButton (val) {
-      const { Cesium, viewer, resizeToolbar } = this
-      let toolbar = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+      const { Cesium, viewer, resizeToolbar, viewerContainer } = this
+      let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.navigationHelpButton) && !viewer.navigationHelpButton.isDestroyed() && !val) {
         viewer.navigationHelpButton.destroy()
         viewer._navigationHelpButton = undefined
@@ -687,7 +716,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
 
       if (Cesium.defined(viewer.navigation)) {
-        let toolbarContainer = getDocumentByClassName(viewer.container.firstChild.children, 'cesium-viewer-toolbar')
+        let toolbarContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
         let navigationContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-navigationContainer')
         navigationContainer.style.top = toolbarContainer.clientHeight + 'px'
 
@@ -816,9 +845,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       CollectionEvents.forEach(collection => {
         bindEvents.call(this, viewer[collection.name], collection.events)
       })
-
-      // bindEvents.call(this, viewer.dataSources, events['dataSources'])
-      // bindEvents.call(this, viewer.entities, events['entities'])
       // viewer.reset()
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
@@ -857,10 +883,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     getCesiumScript () {
       if (!global.Cesium) {
-        let cesiumPath = this._Cesium().cesiumPath || this.cesiumPath
-        // if (cesiumPath.charAt(cesiumPath.length - 1) !== '/') {
-        //   cesiumPath = cesiumPath + '/'
-        // }
+        let cesiumPath
+        if (this._Cesium) {
+          cesiumPath = this._Cesium().cesiumPath
+        } else {
+          cesiumPath = this.cesiumPath
+        }
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
           global._initCesium = function () {
