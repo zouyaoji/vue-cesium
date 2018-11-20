@@ -143,19 +143,19 @@ const routeMap = [
         }
       },
       {
+        path: 'wmts-imagery-layer',
+        component: 'wmts-imagery-layer',
+        name: {
+          zh: 'WMTS服务图层',
+          en: 'WMTSImageryLayer'
+        }
+      },
+      {
         path: 'supermap-imagery-layer',
         component: 'supermap-imagery-layer',
         name: {
           zh: 'SuperMap影像服务图层',
           en: 'SuperMapImageryLayer'
-        }
-      },
-      {
-        path: 'tianditu-imagery-layer',
-        component: 'tianditu-imagery-layer',
-        name: {
-          zh: '天地图服务图层',
-          en: 'TiandituImageryLayer'
         }
       }
     ]
@@ -171,8 +171,8 @@ const routeMap = [
       path: 'cesium-3dtileset',
       component: 'cesium-3dtileset',
       name: {
-        zh: '3DTiles',
-        en: '3DTiles'
+        zh: '3DTiles模型',
+        en: '3DTiles Model'
       }
     }]
   }

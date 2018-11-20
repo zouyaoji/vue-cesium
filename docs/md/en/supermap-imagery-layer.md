@@ -2,7 +2,7 @@
 
 # SuperMapImageryLayer
 
-`supermap-imagery-layer`
+`supermap-imagery-layer` Load the SuperMap iServer service. Only the SuperMap Cesium package  has this component.
 
 ## Instance Properties
 

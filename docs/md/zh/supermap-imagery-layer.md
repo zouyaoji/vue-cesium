@@ -2,7 +2,7 @@
 
 # SuperMap影像服务图层
 
-`supermap-imagery-layer`加载超图iserver影像服务。
+`supermap-imagery-layer`加载超图iserver影像服务。只有超图WebGL包有此组件。
 
 ## 属性
 
