@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-19 14:33:05
+ * @Last Modified time: 2018-11-20 09:20:17
  */
 
 <template>
@@ -16,12 +16,14 @@ import bindEvents from '../base/bindEvent'
 import { CollectionEvents } from '../base/events.js'
 import { getDocumentByClassName } from '../base/util'
 import { createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels } from '../base/providerViewModels'
+const path = require('path')
 
 export default {
   name: 'cesium-viewer',
   props: {
     cesiumPath: {
-      type: String
+      type: String,
+      default: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
     },
     animation: {
       type: Boolean,
@@ -855,10 +857,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     getCesiumScript () {
       if (!global.Cesium) {
-        let cesiumPath = this.cesiumPath || this._Cesium().cesiumPath
-        if (cesiumPath.charAt(cesiumPath.length - 1) !== '/') {
-          cesiumPath = cesiumPath + '/'
-        }
+        let cesiumPath = this._Cesium().cesiumPath || this.cesiumPath
+        // if (cesiumPath.charAt(cesiumPath.length - 1) !== '/') {
+        //   cesiumPath = cesiumPath + '/'
+        // }
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
           global._initCesium = function () {
@@ -867,14 +869,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             global._initCesium = null
           }
 
+          let dirName = path.dirname(cesiumPath)
           const $link = document.createElement('link')
           $link.rel = 'stylesheet'
           global.document.head.appendChild($link)
-          $link.href = `${cesiumPath}Widgets/widgets.css`
+          $link.href = `${dirName}/Widgets/widgets.css`
 
           const $script = document.createElement('script')
           global.document.body.appendChild($script)
-          $script.src = `${cesiumPath}Cesium.js`
+          $script.src = cesiumPath
           $script.onload = function () {
             global._initCesium()
 
@@ -882,7 +885,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             if (global.Cesium.SuperMapImageryProvider) {
               const $scriptZlib = document.createElement('script')
               global.document.body.appendChild($scriptZlib)
-              $scriptZlib.src = `${cesiumPath}/Workers/zlib.min.js`
+              $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
             }
           }
         })

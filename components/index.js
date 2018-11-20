@@ -12,7 +12,12 @@ import Cesium3DTileset from './model/Cesium3DTileset.vue'
 
 export default {
   install (Vue, options) {
-    const { cesiumPath } = options
+    let cesiumPath
+    if (options) {
+      cesiumPath = options.cesiumPath
+    } else {
+      cesiumPath = 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+    }
     Vue.prototype._Cesium = () => ({ cesiumPath })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component('supermap-imagery-layer', SuperMapImageryLayer)
