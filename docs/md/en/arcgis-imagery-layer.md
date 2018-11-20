@@ -8,7 +8,7 @@
 
 |name|type|default|description|
 |------|-----|-----|----|
-|url|String||`required`	The URL of the ArcGIS MapServer service.|
+|url|String||`required`The URL of the ArcGIS MapServer service.|
 |token|String||`optional`The ArcGIS token used to authenticate with the ArcGIS MapServer service.|
 |tileDiscardPolicy|Object||`optional`The policy that determines if a tile is invalid and should be discarded.|
 |proxy|Cesium.Proxy|20|`optional`A proxy to use for requests. This object is expected to have a getURL function which returns the proxied URL, if needed.|
