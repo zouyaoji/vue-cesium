@@ -7,7 +7,7 @@
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.png)](http://packagequality.com/#?package=vue-cesium)
+[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
 [![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
 [![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
 
