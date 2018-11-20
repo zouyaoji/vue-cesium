@@ -29,8 +29,7 @@ class Mixin {
         this.$emit(e.type.replace(/^on/, ''), e)
       },
       reload () {
-        this &&
-          this.Cesium &&
+        this && this.Cesium &&
           this.$nextTick(() => {
             this.unload()
             this.$nextTick(this.load)
@@ -41,13 +40,7 @@ class Mixin {
         try {
           switch (prop.type) {
             case 'primitives':
-              viewer.scene[prop.type][types[prop.type].unload](originInstance)
-              break
-            case 'autoComplete':
-            case 'lushu':
-              return originInstance.dispose()
-            case 'markerClusterer':
-              return originInstance.clearMarkers()
+              return viewer.scene[prop.type][types[prop.type].unload](originInstance)
             default:
               viewer[prop.type][types[prop.type].unload](originInstance)
           }

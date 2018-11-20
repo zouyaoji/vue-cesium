@@ -129,6 +129,10 @@ export default {
     debugShowUrl: {
       type: Boolean,
       default: false
+    },
+    isZoomTo: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -234,11 +238,11 @@ export default {
   },
   methods: {
     load () {
-      const { Cesium, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
+      const { Cesium, viewer, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
         dynamicScreenSpaceErrorDensity, dynamicScreenSpaceErrorFactor, dynamicScreenSpaceErrorHeightFalloff, skipLevelOfDetail, baseScreenSpaceError,
-        skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid,
-        pointCloudShading, imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume,
-        debugShowContentBoundingVolume, debugShowViewerRequestVolume, debugShowGeometricError, debugShowRenderingStatistics, debugShowMemoryUsage, debugShowUrl } = this
+        skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid, pointCloudShading,
+        imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume, debugShowContentBoundingVolume,
+        debugShowViewerRequestVolume, debugShowGeometricError, debugShowRenderingStatistics, debugShowMemoryUsage, debugShowUrl, isZoomTo } = this
 
       if (!Cesium.defined(Cesium.Cesium3DTileset)) {
         throw new Cesium.DeveloperError('Your Cesium Package is not included Cesium3DTileset!')
@@ -280,6 +284,15 @@ export default {
       })
 
       bindEvents.call(this, this.originInstance)
+
+      this.originInstance.readyPromise.then(tileset => {
+        viewer.scene.primitives.add(tileset)
+        if (isZoomTo) {
+          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+        }
+      }).otherwise(error => {
+        throw new Cesium.DeveloperError(error)
+      })
     }
   }
 }
