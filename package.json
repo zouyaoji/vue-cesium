@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Load the Cesium official build package or other third-party Cesium packages (such as the Superap WebGL build package) to the Vue component.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/zouyaoji/vue-cesium/issues"
   },
-  "homepage": "https://github.com/zouyaoji/vue-cesium/#readme",
+  "homepage": "https://zouyaoji.top/vue-cesium",
   "_npmVersion": "5.6.0",
   "_nodeVersion": "8.9.6",
   "_npmUser": {
