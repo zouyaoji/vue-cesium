@@ -3,13 +3,10 @@ import bindEvents from '../base/bindEvent'
 import { ImageryLayerEvents } from '../base/events.js'
 import commonMixin from '../base/mixins/common.js'
 export default {
-  name: 'tianditu-imagery-layer',
+  name: 'wmts-imagery-layer',
   render (h) {},
   mixins: [commonMixin('imageryLayers')],
   props: {
-    rectangle: {
-      type: Object
-    },
     alpha: {
       type: Number,
       default: 1.0
@@ -47,27 +44,67 @@ export default {
     maximumTerrainLevel: {
       type: Number
     },
-    mapStyle: {
+    url: {
+      type: String
+    },
+    format: {
       type: String,
-      default: 'img_w'
+      default: 'image/jpeg'
+    },
+    layer: {
+      type: String
+    },
+    wmtsStyle: {
+      type: String
+    },
+    tileMatrixSetID: {
+      type: String
+    },
+    tileMatrixLabels: {
+      type: Array
+    },
+    clock: {
+      type: Object
+    },
+    times: {
+      type: Object
+    },
+    dimensions: {
+      type: Object
+    },
+    tileWidth: {
+      type: Number,
+      default: 256
+    },
+    tileHeight: {
+      type: Number,
+      default: 256
+    },
+    tilingScheme: {
+      type: Object
+    },
+    rectangle: {
+      type: Object
+    },
+    minimumLevel: {
+      type: Number,
+      default: 0
+    },
+    maximumLevel: {
+      type: Number
+    },
+    ellipsoid: {
+      type: Object
     },
     credit: {
       type: String
     },
-    tileHeight: {
-      type: Number
-    },
-    minimumLevel: {
-      type: Number
-    },
-    maximumLevel: {
-      type: Number
+    subdomains: {
+      type: String | Array,
+      default: 'abc'
     }
   },
   watch: {
-    rectangle () {
-      this.reload()
-    },
     alpha (val) {
       this.originInstance.alpha = val
     },
@@ -101,13 +138,40 @@ export default {
     url () {
       this.reload()
     },
-    mapStyle () {
+    format () {
+      this.reload()
+    },
+    layer () {
+      this.reload()
+    },
+    wmtsStyle () {
+      this.reload()
+    },
+    tileMatrixSetID () {
+      this.reload()
+    },
+    tileMatrixLabels () {
+      this.reload()
+    },
+    clock () {
+      this.reload()
+    },
+    times () {
+      this.reload()
+    },
+    dimensions () {
+      this.reload()
+    },
+    tileWidth () {
       this.reload()
     },
     tileHeight () {
       this.reload()
     },
-    credit () {
+    tilingScheme () {
+      this.reload()
+    },
+    rectangle () {
       this.reload()
     },
     minimumLevel () {
@@ -115,26 +179,47 @@ export default {
     },
     maximumLevel () {
       this.reload()
+    },
+    ellipsoid () {
+      this.reload()
+    },
+    credit () {
+      this.reload()
+    },
+    subdomains () {
+      this.reload()
     }
   },
   methods: {
     load () {
-      const { Cesium, viewer, mapStyle, tileHeight, credit, minimumLevel, maximumLevel, rectangle, alpha, brightness, contrast, hue,
+      const { Cesium, viewer, url, format, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
+        tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, alpha, brightness, contrast, hue,
         saturation, gamma, show, splitDirection, minimumTerrainLevel, maximumTerrainLevel } = this
 
-      if (!Cesium.defined(Cesium.TiandituImageryProvider)) {
-        throw new Cesium.DeveloperError('Your Cesium Package is not included TiandituImageryProvider!')
+      if (!Cesium.defined(Cesium.WebMapTileServiceImageryProvider)) {
+        throw new Cesium.DeveloperError('Your Cesium Package is not included WebMapTileServiceImageryProvider!')
       }
-      let imageryProvider = new Cesium.TiandituImageryProvider({
-        mapStyle: mapStyle === '' ? Cesium.TiandituMapsStyle.IMG_W : mapStyle,
+      let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+        url: url,
+        format: format,
+        style: wmtsStyle,
+        tileMatrixSetID: tileMatrixSetID,
+        tileMatrixLabels: tileMatrixLabels,
+        clock: clock,
+        times: times,
+        dimensions: dimensions,
+        tileWidth: tileWidth,
         tileHeight: tileHeight,
+        tilingScheme: tilingScheme,
+        rectangle: rectangle,
         minimumLevel: minimumLevel,
         maximumLevel: maximumLevel,
-        credit: credit
+        ellipsoid: ellipsoid,
+        credit: credit,
+        subdomains: subdomains
       })
 
       this.originInstance = new Cesium.ImageryLayer(imageryProvider, {
-        rectangle: rectangle,
         alpha: alpha,
         brightness: brightness,
         contrast: contrast,

@@ -3,7 +3,7 @@ import CesiumViewer from './viewer/CesiumViewer.vue'
 import SuperMapImageryLayer from './layers/SuperMapImageryLayer.vue'
 import ArcGisMapServerImageryLayer from './layers/ArcGisMapServerImageryLayer.vue'
 import BingMapsImageryLayer from './layers/BingMapsImageryLayer.vue'
-import TiandituImageryLayer from './layers/TiandituImageryLayer.vue'
+import WebMapTileServiceImageryLayer from './layers/WebMapTileServiceImageryLayer.vue'
 import UrlTemplateImageryLayer from './layers/UrlTemplateImageryLayer.vue'
 import SingleTileImageryLayer from './layers/SingleTileImageryLayer.vue'
 import MapboxImageryLayer from './layers/MapboxImageryLayer.vue'
@@ -23,7 +23,7 @@ export default {
     Vue.component('supermap-imagery-layer', SuperMapImageryLayer)
     Vue.component('arcgis-imagery-layer', ArcGisMapServerImageryLayer)
     Vue.component('bingmaps-imagery-layer', BingMapsImageryLayer)
-    Vue.component('tianditu-imagery-layer', TiandituImageryLayer)
+    Vue.component('wmts-imagery-layer', WebMapTileServiceImageryLayer)
     Vue.component('urltemplate-imagery-layer', UrlTemplateImageryLayer)
     Vue.component('singletile-imagery-layer', SingleTileImageryLayer)
     Vue.component('mapbox-imagery-layer', MapboxImageryLayer)
@@ -34,6 +34,6 @@ export default {
 }
 
 export {
-  CesiumViewer, SuperMapImageryLayer, ArcGisMapServerImageryLayer, BingMapsImageryLayer, TiandituImageryLayer, UrlTemplateImageryLayer,
+  CesiumViewer, SuperMapImageryLayer, ArcGisMapServerImageryLayer, BingMapsImageryLayer, WebMapTileServiceImageryLayer, UrlTemplateImageryLayer,
   SingleTileImageryLayer, MapboxImageryLayer, OpenStreetMapImageryLayer, Cesium3DTileset
 }
