@@ -36,4 +36,5 @@ Describes the latitude, longitude and height of the viewer.
 
 ## Reference
 
-> [SuperMap Official Documentation](http://support.supermap.com.cn:8090/webgl/Build/Documentation/index.html)
+> [Cesium Official官方文档](https://cesiumjs.org/Cesium/Build/Documentation/index.html)
+> [SuperMap Cesium Official Documentation](http://support.supermap.com.cn:8090/webgl/Build/Documentation/index.html)

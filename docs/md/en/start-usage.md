@@ -9,14 +9,25 @@ Regist all components of *vue-cesium* at once.
 ```javascript
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
+// Vue-Cesium will load Cesium.js from `https://unpkg.com/cesium/Build/Cesium/Cesium.js`
+Vue.use(VueCesium)
+```
+
+```javascript
+import Vue from 'vue'
+import VueCesium from 'vue-cesium'
 
 Vue.use(VueCesium, {
-  // cesiumPath is the path of the Cesium library, such as
-  // cesiumPath: '/statics/Cesium'
-  // use online reference for http
-  // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build/Cesium'
-  // use online reference for https
-  cesiumPath: 'https://zouyaoji.top/vue-cesium'
+  // cesiumPath is path of Cesium.js', for example:
+  // local Cesium Build package:
+  // ./static/Cesium/Cesium.js
+  // Personal online Cesium Build package：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+  // Personal online SuperMap Cesium Build package：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
+  // Official Online Cesium Build package：
+  // https://unpkg.com/cesium/Build/Cesium/Cesium.js
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 })
 ```
 

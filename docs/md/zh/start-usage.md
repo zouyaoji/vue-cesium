@@ -6,17 +6,32 @@
 
 全局注册将一次性引入 Cesium 组件库的所有组件。
 
+- 不指定Cesium库地址：
+
+```javascript
+import Vue from 'vue'
+import VueCesium from 'vue-cesium'
+// Vue-Cesium默认加载`https://unpkg.com/cesium/Build/Cesium/Cesium.js`
+Vue.use(VueCesium)
+```
+
+- 指定Cesium库地址：
+
 ```javascript
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
 
 Vue.use(VueCesium, {
-  // cesiumPath 是指引用的Cesium的文件夹路径， 如
-  // cesiumPath: '/statics/Cesium'
-  // 或者在线引用(http)
-  // cesiumPath: 'http://support.supermap.com.cn:8090/webgl/Build/Cesium'
-  // 在线引用(https)
-  cesiumPath: 'https://zouyaoji.top/vue-cesium'
+  // cesiumPath 是指引用的Cesium.js路径，如
+  // 项目本地的Cesium Build包，vue项目需要将Cesium Build包放static目录：
+  // ./static/Cesium/Cesium.js
+  // 个人在线Cesium Build包：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+  // 个人在线SuperMap Cesium Build包（在官方基础上二次开发出来的）：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
+  // 官方在线Cesium Build包，有CDN加速，推荐用这个：
+  // https://unpkg.com/cesium/Build/Cesium/Cesium.js
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 })
 ```
 
@@ -151,7 +166,8 @@ export default {
 
 ```html
 <template>
-  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready" >
+  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
+    <openstreetmap-imagery-layer/>
   </cesium-viewer>
 </template>
 <script>
@@ -175,15 +191,6 @@ export default {
   methods: {
     ready (cesiumInstance) {
       const { Cesium, viewer } = cesiumInstance
-      let imageryLayers = viewer.imageryLayers
-      let imagery = new Cesium.TiandituImageryProvider({
-        mapStyle : Cesium.TiandituMapsStyle.IMG_C
-      })
-      imageryLayers.addImageryProvider(imagery)
-      let labelImagery = new Cesium.TiandituImageryProvider({
-          mapStyle : Cesium.TiandituMapsStyle.CIA_C
-      })
-      imageryLayers.addImageryProvider(labelImagery)
       viewer.entities.add({
         id: '成都欢迎你',
         position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
@@ -205,7 +212,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .viewer {
   width: 100%;
@@ -217,6 +223,7 @@ export default {
 <doc-preview>
   <template>
     <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
+      <openstreetmap-imagery-layer/>
     </cesium-viewer>
   </template>
   <script>
@@ -240,15 +247,6 @@ export default {
     methods: {
       ready (cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        let imageryLayers = viewer.imageryLayers
-           let imagery = new Cesium.TiandituImageryProvider({
-            mapStyle : Cesium.TiandituMapsStyle.IMG_C
-        })
-        imageryLayers.addImageryProvider(imagery)
-        let labelImagery = new Cesium.TiandituImageryProvider({
-            mapStyle : Cesium.TiandituMapsStyle.CIA_C
-        })
-        imageryLayers.addImageryProvider(labelImagery)
         viewer.entities.add({
           id: '成都欢迎你',
           position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
