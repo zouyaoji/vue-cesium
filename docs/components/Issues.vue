@@ -7,13 +7,16 @@ md-layout.issues
       ref="dialog")
     md-whiteframe
       md-tabs(@change="changeType")
-        md-tab(:md-label="type.label" v-for="type in formTypes")
-          form
-            md-input-container(v-for="item in type.items")
-              label(v-text="item.label")
-              md-input(v-if="item.type === 'input'" v-model="formData[type.name][item.name]", :required="true")
-              md-textarea(v-if="item.type === 'textarea'" v-model="formData[type.name][item.name]")
-            md-button.md-raised.md-primary(@click="openIssue") 提交
+        template(v-for="(type, index) in formTypes")
+          md-tab(:md-label="type.label" :key="index")
+            form
+              template(v-for="(item,subIndex) in type.items")
+                md-input-container(:key="subIndex")
+                  div(:key="subIndex")
+                    label(v-text="item.label")
+                    md-input(v-if="item.type === 'input'" v-model="formData[type.name][item.name]", :required="true")
+                    md-textarea(v-if="item.type === 'textarea'" v-model="formData[type.name][item.name]")
+                md-button.md-raised.md-primary(@click="openIssue") 提交
   md-layout.issues-card
     md-whiteframe
       md-toolbar

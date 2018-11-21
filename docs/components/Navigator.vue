@@ -1,11 +1,13 @@
 <template lang="pug">
 md-list
-  md-list-item(v-for="route in routeMap", v-if="route.name")
-    span(v-text="route.name")
-    md-list-expand
-      md-list
-        md-list-item.md-inset(v-for="subRoute in route.children")
-          router-link(:to="`${route.path}/${subRoute.path}`", v-text="subRoute.name")
+  template(v-for="(route, index) in routeMap", v-if="route.name")
+    md-list-item(:key="index")
+      span(v-text="route.name")
+      md-list-expand
+        md-list
+          template(v-for="(subRoute, subIndex) in route.children")
+            md-list-item.md-inset(:key="subIndex")
+              router-link(:to="`${route.path}/${subRoute.path}`", v-text="subRoute.name")
 </template>
 
 <script>

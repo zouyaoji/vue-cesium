@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
@@ -69,18 +70,57 @@ module.exports = {
       docs: path.resolve(__dirname, '../docs')
     }
   },
+  optimization: {
+    runtimeChunk: {
+      name: 'manifest'
+    },
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+          minSize: 30000,
+          minChunks: 2,
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 10
+        },
+        libs: {
+          name: 'libs',
+          minSize: 30000,
+          minChunks: 2,
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 5
+        },
+        resource: {
+          name: 'resource',
+          minSize: 30000,
+          minChunks: 2,
+          chunks: 'all',
+          reuseExistingChunk: true,
+          priority: 2
+        }
+      }
+    }
+  },
   plugins: [
+    new CleanWebpackPlugin(['dist'], {
+      root: path.resolve(__dirname, '../')
+    }),
+    // new VueLoaderPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../docs/template/index.html'),
-      chunks: ['libs', 'vendor', 'resource', 'main']
+      chunks: ['libs', 'vendor', 'resource', 'main', 'manifest']
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'libs', 'resource', 'manifest'],
-      minChunks: Infinity
-    }),
-    new InlineManifestWebpackPlugin({
-      name: 'webpackManifest'
-    })
+    new InlineManifestWebpackPlugin('manifest')
   ]
 }
