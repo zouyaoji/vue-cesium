@@ -4,13 +4,21 @@ const types = {
   },
   primitives: {
     unload: 'remove'
+  },
+  entities: {
+    unload: 'remove'
   }
 }
 
-const getParent = $component =>
-  $component.abstract || $component.$el === $component.$children[0].$el
-    ? getParent($component.$parent)
-    : $component
+const getParent = $component => $component.abstract || $component.$el === $component.$children[0].$el ? getParent($component.$parent) : $component
+
+function destroyInstance () {
+  const { unload, renderByParent, $parent } = this
+  if (renderByParent) {
+    $parent.reload()
+  }
+  unload()
+}
 
 class Mixin {
   constructor (prop) {
@@ -29,11 +37,10 @@ class Mixin {
         this.$emit(e.type.replace(/^on/, ''), e)
       },
       reload () {
-        this && this.Cesium &&
-          this.$nextTick(() => {
-            this.unload()
-            this.$nextTick(this.load)
-          })
+        this && this.Cesium && this.$nextTick(() => {
+          this.unload()
+          this.$nextTick(this.load)
+        })
       },
       unload () {
         const { viewer, originInstance } = this
@@ -58,13 +65,8 @@ class Mixin {
       const { ready } = this
       viewer ? ready() : $parent.$on('ready', ready)
     }
-    this.beforeDestroy = function () {
-      const { unload, renderByParent, $parent } = this
-      if (renderByParent) {
-        $parent.reload()
-      }
-      unload()
-    }
+    this.destroyed = destroyInstance
+    this.beforeDestroy = destroyInstance
   }
 }
 

@@ -2,18 +2,19 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-11-20 14:22:28
+ * @Last Modified time: 2018-11-23 17:17:17
  */
-
 <template>
-  <div ref="viewer" style="width:100%; height:100%;">
+  <div>
+    <div ref="viewer" style="width:100%; height:100%;">
+    </div>
     <slot></slot>
   </div>
 </template>
 
 <script>
 import bindEvents from '../base/bindEvent'
-import { CollectionEvents } from '../base/events.js'
+import { Events } from '../base/events.js'
 import { getDocumentByClassName } from '../base/util'
 import { createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels } from '../base/providerViewModels'
 const path = require('path')
@@ -842,9 +843,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       this.viewer = viewer
       // options待完善
       bindEvents.call(this, viewer)
-      CollectionEvents.forEach(collection => {
-        bindEvents.call(this, viewer[collection.name], collection.events)
+      Events['viewer-children-events'].forEach(eventName => {
+        bindEvents.call(this, viewer[eventName.name], eventName.events)
       })
+      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
+      Events['viewer-mouse-events'].forEach(eventName => {
+        const listener = this.$listeners[eventName]
+        listener && handler.setInputAction(listener.fns, Cesium.ScreenSpaceEventType[eventName])
+      })
+
       // viewer.reset()
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
@@ -869,13 +876,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
         }
       }
-      this.$emit('ready', { Cesium, viewer })
+
       this.viewerContainer = this.$refs.viewer.children[0]
       if (Cesium.defined(Cesium.SuperMapImageryProvider)) {
         let credit = viewer.scene.frameState.creditDisplay
         credit.container.removeChild(credit._imageContainer)
       }
       this.resizeControl()
+      this.$emit('ready', { Cesium, viewer })
     },
     initViewer (Cesium) {
       this.Cesium = Cesium

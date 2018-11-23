@@ -1,6 +1,6 @@
 <script>
 import bindEvents from '../base/bindEvent'
-import { ImageryLayerEvents } from '../base/events.js'
+import { Events } from '../base/events.js'
 import commonMixin from '../base/mixins/common.js'
 export default {
   name: 'singletile-imagery-layer',
@@ -129,7 +129,7 @@ export default {
         minimumTerrainLevel: minimumTerrainLevel,
         maximumTerrainLevel: maximumTerrainLevel
       })
-      bindEvents.call(this, imageryProvider, ImageryLayerEvents['imagery-layer'])
+      bindEvents.call(this, imageryProvider, Events['imagery-layer-events'])
       viewer.imageryLayers.add(this.originInstance)
     }
   }

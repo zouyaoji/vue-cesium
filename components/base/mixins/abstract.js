@@ -2,14 +2,8 @@ class Mixin {
   constructor ({ component, props, events, extraProps, exceptProps }) {
     this.render = function (h) {
       return h(component, {
-        props: props.reduce(
-          (obj, key) => Object.assign(obj, { [key]: this[key] }),
-          {}
-        ),
-        on: events.reduce(
-          (obj, key) => Object.assign(obj, { [key]: this.transmitEvent }),
-          {}
-        )
+        props: props.reduce((obj, key) => Object.assign(obj, { [key]: this[key] }), {}),
+        on: events.reduce((obj, key) => Object.assign(obj, { [key]: this.transmitEvent }), {})
       })
     }
     this.props = [

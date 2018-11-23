@@ -1,10 +1,12 @@
+
+
 <script>
 import bindEvents from '../base/bindEvent'
-import { ImageryLayerEvents } from '../base/events.js'
+import { Events } from '../base/events.js'
 import commonMixin from '../base/mixins/common.js'
 export default {
   name: 'openstreetmap-imagery-layer',
-  render (h) {},
+  render () {},
   mixins: [commonMixin('imageryLayers')],
   props: {
     url: {
@@ -154,12 +156,9 @@ export default {
         minimumTerrainLevel: minimumTerrainLevel,
         maximumTerrainLevel: maximumTerrainLevel
       })
-      bindEvents.call(this, imageryProvider, ImageryLayerEvents['imagery-layer'])
+      bindEvents.call(this, imageryProvider, Events['imagery-layer-events'])
       viewer.imageryLayers.add(this.originInstance)
     }
   }
 }
 </script>
-
-<style>
-</style>
