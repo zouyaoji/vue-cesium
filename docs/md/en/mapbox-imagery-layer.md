@@ -46,20 +46,20 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>alpha</span>
-      <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>brightness</span>
-      <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>contrast</span>
-      <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>切换服务</span>
-      <el-select v-model="mapId" placeholder="切换影像">
-        <el-option
+      <md-select v-model="mapId" placeholder="切换影像">
+        <md-option
           v-for="item in options"
           :key="item.value"
-          :label="item.label"
           :value="item.value">
-        </el-option>
-      </el-select>
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
     <cesium-viewer @ready="ready">
       <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
@@ -108,20 +108,20 @@
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
         <span>alpha</span>
-        <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>brightness</span>
-        <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>contrast</span>
-        <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>mapId</span>
-        <el-select v-model="mapId" placeholder="切换影像">
-          <el-option
+        <md-select v-model="mapId" placeholder="切换影像">
+          <md-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
             :value="item.value">
-          </el-option>
-        </el-select>
+            {{item.label}}
+          </md-option>
+        </md-select>
       </div>
       <cesium-viewer @ready="ready">
         <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"

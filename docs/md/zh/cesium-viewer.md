@@ -1,3 +1,5 @@
+<template lang="markdown">
+
 # 场景容器
 
 `CesiumViewer`是用于构建 Cesium 应用程序的基础部件，它将所有标准的 Cesium 部件组合成一个可重复使用的包。 此部件通常可以利用 mixin 来扩展，以此增加对各种应用程序有用的功能函数。\
@@ -67,6 +69,21 @@
 |onStop||场景时钟每当到达停止时间时触发该事件。|Viewer.clock|
 |onTick||场景时钟每当调用Clock#tick触发该事件。|Viewer.clock|
 |errorEvent||场景地形提供者遇到异步错误时触发该事件。|Viewer.terrainProvider|
+|LEFT_CLICK|{position: point}|鼠标左键单击事件。|ScreenSpaceEventType|
+|LEFT_DOUBLE_CLICK|{position: point}|鼠标左键双击事件。|ScreenSpaceEventType|
+|LEFT_DOWN|{position: point}|鼠标左键按下事件。|ScreenSpaceEventType|
+|LEFT_UP|{position: point}|鼠标左键弹起事件|ScreenSpaceEventType|
+|MIDDLE_CLICK|{position: point}|鼠标中键单击事件。|ScreenSpaceEventType|
+|MIDDLE_DOWN|{position: point}|鼠标中键按下事件。|ScreenSpaceEventType|
+|MIDDLE_UP|{position: point}|鼠标中键弹起事件。|ScreenSpaceEventType|
+|MOUSE_MOVE|{startPosition: point, endPosition: point}|鼠标移动事件。|ScreenSpaceEventType|
+|PINCH_END||触摸设备双指操作结束事件。|ScreenSpaceEventType|
+|PINCH_MOVE|{distance: {startPosition: point, endPosition: point}, angleAndHeight: {startPosition: point, endPosition: point}}|触摸设备双指操作移动事件。|ScreenSpaceEventType|
+|PINCH_START|{position1: point, position2: point}|触摸设备双指操作开始事件。|ScreenSpaceEventType|
+|RIGHT_CLICK|{position: point}|鼠标右键单击事件。|ScreenSpaceEventType|
+|RIGHT_DOWN|{position: point}|鼠标右键按下事件。|ScreenSpaceEventType|
+|RIGHT_UP|{position: point}|鼠标弹起事件。|ScreenSpaceEventType|
+|WHEEL|delta|鼠标中轮滚动事件。|ScreenSpaceEventType|
 ---
 
 ## 示例
@@ -80,15 +97,15 @@
   <div class="viewer" ref="myViewer">
     <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
       <span>动画部件</span>
-      <el-switch v-model="animation"></el-switch>
+      <md-switch v-model="animation"></md-switch>
       <span>时间轴部件</span>
-      <el-switch v-model="timeline"></el-switch>
+      <md-switch v-model="timeline"></md-switch>
       <span>基础图层拾取器</span>
-      <el-switch v-model="baseLayerPicker"></el-switch>
+      <md-switch v-model="baseLayerPicker"></md-switch>
       <span>全屏按钮</span>
-      <el-switch v-model="fullscreenButton"></el-switch>
+      <md-switch v-model="fullscreenButton"></md-switch>
       <span>信息提示框</span>
-      <el-switch v-model="infoBox"></el-switch>
+      <md-switch v-model="infoBox"></md-switch>
     </div>
     <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
@@ -148,15 +165,15 @@
     <div class="viewer" ref="myViewer">
       <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
         <span>动画部件</span>
-        <el-switch v-model="animation"></el-switch>
+        <md-switch v-model="animation"></md-switch>
         <span>时间轴部件</span>
-        <el-switch v-model="timeline"></el-switch>
+        <md-switch v-model="timeline"></md-switch>
         <span>基础图层拾取器</span>
-        <el-switch v-model="baseLayerPicker"></el-switch>
+        <md-switch v-model="baseLayerPicker"></md-switch>
         <span>全屏按钮</span>
-        <el-switch v-model="fullscreenButton"></el-switch>
+        <md-switch v-model="fullscreenButton"></md-switch>
         <span>信息提示框</span>
-        <el-switch v-model="infoBox"></el-switch>
+        <md-switch v-model="infoBox"></md-switch>
       </div>
       <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">

@@ -68,14 +68,14 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>切换地址</span>
-      <el-select v-model="url" placeholder="切换地址">
-        <el-option
+      <md-select v-model="url" placeholder="切换地址">
+        <md-option
           v-for="item in options"
           :key="item.value"
-          :label="item.label"
           :value="item.value">
-        </el-option>
-      </el-select>
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
     <cesium-viewer>
       <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
@@ -120,14 +120,14 @@
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
         <span>切换地址</span>
-        <el-select v-model="url" placeholder="切换地址">
-          <el-option
+        <md-select v-model="url" placeholder="切换地址">
+          <md-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
             :value="item.value">
-          </el-option>
-        </el-select>
+            {{item.label}}
+          </md-option>
+        </md-select>
       </div>
       <cesium-viewer>
         <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>

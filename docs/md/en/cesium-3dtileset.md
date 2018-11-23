@@ -68,14 +68,14 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>Change Model</span>
-      <el-select v-model="url" placeholder="Change Model">
-        <el-option
+      <md-select v-model="url" placeholder="Change Model">
+        <md-option
           v-for="item in options"
           :key="item.value"
           :label="item.label"
           :value="item.value">
-        </el-option>
-      </el-select>
+        </md-option>
+      </md-select>
     </div>
     <cesium-viewer>
       <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
@@ -124,8 +124,8 @@
           <el-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
             :value="item.value">
+            {{item.label}}
           </el-option>
         </el-select>
       </div>

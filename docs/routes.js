@@ -69,6 +69,23 @@ const routeMap = [
     ]
   },
   {
+    // 指南
+    path: 'guide',
+    component: CateView,
+    name: {
+      zh: '指南',
+      en: 'Guide'
+    },
+    children: [{
+      path: 'painting',
+      component: 'guide-painting',
+      name: {
+        zh: '绘制',
+        en: 'Painting'
+      }
+    }]
+  },
+  {
     path: 'CesiumViewer',
     name: {
       zh: '场景',
@@ -159,6 +176,22 @@ const routeMap = [
         }
       }
     ]
+  },
+  {
+    path: 'entity',
+    name: {
+      zh: '实体',
+      en: 'entity'
+    },
+    component: CateView,
+    children: [{
+      path: 'polyline-graphics',
+      component: 'polyline-graphics',
+      name: {
+        zh: '线实体',
+        en: 'PolylineGraphics'
+      }
+    }]
   },
   {
     path: 'model',

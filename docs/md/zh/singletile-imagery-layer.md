@@ -41,11 +41,11 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>透明度</span>
-      <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>亮度</span>
-      <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>对比度</span>
-      <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
     </div>
     <cesium-viewer @ready="ready">
       <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
@@ -87,11 +87,11 @@
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
         <span>透明度</span>
-        <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>亮度</span>
-        <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>对比度</span>
-        <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       </div>
       <cesium-viewer @ready="ready">
         <singletile-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"

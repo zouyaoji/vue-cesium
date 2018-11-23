@@ -51,20 +51,20 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>透明度</span>
-      <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>亮度</span>
-      <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>对比度</span>
-      <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>切换服务</span>
-      <el-select v-model="url" placeholder="请选择服务">
-        <el-option
+      <md-select v-model="url" placeholder="请选择服务">
+        <md-option
           v-for="item in options"
           :key="item.value"
-          :label="item.label"
           :value="item.value">
-        </el-option>
-      </el-select>
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
     <cesium-viewer>
       <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
@@ -113,20 +113,20 @@
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
         <span>透明度</span>
-        <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover"></vue-slider>
         <span>亮度</span>
-        <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
         <span>对比度</span>
-        <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
         <span>切换服务</span>
-        <el-select v-model="url" placeholder="请选择服务">
-          <el-option
+        <md-select v-model="url" placeholder="请选择服务" >
+          <md-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
             :value="item.value">
-          </el-option>
-        </el-select>
+            {{item.label}}
+          </md-option>
+        </md-select>
       </div>
       <cesium-viewer>
        <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" 
@@ -139,6 +139,42 @@
     export default {
       data () {
         return {
+          options2: {
+            data: null,
+            eventType: 'auto',
+            width: 'auto',
+            height: 6,
+            dotSize: 16,
+            dotHeight: null,
+            dotWidth: null,
+            min: 0,
+            max: 100,
+            interval: 1,
+            show: true,
+            speed: 0.5,
+            disabled: false,
+            piecewise: false,
+            usdKeyboard: false,
+            enableCross: true,
+            piecewiseStyle: false,
+            piecewiseLabel: false,
+            tooltip: 'always',
+            tooltipDir: 'top',
+            reverse: false,
+            data: null,
+            clickable: true,
+            realTime: false,
+            lazy: false,
+            formatter: null,
+            bgStyle: null,
+            sliderStyle: null,
+            processStyle: null,
+            piecewiseActiveStyle: null,
+            piecewiseStyle: null,
+            tooltipStyle: null,
+            labelStyle: null,
+            labelActiveStyle: null
+          },
           options: [{
             value: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             label: 'World_Imagery'

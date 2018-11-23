@@ -53,24 +53,24 @@
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
       <span>透明度</span>
-      <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>亮度</span>
-      <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>对比度</span>
-      <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>切换服务</span>
-      <el-select v-model="urlAMapImage" placeholder="请选择服务">
-        <el-option
+      <md-select v-model="urlAMapImage" placeholder="请选择服务">
+        <md-option
           v-for="item in options"
           :key="item.value"
-          :label="item.label"
           :value="item.value">
-        </el-option>
-      </el-select>
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
     <cesium-viewer @ready="ready">
       <urltemplate-imagery-layer :url="urlAMapImage" credit="高德地图服务" :alpha="alpha" :brightness="brightness"
-        :contrast="contrast" :maximumLevel="18" />
+        :contrast="contrast" :maximumLevel="18"></urltemplate-imagery-layer>
     </cesium-viewer>
   </div>
 </template>
@@ -115,20 +115,20 @@
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
         <span>透明度</span>
-        <el-slider v-model="alpha" :min="0" :max="1" :step="0.01" ></el-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>亮度</span>
-        <el-slider v-model="brightness" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>对比度</span>
-        <el-slider v-model="contrast" :min="0" :max="3" :step="0.01" ></el-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>切换服务</span>
-        <el-select v-model="urlAMapImage" placeholder="请选择服务">
-          <el-option
+        <md-select v-model="urlAMapImage" placeholder="请选择服务">
+          <md-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
             :value="item.value">
-          </el-option>
-        </el-select>
+            {{item.label}}
+          </md-option>
+        </md-select>
       </div>
       <cesium-viewer @ready="ready">
         <urltemplate-imagery-layer :url="urlAMapImage" credit="高德地图服务" :alpha="alpha" :brightness="brightness"

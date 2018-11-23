@@ -66,6 +66,21 @@ The container is an empty DOM node which used to mount other components or DOM n
 |onStop||An Event that is fired whenever Clock#stopTime is reached.|Viewer.clock|
 |onTick||An Event that is fired whenever Clock#tick is called.|Viewer.clock|
 |errorEvent||Gets an event that is raised when the terrain provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|Viewer.terrainProvider|
+|LEFT_CLICK|{position: point}|Represents a mouse left click event.|ScreenSpaceEventType|
+|LEFT_DOUBLE_CLICK|{position: point}|Represents a mouse left double click event.|ScreenSpaceEventType|
+|LEFT_DOWN|{position: point}|Represents a mouse left button down event.|ScreenSpaceEventType|
+|LEFT_UP|{position: point}|Represents a mouse left button up event.|ScreenSpaceEventType|
+|MIDDLE_CLICK|{position: point}|Represents a mouse middle click event.|ScreenSpaceEventType|
+|MIDDLE_DOWN|{position: point}|Represents a mouse middle button down event.|ScreenSpaceEventType|
+|MIDDLE_UP|{position: point}|Represents a mouse middle button up event.|ScreenSpaceEventType|
+|MOUSE_MOVE|{startPosition: point, endPosition: point}|Represents a mouse move event.|ScreenSpaceEventType|
+|PINCH_END||Represents the end of a two-finger event on a touch surface.|ScreenSpaceEventType|
+|PINCH_MOVE|{distance: {startPosition: point, endPosition: point}, angleAndHeight: {startPosition: point, endPosition: point}}|Represents a change of a two-finger event on a touch surface.|ScreenSpaceEventType|
+|PINCH_START|{position1: point, position2: point}|Represents the start of a two-finger event on a touch surface.|ScreenSpaceEventType|
+|RIGHT_CLICK|{position: point}|Represents a mouse right click event.|ScreenSpaceEventType|
+|RIGHT_DOWN|{position: point}|Represents a mouse left button down event.|ScreenSpaceEventType|
+|RIGHT_UP|{position: point}|Represents a mouse right button up event.|ScreenSpaceEventType|
+|WHEEL|delta|Represents a mouse wheel event.|ScreenSpaceEventType|
 ---
 
 ## Examples
@@ -79,15 +94,15 @@ The container is an empty DOM node which used to mount other components or DOM n
   <div class="viewer" ref="myViewer">
     <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
       <span>animation</span>
-      <el-switch v-model="animation"></el-switch>
+      <md-switch v-model="animation"></md-switch>
       <span>timeline</span>
-      <el-switch v-model="timeline"></el-switch>
+      <md-switch v-model="timeline"></md-switch>
       <span>baseLayerPicker</span>
-      <el-switch v-model="baseLayerPicker"></el-switch>
+      <md-switch v-model="baseLayerPicker"></md-switch>
       <span>fullscreenButton</span>
-      <el-switch v-model="fullscreenButton"></el-switch>
+      <md-switch v-model="fullscreenButton"></md-switch>
       <span>infoBox</span>
-      <el-switch v-model="infoBox"></el-switch>
+      <md-switch v-model="infoBox"></md-switch>
     </div>
     <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
@@ -147,15 +162,15 @@ The container is an empty DOM node which used to mount other components or DOM n
     <div class="viewer" ref="myViewer">
       <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
         <span>animation</span>
-        <el-switch v-model="animation"></el-switch>
+        <md-switch v-model="animation"></md-switch>
         <span>timeline</span>
-        <el-switch v-model="timeline"></el-switch>
+        <md-switch v-model="timeline"></md-switch>
         <span>baseLayerPicker</span>
-        <el-switch v-model="baseLayerPicker"></el-switch>
+        <md-switch v-model="baseLayerPicker"></md-switch>
         <span>fullscreenButton</span>
-        <el-switch v-model="fullscreenButton"></el-switch>
+        <md-switch v-model="fullscreenButton"></md-switch>
         <span>infoBox</span>
-        <el-switch v-model="infoBox"></el-switch>
+        <md-switch v-model="infoBox"></md-switch>
       </div>
       <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
