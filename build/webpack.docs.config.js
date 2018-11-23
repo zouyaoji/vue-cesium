@@ -13,10 +13,6 @@ module.exports = {
       'prismjs',
       'vue-material'
     ],
-    resource: [
-      'prismjs/themes/prism-tomorrow.css',
-      'docs/fonts/iconfont.css'
-    ],
     vendor: [
       'docs/components/App.vue',
       'docs/components/CateView.vue',
@@ -44,8 +40,7 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        use: ['vue-markdown-loader'],
-        exclude: [/node_modules/]
+        loader: 'vue-markdown-loader'
       },
       {
         test: /\.css$/,
@@ -75,7 +70,7 @@ module.exports = {
       name: 'manifest'
     },
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minSize: 30000,
       minChunks: 1,
       maxAsyncRequests: 5,
@@ -83,6 +78,14 @@ module.exports = {
       automaticNameDelimiter: '~',
       name: true,
       cacheGroups: {
+        libs: {
+          name: 'libs',
+          minSize: 30000,
+          minChunks: 2,
+          chunks: 'initial',
+          reuseExistingChunk: true,
+          priority: 10
+        },
         vendor: {
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
@@ -90,23 +93,7 @@ module.exports = {
           minChunks: 2,
           chunks: 'all',
           reuseExistingChunk: true,
-          priority: 10
-        },
-        libs: {
-          name: 'libs',
-          minSize: 30000,
-          minChunks: 2,
-          chunks: 'all',
-          reuseExistingChunk: true,
-          priority: 5
-        },
-        resource: {
-          name: 'resource',
-          minSize: 30000,
-          minChunks: 2,
-          chunks: 'all',
-          reuseExistingChunk: true,
-          priority: 2
+          priority: 20
         }
       }
     }
@@ -115,11 +102,10 @@ module.exports = {
     new CleanWebpackPlugin(['dist'], {
       root: path.resolve(__dirname, '../')
     }),
-    // new VueLoaderPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../docs/template/index.html'),
-      chunks: ['libs', 'vendor', 'resource', 'main', 'manifest']
+      chunks: ['vendor', 'libs', 'main', 'manifest']
     }),
     new InlineManifestWebpackPlugin('manifest')
   ]

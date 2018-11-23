@@ -1,15 +1,8 @@
 {
-  "presets": [["es2015", { "modules": false }]],
+  "presets": [["es2015"]],
   "plugins": [
     "add-module-exports",
     "transform-es2015-modules-umd",
-    "syntax-dynamic-import",
-    [
-      "component",
-      {
-        "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
-      }
-    ]
+    "syntax-dynamic-import"
   ]
 }
