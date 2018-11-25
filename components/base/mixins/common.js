@@ -48,6 +48,10 @@ class Mixin {
           switch (prop.type) {
             case 'primitives':
               return viewer.scene[prop.type][types[prop.type].unload](originInstance)
+            case 'polyline-primitive':
+            case 'label-primitive':
+            case 'point-primitive':
+              return getParent(this.$parent).originInstance.remove(originInstance)
             default:
               viewer[prop.type][types[prop.type].unload](originInstance)
           }

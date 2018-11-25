@@ -5,9 +5,7 @@
  * @Last Modified time: 2018-11-23 17:17:17
  */
 <template>
-  <div>
-    <div ref="viewer" style="width:100%; height:100%;">
-    </div>
+  <div ref="viewer" style="width:100%; height:100%;">
     <slot></slot>
   </div>
 </template>

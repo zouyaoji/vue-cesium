@@ -3,7 +3,7 @@ import bindEvents from '../base/bindEvent'
 import { Events } from '../base/events.js'
 import commonMixin from '../base/mixins/common.js'
 export default {
-  name: 'polyline-graphics',
+  name: 'polyline-entity',
   render (h) {},
   mixins: [commonMixin('entities')],
   props: {
@@ -72,42 +72,60 @@ export default {
   },
   watch: {
     id () {
+      this.reload()
     },
-    name () {
+    name (val) {
+      this.originInstance.name = val
     },
     availability () {
+      this.reload()
     },
-    description () {
+    description (val) {
+      this.originInstance.description = val
     },
-    position () {
+    position (val) {
+      this.originInstance.position = val
     },
-    orientation () {
+    orientation (val) {
+      this.originInstance.orientation = val
     },
-    viewFrom () {
+    viewFrom (val) {
+      this.originInstance.viewFrom = val
     },
     parent () {
+      this.reload()
     },
     positions () {
     },
-    followSurface () {
+    followSurface (val) {
+      this.originInstance.polyline.followSurface = val
     },
-    clampToGround () {
+    clampToGround (val) {
+      this.originInstance.polyline.clampToGround = val
     },
-    width () {
+    width (val) {
+      this.originInstance.polyline.width = val
     },
-    show () {
+    show (val) {
+      this.originInstance.polyline.show = val
     },
-    material () {
+    material (val) {
+      this.originInstance.polyline.material = val
     },
-    depthFailMaterial () {
+    depthFailMaterial (val) {
+      this.originInstance.polyline.depthFailMaterial = val
     },
-    granularity () {
+    granularity (val) {
+      this.originInstance.polyline.granularity = val
     },
-    shadows () {
+    shadows (val) {
+      this.originInstance.polyline.shadows = val
     },
-    distanceDisplayCondition () {
+    distanceDisplayCondition (val) {
+      this.originInstance.polyline.distanceDisplayCondition = val
     },
-    zIndex () {
+    zIndex (val) {
+      this.originInstance.polyline.zIndex = val
     }
   },
   methods: {
@@ -127,7 +145,6 @@ export default {
         distanceDisplayCondition: distanceDisplayCondition,
         zIndex: zIndex
       }
-
       polyline.positions = new Cesium.CallbackProperty(() => this.positions, false)
       this.originInstance = viewer.entities.add({
         id: id,
@@ -147,6 +164,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>
