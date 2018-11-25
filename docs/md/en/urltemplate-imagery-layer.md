@@ -100,13 +100,6 @@
     }
   }
 </script>
-
-<style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 ```
 
 #### Preview
@@ -162,11 +155,4 @@
       }
     }
   </script>
-
-  <style scoped>
-    .viewer {
-      width: 100%;
-      height: 400px;
-    }
-  </style>
 </doc-preview>

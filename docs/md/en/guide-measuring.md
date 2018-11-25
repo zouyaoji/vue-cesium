@@ -1,10 +1,10 @@
 <template lang="markdown">
 
-# 绘制
+# 量算
 
 ## 说明
 
-由于 MVVM 数据驱动视图的特性，绘制很方便。
+由于 MVVM 数据驱动视图的特性，量算很方便。
 
 ## 示例
 
@@ -15,14 +15,18 @@
 ```html
 <template>
   <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
-        <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止绘制' : '开始绘制' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-      </div>
+    <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
+      <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止量算' : '开始量算' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+    </div>
     <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
       <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-      <polyline-entity :positions="polyline.positions" :key="index" :material="material" v-for="(polyline, index) of polylines"
-        :width="5"></polyline-entity>
+      <polyline-collection>
+        <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines"></polyline-primitive>
+      </polyline-collection>
+      <label-collection>
+        <cesium-label :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels"></cesium-label>
+      </label-collection>
     </cesium-viewer>
   </div>
 </template>
@@ -34,14 +38,17 @@
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         material: undefined,
         editing: false,
+        distance: 0,
+        labels: [],
         polylines: [],
-        options: [],
+        options: []
       }
     },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
         window.viewer = viewer
+        window.ppp = this
         this.cesiumInstance = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         this.material = new Cesium.PolylineDashMaterialProperty({
@@ -65,18 +72,24 @@
       },
       clear () {
         this.polylines = []
+        this.labels = []
       },
       LEFT_CLICK (movement) {
         if (!this.editing) {
           return
         }
         const {Cesium, viewer} = this.cesiumInstance
-        const { polylines } = this
+        const { polylines, labels } = this
+        !polylines.length && polylines.push({positions: []})
         let cartesian = viewer.scene.pickPosition(movement.position)
         if (!Cesium.defined(cartesian)) {
           return
         }
         polylines[polylines.length - 1].positions.push(cartesian)
+        labels.push({
+          text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+          position: cartesian
+        })
       },
       MOUSE_MOVE (movement) {
         if (!this.editing) {
@@ -99,12 +112,13 @@
           polyline.positions.push(cartesian)
         }
         this.$set(polyline.positions, polyline.positions.length - 1, cartesian)
+        this.distance = this.getDistance(polyline.positions)
       },
       RIGHT_CLICK (movement) {
         if (!this.editing) {
           return
         }
-        const { polylines } = this
+        const { polylines,labels } = this
         if(!polylines.length) {
           return
         }
@@ -115,9 +129,22 @@
         const polyline = polylines[polylines.length - 1]
         polyline.positions.pop()
         polyline.positions.push(cartesian)
+        labels.push({
+          text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+          position: cartesian
+        })
         if (polylines.length) {
           polylines.push({positions: []})
         }
+      },
+      getDistance (positions) {
+        const { Cesium } = this.cesiumInstance
+        let distance = 0
+        for (let i = 0; i < positions.length - 1; i++) {
+          let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
+          distance = distance + s
+        }
+        return distance
       }
     }
   }
@@ -130,13 +157,17 @@
   <template>
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
-        <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止绘制' : '开始绘制' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止量算' : '开始量算' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
       <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
         <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-        <polyline-entity :ref="'line'+index" :positions="polyline.positions" :key="index" :material="material" v-for="(polyline, index) of polylines"
-          :width="5"></polyline-entity>
+        <polyline-collection>
+          <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines"></polyline-primitive>
+        </polyline-collection>
+        <label-collection>
+          <cesium-label :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels"></cesium-label>
+        </label-collection>
       </cesium-viewer>
     </div>
   </template>
@@ -148,6 +179,8 @@
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           material: undefined,
           editing: false,
+          distance: 0,
+          labels: [],
           polylines: [],
           options: []
         }
@@ -155,6 +188,8 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          window.viewer = viewer
+          window.ppp = this
           this.cesiumInstance = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           this.material = new Cesium.PolylineDashMaterialProperty({
@@ -178,19 +213,24 @@
         },
         clear () {
           this.polylines = []
+          this.labels = []
         },
         LEFT_CLICK (movement) {
           if (!this.editing) {
             return
           }
           const {Cesium, viewer} = this.cesiumInstance
-          const { polylines } = this
+          const { polylines, labels } = this
           !polylines.length && polylines.push({positions: []})
           let cartesian = viewer.scene.pickPosition(movement.position)
           if (!Cesium.defined(cartesian)) {
             return
           }
           polylines[polylines.length - 1].positions.push(cartesian)
+          labels.push({
+            text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+            position: cartesian
+          })
         },
         MOUSE_MOVE (movement) {
           if (!this.editing) {
@@ -213,16 +253,16 @@
             polyline.positions.push(cartesian)
           }
           this.$set(polyline.positions, polyline.positions.length - 1, cartesian)
+          this.distance = this.getDistance(polyline.positions)
         },
         RIGHT_CLICK (movement) {
           if (!this.editing) {
             return
           }
-          const { polylines } = this
+          const { polylines,labels } = this
           if(!polylines.length) {
             return
           }
-          const {viewer} = this.cesiumInstance
           let cartesian = viewer.scene.pickPosition(movement.position)
           if (!Cesium.defined(cartesian)) {
             return
@@ -230,9 +270,22 @@
           const polyline = polylines[polylines.length - 1]
           polyline.positions.pop()
           polyline.positions.push(cartesian)
+          labels.push({
+            text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+            position: cartesian
+          })
           if (polylines.length) {
             polylines.push({positions: []})
           }
+        },
+        getDistance (positions) {
+          const { Cesium } = this.cesiumInstance
+          let distance = 0
+          for (let i = 0; i < positions.length - 1; i++) {
+            let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
+            distance = distance + s
+          }
+          return distance
         }
       }
     }

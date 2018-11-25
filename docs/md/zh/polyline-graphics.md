@@ -2,7 +2,7 @@
 
 # 线实体polyline
 
-`polyline-graphics`
+`polyline-entity`
 
 ## 属性
 
@@ -59,7 +59,7 @@
       </div>
     <cesium-viewer>
       <cesium-3dtileset ref="tileset" :url="url" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE"/>
-      <polyline-graphics :positions="positions" :width="2.0"/>
+      <polyline-entity :positions="positions" :width="2.0"/>
     </cesium-viewer>
   </div>
 </template>
@@ -102,13 +102,6 @@
     }
   }
 </script>
-
-<style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 ```
 
 #### 预览
@@ -154,11 +147,4 @@
       }
     }
   </script>
-
-  <style scoped>
-    .viewer {
-      width: 100%;
-      height: 400px;
-    }
-  </style>
 </doc-preview>

@@ -21,8 +21,8 @@
       </div>
     <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
       <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-      <polyline-graphics :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
-        :width="5"></polyline-graphics>
+      <polyline-entity :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
+        :width="5"></polyline-entity>
     </cesium-viewer>
   </div>
 </template>
@@ -109,13 +109,6 @@
     }
   }
 </script>
-
-<style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 ```
 
 #### 预览
@@ -129,8 +122,8 @@
         </div>
       <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
         <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-        <polyline-graphics :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
-          :width="5"></polyline-graphics>
+        <polyline-entity :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
+          :width="5"></polyline-entity>
       </cesium-viewer>
     </div>
   </template>
@@ -217,11 +210,4 @@
       }
     }
   </script>
-
-  <style scoped>
-    .viewer {
-      width: 100%;
-      height: 400px;
-    }
-  </style>
 </doc-preview>

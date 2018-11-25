@@ -146,13 +146,6 @@ The container is an empty DOM node which used to mount other components or DOM n
     }
   }
 </script>
-
-<style scoped>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
-</style>
 ```
 
 #### Preview
@@ -215,11 +208,4 @@ The container is an empty DOM node which used to mount other components or DOM n
       }
     }
   </script>
-
-  <style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-  </style>
 </doc-preview>

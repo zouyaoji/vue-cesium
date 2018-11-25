@@ -92,13 +92,6 @@
     }
   }
 </script>
-
-<style scoped>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 ```
 
 #### 预览
@@ -154,11 +147,4 @@
       }
     }
   </script>
-
-  <style scoped>
-    .viewer {
-      width: 100%;
-      height: 400px;
-    }
-  </style>
 </doc-preview>
