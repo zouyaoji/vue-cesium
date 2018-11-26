@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     load () {
-      const { Cesium, viewer, id, name, availability, positions, description, position, orientation, viewFrom, parent, followSurface,
+      const { Cesium, viewer, id, name, availability, description, position, orientation, viewFrom, parent, positions, followSurface,
         clampToGround, width, show, material, depthFailMaterial, granularity, shadows, distanceDisplayCondition, zIndex } = this
       let polyline = {
         positions: positions,

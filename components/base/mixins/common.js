@@ -51,6 +51,7 @@ class Mixin {
             case 'polyline-primitive':
             case 'label-primitive':
             case 'point-primitive':
+            case 'polygon-primitive':
               return getParent(this.$parent).originInstance.remove(originInstance)
             default:
               viewer[prop.type][types[prop.type].unload](originInstance)

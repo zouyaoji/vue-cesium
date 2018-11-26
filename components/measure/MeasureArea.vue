@@ -1,7 +1,7 @@
 <template>
   <i>
     <polyline-collection>
-      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2"></polyline-primitive>
+      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2" :loop="true"></polyline-primitive>
     </polyline-collection>
     <point-collection>
       <template v-for="(polyline, index) of polylines">
@@ -13,20 +13,23 @@
     <label-collection>
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"></label-primitive>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
+      </label-primitive>
     </label-collection>
+    <polygon-entity :hierarchy="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :perPositionHeight="true" :material="materialPolygon"></polygon-entity>
   </i>
 </template>
 
 <script>
+import turfArea from '../base/turfArea.js'
 import commonMixin from '../base/mixins/common.js'
 export default {
-  name: 'measure-distance',
+  name: 'measure-area',
   render (h) {},
   mixins: [commonMixin('measure')],
   data () {
     return {
-      distance: 0,
+      area: 0,
       polylines: [],
       labels: [],
       font: '50 14px SimSun'
@@ -36,17 +39,6 @@ export default {
     measuring: {
       type: Boolean,
       default: false
-    }
-  },
-  watch: {
-    measuring (val) {
-      if (!val) {
-        const { polylines } = this
-        const polyline = polylines[polylines.length - 1]
-        if (polyline.positions.length === 0) {
-          polylines.pop()
-        }
-      }
     }
   },
   methods: {
@@ -60,6 +52,7 @@ export default {
       this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
       this.materialLine = Cesium.Material.fromType('Color')
       this.materialLine.uniforms.color = new Cesium.Color(0.3176470588235294, 1, 0, 1)
+      this.materialPolygon = Cesium.Color.fromCssColorString('rgba(255,165,0,0.5)')
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
       handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
       handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
@@ -69,7 +62,7 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines, labels } = this
+      const { Cesium, viewer, polylines } = this
       !polylines.length && polylines.push({ positions: [] })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
@@ -77,12 +70,6 @@ export default {
       }
       const polyline = polylines[polylines.length - 1]
       polyline.positions.push(cartesian)
-      if (polyline.positions.length >= 2) {
-        labels.push({
-          text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
-          position: cartesian
-        })
-      }
     },
     MOUSE_MOVE (movement) {
       if (!this.measuring) {
@@ -105,9 +92,9 @@ export default {
         polyline.positions.pop()
       }
       polyline.positions.push(cartesian)
-      this.distance = this.getDistance(polyline.positions)
+      this.area = this.getArea(polyline.positions)
       labels.push({
-        text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+        text: this.area > 1000000 ? (this.area / 1000000).toFixed(2) + 'km²' : this.area.toFixed(2) + '㎡',
         position: cartesian
       })
     },
@@ -128,18 +115,52 @@ export default {
         return
       }
       if (polylines.length) {
-        this.distance = 0
+        this.area = 0
         polylines.push({ positions: [] })
       }
     },
-    getDistance (positions) {
+    getArea (positions) {
       const { Cesium } = this
-      let distance = 0
-      for (let i = 0; i < positions.length - 1; i++) {
-        let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
-        distance = distance + s
+      let array = []
+      for (let i = 0, len = positions.length; i < len; i++) {
+        let cartographic = Cesium.Cartographic.fromCartesian(positions[i])
+        let longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(6)
+        let latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(6)
+        array.push({ x: longitude, y: latitude })
       }
-      return distance
+      let arrs = []
+      let tems = []
+      arrs.push(tems)
+      for (let i = 0, len = array.length; i < len; i++) {
+        tems.push([array[i].x, array[i].y])
+      }
+      let polygons = {
+        'type': 'FeatureCollection',
+        'features': [
+          {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': arrs
+            }
+          }, {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [[
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0]
+              ]]
+            }
+          }
+        ]
+      }
+      return turfArea(polygons)
     },
     clear () {
       this.distance = 0

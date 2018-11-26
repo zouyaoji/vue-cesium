@@ -28,14 +28,14 @@ export default {
       default: '30px sans-serif'
     },
     heightReference: {
-      type: Number
+      type: Number,
+      default: 0
     },
     horizontalOrigin: {
-      type: Number
+      type: Number,
+      default: 1
     },
-    id: {
-      type: Object
-    },
+    id: null,
     outlineColor: {
       type: Object
     },
@@ -46,6 +46,7 @@ export default {
     pixelOffset: {
       type: Object
     },
+    pixelOffsetScaleByDistance: Object,
     position: {
       type: Object
     },
@@ -118,6 +119,9 @@ export default {
     pixelOffset (val) {
       this.originInstance.pixelOffset = val
     },
+    pixelOffsetScaleByDistance (val) {
+      this.originInstance.pixelOffsetScaleByDistance = val
+    },
     position (val) {
       this.originInstance.position = val
     },
@@ -148,8 +152,9 @@ export default {
   },
   methods: {
     load () {
-      const { backgroundColor, backgroundPadding, disableDepthTestDistance, distanceDisplayCondition, eyeOffset, fillColor, font, heightReference, horizontalOrigin,
-        id, outlineColor, outlineWidth, pixelOffset, position, scale, scaleByDistance, show, showBackground, labelStyle, text, translucencyByDistance, verticalOrigin } = this
+      const { backgroundColor, backgroundPadding, disableDepthTestDistance, distanceDisplayCondition, eyeOffset, fillColor, font, heightReference,
+        horizontalOrigin, id, outlineColor, outlineWidth, pixelOffset, pixelOffsetScaleByDistance, position, scale, scaleByDistance,
+        show, showBackground, labelStyle, text, translucencyByDistance, verticalOrigin } = this
       let label = {
         backgroundColor: backgroundColor,
         backgroundPadding: backgroundPadding,
@@ -164,6 +169,7 @@ export default {
         outlineColor: outlineColor,
         outlineWidth: outlineWidth,
         pixelOffset: pixelOffset,
+        pixelOffsetScaleByDistance: pixelOffsetScaleByDistance,
         position: position,
         scale: scale,
         scaleByDistance: scaleByDistance,

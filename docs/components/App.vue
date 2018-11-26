@@ -121,19 +121,8 @@ h2 {
   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
   width: 100%;
 
-@media screen and (max-width: 1559px) 
-  .viewer
-    width: 100%;
-    height: 800px;
- 
-@media screen and (max-width: 1200px)
-  .viewer
-    width: 100%;
-    height: 600px;
-
-@media screen and (max-width: 768px) 
-  .viewer
-    width: 100%;
-    height: 400px;
+.viewer
+  width: 100%;
+  height: 500px;
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <i>
     <polyline-collection>
-      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2"></polyline-primitive>
+      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2" :loop="true"></polyline-primitive>
     </polyline-collection>
     <point-collection>
       <template v-for="(polyline, index) of polylines">
@@ -9,11 +9,12 @@
           <point-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
         </template>
       </template>
+      <!-- <point-primitive :position="point.position" :key="index" :color="colorPoint" :pixelSize="8" v-for="(point, index) of points"></point-primitive> -->
     </point-collection>
     <label-collection>
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"></label-primitive>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"/>
     </label-collection>
   </i>
 </template>
@@ -21,12 +22,15 @@
 <script>
 import commonMixin from '../base/mixins/common.js'
 export default {
-  name: 'measure-distance',
+  name: 'measure-height',
   render (h) {},
   mixins: [commonMixin('measure')],
   data () {
     return {
-      distance: 0,
+      height: 0,
+      distanceH: 0,
+      distanceS: 0,
+      startPoint: undefined,
       polylines: [],
       labels: [],
       font: '50 14px SimSun'
@@ -39,15 +43,7 @@ export default {
     }
   },
   watch: {
-    measuring (val) {
-      if (!val) {
-        const { polylines } = this
-        const polyline = polylines[polylines.length - 1]
-        if (polyline.positions.length === 0) {
-          polylines.pop()
-        }
-      }
-    }
+
   },
   methods: {
     load () {
@@ -69,19 +65,16 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines, labels } = this
+      const { Cesium, viewer, polylines } = this
       !polylines.length && polylines.push({ positions: [] })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
       }
       const polyline = polylines[polylines.length - 1]
-      polyline.positions.push(cartesian)
-      if (polyline.positions.length >= 2) {
-        labels.push({
-          text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
-          position: cartesian
-        })
+      if (polyline.positions.length === 0) {
+        polyline.positions.push(cartesian)
+        this.startPoint = cartesian
       }
     },
     MOUSE_MOVE (movement) {
@@ -100,15 +93,56 @@ export default {
       if (!Cesium.defined(cartesian)) {
         return
       }
-      if (polyline.positions.length >= 2) {
-        labels.pop()
-        polyline.positions.pop()
+
+      let endPoint = cartesian
+      let normalStart = {}
+      Cesium.Cartesian3.normalize(this.startPoint, normalStart)
+      let planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
+      let hypPoint = {}
+      this.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
+      let labelPositonHeight = {}
+      let labelPositonH = {}
+      let labelPositonS = {}
+      if (this.height >= 0) {
+        Cesium.Plane.projectPointOntoPlane(planeStart, endPoint, hypPoint)
+        Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonHeight)
+        Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonH)
+        this.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
+      } else {
+        let normalEnd = {}
+        Cesium.Cartesian3.normalize(endPoint, normalEnd)
+        let planeEnd = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(endPoint, new Cesium.Cartesian3(0, 0, 0)))
+        Cesium.Plane.projectPointOntoPlane(planeEnd, this.startPoint, hypPoint)
+        Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonHeight)
+        Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonH)
+        this.distanceH = Cesium.Cartesian3.distance(endPoint, hypPoint)
       }
-      polyline.positions.push(cartesian)
-      this.distance = this.getDistance(polyline.positions)
+      this.distanceS = Cesium.Cartesian3.distance(this.startPoint, endPoint)
+      Cesium.Cartesian3.midpoint(this.startPoint, endPoint, labelPositonS)
+      this.height = Math.abs(this.height)
+      if (polyline.positions.length !== 1) {
+        polyline.positions.pop()
+        polyline.positions.pop()
+        labels.pop()
+        labels.pop()
+        labels.pop()
+      }
+      polyline.positions.push(endPoint)
+      polyline.positions.push(hypPoint)
+      let labelTextHeight = this.height > 1000 ? (this.height / 1000).toFixed(2) + 'km' : this.height.toFixed(2) + 'm'
       labels.push({
-        text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
-        position: cartesian
+        text: '高度:' + labelTextHeight,
+        position: labelPositonHeight
+      })
+      let labelTextH = this.distanceH > 1000 ? (this.distanceH / 1000).toFixed(2) + 'km' : this.distanceH.toFixed(2) + 'm'
+      labels.push({
+        text: '水平距离:' + labelTextH,
+        position: labelPositonH
+      })
+      let labelTextS = this.distanceS > 1000 ? (this.distanceS / 1000).toFixed(2) + 'km' : this.distanceS.toFixed(2) + 'm'
+      labels.push({
+        text: '空间距离:' + labelTextS,
+        position: labelPositonS
       })
     },
     RIGHT_CLICK (movement) {
@@ -119,16 +153,14 @@ export default {
       if (!polylines.length) {
         return
       }
-      const polyline = polylines[polylines.length - 1]
-      if (polyline.positions.length === 0) {
-        return
-      }
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
       }
       if (polylines.length) {
-        this.distance = 0
+        this.distanceH = 0
+        this.distanceS = 0
+        this.height = 0
         polylines.push({ positions: [] })
       }
     },
