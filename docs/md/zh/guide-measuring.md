@@ -75,9 +75,9 @@
   <template>
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
-        <md-button class="md-raised md-accent" @click="toggle('distance')">{{ distanceMeasuring ? '停止量算' : '距离' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('area')">{{ areaMeasuring ? '停止量算' : '面积' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('height')">{{ heightMeasuring ? '停止量算' : '高度' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('distance')">{{ distanceMeasuring ? '量算距离' : '距离' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('area')">{{ areaMeasuring ? '量算面积' : '面积' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('height')">{{ heightMeasuring ? '量算高度' : '高度' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
       <cesium-viewer @ready="ready" scene3DOnly>

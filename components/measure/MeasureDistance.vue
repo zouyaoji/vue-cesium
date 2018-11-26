@@ -13,7 +13,7 @@
     <label-collection>
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"></label-primitive>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="Number.POSITIVE_INFINITY"></label-primitive>
     </label-collection>
   </i>
 </template>

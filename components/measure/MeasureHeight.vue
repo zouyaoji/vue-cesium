@@ -9,12 +9,11 @@
           <point-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
         </template>
       </template>
-      <!-- <point-primitive :position="point.position" :key="index" :color="colorPoint" :pixelSize="8" v-for="(point, index) of points"></point-primitive> -->
     </point-collection>
     <label-collection>
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"/>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="Number.POSITIVE_INFINITY" :pixelOffsetScaleByDistance="pixelOffsetScaleByDistance"/>
     </label-collection>
   </i>
 </template>
@@ -56,6 +55,7 @@ export default {
       this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
       this.materialLine = Cesium.Material.fromType('Color')
       this.materialLine.uniforms.color = new Cesium.Color(0.3176470588235294, 1, 0, 1)
+      this.pixelOffsetScaleByDistance = new Cesium.NearFarScalar(150, 3, 15000000, 0.5)
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
       handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
       handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
