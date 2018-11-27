@@ -10,10 +10,10 @@
         </template>
       </template>
     </point-collection>
-    <label-collection>
+    <label-collection ref="labelCollection" @ready="labelCollectionReady">
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="Number.POSITIVE_INFINITY">
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
       </label-primitive>
     </label-collection>
     <polygon-entity :hierarchy="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :perPositionHeight="true" :material="materialPolygon"></polygon-entity>
@@ -29,16 +29,30 @@ export default {
   mixins: [commonMixin('measure')],
   data () {
     return {
+      measuring: false,
       area: 0,
       polylines: [],
       labels: [],
-      font: '50 14px SimSun'
+      font: '100 20px SimSun',
+      mode: 1
     }
   },
-  props: {
-    measuring: {
-      type: Boolean,
-      default: false
+  watch: {
+    measuring (val) {
+      const { polylines } = this
+      const polyline = polylines[polylines.length - 1]
+      if (!val && polyline && !polyline.positions.length) {
+        this.polylines.pop()
+      } else if (val) {
+        for (let $node of this.$parent.$slots.default || []) {
+          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-height' ||
+            $node.componentOptions.tag === 'measure-distance')) {
+            $node.child.measuring = false
+          }
+        }
+        polylines.length && polylines.push({ positions: [], area: 0 })
+      }
+      this.$emit('activeEvt', { type: 'areaMeasuring', isActive: val })
     }
   },
   methods: {
@@ -63,7 +77,7 @@ export default {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [] })
+      !polylines.length && polylines.push({ positions: [], area: 0 })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -102,7 +116,7 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { viewer, polylines } = this
+      const { viewer, polylines, mode } = this
       if (!polylines.length) {
         return
       }
@@ -114,9 +128,12 @@ export default {
       if (!Cesium.defined(cartesian)) {
         return
       }
-      if (polylines.length) {
-        this.area = 0
-        polylines.push({ positions: [] })
+      if (mode === 0) {
+        if (polylines.length) {
+          polylines.push({ positions: [], area: 0 })
+        }
+      } else {
+        this.measuring = false
       }
     },
     getArea (positions) {
@@ -166,7 +183,10 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
-      this.points = []
+    },
+    labelCollectionReady () {
+      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
+      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }

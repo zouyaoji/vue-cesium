@@ -16,16 +16,16 @@
 <template>
   <div class="viewer">
     <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
-      <md-button class="md-raised md-accent" @click="toggle('distance')">{{ distanceMeasuring ? '停止量算' : '距离' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('distance')">{{ this.$refs[distance].measuring ? '停止量算' : '距离' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('area')">{{ areaMeasuring ? '停止量算' : '面积' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('height')">{{ heightMeasuring ? '停止量算' : '高度' }}</md-button>
       <md-button class="md-raised md-accent" @click="clear">清除</md-button>
     </div>
     <cesium-viewer @ready="ready" scene3DOnly>
       <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-      <measure-distance ref="measureDistance" :measuring="distanceMeasuring"></measure-distance>
-      <measure-area ref="measureArea" :measuring="areaMeasuring"></measure-area>
-      <measure-height ref="measureHeight" :measuring="heightMeasuring"></measure-height>
+      <measure-distance ref="measureDistance"></measure-distance>
+      <measure-area ref="measureArea"></measure-area>
+      <measure-height ref="measureHeight"></measure-height>
     </cesium-viewer>
   </div>
 </template>
@@ -45,19 +45,8 @@
         const {Cesium, viewer} = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
-      toggle (name) {
-        this.distanceMeasuring = false
-        this.areaMeasuring = false
-        this.heightMeasuring = false
-        if (name === 'distance'){
-          this.distanceMeasuring = true
-        }
-        if (name === 'area'){
-          this.areaMeasuring = true
-        }
-        if (name === 'height'){
-          this.heightMeasuring = true
-        }
+      toggle (type) {
+        this.$refs[type].measuring = !this.$refs[type].measuring
       },
       clear () {
         this.$refs.measureDistance.clear()
@@ -75,16 +64,16 @@
   <template>
     <div class="viewer">
       <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
-        <md-button class="md-raised md-accent" @click="toggle('distance')">{{ distanceMeasuring ? '量算距离' : '距离' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('area')">{{ areaMeasuring ? '量算面积' : '面积' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('height')">{{ heightMeasuring ? '量算高度' : '高度' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? '停止' : '距离' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? '停止' : '面积' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? '停止' : '高度' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
       <cesium-viewer @ready="ready" scene3DOnly>
         <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-        <measure-distance ref="measureDistance" :measuring="distanceMeasuring"></measure-distance>
-        <measure-area ref="measureArea" :measuring="areaMeasuring"></measure-area>
-        <measure-height ref="measureHeight" :measuring="heightMeasuring"></measure-height>
+        <measure-distance ref="measureDistance" @activeEvt="activeEvt"></measure-distance>
+        <measure-area ref="measureArea" @activeEvt="activeEvt"></measure-area>
+        <measure-height ref="measureHeight" @activeEvt="activeEvt"></measure-height>
       </cesium-viewer>
     </div>
   </template>
@@ -105,24 +94,17 @@
           window.viewer = viewer
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
-        toggle (name) {
-          this.distanceMeasuring = false
-          this.areaMeasuring = false
-          this.heightMeasuring = false
-          if (name === 'distance'){
-            this.distanceMeasuring = true
-          }
-          if (name === 'area'){
-            this.areaMeasuring = true
-          }
-          if (name === 'height'){
-            this.heightMeasuring = true
-          }
+        toggle (type) {
+          // this.distanceMeasuring = !this.distanceMeasuring
+          this.$refs[type].measuring = !this.$refs[type].measuring
         },
         clear () {
           this.$refs.measureDistance.clear()
           this.$refs.measureArea.clear()
           this.$refs.measureHeight.clear()
+        },
+        activeEvt (_) {
+          this[_.type] = _.isActive
         }
       }
     }

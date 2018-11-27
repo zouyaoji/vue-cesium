@@ -10,10 +10,18 @@
         </template>
       </template>
     </point-collection>
-    <label-collection>
-      <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
+    <label-collection ref="labelCollection" @ready="labelCollectionReady">
+      <!-- <template v-for="(polyline, index) of polylines">
+        <template  v-for="(position, subIndex) of polyline.positions">
+          <label-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel"
+            :text="polyline.distance + 'm'"
+            :showBackground="true" :backgroundColor="backgroundColorLabel" :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
+          </label-primitive>
+        </template>
+      </template> -->
+      <label-primitive :ref="'label' + index" :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="Number.POSITIVE_INFINITY"></label-primitive>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"></label-primitive>
     </label-collection>
   </i>
 </template>
@@ -26,27 +34,30 @@ export default {
   mixins: [commonMixin('measure')],
   data () {
     return {
+      measuring: false,
       distance: 0,
       polylines: [],
       labels: [],
-      font: '50 14px SimSun'
-    }
-  },
-  props: {
-    measuring: {
-      type: Boolean,
-      default: false
+      font: '100 20px SimSun',
+      mode: 1
     }
   },
   watch: {
     measuring (val) {
-      if (!val) {
-        const { polylines } = this
-        const polyline = polylines[polylines.length - 1]
-        if (polyline.positions.length === 0) {
-          polylines.pop()
+      const { polylines } = this
+      const polyline = polylines[polylines.length - 1]
+      if (!val && polyline && !polyline.positions.length) {
+        this.polylines.pop()
+      } else if (val) {
+        for (let $node of this.$parent.$slots.default || []) {
+          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-height' ||
+            $node.componentOptions.tag === 'measure-area')) {
+            $node.child.measuring = false
+          }
         }
+        polylines.length && polylines.push({ positions: [], distance: 0 })
       }
+      this.$emit('activeEvt', { type: 'distanceMeasuring', isActive: val })
     }
   },
   methods: {
@@ -70,7 +81,7 @@ export default {
         return
       }
       const { Cesium, viewer, polylines, labels } = this
-      !polylines.length && polylines.push({ positions: [] })
+      !polylines.length && polylines.push({ positions: [], distance: 0 })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -105,9 +116,9 @@ export default {
         polyline.positions.pop()
       }
       polyline.positions.push(cartesian)
-      this.distance = this.getDistance(polyline.positions)
+      polyline.distance = this.getDistance(polyline.positions)
       labels.push({
-        text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
+        text: polyline.distance > 1000 ? (polyline.distance / 1000).toFixed(2) + 'km' : polyline.distance.toFixed(2) + 'm',
         position: cartesian
       })
     },
@@ -115,7 +126,7 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { viewer, polylines } = this
+      const { viewer, polylines, mode } = this
       if (!polylines.length) {
         return
       }
@@ -127,9 +138,12 @@ export default {
       if (!Cesium.defined(cartesian)) {
         return
       }
-      if (polylines.length) {
-        this.distance = 0
-        polylines.push({ positions: [] })
+      if (mode === 0) {
+        if (polylines.length) {
+          polylines.push({ positions: [], distance: 0 })
+        }
+      } else {
+        this.measuring = false
       }
     },
     getDistance (positions) {
@@ -145,7 +159,10 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
-      this.points = []
+    },
+    labelCollectionReady () {
+      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
+      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }

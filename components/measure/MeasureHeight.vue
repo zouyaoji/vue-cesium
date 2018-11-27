@@ -10,10 +10,10 @@
         </template>
       </template>
     </point-collection>
-    <label-collection>
+    <label-collection ref="labelCollection" @ready="labelCollectionReady">
       <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
         :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="Number.POSITIVE_INFINITY" :pixelOffsetScaleByDistance="pixelOffsetScaleByDistance"/>
+        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0" :pixelOffsetScaleByDistance="pixelOffsetScaleByDistance"/>
     </label-collection>
   </i>
 </template>
@@ -26,23 +26,34 @@ export default {
   mixins: [commonMixin('measure')],
   data () {
     return {
+      measuring: false,
       height: 0,
       distanceH: 0,
       distanceS: 0,
       startPoint: undefined,
       polylines: [],
       labels: [],
-      font: '50 14px SimSun'
-    }
-  },
-  props: {
-    measuring: {
-      type: Boolean,
-      default: false
+      font: '100 20px SimSun',
+      mode: 1
     }
   },
   watch: {
-
+    measuring (val) {
+      const { polylines } = this
+      const polyline = polylines[polylines.length - 1]
+      if (!val && polyline && !polyline.positions.length) {
+        this.polylines.pop()
+      } else if (val) {
+        for (let $node of this.$parent.$slots.default || []) {
+          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-distance' ||
+            $node.componentOptions.tag === 'measure-area')) {
+            $node.child.measuring = false
+          }
+        }
+        polylines.length && polylines.push({ positions: [], distance: 0 })
+      }
+      this.$emit('activeEvt', { type: 'heightMeasuring', isActive: val })
+    }
   },
   methods: {
     load () {
@@ -149,7 +160,7 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { viewer, polylines } = this
+      const { viewer, polylines, mode } = this
       if (!polylines.length) {
         return
       }
@@ -157,11 +168,15 @@ export default {
       if (!Cesium.defined(cartesian)) {
         return
       }
-      if (polylines.length) {
-        this.distanceH = 0
-        this.distanceS = 0
-        this.height = 0
-        polylines.push({ positions: [] })
+      if (mode === 0) {
+        if (polylines.length) {
+          this.distanceH = 0
+          this.distanceS = 0
+          this.height = 0
+          polylines.push({ positions: [] })
+        }
+      } else {
+        this.measuring = false
       }
     },
     getDistance (positions) {
@@ -177,7 +192,10 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
-      this.points = []
+    },
+    labelCollectionReady () {
+      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
+      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }
