@@ -123,6 +123,14 @@ h2 {
 
 .viewer
   width: 100%;
-  height: 500px;
+  height: 550px;
+
+.demo-tool
+  position: absolute; 
+  left: 1%; 
+  top: 1%; 
+  // width: 150px; 
+  z-index: 100; 
+  color: white
 
 </style>

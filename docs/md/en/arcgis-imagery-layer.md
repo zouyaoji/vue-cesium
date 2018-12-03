@@ -50,7 +50,7 @@
 ```html
 <template>
   <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+    <div class="demo-tool">
       <span>alpha</span>
       <md-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></md-slider>
       <span>brightness</span>
@@ -105,7 +105,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <span>alpha</span>
         <md-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover"  :speed="0.1"></md-slider>
         <span>brightness</span>

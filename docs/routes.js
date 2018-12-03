@@ -107,7 +107,7 @@ const routeMap = [
         path: 'cesium-viewer',
         component: 'cesium-viewer',
         name: {
-          zh: '场景容器',
+          zh: '场景视图',
           en: 'CesiumViewer'
         }
       }
@@ -122,16 +122,16 @@ const routeMap = [
     component: CateView,
     children: [
       {
-        path: 'arcgis-imagery-layer',
-        component: 'arcgis-imagery-layer',
+        path: 'arcgis-mapserver-imagery-provider',
+        component: 'arcgis-mapserver-imagery-provider',
         name: {
-          zh: 'ArcGIS影像服务图层',
-          en: 'ArcGISImageryLayer'
+          zh: 'ArcGIS地图影像服务Provider',
+          en: 'ArcGisMapServerImageryProvider'
         }
       },
       {
-        path: 'bingmaps-imagery-layer',
-        component: 'bingmaps-imagery-layer',
+        path: 'bingmaps-imagery-provider',
+        component: 'bingmaps-imagery-provider',
         name: {
           zh: 'BingMaps影像服务图层',
           en: 'BingMapsImageryLayer'
@@ -204,10 +204,10 @@ const routeMap = [
     }]
   },
   {
-    path: 'model',
+    path: 'primitive',
     name: {
-      zh: '模型',
-      en: 'Model'
+      zh: '几何体',
+      en: 'Primitive'
     },
     component: CateView,
     children: [{

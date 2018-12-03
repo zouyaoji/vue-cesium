@@ -1,8 +1,108 @@
-<template lang="markdown">
-
 # 3DTiles模型
 
 `cesium-3dtileset`用于加载3DTiles模型。
+
+## 示例
+
+### 加载3DTileset模型
+
+#### 预览
+
+<doc-preview>
+  <template>
+    <div class="viewer">
+      <div class="demo-tool">
+        <span>切换地址</span>
+        <md-select v-model="url" placeholder="切换地址">
+          <md-option
+            v-for="item in options"
+            :key="item.value"
+            :value="item.value">
+            {{item.label}}
+          </md-option>
+        </md-select>
+      </div>
+      <cesium-viewer @ready="ready">
+        <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+      </cesium-viewer>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          options: [{
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+            label: 'tileset one'
+          }, {
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+            label: 'tileset two'
+          }],
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          this.cesiumInstance = cesiumInstance
+        },
+        readyPromise (tileset) {
+          const {Cesium, viewer} = this.cesiumInstance
+          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### 代码
+
+```html
+<template>
+  <div class="viewer">
+    <div class="demo-tool">
+      <span>切换地址</span>
+      <md-select v-model="url" placeholder="切换地址">
+        <md-option
+          v-for="item in options"
+          :key="item.value"
+          :value="item.value">
+          {{item.label}}
+        </md-option>
+      </md-select>
+    </div>
+    <cesium-viewer @ready="ready">
+      <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+    </cesium-viewer>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+        options: [{
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          label: 'tileset one'
+        }, {
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+          label: 'tileset two'
+        }],
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        this.cesiumInstance = cesiumInstance
+      },
+      readyPromise (tileset) {
+        const {Cesium, viewer} = this.cesiumInstance
+        viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+      }
+    }
+  }
+</script>
+```
 
 ## 属性
 
@@ -44,6 +144,13 @@
 |isZoomTo|Boolean|true|`optional` 加载到scene之后是否定位到该模型。|
 ---
 
+## 方法
+
+|函数|返回|说明|
+|------|----|----|
+|getInstance|[Cesium.Cesium3DTileset](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)|获取`Cesium3DTileset`实例。|
+---
+
 ## 事件
 
 |事件名|参数|描述|
@@ -56,97 +163,3 @@
 |tileLoad||tile加载完成后触发该事件。|
 |tileUnload||tile加载未成功加载时触发该事件。|
 |tileVisible||tile可见性发生改变时触发该事件。|
-
-## 示例
-
-### 3DTiles模型
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-      <span>切换地址</span>
-      <md-select v-model="url" placeholder="切换地址">
-        <md-option
-          v-for="item in options"
-          :key="item.value"
-          :value="item.value">
-          {{item.label}}
-        </md-option>
-      </md-select>
-    </div>
-    <cesium-viewer>
-      <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        options: [{
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          label: '数据1'
-        }, {
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-          label: '数据2'
-        }],
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-        <span>切换地址</span>
-        <md-select v-model="url" placeholder="切换地址">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
-      <cesium-viewer>
-        <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          options: [{
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-            label: '数据1'
-          }, {
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-            label: '数据2'
-          }],
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-        }
-      }
-    }
-  </script>
-</doc-preview>

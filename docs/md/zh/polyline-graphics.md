@@ -45,7 +45,7 @@
 ```html
 <template>
   <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <md-button>开始绘制</md-button>
         <span>线类型</span>
         <md-select v-model="url" placeholder="切换地址">
@@ -109,7 +109,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <span>切换地址</span>
         <md-select v-model="url" placeholder="切换地址">
           <md-option

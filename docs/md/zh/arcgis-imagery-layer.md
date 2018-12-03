@@ -4,6 +4,94 @@
 
 `arcgis-imagery-layer`
 
+## 示例
+
+### 添加ArcGIS影像服务
+
+#### 预览
+
+<doc-preview>
+  <template>
+    <div class="viewer">
+      <cesium-viewer @ready="ready">
+       <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" :contrast="contrast"/>
+      </cesium-viewer>
+      <div class="demo-tool">
+        <span>透明度</span>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover"></vue-slider>
+        <span>亮度</span>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
+        <span>对比度</span>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
+        <span>切换服务</span>
+        <md-select v-model="url" placeholder="请选择服务" >
+          <md-option
+            v-for="item in options"
+            :key="item.value"
+            :value="item.value">
+            {{item.label}}
+          </md-option>
+        </md-select>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          options: [{
+            value: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+            label: 'World_Imagery'
+          }, {
+            value: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
+            label: 'World_Street_Map'
+          }],
+          url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
+          alpha: 1,
+          brightness: 1,
+          contrast: 1
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          const {Cesium, viewer} = cesiumInstance
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### 代码
+
+```html
+<template>
+  <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" :contrast="contrast"/>
+    </cesium-viewer>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
+        alpha: 1,
+        brightness: 1,
+        contrast: 1
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+      }
+    }
+  }
+</script>
+```
+
 ## 属性
 
 |属性名|类型|默认值|描述|
@@ -39,153 +127,3 @@
 |------|----|----|
 |ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
 |errorEvent|TileProviderError|当图层的提供者发生异步错误时触发, 返回一个TileProviderError实例。|
-
-## 示例
-
-### 超图iserver影像服务
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-      <span>透明度</span>
-      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>亮度</span>
-      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>对比度</span>
-      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>切换服务</span>
-      <md-select v-model="url" placeholder="请选择服务">
-        <md-option
-          v-for="item in options"
-          :key="item.value"
-          :value="item.value">
-          {{item.label}}
-        </md-option>
-      </md-select>
-    </div>
-    <cesium-viewer>
-      <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness"
-      :contrast="contrast" @ready="ready" />
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        options: [{
-          value: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-          label: 'World_Imagery'
-        }, {
-          value: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
-          label: 'World_Street_Map'
-        }],
-        url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
-        alpha: 1,
-        brightness: 1,
-        contrast: 1
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
-        <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover"></vue-slider>
-        <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
-        <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover"></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="url" placeholder="请选择服务" >
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
-      <cesium-viewer>
-       <arcgis-imagery-layer :url="url" :alpha="alpha" :brightness="brightness" 
-        :contrast="contrast" @ready="ready" />
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          options2: {
-            data: null,
-            eventType: 'auto',
-            width: 'auto',
-            height: 6,
-            dotSize: 16,
-            dotHeight: null,
-            dotWidth: null,
-            min: 0,
-            max: 100,
-            interval: 1,
-            show: true,
-            speed: 0.5,
-            disabled: false,
-            piecewise: false,
-            usdKeyboard: false,
-            enableCross: true,
-            piecewiseStyle: false,
-            piecewiseLabel: false,
-            tooltip: 'always',
-            tooltipDir: 'top',
-            reverse: false,
-            data: null,
-            clickable: true,
-            realTime: false,
-            lazy: false,
-            formatter: null,
-            bgStyle: null,
-            sliderStyle: null,
-            processStyle: null,
-            piecewiseActiveStyle: null,
-            piecewiseStyle: null,
-            tooltipStyle: null,
-            labelStyle: null,
-            labelActiveStyle: null
-          },
-          options: [{
-            value: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-            label: 'World_Imagery'
-          }, {
-            value: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
-            label: 'World_Street_Map'
-          }],
-          url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
-          alpha: 1,
-          brightness: 1,
-          contrast: 1
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-        }
-      }
-    }
-  </script>
-</doc-preview>

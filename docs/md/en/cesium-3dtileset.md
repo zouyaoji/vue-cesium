@@ -66,7 +66,7 @@
 ```html
 <template>
   <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+    <div class="demo-tool">
       <span>Change Model</span>
       <md-select v-model="url" placeholder="Change Model">
         <md-option
@@ -111,7 +111,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <span>Change Model</span>
         <el-select v-model="url" placeholder="Change Model">
           <el-option

@@ -92,7 +92,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 ```html
 <template>
   <div class="viewer" ref="myViewer">
-    <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
+    <div class="demo-tool">
       <span>animation</span>
       <md-switch v-model="animation"></md-switch>
       <span>timeline</span>
@@ -153,7 +153,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 <doc-preview>
   <template>
     <div class="viewer" ref="myViewer">
-      <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
+      <div class="demo-tool">
         <span>animation</span>
         <md-switch v-model="animation"></md-switch>
         <span>timeline</span>

@@ -15,7 +15,7 @@
 ```html
 <template>
   <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle">{{ polyline.editing ? '停止绘制' : '开始绘制' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
@@ -116,7 +116,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-        <div style="position: absolute; left: 1%; top: 1%; width: 100px; z-index: 9999; color: white">
+        <div class="demo-tool">
           <md-button class="md-raised md-accent" @click="toggle">{{ polyline.editing ? '停止绘制' : '开始绘制' }}</md-button>
           <md-button class="md-raised md-accent" @click="clear">清除</md-button>
         </div>

@@ -1,11 +1,136 @@
-<template lang="markdown">
-
 # 场景容器
 
 `CesiumViewer`是用于构建 Cesium 应用程序的基础部件，它将所有标准的 Cesium 部件组合成一个可重复使用的包。 此部件通常可以利用 mixin 来扩展，以此增加对各种应用程序有用的功能函数。\
 场景容器的实质是通过 Cesium.Viewer 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者组件。此部件初始化完成后默认会有 Cesiumwidget, dataSources、 如果需要二次开发或者手动控制其子组件，可以在 `ready` 事件中使用返回的 `Cesium` 和 `Viewer` 实例进行手动控制。
 
-## 实例属性
+## 示例
+
+### 初始化Viewer控制部件显隐
+
+#### 预览
+
+<doc-preview>
+  <template>
+    <div class="viewer" ref="myViewer">
+      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+        :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+      </cesium-viewer>
+      <div class="demo-tool">
+        <span>动画部件</span>
+        <md-switch v-model="animation"></md-switch>
+        <span>时间轴部件</span>
+        <md-switch v-model="timeline"></md-switch>
+        <span>基础图层拾取器</span>
+        <md-switch v-model="baseLayerPicker"></md-switch>
+        <span>全屏按钮</span>
+        <md-switch v-model="fullscreenButton"></md-switch>
+        <span>信息提示框</span>
+        <md-switch v-model="infoBox"></md-switch>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          animation: true,
+          timeline: true,
+          baseLayerPicker: false,
+          fullscreenButton: true,
+          infoBox: true,
+          fullscreenElement: document.body
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          const {Cesium, viewer} = cesiumInstance
+          this.fullscreenElement = this.$refs.myViewer
+          viewer.entities.add({
+            id: '成都欢迎你',
+            position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+            billboard: new Cesium.BillboardGraphics({
+              image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+              scale: 0.1
+            }),
+            label: new Cesium.LabelGraphics ({
+              text: 'Hello Word',
+              font: '24px sans-serif',
+              horizontalOrigin: 1,
+              outlineColor: new Cesium.Color(0, 0, 0, 1),
+              outlineWidth: 2,
+              pixelOffset: new Cesium.Cartesian2(17, -5),
+              style: Cesium.LabelStyle.FILL
+            })
+          })
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### 代码
+
+```html
+<template>
+  <div class="viewer" ref="myViewer">
+    <div class="demo-tool">
+      <span>动画部件</span>
+      <md-switch v-model="animation"></md-switch>
+      <span>时间轴部件</span>
+      <md-switch v-model="timeline"></md-switch>
+      <span>基础图层拾取器</span>
+      <md-switch v-model="baseLayerPicker"></md-switch>
+      <span>全屏按钮</span>
+      <md-switch v-model="fullscreenButton"></md-switch>
+      <span>信息提示框</span>
+      <md-switch v-model="infoBox"></md-switch>
+    </div>
+    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+      :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+    </cesium-viewer>
+  </div>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        animation: true,
+        timeline: true,
+        baseLayerPicker: false,
+        fullscreenButton: true,
+        infoBox: true,
+        fullscreenElement: document.body
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.fullscreenElement = this.$refs.myViewer
+        viewer.entities.add({
+          id: '成都欢迎你',
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new Cesium.LabelGraphics ({
+            text: 'Hello Word',
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
+      }
+    }
+  }
+</script>
+```
+
+## 属性
 
 |属性名|类型|默认值|描述|
 |------|------|-----|---|
@@ -85,130 +210,3 @@
 |RIGHT_UP|{position: point}|鼠标弹起事件。|ScreenSpaceEventType|
 |WHEEL|delta|鼠标中轮滚动事件。|ScreenSpaceEventType|
 ---
-
-## 示例
-
-### 初始化Viewer控制部件显隐
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer" ref="myViewer">
-    <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
-      <span>动画部件</span>
-      <md-switch v-model="animation"></md-switch>
-      <span>时间轴部件</span>
-      <md-switch v-model="timeline"></md-switch>
-      <span>基础图层拾取器</span>
-      <md-switch v-model="baseLayerPicker"></md-switch>
-      <span>全屏按钮</span>
-      <md-switch v-model="fullscreenButton"></md-switch>
-      <span>信息提示框</span>
-      <md-switch v-model="infoBox"></md-switch>
-    </div>
-    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
-      :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
-    </cesium-viewer>
-  </div>
-</template>
-<script>
-  export default {
-    data () {
-      return {
-        animation: true,
-        timeline: true,
-        baseLayerPicker: false,
-        fullscreenButton: true,
-        infoBox: true,
-        fullscreenElement: document.body
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.fullscreenElement = this.$refs.myViewer
-        viewer.entities.add({
-          id: '成都欢迎你',
-          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-          billboard: new Cesium.BillboardGraphics({
-            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-            scale: 0.1
-          }),
-          label: new Cesium.LabelGraphics ({
-            text: 'Hello Word',
-            font: '24px sans-serif',
-            horizontalOrigin: 1,
-            outlineColor: new Cesium.Color(0, 0, 0, 1),
-            outlineWidth: 2,
-            pixelOffset: new Cesium.Cartesian2(17, -5),
-            style: Cesium.LabelStyle.FILL
-          })
-        })
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer" ref="myViewer">
-      <div class="row" style="position: absolute; left: 1%; top: 2%; width: 100%; z-index: 9999; color: white">
-        <span>动画部件</span>
-        <md-switch v-model="animation"></md-switch>
-        <span>时间轴部件</span>
-        <md-switch v-model="timeline"></md-switch>
-        <span>基础图层拾取器</span>
-        <md-switch v-model="baseLayerPicker"></md-switch>
-        <span>全屏按钮</span>
-        <md-switch v-model="fullscreenButton"></md-switch>
-        <span>信息提示框</span>
-        <md-switch v-model="infoBox"></md-switch>
-      </div>
-      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
-        :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          animation: true,
-          timeline: true,
-          baseLayerPicker: false,
-          fullscreenButton: true,
-          infoBox: true,
-          fullscreenElement: document.body
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.fullscreenElement = this.$refs.myViewer
-          viewer.entities.add({
-            id: '成都欢迎你',
-            position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-            billboard: new Cesium.BillboardGraphics({
-              image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-              scale: 0.1
-            }),
-            label: new Cesium.LabelGraphics ({
-              text: 'Hello Word',
-              font: '24px sans-serif',
-              horizontalOrigin: 1,
-              outlineColor: new Cesium.Color(0, 0, 0, 1),
-              outlineWidth: 2,
-              pixelOffset: new Cesium.Cartesian2(17, -5),
-              style: Cesium.LabelStyle.FILL
-            })
-          })
-        }
-      }
-    }
-  </script>
-</doc-preview>

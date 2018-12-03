@@ -40,7 +40,7 @@
 ```html
 <template>
   <div class="viewer">
-    <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+    <div class="demo-tool">
       <span>透明度</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>亮度</span>
@@ -96,7 +96,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div style="position: absolute; left: 1%; top: 1%; width: 150px; z-index: 9999; color: white">
+      <div class="demo-tool">
         <span>透明度</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>亮度</span>
