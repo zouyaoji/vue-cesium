@@ -1,7 +1,7 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.13",
-  "description": "Load the Cesium official build package or other third-party Cesium packages (such as the Superap WebGL build package) to the Vue component.",
+  "version": "0.0.14",
+  "description": "Load the Cesium official build package or other third-party Cesium packages (such as the SuperMap WebGL build package) to the Vue component.",
   "main": "index.js",
   "scripts": {
     "build:docs": "webpack --config ./build/webpack.docs.config.js --mode production",

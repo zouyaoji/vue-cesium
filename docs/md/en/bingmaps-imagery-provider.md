@@ -1,25 +1,25 @@
-# BingMaps影像Provider
+# BingMapsImageryProvider
 
 `bingmaps-imagery-provider`
 
-## 示例
+## Examples
 
-### 添加BingMaps影像服务图层到场景
+### add a BingMapsImageryProvider layer to viewer
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
       <div class="demo-tool">
-        <span>透明度</span>
+        <span>alpha</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>亮度</span>
+        <span>brightness</span>
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>对比度</span>
+        <span>contrast</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="mapStyle" placeholder="请选择服务">
+        <span>switch url</span>
+        <md-select v-model="mapStyle" placeholder="switch url">
           <md-option
             v-for="item in options"
             :key="item.value"
@@ -71,20 +71,20 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
   <div class="viewer">
     <div class="demo-tool">
-      <span>透明度</span>
+      <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>亮度</span>
+      <span>brightness</span>
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>对比度</span>
+      <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>切换服务</span>
-      <md-select v-model="mapStyle" placeholder="请选择服务">
+      <span>switch url</span>
+      <md-select v-model="mapStyle" placeholder="switch url">
         <md-option
           v-for="item in options"
           :key="item.value"
@@ -136,21 +136,21 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|url|String||`required`指定服务地址。|
-|bmKey|String||`optional`指定BingMaps地图API秘钥，可到[https://www.bingmapsportal.com/](https://www.bingmapsportal.com/)申请Key。|
-|tileProtocol|String||`optional`指定地图是http还是https加载，默认与页面相同。|
-|mapStyle|String|'Aerial'|`optional`指定加载的BingMaps类型。|
-|culture|String||`optional`指定服务的描述信息。|
-|ellipsoid|Number|0|`optional`参考椭球体|
-|tileDiscardPolicy|Object||`optional`指定tile无效时是否被舍弃。|
+|url|String||`required`The url of the Bing Maps server hosting the imagery.|
+|bmKey|String||`optional`The Bing Maps key for your application, which can be created at https://www.bingmapsportal.com/. If this parameter is not provided, BingMapsApi.defaultKey is used, which is undefined by default.|
+|tileProtocol|String||`optional`The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page.|
+|mapStyle|String|'Aerial'|`optional`The type of Bing Maps imagery to load.|
+|culture|String||`optional`The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See http://msdn.microsoft.com/en-us/library/hh441729.aspx for information on the supported cultures.|
+|ellipsoid|Number|0|`optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used.|
+|tileDiscardPolicy|Object||`optional`The policy that determines if a tile is invalid and should be discarded. If this value is not specified, a default DiscardMissingTileImagePolicy is used which requests tile 0,0 at the maximum tile level and checks pixels (0,0), (120,140), (130,160), (200,50), and (200,200). If all of these pixels are transparent, the discard check is disabled and no tiles are discarded. If any of them have a non-transparent color, any tile that has the same values in these pixel locations is discarded. The end result of these defaults should be correct tile discarding for a standard Bing Maps server. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter.|
 
-## 事件
+## Events
 
 |事件名|参数|描述|
 |------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|errorEvent|TileProviderError|当图层的提供者发生异步错误时触发, 返回一个TileProviderError实例。|
+|ready|{Cesium, viewer}|Triggers when BingMapsImageryProvider is ready. It returns a core class of Cesium, a viewer instance.|
+|errorEvent|TileProviderError|Gets an event that is raised when the imagery provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|

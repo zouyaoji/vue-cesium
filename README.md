@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://zouyaoji.top/vue-cesium/favicon.png" width="200px">
 </p>
-<p align="center">Load the Cesium official build package or other third-party Cesium packages (such as the Superap WebGL build package) to the Vue component.</p>
+<p align="center">Load the Cesium official build package or other third-party Cesium packages (such as the SuperMap WebGL build package) to the Vue component.</p>
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()

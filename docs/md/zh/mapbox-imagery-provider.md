@@ -1,18 +1,23 @@
 <template lang="markdown">
 
-# MapBox影像图层
+# Mapbox影像Provider
 
-`mapbox-imagery-layer`加载由Mapbox托管的影像。
+`mapbox-imagery-provider`加载由Mapbox托管的影像。
 
 ## 示例
 
-### MapBox影像图层
+### 添加Mapbox影像图层Provider图层到场景
 
 #### 预览
 
 <doc-preview>
   <template>
     <div class="viewer">
+      <cesium-viewer @ready="ready">
+       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <mapbox-imagery-provider :mapId="mapId"></mapbox-imagery-provider>
+       </imagery-layer>
+      </cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -30,10 +35,6 @@
           </md-option>
         </md-select>
       </div>
-      <cesium-viewer @ready="ready">
-        <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
-          :contrast="contrast" />
-      </cesium-viewer>
     </div>
   </template>
 
@@ -57,6 +58,7 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          // ...
         }
       }
     }
@@ -68,6 +70,11 @@
 ```html
 <template>
   <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <mapbox-imagery-provider :mapId="mapId"></mapbox-imagery-provider>
+      </imagery-layer>
+    </cesium-viewer>
     <div class="demo-tool">
       <span>透明度</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -85,10 +92,6 @@
         </md-option>
       </md-select>
     </div>
-    <cesium-viewer @ready="ready">
-      <mapbox-imagery-layer :mapId="mapId" :alpha="alpha" :brightness="brightness"
-        :contrast="contrast" />
-    </cesium-viewer>
   </div>
 </template>
 
@@ -112,6 +115,7 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
+        // ...
       }
     }
   }
@@ -131,16 +135,6 @@
 |maximumLevel|Number||`optional`最大层级。|
 |rectangle|Object||`optional`图层的矩形范围,此矩形限制了影像可见范围。|
 |credit|String||`optional`服务描述信息。|
-|alpha|Number\|function|1.0|`optional`图层透明度值，取值范围为0.0~1.0。|
-|brightness|Number\|function|1.0|`optional`图层亮度值。值为1.0表示使用原图；值大于1.0时图像将变亮；值小于1.0时图像将变暗。|
-|contrast|Number\|function|1.0|`optional`图层对比度。值为1.0表示使用原图；值大于1.0表示增加对比度；值小于1.0表示降低对比度。|
-|hue|Number\|function|0.0|`optional`图层色调。值为0.0表示使用原图。|
-|saturation|Number\|function|1.0|`optional`图层饱和度。值为1.0表示使用原图；值大于1.0表示增加饱和度；值小于1.0表示降低饱和度。|
-|gamma|Number\|function|1.0|`optional`图层伽马校正。值为1.0表示使用原图。|
-|show|Boolean|true|`optional`指定图层是否显示，true表示显示此图层，false表示不显示。|
-|splitDirection|Number||`optional`指定影像图层分割方向。0始终显示影像图层，-1在Scene#imagerySplitPosition的左侧显示影像图层，1在Scene#imagerySplitPosition右侧显示影像图层。|
-|minimumTerrainLevel|Number||`optional`最小地形细节层次。level 0是最小细节层次。|
-|maximumTerrainLevel|Number||`optional`最大地形细节层次。|
 
 ## 事件
 

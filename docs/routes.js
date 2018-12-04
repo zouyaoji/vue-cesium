@@ -114,10 +114,10 @@ const routeMap = [
     ]
   },
   {
-    path: 'layer',
+    path: 'imageryLayer',
     name: {
-      zh: '图层',
-      en: 'Layer'
+      zh: '影像图层',
+      en: 'ImageryLayer'
     },
     component: CateView,
     children: [
@@ -133,56 +133,56 @@ const routeMap = [
         path: 'bingmaps-imagery-provider',
         component: 'bingmaps-imagery-provider',
         name: {
-          zh: 'BingMaps影像服务图层',
+          zh: 'BingMaps影像Provider',
           en: 'BingMapsImageryLayer'
         }
       },
       {
-        path: 'mapbox-imagery-layer',
-        component: 'mapbox-imagery-layer',
+        path: 'mapbox-imagery-provider',
+        component: 'mapbox-imagery-provider',
         name: {
-          zh: 'Mapbox影像服务图层',
-          en: 'MapboxImageryLayer'
+          zh: 'Mapbox影像Provider',
+          en: 'MapboxImageryProvider'
         }
       },
       {
-        path: 'openstreetmap-imagery-layer',
-        component: 'openstreetmap-imagery-layer',
+        path: 'openstreetmap-imagery-provider',
+        component: 'openstreetmap-imagery-provider',
         name: {
-          zh: 'Openstreetmap影像服务图层',
-          en: 'OpenStreetMapImageryLayer'
+          zh: 'Openstreetmap影像Provider',
+          en: 'OpenStreetMapImageryProvider'
         }
       },
       {
-        path: 'singletile-imagery-layer',
-        component: 'singletile-imagery-layer',
+        path: 'singletile-imagery-provider',
+        component: 'singletile-imagery-provider',
         name: {
-          zh: 'Singletile影像图层',
-          en: 'SingleTileImageryLayer'
+          zh: 'Singletile影像Provider',
+          en: 'SingleTileImageryProvider'
         }
       },
       {
-        path: 'urltemplate-imagery-layer',
-        component: 'urltemplate-imagery-layer',
+        path: 'urltemplate-imagery-provider',
+        component: 'urltemplate-imagery-provider',
         name: {
-          zh: 'UrlTemplate影像图层',
-          en: 'UrlTemplateImageryLayer'
+          zh: 'UrlTemplate影像Provider',
+          en: 'UrlTemplateImageryProvider'
         }
       },
       {
-        path: 'wmts-imagery-layer',
-        component: 'wmts-imagery-layer',
+        path: 'wmts-imagery-provider',
+        component: 'wmts-imagery-provider',
         name: {
-          zh: 'WMTS服务图层',
-          en: 'WMTSImageryLayer'
+          zh: 'WMTS服务Provider',
+          en: 'WebMapTileServiceImageryProvider'
         }
       },
       {
-        path: 'supermap-imagery-layer',
-        component: 'supermap-imagery-layer',
+        path: 'supermap-imagery-provider',
+        component: 'supermap-imagery-provider',
         name: {
-          zh: 'SuperMap影像服务图层',
-          en: 'SuperMapImageryLayer'
+          zh: 'SuperMap影像服务Provider',
+          en: 'SuperMapImageryProvider'
         }
       }
     ]

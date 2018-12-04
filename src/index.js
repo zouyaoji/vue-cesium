@@ -1,16 +1,14 @@
 import { version } from '../package.json'
 import CesiumViewer from '@/viewer/CesiumViewer.vue'
 import ImageryLayer from '@/imageryLayers/ImageryLayer.vue'
-
-import SuperMapImageryLayer from '@/imageryLayers/SuperMapImageryLayer.vue'
 import ArcGisMapServerImageryProvider from '@/imageryLayers/ArcGisMapServerImageryProvider.vue'
 import BingMapsImageryProvider from '@/imageryLayers/BingMapsImageryProvider.vue'
-import WebMapTileServiceImageryLayer from '@/imageryLayers/WebMapTileServiceImageryLayer.vue'
-import UrlTemplateImageryLayer from '@/imageryLayers/UrlTemplateImageryLayer.vue'
-import SingleTileImageryLayer from '@/imageryLayers/SingleTileImageryLayer.vue'
-import MapboxImageryLayer from '@/imageryLayers/MapboxImageryLayer.vue'
-import OpenStreetMapImageryLayer from '@/imageryLayers/OpenStreetMapImageryLayer.vue'
-
+import MapboxImageryProvider from '@/imageryLayers/MapboxImageryProvider.vue'
+import OpenStreetMapImageryProvider from '@/imageryLayers/OpenStreetMapImageryProvider.vue'
+import SingleTileImageryProvider from '@/imageryLayers/SingleTileImageryProvider.vue'
+import UrlTemplateImageryProvider from '@/imageryLayers/UrlTemplateImageryProvider.vue'
+import WebMapTileServiceImageryProvider from '@/imageryLayers/WebMapTileServiceImageryProvider.vue'
+import SuperMapImageryProvider from '@/imageryLayers/SuperMapImageryProvider.vue'
 import PolylineGraphics from '@/entities/PolylineGraphics.vue'
 import PolygonGraphics from '@/entities/PolygonGraphics.vue'
 
@@ -29,24 +27,18 @@ import MeasureHeight from '@/measure/MeasureHeight.vue'
 
 export default {
   install (Vue, options) {
-    let cesiumPath
-    if (options) {
-      cesiumPath = options.cesiumPath
-    } else {
-      cesiumPath = 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-    }
+    let cesiumPath = options ? options.cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
     Vue.prototype._Cesium = () => ({ cesiumPath })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component(ImageryLayer.name, ImageryLayer)
-
-    Vue.component('supermap-imagery-layer', SuperMapImageryLayer)
     Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
     Vue.component(BingMapsImageryProvider.name, BingMapsImageryProvider)
-    Vue.component('wmts-imagery-layer', WebMapTileServiceImageryLayer)
-    Vue.component('urltemplate-imagery-layer', UrlTemplateImageryLayer)
-    Vue.component('singletile-imagery-layer', SingleTileImageryLayer)
-    Vue.component('mapbox-imagery-layer', MapboxImageryLayer)
-    Vue.component('openstreetmap-imagery-layer', OpenStreetMapImageryLayer)
+    Vue.component(MapboxImageryProvider.name, MapboxImageryProvider)
+    Vue.component(OpenStreetMapImageryProvider.name, OpenStreetMapImageryProvider)
+    Vue.component(SingleTileImageryProvider.name, SingleTileImageryProvider)
+    Vue.component(UrlTemplateImageryProvider.name, UrlTemplateImageryProvider)
+    Vue.component(WebMapTileServiceImageryProvider.name, WebMapTileServiceImageryProvider)
+    Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
 
     Vue.component('polyline-entity', PolylineGraphics)
     Vue.component('polygon-entity', PolygonGraphics)
@@ -68,7 +60,7 @@ export default {
 }
 
 export {
-  CesiumViewer, ImageryLayer, SuperMapImageryLayer, ArcGisMapServerImageryProvider, BingMapsImageryProvider, WebMapTileServiceImageryLayer, UrlTemplateImageryLayer,
-  SingleTileImageryLayer, MapboxImageryLayer, OpenStreetMapImageryLayer, Cesium3DTileset, PolylineGraphics, PolygonGraphics, PointCollection,
+  CesiumViewer, ImageryLayer, ArcGisMapServerImageryProvider, BingMapsImageryProvider, MapboxImageryProvider, OpenStreetMapImageryProvider, SingleTileImageryProvider,
+  UrlTemplateImageryProvider, WebMapTileServiceImageryProvider, SuperMapImageryProvider, Cesium3DTileset, PolylineGraphics, PolygonGraphics, PointCollection,
   PolylineCollection, PointPrimitive, Polyline, LabelCollection, Label, MeasureDistance, MeasureArea, MeasureHeight, Model
 }

@@ -1,12 +1,12 @@
 <template lang="markdown">
 
-# ArcGIS影像服务图层
+# ArcGIS地图影像服务Provider
 
 `arcgis-mapserver-imagery-provider`
 
 ## 示例
 
-### 添加ArcGIS影像服务
+### 添加ArcGIS地图影像服务Provider图层到场景
 
 #### 预览
 

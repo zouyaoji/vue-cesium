@@ -129,8 +129,7 @@ h2 {
   position: absolute; 
   left: 1%; 
   top: 1%; 
-  // width: 150px; 
+  min-width: 185px; 
   z-index: 100; 
   color: white
-
 </style>
