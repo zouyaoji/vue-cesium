@@ -27,7 +27,6 @@ Vue.use(VueCesium, {
   // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
   cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/MyCesium/Cesium.js'
 })
-
 Vue.material.registerTheme({
   white: {
     primary: 'white',

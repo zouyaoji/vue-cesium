@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # 量算
 
 ## 说明

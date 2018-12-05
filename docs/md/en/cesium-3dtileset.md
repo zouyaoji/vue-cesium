@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # Cesium3DTileset
 
 `cesium-3dtileset`A 3D Tiles tileset, used for streaming massive heterogeneous 3D geospatial datasets.

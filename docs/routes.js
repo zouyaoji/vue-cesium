@@ -114,13 +114,21 @@ const routeMap = [
     ]
   },
   {
-    path: 'imageryLayer',
+    path: 'Layers',
     name: {
-      zh: '影像图层',
-      en: 'ImageryLayer'
+      zh: '图层',
+      en: 'Layers'
     },
     component: CateView,
     children: [
+      {
+        path: 'imagery-layer',
+        component: 'imagery-layer',
+        name: {
+          zh: '影像图层',
+          en: 'ImageryLayer'
+        }
+      },
       {
         path: 'arcgis-mapserver-imagery-provider',
         component: 'arcgis-mapserver-imagery-provider',

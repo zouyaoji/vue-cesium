@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # ArcGisMapServerImageryProvider
 
 `arcgis-mapserver-imagery-provider`

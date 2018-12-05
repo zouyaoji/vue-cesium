@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # ArcGIS地图影像服务Provider
 
 `arcgis-mapserver-imagery-provider`

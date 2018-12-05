@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # 绘制
 
 ## 示例

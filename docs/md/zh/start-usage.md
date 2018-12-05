@@ -42,7 +42,7 @@ Vue.use(VueCesium, {
 </div>
 </template>
 
-<style scoped>
+<style>
 .viewer {
   width: 100%;
   height: 400px;
@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .viewer {
   width: 100%;
   height: 400px;
@@ -163,67 +163,14 @@ export default {
 
 ## Hello world
 
-```html
-<template>
-  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
-    <openstreetmap-imagery-layer/>
-  </cesium-viewer>
-</template>
-<script>
-export default {
-  data () {
-    return {
-      animation: true,
-      timeline: true,
-      camera: {
-        position: {
-          longitude: 104.06,
-          latitude: 30.67,
-          height: 100000
-        },
-        heading: 360,
-        
-        pitch: -90,
-        roll: 0
-      }
-    }
-  },
-  methods: {
-    ready (cesiumInstance) {
-      const { Cesium, viewer } = cesiumInstance
-      viewer.entities.add({
-        id: '成都欢迎你',
-        position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-        billboard: new Cesium.BillboardGraphics({
-          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          scale: 0.1
-        }),
-        label: new Cesium.LabelGraphics ({
-          text: 'Hello Word',
-          font: '24px sans-serif',
-          horizontalOrigin: 1,
-          outlineColor: new Cesium.Color(0, 0, 0, 1),
-          outlineWidth: 2,
-          pixelOffset: new Cesium.Cartesian2(17, -5),
-          style: Cesium.LabelStyle.FILL
-        })
-      })
-    }
-  }
-}
-</script>
-<style scoped>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
-</style>
-```
+### 预览
 
 <doc-preview>
   <template>
     <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
-      <openstreetmap-imagery-layer/>
+      <imagery-layer>
+        <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
+      </imagery-layer>
     </cesium-viewer>
   </template>
   <script>
@@ -256,6 +203,7 @@ export default {
           }),
           label: new Cesium.LabelGraphics ({
             text: 'Hello Word',
+            fillColor: Cesium.Color.GOLD,
             font: '24px sans-serif',
             horizontalOrigin: 1,
             outlineColor: new Cesium.Color(0, 0, 0, 1),
@@ -268,10 +216,71 @@ export default {
     }
   }
   </script>
-  <style scoped>
+  <style>
   .viewer {
     width: 100%;
     height: 400px;
   }
   </style>
 </doc-preview>
+
+### 代码
+
+```html
+<template>
+  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
+    <imagery-layer>
+      <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
+    </imagery-layer>
+  </cesium-viewer>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      animation: true,
+      timeline: true,
+      camera: {
+        position: {
+          longitude: 104.06,
+          latitude: 30.67,
+          height: 100000
+        },
+        heading: 360,
+        pitch: -90,
+        roll: 0
+      }
+    }
+  },
+  methods: {
+    ready (cesiumInstance) {
+      const { Cesium, viewer } = cesiumInstance
+      viewer.entities.add({
+        id: '成都欢迎你',
+        position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+        billboard: new Cesium.BillboardGraphics({
+          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+          scale: 0.1
+        }),
+        label: new Cesium.LabelGraphics ({
+          text: 'Hello Word',
+          fillColor: Cesium.Color.GOLD,
+          font: '24px sans-serif',
+          horizontalOrigin: 1,
+          outlineColor: new Cesium.Color(0, 0, 0, 1),
+          outlineWidth: 2,
+          pixelOffset: new Cesium.Cartesian2(17, -5),
+          style: Cesium.LabelStyle.FILL
+        })
+      })
+    }
+  }
+}
+</script>
+<style>
+.viewer {
+  width: 100%;
+  height: 400px;
+}
+</style>
+```

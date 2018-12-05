@@ -1,21 +1,21 @@
 # SuperMap影像服务Provider
 
-`supermap-imagery-layer`加载超图iserver影像服务。只有超图WebGL包有此组件。
+`supermap-imagery-provider`加载超图iserver影像服务。只有超图WebGL包有此组件。
 
 ## 示例
 
-### 添加SuperMap影像到场景
+### 添加SuperMapImageryProvider影像到场景
 
 #### 预览
 
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready">
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <supermap-imagery-provider ref="supermapLayer" :url="url"></supermap-imagery-provider>
-       </imagery-layer>
-      </cesium-viewer>
+      <sm-cesium-viewer :cesiumPath="cesiumPath">
+        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
+        </imagery-layer>
+      </sm-cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -37,9 +37,11 @@
   </template>
 
   <script>
+    import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
     export default {
       data () {
         return {
+          cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
           options: [{
             value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
             label: '四川地图'
@@ -53,10 +55,13 @@
           contrast: 1
         }
       },
+      components: {
+        SmCesiumViewer: CesiumViewer
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(this.$refs.supermapLayer.originInstance)
+          viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
         }
       }
     }
@@ -68,11 +73,11 @@
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer @ready="ready">
+    <sm-cesium-viewer :cesiumPath="cesiumPath">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <supermap-imagery-provider ref="supermapLayer" :url="url"></supermap-imagery-provider>
+        <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
       </imagery-layer>
-    </cesium-viewer>
+    </sm-cesium-viewer>
     <div class="demo-tool">
       <span>透明度</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -94,9 +99,11 @@
 </template>
 
 <script>
+  import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
   export default {
     data () {
       return {
+        cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
         options: [{
           value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           label: '四川地图'
@@ -110,10 +117,13 @@
         contrast: 1
       }
     },
+    components: {
+      SmCesiumViewer: CesiumViewer
+    },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        viewer.zoomTo(this.$refs.supermapLayer.originInstance)
+        viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
       }
     }
   }

@@ -67,7 +67,7 @@ Vue.use(VueCesium, {
   </div>
 </template>
 
-<style scoped>
+<style>
 .viewer {
   width: 100%;
   height: 400px;

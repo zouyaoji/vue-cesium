@@ -11,11 +11,11 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready">
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <supermap-imagery-provider ref="supermapLayer" :url="url"></supermap-imagery-provider>
-       </imagery-layer>
-      </cesium-viewer>
+      <sm-cesium-viewer :cesiumPath="cesiumPath">
+        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
+        </imagery-layer>
+      </sm-cesium-viewer>
       <div class="demo-tool">
         <span>alpha</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -23,8 +23,8 @@
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
         <span>contrast</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>change url</span>
-        <md-select v-model="url" placeholder="select url">
+        <span>switch url</span>
+        <md-select v-model="url" placeholder="switch url">
           <md-option
             v-for="item in options"
             :key="item.value"
@@ -37,15 +37,17 @@
   </template>
 
   <script>
+    import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
     export default {
       data () {
         return {
+          cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
           options: [{
             value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-            label: '四川地图'
+            label: 'sichuan'
           }, {
             value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-            label: '谷歌地图'
+            label: 'google'
           }],
           url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           alpha: 1,
@@ -53,10 +55,13 @@
           contrast: 1
         }
       },
+      components: {
+        SmCesiumViewer: CesiumViewer
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(this.$refs.supermapLayer.originInstance)
+          viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
         }
       }
     }
@@ -68,11 +73,11 @@
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer @ready="ready">
+    <sm-cesium-viewer :cesiumPath="cesiumPath">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <supermap-imagery-provider ref="supermapLayer" :url="url"></supermap-imagery-provider>
+        <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
       </imagery-layer>
-    </cesium-viewer>
+    </sm-cesium-viewer>
     <div class="demo-tool">
       <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
@@ -80,8 +85,8 @@
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
       <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-      <span>change url</span>
-      <md-select v-model="url" placeholder="select url">
+      <span>switch url</span>
+      <md-select v-model="url" placeholder="switch url">
         <md-option
           v-for="item in options"
           :key="item.value"
@@ -94,15 +99,17 @@
 </template>
 
 <script>
+  import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
   export default {
     data () {
       return {
+        cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
         options: [{
           value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-          label: '四川地图'
+          label: 'sichuan'
         }, {
           value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-          label: '谷歌地图'
+          label: 'google'
         }],
         url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
         alpha: 1,
@@ -110,10 +117,13 @@
         contrast: 1
       }
     },
+    components: {
+      SmCesiumViewer: CesiumViewer
+    },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        viewer.zoomTo(this.$refs.supermapLayer.originInstance)
+        viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
       }
     }
   }

@@ -1,5 +1,3 @@
-<template lang="markdown">
-
 # 线实体polyline
 
 `polyline-entity`
