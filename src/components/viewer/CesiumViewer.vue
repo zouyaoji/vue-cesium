@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-12-03 11:48:47
+ * @Last Modified time: 2018-12-05 11:27:30
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -24,8 +24,7 @@ export default {
   mixins: [services],
   props: {
     cesiumPath: {
-      type: String,
-      default: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+      type: String
     },
     animation: {
       type: Boolean,
@@ -186,6 +185,10 @@ export default {
     navigation: {
       type: Boolean,
       default: false
+    },
+    logo: {
+      type: Boolean,
+      default: true
     },
     camera: {
       type: Object,
@@ -879,9 +882,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
 
       this.viewerContainer = this.$refs.viewer.children[0]
-      if (Cesium.defined(Cesium.SuperMapImageryProvider)) {
+      if (Cesium.defined(Cesium.SuperMapImageryProvider) && !this.logo) {
         let credit = viewer.scene.frameState.creditDisplay
         credit.container.removeChild(credit._imageContainer)
+      }
+      if (!this.logo) {
+        viewer.cesiumWidget.creditContainer.style.display = 'none'
       }
       this.resizeControl()
       this.$emit('ready', { Cesium, viewer })
@@ -893,10 +899,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     getCesiumScript () {
       if (!global.Cesium) {
         let cesiumPath
-        if (this._Cesium) {
-          cesiumPath = this._Cesium().cesiumPath
-        } else {
+        if (this.cesiumPath) {
           cesiumPath = this.cesiumPath
+        } else {
+          cesiumPath = this._Cesium().cesiumPath
         }
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
@@ -951,7 +957,31 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
   mounted () {
     this.reset()
   },
-  beforeDestroy () {
+  destroyed () {
+    if (global.Cesium) {
+      let scripts = document.getElementsByTagName('script')
+      let removeScripts = []
+      for (let script of scripts) {
+        if (script.src.indexOf('/Cesium.js') > -1) {
+          removeScripts.push(script)
+        }
+        if (global.Cesium.SuperMapImageryProvider) {
+          if (script.src.indexOf('/Workers/zlib.min.js') > -1) {
+            removeScripts.push(script)
+          }
+        }
+      }
+      removeScripts.forEach(script => {
+        document.getElementsByTagName('body')[0].removeChild(script)
+      })
+      let links = document.getElementsByTagName('link')
+      for (let link of links) {
+        if (link.href.indexOf('Widgets/widgets.css') > -1) {
+          document.getElementsByTagName('head')[0].removeChild(link)
+        }
+      }
+      global.Cesium = null
+    }
   },
   data () {
     return {
