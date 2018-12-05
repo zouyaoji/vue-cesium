@@ -182,6 +182,7 @@ export default {
           height: 100000
         },
         heading: 360,
+        
         pitch: -90,
         roll: 0
       }

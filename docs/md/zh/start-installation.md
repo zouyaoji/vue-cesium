@@ -3,7 +3,7 @@
 ## NPM
 
 ```bash
-$ npm install vue-cesium --save
+npm install vue-cesium --save
 ```
 
 ## CDN

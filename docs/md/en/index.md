@@ -2,7 +2,7 @@
 
 <p align="center"><img src="//zouyaoji.github.io/vue-cesium/favicon.png" width="200px"></p>
 
-<p align="center">Load the Cesium official build package or other third-party Cesium packages (such as the SuperMap WebGL build package) to the Vue component.</p>
+<p align="center">Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.</p>
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
@@ -12,7 +12,7 @@
 
 ## Introduction
 
-- Load the Cesium official build package or other third-party Cesium packages (such as the SuperMap WebGL build package) to the Vue component. I mainly used to load SuperMap WebGL.
+- Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.
 - Continuous development...
 - [For more examples](https://github.com/zouyaoji/vue-cesium-demo)
 

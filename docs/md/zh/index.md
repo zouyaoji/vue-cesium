@@ -2,7 +2,7 @@
 
 <p align="center"><img src="//zouyaoji.top/vue-cesium/favicon.png" width="200px"></p>
 
-<p align="center">加载Cesium官方Build包或者其他第三方Cesium包（如超图WebGL的Build包）到Vue组件。</p>
+<p align="center">基于 Vue 2.x 的Cesium三维地图组件。</p>
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
@@ -12,7 +12,7 @@
 
 ## 介绍
 
-- 加载Cesium官方Build包或者其他第三方Cesium包（如超图WebGL的Build包）到Vue组件。我主要用来加载超图WebGL。
+- 基于 Vue 2.x 的Cesium三维地图组件。
 - 持续开发中...
 - [更多例子](https://github.com/zouyaoji/vue-cesium-demo)
 
