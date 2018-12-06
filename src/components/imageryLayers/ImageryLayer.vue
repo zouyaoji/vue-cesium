@@ -1,7 +1,4 @@
-
 <script>
-// import bindEvents from '../../util/bindEvent'
-// import { Events } from '../../util/events.js'providerContainer
 import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
 export default {

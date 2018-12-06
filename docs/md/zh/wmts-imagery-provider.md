@@ -11,12 +11,12 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready">
+      <cesium-viewer @ready="ready" @layerAdded="layerAdded">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
           :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
        </imagery-layer>
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
           :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
        </imagery-layer>
@@ -68,8 +68,15 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          this.cesiumInstance = cesiumInstance
           viewer.imageryLayers.removeAll()
           this.tilingScheme = new Cesium.GeographicTilingScheme()
+        },
+        layerAdded () {
+          if (this.$refs.layerText.imageryLayer) {
+            const {viewer} = this.cesiumInstance
+            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+          }
         }
       }
     }
@@ -80,70 +87,77 @@
 
 ```html
 <template>
-    <div class="viewer">
-      <cesium-viewer @ready="ready">
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
-       </imagery-layer>
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
-       </imagery-layer>
-      </cesium-viewer>
-      <div class="demo-tool">
-        <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="url" placeholder="请选择服务">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
+  <div class="viewer">
+    <cesium-viewer @ready="ready" @layerAdded="layerAdded">
+      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
+        :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
+      </imagery-layer>
+      <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
+        :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
+      </imagery-layer>
+    </cesium-viewer>
+    <div class="demo-tool">
+      <span>透明度</span>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
+      <span>亮度</span>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <span>对比度</span>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <span>切换服务</span>
+      <md-select v-model="url" placeholder="请选择服务">
+        <md-option
+          v-for="item in options"
+          :key="item.value"
+          :value="item.value">
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-    export default {
-      data () {
-        return {
-          url: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          urlText: 'http://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          style: 'default',
-          tileMatrixSetID: 'c',
-          tileMatrixLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'],
-          credit : '天地图WMTS服务',
-          subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
-          tilingScheme: undefined,
-          options: [{
-            label: '天地图全球影像地图服务（经纬度投影）',
-            value: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }, {
-            label: '天地图全球矢量地图服务（经纬度投影）',
-            value: 'http://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }],
-          alpha: 1,
-          brightness: 1,
-          contrast: 1
-        }
+<script>
+  export default {
+    data () {
+      return {
+        url: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+        urlText: 'http://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+        style: 'default',
+        tileMatrixSetID: 'c',
+        tileMatrixLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'],
+        credit : '天地图WMTS服务',
+        subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
+        tilingScheme: undefined,
+        options: [{
+          label: '天地图全球影像地图服务（经纬度投影）',
+          value: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+        }, {
+          label: '天地图全球矢量地图服务（经纬度投影）',
+          value: 'http://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+        }],
+        alpha: 1,
+        brightness: 1,
+        contrast: 1
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+        viewer.imageryLayers.removeAll()
+        this.tilingScheme = new Cesium.GeographicTilingScheme()
       },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          viewer.imageryLayers.removeAll()
-          this.tilingScheme = new Cesium.GeographicTilingScheme()
+      layerAdded () {
+        if (this.$refs.layerText.imageryLayer) {
+          const {viewer} = this.cesiumInstance
+          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
         }
       }
     }
-  </script>
+  }
+</script>
 ```
 
 ## 属性

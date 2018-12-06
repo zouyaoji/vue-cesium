@@ -11,12 +11,12 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready">
+      <cesium-viewer @ready="ready" @layerAdded="layerAdded">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
           :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
        </imagery-layer>
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
           :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
        </imagery-layer>
@@ -68,8 +68,15 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          this.cesiumInstance = cesiumInstance
           viewer.imageryLayers.removeAll()
           this.tilingScheme = new Cesium.GeographicTilingScheme()
+        },
+        layerAdded () {
+          if (this.$refs.layerText.imageryLayer) {
+            const {viewer} = this.cesiumInstance
+            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+          }
         }
       }
     }
@@ -81,12 +88,12 @@
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer @ready="ready">
+    <cesium-viewer @ready="ready" @layerAdded="layerAdded">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
         :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
       </imagery-layer>
-      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
         :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
       </imagery-layer>
@@ -138,8 +145,15 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
+        this.cesiumInstance = cesiumInstance
         viewer.imageryLayers.removeAll()
         this.tilingScheme = new Cesium.GeographicTilingScheme()
+      },
+      layerAdded () {
+        if (this.$refs.layerText.imageryLayer) {
+          const {viewer} = this.cesiumInstance
+          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+        }
       }
     }
   }
