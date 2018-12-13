@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none">
+  <i style="display: none !important">
     <polyline-collection>
       <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2" :loop="true"></polyline-primitive>
     </polyline-collection>
@@ -19,17 +19,13 @@
 </template>
 
 <script>
-import commonMixin from '../../mixins/common.js'
+import measure from '../../mixins/measure'
 export default {
   name: 'measure-height',
-  render (h) {},
-  mixins: [commonMixin('measure')],
+  mixins: [measure],
   data () {
     return {
       measuring: false,
-      height: 0,
-      distanceH: 0,
-      distanceS: 0,
       startPoint: undefined,
       polylines: [],
       labels: [],
@@ -50,34 +46,18 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [], distance: 0 })
+        polylines.length && polylines.push({ positions: [], distanceH: 0, height: 0, distanceS: 0 })
       }
       this.$emit('activeEvt', { type: 'heightMeasuring', isActive: val })
     }
   },
   methods: {
-    load () {
-      this.Cesium = this.$parent.Cesium
-      this.viewer = this.$parent.viewer
-      const { Cesium, viewer } = this
-      this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
-      this.backgroundColorLabel = Cesium.Color.fromCssColorString('rgba(42,42,42,0.8)')
-      this.backgroundPaddingLabel = new Cesium.Cartesian2(7, 5)
-      this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
-      this.materialLine = Cesium.Material.fromType('Color')
-      this.materialLine.uniforms.color = new Cesium.Color(0.3176470588235294, 1, 0, 1)
-      this.pixelOffsetScaleByDistance = new Cesium.NearFarScalar(150, 3, 15000000, 0.5)
-      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-      handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-      handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
-    },
     LEFT_CLICK (movement) {
       if (!this.measuring) {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [] })
+      !polylines.length && polylines.push({ positions: [], distanceH: 0, height: 0, distanceS: 0 })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -110,15 +90,15 @@ export default {
       Cesium.Cartesian3.normalize(this.startPoint, normalStart)
       let planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
       let hypPoint = {}
-      this.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
+      polyline.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
       let labelPositonHeight = {}
       let labelPositonH = {}
       let labelPositonS = {}
-      if (this.height >= 0) {
+      if (polyline.height >= 0) {
         Cesium.Plane.projectPointOntoPlane(planeStart, endPoint, hypPoint)
         Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonHeight)
         Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonH)
-        this.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
+        polyline.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
       } else {
         let normalEnd = {}
         Cesium.Cartesian3.normalize(endPoint, normalEnd)
@@ -126,11 +106,11 @@ export default {
         Cesium.Plane.projectPointOntoPlane(planeEnd, this.startPoint, hypPoint)
         Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonHeight)
         Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonH)
-        this.distanceH = Cesium.Cartesian3.distance(endPoint, hypPoint)
+        polyline.distanceH = Cesium.Cartesian3.distance(endPoint, hypPoint)
       }
-      this.distanceS = Cesium.Cartesian3.distance(this.startPoint, endPoint)
+      polyline.distanceS = Cesium.Cartesian3.distance(this.startPoint, endPoint)
       Cesium.Cartesian3.midpoint(this.startPoint, endPoint, labelPositonS)
-      this.height = Math.abs(this.height)
+      polyline.height = Math.abs(polyline.height)
       if (polyline.positions.length !== 1) {
         polyline.positions.pop()
         polyline.positions.pop()
@@ -140,17 +120,17 @@ export default {
       }
       polyline.positions.push(endPoint)
       polyline.positions.push(hypPoint)
-      let labelTextHeight = this.height > 1000 ? (this.height / 1000).toFixed(2) + 'km' : this.height.toFixed(2) + 'm'
+      let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
       labels.push({
         text: '高度:' + labelTextHeight,
         position: labelPositonHeight
       })
-      let labelTextH = this.distanceH > 1000 ? (this.distanceH / 1000).toFixed(2) + 'km' : this.distanceH.toFixed(2) + 'm'
+      let labelTextH = polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
       labels.push({
         text: '水平距离:' + labelTextH,
         position: labelPositonH
       })
-      let labelTextS = this.distanceS > 1000 ? (this.distanceS / 1000).toFixed(2) + 'km' : this.distanceS.toFixed(2) + 'm'
+      let labelTextS = polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
       labels.push({
         text: '空间距离:' + labelTextS,
         position: labelPositonS
@@ -170,10 +150,7 @@ export default {
       }
       if (mode === 0) {
         if (polylines.length) {
-          this.distanceH = 0
-          this.distanceS = 0
-          this.height = 0
-          polylines.push({ positions: [] })
+          polylines.push({ positions: [], distanceH: 0, height: 0, distanceS: 0 })
         }
       } else {
         this.measuring = false

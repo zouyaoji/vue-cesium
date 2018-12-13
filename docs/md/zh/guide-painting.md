@@ -9,14 +9,16 @@
 <doc-preview>
   <template>
     <div class="viewer">
+      <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
+        <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
+        <entity :key="index" v-for="(polyline, index) of polylines">
+          <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
+        </entity>
+      </cesium-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止绘制' : '开始绘制' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
-      <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
-        <polyline-entity :ref="'line'+index" :positions="polyline.positions" :key="index" :material="material" v-for="(polyline, index) of polylines"
-          :width="5"></polyline-entity>
-      </cesium-viewer>
     </div>
   </template>
 
@@ -24,6 +26,7 @@
     export default {
       data () {
         return {
+          tilesetUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           material: undefined,
           editing: false,
           polylines: [],
@@ -111,6 +114,9 @@
           if (polylines.length) {
             polylines.push({positions: []})
           }
+        },
+        readyPromise (tileset) {
+          this.cesiumInstance.viewer.zoomTo(tileset)
         }
       }
     }
@@ -122,14 +128,16 @@
 ```html
 <template>
   <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止绘制' : '开始绘制' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-      </div>
     <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
-      <polyline-entity :positions="polyline.positions" :key="index" :material="material" v-for="(polyline, index) of polylines"
-        :width="5"></polyline-entity>
+      <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
+      <entity :key="index" v-for="(polyline, index) of polylines">
+        <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
+      </entity>
     </cesium-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle">{{ editing ? '停止绘制' : '开始绘制' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+    </div>
   </div>
 </template>
 
@@ -137,16 +145,16 @@
   export default {
     data () {
       return {
+        tilesetUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         material: undefined,
         editing: false,
         polylines: [],
-        options: [],
+        options: []
       }
     },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        window.viewer = viewer
         this.cesiumInstance = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         this.material = new Cesium.PolylineDashMaterialProperty({
@@ -177,6 +185,7 @@
         }
         const {Cesium, viewer} = this.cesiumInstance
         const { polylines } = this
+        !polylines.length && polylines.push({positions: []})
         let cartesian = viewer.scene.pickPosition(movement.position)
         if (!Cesium.defined(cartesian)) {
           return
@@ -213,6 +222,7 @@
         if(!polylines.length) {
           return
         }
+        const {viewer} = this.cesiumInstance
         let cartesian = viewer.scene.pickPosition(movement.position)
         if (!Cesium.defined(cartesian)) {
           return
@@ -223,6 +233,9 @@
         if (polylines.length) {
           polylines.push({positions: []})
         }
+      },
+      readyPromise (tileset) {
+        this.cesiumInstance.viewer.zoomTo(tileset)
       }
     }
   }

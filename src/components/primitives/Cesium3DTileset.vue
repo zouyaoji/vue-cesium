@@ -1,10 +1,10 @@
 <script>
 import bindEvents from '../../util/bindEvent'
-import commonMixin from '../../mixins/common.js'
+import primitive from '../../mixins/primitive'
 export default {
   name: 'cesium-3dtileset',
   render (h) {},
-  mixins: [commonMixin('primitives')],
+  mixins: [primitive],
   props: {
     url: {
       type: String
@@ -233,16 +233,12 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
+    createCesiumObject () {
+      const { Cesium, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
         dynamicScreenSpaceErrorDensity, dynamicScreenSpaceErrorFactor, dynamicScreenSpaceErrorHeightFalloff, skipLevelOfDetail, baseScreenSpaceError,
         skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid, pointCloudShading,
         imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume, debugShowContentBoundingVolume,
         debugShowViewerRequestVolume, debugShowGeometricError, debugShowRenderingStatistics, debugShowMemoryUsage, debugShowUrl } = this
-
-      if (!Cesium.defined(Cesium.Cesium3DTileset)) {
-        throw new Cesium.DeveloperError('Your Cesium Package is not included Cesium3DTileset!')
-      }
       let tileset = new Cesium.Cesium3DTileset({
         url: url,
         show: show,
@@ -278,17 +274,9 @@ export default {
         debugShowMemoryUsage: debugShowMemoryUsage,
         debugShowUrl: debugShowUrl
       })
-      tileset.readyPromise.then(tileset => {
-        this.$emit('readyPromise', tileset)
-      }).otherwise(error => {
-        throw new Cesium.DeveloperError(error)
-      })
       bindEvents.call(this, tileset)
-      this.originInstance = viewer.scene.primitives.add(tileset)
+      return tileset
     }
   }
 }
 </script>
-
-<style>
-</style>

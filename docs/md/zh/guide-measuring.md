@@ -96,7 +96,6 @@
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
         this.cesiumInstance = cesiumInstance
-        window.viewer = viewer
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
       toggle (type) {

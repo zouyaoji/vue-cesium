@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none">
+  <i style="display: none !important">
     <polyline-collection>
       <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2"></polyline-primitive>
     </polyline-collection>
@@ -11,33 +11,27 @@
       </template>
     </point-collection>
     <label-collection ref="labelCollection" @ready="labelCollectionReady">
-      <!-- <template v-for="(polyline, index) of polylines">
+      <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
           <label-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel"
-            :text="polyline.distance + 'm'"
-            :showBackground="true" :backgroundColor="backgroundColorLabel" :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
+            :text="'距离:' + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
+            :showBackground="true" :backgroundColor="backgroundColorLabel" :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"
+            :show="polyline.distances[subIndex] !== 0">
           </label-primitive>
         </template>
-      </template> -->
-      <label-primitive :ref="'label' + index" :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
-        :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"></label-primitive>
+      </template>
     </label-collection>
   </i>
 </template>
-
 <script>
-import commonMixin from '../../mixins/common.js'
+import measure from '../../mixins/measure'
 export default {
   name: 'measure-distance',
-  render (h) {},
-  mixins: [commonMixin('measure')],
+  mixins: [measure],
   data () {
     return {
       measuring: false,
-      distance: 0,
       polylines: [],
-      labels: [],
       font: '100 20px SimSun',
       mode: 1
     }
@@ -55,51 +49,32 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [], distance: 0 })
+        polylines.length && polylines.push({ positions: [], distances: [], distance: 0 })
       }
       this.$emit('activeEvt', { type: 'distanceMeasuring', isActive: val })
     }
   },
   methods: {
-    load () {
-      this.Cesium = this.$parent.Cesium
-      this.viewer = this.$parent.viewer
-      const { Cesium, viewer } = this
-      this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
-      this.backgroundColorLabel = Cesium.Color.fromCssColorString('rgba(42,42,42,0.8)')
-      this.backgroundPaddingLabel = new Cesium.Cartesian2(7, 5)
-      this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
-      this.materialLine = Cesium.Material.fromType('Color')
-      this.materialLine.uniforms.color = new Cesium.Color(0.3176470588235294, 1, 0, 1)
-      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-      handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-      handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
-    },
     LEFT_CLICK (movement) {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines, labels } = this
-      !polylines.length && polylines.push({ positions: [], distance: 0 })
+      const { Cesium, viewer, polylines } = this
+      !polylines.length && polylines.push({ positions: [], distances: [], distance: 0 })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
       }
       const polyline = polylines[polylines.length - 1]
       polyline.positions.push(cartesian)
-      if (polyline.positions.length >= 2) {
-        labels.push({
-          text: this.distance > 1000 ? (this.distance / 1000).toFixed(2) + 'km' : this.distance.toFixed(2) + 'm',
-          position: cartesian
-        })
-      }
+      let distance = polyline.distance
+      polyline.distances.push(distance)
     },
     MOUSE_MOVE (movement) {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines, labels } = this
+      const { Cesium, viewer, polylines } = this
       if (!polylines.length) {
         return
       }
@@ -112,15 +87,13 @@ export default {
         return
       }
       if (polyline.positions.length >= 2) {
-        labels.pop()
         polyline.positions.pop()
+        polyline.distances.pop()
       }
       polyline.positions.push(cartesian)
-      polyline.distance = this.getDistance(polyline.positions)
-      labels.push({
-        text: polyline.distance > 1000 ? (polyline.distance / 1000).toFixed(2) + 'km' : polyline.distance.toFixed(2) + 'm',
-        position: cartesian
-      })
+      let distance = this.getDistance(polyline.positions)
+      polyline.distances.push(distance)
+      polyline.distance = distance
     },
     RIGHT_CLICK (movement) {
       if (!this.measuring) {
@@ -140,7 +113,7 @@ export default {
       }
       if (mode === 0) {
         if (polylines.length) {
-          polylines.push({ positions: [], distance: 0 })
+          polylines.push({ positions: [], distances: [], distance: 0 })
         }
       } else {
         this.measuring = false
@@ -156,9 +129,7 @@ export default {
       return distance
     },
     clear () {
-      this.distance = 0
       this.polylines = []
-      this.labels = []
     },
     labelCollectionReady () {
       this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false

@@ -1,9 +1,9 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+// import commonMixin from '../../mixins/common.js'
 export default {
   name: 'polygon-geometry',
   render (h) {},
-  mixins: [commonMixin('polygon-geometry')],
+  // mixins: [commonMixin('polygon-geometry')],
   props: {
     positions: {
       type: Array

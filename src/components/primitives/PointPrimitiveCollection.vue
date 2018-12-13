@@ -1,13 +1,8 @@
-<template>
-  <i>
-    <slot></slot>
-  </i>
-</template>
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollection from '../../mixins/primitiveCollection'
 export default {
   name: 'point-collection',
-  mixins: [commonMixin('Primitives')],
+  mixins: [primitiveCollection],
   props: {
     modelMatrix: {
       type: Object
@@ -29,14 +24,14 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, modelMatrix, debugShowBoundingVolume, blendOption } = this
+    createCesiumObject () {
+      const { Cesium, modelMatrix, debugShowBoundingVolume, blendOption } = this
       let pointCollection = new Cesium.PointPrimitiveCollection({
         modelMatrix: modelMatrix,
         debugShowBoundingVolume: debugShowBoundingVolume,
         blendOption: blendOption
       })
-      this.originInstance = viewer.scene.primitives.add(pointCollection)
+      return pointCollection
     }
   }
 }

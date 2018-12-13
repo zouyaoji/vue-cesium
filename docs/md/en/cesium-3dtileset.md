@@ -2,6 +2,108 @@
 
 `cesium-3dtileset`A 3D Tiles tileset, used for streaming massive heterogeneous 3D geospatial datasets.
 
+## Example
+
+### add a Cesium3DTileset model to viewer
+
+#### Preview
+
+<doc-preview>
+  <template>
+    <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+      </cesium-viewer>
+      <div class="demo-tool">
+        <span>switch url</span>
+        <md-select v-model="url" placeholder="switch url">
+          <md-option
+            v-for="item in options"
+            :key="item.value"
+            :value="item.value">
+            {{item.label}}
+          </md-option>
+        </md-select>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          options: [{
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+            label: 'tileset one'
+          }, {
+            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+            label: 'tileset two'
+          }],
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          this.cesiumInstance = cesiumInstance
+        },
+        readyPromise (tileset) {
+          const {Cesium, viewer} = this.cesiumInstance
+          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### 代码
+
+```html
+<template>
+  <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+    </cesium-viewer>
+    <div class="demo-tool">
+      <span>switch url</span>
+      <md-select v-model="url" placeholder="switch url">
+        <md-option
+          v-for="item in options"
+          :key="item.value"
+          :value="item.value">
+          {{item.label}}
+        </md-option>
+      </md-select>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+        options: [{
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          label: 'tileset one'
+        }, {
+          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
+          label: 'tileset two'
+        }],
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        this.cesiumInstance = cesiumInstance
+      },
+      readyPromise (tileset) {
+        const {Cesium, viewer} = this.cesiumInstance
+        viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+      }
+    }
+  }
+</script>
+```
+
 ## Instance Properties
 
 |name|type|default|description|
@@ -54,97 +156,3 @@
 |tileLoad||The event fired to indicate that a tile's content was loaded.The loaded Cesium3DTile is passed to the event listener.|
 |tileUnload||The event fired to indicate that a tile's content was unloaded.The unloaded Cesium3DTile is passed to the event listener.This event is fired immediately before the tile's content is unload|
 |tileVisible||This event fires once for each visible tile in a frame. This can be used to manually style a tileset.The visible Cesium3DTile is passed to the event listener.|
-
-## Example
-
-### Add a 3DTiles model to CesiumViewer
-
-#### Code
-
-```html
-<template>
-  <div class="viewer">
-    <div class="demo-tool">
-      <span>Change Model</span>
-      <md-select v-model="url" placeholder="Change Model">
-        <md-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </md-option>
-      </md-select>
-    </div>
-    <cesium-viewer>
-      <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        options: [{
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          label: 'Model1'
-        }, {
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-          label: 'Model2'
-        }],
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer">
-      <div class="demo-tool">
-        <span>Change Model</span>
-        <el-select v-model="url" placeholder="Change Model">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </el-option>
-        </el-select>
-      </div>
-      <cesium-viewer>
-        <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          options: [{
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-            label: 'Model1'
-          }, {
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-            label: 'Model2'
-          }],
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-        }
-      }
-    }
-  </script>
-</doc-preview>

@@ -9,6 +9,8 @@ import SingleTileImageryProvider from '@/imageryLayers/SingleTileImageryProvider
 import UrlTemplateImageryProvider from '@/imageryLayers/UrlTemplateImageryProvider.vue'
 import WebMapTileServiceImageryProvider from '@/imageryLayers/WebMapTileServiceImageryProvider.vue'
 import SuperMapImageryProvider from '@/imageryLayers/SuperMapImageryProvider.vue'
+
+import Entity from '@/entities/Entity.vue'
 import PolylineGraphics from '@/entities/PolylineGraphics.vue'
 import PolygonGraphics from '@/entities/PolygonGraphics.vue'
 
@@ -40,18 +42,19 @@ export default {
     Vue.component(WebMapTileServiceImageryProvider.name, WebMapTileServiceImageryProvider)
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
 
-    Vue.component('polyline-entity', PolylineGraphics)
-    Vue.component('polygon-entity', PolygonGraphics)
+    Vue.component(Entity.name, Entity)
+    Vue.component(PolylineGraphics.name, PolylineGraphics)
+    Vue.component(PolygonGraphics.name, PolygonGraphics)
 
-    Vue.component('cesium-3dtileset', Cesium3DTileset)
+    Vue.component(Cesium3DTileset.name, Cesium3DTileset)
+    Vue.component(PolylineCollection.name, PolylineCollection)
+    Vue.component(Polyline.name, Polyline)
+    Vue.component(LabelCollection.name, LabelCollection)
+    Vue.component(Label.name, Label)
+    Vue.component(PointCollection.name, PointCollection)
+    Vue.component(PointPrimitive.name, PointPrimitive)
+
     Vue.component('model-primitive', Model)
-    Vue.component('point-collection', PointCollection)
-    Vue.component('polyline-collection', PolylineCollection)
-    Vue.component('label-collection', LabelCollection)
-    Vue.component('point-primitive', PointPrimitive)
-    Vue.component('polyline-primitive', Polyline)
-    Vue.component('label-primitive', Label)
-
     Vue.component('measure-distance', MeasureDistance)
     Vue.component('measure-area', MeasureArea)
     Vue.component('measure-height', MeasureHeight)
@@ -61,6 +64,6 @@ export default {
 
 export {
   CesiumViewer, ImageryLayer, ArcGisMapServerImageryProvider, BingMapsImageryProvider, MapboxImageryProvider, OpenStreetMapImageryProvider, SingleTileImageryProvider,
-  UrlTemplateImageryProvider, WebMapTileServiceImageryProvider, SuperMapImageryProvider, Cesium3DTileset, PolylineGraphics, PolygonGraphics, PointCollection,
+  UrlTemplateImageryProvider, WebMapTileServiceImageryProvider, SuperMapImageryProvider, Entity, PolylineGraphics, Cesium3DTileset, PolygonGraphics, PointCollection,
   PolylineCollection, PointPrimitive, Polyline, LabelCollection, Label, MeasureDistance, MeasureArea, MeasureHeight, Model
 }

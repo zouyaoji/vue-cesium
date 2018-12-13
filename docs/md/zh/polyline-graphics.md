@@ -1,19 +1,119 @@
-# 线实体polyline
+# 折线对象
 
-`polyline-entity`
+`polyline-graphics`需要配合`entity`使用。
+
+## 示例
+
+### 添加线实体到场景
+
+#### 预览
+
+<doc-preview>
+  <template>
+    <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <entity>
+          <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
+        </entity>
+        <entity>
+          <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
+        </entity>
+        <entity>
+          <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
+        </entity>
+      </cesium-viewer>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          positions1: [],
+          material1: undefined,
+          positions2: [],
+          material2: undefined,
+          positions3: [],
+          material3: undefined
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          const {Cesium, viewer} = cesiumInstance
+          this.positions1.push(Cesium.Cartesian3.fromDegrees(90, 20, 10000))
+          this.positions1.push(Cesium.Cartesian3.fromDegrees(120, 20, 10000))
+          this.material1 = Cesium.Color.RED
+          this.positions2.push(Cesium.Cartesian3.fromDegrees(90, 30, 10000))
+          this.positions2.push(Cesium.Cartesian3.fromDegrees(120, 30, 10000))
+          this.material2 = new Cesium.PolylineGlowMaterialProperty({
+            glowPower : 0.2,
+            color : Cesium.Color.BLUE
+          })
+          this.positions3.push(Cesium.Cartesian3.fromDegrees(90, 40, 10000))
+          this.positions3.push(Cesium.Cartesian3.fromDegrees(120, 40, 10000))
+          this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### 代码
+
+```html
+<template>
+  <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <entity>
+        <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
+      </entity>
+      <entity>
+        <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
+      </entity>
+      <entity>
+        <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
+      </entity>
+    </cesium-viewer>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        positions1: [],
+        material1: undefined,
+        positions2: [],
+        material2: undefined,
+        positions3: [],
+        material3: undefined
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.positions1.push(Cesium.Cartesian3.fromDegrees(90, 20, 10000))
+        this.positions1.push(Cesium.Cartesian3.fromDegrees(120, 20, 10000))
+        this.material1 = Cesium.Color.RED
+        this.positions2.push(Cesium.Cartesian3.fromDegrees(90, 30, 10000))
+        this.positions2.push(Cesium.Cartesian3.fromDegrees(120, 30, 10000))
+        this.material2 = new Cesium.PolylineGlowMaterialProperty({
+          glowPower : 0.2,
+          color : Cesium.Color.BLUE
+        })
+        this.positions3.push(Cesium.Cartesian3.fromDegrees(90, 40, 10000))
+        this.positions3.push(Cesium.Cartesian3.fromDegrees(120, 40, 10000))
+        this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
+      }
+    }
+  }
+</script>
+```
 
 ## 属性
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|id|String|`optional` 对象的唯一标识符。如果没有提供，则生成GUID。|
-|name|String|`optional` 向用户显示的可读名称，名称可不必唯一。|
-|availability|TimeIntervalCollection|`optional` The availability, if any, associated with this object.|
-|description|Property|`optional` 实体的HTML描述。|
-|position|PositionProperty|`optional`实体的位置。|
-|orientation|Property|`optional` 实体的方向。|
-|viewFrom|Property|`optional` 查看此实体对象的建议初始偏移量。|
-|parent|Entity|`optional` 与此实体关联的父实体。|
 |positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
 |followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
 |clampToGround|Property|false|`optional` 指定线是否贴地。|
@@ -33,116 +133,3 @@
 |------|----|----|
 |ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
 |definitionChanged||每当更改或修改属性或子属性时触发该事件。|
-
-## 示例
-
-### 3DTiles模型
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer">
-      <div class="demo-tool">
-        <md-button>开始绘制</md-button>
-        <span>线类型</span>
-        <md-select v-model="url" placeholder="切换地址">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
-    <cesium-viewer>
-      <cesium-3dtileset ref="tileset" :url="url" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE"/>
-      <polyline-entity :positions="positions" :width="2.0"/>
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        
-        positions: []，
-        options: [{
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          label: '数据1'
-        }, {
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-          label: '数据2'
-        }],
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.cesiumInstance = cesiumInstance
-      },
-      LEFT_CLICK (movement) {
-        const {Cesium, viewer} = this.cesiumInstance
-        let cartesian = viewer.scene.pickPosition(movement.position)
-        if (Cesium.defined(cartesian)) {
-          this.positions.push(cartesian)
-        }
-      },
-      MOUSE_MOVE (movement) {
-        let cartesian = viewer.scene.pickPosition(movement.endPosition)
-        if (Cesium.defined(cartesian)) {
-          this.positions.pop()
-          this.positions.push(cartesian)
-        }
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer">
-      <div class="demo-tool">
-        <span>切换地址</span>
-        <md-select v-model="url" placeholder="切换地址">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
-      <cesium-viewer>
-        <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          options: [{
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-            label: '数据1'
-          }, {
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-            label: '数据2'
-          }],
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-        }
-      }
-    }
-  </script>
-</doc-preview>

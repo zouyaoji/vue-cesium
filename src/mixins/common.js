@@ -1,85 +1,68 @@
-const types = {
-  imageryLayers: {
-    unload: 'remove'
-  },
-  primitives: {
-    unload: 'remove'
-  },
-  entities: {
-    unload: 'remove'
-  }
-}
 
+import services from './services'
+const VM_PROP = 'vm'
 const getParent = $component => $component.abstract || $component.$el === $component.$children[0].$el ? getParent($component.$parent) : $component
-
-function destroyInstance () {
-  const { unload, renderByParent, $parent } = this
-  if (renderByParent) {
-    $parent.reload()
-  }
-  unload()
-}
-
-class Mixin {
-  constructor (prop) {
-    this.methods = {
-      ready () {
-        console.log('mounted')
-        const $parent = getParent(this.$parent)
-        const Cesium = (this.Cesium = $parent.Cesium)
-        const viewer = (this.viewer = $parent.viewer)
-        this.load()
-        const originInstance = this.originInstance
-        this.$emit('ready', {
-          Cesium,
-          viewer,
-          originInstance
-        })
-      },
-      transmitEvent (e) {
-        this.$emit(e.type.replace(/^on/, ''), e)
-      },
-      reload () {
-        this && this.Cesium && this.$nextTick(() => {
-          this.unload()
-          this.$nextTick(this.ready)
-        })
-      },
-      unload () {
-        const { viewer, originInstance } = this
-        try {
-          switch (prop.type) {
-            case 'primitives':
-              return viewer.scene[prop.type][types[prop.type].unload](originInstance)
-            case 'polyline-primitive':
-            case 'label-primitive':
-            case 'point-primitive':
-            case 'polygon-primitive':
-              return getParent(this.$parent).originInstance.remove(originInstance)
-            default:
-              viewer[prop.type][types[prop.type].unload](originInstance)
-          }
-        } catch (e) {}
-      },
-      getInstance () {
-        return this.originInstance
-      }
-    }
-    this.computed = {
-      renderByParent () {
-        return this.$parent.preventChildrenRender
-      }
-    }
-
-    this.mounted = function () {
-      const $parent = getParent(this.$parent)
-      const viewer = $parent.viewer
-      const { ready } = this
-      viewer ? ready() : $parent.$on('ready', ready)
-    }
-    this.destroyed = destroyInstance
-    this.beforeDestroy = destroyInstance
+/**
+ * @vueProps
+ */
+const props = {}
+/**
+ * @vueMethods
+ */
+const methods = {
+  load () {
+    const $parent = getParent(this.$parent)
+    const Cesium = (this.Cesium = $parent.Cesium)
+    const viewer = (this.viewer = $parent.viewer)
+    this.originInstance = this.createCesiumObject()
+    this.mount()
+    this.$emit('ready', { Cesium, viewer })
+  },
+  createCesiumObject () {
+    throw new Error('Not implemented method')
+  },
+  mount () {
+    throw new Error('Not implemented method')
+  },
+  reload () {
+    this && this.Cesium && this.$nextTick(() => {
+      this.unload()
+      this.$nextTick(this.load)
+    })
+  },
+  refresh () {
+    throw new Error('Not implemented method')
+  },
+  unload () {
+    throw new Error('Not implemented method')
+  },
+  getServices () {
+    return services.methods.getServices.call(this)
   }
 }
-
-export default type => new Mixin({ type })
+/**
+ * Basic cesium component mixin.
+ */
+export default {
+  VM_PROP,
+  mixins: [services],
+  props,
+  methods,
+  mounted () {
+    const $parent = getParent(this.$parent)
+    const viewer = $parent.viewer
+    const { load } = this
+    viewer ? load() : $parent.$on('ready', load)
+  },
+  created () {
+    Object.defineProperties(this, {
+      cesiumObject: {
+        enumerable: true,
+        get: () => this.originInstance
+      }
+    })
+  },
+  destroyed () {
+    this.unload()
+  }
+}

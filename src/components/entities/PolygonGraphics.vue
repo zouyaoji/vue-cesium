@@ -1,36 +1,9 @@
 <script>
-import bindEvents from '../../util/bindEvent'
-import { Events } from '../../util/events.js'
-import commonMixin from '../../mixins/common.js'
+import entityGraphics from '../../mixins/entityGraphics.js'
 export default {
-  name: 'polygon-entity',
-  render (h) {},
-  mixins: [commonMixin('entities')],
+  name: 'polygon-graphics',
+  mixins: [entityGraphics],
   props: {
-    id: {
-      type: String
-    },
-    name: {
-      type: String
-    },
-    availability: {
-      type: Object
-    },
-    description: {
-      type: String
-    },
-    position: {
-      type: Object
-    },
-    orientation: {
-      type: Object
-    },
-    viewFrom: {
-      type: Object
-    },
-    parent: {
-      type: Object
-    },
     hierarchy: {
       type: Array
     },
@@ -101,13 +74,67 @@ export default {
     }
   },
   watch: {
-
+    hierarchy () {
+    },
+    height (val) {
+      this.graphics.height = val
+    },
+    heightReference (val) {
+      this.graphics.heightReference = val
+    },
+    extrudedHeight (val) {
+      this.graphics.extrudedHeight = val
+    },
+    extrudedHeightReference (val) {
+      this.graphics.extrudedHeightReference = val
+    },
+    show (val) {
+      this.graphics.show = val
+    },
+    fill (val) {
+      this.graphics.fill = val
+    },
+    material (val) {
+      this.graphics.material = val
+    },
+    outline (val) {
+      this.graphics.outline = val
+    },
+    outlineColor (val) {
+      this.graphics.outlineColor = val
+    },
+    outlineWidth (val) {
+      this.graphics.outlineWidth = val
+    },
+    stRotation (val) {
+      this.graphics.stRotation = val
+    },
+    granularity (val) {
+      this.graphics.granularity = val
+    },
+    perPositionHeight (val) {
+      this.graphics.perPositionHeight = val
+    },
+    closeTop (val) {
+      this.graphics.closeTop = val
+    },
+    closeBottom (val) {
+      this.graphics.closeBottom = val
+    },
+    shadows (val) {
+      this.graphics.shadows = val
+    },
+    distanceDisplayCondition (val) {
+      this.graphics.distanceDisplayCondition = val
+    },
+    zIndex (val) {
+      this.graphics.zIndex = val
+    }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, id, name, availability, description, position, orientation, viewFrom, parent, hierarchy, height,
-        heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor, outlineWidth,
-        stRotation, granularity, perPositionHeight, closeTop, closeBottom, shadows, distanceDisplayCondition, zIndex } = this
+    createCesiumObject () {
+      const { Cesium, hierarchy, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
+        outlineWidth, stRotation, granularity, perPositionHeight, closeTop, closeBottom, shadows, distanceDisplayCondition, zIndex } = this
       let polygon = {
         hierarchy: hierarchy,
         height: height,
@@ -131,19 +158,7 @@ export default {
       }
 
       polygon.hierarchy = new Cesium.CallbackProperty(() => this.hierarchy, false)
-      this.originInstance = viewer.entities.add({
-        id: id,
-        name: name,
-        availability: availability,
-        show: show,
-        description: description,
-        position: position,
-        orientation: orientation,
-        viewFrom: viewFrom,
-        parent: parent,
-        polygon: polygon
-      })
-      bindEvents.call(this, this.originInstance, Events['entity-events'])
+      return polygon
     }
   }
 }

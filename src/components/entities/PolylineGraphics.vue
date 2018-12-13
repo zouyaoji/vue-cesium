@@ -1,36 +1,9 @@
 <script>
-import bindEvents from '../../util/bindEvent'
-import { Events } from '../../util/events.js'
-import commonMixin from '../../mixins/common.js'
+import entityGraphics from '../../mixins/entityGraphics.js'
 export default {
-  name: 'polyline-entity',
-  render (h) {},
-  mixins: [commonMixin('entities')],
+  name: 'polyline-graphics',
+  mixins: [entityGraphics],
   props: {
-    id: {
-      type: String
-    },
-    name: {
-      type: String
-    },
-    availability: {
-      type: Object
-    },
-    description: {
-      type: String
-    },
-    position: {
-      type: Object
-    },
-    orientation: {
-      type: Object
-    },
-    viewFrom: {
-      type: Object
-    },
-    parent: {
-      type: Object
-    },
     positions: {
       type: Array
     },
@@ -71,68 +44,44 @@ export default {
     }
   },
   watch: {
-    id () {
-      this.reload()
-    },
-    name (val) {
-      this.originInstance.name = val
-    },
-    availability () {
-      this.reload()
-    },
-    description (val) {
-      this.originInstance.description = val
-    },
-    position (val) {
-      this.originInstance.position = val
-    },
-    orientation (val) {
-      this.originInstance.orientation = val
-    },
-    viewFrom (val) {
-      this.originInstance.viewFrom = val
-    },
-    parent () {
-      this.reload()
-    },
     positions () {
     },
     followSurface (val) {
-      this.originInstance.polyline.followSurface = val
+      this.graphics.followSurface = val
     },
     clampToGround (val) {
-      this.originInstance.polyline.clampToGround = val
+      this.graphics.clampToGround = val
     },
     width (val) {
-      this.originInstance.polyline.width = val
+      this.graphics.width = val
     },
     show (val) {
-      this.originInstance.polyline.show = val
+      this.graphics.show = val
     },
     material (val) {
-      this.originInstance.polyline.material = val
+      this.graphics.material = val
     },
     depthFailMaterial (val) {
-      this.originInstance.polyline.depthFailMaterial = val
+      this.graphics.depthFailMaterial = val
     },
     granularity (val) {
-      this.originInstance.polyline.granularity = val
+      this.graphics.granularity = val
     },
     shadows (val) {
-      this.originInstance.polyline.shadows = val
+      this.graphics.shadows = val
     },
     distanceDisplayCondition (val) {
-      this.originInstance.polyline.distanceDisplayCondition = val
+      this.graphics.distanceDisplayCondition = val
     },
     zIndex (val) {
-      this.originInstance.polyline.zIndex = val
+      this.graphics.zIndex = val
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, id, name, availability, description, position, orientation, viewFrom, parent, positions, followSurface,
-        clampToGround, width, show, material, depthFailMaterial, granularity, shadows, distanceDisplayCondition, zIndex } = this
-      let polyline = {
+    createCesiumObject () {
+      const { Cesium, positions, followSurface, clampToGround, width, show, material, depthFailMaterial,
+        granularity, shadows, distanceDisplayCondition, zIndex } = this
+      let polyline = new Cesium.PolylineGraphics({
         positions: positions,
         followSurface: followSurface,
         clampToGround: clampToGround,
@@ -144,22 +93,9 @@ export default {
         shadows: shadows,
         distanceDisplayCondition: distanceDisplayCondition,
         zIndex: zIndex
-      }
-      polyline.positions = new Cesium.CallbackProperty(() => this.positions, false)
-      this.originInstance = viewer.entities.add({
-        id: id,
-        name: name,
-        availability: availability,
-        show: show,
-        description: description,
-        position: position,
-        orientation: orientation,
-        viewFrom: viewFrom,
-        parent: parent,
-        polyline: polyline
       })
-
-      bindEvents.call(this, this.originInstance, Events['entity-events'])
+      polyline.positions = new Cesium.CallbackProperty(() => this.positions, false)
+      return polyline
     }
   }
 }

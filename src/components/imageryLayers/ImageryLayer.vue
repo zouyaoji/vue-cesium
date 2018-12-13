@@ -117,7 +117,6 @@ export default {
         maximumTerrainLevel: maximumTerrainLevel,
         cutoutRectangle: cutoutRectangle
       })
-      window.imageryLayer = this
       return imageryLayer
     },
     mount () {
@@ -158,7 +157,7 @@ export default {
     }
   },
   created () {
-    this._geometry = undefined
+    this._provider = undefined
     Object.defineProperties(this, {
       imageryLayer: {
         enumerable: true,

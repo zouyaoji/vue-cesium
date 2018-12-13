@@ -1,13 +1,8 @@
-<template>
-  <i>
-    <slot></slot>
-  </i>
-</template>
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollection from '../../mixins/primitiveCollection'
 export default {
   name: 'polyline-collection',
-  mixins: [commonMixin('Primitives')],
+  mixins: [primitiveCollection],
   props: {
     modelMatrix: {
       type: Object
@@ -26,13 +21,13 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, modelMatrix, debugShowBoundingVolume } = this
+    createCesiumObject () {
+      const { Cesium, modelMatrix, debugShowBoundingVolume } = this
       let polylineCollection = new Cesium.PolylineCollection({
         modelMatrix: modelMatrix,
         debugShowBoundingVolume: debugShowBoundingVolume
       })
-      this.originInstance = viewer.scene.primitives.add(polylineCollection)
+      return polylineCollection
     }
   }
 }

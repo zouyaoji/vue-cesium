@@ -1,9 +1,8 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollectionItem from '../../mixins/primitiveCollectionItem'
 export default {
   name: 'point-primitive',
-  render (h) {},
-  mixins: [commonMixin('point-primitive')],
+  mixins: [primitiveCollectionItem],
   props: {
     color: {
       type: Object
@@ -77,8 +76,8 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { color, disableDepthTestDistance, distanceDisplayCondition, id, outlineColor, outlineWidth, pixelSize,
+    createCesiumObject () {
+      const { primitiveCollection, color, disableDepthTestDistance, distanceDisplayCondition, id, outlineColor, outlineWidth, pixelSize,
         position, scaleByDistance, show, translucencyByDistance } = this
       let point = {
         color: color,
@@ -93,7 +92,7 @@ export default {
         show: show,
         translucencyByDistance: translucencyByDistance
       }
-      this.originInstance = this.$parent.originInstance.add(point)
+      return primitiveCollection.add(point)
     }
   }
 }

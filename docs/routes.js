@@ -203,8 +203,8 @@ const routeMap = [
     },
     component: CateView,
     children: [{
-      path: 'polyline-entity',
-      component: 'polyline-entity',
+      path: 'polyline-graphics',
+      component: 'polyline-graphics',
       name: {
         zh: '线实体',
         en: 'PolylineGraphics'
@@ -222,8 +222,8 @@ const routeMap = [
       path: 'cesium-3dtileset',
       component: 'cesium-3dtileset',
       name: {
-        zh: '3DTiles模型',
-        en: '3DTiles Model'
+        zh: 'Cesium3DTileset模型',
+        en: 'Cesium3DTileset'
       }
     }]
   }

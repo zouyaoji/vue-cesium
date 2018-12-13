@@ -1,9 +1,8 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollectionItem from '../../mixins/primitiveCollectionItem'
 export default {
   name: 'label-primitive',
-  render (h) {},
-  mixins: [commonMixin('label-primitive')],
+  mixins: [primitiveCollectionItem],
   props: {
     backgroundColor: {
       type: Object
@@ -81,78 +80,78 @@ export default {
   },
   watch: {
     backgroundColor (val) {
-      this.originInstance.backgroundColor = val
+      this.primitive.backgroundColor = val
     },
     backgroundPadding (val) {
-      this.originInstance.backgroundPadding = val
+      this.primitive.backgroundPadding = val
     },
     disableDepthTestDistance (val) {
-      this.originInstance.disableDepthTestDistance = val
+      this.primitive.disableDepthTestDistance = val
     },
     distanceDisplayCondition (val) {
-      this.originInstance.distanceDisplayCondition = val
+      this.primitive.distanceDisplayCondition = val
     },
     eyeOffset (val) {
-      this.originInstance.eyeOffset = val
+      this.primitive.eyeOffset = val
     },
     fillColor (val) {
-      this.originInstance.fillColor = val
+      this.primitive.fillColor = val
     },
     font (val) {
-      this.originInstance.font = val
+      this.primitive.font = val
     },
     heightReference (val) {
-      this.originInstance.heightReference = val
+      this.primitive.heightReference = val
     },
     horizontalOrigin (val) {
-      this.originInstance.horizontalOrigin = val
+      this.primitive.horizontalOrigin = val
     },
     id (val) {
-      this.originInstance.id = val
+      this.primitive.id = val
     },
     outlineColor (val) {
-      this.originInstance.outlineColor = val
+      this.primitive.outlineColor = val
     },
     outlineWidth (val) {
-      this.originInstance.outlineWidth = val
+      this.primitive.outlineWidth = val
     },
     pixelOffset (val) {
-      this.originInstance.pixelOffset = val
+      this.primitive.pixelOffset = val
     },
     pixelOffsetScaleByDistance (val) {
-      this.originInstance.pixelOffsetScaleByDistance = val
+      this.primitive.pixelOffsetScaleByDistance = val
     },
     position (val) {
-      this.originInstance.position = val
+      this.primitive.position = val
     },
     scale (val) {
-      this.originInstance.scale = val
+      this.primitive.scale = val
     },
     scaleByDistance (val) {
-      this.originInstance.scaleByDistance = val
+      this.primitive.scaleByDistance = val
     },
     show (val) {
-      this.originInstance.show = val
+      this.primitive.show = val
     },
     showBackground (val) {
-      this.originInstance.showBackground = val
+      this.primitive.showBackground = val
     },
     labelStyle (val) {
-      this.originInstance.labelStyle = val
+      this.primitive.labelStyle = val
     },
     text (val) {
-      this.originInstance.text = val
+      this.primitive.text = val
     },
     translucencyByDistance (val) {
-      this.originInstance.translucencyByDistance = val
+      this.primitive.translucencyByDistance = val
     },
     verticalOrigin (val) {
-      this.originInstance.verticalOrigin = val
+      this.primitive.verticalOrigin = val
     }
   },
   methods: {
-    load () {
-      const { backgroundColor, backgroundPadding, disableDepthTestDistance, distanceDisplayCondition, eyeOffset, fillColor, font, heightReference,
+    createCesiumObject () {
+      const { primitiveCollection, backgroundColor, backgroundPadding, disableDepthTestDistance, distanceDisplayCondition, eyeOffset, fillColor, font, heightReference,
         horizontalOrigin, id, outlineColor, outlineWidth, pixelOffset, pixelOffsetScaleByDistance, position, scale, scaleByDistance,
         show, showBackground, labelStyle, text, translucencyByDistance, verticalOrigin } = this
       let label = {
@@ -180,7 +179,7 @@ export default {
         translucencyByDistance: translucencyByDistance,
         verticalOrigin: verticalOrigin
       }
-      this.originInstance = this.$parent.originInstance.add(label)
+      return primitiveCollection.add(label)
     }
   }
 }

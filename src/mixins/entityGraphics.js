@@ -3,31 +3,28 @@ import { Events } from '../util/events.js'
 import cmp from './virtualCmp'
 import mergeDescriptors from '../util/mergeDescriptors'
 
-const props = {
-}
-const computed = {
-}
+const props = {}
+const computed = {}
 const methods = {
   mount () {
-    const { imageryProvider, providerContainer } = this
-    bindEvents.call(this, imageryProvider, Events['imagery-layer-events'])
-    providerContainer && providerContainer.setProvider(imageryProvider)
+    const { graphics, graphicsContainer } = this
+    bindEvents.call(this, graphics, Events['entity-events'])
+    graphicsContainer && graphicsContainer.setGraphics(graphics)
   },
   unload () {
-    const { providerContainer } = this
-    providerContainer && providerContainer.setProvider(undefined)
+    const { graphicsContainer } = this
+    graphicsContainer && graphicsContainer.setGraphics(undefined)
   },
   getServices () {
     const vm = this
     return mergeDescriptors(cmp.methods.getServices.call(this), {
-      get imageryProvider () {
-        return vm.imageryProvider
+      get graphics () {
+        return vm.graphics
       }
     })
   }
 }
-const watch = {
-}
+const watch = {}
 
 export default {
   mixins: [cmp],
@@ -42,13 +39,13 @@ export default {
   },
   created () {
     Object.defineProperties(this, {
-      imageryProvider: {
+      graphics: {
         enumerable: true,
         get: () => this.cesiumObject
       },
-      providerContainer: {
+      graphicsContainer: {
         enumerable: true,
-        get: () => this.$services && this.$services.providerContainer
+        get: () => this.$services && this.$services.graphicsContainer
       }
     })
   }

@@ -45,8 +45,6 @@
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        window.viewer = viewer
-        window.ppp = this
         this.cesiumInstance = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         this.material = new Cesium.PolylineDashMaterialProperty({
@@ -186,8 +184,6 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          window.viewer = viewer
-          window.ppp = this
           this.cesiumInstance = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           this.material = new Cesium.PolylineDashMaterialProperty({

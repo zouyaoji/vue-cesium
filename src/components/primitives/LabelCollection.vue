@@ -1,14 +1,8 @@
-<template>
-  <i :id="[$options.name]" :class="[$options.name]" style="display: none !important;">
-    <slot id="labelcollection"></slot>
-  </i>
-</template>
-
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollection from '../../mixins/primitiveCollection'
 export default {
   name: 'label-collection',
-  mixins: [commonMixin('Primitives')],
+  mixins: [primitiveCollection],
   props: {
     modelMatrix: {
       type: Object
@@ -33,15 +27,15 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, modelMatrix, debugShowBoundingVolume, scene, blendOption } = this
+    createCesiumObject () {
+      const { Cesium, modelMatrix, debugShowBoundingVolume, scene, blendOption } = this
       let labelCollection = new Cesium.LabelCollection({
         modelMatrix: modelMatrix,
         debugShowBoundingVolume: debugShowBoundingVolume,
         scene: scene,
         blendOption: blendOption
       })
-      this.originInstance = viewer.scene.primitives.add(labelCollection)
+      return labelCollection
     }
   }
 }

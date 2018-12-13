@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none">
+  <i style="display: none ">
     <polyline-collection>
       <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2" :loop="true"></polyline-primitive>
     </polyline-collection>
@@ -11,28 +11,30 @@
       </template>
     </point-collection>
     <label-collection ref="labelCollection" @ready="labelCollectionReady">
-      <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
-        :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
-      </label-primitive>
+      <template v-for="(polyline, index) of polylines">
+        <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="index"
+          :text="'面积:' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')" 
+          :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
+          :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
+        </label-primitive>
+      </template>
     </label-collection>
-    <polygon-entity :hierarchy="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :perPositionHeight="true" :material="materialPolygon"></polygon-entity>
+    <entity :key="index" v-for="(polyline, index) of polylines">
+      <polygon-graphics :ref="'line'+index" :hierarchy="polyline.positions" :perPositionHeight="true" :material="materialPolygon"></polygon-graphics>
+    </entity>
   </i>
 </template>
 
 <script>
 import turfArea from '../../util/turfArea.js'
-import commonMixin from '../../mixins/common.js'
+import measure from '../../mixins/measure'
 export default {
   name: 'measure-area',
-  render (h) {},
-  mixins: [commonMixin('measure')],
+  mixins: [measure],
   data () {
     return {
       measuring: false,
-      area: 0,
       polylines: [],
-      labels: [],
       font: '100 20px SimSun',
       mode: 1
     }
@@ -52,26 +54,11 @@ export default {
         }
         polylines.length && polylines.push({ positions: [], area: 0 })
       }
-      this.$emit('activeEvt', { type: 'areaMeasuring', isActive: val })
+      const listener = this.$listeners['activeEvt']
+      listener && this.$emit('activeEvt', { type: 'areaMeasuring', isActive: val })
     }
   },
   methods: {
-    load () {
-      this.Cesium = this.$parent.Cesium
-      this.viewer = this.$parent.viewer
-      const { Cesium, viewer } = this
-      this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
-      this.backgroundColorLabel = Cesium.Color.fromCssColorString('rgba(42,42,42,0.8)')
-      this.backgroundPaddingLabel = new Cesium.Cartesian2(7, 5)
-      this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
-      this.materialLine = Cesium.Material.fromType('Color')
-      this.materialLine.uniforms.color = new Cesium.Color(0.3176470588235294, 1, 0, 1)
-      this.materialPolygon = Cesium.Color.fromCssColorString('rgba(255,165,0,0.5)')
-      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-      handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-      handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
-    },
     LEFT_CLICK (movement) {
       if (!this.measuring) {
         return
@@ -89,7 +76,7 @@ export default {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines, labels } = this
+      const { Cesium, viewer, polylines } = this
       if (!polylines.length) {
         return
       }
@@ -102,15 +89,10 @@ export default {
         return
       }
       if (polyline.positions.length >= 2) {
-        labels.pop()
         polyline.positions.pop()
       }
       polyline.positions.push(cartesian)
-      this.area = this.getArea(polyline.positions)
-      labels.push({
-        text: this.area > 1000000 ? (this.area / 1000000).toFixed(2) + 'km²' : this.area.toFixed(2) + '㎡',
-        position: cartesian
-      })
+      polyline.area = this.getArea(polyline.positions)
     },
     RIGHT_CLICK (movement) {
       if (!this.measuring) {

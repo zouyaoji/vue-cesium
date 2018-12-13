@@ -1,20 +1,119 @@
-# polyline实体
+# PolylineGraphics
 
-`polyline-entity`
+`polyline-graphics`Describes a polyline. The first two positions define a line segment, and each additional position defines a line segment from the previous position. The segments can be linear connected points, great arcs, or clamped to terrain.
 
-## 属性
+## Examples
 
-|属性名|类型|默认值|描述|
+### add a PolylineGraphics to viewer with entity
+
+#### Preview
+
+<doc-preview>
+  <template>
+    <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <entity>
+          <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
+        </entity>
+        <entity>
+          <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
+        </entity>
+        <entity>
+          <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
+        </entity>
+      </cesium-viewer>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      data () {
+        return {
+          positions1: [],
+          material1: undefined,
+          positions2: [],
+          material2: undefined,
+          positions3: [],
+          material3: undefined
+        }
+      },
+      methods: {
+        ready (cesiumInstance) {
+          const {Cesium, viewer} = cesiumInstance
+          this.positions1.push(Cesium.Cartesian3.fromDegrees(90, 20, 10000))
+          this.positions1.push(Cesium.Cartesian3.fromDegrees(120, 20, 10000))
+          this.material1 = Cesium.Color.RED
+          this.positions2.push(Cesium.Cartesian3.fromDegrees(90, 30, 10000))
+          this.positions2.push(Cesium.Cartesian3.fromDegrees(120, 30, 10000))
+          this.material2 = new Cesium.PolylineGlowMaterialProperty({
+            glowPower : 0.2,
+            color : Cesium.Color.BLUE
+          })
+          this.positions3.push(Cesium.Cartesian3.fromDegrees(90, 40, 10000))
+          this.positions3.push(Cesium.Cartesian3.fromDegrees(120, 40, 10000))
+          this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
+        }
+      }
+    }
+  </script>
+</doc-preview>
+
+#### Code
+
+```html
+<template>
+  <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <entity>
+        <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
+      </entity>
+      <entity>
+        <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
+      </entity>
+      <entity>
+        <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
+      </entity>
+    </cesium-viewer>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        positions1: [],
+        material1: undefined,
+        positions2: [],
+        material2: undefined,
+        positions3: [],
+        material3: undefined
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.positions1.push(Cesium.Cartesian3.fromDegrees(90, 20, 10000))
+        this.positions1.push(Cesium.Cartesian3.fromDegrees(120, 20, 10000))
+        this.material1 = Cesium.Color.RED
+        this.positions2.push(Cesium.Cartesian3.fromDegrees(90, 30, 10000))
+        this.positions2.push(Cesium.Cartesian3.fromDegrees(120, 30, 10000))
+        this.material2 = new Cesium.PolylineGlowMaterialProperty({
+          glowPower : 0.2,
+          color : Cesium.Color.BLUE
+        })
+        this.positions3.push(Cesium.Cartesian3.fromDegrees(90, 40, 10000))
+        this.positions3.push(Cesium.Cartesian3.fromDegrees(120, 40, 10000))
+        this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
+      }
+    }
+  }
+</script>
+```
+
+## Instance Properties
+
+|name|type|default|description|
 |------|-----|-----|----|
-||id|String|`optional` A unique identifier for this object. If none is provided, a GUID is generated.|
-|name|String|`optional` A human readable name to display to users. It does not have to be unique.|
-|availability|TimeIntervalCollection|`optional` The availability, if any, associated with this object.|
-|show|Boolean|`optional` A boolean value indicating if the entity and its children are displayed.|
-|description|Property|`optional` A string Property specifying an HTML description for this entity.|
-|position|PositionProperty|`optional` A Property specifying the entity position.|
-|orientation|Property|`optional` A Property specifying the entity orientation.|
-|viewFrom|Property|`optional` A suggested initial offset for viewing this object.|
-|parent|Entity|`optional` A parent entity to associate with this entity.|
 |positions|Property||`optional` A Property specifying the array of Cartesian3 positions that define the line strip.|
 |followSurface|Property|true|`optional` A boolean Property specifying whether the line segments should be great arcs or linearly connected.|
 |clampToGround|Property|false|`optional` A boolean Property specifying whether the Polyline should be clamped to the ground.|
@@ -28,109 +127,9 @@
 |zIndex|Property|0|`optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if `clampToGround` is true and polylines on terrain is supported.|
 ---
 
-## 事件
+## Events
 
 |事件名|参数|描述|
 |------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|allTilesLoaded||所有tiles加载完毕后触发该事件。|
-|initialTilesLoaded||触发该事件以指示已加载满足此帧的屏幕空间错误的所有切片。|
-|loadProgress||该事件指示tile加载进度。|
-|tileFailed||tile加载失败时触发该事件。|
-|tileLoad||tile加载完成后触发该事件。|
-|tileUnload||tile加载未成功加载时触发该事件。|
-|tileVisible||tile可见性发生改变时触发该事件。|
-
-## 示例
-
-### 3DTiles模型
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer">
-    <div class="demo-tool">
-      <span>切换地址</span>
-      <md-select v-model="url" placeholder="切换地址">
-        <md-option
-          v-for="item in options"
-          :key="item.value"
-          :value="item.value">
-          {{item.label}}
-        </md-option>
-      </md-select>
-    </div>
-    <cesium-viewer>
-      <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        options: [{
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          label: '数据1'
-        }, {
-          value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-          label: '数据2'
-        }],
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
-
-<doc-preview>
-  <template>
-    <div class="viewer">
-      <div class="demo-tool">
-        <span>切换地址</span>
-        <md-select v-model="url" placeholder="切换地址">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
-      <cesium-viewer>
-        <cesium-3dtileset ref="tileset" :url="url" @ready="ready"/>
-      </cesium-viewer>
-    </div>
-  </template>
-
-  <script>
-    export default {
-      data () {
-        return {
-          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          options: [{
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-            label: '数据1'
-          }, {
-            value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-            label: '数据2'
-          }],
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-        }
-      }
-    }
-  </script>
-</doc-preview>
+|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|

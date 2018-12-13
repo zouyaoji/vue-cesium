@@ -1,16 +1,19 @@
-# 3DTiles模型
+# Cesium3DTileset模型
 
 `cesium-3dtileset`用于加载3DTiles模型。
 
 ## 示例
 
-### 加载3DTileset模型
+### 加载Cesium3DTileset模型到场景
 
 #### 预览
 
 <doc-preview>
   <template>
     <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+      </cesium-viewer>
       <div class="demo-tool">
         <span>切换地址</span>
         <md-select v-model="url" placeholder="切换地址">
@@ -22,9 +25,6 @@
           </md-option>
         </md-select>
       </div>
-      <cesium-viewer @ready="ready">
-        <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
-      </cesium-viewer>
     </div>
   </template>
 
@@ -60,6 +60,9 @@
 ```html
 <template>
   <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
+    </cesium-viewer>
     <div class="demo-tool">
       <span>切换地址</span>
       <md-select v-model="url" placeholder="切换地址">
@@ -71,9 +74,6 @@
         </md-option>
       </md-select>
     </div>
-    <cesium-viewer @ready="ready">
-      <cesium-3dtileset :url="url" @readyPromise="readyPromise"/>
-    </cesium-viewer>
   </div>
 </template>
 
@@ -142,13 +142,6 @@
 |debugShowMemoryUsage|Boolean|false|`optional` 仅调试可用，如果为true，则绘制标签表示每个tile的纹理和几何内存，以mb为单位。|
 |debugShowUrl|Boolean|false|`optional` 仅调试可用，如果为true，则绘制标签表示每个tile的网址。|
 |isZoomTo|Boolean|true|`optional` 加载到scene之后是否定位到该模型。|
----
-
-## 方法
-
-|函数|返回|说明|
-|------|----|----|
-|getInstance|[Cesium.Cesium3DTileset](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)|获取`Cesium3DTileset`实例。|
 ---
 
 ## 事件

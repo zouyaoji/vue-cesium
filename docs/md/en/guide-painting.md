@@ -1,128 +1,24 @@
-# 绘制
+# Painting
 
-## 说明
+## Examples
 
-由于 MVVM 数据驱动视图的特性，绘制很方便。
+### Draw polylines
 
-## 示例
-
-### 绘制实体线
-
-#### 代码
-
-```html
-<template>
-  <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle">{{ polyline.editing ? '停止绘制' : '开始绘制' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-      </div>
-    <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
-      <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-      <polyline-entity :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
-        :width="5"></polyline-entity>
-    </cesium-viewer>
-  </div>
-</template>
-
-<script>
-  export default {
-    data () {
-      return {
-        modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        material: undefined,
-        polyline: {
-          editing: false,
-          paths: []
-        },
-        options: [],
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.cesiumInstance = cesiumInstance
-        viewer.scene.globe.depthTestAgainstTerrain = true
-
-        this.material = new Cesium.PolylineDashMaterialProperty({
-          color: Cesium.Color.CYAN
-        })
-      },
-      toggle (name) {
-        this.polyline.editing = !this.polyline.editing
-      },
-      clear () {
-        const { viewer} = this.cesiumInstance
-        viewer.entities.removeAll()
-      },
-      LEFT_CLICK (movement) {
-        if (!this.polyline.editing) {
-          return
-        }          
-        const {Cesium, viewer} = this.cesiumInstance
-        const {paths} = this.polyline
-        !paths.length && paths.push([])
-        let cartesian = viewer.scene.pickPosition(movement.position)
-        if (!Cesium.defined(cartesian)) {
-          return
-        }
-        paths[paths.length - 1].push(cartesian)
-      },
-      MOUSE_MOVE (movement) {
-        if (!this.polyline.editing) {
-          return
-        }
-        const {paths} = this.polyline
-        if (!paths.length) {
-          return
-        }
-        const path = paths[paths.length - 1]
-        if (!path.length) {
-          return
-        }
-        const {Cesium, viewer} = this.cesiumInstance
-        let cartesian = viewer.scene.pickPosition(movement.endPosition)
-        if (!Cesium.defined(cartesian)) {
-          return
-        }
-        if (path.length === 1) {
-          path.push(cartesian)
-        }
-        this.$set(path, path.length - 1, cartesian)
-      },
-      RIGHT_CLICK (movement) {
-        if (!this.polyline.editing) {
-          return
-        }
-        const {paths} = this.polyline
-        if(!paths.length) {
-          paths.push([])
-        }
-        const path = paths[paths.length - 1]
-        path.pop()
-        if (path.length) {
-          paths.push([])
-        }
-      }
-    }
-  }
-</script>
-```
-
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
-        <div class="demo-tool">
-          <md-button class="md-raised md-accent" @click="toggle">{{ polyline.editing ? '停止绘制' : '开始绘制' }}</md-button>
-          <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-        </div>
       <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
-        <cesium-3dtileset :url="modelUrl"></cesium-3dtileset>
-        <polyline-entity :positions="path" :key="index" :material="material" v-for="(path, index) of polyline.paths"
-          :width="5"></polyline-entity>
+        <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
+        <entity :key="index" v-for="(polyline, index) of polylines">
+          <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
+        </entity>
       </cesium-viewer>
+      <div class="demo-tool">
+        <md-button class="md-raised md-accent" @click="toggle">{{ editing ? 'stop' : 'start' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+      </div>
     </div>
   </template>
 
@@ -130,13 +26,11 @@
     export default {
       data () {
         return {
-          modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          tilesetUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           material: undefined,
-          polyline: {
-            editing: false,
-            paths: []
-          },
-          options: [],
+          editing: false,
+          polylines: [],
+          options: []
         }
       },
       methods: {
@@ -144,41 +38,51 @@
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
-
           this.material = new Cesium.PolylineDashMaterialProperty({
             color: Cesium.Color.CYAN
           })
         },
         toggle (name) {
-          this.polyline.editing = !this.polyline.editing
+          this.editing = !this.editing
+          const { polylines } = this
+          if (this.editing){
+            polylines.push({positions: []})
+          } else {
+            if (!polylines.length) {
+              return
+            }
+            const polyline = polylines[polylines.length - 1]
+            if (polyline.positions.length === 0) {
+              polylines.pop()
+            }
+          }
         },
         clear () {
-          const { viewer} = this.cesiumInstance
-          viewer.entities.removeAll()
+          this.polylines = []
         },
         LEFT_CLICK (movement) {
-          if (!this.polyline.editing) {
+          if (!this.editing) {
             return
-          }          
+          }
           const {Cesium, viewer} = this.cesiumInstance
-          const {paths} = this.polyline
-          !paths.length && paths.push([])
+          const { polylines } = this
+          !polylines.length && polylines.push({positions: []})
           let cartesian = viewer.scene.pickPosition(movement.position)
           if (!Cesium.defined(cartesian)) {
             return
           }
-          paths[paths.length - 1].push(cartesian)
+          polylines[polylines.length - 1].positions.push(cartesian)
         },
         MOUSE_MOVE (movement) {
-          if (!this.polyline.editing) {
+          if (!this.editing) {
             return
           }
-          const {paths} = this.polyline
-          if (!paths.length) {
+          const { polylines } = this
+          if (!polylines.length) {
             return
           }
-          const path = paths[paths.length - 1]
-          if (!path.length) {
+          const polyline = polylines[polylines.length - 1]
+          if (!polyline.positions.length) {
             return
           }
           const {Cesium, viewer} = this.cesiumInstance
@@ -186,26 +90,154 @@
           if (!Cesium.defined(cartesian)) {
             return
           }
-          if (path.length === 1) {
-            path.push(cartesian)
+          if (polyline.positions.length === 1) {
+            polyline.positions.push(cartesian)
           }
-          this.$set(path, path.length - 1, cartesian)
+          this.$set(polyline.positions, polyline.positions.length - 1, cartesian)
         },
         RIGHT_CLICK (movement) {
-          if (!this.polyline.editing) {
+          if (!this.editing) {
             return
           }
-          const {paths} = this.polyline
-          if(!paths.length) {
-            paths.push([])
+          const { polylines } = this
+          if(!polylines.length) {
+            return
           }
-          const path = paths[paths.length - 1]
-          path.pop()
-          if (path.length) {
-            paths.push([])
+          const {viewer} = this.cesiumInstance
+          let cartesian = viewer.scene.pickPosition(movement.position)
+          if (!Cesium.defined(cartesian)) {
+            return
           }
+          const polyline = polylines[polylines.length - 1]
+          polyline.positions.pop()
+          polyline.positions.push(cartesian)
+          if (polylines.length) {
+            polylines.push({positions: []})
+          }
+        },
+        readyPromise (tileset) {
+          this.cesiumInstance.viewer.zoomTo(tileset)
         }
       }
     }
   </script>
 </doc-preview>
+
+#### Code
+
+```html
+<template>
+  <div class="viewer">
+    <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
+      <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
+      <entity :key="index" v-for="(polyline, index) of polylines">
+        <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
+      </entity>
+    </cesium-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle">{{ editing ? 'start' : 'stop' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        tilesetUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+        material: undefined,
+        editing: false,
+        polylines: [],
+        options: []
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+        viewer.scene.globe.depthTestAgainstTerrain = true
+        this.material = new Cesium.PolylineDashMaterialProperty({
+          color: Cesium.Color.CYAN
+        })
+      },
+      toggle (name) {
+        this.editing = !this.editing
+        const { polylines } = this
+        if (this.editing){
+          polylines.push({positions: []})
+        } else {
+          if (!polylines.length) {
+            return
+          }
+          const polyline = polylines[polylines.length - 1]
+          if (polyline.positions.length === 0) {
+            polylines.pop()
+          }
+        }
+      },
+      clear () {
+        this.polylines = []
+      },
+      LEFT_CLICK (movement) {
+        if (!this.editing) {
+          return
+        }
+        const {Cesium, viewer} = this.cesiumInstance
+        const { polylines } = this
+        !polylines.length && polylines.push({positions: []})
+        let cartesian = viewer.scene.pickPosition(movement.position)
+        if (!Cesium.defined(cartesian)) {
+          return
+        }
+        polylines[polylines.length - 1].positions.push(cartesian)
+      },
+      MOUSE_MOVE (movement) {
+        if (!this.editing) {
+          return
+        }
+        const { polylines } = this
+        if (!polylines.length) {
+          return
+        }
+        const polyline = polylines[polylines.length - 1]
+        if (!polyline.positions.length) {
+          return
+        }
+        const {Cesium, viewer} = this.cesiumInstance
+        let cartesian = viewer.scene.pickPosition(movement.endPosition)
+        if (!Cesium.defined(cartesian)) {
+          return
+        }
+        if (polyline.positions.length === 1) {
+          polyline.positions.push(cartesian)
+        }
+        this.$set(polyline.positions, polyline.positions.length - 1, cartesian)
+      },
+      RIGHT_CLICK (movement) {
+        if (!this.editing) {
+          return
+        }
+        const { polylines } = this
+        if(!polylines.length) {
+          return
+        }
+        const {viewer} = this.cesiumInstance
+        let cartesian = viewer.scene.pickPosition(movement.position)
+        if (!Cesium.defined(cartesian)) {
+          return
+        }
+        const polyline = polylines[polylines.length - 1]
+        polyline.positions.pop()
+        polyline.positions.push(cartesian)
+        if (polylines.length) {
+          polylines.push({positions: []})
+        }
+      },
+      readyPromise (tileset) {
+        this.cesiumInstance.viewer.zoomTo(tileset)
+      }
+    }
+  }
+</script>
+```

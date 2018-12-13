@@ -1,4 +1,4 @@
-import common from './common3'
+import common from './common'
 import stubVNode from './stubVNode'
 export default {
   mixins: [stubVNode, common],

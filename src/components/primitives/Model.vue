@@ -1,9 +1,8 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitive from '../../mixins/primitive'
 export default {
   name: 'model-primitive',
-  render (h) {},
-  mixins: [commonMixin('primitives')],
+  mixins: [primitive],
   props: {
     url: {
       type: String
@@ -170,8 +169,8 @@ export default {
     }
   },
   methods: {
-    load () {
-      const { Cesium, viewer, url, basePath, show, modelMatrix, scale, minimumPixelSize, maximumScale, id, allowPicking, incrementallyLoadTextures,
+    createCesiumObject () {
+      const { Cesium, url, basePath, show, modelMatrix, scale, minimumPixelSize, maximumScale, id, allowPicking, incrementallyLoadTextures,
         asynchronous, clampAnimations, shadows, debugShowBoundingVolume, debugWireframe, heightReference, scene, distanceDisplayCondition, color,
         colorBlendMode, colorBlendAmount, silhouetteColor, silhouetteSize, clippingPlanes, dequantizeInShader } = this
 
@@ -202,16 +201,8 @@ export default {
         clippingPlanes: clippingPlanes,
         dequantizeInShader: dequantizeInShader
       })
-      model.readyPromise.then(model => {
-        this.$emit('readyPromise', model)
-      }).otherwise(error => {
-        throw new Cesium.DeveloperError(error)
-      })
-      this.originInstance = viewer.scene.primitives.add(model)
+      return model
     }
   }
 }
 </script>
-
-<style>
-</style>

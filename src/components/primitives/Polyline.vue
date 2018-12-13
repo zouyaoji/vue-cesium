@@ -1,9 +1,8 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitiveCollectionItem from '../../mixins/primitiveCollectionItem'
 export default {
   name: 'polyline-primitive',
-  render (h) {},
-  mixins: [commonMixin('polyline-primitive')],
+  mixins: [primitiveCollectionItem],
   props: {
     show: {
       type: Boolean,
@@ -32,30 +31,30 @@ export default {
   },
   watch: {
     show (val) {
-      this.originInstance.val = val
+      this.primitive.val = val
     },
     width (val) {
-      this.originInstance.width = val
+      this.primitive.width = val
     },
     loop (val) {
-      this.originInstance.loop = val
+      this.primitive.loop = val
     },
     material (val) {
-      this.originInstance.material = val
+      this.primitive.material = val
     },
     positions (val) {
-      this.originInstance.positions = val
+      this.primitive.positions = val
     },
     id (val) {
-      this.originInstance.id = val
+      this.primitive.id = val
     },
     distanceDisplayCondition (val) {
-      this.originInstance.distanceDisplayCondition = val
+      this.primitive.distanceDisplayCondition = val
     }
   },
   methods: {
-    load () {
-      const { show, width, loop, material, positions, id, distanceDisplayCondition } = this
+    createCesiumObject () {
+      const { primitiveCollection, show, width, loop, material, positions, id, distanceDisplayCondition } = this
       let polyline = {
         show: show,
         width: width,
@@ -65,7 +64,7 @@ export default {
         id: id,
         distanceDisplayCondition: distanceDisplayCondition
       }
-      this.originInstance = this.$parent.originInstance.add(polyline)
+      return primitiveCollection.add(polyline)
     }
   }
 }
