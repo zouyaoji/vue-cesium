@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <sm-cesium-viewer :cesiumPath="cesiumPath">
+      <sm-cesium-viewer :cesiumPath="cesiumPath" navigation>
         <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
         </imagery-layer>
@@ -73,7 +73,7 @@
 ```html
 <template>
   <div class="viewer">
-    <sm-cesium-viewer :cesiumPath="cesiumPath">
+    <sm-cesium-viewer :cesiumPath="cesiumPath" navigation>
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
       </imagery-layer>

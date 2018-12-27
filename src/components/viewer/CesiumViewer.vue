@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-12-05 11:27:30
+ * @Last Modified time: 2018-12-27 14:19:19
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -881,7 +881,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       }
 
-      this.viewerContainer = this.$refs.viewer.children[0]
+      this.viewerContainer = getDocumentByClassName(this.$refs.viewer.children, 'cesium-viewer')
       if (Cesium.defined(Cesium.SuperMapImageryProvider) && !this.logo) {
         let credit = viewer.scene.frameState.creditDisplay
         credit.container.removeChild(credit._imageContainer)
