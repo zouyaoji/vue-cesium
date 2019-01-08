@@ -43,13 +43,13 @@
         return {
           cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
           options: [{
-            value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+            value: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
             label: '四川地图'
           }, {
             value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
             label: '谷歌地图'
           }],
-          url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+          url: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           alpha: 1,
           brightness: 1,
           contrast: 1
