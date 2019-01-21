@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2018-12-27 14:19:19
+ * @Last Modified time: 2019-01-21 14:36:44
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -189,6 +189,10 @@ export default {
     logo: {
       type: Boolean,
       default: true
+    },
+    accessToken: {
+      type: String,
+      default: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
     },
     camera: {
       type: Object,
@@ -798,6 +802,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       //     $el = $node.elm
       //   }
       // }
+      Cesium.Ion.defaultAccessToken = this.accessToken
       const viewer = new Cesium.Viewer($el, {
         animation: this.animation,
         baseLayerPicker: this.baseLayerPicker,
