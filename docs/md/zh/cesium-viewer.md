@@ -164,6 +164,7 @@
 |mapMode2D|Number|1|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。|
 |projectionPicker|Boolean|false|`optional`是否显示投影切换按钮|
 |logo|Boolean|true| `optional` 是否显示默认logo.|
+|accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。|
 |camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。|
 ---
 

@@ -36,6 +36,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 |terrainShadows|Number|3|`optional`Determines if the terrain casts or receives shadows from the sun.|
 |mapMode2D|Number|1|`optional`Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.|
 |projectionPicker|Boolean|false|`optional`If set to true, the ProjectionPicker widget will be created.|
+|accessToken|String||`optional`set accessToken of Cesium ion|
 |logo|Boolean|true| `optional` Determines if default logo is displayed on the viewer.|
 ---
 
