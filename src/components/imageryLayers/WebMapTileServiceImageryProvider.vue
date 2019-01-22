@@ -62,6 +62,9 @@ export default {
     subdomains: {
       type: String | Array,
       default: 'abc'
+    },
+    token: {
+      type: String
     }
   },
   watch: {
@@ -123,9 +126,9 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, url, format, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
-        tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains } = this
+        tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
       let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
-        url: url,
+        url: Cesium.defined(token) ? url + '&tk=' + token : url,
         format: format,
         style: wmtsStyle,
         tileMatrixSetID: tileMatrixSetID,
