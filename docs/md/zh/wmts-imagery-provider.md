@@ -14,11 +14,11 @@
       <cesium-viewer @ready="ready" @layerAdded="layerAdded">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
+          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token"></wmts-imagery-provider>
        </imagery-layer>
        <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
+          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token"></wmts-imagery-provider>
        </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
@@ -62,7 +62,8 @@
           }],
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          token: '436ce7e50d27eede2f2929307e6b33c0'
         }
       },
       methods: {
@@ -90,12 +91,12 @@
   <div class="viewer">
     <cesium-viewer @ready="ready" @layerAdded="layerAdded">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-        :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast"></wmts-imagery-provider>
+        <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
+          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token"></wmts-imagery-provider>
       </imagery-layer>
       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-        :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels"></wmts-imagery-provider>
+        <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
+          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token"></wmts-imagery-provider>
       </imagery-layer>
     </cesium-viewer>
     <div class="demo-tool">
@@ -139,7 +140,8 @@
         }],
         alpha: 1,
         brightness: 1,
-        contrast: 1
+        contrast: 1,
+        token: '436ce7e50d27eede2f2929307e6b33c0'
       }
     },
     methods: {
@@ -182,6 +184,7 @@
 |ellipsoid|Ellipsoid||`optional` 参考椭球体，没指定默认WGS84椭球。|
 |credit|Credit | String||`optional` 数据源描述信息。|
 |subdomains|String| Array |'abc'|`optional` 指定URL模板中{s}占位符的子域。 如果此参数是单个字符串，则字符串中的每个字符都是子域。 如果是数组，则数组中的每个元素都是子域。|
+|token|String|||`optional` 指定服务token|
 ---
 
 ## 事件
