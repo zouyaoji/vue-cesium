@@ -11,8 +11,22 @@ import WebMapTileServiceImageryProvider from '@/imageryLayers/WebMapTileServiceI
 import SuperMapImageryProvider from '@/imageryLayers/SuperMapImageryProvider.vue'
 
 import Entity from '@/entities/Entity.vue'
-import PolylineGraphics from '@/entities/PolylineGraphics.vue'
+import BillboardGraphics from '@/entities/BillboardGraphics.vue'
+import BoxGraphics from '@/entities/BoxGraphics.vue'
+import CorridorGraphics from '@/entities/CorridorGraphics.vue'
+import CylinderGraphics from '@/entities/CylinderGraphics.vue'
+import EllipseGraphics from '@/entities/EllipseGraphics.vue'
+import EllipsoidGraphics from '@/entities/EllipsoidGraphics.vue'
+import LabelGraphics from '@/entities/LabelGraphics.vue'
+import ModelGraphics from '@/entities/ModelGraphics.vue'
+import PathGraphics from '@/entities/PathGraphics.vue'
+import PlaneGraphics from '@/entities/PlaneGraphics.vue'
+import PointGraphics from '@/entities/PointGraphics.vue'
 import PolygonGraphics from '@/entities/PolygonGraphics.vue'
+import PolylineGraphics from '@/entities/PolylineGraphics.vue'
+import PolylineVolumeGraphics from '@/entities/PolylineVolumeGraphics.vue'
+import RectangleGraphics from '@/entities/RectangleGraphics.vue'
+import WallGraphics from '@/entities/WallGraphics.vue'
 
 import PointCollection from '@/primitives/PointPrimitiveCollection.vue'
 import PolylineCollection from '@/primitives/PolylineCollection.vue'
@@ -43,8 +57,22 @@ export default {
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
 
     Vue.component(Entity.name, Entity)
-    Vue.component(PolylineGraphics.name, PolylineGraphics)
+    Vue.component(BillboardGraphics.name, BillboardGraphics)
+    Vue.component(BoxGraphics.name, BoxGraphics)
+    Vue.component(CorridorGraphics.name, CorridorGraphics)
+    Vue.component(CylinderGraphics.name, CylinderGraphics)
+    Vue.component(EllipseGraphics.name, EllipseGraphics)
+    Vue.component(EllipsoidGraphics.name, EllipsoidGraphics)
+    Vue.component(LabelGraphics.name, LabelGraphics)
+    Vue.component(ModelGraphics.name, ModelGraphics)
+    Vue.component(PathGraphics.name, PathGraphics)
+    Vue.component(PlaneGraphics.name, PlaneGraphics)
+    Vue.component(PointGraphics.name, PointGraphics)
     Vue.component(PolygonGraphics.name, PolygonGraphics)
+    Vue.component(PolylineGraphics.name, PolylineGraphics)
+    Vue.component(PolylineVolumeGraphics.name, PolylineVolumeGraphics)
+    Vue.component(RectangleGraphics.name, RectangleGraphics)
+    Vue.component(WallGraphics.name, WallGraphics)
 
     Vue.component(Cesium3DTileset.name, Cesium3DTileset)
     Vue.component(PolylineCollection.name, PolylineCollection)
@@ -63,7 +91,47 @@ export default {
 }
 
 export {
-  CesiumViewer, ImageryLayer, ArcGisMapServerImageryProvider, BingMapsImageryProvider, MapboxImageryProvider, OpenStreetMapImageryProvider, SingleTileImageryProvider,
-  UrlTemplateImageryProvider, WebMapTileServiceImageryProvider, SuperMapImageryProvider, Entity, PolylineGraphics, Cesium3DTileset, PolygonGraphics, PointCollection,
-  PolylineCollection, PointPrimitive, Polyline, LabelCollection, Label, MeasureDistance, MeasureArea, MeasureHeight, Model
+  CesiumViewer,
+
+  ImageryLayer,
+  ArcGisMapServerImageryProvider,
+  BingMapsImageryProvider,
+  MapboxImageryProvider,
+  OpenStreetMapImageryProvider,
+  SingleTileImageryProvider,
+  UrlTemplateImageryProvider,
+  WebMapTileServiceImageryProvider,
+  SuperMapImageryProvider,
+
+  Entity,
+  BillboardGraphics,
+  BoxGraphics,
+  CorridorGraphics,
+  CylinderGraphics,
+  EllipseGraphics,
+  EllipsoidGraphics,
+  LabelGraphics,
+  ModelGraphics,
+  PathGraphics,
+  PlaneGraphics,
+  PointGraphics,
+  PolygonGraphics,
+  PolylineGraphics,
+  PolylineVolumeGraphics,
+  RectangleGraphics,
+  WallGraphics,
+
+  Cesium3DTileset,
+  PointCollection,
+  PolylineCollection,
+  PointPrimitive,
+  Polyline,
+  LabelCollection,
+  Label,
+
+  MeasureDistance,
+  MeasureArea,
+  MeasureHeight,
+
+  Model
 }

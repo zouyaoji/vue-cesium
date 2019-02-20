@@ -33,7 +33,8 @@ export default {
       type: Number
     },
     shadows: {
-      type: Number
+      type: Number,
+      default: 0
     },
     distanceDisplayCondition: {
       type: Number
