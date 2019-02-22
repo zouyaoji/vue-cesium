@@ -14,7 +14,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -62,16 +62,16 @@ export default {
     createCesiumObject () {
       const { Cesium, plane, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
       let planeGraphics = new Cesium.PlaneGraphics({
-        plane: plane,
-        dimensions: dimensions,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition
+        plane,
+        dimensions,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        shadows,
+        distanceDisplayCondition
       })
 
       return planeGraphics

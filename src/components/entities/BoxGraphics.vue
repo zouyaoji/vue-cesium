@@ -14,7 +14,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -28,9 +28,7 @@ export default {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    }
+    distanceDisplayCondition: Object
   },
   watch: {
     heightReference (val) {
@@ -52,7 +50,7 @@ export default {
       this.graphics.outline = val
     },
     outlineColor (val) {
-      this.graphics.pixelOffset = val
+      this.graphics.outlineColor = val
     },
     outlineWidth (val) {
       this.graphics.rotation = val
@@ -68,16 +66,16 @@ export default {
     createCesiumObject () {
       const { Cesium, heightReference, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
       let box = new Cesium.BoxGraphics({
-        heightReference: heightReference,
-        dimensions: dimensions,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition
+        heightReference,
+        dimensions,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        shadows,
+        distanceDisplayCondition
       })
 
       return box

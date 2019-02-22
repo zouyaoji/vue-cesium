@@ -5,7 +5,7 @@ export default {
   mixins: [entityGraphics],
   props: {
     heightReference: Number,
-    radii: Number,
+    radii: Object,
     show: {
       type: Boolean,
       default: true
@@ -14,7 +14,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -40,7 +40,7 @@ export default {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: Number
+    distanceDisplayCondition: Object
   },
   watch: {
     heightReference (val) {
@@ -88,19 +88,19 @@ export default {
       const { Cesium, heightReference, radii, show, fill, material, outline, outlineColor, outlineWidth, subdivisions,
         stackPartitions, slicePartitions, shadows, distanceDisplayCondition } = this
       let ellipsoid = new Cesium.EllipsoidGraphics({
-        heightReference: heightReference,
-        radii: radii,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        subdivisions: subdivisions,
-        stackPartitions: stackPartitions,
-        slicePartitions: slicePartitions,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition
+        heightReference,
+        radii,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        subdivisions,
+        stackPartitions,
+        slicePartitions,
+        shadows,
+        distanceDisplayCondition
       })
 
       return ellipsoid

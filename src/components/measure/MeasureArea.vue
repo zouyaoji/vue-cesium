@@ -19,7 +19,7 @@
         </label-primitive>
       </template>
     </label-collection>
-    <entity :key="index" v-for="(polyline, index) of polylines">
+    <entity :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polygon">
       <polygon-graphics :ref="'line'+index" :hierarchy="polyline.positions" :perPositionHeight="true" :material="materialPolygon"></polygon-graphics>
     </entity>
   </i>
@@ -33,6 +33,7 @@ export default {
   mixins: [measure],
   data () {
     return {
+      polygon: {},
       measuring: false,
       polylines: [],
       font: '100 20px SimSun',

@@ -16,7 +16,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -38,9 +38,7 @@ export default {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    }
+    distanceDisplayCondition: Object
   },
   watch: {
     heightReference (val) {
@@ -91,20 +89,20 @@ export default {
       const { Cesium, heightReference, length, topRadius, bottomRadius, show, fill, material,
         outline, outlineColor, outlineWidth, numberOfVerticalLines, slices, shadows, distanceDisplayCondition } = this
       let cylinder = new Cesium.CylinderGraphics({
-        heightReference: heightReference,
-        length: length,
-        topRadius: topRadius,
-        bottomRadius: bottomRadius,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        numberOfVerticalLines: numberOfVerticalLines,
-        slices: slices,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition
+        heightReference,
+        length,
+        topRadius,
+        bottomRadius,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        numberOfVerticalLines,
+        slices,
+        shadows,
+        distanceDisplayCondition
       })
       return cylinder
     }

@@ -30,7 +30,8 @@ export default {
       type: Object
     },
     granularity: {
-      type: Number
+      type: Number,
+      default: Math.PI / 180.0
     },
     shadows: {
       type: Number,

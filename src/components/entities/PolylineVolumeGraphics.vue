@@ -20,7 +20,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -32,7 +32,7 @@ export default {
     },
     granularity: {
       type: Number,
-      default: 180.0 / Math.PI
+      default: Math.PI / 180.0
     },
     shadows: {
       type: Number,

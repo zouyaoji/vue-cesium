@@ -4,9 +4,7 @@ export default {
   name: 'polygon-graphics',
   mixins: [entityGraphics],
   props: {
-    hierarchy: {
-      type: Array
-    },
+    hierarchy: [Array, Object],
     height: {
       type: Number
     },
@@ -42,12 +40,12 @@ export default {
       default: 1.0
     },
     stRotation: {
-      type: Number,
+      type: [Number, Object],
       default: 0.0
     },
     granularity: {
       type: Number,
-      default: 0.017453292519943295
+      default: Math.PI / 180.0
     },
     perPositionHeight: {
       type: Boolean,
@@ -135,27 +133,27 @@ export default {
     createCesiumObject () {
       const { Cesium, hierarchy, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, stRotation, granularity, perPositionHeight, closeTop, closeBottom, shadows, distanceDisplayCondition, zIndex } = this
-      let polygon = {
-        hierarchy: hierarchy,
-        height: height,
-        heightReference: heightReference,
-        extrudedHeight: extrudedHeight,
-        extrudedHeightReference: extrudedHeightReference,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        stRotation: stRotation,
-        granularity: granularity,
-        perPositionHeight: perPositionHeight,
-        closeTop: closeTop,
-        closeBottom: closeBottom,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition,
-        zIndex: zIndex
-      }
+      let polygon = new Cesium.PolygonGraphics({
+        hierarchy,
+        height,
+        heightReference,
+        extrudedHeight,
+        extrudedHeightReference,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        stRotation,
+        granularity,
+        perPositionHeight,
+        closeTop,
+        closeBottom,
+        shadows,
+        distanceDisplayCondition,
+        zIndex
+      })
 
       polygon.hierarchy = new Cesium.CallbackProperty(() => this.hierarchy, false)
       return polygon

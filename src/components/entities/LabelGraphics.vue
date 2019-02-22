@@ -9,7 +9,7 @@ export default {
       type: String,
       default: '30px sans-serif'
     },
-    style: {
+    labelStyle: {
       type: Number,
       default: 0
     },
@@ -43,25 +43,15 @@ export default {
     },
     eyeOffset: Object,
     pixelOffset: Object,
-    translucencyByDistance: {
-      type: Object
-    },
-    pixelOffsetScaleByDistance: {
-      type: Object
-    },
-    scaleByDistance: {
-      type: Object
-    },
+    translucencyByDistance: Object,
+    pixelOffsetScaleByDistance: Object,
+    scaleByDistance: Object,
     heightReference: {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    },
-    disableDepthTestDistance: {
-      type: Number
-    }
+    distanceDisplayCondition: Object,
+    disableDepthTestDistance: Object
   },
   watch: {
     text (val) {
@@ -70,7 +60,7 @@ export default {
     font (val) {
       this.graphics.font = val
     },
-    style (val) {
+    labelStyle (val) {
       this.graphics.style = val
     },
     fillColor (val) {
@@ -130,31 +120,31 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, text, font, style, fillColor, outlineColor, outlineWidth, show, showBackground, backgroundColor, backgroundPadding, scale,
+      const { Cesium, text, font, labelStyle, fillColor, outlineColor, outlineWidth, show, showBackground, backgroundColor, backgroundPadding, scale,
         horizontalOrigin, verticalOrigin, eyeOffset, pixelOffset, translucencyByDistance, pixelOffsetScaleByDistance, scaleByDistance, heightReference,
         distanceDisplayCondition, disableDepthTestDistance } = this
       let label = new Cesium.LabelGraphics({
-        text: text,
-        font: font,
-        style: style,
-        fillColor: fillColor,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        show: show,
-        showBackground: showBackground,
-        backgroundColor: backgroundColor,
-        backgroundPadding: backgroundPadding,
-        scale: scale,
-        horizontalOrigin: horizontalOrigin,
-        verticalOrigin: verticalOrigin,
-        eyeOffset: eyeOffset,
-        pixelOffset: pixelOffset,
-        translucencyByDistance: translucencyByDistance,
-        pixelOffsetScaleByDistance: pixelOffsetScaleByDistance,
-        scaleByDistance: scaleByDistance,
-        heightReference: heightReference,
-        distanceDisplayCondition: distanceDisplayCondition,
-        disableDepthTestDistance: disableDepthTestDistance
+        text,
+        font,
+        labelStyle,
+        fillColor,
+        outlineColor,
+        outlineWidth,
+        show,
+        showBackground,
+        backgroundColor,
+        backgroundPadding,
+        scale,
+        horizontalOrigin,
+        verticalOrigin,
+        eyeOffset,
+        pixelOffset,
+        translucencyByDistance,
+        pixelOffsetScaleByDistance,
+        scaleByDistance,
+        heightReference,
+        distanceDisplayCondition,
+        disableDepthTestDistance
       })
 
       return label

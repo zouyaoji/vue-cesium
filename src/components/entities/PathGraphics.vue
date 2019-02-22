@@ -14,7 +14,7 @@ export default {
       type: Number,
       default: 1.0
     },
-    material: Object,
+    material: [Object, String],
     resolution: {
       type: Number,
       default: 60
@@ -47,14 +47,14 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, leadTime, trailTime, show, width, material, resolution, distanceDisplayCondition } = this
-      let path = new Cesium.ModelGraphics({
-        leadTime: leadTime,
-        trailTime: trailTime,
-        show: show,
-        width: width,
-        material: material,
-        resolution: resolution,
-        distanceDisplayCondition: distanceDisplayCondition
+      let path = new Cesium.PathGraphics({
+        leadTime,
+        trailTime,
+        show,
+        width,
+        material,
+        resolution,
+        distanceDisplayCondition
       })
 
       return path

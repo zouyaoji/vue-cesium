@@ -21,7 +21,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -36,22 +36,22 @@ export default {
       default: 16
     },
     rotation: {
-      type: Number,
+      type: [Number, Object],
       default: 0.0
     },
     stRotation: {
-      type: Number,
+      type: [Number, Object],
       default: 0.0
     },
     granularity: {
       type: Number,
-      default: 180.0 / Math.PI
+      default: Math.PI / 180.0
     },
     shadows: {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: Number,
+    distanceDisplayCondition: Object,
     classificationType: {
       type: Number,
       default: 2
@@ -128,26 +128,26 @@ export default {
       const { Cesium, semiMajorAxis, semiMinorAxis, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, numberOfVerticalLines, rotation, stRotation, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
       let ellipse = new Cesium.EllipseGraphics({
-        semiMajorAxis: semiMajorAxis,
-        semiMinorAxis: semiMinorAxis,
-        height: height,
-        heightReference: heightReference,
-        extrudedHeight: extrudedHeight,
-        extrudedHeightReference: extrudedHeightReference,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        numberOfVerticalLines: numberOfVerticalLines,
-        rotation: rotation,
-        stRotation: stRotation,
-        granularity: granularity,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition,
-        classificationType: classificationType,
-        zIndex: zIndex
+        semiMajorAxis,
+        semiMinorAxis,
+        height,
+        heightReference,
+        extrudedHeight,
+        extrudedHeightReference,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        numberOfVerticalLines,
+        rotation,
+        stRotation,
+        granularity,
+        shadows,
+        distanceDisplayCondition,
+        classificationType,
+        zIndex
       })
 
       return ellipse

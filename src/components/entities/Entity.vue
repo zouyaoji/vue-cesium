@@ -36,12 +36,8 @@ export default {
     parent: {
       type: Object
     },
-    billboard: {
-      type: Object
-    },
-    corridor: {
-      type: Object
-    },
+    billboard: Object,
+    corridor: Object,
     cylinder: {
       type: Object
     },
@@ -89,14 +85,14 @@ export default {
     }
   },
   watch: {
-    id () {
-      this.reload()
+    id (val) {
+      this.entity.id = val
     },
     name (val) {
       this.entity.name = val
     },
-    availability () {
-      this.reload()
+    availability (val) {
+      this.entity.availability = val
     },
     show (val) {
       this.entity.show = val
@@ -113,59 +109,59 @@ export default {
     viewFrom (val) {
       this.entity.viewFrom = val
     },
-    parent () {
-      this.reload()
+    parent (val) {
+      this.entity.viewFrom = val
     },
-    billboard () {
-      this.reload()
+    billboard (val) {
+      this.entity.billboard = val
     },
-    corridor () {
-      this.reload()
+    corridor (val) {
+      this.entity.corridor = val
     },
-    cylinder () {
-      this.reload()
+    cylinder (val) {
+      this.entity.cylinder = val
     },
-    ellipse () {
-      this.reload()
+    ellipse (val) {
+      this.entity.ellipse = val
     },
-    ellipsoid () {
-      this.reload()
+    ellipsoid (val) {
+      this.entity.ellipsoid = val
     },
-    box () {
-      this.reload()
+    box (val) {
+      this.entity.box = val
     },
-    label () {
-      this.reload()
+    label (val) {
+      this.entity.label = val
     },
-    model () {
-      this.reload()
+    model (val) {
+      this.entity.model = val
     },
-    path () {
-      this.reload()
+    path (val) {
+      this.entity.path = val
     },
-    plane () {
-      this.reload()
+    plane (val) {
+      this.entity.plane = val
     },
-    point () {
-      this.reload()
+    point (val) {
+      this.entity.point = val
     },
-    polygon () {
-      this.reload()
+    polygon (val) {
+      this.entity.polygon = val
     },
-    polyline () {
-      this.reload()
+    polyline (val) {
+      this.entity.polyline = val
     },
-    properties () {
-      this.reload()
+    properties (val) {
+      this.entity.properties = val
     },
-    polylineVolume () {
-      this.reload()
+    polylineVolume (val) {
+      this.entity.polylineVolume = val
     },
-    rectangle () {
-      this.reload()
+    rectangle (val) {
+      this.entity.rectangle = val
     },
-    wall () {
-      this.reload()
+    wall (val) {
+      this.entity.wall = val
     }
   },
   methods: {
@@ -173,32 +169,32 @@ export default {
       const { Cesium, id, name, availability, description, show, position, orientation, viewFrom, parent, billboard, corridor, cylinder,
         ellipse, ellipsoid, box, label, model, path, plane, point, polygon, polyline, properties, polylineVolume, rectangle, wall } = this
       let entity = new Cesium.Entity({
-        id: id,
-        name: name,
-        availability: availability,
-        show: show,
-        description: description,
-        position: position,
-        orientation: orientation,
-        viewFrom: viewFrom,
-        parent: parent,
-        billboard: billboard,
-        corridor: corridor,
-        cylinder: cylinder,
-        ellipse: ellipse,
-        ellipsoid: ellipsoid,
-        box: box,
-        label: label,
-        model: model,
-        path: path,
-        plane: plane,
-        point: point,
-        polygon: polygon,
-        polyline: polyline,
-        properties: properties,
-        polylineVolume: polylineVolume,
-        rectangle: rectangle,
-        wall: wall
+        id,
+        name,
+        availability,
+        description,
+        show,
+        position,
+        orientation,
+        viewFrom,
+        parent,
+        billboard,
+        corridor,
+        cylinder,
+        ellipse,
+        ellipsoid,
+        box,
+        label,
+        model,
+        path,
+        plane,
+        point,
+        polygon,
+        polyline,
+        properties,
+        polylineVolume,
+        rectangle,
+        wall
       })
       return entity
     },
@@ -212,11 +208,39 @@ export default {
       viewer.entities.remove(entity)
     },
     setGraphics (graphics) {
-      const { entity } = this
+      console.log('setGraphics')
       if (graphics instanceof Cesium.BillboardGraphics) {
-        entity.billboard = graphics
+        this.$emit('update:billboard', graphics)
+      } else if (graphics instanceof Cesium.BoxGraphics) {
+        this.$emit('update:box', graphics)
+      } else if (graphics instanceof Cesium.CorridorGraphics) {
+        this.$emit('update:corridor', graphics)
+      } else if (graphics instanceof Cesium.CylinderGraphics) {
+        this.$emit('update:cylinder', graphics)
+      } else if (graphics instanceof Cesium.EllipseGraphics) {
+        this.$emit('update:ellipse', graphics)
+      } else if (graphics instanceof Cesium.EllipsoidGraphics) {
+        this.$emit('update:ellipsoid', graphics)
+      } else if (graphics instanceof Cesium.LabelGraphics) {
+        this.$emit('update:label', graphics)
+      } else if (graphics instanceof Cesium.ModelGraphics) {
+        this.$emit('update:model', graphics)
+      } else if (graphics instanceof Cesium.PathGraphics) {
+        this.$emit('update:path', graphics)
+      } else if (graphics instanceof Cesium.PlaneGraphics) {
+        this.$emit('update:plane', graphics)
+      } else if (graphics instanceof Cesium.PointGraphics) {
+        this.$emit('update:point', graphics)
+      } else if (graphics instanceof Cesium.PolygonGraphics) {
+        this.$emit('update:polygon', graphics)
       } else if (graphics instanceof Cesium.PolylineGraphics) {
-        entity.polyline = graphics
+        this.$emit('update:polyline', graphics)
+      } else if (graphics instanceof Cesium.PolylineVolumeGraphics) {
+        this.$emit('update:polylineVolume', graphics)
+      } else if (graphics instanceof Cesium.RectangleGraphics) {
+        this.$emit('update:rectangle', graphics)
+      } else if (graphics instanceof Cesium.WallGraphics) {
+        this.$emit('update:wall', graphics)
       }
     },
     getServices () {

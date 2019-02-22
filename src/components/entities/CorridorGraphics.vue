@@ -25,7 +25,7 @@ export default {
       type: Boolean,
       default: true
     },
-    material: Object,
+    material: [Object, String],
     outline: {
       type: Boolean,
       default: false
@@ -37,15 +37,13 @@ export default {
     },
     granularity: {
       type: Number,
-      default: 180.0 / Math.PI
+      default: Math.PI / 180.0
     },
     shadows: {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    },
+    distanceDisplayCondition: Object,
     classificationType: {
       type: Number,
       default: 2
@@ -53,7 +51,8 @@ export default {
     zIndex: Number
   },
   watch: {
-    positions () {
+    positions (val) {
+      this.graphics.positions = val
     },
     width (val) {
       this.graphics.width = val
@@ -112,24 +111,24 @@ export default {
       const { Cesium, positions, width, cornerType, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material,
         outline, outlineColor, outlineWidth, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
       let corridor = new Cesium.CorridorGraphics({
-        positions: positions,
-        width: width,
-        cornerType: cornerType,
-        height: height,
-        heightReference: heightReference,
-        extrudedHeight: extrudedHeight,
-        extrudedHeightReference: extrudedHeightReference,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        granularity: granularity,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition,
-        classificationType: classificationType,
-        zIndex: zIndex
+        positions,
+        width,
+        cornerType,
+        height,
+        heightReference,
+        extrudedHeight,
+        extrudedHeightReference,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        granularity,
+        shadows,
+        distanceDisplayCondition,
+        classificationType,
+        zIndex
       })
       return corridor
     }

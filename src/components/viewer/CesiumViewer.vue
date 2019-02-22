@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-01-22 09:01:22
+ * @Last Modified time: 2019-02-21 18:47:30
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -599,6 +599,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     shadows (val) {
       const { viewer } = this
       viewer.scene.shadowMap.enabled = val
+    },
+    terrainProvider (val) {
+      const { viewer } = this
+      viewer.terrainProvider = val
     },
     'camera': {
       handler (val) {

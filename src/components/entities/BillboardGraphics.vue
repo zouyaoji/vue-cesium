@@ -21,55 +21,28 @@ export default {
       type: Number,
       default: 0
     },
-    eyeOffset: {
-      type: Object
-    },
-    pixelOffset: {
-      type: Object
-    },
+    eyeOffset: Object,
+    pixelOffset: Object,
     rotation: {
-      type: Number,
+      type: [Number, Object],
       default: 0
     },
-    alignedAxis: {
-      type: Object
-    },
-    width: {
-      type: Number
-    },
-    height: {
-      type: Number
-    },
-    color: {
-      type: Object
-    },
-    scaleByDistance: {
-      type: Object
-    },
-    translucencyByDistance: {
-      type: Object
-    },
-    pixelOffsetScaleByDistance: {
-      type: Object
-    },
-    imageSubRegion: {
-      type: Object
-    },
-    sizeInMeters: {
-      type: Boolean
-    },
-    heightReference: {
-      type: Number
-    },
-    distanceDisplayCondition: {
-      type: Number
-    },
-    disableDepthTestDistance: {
-      type: Number
-    }
+    alignedAxis: Object,
+    width: Number,
+    height: Number,
+    color: Object,
+    scaleByDistance: Object,
+    translucencyByDistance: Object,
+    pixelOffsetScaleByDistance: Object,
+    imageSubRegion: Object,
+    sizeInMeters: Boolean,
+    heightReference: Number,
+    distanceDisplayCondition: Object,
+    disableDepthTestDistance: Object
   },
   watch: {
-    image () {
+    image (val) {
+      this.graphics.image = val
     },
     show (val) {
       this.graphics.show = val
@@ -135,26 +108,26 @@ export default {
         color, scaleByDistance, translucencyByDistance, pixelOffsetScaleByDistance, imageSubRegion, sizeInMeters, heightReference, distanceDisplayCondition,
         disableDepthTestDistance } = this
       let billboard = new Cesium.BillboardGraphics({
-        image: image,
-        show: show,
-        scale: scale,
-        horizontalOrigin: horizontalOrigin,
-        verticalOrigin: verticalOrigin,
-        eyeOffset: eyeOffset,
-        pixelOffset: pixelOffset,
-        rotation: rotation,
-        alignedAxis: alignedAxis,
-        width: width,
-        height: height,
-        color: color,
-        scaleByDistance: scaleByDistance,
-        translucencyByDistance: translucencyByDistance,
-        pixelOffsetScaleByDistance: pixelOffsetScaleByDistance,
-        imageSubRegion: imageSubRegion,
-        sizeInMeters: sizeInMeters,
-        heightReference: heightReference,
-        distanceDisplayCondition: distanceDisplayCondition,
-        disableDepthTestDistance: disableDepthTestDistance
+        image,
+        show,
+        scale,
+        horizontalOrigin,
+        verticalOrigin,
+        eyeOffset,
+        pixelOffset,
+        rotation,
+        alignedAxis,
+        width,
+        height,
+        color,
+        scaleByDistance,
+        translucencyByDistance,
+        pixelOffsetScaleByDistance,
+        imageSubRegion,
+        sizeInMeters,
+        heightReference,
+        distanceDisplayCondition,
+        disableDepthTestDistance
       })
 
       return billboard

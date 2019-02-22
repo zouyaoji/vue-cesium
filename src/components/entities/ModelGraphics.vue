@@ -4,14 +4,14 @@ export default {
   name: 'model-graphics',
   mixins: [entityGraphics],
   props: {
-    url: String,
+    uri: String,
     show: {
       type: Boolean,
       default: true
     },
     scale: {
-      type: Boolean,
-      default: true
+      type: Number,
+      default: 1.0
     },
     minimumPixelSize: {
       type: Number,
@@ -39,9 +39,7 @@ export default {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    },
+    distanceDisplayCondition: Object,
     silhouetteColor: Object,
     silhouetteSize: {
       type: Number,
@@ -128,26 +126,26 @@ export default {
         shadows, heightReference, distanceDisplayCondition, silhouetteColor, silhouetteSize, color, colorBlendMode, colorBlendAmount, clippingPlanes,
         imageBasedLightingFactor, lightColor } = this
       let model = new Cesium.ModelGraphics({
-        uri: uri,
-        show: show,
-        scale: scale,
-        minimumPixelSize: minimumPixelSize,
-        maximumScale: maximumScale,
-        incrementallyLoadTextures: incrementallyLoadTextures,
-        runAnimations: runAnimations,
-        clampAnimations: clampAnimations,
-        nodeTransformations: nodeTransformations,
-        shadows: shadows,
-        heightReference: heightReference,
-        distanceDisplayCondition: distanceDisplayCondition,
-        silhouetteColor: silhouetteColor,
-        silhouetteSize: silhouetteSize,
-        color: color,
-        colorBlendMode: colorBlendMode,
-        colorBlendAmount: colorBlendAmount,
-        clippingPlanes: clippingPlanes,
-        imageBasedLightingFactor: imageBasedLightingFactor,
-        lightColor: lightColor
+        uri,
+        show,
+        scale,
+        minimumPixelSize,
+        maximumScale,
+        incrementallyLoadTextures,
+        runAnimations,
+        clampAnimations,
+        nodeTransformations,
+        shadows,
+        heightReference,
+        distanceDisplayCondition,
+        silhouetteColor,
+        silhouetteSize,
+        color,
+        colorBlendMode,
+        colorBlendAmount,
+        clippingPlanes,
+        imageBasedLightingFactor,
+        lightColor
       })
 
       return model

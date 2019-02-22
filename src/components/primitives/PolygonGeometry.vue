@@ -22,14 +22,15 @@ export default {
       type: Object
     },
     stRotation: {
-      type: Number,
+      type: [Number, Object],
       default: 0.0
     },
     ellipsoid: {
       type: Object
     },
     granularity: {
-      type: Number
+      type: Number,
+      default: Math.PI / 180.0
     },
     perPositionHeight: {
       type: Boolean,
