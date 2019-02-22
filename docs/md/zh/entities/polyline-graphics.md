@@ -1,6 +1,6 @@
-# 折线对象
+# 折线
 
-`polyline-graphics`需要配合`entity`使用。
+`polyline-graphics` 折线组件，作为`entity`的子组件添加包折线对象的实体到场景。折线对象描述的是折线，前两个位置定义线段，每个附加位置定义前一个位置的线段。 这些段可以是线性连接点，大弧度或夹紧到地形。如示例所示。
 
 ## 示例
 
@@ -12,13 +12,13 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <entity>
+        <entity :polyline.sync="polyline1">
           <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
         </entity>
-        <entity>
+        <entity :polyline.sync="polyline2">
           <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
         </entity>
-        <entity>
+        <entity :polyline.sync="polyline3">
           <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
         </entity>
       </cesium-viewer>
@@ -29,10 +29,13 @@
     export default {
       data () {
         return {
+          polyline1: {},
           positions1: [],
           material1: undefined,
+          polyline2: {},
           positions2: [],
           material2: undefined,
+          polyline3: {},
           positions3: [],
           material3: undefined
         }
@@ -64,13 +67,13 @@
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
-      <entity>
+      <entity :polyline.sync="polyline1">
         <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
       </entity>
-      <entity>
+      <entity :polyline.sync="polyline2">
         <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
       </entity>
-      <entity>
+      <entity :polyline.sync="polyline3">
         <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
       </entity>
     </cesium-viewer>
@@ -81,10 +84,13 @@
   export default {
     data () {
       return {
+        polyline1: {},
         positions1: [],
         material1: undefined,
+        polyline2: {},
         positions2: [],
         material2: undefined,
+        polyline3: {},
         positions3: [],
         material3: undefined
       }

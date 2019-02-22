@@ -1,6 +1,6 @@
 # PolylineGraphics
 
-`polyline-graphics`Describes a polyline. The first two positions define a line segment, and each additional position defines a line segment from the previous position. The segments can be linear connected points, great arcs, or clamped to terrain.
+`polyline-graphics` Add an entity containing a polyline object to the viewer as a subcomponent of `entity`. Describes a polyline. The first two positions define a line segment, and each additional position defines a line segment from the previous position. The segments can be linear connected points, great arcs, or clamped to terrain. As shown in the example below.
 
 ## Examples
 
@@ -9,16 +9,16 @@
 #### Preview
 
 <doc-preview>
-  <template>
+<template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <entity>
+        <entity :polyline.sync="polyline1">
           <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
         </entity>
-        <entity>
+        <entity :polyline.sync="polyline2">
           <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
         </entity>
-        <entity>
+        <entity :polyline.sync="polyline3">
           <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
         </entity>
       </cesium-viewer>
@@ -29,10 +29,13 @@
     export default {
       data () {
         return {
+          polyline1: {},
           positions1: [],
           material1: undefined,
+          polyline2: {},
           positions2: [],
           material2: undefined,
+          polyline3: {},
           positions3: [],
           material3: undefined
         }
@@ -64,13 +67,13 @@
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
-      <entity>
+      <entity :polyline.sync="polyline1">
         <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
       </entity>
-      <entity>
+      <entity :polyline.sync="polyline2">
         <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>
       </entity>
-      <entity>
+      <entity :polyline.sync="polyline3">
         <polyline-graphics :positions="positions3" :material="material3" :width="10"></polyline-graphics>
       </entity>
     </cesium-viewer>
@@ -81,10 +84,13 @@
   export default {
     data () {
       return {
+        polyline1: {},
         positions1: [],
         material1: undefined,
+        polyline2: {},
         positions2: [],
         material2: undefined,
+        polyline3: {},
         positions3: [],
         material3: undefined
       }
@@ -129,7 +135,7 @@
 
 ## Events
 
-|事件名|参数|描述|
+|name|parameter|description|
 |------|----|----|
 |ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
 |definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|

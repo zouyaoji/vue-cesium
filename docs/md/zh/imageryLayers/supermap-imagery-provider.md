@@ -37,7 +37,7 @@
   </template>
 
   <script>
-    import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
+    import CesiumViewer from '../../../../src/components/viewer/CesiumViewer.vue'
     export default {
       data () {
         return {
