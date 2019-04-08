@@ -54,7 +54,6 @@
       },
       methods: {
         ready (cesiumInstance) {
-          console.log('CesiumReady')
           const {Cesium, viewer} = cesiumInstance
           this.positions1 = Cesium.Cartesian3.fromDegreesArray([
             100.0, 40.0,
@@ -133,7 +132,6 @@
     },
     methods: {
       ready (cesiumInstance) {
-        console.log('CesiumReady')
         const {Cesium, viewer} = cesiumInstance
         this.positions1 = Cesium.Cartesian3.fromDegreesArray([
           100.0, 40.0,

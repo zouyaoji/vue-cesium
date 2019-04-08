@@ -208,7 +208,6 @@ export default {
       viewer.entities.remove(entity)
     },
     setGraphics (graphics) {
-      console.log('setGraphics')
       if (graphics instanceof Cesium.BillboardGraphics) {
         this.$emit('update:billboard', graphics)
       } else if (graphics instanceof Cesium.BoxGraphics) {

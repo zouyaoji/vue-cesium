@@ -10,7 +10,7 @@ export default function (instance, eventList) {
       const listener = this.$listeners[eventName]
       listener && instance[event].addEventListener(listener.fns)
     } else {
-      console.log('Add event linstener of ' + event + ' failed, try to upgrade Cesium to latest version.')
+      // console.log('Add event linstener of ' + event + ' failed, try to upgrade Cesium to latest version.')
     }
   })
 }

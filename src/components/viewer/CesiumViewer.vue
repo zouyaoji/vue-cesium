@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-02-21 18:47:30
+ * @Last Modified time: 2019-03-15 14:33:24
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -910,12 +910,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     getCesiumScript () {
       if (!global.Cesium) {
-        let cesiumPath
-        if (this.cesiumPath) {
-          cesiumPath = this.cesiumPath
-        } else {
-          cesiumPath = this._Cesium().cesiumPath
-        }
+        let cesiumPath = this.cesiumPath ? this.cesiumPath : this._Cesium().cesiumPath
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
           global._initCesium = function () {
