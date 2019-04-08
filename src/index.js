@@ -44,7 +44,8 @@ import MeasureHeight from '@/measure/MeasureHeight.vue'
 export default {
   install (Vue, options) {
     let cesiumPath = options ? options.cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-    Vue.prototype._Cesium = () => ({ cesiumPath })
+    let accessToken = options ? options.accessToken : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
+    Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component(ImageryLayer.name, ImageryLayer)
     Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)

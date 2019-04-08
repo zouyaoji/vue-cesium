@@ -26,7 +26,9 @@ Vue.use(VueCesium, {
   // Personal online SuperMap Cesium Build package：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // Official Online Cesium Build package：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  // Cesium.Ion.defaultAccessToken
+  accessToken: ''
 })
 ```
 

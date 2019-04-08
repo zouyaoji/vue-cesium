@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-03-15 14:33:24
+ * @Last Modified time: 2019-04-08 14:37:12
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -807,7 +807,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       //   }
       // }
       if (!Cesium.defined(Cesium.SuperMapImageryProvider)) {
-        Cesium.Ion.defaultAccessToken = this.accessToken
+        let accessToken
+        if (this._Cesium) {
+          accessToken = this._Cesium().accessToken
+        } else {
+          accessToken = this.accessToken
+        }
+        Cesium.Ion.defaultAccessToken = accessToken
       }
 
       const viewer = new Cesium.Viewer($el, {

@@ -15,7 +15,7 @@ import VueCesium from 'vue-cesium'
 Vue.use(VueCesium)
 ```
 
-- 指定Cesium库地址：
+- 指定Cesium库地址和Access Token：
 
 ```javascript
 import Vue from 'vue'
@@ -30,7 +30,9 @@ Vue.use(VueCesium, {
   // 个人在线SuperMap Cesium Build包（在官方基础上二次开发出来的）：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // 官方在线Cesium Build包，有CDN加速，推荐用这个：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  // 指定Cesium.Ion.defaultAccessToken，使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致Cesium在线影像加载不了
+  accessToken: ''
 })
 ```
 
