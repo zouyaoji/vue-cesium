@@ -41,20 +41,35 @@ import MeasureDistance from '@/measure/MeasureDistance.vue'
 import MeasureArea from '@/measure/MeasureArea.vue'
 import MeasureHeight from '@/measure/MeasureHeight.vue'
 
+import CesiumHeatMap from '@/extra/CesiumHeatMap.vue'
+
 export default {
   install (Vue, options) {
-    let cesiumPath = options ? options.cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-    let accessToken = options ? options.accessToken : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
+    let cesiumPath = options
+      ? options.cesiumPath
+      : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+    let accessToken = options
+      ? options.accessToken
+      : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
     Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component(ImageryLayer.name, ImageryLayer)
-    Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
+    Vue.component(
+      ArcGisMapServerImageryProvider.name,
+      ArcGisMapServerImageryProvider
+    )
     Vue.component(BingMapsImageryProvider.name, BingMapsImageryProvider)
     Vue.component(MapboxImageryProvider.name, MapboxImageryProvider)
-    Vue.component(OpenStreetMapImageryProvider.name, OpenStreetMapImageryProvider)
+    Vue.component(
+      OpenStreetMapImageryProvider.name,
+      OpenStreetMapImageryProvider
+    )
     Vue.component(SingleTileImageryProvider.name, SingleTileImageryProvider)
     Vue.component(UrlTemplateImageryProvider.name, UrlTemplateImageryProvider)
-    Vue.component(WebMapTileServiceImageryProvider.name, WebMapTileServiceImageryProvider)
+    Vue.component(
+      WebMapTileServiceImageryProvider.name,
+      WebMapTileServiceImageryProvider
+    )
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
 
     Vue.component(Entity.name, Entity)
@@ -87,13 +102,14 @@ export default {
     Vue.component('measure-distance', MeasureDistance)
     Vue.component('measure-area', MeasureArea)
     Vue.component('measure-height', MeasureHeight)
+
+    Vue.component(CesiumHeatMap.name, CesiumHeatMap)
   },
   version
 }
 
 export {
   CesiumViewer,
-
   ImageryLayer,
   ArcGisMapServerImageryProvider,
   BingMapsImageryProvider,
@@ -103,7 +119,6 @@ export {
   UrlTemplateImageryProvider,
   WebMapTileServiceImageryProvider,
   SuperMapImageryProvider,
-
   Entity,
   BillboardGraphics,
   BoxGraphics,
@@ -121,7 +136,6 @@ export {
   PolylineVolumeGraphics,
   RectangleGraphics,
   WallGraphics,
-
   Cesium3DTileset,
   PointCollection,
   PolylineCollection,
@@ -129,10 +143,9 @@ export {
   Polyline,
   LabelCollection,
   Label,
-
   MeasureDistance,
   MeasureArea,
   MeasureHeight,
-
-  Model
+  Model,
+  CesiumHeatMap
 }

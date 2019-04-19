@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.",
   "main": "index.js",
   "scripts": {
@@ -81,6 +81,7 @@
   },
   "dependencies": {
     "babel-preset-stage-3": "^6.24.1",
+    "heatmap.js": "^2.0.5",
     "markdown-it": "^8.4.2"
   }
 }

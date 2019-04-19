@@ -55,7 +55,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>

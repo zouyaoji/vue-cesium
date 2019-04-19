@@ -348,14 +348,34 @@ const routeMap = [
       en: 'Primitive'
     },
     component: CateView,
-    children: [{
-      path: 'cesium-3dtileset',
-      component: 'cesium-3dtileset',
-      name: {
-        zh: 'Cesium3DTileset模型',
-        en: 'Cesium3DTileset'
+    children: [
+      {
+        path: 'cesium-3dtileset',
+        component: 'cesium-3dtileset',
+        name: {
+          zh: 'Cesium3DTileset模型',
+          en: 'Cesium3DTileset'
+        }
       }
-    }]
+    ]
+  },
+  {
+    path: 'extra',
+    name: {
+      zh: '其他',
+      en: 'Extra'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'cesium-heatmap',
+        component: 'extra/cesium-heatmap',
+        name: {
+          zh: '热力图',
+          en: 'HeatMap'
+        }
+      }
+    ]
   }
 ]
 
