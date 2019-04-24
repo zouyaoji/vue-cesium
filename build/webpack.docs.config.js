@@ -19,7 +19,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    publicPath: process.env.NODE_ENV === 'production' ? '/docs/statics/' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '/docs/statics/' : './',
     filename: '[name].[hash:8].bundle.js',
     chunkFilename: '[name].[chunkhash:8].js'
   },
