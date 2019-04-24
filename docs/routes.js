@@ -374,6 +374,14 @@ const routeMap = [
           zh: '热力图',
           en: 'HeatMap'
         }
+      },
+      {
+        path: 'cesium-windmap',
+        component: 'extra/cesium-windmap',
+        name: {
+          zh: '风向图',
+          en: 'WindMap'
+        }
       }
     ]
   }

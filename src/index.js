@@ -42,6 +42,7 @@ import MeasureArea from '@/measure/MeasureArea.vue'
 import MeasureHeight from '@/measure/MeasureHeight.vue'
 
 import CesiumHeatMap from '@/extra/CesiumHeatMap.vue'
+import CesiumWindMap from '@/extra/CesiumWindMap.vue'
 
 export default {
   install (Vue, options) {
@@ -104,6 +105,7 @@ export default {
     Vue.component('measure-height', MeasureHeight)
 
     Vue.component(CesiumHeatMap.name, CesiumHeatMap)
+    Vue.component(CesiumWindMap.name, CesiumWindMap)
   },
   version
 }
@@ -147,5 +149,6 @@ export {
   MeasureArea,
   MeasureHeight,
   Model,
-  CesiumHeatMap
+  CesiumHeatMap,
+  CesiumWindMap
 }
