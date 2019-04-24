@@ -1,7 +1,7 @@
 <script>
 import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
-import CHInstance from '../../util/CHInstance.js'
+import CHInstance from '../../libs/heatmap/CHInstance.js'
 
 export default {
   name: 'cesium-heatmap',

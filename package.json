@@ -81,6 +81,7 @@
   },
   "dependencies": {
     "babel-preset-stage-3": "^6.24.1",
+    "copy-webpack-plugin": "^5.0.2",
     "heatmap.js": "^2.0.5",
     "markdown-it": "^8.4.2"
   }

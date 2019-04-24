@@ -3,16 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
     main: 'docs/main.js',
-    libs: [
-      'vue',
-      'vue-router',
-      'prismjs',
-      'vue-material'
-    ],
+    libs: ['vue', 'vue-router', 'prismjs', 'vue-material'],
     vendor: [
       'docs/components/App.vue',
       'docs/components/CateView.vue',
@@ -23,6 +19,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
+    publicPath: process.env.NODE_ENV === 'production' ? '/docs/statics/' : '/',
     filename: '[name].[hash:8].bundle.js',
     chunkFilename: '[name].[chunkhash:8].js'
   },
@@ -108,6 +105,14 @@ module.exports = {
       template: path.resolve(__dirname, '../docs/template/index.html'),
       chunks: ['vendor', 'libs', 'main', 'manifest']
     }),
-    new InlineManifestWebpackPlugin('manifest')
+    new InlineManifestWebpackPlugin('manifest'),
+    // copy custom static assets
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../docs/statics'),
+        to: 'statics',
+        ignore: ['.*']
+      }
+    ])
   ]
 }
