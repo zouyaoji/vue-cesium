@@ -4,9 +4,9 @@
   "description": "Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.",
   "main": "index.js",
   "scripts": {
-    "build:docs": "webpack --config ./build/webpack.docs.config.js --mode production",
-    "build": "webpack --config ./build/webpack.prod.config.js --mode production",
-    "dev": "webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline --mode development",
+    "build:docs": "cross-env NODE_ENV=production webpack --config ./build/webpack.docs.config.js --mode production",
+    "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.prod.config.js --mode production",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --content-base docs --config ./build/webpack.docs.config.js --hot --inline --mode development",
     "deploy": "npm run build && npm run build:docs"
   },
   "keywords": [
@@ -82,6 +82,7 @@
   "dependencies": {
     "babel-preset-stage-3": "^6.24.1",
     "copy-webpack-plugin": "^5.0.2",
+    "cross-env": "^5.2.0",
     "heatmap.js": "^2.0.5",
     "markdown-it": "^8.4.2"
   }
