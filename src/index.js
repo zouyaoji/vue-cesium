@@ -41,8 +41,8 @@ import MeasureDistance from '@/measure/MeasureDistance.vue'
 import MeasureArea from '@/measure/MeasureArea.vue'
 import MeasureHeight from '@/measure/MeasureHeight.vue'
 
-import CesiumHeatMap from '@/extra/CesiumHeatMap.vue'
-import CesiumWindMap from '@/extra/CesiumWindMap.vue'
+import CesiumHeatMap from '@/visualization/CesiumHeatMap.vue'
+import CesiumWindMap from '@/visualization/CesiumWindMap.vue'
 
 export default {
   install (Vue, options) {

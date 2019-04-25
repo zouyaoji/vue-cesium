@@ -1,7 +1,7 @@
-let Cesium = {}
+// let Cesium = {}
 class CustomPrimitive {
-  constructor (CesiumJS, options) {
-    Cesium = CesiumJS
+  constructor (options) {
+    // Cesium = CesiumJS
     this.commandType = Cesium.defaultValue(options.commandType, 'Draw')
 
     this.geometry = options.geometry
@@ -17,6 +17,9 @@ class CustomPrimitive {
     this.framebuffer = options.framebuffer
 
     this.outputTextures = options.outputTextures
+    if (Cesium.defined(options.outputTextures)) {
+      this.outputTexture = options.outputTextures[0]
+    }
 
     this.autoClear = Cesium.defaultValue(options.autoClear, false)
 
@@ -69,6 +72,7 @@ class CustomPrimitive {
           fragmentShaderSource: this.fragmentShaderSource,
           uniformMap: this.uniformMap,
           outputTextures: this.outputTextures,
+          outputTexture: this.outputTextures[0],
           persists: true
         })
       }

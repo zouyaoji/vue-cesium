@@ -27,32 +27,37 @@ export default {
     }
   },
   watch: {
-
+    windData (val) {
+      this.reload()
+    },
+    particleSystemOptions: {
+      handler (val) {
+        this.windMap.particleSystem.applyParticleSystemOptions(val)
+      },
+      deep: true
+    }
   },
   methods: {
     createCesiumObject () {
       const { viewer, particleSystemOptions } = this
       window.viewer = viewer
-      var demo
-      Cesium.defaultValue(demo, false)
-      const mode = { debug: !demo }
-      let windMap = new Wind3D(
-        viewer,
-        {
-          dataDirectory: './statics/SampleData/windData/',
-          glslDirectory: './statics/SampleData/glsl/'
-        },
-        particleSystemOptions,
-        mode
-      )
-      console.log(windMap)
-      return windMap
+      if (Cesium.defined(this.windData.U)) {
+        let windMap = new Wind3D(
+          viewer,
+          this.windData,
+          particleSystemOptions
+        )
+        return windMap
+      }
+      return null
     },
     mount () {
       // const { viewer, entity } = this
     },
     unload () {
-
+      if (this.windMap !== null) {
+        this.windMap.particleSystem.destroyAll()
+      }
     },
 
     getServices () {
@@ -76,7 +81,7 @@ export default {
   },
   created () {
     Object.defineProperties(this, {
-      windMapInstance: {
+      windMap: {
         enumerable: true,
         get: () => this.$services && this.cesiumObject
       }

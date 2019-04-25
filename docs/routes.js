@@ -360,16 +360,16 @@ const routeMap = [
     ]
   },
   {
-    path: 'extra',
+    path: 'visualization',
     name: {
-      zh: '其他',
-      en: 'Extra'
+      zh: '可视化',
+      en: 'Visualization'
     },
     component: CateView,
     children: [
       {
         path: 'cesium-heatmap',
-        component: 'extra/cesium-heatmap',
+        component: 'visualization/cesium-heatmap',
         name: {
           zh: '热力图',
           en: 'HeatMap'
@@ -377,7 +377,7 @@ const routeMap = [
       },
       {
         path: 'cesium-windmap',
-        component: 'extra/cesium-windmap',
+        component: 'visualization/cesium-windmap',
         name: {
           zh: '风向图',
           en: 'WindMap'

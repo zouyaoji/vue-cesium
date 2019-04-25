@@ -1,4 +1,4 @@
-var Util = function () {
+var Util = (function () {
   var loadText = function (filePath) {
     // eslint-disable-next-line
     var request = new XMLHttpRequest()
@@ -7,7 +7,7 @@ var Util = function () {
     return request.responseText
   }
 
-  var fullscreenQuad = {}
+  var fullscreenQuad = null
   var getFullscreenQuad = function () {
     if (!Cesium.defined(fullscreenQuad)) {
       fullscreenQuad = new Cesium.Geometry({
@@ -20,24 +20,21 @@ var Util = function () {
             //  |     |
             //  v0----v1
             values: new Float32Array([
-              -1,
-              -1,
-              0, // v0
-              1,
-              -1,
-              0, // v1
-              1,
-              1,
-              0, // v2
-              -1,
-              1,
-              0 // v3
+              -1, -1, 0, // v0
+              1, -1, 0, // v1
+              1, 1, 0, // v2
+              -1, 1, 0 // v3
             ])
           }),
           st: new Cesium.GeometryAttribute({
             componentDatatype: Cesium.ComponentDatatype.FLOAT,
             componentsPerAttribute: 2,
-            values: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1])
+            values: new Float32Array([
+              0, 0,
+              1, 0,
+              1, 1,
+              0, 1
+            ])
           })
         }),
         indices: new Uint32Array([3, 2, 0, 0, 2, 1])
@@ -77,11 +74,7 @@ var Util = function () {
       blending: options.blending
     }
 
-    var rawRenderState = Cesium.Appearance.getDefaultRenderState(
-      translucent,
-      closed,
-      existing
-    )
+    var rawRenderState = Cesium.Appearance.getDefaultRenderState(translucent, closed, existing)
     return rawRenderState
   }
 
@@ -144,5 +137,6 @@ var Util = function () {
     createRawRenderState: createRawRenderState,
     viewRectangleToLonLatRange: viewRectangleToLonLatRange
   }
-}
+})()
+
 export default Util

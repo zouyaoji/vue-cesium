@@ -1,17 +1,20 @@
 import Util from './util'
-import DataProcess from './dataProcess'
+// import DataProcess from './dataProcess'
 import CustomPrimitive from './customPrimitive'
-let Cesium = {}
+import updateFrag from './update.frag'
+import trailDrawFrag from './trailDraw.frag'
+import segmentDrawVert from './segmentDraw.vert'
+import segmentDrawFrag from './segmentDraw.frag'
+import screenDrawFrag from './screenDraw.frag'
+import randomFrag from './random.frag'
+import fullscreenVert from './fullscreen.vert'
 class ParticleSystem {
   constructor (
-    CesiumJS,
     cesiumContext,
     windData,
     particleSystemOptions,
-    fileOptions,
     viewerParameters
   ) {
-    Cesium = CesiumJS
     this.context = cesiumContext
     this.data = windData
 
@@ -20,13 +23,11 @@ class ParticleSystem {
       Math.sqrt(this.particleSystemOptions.maxParticles)
     )
 
-    this.particlesArray = DataProcess.randomizeParticleLonLatLev(
+    this.particlesArray = this.randomizeParticleLonLatLev(
       this.particleSystemOptions.maxParticles,
       viewerParameters.lonLatRange
     )
     this.particleGeometry = this.setupParticleGeometry()
-
-    this.fileOptions = fileOptions
 
     this.viewerParameters = viewerParameters
 
@@ -181,7 +182,8 @@ class ParticleSystem {
 
     const indexSize = 6 * this.particleSystemOptions.maxParticles
     var vertexIndexes = new Uint32Array(indexSize)
-    for (let i = 0, j = 0, vertex = 0;
+    for (
+      let i = 0, j = 0, vertex = 0;
       i < this.particleSystemOptions.maxParticles;
       i++
     ) {
@@ -365,7 +367,7 @@ class ParticleSystem {
     }
 
     const fragmentShaderSource = new Cesium.ShaderSource({
-      sources: [Util.loadText(this.fileOptions.glslDirectory + 'update.frag')]
+      sources: [updateFrag]
     })
 
     var primitive = new CustomPrimitive({
@@ -429,7 +431,7 @@ class ParticleSystem {
     }
 
     const fragmentShaderSource = new Cesium.ShaderSource({
-      sources: [Util.loadText(this.fileOptions.glslDirectory + 'random.frag')]
+      sources: [randomFrag]
     })
 
     var primitive = new CustomPrimitive({
@@ -499,15 +501,11 @@ class ParticleSystem {
     })
 
     const vertexShaderSource = new Cesium.ShaderSource({
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'segmentDraw.vert')
-      ]
+      sources: [segmentDrawVert]
     })
 
     const fragmentShaderSource = new Cesium.ShaderSource({
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'segmentDraw.frag')
-      ]
+      sources: [segmentDrawFrag]
     })
 
     var primitive = new CustomPrimitive({
@@ -568,16 +566,12 @@ class ParticleSystem {
     // prevent Cesium from writing depth because the depth here should be written manually
     const vertexShaderSource = new Cesium.ShaderSource({
       defines: ['DISABLE_GL_POSITION_LOG_DEPTH'],
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'fullscreen.vert')
-      ]
+      sources: [fullscreenVert]
     })
 
     const fragmentShaderSource = new Cesium.ShaderSource({
       defines: ['DISABLE_LOG_DEPTH_FRAGMENT_WRITE'],
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'trailDraw.frag')
-      ]
+      sources: [trailDrawFrag]
     })
 
     var primitive = new CustomPrimitive({
@@ -636,16 +630,12 @@ class ParticleSystem {
     // prevent Cesium from writing depth because the depth here should be written manually
     const vertexShaderSource = new Cesium.ShaderSource({
       defines: ['DISABLE_GL_POSITION_LOG_DEPTH'],
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'fullscreen.vert')
-      ]
+      sources: [fullscreenVert]
     })
 
     const fragmentShaderSource = new Cesium.ShaderSource({
       defines: ['DISABLE_LOG_DEPTH_FRAGMENT_WRITE'],
-      sources: [
-        Util.loadText(this.fileOptions.glslDirectory + 'screenDraw.frag')
-      ]
+      sources: [screenDrawFrag]
     })
 
     var primitive = new CustomPrimitive({
@@ -689,7 +679,7 @@ class ParticleSystem {
 
     var maxParticles = this.particleSystemOptions.maxParticles
     var lonLatRange = this.viewerParameters.lonLatRange
-    this.particlesArray = DataProcess.randomizeParticleLonLatLev(
+    this.particlesArray = this.randomizeParticleLonLatLev(
       maxParticles,
       lonLatRange
     )
@@ -742,6 +732,23 @@ class ParticleSystem {
       this.particleSystemOptions.particlesTextureSize
 
     this.refreshParticle(this.viewerParameters, maxParticlesChanged)
+  }
+
+  randomizeParticleLonLatLev (maxParticles, lonLatRange) {
+    let data = this.data
+    var array = new Float32Array(3 * maxParticles)
+    for (var i = 0; i < maxParticles; i++) {
+      array[3 * i] = Cesium.Math.randomBetween(
+        lonLatRange.lon.min,
+        lonLatRange.lon.max
+      )
+      array[3 * i + 1] = Cesium.Math.randomBetween(
+        lonLatRange.lat.min,
+        lonLatRange.lat.max
+      )
+      array[3 * i + 2] = Cesium.Math.randomBetween(data.lev.min, data.lev.max)
+    }
+    return array
   }
 }
 

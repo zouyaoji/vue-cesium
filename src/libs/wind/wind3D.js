@@ -1,22 +1,8 @@
-import DataProcess from './dataProcess'
+// import DataProcess from './dataProcess'
 import ParticleSystem from './customParticleSystem'
 import Util from './util'
-let Cesium = {}
 class Wind3D {
-  constructor (CesiumJS, viewer, fileOptions, particleSystemOptions, /* displayOptions, */ mode) {
-    var options = {
-      baseLayerPicker: false,
-      geocoder: false,
-      infoBox: false,
-      fullscreenElement: 'cesiumContainer',
-      scene3DOnly: true
-    }
-
-    if (mode.debug) {
-      options.useDefaultRenderLoop = false
-    }
-    Cesium = CesiumJS
-    // this.viewer = new Cesium.Viewer('cesiumContainer', options)
+  constructor (viewer, windData, particleSystemOptions, colorTable) {
     this.viewer = viewer
     this.scene = this.viewer.scene
     this.camera = this.viewer.camera
@@ -28,34 +14,22 @@ class Wind3D {
     )
     this.viewerParameters = {}
     this.updateViewerParameters()
-
-    DataProcess.loadData(fileOptions).then(windData => {
-      this.particleSystem = new ParticleSystem(
-        this.scene.context,
-        windData,
-        particleSystemOptions,
-        fileOptions,
-        this.viewerParameters
-      )
-
-      // the order of primitives.add should respect the dependency of primitives
-      this.scene.primitives.add(this.particleSystem.primitives.particlesUpdate)
-      this.scene.primitives.add(
-        this.particleSystem.primitives.particlesRandomize
-      )
-      this.scene.primitives.add(this.particleSystem.primitives.segments)
-      this.scene.primitives.add(this.particleSystem.primitives.trails)
-      this.scene.primitives.add(this.particleSystem.primitives.screen)
-
-      this.setupEventListeners()
-
-      if (mode.debug) {
-        this.debug()
-      }
-    })
-
     this.imageryLayers = this.viewer.imageryLayers
-    // this.setGlobeLayer(displayOptions)
+    this.particleSystem = new ParticleSystem(
+      this.scene.context,
+      windData,
+      particleSystemOptions,
+      this.viewerParameters
+    )
+
+    // the order of primitives.add should respect the dependency of primitives
+    this.scene.primitives.add(this.particleSystem.primitives.particlesUpdate)
+    this.scene.primitives.add(this.particleSystem.primitives.particlesRandomize)
+    this.scene.primitives.add(this.particleSystem.primitives.segments)
+    this.scene.primitives.add(this.particleSystem.primitives.trails)
+    this.scene.primitives.add(this.particleSystem.primitives.screen)
+
+    this.setupEventListeners()
   }
 
   updateViewerParameters () {
@@ -79,42 +53,6 @@ class Wind3D {
     }
 
     this.viewerParameters = viewerParameters
-  }
-
-  setGlobeLayer (displayOptions) {
-    this.viewer.imageryLayers.removeAll()
-    this.viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider()
-
-    var layerSource = displayOptions.layerSource
-    switch (layerSource) {
-      case 'NaturalEarthII': {
-        this.viewer.imageryLayers.addImageryProvider(
-          Cesium.createTileMapServiceImageryProvider({
-            url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
-          })
-        )
-        break
-      }
-      case 'WMS': {
-        this.viewer.imageryLayers.addImageryProvider(
-          new Cesium.WebMapServiceImageryProvider({
-            url: displayOptions.WMSURL,
-            layers: displayOptions.WMSlayer.name,
-            parameters: {
-              ColorScaleRange: displayOptions.WMSlayer.ColorScaleRange
-            }
-          })
-        )
-        break
-      }
-      case 'WorldTerrain': {
-        this.viewer.imageryLayers.addImageryProvider(
-          Cesium.createWorldImagery()
-        )
-        this.viewer.terrainProvider = Cesium.createWorldTerrain()
-        break
-      }
-    }
   }
 
   setupEventListeners () {
@@ -148,26 +86,7 @@ class Wind3D {
       that.particleSystem.applyParticleSystemOptions(event.detail)
     })
 
-    window.addEventListener('displayOptionsChanged', function (event) {
-      that.setGlobeLayer(event.detail)
-    })
-  }
-
-  debug () {
-    const that = this
-
-    var animate = function () {
-      that.viewer.resize()
-      that.viewer.render()
-      // eslint-disable-next-line
-      requestAnimationFrame(animate)
-    }
-
-    // var spector = new SPECTOR.Spector()
-    // spector.displayUI()
-    // spector.spyCanvases()
-
-    animate()
+    window.addEventListener('displayOptionsChanged', function (event) {})
   }
 }
 
