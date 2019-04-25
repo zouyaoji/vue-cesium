@@ -110,7 +110,7 @@ export default {
     createCesiumObject () {
       const { Cesium, positions, width, cornerType, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material,
         outline, outlineColor, outlineWidth, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
-      let corridor = new Cesium.CorridorGraphics({
+      let options = {
         positions,
         width,
         cornerType,
@@ -129,7 +129,9 @@ export default {
         distanceDisplayCondition,
         classificationType,
         zIndex
-      })
+      }
+      this.removeNullItem(options)
+      let corridor = new Cesium.CorridorGraphics(options)
       return corridor
     }
   }

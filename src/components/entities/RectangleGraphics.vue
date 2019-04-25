@@ -116,7 +116,7 @@ export default {
     createCesiumObject () {
       const { Cesium, coordinates, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, rotation, stRotation, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
-      let rectangle = new Cesium.RectangleGraphics({
+      let options = {
         coordinates: coordinates,
         height: height,
         heightReference: heightReference,
@@ -135,8 +135,9 @@ export default {
         distanceDisplayCondition: distanceDisplayCondition,
         classificationType: classificationType,
         zIndex: zIndex
-      })
-
+      }
+      this.removeNullItem(options)
+      let rectangle = new Cesium.RectangleGraphics(options)
       return rectangle
     }
   }

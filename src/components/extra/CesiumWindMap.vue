@@ -13,14 +13,16 @@ export default {
     windData: Object,
     particleSystemOptions: {
       type: Object,
-      default: {
-        maxParticles: 128 * 128,
-        particleHeight: 100.0,
-        fadeOpacity: 0.996,
-        dropRate: 0.003,
-        dropRateBump: 0.01,
-        speedFactor: 4.0,
-        lineWidth: 4.0
+      default: function () {
+        return {
+          maxParticles: 128 * 128,
+          particleHeight: 100.0,
+          fadeOpacity: 0.996,
+          dropRate: 0.003,
+          dropRateBump: 0.01,
+          speedFactor: 4.0,
+          lineWidth: 4.0
+        }
       }
     }
   },
@@ -29,20 +31,21 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, viewer, particleSystemOptions } = this
-      var demo = false
+      const { viewer, particleSystemOptions } = this
+      window.viewer = viewer
+      var demo
+      Cesium.defaultValue(demo, false)
       const mode = { debug: !demo }
       let windMap = new Wind3D(
-        Cesium,
         viewer,
         {
-          dataDirectory: '/statics/data/',
-          glslDirectory: '/statics/glsl/'
+          dataDirectory: './statics/SampleData/windData/',
+          glslDirectory: './statics/SampleData/glsl/'
         },
         particleSystemOptions,
         mode
       )
-
+      console.log(windMap)
       return windMap
     },
     mount () {

@@ -5,29 +5,19 @@ export default {
   render (h) {},
   // mixins: [commonMixin('polygon-geometry')],
   props: {
-    positions: {
-      type: Array
-    },
-    holes: {
-      type: Array
-    },
+    positions: Array,
+    holes: Array,
     height: {
       type: Number,
       default: 0.0
     },
-    extrudedHeight: {
-      type: Number
-    },
-    vertexFormat: {
-      type: Object
-    },
+    extrudedHeight: Number,
+    vertexFormat: Object,
     stRotation: {
       type: [Number, Object],
       default: 0.0
     },
-    ellipsoid: {
-      type: Object
-    },
+    ellipsoid: Object,
     granularity: {
       type: Number,
       default: Math.PI / 180.0
@@ -54,16 +44,17 @@ export default {
         granularity, perPositionHeight, closeTop, closeBottom } = this
       let polygon = {
         polygonHierarchy: new Cesium.PolygonHierarchy(positions, holes),
-        height: height,
-        extrudedHeight: extrudedHeight,
-        vertexFormat: vertexFormat,
-        stRotation: stRotation,
-        ellipsoid: ellipsoid,
-        granularity: granularity,
-        perPositionHeight: perPositionHeight,
-        closeTop: closeTop,
-        closeBottom: closeBottom
+        height,
+        extrudedHeight,
+        vertexFormat,
+        stRotation,
+        ellipsoid,
+        granularity,
+        perPositionHeight,
+        closeTop,
+        closeBottom
       }
+      this.removeNullItem(polygon)
       this.originInstance = this.$parent.originInstance.add(polygon)
     }
   }

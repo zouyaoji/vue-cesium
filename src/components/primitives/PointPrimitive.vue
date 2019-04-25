@@ -4,41 +4,23 @@ export default {
   name: 'point-primitive',
   mixins: [primitiveCollectionItem],
   props: {
-    color: {
-      type: Object
-    },
-    disableDepthTestDistance: {
-      type: Number
-    },
-    distanceDisplayCondition: {
-      type: Object
-    },
-    id: {
-      type: Object
-    },
-    outlineColor: {
-      type: Object
-    },
+    color: Object,
+    disableDepthTestDistance: Number,
+    distanceDisplayCondition: Object,
+    id: null,
+    outlineColor: Object,
     outlineWidth: {
       type: Number,
       default: 1.0
     },
-    pixelSize: {
-      type: Number
-    },
-    position: {
-      type: Object
-    },
-    scaleByDistance: {
-      type: Object
-    },
+    pixelSize: Number,
+    position: Object,
+    scaleByDistance: Object,
     show: {
       type: Boolean,
       default: true
     },
-    translucencyByDistance: {
-      type: Object
-    }
+    translucencyByDistance: Object
   },
   watch: {
     color  (val) {
@@ -80,18 +62,19 @@ export default {
       const { primitiveCollection, color, disableDepthTestDistance, distanceDisplayCondition, id, outlineColor, outlineWidth, pixelSize,
         position, scaleByDistance, show, translucencyByDistance } = this
       let point = {
-        color: color,
-        disableDepthTestDistance: disableDepthTestDistance,
-        distanceDisplayCondition: distanceDisplayCondition,
-        id: id,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        pixelSize: pixelSize,
-        position: position,
-        scaleByDistance: scaleByDistance,
-        show: show,
-        translucencyByDistance: translucencyByDistance
+        color,
+        disableDepthTestDistance,
+        distanceDisplayCondition,
+        id,
+        outlineColor,
+        outlineWidth,
+        pixelSize,
+        position,
+        scaleByDistance,
+        show,
+        translucencyByDistance
       }
+      this.removeNullItem(point)
       return primitiveCollection.add(point)
     }
   }

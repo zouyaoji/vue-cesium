@@ -133,7 +133,7 @@ export default {
     createCesiumObject () {
       const { Cesium, hierarchy, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, stRotation, granularity, perPositionHeight, closeTop, closeBottom, shadows, distanceDisplayCondition, zIndex } = this
-      let polygon = new Cesium.PolygonGraphics({
+      let options = {
         hierarchy,
         height,
         heightReference,
@@ -153,8 +153,9 @@ export default {
         shadows,
         distanceDisplayCondition,
         zIndex
-      })
-
+      }
+      this.removeNullItem(options)
+      let polygon = new Cesium.PolygonGraphics(options)
       polygon.hierarchy = new Cesium.CallbackProperty(() => this.hierarchy, false)
       return polygon
     }

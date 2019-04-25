@@ -62,7 +62,7 @@ export default {
     createCesiumObject () {
       const { Cesium, color, pixelSize, outlineColor, outlineWidth, show, scaleByDistance, translucencyByDistance, heightReference,
         distanceDisplayCondition, disableDepthTestDistance } = this
-      let point = new Cesium.PointGraphics({
+      let options = {
         color,
         pixelSize,
         outlineColor,
@@ -73,8 +73,9 @@ export default {
         heightReference,
         distanceDisplayCondition,
         disableDepthTestDistance
-      })
-
+      }
+      this.removeNullItem(options)
+      let point = new Cesium.PointGraphics(options)
       return point
     }
   }

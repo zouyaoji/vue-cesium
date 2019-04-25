@@ -83,7 +83,7 @@ export default {
     createCesiumObject () {
       const { Cesium, positions, followSurface, clampToGround, width, show, material, depthFailMaterial,
         granularity, shadows, distanceDisplayCondition, zIndex } = this
-      let polyline = new Cesium.PolylineGraphics({
+      let options = {
         positions: positions,
         followSurface: followSurface,
         clampToGround: clampToGround,
@@ -95,7 +95,9 @@ export default {
         shadows: shadows,
         distanceDisplayCondition: distanceDisplayCondition,
         zIndex: zIndex
-      })
+      }
+      this.removeNullItem(options)
+      let polyline = new Cesium.PolylineGraphics(options)
       polyline.positions = new Cesium.CallbackProperty(() => this.positions, false)
       return polyline
     }

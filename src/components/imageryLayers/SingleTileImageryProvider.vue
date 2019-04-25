@@ -8,15 +8,9 @@ export default {
       type: String,
       default: 'https://a.tile.openstreetmap.org'
     },
-    rectangle: {
-      type: Object
-    },
-    credit: {
-      type: String
-    },
-    ellipsoid: {
-      type: Object
-    }
+    rectangle: Object,
+    credit: String,
+    ellipsoid: Object
   },
   watch: {
     url () {
@@ -35,12 +29,14 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, url, rectangle, credit, ellipsoid } = this
-      let imageryProvider = new Cesium.SingleTileImageryProvider({
-        url: url,
-        rectangle: rectangle,
-        credit: credit,
-        ellipsoid: ellipsoid
-      })
+      let options = {
+        url,
+        rectangle,
+        credit,
+        ellipsoid
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.SingleTileImageryProvider(options)
       return imageryProvider
     }
   }

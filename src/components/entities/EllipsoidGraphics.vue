@@ -87,7 +87,7 @@ export default {
     createCesiumObject () {
       const { Cesium, heightReference, radii, show, fill, material, outline, outlineColor, outlineWidth, subdivisions,
         stackPartitions, slicePartitions, shadows, distanceDisplayCondition } = this
-      let ellipsoid = new Cesium.EllipsoidGraphics({
+      let options = {
         heightReference,
         radii,
         show,
@@ -101,7 +101,9 @@ export default {
         slicePartitions,
         shadows,
         distanceDisplayCondition
-      })
+      }
+      this.removeNullItem(options)
+      let ellipsoid = new Cesium.EllipsoidGraphics(options)
 
       return ellipsoid
     }

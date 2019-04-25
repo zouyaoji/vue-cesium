@@ -6,16 +6,12 @@ export default {
   render (h) {},
   mixins: [primitive],
   props: {
-    url: {
-      type: String
-    },
+    url: String,
     show: {
       type: Boolean,
       default: true
     },
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     shadows: {
       type: Number,
       default: 1
@@ -72,24 +68,12 @@ export default {
       type: Boolean,
       default: false
     },
-    clippingPlanes: {
-      type: Object
-    },
-    classificationType: {
-      type: Object
-    },
-    ellipsoid: {
-      type: Object
-    },
-    pointCloudShading: {
-      type: Object
-    },
-    imageBasedLightingFactor: {
-      type: Object
-    },
-    lightColor: {
-      type: Object
-    },
+    clippingPlanes: Object,
+    classificationType: Object,
+    ellipsoid: Object,
+    pointCloudShading: Object,
+    imageBasedLightingFactor: Object,
+    lightColor: Object,
     debugFreezeFrame: {
       type: Boolean,
       default: false
@@ -239,41 +223,43 @@ export default {
         skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid, pointCloudShading,
         imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume, debugShowContentBoundingVolume,
         debugShowViewerRequestVolume, debugShowGeometricError, debugShowRenderingStatistics, debugShowMemoryUsage, debugShowUrl } = this
-      let tileset = new Cesium.Cesium3DTileset({
-        url: url,
-        show: show,
-        modelMatrix: modelMatrix,
-        shadows: shadows,
-        maximumScreenSpaceError: maximumScreenSpaceError,
-        maximumMemoryUsage: maximumMemoryUsage,
-        cullWithChildrenBounds: cullWithChildrenBounds,
-        dynamicScreenSpaceError: dynamicScreenSpaceError,
-        dynamicScreenSpaceErrorDensity: dynamicScreenSpaceErrorDensity,
-        dynamicScreenSpaceErrorFactor: dynamicScreenSpaceErrorFactor,
-        dynamicScreenSpaceErrorHeightFalloff: dynamicScreenSpaceErrorHeightFalloff,
-        skipLevelOfDetail: skipLevelOfDetail,
-        baseScreenSpaceError: baseScreenSpaceError,
-        skipScreenSpaceErrorFactor: skipScreenSpaceErrorFactor,
-        skipLevels: skipLevels,
-        immediatelyLoadDesiredLevelOfDetail: immediatelyLoadDesiredLevelOfDetail,
-        loadSiblings: loadSiblings,
-        clippingPlanes: clippingPlanes,
-        classificationType: classificationType,
-        ellipsoid: ellipsoid,
-        pointCloudShading: pointCloudShading,
-        imageBasedLightingFactor: imageBasedLightingFactor,
-        lightColor: lightColor,
-        debugFreezeFrame: debugFreezeFrame,
-        debugColorizeTiles: debugColorizeTiles,
-        debugWireframe: debugWireframe,
-        debugShowBoundingVolume: debugShowBoundingVolume,
-        debugShowContentBoundingVolume: debugShowContentBoundingVolume,
-        debugShowViewerRequestVolume: debugShowViewerRequestVolume,
-        debugShowGeometricError: debugShowGeometricError,
-        debugShowRenderingStatistics: debugShowRenderingStatistics,
-        debugShowMemoryUsage: debugShowMemoryUsage,
-        debugShowUrl: debugShowUrl
-      })
+      let options = {
+        url,
+        show,
+        modelMatrix,
+        shadows,
+        maximumScreenSpaceError,
+        maximumMemoryUsage,
+        cullWithChildrenBounds,
+        dynamicScreenSpaceError,
+        dynamicScreenSpaceErrorDensity,
+        dynamicScreenSpaceErrorFactor,
+        dynamicScreenSpaceErrorHeightFalloff,
+        skipLevelOfDetail,
+        baseScreenSpaceError,
+        skipScreenSpaceErrorFactor,
+        skipLevels,
+        immediatelyLoadDesiredLevelOfDetail,
+        loadSiblings,
+        clippingPlanes,
+        classificationType,
+        ellipsoid,
+        pointCloudShading,
+        imageBasedLightingFactor,
+        lightColor,
+        debugFreezeFrame,
+        debugColorizeTiles,
+        debugWireframe,
+        debugShowBoundingVolume,
+        debugShowContentBoundingVolume,
+        debugShowViewerRequestVolume,
+        debugShowGeometricError,
+        debugShowRenderingStatistics,
+        debugShowMemoryUsage,
+        debugShowUrl
+      }
+      this.removeNullItem(options)
+      let tileset = new Cesium.Cesium3DTileset(options)
       bindEvents.call(this, tileset)
       return tileset
     }

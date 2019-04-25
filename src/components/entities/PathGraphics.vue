@@ -47,7 +47,7 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, leadTime, trailTime, show, width, material, resolution, distanceDisplayCondition } = this
-      let path = new Cesium.PathGraphics({
+      let options = {
         leadTime,
         trailTime,
         show,
@@ -55,7 +55,9 @@ export default {
         material,
         resolution,
         distanceDisplayCondition
-      })
+      }
+      this.removeNullItem(options)
+      let path = new Cesium.PathGraphics(options)
 
       return path
     }

@@ -88,7 +88,7 @@ export default {
     createCesiumObject () {
       const { Cesium, heightReference, length, topRadius, bottomRadius, show, fill, material,
         outline, outlineColor, outlineWidth, numberOfVerticalLines, slices, shadows, distanceDisplayCondition } = this
-      let cylinder = new Cesium.CylinderGraphics({
+      let options = {
         heightReference,
         length,
         topRadius,
@@ -103,7 +103,9 @@ export default {
         slices,
         shadows,
         distanceDisplayCondition
-      })
+      }
+      this.removeNullItem(options)
+      let cylinder = new Cesium.CylinderGraphics(options)
       return cylinder
     }
   }

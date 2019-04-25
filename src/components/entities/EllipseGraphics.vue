@@ -127,7 +127,7 @@ export default {
     createCesiumObject () {
       const { Cesium, semiMajorAxis, semiMinorAxis, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, numberOfVerticalLines, rotation, stRotation, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
-      let ellipse = new Cesium.EllipseGraphics({
+      let options = {
         semiMajorAxis,
         semiMinorAxis,
         height,
@@ -148,7 +148,9 @@ export default {
         distanceDisplayCondition,
         classificationType,
         zIndex
-      })
+      }
+      this.removeNullItem(options)
+      let ellipse = new Cesium.EllipseGraphics(options)
 
       return ellipse
     }

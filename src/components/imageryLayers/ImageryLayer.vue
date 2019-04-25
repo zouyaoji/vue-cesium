@@ -5,12 +5,8 @@ export default {
   name: 'imagery-layer',
   mixins: [cmp],
   props: {
-    imageryProvider: {
-      type: Object
-    },
-    rectangle: {
-      type: Object
-    },
+    imageryProvider: Object,
+    rectangle: Object,
     alpha: {
       type: Number,
       default: 1.0
@@ -45,12 +41,8 @@ export default {
       default: true
     },
     maximumAnisotropy: Number,
-    minimumTerrainLevel: {
-      type: Number
-    },
-    maximumTerrainLevel: {
-      type: Number
-    },
+    minimumTerrainLevel: Number,
+    maximumTerrainLevel: Number,
     cutoutRectangle: Object
   },
   watch: {
@@ -101,22 +93,24 @@ export default {
     createCesiumObject () {
       const { Cesium, rectangle, alpha, brightness, contrast, hue, saturation, gamma, splitDirection,
         minificationFilter, magnificationFilter, show, minimumTerrainLevel, maximumTerrainLevel, cutoutRectangle } = this
-      let imageryLayer = new Cesium.ImageryLayer(this.provider || {}, {
-        rectangle: rectangle,
-        alpha: alpha,
-        brightness: brightness,
-        contrast: contrast,
-        hue: hue,
-        saturation: saturation,
-        gamma: gamma,
-        splitDirection: splitDirection,
-        minificationFilter: minificationFilter,
-        magnificationFilter: magnificationFilter,
-        show: show,
-        minimumTerrainLevel: minimumTerrainLevel,
-        maximumTerrainLevel: maximumTerrainLevel,
-        cutoutRectangle: cutoutRectangle
-      })
+      let options = {
+        rectangle,
+        alpha,
+        brightness,
+        contrast,
+        hue,
+        saturation,
+        gamma,
+        splitDirection,
+        minificationFilter,
+        magnificationFilter,
+        show,
+        minimumTerrainLevel,
+        maximumTerrainLevel,
+        cutoutRectangle
+      }
+      this.removeNullItem(options)
+      let imageryLayer = new Cesium.ImageryLayer(this.provider || {}, options)
       return imageryLayer
     },
     mount () {

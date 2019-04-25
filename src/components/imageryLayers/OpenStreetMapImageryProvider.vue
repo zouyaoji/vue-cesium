@@ -12,18 +12,10 @@ export default {
       type: String,
       default: 'png'
     },
-    rectangle: {
-      type: Object
-    },
-    minimumLevel: {
-      type: Number
-    },
-    maximumLevel: {
-      type: Number
-    },
-    ellipsoid: {
-      type: Object
-    },
+    rectangle: Object,
+    minimumLevel: Number,
+    maximumLevel: Number,
+    ellipsoid: Object,
     credit: {
       type: String,
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
@@ -55,16 +47,18 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
+      let options = {
+        url,
+        fileExtension,
+        rectangle,
+        minimumLevel,
+        maximumLevel,
+        ellipsoid,
+        credit
+      }
+      this.removeNullItem(options)
       /* eslint-disable new-cap */
-      let imageryProvider = new Cesium.createOpenStreetMapImageryProvider({
-        url: url,
-        fileExtension: fileExtension,
-        rectangle: rectangle,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
-        ellipsoid: ellipsoid,
-        credit: credit
-      })
+      let imageryProvider = new Cesium.createOpenStreetMapImageryProvider(options)
       return imageryProvider
     }
   }

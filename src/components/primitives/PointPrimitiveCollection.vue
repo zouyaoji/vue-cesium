@@ -4,16 +4,12 @@ export default {
   name: 'point-collection',
   mixins: [primitiveCollection],
   props: {
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     debugShowBoundingVolume: {
       type: Boolean,
       default: false
     },
-    blendOption: {
-      type: Number
-    }
+    blendOption: Number
   },
   watch: {
     modelMatrix () {
@@ -26,11 +22,13 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, modelMatrix, debugShowBoundingVolume, blendOption } = this
-      let pointCollection = new Cesium.PointPrimitiveCollection({
-        modelMatrix: modelMatrix,
-        debugShowBoundingVolume: debugShowBoundingVolume,
-        blendOption: blendOption
-      })
+      let options = {
+        modelMatrix,
+        debugShowBoundingVolume,
+        blendOption
+      }
+      this.removeNullItem(options)
+      let pointCollection = new Cesium.PointPrimitiveCollection(options)
       return pointCollection
     }
   }

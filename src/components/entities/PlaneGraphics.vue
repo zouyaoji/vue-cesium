@@ -61,7 +61,7 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, plane, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
-      let planeGraphics = new Cesium.PlaneGraphics({
+      let options = {
         plane,
         dimensions,
         show,
@@ -72,8 +72,9 @@ export default {
         outlineWidth,
         shadows,
         distanceDisplayCondition
-      })
-
+      }
+      this.removeNullItem(options)
+      let planeGraphics = new Cesium.PlaneGraphics(options)
       return planeGraphics
     }
   }

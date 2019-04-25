@@ -4,24 +4,14 @@ export default {
   name: 'label-primitive',
   mixins: [primitiveCollectionItem],
   props: {
-    backgroundColor: {
-      type: Object
-    },
-    backgroundPadding: {
-      type: Object
-    },
+    backgroundColor: Object,
+    backgroundPadding: Object,
     disableDepthTestDistance: {
       type: Number
     },
-    distanceDisplayCondition: {
-      type: Object
-    },
-    eyeOffset: {
-      type: Object
-    },
-    fillColor: {
-      type: Object
-    },
+    distanceDisplayCondition: Object,
+    eyeOffset: Object,
+    fillColor: Object,
     font: {
       type: String,
       default: '30px sans-serif'
@@ -35,26 +25,16 @@ export default {
       default: 1
     },
     id: null,
-    outlineColor: {
-      type: Object
-    },
+    outlineColor: Object,
     outlineWidth: {
       type: Number,
       default: 1.0
     },
-    pixelOffset: {
-      type: Object
-    },
+    pixelOffset: Object,
     pixelOffsetScaleByDistance: Object,
-    position: {
-      type: Object
-    },
-    scale: {
-      type: Number
-    },
-    scaleByDistance: {
-      type: Object
-    },
+    position: Object,
+    scale: Number,
+    scaleByDistance: Object,
     show: {
       type: Boolean,
       default: true
@@ -67,12 +47,8 @@ export default {
       type: Number,
       default: 2
     },
-    text: {
-      type: String
-    },
-    translucencyByDistance: {
-      type: Object
-    },
+    text: String,
+    translucencyByDistance: Object,
     verticalOrigin: {
       type: Number,
       default: 2
@@ -155,30 +131,31 @@ export default {
         horizontalOrigin, id, outlineColor, outlineWidth, pixelOffset, pixelOffsetScaleByDistance, position, scale, scaleByDistance,
         show, showBackground, labelStyle, text, translucencyByDistance, verticalOrigin } = this
       let label = {
-        backgroundColor: backgroundColor,
-        backgroundPadding: backgroundPadding,
-        disableDepthTestDistance: disableDepthTestDistance,
-        distanceDisplayCondition: distanceDisplayCondition,
-        eyeOffset: eyeOffset,
-        fillColor: fillColor,
-        font: font,
-        heightReference: heightReference,
-        horizontalOrigin: horizontalOrigin,
-        id: id,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        pixelOffset: pixelOffset,
-        pixelOffsetScaleByDistance: pixelOffsetScaleByDistance,
-        position: position,
-        scale: scale,
-        scaleByDistance: scaleByDistance,
-        show: show,
-        showBackground: showBackground,
-        style: labelStyle,
-        text: text,
-        translucencyByDistance: translucencyByDistance,
-        verticalOrigin: verticalOrigin
+        backgroundColor,
+        backgroundPadding,
+        disableDepthTestDistance,
+        distanceDisplayCondition,
+        eyeOffset,
+        fillColor,
+        font,
+        heightReference,
+        horizontalOrigin,
+        id,
+        outlineColor,
+        outlineWidth,
+        pixelOffset,
+        pixelOffsetScaleByDistance,
+        position,
+        scale,
+        scaleByDistance,
+        show,
+        showBackground,
+        labelStyle,
+        text,
+        translucencyByDistance,
+        verticalOrigin
       }
+      this.removeNullItem(label)
       return primitiveCollection.add(label)
     }
   }

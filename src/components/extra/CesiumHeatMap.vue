@@ -84,8 +84,8 @@ export default {
       *  options: a heatmap.js options object (see http://www.patrick-wied.at/static/heatmapjs/docs.html#h337-create)
       */
     create (bounds, options) {
-      const { Cesium, viewer } = this
-      let instance = new CHInstance(viewer, bounds, options, Cesium, this)
+      const { viewer } = this
+      let instance = new CHInstance(viewer, bounds, options, this)
       return instance
     },
     getContainer (width, height, id) {

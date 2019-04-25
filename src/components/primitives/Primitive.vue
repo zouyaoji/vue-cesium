@@ -5,19 +5,13 @@ export default {
   render (h) {},
   mixins: [commonMixin('primitive')],
   props: {
-    geometryInstances: {
-      type: Array | Object
-    },
-    appearance: {
-      type: Object
-    },
+    geometryInstances: Array | Object,
+    appearance: Object,
     show: {
       type: Boolean,
       default: true
     },
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     vertexCacheOptimize: {
       type: Boolean,
       default: false
@@ -63,20 +57,21 @@ export default {
       const { geometryInstances, appearance, show, modelMatrix, vertexCacheOptimize, interleave, compressVertices,
         releaseGeometryInstances, allowPicking, cull, asynchronous, debugShowBoundingVolume, shadows } = this
       let point = {
-        geometryInstances: geometryInstances,
-        appearance: appearance,
-        show: show,
-        modelMatrix: modelMatrix,
-        vertexCacheOptimize: vertexCacheOptimize,
-        interleave: interleave,
-        compressVertices: compressVertices,
-        releaseGeometryInstances: releaseGeometryInstances,
-        allowPicking: allowPicking,
-        cull: cull,
-        asynchronous: asynchronous,
-        debugShowBoundingVolume: debugShowBoundingVolume,
-        shadows: shadows
+        geometryInstances,
+        appearance,
+        show,
+        modelMatrix,
+        vertexCacheOptimize,
+        interleave,
+        compressVertices,
+        releaseGeometryInstances,
+        allowPicking,
+        cull,
+        asynchronous,
+        debugShowBoundingVolume,
+        shadows
       }
+      this.removeNullItem(point)
       this.originInstance = this.$parent.originInstance.add(point)
     }
   }

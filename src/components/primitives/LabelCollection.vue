@@ -4,19 +4,13 @@ export default {
   name: 'label-collection',
   mixins: [primitiveCollection],
   props: {
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     debugShowBoundingVolume: {
       type: Boolean,
       default: false
     },
-    scene: {
-      type: Object
-    },
-    blendOption: {
-      type: Number
-    }
+    scene: Object,
+    blendOption: Number
   },
   watch: {
     modelMatrix () {
@@ -29,12 +23,14 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, modelMatrix, debugShowBoundingVolume, scene, blendOption } = this
-      let labelCollection = new Cesium.LabelCollection({
-        modelMatrix: modelMatrix,
-        debugShowBoundingVolume: debugShowBoundingVolume,
-        scene: scene,
-        blendOption: blendOption
-      })
+      let options = {
+        modelMatrix,
+        debugShowBoundingVolume,
+        scene,
+        blendOption
+      }
+      this.removeNullItem(options)
+      let labelCollection = new Cesium.LabelCollection(options)
       return labelCollection
     }
   }

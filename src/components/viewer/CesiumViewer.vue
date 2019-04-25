@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-04-08 14:37:12
+ * @Last Modified time: 2019-04-25 16:22:29
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -23,9 +23,7 @@ export default {
   name: 'cesium-viewer',
   mixins: [services],
   props: {
-    cesiumPath: {
-      type: String
-    },
+    cesiumPath: String,
     animation: {
       type: Boolean,
       default: false
@@ -85,41 +83,21 @@ export default {
     clockViewModel: {
       type: Object
     },
-    selectedImageryProviderViewModel: {
-      type: Object
-    },
-    imageryProviderViewModels: {
-      type: Object
-    },
-    selectedTerrainProviderViewModel: {
-      type: Object
-    },
-    terrainProviderViewModels: {
-      type: Object
-    },
-    imageryProvider: {
-      type: Object
-    },
-    terrainProvider: {
-      type: Object
-    },
-    skyBox: {
-      type: Object
-    },
-    skyAtmosphere: {
-      type: Object
-    },
+    selectedImageryProviderViewModel: Object,
+    imageryProviderViewModels: Object,
+    selectedTerrainProviderViewModel: Object,
+    terrainProviderViewModels: Object,
+    imageryProvider: Object,
+    terrainProvider: Object,
+    skyBox: Object,
+    skyAtmosphere: Object,
     /* eslint-disable no-undef */
-    fullscreenElement: {
-      type: Element
-    },
+    fullscreenElement: Element,
     useDefaultRenderLoop: {
       type: Boolean,
       default: true
     },
-    targetFrameRate: {
-      type: Number
-    },
+    targetFrameRate: Number,
     showRenderLoopErrors: {
       type: Boolean,
       default: true
@@ -128,32 +106,20 @@ export default {
       type: Boolean,
       default: true
     },
-    contextOptions: {
-      type: Object
-    },
+    contextOptions: Object,
     sceneMode: {
       type: Number,
       default: 3
     },
-    mapProjection: {
-      type: Object
-    },
-    globe: {
-      type: Object
-    },
+    mapProjection: Object,
+    globe: Object,
     orderIndependentTranslucency: {
       type: Boolean,
       default: true
     },
-    creditContainer: {
-      type: String
-    },
-    creditViewport: {
-      type: String
-    },
-    dataSources: {
-      type: Object
-    },
+    creditContainer: String,
+    creditViewport: String,
+    dataSources: Object,
     terrainExaggeration: {
       type: Number,
       default: 1.0
@@ -163,12 +129,12 @@ export default {
       default: false
     },
     terrainShadows: {
-      type: Number
-      // default: Cesium.ShadowMode.RECEIVE_ONLY
+      type: Number,
+      default: 3
     },
     mapMode2D: {
-      type: Number
-      // default: Cesium.MapMode2D.INFINITE_SCROLL
+      type: Number,
+      default: 1
     },
     projectionPicker: {
       type: Boolean,
@@ -190,9 +156,7 @@ export default {
       type: Boolean,
       default: true
     },
-    accessToken: {
-      type: String
-    },
+    accessToken: String,
     camera: {
       type: Object,
       default: function () {
@@ -814,53 +778,98 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
         Cesium.Ion.defaultAccessToken = accessToken
       }
-
-      const viewer = new Cesium.Viewer($el, {
-        animation: this.animation,
-        baseLayerPicker: this.baseLayerPicker,
-        fullscreenButton: this.fullscreenButton,
-        vrButton: this.vrButton,
-        geocoder: this.geocoder,
-        homeButton: this.homeButton,
-        infoBox: this.infoBox,
-        sceneModePicker: this.sceneModePicker,
-        selectionIndicator: this.selectionIndicator,
-        timeline: this.timeline,
-        navigationHelpButton: this.navigationHelpButton,
-        navigationInstructionsInitiallyVisible: this.navigationInstructionsInitiallyVisible,
-        scene3DOnly: this.scene3DOnly,
-        shouldAnimate: this.shouldAnimate,
-        clockViewModel: this.clockViewModel,
-        selectedImageryProviderViewModel: this.selectedImageryProviderViewModel,
-        imageryProviderViewModels: this.imageryProviderViewModels,
-        selectedTerrainProviderViewModel: this.selectedTerrainProviderViewModel,
-        terrainProviderViewModels: this.terrainProviderViewModels,
-        imageryProvider: this.imageryProvider,
-        terrainProvider: this.terrainProvider,
-        skyBox: this.skyBox,
-        skyAtmosphere: this.skyAtmosphere,
-        fullscreenElement: this.fullscreenElement,
-        useDefaultRenderLoop: this.useDefaultRenderLoop,
-        targetFrameRate: this.targetFrameRate,
-        showRenderLoopErrors: this.showRenderLoopErrors,
-        automaticallyTrackDataSourceClocks: this.automaticallyTrackDataSourceClocks,
-        contextOptions: this.contextOptions,
-        sceneMode: this.sceneMode,
-        mapProjection: this.mapProjection,
-        globe: this.globe,
-        orderIndependentTranslucency: this.orderIndependentTranslucency,
-        creditContainer: this.creditContainer,
-        creditViewport: this.creditViewport,
-        dataSources: this.dataSources,
-        terrainExaggeration: this.terrainExaggeration,
-        shadows: this.shadows,
-        terrainShadows: this.terrainShadows,
-        mapMode2D: this.mapMode2D,
-        projectionPicker: this.projectionPicker,
-        requestRenderMode: this.requestRenderMode,
-        maximumRenderTimeChange: this.maximumRenderTimeChange,
-        navigation: this.navigation
-      })
+      const { animation,
+        baseLayerPicker,
+        fullscreenButton,
+        vrButton,
+        geocoder,
+        homeButton,
+        infoBox,
+        sceneModePicker,
+        selectionIndicator,
+        timeline,
+        navigationHelpButton,
+        navigationInstructionsInitiallyVisible,
+        scene3DOnly,
+        shouldAnimate,
+        clockViewModel,
+        selectedImageryProviderViewModel,
+        imageryProviderViewModels,
+        selectedTerrainProviderViewModel,
+        terrainProviderViewModels,
+        imageryProvider,
+        terrainProvider,
+        skyBox,
+        skyAtmosphere,
+        fullscreenElement,
+        useDefaultRenderLoop,
+        targetFrameRate,
+        showRenderLoopErrors,
+        automaticallyTrackDataSourceClocks,
+        contextOptions,
+        sceneMode,
+        mapProjection,
+        globe,
+        orderIndependentTranslucency,
+        creditContainer,
+        creditViewport,
+        dataSources,
+        terrainExaggeration,
+        shadows,
+        terrainShadows,
+        mapMode2D,
+        projectionPicker,
+        requestRenderMode,
+        maximumRenderTimeChange,
+        navigation } = this
+      let options = {
+        animation,
+        baseLayerPicker,
+        fullscreenButton,
+        vrButton,
+        geocoder,
+        homeButton,
+        infoBox,
+        sceneModePicker,
+        selectionIndicator,
+        timeline,
+        navigationHelpButton,
+        navigationInstructionsInitiallyVisible,
+        scene3DOnly,
+        shouldAnimate,
+        clockViewModel,
+        selectedImageryProviderViewModel,
+        imageryProviderViewModels,
+        selectedTerrainProviderViewModel,
+        terrainProviderViewModels,
+        imageryProvider,
+        terrainProvider,
+        skyBox,
+        skyAtmosphere,
+        fullscreenElement,
+        useDefaultRenderLoop,
+        targetFrameRate,
+        showRenderLoopErrors,
+        automaticallyTrackDataSourceClocks,
+        contextOptions,
+        sceneMode,
+        mapProjection,
+        globe,
+        orderIndependentTranslucency,
+        creditContainer,
+        creditViewport,
+        dataSources,
+        terrainExaggeration,
+        shadows,
+        terrainShadows,
+        mapMode2D,
+        projectionPicker,
+        requestRenderMode,
+        maximumRenderTimeChange,
+        navigation
+      }
+      this.removeNullItem(options)
+      const viewer = new Cesium.Viewer($el, options)
       this.viewer = viewer
       // options待完善
       bindEvents.call(this, viewer)

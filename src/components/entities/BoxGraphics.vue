@@ -65,7 +65,7 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, heightReference, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
-      let box = new Cesium.BoxGraphics({
+      let options = {
         heightReference,
         dimensions,
         show,
@@ -76,8 +76,9 @@ export default {
         outlineWidth,
         shadows,
         distanceDisplayCondition
-      })
-
+      }
+      this.removeNullItem(options)
+      let box = new Cesium.BoxGraphics(options)
       return box
     }
   }

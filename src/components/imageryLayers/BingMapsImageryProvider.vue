@@ -4,28 +4,16 @@ export default {
   name: 'bingmaps-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
-    bmKey: {
-      type: String
-    },
-    tileProtocol: {
-      type: String
-    },
+    url: String,
+    bmKey: String,
+    tileProtocol: String,
     mapStyle: {
       type: String,
       default: 'Aerial'
     },
-    culture: {
-      type: String
-    },
-    ellipsoid: {
-      type: Object
-    },
-    tileDiscardPolicy: {
-      type: Object
-    }
+    culture: String,
+    ellipsoid: Object,
+    tileDiscardPolicy: Object
   },
   watch: {
     url () {
@@ -53,15 +41,17 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy } = this
-      let imageryProvider = new Cesium.BingMapsImageryProvider({
-        url: url,
+      let options = {
+        url,
         key: bmKey,
-        tileProtocol: tileProtocol,
-        mapStyle: mapStyle,
-        culture: culture,
-        ellipsoid: ellipsoid,
-        tileDiscardPolicy: tileDiscardPolicy
-      })
+        tileProtocol,
+        mapStyle,
+        culture,
+        ellipsoid,
+        tileDiscardPolicy
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.BingMapsImageryProvider(options)
       return imageryProvider
     }
   }

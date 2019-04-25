@@ -4,9 +4,7 @@ export default {
   name: 'polyline-collection',
   mixins: [primitiveCollection],
   props: {
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     debugShowBoundingVolume: {
       type: Boolean,
       default: false
@@ -23,10 +21,12 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, modelMatrix, debugShowBoundingVolume } = this
-      let polylineCollection = new Cesium.PolylineCollection({
-        modelMatrix: modelMatrix,
-        debugShowBoundingVolume: debugShowBoundingVolume
-      })
+      let options = {
+        modelMatrix,
+        debugShowBoundingVolume
+      }
+      this.removeNullItem(options)
+      let polylineCollection = new Cesium.PolylineCollection(options)
       return polylineCollection
     }
   }

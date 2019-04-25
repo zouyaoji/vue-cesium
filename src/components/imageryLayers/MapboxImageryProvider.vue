@@ -4,34 +4,18 @@ export default {
   name: 'mapbox-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
-    mapId: {
-      type: String
-    },
-    accessToken: {
-      type: String
-    },
+    url: String,
+    mapId: String,
+    accessToken: String,
     format: {
       type: String,
       default: 'png'
     },
-    ellipsoid: {
-      type: String
-    },
-    minimumLevel: {
-      type: Number
-    },
-    maximumLevel: {
-      type: Number
-    },
-    rectangle: {
-      type: Object
-    },
-    credit: {
-      type: String
-    }
+    ellipsoid: Object,
+    minimumLevel: Number,
+    maximumLevel: Number,
+    rectangle: Object,
+    credit: String
   },
   watch: {
     url () {
@@ -65,17 +49,19 @@ export default {
   methods: {
     createCesiumObject () {
       const { Cesium, url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } = this
-      let imageryProvider = new Cesium.MapboxImageryProvider({
-        url: url,
-        mapId: mapId,
-        accessToken: accessToken,
-        format: format,
-        ellipsoid: ellipsoid,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
-        rectangle: rectangle,
-        credit: credit
-      })
+      let options = {
+        url,
+        mapId,
+        accessToken,
+        format,
+        ellipsoid,
+        minimumLevel,
+        maximumLevel,
+        rectangle,
+        credit
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.MapboxImageryProvider(options)
       return imageryProvider
     }
   }

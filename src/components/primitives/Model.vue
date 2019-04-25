@@ -4,19 +4,13 @@ export default {
   name: 'model-primitive',
   mixins: [primitive],
   props: {
-    url: {
-      type: String
-    },
-    basePath: {
-      type: String
-    },
+    url: String,
+    basePath: String,
     show: {
       type: Boolean,
       default: true
     },
-    modelMatrix: {
-      type: Object
-    },
+    modelMatrix: Object,
     scale: {
       type: Number,
       default: 1
@@ -25,9 +19,7 @@ export default {
       type: Number,
       default: 0
     },
-    maximumScale: {
-      type: Number
-    },
+    maximumScale: Number,
     id: null,
     allowPicking: {
       type: Boolean,
@@ -46,7 +38,8 @@ export default {
       default: true
     },
     shadows: {
-      type: Number
+      type: Number,
+      default: 1
     },
     debugShowBoundingVolume: {
       type: Boolean,
@@ -56,35 +49,24 @@ export default {
       type: Boolean,
       default: false
     },
-    heightReference: {
-      type: Object
-    },
-    scene: {
-      type: Object
-    },
-    distanceDisplayCondition: {
-      type: Object
-    },
-    color: {
-      type: Object
-    },
+    heightReference: Object,
+    scene: Object,
+    distanceDisplayCondition: Object,
+    color: Object,
     colorBlendMode: {
-      type: Number
+      type: Number,
+      default: 0
     },
     colorBlendAmount: {
       type: Number,
       default: 0.5
     },
-    silhouetteColor: {
-      type: Object
-    },
+    silhouetteColor: Object,
     silhouetteSize: {
       type: Number,
       default: 0.0
     },
-    clippingPlanes: {
-      type: Object
-    },
+    clippingPlanes: Object,
     dequantizeInShader: {
       type: Boolean,
       default: true
@@ -173,34 +155,35 @@ export default {
       const { Cesium, url, basePath, show, modelMatrix, scale, minimumPixelSize, maximumScale, id, allowPicking, incrementallyLoadTextures,
         asynchronous, clampAnimations, shadows, debugShowBoundingVolume, debugWireframe, heightReference, scene, distanceDisplayCondition, color,
         colorBlendMode, colorBlendAmount, silhouetteColor, silhouetteSize, clippingPlanes, dequantizeInShader } = this
-
-      let model = Cesium.Model.fromGltf({
-        url: url,
-        basePath: basePath,
-        show: show,
-        modelMatrix: modelMatrix,
-        scale: scale,
-        minimumPixelSize: minimumPixelSize,
-        maximumScale: maximumScale,
-        id: id,
-        allowPicking: allowPicking,
-        incrementallyLoadTextures: incrementallyLoadTextures,
-        asynchronous: asynchronous,
-        clampAnimations: clampAnimations,
-        shadows: shadows,
-        debugShowBoundingVolume: debugShowBoundingVolume,
-        debugWireframe: debugWireframe,
-        heightReference: heightReference,
-        scene: scene,
-        distanceDisplayCondition: distanceDisplayCondition,
-        color: color,
-        colorBlendMode: colorBlendMode,
-        colorBlendAmount: colorBlendAmount,
-        silhouetteColor: silhouetteColor,
-        silhouetteSize: silhouetteSize,
-        clippingPlanes: clippingPlanes,
-        dequantizeInShader: dequantizeInShader
-      })
+      let options = {
+        url,
+        basePath,
+        show,
+        modelMatrix,
+        scale,
+        minimumPixelSize,
+        maximumScale,
+        id,
+        allowPicking,
+        incrementallyLoadTextures,
+        asynchronous,
+        clampAnimations,
+        shadows,
+        debugShowBoundingVolume,
+        debugWireframe,
+        heightReference,
+        scene,
+        distanceDisplayCondition,
+        color,
+        colorBlendMode,
+        colorBlendAmount,
+        silhouetteColor,
+        silhouetteSize,
+        clippingPlanes,
+        dequantizeInShader
+      }
+      this.removeNullItem(options)
+      let model = Cesium.Model.fromGltf(options)
       return model
     }
   }

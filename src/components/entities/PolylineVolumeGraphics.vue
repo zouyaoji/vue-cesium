@@ -82,7 +82,7 @@ export default {
     createCesiumObject () {
       const { Cesium, positions, shape, cornerType, show, fill, material, outline, outlineColor,
         outlineWidth, granularity, shadows, distanceDisplayCondition } = this
-      let polylineVolume = new Cesium.PolylineVolumeGraphics({
+      let options = {
         positions: positions,
         shape: shape,
         cornerType: cornerType,
@@ -95,8 +95,9 @@ export default {
         granularity: granularity,
         shadows: shadows,
         distanceDisplayCondition: distanceDisplayCondition
-      })
-
+      }
+      this.removeNullItem(options)
+      let polylineVolume = new Cesium.PolylineVolumeGraphics(options)
       return polylineVolume
     }
   }

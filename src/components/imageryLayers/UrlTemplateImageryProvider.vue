@@ -4,37 +4,19 @@ export default {
   name: 'urltemplate-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
-    pickFeaturesUrl: {
-      type: String
-    },
-    urlSchemeZeroPadding: {
-      type: Object
-    },
-    subdomains: {
-      type: String
-    },
-    credit: {
-      type: String
-    },
+    url: String,
+    pickFeaturesUrl: String,
+    urlSchemeZeroPadding: Object,
+    subdomains: String,
+    credit: String,
     minimumLevel: {
       type: Number,
       default: 0
     },
-    maximumLevel: {
-      type: Number
-    },
-    rectangle: {
-      type: Object
-    },
-    tilingScheme: {
-      type: Object
-    },
-    ellipsoid: {
-      type: Object
-    },
+    maximumLevel: Number,
+    rectangle: Object,
+    tilingScheme: Object,
+    ellipsoid: Object,
     tileWidth: {
       type: Number,
       default: 256
@@ -47,16 +29,12 @@ export default {
       type: Boolean,
       default: true
     },
-    getFeatureInfoFormats: {
-      type: Array
-    },
+    getFeatureInfoFormats: Array,
     enablePickFeatures: {
       type: Boolean,
       default: true
     },
-    customTags: {
-      type: Object
-    }
+    customTags: Object
   },
   watch: {
     url () {
@@ -112,24 +90,26 @@ export default {
     createCesiumObject () {
       const { Cesium, url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
         tilingScheme, ellipsoid, tileWidth, tileHeight, hasAlphaChannel, getFeatureInfoFormats, customTags, enablePickFeatures } = this
-      let imageryProvider = new Cesium.UrlTemplateImageryProvider({
-        url: url,
-        pickFeaturesUrl: pickFeaturesUrl,
-        urlSchemeZeroPadding: urlSchemeZeroPadding,
-        subdomains: subdomains,
-        credit: credit,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
-        rectangle: rectangle,
-        tilingScheme: tilingScheme,
-        ellipsoid: ellipsoid,
-        tileWidth: tileWidth,
-        tileHeight: tileHeight,
-        hasAlphaChannel: hasAlphaChannel,
-        getFeatureInfoFormats: getFeatureInfoFormats,
-        customTags: customTags,
-        enablePickFeatures: enablePickFeatures
-      })
+      let options = {
+        url,
+        pickFeaturesUrl,
+        urlSchemeZeroPadding,
+        subdomains,
+        credit,
+        minimumLevel,
+        maximumLevel,
+        rectangle,
+        tilingScheme,
+        ellipsoid,
+        tileWidth,
+        tileHeight,
+        hasAlphaChannel,
+        getFeatureInfoFormats,
+        customTags,
+        enablePickFeatures
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.UrlTemplateImageryProvider(options)
       return imageryProvider
     }
   }

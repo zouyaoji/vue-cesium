@@ -123,7 +123,7 @@ export default {
       const { Cesium, text, font, labelStyle, fillColor, outlineColor, outlineWidth, show, showBackground, backgroundColor, backgroundPadding, scale,
         horizontalOrigin, verticalOrigin, eyeOffset, pixelOffset, translucencyByDistance, pixelOffsetScaleByDistance, scaleByDistance, heightReference,
         distanceDisplayCondition, disableDepthTestDistance } = this
-      let label = new Cesium.LabelGraphics({
+      let options = {
         text,
         font,
         labelStyle,
@@ -145,7 +145,9 @@ export default {
         heightReference,
         distanceDisplayCondition,
         disableDepthTestDistance
-      })
+      }
+      this.removeNullItem(options)
+      let label = new Cesium.LabelGraphics(options)
 
       return label
     }

@@ -16,18 +16,10 @@ export default {
       type: Boolean,
       default: false
     },
-    material: {
-      type: Object
-    },
-    positions: {
-      type: Array
-    },
-    id: {
-      type: Object
-    },
-    distanceDisplayCondition: {
-      type: Number
-    }
+    material: Object,
+    positions: Array,
+    id: Object,
+    distanceDisplayCondition: Object
   },
   watch: {
     show (val) {
@@ -56,14 +48,15 @@ export default {
     createCesiumObject () {
       const { primitiveCollection, show, width, loop, material, positions, id, distanceDisplayCondition } = this
       let polyline = {
-        show: show,
-        width: width,
-        loop: loop,
-        material: material,
-        positions: positions,
-        id: id,
-        distanceDisplayCondition: distanceDisplayCondition
+        show,
+        width,
+        loop,
+        material,
+        positions,
+        id,
+        distanceDisplayCondition
       }
+      this.removeNullItem(polyline)
       return primitiveCollection.add(polyline)
     }
   }

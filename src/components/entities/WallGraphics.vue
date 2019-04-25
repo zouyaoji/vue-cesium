@@ -77,7 +77,7 @@ export default {
     createCesiumObject () {
       const { Cesium, positions, maximumHeights, minimumHeights, show, fill, material, outline, outlineColor,
         outlineWidth, granularity, shadows, distanceDisplayCondition } = this
-      let wall = new Cesium.WallGraphics({
+      let options = {
         positions: positions,
         maximumHeights: maximumHeights,
         minimumHeights: minimumHeights,
@@ -90,8 +90,9 @@ export default {
         granularity: granularity,
         shadows: shadows,
         distanceDisplayCondition: distanceDisplayCondition
-      })
-
+      }
+      this.removeNullItem(options)
+      let wall = new Cesium.WallGraphics(options)
       return wall
     }
   }

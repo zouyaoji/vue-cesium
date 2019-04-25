@@ -168,7 +168,7 @@ export default {
     createCesiumObject () {
       const { Cesium, id, name, availability, description, show, position, orientation, viewFrom, parent, billboard, corridor, cylinder,
         ellipse, ellipsoid, box, label, model, path, plane, point, polygon, polyline, properties, polylineVolume, rectangle, wall } = this
-      let entity = new Cesium.Entity({
+      let options = {
         id,
         name,
         availability,
@@ -195,7 +195,9 @@ export default {
         polylineVolume,
         rectangle,
         wall
-      })
+      }
+      this.removeNullItem(options)
+      let entity = new Cesium.Entity(options)
       return entity
     },
     mount () {

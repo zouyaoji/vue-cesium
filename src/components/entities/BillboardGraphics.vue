@@ -107,7 +107,7 @@ export default {
       const { Cesium, image, show, scale, horizontalOrigin, verticalOrigin, eyeOffset, pixelOffset, rotation, alignedAxis, width, height,
         color, scaleByDistance, translucencyByDistance, pixelOffsetScaleByDistance, imageSubRegion, sizeInMeters, heightReference, distanceDisplayCondition,
         disableDepthTestDistance } = this
-      let billboard = new Cesium.BillboardGraphics({
+      let options = {
         image,
         show,
         scale,
@@ -128,8 +128,9 @@ export default {
         heightReference,
         distanceDisplayCondition,
         disableDepthTestDistance
-      })
-
+      }
+      this.removeNullItem(options)
+      let billboard = new Cesium.BillboardGraphics(options)
       return billboard
     }
   }

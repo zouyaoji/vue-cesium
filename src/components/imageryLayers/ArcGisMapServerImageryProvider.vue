@@ -4,35 +4,21 @@ export default {
   name: 'arcgis-mapserver-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
-    token: {
-      type: String
-    },
-    tileDiscardPolicy: {
-      type: Object
-    },
+    url: String,
+    token: String,
+    tileDiscardPolicy: Object,
     usePreCachedTilesIfAvailable: {
       type: Boolean,
       default: true
     },
-    layers: {
-      type: String
-    },
+    layers: String,
     enablePickFeatures: {
       type: Boolean,
       default: true
     },
-    rectangle: {
-      type: Object
-    },
-    tilingScheme: {
-      type: Object
-    },
-    ellipsoid: {
-      type: Object
-    },
+    rectangle: Object,
+    tilingScheme: Object,
+    ellipsoid: Object,
     tileWidth: {
       type: Number,
       default: 256
@@ -41,12 +27,8 @@ export default {
       type: Number,
       default: 256
     },
-    minimumLevel: {
-      type: Number
-    },
-    maximumLevel: {
-      type: Number
-    }
+    minimumLevel: Number,
+    maximumLevel: Number
   },
   watch: {
     url () {
@@ -93,21 +75,23 @@ export default {
     createCesiumObject () {
       const { Cesium, url, token, tileDiscardPolicy, usePreCachedTilesIfAvailable, layers, enablePickFeatures, rectangle,
         tilingScheme, ellipsoid, tileWidth, tileHeight, minimumLevel, maximumLevel } = this
-      let imageryProvider = new Cesium.ArcGisMapServerImageryProvider({
-        url: url,
-        token: token,
-        tileDiscardPolicy: tileDiscardPolicy,
-        usePreCachedTilesIfAvailable: usePreCachedTilesIfAvailable,
-        layers: layers,
-        enablePickFeatures: enablePickFeatures,
-        rectangle: rectangle,
-        tilingScheme: tilingScheme,
-        ellipsoid: ellipsoid,
-        tileWidth: tileWidth,
-        tileHeight: tileHeight,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel
-      })
+      let options = {
+        url,
+        token,
+        tileDiscardPolicy,
+        usePreCachedTilesIfAvailable,
+        layers,
+        enablePickFeatures,
+        rectangle,
+        tilingScheme,
+        ellipsoid,
+        tileWidth,
+        tileHeight,
+        minimumLevel,
+        maximumLevel
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.ArcGisMapServerImageryProvider(options)
       return imageryProvider
     }
   }

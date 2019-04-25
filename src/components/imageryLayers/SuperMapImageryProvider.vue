@@ -4,12 +4,8 @@ export default {
   name: 'supermap-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
-    name: {
-      type: String
-    },
+    url: String,
+    name: String,
     minimumLevel: {
       type: Number,
       default: 0
@@ -46,13 +42,15 @@ export default {
       if (!Cesium.defined(Cesium.SuperMapImageryProvider)) {
         throw new Cesium.DeveloperError('Youer Cesium Package is not included SuperMapImageryProvider!')
       }
-      let imageryProvider = new Cesium.SuperMapImageryProvider({
-        url: url,
-        name: name,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
-        credit: credit
-      })
+      let options = {
+        url,
+        name,
+        minimumLevel,
+        maximumLevel,
+        credit
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.SuperMapImageryProvider(options)
       return imageryProvider
     }
   }

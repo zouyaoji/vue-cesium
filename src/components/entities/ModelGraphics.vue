@@ -125,7 +125,7 @@ export default {
       const { Cesium, uri, show, scale, minimumPixelSize, maximumScale, incrementallyLoadTextures, runAnimations, clampAnimations, nodeTransformations,
         shadows, heightReference, distanceDisplayCondition, silhouetteColor, silhouetteSize, color, colorBlendMode, colorBlendAmount, clippingPlanes,
         imageBasedLightingFactor, lightColor } = this
-      let model = new Cesium.ModelGraphics({
+      let options = {
         uri,
         show,
         scale,
@@ -146,8 +146,9 @@ export default {
         clippingPlanes,
         imageBasedLightingFactor,
         lightColor
-      })
-
+      }
+      this.removeNullItem(options)
+      let model = new Cesium.ModelGraphics(options)
       return model
     }
   }

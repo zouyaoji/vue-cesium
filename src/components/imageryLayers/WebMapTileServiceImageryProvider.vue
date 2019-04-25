@@ -4,34 +4,18 @@ export default {
   name: 'wmts-imagery-provider',
   mixins: [imageryProvider],
   props: {
-    url: {
-      type: String
-    },
+    url: String,
     format: {
       type: String,
       default: 'image/jpeg'
     },
-    layer: {
-      type: String
-    },
-    wmtsStyle: {
-      type: String
-    },
-    tileMatrixSetID: {
-      type: String
-    },
-    tileMatrixLabels: {
-      type: Array
-    },
-    clock: {
-      type: Object
-    },
-    times: {
-      type: Object
-    },
-    dimensions: {
-      type: Object
-    },
+    layer: String,
+    wmtsStyle: String,
+    tileMatrixSetID: String,
+    tileMatrixLabels: Array,
+    clock: Object,
+    times: Object,
+    dimensions: Object,
     tileWidth: {
       type: Number,
       default: 256
@@ -40,22 +24,14 @@ export default {
       type: Number,
       default: 256
     },
-    tilingScheme: {
-      type: Object
-    },
-    rectangle: {
-      type: Object
-    },
+    tilingScheme: Object,
+    rectangle: Object,
     minimumLevel: {
       type: Number,
       default: 0
     },
-    maximumLevel: {
-      type: Number
-    },
-    ellipsoid: {
-      type: Object
-    },
+    maximumLevel: Number,
+    ellipsoid: Object,
     credit: {
       type: String
     },
@@ -63,9 +39,7 @@ export default {
       type: String | Array,
       default: 'abc'
     },
-    token: {
-      type: String
-    }
+    token: String
   },
   watch: {
     url () {
@@ -127,25 +101,27 @@ export default {
     createCesiumObject () {
       const { Cesium, url, format, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
         tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
-      let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+      let options = {
         url: Cesium.defined(token) ? url + '&tk=' + token : url,
-        format: format,
-        style: wmtsStyle,
-        tileMatrixSetID: tileMatrixSetID,
-        tileMatrixLabels: tileMatrixLabels,
-        clock: clock,
-        times: times,
-        dimensions: dimensions,
-        tileWidth: tileWidth,
-        tileHeight: tileHeight,
-        tilingScheme: tilingScheme,
-        rectangle: rectangle,
-        minimumLevel: minimumLevel,
-        maximumLevel: maximumLevel,
-        ellipsoid: ellipsoid,
-        credit: credit,
-        subdomains: subdomains
-      })
+        format,
+        wmtsStyle,
+        tileMatrixSetID,
+        tileMatrixLabels,
+        clock,
+        times,
+        dimensions,
+        tileWidth,
+        tileHeight,
+        tilingScheme,
+        rectangle,
+        minimumLevel,
+        maximumLevel,
+        ellipsoid,
+        credit,
+        subdomains
+      }
+      this.removeNullItem(options)
+      let imageryProvider = new Cesium.WebMapTileServiceImageryProvider(options)
       return imageryProvider
     }
   }
