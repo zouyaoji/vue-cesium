@@ -33,9 +33,6 @@ const methods = {
   refresh () {
     throw new Error('Not implemented method')
   },
-  unload () {
-    throw new Error('Not implemented method')
-  },
   getServices () {
     return services.methods.getServices.call(this)
   }

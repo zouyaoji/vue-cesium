@@ -10,9 +10,6 @@ export default {
     load () {
       return common.methods.load.call(this)
     },
-    createCesiumObject () {
-      throw new Error('Not implemented method')
-    },
     /**
      * Redefine for easy call in child components
      * @returns {Object}
@@ -27,6 +24,9 @@ export default {
      */
     reload () {
       return common.methods.reload.call(this)
+    },
+    unload () {
+      throw new Error('Not implemented method')
     }
   }
 }

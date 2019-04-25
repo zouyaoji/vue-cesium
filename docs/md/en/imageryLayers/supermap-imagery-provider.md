@@ -18,11 +18,11 @@
       </sm-cesium-viewer>
       <div class="demo-tool">
         <span>alpha</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
         <span>brightness</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>contrast</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>switch url</span>
         <md-select v-model="url" placeholder="switch url">
           <md-option
@@ -80,11 +80,11 @@
     </sm-cesium-viewer>
     <div class="demo-tool">
       <span>alpha</span>
-      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
       <span>brightness</span>
-      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
       <span>contrast</span>
-      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
       <span>switch url</span>
       <md-select v-model="url" placeholder="switch url">
         <md-option

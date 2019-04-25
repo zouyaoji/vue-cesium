@@ -23,11 +23,11 @@
       </cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
         <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>切换服务</span>
         <md-select v-model="url" placeholder="请选择服务">
           <md-option
@@ -101,11 +101,11 @@
     </cesium-viewer>
     <div class="demo-tool">
       <span>透明度</span>
-      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
       <span>亮度</span>
-      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
       <span>对比度</span>
-      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01" tooltip="hover" ></vue-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
       <span>切换服务</span>
       <md-select v-model="url" placeholder="请选择服务">
         <md-option

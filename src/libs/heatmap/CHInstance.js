@@ -4,16 +4,15 @@
  *  Works with heatmap.js v2.0.0: http://www.patrick-wied.at/static/heatmapjs/
  */
 const h337 = require('heatmap.js')
-let Cesium = {}
 class CHInstance {
-  constructor (c, bb, o, CesiumJS, CesiumHeatmap) {
+  constructor (c, bb, o, CesiumHeatmap) {
     if (!bb) {
       return null
     }
     if (!o) {
       o = {}
     }
-    Cesium = CesiumJS
+    // Cesium = CesiumJS
     this._layer = undefined
     // this.Cesium = Cesium
     this.CesiumHeatmap = CesiumHeatmap

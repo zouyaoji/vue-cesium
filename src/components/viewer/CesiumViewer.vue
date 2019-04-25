@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-04-25 16:22:29
+ * @Last Modified time: 2019-04-25 17:37:35
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -509,6 +509,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer._vrButton = vrButton
         resizeControl()
       }
+    },
+    useDefaultRenderLoop (val) {
+      this.viewer.useDefaultRenderLoop = val
     },
     'viewer.vrButton.viewModel.isVREnabled' (val) {
       const { Cesium, viewer } = this
