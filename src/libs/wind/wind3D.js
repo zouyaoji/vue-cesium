@@ -88,6 +88,14 @@ class Wind3D {
 
     window.addEventListener('displayOptionsChanged', function (event) {})
   }
+
+  destroy () {
+    this.scene.primitives.remove(this.particleSystem.primitives.particlesUpdate)
+    this.scene.primitives.remove(this.particleSystem.primitives.particlesRandomize)
+    this.scene.primitives.remove(this.particleSystem.primitives.segments)
+    this.scene.primitives.remove(this.particleSystem.primitives.trails)
+    this.scene.primitives.remove(this.particleSystem.primitives.screen)
+  }
 }
 
 export default Wind3D

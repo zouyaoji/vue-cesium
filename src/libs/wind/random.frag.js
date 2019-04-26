@@ -36,7 +36,8 @@ vec4 generateRandomParticle(vec2 seed, float lev) {
 }
 
 bool particleOutbound(vec4 particle) {
-    return particle.y < -90.0 || particle.y > 90.0;
+    // return particle.y < -90.0 || particle.y > 90.0;
+    return ReplacedExpression;
 }
 
 void main() {

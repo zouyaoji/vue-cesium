@@ -429,9 +429,18 @@ class ParticleSystem {
         return that.particleSystemOptions.dropRateBump
       }
     }
-
+    let expression =
+      'particle.y < ' +
+      this.data.lat.min.toFixed(6) +
+      ' || particle.y >' +
+      this.data.lat.max.toFixed(6) +
+      ' || particle.x < ' +
+      this.data.lon.min.toFixed(6) +
+      ' || particle.x > ' +
+      this.data.lon.max.toFixed(6)
+    let randomFragTemp = randomFrag.replace('ReplacedExpression', expression)
     const fragmentShaderSource = new Cesium.ShaderSource({
-      sources: [randomFrag]
+      sources: [randomFragTemp]
     })
 
     var primitive = new CustomPrimitive({

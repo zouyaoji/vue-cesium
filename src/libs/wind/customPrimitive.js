@@ -1,7 +1,5 @@
-// let Cesium = {}
 class CustomPrimitive {
   constructor (options) {
-    // Cesium = CesiumJS
     this.commandType = Cesium.defaultValue(options.commandType, 'Draw')
 
     this.geometry = options.geometry

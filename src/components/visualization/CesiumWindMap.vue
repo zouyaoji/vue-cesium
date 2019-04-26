@@ -10,7 +10,7 @@ export default {
   },
   mixins: [cmp],
   props: {
-    windData: Object,
+    data: Object,
     particleSystemOptions: {
       type: Object,
       default: function () {
@@ -27,7 +27,7 @@ export default {
     }
   },
   watch: {
-    windData (val) {
+    data (val) {
       this.reload()
     },
     particleSystemOptions: {
@@ -40,11 +40,10 @@ export default {
   methods: {
     createCesiumObject () {
       const { viewer, particleSystemOptions } = this
-      window.viewer = viewer
-      if (Cesium.defined(this.windData.U)) {
+      if (!this.isEmptyObj(this.data)) {
         let windMap = new Wind3D(
           viewer,
-          this.windData,
+          this.data,
           particleSystemOptions
         )
         return windMap
@@ -55,8 +54,8 @@ export default {
       // const { viewer, entity } = this
     },
     unload () {
-      if (this.windMap !== null) {
-        this.windMap.particleSystem.destroyAll()
+      if (!this.isEmptyObj(this.windMap)) {
+        this.windMap.destroy()
       }
     },
 
