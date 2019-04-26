@@ -1,6 +1,6 @@
 # 风向图
 
-`cesium-heatmap` 风向图
+`cesium-windmap` 风向图
 
 ## 示例
 
@@ -15,7 +15,7 @@
         <imagery-layer>
           <singletile-imagery-provider :url="urlLayer"></singletile-imagery-provider>
         </imagery-layer>
-        <cesium-windmap ref="windmap" :windData="windData" :particleSystemOptions="particleSystemOptions">
+        <cesium-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions">
         </cesium-windmap>
       </cesium-viewer>
       <div class="demo-tool">
@@ -33,6 +33,15 @@
         <vue-slider v-model="particleSystemOptions.speedFactor" :min="0.5" :max="100" :interval="0.1"></vue-slider>
         <span>lineWidth</span>
         <vue-slider v-model="particleSystemOptions.lineWidth" :min="0.01" :max="16" :interval="0.01"></vue-slider>
+        <span>switch data</span>
+        <md-select v-model="data" placeholder="切换数据" @selected="switchData">
+          <md-option
+            v-for="item in options"
+            :key="item.value"
+            :value="item.value">
+            {{item.label}}
+          </md-option>
+        </md-select>
       </div>
     </div>
   </template>
@@ -44,6 +53,14 @@
           urlLayer: './statics/SampleData/worldimage.jpg',
           urlNetCDF: './statics/SampleData/windData/demo.nc',
           windData: {},
+          options: [{
+            label: 'Global Data',
+            value: 1
+          }, {
+            label: 'China Data',
+            value: 2
+          }],
+          data: 0,
           particleSystemOptions: {
             maxParticles: 128 * 128,
             particleHeight: 100.0,
@@ -110,13 +127,29 @@
       },
       methods: {
         ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          let _this = this
           this.cesiumInstance = cesiumInstance
-          this.loadNetCDF(this.urlNetCDF).then((data)=>{
-             data.colorTable = this.loadColorTable()
-            _this.windData = data
-          })
+          this.data = 2
+          this.switchData(2)
+        },
+        switchData (val) {
+          const {Cesium, viewer} = this.cesiumInstance
+          let _this = this
+          if (val === 1){
+            this.loadNetCDF(this.urlNetCDF).then((data)=>{
+              data.colorTable = this.loadColorTable()
+              _this.windData = data
+            })
+          } else if (val === 2){
+            Cesium.Resource.fetchJson({ url: './statics/data/wind.json' }).then((data) => {
+              data.colorTable = this.loadColorTable()
+              data.lat.array = new Float32Array(data.lon.array)
+              data.lat.array = new Float32Array(data.lat.array)
+              data.lev.array = new Float32Array(data.lev.array)
+              data.U.array = new Float32Array(data.U.array)
+              data.V.array = new Float32Array(data.V.array)
+              _this.windData = data
+            })
+          }
         },
         loadColorTable (filePath) {
           var json = this.colorTableParam
@@ -195,7 +228,7 @@
       <imagery-layer>
         <singletile-imagery-provider :url="urlLayer"></singletile-imagery-provider>
       </imagery-layer>
-      <cesium-windmap ref="windmap" :windData="windData" :particleSystemOptions="particleSystemOptions">
+      <cesium-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions">
       </cesium-windmap>
     </cesium-viewer>
     <div class="demo-tool">
@@ -213,6 +246,15 @@
       <vue-slider v-model="particleSystemOptions.speedFactor" :min="0.5" :max="100" :interval="0.1"></vue-slider>
       <span>lineWidth</span>
       <vue-slider v-model="particleSystemOptions.lineWidth" :min="0.01" :max="16" :interval="0.01"></vue-slider>
+      <span>switch data</span>
+      <md-select v-model="data" placeholder="切换数据" @selected="switchData">
+        <md-option
+          v-for="item in options"
+          :key="item.value"
+          :value="item.value">
+          {{item.label}}
+        </md-option>
+      </md-select>
     </div>
   </div>
 </template>
@@ -224,6 +266,14 @@
         urlLayer: './statics/SampleData/worldimage.jpg',
         urlNetCDF: './statics/SampleData/windData/demo.nc',
         windData: {},
+        options: [{
+          label: 'Global Data',
+          value: 1
+        }, {
+          label: 'China Data',
+          value: 2
+        }],
+        data: 0,
         particleSystemOptions: {
           maxParticles: 128 * 128,
           particleHeight: 100.0,
@@ -290,13 +340,29 @@
     },
     methods: {
       ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        let _this = this
         this.cesiumInstance = cesiumInstance
-        this.loadNetCDF(this.urlNetCDF).then((data)=>{
+        this.data = 2
+        this.switchData(2)
+      },
+      switchData (val) {
+        const {Cesium, viewer} = this.cesiumInstance
+        let _this = this
+        if (val === 1){
+          this.loadNetCDF(this.urlNetCDF).then((data)=>{
             data.colorTable = this.loadColorTable()
-          _this.windData = data
-        })
+            _this.windData = data
+          })
+        } else if (val === 2){
+          Cesium.Resource.fetchJson({ url: './statics/data/wind.json' }).then((data) => {
+            data.colorTable = this.loadColorTable()
+            data.lat.array = new Float32Array(data.lon.array)
+            data.lat.array = new Float32Array(data.lat.array)
+            data.lev.array = new Float32Array(data.lev.array)
+            data.U.array = new Float32Array(data.U.array)
+            data.V.array = new Float32Array(data.V.array)
+            _this.windData = data
+          })
+        }
       },
       loadColorTable (filePath) {
         var json = this.colorTableParam
@@ -370,7 +436,7 @@
 
 |属性名|类型|默认值|描述|
 |------|-----|-----|----|
-|windData|Object||`required` 指定风向数据。|
+|data|Object||`required` 指定风向数据。|
 |particleSystemOptions|Object||`optional` 指定粒子参数。|
 ---
 
@@ -379,6 +445,12 @@
 |事件名|参数|描述|
 |------|----|----|
 |ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+
+## Vue方法
+
+|方法名|参数|描述|
+|------|----|----|
+|destroy||清除风向图。|
 
 ## 其他说明
 
