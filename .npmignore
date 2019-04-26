@@ -4,5 +4,4 @@ docs
 coverage
 .babelrc
 .travis.yml
-CONTRIBUTING.md
 server.js
