@@ -140,7 +140,7 @@
               _this.windData = data
             })
           } else if (val === 2){
-            Cesium.Resource.fetchJson({ url: './statics/data/wind.json' }).then((data) => {
+            Cesium.Resource.fetchJson({ url: './statics/SampleData/windData/wind.json' }).then((data) => {
               data.colorTable = this.loadColorTable()
               data.lat.array = new Float32Array(data.lon.array)
               data.lat.array = new Float32Array(data.lat.array)
