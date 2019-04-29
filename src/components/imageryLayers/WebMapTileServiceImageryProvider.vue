@@ -99,12 +99,13 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, format, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
+      const { Cesium, url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
         tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
       let options = {
         url: Cesium.defined(token) ? url + '&tk=' + token : url,
         format,
-        wmtsStyle,
+        layer,
+        style: wmtsStyle,
         tileMatrixSetID,
         tileMatrixLabels,
         clock,

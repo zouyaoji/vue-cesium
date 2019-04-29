@@ -14,11 +14,11 @@
       <cesium-viewer @ready="ready" @layerAdded="layerAdded">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token"></wmts-imagery-provider>
+          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token" :layer="layer1"></wmts-imagery-provider>
        </imagery-layer>
        <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token"></wmts-imagery-provider>
+          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer2"></wmts-imagery-provider>
        </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
@@ -45,6 +45,8 @@
     export default {
       data () {
         return {
+          layer1: 'img',
+          layer2: 'cia',
           url: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
           urlText: 'http://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
           style: 'default',
