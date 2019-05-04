@@ -1,7 +1,7 @@
 <template>
   <i style="display: none ">
     <polyline-collection>
-      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2" :loop="true"></polyline-primitive>
+      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2" :loop="true"></polyline-primitive>
     </polyline-collection>
     <point-collection>
       <template v-for="(polyline, index) of polylines">
@@ -19,7 +19,7 @@
         </label-primitive>
       </template>
     </label-collection>
-    <entity :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polygon">
+    <entity :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
       <polygon-graphics :ref="'line'+index" :hierarchy="polyline.positions" :perPositionHeight="true" :material="materialPolygon"></polygon-graphics>
     </entity>
   </i>
@@ -53,7 +53,17 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [], area: 0 })
+        polylines.length && polylines.push({ positions: [],
+          area: 0,
+          materialLine: new Cesium.Material({
+            fabric: {
+              type: 'Color',
+              uniforms: {
+                color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+              }
+            }
+          })
+        })
       }
       const listener = this.$listeners['activeEvt']
       listener && this.$emit('activeEvt', { type: 'areaMeasuring', isActive: val })
@@ -65,7 +75,17 @@ export default {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [], area: 0 })
+      !polylines.length && polylines.push({ positions: [],
+        area: 0,
+        materialLine: new Cesium.Material({
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+            }
+          }
+        })
+      })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -113,7 +133,17 @@ export default {
       }
       if (mode === 0) {
         if (polylines.length) {
-          polylines.push({ positions: [], area: 0 })
+          polylines.push({ positions: [],
+            area: 0,
+            materialLine: new Cesium.Material({
+              fabric: {
+                type: 'Color',
+                uniforms: {
+                  color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+                }
+              }
+            })
+          })
         }
       } else {
         this.measuring = false

@@ -38,11 +38,9 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
-          window.viewer = viewer
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
         toggle (type) {
-          // this.distanceMeasuring = !this.distanceMeasuring
           this.$refs[type].measuring = !this.$refs[type].measuring
         },
         clear () {

@@ -1,7 +1,7 @@
 <template>
   <i style="display: none !important">
     <polyline-collection>
-      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="materialLine" :width="2"></polyline-primitive>
+      <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2"></polyline-primitive>
     </polyline-collection>
     <point-collection>
       <template v-for="(polyline, index) of polylines">
@@ -49,7 +49,18 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [], distances: [], distance: 0 })
+        polylines.length && polylines.push({ positions: [],
+          distances: [],
+          distance: 0,
+          materialLine: new Cesium.Material({
+            fabric: {
+              type: 'Color',
+              uniforms: {
+                color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+              }
+            }
+          })
+        })
       }
       this.$emit('activeEvt', { type: 'distanceMeasuring', isActive: val })
     }
@@ -60,7 +71,18 @@ export default {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [], distances: [], distance: 0 })
+      !polylines.length && polylines.push({ positions: [],
+        distances: [],
+        distance: 0,
+        materialLine: new Cesium.Material({
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+            }
+          }
+        })
+      })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -113,7 +135,18 @@ export default {
       }
       if (mode === 0) {
         if (polylines.length) {
-          polylines.push({ positions: [], distances: [], distance: 0 })
+          polylines.push({ positions: [],
+            distances: [],
+            distance: 0,
+            materialLine: new Cesium.Material({
+              fabric: {
+                type: 'Color',
+                uniforms: {
+                  color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+                }
+              }
+            })
+          })
         }
       } else {
         this.measuring = false
