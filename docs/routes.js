@@ -198,19 +198,19 @@ const routeMap = [
   {
     path: 'entities',
     name: {
-      zh: '实体集合',
+      zh: '实体',
       en: 'entities'
     },
     component: CateView,
     children: [
-      {
-        path: 'entity',
-        component: 'entities/entity',
-        name: {
-          zh: '实体',
-          en: 'Entity'
-        }
-      },
+      // {
+      //   path: 'entity',
+      //   component: 'entities/entity',
+      //   name: {
+      //     zh: '实体',
+      //     en: 'Entity'
+      //   }
+      // },
       {
         path: 'billboard-graphics',
         component: 'entities/billboard-graphics',

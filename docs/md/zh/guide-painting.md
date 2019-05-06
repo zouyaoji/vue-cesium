@@ -11,8 +11,8 @@
     <div class="viewer">
       <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
         <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
-        <entity :key="index" v-for="(polyline, index) of polylines">
-          <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
+        <entity :key="index" v-for="(polyline, index) of polylines" :polyline.sync="polyline.polyline">
+          <polyline-graphics :ref="'line'+index" :positions="polyline.positions" :material="material" :width="5"></polyline-graphics>
         </entity>
       </cesium-viewer>
       <div class="demo-tool">
@@ -130,7 +130,7 @@
   <div class="viewer">
     <cesium-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @MOUSE_MOVE="MOUSE_MOVE" @RIGHT_CLICK="RIGHT_CLICK">
       <cesium-3dtileset ref="tileset" :url="tilesetUrl" @readyPromise="readyPromise"></cesium-3dtileset>
-      <entity :key="index" v-for="(polyline, index) of polylines">
+      <entity :key="index" v-for="(polyline, index) of polylines" :polyline.sync="polyline.polyline">
         <polyline-graphics :ref="'line'+index" :positions="polyline.positions"  :material="material" :width="5"></polyline-graphics>
       </entity>
     </cesium-viewer>

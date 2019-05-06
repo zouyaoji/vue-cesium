@@ -13,7 +13,7 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <entity :polyline.sync="polyline1">
-          <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="true"></polyline-graphics>
+          <polyline-graphics :positions="positions1" :material="material1" :width="5" :clampToGround="false"></polyline-graphics>
         </entity>
         <entity :polyline.sync="polyline2">
           <polyline-graphics :positions="positions2" :material="material2" :width="10"></polyline-graphics>

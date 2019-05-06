@@ -36,7 +36,7 @@
             },
             // minCanvasSize: 10,
             // maxCanvasSize: 100,
-            radius: 25,
+            radius: 250,
             maxOpacity: 0.5,
             minOpacity: 0,
             blur: 0.75
@@ -51,16 +51,20 @@
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
           this.terrainProvider = Cesium.createWorldTerrain()
-          Cesium.Resource.fetchJson({url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/temperature.json'}).then((data)=>{
-            this.bounds = {
+          let _this = this
+          Cesium.Resource.fetchJson({url: './statics/SampleData/heatmapData/19042808_t.json'}).then((data)=>{
+            _this.bounds = {
               west: data.left,
               south: data.bottom,
               east: data.right,
               north: data.top
             }
-            this.min = data.min
-            this.max = data.max
-            this.data = this.getData(data)
+            _this.min = data.min
+            _this.max = data.max
+            _this.data = data.datas
+             viewer.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(103.674645955002, 32.0725088139904, 40000.0)
+            })
           })
         },
         getData (data) {

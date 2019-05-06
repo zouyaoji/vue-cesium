@@ -1,4 +1,5 @@
 # 量算
+`measure-distance` `measure-area` `measure-height`
 
 ## 示例
 
@@ -18,7 +19,7 @@
       <cesium-viewer @ready="ready" scene3DOnly>
         <cesium-3dtileset :url="modelUrl" @readyPromise="readyPromise"></cesium-3dtileset>
         <measure-distance ref="measureDistance" @activeEvt="activeEvt"></measure-distance>
-        <measure-area ref="measureArea" @activeEvt="activeEvt"></measure-area>
+        <measure-area :perPositionHeight="true" ref="measureArea" @activeEvt="activeEvt"></measure-area>
         <measure-height ref="measureHeight" @activeEvt="activeEvt"></measure-height>
       </cesium-viewer>
     </div>
@@ -31,7 +32,7 @@
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           distanceMeasuring: false,
           areaMeasuring: false,
-          heightMeasuring: false,
+          heightMeasuring: false
         }
       },
       methods: {
@@ -115,3 +116,11 @@
   }
 </script>
 ```
+
+## 属性
+
+### measure-area
+
+|属性名|类型|默认值|描述|
+|------|-----|-----|----|
+|perPositionHeight|Boolean|true|`optional` 测量面是否贴地形。|
