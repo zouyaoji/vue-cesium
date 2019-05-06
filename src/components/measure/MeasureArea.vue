@@ -6,21 +6,20 @@
     <point-collection>
       <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
-          <point-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
+          <point-primitive :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
         </template>
       </template>
     </point-collection>
-    <label-collection ref="labelCollection" @ready="labelCollectionReady">
+    <label-collection>
       <template v-for="(polyline, index) of polylines">
-        <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="index"
+        <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="'label'+index" :pixelOffset="pixelOffset"
           :text="'面积:' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')" 
-          :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-          :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0">
+          :font="font" :outlineColor="outlineColorLabel" showBackground :disableDepthTestDistance="disableDepthTestDistance">
         </label-primitive>
       </template>
     </label-collection>
-    <entity :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
-      <polygon-graphics :ref="'line'+index" :hierarchy="polyline.positions" :perPositionHeight="true" :material="materialPolygon"></polygon-graphics>
+    <entity :ref="'entity'+index" :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
+      <polygon-graphics :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight" :material="materialPolygon"></polygon-graphics>
     </entity>
   </i>
 </template>
@@ -38,6 +37,12 @@ export default {
       polylines: [],
       font: '100 20px SimSun',
       mode: 1
+    }
+  },
+  props: {
+    perPositionHeight: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -196,10 +201,6 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
-    },
-    labelCollectionReady () {
-      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
-      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }

@@ -5,18 +5,10 @@ export default {
   mixins: [entityGraphics],
   props: {
     hierarchy: [Array, Object],
-    height: {
-      type: Number
-    },
-    heightReference: {
-      type: Number
-    },
-    extrudedHeight: {
-      type: Number
-    },
-    extrudedHeightReference: {
-      type: Number
-    },
+    height: Number,
+    heightReference: Number,
+    extrudedHeight: Number,
+    extrudedHeightReference: Number,
     show: {
       type: Boolean,
       default: true
@@ -25,16 +17,12 @@ export default {
       type: Boolean,
       default: true
     },
-    material: {
-      type: Object
-    },
+    material: Object,
     outline: {
       type: Boolean,
       default: false
     },
-    outlineColor: {
-      type: Object
-    },
+    outlineColor: Object,
     outlineWidth: {
       type: Number,
       default: 1.0
@@ -63,13 +51,8 @@ export default {
       type: Number,
       default: 0
     },
-    distanceDisplayCondition: {
-      type: Number
-    },
-    zIndex: {
-      type: Number,
-      default: 0
-    }
+    distanceDisplayCondition: Object,
+    zIndex: Number
   },
   watch: {
     hierarchy () {

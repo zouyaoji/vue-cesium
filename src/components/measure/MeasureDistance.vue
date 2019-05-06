@@ -6,17 +6,16 @@
     <point-collection>
       <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
-          <point-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
+          <point-primitive :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
         </template>
       </template>
     </point-collection>
-    <label-collection ref="labelCollection" @ready="labelCollectionReady">
+    <label-collection>
       <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
-          <label-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel"
+          <label-primitive :position="position" :key="'label' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel" 
             :text="'距离:' + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
-            :showBackground="true" :backgroundColor="backgroundColorLabel" :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0"
-            :show="polyline.distances[subIndex] !== 0">
+            showBackground :disableDepthTestDistance="disableDepthTestDistance" v-if="polyline.distances[subIndex] !== 0" :pixelOffset="pixelOffset">
           </label-primitive>
         </template>
       </template>
@@ -163,10 +162,6 @@ export default {
     },
     clear () {
       this.polylines = []
-    },
-    labelCollectionReady () {
-      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
-      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }

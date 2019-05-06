@@ -8,81 +8,35 @@ export default {
   name: 'entity',
   mixins: [cmp],
   props: {
-    id: {
-      type: String
-    },
-    name: {
-      type: String
-    },
-    availability: {
-      type: Object
-    },
+    id: String,
+    name: String,
+    availability: Object,
     show: {
       type: Boolean,
       default: true
     },
-    description: {
-      type: String
-    },
-    position: {
-      type: Object
-    },
-    orientation: {
-      type: Object
-    },
-    viewFrom: {
-      type: Object
-    },
-    parent: {
-      type: Object
-    },
+    description: String,
+    position: Object,
+    orientation: Object,
+    viewFrom: Object,
+    parent: Object,
     billboard: Object,
     corridor: Object,
-    cylinder: {
-      type: Object
-    },
-    ellipse: {
-      type: Object
-    },
-    ellipsoid: {
-      type: Object
-    },
-    box: {
-      type: Object
-    },
-    label: {
-      type: Object
-    },
-    model: {
-      type: Object
-    },
-    path: {
-      type: Object
-    },
-    plane: {
-      type: Object
-    },
-    point: {
-      type: Object
-    },
-    polygon: {
-      type: Object
-    },
-    polyline: {
-      type: Object
-    },
-    properties: {
-      type: Object
-    },
-    polylineVolume: {
-      type: Object
-    },
-    rectangle: {
-      type: Object
-    },
-    wall: {
-      type: Object
-    }
+    cylinder: Object,
+    ellipse: Object,
+    ellipsoid: Object,
+    box: Object,
+    label: Object,
+    model: Object,
+    path: Object,
+    plane: Object,
+    point: Object,
+    polygon: Object,
+    polyline: Object,
+    properties: Object,
+    polylineVolume: Object,
+    rectangle: Object,
+    wall: Object
   },
   watch: {
     id (val) {

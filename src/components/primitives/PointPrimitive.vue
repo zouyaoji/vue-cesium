@@ -5,7 +5,7 @@ export default {
   mixins: [primitiveCollectionItem],
   props: {
     color: Object,
-    disableDepthTestDistance: Number,
+    disableDepthTestDistance: [Object, Number],
     distanceDisplayCondition: Object,
     id: null,
     outlineColor: Object,

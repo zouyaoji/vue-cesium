@@ -6,14 +6,13 @@
     <point-collection>
       <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
-          <point-primitive :position="position" :key="'polyline' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
+          <point-primitive :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></point-primitive>
         </template>
       </template>
     </point-collection>
-    <label-collection ref="labelCollection" @ready="labelCollectionReady">
-      <label-primitive :position="label.position" :text="label.text" :key="index" v-for="(label, index) of labels" 
-        :font="font" :outlineColor="outlineColorLabel" :showBackground="true" :backgroundColor="backgroundColorLabel"
-        :backgroundPadding="backgroundPaddingLabel" :disableDepthTestDistance="0" :pixelOffsetScaleByDistance="pixelOffsetScaleByDistance"/>
+    <label-collection>
+      <label-primitive :position="label.position" :text="label.text" :key="'label'+index" v-for="(label, index) of labels"
+        :font="font" :outlineColor="outlineColorLabel" :disableDepthTestDistance="disableDepthTestDistance"/>
     </label-collection>
   </i>
 </template>
@@ -93,22 +92,13 @@ export default {
       }
     },
     MOUSE_MOVE (movement) {
-      if (!this.measuring) {
-        return
-      }
+      if (!this.measuring) return
       const { Cesium, viewer, polylines, labels } = this
-      if (!polylines.length) {
-        return
-      }
+      if (!polylines.length) return
       const polyline = polylines[polylines.length - 1]
-      if (!polyline.positions.length) {
-        return
-      }
+      if (!polyline.positions.length) return
       let cartesian = viewer.scene.pickPosition(movement.endPosition)
-      if (!Cesium.defined(cartesian)) {
-        return
-      }
-
+      if (!Cesium.defined(cartesian)) return
       let endPoint = cartesian
       let normalStart = {}
       Cesium.Cartesian3.normalize(this.startPoint, normalStart)
@@ -146,7 +136,7 @@ export default {
       polyline.positions.push(hypPoint)
       let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
       labels.push({
-        text: '高度:' + labelTextHeight,
+        text: '垂直高度:' + labelTextHeight,
         position: labelPositonHeight
       })
       let labelTextH = polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
@@ -205,10 +195,6 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
-    },
-    labelCollectionReady () {
-      this.$refs.labelCollection.originInstance._backgroundBillboardCollection._depthTestEnable = false
-      this.$refs.labelCollection.originInstance._billboardCollection._depthTestEnable = false
     }
   }
 }

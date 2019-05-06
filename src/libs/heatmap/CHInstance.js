@@ -170,7 +170,7 @@ class CHInstance {
         data: data
       })
 
-      this.updateLayer()
+      // this.updateLayer()
       return true
     }
 

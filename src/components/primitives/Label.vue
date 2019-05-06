@@ -6,9 +6,7 @@ export default {
   props: {
     backgroundColor: Object,
     backgroundPadding: Object,
-    disableDepthTestDistance: {
-      type: Number
-    },
+    disableDepthTestDistance: [Object, Number],
     distanceDisplayCondition: Object,
     eyeOffset: Object,
     fillColor: Object,

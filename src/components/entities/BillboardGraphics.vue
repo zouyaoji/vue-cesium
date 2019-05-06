@@ -38,7 +38,7 @@ export default {
     sizeInMeters: Boolean,
     heightReference: Number,
     distanceDisplayCondition: Object,
-    disableDepthTestDistance: Object
+    disableDepthTestDistance: [Object, Number]
   },
   watch: {
     image (val) {

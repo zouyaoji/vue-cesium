@@ -43,7 +43,7 @@ export default {
       for (var attr in o) {
         if (o[attr] === null || o[attr] === undefined) delete o[attr]
         else if (typeof o[attr] === 'object') {
-          this.removeNullItem(o[attr])
+          // this.removeNullItem(o[attr])
           if (this.isEmptyObj(o[attr])) delete o[attr]
         }
       }

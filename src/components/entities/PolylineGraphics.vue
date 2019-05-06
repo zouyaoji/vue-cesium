@@ -4,12 +4,10 @@ export default {
   name: 'polyline-graphics',
   mixins: [entityGraphics],
   props: {
-    positions: {
-      type: Array
-    },
-    followSurface: {
-      type: Boolean,
-      default: true
+    positions: Array,
+    arcType: {
+      type: Number,
+      default: 1
     },
     clampToGround: {
       type: Boolean,
@@ -23,33 +21,21 @@ export default {
       type: Boolean,
       default: true
     },
-    material: {
-      type: Object
-    },
-    depthFailMaterial: {
-      type: Object
-    },
+    material: Object,
+    depthFailMaterial: Object,
     granularity: {
       type: Number,
       default: Math.PI / 180.0
     },
-    shadows: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: {
-      type: Number
-    },
-    zIndex: {
-      type: Number,
-      default: 0
-    }
+    shadows: Number,
+    distanceDisplayCondition: Object,
+    zIndex: Number
   },
   watch: {
     positions () {
     },
-    followSurface (val) {
-      this.graphics.followSurface = val
+    arcType (val) {
+      this.graphics.arcType = val
     },
     clampToGround (val) {
       this.graphics.clampToGround = val
@@ -81,20 +67,20 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, positions, followSurface, clampToGround, width, show, material, depthFailMaterial,
+      const { Cesium, positions, arcType, clampToGround, width, show, material, depthFailMaterial,
         granularity, shadows, distanceDisplayCondition, zIndex } = this
       let options = {
-        positions: positions,
-        followSurface: followSurface,
-        clampToGround: clampToGround,
-        width: width,
-        show: show,
-        material: material,
-        depthFailMaterial: depthFailMaterial,
-        granularity: granularity,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition,
-        zIndex: zIndex
+        positions,
+        arcType,
+        clampToGround,
+        width,
+        show,
+        material,
+        depthFailMaterial,
+        granularity,
+        shadows,
+        distanceDisplayCondition,
+        zIndex
       }
       this.removeNullItem(options)
       let polyline = new Cesium.PolylineGraphics(options)

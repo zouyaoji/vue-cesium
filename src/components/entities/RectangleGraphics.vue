@@ -5,10 +5,7 @@ export default {
   mixins: [entityGraphics],
   props: {
     coordinates: Object,
-    height: {
-      type: Number,
-      default: 0
-    },
+    height: Number,
     heightReference: Number,
     extrudedHeight: Number,
     extrudedHeightReference: Number,
@@ -42,19 +39,10 @@ export default {
       type: Number,
       default: Math.PI / 180.0
     },
-    shadows: {
-      type: Number,
-      default: 0
-    },
+    shadows: Number,
     distanceDisplayCondition: Number,
-    classificationType: {
-      type: Number,
-      default: 2
-    },
-    zIndex: {
-      type: Number,
-      default: 0
-    }
+    classificationType: Number,
+    zIndex: Number
   },
   watch: {
     coordinates (val) {

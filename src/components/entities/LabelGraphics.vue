@@ -51,7 +51,7 @@ export default {
       default: 0
     },
     distanceDisplayCondition: Object,
-    disableDepthTestDistance: Object
+    disableDepthTestDistance: [Object, Number]
   },
   watch: {
     text (val) {

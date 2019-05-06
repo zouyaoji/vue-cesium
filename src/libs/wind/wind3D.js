@@ -55,32 +55,37 @@ class Wind3D {
     this.viewerParameters = viewerParameters
   }
 
+  moveStartListener () {
+    this.scene.primitives.show = false
+  }
+
+  moveEndListener () {
+    this.updateViewerParameters()
+    this.particleSystem.refreshParticle(this.viewerParameters, false)
+    this.scene.primitives.show = true
+  }
+
+  preRenderListener () {
+    if (this.resized) {
+      this.particleSystem.canvasResize(this.scene.context)
+      this.resized = false
+      this.scene.primitives.show = true
+    }
+  }
+
   setupEventListeners () {
     const that = this
 
-    this.camera.moveStart.addEventListener(function () {
-      that.scene.primitives.show = false
-    })
+    this.camera.moveStart.addEventListener(this.moveStartListener, this)
+    this.camera.moveEnd.addEventListener(this.moveEndListener, this)
 
-    this.camera.moveEnd.addEventListener(function () {
-      that.updateViewerParameters()
-      that.particleSystem.refreshParticle(that.viewerParameters, false)
-      that.scene.primitives.show = true
-    })
-
-    var resized = false
+    this.resized = false
     window.addEventListener('resize', function () {
-      resized = true
+      this.resized = true
       that.scene.primitives.show = false
     })
 
-    this.scene.preRender.addEventListener(function () {
-      if (resized) {
-        that.particleSystem.canvasResize(that.scene.context)
-        resized = false
-        that.scene.primitives.show = true
-      }
-    })
+    this.scene.preRender.addEventListener(this.preRenderListener, this)
 
     window.addEventListener('particleSystemOptionsChanged', function (event) {
       that.particleSystem.applyParticleSystemOptions(event.detail)
@@ -91,10 +96,15 @@ class Wind3D {
 
   destroy () {
     this.scene.primitives.remove(this.particleSystem.primitives.particlesUpdate)
-    this.scene.primitives.remove(this.particleSystem.primitives.particlesRandomize)
+    this.scene.primitives.remove(
+      this.particleSystem.primitives.particlesRandomize
+    )
     this.scene.primitives.remove(this.particleSystem.primitives.segments)
     this.scene.primitives.remove(this.particleSystem.primitives.trails)
     this.scene.primitives.remove(this.particleSystem.primitives.screen)
+    this.camera.moveStart.removeEventListener(this.moveStartListener, this)
+    this.camera.moveEnd.removeEventListener(this.moveEndListener, this)
+    this.scene.preRender.removeEventListener(this.preRenderListener, this)
   }
 }
 

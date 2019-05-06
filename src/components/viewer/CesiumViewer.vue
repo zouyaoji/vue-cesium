@@ -80,9 +80,7 @@ export default {
       type: Boolean,
       default: false
     },
-    clockViewModel: {
-      type: Object
-    },
+    clockViewModel: Object,
     selectedImageryProviderViewModel: Object,
     imageryProviderViewModels: Object,
     selectedTerrainProviderViewModel: Object,

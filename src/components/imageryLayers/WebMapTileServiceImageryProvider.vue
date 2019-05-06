@@ -32,9 +32,7 @@ export default {
     },
     maximumLevel: Number,
     ellipsoid: Object,
-    credit: {
-      type: String
-    },
+    credit: String,
     subdomains: {
       type: String | Array,
       default: 'abc'

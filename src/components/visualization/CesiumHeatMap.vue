@@ -37,13 +37,39 @@ export default {
   watch: {
     bounds (val) {
       // this.reload()
+      const { Cesium, heatMapInstance } = this
+      if (Cesium.defined(heatMapInstance) && Cesium.defined(heatMapInstance._layer)) {
+        // heatMapInstance._layer.rectangle.coordinates = Cesium.Rectangle.fromDegrees(
+        //   val.west,
+        //   val.south,
+        //   val.east,
+        //   val.north
+        // )
+      } else {
+        this.reload()
+      }
     },
-    options (val) {
-      this.heatMapInstance._heatmap.configure(val)
-      this.heatMapInstance._heatmap.repaint()
+    options: {
+      handler  (val) {
+        const { Cesium, heatMapInstance } = this
+        if (Cesium.defined(heatMapInstance) && Cesium.defined(heatMapInstance._layer)) {
+          heatMapInstance._heatmap.configure(val)
+          heatMapInstance._heatmap.repaint()
+          // let material = new Cesium.ImageMaterialProperty({
+          //   image: heatMapInstance._heatmap._renderer.canvas
+          // })
+          // material.transparent = true
+          heatMapInstance._layer.rectangle.material.image = heatMapInstance._heatmap._renderer.canvas
+        }
+      },
+      deep: true
     },
     data (val) {
-      this.reload()
+      const { heatMapInstance, min, max } = this
+      if (!this.isEmptyObj(heatMapInstance)) {
+        heatMapInstance.setWGS84Data(min, max, val)
+        heatMapInstance.updateLayer()
+      }
     }
   },
   methods: {
@@ -55,16 +81,21 @@ export default {
         options
       )
 
-      if (heatMapInstance.setWGS84Data(min, max, data)) {
-        this.$emit('dataSeted', heatMapInstance._layer)
+      if (!this.isEmptyObj(heatMapInstance)) {
+        if (heatMapInstance.setWGS84Data(min, max, data)) {
+          heatMapInstance.updateLayer()
+          this.$emit('dataSeted', heatMapInstance._layer)
+        }
+        return heatMapInstance
       }
-      return heatMapInstance
+      return null
     },
     mount () {
       // const { viewer, entity } = this
     },
     unload () {
-      this.heatMapInstance.remove()
+      const { heatMapInstance } = this
+      if (!this.isEmptyObj(heatMapInstance)) heatMapInstance.remove()
     },
 
     getServices () {
