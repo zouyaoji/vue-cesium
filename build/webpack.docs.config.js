@@ -60,7 +60,7 @@ module.exports = {
   resolve: {
     alias: {
       docs: path.resolve(__dirname, '../docs'),
-      '@': path.resolve(__dirname, '../src/components')
+      '@': path.resolve(__dirname, '../src')
     }
   },
   optimization: {
