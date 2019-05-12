@@ -12,7 +12,7 @@
 <doc-preview>
   <template>
     <div class="viewer" ref="myViewer">
-      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
       </cesium-viewer>
       <div class="demo-tool">
