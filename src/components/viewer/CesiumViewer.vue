@@ -2,10 +2,10 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-05-12 00:01:30
+ * @Last Modified time: 2019-05-13 00:30:01
  */
 <template>
-  <div ref="viewer" style="width:100%; height:100%;">
+  <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
     <slot></slot>
   </div>
 </template>
@@ -16,7 +16,6 @@ import { Events } from '../../util/events.js'
 import services from '../../mixins/services'
 import mergeDescriptors from '../../util/mergeDescriptors'
 import { getDocumentByClassName } from '../../util/util.js'
-import { createDefaultImageryProviderViewModels, createDefaultTerrainProviderViewModels } from '../../util/providerViewModels'
 const path = require('path')
 
 export default {
@@ -90,7 +89,9 @@ export default {
     skyBox: Object,
     skyAtmosphere: Object,
     /* eslint-disable no-undef */
-    fullscreenElement: Element,
+    fullscreenElement: {
+      type: Element | String
+    },
     useDefaultRenderLoop: {
       type: Boolean,
       default: true
@@ -188,7 +189,7 @@ export default {
       }
     },
     infoBox (val) {
-      const { Cesium, viewer, viewerContainer, resizeControl } = this
+      const { Cesium, viewer, viewerContainer } = this
       if (Cesium.defined(viewer.infoBox) && !viewer.infoBox.isDestroyed() && !val) {
         viewer.infoBox.destroy()
         viewer._infoBox = undefined
@@ -203,7 +204,8 @@ export default {
         viewer._eventHelper.add(infoBoxViewModel.cameraClicked, viewer._onInfoBoxCameraClicked, viewer)
         viewer._eventHelper.add(infoBoxViewModel.closeClicked, viewer._onInfoBoxClockClicked, viewer)
         viewer._infoBox = infoBox
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     geocoder (val) {
@@ -284,32 +286,23 @@ export default {
       const { Cesium, viewer, resizeToolbar, viewerContainer } = this
       let toolbar = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
       if (Cesium.defined(viewer.baseLayerPicker) && !viewer.baseLayerPicker.isDestroyed() && !val) {
+        viewer.imageryLayers.removeAll()
         viewer.baseLayerPicker.destroy()
         viewer._baseLayerPicker = undefined
-        viewer.imageryLayers.removeAll()
+
         if (Cesium.defined(Cesium.SuperMapImageryProvider)) {
-          let cesiumPath
-          if (this._Cesium) {
-            cesiumPath = this._Cesium().cesiumPath
-          } else {
-            cesiumPath = this.cesiumPath
-          }
-          let dirName = path.dirname(cesiumPath)
           viewer.imageryLayers.add(
             new Cesium.ImageryLayer(
               new Cesium.SingleTileImageryProvider({
-                url: `${dirName}/Assets/Textures/GlobalBkLayer.jpg`
+                url: Cesium.buildModuleUrl('Assets/Textures/GlobalBkLayer.jpg')
               })
             )
           )
         } else {
-          let dirName = `https://zouyaoji.top/vue-cesium/statics/SuperMapCesium`
-          viewer.imageryLayers.add(
-            new Cesium.ImageryLayer(
-              new Cesium.SingleTileImageryProvider({
-                url: `${dirName}/Assets/Textures/GlobalBkLayer.jpg`
-              })
-            )
+          viewer.imageryLayers.addImageryProvider(
+            Cesium.createTileMapServiceImageryProvider({
+              url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+            })
           )
         }
       } else if (!Cesium.defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
@@ -343,15 +336,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
 
         if (createBaseLayerPicker) {
           viewer.imageryLayers.removeAll()
-          let cesiumPath
-          if (this._Cesium) {
-            cesiumPath = this._Cesium().cesiumPath
-          } else {
-            cesiumPath = this.cesiumPath
-          }
-          let dirName = path.dirname(cesiumPath) + '/'
-          let imageryProviderViewModels = Cesium.defaultValue(this.imageryProviderViewModels, createDefaultImageryProviderViewModels(Cesium, dirName))
-          let terrainProviderViewModels = Cesium.defaultValue(this.terrainProviderViewModels, createDefaultTerrainProviderViewModels(Cesium, dirName))
+          let imageryProviderViewModels = Cesium.defaultValue(this.imageryProviderViewModels, Cesium.createDefaultImageryProviderViewModels())
+          let terrainProviderViewModels = Cesium.defaultValue(this.terrainProviderViewModels, Cesium.createDefaultTerrainProviderViewModels())
           let baseLayerPicker = new Cesium.BaseLayerPicker(toolbar, {
             globe: viewer.scene.globe,
             imageryProviderViewModels: imageryProviderViewModels,
@@ -397,41 +383,44 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
     },
     animation (val) {
-      const { Cesium, viewer, viewerContainer, resizeControl } = this
+      const { Cesium, viewer, viewerContainer } = this
       if (Cesium.defined(viewer.animation) && !viewer.animation.isDestroyed() && !val) {
         viewer.animation.destroy()
         let animationContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-animationContainer')
         viewerContainer.removeChild(animationContainer)
         viewer._animation = undefined
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       } else if (!Cesium.defined(viewer.animation) || viewer.animation.isDestroyed()) {
         let animationContainer = document.createElement('div')
         animationContainer.className = 'cesium-viewer-animationContainer'
         this.viewerContainer.appendChild(animationContainer)
         let animation = new Cesium.Animation(animationContainer, new Cesium.AnimationViewModel(viewer.clockViewModel))
-        var d = new Date()
-        var hour = 0 - d.getTimezoneOffset()
-        animation.viewModel.timeFormatter = function (date, viewModel) {
-          var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
-          var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
-          var millisecond = Math.round(gregorianDate.millisecond)
-          if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
-            return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
-          }
-          return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
-        }
+        // var d = new Date()
+        // var hour = 0 - d.getTimezoneOffset()
+        // animation.viewModel.timeFormatter = function (date, viewModel) {
+        //   var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
+        //   var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
+        //   var millisecond = Math.round(gregorianDate.millisecond)
+        //   if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
+        //     return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
+        //   }
+        //   return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
+        // }
         viewer._animation = animation
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     timeline (val) {
-      const { Cesium, viewer, viewerContainer, onTimelineScrubfunction, resizeControl } = this
+      const { Cesium, viewer, viewerContainer, onTimelineScrubfunction } = this
       if (Cesium.defined(viewer.timeline) && !viewer.timeline.isDestroyed() && !val) {
         viewer.timeline.destroy()
         viewer._timeline = undefined
         let timelineContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-timelineContainer')
         viewerContainer.removeChild(timelineContainer)
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       } else if (!Cesium.defined(viewer.timeline) || viewer.timeline.isDestroyed()) {
         let timelineContainer = document.createElement('div')
         timelineContainer.className = 'cesium-viewer-timelineContainer'
@@ -440,24 +429,27 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         timeline.addEventListener('settime', onTimelineScrubfunction, false)
         timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
         viewer._timeline = timeline
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     fullscreenButton (val) {
-      const { Cesium, viewer, viewerContainer, resizeControl } = this
+      const { Cesium, viewer, viewerContainer } = this
       if (Cesium.defined(viewer.fullscreenButton) && !viewer.fullscreenButton.isDestroyed() && !val) {
         viewer.fullscreenButton.destroy()
         viewer._fullscreenButton = undefined
         let fullscreenContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-fullscreenContainer')
         viewerContainer.removeChild(fullscreenContainer)
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       } else if (!Cesium.defined(viewer.fullscreenButton) || viewer.fullscreenButton.isDestroyed()) {
         let fullscreenContainer = document.createElement('div')
         fullscreenContainer.className = 'cesium-viewer-fullscreenContainer'
         viewerContainer.appendChild(fullscreenContainer)
-        let fullscreenButton = new Cesium.FullscreenButton(fullscreenContainer, document.body)
+        let fullscreenButton = new Cesium.FullscreenButton(fullscreenContainer, this.$refs.viewer)
         viewer._fullscreenButton = fullscreenButton
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     fullscreenElement (val) {
@@ -469,65 +461,50 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         this.viewer.fullscreenButton.viewModel.fullscreenElement = val
       }
     },
-    'viewer.fullscreenButton.viewModel.isFullscreenEnabled' (val) {
-      const { Cesium, viewer } = this
-      if (viewer.fullscreenButton) {
-        viewer.fullscreenButton.container.style.display = val ? 'block' : 'none'
-        let right = 0
-        if (Cesium.defined(viewer.vrButton)) {
-          viewer.vrButton.container.style.right = viewer.fullscreenButton.container.clientWidth + 'px'
-          right += viewer.fullscreenButton.container.clientWidth
-        }
-        if (Cesium.defined(viewer.timeline)) {
-          viewer.timeline.container.style.right = right + viewer.fullscreenButton.container.clientWidth + 'px'
-          viewer.timeline.resize()
-        }
-      } else {
-        if (Cesium.defined(viewer.vrButton)) { viewer.vrButton.container.style.right = 0 + 'px' }
-      }
-    },
     vrButton (val) {
-      const { Cesium, viewer, viewerContainer, resizeControl, enableVRUI } = this
+      const { Cesium, viewer, viewerContainer, enableVRUI } = this
       if (Cesium.defined(viewer.vrButton) && !viewer.vrButton.isDestroyed() && !val) {
         viewer.vrButton.destroy()
         viewer._vrButton = undefined
         let vrContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-vrContainer')
         viewerContainer.removeChild(vrContainer)
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       } else if (!Cesium.defined(viewer.vrButton) || viewer.vrButton.isDestroyed()) {
         let vrContainer = document.createElement('div')
         vrContainer.className = 'cesium-viewer-vrContainer'
         viewerContainer.appendChild(vrContainer)
-        let vrButton = new Cesium.VRButton(vrContainer, viewer.scene, document.body)
+        let vrButton = new Cesium.VRButton(vrContainer, viewer.scene, viewerContainer)
         let viewModelCommand = vrButton.viewModel._command
         vrButton.viewModel._command = function (VRButtonViewModel) {
           viewModelCommand()
           enableVRUI(viewer, VRButtonViewModel.isVRMode)
         }
         viewer._vrButton = vrButton
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     useDefaultRenderLoop (val) {
       this.viewer.useDefaultRenderLoop = val
     },
-    'viewer.vrButton.viewModel.isVREnabled' (val) {
-      const { Cesium, viewer } = this
-      if (viewer.vrButton) {
-        viewer.vrButton.container.style.display = val ? 'block' : 'none'
-        let right = 0
-        if (Cesium.defined(viewer.fullscreenButton)) {
-          viewer.vrButton.container.style.right = viewer.fullscreenButton.container.clientWidth + 'px'
-          right += viewer.fullscreenButton.container.clientWidth
-        }
-        if (Cesium.defined(viewer.timeline)) {
-          viewer.timeline.container.style.right = right + viewer.vrButton.container.clientWidth + 'px'
-          viewer.timeline.resize()
-        }
-      }
-    },
+    // 'viewer.vrButton.viewModel.isVREnabled' (val) {
+    //   const { Cesium, viewer } = this
+    //   if (viewer.vrButton) {
+    //     viewer.vrButton.container.style.display = val ? 'block' : 'none'
+    //     let right = 0
+    //     if (Cesium.defined(viewer.fullscreenButton)) {
+    //       viewer.vrButton.container.style.right = viewer.fullscreenButton.container.clientWidth + 'px'
+    //       right += viewer.fullscreenButton.container.clientWidth
+    //     }
+    //     if (Cesium.defined(viewer.timeline)) {
+    //       viewer.timeline.container.style.right = right + viewer.vrButton.container.clientWidth + 'px'
+    //       viewer.timeline.resize()
+    //     }
+    //   }
+    // },
     navigation (val) {
-      const { Cesium, viewer, viewerContainer, resizeControl } = this
+      const { Cesium, viewer, viewerContainer } = this
       if (Cesium.defined(viewer.navigation) && !val) {
         viewer.navigation.viewModel.eventHelper.removeAll()
         Cesium.destroyObject(viewer.navigation.viewModel)
@@ -540,7 +517,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewerContainer.appendChild(navigationContainer)
         let navigation = new Cesium.Navigation({ container: navigationContainer, viewer: viewer, scene: viewer.scene })
         viewer._navigation = navigation
-        resizeControl()
+        viewer._forceResize = true
+        viewer.resize()
       }
     },
     sceneMode (val) {
@@ -582,14 +560,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       },
       deep: true
     },
-    imageryProvider (val) {
+    imageryProvider (val, oldvalue) {
       const { Cesium, viewer } = this
       if (Cesium.defined(val)) {
-        viewer.imageryLayers.removeAll()
-        viewer.imageryLayers.addImageryProvider(val, 0)
+        for (let i = 0; i < viewer.imageryLayers.length; i++) {
+          viewer.imageryLayers[i].imageryProvider === oldvalue && viewer.imageryLayers.remove(viewer.imageryLayers[i])
+        }
+        viewer.imageryLayers.addImageryProvider(val)
       }
-    },
-    'viewer.imageryLayers' (val) {
     }
   },
   methods: {
@@ -630,82 +608,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       for (var i = 0; i < arr.length; i++) {
         parent.appendChild(arr[i])
       }
-    },
-    resizeControl () {
-      const { Cesium, viewer, viewerContainer } = this
-      let animationExists = Cesium.defined(viewer._animation)
-      let timelineExists = Cesium.defined(viewer._timeline)
-      let timeline = viewer._timeline
-      let width = viewerContainer.clientWidth
-      var height = viewerContainer.clientHeight
-      let animationContainer
-      let animationWidth = 0
-      let creditLeft = 0
-      let creditBottom = 0
-
-      if (animationExists && window.getComputedStyle(viewer._animation.container).visibility !== 'hidden') {
-        var lastWidth = this._lastWidth
-        animationContainer = viewer._animation.container
-        if (width > 900) {
-          animationWidth = 169
-          if (lastWidth <= 900) {
-            animationContainer.style.width = '169px'
-            animationContainer.style.height = '112px'
-            viewer._animation.resize()
-          }
-        } else if (width >= 600) {
-          animationWidth = 136
-          if (lastWidth < 600 || lastWidth > 900) {
-            animationContainer.style.width = '136px'
-            animationContainer.style.height = '90px'
-            viewer._animation.resize()
-          }
-        } else {
-          animationWidth = 106
-          if (lastWidth > 600 || lastWidth === 0) {
-            animationContainer.style.width = '106px'
-            animationContainer.style.height = '70px'
-            viewer._animation.resize()
-          }
-        }
-        creditLeft = animationWidth + 5
-      }
-
-      if (timelineExists && window.getComputedStyle(viewer._timeline.container).visibility !== 'hidden') {
-        let fullscreenButton = viewer._fullscreenButton
-        let vrButton = viewer._vrButton
-        let timelineContainer = timeline.container
-        let timelineStyle = timelineContainer.style
-
-        creditBottom = timelineContainer.clientHeight + 3
-        timelineStyle.left = animationWidth + 'px'
-
-        var pixels = 0
-        if (Cesium.defined(viewer.fullscreenButton)) {
-          pixels += fullscreenButton.container.clientWidth
-        }
-        if (Cesium.defined(vrButton)) {
-          pixels += vrButton.container.clientWidth
-        }
-
-        timelineStyle.right = pixels + 'px'
-        timeline.resize()
-      }
-
-      if (Cesium.defined(viewer.navigation)) {
-        let toolbarContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-toolbar')
-        let navigationContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-navigationContainer')
-        navigationContainer.style.top = toolbarContainer.clientHeight + 'px'
-
-        if (Cesium.defined(viewer.infoBox)) {
-          viewer.infoBox.container.firstChild.style.right = navigationContainer.clientWidth + 'px'
-        }
-      }
-
-      viewer._bottomContainer.style.left = creditLeft + 'px'
-      viewer._bottomContainer.style.bottom = creditBottom + 'px'
-      this._lastWidth = width
-      this._lastHeight = height
     },
     enableVRUI (viewer, enabled) {
       const { Cesium } = this
@@ -849,7 +751,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         terrainProvider,
         skyBox,
         skyAtmosphere,
-        fullscreenElement,
+        fullscreenElement: this.isEmptyObj(fullscreenElement) ? this.$refs.viewer : fullscreenElement,
         useDefaultRenderLoop,
         targetFrameRate,
         showRenderLoopErrors,
@@ -873,6 +775,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       this.removeNullItem(options)
       const viewer = new Cesium.Viewer($el, options)
+      this.isEmptyObj(imageryProvider) && viewer.imageryLayers.removeAll()
       this.viewer = viewer
       // options待完善
       bindEvents.call(this, viewer)
@@ -896,19 +799,19 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         })
       }
-      if (Cesium.defined(viewer.animation)) {
-        var d = new Date()
-        var hour = 0 - d.getTimezoneOffset()
-        viewer.animation.viewModel.timeFormatter = function (date, viewModel) {
-          var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
-          var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
-          var millisecond = Math.round(gregorianDate.millisecond)
-          if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
-            return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
-          }
-          return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
-        }
-      }
+      // if (Cesium.defined(viewer.animation)) {
+      //   var d = new Date()
+      //   var hour = 0 - d.getTimezoneOffset()
+      //   viewer.animation.viewModel.timeFormatter = function (date, viewModel) {
+      //     var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
+      //     var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
+      //     var millisecond = Math.round(gregorianDate.millisecond)
+      //     if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
+      //       return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
+      //     }
+      //     return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
+      //   }
+      // }
 
       this.viewerContainer = getDocumentByClassName(this.$refs.viewer.children, 'cesium-viewer')
       if (Cesium.defined(Cesium.SuperMapImageryProvider) && !this.logo) {
@@ -918,7 +821,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       if (!this.logo) {
         viewer.cesiumWidget.creditContainer.style.display = 'none'
       }
-      this.resizeControl()
+      // this.resizeControl()
       this.$emit('ready', { Cesium, viewer })
     },
     initViewer (Cesium) {
