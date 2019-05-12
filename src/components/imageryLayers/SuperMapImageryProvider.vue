@@ -19,28 +19,19 @@ export default {
       default: 'MapQuest, SuperMap iServer Imagery'
     }
   },
-  watch: {
-    url (val) {
-      this.reload()
-    },
-    name (val) {
-      this.originInstance.imageryProvider.name = val
-    },
-    minimumLevel (val) {
-      this.reload()
-    },
-    maximumLevel (val) {
-      this.reload()
-    },
-    credit (val) {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, name, minimumLevel, maximumLevel, credit } = this
+      return {
+        url, name, minimumLevel, maximumLevel, credit
+      }
     }
   },
   methods: {
     createCesiumObject () {
       const { Cesium, url, name, minimumLevel, maximumLevel, credit } = this
       if (!Cesium.defined(Cesium.SuperMapImageryProvider)) {
-        throw new Cesium.DeveloperError('Youer Cesium Package is not included SuperMapImageryProvider!')
+        throw new Cesium.DeveloperError('Your Cesium Package is not included SuperMapImageryProvider!')
       }
       let options = {
         url,
@@ -50,8 +41,7 @@ export default {
         credit
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.SuperMapImageryProvider(options)
-      return imageryProvider
+      return new Cesium.SuperMapImageryProvider(options)
     }
   }
 }

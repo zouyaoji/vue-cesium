@@ -10,19 +10,13 @@ export default {
       default: 1
     },
     outlineColor: Object,
-    outlineWidth: {
-      type: Number,
-      default: 0
-    },
+    outlineWidth: Number,
     show: {
       type: Boolean,
       default: true
     },
     scaleByDistance: Object,
-    heightReference: {
-      type: Number,
-      default: 0
-    },
+    heightReference: Number,
     distanceDisplayCondition: Object,
     disableDepthTestDistance: [Object, Number]
   },

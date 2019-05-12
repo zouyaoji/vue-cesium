@@ -1,58 +1,116 @@
-// import DataProcess from './dataProcess'
-import ParticleSystem from './customParticleSystem'
+import ParticleSystem from './particleSystem'
 import Util from './util'
 class Wind3D {
-  constructor (viewer, windData, particleSystemOptions, colorTable) {
+  constructor (viewer, data, particleSystemOptions) {
     this.viewer = viewer
     this.scene = this.viewer.scene
     this.camera = this.viewer.camera
-
+    this.data = data
+    this.viewerParameters = {
+      lonRange: new Cesium.Cartesian2(),
+      latRange: new Cesium.Cartesian2(),
+      pixelSize: 0.0,
+      lonDataRange: new Cesium.Cartesian2(),
+      latDataRange: new Cesium.Cartesian2()
+    }
     // use a smaller earth radius to make sure distance to camera > 0
     this.globeBoundingSphere = new Cesium.BoundingSphere(
       Cesium.Cartesian3.ZERO,
       0.99 * 6378137.0
     )
-    this.viewerParameters = {}
     this.updateViewerParameters()
-    this.imageryLayers = this.viewer.imageryLayers
     this.particleSystem = new ParticleSystem(
       this.scene.context,
-      windData,
+      data,
       particleSystemOptions,
       this.viewerParameters
     )
 
-    // the order of primitives.add should respect the dependency of primitives
-    this.scene.primitives.add(this.particleSystem.primitives.particlesUpdate)
-    this.scene.primitives.add(this.particleSystem.primitives.particlesRandomize)
-    this.scene.primitives.add(this.particleSystem.primitives.segments)
-    this.scene.primitives.add(this.particleSystem.primitives.trails)
-    this.scene.primitives.add(this.particleSystem.primitives.screen)
-
+    this.addPrimitives()
     this.setupEventListeners()
+    this.imageryLayers = this.viewer.imageryLayers
+  }
+
+  addPrimitives () {
+    // the order of primitives.add() should respect the dependency of primitives
+    this.scene.primitives.add(
+      this.particleSystem.particlesComputing.primitives.getWind
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesComputing.primitives.updateSpeed
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesComputing.primitives.updatePosition
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesComputing.primitives.postProcessingPosition
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesComputing.primitives.postProcessingSpeed
+    )
+
+    this.scene.primitives.add(
+      this.particleSystem.particlesRendering.primitives.segments
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesRendering.primitives.trails
+    )
+    this.scene.primitives.add(
+      this.particleSystem.particlesRendering.primitives.screen
+    )
+  }
+
+  removePrimitives () {
+    this.scene.primitives.remove(
+      this.particleSystem.particlesRendering.primitives.screen
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesRendering.primitives.trails
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesRendering.primitives.segments
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesComputing.primitives.postProcessingSpeed
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesComputing.primitives.postProcessingPosition
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesComputing.primitives.updatePosition
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesComputing.primitives.updateSpeed
+    )
+    this.scene.primitives.remove(
+      this.particleSystem.particlesComputing.primitives.getWind
+    )
   }
 
   updateViewerParameters () {
-    var viewerParameters = {}
-
     var viewRectangle = this.camera.computeViewRectangle(
       this.scene.globe.ellipsoid
     )
-    viewerParameters.lonLatRange = Util.viewRectangleToLonLatRange(
-      viewRectangle
-    )
+    var lonLatRange = Util.viewRectangleToLonLatRange(viewRectangle)
+    this.viewerParameters.lonRange.x = lonLatRange.lon.min
+    this.viewerParameters.lonRange.y = lonLatRange.lon.max
+    this.viewerParameters.latRange.x = lonLatRange.lat.min
+    this.viewerParameters.latRange.y = lonLatRange.lat.max
 
-    viewerParameters.pixelSize = this.camera.getPixelSize(
+    this.viewerParameters.lonDataRange.x = this.data.lon.min
+    this.viewerParameters.lonDataRange.y = this.data.lon.max
+    this.viewerParameters.latDataRange.x = this.data.lat.min
+    this.viewerParameters.latDataRange.y = this.data.lat.max
+
+    var pixelSize = this.camera.getPixelSize(
       this.globeBoundingSphere,
       this.scene.drawingBufferWidth,
       this.scene.drawingBufferHeight
     )
 
-    if (viewerParameters.pixelSize === 0) {
-      viewerParameters.pixelSize = this.viewerParameters.pixelSize
+    if (pixelSize > 0) {
+      this.viewerParameters.pixelSize = pixelSize
     }
-
-    this.viewerParameters = viewerParameters
   }
 
   moveStartListener () {
@@ -61,7 +119,7 @@ class Wind3D {
 
   moveEndListener () {
     this.updateViewerParameters()
-    this.particleSystem.refreshParticle(this.viewerParameters, false)
+    this.particleSystem.applyViewerParameters(this.viewerParameters)
     this.scene.primitives.show = true
   }
 
@@ -69,6 +127,7 @@ class Wind3D {
     if (this.resized) {
       this.particleSystem.canvasResize(this.scene.context)
       this.resized = false
+      this.addPrimitives()
       this.scene.primitives.show = true
     }
   }
@@ -81,27 +140,16 @@ class Wind3D {
 
     this.resized = false
     window.addEventListener('resize', function () {
-      this.resized = true
+      that.resized = true
       that.scene.primitives.show = false
+      that.scene.primitives.removeAll()
     })
 
     this.scene.preRender.addEventListener(this.preRenderListener, this)
-
-    window.addEventListener('particleSystemOptionsChanged', function (event) {
-      that.particleSystem.applyParticleSystemOptions(event.detail)
-    })
-
-    window.addEventListener('displayOptionsChanged', function (event) {})
   }
 
   destroy () {
-    this.scene.primitives.remove(this.particleSystem.primitives.particlesUpdate)
-    this.scene.primitives.remove(
-      this.particleSystem.primitives.particlesRandomize
-    )
-    this.scene.primitives.remove(this.particleSystem.primitives.segments)
-    this.scene.primitives.remove(this.particleSystem.primitives.trails)
-    this.scene.primitives.remove(this.particleSystem.primitives.screen)
+    this.removePrimitives()
     this.camera.moveStart.removeEventListener(this.moveStartListener, this)
     this.camera.moveEnd.removeEventListener(this.moveEndListener, this)
     this.scene.preRender.removeEventListener(this.preRenderListener, this)

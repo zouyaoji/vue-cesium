@@ -31,9 +31,7 @@ export default {
       type: Number,
       default: 1.0
     },
-    splitDirection: {
-      type: Number
-    },
+    splitDirection: Number,
     minificationFilter: Object,
     magnificationFilter: Object,
     show: {
@@ -50,25 +48,25 @@ export default {
       this.reload()
     },
     alpha (val) {
-      this.originInstance.alpha = val
+      this.imageryLayer.alpha = val
     },
     brightness (val) {
-      this.originInstance.brightness = val
+      this.imageryLayer.brightness = val
     },
     contrast (val) {
-      this.originInstance.contrast = val
+      this.imageryLayer.contrast = val
     },
     hue (val) {
-      this.originInstance.hue = val
+      this.imageryLayer.hue = val
     },
     saturation (val) {
-      this.originInstance.saturation = val
+      this.imageryLayer.saturation = val
     },
     gamma (val) {
-      this.originInstance.gamma = val
+      this.imageryLayer.gamma = val
     },
     splitDirection (val) {
-      this.originInstance.splitDirection = val
+      this.imageryLayer.splitDirection = val
     },
     minificationFilter () {
       this.reload()
@@ -77,16 +75,16 @@ export default {
       this.reload()
     },
     show (val) {
-      this.originInstance.show = val
+      this.imageryLayer.show = val
     },
     minimumTerrainLevel (val) {
-      this.originInstance.minimumTerrainLevel = val
+      this.imageryLayer.minimumTerrainLevel = val
     },
     maximumTerrainLevel (val) {
-      this.originInstance.maximumTerrainLevel = val
+      this.imageryLayer.maximumTerrainLevel = val
     },
     cutoutRectangle (val) {
-      this.originInstance.cutoutRectangle = val
+      this.imageryLayer.cutoutRectangle = val
     }
   },
   methods: {
@@ -110,16 +108,15 @@ export default {
         cutoutRectangle
       }
       this.removeNullItem(options)
-      let imageryLayer = new Cesium.ImageryLayer(this.provider || {}, options)
-      return imageryLayer
+      return new Cesium.ImageryLayer({})
     },
     mount () {
-      const { viewer } = this
-      viewer.imageryLayers.add(this.imageryLayer)
+      // const { viewer, imageryLayer } = this
+      // viewer.imageryLayers.add(imageryLayer)
     },
     unload () {
-      const { viewer } = this
-      viewer.imageryLayers.remove(this.imageryLayer)
+      const { viewer, imageryLayer } = this
+      viewer.imageryLayers.remove(imageryLayer)
     },
     refresh () {
       this.unload()
@@ -127,9 +124,19 @@ export default {
       this.mount()
     },
     setProvider (provider) {
-      if (provider !== this._provider) {
-        this._provider = provider
-        this.refresh()
+      // if (provider !== this._provider) {
+      //   this._provider = provider
+      //   this.refresh()
+      //   const listener = this.$listeners['update:imageryProvider']
+      //   if (listener) this.$emit('update:imageryProvider', provider)
+      // }
+      const { viewer, imageryLayer } = this
+      if (provider) {
+        const listener = this.$listeners['update:imageryProvider']
+        if (listener) this.$emit('update:imageryProvider', provider)
+        this.originInstance = viewer.imageryLayers.addImageryProvider(provider)
+      } else {
+        viewer.imageryLayers.remove(imageryLayer)
       }
     },
     getServices () {
@@ -151,16 +158,16 @@ export default {
     }
   },
   created () {
-    this._provider = undefined
+    // this._provider = undefined
     Object.defineProperties(this, {
       imageryLayer: {
         enumerable: true,
-        get: () => this.$services && this.cesiumObject
-      },
-      provider: {
-        enumerable: true,
-        get: () => this.imageryProvider || this._provider
+        get: () => this.cesiumObject
       }
+      // provider: {
+      //   enumerable: true,
+      //   get: () => this.imageryProvider || this._provider
+      // }
     })
   }
 }

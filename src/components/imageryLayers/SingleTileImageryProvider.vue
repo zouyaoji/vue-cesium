@@ -12,18 +12,12 @@ export default {
     credit: String,
     ellipsoid: Object
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    credit () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, rectangle, credit, ellipsoid } = this
+      return {
+        url, rectangle, credit, ellipsoid
+      }
     }
   },
   methods: {
@@ -31,13 +25,12 @@ export default {
       const { Cesium, url, rectangle, credit, ellipsoid } = this
       let options = {
         url,
-        rectangle,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
         credit,
         ellipsoid
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.SingleTileImageryProvider(options)
-      return imageryProvider
+      return new Cesium.SingleTileImageryProvider(options)
     }
   }
 }

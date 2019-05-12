@@ -1,10 +1,5 @@
-// this file must use UNIX Style End of Line
-// otherwise the regex for #extension in Cesium.ShaderSource won't work
-#extension GL_EXT_draw_buffers: enable
-
-uniform sampler2D currentParticlesPosition;
 uniform sampler2D nextParticlesPosition;
-uniform sampler2D particlesRelativeSpeed;
+uniform sampler2D nextParticlesSpeed; // (u, v, w, normalization)
 
 // range (min, max)
 uniform vec2 lonRange;
@@ -26,35 +21,31 @@ float rand(vec2 seed, vec2 range) {
     return temp * (range.y - range.x) + range.x;
 }
 
-vec4 generateRandomParticle(vec2 seed, float lev) {
+vec3 generateRandomParticle(vec2 seed, float lev) {
     // ensure the longitude is in [0, 360]
     float randomLon = mod(rand(seed, lonRange), 360.0);
     float randomLat = rand(-seed, latRange);
 
-    return vec4(randomLon, randomLat, lev, 0.0);
+    return vec3(randomLon, randomLat, lev);
 }
 
-bool particleOutbound(vec4 particle) {
+bool particleOutbound(vec3 particle) {
     return particle.y < -90.0 || particle.y > 90.0;
 }
 
 void main() {
-    vec3 relativeSpeed = texture2D(particlesRelativeSpeed, v_textureCoordinates).rgb;
-    float particleDropRate = dropRate + dropRateBump * length(relativeSpeed);
+	vec3 nextParticle = texture2D(nextParticlesPosition, v_textureCoordinates).rgb;
+    vec4 nextSpeed = texture2D(nextParticlesSpeed, v_textureCoordinates);
+    float particleDropRate = dropRate + dropRateBump * nextSpeed.a;
 
-    vec4 currentParticle = texture2D(currentParticlesPosition, v_textureCoordinates);
-    vec4 nextParticle = texture2D(nextParticlesPosition, v_textureCoordinates);
-
-    vec2 seed1 = currentParticle.xy + v_textureCoordinates;
-    vec2 seed2 = nextParticle.xy + v_textureCoordinates;
-    vec4 randomParticle = generateRandomParticle(seed1, currentParticle.z);
-
+    vec2 seed1 = nextParticle.xy + v_textureCoordinates;
+    vec2 seed2 = nextSpeed.xy + v_textureCoordinates;
+    vec3 randomParticle = generateRandomParticle(seed1, nextParticle.z);
     float randomNumber = rand(seed2, normalRange);
+	
     if (randomNumber < particleDropRate || particleOutbound(nextParticle)) {
-        gl_FragData[0] = randomParticle;
-        gl_FragData[1] = randomParticle;
+		gl_FragColor = vec4(randomParticle, 1.0); // 1.0 means this is a random particle
     } else {
-        gl_FragData[0] = currentParticle;
-        gl_FragData[1] = nextParticle;
+		gl_FragColor = vec4(nextParticle, 0.0);
     }
 }

@@ -1,9 +1,8 @@
 <script>
-import commonMixin from '../../mixins/common.js'
+import primitive from '../../mixins/primitive'
 export default {
   name: 'primitive',
-  render (h) {},
-  mixins: [commonMixin('primitive')],
+  mixins: [primitive],
   props: {
     geometryInstances: Array | Object,
     appearance: Object,
@@ -53,10 +52,10 @@ export default {
 
   },
   methods: {
-    load () {
-      const { geometryInstances, appearance, show, modelMatrix, vertexCacheOptimize, interleave, compressVertices,
+    createCesiumObject () {
+      const { Cesium, geometryInstances, appearance, show, modelMatrix, vertexCacheOptimize, interleave, compressVertices,
         releaseGeometryInstances, allowPicking, cull, asynchronous, debugShowBoundingVolume, shadows } = this
-      let point = {
+      let options = {
         geometryInstances,
         appearance,
         show,
@@ -71,8 +70,12 @@ export default {
         debugShowBoundingVolume,
         shadows
       }
-      this.removeNullItem(point)
-      this.originInstance = this.$parent.originInstance.add(point)
+      this.removeNullItem(options)
+      let primitive = new Cesium.Primitive(options)
+      return primitive
+    },
+    setGeometry (geometry) {
+
     }
   }
 }

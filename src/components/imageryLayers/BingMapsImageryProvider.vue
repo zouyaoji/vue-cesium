@@ -15,27 +15,12 @@ export default {
     ellipsoid: Object,
     tileDiscardPolicy: Object
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    bmKey () {
-      this.reload()
-    },
-    tileProtocol () {
-      this.reload()
-    },
-    mapStyle () {
-      this.reload()
-    },
-    culture () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    tileDiscardPolicy () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy } = this
+      return {
+        url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy
+      }
     }
   },
   methods: {
@@ -51,8 +36,7 @@ export default {
         tileDiscardPolicy
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.BingMapsImageryProvider(options)
-      return imageryProvider
+      return new Cesium.BingMapsImageryProvider(options)
     }
   }
 }

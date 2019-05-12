@@ -1,12 +1,4 @@
 var Util = (function () {
-  var loadText = function (filePath) {
-    // eslint-disable-next-line
-    var request = new XMLHttpRequest()
-    request.open('GET', filePath, false)
-    request.send()
-    return request.responseText
-  }
-
   var fullscreenQuad = null
   var getFullscreenQuad = function () {
     if (!Cesium.defined(fullscreenQuad)) {
@@ -130,7 +122,6 @@ var Util = (function () {
   }
 
   return {
-    loadText: loadText,
     getFullscreenQuad: getFullscreenQuad,
     createTexture: createTexture,
     createFramebuffer: createFramebuffer,

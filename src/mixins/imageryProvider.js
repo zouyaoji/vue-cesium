@@ -1,12 +1,9 @@
 import bindEvents from '../util/bindEvent'
 import { Events } from '../util/events.js'
 import cmp from './virtualCmp'
-import mergeDescriptors from '../util/mergeDescriptors'
 
-const props = {
-}
-const computed = {
-}
+const props = {}
+const computed = {}
 const methods = {
   mount () {
     const { imageryProvider, providerContainer } = this
@@ -16,19 +13,16 @@ const methods = {
   unload () {
     const { providerContainer } = this
     providerContainer && providerContainer.setProvider(undefined)
-  },
-  getServices () {
-    const vm = this
-    return mergeDescriptors(cmp.methods.getServices.call(this), {
-      get imageryProvider () {
-        return vm.imageryProvider
-      }
-    })
   }
 }
 const watch = {
+  changeProps: {
+    handler () {
+      this.reload()
+    },
+    deep: true
+  }
 }
-
 export default {
   mixins: [cmp],
   props,

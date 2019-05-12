@@ -5,29 +5,18 @@ const props = {}
 const computed = {}
 const methods = {
   mount () {
-    const { viewer, primitive } = this
-    primitive.readyPromise
-      .then(primitive => {
-        const listener = this.$listeners['readyPromise']
-        listener && this.$emit('readyPromise', primitive)
-      })
-      .otherwise(error => {
-        throw new Cesium.DeveloperError(error)
-      })
-    viewer && viewer.scene.primitives.add(primitive)
+    const { geometry, geometryContainer } = this
+    geometryContainer && geometryContainer.setGeometry(geometry)
   },
   unload () {
-    const { viewer, primitive } = this
-    viewer && viewer.scene.primitives.remove(primitive)
+    const { geometryContainer } = this
+    geometryContainer && geometryContainer.setGeometry(undefined)
   },
   getServices () {
     const vm = this
     return mergeDescriptors(cmp.methods.getServices.call(this), {
       get primitive () {
         return vm.primitive
-      },
-      get geometryInstancesContainer () {
-        return vm
       }
     })
   }
@@ -41,17 +30,19 @@ export default {
   watch,
   methods,
   stubVNode: {
-    attrs () {
-      return {
-        class: this.$options.name
-      }
+    empty () {
+      return this.$options.name
     }
   },
   created () {
     Object.defineProperties(this, {
-      primitive: {
+      geometry: {
         enumerable: true,
         get: () => this.cesiumObject
+      },
+      geometryContainer: {
+        enumerable: true,
+        get: () => this.$services && this.$services.geometryContainer
       }
     })
   }

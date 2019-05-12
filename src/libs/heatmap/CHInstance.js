@@ -12,9 +12,7 @@ class CHInstance {
     if (!o) {
       o = {}
     }
-    // Cesium = CesiumJS
     this._layer = undefined
-    // this.Cesium = Cesium
     this.CesiumHeatmap = CesiumHeatmap
     this._cesium = c
     this._options = o

@@ -55,7 +55,7 @@ export default {
         closeBottom
       }
       this.removeNullItem(polygon)
-      this.originInstance = this.$parent.originInstance.add(polygon)
+      return this.$parent.originInstance.add(polygon)
     }
   }
 }

@@ -17,33 +17,12 @@ export default {
     rectangle: Object,
     credit: String
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    mapId () {
-      this.reload()
-    },
-    accessToken () {
-      this.reload()
-    },
-    format () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    minimumLevel () {
-      this.reload()
-    },
-    maximumLevel () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    credit () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } = this
+      return {
+        url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit
+      }
     }
   },
   methods: {
@@ -57,12 +36,11 @@ export default {
         ellipsoid,
         minimumLevel,
         maximumLevel,
-        rectangle,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
         credit
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.MapboxImageryProvider(options)
-      return imageryProvider
+      return new Cesium.MapboxImageryProvider(options)
     }
   }
 }

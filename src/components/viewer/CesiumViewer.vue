@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-04-25 17:37:35
+ * @Last Modified time: 2019-05-12 00:01:30
  */
 <template>
   <div ref="viewer" style="width:100%; height:100%;">
@@ -843,7 +843,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         imageryProviderViewModels,
         selectedTerrainProviderViewModel,
         terrainProviderViewModels,
-        imageryProvider,
+        imageryProvider: this.isEmptyObj(imageryProvider) ? Cesium.createTileMapServiceImageryProvider({
+          url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+        }) : imageryProvider,
         terrainProvider,
         skyBox,
         skyAtmosphere,

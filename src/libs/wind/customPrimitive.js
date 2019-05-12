@@ -1,6 +1,6 @@
 class CustomPrimitive {
   constructor (options) {
-    this.commandType = Cesium.defaultValue(options.commandType, 'Draw')
+    this.commandType = options.commandType
 
     this.geometry = options.geometry
     this.attributeLocations = options.attributeLocations
@@ -14,12 +14,10 @@ class CustomPrimitive {
     this.rawRenderState = options.rawRenderState
     this.framebuffer = options.framebuffer
 
-    this.outputTextures = options.outputTextures
-    if (Cesium.defined(options.outputTextures)) {
-      this.outputTexture = options.outputTextures[0]
-    }
+    this.outputTexture = options.outputTexture
 
     this.autoClear = Cesium.defaultValue(options.autoClear, false)
+    this.preExecute = options.preExecute
 
     this.show = true
     this.commandToExecute = undefined
@@ -69,8 +67,7 @@ class CustomPrimitive {
           owner: this,
           fragmentShaderSource: this.fragmentShaderSource,
           uniformMap: this.uniformMap,
-          outputTextures: this.outputTextures,
-          outputTexture: this.outputTextures[0],
+          outputTexture: this.outputTexture,
           persists: true
         })
       }
@@ -88,19 +85,18 @@ class CustomPrimitive {
     this.commandToExecute.vertexArray = vertexArray
   }
 
-  preExecute () {
-    // this function will be executed before the command
-  }
-
   update (frameState) {
     if (!this.show) {
       return
     }
+
     if (!Cesium.defined(this.commandToExecute)) {
       this.commandToExecute = this.createCommand(frameState.context)
     }
 
-    this.preExecute()
+    if (Cesium.defined(this.preExecute)) {
+      this.preExecute()
+    }
 
     if (Cesium.defined(this.clearCommand)) {
       frameState.commandList.push(this.clearCommand)

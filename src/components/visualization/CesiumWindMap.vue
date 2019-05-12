@@ -1,5 +1,4 @@
 <script>
-import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
 import Wind3D from '../../libs/wind/wind3D.js'
 export default {
@@ -15,6 +14,7 @@ export default {
       type: Object,
       default: function () {
         return {
+          particlesTextureSize: 128,
           maxParticles: 128 * 128,
           particleHeight: 100.0,
           fadeOpacity: 0.996,
@@ -51,31 +51,16 @@ export default {
       return null
     },
     mount () {
-      // const { viewer, entity } = this
     },
     unload () {
       if (!this.isEmptyObj(this.windMap)) {
         this.windMap.destroy()
       }
-    },
-
-    getServices () {
-      const vm = this
-      return mergeDescriptors(
-        cmp.methods.getServices.call(this),
-        {
-          get windMap () { return vm.windMap },
-          get windMapContainer () { return vm }
-        }
-      )
     }
-
   },
   stubVNode: {
-    attrs () {
-      return {
-        class: this.$options.name
-      }
+    empty () {
+      return this.$options.name
     }
   },
   created () {

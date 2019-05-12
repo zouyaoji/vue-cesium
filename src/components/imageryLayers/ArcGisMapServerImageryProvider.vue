@@ -30,45 +30,25 @@ export default {
     minimumLevel: Number,
     maximumLevel: Number
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    token () {
-      this.reload()
-    },
-    tileDiscardPolicy () {
-      this.reload()
-    },
-    usePreCachedTilesIfAvailable () {
-      this.reload()
-    },
-    layers () {
-      this.reload()
-    },
-    enablePickFeatures () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    tilingScheme () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    tileWidth () {
-      this.reload()
-    },
-    tileHeight () {
-      this.reload()
-    },
-    minimumLevel () {
-      this.reload()
-    },
-    maximumLevel () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, token, tileDiscardPolicy, usePreCachedTilesIfAvailable, layers, enablePickFeatures, rectangle,
+        tilingScheme, ellipsoid, tileWidth, tileHeight, minimumLevel, maximumLevel } = this
+      return {
+        url,
+        token,
+        tileDiscardPolicy,
+        usePreCachedTilesIfAvailable,
+        layers,
+        enablePickFeatures,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        tilingScheme,
+        ellipsoid,
+        tileWidth,
+        tileHeight,
+        minimumLevel,
+        maximumLevel
+      }
     }
   },
   methods: {
@@ -82,7 +62,7 @@ export default {
         usePreCachedTilesIfAvailable,
         layers,
         enablePickFeatures,
-        rectangle,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
         tilingScheme,
         ellipsoid,
         tileWidth,
@@ -91,8 +71,7 @@ export default {
         maximumLevel
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.ArcGisMapServerImageryProvider(options)
-      return imageryProvider
+      return new Cesium.ArcGisMapServerImageryProvider(options)
     }
   }
 }

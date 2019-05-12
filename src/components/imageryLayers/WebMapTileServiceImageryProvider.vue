@@ -39,60 +39,31 @@ export default {
     },
     token: String
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    format () {
-      this.reload()
-    },
-    layer () {
-      this.reload()
-    },
-    wmtsStyle () {
-      this.reload()
-    },
-    tileMatrixSetID () {
-      this.reload()
-    },
-    tileMatrixLabels () {
-      this.reload()
-    },
-    clock () {
-      this.reload()
-    },
-    times () {
-      this.reload()
-    },
-    dimensions () {
-      this.reload()
-    },
-    tileWidth () {
-      this.reload()
-    },
-    tileHeight () {
-      this.reload()
-    },
-    tilingScheme () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    minimumLevel () {
-      this.reload()
-    },
-    maximumLevel () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    credit () {
-      this.reload()
-    },
-    subdomains () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
+        tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
+      return {
+        url,
+        format,
+        layer,
+        wmtsStyle,
+        tileMatrixSetID,
+        tileMatrixLabels,
+        clock,
+        times,
+        dimensions,
+        tileWidth,
+        tileHeight,
+        tilingScheme,
+        rectangle,
+        minimumLevel,
+        maximumLevel,
+        ellipsoid,
+        credit,
+        subdomains,
+        token
+      }
     }
   },
   methods: {
@@ -112,7 +83,7 @@ export default {
         tileWidth,
         tileHeight,
         tilingScheme,
-        rectangle,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
         minimumLevel,
         maximumLevel,
         ellipsoid,

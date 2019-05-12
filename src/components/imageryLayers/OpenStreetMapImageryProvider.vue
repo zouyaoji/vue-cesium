@@ -21,27 +21,12 @@ export default {
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
     }
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    fileExtension () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    minimumLevel () {
-      this.reload()
-    },
-    maximumLevel () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    credit () {
-      this.reload()
+  computed: {
+    changeProps () {
+      const { url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
+      return {
+        url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit
+      }
     }
   },
   methods: {
@@ -50,7 +35,7 @@ export default {
       let options = {
         url,
         fileExtension,
-        rectangle,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
         minimumLevel,
         maximumLevel,
         ellipsoid,
@@ -58,8 +43,7 @@ export default {
       }
       this.removeNullItem(options)
       /* eslint-disable new-cap */
-      let imageryProvider = new Cesium.createOpenStreetMapImageryProvider(options)
-      return imageryProvider
+      return new Cesium.createOpenStreetMapImageryProvider(options)
     }
   }
 }

@@ -36,61 +36,11 @@ export default {
     },
     customTags: Object
   },
-  watch: {
-    url () {
-      this.reload()
-    },
-    pickFeaturesUrl () {
-      this.reload()
-    },
-    urlSchemeZeroPadding () {
-      this.reload()
-    },
-    subdomains () {
-      this.reload()
-    },
-    credit () {
-      this.reload()
-    },
-    minimumLevel () {
-      this.reload()
-    },
-    maximumLevel () {
-      this.reload()
-    },
-    rectangle () {
-      this.reload()
-    },
-    tilingScheme () {
-      this.reload()
-    },
-    ellipsoid () {
-      this.reload()
-    },
-    tileWidth () {
-      this.reload()
-    },
-    tileHeight () {
-      this.reload()
-    },
-    hasAlphaChannel () {
-      this.reload()
-    },
-    getFeatureInfoFormats () {
-      this.reload()
-    },
-    enablePickFeatures () {
-      this.reload()
-    },
-    customTags () {
-      this.reload()
-    }
-  },
-  methods: {
-    createCesiumObject () {
-      const { Cesium, url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
+  computed: {
+    changeProps () {
+      const { url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
         tilingScheme, ellipsoid, tileWidth, tileHeight, hasAlphaChannel, getFeatureInfoFormats, customTags, enablePickFeatures } = this
-      let options = {
+      return {
         url,
         pickFeaturesUrl,
         urlSchemeZeroPadding,
@@ -108,9 +58,32 @@ export default {
         customTags,
         enablePickFeatures
       }
+    }
+  },
+  methods: {
+    createCesiumObject () {
+      const { Cesium, url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
+        tilingScheme, ellipsoid, tileWidth, tileHeight, hasAlphaChannel, getFeatureInfoFormats, customTags, enablePickFeatures } = this
+      let options = {
+        url,
+        pickFeaturesUrl,
+        urlSchemeZeroPadding,
+        subdomains,
+        credit,
+        minimumLevel,
+        maximumLevel,
+        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        tilingScheme,
+        ellipsoid,
+        tileWidth,
+        tileHeight,
+        hasAlphaChannel,
+        getFeatureInfoFormats,
+        customTags,
+        enablePickFeatures
+      }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.UrlTemplateImageryProvider(options)
-      return imageryProvider
+      return new Cesium.UrlTemplateImageryProvider(options)
     }
   }
 }

@@ -1,48 +1,52 @@
 import { version } from '../package.json'
-import CesiumViewer from '@/viewer/CesiumViewer.vue'
-import ImageryLayer from '@/imageryLayers/ImageryLayer.vue'
-import ArcGisMapServerImageryProvider from '@/imageryLayers/ArcGisMapServerImageryProvider.vue'
-import BingMapsImageryProvider from '@/imageryLayers/BingMapsImageryProvider.vue'
-import MapboxImageryProvider from '@/imageryLayers/MapboxImageryProvider.vue'
-import OpenStreetMapImageryProvider from '@/imageryLayers/OpenStreetMapImageryProvider.vue'
-import SingleTileImageryProvider from '@/imageryLayers/SingleTileImageryProvider.vue'
-import UrlTemplateImageryProvider from '@/imageryLayers/UrlTemplateImageryProvider.vue'
-import WebMapTileServiceImageryProvider from '@/imageryLayers/WebMapTileServiceImageryProvider.vue'
-import SuperMapImageryProvider from '@/imageryLayers/SuperMapImageryProvider.vue'
+import CesiumViewer from '@/components/viewer/CesiumViewer.vue'
+import ImageryLayer from '@/components/imageryLayers/ImageryLayer.vue'
+import ArcGisMapServerImageryProvider from '@/components/imageryLayers/ArcGisMapServerImageryProvider.vue'
+import BingMapsImageryProvider from '@/components/imageryLayers/BingMapsImageryProvider.vue'
+import MapboxImageryProvider from '@/components/imageryLayers/MapboxImageryProvider.vue'
+import OpenStreetMapImageryProvider from '@/components/imageryLayers/OpenStreetMapImageryProvider.vue'
+import SingleTileImageryProvider from '@/components/imageryLayers/SingleTileImageryProvider.vue'
+import UrlTemplateImageryProvider from '@/components/imageryLayers/UrlTemplateImageryProvider.vue'
+import WebMapServiceImageryProvider from '@/components/imageryLayers/WebMapServiceImageryProvider.vue'
+import WebMapTileServiceImageryProvider from '@/components/imageryLayers/WebMapTileServiceImageryProvider.vue'
+import SuperMapImageryProvider from '@/components/imageryLayers/SuperMapImageryProvider.vue'
 
-import Entity from '@/entities/Entity.vue'
-import BillboardGraphics from '@/entities/BillboardGraphics.vue'
-import BoxGraphics from '@/entities/BoxGraphics.vue'
-import CorridorGraphics from '@/entities/CorridorGraphics.vue'
-import CylinderGraphics from '@/entities/CylinderGraphics.vue'
-import EllipseGraphics from '@/entities/EllipseGraphics.vue'
-import EllipsoidGraphics from '@/entities/EllipsoidGraphics.vue'
-import LabelGraphics from '@/entities/LabelGraphics.vue'
-import ModelGraphics from '@/entities/ModelGraphics.vue'
-import PathGraphics from '@/entities/PathGraphics.vue'
-import PlaneGraphics from '@/entities/PlaneGraphics.vue'
-import PointGraphics from '@/entities/PointGraphics.vue'
-import PolygonGraphics from '@/entities/PolygonGraphics.vue'
-import PolylineGraphics from '@/entities/PolylineGraphics.vue'
-import PolylineVolumeGraphics from '@/entities/PolylineVolumeGraphics.vue'
-import RectangleGraphics from '@/entities/RectangleGraphics.vue'
-import WallGraphics from '@/entities/WallGraphics.vue'
+import Entity from '@/components/entities/Entity.vue'
+import BillboardGraphics from '@/components/entities/BillboardGraphics.vue'
+import BoxGraphics from '@/components/entities/BoxGraphics.vue'
+import CorridorGraphics from '@/components/entities/CorridorGraphics.vue'
+import CylinderGraphics from '@/components/entities/CylinderGraphics.vue'
+import EllipseGraphics from '@/components/entities/EllipseGraphics.vue'
+import EllipsoidGraphics from '@/components/entities/EllipsoidGraphics.vue'
+import LabelGraphics from '@/components/entities/LabelGraphics.vue'
+import ModelGraphics from '@/components/entities/ModelGraphics.vue'
+import PathGraphics from '@/components/entities/PathGraphics.vue'
+import PlaneGraphics from '@/components/entities/PlaneGraphics.vue'
+import PointGraphics from '@/components/entities/PointGraphics.vue'
+import PolygonGraphics from '@/components/entities/PolygonGraphics.vue'
+import PolylineGraphics from '@/components/entities/PolylineGraphics.vue'
+import PolylineVolumeGraphics from '@/components/entities/PolylineVolumeGraphics.vue'
+import RectangleGraphics from '@/components/entities/RectangleGraphics.vue'
+import WallGraphics from '@/components/entities/WallGraphics.vue'
 
-import PointCollection from '@/primitives/PointPrimitiveCollection.vue'
-import PolylineCollection from '@/primitives/PolylineCollection.vue'
-import LabelCollection from '@/primitives/LabelCollection.vue'
-import PointPrimitive from '@/primitives/PointPrimitive.vue'
-import Polyline from '@/primitives/Polyline.vue'
-import Label from '@/primitives/Label.vue'
-import Cesium3DTileset from '@/primitives/Cesium3DTileset.vue'
-import Model from '@/primitives/Model.vue'
+import PointCollection from '@/components/primitives/PointPrimitiveCollection.vue'
+import PolylineCollection from '@/components/primitives/PolylineCollection.vue'
+import LabelCollection from '@/components/primitives/LabelCollection.vue'
+import PointPrimitive from '@/components/primitives/PointPrimitive.vue'
+import Polyline from '@/components/primitives/Polyline.vue'
+import Label from '@/components/primitives/Label.vue'
+import Cesium3DTileset from '@/components/primitives/Cesium3DTileset.vue'
+import Model from '@/components/primitives/Model.vue'
+import GroundPrimitive from '@/components/primitives/GroundPrimitive.vue'
+import GeometryInstance from '@/components/primitives/GeometryInstance.vue'
+import RectangleGeometry from '@/components/primitives/RectangleGeometry.vue'
 
-import MeasureDistance from '@/measure/MeasureDistance.vue'
-import MeasureArea from '@/measure/MeasureArea.vue'
-import MeasureHeight from '@/measure/MeasureHeight.vue'
+import MeasureDistance from '@/components/measure/MeasureDistance.vue'
+import MeasureArea from '@/components/measure/MeasureArea.vue'
+import MeasureHeight from '@/components/measure/MeasureHeight.vue'
 
-import CesiumHeatMap from '@/visualization/CesiumHeatMap.vue'
-import CesiumWindMap from '@/visualization/CesiumWindMap.vue'
+import CesiumHeatMap from '@/components/visualization/CesiumHeatMap.vue'
+import CesiumWindMap from '@/components/visualization/CesiumWindMap.vue'
 
 export default {
   install (Vue, options) {
@@ -55,22 +59,14 @@ export default {
     Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component(ImageryLayer.name, ImageryLayer)
-    Vue.component(
-      ArcGisMapServerImageryProvider.name,
-      ArcGisMapServerImageryProvider
-    )
+    Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
     Vue.component(BingMapsImageryProvider.name, BingMapsImageryProvider)
     Vue.component(MapboxImageryProvider.name, MapboxImageryProvider)
-    Vue.component(
-      OpenStreetMapImageryProvider.name,
-      OpenStreetMapImageryProvider
-    )
+    Vue.component(OpenStreetMapImageryProvider.name, OpenStreetMapImageryProvider)
     Vue.component(SingleTileImageryProvider.name, SingleTileImageryProvider)
     Vue.component(UrlTemplateImageryProvider.name, UrlTemplateImageryProvider)
-    Vue.component(
-      WebMapTileServiceImageryProvider.name,
-      WebMapTileServiceImageryProvider
-    )
+    Vue.component(WebMapServiceImageryProvider.name, WebMapServiceImageryProvider)
+    Vue.component(WebMapTileServiceImageryProvider.name, WebMapTileServiceImageryProvider)
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
 
     Vue.component(Entity.name, Entity)
@@ -100,6 +96,10 @@ export default {
     Vue.component(PointPrimitive.name, PointPrimitive)
 
     Vue.component('model-primitive', Model)
+    Vue.component(GroundPrimitive.name, GroundPrimitive)
+    Vue.component(GeometryInstance.name, GeometryInstance)
+    Vue.component(RectangleGeometry.name, RectangleGeometry)
+
     Vue.component('measure-distance', MeasureDistance)
     Vue.component('measure-area', MeasureArea)
     Vue.component('measure-height', MeasureHeight)
@@ -119,6 +119,7 @@ export {
   OpenStreetMapImageryProvider,
   SingleTileImageryProvider,
   UrlTemplateImageryProvider,
+  WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
   SuperMapImageryProvider,
   Entity,
@@ -149,6 +150,9 @@ export {
   MeasureArea,
   MeasureHeight,
   Model,
+  GroundPrimitive,
+  GeometryInstance,
+  RectangleGeometry,
   CesiumHeatMap,
   CesiumWindMap
 }

@@ -128,7 +128,7 @@ export default {
         availability,
         description,
         show,
-        position,
+        position: position instanceof Cesium.Cartesian3 || this.isEmptyObj(position) ? position : Cesium.Cartesian3.fromDegrees(position.x, position.y, position.z),
         orientation,
         viewFrom,
         parent,
@@ -165,37 +165,53 @@ export default {
     },
     setGraphics (graphics) {
       if (graphics instanceof Cesium.BillboardGraphics) {
-        this.$emit('update:billboard', graphics)
+        const listener = this.$listeners['update:billboard']
+        if (listener) { this.$emit('update:billboard', graphics) } else this.entity.billboard = graphics
       } else if (graphics instanceof Cesium.BoxGraphics) {
-        this.$emit('update:box', graphics)
+        const listener = this.$listeners['update:box']
+        if (listener) { this.$emit('update:box', graphics) } else this.entity.box = graphics
       } else if (graphics instanceof Cesium.CorridorGraphics) {
-        this.$emit('update:corridor', graphics)
+        const listener = this.$listeners['update:corridor']
+        if (listener) { this.$emit('update:corridor', graphics) } else this.entity.corridor = graphics
       } else if (graphics instanceof Cesium.CylinderGraphics) {
-        this.$emit('update:cylinder', graphics)
+        const listener = this.$listeners['update:cylinder']
+        if (listener) { this.$emit('update:cylinder', graphics) } else this.entity.cylinder = graphics
       } else if (graphics instanceof Cesium.EllipseGraphics) {
-        this.$emit('update:ellipse', graphics)
+        const listener = this.$listeners['update:ellipse']
+        if (listener) { this.$emit('update:ellipse', graphics) } else this.entity.ellipse = graphics
       } else if (graphics instanceof Cesium.EllipsoidGraphics) {
-        this.$emit('update:ellipsoid', graphics)
+        const listener = this.$listeners['update:ellipsoid']
+        if (listener) { this.$emit('update:ellipsoid', graphics) } else this.entity.ellipsoid = graphics
       } else if (graphics instanceof Cesium.LabelGraphics) {
-        this.$emit('update:label', graphics)
+        const listener = this.$listeners['update:label']
+        if (listener) { this.$emit('update:label', graphics) } else this.entity.label = graphics
       } else if (graphics instanceof Cesium.ModelGraphics) {
-        this.$emit('update:model', graphics)
+        const listener = this.$listeners['update:model']
+        if (listener) { this.$emit('update:model', graphics) } else this.entity.model = graphics
       } else if (graphics instanceof Cesium.PathGraphics) {
-        this.$emit('update:path', graphics)
+        const listener = this.$listeners['update:path']
+        if (listener) { this.$emit('update:path', graphics) } else this.entity.path = graphics
       } else if (graphics instanceof Cesium.PlaneGraphics) {
-        this.$emit('update:plane', graphics)
+        const listener = this.$listeners['update:plane']
+        if (listener) { this.$emit('update:plane', graphics) } else this.entity.plane = graphics
       } else if (graphics instanceof Cesium.PointGraphics) {
-        this.$emit('update:point', graphics)
+        const listener = this.$listeners['update:point']
+        if (listener) { this.$emit('update:point', graphics) } else this.entity.point = graphics
       } else if (graphics instanceof Cesium.PolygonGraphics) {
-        this.$emit('update:polygon', graphics)
+        const listener = this.$listeners['update:polygon']
+        if (listener) { this.$emit('update:polygon', graphics) } else this.entity.polygon = graphics
       } else if (graphics instanceof Cesium.PolylineGraphics) {
-        this.$emit('update:polyline', graphics)
+        const listener = this.$listeners['update:polyline']
+        if (listener) { this.$emit('update:polyline', graphics) } else this.entity.polyline = graphics
       } else if (graphics instanceof Cesium.PolylineVolumeGraphics) {
-        this.$emit('update:polylineVolume', graphics)
+        const listener = this.$listeners['update:polylineVolume']
+        if (listener) { this.$emit('update:polylineVolume', graphics) } else this.entity.polylineVolume = graphics
       } else if (graphics instanceof Cesium.RectangleGraphics) {
-        this.$emit('update:rectangle', graphics)
+        const listener = this.$listeners['update:rectangle']
+        if (listener) { this.$emit('update:rectangle', graphics) } else this.entity.rectangle = graphics
       } else if (graphics instanceof Cesium.WallGraphics) {
-        this.$emit('update:wall', graphics)
+        const listener = this.$listeners['update:wall']
+        if (listener) { this.$emit('update:wall', graphics) } else this.entity.wall = graphics
       }
     },
     getServices () {
@@ -220,7 +236,7 @@ export default {
     Object.defineProperties(this, {
       entity: {
         enumerable: true,
-        get: () => this.$services && this.cesiumObject
+        get: () => this.cesiumObject
       }
     })
   }

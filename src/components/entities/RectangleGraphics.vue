@@ -46,7 +46,7 @@ export default {
   },
   watch: {
     coordinates (val) {
-      this.graphics.coordinates = val
+      this.graphics.coordinates = val instanceof Cesium.Rectangle ? val : Cesium.Rectangle.fromDegrees(val.west, val.south, val.east, val.north)
     },
     height (val) {
       this.graphics.height = val
@@ -105,28 +105,27 @@ export default {
       const { Cesium, coordinates, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
         outlineWidth, rotation, stRotation, granularity, shadows, distanceDisplayCondition, classificationType, zIndex } = this
       let options = {
-        coordinates: coordinates,
-        height: height,
-        heightReference: heightReference,
-        extrudedHeight: extrudedHeight,
-        extrudedHeightReference: extrudedHeightReference,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        rotation: rotation,
-        stRotation: stRotation,
-        granularity: granularity,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition,
-        classificationType: classificationType,
-        zIndex: zIndex
+        coordinates: coordinates instanceof Cesium.Rectangle || this.isEmptyObj(coordinates) ? coordinates : Cesium.Rectangle.fromDegrees(coordinates.west, coordinates.south, coordinates.east, coordinates.north),
+        height,
+        heightReference,
+        extrudedHeight,
+        extrudedHeightReference,
+        show,
+        fill,
+        material,
+        outline,
+        outlineColor,
+        outlineWidth,
+        rotation,
+        stRotation,
+        granularity,
+        shadows,
+        distanceDisplayCondition,
+        classificationType,
+        zIndex
       }
       this.removeNullItem(options)
-      let rectangle = new Cesium.RectangleGraphics(options)
-      return rectangle
+      return new Cesium.RectangleGraphics(options)
     }
   }
 }

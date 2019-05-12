@@ -1,7 +1,7 @@
 import bindEvents from '../util/bindEvent'
 import { Events } from '../util/events.js'
 import cmp from './virtualCmp'
-import mergeDescriptors from '../util/mergeDescriptors'
+// import mergeDescriptors from '../util/mergeDescriptors'
 
 const props = {}
 const computed = {}
@@ -14,14 +14,6 @@ const methods = {
   unload () {
     const { graphicsContainer } = this
     graphicsContainer && graphicsContainer.setGraphics(undefined)
-  },
-  getServices () {
-    const vm = this
-    return mergeDescriptors(cmp.methods.getServices.call(this), {
-      get graphics () {
-        return vm.graphics
-      }
-    })
   }
 }
 const watch = {}

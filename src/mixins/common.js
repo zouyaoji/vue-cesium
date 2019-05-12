@@ -16,7 +16,7 @@ const methods = {
     const viewer = (this.viewer = $parent.viewer)
     this.originInstance = this.createCesiumObject()
     this.mount()
-    this.$emit('ready', { Cesium, viewer })
+    this.$emit('ready', { Cesium, viewer, cesiumObject: this.cesiumObject })
   },
   createCesiumObject () {
     throw new Error('Not implemented method')

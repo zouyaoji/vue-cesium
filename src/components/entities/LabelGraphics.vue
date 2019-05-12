@@ -147,9 +147,7 @@ export default {
         disableDepthTestDistance
       }
       this.removeNullItem(options)
-      let label = new Cesium.LabelGraphics(options)
-
-      return label
+      return new Cesium.LabelGraphics(options)
     }
   }
 }

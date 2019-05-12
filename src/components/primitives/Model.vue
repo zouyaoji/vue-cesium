@@ -97,7 +97,6 @@ export default {
     id (val) {
       this.originInstance.id = val
     },
-    // reload
     allowPicking (val) {
       this.originInstance.allowPicking = val
     },
