@@ -1,24 +1,19 @@
-# WMTS服务Provider
+# WMS服务Provider
 
-`wmts-imagery-provider`用于加载WMTS服务的影像图层，示例将加载天地图的服务。
+`wms-imagery-provider`作为`imagery-layer`子组件加载WMS服务的影像图层。
 
 ## 示例
 
-### 添加天地图WMTS服务到场景
+### 添加WMS服务到场景
 
 #### 预览
 
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready" @layerAdded="layerAdded">
+      <cesium-viewer @ready="ready">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer1"></wmts-imagery-provider>
-       </imagery-layer>
-       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer2"></wmts-imagery-provider>
+        <wms-imagery-provider :url="url" :layers="layers" :parameters="parameters"></wms-imagery-provider>
        </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
@@ -28,8 +23,8 @@
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>对比度</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="url" placeholder="请选择服务">
+        <span>切换图层</span>
+        <md-select v-model="layers" placeholder="请选择服务" @selected="mdSelected">
           <md-option
             v-for="item in options"
             :key="item.value"
@@ -45,40 +40,37 @@
     export default {
       data () {
         return {
-          layer1: 'img',
-          layer2: 'cia',
-          url: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          urlText: 'http://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          style: 'default',
-          tileMatrixSetID: 'c',
-          tileMatrixLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'],
-          credit : '天地图WMTS服务',
-          subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
-          tilingScheme: undefined,
-          options: [{
-            label: '天地图全球影像地图服务（经纬度投影）',
-            value: 'http://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }, {
-            label: '天地图全球矢量地图服务（经纬度投影）',
-            value: 'http://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }],
+          url: 'https://www.ncei.noaa.gov/thredds/wms/gfs-004-files/201809/20180916/gfs_4_20180916_0000_000.grb2',
+          layers: 'Precipitable_water_entire_atmosphere_single_layer',
+          parameters: {
+            ColorScaleRange: '0.1,66.8'
+          },
           alpha: 1,
           brightness: 1,
           contrast: 1,
-          token: '436ce7e50d27eede2f2929307e6b33c0'
+          options: [{
+            label: 'WMS:Rainfall',
+            value: 'Precipitable_water_entire_atmosphere_single_layer'
+          }, {
+            label: 'WMS:Air Pressure',
+            value: 'Pressure_surface'
+          }]
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
-          viewer.imageryLayers.removeAll()
-          this.tilingScheme = new Cesium.GeographicTilingScheme()
         },
-        layerAdded () {
-          if (this.$refs.layerText.imageryLayer) {
-            const {viewer} = this.cesiumInstance
-            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+        mdSelected (value) {
+          if (value === 'Precipitable_water_entire_atmosphere_single_layer') {
+            this.parameters = {
+              ColorScaleRange: '0.1,66.8'
+            }
+          } else if (value === 'Pressure_surface') {
+            this.parameters = {
+              ColorScaleRange: '51640,103500'
+            }
           }
         }
       }
@@ -94,7 +86,7 @@
     <cesium-viewer @ready="ready" @layerAdded="layerAdded">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :token="token"></wmts-imagery-provider>
+          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token"></wmts-imagery-provider>
       </imagery-layer>
       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"

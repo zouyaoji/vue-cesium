@@ -32,11 +32,21 @@
           description: 'Hello Vue Cesium',
           rotation: 0,
           rectangle1: {},
-          coordinates1: {},
+          coordinates1: {
+            west: -110,
+            south: 20,
+            east: -80,
+            north: 25
+          },
           material1: {},
 
           rectangle2: {},
-          coordinates2: {},
+          coordinates2: {
+            west: -110.0,
+            south: 30,
+            east: -100,
+            north: 40.0
+          },
           material2: {},
           rotation2: {},
           outlineColor2: {},
@@ -53,10 +63,8 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.rotation = Cesium.Math.toRadians(30)
-          this.coordinates1 =  Cesium.Rectangle.fromDegrees(-110.0, 20.0, -80.0, 25.0)
           this.material1 = Cesium.Color.RED.withAlpha(0.5)
 
-          this.coordinates2 = Cesium.Rectangle.fromDegrees(-110.0, 30.0, -100.0, 40.0)
           this.material2 = Cesium.Color.GREEN.withAlpha(0.5)
           this.rotation2 = Cesium.Math.toRadians(45)
           this.outlineColor2 = Cesium.Color.BLACK
@@ -107,11 +115,21 @@
         description: 'Hello Vue Cesium',
         rotation: 0,
         rectangle1: {},
-        coordinates1: {},
+        coordinates1: {
+          west: -110,
+          south: 20,
+          east: -80,
+          north: 25
+        },
         material1: {},
 
         rectangle2: {},
-        coordinates2: {},
+        coordinates2: {
+          west: -110.0,
+          south: 30,
+          east: -100,
+          north: 40.0
+        },
         material2: {},
         rotation2: {},
         outlineColor2: {},
@@ -128,10 +146,8 @@
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
         this.rotation = Cesium.Math.toRadians(30)
-        this.coordinates1 =  Cesium.Rectangle.fromDegrees(-110.0, 20.0, -80.0, 25.0)
         this.material1 = Cesium.Color.RED.withAlpha(0.5)
 
-        this.coordinates2 = Cesium.Rectangle.fromDegrees(-110.0, 30.0, -100.0, 40.0)
         this.material2 = Cesium.Color.GREEN.withAlpha(0.5)
         this.rotation2 = Cesium.Math.toRadians(45)
         this.outlineColor2 = Cesium.Color.BLACK

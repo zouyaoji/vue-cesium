@@ -13,7 +13,7 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <singletile-imagery-provider :url="url"></singletile-imagery-provider>
+          <singletile-imagery-provider :url="url" :rectangle="rectangle"></singletile-imagery-provider>
         </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
@@ -33,13 +33,13 @@
           url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/worldimage.jpg',
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          rectangle: {west: 100, south: 30, east: 105, north: 60}
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          // ..
         }
       }
     }

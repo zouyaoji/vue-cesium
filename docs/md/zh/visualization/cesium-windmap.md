@@ -62,6 +62,7 @@
           }],
           data: 0,
           particleSystemOptions: {
+            particlesTextureSize: 128,
             maxParticles: 128 * 128,
             particleHeight: 100.0,
             fadeOpacity: 0.996,

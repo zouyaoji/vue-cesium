@@ -32,11 +32,21 @@
           description: 'Hello Vue Cesium',
           rotation: 0,
           rectangle1: {},
-          coordinates1: {},
+          coordinates1: {
+            west: -110,
+            south: 20,
+            east: -80,
+            north: 25
+          },
           material1: {},
 
           rectangle2: {},
-          coordinates2: {},
+          coordinates2: {
+            west: -110.0,
+            south: 30,
+            east: -100,
+            north: 40.0
+          },
           material2: {},
           rotation2: {},
           outlineColor2: {},
@@ -53,10 +63,8 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.rotation = Cesium.Math.toRadians(30)
-          this.coordinates1 =  Cesium.Rectangle.fromDegrees(-110.0, 20.0, -80.0, 25.0)
           this.material1 = Cesium.Color.RED.withAlpha(0.5)
 
-          this.coordinates2 = Cesium.Rectangle.fromDegrees(-110.0, 30.0, -100.0, 40.0)
           this.material2 = Cesium.Color.GREEN.withAlpha(0.5)
           this.rotation2 = Cesium.Math.toRadians(45)
           this.outlineColor2 = Cesium.Color.BLACK
@@ -85,33 +93,43 @@
 
 ```html
 <template>
-  <div class="viewer">
-    <cesium-viewer @ready="ready">
-      <entity :description="description" :rectangle.sync="rectangle1">
-        <rectangle-graphics :coordinates="coordinates1" :material="material1"></rectangle-graphics>
-      </entity>
-      <entity :description="description" :rectangle.sync="rectangle2">
-        <rectangle-graphics :coordinates="coordinates2" :material="material2" :rotation="rotation2" :extrudedHeight="300000.0" :height="100000.0" :outline="true" :outlineColor="outlineColor2"></rectangle-graphics>
-      </entity>
-      <entity :description="description" :rectangle.sync="rectangle3">
-        <rectangle-graphics :coordinates="coordinates3" :material="material3" :rotation="rotation3" :stRotation="stRotation3" :classificationType="classificationType3" @ready="subReady"></rectangle-graphics>
-      </entity>
-    </cesium-viewer>
-  </div>
-</template>
+    <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <entity :description="description" :rectangle.sync="rectangle1">
+          <rectangle-graphics :coordinates="coordinates1" :material="material1"></rectangle-graphics>
+        </entity>
+        <entity :description="description" :rectangle.sync="rectangle2">
+          <rectangle-graphics :coordinates="coordinates2" :material="material2" :rotation="rotation2" :extrudedHeight="300000.0" :height="100000.0" :outline="true" :outlineColor="outlineColor2"></rectangle-graphics>
+        </entity>
+        <entity :description="description" :rectangle.sync="rectangle3">
+          <rectangle-graphics :coordinates="coordinates3" :material="material3" :rotation="rotation3" :stRotation="stRotation3" :classificationType="classificationType3" @ready="subReady"></rectangle-graphics>
+        </entity>
+      </cesium-viewer>
+    </div>
+  </template>
 
-<script>
+  <script>
   export default {
     data () {
       return {
         description: 'Hello Vue Cesium',
         rotation: 0,
         rectangle1: {},
-        coordinates1: {},
+        coordinates1: {
+          west: -110,
+          south: 20,
+          east: -80,
+          north: 25
+        },
         material1: {},
 
         rectangle2: {},
-        coordinates2: {},
+        coordinates2: {
+          west: -110.0,
+          south: 30,
+          east: -100,
+          north: 40.0
+        },
         material2: {},
         rotation2: {},
         outlineColor2: {},
@@ -128,10 +146,8 @@
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
         this.rotation = Cesium.Math.toRadians(30)
-        this.coordinates1 =  Cesium.Rectangle.fromDegrees(-110.0, 20.0, -80.0, 25.0)
         this.material1 = Cesium.Color.RED.withAlpha(0.5)
 
-        this.coordinates2 = Cesium.Rectangle.fromDegrees(-110.0, 30.0, -100.0, 40.0)
         this.material2 = Cesium.Color.GREEN.withAlpha(0.5)
         this.rotation2 = Cesium.Math.toRadians(45)
         this.outlineColor2 = Cesium.Color.BLACK

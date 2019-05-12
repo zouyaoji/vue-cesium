@@ -69,33 +69,6 @@ const routeMap = [
     ]
   },
   {
-    // 指南
-    path: 'guide',
-    component: CateView,
-    name: {
-      zh: '指南',
-      en: 'Guide'
-    },
-    children: [
-      {
-        path: 'painting',
-        component: 'guide-painting',
-        name: {
-          zh: '绘制',
-          en: 'Painting'
-        }
-      },
-      {
-        path: 'measuring',
-        component: 'guide-measuring',
-        name: {
-          zh: '量算',
-          en: 'Measuring'
-        }
-      }
-    ]
-  },
-  {
     path: 'CesiumViewer',
     name: {
       zh: '场景',
@@ -116,19 +89,11 @@ const routeMap = [
   {
     path: 'imageryLayers',
     name: {
-      zh: '图层',
+      zh: '影像',
       en: 'Layers'
     },
     component: CateView,
     children: [
-      {
-        path: 'imagery-layer',
-        component: 'imageryLayers/imagery-layer',
-        name: {
-          zh: '影像图层',
-          en: 'ImageryLayer'
-        }
-      },
       {
         path: 'arcgis-mapserver-imagery-provider',
         component: 'imageryLayers/arcgis-mapserver-imagery-provider',
@@ -178,6 +143,14 @@ const routeMap = [
         }
       },
       {
+        path: 'wms-imagery-provider',
+        component: 'imageryLayers/wms-imagery-provider',
+        name: {
+          zh: 'WMS服务Provider',
+          en: 'WebMapServiceImageryProvider'
+        }
+      },
+      {
         path: 'wmts-imagery-provider',
         component: 'imageryLayers/wmts-imagery-provider',
         name: {
@@ -196,21 +169,22 @@ const routeMap = [
     ]
   },
   {
+    path: 'TerrainProvider',
+    name: {
+      zh: '地形',
+      en: 'Terrains'
+    },
+    component: CateView,
+    children: []
+  },
+  {
     path: 'entities',
     name: {
       zh: '实体',
-      en: 'entities'
+      en: 'Entities'
     },
     component: CateView,
     children: [
-      // {
-      //   path: 'entity',
-      //   component: 'entities/entity',
-      //   name: {
-      //     zh: '实体',
-      //     en: 'Entity'
-      //   }
-      // },
       {
         path: 'billboard-graphics',
         component: 'entities/billboard-graphics',
@@ -342,28 +316,63 @@ const routeMap = [
     ]
   },
   {
-    path: 'primitive',
+    path: 'primitives',
     name: {
-      zh: '几何体',
-      en: 'Primitive'
+      zh: '图元',
+      en: 'Primitives'
     },
     component: CateView,
     children: [
       {
         path: 'cesium-3dtileset',
-        component: 'cesium-3dtileset',
+        component: 'primitives/cesium-3dtileset',
         name: {
-          zh: 'Cesium3DTileset模型',
+          zh: '3DTiles模型',
           en: 'Cesium3DTileset'
+        }
+      },
+      {
+        path: 'rectangle-geometry',
+        component: 'primitives/rectangle-geometry',
+        name: {
+          zh: '矩形图元',
+          en: 'RectangleGeometry'
         }
       }
     ]
   },
   {
-    path: 'visualization',
+    // 指南
+    path: 'tools',
+    component: CateView,
+    name: {
+      zh: '工具',
+      en: 'Tools'
+    },
+    children: [
+      {
+        path: 'Painting',
+        component: 'tools/painting',
+        name: {
+          zh: '绘制',
+          en: 'Painting'
+        }
+      },
+      {
+        path: 'measuring',
+        component: 'tools/measuring',
+        name: {
+          zh: '量算',
+          en: 'Measuring'
+        }
+      }
+    ]
+  },
+  {
+    path: 'visualizations',
     name: {
       zh: '可视化',
-      en: 'Visualization'
+      en: 'Visualizations'
     },
     component: CateView,
     children: [

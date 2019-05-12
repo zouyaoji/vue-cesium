@@ -43,7 +43,7 @@
           shape3: [],
           positions3: [],
           material3: undefined,
-          cornerType3: {}
+          cornerType3: 0
         }
       },
       methods: {
@@ -149,7 +149,7 @@
         shape3: [],
         positions3: [],
         material3: undefined,
-        cornerType3: {}
+        cornerType3: 0
       }
     },
     methods: {

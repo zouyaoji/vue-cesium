@@ -15,10 +15,10 @@
         <entity :position="position1" :description="description" :point.sync="point1">
           <point-graphics :color="color1" :pixelSize="8"></point-graphics>
         </entity>
-        <entity :position="position2" :description="description" :point.sync="point2">
+        <entity :position="position2" :description="description">
           <point-graphics :color="color2" :pixelSize="16"></point-graphics>
         </entity>
-        <entity :position="position3" :description="description" :point.sync="point3">
+        <entity :position="position3" :description="description">
           <point-graphics :color="color3" :pixelSize="32" @ready="subReady"></point-graphics>
         </entity>
       </cesium-viewer>
@@ -30,26 +30,22 @@
       data () {
         return {
           description: 'Hello Vue Cesium',
-          point1: {},
+          point1: null,
           color1: {},
-          position1: {},
+          position1: {x: -75.59777, y: 40.03883},
 
-          point2: {},
           color2: {},
-          position2: {},
+          position2: {x: -80.50, y: 35.14},
 
-          point3: {},
           color3: {},
-          position3: {}
+          position3: undefined
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883)
           this.color1 = Cesium.Color.RED
 
-          this.position2 = Cesium.Cartesian3.fromDegrees(-80.50, 35.14)
           this.color2 = Cesium.Color.BLUE
 
           this.position3 = Cesium.Cartesian3.fromDegrees(-80.12, 25.46)

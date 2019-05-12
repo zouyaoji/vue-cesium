@@ -31,15 +31,15 @@
         return {
           description: 'Hello Vue Cesium',
           wall1: {},
-          positions1: {},
+          positions1: [],
           material1: {},
 
           wall2: {},
-          positions2: {},
+          positions2: [],
           material2: {},
 
           wall3: {},
-          positions3: {},
+          positions3: [],
           material3: {},
           outlineColor3: {}
         }
@@ -78,9 +78,7 @@
               -92.5, 50.0,
               -90.0, 50.0
             ])
-          this.material3 = 'https://zouyaoji.top/vue-cesium/favicon.png'
           this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
-          this.rotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
           this.outlineColor3 = Cesium.Color.BLACK
         },
         subReady (cesiumInstance) {
@@ -117,15 +115,15 @@
       return {
         description: 'Hello Vue Cesium',
         wall1: {},
-        positions1: {},
+        positions1: [],
         material1: {},
 
         wall2: {},
-        positions2: {},
+        positions2: [],
         material2: {},
 
         wall3: {},
-        positions3: {},
+        positions3: [],
         material3: {},
         outlineColor3: {}
       }
@@ -164,9 +162,7 @@
             -92.5, 50.0,
             -90.0, 50.0
           ])
-        this.material3 = 'https://zouyaoji.top/vue-cesium/favicon.png'
         this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
-        this.rotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
         this.outlineColor3 = Cesium.Color.BLACK
       },
       subReady (cesiumInstance) {

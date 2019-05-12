@@ -14,7 +14,7 @@
       <cesium-viewer @ready="ready" @layerAdded="layerAdded">
        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token" :layer="layer1"></wmts-imagery-provider>
+          :tileMatrixLabels="tileMatrixLabels" :contrast="contrast" :token="token" :layer="layer1"></wmts-imagery-provider>
        </imagery-layer>
        <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
@@ -94,7 +94,7 @@
     <cesium-viewer @ready="ready" @layerAdded="layerAdded">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <wmts-imagery-provider :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-        :tileMatrixLabels="tileMatrixLabels" :alpha="alpha" :brightness="brightness" :contrast="contrast" :token="token"></wmts-imagery-provider>
+        :tileMatrixLabels="tileMatrixLabels" :token="token"></wmts-imagery-provider>
       </imagery-layer>
       <imagery-layer ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <wmts-imagery-provider :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
