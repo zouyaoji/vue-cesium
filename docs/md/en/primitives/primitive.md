@@ -1,23 +1,23 @@
-# RectangleGeometry图元
+# Primitive
 
-`rectangle-geometry`可以加载矩形，属于Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
+`primitive` The component loads the geometry object of the `Primitive API`. According to the Cesium organization, you need to wrap `geometry-instance` as an intermediate component to add the collection object `Geometry`.
 
-## 示例
+## Example
 
-### 添加RectangleGeometry到场景
+### add a RectangleGeometry to viewer
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <cesium-terrain-provider></cesium-terrain-provider>
-        <ground-primitive :appearance="appearance">
+        <primitive :appearance="appearance">
           <geometry-instance :geometry="geometry">
             <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
           </geometry-instance>
-        </ground-primitive>
+        </primitive>
       </cesium-viewer>
     </div>
   </template>
@@ -61,18 +61,18 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <cesium-terrain-provider></cesium-terrain-provider>
-      <ground-primitive :appearance="appearance">
+      <primitive :appearance="appearance">
         <geometry-instance :geometry="geometry">
           <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
         </geometry-instance>
-      </ground-primitive>
+      </primitive>
     </cesium-viewer>
   </div>
 </template>
@@ -116,17 +116,12 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
-参考官方文档 [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
+Reference official document [Primitive](https://cesiumjs.org/Cesium/Build/Documentation/Primitive.html)
 
---- -->
+## Events
 
-## 事件
-
-|事件名|参数|描述|
+|name|parameter|description|
 |------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|allTilesLoaded||所有tiles加载完毕后触发该事件。|
+|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|

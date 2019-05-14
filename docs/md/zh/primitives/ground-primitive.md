@@ -1,6 +1,6 @@
-# RectangleGeometry图元
+# GroundPrimitive图元
 
-`rectangle-geometry`可以加载矩形，属于Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
+`ground-primitive`组件加载`Primitive API`的几何对象。按照Cesium组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`，`ground-primitive`支持添加贴地几何对象，`CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`以及`RectangleGeometry`。
 
 ## 示例
 
@@ -118,7 +118,7 @@
 
 ## 属性
 
-参考官方文档 [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+参考官方文档 [GroundPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/GroundPrimitive.html)
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 
@@ -129,4 +129,3 @@
 |事件名|参数|描述|
 |------|----|----|
 |ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|allTilesLoaded||所有tiles加载完毕后触发该事件。|

@@ -195,4 +195,3 @@ Reference official document [RectangleGraphics](https://cesiumjs.org/Cesium/Buil
 |name|parameter|description|
 |------|----|----|
 |ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
