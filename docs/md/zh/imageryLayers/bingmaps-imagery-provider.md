@@ -11,6 +11,11 @@
 <doc-preview>
   <template>
     <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
+        </imagery-layer>
+      </cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
@@ -28,11 +33,6 @@
           </md-option>
         </md-select>
       </div>
-      <cesium-viewer @ready="ready">
-        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
-        </imagery-layer>
-      </cesium-viewer>
     </div>
   </template>
 
@@ -58,7 +58,8 @@
           }],
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          terrainProvider: null
         }
       },
       methods: {
