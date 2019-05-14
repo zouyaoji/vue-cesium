@@ -15,7 +15,7 @@
         <imagery-layer>
           <bingmaps-imagery-provider url="https://dev.virtualearth.net" bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-" mapStyle="Aerial"/>
         </imagery-layer>
-        <cesium-terrain-provider/>
+        <cesium-terrain-provider></cesium-terrain-provider>
       </cesium-viewer>
   </template>
   <script>
@@ -46,7 +46,7 @@
       <imagery-layer>
         <bingmaps-imagery-provider url="https://dev.virtualearth.net" bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-" mapStyle="Aerial"/>
       </imagery-layer>
-      <cesium-terrain-provider/>
+      <cesium-terrain-provider></cesium-terrain-provider>
     </cesium-viewer>
 </template>
 <script>

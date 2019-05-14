@@ -12,6 +12,7 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
+        <cesium-terrain-provider></cesium-terrain-provider>
         <ground-primitive :appearance="appearance">
           <geometry-instance :geometry="geometry">
             <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
@@ -65,6 +66,7 @@
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
+      <cesium-terrain-provider></cesium-terrain-provider>
       <ground-primitive :appearance="appearance">
         <geometry-instance :geometry="geometry">
           <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
