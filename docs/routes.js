@@ -175,7 +175,16 @@ const routeMap = [
       en: 'Terrains'
     },
     component: CateView,
-    children: []
+    children: [
+      {
+        path: 'cesium-terrain-provider',
+        component: 'terrains/cesium-terrain-provider',
+        name: {
+          zh: 'Cesium地形',
+          en: 'CesiumTerrainProvider'
+        }
+      }
+    ]
   },
   {
     path: 'entities',

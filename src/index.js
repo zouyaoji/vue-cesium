@@ -11,6 +11,8 @@ import WebMapServiceImageryProvider from '@/components/imageryLayers/WebMapServi
 import WebMapTileServiceImageryProvider from '@/components/imageryLayers/WebMapTileServiceImageryProvider.vue'
 import SuperMapImageryProvider from '@/components/imageryLayers/SuperMapImageryProvider.vue'
 
+import CesiumTerrainProvider from '@/components/terrains/CesiumTerrainProvider.vue'
+
 import Entity from '@/components/entities/Entity.vue'
 import BillboardGraphics from '@/components/entities/BillboardGraphics.vue'
 import BoxGraphics from '@/components/entities/BoxGraphics.vue'
@@ -59,15 +61,28 @@ export default {
     Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
     Vue.component('cesium-viewer', CesiumViewer)
     Vue.component(ImageryLayer.name, ImageryLayer)
-    Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
+    Vue.component(
+      ArcGisMapServerImageryProvider.name,
+      ArcGisMapServerImageryProvider
+    )
     Vue.component(BingMapsImageryProvider.name, BingMapsImageryProvider)
     Vue.component(MapboxImageryProvider.name, MapboxImageryProvider)
-    Vue.component(OpenStreetMapImageryProvider.name, OpenStreetMapImageryProvider)
+    Vue.component(
+      OpenStreetMapImageryProvider.name,
+      OpenStreetMapImageryProvider
+    )
     Vue.component(SingleTileImageryProvider.name, SingleTileImageryProvider)
     Vue.component(UrlTemplateImageryProvider.name, UrlTemplateImageryProvider)
-    Vue.component(WebMapServiceImageryProvider.name, WebMapServiceImageryProvider)
-    Vue.component(WebMapTileServiceImageryProvider.name, WebMapTileServiceImageryProvider)
+    Vue.component(
+      WebMapServiceImageryProvider.name,
+      WebMapServiceImageryProvider
+    )
+    Vue.component(
+      WebMapTileServiceImageryProvider.name,
+      WebMapTileServiceImageryProvider
+    )
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
+    Vue.component(CesiumTerrainProvider.name, CesiumTerrainProvider)
 
     Vue.component(Entity.name, Entity)
     Vue.component(BillboardGraphics.name, BillboardGraphics)
@@ -122,6 +137,8 @@ export {
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
   SuperMapImageryProvider,
+  CesiumTerrainProvider,
+
   Entity,
   BillboardGraphics,
   BoxGraphics,
@@ -139,6 +156,7 @@ export {
   PolylineVolumeGraphics,
   RectangleGraphics,
   WallGraphics,
+
   Cesium3DTileset,
   PointCollection,
   PolylineCollection,
@@ -146,13 +164,15 @@ export {
   Polyline,
   LabelCollection,
   Label,
+  GroundPrimitive,
+  GeometryInstance,
+  RectangleGeometry,
+
   MeasureDistance,
   MeasureArea,
   MeasureHeight,
   Model,
-  GroundPrimitive,
-  GeometryInstance,
-  RectangleGeometry,
+
   CesiumHeatMap,
   CesiumWindMap
 }
