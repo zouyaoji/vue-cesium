@@ -49,7 +49,45 @@ export default {
     }
   },
   watch: {
-
+    geometryInstances (val) {
+      this.primitive.geometryInstances = val
+    },
+    appearance (val) {
+      this.primitive.appearance = val
+    },
+    show (val) {
+      this.primitive.show = val
+    },
+    modelMatrix (val) {
+      this.primitive.modelMatrix = val
+    },
+    vertexCacheOptimize (val) {
+      this.primitive.vertexCacheOptimize = val
+    },
+    interleave (val) {
+      this.primitive.interleave = val
+    },
+    compressVertices (val) {
+      this.primitive.compressVertices = val
+    },
+    releaseGeometryInstances (val) {
+      this.primitive.releaseGeometryInstances = val
+    },
+    allowPicking (val) {
+      this.primitive.allowPicking = val
+    },
+    cull (val) {
+      this.primitive.cull = val
+    },
+    asynchronous (val) {
+      this.primitive.asynchronous = val
+    },
+    debugShowBoundingVolume (val) {
+      this.primitive.debugShowBoundingVolume = val
+    },
+    shadows (val) {
+      this.primitive.shadows = val
+    }
   },
   methods: {
     createCesiumObject () {
@@ -71,11 +109,11 @@ export default {
         shadows
       }
       this.removeNullItem(options)
-      let primitive = new Cesium.Primitive(options)
-      return primitive
+      return new Cesium.Primitive(options)
     },
-    setGeometry (geometry) {
-
+    setGeometryInstances (geometryInstances) {
+      const listener = this.$listeners['update:geometryInstances']
+      if (listener) { this.$emit('update:geometryInstances', geometryInstances) } else this.primitive.geometryInstances = geometryInstances
     }
   }
 }

@@ -31,6 +31,10 @@ import PolylineVolumeGraphics from '@/components/entities/PolylineVolumeGraphics
 import RectangleGraphics from '@/components/entities/RectangleGraphics.vue'
 import WallGraphics from '@/components/entities/WallGraphics.vue'
 
+import Primitive from '@/components/primitives/Primitive.vue'
+import GroundPrimitive from '@/components/primitives/GroundPrimitive.vue'
+import GeometryInstance from '@/components/primitives/GeometryInstance.vue'
+import RectangleGeometry from '@/components/primitives/RectangleGeometry.vue'
 import PointCollection from '@/components/primitives/PointPrimitiveCollection.vue'
 import PolylineCollection from '@/components/primitives/PolylineCollection.vue'
 import LabelCollection from '@/components/primitives/LabelCollection.vue'
@@ -39,9 +43,6 @@ import Polyline from '@/components/primitives/Polyline.vue'
 import Label from '@/components/primitives/Label.vue'
 import Cesium3DTileset from '@/components/primitives/Cesium3DTileset.vue'
 import Model from '@/components/primitives/Model.vue'
-import GroundPrimitive from '@/components/primitives/GroundPrimitive.vue'
-import GeometryInstance from '@/components/primitives/GeometryInstance.vue'
-import RectangleGeometry from '@/components/primitives/RectangleGeometry.vue'
 
 import MeasureDistance from '@/components/measure/MeasureDistance.vue'
 import MeasureArea from '@/components/measure/MeasureArea.vue'
@@ -102,6 +103,7 @@ export default {
     Vue.component(RectangleGraphics.name, RectangleGraphics)
     Vue.component(WallGraphics.name, WallGraphics)
 
+    Vue.component(Primitive.name, Primitive)
     Vue.component(Cesium3DTileset.name, Cesium3DTileset)
     Vue.component(PolylineCollection.name, PolylineCollection)
     Vue.component(Polyline.name, Polyline)
@@ -138,7 +140,6 @@ export {
   WebMapTileServiceImageryProvider,
   SuperMapImageryProvider,
   CesiumTerrainProvider,
-
   Entity,
   BillboardGraphics,
   BoxGraphics,
@@ -156,7 +157,11 @@ export {
   PolylineVolumeGraphics,
   RectangleGraphics,
   WallGraphics,
-
+  Primitive,
+  GroundPrimitive,
+  GeometryInstance,
+  RectangleGeometry,
+  Model,
   Cesium3DTileset,
   PointCollection,
   PolylineCollection,
@@ -164,15 +169,9 @@ export {
   Polyline,
   LabelCollection,
   Label,
-  GroundPrimitive,
-  GeometryInstance,
-  RectangleGeometry,
-
   MeasureDistance,
   MeasureArea,
   MeasureHeight,
-  Model,
-
   CesiumHeatMap,
   CesiumWindMap
 }
