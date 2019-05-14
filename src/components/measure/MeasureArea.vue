@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import turfArea from '../../util/turfArea.js'
+import turfArea from '../../libs/turfArea/turfArea.js'
 import measure from '../../mixins/measure'
 export default {
   name: 'measure-area',

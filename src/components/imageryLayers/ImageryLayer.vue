@@ -108,11 +108,11 @@ export default {
         cutoutRectangle
       }
       this.removeNullItem(options)
-      return new Cesium.ImageryLayer({})
+      return new Cesium.ImageryLayer(this.provider || {}, options)
     },
     mount () {
-      // const { viewer, imageryLayer } = this
-      // viewer.imageryLayers.add(imageryLayer)
+      const { viewer, imageryLayer } = this
+      viewer.imageryLayers.add(imageryLayer)
     },
     unload () {
       const { viewer, imageryLayer } = this
@@ -124,19 +124,11 @@ export default {
       this.mount()
     },
     setProvider (provider) {
-      // if (provider !== this._provider) {
-      //   this._provider = provider
-      //   this.refresh()
-      //   const listener = this.$listeners['update:imageryProvider']
-      //   if (listener) this.$emit('update:imageryProvider', provider)
-      // }
-      const { viewer, imageryLayer } = this
-      if (provider) {
+      if (provider !== this._provider) {
+        this._provider = provider
+        this.refresh()
         const listener = this.$listeners['update:imageryProvider']
         if (listener) this.$emit('update:imageryProvider', provider)
-        this.originInstance = viewer.imageryLayers.addImageryProvider(provider)
-      } else {
-        viewer.imageryLayers.remove(imageryLayer)
       }
     },
     getServices () {
@@ -158,16 +150,16 @@ export default {
     }
   },
   created () {
-    // this._provider = undefined
+    this._provider = undefined
     Object.defineProperties(this, {
       imageryLayer: {
         enumerable: true,
         get: () => this.cesiumObject
+      },
+      provider: {
+        enumerable: true,
+        get: () => this.imageryProvider || this._provider
       }
-      // provider: {
-      //   enumerable: true,
-      //   get: () => this.imageryProvider || this._provider
-      // }
     })
   }
 }

@@ -775,7 +775,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       this.removeNullItem(options)
       const viewer = new Cesium.Viewer($el, options)
-      this.isEmptyObj(imageryProvider) && viewer.imageryLayers.removeAll()
+      // this.isEmptyObj(imageryProvider) && viewer.imageryLayers.removeAll()
       this.viewer = viewer
       // options待完善
       bindEvents.call(this, viewer)

@@ -91,8 +91,7 @@ export default {
         subdomains
       }
       this.removeNullItem(options)
-      let imageryProvider = new Cesium.WebMapTileServiceImageryProvider(options)
-      return imageryProvider
+      return new Cesium.WebMapTileServiceImageryProvider(options)
     }
   }
 }
