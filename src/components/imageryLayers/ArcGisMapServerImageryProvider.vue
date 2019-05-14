@@ -41,7 +41,7 @@ export default {
         usePreCachedTilesIfAvailable,
         layers,
         enablePickFeatures,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle,
         tilingScheme,
         ellipsoid,
         tileWidth,
