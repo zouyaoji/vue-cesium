@@ -2,7 +2,7 @@
  * @Author: zouyaoji 
  * @Date: 2018-02-06 17:56:48 
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-05-13 00:30:01
+ * @Last Modified time: 2019-05-18 10:01:54
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -908,12 +908,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       }
       global.Cesium = null
-    }
-  },
-  data () {
-    return {
-      viewer: null,
-      viewerContainer: null
     }
   }
 }
