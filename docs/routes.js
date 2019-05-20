@@ -72,7 +72,7 @@ const routeMap = [
     path: 'CesiumViewer',
     name: {
       zh: '场景',
-      en: 'Viewer'
+      en: 'CesiumViewer'
     },
     component: CateView,
     children: [

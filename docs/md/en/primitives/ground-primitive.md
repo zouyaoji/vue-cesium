@@ -9,11 +9,11 @@
 #### Preview
 
 <doc-preview>
-  <template>
+<template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <cesium-terrain-provider></cesium-terrain-provider>
-        <ground-primitive :appearance="appearance">
+        <ground-primitive :appearance="appearance" :asynchronous="asynchronous" :interleave="interleave">
           <geometry-instance :geometry="geometry">
             <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
           </geometry-instance>
@@ -30,7 +30,23 @@
           appearance: null,
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-          rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+          rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
+          interleave: false,
+          asynchronous: false
+        }
+      },
+      watch: {
+        image (val) {
+          this.appearance = new Cesium.MaterialAppearance({
+            material: new Cesium.Material({
+              fabric: {
+                type: 'Image',
+                uniforms: {
+                  image: val
+                }
+              }
+            })
+          })
         }
       },
       methods: {
@@ -55,6 +71,23 @@
               }
             })
           })
+          this.play()
+        },
+        play () {
+          let urls = [
+            'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
+            'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/2.png',
+            'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/3.png',
+            'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/4.png',
+            'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/5.png'
+          ]
+          let i = 0
+          let _this = this
+          setInterval(function() {
+            _this.appearance.material.uniforms.image = urls[i]
+            i++
+            if (i === 5) i = 0
+          }, 500)
         }
       }
     }
@@ -68,7 +101,7 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <cesium-terrain-provider></cesium-terrain-provider>
-      <ground-primitive :appearance="appearance">
+      <ground-primitive :appearance="appearance" :asynchronous="asynchronous" :interleave="interleave">
         <geometry-instance :geometry="geometry">
           <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
         </geometry-instance>
@@ -85,7 +118,23 @@
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
+        interleave: false,
+        asynchronous: false
+      }
+    },
+    watch: {
+      image (val) {
+        this.appearance = new Cesium.MaterialAppearance({
+          material: new Cesium.Material({
+            fabric: {
+              type: 'Image',
+              uniforms: {
+                image: val
+              }
+            }
+          })
+        })
       }
     },
     methods: {
@@ -110,6 +159,23 @@
             }
           })
         })
+        this.play()
+      },
+      play () {
+        let urls = [
+          'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
+          'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/2.png',
+          'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/3.png',
+          'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/4.png',
+          'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/5.png'
+        ]
+        let i = 0
+        let _this = this
+        setInterval(function() {
+          _this.appearance.material.uniforms.image = urls[i]
+          i++
+          if (i === 5) i = 0
+        }, 500)
       }
     }
   }

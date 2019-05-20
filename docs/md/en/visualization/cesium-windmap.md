@@ -34,7 +34,7 @@
         <span>lineWidth</span>
         <vue-slider v-model="particleSystemOptions.lineWidth" :min="0.01" :max="16" :interval="0.01"></vue-slider>
         <span>switch data</span>
-        <md-select v-model="data" placeholder="切换数据" @selected="switchData">
+        <md-select v-model="data" placeholder="switchData" @selected="switchData">
           <md-option
             v-for="item in options"
             :key="item.value"
@@ -62,6 +62,7 @@
           }],
           data: 0,
           particleSystemOptions: {
+            particlesTextureSize: 128,
             maxParticles: 128 * 128,
             particleHeight: 100.0,
             fadeOpacity: 0.996,
@@ -69,59 +70,6 @@
             dropRateBump: 0.01,
             speedFactor: 4.0,
             lineWidth: 4.0
-          },
-          colorTableParam: {
-            'ncolors': 16,
-            'colorTable': [
-              0.015686,
-              0.054902,
-              0.847059,
-              0.12549,
-              0.313725,
-              1.0,
-              0.254902,
-              0.588235,
-              1.0,
-              0.427451,
-              0.756863,
-              1.0,
-              0.52549,
-              0.85098,
-              1.0,
-              0.611765,
-              0.933333,
-              1.0,
-              0.686275,
-              0.960784,
-              1.0,
-              0.807843,
-              1.0,
-              1.0,
-              1.0,
-              0.996078,
-              0.278431,
-              1.0,
-              0.921569,
-              0.0,
-              1.0,
-              0.768627,
-              0.0,
-              1.0,
-              0.564706,
-              0.0,
-              1.0,
-              0.282353,
-              0.0,
-              1.0,
-              0.0,
-              0.0,
-              0.835294,
-              0.0,
-              0.0,
-              0.619608,
-              0.0,
-              0.0
-            ]
           }
         }
       },
@@ -136,12 +84,10 @@
           let _this = this
           if (val === 1){
             this.loadNetCDF(this.urlNetCDF).then((data)=>{
-              data.colorTable = this.loadColorTable()
               _this.windData = data
             })
           } else if (val === 2){
             Cesium.Resource.fetchJson({ url: './statics/SampleData/windData/wind.json' }).then((data) => {
-              data.colorTable = this.loadColorTable()
               data.lat.array = new Float32Array(data.lon.array)
               data.lat.array = new Float32Array(data.lat.array)
               data.lev.array = new Float32Array(data.lev.array)
@@ -150,21 +96,6 @@
               _this.windData = data
             })
           }
-        },
-        loadColorTable (filePath) {
-          var json = this.colorTableParam
-          var colorNum = json['ncolors']
-          var colorTable = json['colorTable']
-          var colorsArray = new Float32Array(3 * colorNum)
-          for (var i = 0; i < colorNum; i++) {
-            colorsArray[3 * i] = colorTable[3 * i]
-            colorsArray[3 * i + 1] = colorTable[3 * i + 1]
-            colorsArray[3 * i + 2] = colorTable[3 * i + 2]
-          }
-          let result = {}
-          result.colorNum = colorNum
-          result.array = colorsArray
-          return result
         },
         async loadNetCDF (filePath) {
           let _this = this
@@ -247,7 +178,7 @@
       <span>lineWidth</span>
       <vue-slider v-model="particleSystemOptions.lineWidth" :min="0.01" :max="16" :interval="0.01"></vue-slider>
       <span>switch data</span>
-      <md-select v-model="data" placeholder="切换数据" @selected="switchData">
+      <md-select v-model="data" placeholder="switchData" @selected="switchData">
         <md-option
           v-for="item in options"
           :key="item.value"
@@ -275,6 +206,7 @@
         }],
         data: 0,
         particleSystemOptions: {
+          particlesTextureSize: 128,
           maxParticles: 128 * 128,
           particleHeight: 100.0,
           fadeOpacity: 0.996,
@@ -282,59 +214,6 @@
           dropRateBump: 0.01,
           speedFactor: 4.0,
           lineWidth: 4.0
-        },
-        colorTableParam: {
-          'ncolors': 16,
-          'colorTable': [
-            0.015686,
-            0.054902,
-            0.847059,
-            0.12549,
-            0.313725,
-            1.0,
-            0.254902,
-            0.588235,
-            1.0,
-            0.427451,
-            0.756863,
-            1.0,
-            0.52549,
-            0.85098,
-            1.0,
-            0.611765,
-            0.933333,
-            1.0,
-            0.686275,
-            0.960784,
-            1.0,
-            0.807843,
-            1.0,
-            1.0,
-            1.0,
-            0.996078,
-            0.278431,
-            1.0,
-            0.921569,
-            0.0,
-            1.0,
-            0.768627,
-            0.0,
-            1.0,
-            0.564706,
-            0.0,
-            1.0,
-            0.282353,
-            0.0,
-            1.0,
-            0.0,
-            0.0,
-            0.835294,
-            0.0,
-            0.0,
-            0.619608,
-            0.0,
-            0.0
-          ]
         }
       }
     },
@@ -349,12 +228,10 @@
         let _this = this
         if (val === 1){
           this.loadNetCDF(this.urlNetCDF).then((data)=>{
-            data.colorTable = this.loadColorTable()
             _this.windData = data
           })
         } else if (val === 2){
-          Cesium.Resource.fetchJson({ url: './statics/data/wind.json' }).then((data) => {
-            data.colorTable = this.loadColorTable()
+          Cesium.Resource.fetchJson({ url: './statics/SampleData/windData/wind.json' }).then((data) => {
             data.lat.array = new Float32Array(data.lon.array)
             data.lat.array = new Float32Array(data.lat.array)
             data.lev.array = new Float32Array(data.lev.array)
@@ -363,21 +240,6 @@
             _this.windData = data
           })
         }
-      },
-      loadColorTable (filePath) {
-        var json = this.colorTableParam
-        var colorNum = json['ncolors']
-        var colorTable = json['colorTable']
-        var colorsArray = new Float32Array(3 * colorNum)
-        for (var i = 0; i < colorNum; i++) {
-          colorsArray[3 * i] = colorTable[3 * i]
-          colorsArray[3 * i + 1] = colorTable[3 * i + 1]
-          colorsArray[3 * i + 2] = colorTable[3 * i + 2]
-        }
-        let result = {}
-        result.colorNum = colorNum
-        result.array = colorsArray
-        return result
       },
       async loadNetCDF (filePath) {
         let _this = this
