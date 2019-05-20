@@ -50,7 +50,7 @@ export default {
   },
   watch: {
     geometryInstances (val) {
-      this.primitive.geometryInstances = val
+      this.reload()
     },
     appearance (val) {
       this.primitive.appearance = val
@@ -62,13 +62,13 @@ export default {
       this.primitive.modelMatrix = val
     },
     vertexCacheOptimize (val) {
-      this.primitive.vertexCacheOptimize = val
+      this.reload()
     },
     interleave (val) {
-      this.primitive.interleave = val
+      this.reload()
     },
     compressVertices (val) {
-      this.primitive.compressVertices = val
+      this.reload()
     },
     releaseGeometryInstances (val) {
       this.primitive.releaseGeometryInstances = val
@@ -80,7 +80,7 @@ export default {
       this.primitive.cull = val
     },
     asynchronous (val) {
-      this.primitive.asynchronous = val
+      this.reload()
     },
     debugShowBoundingVolume (val) {
       this.primitive.debugShowBoundingVolume = val

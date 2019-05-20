@@ -46,7 +46,7 @@ export default {
   },
   watch: {
     geometryInstances (val) {
-      this.primitive.geometryInstances = val
+      this.reload()
     },
     appearance (val) {
       this.primitive.appearance = val
@@ -55,22 +55,22 @@ export default {
       this.primitive.show = val
     },
     vertexCacheOptimize (val) {
-      this.primitive.vertexCacheOptimize = val
+      this.reload()
     },
     interleave (val) {
       this.primitive.interleave = val
     },
     compressVertices (val) {
-      this.primitive.compressVertices = val
+      this.reload()
     },
     releaseGeometryInstances (val) {
       this.primitive.releaseGeometryInstances = val
     },
     allowPicking (val) {
-      this.primitive.allowPicking = val
+      this.reload()
     },
     asynchronous (val) {
-      this.primitive.asynchronous = val
+      this.reload()
     },
     classificationType (val) {
       this.primitive.classificationType = val
