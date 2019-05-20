@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.",
   "main": "index.js",
   "scripts": {
