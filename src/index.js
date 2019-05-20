@@ -53,10 +53,10 @@ import CesiumWindMap from '@/components/visualization/CesiumWindMap.vue'
 
 export default {
   install (Vue, options) {
-    let cesiumPath = options
+    let cesiumPath = options.cesiumPath
       ? options.cesiumPath
       : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-    let accessToken = options
+    let accessToken = options.accessToken
       ? options.accessToken
       : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
     Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
