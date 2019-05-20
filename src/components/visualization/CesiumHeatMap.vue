@@ -8,7 +8,7 @@
         <rectangle-geometry :rectangle="coordinates"></rectangle-geometry>
       </geometry-instance>
     </ground-primitive>
-    <imagery-layer ref="layer" v-else-if="type === 2"  :show="show">
+    <imagery-layer ref="imageryLayer" v-else-if="type === 2"  :show="show">
       <singletile-imagery-provider :url="layerUrl" :rectangle="coordinates"></singletile-imagery-provider>
     </imagery-layer>
   </i>
@@ -85,21 +85,8 @@ export default {
 
         JSON.stringify(val.options) !== JSON.stringify(oldValue.options) && _heatmapInstance.configure(val.options)
         JSON.stringify(val.data) !== JSON.stringify(oldValue.data) && this.setWGS84Data(val.min, val.max, val.data)
-
-        this.material = new Cesium.ImageMaterialProperty({
-          image: _heatmapInstance._renderer.canvas
-        })
         this.layerUrl = _heatmapInstance.getDataURL()
-        this.appearance = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: this.layerUrl
-              }
-            }
-          })
-        })
+        this.appearance.material.uniforms.image = this.layerUrl
       },
       deep: true
     }
@@ -123,21 +110,25 @@ export default {
       this._heatmapInstance = h337.create(this.options)
       this._container.children[0].setAttribute('id', this._id + '-hm')
       if (this.setWGS84Data(min, max, data)) {
-        this.material = new Cesium.ImageMaterialProperty({
-          image: this._heatmapInstance._renderer.canvas
-        })
         this.layerUrl = this._heatmapInstance.getDataURL()
-        this.appearance = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: this.layerUrl
-              }
-            }
-          })
-        })
       }
+      this.material = new Cesium.ImageMaterialProperty({
+        image: new Cesium.CallbackProperty(this.materialCallback, false),
+        transparent: true
+      })
+      this.appearance = new Cesium.MaterialAppearance({
+        material: new Cesium.Material({
+          fabric: {
+            type: 'Image',
+            uniforms: {
+              image: this.layerUrl
+            }
+          }
+        })
+      })
+    },
+    materialCallback () {
+      return this.layerUrl
     },
     setBounds (bounds) {
       const { options, defaultOptions } = this
@@ -160,7 +151,9 @@ export default {
     mount () {},
     unload () {
       document.body.removeChild(this._container)
-      this.$refs[this.type] && this.$refs[this.type].unload()
+      let refs = ['entity', 'primitive', 'imageryLayer']
+      const { type } = this
+      this.$refs[refs[type]] && this.$refs[refs[type]].unload()
     },
     setWidthAndHeight (mbb) {
       const { defaultOptions } = this
