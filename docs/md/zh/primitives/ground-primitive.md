@@ -1,6 +1,6 @@
 # GroundPrimitive图元
 
-`ground-primitive`组件加载`Primitive API`的几何对象。按照Cesium组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`，`ground-primitive`支持添加贴地几何对象，`CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`以及`RectangleGeometry`。
+`ground-primitive` 使用`Primitive API`加载几何对象。按照Cesium组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`，`ground-primitive`支持添加贴地几何对象，`CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`以及`RectangleGeometry`。
 
 ## 示例
 
@@ -26,27 +26,12 @@
     export default {
       data () {
         return {
-          geometryInstances: null,
           appearance: null,
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
           interleave: false,
           asynchronous: false
-        }
-      },
-      watch: {
-        image (val) {
-          this.appearance = new Cesium.MaterialAppearance({
-            material: new Cesium.Material({
-              fabric: {
-                type: 'Image',
-                uniforms: {
-                  image: val
-                }
-              }
-            })
-          })
         }
       },
       methods: {
@@ -114,27 +99,12 @@
   export default {
     data () {
       return {
-        geometryInstances: null,
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
         rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
         interleave: false,
         asynchronous: false
-      }
-    },
-    watch: {
-      image (val) {
-        this.appearance = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: val
-              }
-            }
-          })
-        })
       }
     },
     methods: {

@@ -1,6 +1,6 @@
 # RectangleGeometry
 
-`rectangle-geometry` Load a rectangle, belong to the Primitive API, add a rectangle to the scene as a subcomponent of `primitive` or `ground-primitive`, and add the terrain with the addition of `ground-primitive`.
+`rectangle-geometry` A description of a cartographic rectangle on an ellipsoid centered at the origin. Rectangle geometry can be rendered with both `Primitive` and `GroundPrimitive`.
 
 ## Examples
 
@@ -116,10 +116,11 @@
 
 ## Instance Properties
 
-|name|type|default|description|
+Reference official document [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+<!-- |name|type|default|description|
 |------|-----|-----|----|
 
----
+--- -->
 
 ## Events
 

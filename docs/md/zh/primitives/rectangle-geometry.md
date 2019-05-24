@@ -1,4 +1,4 @@
-# RectangleGeometry图元
+# RectangleGeometry几何对象
 
 `rectangle-geometry`可以加载矩形，属于Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
 
@@ -26,7 +26,6 @@
     export default {
       data () {
         return {
-          geometryInstances: null,
           appearance: null,
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
@@ -81,7 +80,6 @@
   export default {
     data () {
       return {
-        geometryInstances: null,
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
@@ -129,4 +127,3 @@
 |事件名|参数|描述|
 |------|----|----|
 |ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|allTilesLoaded||所有tiles加载完毕后触发该事件。|

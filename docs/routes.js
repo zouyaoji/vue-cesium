@@ -352,7 +352,7 @@ const routeMap = [
         path: 'primitive',
         component: 'primitives/primitive',
         name: {
-          zh: '图元(Primitive)',
+          zh: 'Primitive图元',
           en: 'Primitive'
         }
       },
@@ -360,16 +360,40 @@ const routeMap = [
         path: 'ground-primitive',
         component: 'primitives/ground-primitive',
         name: {
-          zh: '贴地图元(GroundPrimitive)',
+          zh: 'GroundPrimitive图元',
           en: 'GroundPrimitive'
+        }
+      },
+      {
+        path: 'classification-primitive',
+        component: 'primitives/classification-primitive',
+        name: {
+          zh: 'ClassificationPrimitive图元',
+          en: 'ClassificationPrimitive'
+        }
+      },
+      {
+        path: 'box-geometry',
+        component: 'primitives/box-geometry',
+        name: {
+          zh: '盒子Geometry',
+          en: 'BoxGeometry'
         }
       },
       {
         path: 'rectangle-geometry',
         component: 'primitives/rectangle-geometry',
         name: {
-          zh: '矩形(geometry)',
+          zh: '矩形Geometry',
           en: 'RectangleGeometry'
+        }
+      },
+      {
+        path: 'polygon-geometry',
+        component: 'primitives/polygon-geometry',
+        name: {
+          zh: '多边形Geometry',
+          en: 'PolygonGeometry'
         }
       },
       {
@@ -431,6 +455,14 @@ const routeMap = [
         name: {
           zh: '风向图',
           en: 'WindMap'
+        }
+      },
+      {
+        path: 'cesium-flood',
+        component: 'visualization/cesium-flood',
+        name: {
+          zh: '淹没分析',
+          en: 'FloodAnalysis'
         }
       }
     ]

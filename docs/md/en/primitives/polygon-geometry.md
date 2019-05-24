@@ -1,10 +1,10 @@
-# Primitive
+# PolygonGeometry
 
-`primitive` The component loads the geometry object of the `Primitive API`. According to the Cesium organization, you need to wrap `geometry-instance` as an intermediate component to add the collection object `Geometry`.
+`polygon-geometry` A description of a polygon on the ellipsoid. The polygon is defined by a polygon hierarchy. Polygon geometry can be rendered with both `Primitive` and `GroundPrimitive`.
 
 ## Example
 
-### add a RectangleGeometry to viewer
+### Add a polygonGeometry to viewer with GroundPrimitive
 
 #### Preview
 
@@ -13,11 +13,11 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <cesium-terrain-provider></cesium-terrain-provider>
-        <primitive :appearance="appearance">
-          <geometry-instance :geometry="geometry">
-            <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
+        <ground-primitive :appearance="appearance">
+          <geometry-instance :geometry.sync="geometry" :attributes="attributes">
+            <polygon-geometry :polygonHierarchy="polygonHierarchy"></polygon-geometry>
           </geometry-instance>
-        </primitive>
+        </ground-primitive>
       </cesium-viewer>
     </div>
   </template>
@@ -27,9 +27,15 @@
       data () {
         return {
           appearance: null,
+          attributes: null,
           geometry: null,
-          image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-          rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+          polygonHierarchy: [
+            102.1, 29.5,
+            106.2, 29.5,
+            106.2, 33.5,
+            108.2, 35.5,
+            102.1, 33.5
+          ]
         }
       },
       methods: {
@@ -44,15 +50,12 @@
               roll: 0.002443376981836387
             }
           })
-          this.appearance = new Cesium.MaterialAppearance({
-            material: new Cesium.Material({
-              fabric: {
-                type: 'Image',
-                uniforms: {
-                  image: this.image
-                }
-              }
-            })
+          this.attributes = {
+            color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.4))
+          }
+          this.appearance = new Cesium.PerInstanceColorAppearance({
+            flat : true,
+            translucent : true
           })
         }
       }
@@ -67,11 +70,11 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <cesium-terrain-provider></cesium-terrain-provider>
-      <primitive :appearance="appearance">
-        <geometry-instance :geometry="geometry">
-          <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
+      <ground-primitive :appearance="appearance">
+        <geometry-instance :geometry.sync="geometry" :attributes="attributes">
+          <polygon-geometry :polygonHierarchy="polygonHierarchy"></polygon-geometry>
         </geometry-instance>
-      </primitive>
+      </ground-primitive>
     </cesium-viewer>
   </div>
 </template>
@@ -81,9 +84,15 @@
     data () {
       return {
         appearance: null,
+        attributes: null,
         geometry: null,
-        image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+        polygonHierarchy: [
+          102.1, 29.5,
+          106.2, 29.5,
+          106.2, 33.5,
+          108.2, 35.5,
+          102.1, 33.5
+        ]
       }
     },
     methods: {
@@ -98,15 +107,12 @@
             roll: 0.002443376981836387
           }
         })
-        this.appearance = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: this.image
-              }
-            }
-          })
+        this.attributes = {
+          color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.4))
+        }
+        this.appearance = new Cesium.PerInstanceColorAppearance({
+          flat : true,
+          translucent : true
         })
       }
     }
@@ -116,7 +122,11 @@
 
 ## Instance Properties
 
-Reference official document [Primitive](https://cesiumjs.org/Cesium/Build/Documentation/Primitive.html)
+Reference official document [PolygonGeometry](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGeometry.html)
+<!-- |属性名|类型|默认值|描述|
+|------|-----|-----|----|
+
+--- -->
 
 ## Events
 

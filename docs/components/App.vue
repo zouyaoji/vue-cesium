@@ -126,10 +126,15 @@ h2 {
   height: 550px;
 
 .demo-tool
-  position: absolute; 
-  left: 1%; 
-  top: 1%; 
-  min-width: 185px; 
-  z-index: 100; 
-  color: white
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  min-width: 185px;
+  z-index: 100;
+  color: white;
+
+.md-input-container label
+  color: #fff
+.md-input-container.md-has-value input
+  color: #fff
 </style>

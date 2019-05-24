@@ -32,7 +32,7 @@
           description: 'Hello Vue Cesium',
           box1: {},
           position1: {},
-          dimensions1: {},
+          dimensions1: {x: 400000.0, y: 300000.0, z: 500000.0},
           material1: {},
           box2: {},
           position2: {},
@@ -50,12 +50,13 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 300000.0)
-          this.dimensions1 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
           this.material1 = Cesium.Color.BLUE
+
           this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 300000.0)
           this.dimensions2 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
           this.outlineColor2 = Cesium.Color.BLACK
+
           this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
           this.dimensions3 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
           this.outlineColor3 = Cesium.Color.YELLOW
@@ -91,9 +92,9 @@
         description: 'Hello Vue Cesium',
         box1: {},
         position1: {},
-        dimensions1: {},
+        dimensions1: {x: 400000.0, y: 300000.0, z: 500000.0},
         material1: {},
-        
+
         box2: {},
         position2: {},
         dimensions2: {},
@@ -111,12 +112,13 @@
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
         this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 300000.0)
-        this.dimensions1 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
         this.material1 = Cesium.Color.BLUE
+
         this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 300000.0)
         this.dimensions2 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
         this.material2 = Cesium.Color.RED.withAlpha(0.5)
         this.outlineColor2 = Cesium.Color.BLACK
+
         this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
         this.dimensions3 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
         this.outlineColor3 = Cesium.Color.YELLOW

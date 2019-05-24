@@ -76,8 +76,8 @@
       methods: {
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
-          this.data = 2
-          this.switchData(2)
+          this.data = 1
+          this.switchData(1)
         },
         switchData (val) {
           const {Cesium, viewer} = this.cesiumInstance
@@ -220,8 +220,8 @@
     methods: {
       ready (cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        this.data = 2
-        this.switchData(2)
+        this.data = 1
+        this.switchData(1)
       },
       switchData (val) {
         const {Cesium, viewer} = this.cesiumInstance

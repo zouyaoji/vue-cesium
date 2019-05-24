@@ -26,27 +26,12 @@
     export default {
       data () {
         return {
-          geometryInstances: null,
           appearance: null,
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
           interleave: false,
           asynchronous: false
-        }
-      },
-      watch: {
-        image (val) {
-          this.appearance = new Cesium.MaterialAppearance({
-            material: new Cesium.Material({
-              fabric: {
-                type: 'Image',
-                uniforms: {
-                  image: val
-                }
-              }
-            })
-          })
         }
       },
       methods: {
@@ -114,27 +99,12 @@
   export default {
     data () {
       return {
-        geometryInstances: null,
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
         rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
         interleave: false,
         asynchronous: false
-      }
-    },
-    watch: {
-      image (val) {
-        this.appearance = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: val
-              }
-            }
-          })
-        })
       }
     },
     methods: {
