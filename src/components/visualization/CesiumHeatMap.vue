@@ -126,6 +126,7 @@ export default {
           }
         })
       })
+      return this._heatmapInstance
     },
     materialCallback () {
       return this.layerUrl
@@ -334,7 +335,7 @@ export default {
       return mergeDescriptors(
         cmp.methods.getServices.call(this),
         {
-          get heatMap () { return vm.heatMap },
+          get heatMapInstance () { return vm.heatMapInstance },
           get heatMapContainer () { return vm }
         }
       )

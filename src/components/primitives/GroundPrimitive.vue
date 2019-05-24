@@ -64,7 +64,7 @@ export default {
       this.reload()
     },
     releaseGeometryInstances (val) {
-      this.primitive.releaseGeometryInstances = val
+      this.reload()
     },
     allowPicking (val) {
       this.reload()
@@ -88,7 +88,7 @@ export default {
         releaseGeometryInstances, allowPicking, asynchronous, classificationType, debugShowBoundingVolume, debugShowShadowVolume } = this
       let options = {
         geometryInstances,
-        appearance: Cesium.defaultValue(appearance, new Cesium.MaterialAppearance()),
+        appearance,
         show,
         vertexCacheOptimize,
         interleave,

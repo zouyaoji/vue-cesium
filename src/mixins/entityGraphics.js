@@ -13,7 +13,7 @@ const methods = {
   },
   unload () {
     const { graphicsContainer } = this
-    graphicsContainer && graphicsContainer.setGraphics(undefined)
+    graphicsContainer && graphicsContainer.unload()
   }
 }
 const watch = {}

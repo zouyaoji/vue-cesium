@@ -1,27 +1,16 @@
 <script>
-// import commonMixin from '../../mixins/common.js'
+import primitiveItem from '../../mixins/primitiveItem'
 export default {
   name: 'polygon-geometry',
-  render (h) {},
-  // mixins: [commonMixin('polygon-geometry')],
+  mixins: [primitiveItem],
   props: {
-    positions: Array,
-    holes: Array,
-    height: {
-      type: Number,
-      default: 0.0
-    },
+    polygonHierarchy: Object | Array,
+    height: Number,
     extrudedHeight: Number,
     vertexFormat: Object,
-    stRotation: {
-      type: [Number, Object],
-      default: 0.0
-    },
+    stRotation: Number,
     ellipsoid: Object,
-    granularity: {
-      type: Number,
-      default: Math.PI / 180.0
-    },
+    granularity: Number,
     perPositionHeight: {
       type: Boolean,
       default: false
@@ -33,17 +22,34 @@ export default {
     closeBottom: {
       type: Boolean,
       default: true
-    }
+    },
+    arcType: Number
   },
   watch: {
-
+    polygonHierarchy (val) {
+      this.geometry.polygonHierarchy = val
+    },
+    height (val) {
+      this.geometryContainer.geometryInstancesContainer.reload()
+    },
+    extrudedHeight (val) {
+      this.geometryContainer.geometryInstancesContainer.reload()
+    },
+    vertexFormat (val) {},
+    stRotation (val) {},
+    ellipsoid (val) {},
+    granularity (val) {},
+    perPositionHeight (val) {},
+    closeTop (val) {},
+    closeBottom (val) {},
+    arcType (val) {}
   },
   methods: {
-    load () {
-      const { Cesium, positions, holes, height, extrudedHeight, vertexFormat, stRotation, ellipsoid,
-        granularity, perPositionHeight, closeTop, closeBottom } = this
-      let polygon = {
-        polygonHierarchy: new Cesium.PolygonHierarchy(positions, holes),
+    createCesiumObject () {
+      const { Cesium, polygonHierarchy, height, extrudedHeight, vertexFormat, stRotation, ellipsoid,
+        granularity, perPositionHeight, closeTop, closeBottom, arcType } = this
+      let options = {
+        polygonHierarchy: polygonHierarchy instanceof Cesium.PolygonHierarchy || this.isEmptyObj(polygonHierarchy) ? polygonHierarchy : new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(polygonHierarchy)),
         height,
         extrudedHeight,
         vertexFormat,
@@ -52,10 +58,11 @@ export default {
         granularity,
         perPositionHeight,
         closeTop,
-        closeBottom
+        closeBottom,
+        arcType
       }
-      this.removeNullItem(polygon)
-      return this.$parent.originInstance.add(polygon)
+      this.removeNullItem(options)
+      return new Cesium.PolygonGeometry(options)
     }
   }
 }

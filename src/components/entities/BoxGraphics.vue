@@ -67,7 +67,7 @@ export default {
       const { Cesium, heightReference, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
       let options = {
         heightReference,
-        dimensions,
+        dimensions: dimensions instanceof Cesium.Cartesian3 || this.isEmptyObj(dimensions) ? dimensions : new Cesium.Cartesian3(dimensions.x, dimensions.y, dimensions.z),
         show,
         fill,
         material,

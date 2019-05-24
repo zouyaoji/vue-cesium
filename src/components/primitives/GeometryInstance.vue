@@ -28,7 +28,7 @@ export default {
     createCesiumObject () {
       const { Cesium, geometry, modelMatrix, id, attributes } = this
       let options = {
-        geometry: Cesium.defaultValue(geometry, new Cesium.Geometry({ attributes: new Cesium.GeometryAttributes() })),
+        geometry,
         modelMatrix,
         id,
         attributes

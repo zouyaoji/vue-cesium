@@ -10,7 +10,7 @@ const methods = {
   },
   unload () {
     const { geometryContainer } = this
-    geometryContainer && geometryContainer.setGeometry(undefined)
+    geometryContainer && geometryContainer.unload()
   },
   getServices () {
     const vm = this

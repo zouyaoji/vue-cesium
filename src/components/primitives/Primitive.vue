@@ -71,10 +71,10 @@ export default {
       this.reload()
     },
     releaseGeometryInstances (val) {
-      this.primitive.releaseGeometryInstances = val
+      this.reload()
     },
     allowPicking (val) {
-      this.primitive.allowPicking = val
+      this.reload()
     },
     cull (val) {
       this.primitive.cull = val
