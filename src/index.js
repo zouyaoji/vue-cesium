@@ -33,8 +33,11 @@ import WallGraphics from '@/components/entities/WallGraphics.vue'
 
 import Primitive from '@/components/primitives/Primitive.vue'
 import GroundPrimitive from '@/components/primitives/GroundPrimitive.vue'
+import ClassificationPrimitive from '@/components/primitives/ClassificationPrimitive.vue'
 import GeometryInstance from '@/components/primitives/GeometryInstance.vue'
 import RectangleGeometry from '@/components/primitives/RectangleGeometry.vue'
+import BoxGeometry from '@/components/primitives/BoxGeometry.vue'
+import PolygonGeometry from '@/components/primitives/PolygonGeometry.vue'
 import PointCollection from '@/components/primitives/PointPrimitiveCollection.vue'
 import PolylineCollection from '@/components/primitives/PolylineCollection.vue'
 import LabelCollection from '@/components/primitives/LabelCollection.vue'
@@ -50,6 +53,7 @@ import MeasureHeight from '@/components/measure/MeasureHeight.vue'
 
 import CesiumHeatMap from '@/components/visualization/CesiumHeatMap.vue'
 import CesiumWindMap from '@/components/visualization/CesiumWindMap.vue'
+import CesiumFlood from '@/components/visualization/CesiumFlood.vue'
 
 export default {
   install (Vue, options) {
@@ -104,6 +108,12 @@ export default {
     Vue.component(WallGraphics.name, WallGraphics)
 
     Vue.component(Primitive.name, Primitive)
+    Vue.component(GroundPrimitive.name, GroundPrimitive)
+    Vue.component(ClassificationPrimitive.name, ClassificationPrimitive)
+    Vue.component(GeometryInstance.name, GeometryInstance)
+    Vue.component(BoxGeometry.name, BoxGeometry)
+    Vue.component(RectangleGeometry.name, RectangleGeometry)
+    Vue.component(PolygonGeometry.name, PolygonGeometry)
     Vue.component(Cesium3DTileset.name, Cesium3DTileset)
     Vue.component(PolylineCollection.name, PolylineCollection)
     Vue.component(Polyline.name, Polyline)
@@ -111,11 +121,7 @@ export default {
     Vue.component(Label.name, Label)
     Vue.component(PointCollection.name, PointCollection)
     Vue.component(PointPrimitive.name, PointPrimitive)
-
     Vue.component('model-primitive', Model)
-    Vue.component(GroundPrimitive.name, GroundPrimitive)
-    Vue.component(GeometryInstance.name, GeometryInstance)
-    Vue.component(RectangleGeometry.name, RectangleGeometry)
 
     Vue.component('measure-distance', MeasureDistance)
     Vue.component('measure-area', MeasureArea)
@@ -123,6 +129,7 @@ export default {
 
     Vue.component(CesiumHeatMap.name, CesiumHeatMap)
     Vue.component(CesiumWindMap.name, CesiumWindMap)
+    Vue.component(CesiumFlood.name, CesiumFlood)
   },
   version
 }
@@ -159,8 +166,11 @@ export {
   WallGraphics,
   Primitive,
   GroundPrimitive,
+  ClassificationPrimitive,
   GeometryInstance,
+  BoxGeometry,
   RectangleGeometry,
+  PolygonGeometry,
   Model,
   Cesium3DTileset,
   PointCollection,
@@ -173,5 +183,6 @@ export {
   MeasureArea,
   MeasureHeight,
   CesiumHeatMap,
-  CesiumWindMap
+  CesiumWindMap,
+  CesiumFlood
 }
