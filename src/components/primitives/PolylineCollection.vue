@@ -26,8 +26,7 @@ export default {
         debugShowBoundingVolume
       }
       this.removeNullItem(options)
-      let polylineCollection = new Cesium.PolylineCollection(options)
-      return polylineCollection
+      return new Cesium.PolylineCollection(options)
     }
   }
 }

@@ -6,8 +6,6 @@ const props = {}
 const computed = {}
 const methods = {
   createCesiumObject () {
-    this.Cesium = this.$parent.Cesium
-    this.viewer = this.$parent.viewer
     const { Cesium, viewer } = this
     this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
     this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')

@@ -54,6 +54,7 @@ import MeasureHeight from '@/components/measure/MeasureHeight.vue'
 import CesiumHeatMap from '@/components/visualization/CesiumHeatMap.vue'
 import CesiumWindMap from '@/components/visualization/CesiumWindMap.vue'
 import CesiumFlood from '@/components/visualization/CesiumFlood.vue'
+// import CesiumViewshed3D from '@/components/visualization/CesiumViewshed3D.vue'
 
 export default {
   install (Vue, options) {
@@ -130,6 +131,7 @@ export default {
     Vue.component(CesiumHeatMap.name, CesiumHeatMap)
     Vue.component(CesiumWindMap.name, CesiumWindMap)
     Vue.component(CesiumFlood.name, CesiumFlood)
+    // Vue.component(CesiumViewshed3D.name, CesiumViewshed3D)
   },
   version
 }
@@ -185,4 +187,5 @@ export {
   CesiumHeatMap,
   CesiumWindMap,
   CesiumFlood
+  // CesiumViewshed3D
 }

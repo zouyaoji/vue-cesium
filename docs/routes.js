@@ -373,6 +373,14 @@ const routeMap = [
         }
       },
       {
+        path: 'polyline-primitive',
+        component: 'primitives/polyline-primitive',
+        name: {
+          zh: '线Primitive',
+          en: 'PolylinePrimitive'
+        }
+      },
+      {
         path: 'box-geometry',
         component: 'primitives/box-geometry',
         name: {
