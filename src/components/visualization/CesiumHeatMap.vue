@@ -1,14 +1,14 @@
 <template>
   <i style="display: none !important">
-    <entity ref="entity" v-if="type === 1" :show="show">
+    <entity ref="1" v-if="type === 1" :show="show">
       <rectangle-graphics :coordinates="coordinates" :material="material"></rectangle-graphics>
     </entity>
-    <ground-primitive ref="primitive" v-else-if="type === 0" :show="show" :appearance="appearance">
+    <ground-primitive ref="0" v-else-if="type === 0" :show="show" :appearance="appearance">
       <geometry-instance :geometry.sync="geometry">
         <rectangle-geometry :rectangle="coordinates"></rectangle-geometry>
       </geometry-instance>
     </ground-primitive>
-    <imagery-layer ref="imageryLayer" v-else-if="type === 2"  :show="show">
+    <imagery-layer ref="2" v-else-if="type === 2"  :show="show">
       <singletile-imagery-provider :url="layerUrl" :rectangle="coordinates"></singletile-imagery-provider>
     </imagery-layer>
   </i>
@@ -16,7 +16,7 @@
 <script>
 import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
-const h337 = require('heatmap.js')
+import h337 from '../../libs/heatmap/heatmap'
 export default {
   name: 'cesium-heatmap',
   data () {
@@ -82,7 +82,6 @@ export default {
         }
         val.min !== oldValue.min && _heatmapInstance.setDataMin(val.min)
         val.max !== oldValue.max && _heatmapInstance.setDataMin(val.max)
-
         JSON.stringify(val.options) !== JSON.stringify(oldValue.options) && _heatmapInstance.configure(val.options)
         JSON.stringify(val.data) !== JSON.stringify(oldValue.data) && this.setWGS84Data(val.min, val.max, val.data)
         this.layerUrl = _heatmapInstance.getDataURL()
@@ -152,9 +151,8 @@ export default {
     mount () {},
     unload () {
       document.body.removeChild(this._container)
-      let refs = ['entity', 'primitive', 'imageryLayer']
       const { type } = this
-      this.$refs[refs[type]] && this.$refs[refs[type]].unload()
+      this.$refs[type] && this.$refs[type].unload()
     },
     setWidthAndHeight (mbb) {
       const { defaultOptions } = this
