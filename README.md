@@ -62,8 +62,7 @@ Vue.use(VueCesium, {
 ```vue
 <template>
   <div class="viewer">
-    <cesium-viewer>
-    </cesium-viewer>
+    <cesium-viewer> </cesium-viewer>
   </div>
 </template>
 
@@ -85,6 +84,6 @@ Vue.use(VueCesium, {
 
 Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
-## Thanks
+## Reference
 
-I referenced a lot from the [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) project. Thanks very much!
+A good project: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)
