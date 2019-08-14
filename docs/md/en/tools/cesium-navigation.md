@@ -32,7 +32,7 @@
         return {
           options: {
              // option used to set a default view when resetting the map view with the reset navigation control.[lon,lat,height] or [west,south,east,north]
-            defaultResetView: [105, 29.999999999999993, 118, 35],
+            defaultResetView: [105, 29.999999999999993, 19059568.497290563],
             // option used to enable or disable the compass.
             enableCompass: true,
             // option used to enable or disable the zoom controls.
@@ -86,7 +86,7 @@
       return {
         options: {
           // option used to set a default view when resetting the map view with the reset navigation control.[lon,lat,height] or [west,south,east,north]
-          defaultResetView: [105, 29.999999999999993, 118, 35],
+          defaultResetView: [105, 29.999999999999993, 19059568.497290563],
           // option used to enable or disable the compass.
           enableCompass: true,
           // option used to enable or disable the zoom controls.

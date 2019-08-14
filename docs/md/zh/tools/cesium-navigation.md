@@ -32,7 +32,7 @@
         return {
           options: {
             // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度[lon,lat,height]或者 rectangle[west,south,east,north]
-            defaultResetView: [105, 29.999999999999993, 118, 35],
+            defaultResetView: [105, 29.999999999999993, 19059568.497290563],
             // 用于启用或禁用罗盘。true是启用罗盘，false是禁用罗盘。默认值为true。如果将选项设置为false，则罗盘将不会添加到地图中。
             enableCompass: true,
             // 用于启用或禁用缩放控件。true是启用，false是禁用。默认值为true。如果将选项设置为false，则缩放控件将不会添加到地图中。
@@ -86,7 +86,7 @@
       return {
         options: {
           // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度数组[lon,lat,height]或者 rectangle[west,south,east,north]
-          defaultResetView: [105, 29.999999999999993, 118, 35],
+          defaultResetView: [105, 29.999999999999993, 19059568.497290563],
           // 用于启用或禁用罗盘。true是启用罗盘，false是禁用罗盘。默认值为true。如果将选项设置为false，则罗盘将不会添加到地图中。
           enableCompass: true,
           // 用于启用或禁用缩放控件。true是启用，false是禁用。默认值为true。如果将选项设置为false，则缩放控件将不会添加到地图中。
