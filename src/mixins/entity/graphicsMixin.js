@@ -1,10 +1,7 @@
-import bindEvents from '../util/bindEvent'
-import { Events } from '../util/events.js'
-import cmp from './virtualCmp'
-// import mergeDescriptors from '../util/mergeDescriptors'
+import bindEvents from '@/util/bindEvent'
+import { Events } from '@/util/events'
+import cmp from '@/mixins/virtualCmp'
 
-const props = {}
-const computed = {}
 const methods = {
   mount () {
     const { graphics, graphicsContainer } = this
@@ -16,13 +13,9 @@ const methods = {
     graphicsContainer && graphicsContainer.unload()
   }
 }
-const watch = {}
 
 export default {
   mixins: [cmp],
-  props,
-  computed,
-  watch,
   methods,
   stubVNode: {
     empty () {

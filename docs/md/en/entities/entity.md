@@ -25,14 +25,13 @@
           id: 'This is a billboard',
           description: 'Hello Vue Cesium',
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          position: {},
+          position: { lng: 108, lat: 35, height: 100 },
           billboard: {}
         }
       },
       methods: {
         ready (cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
-          this.position = Cesium.Cartesian3.fromDegrees(108, 35, 100)
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default
@@ -57,27 +56,25 @@
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
-      <entity :position="position" :billboard="billboard" :description="description" :id="id">
-      </entity>
+      <entity :position="position" :billboard="billboard" :description="description" :id="id"> </entity>
     </cesium-viewer>
   </div>
 </template>
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         id: 'This is a billboard',
         description: 'Hello Vue Cesium',
         image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-        position: {},
+        position: { lng: 108, lat: 35, height: 100 },
         billboard: {}
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        this.position = Cesium.Cartesian3.fromDegrees(108, 35, 100)
         this.billboard = new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
           show: true, // default
@@ -88,7 +85,7 @@
           scale: 0.5, // default: 1.0
           color: Cesium.Color.LIME, // default: WHITE
           // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
-          alignedAxis: Cesium.Cartesian3.ZERO, // default
+          alignedAxis: Cesium.Cartesian3.ZERO // default
         })
       }
     }
@@ -98,25 +95,42 @@
 
 ## Instance Properties
 
-Reference official document [Entity](https://cesiumjs.org/Cesium/Build/Documentation/Entity.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+| name           | type    | default | description                                                                                                       |
+| -------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| id             | String  |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated.                         |
+| name           | String  |         | `optional` A human readable name to display to users. It does not have to be unique.                              |
+| availability   |         |         | `optional` The availability, if any, associated with this object.                                                 |
+| show           | Boolean | true    | `optional` A boolean value indicating if the entity and its children are displayed.                               |
+| description    |         |         | `optional` A string Property specifying an HTML description for this entity.                                      |
+| position       | Object  |         | `optional` A Property specifying the entity position. **structure: { lng: number, lat: number, height: number }** |
+| orientation    |         |         | `optional` A Property specifying the entity orientation.                                                          |
+| viewFrom       |         |         | `optional` A suggested initial offset for viewing this object.                                                    |
+| parent         |         |         | `optional` A parent entity to associate with this entity.                                                         |
+| billboard      |         |         | `optional` A billboard to associate with this entity.                                                             |
+| box            |         |         | `optional` A box to associate with this entity.                                                                   |
+| corridor       |         |         | `optional` A corridor to associate with this entity.                                                              |
+| cylinder       |         |         | `optional` A cylinder to associate with this entity.                                                              |
+| ellipse        |         |         | `optional` A ellipse to associate with this entity.                                                               |
+| ellipsoid      |         |         | `optional` A ellipsoid to associate with this entity.                                                             |
+| label          |         |         | `optional` A options.label to associate with this entity.                                                         |
+| model          |         |         | `optional` A model to associate with this entity.                                                                 |
+| path           |         |         | `optional` A path to associate with this entity.                                                                  |
+| plane          |         |         | `optional` A plane to associate with this entity.                                                                 |
+| point          |         |         | `optional` A point to associate with this entity.                                                                 |
+| polygon        |         |         | `optional` A polygon to associate with this entity.                                                               |
+| polyline       |         |         | `optional` A polyline to associate with this entity.                                                              |
+| properties     |         |         | `optional` Arbitrary properties to associate with this entity.                                                    |
+| polylineVolume |         |         | `optional` A polylineVolume to associate with this entity.                                                        |
+| rectangle      |         |         | `optional` A rectangle to associate with this entity.                                                             |
+| wall           |         |         | `optional` A wall to associate with this entity.                                                                  |
+
+---
+
+- Reference official document [Entity](https://cesiumjs.org/Cesium/Build/Documentation/Entity.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

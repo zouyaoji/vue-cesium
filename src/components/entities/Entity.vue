@@ -1,12 +1,14 @@
 <script>
-import mergeDescriptors from '../../util/mergeDescriptors'
-import cmp from '../../mixins/virtualCmp'
-import bindEvents from '../../util/bindEvent'
-import { Events } from '../../util/events.js'
+import mergeDescriptors from '@/util/mergeDescriptors'
+import cmp from '@/mixins/virtualCmp'
+import bindEvents from '@/util/bindEvent'
+import { Events } from '@/util/events'
+import { position } from '@/mixins/entity/allProps'
+import { makeCartesian3 } from '@/util/util'
 
 export default {
   name: 'entity',
-  mixins: [cmp],
+  mixins: [cmp, position],
   props: {
     id: String,
     name: String,
@@ -16,7 +18,6 @@ export default {
       default: true
     },
     description: String,
-    position: Object,
     orientation: Object,
     viewFrom: Object,
     parent: Object,
@@ -53,9 +54,6 @@ export default {
     },
     description (val) {
       this.entity.description = val
-    },
-    position (val) {
-      this.entity.position = val
     },
     orientation (val) {
       this.entity.orientation = val
@@ -128,7 +126,7 @@ export default {
         availability,
         description,
         show,
-        position: position instanceof Cesium.Cartesian3 || this.isEmptyObj(position) ? position : Cesium.Cartesian3.fromDegrees(position.x, position.y, position.z),
+        position: makeCartesian3(position),
         orientation,
         viewFrom,
         parent,
@@ -151,8 +149,7 @@ export default {
         wall
       }
       this.removeNullItem(options)
-      let entity = new Cesium.Entity(options)
-      return entity
+      return new Cesium.Entity(options)
     },
     mount () {
       const { viewer, entity } = this

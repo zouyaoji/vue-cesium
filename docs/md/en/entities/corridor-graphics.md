@@ -16,12 +16,26 @@
           <corridor-graphics :positions="positions1" :material="material1" :width="200000.0"></corridor-graphics>
         </entity>
         <entity :name="name2" :description="description" :corridor.sync="corridor2">
-          <corridor-graphics :positions="positions2" :height="100000.0" :width="200000.0" :cornerType="0"
-            :material="material2" :outline="true"></corridor-graphics>
+          <corridor-graphics
+            :positions="positions2"
+            :height="100000.0"
+            :width="200000.0"
+            :cornerType="0"
+            material="GREEN"
+            :outline="true"
+          ></corridor-graphics>
         </entity>
         <entity :name="name3" :description="description" :corridor.sync="corridor3">
-          <corridor-graphics :positions="positions3" :material="material3" :outlineColor="outlineColor3" :outline="true"
-            :height="200000.0" :extrudedHeight="100000.0" :width="200000.0" :cornerType="cornerType3" :outlineColor="outlineColor3"></corridor-graphics>
+          <corridor-graphics
+            :positions="positions3"
+            :material="material3"
+            outlineColor="WHITE"
+            :outline="true"
+            :height="200000.0"
+            :extrudedHeight="100000.0"
+            :width="200000.0"
+            :cornerType="cornerType3"
+          ></corridor-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -29,55 +43,34 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
 
           corridor1: {},
           name1: 'Red corridor on surface with rounded corners',
-          positions1: [],
+          positions1: [{ lng: 100.0, lat: 40.0 }, { lng: 105.0, lat: 40.0 }, { lng: 105.0, lat: 35.0 }],
           material1: {},
 
           corridor2: {},
           name2: 'Green corridor at height with mitered corners and outline',
-          positions2: [],
+          positions2: [{ lng: 90.0, lat: 40.0 }, { lng: 95.0, lat: 40.0 }, { lng: 95.0, lat: 35.0 }],
           cornerType2: 0,
-          material2: {},
 
           corridor3: {},
           name3: 'Blue extruded corridor with beveled corners and outline',
-          positions3: [],
+          positions3: [{ lng: 80.0, lat: 40.0 }, { lng: 85.0, lat: 40.0 }, { lng: 85.0, lat: 35.0 }],
           cornerType3: 0,
-          material3: {},
-          outlineColor3: {}
+          material3: {}
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.positions1 = Cesium.Cartesian3.fromDegreesArray([
-            100.0, 40.0,
-            105.0, 40.0,
-            105.0, 35.0
-          ])
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.material1 = Cesium.Color.RED.withAlpha(0.5)
-
-          this.positions2 = Cesium.Cartesian3.fromDegreesArray([
-            90.0, 40.0,
-            95.0, 40.0,
-            95.0, 35.0
-          ])
           this.cornerType2 = Cesium.CornerType.MITERED
-          this.material2 = Cesium.Color.GREEN
-
-          this.positions3 =  Cesium.Cartesian3.fromDegreesArray([
-            80.0, 40.0,
-            85.0, 40.0,
-            85.0, 35.0
-          ])
-          this.cornerType3 = Cesium.CornerType.BEVELED,
-          this.material3 =  Cesium.Color.BLUE.withAlpha(0.5)
-          this.outlineColor3 = Cesium.Color.WHITE
+          this.cornerType3 = Cesium.CornerType.BEVELED
+          this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
         }
       }
     }
@@ -94,12 +87,26 @@
         <corridor-graphics :positions="positions1" :material="material1" :width="200000.0"></corridor-graphics>
       </entity>
       <entity :name="name2" :description="description" :corridor.sync="corridor2">
-        <corridor-graphics :positions="positions2" :height="100000.0" :width="200000.0" :cornerType="0"
-          :material="material2" :outline="true"></corridor-graphics>
+        <corridor-graphics
+          :positions="positions2"
+          :height="100000.0"
+          :width="200000.0"
+          :cornerType="0"
+          material="GREEN"
+          :outline="true"
+        ></corridor-graphics>
       </entity>
       <entity :name="name3" :description="description" :corridor.sync="corridor3">
-        <corridor-graphics :positions="positions3" :material="material3" :outlineColor="outlineColor3" :outline="true"
-          :height="200000.0" :extrudedHeight="100000.0" :width="200000.0" :cornerType="cornerType3" :outlineColor="outlineColor3"></corridor-graphics>
+        <corridor-graphics
+          :positions="positions3"
+          :material="material3"
+          outlineColor="WHITE"
+          :outline="true"
+          :height="200000.0"
+          :extrudedHeight="100000.0"
+          :width="200000.0"
+          :cornerType="cornerType3"
+        ></corridor-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -107,55 +114,34 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
 
         corridor1: {},
         name1: 'Red corridor on surface with rounded corners',
-        positions1: [],
+        positions1: [{ lng: 100.0, lat: 40.0 }, { lng: 105.0, lat: 40.0 }, { lng: 105.0, lat: 35.0 }],
         material1: {},
 
         corridor2: {},
         name2: 'Green corridor at height with mitered corners and outline',
-        positions2: [],
+        positions2: [{ lng: 90.0, lat: 40.0 }, { lng: 95.0, lat: 40.0 }, { lng: 95.0, lat: 35.0 }],
         cornerType2: 0,
-        material2: {},
 
         corridor3: {},
         name3: 'Blue extruded corridor with beveled corners and outline',
-        positions3: [],
+        positions3: [{ lng: 80.0, lat: 40.0 }, { lng: 85.0, lat: 40.0 }, { lng: 85.0, lat: 35.0 }],
         cornerType3: 0,
-        material3: {},
-        outlineColor3: {}
+        material3: {}
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.positions1 = Cesium.Cartesian3.fromDegreesArray([
-          100.0, 40.0,
-          105.0, 40.0,
-          105.0, 35.0
-        ])
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.material1 = Cesium.Color.RED.withAlpha(0.5)
-
-        this.positions2 = Cesium.Cartesian3.fromDegreesArray([
-          90.0, 40.0,
-          95.0, 40.0,
-          95.0, 35.0
-        ])
         this.cornerType2 = Cesium.CornerType.MITERED
-        this.material2 = Cesium.Color.GREEN
-
-        this.positions3 =  Cesium.Cartesian3.fromDegreesArray([
-          80.0, 40.0,
-          85.0, 40.0,
-          85.0, 35.0
-        ])
-        this.cornerType3 = Cesium.CornerType.BEVELED,
-        this.material3 =  Cesium.Color.BLUE.withAlpha(0.5)
-        this.outlineColor3 = Cesium.Color.WHITE
+        this.cornerType3 = Cesium.CornerType.BEVELED
+        this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
       }
     }
   }
@@ -164,24 +150,34 @@
 
 ## Instance Properties
 
-Reference official document [CorridorGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CorridorGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the corridor. |
+| positions | Array | | `optional` A Property specifying the array of Cartesian3 positions that define the centerline of the corridor. **structure:[{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]**|
+| width | Number | | `optional` A numeric Property specifying the distance between the edges of the corridor. |
+| height | Number | `0` | `optional` A numeric Property specifying the altitude of the corridor relative to the ellipsoid surface. |
+| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the corridor's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to.  **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| cornerType | Number | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |
+| granularity | Number | RADIANS_PER_DEGREE | `optional` A numeric Property specifying the distance between each latitude and longitude. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the corridor is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the corridor. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the corridor is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the corridor casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this corridor will be displayed. **structure:{ near: number, far: number }** |
+| classificationType | Number | `2` | `optional` An enum Property specifying whether this corridor will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2, NUMBER_OF_CLASSIFICATION_TYPES: 3** |
+| zIndex | Number | | `optional` A Property specifying the zIndex of the corridor, used for ordering. Only has an effect if height and extrudedHeight are undefined, and if the corridor is static. |
+
+---
+
+- Reference official document [CorridorGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CorridorGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |

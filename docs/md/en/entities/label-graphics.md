@@ -55,7 +55,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         label1: {},
@@ -64,8 +64,8 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.position1 = Cesium.Cartesian3.fromDegrees(114.0, 40.0, 300000.0)
         this.pixelOffset1 = new Cesium.Cartesian2(0.0, 20)
       }
@@ -76,25 +76,38 @@
 
 ## Instance Properties
 
-Reference official document [LabelGraphics](https://cesiumjs.org/Cesium/Build/Documentation/LabelGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| -------------------------- | --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the label. |
+| text | String | | `optional` A Property specifying the text. Explicit newlines '\n' are supported. |
+| font | String | `'30px sans-serif'` | `optional` A Property specifying the CSS font. |
+| labelStyle | Number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |
+| scale | Number | `1.0` | `optional` A numeric Property specifying the scale to apply to the text. |
+| showBackground | Boolean | `false` | `optional` A boolean Property specifying the visibility of the background behind the label. |
+| backgroundColor | Object\|String\|Array | `[0.165, 0.165, 0.165, 0.8]` | `optional` A Property specifying the background Color. |
+| backgroundPadding | Object | `{x: 7, y: 5}` | `optional` A Cartesian2 Property specifying the horizontal and vertical background padding in pixels. **结构：{ x: number, y: number }** |
+| pixelOffset | Object | `{x: 0, y: 0 }` | `optional` A Cartesian2 Property specifying the pixel offset. **structure: { x: number, y: number }** |
+| eyeOffset | Object | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset. **structure: { x: number, y: number, z: number }** |
+| horizontalOrigin | Number | `0` | `optional` A Property specifying the HorizontalOrigin. |
+| verticalOrigin | Number | `0` | `optional` A Property specifying the VerticalOrigin. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. |
+| fillColor | Object\|String\|Array | `white` | `optional` A Property specifying the fill Color. |
+| outlineColor | Object\|String\|Array | `black` | `optional` A Property specifying the outline Color. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the outline width. |
+| translucencyByDistance | Object | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. **structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| pixelOffsetScaleByDistance | Object | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. **structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| scaleByDistance | Object | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. **structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this label will be displayed. **structure: { near: number, far: number }** |
+| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+
+---
+
+- Reference official document [LabelGraphics](https://cesiumjs.org/Cesium/Build/Documentation/LabelGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

@@ -1,104 +1,61 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import {
+  show,
+  distanceDisplayCondition,
+  positions,
+  fill,
+  material,
+  outline,
+  outlineColor,
+  outlineWidth,
+  shadows
+} from '@/mixins/entity/allProps'
+import polylineVolumeMixin from '@/mixins/entity/polylineVolumeMixin'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeCartesian2Array, makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '@/util/util'
 export default {
   name: 'polyline-volume-graphics',
-  mixins: [entityGraphics],
+  mixins: [
+    show,
+    distanceDisplayCondition,
+    positions,
+    fill,
+    material,
+    outline,
+    outlineColor,
+    outlineWidth,
+    shadows,
+    polylineVolumeMixin,
+    graphicsMixin
+  ],
   props: {
-    positions: Array,
-    shape: Array,
-    cornerType: {
-      type: Number,
-      default: 0
-    },
-    extrudedHeight: Number,
-    extrudedHeightReference: Number,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    fill: {
-      type: Boolean,
-      default: true
-    },
-    material: [Object, String],
-    outline: {
-      type: Boolean,
-      default: false
-    },
-    outlineColor: Object,
-    outlineWidth: {
-      type: Number,
-      default: 1.0
-    },
-    granularity: {
-      type: Number,
-      default: Math.PI / 180.0
-    },
-    shadows: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: Number
+    shape: Array
   },
   watch: {
-    positions (val) {
-      this.graphics.positions = val
-    },
     shape (val) {
-      this.graphics.shape = val
-    },
-    cornerType (val) {
-      this.graphics.cornerType = val
-    },
-    show (val) {
-      this.graphics.show = val
-    },
-    fill (val) {
-      this.graphics.fill = val
-    },
-    material (val) {
-      this.graphics.material = val
-    },
-    outline (val) {
-      this.graphics.outline = val
-    },
-    outlineColor (val) {
-      this.graphics.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.graphics.outlineWidth = val
-    },
-    granularity (val) {
-      this.graphics.granularity = val
-    },
-    shadows (val) {
-      this.graphics.shadows = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
+      this.graphics.shape = makeCartesian2Array(val)
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, positions, shape, cornerType, show, fill, material, outline, outlineColor,
-        outlineWidth, granularity, shadows, distanceDisplayCondition } = this
+      const { show, positions, shape, cornerType, granularity, fill, material, outline,
+        outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
       let options = {
-        positions: positions,
-        shape: shape,
-        cornerType: cornerType,
-        show: show,
-        fill: fill,
-        material: material,
-        outline: outline,
-        outlineColor: outlineColor,
-        outlineWidth: outlineWidth,
-        granularity: granularity,
-        shadows: shadows,
-        distanceDisplayCondition: distanceDisplayCondition
+        show,
+        positions: makeCartesian3Array(positions),
+        shape: makeCartesian2Array(shape),
+        cornerType,
+        granularity,
+        fill,
+        material: makeMaterial(material),
+        outline,
+        outlineColor: makeColor(outlineColor),
+        outlineWidth,
+        shadows,
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
       }
       this.removeNullItem(options)
-      let polylineVolume = new Cesium.PolylineVolumeGraphics(options)
-      return polylineVolume
+      return new Cesium.PolylineVolumeGraphics(options)
     }
   }
 }

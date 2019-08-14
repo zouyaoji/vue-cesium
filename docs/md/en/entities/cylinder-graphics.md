@@ -13,11 +13,23 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <entity :position="position1" :description="description" :cylinder.sync="cylinder1">
-          <cylinder-graphics :length="400000.0" :topRadius="200000.0" :bottomRadius="200000.0" :material="material1"
-            :outline="true" :outlineColor="outlineColor1"></cylinder-graphics>
+          <cylinder-graphics
+            :length="400000.0"
+            :topRadius="200000.0"
+            :bottomRadius="200000.0"
+            :material="material1"
+            :outline="true"
+            :outlineColor="outlineColor1"
+          ></cylinder-graphics>
         </entity>
         <entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-          <cylinder-graphics :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" :material="material2"></cylinder-graphics>
+          <cylinder-graphics
+            :length="400000.0"
+            :topRadius="0.0"
+            :bottomRadius="200000.0"
+            :material="material2"
+            @ready="subReady"
+          ></cylinder-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -25,28 +37,27 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
           cylinder1: {},
-          position1: {},
-          outlineColor1: {},
+          position1: { lng: 105.0, lat: 40.0, height: 200000.0 },
+          outlineColor1: 'DARK_GREEN',
           material1: {},
 
           cylinder2: {},
-          position2: {},
-          material2: {}
+          position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
+          material2: 'RED'
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 200000.0)
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-          this.outlineColor1 = Cesium.Color.DARK_GREEN
-
-          this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 200000.0)
-          this.material2 = Cesium.Color.RED
+        },
+        subReady(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -60,11 +71,23 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <entity :position="position1" :description="description" :cylinder.sync="cylinder1">
-        <cylinder-graphics :length="400000.0" :topRadius="200000.0" :bottomRadius="200000.0" :material="material1"
-          :outline="true" :outlineColor="outlineColor1"></cylinder-graphics>
+        <cylinder-graphics
+          :length="400000.0"
+          :topRadius="200000.0"
+          :bottomRadius="200000.0"
+          :material="material1"
+          :outline="true"
+          :outlineColor="outlineColor1"
+        ></cylinder-graphics>
       </entity>
       <entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-        <cylinder-graphics :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" :material="material2"></cylinder-graphics>
+        <cylinder-graphics
+          :length="400000.0"
+          :topRadius="0.0"
+          :bottomRadius="200000.0"
+          :material="material2"
+          @ready="subReady"
+        ></cylinder-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -72,28 +95,27 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         cylinder1: {},
-        position1: {},
-        outlineColor1: {},
+        position1: { lng: 105.0, lat: 40.0, height: 200000.0 },
+        outlineColor1: 'DARK_GREEN',
         material1: {},
 
         cylinder2: {},
-        position2: {},
-        material2: {}
+        position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
+        material2: 'RED'
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 200000.0)
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-        this.outlineColor1 = Cesium.Color.DARK_GREEN
-
-        this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 200000.0)
-        this.material2 = Cesium.Color.RED
+      },
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        viewer.zoomTo(viewer.entities)
       }
     }
   }
@@ -102,25 +124,31 @@
 
 ## Instance Properties
 
-Reference official document [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the cylinder. |
+| length | Array | | `optional` A numeric Property specifying the length of the cylinder. |
+| topRadius | Number | | `optional` A numeric Property specifying the radius of the top of the cylinder. |
+| bottomRadius | Number | | `optional` A numeric Property specifying the radius of the bottom of the cylinder. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the cylinder is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the cylinder. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the cylinder is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| numberOfVerticalLines | Number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
+| slices | Number | `128` | `optional` The number of edges around the perimeter of the cylinder. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the cylinder casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this cylinder will be displayed. **structure: { near: number, far: number }** |
+
+---
+
+- Reference official document [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

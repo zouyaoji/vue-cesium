@@ -16,10 +16,23 @@
           <plane-graphics :plane="plane1" :dimensions="dimensions1" :material="material1"></plane-graphics>
         </entity>
         <entity :position="position2" :description="description" :plane.sync="planeEntity2">
-          <plane-graphics :plane="plane2" :dimensions="dimensions2" :material="material2" :outline="true" :outlineColor="outlineColor2"></plane-graphics>
+          <plane-graphics
+            :plane="plane2"
+            :dimensions="dimensions2"
+            :material="material2"
+            :outline="true"
+            :outlineColor="outlineColor2"
+          ></plane-graphics>
         </entity>
         <entity :position="position3" :description="description" :plane.sync="planeEntity3">
-          <plane-graphics :plane="plane3" :dimensions="dimensions3" :fill="false" :outline="true" :outlineColor="outlineColor3" @ready="subReady"></plane-graphics>
+          <plane-graphics
+            :plane="plane3"
+            :dimensions="dimensions3"
+            :fill="false"
+            :outline="true"
+            :outlineColor="outlineColor3"
+            @ready="subReady"
+          ></plane-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -27,50 +40,36 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
-          position1: {},
+          position1: { lng: 114.0, lat: 40.0, height: 300000.0 },
           planeEntity1: {},
-          plane1: undefined,
-          dimensions1: {},
-          material1: {},
+          plane1: { normal: { x: 1, y: 0, z: 0 }, distance: 0.0 },
+          dimensions1: { x: 400000.0, y: 300000.0 },
+          material1: 'BLUE',
 
-          position2: {},
+          position2: { lng: 107.0, lat: 40.0, height: 300000.0 },
           planeEntity2: {},
-          plane2: undefined,
-          dimensions2: {},
+          plane2: { normal: { x: 0, y: 1, z: 0 }, distance: 0.0 },
+          dimensions2: { x: 400000.0, y: 300000.0 },
           material2: {},
-          outlineColor2: {},
+          outlineColor2: 'BLACK',
 
-          position3: {},
+          position3: { lng: 100.0, lat: 40.0, height: 300000.0 },
           planeEntity3: {},
-          plane3: undefined,
-          dimensions3: {},
-          outlineColor3: {}
+          plane3: { normal: { x: 0, y: 0, z: 1 }, distance: 0.0 },
+          dimensions3: { x: 400000.0, y: 300000.0 },
+          outlineColor3: 'YELLOW'
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(114.0, 40.0, 300000.0)
-          this.plane1 = new Cesium.Plane(Cesium.Cartesian3.UNIT_X, 0.0)
-          this.dimensions1 = new Cesium.Cartesian2(400000.0, 300000.0)
-          this.material1 = Cesium.Color.BLUE
-
-          this.position2 = Cesium.Cartesian3.fromDegrees(107.0, 40.0, 300000.0)
-          this.plane2 = new Cesium.Plane(Cesium.Cartesian3.UNIT_Y, 0.0)
-          this.dimensions2 = new Cesium.Cartesian2(400000.0, 300000.0)
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
-          this.outlineColor2 = Cesium.Color.BLACK
-
-          this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
-          this.plane3 = new Cesium.Plane(Cesium.Cartesian3.UNIT_Z, 0.0)
-          this.dimensions3= new Cesium.Cartesian2(400000.0, 300000.0)
-          this.outlineColor3 = Cesium.Color.YELLOW
         },
-        subReady (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        subReady(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           viewer.zoomTo(viewer.entities)
         }
       }
@@ -88,10 +87,23 @@
         <plane-graphics :plane="plane1" :dimensions="dimensions1" :material="material1"></plane-graphics>
       </entity>
       <entity :position="position2" :description="description" :plane.sync="planeEntity2">
-        <plane-graphics :plane="plane2" :dimensions="dimensions2" :material="material2" :outline="true" :outlineColor="outlineColor2"></plane-graphics>
+        <plane-graphics
+          :plane="plane2"
+          :dimensions="dimensions2"
+          :material="material2"
+          :outline="true"
+          :outlineColor="outlineColor2"
+        ></plane-graphics>
       </entity>
       <entity :position="position3" :description="description" :plane.sync="planeEntity3">
-        <plane-graphics :plane="plane3" :dimensions="dimensions3" :fill="false" :outline="true" :outlineColor="outlineColor3" @ready="subReady"></plane-graphics>
+        <plane-graphics
+          :plane="plane3"
+          :dimensions="dimensions3"
+          :fill="false"
+          :outline="true"
+          :outlineColor="outlineColor3"
+          @ready="subReady"
+        ></plane-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -99,50 +111,36 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
-        position1: {},
+        position1: { lng: 114.0, lat: 40.0, height: 300000.0 },
         planeEntity1: {},
-        plane1: undefined,
-        dimensions1: {},
-        material1: {},
+        plane1: { normal: { x: 1, y: 0, z: 0 }, distance: 0.0 },
+        dimensions1: { x: 400000.0, y: 300000.0 },
+        material1: 'BLUE',
 
-        position2: {},
+        position2: { lng: 107.0, lat: 40.0, height: 300000.0 },
         planeEntity2: {},
-        plane2: undefined,
-        dimensions2: {},
+        plane2: { normal: { x: 0, y: 1, z: 0 }, distance: 0.0 },
+        dimensions2: { x: 400000.0, y: 300000.0 },
         material2: {},
-        outlineColor2: {},
+        outlineColor2: 'BLACK',
 
-        position3: {},
+        position3: { lng: 100.0, lat: 40.0, height: 300000.0 },
         planeEntity3: {},
-        plane3: undefined,
-        dimensions3: {},
-        outlineColor3: {}
+        plane3: { normal: { x: 0, y: 0, z: 1 }, distance: 0.0 },
+        dimensions3: { x: 400000.0, y: 300000.0 },
+        outlineColor3: 'YELLOW'
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.position1 = Cesium.Cartesian3.fromDegrees(114.0, 40.0, 300000.0)
-        this.plane1 = new Cesium.Plane(Cesium.Cartesian3.UNIT_X, 0.0)
-        this.dimensions1 = new Cesium.Cartesian2(400000.0, 300000.0)
-        this.material1 = Cesium.Color.BLUE
-
-        this.position2 = Cesium.Cartesian3.fromDegrees(107.0, 40.0, 300000.0)
-        this.plane2 = new Cesium.Plane(Cesium.Cartesian3.UNIT_Y, 0.0)
-        this.dimensions2 = new Cesium.Cartesian2(400000.0, 300000.0)
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.material2 = Cesium.Color.RED.withAlpha(0.5)
-        this.outlineColor2 = Cesium.Color.BLACK
-
-        this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
-        this.plane3 = new Cesium.Plane(Cesium.Cartesian3.UNIT_Z, 0.0)
-        this.dimensions3= new Cesium.Cartesian2(400000.0, 300000.0)
-        this.outlineColor3 = Cesium.Color.YELLOW
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       }
     }
@@ -152,25 +150,27 @@
 
 ## Instance Properties
 
-Reference official document [PlaneGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PlaneGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------------- | ----------- | ---------------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the plane. |
+| plane | Object | | `optional` A Plane Property specifying the normal and distance for the plane. **structure: { normal: { x: number, y: number, z: number }, distance: number }** |
+| dimensions | Object | | `optional` A Cartesian2 Property specifying the width and height of the plane. **structure: { x: number, y: number }** |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the plane is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the plane. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the plane is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the plane casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this plane will be displayed. **structure: { near: number, far: number }** |
+
+---
+
+- Reference official document [PlaneGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PlaneGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

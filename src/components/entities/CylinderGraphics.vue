@@ -1,112 +1,57 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import {
+  show,
+  distanceDisplayCondition,
+  heightReference,
+  fill,
+  material,
+  outline,
+  outlineColor,
+  outlineWidth,
+  numberOfVerticalLines,
+  shadows
+} from '@/mixins/entity/allProps'
+import cylinderMixin from '@/mixins/entity/cylinderMixin'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeMaterial, makeColor, makeDistanceDisplayCondition } from '@/util/util'
 export default {
   name: 'cylinder-graphics',
-  mixins: [entityGraphics],
-  props: {
-    heightReference: Number,
-    length: Number,
-    topRadius: Number,
-    bottomRadius: Number,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    fill: {
-      type: Boolean,
-      default: true
-    },
-    material: [Object, String],
-    outline: {
-      type: Boolean,
-      default: false
-    },
-    outlineColor: Object,
-    outlineWidth: {
-      type: Number,
-      default: 1
-    },
-    numberOfVerticalLines: {
-      type: Number,
-      default: 16
-    },
-    slices: {
-      type: Number,
-      default: 128
-    },
-    shadows: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: Object
-  },
-  watch: {
-    heightReference (val) {
-      this.graphics.heightReference = val
-    },
-    length (val) {
-      this.graphics.length = val
-    },
-    topRadius (val) {
-      this.graphics.topRadius = val
-    },
-    bottomRadius (val) {
-      this.graphics.bottomRadius = val
-    },
-    show (val) {
-      this.graphics.show = val
-    },
-    fill (val) {
-      this.graphics.fill = val
-    },
-    material (val) {
-      this.graphics.material = val
-    },
-    outline (val) {
-      this.graphics.outline = val
-    },
-    outlineColor (val) {
-      this.graphics.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.graphics.outlineWidth = val
-    },
-    numberOfVerticalLines (val) {
-      this.graphics.numberOfVerticalLines = val
-    },
-    slices (val) {
-      this.graphics.slices = val
-    },
-    shadows (val) {
-      this.graphics.shadows = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
-    }
-  },
+  mixins: [
+    show,
+    distanceDisplayCondition,
+    heightReference,
+    fill,
+    material,
+    outline,
+    outlineColor,
+    outlineWidth,
+    numberOfVerticalLines,
+    shadows,
+    cylinderMixin,
+    graphicsMixin
+  ],
   methods: {
     createCesiumObject () {
-      const { Cesium, heightReference, length, topRadius, bottomRadius, show, fill, material,
-        outline, outlineColor, outlineWidth, numberOfVerticalLines, slices, shadows, distanceDisplayCondition } = this
+      const { show, length, topRadius, bottomRadius, heightReference, fill, material, outline,
+        outlineColor, outlineWidth, numberOfVerticalLines, slices, shadows, distanceDisplayCondition } = this
       let options = {
-        heightReference,
+        show,
         length,
         topRadius,
         bottomRadius,
-        show,
+        heightReference,
         fill,
-        material,
+        material: makeMaterial(material),
         outline,
-        outlineColor,
+        outlineColor: makeColor(outlineColor),
         outlineWidth,
         numberOfVerticalLines,
         slices,
         shadows,
-        distanceDisplayCondition
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
       }
       this.removeNullItem(options)
-      let cylinder = new Cesium.CylinderGraphics(options)
-      return cylinder
+      return new Cesium.CylinderGraphics(options)
     }
   }
 }

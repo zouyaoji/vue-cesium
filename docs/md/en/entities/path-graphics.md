@@ -38,7 +38,7 @@
           position1: {},
           terrainProvider: {},
           orientation: {},
-          uri1: 'https://zouyaoji.top/vue-cesium/statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
+          uri1: '/statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
           start: {},
           stop: {}
         }
@@ -125,8 +125,22 @@
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer :shouldAnimate="true" :animation="true" :timeline="true" @ready="ready" :terrainProvider="terrainProvider">
-      <entity ref="entity" :availability="availability" :position="position1" :orientation="orientation" :description="description" :model.sync="model1" :path.sync="path1">
+    <cesium-viewer
+      :shouldAnimate="true"
+      :animation="true"
+      :timeline="true"
+      @ready="ready"
+      :terrainProvider="terrainProvider"
+    >
+      <entity
+        ref="entity"
+        :availability="availability"
+        :position="position1"
+        :orientation="orientation"
+        :description="description"
+        :model.sync="model1"
+        :path.sync="path1"
+      >
         <path-graphics :resolution="1" :material="material1" :width="10"></path-graphics>
         <model-graphics :uri="uri1" :minimumPixelSize="64" @ready="subReady"></model-graphics>
       </entity>
@@ -141,7 +155,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         cesiumInstance: {},
         description: 'Hello Vue Cesium',
@@ -158,8 +172,8 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
         this.terrainProvider = Cesium.createWorldTerrain()
         this.position1 = Cesium.Cartesian3.fromDegrees(114.0, 40.0, 1.0)
@@ -179,82 +193,90 @@
         viewer.clock.multiplier = 10
         viewer.timeline.zoomTo(this.start, this.stop)
         this.position1 = this.computeCirclularFlight(-112.110693, 36.0994841, 0.03)
-        this.availability =  new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
-          start : this.start,
-          stop : this.stop
-        })])
+        this.availability = new Cesium.TimeIntervalCollection([
+          new Cesium.TimeInterval({
+            start: this.start,
+            stop: this.stop
+          })
+        ])
         this.orientation = new Cesium.VelocityOrientationProperty(this.position1)
-        this.material1 =  new Cesium.PolylineGlowMaterialProperty({
-          glowPower : 0.1,
-          color : Cesium.Color.YELLOW
+        this.material1 = new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.1,
+          color: Cesium.Color.YELLOW
         })
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       },
-      computeCirclularFlight (lon, lat, radius) {
-        const {Cesium, viewer} = this.cesiumInstance
+      computeCirclularFlight(lon, lat, radius) {
+        const { Cesium, viewer } = this.cesiumInstance
         let property = new Cesium.SampledPositionProperty()
         for (let i = 0; i <= 360; i += 45) {
           let radians = Cesium.Math.toRadians(i)
-          let time = Cesium.JulianDate.addSeconds(this.start, i, new Cesium.JulianDate());
-          let position = Cesium.Cartesian3.fromDegrees(lon + (radius * 1.5 * Math.cos(radians)), lat + (radius * Math.sin(radians)), Cesium.Math.nextRandomNumber() * 500 + 1750)
+          let time = Cesium.JulianDate.addSeconds(this.start, i, new Cesium.JulianDate())
+          let position = Cesium.Cartesian3.fromDegrees(
+            lon + radius * 1.5 * Math.cos(radians),
+            lat + radius * Math.sin(radians),
+            Cesium.Math.nextRandomNumber() * 500 + 1750
+          )
           property.addSample(time, position)
 
           //Also create a point for each sample we generate.
           viewer.entities.add({
-            position : position,
-            point : {
-              pixelSize : 8,
-              color : Cesium.Color.TRANSPARENT,
-              outlineColor : Cesium.Color.YELLOW,
-              outlineWidth : 3
+            position: position,
+            point: {
+              pixelSize: 8,
+              color: Cesium.Color.TRANSPARENT,
+              outlineColor: Cesium.Color.YELLOW,
+              outlineWidth: 3
             }
           })
         }
         return property
       },
-      viewTopDown () {
-        const {Cesium, viewer} = this.cesiumInstance
+      viewTopDown() {
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.trackedEntity = undefined
         viewer.zoomTo(viewer.entities, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-90)))
       },
-      viewSide () {
-        const {Cesium, viewer} = this.cesiumInstance
+      viewSide() {
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.trackedEntity = undefined
-        viewer.zoomTo(viewer.entities, new Cesium.HeadingPitchRange(Cesium.Math.toRadians(-90), Cesium.Math.toRadians(-15), 7500))
+        viewer.zoomTo(
+          viewer.entities,
+          new Cesium.HeadingPitchRange(Cesium.Math.toRadians(-90), Cesium.Math.toRadians(-15), 7500)
+        )
       },
-      viewAircraft () {
-        const {Cesium, viewer} = this.cesiumInstance
+      viewAircraft() {
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.trackedEntity = this.$refs.entity.cesiumObject
       }
     }
   }
-</script> 
+</script>
 ```
 
 ## Instance Properties
 
-Reference official document [PathGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PathGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------- | ----------- | ---------------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the path. |
+| leadTime | Object | | `optional` A Property specifying the number of seconds behind the object to show. |
+| trailTime | Object | | `optional` A Property specifying the number of seconds in front of the object to show. |
+| width | Number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
+| resolution | Number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to draw the path. |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this path will be displayed. **structure: { near: number, far: number }** |
+
+---
+
+- Reference official document [PathGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PathGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

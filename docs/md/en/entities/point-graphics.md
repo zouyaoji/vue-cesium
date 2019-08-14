@@ -15,10 +15,10 @@
         <entity :position="position1" :description="description" :point.sync="point1">
           <point-graphics :color="color1" :pixelSize="8"></point-graphics>
         </entity>
-        <entity :position="position2" :description="description" :point.sync="point2">
+        <entity :position="position2" :description="description">
           <point-graphics :color="color2" :pixelSize="16"></point-graphics>
         </entity>
-        <entity :position="position3" :description="description" :point.sync="point3">
+        <entity :position="position3" :description="description">
           <point-graphics :color="color3" :pixelSize="32" @ready="subReady"></point-graphics>
         </entity>
       </cesium-viewer>
@@ -27,36 +27,32 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
-          point1: {},
+          point1: null,
           color1: {},
-          position1: {},
+          position1: { lng: -75.59777, lat: 40.03883 },
 
-          point2: {},
           color2: {},
-          position2: {},
+          position2: { lng: -80.5, lat: 35.14 },
 
-          point3: {},
           color3: {},
-          position3: {}
+          position3: undefined
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883)
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.color1 = Cesium.Color.RED
 
-          this.position2 = Cesium.Cartesian3.fromDegrees(-80.50, 35.14)
           this.color2 = Cesium.Color.BLUE
 
           this.position3 = Cesium.Cartesian3.fromDegrees(-80.12, 25.46)
           this.color3 = Cesium.Color.LIME
         },
-        subReady (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        subReady(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           viewer.zoomTo(viewer.entities)
         }
       }
@@ -73,10 +69,10 @@
       <entity :position="position1" :description="description" :point.sync="point1">
         <point-graphics :color="color1" :pixelSize="8"></point-graphics>
       </entity>
-      <entity :position="position2" :description="description" :point.sync="point2">
+      <entity :position="position2" :description="description">
         <point-graphics :color="color2" :pixelSize="16"></point-graphics>
       </entity>
-      <entity :position="position3" :description="description" :point.sync="point3">
+      <entity :position="position3" :description="description">
         <point-graphics :color="color3" :pixelSize="32" @ready="subReady"></point-graphics>
       </entity>
     </cesium-viewer>
@@ -85,36 +81,32 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
-        point1: {},
+        point1: null,
         color1: {},
-        position1: {},
+        position1: { lng: -75.59777, lat: 40.03883 },
 
-        point2: {},
         color2: {},
-        position2: {},
+        position2: { lng: -80.5, lat: 35.14 },
 
-        point3: {},
         color3: {},
-        position3: {}
+        position3: undefined
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.position1 = Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883)
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.color1 = Cesium.Color.RED
 
-        this.position2 = Cesium.Cartesian3.fromDegrees(-80.50, 35.14)
         this.color2 = Cesium.Color.BLUE
 
         this.position3 = Cesium.Cartesian3.fromDegrees(-80.12, 25.46)
         this.color3 = Cesium.Color.LIME
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       }
     }
@@ -124,25 +116,27 @@
 
 ## Instance Properties
 
-Reference official document [PointGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PointGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the point. |
+| pixelSize | Number | `1` | `optional` A numeric Property specifying the size in pixels. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| color | Object | `'WHITE'` | `optional` A Property specifying the Color of the point. |
+| outlineColor | Object | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| scaleByDistance | Object | | `optional` A NearFarScalar Property used to scale the point based on distance. **structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| translucencyByDistance | Object | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. **structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this point will be displayed. **structure: { near: number, far: number }** |
+| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+
+---
+
+- Reference official document [PointGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PointGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

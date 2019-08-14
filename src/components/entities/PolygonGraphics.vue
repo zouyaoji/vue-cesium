@@ -1,146 +1,75 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import {
+  show,
+  distanceDisplayCondition,
+  heightReference,
+  extrudedHeightReference,
+  fill,
+  material,
+  outline,
+  outlineColor,
+  outlineWidth,
+  shadows,
+  classificationType,
+  zIndex
+} from '@/mixins/entity/allProps'
+import polygonMixin from '@/mixins/entity/polygonMixin'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeColor, makeMaterial, makeDistanceDisplayCondition, makePolygonHierarchy } from '@/util/util'
 export default {
   name: 'polygon-graphics',
-  mixins: [entityGraphics],
+  mixins: [
+    show,
+    distanceDisplayCondition,
+    heightReference,
+    extrudedHeightReference,
+    fill,
+    material,
+    outline,
+    outlineColor,
+    outlineWidth,
+    shadows,
+    classificationType,
+    zIndex,
+    polygonMixin,
+    graphicsMixin
+  ],
   props: {
-    hierarchy: [Array, Object],
-    height: Number,
-    heightReference: Number,
-    extrudedHeight: Number,
-    extrudedHeightReference: Number,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    fill: {
-      type: Boolean,
-      default: true
-    },
-    material: Object,
-    outline: {
-      type: Boolean,
-      default: false
-    },
-    outlineColor: Object,
-    outlineWidth: {
-      type: Number,
-      default: 1.0
-    },
-    stRotation: {
-      type: [Number, Object],
-      default: 0.0
-    },
-    granularity: {
-      type: Number,
-      default: Math.PI / 180.0
-    },
-    perPositionHeight: {
-      type: Boolean,
-      default: false
-    },
-    closeTop: {
-      type: Boolean,
-      default: true
-    },
-    closeBottom: {
-      type: Boolean,
-      default: true
-    },
-    shadows: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: Object,
-    zIndex: Number
+    hierarchy: Array | Object
   },
   watch: {
-    hierarchy () {
-    },
-    height (val) {
-      this.graphics.height = val
-    },
-    heightReference (val) {
-      this.graphics.heightReference = val
-    },
-    extrudedHeight (val) {
-      this.graphics.extrudedHeight = val
-    },
-    extrudedHeightReference (val) {
-      this.graphics.extrudedHeightReference = val
-    },
-    show (val) {
-      this.graphics.show = val
-    },
-    fill (val) {
-      this.graphics.fill = val
-    },
-    material (val) {
-      this.graphics.material = val
-    },
-    outline (val) {
-      this.graphics.outline = val
-    },
-    outlineColor (val) {
-      this.graphics.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.graphics.outlineWidth = val
-    },
-    stRotation (val) {
-      this.graphics.stRotation = val
-    },
-    granularity (val) {
-      this.graphics.granularity = val
-    },
-    perPositionHeight (val) {
-      this.graphics.perPositionHeight = val
-    },
-    closeTop (val) {
-      this.graphics.closeTop = val
-    },
-    closeBottom (val) {
-      this.graphics.closeBottom = val
-    },
-    shadows (val) {
-      this.graphics.shadows = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
-    },
-    zIndex (val) {
-      this.graphics.zIndex = val
+    hierarchy (val) {
+      this.graphics.hierarchy = makePolygonHierarchy(val)
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, hierarchy, height, heightReference, extrudedHeight, extrudedHeightReference, show, fill, material, outline, outlineColor,
-        outlineWidth, stRotation, granularity, perPositionHeight, closeTop, closeBottom, shadows, distanceDisplayCondition, zIndex } = this
+      const { show, hierarchy, height, heightReference, extrudedHeight, extrudedHeightReference, stRotation, granularity, fill, material,
+        outline, outlineColor, outlineWidth, perPositionHeight, closeTop, closeBottom, arcType, shadows, distanceDisplayCondition, zIndex } = this
       let options = {
-        hierarchy,
+        show,
+        hierarchy: makePolygonHierarchy(hierarchy),
         height,
         heightReference,
         extrudedHeight,
         extrudedHeightReference,
-        show,
-        fill,
-        material,
-        outline,
-        outlineColor,
-        outlineWidth,
         stRotation,
         granularity,
+        fill,
+        material: makeMaterial(material),
+        outline,
+        outlineColor: makeColor(outlineColor),
+        outlineWidth,
         perPositionHeight,
         closeTop,
         closeBottom,
+        arcType,
         shadows,
-        distanceDisplayCondition,
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
         zIndex
       }
       this.removeNullItem(options)
-      let polygon = new Cesium.PolygonGraphics(options)
-      polygon.hierarchy = new Cesium.CallbackProperty(() => this.hierarchy, false)
-      return polygon
+      return new Cesium.PolygonGraphics(options)
     }
   }
 }

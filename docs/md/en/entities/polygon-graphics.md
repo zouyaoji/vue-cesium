@@ -16,19 +16,45 @@
           <polygon-graphics :hierarchy="hierarchy1" :material="material1"></polygon-graphics>
         </entity>
         <entity :description="description" :polygon.sync="polygon2">
-          <polygon-graphics :hierarchy="hierarchy2" :material="material2" :extrudedHeight="500000.0" :closeTop="false" :closeBottom="false"></polygon-graphics>
+          <polygon-graphics
+            :hierarchy="hierarchy2"
+            :material="material2"
+            :extrudedHeight="500000.0"
+            :closeTop="false"
+            :closeBottom="false"
+          ></polygon-graphics>
         </entity>
         <entity :description="description" :polygon.sync="polygon3">
-          <polygon-graphics :hierarchy="hierarchy3" :material="material3" :extrudedHeight="0" :perPositionHeight="true" :outline="true" :outlineColor="outlineColor3"></polygon-graphics>
+          <polygon-graphics
+            :hierarchy="hierarchy3"
+            :material="material3"
+            :extrudedHeight="0"
+            :perPositionHeight="true"
+            :outline="true"
+            :outlineColor="outlineColor3"
+          ></polygon-graphics>
         </entity>
         <entity :description="description" :polygon.sync="polygon4">
           <polygon-graphics :hierarchy="hierarchy4" :material="material4" :height="0" :outline="true"></polygon-graphics>
         </entity>
         <entity :description="description" :polygon.sync="polygon5">
-          <polygon-graphics :hierarchy="hierarchy5" :material="material5" :perPositionHeight="true" :outline="true" :outlineColor="outlineColor5"></polygon-graphics>
+          <polygon-graphics
+            :hierarchy="hierarchy5"
+            :material="material5"
+            :perPositionHeight="true"
+            :outline="true"
+            :outlineColor="outlineColor5"
+          ></polygon-graphics>
         </entity>
         <entity :description="description" :polygon.sync="polygon6">
-          <polygon-graphics :hierarchy="hierarchy6" :material="material6" :extrudedHeight="50000" :outline="true" :outlineColor="outlineColor6" @ready="subReady"></polygon-graphics>
+          <polygon-graphics
+            :hierarchy="hierarchy6"
+            :material="material6"
+            :extrudedHeight="50000"
+            :outline="true"
+            :outlineColor="outlineColor6"
+            @ready="subReady"
+          ></polygon-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -36,16 +62,22 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
           polygon1: {},
-          hierarchy1: [],
-          material1: {},
+          hierarchy1: [
+            { lng: -115, lat: 37.0 },
+            { lng: -115, lat: 32.0 },
+            { lng: -107, lat: 33.0 },
+            { lng: -102, lat: 31.0 },
+            { lng: -102, lat: 35.0 }
+          ],
+          material1: 'red',
 
           polygon2: {},
           hierarchy2: [],
-          material2: {},
+          material2: 'GREEN',
 
           polygon3: {},
           hierarchy3: [],
@@ -53,13 +85,50 @@
           outlineColor3: {},
 
           polygon4: {},
-          hierarchy4: [],
+          hierarchy4: {
+            positions: [
+              { lng: -99.0, lat: 30.0 },
+              { lng: -85.0, lat: 30.0 },
+              { lng: -85.0, lat: 40.0 },
+              { lng: -99.0, lat: 40.0 }
+            ],
+            holes: [
+              {
+                positions: [
+                  { lng: -97.0, lat: 31.0 },
+                  { lng: -97.0, lat: 39.0 },
+                  { lng: -87.0, lat: 39.0 },
+                  { lng: -87.0, lat: 31.0 }
+                ],
+                holes: [
+                  {
+                    positions: [
+                      { lng: -95.0, lat: 33.0 },
+                      { lng: -89.0, lat: 33.0 },
+                      { lng: -89.0, lat: 37.0 },
+                      { lng: -95.0, lat: 37.0 }
+                    ],
+                    holes: [
+                      {
+                        positions: [
+                          { lng: -93.0, lat: 34.0 },
+                          { lng: -91.0, lat: 34.0 },
+                          { lng: -91.0, lat: 36.0 },
+                          { lng: -93.0, lat: 36.0 }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
           material4: {},
 
           polygon5: {},
           hierarchy5: [],
           material5: {},
-          outlineColor5: {},
+          outlineColor5: 'BLACK',
 
           polygon6: {},
           hierarchy6: [],
@@ -69,86 +138,35 @@
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.hierarchy1 = Cesium.Cartesian3.fromDegreesArray(
-            [
-              -115.0, 37.0,
-              -115.0, 32.0,
-              -107.0, 33.0,
-              -102.0, 31.0,
-              -102.0, 35.0
-            ])
-          this.material1 = Cesium.Color.RED
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
 
-          this.hierarchy2 = Cesium.Cartesian3.fromDegreesArray(
-            [
-              -108.0, 42.0,
-              -100.0, 42.0,
-              -104.0, 40.0
-            ])
-          this.material2 = Cesium.Color.GREEN
+          this.hierarchy2 = [{ lng: -108.0, lat: 42.0 }, { lng: -100.0, lat: 42.0 }, { lng: -104.0, lat: 40.0 }]
 
-          this.hierarchy3 = Cesium.Cartesian3.fromDegreesArrayHeights(
-            [
-              -108.0, 25.0, 100000,
-              -100.0, 25.0, 100000,
-              -100.0, 30.0, 100000,
-              -108.0, 30.0, 300000
-            ])
+          this.hierarchy3 = [
+            { lng: -108.0, lat: 25.0, height: 100000 },
+            { lng: -100.0, lat: 25.0, height: 100000 },
+            { lng: -100.0, lat: 30.0, height: 100000 },
+            { lng: -108.0, lat: 30.0, height: 100000 }
+          ]
+
           this.materia3 = Cesium.Color.ORANGE.withAlpha(0.5)
-          this.outlineColor3 = Cesium.Color.BLACK
-          this.hierarchy4 =
-          {
-            positions: Cesium.Cartesian3.fromDegreesArray(
-              [-99.0, 30.0,
-                -85.0, 30.0,
-                -85.0, 40.0,
-                -99.0, 40.0
-              ]),
-            holes: [{
-              positions: Cesium.Cartesian3.fromDegreesArray([
-                -97.0, 31.0,
-                -97.0, 39.0,
-                -87.0, 39.0,
-                -87.0, 31.0
-              ]),
-              holes: [{
-                positions: Cesium.Cartesian3.fromDegreesArray([
-                  -95.0, 33.0,
-                  -89.0, 33.0,
-                  -89.0, 37.0,
-                  -95.0, 37.0
-                ]),
-                holes: [{
-                  positions: Cesium.Cartesian3.fromDegreesArray([
-                    -93.0, 34.0,
-                    -91.0, 34.0,
-                    -91.0, 36.0,
-                    -93.0, 36.0
-                  ])
-                }]
-              }]
-            }]
-          }
+
           this.material4 = Cesium.Color.BLUE.withAlpha(0.5)
 
           this.material5 = Cesium.Color.CYAN.withAlpha(0.5)
-          this.outlineColor5 = Cesium.Color.BLACK
 
-          this.hierarchy6 = Cesium.Cartesian3.fromDegreesArray(
-            [
-              -120.0, 45.0,
-              -80.0, 45.0,
-              -80.0, 55.0,
-              -120.0, 55.0
-            ])
+          this.hierarchy6 = [
+            { lng: -120.0, lat: 45.0 },
+            { lng: -80.0, lat: 45.0 },
+            { lng: -80.0, lat: 55.0 },
+            { lng: -120.0, lat: 55.0 }
+          ]
           this.material6 = Cesium.Color.PURPLE
           this.outlineColor6 = Cesium.Color.MAGENTA
-          // this.arcType6 = Cesium.ArcType.RHUMB
         },
-        subReady (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        subReady(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           viewer.zoomTo(viewer.entities)
         }
       }
@@ -166,19 +184,45 @@
         <polygon-graphics :hierarchy="hierarchy1" :material="material1"></polygon-graphics>
       </entity>
       <entity :description="description" :polygon.sync="polygon2">
-        <polygon-graphics :hierarchy="hierarchy2" :material="material2" :extrudedHeight="500000.0" :closeTop="false" :closeBottom="false"></polygon-graphics>
+        <polygon-graphics
+          :hierarchy="hierarchy2"
+          :material="material2"
+          :extrudedHeight="500000.0"
+          :closeTop="false"
+          :closeBottom="false"
+        ></polygon-graphics>
       </entity>
       <entity :description="description" :polygon.sync="polygon3">
-        <polygon-graphics :hierarchy="hierarchy3" :material="material3" :extrudedHeight="0" :perPositionHeight="true" :outline="true" :outlineColor="outlineColor3"></polygon-graphics>
+        <polygon-graphics
+          :hierarchy="hierarchy3"
+          :material="material3"
+          :extrudedHeight="0"
+          :perPositionHeight="true"
+          :outline="true"
+          :outlineColor="outlineColor3"
+        ></polygon-graphics>
       </entity>
       <entity :description="description" :polygon.sync="polygon4">
         <polygon-graphics :hierarchy="hierarchy4" :material="material4" :height="0" :outline="true"></polygon-graphics>
       </entity>
       <entity :description="description" :polygon.sync="polygon5">
-        <polygon-graphics :hierarchy="hierarchy5" :material="material5" :perPositionHeight="true" :outline="true" :outlineColor="outlineColor5"></polygon-graphics>
+        <polygon-graphics
+          :hierarchy="hierarchy5"
+          :material="material5"
+          :perPositionHeight="true"
+          :outline="true"
+          :outlineColor="outlineColor5"
+        ></polygon-graphics>
       </entity>
       <entity :description="description" :polygon.sync="polygon6">
-        <polygon-graphics :hierarchy="hierarchy6" :material="material6" :extrudedHeight="50000" :outline="true" :outlineColor="outlineColor6" @ready="subReady"></polygon-graphics>
+        <polygon-graphics
+          :hierarchy="hierarchy6"
+          :material="material6"
+          :extrudedHeight="50000"
+          :outline="true"
+          :outlineColor="outlineColor6"
+          @ready="subReady"
+        ></polygon-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -186,16 +230,22 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         polygon1: {},
-        hierarchy1: [],
-        material1: {},
+        hierarchy1: [
+          { lng: -115, lat: 37.0 },
+          { lng: -115, lat: 32.0 },
+          { lng: -107, lat: 33.0 },
+          { lng: -102, lat: 31.0 },
+          { lng: -102, lat: 35.0 }
+        ],
+        material1: 'red',
 
         polygon2: {},
         hierarchy2: [],
-        material2: {},
+        material2: 'GREEN',
 
         polygon3: {},
         hierarchy3: [],
@@ -203,13 +253,50 @@
         outlineColor3: {},
 
         polygon4: {},
-        hierarchy4: [],
+        hierarchy4: {
+          positions: [
+            { lng: -99.0, lat: 30.0 },
+            { lng: -85.0, lat: 30.0 },
+            { lng: -85.0, lat: 40.0 },
+            { lng: -99.0, lat: 40.0 }
+          ],
+          holes: [
+            {
+              positions: [
+                { lng: -97.0, lat: 31.0 },
+                { lng: -97.0, lat: 39.0 },
+                { lng: -87.0, lat: 39.0 },
+                { lng: -87.0, lat: 31.0 }
+              ],
+              holes: [
+                {
+                  positions: [
+                    { lng: -95.0, lat: 33.0 },
+                    { lng: -89.0, lat: 33.0 },
+                    { lng: -89.0, lat: 37.0 },
+                    { lng: -95.0, lat: 37.0 }
+                  ],
+                  holes: [
+                    {
+                      positions: [
+                        { lng: -93.0, lat: 34.0 },
+                        { lng: -91.0, lat: 34.0 },
+                        { lng: -91.0, lat: 36.0 },
+                        { lng: -93.0, lat: 36.0 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         material4: {},
 
         polygon5: {},
         hierarchy5: [],
         material5: {},
-        outlineColor5: {},
+        outlineColor5: 'BLACK',
 
         polygon6: {},
         hierarchy6: [],
@@ -219,86 +306,35 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.hierarchy1 = Cesium.Cartesian3.fromDegreesArray(
-          [
-            -115.0, 37.0,
-            -115.0, 32.0,
-            -107.0, 33.0,
-            -102.0, 31.0,
-            -102.0, 35.0
-          ])
-        this.material1 = Cesium.Color.RED
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
 
-        this.hierarchy2 = Cesium.Cartesian3.fromDegreesArray(
-          [
-            -108.0, 42.0,
-            -100.0, 42.0,
-            -104.0, 40.0
-          ])
-        this.material2 = Cesium.Color.GREEN
+        this.hierarchy2 = [{ lng: -108.0, lat: 42.0 }, { lng: -100.0, lat: 42.0 }, { lng: -104.0, lat: 40.0 }]
 
-        this.hierarchy3 = Cesium.Cartesian3.fromDegreesArrayHeights(
-          [
-            -108.0, 25.0, 100000,
-            -100.0, 25.0, 100000,
-            -100.0, 30.0, 100000,
-            -108.0, 30.0, 300000
-          ])
+        this.hierarchy3 = [
+          { lng: -108.0, lat: 25.0, height: 100000 },
+          { lng: -100.0, lat: 25.0, height: 100000 },
+          { lng: -100.0, lat: 30.0, height: 100000 },
+          { lng: -108.0, lat: 30.0, height: 100000 }
+        ]
+
         this.materia3 = Cesium.Color.ORANGE.withAlpha(0.5)
-        this.outlineColor3 = Cesium.Color.BLACK
-        this.hierarchy4 =
-        {
-          positions: Cesium.Cartesian3.fromDegreesArray(
-            [-99.0, 30.0,
-              -85.0, 30.0,
-              -85.0, 40.0,
-              -99.0, 40.0
-            ]),
-          holes: [{
-            positions: Cesium.Cartesian3.fromDegreesArray([
-              -97.0, 31.0,
-              -97.0, 39.0,
-              -87.0, 39.0,
-              -87.0, 31.0
-            ]),
-            holes: [{
-              positions: Cesium.Cartesian3.fromDegreesArray([
-                -95.0, 33.0,
-                -89.0, 33.0,
-                -89.0, 37.0,
-                -95.0, 37.0
-              ]),
-              holes: [{
-                positions: Cesium.Cartesian3.fromDegreesArray([
-                  -93.0, 34.0,
-                  -91.0, 34.0,
-                  -91.0, 36.0,
-                  -93.0, 36.0
-                ])
-              }]
-            }]
-          }]
-        }
+
         this.material4 = Cesium.Color.BLUE.withAlpha(0.5)
 
         this.material5 = Cesium.Color.CYAN.withAlpha(0.5)
-        this.outlineColor5 = Cesium.Color.BLACK
 
-        this.hierarchy6 = Cesium.Cartesian3.fromDegreesArray(
-          [
-            -120.0, 45.0,
-            -80.0, 45.0,
-            -80.0, 55.0,
-            -120.0, 55.0
-          ])
+        this.hierarchy6 = [
+          { lng: -120.0, lat: 45.0 },
+          { lng: -80.0, lat: 45.0 },
+          { lng: -80.0, lat: 55.0 },
+          { lng: -120.0, lat: 55.0 }
+        ]
         this.material6 = Cesium.Color.PURPLE
         this.outlineColor6 = Cesium.Color.MAGENTA
-        // this.arcType6 = Cesium.ArcType.RHUMB
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       }
     }
@@ -308,25 +344,59 @@
 
 ## Instance Properties
 
-Reference official document [PolygonGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the polygon. |
+| hierarchy | Object\|Array | | `optional` A Property specifying the PolygonHierarchy. |
+| height | Number | `0` | `optional` A numeric Property specifying the altitude of the polygon relative to the ellipsoid surface. |
+| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the polygon's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| stRotation | Number\|Object | `0.0` | `optional` A numeric property specifying the rotation of the polygon texture counter-clockwise from north. |
+| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the polygon. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| perPositionHeight | Boolean | `false` | `optional` A boolean specifying whether or not the the height of each position is used. |
+| closeTop | Boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
+| closeBottom | Boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
+| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the polygon casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this polygon will be displayed. **structure: { near: number, far: number }** |
+| classificationType | Number | `2` | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2, NUMBER_OF_CLASSIFICATION_TYPES: 3** |
+| zIndex | Number | `0` | `optional` A property specifying the zIndex used for ordering ground geometry. Only has an effect if the polygon is constant and neither height or extrudedHeight are specified. |
+
+---
+
+- structure of hierarchy
+
+```js
+// Array
+[{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}]
+// Object
+{
+  positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}],
+  holes: [
+    {
+      positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}],
+      holes: [
+        positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}]
+        // ...
+      ]
+    }
+  ]
+}
+
+```
+
+- Reference official document [PolygonGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
-|definitionChanged||Gets the event that is raised whenever a property or sub-property is changed or modified.|
+| name              | parameter        | description                                                                                    |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| definitionChanged |                  | Gets the event that is raised whenever a property or sub-property is changed or modified.      |

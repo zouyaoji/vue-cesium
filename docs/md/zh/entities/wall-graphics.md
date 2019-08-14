@@ -13,13 +13,25 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <entity :description="description" :wall.sync="wall1">
-          <wall-graphics :positions="positions1" :material="material1" :minimumHeights="[100000.0, 100000.0]"></wall-graphics>
+          <wall-graphics
+            :positions="positions1"
+            :material="material1"
+            :minimumHeights="[100000.0, 100000.0]"
+          ></wall-graphics>
         </entity>
         <entity :description="description" :wall.sync="wall2">
-          <wall-graphics :positions="positions2" :material="material2" :outline="true"></wall-graphics>
+          <wall-graphics :positions="positions2" :material="material2" :outline="true" heightPositions></wall-graphics>
         </entity>
         <entity :description="description" :wall.sync="wall3">
-          <wall-graphics :positions="positions3" :material="material3" :outline="true" :outlineColor="outlineColor3" :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000]" :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000, 0]" @ready="subReady"></wall-graphics>
+          <wall-graphics
+            :positions="positions3"
+            :material="material3"
+            :outline="true"
+            :outlineColor="outlineColor3"
+            :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000]"
+            :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000, 0]"
+            @ready="subReady"
+          ></wall-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -27,62 +39,53 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
           wall1: {},
           positions1: [],
-          material1: {},
+          material1: 'RED',
 
           wall2: {},
-          positions2: [],
+          positions2: [
+            { lng: -107.0, lat: 43.0, height: 100000.0 },
+            { lng: -97.0, lat: 43.0, height: 100000.0 },
+            { lng: -97.0, lat: 40.0, height: 100000.0 },
+            { lng: -107.0, lat: 40.0, height: 100000.0 },
+            { lng: -107.0, lat: 43.0, height: 100000.0 }
+          ],
           material2: {},
 
           wall3: {},
-          positions3: [],
+          positions3: [
+            { lng: -115.0, lat: 50.0 },
+            { lng: -112.0, lat: 50.0 },
+            { lng: -107.5, lat: 50.0 },
+            { lng: -105.0, lat: 50.0 },
+            { lng: -102.5, lat: 50.0 },
+            { lng: -100.0, lat: 50.0 },
+            { lng: -97.5, lat: 50.0 },
+            { lng: -95.0, lat: 50.0 },
+            { lng: -92.5, lat: 50.0 },
+            { lng: -90.0, lat: 50.0 }
+          ],
           material3: {},
           outlineColor3: {}
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.positions1 = Cesium.Cartesian3.fromDegreesArrayHeights(
-            [
-              -115.0, 44.0, 200000.0,
-              -90.0, 44.0, 200000.0
-            ])
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+          this.positions1 = [{ lng: -115.0, lat: 44.0, height: 200000.0 }, { lng: -90.0, lat: 44.0, height: 200000.0 }]
           this.material1 = Cesium.Color.RED
 
-          this.positions2 =  Cesium.Cartesian3.fromDegreesArrayHeights(
-            [
-              -107.0, 43.0, 100000.0,
-              -97.0, 43.0, 100000.0,
-              -97.0, 40.0, 100000.0,
-              -107.0, 40.0, 100000.0,
-              -107.0, 43.0, 100000.0
-            ])
           this.material2 = Cesium.Color.GREEN
 
-          this.positions3 = Cesium.Cartesian3.fromDegreesArray(
-            [
-              -115.0, 50.0,
-              -112.5, 50.0,
-              -110.0, 50.0,
-              -107.5, 50.0,
-              -105.0, 50.0,
-              -102.5, 50.0,
-              -100.0, 50.0,
-              -97.5, 50.0,
-              -95.0, 50.0,
-              -92.5, 50.0,
-              -90.0, 50.0
-            ])
           this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
           this.outlineColor3 = Cesium.Color.BLACK
         },
-        subReady (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        subReady(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           viewer.zoomTo(viewer.entities)
         }
       }
@@ -97,13 +100,25 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <entity :description="description" :wall.sync="wall1">
-        <wall-graphics :positions="positions1" :material="material1" :minimumHeights="[100000.0, 100000.0]"></wall-graphics>
+        <wall-graphics
+          :positions="positions1"
+          :material="material1"
+          :minimumHeights="[100000.0, 100000.0]"
+        ></wall-graphics>
       </entity>
       <entity :description="description" :wall.sync="wall2">
-        <wall-graphics :positions="positions2" :material="material2" :outline="true"></wall-graphics>
+        <wall-graphics :positions="positions2" :material="material2" :outline="true" heightPositions></wall-graphics>
       </entity>
       <entity :description="description" :wall.sync="wall3">
-        <wall-graphics :positions="positions3" :material="material3" :outline="true" :outlineColor="outlineColor3" :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000]" :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000, 0]" @ready="subReady"></wall-graphics>
+        <wall-graphics
+          :positions="positions3"
+          :material="material3"
+          :outline="true"
+          :outlineColor="outlineColor3"
+          :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000]"
+          :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000, 0]"
+          @ready="subReady"
+        ></wall-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -111,62 +126,53 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         wall1: {},
         positions1: [],
-        material1: {},
+        material1: 'RED',
 
         wall2: {},
-        positions2: [],
+        positions2: [
+          { lng: -107.0, lat: 43.0, height: 100000.0 },
+          { lng: -97.0, lat: 43.0, height: 100000.0 },
+          { lng: -97.0, lat: 40.0, height: 100000.0 },
+          { lng: -107.0, lat: 40.0, height: 100000.0 },
+          { lng: -107.0, lat: 43.0, height: 100000.0 }
+        ],
         material2: {},
 
         wall3: {},
-        positions3: [],
+        positions3: [
+          { lng: -115.0, lat: 50.0 },
+          { lng: -112.0, lat: 50.0 },
+          { lng: -107.5, lat: 50.0 },
+          { lng: -105.0, lat: 50.0 },
+          { lng: -102.5, lat: 50.0 },
+          { lng: -100.0, lat: 50.0 },
+          { lng: -97.5, lat: 50.0 },
+          { lng: -95.0, lat: 50.0 },
+          { lng: -92.5, lat: 50.0 },
+          { lng: -90.0, lat: 50.0 }
+        ],
         material3: {},
         outlineColor3: {}
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.positions1 = Cesium.Cartesian3.fromDegreesArrayHeights(
-          [
-            -115.0, 44.0, 200000.0,
-            -90.0, 44.0, 200000.0
-          ])
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        this.positions1 = [{ lng: -115.0, lat: 44.0, height: 200000.0 }, { lng: -90.0, lat: 44.0, height: 200000.0 }]
         this.material1 = Cesium.Color.RED
 
-        this.positions2 =  Cesium.Cartesian3.fromDegreesArrayHeights(
-          [
-            -107.0, 43.0, 100000.0,
-            -97.0, 43.0, 100000.0,
-            -97.0, 40.0, 100000.0,
-            -107.0, 40.0, 100000.0,
-            -107.0, 43.0, 100000.0
-          ])
         this.material2 = Cesium.Color.GREEN
 
-        this.positions3 = Cesium.Cartesian3.fromDegreesArray(
-          [
-            -115.0, 50.0,
-            -112.5, 50.0,
-            -110.0, 50.0,
-            -107.5, 50.0,
-            -105.0, 50.0,
-            -102.5, 50.0,
-            -100.0, 50.0,
-            -97.5, 50.0,
-            -95.0, 50.0,
-            -92.5, 50.0,
-            -90.0, 50.0
-          ])
         this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
         this.outlineColor3 = Cesium.Color.BLACK
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       }
     }
@@ -176,25 +182,29 @@
 
 ## 属性
 
-参考官方文档 [WallGraphics](https://cesiumjs.org/Cesium/Build/Documentation/WallGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ------------------------ | ------- | ----------- | -------------------------------------------------- |
+| show | Boolean | `true` | `optional` 指定 wall 是否显示。 |
+| positions | Array | | `optional` 指定 wall 顶部的位置数组。 **结构：[{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
+| minimumHeights | Array | | `optional` 指定 wall 底部的高度数组。 |
+| maximumHeights | Array | | `optional` 指定 wall 顶部的高度数组。 |
+| granularity | Number | | `optional` 指定每个纬度和经度之间的角距离。 |
+| fill | Boolean | `true` | `optional` 指定 wall 是否填充材质。 |
+| material | Object\|String\|Array | `'WHITE'` | `optional` 指定 wall 材质。 |
+| outline | Boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` 指定 wall 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 wall 轮廓线宽度。 |
+| shadows | Number | `0` | `optional` 指定 wall 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` 指定 wall 随相机距离改变的显示条件。 **结构：{ near: number, far: number }** |
+
+---
+
+- 官方文档 [WallGraphics](https://cesiumjs.org/Cesium/Build/Documentation/WallGraphics.html)
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|definitionChanged||每当更改或修改属性或子属性时触发该事件。|
+| 事件名            | 参数             | 描述                                                |
+| ----------------- | ---------------- | --------------------------------------------------- |
+| ready             | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| definitionChanged |                  | 每当更改或修改属性或子属性时触发该事件。            |

@@ -1,76 +1,29 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import { heightReference } from '@/mixins/entity/allProps'
+import pointMixin from '@/mixins/entity/pointMixin'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeColor, makeDistanceDisplayCondition, makeNearFarScalar } from '@/util/util'
 export default {
   name: 'point-graphics',
-  mixins: [entityGraphics],
-  props: {
-    color: Object,
-    pixelSize: {
-      type: Number,
-      default: 1
-    },
-    outlineColor: Object,
-    outlineWidth: Number,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    scaleByDistance: Object,
-    heightReference: Number,
-    distanceDisplayCondition: Object,
-    disableDepthTestDistance: [Object, Number]
-  },
-  watch: {
-    color (val) {
-      this.graphics.color = val
-    },
-    pixelSize (val) {
-      this.graphics.pixelSize = val
-    },
-    outlineColor (val) {
-      this.graphics.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.graphics.outlineWidth = val
-    },
-    show (val) {
-      this.graphics.show = val
-    },
-    scaleByDistance (val) {
-      this.graphics.scaleByDistance = val
-    },
-    translucencyByDistance (val) {
-      this.graphics.translucencyByDistance = val
-    },
-    heightReference (val) {
-      this.graphics.heightReference = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
-    },
-    disableDepthTestDistance (val) {
-      this.graphics.disableDepthTestDistance = val
-    }
-  },
+  mixins: [heightReference, pointMixin, graphicsMixin],
   methods: {
     createCesiumObject () {
-      const { Cesium, color, pixelSize, outlineColor, outlineWidth, show, scaleByDistance, translucencyByDistance, heightReference,
+      const { show, pixelSize, heightReference, color, outlineColor, outlineWidth, scaleByDistance, translucencyByDistance,
         distanceDisplayCondition, disableDepthTestDistance } = this
       let options = {
-        color,
-        pixelSize,
-        outlineColor,
-        outlineWidth,
         show,
-        scaleByDistance,
-        translucencyByDistance,
+        pixelSize,
         heightReference,
-        distanceDisplayCondition,
+        color: makeColor(color),
+        outlineColor: makeColor(outlineColor),
+        outlineWidth,
+        scaleByDistance: makeNearFarScalar(scaleByDistance),
+        translucencyByDistance: makeNearFarScalar(translucencyByDistance),
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
         disableDepthTestDistance
       }
       this.removeNullItem(options)
-      let point = new Cesium.PointGraphics(options)
-      return point
+      return new Cesium.PointGraphics(options)
     }
   }
 }

@@ -1,155 +1,78 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import modelMixin from '@/mixins/entity/modelMixin'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeTranslationRotationScale, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '@/util/util'
 export default {
   name: 'model-graphics',
-  mixins: [entityGraphics],
+  mixins: [modelMixin, graphicsMixin],
   props: {
     uri: String,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    scale: {
-      type: Number,
-      default: 1.0
-    },
-    minimumPixelSize: {
-      type: Number,
-      default: 0.0
-    },
-    maximumScale: Number,
-    incrementallyLoadTextures: {
-      type: Boolean,
-      default: true
-    },
     runAnimations: {
       type: Boolean,
       default: true
     },
-    clampAnimations: {
-      type: Boolean,
-      default: true
+    imageBasedLightingFactor: {
+      type: Object,
+      default: () => {
+        return {
+          x: 1.0, y: 1.0
+        }
+      }
     },
+    lightColor: Object,
     nodeTransformations: Object,
-    shadows: {
-      type: Number,
-      default: 1
-    },
-    heightReference: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: Object,
-    silhouetteColor: Object,
-    silhouetteSize: {
-      type: Number,
-      default: 0.0
-    },
-    color: Object,
-    colorBlendMode: {
-      type: Number,
-      default: 0
-    },
-    colorBlendAmount: {
-      type: Number,
-      default: 0.5
-    },
-    clippingPlanes: Object,
-    imageBasedLightingFactor: Object,
-    lightColor: Object
+    articulations: Object
   },
   watch: {
     uri (val) {
       this.graphics.uri = val
     },
-    show (val) {
-      this.graphics.show = val
-    },
-    scale (val) {
-      this.graphics.scale = val
-    },
-    minimumPixelSize (val) {
-      this.graphics.minimumPixelSize = val
-    },
-    maximumScale (val) {
-      this.graphics.maximumScale = val
-    },
-    incrementallyLoadTextures (val) {
-      this.graphics.incrementallyLoadTextures = val
-    },
     runAnimations (val) {
       this.graphics.runAnimations = val
     },
-    clampAnimations (val) {
-      this.graphics.clampAnimations = val
-    },
     nodeTransformations (val) {
-      this.graphics.nodeTransformations = val
-    },
-    shadows (val) {
-      this.graphics.shadows = val
-    },
-    heightReference (val) {
-      this.graphics.heightReference = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
-    },
-    silhouetteColor (val) {
-      this.graphics.silhouetteColor = val
-    },
-    silhouetteSize (val) {
-      this.graphics.silhouetteSize = val
-    },
-    color (val) {
-      this.graphics.color = val
-    },
-    colorBlendMode (val) {
-      this.graphics.colorBlendMode = val
-    },
-    colorBlendAmount (val) {
-      this.graphics.colorBlendAmount = val
-    },
-    clippingPlanes (val) {
-      this.graphics.clippingPlanes = val
+      this.graphics.nodeTransformations = makeTranslationRotationScale(val)
     },
     imageBasedLightingFactor (val) {
-      this.graphics.imageBasedLightingFactor = val
+      this.graphics.imageBasedLightingFactor = makeCartesian2(val)
     },
     lightColor (val) {
-      this.graphics.lightColor = val
+      this.graphics.lightColor = makeCartesian3(val)
+    },
+    articulations (val) {
+      this.graphics.articulations = val
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, uri, show, scale, minimumPixelSize, maximumScale, incrementallyLoadTextures, runAnimations, clampAnimations, nodeTransformations,
-        shadows, heightReference, distanceDisplayCondition, silhouetteColor, silhouetteSize, color, colorBlendMode, colorBlendAmount, clippingPlanes,
-        imageBasedLightingFactor, lightColor } = this
+      const { show, uri, scale, minimumPixelSize, maximumScale, incrementallyLoadTextures, runAnimations, clampAnimations, shadows, heightReference,
+        silhouetteColor, silhouetteSize, color, colorBlendMode, colorBlendAmount, imageBasedLightingFactor, lightColor,
+        distanceDisplayCondition, nodeTransformations, articulations, clippingPlanes } = this
       let options = {
-        uri,
         show,
+        uri,
         scale,
         minimumPixelSize,
         maximumScale,
         incrementallyLoadTextures,
         runAnimations,
         clampAnimations,
-        nodeTransformations,
         shadows,
         heightReference,
-        distanceDisplayCondition,
-        silhouetteColor,
+        silhouetteColor: makeColor(silhouetteColor),
         silhouetteSize,
-        color,
+        color: makeColor(color),
         colorBlendMode,
         colorBlendAmount,
-        clippingPlanes,
-        imageBasedLightingFactor,
-        lightColor
+        imageBasedLightingFactor: makeCartesian2(imageBasedLightingFactor),
+        lightColor: makeColor(lightColor),
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
+        nodeTransformations: makeTranslationRotationScale(nodeTransformations),
+        articulations,
+        clippingPlanes
       }
       this.removeNullItem(options)
-      let model = new Cesium.ModelGraphics(options)
-      return model
+      return new Cesium.ModelGraphics(options)
     }
   }
 }

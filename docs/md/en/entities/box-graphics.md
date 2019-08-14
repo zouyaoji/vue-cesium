@@ -16,10 +16,20 @@
           <box-graphics :dimensions="dimensions1" :material="material1"></box-graphics>
         </entity>
         <entity :position="position2" :description="description" :box.sync="box2">
-          <box-graphics :dimensions="dimensions2" :material="material2" :outlineColor="outlineColor2" :outline="true"></box-graphics>
+          <box-graphics
+            :dimensions="dimensions2"
+            :material="material2"
+            :outlineColor="outlineColor2"
+            :outline="true"
+          ></box-graphics>
         </entity>
         <entity :position="position3" :description="description" :box.sync="box3">
-          <box-graphics :dimensions="dimensions3" :material="material3" :outlineColor="outlineColor3" :fill="false" :outline="true"></box-graphics>
+          <box-graphics
+            :dimensions="dimensions3"
+            :outlineColor="outlineColor3"
+            :fill="false"
+            :outline="true"
+          ></box-graphics>
         </entity>
       </cesium-viewer>
     </div>
@@ -27,40 +37,31 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
           box1: {},
-          position1: {},
-          dimensions1: {},
-          material1: {},
+          position1: { lng: 105.0, lat: 40.0, height: 300000.0 },
+          dimensions1: { x: 400000.0, y: 300000.0, z: 500000.0 },
+          material1: 'BLUE',
 
           box2: {},
-          position2: {},
-          dimensions2: {},
+          position2: { lng: 110.0, lat: 40.0, height: 300000.0 },
+          dimensions2: { x: 400000.0, y: 300000.0, z: 500000.0 },
           material2: {},
-          outlineColor2: {},
+          outlineColor2: 'BLACK',
 
           box3: {},
-          position3: {},
-          dimensions3: {},
-          material3: {},
-          outlineColor3: {}
+          position3: { lng: 100.0, lat: 40.0, height: 300000.0 },
+          dimensions3: { x: 400000.0, y: 300000.0, z: 500000.0 },
+          outlineColor3: 'YELLOW'
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 300000.0)
-          this.dimensions1 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
-          this.material1 = Cesium.Color.BLUE
-          this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 300000.0)
-          this.dimensions2 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
-          this.outlineColor2 = Cesium.Color.BLACK
-          this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
-          this.dimensions3 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
-          this.outlineColor3 = Cesium.Color.YELLOW
         }
       }
     }
@@ -77,10 +78,20 @@
         <box-graphics :dimensions="dimensions1" :material="material1"></box-graphics>
       </entity>
       <entity :position="position2" :description="description" :box.sync="box2">
-        <box-graphics :dimensions="dimensions2" :material="material2" :outlineColor="outlineColor2" :outline="true"></box-graphics>
+        <box-graphics
+          :dimensions="dimensions2"
+          :material="material2"
+          :outlineColor="outlineColor2"
+          :outline="true"
+        ></box-graphics>
       </entity>
       <entity :position="position3" :description="description" :box.sync="box3">
-        <box-graphics :dimensions="dimensions3" :material="material3" :outlineColor="outlineColor3" :fill="false" :outline="true"></box-graphics>
+        <box-graphics
+          :dimensions="dimensions3"
+          :outlineColor="outlineColor3"
+          :fill="false"
+          :outline="true"
+        ></box-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -88,38 +99,31 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         box1: {},
-        position1: {},
-        dimensions1: {},
-        material1: {},
+        position1: { lng: 105.0, lat: 40.0, height: 300000.0 },
+        dimensions1: { x: 400000.0, y: 300000.0, z: 500000.0 },
+        material1: 'BLUE',
+
         box2: {},
-        position2: {},
-        dimensions2: {},
+        position2: { lng: 110.0, lat: 40.0, height: 300000.0 },
+        dimensions2: { x: 400000.0, y: 300000.0, z: 500000.0 },
         material2: {},
-        outlineColor2: {},
+        outlineColor2: 'BLACK',
+
         box3: {},
-        position3: {},
-        dimensions3: {},
-        material3: {},
-        outlineColor3: {}
+        position3: { lng: 100.0, lat: 40.0, height: 300000.0 },
+        dimensions3: { x: 400000.0, y: 300000.0, z: 500000.0 },
+        outlineColor3: 'YELLOW'
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 300000.0)
-        this.dimensions1 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
-        this.material1 = Cesium.Color.BLUE
-        this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 300000.0)
-        this.dimensions2 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+
         this.material2 = Cesium.Color.RED.withAlpha(0.5)
-        this.outlineColor2 = Cesium.Color.BLACK
-        this.position3 = Cesium.Cartesian3.fromDegrees(100.0, 40.0, 300000.0)
-        this.dimensions3 = new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
-        this.outlineColor3 = Cesium.Color.YELLOW
       }
     }
   }
@@ -128,24 +132,26 @@
 
 ## Instance Properties
 
-Reference official document [BoxGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BoxGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ------------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the box. |
+| dimensions | Object | | `optional` A Cartesian3 Property specifying the length, width, and height of the box. **structure: { x: number, y: number, z: number }** |
+| heightReference | Number | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| fill | Boolean | true | `optional` A boolean Property specifying whether the box is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the box. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the box is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this box will be displayed. **structure: { near: number, far: number }** |
+
+---
+
+- Reference official document [BoxGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BoxGraphics.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |

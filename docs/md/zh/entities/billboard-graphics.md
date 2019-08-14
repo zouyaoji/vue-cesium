@@ -13,9 +13,19 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
-          <billboard-graphics :image="image" :scale="0.1"></billboard-graphics>
+           <billboard-graphics
+            :image="image"
+            :scale="0.1"
+            :show="show"
+            :distanceDisplayCondition="distanceDisplayCondition"
+            :horizontalOrigin="horizontalOrigin"
+          ></billboard-graphics>
         </entity>
       </cesium-viewer>
+      <div class="demo-tool">
+        <span>{{ show ? '隐藏' : '显示' }}</span>
+        <md-switch v-model="show"></md-switch>
+      </div>
     </div>
   </template>
 
@@ -23,17 +33,19 @@
     export default {
       data () {
         return {
-          id: 'This is a billboard',
-          description: 'Hello Vue Cesium',
+          id: 'Hello Vue Cesium',
+          description: 'This is a billboard',
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          position: {},
-          billboard: {}
+          position: { lng: 90, lat: 40, height: 10000 },
+          billboard: {},
+          show: true,
+          distanceDisplayCondition: { near: 0, far: 20000000 },
+          horizontalOrigin: 0
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.position = Cesium.Cartesian3.fromDegrees(90, 40, 10000)
         }
       }
     }
@@ -44,57 +56,78 @@
 
 ```html
 <template>
-    <div class="viewer">
-      <cesium-viewer @ready="ready">
-        <entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
-          <billboard-graphics :image="image" :scale="0.1"></billboard-graphics>
-        </entity>
-      </cesium-viewer>
+  <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+        <billboard-graphics
+          :image="image"
+          :scale="0.1"
+          :show="show"
+          :distanceDisplayCondition="distanceDisplayCondition"
+        ></billboard-graphics>
+      </entity>
+    </cesium-viewer>
+    <div class="demo-tool">
+      <span>{{ show ? '隐藏' : '显示' }}</span>
+      <md-switch v-model="show"></md-switch>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-    export default {
-      data () {
-        return {
-          id: 'This is a billboard',
-          description: 'Hello Vue Cesium',
-          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          position: {},
-          billboard: {}
-        }
-      },
-      methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          this.position = Cesium.Cartesian3.fromDegrees(90, 40, 10000)
-        }
+<script>
+  export default {
+    data() {
+      return {
+        id: 'This is a billboard',
+        description: 'Hello Vue Cesium',
+        image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+        position: { lng: 90, lat: 40, height: 10000 },
+        billboard: {},
+        distanceDisplayCondition: { near: 0, far: 20000000 }
+      }
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
       }
     }
-  </script>
+  }
+</script>
 ```
 
 ## 属性
 
-参考官方文档 [BillboardGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BillboardGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| -------------------------- | -------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| show | Boolean | `true` | `optional` 指定 billboard 是否显示。 |
+| image | String\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
+| scale | Number | `1.0` | `optional` 指定 billboard 图片的缩放比例。 |
+| pixelOffset | Object | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移。**结构：{ x: number, y: number }** |
+| eyeOffset | Object | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移。**结构：{ x: number, y: number, z: number }** |
+| horizontalOrigin | Number | `0` | `optional` 指定 billboard 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |
+| verticalOrigin | Number | `0` | `optional` 指定 billboard 垂直对齐方式。 **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |
+| heightReference | Number | `0` | `optional` 指定 billboard 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| color | Object\|String\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
+| rotation | Number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
+| alignedAxis | Cartesian3 | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。**结构：{ x: number, y: number, z: number }** |
+| sizeInMeters | Boolean | | `optional` 指定 billboard 的单位是否是米。 |
+| width | Number | | `optional` 指定 billboard 的宽度（像素）。 |
+| height | Number | | `optional` 指定 billboard 的高度（像素）。 |
+| scaleByDistance | Object | | `optional` 指定 billboard 随相机距离缩放的参数。**结构：{ near: number, nearValue: number, far: number, farValue: number }** |
+| translucencyByDistance | Object | | `optional` 指定 billboard 随相机距离透明度改变的参数。**结构：{ near: number, nearValue: number, far: number, farValue: number }** |
+| pixelOffsetScaleByDistance | Object | | `optional` 指定 billboard 随相机距离像素偏移改变的参数。**结构：{ near: number, nearValue: number, far: number, farValue: number }** |
+| imageSubRegion | Object | | `optional` 指定 billboard 的子区域，相对于左下角。 |
+| distanceDisplayCondition | Object | | `optional` 指定 billboard 随相机距离改变是否显示参数。**结构：{ near: number, far: number }** |
+| disableDepthTestDistance | Number | | `optional` 指定 billboard 深度检测距离。 |
+
+---
+
+- 官方文档 [BillboardGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BillboardGraphics.html)
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|definitionChanged||每当更改或修改属性或子属性时触发该事件。|
+| 事件名            | 参数             | 描述                                                |
+| ----------------- | ---------------- | --------------------------------------------------- |
+| ready             | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| definitionChanged |                  | 每当更改或修改属性或子属性时触发该事件。            |

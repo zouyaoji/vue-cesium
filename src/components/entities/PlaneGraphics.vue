@@ -1,81 +1,56 @@
 <script>
-import entityGraphics from '../../mixins/entityGraphics.js'
+import {
+  show,
+  distanceDisplayCondition,
+  dimensions,
+  fill,
+  material,
+  outline,
+  outlineColor,
+  outlineWidth,
+  shadows
+} from '@/mixins/entity/allProps'
+import graphicsMixin from '@/mixins/entity/graphicsMixin'
+import { makeCartesian2, makeMaterial, makeColor, makeDistanceDisplayCondition, makePlane } from '@/util/util'
 export default {
   name: 'plane-graphics',
-  mixins: [entityGraphics],
+  mixins: [
+    show,
+    distanceDisplayCondition,
+    dimensions,
+    fill,
+    material,
+    outline,
+    outlineColor,
+    outlineWidth,
+    shadows,
+    graphicsMixin
+  ],
   props: {
-    plane: Object,
-    dimensions: Object,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    fill: {
-      type: Boolean,
-      default: true
-    },
-    material: [Object, String],
-    outline: {
-      type: Boolean,
-      default: false
-    },
-    outlineColor: Object,
-    shadows: {
-      type: Number,
-      default: 0
-    },
-    distanceDisplayCondition: Object
+    plane: Object
   },
   watch: {
     plane (val) {
-      this.graphics.plane = val
-    },
-    dimensions (val) {
-      this.graphics.dimensions = val
-    },
-    show (val) {
-      this.graphics.show = val
-    },
-    fill (val) {
-      this.graphics.fill = val
-    },
-    material (val) {
-      this.graphics.material = val
-    },
-    outline (val) {
-      this.graphics.outline = val
-    },
-    outlineColor (val) {
-      this.graphics.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.graphics.outlineWidth = val
-    },
-    shadows (val) {
-      this.graphics.shadows = val
-    },
-    distanceDisplayCondition (val) {
-      this.graphics.distanceDisplayCondition = val
+      this.graphics.plane = makePlane(val)
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, plane, dimensions, show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
+      const { Cesium, show, plane, dimensions, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
       let options = {
-        plane,
-        dimensions,
         show,
+        plane: makePlane(plane),
+        dimensions: makeCartesian2(dimensions),
         fill,
-        material,
+        material: makeMaterial(material),
         outline,
-        outlineColor,
+        outlineColor: makeColor(outlineColor),
         outlineWidth,
         shadows,
-        distanceDisplayCondition
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
       }
       this.removeNullItem(options)
-      let planeGraphics = new Cesium.PlaneGraphics(options)
-      return planeGraphics
+      return new Cesium.PlaneGraphics(options)
     }
   }
 }

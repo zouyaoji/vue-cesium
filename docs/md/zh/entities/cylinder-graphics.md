@@ -29,24 +29,19 @@
         return {
           description: 'Hello Vue Cesium',
           cylinder1: {},
-          position1: {},
-          outlineColor1: {},
+          position1: { lng: 105.0, lat: 40.0, height: 200000.0 },
+          outlineColor1: 'DARK_GREEN',
           material1: {},
 
           cylinder2: {},
-          position2: {},
-          material2: {}
+          position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
+          material2: 'RED'
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 200000.0)
           this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-          this.outlineColor1 = Cesium.Color.DARK_GREEN
-
-          this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 200000.0)
-          this.material2 = Cesium.Color.RED
         },
         subReady (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
@@ -64,11 +59,23 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <entity :position="position1" :description="description" :cylinder.sync="cylinder1">
-        <cylinder-graphics :length="400000.0" :topRadius="200000.0" :bottomRadius="200000.0" :material="material1"
-          :outline="true" :outlineColor="outlineColor1"></cylinder-graphics>
+        <cylinder-graphics
+          :length="400000.0"
+          :topRadius="200000.0"
+          :bottomRadius="200000.0"
+          :material="material1"
+          :outline="true"
+          :outlineColor="outlineColor1"
+        ></cylinder-graphics>
       </entity>
       <entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-        <cylinder-graphics :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" :material="material2"></cylinder-graphics>
+        <cylinder-graphics
+          :length="400000.0"
+          :topRadius="0.0"
+          :bottomRadius="200000.0"
+          :material="material2"
+          @ready="subReady"
+        ></cylinder-graphics>
       </entity>
     </cesium-viewer>
   </div>
@@ -76,31 +83,26 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         description: 'Hello Vue Cesium',
         cylinder1: {},
-        position1: {},
-        outlineColor1: {},
+        position1: { lng: 105.0, lat: 40.0, height: 200000.0 },
+        outlineColor1: 'DARK_GREEN',
         material1: {},
 
         cylinder2: {},
-        position2: {},
-        material2: {}
+        position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
+        material2: 'RED'
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
-        this.position1 = Cesium.Cartesian3.fromDegrees(105.0, 40.0, 200000.0)
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-        this.outlineColor1 = Cesium.Color.DARK_GREEN
-
-        this.position2 = Cesium.Cartesian3.fromDegrees(110.0, 40.0, 200000.0)
-        this.material2 = Cesium.Color.RED
       },
-      subReady (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      subReady(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         viewer.zoomTo(viewer.entities)
       }
     }
@@ -110,25 +112,31 @@
 
 ## 属性
 
-参考官方文档 [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
-<!-- |属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|positions|Property||`optional` 指定表示线条的Cartesian3位置数组。|
-|followSurface|Property|true|`optional` 指定线段是弧线还是直线连接。|
-|clampToGround|Property|false|`optional` 指定线是否贴地。|
-|width|Property|1.0|`optional` 指定线的宽度（像素）。|
-|show|Property|true|`optional` 指定线是否可显示。|
-|material|MaterialProperty|Color.WHITE|`optional` 指定用于绘制线的材质。|
-|depthFailMaterial|MaterialProperty||`optional` 指定用于绘制低于地形的线的材质。|
-|granularity|Property|Cesium.Math.RADIANS_PER_DEGREE|`optional`指定每个纬度和经度之间的角距离，当followSurface为true时有效。|
-|shadows|Property|ShadowMode.DISABLED|`optional` 指定这些是否投射或接收来自每个光源的阴影。|
-|distanceDisplayCondition|Property||`optional` 指定相机到线的距离。|
-|zIndex|Property|0|`optional` 指定用于排序地面几何的zIndex。 仅当`clampToGround`为真且支持地形上的折线时才有效。|
---- -->
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ------------------------ | --------------------- | --------- | --------------------------------------------------------- |
+| show | Boolean | `true` | `optional` 指定 cylinder 是否显示。 |
+| length | Array | | `optional` 指定 cylinder 的长。 |
+| topRadius | Number | | `optional` 指定 cylinder 的顶部半径。 |
+| bottomRadius | Number | | `optional` 指定 cylinder 的底部半径。 |
+| heightReference | Number | | `optional` 指定 cylinder 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| fill | Boolean | `true` | `optional` 指定 cylinder 是否填充材质。 |
+| material | Object\|String\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。 |
+| outline | Boolean | `false` | `optional` 指定 cylinder 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 cylinder 轮廓线宽度。 |
+| numberOfVerticalLines | Number | `16` | `optional` 指定沿轮廓线周长绘制的垂直线数。 |
+| slices | Number | `128` | `optional` 指定 cylinder 边节点数量。 |
+| shadows | Number | `0` | `optional` 指定 cylinder 是否投射或接收每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4, RECEIVE_ONLY: 3** |
+| distanceDisplayCondition | Object | | `optional` 指定 cylinder 随相机距离显示条件。 **结构：{ near: number, far: number }** |
+
+---
+
+- 官方文档 [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
-|definitionChanged||每当更改或修改属性或子属性时触发该事件。|
+| 事件名            | 参数             | 描述                                                |
+| ----------------- | ---------------- | --------------------------------------------------- |
+| ready             | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| definitionChanged |                  | 每当更改或修改属性或子属性时触发该事件。            |
