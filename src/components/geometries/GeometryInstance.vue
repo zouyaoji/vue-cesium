@@ -1,24 +1,20 @@
 <script>
-import cmp from '../../mixins/virtualCmp'
-import mergeDescriptors from '../../util/mergeDescriptors'
+import cmp from '@/mixins/virtualCmp'
+import mergeDescriptors from '@/util/mergeDescriptors'
+import {
+  modelMatrix,
+  id
+} from '@/mixins/entity/allProps'
 export default {
   name: 'geometry-instance',
-  mixins: [cmp],
+  mixins: [cmp, modelMatrix, id],
   props: {
     geometry: Object,
-    modelMatrix: Object,
-    id: Object,
     attributes: Object
   },
   watch: {
     geometry (val) {
       this.geometryInstance.geometry = val
-    },
-    modelMatrix (val) {
-      this.geometryInstance.modelMatrix = val
-    },
-    id (val) {
-      this.geometryInstance.id = val
     },
     attributes (val) {
       this.geometryInstance.attributes = val

@@ -1,12 +1,12 @@
-# RectangleGeometry几何对象
+# RectangleGeometry
 
-`rectangle-geometry`可以加载矩形，属于Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
+`rectangle-geometry` A description of a cartographic rectangle on an ellipsoid centered at the origin. Rectangle geometry can be rendered with both `Primitive` and `GroundPrimitive`.
 
-## 示例
+## Examples
 
-### 添加RectangleGeometry到场景
+### add a rectangleGeometry to viewer
 
-#### 预览
+#### preview
 
 <doc-preview>
   <template>
@@ -29,7 +29,7 @@
           appearance: null,
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-          rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+          rectangle: [102.5, 29.5, 106.5, 33.5]
         }
       },
       methods: {
@@ -60,7 +60,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -78,18 +78,18 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5}
+        rectangle: [102.5, 29.5, 106.5, 33.5]
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
           orientation: {
@@ -114,16 +114,17 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
-参考官方文档 [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
-<!-- |属性名|类型|默认值|描述|
+Reference official document [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+
+<!-- |name|type|default|description|
 |------|-----|-----|----|
 
 --- -->
 
-## 事件
+## Events
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+| name  | parameter        | description                                                                                   |
+| ----- | ---------------- | --------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance. |

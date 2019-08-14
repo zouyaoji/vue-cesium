@@ -1,10 +1,10 @@
-# Polygon几何对象
+# RectangleGeometry 几何对象
 
-`polygon-geometry`可以加载矩形，属于Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
+`rectangle-geometry`可以加载矩形，属于 Primitive API，作为`primitive`或`ground-primitive`的子组件将矩形添加到场景，用`ground-primitive`的添加出来是贴地形的。
 
 ## 示例
 
-### 添加PolygonGeometry到场景
+### 添加 RectangleGeometry 到场景
 
 #### 预览
 
@@ -14,8 +14,8 @@
       <cesium-viewer @ready="ready">
         <cesium-terrain-provider></cesium-terrain-provider>
         <ground-primitive :appearance="appearance">
-          <geometry-instance :geometry.sync="geometry" :attributes="attributes">
-            <polygon-geometry :polygonHierarchy="polygonHierarchy"></polygon-geometry>
+          <geometry-instance :geometry="geometry">
+            <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
           </geometry-instance>
         </ground-primitive>
       </cesium-viewer>
@@ -27,15 +27,9 @@
       data () {
         return {
           appearance: null,
-          attributes: null,
           geometry: null,
-          polygonHierarchy: [
-            102.1, 29.5,
-            106.2, 29.5,
-            106.2, 33.5,
-            108.2, 35.5,
-            102.1, 33.5
-          ]
+          image: '/statics/SampleData/radarImage/1.png',
+          rectangle:  { west: 102.5, south: 29.5, east: 106.5, north: 33.5}
         }
       },
       methods: {
@@ -50,12 +44,15 @@
               roll: 0.002443376981836387
             }
           })
-          this.attributes = {
-            color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.4))
-          }
-          this.appearance = new Cesium.PerInstanceColorAppearance({
-            flat : true,
-            translucent : true
+          this.appearance = new Cesium.MaterialAppearance({
+            material: new Cesium.Material({
+              fabric: {
+                type: 'Image',
+                uniforms: {
+                  image: this.image
+                }
+              }
+            })
           })
         }
       }
@@ -71,8 +68,8 @@
     <cesium-viewer @ready="ready">
       <cesium-terrain-provider></cesium-terrain-provider>
       <ground-primitive :appearance="appearance">
-        <geometry-instance :geometry.sync="geometry" :attributes="attributes">
-          <polygon-geometry :polygonHierarchy="polygonHierarchy"></polygon-geometry>
+        <geometry-instance :geometry="geometry">
+          <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
         </geometry-instance>
       </ground-primitive>
     </cesium-viewer>
@@ -81,24 +78,18 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
-        attributes: null,
         geometry: null,
-        polygonHierarchy: [
-          102.1, 29.5,
-          106.2, 29.5,
-          106.2, 33.5,
-          108.2, 35.5,
-          102.1, 33.5
-        ]
+        image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
+        rectangle: [102.5, 29.5, 106.5, 33.5]
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
           orientation: {
@@ -107,12 +98,15 @@
             roll: 0.002443376981836387
           }
         })
-        this.attributes = {
-          color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.4))
-        }
-        this.appearance = new Cesium.PerInstanceColorAppearance({
-          flat : true,
-          translucent : true
+        this.appearance = new Cesium.MaterialAppearance({
+          material: new Cesium.Material({
+            fabric: {
+              type: 'Image',
+              uniforms: {
+                image: this.image
+              }
+            }
+          })
         })
       }
     }
@@ -122,7 +116,8 @@
 
 ## 属性
 
-参考官方文档 [PolygonGeometry](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGeometry.html)
+参考官方文档 [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 
@@ -130,6 +125,6 @@
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+| 事件名 | 参数             | 描述                                                |
+| ------ | ---------------- | --------------------------------------------------- |
+| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |

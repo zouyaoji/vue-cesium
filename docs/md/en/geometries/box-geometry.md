@@ -30,7 +30,7 @@
           attributes: null,
           geometry: null,
           modelMatrix: null,
-          dimensions: {x: 400000.0, y: 300000.0, z: 500000.0}
+          dimensions: [400000.0, 300000.0, 500000.0]
         }
       },
       methods: {
@@ -71,29 +71,31 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
         attributes: null,
         geometry: null,
         modelMatrix: null,
-        dimensions: {x: 400000.0, y: 300000.0, z: 500000.0}
+        dimensions: [400000.0, 300000.0, 500000.0]
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         this.attributes = {
-          color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
         }
         this.appearance = new Cesium.PerInstanceColorAppearance({
           closed: true,
-          translucent : true
+          translucent: true
         })
         this.modelMatrix = Cesium.Matrix4.multiplyByTranslation(
           Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105.0, 40.0)),
-          new Cesium.Cartesian3(0.0, 0.0, 250000), new Cesium.Matrix4())
+          new Cesium.Cartesian3(0.0, 0.0, 250000),
+          new Cesium.Matrix4()
+        )
       }
     }
   }
@@ -102,10 +104,10 @@
 
 ## Instance Properties
 
-Reference official document  [BoxGeometry](https://cesiumjs.org/Cesium/Build/Documentation/BoxGeometry.html)
+Reference official document [BoxGeometry](https://cesiumjs.org/Cesium/Build/Documentation/BoxGeometry.html)
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
