@@ -12,7 +12,14 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <flood-anaysis ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
+        <flood-anaysis
+          ref="flood"
+          :minHeight="minHeight"
+          :maxHeight="maxHeight"
+          :speed="speed"
+          :polygonHierarchy="polygonHierarchy"
+          @activeEvt="activeEvt"
+        >
         </flood-anaysis>
         <cesium-terrain-provider></cesium-terrain-provider>
         <imagery-layer>
@@ -20,7 +27,7 @@
         </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
-         <md-input-container>
+        <md-input-container>
           <label>minHeight</label>
           <md-input v-model.number="minHeight"></md-input>
         </md-input-container>
@@ -29,7 +36,7 @@
           <md-input v-model.number="maxHeight"></md-input>
         </md-input-container>
         <span>speed</span>
-        <vue-slider v-model="speed" :min="1" :max="100" :interval="1"  ></vue-slider>
+        <vue-slider v-model="speed" :min="1" :max="100" :interval="1"></vue-slider>
         <md-button class="md-raised md-accent" @click="toggle">{{ flooding ? 'Stop' : 'Start' }}</md-button>
         <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
       </div>
@@ -37,16 +44,16 @@
   </template>
   <script>
     export default {
-      data () {
+      data() {
         return {
           minHeight: 0,
           maxHeight: 4000,
           speed: 10,
           polygonHierarchy: [
-            102.1, 29.5,
-            106.2, 29.5,
-            106.2, 33.5,
-            102.1, 33.5
+            { lng: 102.1, lat: 29.5 },
+            { lng: 106.2, lat: 29.5 },
+            { lng: 106.2, lat: 33.5 },
+            { lng: 102.1, lat: 33.5 }
           ],
           url: 'https://dev.virtualearth.net',
           bmKey: 'AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-', // 可到(https://www.bingmapsportal.com/)申请Key。
@@ -54,9 +61,9 @@
         }
       },
       methods: {
-        ready (cesiumInstance) {
+        ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
-          const {Cesium, viewer} = this.cesiumInstance
+          const { Cesium, viewer } = this.cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.camera.setView({
             destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
@@ -67,13 +74,13 @@
             }
           })
         },
-        toggle (){
+        toggle() {
           this.$refs.flood.flooding = !this.$refs.flood.flooding
         },
-        activeEvt (_) {
+        activeEvt(_) {
           this.flooding = _.isActive
         },
-        clear () {
+        clear() {
           this.$refs.flood.unload()
         }
       }
@@ -87,7 +94,14 @@
 <template>
   <div class="viewer">
     <cesium-viewer @ready="ready">
-      <flood-anaysis ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
+      <flood-anaysis
+        ref="flood"
+        :minHeight="minHeight"
+        :maxHeight="maxHeight"
+        :speed="speed"
+        :polygonHierarchy="polygonHierarchy"
+        @activeEvt="activeEvt"
+      >
       </flood-anaysis>
       <cesium-terrain-provider></cesium-terrain-provider>
       <imagery-layer>
@@ -95,7 +109,7 @@
       </imagery-layer>
     </cesium-viewer>
     <div class="demo-tool">
-        <md-input-container>
+      <md-input-container>
         <label>minHeight</label>
         <md-input v-model.number="minHeight"></md-input>
       </md-input-container>
@@ -104,7 +118,7 @@
         <md-input v-model.number="maxHeight"></md-input>
       </md-input-container>
       <span>speed</span>
-      <vue-slider v-model="speed" :min="1" :max="100" :interval="1"  ></vue-slider>
+      <vue-slider v-model="speed" :min="1" :max="100" :interval="1"></vue-slider>
       <md-button class="md-raised md-accent" @click="toggle">{{ flooding ? 'Stop' : 'Start' }}</md-button>
       <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
     </div>
@@ -112,16 +126,16 @@
 </template>
 <script>
   export default {
-    data () {
+    data() {
       return {
         minHeight: 0,
         maxHeight: 4000,
         speed: 10,
         polygonHierarchy: [
-          102.1, 29.5,
-          106.2, 29.5,
-          106.2, 33.5,
-          102.1, 33.5
+          { lng: 102.1, lat: 29.5 },
+          { lng: 106.2, lat: 29.5 },
+          { lng: 106.2, lat: 33.5 },
+          { lng: 102.1, lat: 33.5 }
         ],
         url: 'https://dev.virtualearth.net',
         bmKey: 'AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-', // 可到(https://www.bingmapsportal.com/)申请Key。
@@ -129,9 +143,9 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
@@ -142,13 +156,13 @@
           }
         })
       },
-      toggle (){
+      toggle() {
         this.$refs.flood.flooding = !this.$refs.flood.flooding
       },
-      activeEvt (_) {
+      activeEvt(_) {
         this.flooding = _.isActive
       },
-      clear () {
+      clear() {
         this.$refs.flood.unload()
       }
     }
@@ -158,17 +172,18 @@
 
 ## Instance Properties
 
-|name|type|default|description|
-|------|-----|-----|----|
-|minHeight|Number|0|`optional` Minimum elevation.|
-|maxHeight|Number||`require` Maximum elevation.|
-|speed|Number|10|`optional` Submerged speed.|
-|polygonHierarchy|Array||`require` Specifies the latitude and longitude array that builds the submerged analysis polygon.|
+| name             | type   | default | description                                                                                      |
+| ---------------- | ------ | ------- | ------------------------------------------------------------------------------------------------ |
+| minHeight        | Number | 0       | `optional` Minimum elevation.                                                                    |
+| maxHeight        | Number |         | `require` Maximum elevation.                                                                     |
+| speed            | Number | 10      | `optional` Submerged speed.                                                                      |
+| polygonHierarchy | Array  |         | `require` Specifies the latitude and longitude array that builds the submerged analysis polygon. |
+
 ---
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance.|
-|activeEvt|{isActive: Boolean}|Triggered when the `flooding` state changes in the flood analysis component, and returns whether the flood analysis starts.|
+| name      | parameter           | description                                                                                                                 |
+| --------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer}    | Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance.                               |
+| activeEvt | {isActive: Boolean} | Triggered when the `flooding` state changes in the flood analysis component, and returns whether the flood analysis starts. |

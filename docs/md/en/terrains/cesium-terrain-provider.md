@@ -71,6 +71,7 @@
 ## Instance Properties
 
 Reference official document [CesiumTerrainProvider](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)
+
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 |url|String||`required`指定服务地址。|
@@ -80,6 +81,6 @@ Reference official document [CesiumTerrainProvider](https://cesiumjs.org/Cesium/
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |

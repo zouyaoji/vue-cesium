@@ -108,10 +108,10 @@
 </template>
 <script>
   export default {
-    data () {
+    data() {
       return {
         terrainProvider: null,
-        bounds: {west: 80.0, south: 30.0, east: 109.0, north: 50.0},
+        bounds: { west: 80.0, south: 30.0, east: 109.0, north: 50.0 },
         options: {
           backgroundColor: 'rgba(0,0,0,0)',
           gradient: {
@@ -136,9 +136,9 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
           orientation: {
@@ -149,7 +149,7 @@
         })
         this.terrainProvider = Cesium.createWorldTerrain()
         let _this = this
-        Cesium.Resource.fetchJson({url: './statics/SampleData/heatmapData/19042808_t.json'}).then((data)=>{
+        Cesium.Resource.fetchJson({ url: './statics/SampleData/heatmapData/19042808_t.json' }).then(data => {
           _this.bounds = {
             west: data.left,
             south: data.bottom,
@@ -161,7 +161,7 @@
           _this.data = data.datas
         })
       },
-      getData (data) {
+      getData(data) {
         var result = []
         let rows = data.rows
         let cols = data.cols
@@ -186,18 +186,19 @@
 
 ## 属性
 
-|属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|type|Number|0|`optional` 指定热力图加载的Cesium对象类型，0: RectangleGeometry, 1: RectangleGraphics, 2: SingleTileImageryProvider。|
-|bounds|Object||`optional` 指定热力图矩形范围。|
-|options|Object|true|`optional` 指定热力图的heatmap参数。|
-|min|Number||`optional` 指定最小值。|
-|max|Number||`optional` 指定最大值。|
-|data|Array|true|`optional` 指定热力图数据。|
+| 属性名  | 类型   | 默认值 | 描述                                                                                                                    |
+| ------- | ------ | ------ | ----------------------------------------------------------------------------------------------------------------------- |
+| type    | Number | 0      | `optional` 指定热力图加载的 Cesium 对象类型，0: RectangleGeometry, 1: RectangleGraphics, 2: SingleTileImageryProvider。 |
+| bounds  | Object |        | `optional` 指定热力图矩形范围。                                                                                         |
+| options | Object | true   | `optional` 指定热力图的 heatmap 参数。                                                                                  |
+| min     | Number |        | `optional` 指定最小值。                                                                                                 |
+| max     | Number |        | `optional` 指定最大值。                                                                                                 |
+| data    | Array  | true   | `optional` 指定热力图数据。                                                                                             |
+
 ---
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+| 事件名 | 参数             | 描述                                                |
+| ------ | ---------------- | --------------------------------------------------- |
+| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |

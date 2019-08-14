@@ -74,6 +74,13 @@ Vue.use(VueCesium, {
 </style>
 ```
 
+## TODOS
+
+- ~~Key attributes don't need to be instantiated with Cesium after ready, they can be written directly to data, which is convenient for development. On the other hand, the watch object is not so complicated, and the performance is good.~~
+- Doucment & Demo
+- Continue to develop components
+- ...
+
 ## Contributing
 
 [Contributing Guide](https://github.com/zouyaoji/vue-cesium/blob/master/CONTRIBUTING.md)

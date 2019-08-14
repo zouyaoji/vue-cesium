@@ -86,7 +86,7 @@
       <span>信息提示框</span>
       <md-switch v-model="infoBox"></md-switch>
     </div>
-    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
     </cesium-viewer>
   </div>

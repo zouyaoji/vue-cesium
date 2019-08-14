@@ -10,9 +10,7 @@ const genRouteMap = (routeMap, lang, isChild) =>
       path: isChild ? item.path : `/${lang}/${item.path}`,
       name: item.name[lang],
       component:
-        typeof item.component === 'string'
-          ? () => import(`./md/${lang}/${item.component}.md`)
-          : item.component,
+        typeof item.component === 'string' ? () => import(`./md/${lang}/${item.component}.md`) : item.component,
       meta: Object.assign({ lang }, item.meta),
       children: genRouteMap(item.children || [], lang, true)
     }
@@ -87,9 +85,44 @@ const routeMap = [
     ]
   },
   {
+    // 指南
+    path: 'tools',
+    component: CateView,
+    name: {
+      zh: '工具',
+      en: 'Tools'
+    },
+    children: [
+      {
+        path: 'Painting',
+        component: 'tools/painting',
+        name: {
+          zh: '绘制',
+          en: 'Painting'
+        }
+      },
+      {
+        path: 'measuring',
+        component: 'tools/measuring',
+        name: {
+          zh: '量算',
+          en: 'Measuring'
+        }
+      },
+      {
+        path: 'cesium-navigation',
+        component: 'tools/cesium-navigation',
+        name: {
+          zh: '导航罗盘',
+          en: 'CesiumNavigation'
+        }
+      }
+    ]
+  },
+  {
     path: 'imageryLayers',
     name: {
-      zh: '影像类',
+      zh: '影像',
       en: 'Layers'
     },
     component: CateView,
@@ -179,7 +212,7 @@ const routeMap = [
   {
     path: 'TerrainProvider',
     name: {
-      zh: '地形类',
+      zh: '地形',
       en: 'Terrains'
     },
     component: CateView,
@@ -197,7 +230,7 @@ const routeMap = [
   {
     path: 'entities',
     name: {
-      zh: '实体类',
+      zh: '实体',
       en: 'Entities'
     },
     component: CateView,
@@ -206,7 +239,7 @@ const routeMap = [
         path: 'entity',
         component: 'entities/entity',
         name: {
-          zh: '实体',
+          zh: '实体组件',
           en: 'Entity'
         }
       },
@@ -343,7 +376,7 @@ const routeMap = [
   {
     path: 'primitives',
     name: {
-      zh: '图元类',
+      zh: '图元',
       en: 'Primitives'
     },
     component: CateView,
@@ -373,35 +406,19 @@ const routeMap = [
         }
       },
       {
+        path: 'point-primitive',
+        component: 'primitives/point-primitive',
+        name: {
+          zh: '点Primitive',
+          en: 'PointPrimitive'
+        }
+      },
+      {
         path: 'polyline-primitive',
         component: 'primitives/polyline-primitive',
         name: {
           zh: '线Primitive',
           en: 'PolylinePrimitive'
-        }
-      },
-      {
-        path: 'box-geometry',
-        component: 'primitives/box-geometry',
-        name: {
-          zh: '盒子Geometry',
-          en: 'BoxGeometry'
-        }
-      },
-      {
-        path: 'rectangle-geometry',
-        component: 'primitives/rectangle-geometry',
-        name: {
-          zh: '矩形Geometry',
-          en: 'RectangleGeometry'
-        }
-      },
-      {
-        path: 'polygon-geometry',
-        component: 'primitives/polygon-geometry',
-        name: {
-          zh: '多边形Geometry',
-          en: 'PolygonGeometry'
         }
       },
       {
@@ -415,28 +432,35 @@ const routeMap = [
     ]
   },
   {
-    // 指南
-    path: 'tools',
-    component: CateView,
+    path: 'geometries',
     name: {
-      zh: '工具类',
-      en: 'Tools'
+      zh: '几何体',
+      en: 'Geometries'
     },
+    component: CateView,
     children: [
       {
-        path: 'Painting',
-        component: 'tools/painting',
+        path: 'box-geometry',
+        component: 'geometries/box-geometry',
         name: {
-          zh: '绘制',
-          en: 'Painting'
+          zh: '盒子Geometry',
+          en: 'BoxGeometry'
         }
       },
       {
-        path: 'measuring',
-        component: 'tools/measuring',
+        path: 'rectangle-geometry',
+        component: 'geometries/rectangle-geometry',
         name: {
-          zh: '量算',
-          en: 'Measuring'
+          zh: '矩形Geometry',
+          en: 'RectangleGeometry'
+        }
+      },
+      {
+        path: 'polygon-geometry',
+        component: 'geometries/polygon-geometry',
+        name: {
+          zh: '多边形Geometry',
+          en: 'PolygonGeometry'
         }
       }
     ]

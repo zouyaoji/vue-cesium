@@ -24,7 +24,7 @@ The container is an empty DOM node which used to mount other components or DOM n
         <span>infoBox</span>
         <md-switch v-model="infoBox"></md-switch>
       </div>
-      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+      <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
       </cesium-viewer>
     </div>
@@ -86,7 +86,7 @@ The container is an empty DOM node which used to mount other components or DOM n
       <span>infoBox</span>
       <md-switch v-model="infoBox"></md-switch>
     </div>
-    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline" 
+    <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
     </cesium-viewer>
   </div>
