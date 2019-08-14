@@ -1,28 +1,12 @@
 <script>
-import primitiveCollection from '../../mixins/primitiveCollection'
+import { scene, blendOption } from '@/mixins/entity/allProps'
+import primitiveMixin from '@/mixins/primitive/primitiveMixin'
 export default {
   name: 'label-collection',
-  mixins: [primitiveCollection],
-  props: {
-    modelMatrix: Object,
-    debugShowBoundingVolume: {
-      type: Boolean,
-      default: false
-    },
-    scene: Object,
-    blendOption: Number
-  },
-  watch: {
-    modelMatrix () {
-      this.reload()
-    },
-    debugShowBoundingVolume (val) {
-      this.originInstance.debugShowBoundingVolume = val
-    }
-  },
+  mixins: [scene, blendOption, primitiveMixin],
   methods: {
     createCesiumObject () {
-      const { Cesium, modelMatrix, debugShowBoundingVolume, scene, blendOption } = this
+      const { modelMatrix, debugShowBoundingVolume, scene, blendOption } = this
       let options = {
         modelMatrix,
         debugShowBoundingVolume,
@@ -30,8 +14,7 @@ export default {
         blendOption
       }
       this.removeNullItem(options)
-      let labelCollection = new Cesium.LabelCollection(options)
-      return labelCollection
+      return new Cesium.LabelCollection(options)
     }
   }
 }

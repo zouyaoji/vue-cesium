@@ -1,156 +1,51 @@
 <script>
-import primitiveCollectionItem from '../../mixins/primitiveCollectionItem'
+import {
+  id,
+  position
+} from '@/mixins/entity/allProps'
+import labelMixin from '@/mixins/entity/labelMixin'
+import collectionItemMixin from '@/mixins/primitive/collectionItemMixin'
+import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '@/util/util'
 export default {
   name: 'label-primitive',
-  mixins: [primitiveCollectionItem],
+  mixins: [id, position, labelMixin, collectionItemMixin],
   props: {
-    backgroundColor: Object,
-    backgroundPadding: Object,
-    disableDepthTestDistance: [Object, Number],
-    distanceDisplayCondition: Object,
-    eyeOffset: Object,
-    fillColor: Object,
-    font: {
-      type: String,
-      default: '30px sans-serif'
-    },
-    heightReference: {
-      type: Number,
-      default: 0
-    },
-    horizontalOrigin: {
-      type: Number,
-      default: 1
-    },
-    id: null,
-    outlineColor: Object,
-    outlineWidth: {
-      type: Number,
-      default: 1.0
-    },
-    pixelOffset: Object,
-    pixelOffsetScaleByDistance: Object,
-    position: Object,
-    scale: Number,
-    scaleByDistance: Object,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    showBackground: {
-      type: Boolean,
-      default: false
-    },
-    labelStyle: {
-      type: Number,
-      default: 2
-    },
-    text: String,
-    translucencyByDistance: Object,
-    verticalOrigin: {
-      type: Number,
-      default: 2
-    }
+    totalScale: Number
   },
   watch: {
-    backgroundColor (val) {
-      this.primitive.backgroundColor = val
-    },
-    backgroundPadding (val) {
-      this.primitive.backgroundPadding = val
-    },
-    disableDepthTestDistance (val) {
-      this.primitive.disableDepthTestDistance = val
-    },
-    distanceDisplayCondition (val) {
-      this.primitive.distanceDisplayCondition = val
-    },
-    eyeOffset (val) {
-      this.primitive.eyeOffset = val
-    },
-    fillColor (val) {
-      this.primitive.fillColor = val
-    },
-    font (val) {
-      this.primitive.font = val
-    },
-    heightReference (val) {
-      this.primitive.heightReference = val
-    },
-    horizontalOrigin (val) {
-      this.primitive.horizontalOrigin = val
-    },
-    id (val) {
-      this.primitive.id = val
-    },
-    outlineColor (val) {
-      this.primitive.outlineColor = val
-    },
-    outlineWidth (val) {
-      this.primitive.outlineWidth = val
-    },
-    pixelOffset (val) {
-      this.primitive.pixelOffset = val
-    },
-    pixelOffsetScaleByDistance (val) {
-      this.primitive.pixelOffsetScaleByDistance = val
-    },
-    position (val) {
-      this.primitive.position = val
-    },
-    scale (val) {
-      this.primitive.scale = val
-    },
-    scaleByDistance (val) {
-      this.primitive.scaleByDistance = val
-    },
-    show (val) {
-      this.primitive.show = val
-    },
-    showBackground (val) {
-      this.primitive.showBackground = val
-    },
-    labelStyle (val) {
-      this.primitive.labelStyle = val
-    },
-    text (val) {
-      this.primitive.text = val
-    },
-    translucencyByDistance (val) {
-      this.primitive.translucencyByDistance = val
-    },
-    verticalOrigin (val) {
-      this.primitive.verticalOrigin = val
+    totalScale (val) {
+      this.primitive.totalScale = val
     }
   },
   methods: {
     createCesiumObject () {
       const { primitiveCollection, backgroundColor, backgroundPadding, disableDepthTestDistance, distanceDisplayCondition, eyeOffset, fillColor, font, heightReference,
         horizontalOrigin, id, outlineColor, outlineWidth, pixelOffset, pixelOffsetScaleByDistance, position, scale, scaleByDistance,
-        show, showBackground, labelStyle, text, translucencyByDistance, verticalOrigin } = this
+        show, showBackground, labelStyle, text, totalScale, translucencyByDistance, verticalOrigin } = this
       let label = {
-        backgroundColor,
-        backgroundPadding,
+        backgroundColor: makeColor(backgroundColor),
+        backgroundPadding: makeCartesian2(backgroundPadding),
         disableDepthTestDistance,
-        distanceDisplayCondition,
-        eyeOffset,
-        fillColor,
+        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
+        eyeOffset: makeCartesian3(eyeOffset),
+        fillColor: makeColor(fillColor),
         font,
         heightReference,
         horizontalOrigin,
         id,
-        outlineColor,
+        outlineColor: makeColor(outlineColor),
         outlineWidth,
-        pixelOffset,
-        pixelOffsetScaleByDistance,
-        position,
+        pixelOffset: makeCartesian2(pixelOffset),
+        pixelOffsetScaleByDistance: makeNearFarScalar(pixelOffsetScaleByDistance),
+        position: makeCartesian3(position),
         scale,
-        scaleByDistance,
+        scaleByDistance: makeNearFarScalar(scaleByDistance),
         show,
         showBackground,
         labelStyle,
         text,
-        translucencyByDistance,
+        totalScale,
+        translucencyByDistance: makeNearFarScalar(translucencyByDistance),
         verticalOrigin
       }
       this.removeNullItem(label)

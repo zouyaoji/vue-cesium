@@ -1,11 +1,14 @@
-import cmp from './virtualCmp'
-import mergeDescriptors from '../util/mergeDescriptors'
+/**
+ * Label
+ * PointPrimitive
+ * Polyline
+ * Billboard
+ */
+import cmp from '@/mixins/virtualCmp'
+import mergeDescriptors from '@/util/mergeDescriptors'
 
-const props = {}
-const computed = {}
 const methods = {
-  mount () {
-  },
+  mount () {},
   unload () {
     const { primitive, primitiveCollection } = this
     primitiveCollection.remove(primitive)
@@ -19,13 +22,9 @@ const methods = {
     })
   }
 }
-const watch = {}
 
 export default {
   mixins: [cmp],
-  props,
-  computed,
-  watch,
   methods,
   stubVNode: {
     empty () {
@@ -40,7 +39,7 @@ export default {
       },
       primitiveCollection: {
         enumerable: true,
-        get: () => this.$services && this.$services.primitiveCollection
+        get: () => this.$services && this.$services.primitive
       }
     })
   }

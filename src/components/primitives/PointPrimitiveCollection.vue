@@ -1,35 +1,19 @@
 <script>
-import primitiveCollection from '../../mixins/primitiveCollection'
+import { blendOption, modelMatrix, debugShowBoundingVolume } from '@/mixins/entity/allProps'
+import primitiveMixin from '@/mixins/primitive/primitiveMixin'
 export default {
   name: 'point-collection',
-  mixins: [primitiveCollection],
-  props: {
-    modelMatrix: Object,
-    debugShowBoundingVolume: {
-      type: Boolean,
-      default: false
-    },
-    blendOption: Number
-  },
-  watch: {
-    modelMatrix () {
-      this.reload()
-    },
-    debugShowBoundingVolume (val) {
-      this.originInstance.debugShowBoundingVolume = val
-    }
-  },
+  mixins: [blendOption, modelMatrix, debugShowBoundingVolume, primitiveMixin],
   methods: {
     createCesiumObject () {
-      const { Cesium, modelMatrix, debugShowBoundingVolume, blendOption } = this
+      const { modelMatrix, debugShowBoundingVolume, blendOption } = this
       let options = {
         modelMatrix,
         debugShowBoundingVolume,
         blendOption
       }
       this.removeNullItem(options)
-      let pointCollection = new Cesium.PointPrimitiveCollection(options)
-      return pointCollection
+      return new Cesium.PointPrimitiveCollection(options)
     }
   }
 }

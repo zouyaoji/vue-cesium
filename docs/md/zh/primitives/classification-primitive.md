@@ -1,10 +1,10 @@
-# ClassificationPrimitive图元
+# ClassificationPrimitive 图元
 
-`classification-primitive` 使用`Primitive API`加载几何对象。按照Cesium组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`和`ground-primitive`组件`classification-primitive`主要用于加载体对象，如 `BoxGeometry`、 `CylinderGeometry`、 `EllipsoidGeometry`、`PolylineVolumeGeometry`和 `SphereGeometry`。而 `CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`和`RectangleGeometry` 需要拉伸才能正常渲染。
+`classification-primitive` 使用`Primitive API`加载几何对象。按照 Cesium 组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`和`ground-primitive`组件`classification-primitive`主要用于加载体对象，如 `BoxGeometry`、 `CylinderGeometry`、 `EllipsoidGeometry`、`PolylineVolumeGeometry`和 `SphereGeometry`。而 `CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`和`RectangleGeometry` 需要拉伸才能正常渲染。
 
 ## 示例
 
-### 添加RectangleGeometry到场景
+### 添加 RectangleGeometry 到场景
 
 #### 预览
 
@@ -71,7 +71,7 @@
     <cesium-viewer @ready="ready">
       <cesium-terrain-provider></cesium-terrain-provider>
       <classification-primitive :asynchronous="false">
-        <geometry-instance  :geometry.sync="geometry" :attributes="attributes">
+        <geometry-instance :geometry.sync="geometry" :attributes="attributes">
           <polygon-geometry :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></polygon-geometry>
         </geometry-instance>
       </classification-primitive>
@@ -81,27 +81,22 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.4, south: 29.5, east: 106.5,  north: 33.5},
+        rectangle: { west: 102.4, south: 29.5, east: 106.5, north: 33.5 },
         vertexFormat: null,
         attributes: null,
         extrudedHeight: 3000,
-        polygonHierarchy: [
-          102.1, 29.5,
-          106.2, 29.5,
-          106.2, 33.5,
-          102.1, 33.5
-        ]
+        polygonHierarchy: [102.1, 29.5, 106.2, 29.5, 106.2, 33.5, 102.1, 33.5]
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
@@ -112,7 +107,7 @@
           }
         })
         this.attributes = {
-          color : Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 100))
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 100))
         }
       }
     }
@@ -123,6 +118,7 @@
 ## 属性
 
 参考官方文档 [ClassificationPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/ClassificationPrimitive.html)
+
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 
@@ -130,6 +126,6 @@
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+| 事件名 | 参数             | 描述                                                |
+| ------ | ---------------- | --------------------------------------------------- |
+| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |

@@ -1,21 +1,26 @@
 <script>
-import bindEvents from '../../util/bindEvent'
-import primitive from '../../mixins/primitive'
+import bindEvents from '@/util/bindEvent'
+import {
+  show,
+  modelMatrix,
+  shadows,
+  clippingPlanes,
+  debugShowBoundingVolume
+} from '@/mixins/entity/allProps'
+import primitiveMixin from '@/mixins/primitive/primitiveMixin'
+import { makeCartesian2, makeCartesian3 } from '@/util/util'
 export default {
   name: 'cesium-3dtileset',
-  render (h) {},
-  mixins: [primitive],
+  mixins: [
+    show,
+    modelMatrix,
+    shadows,
+    clippingPlanes,
+    debugShowBoundingVolume,
+    primitiveMixin
+  ],
   props: {
     url: String,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    modelMatrix: Object,
-    shadows: {
-      type: Number,
-      default: 1
-    },
     maximumScreenSpaceError: {
       type: Number,
       default: 16
@@ -68,8 +73,7 @@ export default {
       type: Boolean,
       default: false
     },
-    clippingPlanes: Object,
-    classificationType: Object,
+    classificationType: Number,
     ellipsoid: Object,
     pointCloudShading: Object,
     imageBasedLightingFactor: Object,
@@ -83,10 +87,6 @@ export default {
       default: false
     },
     debugWireframe: {
-      type: Boolean,
-      default: false
-    },
-    debugShowBoundingVolume: {
       type: Boolean,
       default: false
     },
@@ -119,56 +119,44 @@ export default {
     url () {
       this.reload()
     },
-    show () {
-      this.reload()
+    maximumScreenSpaceError (val) {
+      this.primitive.maximumScreenSpaceError = val
     },
-    modelMatrix () {
-      this.reload()
+    maximumMemoryUsage (val) {
+      this.primitive.maximumMemoryUsage = val
     },
-    shadows () {
-      this.reload()
+    cullWithChildrenBounds (val) {
+      this.primitive.cullWithChildrenBounds = val
     },
-    maximumScreenSpaceError () {
-      this.reload()
+    dynamicScreenSpaceError (val) {
+      this.primitive.dynamicScreenSpaceError = val
     },
-    maximumMemoryUsage () {
-      this.reload()
+    dynamicScreenSpaceErrorDensity (val) {
+      this.primitive.dynamicScreenSpaceErrorDensity = val
     },
-    cullWithChildrenBounds () {
-      this.reload()
+    dynamicScreenSpaceErrorFactor (val) {
+      this.primitive.dynamicScreenSpaceErrorFactor = val
     },
-    dynamicScreenSpaceError () {
-      this.reload()
+    dynamicScreenSpaceErrorHeightFalloff (val) {
+      this.primitive.dynamicScreenSpaceErrorHeightFalloff = val
     },
-    dynamicScreenSpaceErrorDensity () {
-      this.reload()
+    skipLevelOfDetail (val) {
+      this.primitive.skipLevelOfDetail = val
     },
-    dynamicScreenSpaceErrorFactor () {
-      this.reload()
+    baseScreenSpaceError (val) {
+      this.primitive.baseScreenSpaceError = val
     },
-    dynamicScreenSpaceErrorHeightFalloff () {
-      this.reload()
+    skipScreenSpaceErrorFactor (val) {
+      this.primitive.skipScreenSpaceErrorFactor = val
     },
-    skipLevelOfDetail () {
-      this.reload()
+    skipLevels (val) {
+      this.primitive.skipLevels = val
     },
-    baseScreenSpaceError () {
-      this.reload()
+    immediatelyLoadDesiredLevelOfDetail (val) {
+      this.primitive.immediatelyLoadDesiredLevelOfDetail = val
     },
-    skipScreenSpaceErrorFactor () {
-      this.reload()
-    },
-    skipLevels () {
-      this.reload()
-    },
-    immediatelyLoadDesiredLevelOfDetail () {
-      this.reload()
-    },
-    loadSiblings () {
-      this.reload()
-    },
-    clippingPlanes () {
-      this.reload()
+    loadSiblings (val) {
+      this.primitive.loadSiblings = val
     },
     classificationType () {
       this.reload()
@@ -176,49 +164,46 @@ export default {
     ellipsoid () {
       this.reload()
     },
-    pointCloudShading () {
-      this.reload()
+    pointCloudShading (val) {
+      this.primitive.pointCloudShading = val
     },
-    imageBasedLightingFactor () {
-      this.reload()
+    imageBasedLightingFactor (val) {
+      this.primitive.imageBasedLightingFactor = makeCartesian2(val)
     },
-    lightColor () {
-      this.reload()
+    lightColor (val) {
+      this.primitive.lightColor = makeCartesian3(val)
     },
-    debugFreezeFrame () {
-      this.reload()
+    debugFreezeFrame (val) {
+      this.primitive.debugFreezeFrame = val
     },
-    debugColorizeTiles () {
-      this.reload()
+    debugColorizeTiles (val) {
+      this.primitive.debugColorizeTiles = val
     },
-    debugWireframe () {
-      this.reload()
+    debugWireframe (val) {
+      this.primitive.debugWireframe = val
     },
-    debugShowBoundingVolume () {
-      this.reload()
+    debugShowContentBoundingVolume (val) {
+      this.primitive.debugShowContentBoundingVolume = val
     },
-    debugShowContentBoundingVolume () {
-      this.reload()
+    debugShowViewerRequestVolume (val) {
+      this.primitive.debugShowViewerRequestVolume = val
     },
-    debugShowViewerRequestVolume () {
-      this.reload()
+    debugShowGeometricError (val) {
+      this.primitive.debugShowGeometricError = val
     },
-    debugShowGeometricError () {
-      this.reload()
+    debugShowRenderingStatistics (val) {
+      this.primitive.debugShowRenderingStatistics = val
     },
-    debugShowRenderingStatistics () {
-      this.reload()
+    debugShowMemoryUsage (val) {
+      this.primitive.debugShowMemoryUsage = val
     },
-    debugShowMemoryUsage () {
-      this.reload()
-    },
-    debugShowUrl () {
-      this.reload()
+    debugShowUrl (val) {
+      this.primitive.debugShowUrl = val
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
+      const { url, show, modelMatrix, shadows, maximumScreenSpaceError, maximumMemoryUsage, cullWithChildrenBounds, dynamicScreenSpaceError,
         dynamicScreenSpaceErrorDensity, dynamicScreenSpaceErrorFactor, dynamicScreenSpaceErrorHeightFalloff, skipLevelOfDetail, baseScreenSpaceError,
         skipScreenSpaceErrorFactor, skipLevels, immediatelyLoadDesiredLevelOfDetail, loadSiblings, clippingPlanes, classificationType, ellipsoid, pointCloudShading,
         imageBasedLightingFactor, lightColor, debugFreezeFrame, debugColorizeTiles, debugWireframe, debugShowBoundingVolume, debugShowContentBoundingVolume,
@@ -245,8 +230,8 @@ export default {
         classificationType,
         ellipsoid,
         pointCloudShading,
-        imageBasedLightingFactor,
-        lightColor,
+        imageBasedLightingFactor: makeCartesian2(imageBasedLightingFactor),
+        lightColor: makeCartesian3(lightColor),
         debugFreezeFrame,
         debugColorizeTiles,
         debugWireframe,

@@ -1,26 +1,11 @@
 <script>
-import primitiveCollection from '../../mixins/primitiveCollection'
+import primitiveMixin from '@/mixins/primitive/primitiveMixin'
 export default {
   name: 'polyline-collection',
-  mixins: [primitiveCollection],
-  props: {
-    modelMatrix: Object,
-    debugShowBoundingVolume: {
-      type: Boolean,
-      default: false
-    }
-  },
-  watch: {
-    modelMatrix () {
-      this.reload()
-    },
-    debugShowBoundingVolume (val) {
-      this.originInstance.debugShowBoundingVolume = val
-    }
-  },
+  mixins: [primitiveMixin],
   methods: {
     createCesiumObject () {
-      const { Cesium, modelMatrix, debugShowBoundingVolume } = this
+      const { modelMatrix, debugShowBoundingVolume } = this
       let options = {
         modelMatrix,
         debugShowBoundingVolume

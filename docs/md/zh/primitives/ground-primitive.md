@@ -1,10 +1,10 @@
-# GroundPrimitive图元
+# GroundPrimitive 图元
 
-`ground-primitive` 使用`Primitive API`加载几何对象。按照Cesium组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`，`ground-primitive`支持添加贴地几何对象，`CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`以及`RectangleGeometry`。
+`ground-primitive` 使用`Primitive API`加载几何对象。按照 Cesium 组织方式，需要包裹`geometry-instance`作为中间组件添加集合对象`Geometry`。相比`primitive`，`ground-primitive`支持添加贴地几何对象，`CircleGeometry`、 `CorridorGeometry`、 `EllipseGeometry`、 `PolygonGeometry`以及`RectangleGeometry`。
 
 ## 示例
 
-### 添加RectangleGeometry到场景
+### 添加 RectangleGeometry 到场景
 
 #### 预览
 
@@ -97,20 +97,20 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
+        rectangle: { west: 102.5, south: 29.5, east: 106.5, north: 33.5 },
         interleave: false,
         asynchronous: false
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
           orientation: {
@@ -131,7 +131,7 @@
         })
         this.play()
       },
-      play () {
+      play() {
         let urls = [
           'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/2.png',
@@ -155,6 +155,7 @@
 ## 属性
 
 参考官方文档 [GroundPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/GroundPrimitive.html)
+
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 
@@ -162,6 +163,6 @@
 
 ## 事件
 
-|事件名|参数|描述|
-|------|----|----|
-|ready|{Cesium, viewer}|该组件渲染完毕时触发，返回Cesium类, viewer实例。|
+| 事件名 | 参数             | 描述                                                |
+| ------ | ---------------- | --------------------------------------------------- |
+| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |

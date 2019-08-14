@@ -1,19 +1,30 @@
-import cmp from './virtualCmp'
-import mergeDescriptors from '../util/mergeDescriptors'
+/**
+ * ClassificationPrimitive
+ * GroundPolylinePrimitive
+ * GroundPrimitive
+ * Model
+ * Cesium3DTileset
+ * Primitive
+ * BillboardCollection
+ * LabelCollection
+ * PointPrimitiveCollection
+ * PolylineCollection
+ */
+import cmp from '@/mixins/virtualCmp'
+import mergeDescriptors from '@/util/mergeDescriptors'
 
-const props = {}
-const computed = {}
 const methods = {
   mount () {
     const { viewer, primitive } = this
-    primitive.readyPromise
-      .then(primitive => {
-        const listener = this.$listeners['readyPromise']
-        listener && this.$emit('readyPromise', primitive)
-      })
-      .otherwise(error => {
-        throw new Cesium.DeveloperError(error)
-      })
+    primitive.readyPromise &&
+      primitive.readyPromise
+        .then(primitive => {
+          const listener = this.$listeners['readyPromise']
+          listener && this.$emit('readyPromise', primitive)
+        })
+        .otherwise(error => {
+          throw new Cesium.DeveloperError(error)
+        })
     viewer && viewer.scene.primitives.add(primitive)
   },
   unload () {
@@ -32,13 +43,9 @@ const methods = {
     })
   }
 }
-const watch = {}
 
 export default {
   mixins: [cmp],
-  props,
-  computed,
-  watch,
   methods,
   stubVNode: {
     attrs () {
