@@ -1,5 +1,5 @@
 <script>
-import cmp from '../../mixins/virtualCmp.js'
+import cmp from '@/mixins/virtualCmp.js'
 export default {
   name: 'cesium-terrain-provider',
   mixins: [cmp],
@@ -33,15 +33,7 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const {
-        Cesium,
-        url,
-        requestVertexNormals,
-        requestWaterMask,
-        requestMetadata,
-        ellipsoid,
-        credit
-      } = this
+      const { url, requestVertexNormals, requestWaterMask, requestMetadata, ellipsoid, credit } = this
       let options = {
         url,
         requestVertexNormals,

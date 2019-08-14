@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-07-02 13:49:24
+ * @Last Modified time: 2019-08-13 10:12:44
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import bindEvents from '../../util/bindEvent'
-import { Events } from '../../util/events.js'
-import services from '../../mixins/services'
-import mergeDescriptors from '../../util/mergeDescriptors'
-import { getDocumentByClassName } from '../../util/util.js'
+import bindEvents from '@/util/bindEvent'
+import { Events } from '@/util/events.js'
+import services from '@/mixins/services'
+import mergeDescriptors from '@/util/mergeDescriptors'
+import { getDocumentByClassName } from '@/util/util.js'
 const path = require('path')
 
 export default {

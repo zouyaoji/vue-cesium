@@ -8,7 +8,7 @@
   </i>
 </template>
 <script>
-import cmp from '../../mixins/virtualCmp'
+import cmp from '@/mixins/virtualCmp'
 export default {
   name: 'flood-anaysis',
   data () {
