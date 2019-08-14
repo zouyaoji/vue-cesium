@@ -13,9 +13,9 @@
     <label-collection>
       <template v-for="(polyline, index) of polylines">
         <template  v-for="(position, subIndex) of polyline.positions">
-          <label-primitive :position="position" :key="'label' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel" 
+          <label-primitive :position="position" :key="'label' + index + 'position' + subIndex" :font="font" :outlineColor="outlineColorLabel"
             :text="'距离:' + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
-            showBackground :disableDepthTestDistance="disableDepthTestDistance" v-if="polyline.distances[subIndex] !== 0" :pixelOffset="pixelOffset">
+            showBackground :disableDepthTestDistance="disableDepthTestDistance" v-if="polyline.distances[subIndex] !== 0" :pixelOffset="pixelOffset" :horizontalOrigin="1">
           </label-primitive>
         </template>
       </template>

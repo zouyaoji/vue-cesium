@@ -13,8 +13,8 @@
     <label-collection>
       <template v-for="(polyline, index) of polylines">
         <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="'label'+index" :pixelOffset="pixelOffset"
-          :text="'面积:' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')" 
-          :font="font" :outlineColor="outlineColorLabel" showBackground :disableDepthTestDistance="disableDepthTestDistance">
+          :text="'面积:' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+          :font="font" :outlineColor="outlineColorLabel" showBackground :disableDepthTestDistance="disableDepthTestDistance" :horizontalOrigin="1">
         </label-primitive>
       </template>
     </label-collection>

@@ -1,4 +1,5 @@
 # 量算
+
 `measure-distance` `measure-area` `measure-height`
 
 ## 示例
@@ -67,9 +68,15 @@
 <template>
   <div class="viewer">
     <div class="demo-tool">
-      <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? '停止' : '距离' }}</md-button>
-      <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? '停止' : '面积' }}</md-button>
-      <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? '停止' : '高度' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
+        >{{ distanceMeasuring ? '停止' : '距离' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="toggle('measureArea')"
+        >{{ areaMeasuring ? '停止' : '面积' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
+        >{{ heightMeasuring ? '停止' : '高度' }}</md-button
+      >
       <md-button class="md-raised md-accent" @click="clear">清除</md-button>
     </div>
     <cesium-viewer @ready="ready" scene3DOnly>
@@ -83,33 +90,33 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         distanceMeasuring: false,
         areaMeasuring: false,
-        heightMeasuring: false,
+        heightMeasuring: false
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
-      toggle (type) {
+      toggle(type) {
         this.$refs[type].measuring = !this.$refs[type].measuring
       },
-      clear () {
+      clear() {
         this.$refs.measureDistance.clear()
         this.$refs.measureArea.clear()
         this.$refs.measureHeight.clear()
       },
-      activeEvt (_) {
+      activeEvt(_) {
         this[_.type] = _.isActive
       },
-      readyPromise (tileset) {
-        const {viewer} = this.cesiumInstance
+      readyPromise(tileset) {
+        const { viewer } = this.cesiumInstance
         viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
       }
     }
@@ -121,6 +128,6 @@
 
 ### measure-area
 
-|属性名|类型|默认值|描述|
-|------|-----|-----|----|
-|perPositionHeight|Boolean|true|`optional` 测量面是否贴地形。|
+| 属性名            | 类型    | 默认值 | 描述                          |
+| ----------------- | ------- | ------ | ----------------------------- |
+| perPositionHeight | Boolean | true   | `optional` 测量面是否贴地形。 |

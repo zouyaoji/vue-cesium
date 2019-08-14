@@ -12,7 +12,7 @@
     </point-collection>
     <label-collection>
       <label-primitive :position="label.position" :text="label.text" :key="'label'+index" v-for="(label, index) of labels"
-        :font="font" :outlineColor="outlineColorLabel" :disableDepthTestDistance="disableDepthTestDistance"></label-primitive>
+        :font="font" :outlineColor="outlineColorLabel" :disableDepthTestDistance="disableDepthTestDistance" :horizontalOrigin="1"></label-primitive>
     </label-collection>
   </i>
 </template>
