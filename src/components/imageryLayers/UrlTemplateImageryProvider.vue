@@ -1,68 +1,52 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  url,
+  subdomains,
+  credit,
+  minimumLevel,
+  maximumLevel,
+  rectangle,
+  tilingScheme,
+  ellipsoid,
+  tileWidth,
+  tileHeight,
+  getFeatureInfoFormats,
+  enablePickFeatures
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '@/util/util'
 export default {
   name: 'urltemplate-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [
+    url,
+    subdomains,
+    credit,
+    minimumLevel,
+    maximumLevel,
+    rectangle,
+    tilingScheme,
+    ellipsoid,
+    tileWidth,
+    tileHeight,
+    getFeatureInfoFormats,
+    enablePickFeatures,
+    imageryProviderMixin
+  ],
   props: {
-    url: String,
-    pickFeaturesUrl: String,
+    pickFeaturesUrl: String | Object,
     urlSchemeZeroPadding: Object,
-    subdomains: String,
-    credit: String,
-    minimumLevel: {
-      type: Number,
-      default: 0
-    },
-    maximumLevel: Number,
-    rectangle: Object,
-    tilingScheme: Object,
-    ellipsoid: Object,
-    tileWidth: {
-      type: Number,
-      default: 256
-    },
-    tileHeight: {
-      type: Number,
-      default: 256
-    },
     hasAlphaChannel: {
-      type: Boolean,
-      default: true
-    },
-    getFeatureInfoFormats: Array,
-    enablePickFeatures: {
       type: Boolean,
       default: true
     },
     customTags: Object
   },
-  computed: {
-    changeProps () {
-      const { url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
-        tilingScheme, ellipsoid, tileWidth, tileHeight, hasAlphaChannel, getFeatureInfoFormats, customTags, enablePickFeatures } = this
-      return {
-        url,
-        pickFeaturesUrl,
-        urlSchemeZeroPadding,
-        subdomains,
-        credit,
-        minimumLevel,
-        maximumLevel,
-        rectangle,
-        tilingScheme,
-        ellipsoid,
-        tileWidth,
-        tileHeight,
-        hasAlphaChannel,
-        getFeatureInfoFormats,
-        customTags,
-        enablePickFeatures
-      }
-    }
-  },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
+      return new Cesium.UrlTemplateImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, pickFeaturesUrl, urlSchemeZeroPadding, subdomains, credit, minimumLevel, maximumLevel, rectangle,
         tilingScheme, ellipsoid, tileWidth, tileHeight, hasAlphaChannel, getFeatureInfoFormats, customTags, enablePickFeatures } = this
       let options = {
         url,
@@ -72,7 +56,7 @@ export default {
         credit,
         minimumLevel,
         maximumLevel,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle: makeRectangle(rectangle),
         tilingScheme,
         ellipsoid,
         tileWidth,
@@ -83,7 +67,7 @@ export default {
         enablePickFeatures
       }
       this.removeNullItem(options)
-      return new Cesium.UrlTemplateImageryProvider(options)
+      return options
     }
   }
 }

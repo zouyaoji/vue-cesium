@@ -1,33 +1,40 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  accessToken,
+  format,
+  ellipsoid,
+  minimumLevel,
+  maximumLevel,
+  rectangle,
+  credit
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '@/util/util'
 export default {
   name: 'mapbox-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [
+    accessToken,
+    format,
+    ellipsoid,
+    minimumLevel,
+    maximumLevel,
+    rectangle,
+    credit,
+    imageryProviderMixin
+  ],
   props: {
-    url: String,
-    mapId: String,
-    accessToken: String,
-    format: {
+    url: {
       type: String,
-      default: 'png'
+      default: 'https://api.mapbox.com/v4/'
     },
-    ellipsoid: Object,
-    minimumLevel: Number,
-    maximumLevel: Number,
-    rectangle: Object,
-    credit: String
-  },
-  computed: {
-    changeProps () {
-      const { url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } = this
-      return {
-        url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit
-      }
-    }
+    mapId: String
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } = this
+      return new Cesium.MapboxImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, mapId, accessToken, format, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } = this
       let options = {
         url,
         mapId,
@@ -36,11 +43,11 @@ export default {
         ellipsoid,
         minimumLevel,
         maximumLevel,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle: makeRectangle(rectangle),
         credit
       }
       this.removeNullItem(options)
-      return new Cesium.MapboxImageryProvider(options)
+      return options
     }
   }
 }

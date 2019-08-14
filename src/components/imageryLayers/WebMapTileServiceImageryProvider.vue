@@ -1,10 +1,40 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  url,
+  clock,
+  times,
+  tileWidth,
+  tileHeight,
+  tilingScheme,
+  rectangle,
+  minimumLevel,
+  maximumLevel,
+  ellipsoid,
+  credit,
+  subdomains,
+  token
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '@/util/util'
 export default {
   name: 'wmts-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [
+    url,
+    clock,
+    times,
+    tileWidth,
+    tileHeight,
+    tilingScheme,
+    rectangle,
+    minimumLevel,
+    maximumLevel,
+    ellipsoid,
+    credit,
+    subdomains,
+    token,
+    imageryProviderMixin
+  ],
   props: {
-    url: String,
     format: {
       type: String,
       default: 'image/jpeg'
@@ -13,62 +43,14 @@ export default {
     wmtsStyle: String,
     tileMatrixSetID: String,
     tileMatrixLabels: Array,
-    clock: Object,
-    times: Object,
-    dimensions: Object,
-    tileWidth: {
-      type: Number,
-      default: 256
-    },
-    tileHeight: {
-      type: Number,
-      default: 256
-    },
-    tilingScheme: Object,
-    rectangle: Object,
-    minimumLevel: {
-      type: Number,
-      default: 0
-    },
-    maximumLevel: Number,
-    ellipsoid: Object,
-    credit: String,
-    subdomains: {
-      type: String | Array,
-      default: 'abc'
-    },
-    token: String
-  },
-  computed: {
-    changeProps () {
-      const { url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
-        tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
-      return {
-        url,
-        format,
-        layer,
-        wmtsStyle,
-        tileMatrixSetID,
-        tileMatrixLabels,
-        clock,
-        times,
-        dimensions,
-        tileWidth,
-        tileHeight,
-        tilingScheme,
-        rectangle,
-        minimumLevel,
-        maximumLevel,
-        ellipsoid,
-        credit,
-        subdomains,
-        token
-      }
-    }
+    dimensions: Object
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
+      return new Cesium.WebMapTileServiceImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
         tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
       let options = {
         url: Cesium.defined(token) ? url + '&tk=' + token : url,
@@ -83,7 +65,7 @@ export default {
         tileWidth,
         tileHeight,
         tilingScheme,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle: makeRectangle(rectangle),
         minimumLevel,
         maximumLevel,
         ellipsoid,
@@ -91,7 +73,7 @@ export default {
         subdomains
       }
       this.removeNullItem(options)
-      return new Cesium.WebMapTileServiceImageryProvider(options)
+      return options
     }
   }
 }

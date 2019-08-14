@@ -1,60 +1,50 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  url,
+  token,
+  tileDiscardPolicy,
+  layers,
+  enablePickFeatures,
+  rectangle,
+  tilingScheme,
+  ellipsoid,
+  credit,
+  tileWidth,
+  tileHeight,
+  maximumLevel
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '@/util/util'
 export default {
   name: 'arcgis-mapserver-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [
+    url,
+    token,
+    tileDiscardPolicy,
+    layers,
+    enablePickFeatures,
+    rectangle,
+    tilingScheme,
+    ellipsoid,
+    credit,
+    tileWidth,
+    tileHeight,
+    maximumLevel,
+    imageryProviderMixin
+  ],
   props: {
-    url: String,
-    token: String,
-    tileDiscardPolicy: Object,
     usePreCachedTilesIfAvailable: {
       type: Boolean,
       default: true
-    },
-    layers: String,
-    enablePickFeatures: {
-      type: Boolean,
-      default: true
-    },
-    rectangle: Object,
-    tilingScheme: Object,
-    ellipsoid: Object,
-    tileWidth: {
-      type: Number,
-      default: 256
-    },
-    tileHeight: {
-      type: Number,
-      default: 256
-    },
-    minimumLevel: Number,
-    maximumLevel: Number
-  },
-  computed: {
-    changeProps () {
-      const { url, token, tileDiscardPolicy, usePreCachedTilesIfAvailable, layers, enablePickFeatures, rectangle,
-        tilingScheme, ellipsoid, tileWidth, tileHeight, minimumLevel, maximumLevel } = this
-      return {
-        url,
-        token,
-        tileDiscardPolicy,
-        usePreCachedTilesIfAvailable,
-        layers,
-        enablePickFeatures,
-        rectangle,
-        tilingScheme,
-        ellipsoid,
-        tileWidth,
-        tileHeight,
-        minimumLevel,
-        maximumLevel
-      }
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, token, tileDiscardPolicy, usePreCachedTilesIfAvailable, layers, enablePickFeatures, rectangle,
-        tilingScheme, ellipsoid, tileWidth, tileHeight, minimumLevel, maximumLevel } = this
+      return new Cesium.ArcGisMapServerImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, token, tileDiscardPolicy, usePreCachedTilesIfAvailable, layers, enablePickFeatures, rectangle,
+        tilingScheme, ellipsoid, credit, tileWidth, tileHeight, maximumLevel } = this
       let options = {
         url,
         token,
@@ -62,16 +52,16 @@ export default {
         usePreCachedTilesIfAvailable,
         layers,
         enablePickFeatures,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle: makeRectangle(rectangle),
         tilingScheme,
         ellipsoid,
+        credit,
         tileWidth,
         tileHeight,
-        minimumLevel,
         maximumLevel
       }
       this.removeNullItem(options)
-      return new Cesium.ArcGisMapServerImageryProvider(options)
+      return options
     }
   }
 }

@@ -1,49 +1,51 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  fileExtension,
+  rectangle,
+  minimumLevel,
+  maximumLevel,
+  ellipsoid
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '@/util/util'
 export default {
   name: 'openstreetmap-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [
+    imageryProviderMixin,
+    fileExtension,
+    rectangle,
+    minimumLevel,
+    maximumLevel,
+    ellipsoid
+  ],
   props: {
     url: {
       type: String,
       default: 'https://a.tile.openstreetmap.org'
     },
-    fileExtension: {
-      type: String,
-      default: 'png'
-    },
-    rectangle: Object,
-    minimumLevel: Number,
-    maximumLevel: Number,
-    ellipsoid: Object,
     credit: {
-      type: String,
+      type: String | Object,
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
-    }
-  },
-  computed: {
-    changeProps () {
-      const { url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
-      return {
-        url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit
-      }
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
+      /* eslint-disable new-cap */
+      return new Cesium.createOpenStreetMapImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
       let options = {
         url,
         fileExtension,
-        rectangle: rectangle instanceof Cesium.Rectangle || this.isEmptyObj(rectangle) ? rectangle : Cesium.Rectangle.fromDegrees(rectangle.west, rectangle.south, rectangle.east, rectangle.north),
+        rectangle: makeRectangle(rectangle),
         minimumLevel,
         maximumLevel,
         ellipsoid,
         credit
       }
       this.removeNullItem(options)
-      /* eslint-disable new-cap */
-      return new Cesium.createOpenStreetMapImageryProvider(options)
+      return options
     }
   }
 }

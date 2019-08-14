@@ -1,31 +1,32 @@
 <script>
-import imageryProvider from '../../mixins/imageryProvider'
+import {
+  url,
+  ellipsoid,
+  tileDiscardPolicy
+} from '@/mixins/imageryProvider/allProps'
+import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
 export default {
   name: 'bingmaps-imagery-provider',
-  mixins: [imageryProvider],
+  mixins: [url, ellipsoid, tileDiscardPolicy, imageryProviderMixin],
   props: {
-    url: String,
+    url: String | Object,
     bmKey: String,
     tileProtocol: String,
     mapStyle: {
       type: String,
       default: 'Aerial'
     },
-    culture: String,
-    ellipsoid: Object,
-    tileDiscardPolicy: Object
-  },
-  computed: {
-    changeProps () {
-      const { url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy } = this
-      return {
-        url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy
-      }
+    culture: {
+      type: String,
+      default: ''
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy } = this
+      return new Cesium.BingMapsImageryProvider(this.makeOptions())
+    },
+    makeOptions () {
+      const { url, bmKey, tileProtocol, mapStyle, culture, ellipsoid, tileDiscardPolicy } = this
       let options = {
         url,
         key: bmKey,
@@ -36,7 +37,7 @@ export default {
         tileDiscardPolicy
       }
       this.removeNullItem(options)
-      return new Cesium.BingMapsImageryProvider(options)
+      return options
     }
   }
 }

@@ -1,6 +1,7 @@
 <script>
-import mergeDescriptors from '../../util/mergeDescriptors'
-import cmp from '../../mixins/virtualCmp'
+import mergeDescriptors from '@/util/mergeDescriptors'
+import cmp from '@/mixins/virtualCmp'
+import { makeRectangle, makeColor } from '@/util/util'
 export default {
   name: 'imagery-layer',
   mixins: [cmp],
@@ -32,8 +33,8 @@ export default {
       default: 1.0
     },
     splitDirection: Number,
-    minificationFilter: Object,
-    magnificationFilter: Object,
+    minificationFilter: Number,
+    magnificationFilter: Number,
     show: {
       type: Boolean,
       default: true
@@ -41,7 +42,12 @@ export default {
     maximumAnisotropy: Number,
     minimumTerrainLevel: Number,
     maximumTerrainLevel: Number,
-    cutoutRectangle: Object
+    cutoutRectangle: Object,
+    colorToAlpha: Object,
+    colorToAlphaThreshold: {
+      type: Number,
+      default: 0.004
+    }
   },
   watch: {
     rectangle () {
@@ -77,6 +83,9 @@ export default {
     show (val) {
       this.imageryLayer.show = val
     },
+    maximumAnisotropy (val) {
+      this.imageryLayer.maximumAnisotropy = val
+    },
     minimumTerrainLevel (val) {
       this.imageryLayer.minimumTerrainLevel = val
     },
@@ -84,15 +93,21 @@ export default {
       this.imageryLayer.maximumTerrainLevel = val
     },
     cutoutRectangle (val) {
-      this.imageryLayer.cutoutRectangle = val
+      this.imageryLayer.cutoutRectangle = makeRectangle(val)
+    },
+    colorToAlpha (val) {
+      this.imageryLayer.colorToAlpha = makeColor(val)
+    },
+    colorToAlphaThreshold (val) {
+      this.imageryLayer.colorToAlphaThreshold = val
     }
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, rectangle, alpha, brightness, contrast, hue, saturation, gamma, splitDirection,
-        minificationFilter, magnificationFilter, show, minimumTerrainLevel, maximumTerrainLevel, cutoutRectangle } = this
+      const { rectangle, alpha, brightness, contrast, hue, saturation, gamma, splitDirection, minificationFilter, magnificationFilter,
+        show, maximumAnisotropy, minimumTerrainLevel, maximumTerrainLevel, cutoutRectangle, colorToAlpha, colorToAlphaThreshold } = this
       let options = {
-        rectangle,
+        rectangle: makeRectangle(rectangle),
         alpha,
         brightness,
         contrast,
@@ -103,9 +118,12 @@ export default {
         minificationFilter,
         magnificationFilter,
         show,
+        maximumAnisotropy,
         minimumTerrainLevel,
         maximumTerrainLevel,
-        cutoutRectangle
+        cutoutRectangle: makeRectangle(cutoutRectangle),
+        colorToAlpha: makeColor(colorToAlpha),
+        colorToAlphaThreshold
       }
       this.removeNullItem(options)
       return new Cesium.ImageryLayer(this.provider || {}, options)
