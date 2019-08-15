@@ -136,12 +136,13 @@
 | ------------ | ------ | ------ | -------------------------------------- |
 | url          | String |        | `required` 超图 iserver 影像服务地址。 |
 | name         | String |        | `optional` 影像图层名称。              |
-| minimumLevel | Number | 0      | `optional` 最小层级。                  |
-| maximumLevel | Number | 20     | `optional` 最大层级。                  |
+| minimumLevel | Number | `0`    | `optional` 最小层级。                  |
+| maximumLevel | Number | `20`   | `optional` 最大层级。                  |
 
 ## 事件
 
-| 事件名     | 参数              | 描述                                                                |
-| ---------- | ----------------- | ------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
-| errorEvent | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| 事件名       | 参数              | 描述                                                                |
+| ------------ | ----------------- | ------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
+| errorEvent   | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider   | 当图层可用时触发, 返回 ImageryProvider 实例。                       |

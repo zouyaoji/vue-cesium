@@ -129,7 +129,7 @@
 | mapId | String | | `required`The Mapbox Map ID. |
 | accessToken | Object | | `optional`The public access token for the imagery. |
 | format | String | `'png'` | `optional`The format of the image request. |
-| ellipsoid | String | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| ellipsoid | Object | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
 | minimumLevel | Number | 0 | `optional`The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | maximumLevel | Number | | `optional`The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | rectangle | Object | | `optional`The rectangle, in radians, covered by the image. **structure: { west: number, south: number, east: number, north: number }** |
@@ -139,7 +139,8 @@
 
 ## Events
 
-| name       | parameter         | description                                                                                                                                                                                                                                                |
-| ---------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | Triggers when MapboxImageryProvider is ready. It returns a core class of Cesium, a viewer instance.                                                                                                                                                        |
-| errorEvent | TileProviderError | Gets an event that is raised when the imagery provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError. |
+| name         | parameter         | description                                                                                                                                                                                                                                                |
+| ------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | Triggers when MapboxImageryProvider is ready. It returns a core class of Cesium, a viewer instance.                                                                                                                                                        |
+| errorEvent   | TileProviderError | Gets an event that is raised when the imagery provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError. |
+| readyPromise | ImageryProvider   | Gets a promise that resolves to true when the provider is ready for use.                                                                                                                                                                                   |

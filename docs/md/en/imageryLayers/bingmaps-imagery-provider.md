@@ -11,6 +11,11 @@
 <doc-preview>
   <template>
     <div class="viewer">
+      <cesium-viewer @ready="ready">
+        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
+        </imagery-layer>
+      </cesium-viewer>
       <div class="demo-tool">
         <span>alpha</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
@@ -28,11 +33,6 @@
           </md-option>
         </md-select>
       </div>
-      <cesium-viewer @ready="ready">
-        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
-        </imagery-layer>
-      </cesium-viewer>
     </div>
   </template>
 
@@ -76,6 +76,11 @@
 ```html
 <template>
   <div class="viewer">
+    <cesium-viewer @ready="ready">
+      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
+      </imagery-layer>
+    </cesium-viewer>
     <div class="demo-tool">
       <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
@@ -90,11 +95,6 @@
         </md-option>
       </md-select>
     </div>
-    <cesium-viewer @ready="ready">
-      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <bingmaps-imagery-provider :url="url" :bmKey="bmKey" :mapStyle="mapStyle"></bingmaps-imagery-provider>
-      </imagery-layer>
-    </cesium-viewer>
   </div>
 </template>
 
@@ -148,14 +148,16 @@
 | tileProtocol | String | | `optional`The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page. |
 | mapStyle | String | `'Aerial'` | `optional`The type of Bing Maps imagery to load. |
 | culture | String | `''` | `optional`The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See [http://msdn.microsoft.com/en-us/library/hh441729.aspx](http://msdn.microsoft.com/en-us/library/hh441729.aspx) for information on the supported cultures. |
-| ellipsoid | Number |  | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| ellipsoid | Object |  | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
 | tileDiscardPolicy | Object | | `optional`The policy that determines if a tile is invalid and should be discarded. If this value is not specified, a default DiscardMissingTileImagePolicy is used which requests tile 0,0 at the maximum tile level and checks pixels (0,0), (120,140), (130,160), (200,50), and (200,200). If all of these pixels are transparent, the discard check is disabled and no tiles are discarded. If any of them have a non-transparent color, any tile that has the same values in these pixel locations is discarded. The end result of these defaults should be correct tile discarding for a standard Bing Maps server. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter. |
 
 - Reference official document [BingMapsImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/BingMapsImageryProvider.html)
 
 ## Events
 
-| 事件名     | 参数              | 描述                                                                                                                                                                                                                                                       |
-| ---------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | Triggers when BingMapsImageryProvider is ready. It returns a core class of Cesium, a viewer instance.                                                                                                                                                      |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | ---- | -------------------------- |
+| ready | {Cesium, viewer} | Triggers when BingMapsImageryProvider is ready. It returns a core class of Cesium, a viewer instance. |
 | errorEvent | TileProviderError | Gets an event that is raised when the imagery provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError. |
+| readyPromise | ImageryProvider | Gets a promise that resolves to true when the provider is ready for use. |

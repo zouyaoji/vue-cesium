@@ -31,8 +31,8 @@
       data () {
         return {
           options: {
-             // option used to set a default view when resetting the map view with the reset navigation control.[lon,lat,height] or [west,south,east,north]
-            defaultResetView: [105, 29.999999999999993, 19059568.497290563],
+             // option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
+            defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
             // option used to enable or disable the compass.
             enableCompass: true,
             // option used to enable or disable the zoom controls.
@@ -85,8 +85,8 @@
     data() {
       return {
         options: {
-          // option used to set a default view when resetting the map view with the reset navigation control.[lon,lat,height] or [west,south,east,north]
-          defaultResetView: [105, 29.999999999999993, 19059568.497290563],
+          // option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
+          defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
           // option used to enable or disable the compass.
           enableCompass: true,
           // option used to enable or disable the zoom controls.
@@ -116,13 +116,14 @@
 
 ## Instance Properties
 
-| name                   | type    | default | description                                                                                                                                          |     |
+<!-- prettier-ignore -->
+| name | type | default | description | |
 | ---------------------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
-| defaultResetView       | Array   |         | `optional` option used to set a default view when resetting the map view with the reset navigation control. [lon,lat,height],[west,south,east,north] |
-| enableCompass          | Boolean | true    | `optional` option used to enable or disable the compass.                                                                                             |
-| enableZoomControls     | Boolean | true    | `optional` option used to enable or disable the zoom controls.                                                                                       |
-| enableDistanceLegend   | Boolean | true    | `optional` option used to enable or disable the distance legend.                                                                                     |
-| enableCompassOuterRing | Boolean | true    | `optional` option used to enable or disable the Compass Outer Ring.                                                                                  |
+| defaultResetView | Array | | `optional` option used to set a default view when resetting the map view with the reset navigation control. **structure: {lng: number, lat: number, height: number} or {west: number,south: number,east: number,north: number}** |
+| enableCompass | Boolean | true | `optional` option used to enable or disable the compass. |
+| enableZoomControls | Boolean | true | `optional` option used to enable or disable the zoom controls. |
+| enableDistanceLegend | Boolean | true | `optional` option used to enable or disable the distance legend. |
+| enableCompassOuterRing | Boolean | true | `optional` option used to enable or disable the Compass Outer Ring. |
 
 ---
 

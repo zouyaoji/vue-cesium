@@ -129,7 +129,7 @@
 | mapId | String | | `required`Mapbox 地图 ID。 |
 | accessToken | Object | | `optional`加载的 Mapbox 影像秘钥。 |
 | format | String | `'png'` | `optional`请求返回的影像图片格式。 |
-| ellipsoid | String | | `optional`参考椭球体，没指定的话默认 WGS84。 |
+| ellipsoid | Object | | `optional`参考椭球体，没指定的话默认 WGS84。 |
 | minimumLevel | Number | `0` | `optional`最小层级。 |
 | maximumLevel | Number | | `optional`最大层级。 |
 | rectangle | Object | | `optional`图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
@@ -137,7 +137,8 @@
 
 ## 事件
 
-| 事件名     | 参数              | 描述                                                                |
-| ---------- | ----------------- | ------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
-| errorEvent | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| 事件名       | 参数              | 描述                                                                |
+| ------------ | ----------------- | ------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
+| errorEvent   | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider   | 当图层可用时触发, 返回 ImageryProvider 实例。                       |

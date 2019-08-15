@@ -34,10 +34,10 @@
           attributes: null,
           extrudedHeight: 3000,
           polygonHierarchy: [
-            102.1, 29.5,
-            106.2, 29.5,
-            106.2, 33.5,
-            102.1, 33.5
+            { lng: 102.1, lat: 29.5 },
+            { lng: 106.2, lat: 29.5 },
+            { lng: 106.2, lat: 33.5 },
+            { lng: 102.1, lat: 33.5 }
           ]
         }
       },
@@ -90,7 +90,12 @@
         vertexFormat: null,
         attributes: null,
         extrudedHeight: 3000,
-        polygonHierarchy: [102.1, 29.5, 106.2, 29.5, 106.2, 33.5, 102.1, 33.5]
+        polygonHierarchy: [
+          { lng: 102.1, lat: 29.5 },
+          { lng: 106.2, lat: 29.5 },
+          { lng: 106.2, lat: 33.5 },
+          { lng: 102.1, lat: 33.5 }
+        ]
       }
     },
     methods: {

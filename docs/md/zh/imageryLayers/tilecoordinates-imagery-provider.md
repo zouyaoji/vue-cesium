@@ -1,10 +1,10 @@
-# OpenStreetMapImageryProvider
+# TileCoordinates 影像 Provider
 
-`openstreetmap-imagery-provider`加载 openstreetmap 地图影像。
+`tilecoordinates-imagery-provider`
 
 ## 示例
 
-### 添加 OpenStreetMap 到场景
+### 添加 TileCoordinatesImagery 到场景
 
 #### 预览
 
@@ -13,7 +13,7 @@
     <div class="viewer">
       <cesium-viewer @ready="ready">
         <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <openstreetmap-imagery-provider :url="url"></openstreetmap-imagery-provider>
+          <tilecoordinates-imagery-provider></tilecoordinates-imagery-provider>
         </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
@@ -23,15 +23,6 @@
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>对比度</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="url" placeholder="切换影像">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
       </div>
     </div>
   </template>
@@ -40,14 +31,6 @@
     export default {
       data () {
         return {
-          url: 'https://a.tile.openstreetmap.org',
-          options: [{
-            value: 'https://a.tile.openstreetmap.org',
-            label: 'openstreetmap1'
-          }, {
-            value: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
-            label: 'openstreetmap2'
-          }],
           alpha: 1,
           brightness: 1,
           contrast: 1
@@ -56,7 +39,8 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          // ..
+          // ...
+          window.viewer = viewer
         }
       }
     }
@@ -70,7 +54,7 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <openstreetmap-imagery-provider :url="url"></openstreetmap-imagery-provider>
+        <tilecoordinates-imagery-provider></tilecoordinates-imagery-provider>
       </imagery-layer>
     </cesium-viewer>
     <div class="demo-tool">
@@ -80,12 +64,6 @@
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
       <span>对比度</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
-      <span>切换服务</span>
-      <md-select v-model="url" placeholder="切换影像">
-        <md-option v-for="item in options" :key="item.value" :value="item.value">
-          {{item.label}}
-        </md-option>
-      </md-select>
     </div>
   </div>
 </template>
@@ -94,17 +72,6 @@
   export default {
     data() {
       return {
-        url: 'https://a.tile.openstreetmap.org',
-        options: [
-          {
-            value: 'https://a.tile.openstreetmap.org',
-            label: 'openstreetmap1'
-          },
-          {
-            value: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
-            label: 'openstreetmap2'
-          }
-        ],
         alpha: 1,
         brightness: 1,
         contrast: 1
@@ -113,7 +80,7 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        // ..
+        // ...
       }
     }
   }
@@ -124,18 +91,14 @@
 
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
-| ------------- | ------ | ------------------------------------------------------ | ---------------------------------------------------- |
-| url | String | `'https://a.tile.openstreetmap.org'` | `optional`指定 OpenStreetMap 服务地址。 |
-| fileExtension | String | `'png'` | `required`指定图片格式。 |
-| rectangle | Object | | `optional`图层的矩形范围，此矩形限制了影像可见范围。 **structure: { west: number, south: number, east: number, north: number }** |
-| minimumLevel | Number | `0` | `optional`最小层级。 |
-| maximumLevel | Number | | `optional`最大层级。 |
-| ellipsoid | Object | | `optional`参考椭球体，没指定的话默认 WGS84。 |
-| credit | String | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`服务描述信息。 |
+| ----- | -------- | ------- | ------------------------------------- |
+| tilingScheme | Number | | `optional` 指定瓦片坐标系参数. |
+| ellipsoid | Object | | `optional` 指定参考椭球体，默认是WGS84椭球体。 |
+| color | String\|Object\|Array | `'YELLOW'` | `optional` 指定绘制瓦片网格和文字的颜色。 |
+| tileWidth | Number | `256` | `optional` 指定瓦片到最详细级别的宽度。 |
+| tileHeight | Number | `256` | `optional` 指定瓦片到最详细级别的高度。 |
 
----
-
-- 官方文档 [createOpenStreetMapImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/createOpenStreetMapImageryProvider.html)
+- 官方文档 [TileCoordinatesImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/TileCoordinatesImageryProvider.html)
 
 ## 事件
 

@@ -11,8 +11,8 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <cesium-viewer @ready="ready">
-        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <cesium-viewer @ready="ready" @layerAdded="layerAdded">
+        <imagery-layer :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast">
           <urltemplate-imagery-provider :url="urlText"></urltemplate-imagery-provider>
         </imagery-layer>
         <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
@@ -21,17 +21,14 @@
       </cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
         <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>切换服务</span>
         <md-select v-model="url" placeholder="请选择服务">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
+          <md-option v-for="item in options" :key="item.value" :value="item.value">
             {{item.label}}
           </md-option>
         </md-select>
@@ -41,25 +38,42 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
           urlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
-          options: [{
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-            label: '高德影像地图服务'
-          }, {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-            label: '高德矢量地图服务'
-          }],
+          options: [
+            {
+              value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              label: '高德影像地图服务'
+            },
+            {
+              value: 'http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+              label: '谷歌影像地图服务'
+            },
+            {
+              value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+              label: '高德矢量地图服务'
+            }
+          ],
           alpha: 1,
           brightness: 1,
           contrast: 1
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+          this.cesiumInstance = cesiumInstance
+        },
+        layerAdded() {
+          if (
+            this.$refs.layerText.imageryLayer &&
+            this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+          ) {
+            const { viewer } = this.cesiumInstance
+            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+          }
         }
       }
     }
@@ -71,8 +85,8 @@
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer @ready="ready">
-      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
+    <cesium-viewer @ready="ready" @layerAdded="layerAdded">
+      <imagery-layer :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast">
         <urltemplate-imagery-provider :url="urlText"></urltemplate-imagery-provider>
       </imagery-layer>
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
@@ -108,6 +122,10 @@
             label: '高德影像地图服务'
           },
           {
+            value: 'http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+            label: '谷歌影像地图服务'
+          },
+          {
             value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: '高德矢量地图服务'
           }
@@ -120,6 +138,16 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+      },
+      layerAdded() {
+        if (
+          this.$refs.layerText.imageryLayer &&
+          this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+        ) {
+          const { viewer } = this.cesiumInstance
+          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+        }
       }
     }
   }
@@ -154,7 +182,8 @@
 
 ## 事件
 
-| 事件名     | 参数              | 描述                                                                |
-| ---------- | ----------------- | ------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
-| errorEvent | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| 事件名       | 参数              | 描述                                                                |
+| ------------ | ----------------- | ------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
+| errorEvent   | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider   | 当图层可用时触发, 返回 ImageryProvider 实例。                       |

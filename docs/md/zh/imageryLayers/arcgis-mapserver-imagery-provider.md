@@ -133,16 +133,17 @@
 | enablePickFeatures | Boolean | `true` | `optional`是否拾取对象，在 infobox 弹出信息。 |
 | rectangle | Object | | `optional` 图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
 | tilingScheme | Object | | `optional`The tiling scheme to use to divide the world into tiles. This parameter is ignored when accessing a tiled server. |
-| ellipsoid |  | Object | `optional`参考椭球体 |
-| tileWidth | Number | 256 | `optional`像元宽度。 |
-| tileHeight | Number | 256 | `optional`像元高度。 |
+| ellipsoid | Object |  | `optional`参考椭球体 |
+| tileWidth | Number | `256` | `optional`像元宽度。 |
+| tileHeight | Number | `256` | `optional`像元高度。 |
 | maximumLevel | Number | | `optional`最大层级。 |
 
 - 官方文档 [ArcGisMapServerImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/ArcGisMapServerImageryProvider.html)
 
 ## 事件
 
-| 事件名     | 参数              | 描述                                                                |
-| ---------- | ----------------- | ------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
-| errorEvent | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| 事件名       | 参数              | 描述                                                                |
+| ------------ | ----------------- | ------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
+| errorEvent   | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider   | 当图层可用时触发, 返回 ImageryProvider 实例。                       |

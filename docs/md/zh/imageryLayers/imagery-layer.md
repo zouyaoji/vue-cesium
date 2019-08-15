@@ -125,7 +125,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ------------------- | -------------------------- | --------------------------------- | -------------------------------------------------- |
-| rectangle | Object | imageryProvider.rectangle | `optional`图层的矩形范围,此矩形限制了影像可见范围。 |
+| rectangle | Object | `imageryProvider.rectangle` | `optional`图层的矩形范围,此矩形限制了影像可见范围。 |
 | alpha | Number\|function | `1.0` | `optional`图层透明度值，取值范围为 0.0~1.0。 |
 | brightness | Number\|function | `1.0`| `optional`图层亮度值。值为 1.0 表示使用原图；值大于 1.0 时图像将变亮；值小于 1.0 时图像将变暗。 |
 | contrast | Number\|function | `1.0` | `optional`图层对比度。值为 1.0 表示使用原图；值大于 1.0 表示增加对比度；值小于 1.0 表示降低对比度。 |
@@ -136,7 +136,7 @@
 | minificationFilter | Number | `9729` | `optional` 指定图层纹理缩小过滤器。 可能的值是 TextureMinificationFilter.LINEAR 和 TextureMinificationFilter.NEAREST。**NEAREST: 9728, LINEAR: 9729, NEAREST_MIPMAP_NEAREST: 9984, LINEAR_MIPMAP_NEAREST: 9985, NEAREST_MIPMAP_LINEAR: 9986, NEAREST_MIPMAP_NEAREST: 9984** |
 | magnificationFilter | Number | `9729` | `optional` 指定图层纹理缩小过滤器。 可能的值是 TextureMagnificationFilter.LINEAR 和 TextureMagnificationFilter.NEAREST。 **NEAREST: 9728, LINEAR: 9729** |
 | show | Boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false。 |
-| maximumAnisotropy | Number | maximum supported | `optional` 指定纹理过滤的最大各向异性级别。 如果未指定此参数，则将使用 WebGL 堆栈支持的最大各向异性。 较大的值使图像在水平视图中看起来更好。 |
+| maximumAnisotropy | Number | `maximum supported` | `optional` 指定纹理过滤的最大各向异性级别。 如果未指定此参数，则将使用 WebGL 堆栈支持的最大各向异性。 较大的值使图像在水平视图中看起来更好。 |
 | minimumTerrainLevel | Number | | `optional`最小地形细节层次。level 0 是最小细节层次。 |
 | maximumTerrainLevel | Number | | `optional`最大地形细节层次。 |
 | cutoutRectangle | Object | | `optional` 指定裁剪此影像图层的矩形范围。 **结构：{ west: number, south: number, east: number, north: number }** |

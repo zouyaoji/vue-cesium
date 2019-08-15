@@ -149,14 +149,15 @@
 | tileProtocol | String | | `optional`指定地图是 http 还是 https 加载，默认与页面相同。 |
 | mapStyle | String | `'Aerial'` | `optional`指定加载的 BingMaps 类型。 |
 | culture | String | `''` | `optional`指定服务的描述信息。 |
-| ellipsoid | Number | | `optional`参考椭球体 |
+| ellipsoid | Object | | `optional`参考椭球体 |
 | tileDiscardPolicy | Object | | `optional`指定 tile 无效时是否被舍弃。 |
 
 - 官方文档 [BingMapsImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/BingMapsImageryProvider.html)
 
 ## 事件
 
-| 事件名     | 参数              | 描述                                                                |
-| ---------- | ----------------- | ------------------------------------------------------------------- |
-| ready      | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
-| errorEvent | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| 事件名       | 参数              | 描述                                                                |
+| ------------ | ----------------- | ------------------------------------------------------------------- |
+| ready        | {Cesium, viewer}  | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。                 |
+| errorEvent   | TileProviderError | 当图层的提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider   | 当图层可用时触发, 返回 ImageryProvider 实例。                       |

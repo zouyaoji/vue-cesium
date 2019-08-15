@@ -31,8 +31,8 @@
       data () {
         return {
           options: {
-            // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度[lon,lat,height]或者 rectangle[west,south,east,north]
-            defaultResetView: [105, 29.999999999999993, 19059568.497290563],
+            // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
+            defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
             // 用于启用或禁用罗盘。true是启用罗盘，false是禁用罗盘。默认值为true。如果将选项设置为false，则罗盘将不会添加到地图中。
             enableCompass: true,
             // 用于启用或禁用缩放控件。true是启用，false是禁用。默认值为true。如果将选项设置为false，则缩放控件将不会添加到地图中。
@@ -85,8 +85,8 @@
     data() {
       return {
         options: {
-          // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度数组[lon,lat,height]或者 rectangle[west,south,east,north]
-          defaultResetView: [105, 29.999999999999993, 19059568.497290563],
+          // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
+          defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
           // 用于启用或禁用罗盘。true是启用罗盘，false是禁用罗盘。默认值为true。如果将选项设置为false，则罗盘将不会添加到地图中。
           enableCompass: true,
           // 用于启用或禁用缩放控件。true是启用，false是禁用。默认值为true。如果将选项设置为false，则缩放控件将不会添加到地图中。
@@ -116,13 +116,14 @@
 
 ## 属性
 
-| 属性名                 | 类型    | 默认值 | 描述                                                                       |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| defaultResetView       | Array   |        | `optional` 指定重置按钮的位置。[lon,lat,height]或者[west,south,east,north] |
-| enableCompass          | Boolean | true   | `optional` 指定是否启用罗盘部件。                                          |
-| enableZoomControls     | Boolean | true   | `optional` 指定是否启用缩放部件。                                          |
-| enableDistanceLegend   | Boolean | true   | `optional` 指定是否启用距离比例尺部件。                                    |
-| enableCompassOuterRing | Boolean | true   | `optional` 指定罗盘部件是否可用。                                          |
+| defaultResetView | Object | 中国 | `optional` 指定重置按钮的位置。**结构：{lng: number, lat: number, height: number} or {west: number,south: number,east: number,north: number}** |
+| enableCompass | Boolean | true | `optional` 指定是否启用罗盘部件。 |
+| enableZoomControls | Boolean | true | `optional` 指定是否启用缩放部件。 |
+| enableDistanceLegend | Boolean | true | `optional` 指定是否启用距离比例尺部件。 |
+| enableCompassOuterRing | Boolean | true | `optional` 指定罗盘部件是否可用。 |
 
 ---
 
