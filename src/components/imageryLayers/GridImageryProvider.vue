@@ -6,6 +6,7 @@ import {
   tileHeight
 } from '@/mixins/imageryProvider/allProps'
 import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeColor } from '@/util/util'
 export default {
   name: 'grid-imagery-provider',
   mixins: [
@@ -22,11 +23,11 @@ export default {
     },
     color: {
       type: String | Object | Array,
-      default: [1.0, 1.0, 1.0, 0.4]
+      default: () => [1.0, 1.0, 1.0, 0.4]
     },
     glowColor: {
       type: String | Array | Object,
-      default: [0.0, 1.0, 0.0, 0.05]
+      default: () => [0.0, 1.0, 0.0, 0.05]
     },
     glowWidth: {
       type: Number,
@@ -34,7 +35,7 @@ export default {
     },
     backgroundColor: {
       type: String | Array | Object,
-      default: [0.0, 0.5, 0.0, 0.2]
+      default: () => [0.0, 0.5, 0.0, 0.2]
     },
     canvasSize: {
       type: Number,
@@ -51,10 +52,10 @@ export default {
         tilingScheme,
         ellipsoid,
         cells,
-        color,
-        glowColor,
-        glowWidth,
-        backgroundColor,
+        color: makeColor(color),
+        glowColor: makeColor(glowColor),
+        glowWidth: makeColor(glowWidth),
+        backgroundColor: makeColor(backgroundColor),
         tileWidth,
         tileHeight,
         canvasSize

@@ -6,6 +6,7 @@ import {
   tileHeight
 } from '@/mixins/imageryProvider/allProps'
 import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+import { makeColor } from '@/util/util'
 export default {
   name: 'tilecoordinates-imagery-provider',
   mixins: [
@@ -30,7 +31,7 @@ export default {
       let options = {
         tilingScheme,
         ellipsoid,
-        color,
+        color: makeColor(color),
         tileWidth,
         tileHeight
       }

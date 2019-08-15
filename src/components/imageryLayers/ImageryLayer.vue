@@ -9,27 +9,27 @@ export default {
     imageryProvider: Object,
     rectangle: Object,
     alpha: {
-      type: Number,
+      type: Number | Function,
       default: 1.0
     },
     brightness: {
-      type: Number,
+      type: Number | Function,
       default: 1.0
     },
     contrast: {
-      type: Number,
+      type: Number | Function,
       default: 1.0
     },
     hue: {
-      type: Number,
+      type: Number | Function,
       default: 0.0
     },
     saturation: {
-      type: Number,
+      type: Number | Function,
       default: 1.0
     },
     gamma: {
-      type: Number,
+      type: Number | Function,
       default: 1.0
     },
     splitDirection: Number,

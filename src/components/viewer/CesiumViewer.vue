@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-08-13 10:12:44
+ * @Last Modified time: 2019-08-15 10:38:30
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -17,7 +17,6 @@ import services from '@/mixins/services'
 import mergeDescriptors from '@/util/mergeDescriptors'
 import { getDocumentByClassName } from '@/util/util.js'
 const path = require('path')
-
 export default {
   name: 'cesium-viewer',
   mixins: [services],
@@ -622,7 +621,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       let infoBox = viewer._infoBox
       let selectionIndicator = viewer._selectionIndicator
       let visibility = enabled ? 'hidden' : 'visible'
-
       if (Cesium.defined(geocoder)) {
         geocoder.container.style.visibility = visibility
       }
@@ -653,7 +651,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       if (Cesium.defined(selectionIndicator)) {
         selectionIndicator.container.style.visibility = visibility
       }
-
       if (viewer._container) {
         var right = enabled || !Cesium.defined(fullscreenButton) ? 0 : fullscreenButton.container.clientWidth
         viewer._vrButton.container.style.right = right + 'px'
@@ -664,14 +661,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       if (this.viewer) {
         return
       }
-
       let $el = this.$refs.viewer
-      // for (let $node of this.$slots.default || []) {
-      //   if ($node.componentOptions && $node.componentOptions.tag === 'sm-cesium-view') {
-      //     this.hasSmCesiumView = true
-      //     $el = $node.elm
-      //   }
-      // }
       if (!Cesium.defined(Cesium.SuperMapImageryProvider)) {
         let accessToken
         if (this._Cesium) {
@@ -681,7 +671,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
         Cesium.Ion.defaultAccessToken = accessToken
       }
-      const { animation,
+      const {
+        animation,
         baseLayerPicker,
         fullscreenButton,
         vrButton,
@@ -724,7 +715,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         projectionPicker,
         requestRenderMode,
         maximumRenderTimeChange,
-        navigation } = this
+        navigation
+      } = this
       let options = {
         animation,
         baseLayerPicker,
@@ -775,9 +767,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       this.removeNullItem(options)
       const viewer = new Cesium.Viewer($el, options)
-      // this.isEmptyObj(imageryProvider) && viewer.imageryLayers.removeAll()
       this.viewer = viewer
-      // options待完善
       bindEvents.call(this, viewer)
       Events['viewer-children-events'].forEach(eventName => {
         bindEvents.call(this, viewer[eventName.name], eventName.events)
@@ -787,7 +777,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         const listener = this.$listeners[eventName]
         listener && handler.setInputAction(listener.fns, Cesium.ScreenSpaceEventType[eventName])
       })
-
       // viewer.reset()
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
@@ -812,7 +801,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       //     return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
       //   }
       // }
-
       this.viewerContainer = getDocumentByClassName(this.$refs.viewer.children, 'cesium-viewer')
       if (Cesium.defined(Cesium.SuperMapImageryProvider) && !this.logo) {
         let credit = viewer.scene.frameState.creditDisplay
@@ -821,7 +809,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       if (!this.logo) {
         viewer.cesiumWidget.creditContainer.style.display = 'none'
       }
-      // this.resizeControl()
       this.$emit('ready', { Cesium, viewer })
     },
     initViewer (Cesium) {
@@ -838,7 +825,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             global.Cesium._preloader = null
             global._initCesium = null
           }
-
           let dirName = path.dirname(cesiumPath)
           const $link = document.createElement('link')
           $link.rel = 'stylesheet'
@@ -850,7 +836,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           $script.src = cesiumPath
           $script.onload = function () {
             global._initCesium()
-
             // 超图WebGL3D需要引入zlib.min.js
             if (global.Cesium.SuperMapImageryProvider) {
               const $scriptZlib = document.createElement('script')

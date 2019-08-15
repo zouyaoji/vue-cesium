@@ -4,7 +4,7 @@ import CesiumViewer from '@/components/viewer/CesiumViewer.vue'
 import ImageryLayer from '@/components/imageryLayers/ImageryLayer.vue'
 import ArcGisMapServerImageryProvider from '@/components/imageryLayers/ArcGisMapServerImageryProvider.vue'
 import BingMapsImageryProvider from '@/components/imageryLayers/BingMapsImageryProvider.vue'
-import GoogleEarthEnterpriseImageryProvider from '@/components/imageryLayers/GoogleEarthEnterpriseImageryProvider.vue'
+// import GoogleEarthEnterpriseImageryProvider from '@/components/imageryLayers/GoogleEarthEnterpriseImageryProvider.vue'
 import GridImageryProvider from '@/components/imageryLayers/GridImageryProvider.vue'
 import IonImageryProvider from '@/components/imageryLayers/IonImageryProvider.vue'
 import MapboxImageryProvider from '@/components/imageryLayers/MapboxImageryProvider.vue'
@@ -82,7 +82,7 @@ export default {
     Vue.component(ImageryLayer.name, ImageryLayer)
     Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
     Vue.component(BingMapsImageryProvider.name, BingMapsImageryProvider)
-    Vue.component(GoogleEarthEnterpriseImageryProvider.name, GoogleEarthEnterpriseImageryProvider)
+    // Vue.component(GoogleEarthEnterpriseImageryProvider.name, GoogleEarthEnterpriseImageryProvider)
     Vue.component(GridImageryProvider.name, GridImageryProvider)
     Vue.component(IonImageryProvider.name, IonImageryProvider)
     Vue.component(MapboxImageryProvider.name, MapboxImageryProvider)
@@ -129,7 +129,7 @@ export default {
     Vue.component(BillboardCollection.name, BillboardCollection)
     Vue.component(Billboard.name, Billboard)
 
-    Vue.component('model-primitive', Model)
+    Vue.component(Model.name, Model)
     Vue.component(Cesium3DTileset.name, Cesium3DTileset)
 
     Vue.component(GeometryInstance.name, GeometryInstance)
@@ -137,9 +137,9 @@ export default {
     Vue.component(RectangleGeometry.name, RectangleGeometry)
     Vue.component(PolygonGeometry.name, PolygonGeometry)
 
-    Vue.component('measure-distance', MeasureDistance)
-    Vue.component('measure-area', MeasureArea)
-    Vue.component('measure-height', MeasureHeight)
+    Vue.component(MeasureDistance.name, MeasureDistance)
+    Vue.component(MeasureArea.name, MeasureArea)
+    Vue.component(MeasureHeight.name, MeasureHeight)
     Vue.component(CesiumNavigation.name, CesiumNavigation)
 
     Vue.component(CesiumHeatMap.name, CesiumHeatMap)
@@ -154,9 +154,13 @@ export {
   ImageryLayer,
   ArcGisMapServerImageryProvider,
   BingMapsImageryProvider,
+  GridImageryProvider,
+  IonImageryProvider,
   MapboxImageryProvider,
   OpenStreetMapImageryProvider,
   SingleTileImageryProvider,
+  TileCoordinatesImageryProvider,
+  TileMapServiceImageryProvider,
   UrlTemplateImageryProvider,
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,

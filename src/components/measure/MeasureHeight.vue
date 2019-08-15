@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import measure from '../../mixins/measure'
+import measure from '@/mixins/measure'
 export default {
   name: 'measure-height',
   mixins: [measure],
