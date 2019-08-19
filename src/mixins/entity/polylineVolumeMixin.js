@@ -1,4 +1,4 @@
-import { cornerType, granularity } from '@/mixins/entity/allProps'
+import { cornerType, granularity } from './allProps'
 
 export default {
   mixins: [cornerType, granularity]

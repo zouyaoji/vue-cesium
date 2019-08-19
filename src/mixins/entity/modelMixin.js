@@ -13,7 +13,7 @@ import {
   color,
   colorBlendMode,
   colorBlendAmount
-} from '@/mixins/entity/allProps'
+} from './allProps'
 
 export default {
   mixins: [

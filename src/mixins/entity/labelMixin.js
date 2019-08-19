@@ -20,7 +20,7 @@ import {
   pixelOffsetScaleByDistance,
   scaleByDistance,
   disableDepthTestDistance
-} from '@/mixins/entity/allProps'
+} from './allProps'
 
 export default {
   mixins: [

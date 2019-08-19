@@ -13,9 +13,9 @@ import {
   credit,
   subdomains,
   token
-} from '@/mixins/imageryProvider/allProps'
-import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
-import { makeRectangle } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '../../util/util'
 export default {
   name: 'wmts-imagery-provider',
   mixins: [
@@ -53,7 +53,7 @@ export default {
       const { url, format, layer, wmtsStyle, tileMatrixSetID, tileMatrixLabels, clock, times, dimensions, tileWidth, tileHeight,
         tilingScheme, rectangle, minimumLevel, maximumLevel, ellipsoid, credit, subdomains, token } = this
       let options = {
-        url: Cesium.defined(token) ? url + '&tk=' + token : url,
+        url: typeof token !== 'undefined' ? url + '&tk=' + token : url,
         format,
         layer,
         style: wmtsStyle,

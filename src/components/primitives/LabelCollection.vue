@@ -1,6 +1,6 @@
 <script>
-import { scene, blendOption } from '@/mixins/entity/allProps'
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
+import { scene, blendOption } from '../../mixins/entity/allProps'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 export default {
   name: 'label-collection',
   mixins: [scene, blendOption, primitiveMixin],

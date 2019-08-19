@@ -3,8 +3,8 @@ import {
   url,
   minimumLevel,
   maximumLevel
-} from '@/mixins/imageryProvider/allProps'
-import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+} from '../../mixins/entity/allProps'
+import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 export default {
   name: 'supermap-imagery-provider',
   mixins: [

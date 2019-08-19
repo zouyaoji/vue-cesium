@@ -4,9 +4,9 @@ import {
   ellipsoid,
   tileWidth,
   tileHeight
-} from '@/mixins/imageryProvider/allProps'
-import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
-import { makeColor } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
+import { makeColor } from '../../util/util'
 export default {
   name: 'tilecoordinates-imagery-provider',
   mixins: [

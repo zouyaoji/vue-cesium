@@ -4,11 +4,12 @@ import {
   id,
   aaMixin,
   debugShowBoundingVolume,
-  scene
-} from '@/mixins/entity/allProps'
-import modelMixin from '@/mixins/entity/modelMixin'
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
-import { makeColor, makeDistanceDisplayCondition } from '@/util/util'
+  scene,
+  debugWireframe
+} from '../../mixins/entity/allProps'
+import modelMixin from '../../mixins/entity/modelMixin'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
+import { makeColor, makeDistanceDisplayCondition } from '../../util/util'
 export default {
   name: 'model-primitive',
   mixins: [
@@ -17,16 +18,13 @@ export default {
     aaMixin,
     debugShowBoundingVolume,
     scene,
+    debugWireframe,
     modelMixin,
     primitiveMixin
   ],
   props: {
     url: String,
     basePath: String,
-    debugWireframe: {
-      type: Boolean,
-      default: false
-    },
     dequantizeInShader: {
       type: Boolean,
       default: true
@@ -38,9 +36,6 @@ export default {
     },
     basePath (val) {
       this.reload()
-    },
-    debugWireframe (val) {
-      this.primitive.debugWireframe = val
     },
     dequantizeInShader (val) {
       this.primitive.dequantizeInShader = val

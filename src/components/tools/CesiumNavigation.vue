@@ -1,7 +1,7 @@
 
 <script>
 import CesiumNavigation from 'es6-cesium-navigation'
-import cmp from '@/mixins/virtualCmp'
+import cmp from '../../mixins/virtualCmp'
 export default {
   name: 'cesium-navigation',
   mixins: [cmp],

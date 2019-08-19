@@ -1,14 +1,15 @@
 <script>
-import bindEvents from '@/util/bindEvent'
+import bindEvents from '../../util/bindEvent'
 import {
   show,
   modelMatrix,
   shadows,
   clippingPlanes,
-  debugShowBoundingVolume
-} from '@/mixins/entity/allProps'
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
-import { makeCartesian2, makeCartesian3 } from '@/util/util'
+  debugShowBoundingVolume,
+  debugWireframe
+} from '../../mixins/entity/allProps'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
+import { makeCartesian2, makeCartesian3 } from '../../util/util'
 export default {
   name: 'cesium-3dtileset',
   mixins: [
@@ -17,6 +18,7 @@ export default {
     shadows,
     clippingPlanes,
     debugShowBoundingVolume,
+    debugWireframe,
     primitiveMixin
   ],
   props: {
@@ -83,10 +85,6 @@ export default {
       default: false
     },
     debugColorizeTiles: {
-      type: Boolean,
-      default: false
-    },
-    debugWireframe: {
       type: Boolean,
       default: false
     },
@@ -178,9 +176,6 @@ export default {
     },
     debugColorizeTiles (val) {
       this.primitive.debugColorizeTiles = val
-    },
-    debugWireframe (val) {
-      this.primitive.debugWireframe = val
     },
     debugShowContentBoundingVolume (val) {
       this.primitive.debugShowContentBoundingVolume = val

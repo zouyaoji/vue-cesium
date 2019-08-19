@@ -10,10 +10,10 @@ import {
   outlineWidth,
   numberOfVerticalLines,
   shadows
-} from '@/mixins/entity/allProps'
-import cylinderMixin from '@/mixins/entity/cylinderMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeMaterial, makeColor, makeDistanceDisplayCondition } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import cylinderMixin from '../../mixins/entity/cylinderMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeMaterial, makeColor, makeDistanceDisplayCondition } from '../../util/util'
 export default {
   name: 'cylinder-graphics',
   mixins: [

@@ -1,7 +1,7 @@
 <script>
-import mergeDescriptors from '@/util/mergeDescriptors'
-import cmp from '@/mixins/virtualCmp'
-import { makeRectangle, makeColor } from '@/util/util'
+import mergeDescriptors from '../../util/mergeDescriptors'
+import cmp from '../../mixins/virtualCmp'
+import { makeRectangle, makeColor } from '../../util/util'
 export default {
   name: 'imagery-layer',
   mixins: [cmp],

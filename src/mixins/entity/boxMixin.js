@@ -1,4 +1,4 @@
-import { dimensions } from '@/mixins/entity/allProps'
+import { dimensions } from './allProps'
 
 export default {
   mixins: [dimensions]

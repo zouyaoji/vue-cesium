@@ -1,4 +1,4 @@
-import { radii, stackPartitions, slicePartitions } from '@/mixins/entity/allProps'
+import { radii, stackPartitions, slicePartitions } from './allProps'
 
 export default {
   mixins: [radii, stackPartitions, slicePartitions]

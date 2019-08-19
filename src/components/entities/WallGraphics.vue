@@ -8,10 +8,10 @@ import {
   outlineColor,
   outlineWidth,
   shadows
-} from '@/mixins/entity/allProps'
-import wallMixin from '@/mixins/entity/wallMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import wallMixin from '../../mixins/entity/wallMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '../../util/util'
 export default {
   name: 'wall-graphics',
   mixins: [

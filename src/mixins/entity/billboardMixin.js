@@ -18,7 +18,7 @@ import {
   disableDepthTestDistance,
   show,
   distanceDisplayCondition
-} from '@/mixins/entity/allProps'
+} from './allProps'
 
 export default {
   mixins: [

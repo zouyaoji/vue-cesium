@@ -9,9 +9,9 @@ import {
   outlineColor,
   outlineWidth,
   shadows
-} from '@/mixins/entity/allProps'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeCartesian2, makeMaterial, makeColor, makeDistanceDisplayCondition, makePlane } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeCartesian2, makeMaterial, makeColor, makeDistanceDisplayCondition, makePlane } from '../../util/util'
 export default {
   name: 'plane-graphics',
   mixins: [

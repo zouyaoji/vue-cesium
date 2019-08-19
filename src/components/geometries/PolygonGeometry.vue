@@ -1,14 +1,16 @@
 <script>
-import polygonMixin from '@/mixins/entity/polygonMixin'
-import geometryMixin from '@/mixins/geometry/geometryMixin'
-import { makePolygonHierarchy } from '@/util/util'
+import {
+  ellipsoid,
+  vertexFormat
+} from '../../mixins/entity/allProps'
+import polygonMixin from '../../mixins/entity/polygonMixin'
+import geometryMixin from '../../mixins/geometry/geometryMixin'
+import { makePolygonHierarchy } from '../../util/util'
 export default {
   name: 'polygon-geometry',
-  mixins: [polygonMixin, geometryMixin],
+  mixins: [polygonMixin, ellipsoid, vertexFormat, geometryMixin],
   props: {
-    polygonHierarchy: Object | Array,
-    vertexFormat: Object,
-    ellipsoid: Object
+    polygonHierarchy: Object | Array
   },
   methods: {
     createCesiumObject () {

@@ -1,5 +1,5 @@
-import cmp from '@/mixins/virtualCmp'
-import mergeDescriptors from '@/util/mergeDescriptors'
+import cmp from '../virtualCmp'
+import mergeDescriptors from '../../util/mergeDescriptors'
 
 const computed = {
   changeProps () {
@@ -27,7 +27,7 @@ const methods = {
 const watch = {
   changeProps: {
     handler () {
-      this.geometryContainer.geometryInstancesContainer.reload()
+      this.geometryContainer.primitiveContainer.reload()
     },
     deep: true
   }

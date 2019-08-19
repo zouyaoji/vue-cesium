@@ -1,4 +1,4 @@
-import { length, topRadius, bottomRadius, slices } from '@/mixins/entity/allProps'
+import { length, topRadius, bottomRadius, slices } from './allProps'
 
 export default {
   mixins: [length, topRadius, bottomRadius, slices]

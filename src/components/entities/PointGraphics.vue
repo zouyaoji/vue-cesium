@@ -1,8 +1,8 @@
 <script>
-import { heightReference } from '@/mixins/entity/allProps'
-import pointMixin from '@/mixins/entity/pointMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeColor, makeDistanceDisplayCondition, makeNearFarScalar } from '@/util/util'
+import { heightReference } from '../../mixins/entity/allProps'
+import pointMixin from '../../mixins/entity/pointMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeColor, makeDistanceDisplayCondition, makeNearFarScalar } from '../../util/util'
 export default {
   name: 'point-graphics',
   mixins: [heightReference, pointMixin, graphicsMixin],

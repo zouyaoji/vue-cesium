@@ -2,10 +2,10 @@
 import {
   id,
   position
-} from '@/mixins/entity/allProps'
-import labelMixin from '@/mixins/entity/labelMixin'
-import collectionItemMixin from '@/mixins/primitive/collectionItemMixin'
-import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import labelMixin from '../../mixins/entity/labelMixin'
+import collectionItemMixin from '../../mixins/primitive/collectionItemMixin'
+import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '../../util/util'
 export default {
   name: 'label-primitive',
   mixins: [id, position, labelMixin, collectionItemMixin],

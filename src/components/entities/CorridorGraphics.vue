@@ -2,10 +2,10 @@
 import {
   show, distanceDisplayCondition, heightReference, extrudedHeightReference, fill, material, outline, outlineColor,
   outlineWidth, shadows, classificationType, zIndex
-} from '@/mixins/entity/allProps'
-import corridorMixin from '@/mixins/entity/corridorMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeColor, makeMaterial, makeDistanceDisplayCondition, makeCartesian3Array } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import corridorMixin from '../../mixins/entity/corridorMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeColor, makeMaterial, makeDistanceDisplayCondition, makeCartesian3Array } from '../../util/util'
 export default {
   name: 'corridor-graphics',
   mixins: [corridorMixin, heightReference, extrudedHeightReference, fill, material, outline,

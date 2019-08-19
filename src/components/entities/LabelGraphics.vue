@@ -1,7 +1,7 @@
 <script>
-import labelMixin from '@/mixins/entity/labelMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '@/util/util'
+import labelMixin from '../../mixins/entity/labelMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '../../util/util'
 
 export default {
   name: 'label-graphics',

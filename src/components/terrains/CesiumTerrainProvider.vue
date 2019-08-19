@@ -1,5 +1,5 @@
 <script>
-import cmp from '@/mixins/virtualCmp.js'
+import cmp from '../../mixins/virtualCmp.js'
 export default {
   name: 'cesium-terrain-provider',
   mixins: [cmp],

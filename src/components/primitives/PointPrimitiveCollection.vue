@@ -1,7 +1,19 @@
 <script>
-import { blendOption, modelMatrix, debugShowBoundingVolume } from '@/mixins/entity/allProps'
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
+import { blendOption, modelMatrix, debugShowBoundingVolume } from '../../mixins/entity/allProps'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
+import { makePointOptions } from '../../util/util'
 export default {
+  props: {
+    points: {
+      type: Array,
+      default: () => []
+    }
+  },
+  watch: {
+    points () {
+      this.reload()
+    }
+  },
   name: 'point-collection',
   mixins: [blendOption, modelMatrix, debugShowBoundingVolume, primitiveMixin],
   methods: {
@@ -13,7 +25,13 @@ export default {
         blendOption
       }
       this.removeNullItem(options)
-      return new Cesium.PointPrimitiveCollection(options)
+      let pointCollection = new Cesium.PointPrimitiveCollection(options)
+      this.points.forEach(point => {
+        let pointOptions = makePointOptions(point)
+        this.removeNullItem(pointOptions)
+        pointCollection.add(pointOptions)
+      })
+      return pointCollection
     }
   }
 }

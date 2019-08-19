@@ -1,10 +1,10 @@
 <script>
-import mergeDescriptors from '@/util/mergeDescriptors'
-import cmp from '@/mixins/virtualCmp'
-import bindEvents from '@/util/bindEvent'
-import { Events } from '@/util/events'
-import { position } from '@/mixins/entity/allProps'
-import { makeCartesian3 } from '@/util/util'
+import mergeDescriptors from '../../util/mergeDescriptors'
+import cmp from '../../mixins/virtualCmp'
+import bindEvents from '../../util/bindEvent'
+import { Events } from '../../util/events'
+import { position } from '../../mixins/entity/allProps'
+import { makeCartesian3 } from '../../util/util'
 
 export default {
   name: 'entity',

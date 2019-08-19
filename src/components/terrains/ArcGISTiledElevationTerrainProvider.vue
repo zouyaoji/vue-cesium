@@ -1,5 +1,5 @@
 <script>
-import cmp from '@/mixins/virtualCmp.js'
+import cmp from '../../mixins/virtualCmp.js'
 export default {
   name: 'arcgis-tiledelevation-terrain-provider',
   mixins: [cmp],

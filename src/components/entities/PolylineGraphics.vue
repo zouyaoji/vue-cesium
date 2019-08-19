@@ -4,10 +4,10 @@ import {
   arcType,
   classificationType,
   zIndex
-} from '@/mixins/entity/allProps'
-import polylineMixin from '@/mixins/entity/polylineMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeDistanceDisplayCondition, makeCartesian3Array, makeMaterial } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import polylineMixin from '../../mixins/entity/polylineMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeDistanceDisplayCondition, makeCartesian3Array, makeMaterial } from '../../util/util'
 
 export default {
   name: 'polyline-graphics',

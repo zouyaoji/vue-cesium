@@ -1,6 +1,6 @@
-import bindEvents from '@/util/bindEvent'
-import { Events } from '@/util/events'
-import cmp from '@/mixins/virtualCmp'
+import bindEvents from '../../util/bindEvent'
+import { Events } from '../../util/events'
+import cmp from '../virtualCmp'
 
 const computed = {
   changeProps () {
@@ -10,6 +10,14 @@ const computed = {
 const methods = {
   mount () {
     const { imageryProvider, providerContainer } = this
+    imageryProvider.readyPromise
+      .then(() => {
+        const listener = this.$listeners['readyPromise']
+        listener && this.$emit('readyPromise', imageryProvider)
+      })
+      .otherwise(error => {
+        throw new Cesium.DeveloperError(error)
+      })
     bindEvents.call(this, imageryProvider, Events['imagery-layer-events'])
     providerContainer && providerContainer.setProvider(imageryProvider)
   },

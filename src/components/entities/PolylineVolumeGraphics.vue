@@ -9,10 +9,10 @@ import {
   outlineColor,
   outlineWidth,
   shadows
-} from '@/mixins/entity/allProps'
-import polylineVolumeMixin from '@/mixins/entity/polylineVolumeMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeCartesian2Array, makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import polylineVolumeMixin from '../../mixins/entity/polylineVolumeMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeCartesian2Array, makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '../../util/util'
 export default {
   name: 'polyline-volume-graphics',
   mixins: [

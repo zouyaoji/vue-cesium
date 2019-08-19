@@ -1,15 +1,15 @@
 <script>
-import rectangleMixin from '@/mixins/entity/rectangleMixin'
-import geometryMixin from '@/mixins/geometry/geometryMixin'
-import { makeRectangle } from '@/util/util'
+import {
+  ellipsoid,
+  vertexFormat,
+  rectangle
+} from '../../mixins/entity/allProps'
+import rectangleMixin from '../../mixins/entity/rectangleMixin'
+import geometryMixin from '../../mixins/geometry/geometryMixin'
+import { makeRectangle } from '../../util/util'
 export default {
   name: 'rectangle-geometry',
-  mixins: [rectangleMixin, geometryMixin],
-  props: {
-    rectangle: Object | Array,
-    vertexFormat: Object,
-    ellipsoid: Object
-  },
+  mixins: [rectangleMixin, ellipsoid, vertexFormat, rectangle, geometryMixin],
   methods: {
     createCesiumObject () {
       return new Cesium.RectangleGeometry(this.makeOptions())

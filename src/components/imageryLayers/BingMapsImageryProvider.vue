@@ -3,8 +3,8 @@ import {
   url,
   ellipsoid,
   tileDiscardPolicy
-} from '@/mixins/imageryProvider/allProps'
-import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
+} from '../../mixins/entity/allProps'
+import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 export default {
   name: 'bingmaps-imagery-provider',
   mixins: [url, ellipsoid, tileDiscardPolicy, imageryProviderMixin],

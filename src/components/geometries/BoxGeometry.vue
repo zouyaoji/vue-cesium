@@ -1,13 +1,13 @@
 <script>
-import geometryMixin from '@/mixins/geometry/geometryMixin'
-import { makeCartesian3 } from '@/util/util'
+import {
+  dimensions,
+  vertexFormat
+} from '../../mixins/entity/allProps'
+import geometryMixin from '../../mixins/geometry/geometryMixin'
+import { makeCartesian3 } from '../../util/util'
 export default {
   name: 'box-geometry',
-  mixins: [geometryMixin],
-  props: {
-    dimensions: Object | Array,
-    vertexFormat: Object
-  },
+  mixins: [dimensions, vertexFormat, geometryMixin],
   methods: {
     createCesiumObject () {
       return Cesium.BoxGeometry.fromDimensions(this.makeOptions())

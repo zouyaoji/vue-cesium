@@ -103,7 +103,9 @@ export function makeDistanceDisplayCondition (val) {
 }
 
 export function makeColor (val) {
-  if (val instanceof Cesium.Color) {
+  if (typeof Cesium === 'undefined') {
+    return val
+  } else if (val instanceof Cesium.Color) {
     return val
   } else if (val instanceof Array) {
     return new Cesium.Color(val[0], val[1], val[2], val[3])
@@ -157,4 +159,101 @@ export function makeTranslationRotationScale (val) {
       makeCartesian3(val.scale)
     )
   )
+}
+
+export function makePointOptions (val) {
+  const {
+    color,
+    disableDepthTestDistance,
+    distanceDisplayCondition,
+    id,
+    outlineColor,
+    outlineWidth,
+    pixelSize,
+    position,
+    scaleByDistance,
+    show,
+    translucencyByDistance
+  } = val
+
+  let point = {
+    color: makeColor(color),
+    disableDepthTestDistance,
+    distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
+    id,
+    outlineColor: makeColor(outlineColor),
+    outlineWidth,
+    pixelSize,
+    position: makeCartesian3(position),
+    scaleByDistance: makeNearFarScalar(scaleByDistance),
+    show,
+    translucencyByDistance: makeNearFarScalar(translucencyByDistance)
+  }
+
+  return point
+}
+
+export function makePolylineOptions (val) {
+  const { show, width, loop, material, positions, id, distanceDisplayCondition } = val
+  let polyline = {
+    show,
+    width,
+    loop,
+    material,
+    positions: makeCartesian3Array(positions),
+    id,
+    distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
+  }
+
+  return polyline
+}
+
+export function makeBillboardptions (val) {
+  const {
+    alignedAxis,
+    color,
+    disableDepthTestDistance,
+    distanceDisplayCondition,
+    eyeOffset,
+    height,
+    heightReference,
+    horizontalOrigin,
+    id,
+    image,
+    pixelOffset,
+    pixelOffsetScaleByDistance,
+    position,
+    rotation,
+    scale,
+    scaleByDistance,
+    show,
+    sizeInMeters,
+    translucencyByDistance,
+    verticalOrigin,
+    width
+  } = this
+  let billboard = {
+    alignedAxis: makeCartesian3(alignedAxis),
+    color: makeColor(color),
+    disableDepthTestDistance,
+    distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
+    eyeOffset: makeCartesian3(eyeOffset),
+    height,
+    heightReference,
+    horizontalOrigin,
+    id,
+    image,
+    pixelOffset: makeCartesian2(pixelOffset),
+    pixelOffsetScaleByDistance: makeNearFarScalar(pixelOffsetScaleByDistance),
+    position: makeCartesian3(position),
+    rotation,
+    scale,
+    scaleByDistance: makeNearFarScalar(scaleByDistance),
+    show,
+    sizeInMeters,
+    translucencyByDistance: makeNearFarScalar(translucencyByDistance),
+    verticalOrigin,
+    width
+  }
+  return billboard
 }

@@ -10,9 +10,9 @@ import {
   classificationType,
   debugShowBoundingVolume,
   debugShowShadowVolume
-} from '@/mixins/entity/allProps'
+} from '../../mixins/entity/allProps'
 
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 
 export default {
   name: 'classification-primitive',

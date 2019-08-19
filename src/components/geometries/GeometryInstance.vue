@@ -1,10 +1,10 @@
 <script>
-import cmp from '@/mixins/virtualCmp'
-import mergeDescriptors from '@/util/mergeDescriptors'
+import cmp from '../../mixins/virtualCmp'
+import mergeDescriptors from '../../util/mergeDescriptors'
 import {
   modelMatrix,
   id
-} from '@/mixins/entity/allProps'
+} from '../../mixins/entity/allProps'
 export default {
   name: 'geometry-instance',
   mixins: [cmp, modelMatrix, id],
@@ -33,12 +33,14 @@ export default {
       return new Cesium.GeometryInstance(options)
     },
     mount () {
-      const { geometryInstance, geometryInstancesContainer } = this
-      geometryInstancesContainer && geometryInstancesContainer.setGeometryInstances(geometryInstance)
+      this.index = this.$parent.childCount
+      this.$parent.childCount += 1
+      const { geometryInstance, primitiveContainer } = this
+      primitiveContainer && primitiveContainer.setGeometryInstances(geometryInstance, this.index)
     },
     unload () {
-      const { geometryInstancesContainer } = this
-      geometryInstancesContainer && geometryInstancesContainer.setGeometryInstances(undefined)
+      const { primitiveContainer } = this
+      primitiveContainer && primitiveContainer.unload()
     },
     setGeometry (geometry) {
       const listener = this.$listeners['update:geometry']
@@ -69,9 +71,9 @@ export default {
         enumerable: true,
         get: () => this.cesiumObject
       },
-      geometryInstancesContainer: {
+      primitiveContainer: {
         enumerable: true,
-        get: () => this.$services && this.$services.geometryInstancesContainer
+        get: () => this.$services && this.$services.primitiveContainer
       }
     })
   }

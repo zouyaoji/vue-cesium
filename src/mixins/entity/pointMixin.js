@@ -8,7 +8,7 @@ import {
   scaleByDistance,
   translucencyByDistance,
   disableDepthTestDistance
-} from '@/mixins/entity/allProps'
+} from './allProps'
 
 export default {
   mixins: [

@@ -7,10 +7,10 @@ import {
   outlineColor,
   outlineWidth,
   shadows
-} from '@/mixins/entity/allProps'
-import boxMixin from '@/mixins/entity/boxMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeCartesian3, makeMaterial, makeColor, makeDistanceDisplayCondition } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import boxMixin from '../../mixins/entity/boxMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeCartesian3, makeMaterial, makeColor, makeDistanceDisplayCondition } from '../../util/util'
 
 export default {
   name: 'box-graphics',

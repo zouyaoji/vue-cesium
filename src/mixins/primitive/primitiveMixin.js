@@ -10,8 +10,8 @@
  * PointPrimitiveCollection
  * PolylineCollection
  */
-import cmp from '@/mixins/virtualCmp'
-import mergeDescriptors from '@/util/mergeDescriptors'
+import cmp from '../virtualCmp'
+import mergeDescriptors from '../../util/mergeDescriptors'
 
 const methods = {
   mount () {
@@ -29,6 +29,7 @@ const methods = {
   },
   unload () {
     const { viewer, primitive } = this
+    this.instances = []
     viewer && viewer.scene.primitives.remove(primitive)
   },
   getServices () {
@@ -37,14 +38,29 @@ const methods = {
       get primitive () {
         return vm.primitive
       },
-      get geometryInstancesContainer () {
+      get primitiveContainer () {
         return vm
       }
     })
+  },
+  setGeometryInstances (geometryInstance, index) {
+    this.instances.push(geometryInstance)
+    if (index === this.childCount - 1) {
+      const listener = this.$listeners['update:geometryInstances']
+      if (listener) {
+        this.$emit('update:geometryInstances', this.instances)
+      } else this.primitive.geometryInstances = this.instances
+    }
   }
 }
 
 export default {
+  data () {
+    return {
+      childCount: 0,
+      instances: []
+    }
+  },
   mixins: [cmp],
   methods,
   stubVNode: {

@@ -1,7 +1,7 @@
 <script>
-import billboardMixin from '@/mixins/entity/billboardMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3, makeBoundingRectangle } from '@/util/util'
+import billboardMixin from '../../mixins/entity/billboardMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3, makeBoundingRectangle } from '../../util/util'
 
 export default {
   name: 'billboard-graphics',

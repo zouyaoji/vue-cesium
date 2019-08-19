@@ -8,7 +8,7 @@
   </i>
 </template>
 <script>
-import cmp from '@/mixins/virtualCmp'
+import cmp from '../../mixins/virtualCmp'
 export default {
   name: 'flood-anaysis',
   data () {
@@ -57,7 +57,11 @@ export default {
       const { Cesium, minHeight } = this
       this.attributes = {
         // eslint-disable-next-line new-cap
-        color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 155))
+        // color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 155))
+        // eslint-disable-next-line new-cap
+        // color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(40, 150, 200, 155))
+        // eslint-disable-next-line new-cap
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(40, 150, 200, 155))
       }
       this.extrudedHeight = minHeight
       return this.$refs.primitive.primitive

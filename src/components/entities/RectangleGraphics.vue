@@ -12,10 +12,10 @@ import {
   shadows,
   classificationType,
   zIndex
-} from '@/mixins/entity/allProps'
-import rectangleMixin from '@/mixins/entity/rectangleMixin'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeColor, makeRectangle, makeMaterial, makeDistanceDisplayCondition } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import rectangleMixin from '../../mixins/entity/rectangleMixin'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeColor, makeRectangle, makeMaterial, makeDistanceDisplayCondition } from '../../util/util'
 export default {
   name: 'rectangle-graphics',
   mixins: [

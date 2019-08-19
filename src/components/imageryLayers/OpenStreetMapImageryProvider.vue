@@ -5,9 +5,9 @@ import {
   minimumLevel,
   maximumLevel,
   ellipsoid
-} from '@/mixins/imageryProvider/allProps'
-import imageryProviderMixin from '@/mixins/imageryProvider/imageryProviderMixin'
-import { makeRectangle } from '@/util/util'
+} from '../../mixins/entity/allProps'
+import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
+import { makeRectangle } from '../../util/util'
 export default {
   name: 'openstreetmap-imagery-provider',
   mixins: [

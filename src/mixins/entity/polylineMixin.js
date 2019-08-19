@@ -1,4 +1,4 @@
-import { show, distanceDisplayCondition, width, material, positions } from '@/mixins/entity/allProps'
+import { show, distanceDisplayCondition, width, material, positions } from './allProps'
 
 export default {
   mixins: [show, distanceDisplayCondition, width, material, positions]

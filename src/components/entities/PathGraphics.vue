@@ -1,7 +1,7 @@
 <script>
-import { show, distanceDisplayCondition, width, material } from '@/mixins/entity/allProps'
-import graphicsMixin from '@/mixins/entity/graphicsMixin'
-import { makeMaterial, makeDistanceDisplayCondition } from '@/util/util'
+import { show, distanceDisplayCondition, width, material } from '../../mixins/entity/allProps'
+import graphicsMixin from '../../mixins/entity/graphicsMixin'
+import { makeMaterial, makeDistanceDisplayCondition } from '../../util/util'
 export default {
   name: 'path-graphics',
   mixins: [show, distanceDisplayCondition, width, material, graphicsMixin],

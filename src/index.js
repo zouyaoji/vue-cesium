@@ -1,4 +1,4 @@
-import { version } from '../package.json'
+import { version as VERSION } from '../package.json'
 import CesiumViewer from '@/components/viewer/CesiumViewer.vue'
 
 import ImageryLayer from '@/components/imageryLayers/ImageryLayer.vue'
@@ -60,9 +60,9 @@ import BoxGeometry from '@/components/geometries/BoxGeometry.vue'
 import RectangleGeometry from '@/components/geometries/RectangleGeometry.vue'
 import PolygonGeometry from '@/components/geometries/PolygonGeometry.vue'
 
-import MeasureDistance from '@/components/measure/MeasureDistance.vue'
-import MeasureArea from '@/components/measure/MeasureArea.vue'
-import MeasureHeight from '@/components/measure/MeasureHeight.vue'
+import MeasureDistance from '@/components/tools/MeasureDistance.vue'
+import MeasureArea from '@/components/tools/MeasureArea.vue'
+import MeasureHeight from '@/components/tools/MeasureHeight.vue'
 import CesiumNavigation from '@/components/tools/CesiumNavigation.vue'
 
 import CesiumHeatMap from '@/components/visualization/CesiumHeatMap.vue'
@@ -72,12 +72,8 @@ import CesiumFlood from '@/components/visualization/CesiumFlood.vue'
 
 export default {
   install (Vue, options) {
-    let cesiumPath = options.cesiumPath ? options.cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-    let accessToken = options.accessToken
-      ? options.accessToken
-      : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiMGRjM2QxYi04ODM2LTQzMDEtOGJmOS1mNDlkY2Q2NjE4MjciLCJpZCI6MjU5LCJpYXQiOjE1MjU5NjYyMDd9.xW9loNLo68KE3ReAHd-Lp73M8qJKhI9vA0wYL-qJX_I'
-    Vue.prototype._Cesium = () => ({ cesiumPath, accessToken })
-    Vue.component('cesium-viewer', CesiumViewer)
+    Vue.prototype._Cesium = () => (options)
+    Vue.component(CesiumViewer.name, CesiumViewer, options)
 
     Vue.component(ImageryLayer.name, ImageryLayer)
     Vue.component(ArcGisMapServerImageryProvider.name, ArcGisMapServerImageryProvider)
@@ -146,10 +142,11 @@ export default {
     Vue.component(CesiumWindMap.name, CesiumWindMap)
     Vue.component(CesiumFlood.name, CesiumFlood)
   },
-  version
+  VERSION
 }
 
 export {
+  VERSION,
   CesiumViewer,
   ImageryLayer,
   ArcGisMapServerImageryProvider,

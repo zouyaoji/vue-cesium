@@ -1,6 +1,6 @@
-import bindEvents from '@/util/bindEvent'
-import { Events } from '@/util/events'
-import cmp from '@/mixins/virtualCmp'
+import bindEvents from '../../util/bindEvent'
+import { Events } from '../../util/events'
+import cmp from '../virtualCmp'
 
 const methods = {
   mount () {

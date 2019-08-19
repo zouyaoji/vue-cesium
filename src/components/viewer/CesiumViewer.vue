@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-08-15 10:38:30
+ * @Last Modified time: 2019-08-19 12:52:52
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import bindEvents from '@/util/bindEvent'
-import { Events } from '@/util/events.js'
-import services from '@/mixins/services'
-import mergeDescriptors from '@/util/mergeDescriptors'
-import { getDocumentByClassName } from '@/util/util.js'
+import bindEvents from '../../util/bindEvent'
+import { Events } from '../../util/events'
+import services from '../../mixins/services'
+import mergeDescriptors from '../../util/mergeDescriptors'
+import { getDocumentByClassName } from '../../util/util'
 const path = require('path')
 export default {
   name: 'cesium-viewer',
@@ -658,19 +658,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
     },
     init (Cesium) {
-      if (this.viewer) {
-        return
-      }
+      if (this.viewer) { return }
       let $el = this.$refs.viewer
-      if (!Cesium.defined(Cesium.SuperMapImageryProvider)) {
-        let accessToken
-        if (this._Cesium) {
-          accessToken = this._Cesium().accessToken
-        } else {
-          accessToken = this.accessToken
-        }
-        Cesium.Ion.defaultAccessToken = accessToken
-      }
+      let accessToken = this.accessToken ? this.accessToken : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('accessToken')
+        ? this._Cesium().accessToken : this.accessToken
+
+      Cesium.Ion.defaultAccessToken = accessToken
       const {
         animation,
         baseLayerPicker,
@@ -817,7 +810,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     getCesiumScript () {
       if (!global.Cesium) {
-        let cesiumPath = this.cesiumPath ? this.cesiumPath : this._Cesium().cesiumPath
+        let cesiumPath = this.cesiumPath ? this.cesiumPath : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
+          ? this._Cesium().cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
           global._initCesium = function () {

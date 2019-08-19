@@ -1,6 +1,6 @@
 <script>
-import { show } from '@/mixins/entity/allProps'
-import primitiveMixin from '@/mixins/primitive/primitiveMixin'
+import { show } from '../../mixins/entity/allProps'
+import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 export default {
   name: 'primitive-collection',
   mixins: [show, primitiveMixin],
