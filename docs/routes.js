@@ -42,7 +42,7 @@ const routeMap = [
     children: [
       {
         path: 'installation',
-        component: 'start-installation',
+        component: 'start/installation',
         name: {
           zh: '安装',
           en: 'Installation'
@@ -50,7 +50,7 @@ const routeMap = [
       },
       {
         path: 'usage',
-        component: 'start-usage',
+        component: 'start/usage',
         name: {
           zh: '快速上手',
           en: 'Usage'
@@ -58,7 +58,7 @@ const routeMap = [
       },
       {
         path: 'base',
-        component: 'start-base',
+        component: 'start/base',
         name: {
           zh: '基础',
           en: 'Base'
@@ -67,19 +67,19 @@ const routeMap = [
     ]
   },
   {
-    path: 'CesiumViewer',
+    path: 'viewer',
     name: {
       zh: '场景',
-      en: 'CesiumViewer'
+      en: 'Viewer'
     },
     component: CateView,
     children: [
       {
         path: 'cesium-viewer',
-        component: 'cesium-viewer',
+        component: 'viewer/cesium-viewer',
         name: {
           zh: '场景(Viewer)',
-          en: 'Viewer'
+          en: 'CesiumViewer'
         }
       }
     ]
@@ -94,7 +94,7 @@ const routeMap = [
     },
     children: [
       {
-        path: 'Painting',
+        path: 'painting',
         component: 'tools/painting',
         name: {
           zh: '绘制',
@@ -131,7 +131,7 @@ const routeMap = [
         path: 'imagery-layer',
         component: 'imageryLayers/imagery-layer',
         name: {
-          zh: '影像图层',
+          zh: '影像图层(ImageryLayer)',
           en: 'ImageryLayer'
         }
       },
@@ -139,7 +139,7 @@ const routeMap = [
         path: 'arcgis-mapserver-imagery-provider',
         component: 'imageryLayers/arcgis-mapserver-imagery-provider',
         name: {
-          zh: 'ArcGIS地图影像服务Provider',
+          zh: 'ArcGIS(ArcGisMapServerImagery)',
           en: 'ArcGisMapServerImageryProvider'
         }
       },
@@ -147,15 +147,31 @@ const routeMap = [
         path: 'bingmaps-imagery-provider',
         component: 'imageryLayers/bingmaps-imagery-provider',
         name: {
-          zh: 'BingMaps影像Provider',
-          en: 'BingMapsImageryLayer'
+          zh: 'BingMaps(BingMapsImagery)',
+          en: 'BingMapsImageryProvider'
+        }
+      },
+      {
+        path: 'grid-imagery-provider',
+        component: 'imageryLayers/grid-imagery-provider',
+        name: {
+          zh: 'Grid(GridImagery)',
+          en: 'GridImageryProvider'
+        }
+      },
+      {
+        path: 'ion-imagery-provider',
+        component: 'imageryLayers/ion-imagery-provider',
+        name: {
+          zh: 'CesiumIon(IonImagery)',
+          en: 'IonImageryProvider'
         }
       },
       {
         path: 'mapbox-imagery-provider',
         component: 'imageryLayers/mapbox-imagery-provider',
         name: {
-          zh: 'Mapbox影像Provider',
+          zh: 'Mapbox(MapboxImagery)',
           en: 'MapboxImageryProvider'
         }
       },
@@ -163,7 +179,7 @@ const routeMap = [
         path: 'openstreetmap-imagery-provider',
         component: 'imageryLayers/openstreetmap-imagery-provider',
         name: {
-          zh: 'Openstreetmap影像Provider',
+          zh: 'Openstreetmap(OpenStreetMapImagery)',
           en: 'OpenStreetMapImageryProvider'
         }
       },
@@ -171,15 +187,31 @@ const routeMap = [
         path: 'singletile-imagery-provider',
         component: 'imageryLayers/singletile-imagery-provider',
         name: {
-          zh: 'Singletile影像Provider',
+          zh: 'Singletile(SingleTileImagery)',
           en: 'SingleTileImageryProvider'
+        }
+      },
+      {
+        path: 'tilecoordinates-imagery-provider',
+        component: 'imageryLayers/tilecoordinates-imagery-provider',
+        name: {
+          zh: 'TileCoordinates(TileCoordinatesImagery)',
+          en: 'TileCoordinatesImageryProvider'
+        }
+      },
+      {
+        path: 'tilemapservice-imagery-provider',
+        component: 'imageryLayers/tilemapservice-imagery-provider',
+        name: {
+          zh: 'TileMapService(TileMapServiceImagery)',
+          en: 'TileMapServiceImageryProvider'
         }
       },
       {
         path: 'urltemplate-imagery-provider',
         component: 'imageryLayers/urltemplate-imagery-provider',
         name: {
-          zh: 'UrlTemplate影像Provider',
+          zh: 'UrlTemplate(UrlTemplateImagery)',
           en: 'UrlTemplateImageryProvider'
         }
       },
@@ -187,7 +219,7 @@ const routeMap = [
         path: 'wms-imagery-provider',
         component: 'imageryLayers/wms-imagery-provider',
         name: {
-          zh: 'WMS服务Provider',
+          zh: 'WMS(WebMapServiceImagery)',
           en: 'WebMapServiceImageryProvider'
         }
       },
@@ -195,7 +227,7 @@ const routeMap = [
         path: 'wmts-imagery-provider',
         component: 'imageryLayers/wmts-imagery-provider',
         name: {
-          zh: 'WMTS服务Provider',
+          zh: 'WMTS(WebMapTileServiceImagery)',
           en: 'WebMapTileServiceImageryProvider'
         }
       },
@@ -203,7 +235,7 @@ const routeMap = [
         path: 'supermap-imagery-provider',
         component: 'imageryLayers/supermap-imagery-provider',
         name: {
-          zh: 'SuperMap影像服务Provider',
+          zh: 'SuperMap(SuperMapImagery)',
           en: 'SuperMapImageryProvider'
         }
       }
@@ -221,7 +253,7 @@ const routeMap = [
         path: 'cesium-terrain-provider',
         component: 'terrains/cesium-terrain-provider',
         name: {
-          zh: 'Cesium地形Provider',
+          zh: 'Cesium地形(CesiumTerrainProvider)',
           en: 'CesiumTerrainProvider'
         }
       }
@@ -239,7 +271,7 @@ const routeMap = [
         path: 'entity',
         component: 'entities/entity',
         name: {
-          zh: '实体组件',
+          zh: '实体(Entity)',
           en: 'Entity'
         }
       },
@@ -247,7 +279,7 @@ const routeMap = [
         path: 'billboard-graphics',
         component: 'entities/billboard-graphics',
         name: {
-          zh: '布告板',
+          zh: '布告板(Billboard)',
           en: 'BillboardGraphics'
         }
       },
@@ -255,7 +287,7 @@ const routeMap = [
         path: 'box-graphics',
         component: 'entities/box-graphics',
         name: {
-          zh: '六面体盒子',
+          zh: '盒子(Box)',
           en: 'BoxGraphics'
         }
       },
@@ -263,7 +295,7 @@ const routeMap = [
         path: 'corridor-graphics',
         component: 'entities/corridor-graphics',
         name: {
-          zh: '走廊',
+          zh: '走廊(Corridor)',
           en: 'CorridorGraphics'
         }
       },
@@ -271,7 +303,7 @@ const routeMap = [
         path: 'cylinder-graphics',
         component: 'entities/cylinder-graphics',
         name: {
-          zh: '圆柱（锥）体',
+          zh: '圆柱（锥）(Cylinder)',
           en: 'CylinderGraphics'
         }
       },
@@ -279,7 +311,7 @@ const routeMap = [
         path: 'ellipse-graphics',
         component: 'entities/ellipse-graphics',
         name: {
-          zh: '椭圆形(体)',
+          zh: '椭圆形(体)(Ellipse)',
           en: 'EllipseGraphics'
         }
       },
@@ -287,7 +319,7 @@ const routeMap = [
         path: 'ellipsoid-graphics',
         component: 'entities/ellipsoid-graphics',
         name: {
-          zh: '(椭)球体',
+          zh: '(椭)球体(Ellipsoid)',
           en: 'EllipsoidGraphics'
         }
       },
@@ -295,7 +327,7 @@ const routeMap = [
         path: 'label-graphics',
         component: 'entities/label-graphics',
         name: {
-          zh: '标签',
+          zh: '标签(Label)',
           en: 'LabelGraphics'
         }
       },
@@ -303,7 +335,7 @@ const routeMap = [
         path: 'model-graphics',
         component: 'entities/model-graphics',
         name: {
-          zh: '模型',
+          zh: '模型(Model)',
           en: 'ModelGraphics'
         }
       },
@@ -311,7 +343,7 @@ const routeMap = [
         path: 'path-graphics',
         component: 'entities/path-graphics',
         name: {
-          zh: '路径',
+          zh: '路径(Path)',
           en: 'PathGraphics'
         }
       },
@@ -319,7 +351,7 @@ const routeMap = [
         path: 'plane-graphics',
         component: 'entities/plane-graphics',
         name: {
-          zh: '平面',
+          zh: '平面(Plane)',
           en: 'PlaneGraphics'
         }
       },
@@ -327,7 +359,7 @@ const routeMap = [
         path: 'point-graphics',
         component: 'entities/point-graphics',
         name: {
-          zh: '点',
+          zh: '点(Point)',
           en: 'PointGraphics'
         }
       },
@@ -335,7 +367,7 @@ const routeMap = [
         path: 'polygon-graphics',
         component: 'entities/polygon-graphics',
         name: {
-          zh: '多边形',
+          zh: '多边形(Ploygon)',
           en: 'PolygonGraphics'
         }
       },
@@ -343,7 +375,7 @@ const routeMap = [
         path: 'polyline-graphics',
         component: 'entities/polyline-graphics',
         name: {
-          zh: '折线',
+          zh: '折线(Polyline)',
           en: 'PolylineGraphics'
         }
       },
@@ -351,7 +383,7 @@ const routeMap = [
         path: 'polyline-volume-graphics',
         component: 'entities/polyline-volume-graphics',
         name: {
-          zh: '多段线柱体',
+          zh: '多段线柱体(PolylineVolume)',
           en: 'PolylineVolumeGraphics'
         }
       },
@@ -359,7 +391,7 @@ const routeMap = [
         path: 'rectangle-graphics',
         component: 'entities/rectangle-graphics',
         name: {
-          zh: '矩形',
+          zh: '矩形(Rectangle)',
           en: 'RectangleGraphics'
         }
       },
@@ -367,7 +399,7 @@ const routeMap = [
         path: 'wall-graphics',
         component: 'entities/wall-graphics',
         name: {
-          zh: '围墙',
+          zh: '围墙(Wall)',
           en: 'WallGraphics'
         }
       }
@@ -385,7 +417,7 @@ const routeMap = [
         path: 'primitive',
         component: 'primitives/primitive',
         name: {
-          zh: 'Primitive图元',
+          zh: '普通图元(Primitive)',
           en: 'Primitive'
         }
       },
@@ -393,7 +425,7 @@ const routeMap = [
         path: 'ground-primitive',
         component: 'primitives/ground-primitive',
         name: {
-          zh: 'GroundPrimitive图元',
+          zh: '贴地图元(GroundPrimitive)',
           en: 'GroundPrimitive'
         }
       },
@@ -401,15 +433,23 @@ const routeMap = [
         path: 'classification-primitive',
         component: 'primitives/classification-primitive',
         name: {
-          zh: 'ClassificationPrimitive图元',
+          zh: '体图元(ClassificationPrimitive)',
           en: 'ClassificationPrimitive'
+        }
+      },
+      {
+        path: 'point-collection',
+        component: 'primitives/point-collection',
+        name: {
+          zh: '点图元集合(PointCollection)',
+          en: 'PointCollection'
         }
       },
       {
         path: 'point-primitive',
         component: 'primitives/point-primitive',
         name: {
-          zh: '点Primitive',
+          zh: '点图元(PointPrimitive)',
           en: 'PointPrimitive'
         }
       },
@@ -417,7 +457,7 @@ const routeMap = [
         path: 'polyline-primitive',
         component: 'primitives/polyline-primitive',
         name: {
-          zh: '线Primitive',
+          zh: '线图元(PolylinePrimitive)',
           en: 'PolylinePrimitive'
         }
       },
@@ -425,7 +465,7 @@ const routeMap = [
         path: 'cesium-3dtileset',
         component: 'primitives/cesium-3dtileset',
         name: {
-          zh: '3DTiles模型',
+          zh: '3DTiles(Cesium3DTileset)',
           en: 'Cesium3DTileset'
         }
       }
@@ -443,7 +483,7 @@ const routeMap = [
         path: 'box-geometry',
         component: 'geometries/box-geometry',
         name: {
-          zh: '盒子Geometry',
+          zh: '盒子(Box)',
           en: 'BoxGeometry'
         }
       },
@@ -451,7 +491,7 @@ const routeMap = [
         path: 'rectangle-geometry',
         component: 'geometries/rectangle-geometry',
         name: {
-          zh: '矩形Geometry',
+          zh: '矩形(Rectangle)',
           en: 'RectangleGeometry'
         }
       },
@@ -459,7 +499,7 @@ const routeMap = [
         path: 'polygon-geometry',
         component: 'geometries/polygon-geometry',
         name: {
-          zh: '多边形Geometry',
+          zh: '多边形(Polygon)',
           en: 'PolygonGeometry'
         }
       }

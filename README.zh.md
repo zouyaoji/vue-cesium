@@ -98,6 +98,7 @@ Vue.use(VueCesium, {
 ## TODOS
 
 - ~~关键属性不需在 ready 后用 Cesium 实例化，可以直接写到 data 中，一方面方便开发，另外一方面 watch 对象没那么复杂了，性能好些~~
+- 用 rollupjs 打包改善局部引入
 - 完善文档
 - 继续增加常用组件
 - ...

@@ -12,13 +12,7 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <primitive :appearance="appearance">
-          <geometry-instance :geometry="geometry">
-            <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
-          </geometry-instance>
-          <geometry-instance>
-            <polygon-geometry :polygonHierarchy="polygonHierarchy"></polygon-geometry>
-          </geometry-instance>
+        <primitive :appearance="appearance" :geometryInstances="geometryInstances">
         </primitive>
       </cesium-viewer>
     </div>
@@ -29,6 +23,7 @@
       data () {
         return {
           appearance: null,
+          geometryInstances: null,
           geometry: null,
           polygonHierarchy: [
             { lng: 102.1, lat: 29.5 },
@@ -37,24 +32,24 @@
             { lng: 108.2, lat: 35.5 },
             { lng: 102.1, lat: 33.5 }
           ],
-          image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-          rectangle: {west: 102.5, south: 29.5, east: 130.5,  north: 33.5}
+          height: 200,
+          rectangle: {west: 100.5, south: 29.5, east: 115.5,  north: 35.5}
         }
       },
       methods: {
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
-          viewer.camera.setView({
-            destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-            orientation: {
-              heading: 6.20312220367255,
-              pitch: -0.9937536846355606,
-              roll: 0.002443376981836387
-            }
+
+          this.geometryInstances = new Cesium.GeometryInstance({
+            geometry: new Cesium.RectangleGeometry({
+              rectangle: Cesium.Rectangle.fromDegrees(this.rectangle.west, this.rectangle.south, this.rectangle.east, this.rectangle.north)
+            })
           })
           this.appearance = new Cesium.MaterialAppearance({
-              material: Cesium.Material.fromType('Checkerboard'),
+              material: Cesium.Material.fromType('Checkerboard', {
+                repeat : new Cesium.Cartesian2(20.0, 6.0)
+              }),
               materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
           })
         }
@@ -93,14 +88,6 @@
       ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
         const { Cesium, viewer } = this.cesiumInstance
-        viewer.camera.setView({
-          destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-          orientation: {
-            heading: 6.20312220367255,
-            pitch: -0.9937536846355606,
-            roll: 0.002443376981836387
-          }
-        })
         this.appearance = new Cesium.MaterialAppearance({
           material: new Cesium.Material({
             fabric: {

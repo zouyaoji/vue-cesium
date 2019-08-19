@@ -14,17 +14,12 @@
       <cesium-viewer @ready="ready" scene3DOnly>
         <polyline-collection>
           <polyline-primitive :positions="positions1" :material="material1" :width="5"></polyline-primitive>
-        </polyline-collection>
-        <polyline-collection>
           <polyline-primitive :positions="positions2" :material="material2" :width="10"></polyline-primitive>
-        </polyline-collection>
-        <polyline-collection>
           <polyline-primitive :positions="positions3" :material="material3" :width="10"></polyline-primitive>
         </polyline-collection>
       </cesium-viewer>
     </div>
   </template>
-
   <script>
     export default {
       data () {
@@ -82,17 +77,12 @@
     <cesium-viewer @ready="ready" scene3DOnly>
       <polyline-collection>
         <polyline-primitive :positions="positions1" :material="material1" :width="5"></polyline-primitive>
-      </polyline-collection>
-      <polyline-collection>
         <polyline-primitive :positions="positions2" :material="material2" :width="10"></polyline-primitive>
-      </polyline-collection>
-      <polyline-collection>
         <polyline-primitive :positions="positions3" :material="material3" :width="10"></polyline-primitive>
       </polyline-collection>
     </cesium-viewer>
   </div>
 </template>
-
 <script>
   export default {
     data() {

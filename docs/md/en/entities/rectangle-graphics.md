@@ -180,7 +180,7 @@
 </script>
 ```
 
-## Instance P
+## Instance Properties
 
 <!-- prettier-ignore -->
 | name | type | default | description |

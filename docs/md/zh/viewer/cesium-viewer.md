@@ -13,6 +13,7 @@
     <div class="viewer" ref="myViewer">
       <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+        <cesium-navigation></cesium-navigation>
       </cesium-viewer>
       <div class="demo-tool">
         <span>动画部件</span>
@@ -74,6 +75,7 @@
   <div class="viewer" ref="myViewer">
     <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+      <cesium-navigation></cesium-navigation>
     </cesium-viewer>
     <div class="demo-tool">
       <span>动画部件</span>

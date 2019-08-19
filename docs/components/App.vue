@@ -161,4 +161,8 @@ h2 {
 .md-input-container.md-has-value input {
   color: #fff;
 }
+
+ .cesium-svgPath-svg {
+    height: 100% !important;
+  }
 </style>

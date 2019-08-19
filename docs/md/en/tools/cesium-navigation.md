@@ -52,12 +52,6 @@
       }
     }
   </script>
-
-  <style>
-    .cesium-svgPath-svg {
-      height: 100% !important;
-    }
-  </style>
 </doc-preview>
 
 #### Code
@@ -106,12 +100,6 @@
     }
   }
 </script>
-
-<style>
-  .cesium-svgPath-svg {
-    height: 100% !important;
-  }
-</style>
 ```
 
 ## Instance Properties

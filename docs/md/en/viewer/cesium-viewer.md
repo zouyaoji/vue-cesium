@@ -14,6 +14,7 @@ The container is an empty DOM node which used to mount other components or DOM n
     <div class="viewer" ref="myViewer">
       <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+        <cesium-navigation></cesium-navigation>
       </cesium-viewer>
       <div class="demo-tool">
         <span>animation</span>

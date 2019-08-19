@@ -76,7 +76,7 @@ Vue.use(VueCesium, {
 
 ## TODOS
 
-- ~~Support common attributes to write directly to data~~
+- Use rollup odule bundler
 - Doucment & Demo
 - Add more components
 - ...

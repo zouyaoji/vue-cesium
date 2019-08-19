@@ -16,8 +16,11 @@
         </flood-anaysis>
         <cesium-terrain-provider></cesium-terrain-provider>
         <imagery-layer>
-          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" mapStyle="Aerial"></bingmaps-imagery-provider>
+          <urltemplate-imagery-provider ref="aad" :tilingScheme="tilingScheme" :url="url" :maximumLevel="21"></urltemplate-imagery-provider>
         </imagery-layer>
+        <!-- <imagery-layer>
+          <bingmaps-imagery-provider :url="url" :bmKey="bmKey" mapStyle="Aerial"></bingmaps-imagery-provider>
+        </imagery-layer> -->
       </cesium-viewer>
       <div class="demo-tool">
          <md-input-container>
@@ -39,32 +42,43 @@
     export default {
       data () {
         return {
-          minHeight: 0,
-          maxHeight: 4000,
-          speed: 10,
+          minHeight: 48,
+          maxHeight: 150,
+          speed: 0.1,
           polygonHierarchy: [
-            {lng: 102.1, lat: 29.5},
-            {lng: 106.2, lat: 29.5},
-            {lng: 106.2, lat: 33.5},
-            {lng: 102.1, lat: 33.5}
+            // {lng: 102.1, lat: 29.5},
+            // {lng: 106.2, lat: 29.5},
+            // {lng: 106.2, lat: 33.5},
+            // {lng: 102.1, lat: 33.5}
+            {lng: 114.507065, lat: 38.034138},
+            {lng: 114.545044, lat: 38.034138},
+            {lng: 114.545044, lat: 38.04308},
+            {lng: 114.507065, lat: 38.04308}
           ],
-          url: 'https://dev.virtualearth.net',
+          // url: 'https://dev.virtualearth.net',
+          url: 'http://localhost:3000/assets/dom/{z}/{x}/{y}.png',
+          demUrl: 'http://localhost:3000/assets/dsm/',
           bmKey: 'AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-', // 可到(https://www.bingmapsportal.com/)申请Key。
-          flooding: false
+          flooding: false,
+          tilingScheme: undefined,
+          rectangle: {west: 114.507065, south: 38.034138, east: 114.545044, north: 38.04308}
         }
       },
       methods: {
         ready (cesiumInstance) {
+          window.vm = this
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
+          this.tilingScheme = new Cesium.WebMercatorTilingScheme()
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.camera.setView({
-            destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-            orientation: {
-              heading: 6.20312220367255,
-              pitch: -0.9937536846355606,
-              roll: 0.002443376981836387
-            }
+            // destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
+            destination: Cesium.Rectangle.fromDegrees(114.507065, 38.034138, 114.545044, 38.04308)
+            // orientation: {
+            //   heading: 6.20312220367255,
+            //   pitch: -0.9937536846355606,
+            //   roll: 0.002443376981836387
+            // }
           })
         },
         toggle (){

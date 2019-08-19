@@ -1,12 +1,12 @@
-# 点图元
+# PointPrimitive
 
-`point-primitive` 可渲染折线。 通过`point-collection`组件来加载它。
+`point-primitive` Used to add points, load it with the `point-collection` component.
 
-## 示例
+## Example
 
-### 添加点图元到场景
+### Add PointPrimitive to viewer
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -65,7 +65,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -124,27 +124,27 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ------------------------ | ------- | ------------------ | ------------------------------------------- |
-| color | Object|Array|String | `'WHITE'` | `optional` 指定点的颜色。 |
-| disableDepthTestDistance | Number | | `optional` 指定点深度检测距离。 |
-| distanceDisplayCondition | Object | | `optional` 指定点显示条件。. **结构: { near: number, far: number }** |
-| id | \* | | `optional` 指定与点关联的信息。 |
-| outlineColor | Object|Array|String | `'BLACK'` | `optional` 指定点的轮廓颜色。 |
-| outlineWidth | Number | `0` | `optional` 指定点的轮廓宽度。 |
-| pixelSize | Number | `1` | `optional` 指定点的像素大小。 |
-| position | Object | | `optional` 指定点的位置。 **结构：{ lng: number, lat: number, height: number }** |
-| scaleByDistance | Object | | `optional` 指定点的缩放参数。 **结构： { near: number, nearValue: number, far: number, farValue: number }** |
-| show | Boolean | `true` | `optional`指定点是否显示。 |
-| translucencyByDistance | Object | | `optional` 指定点透明度改变参数。 **结构： { near: number, nearValue: number, far: number, farValue: number }** |
+| color | Object|Array|String | `'WHITE'` | `optional` A Property specifying the Color of the point. |
+| disableDepthTestDistance | Number |  | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+| distanceDisplayCondition | Object |  | `optional` A Property specifying at what distance from the camera that this point will be displayed. **Structure: { near: number, far: number }** |
+| id | * | | `optional` Gets or sets the user-defined value returned when the point is picked. |
+| outlineColor | Object|Array|String | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| pixelSize | Number | `1` | `optional` A numeric Property specifying the size in pixels. |
+| position | Object | | `optional` Gets or sets the Cartesian position of this point. **Structure: { lng: number, lat: number, height: number }** |
+| scaleByDistance | Object | | `optional` A NearFarScalar Property used to scale the point based on distance. **Structure: { near: number, nearValue: number, far: number, farValue: number }** |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the point. |
+| translucencyByDistance | Object | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. **Structure: { near: number, nearValue: number, far: number, farValue: number }** |
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数             | 描述                                                |
-| ------ | ---------------- | --------------------------------------------------- |
-| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
