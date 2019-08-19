@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.",
   "main": "index.js",
   "scripts": {
@@ -87,7 +87,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "copy-webpack-plugin": "^5.0.2",
     "cross-env": "^5.2.0",
-    "es6-cesium-navigation": "^1.0.4",
+    "es6-cesium-navigation": "^1.0.5",
     "markdown-it": "^8.4.2",
     "netcdfjs": "^0.7.0"
   }
