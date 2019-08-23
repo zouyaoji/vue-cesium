@@ -63,16 +63,18 @@ import PolygonGeometry from '@/components/geometries/PolygonGeometry.vue'
 import MeasureDistance from '@/components/tools/MeasureDistance.vue'
 import MeasureArea from '@/components/tools/MeasureArea.vue'
 import MeasureHeight from '@/components/tools/MeasureHeight.vue'
+import DrawPolylineHandler from '@/components/tools/DrawPolylineHandler.vue'
 import CesiumNavigation from '@/components/tools/CesiumNavigation.vue'
 
 import CesiumHeatMap from '@/components/visualization/CesiumHeatMap.vue'
 import CesiumWindMap from '@/components/visualization/CesiumWindMap.vue'
 import CesiumFlood from '@/components/visualization/CesiumFlood.vue'
 // import CesiumViewshed3D from '@/components/visualization/CesiumViewshed3D.vue'
+import PostProcessStage from '@/components/particles/PostProcessStage.vue'
 
 export default {
   install (Vue, options) {
-    Vue.prototype._Cesium = () => (options)
+    Vue.prototype._Cesium = () => options
     Vue.component(CesiumViewer.name, CesiumViewer, options)
 
     Vue.component(ImageryLayer.name, ImageryLayer)
@@ -136,11 +138,14 @@ export default {
     Vue.component(MeasureDistance.name, MeasureDistance)
     Vue.component(MeasureArea.name, MeasureArea)
     Vue.component(MeasureHeight.name, MeasureHeight)
+    Vue.component(DrawPolylineHandler.name, DrawPolylineHandler)
     Vue.component(CesiumNavigation.name, CesiumNavigation)
 
     Vue.component(CesiumHeatMap.name, CesiumHeatMap)
     Vue.component(CesiumWindMap.name, CesiumWindMap)
     Vue.component(CesiumFlood.name, CesiumFlood)
+
+    Vue.component(PostProcessStage.name, PostProcessStage)
   },
   VERSION
 }
@@ -202,8 +207,10 @@ export {
   MeasureDistance,
   MeasureArea,
   MeasureHeight,
+  DrawPolylineHandler,
   CesiumNavigation,
   CesiumHeatMap,
   CesiumWindMap,
-  CesiumFlood
+  CesiumFlood,
+  PostProcessStage
 }
