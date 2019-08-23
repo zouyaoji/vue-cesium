@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-08-19 12:52:52
+ * @Last Modified time: 2019-08-20 23:32:43
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">

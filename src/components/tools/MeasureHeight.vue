@@ -10,7 +10,7 @@
         </template>
       </template>
     </point-collection>
-    <label-collection>
+    <label-collection ref="labelCollection">
       <label-primitive :position="label.position" :text="label.text" :key="'label'+index" v-for="(label, index) of labels"
         :font="font" :outlineColor="outlineColorLabel" :disableDepthTestDistance="disableDepthTestDistance" :horizontalOrigin="1"></label-primitive>
     </label-collection>
@@ -18,23 +18,35 @@
 </template>
 
 <script>
-import measure from '../../mixins/measure'
+import measure from '../../mixins/tool/measure'
 export default {
   name: 'measure-height',
   mixins: [measure],
   data () {
     return {
       measuring: false,
-      startPoint: undefined,
+      startPoint: {},
       polylines: [],
-      labels: [],
-      font: '100 20px SimSun',
-      mode: 1
+      labels: []
+    }
+  },
+  props: {
+    distanceHText: {
+      type: String,
+      default: '水平距离：'
+    },
+    distanceSText: {
+      type: String,
+      default: '空间距离：'
+    },
+    heightText: {
+      type: String,
+      default: '垂直高度：'
     }
   },
   watch: {
     measuring (val) {
-      const { polylines } = this
+      const { polylines, startNew } = this
       const polyline = polylines[polylines.length - 1]
       if (!val && polyline && !polyline.positions.length) {
         this.polylines.pop()
@@ -45,19 +57,7 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [],
-          distanceH: 0,
-          height: 0,
-          distanceS: 0,
-          materialLine: new Cesium.Material({
-            fabric: {
-              type: 'Color',
-              uniforms: {
-                color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-              }
-            }
-          })
-        })
+        startNew()
       }
       this.$emit('activeEvt', { type: 'heightMeasuring', isActive: val })
     }
@@ -68,19 +68,6 @@ export default {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [],
-        distanceH: 0,
-        height: 0,
-        distanceS: 0,
-        materialLine: new Cesium.Material({
-          fabric: {
-            type: 'Color',
-            uniforms: {
-              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-            }
-          }
-        })
-      })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -91,9 +78,9 @@ export default {
         this.startPoint = cartesian
       }
     },
-    MOUSE_MOVE (movement) {
+    async MOUSE_MOVE (movement) {
       if (!this.measuring) return
-      const { Cesium, viewer, polylines, labels } = this
+      const { Cesium, viewer, polylines, labels, onMeasureEvt, distanceHText, distanceSText, heightText } = this
       if (!polylines.length) return
       const polyline = polylines[polylines.length - 1]
       if (!polyline.positions.length) return
@@ -136,54 +123,63 @@ export default {
       polyline.positions.push(hypPoint)
       let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
       labels.push({
-        text: '垂直高度:' + labelTextHeight,
+        text: heightText + labelTextHeight,
         position: labelPositonHeight
       })
       let labelTextH = polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
       labels.push({
-        text: '水平距离:' + labelTextH,
+        text: distanceHText + labelTextH,
         position: labelPositonH
       })
       let labelTextS = polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
       labels.push({
-        text: '空间距离:' + labelTextS,
+        text: distanceSText + labelTextS,
         position: labelPositonS
       })
+
+      await this.$nextTick()
+      onMeasureEvt(polyline, labels)
     },
-    RIGHT_CLICK (movement) {
+    async RIGHT_CLICK (movement) {
       if (!this.measuring) {
         return
       }
-      const { viewer, polylines, mode } = this
+      const { viewer, polylines, mode, startNew, onMeasureEvt, labels } = this
       if (!polylines.length) {
         return
       }
+      const polyline = polylines[polylines.length - 1]
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
       }
       if (mode === 0) {
         if (polylines.length) {
-          polylines.push({ positions: [],
-            distanceH: 0,
-            height: 0,
-            distanceS: 0,
-            materialLine: new Cesium.Material({
-              fabric: {
-                type: 'Color',
-                uniforms: {
-                  color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-                }
-              }
-            })
-          })
+          startNew()
         }
       } else {
         this.measuring = false
       }
+      await this.$nextTick()
+      onMeasureEvt(polyline, labels, true)
+    },
+    startNew () {
+      const { polylines } = this
+      Cesium.defined(polylines) && polylines.push({ positions: [],
+        distanceH: 0,
+        height: 0,
+        distanceS: 0,
+        materialLine: new Cesium.Material({
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+            }
+          }
+        })
+      })
     },
     getDistance (positions) {
-      const { Cesium } = this
       let distance = 0
       for (let i = 0; i < positions.length - 1; i++) {
         let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
@@ -195,6 +191,16 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
+      this.measuring = false
+    },
+    onMeasureEvt (polyline, labels, flag = false) {
+      const listener = this.$listeners['measureEvt']
+      let labelsResult = {
+        labelHeight: this.$refs.labelCollection.cesiumObject.get(labels.length - 3),
+        labelH: this.$refs.labelCollection.cesiumObject.get(labels.length - 2),
+        labelS: this.$refs.labelCollection.cesiumObject.get(labels.length - 1)
+      }
+      listener && this.$emit('measureEvt', { polyline: polyline, label: labelsResult, type: 'heightMeasuring', accomplish: flag })
     }
   }
 }

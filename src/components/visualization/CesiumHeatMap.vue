@@ -14,7 +14,6 @@
   </i>
 </template>
 <script>
-import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
 import h337 from '../../libs/heatmap/heatmap'
 export default {
@@ -327,16 +326,6 @@ export default {
       pn.y = Math.round((p.y - this._yoffset) / this._factor + this._spacing)
       pn.y = this.height - pn.y
       return pn
-    },
-    getServices () {
-      const vm = this
-      return mergeDescriptors(
-        cmp.methods.getServices.call(this),
-        {
-          get heatMapInstance () { return vm.heatMapInstance },
-          get heatMapContainer () { return vm }
-        }
-      )
     }
   },
   stubVNode: {

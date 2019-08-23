@@ -469,6 +469,9 @@ const positions = {
   },
   watch: {
     positions (val) {
+      if (Cesium.defined(this.cesiumObject.positions) && Cesium.defined(this.cesiumObject.positions._callback)) {
+        return
+      }
       this.cesiumObject.positions = makeCartesian3Array(val)
     }
   }

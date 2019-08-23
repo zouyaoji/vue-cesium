@@ -8,7 +8,10 @@ import cmp from '../virtualCmp'
 import mergeDescriptors from '../../util/mergeDescriptors'
 
 const methods = {
-  mount () {},
+  mount () {
+    this.index = this.$parent.childCount
+    this.$parent.childCount += 1
+  },
   unload () {
     const { primitive, primitiveCollection } = this
     primitiveCollection.remove(primitive)
@@ -22,8 +25,12 @@ const methods = {
     })
   }
 }
-
 export default {
+  data () {
+    return {
+      index: 0
+    }
+  },
   mixins: [cmp],
   methods,
   stubVNode: {

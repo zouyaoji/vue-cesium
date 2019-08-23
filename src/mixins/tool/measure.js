@@ -1,11 +1,19 @@
-import cmp from './virtualCmp'
-import mergeDescriptors from '../util/mergeDescriptors'
+import cmp from '../virtualCmp'
 
-const props = {}
+const props = {
+  mode: {
+    type: Number,
+    default: 1
+  },
+  font: {
+    type: String,
+    default: '100 20px SimSun'
+  }
+}
 const computed = {}
 const methods = {
   createCesiumObject () {
-    const { Cesium, viewer } = this
+    const { viewer } = this
     this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
     this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
     this.materialPolygon = Cesium.Color.fromCssColorString('rgba(255,165,0,0.25)')
@@ -17,15 +25,7 @@ const methods = {
     handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
   },
   mount () {},
-  unload () {},
-  getServices () {
-    const vm = this
-    return mergeDescriptors(cmp.methods.getServices.call(this), {
-      get primitiveCollection () {
-        return vm.primitiveCollection
-      }
-    })
-  }
+  unload () {}
 }
 const watch = {}
 
@@ -44,9 +44,9 @@ export default {
   },
   created () {
     Object.defineProperties(this, {
-      primitiveCollection: {
+      polyline: {
         enumerable: true,
-        get: () => this.cesiumObject
+        get: () => this.polyline
       }
     })
   }

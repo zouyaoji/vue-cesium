@@ -49,7 +49,7 @@ const methods = {
       const listener = this.$listeners['update:geometryInstances']
       if (listener) {
         this.$emit('update:geometryInstances', this.instances)
-      } else this.primitive.geometryInstances = this.instances
+      } else this.primitive.geometryInstances = index === 0 ? geometryInstance : this.instances
     }
   }
 }

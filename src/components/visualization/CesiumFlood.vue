@@ -1,6 +1,6 @@
 <template>
   <i style="display: none !important">
-    <classification-primitive ref="primitive" :asynchronous="false" :show="extrudedHeight !== 0 && extrudedHeight !== ''">
+    <classification-primitive ref="primitive" :appearance="appearance" :asynchronous="false" :show="extrudedHeight !== 0 && extrudedHeight !== ''">
       <geometry-instance :geometry.sync="geometry" :attributes="attributes">
         <polygon-geometry :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></polygon-geometry>
       </geometry-instance>
@@ -9,6 +9,8 @@
 </template>
 <script>
 import cmp from '../../mixins/virtualCmp'
+import { makeColor } from '../../util/util'
+
 export default {
   name: 'flood-anaysis',
   data () {
@@ -17,7 +19,8 @@ export default {
       attributes: null,
       extrudedHeight: 0.1,
       flooding: false,
-      floodDone: false
+      floodDone: false,
+      appearance: null
     }
   },
   mixins: [cmp],
@@ -31,6 +34,10 @@ export default {
     speed: {
       type: Number,
       default: 10
+    },
+    color: {
+      type: Object | Array | String,
+      default: 'rgba(40,150,200,0.6)'
     }
   },
   watch: {
@@ -54,14 +61,10 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      const { Cesium, minHeight } = this
+      const { Cesium, minHeight, color } = this
       this.attributes = {
         // eslint-disable-next-line new-cap
-        // color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 155))
-        // eslint-disable-next-line new-cap
-        // color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(40, 150, 200, 155))
-        // eslint-disable-next-line new-cap
-        color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(40, 150, 200, 155))
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(makeColor(color))
       }
       this.extrudedHeight = minHeight
       return this.$refs.primitive.primitive

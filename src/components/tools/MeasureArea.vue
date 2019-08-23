@@ -10,44 +10,45 @@
         </template>
       </template>
     </point-collection>
-    <label-collection>
+    <label-collection ref="labelCollection">
       <template v-for="(polyline, index) of polylines">
-        <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="'label'+index" :pixelOffset="pixelOffset"
-          :text="'面积:' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+        <label-primitive :position="polyline.positions[polyline.positions.length-1]" :key="'label'+index"  :pixelOffset="pixelOffset"
+          :text= "areaText+(polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
           :font="font" :outlineColor="outlineColorLabel" showBackground :disableDepthTestDistance="disableDepthTestDistance" :horizontalOrigin="1">
         </label-primitive>
       </template>
     </label-collection>
     <entity :ref="'entity'+index" :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
-      <polygon-graphics :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight" :material="materialPolygon"></polygon-graphics>
+      <polygon-graphics :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight" :material="materialPolygon" @ready="ready"></polygon-graphics>
     </entity>
   </i>
 </template>
 
 <script>
-import turfArea from '../../libs/turfArea/turfArea.js'
-import measure from '../../mixins/measure'
+import turfArea from '../../libs/turfArea/turfArea'
+import measure from '../../mixins/tool/measure'
 export default {
   name: 'measure-area',
   mixins: [measure],
   data () {
     return {
-      polygon: {},
       measuring: false,
-      polylines: [],
-      font: '100 20px SimSun',
-      mode: 1
+      polylines: []
     }
   },
   props: {
     perPositionHeight: {
       type: Boolean,
       default: true
+    },
+    areaText: {
+      type: String,
+      default: '面积：'
     }
   },
   watch: {
     measuring (val) {
-      const { polylines } = this
+      const { polylines, startNew } = this
       const polyline = polylines[polylines.length - 1]
       if (!val && polyline && !polyline.positions.length) {
         this.polylines.pop()
@@ -58,39 +59,23 @@ export default {
             $node.child.measuring = false
           }
         }
-        polylines.length && polylines.push({ positions: [],
-          area: 0,
-          materialLine: new Cesium.Material({
-            fabric: {
-              type: 'Color',
-              uniforms: {
-                color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-              }
-            }
-          })
-        })
+        startNew()
       }
       const listener = this.$listeners['activeEvt']
       listener && this.$emit('activeEvt', { type: 'areaMeasuring', isActive: val })
     }
   },
   methods: {
+    ready (val) {
+      const { polylines } = this
+      const polyline = polylines[polylines.length - 1]
+      val.cesiumObject.hierarchy = new Cesium.CallbackProperty(() => polyline.positions, false)
+    },
     LEFT_CLICK (movement) {
       if (!this.measuring) {
         return
       }
       const { Cesium, viewer, polylines } = this
-      !polylines.length && polylines.push({ positions: [],
-        area: 0,
-        materialLine: new Cesium.Material({
-          fabric: {
-            type: 'Color',
-            uniforms: {
-              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-            }
-          }
-        })
-      })
       let cartesian = viewer.scene.pickPosition(movement.position)
       if (!Cesium.defined(cartesian)) {
         return
@@ -98,15 +83,16 @@ export default {
       const polyline = polylines[polylines.length - 1]
       polyline.positions.push(cartesian)
     },
-    MOUSE_MOVE (movement) {
+    async MOUSE_MOVE (movement) {
       if (!this.measuring) {
         return
       }
-      const { Cesium, viewer, polylines } = this
+      const { viewer, polylines, onMeasureEvt } = this
       if (!polylines.length) {
         return
       }
-      const polyline = polylines[polylines.length - 1]
+      const nIndex = polylines.length - 1
+      const polyline = polylines[nIndex]
       if (!polyline.positions.length) {
         return
       }
@@ -119,16 +105,19 @@ export default {
       }
       polyline.positions.push(cartesian)
       polyline.area = this.getArea(polyline.positions)
+      await this.$nextTick()
+      onMeasureEvt(polyline, nIndex)
     },
-    RIGHT_CLICK (movement) {
+    async RIGHT_CLICK (movement) {
       if (!this.measuring) {
         return
       }
-      const { viewer, polylines, mode } = this
+      const { viewer, polylines, mode, startNew, onMeasureEvt } = this
       if (!polylines.length) {
         return
       }
-      const polyline = polylines[polylines.length - 1]
+      const nIndex = polylines.length - 1
+      const polyline = polylines[nIndex]
       if (polyline.positions.length === 0) {
         return
       }
@@ -136,23 +125,29 @@ export default {
       if (!Cesium.defined(cartesian)) {
         return
       }
+      polyline.positions.pop()
+      polyline.area = this.getArea(polyline.positions)
       if (mode === 0) {
-        if (polylines.length) {
-          polylines.push({ positions: [],
-            area: 0,
-            materialLine: new Cesium.Material({
-              fabric: {
-                type: 'Color',
-                uniforms: {
-                  color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
-                }
-              }
-            })
-          })
-        }
+        startNew()
       } else {
         this.measuring = false
       }
+      await this.$nextTick()
+      onMeasureEvt(polyline, nIndex, true)
+    },
+    startNew () {
+      const { polylines } = this
+      Cesium.defined(polylines) && polylines.push({ positions: [],
+        area: 0,
+        materialLine: new Cesium.Material({
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+            }
+          }
+        })
+      })
     },
     getArea (positions) {
       const { Cesium } = this
@@ -201,6 +196,11 @@ export default {
       this.distance = 0
       this.polylines = []
       this.labels = []
+      this.measuring = false
+    },
+    onMeasureEvt (polyline, index, flag = false) {
+      const listener = this.$listeners['measureEvt']
+      listener && this.$emit('measureEvt', { polyline: polyline, label: this.$refs.labelCollection.cesiumObject.get(index), type: 'areaMeasuring', accomplish: flag })
     }
   }
 }

@@ -1,5 +1,4 @@
 import cmp from '../virtualCmp'
-import mergeDescriptors from '../../util/mergeDescriptors'
 
 const computed = {
   changeProps () {
@@ -14,14 +13,6 @@ const methods = {
   unload () {
     const { geometryContainer } = this
     geometryContainer && geometryContainer.unload()
-  },
-  getServices () {
-    const vm = this
-    return mergeDescriptors(cmp.methods.getServices.call(this), {
-      get primitive () {
-        return vm.primitive
-      }
-    })
   }
 }
 const watch = {

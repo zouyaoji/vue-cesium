@@ -39,7 +39,9 @@ export default {
   },
   watch: {
     hierarchy (val) {
-      this.graphics.hierarchy = makePolygonHierarchy(val)
+      if (!Cesium.defined(this.graphics.hierarchy._callback)) {
+        this.graphics.hierarchy = makePolygonHierarchy(val)
+      }
     }
   },
   methods: {
