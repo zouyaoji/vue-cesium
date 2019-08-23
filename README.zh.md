@@ -23,9 +23,9 @@
 
 ## 开始
 
-打包后的 Cesium 没办法再通过 import 方式直接导入到项目中，详见[ISSUE](https://github.com/AnalyticalGraphicsInc/cesium/issues/5278)。故造此轮子可以把打包后的 Cesium 以动态形式引入你的 Vue 项目。
+此项目引入的是构建后的 Cesium 包，也就是 Cesium 源码打包后`Build`目录的库。之所以这样是因为引入`Build`后的库可以随心所欲的切换在线、本地源，官方原生库和基于 Cesium 构建的第三方库。
 
-持续开发中，有问题可直接联系我交流。<370681295@qq.com>
+逐步完善中，有问题可提 Issue 或者直接联系我交流。<370681295@qq.com>
 
 ### 安装
 

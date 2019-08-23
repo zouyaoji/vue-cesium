@@ -4,7 +4,7 @@
 
 ### Global Registration
 
-Regist all components of *vue-cesium* at once.
+Regist all components of **vue-cesium** at once.
 
 ```javascript
 import Vue from 'vue'
@@ -34,10 +34,9 @@ Vue.use(VueCesium, {
 
 ```html
 <template>
-<div class="viewer">
-  <cesium-viewer>
-  </cesium-viewer>
-</div>
+  <div class="viewer">
+    <cesium-viewer> </cesium-viewer>
+  </div>
 </template>
 
 <style>
@@ -50,7 +49,7 @@ Vue.use(VueCesium, {
 
 ### Local Registration
 
-All components are stored in the `vue-cesium / components` folder.
+All components are stored in the `vue-cesium/src/components` folder.
 As ES module can't be run directly in most browsers, if importing component causes some runtime errors, please check the webpack's loader configuration whethor the `include` and `exclude` options hits this library.
 
 ```html
@@ -61,12 +60,12 @@ As ES module can't be run directly in most browsers, if importing component caus
 </template>
 
 <script>
-import CesiumViewer from 'vue-cesium/components/viewer/CesiumViewer.vue'
-export default {
-  components: {
-    CesiumViewer
+  import CesiumViewer from 'vue-cesium/src/components/viewer/CesiumViewer.vue'
+  export default {
+    components: {
+      CesiumViewer
+    }
   }
-}
 </script>
 
 <style>
@@ -93,29 +92,29 @@ export default {
   <cesium-viewer :animation="animation" :camera="camera"></cesium-viewer>
 </template>
 <script>
-export default {
-  data () {
-    return {
-      camera: {
-        position: {
-          longitude: 104.06,
-          latitude: 30.67,
-          height: 2000
+  export default {
+    data() {
+      return {
+        camera: {
+          position: {
+            longitude: 104.06,
+            latitude: 30.67,
+            height: 2000
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
         },
-        heading: 360,
-        pitch: -90,
-        roll: 0
-      },
-      animation: false
+        animation: false
+      }
+    },
+    mounted() {
+      this.camera.position.longitude = 116.46
+      this.camera.position.latitude = 39.92
+      this.camera.position.height = 500
+      this.animation = true
     }
-  },
-  mounted () {
-    this.camera.position.longitude = 116.46
-    this.camera.position.latitude = 39.92
-    this.camera.position.height = 500
-    this.animation = true
   }
-}
 </script>
 ```
 
@@ -126,33 +125,33 @@ export default {
   <cesium-viewer :animation="animation" :camera="camera" @ready="ready"></cesium-viewer>
 </template>
 <script>
-export default {
-  data () {
-    return {
-      camera: {
-        position: {
-          longitude: 104.06,
-          latitude: 30.67,
-          height: 2000
+  export default {
+    data() {
+      return {
+        camera: {
+          position: {
+            longitude: 104.06,
+            latitude: 30.67,
+            height: 2000
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
         },
-        heading: 360,
-        pitch: -90,
-        roll: 0
-      },
-      animation: false
-    }
-  },
-  methods: {
-    ready (cesiumInstance) {
-      const { Cesium, viewer } = cesiumInstance
-      // Get Cesium and viewer instances here, then execute the relevant logic code
-      this.camera.position.longitude = 116.46
-      this.camera.position.latitude = 39.92
-      this.camera.position.height = 500
-      this.animation = true
+        animation: false
+      }
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        // Get Cesium and viewer instances here, then execute the relevant logic code
+        this.camera.position.longitude = 116.46
+        this.camera.position.latitude = 39.92
+        this.camera.position.height = 500
+        this.animation = true
+      }
     }
   }
-}
 </script>
 ```
 
@@ -230,52 +229,52 @@ export default {
   </cesium-viewer>
 </template>
 <script>
-export default {
-  data () {
-    return {
-      animation: true,
-      timeline: true,
-      camera: {
-        position: {
-          longitude: 104.06,
-          latitude: 30.67,
-          height: 100000
-        },
-        heading: 360,
-        pitch: -90,
-        roll: 0
+  export default {
+    data() {
+      return {
+        animation: true,
+        timeline: true,
+        camera: {
+          position: {
+            longitude: 104.06,
+            latitude: 30.67,
+            height: 100000
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
+        }
+      }
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        viewer.entities.add({
+          id: 'Welcome to Chengdu',
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new Cesium.LabelGraphics({
+            text: 'Hello Word',
+            fillColor: Cesium.Color.GOLD,
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
       }
     }
-  },
-  methods: {
-    ready (cesiumInstance) {
-      const { Cesium, viewer } = cesiumInstance
-      viewer.entities.add({
-        id: 'Welcome to Chengdu',
-        position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-        billboard: new Cesium.BillboardGraphics({
-          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-          scale: 0.1
-        }),
-        label: new Cesium.LabelGraphics ({
-          text: 'Hello Word',
-          fillColor: Cesium.Color.GOLD,
-          font: '24px sans-serif',
-          horizontalOrigin: 1,
-          outlineColor: new Cesium.Color(0, 0, 0, 1),
-          outlineWidth: 2,
-          pixelOffset: new Cesium.Cartesian2(17, -5),
-          style: Cesium.LabelStyle.FILL
-        })
-      })
-    }
   }
-}
 </script>
 <style>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```

@@ -36,7 +36,7 @@
           positions2: [{ lng: 90, lat: 30, height: 10000 }, { lng: 120, lat: 30, height: 10000 }],
           material2: undefined,
           polyline3: {},
-          positions3: [{ lng: 90, lat: 40, height: 10000 }, { lng: 120, lat: 40, height: 10000 }],
+          positions3: [],
           material3: undefined
         }
       },
@@ -49,6 +49,7 @@
             color : Cesium.Color.BLUE
           })
           this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
+          this.positions3 = [{ lng: 90, lat: 40, height: 10000 }, { lng: 120, lat: 40, height: 10000 }]
         }
       }
     }

@@ -50,7 +50,6 @@
         },
         LEFT_CLICK (movement) {
            var feature = this.cesiumInstance.viewer.scene.pick(movement.position)
-           console.log(feature)
         }
       }
     }
@@ -103,7 +102,6 @@
       },
       LEFT_CLICK(movement) {
         var feature = this.cesiumInstance.viewer.scene.pick(movement.position)
-        console.log(feature)
       }
     }
   }

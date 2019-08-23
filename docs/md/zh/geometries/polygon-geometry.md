@@ -14,10 +14,10 @@
       <cesium-viewer @ready="ready">
         <primitive :appearance="appearance">
           <geometry-instance>
-            <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
+            <rectangle-geometry :rectangle="rectangle" :height="height"></rectangle-geometry>
           </geometry-instance>
-          <geometry-instance :geometry.sync="geometry">
-            <polygon-geometry :polygonHierarchy="polygonHierarchy" :height="height"></polygon-geometry>
+          <geometry-instance>
+            <polygon-geometry :polygonHierarchy="polygonHierarchy" :height="height" :extrudedHeight="30" :perPositionHeight="true"></polygon-geometry>
           </geometry-instance>
         </primitive>
       </cesium-viewer>
@@ -37,7 +37,7 @@
             { lng: 108.2, lat: 35.5 },
             { lng: 102.1, lat: 33.5 }
           ],
-          height: 200,
+          height: 100000,
           rectangle: {west: 110.5, south: 29.5, east: 115.5,  north: 34.5}
         }
       },
@@ -45,11 +45,51 @@
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
-          this.appearance = new Cesium.MaterialAppearance({
-            material: Cesium.Material.fromType('Checkerboard', {
-              repeat : new Cesium.Cartesian2(20.0, 6.0)
+          // this.appearance = new Cesium.MaterialAppearance({
+          //   material: Cesium.Material.fromType('Checkerboard', {
+          //     repeat : new Cesium.Cartesian2(20.0, 6.0)
+          //   }),
+          //   materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          // })
+          this.appearance = new Cesium.EllipsoidSurfaceAppearance({
+            material: new Cesium.Material({
+              fabric: {
+                type: 'Water',
+                uniforms: {
+                  normalMap: './statics/SampleData/images/waterNormals.png',
+                  frequency: 1000.0,
+                  animationSpeed: 0.05,
+                  amplitude: 10.0
+                }
+              }
             }),
-            materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+            fragmentShaderSource: `
+            varying vec3 v_positionMC;
+            varying vec3 v_positionEC;
+            varying vec2 v_st;
+
+            void main()
+            {
+                czm_materialInput materialInput;
+                vec3 normalEC = normalize(czm_normal3D * czm_geodeticSurfaceNormal(v_positionMC, vec3(0.0), vec3(1.0)));
+            #ifdef FACE_FORWARD
+                normalEC = faceforward(normalEC, vec3(0.0, 0.0, 1.0), -normalEC);
+            #endif
+                materialInput.s = v_st.s;
+                materialInput.st = v_st;
+                materialInput.str = vec3(v_st, 0.0);
+                materialInput.normalEC = normalEC;
+                materialInput.tangentToEyeMatrix = czm_eastNorthUpToEyeCoordinates(v_positionMC, materialInput.normalEC);
+                vec3 positionToEyeEC = -v_positionEC;
+                materialInput.positionToEyeEC = positionToEyeEC;
+                czm_material material = czm_getMaterial(materialInput);
+            #ifdef FLAT
+                gl_FragColor = vec4(material.diffuse + material.emission, material.alpha);
+            #else
+                gl_FragColor = czm_phong(normalize(positionToEyeEC), material);
+                gl_FragColor.a = 0.5;
+            #endif
+            }`
           })
         }
       }
@@ -65,10 +105,15 @@
     <cesium-viewer @ready="ready">
       <primitive :appearance="appearance">
         <geometry-instance>
-          <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
+          <rectangle-geometry :rectangle="rectangle" :height="height"></rectangle-geometry>
         </geometry-instance>
-        <geometry-instance :geometry.sync="geometry">
-          <polygon-geometry :polygonHierarchy="polygonHierarchy" :height="height"></polygon-geometry>
+        <geometry-instance>
+          <polygon-geometry
+            :polygonHierarchy="polygonHierarchy"
+            :height="height"
+            :extrudedHeight="30"
+            :perPositionHeight="true"
+          ></polygon-geometry>
         </geometry-instance>
       </primitive>
     </cesium-viewer>
@@ -88,7 +133,7 @@
           { lng: 108.2, lat: 35.5 },
           { lng: 102.1, lat: 33.5 }
         ],
-        height: 200,
+        height: 100000,
         rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
       }
     },
@@ -96,11 +141,51 @@
       ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
         const { Cesium, viewer } = this.cesiumInstance
-        this.appearance = new Cesium.MaterialAppearance({
-          material: Cesium.Material.fromType('Checkerboard', {
-            repeat: new Cesium.Cartesian2(20.0, 6.0)
+        // this.appearance = new Cesium.MaterialAppearance({
+        //   material: Cesium.Material.fromType('Checkerboard', {
+        //     repeat : new Cesium.Cartesian2(20.0, 6.0)
+        //   }),
+        //   materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+        // })
+        this.appearance = new Cesium.EllipsoidSurfaceAppearance({
+          material: new Cesium.Material({
+            fabric: {
+              type: 'Water',
+              uniforms: {
+                normalMap: './statics/SampleData/images/waterNormals.png',
+                frequency: 1000.0,
+                animationSpeed: 0.05,
+                amplitude: 10.0
+              }
+            }
           }),
-          materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          fragmentShaderSource: `
+            varying vec3 v_positionMC;
+            varying vec3 v_positionEC;
+            varying vec2 v_st;
+
+            void main()
+            {
+                czm_materialInput materialInput;
+                vec3 normalEC = normalize(czm_normal3D * czm_geodeticSurfaceNormal(v_positionMC, vec3(0.0), vec3(1.0)));
+            #ifdef FACE_FORWARD
+                normalEC = faceforward(normalEC, vec3(0.0, 0.0, 1.0), -normalEC);
+            #endif
+                materialInput.s = v_st.s;
+                materialInput.st = v_st;
+                materialInput.str = vec3(v_st, 0.0);
+                materialInput.normalEC = normalEC;
+                materialInput.tangentToEyeMatrix = czm_eastNorthUpToEyeCoordinates(v_positionMC, materialInput.normalEC);
+                vec3 positionToEyeEC = -v_positionEC;
+                materialInput.positionToEyeEC = positionToEyeEC;
+                czm_material material = czm_getMaterial(materialInput);
+            #ifdef FLAT
+                gl_FragColor = vec4(material.diffuse + material.emission, material.alpha);
+            #else
+                gl_FragColor = czm_phong(normalize(positionToEyeEC), material);
+                gl_FragColor.a = 0.5;
+            #endif
+            }`
         })
       }
     }

@@ -28,6 +28,10 @@ module.exports = {
         ]
       },
       {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        use: ['url-loader']
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/

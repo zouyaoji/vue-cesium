@@ -16,6 +16,9 @@
           <path-graphics :resolution="1" :material="material1" :width="10"></path-graphics>
           <model-graphics :uri="uri1" :minimumPixelSize="64" @ready="subReady"></model-graphics>
         </entity>
+        <entity :key="index" :position="position" v-for="(position, index) of positions">
+          <point-graphics :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></point-graphics>
+        </entity>
       </cesium-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="viewTopDown">View Top Down</md-button>
@@ -40,7 +43,8 @@
           orientation: {},
           uri1: 'https://zouyaoji.top/vue-cesium/statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
           start: {},
-          stop: {}
+          stop: {},
+          positions: []
         }
       },
       methods: {
@@ -87,17 +91,7 @@
             let time = Cesium.JulianDate.addSeconds(this.start, i, new Cesium.JulianDate());
             let position = Cesium.Cartesian3.fromDegrees(lon + (radius * 1.5 * Math.cos(radians)), lat + (radius * Math.sin(radians)), Cesium.Math.nextRandomNumber() * 500 + 1750)
             property.addSample(time, position)
-
-            //Also create a point for each sample we generate.
-            viewer.entities.add({
-              position : position,
-              point : {
-                pixelSize : 8,
-                color : Cesium.Color.TRANSPARENT,
-                outlineColor : Cesium.Color.YELLOW,
-                outlineWidth : 3
-              }
-            })
+            this.positions.push(position)
           }
           return property
         },

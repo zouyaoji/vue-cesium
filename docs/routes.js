@@ -279,7 +279,7 @@ const routeMap = [
         path: 'billboard-graphics',
         component: 'entities/billboard-graphics',
         name: {
-          zh: '布告板(Billboard)',
+          zh: '布告板(BillboardGraphics)',
           en: 'BillboardGraphics'
         }
       },
@@ -287,7 +287,7 @@ const routeMap = [
         path: 'box-graphics',
         component: 'entities/box-graphics',
         name: {
-          zh: '盒子(Box)',
+          zh: '盒子(BoxGraphics)',
           en: 'BoxGraphics'
         }
       },
@@ -295,7 +295,7 @@ const routeMap = [
         path: 'corridor-graphics',
         component: 'entities/corridor-graphics',
         name: {
-          zh: '走廊(Corridor)',
+          zh: '走廊(CorridorGraphics)',
           en: 'CorridorGraphics'
         }
       },
@@ -303,7 +303,7 @@ const routeMap = [
         path: 'cylinder-graphics',
         component: 'entities/cylinder-graphics',
         name: {
-          zh: '圆柱（锥）(Cylinder)',
+          zh: '圆柱（锥）(CylinderGraphics)',
           en: 'CylinderGraphics'
         }
       },
@@ -311,7 +311,7 @@ const routeMap = [
         path: 'ellipse-graphics',
         component: 'entities/ellipse-graphics',
         name: {
-          zh: '椭圆形(体)(Ellipse)',
+          zh: '椭圆形(体)(EllipseGraphics)',
           en: 'EllipseGraphics'
         }
       },
@@ -319,7 +319,7 @@ const routeMap = [
         path: 'ellipsoid-graphics',
         component: 'entities/ellipsoid-graphics',
         name: {
-          zh: '(椭)球体(Ellipsoid)',
+          zh: '(椭)球体(EllipsoidGraphics)',
           en: 'EllipsoidGraphics'
         }
       },
@@ -327,7 +327,7 @@ const routeMap = [
         path: 'label-graphics',
         component: 'entities/label-graphics',
         name: {
-          zh: '标签(Label)',
+          zh: '标签(LabelGraphics)',
           en: 'LabelGraphics'
         }
       },
@@ -335,7 +335,7 @@ const routeMap = [
         path: 'model-graphics',
         component: 'entities/model-graphics',
         name: {
-          zh: '模型(Model)',
+          zh: '模型(ModelGraphics)',
           en: 'ModelGraphics'
         }
       },
@@ -343,7 +343,7 @@ const routeMap = [
         path: 'path-graphics',
         component: 'entities/path-graphics',
         name: {
-          zh: '路径(Path)',
+          zh: '路径(PathGraphics)',
           en: 'PathGraphics'
         }
       },
@@ -351,7 +351,7 @@ const routeMap = [
         path: 'plane-graphics',
         component: 'entities/plane-graphics',
         name: {
-          zh: '平面(Plane)',
+          zh: '平面(PlaneGraphics)',
           en: 'PlaneGraphics'
         }
       },
@@ -359,7 +359,7 @@ const routeMap = [
         path: 'point-graphics',
         component: 'entities/point-graphics',
         name: {
-          zh: '点(Point)',
+          zh: '点(PointGraphics)',
           en: 'PointGraphics'
         }
       },
@@ -367,7 +367,7 @@ const routeMap = [
         path: 'polygon-graphics',
         component: 'entities/polygon-graphics',
         name: {
-          zh: '多边形(Ploygon)',
+          zh: '多边形(PolygonGraphics)',
           en: 'PolygonGraphics'
         }
       },
@@ -375,7 +375,7 @@ const routeMap = [
         path: 'polyline-graphics',
         component: 'entities/polyline-graphics',
         name: {
-          zh: '折线(Polyline)',
+          zh: '折线(PolylineGraphics)',
           en: 'PolylineGraphics'
         }
       },
@@ -383,7 +383,7 @@ const routeMap = [
         path: 'polyline-volume-graphics',
         component: 'entities/polyline-volume-graphics',
         name: {
-          zh: '多段线柱体(PolylineVolume)',
+          zh: '多段线柱体(PolylineVolumeGraphics)',
           en: 'PolylineVolumeGraphics'
         }
       },
@@ -391,7 +391,7 @@ const routeMap = [
         path: 'rectangle-graphics',
         component: 'entities/rectangle-graphics',
         name: {
-          zh: '矩形(Rectangle)',
+          zh: '矩形(RectangleGraphics)',
           en: 'RectangleGraphics'
         }
       },
@@ -399,7 +399,7 @@ const routeMap = [
         path: 'wall-graphics',
         component: 'entities/wall-graphics',
         name: {
-          zh: '围墙(Wall)',
+          zh: '围墙(WallGraphics)',
           en: 'WallGraphics'
         }
       }
@@ -483,7 +483,7 @@ const routeMap = [
         path: 'box-geometry',
         component: 'geometries/box-geometry',
         name: {
-          zh: '盒子(Box)',
+          zh: '盒子(BoxGeometry)',
           en: 'BoxGeometry'
         }
       },
@@ -491,7 +491,7 @@ const routeMap = [
         path: 'rectangle-geometry',
         component: 'geometries/rectangle-geometry',
         name: {
-          zh: '矩形(Rectangle)',
+          zh: '矩形(RectangleGeometry)',
           en: 'RectangleGeometry'
         }
       },
@@ -499,7 +499,7 @@ const routeMap = [
         path: 'polygon-geometry',
         component: 'geometries/polygon-geometry',
         name: {
-          zh: '多边形(Polygon)',
+          zh: '多边形(PolygonGeometry)',
           en: 'PolygonGeometry'
         }
       }

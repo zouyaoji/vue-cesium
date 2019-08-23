@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://zouyaoji.top/vue-cesium/favicon.png" width="200px">
 </p>
-<p align="center">Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.</p>
+<p align="center">Vue 2.x components for Cesium that can help you load Cesium built package or other third-party packages which are built on Cesium.</p>
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
@@ -76,7 +76,7 @@ Vue.use(VueCesium, {
 
 ## TODOS
 
-- Use rollup odule bundler
+- Use rollup module bundler
 - Doucment & Demo
 - Add more components
 - ...
