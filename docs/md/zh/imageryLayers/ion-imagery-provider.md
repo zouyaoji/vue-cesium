@@ -54,7 +54,7 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <grid-imagery-provider></grid-imagery-provider>
+        <ion-imagery-provider></ion-imagery-provider>
       </imagery-layer>
     </cesium-viewer>
     <div class="demo-tool">
