@@ -19,6 +19,11 @@ import SuperMapImageryProvider from '@/components/imageryLayers/SuperMapImageryP
 
 import CesiumTerrainProvider from '@/components/terrains/CesiumTerrainProvider.vue'
 
+import CustomDataSource from '@/components/datasources/CustomDataSource.vue'
+import CzmlDataSource from '@/components/datasources/CzmlDataSource.vue'
+import GeoJsonDataSource from '@/components/datasources/GeoJsonDataSource.vue'
+import KmlDataSource from '@/components/datasources/KmlDataSource.vue'
+
 import Entity from '@/components/entities/Entity.vue'
 import BillboardGraphics from '@/components/entities/BillboardGraphics.vue'
 import BoxGraphics from '@/components/entities/BoxGraphics.vue'
@@ -94,6 +99,11 @@ export default {
     Vue.component(SuperMapImageryProvider.name, SuperMapImageryProvider)
     Vue.component(CesiumTerrainProvider.name, CesiumTerrainProvider)
 
+    Vue.component(CustomDataSource.name, CustomDataSource)
+    Vue.component(CzmlDataSource.name, CzmlDataSource)
+    Vue.component(GeoJsonDataSource.name, GeoJsonDataSource)
+    Vue.component(KmlDataSource.name, KmlDataSource)
+
     Vue.component(Entity.name, Entity)
     Vue.component(BillboardGraphics.name, BillboardGraphics)
     Vue.component(BoxGraphics.name, BoxGraphics)
@@ -168,6 +178,10 @@ export {
   WebMapTileServiceImageryProvider,
   SuperMapImageryProvider,
   CesiumTerrainProvider,
+  CustomDataSource,
+  CzmlDataSource,
+  GeoJsonDataSource,
+  KmlDataSource,
   Entity,
   BillboardGraphics,
   BoxGraphics,
