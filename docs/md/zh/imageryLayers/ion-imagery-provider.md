@@ -40,7 +40,6 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           // ...
-          window.viewer = viewer
         }
       }
     }
@@ -54,7 +53,7 @@
   <div class="viewer">
     <cesium-viewer @ready="ready">
       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <ion-imagery-provider></ion-imagery-provider>
+        <ion-imagery-provider :assetId="3812"></ion-imagery-provider>
       </imagery-layer>
     </cesium-viewer>
     <div class="demo-tool">
