@@ -506,6 +506,24 @@ const routeMap = [
     ]
   },
   {
+    path: 'datasources',
+    name: {
+      zh: '数据源',
+      en: 'Datasources'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'geojson-datasource',
+        component: 'datasources/geojson-datasource',
+        name: {
+          zh: 'GeoJson数据源',
+          en: 'GeoJsonDataSource'
+        }
+      }
+    ]
+  },
+  {
     path: 'visualizations',
     name: {
       zh: '可视化',

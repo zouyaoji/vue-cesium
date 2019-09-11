@@ -14,7 +14,7 @@
       <cesium-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
         <cesium-navigation></cesium-navigation>
-        <post-process-stage :fragmentShader="fragmentShader"></post-process-stage>
+        <post-process-stage :fragmentShader="fragmentShader" v-if="animation"></post-process-stage>
       </cesium-viewer>
       <div class="demo-tool">
         <span>动画部件</span>

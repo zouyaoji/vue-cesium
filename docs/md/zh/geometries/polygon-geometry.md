@@ -12,14 +12,14 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <primitive :appearance="appearance">
+        <ground-primitive :appearance="appearance">
           <geometry-instance>
             <rectangle-geometry :rectangle="rectangle" :height="height"></rectangle-geometry>
           </geometry-instance>
           <geometry-instance>
             <polygon-geometry :polygonHierarchy="polygonHierarchy" :height="height" :extrudedHeight="30" :perPositionHeight="true"></polygon-geometry>
           </geometry-instance>
-        </primitive>
+        </ground-primitive>
       </cesium-viewer>
     </div>
   </template>
