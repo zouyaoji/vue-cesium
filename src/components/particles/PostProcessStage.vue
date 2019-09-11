@@ -75,8 +75,10 @@ export default {
     })
   },
   stubVNode: {
-    empty () {
-      return this.$options.name
+    attrs () {
+      return {
+        class: this.$options.name
+      }
     }
   }
 }

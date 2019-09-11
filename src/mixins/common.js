@@ -1,7 +1,7 @@
-
 import services from './services'
 const VM_PROP = 'vm'
-const getParent = $component => $component.abstract || $component.$el === $component.$children[0].$el ? getParent($component.$parent) : $component
+const getParent = $component =>
+  $component.abstract || $component.$el === $component.$children[0].$el ? getParent($component.$parent) : $component
 /**
  * @vueProps
  */
@@ -25,10 +25,12 @@ const methods = {
     throw new Error('Not implemented method')
   },
   reload () {
-    this && this.Cesium && this.$nextTick(() => {
-      this.unload()
-      this.$nextTick(this.load)
-    })
+    this &&
+      this.Cesium &&
+      this.$nextTick(() => {
+        this.unload()
+        this.$nextTick(this.load)
+      })
   },
   refresh () {
     throw new Error('Not implemented method')

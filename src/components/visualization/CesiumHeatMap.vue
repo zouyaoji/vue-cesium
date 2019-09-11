@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none !important">
+  <i :class="$options.name" style="display: none !important">
     <entity ref="1" v-if="type === 1" :show="show">
       <rectangle-graphics :coordinates="coordinates" :material="material"></rectangle-graphics>
     </entity>
@@ -326,13 +326,6 @@ export default {
       pn.y = Math.round((p.y - this._yoffset) / this._factor + this._spacing)
       pn.y = this.height - pn.y
       return pn
-    }
-  },
-  stubVNode: {
-    attrs () {
-      return {
-        class: this.$options.name
-      }
     }
   },
   created () {

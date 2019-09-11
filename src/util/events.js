@@ -1,9 +1,6 @@
 export const Events = {
   // Vue组件
-  'cesium-viewer': [
-    'selectedEntityChanged',
-    'trackedEntityChanged'
-  ],
+  'cesium-viewer': ['selectedEntityChanged', 'trackedEntityChanged'],
   'cesium-3dtileset': [
     'allTilesLoaded',
     'initialTilesLoaded',
@@ -13,12 +10,8 @@ export const Events = {
     'tileUnload',
     'tileVisible'
   ],
-  'imagery-layer-events': [
-    'errorEvent'
-  ],
-  'entity-events': [
-    'definitionChanged'
-  ],
+  'imagery-layer-events': ['errorEvent'],
+  'entity-events': ['definitionChanged'],
   'viewer-mouse-events': [
     `LEFT_CLICK`,
     `LEFT_DOUBLE_CLICK`,
@@ -36,34 +29,27 @@ export const Events = {
     `RIGHT_UP`,
     `WHEEL`
   ],
+  'datasource-events': ['changedEvent', 'errorEvent', 'loadingEvent'],
   'viewer-children-events': [
     {
       // viewer.imageryLayers
-      'name': 'imageryLayers',
-      'events': [
-        'layerAdded',
-        'layerMoved',
-        'layerRemoved',
-        'layerShownOrHidden'
-      ]
-    }, {
+      name: 'imageryLayers',
+      events: ['layerAdded', 'layerMoved', 'layerRemoved', 'layerShownOrHidden']
+    },
+    {
       // viewer.dataSources
-      'name': 'dataSources',
-      'events': [
-        'dataSourceAdded',
-        'dataSourceMoved',
-        'dataSourceRemoved'
-      ]
-    }, {
+      name: 'dataSources',
+      events: ['dataSourceAdded', 'dataSourceMoved', 'dataSourceRemoved']
+    },
+    {
       // viewer.entities
-      'name': 'entities',
-      'events': [
-        'collectionChanged'
-      ]
-    }, {
+      name: 'entities',
+      events: ['collectionChanged']
+    },
+    {
       // viewer.scene
-      'name': 'scene',
-      'events': [
+      name: 'scene',
+      events: [
         'morphComplete',
         'morphStart',
         'postRender',
@@ -73,27 +59,21 @@ export const Events = {
         'renderError',
         'terrainProviderChanged'
       ]
-    }, {
+    },
+    {
       // viewer.camera
-      'name': 'camera',
-      'events': [
-        'changed',
-        'moveEnd',
-        'moveStart'
-      ]
-    }, {
+      name: 'camera',
+      events: ['changed', 'moveEnd', 'moveStart']
+    },
+    {
       // viewer.clock
-      'name': 'clock',
-      'events': [
-        'onStop',
-        'onTick'
-      ]
-    }, {
+      name: 'clock',
+      events: ['onStop', 'onTick']
+    },
+    {
       // viewer.terrainProvider
-      'name': 'terrainProvider',
-      'events': [
-        'errorEvent'
-      ]
+      name: 'terrainProvider',
+      events: ['errorEvent']
     }
   ]
 }

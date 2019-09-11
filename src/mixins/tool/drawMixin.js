@@ -20,12 +20,5 @@ export default {
   props,
   computed,
   watch,
-  methods,
-  stubVNode: {
-    attrs () {
-      return {
-        class: this.$options.name
-      }
-    }
-  }
+  methods
 }

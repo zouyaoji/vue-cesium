@@ -23,7 +23,7 @@ const methods = {
   },
   unload () {
     const { providerContainer } = this
-    providerContainer && providerContainer.setProvider(undefined)
+    providerContainer.unload()
   }
 }
 const watch = {

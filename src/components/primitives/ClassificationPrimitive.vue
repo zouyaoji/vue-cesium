@@ -49,10 +49,6 @@ export default {
       }
       this.removeNullItem(options)
       return new Cesium.ClassificationPrimitive(options)
-    },
-    setGeometryInstances (geometryInstances) {
-      const listener = this.$listeners['update:geometryInstances']
-      if (listener) { this.$emit('update:geometryInstances', geometryInstances) } else this.primitive.geometryInstances = geometryInstances
     }
   }
 }

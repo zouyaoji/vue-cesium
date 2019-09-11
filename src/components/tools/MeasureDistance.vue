@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none !important">
+  <i :class="$options.name" style="display: none !important">
     <polyline-collection>
       <polyline-primitive :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2"></polyline-primitive>
     </polyline-collection>

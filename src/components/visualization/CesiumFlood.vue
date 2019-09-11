@@ -1,5 +1,5 @@
 <template>
-  <i style="display: none !important">
+  <i :class="$options.name" style="display: none !important">
     <classification-primitive ref="primitive" :appearance="appearance" :asynchronous="false" :show="extrudedHeight !== 0 && extrudedHeight !== ''">
       <geometry-instance :geometry.sync="geometry" :attributes="attributes">
         <polygon-geometry :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></polygon-geometry>
@@ -84,11 +84,6 @@ export default {
       this.extrudedHeight = this.minHeight
       this.flooding = false
       this.$refs.primitive && this.$refs.primitive.unload()
-    }
-  },
-  stubVNode: {
-    empty () {
-      return this.$options.name
     }
   },
   created () {

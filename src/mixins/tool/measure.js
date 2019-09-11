@@ -35,13 +35,6 @@ export default {
   computed,
   watch,
   methods,
-  stubVNode: {
-    attrs () {
-      return {
-        class: this.$options.name
-      }
-    }
-  },
   created () {
     Object.defineProperties(this, {
       polyline: {
