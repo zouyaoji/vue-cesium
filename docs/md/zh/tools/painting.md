@@ -132,7 +132,6 @@
 </template>
 
 <script>
-  import Tooltip from './Tooltip.js'
   export default {
     data() {
       return {
