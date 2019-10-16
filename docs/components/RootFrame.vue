@@ -6,7 +6,7 @@
           md-icon menu
         span.md-title(v-text="title") VUE CESIUM
         md-button.md-icon-button
-          router-link.link(:to="`/${otherLang}/index`", @click="changeLang")
+          router-link.link(:to="otherUrl", @click.native="changeLang")
           md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
         md-button.md-icon-button(href="https://github.com/zouyaoji/vue-cesium")
           md-icon(md-iconset="iconfont icon-github")
@@ -75,6 +75,9 @@ export default {
   computed: {
     otherLang () {
       return this.lang === 'zh' ? 'en' : 'zh'
+    },
+    otherUrl () {
+      return this.$route.path.indexOf('/zh/') !== -1 ? this.$route.path.replace('/zh/', '/en/') : this.$route.path.replace('/en/', '/zh/')
     }
   },
   mounted () {

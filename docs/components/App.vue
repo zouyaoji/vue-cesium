@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  router-view(v-if="isIndex")
+  router-view(v-if="isIndex", @changeLang="changeLang")
   root-frame.root(v-else, :lang="lang", @changeLang="changeLang")
     navigator(:lang="lang", slot="side-nav")
     router-view(slot="page-content").doc.markdown-body

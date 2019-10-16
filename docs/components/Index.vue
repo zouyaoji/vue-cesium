@@ -4,8 +4,8 @@ section.index
     img(src='//zouyaoji.top/vue-cesium/favicon.png')
     h1 Vue Cesium
     .links
-      router-link(to="/zh/index") 中文
-      router-link(to="/en/index") English
+      router-link(to="/zh/index", @click.native="changeLang('zh')") 中文
+      router-link(to="/en/index", @click.native="changeLang('en')") English
 </template>
 
 <style lang="stylus" scoped>
@@ -46,3 +46,13 @@ section.index
         background white
         color #3f51b5
 </style>
+
+<script>
+export default {
+  methods: {
+    changeLang (lang) {
+      this.$emit('changeLang', lang)
+    }
+  }
+}
+</script>
