@@ -204,8 +204,63 @@ export function makePolylineOptions (val) {
     id,
     distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
   }
-
   return polyline
+}
+
+export function makeLabelOptions (val) {
+  const {
+    backgroundColor,
+    backgroundPadding,
+    disableDepthTestDistance,
+    distanceDisplayCondition,
+    eyeOffset,
+    fillColor,
+    font,
+    heightReference,
+    horizontalOrigin,
+    id,
+    outlineColor,
+    outlineWidth,
+    pixelOffset,
+    pixelOffsetScaleByDistance,
+    position,
+    scale,
+    scaleByDistance,
+    show,
+    showBackground,
+    labelStyle,
+    text,
+    totalScale,
+    translucencyByDistance,
+    verticalOrigin
+  } = val
+  let label = {
+    backgroundColor: makeColor(backgroundColor),
+    backgroundPadding: makeCartesian2(backgroundPadding),
+    disableDepthTestDistance,
+    distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition),
+    eyeOffset: makeCartesian3(eyeOffset),
+    fillColor: makeColor(fillColor),
+    font,
+    heightReference,
+    horizontalOrigin,
+    id,
+    outlineColor: makeColor(outlineColor),
+    outlineWidth,
+    pixelOffset: makeCartesian2(pixelOffset),
+    pixelOffsetScaleByDistance: makeNearFarScalar(pixelOffsetScaleByDistance),
+    position: makeCartesian3(position),
+    scale,
+    scaleByDistance: makeNearFarScalar(scaleByDistance),
+    show,
+    showBackground,
+    style: labelStyle,
+    text,
+    totalScale,
+    translucencyByDistance: makeNearFarScalar(translucencyByDistance),
+    verticalOrigin
+  }
+  return label
 }
 
 export function makeBillboardptions (val) {
@@ -231,7 +286,7 @@ export function makeBillboardptions (val) {
     translucencyByDistance,
     verticalOrigin,
     width
-  } = this
+  } = val
   let billboard = {
     alignedAxis: makeCartesian3(alignedAxis),
     color: makeColor(color),
