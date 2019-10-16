@@ -5,13 +5,13 @@ export default {
   name: 'polyline-collection',
   mixins: [primitiveMixin],
   props: {
-    pollines: {
+    polylines: {
       type: Array,
       default: () => []
     }
   },
   watch: {
-    pollines () {
+    polylines () {
       this.reload()
     }
   },
@@ -24,7 +24,7 @@ export default {
       }
       this.removeNullItem(options)
       let polylineColletion = new Cesium.PolylineCollection(options)
-      this.pollines.forEach(polyline => {
+      this.polylines.forEach(polyline => {
         let polylineOptions = makePolylineOptions(polyline)
         this.removeNullItem(polylineOptions)
         polylineColletion.add(polylineOptions)
