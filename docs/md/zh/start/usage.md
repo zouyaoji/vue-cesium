@@ -104,8 +104,8 @@ Vue.use(VueCesium, {
       return {
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 2000
           },
           heading: 360,
@@ -116,8 +116,8 @@ Vue.use(VueCesium, {
       }
     },
     mounted() {
-      this.camera.position.longitude = 116.46
-      this.camera.position.latitude = 39.92
+      this.camera.position.lng = 116.46
+      this.camera.position.lat = 39.92
       this.camera.position.height = 500
       this.animation = true
     }
@@ -137,8 +137,8 @@ Vue.use(VueCesium, {
       return {
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 2000
           },
           heading: 360,
@@ -152,8 +152,8 @@ Vue.use(VueCesium, {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         // 在这儿获取Cesium和viewer实例，再执行相关逻辑代码
-        this.camera.position.longitude = 116.46
-        this.camera.position.latitude = 39.92
+        this.camera.position.lng = 116.46
+        this.camera.position.lat = 39.92
         this.camera.position.height = 500
         this.animation = true
       }
@@ -168,7 +168,7 @@ Vue.use(VueCesium, {
 
 <doc-preview>
   <template>
-    <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
+    <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera.sync="camera" @ready="ready">
       <imagery-layer>
         <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
       </imagery-layer>
@@ -182,8 +182,8 @@ Vue.use(VueCesium, {
         timeline: true,
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 100000
           },
           heading: 360,
@@ -229,7 +229,7 @@ Vue.use(VueCesium, {
 
 ```html
 <template>
-  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
+  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera.sync="camera" @ready="ready">
     <imagery-layer>
       <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
     </imagery-layer>
@@ -243,8 +243,8 @@ Vue.use(VueCesium, {
         timeline: true,
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 100000
           },
           heading: 360,

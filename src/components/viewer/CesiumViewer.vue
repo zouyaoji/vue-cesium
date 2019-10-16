@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-10-16 14:44:56
+ * @Last Modified time: 2019-10-16 15:02:08
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -160,8 +160,8 @@ export default {
       default: function () {
         return {
           position: {
-            longitude: 105,
-            latitude: 29.999999999999993,
+            lng: 105,
+            lat: 29.999999999999993,
             height: 19059568.497290563
           },
           heading: 360,
@@ -549,7 +549,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       handler (val) {
         const { Cesium, viewer } = this
         viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(val.position.longitude, val.position.latitude, val.position.height),
+          destination: Cesium.Cartesian3.fromDegrees(val.position.lng, val.position.lat, val.position.height),
           orientation: {
             heading: Cesium.Math.toRadians(val.heading),
             pitch: Cesium.Math.toRadians(val.pitch),
@@ -773,7 +773,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       // viewer.reset()
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(this.camera.position.longitude, this.camera.position.latitude, this.camera.position.height),
+          destination: Cesium.Cartesian3.fromDegrees(this.camera.position.lng, this.camera.position.lat, this.camera.position.height),
           orientation: {
             heading: Cesium.Math.toRadians(this.camera.heading),
             pitch: Cesium.Math.toRadians(this.camera.pitch),
@@ -781,6 +781,24 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         })
       }
+
+      let _this = this
+      viewer.camera.changed.addEventListener(() => {
+        const listener = _this.$listeners['update:camera']
+        let cartographic = Cesium.Cartographic.fromCartesian(viewer.camera.position)
+        let camera = {
+          position: {
+            lng: Cesium.Math.toDegrees(cartographic.longitude),
+            lat: Cesium.Math.toDegrees(cartographic.latitude),
+            height: cartographic.height
+          },
+          heading: Cesium.Math.toDegrees(viewer.camera.heading),
+          pitch: Cesium.Math.toDegrees(viewer.camera.pitch),
+          roll: Cesium.Math.toDegrees(viewer.camera.roll)
+        }
+        if (listener) { this.$emit('update:camera', camera) }
+      })
+
       // if (Cesium.defined(viewer.animation)) {
       //   var d = new Date()
       //   var hour = 0 - d.getTimezoneOffset()

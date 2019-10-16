@@ -97,8 +97,8 @@ As ES module can't be run directly in most browsers, if importing component caus
       return {
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 2000
           },
           heading: 360,
@@ -109,8 +109,8 @@ As ES module can't be run directly in most browsers, if importing component caus
       }
     },
     mounted() {
-      this.camera.position.longitude = 116.46
-      this.camera.position.latitude = 39.92
+      this.camera.position.lng = 116.46
+      this.camera.position.lat = 39.92
       this.camera.position.height = 500
       this.animation = true
     }
@@ -130,8 +130,8 @@ As ES module can't be run directly in most browsers, if importing component caus
       return {
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 2000
           },
           heading: 360,
@@ -145,8 +145,8 @@ As ES module can't be run directly in most browsers, if importing component caus
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         // Get Cesium and viewer instances here, then execute the relevant logic code
-        this.camera.position.longitude = 116.46
-        this.camera.position.latitude = 39.92
+        this.camera.position.lng = 116.46
+        this.camera.position.lat = 39.92
         this.camera.position.height = 500
         this.animation = true
       }
@@ -175,8 +175,8 @@ As ES module can't be run directly in most browsers, if importing component caus
         timeline: true,
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 100000
           },
           heading: 360,
@@ -236,8 +236,8 @@ As ES module can't be run directly in most browsers, if importing component caus
         timeline: true,
         camera: {
           position: {
-            longitude: 104.06,
-            latitude: 30.67,
+            lng: 104.06,
+            lat: 30.67,
             height: 100000
           },
           heading: 360,
