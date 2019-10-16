@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-10-16 15:02:08
+ * @Last Modified time: 2019-10-16 18:24:22
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -770,7 +770,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         const listener = this.$listeners[eventName]
         listener && handler.setInputAction(listener.fns, Cesium.ScreenSpaceEventType[eventName])
       })
-      // viewer.reset()
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
           destination: Cesium.Cartesian3.fromDegrees(this.camera.position.lng, this.camera.position.lat, this.camera.position.height),
