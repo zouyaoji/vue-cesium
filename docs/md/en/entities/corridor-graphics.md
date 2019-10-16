@@ -174,7 +174,7 @@
 
 ---
 
-- Reference official document [CorridorGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CorridorGraphics.html)
+- Reference official document [CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)
 
 ## Events
 

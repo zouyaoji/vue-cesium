@@ -162,7 +162,7 @@
 
 ---
 
-官方文档 [CorridorGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CorridorGraphics.html)
+官方文档 [CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)
 
 ## 事件
 

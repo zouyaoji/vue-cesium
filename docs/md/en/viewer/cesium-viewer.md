@@ -164,6 +164,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 |projectionPicker|Boolean|`false`|`optional`If set to true, the ProjectionPicker widget will be created.|
 |accessToken|String||`optional`set accessToken of Cesium ion|
 |logo|Boolean|`true`| `optional` Determines if default logo is displayed on the viewer.|
+|camera|Object|| `optional` Scene camera position. Default positioning to China worldwide. **structure: { position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
 ---
 
 ## Events

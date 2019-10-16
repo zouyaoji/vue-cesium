@@ -70,7 +70,7 @@
 
 ## Instance Properties
 
-Reference official document [CesiumTerrainProvider](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)
+Reference official document [CesiumTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

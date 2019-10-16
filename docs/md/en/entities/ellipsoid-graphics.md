@@ -163,7 +163,7 @@
 
 ---
 
-- Reference official document [EllipsoidGraphics](https://cesiumjs.org/Cesium/Build/Documentation/EllipsoidGraphics.html)
+- Reference official document [EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)
 
 ## Events
 

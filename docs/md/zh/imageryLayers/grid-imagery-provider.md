@@ -102,7 +102,7 @@
 | tileHeight | Number | `256` | `optional` 指定瓦片到最详细级别的高度。 |
 | canvasSize | Number | `256` | `optional` 指定渲染画布大小。 |
 
-- 官方文档 [GridImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/GridImageryProvider.html)
+- 官方文档 [GridImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/GridImageryProvider.html)
 
 ## 事件
 

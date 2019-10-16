@@ -185,7 +185,7 @@
 |projectionPicker|Boolean|`false`|`optional`是否显示投影切换按钮|
 |logo|Boolean|`true`| `optional` 是否显示默认logo.|
 |accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
-|camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。|
+|camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。 **结构：{ position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
 ---
 
 ## 事件

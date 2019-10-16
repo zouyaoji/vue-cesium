@@ -103,7 +103,7 @@
 
 ---
 
-- Reference official document [LabelGraphics](https://cesiumjs.org/Cesium/Build/Documentation/LabelGraphics.html)
+- Reference official document [LabelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/LabelGraphics.html)
 
 ## Events
 

@@ -195,7 +195,7 @@
 
 ## 属性
 
-参考官方文档 [PolygonGeometry](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGeometry.html)
+参考官方文档 [PolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGeometry.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

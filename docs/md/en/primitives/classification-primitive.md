@@ -118,7 +118,7 @@ The `classification-primitive` component loads the geometry object of the `Primi
 
 ## Instance Properties
 
-Reference official document  [ClassificationPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/ClassificationPrimitive.html)
+Reference official document  [ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 

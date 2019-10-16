@@ -132,7 +132,7 @@
 
 ---
 
-- 官方文档 [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
+- 官方文档 [CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)
 
 ## 事件
 

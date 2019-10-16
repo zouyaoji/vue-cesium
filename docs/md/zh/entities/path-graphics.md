@@ -265,7 +265,7 @@
 
 ---
 
-- 官方文档 [PathGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PathGraphics.html)
+- 官方文档 [PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)
 
 ## 事件
 

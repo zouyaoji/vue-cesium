@@ -126,7 +126,7 @@
 | tileHeight | Number | `256` | `optional` 指定图像瓦片高度。|
 | flipXY | Boolean | | `optional` 较旧版本的gdal2tiles.py在tilemapresource.xml中翻转了X和Y值。 指定此选项将执行相同操作，允许加载这些不正确的tileset。 |
 
-- 官方文档 [createTileMapServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/createTileMapServiceImageryProvider.html)
+- 官方文档 [createTileMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/createTileMapServiceImageryProvider.html)
 
 ## 事件
 

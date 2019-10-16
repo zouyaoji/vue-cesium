@@ -101,7 +101,7 @@
 
 ---
 
-- Reference official document [BillboardGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BillboardGraphics.html)
+- Reference official document [BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)
 
 ## Events
 

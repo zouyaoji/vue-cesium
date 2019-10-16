@@ -438,6 +438,38 @@ const routeMap = [
         }
       },
       {
+        path: 'label-collection',
+        component: 'primitives/label-collection',
+        name: {
+          zh: '标签图元集合(LabelCollection)',
+          en: 'LabelCollection'
+        }
+      },
+      {
+        path: 'label-primitive',
+        component: 'primitives/label-primitive',
+        name: {
+          zh: '标签图元(Label)',
+          en: 'Label'
+        }
+      },
+      {
+        path: 'billboard-collection',
+        component: 'primitives/billboard-collection',
+        name: {
+          zh: '布告板图元集合(BillboardCollection)',
+          en: 'BillboardCollection'
+        }
+      },
+      {
+        path: 'billboard-primitive',
+        component: 'primitives/billboard-primitive',
+        name: {
+          zh: '布告板图元(Billboard)',
+          en: 'Billboard'
+        }
+      },
+      {
         path: 'point-collection',
         component: 'primitives/point-collection',
         name: {
@@ -454,11 +486,27 @@ const routeMap = [
         }
       },
       {
+        path: 'polyline-collection',
+        component: 'primitives/polyline-collection',
+        name: {
+          zh: '线图元集合(PolylineCollection)',
+          en: 'PolylineCollection'
+        }
+      },
+      {
         path: 'polyline-primitive',
         component: 'primitives/polyline-primitive',
         name: {
           zh: '线图元(PolylinePrimitive)',
           en: 'PolylinePrimitive'
+        }
+      },
+      {
+        path: 'model-primitive',
+        component: 'primitives/model-primitive',
+        name: {
+          zh: '模型图元(Model)',
+          en: 'Model'
         }
       },
       {

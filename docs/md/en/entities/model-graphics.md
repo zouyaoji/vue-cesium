@@ -111,7 +111,7 @@
 
 ---
 
-- Reference official document [ModelGraphics](https://cesiumjs.org/Cesium/Build/Documentation/ModelGraphics.html)
+- Reference official document [ModelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/ModelGraphics.html)
 
 ## Events
 

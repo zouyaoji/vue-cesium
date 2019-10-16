@@ -152,7 +152,7 @@
 
 ---
 
-- 官方文档 [EllipsoidGraphics](https://cesiumjs.org/Cesium/Build/Documentation/EllipsoidGraphics.html)
+- 官方文档 [EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)
 
 ## 事件
 

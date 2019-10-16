@@ -177,7 +177,7 @@
 
 ---
 
-- 官方文档 [WebMapServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/WebMapServiceImageryProvider.html)
+- 官方文档 [WebMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)
 
 ## 事件
 

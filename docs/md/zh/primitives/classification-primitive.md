@@ -122,7 +122,7 @@
 
 ## 属性
 
-参考官方文档 [ClassificationPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/ClassificationPrimitive.html)
+参考官方文档 [ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

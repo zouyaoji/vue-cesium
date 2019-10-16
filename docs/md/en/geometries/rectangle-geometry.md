@@ -110,7 +110,7 @@
 
 ## Instance Properties
 
-Reference official document [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+Reference official document [RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)
 
 <!-- |name|type|default|description|
 |------|-----|-----|----|

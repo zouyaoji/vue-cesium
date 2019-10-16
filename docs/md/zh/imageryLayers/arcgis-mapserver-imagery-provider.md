@@ -138,7 +138,7 @@
 | tileHeight | Number | `256` | `optional`像元高度。 |
 | maximumLevel | Number | | `optional`最大层级。 |
 
-- 官方文档 [ArcGisMapServerImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/ArcGisMapServerImageryProvider.html)
+- 官方文档 [ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)
 
 ## 事件
 

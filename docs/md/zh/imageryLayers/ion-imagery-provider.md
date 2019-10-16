@@ -95,7 +95,7 @@
 | accessToken | String | | `optional` 指定密钥。 |
 | server | String\|Object | | `optional` 指定 Cesium 在线服务器地址。|
 
-- 官方文档 [IonImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/IonImageryProvider.html)
+- 官方文档 [IonImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html)
 
 ## 事件
 

@@ -148,7 +148,7 @@
 
 ---
 
-- Reference official document [BoxGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BoxGraphics.html)
+- Reference official document [BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)
 
 ## Events
 

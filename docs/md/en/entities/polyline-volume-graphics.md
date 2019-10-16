@@ -238,7 +238,7 @@
 
 > `positions` can be a array of `Cartesian3`, latitude and longitude array as [lon,lat,height...,lon,lat,height]、[lon,lat...,lon,lat]If you include height, specify heightPositions.
 
-- Reference official document [PolylineVolumeGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolylineVolumeGraphics.html)
+- Reference official document [PolylineVolumeGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGraphics.html)
 
 ## Events
 

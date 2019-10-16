@@ -104,7 +104,7 @@
 
 ## Instance Properties
 
-Reference official document [BoxGeometry](https://cesiumjs.org/Cesium/Build/Documentation/BoxGeometry.html)
+Reference official document [BoxGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxGeometry.html)
 
 ## Events
 

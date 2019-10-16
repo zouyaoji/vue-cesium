@@ -4,7 +4,7 @@
 
 ## Example
 
-### Add PointPrimitive to viewer
+### Add some points to viewer by PointPrimitive
 
 #### Preview
 
@@ -143,8 +143,10 @@
 
 ---
 
+- Reference official document [PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html).
+
 ## Events
 
-| name  | parameter        | description                                                                                    |
-| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| name  | parameter        | description                                                                                 |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |

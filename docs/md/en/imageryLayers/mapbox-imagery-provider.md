@@ -135,7 +135,7 @@
 | rectangle | Object | | `optional`The rectangle, in radians, covered by the image. **structure: { west: number, south: number, east: number, north: number }** |
 | credit | String | | `optional`A credit for the data source, which is displayed on the canvas. |
 
-- Reference official document [MapboxImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/MapboxImageryProvider.html)
+- Reference official document [MapboxImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/MapboxImageryProvider.html)
 
 ## Events
 

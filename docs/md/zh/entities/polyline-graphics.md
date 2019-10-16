@@ -131,7 +131,7 @@
 
 ---
 
-- 官方文档 [PolylineGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolylineGraphics.html)
+- 官方文档 [PolylineGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGraphics.html)
 
 ## 事件
 

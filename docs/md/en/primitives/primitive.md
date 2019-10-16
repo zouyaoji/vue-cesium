@@ -100,7 +100,7 @@
 
 ## Instance Properties
 
-Reference official document [Primitive](https://cesiumjs.org/Cesium/Build/Documentation/Primitive.html)
+Reference official document [Primitive](https://cesium.com/docs/cesiumjs-ref-doc/Primitive.html)
 
 ## Events
 

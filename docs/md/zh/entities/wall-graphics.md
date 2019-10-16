@@ -200,7 +200,7 @@
 
 ---
 
-- 官方文档 [WallGraphics](https://cesiumjs.org/Cesium/Build/Documentation/WallGraphics.html)
+- 官方文档 [WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)
 
 ## 事件
 

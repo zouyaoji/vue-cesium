@@ -191,7 +191,7 @@
 
 ---
 
-- 官方文档 [RectangleGraphics](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGraphics.html)
+- 官方文档 [RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)
 
 ## 事件
 

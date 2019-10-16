@@ -200,7 +200,7 @@
 
 ---
 
-- Reference official document [WallGraphics](https://cesiumjs.org/Cesium/Build/Documentation/WallGraphics.html)
+- Reference official document [WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)
 
 ## Events
 

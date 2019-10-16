@@ -134,6 +134,6 @@ color: [1.0, 1.0, 1.0, 1.0]
 
 ## 参考
 
-> [Cesium 官方文档](https://cesiumjs.org/Cesium/Build/Documentation/index.html)
+> [Cesium 官方文档](https://cesium.com/docs/cesiumjs-ref-doc/index.html)
 
 > [超图 WebGL3D 官方文档](http://support.supermap.com.cn:8090/webgl/Build/Documentation/index.html)

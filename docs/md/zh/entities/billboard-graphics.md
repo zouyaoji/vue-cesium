@@ -123,7 +123,7 @@
 
 ---
 
-- 官方文档 [BillboardGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BillboardGraphics.html)
+- 官方文档 [BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)
 
 ## 事件
 

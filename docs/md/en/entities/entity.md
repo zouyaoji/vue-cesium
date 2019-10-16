@@ -126,7 +126,7 @@
 
 ---
 
-- Reference official document [Entity](https://cesiumjs.org/Cesium/Build/Documentation/Entity.html)
+- Reference official document [Entity](https://cesium.com/docs/cesiumjs-ref-doc/Entity.html)
 
 ## Events
 

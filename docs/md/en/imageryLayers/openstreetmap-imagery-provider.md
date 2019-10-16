@@ -131,7 +131,7 @@
 | ellipsoid | Object | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
 | credit | String\| Object | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`A credit for the data source, which is displayed on the canvas. |
 
-- Reference official document [createOpenStreetMapImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/createOpenStreetMapImageryProvider.html)
+- Reference official document [createOpenStreetMapImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/createOpenStreetMapImageryProvider.html)
 
 ## Events
 

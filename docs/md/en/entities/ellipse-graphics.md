@@ -162,7 +162,7 @@
 
 ---
 
-- Reference official document [EllipseGraphics](https://cesiumjs.org/Cesium/Build/Documentation/EllipseGraphics.html)
+- Reference official document [EllipseGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipseGraphics.html)
 
 ## Events
 

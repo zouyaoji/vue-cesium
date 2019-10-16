@@ -177,7 +177,7 @@
 
 ---
 
-- Reference official document [WebMapServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/WebMapServiceImageryProvider.html)
+- Reference official document [WebMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)
 
 ## Events
 

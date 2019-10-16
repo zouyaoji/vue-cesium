@@ -97,7 +97,7 @@
 | tileWidth | Number | `256` | `optional` 指定瓦片到最详细级别的宽度。 |
 | tileHeight | Number | `256` | `optional` 指定瓦片到最详细级别的高度。 |
 
-- 官方文档 [TileCoordinatesImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/TileCoordinatesImageryProvider.html)
+- 官方文档 [TileCoordinatesImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileCoordinatesImageryProvider.html)
 
 ## 事件
 

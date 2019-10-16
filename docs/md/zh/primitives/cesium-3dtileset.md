@@ -144,6 +144,8 @@
 |isZoomTo|Boolean|true|`optional` 加载到scene之后是否定位到该模型。|
 ---
 
+- 参考官方文档[Cesium3DTileset](https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html)。
+
 ## 事件
 
 |事件名|参数|描述|

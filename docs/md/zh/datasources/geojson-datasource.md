@@ -87,7 +87,7 @@
 | fill          | String\|Object\|Array |        |                                                        |
 | clampToGround | Boolean               |        |                                                        |
 
-- 官方文档 [GeoJsonDataSource](https://cesiumjs.org/Cesium/Build/Documentation/GeoJsonDataSource.html)
+- 官方文档 [GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)
 
 ## 事件
 

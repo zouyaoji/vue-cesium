@@ -125,7 +125,7 @@
 | tileHeight | Number | `256` | `optional` Pixel height of image tiles.|
 | flipXY | Boolean | | `optional` Older versions of gdal2tiles.py flipped X and Y values in tilemapresource.xml. Specifying this option will do the same, allowing for loading of these incorrect tilesets. |
 
-- Reference official document [createTileMapServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/createTileMapServiceImageryProvider.html)
+- Reference official document [createTileMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/createTileMapServiceImageryProvider.html)
 
 ## Events
 

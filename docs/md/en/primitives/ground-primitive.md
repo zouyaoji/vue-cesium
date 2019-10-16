@@ -154,7 +154,7 @@
 
 ## Instance Properties
 
-Reference official document [GroundPrimitive](https://cesiumjs.org/Cesium/Build/Documentation/GroundPrimitive.html)
+Reference official document [GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----| -->

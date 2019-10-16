@@ -95,7 +95,7 @@
 | accessToken | String | | `optional` The access token to use. |
 | server | String\|Object | | `optional` The resource to the Cesium ion API server. |
 
-- Reference official document [IonImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/IonImageryProvider.html)
+- Reference official document [IonImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html)
 
 ## Events
 

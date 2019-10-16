@@ -144,7 +144,7 @@
 
 ---
 
-- Reference official document [CylinderGraphics](https://cesiumjs.org/Cesium/Build/Documentation/CylinderGraphics.html)
+- Reference official document [CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)
 
 ## Events
 

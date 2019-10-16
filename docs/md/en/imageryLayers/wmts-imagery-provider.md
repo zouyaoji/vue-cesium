@@ -189,7 +189,7 @@
 |token|String|||`optional` service token|
 ---
 
-- Reference official document [WebMapTileServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/WebMapTileServiceImageryProvider.html)
+- Reference official document [WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html)
 
 ## Events
 

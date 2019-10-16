@@ -98,7 +98,7 @@
 
 ---
 
-- Reference official document [SingleTileImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/SingleTileImageryProvider.html)
+- Reference official document [SingleTileImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html)
 
 ## Events
 

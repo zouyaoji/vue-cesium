@@ -145,7 +145,7 @@
 
 ---
 
-- 官方文档 [ImageryLayer](https://cesiumjs.org/Cesium/Build/Documentation/ImageryLayer.html)
+- 官方文档 [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)
 
 ## 事件
 

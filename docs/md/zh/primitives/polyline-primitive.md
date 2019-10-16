@@ -146,6 +146,8 @@
 
 ---
 
+- 参考官方文档[Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html)。
+
 ## 事件
 
 | 事件名 | 参数             | 描述                                                |

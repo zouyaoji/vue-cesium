@@ -110,7 +110,7 @@
 
 ## Instance Properties
 
-Reference official document [PolygonGeometry](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGeometry.html)
+Reference official document [PolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGeometry.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

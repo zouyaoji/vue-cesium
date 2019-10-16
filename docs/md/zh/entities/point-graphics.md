@@ -132,7 +132,7 @@
 
 ---
 
-- 官方文档 [PointGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PointGraphics.html)
+- 官方文档 [PointGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PointGraphics.html)
 
 ## 事件
 

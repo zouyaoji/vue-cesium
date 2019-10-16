@@ -111,7 +111,7 @@
 
 ---
 
-- 官方文档 [ModelGraphics](https://cesiumjs.org/Cesium/Build/Documentation/ModelGraphics.html)
+- 官方文档 [ModelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/ModelGraphics.html)
 
 ## 事件
 

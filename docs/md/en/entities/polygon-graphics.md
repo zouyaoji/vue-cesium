@@ -392,7 +392,7 @@
 
 ```
 
-- Reference official document [PolygonGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolygonGraphics.html)
+- Reference official document [PolygonGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html)
 
 ## Events
 

@@ -132,7 +132,7 @@
 
 ---
 
-- Reference official document [PointGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PointGraphics.html)
+- Reference official document [PointGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PointGraphics.html)
 
 ## Events
 

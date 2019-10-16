@@ -110,7 +110,7 @@
 
 ## 属性
 
-参考官方文档 [BoxGeometry](https://cesiumjs.org/Cesium/Build/Documentation/BoxGeometry.html)
+参考官方文档 [BoxGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxGeometry.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

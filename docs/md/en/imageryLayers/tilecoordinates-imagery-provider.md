@@ -97,7 +97,7 @@
 | tileWidth | Number | `256` | `optional` The width of the tile for level-of-detail selection purposes. |
 | tileHeight | Number | `256` | `optional` The height of the tile for level-of-detail selection purposes. |
 
-- Reference official document [TileCoordinatesImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/TileCoordinatesImageryProvider.html)
+- Reference official document [TileCoordinatesImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileCoordinatesImageryProvider.html)
 
 ## Events
 

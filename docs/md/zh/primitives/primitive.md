@@ -106,7 +106,7 @@
 
 ## 属性
 
-参考官方文档 [Primitive](https://cesiumjs.org/Cesium/Build/Documentation/Primitive.html)
+参考官方文档 [Primitive](https://cesium.com/docs/cesiumjs-ref-doc/Primitive.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

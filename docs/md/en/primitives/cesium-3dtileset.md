@@ -144,6 +144,8 @@
 |isZoomTo|Boolean|true|`optional` Determines whether zoomTo the tile.|
 ---
 
+- Reference official document [Cesium3DTileset](https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html).
+
 ## Events
 
 |name|parameter|description|

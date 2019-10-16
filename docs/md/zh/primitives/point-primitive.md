@@ -143,6 +143,8 @@
 
 ---
 
+- 参考官方文档[PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html)。
+
 ## 事件
 
 | 事件名 | 参数             | 描述                                                |

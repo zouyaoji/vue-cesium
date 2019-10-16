@@ -110,7 +110,7 @@
 
 ## 属性
 
-参考官方文档 [RectangleGeometry](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGeometry.html)
+参考官方文档 [RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)
 
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|

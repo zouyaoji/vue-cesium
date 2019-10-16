@@ -60,6 +60,6 @@ Cesium.Rectangle.fromDegrees(coordinates[0], coordinates[1], coordinates[2], coo
 
 ## Reference
 
-> [Cesium Official](https://cesiumjs.org/Cesium/Build/Documentation/index.html)
+> [Cesium Official](https://cesium.com/docs/cesiumjs-ref-doc/index.html)
 
 > [SuperMap Cesium Official Documentation](http://support.supermap.com.cn:8090/webgl/Build/Documentation/index.html)

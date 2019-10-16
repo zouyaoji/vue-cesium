@@ -263,7 +263,7 @@
 
 ---
 
-- 官方文档 [WebMapTileServiceImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/WebMapServiceImageryProvider.html)
+- 官方文档 [WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)
 
 ## 事件
 

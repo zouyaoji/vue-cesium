@@ -142,7 +142,7 @@ cutoutRectangle|Rectangle||`optional` Cartographic rectangle for cutting out a p
 | colorToAlpha | Object | |`optional` Color to be used as alpha.|
 | colorToAlphaThreshold | Number | `0.004` |`optional` Threshold for color-to-alpha.|
 
-- Reference official document [ImageryLayer](https://cesiumjs.org/Cesium/Build/Documentation/ImageryLayer.html)
+- Reference official document [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)
 
 ## Events
 

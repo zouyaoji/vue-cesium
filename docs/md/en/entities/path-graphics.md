@@ -272,7 +272,7 @@
 
 ---
 
-- Reference official document [PathGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PathGraphics.html)
+- Reference official document [PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)
 
 ## Events
 

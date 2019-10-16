@@ -236,7 +236,7 @@
 
 ---
 
-- 官方文档 [PolylineVolumeGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolylineVolumeGraphics.html)
+- 官方文档 [PolylineVolumeGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGraphics.html)
 
 ## 事件
 

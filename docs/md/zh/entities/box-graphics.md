@@ -138,7 +138,7 @@
 
 ---
 
-官方文档 [BoxGraphics](https://cesiumjs.org/Cesium/Build/Documentation/BoxGraphics.html)
+官方文档 [BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)
 
 ## 事件
 

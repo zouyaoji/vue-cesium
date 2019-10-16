@@ -208,7 +208,7 @@
 
 > `coordinates` can be `Cesium.Rectangle` or an array of latitude and longitude describing the rectangle structure [west,south,east,north]
 
-- Reference official document [RectangleGraphics](https://cesiumjs.org/Cesium/Build/Documentation/RectangleGraphics.html)
+- Reference official document [RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)
 
 ## Events
 

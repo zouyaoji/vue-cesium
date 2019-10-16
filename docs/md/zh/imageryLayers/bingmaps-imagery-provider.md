@@ -152,7 +152,7 @@
 | ellipsoid | Object | | `optional`参考椭球体 |
 | tileDiscardPolicy | Object | | `optional`指定 tile 无效时是否被舍弃。 |
 
-- 官方文档 [BingMapsImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/BingMapsImageryProvider.html)
+- 官方文档 [BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)
 
 ## 事件
 

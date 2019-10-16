@@ -166,7 +166,7 @@
 
 ---
 
-- Reference official document [PlaneGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PlaneGraphics.html)
+- Reference official document [PlaneGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGraphics.html)
 
 ## Events
 

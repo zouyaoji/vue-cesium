@@ -85,7 +85,7 @@
 | fill          | String\|Object\|Array |         |                                                                    |
 | clampToGround | Boolean               |         |                                                                    |
 
-- Reference official document [GeoJsonDataSource](https://cesiumjs.org/Cesium/Build/Documentation/GeoJsonDataSource.html)
+- Reference official document [GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)
 
 ## Events
 

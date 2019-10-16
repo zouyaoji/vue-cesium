@@ -4,7 +4,7 @@
 
 ## Example
 
-### Add a PointCollection to Viewer
+### Add some points to viewer by PointCollection
 
 #### Preview
 
@@ -91,8 +91,10 @@
 
 ---
 
+- Reference official document [PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html).
+
 ## Events
 
-| name  | parameter        | description                                                                                    |
-| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| name  | parameter        | description                                                                                 |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |

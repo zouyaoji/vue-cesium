@@ -1,6 +1,6 @@
 # 点集合图元
 
-`point-collection` 用于添加点图元。挂载[`point-primitive`](./#/zh/primitives/point-primitive)组件添加点。
+`point-collection` 用于添加海量点图元，也可通过挂载[`point-primitive`](./#/zh/primitives/point-primitive)组件添加点。
 
 ## 示例
 
@@ -81,14 +81,16 @@
 
 ## 属性
 
-| 属性名                  | 类型    | 默认值  | 描述                                                          |
-| ----------------------- | ------- | ------- | ------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。  |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。 |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                 |
-| points                  | Array   | `[]`    | `optional` 指定点集合数组。                                   |
+| 属性名                  | 类型    | 默认值  | 描述                                                                                                       |
+| ----------------------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                                               |
+| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                                              |
+| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                                                              |
+| points                  | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构为[`point-primitive`](./#/zh/primitives/point-primitive)组件属性。 |
 
 ---
+
+- 参考官方文档[PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html)。
 
 ## 事件
 

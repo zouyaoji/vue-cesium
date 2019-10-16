@@ -127,7 +127,7 @@
 
 ---
 
-- 官方文档 [Entity](https://cesiumjs.org/Cesium/Build/Documentation/Entity.html)
+- 官方文档 [Entity](https://cesium.com/docs/cesiumjs-ref-doc/Entity.html)
 
 ## 事件
 

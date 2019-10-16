@@ -148,7 +148,7 @@
 
 ---
 
-- Reference official document [UrlTemplateImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/UrlTemplateImageryProvider.html)
+- Reference official document [UrlTemplateImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/UrlTemplateImageryProvider.html)
 
 ## Events
 

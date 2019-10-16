@@ -102,7 +102,7 @@
 | tileHeight | Number | `256` | `optional` The height of the tile for level-of-detail selection purposes. |
 | canvasSize | Number | `256` | `optional` The size of the canvas used for rendering. |
 
-- Reference official document [GridImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/GridImageryProvider.html)
+- Reference official document [GridImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/GridImageryProvider.html)
 
 ## Events
 

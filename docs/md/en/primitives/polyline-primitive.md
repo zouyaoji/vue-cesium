@@ -4,7 +4,7 @@
 
 ## Examples
 
-### Add a polyline to viewer
+### Add some polylines to viewer by PolylinePrimitive
 
 #### Preview
 
@@ -101,7 +101,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         polyline1: {},
         positions1: [],
@@ -116,15 +116,15 @@
       }
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.positions1.push(Cesium.Cartesian3.fromDegrees(90, 20, 10000))
         this.positions1.push(Cesium.Cartesian3.fromDegrees(120, 20, 10000))
         this.material1 = new Cesium.Material({
           fabric: {
             type: 'Color',
             uniforms: {
-                color: Cesium.Color.RED
+              color: Cesium.Color.RED
             }
           }
         })
@@ -134,7 +134,7 @@
           fabric: {
             type: 'PolylineGlow',
             uniforms: {
-                color: Cesium.Color.BLUE
+              color: Cesium.Color.BLUE
             }
           }
         })
@@ -144,7 +144,7 @@
           fabric: {
             type: 'PolylineArrow',
             uniforms: {
-                color: Cesium.Color.PURPLE
+              color: Cesium.Color.PURPLE
             }
           }
         })
@@ -156,7 +156,8 @@
 
 ## Instance Properties
 
-Reference official document [Polyline](https://cesiumjs.org/Cesium/Build/Documentation/Polyline.html).
+- Reference official document [Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html).
+
 <!-- |属性名|类型|默认值|描述|
 |------|-----|-----|----|
 
@@ -164,6 +165,6 @@ Reference official document [Polyline](https://cesiumjs.org/Cesium/Build/Documen
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                 |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |

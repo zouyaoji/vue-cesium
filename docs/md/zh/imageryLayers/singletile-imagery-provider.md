@@ -97,7 +97,7 @@
 
 ---
 
-- 官方文档 [SingleTileImageryProvider](https://cesiumjs.org/Cesium/Build/Documentation/SingleTileImageryProvider.html)
+- 官方文档 [SingleTileImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/SingleTileImageryProvider.html)
 
 ## 事件
 

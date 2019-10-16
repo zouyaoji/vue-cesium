@@ -136,7 +136,7 @@
 
 ---
 
-- Reference official document [PolylineGraphics](https://cesiumjs.org/Cesium/Build/Documentation/PolylineGraphics.html)
+- Reference official document [PolylineGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGraphics.html)
 
 ## Events
 
