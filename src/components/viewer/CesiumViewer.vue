@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-08-20 23:32:43
+ * @Last Modified time: 2019-10-16 14:44:56
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -710,6 +710,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         maximumRenderTimeChange,
         navigation
       } = this
+      const url = Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
       let options = {
         animation,
         baseLayerPicker,
@@ -730,9 +731,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         imageryProviderViewModels,
         selectedTerrainProviderViewModel,
         terrainProviderViewModels,
-        imageryProvider: this.isEmptyObj(imageryProvider) ? Cesium.createTileMapServiceImageryProvider({
-          url: Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
-        }) : imageryProvider,
+        imageryProvider: this.isEmptyObj(imageryProvider) ? Cesium.defined(Cesium.TileMapServiceImageryProvider) ? new Cesium.TileMapServiceImageryProvider({
+          url: url }) : Cesium.createTileMapServiceImageryProvider({ url: url }) : imageryProvider,
         terrainProvider,
         skyBox,
         skyAtmosphere,

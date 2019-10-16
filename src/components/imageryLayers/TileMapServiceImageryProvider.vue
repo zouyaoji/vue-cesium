@@ -33,8 +33,8 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      /* eslint-disable new-cap */
-      return new Cesium.createTileMapServiceImageryProvider(this.makeOptions())
+      return Cesium.defined(Cesium.TileMapServiceImageryProvider) ? new Cesium.TileMapServiceImageryProvider(this.makeOptions())
+        : Cesium.createTileMapServiceImageryProvider(this.makeOptions())
     },
     makeOptions () {
       const { url, fileExtension, credit, minimumLevel, maximumLevel, rectangle, tilingScheme, ellipsoid, tileWidth, tileHeight, flipXY } = this

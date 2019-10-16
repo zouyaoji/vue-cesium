@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     createCesiumObject () {
-      /* eslint-disable new-cap */
-      return new Cesium.createOpenStreetMapImageryProvider(this.makeOptions())
+      return Cesium.defined(Cesium.OpenStreetMapImageryProvider) ? new Cesium.OpenStreetMapImageryProvider(this.makeOptions())
+        : Cesium.createOpenStreetMapImageryProvider(this.makeOptions())
     },
     makeOptions () {
       const { url, fileExtension, rectangle, minimumLevel, maximumLevel, ellipsoid, credit } = this
