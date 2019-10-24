@@ -1335,6 +1335,79 @@ var Ea=[gd,mb,Yb,$b,lc,Kb,gd,gd];var Fa=[Zc,Hb,nb,Zc];var Ga=[wd,sd,_c,sd,sd,_c,
     return Module;
 });
 
+define('Core/defaultValue',[
+        './freezeObject'
+    ], function(
+        freezeObject) {
+    'use strict';
+
+    /**
+     * Returns the first parameter if not undefined, otherwise the second parameter.
+     * Useful for setting a default value for a parameter.
+     *
+     * @exports defaultValue
+     *
+     * @param {*} a
+     * @param {*} b
+     * @returns {*} Returns the first parameter if not undefined, otherwise the second parameter.
+     *
+     * @example
+     * param = Cesium.defaultValue(param, 'default');
+     */
+    function defaultValue(a, b) {
+        if (a !== undefined && a !== null) {
+            return a;
+        }
+        return b;
+    }
+
+    /**
+     * A frozen empty object that can be used as the default value for options passed as
+     * an object literal.
+     * @type {Object}
+     */
+    defaultValue.EMPTY_OBJECT = freezeObject({});
+
+    return defaultValue;
+});
+
+define('Core/formatError',[
+        './defined'
+    ], function(
+        defined) {
+    'use strict';
+
+    /**
+     * Formats an error object into a String.  If available, uses name, message, and stack
+     * properties, otherwise, falls back on toString().
+     *
+     * @exports formatError
+     *
+     * @param {*} object The item to find in the array.
+     * @returns {String} A string containing the formatted error.
+     */
+    function formatError(object) {
+        var result;
+
+        var name = object.name;
+        var message = object.message;
+        if (defined(name) && defined(message)) {
+            result = name + ': ' + message;
+        } else {
+            result = object.toString();
+        }
+
+        var stack = object.stack;
+        if (defined(stack)) {
+            result += '\n' + stack;
+        }
+
+        return result;
+    }
+
+    return formatError;
+});
+
 /**
   @license
   when.js - https://github.com/cujojs/when
@@ -2084,89 +2157,16 @@ define('ThirdParty/when',[],function () {
 	// Boilerplate for AMD, Node, and browser global
 );
 
-define('Core/defaultValue',[
-        './freezeObject'
-    ], function(
-        freezeObject) {
-    'use strict';
-
-    /**
-     * Returns the first parameter if not undefined, otherwise the second parameter.
-     * Useful for setting a default value for a parameter.
-     *
-     * @exports defaultValue
-     *
-     * @param {*} a
-     * @param {*} b
-     * @returns {*} Returns the first parameter if not undefined, otherwise the second parameter.
-     *
-     * @example
-     * param = Cesium.defaultValue(param, 'default');
-     */
-    function defaultValue(a, b) {
-        if (a !== undefined && a !== null) {
-            return a;
-        }
-        return b;
-    }
-
-    /**
-     * A frozen empty object that can be used as the default value for options passed as
-     * an object literal.
-     * @type {Object}
-     */
-    defaultValue.EMPTY_OBJECT = freezeObject({});
-
-    return defaultValue;
-});
-
-define('Core/formatError',[
-        './defined'
-    ], function(
-        defined) {
-    'use strict';
-
-    /**
-     * Formats an error object into a String.  If available, uses name, message, and stack
-     * properties, otherwise, falls back on toString().
-     *
-     * @exports formatError
-     *
-     * @param {*} object The item to find in the array.
-     * @returns {String} A string containing the formatted error.
-     */
-    function formatError(object) {
-        var result;
-
-        var name = object.name;
-        var message = object.message;
-        if (defined(name) && defined(message)) {
-            result = name + ': ' + message;
-        } else {
-            result = object.toString();
-        }
-
-        var stack = object.stack;
-        if (defined(stack)) {
-            result += '\n' + stack;
-        }
-
-        return result;
-    }
-
-    return formatError;
-});
-
 define('Workers/createTaskProcessorWorker',[
-        '../ThirdParty/when',
         '../Core/defaultValue',
         '../Core/defined',
-        '../Core/formatError'
+        '../Core/formatError',
+        '../ThirdParty/when'
     ], function(
-        when,
         defaultValue,
         defined,
-        formatError) {
+        formatError,
+        when) {
     'use strict';
 
     // createXXXGeometry functions may return Geometry or a Promise that resolves to Geometry
@@ -2212,7 +2212,6 @@ define('Workers/createTaskProcessorWorker',[
         var postMessage;
 
         return function(event) {
-            /*global self*/
             var data = event.data;
 
             var transferableObjects = [];

@@ -185,296 +185,6 @@ define('Core/DeveloperError',[
     return DeveloperError;
 });
 
-define('Core/defineProperties',[
-        './defined'
-    ], function(
-        defined) {
-    'use strict';
-
-    var definePropertyWorks = (function() {
-        try {
-            return 'x' in Object.defineProperty({}, 'x', {});
-        } catch (e) {
-            return false;
-        }
-    })();
-
-    /**
-     * Defines properties on an object, using Object.defineProperties if available,
-     * otherwise returns the object unchanged.  This function should be used in
-     * setup code to prevent errors from completely halting JavaScript execution
-     * in legacy browsers.
-     *
-     * @private
-     *
-     * @exports defineProperties
-     */
-    var defineProperties = Object.defineProperties;
-    if (!definePropertyWorks || !defined(defineProperties)) {
-        defineProperties = function(o) {
-            return o;
-        };
-    }
-
-    return defineProperties;
-});
-
-define('Core/Fullscreen',[
-        './defined',
-        './defineProperties'
-    ], function(
-        defined,
-        defineProperties) {
-    'use strict';
-
-    var _supportsFullscreen;
-    var _names = {
-        requestFullscreen : undefined,
-        exitFullscreen : undefined,
-        fullscreenEnabled : undefined,
-        fullscreenElement : undefined,
-        fullscreenchange : undefined,
-        fullscreenerror : undefined
-    };
-
-    /**
-     * Browser-independent functions for working with the standard fullscreen API.
-     *
-     * @exports Fullscreen
-     * @namespace
-     *
-     * @see {@link http://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html|W3C Fullscreen Living Specification}
-     */
-    var Fullscreen = {};
-
-    defineProperties(Fullscreen, {
-        /**
-         * The element that is currently fullscreen, if any.  To simply check if the
-         * browser is in fullscreen mode or not, use {@link Fullscreen#fullscreen}.
-         * @memberof Fullscreen
-         * @type {Object}
-         * @readonly
-         */
-        element : {
-            get : function() {
-                if (!Fullscreen.supportsFullscreen()) {
-                    return undefined;
-                }
-
-                return document[_names.fullscreenElement];
-            }
-        },
-
-        /**
-         * The name of the event on the document that is fired when fullscreen is
-         * entered or exited.  This event name is intended for use with addEventListener.
-         * In your event handler, to determine if the browser is in fullscreen mode or not,
-         * use {@link Fullscreen#fullscreen}.
-         * @memberof Fullscreen
-         * @type {String}
-         * @readonly
-         */
-        changeEventName : {
-            get : function() {
-                if (!Fullscreen.supportsFullscreen()) {
-                    return undefined;
-                }
-
-                return _names.fullscreenchange;
-            }
-        },
-
-        /**
-         * The name of the event that is fired when a fullscreen error
-         * occurs.  This event name is intended for use with addEventListener.
-         * @memberof Fullscreen
-         * @type {String}
-         * @readonly
-         */
-        errorEventName : {
-            get : function() {
-                if (!Fullscreen.supportsFullscreen()) {
-                    return undefined;
-                }
-
-                return _names.fullscreenerror;
-            }
-        },
-
-        /**
-         * Determine whether the browser will allow an element to be made fullscreen, or not.
-         * For example, by default, iframes cannot go fullscreen unless the containing page
-         * adds an "allowfullscreen" attribute (or prefixed equivalent).
-         * @memberof Fullscreen
-         * @type {Boolean}
-         * @readonly
-         */
-        enabled : {
-            get : function() {
-                if (!Fullscreen.supportsFullscreen()) {
-                    return undefined;
-                }
-
-                return document[_names.fullscreenEnabled];
-            }
-        },
-
-        /**
-         * Determines if the browser is currently in fullscreen mode.
-         * @memberof Fullscreen
-         * @type {Boolean}
-         * @readonly
-         */
-        fullscreen : {
-            get : function() {
-                if (!Fullscreen.supportsFullscreen()) {
-                    return undefined;
-                }
-
-                return Fullscreen.element !== null;
-            }
-        }
-    });
-
-    /**
-     * Detects whether the browser supports the standard fullscreen API.
-     *
-     * @returns {Boolean} <code>true</code> if the browser supports the standard fullscreen API,
-     * <code>false</code> otherwise.
-     */
-    Fullscreen.supportsFullscreen = function() {
-        if (defined(_supportsFullscreen)) {
-            return _supportsFullscreen;
-        }
-
-        _supportsFullscreen = false;
-
-        var body = document.body;
-        if (typeof body.requestFullscreen === 'function') {
-            // go with the unprefixed, standard set of names
-            _names.requestFullscreen = 'requestFullscreen';
-            _names.exitFullscreen = 'exitFullscreen';
-            _names.fullscreenEnabled = 'fullscreenEnabled';
-            _names.fullscreenElement = 'fullscreenElement';
-            _names.fullscreenchange = 'fullscreenchange';
-            _names.fullscreenerror = 'fullscreenerror';
-            _supportsFullscreen = true;
-            return _supportsFullscreen;
-        }
-
-        //check for the correct combination of prefix plus the various names that browsers use
-        var prefixes = ['webkit', 'moz', 'o', 'ms', 'khtml'];
-        var name;
-        for (var i = 0, len = prefixes.length; i < len; ++i) {
-            var prefix = prefixes[i];
-
-            // casing of Fullscreen differs across browsers
-            name = prefix + 'RequestFullscreen';
-            if (typeof body[name] === 'function') {
-                _names.requestFullscreen = name;
-                _supportsFullscreen = true;
-            } else {
-                name = prefix + 'RequestFullScreen';
-                if (typeof body[name] === 'function') {
-                    _names.requestFullscreen = name;
-                    _supportsFullscreen = true;
-                }
-            }
-
-            // disagreement about whether it's "exit" as per spec, or "cancel"
-            name = prefix + 'ExitFullscreen';
-            if (typeof document[name] === 'function') {
-                _names.exitFullscreen = name;
-            } else {
-                name = prefix + 'CancelFullScreen';
-                if (typeof document[name] === 'function') {
-                    _names.exitFullscreen = name;
-                }
-            }
-
-            // casing of Fullscreen differs across browsers
-            name = prefix + 'FullscreenEnabled';
-            if (document[name] !== undefined) {
-                _names.fullscreenEnabled = name;
-            } else {
-                name = prefix + 'FullScreenEnabled';
-                if (document[name] !== undefined) {
-                    _names.fullscreenEnabled = name;
-                }
-            }
-
-            // casing of Fullscreen differs across browsers
-            name = prefix + 'FullscreenElement';
-            if (document[name] !== undefined) {
-                _names.fullscreenElement = name;
-            } else {
-                name = prefix + 'FullScreenElement';
-                if (document[name] !== undefined) {
-                    _names.fullscreenElement = name;
-                }
-            }
-
-            // thankfully, event names are all lowercase per spec
-            name = prefix + 'fullscreenchange';
-            // event names do not have 'on' in the front, but the property on the document does
-            if (document['on' + name] !== undefined) {
-                //except on IE
-                if (prefix === 'ms') {
-                    name = 'MSFullscreenChange';
-                }
-                _names.fullscreenchange = name;
-            }
-
-            name = prefix + 'fullscreenerror';
-            if (document['on' + name] !== undefined) {
-                //except on IE
-                if (prefix === 'ms') {
-                    name = 'MSFullscreenError';
-                }
-                _names.fullscreenerror = name;
-            }
-        }
-
-        return _supportsFullscreen;
-    };
-
-    /**
-     * Asynchronously requests the browser to enter fullscreen mode on the given element.
-     * If fullscreen mode is not supported by the browser, does nothing.
-     *
-     * @param {Object} element The HTML element which will be placed into fullscreen mode.
-     * @param {HMDVRDevice} [vrDevice] The VR device.
-     *
-     * @example
-     * // Put the entire page into fullscreen.
-     * Cesium.Fullscreen.requestFullscreen(document.body)
-     *
-     * // Place only the Cesium canvas into fullscreen.
-     * Cesium.Fullscreen.requestFullscreen(scene.canvas)
-     */
-    Fullscreen.requestFullscreen = function(element, vrDevice) {
-        if (!Fullscreen.supportsFullscreen()) {
-            return;
-        }
-
-        element[_names.requestFullscreen]({ vrDisplay: vrDevice });
-    };
-
-    /**
-     * Asynchronously exits fullscreen mode.  If the browser is not currently
-     * in fullscreen, or if fullscreen mode is not supported by the browser, does nothing.
-     */
-    Fullscreen.exitFullscreen = function() {
-        if (!Fullscreen.supportsFullscreen()) {
-            return;
-        }
-
-        document[_names.exitFullscreen]();
-    };
-
-    return Fullscreen;
-});
-
 /**
   @license
   when.js - https://github.com/cujojs/when
@@ -1224,20 +934,313 @@ define('ThirdParty/when',[],function () {
 	// Boilerplate for AMD, Node, and browser global
 );
 
+define('Core/defineProperties',[
+        './defined'
+    ], function(
+        defined) {
+    'use strict';
+
+    var definePropertyWorks = (function() {
+        try {
+            return 'x' in Object.defineProperty({}, 'x', {});
+        } catch (e) {
+            return false;
+        }
+    })();
+
+    /**
+     * Defines properties on an object, using Object.defineProperties if available,
+     * otherwise returns the object unchanged.  This function should be used in
+     * setup code to prevent errors from completely halting JavaScript execution
+     * in legacy browsers.
+     *
+     * @private
+     *
+     * @exports defineProperties
+     */
+    var defineProperties = Object.defineProperties;
+    if (!definePropertyWorks || !defined(defineProperties)) {
+        defineProperties = function(o) {
+            return o;
+        };
+    }
+
+    return defineProperties;
+});
+
+define('Core/Fullscreen',[
+        './defined',
+        './defineProperties'
+    ], function(
+        defined,
+        defineProperties) {
+    'use strict';
+
+    var _supportsFullscreen;
+    var _names = {
+        requestFullscreen : undefined,
+        exitFullscreen : undefined,
+        fullscreenEnabled : undefined,
+        fullscreenElement : undefined,
+        fullscreenchange : undefined,
+        fullscreenerror : undefined
+    };
+
+    /**
+     * Browser-independent functions for working with the standard fullscreen API.
+     *
+     * @exports Fullscreen
+     * @namespace
+     *
+     * @see {@link http://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html|W3C Fullscreen Living Specification}
+     */
+    var Fullscreen = {};
+
+    defineProperties(Fullscreen, {
+        /**
+         * The element that is currently fullscreen, if any.  To simply check if the
+         * browser is in fullscreen mode or not, use {@link Fullscreen#fullscreen}.
+         * @memberof Fullscreen
+         * @type {Object}
+         * @readonly
+         */
+        element : {
+            get : function() {
+                if (!Fullscreen.supportsFullscreen()) {
+                    return undefined;
+                }
+
+                return document[_names.fullscreenElement];
+            }
+        },
+
+        /**
+         * The name of the event on the document that is fired when fullscreen is
+         * entered or exited.  This event name is intended for use with addEventListener.
+         * In your event handler, to determine if the browser is in fullscreen mode or not,
+         * use {@link Fullscreen#fullscreen}.
+         * @memberof Fullscreen
+         * @type {String}
+         * @readonly
+         */
+        changeEventName : {
+            get : function() {
+                if (!Fullscreen.supportsFullscreen()) {
+                    return undefined;
+                }
+
+                return _names.fullscreenchange;
+            }
+        },
+
+        /**
+         * The name of the event that is fired when a fullscreen error
+         * occurs.  This event name is intended for use with addEventListener.
+         * @memberof Fullscreen
+         * @type {String}
+         * @readonly
+         */
+        errorEventName : {
+            get : function() {
+                if (!Fullscreen.supportsFullscreen()) {
+                    return undefined;
+                }
+
+                return _names.fullscreenerror;
+            }
+        },
+
+        /**
+         * Determine whether the browser will allow an element to be made fullscreen, or not.
+         * For example, by default, iframes cannot go fullscreen unless the containing page
+         * adds an "allowfullscreen" attribute (or prefixed equivalent).
+         * @memberof Fullscreen
+         * @type {Boolean}
+         * @readonly
+         */
+        enabled : {
+            get : function() {
+                if (!Fullscreen.supportsFullscreen()) {
+                    return undefined;
+                }
+
+                return document[_names.fullscreenEnabled];
+            }
+        },
+
+        /**
+         * Determines if the browser is currently in fullscreen mode.
+         * @memberof Fullscreen
+         * @type {Boolean}
+         * @readonly
+         */
+        fullscreen : {
+            get : function() {
+                if (!Fullscreen.supportsFullscreen()) {
+                    return undefined;
+                }
+
+                return Fullscreen.element !== null;
+            }
+        }
+    });
+
+    /**
+     * Detects whether the browser supports the standard fullscreen API.
+     *
+     * @returns {Boolean} <code>true</code> if the browser supports the standard fullscreen API,
+     * <code>false</code> otherwise.
+     */
+    Fullscreen.supportsFullscreen = function() {
+        if (defined(_supportsFullscreen)) {
+            return _supportsFullscreen;
+        }
+
+        _supportsFullscreen = false;
+
+        var body = document.body;
+        if (typeof body.requestFullscreen === 'function') {
+            // go with the unprefixed, standard set of names
+            _names.requestFullscreen = 'requestFullscreen';
+            _names.exitFullscreen = 'exitFullscreen';
+            _names.fullscreenEnabled = 'fullscreenEnabled';
+            _names.fullscreenElement = 'fullscreenElement';
+            _names.fullscreenchange = 'fullscreenchange';
+            _names.fullscreenerror = 'fullscreenerror';
+            _supportsFullscreen = true;
+            return _supportsFullscreen;
+        }
+
+        //check for the correct combination of prefix plus the various names that browsers use
+        var prefixes = ['webkit', 'moz', 'o', 'ms', 'khtml'];
+        var name;
+        for (var i = 0, len = prefixes.length; i < len; ++i) {
+            var prefix = prefixes[i];
+
+            // casing of Fullscreen differs across browsers
+            name = prefix + 'RequestFullscreen';
+            if (typeof body[name] === 'function') {
+                _names.requestFullscreen = name;
+                _supportsFullscreen = true;
+            } else {
+                name = prefix + 'RequestFullScreen';
+                if (typeof body[name] === 'function') {
+                    _names.requestFullscreen = name;
+                    _supportsFullscreen = true;
+                }
+            }
+
+            // disagreement about whether it's "exit" as per spec, or "cancel"
+            name = prefix + 'ExitFullscreen';
+            if (typeof document[name] === 'function') {
+                _names.exitFullscreen = name;
+            } else {
+                name = prefix + 'CancelFullScreen';
+                if (typeof document[name] === 'function') {
+                    _names.exitFullscreen = name;
+                }
+            }
+
+            // casing of Fullscreen differs across browsers
+            name = prefix + 'FullscreenEnabled';
+            if (document[name] !== undefined) {
+                _names.fullscreenEnabled = name;
+            } else {
+                name = prefix + 'FullScreenEnabled';
+                if (document[name] !== undefined) {
+                    _names.fullscreenEnabled = name;
+                }
+            }
+
+            // casing of Fullscreen differs across browsers
+            name = prefix + 'FullscreenElement';
+            if (document[name] !== undefined) {
+                _names.fullscreenElement = name;
+            } else {
+                name = prefix + 'FullScreenElement';
+                if (document[name] !== undefined) {
+                    _names.fullscreenElement = name;
+                }
+            }
+
+            // thankfully, event names are all lowercase per spec
+            name = prefix + 'fullscreenchange';
+            // event names do not have 'on' in the front, but the property on the document does
+            if (document['on' + name] !== undefined) {
+                //except on IE
+                if (prefix === 'ms') {
+                    name = 'MSFullscreenChange';
+                }
+                _names.fullscreenchange = name;
+            }
+
+            name = prefix + 'fullscreenerror';
+            if (document['on' + name] !== undefined) {
+                //except on IE
+                if (prefix === 'ms') {
+                    name = 'MSFullscreenError';
+                }
+                _names.fullscreenerror = name;
+            }
+        }
+
+        return _supportsFullscreen;
+    };
+
+    /**
+     * Asynchronously requests the browser to enter fullscreen mode on the given element.
+     * If fullscreen mode is not supported by the browser, does nothing.
+     *
+     * @param {Object} element The HTML element which will be placed into fullscreen mode.
+     * @param {HMDVRDevice} [vrDevice] The VR device.
+     *
+     * @example
+     * // Put the entire page into fullscreen.
+     * Cesium.Fullscreen.requestFullscreen(document.body)
+     *
+     * // Place only the Cesium canvas into fullscreen.
+     * Cesium.Fullscreen.requestFullscreen(scene.canvas)
+     */
+    Fullscreen.requestFullscreen = function(element, vrDevice) {
+        if (!Fullscreen.supportsFullscreen()) {
+            return;
+        }
+
+        element[_names.requestFullscreen]({ vrDisplay: vrDevice });
+    };
+
+    /**
+     * Asynchronously exits fullscreen mode.  If the browser is not currently
+     * in fullscreen, or if fullscreen mode is not supported by the browser, does nothing.
+     */
+    Fullscreen.exitFullscreen = function() {
+        if (!Fullscreen.supportsFullscreen()) {
+            return;
+        }
+
+        document[_names.exitFullscreen]();
+    };
+
+    //For unit tests
+    Fullscreen._names = _names;
+
+    return Fullscreen;
+});
+
 define('Core/FeatureDetection',[
+        '../ThirdParty/when',
         './defaultValue',
         './defined',
         './defineProperties',
         './DeveloperError',
-        './Fullscreen',
-        '../ThirdParty/when'
+        './Fullscreen'
     ], function(
+        when,
         defaultValue,
         defined,
         defineProperties,
         DeveloperError,
-        Fullscreen,
-        when) {
+        Fullscreen) {
     'use strict';
     /*global CanvasPixelArray*/
 
@@ -1432,6 +1435,9 @@ define('Core/FeatureDetection',[
     }
 
     function supportsWebP() {
+                if (!supportsWebP.initialized) {
+            throw new DeveloperError('You must call FeatureDetection.supportsWebP.initialize and wait for the promise to resolve before calling FeatureDetection.supportsWebP');
+        }
                 return supportsWebP._result;
     }
     supportsWebP._promise = undefined;
@@ -2304,6 +2310,9 @@ define('Core/ComponentDatatype',[
      * var size = Cesium.ComponentDatatype.getSizeInBytes(Cesium.ComponentDatatype.BYTE);
      */
     ComponentDatatype.getSizeInBytes = function(componentDatatype){
+                if (!defined(componentDatatype)) {
+            throw new DeveloperError('value is required.');
+        }
         
         switch (componentDatatype) {
         case ComponentDatatype.BYTE:
@@ -2322,6 +2331,8 @@ define('Core/ComponentDatatype',[
             return Float32Array.BYTES_PER_ELEMENT;
         case ComponentDatatype.DOUBLE:
             return Float64Array.BYTES_PER_ELEMENT;
+                default:
+            throw new DeveloperError('componentDatatype is not a valid value.');
                 }
     };
 
@@ -2395,6 +2406,12 @@ define('Core/ComponentDatatype',[
      * var typedArray = Cesium.ComponentDatatype.createTypedArray(Cesium.ComponentDatatype.FLOAT, 100);
      */
     ComponentDatatype.createTypedArray = function(componentDatatype, valuesOrLength) {
+                if (!defined(componentDatatype)) {
+            throw new DeveloperError('componentDatatype is required.');
+        }
+        if (!defined(valuesOrLength)) {
+            throw new DeveloperError('valuesOrLength is required.');
+        }
         
         switch (componentDatatype) {
         case ComponentDatatype.BYTE:
@@ -2413,6 +2430,8 @@ define('Core/ComponentDatatype',[
             return new Float32Array(valuesOrLength);
         case ComponentDatatype.DOUBLE:
             return new Float64Array(valuesOrLength);
+                default:
+            throw new DeveloperError('componentDatatype is not a valid value.');
                 }
     };
 
@@ -2428,6 +2447,12 @@ define('Core/ComponentDatatype',[
      * @exception {DeveloperError} componentDatatype is not a valid value.
      */
     ComponentDatatype.createArrayBufferView = function(componentDatatype, buffer, byteOffset, length) {
+                if (!defined(componentDatatype)) {
+            throw new DeveloperError('componentDatatype is required.');
+        }
+        if (!defined(buffer)) {
+            throw new DeveloperError('buffer is required.');
+        }
         
         byteOffset = defaultValue(byteOffset, 0);
         length = defaultValue(length, (buffer.byteLength - byteOffset) / ComponentDatatype.getSizeInBytes(componentDatatype));
@@ -2449,6 +2474,8 @@ define('Core/ComponentDatatype',[
             return new Float32Array(buffer, byteOffset, length);
         case ComponentDatatype.DOUBLE:
             return new Float64Array(buffer, byteOffset, length);
+                default:
+            throw new DeveloperError('componentDatatype is not a valid value.');
                 }
     };
 
@@ -2478,6 +2505,8 @@ define('Core/ComponentDatatype',[
                 return ComponentDatatype.FLOAT;
             case 'DOUBLE':
                 return ComponentDatatype.DOUBLE;
+                        default:
+                throw new DeveloperError('name is not a valid value.');
                     }
     };
 
@@ -3075,6 +3104,13 @@ define('Core/Math',[
     CesiumMath.SIXTY_FOUR_KILOBYTES = 64 * 1024;
 
     /**
+     * 4 * 1024 * 1024 * 1024
+     * @type {Number}
+     * @constant
+     */
+    CesiumMath.FOUR_GIGABYTES = 4 * 1024 * 1024 * 1024;
+
+    /**
      * Returns the sign of the value; 1 if the value is positive, -1 if the value is
      * negative, or 0 if the value is 0.
      *
@@ -3103,29 +3139,41 @@ define('Core/Math',[
     };
 
     /**
-     * Converts a scalar value in the range [-1.0, 1.0] to a SNORM in the range [0, rangeMax]
+     * Converts a scalar value in the range [-1.0, 1.0] to a SNORM in the range [0, rangeMaximum]
      * @param {Number} value The scalar value in the range [-1.0, 1.0]
-     * @param {Number} [rangeMax=255] The maximum value in the mapped range, 255 by default.
-     * @returns {Number} A SNORM value, where 0 maps to -1.0 and rangeMax maps to 1.0.
+     * @param {Number} [rangeMaximum=255] The maximum value in the mapped range, 255 by default.
+     * @returns {Number} A SNORM value, where 0 maps to -1.0 and rangeMaximum maps to 1.0.
      *
      * @see CesiumMath.fromSNorm
      */
-    CesiumMath.toSNorm = function(value, rangeMax) {
-        rangeMax = defaultValue(rangeMax, 255);
-        return Math.round((CesiumMath.clamp(value, -1.0, 1.0) * 0.5 + 0.5) * rangeMax);
+    CesiumMath.toSNorm = function(value, rangeMaximum) {
+        rangeMaximum = defaultValue(rangeMaximum, 255);
+        return Math.round((CesiumMath.clamp(value, -1.0, 1.0) * 0.5 + 0.5) * rangeMaximum);
     };
 
     /**
-     * Converts a SNORM value in the range [0, rangeMax] to a scalar in the range [-1.0, 1.0].
-     * @param {Number} value SNORM value in the range [0, 255]
-     * @param {Number} [rangeMax=255] The maximum value in the SNORM range, 255 by default.
+     * Converts a SNORM value in the range [0, rangeMaximum] to a scalar in the range [-1.0, 1.0].
+     * @param {Number} value SNORM value in the range [0, rangeMaximum]
+     * @param {Number} [rangeMaximum=255] The maximum value in the SNORM range, 255 by default.
      * @returns {Number} Scalar in the range [-1.0, 1.0].
      *
      * @see CesiumMath.toSNorm
      */
-    CesiumMath.fromSNorm = function(value, rangeMax) {
-        rangeMax = defaultValue(rangeMax, 255);
-        return CesiumMath.clamp(value, 0.0, rangeMax) / rangeMax * 2.0 - 1.0;
+    CesiumMath.fromSNorm = function(value, rangeMaximum) {
+        rangeMaximum = defaultValue(rangeMaximum, 255);
+        return CesiumMath.clamp(value, 0.0, rangeMaximum) / rangeMaximum * 2.0 - 1.0;
+    };
+
+    /**
+     * Converts a scalar value in the range [rangeMinimum, rangeMaximum] to a scalar in the range [0.0, 1.0]
+     * @param {Number} value The scalar value in the range [rangeMinimum, rangeMaximum]
+     * @param {Number} rangeMinimum The minimum value in the mapped range.
+     * @param {Number} rangeMaximum The maximum value in the mapped range.
+     * @returns {Number} A scalar value, where rangeMinimum maps to 0.0 and rangeMaximum maps to 1.0.
+     */
+    CesiumMath.normalize = function(value, rangeMinimum, rangeMaximum) {
+        rangeMaximum = Math.max(rangeMaximum - rangeMinimum, 0.0);
+        return rangeMaximum === 0.0 ? 0.0 : CesiumMath.clamp((value - rangeMinimum) / rangeMaximum, 0.0, 1.0);
     };
 
     /**
@@ -3298,6 +3346,9 @@ define('Core/Math',[
      * @returns {Number} The corresponding angle in radians.
      */
     CesiumMath.toRadians = function(degrees) {
+                if (!defined(degrees)) {
+            throw new DeveloperError('degrees is required.');
+        }
                 return degrees * CesiumMath.RADIANS_PER_DEGREE;
     };
 
@@ -3307,6 +3358,9 @@ define('Core/Math',[
      * @returns {Number} The corresponding angle in degrees.
      */
     CesiumMath.toDegrees = function(radians) {
+                if (!defined(radians)) {
+            throw new DeveloperError('radians is required.');
+        }
                 return radians * CesiumMath.DEGREES_PER_RADIAN;
     };
 
@@ -3321,6 +3375,9 @@ define('Core/Math',[
      * var longitude = Cesium.Math.convertLongitudeRange(Cesium.Math.toRadians(270.0));
      */
     CesiumMath.convertLongitudeRange = function(angle) {
+                if (!defined(angle)) {
+            throw new DeveloperError('angle is required.');
+        }
                 var twoPi = CesiumMath.TWO_PI;
 
         var simplified = angle - Math.floor(angle / twoPi) * twoPi;
@@ -3347,6 +3404,9 @@ define('Core/Math',[
      * var latitude = Cesium.Math.clampToLatitudeRange(Cesium.Math.toRadians(108.0));
      */
     CesiumMath.clampToLatitudeRange = function(angle) {
+                if (!defined(angle)) {
+            throw new DeveloperError('angle is required.');
+        }
         
         return CesiumMath.clamp(angle, -1*CesiumMath.PI_OVER_TWO, CesiumMath.PI_OVER_TWO);
     };
@@ -3358,6 +3418,9 @@ define('Core/Math',[
      * @returns {Number} The angle in the range [<code>-CesiumMath.PI</code>, <code>CesiumMath.PI</code>].
      */
     CesiumMath.negativePiToPi = function(angle) {
+                if (!defined(angle)) {
+            throw new DeveloperError('angle is required.');
+        }
                 return CesiumMath.zeroToTwoPi(angle + CesiumMath.PI) - CesiumMath.PI;
     };
 
@@ -3368,6 +3431,9 @@ define('Core/Math',[
      * @returns {Number} The angle in the range [0, <code>CesiumMath.TWO_PI</code>].
      */
     CesiumMath.zeroToTwoPi = function(angle) {
+                if (!defined(angle)) {
+            throw new DeveloperError('angle is required.');
+        }
                 var mod = CesiumMath.mod(angle, CesiumMath.TWO_PI);
         if (Math.abs(mod) < CesiumMath.EPSILON14 && Math.abs(angle) > CesiumMath.EPSILON14) {
             return CesiumMath.TWO_PI;
@@ -3383,6 +3449,12 @@ define('Core/Math',[
      * @returns {Number} The remainder.
      */
     CesiumMath.mod = function(m, n) {
+                if (!defined(m)) {
+            throw new DeveloperError('m is required.');
+        }
+        if (!defined(n)) {
+            throw new DeveloperError('n is required.');
+        }
                 return ((m % n) + n) % n;
     };
 
@@ -3405,6 +3477,15 @@ define('Core/Math',[
      * var d = Cesium.Math.equalsEpsilon(3699175.1634344, 3699175.2, Cesium.Math.EPSILON9); // false
      */
     CesiumMath.equalsEpsilon = function(left, right, relativeEpsilon, absoluteEpsilon) {
+                if (!defined(left)) {
+            throw new DeveloperError('left is required.');
+        }
+        if (!defined(right)) {
+            throw new DeveloperError('right is required.');
+        }
+        if (!defined(relativeEpsilon)) {
+            throw new DeveloperError('relativeEpsilon is required.');
+        }
                 absoluteEpsilon = defaultValue(absoluteEpsilon, relativeEpsilon);
         var absDiff = Math.abs(left - right);
         return absDiff <= absoluteEpsilon || absDiff <= relativeEpsilon * Math.max(Math.abs(left), Math.abs(right));
@@ -3422,6 +3503,15 @@ define('Core/Math',[
      *          values are nearly equal.
      */
     CesiumMath.lessThan = function(left, right, absoluteEpsilon) {
+                if (!defined(left)) {
+            throw new DeveloperError('first is required.');
+        }
+        if (!defined(right)) {
+            throw new DeveloperError('second is required.');
+        }
+        if (!defined(absoluteEpsilon)) {
+            throw new DeveloperError('relativeEpsilon is required.');
+        }
                 return left - right < -absoluteEpsilon;
     };
 
@@ -3436,6 +3526,15 @@ define('Core/Math',[
      *          the values are nearly equal.
      */
     CesiumMath.lessThanOrEquals = function(left, right, absoluteEpsilon) {
+                if (!defined(left)) {
+            throw new DeveloperError('first is required.');
+        }
+        if (!defined(right)) {
+            throw new DeveloperError('second is required.');
+        }
+        if (!defined(absoluteEpsilon)) {
+            throw new DeveloperError('relativeEpsilon is required.');
+        }
                 return left - right < absoluteEpsilon;
     };
 
@@ -3451,6 +3550,15 @@ define('Core/Math',[
      *          values are nearly equal.
      */
     CesiumMath.greaterThan = function(left, right, absoluteEpsilon) {
+                if (!defined(left)) {
+            throw new DeveloperError('first is required.');
+        }
+        if (!defined(right)) {
+            throw new DeveloperError('second is required.');
+        }
+        if (!defined(absoluteEpsilon)) {
+            throw new DeveloperError('relativeEpsilon is required.');
+        }
                 return left - right > absoluteEpsilon;
     };
 
@@ -3465,6 +3573,15 @@ define('Core/Math',[
      *          the values are nearly equal.
      */
     CesiumMath.greaterThanOrEquals = function(left, right, absoluteEpsilon) {
+                if (!defined(left)) {
+            throw new DeveloperError('first is required.');
+        }
+        if (!defined(right)) {
+            throw new DeveloperError('second is required.');
+        }
+        if (!defined(absoluteEpsilon)) {
+            throw new DeveloperError('relativeEpsilon is required.');
+        }
                 return left - right > -absoluteEpsilon;
     };
 
@@ -3486,12 +3603,17 @@ define('Core/Math',[
      * @see {@link http://en.wikipedia.org/wiki/Factorial|Factorial on Wikipedia}
      */
     CesiumMath.factorial = function(n) {
+                if (typeof n !== 'number' || n < 0) {
+            throw new DeveloperError('A number greater than or equal to 0 is required.');
+        }
         
         var length = factorials.length;
         if (n >= length) {
             var sum = factorials[length - 1];
             for (var i = length; i <= n; i++) {
-                factorials.push(sum * i);
+                var next = sum * i;
+                factorials.push(next);
+                sum = next;
             }
         }
         return factorials[n];
@@ -3514,6 +3636,12 @@ define('Core/Math',[
     CesiumMath.incrementWrap = function(n, maximumValue, minimumValue) {
         minimumValue = defaultValue(minimumValue, 0.0);
 
+                if (!defined(n)) {
+            throw new DeveloperError('n is required.');
+        }
+        if (maximumValue <= minimumValue) {
+            throw new DeveloperError('maximumValue must be greater than minimumValue.');
+        }
         
         ++n;
         if (n > maximumValue) {
@@ -3535,6 +3663,9 @@ define('Core/Math',[
      * var f = Cesium.Math.isPowerOfTwo(20); // false
      */
     CesiumMath.isPowerOfTwo = function(n) {
+                if (typeof n !== 'number' || n < 0) {
+            throw new DeveloperError('A number greater than or equal to 0 is required.');
+        }
         
         return (n !== 0) && ((n & (n - 1)) === 0);
     };
@@ -3552,6 +3683,9 @@ define('Core/Math',[
      * var m = Cesium.Math.nextPowerOfTwo(32); // 32
      */
     CesiumMath.nextPowerOfTwo = function(n) {
+                if (typeof n !== 'number' || n < 0) {
+            throw new DeveloperError('A number greater than or equal to 0 is required.');
+        }
         
         // From http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
         --n;
@@ -3574,6 +3708,15 @@ define('Core/Math',[
      * @returns {Number} The value clamped so that min <= value <= max.
      */
     CesiumMath.clamp = function(value, min, max) {
+                if (!defined(value)) {
+            throw new DeveloperError('value is required');
+        }
+        if (!defined(min)) {
+            throw new DeveloperError('min is required.');
+        }
+        if (!defined(max)) {
+            throw new DeveloperError('max is required.');
+        }
                 return value < min ? min : value > max ? max : value;
     };
 
@@ -3586,6 +3729,9 @@ define('Core/Math',[
      * @param {Number} seed An integer used as the seed.
      */
     CesiumMath.setRandomNumberSeed = function(seed) {
+                if (!defined(seed)) {
+            throw new DeveloperError('seed is required.');
+        }
         
         randomNumberGenerator = new MersenneTwister(seed);
     };
@@ -3623,6 +3769,9 @@ define('Core/Math',[
      *          whichever is closer, if the value is outside the range.
      */
     CesiumMath.acosClamped = function(value) {
+                if (!defined(value)) {
+            throw new DeveloperError('value is required.');
+        }
                 return Math.acos(CesiumMath.clamp(value, -1.0, 1.0));
     };
 
@@ -3635,6 +3784,9 @@ define('Core/Math',[
      *          whichever is closer, if the value is outside the range.
      */
     CesiumMath.asinClamped = function(value) {
+                if (!defined(value)) {
+            throw new DeveloperError('value is required.');
+        }
                 return Math.asin(CesiumMath.clamp(value, -1.0, 1.0));
     };
 
@@ -3646,6 +3798,12 @@ define('Core/Math',[
      * @returns {Number} The chord length.
      */
     CesiumMath.chordLength = function(angle, radius) {
+                if (!defined(angle)) {
+            throw new DeveloperError('angle is required.');
+        }
+        if (!defined(radius)) {
+            throw new DeveloperError('radius is required.');
+        }
                 return 2.0 * radius * Math.sin(angle * 0.5);
     };
 
@@ -3657,6 +3815,12 @@ define('Core/Math',[
      * @returns {Number} The result.
      */
     CesiumMath.logBase = function(number, base) {
+                if (!defined(number)) {
+            throw new DeveloperError('number is required.');
+        }
+        if (!defined(base)) {
+            throw new DeveloperError('base is required.');
+        }
                 return Math.log(number) / Math.log(base);
     };
 
@@ -3704,6 +3868,7 @@ define('Core/Math',[
      * @returns {Number} An approximation of atan(x)
      */
     CesiumMath.fastApproximateAtan = function(x) {
+                Check.typeOf.number('x', x);
         
         return x * (-0.1784 * Math.abs(x) - 0.0663 * x * x + 1.0301);
     };
@@ -3718,6 +3883,8 @@ define('Core/Math',[
      * @returns {Number} An approximation of atan2(x, y)
      */
     CesiumMath.fastApproximateAtan2 = function(x, y) {
+                Check.typeOf.number('x', x);
+        Check.typeOf.number('y', y);
         
         // atan approximations are usually only reliable over [-1, 1]
         // So reduce the range by flipping whether x or y is on top based on which is bigger.
@@ -3729,6 +3896,9 @@ define('Core/Math',[
         opposite = Math.min(t, opposite);
 
         var oppositeOverAdjacent = opposite / adjacent;
+                if (isNaN(oppositeOverAdjacent)) {
+            throw new DeveloperError('either x or y must be nonzero');
+        }
                 t = CesiumMath.fastApproximateAtan(oppositeOverAdjacent);
 
         // Undo range reduction
@@ -3810,6 +3980,7 @@ define('Core/IndexDatatype',[
                 return Uint32Array.BYTES_PER_ELEMENT;
         }
 
+                throw new DeveloperError('indexDatatype is required and must be a valid IndexDatatype constant.');
             };
 
     /**
@@ -3826,6 +3997,8 @@ define('Core/IndexDatatype',[
                 return IndexDatatype.UNSIGNED_INT;
             case 1:
                 return IndexDatatype.UNSIGNED_BYTE;
+                        default:
+                throw new DeveloperError('Size in bytes cannot be mapped to an IndexDatatype');
                     }
     };
 
@@ -3859,6 +4032,9 @@ define('Core/IndexDatatype',[
      * this.indices = Cesium.IndexDatatype.createTypedArray(positions.length / 3, numberOfIndices);
      */
     IndexDatatype.createTypedArray = function(numberOfVertices, indicesLengthOrArray) {
+                if (!defined(numberOfVertices)) {
+            throw new DeveloperError('numberOfVertices is required.');
+        }
         
         if (numberOfVertices >= CesiumMath.SIXTY_FOUR_KILOBYTES) {
             return new Uint32Array(indicesLengthOrArray);
@@ -3879,6 +4055,15 @@ define('Core/IndexDatatype',[
      *
      */
     IndexDatatype.createTypedArrayFromArrayBuffer = function(numberOfVertices, sourceArray, byteOffset, length) {
+                if (!defined(numberOfVertices)) {
+            throw new DeveloperError('numberOfVertices is required.');
+        }
+        if (!defined(sourceArray)) {
+            throw new DeveloperError('sourceArray is required.');
+        }
+        if (!defined(byteOffset)) {
+            throw new DeveloperError('byteOffset is required.');
+        }
         
         if (numberOfVertices >= CesiumMath.SIXTY_FOUR_KILOBYTES) {
             return new Uint32Array(sourceArray, byteOffset, length);
@@ -4000,15 +4185,15 @@ define('Core/formatError',[
 });
 
 define('Workers/createTaskProcessorWorker',[
-        '../ThirdParty/when',
         '../Core/defaultValue',
         '../Core/defined',
-        '../Core/formatError'
+        '../Core/formatError',
+        '../ThirdParty/when'
     ], function(
-        when,
         defaultValue,
         defined,
-        formatError) {
+        formatError,
+        when) {
     'use strict';
 
     // createXXXGeometry functions may return Geometry or a Promise that resolves to Geometry
@@ -4054,7 +4239,6 @@ define('Workers/createTaskProcessorWorker',[
         var postMessage;
 
         return function(event) {
-            /*global self*/
             var data = event.data;
 
             var transferableObjects = [];

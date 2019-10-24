@@ -20,10 +20,9 @@
  * Portions licensed separately.
  * See https://github.com/AnalyticalGraphicsInc/cesium/blob/master/LICENSE.md for full licensing details.
  */
-/*global self:true*/
 // make sure self is defined so that the Dojo build can evaluate this file without crashing.
 if (typeof self === 'undefined') {
-    self = {};
+    self = {}; //eslint-disable-line no-implicit-globals, no-global-assign
 }
 
 self.onmessage = function(event) {
