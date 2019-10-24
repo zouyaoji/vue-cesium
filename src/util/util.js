@@ -53,13 +53,15 @@ export function makeCartesian3Array (vals) {
   if (vals && vals instanceof Array && vals[0] instanceof Cesium.Cartesian3) {
     return vals
   }
+
   let coordinates = []
   vals.forEach(item => {
     coordinates.push(item.lng)
     coordinates.push(item.lat)
     coordinates.push(item.height)
   })
-  return Cesium.Cartesian3.fromDegreesArrayHeights(coordinates)
+
+  return coordinates.length >= 3 ? Cesium.Cartesian3.fromDegreesArrayHeights(coordinates) : vals
 }
 
 export function makeCartesian2Array (vals) {
@@ -86,11 +88,14 @@ function parsePolygonHierarchyJson (val) {
 export function makePolygonHierarchy (val) {
   if (typeof Cesium === 'undefined') {
     return val
-  } else if (val instanceof Array) {
+  } else if (val instanceof Array && val.length >= 3) {
     return new Cesium.PolygonHierarchy(makeCartesian3Array(val))
   }
-  val.positions = makeCartesian3Array(val.positions)
-  parsePolygonHierarchyJson(val.holes)
+  if (Cesium.defined(val.positions)) {
+    val.positions = makeCartesian3Array(val.positions)
+    parsePolygonHierarchyJson(val.holes)
+  }
+
   return val
 }
 

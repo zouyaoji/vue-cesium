@@ -19,7 +19,8 @@
       </template>
     </label-collection>
     <entity :ref="'entity'+index" :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
-      <polygon-graphics :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight" :material="materialPolygon" @ready="ready"></polygon-graphics>
+      <polygon-graphics :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight"
+        :material="materialPolygon" @ready="ready" v-if="polyline.positions.length >= 3"></polygon-graphics>
     </entity>
   </i>
 </template>
@@ -27,6 +28,7 @@
 <script>
 import turfArea from '../../libs/turfArea/turfArea'
 import measure from '../../mixins/tool/measure'
+import { makePolygonHierarchy } from '../../util/util'
 export default {
   name: 'measure-area',
   mixins: [measure],
@@ -69,7 +71,7 @@ export default {
     ready (val) {
       const { polylines } = this
       const polyline = polylines[polylines.length - 1]
-      val.cesiumObject.hierarchy = new Cesium.CallbackProperty(() => polyline.positions, false)
+      val.cesiumObject.hierarchy = new Cesium.CallbackProperty(() => makePolygonHierarchy(polyline.positions), false)
     },
     LEFT_CLICK (movement) {
       if (!this.measuring) {
