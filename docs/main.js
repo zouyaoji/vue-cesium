@@ -24,8 +24,9 @@ Vue.use(VueCesium, {
   // Personal online SuperMap Cesium Build package：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // Official Online Cesium Build package：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
-  // cesiumPath: './statics/Cesium/Cesium.js',
+  // cesiumPath: 'https://unpkg.com/cesium/Build/CesiumUnminified/Cesium.js',
+  // cesiumPath: 'https://unpkg.com/cesium@1.55.0/Build/Cesium/Cesium.js',
+  cesiumPath: './statics/Cesium/Cesium.js',
   accessToken:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })

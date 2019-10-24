@@ -30,8 +30,8 @@
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
-          interleave: false,
-          asynchronous: false
+          interleave: true,
+          asynchronous: true
         }
       },
       methods: {
@@ -97,20 +97,20 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         appearance: null,
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
-        rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
-        interleave: false,
-        asynchronous: false
+        rectangle: { west: 102.5, south: 29.5, east: 106.5, north: 33.5 },
+        interleave: true,
+        asynchronous: true
       }
     },
     methods: {
-      ready (cesiumInstance) {
+      ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        const {Cesium, viewer} = this.cesiumInstance
+        const { Cesium, viewer } = this.cesiumInstance
         viewer.camera.setView({
           destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
           orientation: {
@@ -131,7 +131,7 @@
         })
         this.play()
       },
-      play () {
+      play() {
         let urls = [
           'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/2.png',
@@ -163,6 +163,6 @@ Reference official document [GroundPrimitive](https://cesium.com/docs/cesiumjs-r
 
 ## Events
 
-|name|parameter|description|
-|------|----|----|
-|ready|{Cesium, viewer}|Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance.|
+| name  | parameter        | description                                                                                    |
+| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |

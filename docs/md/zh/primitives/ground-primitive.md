@@ -30,8 +30,8 @@
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
-          interleave: false,
-          asynchronous: false
+          interleave: true,
+          asynchronous: true
         }
       },
       methods: {
@@ -103,8 +103,8 @@
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
         rectangle: { west: 102.5, south: 29.5, east: 106.5, north: 33.5 },
-        interleave: false,
-        asynchronous: false
+        interleave: true,
+        asynchronous: true
       }
     },
     methods: {
