@@ -13,7 +13,7 @@ import {
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeCartesian2, makeMaterial, makeColor, makeDistanceDisplayCondition, makePlane } from '../../util/util'
 export default {
-  name: 'plane-graphics',
+  name: 'vc-graphics-plane',
   mixins: [
     show,
     distanceDisplayCondition,

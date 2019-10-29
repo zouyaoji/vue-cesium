@@ -4,7 +4,7 @@ import pointMixin from '../../mixins/entity/pointMixin'
 import collectionItemMixin from '../../mixins/primitive/collectionItemMixin'
 import { makePointOptions } from '../../util/util'
 export default {
-  name: 'point-primitive',
+  name: 'vc-primitive-point',
   mixins: [id, position, pointMixin, collectionItemMixin],
   methods: {
     createCesiumObject () {

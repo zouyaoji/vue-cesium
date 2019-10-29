@@ -17,7 +17,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'wmts-imagery-provider',
+  name: 'vc-imagery-provider-wmts',
   mixins: [
     url,
     clock,

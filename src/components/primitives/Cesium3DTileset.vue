@@ -11,7 +11,7 @@ import {
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 import { makeCartesian2, makeCartesian3 } from '../../util/util'
 export default {
-  name: 'cesium-3dtileset',
+  name: 'vc-primitive-3dtileset',
   mixins: [
     show,
     modelMatrix,

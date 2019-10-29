@@ -25,7 +25,7 @@
 <script>
 import measure from '../../mixins/tool/measure'
 export default {
-  name: 'measure-distance',
+  name: 'vc-measure-distance',
   mixins: [measure],
   data () {
     return {

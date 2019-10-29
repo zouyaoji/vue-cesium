@@ -17,7 +17,7 @@ import polygonMixin from '../../mixins/entity/polygonMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeColor, makeMaterial, makeDistanceDisplayCondition, makePolygonHierarchy } from '../../util/util'
 export default {
-  name: 'polygon-graphics',
+  name: 'vc-graphics-polygon',
   mixins: [
     show,
     distanceDisplayCondition,

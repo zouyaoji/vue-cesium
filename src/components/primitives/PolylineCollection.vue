@@ -2,7 +2,7 @@
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 import { makePolylineOptions } from '../../util/util'
 export default {
-  name: 'polyline-collection',
+  name: 'vc-primitive-polyline-collection',
   mixins: [primitiveMixin],
   props: {
     polylines: {

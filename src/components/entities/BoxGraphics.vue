@@ -10,10 +10,9 @@ import {
 } from '../../mixins/entity/allProps'
 import boxMixin from '../../mixins/entity/boxMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
-import { makeCartesian3, makeMaterial, makeColor, makeDistanceDisplayCondition } from '../../util/util'
 
 export default {
-  name: 'box-graphics',
+  name: 'vc-graphics-box',
   mixins: [
     heightReference,
     fill,
@@ -25,23 +24,19 @@ export default {
     boxMixin,
     graphicsMixin ],
   methods: {
-    createCesiumObject () {
-      const { show, dimensions, heightReference, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition } = this
-      let options = {
-        show,
-        dimensions: makeCartesian3(dimensions),
-        heightReference,
-        fill,
-        material: makeMaterial(material),
-        outline,
-        outlineColor: makeColor(outlineColor),
-        outlineWidth,
-        shadows,
-        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
-      }
+    async createCesiumObject () {
+      const { specialWatchers, $props } = this
+      const specialWatcherKeys = Object.keys(this.specialWatchers)
+      const options = {}
+      Object.keys($props).forEach((prop) => {
+        options[prop] = specialWatcherKeys.indexOf(prop) !== -1 ? specialWatchers[prop].handler.call(this, this[prop]) : this[prop]
+      })
       this.removeNullItem(options)
       return new Cesium.BoxGraphics(options)
     }
+  },
+  created () {
+    this.cesiumClass = 'BoxGraphics'
   }
 }
 </script>

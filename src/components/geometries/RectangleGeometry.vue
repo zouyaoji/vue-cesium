@@ -8,10 +8,10 @@ import rectangleMixin from '../../mixins/entity/rectangleMixin'
 import geometryMixin from '../../mixins/geometry/geometryMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'rectangle-geometry',
+  name: 'vc-geometry-rectangle',
   mixins: [rectangleMixin, ellipsoid, vertexFormat, rectangle, geometryMixin],
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       return new Cesium.RectangleGeometry(this.makeOptions())
     },
     makeOptions () {

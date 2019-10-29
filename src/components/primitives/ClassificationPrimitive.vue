@@ -15,7 +15,7 @@ import {
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 
 export default {
-  name: 'classification-primitive',
+  name: 'vc-primitive-classification',
   mixins: [
     vcMixin,
     geometryInstances,

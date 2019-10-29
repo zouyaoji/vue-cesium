@@ -6,7 +6,7 @@ import {
 } from '../../mixins/entity/allProps'
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 export default {
-  name: 'bingmaps-imagery-provider',
+  name: 'vc-imagery-provider-bingmaps',
   mixins: [url, ellipsoid, tileDiscardPolicy, imageryProviderMixin],
   props: {
     url: String | Object,

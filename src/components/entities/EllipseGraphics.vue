@@ -19,7 +19,7 @@ import ellipseMixin from '../../mixins/entity/ellipseMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeColor, makeMaterial, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'ellipse-graphics',
+  name: 'vc-graphics-ellipse',
   mixins: [
     show,
     distanceDisplayCondition,

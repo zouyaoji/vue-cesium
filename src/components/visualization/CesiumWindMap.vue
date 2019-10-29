@@ -3,7 +3,7 @@ import colorTable from '../../libs/wind/colorTable.js'
 import cmp from '../../mixins/virtualCmp'
 import Wind3D from '../../libs/wind/wind3D.js'
 export default {
-  name: 'cesium-windmap',
+  name: 'vc-windmap',
   mixins: [cmp],
   props: {
     data: Object,

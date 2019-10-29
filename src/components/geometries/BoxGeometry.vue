@@ -6,7 +6,7 @@ import {
 import geometryMixin from '../../mixins/geometry/geometryMixin'
 import { makeCartesian3 } from '../../util/util'
 export default {
-  name: 'box-geometry',
+  name: 'vc-geometry-box',
   mixins: [dimensions, vertexFormat, geometryMixin],
   methods: {
     createCesiumObject () {

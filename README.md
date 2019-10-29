@@ -23,6 +23,8 @@
 
 ## Get Start
 
+Amateur learning Vue component development, continuous development.
+
 ### Installation
 
 ```bash

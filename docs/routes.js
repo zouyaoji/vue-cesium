@@ -242,7 +242,7 @@ const routeMap = [
     ]
   },
   {
-    path: 'TerrainProvider',
+    path: 'terrains',
     name: {
       zh: '地形',
       en: 'Terrains'
@@ -567,6 +567,30 @@ const routeMap = [
         name: {
           zh: 'GeoJson数据源',
           en: 'GeoJsonDataSource'
+        }
+      },
+      {
+        path: 'custom-datasource',
+        component: 'datasources/custom-datasource',
+        name: {
+          zh: 'Custom数据源',
+          en: 'CustomDataSource'
+        }
+      },
+      {
+        path: 'czml-datasource',
+        component: 'datasources/czml-datasource',
+        name: {
+          zh: 'Czml数据源',
+          en: 'CzmlDataSource'
+        }
+      },
+      {
+        path: 'kml-datasource',
+        component: 'datasources/kml-datasource',
+        name: {
+          zh: 'Kml数据源',
+          en: 'KmlDataSource'
         }
       }
     ]

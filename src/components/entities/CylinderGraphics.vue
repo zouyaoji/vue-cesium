@@ -13,9 +13,8 @@ import {
 } from '../../mixins/entity/allProps'
 import cylinderMixin from '../../mixins/entity/cylinderMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
-import { makeMaterial, makeColor, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'cylinder-graphics',
+  name: 'vc-graphics-cylinder',
   mixins: [
     show,
     distanceDisplayCondition,
@@ -31,28 +30,19 @@ export default {
     graphicsMixin
   ],
   methods: {
-    createCesiumObject () {
-      const { show, length, topRadius, bottomRadius, heightReference, fill, material, outline,
-        outlineColor, outlineWidth, numberOfVerticalLines, slices, shadows, distanceDisplayCondition } = this
-      let options = {
-        show,
-        length,
-        topRadius,
-        bottomRadius,
-        heightReference,
-        fill,
-        material: makeMaterial(material),
-        outline,
-        outlineColor: makeColor(outlineColor),
-        outlineWidth,
-        numberOfVerticalLines,
-        slices,
-        shadows,
-        distanceDisplayCondition: makeDistanceDisplayCondition(distanceDisplayCondition)
-      }
+    async createCesiumObject () {
+      const { specialWatchers, $props } = this
+      const specialWatcherKeys = Object.keys(this.specialWatchers)
+      const options = {}
+      Object.keys($props).forEach((prop) => {
+        options[prop] = specialWatcherKeys.indexOf(prop) !== -1 ? specialWatchers[prop].handler.call(this, this[prop]) : this[prop]
+      })
       this.removeNullItem(options)
       return new Cesium.CylinderGraphics(options)
     }
+  },
+  created () {
+    this.cesiumClass = 'CylinderGraphics'
   }
 }
 </script>

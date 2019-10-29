@@ -4,10 +4,10 @@ import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '../../util/util'
 
 export default {
-  name: 'label-graphics',
+  name: 'vc-graphics-label',
   mixins: [labelMixin, graphicsMixin],
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { text, font, labelStyle, fillColor, outlineColor, outlineWidth, show, showBackground, backgroundColor, backgroundPadding, scale,
         horizontalOrigin, verticalOrigin, eyeOffset, pixelOffset, translucencyByDistance, pixelOffsetScaleByDistance, scaleByDistance, heightReference,
         distanceDisplayCondition, disableDepthTestDistance } = this

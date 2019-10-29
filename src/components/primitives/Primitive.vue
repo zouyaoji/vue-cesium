@@ -15,7 +15,7 @@ import {
 } from '../../mixins/entity/allProps'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 export default {
-  name: 'primitive',
+  name: 'vc-primitive',
   mixins: [
     vcMixin,
     modelMatrix,

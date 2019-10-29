@@ -7,7 +7,7 @@ import polylineMixin from '../../mixins/entity/polylineMixin'
 import collectionItemMixin from '../../mixins/primitive/collectionItemMixin'
 import { makePolylineOptions } from '../../util/util'
 export default {
-  name: 'polyline-primitive',
+  name: 'vc-primitive-polyline',
   mixins: [loop, id, polylineMixin, collectionItemMixin],
   methods: {
     createCesiumObject () {

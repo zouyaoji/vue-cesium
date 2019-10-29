@@ -14,7 +14,7 @@ export default {
       this.reload()
     }
   },
-  name: 'point-collection',
+  name: 'vc-primitive-point-collection',
   mixins: [blendOption, modelMatrix, debugShowBoundingVolume, primitiveMixin],
   methods: {
     createCesiumObject () {

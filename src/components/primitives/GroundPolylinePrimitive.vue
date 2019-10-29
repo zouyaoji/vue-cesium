@@ -13,7 +13,7 @@ import {
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 
 export default {
-  name: 'ground-polyline-primitive',
+  name: 'vc-primitive-ground-polyline',
   mixins: [
     geometryInstances,
     appearance,

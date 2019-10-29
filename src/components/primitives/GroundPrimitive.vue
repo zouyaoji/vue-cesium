@@ -13,7 +13,7 @@ import {
 } from '../../mixins/entity/allProps'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 export default {
-  name: 'ground-primitive',
+  name: 'vc-primitive-ground',
   mixins: [
     vcMixin,
     geometryInstances,
@@ -28,7 +28,7 @@ export default {
     primitiveMixin
   ],
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { geometryInstances, appearance, show, vertexCacheOptimize, interleave, compressVertices,
         releaseGeometryInstances, allowPicking, asynchronous, classificationType, debugShowBoundingVolume, debugShowShadowVolume } = this
       let options = {
@@ -46,6 +46,9 @@ export default {
         debugShowShadowVolume
       }
       this.removeNullItem(options)
+      if (!asynchronous) {
+        await Cesium.GroundPrimitive.initializeTerrainHeights()
+      }
       return new Cesium.GroundPrimitive(options)
     }
   }

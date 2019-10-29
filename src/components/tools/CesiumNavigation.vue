@@ -3,7 +3,7 @@
 import CesiumNavigation from 'es6-cesium-navigation'
 import cmp from '../../mixins/virtualCmp'
 export default {
-  name: 'cesium-navigation',
+  name: 'vc-viewer-navigation',
   mixins: [cmp],
   props: {
     options: Object

@@ -11,7 +11,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'mapbox-imagery-provider',
+  name: 'vc-imagery-provider-mapbox',
   mixins: [
     accessToken,
     format,
@@ -30,7 +30,7 @@ export default {
     mapId: String
   },
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       return new Cesium.MapboxImageryProvider(this.makeOptions())
     },
     makeOptions () {

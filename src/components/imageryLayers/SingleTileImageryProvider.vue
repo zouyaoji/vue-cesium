@@ -8,7 +8,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'singletile-imagery-provider',
+  name: 'vc-imagery-provider-singletile',
   mixins: [
     url,
     rectangle,

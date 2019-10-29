@@ -2,9 +2,9 @@
 
 `geojson-datasource` Creates a Promise to a new instance loaded with the provided GeoJSON or TopoJSON data.
 
-## Code
+## Example
 
-### Add GeoJsonDataSource to viewer
+### Add a datasource to viewer by GeoJsonDataSource
 
 #### Preview
 
@@ -29,9 +29,8 @@
           const { Cesium, viewer } = cesiumInstance
         },
         subReady (cesiumInstance){
-          cesiumInstance.cesiumObject.then(ds => {
-            cesiumInstance.viewer.zoomTo(ds)
-          })
+          const { Cesium, viewer, cesiumObject } = cesiumInstance
+          viewer.zoomTo(cesiumObject)
         }
       }
     }
@@ -61,9 +60,8 @@
         const { Cesium, viewer } = cesiumInstance
       },
       subReady(cesiumInstance) {
-        cesiumInstance.cesiumObject.then(ds => {
-          cesiumInstance.viewer.zoomTo(ds)
-        })
+        const { Cesium, viewer, cesiumObject } = cesiumInstance
+        viewer.zoomTo(cesiumObject)
       }
     }
   }
@@ -72,23 +70,24 @@
 
 ## Instance Properties
 
-| name          | type                  | default | description                                                        |
-| ------------- | --------------------- | ------- | ------------------------------------------------------------------ |
-| data          | String\|Object        |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded. |
-| options       | Object                |         | `optional` An object with the following properties:                |
-| sourceUri     | String                |         |                                                                    |
-| markerSize    | Number                |         |                                                                    |
-| markerSymbol  | String                |         |                                                                    |
-| markerColor   | String\|Object\|Array |         |                                                                    |
-| stroke        | String\|Object\|Array |         |                                                                    |
-| strokeWidth   | Number                |         |                                                                    |
-| fill          | String\|Object\|Array |         |                                                                    |
-| clampToGround | Boolean               |         |                                                                    |
+| name          | type                  | default | description                                                                |
+| ------------- | --------------------- | ------- | -------------------------------------------------------------------------- |
+| data          | String\|Object        |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded.         |
+| show          | Boolean               | `true`  | `optional` A boolean Property specifying the visibility of the dataSource. |
+| options       | Object                |         | `optional` An object with the following properties:                        |
+| sourceUri     | String                |         |                                                                            |
+| markerSize    | Number                |         |                                                                            |
+| markerSymbol  | String                |         |                                                                            |
+| markerColor   | String\|Object\|Array |         |                                                                            |
+| stroke        | String\|Object\|Array |         |                                                                            |
+| strokeWidth   | Number                |         |                                                                            |
+| fill          | String\|Object\|Array |         |                                                                            |
+| clampToGround | Boolean               |         |                                                                            |
 
 - Reference official document [GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)
 
 ## Events
 
-| name  | parameter                       | description                                            |
-| ----- | ------------------------------- | ------------------------------------------------------ |
-| ready | {Cesium, viewer, CesiumObject } | Triggers when ArcGisMapServerImageryProvider is ready. |
+| name  | parameter                       | description                           |
+| ----- | ------------------------------- | ------------------------------------- |
+| ready | {Cesium, viewer, cesiumObject } | Triggers when the component is ready. |

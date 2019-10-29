@@ -8,7 +8,7 @@ import collectionItemMixin from '../../mixins/primitive/collectionItemMixin'
 import { makeLabelOptions } from '../../util/util'
 // import { makeNearFarScalar, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '../../util/util'
 export default {
-  name: 'label-primitive',
+  name: 'vc-primitive-label',
   mixins: [id, position, labelMixin, collectionItemMixin],
   props: {
     totalScale: Number

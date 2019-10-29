@@ -3,14 +3,19 @@ import { Events } from '../../util/events'
 import cmp from '../virtualCmp'
 
 const methods = {
-  mount () {
-    const { graphics, graphicsContainer } = this
+  async mount () {
+    console.log('m')
+    const { graphics, graphicsContainer, $options } = this
     bindEvents.call(this, graphics, Events['entity-events'])
-    graphicsContainer && graphicsContainer.setGraphics(graphics)
+    let arr = $options.name.split('-')
+    return graphicsContainer && graphicsContainer.setGraphics(graphics, arr.length === 2 ? arr[0] : 'polylineVolume')
   },
-  unload () {
-    const { graphicsContainer } = this
-    graphicsContainer && graphicsContainer.unload()
+  async unmount () {
+    console.log('n')
+    const { graphics, graphicsContainer, $options } = this
+    bindEvents.call(this, graphics, Events['entity-events'], false)
+    let arr = $options.name.split('-')
+    return graphicsContainer && graphicsContainer.setGraphics(undefined, arr.length === 2 ? arr[0] : 'polylineVolume')
   }
 }
 

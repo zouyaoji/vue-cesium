@@ -4,7 +4,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-
+const blockName = 'vue-filename-injector'
 module.exports = {
   entry: {
     main: 'docs/main.js',

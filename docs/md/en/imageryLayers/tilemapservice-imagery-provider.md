@@ -132,6 +132,6 @@
 <!-- prettier-ignore -->
 | name | parameter | description |
 | ---- | ---- | -------------------------- |
-| ready | {Cesium, viewer} | Triggers when BingMapsImageryProvider is ready. It returns a core class of Cesium, a viewer instance. |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |
 | errorEvent | TileProviderError | Gets an event that is raised when the imagery provider encounters an asynchronous error.|
 | readyPromise | ImageryProvider | Gets a promise that resolves to true when the provider is ready for use. |

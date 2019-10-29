@@ -3,7 +3,7 @@ import { show, distanceDisplayCondition, width, material } from '../../mixins/en
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeMaterial, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'path-graphics',
+  name: 'vc-graphics-path',
   mixins: [show, distanceDisplayCondition, width, material, graphicsMixin],
   props: {
     leadTime: Number,

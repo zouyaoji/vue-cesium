@@ -6,11 +6,11 @@ const computed = {
   }
 }
 const methods = {
-  mount () {
+  async mount () {
     const { geometry, geometryContainer } = this
     geometryContainer && geometryContainer.setGeometry(geometry)
   },
-  unload () {
+  async unload () {
     const { geometryContainer } = this
     geometryContainer && geometryContainer.unload()
   }

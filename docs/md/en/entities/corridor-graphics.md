@@ -178,6 +178,6 @@
 
 ## Events
 
-| name  | parameter        | description                                                                                    |
-| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| name  | parameter        | description                                                                                 |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |

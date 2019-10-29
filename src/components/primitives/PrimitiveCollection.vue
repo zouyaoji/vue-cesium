@@ -2,7 +2,7 @@
 import { show } from '../../mixins/entity/allProps'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 export default {
-  name: 'primitive-collection',
+  name: 'vc-primitive-collection',
   mixins: [show, primitiveMixin],
   props: {
     destroyPrimitives: {

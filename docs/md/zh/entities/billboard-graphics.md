@@ -12,14 +12,17 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+        <entity ref="entity" :position="position" :description="description" :id="id" :billboard.sync="billboard" @definitionChanged="definitionChanged">
            <billboard-graphics
+            ref="billboard"
             :image="image"
             :scale="0.1"
             :show="show"
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
           ></billboard-graphics>
+          <box-graphics ref="box" :dimensions="dimensions1" :material="material1"></box-graphics>
+          <label-graphics ref="label" :text="description" font="20px sans-serif"></label-graphics>
         </entity>
       </cesium-viewer>
       <div class="demo-tool">
@@ -27,6 +30,7 @@
         <md-switch v-model="show"></md-switch>
       </div>
     </div>
+
   </template>
 
   <script>
@@ -40,12 +44,18 @@
           billboard: {},
           show: true,
           distanceDisplayCondition: { near: 0, far: 20000000 },
-          horizontalOrigin: 0
+          horizontalOrigin: 0,
+          dimensions1: { x: 400000.0, y: 300000.0, z: 500000.0 },
+          material1: 'https://zouyaoji.top/vue-cesium/favicon.png',
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          window.vm = this
+        },
+        definitionChanged (val) {
+
         }
       }
     }

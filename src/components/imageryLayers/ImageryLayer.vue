@@ -3,7 +3,7 @@ import mergeDescriptors from '../../util/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
 import { makeRectangle, makeColor } from '../../util/util'
 export default {
-  name: 'imagery-layer',
+  name: 'vc-imagery-layer',
   mixins: [cmp],
   props: {
     imageryProvider: Object,
@@ -49,61 +49,8 @@ export default {
       default: 0.004
     }
   },
-  watch: {
-    rectangle () {
-      this.reload()
-    },
-    alpha (val) {
-      this.imageryLayer.alpha = val
-    },
-    brightness (val) {
-      this.imageryLayer.brightness = val
-    },
-    contrast (val) {
-      this.imageryLayer.contrast = val
-    },
-    hue (val) {
-      this.imageryLayer.hue = val
-    },
-    saturation (val) {
-      this.imageryLayer.saturation = val
-    },
-    gamma (val) {
-      this.imageryLayer.gamma = val
-    },
-    splitDirection (val) {
-      this.imageryLayer.splitDirection = val
-    },
-    minificationFilter () {
-      this.reload()
-    },
-    magnificationFilter () {
-      this.reload()
-    },
-    show (val) {
-      this.imageryLayer.show = val
-    },
-    maximumAnisotropy (val) {
-      this.imageryLayer.maximumAnisotropy = val
-    },
-    minimumTerrainLevel (val) {
-      this.imageryLayer.minimumTerrainLevel = val
-    },
-    maximumTerrainLevel (val) {
-      this.imageryLayer.maximumTerrainLevel = val
-    },
-    cutoutRectangle (val) {
-      this.imageryLayer.cutoutRectangle = makeRectangle(val)
-    },
-    colorToAlpha (val) {
-      this.imageryLayer.colorToAlpha = makeColor(val)
-    },
-    colorToAlphaThreshold (val) {
-      this.imageryLayer.colorToAlphaThreshold = val
-    }
-  },
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { rectangle, alpha, brightness, contrast, hue, saturation, gamma, splitDirection, minificationFilter, magnificationFilter,
         show, maximumAnisotropy, minimumTerrainLevel, maximumTerrainLevel, cutoutRectangle, colorToAlpha, colorToAlphaThreshold } = this
       let options = {
@@ -128,18 +75,23 @@ export default {
       this.removeNullItem(options)
       return new Cesium.ImageryLayer(this.provider || {}, options)
     },
-    mount () {
-      const { viewer, imageryLayer } = this
-      viewer.imageryLayers.add(imageryLayer)
+    async mount () {
+      const { viewer, imageryLayer, setPropWatchers } = this
+      setPropWatchers(true)
+      return viewer.imageryLayers.add(imageryLayer)
     },
-    unload () {
-      const { viewer, imageryLayer } = this
-      viewer.imageryLayers.remove(imageryLayer)
+    async unmount () {
+      const { viewer, imageryLayer, setPropWatchers } = this
+      setPropWatchers(false)
+      return viewer.imageryLayers.remove(imageryLayer)
     },
-    refresh () {
+    async refresh () {
       this.unload()
-      this.originInstance = this.createCesiumObject()
-      this.mount()
+      this.originInstance = await this.createCesiumObject()
+      return this.mount().then(() => {
+        this._mounted = true
+        return true
+      })
     },
     setProvider (provider) {
       if (provider !== this._provider) {
@@ -147,7 +99,9 @@ export default {
         this.refresh()
         const listener = this.$listeners['update:imageryProvider']
         if (listener) this.$emit('update:imageryProvider', provider)
+        return true
       }
+      return false
     },
     getServices () {
       const vm = this
@@ -169,6 +123,7 @@ export default {
   },
   created () {
     this._provider = undefined
+    this.cesiumClass = 'ImageryLayer'
     Object.defineProperties(this, {
       imageryLayer: {
         enumerable: true,

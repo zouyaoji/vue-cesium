@@ -1,6 +1,6 @@
 # 实体
 
-`entity` 实体实例类，它将多种可视化对象聚合到单个高级对象中
+`entity` 实体实例类，它将多种可视化对象聚合到单个高级对象中。
 
 ## 示例
 
@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <entity :position="position" :billboard="billboard" :description="description" :id="id">
+        <entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id" @ready.once="entityReady">
         </entity>
       </cesium-viewer>
     </div>
@@ -32,6 +32,10 @@
       methods: {
         ready (cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          window.vm = this
+        },
+        entityReady () {
+          window.vm = this
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default

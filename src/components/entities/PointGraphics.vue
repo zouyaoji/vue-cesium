@@ -4,7 +4,7 @@ import pointMixin from '../../mixins/entity/pointMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeColor, makeDistanceDisplayCondition, makeNearFarScalar } from '../../util/util'
 export default {
-  name: 'point-graphics',
+  name: 'vc-graphics-point',
   mixins: [heightReference, pointMixin, graphicsMixin],
   methods: {
     createCesiumObject () {

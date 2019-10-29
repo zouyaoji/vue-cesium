@@ -26,7 +26,7 @@ export default {
       return common.methods.reload.call(this)
     },
     unload () {
-      throw new Error('Not implemented method')
+      return common.methods.unload.call(this)
     }
   }
 }

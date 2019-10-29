@@ -16,7 +16,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'arcgis-mapserver-imagery-provider',
+  name: 'vc-imagery-provider-arcgis',
   mixins: [
     url,
     token,

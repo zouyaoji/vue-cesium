@@ -1,11 +1,11 @@
 import {
-  makeDistanceDisplayCondition,
-  makeCartesian2,
-  makeCartesian3,
-  makeColor,
-  makeNearFarScalar,
-  makeMaterial,
-  makeCartesian3Array,
+  // makeDistanceDisplayCondition,
+  // makeCartesian2,
+  // makeCartesian3,
+  // makeColor,
+  // makeNearFarScalar,
+  // makeMaterial,
+  // makeCartesian3Array,
   lnglatValidator
 } from '../../util/util'
 
@@ -20,12 +20,12 @@ const position = {
         return val && val.hasOwnProperty('lng') ? lnglatValidator(val.lng, val.lat) : true
       }
     }
-  },
-  watch: {
-    position (val) {
-      this.cesiumObject.position = val.hasOwnProperty('lng') ? makeCartesian3(val) : val
-    }
   }
+  // watch: {
+  //   position (val) {
+  //     this.cesiumObject.position = makeCartesian3(val)
+  //   }
+  // }
 }
 
 /**
@@ -37,12 +37,12 @@ const show = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    show (val) {
-      this.cesiumObject.show = val
-    }
   }
+  // watch: {
+  //   show (val) {
+  //     this.cesiumObject.show = val
+  //   }
+  // }
 }
 
 /**
@@ -51,12 +51,12 @@ const show = {
 const distanceDisplayCondition = {
   props: {
     distanceDisplayCondition: Object
-  },
-  watch: {
-    distanceDisplayCondition (val) {
-      this.cesiumObject.distanceDisplayCondition = makeDistanceDisplayCondition(val)
-    }
   }
+  // watch: {
+  //   distanceDisplayCondition (val) {
+  //     this.cesiumObject.distanceDisplayCondition = makeDistanceDisplayCondition(val)
+  //   }
+  // }
 }
 
 /**
@@ -65,12 +65,12 @@ const distanceDisplayCondition = {
 const image = {
   props: {
     image: String | Object
-  },
-  watch: {
-    image (val) {
-      this.cesiumObject.image = val
-    }
   }
+  // watch: {
+  //   image (val) {
+  //     this.cesiumObject.image = val
+  //   }
+  // }
 }
 
 /**
@@ -82,12 +82,12 @@ const scale = {
       type: Number,
       default: 1.0
     }
-  },
-  watch: {
-    scale (val) {
-      this.cesiumObject.scale = val
-    }
   }
+  // watch: {
+  //   scale (val) {
+  //     this.cesiumObject.scale = val
+  //   }
+  // }
 }
 
 /**
@@ -104,15 +104,15 @@ const pixelOffset = {
         }
       }
     }
-  },
-  watch: {
-    pixelOffset: {
-      handler (val) {
-        this.cesiumObject.pixelOffset = makeCartesian2(val)
-      },
-      deep: true
-    }
   }
+  // watch: {
+  //   pixelOffset: {
+  //     handler (val) {
+  //       this.cesiumObject.pixelOffset = makeCartesian2(val)
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 
 /**
@@ -130,15 +130,15 @@ const eyeOffset = {
         }
       }
     }
-  },
-  watch: {
-    eyeOffset: {
-      handler (val) {
-        this.cesiumObject.eyeOffset = makeCartesian3(val)
-      },
-      deep: true
-    }
   }
+  // watch: {
+  //   eyeOffset: {
+  //     handler (val) {
+  //       this.cesiumObject.eyeOffset = makeCartesian3(val)
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 
 /**
@@ -150,12 +150,12 @@ const horizontalOrigin = {
       type: Number,
       default: 0
     }
-  },
-  watch: {
-    horizontalOrigin (val) {
-      this.cesiumObject.horizontalOrigin = val
-    }
   }
+  // watch: {
+  //   horizontalOrigin (val) {
+  //     this.cesiumObject.horizontalOrigin = val
+  //   }
+  // }
 }
 
 /**
@@ -167,12 +167,12 @@ const verticalOrigin = {
       type: Number,
       default: 0
     }
-  },
-  watch: {
-    verticalOrigin (val) {
-      this.cesiumObject.verticalOrigin = val
-    }
   }
+  // watch: {
+  //   verticalOrigin (val) {
+  //     this.cesiumObject.verticalOrigin = val
+  //   }
+  // }
 }
 
 /**
@@ -181,12 +181,12 @@ const verticalOrigin = {
 const heightReference = {
   props: {
     heightReference: Number
-  },
-  watch: {
-    heightReference (val) {
-      this.cesiumObject.heightReference = val
-    }
   }
+  // watch: {
+  //   heightReference (val) {
+  //     this.cesiumObject.heightReference = val
+  //   }
+  // }
 }
 
 /**
@@ -198,12 +198,12 @@ const color = {
       type: Object | String | Array,
       default: 'white'
     }
-  },
-  watch: {
-    color (val) {
-      this.cesiumObject.color = makeColor(val)
-    }
   }
+  // watch: {
+  //   color (val) {
+  //     this.cesiumObject.color = makeColor(val)
+  //   }
+  // }
 }
 
 /**
@@ -215,12 +215,12 @@ const rotation = {
       type: Number | Object,
       default: 0
     }
-  },
-  watch: {
-    rotation (val) {
-      this.cesiumObject.rotation = val
-    }
   }
+  // watch: {
+  //   rotation (val) {
+  //     this.cesiumObject.rotation = val
+  //   }
+  // }
 }
 
 /**
@@ -238,15 +238,15 @@ const alignedAxis = {
         }
       }
     }
-  },
-  watch: {
-    alignedAxis: {
-      handler (val) {
-        this.graphics.alignedAxis = makeCartesian3(val)
-      },
-      deep: true
-    }
   }
+  // watch: {
+  //   alignedAxis: {
+  //     handler (val) {
+  //       this.graphics.alignedAxis = makeCartesian3(val)
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 
 /**
@@ -255,12 +255,12 @@ const alignedAxis = {
 const sizeInMeters = {
   props: {
     sizeInMeters: Boolean
-  },
-  watch: {
-    sizeInMeters (val) {
-      this.cesiumObject.sizeInMeters = val
-    }
   }
+  // watch: {
+  //   sizeInMeters (val) {
+  //     this.cesiumObject.sizeInMeters = val
+  //   }
+  // }
 }
 
 /**
@@ -269,12 +269,12 @@ const sizeInMeters = {
 const width = {
   props: {
     width: Number
-  },
-  watch: {
-    width (val) {
-      this.cesiumObject.width = val
-    }
   }
+  // watch: {
+  //   width (val) {
+  //     this.cesiumObject.width = val
+  //   }
+  // }
 }
 
 /**
@@ -283,12 +283,12 @@ const width = {
 const height = {
   props: {
     height: Number
-  },
-  watch: {
-    height (val) {
-      this.cesiumObject.height = val
-    }
   }
+  // watch: {
+  //   height (val) {
+  //     this.cesiumObject.height = val
+  //   }
+  // }
 }
 
 /**
@@ -297,12 +297,12 @@ const height = {
 const scaleByDistance = {
   props: {
     scaleByDistance: Object
-  },
-  watch: {
-    scaleByDistance (val) {
-      this.cesiumObject.scaleByDistance = makeNearFarScalar(val)
-    }
   }
+  // watch: {
+  //   scaleByDistance (val) {
+  //     this.cesiumObject.scaleByDistance = makeNearFarScalar(val)
+  //   }
+  // }
 }
 
 /**
@@ -311,12 +311,12 @@ const scaleByDistance = {
 const translucencyByDistance = {
   props: {
     translucencyByDistance: Object
-  },
-  watch: {
-    translucencyByDistance (val) {
-      this.cesiumObject.translucencyByDistance = makeNearFarScalar(val)
-    }
   }
+  // watch: {
+  //   translucencyByDistance (val) {
+  //     this.cesiumObject.translucencyByDistance = makeNearFarScalar(val)
+  //   }
+  // }
 }
 
 /**
@@ -325,12 +325,12 @@ const translucencyByDistance = {
 const pixelOffsetScaleByDistance = {
   props: {
     pixelOffsetScaleByDistance: Object
-  },
-  watch: {
-    pixelOffsetScaleByDistance (val) {
-      this.cesiumObject.pixelOffsetScaleByDistance = makeNearFarScalar(val)
-    }
   }
+  // watch: {
+  //   pixelOffsetScaleByDistance (val) {
+  //     this.cesiumObject.pixelOffsetScaleByDistance = makeNearFarScalar(val)
+  //   }
+  // }
 }
 
 /**
@@ -339,12 +339,12 @@ const pixelOffsetScaleByDistance = {
 const disableDepthTestDistance = {
   props: {
     disableDepthTestDistance: Number
-  },
-  watch: {
-    distanceDisplayCondition (val) {
-      this.cesiumObject.disableDepthTestDistance = val
-    }
   }
+  // watch: {
+  //   distanceDisplayCondition (val) {
+  //     this.cesiumObject.disableDepthTestDistance = val
+  //   }
+  // }
 }
 
 /**
@@ -353,12 +353,12 @@ const disableDepthTestDistance = {
 const dimensions = {
   props: {
     dimensions: Object
-  },
-  watch: {
-    dimensions (val) {
-      this.cesiumObject.dimensions = makeCartesian3(val)
-    }
   }
+  // watch: {
+  //   dimensions (val) {
+  //     this.cesiumObject.dimensions = makeCartesian3(val)
+  //   }
+  // }
 }
 
 /**
@@ -370,12 +370,12 @@ const fill = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    fill (val) {
-      this.cesiumObject.fill = val
-    }
   }
+  // watch: {
+  //   fill (val) {
+  //     this.cesiumObject.fill = val
+  //   }
+  // }
 }
 
 /**
@@ -387,12 +387,12 @@ const material = {
       type: Object | String | Array,
       default: 'white'
     }
-  },
-  watch: {
-    material (val) {
-      this.cesiumObject.material = makeMaterial(val)
-    }
   }
+  // watch: {
+  //   material (val) {
+  //     this.cesiumObject.material = makeMaterial(val)
+  //   }
+  // }
 }
 
 /**
@@ -404,12 +404,12 @@ const outline = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    outline (val) {
-      this.cesiumObject.outline = val
-    }
   }
+  // watch: {
+  //   outline (val) {
+  //     this.cesiumObject.outline = val
+  //   }
+  // }
 }
 
 /**
@@ -421,12 +421,12 @@ const outlineColor = {
       type: Object | String | Array,
       default: 'black'
     }
-  },
-  watch: {
-    outlineColor (val) {
-      this.cesiumObject.outlineColor = makeColor(val)
-    }
   }
+  // watch: {
+  //   outlineColor (val) {
+  //     this.cesiumObject.outlineColor = makeColor(val)
+  //   }
+  // }
 }
 
 /**
@@ -438,12 +438,12 @@ const outlineWidth = {
       type: Number,
       default: 1.0
     }
-  },
-  watch: {
-    outlineWidth (val) {
-      this.cesiumObject.outlineWidth = val
-    }
   }
+  // watch: {
+  //   outlineWidth (val) {
+  //     this.cesiumObject.outlineWidth = val
+  //   }
+  // }
 }
 
 /**
@@ -452,12 +452,12 @@ const outlineWidth = {
 const shadows = {
   props: {
     shadows: Number
-  },
-  watch: {
-    shadows (val) {
-      this.cesiumObject.shadows = val
-    }
   }
+  // watch: {
+  //   shadows (val) {
+  //     this.cesiumObject.shadows = val
+  //   }
+  // }
 }
 
 /**
@@ -466,15 +466,15 @@ const shadows = {
 const positions = {
   props: {
     positions: Array
-  },
-  watch: {
-    positions (val) {
-      if (Cesium.defined(this.cesiumObject.positions) && Cesium.defined(this.cesiumObject.positions._callback)) {
-        return
-      }
-      this.cesiumObject.positions = makeCartesian3Array(val)
-    }
   }
+  // watch: {
+  //   positions (val) {
+  //     if (Cesium.defined(this.cesiumObject.positions) && Cesium.defined(this.cesiumObject.positions._callback)) {
+  //       return
+  //     }
+  //     this.cesiumObject.positions = makeCartesian3Array(val)
+  //   }
+  // }
 }
 
 /**
@@ -483,12 +483,12 @@ const positions = {
 const extrudedHeight = {
   props: {
     extrudedHeight: Number
-  },
-  watch: {
-    extrudedHeight (val) {
-      this.cesiumObject.extrudedHeight = val
-    }
   }
+  // watch: {
+  //   extrudedHeight (val) {
+  //     this.cesiumObject.extrudedHeight = val
+  //   }
+  // }
 }
 
 /**
@@ -497,12 +497,12 @@ const extrudedHeight = {
 const extrudedHeightReference = {
   props: {
     extrudedHeightReference: Number
-  },
-  watch: {
-    extrudedHeightReference (val) {
-      this.cesiumObject.extrudedHeightReference = val
-    }
   }
+  // watch: {
+  //   extrudedHeightReference (val) {
+  //     this.cesiumObject.extrudedHeightReference = val
+  //   }
+  // }
 }
 
 /**
@@ -514,12 +514,12 @@ const cornerType = {
       type: Number,
       default: 0
     }
-  },
-  watch: {
-    cornerType (val) {
-      this.cesiumObject.cornerType = val
-    }
   }
+  // watch: {
+  //   cornerType (val) {
+  //     this.cesiumObject.cornerType = val
+  //   }
+  // }
 }
 
 /**
@@ -528,12 +528,12 @@ const cornerType = {
 const granularity = {
   props: {
     granularity: Number
-  },
-  watch: {
-    granularity (val) {
-      this.cesiumObject.granularity = val
-    }
   }
+  // watch: {
+  //   granularity (val) {
+  //     this.cesiumObject.granularity = val
+  //   }
+  // }
 }
 
 /**
@@ -545,12 +545,12 @@ const classificationType = {
       type: Number,
       default: 2
     }
-  },
-  watch: {
-    classificationType (val) {
-      this.cesiumObject.classificationType = val
-    }
   }
+  // watch: {
+  //   classificationType (val) {
+  //     this.cesiumObject.classificationType = val
+  //   }
+  // }
 }
 
 /**
@@ -559,12 +559,12 @@ const classificationType = {
 const zIndex = {
   props: {
     zIndex: Number
-  },
-  watch: {
-    zIndex (val) {
-      this.cesiumObject.zIndex = val
-    }
   }
+  // watch: {
+  //   zIndex (val) {
+  //     this.cesiumObject.zIndex = val
+  //   }
+  // }
 }
 
 /**
@@ -573,12 +573,12 @@ const zIndex = {
 const length = {
   props: {
     length: Number
-  },
-  watch: {
-    length (val) {
-      this.cesiumObject.length = val
-    }
   }
+  // watch: {
+  //   length (val) {
+  //     this.cesiumObject.length = val
+  //   }
+  // }
 }
 
 /**
@@ -587,12 +587,12 @@ const length = {
 const topRadius = {
   props: {
     topRadius: Number
-  },
-  watch: {
-    topRadius (val) {
-      this.cesiumObject.topRadius = val
-    }
   }
+  // watch: {
+  //   topRadius (val) {
+  //     this.cesiumObject.topRadius = val
+  //   }
+  // }
 }
 
 /**
@@ -601,12 +601,12 @@ const topRadius = {
 const bottomRadius = {
   props: {
     bottomRadius: Number
-  },
-  watch: {
-    bottomRadius (val) {
-      this.cesiumObject.bottomRadius = val
-    }
   }
+  // watch: {
+  //   bottomRadius (val) {
+  //     this.cesiumObject.bottomRadius = val
+  //   }
+  // }
 }
 
 /**
@@ -618,12 +618,12 @@ const numberOfVerticalLines = {
       type: Number,
       default: 16
     }
-  },
-  watch: {
-    numberOfVerticalLines (val) {
-      this.cesiumObject.numberOfVerticalLines = val
-    }
   }
+  // watch: {
+  //   numberOfVerticalLines (val) {
+  //     this.cesiumObject.numberOfVerticalLines = val
+  //   }
+  // }
 }
 
 /**
@@ -635,12 +635,12 @@ const slices = {
       type: Number,
       default: 128
     }
-  },
-  watch: {
-    slices (val) {
-      this.cesiumObject.slices = val
-    }
   }
+  // watch: {
+  //   slices (val) {
+  //     this.cesiumObject.slices = val
+  //   }
+  // }
 }
 
 /**
@@ -649,12 +649,12 @@ const slices = {
 const semiMajorAxis = {
   props: {
     semiMajorAxis: Number
-  },
-  watch: {
-    semiMajorAxis (val) {
-      this.cesiumObject.semiMajorAxis = val
-    }
   }
+  // watch: {
+  //   semiMajorAxis (val) {
+  //     this.cesiumObject.semiMajorAxis = val
+  //   }
+  // }
 }
 
 /**
@@ -663,12 +663,12 @@ const semiMajorAxis = {
 const semiMinorAxis = {
   props: {
     semiMinorAxis: Number
-  },
-  watch: {
-    semiMinorAxis (val) {
-      this.cesiumObject.semiMinorAxis = val
-    }
   }
+  // watch: {
+  //   semiMinorAxis (val) {
+  //     this.cesiumObject.semiMinorAxis = val
+  //   }
+  // }
 }
 
 /**
@@ -680,12 +680,12 @@ const stRotation = {
       type: [Number, Object],
       default: 0.0
     }
-  },
-  watch: {
-    stRotation (val) {
-      this.cesiumObject.stRotation = val
-    }
   }
+  // watch: {
+  //   stRotation (val) {
+  //     this.cesiumObject.stRotation = val
+  //   }
+  // }
 }
 
 /**
@@ -694,12 +694,12 @@ const stRotation = {
 const radii = {
   props: {
     radii: Object
-  },
-  watch: {
-    radii (val) {
-      this.cesiumObject.radii = makeCartesian3(val)
-    }
   }
+  // watch: {
+  //   radii (val) {
+  //     this.cesiumObject.radii = makeCartesian3(val)
+  //   }
+  // }
 }
 
 /**
@@ -711,12 +711,12 @@ const stackPartitions = {
       type: Number,
       default: 64
     }
-  },
-  watch: {
-    stackPartitions (val) {
-      this.cesiumObject.stackPartitions = val
-    }
   }
+  // watch: {
+  //   stackPartitions (val) {
+  //     this.cesiumObject.stackPartitions = val
+  //   }
+  // }
 }
 
 /**
@@ -728,12 +728,12 @@ const slicePartitions = {
       type: Number,
       default: 64
     }
-  },
-  watch: {
-    slicePartitions (val) {
-      this.cesiumObject.slicePartitions = val
-    }
   }
+  // watch: {
+  //   slicePartitions (val) {
+  //     this.cesiumObject.slicePartitions = val
+  //   }
+  // }
 }
 
 /**
@@ -745,12 +745,12 @@ const subdivisions = {
       type: Number,
       default: 128
     }
-  },
-  watch: {
-    subdivisions (val) {
-      this.cesiumObject.subdivisions = val
-    }
   }
+  // watch: {
+  //   subdivisions (val) {
+  //     this.cesiumObject.subdivisions = val
+  //   }
+  // }
 }
 
 /**
@@ -759,12 +759,12 @@ const subdivisions = {
 const text = {
   props: {
     text: String
-  },
-  watch: {
-    text (val) {
-      this.cesiumObject.text = val
-    }
   }
+  // watch: {
+  //   text (val) {
+  //     this.cesiumObject.text = val
+  //   }
+  // }
 }
 
 /**
@@ -776,12 +776,12 @@ const font = {
       type: String,
       default: '30px sans-serif'
     }
-  },
-  watch: {
-    font (val) {
-      this.cesiumObject.font = val
-    }
   }
+  // watch: {
+  //   font (val) {
+  //     this.cesiumObject.font = val
+  //   }
+  // }
 }
 
 /**
@@ -793,12 +793,12 @@ const labelStyle = {
       type: Number,
       default: 0
     }
-  },
-  watch: {
-    labelStyle (val) {
-      this.cesiumObject.style = val
-    }
   }
+  // watch: {
+  //   labelStyle (val) {
+  //     this.cesiumObject.style = val
+  //   }
+  // }
 }
 
 /**
@@ -810,12 +810,12 @@ const showBackground = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    showBackground (val) {
-      this.cesiumObject.showBackground = val
-    }
   }
+  // watch: {
+  //   showBackground (val) {
+  //     this.cesiumObject.showBackground = val
+  //   }
+  // }
 }
 
 /**
@@ -829,12 +829,12 @@ const backgroundColor = {
         return [0.165, 0.165, 0.165, 0.8]
       }
     }
-  },
-  watch: {
-    showBackground (val) {
-      this.cesiumObject.backgroundColor = makeColor(val)
-    }
   }
+  // watch: {
+  //   backgroundColor (val) {
+  //     this.cesiumObject.backgroundColor = makeColor(val)
+  //   }
+  // }
 }
 
 /**
@@ -848,12 +848,12 @@ const backgroundPadding = {
         return { x: 7, y: 5 }
       }
     }
-  },
-  watch: {
-    showBackground (val) {
-      this.cesiumObject.backgroundPadding = makeCartesian2(val)
-    }
   }
+  // watch: {
+  //   showBackground (val) {
+  //     this.cesiumObject.backgroundPadding = makeCartesian2(val)
+  //   }
+  // }
 }
 
 /**
@@ -865,12 +865,12 @@ const fillColor = {
       type: Object | String | Array,
       default: 'WHITE'
     }
-  },
-  watch: {
-    fillColor (val) {
-      this.cesiumObject.fillColor = makeColor(val)
-    }
   }
+  // watch: {
+  //   fillColor (val) {
+  //     this.cesiumObject.fillColor = makeColor(val)
+  //   }
+  // }
 }
 
 /**
@@ -879,12 +879,12 @@ const fillColor = {
 const uri = {
   props: {
     uri: String
-  },
-  watch: {
-    uri (val) {
-      this.cesiumObject.uri = val
-    }
   }
+  // watch: {
+  //   uri (val) {
+  //     this.cesiumObject.uri = val
+  //   }
+  // }
 }
 
 /**
@@ -896,12 +896,12 @@ const minimumPixelSize = {
       type: Number,
       default: 0.0
     }
-  },
-  watch: {
-    minimumPixelSize (val) {
-      this.cesiumObject.minimumPixelSize = val
-    }
   }
+  // watch: {
+  //   minimumPixelSize (val) {
+  //     this.cesiumObject.minimumPixelSize = val
+  //   }
+  // }
 }
 
 /**
@@ -910,12 +910,12 @@ const minimumPixelSize = {
 const maximumScale = {
   props: {
     maximumScale: Number
-  },
-  watch: {
-    maximumScale (val) {
-      this.cesiumObject.maximumScale = val
-    }
   }
+  // watch: {
+  //   maximumScale (val) {
+  //     this.cesiumObject.maximumScale = val
+  //   }
+  // }
 }
 
 /**
@@ -927,12 +927,12 @@ const incrementallyLoadTextures = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    incrementallyLoadTextures (val) {
-      this.cesiumObject.incrementallyLoadTextures = val
-    }
   }
+  // watch: {
+  //   incrementallyLoadTextures (val) {
+  //     this.cesiumObject.incrementallyLoadTextures = val
+  //   }
+  // }
 }
 
 /**
@@ -944,12 +944,12 @@ const clampAnimations = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    clampAnimations (val) {
-      this.cesiumObject.clampAnimations = val
-    }
   }
+  // watch: {
+  //   clampAnimations (val) {
+  //     this.cesiumObject.clampAnimations = val
+  //   }
+  // }
 }
 
 /**
@@ -958,12 +958,12 @@ const clampAnimations = {
 const silhouetteColor = {
   props: {
     silhouetteColor: Object | String | Array
-  },
-  watch: {
-    silhouetteColor (val) {
-      this.cesiumObject.silhouetteColor = makeColor(val)
-    }
   }
+  // watch: {
+  //   silhouetteColor (val) {
+  //     this.cesiumObject.silhouetteColor = makeColor(val)
+  //   }
+  // }
 }
 
 /**
@@ -975,12 +975,12 @@ const silhouetteSize = {
       type: Number,
       default: 0.0
     }
-  },
-  watch: {
-    silhouetteSize (val) {
-      this.cesiumObject.silhouetteSize = val
-    }
   }
+  // watch: {
+  //   silhouetteSize (val) {
+  //     this.cesiumObject.silhouetteSize = val
+  //   }
+  // }
 }
 
 /**
@@ -992,12 +992,12 @@ const colorBlendMode = {
       type: Number,
       default: 0
     }
-  },
-  watch: {
-    colorBlendMode (val) {
-      this.cesiumObject.colorBlendMode = val
-    }
   }
+  // watch: {
+  //   colorBlendMode (val) {
+  //     this.cesiumObject.colorBlendMode = val
+  //   }
+  // }
 }
 
 /**
@@ -1009,12 +1009,12 @@ const colorBlendAmount = {
       type: Number,
       default: 0.5
     }
-  },
-  watch: {
-    colorBlendAmount (val) {
-      this.cesiumObject.colorBlendAmount = val
-    }
   }
+  // watch: {
+  //   colorBlendAmount (val) {
+  //     this.cesiumObject.colorBlendAmount = val
+  //   }
+  // }
 }
 
 /**
@@ -1023,12 +1023,12 @@ const colorBlendAmount = {
 const clippingPlanes = {
   props: {
     clippingPlanes: Object
-  },
-  watch: {
-    clippingPlanes (val) {
-      this.cesiumObject.clippingPlanes = val
-    }
   }
+  // watch: {
+  //   clippingPlanes (val) {
+  //     this.cesiumObject.clippingPlanes = val
+  //   }
+  // }
 }
 
 /**
@@ -1040,12 +1040,12 @@ const pixelSize = {
       type: Number,
       default: 1
     }
-  },
-  watch: {
-    pixelSize (val) {
-      this.cesiumObject.pixelSize = val
-    }
   }
+  // watch: {
+  //   pixelSize (val) {
+  //     this.cesiumObject.pixelSize = val
+  //   }
+  // }
 }
 
 /**
@@ -1057,12 +1057,12 @@ const perPositionHeight = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    perPositionHeight (val) {
-      this.cesiumObject.perPositionHeight = val
-    }
   }
+  // watch: {
+  //   perPositionHeight (val) {
+  //     this.cesiumObject.perPositionHeight = val
+  //   }
+  // }
 }
 
 /**
@@ -1074,12 +1074,12 @@ const closeTop = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    closeTop (val) {
-      this.cesiumObject.closeTop = val
-    }
   }
+  // watch: {
+  //   closeTop (val) {
+  //     this.cesiumObject.closeTop = val
+  //   }
+  // }
 }
 
 /**
@@ -1091,12 +1091,12 @@ const closeBottom = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    closeBottom (val) {
-      this.cesiumObject.closeBottom = val
-    }
   }
+  // watch: {
+  //   closeBottom (val) {
+  //     this.cesiumObject.closeBottom = val
+  //   }
+  // }
 }
 
 /**
@@ -1108,12 +1108,12 @@ const arcType = {
       type: Number,
       default: 1
     }
-  },
-  watch: {
-    arcType (val) {
-      this.cesiumObject.arcType = val
-    }
   }
+  // watch: {
+  //   arcType (val) {
+  //     this.cesiumObject.arcType = val
+  //   }
+  // }
 }
 
 /**
@@ -1122,12 +1122,12 @@ const arcType = {
 const minimumHeights = {
   props: {
     minimumHeights: Array
-  },
-  watch: {
-    minimumHeights (val) {
-      this.cesiumObject.minimumHeights = val
-    }
   }
+  // watch: {
+  //   minimumHeights (val) {
+  //     this.cesiumObject.minimumHeights = val
+  //   }
+  // }
 }
 
 /**
@@ -1136,12 +1136,12 @@ const minimumHeights = {
 const maximumHeights = {
   props: {
     maximumHeights: Array
-  },
-  watch: {
-    maximumHeights (val) {
-      this.cesiumObject.maximumHeights = val
-    }
   }
+  // watch: {
+  //   maximumHeights (val) {
+  //     this.cesiumObject.maximumHeights = val
+  //   }
+  // }
 }
 
 // imageryProvider 相关
@@ -1364,15 +1364,15 @@ const aaMixin = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    allowPicking () {
-      this.reload()
-    },
-    asynchronous () {
-      this.reload()
-    }
   }
+  // watch: {
+  //   allowPicking () {
+  //     this.reload()
+  //   },
+  //   asynchronous () {
+  //     this.reload()
+  //   }
+  // }
 }
 
 /**
@@ -1384,12 +1384,12 @@ const debugShowShadowVolume = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    debugShowShadowVolume (val) {
-      this.cesiumObject.debugShowShadowVolume = val
-    }
   }
+  // watch: {
+  //   debugShowShadowVolume (val) {
+  //     this.cesiumObject.debugShowShadowVolume = val
+  //   }
+  // }
 }
 
 /**
@@ -1401,12 +1401,12 @@ const releaseGeometryInstances = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    releaseGeometryInstances () {
-      this.reload()
-    }
   }
+  // watch: {
+  //   releaseGeometryInstances () {
+  //     this.reload()
+  //   }
+  // }
 }
 
 /**
@@ -1418,12 +1418,12 @@ const interleave = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    interleave () {
-      this.reload()
-    }
   }
+  // watch: {
+  //   interleave () {
+  //     this.reload()
+  //   }
+  // }
 }
 
 /**
@@ -1432,12 +1432,13 @@ const interleave = {
 const appearance = {
   props: {
     appearance: Object
-  },
-  watch: {
-    appearance (val) {
-      this.cesiumObject.appearance = val
-    }
   }
+  // watch: {
+  //   async appearance (val) {
+  //     await this.$createPromise
+  //     this.cesiumObject.appearance = val
+  //   }
+  // }
 }
 
 /**
@@ -1446,12 +1447,12 @@ const appearance = {
 const geometryInstances = {
   props: {
     geometryInstances: Array | Object
-  },
-  watch: {
-    geometryInstances () {
-      this.reload()
-    }
   }
+  // watch: {
+  //   geometryInstances () {
+  //     this.reload()
+  //   }
+  // }
 }
 
 /**
@@ -1468,15 +1469,15 @@ const vcMixin = {
       type: Boolean,
       default: true
     }
-  },
-  watch: {
-    vertexCacheOptimize () {
-      this.reload()
-    },
-    compressVertices () {
-      this.reload()
-    }
   }
+  // watch: {
+  //   vertexCacheOptimize () {
+  //     this.reload()
+  //   },
+  //   compressVertices () {
+  //     this.reload()
+  //   }
+  // }
 }
 
 /**
@@ -1485,12 +1486,12 @@ const vcMixin = {
 const modelMatrix = {
   props: {
     modelMatrix: Object
-  },
-  watch: {
-    modelMatrix (val) {
-      this.cesiumObject.modelMatrix = val
-    }
   }
+  // watch: {
+  //   modelMatrix (val) {
+  //     this.cesiumObject.modelMatrix = val
+  //   }
+  // }
 }
 
 /**
@@ -1502,12 +1503,12 @@ const debugShowBoundingVolume = {
       tyep: Boolean,
       default: false
     }
-  },
-  watch: {
-    debugShowBoundingVolume (val) {
-      this.cesiumObject.debugShowBoundingVolume = val
-    }
   }
+  // watch: {
+  //   debugShowBoundingVolume (val) {
+  //     this.cesiumObject.debugShowBoundingVolume = val
+  //   }
+  // }
 }
 
 /**
@@ -1516,12 +1517,12 @@ const debugShowBoundingVolume = {
 const scene = {
   props: {
     scene: Object
-  },
-  watch: {
-    scene (val) {
-      this.cesiumObject.scene = val
-    }
   }
+  // watch: {
+  //   scene (val) {
+  //     this.cesiumObject.scene = val
+  //   }
+  // }
 }
 
 /**
@@ -1547,12 +1548,12 @@ const blendOption = {
 const id = {
   props: {
     id: null
-  },
-  watch: {
-    id (val) {
-      this.cesiumObject.id = val
-    }
   }
+  // watch: {
+  //   id (val) {
+  //     this.cesiumObject.id = val
+  //   }
+  // }
 }
 
 /**
@@ -1564,12 +1565,12 @@ const loop = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    loop (val) {
-      this.cesiumObject.loop = val
-    }
   }
+  // watch: {
+  //   loop (val) {
+  //     this.cesiumObject.loop = val
+  //   }
+  // }
 }
 
 /**
@@ -1581,12 +1582,12 @@ const debugWireframe = {
       type: Boolean,
       default: false
     }
-  },
-  watch: {
-    debugWireframe (val) {
-      this.primitive.debugWireframe = val
-    }
   }
+  // watch: {
+  //   debugWireframe (val) {
+  //     this.primitive.debugWireframe = val
+  //   }
+  // }
 }
 
 // geometry 相关

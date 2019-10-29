@@ -8,7 +8,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeColor } from '../../util/util'
 export default {
-  name: 'grid-imagery-provider',
+  name: 'vc-imagery-provider-grid',
   mixins: [
     tilingScheme,
     ellipsoid,

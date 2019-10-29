@@ -1,7 +1,7 @@
 <script>
 import cmp from '../../mixins/virtualCmp.js'
 export default {
-  name: 'cesium-terrain-provider',
+  name: 'vc-terrain-provider-cesium',
   mixins: [cmp],
   props: {
     url: String,

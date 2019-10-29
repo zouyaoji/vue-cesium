@@ -1,7 +1,7 @@
 <script>
 import datasourceMinix from '../../mixins/datasource/datasourceMinix'
 export default {
-  name: 'czml-datasource',
+  name: 'vc-datasource-czml',
   mixins: [ datasourceMinix ],
   props: {
     czml: {
@@ -11,7 +11,7 @@ export default {
     sourceUri: String
   },
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { czml, makeOptions } = this
       return Cesium.CzmlDataSource.load(czml, makeOptions())
     },
@@ -20,6 +20,7 @@ export default {
       let options = {
         sourceUri
       }
+      this.removeNullItem(options)
       return options
     }
   }

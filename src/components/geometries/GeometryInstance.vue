@@ -6,7 +6,7 @@ import {
   id
 } from '../../mixins/entity/allProps'
 export default {
-  name: 'geometry-instance',
+  name: 'vc-geometry-instance',
   mixins: [cmp, modelMatrix, id],
   props: {
     geometry: Object,
@@ -21,7 +21,7 @@ export default {
     }
   },
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { Cesium, geometry, modelMatrix, id, attributes } = this
       let options = {
         geometry: Cesium.defaultValue(geometry, new Cesium.Geometry({ attributes: new Cesium.GeometryAttributes() })),
@@ -32,11 +32,11 @@ export default {
       this.removeNullItem(options)
       return new Cesium.GeometryInstance(options)
     },
-    mount () {
+    async mount () {
       this.index = this.$parent.childCount
       this.$parent.childCount += 1
       const { geometryInstance, primitiveContainer } = this
-      primitiveContainer && primitiveContainer.setGeometryInstances(geometryInstance, this.index)
+      return primitiveContainer && primitiveContainer.setGeometryInstances(geometryInstance, this.index)
     },
     unload () {
       const { primitiveContainer } = this

@@ -3,7 +3,7 @@ import modelMixin from '../../mixins/entity/modelMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeTranslationRotationScale, makeColor, makeDistanceDisplayCondition, makeCartesian2, makeCartesian3 } from '../../util/util'
 export default {
-  name: 'model-graphics',
+  name: 'vc-graphics-model',
   mixins: [modelMixin, graphicsMixin],
   props: {
     uri: String,

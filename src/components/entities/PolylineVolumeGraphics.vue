@@ -14,7 +14,7 @@ import polylineVolumeMixin from '../../mixins/entity/polylineVolumeMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeCartesian2Array, makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '../../util/util'
 export default {
-  name: 'polyline-volume-graphics',
+  name: 'vc-polyline-volume-graphics',
   mixins: [
     show,
     distanceDisplayCondition,

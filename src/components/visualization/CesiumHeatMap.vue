@@ -17,7 +17,7 @@
 import cmp from '../../mixins/virtualCmp'
 import h337 from '../../libs/heatmap/heatmap'
 export default {
-  name: 'cesium-heatmap',
+  name: 'vc-heatmap',
   data () {
     return {
       defaultOptions: {

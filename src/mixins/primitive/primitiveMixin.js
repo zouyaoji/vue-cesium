@@ -14,7 +14,7 @@ import cmp from '../virtualCmp'
 import mergeDescriptors from '../../util/mergeDescriptors'
 
 const methods = {
-  mount () {
+  async mount () {
     const { viewer, primitive } = this
     primitive.readyPromise &&
       primitive.readyPromise
@@ -25,12 +25,12 @@ const methods = {
         .otherwise(error => {
           throw new Cesium.DeveloperError(error)
         })
-    viewer && viewer.scene.primitives.add(primitive)
+    return viewer && viewer.scene.primitives.add(primitive)
   },
-  unload () {
+  async unload () {
     const { viewer, primitive } = this
     this.instances = []
-    viewer && viewer.scene.primitives.remove(primitive)
+    return viewer && viewer.scene.primitives.remove(primitive)
   },
   getServices () {
     const vm = this
@@ -43,14 +43,17 @@ const methods = {
       }
     })
   },
-  setGeometryInstances (geometryInstance, index) {
+  async setGeometryInstances (geometryInstance, index) {
     this.instances.push(geometryInstance)
     if (index === this.childCount - 1) {
       const listener = this.$listeners['update:geometryInstances']
       if (listener) {
         this.$emit('update:geometryInstances', this.instances)
-      } else this.primitive.geometryInstances = index === 0 ? geometryInstance : this.instances
+      } else {
+        this.primitive.geometryInstances = index === 0 ? geometryInstance : this.instances
+      }
     }
+    return true
   }
 }
 

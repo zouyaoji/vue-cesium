@@ -29,10 +29,8 @@
           const { Cesium, viewer } = cesiumInstance
         },
         subReady (cesiumInstance){
-          cesiumInstance.cesiumObject.then(ds => {
-            console.log(ds)
-            cesiumInstance.viewer.zoomTo(ds)
-          })
+          const { Cesium, viewer, cesiumObject } = cesiumInstance
+          viewer.zoomTo(cesiumObject)
         }
       }
     }
@@ -62,10 +60,8 @@
         const { Cesium, viewer } = cesiumInstance
       },
       subReady(cesiumInstance) {
-        cesiumInstance.cesiumObject.then(ds => {
-          console.log(ds)
-          cesiumInstance.viewer.zoomTo(ds)
-        })
+        const { Cesium, viewer, cesiumObject } = cesiumInstance
+        viewer.zoomTo(cesiumObject)
       }
     }
   }
@@ -86,6 +82,7 @@
 | strokeWidth   | Number                |        |                                                        |
 | fill          | String\|Object\|Array |        |                                                        |
 | clampToGround | Boolean               |        |                                                        |
+| show          | Boolean               | `true` | `optional` 指定该数据源是否显示。                      |
 
 - 官方文档 [GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)
 
@@ -93,4 +90,4 @@
 
 | 事件名 | 参数                            | 描述                   |
 | ------ | ------------------------------- | ---------------------- |
-| ready  | {Cesium, viewer, CesiumObject } | 该组件渲染完毕时触发。 |
+| ready  | {Cesium, viewer, cesiumObject } | 该组件渲染完毕时触发。 |

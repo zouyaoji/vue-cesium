@@ -7,7 +7,7 @@ import {
 } from '../../mixins/entity/allProps'
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 export default {
-  name: 'googleearthenterprise-imagery-provider',
+  name: 'vc-imagery-provider-googleearthenterprise',
   mixins: [
     url,
     ellipsoid,

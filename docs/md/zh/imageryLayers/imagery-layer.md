@@ -1,6 +1,6 @@
 # 影像图层
 
-`imagery-layer`可以加载影像图层到场景，需要结合 imagery provider 使用。
+`imagery-layer` 加载影像图层到场景。
 
 ## 示例
 
@@ -12,26 +12,16 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-       <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <mapbox-imagery-provider :mapId="mapId"></mapbox-imagery-provider>
+       <imagery-layer ref="layer" :alpha="alpha" :brightness="brightness" :contrast="contrast" :imageryProvider="imageryProvider">
        </imagery-layer>
       </cesium-viewer>
       <div class="demo-tool">
         <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
         <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
-        <span>切换服务</span>
-        <md-select v-model="mapId" placeholder="切换影像">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
       </div>
     </div>
   </template>
@@ -50,13 +40,16 @@
           }],
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          imageryProvider: null
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          // ...
+          this.imageryProvider = new Cesium.MapboxImageryProvider({
+            mapId: 'mapbox.satellite'
+          })
         }
       }
     }
@@ -145,10 +138,10 @@
 
 ---
 
-- 官方文档 [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)
+- 参考官方文档 [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)。
 
 ## 事件
 
-| 事件名 | 参数             | 描述                                                |
-| ------ | ---------------- | --------------------------------------------------- |
-| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| 事件名 | 参数                           | 描述                                                             |
+| ------ | ------------------------------ | ---------------------------------------------------------------- |
+| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer, imagerLayer 实例。 |

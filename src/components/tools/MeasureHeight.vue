@@ -20,7 +20,7 @@
 <script>
 import measure from '../../mixins/tool/measure'
 export default {
-  name: 'measure-height',
+  name: 'vc-measure-height',
   mixins: [measure],
   data () {
     return {

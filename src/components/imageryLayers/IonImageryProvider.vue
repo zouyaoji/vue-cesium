@@ -4,7 +4,7 @@ import {
 } from '../../mixins/entity/allProps'
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 export default {
-  name: 'ion-imagery-provider',
+  name: 'vc-imagery-provider-ion',
   mixins: [
     accessToken,
     imageryProviderMixin

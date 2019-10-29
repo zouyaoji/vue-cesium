@@ -1,10 +1,9 @@
 {
-  "presets": [
-    ["es2015"]
-  ],
+  "presets": [["@babel/preset-env"]],
   "plugins": [
     "add-module-exports",
-    "transform-es2015-modules-umd",
-    "syntax-dynamic-import"
+    "@babel/plugin-transform-modules-umd",
+    "@babel/plugin-syntax-dynamic-import",
+    ["@babel/transform-runtime"]
   ]
 }

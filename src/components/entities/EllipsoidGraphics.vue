@@ -15,7 +15,7 @@ import ellipsoidMixin from '../../mixins/entity/ellipsoidMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeCartesian3, makeMaterial, makeColor, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'ellipsoid-graphics',
+  name: 'vc-graphics-ellipsoid',
   mixins: [
     show,
     distanceDisplayCondition,

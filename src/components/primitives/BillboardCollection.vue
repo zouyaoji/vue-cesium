@@ -3,7 +3,7 @@ import { scene, blendOption } from '../../mixins/entity/allProps'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 import { makeBillboardptions } from '../../util/util'
 export default {
-  name: 'billboard-collection',
+  name: 'vc-primitive-billboard-collection',
   mixins: [scene, blendOption, primitiveMixin],
   props: {
     billboards: {

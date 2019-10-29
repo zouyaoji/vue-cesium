@@ -30,7 +30,7 @@ import turfArea from '../../libs/turfArea/turfArea'
 import measure from '../../mixins/tool/measure'
 import { makePolygonHierarchy } from '../../util/util'
 export default {
-  name: 'measure-area',
+  name: 'vc-measure-area',
   mixins: [measure],
   data () {
     return {

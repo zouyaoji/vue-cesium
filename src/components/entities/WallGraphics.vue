@@ -13,7 +13,7 @@ import wallMixin from '../../mixins/entity/wallMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeMaterial, makeColor, makeDistanceDisplayCondition, makeCartesian3Array } from '../../util/util'
 export default {
-  name: 'wall-graphics',
+  name: 'vc-wall-graphics',
   mixins: [
     show,
     distanceDisplayCondition,

@@ -33,7 +33,7 @@
           box1: {},
           position1: { lng: 105.0, lat: 40.0, height: 300000.0 },
           dimensions1: { x: 400000.0, y: 300000.0, z: 500000.0 },
-          material1: 'BLUE',
+          material1: 'https://zouyaoji.top/vue-cesium/favicon.png',
 
           box2: {},
           position2: { lng: 110.0, lat: 40.0, height: 300000.0 },

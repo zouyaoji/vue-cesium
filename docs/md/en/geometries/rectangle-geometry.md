@@ -119,6 +119,6 @@ Reference official document [RectangleGeometry](https://cesium.com/docs/cesiumjs
 
 ## Events
 
-| name  | parameter        | description                                                                                   |
-| ----- | ---------------- | --------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance. |
+| name  | parameter        | description                                                                                 |
+| ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance. |

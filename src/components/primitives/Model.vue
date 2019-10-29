@@ -11,7 +11,7 @@ import modelMixin from '../../mixins/entity/modelMixin'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 import { makeColor, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'model-primitive',
+  name: 'vc-primitive-model',
   mixins: [
     modelMatrix,
     id,

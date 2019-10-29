@@ -2,7 +2,7 @@
 import datasourceMinix from '../../mixins/datasource/datasourceMinix'
 import { makeColor } from '../../util/util'
 export default {
-  name: 'geojson-datasource',
+  name: 'vc-datasource-geojson',
   mixins: [ datasourceMinix ],
   props: {
     data: {
@@ -32,9 +32,11 @@ export default {
     }
   },
   methods: {
-    createCesiumObject () {
-      const { data, makeOptions } = this
-      return Cesium.GeoJsonDataSource.load(data, makeOptions())
+    async createCesiumObject () {
+      const { data, show, makeOptions } = this
+      let datasource = await Cesium.GeoJsonDataSource.load(data, makeOptions())
+      datasource.show = show
+      return datasource
     },
     makeOptions () {
       const { sourceUri, markerSize, markerSymbol, markerColor, stroke, strokeWidth, fill, clampToGround } = this
@@ -48,6 +50,7 @@ export default {
         fill: makeColor(fill),
         clampToGround
       }
+      this.removeNullItem(options)
       return options
     }
   }

@@ -8,15 +8,15 @@ const computed = {
   }
 }
 const methods = {
-  mount () {
+  async mount () {
     const { viewer, datasource } = this
-    viewer.dataSources.add(datasource).then(ds => {
-      this.originInstance = ds
-      bindEvents.call(this, ds, Events['datasource-events'])
-    })
+    await viewer.dataSources.add(datasource)
+    bindEvents.call(this, datasource, Events['datasource-events'])
   },
-  unload () {
+  async unload () {
     const { viewer, datasource } = this
+    bindEvents.call(this, datasource, Events['datasource-events'])
+    this.originInstance = undefined
     viewer.dataSources.remove(datasource)
   }
 }

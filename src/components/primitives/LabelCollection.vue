@@ -3,7 +3,7 @@ import { scene, blendOption } from '../../mixins/entity/allProps'
 import primitiveMixin from '../../mixins/primitive/primitiveMixin'
 import { makeLabelOptions } from '../../util/util'
 export default {
-  name: 'label-collection',
+  name: 'vc-primitive-lable-collection',
   mixins: [scene, blendOption, primitiveMixin],
   props: {
     labels: {

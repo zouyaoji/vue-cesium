@@ -9,7 +9,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'openstreetmap-imagery-provider',
+  name: 'vc-imagery-provider-openstreetmap',
   mixins: [
     imageryProviderMixin,
     fileExtension,

@@ -1,7 +1,7 @@
 <script>
 import cmp from '../../mixins/virtualCmp.js'
 export default {
-  name: 'arcgis-tiledelevation-terrain-provider',
+  name: 'vc-terrain-provider-arcgis',
   mixins: [cmp],
   props: {
     url: String | Object,

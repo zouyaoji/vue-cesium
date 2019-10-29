@@ -12,7 +12,7 @@ import cmp from '../../mixins/virtualCmp'
 import { makeColor } from '../../util/util'
 
 export default {
-  name: 'flood-anaysis',
+  name: 'vc-anaysis-flood',
   data () {
     return {
       geometry: null,

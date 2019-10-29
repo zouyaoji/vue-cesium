@@ -8,7 +8,7 @@ const computed = {
   }
 }
 const methods = {
-  mount () {
+  async mount () {
     const { imageryProvider, providerContainer } = this
     imageryProvider.readyPromise
       .then(() => {
@@ -19,29 +19,27 @@ const methods = {
         throw new Cesium.DeveloperError(error)
       })
     bindEvents.call(this, imageryProvider, Events['imagery-layer-events'])
-    providerContainer && providerContainer.setProvider(imageryProvider)
+    return providerContainer && providerContainer.setProvider(imageryProvider)
   },
-  unload () {
-    const { providerContainer } = this
-    providerContainer.unload()
-  }
-}
-const watch = {
-  changeProps: {
-    handler () {
-      this.reload()
-    },
-    deep: true
+  async unmount () {
+    const { imageryProvider } = this
+    bindEvents.call(this, imageryProvider, Events['imagery-layer-events'], false)
+    return true
   }
 }
 export default {
   mixins: [cmp],
   computed,
-  watch,
+  // watch,
   methods,
   stubVNode: {
     empty () {
       return this.$options.name
+    }
+  },
+  data () {
+    return {
+      renderByParent: true
     }
   },
   created () {

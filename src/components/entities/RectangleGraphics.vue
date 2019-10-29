@@ -17,7 +17,7 @@ import rectangleMixin from '../../mixins/entity/rectangleMixin'
 import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeColor, makeRectangle, makeMaterial, makeDistanceDisplayCondition } from '../../util/util'
 export default {
-  name: 'rectangle-graphics',
+  name: 'vc-rectangle-graphics',
   mixins: [
     show,
     distanceDisplayCondition,

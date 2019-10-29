@@ -1,13 +1,13 @@
 <script>
 import datasourceMinix from '../../mixins/datasource/datasourceMinix'
 export default {
-  name: 'custom-datasource',
+  name: 'vc-datasource-custom',
   mixins: [ datasourceMinix ],
   props: {
     name: String
   },
   methods: {
-    createCesiumObject () {
+    async createCesiumObject () {
       const { makeOptions } = this
       return new Cesium.CustomDataSource(makeOptions())
     },
@@ -16,6 +16,7 @@ export default {
       let options = {
         name
       }
+      this.removeNullItem(options)
       return options
     }
   }

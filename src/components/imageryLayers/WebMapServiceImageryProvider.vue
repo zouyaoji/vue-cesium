@@ -20,7 +20,7 @@ import {
 import imageryProviderMixin from '../../mixins/imageryProvider/imageryProviderMixin'
 import { makeRectangle } from '../../util/util'
 export default {
-  name: 'wms-imagery-provider',
+  name: 'vc-imagery-provider-wms',
   mixins: [
     url,
     layers,

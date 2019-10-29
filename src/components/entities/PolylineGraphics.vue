@@ -10,7 +10,7 @@ import graphicsMixin from '../../mixins/entity/graphicsMixin'
 import { makeDistanceDisplayCondition, makeCartesian3Array, makeMaterial } from '../../util/util'
 
 export default {
-  name: 'polyline-graphics',
+  name: 'vc-polyline-graphics',
   mixins: [
     granularity,
     arcType,

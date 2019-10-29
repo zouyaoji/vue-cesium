@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <cesium-viewer @ready="ready">
-        <cesium-terrain-provider></cesium-terrain-provider>
+        <!-- <cesium-terrain-provider></cesium-terrain-provider> -->
         <ground-primitive :appearance="appearance" :asynchronous="asynchronous" :interleave="interleave">
           <geometry-instance :geometry="geometry">
             <rectangle-geometry :rectangle="rectangle"></rectangle-geometry>
@@ -30,8 +30,8 @@
           geometry: null,
           image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
           rectangle: {west: 102.5, south: 29.5, east: 106.5,  north: 33.5},
-          interleave: true,
-          asynchronous: true
+          interleave: false,
+          asynchronous: false
         }
       },
       methods: {
@@ -103,8 +103,8 @@
         geometry: null,
         image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
         rectangle: { west: 102.5, south: 29.5, east: 106.5, north: 33.5 },
-        interleave: true,
-        asynchronous: true
+        interleave: false,
+        asynchronous: false
       }
     },
     methods: {
