@@ -1,25 +1,13 @@
 import Util from './util'
 import CustomPrimitive from './customPrimitive'
-import getWind from './glsl/getWind'
-import updateSpeed from './glsl/updateSpeed'
-import updatePosition from './glsl/updatePosition'
-import postProcessingPosition from './glsl/postProcessingPosition'
-import postProcessingSpeed from './glsl/postProcessingSpeed'
+import { getWindFrag, updateSpeedFrag, updatePositionFrag, postProcessingPositionFrag, postProcessingSpeedFrag } from './glsl'
 
 class ParticlesComputing {
   constructor (context, data, particleSystemOptions, viewerParameters) {
     this.data = data
     this.createWindTextures(context, data)
-    this.createParticlesTextures(
-      context,
-      particleSystemOptions,
-      viewerParameters
-    )
-    this.createComputingPrimitives(
-      data,
-      particleSystemOptions,
-      viewerParameters
-    )
+    this.createParticlesTextures(context, particleSystemOptions, viewerParameters)
+    this.createComputingPrimitives(data, particleSystemOptions, viewerParameters)
   }
 
   createWindTextures (context, data) {
@@ -69,56 +57,32 @@ class ParticlesComputing {
       })
     }
 
-    var particlesArray = this.randomizeParticles(
-      particleSystemOptions.maxParticles,
-      viewerParameters
-    )
+    var particlesArray = this.randomizeParticles(particleSystemOptions.maxParticles, viewerParameters)
 
     this.particlesTextures = {
       particlesWind: Util.createTexture(particlesTextureOptions),
 
-      currentParticlesPosition: Util.createTexture(
-        particlesTextureOptions,
-        particlesArray
-      ),
-      nextParticlesPosition: Util.createTexture(
-        particlesTextureOptions,
-        particlesArray
-      ),
+      currentParticlesPosition: Util.createTexture(particlesTextureOptions, particlesArray),
+      nextParticlesPosition: Util.createTexture(particlesTextureOptions, particlesArray),
 
       currentParticlesSpeed: Util.createTexture(particlesTextureOptions),
       nextParticlesSpeed: Util.createTexture(particlesTextureOptions),
 
-      postProcessingPosition: Util.createTexture(
-        particlesTextureOptions,
-        particlesArray
-      ),
+      postProcessingPosition: Util.createTexture(particlesTextureOptions, particlesArray),
       postProcessingSpeed: Util.createTexture(particlesTextureOptions)
     }
   }
 
   destroyParticlesTextures () {
-    Object.keys(this.particlesTextures).forEach(key => {
+    Object.keys(this.particlesTextures).forEach((key) => {
       this.particlesTextures[key].destroy()
     })
   }
 
   createComputingPrimitives (data, particleSystemOptions, viewerParameters) {
-    const dimension = new Cesium.Cartesian3(
-      data.dimensions.lon,
-      data.dimensions.lat,
-      data.dimensions.lev
-    )
-    const minimum = new Cesium.Cartesian3(
-      data.lon.min,
-      data.lat.min,
-      data.lev.min
-    )
-    const maximum = new Cesium.Cartesian3(
-      data.lon.max,
-      data.lat.max,
-      data.lev.max
-    )
+    const dimension = new Cesium.Cartesian3(data.dimensions.lon, data.dimensions.lat, data.dimensions.lev)
+    const minimum = new Cesium.Cartesian3(data.lon.min, data.lat.min, data.lev.min)
+    const maximum = new Cesium.Cartesian3(data.lon.max, data.lat.max, data.lev.max)
     const interval = new Cesium.Cartesian3(
       (maximum.x - minimum.x) / (dimension.x - 1),
       (maximum.y - minimum.y) / (dimension.y - 1),
@@ -156,13 +120,12 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [getWind]
+          sources: [getWindFrag]
         }),
         outputTexture: this.particlesTextures.particlesWind,
         preExecute: function () {
           // keep the outputTexture up to date
-          that.primitives.getWind.commandToExecute.outputTexture =
-            that.particlesTextures.particlesWind
+          that.primitives.getWind.commandToExecute.outputTexture = that.particlesTextures.particlesWind
         }
       }),
 
@@ -189,20 +152,18 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [updateSpeed]
+          sources: [updateSpeedFrag]
         }),
         outputTexture: this.particlesTextures.nextParticlesSpeed,
         preExecute: function () {
           // swap textures before binding
           var temp
           temp = that.particlesTextures.currentParticlesSpeed
-          that.particlesTextures.currentParticlesSpeed =
-            that.particlesTextures.postProcessingSpeed
+          that.particlesTextures.currentParticlesSpeed = that.particlesTextures.postProcessingSpeed
           that.particlesTextures.postProcessingSpeed = temp
 
           // keep the outputTexture up to date
-          that.primitives.updateSpeed.commandToExecute.outputTexture =
-            that.particlesTextures.nextParticlesSpeed
+          that.primitives.updateSpeed.commandToExecute.outputTexture = that.particlesTextures.nextParticlesSpeed
         }
       }),
 
@@ -217,20 +178,18 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [updatePosition]
+          sources: [updatePositionFrag]
         }),
         outputTexture: this.particlesTextures.nextParticlesPosition,
         preExecute: function () {
           // swap textures before binding
           var temp
           temp = that.particlesTextures.currentParticlesPosition
-          that.particlesTextures.currentParticlesPosition =
-            that.particlesTextures.postProcessingPosition
+          that.particlesTextures.currentParticlesPosition = that.particlesTextures.postProcessingPosition
           that.particlesTextures.postProcessingPosition = temp
 
           // keep the outputTexture up to date
-          that.primitives.updatePosition.commandToExecute.outputTexture =
-            that.particlesTextures.nextParticlesPosition
+          that.primitives.updatePosition.commandToExecute.outputTexture = that.particlesTextures.nextParticlesPosition
         }
       }),
 
@@ -267,13 +226,12 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [postProcessingPosition]
+          sources: [postProcessingPositionFrag]
         }),
         outputTexture: this.particlesTextures.postProcessingPosition,
         preExecute: function () {
           // keep the outputTexture up to date
-          that.primitives.postProcessingPosition.commandToExecute.outputTexture =
-            that.particlesTextures.postProcessingPosition
+          that.primitives.postProcessingPosition.commandToExecute.outputTexture = that.particlesTextures.postProcessingPosition
         }
       }),
 
@@ -288,13 +246,12 @@ class ParticlesComputing {
           }
         },
         fragmentShaderSource: new Cesium.ShaderSource({
-          sources: [postProcessingSpeed]
+          sources: [postProcessingSpeedFrag]
         }),
         outputTexture: this.particlesTextures.postProcessingSpeed,
         preExecute: function () {
           // keep the outputTexture up to date
-          that.primitives.postProcessingSpeed.commandToExecute.outputTexture =
-            that.particlesTextures.postProcessingSpeed
+          that.primitives.postProcessingSpeed.commandToExecute.outputTexture = that.particlesTextures.postProcessingSpeed
         }
       })
     }

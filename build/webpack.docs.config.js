@@ -1,10 +1,11 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const blockName = 'vue-filename-injector'
+const config = require('./config')
+
 module.exports = {
   entry: {
     main: 'docs/main.js',
@@ -111,10 +112,13 @@ module.exports = {
     }
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
-      root: path.resolve(__dirname, '../')
-    }),
+    new webpack.ProgressPlugin(),
+    new CleanWebpackPlugin(),
     new webpack.HashedModuleIdsPlugin(),
+    new webpack.DefinePlugin(Object.assign({}, config.replaces, {
+      'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
+      'process.env.VUECESIUM_DEBUG': process.env.NODE_ENV !== 'production'
+    })),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../docs/template/index.html'),
       chunks: ['vendor', 'libs', 'main', 'manifest']
@@ -128,5 +132,12 @@ module.exports = {
         ignore: ['.*']
       }
     ])
-  ]
+  ],
+  performance: {
+    maxEntrypointSize: 1024 * 1024, // 1Mb
+    maxAssetSize: 10 * 1024 * 1024 // 10Mb
+  },
+  devServer: {
+    host: '0.0.0.0'
+  }
 }

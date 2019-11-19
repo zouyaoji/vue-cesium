@@ -1,0 +1,25 @@
+.floating {
+    .opaque-to-input;
+    position: absolute;
+    border-radius: 15px;
+    //background-color: @floating-background-color;
+
+}
+
+.floating-horizontal {
+    .floating;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.floating-vertical {
+    .floating;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+@media print {
+    .floating {
+        display: none;
+    }
+}

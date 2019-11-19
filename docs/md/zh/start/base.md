@@ -23,7 +23,7 @@
 
 ### Cartesian2
 
-- 描述表达二维结构分量的 point、padding 等。如组件`box-graphics`的`dimensions`属性。
+- 描述表达二维结构分量的 point、padding 等。如组件`vc-graphics-box`的`dimensions`属性。
 
 ```JavaScript
 {
@@ -34,7 +34,7 @@
 
 ### Cartesian2 Array
 
-- 描述二维点集合。如组件`polyline-volume-graphics`的`shape`属性。
+- 描述二维点集合。如组件`vc-graphics-polyline-volume`的`shape`属性。
 
 ```JavaScript
 [{ x: number, y: number },...,{ x: number, y: number }]
@@ -42,7 +42,7 @@
 
 ### Cartesian3
 
-- 描述三维点。如组件`entity`的`position`属性。
+- 描述三维点。如组件`vc-entity`的`position`属性。
 
 ```JavaScript
 {
@@ -60,7 +60,7 @@
 
 ### Cartesian3 Array
 
-- 描述三维点集。如组件`polyline-graphics`的`positions`属性。
+- 描述三维点集。如组件`vc-graphics-polyline`的`positions`属性。
 
 ```JavaScript
 [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]
@@ -68,7 +68,7 @@
 
 ### Rectangle
 
-- 描述矩形。如组件`rectangle-graphics`的`coordinates`属性。
+- 描述矩形。如组件`vc-graphics-rectangle`的`coordinates`属性。
 
 ```JavaScript
 { west: number, south: number, east: number, north: number }

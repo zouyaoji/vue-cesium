@@ -1,0 +1,286 @@
+/*html {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    background: #000;
+    font-size: 15px;
+    font-family: @default-font;
+}*/
+
+.full-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+
+    -webkit-transition: left @explorer-panel-close-animation-length ease-out;
+    -moz-transition: left @explorer-panel-close-animation-length ease-out;
+    -ms-transition: left @explorer-panel-close-animation-length ease-out;
+    -o-transition: left @explorer-panel-close-animation-length ease-out;
+    transition: left @explorer-panel-close-animation-length ease-out;
+}
+
+.transparent-to-input {
+    pointer-events: none;
+}
+
+.opaque-to-input {
+    pointer-events: auto;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+/*a {
+    text-decoration: none;
+    color: @highlight-color;
+}*/
+
+a:hover {
+    text-decoration: underline;
+}
+/*
+@modal-background-color: @panel-background-color;
+@modal-text-color: @panel-emphasized-text-color;
+@modal-header-background-color: rgba(0,0,0,0.2);
+@modal-header-text-color: @panel-emphasized-text-color;*/
+
+/*.modal-background {
+    .opaque-to-input;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;  required for IE9 
+}*/
+/*
+.modal {
+    position: absolute;
+    margin: auto;
+    background-color: @modal-background-color;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-height: 100%;
+    max-width: 100%;
+    font-family: @default-font;
+    color: @modal-text-color;
+}
+
+.modal-header {
+  background-color: @modal-header-background-color;
+  border-bottom: @panel-element-border;
+  font-size: 15px;
+  line-height: 40px;
+  margin: 0;
+}
+
+.modal-header h1 {
+  font-size: 15px;
+  color: @modal-header-text-color;
+  margin-left: 15px;
+}*/
+
+/* Commented out due to conflicts with client apps. 
+.modal-content {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  overflow: auto;
+}*/
+
+/*.modal-close-button {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    color: @modal-header-text-color;
+}*/
+
+
+#ui {
+    // This keeps the UI above the map in IE9.
+    z-index: 2100;
+}
+
+@media print {
+    .full-window {
+        position: initial;
+    }
+}
+
+// input fields
+
+/* input[type=text] {
+  height: 38px;
+  background-color: #eeeeee;
+  color: @input-text-color;
+  font-size: 14px;
+}
+
+::-webkit-input-placeholder {
+  color: fade(@input-text-color, 75%);
+  font-style: italic;
+}
+
+:-moz-placeholder { /* Firefox 18- 
+  color: fade(@input-text-color, 75%);
+  font-style: italic;
+}
+
+::-moz-placeholder {  /* Firefox 19+  
+  color: fade(@input-text-color, 75%);
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
+  color: fade(@input-text-color, 75%);
+  font-style: italic;
+}
+
+input:focus {
+    outline-color: #FFFFFF;
+}
+*/
+
+/*select {
+  display: block;
+  background-color: @panel-form-input-background-color;
+  color: @panel-form-input-text-color;
+  height: 40px;
+  border: 0;
+  margin-top: 10px;
+  font-size: 14px;
+  padding-left: 5px;
+}*/
+
+.markdown {
+  img { max-width: 100% }
+  svg { max-height: 100% }
+
+  input,
+  select,
+  textarea,
+  fieldset {
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  label {
+    vertical-align: middle;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.25;
+    margin-top: 1em;
+    margin-bottom: .5em;
+  }
+
+  h1 { font-size: 2rem }
+  h2 { font-size: 1.5rem }
+  h3 { font-size: 1.25rem }
+  h4 { font-size: 1rem }
+  h5 { font-size: .875rem }
+  h6 { font-size: .75rem }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  strong { font-weight: bold }
+  em { font-style: italic }
+  small {font-size: 80%;}
+  mark { color: #000; background: #ff0;}
+  u {text-decoration: underline;}
+  s {text-decoration: line-through;}
+
+  dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  ol{
+    list-style: decimal inside;
+  }
+
+  ul{
+    list-style: disc inside;
+  }
+
+  pre, code, samp {
+    font-family: monospace;
+    font-size: inherit;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    overflow-x: scroll;
+  }
+
+  a {
+    color: #68ADFE;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  pre, code {
+    background-color: transparent;
+    border-radius: 3px;
+  }
+
+  hr {
+    border: 0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0,0,0,.125);
+  }
+
+  .left-align   { text-align: left }
+  .center       { text-align: center }
+  .right-align  { text-align: right }
+  .justify      { text-align: justify }
+
+  .truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  ol.upper-roman {list-style-type: upper-roman;}
+  ol.lower-alpha {list-style-type: lower-alpha;}
+
+  ul.circle {list-style-type: circle;}
+  ul.square {list-style-type: square;}
+
+  .list-reset {
+    list-style: none;
+    padding-left: 0;
+  }
+}

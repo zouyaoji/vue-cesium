@@ -34,7 +34,6 @@ export default {
 </script>
 
 <style lang="stylus">
-
 h1.title {
   .logo {
     width: 2.5rem;
@@ -162,7 +161,7 @@ h2 {
   color: #fff;
 }
 
- .cesium-svgPath-svg {
-    height: 100% !important;
-  }
+.cesium-svgPath-svg {
+  height: 100% !important;
+}
 </style>

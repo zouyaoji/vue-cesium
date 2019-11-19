@@ -6,12 +6,16 @@
 
 Regist all components of **vue-cesium** at once.
 
+- Use the default Cesium library url
+
 ```javascript
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
-// Vue-Cesium will load Cesium.js from `https://unpkg.com/cesium/Build/Cesium/Cesium.js`
+// VueCesium will load Cesium.js from `https://unpkg.com/cesium/Build/Cesium/Cesium.js` by default.
 Vue.use(VueCesium)
 ```
+
+- Specify the Cesium library url and the CesiumIon online resource accessToken:
 
 ```javascript
 import Vue from 'vue'
@@ -35,7 +39,9 @@ Vue.use(VueCesium, {
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer> </cesium-viewer>
+    <vc-viewer>
+      <vc-layer-imagery></vc-layer-imagery>
+    </vc-viewer>
   </div>
 </template>
 
@@ -49,24 +55,48 @@ Vue.use(VueCesium, {
 
 ### Local Registration
 
-All components are stored in the `vue-cesium/src/components` folder.
-As ES module can't be run directly in most browsers, if importing component causes some runtime errors, please check the webpack's loader configuration whethor the `include` and `exclude` options hits this library.
+If you need to introduce components on demand, you can choose to locally register Cesium components, which will reduce the size of the package after the project is packaged.
+
+- Use the default Cesium library url
+
+```javascript
+import Vue from 'vue'
+import { Viewer, ImageryLayer } from 'vue-cesium'
+// VueCesium 默认使用 `https://unpkg.com/cesium/Build/Cesium/Cesium.js`
+Vue.use(Viewer)
+Vue.use(ImageryLayer)
+```
+
+- Specify the Cesium library url and the CesiumIon online resource accessToken:
+
+```javascript
+import Vue from 'vue'
+import { Viewer, ImageryLayer } from 'vue-cesium'
+
+Vue.use(Viewer, {
+  // cesiumPath is path of Cesium.js', for example:
+  // local Cesium Build package:
+  // cesiumPath: /static/Cesium/Cesium.js
+  // Personal online Cesium Build package：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+  // Personal online SuperMap Cesium Build package：
+  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
+  // Official Online Cesium Build package：
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  // Cesium.Ion.defaultAccessToken
+  accessToken: ''
+})
+Vue.use(ImageryLayer)
+```
 
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer></cesium-viewer>
+    <vc-viewer>
+      <vc-layer-imagery></vc-layer-imagery>
+    </vc-viewer>
   </div>
 </template>
-
-<script>
-  import CesiumViewer from 'vue-cesium/src/components/viewer/CesiumViewer.vue'
-  export default {
-    components: {
-      CesiumViewer
-    }
-  }
-</script>
 
 <style>
   .viewer {
@@ -80,16 +110,140 @@ As ES module can't be run directly in most browsers, if importing component caus
 
 - To be added
 
+## Hello Cesium
+
+### Preview
+
+<doc-preview>
+  <template>
+    <vc-viewer class="viewer" :animation="animation" :timeline="timeline" :camera.sync="camera" @ready="ready">
+      <vc-layer-imagery>
+        <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
+      </vc-layer-imagery>
+    </vc-viewer>
+  </template>
+  <script>
+  export default {
+    data () {
+      return {
+        animation: true,
+        timeline: true,
+        camera: {
+          position: {
+            lng: 104.06,
+            lat: 30.67,
+            height: 100000
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
+        }
+      }
+    },
+    methods: {
+      ready (cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        viewer.entities.add({
+          id: 'Welcome to Chengdu',
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new Cesium.LabelGraphics ({
+            text: 'Hello Cesium',
+            fillColor: Cesium.Color.GOLD,
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
+      }
+    }
+  }
+  </script>
+  <style>
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
+  </style>
+</doc-preview>
+
+### Code
+
+```html
+<template>
+  <vc-viewer class="viewer" :animation="animation" :timeline="timeline" :camera.sync="camera" @ready="ready">
+    <vc-layer-imagery>
+      <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
+    </vc-layer-imagery>
+  </vc-viewer>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        animation: true,
+        timeline: true,
+        camera: {
+          position: {
+            lng: 104.06,
+            lat: 30.67,
+            height: 100000
+          },
+          heading: 360,
+          pitch: -90,
+          roll: 0
+        }
+      }
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        viewer.entities.add({
+          id: 'Welcome to Chengdu',
+          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
+          billboard: new Cesium.BillboardGraphics({
+            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+            scale: 0.1
+          }),
+          label: new Cesium.LabelGraphics({
+            text: 'Hello Cesium',
+            fillColor: Cesium.Color.GOLD,
+            font: '24px sans-serif',
+            horizontalOrigin: 1,
+            outlineColor: new Cesium.Color(0, 0, 0, 1),
+            outlineWidth: 2,
+            pixelOffset: new Cesium.Cartesian2(17, -5),
+            style: Cesium.LabelStyle.FILL
+          })
+        })
+      }
+    }
+  }
+</script>
+<style>
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
+</style>
+```
+
 ## Q&A
 
-- `CesiumViewer` component is an empty block level element. If it doesn't declare its height, the `viewer` will be invisible.
+- `VcViewer` component is an empty block level element. If it doesn't declare its height, the `viewer` will be invisible.
 - If you need to update your model, just do it in the callback of the global component event `ready`.
 
 ### Wrong Way
 
 ```html
 <template>
-  <cesium-viewer :animation="animation" :camera="camera"></cesium-viewer>
+  <vc-viewer :animation="animation" :camera="camera"></vc-viewer>
 </template>
 <script>
   export default {
@@ -122,7 +276,7 @@ As ES module can't be run directly in most browsers, if importing component caus
 
 ```html
 <template>
-  <cesium-viewer :animation="animation" :camera="camera" @ready="ready"></cesium-viewer>
+  <vc-viewer :animation="animation" :camera="camera" @ready="ready"></vc-viewer>
 </template>
 <script>
   export default {
@@ -153,128 +307,4 @@ As ES module can't be run directly in most browsers, if importing component caus
     }
   }
 </script>
-```
-
-## Hello world
-
-### Preview
-
-<doc-preview>
-  <template>
-    <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
-      <imagery-layer>
-        <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
-      </imagery-layer>
-    </cesium-viewer>
-  </template>
-  <script>
-  export default {
-    data () {
-      return {
-        animation: true,
-        timeline: true,
-        camera: {
-          position: {
-            lng: 104.06,
-            lat: 30.67,
-            height: 100000
-          },
-          heading: 360,
-          pitch: -90,
-          roll: 0
-        }
-      }
-    },
-    methods: {
-      ready (cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.entities.add({
-          id: 'Welcome to Chengdu',
-          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-          billboard: new Cesium.BillboardGraphics({
-            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-            scale: 0.1
-          }),
-          label: new Cesium.LabelGraphics ({
-            text: 'Hello Word',
-            fillColor: Cesium.Color.GOLD,
-            font: '24px sans-serif',
-            horizontalOrigin: 1,
-            outlineColor: new Cesium.Color(0, 0, 0, 1),
-            outlineWidth: 2,
-            pixelOffset: new Cesium.Cartesian2(17, -5),
-            style: Cesium.LabelStyle.FILL
-          })
-        })
-      }
-    }
-  }
-  </script>
-  <style>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-  </style>
-</doc-preview>
-
-### Code
-
-```html
-<template>
-  <cesium-viewer class="viewer" :animation="animation" :timeline="timeline" :camera="camera" @ready="ready">
-    <imagery-layer>
-      <openstreetmap-imagery-provider></openstreetmap-imagery-provider>
-    </imagery-layer>
-  </cesium-viewer>
-</template>
-<script>
-  export default {
-    data() {
-      return {
-        animation: true,
-        timeline: true,
-        camera: {
-          position: {
-            lng: 104.06,
-            lat: 30.67,
-            height: 100000
-          },
-          heading: 360,
-          pitch: -90,
-          roll: 0
-        }
-      }
-    },
-    methods: {
-      ready(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.entities.add({
-          id: 'Welcome to Chengdu',
-          position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
-          billboard: new Cesium.BillboardGraphics({
-            image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-            scale: 0.1
-          }),
-          label: new Cesium.LabelGraphics({
-            text: 'Hello Word',
-            fillColor: Cesium.Color.GOLD,
-            font: '24px sans-serif',
-            horizontalOrigin: 1,
-            outlineColor: new Cesium.Color(0, 0, 0, 1),
-            outlineWidth: 2,
-            pixelOffset: new Cesium.Cartesian2(17, -5),
-            style: Cesium.LabelStyle.FILL
-          })
-        })
-      }
-    }
-  }
-</script>
-<style>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 ```

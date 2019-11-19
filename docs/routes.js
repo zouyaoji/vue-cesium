@@ -69,337 +69,352 @@ const routeMap = [
   {
     path: 'viewer',
     name: {
-      zh: '场景',
+      zh: '视图',
       en: 'Viewer'
     },
     component: CateView,
     children: [
       {
-        path: 'cesium-viewer',
-        component: 'viewer/cesium-viewer',
+        path: 'vc-viewer',
+        component: 'viewer/vc-viewer',
         name: {
-          zh: '场景(Viewer)',
-          en: 'CesiumViewer'
+          zh: '场景视图',
+          en: 'Viewer Instance'
         }
       }
     ]
   },
   {
-    // 指南
-    path: 'tools',
-    component: CateView,
-    name: {
-      zh: '工具',
-      en: 'Tools'
-    },
-    children: [
-      {
-        path: 'painting',
-        component: 'tools/painting',
-        name: {
-          zh: '绘制',
-          en: 'Painting'
-        }
-      },
-      {
-        path: 'measuring',
-        component: 'tools/measuring',
-        name: {
-          zh: '量算',
-          en: 'Measuring'
-        }
-      },
-      {
-        path: 'cesium-navigation',
-        component: 'tools/cesium-navigation',
-        name: {
-          zh: '导航罗盘',
-          en: 'CesiumNavigation'
-        }
-      }
-    ]
-  },
-  {
-    path: 'imageryLayers',
+    path: 'imagery',
     name: {
       zh: '影像',
-      en: 'Layers'
+      en: 'Imagery'
     },
     component: CateView,
     children: [
       {
-        path: 'imagery-layer',
-        component: 'imageryLayers/imagery-layer',
+        path: 'vc-layer-imagery',
+        component: 'imageryLayer/vc-layer-imagery',
         name: {
-          zh: '影像图层(ImageryLayer)',
+          zh: '影像图层',
           en: 'ImageryLayer'
         }
       },
       {
-        path: 'arcgis-mapserver-imagery-provider',
-        component: 'imageryLayers/arcgis-mapserver-imagery-provider',
+        path: 'vc-provider-imagery-arcgis-mapserver',
+        component: 'imageryLayer/vc-provider-imagery-arcgis-mapserver',
         name: {
-          zh: 'ArcGIS(ArcGisMapServerImagery)',
+          zh: 'ArcGISMapServer影像',
           en: 'ArcGisMapServerImageryProvider'
         }
       },
       {
-        path: 'bingmaps-imagery-provider',
-        component: 'imageryLayers/bingmaps-imagery-provider',
+        path: 'vc-provider-imagery-bingmaps',
+        component: 'imageryLayer/vc-provider-imagery-bingmaps',
         name: {
-          zh: 'BingMaps(BingMapsImagery)',
+          zh: 'BingMaps影像',
           en: 'BingMapsImageryProvider'
         }
       },
       {
-        path: 'grid-imagery-provider',
-        component: 'imageryLayers/grid-imagery-provider',
+        path: 'vc-provider-imagery-grid',
+        component: 'imageryLayer/vc-provider-imagery-grid',
         name: {
-          zh: 'Grid(GridImagery)',
+          zh: '经纬格网影像',
           en: 'GridImageryProvider'
         }
       },
       {
-        path: 'ion-imagery-provider',
-        component: 'imageryLayers/ion-imagery-provider',
+        path: 'vc-provider-imagery-ion',
+        component: 'imageryLayer/vc-provider-imagery-ion',
         name: {
-          zh: 'CesiumIon(IonImagery)',
+          zh: 'CesiumIon影像',
           en: 'IonImageryProvider'
         }
       },
       {
-        path: 'mapbox-imagery-provider',
-        component: 'imageryLayers/mapbox-imagery-provider',
+        path: 'vc-provider-imagery-mapbox',
+        component: 'imageryLayer/vc-provider-imagery-mapbox',
         name: {
-          zh: 'Mapbox(MapboxImagery)',
+          zh: 'Mapbox影像',
           en: 'MapboxImageryProvider'
         }
       },
       {
-        path: 'openstreetmap-imagery-provider',
-        component: 'imageryLayers/openstreetmap-imagery-provider',
+        path: 'vc-provider-imagery-openstreetmap',
+        component: 'imageryLayer/vc-provider-imagery-openstreetmap',
         name: {
-          zh: 'Openstreetmap(OpenStreetMapImagery)',
+          zh: 'OpenStreetMap影像',
           en: 'OpenStreetMapImageryProvider'
         }
       },
       {
-        path: 'singletile-imagery-provider',
-        component: 'imageryLayers/singletile-imagery-provider',
+        path: 'vc-provider-imagery-tile-single',
+        component: 'imageryLayer/vc-provider-imagery-tile-single',
         name: {
-          zh: 'Singletile(SingleTileImagery)',
+          zh: 'Singletile影像',
           en: 'SingleTileImageryProvider'
         }
       },
       {
-        path: 'tilecoordinates-imagery-provider',
-        component: 'imageryLayers/tilecoordinates-imagery-provider',
+        path: 'vc-provider-imagery-tile-coordinates',
+        component: 'imageryLayer/vc-provider-imagery-tile-coordinates',
         name: {
-          zh: 'TileCoordinates(TileCoordinatesImagery)',
+          zh: 'TileCoordinates影像',
           en: 'TileCoordinatesImageryProvider'
         }
       },
       {
-        path: 'tilemapservice-imagery-provider',
-        component: 'imageryLayers/tilemapservice-imagery-provider',
+        path: 'vc-provider-imagery-tile-mapservice',
+        component: 'imageryLayer/vc-provider-imagery-tile-mapservice',
         name: {
-          zh: 'TileMapService(TileMapServiceImagery)',
+          zh: 'TileMapService影像',
           en: 'TileMapServiceImageryProvider'
         }
       },
       {
-        path: 'urltemplate-imagery-provider',
-        component: 'imageryLayers/urltemplate-imagery-provider',
+        path: 'vc-provider-imagery-urltemplate',
+        component: 'imageryLayer/vc-provider-imagery-urltemplate',
         name: {
-          zh: 'UrlTemplate(UrlTemplateImagery)',
+          zh: 'UrlTemplate影像',
           en: 'UrlTemplateImageryProvider'
         }
       },
       {
-        path: 'wms-imagery-provider',
-        component: 'imageryLayers/wms-imagery-provider',
+        path: 'vc-provider-imagery-wms',
+        component: 'imageryLayer/vc-provider-imagery-wms',
         name: {
-          zh: 'WMS(WebMapServiceImagery)',
+          zh: 'WMS影像',
           en: 'WebMapServiceImageryProvider'
         }
       },
       {
-        path: 'wmts-imagery-provider',
-        component: 'imageryLayers/wmts-imagery-provider',
+        path: 'vc-provider-imagery-wmts',
+        component: 'imageryLayer/vc-provider-imagery-wmts',
         name: {
-          zh: 'WMTS(WebMapTileServiceImagery)',
+          zh: 'WMTS影像',
           en: 'WebMapTileServiceImageryProvider'
         }
-      },
-      {
-        path: 'supermap-imagery-provider',
-        component: 'imageryLayers/supermap-imagery-provider',
-        name: {
-          zh: 'SuperMap(SuperMapImagery)',
-          en: 'SuperMapImageryProvider'
-        }
       }
+      // {
+      //   path: 'vc-provider-imagery-supermap',
+      //   component: 'imageryLayer/vc-provider-imagery-supermap',
+      //   name: {
+      //     zh: 'SuperMap影像',
+      //     en: 'SuperMapImageryProvider'
+      //   }
+      // }
     ]
   },
   {
-    path: 'terrains',
+    path: 'terrain',
     name: {
       zh: '地形',
-      en: 'Terrains'
+      en: 'Terrain'
     },
     component: CateView,
     children: [
       {
-        path: 'cesium-terrain-provider',
-        component: 'terrains/cesium-terrain-provider',
+        path: 'vc-provider-terrain-cesium',
+        component: 'terrain/vc-provider-terrain-cesium',
         name: {
-          zh: 'Cesium地形(CesiumTerrainProvider)',
+          zh: 'Cesium地形',
           en: 'CesiumTerrainProvider'
+        }
+      },
+      {
+        path: 'vc-provider-terrain-arcgis-tiled-elevation',
+        component: 'terrain/vc-provider-terrain-arcgis-tiled-elevation',
+        name: {
+          zh: 'ArcGISTiledElevation地形',
+          en: 'ArcGISTiledElevationTerrainProvider'
         }
       }
     ]
   },
   {
-    path: 'entities',
+    path: 'datasource',
     name: {
-      zh: '实体',
-      en: 'Entities'
+      zh: '数据源',
+      en: 'Datasource'
     },
     component: CateView,
     children: [
       {
-        path: 'entity',
-        component: 'entities/entity',
+        path: 'vc-datasource-custom',
+        component: 'datasource/vc-datasource-custom',
         name: {
-          zh: '实体(Entity)',
-          en: 'Entity'
+          zh: 'Custom数据源',
+          en: 'CustomDataSource'
         }
       },
       {
-        path: 'billboard-graphics',
-        component: 'entities/billboard-graphics',
+        path: 'vc-datasource-czml',
+        component: 'datasource/vc-datasource-czml',
         name: {
-          zh: '布告板(BillboardGraphics)',
+          zh: 'Czml数据源',
+          en: 'CzmlDataSource'
+        }
+      },
+      {
+        path: 'vc-datasource-geojson',
+        component: 'datasource/vc-datasource-geojson',
+        name: {
+          zh: 'GeoJson数据源',
+          en: 'GeoJsonDataSource'
+        }
+      },
+      {
+        path: 'vc-datasource-kml',
+        component: 'datasource/vc-datasource-kml',
+        name: {
+          zh: 'Kml数据源',
+          en: 'KmlDataSource'
+        }
+      }
+    ]
+  },
+  {
+    path: 'entity',
+    name: {
+      zh: '实体',
+      en: 'Entity'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'vc-entity',
+        component: 'entity/vc-entity',
+        name: {
+          zh: '实体实例',
+          en: 'Entity Instance'
+        }
+      },
+      {
+        path: 'vc-graphics-billboard',
+        component: 'entity/vc-graphics-billboard',
+        name: {
+          zh: '布告板实体',
           en: 'BillboardGraphics'
         }
       },
       {
-        path: 'box-graphics',
-        component: 'entities/box-graphics',
+        path: 'vc-graphics-box',
+        component: 'entity/vc-graphics-box',
         name: {
-          zh: '盒子(BoxGraphics)',
+          zh: '盒子实体',
           en: 'BoxGraphics'
         }
       },
       {
-        path: 'corridor-graphics',
-        component: 'entities/corridor-graphics',
+        path: 'vc-graphics-corridor',
+        component: 'entity/vc-graphics-corridor',
         name: {
-          zh: '走廊(CorridorGraphics)',
+          zh: '走廊实体',
           en: 'CorridorGraphics'
         }
       },
       {
-        path: 'cylinder-graphics',
-        component: 'entities/cylinder-graphics',
+        path: 'vc-graphics-cylinder',
+        component: 'entity/vc-graphics-cylinder',
         name: {
-          zh: '圆柱（锥）(CylinderGraphics)',
+          zh: '圆柱（锥、台）实体',
           en: 'CylinderGraphics'
         }
       },
       {
-        path: 'ellipse-graphics',
-        component: 'entities/ellipse-graphics',
+        path: 'vc-graphics-ellipse',
+        component: 'entity/vc-graphics-ellipse',
         name: {
-          zh: '椭圆形(体)(EllipseGraphics)',
+          zh: '椭圆实体',
           en: 'EllipseGraphics'
         }
       },
       {
-        path: 'ellipsoid-graphics',
-        component: 'entities/ellipsoid-graphics',
+        path: 'vc-graphics-ellipsoid',
+        component: 'entity/vc-graphics-ellipsoid',
         name: {
-          zh: '(椭)球体(EllipsoidGraphics)',
+          zh: '(椭)球实体',
           en: 'EllipsoidGraphics'
         }
       },
       {
-        path: 'label-graphics',
-        component: 'entities/label-graphics',
+        path: 'vc-graphics-label',
+        component: 'entity/vc-graphics-label',
         name: {
-          zh: '标签(LabelGraphics)',
+          zh: '标签实体',
           en: 'LabelGraphics'
         }
       },
       {
-        path: 'model-graphics',
-        component: 'entities/model-graphics',
+        path: 'vc-graphics-model',
+        component: 'entity/vc-graphics-model',
         name: {
-          zh: '模型(ModelGraphics)',
+          zh: '模型实体',
           en: 'ModelGraphics'
         }
       },
       {
-        path: 'path-graphics',
-        component: 'entities/path-graphics',
+        path: 'vc-graphics-path',
+        component: 'entity/vc-graphics-path',
         name: {
-          zh: '路径(PathGraphics)',
+          zh: '路径实体',
           en: 'PathGraphics'
         }
       },
       {
-        path: 'plane-graphics',
-        component: 'entities/plane-graphics',
+        path: 'vc-graphics-plane',
+        component: 'entity/vc-graphics-plane',
         name: {
-          zh: '平面(PlaneGraphics)',
+          zh: '平面实体',
           en: 'PlaneGraphics'
         }
       },
       {
-        path: 'point-graphics',
-        component: 'entities/point-graphics',
+        path: 'vc-graphics-point',
+        component: 'entity/vc-graphics-point',
         name: {
-          zh: '点(PointGraphics)',
+          zh: '点实体',
           en: 'PointGraphics'
         }
       },
       {
-        path: 'polygon-graphics',
-        component: 'entities/polygon-graphics',
+        path: 'vc-graphics-polygon',
+        component: 'entity/vc-graphics-polygon',
         name: {
-          zh: '多边形(PolygonGraphics)',
+          zh: '多边形实体',
           en: 'PolygonGraphics'
         }
       },
       {
-        path: 'polyline-graphics',
-        component: 'entities/polyline-graphics',
+        path: 'vc-graphics-polyline',
+        component: 'entity/vc-graphics-polyline',
         name: {
-          zh: '折线(PolylineGraphics)',
+          zh: '多段线实体',
           en: 'PolylineGraphics'
         }
       },
       {
-        path: 'polyline-volume-graphics',
-        component: 'entities/polyline-volume-graphics',
+        path: 'vc-graphics-polyline-volume',
+        component: 'entity/vc-graphics-polyline-volume',
         name: {
-          zh: '多段线柱体(PolylineVolumeGraphics)',
+          zh: '多段线柱实体',
           en: 'PolylineVolumeGraphics'
         }
       },
       {
-        path: 'rectangle-graphics',
-        component: 'entities/rectangle-graphics',
+        path: 'vc-graphics-rectangle',
+        component: 'entity/vc-graphics-rectangle',
         name: {
-          zh: '矩形(RectangleGraphics)',
+          zh: '矩形实体',
           en: 'RectangleGraphics'
         }
       },
       {
-        path: 'wall-graphics',
-        component: 'entities/wall-graphics',
+        path: 'vc-graphics-wall',
+        component: 'entity/vc-graphics-wall',
         name: {
-          zh: '围墙(WallGraphics)',
+          zh: '围墙实体',
           en: 'WallGraphics'
         }
       }
@@ -408,189 +423,231 @@ const routeMap = [
   {
     path: 'primitives',
     name: {
-      zh: '图元',
+      zh: '图元集合',
       en: 'Primitives'
     },
     component: CateView,
     children: [
       {
-        path: 'primitive',
-        component: 'primitives/primitive',
+        path: 'vc-collection-primitive',
+        component: 'primitives/vc-collection-primitive',
         name: {
-          zh: '普通图元(Primitive)',
-          en: 'Primitive'
+          zh: '普通图元集合',
+          en: 'PrimitiveCollection'
         }
       },
       {
-        path: 'ground-primitive',
-        component: 'primitives/ground-primitive',
+        path: 'vc-collection-primitive-billboard',
+        component: 'primitives/vc-collection-primitive-billboard',
         name: {
-          zh: '贴地图元(GroundPrimitive)',
-          en: 'GroundPrimitive'
-        }
-      },
-      {
-        path: 'classification-primitive',
-        component: 'primitives/classification-primitive',
-        name: {
-          zh: '体图元(ClassificationPrimitive)',
-          en: 'ClassificationPrimitive'
-        }
-      },
-      {
-        path: 'label-collection',
-        component: 'primitives/label-collection',
-        name: {
-          zh: '标签图元集合(LabelCollection)',
-          en: 'LabelCollection'
-        }
-      },
-      {
-        path: 'label-primitive',
-        component: 'primitives/label-primitive',
-        name: {
-          zh: '标签图元(Label)',
-          en: 'Label'
-        }
-      },
-      {
-        path: 'billboard-collection',
-        component: 'primitives/billboard-collection',
-        name: {
-          zh: '布告板图元集合(BillboardCollection)',
+          zh: '布告板图元集合',
           en: 'BillboardCollection'
         }
       },
       {
-        path: 'billboard-primitive',
-        component: 'primitives/billboard-primitive',
+        path: 'vc-collection-primitive-label',
+        component: 'primitives/vc-collection-primitive-label',
         name: {
-          zh: '布告板图元(Billboard)',
+          zh: '标签图元集合',
+          en: 'LabelCollection'
+        }
+      },
+      {
+        path: 'vc-collection-primitive-point',
+        component: 'primitives/vc-collection-primitive-point',
+        name: {
+          zh: '点图元集合',
+          en: 'PointPrimitiveCollection'
+        }
+      },
+      {
+        path: 'vc-collection-primitive-polyline',
+        component: 'primitives/vc-collection-primitive-polyline',
+        name: {
+          zh: '线图元集合',
+          en: 'PolylineCollection'
+        }
+      }
+    ]
+  },
+  {
+    path: 'primitive',
+    name: {
+      zh: '图元',
+      en: 'Primitive'
+    },
+    component: CateView,
+    children: [
+      {
+        path: 'vc-primitive',
+        component: 'primitive/vc-primitive',
+        name: {
+          zh: '普通图元',
+          en: 'VcPrimitive'
+        }
+      },
+      {
+        path: 'vc-primitive-ground',
+        component: 'primitive/vc-primitive-ground',
+        name: {
+          zh: '贴地图元',
+          en: 'GroundPrimitive'
+        }
+      },
+      {
+        path: 'vc-primitive-classification',
+        component: 'primitive/vc-primitive-classification',
+        name: {
+          zh: '分类图元',
+          en: 'ClassificationPrimitive'
+        }
+      },
+      {
+        path: 'vc-primitive-billboard',
+        component: 'primitive/vc-primitive-billboard',
+        name: {
+          zh: '布告板图元',
           en: 'Billboard'
         }
       },
       {
-        path: 'point-collection',
-        component: 'primitives/point-collection',
+        path: 'vc-primitive-label',
+        component: 'primitive/vc-primitive-label',
         name: {
-          zh: '点图元集合(PointCollection)',
-          en: 'PointCollection'
+          zh: '标签图元',
+          en: 'Label'
         }
       },
       {
-        path: 'point-primitive',
-        component: 'primitives/point-primitive',
+        path: 'vc-primitive-point',
+        component: 'primitive/vc-primitive-point',
         name: {
-          zh: '点图元(PointPrimitive)',
+          zh: '点图元',
           en: 'PointPrimitive'
         }
       },
       {
-        path: 'polyline-collection',
-        component: 'primitives/polyline-collection',
+        path: 'vc-primitive-polyline',
+        component: 'primitive/vc-primitive-polyline',
         name: {
-          zh: '线图元集合(PolylineCollection)',
-          en: 'PolylineCollection'
-        }
-      },
-      {
-        path: 'polyline-primitive',
-        component: 'primitives/polyline-primitive',
-        name: {
-          zh: '线图元(PolylinePrimitive)',
+          zh: '线图元',
           en: 'PolylinePrimitive'
         }
       },
       {
-        path: 'model-primitive',
-        component: 'primitives/model-primitive',
+        path: 'vc-primitive-polyline-ground',
+        component: 'primitive/vc-primitive-polyline-ground',
         name: {
-          zh: '模型图元(Model)',
+          zh: '贴地线图元',
+          en: 'GroundPolylinePrimitive'
+        }
+      },
+      {
+        path: 'vc-primitive-model',
+        component: 'primitive/vc-primitive-model',
+        name: {
+          zh: '模型图元',
           en: 'Model'
         }
       },
       {
-        path: 'cesium-3dtileset',
-        component: 'primitives/cesium-3dtileset',
+        path: 'vc-primitive-3dtileset',
+        component: 'primitive/vc-primitive-3dtileset',
         name: {
-          zh: '3DTiles(Cesium3DTileset)',
+          zh: '3DTileset图元',
           en: 'Cesium3DTileset'
         }
       }
     ]
   },
   {
-    path: 'geometries',
+    path: 'geometry',
     name: {
       zh: '几何体',
-      en: 'Geometries'
+      en: 'geometry'
     },
     component: CateView,
     children: [
       {
-        path: 'box-geometry',
-        component: 'geometries/box-geometry',
+        path: 'vc-instance-geometry',
+        component: 'geometry/vc-instance-geometry',
         name: {
-          zh: '盒子(BoxGeometry)',
+          zh: '几何体实例',
+          en: 'GeometryInstance'
+        }
+      },
+      {
+        path: 'vc-geometry-box',
+        component: 'geometry/vc-geometry-box',
+        name: {
+          zh: '立方体',
           en: 'BoxGeometry'
         }
       },
       {
-        path: 'rectangle-geometry',
-        component: 'geometries/rectangle-geometry',
+        path: 'vc-geometry-polygon',
+        component: 'geometry/vc-geometry-polygon',
         name: {
-          zh: '矩形(RectangleGeometry)',
-          en: 'RectangleGeometry'
+          zh: '多边形',
+          en: 'PolygonGeometry'
         }
       },
       {
-        path: 'polygon-geometry',
-        component: 'geometries/polygon-geometry',
+        path: 'vc-geometry-polyline',
+        component: 'geometry/vc-geometry-polyline',
         name: {
-          zh: '多边形(PolygonGeometry)',
-          en: 'PolygonGeometry'
+          zh: '多段线',
+          en: 'PolylineGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-polyline-ground',
+        component: 'geometry/vc-geometry-polyline-ground',
+        name: {
+          zh: '贴地多段线',
+          en: 'GroundPolylineGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-rectangle',
+        component: 'geometry/vc-geometry-rectangle',
+        name: {
+          zh: '矩形',
+          en: 'RectangleGeometry'
         }
       }
     ]
   },
   {
-    path: 'datasources',
-    name: {
-      zh: '数据源',
-      en: 'Datasources'
-    },
+    path: 'tools',
     component: CateView,
+    name: {
+      zh: '工具',
+      en: 'Tools'
+    },
     children: [
+      // {
+      //   path: 'vc-painting',
+      //   component: 'toolsc-painting',
+      //   name: {
+      //     zh: '绘制',
+      //     en: 'Painting'
+      //   }
+      // },
       {
-        path: 'geojson-datasource',
-        component: 'datasources/geojson-datasource',
+        path: 'vc-measuring',
+        component: 'tool/vc-measuring',
         name: {
-          zh: 'GeoJson数据源',
-          en: 'GeoJsonDataSource'
+          zh: '量算',
+          en: 'Measuring'
         }
       },
       {
-        path: 'custom-datasource',
-        component: 'datasources/custom-datasource',
+        path: 'vc-navigation',
+        component: 'tool/vc-navigation',
         name: {
-          zh: 'Custom数据源',
-          en: 'CustomDataSource'
-        }
-      },
-      {
-        path: 'czml-datasource',
-        component: 'datasources/czml-datasource',
-        name: {
-          zh: 'Czml数据源',
-          en: 'CzmlDataSource'
-        }
-      },
-      {
-        path: 'kml-datasource',
-        component: 'datasources/kml-datasource',
-        name: {
-          zh: 'Kml数据源',
-          en: 'KmlDataSource'
+          zh: '导航罗盘',
+          en: 'VcNavigation'
         }
       }
     ]
@@ -604,27 +661,27 @@ const routeMap = [
     component: CateView,
     children: [
       {
-        path: 'cesium-heatmap',
-        component: 'visualization/cesium-heatmap',
+        path: 'vc-heatmap',
+        component: 'visualization/vc-heatmap',
         name: {
           zh: '热力图',
-          en: 'HeatMap'
+          en: 'VcHeatMap'
         }
       },
       {
-        path: 'cesium-windmap',
-        component: 'visualization/cesium-windmap',
+        path: 'vc-windmap',
+        component: 'visualization/vc-windmap',
         name: {
           zh: '风向图',
-          en: 'WindMap'
+          en: 'VcWindMap'
         }
       },
       {
-        path: 'cesium-flood',
-        component: 'visualization/cesium-flood',
+        path: 'vc-analysis-flood',
+        component: 'visualization/vc-analysis-flood',
         name: {
           zh: '淹没分析',
-          en: 'FloodAnalysis'
+          en: 'VcFloodAnalysis'
         }
       }
     ]
