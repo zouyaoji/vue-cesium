@@ -1,9 +1,5 @@
-/*
- * @Author: zouyaoji
- * @Date: 2018-02-06 17:56:48
- * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-10-16 18:24:22
- */
+/* * @Author: zouyaoji * @Date: 2018-02-06 17:56:48 * @Last Modified by: zouyaoji * @Last Modified time: 2019-11-19
+21:07:27 */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
     <slot></slot>
@@ -177,7 +173,10 @@ export default {
       if (Cesium.defined(viewer.selectionIndicator) && !viewer.selectionIndicator.isDestroyed() && !val) {
         viewer.selectionIndicator.destroy()
         viewer._selectionIndicator = undefined
-        let selectionIndicatorContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-selectionIndicatorContainer')
+        let selectionIndicatorContainer = getDocumentByClassName(
+          viewerContainer.children,
+          'cesium-viewer-selectionIndicatorContainer'
+        )
         viewerContainer.removeChild(selectionIndicatorContainer)
       } else if (!Cesium.defined(viewer.selectionIndicator) || viewer.selectionIndicator.isDestroyed()) {
         let selectionIndicatorContainer = document.createElement('div')
@@ -221,7 +220,11 @@ export default {
         toolbar.appendChild(geocoderContainer)
         let geocoder = new Cesium.Geocoder({
           container: geocoderContainer,
-          geocoderServices: Cesium.defined(this.geocoder) ? (Cesium.isArray(this.geocoder) ? this.geocoder : [this.geocoder]) : undefined,
+          geocoderServices: Cesium.defined(this.geocoder)
+            ? Cesium.isArray(this.geocoder)
+              ? this.geocoder
+              : [this.geocoder]
+            : undefined,
           scene: viewer.scene,
           viewer: viewer
         })
@@ -259,8 +262,10 @@ export default {
         viewer.sceneModePicker.destroy()
         viewer._sceneModePicker = undefined
       } else if (!Cesium.defined(viewer.sceneModePicker) || viewer.sceneModePicker.isDestroyed()) {
-        if ((this.sceneModePicker === true) && this.scene3DOnly) {
-          throw new Cesium.DeveloperError('options.sceneModePicker is not available when options.scene3DOnly is set to true.')
+        if (this.sceneModePicker === true && this.scene3DOnly) {
+          throw new Cesium.DeveloperError(
+            'options.sceneModePicker is not available when options.scene3DOnly is set to true.'
+          )
         }
         if (!this.scene3DOnly && this.sceneModePicker === true) {
           let sceneModePicker = new Cesium.SceneModePicker(toolbar, viewer.scene)
@@ -305,8 +310,9 @@ export default {
           )
         }
       } else if (!Cesium.defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
-        let createBaseLayerPicker = (!Cesium.defined(viewer.globe) || this.globe !== false) &&
-                                    (!Cesium.defined(viewer.baseLayerPicker) || this.baseLayerPicker !== false)
+        let createBaseLayerPicker =
+          (!Cesium.defined(viewer.globe) || this.globe !== false) &&
+          (!Cesium.defined(viewer.baseLayerPicker) || this.baseLayerPicker !== false)
 
         // >>includeStart('debug', pragmas.debug);
         // If using BaseLayerPicker, imageryProvider is an invalid option
@@ -335,8 +341,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
 
         if (createBaseLayerPicker) {
           viewer.imageryLayers.removeAll()
-          let imageryProviderViewModels = Cesium.defaultValue(this.imageryProviderViewModels, Cesium.createDefaultImageryProviderViewModels())
-          let terrainProviderViewModels = Cesium.defaultValue(this.terrainProviderViewModels, Cesium.createDefaultTerrainProviderViewModels())
+          let imageryProviderViewModels = Cesium.defaultValue(
+            this.imageryProviderViewModels,
+            Cesium.createDefaultImageryProviderViewModels()
+          )
+          let terrainProviderViewModels = Cesium.defaultValue(
+            this.terrainProviderViewModels,
+            Cesium.createDefaultTerrainProviderViewModels()
+          )
           let baseLayerPicker = new Cesium.BaseLayerPicker(toolbar, {
             globe: viewer.scene.globe,
             imageryProviderViewModels: imageryProviderViewModels,
@@ -370,9 +382,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
               window.localStorage.setItem('cesium-hasSeenNavHelp', 'true')
             }
           }
-        } catch (e) {
-
-        }
+        } catch (e) { }
         let navigationHelpButton = new Cesium.NavigationHelpButton({
           container: toolbar,
           instructionsInitiallyVisible: Cesium.defaultValue(this.navigationInstructionsInitiallyVisible, showNavHelp)
@@ -522,10 +532,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     sceneMode (val) {
       const { Cesium, viewer } = this
-      if (Cesium.SceneMode.COLUMBUS_VIEW === val ||
-          Cesium.SceneMode.MORPHING === val ||
-          Cesium.SceneMode.SCENE2D === val ||
-          Cesium.SceneMode.SCENE3D === val) {
+      if (
+        Cesium.SceneMode.COLUMBUS_VIEW === val ||
+        Cesium.SceneMode.MORPHING === val ||
+        Cesium.SceneMode.SCENE2D === val ||
+        Cesium.SceneMode.SCENE3D === val
+      ) {
         viewer.scene.mode = val
       }
     },
@@ -545,7 +557,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       const { viewer } = this
       viewer.terrainProvider = val
     },
-    'camera': {
+    camera: {
       handler (val) {
         const { Cesium, viewer } = this
         viewer.camera.setView({
@@ -576,7 +588,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       clock.shouldAnimate = false
     },
     resizeToolbar (parent, child) {
-      Array.prototype.slice.call(parent.children).forEach(element => {
+      Array.prototype.slice.call(parent.children).forEach((element) => {
         switch (element.className) {
           case 'cesium-viewer-geocoderContainer':
             element.customIndex = 1
@@ -600,10 +612,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         }
       })
       let arr = []
-      Array.prototype.slice.call(parent.children).forEach(element => {
+      Array.prototype.slice.call(parent.children).forEach((element) => {
         arr.push(element)
       })
-      arr.sort(function (a, b) { return a.customIndex - b.customIndex })
+      arr.sort(function (a, b) {
+        return a.customIndex - b.customIndex
+      })
       for (var i = 0; i < arr.length; i++) {
         parent.appendChild(arr[i])
       }
@@ -658,10 +672,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
     },
     init (Cesium) {
-      if (this.viewer) { return }
+      if (this.viewer) {
+        return
+      }
       let $el = this.$refs.viewer
-      let accessToken = this.accessToken ? this.accessToken : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('accessToken')
-        ? this._Cesium().accessToken : this.accessToken
+      let accessToken = this.accessToken
+        ? this.accessToken
+        : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('accessToken')
+          ? this._Cesium().accessToken
+          : this.accessToken
 
       Cesium.Ion.defaultAccessToken = accessToken
       const {
@@ -731,8 +750,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         imageryProviderViewModels,
         selectedTerrainProviderViewModel,
         terrainProviderViewModels,
-        imageryProvider: this.isEmptyObj(imageryProvider) ? Cesium.defined(Cesium.TileMapServiceImageryProvider) ? new Cesium.TileMapServiceImageryProvider({
-          url: url }) : Cesium.createTileMapServiceImageryProvider({ url: url }) : imageryProvider,
+        imageryProvider: this.isEmptyObj(imageryProvider)
+          ? Cesium.defined(Cesium.TileMapServiceImageryProvider)
+            ? new Cesium.TileMapServiceImageryProvider({
+              url: url
+            })
+            : Cesium.createTileMapServiceImageryProvider({ url: url })
+          : imageryProvider,
         terrainProvider,
         skyBox,
         skyAtmosphere,
@@ -762,17 +786,21 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       const viewer = new Cesium.Viewer($el, options)
       this.viewer = viewer
       bindEvents.call(this, viewer)
-      Events['viewer-children-events'].forEach(eventName => {
+      Events['viewer-children-events'].forEach((eventName) => {
         bindEvents.call(this, viewer[eventName.name], eventName.events)
       })
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      Events['viewer-mouse-events'].forEach(eventName => {
+      Events['viewer-mouse-events'].forEach((eventName) => {
         const listener = this.$listeners[eventName]
         listener && handler.setInputAction(listener.fns, Cesium.ScreenSpaceEventType[eventName])
       })
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(this.camera.position.lng, this.camera.position.lat, this.camera.position.height),
+          destination: Cesium.Cartesian3.fromDegrees(
+            this.camera.position.lng,
+            this.camera.position.lat,
+            this.camera.position.height
+          ),
           orientation: {
             heading: Cesium.Math.toRadians(this.camera.heading),
             pitch: Cesium.Math.toRadians(this.camera.pitch),
@@ -784,8 +812,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       let _this = this
       viewer.camera.changed.addEventListener(() => {
         const listener = _this.$listeners['update:camera']
-        let cartographic = Cesium.Cartographic.fromCartesian(viewer.camera.position)
-        let camera = {
+        const cartographic = viewer.camera.positionCartographic
+        const camera = {
           position: {
             lng: Cesium.Math.toDegrees(cartographic.longitude),
             lat: Cesium.Math.toDegrees(cartographic.latitude),
@@ -795,7 +823,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           pitch: Cesium.Math.toDegrees(viewer.camera.pitch),
           roll: Cesium.Math.toDegrees(viewer.camera.roll)
         }
-        if (listener) { this.$emit('update:camera', camera) }
+        listener && this.$emit('update:camera', camera)
       })
 
       // if (Cesium.defined(viewer.animation)) {
@@ -827,8 +855,11 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     getCesiumScript () {
       if (!global.Cesium) {
-        let cesiumPath = this.cesiumPath ? this.cesiumPath : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
-          ? this._Cesium().cesiumPath : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+        let cesiumPath = this.cesiumPath
+          ? this.cesiumPath
+          : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
+            ? this._Cesium().cesiumPath
+            : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
         global.Cesium = {}
         global.Cesium._preloader = new Promise((resolve, reject) => {
           global._initCesium = function () {
@@ -871,8 +902,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       return mergeDescriptors(
         {},
         {
-          get Cesium () { return vm.Cesium },
-          get viewer () { return vm.viewer }
+          get Cesium () {
+            return vm.Cesium
+          },
+          get viewer () {
+            return vm.viewer
+          }
         }
       )
     }
@@ -894,7 +929,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         }
       }
-      removeScripts.forEach(script => {
+      removeScripts.forEach((script) => {
         document.getElementsByTagName('body')[0].removeChild(script)
       })
       let links = document.getElementsByTagName('link')
