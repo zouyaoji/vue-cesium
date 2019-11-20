@@ -1,7 +1,7 @@
 import services from './services'
 import nameClassMap from '../utils/nameClassMap'
 import specialProps from '../utils/specialProps'
-import { warn, log } from '../utils/log'
+import { warn } from '../utils/log'
 const VM_PROP = 'vm'
 /**
  * 获取父组件方法。
