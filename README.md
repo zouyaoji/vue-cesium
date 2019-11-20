@@ -16,10 +16,12 @@
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
 
-## Documentation
+## Links
 
-- [Online Documentation](https://zouyaoji.top/vue-cesium)
-- [For more examples](https://github.com/zouyaoji/vue-cesium-demo)
+- [Documentation](https://zouyaoji.top/vue-cesium)
+- [Official Demo](https://sandcastle.cesium.com/)
+- [More examples](https://github.com/zouyaoji/vue-cesium-demo)
+- [Documentation-v1](https://zouyaoji.top/vue-cesium-v1)
 
 ## Get Start
 

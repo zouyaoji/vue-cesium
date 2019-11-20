@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-11-13 21:14:32
+ * @Last Modified time: 2019-11-20 09:53:22
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -808,8 +808,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       let _this = this
       viewer.camera.changed.addEventListener(() => {
         const listener = _this.$listeners['update:camera']
-        let cartographic = Cesium.Cartographic.fromCartesian(viewer.camera.position)
-        let camera = {
+        const cartographic = viewer.camera.positionCartographic
+        const camera = {
           position: {
             lng: Cesium.Math.toDegrees(cartographic.longitude),
             lat: Cesium.Math.toDegrees(cartographic.latitude),

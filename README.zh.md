@@ -16,10 +16,12 @@
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
 
-## 文档
+## 链接
 
 - [在线文档](https://zouyaoji.top/vue-cesium)
+- [官方例子](https://sandcastle.cesium.com/)
 - [更多例子](https://github.com/zouyaoji/vue-cesium-demo)
+- [v1 版本文档](https://zouyaoji.top/vue-cesium-v1)
 
 ## 开始
 
