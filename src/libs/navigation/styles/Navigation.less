@@ -1,0 +1,145 @@
+.navigation-controls {
+  //.floating-vertical;
+  position: absolute;
+  right: 30px;
+  top: 210px;
+  width: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 300;
+  // avoids selection of text with rapid zooming
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.navigation-control {
+  .clickable;
+  border-bottom: @floating-element-border;
+}
+
+.naviagation-control:active {
+  color: #fff;
+}
+
+.navigation-control-last {
+  .navigation-control;
+  border-bottom: 0;
+}
+
+.navigation-control-icon-zoom-in {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: @floating-text-color;
+  padding-bottom: 4px;
+}
+
+.navigation-control-icon-zoom-out {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: @floating-text-color;
+}
+
+.navigation-control-icon-reset {
+  position: relative;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  fill: fade(@floating-text-color, 80%);
+  padding-top: 6px;
+  padding-bottom: 6px;
+  box-sizing: content-box;
+}
+
+@compass-diameter: 95px;
+@compass-ring-width: @compass-diameter * 20 / 145;
+@compass-gyro-diameter: @compass-diameter * 50 / 145;
+
+.compass {
+  .opaque-to-input;
+  position: absolute;
+  right: 0px;
+  top: 100px;
+  width: @compass-diameter;
+  height: @compass-diameter;
+  overflow: hidden;
+}
+
+.compass-outer-ring {
+  position: absolute;
+  top: 0;
+  width: @compass-diameter;
+  height: @compass-diameter;
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.compass-outer-ring-background {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 44px;
+  border: 12px solid @floating-background-color;
+  box-sizing: content-box;
+}
+
+.compass-gyro {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: @compass-diameter;
+  height: @compass-diameter;
+  fill: #ccc;
+}
+
+.compass-gyro-active {
+  fill: @highlight-color;
+}
+
+.compass-gyro-background {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 33px;
+  height: 33px;
+  border-radius: 33px;
+  background-color: @floating-background-color;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: content-box;
+}
+
+.compass-gyro-background:hover + .compass-gyro {
+  fill: @highlight-color;
+}
+
+.compass-rotation-marker {
+  position: absolute;
+  top: 0;
+  width: @compass-diameter;
+  height: @compass-diameter;
+  fill: @highlight-color;
+}
+
+// Don't display the nav controls on small screens like mobile phones.
+// @media screen and (max-width: 700px), screen and (max-height: 420px) {
+//     .navigation-controls {
+//         display: none;
+//     }
+//     .compass {
+//         display: none;
+//     }
+// }
+
+@media print {
+  .navigation-controls {
+    display: none;
+  }
+  .compass {
+    display: none;
+  }
+}

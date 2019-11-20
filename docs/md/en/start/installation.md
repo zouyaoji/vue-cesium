@@ -3,7 +3,13 @@
 ## NPM
 
 ```bash
-$ npm install vue-cesium --save
+npm install vue-cesium --save
+```
+
+## YARN
+
+```bash
+yarn add vue-cesium
 ```
 
 ## CDN

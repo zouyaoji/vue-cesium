@@ -1,7 +1,7 @@
 <script>
 import cmp from '../../mixins/virtualCmp.js'
 export default {
-  name: 'post-process-stage',
+  name: 'vc-post-process-stage',
   mixins: [cmp],
   props: {
     fragmentShader: String,

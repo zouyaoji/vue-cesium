@@ -1,10 +1,6 @@
 import Util from './util'
 import CustomPrimitive from './customPrimitive'
-import segmentDrawVert from './glsl/segmentDraw.vert.js'
-import segmentDrawFrag from './glsl/segmentDraw.frag.js'
-import trailDrawFrag from './glsl/trailDraw'
-import fullscreenVert from './glsl/fullscreen'
-import screenDrawFrag from './glsl/screenDraw'
+import { segmentDrawVert, segmentDrawFrag, trailDrawFrag, fullscreenVert, screenDrawFrag } from './glsl'
 
 class ParticlesRendering {
   constructor (context, data, particleSystemOptions, viewerParameters, particlesComputing) {

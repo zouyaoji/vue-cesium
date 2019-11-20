@@ -1,0 +1,42 @@
+.distance-legend {
+    .floating-horizontal;
+    //right: 25px;
+    bottom: 30px;
+    height: 30px;
+    width: 125px;
+    //border: 1px solid rgba(255,255,255,0.1);
+    box-sizing: content-box;
+}
+
+.distance-legend-label {
+    display: inline-block;
+    font-family: @default-font;
+    font-size: 14px;
+    font-weight: lighter;
+    line-height: 30px;
+    color: @floating-text-color;
+    width: 125px;
+    text-align: center;
+}
+
+.distance-legend-scale-bar {
+    border-left: 1px solid @floating-text-color;
+    border-right: 1px solid @floating-text-color;
+    border-bottom: 1px solid @floating-text-color;
+    position: absolute;
+    height: 10px;
+    top: 15px;
+}
+
+@media print {
+    .distance-legend {
+        display: none;
+    }
+}
+
+// Don't display the distance legend on small screens like mobile phones.
+@media screen and (max-width: 700px), screen and (max-height: 420px) {
+    .distance-legend {
+        display: none;
+    }
+}

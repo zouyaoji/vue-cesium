@@ -34,7 +34,6 @@ export default {
 </script>
 
 <style lang="stylus">
-
 h1.title {
   .logo {
     width: 2.5rem;
@@ -80,9 +79,9 @@ h2 {
   }
 }
 
-.map {
+.viewer {
   width: 100%;
-  height: 300px;
+  height: 550px;
 
   img {
     max-width: none !important;
@@ -140,11 +139,6 @@ h2 {
   width: 100%;
 }
 
-.viewer {
-  width: 100%;
-  height: 550px;
-}
-
 .demo-tool {
   position: absolute;
   left: 1%;
@@ -152,17 +146,10 @@ h2 {
   min-width: 185px;
   z-index: 100;
   color: white;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-.md-input-container label {
-  color: #fff;
+.cesium-svgPath-svg {
+  height: 100% !important;
 }
-
-.md-input-container.md-has-value input {
-  color: #fff;
-}
-
- .cesium-svgPath-svg {
-    height: 100% !important;
-  }
 </style>

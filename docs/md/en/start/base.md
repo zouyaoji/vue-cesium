@@ -22,40 +22,112 @@
 
 ### Cartesian2
 
-Describe two-dimensional points. Such as the `dimensions` attribute of the component `box-graphics`.
+Describe two-dimensional points. Such as the `dimensions` attribute of the component `vc-graphics-box`.
 
 ```JavaScript
-// new Cesium.Cartesian2(dimensions[0], dimensions[1])
-[width, height]
+{
+  x: number,
+  y: number
+}
+```
+
+### Cartesian2 Array
+
+- Describe a two-dimensional point collection. Such as the `shape` attribute of the component `vc-graphics-polyline-volume`.
+
+```JavaScript
+[{ x: number, y: number },...,{ x: number, y: number }]
 ```
 
 ### Cartesian3
 
-Describe the 3D points. Such as the `position` property of the component `entity`.
+Describe the 3D points. Such as the `position` property of the component `vc-entity`.
 
 ```JavaScript
-// Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2])
-[longitude, latitude, height]
+{
+  lng: number,
+  lat: number,
+  height: number
+}
+// or
+{
+  x: number,
+  y: number,
+  z: number
+}
 ```
 
 ### Cartesian3 Array
 
-Describe a collection of 3D points. Such as the `positions` attribute of the component `polyline-graphics`.
+Describe a collection of 3D points. Such as the `positions` attribute of the component `vc-graphics-polyline`.
 
 ```JavaScript
-// Cesium.Cartesian3.fromDegreesArray(positions)
-[longitude, latitude...,longitude, latitude]
-// Cesium.Cartesian3.fromDegreesArrayHeights(positions)
-[longitude, latitude, height...,longitude, latitude, height]
+[{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]
 ```
 
 ### Rectangle
 
-Describe the rectangle. Such as the `coordinates` attribute of the component `rectangle-graphics`.
+Describe the rectangle. Such as the `coordinates` attribute of the component `vc-graphics-rectangle`.
 
 ```JavaScript
-Cesium.Rectangle.fromDegrees(coordinates[0], coordinates[1], coordinates[2], coordinates[3]
-[west, sounth, east, north]
+{ west: number, south: number, east: number, north: number }
+```
+
+### DistanceDisplayCondition
+
+- Describes whether the object is displayed with the camera distance changing.
+
+```JavaScript
+{
+  near: number,
+  far: number
+}
+```
+
+### NearFarScalar
+
+- Describes the upper and lower limits of scaling, offset, etc. of the object at close and long distances as a function of camera distance.
+
+```JavaScript
+{
+  near: number,
+  nearValue: number,
+  far: number,
+  farValue: number
+}
+```
+
+### Color
+
+```JavaScript
+
+// String can be #rgb, #rrggbb, rgb(), rgba(), hsl(), or hsla() etc.
+color: 'WHITE'
+color: 'rgb(255,255,255)'
+color: '#67ADDF'
+// Array range 0-1
+color: [1.0, 1.0, 1.0, 1.0]
+```
+
+### PolygonHierarchy
+
+```JavaScript
+// Array
+[{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}]
+// Object
+{
+  positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}],
+  holes: [
+    {
+      positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}],
+      holes: [
+        positions: [{lng: number, lat: number, height: number},...,{lng: number, lat: number, height: number}]
+        // ...
+      ]
+    }
+  ]
+}
+
 ```
 
 ## Reference

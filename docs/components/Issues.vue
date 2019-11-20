@@ -7,16 +7,13 @@ md-layout.issues
       ref="dialog")
     md-whiteframe
       md-tabs(@change="changeType")
-        template(v-for="(type, index) in formTypes")
-          md-tab(:md-label="type.label" :key="index")
-            form
-              template(v-for="(item,subIndex) in type.items")
-                md-input-container(:key="subIndex")
-                  div(:key="subIndex")
-                    label(v-text="item.label")
-                    md-input(v-if="item.type === 'input'" v-model="formData[type.name][item.name]", :required="true")
-                    md-textarea(v-if="item.type === 'textarea'" v-model="formData[type.name][item.name]")
-                md-button.md-raised.md-primary(@click="openIssue") 提交
+        md-tab(:md-label="type.label" :key="index" v-for="(type,index) in formTypes")
+          form
+            md-input-container(:key="'input' + index" v-for="item,index in type.items")
+              label(v-text="item.label")
+              md-input(v-if="item.type === 'input'" v-model="formData[type.name][item.name]", :required="true")
+              md-textarea(v-if="item.type === 'textarea'" v-model="formData[type.name][item.name]")
+            md-button.md-raised.md-primary(@click="openIssue") 提交
   md-layout.issues-card
     md-whiteframe
       md-toolbar
@@ -215,18 +212,28 @@ export default {
 </script>
 
 <style lang="stylus">
-.issues
-  .issues-card
-    padding 20px 10px
-    flex 1
-    .md-whiteframe
-      flex 1
-  .md-preview
-    display block
-    flex 1
-    padding 10px
-    pre
-      background #eee
-  .doc
-    padding 0
+.issues {
+  .issues-card {
+    padding: 20px 10px;
+    flex: 1;
+
+    .md-whiteframe {
+      flex: 1;
+    }
+  }
+
+  .md-preview {
+    display: block;
+    flex: 1;
+    padding: 10px;
+
+    pre {
+      background: #eee;
+    }
+  }
+
+  .doc {
+    padding: 0;
+  }
+}
 </style>

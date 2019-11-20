@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://zouyaoji.top/vue-cesium/favicon.png" width="200px">
 </p>
-<p align="center">基于 Vue 2.x 的Cesium三维地图组件。</p>
+<p align="center">基于 Vue 2.x 的 Cesium 三维地图组件。</p>
 
 [![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
@@ -16,16 +16,20 @@
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
 
-## 文档
+## 链接
 
 - [在线文档](https://zouyaoji.top/vue-cesium)
+- [官方例子](https://sandcastle.cesium.com/)
 - [更多例子](https://github.com/zouyaoji/vue-cesium-demo)
+- [v1 版本文档](https://zouyaoji.top/vue-cesium-v1)
 
 ## 开始
 
-此项目引入的是构建后的 Cesium 包，也就是 Cesium 源码打包后`Build`目录的库。之所以这样是因为引入`Build`后的库可以随心所欲的切换在线、本地源，官方原生库和基于 Cesium 构建的第三方库。
+`VueCesium` 引入的是构建后的 `CesiumJS` 库，也就是下载 `Cesium` 源码后打包生成的 `Build`目录的 `CesiumJS`。引入 `Build` 后的库有个很大的好处：可以根据项目需求使用在线、本地、官方原生库或基于 Cesium 构建的第三方库。
 
-逐步完善中，有问题可提 Issue 或者直接联系我交流。<370681295@qq.com>
+[查看目前已开发的组件](https://github.com/zouyaoji/vue-cesium/blob/master/src/utils/nameClassMap.js).
+
+逐步完善中，有问题请提 Issue。
 
 ### 安装
 
@@ -66,7 +70,7 @@ Vue.use(VueCesium, {
 ```html
 <template>
   <div class="viewer">
-    <cesium-viewer> </cesium-viewer>
+    <vc-viewer></vc-viewer>
   </div>
 </template>
 
@@ -83,7 +87,7 @@ Vue.use(VueCesium, {
 ```vue
 <template>
   <div class="viewer">
-    <cesium-viewer> </cesium-viewer>
+    <vc-viewer> </vc-viewer>
   </div>
 </template>
 
@@ -97,8 +101,6 @@ Vue.use(VueCesium, {
 
 ## TODOS
 
-- ~~关键属性不需在 ready 后用 Cesium 实例化，可以直接写到 data 中，一方面方便开发，另外一方面 watch 对象没那么复杂了，性能好些~~
-- 用 rollupjs 打包改善局部引入
 - 完善文档
 - 继续增加常用组件
 - ...

@@ -6,6 +6,12 @@
 npm install vue-cesium --save
 ```
 
+## YARN
+
+```bash
+yarn add vue-cesium
+```
+
 ## CDN
 
 - 待完善
