@@ -1,9 +1,0 @@
-{
-  "presets": [["@babel/preset-env"]],
-  "plugins": [
-    "add-module-exports",
-    "@babel/plugin-transform-modules-umd",
-    "@babel/plugin-syntax-dynamic-import",
-    ["@babel/transform-runtime"]
-  ]
-}
