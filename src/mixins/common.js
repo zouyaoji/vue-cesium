@@ -1,7 +1,7 @@
 import services from './services'
 import nameClassMap from '../utils/nameClassMap'
 import specialProps from '../utils/specialProps'
-import { warn } from '../utils/log'
+import { warn, log } from '../utils/log'
 const VM_PROP = 'vm'
 /**
  * 获取父组件方法。
@@ -19,7 +19,6 @@ const methods = {
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async load () {
-    console.log('load:--' + this.cesiumClass)
     if (this._mounted) {
       return false
     }
@@ -34,14 +33,12 @@ const methods = {
     }
     // 注册 Vue 侦听器
     setPropWatchers(true)
-    console.log(this.cesiumClass)
     this._createPromise = createCesiumObject().then(async (cesiumObject) => {
       this.originInstance = cesiumObject
       // Cesium 对象创建成功后再将其挂载渲染。
       return mount().then(() => {
         this._mounted = true
         // 触发该组件的 'ready' 事件。
-        console.log('ready:--' + this.cesiumClass)
         this.$emit('ready', { Cesium, viewer, cesiumObject: cesiumObject })
         return true
       })
@@ -53,7 +50,6 @@ const methods = {
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async unload () {
-    console.log('unload:--' + this.cesiumClass)
     // 如果该组件带有子组件，需要先移除子组件。
     for (const $node of (this.$slots.default || []).map((vnode) => vnode.componentInstance).filter((cmp) => !!cmp)) {
       await $node.unload()
@@ -74,9 +70,7 @@ const methods = {
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async reload () {
-    console.log('reload')
     return this.unload().then((aa) => {
-      console.log(aa)
       return this.load()
     })
   },
@@ -95,7 +89,6 @@ const methods = {
    */
 
   setPropWatchers (register) {
-    console.log('setPropWatchers:--' + register + '--' + this.cesiumClass + this.index)
     if (register) {
       const { $props, specialPropsKeys, cesiumClass, cesiumObject, applyToConstructor } = this
       if (!cesiumClass) { return }
@@ -119,13 +112,11 @@ const methods = {
         const unwatch = this.$watch(
           vueProp,
           async (val) => {
-            console.log(vueProp + '--' + val)
             await this.createPromise //  等待当前对象创建完成，否则监听到了变换也设置不成功
             if (hasSetter) {
               // 属性可写，直接动态响应属性的改变
               const { cesiumObject } = this
               const newVal = specialPropsKeys.indexOf(vueProp) !== -1 ? specialProps[vueProp].handler.call(this, val) : val
-              console.log(newVal)
               if (specialProps.conditions) {
                 if (
                   Cesium.defined(cesiumObject[cesiumProp]) &&

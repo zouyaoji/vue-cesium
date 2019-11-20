@@ -45,7 +45,6 @@
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
-          window.vm = this
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.camera.setView({
             destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),

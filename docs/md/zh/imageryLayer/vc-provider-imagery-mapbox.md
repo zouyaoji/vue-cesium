@@ -57,8 +57,6 @@
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           // ...
-          window.vm = this
-          window.viewer = viewer
         }
       }
     }

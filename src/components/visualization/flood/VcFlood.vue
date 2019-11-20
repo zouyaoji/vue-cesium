@@ -71,7 +71,6 @@ export default {
     },
     onTick () {
       const { maxHeight, speed } = this
-      console.log('123')
       if (this.extrudedHeight < maxHeight) {
         this.extrudedHeight = this.extrudedHeight + speed
       } else {
@@ -80,7 +79,6 @@ export default {
       }
     },
     async mount () {
-      console.log('mount')
       return true
     },
     async unmount () {

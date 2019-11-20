@@ -50,7 +50,6 @@ export default {
       return entities.remove(entity)
     },
     setGraphics (graphics, type) {
-      console.log('update:' + type)
       const listener = this.$listeners['update:' + type]
       if (listener) {
         this.$emit('update:' + type, graphics)

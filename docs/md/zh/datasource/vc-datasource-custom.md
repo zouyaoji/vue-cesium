@@ -63,8 +63,6 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
-          window.viewer = viewer
-          window.vm = this
           this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined

@@ -44,8 +44,6 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
-          window.viewer = viewer
-          window.vm = this
           const billboards = []
           for (var i = 0; i < 500; i++) {
             let billboard = {}
@@ -99,8 +97,6 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        window.viewer = viewer
-        window.vm = this
         const billboards = []
         for (var i = 0; i < 500; i++) {
           let billboard = {}
