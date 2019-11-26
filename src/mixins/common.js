@@ -97,8 +97,8 @@ const methods = {
       for (let i = 0; i < constructor.length; i++) {
         args.push({})
       }
-      // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以辅助判断 watcher 是动态响应还是重载。
-      const instance = cesiumObject || applyToConstructor(constructor, args)
+      // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测 watcher 改变时组件属性是动态响应还是重载组件。
+      let instance = cesiumObject || applyToConstructor(constructor, args)
       Object.keys($props).forEach((vueProp) => {
         let cesiumProp = vueProp
         if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
@@ -139,6 +139,7 @@ const methods = {
       })
       // 销毁临时对象
       instance && Cesium.destroyObject(instance)
+      instance = null
     } else {
       // 注销 watcher 对象
       this.unwatchFns.forEach((item) => item())
@@ -155,19 +156,16 @@ const methods = {
     let instance
     try {
       const args = [{}].concat(argArray)
-      // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，没想到更好的办法，这儿一并给赋值了
-      args[1].url = {}
+      // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，暂时没想到更好的办法
+      // args[1].url = ''
       args[1].mapId = {}
       args[1].geometry = {}
       args[1].rectangle = Cesium.Rectangle.MAX_VALUE
       args[1].polygonHierarchy = {}
       args[1].assetId = 1
       args[1].layers = ''
-      args[1].camera = new Cesium.Camera(this.viewer.scene)
-      args[1].canvas = {}
-      args[1].minimum = {}
-      args[1].maximum = {}
       args[2] = new Cesium.PolylineCollection({})
+
       const FactoryFunction = constructor.bind.apply(constructor, args)
       instance = new FactoryFunction()
     } catch (e) {

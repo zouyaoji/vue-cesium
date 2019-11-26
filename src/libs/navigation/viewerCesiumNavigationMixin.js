@@ -1,5 +1,5 @@
 import CesiumNavigation from './CesiumNavigation'
-import './styles/cesium-navigation.less'
+// import '../../styles/cesium-navigation.scss'
 
 /**
  * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance

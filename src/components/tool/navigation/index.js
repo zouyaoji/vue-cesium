@@ -1,4 +1,5 @@
 import VcNavigation from './VcNavigation.vue'
+import './VcNavigation.scss'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {

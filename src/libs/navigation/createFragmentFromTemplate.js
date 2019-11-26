@@ -1,7 +1,7 @@
 const createFragmentFromTemplate = (htmlString) => {
-  var holder = document.createElement('div')
+  const holder = document.createElement('div')
   holder.innerHTML = htmlString
-  var fragment = document.createDocumentFragment()
+  const fragment = document.createDocumentFragment()
   while (holder.firstChild) {
     fragment.appendChild(holder.firstChild)
   }

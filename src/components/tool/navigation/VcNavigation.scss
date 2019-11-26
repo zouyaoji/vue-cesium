@@ -1,0 +1,593 @@
+$default-font: 'Roboto', sans-serif;
+$highlight-color: #68adfe;
+$left-side-panels-width: 350px;
+
+//Panels
+$panel-background-color: #2f353c;
+$panel-text-color: #cccccc;
+$panel-emphasized-text-color: #ffffff;
+$panel-selected-text-color: $highlight-color;
+$panel-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.26);
+$panel-element-border: 1px solid rgba(100, 100, 100, 0.6);
+$panel-section-background-color: #282d32;
+$panel-form-input-background-color: #838689;
+$panel-form-input-text-color: #ffffff;
+$panel-form-button-background-color: #a1a3a6;
+$panel-form-button-text-color: #ffffff;
+
+// Explorer panel
+$explorer-panel-width: $left-side-panels-width;
+$explorer-panel-header-background-color: #757f88;
+$explorer-panel-inactive-tab-text-color: $panel-text-color;
+$explorer-panel-active-tab-text-color: $panel-emphasized-text-color;
+
+$explorer-panel-active-tab-underline-color: $highlight-color;
+$explorer-panel-close-animation-length: 0.25s;
+$explorer-panel-tab-switch-animation-length: 0.25s;
+$explorer-panel-badge-background-color: $highlight-color;
+$explorer-panel-badge-text-color: $panel-emphasized-text-color;
+
+//Floating elements
+
+$floating-background-color: rgba(47, 53, 60, 80%);
+$floating-text-color: #ffffff;
+$floating-element-border: 1px solid #555555;
+
+// Input
+$input-background-color: #a1a3a6;
+$input-text-color: #666666;
+
+/*html {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    background: #000;
+    font-size: 15px;
+    font-family: $default-font;
+}*/
+
+.full-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+
+  -webkit-transition: left $explorer-panel-close-animation-length ease-out;
+  -moz-transition: left $explorer-panel-close-animation-length ease-out;
+  -ms-transition: left $explorer-panel-close-animation-length ease-out;
+  -o-transition: left $explorer-panel-close-animation-length ease-out;
+  transition: left $explorer-panel-close-animation-length ease-out;
+}
+
+.transparent-to-input {
+  pointer-events: none;
+}
+
+@mixin opaque-to-input {
+  pointer-events: auto;
+}
+
+@mixin clickable {
+  cursor: pointer;
+}
+
+/*a {
+    text-decoration: none;
+    color: $highlight-color;
+}*/
+
+a:hover {
+  text-decoration: underline;
+}
+/*
+$modal-background-color: $panel-background-color;
+$modal-text-color: $panel-emphasized-text-color;
+$modal-header-background-color: rgba(0,0,0,0.2);
+$modal-header-text-color: $panel-emphasized-text-color;*/
+
+/*.modal-background {
+    @include opaque-to-input;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;  required for IE9
+}*/
+/*
+.modal {
+    position: absolute;
+    margin: auto;
+    background-color: $modal-background-color;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-height: 100%;
+    max-width: 100%;
+    font-family: $default-font;
+    color: $modal-text-color;
+}
+
+.modal-header {
+  background-color: $modal-header-background-color;
+  border-bottom: $panel-element-border;
+  font-size: 15px;
+  line-height: 40px;
+  margin: 0;
+}
+
+.modal-header h1 {
+  font-size: 15px;
+  color: $modal-header-text-color;
+  margin-left: 15px;
+}*/
+
+/* Commented out due to conflicts with client apps.
+.modal-content {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  overflow: auto;
+}*/
+
+/*.modal-close-button {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    color: $modal-header-text-color;
+}*/
+
+#ui {
+  // This keeps the UI above the map in IE9.
+  z-index: 2100;
+}
+
+@media print {
+  .full-window {
+    position: initial;
+  }
+}
+
+// input fields
+
+/* input[type=text] {
+  height: 38px;
+  background-color: #eeeeee;
+  color: $input-text-color;
+  font-size: 14px;
+}
+
+::-webkit-input-placeholder {
+  color: fade($input-text-color, 75%);
+  font-style: italic;
+}
+
+:-moz-placeholder { /* Firefox 18-
+  color: fade($input-text-color, 75%);
+  font-style: italic;
+}
+
+::-moz-placeholder {  /* Firefox 19+
+  color: fade($input-text-color, 75%);
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
+  color: fade($input-text-color, 75%);
+  font-style: italic;
+}
+
+input:focus {
+    outline-color: #FFFFFF;
+}
+*/
+
+/*select {
+  display: block;
+  background-color: $panel-form-input-background-color;
+  color: $panel-form-input-text-color;
+  height: 40px;
+  border: 0;
+  margin-top: 10px;
+  font-size: 14px;
+  padding-left: 5px;
+}*/
+
+.markdown {
+  img {
+    max-width: 100%;
+  }
+  svg {
+    max-height: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  fieldset {
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  label {
+    vertical-align: middle;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.25;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+  h4 {
+    font-size: 1rem;
+  }
+  h5 {
+    font-size: 0.875rem;
+  }
+  h6 {
+    font-size: 0.75rem;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+  em {
+    font-style: italic;
+  }
+  small {
+    font-size: 80%;
+  }
+  mark {
+    color: #000;
+    background: #ff0;
+  }
+  u {
+    text-decoration: underline;
+  }
+  s {
+    text-decoration: line-through;
+  }
+
+  dl,
+  ol,
+  ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  ol {
+    list-style: decimal inside;
+  }
+
+  ul {
+    list-style: disc inside;
+  }
+
+  pre,
+  code,
+  samp {
+    font-family: monospace;
+    font-size: inherit;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    overflow-x: scroll;
+  }
+
+  a {
+    color: #68adfe;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  pre,
+  code {
+    background-color: transparent;
+    border-radius: 3px;
+  }
+
+  hr {
+    border: 0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.125);
+  }
+
+  .left-align {
+    text-align: left;
+  }
+  .center {
+    text-align: center;
+  }
+  .right-align {
+    text-align: right;
+  }
+  .justify {
+    text-align: justify;
+  }
+
+  .truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  ol.upper-roman {
+    list-style-type: upper-roman;
+  }
+  ol.lower-alpha {
+    list-style-type: lower-alpha;
+  }
+
+  ul.circle {
+    list-style-type: circle;
+  }
+  ul.square {
+    list-style-type: square;
+  }
+
+  .list-reset {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
+@mixin floating {
+  @include opaque-to-input;
+  position: absolute;
+  border-radius: 15px;
+  //background-color: $floating-background-color;
+}
+
+@mixin floating-horizontal {
+  @include floating;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.floating-vertical {
+  @include floating;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+@media print {
+  .floating {
+    display: none;
+  }
+}
+
+.distance-legend {
+  @include floating-horizontal;
+  //right: 25px;
+  bottom: 30px;
+  height: 30px;
+  width: 125px;
+  //border: 1px solid rgba(255,255,255,0.1);
+  box-sizing: content-box;
+}
+
+.distance-legend-label {
+  display: inline-block;
+  font-family: $default-font;
+  font-size: 14px;
+  font-weight: lighter;
+  line-height: 30px;
+  color: $floating-text-color;
+  width: 125px;
+  text-align: center;
+}
+
+.distance-legend-scale-bar {
+  border-left: 1px solid $floating-text-color;
+  border-right: 1px solid $floating-text-color;
+  border-bottom: 1px solid $floating-text-color;
+  position: absolute;
+  height: 10px;
+  top: 15px;
+}
+
+@media print {
+  .distance-legend {
+    display: none;
+  }
+}
+
+// Don't display the distance legend on small screens like mobile phones.
+@media screen and (max-width: 700px), screen and (max-height: 420px) {
+  .distance-legend {
+    display: none;
+  }
+}
+
+.navigation-controls {
+  //@include floating-vertical;
+  position: absolute;
+  right: 30px;
+  top: 210px;
+  width: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 300;
+  // avoids selection of text with rapid zooming
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin navigation-control {
+  @include clickable;
+  border-bottom: $floating-element-border;
+}
+
+.naviagation-control:active {
+  color: #fff;
+}
+
+.navigation-control-last {
+  @include navigation-control;
+  border-bottom: 0;
+}
+
+.navigation-control-icon-zoom-in {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: $floating-text-color;
+  padding-bottom: 4px;
+}
+
+.navigation-control-icon-zoom-out {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  color: $floating-text-color;
+}
+
+.navigation-control-icon-reset {
+  position: relative;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  fill: fade($floating-text-color, 80%);
+  padding-top: 6px;
+  padding-bottom: 6px;
+  box-sizing: content-box;
+}
+
+$compass-diameter: 95px;
+$compass-ring-width: $compass-diameter * 20 / 145;
+$compass-gyro-diameter: $compass-diameter * 50 / 145;
+
+.compass {
+  @include opaque-to-input;
+  position: absolute;
+  right: 0px;
+  top: 100px;
+  width: $compass-diameter;
+  height: $compass-diameter;
+  overflow: hidden;
+}
+
+.compass-outer-ring {
+  position: absolute;
+  top: 0;
+  width: $compass-diameter;
+  height: $compass-diameter;
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.compass-outer-ring-background {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 44px;
+  border: 12px solid $floating-background-color;
+  box-sizing: content-box;
+}
+
+.compass-gyro {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: $compass-diameter;
+  height: $compass-diameter;
+  fill: #ccc;
+}
+
+.compass-gyro-active {
+  fill: $highlight-color;
+}
+
+.compass-gyro-background {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 33px;
+  height: 33px;
+  border-radius: 33px;
+  background-color: $floating-background-color;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: content-box;
+}
+
+.compass-gyro-background:hover + .compass-gyro {
+  fill: $highlight-color;
+}
+
+.compass-rotation-marker {
+  position: absolute;
+  top: 0;
+  width: $compass-diameter;
+  height: $compass-diameter;
+  fill: $highlight-color;
+}
+
+// Don't display the nav controls on small screens like mobile phones.
+@media screen and (max-width: 700px), screen and (max-height: 420px) {
+  .navigation-controls {
+    display: none;
+  }
+  .compass {
+    display: none;
+  }
+}
+
+@media print {
+  .navigation-controls {
+    display: none;
+  }
+  .compass {
+    display: none;
+  }
+}

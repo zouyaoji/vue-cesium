@@ -1,4 +1,4 @@
-import registerKnockoutBindings from './registerKnockoutBindings'
+// import registerKnockoutBindings from './registerKnockoutBindings'
 import DistanceLegendViewModel from './DistanceLegendViewModel'
 import NavigationViewModel from './NavigationViewModel'
 
@@ -94,7 +94,7 @@ function initialize (viewerCesiumWidget, options) {
   // this.navigationDiv.setAttribute("id", "navigationDiv");
 
   // Register custom Knockout.js bindings.  If you're not using the TerriaJS user interface, you can remove this.
-  registerKnockoutBindings()
+  // registerKnockoutBindings()
 
   if (
     !Cesium.defined(this.terria.options.enableDistanceLegend) ||

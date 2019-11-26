@@ -1,14 +1,14 @@
 import createFragmentFromTemplate from './createFragmentFromTemplate'
 
-var loadView = function (htmlString, container, viewModel) {
+const loadView = function (htmlString, container, viewModel) {
   container = Cesium.getElement(container)
 
-  var fragment = createFragmentFromTemplate(htmlString)
+  const fragment = createFragmentFromTemplate(htmlString)
 
   // Sadly, fragment.childNodes doesn't have a slice function.
   // This code could be replaced with Array.prototype.slice.call(fragment.childNodes)
   // but that seems slightly error prone.
-  var nodes = []
+  const nodes = []
 
   var i
   for (i = 0; i < fragment.childNodes.length; ++i) {

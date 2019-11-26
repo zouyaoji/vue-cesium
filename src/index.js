@@ -68,11 +68,12 @@ import * as RectangleGeometry from './components/geometryInstance/rectangle'
 import * as VcMeasureArea from './components/tool/measureArea'
 import * as VcMeasureDistance from './components/tool/measureDistance'
 import * as VcMeasureHeight from './components/tool/measureHeight'
-// import * as VcNavigation from './components/tool/navigation'
+import * as VcNavigation from './components/tool/navigation'
 // 可视化
 import * as VcFlood from './components/visualization/flood'
 import * as VcHeatMap from './components/visualization/heatmap'
 import * as VcWindMap from './components/visualization/windmap'
+
 /**
  * @const {string} VueCesium version
  */
@@ -159,7 +160,7 @@ function plugin (Vue, options = {}) {
   Vue.use(VcMeasureArea, options)
   Vue.use(VcMeasureDistance, options)
   Vue.use(VcMeasureHeight, options)
-  // Vue.use(VcNavigation, options)
+  Vue.use(VcNavigation, options)
   // 可视化
   Vue.use(VcFlood, options)
   Vue.use(VcHeatMap, options)
@@ -241,6 +242,7 @@ export {
   VcMeasureArea,
   VcMeasureDistance,
   VcMeasureHeight,
+  VcNavigation,
   VcFlood,
   VcHeatMap,
   VcWindMap
