@@ -19,9 +19,9 @@
 ## Links
 
 - [Documentation](https://zouyaoji.top/vue-cesium)
+- [Documentation-v1](https://zouyaoji.top/vue-cesium-v1)
 - [Official Demo](https://sandcastle.cesium.com/)
 - [More examples](https://github.com/zouyaoji/vue-cesium-demo)
-- [Documentation-v1](https://zouyaoji.top/vue-cesium-v1)
 
 ## Get Start
 
