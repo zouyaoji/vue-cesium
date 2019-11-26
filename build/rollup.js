@@ -8,16 +8,16 @@ const nodeResolve = require('rollup-plugin-node-resolve')
 const replace = require('rollup-plugin-re')
 const vuePlugin = require('rollup-plugin-vue').default
 const uglify = require('rollup-plugin-uglify')
-const json = require('rollup-plugin-json')
-const sass = require('./rollup/sass')
+const sass = require('./rollup/sass.js')
 const notifier = require('node-notifier')
 const argv = require('yargs').argv
 const utils = require('./utils')
 const config = require('./config')
 
 process.env.NODE_ENV = 'production'
+// process.env.NODE_ENV = 'development'
 
-const formats = argv.format ? argv.format.split(',').map((s) => s.trim()) : ['umd']
+const formats = argv.format ? argv.format.split(',').map((s) => s.trim()) : ['es', 'cjs', 'umd']
 
 const srcPath = utils.resolve('src')
 // form list of all packages to bundle
@@ -57,7 +57,7 @@ function getAllPackages () {
     {
       entry: config.entry,
       jsName: 'index',
-      cssName: 'style',
+      cssName: undefined,
       globName: config.fullname,
       amdName: config.fullname
     }
@@ -80,6 +80,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/mixins/graphics'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/primitives'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/tool'), srcPath),
+    packagesFromPath(utils.resolve('src/libs/navigation'), srcPath),
     packagesFromPath(utils.resolve('src/libs/wind'), srcPath),
     packagesFromPath(utils.resolve('src/utils'), srcPath)
   ]).then((otherPackages) => {
@@ -100,14 +101,26 @@ function entryToPackage (entry, basePath = srcPath) {
   if (!/\.js$/i.test(entryPath)) {
     entryPath = path.join(entry.path, 'index.js')
   }
-  const jsName = path.relative(basePath, entryPath.replace(/\.js$/i, '')).split(path.sep).join('/')
+  const jsName = path
+    .relative(basePath, entryPath.replace(/\.js$/i, ''))
+    .split(path.sep)
+    .join('/')
   const pkgName = jsName.replace(/\/index$/i, '')
+  const pkg =
+    jsName === 'tool/navigation/index'
+      ? {
+        entry: entryPath,
+        jsName,
+        pkgName,
+        cssName: 'vc-navigation'
+      }
+      : {
+        entry: entryPath,
+        jsName,
+        pkgName
+      }
 
-  return utils.fileExists(entryPath) ? {
-    entry: entryPath,
-    jsName,
-    pkgName
-  } : []
+  return utils.fileExists(entryPath) ? pkg : []
 }
 
 function bundleOptions (format, pkg, env = 'development') {
@@ -150,15 +163,13 @@ function bundleOptions (format, pkg, env = 'development') {
     if (/\.(sass|s?css|vue)$/i.test(id)) {
       return false
     }
-    // check internal component imports
+    // check internal components imports
     const componentsRegExp = /components\/.*/i
     return !(
-      componentsRegExp.test(parentId) && (
-        id.slice(0, 2) === './' ||
+      componentsRegExp.test(parentId) &&
+      (id.slice(0, 2) === './' ||
         id.match(/\.vue\?rollup-plugin-vue/i) ||
-        componentsRegExp.test(id) &&
-        path.basename(path.dirname(id)) === path.basename(path.dirname(parentId))
-      )
+        (componentsRegExp.test(id) && path.basename(path.dirname(id)) === path.basename(path.dirname(parentId))))
     )
   }
   // es/cjs path replacements in 2 phases
@@ -166,18 +177,19 @@ function bundleOptions (format, pkg, env = 'development') {
     [
       // components/**/* -> **/* replacement
       {
-        test: /'(\.{1,2})\/components\/([^']*)'/ig,
+        test: /'(\.{1,2})\/components\/([^']*)'/gi,
         replace: (m1, m2, m3) => `'${m2}/${m3}'`
       },
-      // mixins/utils/libs path inside component replacement
+      // mixins/utils/libs path inside components replacement
       {
         include: ['src/components/**/*'],
-        test: /'(?:\.{2}\/){2,3}((?:mixins|utils|libs)[^']*)'/ig,
-        replace: (m1, m2) => m1.split('../').length === 3 ? `'../${m2}'` : `'../../${m2}'`
+        test: /'(?:\.{2}\/){2,3}((?:mixins|utils|libs)[^']*)'/gi,
+        replace: (m1, m2) => (m1.split('../').length === 3 ? `'../${m2}'` : `'../../${m2}'`)
       }
     ]
   ]
-
+  options.replaces['process.env.NODE_ENV'] = `'${env}'`
+  options.replaces['process.env.VUECESIUM_DEBUG'] = JSON.stringify(process.env.NODE_ENV !== 'production')
   switch (format) {
     case 'umd':
       options.jsName += '.' + format
@@ -201,8 +213,8 @@ function bundleOptions (format, pkg, env = 'development') {
 
         return false
       }
-      options.replaces['process.env.NODE_ENV'] = `'${env}'`
-      options.replaces['process.env.VUECESIUM_DEBUG'] = JSON.stringify(process.env.NODE_ENV !== 'production')
+      // options.replaces['process.env.NODE_ENV'] = `'${env}'`
+      // options.replaces['process.env.VUECESIUM_DEBUG'] = JSON.stringify(process.env.NODE_ENV !== 'production')
       // options.minify = true
       break
     case 'cjs':
@@ -220,7 +232,6 @@ function bundleOptions (format, pkg, env = 'development') {
 
 function makeBundle (options = {}) {
   let stylesPromise = Promise.resolve([])
-
   const plugins = [
     // compile-time variables replace
     replace({
@@ -229,23 +240,11 @@ function makeBundle (options = {}) {
       replaces: options.replaces,
       defines: options.defines
     }),
-    cjs(),
-    nodeResolve({
-      mainFields: ['main', 'module', 'jsnext:main'],
-      browser: true
+    vuePlugin({
+      sourceMap: true,
+      css: false
     }),
-    vuePlugin(
-      {
-        sourceMap: true,
-        css: false
-      }
-    ),
-    json(),
     sass({
-      sass: {
-        indentedSyntax: true,
-        includePaths: [utils.resolve('src'), utils.resolve('src/styles'), utils.resolve('node_modules')]
-      },
       output: (styles) => {
         stylesPromise = Promise.resolve(styles || [])
       }
@@ -254,14 +253,15 @@ function makeBundle (options = {}) {
       runtimeHelpers: true,
       sourceMap: true,
       include: [
-        'src/**/*',
-        'node_modules/es6-cesium-navigation'
-        // 'node_modules/rxjs/_esm2015/**/*',
-        // 'node_modules/lodash-es/**/*',
+        'src/**/*'
       ],
       extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue']
     }),
-
+    nodeResolve({
+      mainFields: ['main', 'module', 'jsnext:main'],
+      browser: true
+    }),
+    cjs(),
     // paths replace
     ...(options.patterns
       ? options.patterns.map((patterns) =>
@@ -309,17 +309,15 @@ function makeBundle (options = {}) {
   }).start()
   // prepare rollup bundler
   return rollup
-    .rollup(
-      Object.assign({}, options.input, { plugins })
-    )
+    .rollup(Object.assign({}, options.input, { plugins }))
     .then((bundle) => {
       // generate bundle
-      return bundle.generate(
-        Object.assign({}, options.output, {
-          sourcemap: true,
-          sourcemapFile: jsOutputPath
-        })
-      )
+      const optt = Object.assign({}, options.output, {
+        sourcemap: true,
+        sourcemapFile: jsOutputPath,
+        isWrite: true
+      })
+      return bundle.generate(optt, true)
     })
     .then((result) => {
       for (const js of result.output) {
@@ -327,7 +325,6 @@ function makeBundle (options = {}) {
         if (!cssOutputPath) {
           return { js, css: undefined }
         }
-
         return stylesPromise
           .then((styles) => {
             const files = styles.reduce((all, css) => {

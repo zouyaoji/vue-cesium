@@ -1,22 +1,22 @@
 const path = require('path')
 const chalk = require('chalk')
-const pluginUtils = require('rollup-pluginutils')
+const pluginUtils = require('@rollup/pluginutils')
 const utils = require('../utils')
 
 // originally taken from https://github.com/differui/rollup-plugin-sass/blob/master/src/index.js
 // adds source map from Sass compiler.
-module.exports = function sass (options) {
+module.exports = function sass (options = {}) {
   options = Object.assign({
     include: [
       '**/*.css',
       '**/*.sass',
-      '**/*.scss'
+      '**/*.scss',
     ],
     exclude: undefined,
     output: false,
     postProcess: style => style,
     banner: '',
-    sass: undefined
+    sass: undefined,
   }, options)
 
   const filter = pluginUtils.createFilter(options.include, options.exclude)
@@ -35,7 +35,7 @@ module.exports = function sass (options) {
         dest = `${dest}.css`
       }
     },
-    transform (code, id) {
+    async transform (code, id) {
       if (!filter(id)) return
 
       const paths = [path.dirname(id), process.cwd()]
@@ -44,9 +44,9 @@ module.exports = function sass (options) {
         outFile: id,
         sourceMap: true,
         data: code,
-        indentedSyntax: path.extname(id) === '.sass' || path.extname(id) === '.less',
+        indentedSyntax: path.extname(id) === '.sass',
         omitSourceMapUrl: true,
-        sourceMapContents: true
+        sourceMapContents: true,
       }, options.sass)
       sassConfig.includePaths = sassConfig.includePaths
         ? sassConfig.includePaths.concat(paths.filter(x => !sassConfig.includePaths.includes(x)))
@@ -70,7 +70,7 @@ module.exports = function sass (options) {
               return {
                 id: id,
                 code: `export default ${JSON.stringify(style.code)}`,
-                map: style.map
+                map: style.map,
               }
             }
 
@@ -80,7 +80,7 @@ module.exports = function sass (options) {
         throw error
       }
     },
-    generateBundle () {
+    async generateBundle () {
       if (!styles.length || options.output === false) {
         return
       }
@@ -95,7 +95,7 @@ module.exports = function sass (options) {
         styles.map(({ id, code, map }) => ({
           code,
           map,
-          sourcesRelativeTo: id
+          sourcesRelativeTo: id,
         })),
         dest,
         options.banner
@@ -103,13 +103,13 @@ module.exports = function sass (options) {
 
       return Promise.all([
         utils.writeFile(dest, res.code),
-        utils.writeFile(dest + '.map', res.map)
+        utils.writeFile(dest + '.map', res.map),
       ]).then(([css, map]) => {
         console.log(css.path, chalk.gray(css.size))
         console.log(map.path, chalk.gray(map.size))
 
         return { css, map }
       })
-    }
+    },
   }
 }
