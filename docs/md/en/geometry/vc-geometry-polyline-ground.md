@@ -130,7 +130,7 @@ The `vc-geometry-polyline-ground` component is used to load a polyline on terrai
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------- |
+| ---- | ---- | ------- | ----------- |
 | positions | Array | | `required` An array of Cartesian3 defining the polyline's points. Heights above the ellipsoid will be ignored. **Structure: [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
 | width | Number | `1.0` | `optional` The screen space width in pixels. |
 | granularity | Number | | `optional` The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation. |
@@ -141,8 +141,9 @@ Refer to the official document: **[GroundPolylineGeometry](https://cesium.com/do
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

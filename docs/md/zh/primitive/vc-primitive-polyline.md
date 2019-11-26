@@ -164,7 +164,7 @@
 
 ---
 
-- 参考官方文档：[Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html)
+- 参考官方文档：**[Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html)**
 
 ## 事件
 

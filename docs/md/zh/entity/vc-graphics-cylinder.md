@@ -69,7 +69,12 @@
         ></vc-graphics-cylinder>
       </vc-entity>
       <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-        <vc-graphics-cylinder :topRadius="0.0" :bottomRadius="200000.0" :material="material2" @ready="subReady"></vc-graphics-cylinder>
+        <vc-graphics-cylinder
+          :topRadius="0.0"
+          :bottomRadius="200000.0"
+          :material="material2"
+          @ready="subReady"
+        ></vc-graphics-cylinder>
       </vc-entity>
     </vc-viewer>
   </div>
@@ -126,7 +131,7 @@
 
 ---
 
-- 参考官方文档： [CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)
+- 参考官方文档： **[CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)**
 
 ## 事件
 

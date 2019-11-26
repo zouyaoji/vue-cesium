@@ -103,8 +103,9 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

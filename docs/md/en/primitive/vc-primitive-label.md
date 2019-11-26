@@ -157,12 +157,13 @@ The `vc-primitive-label` component is used to load a Label draws viewport-aligne
 
 ---
 
-- Refer to the official document: [Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html).
+- Refer to the official document: **[Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

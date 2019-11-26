@@ -1,6 +1,6 @@
 # VcNavigation
 
-The `vc-navigation` component is used to load the navigation compass widget. [es6-cesium-navigation](https://github.com/zouyaoji/es6-cesium-navigation)。
+The `vc-navigation` component is used to load the navigation compass widget. **Note:** This component requires `vue-cesium / vc-navigation.css`.
 
 ## Example
 

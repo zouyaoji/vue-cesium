@@ -125,7 +125,7 @@
 
 ---
 
-- 参考官方文档：[BillboardCollection](https://cesium.com/docs/cesiumjs-ref-doc/BillboardCollection.html)
+- 参考官方文档：**[BillboardCollection](https://cesium.com/docs/cesiumjs-ref-doc/BillboardCollection.html)**
 
 ## 事件
 

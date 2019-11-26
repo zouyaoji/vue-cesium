@@ -97,7 +97,7 @@
 
 ---
 
-- 参考官方文档： [IonImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html)
+- 参考官方文档： **[IonImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/IonImageryProvider.html)**
 
 ## 事件
 

@@ -12,28 +12,43 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
-       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer1"></vc-provider-imagery-wmts>
-       </vc-layer-imagery>
-       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer2"></vc-provider-imagery-wmts>
-       </vc-layer-imagery>
+        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-wmts
+            :url="urlText"
+            :wmtsStyle="style"
+            :tileMatrixSetID="tileMatrixSetID"
+            :credit="credit"
+            :subdomains="subdomains"
+            :tilingScheme="tilingScheme"
+            :tileMatrixLabels="tileMatrixLabels"
+            :token="token"
+            :layer="layer2"
+          ></vc-provider-imagery-wmts>
+        </vc-layer-imagery>
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-wmts
+            :url="url"
+            :wmtsStyle="style"
+            :tileMatrixSetID="tileMatrixSetID"
+            :credit="credit"
+            :subdomains="subdomains"
+            :tilingScheme="tilingScheme"
+            :tileMatrixLabels="tileMatrixLabels"
+            :token="token"
+            :layer="layer1"
+          ></vc-provider-imagery-wmts>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>alpha</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
         <span>brightness</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>contrast</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>switch url</span>
         <md-select v-model="url" placeholder="switch url">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
+          <md-option v-for="item in options" :key="item.value" :value="item.value">
             {{item.label}}
           </md-option>
         </md-select>
@@ -43,41 +58,67 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           layer1: 'img',
           layer2: 'cia',
-          url: 'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          urlText: 'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+          url:
+            'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+          urlText:
+            'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
           style: 'default',
           tileMatrixSetID: 'c',
-          tileMatrixLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'],
-          credit : '天地图WMTS服务',
-          subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
+          tileMatrixLabels: [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            '13',
+            '14',
+            '15',
+            '16',
+            '17',
+            '18',
+            '19'
+          ],
+          credit: '天地图WMTS服务',
+          subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
           tilingScheme: undefined,
-          options: [{
-            label: 'image',
-            value: 'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }, {
-            label: 'vector',
-            value: 'https://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }],
+          options: [
+            {
+              label: 'image',
+              value:
+                'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+            },
+            {
+              label: 'vector',
+              value:
+                'https://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+            }
+          ],
           alpha: 1,
           brightness: 1,
           contrast: 1,
-          token: '436ce7e50d27eede2f2929307e6b33c0'
+          token: 'c50f9b776d3786c077e843ca37583202'
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
-          viewer.imageryLayers.removeAll()
           this.tilingScheme = new Cesium.GeographicTilingScheme()
         },
-        layerAdded () {
+        layerAdded() {
           if (this.$refs.layerText.imageryLayer) {
-            const {viewer} = this.cesiumInstance
+            const { viewer } = this.cesiumInstance
             viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
           }
         }
@@ -92,19 +133,6 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts
-          :url="url"
-          :wmtsStyle="style"
-          :tileMatrixSetID="tileMatrixSetID"
-          :credit="credit"
-          :subdomains="subdomains"
-          :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels"
-          :token="token"
-          :layer="layer1"
-        ></vc-provider-imagery-wmts>
-      </vc-layer-imagery>
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-wmts
           :url="urlText"
@@ -116,6 +144,19 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
           :tileMatrixLabels="tileMatrixLabels"
           :token="token"
           :layer="layer2"
+        ></vc-provider-imagery-wmts>
+      </vc-layer-imagery>
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-wmts
+          :url="url"
+          :wmtsStyle="style"
+          :tileMatrixSetID="tileMatrixSetID"
+          :credit="credit"
+          :subdomains="subdomains"
+          :tilingScheme="tilingScheme"
+          :tileMatrixLabels="tileMatrixLabels"
+          :token="token"
+          :layer="layer1"
         ></vc-provider-imagery-wmts>
       </vc-layer-imagery>
     </vc-viewer>
@@ -140,13 +181,35 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
   export default {
     data() {
       return {
+        layer1: 'img',
+        layer2: 'cia',
         url:
           'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
         urlText:
           'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
         style: 'default',
         tileMatrixSetID: 'c',
-        tileMatrixLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'],
+        tileMatrixLabels: [
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          '11',
+          '12',
+          '13',
+          '14',
+          '15',
+          '16',
+          '17',
+          '18',
+          '19'
+        ],
         credit: '天地图WMTS服务',
         subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
         tilingScheme: undefined,
@@ -172,7 +235,6 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
-        viewer.imageryLayers.removeAll()
         this.tilingScheme = new Cesium.GeographicTilingScheme()
       },
       layerAdded() {
@@ -213,14 +275,15 @@ The `vc-provider-imagery-wmts` component is used to load tiled imagery served by
 
 ---
 
-- Refere to the official document: [WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html)
+- Refere to the official document: **[WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html)**
 
 ## Events
 
-| name         | parameter                      | description                                                                                                       |
-| ------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-| errorEvent   | TileProviderError              | Triggers when the imagery provider encounters an asynchronous error.                                              |
-| readyPromise | ImageryProvider                | Triggers when the provider is ready for use.                                                                      |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| errorEvent | TileProviderError | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider | Triggers when the provider is ready for use. |
 
 ---

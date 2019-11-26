@@ -93,7 +93,7 @@
 
 ---
 
-- 参考官方文档： [GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)
+- 参考官方文档： **[GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)**
 
 ## 事件
 

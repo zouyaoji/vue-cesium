@@ -180,7 +180,7 @@ The `vc-geometry-polygon` component is used to load a rectangle geometry. Need t
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| ----------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| ---- | ---- | ------- | ----------- |
 | polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
 | height | Number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
 | extrudedHeight | Number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
@@ -220,8 +220,9 @@ Refer to the official document: **[PolygonGeometry](https://cesium.com/docs/cesi
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

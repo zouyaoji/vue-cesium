@@ -165,12 +165,13 @@ The `vc-primitive-polyline` component is used to load a renderable polyline, tha
 
 ---
 
-- Refer to the official document: [Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html).
+- Refer to the official document: **[Polyline](https://cesium.com/docs/cesiumjs-ref-doc/Polyline.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

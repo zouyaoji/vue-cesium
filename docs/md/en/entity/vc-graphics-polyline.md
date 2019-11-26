@@ -72,7 +72,13 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :polyline.sync="polyline1">
-        <vc-graphics-polyline :positions="positions1" :material="material1" :width="5" :clampToGround="false" heightPositions></vc-graphics-polyline>
+        <vc-graphics-polyline
+          :positions="positions1"
+          :material="material1"
+          :width="5"
+          :clampToGround="false"
+          heightPositions
+        ></vc-graphics-polyline>
       </vc-entity>
       <vc-entity :polyline.sync="polyline2">
         <vc-graphics-polyline :positions="positions2" :material="material2" :width="10"></vc-graphics-polyline>
@@ -144,13 +150,13 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
 
 ---
 
-- Refer to the official document: [PolylineGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGraphics.html)
+- Refer to the official document: **[PolylineGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGraphics.html)**
 
 ## Events
 
 <!-- prettier-ignore -->
 | name | parameter | description |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
 

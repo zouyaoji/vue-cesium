@@ -135,7 +135,7 @@
 
 ---
 
-- 参考官方文档： [OpenStreetMapImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html)
+- 参考官方文档： **[OpenStreetMapImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html)**
 
 ## 事件
 

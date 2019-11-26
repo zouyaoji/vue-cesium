@@ -159,7 +159,7 @@
 
 ---
 
-- 参考官方文档：[LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)
+- 参考官方文档：**[LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)**
 
 ## 事件
 

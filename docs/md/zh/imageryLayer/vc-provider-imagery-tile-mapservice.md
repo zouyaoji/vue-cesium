@@ -127,7 +127,7 @@
 
 ---
 
-- 参考官方文档： [TileMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileMapServiceImageryProvider.html)
+- 参考官方文档： **[TileMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileMapServiceImageryProvider.html)**
 
 ## 事件
 

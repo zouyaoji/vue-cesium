@@ -175,7 +175,7 @@
 
 ---
 
-- 参考官方文档： [UrlTemplateImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/UrlTemplateImageryProvider.html)
+- 参考官方文档： **[UrlTemplateImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/UrlTemplateImageryProvider.html)**
 
 ## 事件
 

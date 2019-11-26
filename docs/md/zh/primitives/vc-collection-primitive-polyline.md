@@ -188,7 +188,7 @@
 
 ---
 
-- 参考官方文档：[PolylineCollection](https://cesium.com/docs/cesiumjs-ref-doc/PolylineCollection.html)。
+- 参考官方文档：**[PolylineCollection](https://cesium.com/docs/cesiumjs-ref-doc/PolylineCollection.html)**
 
 ## 事件
 

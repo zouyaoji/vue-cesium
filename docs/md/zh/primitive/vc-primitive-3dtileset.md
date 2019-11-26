@@ -220,19 +220,20 @@
 
 ---
 
-- 参考官方文档：[Cesium3DTileset](https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html)
+- 参考官方文档：**[Cesium3DTileset](https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html)**
 
 ## 事件
 
-| 事件名             | 参数                                               | 描述                                                                             |
-| ------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ready              | {Cesium, viewer, cesiumObject}                     | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| allTilesLoaded     |                                                    | 该组件所有层级的 tiles 加载完毕后触发该事件。                                    |
-| initialTilesLoaded |                                                    | 该组件所有初始层级的 tiles 加载完毕触发该事件。                                  |
-| loadProgress       | (numberOfPendingRequests, numberOfTilesProcessing) | 加载 tiles 触发，指示 tile 加载进度。                                            |
-| tileFailed         | {url, message}                                     | tile 加载失败时触发该事件。                                                      |
-| tileLoad           |                                                    | tile 加载完成后触发该事件。                                                      |
-| tileUnload         |                                                    | tile 加载未成功加载时触发该事件。                                                |
-| tileVisible        |                                                    | tile 可见性发生改变时触发该事件。                                                |
+<!-- prettier-ignore -->
+| 事件名 | 参数 | 描述 |
+| ----- | ---- | --- |
+| ready | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| allTilesLoaded | | 该组件所有层级的 tiles 加载完毕后触发该事件。 |
+| initialTilesLoaded | | 该组件所有初始层级的 tiles 加载完毕触发该事件。 |
+| loadProgress | (numberOfPendingRequests, numberOfTilesProcessing) | 加载 tiles 触发，指示 tile 加载进度。 |
+| tileFailed | {url, message} | tile 加载失败时触发该事件。 |
+| tileLoad | | tile 加载完成后触发该事件。 |
+| tileUnload | | tile 加载未成功加载时触发该事件。 |
+| tileVisible | | tile 可见性发生改变时触发该事件。 |
 
 ---

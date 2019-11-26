@@ -99,7 +99,7 @@
 
 ---
 
-- 参考官方文档： [LabelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/LabelGraphics.html)
+- 参考官方文档： **[LabelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/LabelGraphics.html)**
 
 ## 事件
 

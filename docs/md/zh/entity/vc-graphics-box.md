@@ -131,7 +131,7 @@
 
 ---
 
-参考官方文档： [BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)
+参考官方文档： **[BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)**
 
 ## 事件
 

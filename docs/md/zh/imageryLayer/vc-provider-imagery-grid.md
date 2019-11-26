@@ -104,7 +104,7 @@
 
 ---
 
-- 参考官方文档： [GridImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/GridImageryProvider.html)
+- 参考官方文档： **[GridImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/GridImageryProvider.html)**
 
 ## 事件
 

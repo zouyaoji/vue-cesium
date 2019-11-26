@@ -120,12 +120,13 @@ cutoutRectangle|Rectangle||`optional` Cartographic rectangle for cutting out a p
 
 ---
 
-- Refer to the official document: [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)
+- Refer to the official document: **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

@@ -151,7 +151,7 @@
 
 ---
 
-参考官方文档： [GeometryInstance](https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html)
+参考官方文档： **[GeometryInstance](https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html)**
 
 ## 事件
 

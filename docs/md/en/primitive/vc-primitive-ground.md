@@ -172,12 +172,13 @@ The `vc-primitive-ground` component is used to load a ground primitive. It repre
 
 ---
 
-Refer to the official document: [GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)
+Refer to the official document: **[GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

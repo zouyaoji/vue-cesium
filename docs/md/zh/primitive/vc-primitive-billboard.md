@@ -118,7 +118,7 @@
 
 ---
 
-参考官方文档: [Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html)
+参考官方文档: **[Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html)**
 
 ## 事件
 

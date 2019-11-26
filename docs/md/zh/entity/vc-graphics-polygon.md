@@ -400,7 +400,7 @@
 
 ```
 
-- 参考官方文档： [PolygonGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html)
+- 参考官方文档： **[PolygonGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html)**
 
 ## 事件
 

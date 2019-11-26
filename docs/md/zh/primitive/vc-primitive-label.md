@@ -157,7 +157,7 @@
 
 ---
 
-- 参考官方文档：[Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html)
+- 参考官方文档：**[Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html)**
 
 ## 事件
 

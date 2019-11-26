@@ -94,7 +94,7 @@ The `vc-geometry-polyline` component is used to load a polyline modeled as a lin
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------- |
+| ---- | ---- | ------- | ----------- |
 | positions | Array | | `required` An array of Cartesian3 defining the positions in the polyline as a line strip. **Structure: [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
 | width | Number | `1.0` | `optional` The width in pixels. |
 | colors | Array |  | `optional` An Array of Color defining the per vertex or per segment colors. |
@@ -110,8 +110,9 @@ Refer to the official document: **[PolylineGeometry](https://cesium.com/docs/ces
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

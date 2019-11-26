@@ -124,7 +124,7 @@
 
 ---
 
-- 参考官方文档： [BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)
+- 参考官方文档： **[BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)**
 
 ## 事件
 

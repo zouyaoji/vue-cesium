@@ -151,7 +151,7 @@
 
 ---
 
-- 参考官方文档： [EllipseGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipseGraphics.html)
+- 参考官方文档： **[EllipseGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipseGraphics.html)**
 
 ## 事件
 

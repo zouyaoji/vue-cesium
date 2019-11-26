@@ -114,7 +114,7 @@ The `vc-geometry-box` component is used to load a box geometry that describes a 
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| ------------ | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| ---- | ---- | ------- | ----------- |
 | dimensions | Object | | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3, respectively. **structure: { x: number, y: number, z: number }** |
 | vertexFormat | Object | | `optional` The vertex attributes to be computed. |
 
@@ -124,8 +124,9 @@ Refer to the official document: **[BoxGeometry](https://cesium.com/docs/cesiumjs
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

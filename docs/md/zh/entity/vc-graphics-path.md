@@ -263,7 +263,7 @@
 
 ---
 
-- 参考官方文档： [PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)
+- 参考官方文档： **[PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)**
 
 ## 事件
 

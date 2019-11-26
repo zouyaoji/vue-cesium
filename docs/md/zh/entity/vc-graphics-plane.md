@@ -166,7 +166,7 @@
 
 ---
 
-- 参考官方文档： [PlaneGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGraphics.html)
+- 参考官方文档： **[PlaneGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGraphics.html)**
 
 ## 事件
 

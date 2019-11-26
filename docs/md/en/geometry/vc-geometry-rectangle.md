@@ -114,7 +114,7 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------- |
+| ---- | ---- | ------- | ----------- |
 | rectangle | Object | | `required` A cartographic rectangle with north, south, east and west properties in radians. **structure: { west: number, south: number, east: number, north: number }** |
 | vertexFormat | Number | | `optional` The vertex attributes to be computed. |
 | ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
@@ -130,8 +130,9 @@ Refer to the official document: **[RectangleGeometry](https://cesium.com/docs/ce
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

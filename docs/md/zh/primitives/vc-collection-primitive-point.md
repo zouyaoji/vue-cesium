@@ -157,7 +157,7 @@
 
 ---
 
-- 参考官方文档：[PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html)
+- 参考官方文档：**[PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html)**
 
 ## 事件
 

@@ -115,7 +115,7 @@
 
 ---
 
-- 参考官方文档： [ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)
+- 参考官方文档： **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**
 
 ## 事件
 

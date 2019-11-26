@@ -176,7 +176,7 @@
 
 ---
 
-参考官方文档： [CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)
+参考官方文档： **[CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)**
 
 ## 事件
 

@@ -70,10 +70,7 @@ The `vc-provider-imagery-arcgis-mapserver` component is used to load tiled image
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-arcgis-mapserver
-          :url="url"
-          :maximumLevel="maximumLevel"
-        ></vc-provider-imagery-arcgis-mapserver>
+        <vc-provider-imagery-arcgis-mapserver :url="url" :maximumLevel="maximumLevel"></vc-provider-imagery-arcgis-mapserver>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
@@ -143,14 +140,15 @@ The `vc-provider-imagery-arcgis-mapserver` component is used to load tiled image
 
 ---
 
-- Refer to the official document: [ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)
+- Refer to the official document: **[ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)**
 
 ## Events
 
-| name         | parameter                      | description                                                                                                       |
-| ------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-| errorEvent   | TileProviderError              | Triggers when the imagery provider encounters an asynchronous error.                                              |
-| readyPromise | ImageryProvider                | Triggers when the provider is ready for use.                                                                      |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| errorEvent | TileProviderError | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider | Triggers when the provider is ready for use. |
 
 ---

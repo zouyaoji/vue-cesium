@@ -1,6 +1,6 @@
 # 导航罗盘
 
-`vc-navigation` 组件用于加载导航罗盘部件。来自于插件[es6-cesium-navigation](https://github.com/zouyaoji/es6-cesium-navigation)。
+`vc-navigation` 组件用于加载导航罗盘部件。**注意：**此部件需要引入 `vue-cesium/vc-navigation.css`。
 
 ## 示例
 

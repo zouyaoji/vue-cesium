@@ -175,15 +175,16 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
 
 ---
 
-- Refer to the official document: [CustomDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CustomDataSource.html)
+- Refer to the official document: **[CustomDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CustomDataSource.html)**
 
 ## Events
 
-| name         | parameter                      | description                                                                                                       |
-| ------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-| changedEvent |                                | Triggers when the underlying data changes.                                                                        |
-| errorEvent   |                                | Triggers if an error is encountered during processing.                                                            |
-| loadingEvent |                                | Triggers the data source either starts or stops loading.                                                          |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| changedEvent | | Triggers when the underlying data changes. |
+| errorEvent | | Triggers if an error is encountered during processing. |
+| loadingEvent | | Triggers the data source either starts or stops loading. |
 
 ---

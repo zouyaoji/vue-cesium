@@ -159,12 +159,13 @@ The `vc-collection-primitive-label` component is used to load a renderable colle
 
 ---
 
-- Refer to the official document: [LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)
+- Refer to the official document: **[LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

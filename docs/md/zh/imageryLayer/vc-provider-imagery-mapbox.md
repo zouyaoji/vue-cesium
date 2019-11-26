@@ -137,7 +137,7 @@
 
 ---
 
-- 参考官方文档: [MapboxImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/MapboxImageryProvider.html)
+- 参考官方文档: **[MapboxImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/MapboxImageryProvider.html)**
 
 ## 事件
 

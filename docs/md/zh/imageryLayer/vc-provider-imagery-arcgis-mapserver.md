@@ -141,7 +141,7 @@
 
 ---
 
-- 参考官方文档： [ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)
+- 参考官方文档： **[ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)**
 
 ## 事件
 

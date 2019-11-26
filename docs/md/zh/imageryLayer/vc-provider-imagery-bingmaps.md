@@ -155,7 +155,7 @@
 
 ---
 
-- 参考官方文档： [BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)
+- 参考官方文档： **[BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)**
 
 ## 事件
 

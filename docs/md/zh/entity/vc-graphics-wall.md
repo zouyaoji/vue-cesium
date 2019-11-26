@@ -192,7 +192,7 @@
 
 ---
 
-- 参考官方文档： [WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)
+- 参考官方文档： **[WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)**
 
 ## 事件
 

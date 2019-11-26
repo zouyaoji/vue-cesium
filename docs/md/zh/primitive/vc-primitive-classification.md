@@ -139,7 +139,7 @@
 
 ---
 
-参考官方文档： [ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)
+参考官方文档： **[ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)**
 
 ## 事件
 

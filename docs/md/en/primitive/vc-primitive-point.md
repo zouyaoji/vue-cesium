@@ -143,12 +143,13 @@ The `vc-primitive-point` component is used to load a graphical point positioned 
 
 ---
 
-- Refer to the official document: [PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html)
+- Refer to the official document: **[PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

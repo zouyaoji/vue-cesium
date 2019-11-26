@@ -118,12 +118,13 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
 
 ---
 
-- Refer to the official document: [Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html).
+- Refer to the official document: **[Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html)**
 
 ## Events
 
-| name  | parameter                      | description                                                                                                       |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 
 ---

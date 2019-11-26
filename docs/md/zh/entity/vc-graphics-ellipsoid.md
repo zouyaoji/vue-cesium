@@ -79,7 +79,12 @@
         <vc-graphics-ellipsoid :radii="radii1" :material="material1" :outline="true"></vc-graphics-ellipsoid>
       </vc-entity>
       <vc-entity :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
-        <vc-graphics-ellipsoid :radii="radii2" :outline="true" :material="material2" :outlineColor="outlineColor2"></vc-graphics-ellipsoid>
+        <vc-graphics-ellipsoid
+          :radii="radii2"
+          :outline="true"
+          :material="material2"
+          :outlineColor="outlineColor2"
+        ></vc-graphics-ellipsoid>
       </vc-entity>
       <vc-entity :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
         <vc-graphics-ellipsoid
@@ -153,7 +158,7 @@
 
 ---
 
-- 参考官方文档： [EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)
+- 参考官方文档： **[EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)**
 
 ## 事件
 

@@ -12,28 +12,43 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
-       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts :url="url" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains" :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer1"></vc-provider-imagery-wmts>
-       </vc-layer-imagery>
-       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts :url="urlText" :wmtsStyle="style" :tileMatrixSetID="tileMatrixSetID" :credit="credit" :subdomains="subdomains"
-          :tilingScheme="tilingScheme" :tileMatrixLabels="tileMatrixLabels" :token="token" :layer="layer2"></vc-provider-imagery-wmts>
-       </vc-layer-imagery>
+        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-wmts
+            :url="urlText"
+            :wmtsStyle="style"
+            :tileMatrixSetID="tileMatrixSetID"
+            :credit="credit"
+            :subdomains="subdomains"
+            :tilingScheme="tilingScheme"
+            :tileMatrixLabels="tileMatrixLabels"
+            :token="token"
+            :layer="layer2"
+          ></vc-provider-imagery-wmts>
+        </vc-layer-imagery>
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-wmts
+            :url="url"
+            :wmtsStyle="style"
+            :tileMatrixSetID="tileMatrixSetID"
+            :credit="credit"
+            :subdomains="subdomains"
+            :tilingScheme="tilingScheme"
+            :tileMatrixLabels="tileMatrixLabels"
+            :token="token"
+            :layer="layer1"
+          ></vc-provider-imagery-wmts>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>透明度</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
         <span>亮度</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>对比度</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>切换服务</span>
         <md-select v-model="url" placeholder="请选择服务">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
+          <md-option v-for="item in options" :key="item.value" :value="item.value">
             {{item.label}}
           </md-option>
         </md-select>
@@ -43,72 +58,67 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           layer1: 'img',
           layer2: 'cia',
-          url: 'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
-          urlText: 'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+          url:
+            'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+          urlText:
+            'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
           style: 'default',
           tileMatrixSetID: 'c',
-          tileMatrixLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19'],
-          credit : '天地图WMTS服务',
-          subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
-          tilingScheme: undefined,
-          options: [{
-            label: 'image',
-            value: 'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }, {
-            label: 'vector',
-            value: 'https://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
-          }],
+          tileMatrixLabels: [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            '13',
+            '14',
+            '15',
+            '16',
+            '17',
+            '18',
+            '19'
+          ],
+          credit: '天地图WMTS服务',
+          subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+          tilingScheme: {},
+          options: [
+            {
+              label: 'image',
+              value:
+                'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+            },
+            {
+              label: 'vector',
+              value:
+                'https://{s}.tianditu.com/vec_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles'
+            }
+          ],
           alpha: 1,
           brightness: 1,
           contrast: 1,
-          token: '436ce7e50d27eede2f2929307e6b33c0',
-          fragmentShader: `
-            uniform sampler2D colorTexture;
-            varying vec2 v_textureCoordinates;
-
-            float snow(vec2 uv,float scale)
-            {
-                float time = czm_frameNumber / 60.0;
-                float w=smoothstep(1.,0.,-uv.y*(scale/10.));if(w<.1)return 0.;
-                uv+=time/scale;uv.y+=time*2./scale;uv.x+=sin(uv.y+time*.5)/scale;
-                uv*=scale;vec2 s=floor(uv),f=fract(uv),p;float k=3.,d;
-                p=.5+.35*sin(11.*fract(sin((s+p+scale)*mat2(7,3,6,5))*5.))-f;d=length(p);k=min(d,k);
-                k=smoothstep(0.,k,sin(f.x+f.y)*0.01);
-                return k*w;
-            }
-
-            void main(void){
-                vec2 resolution = czm_viewport.zw;
-                vec2 uv=(gl_FragCoord.xy*2.-resolution.xy)/min(resolution.x,resolution.y);
-                vec3 finalColor=vec3(0);
-                float c = 0.0;
-                c+=snow(uv,30.)*.0;
-                c+=snow(uv,20.)*.0;
-                c+=snow(uv,15.)*.0;
-                c+=snow(uv,10.);
-                c+=snow(uv,8.);
-                c+=snow(uv,6.);
-                c+=snow(uv,5.);
-                finalColor=(vec3(c));
-                gl_FragColor = mix(texture2D(colorTexture, v_textureCoordinates), vec4(finalColor,1), 0.3);
-
-            }          `
+          token: 'c50f9b776d3786c077e843ca37583202'
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
-          viewer.imageryLayers.removeAll()
           this.tilingScheme = new Cesium.GeographicTilingScheme()
         },
-        layerAdded () {
+        layerAdded() {
           if (this.$refs.layerText.imageryLayer) {
-            const {viewer} = this.cesiumInstance
+            const { viewer } = this.cesiumInstance
             viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
           }
         }
@@ -123,19 +133,6 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-wmts
-          :url="url"
-          :wmtsStyle="style"
-          :tileMatrixSetID="tileMatrixSetID"
-          :credit="credit"
-          :subdomains="subdomains"
-          :tilingScheme="tilingScheme"
-          :tileMatrixLabels="tileMatrixLabels"
-          :token="token"
-          :layer="layer1"
-        ></vc-provider-imagery-wmts>
-      </vc-layer-imagery>
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-wmts
           :url="urlText"
@@ -147,6 +144,19 @@
           :tileMatrixLabels="tileMatrixLabels"
           :token="token"
           :layer="layer2"
+        ></vc-provider-imagery-wmts>
+      </vc-layer-imagery>
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-wmts
+          :url="url"
+          :wmtsStyle="style"
+          :tileMatrixSetID="tileMatrixSetID"
+          :credit="credit"
+          :subdomains="subdomains"
+          :tilingScheme="tilingScheme"
+          :tileMatrixLabels="tileMatrixLabels"
+          :token="token"
+          :layer="layer1"
         ></vc-provider-imagery-wmts>
       </vc-layer-imagery>
     </vc-viewer>
@@ -171,16 +181,38 @@
   export default {
     data() {
       return {
+        layer1: 'img',
+        layer2: 'cia',
         url:
           'https://{s}.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
         urlText:
           'https://{s}.tianditu.com/cia_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
         style: 'default',
         tileMatrixSetID: 'c',
-        tileMatrixLabels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'],
+        tileMatrixLabels: [
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          '11',
+          '12',
+          '13',
+          '14',
+          '15',
+          '16',
+          '17',
+          '18',
+          '19'
+        ],
         credit: '天地图WMTS服务',
         subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
-        tilingScheme: undefined,
+        tilingScheme: {},
         options: [
           {
             label: 'image',
@@ -196,14 +228,13 @@
         alpha: 1,
         brightness: 1,
         contrast: 1,
-        token: '436ce7e50d27eede2f2929307e6b33c0'
+        token: 'c50f9b776d3786c077e843ca37583202'
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
-        viewer.imageryLayers.removeAll()
         this.tilingScheme = new Cesium.GeographicTilingScheme()
       },
       layerAdded() {
@@ -240,11 +271,11 @@
 | ellipsoid | Ellipsoid | | `optional` 参考椭球体，没指定默认 WGS84 椭球。 |
 | credit | Credit\| String | | `optional` 数据源描述信息。 |
 | subdomains | String \| Array | `'abc'` | `optional` 指定 URL 模板中{s}占位符的子域。 如果此参数是单个字符串，则字符串中的每个字符都是子域。 如果是数组，则数组中的每个元素都是子域。 |
-| token | String | | `optional` 指定服务 token。 |
+| token | String | | `optional` 指定服务 token。 目前只针对天地图服务。 |
 
 ---
 
-- 参考官方文档： [WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)
+- 参考官方文档： **[WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)**
 
 ## 事件
 

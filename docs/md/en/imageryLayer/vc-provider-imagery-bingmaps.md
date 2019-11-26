@@ -153,14 +153,15 @@ The `vc-provider-imagery-bingmaps` component is used to load tiled imagery of th
 
 ---
 
-- Refer to the official documentation: [BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)
+- Refer to the official documentation: **[BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)**
 
 ## Events
 
-| name         | parameter                      | description                                                                                                       |
-| ------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-| errorEvent   | TileProviderError              | Triggers when the imagery provider encounters an asynchronous error.                                              |
-| readyPromise | ImageryProvider                | Triggers when the provider is ready for use.                                                                      |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| errorEvent | TileProviderError | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider | Triggers when the provider is ready for use. |
 
 ---

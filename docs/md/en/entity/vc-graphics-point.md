@@ -132,13 +132,13 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
 
 ---
 
-- Refer to the official document [PointGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PointGraphics.html)
+- Refer to the official document: **[PointGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PointGraphics.html)**
 
 ## Events
 
 <!-- prettier-ignore -->
 | name | parameter | description |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
 

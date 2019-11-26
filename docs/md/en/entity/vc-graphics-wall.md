@@ -192,13 +192,13 @@ The `vc-graphics-wall` component is used to load a two dimensional wall defined 
 
 ---
 
-- Refer to the official document: [WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)
+- Refer to the official document: **[WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)**
 
 ## Events
 
 <!-- prettier-ignore -->
 | name | parameter | description |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
 

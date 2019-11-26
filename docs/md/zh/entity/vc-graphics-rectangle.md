@@ -206,7 +206,7 @@
 
 ---
 
-- 参考官方文档： [RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)
+- 参考官方文档： **[RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)**
 
 ## 事件
 

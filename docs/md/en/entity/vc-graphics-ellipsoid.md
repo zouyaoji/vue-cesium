@@ -79,7 +79,12 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
         <vc-graphics-ellipsoid :radii="radii1" :material="material1" :outline="true"></vc-graphics-ellipsoid>
       </vc-entity>
       <vc-entity :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
-        <vc-graphics-ellipsoid :radii="radii2" :outline="true" :material="material2" :outlineColor="outlineColor2"></vc-graphics-ellipsoid>
+        <vc-graphics-ellipsoid
+          :radii="radii2"
+          :outline="true"
+          :material="material2"
+          :outlineColor="outlineColor2"
+        ></vc-graphics-ellipsoid>
       </vc-entity>
       <vc-entity :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
         <vc-graphics-ellipsoid
@@ -153,13 +158,13 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
 
 ---
 
-- Refer to the official document: [EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)
+- Refer to the official document: **[EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)**
 
 ## Events
 
 <!-- prettier-ignore -->
 | name | parameter | description |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
 

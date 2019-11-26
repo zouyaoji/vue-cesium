@@ -99,7 +99,7 @@
 
 ---
 
-- 参考官方文档： [TileCoordinatesImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileCoordinatesImageryProvider.html)
+- 参考官方文档： **[TileCoordinatesImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/TileCoordinatesImageryProvider.html)**
 
 ## 事件
 

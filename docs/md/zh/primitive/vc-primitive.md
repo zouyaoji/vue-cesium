@@ -140,7 +140,7 @@
 
 ---
 
-参考官方文档： [Primitive](https://cesium.com/docs/cesiumjs-ref-doc/Primitive.html)
+参考官方文档： **[Primitive](https://cesium.com/docs/cesiumjs-ref-doc/Primitive.html)**
 
 ## 事件
 

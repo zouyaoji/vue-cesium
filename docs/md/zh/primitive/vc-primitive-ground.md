@@ -171,7 +171,7 @@
 
 ---
 
-参考官方文档： [GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)
+参考官方文档： **[GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)**
 
 ## 事件
 

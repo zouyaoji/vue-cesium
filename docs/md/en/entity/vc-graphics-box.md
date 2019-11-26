@@ -67,7 +67,12 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
         <vc-graphics-box :dimensions="dimensions1" :material="material1"></vc-graphics-box>
       </vc-entity>
       <vc-entity :position="position2" :description="description" :box.sync="box2">
-        <vc-graphics-box :dimensions="dimensions2" :material="material2" :outlineColor="outlineColor2" :outline="true"></vc-graphics-box>
+        <vc-graphics-box
+          :dimensions="dimensions2"
+          :material="material2"
+          :outlineColor="outlineColor2"
+          :outline="true"
+        ></vc-graphics-box>
       </vc-entity>
       <vc-entity :position="position3" :description="description" :box.sync="box3">
         <vc-graphics-box :dimensions="dimensions3" :outlineColor="outlineColor3" :fill="false" :outline="true"></vc-graphics-box>
@@ -126,13 +131,13 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
 
 ---
 
-- Refer to the official document: [BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)
+- Refer to the official document: **[BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)**
 
 ## Events
 
 <!-- prettier-ignore -->
 | name | parameter | description |
-| ----- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
 

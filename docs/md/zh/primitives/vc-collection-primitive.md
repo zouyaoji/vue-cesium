@@ -139,7 +139,7 @@
 
 ---
 
-- 参考官方文档：[PrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PrimitiveCollection.html)
+- 参考官方文档：**[PrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PrimitiveCollection.html)**
 
 ## 事件
 
