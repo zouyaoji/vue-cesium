@@ -43,6 +43,14 @@ export default {
     tileMatrixSetID: String,
     tileMatrixLabels: Array,
     dimensions: Object
+  },
+  methods: {
+    async createCesiumObject () {
+      const { $props, transformProps } = this
+      const options = transformProps($props)
+      options.url = typeof options.token !== 'undefined' ? options.url + '&tk=' + options.token : options.url
+      return new Cesium.WebMapTileServiceImageryProvider(options)
+    }
   }
 }
 </script>
