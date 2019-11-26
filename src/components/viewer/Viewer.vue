@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-11-20 09:53:22
+ * @Last Modified time: 2019-11-26 21:13:53
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -16,7 +16,7 @@ import { Events } from '../../utils/events'
 import services from '../../mixins/services'
 import mergeDescriptors from '../../utils/mergeDescriptors.js'
 import { getDocumentByClassName } from '../../utils/util.js'
-const glob = typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : {}
+import { dirname } from 'path'
 export default {
   name: 'vc-viewer',
   mixins: [services],
@@ -207,8 +207,7 @@ export default {
         viewer._eventHelper.add(infoBoxViewModel.cameraClicked, viewer._onInfoBoxCameraClicked, viewer)
         viewer._eventHelper.add(infoBoxViewModel.closeClicked, viewer._onInfoBoxClockClicked, viewer)
         viewer._infoBox = infoBox
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
     geocoder (val) {
@@ -268,9 +267,7 @@ export default {
         viewer._sceneModePicker = undefined
       } else if (!Cesium.defined(viewer.sceneModePicker) || viewer.sceneModePicker.isDestroyed()) {
         if (this.sceneModePicker === true && this.scene3DOnly) {
-          throw new Cesium.DeveloperError(
-            'options.sceneModePicker is not available when options.scene3DOnly is set to true.'
-          )
+          throw new Cesium.DeveloperError('options.sceneModePicker is not available when options.scene3DOnly is set to true.')
         }
         if (!this.scene3DOnly && this.sceneModePicker === true) {
           let sceneModePicker = new Cesium.SceneModePicker(toolbar, viewer.scene)
@@ -403,8 +400,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         let animationContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-animationContainer')
         viewerContainer.removeChild(animationContainer)
         viewer._animation = undefined
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       } else if (!Cesium.defined(viewer.animation) || viewer.animation.isDestroyed()) {
         let animationContainer = document.createElement('div')
         animationContainer.className = 'cesium-viewer-animationContainer'
@@ -422,8 +418,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         //   return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
         // }
         viewer._animation = animation
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
 
@@ -434,8 +429,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer._timeline = undefined
         let timelineContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-timelineContainer')
         viewerContainer.removeChild(timelineContainer)
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       } else if (!Cesium.defined(viewer.timeline) || viewer.timeline.isDestroyed()) {
         let timelineContainer = document.createElement('div')
         timelineContainer.className = 'cesium-viewer-timelineContainer'
@@ -444,8 +438,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         timeline.addEventListener('settime', onTimelineScrubfunction, false)
         timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
         viewer._timeline = timeline
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
     fullscreenButton (val) {
@@ -455,16 +448,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer._fullscreenButton = undefined
         let fullscreenContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-fullscreenContainer')
         viewerContainer.removeChild(fullscreenContainer)
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       } else if (!Cesium.defined(viewer.fullscreenButton) || viewer.fullscreenButton.isDestroyed()) {
         let fullscreenContainer = document.createElement('div')
         fullscreenContainer.className = 'cesium-viewer-fullscreenContainer'
         viewerContainer.appendChild(fullscreenContainer)
         let fullscreenButton = new Cesium.FullscreenButton(fullscreenContainer, this.$refs.viewer)
         viewer._fullscreenButton = fullscreenButton
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
     fullscreenElement (val) {
@@ -483,8 +474,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer._vrButton = undefined
         let vrContainer = getDocumentByClassName(viewerContainer.children, 'cesium-viewer-vrContainer')
         viewerContainer.removeChild(vrContainer)
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       } else if (!Cesium.defined(viewer.vrButton) || viewer.vrButton.isDestroyed()) {
         let vrContainer = document.createElement('div')
         vrContainer.className = 'cesium-viewer-vrContainer'
@@ -496,28 +486,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           enableVRUI(viewer, VRButtonViewModel.isVRMode)
         }
         viewer._vrButton = vrButton
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
     useDefaultRenderLoop (val) {
       this.viewer.useDefaultRenderLoop = val
     },
-    // 'viewer.vrButton.viewModel.isVREnabled' (val) {
-    //   const { Cesium, viewer } = this
-    //   if (viewer.vrButton) {
-    //     viewer.vrButton.container.style.display = val ? 'block' : 'none'
-    //     let right = 0
-    //     if (Cesium.defined(viewer.fullscreenButton)) {
-    //       viewer.vrButton.container.style.right = viewer.fullscreenButton.container.clientWidth + 'px'
-    //       right += viewer.fullscreenButton.container.clientWidth
-    //     }
-    //     if (Cesium.defined(viewer.timeline)) {
-    //       viewer.timeline.container.style.right = right + viewer.vrButton.container.clientWidth + 'px'
-    //       viewer.timeline.resize()
-    //     }
-    //   }
-    // },
     navigation (val) {
       const { viewer, viewerContainer } = this
       if (Cesium.defined(viewer.navigation) && !val) {
@@ -532,8 +506,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewerContainer.appendChild(navigationContainer)
         let navigation = new Cesium.Navigation({ container: navigationContainer, viewer: viewer, scene: viewer.scene })
         viewer._navigation = navigation
-        viewer._forceResize = true
-        viewer.resize()
+        viewer.forceResize()
       }
     },
     sceneMode (val) {
@@ -676,9 +649,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer.forceResize()
       }
     },
-    init () {
+    async init () {
       if (this.viewer) {
-        return
+        return false
       }
       let $el = this.$refs.viewer
       let accessToken = this.accessToken
@@ -853,37 +826,37 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       this.Cesium = Cesium
       this.init()
     },
-    async getCesiumScript () {
-      let cesiumPath = this.cesiumPath
+    getCesiumScript () {
+      const cesiumPath = this.cesiumPath
         ? this.cesiumPath
         : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
           ? this._Cesium().cesiumPath
           : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+
+      let dirName = dirname(cesiumPath)
+      const $link = document.createElement('link')
+      $link.rel = 'stylesheet'
+      global.document.head.appendChild($link)
+      $link.href = `${dirName}/Widgets/widgets.css`
+
+      const { initViewer } = this
       const $script = document.createElement('script')
-      glob.document.body.appendChild($script)
+      global.document.body.appendChild($script)
       $script.src = cesiumPath
-      return $script
+      $script.onload = () => {
+        // 超图WebGL3D需要引入zlib.min.js
+        if (Cesium.SuperMapImageryProvider) {
+          const $scriptZlib = document.createElement('script')
+          global.document.body.appendChild($scriptZlib)
+          $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
+        }
+        initViewer()
+      }
     },
     reset () {
       const { getCesiumScript, initViewer } = this
-      if (!glob.Cesium) {
-        getCesiumScript().then((script) => {
-          script.onload = () => {
-            let dirName = Cesium.buildModuleUrl('')
-            const $link = document.createElement('link')
-            $link.rel = 'stylesheet'
-            glob.document.head.appendChild($link)
-            $link.href = `${dirName}/Widgets/widgets.css`
-
-            // 超图WebGL3D需要引入zlib.min.js
-            if (Cesium.SuperMapImageryProvider) {
-              const $scriptZlib = document.createElement('script')
-              glob.document.body.appendChild($scriptZlib)
-              $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
-            }
-            initViewer()
-          }
-        })
+      if (!global.Cesium) {
+        getCesiumScript()
       } else {
         initViewer()
       }
@@ -956,14 +929,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     this.reset()
   },
   destroyed () {
-    if (glob.Cesium) {
+    if (global.Cesium) {
       let scripts = document.getElementsByTagName('script')
       let removeScripts = []
       for (let script of scripts) {
         if (script.src.indexOf('/Cesium.js') > -1) {
           removeScripts.push(script)
         }
-        if (glob.Cesium.SuperMapImageryProvider) {
+        if (global.Cesium.SuperMapImageryProvider) {
           if (script.src.indexOf('/Workers/zlib.min.js') > -1) {
             removeScripts.push(script)
           }
@@ -978,7 +951,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           document.getElementsByTagName('head')[0].removeChild(link)
         }
       }
-      glob.Cesium = null
+      global.Cesium = null
+      this.viewer = null
     }
   }
 }
