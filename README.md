@@ -10,7 +10,7 @@
 [![Package Quality](http://npm.packagequality.com/shield/vue-cesium.png)](http://packagequality.com/#?package=vue-cesium)
 [![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
 [![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
-
+[![Coverage Status](https://coveralls.io/repos/github/zouyaoji/vue-cesium/badge.svg?branch=master)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
 ## Languages
 
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
