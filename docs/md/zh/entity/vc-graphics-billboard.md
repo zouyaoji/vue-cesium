@@ -79,12 +79,14 @@
   export default {
     data() {
       return {
-        id: 'This is a billboard',
-        description: 'Hello Vue Cesium',
+        id: 'Hello Vue Cesium',
+        description: 'This is a billboard',
         image: 'https://zouyaoji.top/vue-cesium/favicon.png',
         position: { lng: 90, lat: 40, height: 10000 },
         billboard: {},
-        distanceDisplayCondition: { near: 0, far: 20000000 }
+        show: true,
+        distanceDisplayCondition: { near: 0, far: 20000000 },
+        horizontalOrigin: 0
       }
     },
     methods: {

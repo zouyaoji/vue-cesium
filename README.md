@@ -5,12 +5,13 @@
 </p>
 <p align="center">Vue 2.x components for CesiumJS. Load Cesium built package or other third-party packages which are built on Cesium.</p>
 
-[![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
+[![npm](https://img.shields.io/npm/v/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
 [![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.png)](http://packagequality.com/#?package=vue-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
+[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
 [![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
 [![Coverage Status](https://coveralls.io/repos/github/zouyaoji/vue-cesium/badge.svg?branch=master)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+
 ## Languages
 
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)

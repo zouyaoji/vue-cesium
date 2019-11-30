@@ -1,6 +1,6 @@
 # OpenStreetMapImageryProvider
 
-the `vc-provider-imagery-openstreetmap`component is used to load tiled imagery hosted by OpenStreetMap.
+The `vc-provider-imagery-openstreetmap`component is used to load tiled imagery hosted by OpenStreetMap.
 
 ## Example
 

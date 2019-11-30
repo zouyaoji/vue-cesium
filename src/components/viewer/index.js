@@ -7,7 +7,7 @@ function plugin (Vue, options = {}) {
   }
   plugin.installed = true
   Vue.prototype._Cesium = () => options
-  Vue.component(Viewer.name, Viewer, options)
+  Vue.component(Viewer.name, Viewer)
 }
 
 export default plugin

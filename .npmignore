@@ -5,4 +5,3 @@ coverage
 .babelrc
 .travis.yml
 server.js
-index.js

@@ -137,7 +137,7 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
 
 ---
 
-- Refer to thefficial document: **[MapboxImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/MapboxImageryProvider.html)**
+- Refer to the official document: **[MapboxImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/MapboxImageryProvider.html)**
 
 ## Events
 
