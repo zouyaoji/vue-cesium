@@ -13,15 +13,15 @@ const methods = {
   async createCesiumObject () {
     const { $props, transformProps, primitives } = this
     const options = transformProps($props)
-    return primitives.add(options)
+    return primitives && primitives.add(options)
   },
   async mount () {
     const { primitives, primitive } = this
-    return primitives.contains(primitive)
+    return primitives && primitives.contains(primitive)
   },
   async unmount () {
     const { primitives, primitive } = this
-    return primitives.remove(primitive)
+    return primitives && primitives.remove(primitive)
   }
 }
 export default {

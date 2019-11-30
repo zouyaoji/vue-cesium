@@ -22,16 +22,19 @@ const methods = {
     if (this._mounted) {
       return false
     }
+
     const { createCesiumObject, mount, setPropWatchers } = this
     const $parent = getParent(this.$parent)
     const Cesium = (this.Cesium = $parent.Cesium)
     const viewer = (this.viewer = $parent.viewer)
-
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
     if (!$parent.cesiumObject) {
       return $parent.load()
     }
     // 注册 Vue 侦听器
+    // 在 Cesium 对象创建前就注册侦听器有一个好处：
+    // 在父组件如 `vc-viewer` 的 `ready` 事件中给子组件的属性赋值能被侦听到。
+    // 从而兼容v1版本的写法。
     setPropWatchers(true)
     this._createPromise = createCesiumObject().then(async (cesiumObject) => {
       this.originInstance = cesiumObject
@@ -70,7 +73,7 @@ const methods = {
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async reload () {
-    return this.unload().then((aa) => {
+    return this.unload().then(() => {
       return this.load()
     })
   },
@@ -91,7 +94,7 @@ const methods = {
   setPropWatchers (register) {
     if (register) {
       const { $props, specialPropsKeys, cesiumClass, cesiumObject, applyToConstructor } = this
-      if (!cesiumClass) { return }
+      if (!cesiumClass || !Cesium[cesiumClass]) { return }
       const constructor = Cesium[cesiumClass]
       const args = []
       for (let i = 0; i < constructor.length; i++) {
@@ -112,7 +115,8 @@ const methods = {
         const unwatch = this.$watch(
           vueProp,
           async (val) => {
-            await this.createPromise //  等待当前对象创建完成，否则监听到了变换也设置不成功
+            // 如果是在父组件的 `ready` 事件中就改变了属性，这儿能侦听到，但子组件实际上还没创建完成
+            await this.createPromise
             if (hasSetter) {
               // 属性可写，直接动态响应属性的改变
               const { cesiumObject } = this
@@ -239,7 +243,6 @@ export default {
   created () {
     this._mounted = false
     this.cesiumClass = nameClassMap[this.$options.name]
-    // this.specialProps = specialProps
     this.specialPropsKeys = Object.keys(specialProps)
     Object.defineProperties(this, {
       createPromise: {
@@ -249,6 +252,10 @@ export default {
       cesiumObject: {
         enumerable: true,
         get: () => this.originInstance
+      },
+      mounted: {
+        enumerable: true,
+        get: () => this._mounted
       }
     })
   },

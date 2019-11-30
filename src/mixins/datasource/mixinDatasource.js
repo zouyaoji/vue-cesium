@@ -8,12 +8,12 @@ const methods = {
   async mount () {
     const { dataSources, datasource } = this
     bindEvents.call(this, datasource, Events['datasource-events'], true)
-    return dataSources.add(datasource)
+    return dataSources && dataSources.add(datasource)
   },
   async unmount () {
     const { dataSources, datasource } = this
     bindEvents.call(this, datasource, Events['datasource-events'], false)
-    return dataSources.remove(datasource)
+    return dataSources && dataSources.remove(datasource)
   },
   getServices () {
     const vm = this

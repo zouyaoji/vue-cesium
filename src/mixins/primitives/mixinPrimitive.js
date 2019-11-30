@@ -21,14 +21,14 @@ const methods = {
       throw new Cesium.DeveloperError(error)
     })
     bindEvents.call(this, primitive, undefined, true)
-    return primitives.add(primitive)
+    return primitives && primitives.add(primitive)
   },
   async unmount () {
     const { primitives, primitive } = this
     this.childCount = 0
     this.instances = []
     bindEvents.call(this, primitive, undefined, false)
-    return primitives.remove(primitive)
+    return primitives && primitives.remove(primitive)
   },
   async setGeometryInstances (geometryInstance, index) {
     this.instances.push(geometryInstance)

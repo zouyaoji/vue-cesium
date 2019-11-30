@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-11-26 21:13:53
+ * @Last Modified time: 2019-11-30 22:05:10
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -649,12 +649,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer.forceResize()
       }
     },
-    async init () {
-      if (this.viewer) {
+    init (Cesium) {
+      if (this._mounted) {
         return false
       }
-      let $el = this.$refs.viewer
-      let accessToken = this.accessToken
+      this.Cesium = Cesium
+      const $el = this.$refs.viewer
+      const accessToken = this.accessToken
         ? this.accessToken
         : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('accessToken')
           ? this._Cesium().accessToken
@@ -796,7 +797,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           this.$emit('update:camera', camera)
         }
       })
-
       // if (Cesium.defined(viewer.animation)) {
       //   var d = new Date()
       //   var hour = 0 - d.getTimezoneOffset()
@@ -821,45 +821,52 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       this.viewer = viewer
       registerEvents(true)
       this.$emit('ready', { Cesium, viewer })
-    },
-    initViewer () {
-      this.Cesium = Cesium
-      this.init()
+      this._mounted = true
     },
     getCesiumScript () {
-      const cesiumPath = this.cesiumPath
-        ? this.cesiumPath
-        : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
-          ? this._Cesium().cesiumPath
-          : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+      if (!global.Cesium) {
+        const cesiumPath = this.cesiumPath
+          ? this.cesiumPath
+          : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
+            ? this._Cesium().cesiumPath
+            : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 
-      let dirName = dirname(cesiumPath)
-      const $link = document.createElement('link')
-      $link.rel = 'stylesheet'
-      global.document.head.appendChild($link)
-      $link.href = `${dirName}/Widgets/widgets.css`
+        let dirName = dirname(cesiumPath)
+        const $link = document.createElement('link')
+        $link.rel = 'stylesheet'
+        global.document.head.appendChild($link)
+        $link.href = `${dirName}/Widgets/widgets.css`
 
-      const { initViewer } = this
-      const $script = document.createElement('script')
-      global.document.body.appendChild($script)
-      $script.src = cesiumPath
-      $script.onload = () => {
-        // 超图WebGL3D需要引入zlib.min.js
-        if (Cesium.SuperMapImageryProvider) {
-          const $scriptZlib = document.createElement('script')
-          global.document.body.appendChild($scriptZlib)
-          $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
-        }
-        initViewer()
+        const $script = document.createElement('script')
+        global.document.body.appendChild($script)
+        $script.src = cesiumPath
+        return new Promise((resolve, reject) => {
+          $script.onload = () => {
+            // 超图WebGL3D需要引入zlib.min.js
+            if (Cesium.SuperMapImageryProvider) {
+              const $scriptZlib = document.createElement('script')
+              global.document.body.appendChild($scriptZlib)
+              $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
+            }
+            resolve(global.Cesium)
+          }
+        })
+      } else {
+        return Promise.resolve(global.Cesium)
       }
     },
-    reset () {
-      const { getCesiumScript, initViewer } = this
-      if (!global.Cesium) {
-        getCesiumScript()
-      } else {
-        initViewer()
-      }
+    registerEvents (flag) {
+      const { viewer } = this
+      bindEvents.call(this, viewer, undefined, flag)
+      Events['viewer-children-events'].forEach((eventName) => {
+        bindEvents.call(this, viewer[eventName.name], eventName.events, flag)
+      })
+      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
+      Events['viewer-mouse-events'].forEach((eventName) => {
+        const listener = this.$listeners[eventName]
+        const methodName = flag ? 'setInputAction' : 'removeInputAction'
+        listener && handler[methodName](listener.fns, Cesium.ScreenSpaceEventType[eventName])
+      })
     },
     getServices () {
       const vm = this
@@ -886,22 +893,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         }
       )
-    },
-    registerEvents (flag) {
-      const { viewer } = this
-      bindEvents.call(this, viewer, undefined, flag)
-      Events['viewer-children-events'].forEach((eventName) => {
-        bindEvents.call(this, viewer[eventName.name], eventName.events, flag)
-      })
-      let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      Events['viewer-mouse-events'].forEach((eventName) => {
-        const listener = this.$listeners[eventName]
-        const methodName = flag ? 'setInputAction' : 'removeInputAction'
-        listener && handler[methodName](listener.fns, Cesium.ScreenSpaceEventType[eventName])
-      })
     }
   },
+  mounted () {
+    const { getCesiumScript, init } = this
+    getCesiumScript().then(init)
+  },
   created () {
+    this._mounted = false
     Object.defineProperties(this, {
       cesiumObject: {
         enumerable: true,
@@ -924,9 +923,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         get: () => this.viewer && this.viewer.scene.primitives
       }
     })
-  },
-  mounted () {
-    this.reset()
   },
   destroyed () {
     if (global.Cesium) {
@@ -953,6 +949,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       global.Cesium = null
       this.viewer = null
+      this._mounted = false
     }
   }
 }

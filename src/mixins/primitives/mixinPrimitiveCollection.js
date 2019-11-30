@@ -12,11 +12,11 @@ import mergeDescriptors from '../../utils/mergeDescriptors'
 const methods = {
   async mount () {
     const { primitives, collection } = this
-    return primitives.add(collection)
+    return primitives && primitives.add(collection)
   },
   async unmount () {
     const { primitives, collection } = this
-    return primitives.remove(collection)
+    return primitives && primitives.remove(collection)
   },
   getServices () {
     const vm = this

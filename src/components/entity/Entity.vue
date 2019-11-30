@@ -42,12 +42,12 @@ export default {
     async mount () {
       const { entities, entity } = this
       bindEvents.call(this, entity, Events['entity-events'])
-      return entities.add(entity)
+      return entities && entities.add(entity)
     },
     async unmount () {
       const { entities, entity } = this
       bindEvents.call(this, entity, Events['entity-events'], false)
-      return entities.remove(entity)
+      return entities && entities.remove(entity)
     },
     setGraphics (graphics, type) {
       const listener = this.$listeners['update:' + type]
