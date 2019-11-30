@@ -29,8 +29,17 @@ module.exports = function (api) {
     ['@babel/plugin-transform-runtime', { corejs: 2, helpers: true, regenerator: true, useESModules: true }]
   ]
 
+  const env = {
+    test: {
+      plugins: [
+        'istanbul'
+      ]
+    }
+  }
+
   return {
     presets,
-    plugins
+    plugins,
+    env
   }
 }

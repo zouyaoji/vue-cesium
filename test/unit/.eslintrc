@@ -1,0 +1,15 @@
+{
+  "env": {
+    "mocha": true,
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "expect": true,
+    "sinon": true
+  },
+  "rules": {
+    "no-unused-expressions": 0
+  }
+}
