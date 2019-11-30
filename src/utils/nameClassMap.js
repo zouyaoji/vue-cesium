@@ -20,6 +20,7 @@ const nameClassMap = {
   'vc-provider-imagery-urltemplate': 'UrlTemplateImageryProvider',
   'vc-provider-imagery-wms': 'WebMapServiceImageryProvider',
   'vc-provider-imagery-wmts': 'WebMapTileServiceImageryProvider',
+  'vc-provider-imagery-supermap': 'SuperMapImageryProvider',
   // 地形
   'vc-provider-terrain-arcgis-tiled-elevation': 'ArcGISTiledElevationTerrainProvider',
   'vc-provider-terrain-cesium': 'CesiumTerrainProvider',

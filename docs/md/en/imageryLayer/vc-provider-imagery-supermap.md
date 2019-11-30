@@ -1,34 +1,36 @@
 # SuperMapImageryProvider
 
-`supermap-imagery-provider` Load the SuperMap iServer service. Only the SuperMap Cesium package has this component.
+The `vc-provider-imagery-supermap` component is used to load the SuperMap iServer service.
 
-## Examples
+## Example
 
-### add a SuperMapImageryProvider layer to viewer
+### Load an imagerylayer with SuperMapImageryProvider
 
 #### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
-      <sm-vc-viewer :cesiumPath="cesiumPath">
-        <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <supermap-imagery-provider ref="supermapLayer":url="url" @ready="ready"></supermap-imagery-provider>
-        </imagery-layer>
-      </sm-vc-viewer>
+      <vc-viewer>
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-supermap
+            ref="imageryProvider"
+            :url="url"
+            @ready="ready"
+            @readyPromise="readyPromise"
+          ></vc-provider-imagery-supermap>
+        </vc-layer-imagery>
+      </vc-viewer>
       <div class="demo-tool">
         <span>alpha</span>
-        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
         <span>brightness</span>
-        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
+        <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
         <span>contrast</span>
-        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
-        <span>switch url</span>
-        <md-select v-model="url" placeholder="switch url">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
+        <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
+        <span>switch</span>
+        <md-select v-model="url" placeholder="请选择服务">
+          <md-option v-for="item in options" :key="item.value" :value="item.value">
             {{item.label}}
           </md-option>
         </md-select>
@@ -37,31 +39,33 @@
   </template>
 
   <script>
-    import CesiumViewer from '../../../../src/components/viewer/Viewer.vue'
     export default {
-      data () {
+      data() {
         return {
-          cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
-          options: [{
-            value: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
-            label: 'sichuan'
-          }, {
-            value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
-            label: 'google'
-          }],
+          options: [
+            {
+              value: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+              label: 'sichuan'
+            },
+            {
+              value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
+              label: 'google'
+            }
+          ],
           url: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           alpha: 1,
           brightness: 1,
           contrast: 1
         }
       },
-      components: {
-        SmCesiumViewer: CesiumViewer
-      },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+          this.cesiumInstance = cesiumInstance
+        },
+        readyPromise() {
+          const { Cesium, viewer } = this.cesiumInstance
+          viewer.zoomTo(this.$refs.imageryProvider.providerContainer.imageryLayer)
         }
       }
     }
@@ -73,11 +77,16 @@
 ```html
 <template>
   <div class="viewer">
-    <sm-vc-viewer :cesiumPath="cesiumPath">
-      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <supermap-imagery-provider ref="supermapLayer" :url="url" @ready="ready"></supermap-imagery-provider>
-      </imagery-layer>
-    </sm-vc-viewer>
+    <vc-viewer>
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-supermap
+          ref="imageryProvider"
+          :url="url"
+          @ready="ready"
+          @readyPromise="readyPromise"
+        ></vc-provider-imagery-supermap>
+      </vc-layer-imagery>
+    </vc-viewer>
     <div class="demo-tool">
       <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
@@ -85,8 +94,8 @@
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
       <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
-      <span>switch url</span>
-      <md-select v-model="url" placeholder="switch url">
+      <span>switch</span>
+      <md-select v-model="url" placeholder="请选择服务">
         <md-option v-for="item in options" :key="item.value" :value="item.value">
           {{item.label}}
         </md-option>
@@ -96,11 +105,9 @@
 </template>
 
 <script>
-  import CesiumViewer from '../../../src/components/viewer/CesiumViewer.vue'
   export default {
     data() {
       return {
-        cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js',
         options: [
           {
             value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
@@ -117,13 +124,14 @@
         contrast: 1
       }
     },
-    components: {
-      SmCesiumViewer: CesiumViewer
-    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(this.$refs.supermapLayer.providerContainer.imageryLayer)
+        this.cesiumInstance = cesiumInstance
+      },
+      readyPromise() {
+        const { Cesium, viewer } = this.cesiumInstance
+        viewer.zoomTo(this.$refs.imageryProvider.providerContainer.imageryLayer)
       }
     }
   }
@@ -142,6 +150,8 @@
 |rectangle|Cesium.Rectangle||`optional`The rectangle of the layer. This rectangle can limit the visible portion of the imagery provider.|
 
 ---
+
+- Refer to the official document: **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/Build/Documentation/SuperMapImageryProvider.html)**
 
 ## Events
 

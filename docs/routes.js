@@ -195,15 +195,15 @@ const routeMap = [
           zh: 'WMTS影像',
           en: 'WebMapTileServiceImageryProvider'
         }
+      },
+      {
+        path: 'vc-provider-imagery-supermap',
+        component: 'imageryLayer/vc-provider-imagery-supermap',
+        name: {
+          zh: 'SuperMap影像',
+          en: 'SuperMapImageryProvider'
+        }
       }
-      // {
-      //   path: 'vc-provider-imagery-supermap',
-      //   component: 'imageryLayer/vc-provider-imagery-supermap',
-      //   name: {
-      //     zh: 'SuperMap影像',
-      //     en: 'SuperMapImageryProvider'
-      //   }
-      // }
     ]
   },
   {
