@@ -9,7 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
@@ -59,19 +59,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: path.resolve(__dirname, '../docs/template/index.html'),
       chunks: ['vendor', 'libs', 'main', 'manifest']
     }),
-    new InlineManifestWebpackPlugin('manifest'),
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../docs/statics'),
-        to: config.dev.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ])
+    new InlineManifestWebpackPlugin('manifest')
   ]
 })
-
-// module.exports = devWebpackConfig
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port
@@ -84,8 +74,8 @@ module.exports = new Promise((resolve, reject) => {
       // add port to devServer config
       devWebpackConfig.devServer.port = port
 
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+      // Add FriendlyErrorsWebpackPlugin
+      devWebpackConfig.plugins.push(new FriendlyErrorsWebpackPlugin({
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`]
         },

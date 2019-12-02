@@ -8,6 +8,7 @@ const nodeResolve = require('rollup-plugin-node-resolve')
 const replace = require('rollup-plugin-re')
 const vuePlugin = require('rollup-plugin-vue').default
 const uglify = require('rollup-plugin-uglify')
+// const globals = require('rollup-plugin-node-globals')
 const sass = require('./rollup/sass.js')
 const notifier = require('node-notifier')
 const argv = require('yargs').argv
@@ -81,6 +82,8 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/mixins/primitives'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/tool'), srcPath),
     packagesFromPath(utils.resolve('src/libs/navigation'), srcPath),
+    packagesFromPath(utils.resolve('src/libs/supermap'), srcPath),
+    packagesFromPath(utils.resolve('src/libs/tianditu'), srcPath),
     packagesFromPath(utils.resolve('src/libs/wind'), srcPath),
     packagesFromPath(utils.resolve('src/utils'), srcPath)
   ]).then((otherPackages) => {
@@ -194,14 +197,14 @@ function bundleOptions (format, pkg, env = 'development') {
     case 'umd':
       options.jsName += '.' + format
       options.cssName = undefined
-      // const ol = {}
-      options.output.globals = (id) => {
-        if (id === 'vue') return 'Vue'
-
-        // if (ol[id] != null) {
-        //   return ol[id]
-        // }
-      }
+      // // const ol = {}
+      // options.output.globals = (id) => {
+      //   if (id === 'vue') return 'Vue'
+      //   console.log(id)
+      //   // if (ol[id] != null) {
+      //   //   return ol[id]
+      //   // }
+      // }
 
       options.input.external = (id, parent, resolved) => {
         if (['vue'].includes(id)) return true
@@ -301,6 +304,10 @@ function makeBundle (options = {}) {
     )
   }
 
+  if (options.format === 'umd') {
+    // <<<<<< adds this line into the bundle.js >>>>>>>  const global = window;
+    options.output.intro = 'var global = typeof self !== undefined ? self : this;'
+  }
   const jsOutputPath = path.join(options.outputPath, options.jsName) + '.js'
   const cssOutputPath = options.cssName ? path.join(options.outputPath, options.cssName) + '.css' : undefined
   const spinner = ora({
@@ -312,12 +319,12 @@ function makeBundle (options = {}) {
     .rollup(Object.assign({}, options.input, { plugins }))
     .then((bundle) => {
       // generate bundle
-      const optt = Object.assign({}, options.output, {
+      const outputOptions = Object.assign({}, options.output, {
         sourcemap: true,
         sourcemapFile: jsOutputPath,
         isWrite: true
       })
-      return bundle.generate(optt, true)
+      return bundle.generate(outputOptions, true)
     })
     .then((result) => {
       for (const js of result.output) {

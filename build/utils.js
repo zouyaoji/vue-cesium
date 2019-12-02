@@ -7,6 +7,7 @@ const postcss = require('postcss')
 const postcssrc = require('postcss-load-config')
 const cssnano = require('cssnano')
 const config = require('./config')
+const packageConfig = require('../package.json')
 
 function resolve (...relPath) {
   return path.join(__dirname, '..', ...relPath).split(path.sep).join('/')

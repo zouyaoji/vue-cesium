@@ -1,5 +1,13 @@
 # 更新日志
 
+## 2.0.0 - 2019-12-02
+
+## 增加
+
+- `vc-provider-imagery-supermap` 加载超图 iServer 影像服务。
+- `vc-provider-imagery-tianditu` 加载天地图 WMTS 影像服务。
+- 支持 CDN 引用注册。
+
 ## 2.0.0-beta.3 - 2019-11-26
 
 ### 修改
