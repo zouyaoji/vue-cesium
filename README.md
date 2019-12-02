@@ -5,12 +5,12 @@
 </p>
 <p align="center">Vue 2.x components for CesiumJS. Load Cesium built package or other third-party packages which are built on Cesium.</p>
 
-[![npm](https://img.shields.io/npm/v/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
-[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
-[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
-[![Coverage Status](https://coveralls.io/repos/github/zouyaoji/vue-cesium/badge.svg?branch=master)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium?style=plastic)](https://travis-ci.org/zouyaoji/vue-cesium)
+[![npm](https://img.shields.io/npm/v/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic)](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE)
+[![Coverage Status](https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+[![Package Quality](https://npm.packagequality.com/shield/vue-cesium.svg)](https://packagequality.com/#?package=vue-cesium)
 
 ## Languages
 
@@ -20,7 +20,6 @@
 ## Links
 
 - [Documentation](https://zouyaoji.top/vue-cesium)
-- [Documentation-v1](https://zouyaoji.top/vue-cesium-v1)
 - [Official Demo](https://sandcastle.cesium.com/)
 - [More examples](https://github.com/zouyaoji/vue-cesium-demo)
 
@@ -98,4 +97,4 @@ Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
 ## Reference
 
-Two good projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).
+Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).

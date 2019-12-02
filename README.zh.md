@@ -5,12 +5,12 @@
 </p>
 <p align="center">基于 Vue 2.x 的 Cesium 三维地图组件。</p>
 
-[![npm](https://img.shields.io/npm/v/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
-[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)](https://www.npmjs.com/package/vue-cesium)
-[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
-[![Coverage Status](https://coveralls.io/repos/github/zouyaoji/vue-cesium/badge.svg?branch=master)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium?style=plastic)](https://travis-ci.org/zouyaoji/vue-cesium)
+[![npm](https://img.shields.io/npm/v/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic)](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE)
+[![Coverage Status](https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+[![Package Quality](https://npm.packagequality.com/shield/vue-cesium.svg)](https://packagequality.com/#?package=vue-cesium)
 
 ## 语言
 
@@ -22,7 +22,6 @@
 - [在线文档](https://zouyaoji.top/vue-cesium)
 - [官方例子](https://sandcastle.cesium.com/)
 - [更多例子](https://github.com/zouyaoji/vue-cesium-demo)
-- [v1 版本文档](https://zouyaoji.top/vue-cesium-v1)
 
 ## 开始
 
@@ -118,4 +117,4 @@ Vue.use(VueCesium, {
 
 ## 参考
 
-学习参考了[vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)
+学习借鉴了 2 个 vue 组件项目[vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)和[vuelayers](https://github.com/ghettovoice/vuelayers/)。
