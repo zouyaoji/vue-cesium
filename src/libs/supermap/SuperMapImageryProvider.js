@@ -2,11 +2,11 @@ import IndexedDBScheduler from './IndexedDBScheduler'
 
 class SuperMapImageryProvider {
   constructor (options) {
-    console.log(options)
-    options = Cesium.defaultValue(options, {})
+    const { appendForwardSlash, Credit, defaultValue, defined, DeveloperError, Event, Resource, when, Math } = Cesium
+    options = defaultValue(options, {})
     const { url } = options
-    if (!Cesium.defined(url)) {
-      throw new Cesium.DeveloperError('options.url is required.')
+    if (!defined(url)) {
+      throw new DeveloperError('options.url is required.')
     }
     const rootNodeUrlRealspace3D = url.substring(0, url.indexOf('datas'))
     this.tablename = url.substring(0, url.indexOf('datas/') + 6, url.length)
@@ -15,124 +15,124 @@ class SuperMapImageryProvider {
       name: rootNodeUrlRealspace3D + this.tablename
     })
     dbPromise.then(e => {
-      that._indexedDBScheduler = e
+      that.m_indexedDBScheduler = e
     })
-    this._indexedDBSetting = {
+    this.m_indexedDBSetting = {
       isOpen: false,
       clear: () => {
-        that._indexedDBScheduler.clear(that.tablename)
+        that.m_indexedDBScheduler.clear(that.tablename)
       }
     }
     this.isSci = false
     this.isTileMap = false
-    let forwardSlashUrl = Cesium.appendForwardSlash(url)
+    let forwardSlashUrl = appendForwardSlash(url)
     if (forwardSlashUrl.indexOf('rest/maps') > -1) {
       this.isTileMap = true
       this.layersID = options.layersID
     } else {
       if (!(forwardSlashUrl.indexOf('rest/realspace') > -1)) {
-        throw new Cesium.DeveloperError('The url type is not supported!')
+        throw new DeveloperError('The url type is not supported!')
       }
       this.isSci = true
     }
-    this._url = forwardSlashUrl
-    this._resource = Cesium.Resource.createIfNeeded(forwardSlashUrl)
-    this._transparent = Cesium.defaultValue(options.transparent, true)
-    this._name = options.name || ''
-    this._urlTemplate = undefined
-    this._errorEvent = new Cesium.Event()
-    this._fileExtension = 'png'
-    this._tileWidth = 256
-    this._tileHeight = 256
-    this._minimumLevel = Cesium.defaultValue(options.minimumLevel, 0)
-    this._maximumLevel = options.maximumLevel
-    this._rectangle = undefined
-    this._tilingScheme = undefined
-    this._tileDiscardPolicy = options.tileDiscardPolicy
-    this._fRatio = Cesium.defaultValue(options.ratio, Cesium.Math.DEGREES_PER_RADIAN / 6378137.0)
-    this._scales = []
-    this._coordUnit = 'DEGREE'
-    let credit = Cesium.defaultValue(options.credit, new Cesium.Credit('MapQuest, SuperMap iServer Imagery'))
+    this.m_url = forwardSlashUrl
+    this.m_resource = Resource.createIfNeeded(forwardSlashUrl)
+    this.m_transparent = defaultValue(options.transparent, true)
+    this.m_name = options.name || ''
+    this.m_urlTemplate = undefined
+    this.m_errorEvent = new Event()
+    this.m_fileExtension = 'png'
+    this.m_tileWidth = 256
+    this.m_tileHeight = 256
+    this.m_minimumLevel = defaultValue(options.minimumLevel, 0)
+    this.m_maximumLevel = options.maximumLevel
+    this.m_rectangle = undefined
+    this.m_tilingScheme = undefined
+    this.m_tileDiscardPolicy = options.tileDiscardPolicy
+    this.m_fRatio = defaultValue(options.ratio, Math.DEGREES_PER_RADIAN / 6378137.0)
+    this.m_scales = []
+    this.m_coordUnit = 'DEGREE'
+    let credit = defaultValue(options.credit, new Credit('MapQuest, SuperMap iServer Imagery'))
     if (typeof credit === 'string') {
-      credit = new Cesium.Credit(credit)
+      credit = new Credit(credit)
     }
-    this._credit = credit
-    this._ready = false
-    this._readyPromise = Cesium.when.defer()
-    this._options = options
+    this.m_credit = credit
+    this.m_ready = false
+    this.m_readyPromise = when.defer()
+    this.m_options = options
     init.call(this)
   }
 
   get url () {
-    return this._url
+    return this.m_url
   }
 
   get name () {
-    return this._name
+    return this.m_name
   }
   set name (val) {
-    this._name = val
+    this.m_name = val
   }
 
   get tileWidth () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('tileWidth must not be called before the imagery provider is ready.')
     }
-    return this._tileWidth
+    return this.m_tileWidth
   }
   get tileHeight () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('tileHeight must not be called before the imagery provider is ready.')
     }
-    return this._tileHeight
+    return this.m_tileHeight
   }
   get maximumLevel () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('maximumLevel must not be called before the imagery provider is ready.')
     }
-    return this._maximumLevel
+    return this.m_maximumLevel
   }
   get minimumLevel () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('minimumLevel must not be called before the imagery provider is ready.')
     }
-    return this._minimumLevel
+    return this.m_minimumLevel
   }
   get tilingScheme () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('tilingScheme must not be called before the imagery provider is ready.')
     }
-    return this._tilingScheme
+    return this.m_tilingScheme
   }
   get rectangle () {
-    if (!this._ready) {
+    if (!this.m_ready) {
       throw new Cesium.DeveloperError('rectangle must not be called before the imagery provider is ready.')
     }
-    return this._rectangle
+    return this.m_rectangle
   }
   get errorEvent () {
-    return this._errorEvent
+    return this.m_errorEvent
   }
   get ready () {
-    return this._ready
+    return this.m_ready
   }
   get credit () {
-    return this._credit
+    return this.m_credit
   }
   get hasAlphaChannel () {
     return true
   }
   get readyPromise () {
-    return this._readyPromise
+    return this.m_readyPromise
   }
   get ratio () {
-    return this._fRatio
+    return this.m_fRatio
   }
   set ratio (val) {
-    this._fRatio = val
+    this.m_fRatio = val
   }
   get tileDiscardPolicy () {
-    return this._tileDiscardPolicy
+    return this.m_tileDiscardPolicy
   }
 
   getTileCredits (x, y, level) {
@@ -143,19 +143,20 @@ class SuperMapImageryProvider {
   }
 
   requestImage (x, y, level, request) {
+    const { defined, DeveloperError, ImageryProvider, when } = Cesium
     if (!this.ready) {
-      throw new Cesium.DeveloperError('requestImage must not be called before the imagery provider is ready.')
+      throw new DeveloperError('requestImage must not be called before the imagery provider is ready.')()
     }
-    const { ImageryProvider, defined, when } = Cesium
+
     let url = buildImageResource.call(this, x, y, level)
-    let resource = this._resource.getDerivedResource({
+    let resource = this.m_resource.getDerivedResource({
       url: url,
       request: request
     })
     let that = this
-    if (this._indexedDBSetting.isOpen) {
-      if (defined(this._indexedDBScheduler)) {
-        let promise = this._indexedDBScheduler.getElementFromDB(this.tablename, url)
+    if (this.m_indexedDBSetting.isOpen) {
+      if (defined(this.m_indexedDBScheduler)) {
+        let promise = this.m_indexedDBScheduler.getElementFromDB(this.tablename, url)
         return defined(promise) ? when(promise, value => {
           if (defined(value)) {
             let image = new Image()
@@ -182,31 +183,32 @@ let Scales = [1.690163571602655e-9, 3.3803271432053056e-9, 6.760654286410611e-9,
 function buildImageResource (x, y, level) {
   let url
   if (this.isTileMap) {
-    if (this._coordUnit === 'DEGREE') {
+    if (this.m_coordUnit === 'DEGREE') {
       let scaleText = ScaleTexts[level + 1] || ScaleTexts[level]
-      url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
-    } else if (this._coordUnit === 'METER') {
+      url = this.m_urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
+    } else if (this.m_coordUnit === 'METER') {
       let scaleText = ScaleTexts[level]
-      url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
+      url = this.m_urlTemplate.replace('{x}', x).replace('{y}', y).replace('{scale}', scaleText)
     }
   } else {
-    url = this._urlTemplate.replace('{x}', x).replace('{y}', y).replace('{level}', level).replace('{fileExtension}', this._fileExtension)
+    url = this.m_urlTemplate.replace('{x}', x).replace('{y}', y).replace('{level}', level).replace('{fileExtension}', this.m_fileExtension)
   }
   return url
 }
 
 function init () {
+  const { Resource, when } = Cesium
   if (this.isTileMap) {
-    let promise = Cesium.Resource.fetchJsonp({
-      url: this._options.url + '.jsonp',
+    let promise = Resource.fetchJsonp({
+      url: this.m_options.url + '.jsonp',
       queryParameters: {
         f: 'json'
       }
     })
-    Cesium.when(promise, onFulfilledTileMap.bind(this), onRejected.bind(this))
+    when(promise, onFulfilledTileMap.bind(this), onRejected.bind(this))
   } else {
     // r(c.CREDENTIAL) && (o = c.addToken(o)),
-    Cesium.when(Cesium.Resource.fetchText({
+    when(Resource.fetchText({
       url: this.url + 'config'
     }), onFulfilledRest3D.bind(this), onRejected.bind(this))
   }
@@ -222,41 +224,41 @@ function getMaximumLevelbyScale (scale) {
 function onFulfilledRest3D (xmlText) {
   let options = parseConfigFromXmlText.call(this, xmlText)
   const { defaultValue, defined, GeographicTilingScheme, Math, Rectangle } = Cesium
-  this._fileExtension = defaultValue(options.fileExtentName, 'png')
-  this._tileWidth = defaultValue(options.imageSizeWidth, 256)
-  this._tileHeight = defaultValue(options.imageSizeHeight, 256)
+  this.m_fileExtension = defaultValue(options.fileExtentName, 'png')
+  this.m_tileWidth = defaultValue(options.imageSizeWidth, 256)
+  this.m_tileHeight = defaultValue(options.imageSizeHeight, 256)
   let levels = options.levels
   let length = levels.length
-  this._minimumLevel = defaultValue(levels[0], 0)
-  this._maximumLevel = defaultValue(levels[length - 1], length - 1)
-  if (!defined(this._tilingScheme)) {
-    this._tilingScheme = new GeographicTilingScheme({
-      ellipsoid: this._options.ellipsoid
+  this.m_minimumLevel = defaultValue(levels[0], 0)
+  this.m_maximumLevel = defaultValue(levels[length - 1], length - 1)
+  if (!defined(this.m_tilingScheme)) {
+    this.m_tilingScheme = new GeographicTilingScheme({
+      ellipsoid: this.m_options.ellipsoid
     })
   }
-  if (!defined(this._rectangle)) {
+  if (!defined(this.m_rectangle)) {
     if (options.left && options.right && options.top && options.bottom) {
       let left = Math.toRadians(options.left)
       let right = Math.toRadians(options.right)
       let bottom = Math.toRadians(options.bottom)
       let top = Math.toRadians(options.top)
-      this._rectangle = new Rectangle(left, bottom, right, top)
+      this.m_rectangle = new Rectangle(left, bottom, right, top)
     }
   }
-  let tilingScheme = this._tilingScheme
-  this._rectangle.west < tilingScheme.rectangle.west && (this._rectangle.west = tilingScheme.rectangle.west)
-  this._rectangle.east > tilingScheme.rectangle.east && (this._rectangle.east = tilingScheme.rectangle.east)
-  this._rectangle.south < tilingScheme.rectangle.south && (this._rectangle.south = tilingScheme.rectangle.south)
-  this._rectangle.north > tilingScheme.rectangle.north && (this._rectangle.north = tilingScheme.rectangle.north)
+  let tilingScheme = this.m_tilingScheme
+  this.m_rectangle.west < tilingScheme.rectangle.west && (this.m_rectangle.west = tilingScheme.rectangle.west)
+  this.m_rectangle.east > tilingScheme.rectangle.east && (this.m_rectangle.east = tilingScheme.rectangle.east)
+  this.m_rectangle.south < tilingScheme.rectangle.south && (this.m_rectangle.south = tilingScheme.rectangle.south)
+  this.m_rectangle.north > tilingScheme.rectangle.north && (this.m_rectangle.north = tilingScheme.rectangle.north)
 
-  let swTile = tilingScheme.positionToTileXY(Rectangle.southwest(this._rectangle), this._minimumLevel)
-  let neTile = tilingScheme.positionToTileXY(Rectangle.northeast(this._rectangle), this._minimumLevel)
+  let swTile = tilingScheme.positionToTileXY(Rectangle.southwest(this.m_rectangle), this.m_minimumLevel)
+  let neTile = tilingScheme.positionToTileXY(Rectangle.northeast(this.m_rectangle), this.m_minimumLevel)
   let tileCount = (window.Math.abs(neTile.x - swTile.x) + 1) * (window.Math.abs(neTile.y - swTile.y) + 1)
-  tileCount > 4 && (this._minimumLevel = 0)
-  this._tilingScheme = tilingScheme
-  this._urlTemplate = this._url + 'data/index/{y}/{x}.{fileExtension}?level={level}'
-  this._ready = true
-  this._readyPromise.resolve(true)
+  tileCount > 4 && (this.m_minimumLevel = 0)
+  this.m_tilingScheme = tilingScheme
+  this.m_urlTemplate = this.m_url + 'data/index/{y}/{x}.{fileExtension}?level={level}'
+  this.m_ready = true
+  this.m_readyPromise.resolve(true)
 }
 
 function parseConfigFromXmlText (xmlText) {
@@ -280,7 +282,7 @@ function parseConfigFromXmlText (xmlText) {
   let cellWidth = queryNumericAttribute(rootNode, 'CellWidth', namespaceURI)
   let cellHeight = queryNumericAttribute(rootNode, 'CellHeight', namespaceURI)
   let cacheName = queryStringValue(rootNode, 'CacheName', namespaceURI)
-  this._name = cacheName || ''
+  this.m_name = cacheName || ''
   return {
     left: left,
     right: right,
@@ -331,46 +333,48 @@ function queryNodes (xmlNode, attribute, namespaceURI) {
 }
 
 function onFulfilledTileMap (response) {
+  const { Cartesian3, defaultValue, defined, GeographicTilingScheme, Math, Rectangle, WebMercatorTilingScheme } = Cesium
   let coordUnit = response.prjCoordSys.coordUnit
-  this._coordUnit = coordUnit
+  this.m_coordUnit = coordUnit
   let bounds = response.bounds
   let visibleScales = response.visibleScales
-  if (Cesium.defined(visibleScales) && visibleScales.length > 1 && Cesium.defined(this._maximumLevel)) {
+  if (defined(visibleScales) && visibleScales.length > 1 && defined(this.m_maximumLevel)) {
     let lastVisibleScale = visibleScales[visibleScales.length - 1]
-    this._maximumLevel = getMaximumLevelbyScale(lastVisibleScale)
+    this.m_maximumLevel = getMaximumLevelbyScale(lastVisibleScale)
   }
   if (coordUnit === 'DEGREE') {
-    this._tilingScheme = new Cesium.GeographicTilingScheme()
-    bounds.left = Cesium.Math.clamp(bounds.left, -180, 180)
-    bounds.bottom = Cesium.Math.clamp(bounds.bottom, -90, 90)
-    bounds.right = Cesium.Math.clamp(bounds.right, -180, 180)
-    bounds.top = Cesium.Math.clamp(bounds.top, -90, 90)
-    this._rectangle = Cesium.Rectangle.fromDegrees(bounds.left, bounds.bottom, bounds.right, bounds.top)
-    this._urlTemplate = this._url + 'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-180,"y":90}'
+    this.m_tilingScheme = new GeographicTilingScheme()
+    bounds.left = Math.clamp(bounds.left, -180, 180)
+    bounds.bottom = Math.clamp(bounds.bottom, -90, 90)
+    bounds.right = Math.clamp(bounds.right, -180, 180)
+    bounds.top = Math.clamp(bounds.top, -90, 90)
+    this.m_rectangle = Rectangle.fromDegrees(bounds.left, bounds.bottom, bounds.right, bounds.top)
+    this.m_urlTemplate = this.m_url + 'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-180,"y":90}'
   } else {
-    let pointLB = new Cesium.Cartesian3(bounds.left, bounds.bottom, 0)
+    let pointLB = new Cartesian3(bounds.left, bounds.bottom, 0)
     pointLB.x = Math.max(-20037508.342789244, pointLB.x)
     pointLB.y = Math.max(-20037508.342789244, pointLB.y)
-    let pointRT = new Cesium.Cartesian3(bounds.right, bounds.top, 0)
+    let pointRT = new Cartesian3(bounds.right, bounds.top, 0)
     pointRT.x = Math.min(20037508.342789244, pointRT.x)
     pointRT.y = Math.min(20037508.342789244, pointRT.y)
-    this._tilingScheme = new Cesium.WebMercatorTilingScheme()
-    let f = this._tilingScheme._projection.unproject(pointLB)
-    let p = this._tilingScheme._projection.unproject(pointRT)
-    this._rectangle = new Cesium.Rectangle(f.longitude, f.latitude, p.longitude, p.latitude)
-    this._urlTemplate = this._url + 'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-20037508.342789248 ,"y":20037508.342789095}'
+    this.m_tilingScheme = new WebMercatorTilingScheme()
+    let f = this.m_tilingScheme.projection.unproject(pointLB)
+    let p = this.m_tilingScheme.projection.unproject(pointRT)
+    this.m_rectangle = new Rectangle(f.longitude, f.latitude, p.longitude, p.latitude)
+    this.m_urlTemplate = this.m_url + 'tileImage.png?transparent={transparent}&cacheEnabled=true&width=256&height=256&x={x}&y={y}&scale={scale}&redirect=false&overlapDisplayed=false&origin={"x":-20037508.342789248 ,"y":20037508.342789095}'
   }
-  this._urlTemplate = this._urlTemplate.replace('{transparent}', this._transparent)
-  this.layersID && (this._urlTemplate = this._urlTemplate + '&layersID=' + this.layersID)
-  this._rectangle || (this._rectangle = Cesium.defaultValue(this._options.rectangle, this._tilingScheme.rectangle))
-  this._ready = true
-  this._readyPromise.resolve(true)
+  this.m_urlTemplate = this.m_urlTemplate.replace('{transparent}', this.m_transparent)
+  this.layersID && (this.m_urlTemplate = this.m_urlTemplate + '&layersID=' + this.layersID)
+  this.m_rectangle || (this.m_rectangle = defaultValue(this.m_options.rectangle, this.m_tilingScheme.rectangle))
+  this.m_ready = true
+  this.m_readyPromise.resolve(true)
 }
 
 function onRejected () {
-  let message = 'An error occurred while accessing ' + this._url + '.'
-  previousError = Cesium.TileProviderError.handleError(previousError, this, this._errorEvent, message, undefined, undefined, undefined, init.bind(this))
-  this._readyPromise.reject(new Cesium.RuntimeError(message))
+  const { TileProviderError, RuntimeError } = Cesium
+  let message = 'An error occurred while accessing ' + this.m_url + '.'
+  previousError = TileProviderError.handleError(previousError, this, this.m_errorEvent, message, undefined, undefined, undefined, init.bind(this))
+  this.m_readyPromise.reject(new RuntimeError(message))
 }
 
 export default SuperMapImageryProvider
