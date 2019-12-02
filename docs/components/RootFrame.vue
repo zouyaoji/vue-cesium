@@ -6,7 +6,7 @@
           md-icon menu
         span.md-title(v-text="title") VUE CESIUM
         md-button.md-icon-button
-          router-link.link(:to="otherUrl", @click.native="changeLang")
+          router-link.link(:to="otherUrl")
           md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
         md-button.md-icon-button(href="https://github.com/zouyaoji/vue-cesium")
           md-icon(md-iconset="iconfont icon-github")
@@ -21,42 +21,61 @@
 </template>
 
 <style lang="stylus" scoped>
-.top
-  position fixed
-  top 0
-  left 0
-  right 0
-  z-index 2
-.logo
-  font-size 1.5rem
-  border-bottom 1px solid rgba(0,0,0,.12)
-  height 12rem
-  justify-content center
-  text-align center
-  a.link:hover
-    text-decoration none
-  img
-    width 90px
-    margin-bottom 1rem
-.md-icon-button
-  a.link
-    position absolute
-    top 0
-    bottom 0
-    left 0
-    right 0
-    z-index 1
-    display block
-    opacity 0
-.md-title
-  flex 1
-.page-content
-  padding-top 64px
-@media(min-width: 1281px)
-  .md-title
-    margin-left 8px!important
-  .top
-    left 304px
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.logo {
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  height: 12rem;
+  justify-content: center;
+  text-align: center;
+
+  a.link:hover {
+    text-decoration: none;
+  }
+
+  img {
+    width: 90px;
+    margin-bottom: 1rem;
+  }
+}
+
+.md-icon-button {
+  a.link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: block;
+    opacity: 0;
+  }
+}
+
+.md-title {
+  flex: 1;
+}
+
+.page-content {
+  padding-top: 64px;
+}
+
+@media (min-width: 1281px) {
+  .md-title {
+    margin-left: 8px !important;
+  }
+
+  .top {
+    left: 304px;
+  }
+}
 </style>
 
 <script>
@@ -67,32 +86,20 @@ export default {
       title: this.$route.name
     }
   },
-  methods: {
-    changeLang () {
-      this.$emit('changeLang', this.otherLang)
-    }
-  },
   computed: {
     otherLang () {
       return this.lang === 'zh' ? 'en' : 'zh'
     },
     otherUrl () {
-      return this.$route.path.indexOf('/zh/') !== -1 ? this.$route.path.replace('/zh/', '/en/') : this.$route.path.replace('/en/', '/zh/')
+      return this.$route.path.indexOf('/zh/') !== -1
+        ? this.$route.path.replace('/zh/', '/en/')
+        : this.$route.path.replace('/en/', '/zh/')
     }
   },
   mounted () {
-    this.$router.afterEach(route => {
-      this.$nextTick(() => {
-        const $table = [].filter.call(this.$el.getElementsByTagName('table'), $t => !~$t.parentNode.classList.value.indexOf('md-table'))
-        $table.forEach($t => {
-          $t.outerHTML = `<div class="doc-table md-table md-theme-default md-whiteframe md-whiteframe-1dp">${$t.outerHTML}</div>`
-        })
-      })
-      const meta = this.$route.meta || {}
-      this.$emit('changeLang', meta.lang)
+    this.$router.afterEach((route) => {
       document.body.scrollTop = 0
       this.title = route.name
-      this.$refs.sidenav.close()
     })
   }
 }

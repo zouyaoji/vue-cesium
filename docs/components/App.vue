@@ -1,7 +1,7 @@
 <template lang="pug">
 div
-  router-view(v-if="isIndex", @changeLang="changeLang")
-  root-frame.root(v-else, :lang="lang", @changeLang="changeLang")
+  router-view(v-if="isIndex")
+  root-frame.root(v-else :lang.sync="lang")
     navigator(:lang="lang", slot="side-nav")
     router-view(slot="page-content").doc.markdown-body
 </template>
@@ -20,10 +20,27 @@ export default {
       lang: 'zh'
     }
   },
-  methods: {
-    changeLang (lang) {
-      this.lang = lang
-    }
+  mounted () {
+    document.addEventListener('click', event => {
+      if (event.target.id === 'toZh') {
+        this.lang = 'zh'
+      } else if (event.target.id === 'toEn') {
+        this.lang = 'en'
+      }
+    })
+    this.$router.afterEach((route) => {
+      this.$nextTick(() => {
+        const $table = [].filter.call(
+          this.$el.getElementsByTagName('table'),
+          ($t) => !~$t.parentNode.classList.value.indexOf('md-table')
+        )
+        $table.forEach(($t) => {
+          $t.outerHTML = `<div class="doc-table md-table md-theme-default md-whiteframe md-whiteframe-1dp">${$t.outerHTML}</div>`
+        })
+      })
+      const meta = this.$route.meta || {}
+      this.lang = meta.lang
+    })
   },
   computed: {
     isIndex () {

@@ -8,6 +8,8 @@ md-list
           template(v-for="(subRoute, subIndex) in route.children")
             md-list-item.md-inset(:key="subIndex")
               router-link(:to="`${route.path}/${subRoute.path}`", v-text="subRoute.name")
+  md-list-item
+    <a href="https://zouyaoji.top/vue-cesium-v1">{{this.lang === 'en'? 'v1 document' : 'v1 文档'}}</a>
 </template>
 
 <script>
