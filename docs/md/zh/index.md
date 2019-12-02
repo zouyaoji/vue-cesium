@@ -9,7 +9,7 @@
 [![npm](https://img.shields.io/npm/dm/vue-cesium)](https://www.npmjs.com/package/vue-cesium)
 [![license](https://img.shields.io/github/license/zouyaoji/vue-cesium)](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE)
 [![Coverage Status](https://img.shields.io/coveralls/github/zouyaoji/vue-cesium)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
-[![Package Quality](https://npm.packagequality.com/shield/vue-cesium.svg)](https://packagequality.com/#?package=vue-cesium)
+[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](https://packagequality.com/#?package=vue-cesium)
 [![GitHub stars](https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social)](https://github.com/zouyaoji/vue-cesium)
 
 ## 介绍
