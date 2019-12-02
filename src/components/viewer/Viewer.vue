@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-11-30 22:05:10
+ * @Last Modified time: 2019-12-02 19:27:54
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -15,8 +15,7 @@ import bindEvents from '../../utils/bindEvent.js'
 import { Events } from '../../utils/events'
 import services from '../../mixins/services'
 import mergeDescriptors from '../../utils/mergeDescriptors.js'
-import { getDocumentByClassName } from '../../utils/util.js'
-import { dirname } from 'path'
+import { dirname, getDocumentByClassName } from '../../utils/util.js'
 export default {
   name: 'vc-viewer',
   mixins: [services],
