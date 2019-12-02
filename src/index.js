@@ -14,6 +14,7 @@ import * as TileMapServiceImageryProvider from './components/imageryLayer/tileMa
 import * as UrlTemplateImageryProvider from './components/imageryLayer/urlTemplate'
 import * as WebMapServiceImageryProvider from './components/imageryLayer/wms'
 import * as WebMapTileServiceImageryProvider from './components/imageryLayer/wmts'
+import * as TiandituImageryProvider from './components/imageryLayer/tianditu'
 import * as SuperMapImageryProvider from './components/imageryLayer/supermap'
 // 地形
 import * as ArcGISTiledElevationTerrainProvider from './components/terrain/arcgis'
@@ -107,6 +108,7 @@ function plugin (Vue, options = {}) {
   Vue.use(UrlTemplateImageryProvider, options)
   Vue.use(WebMapServiceImageryProvider, options)
   Vue.use(WebMapTileServiceImageryProvider, options)
+  Vue.use(TiandituImageryProvider, options)
   Vue.use(SuperMapImageryProvider, options)
   // 地形
   Vue.use(ArcGISTiledElevationTerrainProvider, options)
@@ -190,6 +192,7 @@ export {
   UrlTemplateImageryProvider,
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
+  TiandituImageryProvider,
   SuperMapImageryProvider,
 
   ArcGISTiledElevationTerrainProvider,

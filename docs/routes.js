@@ -197,6 +197,14 @@ const routeMap = [
         }
       },
       {
+        path: 'vc-provider-imagery-tianditu',
+        component: 'imageryLayer/vc-provider-imagery-tianditu',
+        name: {
+          zh: '天地图影像',
+          en: 'TiandituImageryProvider'
+        }
+      },
+      {
         path: 'vc-provider-imagery-supermap',
         component: 'imageryLayer/vc-provider-imagery-supermap',
         name: {
