@@ -46,7 +46,6 @@ Object.keys(TiandituMapsStyle).forEach(key => {
 
 class TiandituImageryProvider {
   constructor (options) {
-    console.log(options)
     const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme, when } = Cesium
     options = defaultValue(options, {})
     this.m_mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
