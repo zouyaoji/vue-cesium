@@ -107,11 +107,17 @@ Vue.use(ImageryLayer)
 
 ### CDN 全局注册
 
-- 待完善
+```js
+<!-- include Vue -->
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<!-- include VueCesium -->
+<script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
+<script>
+  Vue.use(VueCesium) // All VueCesium components now globally installed
+</script>
+```
 
-<!-- ```html
-
-``` -->
+[UMD 例子参考](https://github.com/zouyaoji/vue-cesium/blob/master/test/umd.html)
 
 ## Hello Cesium
 

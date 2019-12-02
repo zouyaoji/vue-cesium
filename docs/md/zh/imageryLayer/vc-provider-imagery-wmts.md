@@ -107,7 +107,7 @@
           alpha: 1,
           brightness: 1,
           contrast: 1,
-          token: 'c50f9b776d3786c077e843ca37583202'
+          token: '436ce7e50d27eede2f2929307e6b33c0'
         }
       },
       methods: {
@@ -228,7 +228,7 @@
         alpha: 1,
         brightness: 1,
         contrast: 1,
-        token: 'c50f9b776d3786c077e843ca37583202'
+        token: '436ce7e50d27eede2f2929307e6b33c0'
       }
     },
     methods: {

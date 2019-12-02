@@ -151,7 +151,7 @@ The `vc-provider-imagery-supermap` component is used to load the SuperMap iServe
 
 ---
 
-- Refer to the official document: **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/Build/Documentation/SuperMapImageryProvider.html)**
+- Refer to the official document of SuperMap: **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/Build/Documentation/SuperMapImageryProvider.html)**
 
 ## Events
 

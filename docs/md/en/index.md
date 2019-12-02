@@ -1,14 +1,16 @@
 # VUE CESIUM
 
-<p align="center"><img src="//zouyaoji.github.io/vue-cesium/favicon.png" width="200px"></p>
+<p align="center"><img src="https://zouyaoji.top/vue-cesium/favicon.png" width="200px"></p>
 
 <p align="center">Cesium components for Vue 2.x that can help you load Cesium built package or other third-party packages which are built on Cesium.</p>
 
-[![npm](https://img.shields.io/npm/v/vue-cesium.svg)]()
-[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium.svg)]()
-[![Package Quality](http://npm.packagequality.com/shield/vue-cesium.svg)](http://packagequality.com/#?package=vue-cesium)
-[![npm](https://img.shields.io/npm/dm/vue-cesium.svg)]()
-[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium.svg)]()
+[![Travis](https://img.shields.io/travis/zouyaoji/vue-cesium?style=plastic)](https://travis-ci.org/zouyaoji/vue-cesium)
+[![npm](https://img.shields.io/npm/v/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![npm](https://img.shields.io/npm/dm/vue-cesium?style=plastic)](https://www.npmjs.com/package/vue-cesium)
+[![license](https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic)](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE)
+[![Coverage Status](https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic)](https://coveralls.io/github/zouyaoji/vue-cesium?branch=master)
+[![Package Quality](https://npm.packagequality.com/shield/vue-cesium.svg)](https://packagequality.com/#?package=vue-cesium)
+[![Package Quality](https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social)](https://packagequality.com/#?package=vue-cesium)
 
 ## Introduction
 

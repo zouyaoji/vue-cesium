@@ -23,6 +23,7 @@ The `vc-provider-terrain-cesium` component is used to load terrain data in Cesiu
     export default {
       data () {
         return {
+          requestWaterMask: true
         }
       },
       methods: {
@@ -58,7 +59,9 @@ The `vc-provider-terrain-cesium` component is used to load terrain data in Cesiu
 <script>
   export default {
     data() {
-      return {}
+      return {
+        requestWaterMask: true
+      }
     },
     methods: {
       ready(cesiumInstance) {

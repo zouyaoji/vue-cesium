@@ -1,10 +1,10 @@
 # SuperMapImageryProvider
 
-`vc-provider-imagery-supermap` 组件用加载超图 iserver 影像服务。
+`vc-provider-imagery-supermap` 组件用于加载超图 iserver 影像服务。
 
 ## 示例
 
-### 添加 SuperMapImageryProvider 影像到场景
+### 加载 SuperMap 影像服务图层
 
 #### 预览
 
@@ -149,7 +149,7 @@
 
 ---
 
-- 参考官方文档: **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/Build/Documentation/SuperMapImageryProvider.html)**
+- 参考超图官方文档: **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/Build/Documentation/SuperMapImageryProvider.html)**
 
 ## 事件
 

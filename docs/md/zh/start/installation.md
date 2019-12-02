@@ -14,8 +14,9 @@ yarn add vue-cesium
 
 ## CDN
 
-- 待完善
-
-<!-- ```html
-<script src="https://unpkg.com/vue-baidu-map"></script>
-``` -->
+```js
+<!-- include Vue -->
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<!-- include VueCesium -->
+<script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
+```
