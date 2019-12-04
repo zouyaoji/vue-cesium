@@ -120,16 +120,15 @@ const methods = {
             if (hasSetter) {
               // 属性可写，直接动态响应属性的改变
               const { cesiumObject } = this
-              const newVal = specialPropsKeys.indexOf(vueProp) !== -1 ? specialProps[vueProp].handler.call(this, val) : val
-              if (specialProps.conditions) {
-                if (
-                  Cesium.defined(cesiumObject[cesiumProp]) &&
-                  Cesium.defined(cesiumObject[cesiumProp][specialProps.conditions])
-                ) {
+
+              if (specialPropsKeys.indexOf(vueProp) !== -1) {
+                const newVal = specialProps[vueProp].handler.call(this, val)
+                // 如果对象已经定义了 exclude 条件如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
+                if (!(Cesium.defined(cesiumObject[cesiumProp][specialProps[vueProp].exclude]) && specialProps[vueProp].exclude)) {
                   cesiumObject[cesiumProp] = newVal
                 }
               } else {
-                cesiumObject[cesiumProp] = newVal
+                cesiumObject[cesiumProp] = val
               }
               return true
             } else {

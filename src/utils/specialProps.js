@@ -51,7 +51,7 @@ const specialProps = {
   },
   positions: {
     handler: makeCartesian3Array,
-    conditions: '_callback'
+    exclude: '_callback'
   },
   color: {
     handler: makeColor
@@ -109,7 +109,7 @@ const specialProps = {
   },
   hierarchy: {
     handler: makePolygonHierarchy,
-    conditions: '_callback'
+    exclude: '_callback'
   },
   polygonHierarchy: {
     handler: makePolygonHierarchy
