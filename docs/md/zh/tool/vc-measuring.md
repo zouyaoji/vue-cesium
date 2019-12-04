@@ -137,11 +137,11 @@
 
 ### vc-measure-distance
 
-| 属性名       | 类型   | 默认值              | 描述                                                |
-| ------------ | ------ | ------------------- | --------------------------------------------------- |
-| mode         | Number | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
-| font         | String | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                      |
-| distanceText | String | `'距离：'`          | `optional` 指定距离文字。                           |
+| 属性名       | 类型    | 默认值     | 描述                                                |
+| ------------ | ------- | ---------- | --------------------------------------------------- |
+| mode         | Number  | `1`        | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
+| distanceText | String  | `'距离：'` | `optional` 指定标签距离文字。                       |
+| depthTest    | Boolean | `false`    | `optional` 指定标签文字和线对象是否始终显示。       |
 
 ---
 
@@ -153,25 +153,43 @@
 | mode              | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。                                         |
 | font              | String  | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                                                              |
 | areaText          | String  | `'面积：'`          | `optional` 指定面积文字。                                                                   |
+| depthTest         | Boolean | `false`             | `optional` 指定标签文字和线对象是否始终显示。                                               |
 
 ---
 
 ### vc-measure-height
 
-| 属性名        | 类型   | 默认值              | 描述                                                |
-| ------------- | ------ | ------------------- | --------------------------------------------------- |
-| mode          | Number | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
-| font          | String | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                      |
-| distanceHText | String | `'水平距离：'`      | `optional` 指定水平距离文字。                       |
-| distanceSText | String | `'空间距离：'`      | `optional` 指定空间距离文字。                       |
-| heightText    | String | `'垂直高度：'`      | `optional` 指定垂直高度文字。                       |
+| 属性名        | 类型    | 默认值              | 描述                                                |
+| ------------- | ------- | ------------------- | --------------------------------------------------- |
+| mode          | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
+| font          | String  | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                      |
+| distanceHText | String  | `'水平距离：'`      | `optional` 指定水平距离文字。                       |
+| distanceSText | String  | `'空间距离：'`      | `optional` 指定空间距离文字。                       |
+| heightText    | String  | `'垂直高度：'`      | `optional` 指定垂直高度文字。                       |
+| depthTest     | Boolean | `false`             | `optional` 指定标签文字和线对象是否始终显示。       |
+
+---
+
+### 标签文字属性
+
+| 属性名          | 类型                  | 默认值                     | 描述                                  |
+| --------------- | --------------------- | -------------------------- | ------------------------------------- |
+| backgroundColor | String\|Array\|Object | `'rgba(38, 38, 38, 0.85)'` | `optional` 指定标签文字背景颜色。     |
+| fillColor       | String\|Array\|Object | `WHITE`                    | `optional` 指定文字标签填充色。       |
+| font            | String                | `'100 20px SimSun'`        | `optional` 指定文字标签 CSS 字体。    |
+| labelStyle      | Number                | `2`                        | `optional` 指定标签文字填充色。       |
+| outlineColor    | String\|Array\|Object | `'BLUE'`                   | `optional` 指定标签文字轮廓线颜色。   |
+| outlineWidth    | Number                | `1`                        | `optional` 指定标签文字轮廓线宽度。   |
+| pixelOffset     | Object                | `{x: 15, y: -20}`          | `optional` 指定标签文字像素偏移。     |
+| showBackground  | Boolean               | `true`                     | `optional` 指定标签文字是否显示背景。 |
 
 ---
 
 ## 事件
 
+<!-- prettier-ignore -->
 | 事件名     | 参数                                | 描述                                                                                                  |
-| ---------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| ---------- | ----------------------------------- | ------------------- |
 | activeEvt  | { type: String, isActive: Boolean } | 量算开始或停止时触发，返回量算类型包括`'areaMeasuring'`、`'distanceMeasuring'`、`'heightMeasuring'`。 |
 | measureEvt | { polyline: Object, label: Object } | 量算过程中触发。返回量算的结果，文字标签对象。可以获取文字标签对象自定义文字单位小数点等。            |
 

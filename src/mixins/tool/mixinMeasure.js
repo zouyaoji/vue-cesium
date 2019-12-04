@@ -1,5 +1,4 @@
 import cmp from '../virtualCmp'
-
 const props = {
   mode: {
     type: Number,
@@ -8,17 +7,62 @@ const props = {
   font: {
     type: String,
     default: '100 20px SimSun'
+  },
+  fillColor: {
+    type: String | Object | Array,
+    default: 'WHITE'
+  },
+  labelStyle: {
+    type: Number,
+    default: 2
+  },
+  showBackground: {
+    type: Boolean,
+    default: true
+  },
+  backgroundColor: {
+    type: String | Object | Array,
+    default: 'rgba(38, 38, 38, 0.85)'
+  },
+  outlineWidth: {
+    type: Number,
+    default: 1
+  },
+  outlineColor: {
+    type: String | Object | Array,
+    default: 'BLUE'
+  },
+  pixelOffset: {
+    type: Object,
+    default: () => {
+      return { x: 15, y: -20 }
+    }
+  },
+  pointColor: {
+    type: String | Object | Array,
+    default: 'rgb(255,229,0)'
+  },
+  pointPixelSize: {
+    type: Number,
+    default: 8
+  },
+  polylineColor: {
+    type: String | Object | Array,
+    default: '#51ff00'
+  },
+  polylineWidth: {
+    type: Number,
+    default: 2
+  },
+  depthTest: {
+    type: Boolean,
+    default: false
   }
 }
-const computed = {}
+
 const methods = {
   async createCesiumObject () {
     const { viewer } = this
-    this.outlineColorLabel = Cesium.Color.fromCssColorString('rgb(0,0,255)')
-    this.colorPoint = Cesium.Color.fromCssColorString('rgb(255,229,0)')
-    this.materialPolygon = Cesium.Color.fromCssColorString('rgba(255,165,0,0.25)')
-    this.disableDepthTestDistance = Number.POSITIVE_INFINITY
-    this.pixelOffset = new Cesium.Cartesian2(10, -15)
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
     handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
     handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
@@ -37,7 +81,6 @@ const watch = {}
 export default {
   mixins: [cmp],
   props,
-  computed,
   watch,
   methods,
   created () {

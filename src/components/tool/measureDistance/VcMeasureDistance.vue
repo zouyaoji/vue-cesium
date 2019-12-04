@@ -1,12 +1,23 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-collection-primitive-polyline>
-      <vc-primitive-polyline :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2"></vc-primitive-polyline>
+    <vc-collection-primitive-polyline ref="polylineCollection">
+      <vc-primitive-polyline
+        :key="index"
+        :material="polyline.materialLine"
+        :positions="polyline.positions"
+        :width="polylineWidth"
+        v-for="(polyline, index) of polylines"
+      ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
     <vc-collection-primitive-point>
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
-          <vc-primitive-point :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></vc-primitive-point>
+          <vc-primitive-point
+            :color="pointColor"
+            :key="'point' + index + 'position' + subIndex"
+            :pixelSize="pointPixelSize"
+            :position="position"
+          ></vc-primitive-point>
         </template>
       </template>
     </vc-collection-primitive-point>
@@ -14,16 +25,19 @@
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-label
-            :position="position"
-            :key="'label' + index + 'position' + subIndex"
+            :backgroundColor="backgroundColor"
+            :fillColor="fillColor"
             :font="font"
-            :outlineColor="outlineColorLabel"
-            :text="distanceText + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
-            showBackground
-            :disableDepthTestDistance="disableDepthTestDistance"
-            v-if="polyline.distances[subIndex] !== 0"
-            :pixelOffset="pixelOffset"
             :horizontalOrigin="1"
+            :key="'label' + index + 'position' + subIndex"
+            :labelStyle="labelStyle"
+            :outlineColor="outlineColor"
+            :outlineWidth="outlineWidth"
+            :pixelOffset="pixelOffset"
+            :position="position"
+            :showBackground="showBackground"
+            :text="distanceText + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
+            v-if="polyline.distances[subIndex] !== 0"
           ></vc-primitive-label>
         </template>
       </template>
@@ -32,6 +46,7 @@
 </template>
 <script>
 import mixinMeasure from '../../../mixins/tool/mixinMeasure'
+import { makeColor } from '../../../utils/util'
 export default {
   name: 'vc-measure-distance',
   mixins: [mixinMeasure],
@@ -55,8 +70,10 @@ export default {
         this.polylines.pop()
       } else if (val) {
         for (let $node of this.$parent.$slots.default || []) {
-          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-height' ||
-            $node.componentOptions.tag === 'measure-area')) {
+          if (
+            $node.componentOptions &&
+            ($node.componentOptions.tag === 'vc-measure-height' || $node.componentOptions.tag === 'vc-measure-area')
+          ) {
             $node.child.measuring = false
           }
         }
@@ -106,7 +123,7 @@ export default {
       polyline.distance = distance
       await this.$nextTick()
       let nIndex = 0
-      polylines.forEach(polyline => {
+      polylines.forEach((polyline) => {
         nIndex += polyline.positions.length - 1
       })
       onMeasureEvt(polyline, nIndex - 1)
@@ -130,6 +147,9 @@ export default {
       polyline.positions.pop()
       polyline.distances.pop()
       polyline.distance = this.getDistance(polyline.positions)
+      if (polyline.positions.length === 1) {
+        polyline.positions = []
+      }
       if (mode === 0) {
         startNew()
       } else {
@@ -137,25 +157,27 @@ export default {
       }
       await this.$nextTick()
       let nIndex = 0
-      polylines.forEach(polyline => {
+      polylines.forEach((polyline) => {
         nIndex += polyline.positions.length - 1
       })
       onMeasureEvt(polyline, nIndex - 1, true)
     },
     startNew () {
       const { polylines } = this
-      Cesium.defined(polylines) && polylines.push({ positions: [],
-        distances: [],
-        distance: 0,
-        materialLine: new Cesium.Material({
-          fabric: {
-            type: 'Color',
-            uniforms: {
-              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+      Cesium.defined(polylines) &&
+        polylines.push({
+          positions: [],
+          distances: [],
+          distance: 0,
+          materialLine: new Cesium.Material({
+            fabric: {
+              type: 'Color',
+              uniforms: {
+                color: makeColor(this.polylineColor)
+              }
             }
-          }
+          })
         })
-      })
     },
     getDistance (positions) {
       const { Cesium } = this
@@ -171,8 +193,30 @@ export default {
       this.measuring = false
     },
     onMeasureEvt (polyline, index, flag = false) {
+      if (!this.depthTest) {
+        this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false
+        this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+        this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+      }
+
       const listener = this.$listeners['measureEvt']
-      listener && this.$emit('measureEvt', { polyline: polyline, label: this.$refs.labelCollection.cesiumObject.get(index), type: 'distanceMeasuring', accomplish: flag })
+      listener &&
+        this.$emit('measureEvt', {
+          polyline: polyline,
+          label: this.$refs.labelCollection.cesiumObject.get(index),
+          type: 'distanceMeasuring',
+          accomplish: flag
+        })
     }
   }
 }

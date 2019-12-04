@@ -1,32 +1,59 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-collection-primitive-polyline>
-      <vc-primitive-polyline :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2" :loop="true"></vc-primitive-polyline>
+    <vc-collection-primitive-polyline ref="polylineCollection">
+      <vc-primitive-polyline
+        :key="index"
+        :loop="true"
+        :material="polyline.materialLine"
+        :positions="polyline.positions"
+        :width="polylineWidth"
+        v-for="(polyline, index) of polylines"
+      ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
     <vc-collection-primitive-point>
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
-          <vc-primitive-point :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></vc-primitive-point>
+          <vc-primitive-point
+            :color="pointColor"
+            :key="'point' + index + 'position' + subIndex"
+            :pixelSize="pointPixelSize"
+            :position="position"
+          ></vc-primitive-point>
         </template>
       </template>
     </vc-collection-primitive-point>
     <vc-collection-primitive-label ref="labelCollection">
       <template v-for="(polyline, index) of polylines">
         <vc-primitive-label
-          :position="polyline.positions[polyline.positions.length-1]"
-          :key="'label'+index"
-          :pixelOffset="pixelOffset"
-          :text="areaText+(polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+          :backgroundColor="backgroundColor"
           :font="font"
-          :outlineColor="outlineColorLabel"
-          showBackground
-          :disableDepthTestDistance="disableDepthTestDistance"
           :horizontalOrigin="1"
+          :key="'label' + index"
+          :labelStyle="labelStyle"
+          :outlineColor="outlineColor"
+          :outlineWidth="outlineWidth"
+          :pixelOffset="pixelOffset"
+          :position="polyline.positions[polyline.positions.length - 1]"
+          :showBackground="showBackground"
+          :text="areaText + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
         ></vc-primitive-label>
       </template>
     </vc-collection-primitive-label>
-    <vc-entity :ref="'entity'+index" :key="index" v-for="(polyline, index) of polylines" :polygon.sync="polyline.polygon">
-      <vc-graphics-polygon :hierarchy="polyline.positions" :perPositionHeight="perPositionHeight" :material="materialPolygon" @ready="ready" v-if="polyline.positions.length >= 3"></vc-graphics-polygon>
+    <vc-entity
+      :description="areaText + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+      :id="'面积量算-' + (index + 1)"
+      :key="index"
+      :polygon.sync="polyline.polygon"
+      :ref="'entity' + index"
+      v-for="(polyline, index) of polylines"
+    >
+      <vc-graphics-polygon
+        :hierarchy="polyline.positions"
+        :material="polygonColor"
+        :perPositionHeight="perPositionHeight"
+        @ready="ready"
+        v-if="polyline.positions.length >= 3"
+      ></vc-graphics-polygon>
     </vc-entity>
   </i>
 </template>
@@ -34,12 +61,13 @@
 <script>
 import area from '@turf/area'
 import mixinMeasure from '../../../mixins/tool/mixinMeasure'
-import { makePolygonHierarchy } from '../../../utils/util'
+import { makePolygonHierarchy, makeColor } from '../../../utils/util'
 export default {
   name: 'vc-measure-area',
   mixins: [mixinMeasure],
   data () {
     return {
+      index: 0,
       measuring: false,
       polylines: []
     }
@@ -52,6 +80,10 @@ export default {
     areaText: {
       type: String,
       default: '面积：'
+    },
+    polygonColor: {
+      type: String | Object | Array,
+      default: 'rgba(255,165,0,0.25)'
     }
   },
   watch: {
@@ -62,8 +94,10 @@ export default {
         this.polylines.pop()
       } else if (val) {
         for (let $node of this.$parent.$slots.default || []) {
-          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-height' ||
-            $node.componentOptions.tag === 'measure-distance')) {
+          if (
+            $node.componentOptions &&
+            ($node.componentOptions.tag === 'vc-measure-height' || $node.componentOptions.tag === 'vc-measure-distance')
+          ) {
             $node.child.measuring = false
           }
         }
@@ -135,6 +169,9 @@ export default {
       }
       polyline.positions.pop()
       polyline.area = this.getArea(polyline.positions)
+      if (polyline.positions.length <= 2) {
+        polyline.positions = []
+      }
       if (mode === 0) {
         startNew()
       } else {
@@ -145,17 +182,19 @@ export default {
     },
     startNew () {
       const { polylines } = this
-      Cesium.defined(polylines) && polylines.push({ positions: [],
-        area: 0,
-        materialLine: new Cesium.Material({
-          fabric: {
-            type: 'Color',
-            uniforms: {
-              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+      Cesium.defined(polylines) &&
+        polylines.push({
+          positions: [],
+          area: 0,
+          materialLine: new Cesium.Material({
+            fabric: {
+              type: 'Color',
+              uniforms: {
+                color: makeColor(this.polylineColor)
+              }
             }
-          }
+          })
         })
-      })
     },
     getArea (positions) {
       const { Cesium } = this
@@ -173,27 +212,22 @@ export default {
         tems.push([array[i].x, array[i].y])
       }
       let polygons = {
-        'type': 'FeatureCollection',
-        'features': [
+        type: 'FeatureCollection',
+        features: [
           {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Polygon',
-              'coordinates': arrs
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: arrs
             }
-          }, {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Polygon',
-              'coordinates': [[
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0]
-              ]]
+          },
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]]
             }
           }
         ]
@@ -207,8 +241,30 @@ export default {
       this.measuring = false
     },
     onMeasureEvt (polyline, index, flag = false) {
+      this.index = index
+      if (!this.depthTest) {
+        this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false
+        this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+        this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+      }
       const listener = this.$listeners['measureEvt']
-      listener && this.$emit('measureEvt', { polyline: polyline, label: this.$refs.labelCollection.cesiumObject.get(index), type: 'areaMeasuring', accomplish: flag })
+      listener &&
+        this.$emit('measureEvt', {
+          polyline: polyline,
+          label: this.$refs.labelCollection.cesiumObject.get(index),
+          type: 'areaMeasuring',
+          accomplish: flag
+        })
     }
   }
 }

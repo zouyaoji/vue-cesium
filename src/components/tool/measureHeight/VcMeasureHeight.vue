@@ -1,25 +1,42 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-collection-primitive-polyline>
-      <vc-primitive-polyline :positions="polyline.positions" :key="index" v-for="(polyline, index) of polylines" :material="polyline.materialLine" :width="2" :loop="true"></vc-primitive-polyline>
+    <vc-collection-primitive-polyline ref="polylineCollection">
+      <vc-primitive-polyline
+        :key="index"
+        :loop="true"
+        :material="polyline.materialLine"
+        :positions="polyline.positions"
+        :width="polylineWidth"
+        v-for="(polyline, index) of polylines"
+      ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
     <vc-collection-primitive-point>
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
-          <vc-primitive-point :position="position" :key="'point' + index + 'position' + subIndex" :color="colorPoint" :pixelSize="8"></vc-primitive-point>
+          <vc-primitive-point
+            :color="pointColor"
+            :key="'point' + index + 'position' + subIndex"
+            :pixelSize="pointPixelSize"
+            :position="position"
+          ></vc-primitive-point>
         </template>
       </template>
     </vc-collection-primitive-point>
     <vc-collection-primitive-label ref="labelCollection">
       <vc-primitive-label
-        :position="label.position"
-        :text="label.text"
-        :key="'label'+index"
-        v-for="(label, index) of labels"
+        :backgroundColor="backgroundColor"
+        :fillColor="fillColor"
         :font="font"
-        :outlineColor="outlineColorLabel"
-        :disableDepthTestDistance="disableDepthTestDistance"
         :horizontalOrigin="1"
+        :key="'label'+index"
+        :labelStyle="labelStyle"
+        :outlineColor="outlineColor"
+        :outlineWidth="outlineWidth"
+        :pixelOffset="pixelOffset"
+        :position="label.position"
+        :showBackground="showBackground"
+        :text="label.text"
+        v-for="(label, index) of labels"
       ></vc-primitive-label>
     </vc-collection-primitive-label>
   </i>
@@ -27,6 +44,7 @@
 
 <script>
 import mixinMeasure from '../../../mixins/tool/mixinMeasure'
+import { makeColor } from '../../../utils/util'
 export default {
   name: 'vc-measure-height',
   mixins: [mixinMeasure],
@@ -60,8 +78,10 @@ export default {
         this.polylines.pop()
       } else if (val) {
         for (let $node of this.$parent.$slots.default || []) {
-          if ($node.componentOptions && ($node.componentOptions.tag === 'measure-distance' ||
-            $node.componentOptions.tag === 'measure-area')) {
+          if (
+            $node.componentOptions &&
+            ($node.componentOptions.tag === 'vc-measure-distance' || $node.componentOptions.tag === 'vc-measure-area')
+          ) {
             $node.child.measuring = false
           }
         }
@@ -134,12 +154,14 @@ export default {
         text: heightText + labelTextHeight,
         position: labelPositonHeight
       })
-      let labelTextH = polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
+      let labelTextH =
+        polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
       labels.push({
         text: distanceHText + labelTextH,
         position: labelPositonH
       })
-      let labelTextS = polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
+      let labelTextS =
+        polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
       labels.push({
         text: distanceSText + labelTextS,
         position: labelPositonS
@@ -173,19 +195,21 @@ export default {
     },
     startNew () {
       const { polylines } = this
-      Cesium.defined(polylines) && polylines.push({ positions: [],
-        distanceH: 0,
-        height: 0,
-        distanceS: 0,
-        materialLine: new Cesium.Material({
-          fabric: {
-            type: 'Color',
-            uniforms: {
-              color: new Cesium.Color(0.3176470588235294, 1, 0, 1)
+      Cesium.defined(polylines) &&
+        polylines.push({
+          positions: [],
+          distanceH: 0,
+          height: 0,
+          distanceS: 0,
+          materialLine: new Cesium.Material({
+            fabric: {
+              type: 'Color',
+              uniforms: {
+                color: makeColor(this.polylineColor)
+              }
             }
-          }
+          })
         })
-      })
     },
     getDistance (positions) {
       let distance = 0
@@ -202,6 +226,21 @@ export default {
       this.measuring = false
     },
     onMeasureEvt (polyline, labels, flag = false) {
+      if (!this.depthTest) {
+        this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false
+        this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+        this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
+          depthMask: true,
+          depthTest: {
+            enabled: false
+          }
+        })
+      }
       const listener = this.$listeners['measureEvt']
       let labelsResult = {
         labelHeight: this.$refs.labelCollection.cesiumObject.get(labels.length - 3),

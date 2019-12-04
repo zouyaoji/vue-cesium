@@ -157,9 +157,10 @@
 <!-- prettier-ignore -->
 | name | type | default | description |
 | ------------ | ------ | ------------------- | --------------------------------------------------- |
-| mode         | Number | `1`                 | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
-| font         | String | `'100 20px SimSun'` | `optional` Specify the label CSS font.                      |
-| distanceText | String | `'距离：'`          | `optional` Specify the distance text.                           |
+| mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
+| font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
+| distanceText | String | `'距离：'` | `optional` Specify the distance text. |
+| depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---
 
@@ -172,6 +173,7 @@
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the area text. the label CSS font. |
 | areaText | String | `'面积：'` | `optional` Specify the area text. |
+| depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---
 
@@ -185,8 +187,23 @@
 | distanceHText | String | `'水平距离：'` | `optional` Specify horizontal distance text. |
 | distanceSText | String | `'空间距离：'` | `optional` Specify the space distance text. |
 | heightText | String | `'垂直高度：'` | `optional` Specify vertical height text. |
+| depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---
+
+### Label
+
+<!-- prettier-ignore -->
+| name | type | default | description |
+| --------------- | --------------------- | -------------------------- | ------------------------------------- |
+| backgroundColor | String\|Array\|Object | `'rgba(38, 38, 38, 0.85)'` | `optional` Gets or sets the background color of this label. |
+| fillColor | String\|Array\|Object | `WHITE` | `optional` Gets or sets the fill color of this label. |
+| font | String | `'100 20px SimSun'` | `optional` Gets or sets the font used to draw this label. |
+| labelStyle | Number | `2` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |
+| outlineColor | String\|Array\|Object | `'BLUE'` | `optional` Gets or sets the outline color of this label. |
+| outlineWidth | Number | `1` | `optional` Gets or sets the outline width of this label. |
+| pixelOffset | Object | `{x: 15, y: -20}` | `optional` Gets or sets the pixel offset in screen space from the origin of this label.|
+| showBackground | Boolean | `true` | `optional` Determines if a background behind this label will be shown. |
 
 ## Event
 
