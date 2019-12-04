@@ -154,6 +154,7 @@
 | totalScale  | Number | `1.0` | `optional` 获取 label 的总比例，该比例是标签的比例乘以所计算的所需字体的相对大小与生成的字形大小的比例。 |
 | translucencyByDistance | Object | | `optional` 指定 label 透明度改变参数。 **结构： { near: number, nearValue: number, far: number, farValue: number }** |
 | verticalOrigin | Number | `0` | `optional` 指定 label 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |
+| labelStyle | Number | `0` | `optional` 指定 label 绘制风格。**FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |
 
 ---
 

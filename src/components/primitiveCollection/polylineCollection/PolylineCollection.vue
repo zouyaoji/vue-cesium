@@ -19,7 +19,7 @@ export default {
       const options = transformProps($props)
       const polylineColletion = new Cesium.PolylineCollection(options)
 
-      polylines.forEach(polyline => {
+      polylines.forEach((polyline) => {
         const polylineOptions = transformProps(polyline)
         polylineColletion.add(polylineOptions)
       })

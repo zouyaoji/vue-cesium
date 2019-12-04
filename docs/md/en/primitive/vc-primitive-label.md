@@ -154,6 +154,7 @@ The `vc-primitive-label` component is used to load a Label draws viewport-aligne
 | totalScale  | Number | `1.0` | `optional` Gets the total scale of the label, which is the label's scale multiplied by the computed relative size of the desired font compared to the generated glyph size. |
 | translucencyByDistance | Object | | `optional` Gets or sets near and far translucency properties of a Label based on the Label's distance from the camera. A label's translucency will interpolate between the NearFarScalar#nearValue and NearFarScalar#farValue while the camera distance falls within the upper and lower bounds of the specified NearFarScalar#near and NearFarScalar#far. Outside of these ranges the label's translucency remains clamped to the nearest bound. If undefined, translucencyByDistance will be disabled. **Structure { near: number, nearValue: number, far: number, farValue: number }** |
 | verticalOrigin | Number | `0` | `optional` Gets or sets the vertical origin of this label, which determines if the label is to the above, below, or at the center of its anchor position. **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |
+| labelStyle | Number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |
 
 ---
 

@@ -36,12 +36,5 @@ export default {
   props: {
     hierarchy: Array | Object
   }
-  // watch: {
-  //   hierarchy (val) {
-  //     if (!(Cesium.defined(this.graphics.hierarchy) && Cesium.defined(this.graphics.hierarchy._callback))) {
-  //       this.graphics.hierarchy = makePolygonHierarchy(val)
-  //     }
-  //   }
-  // },
 }
 </script>
