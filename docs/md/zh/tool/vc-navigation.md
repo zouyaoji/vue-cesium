@@ -1,6 +1,6 @@
 # 导航罗盘
 
-`vc-navigation` 组件用于加载导航罗盘部件。**注意：**此部件需要引入 `vue-cesium/vc-navigation.css`。
+`vc-navigation` 组件用于加载导航罗盘部件。**注意：**此部件需要引入 `vue-cesium/lib/vc-navigation.css`，需要`css-loader`。
 
 ## 示例
 
@@ -60,7 +60,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <cesium-navigation ref="navigation" :options="options"></cesium-navigation>
+      <vc-navigation ref="navigation" :options="options"></vc-navigation>
     </vc-viewer>
     <div class="demo-tool">
       <span>罗盘部件</span>

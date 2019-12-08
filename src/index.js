@@ -62,14 +62,41 @@ import * as Cesium3DTileset from './components/primitive/3dTileset'
 // 几何体
 import * as GeometryInstance from './components/geometryInstance'
 import * as BoxGeometry from './components/geometryInstance/box'
-import * as PolygonGeometry from './components/geometryInstance/polygon'
-import * as PolylineGeometry from './components/geometryInstance/polyline'
+import * as BoxOutlineGeometry from './components/geometryInstance/boxOutline'
+import * as CircleGeometry from './components/geometryInstance/circle'
+import * as CircleOutlineGeometry from './components/geometryInstance/circleOutline'
+import * as CoplanarPolygonGeometry from './components/geometryInstance/coplanarPolygon'
+import * as CoplanarPolygonOutlineGeometry from './components/geometryInstance/coplanarPolygonOutline'
+import * as CorridorGeometry from './components/geometryInstance/corridor'
+import * as CorridorOutlineGeometry from './components/geometryInstance/corridorOutline'
+import * as CylinderGeometry from './components/geometryInstance/cylinder'
+import * as CylinderOutlineGeometry from './components/geometryInstance/cylinderOutline'
+import * as EllipseGeometry from './components/geometryInstance/ellipse'
+import * as EllipseOutlineGeometry from './components/geometryInstance/ellipseOutline'
+import * as EllipsoidGeometry from './components/geometryInstance/ellipsoid'
+import * as EllipsoidOutlineGeometry from './components/geometryInstance/ellipsoidOutline'
+import * as FrustumGeometry from './components/geometryInstance/frustum'
+import * as FrustumOutlineGeometry from './components/geometryInstance/frustumOutline'
 import * as GroundPolylineGeometry from './components/geometryInstance/groundPolyline'
+import * as PlaneGeometry from './components/geometryInstance/plane'
+import * as PlaneOutlineGeometry from './components/geometryInstance/planeOutline'
+import * as PolygonGeometry from './components/geometryInstance/polygon'
+import * as PolygonOutlineGeometry from './components/geometryInstance/polygonOutline'
+import * as PolylineGeometry from './components/geometryInstance/polyline'
+import * as PolylineVolumeGeometry from './components/geometryInstance/polylineVolume'
+import * as PolylineVolumeOutlineGeometry from './components/geometryInstance/polylineVolumeOutline'
 import * as RectangleGeometry from './components/geometryInstance/rectangle'
+import * as RectangleOutlineGeometry from './components/geometryInstance/rectangleOutline'
+import * as SimplePolylineGeometry from './components/geometryInstance/simplePolyline'
+import * as SphereGeometry from './components/geometryInstance/sphere'
+import * as SphereOutlineGeometry from './components/geometryInstance/sphereOutline'
+import * as WallGeometry from './components/geometryInstance/wall'
+import * as WallOutlineGeometry from './components/geometryInstance/wallOutline'
 // 工具
 import * as VcMeasureArea from './components/tool/measureArea'
 import * as VcMeasureDistance from './components/tool/measureDistance'
 import * as VcMeasureHeight from './components/tool/measureHeight'
+import * as VcDrawHandlerPolyline from './components/tool/drawHandlerPolyline'
 import * as VcNavigation from './components/tool/navigation'
 // 可视化
 import * as VcFlood from './components/visualization/flood'
@@ -156,14 +183,41 @@ function plugin (Vue, options = {}) {
   // 几何体
   Vue.use(GeometryInstance, options)
   Vue.use(BoxGeometry, options)
-  Vue.use(PolygonGeometry, options)
-  Vue.use(PolylineGeometry, options)
+  Vue.use(BoxOutlineGeometry, options)
+  Vue.use(CircleGeometry, options)
+  Vue.use(CircleOutlineGeometry, options)
+  Vue.use(CoplanarPolygonGeometry, options)
+  Vue.use(CoplanarPolygonOutlineGeometry, options)
+  Vue.use(CorridorGeometry, options)
+  Vue.use(CorridorOutlineGeometry, options)
+  Vue.use(CylinderGeometry, options)
+  Vue.use(CylinderOutlineGeometry, options)
+  Vue.use(EllipseGeometry, options)
+  Vue.use(EllipseOutlineGeometry, options)
+  Vue.use(EllipsoidGeometry, options)
+  Vue.use(EllipsoidOutlineGeometry, options)
+  Vue.use(FrustumGeometry, options)
+  Vue.use(FrustumOutlineGeometry, options)
   Vue.use(GroundPolylineGeometry, options)
+  Vue.use(PlaneGeometry, options)
+  Vue.use(PlaneOutlineGeometry, options)
+  Vue.use(PolygonGeometry, options)
+  Vue.use(PolygonOutlineGeometry, options)
+  Vue.use(PolylineGeometry, options)
+  Vue.use(PolylineVolumeGeometry, options)
+  Vue.use(PolylineVolumeOutlineGeometry, options)
   Vue.use(RectangleGeometry, options)
+  Vue.use(RectangleOutlineGeometry, options)
+  Vue.use(SimplePolylineGeometry, options)
+  Vue.use(SphereGeometry, options)
+  Vue.use(SphereOutlineGeometry, options)
+  Vue.use(WallGeometry, options)
+  Vue.use(WallOutlineGeometry, options)
   // 工具
   Vue.use(VcMeasureArea, options)
   Vue.use(VcMeasureDistance, options)
   Vue.use(VcMeasureHeight, options)
+  Vue.use(VcDrawHandlerPolyline, options)
   Vue.use(VcNavigation, options)
   // 可视化
   Vue.use(VcFlood, options)
@@ -240,14 +294,41 @@ export {
 
   GeometryInstance,
   BoxGeometry,
-  PolygonGeometry,
-  PolylineGeometry,
+  BoxOutlineGeometry,
+  CircleGeometry,
+  CircleOutlineGeometry,
+  CoplanarPolygonGeometry,
+  CoplanarPolygonOutlineGeometry,
+  CorridorGeometry,
+  CorridorOutlineGeometry,
+  CylinderGeometry,
+  CylinderOutlineGeometry,
+  EllipseGeometry,
+  EllipseOutlineGeometry,
+  EllipsoidGeometry,
+  EllipsoidOutlineGeometry,
+  FrustumGeometry,
+  FrustumOutlineGeometry,
   GroundPolylineGeometry,
+  PlaneGeometry,
+  PlaneOutlineGeometry,
+  PolygonGeometry,
+  PolygonOutlineGeometry,
+  PolylineGeometry,
+  PolylineVolumeGeometry,
+  PolylineVolumeOutlineGeometry,
   RectangleGeometry,
+  RectangleOutlineGeometry,
+  SimplePolylineGeometry,
+  SphereGeometry,
+  SphereOutlineGeometry,
+  WallGeometry,
+  WallOutlineGeometry,
 
   VcMeasureArea,
   VcMeasureDistance,
   VcMeasureHeight,
+  VcDrawHandlerPolyline,
   VcNavigation,
   VcFlood,
   VcHeatMap,

@@ -107,7 +107,7 @@ export function makeCartesian2Array (vals) {
  * @param {Object} val
  */
 export function makeQuaternion (val) {
-  return val && new Cesium.Quaternion(val.x, val.y, val.z, val.w)
+  return val.x ? new Cesium.Quaternion(val.x, val.y, val.z, val.w) : val
 }
 
 /**

@@ -13,10 +13,21 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :description="description" :wall.sync="wall1">
-          <vc-graphics-wall :positions="positions1" :material="material1" :minimumHeights="[100000.0, 100000.0]"></vc-graphics-wall>
+          <vc-graphics-wall
+            ref="wall1"
+            :positions="positions1"
+            :material="material1"
+            :minimumHeights="[100000.0, 100000.0]"
+          ></vc-graphics-wall>
         </vc-entity>
         <vc-entity :description="description" :wall.sync="wall2">
-          <vc-graphics-wall :positions="positions2" :material="material2" :outline="true" heightPositions></vc-graphics-wall>
+          <vc-graphics-wall
+            ref="wall2"
+            :positions="positions2"
+            :material="material2"
+            :outline="true"
+            heightPositions
+          ></vc-graphics-wall>
         </vc-entity>
         <vc-entity :description="description" :wall.sync="wall3">
           <vc-graphics-wall
@@ -26,7 +37,7 @@
             :outlineColor="outlineColor3"
             :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000]"
             :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000]"
-            @ready="subReady"
+            ref="wall3"
           ></vc-graphics-wall>
         </vc-entity>
       </vc-viewer>
@@ -72,6 +83,13 @@
           outlineColor3: {}
         }
       },
+      mounted() {
+        Promise.all([this.$refs.wall1.createPromise, this.$refs.wall2.createPromise, this.$refs.wall3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -79,10 +97,6 @@
           this.material2 = Cesium.Color.GREEN
           this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
           this.outlineColor3 = Cesium.Color.BLACK
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -96,10 +110,21 @@
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :description="description" :wall.sync="wall1">
-        <vc-graphics-wall :positions="positions1" :material="material1" :minimumHeights="[100000.0, 100000.0]"></vc-graphics-wall>
+        <vc-graphics-wall
+          ref="wall1"
+          :positions="positions1"
+          :material="material1"
+          :minimumHeights="[100000.0, 100000.0]"
+        ></vc-graphics-wall>
       </vc-entity>
       <vc-entity :description="description" :wall.sync="wall2">
-        <vc-graphics-wall :positions="positions2" :material="material2" :outline="true" heightPositions></vc-graphics-wall>
+        <vc-graphics-wall
+          ref="wall2"
+          :positions="positions2"
+          :material="material2"
+          :outline="true"
+          heightPositions
+        ></vc-graphics-wall>
       </vc-entity>
       <vc-entity :description="description" :wall.sync="wall3">
         <vc-graphics-wall
@@ -109,7 +134,7 @@
           :outlineColor="outlineColor3"
           :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000]"
           :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000]"
-          @ready="subReady"
+          ref="wall3"
         ></vc-graphics-wall>
       </vc-entity>
     </vc-viewer>
@@ -155,6 +180,13 @@
         outlineColor3: {}
       }
     },
+    mounted() {
+      Promise.all([this.$refs.wall1.createPromise, this.$refs.wall2.createPromise, this.$refs.wall3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -162,10 +194,6 @@
         this.material2 = Cesium.Color.GREEN
         this.material3 = Cesium.Color.BLUE.withAlpha(0.5)
         this.outlineColor3 = Cesium.Color.BLACK
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

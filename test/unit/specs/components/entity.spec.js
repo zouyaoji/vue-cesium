@@ -42,7 +42,6 @@ describe('entity', () => {
         expect(cesiumObject).to.be.instanceof(Cesium.Entity)
         // 给一点点渲染时间
         await waitImmediate()
-        expect(vm.billboard).to.equal(cesiumObject.billboard)
         expect(vm.image).to.equal(viewer.entities.getById(vm.id).billboard.image.getValue())
         destroyVM(vm)
         done()

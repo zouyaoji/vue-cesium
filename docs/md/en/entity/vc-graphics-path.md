@@ -21,12 +21,15 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
           :model.sync="model1"
           :path.sync="path1"
         >
-          <vc-graphics-path :resolution="1" :material="material1" :width="10"></vc-graphics-path>
-          <vc-graphics-model :uri="uri1" :minimumPixelSize="64" @ready="subReady"></vc-graphics-model>
+          <vc-graphics-path ref="path" :resolution="1" :material="material1" :width="10"></vc-graphics-path>
+          <vc-graphics-model ref="model" :uri="uri1" :minimumPixelSize="64"></vc-graphics-model>
         </vc-entity>
-        <vc-entity :key="index" :position="position" v-for="(position, index) of positions">
+        <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
           <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
         </vc-entity>
+        <vc-layer-imagery>
+          <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="viewTopDown">View Top Down</md-button>
@@ -49,11 +52,18 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
           position1: {},
           terrainProvider: {},
           orientation: {},
-          uri1: 'https://zouyaoji.top/vue-cesium/statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
+          uri1: './statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
           start: {},
           stop: {},
           positions: []
         }
+      },
+      mounted() {
+        Promise.all([this.$refs.path.createPromise, this.$refs.model.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
       },
       methods: {
         ready(cesiumInstance) {
@@ -88,10 +98,6 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
             glowPower: 0.1,
             color: Cesium.Color.YELLOW
           })
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         },
         computeCirclularFlight(lon, lat, radius) {
           const { Cesium, viewer } = this.cesiumInstance
@@ -143,12 +149,15 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
         :model.sync="model1"
         :path.sync="path1"
       >
-        <vc-graphics-path :resolution="1" :material="material1" :width="10"></vc-graphics-path>
-        <vc-graphics-model :uri="uri1" :minimumPixelSize="64" @ready="subReady"></vc-graphics-model>
+        <vc-graphics-path ref="path" :resolution="1" :material="material1" :width="10"></vc-graphics-path>
+        <vc-graphics-model ref="model" :uri="uri1" :minimumPixelSize="64"></vc-graphics-model>
       </vc-entity>
-      <vc-entity :key="index" :position="position" v-for="(position, index) of positions">
+      <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
         <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
       </vc-entity>
+      <vc-layer-imagery>
+        <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+      </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="viewTopDown">View Top Down</md-button>
@@ -171,11 +180,16 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
         position1: {},
         terrainProvider: {},
         orientation: {},
-        uri1: 'https://zouyaoji.top/vue-cesium/statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
+        uri1: './statics/SampleData/models/CesiumAir/Cesium_Air.gltf',
         start: {},
         stop: {},
         positions: []
       }
+    },
+    mounted() {
+      Promise.all([this.$refs.path.createPromise, this.$refs.model.createPromise]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
     },
     methods: {
       ready(cesiumInstance) {
@@ -210,10 +224,6 @@ The `vc-graphics-path` component is used to load a path that moves over time. Ne
           glowPower: 0.1,
           color: Cesium.Color.YELLOW
         })
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       },
       computeCirclularFlight(lon, lat, radius) {
         const { Cesium, viewer } = this.cesiumInstance

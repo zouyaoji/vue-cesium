@@ -14,7 +14,7 @@
       <vc-viewer @ready="ready">
         <vc-primitive-polyline-ground :appearance="appearance">
           <vc-instance-geometry>
-            <vc-geometry-polyline-ground :positions="positions" :width="2"></vc-geometry-polyline-ground>
+            <vc-geometry-polyline-ground ref="polylineGround" :positions="positions" :width="2"></vc-geometry-polyline-ground>
           </vc-instance-geometry>
         </vc-primitive-polyline-ground>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
@@ -36,30 +36,15 @@
           ]
         }
       },
+      mounted () {
+        this.$refs.polylineGround.createPromise.then(({ Cesium, viewer, cesiumObject })=> {
+          const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+          viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+        })
+      },
       methods: {
-        ready(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          this.geometryInstances = new Cesium.GeometryInstance({
-            geometry: new Cesium.GroundPolylineGeometry({
-              positions: Cesium.Cartesian3.fromDegreesArray([
-                100.1340164450331,
-                32.05494287836128,
-                108.08821010582645,
-                32.097804071380715
-              ]),
-              width: 4.0
-            }),
-            id: 'object returned when this instance is picked and to get/set per-instance attributes'
-          })
+        ready( {Cesium, viewer }) {
           this.appearance = new Cesium.PolylineMaterialAppearance()
-          viewer.camera.setView({
-            destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-            orientation: {
-              heading: 6.20312220367255,
-              pitch: -0.9937536846355606,
-              roll: 0.002443376981836387
-            }
-          })
         }
       }
     }
@@ -74,7 +59,7 @@
     <vc-viewer @ready="ready">
       <vc-primitive-polyline-ground :appearance="appearance">
         <vc-instance-geometry>
-          <vc-geometry-polyline-ground :positions="positions" :width="2"></vc-geometry-polyline-ground>
+          <vc-geometry-polyline-ground ref="polylineGround" :positions="positions" :width="2"></vc-geometry-polyline-ground>
         </vc-instance-geometry>
       </vc-primitive-polyline-ground>
       <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
@@ -96,30 +81,15 @@
         ]
       }
     },
+    mounted() {
+      this.$refs.polylineGround.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+        viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+      })
+    },
     methods: {
-      ready(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        this.geometryInstances = new Cesium.GeometryInstance({
-          geometry: new Cesium.GroundPolylineGeometry({
-            positions: Cesium.Cartesian3.fromDegreesArray([
-              100.1340164450331,
-              32.05494287836128,
-              108.08821010582645,
-              32.097804071380715
-            ]),
-            width: 4.0
-          }),
-          id: 'object returned when this instance is picked and to get/set per-instance attributes'
-        })
+      ready({ Cesium, viewer }) {
         this.appearance = new Cesium.PolylineMaterialAppearance()
-        viewer.camera.setView({
-          destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-          orientation: {
-            heading: 6.20312220367255,
-            pitch: -0.9937536846355606,
-            roll: 0.002443376981836387
-          }
-        })
       }
     }
   }

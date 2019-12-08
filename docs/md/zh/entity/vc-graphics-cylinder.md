@@ -12,12 +12,12 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position1" :description="description" :cylinder.sync="cylinder1">
+        <vc-entity ref="entity1" :position="position1" :description="description" :cylinder.sync="cylinder1">
           <vc-graphics-cylinder :length="400000.0" :topRadius="200000.0" :bottomRadius="200000.0" :material="material1"
             :outline="true" :outlineColor="outlineColor1"></vc-graphics-cylinder>
         </vc-entity>
-        <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-          <vc-graphics-cylinder :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" :material="material2" @ready="subReady"></vc-graphics-cylinder>
+        <vc-entity ref="entity2" :position="position2" :description="description" :cylinder.sync="cylinder2">
+          <vc-graphics-cylinder :length="400000.0" :topRadius="0.0" :bottomRadius="200000.0" :material="material2"></vc-graphics-cylinder>
         </vc-entity>
       </vc-viewer>
     </div>
@@ -38,14 +38,17 @@
           material2: 'RED'
         }
       },
+      mounted() {
+        Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-        },
-        subReady (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -58,7 +61,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position1" :description="description" :cylinder.sync="cylinder1">
+      <vc-entity ref="entity1" :position="position1" :description="description" :cylinder.sync="cylinder1">
         <vc-graphics-cylinder
           :length="400000.0"
           :topRadius="200000.0"
@@ -68,13 +71,8 @@
           :outlineColor="outlineColor1"
         ></vc-graphics-cylinder>
       </vc-entity>
-      <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
-        <vc-graphics-cylinder
-          :topRadius="0.0"
-          :bottomRadius="200000.0"
-          :material="material2"
-          @ready="subReady"
-        ></vc-graphics-cylinder>
+      <vc-entity ref="entity2" :position="position2" :description="description" :cylinder.sync="cylinder2">
+        <vc-graphics-cylinder :topRadius="0.0" :bottomRadius="200000.0" :material="material2"></vc-graphics-cylinder>
       </vc-entity>
     </vc-viewer>
   </div>
@@ -95,14 +93,15 @@
         material2: 'RED'
       }
     },
+    mounted() {
+      Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

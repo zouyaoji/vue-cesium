@@ -13,13 +13,13 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :position="position1" :description="description" :point.sync="point1">
-          <vc-graphics-point :color="color1" :pixelSize="8"></vc-graphics-point>
+          <vc-graphics-point ref="point1" :color="color1" :pixelSize="8"></vc-graphics-point>
         </vc-entity>
         <vc-entity :position="position2" :description="description">
-          <vc-graphics-point :color="color2" :pixelSize="16"></vc-graphics-point>
+          <vc-graphics-point ref="point2" :color="color2" :pixelSize="16"></vc-graphics-point>
         </vc-entity>
         <vc-entity :position="position3" :description="description">
-          <vc-graphics-point :color="color3" :pixelSize="32" @ready="subReady"></vc-graphics-point>
+          <vc-graphics-point ref="point3" :color="color3" :pixelSize="32"></vc-graphics-point>
         </vc-entity>
       </vc-viewer>
     </div>
@@ -41,6 +41,13 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
           position3: undefined
         }
       },
+      mounted() {
+        Promise.all([this.$refs.point1.createPromise, this.$refs.point2.createPromise, this.$refs.point3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -50,10 +57,6 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
 
           this.position3 = Cesium.Cartesian3.fromDegrees(-80.12, 25.46)
           this.color3 = Cesium.Color.LIME
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -67,13 +70,13 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :position="position1" :description="description" :point.sync="point1">
-        <vc-graphics-point :color="color1" :pixelSize="8"></vc-graphics-point>
+        <vc-graphics-point ref="point1" :color="color1" :pixelSize="8"></vc-graphics-point>
       </vc-entity>
       <vc-entity :position="position2" :description="description">
-        <vc-graphics-point :color="color2" :pixelSize="16"></vc-graphics-point>
+        <vc-graphics-point ref="point2" :color="color2" :pixelSize="16"></vc-graphics-point>
       </vc-entity>
       <vc-entity :position="position3" :description="description">
-        <vc-graphics-point :color="color3" :pixelSize="32" @ready="subReady"></vc-graphics-point>
+        <vc-graphics-point ref="point3" :color="color3" :pixelSize="32"></vc-graphics-point>
       </vc-entity>
     </vc-viewer>
   </div>
@@ -95,6 +98,13 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
         position3: undefined
       }
     },
+    mounted() {
+      Promise.all([this.$refs.point1.createPromise, this.$refs.point2.createPromise, this.$refs.point3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -104,10 +114,6 @@ The `vc-graphics-point` component is used to load a graphical point. Need to be 
 
         this.position3 = Cesium.Cartesian3.fromDegrees(-80.12, 25.46)
         this.color3 = Cesium.Color.LIME
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

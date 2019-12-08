@@ -13,18 +13,18 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? 'Stop' : 'Distance' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? 'Stop' : 'Area' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? 'Stop' : 'Height' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
-      </div>
       <vc-viewer @ready="ready" scene3DOnly>
-        <cesium-3dtileset :url="modelUrl" @readyPromise="readyPromise"></cesium-3dtileset>
-        <measure-distance ref="measureDistance" distanceText="Distance: " @activeEvt="activeEvt" @measureEvt="measureEvt"></measure-distance>
-        <measure-area ref="measureArea" areaText="Area: " @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></measure-area>
-        <measure-height ref="measureHeight" distanceHText="DistanceH:" distanceSText="DistanceS: " heightText="height: " @activeEvt="activeEvt"     @measureEvt="measureEvt"></measure-height>
+        <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
+        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
+        <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
+        <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
       </vc-viewer>
+      <div class="demo-tool">
+        <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? 'stop' : 'distance' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? 'stop' : 'area' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? 'stop' : 'height' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+      </div>
     </div>
   </template>
 
@@ -71,83 +71,68 @@
 
 ```html
 <template>
-  <template>
-    <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
-          >{{ distanceMeasuring ? 'Stop' : 'Distance' }}</md-button
-        >
-        <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? 'Stop' : 'Area' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
-          >{{ heightMeasuring ? 'Stop' : 'Height' }}</md-button
-        >
-        <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
-      </div>
-      <vc-viewer @ready="ready" scene3DOnly>
-        <cesium-3dtileset :url="modelUrl" @readyPromise="readyPromise"></cesium-3dtileset>
-        <measure-distance
-          ref="measureDistance"
-          distanceText="Distance: "
-          @activeEvt="activeEvt"
-          @measureEvt="measureEvt"
-        ></measure-distance>
-        <measure-area
-          ref="measureArea"
-          areaText="Area: "
-          @activeEvt="activeEvt"
-          @measureEvt="measureEvt"
-          :perPositionHeight="true"
-        ></measure-area>
-        <measure-height
-          ref="measureHeight"
-          distanceHText="DistanceH:"
-          distanceSText="DistanceS: "
-          heightText="height: "
-          @activeEvt="activeEvt"
-          @measureEvt="measureEvt"
-        ></measure-height>
-      </vc-viewer>
+  <div class="viewer">
+    <vc-viewer @ready="ready" scene3DOnly>
+      <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
+      <vc-measure-area
+        ref="measureArea"
+        @activeEvt="activeEvt"
+        @measureEvt="measureEvt"
+        :perPositionHeight="true"
+      ></vc-measure-area>
+      <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
+      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+    </vc-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
+        >{{ distanceMeasuring ? 'stop' : 'distance' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? 'stop' : 'area' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
+        >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-    export default {
-      data() {
-        return {
-          modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          distanceMeasuring: false,
-          areaMeasuring: false,
-          heightMeasuring: false
-        }
+<script>
+  export default {
+    data() {
+      return {
+        modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+        distanceMeasuring: false,
+        areaMeasuring: false,
+        heightMeasuring: false
+      }
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+        viewer.scene.globe.depthTestAgainstTerrain = true
       },
-      methods: {
-        ready(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          this.cesiumInstance = cesiumInstance
-          viewer.scene.globe.depthTestAgainstTerrain = true
-        },
-        toggle(type) {
-          this.$refs[type].measuring = !this.$refs[type].measuring
-        },
-        clear() {
-          this.$refs.measureDistance.clear()
-          this.$refs.measureArea.clear()
-          this.$refs.measureHeight.clear()
-        },
-        activeEvt(_) {
-          this[_.type] = _.isActive
-        },
-        measureEvt(result) {
-          console.log(result)
-        },
-        readyPromise(tileset) {
-          const { viewer } = this.cesiumInstance
-          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
-        }
+      toggle(type) {
+        this.$refs[type].measuring = !this.$refs[type].measuring
+      },
+      clear() {
+        this.$refs.measureDistance.clear()
+        this.$refs.measureArea.clear()
+        this.$refs.measureHeight.clear()
+      },
+      activeEvt(_) {
+        this[_.type] = _.isActive
+      },
+      measureEvt(result) {
+        console.log(result)
+      },
+      readyPromise(tileset) {
+        const { viewer } = this.cesiumInstance
+        viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
       }
     }
-  </script></template
->
+  }
+</script>
 ```
 
 ## Instance Properties

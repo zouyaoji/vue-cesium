@@ -215,7 +215,7 @@ export default {
           polyline: polyline,
           label: this.$refs.labelCollection.cesiumObject.get(index),
           type: 'distanceMeasuring',
-          accomplish: flag
+          finished: flag
         })
     }
   }

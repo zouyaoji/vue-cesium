@@ -14,7 +14,7 @@
       <vc-viewer @ready="ready">
         <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
           <vc-instance-geometry>
-            <vc-geometry-polyline :positions="positions" :width="4"></vc-geometry-polyline>
+            <vc-geometry-polyline ref="polyline" :positions="positions" :width="4"></vc-geometry-polyline>
           </vc-instance-geometry>
         </vc-primitive>
       </vc-viewer>
@@ -37,10 +37,14 @@
           ]
         }
       },
+      mounted() {
+        this.$refs.polyline.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+          const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+          viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+        })
+      },
       methods: {
-        ready(cesiumInstance) {
-          this.cesiumInstance = cesiumInstance
-          const { Cesium, viewer } = this.cesiumInstance
+        ready({ Cesium, viewer }) {
           this.appearance = new Cesium.PolylineMaterialAppearance()
         }
       }
@@ -56,7 +60,7 @@
     <vc-viewer @ready="ready">
       <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
         <vc-instance-geometry>
-          <vc-geometry-polyline :positions="positions" :width="4"></vc-geometry-polyline>
+          <vc-geometry-polyline ref="polyline" :positions="positions" :width="4"></vc-geometry-polyline>
         </vc-instance-geometry>
       </vc-primitive>
     </vc-viewer>
@@ -79,10 +83,14 @@
         ]
       }
     },
+    mounted() {
+      this.$refs.polyline.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+        viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+      })
+    },
     methods: {
-      ready(cesiumInstance) {
-        this.cesiumInstance = cesiumInstance
-        const { Cesium, viewer } = this.cesiumInstance
+      ready({ Cesium, viewer }) {
         this.appearance = new Cesium.PolylineMaterialAppearance()
       }
     }
@@ -101,7 +109,7 @@
 | colorsPerVertex | Boolean | `false` | `optional` 指定颜色数组是根据线段数取均值还是通过线段顶点插值。 |
 | arcType | Number | `1` | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2** |
 | granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 arcType 不是 ArcType.NONE 时有效。 |
-| vertexFormat | Object | | `optional` 指定要缓存的顶点属性。 |
+| vertexFormat | Object | | `optional` 指定要缓存的顶点属性类型。 |
 | ellipsoid | Object | | `optional` 指定参考椭球体。 |
 
 ---

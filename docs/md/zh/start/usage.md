@@ -246,7 +246,7 @@ Vue.use(ImageryLayer)
 ## 常见问题
 
 - `VcViewer` 组件容器本身是一个空的块级元素，如果容器不定义高度，`viewer`将渲染在一个高度为 0 不可见的容器内。
-- 该项目是通过动态添加`script`标签引入`Cesium` 的，因此 `VcViewer` 组件及其所有子组件的渲染是异步的。因此，请使用在组件的 `ready` 事件来执行场景 API 加载完毕后才能执行的代码，不要试图在 Vue 自身的生命周期中调用 `Cesium` 类，更不要在这些时机修改 model 层。
+- 该项目是通过动态添加`script`标签引入`Cesium` 的，因此 `VcViewer` 组件及其所有子组件的渲染是异步的。因此，请使用在组件的 `ready` 事件来执行场景 API 加载完毕后才能执行的代码，不要试图在 Vue 自身的生命周期中调用 `Cesium` 类，更不要在这些时机修改 model 层。但在`2.0.1+`版本中可以通过`ref`来获取组件的`createPromise`对象来执行相关操作。
 
 ### 错误用法
 
@@ -285,7 +285,7 @@ Vue.use(ImageryLayer)
 
 ```html
 <template>
-  <vc-viewer :animation="animation" :camera="camera" @ready="ready"></vc-viewer>
+  <vc-viewer ref="viewer" :animation="animation" :camera="camera" @ready="ready"></vc-viewer>
 </template>
 <script>
   export default {
@@ -303,6 +303,11 @@ Vue.use(ImageryLayer)
         },
         animation: false
       }
+    },
+    mounted() {
+      this.$refs.viewer.createPromise.then(({Cesium, viewer} => {
+        console.log('viewer is loaded.')
+      }))
     },
     methods: {
       ready(cesiumInstance) {

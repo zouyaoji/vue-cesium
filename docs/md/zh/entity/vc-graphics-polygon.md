@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :description="description" :polygon.sync="polygon1">
-          <vc-graphics-polygon :hierarchy="hierarchy1" :material="material1"></vc-graphics-polygon>
+          <vc-graphics-polygon ref="polygon1" :hierarchy="hierarchy1" :material="material1"></vc-graphics-polygon>
         </vc-entity>
         <vc-entity :description="description" :polygon.sync="polygon2">
           <vc-graphics-polygon
@@ -22,6 +22,7 @@
             :extrudedHeight="500000.0"
             :closeTop="false"
             :closeBottom="false"
+            ref="polygon2"
           ></vc-graphics-polygon>
         </vc-entity>
         <vc-entity :description="description" :polygon.sync="polygon3">
@@ -32,10 +33,17 @@
             :perPositionHeight="true"
             :outline="true"
             :outlineColor="outlineColor3"
+            ref="polygon3"
           ></vc-graphics-polygon>
         </vc-entity>
         <vc-entity :description="description" :polygon.sync="polygon4">
-          <vc-graphics-polygon :hierarchy="hierarchy4" :material="material4" :height="0" :outline="true"></vc-graphics-polygon>
+          <vc-graphics-polygon
+            :hierarchy="hierarchy4"
+            :material="material4"
+            :height="0"
+            :outline="true"
+            ref="polygon4"
+          ></vc-graphics-polygon>
         </vc-entity>
         <vc-entity :description="description" :polygon.sync="polygon5">
           <vc-graphics-polygon
@@ -44,6 +52,7 @@
             :perPositionHeight="true"
             :outline="true"
             :outlineColor="outlineColor5"
+            ref="polygon5"
           ></vc-graphics-polygon>
         </vc-entity>
         <vc-entity :description="description" :polygon.sync="polygon6">
@@ -53,7 +62,7 @@
             :extrudedHeight="50000"
             :outline="true"
             :outlineColor="outlineColor6"
-            @ready="subReady"
+            ref="polygon6"
           ></vc-graphics-polygon>
         </vc-entity>
       </vc-viewer>
@@ -137,6 +146,18 @@
           outlineColor6: {}
         }
       },
+      mounted() {
+        Promise.all([
+          this.$refs.polygon1.createPromise,
+          this.$refs.polygon2.createPromise,
+          this.$refs.polygon3.createPromise,
+          this.$refs.polygon4.createPromise,
+          this.$refs.polygon5.createPromise,
+          this.$refs.polygon6.createPromise
+        ]).then((instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        })
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -159,6 +180,7 @@
           this.material4 = Cesium.Color.BLUE.withAlpha(0.5)
 
           this.material5 = Cesium.Color.CYAN.withAlpha(0.5)
+          this.hierarchy5 = Cesium.Cartesian3.fromDegreesArrayHeights([-90.0, 41.0, 0.0, -85.0, 41.0, 500000.0, -80.0, 41.0, 0.0])
 
           this.hierarchy6 = [
             { lng: -120.0, lat: 45.0 },
@@ -168,10 +190,6 @@
           ]
           this.material6 = Cesium.Color.PURPLE
           this.outlineColor6 = Cesium.Color.MAGENTA
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -185,7 +203,7 @@
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :description="description" :polygon.sync="polygon1">
-        <vc-graphics-polygon :hierarchy="hierarchy1" :material="material1"></vc-graphics-polygon>
+        <vc-graphics-polygon ref="polygon1" :hierarchy="hierarchy1" :material="material1"></vc-graphics-polygon>
       </vc-entity>
       <vc-entity :description="description" :polygon.sync="polygon2">
         <vc-graphics-polygon
@@ -194,6 +212,7 @@
           :extrudedHeight="500000.0"
           :closeTop="false"
           :closeBottom="false"
+          ref="polygon2"
         ></vc-graphics-polygon>
       </vc-entity>
       <vc-entity :description="description" :polygon.sync="polygon3">
@@ -204,10 +223,17 @@
           :perPositionHeight="true"
           :outline="true"
           :outlineColor="outlineColor3"
+          ref="polygon3"
         ></vc-graphics-polygon>
       </vc-entity>
       <vc-entity :description="description" :polygon.sync="polygon4">
-        <vc-graphics-polygon :hierarchy="hierarchy4" :material="material4" :height="0" :outline="true"></vc-graphics-polygon>
+        <vc-graphics-polygon
+          :hierarchy="hierarchy4"
+          :material="material4"
+          :height="0"
+          :outline="true"
+          ref="polygon4"
+        ></vc-graphics-polygon>
       </vc-entity>
       <vc-entity :description="description" :polygon.sync="polygon5">
         <vc-graphics-polygon
@@ -216,6 +242,7 @@
           :perPositionHeight="true"
           :outline="true"
           :outlineColor="outlineColor5"
+          ref="polygon5"
         ></vc-graphics-polygon>
       </vc-entity>
       <vc-entity :description="description" :polygon.sync="polygon6">
@@ -225,7 +252,7 @@
           :extrudedHeight="50000"
           :outline="true"
           :outlineColor="outlineColor6"
-          @ready="subReady"
+          ref="polygon6"
         ></vc-graphics-polygon>
       </vc-entity>
     </vc-viewer>
@@ -309,6 +336,18 @@
         outlineColor6: {}
       }
     },
+    mounted() {
+      Promise.all([
+        this.$refs.polygon1.createPromise,
+        this.$refs.polygon2.createPromise,
+        this.$refs.polygon3.createPromise,
+        this.$refs.polygon4.createPromise,
+        this.$refs.polygon5.createPromise,
+        this.$refs.polygon6.createPromise
+      ]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -331,6 +370,7 @@
         this.material4 = Cesium.Color.BLUE.withAlpha(0.5)
 
         this.material5 = Cesium.Color.CYAN.withAlpha(0.5)
+        this.hierarchy5 = Cesium.Cartesian3.fromDegreesArrayHeights([-90.0, 41.0, 0.0, -85.0, 41.0, 500000.0, -80.0, 41.0, 0.0])
 
         this.hierarchy6 = [
           { lng: -120.0, lat: 45.0 },
@@ -340,10 +380,6 @@
         ]
         this.material6 = Cesium.Color.PURPLE
         this.outlineColor6 = Cesium.Color.MAGENTA
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

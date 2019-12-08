@@ -17,13 +17,12 @@ export default {
     async createCesiumObject () {
       const { $props, transformProps, polylines } = this
       const options = transformProps($props)
-      const polylineColletion = new Cesium.PolylineCollection(options)
-
+      const polylineCollection = new Cesium.PolylineCollection(options)
       polylines.forEach((polyline) => {
         const polylineOptions = transformProps(polyline)
-        polylineColletion.add(polylineOptions)
+        polylineCollection.add(polylineOptions)
       })
-      return polylineColletion
+      return polylineCollection
     }
   }
 }

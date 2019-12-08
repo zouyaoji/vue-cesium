@@ -263,7 +263,7 @@ export default {
           polyline: polyline,
           label: this.$refs.labelCollection.cesiumObject.get(index),
           type: 'areaMeasuring',
-          accomplish: flag
+          finished: flag
         })
     }
   }

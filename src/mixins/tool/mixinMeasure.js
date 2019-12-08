@@ -63,10 +63,12 @@ const props = {
 const methods = {
   async createCesiumObject () {
     const { viewer } = this
+    viewer.scene.frameState.morphTime = 0
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
     handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
     handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
     handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
+    this.handler = handler
     return this.polylines
   },
   async mount () {
@@ -90,5 +92,13 @@ export default {
         get: () => this.polyline
       }
     })
+  },
+  destroyed () {
+    const { handler } = this
+    if (handler) {
+      handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
+      handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+      handler.removeInputAction(Cesium.ScreenSpaceEventType.RIGHT_CLICK)
+    }
   }
 }

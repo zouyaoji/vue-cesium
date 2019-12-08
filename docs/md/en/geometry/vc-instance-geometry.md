@@ -28,6 +28,14 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
             :modelMatrix="modelMatrix2"
           ></vc-instance-geometry>
         </vc-primitive>
+        <vc-primitive :appearance="appearance2" :geometryInstances.sync="geometryInstances">
+          <vc-instance-geometry>
+            <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+          </vc-instance-geometry>
+          <vc-instance-geometry :geometry.sync="geometry2">
+            <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+          </vc-instance-geometry>
+        </vc-primitive>
       </vc-viewer>
     </div>
   </template>
@@ -41,7 +49,19 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
           color: {},
           attributes: {},
           modelMatrix1: {},
-          modelMatrix2: {}
+          modelMatrix2: {},
+          appearance2: null,
+          geometry2: null,
+          geometryInstances: null,
+          polygonHierarchy: [
+            { lng: 102.1, lat: 29.5 },
+            { lng: 106.2, lat: 29.5 },
+            { lng: 106.2, lat: 33.5 },
+            { lng: 108.2, lat: 35.5 },
+            { lng: 102.1, lat: 33.5 }
+          ],
+          height: 200,
+          rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
         }
       },
       methods: {
@@ -66,7 +86,13 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
             Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(108, 40.03883)),
             new Cesium.Cartesian3(0.0, 0.0, 1500000.0),
             new Cesium.Matrix4()
-          )
+          ),
+          this.appearance2 = new Cesium.MaterialAppearance({
+            material: Cesium.Material.fromType('Checkerboard', {
+              repeat: new Cesium.Cartesian2(20.0, 6.0)
+            }),
+            materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          })
         }
       }
     }
@@ -95,6 +121,14 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
           :modelMatrix="modelMatrix2"
         ></vc-instance-geometry>
       </vc-primitive>
+      <vc-primitive :appearance="appearance2" :geometryInstances.sync="geometryInstances">
+        <vc-instance-geometry>
+          <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+        </vc-instance-geometry>
+        <vc-instance-geometry :geometry.sync="geometry2">
+          <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+        </vc-instance-geometry>
+      </vc-primitive>
     </vc-viewer>
   </div>
 </template>
@@ -108,7 +142,19 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
         color: {},
         attributes: {},
         modelMatrix1: {},
-        modelMatrix2: {}
+        modelMatrix2: {},
+        appearance2: null,
+        geometry2: null,
+        geometryInstances: null,
+        polygonHierarchy: [
+          { lng: 102.1, lat: 29.5 },
+          { lng: 106.2, lat: 29.5 },
+          { lng: 106.2, lat: 33.5 },
+          { lng: 108.2, lat: 35.5 },
+          { lng: 102.1, lat: 33.5 }
+        ],
+        height: 200,
+        rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
       }
     },
     methods: {
@@ -129,11 +175,17 @@ The `vc-instance-geometry` component is used to load a geometry. Geometry instan
           new Cesium.Cartesian3(0.0, 0.0, 100000.0),
           new Cesium.Matrix4()
         )
-        this.modelMatrix2 = Cesium.Matrix4.multiplyByTranslation(
+        ;(this.modelMatrix2 = Cesium.Matrix4.multiplyByTranslation(
           Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(108, 40.03883)),
           new Cesium.Cartesian3(0.0, 0.0, 1500000.0),
           new Cesium.Matrix4()
-        )
+        )),
+          (this.appearance2 = new Cesium.MaterialAppearance({
+            material: Cesium.Material.fromType('Checkerboard', {
+              repeat: new Cesium.Cartesian2(20.0, 6.0)
+            }),
+            materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          }))
       }
     }
   }

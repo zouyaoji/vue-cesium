@@ -12,13 +12,13 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position1" :description="description" :ellipsoid.sync="ellipsoid1">
+        <vc-entity ref="entity1" :position="position1" :description="description" :ellipsoid.sync="ellipsoid1">
           <vc-graphics-ellipsoid :radii="radii1" :material="material1" :outline="true"></vc-graphics-ellipsoid>
         </vc-entity>
-        <vc-entity :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
+        <vc-entity ref="entity2" :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
           <vc-graphics-ellipsoid :radii="radii2" :outline="true" :material="material2" :outlineColor="outlineColor2"></vc-graphics-ellipsoid>
         </vc-entity>
-        <vc-entity :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
+        <vc-entity ref="entity3" :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
           <vc-graphics-ellipsoid
             :radii="radii3"
             :fill="false"
@@ -26,7 +26,6 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
             :outlineColor="outlineColor3"
             :slicePartitions="24"
             :stackPartitions="36"
-            @ready="subReady"
           ></vc-graphics-ellipsoid>
         </vc-entity>
       </vc-viewer>
@@ -55,14 +54,17 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
           outlineColor3: 'YELLOW'
         }
       },
+      mounted() {
+        Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -75,10 +77,10 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position1" :description="description" :ellipsoid.sync="ellipsoid1">
+      <vc-entity ref="entity1" :position="position1" :description="description" :ellipsoid.sync="ellipsoid1">
         <vc-graphics-ellipsoid :radii="radii1" :material="material1" :outline="true"></vc-graphics-ellipsoid>
       </vc-entity>
-      <vc-entity :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
+      <vc-entity ref="entity2" :position="position2" :description="description" :ellipsoid.sync="ellipsoid2">
         <vc-graphics-ellipsoid
           :radii="radii2"
           :outline="true"
@@ -86,7 +88,7 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
           :outlineColor="outlineColor2"
         ></vc-graphics-ellipsoid>
       </vc-entity>
-      <vc-entity :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
+      <vc-entity ref="entity3" :position="position3" :description="description" :ellipsoid.sync="ellipsoid3">
         <vc-graphics-ellipsoid
           :radii="radii3"
           :fill="false"
@@ -94,7 +96,6 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
           :outlineColor="outlineColor3"
           :slicePartitions="24"
           :stackPartitions="36"
-          @ready="subReady"
         ></vc-graphics-ellipsoid>
       </vc-entity>
     </vc-viewer>
@@ -123,14 +124,17 @@ The `vc-graphics-ellipsoid` component is used to load an ellipsoid or spheres. N
         outlineColor3: 'YELLOW'
       }
     },
+    mounted() {
+      Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.material2 = Cesium.Color.RED.withAlpha(0.5)
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

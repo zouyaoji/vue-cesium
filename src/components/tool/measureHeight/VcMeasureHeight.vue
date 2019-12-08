@@ -247,7 +247,7 @@ export default {
         labelH: this.$refs.labelCollection.cesiumObject.get(labels.length - 2),
         labelS: this.$refs.labelCollection.cesiumObject.get(labels.length - 1)
       }
-      listener && this.$emit('measureEvt', { polyline: polyline, label: labelsResult, type: 'heightMeasuring', accomplish: flag })
+      listener && this.$emit('measureEvt', { polyline: polyline, label: labelsResult, type: 'heightMeasuring', finished: flag })
     }
   }
 }

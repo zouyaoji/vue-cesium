@@ -1,7 +1,7 @@
 # VcViewer
 
 `vc-viewer` is a container of Cesium core class and instance. It's the root component of other components of vue-cesium.
-The container is an empty DOM node which used to mount other components or DOM nodes.
+The container is an empty DOM node which used to mount other components or DOM nodes. In `2.0.1 +` version, you can use `ref` to get the` createPromise` object of the component to perform related operations.
 
 ## Example
 
@@ -11,8 +11,8 @@ The container is an empty DOM node which used to mount other components or DOM n
 
 <doc-preview>
   <template>
-    <div class="viewer" ref="myViewer">
-      <vc-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
+    <div class="viewer" ref="viewerContainer">
+      <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
       </vc-viewer>
       <div class="demo-tool">
@@ -41,10 +41,15 @@ The container is an empty DOM node which used to mount other components or DOM n
           fullscreenElement: document.body
         }
       },
+      mounted () {
+        this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+          console.log('viewer is loaded.')
+        })
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.fullscreenElement = this.$refs.myViewer
+          this.fullscreenElement = this.$refs.viewerContainer
           viewer.entities.add({
             id: '成都欢迎你',
             position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
@@ -72,8 +77,8 @@ The container is an empty DOM node which used to mount other components or DOM n
 
 ```html
 <template>
-  <div class="viewer" ref="myViewer">
-    <vc-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
+  <div class="viewer" ref="viewerContainer">
+    <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
     </vc-viewer>
     <div class="demo-tool">
@@ -102,10 +107,15 @@ The container is an empty DOM node which used to mount other components or DOM n
         fullscreenElement: document.body
       }
     },
+    mounted () {
+      this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+        console.log('viewer is loaded.')
+      })
+    },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        this.fullscreenElement = this.$refs.myViewer
+        this.fullscreenElement = this.$refs.viewerContainer
         viewer.entities.add({
           id: '成都欢迎你',
           position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),

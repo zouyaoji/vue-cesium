@@ -238,6 +238,7 @@ Vue.use(ImageryLayer)
 
 - `VcViewer` component is an empty block level element. If it doesn't declare its height, the `viewer` will be invisible.
 - If you need to update your model, just do it in the callback of the global component event `ready`.
+- In `2.0.1 +` version, you can use `ref` to get the`createPromise` object of the component to perform related operations.
 
 ### Wrong Way
 
@@ -294,6 +295,11 @@ Vue.use(ImageryLayer)
         },
         animation: false
       }
+    },
+    mounted() {
+      this.$refs.viewer.createPromise.then(({Cesium, viewer} => {
+        console.log('viewer is loaded.')
+      }))
     },
     methods: {
       ready(cesiumInstance) {

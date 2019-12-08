@@ -12,7 +12,8 @@ import {
   numberOfVerticalLines,
   shadows,
   classificationType,
-  zIndex
+  zIndex,
+  stRotation
 } from '../../../mixins/mixinProps'
 import mixinEllipse from '../../../mixins/graphics/mixinEllipse'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
@@ -32,6 +33,7 @@ export default {
     shadows,
     classificationType,
     zIndex,
+    stRotation,
     mixinEllipse,
     mixinGraphic
   ]

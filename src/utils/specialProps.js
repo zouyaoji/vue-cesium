@@ -1,6 +1,7 @@
 import {
   makeDistanceDisplayCondition,
   makeCartesian2,
+  makeCartesian2Array,
   makeCartesian3,
   makeColor,
   makeNearFarScalar,
@@ -10,8 +11,8 @@ import {
   makeBoundingRectangle,
   makePlane,
   makePolygonHierarchy,
-  makeCartesian2Array,
-  makeTranslationRotationScale
+  makeTranslationRotationScale,
+  makeQuaternion
 } from './util'
 
 /**
@@ -32,6 +33,12 @@ const specialProps = {
   imageBasedLightingFactor: {
     handler: makeCartesian2
   },
+  shape: {
+    handler: makeCartesian2Array
+  },
+  shapePositions: {
+    handler: makeCartesian2Array
+  },
   position: {
     handler: makeCartesian3
   },
@@ -49,7 +56,20 @@ const specialProps = {
   radii: {
     handler: makeCartesian3
   },
+  center: {
+    handler: makeCartesian3
+  },
+  innerRadii: {
+    handler: makeCartesian3
+  },
+  origin: {
+    handler: makeCartesian3
+  },
   positions: {
+    handler: makeCartesian3Array,
+    exclude: '_callback'
+  },
+  polylinePositions: {
     handler: makeCartesian3Array,
     exclude: '_callback'
   },
@@ -114,11 +134,11 @@ const specialProps = {
   polygonHierarchy: {
     handler: makePolygonHierarchy
   },
-  shape: {
-    handler: makeCartesian2Array
-  },
   nodeTransformations: {
     handler: makeTranslationRotationScale
+  },
+  orientation: {
+    handler: makeQuaternion
   }
 }
 

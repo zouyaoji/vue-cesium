@@ -1,6 +1,6 @@
 # 场景容器
 
-`vc-viewer` 是用于构建 Cesium 应用程序的基础组件，场景容器的实质是通过 Cesium.Viewer 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者组件。默认影像底图改为用`NaturalEarthII`影像了，如果需要二次开发或者手动控制其子组件，可以在 `ready` 事件中使用返回的 `Cesium` 和 `Viewer` 实例进行手动控制。
+`vc-viewer` 是用于构建 Cesium 应用程序的基础组件，场景容器的实质是通过 Cesium.Viewer 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者组件。默认影像底图改为用`NaturalEarthII`影像了，如果需要二次开发或者手动控制其子组件，可以在 `ready` 事件中使用返回的 `Cesium` 和 `Viewer` 实例进行手动控制。在`2.0.1+`版本中可以通过`ref`来获取组件的`createPromise`对象来执行相关操作。
 
 ## 示例
 
@@ -10,8 +10,8 @@
 
 <doc-preview>
   <template>
-    <div class="viewer" ref="myViewer">
-      <vc-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
+    <div class="viewer" ref="viewerContainer">
+      <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
       </vc-viewer>
       <div class="demo-tool">
@@ -40,11 +40,16 @@
           fullscreenElement: document.body
         }
       },
+      mounted () {
+        this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+          console.log('viewer is loaded.')
+        })
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           window.viewer = viewer
-          this.fullscreenElement = this.$refs.myViewer
+          this.fullscreenElement = this.$refs.viewerContainer
           viewer.entities.add({
             id: '成都欢迎你',
             position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),
@@ -72,8 +77,8 @@
 
 ```html
 <template>
-  <div class="viewer" ref="myViewer">
-    <vc-viewer :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
+  <div class="viewer" ref="viewerContainer">
+    <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
     </vc-viewer>
     <div class="demo-tool">
@@ -102,10 +107,15 @@
         fullscreenElement: document.body
       }
     },
+    mounted () {
+      this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+        console.log('viewer is loaded.')
+      })
+    },
     methods: {
       ready (cesiumInstance) {
         const {Cesium, viewer} = cesiumInstance
-        this.fullscreenElement = this.$refs.myViewer
+        this.fullscreenElement = this.$refs.viewerContainer
         viewer.entities.add({
           id: '成都欢迎你',
           position: Cesium.Cartesian3.fromDegrees(104.06, 30.67, 100),

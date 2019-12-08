@@ -16,7 +16,7 @@ const getParent = ($component) =>
 const methods = {
   /**
    * 异步加载组件。
-   * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
+   * @returns {Promise<Boolean>} 操作成功返回 {Cesium, viewer, cesiumObject}
    */
   async load () {
     if (this._mounted) {
@@ -36,17 +36,17 @@ const methods = {
     // 在父组件如 `vc-viewer` 的 `ready` 事件中给子组件的属性赋值能被侦听到。
     // 从而兼容v1版本的写法。
     setPropWatchers(true)
-    this._createPromise = createCesiumObject().then(async (cesiumObject) => {
+    return createCesiumObject().then(async (cesiumObject) => {
       this.originInstance = cesiumObject
       // Cesium 对象创建成功后再将其挂载渲染。
       return mount().then(() => {
         this._mounted = true
         // 触发该组件的 'ready' 事件。
-        this.$emit('ready', { Cesium, viewer, cesiumObject: cesiumObject })
-        return true
+        // v2.0.1 增加回传一个当前组件的 vue 实例 vm, 方便在 promise 操作时取一些组件本身属性，如文档中对 geometry 的定位操作。
+        this.$emit('ready', { Cesium, viewer, cesiumObject, vm: this })
+        return { Cesium, viewer, cesiumObject, vm: this }
       })
     })
-    return this._createPromise
   },
   /**
    * 异步卸载组件，vue 组件本身不会销毁，但 Cesium 对象会被移除。
@@ -63,7 +63,6 @@ const methods = {
         this.setPropWatchers(false)
         this.originInstance = undefined
         this._mounted = false
-
         // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
         return this.renderByParent ? this.$parent.unload() : true
       }) : false
@@ -90,7 +89,6 @@ const methods = {
    * 注册或注销 vue watcher 对象。
    * @param {Boolean} register true 代表注册，false 代表注销。
    */
-
   setPropWatchers (register) {
     if (register) {
       const { $props, specialPropsKeys, cesiumClass, cesiumObject, applyToConstructor } = this
@@ -102,7 +100,7 @@ const methods = {
       }
       // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测 watcher 改变时组件属性是动态响应还是重载组件。
       let instance = cesiumObject || applyToConstructor(constructor, args)
-      Object.keys($props).forEach((vueProp) => {
+      $props && Object.keys($props).forEach(vueProp => {
         let cesiumProp = vueProp
         if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
           cesiumProp = 'style'
@@ -124,7 +122,7 @@ const methods = {
               if (specialPropsKeys.indexOf(vueProp) !== -1) {
                 const newVal = specialProps[vueProp].handler.call(this, val)
                 // 如果对象已经定义了 exclude 条件如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
-                if (!(Cesium.defined(cesiumObject[cesiumProp][specialProps[vueProp].exclude]) && specialProps[vueProp].exclude)) {
+                if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp][specialProps[vueProp].exclude]) && specialProps[vueProp].exclude)) {
                   cesiumObject[cesiumProp] = newVal
                 }
               } else {
@@ -202,7 +200,7 @@ const methods = {
   transformProps (props) {
     const { specialPropsKeys, isEmptyObj } = this
     const options = {}
-    Object.keys(props).forEach((vueProp) => {
+    props && Object.keys(props).forEach((vueProp) => {
       let cesiumProp = vueProp
       // 以下 Cesium 实例对象的属性是 HTML 或 Vue 保留字，需要特别处理一下。
       if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
@@ -218,6 +216,12 @@ const methods = {
     // 移除空对象，避免 Cesium 对象初始化时传入空值导致初始化报错。
     this.removeNullItem(options)
     return options
+  },
+  /**
+   * 组件加载前的操作。
+   */
+  async beforeLoad () {
+    await this.$parent.createPromise
   }
 }
 /**
@@ -232,17 +236,24 @@ export default {
       unwatchFns: []
     }
   },
-  mounted () {
-    const $parent = getParent(this.$parent)
-    const viewer = $parent.viewer
-    const { load } = this
-    // 监听父组件 ready 事件加载子组件。
-    viewer ? load() : $parent.$on('ready', load)
-  },
   created () {
     this._mounted = false
     this.cesiumClass = nameClassMap[this.$options.name]
     this.specialPropsKeys = Object.keys(specialProps)
+    const { beforeLoad, load, $parent } = this
+    // this._createPromise = Promise.resolve(beforeLoad()).then(() => load())
+    this._createPromise = Promise.resolve(beforeLoad()).then(() => {
+      return new Promise((resolve, reject) => {
+        const viewer = $parent.viewer
+        viewer && resolve(load())
+        $parent.$on('ready', () => {
+          resolve(load())
+          // .then(val => resolve(val))
+          // .catch((error) => reject(new Error(`[C_PKG_FULLNAME] ERROR: An error occurred during the initialization of the ${this.cesiumClass}!` + error)))
+        })
+      })
+    })
+
     Object.defineProperties(this, {
       createPromise: {
         enumerable: true,

@@ -12,7 +12,7 @@ The `vc-graphics-billboard` component is used to load billboard (a two dimension
  <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+        <vc-entity ref="entity" :position="position" :description="description" :id="id" :billboard.sync="billboard">
            <vc-graphics-billboard
             :image="image"
             :scale="0.1"
@@ -43,6 +43,11 @@ The `vc-graphics-billboard` component is used to load billboard (a two dimension
           horizontalOrigin: 0
         }
       },
+      mounted () {
+        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+          viewer.zoomTo(cesiumObject)
+        })
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
@@ -58,7 +63,7 @@ The `vc-graphics-billboard` component is used to load billboard (a two dimension
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+      <vc-entity ref="entity" :position="position" :description="description" :id="id" :billboard.sync="billboard">
         <vc-graphics-billboard
           :image="image"
           :scale="0.1"
@@ -88,6 +93,11 @@ The `vc-graphics-billboard` component is used to load billboard (a two dimension
         distanceDisplayCondition: { near: 0, far: 20000000 },
         horizontalOrigin: 0
       }
+    },
+    mounted() {
+      this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        viewer.zoomTo(cesiumObject)
+      })
     },
     methods: {
       ready(cesiumInstance) {

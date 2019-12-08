@@ -1,10 +1,12 @@
-# RectangleGeometry
+# RectangleGeometry, RectangleOutlineGeometry
 
-The `vc-geometry-rectangle` component is used to load a rectangle geometry that describes a cartographic rectangle on an ellipsoid centered at the origin. Need to be used as a subcomponent of `vc-instance-geometry`. Can be mounted to `vc-primitive` or `vc-primitive-ground`.
+- The `vc-geometry-rectangle` component is used to load a geometry that describes a cartographic rectangle on an ellipsoid centered at the origin.
+- The `vc-geometry-outline-rectangle` component is used to load a geometry that describes the outline of a a cartographic rectangle on an ellipsoid centered at the origin.
+- It needs to be used as a sub-component of `vc-instance-geometry`, can be mounted on `vc-primitive` or `vc-primitive-ground`.
 
 ## Example
 
-### Load RectangleGeometry with `vc-geometry-rectangle`
+### Load RectangleGeometry
 
 #### preview
 
@@ -12,12 +14,14 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
+        <vc-primitive :appearance="appearance">
           <vc-instance-geometry>
-            <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+            <vc-geometry-rectangle ref="rectangle" :rectangle="rectangle" :vertexFormat="vertexFormat"></vc-geometry-rectangle>
           </vc-instance-geometry>
-          <vc-instance-geometry :geometry.sync="geometry">
-            <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+        </vc-primitive>
+        <vc-primitive :appearance="appearanceOutline">
+          <vc-instance-geometry :attributes="attributes">
+            <vc-geometry-outline-rectangle ref="rectangleOutline" :rectangle="rectangleOutline"></vc-geometry-outline-rectangle>
           </vc-instance-geometry>
         </vc-primitive>
       </vc-viewer>
@@ -29,29 +33,42 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
       data() {
         return {
           appearance: null,
-          geometry: null,
-          geometryInstances: null,
-          polygonHierarchy: [
-            { lng: 102.1, lat: 29.5 },
-            { lng: 106.2, lat: 29.5 },
-            { lng: 106.2, lat: 33.5 },
-            { lng: 108.2, lat: 35.5 },
-            { lng: 102.1, lat: 33.5 }
-          ],
-          height: 200,
-          rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
+          appearanceOutline: null,
+          vertexFormat: null,
+          rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 },
+          rectangleOutline: { west: 100.5, south: 29.5, east: 105.5, north: 34.5 },
+          attributes: null
         }
       },
+      mounted() {
+        Promise.all([this.$refs.rectangle.createPromise, this.$refs.rectangleOutline.createPromise]).then((instances) => {
+          console.log('All geometries are loaded.')
+          const boundingSphereUnion = instances.reduce((prev, cur) => {
+            const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
+            const boundingSphere = cur.vm.$parent.modelMatrix
+              ? Cesium.BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+              : geometry.boundingSphere
+            return prev === null ? boundingSphere : Cesium.BoundingSphere.union(prev, boundingSphere)
+          }, null)
+          instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
+        })
+      },
       methods: {
-        ready(cesiumInstance) {
-          this.cesiumInstance = cesiumInstance
-          const { Cesium, viewer } = this.cesiumInstance
-          this.appearance = new Cesium.MaterialAppearance({
-            material: Cesium.Material.fromType('Checkerboard', {
-              repeat: new Cesium.Cartesian2(20.0, 6.0)
+        ready({ Cesium, viewer }) {
+          const { MaterialAppearance, Material, Cartesian2, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+          this.vertexFormat = MaterialAppearance.vertexFormat
+          this.appearance = new MaterialAppearance({
+            material: Material.fromType('Checkerboard', {
+              repeat: new Cartesian2(20.0, 6.0)
             }),
-            materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+            materialSupport: MaterialAppearance.MaterialSupport.TEXTURED
           })
+          this.appearanceOutline = new PerInstanceColorAppearance({
+            flat: true
+          })
+          this.attributes = {
+            color: ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+          }
         }
       }
     }
@@ -64,12 +81,14 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
+      <vc-primitive :appearance="appearance">
         <vc-instance-geometry>
-          <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+          <vc-geometry-rectangle ref="rectangle" :rectangle="rectangle" :vertexFormat="vertexFormat"></vc-geometry-rectangle>
         </vc-instance-geometry>
-        <vc-instance-geometry :geometry.sync="geometry">
-          <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+      </vc-primitive>
+      <vc-primitive :appearance="appearanceOutline">
+        <vc-instance-geometry :attributes="attributes">
+          <vc-geometry-outline-rectangle ref="rectangleOutline" :rectangle="rectangleOutline"></vc-geometry-outline-rectangle>
         </vc-instance-geometry>
       </vc-primitive>
     </vc-viewer>
@@ -81,29 +100,42 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
     data() {
       return {
         appearance: null,
-        geometry: null,
-        geometryInstances: null,
-        polygonHierarchy: [
-          { lng: 102.1, lat: 29.5 },
-          { lng: 106.2, lat: 29.5 },
-          { lng: 106.2, lat: 33.5 },
-          { lng: 108.2, lat: 35.5 },
-          { lng: 102.1, lat: 33.5 }
-        ],
-        height: 200,
-        rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
+        appearanceOutline: null,
+        vertexFormat: null,
+        rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 },
+        rectangleOutline: { west: 100.5, south: 29.5, east: 105.5, north: 34.5 },
+        attributes: null
       }
     },
+    mounted() {
+      Promise.all([this.$refs.rectangle.createPromise, this.$refs.rectangleOutline.createPromise]).then((instances) => {
+        console.log('All geometries are loaded.')
+        const boundingSphereUnion = instances.reduce((prev, cur) => {
+          const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
+          const boundingSphere = cur.vm.$parent.modelMatrix
+            ? Cesium.BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+            : geometry.boundingSphere
+          return prev === null ? boundingSphere : Cesium.BoundingSphere.union(prev, boundingSphere)
+        }, null)
+        instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
+      })
+    },
     methods: {
-      ready(cesiumInstance) {
-        this.cesiumInstance = cesiumInstance
-        const { Cesium, viewer } = this.cesiumInstance
-        this.appearance = new Cesium.MaterialAppearance({
-          material: Cesium.Material.fromType('Checkerboard', {
-            repeat: new Cesium.Cartesian2(20.0, 6.0)
+      ready({ Cesium, viewer }) {
+        const { MaterialAppearance, Material, Cartesian2, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+        this.vertexFormat = MaterialAppearance.vertexFormat
+        this.appearance = new MaterialAppearance({
+          material: Material.fromType('Checkerboard', {
+            repeat: new Cartesian2(20.0, 6.0)
           }),
-          materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          materialSupport: MaterialAppearance.MaterialSupport.TEXTURED
         })
+        this.appearanceOutline = new PerInstanceColorAppearance({
+          flat: true
+        })
+        this.attributes = {
+          color: ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+        }
       }
     }
   }
@@ -111,6 +143,8 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
 ```
 
 ## Instance Properties
+
+### `vc-geometry-rectangle`
 
 <!-- prettier-ignore -->
 | name | type | default | description |
@@ -126,7 +160,21 @@ The `vc-geometry-rectangle` component is used to load a rectangle geometry that 
 
 ---
 
-Refer to the official document: **[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)**
+### `vc-geometry-outline-rectangle`
+
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ---- | ---- | ------- | ----------- |
+| rectangle | Object | | `required` A cartographic rectangle with north, south, east and west properties in radians. **structure: { west: number, south: number, east: number, north: number }** |
+| ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | Number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
+| rotation | Number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | Number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
+
+---
+
+Refer to the official document: **[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)**, **[RectangleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleOutlineGeometry.html)**
 
 ## Events
 

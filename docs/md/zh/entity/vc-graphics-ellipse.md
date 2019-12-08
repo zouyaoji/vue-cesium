@@ -12,14 +12,14 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position1" :description="description" :ellipse.sync="ellipse1">
+        <vc-entity ref="entity1" :position="position1" :description="description" :ellipse.sync="ellipse1">
           <vc-graphics-ellipse :semiMinorAxis="300000.0" :semiMajorAxis="300000.0" :height="200000.0" :material="material1"
             :outline="true"></vc-graphics-ellipse>
         </vc-entity>
-        <vc-entity :position="position2" :description="description" :ellipse.sync="ellipse2">
+        <vc-entity ref="entity2" :position="position2" :description="description" :ellipse.sync="ellipse2">
           <vc-graphics-ellipse :semiMinorAxis="250000.0" :semiMajorAxis="400000.0" :material="material2"></vc-graphics-ellipse>
         </vc-entity>
-        <vc-entity :position="position3" :description="description" :ellipse.sync="ellipse3">
+        <vc-entity ref="entity3" :position="position3" :description="description" :ellipse.sync="ellipse3">
           <vc-graphics-ellipse :semiMinorAxis="150000.0" :semiMajorAxis="300000.0" :extrudedHeight="200000.0" :rotation="rotation3" :material="material3"
             :outline="true"></vc-graphics-ellipse>
         </vc-entity>
@@ -46,6 +46,13 @@
           material3: {}
         }
       },
+      mounted() {
+        Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
@@ -65,7 +72,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position1" :description="description" :ellipse.sync="ellipse1">
+      <vc-entity ref="entity1" :position="position1" :description="description" :ellipse.sync="ellipse1">
         <vc-graphics-ellipse
           :semiMinorAxis="300000.0"
           :semiMajorAxis="300000.0"
@@ -74,10 +81,10 @@
           :outline="true"
         ></vc-graphics-ellipse>
       </vc-entity>
-      <vc-entity :position="position2" :description="description" :ellipse.sync="ellipse2">
+      <vc-entity ref="entity2" :position="position2" :description="description" :ellipse.sync="ellipse2">
         <vc-graphics-ellipse :semiMinorAxis="250000.0" :semiMajorAxis="400000.0" :material="material2"></vc-graphics-ellipse>
       </vc-entity>
-      <vc-entity :position="position3" :description="description" :ellipse.sync="ellipse3">
+      <vc-entity ref="entity3" :position="position3" :description="description" :ellipse.sync="ellipse3">
         <vc-graphics-ellipse
           :semiMinorAxis="150000.0"
           :semiMajorAxis="300000.0"
@@ -109,6 +116,13 @@
         rotation3: 0,
         material3: {}
       }
+    },
+    mounted() {
+      Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
     },
     methods: {
       ready(cesiumInstance) {

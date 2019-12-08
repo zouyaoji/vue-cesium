@@ -50,7 +50,8 @@ The `vc-provider-imagery-arcgis-mapserver` component is used to load tiled image
           url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer',
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          maximumLevel: 20
         }
       },
       methods: {

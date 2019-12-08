@@ -68,11 +68,36 @@ const nameClassMap = {
   // 几何体
   'vc-instance-geometry': 'GeometryInstance',
   'vc-geometry-box': 'BoxGeometry',
-  'vc-geometry-polygon': 'PolygonGeometry',
-  'vc-geometry-polyline': 'PolylineGeometry',
+  'vc-geometry-outline-box': 'BoxOutlineGeometry',
+  'vc-geometry-circle': 'CircleGeometry',
+  'vc-geometry-outline-circle': 'CircleOutlineGeometry',
+  'vc-geometry-polygon-coplanar': 'CoplanarPolygonGeometry',
+  'vc-geometry-outline-polygon-coplanar': 'CoplanarPolygonOutlineGeometry',
+  'vc-geometry-corridor': 'CorridorGeometry',
+  'vc-geometry-outline-corridor': 'CorridorOutlineGeometry',
+  'vc-geometry-cylinder': 'CylinderGeometry',
+  'vc-geometry-outline-cylinder': 'CylinderOutlineGeometry',
+  'vc-geometry-ellipse': 'EllipseGeometry',
+  'vc-geometry-outline-ellipse': 'EllipseOutlineGeometry',
+  'vc-geometry-ellipsoid': 'EllipsoidGeometry',
+  'vc-geometry-outline-ellipsoid': 'EllipsoidOutlineGeometry',
+  'vc-geometry-frustum': 'FrustumGeometry',
+  'vc-geometry-outline-frustum': 'FrustumOutlineGeometry',
   'vc-geometry-polyline-ground': 'GroundPolylineGeometry',
-  'vc-geometry-rectangle': 'RectangleGeometry'
-
+  'vc-geometry-plane': 'PlaneGeometry',
+  'vc-geometry-outline-plane': 'PlaneOutlineGeometry',
+  'vc-geometry-polygon': 'PolygonGeometry',
+  'vc-geometry-outline-polygon': 'PolygonOutlineGeometry',
+  'vc-geometry-polyline': 'PolylineGeometry',
+  'vc-geometry-polyline-volume': 'PolylineVolumeGeometry',
+  'vc-geometry-outline-polyline-volume': 'PolylineVolumeOutlineGeometry',
+  'vc-geometry-rectangle': 'RectangleGeometry',
+  'vc-geometry-outline-rectangle': 'RectangleOutlineGeometry',
+  'vc-geometry-polyline-simple': 'SimplePolylineGeometry',
+  'vc-geometry-sphere': 'SphereGeometry',
+  'vc-geometry-outline-sphere': 'SphereOutlineGeometry',
+  'vc-geometry-wall': 'WallGeometry',
+  'vc-geometry-outline-wall': 'WallOutlineGeometry'
 }
 
 export default nameClassMap

@@ -13,8 +13,8 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :position="position1" :description="description" :model.sync="model1" :label.sync="label1">
-          <vc-graphics-label text="Hello Vue Cesium" font="20px sans-serif"></vc-graphics-label>
-          <vc-graphics-model :uri="uri1" @ready="subReady"></vc-graphics-model>
+          <vc-graphics-label ref="label" text="Hello Vue Cesium" font="20px sans-serif"></vc-graphics-label>
+          <vc-graphics-model ref="model" :uri="uri1"></vc-graphics-model>
         </vc-entity>
       </vc-viewer>
     </div>
@@ -31,13 +31,16 @@
           uri1: '/statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
         }
       },
+      mounted() {
+        Promise.all([this.$refs.label.createPromise, this.$refs.model.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -51,8 +54,8 @@
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :position="position1" :description="description" :model.sync="model1" :label.sync="label1">
-        <vc-graphics-label text="Hello Vue Cesium" font="20px sans-serif"></vc-graphics-label>
-        <vc-graphics-model :uri="uri1" @ready="subReady"></vc-graphics-model>
+        <vc-graphics-label ref="label" text="Hello Vue Cesium" font="20px sans-serif"></vc-graphics-label>
+        <vc-graphics-model ref="model" :uri="uri1"></vc-graphics-model>
       </vc-entity>
     </vc-viewer>
   </div>
@@ -69,13 +72,14 @@
         uri1: '/statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
       }
     },
+    mounted() {
+      Promise.all([this.$refs.label.createPromise, this.$refs.model.createPromise]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

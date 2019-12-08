@@ -9,11 +9,11 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
 #### Preview
 
 <doc-preview>
-  <template>
+    <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :description="description" :rectangle.sync="rectangle1">
-          <vc-graphics-rectangle :coordinates="coordinates1" :material="material1"></vc-graphics-rectangle>
+          <vc-graphics-rectangle ref="rectangle1" :coordinates="coordinates1" :material="material1"></vc-graphics-rectangle>
         </vc-entity>
         <vc-entity :description="description" :rectangle.sync="rectangle2">
           <vc-graphics-rectangle
@@ -24,6 +24,7 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
             :height="100000.0"
             :outline="true"
             :outlineColor="outlineColor2"
+            ref="rectangle2"
           ></vc-graphics-rectangle>
         </vc-entity>
         <vc-entity :description="description" :rectangle.sync="rectangle3">
@@ -33,7 +34,7 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
             :rotation="rotation3"
             :stRotation="stRotation3"
             :classificationType="classificationType3"
-            @ready="subReady"
+            ref="rectangle3"
           ></vc-graphics-rectangle>
         </vc-entity>
       </vc-viewer>
@@ -64,6 +65,15 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
           classificationType3: 0
         }
       },
+      mounted() {
+        Promise.all([
+          this.$refs.rectangle1.createPromise,
+          this.$refs.rectangle2.createPromise,
+          this.$refs.rectangle3.createPromise
+        ]).then((instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        })
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -83,10 +93,6 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
         getRotationValue() {
           this.rotation += 0.005
           return this.rotation
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -100,7 +106,7 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :description="description" :rectangle.sync="rectangle1">
-        <vc-graphics-rectangle :coordinates="coordinates1" :material="material1"></vc-graphics-rectangle>
+        <vc-graphics-rectangle ref="rectangle1" :coordinates="coordinates1" :material="material1"></vc-graphics-rectangle>
       </vc-entity>
       <vc-entity :description="description" :rectangle.sync="rectangle2">
         <vc-graphics-rectangle
@@ -111,6 +117,7 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
           :height="100000.0"
           :outline="true"
           :outlineColor="outlineColor2"
+          ref="rectangle2"
         ></vc-graphics-rectangle>
       </vc-entity>
       <vc-entity :description="description" :rectangle.sync="rectangle3">
@@ -120,7 +127,7 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
           :rotation="rotation3"
           :stRotation="stRotation3"
           :classificationType="classificationType3"
-          @ready="subReady"
+          ref="rectangle3"
         ></vc-graphics-rectangle>
       </vc-entity>
     </vc-viewer>
@@ -151,6 +158,15 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
         classificationType3: 0
       }
     },
+    mounted() {
+      Promise.all([
+        this.$refs.rectangle1.createPromise,
+        this.$refs.rectangle2.createPromise,
+        this.$refs.rectangle3.createPromise
+      ]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -170,10 +186,6 @@ The `vc-graphics-rectangle` component is used to load a Rectangle that conforms 
       getRotationValue() {
         this.rotation += 0.005
         return this.rotation
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+        <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
     </div>
   </template>
@@ -27,6 +27,11 @@
           position: { lng: 108, lat: 35, height: 100 },
           billboard: {}
         }
+      },
+      mounted () {
+        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+          viewer.zoomTo(cesiumObject)
+        })
       },
       methods: {
         ready(cesiumInstance) {
@@ -55,7 +60,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+      <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
   </div>
 </template>
@@ -70,6 +75,11 @@
         position: { lng: 108, lat: 35, height: 100 },
         billboard: {}
       }
+    },
+    mounted() {
+      this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        viewer.zoomTo(cesiumObject)
+      })
     },
     methods: {
       ready(cesiumInstance) {

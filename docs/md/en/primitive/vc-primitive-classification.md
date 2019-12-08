@@ -12,37 +12,39 @@ The `vc-primitive-classification` component is used to load a classification pri
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <cesium-terrain-provider></cesium-terrain-provider>
-        <classification-primitive :asynchronous="false">
-          <geometry-instance  :geometry.sync="geometry" :attributes="attributes">
-            <polygon-geometry :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></polygon-geometry>
-          </geometry-instance>
-        </classification-primitive>
+        <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+        <vc-primitive-classification :asynchronous="false">
+          <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes">
+            <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></vc-geometry-polygon>
+          </vc-instance-geometry>
+        </vc-primitive-classification>
       </vc-viewer>
     </div>
   </template>
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           appearance: null,
-          geometry: null,
+          geometry: {},
+          image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
+          rectangle: { west: 102.4, south: 29.5, east: 106.5, north: 33.5 },
           vertexFormat: null,
           attributes: null,
           extrudedHeight: 3000,
           polygonHierarchy: [
-            102.1, 29.5,
-            106.2, 29.5,
-            106.2, 33.5,
-            102.1, 33.5
+            { lng: 102.1, lat: 29.5 },
+            { lng: 106.2, lat: 29.5 },
+            { lng: 106.2, lat: 33.5 },
+            { lng: 102.1, lat: 33.5 }
           ]
         }
       },
       methods: {
-        ready (cesiumInstance) {
+        ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
-          const {Cesium, viewer} = this.cesiumInstance
+          const { Cesium, viewer } = this.cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.camera.setView({
             destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
@@ -53,7 +55,7 @@ The `vc-primitive-classification` component is used to load a classification pri
             }
           })
           this.attributes = {
-            color : Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 100))
+            color: Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color.fromBytes(64, 157, 253, 100))
           }
         }
       }
@@ -67,12 +69,12 @@ The `vc-primitive-classification` component is used to load a classification pri
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <cesium-terrain-provider></cesium-terrain-provider>
-      <classification-primitive :asynchronous="false">
-        <geometry-instance :geometry.sync="geometry" :attributes="attributes">
-          <polygon-geometry :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></polygon-geometry>
-        </geometry-instance>
-      </classification-primitive>
+      <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+      <vc-primitive-classification :asynchronous="false">
+        <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes">
+          <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></vc-geometry-polygon>
+        </vc-instance-geometry>
+      </vc-primitive-classification>
     </vc-viewer>
   </div>
 </template>
@@ -82,11 +84,18 @@ The `vc-primitive-classification` component is used to load a classification pri
     data() {
       return {
         appearance: null,
-        geometry: null,
+        geometry: {},
+        image: 'https://zouyaoji.top/vue-cesium/statics/SampleData/radarImage/1.png',
+        rectangle: { west: 102.4, south: 29.5, east: 106.5, north: 33.5 },
         vertexFormat: null,
         attributes: null,
         extrudedHeight: 3000,
-        polygonHierarchy: [102.1, 29.5, 106.2, 29.5, 106.2, 33.5, 102.1, 33.5]
+        polygonHierarchy: [
+          { lng: 102.1, lat: 29.5 },
+          { lng: 106.2, lat: 29.5 },
+          { lng: 106.2, lat: 33.5 },
+          { lng: 102.1, lat: 33.5 }
+        ]
       }
     },
     methods: {

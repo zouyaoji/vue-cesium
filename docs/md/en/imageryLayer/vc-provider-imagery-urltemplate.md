@@ -59,6 +59,16 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          this.cesiumInstance = cesiumInstance
+        },
+        layerAdded() {
+          if (
+            this.$refs.layerText.imageryLayer &&
+            this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+          ) {
+            const { viewer } = this.cesiumInstance
+            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+          }
         }
       }
     }
@@ -119,6 +129,16 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+      },
+      layerAdded() {
+        if (
+          this.$refs.layerText.imageryLayer &&
+          this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+        ) {
+          const { viewer } = this.cesiumInstance
+          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
+        }
       }
     }
   }

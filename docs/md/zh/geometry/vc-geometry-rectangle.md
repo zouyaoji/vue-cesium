@@ -1,6 +1,8 @@
-# RectangleGeometry
+# RectangleGeometry、RectangleOutlineGeometry
 
-`vc-geometry-rectangle` 组件用于加载矩形几何体。需要作为 `vc-instance-geometry` 的子组件使用，可以挂载到 `vc-primitive` 或 `vc-primitive-ground`。
+- `vc-geometry-rectangle` 组件用于加载矩形几何体。
+- `vc-geometry-outline-rectangle` 组件用于加载矩形几何体轮廓。
+- 需要作为 `vc-instance-geometry` 的子组件使用，可以挂载到 `vc-primitive` 或 `vc-primitive-ground`。
 
 ## 示例
 
@@ -12,12 +14,14 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
+        <vc-primitive :appearance="appearance">
           <vc-instance-geometry>
-            <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+            <vc-geometry-rectangle ref="rectangle" :rectangle="rectangle" :vertexFormat="vertexFormat"></vc-geometry-rectangle>
           </vc-instance-geometry>
-          <vc-instance-geometry :geometry.sync="geometry">
-            <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+        </vc-primitive>
+        <vc-primitive :appearance="appearanceOutline">
+          <vc-instance-geometry :attributes="attributes">
+            <vc-geometry-outline-rectangle ref="rectangleOutline" :rectangle="rectangleOutline"></vc-geometry-outline-rectangle>
           </vc-instance-geometry>
         </vc-primitive>
       </vc-viewer>
@@ -29,29 +33,42 @@
       data() {
         return {
           appearance: null,
-          geometry: null,
-          geometryInstances: null,
-          polygonHierarchy: [
-            { lng: 102.1, lat: 29.5 },
-            { lng: 106.2, lat: 29.5 },
-            { lng: 106.2, lat: 33.5 },
-            { lng: 108.2, lat: 35.5 },
-            { lng: 102.1, lat: 33.5 }
-          ],
-          height: 200,
-          rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
+          appearanceOutline: null,
+          vertexFormat: null,
+          rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 },
+          rectangleOutline: { west: 100.5, south: 29.5, east: 105.5, north: 34.5 },
+          attributes: null
         }
       },
+      mounted() {
+        Promise.all([this.$refs.rectangle.createPromise, this.$refs.rectangleOutline.createPromise]).then((instances) => {
+          console.log('All geometries are loaded.')
+          const boundingSphereUnion = instances.reduce((prev, cur) => {
+            const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
+            const boundingSphere = cur.vm.$parent.modelMatrix
+              ? Cesium.BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+              : geometry.boundingSphere
+            return prev === null ? boundingSphere : Cesium.BoundingSphere.union(prev, boundingSphere)
+          }, null)
+          instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
+        })
+      },
       methods: {
-        ready(cesiumInstance) {
-          this.cesiumInstance = cesiumInstance
-          const { Cesium, viewer } = this.cesiumInstance
-          this.appearance = new Cesium.MaterialAppearance({
-            material: Cesium.Material.fromType('Checkerboard', {
-              repeat: new Cesium.Cartesian2(20.0, 6.0)
+        ready({ Cesium, viewer }) {
+          const { MaterialAppearance, Material, Cartesian2, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+          this.vertexFormat = MaterialAppearance.vertexFormat
+          this.appearance = new MaterialAppearance({
+            material: Material.fromType('Checkerboard', {
+              repeat: new Cartesian2(20.0, 6.0)
             }),
-            materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+            materialSupport: MaterialAppearance.MaterialSupport.TEXTURED
           })
+          this.appearanceOutline = new PerInstanceColorAppearance({
+            flat: true
+          })
+          this.attributes = {
+            color: ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+          }
         }
       }
     }
@@ -64,12 +81,14 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
+      <vc-primitive :appearance="appearance">
         <vc-instance-geometry>
-          <vc-geometry-rectangle :rectangle="rectangle"></vc-geometry-rectangle>
+          <vc-geometry-rectangle ref="rectangle" :rectangle="rectangle" :vertexFormat="vertexFormat"></vc-geometry-rectangle>
         </vc-instance-geometry>
-        <vc-instance-geometry :geometry.sync="geometry">
-          <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :height="height"></vc-geometry-polygon>
+      </vc-primitive>
+      <vc-primitive :appearance="appearanceOutline">
+        <vc-instance-geometry :attributes="attributes">
+          <vc-geometry-outline-rectangle ref="rectangleOutline" :rectangle="rectangleOutline"></vc-geometry-outline-rectangle>
         </vc-instance-geometry>
       </vc-primitive>
     </vc-viewer>
@@ -81,29 +100,42 @@
     data() {
       return {
         appearance: null,
-        geometry: null,
-        geometryInstances: null,
-        polygonHierarchy: [
-          { lng: 102.1, lat: 29.5 },
-          { lng: 106.2, lat: 29.5 },
-          { lng: 106.2, lat: 33.5 },
-          { lng: 108.2, lat: 35.5 },
-          { lng: 102.1, lat: 33.5 }
-        ],
-        height: 200,
-        rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
+        appearanceOutline: null,
+        vertexFormat: null,
+        rectangle: { west: 110.5, south: 29.5, east: 115.5, north: 34.5 },
+        rectangleOutline: { west: 100.5, south: 29.5, east: 105.5, north: 34.5 },
+        attributes: null
       }
     },
+    mounted() {
+      Promise.all([this.$refs.rectangle.createPromise, this.$refs.rectangleOutline.createPromise]).then((instances) => {
+        console.log('All geometries are loaded.')
+        const boundingSphereUnion = instances.reduce((prev, cur) => {
+          const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
+          const boundingSphere = cur.vm.$parent.modelMatrix
+            ? Cesium.BoundingSphere.transform(geometry.boundingSphere, cur.vm.$parent.modelMatrix)
+            : geometry.boundingSphere
+          return prev === null ? boundingSphere : Cesium.BoundingSphere.union(prev, boundingSphere)
+        }, null)
+        instances[0].viewer.scene.camera.flyToBoundingSphere(boundingSphereUnion)
+      })
+    },
     methods: {
-      ready(cesiumInstance) {
-        this.cesiumInstance = cesiumInstance
-        const { Cesium, viewer } = this.cesiumInstance
-        this.appearance = new Cesium.MaterialAppearance({
-          material: Cesium.Material.fromType('Checkerboard', {
-            repeat: new Cesium.Cartesian2(20.0, 6.0)
+      ready({ Cesium, viewer }) {
+        const { MaterialAppearance, Material, Cartesian2, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+        this.vertexFormat = MaterialAppearance.vertexFormat
+        this.appearance = new MaterialAppearance({
+          material: Material.fromType('Checkerboard', {
+            repeat: new Cartesian2(20.0, 6.0)
           }),
-          materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
+          materialSupport: MaterialAppearance.MaterialSupport.TEXTURED
         })
+        this.appearanceOutline = new PerInstanceColorAppearance({
+          flat: true
+        })
+        this.attributes = {
+          color: ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+        }
       }
     }
   }
@@ -111,6 +143,8 @@
 ```
 
 ## 属性
+
+### `vc-geometry-rectangle`
 
 | 属性名         | 类型   | 默认值 | 描述                                                                                                |
 | -------------- | ------ | ------ | --------------------------------------------------------------------------------------------------- |
@@ -125,7 +159,20 @@
 
 ---
 
-参考官方文档：**[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)**
+### `vc-geometry-outline-rectangle`
+
+| 属性名         | 类型   | 默认值 | 描述                                                                                                |
+| -------------- | ------ | ------ | --------------------------------------------------------------------------------------------------- |
+| rectangle      | Object |        | `required` 指定矩形四至参数。**结构：{ west: number, south: number, east: number, north: number }** |
+| ellipsoid      | Object |        | `optional` 指定矩形所在的椭球体。                                                                   |
+| granularity    | Number |        | `optional` 指定每个经纬度之间的采样粒度。                                                           |
+| height         | Number | `0`    | `optional` 指定矩形高度。                                                                           |
+| rotation       | Number | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。                                           |
+| extrudedHeight | Number |        | `optional` 指定矩形拉伸高度。                                                                       |
+
+---
+
+参考官方文档：**[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)**、**[RectangleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleOutlineGeometry.html)**
 
 ## 事件
 

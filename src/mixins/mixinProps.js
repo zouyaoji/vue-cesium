@@ -1155,7 +1155,124 @@ const vertexFormat = {
   }
 }
 
+/**
+ * @const {Object} center mixin
+ */
+const center = {
+  props: {
+    center: Object
+  }
+}
+
+/**
+ * @const {Object} radius mixin
+ */
+const radius = {
+  props: {
+    radius: Number
+  }
+}
+/**
+ * @const {Object} innerRadii mixin
+ */
+const innerRadii = {
+  props: {
+    innerRadii: Object
+  }
+}
+/**
+ * @const {Object} minimumClock mixin
+ */
+const minimumClock = {
+  props: {
+    minimumClock: {
+      type: Number,
+      default: 0.0
+    }
+  }
+}
+/**
+ * @const {Object} maximumClock mixin
+ */
+const maximumClock = {
+  props: {
+    maximumClock: {
+      type: Number,
+      default: 2 * Math.PI
+    }
+  }
+}
+/**
+ * @const {Object} minimumCone mixin
+ */
+const minimumCone = {
+  props: {
+    minimumCone: {
+      type: Number,
+      default: 0.0
+    }
+  }
+}
+/**
+ * @const {Object} maximumCone mixin
+ */
+const maximumCone = {
+  props: {
+    maximumCone: {
+      type: Number,
+      default: Math.PI
+    }
+  }
+}
+
+/**
+ * @const {Object} frustum mixin
+ */
+const frustum = {
+  props: {
+    frustum: Object
+  }
+}
+
+/**
+ * @const {Object} origin mixin
+ */
+const origin = {
+  props: {
+    origin: Object
+  }
+}
+
+/**
+ * @const {Object} orientation mixin
+ */
+const orientation = {
+  props: {
+    orientation: Object
+  }
+}
+
+/**
+ * @const {Object} polygonHierarchy mixin
+ */
+const polygonHierarchy = {
+  props: {
+    polygonHierarchy: Object | Array
+  }
+}
+
 export {
+  polygonHierarchy,
+  orientation,
+  origin,
+  frustum,
+  maximumCone,
+  minimumCone,
+  maximumClock,
+  minimumClock,
+  innerRadii,
+  radius,
+  center,
   debugWireframe,
   vertexFormat,
   position,

@@ -593,6 +593,78 @@ const routeMap = [
         }
       },
       {
+        path: 'vc-geometry-circle',
+        component: 'geometry/vc-geometry-circle',
+        name: {
+          zh: '圆形',
+          en: 'CircleGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-polygon-coplanar',
+        component: 'geometry/vc-geometry-polygon-coplanar',
+        name: {
+          zh: '共面多边形',
+          en: 'CoplanarPolygonGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-corridor',
+        component: 'geometry/vc-geometry-corridor',
+        name: {
+          zh: '廊体',
+          en: 'CorridorGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-cylinder',
+        component: 'geometry/vc-geometry-cylinder',
+        name: {
+          zh: '圆柱体',
+          en: 'CylinderGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-ellipse',
+        component: 'geometry/vc-geometry-ellipse',
+        name: {
+          zh: '椭圆',
+          en: 'EllipseGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-ellipsoid',
+        component: 'geometry/vc-geometry-ellipsoid',
+        name: {
+          zh: '椭球体',
+          en: 'EllipsoidGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-frustum',
+        component: 'geometry/vc-geometry-frustum',
+        name: {
+          zh: '视锥体',
+          en: 'FrustumGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-polyline-ground',
+        component: 'geometry/vc-geometry-polyline-ground',
+        name: {
+          zh: '贴地多段线',
+          en: 'GroundPolylineGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-plane',
+        component: 'geometry/vc-geometry-plane',
+        name: {
+          zh: '平面',
+          en: 'PlaneGeometry'
+        }
+      },
+      {
         path: 'vc-geometry-polygon',
         component: 'geometry/vc-geometry-polygon',
         name: {
@@ -609,11 +681,11 @@ const routeMap = [
         }
       },
       {
-        path: 'vc-geometry-polyline-ground',
-        component: 'geometry/vc-geometry-polyline-ground',
+        path: 'vc-geometry-polyline-volume',
+        component: 'geometry/vc-geometry-polyline-volume',
         name: {
-          zh: '贴地多段线',
-          en: 'GroundPolylineGeometry'
+          zh: '多段线柱体',
+          en: 'PolylineVolumeGeometry'
         }
       },
       {
@@ -622,6 +694,30 @@ const routeMap = [
         name: {
           zh: '矩形',
           en: 'RectangleGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-polyline-simple',
+        component: 'geometry/vc-geometry-polyline-simple',
+        name: {
+          zh: '线段',
+          en: 'SimplePolylineGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-sphere',
+        component: 'geometry/vc-geometry-sphere',
+        name: {
+          zh: '球体',
+          en: 'SphereGeometry'
+        }
+      },
+      {
+        path: 'vc-geometry-wall',
+        component: 'geometry/vc-geometry-wall',
+        name: {
+          zh: '围墙',
+          en: 'WallGeometry'
         }
       }
     ]
@@ -634,14 +730,14 @@ const routeMap = [
       en: 'Tools'
     },
     children: [
-      // {
-      //   path: 'vc-painting',
-      //   component: 'toolsc-painting',
-      //   name: {
-      //     zh: '绘制',
-      //     en: 'Painting'
-      //   }
-      // },
+      {
+        path: 'vc-drawing',
+        component: 'tool/vc-drawing',
+        name: {
+          zh: '绘制',
+          en: 'Drawing'
+        }
+      },
       {
         path: 'vc-measuring',
         component: 'tool/vc-measuring',

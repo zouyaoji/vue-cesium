@@ -1,5 +1,49 @@
 # 更新日志
 
+## 2.0.1 - 2019-12-08
+
+## 修改
+
+- 各组件加载放在 Created 生命周期，方便通过获取`createdPromise`对象进行相关逻辑操作。
+- 量算组件增加选项，指定测量线和文字标签是否始终显示。
+
+## 增加
+
+- `vc-provider-imagery-supermap` 加载超图 iServer 影像服务。
+- `vc-provider-imagery-tianditu` 加载天地图 WMTS 影像服务。
+- `vc-handler-draw-polyline` 绘制线组件。
+- `vc-geometry-xxx` 补充几何体对象组件。
+  - `vc-geometry-outline-box`: `BoxOutlineGeometry`,
+  - `vc-geometry-circle`: `CircleGeometry`,
+  - `vc-geometry-outline-circle`: `CircleOutlineGeometry`,
+  - `vc-geometry-polygon-coplanar`: `CoplanarPolygonGeometry`,
+  - `vc-geometry-outline-polygon-coplanar`: `CoplanarPolygonOutlineGeometry`,
+  - `vc-geometry-corridor`: `CorridorGeometry`,
+  - `vc-geometry-outline-corridor`: `CorridorOutlineGeometry`,
+  - `vc-geometry-cylinder`: `CylinderGeometry`,
+  - `vc-geometry-outline-cylinder`: `CylinderOutlineGeometry`,
+  - `vc-geometry-ellipse`: `EllipseGeometry`,
+  - `vc-geometry-outline-ellipse`: `EllipseOutlineGeometry`,
+  - `vc-geometry-ellipsoid`: `EllipsoidGeometry`,
+  - `vc-geometry-outline-ellipsoid`: `EllipsoidOutlineGeometry`,
+  - `vc-geometry-frustum`: `FrustumGeometry`,
+  - `vc-geometry-outline-frustum`: `FrustumOutlineGeometry`,
+  - `vc-geometry-polyline-ground`: `GroundPolylineGeometry`,
+  - `vc-geometry-plane`: `PlaneGeometry`,
+  - `vc-geometry-outline-plane`: `PlaneOutlineGeometry`,
+  - `vc-geometry-polygon`: `PolygonGeometry`,
+  - `vc-geometry-outline-polygon`: `PolygonOutlineGeometry`,
+  - `vc-geometry-polyline`: `PolylineGeometry`,
+  - `vc-geometry-polyline-volume`: `PolylineVolumeGeometry`,
+  - `vc-geometry-outline-polyline-volume`: `PolylineVolumeOutlineGeometry`,
+  - `vc-geometry-rectangle`: `RectangleGeometry`,
+  - `vc-geometry-outline-rectangle`: `RectangleOutlineGeometry`,
+  - `vc-geometry-polyline-simple`: `SimplePolylineGeometry`,
+  - `vc-geometry-sphere`: `SphereGeometry`,
+  - `vc-geometry-outline-sphere`: `SphereOutlineGeometry`,
+  - `vc-geometry-wall`: `WallGeometry`,
+  - `vc-geometry-outline-wall`: `WallOutlineGeometry`
+
 ## 2.0.0 - 2019-12-02
 
 ## 增加

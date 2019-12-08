@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-12-02 19:27:54
+ * @Last Modified time: 2019-12-07 17:54:10
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -648,7 +648,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer.forceResize()
       }
     },
-    init (Cesium) {
+    init () {
       if (this._mounted) {
         return false
       }
@@ -821,38 +821,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       registerEvents(true)
       this.$emit('ready', { Cesium, viewer })
       this._mounted = true
-    },
-    getCesiumScript () {
-      if (!global.Cesium) {
-        const cesiumPath = this.cesiumPath
-          ? this.cesiumPath
-          : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
-            ? this._Cesium().cesiumPath
-            : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-
-        let dirName = dirname(cesiumPath)
-        const $link = document.createElement('link')
-        $link.rel = 'stylesheet'
-        global.document.head.appendChild($link)
-        $link.href = `${dirName}/Widgets/widgets.css`
-
-        const $script = document.createElement('script')
-        global.document.body.appendChild($script)
-        $script.src = cesiumPath
-        return new Promise((resolve, reject) => {
-          $script.onload = () => {
-            // 超图WebGL3D需要引入zlib.min.js
-            if (Cesium.SuperMapImageryProvider) {
-              const $scriptZlib = document.createElement('script')
-              global.document.body.appendChild($scriptZlib)
-              $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
-            }
-            resolve(global.Cesium)
-          }
-        })
-      } else {
-        return Promise.resolve(global.Cesium)
-      }
+      this._resolve({ Cesium, viewer })
+      return { Cesium, viewer }
     },
     registerEvents (flag) {
       const { viewer } = this
@@ -892,15 +862,70 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           }
         }
       )
+    },
+    getCesiumScript () {
+      if (!global.Cesium) {
+        const cesiumPath = this.cesiumPath
+          ? this.cesiumPath
+          : typeof this._Cesium !== 'undefined' && this._Cesium().hasOwnProperty('cesiumPath')
+            ? this._Cesium().cesiumPath
+            : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+
+        let dirName = dirname(cesiumPath)
+        const $link = document.createElement('link')
+        $link.rel = 'stylesheet'
+        global.document.head.appendChild($link)
+        $link.href = `${dirName}/Widgets/widgets.css`
+
+        const $script = document.createElement('script')
+        global.document.body.appendChild($script)
+        $script.src = cesiumPath
+        return new Promise((resolve, reject) => {
+          $script.onload = () => {
+            if (global.Cesium) {
+              // 超图WebGL3D需要引入zlib.min.js
+              if (Cesium.SuperMapImageryProvider) {
+                const $scriptZlib = document.createElement('script')
+                global.document.body.appendChild($scriptZlib)
+                $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
+              }
+              resolve(global.Cesium)
+            } else {
+              reject(new Error(`[C_PKG_FULLNAME] ERROR: ` + 'Error loading CesiumJS!'))
+            }
+          }
+        })
+      } else {
+        return Promise.resolve(global.Cesium)
+      }
+    },
+    async beforeInit () {
+      await this.getCesiumScript()
     }
   },
   mounted () {
-    const { getCesiumScript, init } = this
-    getCesiumScript().then(init)
+    const { init, beforeInit, _reject } = this
+    beforeInit()
+      .then(() => init())
+      .catch(e => _reject(new Error(`[C_PKG_FULLNAME] ERROR: ` + 'An error occurred during the initialization of the Viewer!')))
   },
   created () {
     this._mounted = false
+    // this._createPromise = Promise.resolve(this.beforeInit())
+    // 注释上面方法，测试发现在切换路由时，实测 Vue 生命周期是先触发新组件的 created，再触发旧组件的 destroyed，再触发新组件的 mounted 。
+    // 逻辑就是先创建新的 然后销毁旧的，但虽然销毁的是旧的 还是会把新的给影响。
+    // 因此 viewer 组件的加载方式还是放 mounted，这样就先销毁旧的再加载新的。
+    // 但为了外部能取得 createPromise，_createPromise的初始化还是要放created中。
+    this._createPromise = new Promise((resolve, reject) => {
+      this._resolve = resolve
+      this._reject = reject
+    })
+
     Object.defineProperties(this, {
+      createPromise: {
+        enumerable: true,
+        get: () => this._createPromise
+      },
       cesiumObject: {
         enumerable: true,
         get: () => this.viewer

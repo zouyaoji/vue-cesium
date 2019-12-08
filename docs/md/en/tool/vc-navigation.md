@@ -1,6 +1,6 @@
 # VcNavigation
 
-The `vc-navigation` component is used to load the navigation compass widget. **Note:** This component requires `vue-cesium / vc-navigation.css`.
+The `vc-navigation` component is used to load the navigation compass widget. **Note:** This component requires `vue-cesium/lib/vc-navigation.css`, Requires `css-loader`.
 
 ## Example
 
@@ -12,7 +12,7 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <cesium-navigation ref="navigation" :options="options"></cesium-navigation>
+        <vc-navigation ref="navigation" :options="options"></vc-navigation>
       </vc-viewer>
       <div class="demo-tool">
         <span>EnableCompass</span>
@@ -60,7 +60,7 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <cesium-navigation ref="navigation" :options="options"></cesium-navigation>
+      <vc-navigation ref="navigation" :options="options"></vc-navigation>
     </vc-viewer>
     <div class="demo-tool">
       <span>EnableCompass</span>

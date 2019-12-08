@@ -12,13 +12,18 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position1" :description="description" :box.sync="box1">
+        <vc-entity ref="entity1" :position="position1" :description="description" :box.sync="box1">
           <vc-graphics-box :dimensions="dimensions1" :material="material1"></vc-graphics-box>
         </vc-entity>
-        <vc-entity :position="position2" :description="description" :box.sync="box2">
-          <vc-graphics-box :dimensions="dimensions2" :material="material2" :outlineColor="outlineColor2" :outline="true"></vc-graphics-box>
+        <vc-entity ref="entity2" :position="position2" :description="description" :box.sync="box2">
+          <vc-graphics-box
+            :dimensions="dimensions2"
+            :material="material2"
+            :outlineColor="outlineColor2"
+            :outline="true"
+          ></vc-graphics-box>
         </vc-entity>
-        <vc-entity :position="position3" :description="description" :box.sync="box3">
+        <vc-entity ref="entity3" :position="position3" :description="description" :box.sync="box3">
           <vc-graphics-box :dimensions="dimensions3" :outlineColor="outlineColor3" :fill="false" :outline="true"></vc-graphics-box>
         </vc-entity>
       </vc-viewer>
@@ -27,7 +32,7 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           description: 'Hello Vue Cesium',
           box1: {},
@@ -47,9 +52,16 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
           outlineColor3: 'YELLOW'
         }
       },
+      mounted() {
+        Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
         }
       }
@@ -63,10 +75,10 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position1" :description="description" :box.sync="box1">
+      <vc-entity ref="entity1" :position="position1" :description="description" :box.sync="box1">
         <vc-graphics-box :dimensions="dimensions1" :material="material1"></vc-graphics-box>
       </vc-entity>
-      <vc-entity :position="position2" :description="description" :box.sync="box2">
+      <vc-entity ref="entity2" :position="position2" :description="description" :box.sync="box2">
         <vc-graphics-box
           :dimensions="dimensions2"
           :material="material2"
@@ -74,7 +86,7 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
           :outline="true"
         ></vc-graphics-box>
       </vc-entity>
-      <vc-entity :position="position3" :description="description" :box.sync="box3">
+      <vc-entity ref="entity3" :position="position3" :description="description" :box.sync="box3">
         <vc-graphics-box :dimensions="dimensions3" :outlineColor="outlineColor3" :fill="false" :outline="true"></vc-graphics-box>
       </vc-entity>
     </vc-viewer>
@@ -102,6 +114,13 @@ The `vc-graphics-box` component is used to load a box and needs to be used as a 
         dimensions3: { x: 400000.0, y: 300000.0, z: 500000.0 },
         outlineColor3: 'YELLOW'
       }
+    },
+    mounted() {
+      Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
     },
     methods: {
       ready(cesiumInstance) {

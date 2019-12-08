@@ -13,7 +13,12 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :polylineVolume.sync="polylineVolume1">
-          <vc-graphics-polyline-volume :positions="positions1" :shape="shape1" :material="material1"></vc-graphics-polyline-volume>
+          <vc-graphics-polyline-volume
+            ref="polylineVolume1"
+            :positions="positions1"
+            :shape="shape1"
+            :material="material1"
+          ></vc-graphics-polyline-volume>
         </vc-entity>
         <vc-entity :polylineVolume.sync="polylineVolume2">
           <vc-graphics-polyline-volume
@@ -23,6 +28,7 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
             :outline="true"
             :outlineColor="outlineColor2"
             :cornerType="cornerType2"
+            ref="polylineVolume2"
           ></vc-graphics-polyline-volume>
         </vc-entity>
         <vc-entity :polylineVolume.sync="polylineVolume3">
@@ -31,7 +37,7 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
             :shape="shape3"
             :material="material3"
             :cornerType="cornerType3"
-            @ready="subReady"
+            ref="polylineVolume3"
           ></vc-graphics-polyline-volume>
         </vc-entity>
       </vc-viewer>
@@ -76,6 +82,15 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
           cornerType3: 0
         }
       },
+      mounted() {
+        Promise.all([
+          this.$refs.polylineVolume1.createPromise,
+          this.$refs.polylineVolume2.createPromise,
+          this.$refs.polylineVolume3.createPromise
+        ]).then((instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        })
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -106,10 +121,6 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
             positions[i] = { x: Math.cos(i * angle) * r, y: Math.sin(i * angle) * r }
           }
           return positions
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -123,7 +134,12 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :polylineVolume.sync="polylineVolume1">
-        <vc-graphics-polyline-volume :positions="positions1" :shape="shape1" :material="material1"></vc-graphics-polyline-volume>
+        <vc-graphics-polyline-volume
+          ref="polylineVolume1"
+          :positions="positions1"
+          :shape="shape1"
+          :material="material1"
+        ></vc-graphics-polyline-volume>
       </vc-entity>
       <vc-entity :polylineVolume.sync="polylineVolume2">
         <vc-graphics-polyline-volume
@@ -133,6 +149,7 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
           :outline="true"
           :outlineColor="outlineColor2"
           :cornerType="cornerType2"
+          ref="polylineVolume2"
         ></vc-graphics-polyline-volume>
       </vc-entity>
       <vc-entity :polylineVolume.sync="polylineVolume3">
@@ -141,7 +158,7 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
           :shape="shape3"
           :material="material3"
           :cornerType="cornerType3"
-          @ready="subReady"
+          ref="polylineVolume3"
         ></vc-graphics-polyline-volume>
       </vc-entity>
     </vc-viewer>
@@ -186,6 +203,15 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
         cornerType3: 0
       }
     },
+    mounted() {
+      Promise.all([
+        this.$refs.polylineVolume1.createPromise,
+        this.$refs.polylineVolume2.createPromise,
+        this.$refs.polylineVolume3.createPromise
+      ]).then((instances) => {
+        instances[0].viewer.zoomTo(instances[0].viewer.entities)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -216,10 +242,6 @@ The `vc-graphics-polyline-volume` component is used to load a polyline volume de
           positions[i] = { x: Math.cos(i * angle) * r, y: Math.sin(i * angle) * r }
         }
         return positions
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

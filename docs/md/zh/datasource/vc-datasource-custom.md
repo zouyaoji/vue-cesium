@@ -12,11 +12,11 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-datasource-custom name="custom" ref="custom">
+        <vc-datasource-custom ref="datasource" name="custom">
           <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
           <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
             <vc-graphics-cylinder
-              ref="cylinder"
+              ref="cylinder1"
               :length="400000.0"
               :topRadius="200000.0"
               :bottomRadius="200000.0"
@@ -25,13 +25,13 @@
               :outlineColor="outlineColor1"
             ></vc-graphics-cylinder>
           </vc-entity>
-          <vc-entity ref="entity3" :position="position2" :description="description" :cylinder.sync="cylinder2">
+          <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
             <vc-graphics-cylinder
+              ref="cylinder2"
               :length="400000.0"
               :topRadius="0.0"
               :bottomRadius="200000.0"
               :material="material2"
-              @ready="subReady"
             ></vc-graphics-cylinder>
           </vc-entity>
         </vc-datasource-custom>
@@ -60,6 +60,15 @@
           material2: 'RED'
         }
       },
+      mounted() {
+        Promise.all([
+          this.$refs.entity1.createPromise,
+          this.$refs.cylinder1.createPromise,
+          this.$refs.cylinder2.createPromise
+        ]).then((instances) => {
+          instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+        })
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
@@ -76,10 +85,6 @@
             // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
             alignedAxis: Cesium.Cartesian3.ZERO // default
           })
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.dataSources.get(0))
         }
       }
     }
@@ -92,11 +97,11 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-datasource-custom name="custom" ref="custom">
-        <vc-entity :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
-        <vc-entity :position="position1" :description="description" :cylinder.sync="cylinder1">
+      <vc-datasource-custom ref="datasource" name="custom">
+        <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+        <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
           <vc-graphics-cylinder
-            ref="cylinder"
+            ref="cylinder1"
             :length="400000.0"
             :topRadius="200000.0"
             :bottomRadius="200000.0"
@@ -107,11 +112,11 @@
         </vc-entity>
         <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
           <vc-graphics-cylinder
+            ref="cylinder2"
             :length="400000.0"
             :topRadius="0.0"
             :bottomRadius="200000.0"
             :material="material2"
-            @ready="subReady"
           ></vc-graphics-cylinder>
         </vc-entity>
       </vc-datasource-custom>
@@ -140,6 +145,15 @@
         material2: 'RED'
       }
     },
+    mounted() {
+      Promise.all([
+        this.$refs.entity1.createPromise,
+        this.$refs.cylinder1.createPromise,
+        this.$refs.cylinder2.createPromise
+      ]).then((instances) => {
+        instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+      })
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
@@ -156,10 +170,6 @@
           // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
           alignedAxis: Cesium.Cartesian3.ZERO // default
         })
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.dataSources.get(0))
       }
     }
   }

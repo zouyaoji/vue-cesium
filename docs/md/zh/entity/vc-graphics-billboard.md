@@ -12,10 +12,10 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+        <vc-entity ref="entity" :position="position" :description="description" :id="id" :billboard.sync="billboard">
            <vc-graphics-billboard
             :image="image"
-            :scale="0.1"
+            :scale="0.25"
             :show="show"
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
@@ -43,6 +43,11 @@
           horizontalOrigin: 0
         }
       },
+      mounted () {
+        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+          viewer.zoomTo(cesiumObject)
+        })
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
@@ -61,7 +66,7 @@
       <vc-entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
         <vc-graphics-billboard
           :image="image"
-          :scale="0.1"
+          :scale="0.25"
           :show="show"
           :distanceDisplayCondition="distanceDisplayCondition"
           :horizontalOrigin="horizontalOrigin"
@@ -88,6 +93,11 @@
         distanceDisplayCondition: { near: 0, far: 20000000 },
         horizontalOrigin: 0
       }
+    },
+    mounted() {
+      this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        viewer.zoomTo(cesiumObject)
+      })
     },
     methods: {
       ready(cesiumInstance) {

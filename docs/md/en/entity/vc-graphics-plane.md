@@ -13,10 +13,11 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :position="position1" :description="description" :plane.sync="planeEntity1">
-          <vc-graphics-plane :plane="plane1" :dimensions="dimensions1" :material="material1"></vc-graphics-plane>
+          <vc-graphics-plane ref="plane1" :plane="plane1" :dimensions="dimensions1" :material="material1"></vc-graphics-plane>
         </vc-entity>
         <vc-entity :position="position2" :description="description" :plane.sync="planeEntity2">
           <vc-graphics-plane
+            ref="plane2"
             :plane="plane2"
             :dimensions="dimensions2"
             :material="material2"
@@ -26,12 +27,12 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
         </vc-entity>
         <vc-entity :position="position3" :description="description" :plane.sync="planeEntity3">
           <vc-graphics-plane
+            ref="plane3"
             :plane="plane3"
             :dimensions="dimensions3"
             :fill="false"
             :outline="true"
             :outlineColor="outlineColor3"
-            @ready="subReady"
           ></vc-graphics-plane>
         </vc-entity>
       </vc-viewer>
@@ -63,14 +64,17 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
           outlineColor3: 'YELLOW'
         }
       },
+      mounted() {
+        Promise.all([this.$refs.plane1.createPromise, this.$refs.plane2.createPromise, this.$refs.plane3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           this.material2 = Cesium.Color.RED.withAlpha(0.5)
-        },
-        subReady(cesiumInstance) {
-          const { Cesium, viewer } = cesiumInstance
-          viewer.zoomTo(viewer.entities)
         }
       }
     }
@@ -84,10 +88,11 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-entity :position="position1" :description="description" :plane.sync="planeEntity1">
-        <vc-graphics-plane :plane="plane1" :dimensions="dimensions1" :material="material1"></vc-graphics-plane>
+        <vc-graphics-plane ref="plane1" :plane="plane1" :dimensions="dimensions1" :material="material1"></vc-graphics-plane>
       </vc-entity>
       <vc-entity :position="position2" :description="description" :plane.sync="planeEntity2">
         <vc-graphics-plane
+          ref="plane2"
           :plane="plane2"
           :dimensions="dimensions2"
           :material="material2"
@@ -97,12 +102,12 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
       </vc-entity>
       <vc-entity :position="position3" :description="description" :plane.sync="planeEntity3">
         <vc-graphics-plane
+          ref="plane3"
           :plane="plane3"
           :dimensions="dimensions3"
           :fill="false"
           :outline="true"
           :outlineColor="outlineColor3"
-          @ready="subReady"
         ></vc-graphics-plane>
       </vc-entity>
     </vc-viewer>
@@ -134,14 +139,17 @@ The `vc-graphics-plane` component is used to load a plane. Need to be used as a 
         outlineColor3: 'YELLOW'
       }
     },
+    mounted() {
+      Promise.all([this.$refs.plane1.createPromise, this.$refs.plane2.createPromise, this.$refs.plane3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
+    },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.material2 = Cesium.Color.RED.withAlpha(0.5)
-      },
-      subReady(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        viewer.zoomTo(viewer.entities)
       }
     }
   }

@@ -12,14 +12,14 @@ The `vc-graphics-corridor` component is used to load corridor objects, which is 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity :name="name1" :description="description" :corridor.sync="corridor1">
+        <vc-entity ref="entity1" :name="name1" :description="description" :corridor.sync="corridor1">
           <vc-graphics-corridor :positions="positions1" :material="material1" :width="200000.0"></vc-graphics-corridor>
         </vc-entity>
-        <vc-entity :name="name2" :description="description" :corridor.sync="corridor2">
+        <vc-entity ref="entity2" :name="name2" :description="description" :corridor.sync="corridor2">
           <vc-graphics-corridor :positions="positions2" :height="100000.0" :width="200000.0" :cornerType="0"
             material="GREEN" :outline="true"></vc-graphics-corridor>
         </vc-entity>
-        <vc-entity :name="name3" :description="description" :corridor.sync="corridor3">
+        <vc-entity ref="entity3" :name="name3" :description="description" :corridor.sync="corridor3">
           <vc-graphics-corridor :positions="positions3" :material="material3" outlineColor="WHITE" :outline="true"
             :height="200000.0" :extrudedHeight="100000.0" :width="200000.0" :cornerType="cornerType3"></vc-graphics-corridor>
         </vc-entity>
@@ -50,6 +50,13 @@ The `vc-graphics-corridor` component is used to load corridor objects, which is 
           material3: {}
         }
       },
+      mounted() {
+        Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+          (instances) => {
+            instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          }
+        )
+      },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
@@ -71,10 +78,10 @@ The `vc-graphics-corridor` component is used to load corridor objects, which is 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :name="name1" :description="description" :corridor.sync="corridor1">
+      <vc-entity ref="entity1" :name="name1" :description="description" :corridor.sync="corridor1">
         <vc-graphics-corridor :positions="positions1" :material="material1" :width="200000.0"></vc-graphics-corridor>
       </vc-entity>
-      <vc-entity :name="name2" :description="description" :corridor.sync="corridor2">
+      <vc-entity ref="entity2" :name="name2" :description="description" :corridor.sync="corridor2">
         <vc-graphics-corridor
           :positions="positions2"
           :height="100000.0"
@@ -84,7 +91,7 @@ The `vc-graphics-corridor` component is used to load corridor objects, which is 
           :outline="true"
         ></vc-graphics-corridor>
       </vc-entity>
-      <vc-entity :name="name3" :description="description" :corridor.sync="corridor3">
+      <vc-entity ref="entity3" :name="name3" :description="description" :corridor.sync="corridor3">
         <vc-graphics-corridor
           :positions="positions3"
           :material="material3"
@@ -134,6 +141,13 @@ The `vc-graphics-corridor` component is used to load corridor objects, which is 
         cornerType3: 0,
         material3: {}
       }
+    },
+    mounted() {
+      Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise, this.$refs.entity3.createPromise]).then(
+        (instances) => {
+          instances[0].viewer.zoomTo(instances[0].viewer.entities)
+        }
+      )
     },
     methods: {
       ready(cesiumInstance) {

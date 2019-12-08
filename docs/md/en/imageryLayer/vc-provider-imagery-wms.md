@@ -12,7 +12,7 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+       <vc-layer-imagery ref="wms" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-wms :url="url" :layers="layers" :parameters="parameters"></vc-provider-imagery-wms>
        </vc-layer-imagery>
       </vc-viewer>
@@ -23,15 +23,6 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
         <span>contrast</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
-        <span>switch layer</span>
-        <md-select v-model="layers" placeholder="switch layer" @selected="mdSelected">
-          <md-option
-            v-for="item in options"
-            :key="item.value"
-            :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
       </div>
     </div>
   </template>
@@ -40,38 +31,28 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
     export default {
       data () {
         return {
-          url: 'https://www.ncei.noaa.gov/thredds/wms/gfs-004-files/201809/20180916/gfs_4_20180916_0000_000.grb2',
-          layers: 'Precipitable_water_entire_atmosphere_single_layer',
+          url: 'https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
+          layers: 'Hydrography:bores',
           parameters: {
-            ColorScaleRange: '0.1,66.8'
+            transparent : true,
+            format : 'image/png'
           },
           alpha: 1,
           brightness: 1,
-          contrast: 1,
-          options: [{
-            label: 'WMS:Rainfall',
-            value: 'Precipitable_water_entire_atmosphere_single_layer'
-          }, {
-            label: 'WMS:Air Pressure',
-            value: 'Pressure_surface'
-          }]
+          contrast: 1
         }
+      },
+      mounted () {
+        this.$refs.wms.createPromise.then(( {Cesium, viewer, cesiumObject})=>{
+          viewer.camera.setView({
+            destination: Cesium.Rectangle.fromDegrees(114.591, -45.837, 148.970, -5.730)
+          })
+        })
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
-        },
-        mdSelected (value) {
-          if (value === 'Precipitable_water_entire_atmosphere_single_layer') {
-            this.parameters = {
-              ColorScaleRange: '0.1,66.8'
-            }
-          } else if (value === 'Pressure_surface') {
-            this.parameters = {
-              ColorScaleRange: '51640,103500'
-            }
-          }
         }
       }
     }
@@ -84,7 +65,7 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-layer-imagery ref="wms" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-wms :url="url" :layers="layers" :parameters="parameters"></vc-provider-imagery-wms>
       </vc-layer-imagery>
     </vc-viewer>
@@ -95,12 +76,6 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
       <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
-      <span>switch layer</span>
-      <md-select v-model="layers" placeholder="switch layer" @selected="mdSelected">
-        <md-option v-for="item in options" :key="item.value" :value="item.value">
-          {{item.label}}
-        </md-option>
-      </md-select>
     </div>
   </div>
 </template>
@@ -109,41 +84,28 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
   export default {
     data() {
       return {
-        url: 'https://www.ncei.noaa.gov/thredds/wms/gfs-004-files/201809/20180916/gfs_4_20180916_0000_000.grb2',
-        layers: 'Precipitable_water_entire_atmosphere_single_layer',
+        url: 'https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
+        layers: 'Hydrography:bores',
         parameters: {
-          ColorScaleRange: '0.1,66.8'
+          transparent: true,
+          format: 'image/png'
         },
         alpha: 1,
         brightness: 1,
-        contrast: 1,
-        options: [
-          {
-            label: 'WMS:Rainfall',
-            value: 'Precipitable_water_entire_atmosphere_single_layer'
-          },
-          {
-            label: 'WMS:Air Pressure',
-            value: 'Pressure_surface'
-          }
-        ]
+        contrast: 1
       }
+    },
+    mounted() {
+      this.$refs.wms.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        viewer.camera.setView({
+          destination: Cesium.Rectangle.fromDegrees(114.591, -45.837, 148.97, -5.73)
+        })
+      })
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
-      },
-      mdSelected(value) {
-        if (value === 'Precipitable_water_entire_atmosphere_single_layer') {
-          this.parameters = {
-            ColorScaleRange: '0.1,66.8'
-          }
-        } else if (value === 'Pressure_surface') {
-          this.parameters = {
-            ColorScaleRange: '51640,103500'
-          }
-        }
       }
     }
   }

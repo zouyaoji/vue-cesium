@@ -14,7 +14,7 @@ The `vc-geometry-polyline` component is used to load a polyline modeled as a lin
       <vc-viewer @ready="ready">
         <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
           <vc-instance-geometry>
-            <vc-geometry-polyline :positions="positions" :width="4"></vc-geometry-polyline>
+            <vc-geometry-polyline ref="polyline" :positions="positions" :width="4"></vc-geometry-polyline>
           </vc-instance-geometry>
         </vc-primitive>
       </vc-viewer>
@@ -37,10 +37,14 @@ The `vc-geometry-polyline` component is used to load a polyline modeled as a lin
           ]
         }
       },
+      mounted() {
+        this.$refs.polyline.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+          const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+          viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+        })
+      },
       methods: {
-        ready(cesiumInstance) {
-          this.cesiumInstance = cesiumInstance
-          const { Cesium, viewer } = this.cesiumInstance
+        ready({ Cesium, viewer }) {
           this.appearance = new Cesium.PolylineMaterialAppearance()
         }
       }
@@ -56,7 +60,7 @@ The `vc-geometry-polyline` component is used to load a polyline modeled as a lin
     <vc-viewer @ready="ready">
       <vc-primitive :appearance="appearance" :geometryInstances.sync="geometryInstances">
         <vc-instance-geometry>
-          <vc-geometry-polyline :positions="positions" :width="4"></vc-geometry-polyline>
+          <vc-geometry-polyline ref="polyline" :positions="positions" :width="4"></vc-geometry-polyline>
         </vc-instance-geometry>
       </vc-primitive>
     </vc-viewer>
@@ -79,10 +83,14 @@ The `vc-geometry-polyline` component is used to load a polyline modeled as a lin
         ]
       }
     },
+    mounted() {
+      this.$refs.polyline.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
+        viewer.scene.camera.flyToBoundingSphere(boundingSphere)
+      })
+    },
     methods: {
-      ready(cesiumInstance) {
-        this.cesiumInstance = cesiumInstance
-        const { Cesium, viewer } = this.cesiumInstance
+      ready({ Cesium, viewer }) {
         this.appearance = new Cesium.PolylineMaterialAppearance()
       }
     }
