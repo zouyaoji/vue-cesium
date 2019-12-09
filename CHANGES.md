@@ -1,6 +1,6 @@
 # 更新日志
 
-## 2.0.1 - 2019-12-08
+## 2.0.1 - 2019-12-09
 
 ## 修改
 
@@ -11,7 +11,9 @@
 
 - `vc-provider-imagery-supermap` 加载超图 iServer 影像服务。
 - `vc-provider-imagery-tianditu` 加载天地图 WMTS 影像服务。
+- `vc-handler-draw-point` 绘制点组件。
 - `vc-handler-draw-polyline` 绘制线组件。
+- `vc-handler-draw-polygon` 绘制面组件。
 - `vc-geometry-xxx` 补充几何体对象组件。
   - `vc-geometry-outline-box`: `BoxOutlineGeometry`,
   - `vc-geometry-circle`: `CircleGeometry`,

@@ -28,7 +28,7 @@ The `vc-graphics-model` component is used to load a 3D model based on glTF. Need
           model1: {},
           label1: {},
           position1: { lng: 114.0, lat: 40.0, height: 1.0 },
-          uri1: '/statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
+          uri1: './statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
         }
       },
       mounted() {
@@ -69,7 +69,7 @@ The `vc-graphics-model` component is used to load a 3D model based on glTF. Need
         model1: {},
         label1: {},
         position1: { lng: 114.0, lat: 40.0, height: 1.0 },
-        uri1: '/statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
+        uri1: './statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
       }
     },
     mounted() {

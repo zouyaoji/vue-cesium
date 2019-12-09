@@ -48,7 +48,6 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          window.viewer = viewer
           this.fullscreenElement = this.$refs.viewerContainer
           viewer.entities.add({
             id: '成都欢迎你',

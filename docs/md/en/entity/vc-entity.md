@@ -11,16 +11,15 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready">
-        <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id">
-        </vc-entity>
+      <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
+        <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
     </div>
   </template>
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           id: 'This is a billboard',
           description: 'Hello Vue Cesium',
@@ -29,14 +28,15 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
           billboard: {}
         }
       },
-      mounted () {
-        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+      mounted() {
+        this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
           viewer.zoomTo(cesiumObject)
         })
       },
       methods: {
-        ready (cesiumInstance) {
+        ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          this.viewer = viewer
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default
@@ -47,8 +47,15 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
             scale: 0.5, // default: 1.0
             color: Cesium.Color.LIME, // default: WHITE
             // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
-            alignedAxis: Cesium.Cartesian3.ZERO, // default
+            alignedAxis: Cesium.Cartesian3.ZERO // default
           })
+        },
+        selectedEntityChanged(entity) {
+          console.log(entity)
+        },
+        LEFT_CLICK(movement) {
+          const feature = this.viewer.scene.pick(movement.position)
+          console.log(feature)
         }
       }
     }
@@ -60,7 +67,7 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready">
+    <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
       <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
   </div>
@@ -85,6 +92,7 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.viewer = viewer
         this.billboard = new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
           show: true, // default
@@ -97,6 +105,13 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
           // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
           alignedAxis: Cesium.Cartesian3.ZERO // default
         })
+      },
+      selectedEntityChanged(entity) {
+        console.log(entity)
+      },
+      LEFT_CLICK(movement) {
+        const feature = this.viewer.scene.pick(movement.position)
+        console.log(feature)
       }
     }
   }

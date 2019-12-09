@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready">
+      <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
         <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
     </div>
@@ -36,6 +36,7 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          this.viewer = viewer
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default
@@ -48,6 +49,13 @@
             // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
             alignedAxis: Cesium.Cartesian3.ZERO // default
           })
+        },
+        selectedEntityChanged(entity) {
+          console.log(entity)
+        },
+        LEFT_CLICK(movement) {
+          const feature = this.viewer.scene.pick(movement.position)
+          console.log(feature)
         }
       }
     }
@@ -59,7 +67,7 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready">
+    <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
       <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
   </div>
@@ -84,7 +92,7 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        // this.position = Cesium.Cartesian3.fromDegrees(108, 35, 100)
+        this.viewer = viewer
         this.billboard = new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
           show: true, // default
@@ -97,6 +105,13 @@
           // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
           alignedAxis: Cesium.Cartesian3.ZERO // default
         })
+      },
+      selectedEntityChanged(entity) {
+        console.log(entity)
+      },
+      LEFT_CLICK(movement) {
+        const feature = this.viewer.scene.pick(movement.position)
+        console.log(feature)
       }
     }
   }

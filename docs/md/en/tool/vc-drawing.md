@@ -1,6 +1,8 @@
-# VcDrawHandlerPolyline
+# DrawTools
 
+The `vc-handler-draw-point` component is used to draw point.
 The `vc-handler-draw-polyline` component is used to draw polyline.
+The `vc-handler-draw-polygon` component is used to draw polygon.
 
 ## Example
 
@@ -11,19 +13,33 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
 <doc-preview>
   <template>
     <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? 'Stop' : 'DrawPolyline' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
-      </div>
       <vc-viewer @ready="ready" scene3DOnly>
         <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-handler-draw-point
+          ref="handlerPoint"
+          @activeEvt="activeEvt"
+          @movingEvt="movingEvt"
+          @drawEvt="drawEvt"
+        ></vc-handler-draw-point>
         <vc-handler-draw-polyline
           ref="handlerLine"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
         ></vc-handler-draw-polyline>
+        <vc-handler-draw-polygon
+          ref="handlerPolygon"
+          @activeEvt="activeEvt"
+          @movingEvt="movingEvt"
+          @drawEvt="drawEvt"
+        ></vc-handler-draw-polygon>
       </vc-viewer>
+      <div class="demo-tool">
+        <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? 'Stop' : 'Point' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? 'Stop' : 'Polyline' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? 'Stop' : 'Polygon' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+      </div>
     </div>
   </template>
 
@@ -32,7 +48,9 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
       data() {
         return {
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          polylineDrawing: false
+          pointDrawing: false,
+          polylineDrawing: false,
+          polygonDrawing: false
         }
       },
       methods: {
@@ -43,10 +61,13 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
         toggle(type) {
+          console.log(type)
           this.$refs[type].drawing = !this.$refs[type].drawing
         },
         clear() {
+          this.$refs.handlerPoint.clear()
           this.$refs.handlerLine.clear()
+          this.$refs.handlerPolygon.clear()
         },
         activeEvt(_) {
           this[_.type] = _.isActive
@@ -54,8 +75,9 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
         movingEvt(windowPosition) {
           this.tooltip.showAt(windowPosition, '<p>left click to draw, right click end.</p>')
         },
-        drawEvt (result) {
-          result.finished && this.tooltip.setVisible(false);
+        drawEvt(result) {
+          result.finished && this.tooltip.setVisible(false)
+          console.log(result)
         },
         readyPromise(tileset) {
           const { viewer } = this.cesiumInstance
@@ -119,21 +141,37 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
 ```html
 <template>
   <div class="viewer">
-    <div class="demo-tool">
-      <md-button class="md-raised md-accent" @click="toggle('handlerLine')"
-        >{{ polylineDrawing ? 'Stop' : 'DrawPolyline' }}</md-button
-      >
-      <md-button class="md-raised md-accent" @click="clear">Clear</md-button>
-    </div>
     <vc-viewer @ready="ready" scene3DOnly>
       <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-handler-draw-point
+        ref="handlerPoint"
+        @activeEvt="activeEvt"
+        @movingEvt="movingEvt"
+        @drawEvt="drawEvt"
+      ></vc-handler-draw-point>
       <vc-handler-draw-polyline
         ref="handlerLine"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
       ></vc-handler-draw-polyline>
+      <vc-handler-draw-polygon
+        ref="handlerPolygon"
+        @activeEvt="activeEvt"
+        @movingEvt="movingEvt"
+        @drawEvt="drawEvt"
+      ></vc-handler-draw-polygon>
     </vc-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? 'Stop' : 'Point' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('handlerLine')"
+        >{{ polylineDrawing ? 'Stop' : 'Polyline' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')"
+        >{{ polygonDrawing ? 'Stop' : 'Polygon' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+    </div>
   </div>
 </template>
 
@@ -142,7 +180,9 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
     data() {
       return {
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        polylineDrawing: false
+        pointDrawing: false,
+        polylineDrawing: false,
+        polygonDrawing: false
       }
     },
     methods: {
@@ -153,10 +193,13 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
       toggle(type) {
+        console.log(type)
         this.$refs[type].drawing = !this.$refs[type].drawing
       },
       clear() {
+        this.$refs.handlerPoint.clear()
         this.$refs.handlerLine.clear()
+        this.$refs.handlerPolygon.clear()
       },
       activeEvt(_) {
         this[_.type] = _.isActive
@@ -166,6 +209,7 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
       },
       drawEvt(result) {
         result.finished && this.tooltip.setVisible(false)
+        console.log(result)
       },
       readyPromise(tileset) {
         const { viewer } = this.cesiumInstance
@@ -226,14 +270,36 @@ The `vc-handler-draw-polyline` component is used to draw polyline.
 
 ## Instance Properties
 
+### vc-handler-draw-point
+
+| name           | type                  | default            | description                                                    |
+| -------------- | --------------------- | ------------------ | -------------------------------------------------------------- |
+| mode           | Number                | `1`                | `optional` Draw mode, 0 draws continuously, 1 ends once drawn. |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color.                            |
+| pointPixelSize | Number                | `8`                | `optional` Specify the point pixel size.                       |
+
 ### vc-handler-draw-polyline
 
-| name          | type                  | default     | description                                                                   |
-| ------------- | --------------------- | ----------- | ----------------------------------------------------------------------------- |
-| mode          | Number                | `1`         | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                |
-| depthTest     | Boolean               | `true`      | `optional` Specifies whether drawn line objects participate in depth testing. |
-| polylineColor | String\|Array\|Object | `'#51ff00'` | `optional` Specify the line color.                                            |
-| polylineWidth | Number                | `2`         | `optional` Specify the line width.                                            |
+| name           | type                  | default            | description                                                                       |
+| -------------- | --------------------- | ------------------ | --------------------------------------------------------------------------------- |
+| mode           | Number                | `1`                | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                    |
+| depthTest      | Boolean               | `true`             | `optional` Specifies whether drawn polyline objects participate in depth testing. |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color.                                               |
+| pointPixelSize | Number                | `8`                | `optional` Specify the point pixel size.                                          |
+| polylineColor  | String\|Array\|Object | `'#51ff00'`        | `optional` Specify the polyline color.                                            |
+| polylineWidth  | Number                | `2`                | `optional` Specify the polyline width.                                            |
+
+### vc-handler-draw-polygon
+
+| name           | type                  | default                  | description                                                                   |
+| -------------- | --------------------- | ------------------------ | ----------------------------------------------------------------------------- |
+| mode           | Number                | `1`                      | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                |
+| depthTest      | Boolean               | `true`                   | `optional` Specifies whether drawn line objects participate in depth testing. |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'`       | `optional` Specify the point color.                                           |
+| pointPixelSize | Number                | `8`                      | `optional` Specify the point pixel size.                                      |
+| polylineColor  | String\|Array\|Object | `'#51ff00'`              | `optional` Specify the polyline color.                                        |
+| polylineWidth  | Number                | `2`                      | `optional` Specify the polyline width.                                        |
+| polygonColor   | String\|Array\|Object | `'rgba(255,165,0,0.25)'` | `optional` Specify the polygon color.                                         |
 
 ---
 

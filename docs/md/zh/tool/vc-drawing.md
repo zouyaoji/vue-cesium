@@ -1,6 +1,8 @@
-# VcDrawHandlerPolyline
+# 绘制工具
 
+- `vc-handler-draw-point` 组件用于绘制点。
 - `vc-handler-draw-polyline` 组件用于绘制线。
+- `vc-handler-draw-polygon` 组件用于绘制面。
 
 ## 示例
 
@@ -11,14 +13,18 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '绘制线' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-      </div>
       <vc-viewer @ready="ready" scene3DOnly>
         <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-handler-draw-point ref="handlerPoint" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-point>
         <vc-handler-draw-polyline ref="handlerLine" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-polyline>
+        <vc-handler-draw-polygon ref="handlerPolygon" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-polygon>
       </vc-viewer>
+      <div class="demo-tool">
+        <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+      </div>
     </div>
   </template>
 
@@ -27,7 +33,9 @@
       data () {
         return {
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          polylineDrawing: false
+          pointDrawing: false,
+          polylineDrawing: false,
+          polygonDrawing: false
         }
       },
       methods: {
@@ -38,10 +46,13 @@
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
         toggle (type) {
+          console.log(type)
           this.$refs[type].drawing = !this.$refs[type].drawing
         },
         clear () {
+          this.$refs.handlerPoint.clear()
           this.$refs.handlerLine.clear()
+          this.$refs.handlerPolygon.clear()
         },
         activeEvt (_) {
           this[_.type] = _.isActive
@@ -50,7 +61,8 @@
           this.tooltip.showAt(windowPosition,'<p>左键绘制, 右键结束绘制.</p>')
         },
         drawEvt (result) {
-          result.finished && this.tooltip.setVisible(false);
+          result.finished && this.tooltip.setVisible(false)
+          console.log(result)
         },
         readyPromise (tileset) {
           const {viewer} = this.cesiumInstance
@@ -114,19 +126,33 @@
 ```html
 <template>
   <div class="viewer">
-    <div class="demo-tool">
-      <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '绘制线' }}</md-button>
-      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
-    </div>
     <vc-viewer @ready="ready" scene3DOnly>
-      <cesium-3dtileset :url="modelUrl" @readyPromise="readyPromise"></cesium-3dtileset>
-      <draw-polyline-handler
+      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-handler-draw-point
+        ref="handlerPoint"
+        @activeEvt="activeEvt"
+        @movingEvt="movingEvt"
+        @drawEvt="drawEvt"
+      ></vc-handler-draw-point>
+      <vc-handler-draw-polyline
         ref="handlerLine"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
-      ></draw-polyline-handler>
+      ></vc-handler-draw-polyline>
+      <vc-handler-draw-polygon
+        ref="handlerPolygon"
+        @activeEvt="activeEvt"
+        @movingEvt="movingEvt"
+        @drawEvt="drawEvt"
+      ></vc-handler-draw-polygon>
     </vc-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+    </div>
   </div>
 </template>
 
@@ -135,21 +161,26 @@
     data() {
       return {
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-        polylineDrawing: false
+        pointDrawing: false,
+        polylineDrawing: false,
+        polygonDrawing: false
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
-        this.tooltip = new Tooltip(viewer.cesiumWidget.container)
+        this.tooltip = createTooltip(viewer.cesiumWidget.container)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
       toggle(type) {
+        console.log(type)
         this.$refs[type].drawing = !this.$refs[type].drawing
       },
       clear() {
+        this.$refs.handlerPoint.clear()
         this.$refs.handlerLine.clear()
+        this.$refs.handlerPolygon.clear()
       },
       activeEvt(_) {
         this[_.type] = _.isActive
@@ -157,8 +188,9 @@
       movingEvt(windowPosition) {
         this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
       },
-      drawEvt(polyline) {
-        this.tooltip.setVisible(false)
+      drawEvt(result) {
+        result.finished && this.tooltip.setVisible(false)
+        console.log(result)
       },
       readyPromise(tileset) {
         const { viewer } = this.cesiumInstance
@@ -219,14 +251,36 @@
 
 ## 属性
 
+### vc-handler-draw-point
+
+| 属性名         | 类型                  | 默认值             | 描述                                                |
+| -------------- | --------------------- | ------------------ | --------------------------------------------------- |
+| mode           | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
+| pointPixelSize | Number                | `8`                | `optional` 指定点的像素大小。                       |
+
 ### vc-handler-draw-polyline
 
-| 属性名        | 类型                  | 默认值      | 描述                                                |
-| ------------- | --------------------- | ----------- | --------------------------------------------------- |
-| mode          | Number                | `1`         | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
-| depthTest     | Boolean               | `true`      | `optional` 指定绘制的线对象是否参与深度测试。       |
-| polylineColor | String\|Array\|Object | `'#51ff00'` | `optional` 指定线颜色。                             |
-| polylineWidth | Number                | `2`         | `optional` 指定线宽度。                             |
+| 属性名         | 类型                  | 默认值             | 描述                                                |
+| -------------- | --------------------- | ------------------ | --------------------------------------------------- |
+| mode           | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| depthTest      | Boolean               | `true`             | `optional` 指定绘制的线对象是否参与深度测试。       |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
+| pointPixelSize | Number                | `8`                | `optional` 指定点的像素大小。                       |
+| polylineColor  | String\|Array\|Object | `'#51ff00'`        | `optional` 指定线颜色。                             |
+| polylineWidth  | Number                | `2`                | `optional` 指定线宽度。                             |
+
+### vc-handler-draw-polygon
+
+| 属性名         | 类型                  | 默认值                   | 描述                                                |
+| -------------- | --------------------- | ------------------------ | --------------------------------------------------- |
+| mode           | Number                | `1`                      | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| depthTest      | Boolean               | `true`                   | `optional` 指定绘制的线对象是否参与深度测试。       |
+| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'`       | `optional` 指定点颜色。                             |
+| pointPixelSize | Number                | `8`                      | `optional` 指定点的像素大小。                       |
+| polylineColor  | String\|Array\|Object | `'#51ff00'`              | `optional` 指定线颜色。                             |
+| polylineWidth  | Number                | `2`                      | `optional` 指定线宽度。                             |
+| polygonColor   | String\|Array\|Object | `'rgba(255,165,0,0.25)'` | `optional` 指定面颜色。                             |
 
 ---
 

@@ -57,7 +57,8 @@
             { lng: 113.2, lat: 35.5 },
             { lng: 107.1, lat: 33.5 }
           ],
-          appearanceOutline: null
+          appearanceOutline: null,
+          attributes: null
         }
       },
       mounted() {
@@ -152,7 +153,8 @@
           { lng: 113.2, lat: 35.5 },
           { lng: 107.1, lat: 33.5 }
         ],
-        appearanceOutline: null
+        appearanceOutline: null,
+        attributes: null
       }
     },
     mounted() {

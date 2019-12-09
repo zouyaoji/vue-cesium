@@ -91,7 +91,7 @@
       <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
         >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
       >
-      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+      <md-button class="md-raised md-accent" @click="clear">clear</md-button>
     </div>
   </div>
 </template>

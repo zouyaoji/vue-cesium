@@ -133,7 +133,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-re": "^1.0.7",
     "rollup-plugin-uglify": "^6.0.3",
-    "rollup-plugin-vue": "4.3.2",
+    "rollup-plugin-vue": "^4.2.0",
     "sass-loader": "^7.3.1",
     "semver": "^6.3.0",
     "shelljs": "^0.8.3",
