@@ -96,7 +96,9 @@ import * as WallOutlineGeometry from './components/geometryInstance/wallOutline'
 import * as VcMeasureArea from './components/tool/measureArea'
 import * as VcMeasureDistance from './components/tool/measureDistance'
 import * as VcMeasureHeight from './components/tool/measureHeight'
+import * as VcDrawHandlerPoint from './components/tool/drawHandlerPoint'
 import * as VcDrawHandlerPolyline from './components/tool/drawHandlerPolyline'
+import * as VcDrawHandlerPolygon from './components/tool/drawHandlerPolygon'
 import * as VcNavigation from './components/tool/navigation'
 // 可视化
 import * as VcFlood from './components/visualization/flood'
@@ -217,7 +219,9 @@ function plugin (Vue, options = {}) {
   Vue.use(VcMeasureArea, options)
   Vue.use(VcMeasureDistance, options)
   Vue.use(VcMeasureHeight, options)
+  Vue.use(VcDrawHandlerPoint, options)
   Vue.use(VcDrawHandlerPolyline, options)
+  Vue.use(VcDrawHandlerPolygon, options)
   Vue.use(VcNavigation, options)
   // 可视化
   Vue.use(VcFlood, options)
@@ -328,7 +332,9 @@ export {
   VcMeasureArea,
   VcMeasureDistance,
   VcMeasureHeight,
+  VcDrawHandlerPoint,
   VcDrawHandlerPolyline,
+  VcDrawHandlerPolygon,
   VcNavigation,
   VcFlood,
   VcHeatMap,
