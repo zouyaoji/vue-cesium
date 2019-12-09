@@ -133,8 +133,8 @@ const methods = {
     const poyline = {
       positions: []
     }
-    const drawLinw = drawType === 'polylineDrawing' || drawType === 'polygonDrawing'
-    drawLinw && Object.assign(poyline, {
+    const drawLine = drawType === 'polylineDrawing' || drawType === 'polygonDrawing'
+    drawLine && Object.assign(poyline, {
       materialLine: new Cesium.Material({
         fabric: {
           type: 'Color',

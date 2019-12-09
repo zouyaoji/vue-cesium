@@ -46,12 +46,12 @@
 </template>
 <script>
 import mixinMeasure from '../../../mixins/tool/mixinMeasure'
-import { makeColor } from '../../../utils/util'
 export default {
   name: 'vc-measure-distance',
   mixins: [mixinMeasure],
   data () {
     return {
+      type: 'distanceMeasuring',
       measuring: false,
       polylines: []
     }
@@ -62,123 +62,7 @@ export default {
       default: '距离：'
     }
   },
-  watch: {
-    measuring (val) {
-      const { polylines, startNew } = this
-      const polyline = polylines[polylines.length - 1]
-      if (!val && polyline && !polyline.positions.length) {
-        this.polylines.pop()
-      } else if (val) {
-        for (let $node of this.$parent.$slots.default || []) {
-          if (
-            $node.componentOptions &&
-            ($node.componentOptions.tag === 'vc-measure-height' || $node.componentOptions.tag === 'vc-measure-area')
-          ) {
-            $node.child.measuring = false
-          }
-        }
-        startNew()
-      }
-      this.$emit('activeEvt', { type: 'distanceMeasuring', isActive: val })
-    }
-  },
   methods: {
-    LEFT_CLICK (movement) {
-      if (!this.measuring) {
-        return
-      }
-      const { Cesium, viewer, polylines } = this
-      let cartesian = viewer.scene.pickPosition(movement.position)
-      if (!Cesium.defined(cartesian)) {
-        return
-      }
-      const polyline = polylines[polylines.length - 1]
-      polyline.positions.push(cartesian)
-      let distance = polyline.distance
-      polyline.distances.push(distance)
-    },
-    async MOUSE_MOVE (movement) {
-      if (!this.measuring) {
-        return
-      }
-      const { Cesium, viewer, polylines, onMeasureEvt } = this
-      if (!polylines.length) {
-        return
-      }
-      const polyline = polylines[polylines.length - 1]
-      if (!polyline.positions.length) {
-        return
-      }
-      let cartesian = viewer.scene.pickPosition(movement.endPosition)
-      if (!Cesium.defined(cartesian)) {
-        return
-      }
-      if (polyline.positions.length >= 2) {
-        polyline.positions.pop()
-        polyline.distances.pop()
-      }
-      polyline.positions.push(cartesian)
-      let distance = this.getDistance(polyline.positions)
-      polyline.distances.push(distance)
-      polyline.distance = distance
-      await this.$nextTick()
-      let nIndex = 0
-      polylines.forEach((polyline) => {
-        nIndex += polyline.positions.length - 1
-      })
-      onMeasureEvt(polyline, nIndex - 1)
-    },
-    async RIGHT_CLICK (movement) {
-      if (!this.measuring) {
-        return
-      }
-      const { viewer, polylines, mode, startNew, onMeasureEvt } = this
-      if (!polylines.length) {
-        return
-      }
-      const polyline = polylines[polylines.length - 1]
-      if (polyline.positions.length === 0) {
-        return
-      }
-      let cartesian = viewer.scene.pickPosition(movement.position)
-      if (!Cesium.defined(cartesian)) {
-        return
-      }
-      polyline.positions.pop()
-      polyline.distances.pop()
-      polyline.distance = this.getDistance(polyline.positions)
-      if (polyline.positions.length === 1) {
-        polyline.positions = []
-      }
-      if (mode === 0) {
-        startNew()
-      } else {
-        this.measuring = false
-      }
-      await this.$nextTick()
-      let nIndex = 0
-      polylines.forEach((polyline) => {
-        nIndex += polyline.positions.length - 1
-      })
-      onMeasureEvt(polyline, nIndex - 1, true)
-    },
-    startNew () {
-      const { polylines } = this
-      Cesium.defined(polylines) &&
-        polylines.push({
-          positions: [],
-          distances: [],
-          distance: 0,
-          materialLine: new Cesium.Material({
-            fabric: {
-              type: 'Color',
-              uniforms: {
-                color: makeColor(this.polylineColor)
-              }
-            }
-          })
-        })
-    },
     getDistance (positions) {
       const { Cesium } = this
       let distance = 0
@@ -191,32 +75,6 @@ export default {
     clear () {
       this.polylines = []
       this.measuring = false
-    },
-    onMeasureEvt (polyline, index, flag = false) {
-      if (!this.depthTest) {
-        this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false
-        this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
-          depthMask: true,
-          depthTest: {
-            enabled: false
-          }
-        })
-        this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = Cesium.RenderState.fromCache({
-          depthMask: true,
-          depthTest: {
-            enabled: false
-          }
-        })
-      }
-
-      const listener = this.$listeners['measureEvt']
-      listener &&
-        this.$emit('measureEvt', {
-          polyline: polyline,
-          label: this.$refs.labelCollection.cesiumObject.get(index),
-          type: 'distanceMeasuring',
-          finished: flag
-        })
     }
   }
 }
