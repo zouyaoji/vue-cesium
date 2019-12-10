@@ -16,7 +16,7 @@ export default {
       type: Boolean,
       default: true
     },
-    description: String,
+    description: String | Object,
     orientation: Object,
     viewFrom: Object,
     parent: Object,
