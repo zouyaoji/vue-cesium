@@ -205,3 +205,97 @@
 | 方法名 | 参数 | 描述                           |
 | ------ | ---- | ------------------------------ |
 | clear  |      | 清除量算结果（同时停止量算）。 |
+
+## 备注
+
+- 超图版本量算这样设置线和文字标签一直可见
+
+```html
+<template>
+  <div class="viewer">
+    <vc-viewer @ready="ready" scene3DOnly>
+      <vc-measure-distance depthTest ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
+      <vc-measure-area
+        depthTest
+        ref="measureArea"
+        @activeEvt="activeEvt"
+        @measureEvt="measureEvt"
+        :perPositionHeight="true"
+      ></vc-measure-area>
+      <vc-measure-height depthTest ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
+      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+    </vc-viewer>
+    <div class="demo-tool">
+      <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
+        >{{ distanceMeasuring ? '停止' : '距离' }}</md-button
+      >
+      <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? '停止' : '面积' }}</md-button>
+      <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? '停止' : '高度' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+        distanceMeasuring: false,
+        areaMeasuring: false,
+        heightMeasuring: false
+      }
+    },
+    mounted() {
+      Promise.all([
+        this.$refs.measureDistance.$refs.polylineCollection.createPromise,
+        this.$refs.measureDistance.$refs.labelCollection.createPromise,
+        this.$refs.measureArea.$refs.polylineCollection.createPromise,
+        this.$refs.measureArea.$refs.labelCollection.createPromise,
+        this.$refs.measureHeight.$refs.polylineCollection.createPromise,
+        this.$refs.measureHeight.$refs.labelCollection.createPromise
+      ]).then((instances) => {
+        instances.reduce((pre, cur) => {
+          const rs = Cesium.RenderState.fromCache({
+            depthMask: true,
+            depthTest: {
+              enabled: false
+            }
+          })
+          if (cur.cesiumObject instanceof Cesium.PolylineCollection) {
+            cur.cesiumObject._opaqueRS = rs
+          } else {
+            cur.cesiumObject._billboardCollection._depthTestEnable = false
+            cur.cesiumObject._backgroundBillboardCollection._depthTestEnable = false
+          }
+        }, [])
+      })
+    },
+    methods: {
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+        viewer.scene.globe.depthTestAgainstTerrain = true
+      },
+      toggle(type) {
+        this.$refs[type].measuring = !this.$refs[type].measuring
+      },
+      clear() {
+        this.$refs.measureDistance.clear()
+        this.$refs.measureArea.clear()
+        this.$refs.measureHeight.clear()
+      },
+      activeEvt(_) {
+        this[_.type] = _.isActive
+      },
+      measureEvt(result) {
+        console.log(result)
+      },
+      readyPromise(tileset) {
+        const { viewer } = this.cesiumInstance
+        viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
+      }
+    }
+  }
+</script>
+```
