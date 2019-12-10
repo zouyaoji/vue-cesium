@@ -11,9 +11,12 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
+      <vc-viewer ref="viewer" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
         <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
+      <div ref="bubbleContainer" id="bubbleContainer" hidden>
+        <button id="test">Test</button>
+      </div>
     </div>
   </template>
 
@@ -28,8 +31,8 @@
           billboard: {}
         }
       },
-      mounted () {
-        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+      mounted() {
+        this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
           viewer.zoomTo(cesiumObject)
         })
       },
@@ -37,6 +40,8 @@
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           this.viewer = viewer
+          this.description = this.$refs.bubbleContainer.innerHTML
+          console.log(this.$refs.bubbleContainer)
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default
@@ -52,6 +57,18 @@
         },
         selectedEntityChanged(entity) {
           console.log(entity)
+          if (entity) {
+            this.frame = this.viewer.infoBox.frame
+            this.frame.contentWindow.addEventListener('click', this.frameClick)
+          } else {
+            this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+          }
+        },
+        frameClick(event) {
+          console.log('frame clicked')
+          if (event.target.id === 'test') {
+            console.log('test clicked')
+          }
         },
         LEFT_CLICK(movement) {
           const feature = this.viewer.scene.pick(movement.position)
@@ -67,9 +84,12 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
+    <vc-viewer ref="viewer" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
       <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
+    <div ref="bubbleContainer" id="bubbleContainer" hidden>
+      <button id="test">Test</button>
+    </div>
   </div>
 </template>
 
@@ -93,6 +113,8 @@
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.viewer = viewer
+        this.description = this.$refs.bubbleContainer.innerHTML
+        console.log(this.$refs.bubbleContainer)
         this.billboard = new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
           show: true, // default
@@ -108,6 +130,18 @@
       },
       selectedEntityChanged(entity) {
         console.log(entity)
+        if (entity) {
+          this.frame = this.viewer.infoBox.frame
+          this.frame.contentWindow.addEventListener('click', this.frameClick)
+        } else {
+          this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+        }
+      },
+      frameClick(event) {
+        console.log('frame clicked')
+        if (event.target.id === 'test') {
+          console.log('test clicked')
+        }
       },
       LEFT_CLICK(movement) {
         const feature = this.viewer.scene.pick(movement.position)

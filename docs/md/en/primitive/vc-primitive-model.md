@@ -12,7 +12,16 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000"> </vc-primitive-model>
+        <vc-primitive-model
+          ref="model"
+          @readyPromise="readyPromise"
+          :url="url"
+          :modelMatrix="modelMatrix"
+          :scale="10000"
+          :minimumPixelSize="128"
+          :maximumScale="200000"
+        >
+        </vc-primitive-model>
       </vc-viewer>
     </div>
   </template>
@@ -28,7 +37,12 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          this.viewer = viewer
           this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+        },
+        readyPromise(model) {
+          const boundingSphere = Cesium.BoundingSphere.transform(model.boundingSphere, model.modelMatrix)
+          this.viewer.scene.camera.flyToBoundingSphere(boundingSphere)
         }
       }
     }
@@ -41,7 +55,15 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
+      <vc-primitive-model
+        ref="model"
+        @readyPromise="readyPromise"
+        :url="url"
+        :modelMatrix="modelMatrix"
+        :scale="10000"
+        :minimumPixelSize="128"
+        :maximumScale="200000"
+      >
       </vc-primitive-model>
     </vc-viewer>
   </div>
@@ -58,7 +80,12 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.viewer = viewer
         this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+      },
+      readyPromise(model) {
+        const boundingSphere = Cesium.BoundingSphere.transform(model.boundingSphere, model.modelMatrix)
+        this.viewer.scene.camera.flyToBoundingSphere(boundingSphere)
       }
     }
   }
@@ -107,5 +134,6 @@ The `vc-primitive-model` component is used to load a 3D model based on glTF, the
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| readyPromise | model | Triggers when the model is ready for use.|
 
 ---

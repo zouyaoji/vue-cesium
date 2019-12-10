@@ -12,7 +12,15 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000"> </vc-primitive-model>
+        <vc-primitive-model
+          :url="url"
+          @readyPromise="readyPromise"
+          :modelMatrix="modelMatrix"
+          :scale="10000"
+          :minimumPixelSize="128"
+          :maximumScale="200000"
+        >
+        </vc-primitive-model>
       </vc-viewer>
     </div>
   </template>
@@ -28,7 +36,12 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          this.viewer = viewer
           this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+        },
+        readyPromise(model) {
+          const boundingSphere = Cesium.BoundingSphere.transform(model.boundingSphere, model.modelMatrix)
+          this.viewer.scene.camera.flyToBoundingSphere(boundingSphere)
         }
       }
     }
@@ -41,7 +54,15 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
+      <vc-primitive-model
+        ref="model"
+        @readyPromise="readyPromise"
+        :url="url"
+        :modelMatrix="modelMatrix"
+        :scale="10000"
+        :minimumPixelSize="128"
+        :maximumScale="200000"
+      >
       </vc-primitive-model>
     </vc-viewer>
   </div>
@@ -58,7 +79,12 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.viewer = viewer
         this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+      },
+      readyPromise(model) {
+        const boundingSphere = Cesium.BoundingSphere.transform(model.boundingSphere, model.modelMatrix)
+        this.viewer.scene.camera.flyToBoundingSphere(boundingSphere)
       }
     }
   }
@@ -103,8 +129,9 @@
 
 ## 事件
 
-| 事件名 | 参数                           | 描述                                                                             |
-| ------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| 事件名       | 参数                           | 描述                                                                             |
+| ------------ | ------------------------------ | -------------------------------------------------------------------------------- |
+| ready        | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| readyPromise | model                          | 模型可用时触发。 返回模型对象。                                                  |
 
 ---
