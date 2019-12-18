@@ -13,9 +13,9 @@ import 'material-design-icons/iconfont/material-icons.css'
 import './fonts/iconfont.css'
 import 'vue-material/dist/vue-material.css'
 import 'vue-slider-component/theme/default.css'
-import VueCesium from '../lib/index.js'
-import '../lib/vc-navigation.css'
-import '../lib/vc-navigation-sm.css'
+import VueCesium from '../src/index.js'
+// import '../lib/vc-navigation.css'
+// import '../lib/vc-navigation-sm.css'
 Vue.use(VueCesium, {
   // cesiumPath is path of Cesium.js', for example:
   // local Cesium Build package:
