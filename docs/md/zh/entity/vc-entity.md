@@ -130,6 +130,7 @@
         console.log(entity)
         if (entity) {
           this.frame = this.viewer.infoBox.frame
+          this.frame.setAttribute('sandbox','allow-same-origin allow-popups allow-forms allow-scripts')
           this.frame.contentWindow.addEventListener('click', this.frameClick)
         } else {
           this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
