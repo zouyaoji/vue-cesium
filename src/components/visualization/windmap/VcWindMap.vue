@@ -1,7 +1,7 @@
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import colorTable from '../../../libs/wind/colorTable'
-import Wind3D from '../../../libs/wind/wind3D'
+import colorTable from '../../../exts/wind/colorTable'
+import Wind3D from '../../../exts/wind/wind3D'
 export default {
   name: 'vc-windmap',
   mixins: [cmp],

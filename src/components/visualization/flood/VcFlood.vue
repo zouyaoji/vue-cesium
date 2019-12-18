@@ -1,8 +1,13 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-primitive-classification ref="primitive" :appearance="appearance" :asynchronous="false" :show="extrudedHeight !== 0 && extrudedHeight !== ''">
-      <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes">
-        <vc-geometry-polygon :polygonHierarchy="polygonHierarchy" :extrudedHeight="extrudedHeight"></vc-geometry-polygon>
+    <vc-primitive-classification
+      :appearance="appearance"
+      :asynchronous="false"
+      :show="extrudedHeight !== 0 && extrudedHeight !== ''"
+      ref="primitive"
+    >
+      <vc-instance-geometry :attributes="attributes" :geometry.sync="geometry">
+        <vc-geometry-polygon :extrudedHeight="extrudedHeight" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon>
       </vc-instance-geometry>
     </vc-primitive-classification>
   </i>
@@ -12,7 +17,7 @@ import cmp from '../../../mixins/virtualCmp'
 import { makeColor } from '../../../utils/util'
 
 export default {
-  name: 'vc-analysis-flood',
+  name: 'vc-analytics-flood',
   data () {
     return {
       geometry: null,

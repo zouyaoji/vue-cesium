@@ -1,6 +1,6 @@
 <script>
 import mixinImageryProvider from '../../../mixins/providers/mixinImageryProvider'
-import TiandituImageryProvider from '../../../libs/tianditu/TiandituImageryProvider'
+import TiandituImageryProvider from '../../../exts/imageryProvider/TiandituImageryProvider'
 export default {
   name: 'vc-provider-imagery-tianditu',
   mixins: [mixinImageryProvider],

@@ -1,7 +1,7 @@
 <script>
 import { url, minimumLevel, maximumLevel } from '../../../mixins/mixinProps'
 import mixinImageryProvider from '../../../mixins/providers/mixinImageryProvider'
-import SuperMapImageryProvider from '../../../libs/supermap/SuperMapImageryProvider'
+import SuperMapImageryProvider from '../../../exts/imageryProvider/SuperMapImageryProvider'
 export default {
   name: 'vc-provider-imagery-supermap',
   mixins: [url, minimumLevel, maximumLevel, mixinImageryProvider],
