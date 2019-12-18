@@ -8,8 +8,7 @@ const nodeResolve = require('rollup-plugin-node-resolve')
 const replace = require('rollup-plugin-re')
 const vuePlugin = require('rollup-plugin-vue').default
 const uglify = require('rollup-plugin-uglify')
-// const globals = require('rollup-plugin-node-globals')
-const sass = require('./rollup/sass.js')
+const scssSmartAsset = require('rollup-plugin-scss-smart-asset')
 const notifier = require('node-notifier')
 const argv = require('yargs').argv
 const utils = require('./utils')
@@ -73,6 +72,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/components/primitiveCollection'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/primitive'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/geometryInstance'), 'src/components'),
+    packagesFromPath(utils.resolve('src/components/control'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/tool'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/visualization'), 'src/components'),
     packagesFromPath(utils.resolve('src/mixins'), srcPath),
@@ -81,10 +81,9 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/mixins/graphics'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/primitives'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/tool'), srcPath),
-    packagesFromPath(utils.resolve('src/libs/navigation'), srcPath),
-    packagesFromPath(utils.resolve('src/libs/supermap'), srcPath),
-    packagesFromPath(utils.resolve('src/libs/tianditu'), srcPath),
-    packagesFromPath(utils.resolve('src/libs/wind'), srcPath),
+    packagesFromPath(utils.resolve('src/exts'), srcPath),
+    packagesFromPath(utils.resolve('src/exts/imageryProvider'), srcPath),
+    packagesFromPath(utils.resolve('src/exts/wind'), srcPath),
     packagesFromPath(utils.resolve('src/utils'), srcPath)
   ]).then((otherPackages) => {
     return packages.concat(otherPackages.reduce((all, packages) => all.concat(packages), []))
@@ -109,19 +108,28 @@ function entryToPackage (entry, basePath = srcPath) {
     .split(path.sep)
     .join('/')
   const pkgName = jsName.replace(/\/index$/i, '')
-  const pkg =
-    jsName === 'tool/navigation/index'
-      ? {
-        entry: entryPath,
-        jsName,
-        pkgName,
-        cssName: 'vc-navigation'
-      }
-      : {
-        entry: entryPath,
-        jsName,
-        pkgName
-      }
+  let pkg = {}
+  if (jsName === 'control/navigation/index') {
+    pkg = {
+      entry: entryPath,
+      jsName,
+      pkgName,
+      cssName: 'vc-navigation'
+    }
+  } else if (jsName === 'control/navigationSM/index') {
+    pkg = {
+      entry: entryPath,
+      jsName,
+      pkgName,
+      cssName: 'vc-navigation-sm'
+    }
+  } else {
+    pkg = {
+      entry: entryPath,
+      jsName,
+      pkgName
+    }
+  }
 
   return utils.fileExists(entryPath) ? pkg : []
 }
@@ -183,10 +191,10 @@ function bundleOptions (format, pkg, env = 'development') {
         test: /'(\.{1,2})\/components\/([^']*)'/gi,
         replace: (m1, m2, m3) => `'${m2}/${m3}'`
       },
-      // mixins/utils/libs path inside components replacement
+      // mixins/utils/exts path inside components replacement
       {
         include: ['src/components/**/*'],
-        test: /'(?:\.{2}\/){2,3}((?:mixins|utils|libs)[^']*)'/gi,
+        test: /'(?:\.{2}\/){2,3}((?:mixins|utils|exts)[^']*)'/gi,
         replace: (m1, m2) => (m1.split('../').length === 3 ? `'../${m2}'` : `'../../${m2}'`)
       }
     ]
@@ -247,10 +255,13 @@ function makeBundle (options = {}) {
       sourceMap: true,
       css: false
     }),
-    sass({
-      output: (styles) => {
+    scssSmartAsset({
+      postcssUrlConfig: {
+        url: 'inline'
+      },
+      output: styles => {
         stylesPromise = Promise.resolve(styles || [])
-      }
+      },
     }),
     babel({
       runtimeHelpers: true,

@@ -272,3 +272,22 @@ export function dirname (path) {
   }
   return path.slice(0, end)
 }
+
+export function Platform () {
+  var ua = navigator.userAgent
+  var isWindowsPhone = /(?:Windows Phone)/.test(ua)
+  var isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone
+  var isAndroid = /(?:Android)/.test(ua)
+  var isFireFox = /(?:Firefox)/.test(ua)
+  var isChrome = /(?:Chrome|CriOS)/.test(ua)
+  var isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua))
+  var isPhone = /(?:iPhone)/.test(ua) && !isTablet
+  var isPc = !isPhone && !isAndroid && !isSymbian
+  return {
+    isTablet: isTablet,
+    isPhone: isPhone,
+    isAndroid: isAndroid,
+    isPc: isPc,
+    isChrome: isChrome
+  }
+}

@@ -94,6 +94,9 @@ const specialProps = {
   glowColor: {
     handler: makeColor
   },
+  clearColor: {
+    handler: makeColor
+  },
   scaleByDistance: {
     handler: makeNearFarScalar
   },

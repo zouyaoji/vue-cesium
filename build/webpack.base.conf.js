@@ -87,7 +87,9 @@ module.exports = {
   resolve: {
     alias: {
       docs: path.resolve(__dirname, '../docs'),
-      '@': path.resolve(__dirname, '../src')
+      '@': path.resolve(__dirname, '../src'),
+      'vc-variables': path.resolve(__dirname, '../src/styles/common/_variables.scss'),
+      'vc-mixins': path.resolve(__dirname, '../src/styles/common/_mixins.scss')
     }
   },
   plugins: [
