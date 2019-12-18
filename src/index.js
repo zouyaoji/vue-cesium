@@ -16,6 +16,7 @@ import * as WebMapServiceImageryProvider from './components/imageryLayer/wms'
 import * as WebMapTileServiceImageryProvider from './components/imageryLayer/wmts'
 import * as TiandituImageryProvider from './components/imageryLayer/tianditu'
 import * as SuperMapImageryProvider from './components/imageryLayer/supermap'
+import * as TiledCacheImageryProvider from './components/imageryLayer/tiledCache'
 // 地形
 import * as ArcGISTiledElevationTerrainProvider from './components/terrain/arcgis'
 import * as CesiumTerrainProvider from './components/terrain/cesium'
@@ -92,6 +93,9 @@ import * as SphereGeometry from './components/geometryInstance/sphere'
 import * as SphereOutlineGeometry from './components/geometryInstance/sphereOutline'
 import * as WallGeometry from './components/geometryInstance/wall'
 import * as WallOutlineGeometry from './components/geometryInstance/wallOutline'
+// stage
+import * as PostProcessStageCollection from './components/stageCollection'
+import * as PostProcessStage from './components/stage'
 // 工具
 import * as VcMeasureArea from './components/tool/measureArea'
 import * as VcMeasureDistance from './components/tool/measureDistance'
@@ -99,7 +103,9 @@ import * as VcMeasureHeight from './components/tool/measureHeight'
 import * as VcDrawHandlerPoint from './components/tool/drawHandlerPoint'
 import * as VcDrawHandlerPolyline from './components/tool/drawHandlerPolyline'
 import * as VcDrawHandlerPolygon from './components/tool/drawHandlerPolygon'
-import * as VcNavigation from './components/tool/navigation'
+// 控件
+import * as VcNavigation from './components/control/navigation'
+import * as VcNavigationSM from './components/control/navigationSM'
 // 可视化
 import * as VcFlood from './components/visualization/flood'
 import * as VcHeatMap from './components/visualization/heatmap'
@@ -139,6 +145,7 @@ function plugin (Vue, options = {}) {
   Vue.use(WebMapTileServiceImageryProvider, options)
   Vue.use(TiandituImageryProvider, options)
   Vue.use(SuperMapImageryProvider, options)
+  Vue.use(TiledCacheImageryProvider, options)
   // 地形
   Vue.use(ArcGISTiledElevationTerrainProvider, options)
   Vue.use(CesiumTerrainProvider, options)
@@ -215,6 +222,9 @@ function plugin (Vue, options = {}) {
   Vue.use(SphereOutlineGeometry, options)
   Vue.use(WallGeometry, options)
   Vue.use(WallOutlineGeometry, options)
+  // stage
+  Vue.use(PostProcessStageCollection, options)
+  Vue.use(PostProcessStage, options)
   // 工具
   Vue.use(VcMeasureArea, options)
   Vue.use(VcMeasureDistance, options)
@@ -222,7 +232,9 @@ function plugin (Vue, options = {}) {
   Vue.use(VcDrawHandlerPoint, options)
   Vue.use(VcDrawHandlerPolyline, options)
   Vue.use(VcDrawHandlerPolygon, options)
+  // 控件
   Vue.use(VcNavigation, options)
+  Vue.use(VcNavigationSM, options)
   // 可视化
   Vue.use(VcFlood, options)
   Vue.use(VcHeatMap, options)
@@ -252,6 +264,7 @@ export {
   WebMapTileServiceImageryProvider,
   TiandituImageryProvider,
   SuperMapImageryProvider,
+  TiledCacheImageryProvider,
 
   ArcGISTiledElevationTerrainProvider,
   CesiumTerrainProvider,
@@ -328,6 +341,8 @@ export {
   SphereOutlineGeometry,
   WallGeometry,
   WallOutlineGeometry,
+  PostProcessStageCollection,
+  PostProcessStage,
 
   VcMeasureArea,
   VcMeasureDistance,
@@ -336,6 +351,8 @@ export {
   VcDrawHandlerPolyline,
   VcDrawHandlerPolygon,
   VcNavigation,
+  VcNavigationSM,
+
   VcFlood,
   VcHeatMap,
   VcWindMap

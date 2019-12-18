@@ -1,0 +1,59 @@
+@import '../common/variables';
+@import '../common/mixins';
+.navigation {
+  position: absolute;
+  right: 65px;
+  z-index: 1;
+  bottom: 25px;
+
+  @media (min-width: $sm) {
+    top: 80px;
+    bottom: auto;
+    right: 16px;
+  }
+}
+
+.with-time-series-controls {
+  bottom: 100px;
+}
+
+.control {
+  @media (min-width: $sm) {
+    margin: 7px 0;
+    height: auto;
+  }
+  margin: 4px 8px;
+  text-align: center;
+  //ie sizing fix
+  height: 40px;
+}
+
+.navs {
+  display: flex;
+  flex-direction: column;
+}
+
+.controls {
+  display: flex;
+  @media (min-width: $sm) {
+    flex-direction: column;
+    margin-right: 0;
+  }
+  flex-direction: row;
+}
+
+.location-distance {
+  @extend %clearfix;
+  display: none;
+  @media (min-width: $sm) {
+    display: block;
+  }
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  z-index: 1;
+
+  button {
+    cursor: pointer;
+  }
+}

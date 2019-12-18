@@ -1,0 +1,74 @@
+@import '../common/variables';
+@import '../common/mixins';
+
+$distance-bg: rgba($dark, 0.9);
+
+.baseLegend {
+  box-sizing: border-box;
+  font-family: $font-base;
+  float: left;
+  background-color: #fff;
+  color: $text-dark;
+  padding: $padding-small $padding-small;
+  font-size: $font-size-mid-mini;
+  text-align: center;
+  line-height: 1;
+  border: 0;
+  outline: 0;
+  font-family: $font-mono;
+  max-height: 21px;
+  margin-top: 5px;
+  &:hover {
+    background: $faint-bg;
+  }
+
+  .bar {
+    background: #fff;
+    margin: 0 auto;
+    display: block;
+    @include transition(all 0.5s ease-in-out);
+  }
+}
+
+.locationBar,
+.distanceLegend {
+  // composes: baseLegend;
+  // Adjust colors to match btn--map.
+  background-color: $charcoal-grey;
+  color: $text-light;
+  &:hover {
+    background: $color-primary;
+  }
+  //
+  margin-right: $padding-small;
+  span {
+    padding: 0 $padding-small;
+  }
+
+  li,
+  div {
+    display: inline-block;
+    padding: 0 $padding-small;
+    text-align: left;
+  }
+
+  .section-long {
+    width: 145px;
+  }
+
+  .section {
+    width: 127px;
+  }
+
+  .section-short {
+    width: 80px;
+  }
+}
+
+.distanceLegend {
+  &:hover {
+    background: $charcoal-grey;
+  }
+  text-align: center;
+  width: 110px;
+}

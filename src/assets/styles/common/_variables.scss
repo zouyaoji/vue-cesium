@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,400italic,600');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+$font-pop: 'Open Sans', sans-serif;
+$font-base: 'Open Sans', sans-serif;
+$font-mono: monospace, sans-serif;
+$font-feature-info: $font-mono;
+$font: $font-base;
+
+$color-primary: #519ac2;
+$color-primary-disabled: #595b60;
+@function get-hover-color($base-color) {
+  @return lighten($base-color, 10%);
+}
+$color-secondary: #06ccff;
+
+$animation-fast: 0.1s;
+
+$dark: #3f4854;
+$dark-with-overlay: #667080;
+$dark-lighter: #595b60;
+$grey: #888888;
+$grey-lighter: #ddd;
+// todo: Fix during overhaul
+$grey-lighter2: #e6e6e6;
+$grey-lightest: #f2f2f2;
+$field-border: #ddd;
+$overlay: rgba(255, 255, 255, 0.15);
+
+$text-black: #000;
+$text-dark: #595b60;
+// todo: Fix during overhaul
+$text-dark2: #606d80;
+$text-darker: #4d5766;
+$text-light: #ffffff;
+$text-light-dimmed: #bbbbbb;
+
+// You can override these functions to change the link color depending on the background, eg.
+// @function get-link-color($bg-color) {
+//   @if (lightness($bg-color) > 50) {
+//     @return $text-dark; // Dark color needed on a light background
+//   } @else {
+//     @return $text-light; // Light color needed on a dark background
+//   }
+// }
+// It would make sense to extend this approach to all text and button coloring.
+@function get-link-color($bg-color) {
+  @if variable-exists(text-link) {
+    @return $text-link;
+  }
+  @return $color-primary;
+}
+@function get-visited-link-color($bg-color) {
+  @if variable-exists(text-visited-link) {
+    @return $text-visited-link;
+  }
+  @return get-link-color($bg-color);
+}
+
+$faint-bg: #f5f5f5;
+$warning: #ff5b6f;
+$info-color: #fed17f;
+$link-text-decoration: none;
+
+$padding: 10px;
+$padding-small: 5px;
+$padding-mini: 3px;
+
+$btn-default-line-height: 20px;
+$input-height: 40px;
+$input-height-large: 48px;
+$input-glyph-height: 24px; // This value should be $input-height * 0.6
+$input-glyph-margin: 8px; // This value should be $input-height * 0.2
+
+$sm-logo-height: $input-height;
+$logo-height: 70px;
+$mobile-header-height: 50px;
+
+$modal-bg: #fff;
+$modal-tab-bg: $modal-bg;
+$modal-selected-tab-bg: $modal-tab-bg;
+$modal-text: #000;
+$modal-secondary-bg: #f6f6f7;
+$modal-secondary-bg: #f6f6f7;
+$modal-overlay: rgba(#000, 0.7);
+$modal-highlight: $color-primary;
+// $modal-selected: $color-primary;  // Optionally define this to override $modal-highlight on the selected tab.
+$modal-border: $grey-lighter;
+$modal-content-height: 70vh;
+$modal-header-height: $btn-default-line-height + $padding * 2;
+$dropdown-hover-color: orange;
+
+$data-catalog-color: $text-black;
+
+$feature-info-bg: rgba($dark, 0.95);
+$feature-info-section-bg: $overlay;
+$feature-info-color: $text-light;
+$feature-info-header-bg: $dark;
+$feature-info-btn-color: $text-light;
+// $feature-info-table-odd-row-bg: lighten($feature-info-bg, 5%); // Optionally define for stripy tables.
+$feature-info-table-border-style: 1px solid $dark;
+// $feature-info-table-width: 100%; // Optionally define to force tables to the full width of the feature info panel.
+$feature-info-right-margin: 105px;
+
+$mobile-main-bg: #ffffff;
+$mobile-text: #000;
+
+$mobile-modal-top-height: 40px;
+
+$font-size-large: 1.3rem;
+$font-size-mid-large: 1.1rem;
+$font-size-base: 1rem;
+$font-size-mid-small: 0.9rem;
+$font-size-feature-info: 0.9rem;
+// todo: update during overhaul
+$font-size-data-preview: 0.875rem;
+$font-size-button: 0.85rem;
+$font-size-small: 0.8125rem;
+$font-size-mid-mini: 0.7rem;
+$font-size-mini: 0.625rem;
+$font-size-credits: 0.7rem;
+
+$font-weight-bold: 600;
+$font-weight-medium: 500;
+$font-weight-normal: 400;
+$font-weight-light: 100;
+
+$work-bench-width: 350px;
+$setting-panel: 300px;
+$share-panel-width: 450px;
+$share-panel-caret-left: 215px;
+$feature-info-panel-width: 500px;
+$branding-height: 55px;
+$badge-height: $input-height;
+$workbench-header: $input-height * 2 + $padding-small * 2 + $badge-height + 1px;
+$chart-height: 250px;
+
+$border-color: rgba(#fff, 0.15);
+$border-style: 1px solid $border-color;
+$box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+
+$radius-medium: 3px;
+$radius-small: 2px;
+
+$ring-width: 10px;
+$compass-width: 55px;
+
+//screen sizes
+$sm: 768px;
+$md: 992px;
+$lg: 1300px;
+
+$front-component-z-index: 99;
+
+$chart-area-color: rgba(#fff, 0.075);
+$chart-axis-color: #fff;
+$chart-grid-color: rgba(#fff, 0.085);
+$chart-text-color: #fff;
+$chart-line-color: #ccc;
+$chart-preview-line-color: $chart-line-color;
+$chart-darker: darken($dark, 8%);
+$chart-panel-background: $dark;
+$chart-panel-header: $chart-darker;
+
+$charcoal-grey: #3f4854;
+$turquoise-blue: #08abd5;
+
+// Splitter
+$splitter-thumb-width: 40px;
