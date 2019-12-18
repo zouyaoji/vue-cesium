@@ -14,6 +14,16 @@ The container is an empty DOM node which used to mount other components or DOM n
     <div class="viewer" ref="viewerContainer">
       <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+        <vc-navigation></vc-navigation>
+        <vc-layer-imagery ref="layerText">
+          <vc-provider-imagery-tianditu mapStyle="eia_c" :token="tk"></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
+        <vc-layer-imagery>
+          <vc-provider-imagery-tianditu
+            mapStyle="img_c"
+            token="tk"
+          ></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>animation</span>
@@ -38,7 +48,8 @@ The container is an empty DOM node which used to mount other components or DOM n
           baseLayerPicker: false,
           fullscreenButton: true,
           infoBox: true,
-          fullscreenElement: document.body
+          fullscreenElement: document.body,
+          tk: '436ce7e50d27eede2f2929307e6b33c0'
         }
       },
       mounted () {
@@ -80,6 +91,16 @@ The container is an empty DOM node which used to mount other components or DOM n
   <div class="viewer" ref="viewerContainer">
     <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
       :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+      <vc-navigation></vc-navigation>
+      <vc-layer-imagery ref="layerText">
+        <vc-provider-imagery-tianditu mapStyle="eia_c" :token="tk"></vc-provider-imagery-tianditu>
+      </vc-layer-imagery>
+      <vc-layer-imagery>
+        <vc-provider-imagery-tianditu
+          mapStyle="img_c"
+          token="tk"
+        ></vc-provider-imagery-tianditu>
+      </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <span>animation</span>
@@ -104,7 +125,8 @@ The container is an empty DOM node which used to mount other components or DOM n
         baseLayerPicker: false,
         fullscreenButton: true,
         infoBox: true,
-        fullscreenElement: document.body
+        fullscreenElement: document.body,
+        tk: '436ce7e50d27eede2f2929307e6b33c0'
       }
     },
     mounted () {

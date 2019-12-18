@@ -13,6 +13,16 @@
     <div class="viewer" ref="viewerContainer">
       <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+        <vc-navigation></vc-navigation>
+        <vc-layer-imagery ref="layerText">
+          <vc-provider-imagery-tianditu mapStyle="cia_c" :token="tk"></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
+        <vc-layer-imagery>
+          <vc-provider-imagery-tianditu
+            mapStyle="img_c"
+            token="tk"
+          ></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>动画部件</span>
@@ -37,7 +47,8 @@
           baseLayerPicker: false,
           fullscreenButton: true,
           infoBox: true,
-          fullscreenElement: document.body
+          fullscreenElement: document.body,
+          tk: '436ce7e50d27eede2f2929307e6b33c0'
         }
       },
       mounted () {
@@ -77,8 +88,23 @@
 ```html
 <template>
   <div class="viewer" ref="viewerContainer">
-    <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
-      :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
+    <vc-viewer
+      ref="vcViewer"
+      :animation="animation"
+      :baseLayerPicker="baseLayerPicker"
+      :timeline="timeline"
+      :fullscreenButton="fullscreenButton"
+      :fullscreenElement="fullscreenElement"
+      :infoBox="infoBox"
+      @ready="ready"
+    >
+      <vc-navigation></vc-navigation>
+      <vc-layer-imagery ref="layerText">
+        <vc-provider-imagery-tianditu mapStyle="cva_c" :token="tk"></vc-provider-imagery-tianditu>
+      </vc-layer-imagery>
+      <vc-layer-imagery>
+        <vc-provider-imagery-tianditu mapStyle="img_c" token="tk"></vc-provider-imagery-tianditu>
+      </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <span>动画部件</span>
@@ -96,24 +122,25 @@
 </template>
 <script>
   export default {
-    data () {
+    data() {
       return {
         animation: true,
         timeline: true,
         baseLayerPicker: false,
         fullscreenButton: true,
         infoBox: true,
-        fullscreenElement: document.body
+        fullscreenElement: document.body,
+        tk: '436ce7e50d27eede2f2929307e6b33c0'
       }
     },
-    mounted () {
-      this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+    mounted() {
+      this.$refs.vcViewer.createPromise.then((Cesium, viewer) => {
         console.log('viewer is loaded.')
       })
     },
     methods: {
-      ready (cesiumInstance) {
-        const {Cesium, viewer} = cesiumInstance
+      ready(cesiumInstance) {
+        const { Cesium, viewer } = cesiumInstance
         this.fullscreenElement = this.$refs.viewerContainer
         viewer.entities.add({
           id: '成都欢迎你',
@@ -122,7 +149,7 @@
             image: 'https://zouyaoji.top/vue-cesium/favicon.png',
             scale: 0.1
           }),
-          label: new Cesium.LabelGraphics ({
+          label: new Cesium.LabelGraphics({
             text: 'Hello Cesium',
             font: '24px sans-serif',
             horizontalOrigin: 1,
@@ -140,6 +167,7 @@
 
 ## 属性
 
+<!-- prettier-ignore -->
 |属性名|类型|默认值|描述|
 |------|------|-----|---|
 |animation|Boolean|`false`|`optional`是否显示动画控件|
@@ -173,10 +201,12 @@
 |logo|Boolean|`true`| `optional` 是否显示默认logo.|
 |accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
 |camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。 **结构：{ position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
+
 ---
 
 ## 事件
 
+<!-- prettier-ignore -->
 | 事件名|参数|描述|来源|
 |------|----|----|---|
 |selectedEntityChanged|entity|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（为选中）|Viewer|
@@ -218,6 +248,7 @@
 |RIGHT_DOWN|{position: point}|鼠标右键按下事件。|ScreenSpaceEventType|
 |RIGHT_UP|{position: point}|鼠标弹起事件。|ScreenSpaceEventType|
 |WHEEL|delta|鼠标中轮滚动事件。|ScreenSpaceEventType|
+
 ---
 
 - 参考官方文档： [Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)

@@ -41,7 +41,6 @@
           const { Cesium, viewer } = cesiumInstance
           this.viewer = viewer
           this.description = this.$refs.bubbleContainer.innerHTML
-          console.log(this.$refs.bubbleContainer)
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
             show: true, // default
@@ -114,7 +113,6 @@
         const { Cesium, viewer } = cesiumInstance
         this.viewer = viewer
         this.description = this.$refs.bubbleContainer.innerHTML
-        console.log(this.$refs.bubbleContainer)
         this.billboard = new Cesium.BillboardGraphics({
           image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
           show: true, // default

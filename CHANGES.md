@@ -1,5 +1,19 @@
 # 更新日志
 
+## 2.0.2 - 2019-12-19
+
+## 修改
+
+- `vc-navigation` 样式修改了，增加了位置信息。
+- `vc-analysis-flood` -> `vc-analytics-flood`
+
+## 增加
+
+- `vc-navigation-sm` 超图罗盘样式组件。
+- `vc-stage-process-post` 后期处理组件。
+- `vc-collection-stage-process-post` 后期处理集合组件。
+- `vc-provider-imagery-tiledcache` 组件，加载 TiledCache 瓦片。
+
 ## 2.0.1 - 2019-12-09
 
 ## 修改

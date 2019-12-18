@@ -11,12 +11,11 @@ The `vc-provider-imagery-supermap` component is used to load the SuperMap iServe
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer>
+      <vc-viewer @ready="ready">
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-supermap
             ref="imageryProvider"
             :url="url"
-            @ready="ready"
             @readyPromise="readyPromise"
           ></vc-provider-imagery-supermap>
         </vc-layer-imagery>
@@ -77,12 +76,11 @@ The `vc-provider-imagery-supermap` component is used to load the SuperMap iServe
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer>
+    <vc-viewer @ready="ready">
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-supermap
           ref="imageryProvider"
           :url="url"
-          @ready="ready"
           @readyPromise="readyPromise"
         ></vc-provider-imagery-supermap>
       </vc-layer-imagery>

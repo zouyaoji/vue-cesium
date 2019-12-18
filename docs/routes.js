@@ -212,6 +212,14 @@ const routeMap = [
           en: 'SuperMapImageryProvider'
         }
       }
+      // {
+      //   path: 'vc-provider-imagery-tiledcache',
+      //   component: 'imageryLayer/vc-provider-imagery-tiledcache',
+      //   name: {
+      //     zh: 'TiledCache影像',
+      //     en: 'TiledCacheImageryProvider'
+      //   }
+      // }
     ]
   },
   {
@@ -723,11 +731,11 @@ const routeMap = [
     ]
   },
   {
-    path: 'tools',
+    path: 'tool',
     component: CateView,
     name: {
       zh: '工具',
-      en: 'Tools'
+      en: 'Tool'
     },
     children: [
       {
@@ -745,13 +753,31 @@ const routeMap = [
           zh: '量算',
           en: 'Measuring'
         }
-      },
+      }
+    ]
+  },
+  {
+    path: 'control',
+    component: CateView,
+    name: {
+      zh: '控件',
+      en: 'Control'
+    },
+    children: [
       {
         path: 'vc-navigation',
-        component: 'tool/vc-navigation',
+        component: 'control/vc-navigation',
         name: {
-          zh: '导航罗盘',
+          zh: '导航',
           en: 'VcNavigation'
+        }
+      },
+      {
+        path: 'vc-navigation-sm',
+        component: 'control/vc-navigation-sm',
+        name: {
+          zh: '导航-sm',
+          en: 'VcNavigationSM'
         }
       }
     ]
@@ -789,7 +815,33 @@ const routeMap = [
         }
       }
     ]
-  }
+  },
+  {
+    path: 'other',
+    component: CateView,
+    name: {
+      zh: '其他',
+      en: 'Other'
+    },
+    children: [
+      {
+        path: 'vc-collection-stage-process-post',
+        component: 'other/vc-collection-stage-process-post',
+        name: {
+          zh: '后期处理集合',
+          en: 'PostProcessStageCollection'
+        }
+      },
+      {
+        path: 'vc-stage-process-post',
+        component: 'other/vc-stage-process-post',
+        name: {
+          zh: '后期处理',
+          en: 'PostProcessStage'
+        }
+      }
+    ]
+  },
 ]
 
 export default [
