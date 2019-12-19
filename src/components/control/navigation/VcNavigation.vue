@@ -1,14 +1,14 @@
 <template>
-  <div class="navigationContainer">
-    <div class="navigation">
-      <div class="control" v-if="defaultOptions.enableCompass">
+  <div class="vc-navigationContainer">
+    <div class="vc-navigation">
+      <div class="vc-control" v-if="defaultOptions.enableCompass">
         <vc-compass :enableCompassOuterRing="defaultOptions.enableCompassOuterRing"></vc-compass>
       </div>
-      <div class="control" v-if="defaultOptions.enableZoomControl">
+      <div class="vc-control" v-if="defaultOptions.enableZoomControl">
         <vc-zoom-control :defaultResetView="defaultOptions.defaultResetView" :zoomAmount="defaultOptions.zoomAmount"></vc-zoom-control>
       </div>
     </div>
-    <div :style="ldStyle" class="location-distance" >
+    <div :style="ldStyle" class="vc-location-distance" >
       <vc-location-bar :mouseCoords="mouseCoords" v-if="mouseCoords !== undefined && defaultOptions.enableLocationBar"></vc-location-bar>
       <vc-distance-legend v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
     </div>

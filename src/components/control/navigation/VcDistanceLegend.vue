@@ -1,7 +1,7 @@
 <template>
-  <div v-if="distanceLabel" class="baseLegend distanceLegend">
+  <div v-if="distanceLabel" class="vc-legend vc-legend-distance">
     <label>{{distanceLabel}}</label>
-    <div :style="barStyle" class="bar" />
+    <div :style="barStyle" class="vc-bar" />
   </div>
 </template>
 

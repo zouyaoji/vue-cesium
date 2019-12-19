@@ -1,30 +1,30 @@
 <template>
-  <button @click="toggleUseProjection" class="baseLegend locationBar" type="button">
+  <button @click="toggleUseProjection" class="vc-legend vc-bar-location" type="button">
     <template v-if="!mouseCoords.useProjection">
-      <div class="section">
+      <div class="vc-section">
         <span>经度</span>
         <span>{{ mouseCoords.longitude }}</span>
       </div>
-      <div class="section">
+      <div class="vc-section">
         <span>纬度</span>
         <span>{{ mouseCoords.latitude }}</span>
       </div>
     </template>
     <template v-else>
-      <div class="section-short">
+      <div class="vc-section-short">
         <span>带号</span>
         <span>{{ mouseCoords.utmZone }}</span>
       </div>
-      <div class="section">
+      <div class="vc-section">
         <span>X</span>
         <span>{{ mouseCoords.east }}</span>
       </div>
-      <div class="section">
+      <div class="vc-section">
         <span>Y</span>
         <span>{{ mouseCoords.north }}</span>
       </div>
     </template>
-    <div class="section-long">
+    <div class="vc-section-long" v-if="mouseCoords.elevation">
       <span>高程</span>
       <span>{{ mouseCoords.elevation }}</span>
     </div>

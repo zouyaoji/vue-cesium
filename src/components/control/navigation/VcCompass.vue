@@ -5,15 +5,15 @@
     @mouseup="resetRotater"
     @touchend="resetRotater"
     @touchstart="handleMouseDown"
-    class="compass"
+    class="vc-compass"
   >
-    <div :style="outerCircleStyle" class="outerRing">
+    <div :style="outerCircleStyle" class="vc-compass-outerRing">
       <vc-icon-svg name="compass-outer"></vc-icon-svg>
     </div>
-    <div class="innerRing">
+    <div class="vc-compass-innerRing">
       <vc-icon-svg name="compass-inner"></vc-icon-svg>
     </div>
-    <div :style="rotationMarkerStyle" class="rotationMarker">
+    <div :style="rotationMarkerStyle" class="vc-compass-rotation-marker">
       <vc-icon-svg name="compass-rotation-marker"></vc-icon-svg>
     </div>
   </div>

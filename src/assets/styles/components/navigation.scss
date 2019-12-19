@@ -1,6 +1,6 @@
 @import '../common/variables';
 @import '../common/mixins';
-.navigation {
+.vc-navigation {
   position: absolute;
   right: 65px;
   z-index: 1;
@@ -17,7 +17,7 @@
   bottom: 100px;
 }
 
-.control {
+.vc-control {
   @media (min-width: $sm) {
     margin: 7px 0;
     height: auto;
@@ -42,7 +42,7 @@
   flex-direction: row;
 }
 
-.location-distance {
+.vc-location-distance {
   @extend %clearfix;
   display: none;
   @media (min-width: $sm) {

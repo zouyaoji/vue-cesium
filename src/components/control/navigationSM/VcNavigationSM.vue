@@ -1,5 +1,5 @@
 <template>
-  <div :style="navigationContainerStyle" class="cesium-viewer-navigationContainer" ref="navigationContainer">
+  <div :style="navigationContainerStyle" class="vc-navigationContainer-sm" ref="navigationContainer">
     <vc-compass-sm :enableCompassOuterRing="defaultOptions.enableCompassOuterRing" v-if="defaultOptions.enableCompass"></vc-compass-sm>
     <vc-zoom-control-sm v-if="defaultOptions.enableZoomControl"></vc-zoom-control-sm>
   </div>

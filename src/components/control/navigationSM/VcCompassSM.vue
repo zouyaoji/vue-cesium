@@ -5,16 +5,16 @@
     @mouseup="handleMouseUp"
     @touchend="handleMouseUp"
     @touchstart="handleMouseDown"
-    class="sm-compass"
+    class="vc-compass-sm"
   >
-    <div class="sm-compass-tilt"></div>
-    <div :style="tiltbarStyle" class="sm-compass-tiltbar"></div>
-    <div class="sm-compass-arrows"></div>
-    <div :style="outerRingStyle" class="sm-compass-outer-ring"></div>
-    <div class="arrows_e_active"></div>
-    <div class="arrows_n_active"></div>
-    <div class="arrows_s_active"></div>
-    <div class="arrows_w_active"></div>
+    <div class="vc-compass-tilt-sm"></div>
+    <div :style="tiltbarStyle" class="vc-compass-tiltbar-sm"></div>
+    <div class="vc-compass-arrows-sm"></div>
+    <div :style="outerRingStyle" class="vc-compass-outer-ring-sm"></div>
+    <div class="vc-arrows-e-sm"></div>
+    <div class="vc-arrows-n-sm"></div>
+    <div class="vc-arrows-s-sm"></div>
+    <div class="vc-arrows-w-sm"></div>
   </div>
 </template>
 
@@ -63,9 +63,9 @@ export default {
       getTiltbarPosition.call(this)
       viewerChange(this)
       if (!Platform().isPc) {
-        document.querySelector('.sm-compass-tiltbar').style.visibility = 'visible'
-        document.querySelector('.sm-compass-arrows').style.visibility = 'visible'
-        document.querySelector('.sm-compass-tilt').style.visibility = 'visible'
+        document.querySelector('.vc-compass-tiltbar-sm').style.visibility = 'visible'
+        document.querySelector('.vc-compass-arrows-sm').style.visibility = 'visible'
+        document.querySelector('.vc-compass-tilt-sm').style.visibility = 'visible'
       }
     })
   },

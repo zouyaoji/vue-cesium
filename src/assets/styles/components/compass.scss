@@ -11,7 +11,7 @@
 //
 // Style guide: Component.map-compass
 
-.compass {
+.vc-compass {
   position: relative;
   cursor: default;
   width: $compass-width;
@@ -22,7 +22,7 @@
     fill: $dark;
   }
 }
-.innerRing {
+.vc-compass-innerRing {
   @include vertical-align();
   height: $compass-width - $ring-width -20px;
   width: $compass-width - $ring-width -20px;
@@ -33,8 +33,8 @@
   box-sizing: border-box;
   background: #ffffff;
 }
-.rotationMarker {
-  background-image: url('../../images/compass-rotation-marker.svg');
+.vc-compass-rotation-marker {
+  background-image: url('../../images/vc-compass-rotation-marker.svg');
   height: $compass-width - 4px;
   width: $compass-width - 4px;
   border-radius: 50%;
@@ -45,7 +45,7 @@
   background-size: contain;
 }
 
-.outerRing {
+.vc-compass-outerRing {
   height: $compass-width;
   width: $compass-width;
   border-radius: 50%;

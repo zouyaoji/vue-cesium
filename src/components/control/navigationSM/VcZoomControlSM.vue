@@ -1,12 +1,12 @@
 <template>
-  <div class="sm-zoom">
-    <div @mousedown="handleZoomInMouseDown" @touchstart="handleZoomInMouseDown" class="sm-zoomin"></div>
-    <div @mousedown="handleZoomOutMouseDown" @touchstart="handleZoomOutMouseDown" class="sm-zoomout"></div>
+  <div class="vc-zoom-sm">
+    <div @mousedown="handleZoomInMouseDown" @touchstart="handleZoomInMouseDown" class="vc-zoomin-sm"></div>
+    <div @mousedown="handleZoomOutMouseDown" @touchstart="handleZoomOutMouseDown" class="vc-zoomout-sm"></div>
     <div
       :style="zoombarStyle"
       @mousedown="handleZoomBarScrollMouseDown"
       @touchstart="handleZoomBarScrollMouseDown"
-      class="sm-zoombar"
+      class="vc-zoombar-sm"
     ></div>
   </div>
 </template>
