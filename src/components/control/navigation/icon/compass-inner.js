@@ -6,7 +6,7 @@ VcIconSvg.register({
     viewBox: '0 0 17 17',
     data: `
     <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
-    <title>compass-inner</title>
+    <!-- <title>compass-inner</title> -->
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill-rule="evenodd">

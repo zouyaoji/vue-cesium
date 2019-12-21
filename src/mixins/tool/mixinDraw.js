@@ -43,6 +43,7 @@ const watch = {
       }
       startNew()
     }
+    this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
     const listener = this.$listeners['activeEvt']
     listener && this.$emit('activeEvt', { type: drawType, isActive: val })
   }

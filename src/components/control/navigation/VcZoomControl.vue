@@ -2,17 +2,17 @@
   <div class="zoomControl">
     <ul class="list">
       <li>
-        <button @click="zoomIn" class="increase" title="zoomIn" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomIn" @click="zoomIn" class="increase" type="button">
           <vc-icon-svg name="increase"></vc-icon-svg>
         </button>
       </li>
       <li>
-        <button @click="zoomReset" class="refresh" title="zoomReset" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomReset" @click="zoomReset" class="refresh" type="button">
           <vc-icon-svg name="refresh"></vc-icon-svg>
         </button>
       </li>
       <li>
-        <button @click="zoomOut" class="decrease" title="zoomOut" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomOut" @click="zoomOut" class="decrease" type="button">
           <vc-icon-svg name="decrease"></vc-icon-svg>
         </button>
       </li>

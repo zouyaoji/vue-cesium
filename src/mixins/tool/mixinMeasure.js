@@ -89,6 +89,7 @@ const watch = {
       }
       startNew()
     }
+    this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
     const listener = this.$listeners['activeEvt']
     listener && this.$emit('activeEvt', { type: type, isActive: val })
   }
@@ -170,12 +171,13 @@ const methods = {
           return pre + cur.positions.length - 1
         }, 0) - 1
       } else {
-        polyline.area = this.getArea(polyline.positions)
+        polyline.area = this.getSurfaceArea(polyline.positions)
+        polyline.projectedArea = this.getProjectedArea(polyline.positions)
       }
       await this.$nextTick()
       onMeasureEvt(polyline, nIndex)
     } else {
-      const { labels, distanceHText, distanceSText, heightText } = this
+      const { labels } = this
       let endPoint = cartesian
       let normalStart = {}
       Cesium.Cartesian3.normalize(this.startPoint, normalStart)
@@ -213,19 +215,19 @@ const methods = {
       polyline.positions.push(hypPoint)
       let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
       labels.push({
-        text: heightText + labelTextHeight,
+        text: this.$vc.lang.measure.verticalHeight + ': ' + labelTextHeight,
         position: labelPositonHeight
       })
       let labelTextH =
         polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
       labels.push({
-        text: distanceHText + labelTextH,
+        text: this.$vc.lang.measure.horizontalDistance + ': ' + labelTextH,
         position: labelPositonH
       })
       let labelTextS =
         polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
       labels.push({
-        text: distanceSText + labelTextS,
+        text: this.$vc.lang.measure.spaceDistance + ': ' + labelTextS,
         position: labelPositonS
       })
       await this.$nextTick()
@@ -262,8 +264,9 @@ const methods = {
       }, 0) - 1
     } else if (type === 'areaMeasuring') {
       polyline.positions.pop()
-      const { getArea } = this
-      polyline.area = getArea(polyline.positions)
+      const { getSurfaceArea, getProjectedArea } = this
+      polyline.area = getSurfaceArea(polyline.positions)
+      polyline.projectedArea = getProjectedArea(polyline.positions)
       if (polyline.positions.length <= 2) {
         polyline.positions = []
       }
@@ -307,7 +310,8 @@ const methods = {
       })
     } else if (type === 'areaMeasuring') {
       Object.assign(polyline, {
-        area: 0
+        area: 0,
+        projectedArea: 0
       })
     } else {
       Object.assign(polyline, {

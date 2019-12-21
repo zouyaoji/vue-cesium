@@ -56,20 +56,6 @@ export default {
       labels: []
     }
   },
-  props: {
-    distanceHText: {
-      type: String,
-      default: '水平距离：'
-    },
-    distanceSText: {
-      type: String,
-      default: '空间距离：'
-    },
-    heightText: {
-      type: String,
-      default: '垂直高度：'
-    }
-  },
   methods: {
     getDistance (positions) {
       let distance = 0

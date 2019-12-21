@@ -1,7 +1,17 @@
 <template>
   <div class="vc-zoom-sm">
-    <div @mousedown="handleZoomInMouseDown" @touchstart="handleZoomInMouseDown" class="vc-zoomin-sm"></div>
-    <div @mousedown="handleZoomOutMouseDown" @touchstart="handleZoomOutMouseDown" class="vc-zoomout-sm"></div>
+    <div
+      :title="$vc.lang.navigation.zoomCotrol.zoomIn"
+      @mousedown="handleZoomInMouseDown"
+      @touchstart="handleZoomInMouseDown"
+      class="vc-zoomin-sm"
+    ></div>
+    <div
+      :title="$vc.lang.navigation.zoomCotrol.zoomOut"
+      @mousedown="handleZoomOutMouseDown"
+      @touchstart="handleZoomOutMouseDown"
+      class="vc-zoomout-sm"
+    ></div>
     <div
       :style="zoombarStyle"
       @mousedown="handleZoomBarScrollMouseDown"

@@ -6,7 +6,7 @@ VcIconSvg.register({
     viewBox: '0 0 53 53',
     data: `
     <!-- Generator: Sketch 3.4.3 (16044) - http://www.bohemiancoding.com/sketch -->
-    <title>compass-rotation-marker</title>
+    <!-- <title>compass-rotation-marker</title> -->
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

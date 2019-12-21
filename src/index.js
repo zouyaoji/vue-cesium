@@ -111,10 +111,16 @@ import * as VcFlood from './components/visualization/flood'
 import * as VcHeatMap from './components/visualization/heatmap'
 import * as VcWindMap from './components/visualization/windmap'
 
+import lang from './exts/lang'
+
 /**
  * @const {string} VueCesium version
  */
 const VERSION = 'C_PKG_VERSION'
+
+const $vc = {
+  VERSION
+}
 
 /**
  * Register all VueCesium components.
@@ -239,12 +245,16 @@ function plugin (Vue, options = {}) {
   Vue.use(VcFlood, options)
   Vue.use(VcHeatMap, options)
   Vue.use(VcWindMap, options)
+
+  lang.install($vc, options.lang)
+  Vue.prototype.$vc = $vc
 }
 
 export default plugin
 
 export {
   VERSION,
+  lang,
   plugin as install,
   Viewer,
 

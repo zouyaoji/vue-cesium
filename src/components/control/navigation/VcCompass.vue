@@ -1,5 +1,6 @@
 <template>
   <div
+    :title="$vc.lang.navigation.compass.description"
     @dblclick="handleDoubleClick"
     @mousedown="handleMouseDown"
     @mouseup="resetRotater"

@@ -9,6 +9,15 @@
         v-for="(polyline, index) of polylines"
       ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
+    <vc-collection-primitive-polyline ref="polylineCollection">
+      <vc-primitive-polyline
+        :key="index"
+        :material="polyline.materialLine"
+        :positions="polyline.positions"
+        :width="polylineWidth"
+        v-for="(polyline, index) of polylines"
+      ></vc-primitive-polyline>
+    </vc-collection-primitive-polyline>
     <vc-collection-primitive-point>
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
@@ -36,7 +45,7 @@
             :pixelOffset="pixelOffset"
             :position="position"
             :showBackground="showBackground"
-            :text="distanceText + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
+            :text="$vc.lang.measure.distance + ': ' + (polyline.distances[subIndex] > 1000 ? (polyline.distances[subIndex] / 1000).toFixed(2) + 'km' : polyline.distances[subIndex].toFixed(2) + 'm')"
             v-if="polyline.distances[subIndex] !== 0"
           ></vc-primitive-label>
         </template>
@@ -56,21 +65,44 @@ export default {
       polylines: []
     }
   },
-  props: {
-    distanceText: {
-      type: String,
-      default: '距离：'
-    }
-  },
   methods: {
+    /**
+     * 根据传入坐标数组计算距离。
+     * @param {Array.Cartesian3} positions 传入的坐标数组
+     * @returns {Number} 返回长度数值。
+     */
     getDistance (positions) {
-      const { Cesium } = this
+      // const { Cartesian3 } = Cesium
       let distance = 0
       for (let i = 0; i < positions.length - 1; i++) {
-        let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
+        // Cartesian.distance gives the straight line distance between the two points, ignoring curvature. This is not what we want.
+        // Cartesian3.distance 计算的是两点之间的直线距离，忽略了地球曲率，不太合理。
+        // let s = Cartesian3.distance(positions[i], positions[i + 1])
+        // 2.0.3 版本改为测地距离（GeodesicDistance）。
+        let s = this.getGeodesicDistance(positions[i], positions[i + 1])
         distance = distance + s
       }
       return distance
+    },
+    /**
+     * 返回两点之间的测地距离。
+     * @param {Cartesian3} pointOne 第一个坐标点
+     * @param {Cartesian3} pointTwo 第二个坐标点
+     * @returns {Number} 返回两点之间的测地距离。
+     */
+    getGeodesicDistance (pointOne, pointTwo) {
+      const { Ellipsoid, EllipsoidGeodesic } = Cesium
+      const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(
+        pointOne
+      )
+      const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(
+        pointTwo
+      )
+      const geodesic = new EllipsoidGeodesic(
+        pickedPointCartographic,
+        lastPointCartographic
+      )
+      return geodesic.surfaceDistance
     },
     clear () {
       this.polylines = []
