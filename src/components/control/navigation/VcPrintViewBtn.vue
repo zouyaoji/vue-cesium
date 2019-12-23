@@ -8,10 +8,10 @@
 <script>
 import './icon/share'
 import printWindow from '../../../exts/printWindow'
-import '../../../assets/styles/components/tool-button.scss'
+import '../../../assets/styles/components/toolButton.scss'
 import VcIconSvg from './icon/VcIconSvg.vue'
 import VcPrintView from './VcPrintView.vue'
-import Vue from 'vue/dist/vue.esm.js'
+import Vue from 'vue'
 export default {
   name: 'vc-view-print',
   components: {
@@ -118,11 +118,6 @@ function createWindow (options) {
     <meta charset="UTF-8">
     <title>VueCesium Print View</title>
     <style>
-      .tjs-_base__list-reset {
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
-      }
       .background {
         width: 100%;
         fill: rgba(255, 255, 255, 1.0);
@@ -131,20 +126,8 @@ function createWindow (options) {
         max-width: 95vw;
         max-height: 95vh;
       }
-      .layer-legends {
-        display: inline;
-        float: left;
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-      .layer-title {
-        font-weight: bold;
-      }
       h1, h2, h3 {
         clear: both;
-      }
-      .tjs-_form__input {
-        width: 80%;
       }
       </style>
     `

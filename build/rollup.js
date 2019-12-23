@@ -13,6 +13,7 @@ const notifier = require('node-notifier')
 const argv = require('yargs').argv
 const utils = require('./utils')
 const config = require('./config')
+const alias = require('@rollup/plugin-alias')
 
 process.env.NODE_ENV = 'production'
 // process.env.NODE_ENV = 'development'
@@ -208,7 +209,6 @@ function bundleOptions (format, pkg, env = 'development') {
       // // const ol = {}
       // options.output.globals = (id) => {
       //   if (id === 'vue') return 'Vue'
-      //   console.log(id)
       //   // if (ol[id] != null) {
       //   //   return ol[id]
       //   // }
@@ -254,6 +254,9 @@ function makeBundle (options = {}) {
     vuePlugin({
       sourceMap: true,
       css: false
+    }),
+    alias({
+      'vue': require.resolve('vue/dist/vue.esm.js')
     }),
     scssSmartAsset({
       postcssUrlConfig: {
