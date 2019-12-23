@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer :timeline="timeline" @ready="ready" >
+      <vc-viewer :timeline="timeline" @ready="ready">
         <vc-navigation :options="options"></vc-navigation>
       </vc-viewer>
       <div class="demo-tool">
@@ -42,7 +42,8 @@
             enableLocationBar: true,
             enableCompassOuterRing: true,
             // 缩放比例
-            zoomAmount: 2
+            zoomAmount: 2,
+            gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
           }
         }
       },

@@ -34,8 +34,9 @@
     <div id="app">
       <div id="map">
         <vc-viewer ref="viewer" animation timeline @ready="ready">
+          <vc-navigation></vc-navigation>
           <vc-layer-imagery>
-            <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+            <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
           </vc-layer-imagery>
           <vc-datasource-custom name="custom" ref="custom">
             <vc-entity :position="position" :billboard="billboard" :description="description" :id="id"></vc-entity>
@@ -66,6 +67,7 @@
 
     <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
     <script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-cesium@latest/lib/vc-navigation.css"></link>
     <!-- <script src="../lib/index.umd.js"></script> -->
     <script>
       Vue.use(VueCesium, {

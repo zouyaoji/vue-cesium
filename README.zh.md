@@ -53,6 +53,7 @@ Vue.use(VueCesium)
 ```javascript
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
+import lang from '../../lang/zh-hans'
 
 Vue.use(VueCesium, {
   // cesiumPath 是指引用的Cesium.js路径，如
@@ -63,7 +64,9 @@ Vue.use(VueCesium, {
   // 个人在线SuperMap Cesium Build包（在官方基础上二次开发出来的）：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // 官方在线Cesium Build包，有CDN加速，推荐用这个：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  accessToken: `Your accessToken`,
+  lang: lang // 2.0.3 版本新增。
 })
 ```
 
@@ -87,7 +90,7 @@ Vue.use(VueCesium, {
 ```vue
 <template>
   <div class="viewer">
-    <vc-viewer> </vc-viewer>
+    <vc-viewer></vc-viewer>
   </div>
 </template>
 

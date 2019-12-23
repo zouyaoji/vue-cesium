@@ -1,11 +1,18 @@
 # 更新日志
 
-## 2.0.2 - 2019-12-19
+## 2.0.3 - 2019-12-23
+
+## 增加
+
+- 国际化语言。 `Vue.use(VueCesium, {cesiumPath: cesiumPath, accessToken: accessToken, lang: lang})` 默认加载中文。
 
 ## 修改
 
-- `vc-navigation` 样式修改了，增加了位置信息。
-- `vc-analysis-flood` -> `vc-analytics-flood`
+- css 名称统一。
+- 面积量算结果修正，用海伦公式计算表面积。
+- 距离量算结果修正，之前简单的用了 `Cartesian3.distance` 计算的是两点之间的直线距离，忽略了地球曲率，并不合理，改为计算`测地距离(GeodesicDistance)`。
+
+## 2.0.2 - 2019-12-19
 
 ## 增加
 
@@ -13,6 +20,11 @@
 - `vc-stage-process-post` 后期处理组件。
 - `vc-collection-stage-process-post` 后期处理集合组件。
 - `vc-provider-imagery-tiledcache` 组件，加载 TiledCache 瓦片。
+
+## 修改
+
+- `vc-navigation` 样式修改了，增加了位置信息。
+- `vc-analysis-flood` -> `vc-analytics-flood`
 
 ## 2.0.1 - 2019-12-09
 

@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :polyline.sync="polyline1">
-          <vc-graphics-polyline :positions="positions1" :material="material1" :width="5" :clampToGround="false" heightPositions></vc-graphics-polyline>
+          <vc-graphics-polyline :positions="positions1" :material="material1" :width="5" :clampToGround="false"></vc-graphics-polyline>
         </vc-entity>
         <vc-entity :polyline.sync="polyline2">
           <vc-graphics-polyline :positions="positions2" :material="material2" :width="10"></vc-graphics-polyline>
@@ -77,7 +77,6 @@
           :material="material1"
           :width="5"
           :clampToGround="false"
-          heightPositions
         ></vc-graphics-polyline>
       </vc-entity>
       <vc-entity :polyline.sync="polyline2">

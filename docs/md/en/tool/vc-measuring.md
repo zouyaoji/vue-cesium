@@ -144,7 +144,6 @@
 | ------------ | ------ | ------------------- | --------------------------------------------------- |
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
-| distanceText | String | `'距离：'` | `optional` Specify the distance text. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---
@@ -157,7 +156,6 @@
 | perPositionHeight | Boolean | `true` | `optional` Whether the face uses the height of each point, if not, the surface is drawn to the ground. (But the area algorithm is not the calculated floor area). |
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the area text. the label CSS font. |
-| areaText | String | `'面积：'` | `optional` Specify the area text. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---
@@ -169,9 +167,6 @@
 | ------------- | ------ | ------------------- | --------------------------------------------------- |
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
-| distanceHText | String | `'水平距离：'` | `optional` Specify horizontal distance text. |
-| distanceSText | String | `'空间距离：'` | `optional` Specify the space distance text. |
-| heightText | String | `'垂直高度：'` | `optional` Specify vertical height text. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 
 ---

@@ -21,7 +21,7 @@ The container is an empty DOM node which used to mount other components or DOM n
         <vc-layer-imagery>
           <vc-provider-imagery-tianditu
             mapStyle="img_c"
-            token="tk"
+            :token="tk"
           ></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
@@ -98,7 +98,7 @@ The container is an empty DOM node which used to mount other components or DOM n
       <vc-layer-imagery>
         <vc-provider-imagery-tianditu
           mapStyle="img_c"
-          token="tk"
+          :token="tk"
         ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>

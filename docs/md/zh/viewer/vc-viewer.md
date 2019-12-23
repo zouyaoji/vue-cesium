@@ -14,14 +14,14 @@
       <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
         <vc-navigation></vc-navigation>
-        <vc-layer-imagery ref="layerText">
-          <vc-provider-imagery-tianditu mapStyle="cia_c" :token="tk"></vc-provider-imagery-tianditu>
-        </vc-layer-imagery>
         <vc-layer-imagery>
           <vc-provider-imagery-tianditu
             mapStyle="img_c"
-            token="tk"
+            :token="tk"
           ></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
+        <vc-layer-imagery ref="layerText">
+          <vc-provider-imagery-tianditu mapStyle="cia_c" :token="tk"></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
@@ -99,11 +99,11 @@
       @ready="ready"
     >
       <vc-navigation></vc-navigation>
-      <vc-layer-imagery ref="layerText">
-        <vc-provider-imagery-tianditu mapStyle="cva_c" :token="tk"></vc-provider-imagery-tianditu>
-      </vc-layer-imagery>
       <vc-layer-imagery>
-        <vc-provider-imagery-tianditu mapStyle="img_c" token="tk"></vc-provider-imagery-tianditu>
+        <vc-provider-imagery-tianditu mapStyle="img_c" :token="tk"></vc-provider-imagery-tianditu>
+      </vc-layer-imagery>
+      <vc-layer-imagery ref="layerText">
+        <vc-provider-imagery-tianditu mapStyle="cia_c" :token="tk"></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">

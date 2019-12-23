@@ -9,6 +9,8 @@ div
 <script>
 import RootFrame from './RootFrame.vue'
 import Navigator from './Navigator.vue'
+import en from '../../lang/en-us'
+import zh from '../../lang/zh-hans'
 
 export default {
   components: {
@@ -40,6 +42,7 @@ export default {
       })
       const meta = this.$route.meta || {}
       this.lang = meta.lang
+      this.$vc.lang.set(this.lang === 'zh' ? zh : en)
     })
   },
   computed: {

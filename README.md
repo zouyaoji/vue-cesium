@@ -49,6 +49,7 @@ Vue.use(VueCesium)
 ```javascript
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
+import lang from '../../lang/zh-hans'
 
 Vue.use(VueCesium, {
   // cesiumPath is path of Cesium.js', for example:
@@ -59,7 +60,9 @@ Vue.use(VueCesium, {
   // Personal online SuperMap Cesium Build package：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
   // Official Online Cesium Build package：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  accessToken: `Your accessToken`,
+  lang: lang // 2.0.3+
 })
 ```
 

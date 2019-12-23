@@ -152,7 +152,6 @@
 | perPositionHeight | Boolean | `true`              | `optional` 面是否使用每个点的高度，否的话绘制的面是贴地的。（但面积算法还不是算的贴地面积） |
 | mode              | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。                                         |
 | font              | String  | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                                                              |
-| areaText          | String  | `'面积：'`          | `optional` 指定面积文字。                                                                   |
 | depthTest         | Boolean | `false`             | `optional` 指定标签文字和线对象是参与深度测试。                                             |
 
 ---
@@ -163,9 +162,6 @@
 | ------------- | ------- | ------------------- | --------------------------------------------------- |
 | mode          | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
 | font          | String  | `'100 20px SimSun'` | `optional` 指定标签 CSS 字体。                      |
-| distanceHText | String  | `'水平距离：'`      | `optional` 指定水平距离文字。                       |
-| distanceSText | String  | `'空间距离：'`      | `optional` 指定空间距离文字。                       |
-| heightText    | String  | `'垂直高度：'`      | `optional` 指定垂直高度文字。                       |
 | depthTest     | Boolean | `false`             | `optional` 指定标签文字和线对象是参与深度测试。     |
 
 ---
