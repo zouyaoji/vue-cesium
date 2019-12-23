@@ -4,7 +4,7 @@ const ora = require('ora')
 const rollup = require('rollup')
 const babel = require('rollup-plugin-babel')
 const cjs = require('rollup-plugin-commonjs')
-const nodeResolve = require('rollup-plugin-node-resolve')
+const nodeResolve = require('@rollup/plugin-node-resolve')
 const replace = require('rollup-plugin-re')
 const vuePlugin = require('rollup-plugin-vue').default
 const uglify = require('rollup-plugin-uglify')
@@ -275,7 +275,7 @@ function makeBundle (options = {}) {
       mainFields: ['main', 'module', 'jsnext:main'],
       browser: true
     }),
-    cjs(),
+    cjs({ include: 'node_modules/**' }),
     // paths replace
     ...(options.patterns
       ? options.patterns.map((patterns) =>
