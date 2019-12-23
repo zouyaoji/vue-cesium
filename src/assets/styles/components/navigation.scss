@@ -17,7 +17,7 @@
   bottom: 100px;
 }
 
-.vc-control {
+.vc-navigation-control {
   @media (min-width: $sm) {
     margin: 7px 0;
     height: auto;
@@ -28,12 +28,12 @@
   height: 40px;
 }
 
-.navs {
+.vc-navigation-navs {
   display: flex;
   flex-direction: column;
 }
 
-.controls {
+.vc-navigation-controls {
   display: flex;
   @media (min-width: $sm) {
     flex-direction: column;

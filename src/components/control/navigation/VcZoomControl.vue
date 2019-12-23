@@ -38,6 +38,25 @@ export default {
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
       this.viewer = viewer
+      const resetView = this.defaultResetView
+      if (resetView && resetView.lng) {
+        viewer.camera.setView({
+          destination: Cesium.Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height)
+        })
+      } else if (resetView && resetView.west) {
+        try {
+          const rectangle = Cesium.Rectangle.fromDegrees(resetView.west, resetView.south, resetView.east, resetView.north)
+          Cesium.Rectangle.validate(rectangle)
+          viewer.camera({
+            destination: rectangle,
+            orientation: {
+              heading: Cesium.Math.toRadians(5.729578)
+            }
+          })
+        } catch (e) {
+          console.error(`[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!`)
+        }
+      }
     })
   },
   methods: {

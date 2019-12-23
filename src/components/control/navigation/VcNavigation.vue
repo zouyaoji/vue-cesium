@@ -1,14 +1,27 @@
 <template>
   <div class="vc-navigationContainer">
     <div class="vc-navigation">
-      <div class="vc-control" v-if="defaultOptions.enableCompass">
-        <vc-compass :enableCompassOuterRing="defaultOptions.enableCompassOuterRing"></vc-compass>
+      <div class="vc-navigation-navs">
+        <div class="vc-navigation-control" v-if="defaultOptions.enableCompass">
+          <vc-compass :enableCompassOuterRing="defaultOptions.enableCompassOuterRing"></vc-compass>
+        </div>
+        <div class="vc-navigation-control" v-if="defaultOptions.enableZoomControl">
+          <vc-zoom-control
+            :defaultResetView="defaultOptions.enableZoomControl.defaultResetView"
+            :zoomAmount="defaultOptions.enableZoomControl.zoomAmount || 2"
+          ></vc-zoom-control>
+        </div>
       </div>
-      <div class="vc-control" v-if="defaultOptions.enableZoomControl">
-        <vc-zoom-control :defaultResetView="defaultOptions.defaultResetView" :zoomAmount="defaultOptions.zoomAmount"></vc-zoom-control>
+      <div class="vc-navigation-controls">
+        <div class="vc-navigation-control" v-if="defaultOptions.enablePrintView">
+          <vc-print-view-btn
+            :printAutomatically="defaultOptions.enablePrintView.printAutomatically"
+            :showCredit="defaultOptions.enablePrintView.showCredit"
+          ></vc-print-view-btn>
+        </div>
       </div>
     </div>
-    <div :style="ldStyle" class="vc-location-distance" >
+    <div :style="ldStyle" class="vc-location-distance">
       <vc-location-bar :mouseCoords="mouseCoords" v-if="mouseCoords !== undefined && defaultOptions.enableLocationBar"></vc-location-bar>
       <vc-distance-legend v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
     </div>
@@ -16,7 +29,6 @@
 </template>
 
 <script>
-
 import '../../../assets/styles/components/navigation.scss'
 import cmp from '../../../mixins/virtualCmp'
 import MouseCoords from '../../../exts/MouseCoords'
@@ -24,6 +36,7 @@ import VcCompass from './VcCompass.vue'
 import VcZoomControl from './VcZoomControl.vue'
 import VcDistanceLegend from './VcDistanceLegend.vue'
 import VcLocationBar from './VcLocationBar.vue'
+import VcPrintViewBtn from './VcPrintViewBtn.vue'
 
 export default {
   name: 'vc-navigation',
@@ -31,7 +44,8 @@ export default {
     VcCompass,
     VcZoomControl,
     VcDistanceLegend,
-    VcLocationBar
+    VcLocationBar,
+    VcPrintViewBtn
   },
   mixins: [cmp],
   props: {
@@ -42,12 +56,19 @@ export default {
       defaultOptions: {
         enableCompass: true,
         enableCompassOuterRing: true,
-        enableZoomControl: true,
+        enableZoomControl: {
+          zoomAmount: 2,
+          defaultResetView: {
+            lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+          }
+        },
         enableDistanceLegend: true,
-        enableLocationBar: true,
-        zoomAmount: 2,
-        defaultResetView: {
-          lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+        enableLocationBar: {
+          gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
+        },
+        enablePrintView: {
+          showCredit: true,
+          printAutomatically: false
         }
       },
       ldBottom: 2,
@@ -78,7 +99,7 @@ export default {
       this.viewer.widgetResized.addEventListener(this.widgetResized)
       Object.assign(this.defaultOptions, this.options)
       this.widgetResized()
-      this.mouseCoords = new MouseCoords({ gridFileUrl: this.defaultOptions.gridFileUrl })
+      this.mouseCoords = new MouseCoords({ gridFileUrl: this.defaultOptions.enableLocationBar.gridFileUrl })
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2

@@ -5,6 +5,7 @@
 ## 增加
 
 - 国际化语言。 `Vue.use(VueCesium, {cesiumPath: cesiumPath, accessToken: accessToken, lang: lang})` 默认加载中文。
+- `vc-navigation` 增加一个打印控件。
 
 ## 修改
 

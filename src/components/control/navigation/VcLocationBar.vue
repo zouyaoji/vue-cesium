@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import '../../../assets/styles/components/legend.scss'
 export default {
   name: 'vc-bar-location',
   props: {

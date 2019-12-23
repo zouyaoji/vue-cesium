@@ -25,6 +25,7 @@ export default {
       e: 'E',
       n: 'N',
       elev: 'Elev'
-    }
+    },
+    printView: 'Printing to share your map with others'
   }
 }

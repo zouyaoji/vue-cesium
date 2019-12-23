@@ -25,6 +25,7 @@ export default {
       e: 'X',
       n: 'Y',
       elev: '高程'
-    }
+    },
+    printView: '打印分享'
   }
 }

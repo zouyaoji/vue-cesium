@@ -13,6 +13,9 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-navigation ref="navigation" :options="options"></vc-navigation>
+        <vc-layer-imagery>
+          <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>EnableCompass</span>
@@ -33,15 +36,30 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
       data () {
         return {
           options: {
-             // option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
-            defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
             enableCompass: true,
             enableZoomControl: true,
+            // enableZoomControl: {
+            //   // scaling ratio
+            //   zoomAmount: 2,
+            //   option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
+            //   defaultResetView: {
+            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+            //   }
+            // },
             enableDistanceLegend: true,
             enableLocationBar: true,
+            // enableLocationBar: {
+            //   // Get more accurate elevation
+            //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
+            // },
             enableCompassOuterRing: true,
-            // 缩放比例
-            zoomAmount: 2
+            enablePrintView: true
+            // enablePrintView: {
+            //   // show Credit
+            //   showCredit: true,
+            //   // print automatically
+            //   printAutomatically: false
+            // }
           }
         }
       },
@@ -62,6 +80,9 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-navigation ref="navigation" :options="options"></vc-navigation>
+      <vc-layer-imagery>
+        <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
+      </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <span>EnableCompass</span>
@@ -82,14 +103,30 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
     data() {
       return {
         options: {
-          // option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
-          defaultResetView: { lng: 105, lat: 29.999999999999993, height: 19059568.497290563 },
           enableCompass: true,
           enableZoomControl: true,
+          // enableZoomControl: {
+          //   // scaling ratio
+          //   zoomAmount: 2,
+          //   option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
+          //   defaultResetView: {
+          //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+          //   }
+          // },
           enableDistanceLegend: true,
           enableLocationBar: true,
+          // enableLocationBar: {
+          //   // Get more accurate elevation
+          //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
+          // },
           enableCompassOuterRing: true,
-          zoomAmount: 2
+          enablePrintView: true
+          // enablePrintView: {
+          //   // show Credit
+          //   showCredit: true,
+          //   // print automatically
+          //   printAutomatically: false
+          // }
         }
       }
     },
@@ -108,13 +145,12 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
 <!-- prettier-ignore -->
 | name | type | default | description |
 | ---- | ---- | ------- | ----------- |
-| defaultResetView | Array | | `optional` option used to set a default view when resetting the map view with the reset navigation control. **structure: {lng: number, lat: number, height: number} or {west: number,south: number,east: number,north: number}** |
 | enableCompass | Boolean | `true` | `optional` option used to enable or disable the compass. |
-| enableZoomControl | Boolean | `true` | `optional` option used to enable or disable the zoom control. |
+| enableZoomControl | Boolean\|Object | `true` | `optional` option used to enable or disable the zoom control. |
 | enableDistanceLegend | Boolean | `true` | `optional` option used to enable or disable the distance legend. |
-| enableLocationBar | Boolean | `true` | `optional` option used to enable or disable the LocationBar. |
+| enableLocationBar | Boolean\|Object | `true` | `optional` option used to enable or disable the LocationBar. |
 | enableCompassOuterRing | Boolean | `true` | `optional` option used to enable or disable the Compass Outer Ring. |
-| zoomAmount | Number | `2` | `optional` option used to specify the zoom amount. |
+| enablePrintView | Boolean\|Object | `true` | `optional` option used to enable or disable the PrintView. |
 
 ---
 

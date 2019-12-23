@@ -291,3 +291,48 @@ export function Platform () {
     isChrome: isChrome
   }
 }
+
+export function captureScreenshot (viewer, showSplitter = false) {
+  const { when } = Cesium
+  const deferred = when.defer()
+  const scene = viewer.scene
+  var removeCallback = scene.postRender.addEventListener(function () {
+    removeCallback()
+    try {
+      const cesiumCanvas = viewer.scene.canvas
+
+      // If we're using the splitter, draw the split position as a vertical white line.
+      let canvas = cesiumCanvas
+      // if (showSplitter) {
+      //   canvas = document.createElement('canvas')
+      //   canvas.width = cesiumCanvas.width
+      //   canvas.height = cesiumCanvas.height
+
+      //   const context = canvas.getContext('2d')
+      //   context.drawImage(cesiumCanvas, 0, 0)
+
+      //   const x = viewer.splitPosition * cesiumCanvas.width
+      //   context.strokeStyle = this.terria.baseMapContrastColor
+      //   context.beginPath()
+      //   context.moveTo(x, 0)
+      //   context.lineTo(x, cesiumCanvas.height)
+      //   context.stroke()
+      // }
+
+      deferred.resolve(canvas.toDataURL('image/png'))
+    } catch (e) {
+      deferred.reject(e)
+    }
+  }, this)
+
+  scene.render(viewer.clock.currentTime)
+
+  return deferred.promise
+}
+
+export function getAllAttribution (viewer) {
+  const credits = viewer.scene.frameState.creditDisplay._currentFrameCredits.screenCredits.values.concat(
+    viewer.scene.frameState.creditDisplay._currentFrameCredits.lightboxCredits.values
+  )
+  return credits.map(credit => credit.html)
+}
