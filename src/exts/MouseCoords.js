@@ -1,14 +1,12 @@
 import debounce from 'lodash.debounce'
 import prettifyCoordinates from './prettifyCoordinates'
 import prettifyProjection from './prettifyProjection'
-// import EarthGravityModel1996 from './EarthGravityModel1996'
+import EarthGravityModel1996 from './EarthGravityModel1996'
 class MouseCoords {
-  constructor () {
+  constructor (options = {}) {
     const { Cartographic, knockout } = Cesium
-
-    // this.geoidModel = new EarthGravityModel1996(
-    //   require('../assets/data/WW15MGH.DAC')
-    // )
+    const gridFileUrl = options.gridFileUrl
+    gridFileUrl && (this.geoidModel = new EarthGravityModel1996(gridFileUrl))
 
     this.proj4Projection = '+proj=utm +ellps=GRS80 +units=m +no_defs'
     this.projectionUnits = 'm'
@@ -69,7 +67,6 @@ class MouseCoords {
           const height = barycentric.x * v0.height + barycentric.y * v1.height + barycentric.z * v2.height
           intersection.height = height
         }
-
         const geometricError = globe.terrainProvider.getLevelMaximumGeometricError(pickedTriangle.tile.level)
         const approximateHeight = intersection.height
         const minHeight = Math.max(pickedTriangle.tile.data.tileBoundingRegion.minimumHeight, approximateHeight - geometricError)

@@ -51,7 +51,7 @@ EarthGravityModel1996.prototype.getHeights = function (cartographicArray) {
 }
 
 function getHeightData (model) {
-  const { defined, loadArrayBuffer, when } = Cesium
+  const { defined, when } = Cesium
   if (!defined(model.data)) {
     model.data = loadArrayBuffer(model.gridFileUrl)
   }
@@ -126,6 +126,12 @@ function getHeightValue (data, recordIndex, heightIndex) {
   }
 
   return data[recordIndex * 1440 + heightIndex]
+}
+
+function loadArrayBuffer (urlOrResource) {
+  const { Resource } = Cesium
+  var resource = Resource.createIfNeeded(urlOrResource)
+  return resource.fetchArrayBuffer()
 }
 
 module.exports = EarthGravityModel1996

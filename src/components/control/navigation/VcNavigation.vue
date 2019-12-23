@@ -78,7 +78,7 @@ export default {
       this.viewer.widgetResized.addEventListener(this.widgetResized)
       Object.assign(this.defaultOptions, this.options)
       this.widgetResized()
-      this.mouseCoords = new MouseCoords()
+      this.mouseCoords = new MouseCoords({ gridFileUrl: this.defaultOptions.gridFileUrl })
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2
