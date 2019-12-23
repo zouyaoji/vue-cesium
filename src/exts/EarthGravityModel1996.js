@@ -134,4 +134,5 @@ function loadArrayBuffer (urlOrResource) {
   return resource.fetchArrayBuffer()
 }
 
-module.exports = EarthGravityModel1996
+// module.exports = EarthGravityModel1996
+export default EarthGravityModel1996

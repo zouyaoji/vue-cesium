@@ -68,4 +68,4 @@ function printWindow (windowToPrint) {
   return deferred.promise
 }
 
-module.exports = printWindow
+export default printWindow
