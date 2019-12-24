@@ -18,7 +18,7 @@ describe('vc-viewer', () => {
     vm.$on('ready', ({ Cesium, viewer }) => {
       expect(viewer).to.be.instanceof(Cesium.Viewer)
       expect(vm.$el).to.contain('.cesium-widget canvas')
-      expect(Cesium.buildModuleUrl()).to.contain('https://unpkg.com/cesium/Build/Cesium')
+      expect(Cesium.buildModuleUrl()).to.contain('https://unpkg.com')
       destroyVM(vm)
       done()
     })
