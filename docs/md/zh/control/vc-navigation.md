@@ -54,7 +54,7 @@
             //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
             // },
             enableCompassOuterRing: true,
-            // enablePrintView: true
+            enablePrintView: true
             // enablePrintView: {
             //   // 是否添加 Credit
             //   showCredit: true,

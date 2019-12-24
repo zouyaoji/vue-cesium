@@ -1,6 +1,6 @@
 <template>
   <div class="vc-tool-btn">
-    <button @click="handleCick" class="vc-btn" :title="$vc.lang.navigation.printView" type="button">
+    <button :title="$vc.lang.navigation.printView" @click="handleCick" class="vc-btn" type="button">
       <vc-icon-svg name="share"></vc-icon-svg>
     </button>
   </div>
@@ -32,63 +32,55 @@ export default {
   },
   methods: {
     handleCick () {
-      this.createPrintView(this.printAutomatically, this.printAutomatically)
+      this.createPrintView()
     },
-    createPrintView (hidden, printAutomatically) {
-      const { viewer, showCredit } = this
+    createPrintView () {
+      const { viewer, showCredit, printAutomatically } = this
       this.creatingPrintView = true
-      let iframe
-      if (hidden) {
-        iframe = document.createElement('iframe')
-        document.body.appendChild(iframe)
+      if (printAutomatically) {
+        this.iframe = document.createElement('iframe')
+        document.body.appendChild(this.iframe)
       }
       const newWindow = createWindow({
-        printWindow: iframe ? iframe.contentWindow : undefined,
+        printWindow: this.iframe ? this.iframe.contentWindow : undefined,
         closeCallback: (windowToPrint) => {
-          if (hidden) {
+          if (printAutomatically) {
             this.creatingPrintView = false
           }
         }
       })
+
+      const options = {
+        viewer: viewer,
+        printWindow: newWindow,
+        showCredit: showCredit
+      }
       new Vue({
-        components: { VcPrintView },
-        template: `
-          <vc-print-view :options="options" @ready="printViewReady"></vc-print-view>
-        `,
-        data () {
-          return {
-            options: {
-              viewer: viewer,
-              printWindow: newWindow,
-              showCredit: showCredit
-            }
-          }
-        },
-        methods: {
-          printViewReady (windowToPrint) {
-            if (printAutomatically) {
-              printWindow(windowToPrint)
-                .otherwise((e) => {
-                  console.error(e)
-                })
-                .always(() => {
-                  if (iframe) {
-                    document.body.removeChild(iframe)
-                  }
-                  if (hidden) {
-                    this.creatingPrintView = false
-                  }
-                })
-            }
-          }
-        }
+        render: h => h(VcPrintView, { props: { options }, on: { ready: this.printViewReady } })
       }).$mount(newWindow.document.getElementById('print'))
-      if (!hidden) {
+      if (!printAutomatically) {
         this.creatingPrintView = false
       }
     },
+    printViewReady (windowToPrint) {
+      const { printAutomatically, iframe } = this
+      if (printAutomatically) {
+        printWindow(windowToPrint)
+          .otherwise((e) => {
+            console.error(e)
+          })
+          .always(() => {
+            if (iframe) {
+              document.body.removeChild(iframe)
+            }
+            if (printAutomatically) {
+              this.creatingPrintView = false
+            }
+          })
+      }
+    },
     printViewClosed (windowToPrint) {
-      if (this.hidden) {
+      if (this.printAutomatically) {
         this.creatingPrintView = false
       }
     }
