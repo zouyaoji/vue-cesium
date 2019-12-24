@@ -14,7 +14,7 @@ describe('vc-viewer', () => {
     })
   }).timeout(6000)
   it('cesiumPath', done => {
-    const vm = createTest(Viewer, { cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js' }, true)
+    const vm = createTest(Viewer, { cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js' }, true)
     vm.$on('ready', ({ Cesium, viewer }) => {
       expect(viewer).to.be.instanceof(Cesium.Viewer)
       expect(vm.$el).to.contain('.cesium-widget canvas')
