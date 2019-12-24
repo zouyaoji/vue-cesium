@@ -86,7 +86,7 @@
 
 ---
 
-参考官方文档： [CesiumTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html)
+参考官方文档： [ArcGISTiledElevationTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html)
 
 ## 事件
 
