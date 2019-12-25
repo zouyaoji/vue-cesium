@@ -8,11 +8,18 @@ const methods = {
   async mount () {
     const { dataSources, datasource } = this
     bindEvents.call(this, datasource, Events['datasource-events'], true)
+    Events['datasource-property-events'].forEach((eventName) => {
+      datasource[eventName.name] && bindEvents.call(this, datasource[eventName.name], eventName.events, true)
+    })
+    datasource.show = this.show
     return dataSources && dataSources.add(datasource)
   },
   async unmount () {
     const { dataSources, datasource } = this
     bindEvents.call(this, datasource, Events['datasource-events'], false)
+    Events['datasource-property-events'].forEach((eventName) => {
+      datasource[eventName.name] && bindEvents.call(this, datasource[eventName.name], eventName.events, false)
+    })
     return dataSources && dataSources.remove(datasource)
   },
   getServices () {

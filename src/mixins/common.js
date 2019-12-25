@@ -270,6 +270,8 @@ export default {
     })
   },
   destroyed () {
-    this.unload()
+    this.unload().then(() => {
+      this.$emit('destroyed', this)
+    })
   }
 }

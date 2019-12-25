@@ -1,6 +1,6 @@
 # 淹没分析
 
-`vc-analysis-flood` 组件用于模拟淹没分析。其实质是用 `vc-primitive-classification` 加载 `vc-geometry-polygon`，通过动态修改 `vc-geometry-polygon` 的 `extrudedHeight` 属性拉伸成一个闭合体对象，从而模拟淹没分析。**注意**需要场景加载地形或 3DTiles 才可以分析。
+`vc-analytics-flood` 组件用于模拟淹没分析。其实质是用 `vc-primitive-classification` 加载 `vc-geometry-polygon`，通过动态修改 `vc-geometry-polygon` 的 `extrudedHeight` 属性拉伸成一个闭合体对象，从而模拟淹没分析。**注意**需要场景加载地形或 3DTiles 才可以分析。
 
 ## 示例
 
@@ -12,8 +12,8 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-analysis-flood ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
-        </vc-analysis-flood>
+        <vc-analytics-flood ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
+        </vc-analytics-flood>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
         <vc-layer-imagery>
           <vc-provider-imagery-bingmaps :url="url" :bmKey="bmKey" mapStyle="Aerial"></vc-provider-imagery-bingmaps>
@@ -87,8 +87,8 @@
 <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-analysis-flood ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
-        </vc-analysis-flood>
+        <vc-analytics-flood ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
+        </vc-analytics-flood>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
         <vc-layer-imagery>
           <vc-provider-imagery-bingmaps :url="url" :bmKey="bmKey" mapStyle="Aerial"></vc-provider-imagery-bingmaps>

@@ -60,11 +60,11 @@ export default {
     async mount () {
       const { viewer, imageryLayer } = this
       viewer.imageryLayers.add(imageryLayer)
-      return viewer.imageryLayers.contains(imageryLayer)
+      return !this.viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     },
     async unmount () {
       const { viewer, imageryLayer } = this
-      return viewer.imageryLayers.remove(imageryLayer)
+      return !viewer.isDestroyed() && viewer.imageryLayers.remove(imageryLayer)
     },
     async refresh () {
       return this.unmount().then(() => {

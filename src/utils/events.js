@@ -3,36 +3,7 @@
  */
 export const Events = {
   'vc-viewer': ['selectedEntityChanged', 'trackedEntityChanged'],
-  'vc-primitive-3dtileset': [
-    'allTilesLoaded',
-    'initialTilesLoaded',
-    'loadProgress',
-    'tileFailed',
-    'tileLoad',
-    'tileUnload',
-    'tileVisible'
-  ],
-  'imagery-layer-events': ['errorEvent'],
-  'entity-events': ['definitionChanged'],
-  'viewer-mouse-events': [
-    'LEFT_CLICK',
-    'LEFT_DOUBLE_CLICK',
-    'LEFT_DOWN',
-    'LEFT_UP',
-    'MIDDLE_CLICK',
-    'MIDDLE_DOWN',
-    'MIDDLE_UP',
-    'MOUSE_MOVE',
-    'PINCH_END',
-    'PINCH_MOVE',
-    'PINCH_START',
-    'RIGHT_CLICK',
-    'RIGHT_DOWN',
-    'RIGHT_UP',
-    'WHEEL'
-  ],
-  'datasource-events': ['changedEvent', 'errorEvent', 'loadingEvent'],
-  'viewer-children-events': [
+  'viewer-property-events': [
     {
       // viewer.imageryLayers
       name: 'imageryLayers',
@@ -76,6 +47,49 @@ export const Events = {
       // viewer.terrainProvider
       name: 'terrainProvider',
       events: ['errorEvent']
+    }
+  ],
+  'viewer-mouse-events': [
+    'LEFT_CLICK',
+    'LEFT_DOUBLE_CLICK',
+    'LEFT_DOWN',
+    'LEFT_UP',
+    'MIDDLE_CLICK',
+    'MIDDLE_DOWN',
+    'MIDDLE_UP',
+    'MOUSE_MOVE',
+    'PINCH_END',
+    'PINCH_MOVE',
+    'PINCH_START',
+    'RIGHT_CLICK',
+    'RIGHT_DOWN',
+    'RIGHT_UP',
+    'WHEEL'
+  ],
+  'vc-primitive-3dtileset': [
+    'allTilesLoaded',
+    'initialTilesLoaded',
+    'loadProgress',
+    'tileFailed',
+    'tileLoad',
+    'tileUnload',
+    'tileVisible'
+  ],
+  'imagery-layer-events': ['errorEvent'],
+  'entity-events': ['definitionChanged'],
+  'datasource-events': ['changedEvent', 'errorEvent', 'loadingEvent'],
+  'datasource-property-events': [
+    {
+      name: 'clock',
+      events: ['definitionChanged']
+    },
+    {
+      name: 'clustering',
+      events: ['clusterEvent']
+    },
+    {
+      name: 'entities',
+      events: ['collectionChanged']
     }
   ]
 }

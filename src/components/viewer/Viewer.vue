@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-12-18 15:33:29
+ * @Last Modified time: 2019-12-25 15:54:58
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -794,7 +794,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     registerEvents (flag) {
       const { viewer } = this
       bindEvents.call(this, viewer, undefined, flag)
-      Events['viewer-children-events'].forEach((eventName) => {
+      Events['viewer-property-events'].forEach((eventName) => {
         bindEvents.call(this, viewer[eventName.name], eventName.events, flag)
       })
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
@@ -955,8 +955,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       inputHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE)
       inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
       inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK, KeyboardEventModifier.SHIFT)
-
-      // viewer.destroy()
+      viewer.destroy()
       global.Cesium = null
       this.viewer = null
       this._mounted = false

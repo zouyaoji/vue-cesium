@@ -35,6 +35,28 @@
             ></vc-graphics-cylinder>
           </vc-entity>
         </vc-datasource-custom>
+        <template v-for="(itemOut, indexOut) of datas">
+          <vc-datasource-custom
+            :key="indexOut"
+            :name="'datasource' + indexOut + '_' + itemOut.color"
+            :ref="'ds' + itemOut.name"
+            @ready="datasourceReady(itemOut)"
+            @clusterEvent="datasourceClusterEvent"
+            v-if="itemOut.type == 'point'"
+          >
+            <template v-for="(item, index) of itemOut.data">
+              <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
+                <vc-graphics-billboard
+                  :image="itemOut.iconUrl"
+                  :scale="0.5"
+                  :show="true"
+                  :width="itemOut.width"
+                  :height="itemOut.height"
+                ></vc-graphics-billboard>
+              </vc-entity>
+            </template>
+          </vc-datasource-custom>
+        </template>
       </vc-viewer>
     </div>
   </template>
@@ -57,7 +79,9 @@
 
           cylinder2: {},
           position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
-          material2: 'RED'
+          material2: 'RED',
+
+          datas: []
         }
       },
       mounted() {
@@ -66,7 +90,16 @@
           this.$refs.cylinder1.createPromise,
           this.$refs.cylinder2.createPromise
         ]).then((instances) => {
-          instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+          window.vm = this
+          // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+          instances[0].viewer.camera.setView({
+            destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
+            orientation: {
+              heading: 0.07310634629277768,
+              pitch: -1.5094668006074268,
+              roll: 0.0003451814958399524
+            }
+          })
         })
       },
       methods: {
@@ -85,6 +118,108 @@
             // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
             alignedAxis: Cesium.Cartesian3.ZERO // default
           })
+          this.addPoints(true)
+        },
+        datasourceReady(instance) {
+          let { Cesium, viewer, cesiumObject } = instance
+          const that = this
+          this.$refs['ds' + instance.name][0].createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+            //开启聚合功能
+            cesiumObject.clustering.enabled = true
+            cesiumObject.clustering.pixelRange = 30
+            cesiumObject.clustering.minimumClusterSize = 3
+          })
+        },
+        datasourceClusterEvent(clusteredEntities, cluster) {
+          cluster.label.show = true
+          cluster.label.scale = 0.5
+          cluster.label.fillColor = Cesium.Color.fromCssColorString('#FFFFFF')
+          cluster.label.style = Cesium.LabelStyle.FILL
+          cluster.label.font = '30px caption'
+          cluster.label.VerticalOrigin = Cesium.VerticalOrigin.BOTTOM
+          cluster.label.pixelOffset = new Cesium.Cartesian2(-7, 5)
+          cluster.label.disableDepthTestDistance = Number.POSITIVE_INFINITY
+          cluster.point.show = true
+          //聚合体属性
+          cluster.point.id = cluster.label.id
+          cluster.point.color = Cesium.Color.LIGHTSLATEGRAY
+          if (clusteredEntities.length >= 100) {
+            cluster.point.pixelSize = 38
+            cluster.label.pixelOffset = new Cesium.Cartesian2(-12, 5)
+          } else if (clusteredEntities.length >= 50) {
+            cluster.point.pixelSize = 36
+          } else if (clusteredEntities.length >= 40) {
+            cluster.point.pixelSize = 33
+          } else if (clusteredEntities.length >= 30) {
+            cluster.point.pixelSize = 28
+          } else if (clusteredEntities.length >= 20) {
+            cluster.point.pixelSize = 25
+          } else if (clusteredEntities.length >= 10) {
+            cluster.label.pixelOffset = new Cesium.Cartesian2(-6, 4)
+            cluster.label.scale = 0.4
+            cluster.point.pixelSize = 20
+          } else if (clusteredEntities.length >= 5) {
+            cluster.label.pixelOffset = new Cesium.Cartesian2(-3, 4)
+            cluster.label.scale = 0.4
+            cluster.point.pixelSize = 15
+          } else {
+            cluster.label.pixelOffset = new Cesium.Cartesian2(-3, 4)
+            cluster.label.scale = 0.4
+            cluster.point.pixelSize = 13
+          }
+        },
+        getPosition(item) {
+          return {
+            lng: item.Longitude,
+            lat: item.Latitude,
+            height: 1000
+          }
+        },
+        addPoints(flag) {
+          const item = {
+            id: '1001',
+            code: '1001',
+            name: 'test',
+            iconOn: '/statics/SampleData/points/pic.png',
+            giscolor: '#fb7228',
+            datauri: './statics/SampleData/points/yj.json'
+          }
+          this.showPoints(item, flag)
+        },
+        showPoints(item, flag) {
+          const that = this
+          if (flag) {
+            Cesium.Resource.fetchJson(item.datauri).then((res) => {
+              const img = new Image()
+              img.src = item.iconOn
+              img.onload = () => {
+                let datas = []
+                let data = {
+                  name: item.code,
+                  type: 'point',
+                  clustering: true,
+                  data: [],
+                  iconUrl: item.iconOn,
+                  color: item.giscolor,
+                  width: img.width,
+                  height: img.height
+                }
+                data.data = res.reduce((pre, cur) => {
+                  return pre.concat({
+                    Longitude: cur.Longitude,
+                    Latitude: cur.Latitude,
+                    id: cur.id,
+                    description: cur.name
+                  })
+                }, [])
+
+                datas.push(data)
+                that.datas = datas
+              }
+            })
+          } else {
+            this.datas = []
+          }
         }
       }
     }
@@ -120,6 +255,28 @@
           ></vc-graphics-cylinder>
         </vc-entity>
       </vc-datasource-custom>
+      <template v-for="(itemOut, indexOut) of datas">
+        <vc-datasource-custom
+          :key="indexOut"
+          :name="'datasource' + indexOut + '_' + itemOut.color"
+          :ref="'ds' + itemOut.name"
+          @ready="datasourceReady(itemOut)"
+          @clusterEvent="datasourceClusterEvent"
+          v-if="itemOut.type == 'point'"
+        >
+          <template v-for="(item, index) of itemOut.data">
+            <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
+              <vc-graphics-billboard
+                :image="itemOut.iconUrl"
+                :scale="0.5"
+                :show="true"
+                :width="itemOut.width"
+                :height="itemOut.height"
+              ></vc-graphics-billboard>
+            </vc-entity>
+          </template>
+        </vc-datasource-custom>
+      </template>
     </vc-viewer>
   </div>
 </template>
@@ -142,7 +299,9 @@
 
         cylinder2: {},
         position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
-        material2: 'RED'
+        material2: 'RED',
+
+        datas: []
       }
     },
     mounted() {
@@ -151,7 +310,15 @@
         this.$refs.cylinder1.createPromise,
         this.$refs.cylinder2.createPromise
       ]).then((instances) => {
-        instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+        // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+        instances[0].viewer.camera.setView({
+          destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
+          orientation: {
+            heading: 0.07310634629277768,
+            pitch: -1.5094668006074268,
+            roll: 0.0003451814958399524
+          }
+        })
       })
     },
     methods: {
@@ -170,6 +337,108 @@
           // rotation: Cesium.Math.PI_OVER_FOUR, // default: 0.0
           alignedAxis: Cesium.Cartesian3.ZERO // default
         })
+        this.addPoints(true)
+      },
+      datasourceReady(instance) {
+        let { Cesium, viewer, cesiumObject } = instance
+        const that = this
+        this.$refs['ds' + instance.name][0].createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+          //开启聚合功能
+          cesiumObject.clustering.enabled = true
+          cesiumObject.clustering.pixelRange = 30
+          cesiumObject.clustering.minimumClusterSize = 3
+        })
+      },
+      datasourceClusterEvent(clusteredEntities, cluster) {
+        cluster.label.show = true
+        cluster.label.scale = 0.5
+        cluster.label.fillColor = Cesium.Color.fromCssColorString('#FFFFFF')
+        cluster.label.style = Cesium.LabelStyle.FILL
+        cluster.label.font = '30px caption'
+        cluster.label.VerticalOrigin = Cesium.VerticalOrigin.BOTTOM
+        cluster.label.pixelOffset = new Cesium.Cartesian2(-7, 5)
+        cluster.label.disableDepthTestDistance = Number.POSITIVE_INFINITY
+        cluster.point.show = true
+        //聚合体属性
+        cluster.point.id = cluster.label.id
+        cluster.point.color = Cesium.Color.LIGHTSLATEGRAY
+        if (clusteredEntities.length >= 100) {
+          cluster.point.pixelSize = 38
+          cluster.label.pixelOffset = new Cesium.Cartesian2(-12, 5)
+        } else if (clusteredEntities.length >= 50) {
+          cluster.point.pixelSize = 36
+        } else if (clusteredEntities.length >= 40) {
+          cluster.point.pixelSize = 33
+        } else if (clusteredEntities.length >= 30) {
+          cluster.point.pixelSize = 28
+        } else if (clusteredEntities.length >= 20) {
+          cluster.point.pixelSize = 25
+        } else if (clusteredEntities.length >= 10) {
+          cluster.label.pixelOffset = new Cesium.Cartesian2(-6, 4)
+          cluster.label.scale = 0.4
+          cluster.point.pixelSize = 20
+        } else if (clusteredEntities.length >= 5) {
+          cluster.label.pixelOffset = new Cesium.Cartesian2(-3, 4)
+          cluster.label.scale = 0.4
+          cluster.point.pixelSize = 15
+        } else {
+          cluster.label.pixelOffset = new Cesium.Cartesian2(-3, 4)
+          cluster.label.scale = 0.4
+          cluster.point.pixelSize = 13
+        }
+      },
+      getPosition(item) {
+        return {
+          lng: item.Longitude,
+          lat: item.Latitude,
+          height: 1000
+        }
+      },
+      addPoints(flag) {
+        const item = {
+          id: '1001',
+          code: '1001',
+          name: 'test',
+          iconOn: '/statics/SampleData/points/pic.png',
+          giscolor: '#fb7228',
+          datauri: './statics/SampleData/points/yj.json'
+        }
+        this.showPoints(item, flag)
+      },
+      showPoints(item, flag) {
+        const that = this
+        if (flag) {
+          Cesium.Resource.fetchJson(item.datauri).then((res) => {
+            const img = new Image()
+            img.src = item.iconOn
+            img.onload = () => {
+              let datas = []
+              let data = {
+                name: item.code,
+                type: 'point',
+                clustering: true,
+                data: [],
+                iconUrl: item.iconOn,
+                color: item.giscolor,
+                width: img.width,
+                height: img.height
+              }
+              data.data = res.reduce((pre, cur) => {
+                return pre.concat({
+                  Longitude: cur.Longitude,
+                  Latitude: cur.Latitude,
+                  id: cur.id,
+                  description: cur.name
+                })
+              }, [])
+
+              datas.push(data)
+              that.datas = datas
+            }
+          })
+        } else {
+          this.datas = []
+        }
       }
     }
   }
@@ -189,11 +458,13 @@
 
 ## 事件
 
-| 事件名       | 参数                           | 描述                                                                             |
-| ------------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| changedEvent |                                | 数据源改变时触发。                                                               |
-| errorEvent   |                                | 数据源发生错误时触发。                                                           |
-| loadingEvent |                                | 数据源开始或结束加载时触发。                                                     |
+| 事件名            | 参数                                  | 描述                                                                             |
+| ----------------- | ------------------------------------- | -------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer, cesiumObject}        | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| changedEvent      |                                       | 数据源改变时触发。                                                               |
+| errorEvent        |                                       | 数据源发生错误时触发。                                                           |
+| loadingEvent      |                                       | 数据源开始或结束加载时触发。                                                     |
+| clusterEvent      | (clusteredEntities, cluster)          | 数据源聚合事件。                                                                 |
+| collectionChanged | (collection, added, removed, changed) | 数据源实体集合改变时触发。                                                       |
 
 ---

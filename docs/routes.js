@@ -807,8 +807,8 @@ const routeMap = [
         }
       },
       {
-        path: 'vc-analysis-flood',
-        component: 'visualization/vc-analysis-flood',
+        path: 'vc-analytics-flood',
+        component: 'visualization/vc-analytics-flood',
         name: {
           zh: '淹没分析',
           en: 'VcFloodAnalysis'

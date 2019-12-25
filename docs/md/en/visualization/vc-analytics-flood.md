@@ -1,6 +1,6 @@
 # VcAnalysisFlood
 
-The `vc-analysis-flood` component is used to simulate flood analysis. **Note** Scene loading terrain or 3DTiles is required for analysis.
+The `vc-analytics-flood` component is used to simulate flood analysis. **Note** Scene loading terrain or 3DTiles is required for analysis.
 
 ## Example
 
@@ -12,7 +12,7 @@ The `vc-analysis-flood` component is used to simulate flood analysis. **Note** S
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-analysis-flood
+        <vc-analytics-flood
           ref="flood"
           :minHeight="minHeight"
           :maxHeight="maxHeight"
@@ -20,7 +20,7 @@ The `vc-analysis-flood` component is used to simulate flood analysis. **Note** S
           :polygonHierarchy="polygonHierarchy"
           @activeEvt="activeEvt"
         >
-        </vc-analysis-flood>
+        </vc-analytics-flood>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
         <vc-layer-imagery>
           <vc-provider-imagery-bingmaps :url="url" :bmKey="bmKey" mapStyle="Aerial"></vc-provider-imagery-bingmaps>
@@ -94,7 +94,7 @@ The `vc-analysis-flood` component is used to simulate flood analysis. **Note** S
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-analysis-flood
+      <vc-analytics-flood
         ref="flood"
         :minHeight="minHeight"
         :maxHeight="maxHeight"
@@ -102,7 +102,7 @@ The `vc-analysis-flood` component is used to simulate flood analysis. **Note** S
         :polygonHierarchy="polygonHierarchy"
         @activeEvt="activeEvt"
       >
-      </vc-analysis-flood>
+      </vc-analytics-flood>
       <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
       <vc-layer-imagery>
         <vc-provider-imagery-bingmaps :url="url" :bmKey="bmKey" mapStyle="Aerial"></vc-provider-imagery-bingmaps>

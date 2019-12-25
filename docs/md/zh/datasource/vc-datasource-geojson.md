@@ -103,5 +103,6 @@
 | changedEvent |                                | 数据源改变时触发。                                                               |
 | errorEvent   |                                | 数据源发生错误时触发。                                                           |
 | loadingEvent |                                | 数据源开始或结束加载时触发。                                                     |
-
+| clusterEvent      | (clusteredEntities, cluster)          | 数据源聚合事件。                                                                 |
+| collectionChanged | (collection, added, removed, changed) | 数据源实体集合改变时触发。                                                       |
 ---
