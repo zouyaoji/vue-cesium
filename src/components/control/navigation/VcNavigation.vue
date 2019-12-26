@@ -19,6 +19,9 @@
             :showCredit="defaultOptions.enablePrintView.showCredit"
           ></vc-print-view-btn>
         </div>
+        <div class="vc-navigation-control" v-if="defaultOptions.enableMyLocation">
+          <vc-my-location></vc-my-location>
+        </div>
       </div>
     </div>
     <div :style="ldStyle" class="vc-location-distance">
@@ -37,6 +40,7 @@ import VcZoomControl from './VcZoomControl.vue'
 import VcDistanceLegend from './VcDistanceLegend.vue'
 import VcLocationBar from './VcLocationBar.vue'
 import VcPrintViewBtn from './VcPrintViewBtn.vue'
+import VcMyLocation from './VcMyLocation.vue'
 
 export default {
   name: 'vc-navigation',
@@ -45,7 +49,8 @@ export default {
     VcZoomControl,
     VcDistanceLegend,
     VcLocationBar,
-    VcPrintViewBtn
+    VcPrintViewBtn,
+    VcMyLocation
   },
   mixins: [cmp],
   props: {
@@ -69,7 +74,8 @@ export default {
         enablePrintView: {
           showCredit: true,
           printAutomatically: false
-        }
+        },
+        enableMyLocation: true
       },
       ldBottom: 2,
       ldRight: 3,

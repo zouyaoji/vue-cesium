@@ -26,6 +26,7 @@ export default {
       n: 'Y',
       elev: '高程'
     },
-    printView: '打印分享'
+    printView: '打印分享',
+    centreMap: '定位您的位置'
   }
 }

@@ -1,18 +1,18 @@
 <template>
-  <div class="zoomControl">
-    <ul class="list">
+  <div class="vc-zoom-control">
+    <ul class="vc-list">
       <li>
-        <button :title="$vc.lang.navigation.zoomCotrol.zoomIn" @click="zoomIn" class="increase" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomIn" @click="zoomIn" class="vc-increase" type="button">
           <vc-icon-svg name="increase"></vc-icon-svg>
         </button>
       </li>
       <li>
-        <button :title="$vc.lang.navigation.zoomCotrol.zoomReset" @click="zoomReset" class="refresh" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomReset" @click="zoomReset" class="vc-refresh" type="button">
           <vc-icon-svg name="refresh"></vc-icon-svg>
         </button>
       </li>
       <li>
-        <button :title="$vc.lang.navigation.zoomCotrol.zoomOut" @click="zoomOut" class="decrease" type="button">
+        <button :title="$vc.lang.navigation.zoomCotrol.zoomOut" @click="zoomOut" class="vc-decrease" type="button">
           <vc-icon-svg name="decrease"></vc-icon-svg>
         </button>
       </li>

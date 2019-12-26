@@ -26,6 +26,7 @@ export default {
       n: 'N',
       elev: 'Elev'
     },
-    printView: 'Printing to share your map with others'
+    printView: 'Printing to share your map with others',
+    centreMap: 'Centre map at your current location'
   }
 }

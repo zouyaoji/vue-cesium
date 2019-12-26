@@ -53,13 +53,14 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
             //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
             // },
             enableCompassOuterRing: true,
-            enablePrintView: true
+            enablePrintView: true,
             // enablePrintView: {
             //   // show Credit
             //   showCredit: true,
             //   // print automatically
             //   printAutomatically: false
-            // }
+            // },
+            enableMyLocation: true
           }
         }
       },
@@ -120,13 +121,14 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
           //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
           // },
           enableCompassOuterRing: true,
-          enablePrintView: true
+          enablePrintView: true,
           // enablePrintView: {
           //   // show Credit
           //   showCredit: true,
           //   // print automatically
           //   printAutomatically: false
-          // }
+          // },
+          enableMyLocation: true
         }
       }
     },

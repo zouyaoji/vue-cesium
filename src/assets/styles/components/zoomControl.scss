@@ -1,6 +1,6 @@
 @import '../common/variables';
 @import '../common/mixins';
-.zoomControl {
+.vc-zoom-control {
   display: none;
 
   background: $charcoal-grey;
@@ -24,15 +24,15 @@
   }
 }
 
-.list {
+.vc-list {
   list-style: none;
   padding-left: 0;
   margin: 0;
 }
 
-.increase,
-.decrease,
-.refresh {
+.vc-increase,
+.vc-decrease,
+.vc-refresh {
   background-color: transparent;
   margin: 0;
   border: 0;
