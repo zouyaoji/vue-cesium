@@ -90,7 +90,6 @@
           this.$refs.cylinder1.createPromise,
           this.$refs.cylinder2.createPromise
         ]).then((instances) => {
-          window.vm = this
           // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
           instances[0].viewer.camera.setView({
             destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),

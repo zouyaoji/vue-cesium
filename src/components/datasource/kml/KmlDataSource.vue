@@ -1,20 +1,20 @@
 <script>
-import { credit, ellipsoid } from '../../../mixins/mixinProps'
 import mixinDatasource from '../../../mixins/datasource/mixinDatasource'
 export default {
   name: 'vc-datasource-kml',
-  mixins: [credit, ellipsoid, mixinDatasource],
+  mixins: [mixinDatasource],
   props: {
     data: {
       type: String | Object,
       required: true
     },
-    camera: Object,
-    canvas: Object,
-    sourceUri: String,
-    clampToGround: {
-      type: Boolean,
-      default: false
+    options: {
+      type: Object,
+      default: () => {
+        return {
+          clampToGround: false
+        }
+      }
     }
   },
   methods: {
@@ -27,7 +27,7 @@ export default {
       if (!options.canvas) {
         options.canvas = viewer.canvas
       }
-      return Cesium.KmlDataSource.load(options.data, options)
+      return Cesium.KmlDataSource.load(options.data, options.options)
     }
   }
 }

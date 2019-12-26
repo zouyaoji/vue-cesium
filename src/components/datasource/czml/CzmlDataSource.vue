@@ -1,22 +1,21 @@
 
 <script>
-import { credit } from '../../../mixins/mixinProps'
 import mixinDatasource from '../../../mixins/datasource/mixinDatasource'
 export default {
   name: 'vc-datasource-czml',
-  mixins: [credit, mixinDatasource],
+  mixins: [mixinDatasource],
   props: {
     czml: {
       type: String | Object,
       required: true
     },
-    sourceUri: String
+    options: Object
   },
   methods: {
     async createCesiumObject () {
       const { $props, transformProps } = this
       const options = transformProps($props)
-      return Cesium.CzmlDataSource.load(options.czml, options)
+      return Cesium.CzmlDataSource.load(options.czml, options.options)
     }
   }
 }

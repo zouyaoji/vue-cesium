@@ -16,6 +16,8 @@
           data="./statics/SampleData/lineData/streamline.json"
           @ready="subReady"
           :show="show"
+          :options="options"
+          ref="ds"
         ></vc-datasource-geojson>
       </vc-viewer>
     </div>
@@ -25,7 +27,10 @@
     export default {
       data() {
         return {
-          show: true
+          show: true,
+          options: {
+            stroke: 'red'
+          },
         }
       },
       methods: {
