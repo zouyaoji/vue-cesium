@@ -244,6 +244,20 @@ export function makeTranslationRotationScale (val) {
   )
 }
 
+export function makeOptions (val) {
+  const cmpName = this.$options.name
+  switch (cmpName) {
+    case 'vc-datasource-geojson':
+      const result = {}
+      Object.assign(result, val)
+      result && result.markerColor && (result.markerColor = makeColor(result.markerColor))
+      result && result.stroke && (result.stroke = makeColor(result.stroke))
+      result && result.fill && (result.fill = makeColor(result.fill))
+      return result
+  }
+  return val
+}
+
 export function dirname (path) {
   if (typeof path !== 'string') path = path + ''
   if (path.length === 0) return '.'

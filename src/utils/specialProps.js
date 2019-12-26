@@ -12,7 +12,8 @@ import {
   makePlane,
   makePolygonHierarchy,
   makeTranslationRotationScale,
-  makeQuaternion
+  makeQuaternion,
+  makeOptions
 } from './util'
 
 /**
@@ -142,6 +143,10 @@ const specialProps = {
   },
   orientation: {
     handler: makeQuaternion
+  },
+  options: {
+    deep: true,
+    handler: makeOptions
   }
 }
 

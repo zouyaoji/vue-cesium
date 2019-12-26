@@ -5,47 +5,47 @@ const TiandituMapsStyleID = {}
 const TiandituMapsStyleFormat = {}
 const TiandituMapsStyleEPSG = {}
 const TiandituMapsStyleLabels = {}
-Object.keys(TiandituMapsStyle).forEach(key => {
-  TiandituMapsStyleUrl[TiandituMapsStyle[key]] = 'https://[subdomain].tianditu.com/' + TiandituMapsStyle[key] + '/wmts'
-  TiandituMapsStyleLayer[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(0, 3)
-  TiandituMapsStyleID[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(4)
-  TiandituMapsStyleFormat[TiandituMapsStyle[key]] = 'tiles'
-
-  if (TiandituMapsStyleID[TiandituMapsStyle[key]] === 'w') {
-    TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '900913'
-  } else {
-    TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '4490'
-  }
-  switch (TiandituMapsStyle[key]) {
-    case 'img_w':
-    case 'img_c':
-    case 'cia_w':
-    case 'cia_c':
-    case 'cta_w':
-    case 'cta_c':
-      TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
-      break
-    case 'vec_w':
-    case 'vec_c':
-    case 'cva_w':
-    case 'cva_c':
-      TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']
-      break
-    case 'ter_w':
-    case 'ter_c':
-      TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
-      break
-    case 'eia_w':
-    case 'eia_c':
-    case 'eva_w':
-    case 'eva_c':
-      TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-      break
-  }
-})
 
 class TiandituImageryProvider {
   constructor (options) {
+    Object.keys(TiandituMapsStyle).forEach(key => {
+      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://[subdomain].tianditu.com/' + TiandituMapsStyle[key] + '/wmts'
+      TiandituMapsStyleLayer[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(0, 3)
+      TiandituMapsStyleID[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(4)
+      TiandituMapsStyleFormat[TiandituMapsStyle[key]] = 'tiles'
+
+      if (TiandituMapsStyleID[TiandituMapsStyle[key]] === 'w') {
+        TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '900913'
+      } else {
+        TiandituMapsStyleEPSG[TiandituMapsStyle[key]] = '4490'
+      }
+      switch (TiandituMapsStyle[key]) {
+        case 'img_w':
+        case 'img_c':
+        case 'cia_w':
+        case 'cia_c':
+        case 'cta_w':
+        case 'cta_c':
+          TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
+          break
+        case 'vec_w':
+        case 'vec_c':
+        case 'cva_w':
+        case 'cva_c':
+          TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']
+          break
+        case 'ter_w':
+        case 'ter_c':
+          TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
+          break
+        case 'eia_w':
+        case 'eia_c':
+        case 'eva_w':
+        case 'eva_c':
+          TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+          break
+      }
+    })
     const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme, when } = Cesium
     options = defaultValue(options, {})
     this.m_mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)

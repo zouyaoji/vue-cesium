@@ -13,10 +13,15 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
     <div class="viewer">
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
         <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <vc-provider-imagery-tianditu mapStyle="eva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+          <vc-provider-imagery-tianditu
+            :protocol="protocol"
+            mapStyle="eva_c"
+            token="436ce7e50d27eede2f2929307e6b33c0">
+          </vc-provider-imagery-tianditu>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
+            :protocol="protocol"
             :mapStyle="mapStyle"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
@@ -43,6 +48,7 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
     export default {
       data() {
         return {
+          protocol: 'http',
           options: [
             {
               value: 'img_c',
@@ -98,10 +104,12 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-tianditu mapStyle="eva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+        <vc-provider-imagery-tianditu :protocol="protocol" mapStyle="eva_c" token="436ce7e50d27eede2f2929307e6b33c0">
+        </vc-provider-imagery-tianditu>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
+          :protocol="protocol"
           :mapStyle="mapStyle"
           token="436ce7e50d27eede2f2929307e6b33c0"
         ></vc-provider-imagery-tianditu>
@@ -128,6 +136,7 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
   export default {
     data() {
       return {
+        protocol: 'http',
         options: [
           {
             value: 'img_c',
@@ -183,6 +192,7 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
 | mapStyle | String         | `'img_w'`              | `optional` The type of service.                                                            |
 | credit   | String\|Object | `'天地图全球影像服务'` | `optional` The credit of service                                                           |
 | token    | String         |                        | `optional` The key of service. [Application address](http://lbs.tianditu.gov.cn/home.html) |
+| protocol | String         | `https`                | `optional` The network protocol of service, can be `https` or `http`                                       |
 
 ---
 

@@ -13,10 +13,15 @@
     <div class="viewer">
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
         <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+          <vc-provider-imagery-tianditu
+            :protocol="protocol"
+            mapStyle="cva_c"
+            token="436ce7e50d27eede2f2929307e6b33c0"
+          ></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
+            :protocol="protocol"
             :mapStyle="mapStyle"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
@@ -43,6 +48,7 @@
     export default {
       data() {
         return {
+          protocol: 'http',
           options: [
             {
               value: 'img_c',
@@ -98,10 +104,15 @@
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+        <vc-provider-imagery-tianditu
+          :protocol="protocol"
+          mapStyle="cva_c"
+          token="436ce7e50d27eede2f2929307e6b33c0"
+        ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
+          :protocol="protocol"
           :mapStyle="mapStyle"
           token="436ce7e50d27eede2f2929307e6b33c0"
         ></vc-provider-imagery-tianditu>
@@ -128,6 +139,7 @@
   export default {
     data() {
       return {
+        protocol: 'http',
         options: [
           {
             value: 'img_c',
@@ -183,6 +195,7 @@
 | mapStyle | String         | `'img_w'`              | `optional` 天地图服务地图类型。                                              |
 | credit   | String\|Object | `'天地图全球影像服务'` | `optional` 服务版权描述信息。                                                |
 | token    | String         |                        | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
+| protocol | String         | `https`                | `optional` 指定请求协议类型。可以是`https`或者`http`                         |
 
 ---
 

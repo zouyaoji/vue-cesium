@@ -6,7 +6,11 @@ export default {
   mixins: [mixinImageryProvider],
   props: {
     mapStyle: String,
-    token: String
+    token: String,
+    protocol: {
+      type: String,
+      default: 'https'
+    }
   },
   methods: {
     async createCesiumObject () {
