@@ -15,7 +15,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
         <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
-        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="false"></vc-measure-area>
+        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
         <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
         <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
       </vc-viewer>

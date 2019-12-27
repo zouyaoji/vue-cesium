@@ -1,5 +1,17 @@
 # 更新日志
 
+## 2.0.4 - 2019-12-28
+
+## 增加
+
+- `vc-navigation` 增加一个定位我的位置的控件。用的是`navigator.geolocation`，但谷歌国内被墙了，效果不好，火狐能定位到。
+
+## 修改
+
+- DataSource 组件增加 entities 和 clustering 事件。
+- DataSource 属性 options 合并到一起。
+- `vc-provider-imagery-tianditu` 组件增加属性`protocol`自定义协议类型，服务域名改为 tianditu.gov.cn。
+
 ## 2.0.3 - 2019-12-23
 
 ## 增加
