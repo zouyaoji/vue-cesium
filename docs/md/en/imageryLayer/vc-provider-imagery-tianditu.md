@@ -14,14 +14,12 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
         <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
-            :protocol="protocol"
             mapStyle="eva_c"
             token="436ce7e50d27eede2f2929307e6b33c0">
           </vc-provider-imagery-tianditu>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
-            :protocol="protocol"
             :mapStyle="mapStyle"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
@@ -104,12 +102,11 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-tianditu :protocol="protocol" mapStyle="eva_c" token="436ce7e50d27eede2f2929307e6b33c0">
+        <vc-provider-imagery-tianditu mapStyle="eva_c" token="436ce7e50d27eede2f2929307e6b33c0">
         </vc-provider-imagery-tianditu>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
-          :protocol="protocol"
           :mapStyle="mapStyle"
           token="436ce7e50d27eede2f2929307e6b33c0"
         ></vc-provider-imagery-tianditu>

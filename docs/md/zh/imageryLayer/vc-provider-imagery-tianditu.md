@@ -14,14 +14,12 @@
       <vc-viewer @ready="ready" @layerAdded="layerAdded">
         <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
-            :protocol="protocol"
             mapStyle="cva_c"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
           <vc-provider-imagery-tianditu
-            :protocol="protocol"
             :mapStyle="mapStyle"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
@@ -105,14 +103,12 @@
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
-          :protocol="protocol"
           mapStyle="cva_c"
           token="436ce7e50d27eede2f2929307e6b33c0"
         ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
-          :protocol="protocol"
           :mapStyle="mapStyle"
           token="436ce7e50d27eede2f2929307e6b33c0"
         ></vc-provider-imagery-tianditu>

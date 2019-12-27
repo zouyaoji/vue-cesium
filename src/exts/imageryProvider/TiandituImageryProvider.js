@@ -9,7 +9,7 @@ const TiandituMapsStyleLabels = {}
 class TiandituImageryProvider {
   constructor (options) {
     Object.keys(TiandituMapsStyle).forEach(key => {
-      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://[subdomain].tianditu.com/' + TiandituMapsStyle[key] + '/wmts'
+      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://[subdomain].tianditu.gov.cn/' + TiandituMapsStyle[key] + '/wmts'
       TiandituMapsStyleLayer[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(0, 3)
       TiandituMapsStyleID[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(4)
       TiandituMapsStyleFormat[TiandituMapsStyle[key]] = 'tiles'
