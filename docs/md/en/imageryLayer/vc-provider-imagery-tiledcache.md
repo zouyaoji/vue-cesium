@@ -1,12 +1,12 @@
 # TiledCacheImageryProvider
 
-`vc-provider-imagery-tiledcache` 组件用于加载 TiledCache 影像服务。
+The `vc-provider-imagery-tiledcache` component is used to load the TiledCache image service.
 
-## 示例
+## Example
 
-### 加载 TiledCache 影像服务图层
+### Load an imagerylayer with TiledCacheImageryProvider
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -26,11 +26,11 @@
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
-        <span>透明度</span>
+        <span>alpha</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
-        <span>亮度</span>
+        <span>brightness</span>
         <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
-        <span>对比度</span>
+        <span>contrast</span>
         <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
       </div>
     </div>
@@ -57,7 +57,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -77,11 +77,11 @@
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
-      <span>透明度</span>
+      <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
-      <span>亮度</span>
+      <span>brightness</span>
       <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
-      <span>对比度</span>
+      <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
     </div>
   </div>
