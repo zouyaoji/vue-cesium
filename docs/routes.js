@@ -211,15 +211,15 @@ const routeMap = [
           zh: 'SuperMap影像',
           en: 'SuperMapImageryProvider'
         }
+      },
+      {
+        path: 'vc-provider-imagery-tiledcache',
+        component: 'imageryLayer/vc-provider-imagery-tiledcache',
+        name: {
+          zh: 'TiledCache影像',
+          en: 'TiledCacheImageryProvider'
+        }
       }
-      // {
-      //   path: 'vc-provider-imagery-tiledcache',
-      //   component: 'imageryLayer/vc-provider-imagery-tiledcache',
-      //   name: {
-      //     zh: 'TiledCache影像',
-      //     en: 'TiledCacheImageryProvider'
-      //   }
-      // }
     ]
   },
   {

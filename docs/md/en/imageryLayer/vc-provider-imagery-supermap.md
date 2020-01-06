@@ -43,15 +43,15 @@ The `vc-provider-imagery-supermap` component is used to load the SuperMap iServe
         return {
           options: [
             {
-              value: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+              value: 'https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
               label: 'sichuan'
             },
             {
-              value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
+              value: 'https://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
               label: 'google'
             }
           ],
-          url: 'https://www.songluck.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+          url: 'https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
           alpha: 1,
           brightness: 1,
           contrast: 1
@@ -108,15 +108,15 @@ The `vc-provider-imagery-supermap` component is used to load the SuperMap iServe
       return {
         options: [
           {
-            value: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+            value: 'https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
             label: 'sichuan'
           },
           {
-            value: 'http://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
+            value: 'https://www.supermapol.com/realspace/services/map-World/rest/maps/World_Google',
             label: 'google'
           }
         ],
-        url: 'http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
+        url: 'https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult',
         alpha: 1,
         brightness: 1,
         contrast: 1
