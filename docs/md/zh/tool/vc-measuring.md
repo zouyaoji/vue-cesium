@@ -14,7 +14,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
+        <vc-measure-distance :arcType="1" ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
         <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
         <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
         <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
@@ -137,11 +137,12 @@
 
 ### vc-measure-distance
 
-| 属性名    | 类型    | 默认值              | 描述                                                |
-| --------- | ------- | ------------------- | --------------------------------------------------- |
-| mode      | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。 |
-| font      | String  | `'100 20px SimSun'` | `optional` 指定 label 字体。                        |
-| depthTest | Boolean | `false`             | `optional` 指定标签文字和线对象是参与深度测试。     |
+| 属性名    | 类型    | 默认值              | 描述                                                 |
+| --------- | ------- | ------------------- | ---------------------------------------------------- |
+| mode      | Number  | `1`                 | `optional` 测量模式，0 连续测量，1 测量一次就结束。  |
+| font      | String  | `'100 20px SimSun'` | `optional` 指定 label 字体。                         |
+| depthTest | Boolean | `false`             | `optional` 指定标签文字和线对象是参与深度测试。      |
+| arcType   | Number  | `1`                 | `optional` 指定线的呈现方式， 0 空间直线，1 测地线。 |
 
 ---
 
