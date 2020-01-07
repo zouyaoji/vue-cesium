@@ -47,7 +47,7 @@ export default {
         try {
           const rectangle = Cesium.Rectangle.fromDegrees(resetView.west, resetView.south, resetView.east, resetView.north)
           Cesium.Rectangle.validate(rectangle)
-          viewer.camera({
+          viewer.camera.setView({
             destination: rectangle,
             orientation: {
               heading: Cesium.Math.toRadians(5.729578)

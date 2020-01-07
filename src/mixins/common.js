@@ -4,21 +4,22 @@ import specialProps from '../utils/specialProps'
 import { warn } from '../utils/log'
 const VM_PROP = 'vm'
 /**
- * 获取父组件方法。
- * @param {VueComponent} $component Vue 组件。
+ * Get the parent component. 获取父组件方法。
+ * @param {VueComponent} $component.
  */
 const getParent = ($component) =>
-  $component.abstract || $component.$el === $component.$children[0].$el ? getParent($component.$parent) : $component
+  !$component.cesiumClass && $component.$options.name !== 'vc-viewer' ? getParent($component.$parent) : $component
 
 /**
  * @vueMethods
  */
 const methods = {
   /**
-   * 异步加载组件。
-   * @returns {Promise<Boolean>} 操作成功返回 {Cesium, viewer, cesiumObject}
+   * Load components asynchronously. 异步加载组件。
+   * @returns {Promise<Object>} { Cesium, viewer, cesiumObject }
    */
   async load () {
+    // Returns if it is already loaded. 如果已经加载则返回。
     if (this._mounted) {
       return false
     }
@@ -27,49 +28,47 @@ const methods = {
     const $parent = getParent(this.$parent)
     const Cesium = (this.Cesium = $parent.Cesium)
     const viewer = (this.viewer = $parent.viewer)
+    // If you call the unload method to unload the component, the Cesium object of the parent component may be unloaded. You need to load the parent component first.
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
     if (!$parent.cesiumObject) {
       return $parent.load()
     }
-    // 注册 Vue 侦听器
-    // 在 Cesium 对象创建前就注册侦听器有一个好处：
-    // 在父组件如 `vc-viewer` 的 `ready` 事件中给子组件的属性赋值能被侦听到。
-    // 从而兼容v1版本的写法。
+    // Register vue Watchers. 注册 Vue 侦听器。
     setPropWatchers(true)
     return createCesiumObject().then(async (cesiumObject) => {
       this.originInstance = cesiumObject
-      // Cesium 对象创建成功后再将其挂载渲染。
+      // Load the created Cesium object. 加载创建的 Cesium 对象。
       return mount().then(() => {
         this._mounted = true
-        // 触发该组件的 'ready' 事件。
-        // v2.0.1 增加回传一个当前组件的 vue 实例 vm, 方便在 promise 操作时取一些组件本身属性，如文档中对 geometry 的定位操作。
+        // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
         this.$emit('ready', { Cesium, viewer, cesiumObject, vm: this })
         return { Cesium, viewer, cesiumObject, vm: this }
       })
     })
   },
   /**
-   * 异步卸载组件，vue 组件本身不会销毁，但 Cesium 对象会被移除。
-   * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
+   * Unloading components asynchronously. 异步卸载组件。
+   * @returns {Promise<Boolean>} returns true on success and false on failure. 成功返回 true，失败返回 false。
    */
   async unload () {
-    // 如果该组件带有子组件，需要先移除子组件。
+    // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (const $node of (this.$slots.default || []).map((vnode) => vnode.componentInstance).filter((cmp) => !!cmp)) {
       await $node.unload()
     }
     return this._mounted
       ? this.unmount().then(async () => {
-        // 注销 Vue 侦听器
+        // Teardown the watchers. 注销 Vue 侦听器。
         this.setPropWatchers(false)
         this.originInstance = undefined
         this._mounted = false
+        // If the component cannot be rendered without the parent component, the parent component needs to be removed.
         // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
         return this.renderByParent ? this.$parent.unload() : true
       }) : false
   },
   /**
-   * 异步重载组件，重新加载 Cesium 对象。
-   * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
+   * Reload components asynchronously. 异步重载组件.
+   * @returns {Promise<Boolean>} returns true on success and false on failure. 成功返回 true，失败返回 false。
    */
   async reload () {
     return this.unload().then(() => {
@@ -77,8 +76,8 @@ const methods = {
     })
   },
   /**
-   * 异步创建 Cesium 对象。
-   * @returns {Promise<Object>} 操作成功将返回 Cesium 对象。
+   * Create Cesium objects asynchronously. 异步创建 Cesium 对象。
+   * @returns {Promise<Object>} return the Cesium object.
    */
   async createCesiumObject () {
     const { $props, cesiumClass, transformProps } = this
@@ -86,8 +85,8 @@ const methods = {
     return new Cesium[cesiumClass](options)
   },
   /**
-   * 注册或注销 vue watcher 对象。
-   * @param {Boolean} register true 代表注册，false 代表注销。
+   * Register or unregister the vue watchers.
+   * @param {Boolean} register
    */
   setPropWatchers (register) {
     if (register) {
@@ -98,7 +97,9 @@ const methods = {
       for (let i = 0; i < constructor.length; i++) {
         args.push({})
       }
-      // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测 watcher 改变时组件属性是动态响应还是重载组件。
+      // Create a temporary object to get the writability of the current Cesium object or the props on its prototype chain to
+      // detect whether the component property responds dynamically or reloads the component when the property changes.
+      // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测属性改变时组件属性是动态响应还是重载组件。
       let instance = cesiumObject || applyToConstructor(constructor, args)
       $props && Object.keys($props).forEach(vueProp => {
         let cesiumProp = vueProp
@@ -110,18 +111,22 @@ const methods = {
         const pd = instance && Object.getOwnPropertyDescriptor(instance, cesiumProp)
         const pdProto = instance && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(instance), cesiumProp)
         const hasSetter = (pd && pd.writable) || (pdProto && pdProto.set)
+        // returns an unwatch function that stops firing the callback
         const unwatch = this.$watch(
           vueProp,
           async (val) => {
-            // 如果是在父组件的 `ready` 事件中就改变了属性，这儿能侦听到，但子组件实际上还没创建完成
+            // Wait for child components to be created.
+            // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
             await this.createPromise
             if (hasSetter) {
-              // 属性可写，直接动态响应属性的改变
+              // Attributes are writable and directly respond to changes in attributes.
+              // 属性可写，直接动态响应属性的改变。
               const { cesiumObject } = this
 
               if (specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler) {
                 const newVal = specialProps[vueProp].handler.call(this, val)
-                // 如果对象已经定义了 exclude 条件如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
+                // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
+                // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
                 if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp][specialProps[vueProp].exclude]) && specialProps[vueProp].exclude)) {
                   cesiumObject[cesiumProp] = newVal
                 }
@@ -130,6 +135,7 @@ const methods = {
               }
               return true
             } else {
+              // The attribute is not writable, and the property is changed indirectly through reloading the component.
               // 属性不可写，通过重加载组件间接实现改变属性
               return this.reload()
             }
@@ -138,17 +144,19 @@ const methods = {
         )
         this.unwatchFns.push(unwatch)
       })
+      // Destroy temporary objects.
       // 销毁临时对象
       instance && Cesium.destroyObject(instance)
       instance = null
     } else {
-      // 注销 watcher 对象
+      // Stops firing the callback.
+      // 注销 watchers。
       this.unwatchFns.forEach((item) => item())
       this.unwatchFns = []
     }
   },
   /**
-   * 使用 apply 方式调用 Cesium 构造函数初始化 Cesium 实例。
+   * Use the apply method to call the Cesium constructor to initialize the Cesium instance. 使用 apply 调用 Cesium 构造函数初始化 Cesium 实例。
    * @param {Function} constructor Cesium 构造函数。
    * @param {Array} argArray 构造函数参数。
    * @returns {Object} 返回 Cesium 实例。
@@ -177,21 +185,21 @@ const methods = {
     return instance
   },
   /**
-   * 异步挂载 Cesium 对象，即将 Cesium 对象添加到 viewer 中。虚方法，在各 vue 组件中实现。
+   * Mount Cesium objects asynchronously. 异步挂载 Cesium 对象，即将 Cesium 对象添加到 viewer 中。虚方法，在各 vue 组件中实现。
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async mount () {
     return true
   },
   /**
-   * 异步卸载 Cesium 对象，即将 Cesium 对象从 viewer 移除。虚方法，在各 vue 组件中实现。
+   * Unmount Cesium objects asynchronously. 异步卸载 Cesium 对象，即将 Cesium 对象从 viewer 移除。虚方法，在各 vue 组件中实现。
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
   async unmount () {
     return true
   },
   /**
-   * 获取注入的对象。主要是为了获取父组件和父组件的 Cesium 对象。
+   * Get the injected object. 获取注入的对象。主要是为了获取父组件和父组件的 Cesium 对象。
    * @returns {Object}
    */
   getServices () {
@@ -202,6 +210,7 @@ const methods = {
     const options = {}
     props && Object.keys(props).forEach((vueProp) => {
       let cesiumProp = vueProp
+      // The properties of the following Cesium instance objects are HTML or Vue reserved words and require special handling.
       // 以下 Cesium 实例对象的属性是 HTML 或 Vue 保留字，需要特别处理一下。
       if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
         cesiumProp = 'style'
@@ -213,19 +222,20 @@ const methods = {
           ? specialProps[vueProp].handler.call(this, props[vueProp])
           : props[vueProp]
     })
+    // Remove empty objects to avoid initialization errors when Cesium objects are initialized with null values.
     // 移除空对象，避免 Cesium 对象初始化时传入空值导致初始化报错。
     this.removeNullItem(options)
     return options
   },
   /**
-   * 组件加载前的操作。
+   * The action before the component is loaded. 组件加载前的操作。
    */
   async beforeLoad () {
     await this.$parent.createPromise
   }
 }
 /**
- * VueCesium 组件通用混入。
+ * VueCesium common minxin
  */
 export default {
   VM_PROP,
@@ -240,7 +250,8 @@ export default {
     this._mounted = false
     this.cesiumClass = nameClassMap[this.$options.name]
     this.specialPropsKeys = Object.keys(specialProps)
-    const { beforeLoad, load, $parent } = this
+    const { beforeLoad, load } = this
+    const $parent = getParent(this.$parent)
     // this._createPromise = Promise.resolve(beforeLoad()).then(() => load())
     this._createPromise = Promise.resolve(beforeLoad()).then(() => {
       return new Promise((resolve, reject) => {
