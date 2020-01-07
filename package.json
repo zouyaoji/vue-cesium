@@ -1,7 +1,7 @@
 {
   "name": "vue-cesium",
   "fullname": "VueCesium",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Vue 2.x components for CesiumJS.",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -133,7 +133,7 @@
     "rollup-plugin-re": "^1.0.7",
     "rollup-plugin-scss-smart-asset": "0.0.1",
     "rollup-plugin-uglify": "^6.0.3",
-    "rollup-plugin-vue": "^4.2.0",
+    "rollup-plugin-vue": "4.2.0",
     "sass-loader": "^7.3.1",
     "semver": "^6.3.0",
     "shelljs": "^0.8.3",

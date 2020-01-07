@@ -1,16 +1,23 @@
-# 更新日志
+# Change Log
+
+## 2.0.5 - 2020-01-07
+
+## Fixes
+
+- `vc-measure-distance` Add an attribute `arcType`, 0 for drawing a spatial straight line (Polyline), 1 for drawing a geodesic (PolylineGraphics).
+- fixed [#48](https://github.com/zouyaoji/vue-cesium/issues/48).
 
 ## 2.0.4 - 2019-12-28
 
-## 增加
+## Additions
 
-- `vc-navigation` 增加一个定位我的位置的控件。用的是`navigator.geolocation`，但谷歌国内被墙了，效果不好，火狐能定位到。
+- `vc-navigation` Add a control to position me. I use the browser's own API `navigator.geolocation`, but Google has been blocked in China. The effect is not good. Firefox and Edge can locate it.
 
-## 修改
+## Fixes
 
-- DataSource 组件增加 entities 和 clustering 事件。
-- DataSource 属性 options 合并到一起。
-- `vc-provider-imagery-tianditu` 组件增加属性`protocol`自定义协议类型，服务域名改为 tianditu.gov.cn。
+- The DataSource component adds entities and clustering events.
+- DataSource properties options are merged together.
+- The `vc-provider-imagery-tianditu` component adds the attribute` protocol` to customize the protocol type, and the service domain name is changed to tianditu.gov.cn.
 
 ## 2.0.3 - 2019-12-23
 

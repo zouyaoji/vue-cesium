@@ -42,7 +42,8 @@ npm i --save vue-cesium
 ```js
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
-import lang from '../../lang/zh-hans'
+import lang from 'vue-cesium/lang/zh-hans'
+// import lang from 'vue-cesium/lang/en-us'
 Vue.use(VueCesium)
 // 或者
 // Vue.use(VueCesium, {
