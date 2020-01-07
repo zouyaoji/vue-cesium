@@ -37,57 +37,30 @@
 npm i --save vue-cesium
 ```
 
-### 初始化
+### 使用
 
-- 不指定 Cesium 库地址：
-
-```javascript
-import Vue from 'vue'
-import VueCesium from 'vue-cesium'
-// Vue-Cesium默认加载`https://unpkg.com/cesium/Build/Cesium/Cesium.js`
-Vue.use(VueCesium)
-```
-
-- 指定 Cesium 库地址：
-
-```javascript
+```js
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
 import lang from '../../lang/zh-hans'
-
-Vue.use(VueCesium, {
-  // cesiumPath 是指引用的Cesium.js路径，如
-  // 项目本地的Cesium Build包，vue项目需要将Cesium Build包放static目录：
-  // cesiumPath: /static/Cesium/Cesium.js
-  // 个人在线Cesium Build包：
-  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
-  // 个人在线SuperMap Cesium Build包（在官方基础上二次开发出来的）：
-  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
-  // 官方在线Cesium Build包，有CDN加速，推荐用这个：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
-  accessToken: `Your accessToken`,
-  lang: lang // 2.0.3 版本新增。
-})
+Vue.use(VueCesium)
+// 或者
+// Vue.use(VueCesium, {
+//   // cesiumPath is path of Cesium.js', for example:
+//   // local Cesium Build package:
+//   // cesiumPath: '/static/Cesium/Cesium.js'
+//   // Online Cesium Build package：
+//   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+//   // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+//   // cesiumPath: 'https://unpkg.com/cesium/Build/CesiumUnminified/Cesium.js',
+//   // cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
+//   cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',  // default
+//   accessToken: `Your accessToken`,
+//   lang: lang // 2.0.3+ //  zh-hans
+// })
 ```
 
 ```html
-<template>
-  <div class="viewer">
-    <vc-viewer></vc-viewer>
-  </div>
-</template>
-
-<style>
-  .viewer {
-    width: 100%;
-    height: 400px;
-  }
-</style>
-```
-
-### 使用
-
-```vue
 <template>
   <div class="viewer">
     <vc-viewer></vc-viewer>
@@ -102,12 +75,6 @@ Vue.use(VueCesium, {
 </style>
 ```
 
-## TODOS
-
-- 完善文档
-- 继续增加常用组件
-- ...
-
 ## 贡献
 
 [贡献指南](https://github.com/zouyaoji/vue-cesium/blob/master/CONTRIBUTING.md)
@@ -121,3 +88,7 @@ Vue.use(VueCesium, {
 ## 参考
 
 学习借鉴了 2 个 vue 组件项目[vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)和[vuelayers](https://github.com/ghettovoice/vuelayers/)。
+
+## QQ群
+
+[点击链接加入群聊【Cesium开心农场(16533444)】](https://jq.qq.com/?_wv=1027&k=5BCrKOi)

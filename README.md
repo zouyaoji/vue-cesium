@@ -37,41 +37,33 @@ In the gradual improvement...
 npm i --save vue-cesium
 ```
 
-### Initialization
+### Usage
 
-```javascript
-import Vue from 'vue'
-import VueCesium from 'vue-cesium'
-// Vue-Cesium will load Cesium.js from `https://unpkg.com/cesium/Build/Cesium/Cesium.js`
-Vue.use(VueCesium)
-```
-
-```javascript
+```js
 import Vue from 'vue'
 import VueCesium from 'vue-cesium'
 import lang from '../../lang/zh-hans'
-
-Vue.use(VueCesium, {
-  // cesiumPath is path of Cesium.js', for example:
-  // local Cesium Build package:
-  // cesiumPath: /static/Cesium/Cesium.js
-  // Personal online Cesium Build package：
-  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
-  // Personal online SuperMap Cesium Build package：
-  // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
-  // Official Online Cesium Build package：
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
-  accessToken: `Your accessToken`,
-  lang: lang // 2.0.3+
-})
+Vue.use(VueCesium)
+// or
+// Vue.use(VueCesium, {
+//   // cesiumPath is path of Cesium.js', for example:
+//   // local Cesium Build package:
+//   // cesiumPath: '/static/Cesium/Cesium.js'
+//   // Online Cesium Build package：
+//   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+//   // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+//   // cesiumPath: 'https://unpkg.com/cesium/Build/CesiumUnminified/Cesium.js',
+//   // cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
+//   cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',  // default
+//   accessToken: `Your accessToken`,
+//   lang: lang // 2.0.3+ //  zh-hans
+// })
 ```
 
-### Usage
-
-```vue
+```html
 <template>
   <div class="viewer">
-    <vc-viewer> </vc-viewer>
+    <vc-viewer></vc-viewer>
   </div>
 </template>
 
@@ -82,11 +74,6 @@ Vue.use(VueCesium, {
 }
 </style>
 ```
-
-## TODOS
-
-- Add more components
-- ...
 
 ## Contributing
 
@@ -101,3 +88,7 @@ Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 ## Reference
 
 Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).
+
+## QQGroup
+
+[16533444](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
