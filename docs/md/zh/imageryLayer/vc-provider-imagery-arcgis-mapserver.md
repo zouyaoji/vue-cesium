@@ -70,9 +70,9 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <imagery-layer :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <arcgis-mapserver-imagery-provider :url="url"></arcgis-mapserver-imagery-provider>
-      </imagery-layer>
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-arcgis-mapserver :url="url" :maximumLevel="maximumLevel"></vc-provider-imagery-arcgis-mapserver>
+      </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <span>透明度</span>
