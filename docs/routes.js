@@ -573,6 +573,14 @@ const routeMap = [
           zh: '3DTileset图元',
           en: 'Cesium3DTileset'
         }
+      },
+      {
+        path: 'vc-primitive-particle',
+        component: 'primitive/vc-primitive-particle',
+        name: {
+          zh: '粒子系统',
+          en: 'ParticleSystem'
+        }
       }
     ]
   },

@@ -60,6 +60,7 @@ import * as PointPrimitive from './components/primitive/point'
 import * as Polyline from './components/primitive/polyline'
 import * as Model from './components/primitive/model'
 import * as Cesium3DTileset from './components/primitive/3dTileset'
+import * as ParticleSystem from './components/primitive/particle'
 // 几何体
 import * as GeometryInstance from './components/geometryInstance'
 import * as BoxGeometry from './components/geometryInstance/box'
@@ -149,9 +150,6 @@ function plugin (Vue, options = {}) {
   Vue.use(UrlTemplateImageryProvider, options)
   Vue.use(WebMapServiceImageryProvider, options)
   Vue.use(WebMapTileServiceImageryProvider, options)
-  Vue.use(TiandituImageryProvider, options)
-  Vue.use(SuperMapImageryProvider, options)
-  Vue.use(TiledCacheImageryProvider, options)
   // 地形
   Vue.use(ArcGISTiledElevationTerrainProvider, options)
   Vue.use(CesiumTerrainProvider, options)
@@ -195,6 +193,7 @@ function plugin (Vue, options = {}) {
   Vue.use(Polyline, options)
   Vue.use(Model, options)
   Vue.use(Cesium3DTileset, options)
+  Vue.use(ParticleSystem, options)
   // 几何体
   Vue.use(GeometryInstance, options)
   Vue.use(BoxGeometry, options)
@@ -238,13 +237,6 @@ function plugin (Vue, options = {}) {
   Vue.use(VcDrawHandlerPoint, options)
   Vue.use(VcDrawHandlerPolyline, options)
   Vue.use(VcDrawHandlerPolygon, options)
-  // 控件
-  Vue.use(VcNavigation, options)
-  Vue.use(VcNavigationSM, options)
-  // 可视化
-  Vue.use(VcFlood, options)
-  Vue.use(VcHeatMap, options)
-  Vue.use(VcWindMap, options)
 
   lang.install($vc, options.lang)
   Vue.prototype.$vc = $vc
@@ -272,9 +264,6 @@ export {
   UrlTemplateImageryProvider,
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
-  TiandituImageryProvider,
-  SuperMapImageryProvider,
-  TiledCacheImageryProvider,
 
   ArcGISTiledElevationTerrainProvider,
   CesiumTerrainProvider,
@@ -318,6 +307,7 @@ export {
   Polyline,
   Model,
   Cesium3DTileset,
+  ParticleSystem,
 
   GeometryInstance,
   BoxGeometry,
@@ -359,7 +349,14 @@ export {
   VcMeasureHeight,
   VcDrawHandlerPoint,
   VcDrawHandlerPolyline,
-  VcDrawHandlerPolygon,
+  VcDrawHandlerPolygon
+}
+
+export {
+  TiandituImageryProvider,
+  SuperMapImageryProvider,
+  TiledCacheImageryProvider,
+
   VcNavigation,
   VcNavigationSM,
 

@@ -75,6 +75,9 @@ export const Events = {
     'tileUnload',
     'tileVisible'
   ],
+  'vc-primitive-particle': [
+    'complete'
+  ],
   'imagery-layer-events': ['errorEvent'],
   'entity-events': ['definitionChanged'],
   'datasource-events': ['changedEvent', 'errorEvent', 'loadingEvent'],

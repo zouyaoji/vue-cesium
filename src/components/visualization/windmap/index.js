@@ -5,8 +5,7 @@ function plugin (Vue, options = {}) {
     return
   }
   plugin.installed = true
-  Vue.prototype._Cesium = () => options
-  Vue.component(CesiumWindMap.name, CesiumWindMap, options)
+  Vue.component(CesiumWindMap.name, CesiumWindMap)
 }
 
 export default plugin

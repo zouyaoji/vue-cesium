@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2019-12-25 15:54:58
+ * @Last Modified time: 2020-02-19 15:54:13
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -501,9 +501,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         viewer.camera.setView({
           destination: Cesium.Cartesian3.fromDegrees(val.position.lng, val.position.lat, val.position.height),
           orientation: {
-            heading: Cesium.Math.toRadians(val.heading),
-            pitch: Cesium.Math.toRadians(val.pitch),
-            roll: Cesium.Math.toRadians(val.roll)
+            heading: Cesium.Math.toRadians(val.heading || 360),
+            pitch: Cesium.Math.toRadians(val.pitch || -90),
+            roll: Cesium.Math.toRadians(val.roll || 0)
           }
         })
       },
@@ -731,9 +731,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             this.camera.position.height
           ),
           orientation: {
-            heading: Cesium.Math.toRadians(this.camera.heading),
-            pitch: Cesium.Math.toRadians(this.camera.pitch),
-            roll: Cesium.Math.toRadians(this.camera.roll)
+            heading: Cesium.Math.toRadians(this.camera.heading || 360),
+            pitch: Cesium.Math.toRadians(this.camera.pitch || -90),
+            roll: Cesium.Math.toRadians(this.camera.roll || 0)
           }
         })
       }

@@ -1,5 +1,4 @@
 <script>
-// import bindEvents from '../../util/bindEvent'
 import {
   show,
   modelMatrix,

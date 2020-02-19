@@ -9,6 +9,7 @@
           <vc-zoom-control
             :defaultResetView="defaultOptions.enableZoomControl.defaultResetView"
             :zoomAmount="defaultOptions.enableZoomControl.zoomAmount || 2"
+            :overrideCamera="defaultOptions.enableZoomControl.overrideCamera || false"
           ></vc-zoom-control>
         </div>
       </div>
@@ -65,7 +66,8 @@ export default {
           zoomAmount: 2,
           defaultResetView: {
             lng: 105, lat: 29.999999999999993, height: 19059568.497290563
-          }
+          },
+          overrideCamera: false
         },
         enableDistanceLegend: true,
         enableLocationBar: {

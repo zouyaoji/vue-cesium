@@ -1,32 +1,46 @@
-# Change Log
+# 更新日志
+
+## 2.0.6 - 2020-02-19
+
+### 重大变化 📣
+
+- 默认只加载Cesium自带的类的组件，不再加载扩展的组件。
+
+### 增加
+
+- 增加粒子系统组件 `vc-primitive-particle` 。
+
+### 修复
+
+- `vc-navigation` 缩放控件的 `defaultResetView` 属性初始化时会覆盖 `vc-viewer` 的 `camera` 属性，增加一个属性 `overrideCamera` 来控制是否覆盖，默认是否。
 
 ## 2.0.5 - 2020-01-07
 
-## Fixes
+### 修复
 
-- `vc-measure-distance` Add an attribute `arcType`, 0 for drawing a spatial straight line (Polyline), 1 for drawing a geodesic (PolylineGraphics).
-- fixed [#48](https://github.com/zouyaoji/vue-cesium/issues/48).
+- `vc-measure-distance` 组件增加一个属性 `arcType`, `0` 代表量算时绘制的空间直线, `1` 代表绘制的是测地线。
+- 修复 [#48](https://github.com/zouyaoji/vue-cesium/issues/48).
 
-## 2.0.4 - 2019-12-28
+### 2.0.4 - 2019-12-28
 
-## Additions
+### 增加
 
-- `vc-navigation` Add a control to position me. I use the browser's own API `navigator.geolocation`, but Google has been blocked in China. The effect is not good. Firefox and Edge can locate it.
+- `vc-navigation` 组件增加一个定位按钮. 用的是浏览器定位 API `navigator.geolocation`, 谷歌浏览器被墙了，可能没效果， Firefox 和 Edge 测试工作正常。
 
-## Fixes
+### 修复
 
-- The DataSource component adds entities and clustering events.
-- DataSource properties options are merged together.
-- The `vc-provider-imagery-tianditu` component adds the attribute` protocol` to customize the protocol type, and the service domain name is changed to tianditu.gov.cn.
+- 数据源聚合事件。
+- 数据源属性合并成一个对象。
+- `vc-provider-imagery-tianditu`组件域名换了.
 
 ## 2.0.3 - 2019-12-23
 
-## 增加
+### 增加
 
 - 国际化语言。 `Vue.use(VueCesium, {cesiumPath: cesiumPath, accessToken: accessToken, lang: lang})` 默认加载中文。
 - `vc-navigation` 增加一个打印控件。
 
-## 修改
+### 修改
 
 - css 名称统一。
 - 面积量算结果修正，用海伦公式计算表面积。
@@ -34,26 +48,26 @@
 
 ## 2.0.2 - 2019-12-19
 
-## 增加
+### 增加
 
 - `vc-navigation-sm` 超图罗盘样式组件。
 - `vc-stage-process-post` 后期处理组件。
 - `vc-collection-stage-process-post` 后期处理集合组件。
 - `vc-provider-imagery-tiledcache` 组件，加载 TiledCache 瓦片。
 
-## 修改
+### 修改
 
 - `vc-navigation` 样式修改了，增加了位置信息。
 - `vc-analysis-flood` -> `vc-analytics-flood`
 
 ## 2.0.1 - 2019-12-09
 
-## 修改
+### 修改
 
 - 各组件加载放在 Created 生命周期，方便通过获取`createdPromise`对象进行相关逻辑操作。
 - 量算组件增加选项，指定测量线和文字标签是否始终显示。
 
-## 增加
+### 增加
 
 - `vc-provider-imagery-supermap` 加载超图 iServer 影像服务。
 - `vc-provider-imagery-tianditu` 加载天地图 WMTS 影像服务。
@@ -94,7 +108,7 @@
 
 ## 2.0.0 - 2019-12-02
 
-## 增加
+### 增加
 
 - `vc-provider-imagery-supermap` 加载超图 iServer 影像服务。
 - `vc-provider-imagery-tianditu` 加载天地图 WMTS 影像服务。

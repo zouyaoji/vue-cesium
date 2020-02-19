@@ -6,8 +6,7 @@ function plugin (Vue, options = {}) {
     return
   }
   plugin.installed = true
-  Vue.prototype._Cesium = () => options
-  Vue.component(CesiumHeatMap.name, CesiumHeatMap, options)
+  Vue.component(CesiumHeatMap.name, CesiumHeatMap)
 }
 
 export default plugin

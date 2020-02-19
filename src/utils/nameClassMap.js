@@ -66,6 +66,7 @@ const nameClassMap = {
   'vc-primitive-polyline-ground': 'GroundPolylinePrimitive',
   'vc-primitive-model': 'Model',
   'vc-primitive-3dtileset': 'Cesium3DTileset',
+  'vc-primitive-particle': 'ParticleSystem',
   // 几何体
   'vc-instance-geometry': 'GeometryInstance',
   'vc-geometry-box': 'BoxGeometry',

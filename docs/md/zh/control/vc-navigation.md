@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer :timeline="timeline" @ready="ready">
+      <vc-viewer :timeline="timeline" @ready="ready" :camera.sync="camera">
         <vc-navigation :options="options"></vc-navigation>
         <vc-layer-imagery>
           <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
@@ -41,11 +41,13 @@
             enableZoomControl: true,
             // enableZoomControl: {
             //   // 缩放比例
-            //   zoomAmount: 2,
+            //    zoomAmount: 2,
             //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
             //   defaultResetView: {
             //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
-            //   }
+            //   },
+            //   overrideCamera: false
+            //   },
             // },
             enableDistanceLegend: true,
             enableLocationBar: true,
@@ -62,6 +64,13 @@
             //   printAutomatically: false
             // },
             enableMyLocation: true
+          },
+          camera: {
+            position: {
+              lng: -105,
+              lat: 32,
+              height: 100000
+            }
           }
         }
       },
@@ -108,13 +117,14 @@
         options: {
           enableCompass: true,
           enableZoomControl: true,
-          // enableZoomControl: {
+          enableZoomControl: {
           //   // 缩放比例
           //   zoomAmount: 2,
           //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
           //   defaultResetView: {
           //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
-          //   }
+          //   },
+          //   overrideCamera: false
           // },
           enableDistanceLegend: true,
           enableLocationBar: true,
@@ -155,6 +165,7 @@
 | enableCompassOuterRing | Boolean | `true` | `optional` 指定罗盘部件是否可用。 |
 | enableLocationBar | Boolean\|Object | `true` | `optional` 指定位置信息部件是否可用。 |
 | enablePrintView | Boolean\|Object | `true` | `optional` 指定打印部件是否可用。 |
+| overrideCamera | Boolean | `false` | `optional` 缩放控件默认相机位置参数是否覆盖 vc-viewer 上的相机参数。 |
 
 ---
 

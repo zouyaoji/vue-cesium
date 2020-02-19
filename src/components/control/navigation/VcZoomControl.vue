@@ -33,28 +33,31 @@ export default {
   },
   props: {
     defaultResetView: Object,
-    zoomAmount: Number
+    zoomAmount: Number,
+    overrideCamera: Boolean
   },
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
       this.viewer = viewer
-      const resetView = this.defaultResetView
-      if (resetView && resetView.lng) {
-        viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height)
-        })
-      } else if (resetView && resetView.west) {
-        try {
-          const rectangle = Cesium.Rectangle.fromDegrees(resetView.west, resetView.south, resetView.east, resetView.north)
-          Cesium.Rectangle.validate(rectangle)
+      if (this.overrideCamera) {
+        const resetView = this.defaultResetView
+        if (resetView && resetView.lng) {
           viewer.camera.setView({
-            destination: rectangle,
-            orientation: {
-              heading: Cesium.Math.toRadians(5.729578)
-            }
+            destination: Cesium.Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height)
           })
-        } catch (e) {
-          console.error(`[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!`)
+        } else if (resetView && resetView.west) {
+          try {
+            const rectangle = Cesium.Rectangle.fromDegrees(resetView.west, resetView.south, resetView.east, resetView.north)
+            Cesium.Rectangle.validate(rectangle)
+            viewer.camera.setView({
+              destination: rectangle,
+              orientation: {
+                heading: Cesium.Math.toRadians(5.729578)
+              }
+            })
+          } catch (e) {
+            console.error(`[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!`)
+          }
         }
       }
     })

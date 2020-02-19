@@ -34,6 +34,15 @@ const specialProps = {
   imageBasedLightingFactor: {
     handler: makeCartesian2
   },
+  imageSize: {
+    handler: makeCartesian2
+  },
+  minimumImageSize: {
+    handler: makeCartesian2
+  },
+  maximumImageSize: {
+    handler: makeCartesian2
+  },
   shape: {
     handler: makeCartesian2Array
   },
@@ -96,6 +105,12 @@ const specialProps = {
     handler: makeColor
   },
   clearColor: {
+    handler: makeColor
+  },
+  startColor: {
+    handler: makeColor
+  },
+  endColor: {
     handler: makeColor
   },
   scaleByDistance: {

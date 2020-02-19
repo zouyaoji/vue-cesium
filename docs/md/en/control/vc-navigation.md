@@ -153,6 +153,7 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
 | enableLocationBar | Boolean\|Object | `true` | `optional` option used to enable or disable the LocationBar. |
 | enableCompassOuterRing | Boolean | `true` | `optional` option used to enable or disable the Compass Outer Ring. |
 | enablePrintView | Boolean\|Object | `true` | `optional` option used to enable or disable the PrintView. |
+| overrideCamera | Boolean | `false` | `optional` Whether the default camera position parameter of the zoom control overrides the camera parameter on the vc-viewer. |
 
 ---
 

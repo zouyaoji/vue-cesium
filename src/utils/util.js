@@ -350,3 +350,63 @@ export function getAllAttribution (viewer) {
   )
   return credits.map(credit => credit.html)
 }
+
+export function getExtension (fileName) {
+  var start = fileName.lastIndexOf('.')
+  if (start >= 0) {
+    return fileName.substring(start, fileName.length)
+  }
+  return ''
+}
+
+export function changeExtension (fname, newExt) {
+  return fname.replace(getExtension(fname), newExt)
+}
+
+export function readAsArrayBuffer (file) {
+  var promise = Cesium.when.defer()
+  var fr = new FileReader()
+  fr.onload = function (e) {
+    promise.resolve(e.target.result)
+  }
+  fr.onprogress = function (e) {
+    promise.progress(e.target.result)
+  }
+  fr.onerror = function (e) {
+    promise.reject(e.error)
+  }
+  fr.readAsArrayBuffer(file)
+  return promise
+}
+
+export function readAsText (file) {
+  var promise = Cesium.when.defer()
+  var fr = new FileReader()
+  fr.onload = function (e) {
+    promise.resolve(e.target.result)
+  }
+  fr.onprogress = function (e) {
+    promise.progress(e.target.result)
+  }
+  fr.onerror = function (e) {
+    promise.reject(e.error)
+  }
+  fr.readAsText(file)
+  return promise
+}
+
+export function readAllBytes (file) {
+  var promise = Cesium.when.defer()
+  var fr = new FileReader()
+  fr.onload = function (e) {
+    promise.resolve(new Uint8Array(e.target.result))
+  }
+  fr.onprogress = function (e) {
+    promise.progress(e.target.result)
+  }
+  fr.onerror = function (e) {
+    promise.reject(e.error)
+  }
+  fr.readAsArrayBuffer(file)
+  return promise
+}

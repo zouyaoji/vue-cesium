@@ -6,8 +6,7 @@ function plugin (Vue, options = {}) {
     return
   }
   plugin.installed = true
-  Vue.prototype._Cesium = () => options
-  Vue.component(CesiumFlood.name, CesiumFlood, options)
+  Vue.component(CesiumFlood.name, CesiumFlood)
 }
 
 export default plugin
