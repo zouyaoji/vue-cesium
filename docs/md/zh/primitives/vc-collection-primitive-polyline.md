@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <!-- <vc-collection-primitive-polyline :polylines="polylines"> </vc-collection-primitive-polyline> -->
+        <vc-collection-primitive-polyline :polylines="polylines"></vc-collection-primitive-polyline>
         <vc-collection-primitive-polyline>
           <vc-primitive-polyline :positions="positions1" :material="material1" :width="width"></vc-primitive-polyline>
           <vc-primitive-polyline :positions="positions2" :material="material2" :width="10"></vc-primitive-polyline>

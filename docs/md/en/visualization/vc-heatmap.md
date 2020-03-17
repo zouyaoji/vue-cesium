@@ -197,6 +197,6 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
 
 ## Events
 
-| name  | parameter        | description                                                                                   |
-| ----- | ---------------- | --------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance. |
+| name  | parameter        | description                                                                                                       |
+| ----- | ---------------- | ----------------------------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |

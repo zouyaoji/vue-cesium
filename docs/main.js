@@ -32,15 +32,6 @@ Vue.use(VueCesium, {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })
 
-Vue.use(VueCesium.TiandituImageryProvider)
-Vue.use(VueCesium.SuperMapImageryProvider)
-Vue.use(VueCesium.TiledCacheImageryProvider)
-Vue.use(VueCesium.VcNavigation)
-Vue.use(VueCesium.VcNavigationSM)
-Vue.use(VueCesium.VcFlood)
-Vue.use(VueCesium.VcHeatMap)
-Vue.use(VueCesium.VcWindMap)
-
 Vue.use(VueRouter)
 Vue.use(VueMaterial)
 Vue.material.registerTheme({

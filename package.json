@@ -44,7 +44,10 @@
   "homepage": "https://zouyaoji.top/vue-cesium",
   "dependencies": {
     "@babel/runtime-corejs2": "^7.7.2",
+    "@sakitam-gis/kriging": "^0.1.0",
     "@turf/area": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
+    "@turf/isobands": "^5.1.5",
     "heatmap.js": "^2.0.5",
     "lodash.debounce": "^4.0.8",
     "proj4": "^2.6.0"

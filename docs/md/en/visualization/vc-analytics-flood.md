@@ -185,5 +185,5 @@ The `vc-analytics-flood` component is used to simulate flood analysis. **Note** 
 
 | name      | parameter           | description                                                                                                                 |
 | --------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| ready     | {Cesium, viewer}    | Triggers when Cesium3DTileset is ready. It returns a core class of Cesium, a viewer instance.                               |
+| ready     | {Cesium, viewer}    | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject.           |
 | activeEvt | {isActive: Boolean} | Triggered when the `flooding` state changes in the flood analysis component, and returns whether the flood analysis starts. |

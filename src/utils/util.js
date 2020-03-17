@@ -410,3 +410,13 @@ export function readAllBytes (file) {
   fr.readAsArrayBuffer(file)
   return promise
 }
+
+export function getString (arrayBuffer, encoding) {
+  if (!(arrayBuffer instanceof Uint8Array) &&
+    !(arrayBuffer instanceof ArrayBuffer) && arrayBuffer.buffer) {
+    arrayBuffer = arrayBuffer.buffer
+  }
+  var decoder = new TextDecoder(encoding)
+  var decodedText = decoder.decode(arrayBuffer, { stream: true })
+  return decodedText
+}

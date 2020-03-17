@@ -807,6 +807,14 @@ const routeMap = [
         }
       },
       {
+        path: 'vc-kriging-map',
+        component: 'visualization/vc-kriging-map',
+        name: {
+          zh: '克里金色斑图',
+          en: 'VcKrigingMap'
+        }
+      },
+      {
         path: 'vc-windmap',
         component: 'visualization/vc-windmap',
         name: {

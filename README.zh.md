@@ -57,7 +57,7 @@ Vue.use(VueCesium)
 //   // cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
 //   cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',  // default
 //   accessToken: `Your accessToken`,
-//   lang: lang // 2.0.3+ //  zh-hans
+//   lang: lang // 2.0.3+ //  zh-hans default
 // })
 ```
 
