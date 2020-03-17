@@ -1,7 +1,7 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-entity ref="1" v-if="type === 1" :show="show">
-      <vc-graphics-graphics :coordinates="coordinates" :material="material"></vc-graphics-graphics>
+      <vc-graphics-rectangle :coordinates="coordinates" :material="material"></vc-graphics-rectangle>
     </vc-entity>
     <vc-primitive-ground ref="0" v-else-if="type === 0" :show="show" :appearance="appearance">
       <vc-instance-geometry :geometry.sync="geometry">

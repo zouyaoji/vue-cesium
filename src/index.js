@@ -110,6 +110,7 @@ import * as VcNavigationSM from './components/control/navigationSM'
 // 可视化
 import * as VcFlood from './components/visualization/flood'
 import * as VcHeatMap from './components/visualization/heatmap'
+import * as VcKrigingMap from './components/visualization/krigingmap'
 import * as VcWindMap from './components/visualization/windmap'
 
 import lang from './exts/lang'
@@ -150,6 +151,9 @@ function plugin (Vue, options = {}) {
   Vue.use(UrlTemplateImageryProvider, options)
   Vue.use(WebMapServiceImageryProvider, options)
   Vue.use(WebMapTileServiceImageryProvider, options)
+  Vue.use(TiandituImageryProvider, options)
+  Vue.use(SuperMapImageryProvider, options)
+  Vue.use(TiledCacheImageryProvider, options)
   // 地形
   Vue.use(ArcGISTiledElevationTerrainProvider, options)
   Vue.use(CesiumTerrainProvider, options)
@@ -237,6 +241,14 @@ function plugin (Vue, options = {}) {
   Vue.use(VcDrawHandlerPoint, options)
   Vue.use(VcDrawHandlerPolyline, options)
   Vue.use(VcDrawHandlerPolygon, options)
+  // 可视化
+  Vue.use(VcFlood, options)
+  Vue.use(VcHeatMap, options)
+  Vue.use(VcWindMap, options)
+  Vue.use(VcKrigingMap, options)
+  // 控件
+  Vue.use(VcNavigation, options)
+  Vue.use(VcNavigationSM, options)
 
   lang.install($vc, options.lang)
   Vue.prototype.$vc = $vc
@@ -264,6 +276,9 @@ export {
   UrlTemplateImageryProvider,
   WebMapServiceImageryProvider,
   WebMapTileServiceImageryProvider,
+  TiandituImageryProvider,
+  SuperMapImageryProvider,
+  TiledCacheImageryProvider,
 
   ArcGISTiledElevationTerrainProvider,
   CesiumTerrainProvider,
@@ -349,18 +364,13 @@ export {
   VcMeasureHeight,
   VcDrawHandlerPoint,
   VcDrawHandlerPolyline,
-  VcDrawHandlerPolygon
-}
-
-export {
-  TiandituImageryProvider,
-  SuperMapImageryProvider,
-  TiledCacheImageryProvider,
-
-  VcNavigation,
-  VcNavigationSM,
+  VcDrawHandlerPolygon,
 
   VcFlood,
   VcHeatMap,
-  VcWindMap
+  VcWindMap,
+  VcKrigingMap,
+
+  VcNavigation,
+  VcNavigationSM
 }
