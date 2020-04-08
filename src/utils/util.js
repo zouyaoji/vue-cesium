@@ -201,6 +201,8 @@ export function makeRectangle (val) {
   // Entiy 的 rectangle 属性不能调用这个方法
   if (val instanceof Cesium.RectangleGraphics) {
     return val
+  } else if (val instanceof Array && val.length === 4) {
+    return Cesium.Rectangle.fromDegrees(val[0], val[1], val[2], val[3])
   }
   return val && Cesium.Rectangle.fromDegrees(val.west, val.south, val.east, val.north)
 }

@@ -111,6 +111,11 @@ const methods = {
         const pd = instance && Object.getOwnPropertyDescriptor(instance, cesiumProp)
         const pdProto = instance && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(instance), cesiumProp)
         const hasSetter = (pd && pd.writable) || (pdProto && pdProto.set)
+        // 如果在vue文件中已经监听了改 props 这儿不再监听了
+        // If you have listened to the props in the vue file, you will not add any more listeners here.
+        if (this._watchers.filter(v => v.expression === vueProp).length > 0) {
+          return
+        }
         // returns an unwatch function that stops firing the callback
         const unwatch = this.$watch(
           vueProp,

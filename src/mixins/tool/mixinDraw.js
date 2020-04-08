@@ -154,7 +154,7 @@ const methods = {
   onDrawingEvt (polyline, index, flag = false) {
     this.index = index
     if (!this.depthTest) {
-      this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false
+      this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
     }
     const listener = this.$listeners['drawEvt']
     listener &&

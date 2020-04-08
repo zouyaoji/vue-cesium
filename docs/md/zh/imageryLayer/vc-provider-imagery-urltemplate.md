@@ -40,19 +40,19 @@
     export default {
       data() {
         return {
-          url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-          urlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+          url: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+          urlText: 'https://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
           options: [
             {
-              value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+              value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
               label: '高德影像地图服务'
             },
             {
-              value: 'http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+              value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
               label: '谷歌影像地图服务'
             },
             {
-              value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+              value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
               label: '高德矢量地图服务'
             }
           ],
@@ -69,7 +69,7 @@
         layerAdded() {
           if (
             this.$refs.layerText.imageryLayer &&
-            this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+            this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
           ) {
             const { viewer } = this.cesiumInstance
             viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
@@ -114,19 +114,19 @@
   export default {
     data() {
       return {
-        url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-        urlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+        url: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+        urlText: 'https://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
         options: [
           {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
             label: '高德影像地图服务'
           },
           {
-            value: 'http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+            value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
             label: '谷歌影像地图服务'
           },
           {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: '高德矢量地图服务'
           }
         ],
@@ -141,7 +141,7 @@
         this.cesiumInstance = cesiumInstance
       },
       layerAdded() {
-        if (this.$refs.layerText.imageryLayer && this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}') {
+        if (this.$refs.layerText.imageryLayer && this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}') {
           const { viewer } = this.cesiumInstance
           viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
         }

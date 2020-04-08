@@ -42,13 +42,13 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
     export default {
       data () {
         return {
-          url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-          urlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+          url: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+          urlText: 'https://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
           options: [{
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
             label: 'AMap Imagery'
           }, {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: 'AMap Vector'
           }],
           alpha: 1,
@@ -64,7 +64,7 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
         layerAdded() {
           if (
             this.$refs.layerText.imageryLayer &&
-            this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+            this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
           ) {
             const { viewer } = this.cesiumInstance
             viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
@@ -109,15 +109,15 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
   export default {
     data() {
       return {
-        url: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-        urlText: 'http://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
+        url: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+        urlText: 'https://wprd04.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=12',
         options: [
           {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
             label: 'AMap Imagery'
           },
           {
-            value: 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
+            value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: 'AMap Vector'
           }
         ],
@@ -134,7 +134,7 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
       layerAdded() {
         if (
           this.$refs.layerText.imageryLayer &&
-          this.url !== 'http://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+          this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
         ) {
           const { viewer } = this.cesiumInstance
           viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
