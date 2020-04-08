@@ -130,7 +130,8 @@ class TiandituImageryProvider {
  * @private
  */
 function buildImageResource (x, y, level) {
-  const { combine, defined, defaultValue, freezeObject, queryToObject, objectToQuery, Uri } = Cesium
+  const { combine, defined, defaultValue, queryToObject, objectToQuery, Uri } = Cesium
+  const freezeObject = Object.freeze || function () { }
   const options = freezeObject({
     service: 'WMTS',
     version: '1.0.0',
