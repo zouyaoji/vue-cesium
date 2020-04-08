@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import VueCesium from '../../src/index'
 Vue.use(VueCesium, {
-  cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js'
 })
 
 let id = 0;
