@@ -87,7 +87,7 @@ The `vc-windmap` component is used to load the wind direction map, it is carried
             })
           } else if (val === 2) {
             Cesium.Resource.fetchJson({ url: './statics/SampleData/windData/wind.json' }).then((data) => {
-              data.lat.array = new Float32Array(data.lon.array)
+              data.lon.array = new Float32Array(data.lon.array)
               data.lat.array = new Float32Array(data.lat.array)
               data.lev.array = new Float32Array(data.lev.array)
               data.U.array = new Float32Array(data.U.array)
@@ -230,7 +230,7 @@ The `vc-windmap` component is used to load the wind direction map, it is carried
           })
         } else if (val === 2) {
           Cesium.Resource.fetchJson({ url: './statics/SampleData/windData/wind.json' }).then((data) => {
-            data.lat.array = new Float32Array(data.lon.array)
+            data.lon.array = new Float32Array(data.lon.array)
             data.lat.array = new Float32Array(data.lat.array)
             data.lev.array = new Float32Array(data.lev.array)
             data.U.array = new Float32Array(data.U.array)

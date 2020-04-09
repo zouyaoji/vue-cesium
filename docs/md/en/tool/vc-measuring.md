@@ -145,7 +145,7 @@
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
-| arcType   | Number  | `1`     | `optional` The type of line the polygon edges must follow. |
+| arcType   | Number  | `0`     | `optional` The type of line the polygon edges must follow. |
 
 ---
 
