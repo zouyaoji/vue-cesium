@@ -80,7 +80,7 @@ export default {
   props: {
     arcType: {
       type: Number,
-      default: 1
+      default: 0
     }
   },
   methods: {

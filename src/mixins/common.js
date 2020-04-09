@@ -151,8 +151,7 @@ const methods = {
       })
       // Destroy temporary objects.
       // 销毁临时对象
-      instance && instance instanceof Cesium.Polyline && Cesium.destroyObject(instance)
-      instance = null
+      instance = undefined
     } else {
       // Stops firing the callback.
       // 注销 watchers。
