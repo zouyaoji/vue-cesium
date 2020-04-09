@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-02-19 15:54:13
+ * @Last Modified time: 2020-04-09 11:43:21
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -857,7 +857,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           $script.onload = () => {
             if (global.Cesium) {
               // 超图WebGL3D需要引入zlib.min.js
-              if (Cesium.SuperMapImageryProvider) {
+              if (Cesium.SuperMapImageryProvider && Number(Cesium.VERSION) < 1.54) {
                 const $scriptZlib = document.createElement('script')
                 global.document.body.appendChild($scriptZlib)
                 $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
@@ -933,7 +933,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         if (script.src.indexOf('/Cesium.js') > -1) {
           removeScripts.push(script)
         }
-        if (global.Cesium.SuperMapImageryProvider) {
+        if (global.Cesium.SuperMapImageryProvider && Number(global.Cesium.VERSION) < 1.54) {
           if (script.src.indexOf('/Workers/zlib.min.js') > -1) {
             removeScripts.push(script)
           }
