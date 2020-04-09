@@ -82,9 +82,13 @@ const watch = {
           measureCmpNames.push('vc-measure-area')
           break
       }
+      const drawCmpNames = ['vc-handler-draw-polyline', 'vc-handler-draw-point', 'vc-handler-draw-polygon']
       for (let $node of this.$parent.$slots.default || []) {
         if ($node.componentOptions && measureCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.measuring = false
+        }
+        if ($node.componentOptions && drawCmpNames.indexOf($node.componentOptions.tag) !== -1) {
+          $node.child.drawing = false
         }
       }
       startNew()
@@ -324,13 +328,18 @@ const methods = {
   },
   onMeasureEvt (polyline, index, flag = false) {
     if (!this.depthTest) {
-      this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
       const rs = Cesium.RenderState.fromCache({
         depthMask: true,
         depthTest: {
           enabled: false
         }
       })
+      if (Cesium.SuperMapImageryProvider) {
+        this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS = rs)
+      } else {
+        this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
+      }
+
       this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = rs
       this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = rs
 

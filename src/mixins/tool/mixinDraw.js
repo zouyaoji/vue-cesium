@@ -36,11 +36,16 @@ const watch = {
           drawCmpNames.push('vc-handler-draw-point')
           break
       }
+      const measureCmpNames = ['vc-measure-height', 'vc-measure-distance', 'vc-measure-area']
       for (let $node of this.$parent.$slots.default || []) {
         if ($node.componentOptions && drawCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.drawing = false
         }
+        if ($node.componentOptions && measureCmpNames.indexOf($node.componentOptions.tag) !== -1) {
+          $node.child.measuring = false
+        }
       }
+
       startNew()
     }
     this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
