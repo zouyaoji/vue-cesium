@@ -3,13 +3,13 @@
     <vc-collection-primitive-polyline ref="polylineCollection">
       <vc-primitive-polyline
         :key="index"
-        :material="polyline.materialLine"
+        :material="getPolylineMaterial(polylineMaterial)"
         :positions="polyline.positions"
         :width="polylineWidth"
         v-for="(polyline, index) of polylines"
       ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
-    <vc-collection-primitive-point>
+    <vc-collection-primitive-point ref="pointCollection">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-point
@@ -26,6 +26,8 @@
 
 <script>
 import mixinDraw from '../../../mixins/tool/mixinDraw'
+import { makeMaterial } from '../../../utils/util'
+
 export default {
   name: 'vc-handler-draw-polyline',
   mixins: [mixinDraw],
@@ -39,15 +41,33 @@ export default {
   props: {
     depthTest: {
       type: Boolean,
-      default: true
+      default: false
     },
-    polylineColor: {
-      type: String | Object | Array,
-      default: '#51ff00'
+    polylineMaterial: {
+      type: Object,
+      default: () => {
+        return {
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: '#51ff00'
+            }
+          }
+        }
+      }
     },
     polylineWidth: {
       type: Number,
       default: 2
+    }
+  },
+  methods: {
+    getPolylineMaterial (val) {
+      if (!(val instanceof Cesium.Material)) {
+        return makeMaterial(val)
+      } else {
+        return val
+      }
     }
   }
 }

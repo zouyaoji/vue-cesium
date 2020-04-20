@@ -90,7 +90,7 @@ const methods = {
    */
   setPropWatchers (register) {
     if (register) {
-      const { $props, specialPropsKeys, cesiumClass, cesiumObject, applyToConstructor } = this
+      const { $props, specialPropsKeys, cesiumClass, cesiumObject } = this
       if (!cesiumClass || !Cesium[cesiumClass]) { return }
       const constructor = Cesium[cesiumClass]
       const args = []
@@ -160,35 +160,6 @@ const methods = {
     }
   },
   /**
-   * Use the apply method to call the Cesium constructor to initialize the Cesium instance. 使用 apply 调用 Cesium 构造函数初始化 Cesium 实例。
-   * @param {Function} constructor Cesium 构造函数。
-   * @param {Array} argArray 构造函数参数。
-   * @returns {Object} 返回 Cesium 实例。
-   */
-  applyToConstructor (constructor, argArray) {
-    let instance
-    try {
-      const args = [{}].concat(argArray)
-      // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，暂时没想到更好的办法
-      // args[1].url = ''
-      args[1].mapId = {}
-      args[1].geometry = {}
-      args[1].rectangle = Cesium.Rectangle.MAX_VALUE
-      args[1].polygonHierarchy = {}
-      args[1].assetId = 1
-      args[1].layers = ''
-      args[2] = new Cesium.PolylineCollection({})
-
-      const FactoryFunction = constructor.bind.apply(constructor, args)
-      instance = new FactoryFunction()
-    } catch (e) {
-      if (process.env.VUECESIUM_DEBUG) {
-        warn(e)
-      }
-    }
-    return instance
-  },
-  /**
    * Mount Cesium objects asynchronously. 异步挂载 Cesium 对象，即将 Cesium 对象添加到 viewer 中。虚方法，在各 vue 组件中实现。
    * @returns {Promise<Boolean>} 操作成功返回 true，失败返回 false。
    */
@@ -209,6 +180,10 @@ const methods = {
   getServices () {
     return services.methods.getServices.call(this)
   },
+  /**
+   * 将 props 转换为 Cesium 对象
+   * @param {Object} props
+   */
   transformProps (props) {
     const { specialPropsKeys, isEmptyObj } = this
     const options = {}
@@ -289,4 +264,34 @@ export default {
       this.$emit('destroyed', this)
     })
   }
+}
+
+/**
+ * Use the apply method to call the Cesium constructor to initialize the Cesium instance. 使用 apply 调用 Cesium 构造函数初始化 Cesium 实例。
+ * @param {Function} constructor Cesium 构造函数。
+ * @param {Array} argArray 构造函数参数。
+ * @returns {Object} 返回 Cesium 实例。
+ */
+function applyToConstructor (constructor, argArray) {
+  let instance
+  try {
+    const args = [{}].concat(argArray)
+    // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，暂时没想到更好的办法
+    // args[1].url = ''
+    args[1].mapId = {}
+    args[1].geometry = {}
+    args[1].rectangle = Cesium.Rectangle.MAX_VALUE
+    args[1].polygonHierarchy = {}
+    args[1].assetId = 1
+    args[1].layers = ''
+    args[2] = new Cesium.PolylineCollection({})
+
+    const FactoryFunction = constructor.bind.apply(constructor, args)
+    instance = new FactoryFunction()
+  } catch (e) {
+    if (process.env.VUECESIUM_DEBUG) {
+      warn(e)
+    }
+  }
+  return instance
 }

@@ -1,5 +1,5 @@
 import cmp from '../virtualCmp'
-import { makeColor } from '../../utils/util'
+
 const props = {
   mode: {
     type: Number,
@@ -135,21 +135,10 @@ const methods = {
     onDrawingEvt(polyline, nIndex, true)
   },
   startNew () {
-    const { polylines, drawType } = this
+    const { polylines } = this
     const poyline = {
       positions: []
     }
-    const drawLine = drawType === 'polylineDrawing' || drawType === 'polygonDrawing'
-    drawLine && Object.assign(poyline, {
-      materialLine: new Cesium.Material({
-        fabric: {
-          type: 'Color',
-          uniforms: {
-            color: makeColor(this.polylineColor)
-          }
-        }
-      })
-    })
     Cesium.defined(polylines) && polylines.push(poyline)
   },
   clear () {
@@ -159,7 +148,18 @@ const methods = {
   onDrawingEvt (polyline, index, flag = false) {
     this.index = index
     if (!this.depthTest) {
-      this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
+      const rs = Cesium.RenderState.fromCache({
+        depthMask: true,
+        depthTest: {
+          enabled: false
+        }
+      })
+      this.$refs.pointCollection && (this.$refs.pointCollection.cesiumObject._rsOpaque = rs)
+      if (Cesium.SuperMapImageryProvider) {
+        this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS = rs)
+      } else {
+        this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
+      }
     }
     const listener = this.$listeners['drawEvt']
     listener &&

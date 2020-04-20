@@ -3,7 +3,7 @@
     <vc-collection-primitive-polyline ref="polylineCollection" v-if="arcType === 0">
       <vc-primitive-polyline
         :key="index"
-        :material="polyline.materialLine"
+        :material="getPolylineMaterial()"
         :positions="polyline.positions"
         :width="polylineWidth"
         v-for="(polyline, index) of polylines"
@@ -23,7 +23,7 @@
         <vc-graphics-polyline :material="polylineColor" :positions="polyline.positions" :width="polylineWidth" @ready="ready"></vc-graphics-polyline>
       </vc-entity>
     </vc-datasource-custom>
-    <vc-collection-primitive-point>
+    <vc-collection-primitive-point ref="pointCollection">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-point

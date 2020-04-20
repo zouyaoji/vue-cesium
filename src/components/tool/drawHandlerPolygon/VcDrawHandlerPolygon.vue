@@ -4,7 +4,7 @@
       <vc-primitive-polyline
         :key="index"
         :loop="true"
-        :material="polyline.materialLine"
+        :material="getPolylineMaterial()"
         :positions="polyline.positions"
         :width="polylineWidth"
         v-for="(polyline, index) of polylines"
@@ -25,7 +25,7 @@
         v-if="polyline.positions.length >= 3"
       ></vc-graphics-polygon>
     </vc-entity>
-    <vc-collection-primitive-point>
+    <vc-collection-primitive-point ref="pointCollection">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-point
@@ -42,7 +42,7 @@
 
 <script>
 import mixinDraw from '../../../mixins/tool/mixinDraw'
-import { makePolygonHierarchy } from '../../../utils/util'
+import { makePolygonHierarchy, makeColor } from '../../../utils/util'
 export default {
   name: 'vc-handler-draw-polygon',
   mixins: [mixinDraw],
@@ -80,6 +80,16 @@ export default {
       const { polylines } = this
       const polyline = polylines[polylines.length - 1]
       val.cesiumObject.hierarchy = new Cesium.CallbackProperty(() => makePolygonHierarchy(polyline.positions), false)
+    },
+    getPolylineMaterial () {
+      return new Cesium.Material({
+        fabric: {
+          type: 'Color',
+          uniforms: {
+            color: makeColor(this.polylineColor)
+          }
+        }
+      })
     }
   }
 }

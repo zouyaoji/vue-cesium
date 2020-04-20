@@ -4,13 +4,13 @@
       <vc-primitive-polyline
         :key="index"
         :loop="true"
-        :material="polyline.materialLine"
+        :material="getPolylineMaterial()"
         :positions="polyline.positions"
         :width="polylineWidth"
         v-for="(polyline, index) of polylines"
       ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
-    <vc-collection-primitive-point>
+    <vc-collection-primitive-point ref="pointCollection">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-point

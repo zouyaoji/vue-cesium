@@ -1,4 +1,5 @@
 import mergeDescriptors from '../utils/mergeDescriptors'
+import { isEmptyObj } from '../utils/util'
 
 const SERVICES_PROP = 'services'
 /**
@@ -29,55 +30,14 @@ export default {
      * @param {*} i
      * @returns {Object}
      */
-    removeNullItem (o, arr, i) {
-      var s = {}.toString.call(o)
-      if (s === '[object Array]') {
-        if (this.processArray(o) === true) {
-          // o也是数组，并且删除完子项，从所属数组中删除
-          // if (arr) arr.splice(i, 1);
-        }
-      } else if (s === '[object Object]') {
-        this.proccessObject(o)
-        // if (arr&&isEmptyObj(o)) arr.splice(i, 1);
-      }
-    },
+    removeNullItem: removeNullItem,
     /**
      * 判断是否是空对象。
      * @param {*} o
      * @returns {Boolean}
      */
-    isEmptyObj (o) {
-      for (var attr in o) return !1
-      return !0
-    },
-    /**
-     * 处理数组。
-     * @param {*} arr
-     */
-    processArray (arr) {
-      for (var i = arr.length - 1; i >= 0; i--) {
-        /* if (arr[i] === null || arr[i] === undefined) arr.splice(i, 1);
-            else */ if (
-          typeof arr[i] === 'object'
-        ) {
-          this.removeNullItem(arr[i], arr, i)
-        }
-      }
-      return arr.length === 0
-    },
-    /**
-     * 处理对象。
-     * @param {*} o
-     */
-    proccessObject (o) {
-      for (var attr in o) {
-        if (o[attr] === null || o[attr] === undefined) delete o[attr]
-        else if (typeof o[attr] === 'object') {
-          // this.removeNullItem(o[attr])
-          if (this.isEmptyObj(o[attr])) delete o[attr]
-        }
-      }
-    }
+    isEmptyObj: isEmptyObj
+
   },
   beforeCreate () {
     let source = this.$parent
@@ -90,5 +50,55 @@ export default {
     if (source == null || source._provided[SERVICES_PROP] == null) {
       delete this.$options.inject.$services
     }
+  }
+}
+
+/**
+ * 处理对象。
+ * @param {*} o
+ */
+function proccessObject (o) {
+  for (var attr in o) {
+    if (o[attr] === null || o[attr] === undefined) delete o[attr]
+    else if (typeof o[attr] === 'object') {
+      // this.removeNullItem(o[attr])
+      if (isEmptyObj(o[attr])) delete o[attr]
+    }
+  }
+}
+
+/**
+ * 处理数组。
+ * @param {*} arr
+ */
+function processArray (arr) {
+  for (var i = arr.length - 1; i >= 0; i--) {
+    /* if (arr[i] === null || arr[i] === undefined) arr.splice(i, 1);
+            else */ if (
+      typeof arr[i] === 'object'
+    ) {
+      removeNullItem(arr[i], arr, i)
+    }
+  }
+  return arr.length === 0
+}
+
+/**
+  * 移除对象中的空值。
+  * @param {*} o
+  * @param {*} arr
+  * @param {*} i
+  * @returns {Object}
+  */
+function removeNullItem (o, arr, i) {
+  var s = {}.toString.call(o)
+  if (s === '[object Array]') {
+    if (processArray(o) === true) {
+      // o也是数组，并且删除完子项，从所属数组中删除
+      // if (arr) arr.splice(i, 1);
+    }
+  } else if (s === '[object Object]') {
+    proccessObject(o)
+    // if (arr&&isEmptyObj(o)) arr.splice(i, 1);
   }
 }

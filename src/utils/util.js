@@ -1,3 +1,5 @@
+import specialProps from '../utils/specialProps'
+
 export const checkType = (val) => Object.prototype.toString.call(val).slice(8, -1)
 
 export const toKebabCase = (str) => str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`).replace(/^-/, '')
@@ -20,6 +22,15 @@ export const getDocumentByClassName = (htmlCollection, className) => {
     if (e !== BreakException) throw e
   }
   return temp
+}
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+export function isObject (val) {
+  return val !== null && typeof val === 'object'
 }
 /**
  * 判断传入的对象是否是方法。
@@ -174,22 +185,26 @@ export function makeColor (val) {
  * @param {String|Array|Object} val
  */
 export function makeMaterial (val) {
-  if (
-    val instanceof Array ||
-    (typeof val === 'string' && !/(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val))
-  ) {
+  if (val instanceof Array || (typeof val === 'string' && !/(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val))) {
     return makeColor(val)
+  } else if (val && val.hasOwnProperty('fabric')) {
+    const f = (obj) => {
+      for (var i in obj) {
+        if (!isArray(obj[i]) && typeof obj[i] === 'object') {
+          f(obj[i])
+        } else {
+          const specialPropsKeys = Object.keys(specialProps)
+          if (specialPropsKeys.indexOf(i) !== -1 && specialProps[i].handler && !isEmptyObj(obj[i])) {
+            const result = specialProps[i].handler.call(this, obj[i])
+            // Cesium 通过对象属性个数判断具体材质类型的，通过 Cesium.combine 移除 vue 传的一些属性
+            obj[i] = Cesium.combine(result, result, true)
+          }
+        }
+      }
+    }
+    f(val)
+    return new Cesium.Material(val)
   }
-  // else if (val && val.hasOwnProperty('fabric')) {
-  //   return new Cesium.Material({
-  //     fabric: {
-  //       type: 'Color',
-  //       uniforms: {
-  //         color: new Cesium.Color(1.0, 1.0, 0.0, 1.0)
-  //       }
-  //     }
-  //   })
-  // }
   return val
 }
 /**
@@ -238,11 +253,7 @@ export function makePlane (val) {
 export function makeTranslationRotationScale (val) {
   return (
     val &&
-    new Cesium.TranslationRotationScale(
-      makeCartesian3(val.translation),
-      makeQuaternion(val.rotation),
-      makeCartesian3(val.scale)
-    )
+    new Cesium.TranslationRotationScale(makeCartesian3(val.translation), makeQuaternion(val.rotation), makeCartesian3(val.scale))
   )
 }
 
@@ -350,7 +361,7 @@ export function getAllAttribution (viewer) {
   const credits = viewer.scene.frameState.creditDisplay._currentFrameCredits.screenCredits.values.concat(
     viewer.scene.frameState.creditDisplay._currentFrameCredits.lightboxCredits.values
   )
-  return credits.map(credit => credit.html)
+  return credits.map((credit) => credit.html)
 }
 
 export function getExtension (fileName) {
@@ -414,11 +425,19 @@ export function readAllBytes (file) {
 }
 
 export function getString (arrayBuffer, encoding) {
-  if (!(arrayBuffer instanceof Uint8Array) &&
-    !(arrayBuffer instanceof ArrayBuffer) && arrayBuffer.buffer) {
+  if (!(arrayBuffer instanceof Uint8Array) && !(arrayBuffer instanceof ArrayBuffer) && arrayBuffer.buffer) {
     arrayBuffer = arrayBuffer.buffer
   }
   var decoder = new TextDecoder(encoding)
   var decodedText = decoder.decode(arrayBuffer, { stream: true })
   return decodedText
+}
+
+export function isArray (val) {
+  return toString.call(val) === '[object Array]'
+}
+
+export function isEmptyObj (o) {
+  for (var attr in o) return !1
+  return !0
 }

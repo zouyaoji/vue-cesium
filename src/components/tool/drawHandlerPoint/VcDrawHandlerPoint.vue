@@ -1,6 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-collection-primitive-point>
+    <vc-collection-primitive-point ref="pointCollection">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-primitive-point

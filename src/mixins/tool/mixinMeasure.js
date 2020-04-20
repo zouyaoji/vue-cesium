@@ -297,15 +297,7 @@ const methods = {
       return
     }
     const polyline = {
-      positions: [],
-      materialLine: new Cesium.Material({
-        fabric: {
-          type: 'Color',
-          uniforms: {
-            color: makeColor(this.polylineColor)
-          }
-        }
-      })
+      positions: []
     }
     if (type === 'distanceMeasuring') {
       Object.assign(polyline, {
@@ -339,7 +331,7 @@ const methods = {
       } else {
         this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
       }
-
+      this.$refs.pointCollection && (this.$refs.pointCollection.cesiumObject._rsOpaque = rs)
       this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = rs
       this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = rs
 
@@ -363,6 +355,16 @@ const methods = {
         listener && this.$emit('measureEvt', { polyline: polyline, label: labelsResult, type: 'heightMeasuring', finished: flag })
       }
     }
+  },
+  getPolylineMaterial (val) {
+    return new Cesium.Material({
+      fabric: {
+        type: 'Color',
+        uniforms: {
+          color: makeColor(this.polylineColor)
+        }
+      }
+    })
   }
 }
 
