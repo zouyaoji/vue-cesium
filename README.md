@@ -93,3 +93,12 @@ Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-
 ## QQGroup
 
 [16533444](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
+
+## Donate
+
+> Your support is the driving force for me to move forward and better support the open source cause! ~
+### wechat
+![wechat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
+
+### alipay
+![alipay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)

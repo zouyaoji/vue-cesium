@@ -280,14 +280,14 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
 
 ### vc-handler-draw-polyline
 
-| name           | type                  | default            | description                                                                       |
-| -------------- | --------------------- | ------------------ | --------------------------------------------------------------------------------- |
-| mode           | Number                | `1`                | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                    |
-| depthTest      | Boolean               | `true`             | `optional` Specifies whether drawn polyline objects participate in depth testing. |
-| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color.                                               |
-| pointPixelSize | Number                | `8`                | `optional` Specify the point pixel size.                                          |
-| polylineColor  | String\|Array\|Object | `'#51ff00'`        | `optional` Specify the polyline color.                                            |
-| polylineWidth  | Number                | `2`                | `optional` Specify the polyline width.                                            |
+| name             | type                  | default            | description                                                                       |
+| ---------------- | --------------------- | ------------------ | --------------------------------------------------------------------------------- |
+| mode             | Number                | `1`                | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                    |
+| depthTest        | Boolean               | `true`             | `optional` Specifies whether drawn polyline objects participate in depth testing. |
+| pointColor       | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color.                                               |
+| pointPixelSize   | Number                | `8`                | `optional` Specify the point pixel size.                                          |
+| polylineMaterial | Object                |                    | `optional` Specify the material of polyline.                                      |
+| polylineWidth    | Number                | `2`                | `optional` Specify the polyline width.                                            |
 
 ### vc-handler-draw-polygon
 

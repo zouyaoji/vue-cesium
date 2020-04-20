@@ -41,6 +41,8 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          var scene = viewer.scene
+          scene.debugShowFramesPerSecond = true
           this.cesiumInstance = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
         },

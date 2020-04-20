@@ -25,7 +25,7 @@ Vue.use(VueCesium, {
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
   // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
   // cesiumPath: 'https://unpkg.com/cesium/Build/CesiumUnminified/Cesium.js',
-  // cesiumPath: 'https://unpkg.com/cesium@1.64.0/Build/Cesium/Cesium.js',
+  // cesiumPath: 'https://unpkg.com/cesium@1.54.0/Build/Cesium/Cesium.js',
   // cesiumPath: './statics/SupermapCesium/Cesium.js',
   cesiumPath: './statics/Cesium/Cesium.js',
   // lang: lang,

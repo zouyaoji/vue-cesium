@@ -93,3 +93,12 @@ Vue.use(VueCesium)
 ## QQ群
 
 [点击链接加入群聊【Cesium开心农场(16533444)】](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
+
+## 捐赠
+
+> 您的支持是我前进的动力，更好的支持开源事业！~
+### 微信
+![wechat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
+
+### 支付宝
+![alipay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)

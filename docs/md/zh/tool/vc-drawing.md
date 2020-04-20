@@ -15,9 +15,25 @@
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
         <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
-        <vc-handler-draw-point ref="handlerPoint" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-point>
-        <vc-handler-draw-polyline ref="handlerLine" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-polyline>
-        <vc-handler-draw-polygon ref="handlerPolygon" @activeEvt="activeEvt" @movingEvt="movingEvt" @drawEvt="drawEvt"></vc-handler-draw-polygon>
+        <vc-handler-draw-point
+          ref="handlerPoint"
+          @activeEvt="activeEvt"
+          @movingEvt="movingEvt"
+          @drawEvt="drawEvt"
+        ></vc-handler-draw-point>
+        <vc-handler-draw-polyline
+          ref="handlerLine"
+          :polylineMaterial="polylineMaterial"
+          @activeEvt="activeEvt"
+          @movingEvt="movingEvt"
+          @drawEvt="drawEvt"
+        ></vc-handler-draw-polyline>
+        <vc-handler-draw-polygon
+          ref="handlerPolygon"
+          @activeEvt="activeEvt"
+          @movingEvt="movingEvt"
+          @drawEvt="drawEvt"
+        ></vc-handler-draw-polygon>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
@@ -30,49 +46,57 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           pointDrawing: false,
           polylineDrawing: false,
-          polygonDrawing: false
+          polygonDrawing: false,
+          polylineMaterial: {
+            fabric: {
+              type: 'PolylineDash',
+              uniforms: {
+                color: 'blue'
+              }
+            }
+          }
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
           this.tooltip = createTooltip(viewer.cesiumWidget.container)
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
-        toggle (type) {
+        toggle(type) {
           console.log(type)
           this.$refs[type].drawing = !this.$refs[type].drawing
         },
-        clear () {
+        clear() {
           this.$refs.handlerPoint.clear()
           this.$refs.handlerLine.clear()
           this.$refs.handlerPolygon.clear()
         },
-        activeEvt (_) {
+        activeEvt(_) {
           this[_.type] = _.isActive
         },
         movingEvt(windowPosition) {
-          this.tooltip.showAt(windowPosition,'<p>左键绘制, 右键结束绘制.</p>')
+          this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
         },
-        drawEvt (result) {
+        drawEvt(result) {
           result.finished && this.tooltip.setVisible(false)
           console.log(result)
         },
-        readyPromise (tileset) {
-          const {viewer} = this.cesiumInstance
+        readyPromise(tileset) {
+          const { viewer } = this.cesiumInstance
           viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
         }
       }
     }
   </script>
   <style>
-  .twipsy {
+    .twipsy {
       display: block;
       position: absolute;
       visibility: visible;
@@ -85,24 +109,24 @@
       -khtml-opacity: 0.8;
       -moz-opacity: 0.8;
       filter: alpha(opacity=80);
-  }
-  .twipsy.left .twipsy-arrow {
+    }
+    .twipsy.left .twipsy-arrow {
       top: 50%;
       right: 0;
       margin-top: -5px;
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
       border-left: 5px solid #000000;
-  }
-  .twipsy.right .twipsy-arrow {
+    }
+    .twipsy.right .twipsy-arrow {
       top: 50%;
       left: 0;
       margin-top: -5px;
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
       border-right: 5px solid #000000;
-  }
-  .twipsy-inner {
+    }
+    .twipsy-inner {
       padding: 3px 8px;
       background-color: #000000;
       color: white;
@@ -112,12 +136,12 @@
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px;
-  }
-  .twipsy-arrow {
+    }
+    .twipsy-arrow {
       position: absolute;
       width: 0;
       height: 0;
-  }
+    }
   </style>
 </doc-preview>
 
@@ -136,6 +160,7 @@
       ></vc-handler-draw-point>
       <vc-handler-draw-polyline
         ref="handlerLine"
+        :polylineMaterial="polylineMaterial"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
@@ -163,7 +188,15 @@
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         pointDrawing: false,
         polylineDrawing: false,
-        polygonDrawing: false
+        polygonDrawing: false,
+        polylineMaterial: {
+          fabric: {
+            type: 'PolylineDash',
+            uniforms: {
+              color: 'polylineMaterial'
+            }
+          }
+        }
       }
     },
     methods: {
@@ -261,21 +294,21 @@
 
 ### vc-handler-draw-polyline
 
-| 属性名         | 类型                  | 默认值             | 描述                                                |
-| -------------- | --------------------- | ------------------ | --------------------------------------------------- |
-| mode           | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
-| depthTest      | Boolean               | `true`             | `optional` 指定绘制的线对象是否参与深度测试。       |
-| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
-| pointPixelSize | Number                | `8`                | `optional` 指定点的像素大小。                       |
-| polylineColor  | String\|Array\|Object | `'#51ff00'`        | `optional` 指定线颜色。                             |
-| polylineWidth  | Number                | `2`                | `optional` 指定线宽度。                             |
+| 属性名           | 类型                  | 默认值             | 描述                                                |
+| ---------------- | --------------------- | ------------------ | --------------------------------------------------- |
+| mode             | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| depthTest        | Boolean               | `false`            | `optional` 指定绘制的线对象是否参与深度测试。       |
+| pointColor       | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
+| pointPixelSize   | Number                | `8`                | `optional` 指定点的像素大小。                       |
+| polylineMaterial | Object                |                    | `optional` 指定线材质                               |
+| polylineWidth    | Number                | `2`                | `optional` 指定线宽度。                             |
 
 ### vc-handler-draw-polygon
 
 | 属性名         | 类型                  | 默认值                   | 描述                                                |
 | -------------- | --------------------- | ------------------------ | --------------------------------------------------- |
 | mode           | Number                | `1`                      | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
-| depthTest      | Boolean               | `true`                   | `optional` 指定绘制的线对象是否参与深度测试。       |
+| depthTest      | Boolean               | `false`                  | `optional` 指定绘制的线对象是否参与深度测试。       |
 | pointColor     | String\|Array\|Object | `'rgb(255,229,0)'`       | `optional` 指定点颜色。                             |
 | pointPixelSize | Number                | `8`                      | `optional` 指定点的像素大小。                       |
 | polylineColor  | String\|Array\|Object | `'#51ff00'`              | `optional` 指定线颜色。                             |

@@ -179,7 +179,7 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
             id: '1001',
             code: '1001',
             name: 'test',
-            iconOn: '/statics/SampleData/points/pic.png',
+            iconOn: './statics/SampleData/points/pic.png',
             giscolor: '#fb7228',
             datauri: './statics/SampleData/points/yj.json'
           }
@@ -398,7 +398,7 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
           id: '1001',
           code: '1001',
           name: 'test',
-          iconOn: '/statics/SampleData/points/pic.png',
+          iconOn: './statics/SampleData/points/pic.png',
           giscolor: '#fb7228',
           datauri: './statics/SampleData/points/yj.json'
         }

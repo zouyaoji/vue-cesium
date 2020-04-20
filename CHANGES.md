@@ -1,5 +1,14 @@
 # 更新日志
 
+## 2.0.9 - 2020-04-20
+
+### 修改
+
+- 量算组件和绘制组件互斥。
+- `vc-handler-draw-polyline`组件可以定义绘制的线型。
+- 绘制和量算的点可通过 `depthTest` 属性觉得是否参与深度检测。（默认不参与，即点、线不被地形和模型裁切，会一直显示）
+- 加载超图平台客户端绘制的线被遮挡问题修复。
+
 ## 2.0.6 - 2020-03-17
 
 ### 增加
@@ -7,13 +16,13 @@
 - 增加粒子系统组件 `vc-primitive-particle` 。
 - 增加克里金色斑图组件 `vc-kriging-map`
 
-### 修复
+### 修改
 
 - `vc-navigation` 缩放控件的 `defaultResetView` 属性初始化时会覆盖 `vc-viewer` 的 `camera` 属性，增加一个属性 `overrideCamera` 来控制是否覆盖，默认是否。
 
 ## 2.0.5 - 2020-01-07
 
-### 修复
+### 修改
 
 - `vc-measure-distance` 组件增加一个属性 `arcType`, `0` 代表量算时绘制的空间直线, `1` 代表绘制的是测地线。
 - 修复 [#48](https://github.com/zouyaoji/vue-cesium/issues/48).
@@ -24,7 +33,7 @@
 
 - `vc-navigation` 组件增加一个定位按钮. 用的是浏览器定位 API `navigator.geolocation`, 谷歌浏览器被墙了，可能没效果， Firefox 和 Edge 测试工作正常。
 
-### 修复
+### 修改
 
 - 数据源聚合事件。
 - 数据源属性合并成一个对象。
