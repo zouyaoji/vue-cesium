@@ -14,7 +14,7 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
         <vc-handler-draw-point
           ref="handlerPoint"
           @activeEvt="activeEvt"
@@ -142,7 +142,7 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" scene3DOnly>
-      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       <vc-handler-draw-point
         ref="handlerPoint"
         @activeEvt="activeEvt"

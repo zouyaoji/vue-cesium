@@ -17,7 +17,7 @@
         <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
         <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
         <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
-        <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? 'stop' : 'distance' }}</md-button>
@@ -81,7 +81,7 @@
         :perPositionHeight="true"
       ></vc-measure-area>
       <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
-      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
@@ -192,6 +192,7 @@
 | name | parameter | description |
 | ------- | --------|-------------- |
 | activeEvt | { type: String, isActive: Boolean } | Triggered when the measurement starts or stops, and the return measurement type includes`'areaMeasuring'`、`'distanceMeasuring'`、`'heightMeasuring'`. |
+| movingEvt | Object | Triggered during measurement. Return to the mouse position. |
 | measureEvt | { polyline: Object, label: Object } | Triggered during the measurement process. Returns the result of the calculation, the text label object. You can get text label objects, custom text units, decimal points, and more. |
 
 ---

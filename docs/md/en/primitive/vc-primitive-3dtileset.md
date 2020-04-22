@@ -1,10 +1,10 @@
 # Cesium3DTileset
 
-The `vc-primitive-3dtileset` component is used to load a 3D Tiles tileset, used for streaming massive heterogeneous 3D geospatial datasets.
+The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used for streaming massive heterogeneous 3D geospatial datasets.
 
 ## Example
 
-### Load a Cesium3DTileset with `vc-primitive-3dtileset`
+### Load a Cesium3DTileset with `vc-primitive-tileset`
 
 #### Preview
 
@@ -12,7 +12,7 @@ The `vc-primitive-3dtileset` component is used to load a 3D Tiles tileset, used 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive-3dtileset
+        <vc-primitive-tileset
           :url="url"
           @readyPromise="readyPromise"
           @initialTilesLoaded="initialTilesLoaded"
@@ -23,7 +23,7 @@ The `vc-primitive-3dtileset` component is used to load a 3D Tiles tileset, used 
           @tileUnload="tileUnload"
           @tileVisible="tileVisible"
         >
-        </vc-primitive-3dtileset>
+        </vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
         <span>切换地址</span>
@@ -98,7 +98,7 @@ The `vc-primitive-3dtileset` component is used to load a 3D Tiles tileset, used 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive-3dtileset
+      <vc-primitive-tileset
         :url="url"
         @readyPromise="readyPromise"
         @initialTilesLoaded="initialTilesLoaded"
@@ -109,7 +109,7 @@ The `vc-primitive-3dtileset` component is used to load a 3D Tiles tileset, used 
         @tileUnload="tileUnload"
         @tileVisible="tileVisible"
       >
-      </vc-primitive-3dtileset>
+      </vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <span>切换地址</span>

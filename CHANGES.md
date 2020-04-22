@@ -1,5 +1,18 @@
 # 更新日志
 
+## 2.1.0 - 2020-04-20
+
+### 增加
+
+- `vc-graphics-tileset` 组件，对应 `Cesium3DTilesetGraphics`
+
+### 修改
+
+- 绘制组件 `drawEvt` 事件增加鼠标左键点击反馈。
+- 量算组件 `measureEvt` 事件增加鼠标左键点击反馈。
+- 量算组件增加 `movingEvt` 事件反馈鼠标所在屏幕坐标。
+- `vc-primitive-3dtileset` 组件名称改为 `vc-primitive-tileset`（参考官方的实体命名，两者保持一致）。
+
 ## 2.0.9 - 2020-04-20
 
 ### 修改

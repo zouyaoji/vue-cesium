@@ -1,10 +1,10 @@
-# Cesium3DTileset
+# Cesium3DTilesetGraphics
 
-`vc-primitive-3dtileset` 组件用于加载 3DTiles 模型。
+`vc-graphics-tileset` 组件用于加载 3DTiles 模型。
 
 ## 示例
 
-### 加载 3DTileset 图元
+### 加载 3DTileset 实体
 
 #### 预览
 
@@ -12,27 +12,12 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive-3dtileset
-          :url="url"
-          @readyPromise="readyPromise"
-          @initialTilesLoaded="initialTilesLoaded"
-          @allTilesLoaded="allTilesLoaded"
-          @loadProgress="loadProgress"
-          @tileFailed="tileFailed"
-          @tileLoad="tileLoad"
-          @tileUnload="tileUnload"
-          @tileVisible="tileVisible"
-        >
-        </vc-primitive-3dtileset>
+        <vc-entity ref="entity" :position="position" :description="description" :orientation="orientation" :id="id">
+           <vc-graphics-tileset
+            :uri="uri"
+          ></vc-graphics-tileset>
+        </vc-entity>
       </vc-viewer>
-      <div class="demo-tool">
-        <span>切换地址</span>
-        <md-select v-model="url" placeholder="切换地址">
-          <md-option v-for="item in options" :key="item.value" :value="item.value">
-            {{item.label}}
-          </md-option>
-        </md-select>
-      </div>
     </div>
   </template>
 
@@ -40,53 +25,30 @@
     export default {
       data() {
         return {
-          url: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-          options: [
-            {
-              value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
-              label: 'tileset one'
-            },
-            {
-              value: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Hierarchy/BatchTableHierarchy/tileset.json',
-              label: 'tileset two'
-            }
-          ]
+          uri: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
+          id: 'Hello Vue Cesium',
+          description: 'This is a 3DTilesetGraphics',
+          position: { lng: 108, lat: 35, height: -5000 },
+          orientation: {}
         }
+      },
+      mounted () {
+        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+          console.log('123')
+          viewer.zoomTo(cesiumObject)
+        })
       },
       methods: {
         ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const { Cesium, viewer } = cesiumInstance
-        },
-        readyPromise(tileset) {
-          const { Cesium, viewer } = this.cesiumInstance
-          viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
-        },
-        allTilesLoaded() {
-          console.log('All tiles are loaded')
-        },
-        initialTilesLoaded() {
-          console.log('Initial tiles are loaded')
-        },
-        loadProgress(numberOfPendingRequests, numberOfTilesProcessing) {
-          if (numberOfPendingRequests === 0 && numberOfTilesProcessing === 0) {
-            console.log('Stopped loading')
-            return
-          }
-
-          console.log('Loading: requests: ' + numberOfPendingRequests + ', processing: ' + numberOfTilesProcessing)
-        },
-        tileFailed(error) {
-          console.log('An error occurred loading tile: ' + error.url)
-          console.log('Error: ' + error.message)
-        },
-        tileLoad(tile) {
-          console.log('A tile was loaded.')
-        },
-        tileUnload(tile) {
-          console.log('A tile was unloaded from the cache.')
-        },
-        tileVisible(tile) {}
+          var position = Cesium.Cartesian3.fromDegrees(this.position.lng, this.position.lat, this.position.height);
+          var heading = Cesium.Math.toRadians(90)
+          var pitch = Cesium.Math.toRadians(45)
+          var roll = Cesium.Math.toRadians(45)
+          var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll)
+          this.orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+        }
       }
     }
   </script>
@@ -98,7 +60,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive-3dtileset
+      <vc-primitive-tileset
         :url="url"
         @readyPromise="readyPromise"
         @initialTilesLoaded="initialTilesLoaded"
@@ -109,7 +71,7 @@
         @tileUnload="tileUnload"
         @tileVisible="tileVisible"
       >
-      </vc-primitive-3dtileset>
+      </vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <span>切换地址</span>

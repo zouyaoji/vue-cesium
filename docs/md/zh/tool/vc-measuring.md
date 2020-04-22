@@ -14,10 +14,10 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
-        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
-        <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
-        <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt" @movingEvt="movingEvt"></vc-measure-distance>
+        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" @movingEvt="movingEvt" :perPositionHeight="true"></vc-measure-area>
+        <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt" @movingEvt="movingEvt"></vc-measure-height>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? '停止' : '距离' }}</md-button>
@@ -60,6 +60,9 @@
         measureEvt(result) {
           console.log(result)
         },
+        movingEvt (position) {
+          console.log(position)
+        },
         readyPromise (tileset) {
           const {viewer} = this.cesiumInstance
           viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
@@ -83,7 +86,7 @@
         :perPositionHeight="true"
       ></vc-measure-area>
       <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
-      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
@@ -194,10 +197,11 @@
 ## 事件
 
 <!-- prettier-ignore -->
-| 事件名     | 参数                                | 描述                                                                                                  |
+| 事件名 | 参数 | 描述 |
 | ---------- | ----------------------------------- | ------------------- |
-| activeEvt  | { type: String, isActive: Boolean } | 量算开始或停止时触发，返回量算类型包括`'areaMeasuring'`、`'distanceMeasuring'`、`'heightMeasuring'`。 |
-| measureEvt | { polyline: Object, label: Object, type: String, finished: Boolean } | 量算过程中触发。返回量算的结果，文字标签对象。可以获取文字标签对象自定义文字单位小数点等。            |
+| activeEvt | { type: String, isActive: Boolean } | 量算开始或停止时触发，返回量算类型包括`'areaMeasuring'`、`'distanceMeasuring'`、`'heightMeasuring'`。 |
+| movingEvt | Object | 量算过程中触发。返回鼠标位置。 |
+| measureEvt | { polyline: Object, label: Object, type: String, finished: Boolean } | 量算过程中触发。返回量算的结果，文字标签对象。可以获取文字标签对象自定义文字单位小数点等。 |
 
 ## 方法
 
@@ -205,7 +209,7 @@
 | ------ | ---- | ------------------------------ |
 | clear  |      | 清除量算结果（同时停止量算）。 |
 
-## 备注
+<!-- ## 备注
 
 - 超图版本量算这样设置线和文字标签一直可见
 
@@ -222,7 +226,7 @@
         :perPositionHeight="true"
       ></vc-measure-area>
       <vc-measure-height depthTest ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
-      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
@@ -297,4 +301,4 @@
     }
   }
 </script>
-```
+``` -->

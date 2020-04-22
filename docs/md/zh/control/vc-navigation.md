@@ -116,16 +116,18 @@
         timeline: true,
         options: {
           enableCompass: true,
-          enableZoomControl: true,
+          // enableZoomControl: true,
           enableZoomControl: {
-          //   // 缩放比例
-          //   zoomAmount: 2,
-          //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
-          //   defaultResetView: {
-          //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
-          //   },
-          //   overrideCamera: false
-          // },
+            // 缩放比例
+            zoomAmount: 2,
+            // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
+            defaultResetView: {
+              lng: 105,
+              lat: 29.999999999999993,
+              height: 19059568.497290563
+            },
+            overrideCamera: false
+          },
           enableDistanceLegend: true,
           enableLocationBar: true,
           // enableLocationBar: {
@@ -161,11 +163,13 @@
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | enableCompass | Boolean | `true` | `optional` 指定是否启用罗盘部件。 |
 | enableZoomControl | Boolean\|Object | `true` | `optional` 指定是否启用缩放部件。 |
+| enableZoomControl.zoomAmount | Number | `2` | `optional` 缩放控件缩放系数。 |
+| enableZoomControl.defaultResetView | Object |  | `optional` 重置相机参数。 |
+| enableZoomControl.overrideCamera | Boolean | `false` | `optional` 缩放控件默认相机位置参数是否覆盖 vc-viewer 上的相机参数。 |
 | enableDistanceLegend | Boolean | `true` | `optional` 指定是否启用距离比例尺部件。 |
 | enableCompassOuterRing | Boolean | `true` | `optional` 指定罗盘部件是否可用。 |
 | enableLocationBar | Boolean\|Object | `true` | `optional` 指定位置信息部件是否可用。 |
 | enablePrintView | Boolean\|Object | `true` | `optional` 指定打印部件是否可用。 |
-| overrideCamera | Boolean | `false` | `optional` 缩放控件默认相机位置参数是否覆盖 vc-viewer 上的相机参数。 |
 
 ---
 

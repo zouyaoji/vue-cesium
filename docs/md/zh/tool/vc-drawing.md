@@ -14,7 +14,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
         <vc-handler-draw-point
           ref="handlerPoint"
           @activeEvt="activeEvt"
@@ -65,6 +65,9 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          this.cesiumInstance = cesiumInstance
+          var scene = viewer.scene
+          scene.debugShowFramesPerSecond = true
           this.cesiumInstance = cesiumInstance
           this.tooltip = createTooltip(viewer.cesiumWidget.container)
           viewer.scene.globe.depthTestAgainstTerrain = true
@@ -151,7 +154,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" scene3DOnly>
-      <vc-primitive-3dtileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-3dtileset>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       <vc-handler-draw-point
         ref="handlerPoint"
         @activeEvt="activeEvt"
@@ -193,7 +196,7 @@
           fabric: {
             type: 'PolylineDash',
             uniforms: {
-              color: 'polylineMaterial'
+              color: 'blue'
             }
           }
         }

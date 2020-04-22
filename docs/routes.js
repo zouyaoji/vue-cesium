@@ -370,6 +370,14 @@ const routeMap = [
           en: 'ModelGraphics'
         }
       },
+      // {
+      //   path: 'vc-graphics-tileset',
+      //   component: 'entity/vc-graphics-tileset',
+      //   name: {
+      //     zh: 'Tileset实体',
+      //     en: 'Cesium3DTilesetGraphics'
+      //   }
+      // },
       {
         path: 'vc-graphics-path',
         component: 'entity/vc-graphics-path',
@@ -567,10 +575,10 @@ const routeMap = [
         }
       },
       {
-        path: 'vc-primitive-3dtileset',
-        component: 'primitive/vc-primitive-3dtileset',
+        path: 'vc-primitive-tileset',
+        component: 'primitive/vc-primitive-tileset',
         name: {
-          zh: '3DTileset图元',
+          zh: 'Tileset图元',
           en: 'Cesium3DTileset'
         }
       },
