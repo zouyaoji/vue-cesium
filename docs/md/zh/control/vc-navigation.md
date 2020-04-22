@@ -28,6 +28,8 @@
         <md-switch v-model="options.enableDistanceLegend"></md-switch>
         <span>位置信息部件</span>
         <md-switch v-model="options.enableLocationBar"></md-switch>
+        <span>定位部件</span>
+        <md-switch v-model="options.enableMyLocation"></md-switch>
       </div>
     </div>
   </template>

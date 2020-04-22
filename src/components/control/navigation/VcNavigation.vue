@@ -1,5 +1,5 @@
 <template>
-  <div class="vc-navigationContainer">
+  <div class="vc-navigationContainer" v-if="canRender">
     <div class="vc-navigation">
       <div class="vc-navigation-navs">
         <div class="vc-navigation-control" v-if="defaultOptions.enableCompass">
@@ -81,7 +81,8 @@ export default {
       },
       ldBottom: 2,
       ldRight: 3,
-      mouseCoords: undefined
+      mouseCoords: undefined,
+      canRender: false
     }
   },
   computed: {
@@ -108,6 +109,8 @@ export default {
       Object.assign(this.defaultOptions, this.options)
       this.widgetResized()
       this.mouseCoords = new MouseCoords({ gridFileUrl: this.defaultOptions.enableLocationBar.gridFileUrl })
+      // 避免控件先按默认的参数创建 然后又隐藏 导致视觉上的体验不优雅
+      this.canRender = true
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2

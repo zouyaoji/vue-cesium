@@ -2,15 +2,10 @@
 @import '../common/mixins';
 .vc-navigation {
   position: absolute;
-  right: 65px;
-  z-index: 1;
-  bottom: 25px;
-
-  @media (min-width: $sm) {
-    top: 80px;
-    bottom: auto;
-    right: 16px;
-  }
+  z-index: 1000;
+  top: 80px;
+  bottom: auto;
+  right: 16px;
 }
 
 .with-time-series-controls {
@@ -18,14 +13,9 @@
 }
 
 .vc-navigation-control {
-  @media (min-width: $sm) {
-    margin: 7px 0;
-    height: auto;
-  }
-  margin: 4px 8px;
+  margin: 7px 0;
+  height: auto;
   text-align: center;
-  //ie sizing fix
-  height: 40px;
 }
 
 .vc-navigation-navs {
@@ -35,11 +25,8 @@
 
 .vc-navigation-controls {
   display: flex;
-  @media (min-width: $sm) {
-    flex-direction: column;
-    margin-right: 0;
-  }
-  flex-direction: row;
+  flex-direction: column;
+  margin-right: 0;
 }
 
 .vc-location-distance {

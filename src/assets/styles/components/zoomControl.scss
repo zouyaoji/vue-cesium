@@ -19,12 +19,28 @@
     fill: #fff;
   }
 
-  @media (min-width: $sm) {
-    display: inline-block;
-  }
+  // @media (min-width: $sm) {
+  //   display: inline-block;
+  // }
+  display: inline-block;
 }
 
 .vc-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.vc-list li {
+  line-height: 20px;
+  flex: 1;
+}
+
+.vc-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   padding-left: 0;
   margin: 0;

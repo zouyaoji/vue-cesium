@@ -14,18 +14,16 @@ export default {
   components: {
     VcIconSvg
   },
-  data () {
-    return {
-      datasource: {}
-    }
-  },
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
       this.viewer = viewer
-      this.viewer.dataSources.add(new Cesium.CustomDataSource('VcMyLocation')).then((ds) => {
+      this.viewer.dataSources.add(new Cesium.CustomDataSource('vc-myLocation')).then((ds) => {
         this.datasource = ds
       })
     })
+  },
+  destroyed () {
+    this.viewer.dataSources.remove(this.datasource, true)
   },
   methods: {
     handleCick () {
