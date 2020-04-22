@@ -120,27 +120,32 @@ const methods = {
     if (!this.measuring) {
       return
     }
-    const { Cesium, viewer, polylines, type } = this
+    const { Cesium, viewer, polylines, type, onMeasureEvt } = this
     let cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
-    const polyline = polylines[polylines.length - 1]
+
+    const nIndex = polylines.length - 1
+    const polyline = polylines[nIndex]
 
     switch (type) {
       case 'distanceMeasuring':
         polyline.positions.push(cartesian)
         let distance = polyline.distance
         polyline.distances.push(distance)
+        onMeasureEvt(polyline, nIndex)
         break
       case 'areaMeasuring':
         polyline.positions.push(cartesian)
+        onMeasureEvt(polyline, nIndex)
         break
       case 'heightMeasuring':
         if (polyline.positions.length === 0) {
           polyline.positions.push(cartesian)
           this.startPoint = cartesian
         }
+        onMeasureEvt(polyline, this.labels)
         break
     }
   },
@@ -161,6 +166,8 @@ const methods = {
     if (!Cesium.defined(cartesian)) {
       return
     }
+    const listener = this.$listeners['movingEvt']
+    listener && this.$emit('movingEvt', movement.endPosition, type)
     if (type === 'distanceMeasuring' || type === 'areaMeasuring') {
       if (polyline.positions.length >= 2) {
         polyline.positions.pop()

@@ -9,7 +9,7 @@ import {
 } from '../../../mixins/mixinProps'
 import mixinPrimitive from '../../../mixins/primitives/mixinPrimitive'
 export default {
-  name: 'vc-primitive-3dtileset',
+  name: 'vc-primitive-tileset',
   mixins: [
     show,
     modelMatrix,

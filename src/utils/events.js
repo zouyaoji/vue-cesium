@@ -66,7 +66,7 @@ export const Events = {
     'RIGHT_UP',
     'WHEEL'
   ],
-  'vc-primitive-3dtileset': [
+  'vc-primitive-tileset': [
     'allTilesLoaded',
     'initialTilesLoaded',
     'loadProgress',

@@ -35,6 +35,7 @@ import * as EllipseGraphics from './components/entity/ellipse'
 import * as EllipsoidGraphics from './components/entity/ellipsoid'
 import * as LabelGraphics from './components/entity/label'
 import * as ModelGraphics from './components/entity/model'
+import * as Cesium3DTilesetGraphics from './components/entity/tileset'
 import * as PathGraphics from './components/entity/path'
 import * as PlaneGraphics from './components/entity/plane'
 import * as PointGraphics from './components/entity/point'
@@ -59,7 +60,7 @@ import * as Label from './components/primitive/label'
 import * as PointPrimitive from './components/primitive/point'
 import * as Polyline from './components/primitive/polyline'
 import * as Model from './components/primitive/model'
-import * as Cesium3DTileset from './components/primitive/3dTileset'
+import * as Cesium3DTileset from './components/primitive/tileset'
 import * as ParticleSystem from './components/primitive/particle'
 // 几何体
 import * as GeometryInstance from './components/geometryInstance'
@@ -172,6 +173,7 @@ function plugin (Vue, options = {}) {
   Vue.use(EllipsoidGraphics, options)
   Vue.use(LabelGraphics, options)
   Vue.use(ModelGraphics, options)
+  Vue.use(Cesium3DTilesetGraphics, options)
   Vue.use(PathGraphics, options)
   Vue.use(PlaneGraphics, options)
   Vue.use(PointGraphics, options)
@@ -297,6 +299,7 @@ export {
   EllipsoidGraphics,
   LabelGraphics,
   ModelGraphics,
+  Cesium3DTilesetGraphics,
   PathGraphics,
   PlaneGraphics,
   PointGraphics,

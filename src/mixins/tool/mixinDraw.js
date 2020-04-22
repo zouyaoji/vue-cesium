@@ -75,13 +75,15 @@ const methods = {
     if (!this.drawing) {
       return
     }
-    const { Cesium, viewer, polylines } = this
+    const { Cesium, viewer, polylines, onDrawingEvt } = this
     let cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
-    const polyline = polylines[polylines.length - 1]
+    const nIndex = polylines.length - 1
+    const polyline = polylines[nIndex]
     polyline.positions.push(cartesian)
+    onDrawingEvt(polyline, nIndex)
   },
   async MOUSE_MOVE (movement) {
     if (!this.drawing) {

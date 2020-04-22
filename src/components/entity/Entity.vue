@@ -28,6 +28,7 @@ export default {
     box: Object,
     label: Object,
     model: Object,
+    tileset: Object,
     path: Object,
     plane: Object,
     point: Object,

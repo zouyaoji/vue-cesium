@@ -36,6 +36,7 @@ const nameClassMap = {
   'vc-graphics-ellipsoid': 'EllipsoidGraphics',
   'vc-graphics-label': 'LabelGraphics',
   'vc-graphics-model': 'ModelGraphics',
+  'vc-graphics-tileset': 'Cesium3DTilesetGraphics',
   'vc-graphics-path': 'PathGraphics',
   'vc-graphics-plane': 'PlaneGraphics',
   'vc-graphics-point': 'PointGraphics',
@@ -65,7 +66,7 @@ const nameClassMap = {
   'vc-primitive-polyline': 'Polyline',
   'vc-primitive-polyline-ground': 'GroundPolylinePrimitive',
   'vc-primitive-model': 'Model',
-  'vc-primitive-3dtileset': 'Cesium3DTileset',
+  'vc-primitive-tileset': 'Cesium3DTileset',
   'vc-primitive-particle': 'ParticleSystem',
   // 几何体
   'vc-instance-geometry': 'GeometryInstance',
