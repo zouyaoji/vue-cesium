@@ -8,7 +8,7 @@ import {
 const position = {
   props: {
     position: {
-      type: Object,
+      type: Object | Function,
       validator: val => {
         return val && Object.prototype.hasOwnProperty.call(val, 'lng') ? lnglatValidator(val.lng, val.lat) : true
       }
@@ -314,7 +314,7 @@ const shadows = {
  */
 const positions = {
   props: {
-    positions: Array
+    positions: Array | Object
   }
 }
 

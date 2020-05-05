@@ -2,6 +2,7 @@ import services from './services'
 import nameClassMap from '../utils/nameClassMap'
 import specialProps from '../utils/specialProps'
 import { warn } from '../utils/log'
+
 const VM_PROP = 'vm'
 /**
  * Get the parent component. 获取父组件方法。
@@ -185,8 +186,10 @@ const methods = {
    * @param {Object} props
    */
   transformProps (props) {
-    const { specialPropsKeys, isEmptyObj } = this
+    const { specialPropsKeys, isEmptyObj, cesiumClass } = this
     const options = {}
+    const graphics = ['billboard', 'box', 'corridor', 'cylinder', 'ellipse', 'ellipsoid', 'label', 'model', 'tileset', 'path', 'plane', 'point',
+      'polygon', 'polyline', 'polylineVolume', 'rectangle', 'wall']
     props && Object.keys(props).forEach((vueProp) => {
       let cesiumProp = vueProp
       // The properties of the following Cesium instance objects are HTML or Vue reserved words and require special handling.
@@ -196,11 +199,16 @@ const methods = {
       } else if (vueProp === 'bmKey') {
         cesiumProp = 'key'
       }
-      options[cesiumProp] =
-        specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler && !isEmptyObj(props[vueProp])
-          ? specialProps[vueProp].handler.call(this, props[vueProp])
-          : props[vueProp]
+      if (graphics.indexOf(cesiumProp) !== -1 && (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
+        options[cesiumProp] = this.transformProps(props[vueProp])
+      } else {
+        options[cesiumProp] =
+          specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler && (!isEmptyObj(props[vueProp]) || typeof props[vueProp] === 'function')
+            ? specialProps[vueProp].handler.call(this, props[vueProp])
+            : props[vueProp]
+      }
     })
+
     // Remove empty objects to avoid initialization errors when Cesium objects are initialized with null values.
     // 移除空对象，避免 Cesium 对象初始化时传入空值导致初始化报错。
     this.removeNullItem(options)

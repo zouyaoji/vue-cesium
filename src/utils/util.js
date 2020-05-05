@@ -73,7 +73,9 @@ export function makeCartesian2 (val) {
  * @returns {Object}
  */
 export function makeCartesian3 (val) {
-  if (val && Object.prototype.hasOwnProperty.call(val, 'x')) {
+  if (typeof val === 'function') {
+    return new Cesium.CallbackProperty(val, false)
+  } else if (val && Object.prototype.hasOwnProperty.call(val, 'x')) {
     return new Cesium.Cartesian3(val.x, val.y, val.z)
   } else if (val && Object.prototype.hasOwnProperty.call(val, 'lng')) {
     return Cesium.Cartesian3.fromDegrees(val.lng, val.lat, val.height)
@@ -87,7 +89,7 @@ export function makeCartesian3 (val) {
  * @returns {Array<Cartesian3>}
  */
 export function makeCartesian3Array (vals) {
-  if (vals && vals instanceof Array && vals[0] instanceof Cesium.Cartesian3) {
+  if ((vals && vals instanceof Array && vals[0] instanceof Cesium.Cartesian3) || vals._callback) {
     return vals
   }
 

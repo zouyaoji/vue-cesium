@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-04-09 11:43:21
+ * @Last Modified time: 2020-04-30 16:50:04
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -166,6 +166,18 @@ export default {
           roll: 0
         }
       }
+    },
+    navigation: { // for supermap
+      type: Boolean,
+      default: false
+    },
+    TZcode: {
+      type: String,
+      default: new Date().getTimezoneOffset() === 0 ? 'UTC' : 'UTC' + '+' + -(new Date().getTimezoneOffset() / 60)
+    },
+    UTCoffset: {
+      type: Number,
+      default: -(new Date().getTimezoneOffset())
     }
   },
   watch: {
@@ -381,17 +393,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         animationContainer.className = 'cesium-viewer-animationContainer'
         this.viewerContainer.appendChild(animationContainer)
         let animation = new Cesium.Animation(animationContainer, new Cesium.AnimationViewModel(viewer.clockViewModel))
-        // var d = new Date()
-        // var hour = 0 - d.getTimezoneOffset()
-        // animation.viewModel.timeFormatter = function (date, viewModel) {
-        //   var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
-        //   var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
-        //   var millisecond = Math.round(gregorianDate.millisecond)
-        //   if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
-        //     return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
-        //   }
-        //   return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
-        // }
+        animation.viewModel.dateFormatter = this.localeDateTimeFormatter
+        animation.viewModel.timeFormatter = this.localeTimeFormatter
         viewer._animation = animation
       }
       viewer.forceResize()
@@ -410,6 +413,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         timelineContainer.className = 'cesium-viewer-timelineContainer'
         viewerContainer.appendChild(timelineContainer)
         let timeline = new Cesium.Timeline(timelineContainer, viewer.clock)
+        timeline.makeLabel = time => { return this.localeDateTimeFormatter(time) }
         timeline.addEventListener('settime', onTimelineScrubfunction, false)
         timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
         viewer._timeline = timeline
@@ -756,19 +760,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           this.$emit('update:camera', camera)
         }
       })
-      // if (Cesium.defined(viewer.animation)) {
-      //   var d = new Date()
-      //   var hour = 0 - d.getTimezoneOffset()
-      //   viewer.animation.viewModel.timeFormatter = function (date, viewModel) {
-      //     var dateZone8 = Cesium.JulianDate.addMinutes(date, hour, new Cesium.JulianDate())
-      //     var gregorianDate = Cesium.JulianDate.toGregorianDate(dateZone8)
-      //     var millisecond = Math.round(gregorianDate.millisecond)
-      //     if (Math.abs(viewModel._clockViewModel.multiplier) < 1) {
-      //       return Cesium.sprintf('%02d:%02d:%02d.%03d', gregorianDate.hour, gregorianDate.minute, gregorianDate.second, millisecond)
-      //     }
-      //     return Cesium.sprintf('%02d:%02d:%02d GMT+8', gregorianDate.hour, gregorianDate.minute, gregorianDate.second)
-      //   }
-      // }
+      if (Cesium.defined(viewer.animation)) {
+        viewer.animation.viewModel.dateFormatter = this.localeDateTimeFormatter
+        viewer.animation.viewModel.timeFormatter = this.localeTimeFormatter
+      }
+      if (Cesium.defined(viewer.timeline)) {
+        viewer.timeline.makeLabel = time => { return this.localeDateTimeFormatter(time) }
+        viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
+      }
       this.viewerContainer = viewer._element
       if (Cesium.defined(Cesium.SuperMapImageryProvider) && !this.logo) {
         let credit = viewer.scene.frameState.creditDisplay
@@ -790,6 +789,31 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       if (this.viewer.baseLayerPicker) {
         this.viewer.imageryLayers.raiseToTop(layer)
       }
+    },
+    localeDateTimeFormatter (datetime, viewModel, ignoredate) {
+      if (this.UTCoffset) {
+        datetime = Cesium.JulianDate.addMinutes(datetime, this.UTCoffset, {})
+      }
+      var gregorianDT = Cesium.JulianDate.toGregorianDate(datetime)
+      var objDT
+      if (ignoredate) {
+        objDT = ''
+      } else {
+        objDT = new Date(gregorianDT.year, gregorianDT.month - 1, gregorianDT.day)
+        if (this.$vc.lang.isoName === 'zh-hans') {
+          objDT = gregorianDT.year + '年' + objDT.toLocaleString(this.$vc.lang.isoName, { month: 'short' }) + gregorianDT.day + '日'
+        } else {
+          objDT = gregorianDT.day + ' ' + objDT.toLocaleString(this.$vc.lang.isoName, { month: 'short' }) + ' ' + gregorianDT.year
+        }
+        if (viewModel || gregorianDT.hour + gregorianDT.minute === 0) {
+          return objDT
+        }
+        objDT += ' '
+      }
+      return objDT + Cesium.sprintf('%02d:%02d:%02d ' + this.TZcode, gregorianDT.hour, gregorianDT.minute, gregorianDT.second)
+    },
+    localeTimeFormatter (time, viewModel) {
+      return this.localeDateTimeFormatter(time, viewModel, true)
     },
     registerEvents (flag) {
       const { viewer } = this

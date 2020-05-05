@@ -8,7 +8,7 @@ let notLoadedIcons = []
 let defaultWidth = ''
 // eslint-disable-next-line no-unused-vars
 let defaultHeight = ''
-let classPrefix = 'svg'
+let classPrefix = 'vc-svg'
 let isStroke = false
 let isOriginalDefault = false
 
@@ -263,8 +263,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.svg-icon {
+<style lang="scss" scoped>
+.vc-svg-icon {
   display: block;
 }
 </style>
