@@ -196,6 +196,8 @@ The container is an empty DOM node which used to mount other components or DOM n
 |accessToken|String||`optional`set accessToken of Cesium ion|
 |logo|Boolean|`true`| `optional` Determines if default logo is displayed on the viewer.|
 |camera|Object|| `optional` Scene camera position. Default positioning to China worldwide. **structure: { position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
+|TZcode|String|`UTM`| `optional` Time zone code.|
+|UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` The time difference (minutes) of UTC time.|
 ---
 
 ## Events

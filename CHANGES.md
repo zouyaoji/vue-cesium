@@ -1,5 +1,13 @@
 # 更新日志
 
+## 2.1.1 - 2020-05-05
+
+### 修改
+
+- `vc-viewer` 增加 timeline 时间本地化选项。
+- `vc-datasource-custom` 可添加批量实体。
+- `vc-entity` position 属性可以传 Function，相当于是callback。
+
 ## 2.1.0 - 2020-04-22
 
 ### 增加

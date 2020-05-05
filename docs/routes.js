@@ -85,7 +85,7 @@ const routeMap = [
     ]
   },
   {
-    path: 'imagery',
+    path: 'imageryLayer',
     name: {
       zh: '影像',
       en: 'Imagery'

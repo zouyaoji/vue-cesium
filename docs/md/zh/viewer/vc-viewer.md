@@ -59,6 +59,8 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          viewer.scene.globe.depthTestAgainstTerrain = true
+          viewer.scene.globe.enableLighting = true
           this.fullscreenElement = this.$refs.viewerContainer
           viewer.entities.add({
             id: '成都欢迎你',
@@ -141,6 +143,8 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        viewer.scene.globe.depthTestAgainstTerrain = true
+        viewer.scene.globe.enableLighting = true
         this.fullscreenElement = this.$refs.viewerContainer
         viewer.entities.add({
           id: '成都欢迎你',
@@ -201,6 +205,8 @@
 |logo|Boolean|`true`| `optional` 是否显示默认logo.|
 |accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
 |camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。 **结构：{ position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
+|TZcode|String|`UTM`| `optional` 时区代码。|
+|UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` UTC时间的时差（分钟）。|
 
 ---
 
