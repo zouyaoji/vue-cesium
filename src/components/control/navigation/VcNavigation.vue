@@ -8,8 +8,8 @@
         <div class="vc-navigation-control" v-if="defaultOptions.enableZoomControl">
           <vc-zoom-control
             :defaultResetView="defaultOptions.enableZoomControl.defaultResetView"
-            :zoomAmount="defaultOptions.enableZoomControl.zoomAmount || 2"
             :overrideCamera="defaultOptions.enableZoomControl.overrideCamera || false"
+            :zoomAmount="defaultOptions.enableZoomControl.zoomAmount || 2"
           ></vc-zoom-control>
         </div>
       </div>
@@ -21,13 +21,13 @@
           ></vc-print-view-btn>
         </div>
         <div class="vc-navigation-control" v-if="defaultOptions.enableMyLocation">
-          <vc-my-location></vc-my-location>
+          <vc-my-location :enableMyLocation="defaultOptions.enableMyLocation" @geolocation="geolocation"></vc-my-location>
         </div>
       </div>
     </div>
     <div :style="ldStyle" class="vc-location-distance">
       <vc-location-bar :mouseCoords="mouseCoords" v-if="mouseCoords !== undefined && defaultOptions.enableLocationBar"></vc-location-bar>
-      <vc-distance-legend v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
+      <vc-distance-legend @legendChanged="legendChanged" v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
     </div>
   </div>
 </template>
@@ -77,7 +77,11 @@ export default {
           showCredit: true,
           printAutomatically: false
         },
-        enableMyLocation: true
+        enableMyLocation: {
+          amap: {
+            key: undefined
+          }
+        }
       },
       ldBottom: 2,
       ldRight: 3,
@@ -127,6 +131,14 @@ export default {
     async unmount () {
       Cesium.defined(this.cesiumNavigation) && this.viewer.cesiumWidget.cesiumNavigation.destroy()
       return true
+    },
+    legendChanged (e) {
+      const listener = this.$listeners['legendChanged']
+      listener && this.$emit('legendChanged', e)
+    },
+    geolocation (e) {
+      const listener = this.$listeners['geolocation']
+      listener && this.$emit('geolocation', e)
     }
   },
   stubVNode: {

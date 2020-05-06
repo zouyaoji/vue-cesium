@@ -1,5 +1,5 @@
 <template>
-  <div v-if="distanceLabel" class="vc-legend vc-legend-distance">
+  <div class="vc-legend vc-legend-distance" v-if="distanceLabel">
     <label>{{distanceLabel}}</label>
     <div :style="barStyle" class="vc-bar" />
   </div>
@@ -12,6 +12,7 @@ export default {
   data () {
     return {
       barWidth: 0,
+      distance: 0,
       distanceLabel: undefined
     }
   },
@@ -106,6 +107,10 @@ export default {
       for (let i = distances.length - 1; !defined(distance) && i >= 0; --i) {
         if (distances[i] / pixelDistance < maxBarWidth) {
           distance = distances[i]
+          if (this.distance !== distance) {
+            this.distance = distance
+            this.$emit('legendChanged', distance)
+          }
         }
       }
 

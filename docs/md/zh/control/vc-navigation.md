@@ -11,8 +11,8 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer :timeline="timeline" @ready="ready" :camera.sync="camera">
-        <vc-navigation :options="options"></vc-navigation>
+      <vc-viewer :timeline="timeline" @ready="ready">
+        <vc-navigation @legendChanged="legendChanged" :options="options"></vc-navigation>
         <vc-layer-imagery>
           <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
         </vc-layer-imagery>
@@ -28,8 +28,6 @@
         <md-switch v-model="options.enableDistanceLegend"></md-switch>
         <span>位置信息部件</span>
         <md-switch v-model="options.enableLocationBar"></md-switch>
-        <span>定位部件</span>
-        <md-switch v-model="options.enableMyLocation"></md-switch>
       </div>
     </div>
   </template>
@@ -65,13 +63,11 @@
             //   // 是否自动打印
             //   printAutomatically: false
             // },
-            enableMyLocation: true
-          },
-          camera: {
-            position: {
-              lng: -105,
-              lat: 32,
-              height: 100000
+            // enableMyLocation: true,
+            enableMyLocation: {
+              amap: {
+                key: '42d22e6ed83f077bc28b7864718726de'
+              }
             }
           }
         }
@@ -80,6 +76,9 @@
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
+        },
+        legendChanged (e) {
+          console.log(e)
         }
       }
     }
@@ -144,7 +143,13 @@
           //   // 是否自动打印
           //   printAutomatically: false
           // },
-          enableMyLocation: true
+          // enableMyLocation: true,
+          enableMyLocation: {
+            // 使用高德api定位
+            amap: {
+              key: '42d22e6ed83f077bc28b7864718726de'
+            }
+          }
         }
       }
     },
@@ -177,6 +182,8 @@
 
 ## 事件
 
-| 事件名 | 参数             | 描述                                                |
-| ------ | ---------------- | --------------------------------------------------- |
-| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| 事件名        | 参数             | 描述                                                |
+| ------------- | ---------------- | --------------------------------------------------- |
+| ready         | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| legendChanged | number           | 比例尺改变时触发，返回比例尺数值，单位米。          |
+| geolocation   | Object           | 定位成功时触发，返回定位结果。                      |

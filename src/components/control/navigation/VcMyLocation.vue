@@ -10,9 +10,13 @@
 import './icon/geolocation'
 import '../../../assets/styles/components/toolButton.scss'
 import VcIconSvg from './icon/VcIconSvg.vue'
+import AMapLoader from '@amap/amap-jsapi-loader'
 export default {
   components: {
     VcIconSvg
+  },
+  props: {
+    enableMyLocation: Object | Boolean
   },
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
@@ -20,14 +24,59 @@ export default {
       this.viewer.dataSources.add(new Cesium.CustomDataSource('vc-myLocation')).then((ds) => {
         this.datasource = ds
       })
+      const { enableMyLocation } = this
+      if (enableMyLocation.amap && enableMyLocation.amap.key) {
+        AMapLoader.load({
+          key: enableMyLocation.amap.key,
+          plugins: ['AMap.Geolocation']
+        }).then((AMap) => {
+          this.AMap = AMap
+          this.amapGeolocation = new AMap.Geolocation({
+            // 是否使用高精度定位，默认：true
+            enableHighAccuracy: true,
+            convert: false,
+            // 设置定位超时时间，默认：无穷大
+            timeout: 10000
+          })
+        }).catch(e => {
+          console.error(`[C_PKG_FULLNAME] ERROR: ` + e)
+        })
+      }
     })
   },
   destroyed () {
     this.viewer.dataSources.remove(this.datasource, true)
+    if (this.amapGeolocation) {
+      let scripts = document.getElementsByTagName('script')
+      let removeScripts = []
+      for (let script of scripts) {
+        if (script.src.indexOf('/webapi.amap.com/maps') > -1) {
+          removeScripts.push(script)
+        }
+      }
+      removeScripts.forEach((script) => {
+        document.getElementsByTagName('body')[0].removeChild(script)
+      })
+    }
   },
   methods: {
     handleCick () {
-      this.getLocation()
+      const { enableMyLocation, getLocation } = this
+      if (enableMyLocation.amap && enableMyLocation.amap.key) {
+        this.amapGeolocation.getCurrentPosition((status, result) => {
+          if (status === 'complete') {
+            this.$emit('geolocation', result)
+            this.zoomToMyLocation({
+              lng: result.position.lng,
+              lat: result.position.lat
+            })
+          } else {
+            console.error(`[C_PKG_FULLNAME] ERROR: ` + '高德api定位失败。')
+          }
+        })
+      } else {
+        getLocation()
+      }
     },
     getLocation () {
       if (navigator.geolocation) {
@@ -36,7 +85,13 @@ export default {
           timeout: 5000,
           maximumAge: 0
         }
-        navigator.geolocation.getCurrentPosition(this.zoomToMyLocation, this.handleLocationError, options)
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.$emit('geolocation', position)
+          this.zoomToMyLocation({
+            lng: position.coords.longitude,
+            lat: position.coords.latitude
+          })
+        }, this.handleLocationError, options)
       } else {
         console.error(`[C_PKG_FULLNAME] ERROR: ` + 'Your browser cannot provide your location.')
       }
@@ -71,8 +126,8 @@ export default {
       return html
     },
     zoomToMyLocation (position) {
-      const longitude = position.coords.longitude
-      const latitude = position.coords.latitude
+      const longitude = position.lng
+      const latitude = position.lat
       const { Cartesian3, Rectangle, Ellipsoid, sampleTerrain } = Cesium
       const { datasource, describeWithoutUnderscores } = this
 

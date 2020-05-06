@@ -159,6 +159,8 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
 
 ## Event
 
-| name  | parameter        | description                                                                                    |
-| ----- | ---------------- | ---------------------------------------------------------------------------------------------- |
-| ready | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| name          | parameter        | description                                                                                    |
+| ------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| ready         | {Cesium, viewer} | Triggers when PolylineGraphics is ready. It returns a core class of Cesium, a viewer instance. |
+| legendChanged | number           | Triggered when the scale changes, returns the scale value in meters.                           |
+| geolocation   | Object           | Triggered when positioning is successful and returns the positioning result.                   |
