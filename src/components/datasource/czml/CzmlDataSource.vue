@@ -13,9 +13,8 @@ export default {
   },
   methods: {
     async createCesiumObject () {
-      const { $props, transformProps } = this
-      const options = transformProps($props)
-      return Cesium.CzmlDataSource.load(options.czml, options.options)
+      const { czml, options } = this
+      return Cesium.CzmlDataSource.load(czml, options)
     }
   }
 }
