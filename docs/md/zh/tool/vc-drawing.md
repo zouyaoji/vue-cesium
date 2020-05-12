@@ -14,7 +14,6 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
         <vc-handler-draw-point
           ref="handlerPoint"
           @activeEvt="activeEvt"
@@ -22,23 +21,26 @@
           @drawEvt="drawEvt"
         ></vc-handler-draw-point>
         <vc-handler-draw-polyline
+          :clampToGround="clampToGround"
           ref="handlerLine"
-          :polylineMaterial="polylineMaterial"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
         ></vc-handler-draw-polyline>
         <vc-handler-draw-polygon
+          :clampToGround="clampToGround"
           ref="handlerPolygon"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
         ></vc-handler-draw-polygon>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">贴地</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
       </div>
     </div>
@@ -52,14 +54,7 @@
           pointDrawing: false,
           polylineDrawing: false,
           polygonDrawing: false,
-          polylineMaterial: {
-            fabric: {
-              type: 'PolylineDash',
-              uniforms: {
-                color: 'blue'
-              }
-            }
-          }
+          clampToGround: false
         }
       },
       methods: {
@@ -154,7 +149,6 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" scene3DOnly>
-      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       <vc-handler-draw-point
         ref="handlerPoint"
         @activeEvt="activeEvt"
@@ -162,23 +156,26 @@
         @drawEvt="drawEvt"
       ></vc-handler-draw-point>
       <vc-handler-draw-polyline
+        :clampToGround="clampToGround"
         ref="handlerLine"
-        :polylineMaterial="polylineMaterial"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
       ></vc-handler-draw-polyline>
       <vc-handler-draw-polygon
+        :clampToGround="clampToGround"
         ref="handlerPolygon"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
       ></vc-handler-draw-polygon>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
+      <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">贴地</md-button>
       <md-button class="md-raised md-accent" @click="clear">清除</md-button>
     </div>
   </div>
@@ -192,19 +189,15 @@
         pointDrawing: false,
         polylineDrawing: false,
         polygonDrawing: false,
-        polylineMaterial: {
-          fabric: {
-            type: 'PolylineDash',
-            uniforms: {
-              color: 'blue'
-            }
-          }
-        }
+        clampToGround: false
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        this.cesiumInstance = cesiumInstance
+        var scene = viewer.scene
+        scene.debugShowFramesPerSecond = true
         this.cesiumInstance = cesiumInstance
         this.tooltip = createTooltip(viewer.cesiumWidget.container)
         viewer.scene.globe.depthTestAgainstTerrain = true
@@ -294,29 +287,35 @@
 | mode           | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
 | pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
 | pointPixelSize | Number                | `8`                | `optional` 指定点的像素大小。                       |
+| show           | Boolean               | `true`             | `optional` 指定绘制的点是否可见。                   |
 
 ### vc-handler-draw-polyline
 
-| 属性名           | 类型                  | 默认值             | 描述                                                |
-| ---------------- | --------------------- | ------------------ | --------------------------------------------------- |
-| mode             | Number                | `1`                | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
-| depthTest        | Boolean               | `false`            | `optional` 指定绘制的线对象是否参与深度测试。       |
-| pointColor       | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
-| pointPixelSize   | Number                | `8`                | `optional` 指定点的像素大小。                       |
-| polylineMaterial | Object                |                    | `optional` 指定线材质                               |
-| polylineWidth    | Number                | `2`                | `optional` 指定线宽度。                             |
+| 属性名           | 类型                  | 默认值                                                      | 描述                                                |
+| ---------------- | --------------------- | ----------------------------------------------------------- | --------------------------------------------------- |
+| mode             | Number                | `1`                                                         | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| depthTest        | Boolean               | `false`                                                     | `optional` 指定绘制的线对象是否参与深度测试。       |
+| pointColor       | String\|Array\|Object | `'rgb(255,229,0)'`                                          | `optional` 指定点颜色。                             |
+| pointPixelSize   | Number                | `8`                                                         | `optional` 指定点的像素大小。                       |
+| polylineMaterial | Object                | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质                               |
+| polylineWidth    | Number                | `2`                                                         | `optional` 指定线宽度。                             |
+| clampToGround    | Boolean               | `false`                                                     | `optional` 指定绘制的线是否贴地。                   |
+| show             | Boolean               | `true`                                                      | `optional` 指定绘制的线是否可见。                   |
 
 ### vc-handler-draw-polygon
 
-| 属性名         | 类型                  | 默认值                   | 描述                                                |
-| -------------- | --------------------- | ------------------------ | --------------------------------------------------- |
-| mode           | Number                | `1`                      | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
-| depthTest      | Boolean               | `false`                  | `optional` 指定绘制的线对象是否参与深度测试。       |
-| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'`       | `optional` 指定点颜色。                             |
-| pointPixelSize | Number                | `8`                      | `optional` 指定点的像素大小。                       |
-| polylineColor  | String\|Array\|Object | `'#51ff00'`              | `optional` 指定线颜色。                             |
-| polylineWidth  | Number                | `2`                      | `optional` 指定线宽度。                             |
-| polygonColor   | String\|Array\|Object | `'rgba(255,165,0,0.25)'` | `optional` 指定面颜色。                             |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ---------------- | --------------------- | ----------------------------------------------------------- | --------------------------------------------------- |
+| mode | Number | `1` | `optional` 绘制模式，0 连续绘制，1 绘制一次就结束。 |
+| depthTest | Boolean | `false` | `optional` 指定绘制的线对象是否参与深度测试。 |
+| pointColor | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。 |
+| pointPixelSize | Number | `8` | `optional` 指定点的像素大小。 |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质。 |
+| polylineWidth | Number | `2` | `optional` 指定线宽度。 |
+| polygonMaterial | Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` 指定面材质。 |
+| clampToGround | Boolean | `false` | `optional` 指定绘制的面是否贴地。 |
+| show | Boolean | `true` | `optional` 指定绘制的面是否可见。 |
 
 ---
 

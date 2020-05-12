@@ -5,6 +5,10 @@ const props = {
     type: Number,
     default: 1
   },
+  show: {
+    type: Boolean,
+    default: true
+  },
   pointColor: {
     type: String | Object | Array,
     default: 'rgb(255,229,0)'

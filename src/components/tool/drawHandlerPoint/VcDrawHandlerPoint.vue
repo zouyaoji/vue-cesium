@@ -8,6 +8,7 @@
             :key="'point' + index + 'position' + subIndex"
             :pixelSize="pointPixelSize"
             :position="position"
+            :show="show"
           ></vc-primitive-point>
         </template>
       </template>

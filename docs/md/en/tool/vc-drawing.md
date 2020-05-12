@@ -14,7 +14,6 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
         <vc-handler-draw-point
           ref="handlerPoint"
           @activeEvt="activeEvt"
@@ -22,22 +21,26 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
           @drawEvt="drawEvt"
         ></vc-handler-draw-point>
         <vc-handler-draw-polyline
+          :clampToGround="clampToGround"
           ref="handlerLine"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
         ></vc-handler-draw-polyline>
         <vc-handler-draw-polygon
+          :clampToGround="clampToGround"
           ref="handlerPolygon"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
         ></vc-handler-draw-polygon>
+        <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
         <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? 'Stop' : 'Point' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? 'Stop' : 'Polyline' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? 'Stop' : 'Polygon' }}</md-button>
+        <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">clampToGround</md-button>
         <md-button class="md-raised md-accent" @click="clear">clear</md-button>
       </div>
     </div>
@@ -50,7 +53,8 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           pointDrawing: false,
           polylineDrawing: false,
-          polygonDrawing: false
+          polygonDrawing: false,
+          clampToGround: false
         }
       },
       methods: {
@@ -142,7 +146,6 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" scene3DOnly>
-      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       <vc-handler-draw-point
         ref="handlerPoint"
         @activeEvt="activeEvt"
@@ -150,17 +153,20 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
         @drawEvt="drawEvt"
       ></vc-handler-draw-point>
       <vc-handler-draw-polyline
+        :clampToGround="clampToGround"
         ref="handlerLine"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
       ></vc-handler-draw-polyline>
       <vc-handler-draw-polygon
+        :clampToGround="clampToGround"
         ref="handlerPolygon"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
       ></vc-handler-draw-polygon>
+      <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
       <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? 'Stop' : 'Point' }}</md-button>
@@ -170,6 +176,7 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
       <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')"
         >{{ polygonDrawing ? 'Stop' : 'Polygon' }}</md-button
       >
+      <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">clampToGround</md-button>
       <md-button class="md-raised md-accent" @click="clear">clear</md-button>
     </div>
   </div>
@@ -182,7 +189,8 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         pointDrawing: false,
         polylineDrawing: false,
-        polygonDrawing: false
+        polygonDrawing: false,
+        clampToGround: false
       }
     },
     methods: {
@@ -280,26 +288,30 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
 
 ### vc-handler-draw-polyline
 
-| name             | type                  | default            | description                                                                       |
-| ---------------- | --------------------- | ------------------ | --------------------------------------------------------------------------------- |
-| mode             | Number                | `1`                | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                    |
-| depthTest        | Boolean               | `true`             | `optional` Specifies whether drawn polyline objects participate in depth testing. |
-| pointColor       | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color.                                               |
-| pointPixelSize   | Number                | `8`                | `optional` Specify the point pixel size.                                          |
-| polylineMaterial | Object                |                    | `optional` Specify the material of polyline.                                      |
-| polylineWidth    | Number                | `2`                | `optional` Specify the polyline width.                                            |
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ---------------- | --------------------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| mode | Number | `1` | `optional` Draw mode, 0 draws continuously, 1 ends once drawn. |
+| depthTest | Boolean | `true` | `optional` Specifies whether drawn polyline objects participate in depth testing. |
+| pointColor | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color. |
+| pointPixelSize | Number | `8` | `optional` Specify the point pixel size. |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify the material of polyline. |
+| polylineWidth | Number | `2` | `optional` Specify the polyline width. |
+| clampToGround | Boolean | `false` | `optional` Specifies whether the line drawn is grounded. Only method is valid for Entity. |
 
 ### vc-handler-draw-polygon
 
-| name           | type                  | default                  | description                                                                   |
-| -------------- | --------------------- | ------------------------ | ----------------------------------------------------------------------------- |
-| mode           | Number                | `1`                      | `optional` Draw mode, 0 draws continuously, 1 ends once drawn.                |
-| depthTest      | Boolean               | `true`                   | `optional` Specifies whether drawn line objects participate in depth testing. |
-| pointColor     | String\|Array\|Object | `'rgb(255,229,0)'`       | `optional` Specify the point color.                                           |
-| pointPixelSize | Number                | `8`                      | `optional` Specify the point pixel size.                                      |
-| polylineColor  | String\|Array\|Object | `'#51ff00'`              | `optional` Specify the polyline color.                                        |
-| polylineWidth  | Number                | `2`                      | `optional` Specify the polyline width.                                        |
-| polygonColor   | String\|Array\|Object | `'rgba(255,165,0,0.25)'` | `optional` Specify the polygon color.                                         |
+<!-- prettier-ignore -->
+| name | type | default | description |
+| ---------------- | --------------------- | ------------------------ | ----------------------------------------------------------------------------- |
+| mode | Number | `1` | `optional` Draw mode, 0 draws continuously, 1 ends once drawn. |
+| depthTest | Boolean | `true` | `optional` Specifies whether drawn line objects participate in depth testing. |
+| pointColor | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color. |
+| pointPixelSize | Number | `8` | `optional` Specify the point pixel size. |
+| polylineMaterial | String\|Array\|Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify the drawn line material。 |
+| polylineWidth | Number | `2` | `optional` Specify the polyline width. |
+| polygonMaterial | String\|Array\|Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` Specify the face material. |
+| clampToGround | Boolean | `false` | `optional` Specifies whether the drawn surface is ground-attached. |
 
 ---
 
