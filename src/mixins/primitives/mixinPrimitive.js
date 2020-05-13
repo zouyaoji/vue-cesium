@@ -80,6 +80,10 @@ export default {
       primitives: {
         enumerable: true,
         get: () => this.$services && this.$services.primitives
+      },
+      groundPrimitives: {
+        enumerable: true,
+        get: () => this.$services && this.$services.groundPrimitives
       }
     })
   }

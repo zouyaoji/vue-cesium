@@ -14,22 +14,20 @@ import {
   makeTranslationRotationScale,
   makeQuaternion,
   makeOptions
-} from './util'
+} from './cesiumHelpers'
 
 /**
- * 特殊的 Props, 需要用 util 中提供的方法转换。
+ * 特殊的 Props, 需要用 cesiumHelpers 中提供的方法转换。
  */
 const specialProps = {
   distanceDisplayCondition: {
     handler: makeDistanceDisplayCondition
   },
   pixelOffset: {
-    handler: makeCartesian2,
-    deep: true
+    handler: makeCartesian2
   },
-  showBackground: {
-    handler: makeCartesian2,
-    deep: true
+  backgroundPadding: {
+    handler: makeCartesian2
   },
   imageBasedLightingFactor: {
     handler: makeCartesian2
@@ -53,12 +51,10 @@ const specialProps = {
     handler: makeCartesian3
   },
   eyeOffset: {
-    handler: makeCartesian3,
-    deep: true
+    handler: makeCartesian3
   },
   alignedAxis: {
-    handler: makeCartesian3,
-    deep: true
+    handler: makeCartesian3
   },
   dimensions: {
     handler: makeCartesian3

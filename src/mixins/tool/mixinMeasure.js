@@ -1,5 +1,4 @@
 import cmp from '../virtualCmp'
-import { makeColor } from '../../utils/util'
 const props = {
   mode: {
     type: Number,
@@ -47,9 +46,18 @@ const props = {
     type: Number,
     default: 8
   },
-  polylineColor: {
-    type: String | Object | Array,
-    default: '#51ff00'
+  polylineMaterial: {
+    type: Object,
+    default: () => {
+      return {
+        fabric: {
+          type: 'Color',
+          uniforms: {
+            color: '#51ff00'
+          }
+        }
+      }
+    }
   },
   polylineWidth: {
     type: Number,
@@ -132,12 +140,12 @@ const methods = {
     switch (type) {
       case 'distanceMeasuring':
         polyline.positions.push(cartesian)
-        let distance = polyline.distance
-        polyline.distances.push(distance)
+        polyline.distances.push(polyline.distance)
         onMeasureEvt(polyline, nIndex)
         break
       case 'areaMeasuring':
         polyline.positions.push(cartesian)
+        polyline.distances.push(polyline.distance)
         onMeasureEvt(polyline, nIndex)
         break
       case 'heightMeasuring':
@@ -172,6 +180,9 @@ const methods = {
       if (polyline.positions.length >= 2) {
         polyline.positions.pop()
         polyline.distances && polyline.distances.pop()
+        if (type === 'areaMeasuring') {
+          polyline.distances && polyline.distances.pop()
+        }
       }
       polyline.positions.push(cartesian)
       if (type === 'distanceMeasuring') {
@@ -184,6 +195,16 @@ const methods = {
       } else {
         polyline.area = this.getSurfaceArea(polyline.positions)
         polyline.projectedArea = this.getProjectedArea(polyline.positions)
+
+        let distance = this.getDistance(polyline.positions)
+        polyline.distance = distance
+        polyline.distances.push(distance)
+
+        let clonePoistions = Cesium.clone(polyline.positions, true)
+        clonePoistions.push(polyline.positions[0])
+        distance = this.getDistance(clonePoistions)
+        polyline.distance = distance
+        polyline.distances.push(distance)
       }
       await this.$nextTick()
       onMeasureEvt(polyline, nIndex)
@@ -275,6 +296,7 @@ const methods = {
       }, 0) - 1
     } else if (type === 'areaMeasuring') {
       polyline.positions.pop()
+      polyline.distances.pop()
       const { getSurfaceArea, getProjectedArea } = this
       polyline.area = getSurfaceArea(polyline.positions)
       polyline.projectedArea = getProjectedArea(polyline.positions)
@@ -314,7 +336,9 @@ const methods = {
     } else if (type === 'areaMeasuring') {
       Object.assign(polyline, {
         area: 0,
-        projectedArea: 0
+        projectedArea: 0,
+        distances: [],
+        distance: 0
       })
     } else {
       Object.assign(polyline, {
@@ -324,6 +348,42 @@ const methods = {
       })
     }
     polylines.push(polyline)
+  },
+  /**
+   * 根据传入坐标数组计算距离。
+   * @param {Array.Cartesian3} positions 传入的坐标数组
+   * @returns {Number} 返回长度数值。
+   */
+  getDistance (positions) {
+    const { Cartesian3 } = Cesium
+    const { clampToGround, getGeodesicDistance } = this
+    let distance = 0
+    for (let i = 0; i < positions.length - 1; i++) {
+      let s = 0
+      if (clampToGround) {
+        // Cartesian.distance gives the straight line distance between the two points, ignoring curvature. This is not what we want.
+        // Cartesian3.distance 计算的是两点之间的直线距离，忽略了地球曲率，贴地时不太合理。
+        // 2.0.3 版本增加测地线距离（GeodesicDistance）。
+        s = getGeodesicDistance(positions[i], positions[i + 1])
+      } else {
+        s = Cartesian3.distance(positions[i], positions[i + 1])
+      }
+      distance = distance + s
+    }
+    return distance
+  },
+  /**
+   * 返回两点之间的测地距离。
+   * @param {Cartesian3} pointOne 第一个坐标点
+   * @param {Cartesian3} pointTwo 第二个坐标点
+   * @returns {Number} 返回两点之间的测地距离。
+   */
+  getGeodesicDistance (pointOne, pointTwo) {
+    const { Ellipsoid, EllipsoidGeodesic } = Cesium
+    const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(pointOne)
+    const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(pointTwo)
+    const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
+    return geodesic.surfaceDistance
   },
   onMeasureEvt (polyline, index, flag = false) {
     if (!this.depthTest) {
@@ -362,16 +422,6 @@ const methods = {
         listener && this.$emit('measureEvt', { polyline: polyline, label: labelsResult, type: 'heightMeasuring', finished: flag })
       }
     }
-  },
-  getPolylineMaterial (val) {
-    return new Cesium.Material({
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: makeColor(this.polylineColor)
-        }
-      }
-    })
   }
 }
 

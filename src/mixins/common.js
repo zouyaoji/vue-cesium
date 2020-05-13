@@ -133,7 +133,7 @@ const methods = {
                 const newVal = specialProps[vueProp].handler.call(this, val)
                 // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
                 // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
-                if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp][specialProps[vueProp].exclude]) && specialProps[vueProp].exclude)) {
+                if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp]._callback))) {
                   cesiumObject[cesiumProp] = newVal
                 }
               } else {
@@ -199,7 +199,9 @@ const methods = {
       } else if (vueProp === 'bmKey') {
         cesiumProp = 'key'
       }
-      if (graphics.indexOf(cesiumProp) !== -1 && (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
+
+      if (graphics.indexOf(cesiumProp) !== -1 && getClassName(props[vueProp]).indexOf('Graphics') === -1 &&
+        (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
         options[cesiumProp] = this.transformProps(props[vueProp])
       } else {
         options[cesiumProp] =
@@ -283,7 +285,7 @@ export default {
 function applyToConstructor (constructor, argArray) {
   let instance
   try {
-    const args = [{}].concat(argArray)
+    let args = [{}].concat(argArray)
     // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，暂时没想到更好的办法
     // args[1].url = ''
     args[1].mapId = {}
@@ -296,10 +298,21 @@ function applyToConstructor (constructor, argArray) {
 
     const FactoryFunction = constructor.bind.apply(constructor, args)
     instance = new FactoryFunction()
+    args = undefined
   } catch (e) {
     if (process.env.VUECESIUM_DEBUG) {
       warn(e)
     }
   }
   return instance
+}
+
+function getClassName (objClass) {
+  if (objClass && objClass.constructor) {
+    var strFun = objClass.constructor.toString()
+    var className = strFun.substr(0, strFun.indexOf('('))
+    className = className.replace('function', '')
+    return className.replace(/(^\s*)|(\s*$)/ig, '')
+  }
+  return typeof (objClass)
 }
