@@ -1,10 +1,56 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-collection-primitive-polyline ref="polylineCollection">
+    <!-- 贴地面 -->
+    <vc-collection-primitive ref="groundPolygonCollection" v-if="clampToGround">
+      <template v-for="(polyline, index) of polylines">
+        <vc-primitive-ground
+          :appearance="makeEllipsoidSurfaceAppearance(polygonMaterial)"
+          :asynchronous="false"
+          :key="index"
+          v-if="polyline.positions.length > 2"
+        >
+          <vc-instance-geometry>
+            <vc-geometry-polygon :perPositionHeight="false" :polygonHierarchy="clone(polyline.positions, true)"></vc-geometry-polygon>
+          </vc-instance-geometry>
+        </vc-primitive-ground>
+      </template>
+    </vc-collection-primitive>
+    <!-- 非贴地面 -->
+    <vc-collection-primitive ref="polygonCollection" v-else>
+      <template v-for="(polyline, index) of polylines">
+        <vc-primitive
+          :appearance="makeEllipsoidSurfaceAppearance(polygonMaterial)"
+          :asynchronous="false"
+          :key="index"
+          v-if="polyline.positions.length > 2"
+        >
+          <vc-instance-geometry>
+            <vc-geometry-polygon :perPositionHeight="true" :polygonHierarchy="clone(polyline.positions, true)"></vc-geometry-polygon>
+          </vc-instance-geometry>
+        </vc-primitive>
+      </template>
+    </vc-collection-primitive>
+    <!-- 贴地线 -->
+    <vc-collection-primitive ref="groundPolylineCollection" v-if="clampToGround">
+      <template v-for="(polyline, index) of polylines">
+        <vc-primitive-polyline-ground
+          :appearance="makePolylineMaterialAppearance(polylineMaterial)"
+          :asynchronous="false"
+          :key="index"
+          v-if="polyline.positions.length > 1"
+        >
+          <vc-instance-geometry>
+            <vc-geometry-polyline-ground :positions="polyline.positions" :width="polylineWidth" loop></vc-geometry-polyline-ground>
+          </vc-instance-geometry>
+        </vc-primitive-polyline-ground>
+      </template>
+    </vc-collection-primitive>
+    <!-- 非贴地线 -->
+    <vc-collection-primitive-polyline ref="polylineCollection" v-else>
       <vc-primitive-polyline
         :key="index"
         :loop="true"
-        :material="getPolylineMaterial()"
+        :material="polylineMaterial"
         :positions="polyline.positions"
         :width="polylineWidth"
         v-for="(polyline, index) of polylines"
@@ -35,33 +81,43 @@
           :pixelOffset="pixelOffset"
           :position="polyline.positions[polyline.positions.length - 1]"
           :showBackground="showBackground"
-          :text="$vc.lang.measure.area + ': ' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+          :text="
+            $vc.lang.measure.area +
+              ': ' +
+              (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')
+          "
         ></vc-primitive-label>
+        <template v-for="(position, subIndex) of polyline.positions">
+          <vc-primitive-label
+            :backgroundColor="backgroundColor"
+            :fillColor="fillColor"
+            :font="font"
+            :horizontalOrigin="1"
+            :key="'label' + index + 'position' + subIndex"
+            :labelStyle="labelStyle"
+            :outlineColor="outlineColor"
+            :outlineWidth="outlineWidth"
+            :pixelOffset="pixelOffset"
+            :position="
+              subIndex !== polyline.positions.length - 1
+                ? getMidPoistion(polyline.positions[subIndex], polyline.positions[subIndex + 1])
+                : getMidPoistion(polyline.positions[subIndex], polyline.positions[0])
+            "
+            :showBackground="showBackground"
+            :text="getDistanceText(polyline.distances[subIndex + 1] - polyline.distances[subIndex])"
+            v-if="alongLine"
+          ></vc-primitive-label>
+        </template>
       </template>
     </vc-collection-primitive-label>
-    <vc-entity
-      :description="$vc.lang.measure.area + ': ' + (polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
-      :id="$vc.lang.measure.area + '-' + (index + 1)"
-      :key="index"
-      :polygon.sync="polyline.polygon"
-      :ref="'entity' + index"
-      v-for="(polyline, index) of polylines"
-    >
-      <vc-graphics-polygon
-        :hierarchy="polyline.positions"
-        :material="polygonColor"
-        :perPositionHeight="perPositionHeight"
-        @ready="ready"
-        v-if="polyline.positions.length >= 3"
-      ></vc-graphics-polygon>
-    </vc-entity>
   </i>
 </template>
 
 <script>
 import area from '@turf/area'
 import mixinMeasure from '../../../mixins/tool/mixinMeasure'
-import { makePolygonHierarchy } from '../../../utils/util'
+import { makeMaterial } from '../../../utils/cesiumHelpers'
+import { clone } from '../../../utils/util'
 export default {
   name: 'vc-measure-area',
   mixins: [mixinMeasure],
@@ -74,42 +130,95 @@ export default {
     }
   },
   props: {
-    perPositionHeight: {
+    clampToGround: {
+      type: Boolean,
+      default: false
+    },
+    alongLine: {
       type: Boolean,
       default: true
     },
-    polygonColor: {
-      type: String | Object | Array,
-      default: 'rgba(255,165,0,0.25)'
+    polygonMaterial: {
+      type: Object,
+      default: () => {
+        return {
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: 'rgba(255,165,0,0.25)'
+            }
+          }
+        }
+      }
+    }
+  },
+  watch: {
+    clampToGround () {
+      const { getSurfaceArea, getDistance, polylines } = this
+      polylines.forEach((polyline) => {
+        polyline.area = getSurfaceArea(polyline.positions)
+
+        const distances = [0]
+        let totalDistance = 0
+        for (let i = 0; i < polyline.positions.length; i++) {
+          const positions = [polyline.positions[i], polyline.positions.length - 1 !== i
+            ? polyline.positions[i + 1] : polyline.positions[0]]
+          const distance = getDistance(positions)
+          totalDistance += distance
+          distances.push(totalDistance)
+        }
+        polyline.distances = distances
+        polyline.distance = totalDistance
+      })
     }
   },
   methods: {
-    ready (val) {
-      const { polylines } = this
-      const polyline = polylines[polylines.length - 1]
-      val.cesiumObject.hierarchy = new Cesium.CallbackProperty(() => makePolygonHierarchy(polyline.positions), false)
+    getDistanceText (distance) {
+      return distance > 1000 ? distance.toFixed(2) + 'km' : distance.toFixed(2) + 'm'
     },
+    getMidPoistion (left, right) {
+      const { Cartesian3 } = Cesium
+      return Cartesian3.midpoint(left, right, new Cartesian3())
+    },
+    makeEllipsoidSurfaceAppearance (val) {
+      return new Cesium.EllipsoidSurfaceAppearance({
+        material: makeMaterial.call(this, val)
+      })
+    },
+    makePolylineMaterialAppearance (val) {
+      return new Cesium.PolylineMaterialAppearance({
+        material: makeMaterial.call(this, val)
+      })
+    },
+    clone,
     /**
      * 用海伦公式获取传入坐标的构成的多边形的面积。
      * @param {Array.Cartesian}
      * @returns {Number} 返回面积数值。
      */
-    getSurfaceArea (positions) {
+    getSurfaceArea (vals) {
+      const positions = clone(vals, true)
       if (positions.length < 3) {
         return 0
       }
-      const { Cartesian3, EllipsoidTangentPlane, Ellipsoid, Math: CesiumMath, PolygonGeometryLibrary, PolygonHierarchy, VertexFormat } = Cesium
-      const perPositionHeight = true
+      const {
+        Cartesian3,
+        EllipsoidTangentPlane,
+        Ellipsoid,
+        Math: CesiumMath,
+        PolygonGeometryLibrary,
+        PolygonHierarchy,
+        VertexFormat,
+        ArcType
+      } = Cesium
+      const perPositionHeight = !this.clampToGround
       // Request the triangles that make up the polygon from Cesium.
       // 获取组成多边形的三角形。
-      const tangentPlane = EllipsoidTangentPlane.fromPoints(
-        positions,
-        Ellipsoid.WGS84
-      )
+      const tangentPlane = EllipsoidTangentPlane.fromPoints(positions, Ellipsoid.WGS84)
       const polygons = PolygonGeometryLibrary.polygonsFromHierarchy(
         new PolygonHierarchy(positions),
         tangentPlane.projectPointsOntoPlane.bind(tangentPlane),
-        !perPositionHeight,
+        this.clampToGround,
         Ellipsoid.WGS84
       )
 
@@ -118,7 +227,8 @@ export default {
         polygons.polygons[0],
         CesiumMath.RADIANS_PER_DEGREE,
         perPositionHeight,
-        VertexFormat.POSITION_ONLY
+        VertexFormat.POSITION_ONLY,
+        ArcType.GEODESIC
       )
 
       if (geom.indices.length % 3 !== 0 || geom.attributes.position.values.length % 3 !== 0) {

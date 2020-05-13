@@ -3,10 +3,10 @@
     <vc-collection-primitive-polyline ref="polylineCollection">
       <vc-primitive-polyline
         :key="index"
-        :loop="true"
-        :material="getPolylineMaterial()"
+        :material="polylineMaterial"
         :positions="polyline.positions"
         :width="polylineWidth"
+        loop
         v-for="(polyline, index) of polylines"
       ></vc-primitive-polyline>
     </vc-collection-primitive-polyline>
