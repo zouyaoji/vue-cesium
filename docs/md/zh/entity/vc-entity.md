@@ -11,7 +11,14 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer ref="viewer" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
+      <vc-viewer
+        ref="viewer"
+        @ready="ready"
+        @LEFT_CLICK="LEFT_CLICK"
+        @selectedEntityChanged="selectedEntityChanged"
+        @cameraClicked="cameraClicked"
+        @closeClicked="closeClicked"
+      >
         <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
       <div ref="bubbleContainer" id="bubbleContainer" hidden>
@@ -33,6 +40,7 @@
       },
       mounted() {
         this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+          console.log(cesiumObject)
           viewer.zoomTo(cesiumObject)
         })
       },
@@ -72,6 +80,12 @@
         LEFT_CLICK(movement) {
           const feature = this.viewer.scene.pick(movement.position)
           console.log(feature)
+        },
+        cameraClicked(e) {
+          console.log('cameraClicked', e)
+        },
+        closeClicked(e) {
+          console.log('closeClicked', e)
         }
       }
     }
@@ -83,7 +97,14 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer ref="viewer" @ready="ready" @LEFT_CLICK="LEFT_CLICK" @selectedEntityChanged="selectedEntityChanged">
+    <vc-viewer
+      ref="viewer"
+      @ready="ready"
+      @LEFT_CLICK="LEFT_CLICK"
+      @selectedEntityChanged="selectedEntityChanged"
+      @cameraClicked="cameraClicked"
+      @closeClicked="closeClicked"
+    >
       <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
     <div ref="bubbleContainer" id="bubbleContainer" hidden>
@@ -105,6 +126,7 @@
     },
     mounted() {
       this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        console.log(cesiumObject)
         viewer.zoomTo(cesiumObject)
       })
     },
@@ -144,6 +166,12 @@
       LEFT_CLICK(movement) {
         const feature = this.viewer.scene.pick(movement.position)
         console.log(feature)
+      },
+      cameraClicked(e) {
+        console.log('cameraClicked', e)
+      },
+      closeClicked(e) {
+        console.log('closeClicked', e)
       }
     }
   }

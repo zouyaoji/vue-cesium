@@ -239,6 +239,8 @@
 |onStop||场景时钟每当到达停止时间时触发该事件。|Viewer.clock|
 |onTick||场景时钟每当调用Clock#tick触发该事件。|Viewer.clock|
 |errorEvent||场景地形提供者遇到异步错误时触发该事件。|Viewer.terrainProvider|
+|cameraClicked||infoBox弹窗上点击相机事件。|Viewer.infoBox.viewModel|
+|closeClicked||infoBox弹窗关闭事件。|Viewer.infoBox.viewModel|
 |LEFT_CLICK|{position: point}|鼠标左键单击事件。|ScreenSpaceEventType|
 |LEFT_DOUBLE_CLICK|{position: point}|鼠标左键双击事件。|ScreenSpaceEventType|
 |LEFT_DOWN|{position: point}|鼠标左键按下事件。|ScreenSpaceEventType|

@@ -14,15 +14,37 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
-        <vc-measure-area ref="measureArea" @activeEvt="activeEvt" @measureEvt="measureEvt" :perPositionHeight="true"></vc-measure-area>
-        <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
+        <vc-measure-distance
+          :clampToGround="clampToGround"
+          ref="measureDistance"
+          @activeEvt="activeEvt"
+          @measureEvt="measureEvt"
+          @movingEvt="movingEvt"
+        ></vc-measure-distance>
+        <vc-measure-area
+          ref="measureArea"
+          @activeEvt="activeEvt"
+          @measureEvt="measureEvt"
+          @movingEvt="movingEvt"
+          :clampToGround="clampToGround"
+        ></vc-measure-area>
+        <vc-measure-height
+          ref="measureHeight"
+          @activeEvt="activeEvt"
+          @measureEvt="measureEvt"
+          @movingEvt="movingEvt"
+        ></vc-measure-height>
         <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
-        <md-button class="md-raised md-accent" @click="toggle('measureDistance')">{{ distanceMeasuring ? 'stop' : 'distance' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureDistance')"
+          >{{ distanceMeasuring ? 'stop' : 'distance' }}</md-button
+        >
         <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? 'stop' : 'area' }}</md-button>
-        <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? 'stop' : 'height' }}</md-button>
+        <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
+          >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
+        >
+        <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">clampToGround</md-button>
         <md-button class="md-raised md-accent" @click="clear">clear</md-button>
       </div>
     </div>
@@ -30,36 +52,40 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           distanceMeasuring: false,
           areaMeasuring: false,
-          heightMeasuring: false
+          heightMeasuring: false,
+          clampToGround: false
         }
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
-        toggle (type) {
+        toggle(type) {
           this.$refs[type].measuring = !this.$refs[type].measuring
         },
-        clear () {
+        clear() {
           this.$refs.measureDistance.clear()
           this.$refs.measureArea.clear()
           this.$refs.measureHeight.clear()
         },
-        activeEvt (_) {
+        activeEvt(_) {
           this[_.type] = _.isActive
         },
         measureEvt(result) {
           console.log(result)
         },
-        readyPromise (tileset) {
-          const {viewer} = this.cesiumInstance
+        movingEvt(position) {
+          console.log(position)
+        },
+        readyPromise(tileset) {
+          const { viewer } = this.cesiumInstance
           viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
         }
       }
@@ -73,14 +99,26 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" scene3DOnly>
-      <vc-measure-distance ref="measureDistance" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-distance>
+      <vc-measure-distance
+        :clampToGround="clampToGround"
+        ref="measureDistance"
+        @activeEvt="activeEvt"
+        @measureEvt="measureEvt"
+        @movingEvt="movingEvt"
+      ></vc-measure-distance>
       <vc-measure-area
         ref="measureArea"
         @activeEvt="activeEvt"
         @measureEvt="measureEvt"
-        :perPositionHeight="true"
+        @movingEvt="movingEvt"
+        :clampToGround="clampToGround"
       ></vc-measure-area>
-      <vc-measure-height ref="measureHeight" @activeEvt="activeEvt" @measureEvt="measureEvt"></vc-measure-height>
+      <vc-measure-height
+        ref="measureHeight"
+        @activeEvt="activeEvt"
+        @measureEvt="measureEvt"
+        @movingEvt="movingEvt"
+      ></vc-measure-height>
       <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
@@ -91,6 +129,7 @@
       <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
         >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
       >
+      <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">clampToGround</md-button>
       <md-button class="md-raised md-accent" @click="clear">clear</md-button>
     </div>
   </div>
@@ -103,7 +142,8 @@
         modelUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
         distanceMeasuring: false,
         areaMeasuring: false,
-        heightMeasuring: false
+        heightMeasuring: false,
+        clampToGround: false
       }
     },
     methods: {
@@ -126,6 +166,9 @@
       measureEvt(result) {
         console.log(result)
       },
+      movingEvt(position) {
+        console.log(position)
+      },
       readyPromise(tileset) {
         const { viewer } = this.cesiumInstance
         viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0))
@@ -145,7 +188,11 @@
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
-| arcType   | Number  | `0`     | `optional` The type of line the polygon edges must follow. |
+| arcType | Number | `0` | `optional` The type of line the polygon edges must follow. |
+| clampToGround | Boolean | `false` | `optional` Whether to stick to the ground. |
+| alongLine | Boolean | `true` | `optional` Whether to display labels along the line. |
+| polylineWidth | Number | `2` | `optional` Specify the polyline width. |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
 
 ---
 
@@ -158,6 +205,11 @@
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the area text. the label CSS font. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
+| clampToGround | Boolean | `false` | `optional` Whether to display labels along the line. |
+| alongLine | Boolean | `true` | `optional` Whether to display labels along the line. |
+| polylineWidth | Number | `2` | `optional` Specify the polyline width. |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
+| polygonMaterial | Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` Specify polygon material. |
 
 ---
 
@@ -169,6 +221,8 @@
 | mode | Number | `1` | `optional` Measurement mode, 0 continuous measurement, 1 measurement ends once. |
 | font | String | `'100 20px SimSun'` | `optional` Specify the label CSS font. |
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
+| polylineWidth | Number | `2` | `optional` Specify the polyline width. |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
 
 ---
 

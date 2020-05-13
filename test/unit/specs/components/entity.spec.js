@@ -46,7 +46,7 @@ describe('entity', () => {
         destroyVM(vm)
         done()
       })
-    }).timeout(6000)
+    }).timeout(12000)
   })
   describe('vc-graphics-billboard', () => {
     it('create', done => {
@@ -95,6 +95,6 @@ describe('entity', () => {
         destroyVM(vm)
         done()
       })
-    }).timeout(6000)
+    }).timeout(12000)
   })
 })

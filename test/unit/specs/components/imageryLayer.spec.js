@@ -37,6 +37,6 @@ describe('imageryLayer', () => {
         destroyVM(vm)
         done()
       })
-    }).timeout(6000)
+    }).timeout(12000)
   })
 })

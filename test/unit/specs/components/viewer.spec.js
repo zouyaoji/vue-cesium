@@ -12,7 +12,7 @@ describe('vc-viewer', () => {
       destroyVM(vm)
       done()
     })
-  }).timeout(6000)
+  }).timeout(12000)
   it('cesiumPath', done => {
     const vm = createTest(Viewer, { cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js' }, true)
     vm.$on('ready', ({ Cesium, viewer }) => {
@@ -34,7 +34,7 @@ describe('vc-viewer', () => {
       destroyVM(vm)
       done()
     })
-  }).timeout(6000)
+  }).timeout(12000)
   it('events', done => {
     let vm = createVue({
       template: `
@@ -69,5 +69,5 @@ describe('vc-viewer', () => {
       expect(layer.imageryProvider._mapId).to.equal('mapbox.streets')
       done()
     }
-  }).timeout(6000)
+  }).timeout(12000)
 })

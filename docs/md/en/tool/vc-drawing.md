@@ -308,9 +308,9 @@ The `vc-handler-draw-polygon` component is used to draw polygon.
 | depthTest | Boolean | `true` | `optional` Specifies whether drawn line objects participate in depth testing. |
 | pointColor | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` Specify the point color. |
 | pointPixelSize | Number | `8` | `optional` Specify the point pixel size. |
-| polylineMaterial | String\|Array\|Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify the drawn line material。 |
+| polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify the drawn line material。 |
 | polylineWidth | Number | `2` | `optional` Specify the polyline width. |
-| polygonMaterial | String\|Array\|Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` Specify the face material. |
+| polygonMaterial | Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` Specify the face material. |
 | clampToGround | Boolean | `false` | `optional` Specifies whether the drawn surface is ground-attached. |
 
 ---

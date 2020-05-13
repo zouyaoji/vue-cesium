@@ -228,6 +228,8 @@ The container is an empty DOM node which used to mount other components or DOM n
 |onStop||An Event that is fired whenever Clock#stopTime is reached.|Viewer.clock|
 |onTick||An Event that is fired whenever Clock#tick is called.|Viewer.clock|
 |errorEvent||Gets an event that is raised when the terrain provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|Viewer.terrainProvider|
+|cameraClicked||Gets an Event that is fired when the user clicks the camera icon.|Viewer.infoBox.viewModel|
+|closeClicked||Gets an Event that is fired when the user closes the info box.|Viewer.infoBox.viewModel|
 |LEFT_CLICK|{position: point}|Represents a mouse left click event.|ScreenSpaceEventType|
 |LEFT_DOUBLE_CLICK|{position: point}|Represents a mouse left double click event.|ScreenSpaceEventType|
 |LEFT_DOWN|{position: point}|Represents a mouse left button down event.|ScreenSpaceEventType|

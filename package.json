@@ -1,7 +1,7 @@
 {
   "name": "vue-cesium",
   "fullname": "VueCesium",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Vue 2.x components for CesiumJS.",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -43,6 +43,7 @@
   },
   "homepage": "https://zouyaoji.top/vue-cesium",
   "dependencies": {
+    "@amap/amap-jsapi-loader": "0.0.1",
     "@babel/runtime-corejs2": "^7.7.2",
     "@sakitam-gis/kriging": "^0.1.0",
     "@turf/area": "^6.0.1",

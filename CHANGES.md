@@ -1,12 +1,28 @@
 # 更新日志
 
+## 2.1.2 - 2020-05-13
+
+### 增加
+
+- `vc-navigation` 增加 legendChanged 事件，方便获取导航罗盘当前计算的比例尺。
+- `vc-navigation` 增加 geolocation 事件，定位成功时返回定位结果。
+- `vc-navigation` 鉴于国内谷歌浏览器定位被墙，增加高德定位 API 选项。
+- `vc-viewer` 增加转发 viewr.infoBox.viewModel 的 `cameraClicked` 和 `closeClicked` 事件。
+
+### 修改
+
+- 量算工具和绘制工具支持贴地选项。
+- `vc-datasource-custom` 解决名称获取异常问题。
+- `vc-handler-draw-polygon` 和 `vc-handler-draw-polyline` 增加贴地选项 `clampToGround`。
+- `vc-handler-draw-polygon` 的 `polygonColor` 改为 `polygonMaterial`，方便自定义绘制材质。
+
 ## 2.1.1 - 2020-05-05
 
 ### 修改
 
 - `vc-viewer` 增加 timeline 时间本地化选项。
 - `vc-datasource-custom` 可添加批量实体。
-- `vc-entity` position 属性可以传 Function，相当于是callback。
+- `vc-entity` position 属性可以传 Function，相当于是 callback。
 
 ## 2.1.0 - 2020-04-22
 
