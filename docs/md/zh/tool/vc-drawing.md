@@ -297,7 +297,7 @@
 | depthTest        | Boolean               | `false`                                                     | `optional` 指定绘制的线对象是否参与深度测试。       |
 | pointColor       | String\|Array\|Object | `'rgb(255,229,0)'`                                          | `optional` 指定点颜色。                             |
 | pointPixelSize   | Number                | `8`                                                         | `optional` 指定点的像素大小。                       |
-| polylineMaterial | Object                | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质                               |
+| polylineMaterial | Object                | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质。                               |
 | polylineWidth    | Number                | `2`                                                         | `optional` 指定线宽度。                             |
 | clampToGround    | Boolean               | `false`                                                     | `optional` 指定绘制的线是否贴地。                   |
 | show             | Boolean               | `true`                                                      | `optional` 指定绘制的线是否可见。                   |

@@ -5,7 +5,7 @@
       <vc-collection-primitive ref="polygonCollection" v-if="!clampToGround">
         <template v-for="(polyline, index) of polylines">
           <vc-primitive
-            :appearance="makeAppearance(polygonMaterial)"
+            :appearance="makeEllipsoidSurfaceAppearance(polygonMaterial)"
             :asynchronous="false"
             :key="index"
             v-if="polyline.positions.length > 2"
@@ -20,7 +20,7 @@
       <vc-collection-primitive ref="groundPolygonCollection" v-else>
         <template v-for="(polyline, index) of polylines">
           <vc-primitive-ground
-            :appearance="makeAppearance(polygonMaterial)"
+            :appearance="makeEllipsoidSurfaceAppearance(polygonMaterial)"
             :asynchronous="false"
             :key="index"
             v-if="polyline.positions.length > 2"
@@ -35,7 +35,7 @@
       <vc-collection-primitive ref="groundPolylineCollection" v-if="clampToGround">
         <template v-for="(polyline, index) of polylines">
           <vc-primitive-polyline-ground
-            :appearance="makeAppearance(polylineMaterial)"
+            :appearance="makePolylineMaterialAppearance(polylineMaterial)"
             :asynchronous="false"
             :key="index"
             v-if="polyline.positions.length > 1"
@@ -132,12 +132,14 @@ export default {
       default: false
     }
   },
-  mounted () {
-    window.vm = this
-  },
   methods: {
-    makeAppearance (val) {
+    makeEllipsoidSurfaceAppearance (val) {
       return new Cesium.EllipsoidSurfaceAppearance({
+        material: makeMaterial.call(this, val)
+      })
+    },
+    makePolylineMaterialAppearance (val) {
+      return new Cesium.PolylineMaterialAppearance({
         material: makeMaterial.call(this, val)
       })
     },
