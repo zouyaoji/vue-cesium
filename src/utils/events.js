@@ -47,6 +47,11 @@ export const Events = {
       // viewer.terrainProvider
       name: 'terrainProvider',
       events: ['errorEvent']
+    },
+    {
+      // viewer.infoBox.viewModel
+      name: ['infoBox', 'viewModel'],
+      events: ['cameraClicked', 'closeClicked']
     }
   ],
   'viewer-mouse-events': [

@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-04-30 16:50:04
+ * @Last Modified time: 2020-05-13 19:38:15
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -15,7 +15,7 @@ import bindEvents from '../../utils/bindEvent.js'
 import { Events } from '../../utils/events'
 import services from '../../mixins/services'
 import mergeDescriptors from '../../utils/mergeDescriptors.js'
-import { dirname } from '../../utils/util.js'
+import { dirname, isArray } from '../../utils/util.js'
 
 export default {
   name: 'vc-viewer',
@@ -212,6 +212,8 @@ export default {
         let infoBoxViewModel = infoBox.viewModel
         viewer._eventHelper.add(infoBoxViewModel.cameraClicked, viewer._onInfoBoxCameraClicked, viewer)
         viewer._eventHelper.add(infoBoxViewModel.closeClicked, viewer._onInfoBoxClockClicked, viewer)
+        const events = ['cameraClicked', 'closeClicked']
+        infoBoxViewModel && bindEvents.call(this, infoBoxViewModel, events, true)
         viewer._infoBox = infoBox
       }
       viewer.forceResize()
@@ -819,7 +821,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       const { viewer } = this
       bindEvents.call(this, viewer, undefined, flag)
       Events['viewer-property-events'].forEach((eventName) => {
-        bindEvents.call(this, viewer[eventName.name], eventName.events, flag)
+        const instance = isArray(eventName.name) ? viewer[eventName.name[0]][eventName.name[1]] : viewer[eventName.name]
+        instance && bindEvents.call(this, instance, eventName.events, flag)
       })
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
       Events['viewer-mouse-events'].forEach((eventName) => {
@@ -853,6 +856,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           },
           get primitives () {
             return vm.primitives
+          },
+          get groundPrimitives () {
+            return vm.groundPrimitives
           },
           get postProcessStages () {
             return vm.postProcessStages
@@ -942,6 +948,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       primitives: {
         enumerable: true,
         get: () => this.viewer && this.viewer.scene.primitives
+      },
+      groundPrimitives: {
+        enumerable: true,
+        get: () => this.viewer && this.viewer.scene.groundPrimitives
       },
       postProcessStages: {
         enumerable: true,
