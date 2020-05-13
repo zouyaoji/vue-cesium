@@ -34,7 +34,7 @@ export default {
     mixinGraphic
   ],
   props: {
-    hierarchy: Array | Object
+    hierarchy: Array | Object | Function
   }
 }
 </script>

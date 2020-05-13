@@ -14,7 +14,7 @@
 </template>
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { makeColor } from '../../../utils/util'
+import { makeColor } from '../../../utils/cesiumHelpers'
 
 export default {
   name: 'vc-analytics-flood',

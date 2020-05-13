@@ -25,6 +25,16 @@ export default {
     debugShowBoundingVolume,
     debugShowShadowVolume,
     mixinPrimitive
-  ]
+  ],
+  methods: {
+    async createCesiumObject () {
+      const { $props, transformProps } = this
+      const options = transformProps($props)
+      if (!options.asynchronous) {
+        await Cesium.GroundPolylinePrimitive.initializeTerrainHeights()
+      }
+      return new Cesium.GroundPolylinePrimitive(options)
+    }
+  }
 }
 </script>

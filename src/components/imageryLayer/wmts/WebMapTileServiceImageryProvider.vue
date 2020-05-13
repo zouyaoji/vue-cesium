@@ -12,7 +12,8 @@ import {
   ellipsoid,
   credit,
   subdomains,
-  token
+  token,
+  dimensions
 } from '../../../mixins/mixinProps'
 import mixinImageryProvider from '../../../mixins/providers/mixinImageryProvider'
 export default {
@@ -30,6 +31,7 @@ export default {
     ellipsoid,
     credit,
     subdomains,
+    dimensions,
     token,
     mixinImageryProvider
   ],
@@ -41,8 +43,7 @@ export default {
     layer: String,
     wmtsStyle: String,
     tileMatrixSetID: String,
-    tileMatrixLabels: Array,
-    dimensions: Object
+    tileMatrixLabels: Array
   },
   methods: {
     async createCesiumObject () {
