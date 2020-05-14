@@ -1,4 +1,3 @@
-
 import Viewer from './Viewer.vue'
 
 function plugin (Vue, options = {}) {

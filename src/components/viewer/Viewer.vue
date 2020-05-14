@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-05-13 19:38:15
+ * @Last Modified time: 2020-05-14 13:50:53
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -178,6 +178,10 @@ export default {
     UTCoffset: {
       type: Number,
       default: -(new Date().getTimezoneOffset())
+    },
+    removeCesiumScript: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -903,7 +907,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
     },
     async beforeInit () {
-      await this.getCesiumScript()
+      // Make sure to add only one CesiumJS script tag
+      // 保证只添加一个CesiumJS标签
+      this.$vc.scriptPromise = this.$vc.scriptPromise || this.getCesiumScript()
+      await this.$vc.scriptPromise
     }
   },
   mounted () {
@@ -960,18 +967,18 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     })
   },
   destroyed () {
-    if (global.Cesium) {
+    const { viewer, removeCesiumScript } = this
+
+    viewer.destroy()
+    this.viewer = null
+    this._mounted = false
+
+    if (removeCesiumScript && global.Cesium) {
       let scripts = document.getElementsByTagName('script')
       let removeScripts = []
       for (let script of scripts) {
-        if (script.src.indexOf('/Cesium.js') > -1) {
-          removeScripts.push(script)
-        }
-        if (global.Cesium.SuperMapImageryProvider && Number(global.Cesium.VERSION) < 1.54) {
-          if (script.src.indexOf('/Workers/zlib.min.js') > -1) {
-            removeScripts.push(script)
-          }
-        }
+        script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
+        script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
       }
       removeScripts.forEach((script) => {
         document.getElementsByTagName('body')[0].removeChild(script)
@@ -982,17 +989,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           document.getElementsByTagName('head')[0].removeChild(link)
         }
       }
-
-      const { viewer } = this
-      const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium
-      const inputHandler = viewer.screenSpaceEventHandler
-      inputHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE)
-      inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
-      inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK, KeyboardEventModifier.SHIFT)
-      viewer.destroy()
       global.Cesium = null
-      this.viewer = null
-      this._mounted = false
+      this.$vc.scriptPromise = undefined
     }
   }
 }
