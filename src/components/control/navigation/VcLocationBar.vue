@@ -28,6 +28,10 @@
       <span>{{$vc.lang.navigation.legend.elev}}</span>
       <span>{{ mouseCoords.elevation }}</span>
     </div>
+    <div class="vc-section-long" v-if="cameraHeight < 20000000">
+      <span>{{$vc.lang.navigation.legend.cameraHeight}}</span>
+      <span>{{ cameraHeight }}</span>
+    </div>
   </button>
 </template>
 
@@ -35,6 +39,11 @@
 import '../../../assets/styles/components/legend.scss'
 export default {
   name: 'vc-bar-location',
+  data () {
+    return {
+      cameraHeight: 0
+    }
+  },
   props: {
     showUtmZone: {
       type: Boolean,
@@ -49,6 +58,10 @@ export default {
       this.lastMouseY = -1
       this.viewer._element.addEventListener('mousemove', this.onMouseMove, false)
       this.viewer._element.addEventListener('touchmove', this.onMouseMove, false)
+      this.cameraHeight = this.viewer.camera.positionCartographic.height.toFixed(2)
+      this.viewer.camera.changed.addEventListener(() => {
+        this.cameraHeight = this.viewer.camera.positionCartographic.height.toFixed(2)
+      })
     })
   },
   methods: {

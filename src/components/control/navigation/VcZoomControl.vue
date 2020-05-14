@@ -174,7 +174,12 @@ export default {
         const resetView = this.defaultResetView
         if (resetView && resetView.lng) {
           camera.flyTo({
-            destination: Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height)
+            destination: Cartesian3.fromDegrees(resetView.lng, resetView.lat, resetView.height),
+            orientation: {
+              heading: Cesium.Math.toRadians(resetView.heading || 360),
+              pitch: Cesium.Math.toRadians(resetView.pitch || -90),
+              roll: Cesium.Math.toRadians(resetView.roll || 0)
+            }
           })
         } else if (resetView && resetView.west) {
           try {

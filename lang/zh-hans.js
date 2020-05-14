@@ -24,7 +24,8 @@ export default {
       zone: '带号',
       e: 'X',
       n: 'Y',
-      elev: '高程'
+      elev: '高程',
+      cameraHeight: '相机高度'
     },
     printView: '打印分享',
     centreMap: '定位您的位置'

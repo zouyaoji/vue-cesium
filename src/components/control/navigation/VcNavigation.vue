@@ -85,6 +85,7 @@ export default {
       },
       ldBottom: 2,
       ldRight: 3,
+      ldTop: 3,
       mouseCoords: undefined,
       canRender: false
     }
@@ -92,8 +93,9 @@ export default {
   computed: {
     ldStyle: function () {
       return {
-        bottom: this.ldBottom + 'px',
-        right: this.ldRight + 'px'
+        // bottom: this.ldBottom + 'px',
+        right: this.ldRight + 'px',
+        top: this.ldTop + 'px'
       }
     }
   },
@@ -118,6 +120,7 @@ export default {
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2
+      this.ldTop = this.viewer.container.clientHeight - this.ldBottom - 26
       if (this.ldBottom === 2) {
         let ldRight = 3
         this.viewer.fullscreenButton && (ldRight += this.viewer.fullscreenButton.container.getBoundingClientRect().width)

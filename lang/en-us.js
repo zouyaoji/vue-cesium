@@ -24,7 +24,8 @@ export default {
       zone: 'ZONE',
       e: 'E',
       n: 'N',
-      elev: 'Elev'
+      elev: 'Elev',
+      cameraHeight: 'Camera'
     },
     printView: 'Printing to share your map with others',
     centreMap: 'Centre map at your current location'

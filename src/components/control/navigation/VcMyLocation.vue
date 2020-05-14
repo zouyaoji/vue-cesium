@@ -36,7 +36,7 @@ export default {
             enableHighAccuracy: true,
             convert: false,
             // 设置定位超时时间，默认：无穷大
-            timeout: 10000
+            timeout: 20000
           })
         }).catch(e => {
           console.error(`[C_PKG_FULLNAME] ERROR: ` + e)
@@ -71,7 +71,7 @@ export default {
               lat: result.position.lat
             })
           } else {
-            console.error(`[C_PKG_FULLNAME] ERROR: ` + '高德api定位失败。')
+            console.error(`[C_PKG_FULLNAME] ERROR: ` + result.message)
           }
         })
       } else {
