@@ -53,7 +53,7 @@ The container is an empty DOM node which used to mount other components or DOM n
         }
       },
       mounted () {
-        this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+        this.$refs.vcViewer.createPromise.then(({Cesium, viewer})=> {
           console.log('viewer is loaded.')
         })
       },
@@ -130,7 +130,7 @@ The container is an empty DOM node which used to mount other components or DOM n
       }
     },
     mounted () {
-      this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+      this.$refs.vcViewer.createPromise.then(({Cesium, viewer})=> {
         console.log('viewer is loaded.')
       })
     },
@@ -198,6 +198,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 |camera|Object|| `optional` Scene camera position. Default positioning to China worldwide. **structure: { position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
 |TZcode|String|`UTM`| `optional` Time zone code.|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` The time difference (minutes) of UTC time.|
+|removeCesiumScript|Boolean|`true`| `optional` Whether to remove CesiumJS script tags when vc-viewer is destroyed.|
 ---
 
 ## Events

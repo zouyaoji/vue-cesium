@@ -43,7 +43,7 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
             //   zoomAmount: 2,
             //   option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
             //   defaultResetView: {
-            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563, heading: 360, pitch: -90, roll: 0
             //   }
             // },
             enableDistanceLegend: true,
@@ -111,7 +111,7 @@ The `vc-navigation` component is used to load the navigation compass widget. **N
           //   zoomAmount: 2,
           //   option used to set a default view when resetting the map view with the reset navigation control.{lng: number, lat: number, height: number} or rectangle{west: number,south: number,east: number,north: number}
           //   defaultResetView: {
-          //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+          //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563, heading: 360, pitch: -90, roll: 0
           //   }
           // },
           enableDistanceLegend: true,

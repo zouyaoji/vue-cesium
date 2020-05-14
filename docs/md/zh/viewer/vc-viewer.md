@@ -52,7 +52,7 @@
         }
       },
       mounted () {
-        this.$refs.vcViewer.createPromise.then((Cesium, viewer)=> {
+        this.$refs.vcViewer.createPromise.then(({Cesium, viewer})=> {
           console.log('viewer is loaded.')
         })
       },
@@ -136,7 +136,7 @@
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then((Cesium, viewer) => {
+      this.$refs.vcViewer.createPromise.then(({Cesium, viewer}) => {
         console.log('viewer is loaded.')
       })
     },
@@ -207,7 +207,7 @@
 |camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。 **结构：{ position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
 |TZcode|String|`UTM`| `optional` 时区代码。|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` UTC时间的时差（分钟）。|
-
+|removeCesiumScript|Boolean|`true`| `optional` vc-viewer销毁时是否移除CesiumJS标签.|
 ---
 
 ## 事件

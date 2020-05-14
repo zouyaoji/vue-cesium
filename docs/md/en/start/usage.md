@@ -108,7 +108,17 @@ Vue.use(ImageryLayer)
 
 ### CDN Registration
 
-- To be added
+```js
+<!-- include Vue -->
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<!-- include VueCesium -->
+<script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
+<script>
+  Vue.use(VueCesium) // All VueCesium components now globally installed
+</script>
+```
+
+[UMD DEMO](https://zouyaoji.top/vue-cesium/statics/umd.html)
 
 ## Hello Cesium
 

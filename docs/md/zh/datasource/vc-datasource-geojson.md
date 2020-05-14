@@ -11,9 +11,9 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready">
+      <vc-viewer @ready="ready" @MOUSE_MOVE="MOUSE_MOVE">
         <vc-datasource-geojson
-          data="./statics/SampleData/lineData/streamline.json"
+          data="./statics/geo.json"
           @ready="subReady"
           :show="show"
           :options="options"
@@ -35,10 +35,20 @@
       },
       methods: {
         ready(cesiumInstance) {
+          this.cesiumInstance = cesiumInstance
           const { Cesium, viewer } = cesiumInstance
         },
         subReady(cesiumInstance) {
           cesiumInstance.viewer.zoomTo(cesiumInstance.cesiumObject)
+        },
+        MOUSE_MOVE (movement) {
+          const { Cesium, viewer } = cesiumInstance
+          // Pick a new feature
+          var pickedFeature = viewer.scene.pick(movement.endPosition)
+          if (!Cesium.defined(pickedFeature)) {
+            return
+          }
+          console.log(pickedFeature)
         }
       }
     }
@@ -102,12 +112,13 @@
 
 ## 事件
 
-| 事件名       | 参数                           | 描述                                                                             |
-| ------------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| changedEvent |                                | 数据源改变时触发。                                                               |
-| errorEvent   |                                | 数据源发生错误时触发。                                                           |
-| loadingEvent |                                | 数据源开始或结束加载时触发。                                                     |
+| 事件名            | 参数                                  | 描述                                                                             |
+| ----------------- | ------------------------------------- | -------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer, cesiumObject}        | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| changedEvent      |                                       | 数据源改变时触发。                                                               |
+| errorEvent        |                                       | 数据源发生错误时触发。                                                           |
+| loadingEvent      |                                       | 数据源开始或结束加载时触发。                                                     |
 | clusterEvent      | (clusteredEntities, cluster)          | 数据源聚合事件。                                                                 |
 | collectionChanged | (collection, added, removed, changed) | 数据源实体集合改变时触发。                                                       |
+
 ---

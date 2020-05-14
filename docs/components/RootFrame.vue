@@ -6,7 +6,7 @@
           md-icon menu
         span.md-title(v-text="title") VUE CESIUM
         md-button.md-icon-button
-          router-link.link(:to="otherUrl")
+          router-link.link(:id="otherUrl.indexOf('/zh/' !== -1) ? 'toZh' : 'toEn'" :to="otherUrl")
           md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
         md-button.md-icon-button(href="https://github.com/zouyaoji/vue-cesium")
           md-icon(md-iconset="iconfont icon-github")

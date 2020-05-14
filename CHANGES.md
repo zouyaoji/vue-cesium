@@ -1,5 +1,12 @@
 # 更新日志
 
+## 2.1.3 - 2020-05-14
+
+### 修改
+
+- `vc-viewer` 增加 removeCesiumScript 属性，确定`vc-viewer`在销毁时是否移除 CesiumJS 标签。fixed: #58
+- `vc-navigation` 解决单页面添加多个`vc-viewer` 初始化不正常的问题。增加相机高度。增加heading, pitch, roll属性。
+
 ## 2.1.2 - 2020-05-13
 
 ### 增加

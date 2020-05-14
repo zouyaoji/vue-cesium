@@ -44,10 +44,9 @@
             //    zoomAmount: 2,
             //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
             //   defaultResetView: {
-            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563
+            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563, heading: 360, pitch: -90, roll: 0
             //   },
             //   overrideCamera: false
-            //   },
             // },
             enableDistanceLegend: true,
             enableLocationBar: true,
@@ -117,18 +116,16 @@
         timeline: true,
         options: {
           enableCompass: true,
-          // enableZoomControl: true,
-          enableZoomControl: {
-            // 缩放比例
-            zoomAmount: 2,
-            // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
-            defaultResetView: {
-              lng: 105,
-              lat: 29.999999999999993,
-              height: 19059568.497290563
-            },
-            overrideCamera: false
-          },
+          enableZoomControl: true,
+          // enableZoomControl: {
+          //   // 缩放比例
+          //    zoomAmount: 2,
+          //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
+          //   defaultResetView: {
+          //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563, heading: 360, pitch: -90, roll: 0
+          //   },
+          //   overrideCamera: false
+          // },
           enableDistanceLegend: true,
           enableLocationBar: true,
           // enableLocationBar: {

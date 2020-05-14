@@ -117,7 +117,7 @@ Vue.use(ImageryLayer)
 </script>
 ```
 
-[UMD 例子参考](https://github.com/zouyaoji/vue-cesium/blob/master/test/umd.html)
+[UMD 例子参考](https://zouyaoji.top/vue-cesium/statics/umd.html)
 
 ## Hello Cesium
 
