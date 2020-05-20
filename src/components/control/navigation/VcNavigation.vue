@@ -85,7 +85,6 @@ export default {
       },
       ldBottom: 2,
       ldRight: 3,
-      ldTop: 3,
       mouseCoords: undefined,
       canRender: false
     }
@@ -93,9 +92,8 @@ export default {
   computed: {
     ldStyle: function () {
       return {
-        // bottom: this.ldBottom + 'px',
-        right: this.ldRight + 'px',
-        top: this.ldTop + 'px'
+        bottom: this.ldBottom + 'px',
+        right: this.ldRight + 'px'
       }
     }
   },
@@ -117,10 +115,13 @@ export default {
       this.mouseCoords = new MouseCoords({ gridFileUrl: this.defaultOptions.enableLocationBar.gridFileUrl })
       // 避免控件先按默认的参数创建 然后又隐藏 导致视觉上的体验不优雅
       this.canRender = true
+      this.$nextTick(() => {
+        const viewerContainer = this.viewer._element
+        viewerContainer.appendChild(this.$el)
+      })
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2
-      this.ldTop = this.viewer.container.clientHeight - this.ldBottom - 26
       if (this.ldBottom === 2) {
         let ldRight = 3
         this.viewer.fullscreenButton && (ldRight += this.viewer.fullscreenButton.container.getBoundingClientRect().width)
@@ -132,7 +133,7 @@ export default {
       return true
     },
     async unmount () {
-      Cesium.defined(this.cesiumNavigation) && this.viewer.cesiumWidget.cesiumNavigation.destroy()
+      this.cesiumNavigation && this.viewer.cesiumWidget.cesiumNavigation.destroy()
       return true
     },
     legendChanged (e) {

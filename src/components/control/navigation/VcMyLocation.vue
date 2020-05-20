@@ -27,8 +27,9 @@ export default {
       const { enableMyLocation } = this
       if (enableMyLocation.amap && enableMyLocation.amap.key) {
         AMapLoader.load({
-          key: enableMyLocation.amap.key,
-          plugins: ['AMap.Geolocation']
+          'key': enableMyLocation.amap.key,
+          'version': '2.0',
+          'plugins': ['AMap.Geolocation']
         }).then((AMap) => {
           this.AMap = AMap
           this.amapGeolocation = new AMap.Geolocation({
