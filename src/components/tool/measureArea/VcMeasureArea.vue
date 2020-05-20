@@ -182,7 +182,12 @@ export default {
     },
     makeEllipsoidSurfaceAppearance (val) {
       return new Cesium.EllipsoidSurfaceAppearance({
-        material: makeMaterial.call(this, val)
+        material: makeMaterial.call(this, val),
+        renderState: {
+          cull: {
+            enabled: false
+          }
+        }
       })
     },
     makePolylineMaterialAppearance (val) {
