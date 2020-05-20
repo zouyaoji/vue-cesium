@@ -19,7 +19,8 @@ const props = {
   }
 }
 const watch = {
-  drawing (val) {
+  async drawing (val) {
+    let nextTick = false
     const { polylines, startNew, drawType } = this
     const polyline = polylines[polylines.length - 1]
     if (!val && polyline && !polyline.positions.length) {
@@ -44,14 +45,17 @@ const watch = {
       for (let $node of this.$parent.$slots.default || []) {
         if ($node.componentOptions && drawCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.drawing = false
+          nextTick = true
         }
         if ($node.componentOptions && measureCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.measuring = false
+          nextTick = true
         }
       }
 
       startNew()
     }
+    nextTick && await this.$nextTick()
     this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
     const listener = this.$listeners['activeEvt']
     listener && this.$emit('activeEvt', { type: drawType, isActive: val })
