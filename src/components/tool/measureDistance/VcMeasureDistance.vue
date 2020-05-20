@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     getDistanceText (distance) {
-      return distance > 1000 ? distance.toFixed(2) + 'km' : distance.toFixed(2) + 'm'
+      return distance > 1000 ? (distance / 1000).toFixed(2) + 'km' : distance.toFixed(2) + 'm'
     },
     getMidPoistion (left, right) {
       const { Cartesian3 } = Cesium
