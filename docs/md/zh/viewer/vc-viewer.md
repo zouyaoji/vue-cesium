@@ -167,7 +167,28 @@
     }
   }
 </script>
+<style>
+
+.viewer {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.demo-tool {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  color: #fff;
+}
+</style>
 ```
+
+> tips: md-switch 用的是[vue-material组件库](https://vuematerial.io/)，你也可以使用其他组件库。
+  
+>  本示例用到的vc-navigation的样式需要单独引入，详见[vc-navigation](https://zouyaoji.top/vue-cesium/#/zh/control/vc-navigation)。
 
 ## 属性
 
