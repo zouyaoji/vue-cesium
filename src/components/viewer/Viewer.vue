@@ -825,7 +825,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       const { viewer } = this
       bindEvents.call(this, viewer, undefined, flag)
       Events['viewer-property-events'].forEach((eventName) => {
-        const instance = isArray(eventName.name) ? viewer[eventName.name[0]][eventName.name[1]] : viewer[eventName.name]
+        const instance = isArray(eventName.name) && viewer[eventName.name[0]] ? viewer[eventName.name[0]][eventName.name[1]] : viewer[eventName.name]
         instance && bindEvents.call(this, instance, eventName.events, flag)
       })
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)

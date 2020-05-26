@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready" @MOUSE_MOVE="MOUSE_MOVE">
         <vc-datasource-geojson
-          data="./statics/geo.json"
+          data="./statics/SampleData/lineData/streamline.json"
           @ready="subReady"
           :show="show"
           :options="options"

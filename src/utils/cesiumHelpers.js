@@ -250,7 +250,7 @@ export function makeMaterialProperty (val, isConstant = false) {
  */
 export function makeMaterial (val) {
   const cmpName = this.$options.name
-  if (cmpName.indexOf('graphics') !== -1) {
+  if (cmpName && cmpName.indexOf('graphics') !== -1) {
     return makeMaterialProperty(val)
   }
   if (val && val.hasOwnProperty('fabric')) {

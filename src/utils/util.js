@@ -426,6 +426,137 @@ export function getAllAttribution (viewer) {
   return credits.map((credit) => credit.html)
 }
 
+export function drawTriangle (options) {
+  if (!options) {
+    throw new Error('options is required')
+  }
+  if (!options.width) {
+    throw new Error('options.width is required')
+  }
+  if (!options.height) {
+    throw new Error('options.height is required')
+  }
+  options.backgroundColor = options.backgroundColor || 'black'
+  options.borderColor = options.borderColor || 'orange'
+  options.borderWidth = options.borderWidth || 1
+
+  var cv = document.createElement('canvas')
+  cv.width = options.width
+  cv.height = options.height
+  var ctx = cv.getContext('2d')
+  ctx.beginPath()
+  if (options.direction === 1) { // left
+    ctx.moveTo(cv.width, 0)
+    ctx.lineTo(0, cv.height / 2)
+    ctx.lineTo(cv.width, cv.height)
+  } else if (options.direction === 2) { // top
+    ctx.moveTo(0, cv.height)
+    ctx.lineTo(cv.width / 2, 0)
+    ctx.lineTo(cv.width, cv.height)
+  } else if (options.direction === 3) { // right
+    ctx.moveTo(0, cv.height)
+    ctx.lineTo(cv.width, cv.height / 2)
+    ctx.lineTo(0, 0)
+  } else { // bottom
+    ctx.moveTo(0, 0)
+    ctx.lineTo(cv.width / 2, cv.height)
+    ctx.lineTo(cv.width, 0)
+  }
+  ctx.lineJoin = 'round' // 两条线交汇时的边角类型（miter 尖角默认  bevel斜角 round 圆角 ）
+
+  if (options.backgroundColor) {
+    ctx.fillStyle = options.backgroundColor.toCssColorString()
+    ctx.fill()
+  }
+  if (options.border) {
+    ctx.lineWidth = options.borderWidth
+    ctx.strokeStyle = options.borderColor.toCssColorString()
+    ctx.stroke()
+  }
+  return cv
+}
+
+export function drawText (text, options) {
+  options = options || {
+    font: '20px sans-serif'
+  }
+  var backcolor = options.backgroundColor
+  var padding = options.padding
+  delete options.backgroundColor
+  delete options.padding
+
+  var lines = text.split(/[\r]?\n+/)
+  var lineImgs = []
+  var w = 0; var h = 0
+  for (var i = 0; i < lines.length; i++) {
+    var tempCv = Cesium.writeTextToCanvas(lines[i], options)
+    if (tempCv) {
+      lineImgs.push(tempCv)
+      h += tempCv.height
+      w = Math.max(w, tempCv.width)
+    }
+  }
+  options.backgroundColor = backcolor
+  options.padding = padding
+
+  var cv = options.canvas
+  if (!cv) {
+    w += padding * 2
+    h += padding * 2.25
+    cv = document.createElement('canvas')
+    cv.width = w
+    cv.height = h
+  }
+
+  var ctx = cv.getContext('2d')
+  if (backcolor) {
+    ctx.fillStyle = backcolor.toCssColorString()
+  } else {
+    ctx.fillStyle = undefined
+  }
+
+  if (options.border) {
+    ctx.lineWidth = options.borderWidth
+    ctx.strokeStyle = options.borderColor.toCssColorString()
+  }
+
+  if (!options.borderRadius) {
+    if (backcolor) {
+      ctx.fillRect(0, 0, cv.width, cv.height)
+    }
+
+    if (options.border) {
+      ctx.strokeRect(0, 0, cv.width, cv.height)
+    }
+  } else {
+    drawRoundedRect({
+      x: 0, y: 0, width: cv.width, height: cv.height
+    }, options.borderRadius, ctx)
+  }
+
+  delete ctx.strokeStyle
+  delete ctx.fillStyle
+  var y = 0
+  for (let i = 0; i < lineImgs.length; i++) {
+    ctx.drawImage(lineImgs[i], 0 + padding, y + padding)
+    y += lineImgs[i].height
+  }
+  return cv
+}
+
+function drawRoundedRect (rect, r, ctx) {
+  ctx.beginPath()
+
+  ctx.moveTo(rect.x + r, rect.y)
+  ctx.arcTo(rect.x + rect.width, rect.y, rect.x + rect.width, rect.y + rect.height, r)
+  ctx.arcTo(rect.x + rect.width, rect.y + rect.height, rect.x, rect.y + rect.height, r)
+  ctx.arcTo(rect.x, rect.y + rect.height, rect.x, rect.y, r)
+  ctx.arcTo(rect.x, rect.y, rect.x + r, rect.y, r)
+
+  ctx.fill()
+  ctx.stroke()
+}
+
 export function getExtension (fileName) {
   var start = fileName.lastIndexOf('.')
   if (start >= 0) {
