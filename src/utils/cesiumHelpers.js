@@ -1,5 +1,4 @@
 import { isFunction, isArray, isString, isObject, isEmptyObj } from './util'
-import specialProps from './specialProps'
 /**
  * 将对象 {x: number, y: number } 转换为 Cesium.Cartesian2
  * @param {Object} val
@@ -259,9 +258,8 @@ export function makeMaterial (val) {
         if (!isArray(obj[i]) && isObject(obj[i])) {
           f(obj[i])
         } else {
-          const specialPropsKeys = Object.keys(specialProps)
-          if (specialPropsKeys.indexOf(i) !== -1 && specialProps[i].handler && !isEmptyObj(obj[i])) {
-            const result = specialProps[i].handler.call(this, obj[i])
+          if (i.toLocaleLowerCase().indexOf('color') !== -1 && !isEmptyObj(obj[i])) {
+            const result = makeColor(obj[i])
             // Cesium 通过对象属性个数判断具体材质类型的，通过 Cesium.combine 移除 vue 传的一些属性
             obj[i] = Cesium.combine(result, result, true)
           }
