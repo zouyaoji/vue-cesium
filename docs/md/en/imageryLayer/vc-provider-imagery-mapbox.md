@@ -124,7 +124,7 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
 
 <!-- prettier-ignore -->
 | name | type | default | description |
-| ------------ | ------ |   --------- |
+| ------------- | ------ | ------- | -------------- |
 | url | String | `'https://api.mapbox.com/v4/'` | `optional`The Mapbox server url. |
 | mapId | String | | `required`The Mapbox Map ID. |
 | accessToken | Object | | `optional`The public access token for the imagery. |
