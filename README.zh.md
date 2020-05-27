@@ -69,10 +69,10 @@ Vue.use(VueCesium)
 </template>
 
 <style>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
@@ -86,19 +86,22 @@ Vue.use(VueCesium)
 
 版权所有 (c) 2018 至今, zouyaoji <370681295@qq.com>
 
-## 参考
-
-学习借鉴了 2 个 vue 组件项目[vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)和[vuelayers](https://github.com/ghettovoice/vuelayers/)。
-
-## QQ群
-
-[点击链接加入群聊【Cesium开心农场(16533444)】](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
-
 ## 捐赠
 
 > 您的支持是我前进的动力，更好的支持开源事业！~
+
 ### 微信
+
 ![wechat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
 
 ### 支付宝
+
 ![alipay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)
+
+## QQ 交流群
+
+[点击链接加入群聊【Cesium 开心农场(16533444)】](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
+
+## 参考
+
+学习借鉴了 2 个 vue 组件项目[vue-baidu-map](https://github.com/Dafrok/vue-baidu-map)和[vuelayers](https://github.com/ghettovoice/vuelayers/)。

@@ -5,8 +5,9 @@
         md-button.menu-button.md-icon-button(@click="$refs.sidenav.toggle()")
           md-icon menu
         span.md-title(v-text="title") VUE CESIUM
+        md-button(@click="onDonorClick") {{ lang === 'zh' ? '赞助' : 'Donations' }}
         md-button.md-icon-button
-          router-link.link(:id="otherUrl.indexOf('/zh/' !== -1) ? 'toZh' : 'toEn'" :to="otherUrl")
+          router-link.link(:to="otherUrl")
           md-icon(md-iconset="iconfont icon-zhongyingwenqiehuan-xianshizhongyingwen")
         md-button.md-icon-button(href="https://github.com/zouyaoji/vue-cesium")
           md-icon(md-iconset="iconfont icon-github")
@@ -19,6 +20,41 @@
     .page-content
       slot(name="page-content")
 </template>
+
+
+<script>
+export default {
+  props: ['lang'],
+  data () {
+    return {
+      title: this.$route.name
+    }
+  },
+  computed: {
+    otherLang () {
+      return this.lang === 'zh' ? 'en' : 'zh'
+    },
+    otherUrl () {
+      const url = this.$route.path.indexOf('/zh/') !== -1
+        ? this.$route.path.replace('/zh/', '/en/')
+        : this.$route.path.replace('/en/', '/zh/')
+      return url
+    }
+  },
+  mounted () {
+    this.$router.afterEach((route) => {
+      document.body.scrollTop = 0
+      this.title = route.name
+    })
+  },
+  methods: {
+    onDonorClick () {
+      console.log()
+      this.$router.push({ name: this.lang === 'zh' ? '赞助' : 'Donations' })
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .top {
@@ -77,30 +113,3 @@
   }
 }
 </style>
-
-<script>
-export default {
-  props: ['lang'],
-  data () {
-    return {
-      title: this.$route.name
-    }
-  },
-  computed: {
-    otherLang () {
-      return this.lang === 'zh' ? 'en' : 'zh'
-    },
-    otherUrl () {
-      return this.$route.path.indexOf('/zh/') !== -1
-        ? this.$route.path.replace('/zh/', '/en/')
-        : this.$route.path.replace('/en/', '/zh/')
-    }
-  },
-  mounted () {
-    this.$router.afterEach((route) => {
-      document.body.scrollTop = 0
-      this.title = route.name
-    })
-  }
-}
-</script>

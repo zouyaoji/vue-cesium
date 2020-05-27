@@ -2,8 +2,8 @@
 md-layout.issues
   md-layout.issues-card
     md-dialog-alert(
-      md-content="表单信息不完整！"
-      md-ok-text="确定"
+      md-content="The form information is incomplete!"
+      md-ok-text="Ok"
       ref="dialog")
     md-whiteframe
       md-tabs(@change="changeType")
@@ -13,11 +13,11 @@ md-layout.issues
               label(v-text="item.label")
               md-input(v-if="item.type === 'input'" v-model="formData[type.name][item.name]", :required="true")
               md-textarea(v-if="item.type === 'textarea'" v-model="formData[type.name][item.name]")
-            md-button.md-raised.md-primary(@click="openIssue") 提交
+            md-button.md-raised.md-primary(@click="openIssue") Submit
   md-layout.issues-card
     md-whiteframe
       md-toolbar
-        span.md-title 预览
+        span.md-title Preview
       article.md-preview.markdown-body(v-html="preview")
 </template>
 
@@ -29,58 +29,58 @@ const md = new MarkdownIt({
 
 const formTypes = {
   bug: {
-    label: 'BUG 反馈',
+    label: 'BUG Feedback',
     items: {
-      browserVer: '浏览器版本号',
-      depVer: 'Vue 版本号',
-      packageVer: '组件库版本号',
+      browserVer: 'Browser',
+      depVer: 'Vue Version',
+      packageVer: 'VueCesium Version',
       description: {
-        label: '现象描述',
+        label: 'Problem Description',
         type: 'textarea'
       },
       errMsg: {
-        label: '完整异常信息',
+        label: 'Complete exception information',
         type: 'textarea'
       },
-      demo: '在线示例 / 仓库 URL',
+      demo: 'Online example / github URL',
       code: {
-        label: '复现代码',
+        label: 'Code to reproduce the issue',
         type: 'textarea'
       },
       expect: {
-        label: '预期输出',
+        label: 'Expected results',
         type: 'textarea'
       },
       output: {
-        label: '实际输出',
+        label: 'Actual results',
         type: 'textarea'
       }
     }
   },
   featrue: {
-    label: '功能请求',
+    label: 'Feature request',
     items: {
-      demo: '在线示例 URL',
+      demo: 'Online sample URL',
       description: {
-        label: '功能描述',
+        label: 'Description',
         type: 'textarea'
       },
       usage: {
-        label: '用法示例',
+        label: 'Example usage',
         type: 'textarea'
       }
     }
   },
   documentation: {
-    label: '文档问题',
+    label: 'Documentation issues',
     items: {
-      url: '相关文档 URL',
+      url: 'Related document URL',
       description: {
-        label: '问题描述',
+        label: 'Description',
         type: 'textarea'
       },
       suggestion: {
-        label: '改进建议',
+        label: 'Suggestions for Improvement',
         type: 'textarea'
       }
     }
@@ -137,7 +137,7 @@ export default {
       }
       typeDetail.items.push({
         name: 'title',
-        label: 'ISSUE 标题',
+        label: 'ISSUE Title',
         type: 'input'
       })
       type.items.forEach(name => {

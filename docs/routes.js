@@ -1,6 +1,5 @@
 import CateView from './components/CateView.vue'
 import Index from './components/Index.vue'
-import Issues from './components/Issues.vue'
 
 const langs = ['zh', 'en']
 
@@ -27,6 +26,18 @@ const routeMap = [
       en: 'Documentation'
     },
     component: 'index',
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    // 首页
+    path: 'donations',
+    name: {
+      zh: '赞助',
+      en: 'Donations'
+    },
+    component: 'donations',
     meta: {
       hidden: true
     }
@@ -874,10 +885,20 @@ export default [
     component: Index
   },
   {
-    path: '/issues',
-    name: 'ISSUE',
-    component: Issues,
+    path: '/zh/issues',
+    name: '缺陷',
+    component: () => import('./components/Issues.vue'),
     meta: {
+      lang: 'zh',
+      hidden: true
+    }
+  },
+  {
+    path: '/en/issues',
+    name: 'ISSUE',
+    component: () => import('./components/IssuesEn.vue'),
+    meta: {
+      lang: 'en',
       hidden: true
     }
   },

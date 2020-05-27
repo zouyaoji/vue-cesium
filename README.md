@@ -69,10 +69,10 @@ Vue.use(VueCesium)
 </template>
 
 <style>
-.viewer {
-  width: 100%;
-  height: 400px;
-}
+  .viewer {
+    width: 100%;
+    height: 400px;
+  }
 </style>
 ```
 
@@ -86,19 +86,26 @@ Vue.use(VueCesium)
 
 Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
-## Reference
+## Donate
 
-Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).
+> Your support is the driving force for me to move forward and better support the open source cause! ~
+
+- PayPal
+
+  <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/statics/assets/images/paypal.png" style="height:30px;" /></a>
+
+- WeChat
+
+  ![WeChat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
+
+- AliPay
+
+  ![AliPay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)
 
 ## QQGroup
 
 [16533444](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
 
-## Donate
+## Reference
 
-> Your support is the driving force for me to move forward and better support the open source cause! ~
-### wechat
-![wechat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
-
-### alipay
-![alipay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)
+Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).
