@@ -92,7 +92,7 @@ Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
 - PayPal
 
-  <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/statics/assets/images/paypal.png" style="height:30px;" /></a>
+  <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/statics/assets/images/paypal.png" height="40" /></a>
 
 - WeChat
 
