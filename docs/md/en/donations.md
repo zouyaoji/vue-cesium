@@ -27,6 +27,7 @@ Special thanks to the following donors, this component is completely open source
 
 - `【-。向日葵】`
 - [`【boriskogan81】`](https://github.com/boriskogan81)
+- [`【并非善类】`](https://www.cnblogs.com/JinXinYuan)
 - ...
 
 ## Contributors

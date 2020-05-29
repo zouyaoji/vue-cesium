@@ -23,6 +23,7 @@
 
 - `【-。向日葵】`
 - [`【boriskogan81】`](https://github.com/boriskogan81)
+- [`【并非善类】`](https://www.cnblogs.com/JinXinYuan)
 - ...
 
 ## 组件贡献
