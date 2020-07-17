@@ -21,16 +21,16 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./when-7ef6387a', './Check-ed6a1804', './Math-55f9392d', './Cartesian2-4938fd49', './Transforms-c1370102', './RuntimeError-5b606d78', './WebGLConstants-30fc6f5c', './ComponentDatatype-a863af81', './GeometryAttribute-9c9ba21b', './GeometryAttributes-cb18da36', './Plane-471d15e0', './VertexFormat-d75df48f', './FrustumGeometry-098d1dfd'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, Plane, VertexFormat, FrustumGeometry) { 'use strict';
+define(['./when-54c2dc71', './Check-6c0211bc', './Math-1124a290', './Cartesian2-33d2657c', './Transforms-8be64844', './RuntimeError-2109023a', './WebGLConstants-76bb35d1', './ComponentDatatype-a26dd044', './GeometryAttribute-e9a8b203', './GeometryAttributes-4fcfcf40', './Plane-fa30fc46', './VertexFormat-4d8b817a', './FrustumGeometry-45215f13'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, Plane, VertexFormat, FrustumGeometry) { 'use strict';
 
-    function createFrustumGeometry(frustumGeometry, offset) {
-            if (when.defined(offset)) {
-                frustumGeometry = FrustumGeometry.FrustumGeometry.unpack(frustumGeometry, offset);
-            }
-            return FrustumGeometry.FrustumGeometry.createGeometry(frustumGeometry);
-        }
+  function createFrustumGeometry(frustumGeometry, offset) {
+    if (when.defined(offset)) {
+      frustumGeometry = FrustumGeometry.FrustumGeometry.unpack(frustumGeometry, offset);
+    }
+    return FrustumGeometry.FrustumGeometry.createGeometry(frustumGeometry);
+  }
 
-    return createFrustumGeometry;
+  return createFrustumGeometry;
 
 });
 //# sourceMappingURL=createFrustumGeometry.js.map

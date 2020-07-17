@@ -21,16 +21,16 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./when-7ef6387a', './Check-ed6a1804', './Math-55f9392d', './Cartesian2-4938fd49', './Transforms-c1370102', './RuntimeError-5b606d78', './WebGLConstants-30fc6f5c', './ComponentDatatype-a863af81', './GeometryAttribute-9c9ba21b', './GeometryAttributes-cb18da36', './GeometryOffsetAttribute-5cfc2755', './VertexFormat-d75df48f', './BoxGeometry-4969f847'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute, VertexFormat, BoxGeometry) { 'use strict';
+define(['./when-54c2dc71', './Check-6c0211bc', './Math-1124a290', './Cartesian2-33d2657c', './Transforms-8be64844', './RuntimeError-2109023a', './WebGLConstants-76bb35d1', './ComponentDatatype-a26dd044', './GeometryAttribute-e9a8b203', './GeometryAttributes-4fcfcf40', './GeometryOffsetAttribute-d746452d', './VertexFormat-4d8b817a', './BoxGeometry-5b17b51c'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute, VertexFormat, BoxGeometry) { 'use strict';
 
-    function createBoxGeometry(boxGeometry, offset) {
-            if (when.defined(offset)) {
-                boxGeometry = BoxGeometry.BoxGeometry.unpack(boxGeometry, offset);
-            }
-            return BoxGeometry.BoxGeometry.createGeometry(boxGeometry);
-        }
+  function createBoxGeometry(boxGeometry, offset) {
+    if (when.defined(offset)) {
+      boxGeometry = BoxGeometry.BoxGeometry.unpack(boxGeometry, offset);
+    }
+    return BoxGeometry.BoxGeometry.createGeometry(boxGeometry);
+  }
 
-    return createBoxGeometry;
+  return createBoxGeometry;
 
 });
 //# sourceMappingURL=createBoxGeometry.js.map

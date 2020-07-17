@@ -200,7 +200,7 @@ const methods = {
         cesiumProp = 'key'
       }
 
-      if (graphics.indexOf(cesiumProp) !== -1 && getClassName(props[vueProp]).indexOf('Graphics') === -1 &&
+      if (graphics.indexOf(cesiumProp) !== -1 && (getClassName(props[vueProp]) !== 'undefined' && getClassName(props[vueProp]).indexOf('Graphics') === -1) &&
         (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
         options[cesiumProp] = this.transformProps(props[vueProp])
       } else {
