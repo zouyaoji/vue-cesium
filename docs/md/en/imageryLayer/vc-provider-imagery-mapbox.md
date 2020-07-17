@@ -127,7 +127,7 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
 | ------------- | ------ | ------- | -------------- |
 | url | String | `'https://api.mapbox.com/v4/'` | `optional`The Mapbox server url. |
 | mapId | String | | `required`The Mapbox Map ID. |
-| accessToken | Object | | `optional`The public access token for the imagery. |
+| accessToken | String | | `optional`The public access token for the imagery. |
 | format | String | `'png'` | `optional`The format of the image request. |
 | ellipsoid | Object | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
 | minimumLevel | Number | 0 | `optional`The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |

@@ -127,7 +127,7 @@
 | ------------ | ------ | ------------------------------ | --------------------------------------------------- |
 | url | String | `'https://api.mapbox.com/v4/'` | `optional`指定 Mapbox 服务地址。 |
 | mapId | String | | `required`Mapbox 地图 ID。 |
-| accessToken | Object | | `optional`加载的 Mapbox 影像秘钥。 |
+| accessToken | String | | `optional`加载的 Mapbox 影像秘钥。 |
 | format | String | `'png'` | `optional`请求返回的影像图片格式。 |
 | ellipsoid | Object | | `optional`参考椭球体，没指定的话默认 WGS84。 |
 | minimumLevel | Number | `0` | `optional`最小层级。 |
