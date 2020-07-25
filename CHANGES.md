@@ -1,5 +1,15 @@
 # 更新日志
 
+## 2.1.5 - 2020-08-01
+
+### 增加
+
+- [`vc-scan-circle`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-scan-circle) 圆形扫描效果组件。
+- [`vc-scan-radar`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-scan-radar) 雷达扫描效果组件。
+- [`vc-ripple-circle-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-ripple-circle-double) 双圆涟漪效果组件。
+- [`vc-shine-ellipse`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-shine-ellipse) 闪圆效果组件。
+- [`vc-shine-point`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-shine-point) 闪点效果组件。
+
 ## 2.1.4 - 2020-05-26
 
 ### 修改

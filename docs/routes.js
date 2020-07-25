@@ -809,48 +809,15 @@ const routeMap = [
       }
     ]
   },
-  {
-    path: 'visualizations',
-    name: {
-      zh: '可视化',
-      en: 'Visualizations'
-    },
-    component: CateView,
-    children: [
-      {
-        path: 'vc-heatmap',
-        component: 'visualization/vc-heatmap',
-        name: {
-          zh: '热力图',
-          en: 'VcHeatMap'
-        }
-      },
-      {
-        path: 'vc-kriging-map',
-        component: 'visualization/vc-kriging-map',
-        name: {
-          zh: '克里金色斑图',
-          en: 'VcKrigingMap'
-        }
-      },
-      {
-        path: 'vc-windmap',
-        component: 'visualization/vc-windmap',
-        name: {
-          zh: '风向图',
-          en: 'VcWindMap'
-        }
-      },
-      {
-        path: 'vc-analytics-flood',
-        component: 'visualization/vc-analytics-flood',
-        name: {
-          zh: '淹没分析',
-          en: 'VcFloodAnalysis'
-        }
-      }
-    ]
-  },
+  // {
+  //   path: 'visualizations',
+  //   name: {
+  //     zh: '可视化',
+  //     en: 'Visualizations'
+  //   },
+  //   component: CateView,
+  //   children: []
+  // },
   {
     path: 'other',
     component: CateView,
@@ -877,6 +844,88 @@ const routeMap = [
       }
     ]
   },
+  {
+    path: 'extend',
+    component: CateView,
+    name: {
+      zh: '扩展',
+      en: 'Extend'
+    },
+    children: [
+      {
+        path: 'vc-heatmap',
+        component: 'extend/vc-heatmap',
+        name: {
+          zh: '热力图',
+          en: 'VcHeatMap'
+        }
+      },
+      {
+        path: 'vc-kriging-map',
+        component: 'extend/vc-kriging-map',
+        name: {
+          zh: '克里金色斑图',
+          en: 'VcKrigingMap'
+        }
+      },
+      {
+        path: 'vc-windmap',
+        component: 'extend/vc-windmap',
+        name: {
+          zh: '风向图',
+          en: 'VcWindMap'
+        }
+      },
+      {
+        path: 'vc-analytics-flood',
+        component: 'extend/vc-analytics-flood',
+        name: {
+          zh: '淹没分析',
+          en: 'VcFloodAnalysis'
+        }
+      },
+      {
+        path: 'vc-scan-circle',
+        component: 'extend/vc-scan-circle',
+        name: {
+          zh: '圆形扫描',
+          en: 'ScanCircle'
+        }
+      },
+      {
+        path: 'vc-scan-radar',
+        component: 'extend/vc-scan-radar',
+        name: {
+          zh: '雷达扫描',
+          en: 'ScanRadar'
+        }
+      },
+      {
+        path: 'vc-ripple-circle-double',
+        component: 'extend/vc-ripple-circle-double',
+        name: {
+          zh: '双圆涟漪',
+          en: 'DoubleCircleRipple'
+        }
+      },
+      {
+        path: 'vc-shine-ellipse',
+        component: 'extend/vc-shine-ellipse',
+        name: {
+          zh: '闪圆',
+          en: 'ShineEllipse'
+        }
+      },
+      {
+        path: 'vc-shine-point',
+        component: 'extend/vc-shine-point',
+        name: {
+          zh: '闪点',
+          en: 'ShinePoint'
+        }
+      }
+    ]
+  }
 ]
 
 export default [
