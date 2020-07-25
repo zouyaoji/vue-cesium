@@ -74,7 +74,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/components/geometryInstance'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/control'), 'src/components'),
     packagesFromPath(utils.resolve('src/components/tool'), 'src/components'),
-    packagesFromPath(utils.resolve('src/components/visualization'), 'src/components'),
+    packagesFromPath(utils.resolve('src/components/extend'), 'src/components'),
     packagesFromPath(utils.resolve('src/mixins'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/providers'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/datasource'), srcPath),
