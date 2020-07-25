@@ -108,11 +108,16 @@ import * as VcDrawHandlerPolygon from './components/tool/drawHandlerPolygon'
 // 控件
 import * as VcNavigation from './components/control/navigation'
 import * as VcNavigationSM from './components/control/navigationSM'
-// 可视化
+// 扩展
 import * as VcFlood from './components/visualization/flood'
 import * as VcHeatMap from './components/visualization/heatmap'
 import * as VcKrigingMap from './components/visualization/krigingmap'
 import * as VcWindMap from './components/visualization/windmap'
+import * as ScanCircle from './components/extend/scanCircle'
+import * as ScanRadar from './components/extend/scanRadar'
+import * as DoubleCircleRipple from './components/extend/doubleCircleRipple'
+import * as ShineEllipse from './components/extend/shineEllipse'
+import * as ShinePoint from './components/extend/shinePoint'
 
 import lang from './exts/lang'
 
@@ -243,11 +248,16 @@ function plugin (Vue, options = {}) {
   Vue.use(VcDrawHandlerPoint, options)
   Vue.use(VcDrawHandlerPolyline, options)
   Vue.use(VcDrawHandlerPolygon, options)
-  // 可视化
+  // 扩展
   Vue.use(VcFlood, options)
   Vue.use(VcHeatMap, options)
   Vue.use(VcWindMap, options)
   Vue.use(VcKrigingMap, options)
+  Vue.use(ScanCircle, options)
+  Vue.use(ScanRadar, options)
+  Vue.use(DoubleCircleRipple, options)
+  Vue.use(ShineEllipse, options)
+  Vue.use(ShinePoint, options)
   // 控件
   Vue.use(VcNavigation, options)
   Vue.use(VcNavigationSM, options)
@@ -359,6 +369,7 @@ export {
   SphereOutlineGeometry,
   WallGeometry,
   WallOutlineGeometry,
+
   PostProcessStageCollection,
   PostProcessStage,
 
@@ -373,6 +384,11 @@ export {
   VcHeatMap,
   VcWindMap,
   VcKrigingMap,
+  ScanCircle,
+  ScanRadar,
+  DoubleCircleRipple,
+  ShineEllipse,
+  ShinePoint,
 
   VcNavigation,
   VcNavigationSM

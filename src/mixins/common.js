@@ -220,7 +220,11 @@ const methods = {
    * The action before the component is loaded. 组件加载前的操作。
    */
   async beforeLoad () {
-    await this.$parent.createPromise
+    if (this.$parent.nowaiting) {
+      return true
+    } else {
+      await this.$parent.createPromise
+    }
   }
 }
 /**

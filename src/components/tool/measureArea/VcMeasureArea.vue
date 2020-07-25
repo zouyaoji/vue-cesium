@@ -126,7 +126,8 @@ export default {
       index: 0,
       type: 'areaMeasuring',
       measuring: false,
-      polylines: []
+      polylines: [],
+      nowaiting: true
     }
   },
   props: {

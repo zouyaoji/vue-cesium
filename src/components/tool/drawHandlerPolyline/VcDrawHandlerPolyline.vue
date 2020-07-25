@@ -50,7 +50,8 @@ export default {
     return {
       drawType: 'polylineDrawing',
       drawing: false,
-      polylines: []
+      polylines: [],
+      nowaiting: true
     }
   },
   props: {

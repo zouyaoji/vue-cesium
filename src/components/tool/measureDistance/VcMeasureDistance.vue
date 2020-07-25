@@ -90,7 +90,8 @@ export default {
     return {
       type: 'distanceMeasuring',
       measuring: false,
-      polylines: []
+      polylines: [],
+      nowaiting: true
     }
   },
   props: {

@@ -21,7 +21,8 @@ export default {
       data: null,
       datasourceOptions: {
         clampToGround: true
-      }
+      },
+      nowaiting: true
     }
   },
   mixins: [cmp],
@@ -123,7 +124,9 @@ export default {
       // 按照面积对图层进行排序，规避turf的一个bug
       // isobandsResult.features.sort(sortArea)
       this.data = isobandsResult
-      return isobandsResult
+      return this.$refs.geojson.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        return cesiumObject
+      })
     },
     gridFeatureCollection (grid, xlim, ylim) {
       // var range = grid.zlim[1] - grid.zlim[0]

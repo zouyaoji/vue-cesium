@@ -53,7 +53,8 @@ export default {
       measuring: false,
       startPoint: {},
       polylines: [],
-      labels: []
+      labels: [],
+      nowaiting: true
     }
   },
   methods: {

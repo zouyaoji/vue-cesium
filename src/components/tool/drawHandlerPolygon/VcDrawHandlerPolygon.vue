@@ -85,7 +85,8 @@ export default {
     return {
       drawType: 'polygonDrawing',
       drawing: false,
-      polylines: []
+      polylines: [],
+      nowaiting: true
     }
   },
   props: {

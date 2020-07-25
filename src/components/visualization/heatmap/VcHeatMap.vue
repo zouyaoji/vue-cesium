@@ -40,7 +40,8 @@ export default {
       appearance: null,
       geometry: null,
       coordinates: { west: 0, south: 0, east: 0, north: 0 },
-      layerUrl: ''
+      layerUrl: '',
+      nowaiting: true
     }
   },
   mixins: [cmp],

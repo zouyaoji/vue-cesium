@@ -25,7 +25,8 @@ export default {
     return {
       drawType: 'pointDrawing',
       drawing: false,
-      polylines: []
+      polylines: [],
+      nowaiting: true
     }
   }
 }

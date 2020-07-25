@@ -25,7 +25,8 @@ export default {
       extrudedHeight: 0.1,
       flooding: false,
       floodDone: false,
-      appearance: null
+      appearance: null,
+      nowaiting: true
     }
   },
   mixins: [cmp],
@@ -72,7 +73,9 @@ export default {
         color: Cesium.ColorGeometryInstanceAttribute.fromColor(makeColor(color))
       }
       this.extrudedHeight = minHeight
-      return true
+      return this.$refs.primitive.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        return cesiumObject
+      })
     },
     onTick () {
       const { maxHeight, speed } = this
