@@ -193,6 +193,13 @@ export function makeMaterialProperty (val, isConstant = false) {
 
   if (val && val.hasOwnProperty('fabric')) {
     switch (val.fabric.type) {
+      case 'Image':
+        return new ImageMaterialProperty({
+          image: val.fabric.uniforms.image,
+          repeat: val.fabric.uniforms.repeat || makeCartesian2({ x: 1.0, y: 1.0 }),
+          color: makeColor(val.fabric.uniforms.color) || Color.WHITE,
+          transparent: val.fabric.uniforms.transparent || false
+        })
       case 'Color':
         return new ColorMaterialProperty(makeColor(val.fabric.uniforms.color || Color.WHITE))
       case 'PolylineArrow':

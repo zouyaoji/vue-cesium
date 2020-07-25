@@ -434,7 +434,7 @@ const slices = {
  */
 const semiMajorAxis = {
   props: {
-    semiMajorAxis: Number
+    semiMajorAxis: [Number, Object]
   }
 }
 
@@ -443,7 +443,7 @@ const semiMajorAxis = {
  */
 const semiMinorAxis = {
   props: {
-    semiMinorAxis: Number
+    semiMinorAxis: [Number, Object]
   }
 }
 
