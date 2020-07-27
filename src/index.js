@@ -7,6 +7,7 @@ import * as GoogleEarthEnterpriseImageryProvider from './components/imageryLayer
 import * as GridImageryProvider from './components/imageryLayer/grid'
 import * as IonImageryProvider from './components/imageryLayer/ion'
 import * as MapboxImageryProvider from './components/imageryLayer/mapbox'
+import * as MapboxStyleImageryProvider from './components/imageryLayer/mapboxStyle'
 import * as OpenStreetMapImageryProvider from './components/imageryLayer/openStreetMap'
 import * as SingleTileImageryProvider from './components/imageryLayer/singleTile'
 import * as TileCoordinatesImageryProvider from './components/imageryLayer/tileCoordinates'
@@ -150,6 +151,7 @@ function plugin (Vue, options = {}) {
   Vue.use(GridImageryProvider, options)
   Vue.use(IonImageryProvider, options)
   Vue.use(MapboxImageryProvider, options)
+  Vue.use(MapboxStyleImageryProvider, options)
   Vue.use(OpenStreetMapImageryProvider, options)
   Vue.use(SingleTileImageryProvider, options)
   Vue.use(TileCoordinatesImageryProvider, options)
@@ -281,6 +283,7 @@ export {
   GridImageryProvider,
   IonImageryProvider,
   MapboxImageryProvider,
+  MapboxStyleImageryProvider,
   OpenStreetMapImageryProvider,
   SingleTileImageryProvider,
   TileCoordinatesImageryProvider,

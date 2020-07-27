@@ -13,6 +13,7 @@ const nameClassMap = {
   'vc-provider-imagery-grid': 'GridImageryProvider',
   'vc-provider-imagery-ion': 'IonImageryProvider',
   'vc-provider-imagery-mapbox': 'MapboxImageryProvider',
+  'vc-provider-imagery-style-mapbox': 'MapboxStyleImageryProvider',
   'vc-provider-imagery-openstreetmap': 'OpenStreetMapImageryProvider',
   'vc-provider-imagery-tile-single': 'SingleTileImageryProvider',
   'vc-provider-imagery-tile-coordinates': 'TileCoordinatesImageryProvider',

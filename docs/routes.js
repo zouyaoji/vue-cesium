@@ -152,6 +152,14 @@ const routeMap = [
         }
       },
       {
+        path: 'vc-provider-imagery-style-mapbox',
+        component: 'imageryLayer/vc-provider-imagery-style-mapbox',
+        name: {
+          zh: 'MapboxStyle影像',
+          en: 'MapboxStyleImageryProvider'
+        }
+      },
+      {
         path: 'vc-provider-imagery-openstreetmap',
         component: 'imageryLayer/vc-provider-imagery-openstreetmap',
         name: {
