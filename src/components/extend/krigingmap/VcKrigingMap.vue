@@ -1,6 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-datasource-geojson :data="data" :options="datasourceOptions" :show="show" @ready="datasourceReady" ref="geojson"></vc-datasource-geojson>
+    <vc-datasource-geojson :data="data" :options="datasourceOptions" :show="show" ref="geojsonDatasource" v-if="data !== null"></vc-datasource-geojson>
     <!-- <vc-entity>
       <vc-graphics-polygon :hierarchy="hierarchy1" :material="material1" ref="polygon1"></vc-graphics-polygon>
     </vc-entity>-->
@@ -69,10 +69,15 @@ export default {
       default: true
     }
   },
-  watch: {
+  created () {
+    this._creatPromise = new Promise((resolve, reject) => {
+      this._resolve = resolve
+      this._reject = reject
+    })
   },
-  methods: {
-    async createCesiumObject () {
+  mounted () {
+    this.$parent.createPromise.then(async ({ Cesium, viewer }) => {
+      console.log('viewerReady')
       const { values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha, breaks, clipCoords } = this
       const variogram = kriging.train(values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha)
 
@@ -124,9 +129,32 @@ export default {
       // 按照面积对图层进行排序，规避turf的一个bug
       // isobandsResult.features.sort(sortArea)
       this.data = isobandsResult
-      return this.$refs.geojson.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
-        return cesiumObject
+      this._resolve(true)
+    })
+  },
+  methods: {
+    async createCesiumObject () {
+      return this._creatPromise.then(() => {
+        return this.$refs.geojsonDatasource.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+          const { setPolygonColor } = this
+          if (!this.$refs.geojsonDatasource._mounted) {
+            return this.$refs.geojsonDatasource.load().then(({ Cesium, viewer, cesiumObject }) => {
+              return setPolygonColor(cesiumObject)
+            })
+          } else {
+            return setPolygonColor(cesiumObject)
+          }
+        })
       })
+    },
+    setPolygonColor (cesiumObject) {
+      const { breaks, colors } = this
+      cesiumObject.entities.values.reduce((pre, cur) => {
+        const index = breaks.indexOf(parseFloat(cur.properties.getValue().value.split('-')[0]))
+        cur.polygon.material = Cesium.Color.fromCssColorString(colors[index])
+        cur.polygon.outline = false
+      }, [])
+      return cesiumObject
     },
     gridFeatureCollection (grid, xlim, ylim) {
       // var range = grid.zlim[1] - grid.zlim[0]
@@ -148,20 +176,11 @@ export default {
       }
       return pointArray
     },
-    datasourceReady ({ Cesium, viewer, cesiumObject }) {
-      const { breaks, colors } = this
-      cesiumObject.entities.values.reduce((pre, cur) => {
-        const index = breaks.indexOf(parseFloat(cur.properties.getValue().value.split('-')[0]))
-        cur.polygon.material = Cesium.Color.fromCssColorString(colors[index])
-        cur.polygon.outline = false
-      }, [])
-      this.$emit('ready', { Cesium, viewer, cesiumObject })
-    },
     async mount () {
       return true
     },
     async unmount () {
-      return this.$refs.geojson && this.$refs.geojson.unload()
+      return this.$refs.geojsonDatasource && this.$refs.geojsonDatasource.unload()
     }
   }
 }
