@@ -758,6 +758,18 @@ const arcType = {
 }
 
 /**
+ * @const {Boolean} clampToGround mixin
+ */
+const clampToGround = {
+  props: {
+    clampToGround: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
+
+/**
  * @const Array{} minimumHeights mixin
  */
 const minimumHeights = {
@@ -1292,6 +1304,7 @@ export {
   maximumHeights,
   minimumHeights,
   arcType,
+  clampToGround,
   closeBottom,
   closeTop,
   perPositionHeight,

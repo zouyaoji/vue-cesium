@@ -25,7 +25,8 @@ export default {
     deviationAlpha: {
       type: Number,
       default: 0.05
-    }
+    },
+    imageUrl: String
   },
   data () {
     return {
@@ -35,14 +36,15 @@ export default {
   },
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
-      const { deviationAlpha, color } = this
+      const { deviationAlpha, color, imageUrl } = this
       const colorObject = makeColor(color)
       this.flag = true
       this.x = 1
       this.material = {
         fabric: {
-          type: 'Color',
+          type: 'Image',
           uniforms: {
+            image: imageUrl,
             color: () => {
               if (this.flag) {
                 this.x -= deviationAlpha
