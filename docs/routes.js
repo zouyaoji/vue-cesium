@@ -939,6 +939,14 @@ const routeMap = [
           zh: '流动线',
           en: 'VcPolylineTrail'
         }
+      },
+      {
+        path: 'vc-trail-wall',
+        component: 'extend/vc-trail-wall',
+        name: {
+          zh: '流动墙',
+          en: 'VcWallTrail'
+        }
       }
     ]
   }

@@ -111,7 +111,7 @@
 | position | Object | | `required` 指定圆形扫描添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
 | color | Object\|String\|Array | `'white'` | `optional` 指定圆形扫描颜色。 |
 | radius | Number | `1500` | `optional` 指定圆形扫描半径。单位米。|
-| interval | Number | `3000` | `optional` 指定圆形扫描完成一个周期重复频率，单位秒。 |
+| interval | Number | `3000` | `optional` 指定圆形扫描完成一个周期重复频率，单位毫秒。 |
 
 ---
 

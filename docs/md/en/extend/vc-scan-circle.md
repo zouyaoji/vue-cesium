@@ -1,10 +1,10 @@
-# ScanCircle
+# VcScanCircle
 
 The `vc-scan-circle` component is used to load the circular scanning effect `vc-stage-process-post`. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) .
 
 ## Example
 
-### Load a ScanCircle
+### Load a VcScanCircle
 
 #### Preview
 
@@ -111,7 +111,7 @@ The `vc-scan-circle` component is used to load the circular scanning effect `vc-
 | position | Object | | `required` Specify the position where the circular scan is added. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
 | color | Object\|String\|Array | `'white'` | `optional` Specify the circle scan color. |
 | radius | Number | `1500` | `optional` Specify the circular scan radius in meters.|
-| interval | Number | `3000` | `optional` Specify the repetition frequency of a cycle when the circular sweep is completed, in seconds. |
+| interval | Number | `3000` | `optional` Specify the repetition frequency of a cycle when the circular sweep is completed, in milliseconds. |
 
 ---
 

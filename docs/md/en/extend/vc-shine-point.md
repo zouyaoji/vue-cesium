@@ -1,10 +1,10 @@
-# ShinePoint
+# VcShinePoint
 
 The `vc-shine-point` component is used to load the flash point effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
 ## Example
 
-### Load a ShinePoint
+### Load a VcShinePoint
 
 #### Preview
 
@@ -91,3 +91,5 @@ The `vc-shine-point` component is used to load the flash point effect. Refer to 
 | name  | parameter                       | description                                                                                                       |
 | ----- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | ready | {Cesium, viewer, cesiumObject } | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+
+---

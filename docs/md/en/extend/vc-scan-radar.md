@@ -1,10 +1,10 @@
-# ScanRadar
+# VcScanRadar
 
 The `vc-scan-radar` component is used to the radar scanning special effects. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
 ## Example
 
-### Load a ScanRadar
+### Load a VcScanRadar
 
 #### Preview
 
@@ -110,7 +110,7 @@ The `vc-scan-radar` component is used to the radar scanning special effects. Ref
 | position | Object | | `required` Specify the location added by the radar scan. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
 | color | Object\|String\|Array | `'white'` | `optional` Specify the radar scan color. |
 | radius | Number | `1500` | `optional` Specify the radar scan radius in meters.|
-| interval | Number | `3000` | `optional` Specify the repetition frequency of a cycle when the radar scan is completed, in seconds. |
+| interval | Number | `3000` | `optional` Specify the repetition frequency of a cycle when the radar scan is completed, in milliseconds. |
 
 ---
 

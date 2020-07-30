@@ -1,10 +1,10 @@
-# ShineEllipse
+# VcShineEllipse
 
 The `vc-shine-ellipse` component is used to load the flash circle effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
 ## Example
 
-### Load a ShineEllipse
+### Load a VcShineEllipse
 
 #### Preview
 
@@ -83,6 +83,7 @@ The `vc-shine-ellipse` component is used to load the flash circle effect. Refer 
 | height | Number | `undefined` | `optional` Specify the height of the ellipse for the flash circle effect in meters.|
 | radius | Number | `0` | `optional` Specify the flash circle effect radius in meters.|
 | color | Object\|String\|Array | `'white'` | `optional` Specify the color of the flash circle effect. |
+| imageUrl | String | `''` | `optional` Specify the material image used to express the flash circle effect. |
 | deviationAlpha | Number | `0.05` | `optional` Specify the flash circle effect color Alpha value to change the scale, the larger the value, the faster the flash. Ranges: (0, 1)|
 
 ---

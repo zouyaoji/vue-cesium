@@ -1,10 +1,10 @@
-# DoubleCircleRipple
+# VcDoubleCircleRipple
 
 The `vc-ripple-circle-double` component is used to load the double circle ripple effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
 ## Example
 
-### Load a DoubleCircleRipple
+### Load a VcDoubleCircleRipple
 
 #### Preview
 
@@ -14,7 +14,7 @@ The `vc-ripple-circle-double` component is used to load the double circle ripple
       <vc-viewer @ready="ready">
         <vc-ripple-circle-double
           @ready="subReady"
-          imageUrl="/statics/SampleData/images/redCircle2.png"
+          imageUrl="./statics/SampleData/images/redCircle2.png"
           :position="position"
         ></vc-ripple-circle-double>
         <vc-layer-imagery>
@@ -53,7 +53,7 @@ The `vc-ripple-circle-double` component is used to load the double circle ripple
       <vc-ripple-circle-double
         @ready="subReady"
         :interval="1000"
-        imageUrl="/statics/SampleData/images/redCircle2.png"
+        imageUrl="./statics/SampleData/images/redCircle2.png"
         :position="position"
       ></vc-ripple-circle-double>
       <vc-layer-imagery>
@@ -93,7 +93,7 @@ The `vc-ripple-circle-double` component is used to load the double circle ripple
 | minRadius | Number | `0` | `optional` Specify the minimum radius of the double circle ripple effect. Unit: Meter.|
 | maxRadius | Number | `3000` | `optional` Specify the maximum radius of the double circle ripple effect. Unit: Meter.|
 | deviationRadius | Number | `20` | `optional` Specify the difference between the radius of the double circle. The larger the value, the faster the speed.|
-| interval | Number | `3000` | `optional` The time interval between two circles, in seconds. |
+| interval | Number | `3000` | `optional` The time interval between two circles, in milliseconds. |
 | imageUrl | String | `''` | `optional` Specify the picture used to express the double-circle ripple effect. |
 
 ---

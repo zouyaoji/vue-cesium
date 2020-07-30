@@ -83,6 +83,7 @@
 | height | Number | `undefined` | `optional` 指定闪圆效果效果椭圆高度。单位米。|
 | radius | Number | `0` | `optional` 指定闪圆效果效果半径。单位米。|
 | color | Object\|String\|Array | `'white'` | `optional` 指定闪圆效果颜色。 |
+| imageUrl | String | `''` | `optional` 指定用于表达闪圆效果的材质图片。 |
 | deviationAlpha | Number | `0.05` | `optional` 指定闪圆效果颜色 Alpha 值改变尺度，值越大闪得越快。取值范围: (0, 1)|
 
 ---

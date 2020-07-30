@@ -9,6 +9,8 @@
 - [`vc-ripple-circle-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-ripple-circle-double) 双圆涟漪效果组件。
 - [`vc-shine-ellipse`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-shine-ellipse) 闪圆效果组件。
 - [`vc-shine-point`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-shine-point) 闪点效果组件。
+- [`vc-trail-polyline`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动线效果组件。
+- [`vc-trail-wall`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动墙效果组件。
 - [`vc-provider-imagery-style-mapbox`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-provider-imagery-style-mapbox) 加载mapbox自定义地图服务。
 
 ## 2.1.4 - 2020-05-26

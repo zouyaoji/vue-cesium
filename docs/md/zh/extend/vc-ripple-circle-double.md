@@ -14,7 +14,7 @@
       <vc-viewer @ready="ready">
         <vc-ripple-circle-double
           @ready="subReady"
-          imageUrl="/statics/SampleData/images/redCircle2.png"
+          imageUrl="./statics/SampleData/images/redCircle2.png"
           :position="position"
         ></vc-ripple-circle-double>
         <vc-layer-imagery>
@@ -53,7 +53,7 @@
       <vc-ripple-circle-double
         @ready="subReady"
         :interval="1000"
-        imageUrl="/statics/SampleData/images/redCircle2.png"
+        imageUrl="./statics/SampleData/images/redCircle2.png"
         :position="position"
       ></vc-ripple-circle-double>
       <vc-layer-imagery>
@@ -93,7 +93,7 @@
 | minRadius | Number | `0` | `optional` 指定双圆涟漪效果最小半径。单位米。|
 | maxRadius | Number | `3000` | `optional` 指定双圆涟漪效果最大半径。单位米。|
 | deviationRadius | Number | `20` | `optional` 双圆半径改变大小的差值，值越大速度越快。|
-| interval | Number | `3000` | `optional` 两个圆的时间间隔，单位秒。 |
+| interval | Number | `3000` | `optional` 两个圆的时间间隔，单位毫秒。 |
 | imageUrl | String | `''` | `optional` 指定用于表达双圆涟漪效果的图片。 |
 
 ---
