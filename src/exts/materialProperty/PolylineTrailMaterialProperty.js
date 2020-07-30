@@ -56,7 +56,7 @@ class PolylineTrailMaterialProperty {
       result = {}
     }
 
-    if (this.lastTime >= 0.996 && !this._loop) {
+    if (this.lastTime >= 0.99 && !this._loop) {
       return result
     }
     result.color = Cesium.Property.getValueOrClonedDefault(this._color, time, Cesium.Color.WHITE, result.color)

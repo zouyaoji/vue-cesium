@@ -119,7 +119,8 @@ import * as VcScanRadar from './components/extend/scanRadar'
 import * as VcDoubleCircleRipple from './components/extend/doubleCircleRipple'
 import * as VcShineEllipse from './components/extend/shineEllipse'
 import * as VcShinePoint from './components/extend/shinePoint'
-import * as VcPolylineTrail from './components/extend/PolylineTrail'
+import * as VcPolylineTrail from './components/extend/polylineTrail'
+import * as VcWallTrail from './components/extend/wallTrail'
 
 import lang from './exts/lang'
 
@@ -262,6 +263,7 @@ function plugin (Vue, options = {}) {
   Vue.use(VcShineEllipse, options)
   Vue.use(VcShinePoint, options)
   Vue.use(VcPolylineTrail, options)
+  Vue.use(VcWallTrail, options)
   // 控件
   Vue.use(VcNavigation, options)
   Vue.use(VcNavigationSM, options)
@@ -395,6 +397,7 @@ export {
   VcShineEllipse,
   VcShinePoint,
   VcPolylineTrail,
+  VcWallTrail,
 
   VcNavigation,
   VcNavigationSM
