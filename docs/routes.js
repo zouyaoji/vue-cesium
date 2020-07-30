@@ -838,7 +838,7 @@ const routeMap = [
         path: 'vc-collection-stage-process-post',
         component: 'other/vc-collection-stage-process-post',
         name: {
-          zh: '后期处理集合',
+          zh: '后处理集合',
           en: 'PostProcessStageCollection'
         }
       },
@@ -846,7 +846,7 @@ const routeMap = [
         path: 'vc-stage-process-post',
         component: 'other/vc-stage-process-post',
         name: {
-          zh: '后期处理',
+          zh: '后处理',
           en: 'PostProcessStage'
         }
       }
@@ -897,7 +897,7 @@ const routeMap = [
         component: 'extend/vc-scan-circle',
         name: {
           zh: '圆形扫描',
-          en: 'ScanCircle'
+          en: 'VcScanCircle'
         }
       },
       {
@@ -905,7 +905,7 @@ const routeMap = [
         component: 'extend/vc-scan-radar',
         name: {
           zh: '雷达扫描',
-          en: 'ScanRadar'
+          en: 'VcScanRadar'
         }
       },
       {
@@ -913,7 +913,7 @@ const routeMap = [
         component: 'extend/vc-ripple-circle-double',
         name: {
           zh: '双圆涟漪',
-          en: 'DoubleCircleRipple'
+          en: 'VcDoubleCircleRipple'
         }
       },
       {
@@ -921,7 +921,7 @@ const routeMap = [
         component: 'extend/vc-shine-ellipse',
         name: {
           zh: '闪圆',
-          en: 'ShineEllipse'
+          en: 'VcShineEllipse'
         }
       },
       {
@@ -929,7 +929,15 @@ const routeMap = [
         component: 'extend/vc-shine-point',
         name: {
           zh: '闪点',
-          en: 'ShinePoint'
+          en: 'VcShinePoint'
+        }
+      },
+      {
+        path: 'vc-trail-polyline',
+        component: 'extend/vc-trail-polyline',
+        name: {
+          zh: '流动线',
+          en: 'VcPolylineTrail'
         }
       }
     ]

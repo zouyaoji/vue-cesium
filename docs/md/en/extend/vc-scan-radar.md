@@ -1,24 +1,24 @@
-# 圆形扫描
+# ScanRadar
 
-`vc-scan-circle` 组件用于加载圆形扫描效果，实质是通过 `vc-stage-process-post` 加载的一个后期处理特效。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-scan-radar` component is used to the radar scanning special effects. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
-## 示例
+## Example
 
-### 加载圆形扫描
+### Load a ScanRadar
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-scan-circle
+        <vc-scan-radar
           @ready="subReady"
           :radius="1500"
           :interval="3000"
           :color="[0,1.0,0,1]"
           :position="position"
-        ></vc-scan-circle>
+        ></vc-scan-radar>
         <vc-layer-imagery>
           <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
@@ -29,8 +29,7 @@
     export default {
       data() {
         return {
-          position: { lng: 117.217124, lat: 31.809777, height: 3000 },
-          flag: true
+          position: { lng: 117.217124, lat: 31.809777 }
         }
       },
       methods: {
@@ -55,7 +54,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -103,20 +102,20 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| position | Object | | `required` 指定圆形扫描添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| color | Object\|String\|Array | `'white'` | `optional` 指定圆形扫描颜色。 |
-| radius | Number | `1500` | `optional` 指定圆形扫描半径。单位米。|
-| interval | Number | `3000` | `optional` 指定圆形扫描完成一个周期重复频率，单位秒。 |
+| position | Object | | `required` Specify the location added by the radar scan. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| color | Object\|String\|Array | `'white'` | `optional` Specify the radar scan color. |
+| radius | Number | `1500` | `optional` Specify the radar scan radius in meters.|
+| interval | Number | `3000` | `optional` Specify the repetition frequency of a cycle when the radar scan is completed, in seconds. |
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数                           | 描述                                                                            |
-| ------ | ------------------------------ | ------------------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及 PostProcessStage 实例。 |
+| name  | parameter                       | description                                                                                                       |
+| ----- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer, cesiumObject } | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |

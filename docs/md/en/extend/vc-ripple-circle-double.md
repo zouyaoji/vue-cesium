@@ -1,12 +1,12 @@
-# 双圆涟漪
+# DoubleCircleRipple
 
-`vc-ripple-circle-double` 组件用于加载双圆涟漪效果，实质是通过 `vc-entity` 和 `vc-graphics-ellipse` 按一定时间间隔加载 2 个圆，然后不停循环修改圆的半径及材质透明度实现。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-ripple-circle-double` component is used to load the double circle ripple effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
-## 示例
+## Example
 
-### 加载双圆涟漪效果
+### Load a DoubleCircleRipple
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -44,7 +44,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -83,23 +83,24 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| position | Object | | `required` 指定双圆涟漪效果实体添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| height | Number | `undefined` | `optional` 指定双圆涟漪效果椭圆高度。单位米。|
-| minRadius | Number | `0` | `optional` 指定双圆涟漪效果最小半径。单位米。|
-| maxRadius | Number | `3000` | `optional` 指定双圆涟漪效果最大半径。单位米。|
-| deviationRadius | Number | `20` | `optional` 双圆半径改变大小的差值，值越大速度越快。|
-| interval | Number | `3000` | `optional` 两个圆的时间间隔，单位秒。 |
-| imageUrl | String | `''` | `optional` 指定用于表达双圆涟漪效果的图片。 |
+| position | Object | | `required` Specify the location where the double circle ripple effect entity is added. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| height | Number | `undefined` | `optional` Specify the height of the double circle ripple effect ellipse. Unit: Meter.|
+| minRadius | Number | `0` | `optional` Specify the minimum radius of the double circle ripple effect. Unit: Meter.|
+| maxRadius | Number | `3000` | `optional` Specify the maximum radius of the double circle ripple effect. Unit: Meter.|
+| deviationRadius | Number | `20` | `optional` Specify the difference between the radius of the double circle. The larger the value, the faster the speed.|
+| interval | Number | `3000` | `optional` The time interval between two circles, in seconds. |
+| imageUrl | String | `''` | `optional` Specify the picture used to express the double-circle ripple effect. |
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数             | 描述                                                |
-| ------ | ---------------- | --------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及实体数组。 |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and an Entity array. |

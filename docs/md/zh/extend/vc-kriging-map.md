@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-kriging-map v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors" @ready="subReady" clipCoords="./statics/SampleData/shp/guilin.json">
+        <vc-kriging-map ref="krigingmap" v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors" @ready="subReady" clipCoords="./statics/SampleData/shp/guilin.json">
         </vc-kriging-map>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
       </vc-viewer>
@@ -31,6 +31,7 @@
       },
       methods: {
         async ready (cesiumInstance) {
+          window.vm = this
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
           let data = await Cesium.Resource.fetchJson({url: './statics/SampleData/weather/guilin.json'})

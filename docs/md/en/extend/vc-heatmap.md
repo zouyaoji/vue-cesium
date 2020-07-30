@@ -11,8 +11,18 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" :terrainProvider="terrainProvider">
-        <vc-heatmap ref="heatMap" :bounds="bounds" :options="options" :min="min" :max="max" :data="data"> </vc-heatmap>
+      <vc-viewer @ready="ready">
+        <vc-heatmap
+          ref="heatMap"
+          :bounds="bounds"
+          :options="options"
+          :min="min"
+          :max="max"
+          :data="data"
+          :type="1"
+          @ready="subReady"
+        >
+        </vc-heatmap>
       </vc-viewer>
     </div>
   </template>
@@ -20,7 +30,6 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
     export default {
       data() {
         return {
-          terrainProvider: null,
           bounds: { west: 80.0, south: 30.0, east: 109.0, north: 50.0 },
           options: {
             backgroundColor: 'rgba(0,0,0,0)',
@@ -49,15 +58,6 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
         ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const { Cesium, viewer } = this.cesiumInstance
-          viewer.camera.setView({
-            destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-            orientation: {
-              heading: 6.20312220367255,
-              pitch: -0.9937536846355606,
-              roll: 0.002443376981836387
-            }
-          })
-          this.terrainProvider = Cesium.createWorldTerrain()
           let _this = this
           Cesium.Resource.fetchJson({ url: './statics/SampleData/heatmapData/19042808_t.json' }).then((data) => {
             _this.bounds = {
@@ -70,6 +70,10 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
             _this.max = data.max
             _this.data = data.datas
           })
+        },
+        subReady({ Cesium, viewer, cesiumObject }) {
+          console.log(cesiumObject)
+          viewer.zoomTo(cesiumObject)
         },
         getData(data) {
           var result = []
@@ -99,8 +103,18 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" :terrainProvider="terrainProvider">
-      <vc-heatmap ref="heatMap" :bounds="bounds" :options="options" :min="min" :max="max" :data="data"> </vc-heatmap>
+    <vc-viewer @ready="ready">
+      <vc-heatmap
+        ref="heatMap"
+        :bounds="bounds"
+        :options="options"
+        :min="min"
+        :max="max"
+        :data="data"
+        :type="1"
+        @ready="subReady"
+      >
+      </vc-heatmap>
     </vc-viewer>
   </div>
 </template>
@@ -108,7 +122,6 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
   export default {
     data() {
       return {
-        terrainProvider: null,
         bounds: { west: 80.0, south: 30.0, east: 109.0, north: 50.0 },
         options: {
           backgroundColor: 'rgba(0,0,0,0)',
@@ -137,15 +150,6 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
       ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
         const { Cesium, viewer } = this.cesiumInstance
-        viewer.camera.setView({
-          destination: new Cesium.Cartesian3(-1432246.8223880068, 5761224.588247942, 3297281.1889481535),
-          orientation: {
-            heading: 6.20312220367255,
-            pitch: -0.9937536846355606,
-            roll: 0.002443376981836387
-          }
-        })
-        this.terrainProvider = Cesium.createWorldTerrain()
         let _this = this
         Cesium.Resource.fetchJson({ url: './statics/SampleData/heatmapData/19042808_t.json' }).then((data) => {
           _this.bounds = {
@@ -158,6 +162,10 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
           _this.max = data.max
           _this.data = data.datas
         })
+      },
+      subReady({ Cesium, viewer, cesiumObject }) {
+        console.log(cesiumObject)
+        viewer.zoomTo(cesiumObject)
       },
       getData(data) {
         var result = []
@@ -184,14 +192,15 @@ The `vc-heatmap` component is used to load the heat map. Implemented by `heatmap
 
 ## Instance Properties
 
-| name    | type   | default | description                                                                                               |
-| ------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
-| type    | Number | 0       | `optional` set type of heatmap, 0: RectangleGeometry, 1: RectangleGraphics, 2: SingleTileImageryProvider. |
-| bounds  | Object |         | `optional` set bounds of heatmap.                                                                         |
-| options | Object | true    | `optional` set heatmap param。                                                                            |
-| min     | Number |         | `optional` set min vaule.                                                                                 |
-| max     | Number |         | `optional` set max vaule.                                                                                 |
-| data    | Array  | true    | `optional` set heatmap data.                                                                              |
+| name    | type    | default | description                                                                                               |
+| ------- | ------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| type    | Number  | `0`     | `optional` set type of heatmap, 0: RectangleGeometry, 1: RectangleGraphics, 2: SingleTileImageryProvider. |
+| bounds  | Object  |         | `optional` set bounds of heatmap.                                                                         |
+| options | Object  | `true`  | `optional` set heatmap param。                                                                            |
+| min     | Number  |         | `optional` set min vaule.                                                                                 |
+| max     | Number  |         | `optional` set max vaule.                                                                                 |
+| data    | Array   | `true`  | `optional` set heatmap data.                                                                              |
+| show    | Boolean | `true`  | `optional`Specify whether to display the heat map.                                                        |
 
 ---
 

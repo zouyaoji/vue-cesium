@@ -12,10 +12,10 @@
   <template>
     <div class="viewer">
       <vc-viewer scene3DOnly animation timeline @ready="ready">
+        <vc-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions"></vc-windmap>
         <vc-layer-imagery>
           <vc-provider-imagery-tile-single :url="urlLayer"></vc-provider-imagery-tile-single>
         </vc-layer-imagery>
-        <vc-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions"> </vc-windmap>
       </vc-viewer>
       <div class="demo-tool">
         <span>maxParticles</span>
@@ -155,10 +155,10 @@
 <template>
   <div class="viewer">
     <vc-viewer scene3DOnly animation timeline @ready="ready">
+      <vc-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions"></vc-windmap>
       <vc-layer-imagery>
         <vc-provider-imagery-tile-single :url="urlLayer"></vc-provider-imagery-tile-single>
       </vc-layer-imagery>
-      <vc-windmap ref="windmap" :data="windData" :particleSystemOptions="particleSystemOptions"> </vc-windmap>
     </vc-viewer>
     <div class="demo-tool">
       <span>maxParticles</span>

@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-analytics-flood ref="flood" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
+        <vc-analytics-flood ref="flood" v-if="flag" :minHeight="minHeight" :maxHeight="maxHeight" :speed="speed" :polygonHierarchy="polygonHierarchy" @activeEvt="activeEvt">
         </vc-analytics-flood>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
         <vc-layer-imagery>
@@ -50,12 +50,14 @@
           ],
           url: 'https://dev.virtualearth.net',
           bmKey: 'AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-', // 可到(https://www.bingmapsportal.com/)申请Key。
-          flooding: false
+          flooding: false,
+          flag: true
         }
       },
       methods: {
         ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
+          window.vm = this
           const {Cesium, viewer} = this.cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.camera.setView({

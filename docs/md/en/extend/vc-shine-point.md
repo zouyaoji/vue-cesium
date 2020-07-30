@@ -1,12 +1,12 @@
-# 闪点
+# ShinePoint
 
-`vc-shine-point` 组件用于加载闪点效果，实质是通过 `vc-entity` 和 `vc-graphics-point` 添加一个实体点，然后不停改变点的颜色透明度实现。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-shine-point` component is used to load the flash point effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html).
 
-## 示例
+## Example
 
-### 加载闪点效果
+### Load a ShinePoint
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -40,7 +40,7 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -74,20 +74,20 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| position | Object | | `required` 指定闪点效果实体添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| pixelSize | Number | `10` | `optional` 指定闪点效果效果点的像素值。|
-| color | Object\|String\|Array | `'white'` | `optional` 指定闪点效果颜色。 |
-| deviationAlpha | Number | `0.05` | `optional` 指定闪点效果颜色 Alpha 值改变尺度，值越大闪得越快。取值范围: (0, 1)|
+| position | Object | | `required` Specify the location where the flash point effect entity is added. structure:{ lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| pixelSize | Number | `10` | `optional` Specify the pixel value of the flash point effect point.|
+| color | Object\|String\|Array | `'white'` | `optional` Specify the flash point effect color. |
+| deviationAlpha | Number | `0.05` | `optional` Specify the flash point effect color Alpha value to change the scale, the larger the value, the faster the flash. Ranges: (0, 1)|
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数                           | 描述                                                                  |
-| ------ | ------------------------------ | --------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及闪圆实体实例。 |
+| name  | parameter                       | description                                                                                                       |
+| ----- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| ready | {Cesium, viewer, cesiumObject } | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
