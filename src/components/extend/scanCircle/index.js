@@ -1,4 +1,4 @@
-import ScanCircle from './ScanCircle.vue'
+import VcScanCircle from './VcScanCircle.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
@@ -6,12 +6,12 @@ function plugin (Vue, options = {}) {
   }
   plugin.installed = true
 
-  Vue.component(ScanCircle.name, ScanCircle)
+  Vue.component(VcScanCircle.name, VcScanCircle)
 }
 
 export default plugin
 
 export {
-  ScanCircle,
+  VcScanCircle,
   plugin as install
 }

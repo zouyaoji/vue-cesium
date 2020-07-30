@@ -4,7 +4,12 @@
       <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius1" :semiMinorAxis="radius1"></vc-graphics-ellipse>
     </vc-entity>
     <vc-entity :position="position" ref="entity2" v-if="showEntity2">
-      <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius2" :semiMinorAxis="radius2"></vc-graphics-ellipse>
+      <vc-graphics-ellipse
+        :height="height"
+        :material="material"
+        :semiMajorAxis="radius2"
+        :semiMinorAxis="radius2"
+      ></vc-graphics-ellipse>
     </vc-entity>
   </i>
 </template>
@@ -34,7 +39,7 @@ export default {
     },
     interval: {
       type: Number,
-      default: 2000
+      default: 1000
     },
     imageUrl: String
   },
@@ -80,7 +85,13 @@ export default {
     async createCesiumObject () {
       return this._entity2Promise.then(() => {
         return Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise]).then((entities) => {
-          return entities
+          if (!this.$refs.entity1._mounted || !this.$refs.entity1._mounted) {
+            return Promise.all([this.$refs.entity1.load(), this.$refs.entity2.load()]).then((entities) => {
+              return entities
+            })
+          } else {
+            return entities
+          }
         })
       })
     },
@@ -88,7 +99,7 @@ export default {
       return true
     },
     async unmount () {
-      return true
+      return this.$refs.entity1 && this.$refs.entity2 ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()]) : true
     },
     changeRadius1 () {
       const { deviationRadius, maxRadius, minRadius } = this

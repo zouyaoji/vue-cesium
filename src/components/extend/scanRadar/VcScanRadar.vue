@@ -1,6 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-stage-process-post ref="stage" :fragmentShader="fsScanSegment" :uniforms="uniforms"></vc-stage-process-post>
+    <vc-stage-process-post :fragmentShader="fsScanSegment" :uniforms="uniforms" ref="stage"></vc-stage-process-post>
   </i>
 </template>
 
@@ -80,14 +80,20 @@ export default {
   methods: {
     async createCesiumObject () {
       return this.$refs.stage.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
-        return cesiumObject
+        if (!this.$refs.stage._mounted) {
+          return this.$refs.stage.load().then(({ Cesium, viewer, cesiumObject }) => {
+            return cesiumObject
+          })
+        } else {
+          return cesiumObject
+        }
       })
     },
     async mount () {
       return true
     },
     async unmount () {
-      return true
+      return this.$refs.stage && this.$refs.stage.unload()
     }
   },
   created () {
@@ -95,10 +101,6 @@ export default {
       postProcessStage: {
         enumerable: true,
         get: () => this.cesiumObject
-      },
-      postProcessStages: {
-        enumerable: true,
-        get: () => this.$services && this.$services.postProcessStages
       }
     })
   },

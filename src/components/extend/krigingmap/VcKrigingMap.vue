@@ -77,7 +77,6 @@ export default {
   },
   mounted () {
     this.$parent.createPromise.then(async ({ Cesium, viewer }) => {
-      console.log('viewerReady')
       const { values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha, breaks, clipCoords } = this
       const variogram = kriging.train(values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha)
 

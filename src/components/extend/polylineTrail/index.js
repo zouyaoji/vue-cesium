@@ -1,17 +1,17 @@
-import VcDoubleCircleRipple from './VcDoubleCircleRipple.vue'
+
+import VcPolylineTrail from './VcPolylineTrail.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
     return
   }
   plugin.installed = true
-
-  Vue.component(VcDoubleCircleRipple.name, VcDoubleCircleRipple)
+  Vue.component(VcPolylineTrail.name, VcPolylineTrail)
 }
 
 export default plugin
 
 export {
-  VcDoubleCircleRipple,
+  VcPolylineTrail,
   plugin as install
 }

@@ -1,4 +1,4 @@
-import ShineEllipse from './ShineEllipse.vue'
+import VcShineEllipse from './VcShineEllipse.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
@@ -6,12 +6,12 @@ function plugin (Vue, options = {}) {
   }
   plugin.installed = true
 
-  Vue.component(ShineEllipse.name, ShineEllipse)
+  Vue.component(VcShineEllipse.name, VcShineEllipse)
 }
 
 export default plugin
 
 export {
-  ShineEllipse,
+  VcShineEllipse,
   plugin as install
 }

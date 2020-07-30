@@ -1,4 +1,4 @@
-import ShinePoint from './ShinePoint.vue'
+import VcShinePoint from './VcShinePoint.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
@@ -6,12 +6,12 @@ function plugin (Vue, options = {}) {
   }
   plugin.installed = true
 
-  Vue.component(ShinePoint.name, ShinePoint)
+  Vue.component(VcShinePoint.name, VcShinePoint)
 }
 
 export default plugin
 
 export {
-  ShinePoint,
+  VcShinePoint,
   plugin as install
 }

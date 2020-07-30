@@ -24,7 +24,6 @@ export default {
       attributes: null,
       extrudedHeight: 0.1,
       flooding: false,
-      floodDone: false,
       appearance: null,
       nowaiting: true
     }
@@ -54,6 +53,7 @@ export default {
           this.extrudedHeight = this.extrudedHeight >= this.minHeight ? this.minHeight : 0.1
           this.floodDone = false
         }
+        this._mounted = true
         this.viewer.clock.onTick.addEventListener(this.onTick)
         listener && this.$emit('activeEvt', { isActive: val })
       } else {
@@ -74,7 +74,13 @@ export default {
       }
       this.extrudedHeight = minHeight
       return this.$refs.primitive.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
-        return cesiumObject
+        if (!this.$refs.primitive._mounted) {
+          return this.$refs.primitive.load().then(({ Cesium, viewer, cesiumObject }) => {
+            return cesiumObject
+          })
+        } else {
+          return cesiumObject
+        }
       })
     },
     onTick () {
@@ -85,6 +91,9 @@ export default {
         this.floodDone = true
         this.flooding = false
       }
+    },
+    clear () {
+
     },
     async mount () {
       return true

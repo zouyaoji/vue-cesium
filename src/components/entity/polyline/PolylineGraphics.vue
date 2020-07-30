@@ -2,6 +2,7 @@
 import {
   granularity,
   arcType,
+  clampToGround,
   classificationType,
   zIndex
 } from '../../../mixins/mixinProps'
@@ -13,16 +14,13 @@ export default {
   mixins: [
     granularity,
     arcType,
+    clampToGround,
     classificationType,
     zIndex,
     mixinPolyline,
     mixinGraphic
   ],
   props: {
-    clampToGround: {
-      type: Boolean,
-      default: false
-    },
     depthFailMaterial: Object | Array | String
   }
 }

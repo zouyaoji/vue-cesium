@@ -1,15 +1,15 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity ref="1" v-if="type === 1" :show="show">
+    <vc-entity :show="show" ref="1" v-if="type === 1">
       <vc-graphics-rectangle :coordinates="coordinates" :material="material"></vc-graphics-rectangle>
     </vc-entity>
-    <vc-primitive-ground ref="0" v-else-if="type === 0" :show="show" :appearance="appearance">
+    <vc-primitive-ground :appearance="appearance" :show="show" ref="0" v-else-if="type === 0">
       <vc-instance-geometry :geometry.sync="geometry">
         <vc-geometry-rectangle :rectangle="coordinates"></vc-geometry-rectangle>
       </vc-instance-geometry>
     </vc-primitive-ground>
-    <vc-layer-imagery ref="2" v-else-if="type === 2" :show="show">
-      <vc-provider-imagery-tile-single :url="layerUrl" :rectangle="coordinates"></vc-provider-imagery-tile-single>
+    <vc-layer-imagery :show="show" ref="2" v-else-if="type === 2">
+      <vc-provider-imagery-tile-single :rectangle="coordinates" :url="layerUrl"></vc-provider-imagery-tile-single>
     </vc-layer-imagery>
   </i>
 </template>
@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     async createCesiumObject () {
-      const { Cesium, bounds, options, min, max, data, defaultOptions } = this
+      const { Cesium, bounds, options, min, max, data, defaultOptions, type } = this
       this._WMP = new Cesium.WebMercatorProjection()
       this._id = this.getID()
       options.gradient = options.gradient ? options.gradient : defaultOptions.gradient
@@ -125,7 +125,15 @@ export default {
           }
         })
       })
-      return this._heatmapInstance
+      return this.$refs[type].createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        if (!this.$refs[type]._mounted) {
+          return this.$refs[type].load().then(({ Cesium, viewer, cesiumObject }) => {
+            return cesiumObject
+          })
+        } else {
+          return cesiumObject
+        }
+      })
     },
     materialCallback () {
       return this.layerUrl

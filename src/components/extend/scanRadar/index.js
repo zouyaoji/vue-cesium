@@ -1,4 +1,4 @@
-import ScanRadar from './ScanRadar.vue'
+import VcScanRadar from './VcScanRadar.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
@@ -6,12 +6,12 @@ function plugin (Vue, options = {}) {
   }
   plugin.installed = true
 
-  Vue.component(ScanRadar.name, ScanRadar)
+  Vue.component(VcScanRadar.name, VcScanRadar)
 }
 
 export default plugin
 
 export {
-  ScanRadar,
+  VcScanRadar,
   plugin as install
 }

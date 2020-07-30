@@ -114,11 +114,12 @@ import * as VcFlood from './components/extend/flood'
 import * as VcHeatMap from './components/extend/heatmap'
 import * as VcKrigingMap from './components/extend/krigingmap'
 import * as VcWindMap from './components/extend/windmap'
-import * as ScanCircle from './components/extend/scanCircle'
-import * as ScanRadar from './components/extend/scanRadar'
-import * as DoubleCircleRipple from './components/extend/doubleCircleRipple'
-import * as ShineEllipse from './components/extend/shineEllipse'
-import * as ShinePoint from './components/extend/shinePoint'
+import * as VcScanCircle from './components/extend/scanCircle'
+import * as VcScanRadar from './components/extend/scanRadar'
+import * as VcDoubleCircleRipple from './components/extend/doubleCircleRipple'
+import * as VcShineEllipse from './components/extend/shineEllipse'
+import * as VcShinePoint from './components/extend/shinePoint'
+import * as VcPolylineTrail from './components/extend/PolylineTrail'
 
 import lang from './exts/lang'
 
@@ -255,11 +256,12 @@ function plugin (Vue, options = {}) {
   Vue.use(VcHeatMap, options)
   Vue.use(VcWindMap, options)
   Vue.use(VcKrigingMap, options)
-  Vue.use(ScanCircle, options)
-  Vue.use(ScanRadar, options)
-  Vue.use(DoubleCircleRipple, options)
-  Vue.use(ShineEllipse, options)
-  Vue.use(ShinePoint, options)
+  Vue.use(VcScanCircle, options)
+  Vue.use(VcScanRadar, options)
+  Vue.use(VcDoubleCircleRipple, options)
+  Vue.use(VcShineEllipse, options)
+  Vue.use(VcShinePoint, options)
+  Vue.use(VcPolylineTrail, options)
   // 控件
   Vue.use(VcNavigation, options)
   Vue.use(VcNavigationSM, options)
@@ -387,11 +389,12 @@ export {
   VcHeatMap,
   VcWindMap,
   VcKrigingMap,
-  ScanCircle,
-  ScanRadar,
-  DoubleCircleRipple,
-  ShineEllipse,
-  ShinePoint,
+  VcScanCircle,
+  VcScanRadar,
+  VcDoubleCircleRipple,
+  VcShineEllipse,
+  VcShinePoint,
+  VcPolylineTrail,
 
   VcNavigation,
   VcNavigationSM
