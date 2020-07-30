@@ -1,29 +1,20 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-entity ref="entity">
-      <vc-graphics-polyline
-        :width="width"
-        :clampToGround="clampToGround"
-        :material="material"
-        :positions="positions"
-      ></vc-graphics-polyline>
+      <vc-graphics-polyline :material="material" :positions="positions" :width="width" :clampToGround="clampToGround"></vc-graphics-polyline>
     </vc-entity>
   </i>
 </template>
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { positions, width } from '../../../mixins/mixinProps'
+import { positions, width, clampToGround } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 import PolylineTrailMaterialProperty from '../../../exts/materialProperty/PolylineTrailMaterialProperty'
 export default {
   name: 'vc-trail-polyline',
-  mixins: [cmp, positions, width],
+  mixins: [cmp, positions, width, clampToGround],
   props: {
-    clampToGround: {
-      type: Boolean,
-      default: true
-    },
     color: {
       type: Object | String | Array,
       default: 'yellow'
@@ -32,7 +23,11 @@ export default {
       type: Number,
       default: 3000
     },
-    imageUrl: String
+    imageUrl: String,
+    loop: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -41,27 +36,29 @@ export default {
     }
   },
   mounted () {
-    console.log('a')
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
-      const { color, imageUrl, interval } = this
+      const { color, imageUrl, interval, loop } = this
       const colorCesium = makeColor(color)
-      const data = {}
-      data.flowImage = imageUrl
-      Cesium.PolylineTrailMaterialProperty = PolylineTrailMaterialProperty
-      this.material = new Cesium.PolylineTrailMaterialProperty(colorCesium, interval, imageUrl)
+      this.material = new PolylineTrailMaterialProperty(colorCesium, interval, imageUrl, loop)
     })
   },
   methods: {
     async createCesiumObject () {
       return this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
-        return cesiumObject
+        if (!this.$refs.entity._mounted) {
+          return this.$refs.entity.load().then(({ Cesium, viewer, cesiumObject }) => {
+            return cesiumObject
+          })
+        } else {
+          return cesiumObject
+        }
       })
     },
     async mount () {
       return true
     },
     async unmount () {
-      return true
+      return this.$refs.entity && this.$refs.entity.unload()
     }
   },
   created () {
