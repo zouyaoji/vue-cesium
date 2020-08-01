@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-08-01 20:32:51
+ * @Last Modified time: 2020-08-01 22:33:20
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -899,7 +899,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
               }
               resolve(global.Cesium)
             } else if (global.XE) { // 兼容 西部世界 cesiumlab earthsdk
-              XE.ready().then((e) => {
+              global.XE.ready().then((e) => {
                 resolve(global.Cesium)
               })
             } else {
@@ -984,14 +984,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       for (let script of scripts) {
         script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
         script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
-        script.src.indexOf('/XbsjEarth.js') > -1 && removeScripts.push(script)
+        if (global.XE) {
+          script.src.indexOf('/rxjs.umd.min.js') > -1 && removeScripts.push(script)
+          script.src.indexOf('/XbsjCesium.js') > -1 && removeScripts.push(script)
+          script.src.indexOf('/viewerCesiumNavigationMixin.js') > -1 && removeScripts.push(script)
+          script.src.indexOf('/XbsjEarth.js') > -1 && removeScripts.push(script)
+        }
       }
       removeScripts.forEach((script) => {
-        if (global.XE) {
-          document.getElementsByTagName('head')[0].removeChild(script)
-        } else {
-          document.getElementsByTagName('body')[0].removeChild(script)
-        }
+        script.parentNode.removeChild(script)
       })
       let links = document.getElementsByTagName('link')
       for (let link of links) {
@@ -999,7 +1000,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           document.getElementsByTagName('head')[0].removeChild(link)
         }
       }
-      global.Cesium = null
+      global.Cesium && (global.Cesium = null)
+      global.XbsjCesium && (global.XbsjCesium = null)
+      global.XbsjEarth && (global.XbsjEarth = null)
+      global.XE && (global.XE = null)
       this.$vc.scriptPromise = undefined
     }
   }
