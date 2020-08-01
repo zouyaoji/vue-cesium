@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-05-14 13:50:53
+ * @Last Modified time: 2020-08-01 20:32:51
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -879,10 +879,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 
         let dirName = dirname(cesiumPath)
-        const $link = document.createElement('link')
-        $link.rel = 'stylesheet'
-        global.document.head.appendChild($link)
-        $link.href = `${dirName}/Widgets/widgets.css`
 
         const $script = document.createElement('script')
         global.document.body.appendChild($script)
@@ -890,6 +886,11 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         return new Promise((resolve, reject) => {
           $script.onload = () => {
             if (global.Cesium) {
+              // 引入样式
+              const $link = document.createElement('link')
+              $link.rel = 'stylesheet'
+              global.document.head.appendChild($link)
+              $link.href = `${dirName}/Widgets/widgets.css`
               // 超图WebGL3D需要引入zlib.min.js
               if (Cesium.SuperMapImageryProvider && Number(Cesium.VERSION) < 1.54) {
                 const $scriptZlib = document.createElement('script')
@@ -897,6 +898,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
                 $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
               }
               resolve(global.Cesium)
+            } else if (global.XE) { // 兼容 西部世界 cesiumlab earthsdk
+              XE.ready().then((e) => {
+                resolve(global.Cesium)
+              })
             } else {
               reject(new Error(`[C_PKG_FULLNAME] ERROR: ` + 'Error loading CesiumJS!'))
             }
@@ -979,9 +984,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       for (let script of scripts) {
         script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
         script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
+        script.src.indexOf('/XbsjEarth.js') > -1 && removeScripts.push(script)
       }
       removeScripts.forEach((script) => {
-        document.getElementsByTagName('body')[0].removeChild(script)
+        if (global.XE) {
+          document.getElementsByTagName('head')[0].removeChild(script)
+        } else {
+          document.getElementsByTagName('body')[0].removeChild(script)
+        }
       })
       let links = document.getElementsByTagName('link')
       for (let link of links) {

@@ -1,0 +1,117 @@
+{
+    "asset": {
+        "version": "2.0",
+        "generator": "babylon.js glTF exporter for   v"
+    },
+    "scene": 0,
+    "scenes": [{
+        "nodes": [0],
+        "extensions": {}
+    }],
+    "nodes": [{
+        "mesh": 0,
+        "translation": [4.47034836E-08, -1.49011612E-08, -1.90874871E-08],
+        "rotation": [0.0, 0.0, 0.0, 1.0],
+        "scale": [1.0, 1.0, 1.0],
+        "name": "H"
+    }],
+    "meshes": [{
+        "primitives": [{
+            "attributes": {
+                "POSITION": 1,
+                "NORMAL": 2,
+                "TEXCOORD_0": 3
+            },
+            "indices": 0,
+            "mode": 4,
+            "material": 0
+        }],
+        "name": "H"
+    }],
+    "accessors": [{
+        "bufferView": 0,
+        "componentType": 5123,
+        "count": 144,
+        "type": "SCALAR",
+        "name": "accessorIndices"
+    }, {
+        "bufferView": 1,
+        "componentType": 5126,
+        "count": 144,
+        "max": [0.5, 0.181172624, 0.181172624],
+        "min": [-0.5, -0.181172609, -0.181172624],
+        "type": "VEC3",
+        "name": "accessorPositions"
+    }, {
+        "bufferView": 1,
+        "byteOffset": 1728,
+        "componentType": 5126,
+        "count": 144,
+        "type": "VEC3",
+        "name": "accessorNormals"
+    }, {
+        "bufferView": 2,
+        "componentType": 5126,
+        "count": 144,
+        "type": "VEC2",
+        "name": "accessorUVs"
+    }],
+    "bufferViews": [{
+        "buffer": 0,
+        "byteLength": 288,
+        "name": "bufferViewScalar"
+    }, {
+        "buffer": 0,
+        "byteOffset": 288,
+        "byteLength": 3456,
+        "byteStride": 12,
+        "name": "bufferViewFloatVec3"
+    }, {
+        "buffer": 0,
+        "byteOffset": 3744,
+        "byteLength": 1152,
+        "byteStride": 8,
+        "name": "bufferViewFloatVec2"
+    }],
+    "buffers": [{
+        "uri": "camera1.bin",
+        "byteLength": 4896
+    }],
+    "extensionsUsed": [
+        "KHR_materials_unlit"
+    ],
+    "extensionsRequired": [
+        "KHR_materials_unlit"
+    ],
+    "materials": [{
+        "pbrMetallicRoughness": {
+            "baseColorFactor": [1.0, 1.0, 1.0, 1.0],
+            "baseColorTexture": {
+                "index": 0,
+                "texCoord": 0
+            },
+            "metallicFactor": 0.0,
+            "roughnessFactor": 0.5
+        },    
+        "extensions": {
+            "KHR_materials_unlit": {}
+        }, 
+        "emissiveFactor": [0.0, 0.0, 0.0],
+        "alphaMode": "OPAQUE",
+        "name": "07 - Default"
+    }],
+    "textures": [{
+        "sampler": 0,
+        "source": 0,
+        "name": "07 - Default_baseColor.jpg"
+    }],
+    "images": [{
+        "uri": "camera1.jpg"
+    }],
+    "samplers": [{
+        "magFilter": 9729,
+        "minFilter": 9987,
+        "wrapS": 10497,
+        "wrapT": 10497
+    }]
+}
