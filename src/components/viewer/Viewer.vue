@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-08-03 12:05:32
+ * @Last Modified time: 2020-08-03 17:04:31
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -992,7 +992,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     const { viewer, removeCesiumScript, earth } = this
     global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
 
-    this.viewer = null
+    this.viewer = undefined
     this._mounted = false
 
     if (removeCesiumScript && global.Cesium) {
@@ -1017,10 +1017,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           document.getElementsByTagName('head')[0].removeChild(link)
         }
       }
-      global.Cesium && (global.Cesium = null)
-      global.XbsjCesium && (global.XbsjCesium = null)
-      global.XbsjEarth && (global.XbsjEarth = null)
-      global.XE && (global.XE = null)
+      global.Cesium && (global.Cesium = undefined)
+      global.XbsjCesium && (global.XbsjCesium = undefined)
+      global.XbsjEarth && (global.XbsjEarth = undefined)
+      global.XE && (global.XE = undefined)
       this.$vc.scriptPromise = undefined
     }
   }
