@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-08-03 17:04:31
+ * @Last Modified time: 2020-08-03 18:45:47
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -837,7 +837,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       })
       let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
       Events['viewer-mouse-events'].forEach((eventName) => {
-        const listener = this.$listeners[eventName]
+        const listener = this.$listeners[eventName] || this.$listeners[eventName.toLowerCase()]
         const methodName = flag ? 'setInputAction' : 'removeInputAction'
         listener && handler[methodName](listener.fns, Cesium.ScreenSpaceEventType[eventName])
       })
@@ -889,11 +889,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 
         let dirName = dirname(cesiumPath)
-        // 引入样式
-        const $link = document.createElement('link')
-        $link.rel = 'stylesheet'
-        global.document.head.appendChild($link)
-        $link.href = `${dirName}/Widgets/widgets.css`
+        // 引入样式 earthsdk 会自动引 不用引入了
+        if (cesiumPath.indexOf('/XbsjEarth.js') === -1) {
+          const $link = document.createElement('link')
+          $link.rel = 'stylesheet'
+          global.document.head.appendChild($link)
+          $link.href = `${dirName}/Widgets/widgets.css`
+        }
 
         const $script = document.createElement('script')
         global.document.body.appendChild($script)
@@ -909,13 +911,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
               }
               resolve(global.Cesium)
             } else if (global.XE) { // 兼容 cesiumlab earthsdk
-              // widgets.css earthsdk 会自动引 移除一下
-              let links = document.getElementsByTagName('link')
-              for (let link of links) {
-                if (link.href.indexOf('Widgets/widgets.css') > -1) {
-                  document.getElementsByTagName('head')[0].removeChild(link)
-                }
-              }
               global.XE.ready().then(() => {
                 resolve(global.Cesium)
               })
