@@ -1,26 +1,26 @@
-# EarthSDK 例子
+# EarthSDK Demo
 
-使用 CesiumLab 的 EarthSDK 开发时开发时只需要在引入 vue-cesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 路径即可:
+When developing with CesiumLab's EarthSDK, you only need to specify the EarthSDK path through the configuration item `cesiumPath` when introducing vue-cesium:
 
 ```js
 Vue.use(VueCesium, {
   cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
 })
 
-// 如果是局部引入，也可以这样:
+// or
 import { Viewer } from 'vue-cesium'
 Vue.use(Viewer, {
   cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
 })
 ```
 
-或者是直接在 `vc-viewer` 组件上指定 `cesiumPath` 属性，需要**注意**的是如果要使用 EarthSDK API，只能用 EarthSDK 的方法加载才行，不能放入 Cesium 原生的方法中的。`vc-viewer` 加载成功会返回 { Cesium, viewer, earth }, 通过该 `earth` 进行相关开发即可， 如下面的例子：
+Or you can directly specify the `cesiumPath` attribute on the `vc-viewer` component. **Note** is that if you want to use the EarthSDK API, you can only use the EarthSDK method to load it, and you can't put it in the Cesium native method. `vc-viewer` will return {Cesium, viewer, earth} after loading successfully, and you can use the `earth` for related development, as shown in the following example:
 
-## 示例
+## Example
 
-### 用 EarthSDK 加载 vc-viewer 组件
+### Load the vc-viewer component with EarthSDK
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -45,15 +45,15 @@ Vue.use(Viewer, {
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
-        <span>动画部件</span>
+        <span>animation</span>
         <md-switch v-model="animation"></md-switch>
-        <span>时间轴部件</span>
+        <span>timeline</span>
         <md-switch v-model="timeline"></md-switch>
-        <span>基础图层拾取器</span>
+        <span>baseLayerPicker</span>
         <md-switch v-model="baseLayerPicker"></md-switch>
-        <span>全屏按钮</span>
+        <span>fullscreenButton</span>
         <md-switch v-model="fullscreenButton"></md-switch>
-        <span>信息提示框</span>
+        <span>infoBox</span>
         <md-switch v-model="infoBox"></md-switch>
       </div>
     </div>
@@ -138,7 +138,7 @@ Vue.use(Viewer, {
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -163,15 +163,15 @@ Vue.use(Viewer, {
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
-      <span>动画部件</span>
+      <span>animation</span>
       <md-switch v-model="animation"></md-switch>
-      <span>时间轴部件</span>
+      <span>timeline</span>
       <md-switch v-model="timeline"></md-switch>
-      <span>基础图层拾取器</span>
+      <span>baseLayerPicker</span>
       <md-switch v-model="baseLayerPicker"></md-switch>
-      <span>全屏按钮</span>
+      <span>fullscreenButton</span>
       <md-switch v-model="fullscreenButton"></md-switch>
-      <span>信息提示框</span>
+      <span>infoBox</span>
       <md-switch v-model="infoBox"></md-switch>
     </div>
   </div>
@@ -218,7 +218,6 @@ Vue.use(Viewer, {
             style: Cesium.LabelStyle.FILL
           })
         })
-        // 下面是 earth sdk 提供的方法
         // 1.1.2 场景配置
         earth.sceneTree.root = {
           expand: true,
@@ -257,6 +256,4 @@ Vue.use(Viewer, {
 </script>
 ```
 
----
-
-- 参考西部世界 EarthSDK 在线示例： [示例集合](http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./startup-createEarth.html)
+- Refer to：[EarthSDK DEMO](http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./startup-createEarth.html)

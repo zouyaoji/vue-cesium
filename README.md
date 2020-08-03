@@ -25,7 +25,7 @@
 
 ## Get Start
 
-`VueCesium` using the built CesiumJS library. You can use online, local, official native libraries or third-party libraries built on Cesium depending on your project needs.
+`VueCesium` using the built CesiumJS library. You can use online, local, official native libraries or third-party libraries built on Cesium depending on your project needs. The `SuperMap iClient 3D for WebGL` and the `EarthSDK` of CesiumLab have been tested.
 
 [Developed components](https://github.com/zouyaoji/vue-cesium/blob/master/src/utils/nameClassMap.js).
 

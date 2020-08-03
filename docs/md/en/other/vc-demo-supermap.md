@@ -1,26 +1,26 @@
-# EarthSDK 例子
+# SuperMap Demo
 
-使用 CesiumLab 的 EarthSDK 开发时开发时只需要在引入 vue-cesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 路径即可:
+When using the SuperMap version for development, you only need to specify the path of the SuperMap version through the configuration item `cesiumPath` when introducing vue-cesium:
 
 ```js
 Vue.use(VueCesium, {
-  cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
+  cesiumPath: './statics/SupermapCesium/Cesium.js'
 })
 
-// 如果是局部引入，也可以这样:
+// or
 import { Viewer } from 'vue-cesium'
 Vue.use(Viewer, {
-  cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
+  cesiumPath: './statics/SupermapCesium/Cesium.js'
 })
 ```
 
-或者是直接在 `vc-viewer` 组件上指定 `cesiumPath` 属性，需要**注意**的是如果要使用 EarthSDK API，只能用 EarthSDK 的方法加载才行，不能放入 Cesium 原生的方法中的。`vc-viewer` 加载成功会返回 { Cesium, viewer, earth }, 通过该 `earth` 进行相关开发即可， 如下面的例子：
+Or directly specify the `cesiumPath` property on the `vc-viewer` component, as in the following example:
 
-## 示例
+## Example
 
-### 用 EarthSDK 加载 vc-viewer 组件
+### Load vc-viewer component with SuperMap
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -34,6 +34,7 @@ Vue.use(Viewer, {
         :fullscreenButton="fullscreenButton"
         :fullscreenElement="fullscreenElement"
         :infoBox="infoBox"
+        :logo="true"
         @ready="ready"
       >
         <vc-navigation></vc-navigation>
@@ -45,15 +46,15 @@ Vue.use(Viewer, {
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
-        <span>动画部件</span>
+        <span>animation</span>
         <md-switch v-model="animation"></md-switch>
-        <span>时间轴部件</span>
+        <span>timeline</span>
         <md-switch v-model="timeline"></md-switch>
-        <span>基础图层拾取器</span>
+        <span>baseLayerPicker</span>
         <md-switch v-model="baseLayerPicker"></md-switch>
-        <span>全屏按钮</span>
+        <span>fullscreenButton</span>
         <md-switch v-model="fullscreenButton"></md-switch>
-        <span>信息提示框</span>
+        <span>infoBox</span>
         <md-switch v-model="infoBox"></md-switch>
       </div>
     </div>
@@ -69,7 +70,7 @@ Vue.use(Viewer, {
           infoBox: true,
           fullscreenElement: document.body,
           tk: '436ce7e50d27eede2f2929307e6b33c0',
-          cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
+          cesiumPath: './statics/SuperMapCesium/Cesium.js'
         }
       },
       mounted() {
@@ -79,7 +80,7 @@ Vue.use(Viewer, {
       },
       methods: {
         ready(cesiumInstance) {
-          const { Cesium, viewer, earth } = cesiumInstance
+          const { Cesium, viewer } = cesiumInstance
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.scene.globe.enableLighting = true
           this.fullscreenElement = this.$refs.viewerContainer
@@ -100,38 +101,6 @@ Vue.use(Viewer, {
               style: Cesium.LabelStyle.FILL
             })
           })
-          // 1.1.2 场景配置
-          earth.sceneTree.root = {
-            expand: true,
-            title: '预览场景',
-            children: [
-              {
-                ref: 'polyline1',
-                czmObject: {
-                  xbsjType: 'Polyline',
-                  positions: [
-                    [1.6049052178907162, 0.4547675537396452, 0],
-                    [2.266206367018494, 0.4857724702174004, -5.6841204016160695e-9],
-                    [2.8083374819013205, 0.9842980731992482, -6.859619106471648e-9]
-                  ]
-                }
-              },
-              {
-                czmObject: {
-                  name: '默认影像',
-                  xbsjType: 'Imagery',
-                  xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
-                }
-              }
-            ]
-          }
-          var polyline1 = earth.sceneTree.$refs.polyline1.czmObject
-          // 1.1.3 设置相机位置
-          // earth.camera.position.toString()和earth.camera.toAllJSONStr()这两个方法可获取相机位置
-          earth.camera.position = [1.9801824720243058, 0.5645924417726427, 8556103.623693792]
-          earth.camera.rotation = [2.6645352591003757e-15, -1.5694528555019995, 0]
-          // 1.1.3 设置初始值
-          polyline1.width = 4
         }
       }
     }
@@ -163,15 +132,15 @@ Vue.use(Viewer, {
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
-      <span>动画部件</span>
+      <span>animation</span>
       <md-switch v-model="animation"></md-switch>
-      <span>时间轴部件</span>
+      <span>timeline</span>
       <md-switch v-model="timeline"></md-switch>
-      <span>基础图层拾取器</span>
+      <span>baseLayerPicker</span>
       <md-switch v-model="baseLayerPicker"></md-switch>
-      <span>全屏按钮</span>
+      <span>fullscreenButton</span>
       <md-switch v-model="fullscreenButton"></md-switch>
-      <span>信息提示框</span>
+      <span>infoBox</span>
       <md-switch v-model="infoBox"></md-switch>
     </div>
   </div>
@@ -187,7 +156,7 @@ Vue.use(Viewer, {
         infoBox: true,
         fullscreenElement: document.body,
         tk: '436ce7e50d27eede2f2929307e6b33c0',
-        cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js'
+        cesiumPath: './statics/SuperMapCesium/Cesium.js'
       }
     },
     mounted() {
@@ -197,7 +166,7 @@ Vue.use(Viewer, {
     },
     methods: {
       ready(cesiumInstance) {
-        const { Cesium, viewer, earth } = cesiumInstance
+        const { Cesium, viewer } = cesiumInstance
         viewer.scene.globe.depthTestAgainstTerrain = true
         viewer.scene.globe.enableLighting = true
         this.fullscreenElement = this.$refs.viewerContainer
@@ -218,39 +187,6 @@ Vue.use(Viewer, {
             style: Cesium.LabelStyle.FILL
           })
         })
-        // 下面是 earth sdk 提供的方法
-        // 1.1.2 场景配置
-        earth.sceneTree.root = {
-          expand: true,
-          title: '预览场景',
-          children: [
-            {
-              ref: 'polyline1',
-              czmObject: {
-                xbsjType: 'Polyline',
-                positions: [
-                  [1.6049052178907162, 0.4547675537396452, 0],
-                  [2.266206367018494, 0.4857724702174004, -5.6841204016160695e-9],
-                  [2.8083374819013205, 0.9842980731992482, -6.859619106471648e-9]
-                ]
-              }
-            },
-            {
-              czmObject: {
-                name: '默认影像',
-                xbsjType: 'Imagery',
-                xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
-              }
-            }
-          ]
-        }
-        var polyline1 = earth.sceneTree.$refs.polyline1.czmObject
-        // 1.1.3 设置相机位置
-        // earth.camera.position.toString()和earth.camera.toAllJSONStr()这两个方法可获取相机位置
-        earth.camera.position = [1.9801824720243058, 0.5645924417726427, 8556103.623693792]
-        earth.camera.rotation = [2.6645352591003757e-15, -1.5694528555019995, 0]
-        // 1.1.3 设置初始值
-        polyline1.width = 4
       }
     }
   }
@@ -259,4 +195,4 @@ Vue.use(Viewer, {
 
 ---
 
-- 参考西部世界 EarthSDK 在线示例： [示例集合](http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./startup-createEarth.html)
+- Refer to SuperMap official documents: [SuperMap iClient 3D for WebGL](http://support.supermap.com.cn:8090/webgl/)

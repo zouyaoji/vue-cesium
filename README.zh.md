@@ -25,7 +25,7 @@
 
 ## 开始
 
-`VueCesium` 引入的是构建后的 `CesiumJS` 库，也就是下载 `Cesium` 源码后打包生成的 `Build`目录的 `CesiumJS`。引入 `Build` 后的库有个很大的好处：可以根据项目需求使用在线、本地、官方原生库或基于 Cesium 构建的第三方库。
+`VueCesium` 引入的是构建后的 `CesiumJS` 库，也就是下载 `Cesium` 源码后打包生成的 `Build`目录的 `CesiumJS`。引入 `Build` 后的库有个很大的好处：可以根据项目需求使用在线、本地、官方原生库或基于 Cesium 构建的第三方库。目前已经测试成功加载超图的 `SuperMap iClient 3D for WebGL` 和 西部世界 CesiumLab 的 `EarthSDK` 。
 
 [查看目前已开发的组件](https://github.com/zouyaoji/vue-cesium/blob/master/src/utils/nameClassMap.js).
 
