@@ -12,7 +12,7 @@
 - [`vc-trail-polyline`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动线效果组件。
 - [`vc-trail-wall`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动墙效果组件。
 - [`vc-provider-imagery-style-mapbox`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-provider-imagery-style-mapbox) 加载mapbox自定义地图服务。
-- 兼容cesiumlab的earthsdk.
+- 支持引入 cesiumlab 的 earthsdk (1.4.16+).
 
 ## 2.1.4 - 2020-05-26
 

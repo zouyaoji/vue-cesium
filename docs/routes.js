@@ -849,6 +849,22 @@ const routeMap = [
           zh: '后处理',
           en: 'PostProcessStage'
         }
+      },
+      {
+        path: 'vc-demo-supermap',
+        component: 'other/vc-demo-supermap',
+        name: {
+          zh: '超图例子',
+          en: 'SuperMap Demo'
+        }
+      },
+      {
+        path: 'vc-demo-earthsdk',
+        component: 'other/vc-demo-earthsdk',
+        name: {
+          zh: 'EarthSDK例子',
+          en: 'EarthSDK Demo'
+        }
       }
     ]
   },

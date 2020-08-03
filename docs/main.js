@@ -24,7 +24,6 @@ Vue.use(VueCesium, {
   // Online Cesium Build package：
   // cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
   // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
-  // cesiumPath: 'https://unpkg.com/cesium/Build/CesiumUnminified/Cesium.js',
   // cesiumPath: 'https://unpkg.com/cesium@1.54.0/Build/Cesium/Cesium.js',
   // cesiumPath: './statics/SupermapCesium/Cesium.js', // 超图
   // cesiumPath: './statics/EarthSDK/XbsjEarth/XbsjEarth.js', // CesiumLab EarthSDK

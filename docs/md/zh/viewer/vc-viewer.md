@@ -167,27 +167,10 @@
     }
   }
 </script>
-<style>
-
-.viewer {
-  width: 100%;
-  height: 400px;
-  position: relative;
-}
-
-.demo-tool {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  top: 0;
-  left: 0;
-  color: #fff;
-}
-</style>
 ```
 
 > tips: md-switch 用的是[vue-material组件库](https://vuematerial.io/)，你也可以使用其他组件库。
-  
+
 >  本示例用到的vc-navigation的样式需要单独引入，详见[vc-navigation](https://zouyaoji.top/vue-cesium/#/zh/control/vc-navigation)。
 
 ## 属性
@@ -225,6 +208,7 @@
 |projectionPicker|Boolean|`false`|`optional`是否显示投影切换按钮|
 |logo|Boolean|`true`| `optional` 是否显示默认logo.|
 |accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
+|cesiumPath|String||`optional`指定当前场景使用的 cesium 版本。一般是Vue.use()的时候指定。|
 |camera|Object|| `optional` 场景相机位置.默认定位到全球范围内的中国。 **结构：{ position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
 |TZcode|String|`UTM`| `optional` 时区代码。|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` UTC时间的时差（分钟）。|
