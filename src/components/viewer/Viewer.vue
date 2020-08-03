@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-08-01 22:33:20
+ * @Last Modified time: 2020-08-03 12:05:32
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -732,7 +732,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         navigation
       }
       this.removeNullItem(options)
-      const viewer = new Cesium.Viewer($el, options)
+      let viewer = {}
+      if (!global.XE) {
+        viewer = new Cesium.Viewer($el, options)
+      } else {
+        this.earth = new global.XE.Earth($el, options)
+        viewer = this.earth.czm.viewer
+      }
+
       if (Cesium.defined(this.camera)) {
         viewer.camera.setView({
           destination: Cesium.Cartesian3.fromDegrees(
@@ -786,7 +793,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       viewer.imageryLayers.layerAdded.addEventListener(this.layerAdded)
       this.viewer = viewer
       registerEvents(true)
-      this.$emit('ready', { Cesium, viewer })
+      global.XE ? this.$emit('ready', { Cesium, viewer, earth: this.earth }) : this.$emit('ready', { Cesium, viewer })
       this._mounted = true
       this._resolve({ Cesium, viewer })
       return { Cesium, viewer }
@@ -866,6 +873,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
           },
           get postProcessStages () {
             return vm.postProcessStages
+          },
+          get earth () {
+            return vm.earth
           }
         }
       )
@@ -879,6 +889,11 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             : 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
 
         let dirName = dirname(cesiumPath)
+        // 引入样式
+        const $link = document.createElement('link')
+        $link.rel = 'stylesheet'
+        global.document.head.appendChild($link)
+        $link.href = `${dirName}/Widgets/widgets.css`
 
         const $script = document.createElement('script')
         global.document.body.appendChild($script)
@@ -886,11 +901,6 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         return new Promise((resolve, reject) => {
           $script.onload = () => {
             if (global.Cesium) {
-              // 引入样式
-              const $link = document.createElement('link')
-              $link.rel = 'stylesheet'
-              global.document.head.appendChild($link)
-              $link.href = `${dirName}/Widgets/widgets.css`
               // 超图WebGL3D需要引入zlib.min.js
               if (Cesium.SuperMapImageryProvider && Number(Cesium.VERSION) < 1.54) {
                 const $scriptZlib = document.createElement('script')
@@ -898,8 +908,15 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
                 $scriptZlib.src = `${dirName}/Workers/zlib.min.js`
               }
               resolve(global.Cesium)
-            } else if (global.XE) { // 兼容 西部世界 cesiumlab earthsdk
-              global.XE.ready().then((e) => {
+            } else if (global.XE) { // 兼容 cesiumlab earthsdk
+              // widgets.css earthsdk 会自动引 移除一下
+              let links = document.getElementsByTagName('link')
+              for (let link of links) {
+                if (link.href.indexOf('Widgets/widgets.css') > -1) {
+                  document.getElementsByTagName('head')[0].removeChild(link)
+                }
+              }
+              global.XE.ready().then(() => {
                 resolve(global.Cesium)
               })
             } else {
@@ -972,9 +989,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     })
   },
   destroyed () {
-    const { viewer, removeCesiumScript } = this
+    const { viewer, removeCesiumScript, earth } = this
+    global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
 
-    viewer.destroy()
     this.viewer = null
     this._mounted = false
 
