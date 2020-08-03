@@ -20,64 +20,18592 @@
  * Portions licensed separately.
  * See https://github.com/AnalyticalGraphicsInc/cesium/blob/master/LICENSE.md for full licensing details.
  */
-/**
-  @license
-  when.js - https://github.com/cujojs/when
+define(['./when-8d13db60', './createTaskProcessorWorker', './earcut-2.2.1-b404d9e6', './defined-21f7e510', './pbf-9fe59c76'], function (when, createTaskProcessorWorker, earcut2_2_1, defined, pbf) { 'use strict';
 
-  MIT License (c) copyright B Cavalier & J Hann
+    function DictionaryCoder(strings) {
+        this._stringToNumber = {};
+        this._numberToString = [];
+        for (var i = 0; i < strings.length; i++) {
+            var string = strings[i];
+            this._stringToNumber[string] = i;
+            this._numberToString[i] = string;
+        }
+    }
 
- * A lightweight CommonJS Promises/A and when() implementation
- * when is part of the cujo.js family of libraries (http://cujojs.com/)
- *
- * Licensed under the MIT License at:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * @version 1.7.1
- */
+    DictionaryCoder.prototype.encode = function(string) {
+        return this._stringToNumber[string];
+    };
 
-/**
-@license
-mersenne-twister.js - https://gist.github.com/banksean/300494
+    DictionaryCoder.prototype.decode = function(n) {
+        return this._numberToString[n];
+    };
 
-   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.
+    var viewTypes = {
+        'Int8': Int8Array,
+        'Uint8': Uint8Array,
+        'Int16': Int16Array,
+        'Uint16': Uint16Array,
+        'Int32': Int32Array,
+        'Uint32': Uint32Array,
+        'Float32': Float32Array
+    };
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+    /**
+     * Given a list of member fields, create a full StructArrayLayout, in
+     * particular calculating the correct byte offset for each field.  This data
+     * is used at build time to generate StructArrayLayout_*#emplaceBack() and
+     * other accessors, and at runtime for binding vertex buffer attributes.
+     *
+     * @private
+     */
+    function createLayout(members, alignment) {
+        if (alignment === void 0) alignment = 1;
 
-     1. Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
 
-     2. Redistributions in binary form must reproduce the above copyright
-        notice, this list of conditions and the following disclaimer in the
-        documentation and/or other materials provided with the distribution.
+        var offset = 0;
+        var maxSize = 0;
+        var layoutMembers = members.map(function (member) {
+            //assert_1(member.name.length);
+            var typeSize = sizeOf(member.type);
+            var memberOffset = offset = align(offset, Math.max(alignment, typeSize));
+            var components = member.components || 1;
 
-     3. The names of its contributors may not be used to endorse or promote
-        products derived from this software without specific prior written
-        permission.
+            maxSize = Math.max(maxSize, typeSize);
+            offset += typeSize * components;
 
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+            return {
+                name: member.name,
+                type: member.type,
+                components: components,
+                offset: memberOffset,
+            };
+        });
 
-/* copyright sign */
+        var size = align(offset, Math.max(maxSize, alignment));
 
-!function(){!function(t){"use strict";t("ThirdParty/when",[],function(){function t(t,r,n,i){return e(t).then(r,n,i)}function e(t){var e,r;return t instanceof n?e=t:s(t)?(r=a(),t.then(function(t){r.resolve(t)},function(t){r.reject(t)},function(t){r.progress(t)}),e=r.promise):e=i(t),e}function r(e){return t(e,o)}function n(t){this.then=t}function i(t){return new n(function(r){try{return e(r?r(t):t)}catch(t){return o(t)}})}function o(t){return new n(function(r,n){try{return n?e(n(t)):o(t)}catch(t){return o(t)}})}function a(){function t(t,e,r){return f(t,e,r)}function r(t){return y(t)}function i(t){return y(o(t))}function s(t){return h(t)}var u,l,p,c,f,h,y;return l=new n(t),u={then:t,resolve:r,reject:i,progress:s,promise:l,resolver:{resolve:r,reject:i,progress:s}},p=[],c=[],f=function(t,e,r){var n,i;return n=a(),i="function"==typeof r?function(t){try{n.progress(r(t))}catch(t){n.progress(t)}}:function(t){n.progress(t)},p.push(function(r){r.then(t,e).then(n.resolve,n.reject,i)}),c.push(i),n.promise},h=function(t){return d(c,t),t},y=function(t){return t=e(t),f=t.then,y=e,h=v,d(p,t),c=p=w,t},u}function s(t){return t&&"function"==typeof t.then}function u(e,r,n,i,o){return m(2,arguments),t(e,function(e){function s(t){d(t)}function u(t){y(t)}var l,p,c,f,h,y,d,m,g,x;if(g=e.length>>>0,l=Math.max(0,Math.min(r,g)),c=[],p=g-l+1,f=[],h=a(),l)for(m=h.progress,d=function(t){f.push(t),--p||(y=d=v,h.reject(f))},y=function(t){c.push(t),--l||(y=d=v,h.resolve(c))},x=0;x<g;++x)x in e&&t(e[x],u,s,m);else h.resolve(c);return h.then(n,i,o)})}function l(t,e,r,n){function i(t){return e?e(t[0]):t[0]}return u(t,1,i,r,n)}function p(t,e,r,n){return m(1,arguments),f(t,g).then(e,r,n)}function c(){return f(arguments,g)}function f(e,r){return t(e,function(e){var n,i,o,s,u,l;if(o=i=e.length>>>0,n=[],l=a(),o)for(s=function(e,i){t(e,r).then(function(t){n[i]=t,--o||l.resolve(n)},l.reject)},u=0;u<i;u++)u in e?s(e[u],u):--o;else l.resolve(n);return l.promise})}function h(e,r){var n=b.call(arguments,1);return t(e,function(e){var i;return i=e.length,n[0]=function(e,n,o){return t(e,function(e){return t(n,function(t){return r(e,t,o,i)})})},x.apply(e,n)})}function y(e,r,n){var i=arguments.length>2;return t(e,function(t){return t=i?n:t,r.resolve(t),t},function(t){return r.reject(t),o(t)},r.progress)}function d(t,e){for(var r,n=0;r=t[n++];)r(e)}function m(t,e){for(var r,n=e.length;n>t;)if(null!=(r=e[--n])&&"function"!=typeof r)throw new Error("arg "+n+" must be a function")}function v(){}function g(t){return t}var x,b,w;return t.defer=a,t.resolve=e,t.reject=r,t.join=c,t.all=p,t.map=f,t.reduce=h,t.any=l,t.some=u,t.chain=y,t.isPromise=s,n.prototype={always:function(t,e){return this.then(t,t,e)},otherwise:function(t){return this.then(w,t)},yield:function(t){return this.then(function(){return t})},spread:function(t){return this.then(function(e){return p(e,function(e){return t.apply(w,e)})})}},b=[].slice,x=[].reduce||function(t){var e,r,n,i,o;if(o=0,e=Object(this),i=e.length>>>0,r=arguments,r.length<=1)for(;;){if(o in e){n=e[o++];break}if(++o>=i)throw new TypeError}else n=r[1];for(;o<i;++o)o in e&&(n=t(n,e[o],o,e));return n},t})}("function"==typeof define&&define.amd?define:function(t){"object"==typeof exports?module.exports=t():this.when=t()}),define("Core/defined",[],function(){"use strict";function t(t){return void 0!==t&&null!==t}return t}),define("Core/freezeObject",["./defined"],function(t){"use strict";var e=Object.freeze;return t(e)||(e=function(t){return t}),e}),define("Core/defaultValue",["./freezeObject"],function(t){"use strict";function e(t,e){return void 0!==t&&null!==t?t:e}return e.EMPTY_OBJECT=t({}),e}),define("Core/formatError",["./defined"],function(t){"use strict";function e(e){var r,n=e.name,i=e.message;r=t(n)&&t(i)?n+": "+i:e.toString();var o=e.stack;return t(o)&&(r+="\n"+o),r}return e}),define("Workers/createTaskProcessorWorker",["../ThirdParty/when","../Core/defaultValue","../Core/defined","../Core/formatError"],function(t,e,r,n){"use strict";function i(e,r,n){try{return e(r,n)}catch(e){return t.reject(e)}}function o(o){var a;return function(s){var u=s.data,l=[],p={id:u.id,result:void 0,error:void 0};return t(i(o,u.parameters,l)).then(function(t){p.result=t}).otherwise(function(t){t instanceof Error?p.error={name:t.name,message:t.message,stack:t.stack}:p.error=t}).always(function(){r(a)||(a=e(self.webkitPostMessage,self.postMessage)),u.canTransferArrayBuffer||(l.length=0);try{a(p,l)}catch(t){p.result=void 0,p.error="postMessage failed with error: "+n(t)+"\n  with responseMessage: "+JSON.stringify(p),a(p)}})}}return o}),define("Core/DeveloperError",["./defined"],function(t){"use strict";function e(t){this.name="DeveloperError",this.message=t;var e;try{throw new Error}catch(t){e=t.stack}this.stack=e}return t(Object.create)&&(e.prototype=Object.create(Error.prototype),e.prototype.constructor=e),e.prototype.toString=function(){var e=this.name+": "+this.message;return t(this.stack)&&(e+="\n"+this.stack.toString()),e},e.throwInstantiationError=function(){throw new e("This function defines an interface and should not be called directly.")},e}),define("Core/Check",["./defined","./DeveloperError"],function(t,e){"use strict";function r(t){return t+" is required, actual value was undefined"}function n(t,e,r){return"Expected "+r+" to be typeof "+e+", actual typeof was "+t}var i={};return i.typeOf={},i.defined=function(n,i){if(!t(i))throw new e(r(n))},i.typeOf.func=function(t,r){if("function"!=typeof r)throw new e(n(typeof r,"function",t))},i.typeOf.string=function(t,r){if("string"!=typeof r)throw new e(n(typeof r,"string",t))},i.typeOf.number=function(t,r){if("number"!=typeof r)throw new e(n(typeof r,"number",t))},i.typeOf.number.lessThan=function(t,r,n){if(i.typeOf.number(t,r),r>=n)throw new e("Expected "+t+" to be less than "+n+", actual value was "+r)},i.typeOf.number.lessThanOrEquals=function(t,r,n){if(i.typeOf.number(t,r),r>n)throw new e("Expected "+t+" to be less than or equal to "+n+", actual value was "+r)},i.typeOf.number.greaterThan=function(t,r,n){if(i.typeOf.number(t,r),r<=n)throw new e("Expected "+t+" to be greater than "+n+", actual value was "+r)},i.typeOf.number.greaterThanOrEquals=function(t,r,n){if(i.typeOf.number(t,r),r<n)throw new e("Expected "+t+" to be greater than or equal to"+n+", actual value was "+r)},i.typeOf.object=function(t,r){if("object"!=typeof r)throw new e(n(typeof r,"object",t))},i.typeOf.bool=function(t,r){if("boolean"!=typeof r)throw new e(n(typeof r,"boolean",t))},i.typeOf.number.equals=function(t,r,n,o){if(i.typeOf.number(t,n),i.typeOf.number(r,o),n!==o)throw new e(t+" must be equal to "+r+", the actual values are "+n+" and "+o)},i}),define("Core/defineProperties",["./defined"],function(t){"use strict";var e=function(){try{return"x"in Object.defineProperty({},"x",{})}catch(t){return!1}}(),r=Object.defineProperties;return e&&t(r)||(r=function(t){return t}),r}),define("Core/Fullscreen",["./defined","./defineProperties"],function(t,e){"use strict";var r,n={requestFullscreen:void 0,exitFullscreen:void 0,fullscreenEnabled:void 0,fullscreenElement:void 0,fullscreenchange:void 0,fullscreenerror:void 0},i={};return e(i,{element:{get:function(){if(i.supportsFullscreen())return document[n.fullscreenElement]}},changeEventName:{get:function(){if(i.supportsFullscreen())return n.fullscreenchange}},errorEventName:{get:function(){if(i.supportsFullscreen())return n.fullscreenerror}},enabled:{get:function(){if(i.supportsFullscreen())return document[n.fullscreenEnabled]}},fullscreen:{get:function(){if(i.supportsFullscreen())return null!==i.element}}}),i.supportsFullscreen=function(){if(t(r))return r;r=!1;var e=document.body;if("function"==typeof e.requestFullscreen)return n.requestFullscreen="requestFullscreen",n.exitFullscreen="exitFullscreen",n.fullscreenEnabled="fullscreenEnabled",n.fullscreenElement="fullscreenElement",n.fullscreenchange="fullscreenchange",n.fullscreenerror="fullscreenerror",r=!0;for(var i,o=["webkit","moz","o","ms","khtml"],a=0,s=o.length;a<s;++a){var u=o[a];i=u+"RequestFullscreen","function"==typeof e[i]?(n.requestFullscreen=i,r=!0):(i=u+"RequestFullScreen","function"==typeof e[i]&&(n.requestFullscreen=i,r=!0)),i=u+"ExitFullscreen","function"==typeof document[i]?n.exitFullscreen=i:(i=u+"CancelFullScreen","function"==typeof document[i]&&(n.exitFullscreen=i)),i=u+"FullscreenEnabled",void 0!==document[i]?n.fullscreenEnabled=i:(i=u+"FullScreenEnabled",void 0!==document[i]&&(n.fullscreenEnabled=i)),i=u+"FullscreenElement",void 0!==document[i]?n.fullscreenElement=i:(i=u+"FullScreenElement",void 0!==document[i]&&(n.fullscreenElement=i)),i=u+"fullscreenchange",void 0!==document["on"+i]&&("ms"===u&&(i="MSFullscreenChange"),n.fullscreenchange=i),i=u+"fullscreenerror",void 0!==document["on"+i]&&("ms"===u&&(i="MSFullscreenError"),n.fullscreenerror=i)}return r},i.requestFullscreen=function(t,e){i.supportsFullscreen()&&t[n.requestFullscreen]({vrDisplay:e})},i.exitFullscreen=function(){i.supportsFullscreen()&&document[n.exitFullscreen]()},i}),define("Core/RuntimeError",["./defined"],function(t){"use strict";function e(t){this.name="RuntimeError",this.message=t;var e;try{throw new Error}catch(t){e=t.stack}this.stack=e}return t(Object.create)&&(e.prototype=Object.create(Error.prototype),e.prototype.constructor=e),e.prototype.toString=function(){var e=this.name+": "+this.message;return t(this.stack)&&(e+="\n"+this.stack.toString()),e},e}),define("Core/FeatureDetection",["./defaultValue","./defined","./Fullscreen","./RuntimeError","../ThirdParty/when"],function(t,e,r,n,i){"use strict";function o(t){for(var e=t.split("."),r=0,n=e.length;r<n;++r)e[r]=parseInt(e[r],10);return e}function a(){if(!e(k)&&(k=!1,!y())){var t=/ Chrome\/([\.0-9]+)/.exec(E.userAgent);null!==t&&(k=!0,I=o(t[1]))}return k}function s(){return a()&&I}function u(){if(!e(F)&&(F=!1,!a()&&!y()&&/ Safari\/[\.0-9]+/.test(E.userAgent))){var t=/ Version\/([\.0-9]+)/.exec(E.userAgent);null!==t&&(F=!0,V=o(t[1]))}return F}function l(){return u()&&V}function p(){if(!e(M)){M=!1;var t=/ AppleWebKit\/([\.0-9]+)(\+?)/.exec(E.userAgent);null!==t&&(M=!0,P=o(t[1]),P.isNightly=!!t[2])}return M}function c(){return p()&&P}function f(){if(!e(T)){T=!1;var t;"Microsoft Internet Explorer"===E.appName?null!==(t=/MSIE ([0-9]{1,}[\.0-9]{0,})/.exec(E.userAgent))&&(T=!0,z=o(t[1])):"Netscape"===E.appName&&null!==(t=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(E.userAgent))&&(T=!0,z=o(t[1]))}return T}function h(){return f()&&z}function y(){if(!e(B)){B=!1;var t=/ Edge\/([\.0-9]+)/.exec(E.userAgent);null!==t&&(B=!0,O=o(t[1]))}return B}function d(){return y()&&O}function m(){if(!e(D)){D=!1;var t=/Firefox\/([\.0-9]+)/.exec(E.userAgent);null!==t&&(D=!0,L=o(t[1]))}return D}function v(){return e(R)||(R=/Windows/i.test(E.appVersion)),R}function g(){return m()&&L}function x(){return e(q)||(q="object"==typeof process&&"[object process]"===Object.prototype.toString.call(process)),q}function b(){return e(U)||(U=!m()&&"undefined"!=typeof PointerEvent&&(!e(E.pointerEnabled)||E.pointerEnabled)),U}function w(){if(!e(j)){var t=document.createElement("canvas");t.setAttribute("style","image-rendering: -moz-crisp-edges;image-rendering: pixelated;");var r=t.style.imageRendering;j=e(r)&&""!==r,j&&(N=r)}return j}function _(){return w()?N:void 0}function C(){if(e(K))return K.promise;K=i.defer(),y()&&(G=!1,K.resolve(G));var t=new Image;return t.onload=function(){G=t.width>0&&t.height>0,K.resolve(G)},t.onerror=function(){G=!1,K.resolve(G)},t.src="data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",K.promise}function A(){return e(K)||C(),G}function S(){var t=window.navigator.userAgent.toLowerCase(),e="ipad"==t.match(/ipad/i),r="iphone os"==t.match(/iphone os/i),n="midp"==t.match(/midp/i),i="rv:1.2.3.4"==t.match(/rv:1.2.3.4/i),o="ucweb"==t.match(/ucweb/i),a="android"==t.match(/android/i),s="windows ce"==t.match(/windows ce/i),u="windows mobile"==t.match(/windows mobile/i);return!(e||r||n||i||o||a||s||u)}var E;E="undefined"!=typeof navigator?navigator:{};var k,I,F,V,M,P,T,z,B,O,D,L,R,q,U,N,j,G,K,H=[];"undefined"!=typeof ArrayBuffer&&(H.push(Int8Array,Uint8Array,Int16Array,Uint16Array,Int32Array,Uint32Array,Float32Array,Float64Array),"undefined"!=typeof Uint8ClampedArray&&H.push(Uint8ClampedArray),"undefined"!=typeof CanvasPixelArray&&H.push(CanvasPixelArray));var Y={isChrome:a,chromeVersion:s,isSafari:u,safariVersion:l,isWebkit:p,webkitVersion:c,isInternetExplorer:f,internetExplorerVersion:h,isEdge:y,edgeVersion:d,isFirefox:m,firefoxVersion:g,isWindows:v,isNodeJs:x,hardwareConcurrency:t(E.hardwareConcurrency,3),supportsPointerEvents:b,supportsImageRenderingPixelated:w,supportsWebP:C,supportsWebPSync:A,imageRenderingValue:_,typedArrayTypes:H,isPCBroswer:S};return Y.supportsFullscreen=function(){return r.supportsFullscreen()},Y.supportsTypedArrays=function(){return"undefined"!=typeof ArrayBuffer},Y.supportsWebWorkers=function(){return"undefined"!=typeof Worker},Y.supportsWebAssembly=function(){return"undefined"!=typeof WebAssembly&&!Y.isEdge()},Y.supportsOffscreenCanvas=function(){return"undefined"!=typeof OffscreenCanvas&&!Y.isEdge()},Y}),define("ThirdParty/mersenne-twister",[],function(){var t=function(t){void 0==t&&(t=(new Date).getTime()),this.N=624,this.M=397,this.MATRIX_A=2567483615,this.UPPER_MASK=2147483648,this.LOWER_MASK=2147483647,this.mt=new Array(this.N),this.mti=this.N+1,this.init_genrand(t)};return t.prototype.init_genrand=function(t){for(this.mt[0]=t>>>0,this.mti=1;this.mti<this.N;this.mti++){var t=this.mt[this.mti-1]^this.mt[this.mti-1]>>>30;this.mt[this.mti]=(1812433253*((4294901760&t)>>>16)<<16)+1812433253*(65535&t)+this.mti,this.mt[this.mti]>>>=0}},t.prototype.genrand_int32=function(){var t,e=new Array(0,this.MATRIX_A);if(this.mti>=this.N){var r;for(this.mti==this.N+1&&this.init_genrand(5489),r=0;r<this.N-this.M;r++)t=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+this.M]^t>>>1^e[1&t];for(;r<this.N-1;r++)t=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+(this.M-this.N)]^t>>>1^e[1&t];t=this.mt[this.N-1]&this.UPPER_MASK|this.mt[0]&this.LOWER_MASK,this.mt[this.N-1]=this.mt[this.M-1]^t>>>1^e[1&t],this.mti=0}return t=this.mt[this.mti++],t^=t>>>11,t^=t<<7&2636928640,t^=t<<15&4022730752,(t^=t>>>18)>>>0},t.prototype.random=function(){return this.genrand_int32()*(1/4294967296)},t}),define("Core/Math",["../ThirdParty/mersenne-twister","./Check","./defaultValue","./defined","./DeveloperError"],function(t,e,r,n,i){"use strict";var o={};o.Radius=6378137,o.EPSILON1=.1,o.EPSILON2=.01,o.EPSILON3=.001,o.EPSILON4=1e-4,o.EPSILON5=1e-5,o.EPSILON6=1e-6,o.EPSILON7=1e-7,o.EPSILON8=1e-8,o.EPSILON9=1e-9,o.EPSILON10=1e-10,o.EPSILON11=1e-11,o.EPSILON12=1e-12,o.EPSILON13=1e-13,o.EPSILON14=1e-14,o.EPSILON15=1e-15,o.EPSILON16=1e-16,o.EPSILON17=1e-17,o.EPSILON18=1e-18,o.EPSILON19=1e-19,o.EPSILON20=1e-20,o.EPSILON21=1e-21,o.GRAVITATIONALPARAMETER=3986004418e5,o.SOLAR_RADIUS=6955e5,o.LUNAR_RADIUS=1737400,o.SIXTY_FOUR_KILOBYTES=65536,o.sign=r(Math.sign,function(t){return t=+t,0===t||t!==t?t:t>0?1:-1}),o.signNotZero=function(t){return t<0?-1:1},o.toSNorm=function(t,e){return e=r(e,255),Math.round((.5*o.clamp(t,-1,1)+.5)*e)},o.fromSNorm=function(t,e){return e=r(e,255),o.clamp(t,0,e)/e*2-1},o.sinh=r(Math.sinh,function(t){return(Math.exp(t)-Math.exp(-t))/2}),o.cosh=r(Math.cosh,function(t){return(Math.exp(t)+Math.exp(-t))/2}),o.lerp=function(t,e,r){return(1-r)*t+r*e},o.PI=Math.PI,o.ONE_OVER_PI=1/Math.PI,o.PI_OVER_TWO=Math.PI/2,o.PI_OVER_THREE=Math.PI/3,o.PI_OVER_FOUR=Math.PI/4,o.PI_OVER_SIX=Math.PI/6,o.THREE_PI_OVER_TWO=3*Math.PI/2,o.TWO_PI=2*Math.PI,o.ONE_OVER_TWO_PI=1/(2*Math.PI),o.RADIANS_PER_DEGREE=Math.PI/180,o.DEGREES_PER_RADIAN=180/Math.PI,o.RADIANS_PER_ARCSECOND=o.RADIANS_PER_DEGREE/3600,o.toRadians=function(t){if(!n(t))throw new i("degrees is required.");return t*o.RADIANS_PER_DEGREE},o.toDegrees=function(t){if(!n(t))throw new i("radians is required.");return t*o.DEGREES_PER_RADIAN},o.convertLongitudeRange=function(t){if(!n(t))throw new i("angle is required.");var e=o.TWO_PI,r=t-Math.floor(t/e)*e;return r<-Math.PI?r+e:r>=Math.PI?r-e:r},o.clampToLatitudeRange=function(t){if(!n(t))throw new i("angle is required.");return o.clamp(t,-1*o.PI_OVER_TWO,o.PI_OVER_TWO)},o.negativePiToPi=function(t){if(!n(t))throw new i("angle is required.");return o.zeroToTwoPi(t+o.PI)-o.PI},o.zeroToTwoPi=function(t){if(!n(t))throw new i("angle is required.");var e=o.mod(t,o.TWO_PI);return Math.abs(e)<o.EPSILON14&&Math.abs(t)>o.EPSILON14?o.TWO_PI:e},o.mod=function(t,e){if(!n(t))throw new i("m is required.");if(!n(e))throw new i("n is required.");return(t%e+e)%e},o.equalsEpsilon=function(t,e,o,a){if(!n(t))throw new i("left is required.");if(!n(e))throw new i("right is required.");if(!n(o))throw new i("relativeEpsilon is required.");a=r(a,o);var s=Math.abs(t-e);return s<=a||s<=o*Math.max(Math.abs(t),Math.abs(e))},o.lessThan=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e<-r},o.lessThanOrEquals=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e<r},o.greaterThan=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e>r},o.greaterThanOrEquals=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e>-r};var a=[1];o.factorial=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");var e=a.length;if(t>=e)for(var r=a[e-1],n=e;n<=t;n++)a.push(r*n);return a[t]},o.incrementWrap=function(t,e,o){if(o=r(o,0),!n(t))throw new i("n is required.");if(e<=o)throw new i("maximumValue must be greater than minimumValue.");return++t,t>e&&(t=o),t},o.isPowerOfTwo=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");return 0!==t&&0==(t&t-1)},o.nextPowerOfTwo=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");return--t,t|=t>>1,t|=t>>2,t|=t>>4,t|=t>>8,t|=t>>16,++t},o.clamp=function(t,e,r){if(!n(t))throw new i("value is required");if(!n(e))throw new i("min is required.");if(!n(r))throw new i("max is required.");return t<e?e:t>r?r:t};var s=new t;return o.setRandomNumberSeed=function(e){if(!n(e))throw new i("seed is required.");s=new t(e)},o.nextRandomNumber=function(){return s.random()},o.randomBetween=function(t,e){return o.nextRandomNumber()*(e-t)+t},o.acosClamped=function(t){if(!n(t))throw new i("value is required.");return Math.acos(o.clamp(t,-1,1))},o.asinClamped=function(t){if(!n(t))throw new i("value is required.");return Math.asin(o.clamp(t,-1,1))},o.chordLength=function(t,e){if(!n(t))throw new i("angle is required.");if(!n(e))throw new i("radius is required.");return 2*e*Math.sin(.5*t)},o.logBase=function(t,e){if(!n(t))throw new i("number is required.");if(!n(e))throw new i("base is required.");return Math.log(t)/Math.log(e)},o.cbrt=r(Math.cbrt,function(t){var e=Math.pow(Math.abs(t),1/3);return t<0?-e:e}),o.log2=r(Math.log2,function(t){return Math.log(t)*Math.LOG2E}),o.fog=function(t,e){var r=t*e;return 1-Math.exp(-r*r)},o.fastApproximateAtan=function(t){return e.typeOf.number("x",t),t*(-.1784*Math.abs(t)-.0663*t*t+1.0301)},o.fastApproximateAtan2=function(t,r){e.typeOf.number("x",t),e.typeOf.number("y",r);var n,a,s=Math.abs(t);n=Math.abs(r),a=Math.max(s,n),n=Math.min(s,n);var u=n/a;if(isNaN(u))throw new i("either x or y must be nonzero");return s=o.fastApproximateAtan(u),s=Math.abs(r)>Math.abs(t)?o.PI_OVER_TWO-s:s,s=t<0?o.PI-s:s,s=r<0?-s:s},o}),define("Core/Color",["./Check","./defaultValue","./defined","./FeatureDetection","./freezeObject","./Math"],function(t,e,r,n,i,o){"use strict";function a(t,e,r){return r<0&&(r+=1),r>1&&(r-=1),6*r<1?t+6*(e-t)*r:2*r<1?e:3*r<2?t+(e-t)*(2/3-r)*6:t}function s(t,r,n,i){this.red=e(t,1),this.green=e(r,1),this.blue=e(n,1),this.alpha=e(i,1)}s.fromCartesian4=function(e,n){return t.typeOf.object("cartesian",e),r(n)?(n.red=e.x,n.green=e.y,n.blue=e.z,n.alpha=e.w,n):new s(e.x,e.y,e.z,e.w)},s.fromBytes=function(t,n,i,o,a){return t=s.byteToFloat(e(t,255)),n=s.byteToFloat(e(n,255)),i=s.byteToFloat(e(i,255)),o=s.byteToFloat(e(o,255)),r(a)?(a.red=t,a.green=n,a.blue=i,a.alpha=o,a):new s(t,n,i,o)},s.fromAlpha=function(e,n,i){return t.typeOf.object("color",e),t.typeOf.number("alpha",n),r(i)?(i.red=e.red,i.green=e.green,i.blue=e.blue,i.alpha=n,i):new s(e.red,e.green,e.blue,n)};var u,l,p;n.supportsTypedArrays()&&(u=new ArrayBuffer(4),l=new Uint32Array(u),p=new Uint8Array(u)),s.fromRgba=function(t,e){return l[0]=t,s.fromBytes(p[0],p[1],p[2],p[3],e)},s.fromHsl=function(t,n,i,o,u){t=e(t,0)%1,n=e(n,0),i=e(i,0),o=e(o,1);var l=i,p=i,c=i;if(0!==n){var f;f=i<.5?i*(1+n):i+n-i*n;var h=2*i-f;l=a(h,f,t+1/3),p=a(h,f,t),c=a(h,f,t-1/3)}return r(u)?(u.red=l,u.green=p,u.blue=c,u.alpha=o,u):new s(l,p,c,o)},s.fromRandom=function(n,i){n=e(n,e.EMPTY_OBJECT);var a=n.red;if(!r(a)){var u=e(n.minimumRed,0),l=e(n.maximumRed,1);t.typeOf.number.lessThanOrEquals("minimumRed",u,l),a=u+o.nextRandomNumber()*(l-u)}var p=n.green;if(!r(p)){var c=e(n.minimumGreen,0),f=e(n.maximumGreen,1);t.typeOf.number.lessThanOrEquals("minimumGreen",c,f),p=c+o.nextRandomNumber()*(f-c)}var h=n.blue;if(!r(h)){var y=e(n.minimumBlue,0),d=e(n.maximumBlue,1);t.typeOf.number.lessThanOrEquals("minimumBlue",y,d),h=y+o.nextRandomNumber()*(d-y)}var m=n.alpha;if(!r(m)){var v=e(n.minimumAlpha,0),g=e(n.maximumAlpha,1);t.typeOf.number.lessThanOrEquals("minumumAlpha",v,g),m=v+o.nextRandomNumber()*(g-v)}return r(i)?(i.red=a,i.green=p,i.blue=h,i.alpha=m,i):new s(a,p,h,m)};var c=/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i,f=/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i,h=/^rgba?\(\s*([0-9.]+%?)\s*,\s*([0-9.]+%?)\s*,\s*([0-9.]+%?)(?:\s*,\s*([0-9.]+))?\s*\)$/i,y=/^hsla?\(\s*([0-9.]+)\s*,\s*([0-9.]+%)\s*,\s*([0-9.]+%)(?:\s*,\s*([0-9.]+))?\s*\)$/i;return s.fromCssColorString=function(n,i){t.typeOf.string("color",n),r(i)||(i=new s);var o=s[n.toUpperCase()];if(r(o))return s.clone(o,i),i;var a=c.exec(n);return null!==a?(i.red=parseInt(a[1],16)/15,i.green=parseInt(a[2],16)/15,i.blue=parseInt(a[3],16)/15,i.alpha=1,i):null!==(a=f.exec(n))?(i.red=parseInt(a[1],16)/255,i.green=parseInt(a[2],16)/255,i.blue=parseInt(a[3],16)/255,i.alpha=1,i):null!==(a=h.exec(n))?(i.red=parseFloat(a[1])/("%"===a[1].substr(-1)?100:255),i.green=parseFloat(a[2])/("%"===a[2].substr(-1)?100:255),i.blue=parseFloat(a[3])/("%"===a[3].substr(-1)?100:255),i.alpha=parseFloat(e(a[4],"1.0")),i):null!==(a=y.exec(n))?s.fromHsl(parseFloat(a[1])/360,parseFloat(a[2])/100,parseFloat(a[3])/100,parseFloat(e(a[4],"1.0")),i):i=void 0},s.packedLength=4,s.pack=function(r,n,i){return t.typeOf.object("value",r),t.defined("array",n),i=e(i,0),n[i++]=r.red,n[i++]=r.green,n[i++]=r.blue,n[i]=r.alpha,n},s.unpack=function(n,i,o){return t.defined("array",n),i=e(i,0),r(o)||(o=new s),o.red=n[i++],o.green=n[i++],o.blue=n[i++],o.alpha=n[i],o},s.byteToFloat=function(t){return t/255},s.floatToByte=function(t){return 1===t?255:256*t|0},s.clone=function(t,e){if(r(t))return r(e)?(e.red=t.red,e.green=t.green,e.blue=t.blue,e.alpha=t.alpha,e):new s(t.red,t.green,t.blue,t.alpha)},s.equals=function(t,e){return t===e||r(t)&&r(e)&&t.red===e.red&&t.green===e.green&&t.blue===e.blue&&t.alpha===e.alpha},s.equalsArray=function(t,e,r){return t.red===e[r]&&t.green===e[r+1]&&t.blue===e[r+2]&&t.alpha===e[r+3]},s.prototype.clone=function(t){return s.clone(this,t)},s.prototype.equals=function(t){return s.equals(this,t)},s.prototype.equalsEpsilon=function(t,e){return this===t||r(t)&&Math.abs(this.red-t.red)<=e&&Math.abs(this.green-t.green)<=e&&Math.abs(this.blue-t.blue)<=e&&Math.abs(this.alpha-t.alpha)<=e},s.prototype.toString=function(){return"("+this.red+", "+this.green+", "+this.blue+", "+this.alpha+")"},s.prototype.toCssColorString=function(){var t=s.floatToByte(this.red),e=s.floatToByte(this.green),r=s.floatToByte(this.blue);return 1===this.alpha?"rgb("+t+","+e+","+r+")":"rgba("+t+","+e+","+r+","+this.alpha+")"},s.prototype.toBytes=function(t){var e=s.floatToByte(this.red),n=s.floatToByte(this.green),i=s.floatToByte(this.blue),o=s.floatToByte(this.alpha);return r(t)?(t[0]=e,t[1]=n,t[2]=i,t[3]=o,t):[e,n,i,o]},s.prototype.toRgba=function(){return p[0]=s.floatToByte(this.red),p[1]=s.floatToByte(this.green),p[2]=s.floatToByte(this.blue),p[3]=s.floatToByte(this.alpha),l[0]},s.prototype.brighten=function(e,r){return t.typeOf.number("magnitude",e),t.typeOf.number.greaterThanOrEquals("magnitude",e,0),t.typeOf.object("result",r),e=1-e,r.red=1-(1-this.red)*e,r.green=1-(1-this.green)*e,r.blue=1-(1-this.blue)*e,r.alpha=this.alpha,r},s.prototype.darken=function(e,r){return t.typeOf.number("magnitude",e),t.typeOf.number.greaterThanOrEquals("magnitude",e,0),t.typeOf.object("result",r),e=1-e,r.red=this.red*e,r.green=this.green*e,r.blue=this.blue*e,r.alpha=this.alpha,r},s.prototype.withAlpha=function(t,e){return s.fromAlpha(this,t,e)},s.add=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red+r.red,n.green=e.green+r.green,n.blue=e.blue+r.blue,n.alpha=e.alpha+r.alpha,n},s.subtract=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red-r.red,n.green=e.green-r.green,n.blue=e.blue-r.blue,n.alpha=e.alpha-r.alpha,n},s.multiply=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red*r.red,n.green=e.green*r.green,n.blue=e.blue*r.blue,n.alpha=e.alpha*r.alpha,n},s.divide=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red/r.red,n.green=e.green/r.green,n.blue=e.blue/r.blue,n.alpha=e.alpha/r.alpha,n},s.mod=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red%r.red,n.green=e.green%r.green,n.blue=e.blue%r.blue,n.alpha=e.alpha%r.alpha,n},s.multiplyByScalar=function(e,r,n){return t.typeOf.object("color",e),t.typeOf.number("scalar",r),t.typeOf.object("result",n),n.red=e.red*r,n.green=e.green*r,n.blue=e.blue*r,n.alpha=e.alpha*r,n},s.divideByScalar=function(e,r,n){return t.typeOf.object("color",e),t.typeOf.number("scalar",r),t.typeOf.object("result",n),n.red=e.red/r,n.green=e.green/r,n.blue=e.blue/r,n.alpha=e.alpha/r,n},s.ALICEBLUE=i(s.fromCssColorString("#F0F8FF")),s.ANTIQUEWHITE=i(s.fromCssColorString("#FAEBD7")),s.AQUA=i(s.fromCssColorString("#00FFFF")),s.AQUAMARINE=i(s.fromCssColorString("#7FFFD4")),s.AZURE=i(s.fromCssColorString("#F0FFFF")),s.BEIGE=i(s.fromCssColorString("#F5F5DC")),s.BISQUE=i(s.fromCssColorString("#FFE4C4")),s.BLACK=i(s.fromCssColorString("#000000")),s.BLANCHEDALMOND=i(s.fromCssColorString("#FFEBCD")),s.BLUE=i(s.fromCssColorString("#0000FF")),s.BLUEVIOLET=i(s.fromCssColorString("#8A2BE2")),s.BROWN=i(s.fromCssColorString("#A52A2A")),s.BURLYWOOD=i(s.fromCssColorString("#DEB887")),s.CADETBLUE=i(s.fromCssColorString("#5F9EA0")),s.CHARTREUSE=i(s.fromCssColorString("#7FFF00")),s.CHOCOLATE=i(s.fromCssColorString("#D2691E")),s.CORAL=i(s.fromCssColorString("#FF7F50")),s.CORNFLOWERBLUE=i(s.fromCssColorString("#6495ED")),s.CORNSILK=i(s.fromCssColorString("#FFF8DC")),s.CRIMSON=i(s.fromCssColorString("#DC143C")),s.CYAN=i(s.fromCssColorString("#00FFFF")),s.DARKBLUE=i(s.fromCssColorString("#00008B")),s.DARKCYAN=i(s.fromCssColorString("#008B8B")),s.DARKGOLDENROD=i(s.fromCssColorString("#B8860B")),s.DARKGRAY=i(s.fromCssColorString("#A9A9A9")),s.DARKGREEN=i(s.fromCssColorString("#006400")),s.DARKGREY=s.DARKGRAY,s.DARKKHAKI=i(s.fromCssColorString("#BDB76B")),s.DARKMAGENTA=i(s.fromCssColorString("#8B008B")),s.DARKOLIVEGREEN=i(s.fromCssColorString("#556B2F")),s.DARKORANGE=i(s.fromCssColorString("#FF8C00")),s.DARKORCHID=i(s.fromCssColorString("#9932CC")),s.DARKRED=i(s.fromCssColorString("#8B0000")),s.DARKSALMON=i(s.fromCssColorString("#E9967A")),s.DARKSEAGREEN=i(s.fromCssColorString("#8FBC8F")),s.DARKSLATEBLUE=i(s.fromCssColorString("#483D8B")),s.DARKSLATEGRAY=i(s.fromCssColorString("#2F4F4F")),s.DARKSLATEGREY=s.DARKSLATEGRAY,s.DARKTURQUOISE=i(s.fromCssColorString("#00CED1")),s.DARKVIOLET=i(s.fromCssColorString("#9400D3")),s.DEEPPINK=i(s.fromCssColorString("#FF1493")),s.DEEPSKYBLUE=i(s.fromCssColorString("#00BFFF")),s.DIMGRAY=i(s.fromCssColorString("#696969")),s.DIMGREY=s.DIMGRAY,s.DODGERBLUE=i(s.fromCssColorString("#1E90FF")),s.FIREBRICK=i(s.fromCssColorString("#B22222")),s.FLORALWHITE=i(s.fromCssColorString("#FFFAF0")),s.FORESTGREEN=i(s.fromCssColorString("#228B22")),s.FUCHSIA=i(s.fromCssColorString("#FF00FF")),s.GAINSBORO=i(s.fromCssColorString("#DCDCDC")),s.GHOSTWHITE=i(s.fromCssColorString("#F8F8FF")),s.GOLD=i(s.fromCssColorString("#FFD700")),s.GOLDENROD=i(s.fromCssColorString("#DAA520")),s.GRAY=i(s.fromCssColorString("#808080")),s.GREEN=i(s.fromCssColorString("#008000")),s.GREENYELLOW=i(s.fromCssColorString("#ADFF2F")),s.GREY=s.GRAY,s.HONEYDEW=i(s.fromCssColorString("#F0FFF0")),s.HOTPINK=i(s.fromCssColorString("#FF69B4")),s.INDIANRED=i(s.fromCssColorString("#CD5C5C")),s.INDIGO=i(s.fromCssColorString("#4B0082")),s.IVORY=i(s.fromCssColorString("#FFFFF0")),s.KHAKI=i(s.fromCssColorString("#F0E68C")),s.LAVENDER=i(s.fromCssColorString("#E6E6FA")),s.LAVENDAR_BLUSH=i(s.fromCssColorString("#FFF0F5")),s.LAWNGREEN=i(s.fromCssColorString("#7CFC00")),s.LEMONCHIFFON=i(s.fromCssColorString("#FFFACD")),s.LIGHTBLUE=i(s.fromCssColorString("#ADD8E6")),s.LIGHTCORAL=i(s.fromCssColorString("#F08080")),s.LIGHTCYAN=i(s.fromCssColorString("#E0FFFF")),s.LIGHTGOLDENRODYELLOW=i(s.fromCssColorString("#FAFAD2")),s.LIGHTGRAY=i(s.fromCssColorString("#D3D3D3")),s.LIGHTGREEN=i(s.fromCssColorString("#90EE90")),s.LIGHTGREY=s.LIGHTGRAY,s.LIGHTPINK=i(s.fromCssColorString("#FFB6C1")),s.LIGHTSEAGREEN=i(s.fromCssColorString("#20B2AA")),s.LIGHTSKYBLUE=i(s.fromCssColorString("#87CEFA")),s.LIGHTSLATEGRAY=i(s.fromCssColorString("#778899")),s.LIGHTSLATEGREY=s.LIGHTSLATEGRAY,s.LIGHTSTEELBLUE=i(s.fromCssColorString("#B0C4DE")),s.LIGHTYELLOW=i(s.fromCssColorString("#FFFFE0")),s.LIME=i(s.fromCssColorString("#00FF00")),s.LIMEGREEN=i(s.fromCssColorString("#32CD32")),s.LINEN=i(s.fromCssColorString("#FAF0E6")),s.MAGENTA=i(s.fromCssColorString("#FF00FF")),s.MAROON=i(s.fromCssColorString("#800000")),s.MEDIUMAQUAMARINE=i(s.fromCssColorString("#66CDAA")),s.MEDIUMBLUE=i(s.fromCssColorString("#0000CD")),s.MEDIUMORCHID=i(s.fromCssColorString("#BA55D3")),s.MEDIUMPURPLE=i(s.fromCssColorString("#9370DB")),s.MEDIUMSEAGREEN=i(s.fromCssColorString("#3CB371")),s.MEDIUMSLATEBLUE=i(s.fromCssColorString("#7B68EE")),s.MEDIUMSPRINGGREEN=i(s.fromCssColorString("#00FA9A")),s.MEDIUMTURQUOISE=i(s.fromCssColorString("#48D1CC")),s.MEDIUMVIOLETRED=i(s.fromCssColorString("#C71585")),s.MIDNIGHTBLUE=i(s.fromCssColorString("#191970")),s.MINTCREAM=i(s.fromCssColorString("#F5FFFA")),s.MISTYROSE=i(s.fromCssColorString("#FFE4E1")),s.MOCCASIN=i(s.fromCssColorString("#FFE4B5")),s.NAVAJOWHITE=i(s.fromCssColorString("#FFDEAD")),s.NAVY=i(s.fromCssColorString("#000080")),s.OLDLACE=i(s.fromCssColorString("#FDF5E6")),s.OLIVE=i(s.fromCssColorString("#808000")),s.OLIVEDRAB=i(s.fromCssColorString("#6B8E23")),s.ORANGE=i(s.fromCssColorString("#FFA500")),s.ORANGERED=i(s.fromCssColorString("#FF4500")),s.ORCHID=i(s.fromCssColorString("#DA70D6")),s.PALEGOLDENROD=i(s.fromCssColorString("#EEE8AA")),s.PALEGREEN=i(s.fromCssColorString("#98FB98")),s.PALETURQUOISE=i(s.fromCssColorString("#AFEEEE")),s.PALEVIOLETRED=i(s.fromCssColorString("#DB7093")),s.PAPAYAWHIP=i(s.fromCssColorString("#FFEFD5")),s.PEACHPUFF=i(s.fromCssColorString("#FFDAB9")),s.PERU=i(s.fromCssColorString("#CD853F")),s.PINK=i(s.fromCssColorString("#FFC0CB")),s.PLUM=i(s.fromCssColorString("#DDA0DD")),s.POWDERBLUE=i(s.fromCssColorString("#B0E0E6")),
-s.PURPLE=i(s.fromCssColorString("#800080")),s.RED=i(s.fromCssColorString("#FF0000")),s.ROSYBROWN=i(s.fromCssColorString("#BC8F8F")),s.ROYALBLUE=i(s.fromCssColorString("#4169E1")),s.SADDLEBROWN=i(s.fromCssColorString("#8B4513")),s.SALMON=i(s.fromCssColorString("#FA8072")),s.SANDYBROWN=i(s.fromCssColorString("#F4A460")),s.SEAGREEN=i(s.fromCssColorString("#2E8B57")),s.SEASHELL=i(s.fromCssColorString("#FFF5EE")),s.SIENNA=i(s.fromCssColorString("#A0522D")),s.SILVER=i(s.fromCssColorString("#C0C0C0")),s.SKYBLUE=i(s.fromCssColorString("#87CEEB")),s.SLATEBLUE=i(s.fromCssColorString("#6A5ACD")),s.SLATEGRAY=i(s.fromCssColorString("#708090")),s.SLATEGREY=s.SLATEGRAY,s.SNOW=i(s.fromCssColorString("#FFFAFA")),s.SPRINGGREEN=i(s.fromCssColorString("#00FF7F")),s.STEELBLUE=i(s.fromCssColorString("#4682B4")),s.TAN=i(s.fromCssColorString("#D2B48C")),s.TEAL=i(s.fromCssColorString("#008080")),s.THISTLE=i(s.fromCssColorString("#D8BFD8")),s.TOMATO=i(s.fromCssColorString("#FF6347")),s.TURQUOISE=i(s.fromCssColorString("#40E0D0")),s.VIOLET=i(s.fromCssColorString("#EE82EE")),s.WHEAT=i(s.fromCssColorString("#F5DEB3")),s.WHITE=i(s.fromCssColorString("#FFFFFF")),s.WHITESMOKE=i(s.fromCssColorString("#F5F5F5")),s.YELLOW=i(s.fromCssColorString("#FFFF00")),s.YELLOWGREEN=i(s.fromCssColorString("#9ACD32")),s.TRANSPARENT=i(new s(0,0,0,0)),s}),define("ThirdParty/pbf",[],function(){function t(t){this.buf=ArrayBuffer.isView&&ArrayBuffer.isView(t)?t:new Uint8Array(t||0),this.pos=0,this.type=0,this.length=this.buf.length}function e(t,e,r){var i,o,a=r.buf;if(o=a[r.pos++],i=(112&o)>>4,o<128)return n(t,i,e);if(o=a[r.pos++],i|=(127&o)<<3,o<128)return n(t,i,e);if(o=a[r.pos++],i|=(127&o)<<10,o<128)return n(t,i,e);if(o=a[r.pos++],i|=(127&o)<<17,o<128)return n(t,i,e);if(o=a[r.pos++],i|=(127&o)<<24,o<128)return n(t,i,e);if(o=a[r.pos++],i|=(1&o)<<31,o<128)return n(t,i,e);throw new Error("Expected varint not more than 10 bytes")}function r(e){return e.type===t.Bytes?e.readVarint()+e.pos:e.pos+1}function n(t,e,r){return r?4294967296*e+(t>>>0):4294967296*(e>>>0)+(t>>>0)}function i(t,e){var r,n;if(t>=0?(r=t%4294967296|0,n=t/4294967296|0):(r=~(-t%4294967296),n=~(-t/4294967296),4294967295^r?r=r+1|0:(r=0,n=n+1|0)),t>=0x10000000000000000||t<-0x10000000000000000)throw new Error("Given varint doesn't fit into 10 bytes");e.realloc(10),o(r,n,e),a(n,e)}function o(t,e,r){r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos]=127&t}function a(t,e){var r=(7&t)<<4;e.buf[e.pos++]|=r|((t>>>=3)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t)))))}function s(t,e,r){var n=e<=16383?1:e<=2097151?2:e<=268435455?3:Math.ceil(Math.log(e)/(7*Math.LN2));r.realloc(n);for(var i=r.pos-1;i>=t;i--)r.buf[i+n]=r.buf[i]}function u(t,e){for(var r=0;r<t.length;r++)e.writeVarint(t[r])}function l(t,e){for(var r=0;r<t.length;r++)e.writeSVarint(t[r])}function p(t,e){for(var r=0;r<t.length;r++)e.writeFloat(t[r])}function c(t,e){for(var r=0;r<t.length;r++)e.writeDouble(t[r])}function f(t,e){for(var r=0;r<t.length;r++)e.writeBoolean(t[r])}function h(t,e){for(var r=0;r<t.length;r++)e.writeFixed32(t[r])}function y(t,e){for(var r=0;r<t.length;r++)e.writeSFixed32(t[r])}function d(t,e){for(var r=0;r<t.length;r++)e.writeFixed64(t[r])}function m(t,e){for(var r=0;r<t.length;r++)e.writeSFixed64(t[r])}function v(t,e){return(t[e]|t[e+1]<<8|t[e+2]<<16)+16777216*t[e+3]}function g(t,e,r){t[r]=e,t[r+1]=e>>>8,t[r+2]=e>>>16,t[r+3]=e>>>24}function x(t,e){return(t[e]|t[e+1]<<8|t[e+2]<<16)+(t[e+3]<<24)}function b(t,e,r){for(var n="",i=e;i<r;){var o=t[i],a=null,s=o>239?4:o>223?3:o>191?2:1;if(i+s>r)break;var u,l,p;1===s?o<128&&(a=o):2===s?128==(192&(u=t[i+1]))&&(a=(31&o)<<6|63&u)<=127&&(a=null):3===s?(u=t[i+1],l=t[i+2],128==(192&u)&&128==(192&l)&&((a=(15&o)<<12|(63&u)<<6|63&l)<=2047||a>=55296&&a<=57343)&&(a=null)):4===s&&(u=t[i+1],l=t[i+2],p=t[i+3],128==(192&u)&&128==(192&l)&&128==(192&p)&&((a=(15&o)<<18|(63&u)<<12|(63&l)<<6|63&p)<=65535||a>=1114112)&&(a=null)),null===a?(a=65533,s=1):a>65535&&(a-=65536,n+=String.fromCharCode(a>>>10&1023|55296),a=56320|1023&a),n+=String.fromCharCode(a),i+=s}return n}function w(t,e,r){for(var n,i,o=0;o<e.length;o++){if((n=e.charCodeAt(o))>55295&&n<57344){if(!i){n>56319||o+1===e.length?(t[r++]=239,t[r++]=191,t[r++]=189):i=n;continue}if(n<56320){t[r++]=239,t[r++]=191,t[r++]=189,i=n;continue}n=i-55296<<10|n-56320|65536,i=null}else i&&(t[r++]=239,t[r++]=191,t[r++]=189,i=null);n<128?t[r++]=n:(n<2048?t[r++]=n>>6|192:(n<65536?t[r++]=n>>12|224:(t[r++]=n>>18|240,t[r++]=n>>12&63|128),t[r++]=n>>6&63|128),t[r++]=63&n|128)}return r}var _=function(t,e,r,n,i){var o,a,s=8*i-n-1,u=(1<<s)-1,l=u>>1,p=-7,c=r?i-1:0,f=r?-1:1,h=t[e+c];for(c+=f,o=h&(1<<-p)-1,h>>=-p,p+=s;p>0;o=256*o+t[e+c],c+=f,p-=8);for(a=o&(1<<-p)-1,o>>=-p,p+=n;p>0;a=256*a+t[e+c],c+=f,p-=8);if(0===o)o=1-l;else{if(o===u)return a?NaN:1/0*(h?-1:1);a+=Math.pow(2,n),o-=l}return(h?-1:1)*a*Math.pow(2,o-n)},C=function(t,e,r,n,i,o){var a,s,u,l=8*o-i-1,p=(1<<l)-1,c=p>>1,f=23===i?Math.pow(2,-24)-Math.pow(2,-77):0,h=n?0:o-1,y=n?1:-1,d=e<0||0===e&&1/e<0?1:0;for(e=Math.abs(e),isNaN(e)||e===1/0?(s=isNaN(e)?1:0,a=p):(a=Math.floor(Math.log(e)/Math.LN2),e*(u=Math.pow(2,-a))<1&&(a--,u*=2),e+=a+c>=1?f/u:f*Math.pow(2,1-c),e*u>=2&&(a++,u/=2),a+c>=p?(s=0,a=p):a+c>=1?(s=(e*u-1)*Math.pow(2,i),a+=c):(s=e*Math.pow(2,c-1)*Math.pow(2,i),a=0));i>=8;t[r+h]=255&s,h+=y,s/=256,i-=8);for(a=a<<i|s,l+=i;l>0;t[r+h]=255&a,h+=y,a/=256,l-=8);t[r+h-y]|=128*d},A={read:_,write:C};t.Varint=0,t.Fixed64=1,t.Bytes=2,t.Fixed32=5;return t.prototype={destroy:function(){this.buf=null},readFields:function(t,e,r){for(r=r||this.length;this.pos<r;){var n=this.readVarint(),i=n>>3,o=this.pos;this.type=7&n,t(i,e,this),this.pos===o&&this.skip(n)}return e},readMessage:function(t,e){return this.readFields(t,e,this.readVarint()+this.pos)},readFixed32:function(){var t=v(this.buf,this.pos);return this.pos+=4,t},readSFixed32:function(){var t=x(this.buf,this.pos);return this.pos+=4,t},readFixed64:function(){var t=v(this.buf,this.pos)+4294967296*v(this.buf,this.pos+4);return this.pos+=8,t},readSFixed64:function(){var t=v(this.buf,this.pos)+4294967296*x(this.buf,this.pos+4);return this.pos+=8,t},readFloat:function(){var t=A.read(this.buf,this.pos,!0,23,4);return this.pos+=4,t},readDouble:function(){var t=A.read(this.buf,this.pos,!0,52,8);return this.pos+=8,t},readVarint:function(t){var r,n,i=this.buf;return n=i[this.pos++],r=127&n,n<128?r:(n=i[this.pos++],r|=(127&n)<<7,n<128?r:(n=i[this.pos++],r|=(127&n)<<14,n<128?r:(n=i[this.pos++],r|=(127&n)<<21,n<128?r:(n=i[this.pos],r|=(15&n)<<28,e(r,t,this)))))},readVarint64:function(){return this.readVarint(!0)},readSVarint:function(){var t=this.readVarint();return t%2==1?(t+1)/-2:t/2},readBoolean:function(){return Boolean(this.readVarint())},readString:function(){var t=this.readVarint()+this.pos,e=b(this.buf,this.pos,t);return this.pos=t,e},readBytes:function(){var t=this.readVarint()+this.pos,e=this.buf.subarray(this.pos,t);return this.pos=t,e},readPackedVarint:function(t,e){var n=r(this);for(t=t||[];this.pos<n;)t.push(this.readVarint(e));return t},readPackedSVarint:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSVarint());return t},readPackedBoolean:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readBoolean());return t},readPackedFloat:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFloat());return t},readPackedDouble:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readDouble());return t},readPackedFixed32:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFixed32());return t},readPackedSFixed32:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSFixed32());return t},readPackedFixed64:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFixed64());return t},readPackedSFixed64:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSFixed64());return t},skip:function(e){var r=7&e;if(r===t.Varint)for(;this.buf[this.pos++]>127;);else if(r===t.Bytes)this.pos=this.readVarint()+this.pos;else if(r===t.Fixed32)this.pos+=4;else{if(r!==t.Fixed64)throw new Error("Unimplemented type: "+r);this.pos+=8}},writeTag:function(t,e){this.writeVarint(t<<3|e)},realloc:function(t){for(var e=this.length||16;e<this.pos+t;)e*=2;if(e!==this.length){var r=new Uint8Array(e);r.set(this.buf),this.buf=r,this.length=e}},finish:function(){return this.length=this.pos,this.pos=0,this.buf.subarray(0,this.length)},writeFixed32:function(t){this.realloc(4),g(this.buf,t,this.pos),this.pos+=4},writeSFixed32:function(t){this.realloc(4),g(this.buf,t,this.pos),this.pos+=4},writeFixed64:function(t){this.realloc(8),g(this.buf,-1&t,this.pos),g(this.buf,Math.floor(t*(1/4294967296)),this.pos+4),this.pos+=8},writeSFixed64:function(t){this.realloc(8),g(this.buf,-1&t,this.pos),g(this.buf,Math.floor(t*(1/4294967296)),this.pos+4),this.pos+=8},writeVarint:function(t){if((t=+t||0)>268435455||t<0)return void i(t,this);this.realloc(4),this.buf[this.pos++]=127&t|(t>127?128:0),t<=127||(this.buf[this.pos++]=127&(t>>>=7)|(t>127?128:0),t<=127||(this.buf[this.pos++]=127&(t>>>=7)|(t>127?128:0),t<=127||(this.buf[this.pos++]=t>>>7&127)))},writeSVarint:function(t){this.writeVarint(t<0?2*-t-1:2*t)},writeBoolean:function(t){this.writeVarint(Boolean(t))},writeString:function(t){t=String(t),this.realloc(4*t.length),this.pos++;var e=this.pos;this.pos=w(this.buf,t,this.pos);var r=this.pos-e;r>=128&&s(e,r,this),this.pos=e-1,this.writeVarint(r),this.pos+=r},writeFloat:function(t){this.realloc(4),A.write(this.buf,t,this.pos,!0,23,4),this.pos+=4},writeDouble:function(t){this.realloc(8),A.write(this.buf,t,this.pos,!0,52,8),this.pos+=8},writeBytes:function(t){var e=t.length;this.writeVarint(e),this.realloc(e);for(var r=0;r<e;r++)this.buf[this.pos++]=t[r]},writeRawMessage:function(t,e){this.pos++;var r=this.pos;t(e,this);var n=this.pos-r;n>=128&&s(r,n,this),this.pos=r-1,this.writeVarint(n),this.pos+=n},writeMessage:function(e,r,n){this.writeTag(e,t.Bytes),this.writeRawMessage(r,n)},writePackedVarint:function(t,e){this.writeMessage(t,u,e)},writePackedSVarint:function(t,e){this.writeMessage(t,l,e)},writePackedBoolean:function(t,e){this.writeMessage(t,f,e)},writePackedFloat:function(t,e){this.writeMessage(t,p,e)},writePackedDouble:function(t,e){this.writeMessage(t,c,e)},writePackedFixed32:function(t,e){this.writeMessage(t,h,e)},writePackedSFixed32:function(t,e){this.writeMessage(t,y,e)},writePackedFixed64:function(t,e){this.writeMessage(t,d,e)},writePackedSFixed64:function(t,e){this.writeMessage(t,m,e)},writeBytesField:function(e,r){this.writeTag(e,t.Bytes),this.writeBytes(r)},writeFixed32Field:function(e,r){this.writeTag(e,t.Fixed32),this.writeFixed32(r)},writeSFixed32Field:function(e,r){this.writeTag(e,t.Fixed32),this.writeSFixed32(r)},writeFixed64Field:function(e,r){this.writeTag(e,t.Fixed64),this.writeFixed64(r)},writeSFixed64Field:function(e,r){this.writeTag(e,t.Fixed64),this.writeSFixed64(r)},writeVarintField:function(e,r){this.writeTag(e,t.Varint),this.writeVarint(r)},writeSVarintField:function(e,r){this.writeTag(e,t.Varint),this.writeSVarint(r)},writeStringField:function(e,r){this.writeTag(e,t.Bytes),this.writeString(r)},writeFloatField:function(e,r){this.writeTag(e,t.Fixed32),this.writeFloat(r)},writeDoubleField:function(e,r){this.writeTag(e,t.Fixed64),this.writeDouble(r)},writeBooleanField:function(t,e){this.writeVarintField(t,Boolean(e))}},t}),define("MVT/DictionaryCoder",[],function(){"use strict";function t(t){this._stringToNumber={},this._numberToString=[];for(var e=0;e<t.length;e++){var r=t[e];this._stringToNumber[r]=e,this._numberToString[e]=r}}return t.prototype.encode=function(t){return this._stringToNumber[t]},t.prototype.decode=function(t){return this._numberToString[t]},t}),define("core/defined",[],function(){"use strict";function t(t){return void 0!==t&&null!==t}return t}),define("MVT/util/createLayout",[],function(){"use strict";function t(t,n){void 0===n&&(n=1);var i=0,o=0;return{members:t.map(function(t){var a=e(t.type),s=i=r(i,Math.max(n,a)),u=t.components||1;return o=Math.max(o,a),i+=a*u,{name:t.name,type:t.type,components:u,offset:s}}),size:r(i,Math.max(o,n)),alignment:n}}function e(t){return n[t].BYTES_PER_ELEMENT}function r(t,e){return Math.ceil(t/e)*e}var n={Int8:Int8Array,Uint8:Uint8Array,Int16:Int16Array,Uint16:Uint16Array,Int32:Int32Array,Uint32:Uint32Array,Float32:Float32Array};return t}),define("MVT/render/ImagePosition",[],function(){"use strict";var t=function(t,e){var r=e.pixelRatio,n=e.version,i=e.stretchX,o=e.stretchY,a=e.content;this.paddedRect=t,this.pixelRatio=r,this.stretchX=i,this.stretchY=o,this.content=a,this.version=n},e={tl:{configurable:!0},br:{configurable:!0},tlbr:{configurable:!0},displaySize:{configurable:!0}};return e.tl.get=function(){return[this.paddedRect.x+1,this.paddedRect.y+1]},e.br.get=function(){return[this.paddedRect.x+this.paddedRect.w-1,this.paddedRect.y+this.paddedRect.h-1]},e.tlbr.get=function(){return this.tl.concat(this.br)},e.displaySize.get=function(){return[(this.paddedRect.w-2)/this.pixelRatio,(this.paddedRect.h-2)/this.pixelRatio]},Object.defineProperties(t.prototype,e),t}),define("MVT/util/RGBAImage",[],function(){"use strict";function t(t,e,r,n){var i=e.width,o=e.height;if(n){if(n instanceof Uint8ClampedArray)n=new Uint8Array(n.buffer);else if(n.length!==i*o*r)throw new RangeError("mismatched image size")}else n=new Uint8Array(i*o*r);return t.width=i,t.height=o,t.data=n,t}function e(e,n,i){var o=n.width,a=n.height;if(o!==e.width||a!==e.height){var s=t({},{width:o,height:a},i);r(e,s,{x:0,y:0},{x:0,y:0},{width:Math.min(e.width,o),height:Math.min(e.height,a)},i),e.width=o,e.height=a,e.data=s.data}}function r(t,e,r,n,i,o){if(0===i.width||0===i.height)return e;if(i.width>t.width||i.height>t.height||r.x>t.width-i.width||r.y>t.height-i.height)throw new RangeError("out of range source coordinates for image copy");if(i.width>e.width||i.height>e.height||n.x>e.width-i.width||n.y>e.height-i.height)throw new RangeError("out of range destination coordinates for image copy");for(var a=t.data,s=e.data,u=0;u<i.height;u++)for(var l=((r.y+u)*t.width+r.x)*o,p=((n.y+u)*e.width+n.x)*o,c=0;c<i.width*o;c++)s[p+c]=a[l+c];return e}var n=function(e,r){t(this,e,4,r)};return n.prototype.resize=function(t){e(this,t,4)},n.prototype.replace=function(t,e){e?this.data.set(t):t instanceof Uint8ClampedArray?this.data=new Uint8Array(t.buffer):this.data=t},n.prototype.clone=function(){return new n({width:this.width,height:this.height},new Uint8Array(this.data))},n.copy=function(t,e,n,i,o){r(t,e,n,i,o,4)},n}),define("ThirdParty/potpack",[],function(){function t(t){for(var e=0,r=0,n=0,i=t;n<i.length;n+=1){var o=i[n];e+=o.w*o.h,r=Math.max(r,o.w)}t.sort(function(t,e){return e.h-t.h});for(var a=Math.max(Math.ceil(Math.sqrt(e/.95)),r),s=[{x:0,y:0,w:a,h:1/0}],u=0,l=0,p=0,c=t;p<c.length;p+=1)for(var f=c[p],h=s.length-1;h>=0;h--){var y=s[h];if(!(f.w>y.w||f.h>y.h)){if(f.x=y.x,f.y=y.y,l=Math.max(l,f.y+f.h),u=Math.max(u,f.x+f.w),f.w===y.w&&f.h===y.h){var d=s.pop();h<s.length&&(s[h]=d)}else f.h===y.h?(y.x+=f.w,y.w-=f.w):f.w===y.w?(y.y+=f.h,y.h-=f.h):(s.push({x:y.x+f.w,y:y.y,w:y.w-f.w,h:f.h}),y.y+=f.h,y.h-=f.h);break}}return{w:u,h:l,fill:e/(u*l)||0}}return t}),define("MVT/render/image_atlas",["./ImagePosition","../util/RGBAImage","../../ThirdParty/potpack"],function(t,e,r){"use strict";var n=function(t,n){var i={},o={};this.haveRenderCallbacks=[];var a=[];this.addImages(t,i,a),this.addImages(n,o,a);var s=r(a),u=s.w,l=s.h,p=new e({width:u||1,height:l||1});for(var c in t){var f=t[c],h=i[c].paddedRect;e.copy(f.data,p,{x:0,y:0},{x:h.x+1,y:h.y+1},f.data)}for(var y in n){var d=n[y],m=o[y].paddedRect,v=m.x+1,g=m.y+1,x=d.data.width,b=d.data.height;e.copy(d.data,p,{x:0,y:0},{x:v,y:g},d.data),e.copy(d.data,p,{x:0,y:b-1},{x:v,y:g-1},{width:x,height:1}),e.copy(d.data,p,{x:0,y:0},{x:v,y:g+b},{width:x,height:1}),e.copy(d.data,p,{x:x-1,y:0},{x:v-1,y:g},{width:1,height:b}),e.copy(d.data,p,{x:0,y:0},{x:v+x,y:g},{width:1,height:b})}this.image=p,this.iconPositions=i,this.patternPositions=o};return n.prototype.addImages=function(e,r,n){for(var i in e){var o=e[i],a={x:0,y:0,w:o.data.width+2,h:o.data.height+2};n.push(a),r[i]=new t(a,o),o.hasRenderCallback&&this.haveRenderCallbacks.push(i)}},n.prototype.patchUpdatedImages=function(t,e){t.dispatchRenderCallbacks(this.haveRenderCallbacks);for(var r in t.updatedImages)this.patchUpdatedImage(this.iconPositions[r],t.getImage(r),e),this.patchUpdatedImage(this.patternPositions[r],t.getImage(r),e)},n.prototype.patchUpdatedImage=function(t,e,r){if(t&&e&&t.version!==e.version){t.version=e.version;var n=t.tl,i=n[0],o=n[1];r.update(e.data,void 0,{x:i,y:o})}},n}),define("MVT/style-spec/csscolorparser",[],function(){"use strict";function t(t){return t=Math.round(t),t<0?0:t>255?255:t}function e(t){return t<0?0:t>1?1:t}function r(e){return t("%"===e[e.length-1]?parseFloat(e)/100*255:parseInt(e))}function n(t){return e("%"===t[t.length-1]?parseFloat(t)/100:parseFloat(t))}function i(t,e,r){return r<0?r+=1:r>1&&(r-=1),6*r<1?t+(e-t)*r*6:2*r<1?e:3*r<2?t+(e-t)*(2/3-r)*6:t}function o(e){var o=e.replace(/ /g,"").toLowerCase();if(o in a)return a[o].slice();if("#"===o[0]){if(4===o.length){var s=parseInt(o.substr(1),16);return s>=0&&s<=4095?[(3840&s)>>4|(3840&s)>>8,240&s|(240&s)>>4,15&s|(15&s)<<4,1]:null}if(7===o.length){var s=parseInt(o.substr(1),16);return s>=0&&s<=16777215?[(16711680&s)>>16,(65280&s)>>8,255&s,1]:null}return null}var u=o.indexOf("("),l=o.indexOf(")");if(-1!==u&&l+1===o.length){var p=o.substr(0,u),c=o.substr(u+1,l-(u+1)).split(","),f=1;switch(p){case"rgba":if(4!==c.length)return null;f=n(c.pop());case"rgb":return 3!==c.length?null:[r(c[0]),r(c[1]),r(c[2]),f];case"hsla":if(4!==c.length)return null;f=n(c.pop());case"hsl":if(3!==c.length)return null;var h=(parseFloat(c[0])%360+360)%360/360,y=n(c[1]),d=n(c[2]),m=d<=.5?d*(y+1):d+y-d*y,v=2*d-m;return[t(255*i(v,m,h+1/3)),t(255*i(v,m,h)),t(255*i(v,m,h-1/3)),f];default:return null}}return null}var a={transparent:[0,0,0,0],aliceblue:[240,248,255,1],antiquewhite:[250,235,215,1],aqua:[0,255,255,1],aquamarine:[127,255,212,1],azure:[240,255,255,1],beige:[245,245,220,1],bisque:[255,228,196,1],black:[0,0,0,1],blanchedalmond:[255,235,205,1],blue:[0,0,255,1],blueviolet:[138,43,226,1],brown:[165,42,42,1],burlywood:[222,184,135,1],cadetblue:[95,158,160,1],chartreuse:[127,255,0,1],chocolate:[210,105,30,1],coral:[255,127,80,1],cornflowerblue:[100,149,237,1],cornsilk:[255,248,220,1],crimson:[220,20,60,1],cyan:[0,255,255,1],darkblue:[0,0,139,1],darkcyan:[0,139,139,1],darkgoldenrod:[184,134,11,1],darkgray:[169,169,169,1],darkgreen:[0,100,0,1],darkgrey:[169,169,169,1],darkkhaki:[189,183,107,1],darkmagenta:[139,0,139,1],darkolivegreen:[85,107,47,1],darkorange:[255,140,0,1],darkorchid:[153,50,204,1],darkred:[139,0,0,1],darksalmon:[233,150,122,1],darkseagreen:[143,188,143,1],darkslateblue:[72,61,139,1],darkslategray:[47,79,79,1],darkslategrey:[47,79,79,1],darkturquoise:[0,206,209,1],darkviolet:[148,0,211,1],deeppink:[255,20,147,1],deepskyblue:[0,191,255,1],dimgray:[105,105,105,1],dimgrey:[105,105,105,1],dodgerblue:[30,144,255,1],firebrick:[178,34,34,1],floralwhite:[255,250,240,1],forestgreen:[34,139,34,1],fuchsia:[255,0,255,1],gainsboro:[220,220,220,1],ghostwhite:[248,248,255,1],gold:[255,215,0,1],goldenrod:[218,165,32,1],gray:[128,128,128,1],green:[0,128,0,1],greenyellow:[173,255,47,1],grey:[128,128,128,1],honeydew:[240,255,240,1],hotpink:[255,105,180,1],indianred:[205,92,92,1],indigo:[75,0,130,1],ivory:[255,255,240,1],khaki:[240,230,140,1],lavender:[230,230,250,1],lavenderblush:[255,240,245,1],lawngreen:[124,252,0,1],lemonchiffon:[255,250,205,1],lightblue:[173,216,230,1],lightcoral:[240,128,128,1],lightcyan:[224,255,255,1],lightgoldenrodyellow:[250,250,210,1],lightgray:[211,211,211,1],lightgreen:[144,238,144,1],lightgrey:[211,211,211,1],lightpink:[255,182,193,1],lightsalmon:[255,160,122,1],lightseagreen:[32,178,170,1],lightskyblue:[135,206,250,1],lightslategray:[119,136,153,1],lightslategrey:[119,136,153,1],lightsteelblue:[176,196,222,1],lightyellow:[255,255,224,1],lime:[0,255,0,1],limegreen:[50,205,50,1],linen:[250,240,230,1],magenta:[255,0,255,1],maroon:[128,0,0,1],mediumaquamarine:[102,205,170,1],mediumblue:[0,0,205,1],mediumorchid:[186,85,211,1],mediumpurple:[147,112,219,1],mediumseagreen:[60,179,113,1],mediumslateblue:[123,104,238,1],mediumspringgreen:[0,250,154,1],mediumturquoise:[72,209,204,1],mediumvioletred:[199,21,133,1],midnightblue:[25,25,112,1],mintcream:[245,255,250,1],mistyrose:[255,228,225,1],moccasin:[255,228,181,1],navajowhite:[255,222,173,1],navy:[0,0,128,1],oldlace:[253,245,230,1],olive:[128,128,0,1],olivedrab:[107,142,35,1],orange:[255,165,0,1],orangered:[255,69,0,1],orchid:[218,112,214,1],palegoldenrod:[238,232,170,1],palegreen:[152,251,152,1],paleturquoise:[175,238,238,1],palevioletred:[219,112,147,1],papayawhip:[255,239,213,1],peachpuff:[255,218,185,1],peru:[205,133,63,1],pink:[255,192,203,1],plum:[221,160,221,1],powderblue:[176,224,230,1],purple:[128,0,128,1],rebeccapurple:[102,51,153,1],red:[255,0,0,1],rosybrown:[188,143,143,1],royalblue:[65,105,225,1],saddlebrown:[139,69,19,1],salmon:[250,128,114,1],sandybrown:[244,164,96,1],seagreen:[46,139,87,1],seashell:[255,245,238,1],sienna:[160,82,45,1],silver:[192,192,192,1],skyblue:[135,206,235,1],slateblue:[106,90,205,1],slategray:[112,128,144,1],slategrey:[112,128,144,1],snow:[255,250,250,1],springgreen:[0,255,127,1],steelblue:[70,130,180,1],tan:[210,180,140,1],teal:[0,128,128,1],thistle:[216,191,216,1],tomato:[255,99,71,1],turquoise:[64,224,208,1],violet:[238,130,238,1],wheat:[245,222,179,1],white:[255,255,255,1],whitesmoke:[245,245,245,1],yellow:[255,255,0,1],yellowgreen:[154,205,50,1]};return o}),define("MVT/style-spec/util/color",["../csscolorparser"],function(t){"use strict";var e=function(t,e,r,n){void 0===n&&(n=1),this.r=t,this.g=e,this.b=r,this.a=n};return e.parse=function(r){if(r){if(r instanceof e)return r;if("string"==typeof r){var n=t(r);if(n)return new e(n[0]/255*n[3],n[1]/255*n[3],n[2]/255*n[3],n[3])}}},e.prototype.toString=function(){var t=this.toArray(),e=t[0],r=t[1],n=t[2],i=t[3];return"rgba("+Math.round(e)+","+Math.round(r)+","+Math.round(n)+","+i+")"},e.prototype.toArray=function(){var t=this,e=t.r,r=t.g,n=t.b,i=t.a;return 0===i?[0,0,0,0]:[255*e/i,255*r/i,255*n/i,i]},e.black=new e(0,0,0,1),e.white=new e(1,1,1,1),e.transparent=new e(0,0,0,0),e.red=new e(1,0,0,1),e}),define("MVT/style-spec/expression/types",[],function(){"use strict";function t(e){if("array"===e.kind){var r=t(e.itemType);return"number"==typeof e.N?"array<"+r+", "+e.N+">":"value"===e.itemType.kind?"array":"array<"+r+">"}return e.kind}function e(r,n){if("error"===n.kind)return null;if("array"===r.kind){if("array"===n.kind&&(0===n.N&&"value"===n.itemType.kind||!e(r.itemType,n.itemType))&&("number"!=typeof r.N||r.N===n.N))return null}else{if(r.kind===n.kind)return null;if("value"===r.kind)for(var i=0,o=c;i<o.length;i+=1){var a=o[i];if(!e(a,n))return null}}return"Expected "+t(r)+" but found "+t(n)+" instead."}var r={kind:"null"},n={kind:"number"},i={kind:"string"},o={kind:"boolean"},a={kind:"color"},s={kind:"object"},u={kind:"value"},l={kind:"formatted"},p={kind:"resolvedImage"},c=[r,n,i,o,a,l,s,function(t,e){return{kind:"array",itemType:t,N:e}}(u),p];return e}),define("MVT/style-spec/expression/definitions/assertion",["../types"],function(t){"use strict";function e(t,e){return{kind:"array",itemType:t,N:e}}var r={kind:"number"},n={kind:"string"},i={kind:"boolean"},o={kind:"object"},a={kind:"value"},s={string:n,number:r,boolean:i,object:o},u=function(t,e){this.type=t,this.args=e};return u.parse=function(t,r){if(t.length<2)return r.error("Expected at least one argument.");var n,i=1,o=t[0];if("array"===o){var l;if(t.length>2){var p=t[1];if("string"!=typeof p||!(p in s)||"object"===p)return r.error('The item type argument of "array" must be one of string, number, boolean',1);l=s[p],i++}else l=a;var c;if(t.length>3){if(null!==t[2]&&("number"!=typeof t[2]||t[2]<0||t[2]!==Math.floor(t[2])))return r.error('The length argument to "array" must be a positive integer literal',2);c=t[2],i++}n=e(l,c)}else assert_1(s[o],o),n=s[o];for(var f=[];i<t.length;i++){var h=r.parse(t[i],i,a);if(!h)return null;f.push(h)}return new u(n,f)},u.prototype.evaluate=function(e){for(var r=0;r<this.args.length;r++){var n=this.args[r].evaluate(e);if(!t(this.type,typeOf(n)))return n;if(r===this.args.length-1)throw new RuntimeError("Expected value to be of type "+toString(this.type)+", but found "+toString(typeOf(n))+" instead.")}return assert_1(!1),null},u.prototype.eachChild=function(t){this.args.forEach(t)},u.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.args.map(function(t){return t.possibleOutputs()}))},u.prototype.serialize=function(){var t=this.type,e=[t.kind];if("array"===t.kind){var r=t.itemType;if("string"===r.kind||"number"===r.kind||"boolean"===r.kind){e.push(r.kind);var n=t.N;("number"==typeof n||this.args.length>1)&&e.push(n)}}return e.concat(this.args.map(function(t){return t.serialize()}))},u}),define("MVT/style-spec/expression/definitions/at",["../types"],function(t){"use strict";function e(t,e){return{kind:"array",itemType:t,N:e}}var r={kind:"number"},n={kind:"value"},i=function(t,e,r){this.type=t,this.index=e,this.input=r};return i.parse=function(t,o){if(3!==t.length)return o.error("Expected 2 arguments, but found "+(t.length-1)+" instead.");var a=o.parse(t[1],1,r),s=o.parse(t[2],2,e(o.expectedType||n));if(!a||!s)return null;var u=s.type;return new i(u.itemType,a,s)},i.prototype.evaluate=function(t){var e=this.index.evaluate(t),r=this.input.evaluate(t);if(e<0)throw new RuntimeError("Array index out of bounds: "+e+" < 0.");if(e>=r.length)throw new RuntimeError("Array index out of bounds: "+e+" > "+(r.length-1)+".");if(e!==Math.floor(e))throw new RuntimeError("Array index must be an integer, but found "+e+" instead.");return r[e]},i.prototype.eachChild=function(t){t(this.index),t(this.input)},i.prototype.possibleOutputs=function(){return[void 0]},i.prototype.serialize=function(){return["at",this.index.serialize(),this.input.serialize()]},i}),define("MVT/style-spec/expression/definitions/case",["../types"],function(t){"use strict";var e={kind:"boolean"},r=function(t,e,r){this.type=t,this.branches=e,this.otherwise=r};return r.parse=function(t,n){if(t.length<4)return n.error("Expected at least 3 arguments, but found only "+(t.length-1)+".");if(t.length%2!=0)return n.error("Expected an odd number of arguments.");var i;n.expectedType&&"value"!==n.expectedType.kind&&(i=n.expectedType);for(var o=[],a=1;a<t.length-1;a+=2){var s=n.parse(t[a],a,e);if(!s)return null;var u=n.parse(t[a+1],a+1,i);if(!u)return null;o.push([s,u]),i=i||u.type}var l=n.parse(t[t.length-1],t.length-1,i);return l?(assert_1(i),new r(i,o,l)):null},r.prototype.evaluate=function(t){for(var e=0,r=this.branches;e<r.length;e+=1){var n=r[e],i=n[0],o=n[1];if(i.evaluate(t))return o.evaluate(t)}return this.otherwise.evaluate(t)},r.prototype.eachChild=function(t){for(var e=0,r=this.branches;e<r.length;e+=1){var n=r[e],i=n[0],o=n[1];t(i),t(o)}t(this.otherwise)},r.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.branches.map(function(t){t[0];return t[1].possibleOutputs()})).concat(this.otherwise.possibleOutputs())},r.prototype.serialize=function(){var t=["case"];return this.eachChild(function(e){t.push(e.serialize())}),t},r}),define("MVT/style-spec/expression/types/resolved_image",[],function(){"use strict";var t=function(t){this.name=t.name,this.available=t.available};return t.prototype.toString=function(){return this.name},t.fromString=function(e){return new t({name:e,available:!1})},t.prototype.serialize=function(){return["image",this.name]},t}),define("MVT/style-spec/expression/definitions/coalesce",["../types","../types/resolved_image"],function(t,e){"use strict";var r={kind:"value"},n=function(t,e){this.type=t,this.args=e};return n.parse=function(e,i){if(e.length<2)return i.error("Expectected at least one argument.");var o=null,a=i.expectedType;a&&"value"!==a.kind&&(o=a);for(var s=[],u=0,l=e.slice(1);u<l.length;u+=1){var p=l[u],c=i.parse(p,1+s.length,o,void 0,{typeAnnotation:"omit"});if(!c)return null;o=o||c.type,s.push(c)}return assert_1(o),a&&s.some(function(e){return t(a,e.type)})?new n(r,s):new n(o,s)},n.prototype.evaluate=function(t){for(var r,n=null,i=0,o=0,a=this.args;o<a.length;o+=1){var s=a[o];if(i++,n=s.evaluate(t),n&&n instanceof e&&!n.available&&(r||(r=n.name),n=null,i===this.args.length&&(n=r)),null!==n)break}return n},n.prototype.eachChild=function(t){this.args.forEach(t)},n.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.args.map(function(t){return t.possibleOutputs()}))},n.prototype.serialize=function(){var t=["coalesce"];return this.eachChild(function(e){t.push(e.serialize())}),t},n}),define("MVT/style-spec/expression/definitions/coercion",["../types"],function(t){"use strict";var e={kind:"number"},r={kind:"string"},n={kind:"boolean"},i={kind:"color"},o={kind:"value"},a={"to-boolean":n,"to-color":i,"to-number":e,"to-string":r},s=function(t,e){this.type=t,this.args=e};return s.parse=function(t,e){if(t.length<2)return e.error("Expected at least one argument.");var r=t[0];if(assert_1(a[r],r),("to-boolean"===r||"to-string"===r)&&2!==t.length)return e.error("Expected one argument.");for(var n=a[r],i=[],u=1;u<t.length;u++){var l=e.parse(t[u],u,o);if(!l)return null;i.push(l)}return new s(n,i)},s.prototype.evaluate=function(t){if("boolean"===this.type.kind)return Boolean(this.args[0].evaluate(t));if("color"===this.type.kind){for(var e,r,n=0,i=this.args;n<i.length;n+=1){if(e=i[n].evaluate(t),r=null,e instanceof Color)return e;if("string"==typeof e){var o=t.parseColor(e);if(o)return o}else if(Array.isArray(e)&&!(r=e.length<3||e.length>4?"Invalid rbga value "+JSON.stringify(e)+": expected an array containing either three or four numeric values.":validateRGBA(e[0],e[1],e[2],e[3])))return new Color(e[0]/255,e[1]/255,e[2]/255,e[3])}throw new RuntimeError(r||"Could not parse color from value '"+("string"==typeof e?e:String(JSON.stringify(e)))+"'")}if("number"===this.type.kind){for(var a=null,s=0,u=this.args;s<u.length;s+=1){if(null===(a=u[s].evaluate(t)))return 0;var l=Number(a);if(!isNaN(l))return l}throw new RuntimeError("Could not convert "+JSON.stringify(a)+" to number.")}return"formatted"===this.type.kind?Formatted.fromString(toString$1(this.args[0].evaluate(t))):"resolvedImage"===this.type.kind?ResolvedImage.fromString(toString$1(this.args[0].evaluate(t))):toString$1(this.args[0].evaluate(t))},s.prototype.eachChild=function(t){this.args.forEach(t)},s.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.args.map(function(t){return t.possibleOutputs()}))},s.prototype.serialize=function(){if("formatted"===this.type.kind)return new FormatExpression([{content:this.args[0],scale:null,font:null,textColor:null}]).serialize();if("resolvedImage"===this.type.kind)return new ImageExpression(this.args[0]).serialize();var t=["to-"+this.type.kind];return this.eachChild(function(e){t.push(e.serialize())}),t},s}),define("MVT/style-spec/expression/types/collator",[],function(){"use strict";var t=function(t,e,r){this.sensitivity=t?e?"variant":"case":e?"accent":"base",this.locale=r,this.collator=new Intl.Collator(this.locale?this.locale:[],{sensitivity:this.sensitivity,usage:"search"})};return t.prototype.compare=function(t,e){return this.collator.compare(t,e)},t.prototype.resolvedLocale=function(){return new Intl.Collator(this.locale?this.locale:[]).resolvedOptions().locale},t}),define("MVT/style-spec/expression/definitions/collator",["../types","../types/collator"],function(t,e){"use strict";var r={kind:"string"},n={kind:"boolean"},i={kind:"collator"},o=function(t,e,r){this.type=i,this.locale=r,this.caseSensitive=t,
-this.diacriticSensitive=e};return o.parse=function(t,e){if(2!==t.length)return e.error("Expected one argument.");var i=t[1];if("object"!=typeof i||Array.isArray(i))return e.error("Collator options argument must be an object.");var a=e.parse(void 0!==i["case-sensitive"]&&i["case-sensitive"],1,n);if(!a)return null;var s=e.parse(void 0!==i["diacritic-sensitive"]&&i["diacritic-sensitive"],1,n);if(!s)return null;var u=null;return i.locale&&!(u=e.parse(i.locale,1,r))?null:new o(a,s,u)},o.prototype.evaluate=function(t){return new e(this.caseSensitive.evaluate(t),this.diacriticSensitive.evaluate(t),this.locale?this.locale.evaluate(t):null)},o.prototype.eachChild=function(t){t(this.caseSensitive),t(this.diacriticSensitive),this.locale&&t(this.locale)},o.prototype.possibleOutputs=function(){return[void 0]},o.prototype.serialize=function(){var t={};return t["case-sensitive"]=this.caseSensitive.serialize(),t["diacritic-sensitive"]=this.diacriticSensitive.serialize(),this.locale&&(t.locale=this.locale.serialize()),["collator",t]},o}),define("MVT/style-spec/expression/types/formatted_section",[],function(){"use strict";return function(t,e,r,n,i){this.text=t,this.image=e,this.scale=r,this.fontStack=n,this.textColor=i}}),define("MVT/style-spec/expression/types/formatted",["./formatted_section"],function(t){"use strict";var e=function(t){this.sections=t};return e.fromString=function(r){return new e([new t(r,null,null,null,null)])},e.prototype.isEmpty=function(){return 0===this.sections.length||!this.sections.some(function(t){return 0!==t.text.length||t.image&&0!==t.image.name.length})},e.factory=function(t){return t instanceof e?t:e.fromString(t)},e.prototype.toString=function(){return 0===this.sections.length?"":this.sections.map(function(t){return t.text}).join("")},e.prototype.serialize=function(){for(var t=["format"],e=0,r=this.sections;e<r.length;e+=1){var n=r[e];if(n.image)t.push(["image",n.image.name]);else{t.push(n.text);var i={};n.fontStack&&(i["text-font"]=["literal",n.fontStack.split(",")]),n.scale&&(i["font-scale"]=n.scale),n.textColor&&(i["text-color"]=["rgba"].concat(n.textColor.toArray())),t.push(i)}}return t},e}),define("MVT/style-spec/expression/values",["../util/color","./types/collator","./types/formatted","./types/resolved_image"],function(t,e,r,n){"use strict";function i(t,e){return{kind:"array",itemType:t,N:e}}function o(){}var a={kind:"null"},s={kind:"number"},u={kind:"string"},l={kind:"boolean"},p={kind:"color"},c={kind:"object"},f={kind:"value"},h={kind:"collator"},y={kind:"formatted"},d={kind:"resolvedImage"};return o.validateRGBA=function(t,e,r,n){if(!("number"==typeof t&&t>=0&&t<=255&&"number"==typeof e&&e>=0&&e<=255&&"number"==typeof r&&r>=0&&r<=255)){return"Invalid rgba value ["+("number"==typeof n?[t,e,r,n]:[t,e,r]).join(", ")+"]: 'r', 'g', and 'b' must be between 0 and 255."}return void 0===n||"number"==typeof n&&n>=0&&n<=1?null:"Invalid rgba value ["+[t,e,r,n].join(", ")+"]: 'a' must be between 0 and 1."},o.isValue=function(i){if(null===i)return!0;if("string"==typeof i)return!0;if("boolean"==typeof i)return!0;if("number"==typeof i)return!0;if(i instanceof t)return!0;if(i instanceof e)return!0;if(i instanceof r)return!0;if(i instanceof n)return!0;if(Array.isArray(i)){for(var a=0,s=i;a<s.length;a+=1){var u=s[a];if(!o.isValue(u))return!1}return!0}if("object"==typeof i){for(var l in i)if(!o.isValue(i[l]))return!1;return!0}return!1},o.typeOf=function(m){if(null===m)return a;if("string"==typeof m)return u;if("boolean"==typeof m)return l;if("number"==typeof m)return s;if(m instanceof t)return p;if(m instanceof e)return h;if(m instanceof r)return y;if(m instanceof n)return d;if(Array.isArray(m)){for(var v,g=m.length,x=0,b=m;x<b.length;x+=1){var w=b[x],_=o.typeOf(w);if(v){if(v===_)continue;v=f;break}v=_}return i(v||f,g)}return assert_1("object"==typeof m),c},o.toString$1=function(e){var i=typeof e;return null===e?"":"string"===i||"number"===i||"boolean"===i?String(e):e instanceof t||e instanceof r||e instanceof n?e.toString():JSON.stringify(e)},o}),define("MVT/style-spec/expression/definitions/comparison",["./assertion","../values"],function(t,e){"use strict";function r(t,e){return"=="===t||"!="===t?"boolean"===e.kind||"string"===e.kind||"number"===e.kind||"null"===e.kind||"value"===e.kind:"string"===e.kind||"number"===e.kind||"value"===e.kind}function n(t,e,r){return e===r}function i(t,e,r){return e!==r}function o(t,e,r){return e<r}function a(t,e,r){return e>r}function s(t,e,r){return e<=r}function u(t,e,r){return e>=r}function l(t,e,r,n){return 0===n.compare(e,r)}function p(t,e,r,n){return!l(t,e,r,n)}function c(t,e,r,n){return n.compare(e,r)<0}function f(t,e,r,n){return n.compare(e,r)>0}function h(t,e,r,n){return n.compare(e,r)<=0}function y(t,e,r,n){return n.compare(e,r)>=0}function d(n,i,o){var a="=="!==n&&"!="!==n;return function(){function s(t,e,r){this.type=m,this.lhs=t,this.rhs=e,this.collator=r,this.hasUntypedArgument="value"===t.type.kind||"value"===e.type.kind}return s.parse=function(e,n){if(3!==e.length&&4!==e.length)return n.error("Expected two or three arguments.");var i=e[0],o=n.parse(e[1],1,v);if(!o)return null;if(!r(i,o.type))return n.concat(1).error('"'+i+"\" comparisons are not supported for type '"+toString(o.type)+"'.");var u=n.parse(e[2],2,v);if(!u)return null;if(!r(i,u.type))return n.concat(2).error('"'+i+"\" comparisons are not supported for type '"+toString(u.type)+"'.");if(o.type.kind!==u.type.kind&&"value"!==o.type.kind&&"value"!==u.type.kind)return n.error("Cannot compare types '"+toString(o.type)+"' and '"+toString(u.type)+"'.");a&&("value"===o.type.kind&&"value"!==u.type.kind?o=new t(u.type,[o]):"value"!==o.type.kind&&"value"===u.type.kind&&(u=new t(o.type,[u])));var l=null;if(4===e.length){if("string"!==o.type.kind&&"string"!==u.type.kind&&"value"!==o.type.kind&&"value"!==u.type.kind)return n.error("Cannot use collator to compare non-string types.");if(!(l=n.parse(e[3],3,g)))return null}return new s(o,u,l)},s.prototype.evaluate=function(t){var r=this.lhs.evaluate(t),s=this.rhs.evaluate(t);if(a&&this.hasUntypedArgument){var u=e.typeOf(r),l=e.typeOf(s);if(u.kind!==l.kind||"string"!==u.kind&&"number"!==u.kind)throw new RuntimeError('Expected arguments for "'+n+'" to be (string, string) or (number, number), but found ('+u.kind+", "+l.kind+") instead.")}if(this.collator&&!a&&this.hasUntypedArgument){var p=e.typeOf(r),c=e.typeOf(s);if("string"!==p.kind||"string"!==c.kind)return i(t,r,s)}return this.collator?o(t,r,s,this.collator.evaluate(t)):i(t,r,s)},s.prototype.eachChild=function(t){t(this.lhs),t(this.rhs),this.collator&&t(this.collator)},s.prototype.possibleOutputs=function(){return[!0,!1]},s.prototype.serialize=function(){var t=[n];return this.eachChild(function(e){t.push(e.serialize())}),t},s}()}var m={kind:"boolean"},v={kind:"value"},g={kind:"collator"},x={};return x.Equals=d("==",n,l),x.NotEquals=d("!=",i,p),x.LessThan=d("<",o,c),x.GreaterThan=d(">",a,f),x.LessThanOrEqual=d("<=",s,h),x.GreaterThanOrEqual=d(">=",u,y),x}),define("MVT/style-spec/expression/definitions/format",["../types","../types/formatted","../types/formatted_section","../values"],function(t,e,r,n){"use strict";function i(t,e){return{kind:"array",itemType:t,N:e}}var o={kind:"number"},a={kind:"string"},s={kind:"color"},u={kind:"value"},l={kind:"formatted"},p={kind:"resolvedImage"},c=function(t){this.type=l,this.sections=t};return c.parse=function(t,e){if(t.length<2)return e.error("Expected at least one argument.");var r=t[1];if(!Array.isArray(r)&&"object"==typeof r)return e.error("First argument must be an image or text section.");for(var n=[],l=!1,p=1;p<=t.length-1;++p){var f=t[p];if(l&&"object"==typeof f&&!Array.isArray(f)){l=!1;var h=null;if(f["font-scale"]&&!(h=e.parse(f["font-scale"],1,o)))return null;var y=null;if(f["text-font"]&&!(y=e.parse(f["text-font"],1,i(a))))return null;var d=null;if(f["text-color"]&&!(d=e.parse(f["text-color"],1,s)))return null;var m=n[n.length-1];m.scale=h,m.font=y,m.textColor=d}else{var v=e.parse(t[p],1,u);if(!v)return null;var g=v.type.kind;if("string"!==g&&"value"!==g&&"null"!==g&&"resolvedImage"!==g)return e.error("Formatted text type must be 'string', 'value', 'image' or 'null'.");l=!0,n.push({content:v,scale:null,font:null,textColor:null})}}return new c(n)},c.prototype.evaluate=function(t){var i=function(e){var i=e.content.evaluate(t);return n.typeOf(i)===p?new r("",i,null,null,null):new r(n.toString$1(i),null,e.scale?e.scale.evaluate(t):null,e.font?e.font.evaluate(t).join(","):null,e.textColor?e.textColor.evaluate(t):null)};return new e(this.sections.map(i))},c.prototype.eachChild=function(t){for(var e=0,r=this.sections;e<r.length;e+=1){var n=r[e];t(n.content),n.scale&&t(n.scale),n.font&&t(n.font),n.textColor&&t(n.textColor)}},c.prototype.possibleOutputs=function(){return[void 0]},c.prototype.serialize=function(){for(var t=["format"],e=0,r=this.sections;e<r.length;e+=1){var n=r[e];t.push(n.content.serialize());var i={};n.scale&&(i["font-scale"]=n.scale.serialize()),n.font&&(i["text-font"]=n.font.serialize()),n.textColor&&(i["text-color"]=n.textColor.serialize()),t.push(i)}return t},c}),define("MVT/style-spec/expression/definitions/image",["../types/resolved_image"],function(t){"use strict";var e={kind:"string"},r={kind:"resolvedImage"},n=function(t){this.type=r,this.input=t};return n.parse=function(t,r){if(2!==t.length)return r.error("Expected two arguments.");var i=r.parse(t[1],1,e);return i?new n(i):r.error("No image name provided.")},n.prototype.evaluate=function(e){var r=this.input.evaluate(e),n=!1;return e.availableImages&&e.availableImages.indexOf(r)>-1&&(n=!0),new t({name:r,available:n})},n.prototype.eachChild=function(t){t(this.input)},n.prototype.possibleOutputs=function(){return[void 0]},n.prototype.serialize=function(){return["image",this.input.serialize()]},n}),define("MVT/style-spec/expression/definitions/interpolate",[],function(){"use strict";function t(t,e,r,n){var i=n-r,o=t-r;return 0===i?0:1===e?o/i:(Math.pow(e,o)-1)/(Math.pow(e,i)-1)}var e=function(t,e,r,n,i){this.type=t,this.operator=e,this.interpolation=r,this.input=n,this.labels=[],this.outputs=[];for(var o=0,a=i;o<a.length;o+=1){var s=a[o],u=s[0],l=s[1];this.labels.push(u),this.outputs.push(l)}};return e.interpolationFactor=function(e,r,n,i){var o=0;if("exponential"===e.name)o=t(r,e.base,n,i);else if("linear"===e.name)o=t(r,1,n,i);else if("cubic-bezier"===e.name){var a=e.controlPoints,s=new unitbezier(a[0],a[1],a[2],a[3]);o=s.solve(t(r,1,n,i))}return o},e.parse=function(t,r){var n=t[0],i=t[1],o=t[2],a=t.slice(3);if(!Array.isArray(i)||0===i.length)return r.error("Expected an interpolation type expression.",1);if("linear"===i[0])i={name:"linear"};else if("exponential"===i[0]){var s=i[1];if("number"!=typeof s)return r.error("Exponential interpolation requires a numeric base.",1,1);i={name:"exponential",base:s}}else{if("cubic-bezier"!==i[0])return r.error("Unknown interpolation type "+String(i[0]),1,0);var u=i.slice(1);if(4!==u.length||u.some(function(t){return"number"!=typeof t||t<0||t>1}))return r.error("Cubic bezier interpolation requires four numeric arguments with values between 0 and 1.",1);i={name:"cubic-bezier",controlPoints:u}}if(t.length-1<4)return r.error("Expected at least 4 arguments, but found only "+(t.length-1)+".");if((t.length-1)%2!=0)return r.error("Expected an even number of arguments.");if(!(o=r.parse(o,2,NumberType)))return null;var l=[],p=null;"interpolate-hcl"===n||"interpolate-lab"===n?p=ColorType:r.expectedType&&"value"!==r.expectedType.kind&&(p=r.expectedType);for(var c=0;c<a.length;c+=2){var f=a[c],h=a[c+1],y=c+3,d=c+4;if("number"!=typeof f)return r.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.',y);if(l.length&&l[l.length-1][0]>=f)return r.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.',y);var m=r.parse(h,d,p);if(!m)return null;p=p||m.type,l.push([f,m])}return"number"===p.kind||"color"===p.kind||"array"===p.kind&&"number"===p.itemType.kind&&"number"==typeof p.N?new e(p,n,i,o,l):r.error("Type "+toString(p)+" is not interpolatable.")},e.prototype.evaluate=function(t){var r=this.labels,n=this.outputs;if(1===r.length)return n[0].evaluate(t);var i=this.input.evaluate(t);if(i<=r[0])return n[0].evaluate(t);var o=r.length;if(i>=r[o-1])return n[o-1].evaluate(t);var a=findStopLessThanOrEqualTo(r,i),s=r[a],u=r[a+1],l=e.interpolationFactor(this.interpolation,i,s,u),p=n[a].evaluate(t),c=n[a+1].evaluate(t);return"interpolate"===this.operator?interpolate[this.type.kind.toLowerCase()](p,c,l):"interpolate-hcl"===this.operator?hcl.reverse(hcl.interpolate(hcl.forward(p),hcl.forward(c),l)):lab.reverse(lab.interpolate(lab.forward(p),lab.forward(c),l))},e.prototype.eachChild=function(t){t(this.input);for(var e=0,r=this.outputs;e<r.length;e+=1){t(r[e])}},e.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.outputs.map(function(t){return t.possibleOutputs()}))},e.prototype.serialize=function(){var t;t="linear"===this.interpolation.name?["linear"]:"exponential"===this.interpolation.name?1===this.interpolation.base?["linear"]:["exponential",this.interpolation.base]:["cubic-bezier"].concat(this.interpolation.controlPoints);for(var e=[this.operator,t,this.input.serialize()],r=0;r<this.labels.length;r++)e.push(this.labels[r],this.outputs[r].serialize());return e},e}),define("MVT/style-spec/expression/definitions/in",[],function(){"use strict";function t(t){return"boolean"===t.kind||"string"===t.kind||"number"===t.kind||"null"===t.kind||"value"===t.kind}function e(t){return"boolean"==typeof t||"string"==typeof t||"number"==typeof t}function r(t){return Array.isArray(t)||"string"==typeof t}var n={kind:"boolean"},i={kind:"value"},o=function(t,e){this.type=n,this.needle=t,this.haystack=e};return o.parse=function(e,r){if(3!==e.length)return r.error("Expected 2 arguments, but found "+(e.length-1)+" instead.");var n=r.parse(e[1],1,i),a=r.parse(e[2],2,i);return n&&a?t(n.type)?new o(n,a):r.error("Expected first argument to be of type boolean, string, number or null, but found "+toString(n.type)+" instead"):null},o.prototype.evaluate=function(t){var n=this.needle.evaluate(t),i=this.haystack.evaluate(t);if(!n||!i)return!1;if(!e(n))throw new RuntimeError("Expected first argument to be of type boolean, string or number, but found "+toString(typeOf(n))+" instead.");if(!r(i))throw new RuntimeError("Expected second argument to be of type array or string, but found "+toString(typeOf(i))+" instead.");return i.indexOf(n)>=0},o.prototype.eachChild=function(t){t(this.needle),t(this.haystack)},o.prototype.possibleOutputs=function(){return[!0,!1]},o.prototype.serialize=function(){return["in",this.needle.serialize(),this.haystack.serialize()]},o}),define("MVT/style-spec/expression/definitions/let",[],function(){"use strict";var t=function(t,e){this.type=e.type,this.bindings=[].concat(t),this.result=e};return t.prototype.evaluate=function(t){return this.result.evaluate(t)},t.prototype.eachChild=function(t){for(var e=0,r=this.bindings;e<r.length;e+=1){t(r[e][1])}t(this.result)},t.parse=function(e,r){if(e.length<4)return r.error("Expected at least 3 arguments, but found "+(e.length-1)+" instead.");for(var n=[],i=1;i<e.length-1;i+=2){var o=e[i];if("string"!=typeof o)return r.error("Expected string, but found "+typeof o+" instead.",i);if(/[^a-zA-Z0-9_]/.test(o))return r.error("Variable names must contain only alphanumeric characters or '_'.",i);var a=r.parse(e[i+1],i+1);if(!a)return null;n.push([o,a])}var s=r.parse(e[e.length-1],e.length-1,r.expectedType,n);return s?new t(n,s):null},t.prototype.possibleOutputs=function(){return this.result.possibleOutputs()},t.prototype.serialize=function(){for(var t=["let"],e=0,r=this.bindings;e<r.length;e+=1){var n=r[e],i=n[0],o=n[1];t.push(i,o.serialize())}return t.push(this.result.serialize()),t},t}),define("MVT/style-spec/expression/definitions/length",[],function(){"use strict";var t={kind:"number"},e=function(e){this.type=t,this.input=e};return e.parse=function(t,r){if(2!==t.length)return r.error("Expected 1 argument, but found "+(t.length-1)+" instead.");var n=r.parse(t[1],1);return n?"array"!==n.type.kind&&"string"!==n.type.kind&&"value"!==n.type.kind?r.error("Expected argument of type string or array, but found "+toString(n.type)+" instead."):new e(n):null},e.prototype.evaluate=function(t){var e=this.input.evaluate(t);if("string"==typeof e)return e.length;if(Array.isArray(e))return e.length;throw new RuntimeError("Expected value to be of type string or array, but found "+toString(typeOf(e))+" instead.")},e.prototype.eachChild=function(t){t(this.input)},e.prototype.possibleOutputs=function(){return[void 0]},e.prototype.serialize=function(){var t=["length"];return this.eachChild(function(e){t.push(e.serialize())}),t},e}),define("MVT/style-spec/expression/definitions/literal",["../values","../types/formatted"],function(t,e){"use strict";var r=function(t,e){this.type=t,this.value=e};return r.parse=function(e,n){if(2!==e.length)return n.error("'literal' expression requires exactly one argument, but found "+(e.length-1)+" instead.");if(!t.isValue(e[1]))return n.error("invalid value");var i=e[1],o=t.typeOf(i),a=n.expectedType;return"array"!==o.kind||0!==o.N||!a||"array"!==a.kind||"number"==typeof a.N&&0!==a.N||(o=a),new r(o,i)},r.prototype.evaluate=function(){return this.value},r.prototype.eachChild=function(){},r.prototype.possibleOutputs=function(){return[this.value]},r.prototype.serialize=function(){return"array"===this.type.kind||"object"===this.type.kind?["literal",this.value]:this.value instanceof Color?["rgba"].concat(this.value.toArray()):this.value instanceof e?this.value.serialize():(assert_1(null===this.value||"string"==typeof this.value||"number"==typeof this.value||"boolean"==typeof this.value),this.value)},r}),define("MVT/style-spec/expression/definitions/match",["../values"],function(t){"use strict";var e={kind:"value"},r=function(t,e,r,n,i,o){this.inputType=t,this.type=e,this.input=r,this.cases=n,this.outputs=i,this.otherwise=o};return r.parse=function(n,i){if(n.length<5)return i.error("Expected at least 4 arguments, but found only "+(n.length-1)+".");if(n.length%2!=1)return i.error("Expected an even number of arguments.");var o,a;i.expectedType&&"value"!==i.expectedType.kind&&(a=i.expectedType);for(var s={},u=[],l=2;l<n.length-1;l+=2){var p=n[l],c=n[l+1];Array.isArray(p)||(p=[p]);var f=i.concat(l);if(0===p.length)return f.error("Expected at least one branch label.");for(var h=0,y=p;h<y.length;h+=1){var d=y[h];if("number"!=typeof d&&"string"!=typeof d)return f.error("Branch labels must be numbers or strings.");if("number"==typeof d&&Math.abs(d)>Number.MAX_SAFE_INTEGER)return f.error("Branch labels must be integers no larger than "+Number.MAX_SAFE_INTEGER+".");if("number"==typeof d&&Math.floor(d)!==d)return f.error("Numeric branch labels must be integer values.");if(o){if(f.checkSubtype(o,t.typeOf(d)))return null}else o=t.typeOf(d);if(void 0!==s[String(d)])return f.error("Branch labels must be unique.");s[String(d)]=u.length}var m=i.parse(c,l,a);if(!m)return null;a=a||m.type,u.push(m)}var v=i.parse(n[1],1,e);if(!v)return null;var g=i.parse(n[n.length-1],n.length-1,a);return g?(assert_1(o&&a),"value"!==v.type.kind&&i.concat(1).checkSubtype(o,v.type)?null:new r(o,a,v,s,u,g)):null},r.prototype.evaluate=function(e){var r=this.input.evaluate(e);return(t.typeOf(r)===this.inputType&&this.outputs[this.cases[r]]||this.otherwise).evaluate(e)},r.prototype.eachChild=function(t){t(this.input),this.outputs.forEach(t),t(this.otherwise)},r.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.outputs.map(function(t){return t.possibleOutputs()})).concat(this.otherwise.possibleOutputs())},r.prototype.serialize=function(){for(var t=this,e=["match",this.input.serialize()],r=Object.keys(this.cases).sort(),n=[],i={},o=0,a=r;o<a.length;o+=1){var s=a[o],u=i[this.cases[s]];void 0===u?(i[this.cases[s]]=n.length,n.push([this.cases[s],[s]])):n[u][1].push(s)}for(var l=function(e){return"number"===t.inputType.kind?Number(e):e},p=0,c=n;p<c.length;p+=1){var f=c[p],u=f[0],h=f[1];1===h.length?e.push(l(h[0])):e.push(h.map(l)),e.push(this.outputs[outputIndex$1].serialize())}return e.push(this.otherwise.serialize()),e},r}),define("MVT/style-spec/expression/definitions/number_format",[],function(){"use strict";var t={kind:"number"},e={kind:"string"},r=function(t,r,n,i,o){this.type=e,this.number=t,this.locale=r,this.currency=n,this.minFractionDigits=i,this.maxFractionDigits=o};return r.parse=function(n,i){if(3!==n.length)return i.error("Expected two arguments.");var o=i.parse(n[1],1,t);if(!o)return null;var a=n[2];if("object"!=typeof a||Array.isArray(a))return i.error("NumberFormat options argument must be an object.");var s=null;if(a.locale&&!(s=i.parse(a.locale,1,e)))return null;var u=null;if(a.currency&&!(u=i.parse(a.currency,1,e)))return null;var l=null;if(a["min-fraction-digits"]&&!(l=i.parse(a["min-fraction-digits"],1,t)))return null;var p=null;return a["max-fraction-digits"]&&!(p=i.parse(a["max-fraction-digits"],1,t))?null:new r(o,s,u,l,p)},r.prototype.evaluate=function(t){return new Intl.NumberFormat(this.locale?this.locale.evaluate(t):[],{style:this.currency?"currency":"decimal",currency:this.currency?this.currency.evaluate(t):void 0,minimumFractionDigits:this.minFractionDigits?this.minFractionDigits.evaluate(t):void 0,maximumFractionDigits:this.maxFractionDigits?this.maxFractionDigits.evaluate(t):void 0}).format(this.number.evaluate(t))},r.prototype.eachChild=function(t){t(this.number),this.locale&&t(this.locale),this.currency&&t(this.currency),this.minFractionDigits&&t(this.minFractionDigits),this.maxFractionDigits&&t(this.maxFractionDigits)},r.prototype.possibleOutputs=function(){return[void 0]},r.prototype.serialize=function(){var t={};return this.locale&&(t.locale=this.locale.serialize()),this.currency&&(t.currency=this.currency.serialize()),this.minFractionDigits&&(t["min-fraction-digits"]=this.minFractionDigits.serialize()),this.maxFractionDigits&&(t["max-fraction-digits"]=this.maxFractionDigits.serialize()),["number-format",this.number.serialize(),t]},r}),define("MVT/style-spec/expression/stops",[],function(){"use strict";function t(t,e){for(var r,n,i=t.length-1,o=0,a=i,s=0;o<=a;)if(s=Math.floor((o+a)/2),r=t[s],n=t[s+1],r<=e){if(s===i||e<n)return s;o=s+1}else{if(!(r>e))throw new RuntimeError("Input is not a number.");a=s-1}return 0}return t}),define("MVT/style-spec/expression/definitions/step",["../stops"],function(t){"use strict";var e={kind:"number"},r=function(t,e,r){this.type=t,this.input=e,this.labels=[],this.outputs=[];for(var n=0,i=r;n<i.length;n+=1){var o=i[n],a=o[0],s=o[1];this.labels.push(a),this.outputs.push(s)}};return r.parse=function(t,n){if(t.length-1<4)return n.error("Expected at least 4 arguments, but found only "+(t.length-1)+".");if((t.length-1)%2!=0)return n.error("Expected an even number of arguments.");var i=n.parse(t[1],1,e);if(!i)return null;var o=[],a=null;n.expectedType&&"value"!==n.expectedType.kind&&(a=n.expectedType);for(var s=1;s<t.length;s+=2){var u=1===s?-1/0:t[s],l=t[s+1],p=s,c=s+1;if("number"!=typeof u)return n.error('Input/output pairs for "step" expressions must be defined using literal numeric values (not computed expressions) for the input values.',p);if(o.length&&o[o.length-1][0]>=u)return n.error('Input/output pairs for "step" expressions must be arranged with input values in strictly ascending order.',p);var f=n.parse(l,c,a);if(!f)return null;a=a||f.type,o.push([u,f])}return new r(a,i,o)},r.prototype.evaluate=function(e){var r=this.labels,n=this.outputs;if(1===r.length)return n[0].evaluate(e);var i=this.input.evaluate(e);if(i<=r[0])return n[0].evaluate(e);var o=r.length;return i>=r[o-1]?n[o-1].evaluate(e):n[t(r,i)].evaluate(e)},r.prototype.eachChild=function(t){t(this.input);for(var e=0,r=this.outputs;e<r.length;e+=1){t(r[e])}},r.prototype.possibleOutputs=function(){var t;return(t=[]).concat.apply(t,this.outputs.map(function(t){return t.possibleOutputs()}))},r.prototype.serialize=function(){for(var t=["step",this.input.serialize()],e=0;e<this.labels.length;e++)e>0&&t.push(this.labels[e]),t.push(this.outputs[e].serialize());return t},r}),define("MVT/style-spec/expression/definitions/var",[],function(){"use strict";var t=function(t,e){this.type=e.type,this.name=t,this.boundExpression=e};return t.parse=function(e,r){if(2!==e.length||"string"!=typeof e[1])return r.error("'var' expression requires exactly one string literal argument.");var n=e[1];return r.scope.has(n)?new t(n,r.scope.get(n)):r.error('Unknown variable "'+n+'". Make sure "'+n+'" has been bound in an enclosing "let" expression before using it.',1)},t.prototype.evaluate=function(t){return this.boundExpression.evaluate(t)},t.prototype.eachChild=function(){},t.prototype.possibleOutputs=function(){return[void 0]},t.prototype.serialize=function(){return["var",this.name]},t}),define("MVT/style-spec/expression/definitions/expressions",["./assertion","./at","./case","./coalesce","./coercion","./collator","./comparison","./format","./image","./interpolate","./in","./let","./length","./literal","./match","./number_format","./step","./var"],function(t,e,r,n,i,o,a,s,u,l,p,c,f,h,y,d,m,v){"use strict";return{"==":a.Equals,"!=":a.NotEquals,">":a.GreaterThan,"<":a.LessThan,">=":a.GreaterThanOrEqual,"<=":a.LessThanOrEqual,array:t,at:e,boolean:t,case:r,coalesce:n,collator:o,format:s,image:u,in:p,interpolate:l,"interpolate-hcl":l,"interpolate-lab":l,length:f,let:c,literal:h,match:y,number:t,"number-format":d,object:t,step:m,string:t,"to-boolean":i,"to-color":i,"to-number":i,"to-string":i,var:v}}),define("MVT/util/web_worker_transfer",["../render/image_atlas","../render/ImagePosition","../util/RGBAImage","../style-spec/util/color","../style-spec/expression/definitions/expressions","../style-spec/expression/types/formatted","../style-spec/expression/types/formatted_section","../style-spec/expression/types/resolved_image"],function(t,e,r,n,i,o,a,s){"use strict";function u(){}function l(t){return t&&"undefined"!=typeof ArrayBuffer&&(t instanceof ArrayBuffer||t.constructor&&"ArrayBuffer"===t.constructor.name)}var p={};u.register=function(t,e,r){void 0===r&&(r={}),Object.defineProperty(e,"_classRegistryKey",{value:t,writeable:!1}),p[t]={klass:e,omit:r.omit||[],shallow:r.shallow||[]}},u.register("Object",Object),u.register("Color",n),u.register("ResolvedImage",s),u.register("ImageAtlas",t),u.register("ImagePosition",e),u.register("RGBAImage",r),u.register("Formatted",o),u.register("FormattedSection",a);for(var c in i)i[c]._classRegistryKey||u.register("Expression_"+c,i[c]);return u.serialize=function(t,e){if(null===t||void 0===t||"boolean"==typeof t||"number"==typeof t||"string"==typeof t||t instanceof Boolean||t instanceof Number||t instanceof String||t instanceof Date||t instanceof RegExp)return t;if(l(t))return e&&e.push(t),t;if(ArrayBuffer.isView(t)){var r=t;return e&&e.push(r.buffer),r}if(t instanceof ImageData)return e&&e.push(t.data.buffer),t;if(Array.isArray(t)){for(var n=[],i=0,o=t;i<o.length;i+=1){var a=o[i];n.push(u.serialize(a,e))}return n}if("object"==typeof t){var s=t.constructor,c=s._classRegistryKey;if(!c)throw new Error("can't serialize object of unregistered class");var f=s.serialize?s.serialize(t,e):{};if(!s.serialize){for(var h in t)if(t.hasOwnProperty(h)&&!(p[c].omit.indexOf(h)>=0)){var y=t[h];f[h]=p[c].shallow.indexOf(h)>=0?y:u.serialize(y,e)}t instanceof Error&&(f.message=t.message)}if(f.$name)throw new Error("$name property is reserved for worker serialization logic.");return"Object"!==c&&(f.$name=c),f}throw new Error("can't serialize object of type "+typeof t)},u.deserialize=function(t){if(null===t||void 0===t||"boolean"==typeof t||"number"==typeof t||"string"==typeof t||t instanceof Boolean||t instanceof Number||t instanceof String||t instanceof Date||t instanceof RegExp||l(t)||ArrayBuffer.isView(t)||t instanceof ImageData)return t;if(Array.isArray(t))return t.map(u.deserialize);if("object"==typeof t){var e=t.$name||"Object",r=p[e],n=r.klass;if(!n)throw new Error("can't deserialize unregistered class "+e);if(n.deserialize)return n.deserialize(t);for(var i=Object.create(n.prototype),o=0,a=Object.keys(t);o<a.length;o+=1){var s=a[o];if("$name"!==s){var c=t[s];i[s]=p[e].shallow.indexOf(s)>=0?c:u.deserialize(c)}}return i}throw new Error("can't deserialize object of type "+typeof t)},u}),define("MVT/style/zoom_history",[],function(){"use strict";var t=function(){this.first=!0};return t.prototype.update=function(t,e){var r=Math.floor(t);return this.first?(this.first=!1,this.lastIntegerZoom=r,this.lastIntegerZoomTime=0,this.lastZoom=t,this.lastFloorZoom=r,!0):(this.lastFloorZoom>r?(this.lastIntegerZoom=r+1,this.lastIntegerZoomTime=e):this.lastFloorZoom<r&&(this.lastIntegerZoom=r,this.lastIntegerZoomTime=e),t!==this.lastZoom&&(this.lastZoom=t,this.lastFloorZoom=r,!0))},t}),define("MVT/style/evaluation_parameters",["./zoom_history"],function(t){"use strict";var e=function(e,r){this.zoom=e,r?(this.now=r.now,this.fadeDuration=r.fadeDuration,this.zoomHistory=r.zoomHistory,this.transition=r.transition):(this.now=0,this.fadeDuration=0,this.zoomHistory=new t,this.transition={})};return e.prototype.isSupportedScript=function(t){return!1},e.prototype.crossFadingFactor=function(){return 0===this.fadeDuration?1:Math.min((this.now-this.zoomHistory.lastIntegerZoomTime)/this.fadeDuration,1)},e.prototype.getCrossfadeParameters=function(){var t=this.zoom,e=t-Math.floor(t),r=this.crossFadingFactor();return t>this.zoomHistory.lastIntegerZoom?{fromScale:2,toScale:1,t:e+(1-e)*r}:{fromScale:.5,toScale:1,t:1-(1-r)*e}},e}),define("MVT/data/extent",[],function(){"use strict";return 8192}),define("MVT/data/load_geometry",["./extent"],function(t){"use strict";function e(t,e,r){return Math.min(r,Math.max(e,t))}function r(r){for(var i=t/r.extent,o=r.loadGeometry(),a=0;a<o.length;a++)for(var s=o[a],u=0;u<s.length;u++){var l=s[u];l.x=Math.round(l.x*i),l.y=t-Math.round(l.y*i),(l.x<n.min||l.x>n.max||l.y<n.min||l.y>n.max)&&(l.x=e(l.x,n.min,n.max),l.y=e(l.y,n.min,n.max))}return o}var n=function(t){return{min:-1*Math.pow(2,t-1),max:Math.pow(2,t-1)-1}}(15);return r}),define("MVT/data/segment",["../util/web_worker_transfer"],function(t){"use strict";var e=function(t){void 0===t&&(t=[]),this.segments=t};return e.prototype.prepareSegment=function(t,r,n,i){var o=this.segments[this.segments.length-1];return(!o||o.vertexLength+t>e.MAX_VERTEX_ARRAY_LENGTH||o.sortKey!==i)&&(o={vertexOffset:r.length,primitiveOffset:n.length,vertexLength:0,primitiveLength:0},void 0!==i&&(o.sortKey=i),this.segments.push(o)),o},e.prototype.get=function(){return this.segments},e.prototype.destroy=function(){for(var t=0,e=this.segments;t<e.length;t+=1){var r=e[t];for(var n in r.vaos)r.vaos[n].destroy()}},e.simpleSegment=function(t,r,n,i){return new e([{vertexOffset:t,primitiveOffset:r,vertexLength:n,primitiveLength:i,vaos:{},sortKey:0}])},e.MAX_VERTEX_ARRAY_LENGTH=Math.pow(2,16)-1,t.register("SegmentVector",e),e}),define("MVT/util/structArray",[],function(){"use strict";var t=function(){this.isTransferred=!1,this.capacity=-1,this.resize(0)};return t.serialize=function(t,e){return t.isTransferred&&console.log("StructArray array.isTransferred."),t._trim(),e&&(t.isTransferred=!0,e.push(t.arrayBuffer)),{length:t.length,arrayBuffer:t.arrayBuffer}},t.deserialize=function(t){var e=Object.create(this.prototype);return e.arrayBuffer=t.arrayBuffer,e.length=t.length,e.capacity=t.arrayBuffer.byteLength/e.bytesPerElement,e._refreshViews(),e},t.prototype._trim=function(){this.length!==this.capacity&&(this.capacity=this.length,this.arrayBuffer=this.arrayBuffer.slice(0,this.length*this.bytesPerElement),this._refreshViews())},t.prototype.clear=function(){this.length=0},t.prototype.resize=function(t){this.reserve(t),this.length=t},t.prototype.reserve=function(t){if(t>this.capacity){this.capacity=Math.max(t,Math.floor(5*this.capacity),128),
-this.arrayBuffer=new ArrayBuffer(this.capacity*this.bytesPerElement);var e=this.uint8;this._refreshViews(),e&&this.uint8.set(e)}},t.prototype._refreshViews=function(){throw new Error("_refreshViews() must be implemented by each concrete StructArray layout")},t}),define("MVT/data/StructArrayLayout2i4ub8",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.int16=new Int16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e,r,n,i,o){var a=this.length;return this.resize(a+1),this.emplace(a,t,e,r,n,i,o)},e.prototype.emplace=function(t,e,r,n,i,o,a){var s=4*t,u=8*t;return this.int16[s+0]=e,this.int16[s+1]=r,this.uint8[u+4]=n,this.uint8[u+5]=i,this.uint8[u+6]=o,this.uint8[u+7]=a,t},e}(t);return r.prototype.bytesPerElement=8,e.register("StructArrayLayout2i4ub8",r),r}),define("MVT/data/StructArrayLayout3ui6",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.uint16=new Uint16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e,r){var n=this.length;return this.resize(n+1),this.emplace(n,t,e,r)},e.prototype.emplace=function(t,e,r,n){var i=3*t;return this.uint16[i+0]=e,this.uint16[i+1]=r,this.uint16[i+2]=n,t},e}(t);return r.prototype.bytesPerElement=6,e.register("StructArrayLayout3ui6",r),r}),define("MVT/data/feature_position_map",["../util/web_worker_transfer"],function(t){"use strict";function e(t,n,i,o){if(!(i>=o)){for(var a=t[i+o>>1],s=i-1,u=o+1;;){do{s++}while(t[s]<a);do{u--}while(t[u]>a);if(s>=u)break;r(t,s,u),r(n,3*s,3*u),r(n,3*s+1,3*u+1),r(n,3*s+2,3*u+2)}e(t,n,i,u),e(t,n,u+1,o)}}function r(t,e,r){var n=t[e];t[e]=t[r],t[r]=n}var n=function(){this.ids=[],this.positions=[],this.indexed=!1};return n.prototype.add=function(t,e,r,n){this.ids.push(t),this.positions.push(e,r,n)},n.prototype.getPositions=function(t){for(var e=0,r=this.ids.length-1;e<r;){var n=e+r>>1;this.ids[n]>=t?r=n:e=n+1}for(var i=[];this.ids[e]===t;){var o=this.positions[3*e],a=this.positions[3*e+1],s=this.positions[3*e+2];i.push({index:o,start:a,end:s}),e++}return i},n.serialize=function(t,r){var n=new Float64Array(t.ids),i=new Uint32Array(t.positions);return e(n,i,0,n.length-1),r&&r.push(n.buffer,i.buffer),{ids:n,positions:i}},n.deserialize=function(t){var e=new n;return e.ids=t.ids,e.positions=t.positions,e.indexed=!0,e},t.register("FeaturePositionMap",n),n}),define("MVT/style/possiblyEvaluatedPropertyValue",[],function(){"use strict";var t=function(t,e,r){this.property=t,this.value=e,this.parameters=r};return t.prototype.isConstant=function(){return"constant"===this.value.kind},t.prototype.constantOr=function(t){return"constant"===this.value.kind?this.value.value:t},t.prototype.evaluate=function(t,e,r){return this.property.evaluate(this.value,this.parameters,t,e,r)},t}),define("MVT/style-spec/util/properties",[],function(){"use strict";function t(){}return t.supportsPropertyExpression=function(t){return"data-driven"===t["property-type"]||"cross-faded-data-driven"===t["property-type"]},t.supportsZoomExpression=function(t){return!!t.expression&&t.expression.parameters.indexOf("zoom")>-1},t.supportsInterpolation=function(t){return!!t.expression&&t.expression.interpolated},t}),define("MVT/render/uniform_binding",["../style-spec/util/color"],function(t){"use strict";var e={},r=function(t,e){this.gl=t.gl,this.location=e};e.Uniform1i=function(t){function e(e,r){t.call(this,e,r),this.current=0}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){this.current!==t&&(this.current=t,this.gl.uniform1i(this.location,t))},e}(r),e.Uniform1f=function(t){function e(e,r){t.call(this,e,r),this.current=0}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){this.current!==t&&(this.current=t,this.gl.uniform1f(this.location,t))},e}(r),e.Uniform2f=function(t){function e(e,r){t.call(this,e,r),this.current=[0,0]}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){t[0]===this.current[0]&&t[1]===this.current[1]||(this.current=t,this.gl.uniform2f(this.location,t[0],t[1]))},e}(r),e.Uniform3f=function(t){function e(e,r){t.call(this,e,r),this.current=[0,0,0]}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){t[0]===this.current[0]&&t[1]===this.current[1]&&t[2]===this.current[2]||(this.current=t,this.gl.uniform3f(this.location,t[0],t[1],t[2]))},e}(r),e.Uniform4f=function(t){function e(e,r){t.call(this,e,r),this.current=[0,0,0,0]}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){t[0]===this.current[0]&&t[1]===this.current[1]&&t[2]===this.current[2]&&t[3]===this.current[3]||(this.current=t,this.gl.uniform4f(this.location,t[0],t[1],t[2],t[3]))},e}(r),e.UniformColor=function(e){function r(r,n){e.call(this,r,n),this.current=t.transparent}return e&&(r.__proto__=e),r.prototype=Object.create(e&&e.prototype),r.prototype.constructor=r,r.prototype.set=function(t){t.r===this.current.r&&t.g===this.current.g&&t.b===this.current.b&&t.a===this.current.a||(this.current=t,this.gl.uniform4f(this.location,t.r,t.g,t.b,t.a))},r}(r);var n=new Float32Array(16);return e.UniformMatrix4f=function(t){function e(e,r){t.call(this,e,r),this.current=n}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.set=function(t){this.gl.uniformMatrix4fv(this.location,!1,t)},e}(r),e}),define("MVT/data/StructArrayLayout8ui16",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.uint16=new Uint16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e,r,n,i,o,a,s){var u=this.length;return this.resize(u+1),this.emplace(u,t,e,r,n,i,o,a,s)},e.prototype.emplace=function(t,e,r,n,i,o,a,s,u){var l=8*t;return this.uint16[l+0]=e,this.uint16[l+1]=r,this.uint16[l+2]=n,this.uint16[l+3]=i,this.uint16[l+4]=o,this.uint16[l+5]=a,this.uint16[l+6]=s,this.uint16[l+7]=u,t},e}(t);return r.prototype.bytesPerElement=16,e.register("StructArrayLayout8ui16",r),r}),define("MVT/data/StructArrayLayout2f8",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.float32=new Float32Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e){var r=this.length;return this.resize(r+1),this.emplace(r,t,e)},e.prototype.emplace=function(t,e,r){var n=2*t;return this.float32[n+0]=e,this.float32[n+1]=r,t},e}(t);return r.prototype.bytesPerElement=8,e.register("StructArrayLayout2f8",r),r}),define("MVT/data/StructArrayLayout4f16",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.float32=new Float32Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e,r,n){var i=this.length;return this.resize(i+1),this.emplace(i,t,e,r,n)},e.prototype.emplace=function(t,e,r,n,i){var o=4*t;return this.float32[o+0]=e,this.float32[o+1]=r,this.float32[o+2]=n,this.float32[o+3]=i,t},e}(t);return r.prototype.bytesPerElement=16,e.register("StructArrayLayout4f16",r),r}),define("MVT/data/StructArrayLayout1f4",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.float32=new Float32Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t){var e=this.length;return this.resize(e+1),this.emplace(e,t)},e.prototype.emplace=function(t,e){var r=1*t;return this.float32[r+0]=e,t},e}(t);return r.prototype.bytesPerElement=4,e.register("StructArrayLayout1f4",r),r}),define("MVT/data/program_configuration",["../util/web_worker_transfer","./feature_position_map","../style/possiblyEvaluatedPropertyValue","../style-spec/util/properties","../render/uniform_binding","./StructArrayLayout8ui16","./StructArrayLayout2f8","./StructArrayLayout4f16","./StructArrayLayout1f4"],function(t,e,r,n,i,o,a,s,u){"use strict";function l(t,e,r){return Math.min(r,Math.max(e,t))}function p(t,e){return t=l(Math.floor(t),0,255),e=l(Math.floor(e),0,255),256*t+e}function c(t){return[p(255*t.r,255*t.g),p(255*t.b,255*t.a)]}function f(t,e){return{"text-opacity":["opacity"],"icon-opacity":["opacity"],"text-color":["fill_color"],"icon-color":["fill_color"],"text-halo-color":["halo_color"],"icon-halo-color":["halo_color"],"text-halo-blur":["halo_blur"],"icon-halo-blur":["halo_blur"],"text-halo-width":["halo_width"],"icon-halo-width":["halo_width"],"line-gap-width":["gapwidth"],"line-pattern":["pattern_to","pattern_from"],"fill-pattern":["pattern_to","pattern_from"],"fill-extrusion-pattern":["pattern_to","pattern_from"]}[t]||[t.replace(e+"-","").replace(/-/g,"_")]}function h(t){return{"line-pattern":{source:o,composite:o},"fill-pattern":{source:o,composite:o},"fill-extrusion-pattern":{source:o,composite:o}}[t]}function y(t,e,r){var n={color:{source:a,composite:s},number:{source:u,composite:a}},i=h(t);return i&&i[r]||n[e][r]}var d=function(t,e,r){this.value=t,this.names=e,this.uniformNames=this.names.map(function(t){return"u_"+t}),this.type=r,this.maxValue=-1/0};d.prototype.defines=function(){return this.names.map(function(t){return"#define HAS_UNIFORM_u_"+t})},d.prototype.setConstantPatternPositions=function(){},d.prototype.populatePaintArray=function(){},d.prototype.updatePaintArray=function(){},d.prototype.upload=function(){},d.prototype.destroy=function(){},d.prototype.setUniforms=function(t,e,r,n){e.set(n.constantOr(this.value))},d.prototype.getBinding=function(t,e){return"color"===this.type?new i.UniformColor(t,e):new i.Uniform1f(t,e)},d.serialize=function(e){var r=e.value,n=e.names,i=e.type;return{value:t.serialize(r),names:n,type:i}},d.deserialize=function(e){var r=e.value,n=e.names,i=e.type;return new d(t.deserialize(r),n,i)};var m=function(t,e,r){this.value=t,this.names=e,this.uniformNames=this.names.map(function(t){return"u_"+t}),this.type=r,this.maxValue=-1/0,this.patternPositions={patternTo:null,patternFrom:null}};m.prototype.defines=function(){return this.names.map(function(t){return"#define HAS_UNIFORM_u_"+t})},m.prototype.populatePaintArray=function(){},m.prototype.updatePaintArray=function(){},m.prototype.upload=function(){},m.prototype.destroy=function(){},m.prototype.setConstantPatternPositions=function(t,e){this.patternPositions.patternTo=t.tlbr,this.patternPositions.patternFrom=e.tlbr},m.prototype.setUniforms=function(t,e,r,n,i){var o=this.patternPositions;"u_pattern_to"===i&&o.patternTo&&e.set(o.patternTo),"u_pattern_from"===i&&o.patternFrom&&e.set(o.patternFrom)},m.prototype.getBinding=function(t,e){return new i.Uniform4f(t,e)};var v=function(t,e,r,n){this.expression=t,this.names=e,this.type=r,this.uniformNames=this.names.map(function(t){return"a_"+t}),this.maxValue=-1/0,this.paintVertexAttributes=e.map(function(t){return{name:"a_"+t,type:"Float32",components:"color"===r?2:1,offset:0}}),this.paintVertexArray=new n};v.prototype.defines=function(){return[]},v.prototype.setConstantPatternPositions=function(){},v.prototype.populatePaintArray=function(t,e,r,n){var i=this.paintVertexArray,o=i.length;i.reserve(t);var a=this.expression.evaluate(new EvaluationParameters(0),e,{},[],n);if("color"===this.type)for(var s=c(a),u=o;u<t;u++)i.emplaceBack(s[0],s[1]);else{for(var l=o;l<t;l++)i.emplaceBack(a);this.maxValue=Math.max(this.maxValue,a)}},v.prototype.updatePaintArray=function(t,e,r,n){var i=this.paintVertexArray,o=this.expression.evaluate({zoom:0},r,n);if("color"===this.type)for(var a=c(o),s=t;s<e;s++)i.emplace(s,a[0],a[1]);else{for(var u=t;u<e;u++)i.emplace(u,o);this.maxValue=Math.max(this.maxValue,o)}},v.prototype.upload=function(t){this.paintVertexArray&&this.paintVertexArray.arrayBuffer&&(this.paintVertexBuffer&&this.paintVertexBuffer.buffer?this.paintVertexBuffer.updateData(this.paintVertexArray):this.paintVertexBuffer=t.createVertexBuffer(this.paintVertexArray,this.paintVertexAttributes,this.expression.isStateDependent))},v.prototype.destroy=function(){this.paintVertexBuffer&&this.paintVertexBuffer.destroy()},v.prototype.setUniforms=function(t,e){e.set(0)},v.prototype.getBinding=function(t,e){return new i.Uniform1f(t,e)};var g=function(t,e,r,n,i,o){this.expression=t,this.names=e,this.uniformNames=this.names.map(function(t){return"u_"+t+"_t"}),this.type=r,this.useIntegerZoom=n,this.zoom=i,this.maxValue=-1/0;var a=o;this.paintVertexAttributes=e.map(function(t){return{name:"a_"+t,type:"Float32",components:"color"===r?4:2,offset:0}}),this.paintVertexArray=new a};g.prototype.defines=function(){return[]},g.prototype.setConstantPatternPositions=function(){},g.prototype.populatePaintArray=function(t,e,r,n){var i=this.paintVertexArray,o=i.length;i.reserve(t);var a=this.expression.evaluate(new EvaluationParameters(this.zoom),e,{},[],n),s=this.expression.evaluate(new EvaluationParameters(this.zoom+1),e,{},[],n);if("color"===this.type)for(var u=c(a),l=c(s),p=o;p<t;p++)i.emplaceBack(u[0],u[1],l[0],l[1]);else{for(var f=o;f<t;f++)i.emplaceBack(a,s);this.maxValue=Math.max(this.maxValue,a,s)}},g.prototype.updatePaintArray=function(t,e,r,n){var i=this.paintVertexArray,o=this.expression.evaluate({zoom:this.zoom},r,n),a=this.expression.evaluate({zoom:this.zoom+1},r,n);if("color"===this.type)for(var s=c(o),u=c(a),l=t;l<e;l++)i.emplace(l,s[0],s[1],u[0],u[1]);else{for(var p=t;p<e;p++)i.emplace(p,o,a);this.maxValue=Math.max(this.maxValue,o,a)}},g.prototype.upload=function(t){this.paintVertexArray&&this.paintVertexArray.arrayBuffer&&(this.paintVertexBuffer&&this.paintVertexBuffer.buffer?this.paintVertexBuffer.updateData(this.paintVertexArray):this.paintVertexBuffer=t.createVertexBuffer(this.paintVertexArray,this.paintVertexAttributes,this.expression.isStateDependent))},g.prototype.destroy=function(){this.paintVertexBuffer&&this.paintVertexBuffer.destroy()},g.prototype.interpolationFactor=function(t){return this.useIntegerZoom&&(t=Math.floor(t)),l(this.expression.interpolationFactor(t,this.zoom,this.zoom+1),0,1)},g.prototype.setUniforms=function(t,e,r){e.set(this.interpolationFactor(r.zoom))},g.prototype.getBinding=function(t,e){return new i.Uniform1f(t,e)};var x=function(t,e,r,n,i,o,a){this.expression=t,this.names=e,this.type=r,this.uniformNames=this.names.map(function(t){return"u_"+t+"_t"}),this.useIntegerZoom=n,this.zoom=i,this.maxValue=-1/0,this.layerId=a,this.paintVertexAttributes=e.map(function(t){return{name:"a_"+t,type:"Uint16",components:4,offset:0}}),this.zoomInPaintVertexArray=new o,this.zoomOutPaintVertexArray=new o};x.prototype.defines=function(){return[]},x.prototype.setConstantPatternPositions=function(){},x.prototype.populatePaintArray=function(t,e,r){var n=this.zoomInPaintVertexArray,i=this.zoomOutPaintVertexArray,o=this,a=o.layerId,s=n.length;if(n.reserve(t),i.reserve(t),r&&e.patterns&&e.patterns[a]){var u=e.patterns[a],l=u.min,p=u.mid,c=u.max,f=r[l],h=r[p],y=r[c];if(!f||!h||!y)return;for(var d=s;d<t;d++)n.emplaceBack(h.tl[0],h.tl[1],h.br[0],h.br[1],f.tl[0],f.tl[1],f.br[0],f.br[1]),i.emplaceBack(h.tl[0],h.tl[1],h.br[0],h.br[1],y.tl[0],y.tl[1],y.br[0],y.br[1])}},x.prototype.updatePaintArray=function(t,e,r,n,i){var o=this.zoomInPaintVertexArray,a=this.zoomOutPaintVertexArray,s=this,u=s.layerId;if(i&&r.patterns&&r.patterns[u]){var l=r.patterns[u],p=l.min,c=l.mid,f=l.max,h=i[p],y=i[c],d=i[f];if(!h||!y||!d)return;for(var m=t;m<e;m++)o.emplace(m,y.tl[0],y.tl[1],y.br[0],y.br[1],h.tl[0],h.tl[1],h.br[0],h.br[1]),a.emplace(m,y.tl[0],y.tl[1],y.br[0],y.br[1],d.tl[0],d.tl[1],d.br[0],d.br[1])}},x.prototype.upload=function(t){this.zoomInPaintVertexArray&&this.zoomInPaintVertexArray.arrayBuffer&&this.zoomOutPaintVertexArray&&this.zoomOutPaintVertexArray.arrayBuffer&&(this.zoomInPaintVertexBuffer=t.createVertexBuffer(this.zoomInPaintVertexArray,this.paintVertexAttributes,this.expression.isStateDependent),this.zoomOutPaintVertexBuffer=t.createVertexBuffer(this.zoomOutPaintVertexArray,this.paintVertexAttributes,this.expression.isStateDependent))},x.prototype.destroy=function(){this.zoomOutPaintVertexBuffer&&this.zoomOutPaintVertexBuffer.destroy(),this.zoomInPaintVertexBuffer&&this.zoomInPaintVertexBuffer.destroy()},x.prototype.setUniforms=function(t,e){e.set(0)},x.prototype.getBinding=function(t,e){return new Uniform1f(t,e)};var b=function(){this.binders={},this.cacheKey="",this._buffers=[]};return b.createDynamic=function(t,e,i){var o=new b,a=[];for(var s in t.paint._values)if(i(s)){var u=t.paint.get(s);if(u instanceof r&&n.supportsPropertyExpression(u.property.specification)){var l=f(s,t.type),p=u.property.specification.type,c=u.property.useIntegerZoom,h="cross-faded"===u.property.specification["property-type"]||"cross-faded-data-driven"===u.property.specification["property-type"];if(h)if("constant"===u.value.kind)o.binders[s]=new m(u.value.value,l,p),a.push("/u_"+s);else{var w=y(s,p,"source");o.binders[s]=new x(u.value,l,p,c,e,w,t.id),a.push("/a_"+s)}else if("constant"===u.value.kind)o.binders[s]=new d(u.value.value,l,p),a.push("/u_"+s);else if("source"===u.value.kind){var _=y(s,p,"source");o.binders[s]=new v(u.value,l,p,_),a.push("/a_"+s)}else{var C=y(s,p,"composite");o.binders[s]=new g(u.value,l,p,c,e,C),a.push("/z_"+s)}}}return o.cacheKey=a.sort().join(""),o},b.prototype.populatePaintArrays=function(t,e,r,n,i){for(var o in this.binders){this.binders[o].populatePaintArray(t,e,n,i)}},b.prototype.setConstantPatternPositions=function(t,e){for(var r in this.binders){this.binders[r].setConstantPatternPositions(t,e)}},b.prototype.updatePaintArrays=function(t,e,r,n,i){var o=!1;for(var a in t)for(var s=e.getPositions(+a),u=0,l=s;u<l.length;u+=1){var p=l[u],c=r.feature(p.index);for(var f in this.binders){var h=this.binders[f];if(!(h instanceof d||h instanceof m)&&!0===h.expression.isStateDependent){var y=n.paint.get(f);h.expression=y.value,h.updatePaintArray(p.start,p.end,c,t[a],i),o=!0}}}return o},b.prototype.defines=function(){var t=[];for(var e in this.binders)t.push.apply(t,this.binders[e].defines());return t},b.prototype.getPaintVertexBuffers=function(){return this._buffers},b.prototype.getUniforms=function(t,e){var r=[];for(var n in this.binders)for(var i=this.binders[n],o=0,a=i.uniformNames;o<a.length;o+=1){var s=a[o];if(e[s]){var u=i.getBinding(t,e[s]);r.push({name:s,property:n,binding:u})}}return r},b.prototype.setUniforms=function(t,e,r,n){for(var i=0,o=e;i<o.length;i+=1){var a=o[i],s=a.name,u=a.property,l=a.binding;this.binders[u].setUniforms(t,l,n,r.get(u),s)}},b.prototype.updatePatternPaintBuffers=function(t){var e=[];for(var r in this.binders){var n=this.binders[r];if(n instanceof x){var i=2===t.fromScale?n.zoomInPaintVertexBuffer:n.zoomOutPaintVertexBuffer;i&&e.push(i)}else(n instanceof v||n instanceof g)&&n.paintVertexBuffer&&e.push(n.paintVertexBuffer)}this._buffers=e},b.prototype.upload=function(t){for(var e in this.binders)this.binders[e].upload(t);var r=[];for(var n in this.binders){var i=this.binders[n];(i instanceof v||i instanceof g)&&i.paintVertexBuffer&&r.push(i.paintVertexBuffer)}this._buffers=r},b.prototype.destroy=function(){for(var t in this.binders)this.binders[t].destroy()},t.register("ConstantBinder",d),t.register("CrossFadedConstantBinder",m),t.register("SourceExpressionBinder",v),t.register("CrossFadedCompositeBinder",x),t.register("CompositeExpressionBinder",g),t.register("ProgramConfiguration",b,{omit:["_buffers"]}),b}),define("MVT/data/programConfigurationSet",["../util/web_worker_transfer","./feature_position_map","./program_configuration"],function(t,e,r){"use strict";var n=function(t,n,i,o){void 0===o&&(o=function(){return!0}),this.programConfigurations={};for(var a=0,s=n;a<s.length;a+=1){var u=s[a];this.programConfigurations[u.id]=r.createDynamic(u,i,o),this.programConfigurations[u.id].layoutAttributes=t}this.needsUpload=!1,this._featureMap=new e,this._bufferOffset=0};return n.prototype.populatePaintArrays=function(t,e,r,n,i){for(var o in this.programConfigurations)this.programConfigurations[o].populatePaintArrays(t,e,r,n,i);void 0!==e.id&&this._featureMap.add(+e.id,r,this._bufferOffset,t),this._bufferOffset=t,this.needsUpload=!0},n.prototype.updatePaintArrays=function(t,e,r,n){for(var i=0,o=r;i<o.length;i+=1){var a=o[i];this.needsUpload=this.programConfigurations[a.id].updatePaintArrays(t,this._featureMap,e,a,n)||this.needsUpload}},n.prototype.get=function(t){return this.programConfigurations[t]},n.prototype.upload=function(t){if(this.needsUpload){for(var e in this.programConfigurations)this.programConfigurations[e].upload(t);this.needsUpload=!1}},n.prototype.destroy=function(){for(var t in this.programConfigurations)this.programConfigurations[t].destroy()},t.register("ProgramConfigurationSet",n),n}),define("MVT/data/bucket/addPatternDependencies",[],function(){"use strict";function t(t,e,r,n,i){for(var o=i.patternDependencies,a=0,s=e;a<s.length;a+=1){var u=s[a],l=u.paint.get(t+"-pattern"),p=l.value;if("constant"!==p.kind){var c=p.evaluate({zoom:n-1},r,{},i.availableImages),f=p.evaluate({zoom:n},r,{},i.availableImages),h=p.evaluate({zoom:n+1},r,{},i.availableImages);c=c&&c.name?c.name:c,f=f&&f.name?f.name:f,h=h&&h.name?h.name:h,o[c]=!0,o[f]=!0,o[h]=!0,r.patterns[u.id]={min:c,mid:f,max:h}}}return r}return t}),define("MVT/data/bucket/hasPattern",[],function(){"use strict";function t(t,e,r){for(var n=r.patternDependencies,i=!1,o=0,a=e;o<a.length;o+=1){var s=a[o],u=s.paint.get(t+"-pattern");u.isConstant()||(i=!0);var l=u.constantOr(null);l&&(i=!0,n[l.to]=!0,n[l.from]=!0)}return i}return t}),define("MVT/data/bucket/line_bucket",["../../../core/defined","../../util/createLayout","../../util/web_worker_transfer","../../style/evaluation_parameters","../load_geometry","../segment","../StructArrayLayout2i4ub8","../StructArrayLayout3ui6","../programConfigurationSet","./addPatternDependencies","./hasPattern","../extent"],function(t,e,r,n,i,o,a,s,u,l,p,c){"use strict";var f=["Unknown","Point","LineString","Polygon"],h=e([{name:"a_pos_normal",components:2,type:"Int16"},{name:"a_data",components:4,type:"Uint8"}],4),y=h.members,d=(h.size,h.alignment,Math.cos(Math.PI/180*37.5)),m=Math.pow(2,14)/.5,v=function(t){this.zoom=t.zoom,this.overscaling=t.overscaling,this.layers=t.layers,this.layerIds=this.layers.map(function(t){return t.id}),this.index=t.index,this.hasPattern=!1,this.patternFeatures=[],this.layoutVertexArray=new a,this.indexArray=new s,this.programConfigurations=new u(y,t.layers,t.zoom),this.segments=new o,this.stateDependentLayerIds=this.layers.filter(function(t){return t.isStateDependent()}).map(function(t){return t.id})};return v.prototype.populate=function(t,e){this.hasPattern=!1;for(var r=this.layers[0].layout.get("line-sort-key"),o=[],a=0,s=t;a<s.length;a+=1){var u=s[a],p=u.feature,c=u.index,f=u.sourceLayerIndex;if(this.layers[0]._featureFilter(new n(0),p)){var h=i(p),y=r?r.evaluate(p,{}):void 0,d={id:p.id,properties:p.properties,type:p.type,sourceLayerIndex:f,index:c,geometry:h,patterns:{},sortKey:y};o.push(d)}}r&&o.sort(function(t,e){return t.sortKey-e.sortKey});for(var m=0,v=o;m<v.length;m+=1){var g=v[m],x=g,b=x.geometry,w=x.index,_=x.sourceLayerIndex;if(this.hasPattern){var C=l("line",this.layers,g,this.zoom,e);this.patternFeatures.push(C)}else this.addFeature(g,b,w,{});var A=t[w].feature;e.featureIndex.insert(A,b,w,_,this.index)}},v.prototype.update=function(t,e,r){this.stateDependentLayers.length&&this.programConfigurations.updatePaintArrays(t,e,this.stateDependentLayers,r)},v.prototype.addFeatures=function(t,e){for(var r=0,n=this.patternFeatures;r<n.length;r+=1){var i=n[r];this.addFeature(i,i.geometry,i.index,e)}},v.prototype.isEmpty=function(){return 0===this.layoutVertexArray.length},v.prototype.uploadPending=function(){return!this.uploaded||this.programConfigurations.needsUpload},v.prototype.upload=function(t){this.uploaded||(this.layoutVertexBuffer=t.createVertexBuffer(this.layoutVertexArray,y),this.indexBuffer=t.createIndexBuffer(this.indexArray)),this.programConfigurations.upload(t),this.uploaded=!0},v.prototype.destroy=function(){this.layoutVertexBuffer&&(this.layoutVertexBuffer.destroy(),this.indexBuffer.destroy(),this.programConfigurations.destroy(),this.segments.destroy())},v.prototype.clear=function(){t(this.layoutVertexArray)&&(this.layoutVertexArray=null),t(this.indexArray)&&(this.indexArray=null)},v.prototype.addFeature=function(t,e,r,n){for(var i=this.layers[0].layout,o=i.get("line-join").evaluate(t,{}),a=i.get("line-cap"),s=i.get("line-miter-limit"),u=i.get("line-round-limit"),l=0,p=e;l<p.length;l+=1){var c=p[l];this.addLine(c,t,o,a,s,u,r,n)}},v.prototype.addLine=function(t,e,r,n,i,o,a,s){if(this.distance=0,this.scaledDistance=0,this.totalDistance=0,e.properties&&e.properties.hasOwnProperty("mapbox_clip_start")&&e.properties.hasOwnProperty("mapbox_clip_end")){this.clipStart=+e.properties.mapbox_clip_start,this.clipEnd=+e.properties.mapbox_clip_end;for(var u=0;u<t.length-1;u++)this.totalDistance+=t[u].dist(t[u+1])}for(var l="Polygon"===f[e.type],p=t.length;p>=2&&t[p-1].equals(t[p-2]);)p--;for(var h=0;h<p-1&&t[h].equals(t[h+1]);)h++;if(!(p<(l?3:2))){"bevel"===r&&(i=1.05);var y,m=this.overscaling<=16?15*c/(512*this.overscaling):0,v=this.segments.prepareSegment(10*p,this.layoutVertexArray,this.indexArray),g=void 0,x=void 0,b=void 0,w=void 0;this.e1=this.e2=-1,l&&(y=t[p-2],w=t[h].sub(y)._unit()._perp());for(var _=h;_<p;_++)if(!(x=l&&_===p-1?t[h+1]:t[_+1])||!t[_].equals(x)){w&&(b=w),y&&(g=y),y=t[_],w=x?x.sub(y)._unit()._perp():b,b=b||w;var C=b.add(w);0===C.x&&0===C.y||C._unit();var A=b.x*w.x+b.y*w.y,S=C.x*w.x+C.y*w.y,E=0!==S?1/S:1/0,k=2*Math.sqrt(2-2*S),I=S<d&&g&&x,F=b.x*w.y-b.y*w.x>0;if(I&&_>h){var V=y.dist(g);if(V>2*m){var M=y.sub(y.sub(g)._mult(m/V)._round());this.updateDistance(g,M),this.addCurrentVertex(M,b,0,0,v),g=M}}var P=g&&x,T=P?r:l?"butt":n;if(P&&"round"===T&&(E<o?T="miter":E<=2&&(T="fakeround")),"miter"===T&&E>i&&(T="bevel"),"bevel"===T&&(E>2&&(T="flipbevel"),E<i&&(T="miter")),g&&this.updateDistance(g,y),"miter"===T)C._mult(E),this.addCurrentVertex(y,C,0,0,v);else if("flipbevel"===T){if(E>100)C=w.mult(-1);else{var z=E*b.add(w).mag()/b.sub(w).mag();C._perp()._mult(z*(F?-1:1))}this.addCurrentVertex(y,C,0,0,v),this.addCurrentVertex(y,C.mult(-1),0,0,v)}else if("bevel"===T||"fakeround"===T){var B=-Math.sqrt(E*E-1),O=F?B:0,D=F?0:B;if(g&&this.addCurrentVertex(y,b,O,D,v),"fakeround"===T)for(var L=Math.round(180*k/Math.PI/20),R=1;R<L;R++){var q=R/L;if(.5!==q){var U=q-.5,N=1.0904+A*(A*(3.55645-1.43519*A)-3.2452),j=.848013+A*(.215638*A-1.06021);q+=q*U*(q-1)*(N*U*U+j)}var G=w.sub(b)._mult(q)._add(b)._unit()._mult(F?-1:1);this.addHalfVertex(y,G.x,G.y,!1,F,0,v)}x&&this.addCurrentVertex(y,w,-O,-D,v)}else if("butt"===T)this.addCurrentVertex(y,C,0,0,v);else if("square"===T){var K=g?1:-1;this.addCurrentVertex(y,C,K,K,v)}else"round"===T&&(g&&(this.addCurrentVertex(y,b,0,0,v),this.addCurrentVertex(y,b,1,1,v,!0)),x&&(this.addCurrentVertex(y,w,-1,-1,v,!0),this.addCurrentVertex(y,w,0,0,v)));if(I&&_<p-1){var H=y.dist(x);if(H>2*m){var Y=y.add(x.sub(y)._mult(m/H)._round());this.updateDistance(y,Y),this.addCurrentVertex(Y,w,0,0,v),y=Y}}}this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length,e,a,s)}},v.prototype.addCurrentVertex=function(t,e,r,n,i,o){void 0===o&&(o=!1);var a=e.x+e.y*r,s=e.y-e.x*r,u=-e.x+e.y*n,l=-e.y-e.x*n;this.addHalfVertex(t,a,s,o,!1,r,i),this.addHalfVertex(t,u,l,o,!0,-n,i),this.distance>m/2&&0===this.totalDistance&&(this.distance=0,this.addCurrentVertex(t,e,r,n,i,o))},v.prototype.addHalfVertex=function(t,e,r,n,i,o,a){var s=t.x,u=t.y,l=.5*this.scaledDistance;this.layoutVertexArray.emplaceBack((s<<1)+(n?1:0),(u<<1)+(i?1:0),Math.round(63*e)+128,Math.round(63*r)+128,1+(0===o?0:o<0?-1:1)|(63&l)<<2,l>>6);var p=a.vertexLength++;this.e1>=0&&this.e2>=0&&(this.indexArray.emplaceBack(this.e1,this.e2,p),a.primitiveLength++),i?this.e2=p:this.e1=p},v.prototype.updateDistance=function(t,e){this.distance+=t.dist(e),this.scaledDistance=this.totalDistance>0?(this.clipStart+(this.clipEnd-this.clipStart)*this.distance/this.totalDistance)*(m-1):this.distance},r.register("LineBucket",v,{omit:["layers","patternFeatures"]}),v}),define("ThirdParty/quickselect",[],function(){"use strict";function t(t,r,i,o,a){e(t,r,i||0,o||t.length-1,a||n)}function e(t,n,i,o,a){for(;o>i;){if(o-i>600){var s=o-i+1,u=n-i+1,l=Math.log(s),p=.5*Math.exp(2*l/3),c=.5*Math.sqrt(l*p*(s-p)/s)*(u-s/2<0?-1:1);e(t,n,Math.max(i,Math.floor(n-u*p/s+c)),Math.min(o,Math.floor(n+(s-u)*p/s+c)),a)}var f=t[n],h=i,y=o;for(r(t,i,n),a(t[o],f)>0&&r(t,i,o);h<y;){for(r(t,h,y),h++,y--;a(t[h],f)<0;)h++;for(;a(t[y],f)>0;)y--}0===a(t[i],f)?r(t,i,y):(y++,r(t,y,o)),y<=n&&(i=y+1),n<=y&&(o=y-1)}}function r(t,e,r){var n=t[e];t[e]=t[r],t[r]=n}function n(t,e){return t<e?-1:t>e?1:0}return t}),define("MVT/util/classify_rings",["../../ThirdParty/quickselect"],function(t){"use strict";function e(t){for(var e=0,r=0,n=t.length,i=n-1,o=void 0,a=void 0;r<n;i=r++)o=t[r],a=t[i],e+=(a.x-o.x)*(o.y+a.y);return e}function r(r,i){var o=r.length;if(o<=1)return[r];for(var a,s,u=[],l=0;l<o;l++){var p=e(r[l]);0!==p&&(r[l].area=Math.abs(p),void 0===s&&(s=p<0),s===p<0?(a&&u.push(a),a=[r[l]]):a.push(r[l]))}if(a&&u.push(a),i>1)for(var c=0;c<u.length;c++)u[c].length<=i||(t(u[c],i,1,u[c].length-1,n),u[c]=u[c].slice(0,i));return u}function n(t,e){return e.area-t.area}return r}),define("ThirdParty/earcut-2.1.1",[],function(){"use strict";function t(t,r,i){i=i||2;var o=r&&r.length,a=o?r[0]*i:t.length,s=e(t,0,a,i,!0),l=[];if(!s)return l;var p,c,f,h,y,d,m;if(o&&(s=u(t,r,s,i)),t.length>80*i){p=f=t[0],c=h=t[1];for(var v=i;v<a;v+=i)y=t[v],d=t[v+1],y<p&&(p=y),d<c&&(c=d),y>f&&(f=y),d>h&&(h=d);m=Math.max(f-p,h-c)}return n(s,l,i,p,c,m),l}function e(t,e,r,n,i){var o,a;if(i===I(t,e,r,n)>0)for(o=e;o<r;o+=n)a=S(o,t[o],t[o+1],a);else for(o=r-n;o>=e;o-=n)a=S(o,t[o],t[o+1],a);return a&&x(a,a.next)&&(E(a),a=a.next),a}function r(t,e){if(!t)return t;e||(e=t);var r,n=t;do{if(r=!1,n.steiner||!x(n,n.next)&&0!==g(n.prev,n,n.next))n=n.next;else{if(E(n),(n=e=n.prev)===n.next)return null;r=!0}}while(r||n!==e);return e}function n(t,e,u,l,p,c,h){if(t){!h&&c&&f(t,l,p,c);for(var y,d,m=t;t.prev!==t.next;)if(y=t.prev,d=t.next,c?o(t,l,p,c):i(t))e.push(y.i/u),e.push(t.i/u),e.push(d.i/u),E(t),t=d.next,m=d.next;else if((t=d)===m){h?1===h?(t=a(t,e,u),n(t,e,u,l,p,c,2)):2===h&&s(t,e,u,l,p,c):n(r(t),e,u,l,p,c,1);break}}}function i(t){var e=t.prev,r=t,n=t.next;if(g(e,r,n)>=0)return!1;for(var i=t.next.next;i!==t.prev;){if(m(e.x,e.y,r.x,r.y,n.x,n.y,i.x,i.y)&&g(i.prev,i,i.next)>=0)return!1;i=i.next}return!0}function o(t,e,r,n){var i=t.prev,o=t,a=t.next;if(g(i,o,a)>=0)return!1;for(var s=i.x<o.x?i.x<a.x?i.x:a.x:o.x<a.x?o.x:a.x,u=i.y<o.y?i.y<a.y?i.y:a.y:o.y<a.y?o.y:a.y,l=i.x>o.x?i.x>a.x?i.x:a.x:o.x>a.x?o.x:a.x,p=i.y>o.y?i.y>a.y?i.y:a.y:o.y>a.y?o.y:a.y,c=y(s,u,e,r,n),f=y(l,p,e,r,n),h=t.nextZ;h&&h.z<=f;){
-if(h!==t.prev&&h!==t.next&&m(i.x,i.y,o.x,o.y,a.x,a.y,h.x,h.y)&&g(h.prev,h,h.next)>=0)return!1;h=h.nextZ}for(h=t.prevZ;h&&h.z>=c;){if(h!==t.prev&&h!==t.next&&m(i.x,i.y,o.x,o.y,a.x,a.y,h.x,h.y)&&g(h.prev,h,h.next)>=0)return!1;h=h.prevZ}return!0}function a(t,e,r){var n=t;do{var i=n.prev,o=n.next.next;!x(i,o)&&b(i,n,n.next,o)&&_(i,o)&&_(o,i)&&(e.push(i.i/r),e.push(n.i/r),e.push(o.i/r),E(n),E(n.next),n=t=o),n=n.next}while(n!==t);return n}function s(t,e,i,o,a,s){var u=t;do{for(var l=u.next.next;l!==u.prev;){if(u.i!==l.i&&v(u,l)){var p=A(u,l);return u=r(u,u.next),p=r(p,p.next),n(u,e,i,o,a,s),void n(p,e,i,o,a,s)}l=l.next}u=u.next}while(u!==t)}function u(t,n,i,o){var a,s,u,c,f,h=[];for(a=0,s=n.length;a<s;a++)u=n[a]*o,c=a<s-1?n[a+1]*o:t.length,f=e(t,u,c,o,!1),f===f.next&&(f.steiner=!0),h.push(d(f));for(h.sort(l),a=0;a<h.length;a++)p(h[a],i),i=r(i,i.next);return i}function l(t,e){return t.x-e.x}function p(t,e){if(e=c(t,e)){var n=A(e,t);r(n,n.next)}}function c(t,e){var r,n=e,i=t.x,o=t.y,a=-1/0;do{if(o<=n.y&&o>=n.next.y){var s=n.x+(o-n.y)*(n.next.x-n.x)/(n.next.y-n.y);if(s<=i&&s>a){if(a=s,s===i){if(o===n.y)return n;if(o===n.next.y)return n.next}r=n.x<n.next.x?n:n.next}}n=n.next}while(n!==e);if(!r)return null;if(i===a)return r.prev;var u,l=r,p=r.x,c=r.y,f=1/0;for(n=r.next;n!==l;)i>=n.x&&n.x>=p&&m(o<c?i:a,o,p,c,o<c?a:i,o,n.x,n.y)&&((u=Math.abs(o-n.y)/(i-n.x))<f||u===f&&n.x>r.x)&&_(n,t)&&(r=n,f=u),n=n.next;return r}function f(t,e,r,n){var i=t;do{null===i.z&&(i.z=y(i.x,i.y,e,r,n)),i.prevZ=i.prev,i.nextZ=i.next,i=i.next}while(i!==t);i.prevZ.nextZ=null,i.prevZ=null,h(i)}function h(t){var e,r,n,i,o,a,s,u,l=1;do{for(r=t,t=null,o=null,a=0;r;){for(a++,n=r,s=0,e=0;e<l&&(s++,n=n.nextZ);e++);for(u=l;s>0||u>0&&n;)0===s?(i=n,n=n.nextZ,u--):0!==u&&n?r.z<=n.z?(i=r,r=r.nextZ,s--):(i=n,n=n.nextZ,u--):(i=r,r=r.nextZ,s--),o?o.nextZ=i:t=i,i.prevZ=o,o=i;r=n}o.nextZ=null,l*=2}while(a>1);return t}function y(t,e,r,n,i){return t=32767*(t-r)/i,e=32767*(e-n)/i,t=16711935&(t|t<<8),t=252645135&(t|t<<4),t=858993459&(t|t<<2),t=1431655765&(t|t<<1),e=16711935&(e|e<<8),e=252645135&(e|e<<4),e=858993459&(e|e<<2),e=1431655765&(e|e<<1),t|e<<1}function d(t){var e=t,r=t;do{e.x<r.x&&(r=e),e=e.next}while(e!==t);return r}function m(t,e,r,n,i,o,a,s){return(i-a)*(e-s)-(t-a)*(o-s)>=0&&(t-a)*(n-s)-(r-a)*(e-s)>=0&&(r-a)*(o-s)-(i-a)*(n-s)>=0}function v(t,e){return t.next.i!==e.i&&t.prev.i!==e.i&&!w(t,e)&&_(t,e)&&_(e,t)&&C(t,e)}function g(t,e,r){return(e.y-t.y)*(r.x-e.x)-(e.x-t.x)*(r.y-e.y)}function x(t,e){return t.x===e.x&&t.y===e.y}function b(t,e,r,n){return!!(x(t,e)&&x(r,n)||x(t,n)&&x(r,e))||g(t,e,r)>0!=g(t,e,n)>0&&g(r,n,t)>0!=g(r,n,e)>0}function w(t,e){var r=t;do{if(r.i!==t.i&&r.next.i!==t.i&&r.i!==e.i&&r.next.i!==e.i&&b(r,r.next,t,e))return!0;r=r.next}while(r!==t);return!1}function _(t,e){return g(t.prev,t,t.next)<0?g(t,e,t.next)>=0&&g(t,t.prev,e)>=0:g(t,e,t.prev)<0||g(t,t.next,e)<0}function C(t,e){var r=t,n=!1,i=(t.x+e.x)/2,o=(t.y+e.y)/2;do{r.y>o!=r.next.y>o&&i<(r.next.x-r.x)*(o-r.y)/(r.next.y-r.y)+r.x&&(n=!n),r=r.next}while(r!==t);return n}function A(t,e){var r=new k(t.i,t.x,t.y),n=new k(e.i,e.x,e.y),i=t.next,o=e.prev;return t.next=e,e.prev=t,r.next=i,i.prev=r,n.next=r,r.prev=n,o.next=n,n.prev=o,n}function S(t,e,r,n){var i=new k(t,e,r);return n?(i.next=n.next,i.prev=n,n.next.prev=i,n.next=i):(i.prev=i,i.next=i),i}function E(t){t.next.prev=t.prev,t.prev.next=t.next,t.prevZ&&(t.prevZ.nextZ=t.nextZ),t.nextZ&&(t.nextZ.prevZ=t.prevZ)}function k(t,e,r){this.i=t,this.x=e,this.y=r,this.prev=null,this.next=null,this.z=null,this.prevZ=null,this.nextZ=null,this.steiner=!1}function I(t,e,r,n){for(var i=0,o=e,a=r-n;o<r;o+=n)i+=(t[a]-t[o])*(t[o+1]+t[a+1]),a=o;return i}return t.deviation=function(t,e,r,n){var i=e&&e.length,o=i?e[0]*r:t.length,a=Math.abs(I(t,0,o,r));if(i)for(var s=0,u=e.length;s<u;s++){var l=e[s]*r,p=s<u-1?e[s+1]*r:t.length;a-=Math.abs(I(t,l,p,r))}var c=0;for(s=0;s<n.length;s+=3){var f=n[s]*r,h=n[s+1]*r,y=n[s+2]*r;c+=Math.abs((t[f]-t[y])*(t[h+1]-t[f+1])-(t[f]-t[h])*(t[y+1]-t[f+1]))}return 0===a&&0===c?0:Math.abs((c-a)/a)},t.flatten=function(t){for(var e=t[0][0].length,r={vertices:[],holes:[],dimensions:e},n=0,i=0;i<t.length;i++){for(var o=0;o<t[i].length;o++)for(var a=0;a<e;a++)r.vertices.push(t[i][o][a]);i>0&&(n+=t[i-1].length,r.holes.push(n))}return r},t}),define("MVT/data/StructArrayLayout2i4",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.int16=new Int16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e){var r=this.length;return this.resize(r+1),this.emplace(r,t,e)},e.prototype.emplace=function(t,e,r){var n=2*t;return this.int16[n+0]=e,this.int16[n+1]=r,t},e}(t);return r.prototype.bytesPerElement=4,e.register("StructArrayLayout2i4",r),r}),define("MVT/data/StructArrayLayout2ui4",["../util/structArray","../util/web_worker_transfer"],function(t,e){"use strict";var r=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.uint16=new Uint16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e){var r=this.length;return this.resize(r+1),this.emplace(r,t,e)},e.prototype.emplace=function(t,e,r){var n=2*t;return this.uint16[n+0]=e,this.uint16[n+1]=r,t},e}(t);return r.prototype.bytesPerElement=4,e.register("StructArrayLayout2ui4",r),r}),define("MVT/data/bucket/fill_bucket",["../../../core/defined","../../util/classify_rings","../../util/createLayout","../../util/web_worker_transfer","../../style/evaluation_parameters","../../../ThirdParty/earcut-2.1.1","../load_geometry","../segment","../StructArrayLayout2i4","../StructArrayLayout2ui4","../StructArrayLayout3ui6","../programConfigurationSet","./addPatternDependencies","./hasPattern"],function(t,e,r,n,i,o,a,s,u,l,p,c,f,h){"use strict";var y=r([{name:"a_pos",components:2,type:"Int16"}],4),d=y.members,m=function(t){this.zoom=t.zoom,this.overscaling=t.overscaling,this.layers=t.layers,this.layerIds=this.layers.map(function(t){return t.id}),this.index=t.index,this.hasPattern=!1,this.patternFeatures=[],this.layoutVertexArray=new u,this.indexArray=new p,this.indexArray2=new l,this.programConfigurations=new c(d,t.layers,t.zoom),this.segments=new s,this.segments2=new s,this.stateDependentLayerIds=this.layers.filter(function(t){return t.isStateDependent()}).map(function(t){return t.id})};return m.prototype.populate=function(t,e){this.hasPattern=h("fill",this.layers,e);for(var r=null,n=[],o=0,s=t;o<s.length;o+=1){var u=s[o],l=u.feature,p=u.index,c=u.sourceLayerIndex;if(this.layers[0]._featureFilter(new i(0),l)){var y=a(l),d=r?r.evaluate(l,{},e.availableImages):void 0,m={id:l.id,properties:l.properties,type:l.type,sourceLayerIndex:c,index:p,geometry:y,patterns:{},sortKey:d};n.push(m)}}r&&n.sort(function(t,e){return t.sortKey-e.sortKey});for(var v=0,g=n;v<g.length;v+=1){var x=g[v],b=x,w=b.geometry,_=b.index,C=b.sourceLayerIndex;if(this.hasPattern){var A=f("fill",this.layers,x,this.zoom,e);this.patternFeatures.push(A)}else this.addFeature(x,w,_,{});var S=t[_].feature;e.featureIndex.insert(S,w,_,C,this.index)}},m.prototype.update=function(t,e,r){this.stateDependentLayers.length&&this.programConfigurations.updatePaintArrays(t,e,this.stateDependentLayers,r)},m.prototype.addFeatures=function(t,e){for(var r=0,n=this.patternFeatures;r<n.length;r+=1){var i=n[r];this.addFeature(i,i.geometry,i.index,e)}},m.prototype.isEmpty=function(){return 0===this.layoutVertexArray.length},m.prototype.uploadPending=function(){return!this.uploaded||this.programConfigurations.needsUpload},m.prototype.upload=function(t){this.uploaded||(this.layoutVertexBuffer=t.createVertexBuffer(this.layoutVertexArray,d),this.indexBuffer=t.createIndexBuffer(this.indexArray),this.indexBuffer2=t.createIndexBuffer(this.indexArray2)),this.programConfigurations.upload(t),this.uploaded=!0},m.prototype.destroy=function(){this.layoutVertexBuffer&&(this.layoutVertexBuffer.destroy(),this.indexBuffer.destroy(),this.indexBuffer2.destroy(),this.programConfigurations.destroy(),this.segments.destroy(),this.segments2.destroy())},m.prototype.clear=function(){t(this.layoutVertexArray)&&(this.layoutVertexArray=null),t(this.indexArray)&&(this.indexArray=null),t(this.indexArray2)&&(this.indexArray2=null)},m.prototype.addFeature=function(t,r,n,i){for(var a=0,s=e(r,500);a<s.length;a+=1){for(var u=s[a],l=0,p=0,c=u;p<c.length;p+=1){l+=c[p].length}for(var f=this.segments.prepareSegment(l,this.layoutVertexArray,this.indexArray),h=f.vertexLength,y=[],d=[],m=0,v=u;m<v.length;m+=1){var g=v[m];if(0!==g.length){g!==u[0]&&d.push(y.length/2);var x=this.segments2.prepareSegment(g.length,this.layoutVertexArray,this.indexArray2),b=x.vertexLength;this.layoutVertexArray.emplaceBack(g[0].x,g[0].y),this.indexArray2.emplaceBack(b+g.length-1,b),y.push(g[0].x),y.push(g[0].y);for(var w=1;w<g.length;w++)this.layoutVertexArray.emplaceBack(g[w].x,g[w].y),this.indexArray2.emplaceBack(b+w-1,b+w),y.push(g[w].x),y.push(g[w].y);x.vertexLength+=g.length,x.primitiveLength+=g.length}}for(var _=o(y,d),C=0;C<_.length;C+=3)this.indexArray.emplaceBack(h+_[C],h+_[C+1],h+_[C+2]);f.vertexLength+=l,f.primitiveLength+=_.length/3}this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length,t,n,i)},n.register("FillBucket",m,{omit:["layers","patternFeatures"]}),m}),define("MVT/data/array_types",["../util/web_worker_transfer"],function(t){var e=function(t,e){this._structArray=t,this._pos1=e*this.size,this._pos2=this._pos1/2,this._pos4=this._pos1/4,this._pos8=this._pos1/8},r=function(){this.isTransferred=!1,this.capacity=-1,this.resize(0)};r.serialize=function(t,e){return t.isTransferred&&console.log("StructArray array.isTransferred."),t._trim(),e&&(t.isTransferred=!0,e.push(t.arrayBuffer)),{length:t.length,arrayBuffer:t.arrayBuffer}},r.deserialize=function(t){var e=Object.create(this.prototype);return e.arrayBuffer=t.arrayBuffer,e.length=t.length,e.capacity=t.arrayBuffer.byteLength/e.bytesPerElement,e._refreshViews(),e},r.prototype._trim=function(){this.length!==this.capacity&&(this.capacity=this.length,this.arrayBuffer=this.arrayBuffer.slice(0,this.length*this.bytesPerElement),this._refreshViews())},r.prototype.clear=function(){this.length=0},r.prototype.resize=function(t){this.reserve(t),this.length=t},r.prototype.reserve=function(t){if(t>this.capacity){this.capacity=Math.max(t,Math.floor(5*this.capacity),128),this.arrayBuffer=new ArrayBuffer(this.capacity*this.bytesPerElement);var e=this.uint8;this._refreshViews(),e&&this.uint8.set(e)}},r.prototype._refreshViews=function(){throw new Error("_refreshViews() must be implemented by each concrete StructArray layout")};var n=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype._refreshViews=function(){this.uint8=new Uint8Array(this.arrayBuffer),this.uint32=new Uint32Array(this.arrayBuffer),this.uint16=new Uint16Array(this.arrayBuffer)},e.prototype.emplaceBack=function(t,e,r){var n=this.length;return this.resize(n+1),this.emplace(n,t,e,r)},e.prototype.emplace=function(t,e,r,n){var i=2*t,o=4*t;return this.uint32[i+0]=e,this.uint16[o+2]=r,this.uint16[o+3]=n,t},e}(r);n.prototype.bytesPerElement=8;var i=function(t){function e(){t.apply(this,arguments)}t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e;var r={featureIndex:{configurable:!0},sourceLayerIndex:{configurable:!0},bucketIndex:{configurable:!0}};return r.featureIndex.get=function(){return this._structArray.uint32[this._pos4+0]},r.featureIndex.set=function(t){this._structArray.uint32[this._pos4+0]=t},r.sourceLayerIndex.get=function(){return this._structArray.uint16[this._pos2+2]},r.sourceLayerIndex.set=function(t){this._structArray.uint16[this._pos2+2]=t},r.bucketIndex.get=function(){return this._structArray.uint16[this._pos2+3]},r.bucketIndex.set=function(t){this._structArray.uint16[this._pos2+3]=t},Object.defineProperties(e.prototype,r),e}(e);i.prototype.size=8;var o=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.get=function(t){return new i(this,t)},e}(n);return t.register("FeatureIndexArray",o,{omit:["layers","patternFeatures"]}),{FeatureIndexArray:o}}),define("MVT/pointGeometry",[],function(){"use strict";function t(t,e){this.x=t,this.y=e}return t.prototype={clone:function(){return new t(this.x,this.y)},add:function(t){return this.clone()._add(t)},sub:function(t){return this.clone()._sub(t)},multByPoint:function(t){return this.clone()._multByPoint(t)},divByPoint:function(t){return this.clone()._divByPoint(t)},mult:function(t){return this.clone()._mult(t)},div:function(t){return this.clone()._div(t)},rotate:function(t){return this.clone()._rotate(t)},rotateAround:function(t,e){return this.clone()._rotateAround(t,e)},matMult:function(t){return this.clone()._matMult(t)},unit:function(){return this.clone()._unit()},perp:function(){return this.clone()._perp()},round:function(){return this.clone()._round()},mag:function(){return Math.sqrt(this.x*this.x+this.y*this.y)},equals:function(t){return this.x===t.x&&this.y===t.y},dist:function(t){return Math.sqrt(this.distSqr(t))},distSqr:function(t){var e=t.x-this.x,r=t.y-this.y;return e*e+r*r},angle:function(){return Math.atan2(this.y,this.x)},angleTo:function(t){return Math.atan2(this.y-t.y,this.x-t.x)},angleWith:function(t){return this.angleWithSep(t.x,t.y)},angleWithSep:function(t,e){return Math.atan2(this.x*e-this.y*t,this.x*t+this.y*e)},_matMult:function(t){var e=t[0]*this.x+t[1]*this.y,r=t[2]*this.x+t[3]*this.y;return this.x=e,this.y=r,this},_add:function(t){return this.x+=t.x,this.y+=t.y,this},_sub:function(t){return this.x-=t.x,this.y-=t.y,this},_mult:function(t){return this.x*=t,this.y*=t,this},_div:function(t){return this.x/=t,this.y/=t,this},_multByPoint:function(t){return this.x*=t.x,this.y*=t.y,this},_divByPoint:function(t){return this.x/=t.x,this.y/=t.y,this},_unit:function(){return this._div(this.mag()),this},_perp:function(){var t=this.y;return this.y=this.x,this.x=-t,this},_rotate:function(t){var e=Math.cos(t),r=Math.sin(t),n=e*this.x-r*this.y,i=r*this.x+e*this.y;return this.x=n,this.y=i,this},_rotateAround:function(t,e){var r=Math.cos(t),n=Math.sin(t),i=e.x+r*(this.x-e.x)-n*(this.y-e.y),o=e.y+n*(this.x-e.x)+r*(this.y-e.y);return this.x=i,this.y=o,this},_round:function(){return this.x=Math.round(this.x),this.y=Math.round(this.y),this}},t.convert=function(e){return e instanceof t?e:Array.isArray(e)?new t(e[0],e[1]):e},t}),define("MVT/vectortilefeature",["./pointGeometry"],function(t){"use strict";function e(t,e,n,i,o){this.properties={},this.extent=n,this.type=0,this._pbf=t,this._geometry=-1,this._keys=i,this._values=o,t.readFields(r,this,e)}function r(t,e,r){1==t?e.id=r.readVarint():2==t?n(r,e):3==t?e.type=r.readVarint():4==t&&(e._geometry=r.pos)}function n(t,e){for(var r=t.readVarint()+t.pos;t.pos<r;){var n=e._keys[t.readVarint()],i=e._values[t.readVarint()];e.properties[n]=i}}function i(t){var e=t.length;if(e<=1)return[t];for(var r,n,i=[],a=0;a<e;a++){var s=o(t[a]);0!==s&&(void 0===n&&(n=s<0),n===s<0?(r&&i.push(r),r=[t[a]]):r.push(t[a]))}return r&&i.push(r),i}function o(t){for(var e,r,n=0,i=0,o=t.length,a=o-1;i<o;a=i++)e=t[i],r=t[a],n+=(r.x-e.x)*(e.y+r.y);return n}return e.types=["Unknown","Point","LineString","Polygon"],e.prototype.loadGeometry=function(){var e=this._pbf;e.pos=this._geometry;for(var r,n=e.readVarint()+e.pos,i=1,o=0,a=0,s=0,u=[];e.pos<n;){if(o<=0){var l=e.readVarint();i=7&l,o=l>>3}if(o--,1===i||2===i)a+=e.readSVarint(),s+=e.readSVarint(),1===i&&(r&&u.push(r),r=[]),r.push(new t(a,s));else{if(7!==i)throw new Error("unknown command "+i);r&&r.push(r[0].clone())}}return r&&u.push(r),u},e.prototype.bbox=function(){var t=this._pbf;t.pos=this._geometry;for(var e=t.readVarint()+t.pos,r=1,n=0,i=0,o=0,a=1/0,s=-1/0,u=1/0,l=-1/0;t.pos<e;){if(n<=0){var p=t.readVarint();r=7&p,n=p>>3}if(n--,1===r||2===r)i+=t.readSVarint(),o+=t.readSVarint(),i<a&&(a=i),i>s&&(s=i),o<u&&(u=o),o>l&&(l=o);else if(7!==r)throw new Error("unknown command "+r)}return[a,u,s,l]},e.prototype.toGeoJSON=function(t,r,n){function o(t){for(var e=0;e<t.length;e++){var r=t[e],n=180-360*(r.y+p)/u;t[e]=[360*(r.x+l)/u-180,360/Math.PI*Math.atan(Math.exp(n*Math.PI/180))-90]}}var a,s,u=this.extent*Math.pow(2,n),l=this.extent*t,p=this.extent*r,c=this.loadGeometry(),f=e.types[this.type];switch(this.type){case 1:var h=[];for(a=0;a<c.length;a++)h[a]=c[a][0];c=h,o(c);break;case 2:for(a=0;a<c.length;a++)o(c[a]);break;case 3:for(c=i(c),a=0;a<c.length;a++)for(s=0;s<c[a].length;s++)o(c[a][s])}1===c.length?c=c[0]:f="Multi"+f;var y={type:"Feature",geometry:{type:f,coordinates:c},properties:this.properties};return"id"in this&&(y.id=this.id),y},e}),define("MVT/vectortilelayer",["./vectortilefeature"],function(t){"use strict";function e(t,e){this.version=1,this.name=null,this.extent=4096,this.length=0,this._pbf=t,this._keys=[],this._values=[],this._features=[],t.readFields(r,this,e),this.length=this._features.length}function r(t,e,r){15===t?e.version=r.readVarint():1===t?e.name=r.readString():5===t?e.extent=r.readVarint():2===t?e._features.push(r.pos):3===t?e._keys.push(r.readString()):4===t&&e._values.push(n(r))}function n(t){for(var e=null,r=t.readVarint()+t.pos;t.pos<r;){var n=t.readVarint()>>3;e=1===n?t.readString():2===n?t.readFloat():3===n?t.readDouble():4===n?t.readVarint64():5===n?t.readVarint():6===n?t.readSVarint():7===n?t.readBoolean():null}return e}return e.prototype.feature=function(e){if(e<0||e>=this._features.length)throw new Error("feature index out of bounds");this._pbf.pos=this._features[e];var r=this._pbf.readVarint()+this._pbf.pos;return new t(this._pbf,r,this.extent,this._keys,this._values)},e}),define("MVT/vectortile",["./vectortilelayer"],function(t){"use strict";function e(t,e){this.layers=t.readFields(r,{},e)}function r(e,r,n){if(3===e){var i=new t(n,n.readVarint()+n.pos);i.length&&(r[i.name]=i)}}return e}),define("MVT/symbol/grid_index",["../util/web_worker_transfer"],function(t){function e(t,e,n){var i=this.cells=[];if(t instanceof ArrayBuffer){this.arrayBuffer=t;var o=new Int32Array(this.arrayBuffer);t=o[0],e=o[1],n=o[2],this.d=e+2*n;for(var a=0;a<this.d*this.d;a++){var s=o[r+a],u=o[r+a+1];i.push(s===u?null:o.subarray(s,u))}var l=o[r+i.length],p=o[r+i.length+1];this.keys=o.subarray(l,p),this.bboxes=o.subarray(p),this.insert=this._insertReadonly}else{this.d=e+2*n;for(var c=0;c<this.d*this.d;c++)i.push([]);this.keys=[],this.bboxes=[]}this.n=e,this.extent=t,this.padding=n,this.scale=e/t,this.uid=0;var f=n/e*t;this.min=-f,this.max=t+f}var r=3;return e.prototype.insert=function(t,e,r,n,i){this._forEachCell(e,r,n,i,this._insertCell,this.uid++),this.keys.push(t),this.bboxes.push(e),this.bboxes.push(r),this.bboxes.push(n),this.bboxes.push(i)},e.prototype._insertReadonly=function(){throw"Cannot insert into a GridIndex created from an ArrayBuffer."},e.prototype._insertCell=function(t,e,r,n,i,o){this.cells[i].push(o)},e.prototype.query=function(t,e,r,n,i){var o=this.min,a=this.max;if(t<=o&&e<=o&&a<=r&&a<=n&&!i)return Array.prototype.slice.call(this.keys);var s=[],u={};return this._forEachCell(t,e,r,n,this._queryCell,s,u,i),s},e.prototype._queryCell=function(t,e,r,n,i,o,a,s){var u=this.cells[i];if(null!==u)for(var l=this.keys,p=this.bboxes,c=0;c<u.length;c++){var f=u[c];if(void 0===a[f]){var h=4*f;(s?s(p[h+0],p[h+1],p[h+2],p[h+3]):t<=p[h+2]&&e<=p[h+3]&&r>=p[h+0]&&n>=p[h+1])?(a[f]=!0,o.push(l[f])):a[f]=!1}}},e.prototype._forEachCell=function(t,e,r,n,i,o,a,s){for(var u=this._convertToCellCoord(t),l=this._convertToCellCoord(e),p=this._convertToCellCoord(r),c=this._convertToCellCoord(n),f=u;f<=p;f++)for(var h=l;h<=c;h++){var y=this.d*h+f;if((!s||s(this._convertFromCellCoord(f),this._convertFromCellCoord(h),this._convertFromCellCoord(f+1),this._convertFromCellCoord(h+1)))&&i.call(this,t,e,r,n,y,o,a,s))return}},e.prototype._convertFromCellCoord=function(t){return(t-this.padding)/this.scale},e.prototype._convertToCellCoord=function(t){return Math.max(0,Math.min(this.d-1,Math.floor(t*this.scale)+this.padding))},e.prototype.toArrayBuffer=function(){if(this.arrayBuffer)return this.arrayBuffer;for(var t=this.cells,e=r+this.cells.length+1+1,n=0,i=0;i<this.cells.length;i++)n+=this.cells[i].length;var o=new Int32Array(e+n+this.keys.length+this.bboxes.length);o[0]=this.extent,o[1]=this.n,o[2]=this.padding;for(var a=e,s=0;s<t.length;s++){var u=t[s];o[r+s]=a,o.set(u,a),a+=u.length}return o[r+t.length]=a,o.set(this.keys,a),a+=this.keys.length,o[r+t.length+1]=a,o.set(this.bboxes,a),a+=this.bboxes.length,o.buffer},t.register("GridIndex",e,{omit:["layers","patternFeatures"]}),e}),define("MVT/util/util",[],function(){"use strict";function t(){}t.easeCubicInOut=function(t){if(t<=0)return 0;if(t>=1)return 1;var e=t*t,r=e*t;return 4*(t<.5?r:3*(t-e)+r-.75)},t.asyncAll=function(t,e,r){if(!t.length)return r(null,[]);var n=t.length,i=new Array(t.length),o=null;t.forEach(function(t,a){e(t,function(t,e){t&&(o=t),i[a]=e,0==--n&&r(o,i)})})},t.extend=function(t){for(var e=[],r=arguments.length-1;r-- >0;)e[r]=arguments[r+1];for(var n=0,i=e;n<i.length;n+=1){var o=i[n];for(var a in o)t[a]=o[a]}return t};var e=1;t.uniqueId=function(){return e++},t.uuid=function(){function t(e){return e?(e^16*Math.random()>>e/4).toString(16):([1e7]+-[1e3]+-4e3+-8e3+-1e11).replace(/[018]/g,t)}return t()},t.validateUuid=function(t){return!!t&&/^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(t)},t.bindAll=function(t,e){t.forEach(function(t){e[t]&&(e[t]=e[t].bind(e))})},t.endsWith=function(t,e){return-1!==t.indexOf(e,t.length-e.length)},t.mapObject=function(t,e,r){var n={};for(var i in t)n[i]=e.call(r||this,t[i],i,t);return n},t.filterObject=function(t,e,r){var n={};for(var i in t)e.call(r||this,t[i],i,t)&&(n[i]=t[i]);return n},t.clone=function(e){return Array.isArray(e)?e.map(t.clone):"object"==typeof e&&e?t.mapObject(e,t.clone):e},t.deepEqual=function(e,r){if(Array.isArray(e)){if(!Array.isArray(r)||e.length!==r.length)return!1;for(var n=0;n<e.length;n++)if(!t.deepEqual(e[n],r[n]))return!1;return!0}if("object"==typeof e&&null!==e&&null!==r){if("object"!=typeof r)return!1;if(Object.keys(e).length!==Object.keys(r).length)return!1;for(var i in e)if(!t.deepEqual(e[i],r[i]))return!1;return!0}return e===r},t.arraysIntersect=function(t,e){for(var r=0;r<t.length;r++)if(e.indexOf(t[r])>=0)return!0;return!1};t.isCounterClockwise=function(t,e,r){return(r.y-t.y)*(e.x-t.x)>(e.y-t.y)*(r.x-t.x)},t.isWorker=function(){return"undefined"!=typeof WorkerGlobalScope&&"undefined"!=typeof self&&self instanceof WorkerGlobalScope};var r=null;return t.isSafari=function(t){if(null==r){var e=t.navigator?t.navigator.userAgent:null;r=!!t.safari||!(!e||!(/\b(iPad|iPhone|iPod)\b/.test(e)||e.match("Safari")&&!e.match("Chrome")))}return r},t.resolveTokens=function(t,e){return e.replace(/{([^{}]+)}/g,function(e,r){return r in t?String(t[r]):""})},t}),define("MVT/style-spec/expression/scope",[],function(){"use strict";var t=function(t,e){void 0===e&&(e=[]),this.parent=t,this.bindings={};for(var r=0,n=e;r<n.length;r+=1){var i=n[r],o=i[0],a=i[1];this.bindings[o]=a}};return t.prototype.concat=function(e){return new t(this,e)},t.prototype.get=function(t){if(this.bindings[t])return this.bindings[t];if(this.parent)return this.parent.get(t);throw new Error(t+" not found in scope.")},t.prototype.has=function(t){return!!this.bindings[t]||!!this.parent&&this.parent.has(t)},t}),define("MVT/style-spec/expression/parsing_error",[],function(){"use strict";return function(t){function e(e,r){t.call(this,r),this.message=r,this.key=e}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e}(Error)}),define("MVT/style-spec/expression/evaluation_context",[],function(){"use strict";var t=["Unknown","Point","LineString","Polygon"],e=function(){this.globals=null,this.feature=null,this.featureState=null,this.formattedSection=null,this._parseColorCache={},this.availableImages=null};return e.prototype.id=function(){return this.feature&&"id"in this.feature?this.feature.id:null},e.prototype.geometryType=function(){return this.feature?"number"==typeof this.feature.type?t[this.feature.type]:this.feature.type:null},e.prototype.properties=function(){return this.feature&&this.feature.properties||{}},e.prototype.parseColor=function(t){var e=this._parseColorCache[t];return e||(e=this._parseColorCache[t]=Color.parse(t)),e},e}),define("MVT/style-spec/expression/is_constant",[],function(){"use strict";function t(){}return t.isFeatureConstant=function(e){if(e instanceof CompoundExpression){if("get"===e.name&&1===e.args.length)return!1;if("feature-state"===e.name)return!1;if("has"===e.name&&1===e.args.length)return!1;if("properties"===e.name||"geometry-type"===e.name||"id"===e.name)return!1;if(/^filter-/.test(e.name))return!1}var r=!0;return e.eachChild(function(e){r&&!t.isFeatureConstant(e)&&(r=!1)}),r},t.isStateConstant=function(e){if(e instanceof CompoundExpression&&"feature-state"===e.name)return!1;var r=!0;return e.eachChild(function(e){r&&!t.isStateConstant(e)&&(r=!1)}),r},t.isGlobalPropertyConstant=function(e,r){if(e instanceof CompoundExpression&&r.indexOf(e.name)>=0)return!1;var n=!0;return e.eachChild(function(e){n&&!t.isGlobalPropertyConstant(e,r)&&(n=!1)}),n},t}),define("MVT/style-spec/expression/parsing_context",["./scope","./types","./parsing_error","./definitions/literal","./definitions/assertion","./definitions/coercion","./evaluation_context","./definitions/expressions","./is_constant"],function(t,e,r,n,i,o,a,s,u){"use strict";function l(t){return Array.isArray(t)?"("+t.map(toString).join(", ")+")":"("+toString(t.type)+"...)"}function p(t,e){return{kind:"array",itemType:t,N:e}}function c(t){return{type:t}}function f(t,e){var r=e[0],n=e[1],i=e[2],o=e[3];r=r.evaluate(t),n=n.evaluate(t),i=i.evaluate(t);var a=o?o.evaluate(t):1,s=Values.validateRGBA(r,n,i,a);if(s)throw new RuntimeError(s);return new Color(r/255*a,n/255*a,i/255*a,a)}var h=function(e,r,n,i,o){void 0===r&&(r=[]),void 0===i&&(i=new t),void 0===o&&(o=[]),this.registry=e,this.path=r,this.key=r.map(function(t){return"["+t+"]"}).join(""),this.scope=i,this.errors=o,this.expectedType=n};h.prototype.parse=function(t,e,r,n,i){return void 0===i&&(i={}),e?this.concat(e,r,n)._parse(t,i):this._parse(t,i)},h.prototype._parse=function(t,e){function r(t,e,r){return"assert"===r?new i(e,[t]):"coerce"===r?new o(e,[t]):t}if(null!==t&&"string"!=typeof t&&"boolean"!=typeof t&&"number"!=typeof t||(t=["literal",t]),Array.isArray(t)){if(0===t.length)return this.error('Expected an array with at least one element. If you wanted a literal array, use ["literal", []].');var s=t[0];if("string"!=typeof s)return this.error("Expression name must be a string, but found "+typeof s+' instead. If you wanted a literal array, use ["literal", [...]].',0),null;var l=this.registry[s];if(l){var p=l.parse(t,this);if(!p)return null;if(this.expectedType){var c=this.expectedType,f=p.type;if("string"!==c.kind&&"number"!==c.kind&&"boolean"!==c.kind&&"object"!==c.kind&&"array"!==c.kind||"value"!==f.kind)if("color"!==c.kind&&"formatted"!==c.kind&&"resolvedImage"!==c.kind||"value"!==f.kind&&"string"!==f.kind){if(this.checkSubtype(c,f))return null}else p=r(p,c,e.typeAnnotation||"coerce");else p=r(p,c,e.typeAnnotation||"assert")}if(!(p instanceof n)&&"resolvedImage"!==p.type.kind&&u(p)){var h=new a;try{p=new n(p.type,p.evaluate(h))}catch(t){return this.error(t.message),null}}return p}return this.error('Unknown expression "'+s+'". If you wanted a literal array, use ["literal", [...]].',0)}return void 0===t?this.error("'undefined' value invalid. Use null instead."):"object"==typeof t?this.error('Bare objects invalid. Use ["literal", {...}] instead.'):this.error("Expected an array, but found "+typeof t+" instead.")},h.prototype.concat=function(t,e,r){var n="number"==typeof t?this.path.concat(t):this.path,i=r?this.scope.concat(r):this.scope;return new h(this.registry,n,e||null,i,this.errors)},h.prototype.error=function(t){for(var e=[],n=arguments.length-1;n-- >0;)e[n]=arguments[n+1];var i=""+this.key+e.map(function(t){return"["+t+"]"}).join("");this.errors.push(new r(i,t))},h.prototype.checkSubtype=function(t,r){var n=e(t,r);return n&&this.error(n),n};var y=function(t,e,r,n){this.name=t,this.type=e,this._evaluate=r,this.args=n};y.prototype.evaluate=function(t){return this._evaluate(t,this.args)},y.prototype.eachChild=function(t){this.args.forEach(t)},y.prototype.possibleOutputs=function(){return[void 0]},y.prototype.serialize=function(){return[this.name].concat(this.args.map(function(t){return t.serialize()}))},y.parse=function(t,e){var r,n=t[0],i=y.definitions[n];if(!i)return e.error('Unknown expression "'+n+'". If you wanted a literal array, use ["literal", [...]].',0);for(var o=Array.isArray(i)?i[0]:i.type,a=Array.isArray(i)?[[i[1],i[2]]]:i.overloads,s=a.filter(function(e){var r=e[0];return!Array.isArray(r)||r.length===t.length-1}),u=null,p=0,c=s;p<c.length;p+=1){var f=c[p],d=f[0],m=f[1];u=new h(e.registry,e.path,null,e.scope);for(var v=[],g=!1,x=1;x<t.length;x++){var b=t[x],w=Array.isArray(d)?d[x-1]:d.type,_=u.parse(b,1+v.length,w);if(!_){g=!0;break}v.push(_)}if(!g)if(Array.isArray(d)&&d.length!==v.length)u.error("Expected "+d.length+" arguments, but found "+v.length+" instead.");else{for(var C=0;C<v.length;C++){var A=Array.isArray(d)?d[C]:d.type,S=v[C];u.concat(C+1).checkSubtype(A,S.type)}if(0===u.errors.length)return new y(n,o,m,v)}}if(1===s.length)(r=e.errors).push.apply(r,u.errors);else{for(var E=s.length?s:a,k=E.map(function(t){return l(t[0])}).join(" | "),I=[],F=1;F<t.length;F++){var V=e.parse(t[F],1+I.length);if(!V)return null;I.push(toString(V.type))}e.error("Expected arguments of type "+k+", but found ("+I.join(", ")+") instead.")}return null},y.register=function(t,e){y.definitions=e;for(var r in e)t[r]=y};var d={kind:"number"},m={kind:"string"},v={kind:"boolean"},g={kind:"color"},x={kind:"object"},b={kind:"value"},w={kind:"error"},_={kind:"collator"};return y.register(s,{error:[w,[m],function(t,e){var r=e[0];throw new RuntimeError(r.evaluate(t))}],typeof:[m,[b],function(t,e){var r=e[0];return toString(Values.typeOf(r.evaluate(t)))}],"to-rgba":[p(d,4),[g],function(t,e){return e[0].evaluate(t).toArray()}],rgb:[g,[d,d,d],f],rgba:[g,[d,d,d,d],f],has:{type:v,overloads:[[[m],function(t,e){var r=e[0];return has(r.evaluate(t),t.properties())}],[[m,x],function(t,e){var r=e[0],n=e[1];return has(r.evaluate(t),n.evaluate(t))}]]},get:{type:b,overloads:[[[m],function(t,e){var r=e[0];return get(r.evaluate(t),t.properties())}],[[m,x],function(t,e){var r=e[0],n=e[1];return get(r.evaluate(t),n.evaluate(t))}]]},"feature-state":[b,[m],function(t,e){var r=e[0];return get(r.evaluate(t),t.featureState||{})}],properties:[x,[],function(t){return t.properties()}],"geometry-type":[m,[],function(t){return t.geometryType()}],id:[b,[],function(t){return t.id()}],zoom:[d,[],function(t){return t.globals.zoom}],"heatmap-density":[d,[],function(t){return t.globals.heatmapDensity||0}],"line-progress":[d,[],function(t){return t.globals.lineProgress||0}],accumulated:[b,[],function(t){return void 0===t.globals.accumulated?null:t.globals.accumulated}],"+":[d,c(d),function(t,e){for(var r=0,n=0,i=e;n<i.length;n+=1){r+=i[n].evaluate(t)}return r}],"*":[d,c(d),function(t,e){for(var r=1,n=0,i=e;n<i.length;n+=1){r*=i[n].evaluate(t)}return r}],"-":{type:d,overloads:[[[d,d],function(t,e){var r=e[0],n=e[1];return r.evaluate(t)-n.evaluate(t)}],[[d],function(t,e){return-e[0].evaluate(t)}]]},"/":[d,[d,d],function(t,e){var r=e[0],n=e[1];return r.evaluate(t)/n.evaluate(t)}],"%":[d,[d,d],function(t,e){var r=e[0],n=e[1];return r.evaluate(t)%n.evaluate(t)}],
-ln2:[d,[],function(){return Math.LN2}],pi:[d,[],function(){return Math.PI}],e:[d,[],function(){return Math.E}],"^":[d,[d,d],function(t,e){var r=e[0],n=e[1];return Math.pow(r.evaluate(t),n.evaluate(t))}],sqrt:[d,[d],function(t,e){var r=e[0];return Math.sqrt(r.evaluate(t))}],log10:[d,[d],function(t,e){var r=e[0];return Math.log(r.evaluate(t))/Math.LN10}],ln:[d,[d],function(t,e){var r=e[0];return Math.log(r.evaluate(t))}],log2:[d,[d],function(t,e){var r=e[0];return Math.log(r.evaluate(t))/Math.LN2}],sin:[d,[d],function(t,e){var r=e[0];return Math.sin(r.evaluate(t))}],cos:[d,[d],function(t,e){var r=e[0];return Math.cos(r.evaluate(t))}],tan:[d,[d],function(t,e){var r=e[0];return Math.tan(r.evaluate(t))}],asin:[d,[d],function(t,e){var r=e[0];return Math.asin(r.evaluate(t))}],acos:[d,[d],function(t,e){var r=e[0];return Math.acos(r.evaluate(t))}],atan:[d,[d],function(t,e){var r=e[0];return Math.atan(r.evaluate(t))}],min:[d,c(d),function(t,e){return Math.min.apply(Math,e.map(function(e){return e.evaluate(t)}))}],max:[d,c(d),function(t,e){return Math.max.apply(Math,e.map(function(e){return e.evaluate(t)}))}],abs:[d,[d],function(t,e){var r=e[0];return Math.abs(r.evaluate(t))}],round:[d,[d],function(t,e){var r=e[0],n=r.evaluate(t);return n<0?-Math.round(-n):Math.round(n)}],floor:[d,[d],function(t,e){var r=e[0];return Math.floor(r.evaluate(t))}],ceil:[d,[d],function(t,e){var r=e[0];return Math.ceil(r.evaluate(t))}],"filter-==":[v,[m,b],function(t,e){var r=e[0],n=e[1];return t.properties()[r.value]===n.value}],"filter-id-==":[v,[b],function(t,e){var r=e[0];return t.id()===r.value}],"filter-type-==":[v,[m],function(t,e){var r=e[0];return t.geometryType()===r.value}],"filter-<":[v,[m,b],function(t,e){var r=e[0],n=e[1],i=t.properties()[r.value],o=n.value;return typeof i==typeof o&&i<o}],"filter-id-<":[v,[b],function(t,e){var r=e[0],n=t.id(),i=r.value;return typeof n==typeof i&&n<i}],"filter->":[v,[m,b],function(t,e){var r=e[0],n=e[1],i=t.properties()[r.value],o=n.value;return typeof i==typeof o&&i>o}],"filter-id->":[v,[b],function(t,e){var r=e[0],n=t.id(),i=r.value;return typeof n==typeof i&&n>i}],"filter-<=":[v,[m,b],function(t,e){var r=e[0],n=e[1],i=t.properties()[r.value],o=n.value;return typeof i==typeof o&&i<=o}],"filter-id-<=":[v,[b],function(t,e){var r=e[0],n=t.id(),i=r.value;return typeof n==typeof i&&n<=i}],"filter->=":[v,[m,b],function(t,e){var r=e[0],n=e[1],i=t.properties()[r.value],o=n.value;return typeof i==typeof o&&i>=o}],"filter-id->=":[v,[b],function(t,e){var r=e[0],n=t.id(),i=r.value;return typeof n==typeof i&&n>=i}],"filter-has":[v,[b],function(t,e){return e[0].value in t.properties()}],"filter-has-id":[v,[],function(t){return null!==t.id()}],"filter-type-in":[v,[p(m)],function(t,e){return e[0].value.indexOf(t.geometryType())>=0}],"filter-id-in":[v,[p(b)],function(t,e){return e[0].value.indexOf(t.id())>=0}],"filter-in-small":[v,[m,p(b)],function(t,e){var r=e[0];return e[1].value.indexOf(t.properties()[r.value])>=0}],"filter-in-large":[v,[m,p(b)],function(t,e){var r=e[0],n=e[1];return binarySearch(t.properties()[r.value],n.value,0,n.value.length-1)}],all:{type:v,overloads:[[[v,v],function(t,e){var r=e[0],n=e[1];return r.evaluate(t)&&n.evaluate(t)}],[c(v),function(t,e){for(var r=0,n=e;r<n.length;r+=1){if(!n[r].evaluate(t))return!1}return!0}]]},any:{type:v,overloads:[[[v,v],function(t,e){var r=e[0],n=e[1];return r.evaluate(t)||n.evaluate(t)}],[c(v),function(t,e){for(var r=0,n=e;r<n.length;r+=1){if(n[r].evaluate(t))return!0}return!1}]]},"!":[v,[v],function(t,e){return!e[0].evaluate(t)}],"is-supported-script":[v,[m],function(t,e){var r=e[0],n=t.globals&&t.globals.isSupportedScript;return!n||n(r.evaluate(t))}],upcase:[m,[m],function(t,e){return e[0].evaluate(t).toUpperCase()}],downcase:[m,[m],function(t,e){return e[0].evaluate(t).toLowerCase()}],concat:[m,c(b),function(t,e){return e.map(function(e){return Values.toString$1(e.evaluate(t))}).join("")}],"resolved-locale":[m,[_],function(t,e){return e[0].evaluate(t).resolvedLocale()}]}),h}),define("MVT/style-spec/expression/styleExpression",["./evaluation_context"],function(t){"use strict";function e(t){return"object"==typeof t&&null!==t&&!Array.isArray(t)}function r(t){return"color"===t.type&&e(t.default)?new Color(0,0,0,0):"color"===t.type?Color.parse(t.default)||null:void 0===t.default?null:t.default}var n=function(e,n){this.expression=e,this._warningHistory={},this._evaluator=new t,this._defaultValue=n?r(n):null,this._enumValues=n&&"enum"===n.type?n.values:null};return n.prototype.evaluateWithoutErrorHandling=function(t,e,r,n,i){return this._evaluator.globals=t,this._evaluator.feature=e,this._evaluator.featureState=r,this._evaluator.availableImages=n||null,this._evaluator.formattedSection=i,this.expression.evaluate(this._evaluator)},n.prototype.evaluate=function(t,e,r,n,i){this._evaluator.globals=t,this._evaluator.feature=e||null,this._evaluator.featureState=r||null,this._evaluator.availableImages=n||null,this._evaluator.formattedSection=i||null;try{var o=this.expression.evaluate(this._evaluator);if(null===o||void 0===o||"number"==typeof o&&o!==o)return this._defaultValue;if(this._enumValues&&!(o in this._enumValues))throw new RuntimeError("Expected value to be one of "+Object.keys(this._enumValues).map(function(t){return JSON.stringify(t)}).join(", ")+", but found "+JSON.stringify(o)+" instead.");return o}catch(t){return this._warningHistory[t.message]||(this._warningHistory[t.message]=!0,"undefined"!=typeof console&&console.warn(t.message)),this._defaultValue}},n}),define("MVT/style-spec/expression/expression",["./parsing_context","./styleExpression","./definitions/expressions","../util/color"],function(t,e,r,n){"use strict";function i(){}function o(t){return{result:"success",value:t}}function a(t){return{result:"error",value:t}}function s(t,e){return{kind:"array",itemType:t,N:e}}function u(t){var e={color:d,string:h,number:f,enum:h,boolean:y,formatted:v,resolvedImage:g};return"array"===t.type?s(e[t.value]||m,t.length):e[t.type]}function l(t){return"object"==typeof t&&null!==t&&!Array.isArray(t)}function p(t){for(var e=[],r=arguments.length-1;r-- >0;)e[r]=arguments[r+1];for(var n=0,i=e;n<i.length;n+=1){var o=i[n];for(var a in o)t[a]=o[a]}return t}function c(t,e){var r="color"===e.type,i=t.stops&&"object"==typeof t.stops[0][0],o=i||void 0!==t.property,a=i||!o,s=t.type||(supportsInterpolation(e)?"exponential":"interval");if(r&&(t=p({},t),t.stops&&(t.stops=t.stops.map(function(t){return[t[0],n.parse(t[1])]})),t.default?t.default=n.parse(t.default):t.default=n.parse(e.default)),t.colorSpace&&"rgb"!==t.colorSpace&&!colorSpaces[t.colorSpace])throw new Error("Unknown color space: "+t.colorSpace);var u,l,f;if("exponential"===s)u=evaluateExponentialFunction;else if("interval"===s)u=evaluateIntervalFunction;else if("categorical"===s){u=evaluateCategoricalFunction,l=Object.create(null);for(var h=0,y=t.stops;h<y.length;h+=1){var d=y[h];l[d[0]]=d[1]}f=typeof t.stops[0][0]}else{if("identity"!==s)throw new Error('Unknown function type "'+s+'"');u=evaluateIdentityFunction}if(i){for(var m={},v=[],g=0;g<t.stops.length;g++){var x=t.stops[g],b=x[0].zoom;void 0===m[b]&&(m[b]={zoom:b,type:t.type,property:t.property,default:t.default,stops:[]},v.push(b)),m[b].stops.push([x[0].value,x[1]])}for(var w=[],_=0,C=v;_<C.length;_+=1){var A=C[_];w.push([m[A].zoom,c(m[A],e)])}var S={name:"linear"};return{kind:"composite",interpolationType:S,interpolationFactor:Interpolate.interpolationFactor.bind(void 0,S),zoomStops:w.map(function(t){return t[0]}),evaluate:function(r,n){var i=r.zoom;return evaluateExponentialFunction({stops:w,base:t.base},e,i).evaluate(i,n)}}}if(a){var E="exponential"===s?{name:"exponential",base:void 0!==t.base?t.base:1}:null;return{kind:"camera",interpolationType:E,interpolationFactor:Interpolate.interpolationFactor.bind(void 0,E),zoomStops:t.stops.map(function(t){return t[0]}),evaluate:function(r){var n=r.zoom;return u(t,e,n,l,f)}}}return{kind:"source",evaluate:function(r,n){var i=n&&n.properties?n.properties[t.property]:void 0;return void 0===i?coalesce(t.default,e.default):u(t,e,i,l,f)}}}i.isExpression=function(t){return Array.isArray(t)&&t.length>0&&"string"==typeof t[0]&&t[0]in r};var f={kind:"number"},h={kind:"string"},y={kind:"boolean"},d={kind:"color"},m={kind:"value"},v={kind:"formatted"},g={kind:"resolvedImage"};i.createExpression=function(n,i){var s=new t(r,[],i?u(i):void 0),l=s.parse(n,void 0,void 0,void 0,i&&"string"===i.type?{typeAnnotation:"coerce"}:void 0);return l?o(new e(l,i)):a(s.errors)};var x=function(t,e){this._parameters=t,this._specification=e,p(this,c(this._parameters,this._specification))};return x.deserialize=function(t){return new x(t._parameters,t._specification)},x.serialize=function(t){return{_parameters:t._parameters,_specification:t._specification}},i.normalizePropertyExpression=function(t,e){if(l(t))return new x(t,e);if(i.isExpression(t)){var r=createPropertyExpression(t,e);if("error"===r.result)throw new Error(r.value.map(function(t){return t.key+": "+t.message}).join(", "));return r.value}var o=t;return"string"==typeof t&&"color"===e.type&&(o=n.parse(t)),{kind:"constant",evaluate:function(){return o}}},i}),define("MVT/style-spec/feature_filter/featureFilter",["../expression/expression"],function(t){"use strict";function e(){}function r(t,e){return t<e?-1:t>e?1:0}function n(t){if(!t)return!0;var e=t[0];return t.length<=1?"any"!==e:"=="===e?i(t[1],t[2],"=="):"!="===e?u(i(t[1],t[2],"==")):"<"===e||">"===e||"<="===e||">="===e?i(t[1],t[2],e):"any"===e?o(t.slice(1)):"all"===e?["all"].concat(t.slice(1).map(n)):"none"===e?["all"].concat(t.slice(1).map(n).map(u)):"in"===e?a(t[1],t.slice(2)):"!in"===e?u(a(t[1],t.slice(2))):"has"===e?s(t[1]):"!has"!==e||u(s(t[1]))}function i(t,e,r){switch(t){case"$type":return["filter-type-"+r,e];case"$id":return["filter-id-"+r,e];default:return["filter-"+r,t,e]}}function o(t){return["any"].concat(t.map(n))}function a(t,e){if(0===e.length)return!1;switch(t){case"$type":return["filter-type-in",["literal",e]];case"$id":return["filter-id-in",["literal",e]];default:return e.length>200&&!e.some(function(t){return typeof t!=typeof e[0]})?["filter-in-large",t,["literal",e.sort(r)]]:["filter-in-small",t,["literal",e]]}}function s(t){switch(t){case"$type":return!0;case"$id":return["filter-has-id"];default:return["filter-has",t]}}function u(t){return["!",t]}e.isExpressionFilter=function(t){if(!0===t||!1===t)return!0;if(!Array.isArray(t)||0===t.length)return!1;switch(t[0]){case"has":return t.length>=2&&"$id"!==t[1]&&"$type"!==t[1];case"in":return t.length>=3&&Array.isArray(t[2]);case"!in":case"!has":case"none":return!1;case"==":case"!=":case">":case">=":case"<":case"<=":return 3!==t.length||Array.isArray(t[1])||Array.isArray(t[2]);case"any":case"all":for(var r=0,n=t.slice(1);r<n.length;r+=1){var i=n[r];if(!e.isExpressionFilter(i)&&"boolean"!=typeof i)return!1}return!0;default:return!0}};var l={type:"boolean",default:!1,transition:!1,"property-type":"data-driven",expression:{interpolated:!1,parameters:["zoom","feature"]}};return e.createFilter=function(r){if(null===r||void 0===r)return function(){return!0};e.isExpressionFilter(r)||(r=n(r));var i=t.createExpression(r,l);if("error"===i.result)throw new Error(i.value.map(function(t){return t.key+": "+t.message}).join(", "));return function(t,e){return i.value.evaluate(t,e)}},e}),define("MVT/data/feature_index",["./array_types","./extent","./load_geometry","../DictionaryCoder","../vectortile","../symbol/grid_index","../util/util","../util/web_worker_transfer","../style/evaluation_parameters","../style-spec/feature_filter/featureFilter","../../core/defined","../../ThirdParty/pbf"],function(t,e,r,n,i,o,a,s,u,l,p,c){function f(t){for(var e=1/0,r=1/0,n=-1/0,i=-1/0,o=0,a=t;o<a.length;o+=1){var s=a[o];e=Math.min(e,s.x),r=Math.min(r,s.y),n=Math.max(n,s.x),i=Math.max(i,s.y)}return{minX:e,minY:r,maxX:n,maxY:i}}function h(t,e){return e-t}var y=t.FeatureIndexArray,d=function(t,r,n){this.x=t.x,this.y=t.y,this.z=t.z,this.grid=r||new o(e,16,0),this.featureIndexArray=n||new y};d.prototype.insert=function(t,r,n,i,o,a){var s=this.featureIndexArray.length;this.featureIndexArray.emplaceBack(n,i,o);for(var u=this.grid,l=0;l<r.length;l++){for(var p=r[l],c=[1/0,1/0,-1/0,-1/0],f=0;f<p.length;f++){var h=p[f];c[0]=Math.min(c[0],h.x),c[1]=Math.min(c[1],h.y),c[2]=Math.max(c[2],h.x),c[3]=Math.max(c[3],h.y)}c[0]<e&&c[1]<e&&c[2]>=0&&c[3]>=0&&u.insert(s,c[0],c[1],c[2],c[3])}},d.prototype.loadVTLayers=function(){return this.vtLayers||(this.vtLayers=new i(new c(this.rawTileData)).layers,this.sourceLayerCoder=new n(this.vtLayers?Object.keys(this.vtLayers).sort():["_geojsonTileLayer"])),this.vtLayers},d.prototype.query=function(t,n,i){var o=this;this.loadVTLayers();var a=t.params||{},s=e/t.tileSize,u=l.createFilter(a.filter),p=t.queryGeometry,c=f(p),y=this.grid.query(c.minX-5,c.minY-5,c.maxX+5,c.maxY+5);y.sort(h);for(var d,m={},v=0;v<y.length;v++)!function(e){var i=y[e];if(i!==d){d=i;var l=o.featureIndexArray.get(i),c=null;o.loadMatchingFeature(m,l.bucketIndex,l.sourceLayerIndex,l.featureIndex,u,a.layers,n,function(e,n){c||(c=r(e));var i={};return n.queryIntersectsFeature(p,e,i,c,o.z,t.transform,s,t.pixelPosMatrix)})}}(v);return m},d.prototype.loadMatchingFeature=function(t,e,r,n,i,o,s,l){if(p(e)&&p(r)&&p(n)){var c=this.bucketLayerIDs[e];if(!o||a.arraysIntersect(o,c)){var f=this.sourceLayerCoder.decode(r),h=this.vtLayers[f],y=h.feature(n);if(i(new u(this.z),y))for(var d=0;d<c.length;d++){var m=c[d];if(!(o&&o.indexOf(m)<0)){var v=s[m];if(v){var g=!l||l(y,v);if(g){y.layer=v.serialize();var x=t[m];void 0===x&&(x=t[m]=[]),x.push({featureIndex:n,feature:y,intersectionZ:g})}}}}}}},d.prototype.lookupSymbolFeatures=function(t,e,r,n,i,o){var a={};this.loadVTLayers();for(var s=createFilter(n),u=0,l=t;u<l.length;u+=1){var p=l[u];this.loadMatchingFeature(a,e,r,p,s,i,o)}return a},d.prototype.hasLayer=function(t){for(var e=0,r=this.bucketLayerIDs;e<r.length;e+=1)for(var n=r[e],i=0,o=n;i<o.length;i+=1){var a=o[i];if(t===a)return!0}return!1};return s.register("FeatureIndex",d,{omit:["rawTileData","sourceLayerCoder","vtLayers"]}),d}),define("MVT/group_by_layout",[],function(){"use strict";function t(e){var r=typeof e;if("number"===r||"boolean"===r||"string"===r||void 0===e||null===e)return JSON.stringify(e);if(Array.isArray(e)){for(var n="[",i=0,o=e;i<o.length;i+=1){n+=t(o[i])+","}return n+"]"}for(var a=Object.keys(e).sort(),s="{",u=0;u<a.length;u++)s+=JSON.stringify(a[u])+":"+t(e[a[u]])+",";return s+"}"}function e(e){for(var r="",i=0,o=n;i<o.length;i+=1){r+="/"+t(e[o[i]])}return r}function r(t,r){for(var n={},i=0;i<t.length;i++){var o=r&&r[t[i].id]||e(t[i]);r&&(r[t[i].id]=o);var a=n[o];a||(a=n[o]=[]),a.push(t[i])}var s=[];for(var u in n)s.push(n[u]);return s}const n=["type","source","source-layer","minzoom","maxzoom","filter","layout"];return r}),define("MVT/data/bucket/circle_bucket",["../../../core/defined","../../util/createLayout","../../util/web_worker_transfer","../../style/evaluation_parameters","../load_geometry","../segment","../StructArrayLayout2i4","../StructArrayLayout3ui6","../programConfigurationSet","../extent"],function(t,e,r,n,i,o,a,s,u,l){"use strict";function p(t,e,r,n,i){t.emplaceBack(2*e+(n+1)/2,2*r+(i+1)/2)}var c=e([{name:"a_pos",components:2,type:"Int16"}],4),f=c.members,h=function(t){this.zoom=t.zoom,this.overscaling=t.overscaling,this.layers=t.layers,this.layerIds=this.layers.map(function(t){return t.id}),this.index=t.index,this.hasPattern=!1,this.layoutVertexArray=new a,this.indexArray=new s,this.segments=new o,this.programConfigurations=new u(f,t.layers,t.zoom),this.stateDependentLayerIds=this.layers.filter(function(t){return t.isStateDependent()}).map(function(t){return t.id})};return h.prototype.populate=function(t,e){var r=this.layers[0],o=[],a=null;"circle"===r.type&&(a=r.layout.get("circle-sort-key"));for(var s=0,u=t;s<u.length;s+=1){var l=u[s],p=l.feature,c=l.index,f=l.sourceLayerIndex;if(this.layers[0]._featureFilter(new n(0),p)){var h=i(p),y=a?a.evaluate(p,{}):void 0,d={id:p.id,properties:p.properties,type:p.type,sourceLayerIndex:f,index:c,geometry:h,patterns:{},sortKey:y};o.push(d)}}a&&o.sort(function(t,e){return t.sortKey-e.sortKey});for(var m=0,v=o;m<v.length;m+=1){var g=v[m],x=g,b=x.geometry,w=x.index,_=x.sourceLayerIndex,C=t[w].feature;this.addFeature(g,b,w),e.featureIndex.insert(C,b,w,_,this.index)}},h.prototype.update=function(t,e,r){this.stateDependentLayers.length&&this.programConfigurations.updatePaintArrays(t,e,this.stateDependentLayers,r)},h.prototype.isEmpty=function(){return 0===this.layoutVertexArray.length},h.prototype.uploadPending=function(){return!this.uploaded||this.programConfigurations.needsUpload},h.prototype.upload=function(t){this.uploaded||(this.layoutVertexBuffer=t.createVertexBuffer(this.layoutVertexArray,f),this.indexBuffer=t.createIndexBuffer(this.indexArray)),this.programConfigurations.upload(t),this.uploaded=!0},h.prototype.destroy=function(){this.layoutVertexBuffer&&(this.layoutVertexBuffer.destroy(),this.indexBuffer.destroy(),this.programConfigurations.destroy(),this.segments.destroy())},h.prototype.addFeature=function(t,e,r){for(var n=0,i=e;n<i.length;n+=1)for(var o=i[n],a=0,s=o;a<s.length;a+=1){var u=s[a],c=u.x,f=u.y;if(!(c<0||c>=l||f<0||f>=l)){var h=this.segments.prepareSegment(4,this.layoutVertexArray,this.indexArray,t.sortKey),y=h.vertexLength;p(this.layoutVertexArray,c,f,-1,-1),p(this.layoutVertexArray,c,f,1,-1),p(this.layoutVertexArray,c,f,1,1),p(this.layoutVertexArray,c,f,-1,1),this.indexArray.emplaceBack(y,y+1,y+2),this.indexArray.emplaceBack(y,y+3,y+2),h.vertexLength+=4,h.primitiveLength+=2}}this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length,t,r,{})},r.register("CircleBucket",h,{omit:["layers"]}),h}),define("MVT/style/dataConstantProperty",["../util/web_worker_transfer"],function(t){"use strict";var e=function(t){this.specification=t};return e.prototype.possiblyEvaluate=function(t,e){return t.expression.evaluate(e)},e.prototype.interpolate=function(t,e,r){var n=interpolate[this.specification.type];return n?n(t,e,r):t},t.register("DataConstantProperty",e),e}),define("MVT/style/dataDrivenProperty",["../util/web_worker_transfer","./possiblyEvaluatedPropertyValue"],function(t,e){"use strict";var r=function(t,e){this.specification=t,this.overrides=e};return r.prototype.possiblyEvaluate=function(t,r,n){return"constant"===t.expression.kind||"camera"===t.expression.kind?new e(this,{kind:"constant",value:t.expression.evaluate(r,null,{},n)},r):new e(this,t.expression,r)},r.prototype.interpolate=function(t,r,n){if("constant"!==t.value.kind||"constant"!==r.value.kind)return t;if(void 0===t.value.value||void 0===r.value.value)return new e(this,{kind:"constant",value:void 0},t.parameters);var i=interpolate[this.specification.type];return i?new e(this,{kind:"constant",value:i(t.value.value,r.value.value,n)},t.parameters):t},r.prototype.evaluate=function(t,e,r,n,i){return"constant"===t.kind?t.value:t.evaluate(e,r,n,i)},t.register("DataDrivenProperty",r),r}),define("MVT/style/propertyValue",["../style-spec/expression/expression"],function(t){"use strict";var e=function(e,r){this.property=e,this.value=r,this.expression=t.normalizePropertyExpression(void 0===r?e.specification.default:r,e.specification)};return e.prototype.isDataDriven=function(){return"source"===this.expression.kind||"composite"===this.expression.kind},e.prototype.possiblyEvaluate=function(t,e){return this.property.possiblyEvaluate(this,t,e)},e}),define("MVT/style/transitioningPropertyValue",[],function(){"use strict";function t(t){if(t<=0)return 0;if(t>=1)return 1;var e=t*t,r=e*t;return 4*(t<.5?r:3*(t-e)+r-.75)}var e=function(t,e,r,n,i){this.property=t,this.value=e,this.begin=i+n.delay||0,this.end=this.begin+n.duration||0,t.specification.transition&&(n.delay||n.duration)&&(this.prior=r)};return e.prototype.possiblyEvaluate=function(e,r){var n=e.now||0,i=this.value.possiblyEvaluate(e,r),o=this.prior;if(o){if(n>this.end)return this.prior=null,i;if(this.value.isDataDriven())return this.prior=null,i;if(n<this.begin)return o.possiblyEvaluate(e,r);var a=(n-this.begin)/(this.end-this.begin);return this.property.interpolate(o.possiblyEvaluate(e,r),i,t(a))}return i},e}),define("MVT/Util/util",[],function(){"use strict";function t(){}t.easeCubicInOut=function(t){if(t<=0)return 0;if(t>=1)return 1;var e=t*t,r=e*t;return 4*(t<.5?r:3*(t-e)+r-.75)},t.asyncAll=function(t,e,r){if(!t.length)return r(null,[]);var n=t.length,i=new Array(t.length),o=null;t.forEach(function(t,a){e(t,function(t,e){t&&(o=t),i[a]=e,0==--n&&r(o,i)})})},t.extend=function(t){for(var e=[],r=arguments.length-1;r-- >0;)e[r]=arguments[r+1];for(var n=0,i=e;n<i.length;n+=1){var o=i[n];for(var a in o)t[a]=o[a]}return t};var e=1;t.uniqueId=function(){return e++},t.uuid=function(){function t(e){return e?(e^16*Math.random()>>e/4).toString(16):([1e7]+-[1e3]+-4e3+-8e3+-1e11).replace(/[018]/g,t)}return t()},t.validateUuid=function(t){return!!t&&/^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(t)},t.bindAll=function(t,e){t.forEach(function(t){e[t]&&(e[t]=e[t].bind(e))})},t.endsWith=function(t,e){return-1!==t.indexOf(e,t.length-e.length)},t.mapObject=function(t,e,r){var n={};for(var i in t)n[i]=e.call(r||this,t[i],i,t);return n},t.filterObject=function(t,e,r){var n={};for(var i in t)e.call(r||this,t[i],i,t)&&(n[i]=t[i]);return n},t.clone=function(e){return Array.isArray(e)?e.map(t.clone):"object"==typeof e&&e?t.mapObject(e,t.clone):e},t.deepEqual=function(e,r){if(Array.isArray(e)){if(!Array.isArray(r)||e.length!==r.length)return!1;for(var n=0;n<e.length;n++)if(!t.deepEqual(e[n],r[n]))return!1;return!0}if("object"==typeof e&&null!==e&&null!==r){if("object"!=typeof r)return!1;if(Object.keys(e).length!==Object.keys(r).length)return!1;for(var i in e)if(!t.deepEqual(e[i],r[i]))return!1;return!0}return e===r},t.arraysIntersect=function(t,e){for(var r=0;r<t.length;r++)if(e.indexOf(t[r])>=0)return!0;return!1};t.isCounterClockwise=function(t,e,r){return(r.y-t.y)*(e.x-t.x)>(e.y-t.y)*(r.x-t.x)},t.isWorker=function(){return"undefined"!=typeof WorkerGlobalScope&&"undefined"!=typeof self&&self instanceof WorkerGlobalScope};var r=null;return t.isSafari=function(t){if(null==r){var e=t.navigator?t.navigator.userAgent:null;r=!!t.safari||!(!e||!(/\b(iPad|iPhone|iPod)\b/.test(e)||e.match("Safari")&&!e.match("Chrome")))}return r},t.resolveTokens=function(t,e){return e.replace(/{([^{}]+)}/g,function(e,r){return r in t?String(t[r]):""})},t}),define("MVT/style/transitionablePropertyValue",["./propertyValue","./transitioningPropertyValue","../Util/util"],function(t,e,r){"use strict";var n=function(e){this.property=e,this.value=new t(e,void 0)};return n.prototype.transitioned=function(t,n){return new e(this.property,this.value,n,r.extend({},t.transition,this.transition),t.now)},n.prototype.untransitioned=function(){return new e(this.property,this.value,null,{},0)},n}),define("MVT/style/properties",["./propertyValue","./transitionablePropertyValue"],function(t,e){"use strict";return function(r){this.properties=r,this.defaultPropertyValues={},this.defaultTransitionablePropertyValues={},this.defaultTransitioningPropertyValues={},this.defaultPossiblyEvaluatedValues={},this.overridableProperties=[];for(var n in r){var i=r[n];i.specification.overridable&&this.overridableProperties.push(n);var o=this.defaultPropertyValues[n]=new t(i,void 0),a=this.defaultTransitionablePropertyValues[n]=new e(i);this.defaultTransitioningPropertyValues[n]=a.untransitioned(),this.defaultPossiblyEvaluatedValues[n]=o.possiblyEvaluate({})}}}),define("MVT/style/query_utils",["../pointGeometry"],function(t){"use strict";function e(){}return e.getMaximumPaintValue=function(t,e,r){var n=e.paint.get(t).value;return"constant"===n.kind?n.value:r.programConfigurations.get(e.id).binders[t].maxValue},e.translateDistance=function(t){return Math.sqrt(t[0]*t[0]+t[1]*t[1])},e.translate=function(e,r,n,i,o){if(!r[0]&&!r[1])return e;var a=t.convert(r)._mult(o);"viewport"===n&&a._rotate(-i);for(var s=[],u=0;u<e.length;u++){var l=e[u];s.push(l.sub(a))}return s},e}),define("MVT/style/possiblyEvaluated",[],function(){"use strict";var t=function(t){this._properties=t,this._values=Object.create(t.defaultPossiblyEvaluatedValues)};return t.prototype.get=function(t){return this._values[t]},t}),define("MVT/style/layout",["./propertyValue","./possiblyEvaluated","../util/util"],function(t,e,r){"use strict";var n=function(t){this._properties=t,this._values=Object.create(t.defaultPropertyValues)};return n.prototype.getValue=function(t){return r.clone(this._values[t].value)},n.prototype.setValue=function(e,n){this._values[e]=new t(this._values[e].property,null===n?void 0:r.clone(n))},n.prototype.serialize=function(){for(var t={},e=0,r=Object.keys(this._values);e<r.length;e+=1){var n=r[e],i=this.getValue(n);void 0!==i&&(t[n]=i)}return t},n.prototype.possiblyEvaluate=function(t,r){for(var n=new e(this._properties),i=0,o=Object.keys(this._values);i<o.length;i+=1){var a=o[i];n._values[a]=this._values[a].possiblyEvaluate(t,r)}return n},n}),define("MVT/style/transitioning",["./possiblyEvaluated"],function(t){"use strict";var e=function(t){this._properties=t,this._values=Object.create(t.defaultTransitioningPropertyValues)};return e.prototype.possiblyEvaluate=function(e,r){for(var n=new t(this._properties),i=0,o=Object.keys(this._values);i<o.length;i+=1){var a=o[i];n._values[a]=this._values[a].possiblyEvaluate(e,r)}return n},e.prototype.hasTransition=function(){for(var t=0,e=Object.keys(this._values);t<e.length;t+=1){var r=e[t];if(this._values[r].prior)return!0}return!1},e}),define("MVT/style/transitionable",["./propertyValue","./transitionablePropertyValue","./transitioning","../util/util"],function(t,e,r,n){"use strict";var i=function(t){this._properties=t,this._values=Object.create(t.defaultTransitionablePropertyValues)};return i.prototype.getValue=function(t){return n.clone(this._values[t].value.value)},i.prototype.setValue=function(r,i){this._values.hasOwnProperty(r)||(this._values[r]=new e(this._values[r].property)),this._values[r].value=new t(this._values[r].property,null===i?void 0:n.clone(i))},i.prototype.getTransition=function(t){return n.clone(this._values[t].transition)},i.prototype.setTransition=function(t,r){this._values.hasOwnProperty(t)||(this._values[t]=new e(this._values[t].property)),this._values[t].transition=n.clone(r)||void 0},i.prototype.serialize=function(){for(var t={},e=0,r=Object.keys(this._values);e<r.length;e+=1){var n=r[e],i=this.getValue(n);void 0!==i&&(t[n]=i);var o=this.getTransition(n);void 0!==o&&(t[n+"-transition"]=o)}return t},i.prototype.transitioned=function(t,e){for(var n=new r(this._properties),i=0,o=Object.keys(this._values);i<o.length;i+=1){var a=o[i];n._values[a]=this._values[a].transitioned(t,e._values[a])}return n},i.prototype.untransitioned=function(){for(var t=new r(this._properties),e=0,n=Object.keys(this._values);e<n.length;e+=1){var i=n[e];t._values[i]=this._values[i].untransitioned()}return t},i}),define("MVT/style/style_layer",["./layout","./transitionable","../util/util"],function(t,e,r){"use strict";function n(t,e){return-1!==t.indexOf(e,t.length-e.length)}function i(r,n){if(this.id=r.id,this.type=r.type,"custom"!==r.type&&(r=r,this.metadata=r.metadata,this.minzoom=r.minzoom,this.maxzoom=r.maxzoom,"background"!==r.type&&(this.source=r.source,this.sourceLayer=r["source-layer"],this.filter=r.filter),n.layout&&(this._unevaluatedLayout=new t(n.layout)),n.paint)){this._transitionablePaint=new e(n.paint);for(var i in r.paint)this.setPaintProperty(i,r.paint[i],{validate:!1});for(var o in r.layout)this.setLayoutProperty(o,r.layout[o],{validate:!1});this._transitioningPaint=this._transitionablePaint.untransitioned()}}return i.prototype.getCrossfadeParameters=function(){return this._crossfadeParameters},i.prototype.getLayoutProperty=function(t){return"visibility"===t?this.visibility:this._unevaluatedLayout.getValue(t)},i.prototype.setLayoutProperty=function(t,e,r){if(void 0===r&&(r={}),null!==e&&void 0!==e){this.id}if("visibility"===t)return void(this.visibility=e);this._unevaluatedLayout.setValue(t,e)},i.prototype.getPaintProperty=function(t){return n(t,"-transition")?this._transitionablePaint.getTransition(t.slice(0,-"-transition".length)):this._transitionablePaint.getValue(t)},i.prototype.setPaintProperty=function(t,e,r){if(void 0===r&&(r={}),null!==e&&void 0!==e){this.id}if(n(t,"-transition"))return this._transitionablePaint.setTransition(t.slice(0,-"-transition".length),e||void 0),!1;var i=this._transitionablePaint._values[t],o="cross-faded-data-driven"===i.property.specification["property-type"],a=i.value.isDataDriven(),s=i.value;this._transitionablePaint.setValue(t,e),this._handleSpecialPaintPropertyUpdate(t);var u=this._transitionablePaint._values[t].value;return u.isDataDriven()||a||o||this._handleOverridablePaintPropertyUpdate(t,s,u)},i.prototype._handleSpecialPaintPropertyUpdate=function(t){},i.prototype._handleOverridablePaintPropertyUpdate=function(t,e,r){return!1},i.prototype.isHidden=function(t){return!!(this.minzoom&&t<this.minzoom)||(!!(this.maxzoom&&t>=this.maxzoom)||"none"===this.visibility)},i.prototype.updateTransitions=function(t){this._transitioningPaint=this._transitionablePaint.transitioned(t,this._transitioningPaint)},i.prototype.hasTransition=function(){return this._transitioningPaint.hasTransition()},i.prototype.recalculate=function(t,e){t.getCrossfadeParameters&&(this._crossfadeParameters=t.getCrossfadeParameters()),this._unevaluatedLayout&&(this.layout=this._unevaluatedLayout.possiblyEvaluate(t,e)),this.paint=this._transitioningPaint.possiblyEvaluate(t,e)},i.prototype.serialize=function(){var t={id:this.id,type:this.type,source:this.source,"source-layer":this.sourceLayer,metadata:this.metadata,minzoom:this.minzoom,maxzoom:this.maxzoom,filter:this.filter,layout:this._unevaluatedLayout&&this._unevaluatedLayout.serialize(),paint:this._transitionablePaint&&this._transitionablePaint.serialize()};return this.visibility&&(t.layout=t.layout||{},t.layout.visibility=this.visibility),r.filterObject(t,function(t,e){return!(void 0===t||"layout"===e&&!Object.keys(t).length||"paint"===e&&!Object.keys(t).length)})},i.prototype._validate=function(t,e,r,n,i){return!0},i.prototype.is3D=function(){return!1},i.prototype.isTileClipped=function(){return!1},i.prototype.hasOffscreenPass=function(){return!1},i.prototype.resize=function(){},i.prototype.isStateDependent=function(){return!0},i}),define("MVT/style/style_spec",[],function(){"use strict";return{$version:8,$root:{version:{required:!0,type:"enum",values:[8]},name:{type:"string"},metadata:{type:"*"},center:{type:"array",value:"number"},zoom:{type:"number"},bearing:{type:"number",default:0,period:360,units:"degrees"},pitch:{type:"number",default:0,units:"degrees"},light:{type:"light"},sources:{required:!0,type:"sources"},sprite:{type:"string"},glyphs:{type:"string"},transition:{type:"transition"},layers:{required:!0,type:"array",value:"layer"}},sources:{"*":{type:"source"}},source:["source_vector","source_raster","source_raster_dem","source_geojson","source_video","source_image"],source_vector:{type:{required:!0,type:"enum",values:{vector:{}}},url:{type:"string"},tiles:{type:"array",value:"string"},bounds:{type:"array",value:"number",length:4,default:[-180,-85.051129,180,85.051129]},scheme:{type:"enum",values:{xyz:{},tms:{}},default:"xyz"},minzoom:{type:"number",default:0},maxzoom:{type:"number",default:22},attribution:{type:"string"},"*":{type:"*"}},source_raster:{type:{required:!0,type:"enum",values:{raster:{}}},url:{type:"string"},tiles:{type:"array",value:"string"},bounds:{type:"array",value:"number",length:4,default:[-180,-85.051129,180,85.051129]},minzoom:{type:"number",default:0},maxzoom:{type:"number",default:22},tileSize:{type:"number",default:512,units:"pixels"},scheme:{type:"enum",values:{xyz:{},tms:{}},default:"xyz"},attribution:{type:"string"},"*":{type:"*"}},source_raster_dem:{type:{required:!0,type:"enum",values:{"raster-dem":{}}},url:{type:"string"},
-tiles:{type:"array",value:"string"},bounds:{type:"array",value:"number",length:4,default:[-180,-85.051129,180,85.051129]},minzoom:{type:"number",default:0},maxzoom:{type:"number",default:22},tileSize:{type:"number",default:512,units:"pixels"},attribution:{type:"string"},encoding:{type:"enum",values:{terrarium:{},mapbox:{}},default:"mapbox"},"*":{type:"*"}},source_geojson:{type:{required:!0,type:"enum",values:{geojson:{}}},data:{type:"*"},maxzoom:{type:"number",default:18},attribution:{type:"string"},buffer:{type:"number",default:128,maximum:512,minimum:0},tolerance:{type:"number",default:.375},cluster:{type:"boolean",default:!1},clusterRadius:{type:"number",default:50,minimum:0},clusterMaxZoom:{type:"number"},clusterProperties:{type:"*"},lineMetrics:{type:"boolean",default:!1},generateId:{type:"boolean",default:!1}},source_video:{type:{required:!0,type:"enum",values:{video:{}}},urls:{required:!0,type:"array",value:"string"},coordinates:{required:!0,type:"array",length:4,value:{type:"array",length:2,value:"number"}}},source_image:{type:{required:!0,type:"enum",values:{image:{}}},url:{required:!0,type:"string"},coordinates:{required:!0,type:"array",length:4,value:{type:"array",length:2,value:"number"}}},layer:{id:{type:"string",required:!0},type:{type:"enum",values:{fill:{},line:{},symbol:{},circle:{},heatmap:{},"fill-extrusion":{},raster:{},hillshade:{},background:{}},required:!0},metadata:{type:"*"},source:{type:"string"},"source-layer":{type:"string"},minzoom:{type:"number",minimum:0,maximum:24},maxzoom:{type:"number",minimum:0,maximum:24},filter:{type:"filter"},layout:{type:"layout"},paint:{type:"paint"}},layout:["layout_fill","layout_line","layout_circle","layout_heatmap","layout_fill-extrusion","layout_symbol","layout_raster","layout_hillshade","layout_background"],layout_background:{visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_fill:{"fill-sort-key":{type:"number",expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_circle:{"circle-sort-key":{type:"number",expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_heatmap:{visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},"layout_fill-extrusion":{visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_line:{"line-cap":{type:"enum",values:{butt:{},round:{},square:{}},default:"butt",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"line-join":{type:"enum",values:{bevel:{},round:{},miter:{}},default:"miter",expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"line-miter-limit":{type:"number",default:2,requires:[{"line-join":"miter"}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"line-round-limit":{type:"number",default:1.05,requires:[{"line-join":"round"}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"line-sort-key":{type:"number",expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_symbol:{"symbol-placement":{type:"enum",values:{point:{},line:{},"line-center":{}},default:"point",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"symbol-spacing":{type:"number",default:250,minimum:1,units:"pixels",requires:[{"symbol-placement":"line"}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"symbol-avoid-edges":{type:"boolean",default:!1,expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"symbol-sort-key":{type:"number",expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"symbol-z-order":{type:"enum",values:{auto:{},"viewport-y":{},source:{}},default:"auto",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-allow-overlap":{type:"boolean",default:!1,requires:["icon-image"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-ignore-placement":{type:"boolean",default:!1,requires:["icon-image"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-optional":{type:"boolean",default:!1,requires:["icon-image","text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-rotation-alignment":{type:"enum",values:{map:{},viewport:{},auto:{}},default:"auto",requires:["icon-image"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-size":{type:"number",default:1,minimum:0,units:"factor of the original icon size",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"icon-text-fit":{type:"enum",values:{none:{},width:{},height:{},both:{}},default:"none",requires:["icon-image","text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-text-fit-padding":{type:"array",value:"number",length:4,default:[0,0,0,0],units:"pixels",requires:["icon-image","text-field",{"icon-text-fit":["both","width","height"]}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"icon-image":{type:"resolvedImage",tokens:!0,expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"icon-rotate":{type:"number",default:0,period:360,units:"degrees",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"icon-padding":{type:"number",default:2,minimum:0,units:"pixels",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"icon-keep-upright":{type:"boolean",default:!1,requires:["icon-image",{"icon-rotation-alignment":"map"},{"symbol-placement":["line","line-center"]}],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"icon-offset":{type:"array",value:"number",length:2,default:[0,0],requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"icon-anchor":{type:"enum",values:{center:{},left:{},right:{},top:{},bottom:{},"top-left":{},"top-right":{},"bottom-left":{},"bottom-right":{}},default:"center",requires:["icon-image"],expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"icon-pitch-alignment":{type:"enum",values:{map:{},viewport:{},auto:{}},default:"auto",requires:["icon-image"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-pitch-alignment":{type:"enum",values:{map:{},viewport:{},auto:{}},default:"auto",requires:["text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-rotation-alignment":{type:"enum",values:{map:{},viewport:{},auto:{}},default:"auto",requires:["text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-field":{type:"formatted",default:"",tokens:!0,expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-font":{type:"array",value:"string",default:["Open Sans Regular","Arial Unicode MS Regular"],requires:["text-field"],expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-size":{type:"number",default:16,minimum:0,units:"pixels",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-max-width":{type:"number",default:10,minimum:0,units:"ems",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-line-height":{type:"number",default:1.2,units:"ems",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"text-letter-spacing":{type:"number",default:0,units:"ems",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-justify":{type:"enum",values:{auto:{},left:{},center:{},right:{}},default:"center",requires:["text-field"],expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-radial-offset":{type:"number",units:"ems",default:0,requires:["text-field"],"property-type":"data-driven",expression:{interpolated:!0,parameters:["zoom","feature"]}},"text-variable-anchor":{type:"array",value:"enum",values:{center:{},left:{},right:{},top:{},bottom:{},"top-left":{},"top-right":{},"bottom-left":{},"bottom-right":{}},requires:["text-field",{"symbol-placement":["point"]}],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-anchor":{type:"enum",values:{center:{},left:{},right:{},top:{},bottom:{},"top-left":{},"top-right":{},"bottom-left":{},"bottom-right":{}},default:"center",requires:["text-field",{"!":"text-variable-anchor"}],expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-max-angle":{type:"number",default:45,units:"degrees",requires:["text-field",{"symbol-placement":["line","line-center"]}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"text-writing-mode":{type:"array",value:"enum",values:{horizontal:{},vertical:{}},requires:["text-field",{"symbol-placement":["point"]}],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-rotate":{type:"number",default:0,period:360,units:"degrees",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-padding":{type:"number",default:2,minimum:0,units:"pixels",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"text-keep-upright":{type:"boolean",default:!0,requires:["text-field",{"text-rotation-alignment":"map"},{"symbol-placement":["line","line-center"]}],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-transform":{type:"enum",values:{none:{},uppercase:{},lowercase:{}},default:"none",requires:["text-field"],expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-offset":{type:"array",value:"number",units:"ems",length:2,default:[0,0],requires:["text-field",{"!":"text-radial-offset"}],expression:{interpolated:!0,parameters:["zoom","feature"]},"property-type":"data-driven"},"text-allow-overlap":{type:"boolean",default:!1,requires:["text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-ignore-placement":{type:"boolean",default:!1,requires:["text-field"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-optional":{type:"boolean",default:!1,requires:["text-field","icon-image"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_raster:{visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},layout_hillshade:{visibility:{type:"enum",values:{visible:{},none:{}},default:"visible","property-type":"constant"}},filter:{type:"array",value:"*"},filter_operator:{type:"enum",values:{"==":{},"!=":{},">":{},">=":{},"<":{},"<=":{},in:{},"!in":{},all:{},any:{},none:{},has:{},"!has":{}}},geometry_type:{type:"enum",values:{Point:{},LineString:{},Polygon:{}}},function:{expression:{type:"expression"},stops:{type:"array",value:"function_stop"},base:{type:"number",default:1,minimum:0},property:{type:"string",default:"$zoom"},type:{type:"enum",values:{identity:{},exponential:{},interval:{},categorical:{}},default:"exponential"},colorSpace:{type:"enum",values:{rgb:{},lab:{},hcl:{}},default:"rgb"},default:{type:"*",required:!1}},function_stop:{type:"array",minimum:0,maximum:24,value:["number","color"],length:2},expression:{type:"array",value:"*",minimum:1},expression_name:{type:"enum",values:{let:{group:"Variable binding"},var:{group:"Variable binding"},literal:{group:"Types"},array:{group:"Types"},at:{group:"Lookup"},in:{group:"Lookup"},case:{group:"Decision"},match:{group:"Decision"},coalesce:{group:"Decision"},step:{group:"Ramps, scales, curves"},interpolate:{group:"Ramps, scales, curves"},"interpolate-hcl":{group:"Ramps, scales, curves"},"interpolate-lab":{group:"Ramps, scales, curves"},ln2:{group:"Math"},pi:{group:"Math"},e:{group:"Math"},typeof:{group:"Types"},string:{group:"Types"},number:{group:"Types"},boolean:{group:"Types"},object:{group:"Types"},collator:{group:"Types"},format:{group:"Types"},image:{group:"Types"},"number-format":{group:"Types"},"to-string":{group:"Types"},"to-number":{group:"Types"},"to-boolean":{group:"Types"},"to-rgba":{group:"Color"},"to-color":{group:"Types"},rgb:{group:"Color"},rgba:{group:"Color"},get:{group:"Lookup"},has:{group:"Lookup"},length:{group:"Lookup"},properties:{group:"Feature data"},"feature-state":{group:"Feature data"},"geometry-type":{group:"Feature data"},id:{group:"Feature data"},zoom:{group:"Zoom"},"heatmap-density":{group:"Heatmap"},"line-progress":{group:"Feature data"},accumulated:{group:"Feature data"},"+":{group:"Math"},"*":{group:"Math"},"-":{group:"Math"},"/":{group:"Math"},"%":{group:"Math"},"^":{group:"Math"},sqrt:{group:"Math"},log10:{group:"Math"},ln:{group:"Math"},log2:{group:"Math"},sin:{group:"Math"},cos:{group:"Math"},tan:{group:"Math"},asin:{group:"Math"},acos:{group:"Math"},atan:{group:"Math"},min:{group:"Math"},max:{group:"Math"},round:{group:"Math"},abs:{group:"Math"},ceil:{group:"Math"},floor:{group:"Math"},"==":{group:"Decision"},"!=":{group:"Decision"},">":{group:"Decision"},"<":{group:"Decision"},">=":{group:"Decision"},"<=":{group:"Decision"},all:{group:"Decision"},any:{group:"Decision"},"!":{group:"Decision"},"is-supported-script":{group:"String"},upcase:{group:"String"},downcase:{group:"String"},concat:{group:"String"},"resolved-locale":{group:"String"}}},light:{anchor:{type:"enum",default:"viewport",values:{map:{},viewport:{}},"property-type":"data-constant",transition:!1,expression:{interpolated:!1,parameters:["zoom"]}},position:{type:"array",default:[1.15,210,30],length:3,value:"number","property-type":"data-constant",transition:!0,expression:{interpolated:!0,parameters:["zoom"]}},color:{type:"color","property-type":"data-constant",default:"#ffffff",expression:{interpolated:!0,parameters:["zoom"]},transition:!0},intensity:{type:"number","property-type":"data-constant",default:.5,minimum:0,maximum:1,expression:{interpolated:!0,parameters:["zoom"]},transition:!0}},paint:["paint_fill","paint_line","paint_circle","paint_heatmap","paint_fill-extrusion","paint_symbol","paint_raster","paint_hillshade","paint_background"],paint_fill:{"fill-antialias":{type:"boolean",default:!0,expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"fill-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-color":{type:"color",default:"#000000",transition:!0,requires:[{"!":"fill-pattern"}],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-outline-color":{type:"color",transition:!0,requires:[{"!":"fill-pattern"},{"fill-antialias":!0}],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"fill-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["fill-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"fill-pattern":{type:"resolvedImage",transition:!0,expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"cross-faded-data-driven"}},"paint_fill-extrusion":{"fill-extrusion-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"fill-extrusion-color":{type:"color",default:"#000000",transition:!0,requires:[{"!":"fill-extrusion-pattern"}],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-extrusion-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"fill-extrusion-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["fill-extrusion-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"fill-extrusion-pattern":{type:"resolvedImage",transition:!0,expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"cross-faded-data-driven"},"fill-extrusion-height":{type:"number",default:0,minimum:0,units:"meters",transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-extrusion-base":{type:"number",default:0,minimum:0,units:"meters",transition:!0,requires:["fill-extrusion-height"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"fill-extrusion-vertical-gradient":{type:"boolean",default:!0,transition:!1,expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"}},paint_line:{"line-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-color":{type:"color",default:"#000000",transition:!0,requires:[{"!":"line-pattern"}],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"line-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["line-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"line-width":{type:"number",default:1,minimum:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-gap-width":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-offset":{type:"number",default:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-blur":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"line-dasharray":{type:"array",value:"number",minimum:0,transition:!0,units:"line widths",requires:[{"!":"line-pattern"}],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"cross-faded"},"line-pattern":{type:"resolvedImage",transition:!0,expression:{interpolated:!1,parameters:["zoom","feature"]},"property-type":"cross-faded-data-driven"},"line-gradient":{type:"color",transition:!1,requires:[{"!":"line-dasharray"},{"!":"line-pattern"},{source:"geojson",has:{lineMetrics:!0}}],expression:{interpolated:!0,parameters:["line-progress"]},"property-type":"color-ramp"}},paint_circle:{"circle-radius":{type:"number",default:5,minimum:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-color":{type:"color",default:"#000000",transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-blur":{type:"number",default:0,transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"circle-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["circle-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"circle-pitch-scale":{type:"enum",values:{map:{},viewport:{}},default:"map",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"circle-pitch-alignment":{type:"enum",values:{map:{},viewport:{}},default:"viewport",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"circle-stroke-width":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-stroke-color":{type:"color",default:"#000000",transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"circle-stroke-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"}},paint_heatmap:{"heatmap-radius":{type:"number",default:30,minimum:1,transition:!0,units:"pixels",expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"heatmap-weight":{type:"number",default:1,minimum:0,transition:!1,expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"heatmap-intensity":{type:"number",default:1,minimum:0,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"heatmap-color":{type:"color",default:["interpolate",["linear"],["heatmap-density"],0,"rgba(0, 0, 255, 0)",.1,"royalblue",.3,"cyan",.5,"lime",.7,"yellow",1,"red"],transition:!1,expression:{interpolated:!0,parameters:["heatmap-density"]},"property-type":"color-ramp"},"heatmap-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"}},paint_symbol:{"icon-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"icon-color":{type:"color",default:"#000000",transition:!0,requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"icon-halo-color":{type:"color",default:"rgba(0, 0, 0, 0)",transition:!0,requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"icon-halo-width":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"icon-halo-blur":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"icon-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",requires:["icon-image"],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"icon-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["icon-image","icon-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"text-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"text-color":{type:"color",default:"#000000",transition:!0,overridable:!0,requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"text-halo-color":{type:"color",default:"rgba(0, 0, 0, 0)",transition:!0,requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"text-halo-width":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"text-halo-blur":{type:"number",default:0,minimum:0,transition:!0,units:"pixels",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom","feature","feature-state"]},"property-type":"data-driven"},"text-translate":{type:"array",value:"number",length:2,default:[0,0],transition:!0,units:"pixels",requires:["text-field"],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"text-translate-anchor":{type:"enum",values:{map:{},viewport:{}},default:"map",requires:["text-field","text-translate"],expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"}},paint_raster:{"raster-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-hue-rotate":{type:"number",default:0,period:360,transition:!0,units:"degrees",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-brightness-min":{type:"number",default:0,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-brightness-max":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-saturation":{type:"number",default:0,minimum:-1,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-contrast":{type:"number",default:0,minimum:-1,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"raster-resampling":{type:"enum",values:{linear:{},nearest:{}},default:"linear",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"raster-fade-duration":{type:"number",default:300,minimum:0,transition:!1,units:"milliseconds",expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"}},paint_hillshade:{"hillshade-illumination-direction":{type:"number",default:335,minimum:0,maximum:359,transition:!1,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"hillshade-illumination-anchor":{type:"enum",values:{map:{},viewport:{}},default:"viewport",expression:{interpolated:!1,parameters:["zoom"]},"property-type":"data-constant"},"hillshade-exaggeration":{type:"number",default:.5,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"hillshade-shadow-color":{type:"color",default:"#000000",transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"hillshade-highlight-color":{type:"color",default:"#FFFFFF",transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"hillshade-accent-color":{type:"color",default:"#000000",transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"}},paint_background:{"background-color":{type:"color",default:"#000000",transition:!0,requires:[{"!":"background-pattern"}],expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"},"background-pattern":{type:"resolvedImage",transition:!0,expression:{interpolated:!1,parameters:["zoom"]},"property-type":"cross-faded"},"background-opacity":{type:"number",default:1,minimum:0,maximum:1,transition:!0,expression:{interpolated:!0,parameters:["zoom"]},"property-type":"data-constant"}},transition:{duration:{type:"number",default:300,minimum:0,units:"milliseconds"},delay:{type:"number",default:0,minimum:0,units:"milliseconds"}},"property-type":{"data-driven":{type:"property-type"},"cross-faded":{type:"property-type"},"cross-faded-data-driven":{type:"property-type"},"color-ramp":{type:"property-type"},"data-constant":{type:"property-type"},constant:{type:"property-type"}}}}),define("MVT/util/intersection_tests",["./util","../pointGeometry"],function(t,e){"use strict";function r(){}function n(t,e,r){if(t.length>1){if(i(t,e))return!0;for(var n=0;n<e.length;n++)if(a(e[n],t,r))return!0}for(var o=0;o<t.length;o++)if(a(t[o],e,r))return!0;return!1}function i(t,e){if(0===t.length||0===e.length)return!1;for(var r=0;r<t.length-1;r++)for(var n=t[r],i=t[r+1],a=0;a<e.length-1;a++){var s=e[a],u=e[a+1];if(o(n,i,s,u))return!0}return!1}function o(e,r,n,i){return t.isCounterClockwise(e,n,i)!==t.isCounterClockwise(r,n,i)&&t.isCounterClockwise(e,r,n)!==t.isCounterClockwise(e,r,i)}function a(t,e,n){var i=n*n;if(1===e.length)return t.distSqr(e[0])<i;for(var o=1;o<e.length;o++){var a=e[o-1],s=e[o];if(r.distToSegmentSquared(t,a,s)<i)return!0}return!1}function s(t,e){for(var r,n,i,o=!1,a=0;a<t.length;a++){r=t[a];for(var s=0,u=r.length-1;s<r.length;u=s++)n=r[s],i=r[u],n.y>e.y!=i.y>e.y&&e.x<(i.x-n.x)*(e.y-n.y)/(i.y-n.y)+n.x&&(o=!o)}return o}function u(t,e){for(var r=!1,n=0,i=t.length-1;n<t.length;i=n++){var o=t[n],a=t[i];o.y>e.y!=a.y>e.y&&e.x<(a.x-o.x)*(e.y-o.y)/(a.y-o.y)+o.x&&(r=!r)}return r}return r.polygonIntersectsPolygon=function(t,e){for(var r=0;r<t.length;r++)if(u(e,t[r]))return!0;for(var n=0;n<e.length;n++)if(u(t,e[n]))return!0;return!!i(t,e)},r.polygonIntersectsBufferedPoint=function(t,e,r){return!!u(t,e)||!!a(e,t,r)},r.polygonIntersectsMultiPolygon=function(t,e){if(1===t.length)return s(e,t[0]);for(var r=0;r<e.length;r++)for(var n=e[r],o=0;o<n.length;o++)if(u(t,n[o]))return!0;for(var a=0;a<t.length;a++)if(s(e,t[a]))return!0;for(var l=0;l<e.length;l++)if(i(t,e[l]))return!0;return!1},r.polygonIntersectsBufferedMultiLine=function(t,e,r){for(var i=0;i<e.length;i++){var o=e[i];if(t.length>=3)for(var a=0;a<o.length;a++)if(u(t,o[a]))return!0;if(n(t,o,r))return!0}return!1},r.distToSegmentSquared=function(t,e,r){var n=e.distSqr(r);if(0===n)return t.distSqr(e);var i=((t.x-e.x)*(r.x-e.x)+(t.y-e.y)*(r.y-e.y))/n;return i<0?t.distSqr(e):i>1?t.distSqr(r):t.distSqr(r.sub(e)._mult(i)._add(e))},r}),define("MVT/style/style_layer/circle_style_layer",["../../pointGeometry","../../data/bucket/circle_bucket","../dataConstantProperty","../dataDrivenProperty","../evaluation_parameters","../properties","../query_utils","../style_layer","../style_spec","../../util/intersection_tests"],function(t,e,r,n,i,o,a,s,u,l){"use strict";function p(e,r){var n=h([],[e.x,e.y,0,1],r);return new t(n[0],n[1])}function c(t,e){return t.map(function(t){return p(t,e)})}function f(){var t=new Float32Array(16);return t[0]=1,t[5]=1,t[10]=1,t[15]=1,t}function h(t,e,r){var n=e[0],i=e[1],o=e[2],a=r[3]*n+r[7]*i+r[11]*o+r[15];return a=a||1,t[0]=(r[0]*n+r[4]*i+r[8]*o+r[12])/a,t[1]=(r[1]*n+r[5]*i+r[9]*o+r[13])/a,t[2]=(r[2]*n+r[6]*i+r[10]*o+r[14])/a,t}var y=new o({"circle-sort-key":new n(u.layout_circle["circle-sort-key"])}),d=new o({"circle-radius":new n(u.paint_circle["circle-radius"]),
-"circle-color":new n(u.paint_circle["circle-color"]),"circle-blur":new n(u.paint_circle["circle-blur"]),"circle-opacity":new n(u.paint_circle["circle-opacity"]),"circle-translate":new r(u.paint_circle["circle-translate"]),"circle-translate-anchor":new r(u.paint_circle["circle-translate-anchor"]),"circle-pitch-scale":new r(u.paint_circle["circle-pitch-scale"]),"circle-pitch-alignment":new r(u.paint_circle["circle-pitch-alignment"]),"circle-stroke-width":new n(u.paint_circle["circle-stroke-width"]),"circle-stroke-color":new n(u.paint_circle["circle-stroke-color"]),"circle-stroke-opacity":new n(u.paint_circle["circle-stroke-opacity"])}),m={paint:d,layout:y};return function(t){function r(e){t.call(this,e,m)}return t&&(r.__proto__=t),r.prototype=Object.create(t&&t.prototype),r.prototype.constructor=r,r.prototype.createBucket=function(t){return new e(t)},r.prototype.queryRadius=function(t){var e=t;return a.getMaximumPaintValue("circle-radius",this,e)+a.getMaximumPaintValue("circle-stroke-width",this,e)+a.translateDistance(this.paint.get("circle-translate"))},r.prototype.queryIntersectsFeature=function(t,e,r,n,i,o,s,u){u=f();for(var y=a.translate(t,this.paint.get("circle-translate"),this.paint.get("circle-translate-anchor"),0,s),d=this.paint.get("circle-radius").evaluate(e,r),m=this.paint.get("circle-stroke-width").evaluate(e,r),v=d+m,g="map"===this.paint.get("circle-pitch-alignment"),x=g?y:c(y,u),b=g?v*s:v,w=0,_=n;w<_.length;w+=1)for(var C=_[w],A=0,S=C;A<S.length;A+=1){var E=S[A],k=g?E:p(E,u),I=b;h([],[E.x,E.y,0,1],u);if("viewport"===this.paint.get("circle-pitch-scale")&&"map"===this.paint.get("circle-pitch-alignment")||"map"===this.paint.get("circle-pitch-scale")&&this.paint.get("circle-pitch-alignment"),I*=10,l.polygonIntersectsBufferedPoint(x,k,I))return!0}return!1},r}(s)}),define("MVT/style/crossFadedDataDrivenProperty",["../util/web_worker_transfer","./possiblyEvaluatedPropertyValue","./dataDrivenProperty"],function(t,e,r){"use strict";var n=function(t){function r(){t.apply(this,arguments)}return t&&(r.__proto__=t),r.prototype=Object.create(t&&t.prototype),r.prototype.constructor=r,r.prototype.possiblyEvaluate=function(t,r,n){if(void 0===t.value)return new e(this,{kind:"constant",value:void 0},r);if("constant"===t.expression.kind){var i=t.expression.evaluate(r,null,{},n),o="resolvedImage"===t.property.specification.type,a=o&&"string"!=typeof i?i.name:i,s=this._calculate(a,a,a,r);return new e(this,{kind:"constant",value:s},r)}if("camera"===t.expression.kind){var u=this._calculate(t.expression.evaluate({zoom:r.zoom-1}),t.expression.evaluate({zoom:r.zoom}),t.expression.evaluate({zoom:r.zoom+1}),r);return new e(this,{kind:"constant",value:u},r)}return new e(this,t.expression,r)},r.prototype.evaluate=function(t,e,r,n,i){if("source"===t.kind){var o=t.evaluate(e,r,n,i);return this._calculate(o,o,o,e)}return"composite"===t.kind?this._calculate(t.evaluate({zoom:Math.floor(e.zoom)-1},r,n),t.evaluate({zoom:Math.floor(e.zoom)},r,n),t.evaluate({zoom:Math.floor(e.zoom)+1},r,n),e):t.value},r.prototype._calculate=function(t,e,r,n){return n.zoom>n.zoomHistory.lastIntegerZoom?{from:t,to:e}:{from:r,to:e}},r.prototype.interpolate=function(t){return t},r}(r);return t.register("DataDrivenProperty",r),n}),define("MVT/style/style_layer/fill_style_layer",["../../data/bucket/fill_bucket","../crossFadedDataDrivenProperty","../dataConstantProperty","../dataDrivenProperty","../properties","../query_utils","../style_layer","../style_spec","../../util/intersection_tests"],function(t,e,r,n,i,o,a,s,u){"use strict";var l=new i({"fill-sort-key":new n(s.layout_fill["fill-sort-key"])}),p=new i({"fill-antialias":new r(s.paint_fill["fill-antialias"]),"fill-opacity":new n(s.paint_fill["fill-opacity"]),"fill-color":new n(s.paint_fill["fill-color"]),"fill-outline-color":new n(s.paint_fill["fill-outline-color"]),"fill-translate":new r(s.paint_fill["fill-translate"]),"fill-translate-anchor":new r(s.paint_fill["fill-translate-anchor"]),"fill-pattern":new e(s.paint_fill["fill-pattern"])}),c={paint:p,layout:l};return function(e){function r(t){e.call(this,t,c)}return e&&(r.__proto__=e),r.prototype=Object.create(e&&e.prototype),r.prototype.constructor=r,r.prototype.recalculate=function(t,r){e.prototype.recalculate.call(this,t,r);var n=this.paint._values["fill-outline-color"];"constant"===n.value.kind&&void 0===n.value.value&&(this.paint._values["fill-outline-color"]=this.paint._values["fill-color"])},r.prototype.createBucket=function(e){return new t(e)},r.prototype.queryRadius=function(){return o.translateDistance(this.paint.get("fill-translate"))},r.prototype.queryIntersectsFeature=function(t,e,r,n,i,a,s){var l=o.translate(t,this.paint.get("fill-translate"),this.paint.get("fill-translate-anchor"),0,s);return u.polygonIntersectsMultiPolygon(l,n)},r.prototype.isTileClipped=function(){return!0},r}(a)}),define("MVT/style/crossFadedProperty",["../util/web_worker_transfer"],function(t){"use strict";var e=function(t){this.specification=t};return e.prototype.possiblyEvaluate=function(t,e,r){if(void 0!==t.value){if("constant"===t.expression.kind){var n=t.expression.evaluate(e,null,{},r);return this._calculate(n,n,n,e)}return this._calculate(t.expression.evaluate(new EvaluationParameters(Math.floor(e.zoom-1),e)),t.expression.evaluate(new EvaluationParameters(Math.floor(e.zoom),e)),t.expression.evaluate(new EvaluationParameters(Math.floor(e.zoom+1),e)),e)}},e.prototype._calculate=function(t,e,r,n){return n.zoom>n.zoomHistory.lastIntegerZoom?{from:t,to:e}:{from:r,to:e}},e.prototype.interpolate=function(t){return t},t.register("CrossFadedProperty",e),e}),define("MVT/style/colorRampProperty",["../util/web_worker_transfer"],function(t){"use strict";var e=function(t){this.specification=t};return e.prototype.possiblyEvaluate=function(t,e,r){return!!t.expression.evaluate(e,null,{},r)},e.prototype.interpolate=function(){return!1},t.register("ColorRampProperty",e),e}),define("MVT/style/style_layer/line_style_layer",["../../pointGeometry","../../data/bucket/line_bucket","../crossFadedDataDrivenProperty","../crossFadedProperty","../colorRampProperty","../dataConstantProperty","../dataDrivenProperty","../evaluation_parameters","../properties","../query_utils","../style_layer","../style_spec","../../util/intersection_tests"],function(t,e,r,n,i,o,a,s,u,l,p,c,f){"use strict";var h=new u({"line-cap":new o(c.layout_line["line-cap"]),"line-join":new a(c.layout_line["line-join"]),"line-miter-limit":new o(c.layout_line["line-miter-limit"]),"line-round-limit":new o(c.layout_line["line-round-limit"]),"line-sort-key":new a(c.layout_line["line-sort-key"])}),y=new u({"line-opacity":new a(c.paint_line["line-opacity"]),"line-color":new a(c.paint_line["line-color"]),"line-translate":new o(c.paint_line["line-translate"]),"line-translate-anchor":new o(c.paint_line["line-translate-anchor"]),"line-width":new a(c.paint_line["line-width"]),"line-gap-width":new a(c.paint_line["line-gap-width"]),"line-offset":new a(c.paint_line["line-offset"]),"line-blur":new a(c.paint_line["line-blur"]),"line-dasharray":new n(c.paint_line["line-dasharray"]),"line-pattern":new r(c.paint_line["line-pattern"]),"line-gradient":new i(c.paint_line["line-gradient"])}),d={paint:y,layout:h},m=function(t){function e(){t.apply(this,arguments)}return t&&(e.__proto__=t),e.prototype=Object.create(t&&t.prototype),e.prototype.constructor=e,e.prototype.possiblyEvaluate=function(e,r){return r=new s(Math.floor(r.zoom),{now:r.now,fadeDuration:r.fadeDuration,zoomHistory:r.zoomHistory,transition:r.transition}),t.prototype.possiblyEvaluate.call(this,e,r)},e.prototype.evaluate=function(e,r,n,i){return r=extend({},r,{zoom:Math.floor(r.zoom)}),t.prototype.evaluate.call(this,e,r,n,i)},e}(a),v=new m(d.paint.properties["line-width"].specification);return v.useIntegerZoom=!0,function(r){function n(t){r.call(this,t,d)}function i(t,e){return e>0?e+2*t:t}function o(e,r){for(var n=[],i=new t(0,0),o=0;o<e.length;o++){for(var a=e[o],s=[],u=0;u<a.length;u++){var l=a[u-1],p=a[u],c=a[u+1],f=0===u?i:p.sub(l)._unit()._perp(),h=u===a.length-1?i:c.sub(p)._unit()._perp(),y=f._add(h)._unit(),d=y.x*h.x+y.y*h.y;y._mult(1/d),s.push(y._mult(r)._add(p))}n.push(s)}return n}return r&&(n.__proto__=r),n.prototype=Object.create(r&&r.prototype),n.prototype.constructor=n,n.prototype._handleSpecialPaintPropertyUpdate=function(t){"line-gradient"===t&&this._updateGradient()},n.prototype._updateGradient=function(){var t=this._transitionablePaint._values["line-gradient"].value.expression;this.gradient=renderColorRamp(t,"lineProgress"),this.gradientTexture=null},n.prototype.recalculate=function(t,e){r.prototype.recalculate.call(this,t,e),this.paint._values["line-floorwidth"]=v.possiblyEvaluate(this._transitioningPaint._values["line-width"].value,t)},n.prototype.createBucket=function(t){return new e(t)},n.prototype.queryRadius=function(t){var e=t,r=i(l.getMaximumPaintValue("line-width",this,e),l.getMaximumPaintValue("line-gap-width",this,e)),n=l.getMaximumPaintValue("line-offset",this,e);return r/2+Math.abs(n)+l.translateDistance(this.paint.get("line-translate"))},n.prototype.queryIntersectsFeature=function(t,e,r,n,a,s,u){var p=l.translate(t,this.paint.get("line-translate"),this.paint.get("line-translate-anchor"),0,u),c=u/2*i(this.paint.get("line-width").evaluate(e,r),this.paint.get("line-gap-width").evaluate(e,r)),h=this.paint.get("line-offset").evaluate(e,r);return h&&(n=o(n,h*u)),f.polygonIntersectsBufferedMultiLine(p,n,c)},n.prototype.isTileClipped=function(){return!0},n}(p)}),define("MVT/data/bucket/symbol_attributes",["../../util/createLayout"],function(t){"use strict";function e(){}return e.symbolLayoutAttributes=t([{name:"a_pos_offset",components:4,type:"Int16"},{name:"a_data",components:4,type:"Uint16"},{name:"a_pixeloffset",components:4,type:"Int16"}],4),e.dynamicLayoutAttributes=t([{name:"a_projected_pos",components:3,type:"Float32"}],4),e.placementOpacityAttributes=t([{name:"a_fade_opacity",components:1,type:"Uint32"}],4),e.collisionVertexAttributes=t([{name:"a_placed",components:2,type:"Uint8"},{name:"a_shift",components:2,type:"Float32"}]),e.collisionBox=t([{type:"Int16",name:"anchorPointX"},{type:"Int16",name:"anchorPointY"},{type:"Int16",name:"x1"},{type:"Int16",name:"y1"},{type:"Int16",name:"x2"},{type:"Int16",name:"y2"},{type:"Uint32",name:"featureIndex"},{type:"Uint16",name:"sourceLayerIndex"},{type:"Uint16",name:"bucketIndex"},{type:"Int16",name:"radius"},{type:"Int16",name:"signedDistanceFromAnchor"}]),e.collisionBoxLayout=t([{name:"a_pos",components:2,type:"Int16"},{name:"a_anchor_pos",components:2,type:"Int16"},{name:"a_extrude",components:2,type:"Int16"}],4),e.collisionCircleLayout=t([{name:"a_pos",components:2,type:"Int16"},{name:"a_anchor_pos",components:2,type:"Int16"},{name:"a_extrude",components:2,type:"Int16"}],4),e.placement=t([{type:"Int16",name:"anchorX"},{type:"Int16",name:"anchorY"},{type:"Uint16",name:"glyphStartIndex"},{type:"Uint16",name:"numGlyphs"},{type:"Uint32",name:"vertexStartIndex"},{type:"Uint32",name:"lineStartIndex"},{type:"Uint32",name:"lineLength"},{type:"Uint16",name:"segment"},{type:"Uint16",name:"lowerSize"},{type:"Uint16",name:"upperSize"},{type:"Float32",name:"lineOffsetX"},{type:"Float32",name:"lineOffsetY"},{type:"Uint8",name:"writingMode"},{type:"Uint8",name:"placedOrientation"},{type:"Uint8",name:"hidden"},{type:"Uint32",name:"crossTileID"},{type:"Int16",name:"associatedIconIndex"}]),e.symbolInstance=t([{type:"Int16",name:"anchorX"},{type:"Int16",name:"anchorY"},{type:"Int16",name:"rightJustifiedTextSymbolIndex"},{type:"Int16",name:"centerJustifiedTextSymbolIndex"},{type:"Int16",name:"leftJustifiedTextSymbolIndex"},{type:"Int16",name:"verticalPlacedTextSymbolIndex"},{type:"Int16",name:"placedIconSymbolIndex"},{type:"Int16",name:"verticalPlacedIconSymbolIndex"},{type:"Uint16",name:"key"},{type:"Uint16",name:"textBoxStartIndex"},{type:"Uint16",name:"textBoxEndIndex"},{type:"Uint16",name:"verticalTextBoxStartIndex"},{type:"Uint16",name:"verticalTextBoxEndIndex"},{type:"Uint16",name:"iconBoxStartIndex"},{type:"Uint16",name:"iconBoxEndIndex"},{type:"Uint16",name:"verticalIconBoxStartIndex"},{type:"Uint16",name:"verticalIconBoxEndIndex"},{type:"Uint16",name:"featureIndex"},{type:"Uint16",name:"numHorizontalGlyphVertices"},{type:"Uint16",name:"numVerticalGlyphVertices"},{type:"Uint16",name:"numIconVertices"},{type:"Uint16",name:"numVerticalIconVertices"},{type:"Uint32",name:"crossTileID"},{type:"Float32",name:"textBoxScale"},{type:"Float32",components:2,name:"textOffset"}]),e.glyphOffset=t([{type:"Float32",name:"offsetX"}]),e.lineVertex=t([{type:"Int16",name:"x"},{type:"Int16",name:"y"},{type:"Int16",name:"tileUnitDistanceFromAnchor"}]),e}),define("MVT/symbol/mergeLines",[],function(){function t(t){function e(e){s.push(t[e]),u++}function r(t,e,r){var n=a[t];return delete a[t],a[e]=n,s[n].geometry[0].pop(),s[n].geometry[0]=s[n].geometry[0].concat(r[0]),n}function n(t,e,r){var n=o[e];return delete o[e],o[t]=n,s[n].geometry[0].shift(),s[n].geometry[0]=r[0].concat(s[n].geometry[0]),n}function i(t,e,r){var n=r?e[0][e[0].length-1]:e[0][0];return t+":"+n.x+":"+n.y}for(var o={},a={},s=[],u=0,l=0;l<t.length;l++){var p=t[l],c=p.geometry,f=p.text?p.text.toString():null;if(f){var h=i(f,c),y=i(f,c,!0);if(h in a&&y in o&&a[h]!==o[y]){var d=n(h,y,c),m=r(h,y,s[d].geometry);delete o[h],delete a[y],a[i(f,s[m].geometry,!0)]=m,s[d].geometry=null}else h in a?r(h,y,c):y in o?n(h,y,c):(e(l),o[h]=u-1,a[y]=u-1)}else e(l)}return s.filter(function(t){return t.geometry})}return t}),define("MVT/symbol/one_em",[],function(){return 24}),define("MVT/symbol/shaping",["../util/web_worker_transfer","../pointGeometry","./one_em"],function(t,e,r){function n(t){for(var e=0,r=t;e<r.length;e+=1){if(0!==r[e].positionedGlyphs.length)return!1}return!0}function i(t,e){for(var r=[],n=t.text,i=0,o=0,a=e;o<a.length;o+=1){var s=a[o];r.push(t.substring(i,s)),i=s}return i<n.length&&r.push(t.substring(i,n.length)),r}function o(t){var e=.5,r=.5;switch(t){case"right":case"top-right":case"bottom-right":e=1;break;case"left":case"top-left":case"bottom-left":e=0}switch(t){case"bottom":case"bottom-right":case"bottom-left":r=1;break;case"top":case"top-right":case"top-left":r=0}return{horizontalAlign:e,verticalAlign:r}}var a=function(){};a.WritingMode={horizontal:1,vertical:2,horizontalOnly:3};var s=function(){this.scale=1,this.fontStack="",this.imageName=null};s.forText=function(t,e){var r=new s;return r.scale=t||1,r.fontStack=e,r},s.forImage=function(t){var e=new s;return e.imageName=t,e};var u=function(){this.text="",this.sectionIndex=[],this.sections=[],this.imageSectionID=null};u.fromFeature=function(t,e){for(var r=new u,n=0;n<t.sections.length;n++){var i=t.sections[n];i.image?r.addImageSection(i):r.addTextSection(i,e)}return r},u.prototype.length=function(){return this.text.length},u.prototype.getSection=function(t){return this.sections[this.sectionIndex[t]]},u.prototype.getSectionIndex=function(t){return this.sectionIndex[t]},u.prototype.getCharCode=function(t){return this.text.charCodeAt(t)},u.prototype.verticalizePunctuation=function(){},u.prototype.trim=function(){for(var t=0,e=0;e<this.text.length&&l[this.text.charCodeAt(e)];e++)t++;for(var r=this.text.length,n=this.text.length-1;n>=0&&n>=t&&l[this.text.charCodeAt(n)];n--)r--;this.text=this.text.substring(t,r),this.sectionIndex=this.sectionIndex.slice(t,r)},u.prototype.substring=function(t,e){var r=new u;return r.text=this.text.substring(t,e),r.sectionIndex=this.sectionIndex.slice(t,e),r.sections=this.sections,r},u.prototype.toString=function(){return this.text},u.prototype.getMaxScale=function(){var t=this;return this.sectionIndex.reduce(function(e,r){return Math.max(e,t.sections[r].scale)},0)},u.prototype.addTextSection=function(t,e){this.text+=t.text,this.sections.push(s.forText(t.scale,t.fontStack||e));for(var r=this.sections.length-1,n=0;n<t.text.length;++n)this.sectionIndex.push(r)},u.prototype.addImageSection=function(t){var e=t.image?t.image.name:"";if(0!==e.length){var r=this.getNextImageSectionCharCode();r&&(this.text+=String.fromCharCode(r),this.sections.push(s.forImage(e)),this.sectionIndex.push(this.sections.length-1))}},u.prototype.getNextImageSectionCharCode=function(){return this.imageSectionID?this.imageSectionID>=63743?null:++this.imageSectionID:(this.imageSectionID=57344,this.imageSectionID)},a.shapeText=function(t,e,r,o,s,l,p,c,f,h,y,d,m,v,g,x){var b=u.fromFeature(t,s);d===a.WritingMode.vertical&&b.verticalizePunctuation();var w,_=null,C=null;if(_&&1===b.sections.length){w=[];for(var A=_(b.toString(),void 0),S=0,E=A;S<E.length;S+=1){var k=E[S],I=new u;I.text=k,I.sections=b.sections;for(var F=0;F<k.length;F++)I.sectionIndex.push(0);w.push(I)}}else if(C){w=[];for(var V=C(b.text,b.sectionIndex,void 0),M=0,P=V;M<P.length;M+=1){var T=P[M],z=new u;z.text=T[0],z.sectionIndex=T[1],z.sections=b.sections,w.push(z)}}else w=i(b,void 0);var B=[],O={positionedLines:B,text:b.toString(),top:y[1],bottom:y[1],left:y[0],right:y[0],writingMode:d,iconsInText:!1,verticalizable:!1};return!n(B)&&O};var l={};l[9]=!0,l[10]=!0,l[11]=!0,l[12]=!0,l[13]=!0,l[32]=!0;var p={};return p[10]=!0,p[32]=!0,p[38]=!0,p[40]=!0,p[41]=!0,p[43]=!0,p[45]=!0,p[47]=!0,p[173]=!0,p[183]=!0,p[8203]=!0,p[8208]=!0,p[8211]=!0,p[8231]=!0,a.shapeIcon=function(t,e,r){var n=o(r),i=n.horizontalAlign,a=n.verticalAlign,s=e[0],u=e[1],l=s-t.displaySize[0]*i,p=l+t.displaySize[0],c=u-t.displaySize[1]*a;return{image:t,top:c,bottom:c+t.displaySize[1],left:l,right:p}},a.fitIconToText=function(t,e,r,n,i,o){var a,s=t.image;if(s.content){var u=s.content,l=s.pixelRatio||1;a=[u[0]/l,u[1]/l,s.displaySize[0]-u[2]/l,s.displaySize[1]-u[3]/l]}var p,c,f,h,y=e.left*o,d=e.right*o;"width"===r||"both"===r?(h=i[0]+y-n[3],c=i[0]+d+n[1]):(h=i[0]+(y+d-s.displaySize[0])/2,c=h+s.displaySize[0]);var m=e.top*o,v=e.bottom*o;return"height"===r||"both"===r?(p=i[1]+m-n[0],f=i[1]+v+n[2]):(p=i[1]+(m+v-s.displaySize[1])/2,f=p+s.displaySize[1]),{image:s,top:p,right:c,bottom:f,left:h,collisionPadding:a}},a}),define("MVT/symbol/symbol_size",["../style/evaluation_parameters"],function(t){function e(e,r){var n=r.expression;if("constant"===n.kind){return{kind:"constant",layoutSize:n.evaluate(new t(e+1))}}if("source"===n.kind)return{kind:"source"};for(var i=n.zoomStops,o=n.interpolationType,a=0;a<i.length&&i[a]<=e;)a++;a=Math.max(0,a-1);for(var s=a;s<i.length&&i[s]<e+1;)s++;s=Math.min(i.length-1,s);var u=i[a],l=i[s];return"composite"===n.kind?{kind:"composite",minZoom:u,maxZoom:l,interpolationType:o}:{kind:"camera",minZoom:u,maxZoom:l,minSize:n.evaluate(new t(u)),maxSize:n.evaluate(new t(l)),interpolationType:o}}function r(t,e,r){var n=e.uSize,o=e.uSizeT,a=r.lowerSize,s=r.upperSize;return"source"===t.kind?a/i:"composite"===t.kind?number(a/i,s/i,o):n}function n(t,e){var r=0,n=0;if("constant"===t.kind)n=t.layoutSize;else if("source"!==t.kind){t.interpolationType,t.minZoom,t.maxZoom;"camera"===t.kind?n=number(t.minSize,t.maxSize,0):r=0}return{uSizeT:r,uSize:n}}var i=128;return Object.freeze({__proto__:null,getSizeData:e,evaluateSizeForFeature:r,evaluateSizeForZoom:n,SIZE_PACK_FACTOR:i})}),define("MVT/symbol/transform_text",[],function(){function t(t,e,r){var n=e.layout.get("text-transform").evaluate(r,{});return"uppercase"===n?t=t.toLocaleUpperCase():"lowercase"===n&&(t=t.toLocaleLowerCase()),t}function e(e,r,n){return e.sections.forEach(function(e){e.text=t(e.text,r,n)}),e}return e}),define("MVT/util/is_char_in_unicode_block",[],function(){"use strict";return{"Latin-1 Supplement":function(t){return t>=128&&t<=255},Arabic:function(t){return t>=1536&&t<=1791},"Arabic Supplement":function(t){return t>=1872&&t<=1919},"Arabic Extended-A":function(t){return t>=2208&&t<=2303},"Hangul Jamo":function(t){return t>=4352&&t<=4607},"Unified Canadian Aboriginal Syllabics":function(t){return t>=5120&&t<=5759},Khmer:function(t){return t>=6016&&t<=6143},"Unified Canadian Aboriginal Syllabics Extended":function(t){return t>=6320&&t<=6399},"General Punctuation":function(t){return t>=8192&&t<=8303},"Letterlike Symbols":function(t){return t>=8448&&t<=8527},"Number Forms":function(t){return t>=8528&&t<=8591},"Miscellaneous Technical":function(t){return t>=8960&&t<=9215},"Control Pictures":function(t){return t>=9216&&t<=9279},"Optical Character Recognition":function(t){return t>=9280&&t<=9311},"Enclosed Alphanumerics":function(t){return t>=9312&&t<=9471},"Geometric Shapes":function(t){return t>=9632&&t<=9727},"Miscellaneous Symbols":function(t){return t>=9728&&t<=9983},"Miscellaneous Symbols and Arrows":function(t){return t>=11008&&t<=11263},"CJK Radicals Supplement":function(t){return t>=11904&&t<=12031},"Kangxi Radicals":function(t){return t>=12032&&t<=12255},"Ideographic Description Characters":function(t){return t>=12272&&t<=12287},"CJK Symbols and Punctuation":function(t){return t>=12288&&t<=12351},Hiragana:function(t){return t>=12352&&t<=12447},Katakana:function(t){return t>=12448&&t<=12543},Bopomofo:function(t){return t>=12544&&t<=12591},"Hangul Compatibility Jamo":function(t){return t>=12592&&t<=12687},Kanbun:function(t){return t>=12688&&t<=12703},"Bopomofo Extended":function(t){return t>=12704&&t<=12735},"CJK Strokes":function(t){return t>=12736&&t<=12783},"Katakana Phonetic Extensions":function(t){return t>=12784&&t<=12799},"Enclosed CJK Letters and Months":function(t){return t>=12800&&t<=13055},"CJK Compatibility":function(t){return t>=13056&&t<=13311},"CJK Unified Ideographs Extension A":function(t){return t>=13312&&t<=19903},"Yijing Hexagram Symbols":function(t){return t>=19904&&t<=19967},"CJK Unified Ideographs":function(t){return t>=19968&&t<=40959},"Yi Syllables":function(t){return t>=40960&&t<=42127},"Yi Radicals":function(t){return t>=42128&&t<=42191},"Hangul Jamo Extended-A":function(t){return t>=43360&&t<=43391},"Hangul Syllables":function(t){return t>=44032&&t<=55215},"Hangul Jamo Extended-B":function(t){return t>=55216&&t<=55295},"Private Use Area":function(t){return t>=57344&&t<=63743},"CJK Compatibility Ideographs":function(t){return t>=63744&&t<=64255},"Arabic Presentation Forms-A":function(t){return t>=64336&&t<=65023},"Vertical Forms":function(t){return t>=65040&&t<=65055},"CJK Compatibility Forms":function(t){return t>=65072&&t<=65103},"Small Form Variants":function(t){return t>=65104&&t<=65135},"Arabic Presentation Forms-B":function(t){return t>=65136&&t<=65279},"Halfwidth and Fullwidth Forms":function(t){return t>=65280&&t<=65519}}}),define("MVT/util/script_detection",["./is_char_in_unicode_block"],function(t){"use strict";function e(e){return!t.Arabic(e)&&(!t["Arabic Supplement"](e)&&(!t["Arabic Extended-A"](e)&&(!t["Arabic Presentation Forms-A"](e)&&!t["Arabic Presentation Forms-B"](e))))}function r(e){return 746===e||747===e||!(e<4352)&&(!!t["Bopomofo Extended"](e)||(!!t.Bopomofo(e)||(!(!t["CJK Compatibility Forms"](e)||e>=65097&&e<=65103)||(!!t["CJK Compatibility Ideographs"](e)||(!!t["CJK Compatibility"](e)||(!!t["CJK Radicals Supplement"](e)||(!!t["CJK Strokes"](e)||(!(!t["CJK Symbols and Punctuation"](e)||e>=12296&&e<=12305||e>=12308&&e<=12319||12336===e)||(!!t["CJK Unified Ideographs Extension A"](e)||(!!t["CJK Unified Ideographs"](e)||(!!t["Enclosed CJK Letters and Months"](e)||(!!t["Hangul Compatibility Jamo"](e)||(!!t["Hangul Jamo Extended-A"](e)||(!!t["Hangul Jamo Extended-B"](e)||(!!t["Hangul Jamo"](e)||(!!t["Hangul Syllables"](e)||(!!t.Hiragana(e)||(!!t["Ideographic Description Characters"](e)||(!!t.Kanbun(e)||(!!t["Kangxi Radicals"](e)||(!!t["Katakana Phonetic Extensions"](e)||(!(!t.Katakana(e)||12540===e)||(!(!t["Halfwidth and Fullwidth Forms"](e)||65288===e||65289===e||65293===e||e>=65306&&e<=65310||65339===e||65341===e||65343===e||e>=65371&&e<=65503||65507===e||e>=65512&&e<=65519)||(!(!t["Small Form Variants"](e)||e>=65112&&e<=65118||e>=65123&&e<=65126)||(!!t["Unified Canadian Aboriginal Syllabics"](e)||(!!t["Unified Canadian Aboriginal Syllabics Extended"](e)||(!!t["Vertical Forms"](e)||(!!t["Yijing Hexagram Symbols"](e)||(!!t["Yi Syllables"](e)||!!t["Yi Radicals"](e))))))))))))))))))))))))))))))}function n(e){return e>=1424&&e<=2303||t["Arabic Presentation Forms-A"](e)||t["Arabic Presentation Forms-B"](e)}var i=function(){};return i.allowsVerticalWritingMode=function(t){for(var e=0,n=t;e<n.length;e+=1){if(r(n[e].charCodeAt(0)))return!0}return!1},i.allowsLetterSpacing=function(t){for(var r=0,n=t;r<n.length;r+=1){if(!e(n[r].charCodeAt(0)))return!1}return!0},i.stringContainsRTLText=function(t){for(var e=0,r=t;e<r.length;e+=1){if(n(r[e].charCodeAt(0)))return!0}return!1},i}),define("MVT/data/bucket/symbol_bucket",["./symbol_attributes","../../util/web_worker_transfer","../../style/evaluation_parameters","../load_geometry","../segment","../StructArrayLayout2ui4","../StructArrayLayout3ui6","../programConfigurationSet","../../symbol/mergeLines","../../symbol/shaping","../../symbol/symbol_size","../../symbol/transform_text","../../style-spec/expression/types/formatted","../../style-spec/expression/types/resolved_image","../../util/script_detection"],function(t,e,r,n,i,o,a,s,u,l,p,c,f,h,y){"use strict";function d(t,e,r,n,i,o,a,s,u,l,p,c,f){var h=s?Math.min(MAX_PACKED_SIZE,Math.round(s[0])):0,y=s?Math.min(MAX_PACKED_SIZE,Math.round(s[1])):0;t.emplaceBack(e,r,Math.round(32*n),Math.round(32*i),o,a,(h<<1)+(u?1:0),y,16*l,16*p,256*c,256*f)}function m(t,e,r){t.emplaceBack(e.x,e.y,r),t.emplaceBack(e.x,e.y,r),t.emplaceBack(e.x,e.y,r),t.emplaceBack(e.x,e.y,r)}function v(t){for(var e=0,r=t.sections;e<r.length;e+=1){var n=r[e];if(y.stringContainsRTLText(n.text))return!0}return!1}var g=["Unknown","Point","LineString","Polygon"],x=[{name:"a_fade_opacity",components:1,type:"Uint8",offset:0}],b=function(t){this.layoutVertexArray=new StructArrayLayout4i4ui4i24,this.indexArray=new a,this.programConfigurations=t,this.segments=new i,this.dynamicLayoutVertexArray=new StructArrayLayout3f12,this.opacityVertexArray=new StructArrayLayout1ul4,this.placedSymbolArray=new PlacedSymbolArray};b.prototype.upload=function(e,r,n,i){n&&(this.layoutVertexBuffer=e.createVertexBuffer(this.layoutVertexArray,t.symbolLayoutAttributes.members),this.indexBuffer=e.createIndexBuffer(this.indexArray,r),this.dynamicLayoutVertexBuffer=e.createVertexBuffer(this.dynamicLayoutVertexArray,t.dynamicLayoutAttributes.members,!0),this.opacityVertexBuffer=e.createVertexBuffer(this.opacityVertexArray,x,!0),this.opacityVertexBuffer.itemSize=1),(n||i)&&this.programConfigurations.upload(e)},b.prototype.destroy=function(){this.layoutVertexBuffer&&(this.layoutVertexBuffer.destroy(),this.indexBuffer.destroy(),this.programConfigurations.destroy(),this.segments.destroy(),this.dynamicLayoutVertexBuffer.destroy(),this.opacityVertexBuffer.destroy())},b.prototype.clear=function(){},e.register("SymbolBuffers",b);var w=function(t,e,r){this.layoutVertexArray=new t,this.layoutAttributes=e,this.indexArray=new r,this.segments=new i,this.collisionVertexArray=new StructArrayLayout2ub2f12};w.prototype.upload=function(t){this.layoutVertexBuffer=t.createVertexBuffer(this.layoutVertexArray,this.layoutAttributes),this.indexBuffer=t.createIndexBuffer(this.indexArray),this.collisionVertexBuffer=t.createVertexBuffer(this.collisionVertexArray,collisionVertexAttributes.members,!0)},w.prototype.destroy=function(){this.layoutVertexBuffer&&(this.layoutVertexBuffer.destroy(),this.indexBuffer.destroy(),this.segments.destroy(),this.collisionVertexBuffer.destroy())},e.register("CollisionBuffers",w);var _=function(t){this.collisionBoxArray=t.collisionBoxArray,this.zoom=t.zoom,this.overscaling=t.overscaling,this.layers=t.layers,this.layerIds=this.layers.map(function(t){return t.id}),this.index=t.index,this.pixelRatio=t.pixelRatio,this.sourceLayerIndex=t.sourceLayerIndex,this.hasPattern=!1,this.hasPaintOverrides=!1,this.hasRTLText=!1;var e=this.layers[0],r=e._unevaluatedLayout._values;this.textSizeData=p.getSizeData(this.zoom,r["text-size"]),this.iconSizeData=p.getSizeData(this.zoom,r["icon-size"]);var n=this.layers[0].layout,i=n.get("symbol-sort-key"),o=n.get("symbol-z-order");this.sortFeaturesByKey="viewport-y"!==o&&void 0!==i.constantOr(1);var a="viewport-y"===o||"auto"===o&&!this.sortFeaturesByKey;this.sortFeaturesByY=a&&(n.get("text-allow-overlap")||n.get("icon-allow-overlap")||n.get("text-ignore-placement")||n.get("icon-ignore-placement")),"point"===n.get("symbol-placement")&&(this.writingModes=n.get("text-writing-mode").map(function(t){return l.WritingMode[t]})),this.stateDependentLayerIds=this.layers.filter(function(t){return t.isStateDependent()}).map(function(t){return t.id}),this.sourceID=t.sourceID};return _.prototype.createArrays=function(){},_.prototype.calculateGlyphDependencies=function(t,e,r,n,i){for(var o=0;o<t.length;o++)if(e[t.charCodeAt(o)]=!0,(r||n)&&i){var a=verticalizedCharacterMap[t.charAt(o)];a&&(e[a.charCodeAt(0)]=!0)}},_.prototype.populate=function(t,e){var i=this.layers[0],o=i.layout,a=o.get("text-font"),s=o.get("text-field"),p=o.get("icon-image"),d=("constant"!==s.value.kind||s.value.value instanceof f&&!s.value.value.isEmpty()||s.value.value.toString().length>0)&&("constant"!==a.value.kind||a.value.value.length>0),m=("constant"!==p.value.kind||!!p.value.value)&&Object.keys(p.parameters).length>0,x=o.get("symbol-sort-key");if(this.features=[],d||m){for(var b=e.iconDependencies,w=e.glyphDependencies,_=e.availableImages,C=new r(this.zoom),A=0,S=t;A<S.length;A+=1){var E=S[A],k=E.feature,I=E.index,F=E.sourceLayerIndex;if(i._featureFilter(C,k)){var V=void 0;if(d){var M=i.getValueAndResolveTokens("text-field",k,_),P=f.factory(M);v(P)&&(this.hasRTLText=!0),(!this.hasRTLText||"unavailable"===getRTLTextPluginStatus()||this.hasRTLText&&plugin.isParsed())&&(V=c(P,i,k))}var T=void 0;if(m){var z=i.getValueAndResolveTokens("icon-image",k,_);T=z instanceof h?z:h.fromString(z)}if(V||T){var B=this.sortFeaturesByKey?x.evaluate(k,{}):void 0,O={text:V,icon:T,index:I,sourceLayerIndex:F,geometry:n(k),properties:k.properties,type:g[k.type],sortKey:B};if(void 0!==k.id&&(O.id=k.id),this.features.push(O),T&&(b[T.name]=!0),V){var D=a.evaluate(k,{}).join(","),L="map"===o.get("text-rotation-alignment")&&"point"!==o.get("symbol-placement");this.allowVerticalPlacement=this.writingModes&&this.writingModes.indexOf(l.WritingMode.vertical)>=0;for(var R=0,q=V.sections;R<q.length;R+=1){var U=q[R];if(U.image)b[U.image.name]=!0;else{var N=y.allowsVerticalWritingMode(V.toString()),j=U.fontStack||D,G=w[j]=w[j]||{};this.calculateGlyphDependencies(U.text,G,L,this.allowVerticalPlacement,N)}}}}}}"line"===o.get("symbol-placement")&&(this.features=u(this.features)),this.sortFeaturesByKey&&this.features.sort(function(t,e){return t.sortKey-e.sortKey})}},_.prototype.update=function(t,e,r){this.stateDependentLayers.length&&(this.text.programConfigurations.updatePaintArrays(t,e,this.layers,r),this.icon.programConfigurations.updatePaintArrays(t,e,this.layers,r))},_.prototype.isEmpty=function(){return 0===this.symbolInstances.length&&!this.hasRTLText},_.prototype.uploadPending=function(){return!this.uploaded||this.text.programConfigurations.needsUpload||this.icon.programConfigurations.needsUpload},_.prototype.upload=function(t){},_.prototype.destroy=function(){},_.prototype.clear=function(){},_.prototype.addToLineVertexArray=function(t,e){var r=this.lineVertexArray.length;if(void 0!==t.segment){for(var n=t.dist(e[t.segment+1]),i=t.dist(e[t.segment]),o={},a=t.segment+1;a<e.length;a++)o[a]={x:e[a].x,y:e[a].y,tileUnitDistanceFromAnchor:n},a<e.length-1&&(n+=e[a+1].dist(e[a]));for(var s=t.segment||0;s>=0;s--)o[s]={x:e[s].x,y:e[s].y,tileUnitDistanceFromAnchor:i},s>0&&(i+=e[s-1].dist(e[s]));for(var u=0;u<e.length;u++){var l=o[u];this.lineVertexArray.emplaceBack(l.x,l.y,l.tileUnitDistanceFromAnchor)}}return{lineStartIndex:r,lineLength:this.lineVertexArray.length-r}},_.prototype.addSymbols=function(t,e,r,n,i,o,a,s,u,p,c){
-var f=this,h=t.indexArray,y=t.layoutVertexArray,v=t.dynamicLayoutVertexArray,g=t.segments.prepareSegment(4*e.length,t.layoutVertexArray,t.indexArray,o.sortKey),x=this.glyphOffsetArray.length,b=g.vertexLength,w=this.allowVerticalPlacement&&a===l.WritingMode.vertical?Math.PI/2:0,_=function(t){var e=t.tl,n=t.tr,i=t.bl,o=t.br,a=t.tex,u=t.pixelOffsetTL,l=t.pixelOffsetBR,p=t.minFontScaleX,c=t.minFontScaleY,x=g.vertexLength,b=t.glyphOffset[1];d(y,s.x,s.y,e.x,b+e.y,a.x,a.y,r,t.isSDF,u.x,u.y,p,c),d(y,s.x,s.y,n.x,b+n.y,a.x+a.w,a.y,r,t.isSDF,l.x,u.y,p,c),d(y,s.x,s.y,i.x,b+i.y,a.x,a.y+a.h,r,t.isSDF,u.x,l.y,p,c),d(y,s.x,s.y,o.x,b+o.y,a.x+a.w,a.y+a.h,r,t.isSDF,l.x,l.y,p,c),m(v,s,w),h.emplaceBack(x,x+1,x+2),h.emplaceBack(x+1,x+2,x+3),g.vertexLength+=4,g.primitiveLength+=2,f.glyphOffsetArray.emplaceBack(t.glyphOffset[0])};if(o.text&&o.text.sections){var C=o.text.sections;if(this.hasPaintOverrides){for(var A,S=function(e,r){void 0===A||A===e&&!r||t.programConfigurations.populatePaintArrays(t.layoutVertexArray.length,o,o.index,{},C[A]),A=e},E=0,k=e;E<k.length;E+=1){var I=k[E];S(I.sectionIndex,!1),_(I)}S(A,!0)}else{for(var F=0,V=e;F<V.length;F+=1){_(V[F])}t.programConfigurations.populatePaintArrays(t.layoutVertexArray.length,o,o.index,{},C[0])}}else{for(var M=0,P=e;M<P.length;M+=1){_(P[M])}t.programConfigurations.populatePaintArrays(t.layoutVertexArray.length,o,o.index,{})}t.placedSymbolArray.emplaceBack(s.x,s.y,x,this.glyphOffsetArray.length-x,b,u,p,s.segment,r?r[0]:0,r?r[1]:0,n[0],n[1],a,0,!1,0,c)},_.prototype._addCollisionDebugVertex=function(t,e,r,n,i,o){return e.emplaceBack(0,0),t.emplaceBack(r.x,r.y,n,i,Math.round(o.x),Math.round(o.y))},_.prototype.addCollisionDebugVertices=function(t,e,r,n,i,o,a,s){var u=i.segments.prepareSegment(4,i.layoutVertexArray,i.indexArray),l=u.vertexLength,p=i.layoutVertexArray,c=i.collisionVertexArray,f=a.anchorX,h=a.anchorY;if(this._addCollisionDebugVertex(p,c,o,f,h,new pointGeometry(t,e)),this._addCollisionDebugVertex(p,c,o,f,h,new pointGeometry(r,e)),this._addCollisionDebugVertex(p,c,o,f,h,new pointGeometry(r,n)),this._addCollisionDebugVertex(p,c,o,f,h,new pointGeometry(t,n)),u.vertexLength+=4,s){var y=i.indexArray;y.emplaceBack(l,l+1,l+2),y.emplaceBack(l,l+2,l+3),u.primitiveLength+=2}else{var d=i.indexArray;d.emplaceBack(l,l+1),d.emplaceBack(l+1,l+2),d.emplaceBack(l+2,l+3),d.emplaceBack(l+3,l),u.primitiveLength+=4}},_.prototype.addDebugCollisionBoxes=function(t,e,r,n){for(var i=t;i<e;i++){var o=this.collisionBoxArray.get(i),a=o.x1,s=o.y1,u=o.x2,l=o.y2,p=o.radius>0;this.addCollisionDebugVertices(a,s,u,l,p?n?this.textCollisionCircle:this.iconCollisionCircle:n?this.textCollisionBox:this.iconCollisionBox,o.anchorPoint,r,p)}},_.prototype.generateCollisionDebugBuffers=function(){for(var t=0;t<this.symbolInstances.length;t++){var e=this.symbolInstances.get(t);this.addDebugCollisionBoxes(e.textBoxStartIndex,e.textBoxEndIndex,e,!0),this.addDebugCollisionBoxes(e.verticalTextBoxStartIndex,e.verticalTextBoxEndIndex,e,!0),this.addDebugCollisionBoxes(e.iconBoxStartIndex,e.iconBoxEndIndex,e,!1),this.addDebugCollisionBoxes(e.verticalIconBoxStartIndex,e.verticalIconBoxEndIndex,e,!1)}},_.prototype._deserializeCollisionBoxesForSymbol=function(t,e,r,n,i,o,a,s,u){for(var l={},p=e;p<r;p++){var c=t.get(p);if(0===c.radius){l.textBox={x1:c.x1,y1:c.y1,x2:c.x2,y2:c.y2,anchorPointX:c.anchorPointX,anchorPointY:c.anchorPointY},l.textFeatureIndex=c.featureIndex;break}l.textCircles||(l.textCircles=[],l.textFeatureIndex=c.featureIndex);l.textCircles.push(c.anchorPointX,c.anchorPointY,c.radius,c.signedDistanceFromAnchor,1)}for(var f=n;f<i;f++){var h=t.get(f);if(0===h.radius){l.verticalTextBox={x1:h.x1,y1:h.y1,x2:h.x2,y2:h.y2,anchorPointX:h.anchorPointX,anchorPointY:h.anchorPointY},l.verticalTextFeatureIndex=h.featureIndex;break}}for(var y=o;y<a;y++){var d=t.get(y);if(0===d.radius){l.iconBox={x1:d.x1,y1:d.y1,x2:d.x2,y2:d.y2,anchorPointX:d.anchorPointX,anchorPointY:d.anchorPointY},l.iconFeatureIndex=d.featureIndex;break}}for(var m=s;m<u;m++){var v=t.get(m);if(0===v.radius){l.verticalIconBox={x1:v.x1,y1:v.y1,x2:v.x2,y2:v.y2,anchorPointX:v.anchorPointX,anchorPointY:v.anchorPointY},l.verticalIconFeatureIndex=v.featureIndex;break}}return l},_.prototype.deserializeCollisionBoxes=function(t){this.collisionArrays=[];for(var e=0;e<this.symbolInstances.length;e++){var r=this.symbolInstances.get(e);this.collisionArrays.push(this._deserializeCollisionBoxesForSymbol(t,r.textBoxStartIndex,r.textBoxEndIndex,r.verticalTextBoxStartIndex,r.verticalTextBoxEndIndex,r.iconBoxStartIndex,r.iconBoxEndIndex,r.verticalIconBoxStartIndex,r.verticalIconBoxEndIndex))}},_.prototype.hasTextData=function(){return this.text.segments.get().length>0},_.prototype.hasIconData=function(){return this.icon.segments.get().length>0},_.prototype.hasTextCollisionBoxData=function(){return this.textCollisionBox.segments.get().length>0},_.prototype.hasIconCollisionBoxData=function(){return this.iconCollisionBox.segments.get().length>0},_.prototype.hasTextCollisionCircleData=function(){return this.textCollisionCircle.segments.get().length>0},_.prototype.hasIconCollisionCircleData=function(){return this.iconCollisionCircle.segments.get().length>0},_.prototype.addIndicesForPlacedSymbol=function(t,e){for(var r=t.placedSymbolArray.get(e),n=r.vertexStartIndex+4*r.numGlyphs,i=r.vertexStartIndex;i<n;i+=4)t.indexArray.emplaceBack(i,i+1,i+2),t.indexArray.emplaceBack(i+1,i+2,i+3)},_.prototype.getSortedSymbolIndexes=function(t){if(this.sortedAngle===t&&void 0!==this.symbolInstanceIndexes)return this.symbolInstanceIndexes;for(var e=Math.sin(t),r=Math.cos(t),n=[],i=[],o=[],a=0;a<this.symbolInstances.length;++a){o.push(a);var s=this.symbolInstances.get(a);n.push(0|Math.round(e*s.anchorX+r*s.anchorY)),i.push(s.featureIndex)}return o.sort(function(t,e){return n[t]-n[e]||i[e]-i[t]}),o},_.prototype.sortFeatures=function(t){var e=this;if(this.sortFeaturesByY&&this.sortedAngle!==t&&!(this.text.segments.get().length>1||this.icon.segments.get().length>1)){this.symbolInstanceIndexes=this.getSortedSymbolIndexes(t),this.sortedAngle=t,this.text.indexArray.clear(),this.icon.indexArray.clear(),this.featureSortOrder=[];for(var r=0,n=this.symbolInstanceIndexes;r<n.length;r+=1){var i=n[r],o=this.symbolInstances.get(i);this.featureSortOrder.push(o.featureIndex),[o.rightJustifiedTextSymbolIndex,o.centerJustifiedTextSymbolIndex,o.leftJustifiedTextSymbolIndex].forEach(function(t,r,n){t>=0&&n.indexOf(t)===r&&e.addIndicesForPlacedSymbol(e.text,t)}),o.verticalPlacedTextSymbolIndex>=0&&this.addIndicesForPlacedSymbol(this.text,o.verticalPlacedTextSymbolIndex),o.placedIconSymbolIndex>=0&&this.addIndicesForPlacedSymbol(this.icon,o.placedIconSymbolIndex),o.verticalPlacedIconSymbolIndex>=0&&this.addIndicesForPlacedSymbol(this.icon,o.verticalPlacedIconSymbolIndex)}this.text.indexBuffer&&this.text.indexBuffer.updateData(this.text.indexArray),this.icon.indexBuffer&&this.icon.indexBuffer.updateData(this.icon.indexArray)}},e.register("SymbolBucket",_,{omit:["layers","collisionBoxArray","compareText"]}),_.MAX_GLYPHS=65535,_.addDynamicAttributes=m,_}),define("MVT/style/style_layer/symbol_style_layer",["../../data/bucket/symbol_bucket","../crossFadedDataDrivenProperty","../dataConstantProperty","../dataDrivenProperty","../properties","../query_utils","../style_layer","../style_spec","../../util/util","../../style-spec/expression/expression","../../style-spec/expression/types/formatted","../../style-spec/expression/definitions/format","../../style-spec/expression/definitions/literal","../../style-spec/expression/values"],function(t,e,r,n,i,o,a,s,u,l,p,c,f,h){"use strict";var y={kind:"color"},d={kind:"formatted"},m=new i({"symbol-placement":new r(s.layout_symbol["symbol-placement"]),"symbol-spacing":new r(s.layout_symbol["symbol-spacing"]),"symbol-avoid-edges":new r(s.layout_symbol["symbol-avoid-edges"]),"symbol-sort-key":new n(s.layout_symbol["symbol-sort-key"]),"symbol-z-order":new r(s.layout_symbol["symbol-z-order"]),"icon-allow-overlap":new r(s.layout_symbol["icon-allow-overlap"]),"icon-ignore-placement":new r(s.layout_symbol["icon-ignore-placement"]),"icon-optional":new r(s.layout_symbol["icon-optional"]),"icon-rotation-alignment":new r(s.layout_symbol["icon-rotation-alignment"]),"icon-size":new n(s.layout_symbol["icon-size"]),"icon-text-fit":new r(s.layout_symbol["icon-text-fit"]),"icon-text-fit-padding":new r(s.layout_symbol["icon-text-fit-padding"]),"icon-image":new n(s.layout_symbol["icon-image"]),"icon-rotate":new n(s.layout_symbol["icon-rotate"]),"icon-padding":new r(s.layout_symbol["icon-padding"]),"icon-keep-upright":new r(s.layout_symbol["icon-keep-upright"]),"icon-offset":new n(s.layout_symbol["icon-offset"]),"icon-anchor":new n(s.layout_symbol["icon-anchor"]),"icon-pitch-alignment":new r(s.layout_symbol["icon-pitch-alignment"]),"text-pitch-alignment":new r(s.layout_symbol["text-pitch-alignment"]),"text-rotation-alignment":new r(s.layout_symbol["text-rotation-alignment"]),"text-field":new n(s.layout_symbol["text-field"]),"text-font":new n(s.layout_symbol["text-font"]),"text-size":new n(s.layout_symbol["text-size"]),"text-max-width":new n(s.layout_symbol["text-max-width"]),"text-line-height":new r(s.layout_symbol["text-line-height"]),"text-letter-spacing":new n(s.layout_symbol["text-letter-spacing"]),"text-justify":new n(s.layout_symbol["text-justify"]),"text-radial-offset":new n(s.layout_symbol["text-radial-offset"]),"text-variable-anchor":new r(s.layout_symbol["text-variable-anchor"]),"text-anchor":new n(s.layout_symbol["text-anchor"]),"text-max-angle":new r(s.layout_symbol["text-max-angle"]),"text-writing-mode":new r(s.layout_symbol["text-writing-mode"]),"text-rotate":new n(s.layout_symbol["text-rotate"]),"text-padding":new r(s.layout_symbol["text-padding"]),"text-keep-upright":new r(s.layout_symbol["text-keep-upright"]),"text-transform":new n(s.layout_symbol["text-transform"]),"text-offset":new n(s.layout_symbol["text-offset"]),"text-allow-overlap":new r(s.layout_symbol["text-allow-overlap"]),"text-ignore-placement":new r(s.layout_symbol["text-ignore-placement"]),"text-optional":new r(s.layout_symbol["text-optional"])}),v=new i({"icon-opacity":new n(s.paint_symbol["icon-opacity"]),"icon-color":new n(s.paint_symbol["icon-color"]),"icon-halo-color":new n(s.paint_symbol["icon-halo-color"]),"icon-halo-width":new n(s.paint_symbol["icon-halo-width"]),"icon-halo-blur":new n(s.paint_symbol["icon-halo-blur"]),"icon-translate":new r(s.paint_symbol["icon-translate"]),"icon-translate-anchor":new r(s.paint_symbol["icon-translate-anchor"]),"text-opacity":new n(s.paint_symbol["text-opacity"]),"text-color":new n(s.paint_symbol["text-color"],{runtimeType:y,getOverride:function(t){return t.textColor},hasOverride:function(t){return!!t.textColor}}),"text-halo-color":new n(s.paint_symbol["text-halo-color"]),"text-halo-width":new n(s.paint_symbol["text-halo-width"]),"text-halo-blur":new n(s.paint_symbol["text-halo-blur"]),"text-translate":new r(s.paint_symbol["text-translate"]),"text-translate-anchor":new r(s.paint_symbol["text-translate-anchor"])}),g={paint:v,layout:m};return function(e){function r(t){e.call(this,t,g)}return e&&(r.__proto__=e),r.prototype=Object.create(e&&e.prototype),r.prototype.constructor=r,r.prototype.recalculate=function(t,r){if(e.prototype.recalculate.call(this,t,r),"auto"===this.layout.get("icon-rotation-alignment")&&("point"!==this.layout.get("symbol-placement")?this.layout._values["icon-rotation-alignment"]="map":this.layout._values["icon-rotation-alignment"]="viewport"),"auto"===this.layout.get("text-rotation-alignment")&&("point"!==this.layout.get("symbol-placement")?this.layout._values["text-rotation-alignment"]="map":this.layout._values["text-rotation-alignment"]="viewport"),"auto"===this.layout.get("text-pitch-alignment")&&(this.layout._values["text-pitch-alignment"]=this.layout.get("text-rotation-alignment")),"auto"===this.layout.get("icon-pitch-alignment")&&(this.layout._values["icon-pitch-alignment"]=this.layout.get("icon-rotation-alignment")),"point"===this.layout.get("symbol-placement")){var n=this.layout.get("text-writing-mode");if(n){for(var i=[],o=0,a=n;o<a.length;o+=1){var s=a[o];i.indexOf(s)<0&&i.push(s)}this.layout._values["text-writing-mode"]=i}else this.layout._values["text-writing-mode"]=["horizontal"]}this._setPaintOverrides()},r.prototype.getValueAndResolveTokens=function(t,e,r){var n=this.layout.get(t).evaluate(e,{},r),i=this._unevaluatedLayout._values[t];return i.isDataDriven()||l.isExpression(i.value)||!n?n:u.resolveTokens(e.properties,n)},r.prototype.createBucket=function(e){return new t(e)},r.prototype.queryRadius=function(){return 0},r.prototype.queryIntersectsFeature=function(){return assert_1(!1),!1},r.prototype._setPaintOverrides=function(){for(var t=0,e=g.paint.overridableProperties;t<e.length;t+=1){var n=e[t];if(r.hasPaintOverride(this.layout,n)){var i=this.paint.get(n),o=new FormatSectionOverride(i),a=new StyleExpression(o,i.property.specification),s=null;s="constant"===i.value.kind||"source"===i.value.kind?new ZoomConstantExpression("source",a):new ZoomDependentExpression("composite",a,i.value.zoomStops,i.value._interpolationType),this.paint._values[n]=new PossiblyEvaluatedPropertyValue(i.property,s,i.parameters)}}},r.prototype._handleOverridablePaintPropertyUpdate=function(t,e,n){return!(!this.layout||e.isDataDriven()||n.isDataDriven())&&r.hasPaintOverride(this.layout,t)},r.hasPaintOverride=function(t,e){var r=t.get("text-field"),n=g.paint.properties[e],i=!1,o=function(t){for(var e=0,r=t;e<r.length;e+=1){var o=r[e];if(n.overrides&&n.overrides.hasOverride(o))return void(i=!0)}};if("constant"===r.value.kind&&r.value.value instanceof p)o(r.value.value.sections);else if("source"===r.value.kind){var a=function(t){if(!i)if(t instanceof f&&h.typeOf(t.value)===d){var e=t.value;o(e.sections)}else t instanceof c?o(t.sections):t.eachChild(a)},s=r.value;s._styleExpression&&a(s._styleExpression.expression)}return i},r.hasPaintOverrides=function(t){for(var e=0,n=g.paint.overridableProperties;e<n.length;e+=1){var i=n[e];if(r.hasPaintOverride(t,i))return!0}return!1},r}(a)}),define("MVT/style/create_style_layer",["./style_layer/circle_style_layer","./style_layer/fill_style_layer","./style_layer/line_style_layer","./style_layer/symbol_style_layer"],function(t,e,r,n){"use strict";function i(t){return o[t.type]?new o[t.type](t):null}var o={circle:t,fill:e,line:r,symbol:n};return i}),define("MVT/style/StyleIndexLayer",["../style-spec/feature_filter/featureFilter","../group_by_layout","./create_style_layer"],function(t,e,r){"use strict";function n(t){var e=[];for(var r in t)e.push(t[r]);return e}var i=function(t){this.keyCache={},t&&this.replace(t)};return i.prototype.replace=function(t){this._layerConfigs={},this._layers={},this.update(t,[])},i.prototype.update=function(i,o){for(var a=this,s=0,u=i;s<u.length;s+=1){var l=u[s];this._layerConfigs[l.id]=l;var p=r(l);null!=p&&(this._layers[l.id]=p,p._featureFilter=t.createFilter(p.filter),this.keyCache[l.id]&&delete this.keyCache[l.id])}for(var c=0,f=o;c<f.length;c+=1){var h=f[c];delete this.keyCache[h],delete this._layerConfigs[h],delete this._layers[h]}this.familiesBySource={};for(var y=e(n(this._layerConfigs),this.keyCache),d=0,m=y;d<m.length;d+=1){var v=m[d],g=v.map(function(t){return a._layers[t.id]}),x=g[0];if(void 0!=x&&"none"!==x.visibility){var b=x.source||"",w=this.familiesBySource[b];w||(w=this.familiesBySource[b]={});var _=x.sourceLayer,C=w[_];C||(C=w[_]=[]),C.push(g)}}},i}),define("Workers/MVTWorkTile",["./createTaskProcessorWorker","../Core/Color","../Core/defaultValue","../Core/defined","../ThirdParty/pbf","../MVT/DictionaryCoder","../MVT/data/bucket/line_bucket","../MVT/data/bucket/fill_bucket","../MVT/data/feature_index","../MVT/render/image_atlas","../MVT/style/StyleIndexLayer","../MVT/style/evaluation_parameters","../MVT/vectortile","../MVT/util/web_worker_transfer"],function(t,e,r,n,i,o,a,s,u,l,p,c,f,h){"use strict";function y(t,e){var r=t.pbfData,i=t.layers,o=t.imageMap,a=h.deserialize(t.serializeObj),s=a.featureIndex,l=t.tileID.z;n(s)||(s=new u(t.tileID),s.bucketLayerIDs=[]);var c={};try{var f=new p(i);c=m(d(r),f,o,s,l),c=h.serialize(c,e)}catch(t){}return c}function d(t){if(n(t))return new f(new i(t))}function m(t,e,r,n,i){var u=new o(Object.keys(t.layers).sort()),p={},c={featureIndex:n,iconDependencies:{},patternDependencies:{},glyphDependencies:{}};for(var f in e.familiesBySource)if(""!=f){var h=e.familiesBySource[f];for(var y in h){var d=t.layers[y];if(d){for(var m=u.encode(y),g=[],x=0;x<d.length;x++){var b=d.feature(x);g.push({feature:b,index:x,sourceLayerIndex:m})}for(var w=0,_=h[y];w<_.length;w+=1){var C=_[w],A=C[0];if("none"!==A.visibility){v(C,0,null);var S=p[A.id]=A.createBucket({index:n.bucketLayerIDs.length,layers:C,sourceLayerIndex:m});S.populate(g,c),n.bucketLayerIDs.push(C.map(function(t){return t.id}))}}}}}var E=null;for(var k in p){var S=p[k];S.hasPattern&&(S instanceof a||S instanceof s)&&(null==E&&(E=new l({},r)),S.addFeatures(c,E.patternPositions))}return{buckets:p,imageAtlas:E,featureIndex:n}}function v(t,e,r){for(var n=new c(e),i=0,o=t;i<o.length;i+=1){o[i].recalculate(n,r)}}return h.register("FeatureIndex",u,{omit:["rawTileData","sourceLayerCoder"]}),t(y)})}();
+        return {
+            members: layoutMembers,
+            size: size,
+            alignment: alignment
+        };
+    }
+
+    function sizeOf(type) {
+        return viewTypes[type].BYTES_PER_ELEMENT;
+    }
+
+    function align(offset, size) {
+        return Math.ceil(offset / size) * size;
+    }
+
+    var IMAGE_PADDING = 1;
+
+    var ImagePosition = function ImagePosition(paddedRect, ref) {
+        var pixelRatio = ref.pixelRatio;
+        var version = ref.version;
+        var stretchX = ref.stretchX;
+        var stretchY = ref.stretchY;
+        var content = ref.content;
+
+        this.paddedRect = paddedRect;
+        this.pixelRatio = pixelRatio;
+        this.stretchX = stretchX;
+        this.stretchY = stretchY;
+        this.content = content;
+        this.version = version;
+    };
+
+    var prototypeAccessors = { tl: { configurable: true }, br: { configurable: true }, tlbr: { configurable: true }, displaySize: { configurable: true } };
+
+    prototypeAccessors.tl.get = function () {
+        return [
+            this.paddedRect.x + IMAGE_PADDING,
+            this.paddedRect.y + IMAGE_PADDING
+        ];
+    };
+
+    prototypeAccessors.br.get = function () {
+        return [
+            this.paddedRect.x + this.paddedRect.w - IMAGE_PADDING,
+            this.paddedRect.y + this.paddedRect.h - IMAGE_PADDING
+        ];
+    };
+
+    prototypeAccessors.tlbr.get = function () {
+        return this.tl.concat(this.br);
+    };
+
+    prototypeAccessors.displaySize.get = function () {
+        return [
+            (this.paddedRect.w - IMAGE_PADDING * 2) / this.pixelRatio,
+            (this.paddedRect.h - IMAGE_PADDING * 2) / this.pixelRatio
+        ];
+    };
+
+    Object.defineProperties(ImagePosition.prototype, prototypeAccessors);
+
+    // Not premultiplied, because ImageData is not premultiplied.
+    // UNPACK_PREMULTIPLY_ALPHA_WEBGL must be used when uploading to a texture.
+    var RGBAImage = function RGBAImage(size, data) {
+        createImage(this, size, 4, data);
+    };
+
+    RGBAImage.prototype.resize = function resize(size) {
+        resizeImage(this, size, 4);
+    };
+
+    RGBAImage.prototype.replace = function replace(data, copy) {
+        if (copy) {
+            this.data.set(data);
+        } else if (data instanceof Uint8ClampedArray) {
+            this.data = new Uint8Array(data.buffer);
+        } else {
+            this.data = data;
+        }
+    };
+
+    RGBAImage.prototype.clone = function clone() {
+        return new RGBAImage({width: this.width, height: this.height}, new Uint8Array(this.data));
+    };
+
+    RGBAImage.copy = function copy(srcImg, dstImg, srcPt, dstPt, size) {
+        copyImage(srcImg, dstImg, srcPt, dstPt, size, 4);
+    };
+
+    function createImage(image, ref, channels, data) {
+        var width = ref.width;
+        var height = ref.height;
+
+        if (!data) {
+            data = new Uint8Array(width * height * channels);
+        } else if (data instanceof Uint8ClampedArray) {
+            data = new Uint8Array(data.buffer);
+        } else if (data.length !== width * height * channels) {
+            throw new RangeError('mismatched image size');
+        }
+        image.width = width;
+        image.height = height;
+        image.data = data;
+        return image;
+    }
+
+    function resizeImage(image, ref, channels) {
+        var width = ref.width;
+        var height = ref.height;
+
+        if (width === image.width && height === image.height) {
+            return;
+        }
+
+        var newImage = createImage({}, {width: width, height: height}, channels);
+
+        copyImage(image, newImage, {x: 0, y: 0}, {x: 0, y: 0}, {
+            width: Math.min(image.width, width),
+            height: Math.min(image.height, height)
+        }, channels);
+
+        image.width = width;
+        image.height = height;
+        image.data = newImage.data;
+    }
+
+    function copyImage(srcImg, dstImg, srcPt, dstPt, size, channels) {
+        if (size.width === 0 || size.height === 0) {
+            return dstImg;
+        }
+
+        if (size.width > srcImg.width ||
+            size.height > srcImg.height ||
+            srcPt.x > srcImg.width - size.width ||
+            srcPt.y > srcImg.height - size.height) {
+            throw new RangeError('out of range source coordinates for image copy');
+        }
+
+        if (size.width > dstImg.width ||
+            size.height > dstImg.height ||
+            dstPt.x > dstImg.width - size.width ||
+            dstPt.y > dstImg.height - size.height) {
+            throw new RangeError('out of range destination coordinates for image copy');
+        }
+
+        var srcData = srcImg.data;
+        var dstData = dstImg.data;
+
+        //assert_1(srcData !== dstData);
+
+        for (var y = 0; y < size.height; y++) {
+            var srcOffset = ((srcPt.y + y) * srcImg.width + srcPt.x) * channels;
+            var dstOffset = ((dstPt.y + y) * dstImg.width + dstPt.x) * channels;
+            for (var i = 0; i < size.width * channels; i++) {
+                dstData[dstOffset + i] = srcData[srcOffset + i];
+            }
+        }
+        return dstImg;
+    }
+
+    function potpack(boxes) {
+
+        // calculate total box area and maximum box width
+        var area = 0;
+        var maxWidth = 0;
+
+        for (var i$1 = 0, list = boxes; i$1 < list.length; i$1 += 1) {
+            var box = list[i$1];
+
+            area += box.w * box.h;
+            maxWidth = Math.max(maxWidth, box.w);
+        }
+
+        // sort the boxes for insertion by height, descending
+        boxes.sort(function (a, b) { return b.h - a.h; });
+
+        // aim for a squarish resulting container,
+        // slightly adjusted for sub-100% space utilization
+        var startWidth = Math.max(Math.ceil(Math.sqrt(area / 0.95)), maxWidth);
+
+        // start with a single empty space, unbounded at the bottom
+        var spaces = [{x: 0, y: 0, w: startWidth, h: Infinity}];
+
+        var width = 0;
+        var height = 0;
+
+        for (var i$2 = 0, list$1 = boxes; i$2 < list$1.length; i$2 += 1) {
+            // look through spaces backwards so that we check smaller spaces first
+            var box$1 = list$1[i$2];
+
+            for (var i = spaces.length - 1; i >= 0; i--) {
+                var space = spaces[i];
+
+                // look for empty spaces that can accommodate the current box
+                if (box$1.w > space.w || box$1.h > space.h) { continue; }
+
+                // found the space; add the box to its top-left corner
+                // |-------|-------|
+                // |  box  |       |
+                // |_______|       |
+                // |         space |
+                // |_______________|
+                box$1.x = space.x;
+                box$1.y = space.y;
+
+                height = Math.max(height, box$1.y + box$1.h);
+                width = Math.max(width, box$1.x + box$1.w);
+
+                if (box$1.w === space.w && box$1.h === space.h) {
+                    // space matches the box exactly; remove it
+                    var last = spaces.pop();
+                    if (i < spaces.length) { spaces[i] = last; }
+
+                } else if (box$1.h === space.h) {
+                    // space matches the box height; update it accordingly
+                    // |-------|---------------|
+                    // |  box  | updated space |
+                    // |_______|_______________|
+                    space.x += box$1.w;
+                    space.w -= box$1.w;
+
+                } else if (box$1.w === space.w) {
+                    // space matches the box width; update it accordingly
+                    // |---------------|
+                    // |      box      |
+                    // |_______________|
+                    // | updated space |
+                    // |_______________|
+                    space.y += box$1.h;
+                    space.h -= box$1.h;
+
+                } else {
+                    // otherwise the box splits the space into two spaces
+                    // |-------|-----------|
+                    // |  box  | new space |
+                    // |_______|___________|
+                    // | updated space     |
+                    // |___________________|
+                    spaces.push({
+                        x: space.x + box$1.w,
+                        y: space.y,
+                        w: space.w - box$1.w,
+                        h: box$1.h
+                    });
+                    space.y += box$1.h;
+                    space.h -= box$1.h;
+                }
+                break;
+            }
+        }
+
+        return {
+            w: width, // container width
+            h: height, // container height
+            fill: (area / (width * height)) || 0 // space utilization
+        };
+    }
+
+    var IMAGE_PADDING$1 = 1;
+
+    var ImageAtlas = function ImageAtlas(icons, patterns) {
+        var iconPositions = {}, patternPositions = {};
+        this.haveRenderCallbacks = [];
+
+        var bins = [];
+
+        this.addImages(icons, iconPositions, bins);
+        this.addImages(patterns, patternPositions, bins);
+
+        var ref = potpack(bins);
+        var w = ref.w;
+        var h = ref.h;
+        var image = new RGBAImage({width: w || 1, height: h || 1});
+
+        for (var id in icons) {
+            var src = icons[id];
+            var bin = iconPositions[id].paddedRect;
+            RGBAImage.copy(src.data, image, {x: 0, y: 0}, {x: bin.x + IMAGE_PADDING$1, y: bin.y + IMAGE_PADDING$1}, src.data);
+        }
+
+        for (var id$1 in patterns) {
+            var src$1 = patterns[id$1];
+            var bin$1 = patternPositions[id$1].paddedRect;
+            var x = bin$1.x + IMAGE_PADDING$1,
+                y = bin$1.y + IMAGE_PADDING$1,
+                w$1 = src$1.data.width,
+                h$1 = src$1.data.height;
+
+            RGBAImage.copy(src$1.data, image, {x: 0, y: 0}, {x: x, y: y}, src$1.data);
+            // Add 1 pixel wrapped padding on each side of the image.
+            RGBAImage.copy(src$1.data, image, {x: 0, y: h$1 - 1}, {x: x, y: y - 1}, {width: w$1, height: 1}); // T
+            RGBAImage.copy(src$1.data, image, {x: 0, y: 0}, {x: x, y: y + h$1}, {width: w$1, height: 1}); // B
+            RGBAImage.copy(src$1.data, image, {x: w$1 - 1, y: 0}, {x: x - 1, y: y}, {width: 1, height: h$1}); // L
+            RGBAImage.copy(src$1.data, image, {x: 0, y: 0}, {x: x + w$1, y: y}, {width: 1, height: h$1}); // R
+        }
+
+        this.image = image;
+        this.iconPositions = iconPositions;
+        this.patternPositions = patternPositions;
+    };
+
+    ImageAtlas.prototype.addImages = function addImages(images, positions, bins) {
+        for (var id in images) {
+            var src = images[id];
+            var bin = {
+                x: 0,
+                y: 0,
+                w: src.data.width + 2 * IMAGE_PADDING$1,
+                h: src.data.height + 2 * IMAGE_PADDING$1,
+            };
+            bins.push(bin);
+            positions[id] = new ImagePosition(bin, src);
+
+            if (src.hasRenderCallback) {
+                this.haveRenderCallbacks.push(id);
+            }
+        }
+    };
+
+    ImageAtlas.prototype.patchUpdatedImages = function patchUpdatedImages(imageManager, texture) {
+        imageManager.dispatchRenderCallbacks(this.haveRenderCallbacks);
+        for (var name in imageManager.updatedImages) {
+            this.patchUpdatedImage(this.iconPositions[name], imageManager.getImage(name), texture);
+            this.patchUpdatedImage(this.patternPositions[name], imageManager.getImage(name), texture);
+        }
+    };
+
+    ImageAtlas.prototype.patchUpdatedImage = function patchUpdatedImage(position, image, texture) {
+        if (!position || !image) {
+            return;
+        }
+
+        if (position.version === image.version) {
+            return;
+        }
+
+        position.version = image.version;
+        var ref = position.tl;
+        var x = ref[0];
+        var y = ref[1];
+        texture.update(image.data, undefined, {x: x, y: y});
+    };
+
+    // http://www.w3.org/TR/css3-color/
+    var kCSSColorTable = {
+        "transparent": [0,0,0,0], "aliceblue": [240,248,255,1],
+        "antiquewhite": [250,235,215,1], "aqua": [0,255,255,1],
+        "aquamarine": [127,255,212,1], "azure": [240,255,255,1],
+        "beige": [245,245,220,1], "bisque": [255,228,196,1],
+        "black": [0,0,0,1], "blanchedalmond": [255,235,205,1],
+        "blue": [0,0,255,1], "blueviolet": [138,43,226,1],
+        "brown": [165,42,42,1], "burlywood": [222,184,135,1],
+        "cadetblue": [95,158,160,1], "chartreuse": [127,255,0,1],
+        "chocolate": [210,105,30,1], "coral": [255,127,80,1],
+        "cornflowerblue": [100,149,237,1], "cornsilk": [255,248,220,1],
+        "crimson": [220,20,60,1], "cyan": [0,255,255,1],
+        "darkblue": [0,0,139,1], "darkcyan": [0,139,139,1],
+        "darkgoldenrod": [184,134,11,1], "darkgray": [169,169,169,1],
+        "darkgreen": [0,100,0,1], "darkgrey": [169,169,169,1],
+        "darkkhaki": [189,183,107,1], "darkmagenta": [139,0,139,1],
+        "darkolivegreen": [85,107,47,1], "darkorange": [255,140,0,1],
+        "darkorchid": [153,50,204,1], "darkred": [139,0,0,1],
+        "darksalmon": [233,150,122,1], "darkseagreen": [143,188,143,1],
+        "darkslateblue": [72,61,139,1], "darkslategray": [47,79,79,1],
+        "darkslategrey": [47,79,79,1], "darkturquoise": [0,206,209,1],
+        "darkviolet": [148,0,211,1], "deeppink": [255,20,147,1],
+        "deepskyblue": [0,191,255,1], "dimgray": [105,105,105,1],
+        "dimgrey": [105,105,105,1], "dodgerblue": [30,144,255,1],
+        "firebrick": [178,34,34,1], "floralwhite": [255,250,240,1],
+        "forestgreen": [34,139,34,1], "fuchsia": [255,0,255,1],
+        "gainsboro": [220,220,220,1], "ghostwhite": [248,248,255,1],
+        "gold": [255,215,0,1], "goldenrod": [218,165,32,1],
+        "gray": [128,128,128,1], "green": [0,128,0,1],
+        "greenyellow": [173,255,47,1], "grey": [128,128,128,1],
+        "honeydew": [240,255,240,1], "hotpink": [255,105,180,1],
+        "indianred": [205,92,92,1], "indigo": [75,0,130,1],
+        "ivory": [255,255,240,1], "khaki": [240,230,140,1],
+        "lavender": [230,230,250,1], "lavenderblush": [255,240,245,1],
+        "lawngreen": [124,252,0,1], "lemonchiffon": [255,250,205,1],
+        "lightblue": [173,216,230,1], "lightcoral": [240,128,128,1],
+        "lightcyan": [224,255,255,1], "lightgoldenrodyellow": [250,250,210,1],
+        "lightgray": [211,211,211,1], "lightgreen": [144,238,144,1],
+        "lightgrey": [211,211,211,1], "lightpink": [255,182,193,1],
+        "lightsalmon": [255,160,122,1], "lightseagreen": [32,178,170,1],
+        "lightskyblue": [135,206,250,1], "lightslategray": [119,136,153,1],
+        "lightslategrey": [119,136,153,1], "lightsteelblue": [176,196,222,1],
+        "lightyellow": [255,255,224,1], "lime": [0,255,0,1],
+        "limegreen": [50,205,50,1], "linen": [250,240,230,1],
+        "magenta": [255,0,255,1], "maroon": [128,0,0,1],
+        "mediumaquamarine": [102,205,170,1], "mediumblue": [0,0,205,1],
+        "mediumorchid": [186,85,211,1], "mediumpurple": [147,112,219,1],
+        "mediumseagreen": [60,179,113,1], "mediumslateblue": [123,104,238,1],
+        "mediumspringgreen": [0,250,154,1], "mediumturquoise": [72,209,204,1],
+        "mediumvioletred": [199,21,133,1], "midnightblue": [25,25,112,1],
+        "mintcream": [245,255,250,1], "mistyrose": [255,228,225,1],
+        "moccasin": [255,228,181,1], "navajowhite": [255,222,173,1],
+        "navy": [0,0,128,1], "oldlace": [253,245,230,1],
+        "olive": [128,128,0,1], "olivedrab": [107,142,35,1],
+        "orange": [255,165,0,1], "orangered": [255,69,0,1],
+        "orchid": [218,112,214,1], "palegoldenrod": [238,232,170,1],
+        "palegreen": [152,251,152,1], "paleturquoise": [175,238,238,1],
+        "palevioletred": [219,112,147,1], "papayawhip": [255,239,213,1],
+        "peachpuff": [255,218,185,1], "peru": [205,133,63,1],
+        "pink": [255,192,203,1], "plum": [221,160,221,1],
+        "powderblue": [176,224,230,1], "purple": [128,0,128,1],
+        "rebeccapurple": [102,51,153,1],
+        "red": [255,0,0,1], "rosybrown": [188,143,143,1],
+        "royalblue": [65,105,225,1], "saddlebrown": [139,69,19,1],
+        "salmon": [250,128,114,1], "sandybrown": [244,164,96,1],
+        "seagreen": [46,139,87,1], "seashell": [255,245,238,1],
+        "sienna": [160,82,45,1], "silver": [192,192,192,1],
+        "skyblue": [135,206,235,1], "slateblue": [106,90,205,1],
+        "slategray": [112,128,144,1], "slategrey": [112,128,144,1],
+        "snow": [255,250,250,1], "springgreen": [0,255,127,1],
+        "steelblue": [70,130,180,1], "tan": [210,180,140,1],
+        "teal": [0,128,128,1], "thistle": [216,191,216,1],
+        "tomato": [255,99,71,1], "turquoise": [64,224,208,1],
+        "violet": [238,130,238,1], "wheat": [245,222,179,1],
+        "white": [255,255,255,1], "whitesmoke": [245,245,245,1],
+        "yellow": [255,255,0,1], "yellowgreen": [154,205,50,1]};
+
+    function clamp_css_byte(i) {  // Clamp to integer 0 .. 255.
+        i = Math.round(i);  // Seems to be what Chrome does (vs truncation).
+        return i < 0 ? 0 : i > 255 ? 255 : i;
+    }
+
+    function clamp_css_float(f) {  // Clamp to float 0.0 .. 1.0.
+        return f < 0 ? 0 : f > 1 ? 1 : f;
+    }
+
+    function parse_css_int(str) {  // int or percentage.
+        if (str[str.length - 1] === '%')
+            return clamp_css_byte(parseFloat(str) / 100 * 255);
+        return clamp_css_byte(parseInt(str));
+    }
+
+    function parse_css_float(str) {  // float or percentage.
+        if (str[str.length - 1] === '%')
+            return clamp_css_float(parseFloat(str) / 100);
+        return clamp_css_float(parseFloat(str));
+    }
+
+    function css_hue_to_rgb(m1, m2, h) {
+        if (h < 0) h += 1;
+        else if (h > 1) h -= 1;
+
+        if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
+        if (h * 2 < 1) return m2;
+        if (h * 3 < 2) return m1 + (m2 - m1) * (2/3 - h) * 6;
+        return m1;
+    }
+
+    function parseCSSColor(css_str) {
+        // Remove all whitespace, not compliant, but should just be more accepting.
+        var str = css_str.replace(/ /g, '').toLowerCase();
+
+        // Color keywords (and transparent) lookup.
+        if (str in kCSSColorTable) return kCSSColorTable[str].slice();  // dup.
+
+        // #abc and #abc123 syntax.
+        if (str[0] === '#') {
+            if (str.length === 4) {
+                var iv = parseInt(str.substr(1), 16);  // TODO(deanm): Stricter parsing.
+                if (!(iv >= 0 && iv <= 0xfff)) return null;  // Covers NaN.
+                return [((iv & 0xf00) >> 4) | ((iv & 0xf00) >> 8),
+                    (iv & 0xf0) | ((iv & 0xf0) >> 4),
+                    (iv & 0xf) | ((iv & 0xf) << 4),
+                    1];
+            } else if (str.length === 7) {
+                var iv = parseInt(str.substr(1), 16);  // TODO(deanm): Stricter parsing.
+                if (!(iv >= 0 && iv <= 0xffffff)) return null;  // Covers NaN.
+                return [(iv & 0xff0000) >> 16,
+                    (iv & 0xff00) >> 8,
+                    iv & 0xff,
+                    1];
+            }
+
+            return null;
+        }
+
+        var op = str.indexOf('('), ep = str.indexOf(')');
+        if (op !== -1 && ep + 1 === str.length) {
+            var fname = str.substr(0, op);
+            var params = str.substr(op+1, ep-(op+1)).split(',');
+            var alpha = 1;  // To allow case fallthrough.
+            switch (fname) {
+                case 'rgba':
+                    if (params.length !== 4) return null;
+                    alpha = parse_css_float(params.pop());
+                // Fall through.
+                case 'rgb':
+                    if (params.length !== 3) return null;
+                    return [parse_css_int(params[0]),
+                        parse_css_int(params[1]),
+                        parse_css_int(params[2]),
+                        alpha];
+                case 'hsla':
+                    if (params.length !== 4) return null;
+                    alpha = parse_css_float(params.pop());
+                // Fall through.
+                case 'hsl':
+                    if (params.length !== 3) return null;
+                    var h = (((parseFloat(params[0]) % 360) + 360) % 360) / 360;  // 0 .. 1
+                    // NOTE(deanm): According to the CSS spec s/l should only be
+                    // percentages, but we don't bother and let float or percentage.
+                    var s = parse_css_float(params[1]);
+                    var l = parse_css_float(params[2]);
+                    var m2 = l <= 0.5 ? l * (s + 1) : l + s - l * s;
+                    var m1 = l * 2 - m2;
+                    return [clamp_css_byte(css_hue_to_rgb(m1, m2, h+1/3) * 255),
+                        clamp_css_byte(css_hue_to_rgb(m1, m2, h) * 255),
+                        clamp_css_byte(css_hue_to_rgb(m1, m2, h-1/3) * 255),
+                        alpha];
+                default:
+                    return null;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * An RGBA color value. Create instances from color strings using the static
+     * method `Color.parse`. The constructor accepts RGB channel values in the range
+     * `[0, 1]`, premultiplied by A.
+     *
+     * @param {number} r The red channel.
+     * @param {number} g The green channel.
+     * @param {number} b The blue channel.
+     * @param {number} a The alpha channel.
+     * @private
+     */
+    var Color$1 = function Color(r, g, b, a) {
+        if (a === void 0) a = 1;
+
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    };
+
+    /**
+     * Parses valid CSS color strings and returns a `Color` instance.
+     * @returns A `Color` instance, or `undefined` if the input is not a valid color string.
+     */
+    Color$1.parse = function parse(input) {
+        if (!input) {
+            return undefined;
+        }
+
+        if (input instanceof Color$1) {
+            return input;
+        }
+
+        if (typeof input !== 'string') {
+            return undefined;
+        }
+
+        var rgba = parseCSSColor(input);
+        if (!rgba) {
+            return undefined;
+        }
+
+        return new Color$1(
+            rgba[0] / 255 * rgba[3],
+            rgba[1] / 255 * rgba[3],
+            rgba[2] / 255 * rgba[3],
+            rgba[3]
+        );
+    };
+
+    /**
+     * Returns an RGBA string representing the color value.
+     *
+     * @returns An RGBA string.
+     * @example
+     * var purple = new Color.parse('purple');
+     * purple.toString; // = "rgba(128,0,128,1)"
+     * var translucentGreen = new Color.parse('rgba(26, 207, 26, .73)');
+     * translucentGreen.toString(); // = "rgba(26,207,26,0.73)"
+     */
+    Color$1.prototype.toString = function toString() {
+        var ref = this.toArray();
+        var r = ref[0];
+        var g = ref[1];
+        var b = ref[2];
+        var a = ref[3];
+        return ("rgba(" + (Math.round(r)) + "," + (Math.round(g)) + "," + (Math.round(b)) + "," + a + ")");
+    };
+
+    Color$1.prototype.toArray = function toArray() {
+        var ref = this;
+        var r = ref.r;
+        var g = ref.g;
+        var b = ref.b;
+        var a = ref.a;
+        return a === 0 ? [0, 0, 0, 0] : [
+            r * 255 / a,
+            g * 255 / a,
+            b * 255 / a,
+            a
+        ];
+    };
+
+    Color$1.black = new Color$1(0, 0, 0, 1);
+    Color$1.white = new Color$1(1, 1, 1, 1);
+    Color$1.transparent = new Color$1(0, 0, 0, 0);
+    Color$1.red = new Color$1(1, 0, 0, 1);
+
+    var NullType = {kind: 'null'};
+    var NumberType$1 = {kind: 'number'};
+    var StringType = {kind: 'string'};
+    var BooleanType = {kind: 'boolean'};
+    var ColorType$1 = {kind: 'color'};
+    var ObjectType = {kind: 'object'};
+    var ValueType = {kind: 'value'};
+    var FormattedType = {kind: 'formatted'};
+    var ResolvedImageType = {kind: 'resolvedImage'};
+
+    function array(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    function toString$2(type) {
+        if (type.kind === 'array') {
+            var itemType = toString$2(type.itemType);
+            return typeof type.N === 'number' ?
+                ("array<" + itemType + ", " + (type.N) + ">") :
+                type.itemType.kind === 'value' ? 'array' : ("array<" + itemType + ">");
+        } else {
+            return type.kind;
+        }
+    }
+
+    var valueMemberTypes = [
+        NullType,
+        NumberType$1,
+        StringType,
+        BooleanType,
+        ColorType$1,
+        FormattedType,
+        ObjectType,
+        array(ValueType),
+        ResolvedImageType
+    ];
+
+    /**
+     * Returns null if `t` is a subtype of `expected`; otherwise returns an
+     * error message.
+     * @private
+     */
+    function checkSubtype(expected, t) {
+        if (t.kind === 'error') {
+            // Error is a subtype of every type
+            return null;
+        } else if (expected.kind === 'array') {
+            if (t.kind === 'array' &&
+                ((t.N === 0 && t.itemType.kind === 'value') || !checkSubtype(expected.itemType, t.itemType)) &&
+                (typeof expected.N !== 'number' || expected.N === t.N)) {
+                return null;
+            }
+        } else if (expected.kind === t.kind) {
+            return null;
+        } else if (expected.kind === 'value') {
+            for (var i = 0, list = valueMemberTypes; i < list.length; i += 1) {
+                var memberType = list[i];
+
+                if (!checkSubtype(memberType, t)) {
+                    return null;
+                }
+            }
+        }
+
+        return ("Expected " + (toString$2(expected)) + " but found " + (toString$2(t)) + " instead.");
+    }
+
+    var NumberType$2 = {kind: 'number'};
+    var StringType$1 = {kind: 'string'};
+    var BooleanType$1 = {kind: 'boolean'};
+    var ObjectType$1 = {kind: 'object'};
+    var ValueType$1 = {kind: 'value'};
+
+    function array$1(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    var types = {
+        string: StringType$1,
+        number: NumberType$2,
+        boolean: BooleanType$1,
+        object: ObjectType$1
+    };
+
+    var Assertion = function Assertion(type, args) {
+        this.type = type;
+        this.args = args;
+    };
+
+    Assertion.parse = function parse(args, context) {
+        if (args.length < 2) {
+            return context.error("Expected at least one argument.");
+        }
+
+        var i = 1;
+        var type;
+
+        var name = (args[0] );
+        if (name === 'array') {
+            var itemType;
+            if (args.length > 2) {
+                var type$1 = args[1];
+                if (typeof type$1 !== 'string' || !(type$1 in types) || type$1 === 'object') {
+                    return context.error('The item type argument of "array" must be one of string, number, boolean', 1);
+                }
+                itemType = types[type$1];
+                i++;
+            } else {
+                itemType = ValueType$1;
+            }
+
+            var N;
+            if (args.length > 3) {
+                if (args[2] !== null &&
+                    (typeof args[2] !== 'number' ||
+                        args[2] < 0 ||
+                        args[2] !== Math.floor(args[2]))
+                    ) {
+                    return context.error('The length argument to "array" must be a positive integer literal', 2);
+                }
+                N = args[2];
+                i++;
+            }
+
+            type = array$1(itemType, N);
+        } else {
+            assert_1(types[name], name);
+            type = types[name];
+        }
+
+        var parsed = [];
+        for (; i < args.length; i++) {
+            var input = context.parse(args[i], i, ValueType$1);
+            if (!input) {
+                return null;
+            }
+            parsed.push(input);
+        }
+
+        return new Assertion(type, parsed);
+    };
+
+    Assertion.prototype.evaluate = function evaluate(ctx) {
+        for (var i = 0; i < this.args.length; i++) {
+            var value = this.args[i].evaluate(ctx);
+            var error = checkSubtype(this.type, typeOf(value));
+            if (!error) {
+                return value;
+            } else if (i === this.args.length - 1) {
+                throw new RuntimeError(("Expected value to be of type " + (toString(this.type)) + ", but found " + (toString(typeOf(value))) + " instead."));
+            }
+        }
+
+        assert_1(false);
+        return null;
+    };
+
+    Assertion.prototype.eachChild = function eachChild(fn) {
+        this.args.forEach(fn);
+    };
+
+    Assertion.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = []).concat.apply(ref, this.args.map(function (arg) {
+            return arg.possibleOutputs();
+        }));
+    };
+
+    Assertion.prototype.serialize = function serialize() {
+        var type = this.type;
+        var serialized = [type.kind];
+        if (type.kind === 'array') {
+            var itemType = type.itemType;
+            if (itemType.kind === 'string' ||
+                itemType.kind === 'number' ||
+                itemType.kind === 'boolean') {
+                serialized.push(itemType.kind);
+                var N = type.N;
+                if (typeof N === 'number' || this.args.length > 1) {
+                    serialized.push(N);
+                }
+            }
+        }
+        return serialized.concat(this.args.map(function (arg) {
+            return arg.serialize();
+        }));
+    };
+
+    var NumberType$3 = {kind: 'number'};
+    var ValueType$2 = {kind: 'value'};
+
+    function array$2(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    var At = function At(type, index, input) {
+        this.type = type;
+        this.index = index;
+        this.input = input;
+    };
+
+    At.parse = function parse(args, context) {
+        if (args.length !== 3) {
+            return context.error(("Expected 2 arguments, but found " + (args.length - 1) + " instead."));
+        }
+
+        var index = context.parse(args[1], 1, NumberType$3);
+        var input = context.parse(args[2], 2, array$2(context.expectedType || ValueType$2));
+
+        if (!index || !input) {
+            return null;
+        }
+
+        var t = (input.type );
+        return new At(t.itemType, index, input);
+    };
+
+    At.prototype.evaluate = function evaluate(ctx) {
+        var index = ((this.index.evaluate(ctx) )    );
+        var array = ((this.input.evaluate(ctx) )          );
+
+        if (index < 0) {
+            throw new RuntimeError(("Array index out of bounds: " + index + " < 0."));
+        }
+
+        if (index >= array.length) {
+            throw new RuntimeError(("Array index out of bounds: " + index + " > " + (array.length - 1) + "."));
+        }
+
+        if (index !== Math.floor(index)) {
+            throw new RuntimeError(("Array index must be an integer, but found " + index + " instead."));
+        }
+
+        return array[index];
+    };
+
+    At.prototype.eachChild = function eachChild(fn) {
+        fn(this.index);
+        fn(this.input);
+    };
+
+    At.prototype.possibleOutputs = function possibleOutputs() {
+        return [undefined];
+    };
+
+    At.prototype.serialize = function serialize() {
+        return ["at", this.index.serialize(), this.input.serialize()];
+    };
+
+    var BooleanType$2 = {kind: 'boolean'};
+
+    var Case = function Case(type, branches, otherwise) {
+        this.type = type;
+        this.branches = branches;
+        this.otherwise = otherwise;
+    };
+
+    Case.parse = function parse(args, context) {
+        if (args.length < 4) {
+            return context.error(("Expected at least 3 arguments, but found only " + (args.length - 1) + "."));
+        }
+        if (args.length % 2 !== 0) {
+            return context.error("Expected an odd number of arguments.");
+        }
+
+        var outputType;
+        if (context.expectedType && context.expectedType.kind !== 'value') {
+            outputType = context.expectedType;
+        }
+
+        var branches = [];
+        for (var i = 1; i < args.length - 1; i += 2) {
+            var test = context.parse(args[i], i, BooleanType$2);
+            if (!test) {
+                return null;
+            }
+
+            var result = context.parse(args[i + 1], i + 1, outputType);
+            if (!result) {
+                return null;
+            }
+
+            branches.push([test, result]);
+
+            outputType = outputType || result.type;
+        }
+
+        var otherwise = context.parse(args[args.length - 1], args.length - 1, outputType);
+        if (!otherwise) {
+            return null;
+        }
+
+        assert_1(outputType);
+        return new Case((outputType ), branches, otherwise);
+    };
+
+    Case.prototype.evaluate = function evaluate(ctx) {
+        for (var i = 0, list = this.branches; i < list.length; i += 1) {
+            var ref = list[i];
+            var test = ref[0];
+            var expression = ref[1];
+
+            if (test.evaluate(ctx)) {
+                return expression.evaluate(ctx);
+            }
+        }
+        return this.otherwise.evaluate(ctx);
+    };
+
+    Case.prototype.eachChild = function eachChild(fn) {
+        for (var i = 0, list = this.branches; i < list.length; i += 1) {
+            var ref = list[i];
+            var test = ref[0];
+            var expression = ref[1];
+
+            fn(test);
+            fn(expression);
+        }
+        fn(this.otherwise);
+    };
+
+    Case.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = [])
+            .concat.apply(ref, this.branches.map(function (ref) {
+                var _ = ref[0];
+                var out = ref[1];
+
+                return out.possibleOutputs();
+            }))
+            .concat(this.otherwise.possibleOutputs());
+    };
+
+    Case.prototype.serialize = function serialize() {
+        var serialized = ["case"];
+        this.eachChild(function (child) {
+            serialized.push(child.serialize());
+        });
+        return serialized;
+    };
+
+    var ResolvedImage$1 = function ResolvedImage(options) {
+        this.name = options.name;
+        this.available = options.available;
+    };
+
+    ResolvedImage$1.prototype.toString = function toString() {
+        return this.name;
+    };
+
+    ResolvedImage$1.fromString = function fromString(name) {
+        return new ResolvedImage$1({name: name, available: false});
+    };
+
+    ResolvedImage$1.prototype.serialize = function serialize() {
+        return ["image", this.name];
+    };
+
+    var ValueType$3 = {kind: 'value'};
+
+    var Coalesce = function Coalesce(type, args) {
+        this.type = type;
+        this.args = args;
+    };
+
+    Coalesce.parse = function parse(args, context) {
+        if (args.length < 2) {
+            return context.error("Expectected at least one argument.");
+        }
+        var outputType = (null );
+        var expectedType = context.expectedType;
+        if (expectedType && expectedType.kind !== 'value') {
+            outputType = expectedType;
+        }
+        var parsedArgs = [];
+
+        for (var i = 0, list = args.slice(1); i < list.length; i += 1) {
+            var arg = list[i];
+
+            var parsed = context.parse(arg, 1 + parsedArgs.length, outputType, undefined, {typeAnnotation: 'omit'});
+            if (!parsed) {
+                return null;
+            }
+            outputType = outputType || parsed.type;
+            parsedArgs.push(parsed);
+        }
+        assert_1(outputType);
+
+        // Above, we parse arguments without inferred type annotation so that
+        // they don't produce a runtime error for `null` input, which would
+        // preempt the desired null-coalescing behavior.
+        // Thus, if any of our arguments would have needed an annotation, we
+        // need to wrap the enclosing coalesce expression with it instead.
+        var needsAnnotation = expectedType &&
+            parsedArgs.some(function (arg) {
+                return checkSubtype(expectedType, arg.type);
+            });
+
+        return needsAnnotation ?
+            new Coalesce(ValueType$3, parsedArgs) :
+            new Coalesce((outputType ), parsedArgs);
+    };
+
+    Coalesce.prototype.evaluate = function evaluate(ctx) {
+        var result = null;
+        var argCount = 0;
+        var requestedImageName;
+        for (var i = 0, list = this.args; i < list.length; i += 1) {
+            var arg = list[i];
+
+            argCount++;
+            result = arg.evaluate(ctx);
+            // we need to keep track of the first requested image in a coalesce statement
+            // if coalesce can't find a valid image, we return the first image name so styleimagemissing can fire
+            if (result && result instanceof ResolvedImage$1 && !result.available) {
+                if (!requestedImageName) {
+                    requestedImageName = result.name;
+                }
+                result = null;
+                if (argCount === this.args.length) {
+                    result = requestedImageName;
+                }
+            }
+
+            if (result !== null) {
+                break;
+            }
+        }
+        return result;
+    };
+
+    Coalesce.prototype.eachChild = function eachChild(fn) {
+        this.args.forEach(fn);
+    };
+
+    Coalesce.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = []).concat.apply(ref, this.args.map(function (arg) {
+            return arg.possibleOutputs();
+        }));
+    };
+
+    Coalesce.prototype.serialize = function serialize() {
+        var serialized = ["coalesce"];
+        this.eachChild(function (child) {
+            serialized.push(child.serialize());
+        });
+        return serialized;
+    };
+
+    var NumberType$4 = {kind: 'number'};
+    var StringType$2 = {kind: 'string'};
+    var BooleanType$3 = {kind: 'boolean'};
+    var ColorType$2 = {kind: 'color'};
+    var ValueType$4 = {kind: 'value'};
+
+    var types$1 = {
+        'to-boolean': BooleanType$3,
+        'to-color': ColorType$2,
+        'to-number': NumberType$4,
+        'to-string': StringType$2
+    };
+
+    /**
+     * Special form for error-coalescing coercion expressions "to-number",
+     * "to-color".  Since these coercions can fail at runtime, they accept multiple
+     * arguments, only evaluating one at a time until one succeeds.
+     *
+     * @private
+     */
+    var Coercion = function Coercion(type, args) {
+        this.type = type;
+        this.args = args;
+    };
+
+    Coercion.parse = function parse(args, context) {
+        if (args.length < 2) {
+            return context.error("Expected at least one argument.");
+        }
+
+        var name = (args[0] );
+        assert_1(types$1[name], name);
+
+        if ((name === 'to-boolean' || name === 'to-string') && args.length !== 2) {
+            return context.error("Expected one argument.");
+        }
+
+        var type = types$1[name];
+
+        var parsed = [];
+        for (var i = 1; i < args.length; i++) {
+            var input = context.parse(args[i], i, ValueType$4);
+            if (!input) {
+                return null;
+            }
+            parsed.push(input);
+        }
+
+        return new Coercion(type, parsed);
+    };
+
+    Coercion.prototype.evaluate = function evaluate(ctx) {
+        if (this.type.kind === 'boolean') {
+            return Boolean(this.args[0].evaluate(ctx));
+        } else if (this.type.kind === 'color') {
+            var input;
+            var error;
+            for (var i = 0, list = this.args; i < list.length; i += 1) {
+                var arg = list[i];
+
+                input = arg.evaluate(ctx);
+                error = null;
+                if (input instanceof Color) {
+                    return input;
+                } else if (typeof input === 'string') {
+                    var c = ctx.parseColor(input);
+                    if (c) {
+                        return c;
+                    }
+                } else if (Array.isArray(input)) {
+                    if (input.length < 3 || input.length > 4) {
+                        error = "Invalid rbga value " + (JSON.stringify(input)) + ": expected an array containing either three or four numeric values.";
+                    } else {
+                        error = validateRGBA(input[0], input[1], input[2], input[3]);
+                    }
+                    if (!error) {
+                        return new Color((input[0] ) / 255, (input[1] ) / 255, (input[2] ) / 255, (input[3] ));
+                    }
+                }
+            }
+            throw new RuntimeError(error || ("Could not parse color from value '" + (typeof input === 'string' ? input : String(JSON.stringify(input))) + "'"));
+        } else if (this.type.kind === 'number') {
+            var value = null;
+            for (var i$1 = 0, list$1 = this.args; i$1 < list$1.length; i$1 += 1) {
+                var arg$1 = list$1[i$1];
+
+                value = arg$1.evaluate(ctx);
+                if (value === null) {
+                    return 0;
+                }
+                var num = Number(value);
+                if (isNaN(num)) {
+                    continue;
+                }
+                return num;
+            }
+            throw new RuntimeError(("Could not convert " + (JSON.stringify(value)) + " to number."));
+        } else if (this.type.kind === 'formatted') {
+            // There is no explicit 'to-formatted' but this coercion can be implicitly
+            // created by properties that expect the 'formatted' type.
+            return Formatted.fromString(toString$1(this.args[0].evaluate(ctx)));
+        } else if (this.type.kind === 'resolvedImage') {
+            return ResolvedImage.fromString(toString$1(this.args[0].evaluate(ctx)));
+        } else {
+            return toString$1(this.args[0].evaluate(ctx));
+        }
+    };
+
+    Coercion.prototype.eachChild = function eachChild(fn) {
+        this.args.forEach(fn);
+    };
+
+    Coercion.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = []).concat.apply(ref, this.args.map(function (arg) {
+            return arg.possibleOutputs();
+        }));
+    };
+
+    Coercion.prototype.serialize = function serialize() {
+        if (this.type.kind === 'formatted') {
+            return new FormatExpression([
+                {content: this.args[0], scale: null, font: null, textColor: null}
+            ]).serialize();
+        }
+
+        if (this.type.kind === 'resolvedImage') {
+            return new ImageExpression(this.args[0]).serialize();
+        }
+
+        var serialized = [("to-" + (this.type.kind))];
+        this.eachChild(function (child) {
+            serialized.push(child.serialize());
+        });
+        return serialized;
+    };
+
+    var Collator = function Collator(caseSensitive       , diacriticSensitive       , locale             ) {
+        if (caseSensitive)
+        { this.sensitivity = diacriticSensitive ? 'variant' : 'case'; }
+        else
+        { this.sensitivity = diacriticSensitive ? 'accent' : 'base'; }
+
+        this.locale = locale;
+        this.collator = new Intl.Collator(this.locale ? this.locale : [],
+            {sensitivity: this.sensitivity, usage: 'search'});
+    };
+
+    Collator.prototype.compare = function compare (lhs      , rhs      )       {
+        return this.collator.compare(lhs, rhs);
+    };
+
+    Collator.prototype.resolvedLocale = function resolvedLocale ()       {
+        // We create a Collator without "usage: search" because we don't want
+        // the search options encoded in our result (e.g. "en-u-co-search")
+        return new Intl.Collator(this.locale ? this.locale : [])
+            .resolvedOptions().locale;
+    };
+
+    var StringType$3 = {kind: 'string'};
+    var BooleanType$4 = {kind: 'boolean'};
+    var CollatorType = {kind: 'collator'};
+
+    var CollatorExpression = function CollatorExpression(caseSensitive, diacriticSensitive, locale) {
+        this.type = CollatorType;
+        this.locale = locale;
+        this.caseSensitive = caseSensitive;
+        this.diacriticSensitive = diacriticSensitive;
+    };
+
+    CollatorExpression.parse = function parse(args, context) {
+        if (args.length !== 2) {
+            return context.error("Expected one argument.");
+        }
+
+        var options = (args[1] );
+        if (typeof options !== "object" || Array.isArray(options)) {
+            return context.error("Collator options argument must be an object.");
+        }
+
+        var caseSensitive = context.parse(
+            options['case-sensitive'] === undefined ? false : options['case-sensitive'], 1, BooleanType$4);
+        if (!caseSensitive) {
+            return null;
+        }
+
+        var diacriticSensitive = context.parse(
+            options['diacritic-sensitive'] === undefined ? false : options['diacritic-sensitive'], 1, BooleanType$4);
+        if (!diacriticSensitive) {
+            return null;
+        }
+
+        var locale = null;
+        if (options['locale']) {
+            locale = context.parse(options['locale'], 1, StringType$3);
+            if (!locale) {
+                return null;
+            }
+        }
+
+        return new CollatorExpression(caseSensitive, diacriticSensitive, locale);
+    };
+
+    CollatorExpression.prototype.evaluate = function evaluate(ctx) {
+        return new Collator(this.caseSensitive.evaluate(ctx), this.diacriticSensitive.evaluate(ctx), this.locale ? this.locale.evaluate(ctx) : null);
+    };
+
+    CollatorExpression.prototype.eachChild = function eachChild(fn) {
+        fn(this.caseSensitive);
+        fn(this.diacriticSensitive);
+        if (this.locale) {
+            fn(this.locale);
+        }
+    };
+
+    CollatorExpression.prototype.possibleOutputs = function possibleOutputs() {
+        // Technically the set of possible outputs is the combinatoric set of Collators produced
+        // by all possibleOutputs of locale/caseSensitive/diacriticSensitive
+        // But for the primary use of Collators in comparison operators, we ignore the Collator's
+        // possibleOutputs anyway, so we can get away with leaving this undefined for now.
+        return [undefined];
+    };
+
+    CollatorExpression.prototype.serialize = function serialize() {
+        var options = {};
+        options['case-sensitive'] = this.caseSensitive.serialize();
+        options['diacritic-sensitive'] = this.diacriticSensitive.serialize();
+        if (this.locale) {
+            options['locale'] = this.locale.serialize();
+        }
+        return ["collator", options];
+    };
+
+    var FormattedSection = function FormattedSection(text, image, scale, fontStack, textColor) {
+        this.text = text;
+        this.image = image;
+        this.scale = scale;
+        this.fontStack = fontStack;
+        this.textColor = textColor;
+    };
+
+    var Formatted$1 = function Formatted(sections) {
+        this.sections = sections;
+    };
+
+    Formatted$1.fromString = function fromString(unformatted) {
+        return new Formatted$1([new FormattedSection(unformatted, null, null, null, null)]);
+    };
+
+    Formatted$1.prototype.isEmpty = function isEmpty() {
+        if (this.sections.length === 0) {
+            return true;
+        }
+        return !this.sections.some(function (section) {
+            return section.text.length !== 0 ||
+                (section.image && section.image.name.length !== 0);
+        });
+    };
+
+    Formatted$1.factory = function factory(text) {
+        if (text instanceof Formatted$1) {
+            return text;
+        } else {
+            return Formatted$1.fromString(text);
+        }
+    };
+
+    Formatted$1.prototype.toString = function toString() {
+        if (this.sections.length === 0) {
+            return '';
+        }
+        return this.sections.map(function (section) {
+            return section.text;
+        }).join('');
+    };
+
+    Formatted$1.prototype.serialize = function serialize() {
+        var serialized = ["format"];
+        for (var i = 0, list = this.sections; i < list.length; i += 1) {
+            var section = list[i];
+
+            if (section.image) {
+                serialized.push(["image", section.image.name]);
+                continue;
+            }
+            serialized.push(section.text);
+            var options = {};
+            if (section.fontStack) {
+                options["text-font"] = ["literal", section.fontStack.split(',')];
+            }
+            if (section.scale) {
+                options["font-scale"] = section.scale;
+            }
+            if (section.textColor) {
+                options["text-color"] = (["rgba"]          ).concat(section.textColor.toArray());
+            }
+            serialized.push(options);
+        }
+        return serialized;
+    };
+
+    var NullType$1 = {kind: 'null'};
+    var NumberType$5 = {kind: 'number'};
+    var StringType$4 = {kind: 'string'};
+    var BooleanType$5 = {kind: 'boolean'};
+    var ColorType$3 = {kind: 'color'};
+    var ObjectType$2 = {kind: 'object'};
+    var ValueType$5 = {kind: 'value'};
+    var CollatorType$1 = {kind: 'collator'};
+    var FormattedType$1 = {kind: 'formatted'};
+    var ResolvedImageType$1 = {kind: 'resolvedImage'};
+
+    function array$3(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    function Values$1() {
+    }
+
+    Values$1.validateRGBA = function(r, g, b, a){
+        if (!(
+            typeof r === 'number' && r >= 0 && r <= 255 &&
+                typeof g === 'number' && g >= 0 && g <= 255 &&
+                typeof b === 'number' && b >= 0 && b <= 255
+            )) {
+            var value = typeof a === 'number' ? [r, g, b, a] : [r, g, b];
+            return ("Invalid rgba value [" + (value.join(', ')) + "]: 'r', 'g', and 'b' must be between 0 and 255.");
+        }
+        if (!(
+            typeof a === 'undefined' || (typeof a === 'number' && a >= 0 && a <= 1)
+            )) {
+            return ("Invalid rgba value [" + ([r, g, b, a].join(', ')) + "]: 'a' must be between 0 and 1.");
+        }
+        return null;
+    };
+
+    Values$1.isValue = function(mixed){
+        if (mixed === null) {
+            return true;
+        } else if (typeof mixed === 'string') {
+            return true;
+        } else if (typeof mixed === 'boolean') {
+            return true;
+        } else if (typeof mixed === 'number') {
+            return true;
+        } else if (mixed instanceof Color$1) {
+            return true;
+        } else if (mixed instanceof Collator) {
+            return true;
+        } else if (mixed instanceof Formatted$1) {
+            return true;
+        } else if (mixed instanceof ResolvedImage$1) {
+            return true;
+        } else if (Array.isArray(mixed)) {
+            for (var i = 0, list = mixed; i < list.length; i += 1) {
+                var item = list[i];
+
+                if (!Values$1.isValue(item)) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (typeof mixed === 'object') {
+            for (var key in mixed) {
+                if (!Values$1.isValue(mixed[key])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    Values$1.typeOf = function(value){
+        if (value === null) {
+            return NullType$1;
+        } else if (typeof value === 'string') {
+            return StringType$4;
+        } else if (typeof value === 'boolean') {
+            return BooleanType$5;
+        } else if (typeof value === 'number') {
+            return NumberType$5;
+        } else if (value instanceof Color$1) {
+            return ColorType$3;
+        } else if (value instanceof Collator) {
+            return CollatorType$1;
+        } else if (value instanceof Formatted$1) {
+            return FormattedType$1;
+        } else if (value instanceof ResolvedImage$1) {
+            return ResolvedImageType$1;
+        } else if (Array.isArray(value)) {
+            var length = value.length;
+            var itemType;
+
+            for (var i = 0, list = value; i < list.length; i += 1) {
+                var item = list[i];
+
+                var t = Values$1.typeOf(item);
+                if (!itemType) {
+                    itemType = t;
+                } else if (itemType === t) {
+                    continue;
+                } else {
+                    itemType = ValueType$5;
+                    break;
+                }
+            }
+
+            return array$3(itemType || ValueType$5, length);
+        } else {
+            assert_1(typeof value === 'object');
+            return ObjectType$2;
+        }
+    };
+
+    Values$1.toString$1 = function(value){
+        var type = typeof value;
+        if (value === null) {
+            return '';
+        } else if (type === 'string' || type === 'number' || type === 'boolean') {
+            return String(value);
+        } else if (value instanceof Color$1 || value instanceof Formatted$1 || value instanceof ResolvedImage$1) {
+            return value.toString();
+        } else {
+            return JSON.stringify(value);
+        }
+    };
+
+    var BooleanType$6 = {kind: 'boolean'};
+    var ValueType$6 = {kind: 'value'};
+    var CollatorType$2 = {kind: 'collator'};
+
+    function isComparableType$1(op, type) {
+        if (op === '==' || op === '!=') {
+            // equality operator
+            return type.kind === 'boolean' ||
+                type.kind === 'string' ||
+                type.kind === 'number' ||
+                type.kind === 'null' ||
+                type.kind === 'value';
+        } else {
+            // ordering operator
+            return type.kind === 'string' ||
+                type.kind === 'number' ||
+                type.kind === 'value';
+        }
+    }
+
+    function eq(ctx, a, b) {
+        return a === b;
+    }
+    function neq(ctx, a, b) {
+        return a !== b;
+    }
+    function lt(ctx, a, b) {
+        return a < b;
+    }
+    function gt(ctx, a, b) {
+        return a > b;
+    }
+    function lteq(ctx, a, b) {
+        return a <= b;
+    }
+    function gteq(ctx, a, b) {
+        return a >= b;
+    }
+
+    function eqCollate(ctx, a, b, c) {
+        return c.compare(a, b) === 0;
+    }
+    function neqCollate(ctx, a, b, c) {
+        return !eqCollate(ctx, a, b, c);
+    }
+    function ltCollate(ctx, a, b, c) {
+        return c.compare(a, b) < 0;
+    }
+    function gtCollate(ctx, a, b, c) {
+        return c.compare(a, b) > 0;
+    }
+    function lteqCollate(ctx, a, b, c) {
+        return c.compare(a, b) <= 0;
+    }
+    function gteqCollate(ctx, a, b, c) {
+        return c.compare(a, b) >= 0;
+    }
+
+    /**
+     * Special form for comparison operators, implementing the signatures:
+     * - (T, T, ?Collator) => boolean
+     * - (T, value, ?Collator) => boolean
+     * - (value, T, ?Collator) => boolean
+     *
+     * For inequalities, T must be either value, string, or number. For ==/!=, it
+     * can also be boolean or null.
+     *
+     * Equality semantics are equivalent to Javascript's strict equality (===/!==)
+     * -- i.e., when the arguments' types don't match, == evaluates to false, != to
+     * true.
+     *
+     * When types don't match in an ordering comparison, a runtime error is thrown.
+     *
+     * @private
+     */
+    function makeComparison(op, compareBasic, compareWithCollator) {
+        var isOrderComparison = op !== '==' && op !== '!=';
+
+        return /*@__PURE__*/(function () {
+            function Comparison(lhs, rhs, collator) {
+                this.type = BooleanType$6;
+                this.lhs = lhs;
+                this.rhs = rhs;
+                this.collator = collator;
+                this.hasUntypedArgument = lhs.type.kind === 'value' || rhs.type.kind === 'value';
+            }
+
+            Comparison.parse = function parse(args, context) {
+                if (args.length !== 3 && args.length !== 4) {
+                    return context.error("Expected two or three arguments.");
+                }
+
+                var op = (args[0]     );
+
+                var lhs = context.parse(args[1], 1, ValueType$6);
+                if (!lhs) {
+                    return null;
+                }
+                if (!isComparableType$1(op, lhs.type)) {
+                    return context.concat(1).error(("\"" + op + "\" comparisons are not supported for type '" + (toString(lhs.type)) + "'."));
+                }
+                var rhs = context.parse(args[2], 2, ValueType$6);
+                if (!rhs) {
+                    return null;
+                }
+                if (!isComparableType$1(op, rhs.type)) {
+                    return context.concat(2).error(("\"" + op + "\" comparisons are not supported for type '" + (toString(rhs.type)) + "'."));
+                }
+
+                if (
+                    lhs.type.kind !== rhs.type.kind &&
+                        lhs.type.kind !== 'value' &&
+                        rhs.type.kind !== 'value'
+                    ) {
+                    return context.error(("Cannot compare types '" + (toString(lhs.type)) + "' and '" + (toString(rhs.type)) + "'."));
+                }
+
+                if (isOrderComparison) {
+                    // typing rules specific to less/greater than operators
+                    if (lhs.type.kind === 'value' && rhs.type.kind !== 'value') {
+                        // (value, T)
+                        lhs = new Assertion(rhs.type, [lhs]);
+                    } else if (lhs.type.kind !== 'value' && rhs.type.kind === 'value') {
+                        // (T, value)
+                        rhs = new Assertion(lhs.type, [rhs]);
+                    }
+                }
+
+                var collator = null;
+                if (args.length === 4) {
+                    if (
+                        lhs.type.kind !== 'string' &&
+                            rhs.type.kind !== 'string' &&
+                            lhs.type.kind !== 'value' &&
+                            rhs.type.kind !== 'value'
+                        ) {
+                        return context.error("Cannot use collator to compare non-string types.");
+                    }
+                    collator = context.parse(args[3], 3, CollatorType$2);
+                    if (!collator) {
+                        return null;
+                    }
+                }
+
+                return new Comparison(lhs, rhs, collator);
+            };
+
+            Comparison.prototype.evaluate = function evaluate(ctx) {
+                var lhs = this.lhs.evaluate(ctx);
+                var rhs = this.rhs.evaluate(ctx);
+
+                if (isOrderComparison && this.hasUntypedArgument) {
+                    var lt = Values$1.typeOf(lhs);
+                    var rt = Values$1.typeOf(rhs);
+                    // check that type is string or number, and equal
+                    if (lt.kind !== rt.kind || !(lt.kind === 'string' || lt.kind === 'number')) {
+                        throw new RuntimeError(("Expected arguments for \"" + op + "\" to be (string, string) or (number, number), but found (" + (lt.kind) + ", " + (rt.kind) + ") instead."));
+                    }
+                }
+
+                if (this.collator && !isOrderComparison && this.hasUntypedArgument) {
+                    var lt$1 = Values$1.typeOf(lhs);
+                    var rt$1 = Values$1.typeOf(rhs);
+                    if (lt$1.kind !== 'string' || rt$1.kind !== 'string') {
+                        return compareBasic(ctx, lhs, rhs);
+                    }
+                }
+
+                return this.collator ?
+                    compareWithCollator(ctx, lhs, rhs, this.collator.evaluate(ctx)) :
+                    compareBasic(ctx, lhs, rhs);
+            };
+
+            Comparison.prototype.eachChild = function eachChild(fn) {
+                fn(this.lhs);
+                fn(this.rhs);
+                if (this.collator) {
+                    fn(this.collator);
+                }
+            };
+
+            Comparison.prototype.possibleOutputs = function possibleOutputs() {
+                return [true, false];
+            };
+
+            Comparison.prototype.serialize = function serialize() {
+                var serialized = [op];
+                this.eachChild(function (child) {
+                    serialized.push(child.serialize());
+                });
+                return serialized;
+            };
+
+            return Comparison;
+        }());
+    }
+
+    var ComparisonEnum = {
+    };
+    ComparisonEnum.Equals = makeComparison('==', eq, eqCollate);
+    ComparisonEnum.NotEquals = makeComparison('!=', neq, neqCollate);
+    ComparisonEnum.LessThan = makeComparison('<', lt, ltCollate);
+    ComparisonEnum.GreaterThan = makeComparison('>', gt, gtCollate);
+    ComparisonEnum.LessThanOrEqual = makeComparison('<=', lteq, lteqCollate);
+    ComparisonEnum.GreaterThanOrEqual = makeComparison('>=', gteq, gteqCollate);
+
+    var NumberType$6 = {kind: 'number'};
+    var StringType$5 = {kind: 'string'};
+    var ColorType$4 = {kind: 'color'};
+    var ValueType$7 = {kind: 'value'};
+    var FormattedType$2 = {kind: 'formatted'};
+    var ResolvedImageType$2 = {kind: 'resolvedImage'};
+
+    function array$4(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    var FormatExpression$1 = function FormatExpression(sections) {
+        this.type = FormattedType$2;
+        this.sections = sections;
+    };
+
+    FormatExpression$1.parse = function parse(args, context) {
+        if (args.length < 2) {
+            return context.error("Expected at least one argument.");
+        }
+
+        var firstArg = args[1];
+        if (!Array.isArray(firstArg) && typeof firstArg === 'object') {
+            return context.error("First argument must be an image or text section.");
+        }
+
+        var sections = [];
+        var nextTokenMayBeObject = false;
+        for (var i = 1; i <= args.length - 1; ++i) {
+            var arg = (args[i] );
+
+            if (nextTokenMayBeObject && typeof arg === "object" && !Array.isArray(arg)) {
+                nextTokenMayBeObject = false;
+
+                var scale = null;
+                if (arg['font-scale']) {
+                    scale = context.parse(arg['font-scale'], 1, NumberType$6);
+                    if (!scale) {
+                        return null;
+                    }
+                }
+
+                var font = null;
+                if (arg['text-font']) {
+                    font = context.parse(arg['text-font'], 1, array$4(StringType$5));
+                    if (!font) {
+                        return null;
+                    }
+                }
+
+                var textColor = null;
+                if (arg['text-color']) {
+                    textColor = context.parse(arg['text-color'], 1, ColorType$4);
+                    if (!textColor) {
+                        return null;
+                    }
+                }
+
+                var lastExpression = sections[sections.length - 1];
+                lastExpression.scale = scale;
+                lastExpression.font = font;
+                lastExpression.textColor = textColor;
+            } else {
+                var content = context.parse(args[i], 1, ValueType$7);
+                if (!content) {
+                    return null;
+                }
+
+                var kind = content.type.kind;
+                if (kind !== 'string' && kind !== 'value' && kind !== 'null' && kind !== 'resolvedImage') {
+                    return context.error("Formatted text type must be 'string', 'value', 'image' or 'null'.");
+                }
+
+                nextTokenMayBeObject = true;
+                sections.push({content: content, scale: null, font: null, textColor: null});
+            }
+        }
+
+        return new FormatExpression$1(sections);
+    };
+
+    FormatExpression$1.prototype.evaluate = function evaluate(ctx) {
+        var evaluateSection = function (section) {
+            var evaluatedContent = section.content.evaluate(ctx);
+            if (Values$1.typeOf(evaluatedContent) === ResolvedImageType$2) {
+                return new FormattedSection('', evaluatedContent, null, null, null);
+            }
+
+            return new FormattedSection(
+                Values$1.toString$1(evaluatedContent),
+                null,
+                section.scale ? section.scale.evaluate(ctx) : null,
+                section.font ? section.font.evaluate(ctx).join(',') : null,
+                section.textColor ? section.textColor.evaluate(ctx) : null
+            );
+        };
+
+        return new Formatted$1(this.sections.map(evaluateSection));
+    };
+
+    FormatExpression$1.prototype.eachChild = function eachChild(fn) {
+        for (var i = 0, list = this.sections; i < list.length; i += 1) {
+            var section = list[i];
+
+            fn(section.content);
+            if (section.scale) {
+                fn(section.scale);
+            }
+            if (section.font) {
+                fn(section.font);
+            }
+            if (section.textColor) {
+                fn(section.textColor);
+            }
+        }
+    };
+
+    FormatExpression$1.prototype.possibleOutputs = function possibleOutputs() {
+        // Technically the combinatoric set of all children
+        // Usually, this.text will be undefined anyway
+        return [undefined];
+    };
+
+    FormatExpression$1.prototype.serialize = function serialize() {
+        var serialized = ["format"];
+        for (var i = 0, list = this.sections; i < list.length; i += 1) {
+            var section = list[i];
+
+            serialized.push(section.content.serialize());
+            var options = {};
+            if (section.scale) {
+                options['font-scale'] = section.scale.serialize();
+            }
+            if (section.font) {
+                options['text-font'] = section.font.serialize();
+            }
+            if (section.textColor) {
+                options['text-color'] = section.textColor.serialize();
+            }
+            serialized.push(options);
+        }
+        return serialized;
+    };
+
+    var StringType$6 = {kind: 'string'};
+    var ResolvedImageType$3 = {kind: 'resolvedImage'};
+
+    var ImageExpression$1 = function ImageExpression(input) {
+        this.type = ResolvedImageType$3;
+        this.input = input;
+    };
+
+    ImageExpression$1.parse = function parse(args, context) {
+        if (args.length !== 2) {
+            return context.error("Expected two arguments.");
+        }
+
+        var name = context.parse(args[1], 1, StringType$6);
+        if (!name) {
+            return context.error("No image name provided.");
+        }
+
+        return new ImageExpression$1(name);
+    };
+
+    ImageExpression$1.prototype.evaluate = function evaluate(ctx) {
+        var evaluatedImageName = this.input.evaluate(ctx);
+        var available = false;
+
+        if (ctx.availableImages && ctx.availableImages.indexOf(evaluatedImageName) > -1) {
+            available = true;
+        }
+
+        return new ResolvedImage$1({name: evaluatedImageName, available: available});
+    };
+
+    ImageExpression$1.prototype.eachChild = function eachChild(fn) {
+        fn(this.input);
+    };
+
+    ImageExpression$1.prototype.possibleOutputs = function possibleOutputs() {
+        // The output of image is determined by the list of available images in the evaluation context
+        return [undefined];
+    };
+
+    ImageExpression$1.prototype.serialize = function serialize() {
+        return ["image", this.input.serialize()];
+    };
+
+    var Interpolate$1 = function Interpolate(type, operator, interpolation, input, stops) {
+        this.type = type;
+        this.operator = operator;
+        this.interpolation = interpolation;
+        this.input = input;
+
+        this.labels = [];
+        this.outputs = [];
+        for (var i = 0, list = stops; i < list.length; i += 1) {
+            var ref = list[i];
+            var label = ref[0];
+            var expression = ref[1];
+
+            this.labels.push(label);
+            this.outputs.push(expression);
+        }
+    };
+
+    Interpolate$1.interpolationFactor = function interpolationFactor(interpolation, input, lower, upper) {
+        var t = 0;
+        if (interpolation.name === 'exponential') {
+            t = exponentialInterpolation(input, interpolation.base, lower, upper);
+        } else if (interpolation.name === 'linear') {
+            t = exponentialInterpolation(input, 1, lower, upper);
+        } else if (interpolation.name === 'cubic-bezier') {
+            var c = interpolation.controlPoints;
+            var ub = new unitbezier(c[0], c[1], c[2], c[3]);
+            t = ub.solve(exponentialInterpolation(input, 1, lower, upper));
+        }
+        return t;
+    };
+
+    Interpolate$1.parse = function parse(args, context) {
+        var operator = args[0];
+        var interpolation = args[1];
+        var input = args[2];
+        var rest = args.slice(3);
+
+        if (!Array.isArray(interpolation) || interpolation.length === 0) {
+            return context.error("Expected an interpolation type expression.", 1);
+        }
+
+        if (interpolation[0] === 'linear') {
+            interpolation = {name: 'linear'};
+        } else if (interpolation[0] === 'exponential') {
+            var base = interpolation[1];
+            if (typeof base !== 'number') {
+                return context.error("Exponential interpolation requires a numeric base.", 1, 1);
+            }
+            interpolation = {
+                name: 'exponential',
+                base: base
+            };
+        } else if (interpolation[0] === 'cubic-bezier') {
+            var controlPoints = interpolation.slice(1);
+            if (
+                controlPoints.length !== 4 ||
+                    controlPoints.some(function (t) {
+                        return typeof t !== 'number' || t < 0 || t > 1;
+                    })
+                ) {
+                return context.error('Cubic bezier interpolation requires four numeric arguments with values between 0 and 1.', 1);
+            }
+
+            interpolation = {
+                name: 'cubic-bezier',
+                controlPoints: (controlPoints )
+            };
+        } else {
+            return context.error(("Unknown interpolation type " + (String(interpolation[0]))), 1, 0);
+        }
+
+        if (args.length - 1 < 4) {
+            return context.error(("Expected at least 4 arguments, but found only " + (args.length - 1) + "."));
+        }
+
+        if ((args.length - 1) % 2 !== 0) {
+            return context.error("Expected an even number of arguments.");
+        }
+
+        input = context.parse(input, 2, NumberType);
+        if (!input) {
+            return null;
+        }
+
+        var stops = [];
+
+        var outputType = (null );
+        if (operator === 'interpolate-hcl' || operator === 'interpolate-lab') {
+            outputType = ColorType;
+        } else if (context.expectedType && context.expectedType.kind !== 'value') {
+            outputType = context.expectedType;
+        }
+
+        for (var i = 0; i < rest.length; i += 2) {
+            var label = rest[i];
+            var value = rest[i + 1];
+
+            var labelKey = i + 3;
+            var valueKey = i + 4;
+
+            if (typeof label !== 'number') {
+                return context.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.', labelKey);
+            }
+
+            if (stops.length && stops[stops.length - 1][0] >= label) {
+                return context.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.', labelKey);
+            }
+
+            var parsed = context.parse(value, valueKey, outputType);
+            if (!parsed) {
+                return null;
+            }
+            outputType = outputType || parsed.type;
+            stops.push([label, parsed]);
+        }
+
+        if (outputType.kind !== 'number' &&
+            outputType.kind !== 'color' && !(
+            outputType.kind === 'array' &&
+                outputType.itemType.kind === 'number' &&
+                typeof outputType.N === 'number'
+            )
+            ) {
+            return context.error(("Type " + (toString(outputType)) + " is not interpolatable."));
+        }
+
+        return new Interpolate$1(outputType, (operator ), interpolation, input, stops);
+    };
+
+    Interpolate$1.prototype.evaluate = function evaluate(ctx) {
+        var labels = this.labels;
+        var outputs = this.outputs;
+
+        if (labels.length === 1) {
+            return outputs[0].evaluate(ctx);
+        }
+
+        var value = ((this.input.evaluate(ctx) )    );
+        if (value <= labels[0]) {
+            return outputs[0].evaluate(ctx);
+        }
+
+        var stopCount = labels.length;
+        if (value >= labels[stopCount - 1]) {
+            return outputs[stopCount - 1].evaluate(ctx);
+        }
+
+        var index = findStopLessThanOrEqualTo(labels, value);
+        var lower = labels[index];
+        var upper = labels[index + 1];
+        var t = Interpolate$1.interpolationFactor(this.interpolation, value, lower, upper);
+
+        var outputLower = outputs[index].evaluate(ctx);
+        var outputUpper = outputs[index + 1].evaluate(ctx);
+
+        if (this.operator === 'interpolate') {
+            return (interpolate[this.type.kind.toLowerCase()] )(outputLower, outputUpper, t); // eslint-disable-line import/namespace
+        } else if (this.operator === 'interpolate-hcl') {
+            return hcl.reverse(hcl.interpolate(hcl.forward(outputLower), hcl.forward(outputUpper), t));
+        } else {
+            return lab.reverse(lab.interpolate(lab.forward(outputLower), lab.forward(outputUpper), t));
+        }
+    };
+
+    Interpolate$1.prototype.eachChild = function eachChild(fn) {
+        fn(this.input);
+        for (var i = 0, list = this.outputs; i < list.length; i += 1) {
+            var expression = list[i];
+
+            fn(expression);
+        }
+    };
+
+    Interpolate$1.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = []).concat.apply(ref, this.outputs.map(function (output) {
+            return output.possibleOutputs();
+        }));
+    };
+
+    Interpolate$1.prototype.serialize = function serialize() {
+        var interpolation;
+        if (this.interpolation.name === 'linear') {
+            interpolation = ["linear"];
+        } else if (this.interpolation.name === 'exponential') {
+            if (this.interpolation.base === 1) {
+                interpolation = ["linear"];
+            } else {
+                interpolation = ["exponential", this.interpolation.base];
+            }
+        } else {
+            interpolation = ["cubic-bezier" ].concat(this.interpolation.controlPoints);
+        }
+
+        var serialized = [this.operator, interpolation, this.input.serialize()];
+
+        for (var i = 0; i < this.labels.length; i++) {
+            serialized.push(
+                this.labels[i],
+                this.outputs[i].serialize()
+            );
+        }
+        return serialized;
+    };
+
+    /**
+     * Returns a ratio that can be used to interpolate between exponential function
+     * stops.
+     * How it works: Two consecutive stop values define a (scaled and shifted) exponential function `f(x) = a * base^x + b`, where `base` is the user-specified base,
+     * and `a` and `b` are constants affording sufficient degrees of freedom to fit
+     * the function to the given stops.
+     *
+     * Here's a bit of algebra that lets us compute `f(x)` directly from the stop
+     * values without explicitly solving for `a` and `b`:
+     *
+     * First stop value: `f(x0) = y0 = a * base^x0 + b`
+     * Second stop value: `f(x1) = y1 = a * base^x1 + b`
+     * => `y1 - y0 = a(base^x1 - base^x0)`
+     * => `a = (y1 - y0)/(base^x1 - base^x0)`
+     *
+     * Desired value: `f(x) = y = a * base^x + b`
+     * => `f(x) = y0 + a * (base^x - base^x0)`
+     *
+     * From the above, we can replace the `a` in `a * (base^x - base^x0)` and do a
+     * little algebra:
+     * ```
+     * a * (base^x - base^x0) = (y1 - y0)/(base^x1 - base^x0) * (base^x - base^x0)
+     *                     = (y1 - y0) * (base^x - base^x0) / (base^x1 - base^x0)
+     * ```
+     *
+     * If we let `(base^x - base^x0) / (base^x1 base^x0)`, then we have
+     * `f(x) = y0 + (y1 - y0) * ratio`.  In other words, `ratio` may be treated as
+     * an interpolation factor between the two stops' output values.
+     *
+     * (Note: a slightly different form for `ratio`,
+     * `(base^(x-x0) - 1) / (base^(x1-x0) - 1) `, is equivalent, but requires fewer
+     * expensive `Math.pow()` operations.)
+     *
+     * @private
+     */
+    function exponentialInterpolation(input, base, lowerValue, upperValue) {
+        var difference = upperValue - lowerValue;
+        var progress = input - lowerValue;
+
+        if (difference === 0) {
+            return 0;
+        } else if (base === 1) {
+            return progress / difference;
+        } else {
+            return (Math.pow(base, progress) - 1) / (Math.pow(base, difference) - 1);
+        }
+    }
+
+    var BooleanType$7 = {kind: 'boolean'};
+    var ValueType$8 = {kind: 'value'};
+
+    function isComparableType(type) {
+        return type.kind === 'boolean' ||
+            type.kind === 'string' ||
+            type.kind === 'number' ||
+            type.kind === 'null' ||
+            type.kind === 'value';
+    }
+
+    function isComparableRuntimeValue(needle) {
+        return typeof needle === 'boolean' ||
+            typeof needle === 'string' ||
+            typeof needle === 'number';
+    }
+
+    function isSearchableRuntimeValue(haystack) {
+        return Array.isArray(haystack) ||
+            typeof haystack === 'string';
+    }
+
+    var In = function In(needle, haystack) {
+        this.type = BooleanType$7;
+        this.needle = needle;
+        this.haystack = haystack;
+    };
+
+    In.parse = function parse(args, context) {
+        if (args.length !== 3) {
+            return context.error(("Expected 2 arguments, but found " + (args.length - 1) + " instead."));
+        }
+
+        var needle = context.parse(args[1], 1, ValueType$8);
+
+        var haystack = context.parse(args[2], 2, ValueType$8);
+
+        if (!needle || !haystack) {
+            return null;
+        }
+
+        if (!isComparableType(needle.type)) {
+            return context.error(("Expected first argument to be of type boolean, string, number or null, but found " + (toString(needle.type)) + " instead"));
+        }
+
+        return new In(needle, haystack);
+    };
+
+    In.prototype.evaluate = function evaluate(ctx) {
+        var needle = (this.needle.evaluate(ctx) );
+        var haystack = (this.haystack.evaluate(ctx) );
+
+        if (!needle || !haystack) {
+            return false;
+        }
+
+        if (!isComparableRuntimeValue(needle)) {
+            throw new RuntimeError(("Expected first argument to be of type boolean, string or number, but found " + (toString(typeOf(needle))) + " instead."));
+        }
+
+        if (!isSearchableRuntimeValue(haystack)) {
+            throw new RuntimeError(("Expected second argument to be of type array or string, but found " + (toString(typeOf(haystack))) + " instead."));
+        }
+
+        return haystack.indexOf(needle) >= 0;
+    };
+
+    In.prototype.eachChild = function eachChild(fn) {
+        fn(this.needle);
+        fn(this.haystack);
+    };
+
+    In.prototype.possibleOutputs = function possibleOutputs() {
+        return [true, false];
+    };
+
+    In.prototype.serialize = function serialize() {
+        return ["in", this.needle.serialize(), this.haystack.serialize()];
+    };
+
+    var Let = function Let(bindings, result) {
+        this.type = result.type;
+        this.bindings = [].concat(bindings);
+        this.result = result;
+    };
+
+    Let.prototype.evaluate = function evaluate(ctx) {
+        return this.result.evaluate(ctx);
+    };
+
+    Let.prototype.eachChild = function eachChild(fn) {
+        for (var i = 0, list = this.bindings; i < list.length; i += 1) {
+            var binding = list[i];
+
+            fn(binding[1]);
+        }
+        fn(this.result);
+    };
+
+    Let.parse = function parse(args, context) {
+        if (args.length < 4) {
+            return context.error(("Expected at least 3 arguments, but found " + (args.length - 1) + " instead."));
+        }
+
+        var bindings = [];
+        for (var i = 1; i < args.length - 1; i += 2) {
+            var name = args[i];
+
+            if (typeof name !== 'string') {
+                return context.error(("Expected string, but found " + (typeof name) + " instead."), i);
+            }
+
+            if (/[^a-zA-Z0-9_]/.test(name)) {
+                return context.error("Variable names must contain only alphanumeric characters or '_'.", i);
+            }
+
+            var value = context.parse(args[i + 1], i + 1);
+            if (!value) {
+                return null;
+            }
+
+            bindings.push([name, value]);
+        }
+
+        var result = context.parse(args[args.length - 1], args.length - 1, context.expectedType, bindings);
+        if (!result) {
+            return null;
+        }
+
+        return new Let(bindings, result);
+    };
+
+    Let.prototype.possibleOutputs = function possibleOutputs() {
+        return this.result.possibleOutputs();
+    };
+
+    Let.prototype.serialize = function serialize() {
+        var serialized = ["let"];
+        for (var i = 0, list = this.bindings; i < list.length; i += 1) {
+            var ref = list[i];
+            var name = ref[0];
+            var expr = ref[1];
+
+            serialized.push(name, expr.serialize());
+        }
+        serialized.push(this.result.serialize());
+        return serialized;
+    };
+
+    var NumberType$7 = {kind: 'number'};
+
+    var Length = function Length(input) {
+        this.type = NumberType$7;
+        this.input = input;
+    };
+
+    Length.parse = function parse(args, context) {
+        if (args.length !== 2) {
+            return context.error(("Expected 1 argument, but found " + (args.length - 1) + " instead."));
+        }
+
+        var input = context.parse(args[1], 1);
+        if (!input) {
+            return null;
+        }
+
+        if (input.type.kind !== 'array' && input.type.kind !== 'string' && input.type.kind !== 'value') {
+            return context.error(("Expected argument of type string or array, but found " + (toString(input.type)) + " instead."));
+        }
+
+        return new Length(input);
+    };
+
+    Length.prototype.evaluate = function evaluate(ctx) {
+        var input = this.input.evaluate(ctx);
+        if (typeof input === 'string') {
+            return input.length;
+        } else if (Array.isArray(input)) {
+            return input.length;
+        } else {
+            throw new RuntimeError(("Expected value to be of type string or array, but found " + (toString(typeOf(input))) + " instead."));
+        }
+    };
+
+    Length.prototype.eachChild = function eachChild(fn) {
+        fn(this.input);
+    };
+
+    Length.prototype.possibleOutputs = function possibleOutputs() {
+        return [undefined];
+    };
+
+    Length.prototype.serialize = function serialize() {
+        var serialized = ["length"];
+        this.eachChild(function (child) {
+            serialized.push(child.serialize());
+        });
+        return serialized;
+    };
+
+    var Literal = function Literal(type, value) {
+        this.type = type;
+        this.value = value;
+    };
+
+    Literal.parse = function parse(args, context) {
+        if (args.length !== 2) {
+            return context.error(("'literal' expression requires exactly one argument, but found " + (args.length - 1) + " instead."));
+        }
+
+        if (!Values$1.isValue(args[1])) {
+            return context.error("invalid value");
+        }
+
+        var value = (args[1] );
+        var type = Values$1.typeOf(value);
+
+        // special case: infer the item type if possible for zero-length arrays
+        var expected = context.expectedType;
+        if (
+            type.kind === 'array' &&
+                type.N === 0 &&
+                expected &&
+                expected.kind === 'array' &&
+                (typeof expected.N !== 'number' || expected.N === 0)
+            ) {
+            type = expected;
+        }
+
+        return new Literal(type, value);
+    };
+
+    Literal.prototype.evaluate = function evaluate() {
+        return this.value;
+    };
+
+    Literal.prototype.eachChild = function eachChild() {
+    };
+
+    Literal.prototype.possibleOutputs = function possibleOutputs() {
+        return [this.value];
+    };
+
+    Literal.prototype.serialize = function serialize() {
+        if (this.type.kind === 'array' || this.type.kind === 'object') {
+            return ["literal", this.value];
+        } else if (this.value instanceof Color) {
+            // Constant-folding can generate Literal expressions that you
+            // couldn't actually generate with a "literal" expression,
+            // so we have to implement an equivalent serialization here
+            return ["rgba"].concat(this.value.toArray());
+        } else if (this.value instanceof Formatted$1) {
+            // Same as Color
+            return this.value.serialize();
+        } else {
+            assert_1(this.value === null ||
+                typeof this.value === 'string' ||
+                typeof this.value === 'number' ||
+                typeof this.value === 'boolean');
+            return (this.value );
+        }
+    };
+
+    var ValueType$9 = {kind: 'value'};
+
+    // Map input label values to output expression index
+    var Match = function Match(inputType, outputType, input, cases, outputs, otherwise) {
+        this.inputType = inputType;
+        this.type = outputType;
+        this.input = input;
+        this.cases = cases;
+        this.outputs = outputs;
+        this.otherwise = otherwise;
+    };
+
+    Match.parse = function parse(args, context) {
+        if (args.length < 5) {
+            return context.error(("Expected at least 4 arguments, but found only " + (args.length - 1) + "."));
+        }
+        if (args.length % 2 !== 1) {
+            return context.error("Expected an even number of arguments.");
+        }
+
+        var inputType;
+        var outputType;
+        if (context.expectedType && context.expectedType.kind !== 'value') {
+            outputType = context.expectedType;
+        }
+        var cases = {};
+        var outputs = [];
+        for (var i = 2; i < args.length - 1; i += 2) {
+            var labels = args[i];
+            var value = args[i + 1];
+
+            if (!Array.isArray(labels)) {
+                labels = [labels];
+            }
+
+            var labelContext = context.concat(i);
+            if (labels.length === 0) {
+                return labelContext.error('Expected at least one branch label.');
+            }
+
+            for (var i$1 = 0, list = labels; i$1 < list.length; i$1 += 1) {
+                var label = list[i$1];
+
+                if (typeof label !== 'number' && typeof label !== 'string') {
+                    return labelContext.error("Branch labels must be numbers or strings.");
+                } else if (typeof label === 'number' && Math.abs(label) > Number.MAX_SAFE_INTEGER) {
+                    return labelContext.error(("Branch labels must be integers no larger than " + (Number.MAX_SAFE_INTEGER) + "."));
+
+                } else if (typeof label === 'number' && Math.floor(label) !== label) {
+                    return labelContext.error("Numeric branch labels must be integer values.");
+
+                } else if (!inputType) {
+                    inputType = Values$1.typeOf(label);
+                } else if (labelContext.checkSubtype(inputType, Values$1.typeOf(label))) {
+                    return null;
+                }
+
+                if (typeof cases[String(label)] !== 'undefined') {
+                    return labelContext.error('Branch labels must be unique.');
+                }
+
+                cases[String(label)] = outputs.length;
+            }
+
+            var result = context.parse(value, i, outputType);
+            if (!result) {
+                return null;
+            }
+            outputType = outputType || result.type;
+            outputs.push(result);
+        }
+
+        var input = context.parse(args[1], 1, ValueType$9);
+        if (!input) {
+            return null;
+        }
+
+        var otherwise = context.parse(args[args.length - 1], args.length - 1, outputType);
+        if (!otherwise) {
+            return null;
+        }
+
+        assert_1(inputType && outputType);
+
+        if (input.type.kind !== 'value' && context.concat(1).checkSubtype((inputType ), input.type)) {
+            return null;
+        }
+
+        return new Match((inputType ), (outputType ), input, cases, outputs, otherwise);
+    };
+
+    Match.prototype.evaluate = function evaluate(ctx) {
+        var input = (this.input.evaluate(ctx) );
+        var output = (Values$1.typeOf(input) === this.inputType && this.outputs[this.cases[input]]) || this.otherwise;
+        return output.evaluate(ctx);
+    };
+
+    Match.prototype.eachChild = function eachChild(fn) {
+        fn(this.input);
+        this.outputs.forEach(fn);
+        fn(this.otherwise);
+    };
+
+    Match.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = [])
+            .concat.apply(ref, this.outputs.map(function (out) {
+                return out.possibleOutputs();
+            }))
+            .concat(this.otherwise.possibleOutputs());
+    };
+
+    Match.prototype.serialize = function serialize() {
+        var this$1 = this;
+
+        var serialized = ["match", this.input.serialize()];
+
+        // Sort so serialization has an arbitrary defined order, even though
+        // branch order doesn't affect evaluation
+        var sortedLabels = Object.keys(this.cases).sort();
+
+        // Group branches by unique match expression to support condensed
+        // serializations of the form [case1, case2, ...] -> matchExpression
+        var groupedByOutput = [];
+        var outputLookup = {}; // lookup index into groupedByOutput for a given output expression
+        for (var i = 0, list = sortedLabels; i < list.length; i += 1) {
+            var label = list[i];
+
+            var outputIndex = outputLookup[this.cases[label]];
+            if (outputIndex === undefined) {
+                // First time seeing this output, add it to the end of the grouped list
+                outputLookup[this.cases[label]] = groupedByOutput.length;
+                groupedByOutput.push([this.cases[label], [label]]);
+            } else {
+                // We've seen this expression before, add the label to that output's group
+                groupedByOutput[outputIndex][1].push(label);
+            }
+        }
+
+        var coerceLabel = function (label) {
+            return this$1.inputType.kind === 'number' ? Number(label) : label;
+        };
+
+        for (var i$1 = 0, list$1 = groupedByOutput; i$1 < list$1.length; i$1 += 1) {
+            var ref = list$1[i$1];
+            var outputIndex = ref[0];
+            var labels = ref[1];
+
+            if (labels.length === 1) {
+                // Only a single label matches this output expression
+                serialized.push(coerceLabel(labels[0]));
+            } else {
+                // Array of literal labels pointing to this output expression
+                serialized.push(labels.map(coerceLabel));
+            }
+            serialized.push(this.outputs[outputIndex$1].serialize());
+        }
+        serialized.push(this.otherwise.serialize());
+        return serialized;
+    };
+
+    var NumberType$8 = {kind: 'number'};
+    var StringType$7 = {kind: 'string'};
+
+    var NumberFormat = function NumberFormat(number, locale, currency, minFractionDigits, maxFractionDigits) {
+        this.type = StringType$7;
+        this.number = number;
+        this.locale = locale;
+        this.currency = currency;
+        this.minFractionDigits = minFractionDigits;
+        this.maxFractionDigits = maxFractionDigits;
+    };
+
+    NumberFormat.parse = function parse(args, context) {
+        if (args.length !== 3) {
+            return context.error("Expected two arguments.");
+        }
+
+        var number = context.parse(args[1], 1, NumberType$8);
+        if (!number) {
+            return null;
+        }
+
+        var options = (args[2]   );
+        if (typeof options !== "object" || Array.isArray(options)) {
+            return context.error("NumberFormat options argument must be an object.");
+        }
+
+        var locale = null;
+        if (options['locale']) {
+            locale = context.parse(options['locale'], 1, StringType$7);
+            if (!locale) {
+                return null;
+            }
+        }
+
+        var currency = null;
+        if (options['currency']) {
+            currency = context.parse(options['currency'], 1, StringType$7);
+            if (!currency) {
+                return null;
+            }
+        }
+
+        var minFractionDigits = null;
+        if (options['min-fraction-digits']) {
+            minFractionDigits = context.parse(options['min-fraction-digits'], 1, NumberType$8);
+            if (!minFractionDigits) {
+                return null;
+            }
+        }
+
+        var maxFractionDigits = null;
+        if (options['max-fraction-digits']) {
+            maxFractionDigits = context.parse(options['max-fraction-digits'], 1, NumberType$8);
+            if (!maxFractionDigits) {
+                return null;
+            }
+        }
+
+        return new NumberFormat(number, locale, currency, minFractionDigits, maxFractionDigits);
+    };
+
+    NumberFormat.prototype.evaluate = function evaluate(ctx) {
+        return new Intl.NumberFormat(this.locale ? this.locale.evaluate(ctx) : [],
+            {
+                style: this.currency ? "currency" : "decimal",
+                currency: this.currency ? this.currency.evaluate(ctx) : undefined,
+                minimumFractionDigits: this.minFractionDigits ? this.minFractionDigits.evaluate(ctx) : undefined,
+                maximumFractionDigits: this.maxFractionDigits ? this.maxFractionDigits.evaluate(ctx) : undefined,
+            }).format(this.number.evaluate(ctx));
+    };
+
+    NumberFormat.prototype.eachChild = function eachChild(fn) {
+        fn(this.number);
+        if (this.locale) {
+            fn(this.locale);
+        }
+        if (this.currency) {
+            fn(this.currency);
+        }
+        if (this.minFractionDigits) {
+            fn(this.minFractionDigits);
+        }
+        if (this.maxFractionDigits) {
+            fn(this.maxFractionDigits);
+        }
+    };
+
+    NumberFormat.prototype.possibleOutputs = function possibleOutputs() {
+        return [undefined];
+    };
+
+    NumberFormat.prototype.serialize = function serialize() {
+        var options = {};
+        if (this.locale) {
+            options['locale'] = this.locale.serialize();
+        }
+        if (this.currency) {
+            options['currency'] = this.currency.serialize();
+        }
+        if (this.minFractionDigits) {
+            options['min-fraction-digits'] = this.minFractionDigits.serialize();
+        }
+        if (this.maxFractionDigits) {
+            options['max-fraction-digits'] = this.maxFractionDigits.serialize();
+        }
+        return ["number-format", this.number.serialize(), options];
+    };
+
+    /**
+     * Returns the index of the last stop <= input, or 0 if it doesn't exist.
+     * @private
+     */
+    function findStopLessThanOrEqualTo$1(stops, input) {
+        var lastIndex = stops.length - 1;
+        var lowerIndex = 0;
+        var upperIndex = lastIndex;
+        var currentIndex = 0;
+        var currentValue, nextValue;
+
+        while (lowerIndex <= upperIndex) {
+            currentIndex = Math.floor((lowerIndex + upperIndex) / 2);
+            currentValue = stops[currentIndex];
+            nextValue = stops[currentIndex + 1];
+
+            if (currentValue <= input) {
+                if (currentIndex === lastIndex || input < nextValue) { // Search complete
+                    return currentIndex;
+                }
+
+                lowerIndex = currentIndex + 1;
+            } else if (currentValue > input) {
+                upperIndex = currentIndex - 1;
+            } else {
+                throw new RuntimeError('Input is not a number.');
+            }
+        }
+
+        return 0;
+    }
+
+    var NumberType$9 = {kind: 'number'};
+
+    var Step = function Step(type, input, stops) {
+        this.type = type;
+        this.input = input;
+
+        this.labels = [];
+        this.outputs = [];
+        for (var i = 0, list = stops; i < list.length; i += 1) {
+            var ref = list[i];
+            var label = ref[0];
+            var expression = ref[1];
+
+            this.labels.push(label);
+            this.outputs.push(expression);
+        }
+    };
+
+    Step.parse = function parse(args, context) {
+        if (args.length - 1 < 4) {
+            return context.error(("Expected at least 4 arguments, but found only " + (args.length - 1) + "."));
+        }
+
+        if ((args.length - 1) % 2 !== 0) {
+            return context.error("Expected an even number of arguments.");
+        }
+
+        var input = context.parse(args[1], 1, NumberType$9);
+        if (!input) {
+            return null;
+        }
+
+        var stops = [];
+
+        var outputType = (null );
+        if (context.expectedType && context.expectedType.kind !== 'value') {
+            outputType = context.expectedType;
+        }
+
+        for (var i = 1; i < args.length; i += 2) {
+            var label = i === 1 ? -Infinity : args[i];
+            var value = args[i + 1];
+
+            var labelKey = i;
+            var valueKey = i + 1;
+
+            if (typeof label !== 'number') {
+                return context.error('Input/output pairs for "step" expressions must be defined using literal numeric values (not computed expressions) for the input values.', labelKey);
+            }
+
+            if (stops.length && stops[stops.length - 1][0] >= label) {
+                return context.error('Input/output pairs for "step" expressions must be arranged with input values in strictly ascending order.', labelKey);
+            }
+
+            var parsed = context.parse(value, valueKey, outputType);
+            if (!parsed) {
+                return null;
+            }
+            outputType = outputType || parsed.type;
+            stops.push([label, parsed]);
+        }
+
+        return new Step(outputType, input, stops);
+    };
+
+    Step.prototype.evaluate = function evaluate(ctx) {
+        var labels = this.labels;
+        var outputs = this.outputs;
+
+        if (labels.length === 1) {
+            return outputs[0].evaluate(ctx);
+        }
+
+        var value = ((this.input.evaluate(ctx) )    );
+        if (value <= labels[0]) {
+            return outputs[0].evaluate(ctx);
+        }
+
+        var stopCount = labels.length;
+        if (value >= labels[stopCount - 1]) {
+            return outputs[stopCount - 1].evaluate(ctx);
+        }
+
+        var index = findStopLessThanOrEqualTo$1(labels, value);
+        return outputs[index].evaluate(ctx);
+    };
+
+    Step.prototype.eachChild = function eachChild(fn) {
+        fn(this.input);
+        for (var i = 0, list = this.outputs; i < list.length; i += 1) {
+            var expression = list[i];
+
+            fn(expression);
+        }
+    };
+
+    Step.prototype.possibleOutputs = function possibleOutputs() {
+        var ref;
+
+        return (ref = []).concat.apply(ref, this.outputs.map(function (output) {
+            return output.possibleOutputs();
+        }));
+    };
+
+    Step.prototype.serialize = function serialize() {
+        var serialized = ["step", this.input.serialize()];
+        for (var i = 0; i < this.labels.length; i++) {
+            if (i > 0) {
+                serialized.push(this.labels[i]);
+            }
+            serialized.push(this.outputs[i].serialize());
+        }
+        return serialized;
+    };
+
+    var Var = function Var(name, boundExpression) {
+        this.type = boundExpression.type;
+        this.name = name;
+        this.boundExpression = boundExpression;
+    };
+
+    Var.parse = function parse(args, context) {
+        if (args.length !== 2 || typeof args[1] !== 'string') {
+            return context.error("'var' expression requires exactly one string literal argument.");
+        }
+
+        var name = args[1];
+        if (!context.scope.has(name)) {
+            return context.error(("Unknown variable \"" + name + "\". Make sure \"" + name + "\" has been bound in an enclosing \"let\" expression before using it."), 1);
+        }
+
+        return new Var(name, context.scope.get(name));
+    };
+
+    Var.prototype.evaluate = function evaluate(ctx) {
+        return this.boundExpression.evaluate(ctx);
+    };
+
+    Var.prototype.eachChild = function eachChild() {
+    };
+
+    Var.prototype.possibleOutputs = function possibleOutputs() {
+        return [undefined];
+    };
+
+    Var.prototype.serialize = function serialize() {
+        return ["var", this.name];
+    };
+
+    var expressions = {
+        // special forms
+        '==': ComparisonEnum.Equals,
+        '!=': ComparisonEnum.NotEquals,
+        '>': ComparisonEnum.GreaterThan,
+        '<': ComparisonEnum.LessThan,
+        '>=': ComparisonEnum.GreaterThanOrEqual,
+        '<=': ComparisonEnum.LessThanOrEqual,
+        'array': Assertion,
+        'at': At,
+        'boolean': Assertion,
+        'case': Case,
+        'coalesce': Coalesce,
+        'collator': CollatorExpression,
+        'format': FormatExpression$1,
+        'image': ImageExpression$1,
+        'in': In,
+        'interpolate': Interpolate$1,
+        'interpolate-hcl': Interpolate$1,
+        'interpolate-lab': Interpolate$1,
+        'length': Length,
+        'let': Let,
+        'literal': Literal,
+        'match': Match,
+        'number': Assertion,
+        'number-format': NumberFormat,
+        'object': Assertion,
+        'step': Step,
+        'string': Assertion,
+        'to-boolean': Coercion,
+        'to-color': Coercion,
+        'to-number': Coercion,
+        'to-string': Coercion,
+        'var': Var
+    };
+
+    function WebWorkerTransfer() {
+
+    }
+
+    var registry = {};
+
+    /**
+     * Register the given class as serializable.
+     *
+     * @param options
+     * @param options.omit List of properties to omit from serialization (e.g., cached/computed properties)
+     * @param options.shallow List of properties that should be serialized by a simple shallow copy, rather than by a recursive call to serialize().
+     *
+     * @private
+     */
+    WebWorkerTransfer.register = function (name, klass, options) {
+        if (options === void 0) options = {};
+
+        //assert(!registry[name], (name + " is already registered."));
+        (Object.defineProperty     )(klass, '_classRegistryKey', {
+            value: name,
+            writeable: false
+        });
+        registry[name] = {
+            klass: klass,
+            omit: options.omit || [],
+            shallow: options.shallow || []
+        };
+    };
+
+    WebWorkerTransfer.register('Object', Object);
+
+
+    //    gridIndex.serialize = function serialize(grid, transferables) {
+    //        var buffer = grid.toArrayBuffer();
+    //        if (transferables) {
+    //            transferables.push(buffer);
+    //        }
+    //        return {buffer: buffer};
+    //    };
+    //
+    //    gridIndex.deserialize = function deserialize(serialized) {
+    //        return new gridIndex(serialized.buffer);
+    //    };
+    //    register('Grid', gridIndex);
+
+    WebWorkerTransfer.register('Color', Color$1);
+    //WebWorkerTransfer.register('Error', Error);
+    WebWorkerTransfer.register('ResolvedImage', ResolvedImage$1);
+    WebWorkerTransfer.register('ImageAtlas', ImageAtlas);
+    WebWorkerTransfer.register('ImagePosition', ImagePosition);
+    WebWorkerTransfer.register('RGBAImage', RGBAImage);
+    WebWorkerTransfer.register('Formatted', Formatted$1);
+    WebWorkerTransfer.register('FormattedSection', FormattedSection);
+
+    //    WebWorkerTransfer.register('StylePropertyFunction', StylePropertyFunction);
+    //    WebWorkerTransfer.register('StyleExpression', StyleExpression, {omit: ['_evaluator']});
+    //
+    //    WebWorkerTransfer.register('ZoomDependentExpression', ZoomDependentExpression);
+    //    WebWorkerTransfer.register('ZoomConstantExpression', ZoomConstantExpression);
+    //    WebWorkerTransfer.register('CompoundExpression', CompoundExpression, {omit: ['_evaluate']});
+
+    for (var name$1 in expressions) {
+        if ((expressions[name$1]     )._classRegistryKey) {
+            continue;
+        }
+        WebWorkerTransfer.register(("Expression_" + name$1), expressions[name$1]);
+    }
+
+    function isArrayBuffer(val) {
+        return val && typeof ArrayBuffer !== 'undefined' &&
+            (val instanceof ArrayBuffer || (val.constructor && val.constructor.name === 'ArrayBuffer'));
+    }
+
+    /**
+     * Serialize the given object for transfer to or from a web worker.
+     *
+     * For non-builtin types, recursively serialize each property (possibly
+     * omitting certain properties - see register()), and package the result along
+     * with the constructor's `name` so that the appropriate constructor can be
+     * looked up in `deserialize()`.
+     *
+     * If a `transferables` array is provided, add any transferable objects (i.e.,
+     * any ArrayBuffers or ArrayBuffer views) to the list. (If a copy is needed,
+     * this should happen in the client code, before using serialize().)
+     *
+     * @private
+     */
+    WebWorkerTransfer.serialize = function (input, transferables) {
+        if (input === null ||
+            input === undefined ||
+            typeof input === 'boolean' ||
+            typeof input === 'number' ||
+            typeof input === 'string' ||
+            input instanceof Boolean ||
+            input instanceof Number ||
+            input instanceof String ||
+            input instanceof Date ||
+            input instanceof RegExp) {
+            return input;
+        }
+
+        if (isArrayBuffer(input)) {
+            if (transferables) {
+                transferables.push(((input     )             ));
+            }
+            return input;
+        }
+
+        if (ArrayBuffer.isView(input)) {
+            var view = (input     );
+            if (transferables) {
+                transferables.push(view.buffer);
+            }
+            return view;
+        }
+
+        if (input instanceof ImageData) {
+            if (transferables) {
+                transferables.push(input.data.buffer);
+            }
+            return input;
+        }
+
+        if (Array.isArray(input)) {
+            var serialized = [];
+            for (var i = 0, list = input; i < list.length; i += 1) {
+                var item = list[i];
+
+                serialized.push(WebWorkerTransfer.serialize(item, transferables));
+            }
+            return serialized;
+        }
+
+        if (typeof input === 'object') {
+            var klass = (input.constructor     );
+            var name = klass._classRegistryKey;
+            if (!name) {
+                throw new Error("can't serialize object of unregistered class");
+            }
+            //assert(registry[name]);
+
+            var properties = klass.serialize ?
+                // (Temporary workaround) allow a class to provide static
+                // `serialize()` and `deserialize()` methods to bypass the generic
+                // approach.
+                // This temporary workaround lets us use the generic serialization
+                // approach for objects whose members include instances of dynamic
+                // StructArray types. Once we refactor StructArray to be static,
+                // we can remove this complexity.
+                (klass.serialize(input, transferables)                  ) : {};
+
+            if (!klass.serialize) {
+                for (var key in input) {
+                    // any cast due to https://github.com/facebook/flow/issues/5393
+                    if (!(input     ).hasOwnProperty(key)) {
+                        continue;
+                    }
+                    if (registry[name].omit.indexOf(key) >= 0) {
+                        continue;
+                    }
+                    var property = (input     )[key];
+                    properties[key] = registry[name].shallow.indexOf(key) >= 0 ?
+                        property :
+                        WebWorkerTransfer.serialize(property, transferables);
+                }
+                if (input instanceof Error) {
+                    properties.message = input.message;
+                }
+            }
+
+            if (properties.$name) {
+                throw new Error('$name property is reserved for worker serialization logic.');
+            }
+            if (name !== 'Object') {
+                properties.$name = name;
+            }
+
+            return properties;
+        }
+
+        throw new Error(("can't serialize object of type " + (typeof input)));
+    };
+
+    WebWorkerTransfer.deserialize = function (input) {
+        if (input === null ||
+            input === undefined ||
+            typeof input === 'boolean' ||
+            typeof input === 'number' ||
+            typeof input === 'string' ||
+            input instanceof Boolean ||
+            input instanceof Number ||
+            input instanceof String ||
+            input instanceof Date ||
+            input instanceof RegExp ||
+            isArrayBuffer(input) ||
+            ArrayBuffer.isView(input) ||
+            input instanceof ImageData) {
+            return input;
+        }
+
+        if (Array.isArray(input)) {
+            return input.map(WebWorkerTransfer.deserialize);
+        }
+
+        if (typeof input === 'object') {
+            var name = (input     ).$name || 'Object';
+
+            var ref = registry[name];
+            var klass = ref.klass;
+            if (!klass) {
+                throw new Error(("can't deserialize unregistered class " + name));
+            }
+
+            if (klass.deserialize) {
+                return (klass.deserialize                    )(input);
+            }
+
+            var result = Object.create(klass.prototype);
+
+            for (var i = 0, list = Object.keys(input); i < list.length; i += 1) {
+                var key = list[i];
+
+                if (key === '$name') {
+                    continue;
+                }
+                var value = (input                  )[key];
+                result[key] = registry[name].shallow.indexOf(key) >= 0 ? value : WebWorkerTransfer.deserialize(value);
+            }
+            return result;
+        }
+        throw new Error(("can't deserialize object of type " + (typeof input)));
+    };
+
+    var ZoomHistory = function ZoomHistory() {
+        this.first = true;
+    };
+
+    ZoomHistory.prototype.update = function update (z    , now    ) {
+        var floorZ = Math.floor(z);
+
+        if (this.first) {
+            this.first = false;
+            this.lastIntegerZoom = floorZ;
+            this.lastIntegerZoomTime = 0;
+            this.lastZoom = z;
+            this.lastFloorZoom = floorZ;
+            return true;
+        }
+
+        if (this.lastFloorZoom > floorZ) {
+            this.lastIntegerZoom = floorZ + 1;
+            this.lastIntegerZoomTime = now;
+        } else if (this.lastFloorZoom < floorZ) {
+            this.lastIntegerZoom = floorZ;
+            this.lastIntegerZoomTime = now;
+        }
+
+        if (z !== this.lastZoom) {
+            this.lastZoom = z;
+            this.lastFloorZoom = floorZ;
+            return true;
+        }
+
+        return false;
+    };
+
+    var EvaluationParameters$1 = function EvaluationParameters(zoom, options) {
+        this.zoom = zoom;
+
+        if (options) {
+            this.now = options.now;
+            this.fadeDuration = options.fadeDuration;
+            this.zoomHistory = options.zoomHistory;
+            this.transition = options.transition;
+        } else {
+            this.now = 0;
+            this.fadeDuration = 0;
+            this.zoomHistory = new ZoomHistory();
+            this.transition = {};
+        }
+    };
+
+    EvaluationParameters$1.prototype.isSupportedScript = function isSupportedScript(str) {
+        return false;
+        //return isStringInSupportedScript(str, plugin.isLoaded());
+    };
+
+    EvaluationParameters$1.prototype.crossFadingFactor = function crossFadingFactor() {
+        if (this.fadeDuration === 0) {
+            return 1;
+        } else {
+            return Math.min((this.now - this.zoomHistory.lastIntegerZoomTime) / this.fadeDuration, 1);
+        }
+    };
+
+    EvaluationParameters$1.prototype.getCrossfadeParameters = function getCrossfadeParameters() {
+        var z = this.zoom;
+        var fraction = z - Math.floor(z);
+        var t = this.crossFadingFactor();
+
+        return z > this.zoomHistory.lastIntegerZoom ?
+        {fromScale: 2, toScale: 1, t: fraction + (1 - fraction) * t} :
+        {fromScale: 0.5, toScale: 1, t: 1 - (1 - t) * fraction};
+    };
+
+    var EXTENT = 8192;
+
+    function clamp(n, min, max) {
+        return Math.min(max, Math.max(min, n));
+    }
+
+    // These bounds define the minimum and maximum supported coordinate values.
+    // While visible coordinates are within [0, EXTENT], tiles may theoretically
+    // contain cordinates within [-Infinity, Infinity]. Our range is limited by the
+    // number of bits used to represent the coordinate.
+    function createBounds(bits) {
+        return {
+            min: -1 * Math.pow(2, bits - 1),
+            max: Math.pow(2, bits - 1) - 1
+        };
+    }
+
+    var bounds = createBounds(15);
+
+    /**
+     * Loads a geometry from a VectorTileFeature and scales it to the common extent
+     * used internally.
+     * @param {VectorTileFeature} feature
+     * @private
+     */
+    function loadGeometry(feature) {
+        var scale = EXTENT / feature.extent;
+        var geometry = feature.loadGeometry();
+        for (var r = 0; r < geometry.length; r++) {
+            var ring = geometry[r];
+            for (var p = 0; p < ring.length; p++) {
+                var point = ring[p];
+                // round here because mapbox-gl-native uses integers to represent
+                // points and we need to do the same to avoid renering differences.
+                point.x = Math.round(point.x * scale);
+                // 因为绘制到纹理上颠倒了，所以在这里取反
+                point.y = EXTENT - Math.round(point.y * scale);
+
+                if (point.x < bounds.min || point.x > bounds.max || point.y < bounds.min || point.y > bounds.max) {
+                    //warnOnce('Geometry exceeds allowed extent, reduce your vector tile buffer size');
+                    point.x = clamp(point.x, bounds.min, bounds.max);
+                    point.y = clamp(point.y, bounds.min, bounds.max);
+                }
+            }
+        }
+        return geometry;
+    }
+
+    var SegmentVector = function SegmentVector(segments) {
+        if (segments === void 0) segments = [];
+
+        this.segments = segments;
+    };
+
+    SegmentVector.prototype.prepareSegment = function prepareSegment(numVertices, layoutVertexArray, indexArray, sortKey) {
+        var segment = this.segments[this.segments.length - 1];
+        if (!segment || segment.vertexLength + numVertices > SegmentVector.MAX_VERTEX_ARRAY_LENGTH || segment.sortKey !== sortKey) {
+            segment = ({
+                vertexOffset: layoutVertexArray.length,
+                primitiveOffset: indexArray.length,
+                vertexLength: 0,
+                primitiveLength: 0
+            } );
+            if (sortKey !== undefined) {
+                segment.sortKey = sortKey;
+            }
+            this.segments.push(segment);
+        }
+        return segment;
+    };
+
+    SegmentVector.prototype.get = function get() {
+        return this.segments;
+    };
+
+    SegmentVector.prototype.destroy = function destroy() {
+        for (var i = 0, list = this.segments; i < list.length; i += 1) {
+            var segment = list[i];
+
+            for (var k in segment.vaos) {
+                segment.vaos[k].destroy();
+            }
+        }
+    };
+
+    SegmentVector.simpleSegment = function simpleSegment(vertexOffset, primitiveOffset, vertexLength, primitiveLength) {
+        return new SegmentVector([
+            {
+                vertexOffset: vertexOffset,
+                primitiveOffset: primitiveOffset,
+                vertexLength: vertexLength,
+                primitiveLength: primitiveLength,
+                vaos: {},
+                sortKey: 0
+            }
+        ]);
+    };
+
+    /*
+     * The maximum size of a vertex array. This limit is imposed by WebGL's 16 bit
+     * addressing of vertex buffers.
+     * @private
+     * @readonly
+     */
+    SegmentVector.MAX_VERTEX_ARRAY_LENGTH = Math.pow(2, 16) - 1;
+    WebWorkerTransfer.register('SegmentVector', SegmentVector);
+
+    /**
+     * @private
+     */
+
+    var DEFAULT_CAPACITY = 128;
+    var RESIZE_MULTIPLIER = 5;
+
+    /**
+     * `StructArray` provides an abstraction over `ArrayBuffer` and `TypedArray`
+     * making it behave like an array of typed structs.
+     *
+     * Conceptually, a StructArray is comprised of elements, i.e., instances of its
+     * associated struct type. Each particular struct type, together with an
+     * alignment size, determines the memory layout of a StructArray whose elements
+     * are of that type.  Thus, for each such layout that we need, we have
+     * a corrseponding StructArrayLayout class, inheriting from StructArray and
+     * implementing `emplaceBack()` and `_refreshViews()`.
+     *
+     * In some cases, where we need to access particular elements of a StructArray,
+     * we implement a more specific subclass that inherits from one of the
+     * StructArrayLayouts and adds a `get(i): T` accessor that returns a structured
+     * object whose properties are proxies into the underlying memory space for the
+     * i-th element.  This affords the convience of working with (seemingly) plain
+     * Javascript objects without the overhead of serializing/deserializing them
+     * into ArrayBuffers for efficient web worker transfer.
+     *
+     * @private
+     */
+    var StructArray = function StructArray() {
+        this.isTransferred = false;
+        this.capacity = -1;
+        this.resize(0);
+    };
+
+    /**
+     * Serialize a StructArray instance.Serializes both the raw data and the
+     * metadata needed to reconstruct the StructArray base class during
+     * deserialization.
+     */
+    StructArray.serialize = function serialize(array, transferables) {
+        //assert_1(!array.isTransferred);
+        if(array.isTransferred){
+            console.log("StructArray array.isTransferred.");
+        }
+
+        array._trim();
+
+        if (transferables) {
+            array.isTransferred = true;
+            transferables.push(array.arrayBuffer);
+        }
+
+        return {
+            length: array.length,
+            arrayBuffer: array.arrayBuffer,
+        };
+    };
+
+    StructArray.deserialize = function deserialize(input) {
+        var structArray = Object.create(this.prototype);
+        structArray.arrayBuffer = input.arrayBuffer;
+        structArray.length = input.length;
+        structArray.capacity = input.arrayBuffer.byteLength / structArray.bytesPerElement;
+        structArray._refreshViews();
+        return structArray;
+    };
+
+    /**
+     * Resize the array to discard unused capacity.
+     */
+    StructArray.prototype._trim = function _trim() {
+        if (this.length !== this.capacity) {
+            this.capacity = this.length;
+            this.arrayBuffer = this.arrayBuffer.slice(0, this.length * this.bytesPerElement);
+            this._refreshViews();
+        }
+    };
+
+    /**
+     * Resets the the length of the array to 0 without de-allocating capcacity.
+     */
+    StructArray.prototype.clear = function clear() {
+        this.length = 0;
+    };
+
+    /**
+     * Resize the array.
+     * If `n` is greater than the current length then additional elements with undefined values are added.
+     * If `n` is less than the current length then the array will be reduced to the first `n` elements.
+     * @param {number} n The new size of the array.
+     */
+    StructArray.prototype.resize = function resize(n) {
+        //assert_1(!this.isTransferred);
+        this.reserve(n);
+        this.length = n;
+    };
+
+    /**
+     * Indicate a planned increase in size, so that any necessary allocation may
+     * be done once, ahead of time.
+     * @param {number} n The expected size of the array.
+     */
+    StructArray.prototype.reserve = function reserve(n) {
+        if (n > this.capacity) {
+            this.capacity = Math.max(n, Math.floor(this.capacity * RESIZE_MULTIPLIER), DEFAULT_CAPACITY);
+            this.arrayBuffer = new ArrayBuffer(this.capacity * this.bytesPerElement);
+
+            var oldUint8Array = this.uint8;
+            this._refreshViews();
+            if (oldUint8Array) {
+                this.uint8.set(oldUint8Array);
+            }
+        }
+    };
+
+    /**
+     * Create TypedArray views for the current ArrayBuffer.
+     */
+    StructArray.prototype._refreshViews = function _refreshViews() {
+        throw new Error('_refreshViews() must be implemented by each concrete StructArray layout');
+    };
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Int16[2]
+     * [4]: Uint8[4]
+     *
+     * @private
+     */
+    var StructArrayLayout2i4ub8 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout2i4ub8() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout2i4ub8.__proto__ = StructArray;
+        StructArrayLayout2i4ub8.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout2i4ub8.prototype.constructor = StructArrayLayout2i4ub8;
+
+        StructArrayLayout2i4ub8.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.int16 = new Int16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout2i4ub8.prototype.emplaceBack = function emplaceBack(v0, v1, v2, v3, v4, v5) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1, v2, v3, v4, v5);
+        };
+
+        StructArrayLayout2i4ub8.prototype.emplace = function emplace(i, v0, v1, v2, v3, v4, v5) {
+            var o2 = i * 4;
+            var o1 = i * 8;
+            this.int16[o2 + 0] = v0;
+            this.int16[o2 + 1] = v1;
+            this.uint8[o1 + 4] = v2;
+            this.uint8[o1 + 5] = v3;
+            this.uint8[o1 + 6] = v4;
+            this.uint8[o1 + 7] = v5;
+            return i;
+        };
+
+        return StructArrayLayout2i4ub8;
+    }(StructArray));
+
+    StructArrayLayout2i4ub8.prototype.bytesPerElement = 8;
+    WebWorkerTransfer.register('StructArrayLayout2i4ub8', StructArrayLayout2i4ub8);
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Uint16[3]
+     *
+     * @private
+     */
+    var StructArrayLayout3ui6 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout3ui6() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout3ui6.__proto__ = StructArray;
+        StructArrayLayout3ui6.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout3ui6.prototype.constructor = StructArrayLayout3ui6;
+
+        StructArrayLayout3ui6.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.uint16 = new Uint16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout3ui6.prototype.emplaceBack = function emplaceBack(v0, v1, v2) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1, v2);
+        };
+
+        StructArrayLayout3ui6.prototype.emplace = function emplace(i, v0, v1, v2) {
+            var o2 = i * 3;
+            this.uint16[o2 + 0] = v0;
+            this.uint16[o2 + 1] = v1;
+            this.uint16[o2 + 2] = v2;
+            return i;
+        };
+
+        return StructArrayLayout3ui6;
+    }(StructArray));
+
+    StructArrayLayout3ui6.prototype.bytesPerElement = 6;
+    WebWorkerTransfer.register('StructArrayLayout3ui6', StructArrayLayout3ui6);
+
+    // A transferable data structure that maps feature ids to their indices and buffer offsets
+    var FeaturePositionMap = function FeaturePositionMap() {
+        this.ids = [];
+        this.positions = [];
+        this.indexed = false;
+    };
+
+    FeaturePositionMap.prototype.add = function add(id, index, start, end) {
+        this.ids.push(id);
+        this.positions.push(index, start, end);
+    };
+
+    FeaturePositionMap.prototype.getPositions = function getPositions(id) {
+        //assert_1(this.indexed);
+
+        // binary search for the first occurrence of id in this.ids;
+        // relies on ids/positions being sorted by id, which happens in serialization
+        var i = 0;
+        var j = this.ids.length - 1;
+        while (i < j) {
+            var m = (i + j) >> 1;
+            if (this.ids[m] >= id) {
+                j = m;
+            } else {
+                i = m + 1;
+            }
+        }
+        var positions = [];
+        while (this.ids[i] === id) {
+            var index = this.positions[3 * i];
+            var start = this.positions[3 * i + 1];
+            var end = this.positions[3 * i + 2];
+            positions.push({index: index, start: start, end: end});
+            i++;
+        }
+        return positions;
+    };
+
+    FeaturePositionMap.serialize = function serialize(map, transferables) {
+        var ids = new Float64Array(map.ids);
+        var positions = new Uint32Array(map.positions);
+
+        sort(ids, positions, 0, ids.length - 1);
+
+        if (transferables) {
+            transferables.push(ids.buffer, positions.buffer);
+        }
+
+        return {ids: ids, positions: positions};
+    };
+
+    FeaturePositionMap.deserialize = function deserialize(obj) {
+        var map = new FeaturePositionMap();
+        // after transferring, we only use these arrays statically (no pushes),
+        // so TypedArray vs Array distinction that flow points out doesn't matter
+        map.ids = (obj.ids   );
+        map.positions = (obj.positions   );
+        map.indexed = true;
+        return map;
+    };
+
+    // custom quicksort that sorts ids, indices and offsets together (by ids)
+    function sort(ids, positions, left, right) {
+        if (left >= right) {
+            return;
+        }
+
+        var pivot = ids[(left + right) >> 1];
+        var i = left - 1;
+        var j = right + 1;
+
+        while (true) {
+            do {
+                i++;
+            } while (ids[i] < pivot);
+            do {
+                j--;
+            } while (ids[j] > pivot);
+            if (i >= j) {
+                break;
+            }
+            swap(ids, i, j);
+            swap(positions, 3 * i, 3 * j);
+            swap(positions, 3 * i + 1, 3 * j + 1);
+            swap(positions, 3 * i + 2, 3 * j + 2);
+        }
+
+        sort(ids, positions, left, j);
+        sort(ids, positions, j + 1, right);
+    }
+
+    function swap(arr, i, j) {
+        var tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    WebWorkerTransfer.register('FeaturePositionMap', FeaturePositionMap);
+
+    /**
+     * `PossiblyEvaluatedPropertyValue` is used for data-driven paint and layout property values. It holds a
+     * `PossiblyEvaluatedValue` and the `GlobalProperties` that were used to generate it. You're not allowed to supply
+     * a different set of `GlobalProperties` when performing the final evaluation because they would be ignored in the
+     * case where the input value was a constant or camera function.
+     *
+     * @private
+     */
+    var PossiblyEvaluatedPropertyValue$1 = function PossiblyEvaluatedPropertyValue(property, value, parameters) {
+        this.property = property;
+        this.value = value;
+        this.parameters = parameters;
+    };
+
+    PossiblyEvaluatedPropertyValue$1.prototype.isConstant = function isConstant() {
+        return this.value.kind === 'constant';
+    };
+
+    PossiblyEvaluatedPropertyValue$1.prototype.constantOr = function constantOr(value) {
+        if (this.value.kind === 'constant') {
+            return this.value.value;
+        } else {
+            return value;
+        }
+    };
+
+    PossiblyEvaluatedPropertyValue$1.prototype.evaluate = function evaluate(feature, featureState, availableImages) {
+        return this.property.evaluate(this.value, this.parameters, feature, featureState, availableImages);
+    };
+
+    function Supports() {
+    }
+
+    Supports.supportsPropertyExpression = function (spec) {
+        return spec['property-type'] === 'data-driven' || spec['property-type'] === 'cross-faded-data-driven';
+    };
+
+    Supports.supportsZoomExpression = function (spec) {
+        return !!spec.expression && spec.expression.parameters.indexOf('zoom') > -1;
+    };
+
+    Supports.supportsInterpolation = function (spec) {
+        return !!spec.expression && spec.expression.interpolated;
+    };
+
+    var UniformType = {};
+
+    var Uniform = function Uniform(context, location) {
+        this.gl = context.gl;
+        this.location = location;
+    };
+
+    UniformType.Uniform1i = /*@__PURE__*/(function (Uniform) {
+        function Uniform1i(context, location) {
+            Uniform.call(this, context, location);
+            this.current = 0;
+        }
+
+        if (Uniform) Uniform1i.__proto__ = Uniform;
+        Uniform1i.prototype = Object.create(Uniform && Uniform.prototype);
+        Uniform1i.prototype.constructor = Uniform1i;
+
+        Uniform1i.prototype.set = function set(v) {
+            if (this.current !== v) {
+                this.current = v;
+                this.gl.uniform1i(this.location, v);
+            }
+        };
+
+        return Uniform1i;
+    }(Uniform));
+
+    UniformType.Uniform1f = /*@__PURE__*/(function (Uniform) {
+        function Uniform1f(context, location) {
+            Uniform.call(this, context, location);
+            this.current = 0;
+        }
+
+        if (Uniform) Uniform1f.__proto__ = Uniform;
+        Uniform1f.prototype = Object.create(Uniform && Uniform.prototype);
+        Uniform1f.prototype.constructor = Uniform1f;
+
+        Uniform1f.prototype.set = function set(v) {
+            if (this.current !== v) {
+                this.current = v;
+                this.gl.uniform1f(this.location, v);
+            }
+        };
+
+        return Uniform1f;
+    }(Uniform));
+
+    UniformType.Uniform2f = /*@__PURE__*/(function (Uniform) {
+        function Uniform2f(context, location) {
+            Uniform.call(this, context, location);
+            this.current = [0, 0];
+        }
+
+        if (Uniform) Uniform2f.__proto__ = Uniform;
+        Uniform2f.prototype = Object.create(Uniform && Uniform.prototype);
+        Uniform2f.prototype.constructor = Uniform2f;
+
+        Uniform2f.prototype.set = function set(v) {
+            if (v[0] !== this.current[0] || v[1] !== this.current[1]) {
+                this.current = v;
+                this.gl.uniform2f(this.location, v[0], v[1]);
+            }
+        };
+
+        return Uniform2f;
+    }(Uniform));
+
+    UniformType.Uniform3f = /*@__PURE__*/(function (Uniform) {
+        function Uniform3f(context, location) {
+            Uniform.call(this, context, location);
+            this.current = [0, 0, 0];
+        }
+
+        if (Uniform) Uniform3f.__proto__ = Uniform;
+        Uniform3f.prototype = Object.create(Uniform && Uniform.prototype);
+        Uniform3f.prototype.constructor = Uniform3f;
+
+        Uniform3f.prototype.set = function set(v) {
+            if (v[0] !== this.current[0] || v[1] !== this.current[1] || v[2] !== this.current[2]) {
+                this.current = v;
+                this.gl.uniform3f(this.location, v[0], v[1], v[2]);
+            }
+        };
+
+        return Uniform3f;
+    }(Uniform));
+
+    UniformType.Uniform4f = /*@__PURE__*/(function (Uniform) {
+        function Uniform4f(context, location) {
+            Uniform.call(this, context, location);
+            this.current = [0, 0, 0, 0];
+        }
+
+        if (Uniform) Uniform4f.__proto__ = Uniform;
+        Uniform4f.prototype = Object.create(Uniform && Uniform.prototype);
+        Uniform4f.prototype.constructor = Uniform4f;
+
+        Uniform4f.prototype.set = function set(v) {
+            if (v[0] !== this.current[0] || v[1] !== this.current[1] ||
+                v[2] !== this.current[2] || v[3] !== this.current[3]) {
+                this.current = v;
+                this.gl.uniform4f(this.location, v[0], v[1], v[2], v[3]);
+            }
+        };
+
+        return Uniform4f;
+    }(Uniform));
+
+    UniformType.UniformColor = /*@__PURE__*/(function (Uniform) {
+        function UniformColor(context, location) {
+            Uniform.call(this, context, location);
+            this.current = Color$1.transparent;
+        }
+
+        if (Uniform) UniformColor.__proto__ = Uniform;
+        UniformColor.prototype = Object.create(Uniform && Uniform.prototype);
+        UniformColor.prototype.constructor = UniformColor;
+
+        UniformColor.prototype.set = function set(v) {
+            if (v.r !== this.current.r || v.g !== this.current.g ||
+                v.b !== this.current.b || v.a !== this.current.a) {
+                this.current = v;
+                this.gl.uniform4f(this.location, v.r, v.g, v.b, v.a);
+            }
+        };
+
+        return UniformColor;
+    }(Uniform));
+
+    var emptyMat4 = new Float32Array(16);
+    UniformType.UniformMatrix4f = /*@__PURE__*/(function (Uniform) {
+        function UniformMatrix4f(context, location) {
+            Uniform.call(this, context, location);
+            this.current = emptyMat4;
+        }
+
+        if (Uniform) UniformMatrix4f.__proto__ = Uniform;
+        UniformMatrix4f.prototype = Object.create(Uniform && Uniform.prototype);
+        UniformMatrix4f.prototype.constructor = UniformMatrix4f;
+
+        UniformMatrix4f.prototype.set = function set(v) {
+            this.gl.uniformMatrix4fv(this.location, false, v);
+            // The vast majority of matrix comparisons that will trip this set
+            // happen at i=12 or i=0, so we check those first to avoid lots of
+            // unnecessary iteration:
+    //            if (v[12] !== this.current[12] || v[0] !== this.current[0]) {
+    //                this.current = v;
+    //                this.gl.uniformMatrix4fv(this.location, false, v);
+    //                return;
+    //            }
+    //            for (var i = 1; i < 16; i++) {
+    //                if (v[i] !== this.current[i]) {
+    //                    this.current = v;
+    //                    this.gl.uniformMatrix4fv(this.location, false, v);
+    //                    break;
+    //                }
+    //            }
+        };
+
+        return UniformMatrix4f;
+    }(Uniform));
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Uint16[8]
+     *
+     * @private
+     */
+    var StructArrayLayout8ui16 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout8ui16() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout8ui16.__proto__ = StructArray;
+        StructArrayLayout8ui16.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout8ui16.prototype.constructor = StructArrayLayout8ui16;
+
+        StructArrayLayout8ui16.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.uint16 = new Uint16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout8ui16.prototype.emplaceBack = function emplaceBack(v0, v1, v2, v3, v4, v5, v6, v7) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1, v2, v3, v4, v5, v6, v7);
+        };
+
+        StructArrayLayout8ui16.prototype.emplace = function emplace(i, v0, v1, v2, v3, v4, v5, v6, v7) {
+            var o2 = i * 8;
+            this.uint16[o2 + 0] = v0;
+            this.uint16[o2 + 1] = v1;
+            this.uint16[o2 + 2] = v2;
+            this.uint16[o2 + 3] = v3;
+            this.uint16[o2 + 4] = v4;
+            this.uint16[o2 + 5] = v5;
+            this.uint16[o2 + 6] = v6;
+            this.uint16[o2 + 7] = v7;
+            return i;
+        };
+
+        return StructArrayLayout8ui16;
+    }(StructArray));
+
+    StructArrayLayout8ui16.prototype.bytesPerElement = 16;
+    WebWorkerTransfer.register('StructArrayLayout8ui16', StructArrayLayout8ui16);
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Float32[2]
+     *
+     * @private
+     */
+    var StructArrayLayout2f8 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout2f8() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout2f8.__proto__ = StructArray;
+        StructArrayLayout2f8.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout2f8.prototype.constructor = StructArrayLayout2f8;
+
+        StructArrayLayout2f8.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.float32 = new Float32Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout2f8.prototype.emplaceBack = function emplaceBack(v0, v1) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1);
+        };
+
+        StructArrayLayout2f8.prototype.emplace = function emplace(i, v0, v1) {
+            var o4 = i * 2;
+            this.float32[o4 + 0] = v0;
+            this.float32[o4 + 1] = v1;
+            return i;
+        };
+
+        return StructArrayLayout2f8;
+    }(StructArray));
+
+    StructArrayLayout2f8.prototype.bytesPerElement = 8;
+    WebWorkerTransfer.register('StructArrayLayout2f8', StructArrayLayout2f8);
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Float32[4]
+     *
+     * @private
+     */
+    var StructArrayLayout4f16 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout4f16() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout4f16.__proto__ = StructArray;
+        StructArrayLayout4f16.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout4f16.prototype.constructor = StructArrayLayout4f16;
+
+        StructArrayLayout4f16.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.float32 = new Float32Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout4f16.prototype.emplaceBack = function emplaceBack(v0, v1, v2, v3) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1, v2, v3);
+        };
+
+        StructArrayLayout4f16.prototype.emplace = function emplace(i, v0, v1, v2, v3) {
+            var o4 = i * 4;
+            this.float32[o4 + 0] = v0;
+            this.float32[o4 + 1] = v1;
+            this.float32[o4 + 2] = v2;
+            this.float32[o4 + 3] = v3;
+            return i;
+        };
+
+        return StructArrayLayout4f16;
+    }(StructArray));
+
+    StructArrayLayout4f16.prototype.bytesPerElement = 16;
+    WebWorkerTransfer.register('StructArrayLayout4f16', StructArrayLayout4f16);
+
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Float32[1]
+     *
+     * @private
+     */
+    var StructArrayLayout1f4 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout1f4() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout1f4.__proto__ = StructArray;
+        StructArrayLayout1f4.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout1f4.prototype.constructor = StructArrayLayout1f4;
+
+        StructArrayLayout1f4.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.float32 = new Float32Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout1f4.prototype.emplaceBack = function emplaceBack(v0) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0);
+        };
+
+        StructArrayLayout1f4.prototype.emplace = function emplace(i, v0) {
+            var o4 = i * 1;
+            this.float32[o4 + 0] = v0;
+            return i;
+        };
+
+        return StructArrayLayout1f4;
+    }(StructArray));
+
+    StructArrayLayout1f4.prototype.bytesPerElement = 4;
+    WebWorkerTransfer.register('StructArrayLayout1f4', StructArrayLayout1f4);
+
+    function clamp$1(n, min, max) {
+        return Math.min(max, Math.max(min, n));
+    }
+
+    function packUint8ToFloat(a, b) {
+        // coerce a and b to 8-bit ints
+        a = clamp$1(Math.floor(a), 0, 255);
+        b = clamp$1(Math.floor(b), 0, 255);
+        return 256 * a + b;
+    }
+
+    function packColor(color) {
+        return [
+            packUint8ToFloat(255 * color.r, 255 * color.g),
+            packUint8ToFloat(255 * color.b, 255 * color.a)
+        ];
+    }
+
+    var ConstantBinder = function ConstantBinder(value, names, type) {
+        this.value = value;
+        this.names = names;
+        this.uniformNames = this.names.map(function (name) {
+            return ("u_" + name);
+        });
+        this.type = type;
+        this.maxValue = -Infinity;
+    };
+
+    ConstantBinder.prototype.defines = function defines() {
+        return this.names.map(function (name) {
+            return ("#define HAS_UNIFORM_u_" + name);
+        });
+    };
+    ConstantBinder.prototype.setConstantPatternPositions = function setConstantPatternPositions() {
+    };
+    ConstantBinder.prototype.populatePaintArray = function populatePaintArray() {
+    };
+    ConstantBinder.prototype.updatePaintArray = function updatePaintArray() {
+    };
+    ConstantBinder.prototype.upload = function upload() {
+    };
+    ConstantBinder.prototype.destroy = function destroy() {
+    };
+
+    ConstantBinder.prototype.setUniforms = function setUniforms(context, uniform, globals, currentValue) {
+        uniform.set(currentValue.constantOr(this.value));
+    };
+
+    ConstantBinder.prototype.getBinding = function getBinding(context, location) {
+        return (this.type === 'color') ?
+            new UniformType.UniformColor(context, location) :
+            new UniformType.Uniform1f(context, location);
+    };
+
+    ConstantBinder.serialize = function serialize$1(binder) {
+        var value = binder.value;
+        var names = binder.names;
+        var type = binder.type;
+        return {value: WebWorkerTransfer.serialize(value), names: names, type: type};
+    };
+
+    ConstantBinder.deserialize = function deserialize$1(serialized) {
+        var value = serialized.value;
+        var names = serialized.names;
+        var type = serialized.type;
+        return new ConstantBinder(WebWorkerTransfer.deserialize(value), names, type);
+    };
+
+    var CrossFadedConstantBinder = function CrossFadedConstantBinder(value, names, type) {
+        this.value = value;
+        this.names = names;
+        this.uniformNames = this.names.map(function (name) {
+            return ("u_" + name);
+        });
+        this.type = type;
+        this.maxValue = -Infinity;
+        this.patternPositions = {patternTo: null, patternFrom: null};
+    };
+
+    CrossFadedConstantBinder.prototype.defines = function defines() {
+        return this.names.map(function (name) {
+            return ("#define HAS_UNIFORM_u_" + name);
+        });
+    };
+
+    CrossFadedConstantBinder.prototype.populatePaintArray = function populatePaintArray() {
+    };
+    CrossFadedConstantBinder.prototype.updatePaintArray = function updatePaintArray() {
+    };
+    CrossFadedConstantBinder.prototype.upload = function upload() {
+    };
+    CrossFadedConstantBinder.prototype.destroy = function destroy() {
+    };
+
+    CrossFadedConstantBinder.prototype.setConstantPatternPositions = function setConstantPatternPositions(posTo, posFrom) {
+        this.patternPositions.patternTo = posTo.tlbr;
+        this.patternPositions.patternFrom = posFrom.tlbr;
+    };
+
+    CrossFadedConstantBinder.prototype.setUniforms = function setUniforms(context, uniform, globals, currentValue, uniformName) {
+        var pos = this.patternPositions;
+        if (uniformName === "u_pattern_to" && pos.patternTo) {
+            uniform.set(pos.patternTo);
+        }
+        if (uniformName === "u_pattern_from" && pos.patternFrom) {
+            uniform.set(pos.patternFrom);
+        }
+    };
+
+    CrossFadedConstantBinder.prototype.getBinding = function getBinding(context, location) {
+        return new UniformType.Uniform4f(context, location);
+    };
+
+    var SourceExpressionBinder = function SourceExpressionBinder(expression, names, type, PaintVertexArray) {
+        this.expression = expression;
+        this.names = names;
+        this.type = type;
+        this.uniformNames = this.names.map(function (name) {
+            return ("a_" + name);
+        });
+        this.maxValue = -Infinity;
+        this.paintVertexAttributes = names.map(function (name) {
+                return ({
+                    name: ("a_" + name),
+                    type: 'Float32',
+                    components: type === 'color' ? 2 : 1,
+                    offset: 0
+                });
+            }
+        );
+        this.paintVertexArray = new PaintVertexArray();
+    };
+
+    SourceExpressionBinder.prototype.defines = function defines() {
+        return [];
+    };
+
+    SourceExpressionBinder.prototype.setConstantPatternPositions = function setConstantPatternPositions() {
+    };
+
+    SourceExpressionBinder.prototype.populatePaintArray = function populatePaintArray(newLength, feature, imagePositions, formattedSection) {
+        var paintArray = this.paintVertexArray;
+
+        var start = paintArray.length;
+        paintArray.reserve(newLength);
+
+        var value = this.expression.evaluate(new EvaluationParameters(0), feature, {}, [], formattedSection);
+
+        if (this.type === 'color') {
+            var color = packColor(value);
+            for (var i = start; i < newLength; i++) {
+                paintArray.emplaceBack(color[0], color[1]);
+            }
+        } else {
+            for (var i$1 = start; i$1 < newLength; i$1++) {
+                paintArray.emplaceBack(value);
+            }
+
+            this.maxValue = Math.max(this.maxValue, value);
+        }
+    };
+
+    SourceExpressionBinder.prototype.updatePaintArray = function updatePaintArray(start, end, feature, featureState) {
+        var paintArray = this.paintVertexArray;
+        var value = this.expression.evaluate({zoom: 0}, feature, featureState);
+
+        if (this.type === 'color') {
+            var color = packColor(value);
+            for (var i = start; i < end; i++) {
+                paintArray.emplace(i, color[0], color[1]);
+            }
+        } else {
+            for (var i$1 = start; i$1 < end; i$1++) {
+                paintArray.emplace(i$1, value);
+            }
+
+            this.maxValue = Math.max(this.maxValue, value);
+        }
+    };
+
+    SourceExpressionBinder.prototype.upload = function upload(context) {
+        if (this.paintVertexArray && this.paintVertexArray.arrayBuffer) {
+            if (this.paintVertexBuffer && this.paintVertexBuffer.buffer) {
+                this.paintVertexBuffer.updateData(this.paintVertexArray);
+            } else {
+                this.paintVertexBuffer = context.createVertexBuffer(this.paintVertexArray, this.paintVertexAttributes, this.expression.isStateDependent);
+            }
+        }
+    };
+
+    SourceExpressionBinder.prototype.destroy = function destroy() {
+        if (this.paintVertexBuffer) {
+            this.paintVertexBuffer.destroy();
+        }
+    };
+
+    SourceExpressionBinder.prototype.setUniforms = function setUniforms(context, uniform) {
+        uniform.set(0);
+    };
+
+    SourceExpressionBinder.prototype.getBinding = function getBinding(context, location) {
+        return new UniformType.Uniform1f(context, location);
+    };
+
+    var CompositeExpressionBinder = function CompositeExpressionBinder(expression, names, type, useIntegerZoom, zoom, layout) {
+        this.expression = expression;
+        this.names = names;
+        this.uniformNames = this.names.map(function (name) {
+            return ("u_" + name + "_t");
+        });
+        this.type = type;
+        this.useIntegerZoom = useIntegerZoom;
+        this.zoom = zoom;
+        this.maxValue = -Infinity;
+        var PaintVertexArray = layout;
+        this.paintVertexAttributes = names.map(function (name) {
+            return {
+                name: ("a_" + name),
+                type: 'Float32',
+                components: type === 'color' ? 4 : 2,
+                offset: 0
+            };
+        });
+        this.paintVertexArray = new PaintVertexArray();
+    };
+
+    CompositeExpressionBinder.prototype.defines = function defines() {
+        return [];
+    };
+
+    CompositeExpressionBinder.prototype.setConstantPatternPositions = function setConstantPatternPositions() {
+    };
+
+    CompositeExpressionBinder.prototype.populatePaintArray = function populatePaintArray(newLength, feature, imagePositions, formattedSection) {
+        var paintArray = this.paintVertexArray;
+
+        var start = paintArray.length;
+        paintArray.reserve(newLength);
+
+        var min = this.expression.evaluate(new EvaluationParameters(this.zoom), feature, {}, [], formattedSection);
+        var max = this.expression.evaluate(new EvaluationParameters(this.zoom + 1), feature, {}, [], formattedSection);
+
+        if (this.type === 'color') {
+            var minColor = packColor(min);
+            var maxColor = packColor(max);
+            for (var i = start; i < newLength; i++) {
+                paintArray.emplaceBack(minColor[0], minColor[1], maxColor[0], maxColor[1]);
+            }
+        } else {
+            for (var i$1 = start; i$1 < newLength; i$1++) {
+                paintArray.emplaceBack(min, max);
+            }
+            this.maxValue = Math.max(this.maxValue, min, max);
+        }
+    };
+
+    CompositeExpressionBinder.prototype.updatePaintArray = function updatePaintArray(start, end, feature, featureState) {
+        var paintArray = this.paintVertexArray;
+
+        var min = this.expression.evaluate({zoom: this.zoom}, feature, featureState);
+        var max = this.expression.evaluate({zoom: this.zoom + 1}, feature, featureState);
+
+        if (this.type === 'color') {
+            var minColor = packColor(min);
+            var maxColor = packColor(max);
+            for (var i = start; i < end; i++) {
+                paintArray.emplace(i, minColor[0], minColor[1], maxColor[0], maxColor[1]);
+            }
+        } else {
+            for (var i$1 = start; i$1 < end; i$1++) {
+                paintArray.emplace(i$1, min, max);
+            }
+            this.maxValue = Math.max(this.maxValue, min, max);
+        }
+    };
+
+    CompositeExpressionBinder.prototype.upload = function upload(context) {
+        if (this.paintVertexArray && this.paintVertexArray.arrayBuffer) {
+            if (this.paintVertexBuffer && this.paintVertexBuffer.buffer) {
+                this.paintVertexBuffer.updateData(this.paintVertexArray);
+            } else {
+                this.paintVertexBuffer = context.createVertexBuffer(this.paintVertexArray, this.paintVertexAttributes, this.expression.isStateDependent);
+            }
+        }
+    };
+
+    CompositeExpressionBinder.prototype.destroy = function destroy() {
+        if (this.paintVertexBuffer) {
+            this.paintVertexBuffer.destroy();
+        }
+    };
+
+    CompositeExpressionBinder.prototype.interpolationFactor = function interpolationFactor(currentZoom) {
+        if (this.useIntegerZoom) {
+            currentZoom = Math.floor(currentZoom);
+        }
+        return clamp$1(this.expression.interpolationFactor(currentZoom, this.zoom, this.zoom + 1), 0, 1);
+    };
+
+    CompositeExpressionBinder.prototype.setUniforms = function setUniforms(context, uniform, globals) {
+        uniform.set(this.interpolationFactor(globals.zoom));
+    };
+
+    CompositeExpressionBinder.prototype.getBinding = function getBinding(context, location) {
+        return new UniformType.Uniform1f(context, location);
+    };
+
+    var CrossFadedCompositeBinder = function CrossFadedCompositeBinder(expression, names, type, useIntegerZoom, zoom, PaintVertexArray, layerId) {
+
+        this.expression = expression;
+        this.names = names;
+        this.type = type;
+        this.uniformNames = this.names.map(function (name) {
+            return ("u_" + name + "_t");
+        });
+        this.useIntegerZoom = useIntegerZoom;
+        this.zoom = zoom;
+        this.maxValue = -Infinity;
+        this.layerId = layerId;
+
+        this.paintVertexAttributes = names.map(function (name) {
+                return ({
+                    name: ("a_" + name),
+                    type: 'Uint16',
+                    components: 4,
+                    offset: 0
+                });
+            }
+        );
+
+        this.zoomInPaintVertexArray = new PaintVertexArray();
+        this.zoomOutPaintVertexArray = new PaintVertexArray();
+    };
+
+    CrossFadedCompositeBinder.prototype.defines = function defines() {
+        return [];
+    };
+
+    CrossFadedCompositeBinder.prototype.setConstantPatternPositions = function setConstantPatternPositions() {
+    };
+
+    CrossFadedCompositeBinder.prototype.populatePaintArray = function populatePaintArray(length, feature, imagePositions) {
+        // We populate two paint arrays because, for cross-faded properties, we don't know which direction
+        // we're cross-fading to at layout time. In order to keep vertex attributes to a minimum and not pass
+        // unnecessary vertex data to the shaders, we determine which to upload at draw time.
+
+        var zoomInArray = this.zoomInPaintVertexArray;
+        var zoomOutArray = this.zoomOutPaintVertexArray;
+        var ref = this;
+        var layerId = ref.layerId;
+        var start = zoomInArray.length;
+
+        zoomInArray.reserve(length);
+        zoomOutArray.reserve(length);
+
+        if (imagePositions && feature.patterns && feature.patterns[layerId]) {
+            var ref$1 = feature.patterns[layerId];
+            var min = ref$1.min;
+            var mid = ref$1.mid;
+            var max = ref$1.max;
+
+            var imageMin = imagePositions[min];
+            var imageMid = imagePositions[mid];
+            var imageMax = imagePositions[max];
+
+            if (!imageMin || !imageMid || !imageMax) {
+                return;
+            }
+
+            for (var i = start; i < length; i++) {
+                zoomInArray.emplaceBack(
+                    imageMid.tl[0], imageMid.tl[1], imageMid.br[0], imageMid.br[1],
+                    imageMin.tl[0], imageMin.tl[1], imageMin.br[0], imageMin.br[1]
+                );
+
+                zoomOutArray.emplaceBack(
+                    imageMid.tl[0], imageMid.tl[1], imageMid.br[0], imageMid.br[1],
+                    imageMax.tl[0], imageMax.tl[1], imageMax.br[0], imageMax.br[1]
+                );
+            }
+        }
+    };
+
+    CrossFadedCompositeBinder.prototype.updatePaintArray = function updatePaintArray(start, end, feature, featureState, imagePositions) {
+        // We populate two paint arrays because, for cross-faded properties, we don't know which direction
+        // we're cross-fading to at layout time. In order to keep vertex attributes to a minimum and not pass
+        // unnecessary vertex data to the shaders, we determine which to upload at draw time.
+
+        var zoomInArray = this.zoomInPaintVertexArray;
+        var zoomOutArray = this.zoomOutPaintVertexArray;
+        var ref = this;
+        var layerId = ref.layerId;
+
+        if (imagePositions && feature.patterns && feature.patterns[layerId]) {
+            var ref$1 = feature.patterns[layerId];
+            var min = ref$1.min;
+            var mid = ref$1.mid;
+            var max = ref$1.max;
+            var imageMin = imagePositions[min];
+            var imageMid = imagePositions[mid];
+            var imageMax = imagePositions[max];
+
+            if (!imageMin || !imageMid || !imageMax) {
+                return;
+            }
+            for (var i = start; i < end; i++) {
+                zoomInArray.emplace(i,
+                    imageMid.tl[0], imageMid.tl[1], imageMid.br[0], imageMid.br[1],
+                    imageMin.tl[0], imageMin.tl[1], imageMin.br[0], imageMin.br[1]
+                );
+
+                zoomOutArray.emplace(i,
+                    imageMid.tl[0], imageMid.tl[1], imageMid.br[0], imageMid.br[1],
+                    imageMax.tl[0], imageMax.tl[1], imageMax.br[0], imageMax.br[1]
+                );
+            }
+        }
+    };
+
+    CrossFadedCompositeBinder.prototype.upload = function upload(context) {
+        if (this.zoomInPaintVertexArray && this.zoomInPaintVertexArray.arrayBuffer && this.zoomOutPaintVertexArray && this.zoomOutPaintVertexArray.arrayBuffer) {
+            this.zoomInPaintVertexBuffer = context.createVertexBuffer(this.zoomInPaintVertexArray, this.paintVertexAttributes, this.expression.isStateDependent);
+            this.zoomOutPaintVertexBuffer = context.createVertexBuffer(this.zoomOutPaintVertexArray, this.paintVertexAttributes, this.expression.isStateDependent);
+        }
+    };
+
+    CrossFadedCompositeBinder.prototype.destroy = function destroy() {
+        if (this.zoomOutPaintVertexBuffer) {
+            this.zoomOutPaintVertexBuffer.destroy();
+        }
+        if (this.zoomInPaintVertexBuffer) {
+            this.zoomInPaintVertexBuffer.destroy();
+        }
+
+    };
+
+    CrossFadedCompositeBinder.prototype.setUniforms = function setUniforms(context, uniform) {
+        uniform.set(0);
+    };
+
+    CrossFadedCompositeBinder.prototype.getBinding = function getBinding(context, location) {
+        return new Uniform1f(context, location);
+    };
+
+    /**
+     * ProgramConfiguration contains the logic for binding style layer properties and tile
+     * layer feature data into GL program uniforms and vertex attributes.
+     *
+     * Non-data-driven property values are bound to shader uniforms. Data-driven property
+     * values are bound to vertex attributes. In order to support a uniform GLSL syntax over
+     * both, [Mapbox GL Shaders](https://github.com/mapbox/mapbox-gl-shaders) defines a `#pragma`
+     * abstraction, which ProgramConfiguration is responsible for implementing. At runtime,
+     * it examines the attributes of a particular layer, combines this with fixed knowledge
+     * about how layers of the particular type are implemented, and determines which uniforms
+     * and vertex attributes will be required. It can then substitute the appropriate text
+     * into the shader source code, create and link a program, and bind the uniforms and
+     * vertex attributes in preparation for drawing.
+     *
+     * When a vector tile is parsed, this same configuration information is used to
+     * populate the attribute buffers needed for data-driven styling using the zoom
+     * level and feature property data.
+     *
+     * @private
+     */
+    var ProgramConfiguration = function ProgramConfiguration() {
+        this.binders = {};
+        this.cacheKey = '';
+        this._buffers = [];
+    };
+
+    ProgramConfiguration.createDynamic = function createDynamic(layer, zoom, filterProperties) {
+        var self = new ProgramConfiguration();
+        var keys = [];
+
+        for (var property in layer.paint._values) {
+            if (!filterProperties(property)) {
+                continue;
+            }
+            var value = layer.paint.get(property);
+            if (!(value instanceof PossiblyEvaluatedPropertyValue$1) || !Supports.supportsPropertyExpression(value.property.specification)) {
+                continue;
+            }
+            var names = paintAttributeNames(property, layer.type);
+            var type = value.property.specification.type;
+            var useIntegerZoom = value.property.useIntegerZoom;
+            var isCrossFaded = value.property.specification['property-type'] === 'cross-faded' ||
+                value.property.specification['property-type'] === 'cross-faded-data-driven';
+
+            if (isCrossFaded) {
+                if (value.value.kind === 'constant') {
+                    self.binders[property] = new CrossFadedConstantBinder(value.value.value, names, type);
+                    keys.push(("/u_" + property));
+                } else {
+                    var StructArrayLayout = layoutType(property, type, 'source');
+                    self.binders[property] = new CrossFadedCompositeBinder(value.value, names, type, useIntegerZoom, zoom, StructArrayLayout, layer.id);
+                    keys.push(("/a_" + property));
+                }
+            } else if (value.value.kind === 'constant') {
+                self.binders[property] = new ConstantBinder(value.value.value, names, type);
+                keys.push(("/u_" + property));
+            } else if (value.value.kind === 'source') {
+                var StructArrayLayout$1 = layoutType(property, type, 'source');
+                self.binders[property] = new SourceExpressionBinder(value.value, names, type, StructArrayLayout$1);
+                keys.push(("/a_" + property));
+            } else {
+                var StructArrayLayout$2 = layoutType(property, type, 'composite');
+                self.binders[property] = new CompositeExpressionBinder(value.value, names, type, useIntegerZoom, zoom, StructArrayLayout$2);
+                keys.push(("/z_" + property));
+            }
+        }
+
+        self.cacheKey = keys.sort().join('');
+
+        return self;
+    };
+
+    ProgramConfiguration.prototype.populatePaintArrays = function populatePaintArrays(newLength, feature, index, imagePositions, formattedSection) {
+        for (var property in this.binders) {
+            var binder = this.binders[property];
+            binder.populatePaintArray(newLength, feature, imagePositions, formattedSection);
+        }
+    };
+    ProgramConfiguration.prototype.setConstantPatternPositions = function setConstantPatternPositions(posTo, posFrom) {
+        for (var property in this.binders) {
+            var binder = this.binders[property];
+            binder.setConstantPatternPositions(posTo, posFrom);
+        }
+    };
+
+    ProgramConfiguration.prototype.updatePaintArrays = function updatePaintArrays(featureStates, featureMap, vtLayer, layer, imagePositions) {
+        var dirty = false;
+        for (var id in featureStates) {
+            var positions = featureMap.getPositions(+id);
+
+            for (var i = 0, list = positions; i < list.length; i += 1) {
+                var pos = list[i];
+
+                var feature = vtLayer.feature(pos.index);
+
+                for (var property in this.binders) {
+                    var binder = this.binders[property];
+                    if (binder instanceof ConstantBinder || binder instanceof CrossFadedConstantBinder) {
+                        continue;
+                    }
+                    if ((binder   ).expression.isStateDependent === true) {
+                        //AHM: Remove after https://github.com/mapbox/mapbox-gl-js/issues/6255
+                        var value = layer.paint.get(property);
+                        (binder   ).expression = value.value;
+                        binder.updatePaintArray(pos.start, pos.end, feature, featureStates[id], imagePositions);
+                        dirty = true;
+                    }
+                }
+            }
+        }
+        return dirty;
+    };
+
+    ProgramConfiguration.prototype.defines = function defines() {
+        var result = [];
+        for (var property in this.binders) {
+            result.push.apply(result, this.binders[property].defines());
+        }
+        return result;
+    };
+
+    ProgramConfiguration.prototype.getPaintVertexBuffers = function getPaintVertexBuffers() {
+        return this._buffers;
+    };
+
+    ProgramConfiguration.prototype.getUniforms = function getUniforms(context, locations) {
+        var uniforms = [];
+        for (var property in this.binders) {
+            var binder = this.binders[property];
+            for (var i = 0, list = binder.uniformNames; i < list.length; i += 1) {
+                var name = list[i];
+
+                if (locations[name]) {
+                    var binding = binder.getBinding(context, locations[name]);
+                    uniforms.push({name: name, property: property, binding: binding});
+                }
+            }
+        }
+        return uniforms;
+    };
+
+    ProgramConfiguration.prototype.setUniforms = function setUniforms(context, binderUniforms, properties, globals) {
+        // Uniform state bindings are owned by the Program, but we set them
+        // from within the ProgramConfiguraton's binder members.
+        for (var i = 0, list = binderUniforms; i < list.length; i += 1) {
+            var ref = list[i];
+            var name = ref.name;
+            var property = ref.property;
+            var binding = ref.binding;
+
+            this.binders[property].setUniforms(context, binding, globals, properties.get(property), name);
+        }
+    };
+
+    ProgramConfiguration.prototype.updatePatternPaintBuffers = function updatePatternPaintBuffers(crossfade) {
+        var buffers = [];
+
+        for (var property in this.binders) {
+            var binder = this.binders[property];
+            if (binder instanceof CrossFadedCompositeBinder) {
+                var patternVertexBuffer = crossfade.fromScale === 2 ? binder.zoomInPaintVertexBuffer : binder.zoomOutPaintVertexBuffer;
+                if (patternVertexBuffer) {
+                    buffers.push(patternVertexBuffer);
+                }
+            } else if ((binder instanceof SourceExpressionBinder ||
+                binder instanceof CompositeExpressionBinder) &&
+                binder.paintVertexBuffer
+                ) {
+                buffers.push(binder.paintVertexBuffer);
+            }
+        }
+
+        this._buffers = buffers;
+    };
+
+    ProgramConfiguration.prototype.upload = function upload(context) {
+        for (var property in this.binders) {
+            this.binders[property].upload(context);
+        }
+
+        var buffers = [];
+        for (var property$1 in this.binders) {
+            var binder = this.binders[property$1];
+            if ((binder instanceof SourceExpressionBinder ||
+                binder instanceof CompositeExpressionBinder) &&
+                binder.paintVertexBuffer
+                ) {
+                buffers.push(binder.paintVertexBuffer);
+            }
+        }
+        this._buffers = buffers;
+    };
+
+    ProgramConfiguration.prototype.destroy = function destroy() {
+        for (var property in this.binders) {
+            this.binders[property].destroy();
+        }
+    };
+
+    function paintAttributeNames(property, type) {
+        var attributeNameExceptions = {
+            'text-opacity': ['opacity'],
+            'icon-opacity': ['opacity'],
+            'text-color': ['fill_color'],
+            'icon-color': ['fill_color'],
+            'text-halo-color': ['halo_color'],
+            'icon-halo-color': ['halo_color'],
+            'text-halo-blur': ['halo_blur'],
+            'icon-halo-blur': ['halo_blur'],
+            'text-halo-width': ['halo_width'],
+            'icon-halo-width': ['halo_width'],
+            'line-gap-width': ['gapwidth'],
+            'line-pattern': ['pattern_to', 'pattern_from'],
+            'fill-pattern': ['pattern_to', 'pattern_from'],
+            'fill-extrusion-pattern': ['pattern_to', 'pattern_from'],
+        };
+
+        return attributeNameExceptions[property] ||
+            [property.replace((type + "-"), '').replace(/-/g, '_')];
+    }
+
+    function getLayoutException(property) {
+        var propertyExceptions = {
+            'line-pattern': {
+                'source': StructArrayLayout8ui16,
+                'composite': StructArrayLayout8ui16
+            },
+            'fill-pattern': {
+                'source': StructArrayLayout8ui16,
+                'composite': StructArrayLayout8ui16
+            },
+            'fill-extrusion-pattern': {
+                'source': StructArrayLayout8ui16,
+                'composite': StructArrayLayout8ui16
+            }
+        };
+
+        return propertyExceptions[property];
+    }
+
+    function layoutType(property, type, binderType) {
+        var defaultLayouts = {
+            'color': {
+                'source': StructArrayLayout2f8,
+                'composite': StructArrayLayout4f16
+            },
+            'number': {
+                'source': StructArrayLayout1f4,
+                'composite': StructArrayLayout2f8
+            }
+        };
+
+        var layoutException = getLayoutException(property);
+        return  layoutException && layoutException[binderType] ||
+            defaultLayouts[type][binderType];
+    }
+
+    WebWorkerTransfer.register('ConstantBinder', ConstantBinder);
+    WebWorkerTransfer.register('CrossFadedConstantBinder', CrossFadedConstantBinder);
+    WebWorkerTransfer.register('SourceExpressionBinder', SourceExpressionBinder);
+    WebWorkerTransfer.register('CrossFadedCompositeBinder', CrossFadedCompositeBinder);
+    WebWorkerTransfer.register('CompositeExpressionBinder', CompositeExpressionBinder);
+    WebWorkerTransfer.register('ProgramConfiguration', ProgramConfiguration, {omit: ['_buffers']});
+
+    var ProgramConfigurationSet = function ProgramConfigurationSet(layoutAttributes, layers, zoom, filterProperties) {
+        if (filterProperties === void 0) filterProperties = function () {
+            return true;
+        };
+
+        this.programConfigurations = {};
+        for (var i = 0, list = layers; i < list.length; i += 1) {
+            var layer = list[i];
+
+            this.programConfigurations[layer.id] = ProgramConfiguration.createDynamic(layer, zoom, filterProperties);
+            this.programConfigurations[layer.id].layoutAttributes = layoutAttributes;
+        }
+        this.needsUpload = false;
+        this._featureMap = new FeaturePositionMap();
+        this._bufferOffset = 0;
+    };
+
+    ProgramConfigurationSet.prototype.populatePaintArrays = function populatePaintArrays(length, feature, index, imagePositions, formattedSection) {
+        for (var key in this.programConfigurations) {
+            this.programConfigurations[key].populatePaintArrays(length, feature, index, imagePositions, formattedSection);
+        }
+
+        if (feature.id !== undefined) {
+            this._featureMap.add(+feature.id, index, this._bufferOffset, length);
+        }
+        this._bufferOffset = length;
+
+        this.needsUpload = true;
+    };
+
+    ProgramConfigurationSet.prototype.updatePaintArrays = function updatePaintArrays(featureStates, vtLayer, layers, imagePositions) {
+        for (var i = 0, list = layers; i < list.length; i += 1) {
+            var layer = list[i];
+
+            this.needsUpload = this.programConfigurations[layer.id].updatePaintArrays(featureStates, this._featureMap, vtLayer, layer, imagePositions) || this.needsUpload;
+        }
+    };
+
+    ProgramConfigurationSet.prototype.get = function get(layerId) {
+        return this.programConfigurations[layerId];
+    };
+
+    ProgramConfigurationSet.prototype.upload = function upload(context) {
+        if (!this.needsUpload) {
+            return;
+        }
+        for (var layerId in this.programConfigurations) {
+            this.programConfigurations[layerId].upload(context);
+        }
+        this.needsUpload = false;
+    };
+
+    ProgramConfigurationSet.prototype.destroy = function destroy() {
+        for (var layerId in this.programConfigurations) {
+            this.programConfigurations[layerId].destroy();
+        }
+    };
+
+    WebWorkerTransfer.register('ProgramConfigurationSet', ProgramConfigurationSet);
+
+    function addPatternDependencies(type, layers, patternFeature, zoom, options) {
+        var patterns = options.patternDependencies;
+        for (var i = 0, list = layers; i < list.length; i += 1) {
+            var layer = list[i];
+
+            var patternProperty = layer.paint.get((type + "-pattern"));
+
+            var patternPropertyValue = patternProperty.value;
+            if (patternPropertyValue.kind !== "constant") {
+                var min = patternPropertyValue.evaluate({zoom: zoom - 1}, patternFeature, {}, options.availableImages);
+                var mid = patternPropertyValue.evaluate({zoom: zoom}, patternFeature, {}, options.availableImages);
+                var max = patternPropertyValue.evaluate({zoom: zoom + 1}, patternFeature, {}, options.availableImages);
+                min = min && min.name ? min.name : min;
+                mid = mid && mid.name ? mid.name : mid;
+                max = max && max.name ? max.name : max;
+                // add to patternDependencies
+                patterns[min] = true;
+                patterns[mid] = true;
+                patterns[max] = true;
+
+                // save for layout
+                patternFeature.patterns[layer.id] = {min: min, mid: mid, max: max};
+            }
+        }
+        return patternFeature;
+    }
+
+    var VectorTileFeatureTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
+
+    var lineLayoutAttributes = createLayout([
+        {name: 'a_pos_normal', components: 2, type: 'Int16'},
+        {name: 'a_data', components: 4, type: 'Uint8'}
+    ], 4);
+    var members$3 = lineLayoutAttributes.members;
+
+    // NOTE ON EXTRUDE SCALE:
+    // scale the extrusion vector so that the normal length is this value.
+    // contains the "texture" normals (-1..1). this is distinct from the extrude
+    // normals for line joins, because the x-value remains 0 for the texture
+    // normal array, while the extrude normal actually moves the vertex to create
+    // the acute/bevelled line join.
+    var EXTRUDE_SCALE = 63;
+
+    /*
+     * Sharp corners cause dashed lines to tilt because the distance along the line
+     * is the same at both the inner and outer corners. To improve the appearance of
+     * dashed lines we add extra points near sharp corners so that a smaller part
+     * of the line is tilted.
+     *
+     * COS_HALF_SHARP_CORNER controls how sharp a corner has to be for us to add an
+     * extra vertex. The default is 75 degrees.
+     *
+     * The newly created vertices are placed SHARP_CORNER_OFFSET pixels from the corner.
+     */
+    var COS_HALF_SHARP_CORNER = Math.cos(75 / 2 * (Math.PI / 180));
+    var SHARP_CORNER_OFFSET = 15;
+
+    // Angle per triangle for approximating round line joins.
+    var DEG_PER_TRIANGLE = 20;
+
+    // The number of bits that is used to store the line distance in the buffer.
+    var LINE_DISTANCE_BUFFER_BITS = 15;
+
+    // We don't have enough bits for the line distance as we'd like to have, so
+    // use this value to scale the line distance (in tile units) down to a smaller
+    // value. This lets us store longer distances while sacrificing precision.
+    var LINE_DISTANCE_SCALE = 1 / 2;
+
+    // The maximum line distance, in tile units, that fits in the buffer.
+    var MAX_LINE_DISTANCE = Math.pow(2, LINE_DISTANCE_BUFFER_BITS - 1) / LINE_DISTANCE_SCALE;
+
+    /**
+     * @private
+     */
+    var LineBucket = function LineBucket(options) {
+        this.zoom = options.zoom;
+        this.overscaling = options.overscaling;
+        this.layers = options.layers;
+        this.layerIds = this.layers.map(function (layer) {
+            return layer.id;
+        });
+        this.index = options.index;
+        this.hasPattern = false;
+        this.patternFeatures = [];
+
+        this.layoutVertexArray = new StructArrayLayout2i4ub8();
+        this.indexArray = new StructArrayLayout3ui6();
+        this.programConfigurations = new ProgramConfigurationSet(members$3, options.layers, options.zoom);
+        this.segments = new SegmentVector();
+
+        this.stateDependentLayerIds = this.layers.filter(function (l) {
+            return l.isStateDependent();
+        }).map(function (l) {
+            return l.id;
+        });
+    };
+
+    LineBucket.prototype.populate = function populate(features, options) {
+        //this.hasPattern = hasPattern('line', this.layers, options);
+        this.hasPattern = false;
+        var lineSortKey = this.layers[0].layout.get('line-sort-key');
+        var bucketFeatures = [];
+
+        for (var i = 0, list = features; i < list.length; i += 1) {
+            var ref = list[i];
+            var feature = ref.feature;
+            var index = ref.index;
+            var sourceLayerIndex = ref.sourceLayerIndex;
+
+            if (!this.layers[0]._featureFilter(new EvaluationParameters$1(0), feature)) {
+                continue;
+            }
+
+            var geometry = loadGeometry(feature);
+            var sortKey = lineSortKey ?
+                lineSortKey.evaluate(feature, {}) :
+                undefined;
+
+            var bucketFeature = {
+                id: feature.id,
+                properties: feature.properties,
+                type: feature.type,
+                sourceLayerIndex: sourceLayerIndex,
+                index: index,
+                geometry: geometry,
+                patterns: {},
+                sortKey: sortKey
+            };
+
+            bucketFeatures.push(bucketFeature);
+        }
+
+        if (lineSortKey) {
+            bucketFeatures.sort(function (a, b) {
+                // a.sortKey is always a number when in use
+                return ((a.sortKey )    ) - ((b.sortKey )    );
+            });
+        }
+
+        for (var i$1 = 0, list$1 = bucketFeatures; i$1 < list$1.length; i$1 += 1) {
+            var bucketFeature$1 = list$1[i$1];
+
+            var ref$1 = bucketFeature$1;
+            var geometry$1 = ref$1.geometry;
+            var index$1 = ref$1.index;
+            var sourceLayerIndex$1 = ref$1.sourceLayerIndex;
+
+            if (this.hasPattern) {
+                var patternBucketFeature = addPatternDependencies('line', this.layers, bucketFeature$1, this.zoom, options);
+                // pattern features are added only once the pattern is loaded into the image atlas
+                // so are stored during populate until later updated with positions by tile worker in addFeatures
+                this.patternFeatures.push(patternBucketFeature);
+            } else {
+                this.addFeature(bucketFeature$1, geometry$1, index$1, {});
+            }
+
+            var feature$1 = features[index$1].feature;
+            options.featureIndex.insert(feature$1, geometry$1, index$1, sourceLayerIndex$1, this.index);
+        }
+    };
+
+    LineBucket.prototype.update = function update(states, vtLayer, imagePositions) {
+        if (!this.stateDependentLayers.length) {
+            return;
+        }
+        this.programConfigurations.updatePaintArrays(states, vtLayer, this.stateDependentLayers, imagePositions);
+    };
+
+    LineBucket.prototype.addFeatures = function addFeatures(options, imagePositions) {
+        for (var i = 0, list = this.patternFeatures; i < list.length; i += 1) {
+            var feature = list[i];
+
+            this.addFeature(feature, feature.geometry, feature.index, imagePositions);
+        }
+    };
+
+    LineBucket.prototype.isEmpty = function isEmpty() {
+        return this.layoutVertexArray.length === 0;
+    };
+
+    LineBucket.prototype.uploadPending = function uploadPending() {
+        return !this.uploaded || this.programConfigurations.needsUpload;
+    };
+
+    LineBucket.prototype.upload = function upload(context) {
+        if (!this.uploaded) {
+            this.layoutVertexBuffer = context.createVertexBuffer(this.layoutVertexArray, members$3);
+            this.indexBuffer = context.createIndexBuffer(this.indexArray);
+        }
+        this.programConfigurations.upload(context);
+        this.uploaded = true;
+    };
+
+    LineBucket.prototype.destroy = function destroy() {
+        if (!this.layoutVertexBuffer) {
+            return;
+        }
+        this.layoutVertexBuffer.destroy();
+        this.indexBuffer.destroy();
+        this.programConfigurations.destroy();
+        this.segments.destroy();
+    };
+
+    LineBucket.prototype.clear = function clear() {
+        if (defined.defined(this.layoutVertexArray)) {
+            this.layoutVertexArray = null;
+        }
+        if (defined.defined(this.indexArray)) {
+            this.indexArray = null;
+        }
+    };
+
+    LineBucket.prototype.addFeature = function addFeature(feature, geometry, index, imagePositions) {
+        var layout = this.layers[0].layout;
+        var join = layout.get('line-join').evaluate(feature, {});
+        var cap = layout.get('line-cap');
+        var miterLimit = layout.get('line-miter-limit');
+        var roundLimit = layout.get('line-round-limit');
+
+        for (var i = 0, list = geometry; i < list.length; i += 1) {
+            var line = list[i];
+
+            this.addLine(line, feature, join, cap, miterLimit, roundLimit, index, imagePositions);
+        }
+    };
+
+    LineBucket.prototype.addLine = function addLine(vertices, feature, join, cap, miterLimit, roundLimit, index, imagePositions) {
+        this.distance = 0;
+        this.scaledDistance = 0;
+        this.totalDistance = 0;
+
+        if (!!feature.properties &&
+            feature.properties.hasOwnProperty('mapbox_clip_start') &&
+            feature.properties.hasOwnProperty('mapbox_clip_end')) {
+
+            this.clipStart = +feature.properties['mapbox_clip_start'];
+            this.clipEnd = +feature.properties['mapbox_clip_end'];
+
+            // Calculate the total distance, in tile units, of this tiled line feature
+            for (var i = 0; i < vertices.length - 1; i++) {
+                this.totalDistance += vertices[i].dist(vertices[i + 1]);
+            }
+        }
+
+        var isPolygon = VectorTileFeatureTypes[feature.type] === 'Polygon';
+
+        // If the line has duplicate vertices at the ends, adjust start/length to remove them.
+        var len = vertices.length;
+        while (len >= 2 && vertices[len - 1].equals(vertices[len - 2])) {
+            len--;
+        }
+        var first = 0;
+        while (first < len - 1 && vertices[first].equals(vertices[first + 1])) {
+            first++;
+        }
+
+        // Ignore invalid geometry.
+        if (len < (isPolygon ? 3 : 2)) {
+            return;
+        }
+
+        if (join === 'bevel') {
+            miterLimit = 1.05;
+        }
+
+        var sharpCornerOffset = this.overscaling <= 16 ?
+            SHARP_CORNER_OFFSET * EXTENT / (512 * this.overscaling) :
+            0;
+
+        // we could be more precise, but it would only save a negligible amount of space
+        var segment = this.segments.prepareSegment(len * 10, this.layoutVertexArray, this.indexArray);
+
+        var currentVertex;
+        var prevVertex = ((undefined )   );
+        var nextVertex = ((undefined )   );
+        var prevNormal = ((undefined )   );
+        var nextNormal = ((undefined )   );
+
+        // the last two vertices added
+        this.e1 = this.e2 = -1;
+
+        if (isPolygon) {
+            currentVertex = vertices[len - 2];
+            nextNormal = vertices[first].sub(currentVertex)._unit()._perp();
+        }
+
+        for (var i$1 = first; i$1 < len; i$1++) {
+
+            nextVertex = isPolygon && i$1 === len - 1 ?
+                vertices[first + 1] : // if the line is closed, we treat the last vertex like the first
+                vertices[i$1 + 1]; // just the next vertex
+
+            // if two consecutive vertices exist, skip the current one
+            if (nextVertex && vertices[i$1].equals(nextVertex)) {
+                continue;
+            }
+
+            if (nextNormal) {
+                prevNormal = nextNormal;
+            }
+            if (currentVertex) {
+                prevVertex = currentVertex;
+            }
+
+            currentVertex = vertices[i$1];
+
+            // Calculate the normal towards the next vertex in this line. In case
+            // there is no next vertex, pretend that the line is continuing straight,
+            // meaning that we are just using the previous normal.
+            nextNormal = nextVertex ? nextVertex.sub(currentVertex)._unit()._perp() : prevNormal;
+
+            // If we still don't have a previous normal, this is the beginning of a
+            // non-closed line, so we're doing a straight "join".
+            prevNormal = prevNormal || nextNormal;
+
+            // Determine the normal of the join extrusion. It is the angle bisector
+            // of the segments between the previous line and the next line.
+            // In the case of 180° angles, the prev and next normals cancel each other out:
+            // prevNormal + nextNormal = (0, 0), its magnitude is 0, so the unit vector would be
+            // undefined. In that case, we're keeping the joinNormal at (0, 0), so that the cosHalfAngle
+            // below will also become 0 and miterLength will become Infinity.
+            var joinNormal = prevNormal.add(nextNormal);
+            if (joinNormal.x !== 0 || joinNormal.y !== 0) {
+                joinNormal._unit();
+            }
+            /*  joinNormal prevNormal
+             *         ↖  ↑
+             *            .________. prevVertex
+             *            |
+             * nextNormal  ←  |  currentVertex
+             *            |
+             * nextVertex !
+             *
+             */
+
+            // calculate cosines of the angle (and its half) using dot product
+            var cosAngle = prevNormal.x * nextNormal.x + prevNormal.y * nextNormal.y;
+            var cosHalfAngle = joinNormal.x * nextNormal.x + joinNormal.y * nextNormal.y;
+
+            // Calculate the length of the miter (the ratio of the miter to the width)
+            // as the inverse of cosine of the angle between next and join normals
+            var miterLength = cosHalfAngle !== 0 ? 1 / cosHalfAngle : Infinity;
+
+            // approximate angle from cosine
+            var approxAngle = 2 * Math.sqrt(2 - 2 * cosHalfAngle);
+
+            var isSharpCorner = cosHalfAngle < COS_HALF_SHARP_CORNER && prevVertex && nextVertex;
+            var lineTurnsLeft = prevNormal.x * nextNormal.y - prevNormal.y * nextNormal.x > 0;
+
+            if (isSharpCorner && i$1 > first) {
+                var prevSegmentLength = currentVertex.dist(prevVertex);
+                if (prevSegmentLength > 2 * sharpCornerOffset) {
+                    var newPrevVertex = currentVertex.sub(currentVertex.sub(prevVertex)._mult(sharpCornerOffset / prevSegmentLength)._round());
+                    this.updateDistance(prevVertex, newPrevVertex);
+                    this.addCurrentVertex(newPrevVertex, prevNormal, 0, 0, segment);
+                    prevVertex = newPrevVertex;
+                }
+            }
+
+            // The join if a middle vertex, otherwise the cap.
+            var middleVertex = prevVertex && nextVertex;
+            var currentJoin = middleVertex ? join : isPolygon ? 'butt' : cap;
+
+            if (middleVertex && currentJoin === 'round') {
+                if (miterLength < roundLimit) {
+                    currentJoin = 'miter';
+                } else if (miterLength <= 2) {
+                    currentJoin = 'fakeround';
+                }
+            }
+
+            if (currentJoin === 'miter' && miterLength > miterLimit) {
+                currentJoin = 'bevel';
+            }
+
+            if (currentJoin === 'bevel') {
+                // The maximum extrude length is 128 / 63 = 2 times the width of the line
+                // so if miterLength >= 2 we need to draw a different type of bevel here.
+                if (miterLength > 2) {
+                    currentJoin = 'flipbevel';
+                }
+
+                // If the miterLength is really small and the line bevel wouldn't be visible,
+                // just draw a miter join to save a triangle.
+                if (miterLength < miterLimit) {
+                    currentJoin = 'miter';
+                }
+            }
+
+            // Calculate how far along the line the currentVertex is
+            if (prevVertex) {
+                this.updateDistance(prevVertex, currentVertex);
+            }
+
+            if (currentJoin === 'miter') {
+
+                joinNormal._mult(miterLength);
+                this.addCurrentVertex(currentVertex, joinNormal, 0, 0, segment);
+
+            } else if (currentJoin === 'flipbevel') {
+                // miter is too big, flip the direction to make a beveled join
+
+                if (miterLength > 100) {
+                    // Almost parallel lines
+                    joinNormal = nextNormal.mult(-1);
+
+                } else {
+                    var bevelLength = miterLength * prevNormal.add(nextNormal).mag() / prevNormal.sub(nextNormal).mag();
+                    joinNormal._perp()._mult(bevelLength * (lineTurnsLeft ? -1 : 1));
+                }
+                this.addCurrentVertex(currentVertex, joinNormal, 0, 0, segment);
+                this.addCurrentVertex(currentVertex, joinNormal.mult(-1), 0, 0, segment);
+
+            } else if (currentJoin === 'bevel' || currentJoin === 'fakeround') {
+                var offset = -Math.sqrt(miterLength * miterLength - 1);
+                var offsetA = lineTurnsLeft ? offset : 0;
+                var offsetB = lineTurnsLeft ? 0 : offset;
+
+                // Close previous segment with a bevel
+                if (prevVertex) {
+                    this.addCurrentVertex(currentVertex, prevNormal, offsetA, offsetB, segment);
+                }
+
+                if (currentJoin === 'fakeround') {
+                    // The join angle is sharp enough that a round join would be visible.
+                    // Bevel joins fill the gap between segments with a single pie slice triangle.
+                    // Create a round join by adding multiple pie slices. The join isn't actually round, but
+                    // it looks like it is at the sizes we render lines at.
+
+                    // pick the number of triangles for approximating round join by based on the angle between normals
+                    var n = Math.round((approxAngle * 180 / Math.PI) / DEG_PER_TRIANGLE);
+
+                    for (var m = 1; m < n; m++) {
+                        var t = m / n;
+                        if (t !== 0.5) {
+                            // approximate spherical interpolation https://observablehq.com/@mourner/approximating-geometric-slerp
+                            var t2 = t - 0.5;
+                            var A = 1.0904 + cosAngle * (-3.2452 + cosAngle * (3.55645 - cosAngle * 1.43519));
+                            var B = 0.848013 + cosAngle * (-1.06021 + cosAngle * 0.215638);
+                            t = t + t * t2 * (t - 1) * (A * t2 * t2 + B);
+                        }
+                        var extrude = nextNormal.sub(prevNormal)._mult(t)._add(prevNormal)._unit()._mult(lineTurnsLeft ? -1 : 1);
+                        this.addHalfVertex(currentVertex, extrude.x, extrude.y, false, lineTurnsLeft, 0, segment);
+                    }
+                }
+
+                if (nextVertex) {
+                    // Start next segment
+                    this.addCurrentVertex(currentVertex, nextNormal, -offsetA, -offsetB, segment);
+                }
+
+            } else if (currentJoin === 'butt') {
+                this.addCurrentVertex(currentVertex, joinNormal, 0, 0, segment); // butt cap
+
+            } else if (currentJoin === 'square') {
+                var offset$1 = prevVertex ? 1 : -1; // closing or starting square cap
+                this.addCurrentVertex(currentVertex, joinNormal, offset$1, offset$1, segment);
+
+            } else if (currentJoin === 'round') {
+
+                if (prevVertex) {
+                    // Close previous segment with butt
+                    this.addCurrentVertex(currentVertex, prevNormal, 0, 0, segment);
+
+                    // Add round cap or linejoin at end of segment
+                    this.addCurrentVertex(currentVertex, prevNormal, 1, 1, segment, true);
+                }
+                if (nextVertex) {
+                    // Add round cap before first segment
+                    this.addCurrentVertex(currentVertex, nextNormal, -1, -1, segment, true);
+
+                    // Start next segment with a butt
+                    this.addCurrentVertex(currentVertex, nextNormal, 0, 0, segment);
+                }
+            }
+
+            if (isSharpCorner && i$1 < len - 1) {
+                var nextSegmentLength = currentVertex.dist(nextVertex);
+                if (nextSegmentLength > 2 * sharpCornerOffset) {
+                    var newCurrentVertex = currentVertex.add(nextVertex.sub(currentVertex)._mult(sharpCornerOffset / nextSegmentLength)._round());
+                    this.updateDistance(currentVertex, newCurrentVertex);
+                    this.addCurrentVertex(newCurrentVertex, nextNormal, 0, 0, segment);
+                    currentVertex = newCurrentVertex;
+                }
+            }
+        }
+
+        this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, imagePositions);
+    };
+
+    /**
+     * Add two vertices to the buffers.
+     *
+     * @param p the line vertex to add buffer vertices for
+     * @param normal vertex normal
+     * @param endLeft extrude to shift the left vertex along the line
+     * @param endRight extrude to shift the left vertex along the line
+     * @param segment the segment object to add the vertex to
+     * @param round whether this is a round cap
+     * @private
+     */
+    LineBucket.prototype.addCurrentVertex = function addCurrentVertex(p, normal, endLeft, endRight, segment, round) {
+        if (round === void 0) round = false;
+
+        // left and right extrude vectors, perpendicularly shifted by endLeft/endRight
+        var leftX = normal.x + normal.y * endLeft;
+        var leftY = normal.y - normal.x * endLeft;
+        var rightX = -normal.x + normal.y * endRight;
+        var rightY = -normal.y - normal.x * endRight;
+
+        this.addHalfVertex(p, leftX, leftY, round, false, endLeft, segment);
+        this.addHalfVertex(p, rightX, rightY, round, true, -endRight, segment);
+
+        // There is a maximum "distance along the line" that we can store in the buffers.
+        // When we get close to the distance, reset it to zero and add the vertex again with
+        // a distance of zero. The max distance is determined by the number of bits we allocate
+        // to `linesofar`.
+        if (this.distance > MAX_LINE_DISTANCE / 2 && this.totalDistance === 0) {
+            this.distance = 0;
+            this.addCurrentVertex(p, normal, endLeft, endRight, segment, round);
+        }
+    };
+
+    LineBucket.prototype.addHalfVertex = function addHalfVertex(ref, extrudeX, extrudeY, round, up, dir, segment) {
+        var x = ref.x;
+        var y = ref.y;
+
+        // scale down so that we can store longer distances while sacrificing precision.
+        var linesofar = this.scaledDistance * LINE_DISTANCE_SCALE;
+
+        this.layoutVertexArray.emplaceBack(
+            // a_pos_normal
+            // Encode round/up the least significant bits
+            (x << 1) + (round ? 1 : 0),
+            (y << 1) + (up ? 1 : 0),
+            // a_data
+            // add 128 to store a byte in an unsigned byte
+            Math.round(EXTRUDE_SCALE * extrudeX) + 128,
+            Math.round(EXTRUDE_SCALE * extrudeY) + 128,
+            // Encode the -1/0/1 direction value into the first two bits of .z of a_data.
+            // Combine it with the lower 6 bits of `linesofar` (shifted by 2 bites to make
+            // room for the direction value). The upper 8 bits of `linesofar` are placed in
+            // the `w` component.
+            ((dir === 0 ? 0 : (dir < 0 ? -1 : 1)) + 1) | ((linesofar & 0x3F) << 2),
+            linesofar >> 6);
+
+        var e = segment.vertexLength++;
+        if (this.e1 >= 0 && this.e2 >= 0) {
+            this.indexArray.emplaceBack(this.e1, this.e2, e);
+            segment.primitiveLength++;
+        }
+        if (up) {
+            this.e2 = e;
+        } else {
+            this.e1 = e;
+        }
+    };
+
+    LineBucket.prototype.updateDistance = function updateDistance(prev, next) {
+        this.distance += prev.dist(next);
+
+        // Knowing the ratio of the full linestring covered by this tiled feature, as well
+        // as the total distance (in tile units) of this tiled feature, and the distance
+        // (in tile units) of the current vertex, we can determine the relative distance
+        // of this vertex along the full linestring feature and scale it to [0, 2^15)
+        this.scaledDistance = this.totalDistance > 0 ?
+            (this.clipStart + (this.clipEnd - this.clipStart) * this.distance / this.totalDistance) * (MAX_LINE_DISTANCE - 1) :
+            this.distance;
+    };
+
+    WebWorkerTransfer.register('LineBucket', LineBucket, {omit: ['layers', 'patternFeatures']});
+
+    function quickselect(arr, k, left, right, compare) {
+        quickselectStep(arr, k, left || 0, right || (arr.length - 1), compare || defaultCompare);
+    }
+    function quickselectStep(arr, k, left, right, compare) {
+
+        while (right > left) {
+            if (right - left > 600) {
+                var n = right - left + 1;
+                var m = k - left + 1;
+                var z = Math.log(n);
+                var s = 0.5 * Math.exp(2 * z / 3);
+                var sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
+                var newLeft = Math.max(left, Math.floor(k - m * s / n + sd));
+                var newRight = Math.min(right, Math.floor(k + (n - m) * s / n + sd));
+                quickselectStep(arr, k, newLeft, newRight, compare);
+            }
+
+            var t = arr[k];
+            var i = left;
+            var j = right;
+
+            swap$1(arr, left, k);
+            if (compare(arr[right], t) > 0) swap$1(arr, left, right);
+
+            while (i < j) {
+                swap$1(arr, i, j);
+                i++;
+                j--;
+                while (compare(arr[i], t) < 0) i++;
+                while (compare(arr[j], t) > 0) j--;
+            }
+
+            if (compare(arr[left], t) === 0) swap$1(arr, left, j);
+            else {
+                j++;
+                swap$1(arr, j, right);
+            }
+
+            if (j <= k) left = j + 1;
+            if (k <= j) right = j - 1;
+        }
+    }
+
+    function swap$1(arr, i, j) {
+        var tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    function defaultCompare(a, b) {
+        return a < b ? -1 : a > b ? 1 : 0;
+    }
+
+    /**
+     * Returns the signed area for the polygon ring.  Postive areas are exterior rings and
+     * have a clockwise winding.  Negative areas are interior rings and have a counter clockwise
+     * ordering.
+     *
+     * @private
+     * @param ring Exterior or interior ring
+     */
+    function calculateSignedArea(ring) {
+        var sum = 0;
+        for (var i = 0, len = ring.length, j = len - 1, p1 = (void 0), p2 = (void 0); i < len; j = i++) {
+            p1 = ring[i];
+            p2 = ring[j];
+            sum += (p2.x - p1.x) * (p1.y + p2.y);
+        }
+        return sum;
+    }
+
+    // classifies an array of rings into polygons with outer rings and holes
+    function classifyRings(rings, maxRings) {
+        var len = rings.length;
+
+        if (len <= 1) {
+            return [rings];
+        }
+
+        var polygons = [];
+        var polygon,
+            ccw;
+
+        for (var i = 0; i < len; i++) {
+            var area = calculateSignedArea(rings[i]);
+            if (area === 0) {
+                continue;
+            }
+
+            (rings[i]     ).area = Math.abs(area);
+
+            if (ccw === undefined) {
+                ccw = area < 0;
+            }
+
+            if (ccw === area < 0) {
+                if (polygon) {
+                    polygons.push(polygon);
+                }
+                polygon = [rings[i]];
+
+            } else {
+                (polygon     ).push(rings[i]);
+            }
+        }
+        if (polygon) {
+            polygons.push(polygon);
+        }
+
+        // Earcut performance degrades with the # of rings in a polygon. For this
+        // reason, we limit strip out all but the `maxRings` largest rings.
+        if (maxRings > 1) {
+            for (var j = 0; j < polygons.length; j++) {
+                if (polygons[j].length <= maxRings) {
+                    continue;
+                }
+                quickselect(polygons[j], maxRings, 1, polygons[j].length - 1, compareAreas);
+                polygons[j] = polygons[j].slice(0, maxRings);
+            }
+        }
+
+        return polygons;
+    }
+
+    function compareAreas(a, b) {
+        return b.area - a.area;
+    }
+
+    var StructArrayLayout2i4 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout2i4() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout2i4.__proto__ = StructArray;
+        StructArrayLayout2i4.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout2i4.prototype.constructor = StructArrayLayout2i4;
+
+        StructArrayLayout2i4.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.int16 = new Int16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout2i4.prototype.emplaceBack = function emplaceBack(v0, v1) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1);
+        };
+
+        StructArrayLayout2i4.prototype.emplace = function emplace(i, v0, v1) {
+            var o2 = i * 2;
+            this.int16[o2 + 0] = v0;
+            this.int16[o2 + 1] = v1;
+            return i;
+        };
+
+        return StructArrayLayout2i4;
+    }(StructArray));
+
+    StructArrayLayout2i4.prototype.bytesPerElement = 4;
+    WebWorkerTransfer.register('StructArrayLayout2i4', StructArrayLayout2i4);
+
+    var StructArrayLayout2ui4 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout2ui4() {
+            StructArray.apply(this, arguments);
+        }
+
+        if (StructArray) StructArrayLayout2ui4.__proto__ = StructArray;
+        StructArrayLayout2ui4.prototype = Object.create(StructArray && StructArray.prototype);
+        StructArrayLayout2ui4.prototype.constructor = StructArrayLayout2ui4;
+
+        StructArrayLayout2ui4.prototype._refreshViews = function _refreshViews() {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.uint16 = new Uint16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout2ui4.prototype.emplaceBack = function emplaceBack(v0, v1) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1);
+        };
+
+        StructArrayLayout2ui4.prototype.emplace = function emplace(i, v0, v1) {
+            var o2 = i * 2;
+            this.uint16[o2 + 0] = v0;
+            this.uint16[o2 + 1] = v1;
+            return i;
+        };
+
+        return StructArrayLayout2ui4;
+    }(StructArray));
+
+    StructArrayLayout2ui4.prototype.bytesPerElement = 4;
+    WebWorkerTransfer.register('StructArrayLayout2ui4', StructArrayLayout2ui4);
+
+    function hasPattern(type, layers, options) {
+        var patterns = options.patternDependencies;
+        var hasPattern = false;
+
+        for (var i = 0, list = layers; i < list.length; i += 1) {
+            var layer = list[i];
+
+            var patternProperty = layer.paint.get((type + "-pattern"));
+            if (!patternProperty.isConstant()) {
+                hasPattern = true;
+            }
+
+            var constantPattern = patternProperty.constantOr(null);
+            if (constantPattern) {
+                hasPattern = true;
+                patterns[constantPattern.to] = true;
+                patterns[constantPattern.from] = true;
+            }
+        }
+
+        return hasPattern;
+    }
+
+    // Copyright 2010 The Emscripten Authors.  All rights reserved.
+    // Emscripten is available under two separate licenses, the MIT license and the
+    // University of Illinois/NCSA Open Source License.  Both these licenses can be
+    // found in the LICENSE file.
+
+    // The Module object: Our interface to the outside world. We import
+    // and export values on it. There are various ways Module can be used:
+    // 1. Not defined. We create it here
+    // 2. A function parameter, function(Module) { ..generated code.. }
+    // 3. pre-run appended it, var Module = {}; ..generated code..
+    // 4. External script tag defines var Module.
+    // We need to check if Module already exists (e.g. case 3 above).
+    // Substitution will be replaced with actual code on later stage of the build,
+    // this way Closure Compiler will not mangle it (e.g. case 4. above).
+    // Note that if you want to run closure, and also to use Module
+    // after the generated code, you will need to define   var Module = {};
+    // before the code. Then that object will be used in the code, and you
+    // can continue to use Module afterwards as well.
+    if (typeof WebAssembly !== 'undefined') {
+    	var Module = typeof Module !== 'undefined' ? Module : {};
+
+    	// --pre-jses are emitted after the Module integration code, so that they can
+    	// refer to Module (if they choose; they can also define Module)
+    	// {{PRE_JSES}}
+
+    	// Sometimes an existing Module object exists with properties
+    	// meant to overwrite the default module functionality. Here
+    	// we collect those properties and reapply _after_ we configure
+    	// the current environment's defaults to avoid having to be so
+    	// defensive during initialization.
+    	var moduleOverrides = {};
+    	var key;
+    	for (key in Module) {
+    	  if (Module.hasOwnProperty(key)) {
+    		moduleOverrides[key] = Module[key];
+    	  }
+    	}
+
+    	Module['arguments'] = [];
+    	Module['thisProgram'] = './this.program';
+    	Module['quit'] = function(status, toThrow) {
+    	  throw toThrow;
+    	};
+    	Module['preRun'] = [];
+    	Module['postRun'] = [];
+
+    	// Determine the runtime environment we are in. You can customize this by
+    	// setting the ENVIRONMENT setting at compile time (see settings.js).
+
+    	var ENVIRONMENT_IS_WEB = false;
+    	var ENVIRONMENT_IS_WORKER = false;
+    	var ENVIRONMENT_IS_NODE = false;
+    	var ENVIRONMENT_HAS_NODE = false;
+    	var ENVIRONMENT_IS_SHELL = false;
+    	ENVIRONMENT_IS_WEB = typeof window === 'object';
+    	ENVIRONMENT_IS_WORKER = typeof importScripts === 'function';
+    	// A web environment like Electron.js can have Node enabled, so we must
+    	// distinguish between Node-enabled environments and Node environments per se.
+    	// This will allow the former to do things like mount NODEFS.
+    	ENVIRONMENT_HAS_NODE = typeof process === 'object' && typeof require === 'function';
+    	ENVIRONMENT_IS_NODE = ENVIRONMENT_HAS_NODE && !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_WORKER;
+    	ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONMENT_IS_WORKER;
+
+    	if (Module['ENVIRONMENT']) {
+    	  throw new Error('Module.ENVIRONMENT has been deprecated. To force the environment, use the ENVIRONMENT compile-time option (for example, -s ENVIRONMENT=web or -s ENVIRONMENT=node)');
+    	}
+
+
+    	// Three configurations we can be running in:
+    	// 1) We could be the application main() thread running in the main JS UI thread. (ENVIRONMENT_IS_WORKER == false and ENVIRONMENT_IS_PTHREAD == false)
+    	// 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
+    	// 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
+
+
+
+
+    	// `/` should be present at the end if `scriptDirectory` is not empty
+    	var scriptDirectory = '';
+    	function locateFile(path) {
+    	  if (Module['locateFile']) {
+    		return Module['locateFile'](path, scriptDirectory);
+    	  } else {
+    		return scriptDirectory + path;
+    	  }
+    	}
+
+    	if (ENVIRONMENT_IS_NODE) {
+    	  scriptDirectory = __dirname + '/';
+
+    	  // Expose functionality in the same simple way that the shells work
+    	  // Note that we pollute the global namespace here, otherwise we break in node
+    	  var nodeFS;
+    	  var nodePath;
+
+    	  Module['read'] = function shell_read(filename, binary) {
+    		var ret;
+    		  if (!nodeFS) nodeFS = require('fs');
+    		  if (!nodePath) nodePath = require('path');
+    		  filename = nodePath['normalize'](filename);
+    		  ret = nodeFS['readFileSync'](filename);
+    		return binary ? ret : ret.toString();
+    	  };
+
+    	  Module['readBinary'] = function readBinary(filename) {
+    		var ret = Module['read'](filename, true);
+    		if (!ret.buffer) {
+    		  ret = new Uint8Array(ret);
+    		}
+    		assert(ret.buffer);
+    		return ret;
+    	  };
+
+    	  if (process['argv'].length > 1) {
+    		Module['thisProgram'] = process['argv'][1].replace(/\\/g, '/');
+    	  }
+
+    	  Module['arguments'] = process['argv'].slice(2);
+
+    	  if (typeof module !== 'undefined') {
+    		module['exports'] = Module;
+    	  }
+
+    	  process['on']('uncaughtException', function(ex) {
+    		// suppress ExitStatus exceptions from showing an error
+    		if (!(ex instanceof ExitStatus)) {
+    		  throw ex;
+    		}
+    	  });
+    	  // Currently node will swallow unhandled rejections, but this behavior is
+    	  // deprecated, and in the future it will exit with error status.
+    	  process['on']('unhandledRejection', abort);
+
+    	  Module['quit'] = function(status) {
+    		process['exit'](status);
+    	  };
+
+    	  Module['inspect'] = function () { return '[Emscripten Module object]'; };
+    	} else
+    	if (ENVIRONMENT_IS_SHELL) {
+
+
+    	  if (typeof read != 'undefined') {
+    		Module['read'] = function shell_read(f) {
+    		  return read(f);
+    		};
+    	  }
+
+    	  Module['readBinary'] = function readBinary(f) {
+    		var data;
+    		if (typeof readbuffer === 'function') {
+    		  return new Uint8Array(readbuffer(f));
+    		}
+    		data = read(f, 'binary');
+    		assert(typeof data === 'object');
+    		return data;
+    	  };
+
+    	  if (typeof scriptArgs != 'undefined') {
+    		Module['arguments'] = scriptArgs;
+    	  } else if (typeof arguments != 'undefined') {
+    		Module['arguments'] = arguments;
+    	  }
+
+    	  if (typeof quit === 'function') {
+    		Module['quit'] = function(status) {
+    		  quit(status);
+    		};
+    	  }
+    	} else
+    	if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
+    	  if (ENVIRONMENT_IS_WORKER) { // Check worker, not web, since window could be polyfilled
+    		scriptDirectory = self.location.href;
+    	  } else if (document.currentScript) { // web
+    		scriptDirectory = document.currentScript.src;
+    	  }
+    	  // blob urls look like blob:http://site.com/etc/etc and we cannot infer anything from them.
+    	  // otherwise, slice off the final part of the url to find the script directory.
+    	  // if scriptDirectory does not contain a slash, lastIndexOf will return -1,
+    	  // and scriptDirectory will correctly be replaced with an empty string.
+    	  if (scriptDirectory.indexOf('blob:') !== 0) {
+    		scriptDirectory = scriptDirectory.substr(0, scriptDirectory.lastIndexOf('/')+1);
+    	  } else {
+    		scriptDirectory = '';
+    	  }
+
+
+    	  Module['read'] = function shell_read(url) {
+    		  var xhr = new XMLHttpRequest();
+    		  xhr.open('GET', url, false);
+    		  xhr.send(null);
+    		  return xhr.responseText;
+    	  };
+
+    	  if (ENVIRONMENT_IS_WORKER) {
+    		Module['readBinary'] = function readBinary(url) {
+    			var xhr = new XMLHttpRequest();
+    			xhr.open('GET', url, false);
+    			xhr.responseType = 'arraybuffer';
+    			xhr.send(null);
+    			return new Uint8Array(xhr.response);
+    		};
+    	  }
+
+    	  Module['readAsync'] = function readAsync(url, onload, onerror) {
+    		var xhr = new XMLHttpRequest();
+    		xhr.open('GET', url, true);
+    		xhr.responseType = 'arraybuffer';
+    		xhr.onload = function xhr_onload() {
+    		  if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
+    			onload(xhr.response);
+    			return;
+    		  }
+    		  onerror();
+    		};
+    		xhr.onerror = onerror;
+    		xhr.send(null);
+    	  };
+
+    	  Module['setWindowTitle'] = function(title) { document.title = title; };
+    	} else
+    	{
+    	  throw new Error('environment detection error');
+    	}
+
+    	// Set up the out() and err() hooks, which are how we can print to stdout or
+    	// stderr, respectively.
+    	// If the user provided Module.print or printErr, use that. Otherwise,
+    	// console.log is checked first, as 'print' on the web will open a print dialogue
+    	// printErr is preferable to console.warn (works better in shells)
+    	// bind(console) is necessary to fix IE/Edge closed dev tools panel behavior.
+    	var out = Module['print'] || (typeof console !== 'undefined' ? console.log.bind(console) : (typeof print !== 'undefined' ? print : null));
+    	var err = Module['printErr'] || (typeof printErr !== 'undefined' ? printErr : ((typeof console !== 'undefined' && console.warn.bind(console)) || out));
+
+    	// Merge back in the overrides
+    	for (key in moduleOverrides) {
+    	  if (moduleOverrides.hasOwnProperty(key)) {
+    		Module[key] = moduleOverrides[key];
+    	  }
+    	}
+    	// Free the object hierarchy contained in the overrides, this lets the GC
+    	// reclaim data used e.g. in memoryInitializerRequest, which is a large typed array.
+    	moduleOverrides = undefined;
+
+    	// perform assertions in shell.js after we set up out() and err(), as otherwise if an assertion fails it cannot print the message
+    	assert(typeof Module['memoryInitializerPrefixURL'] === 'undefined', 'Module.memoryInitializerPrefixURL option was removed, use Module.locateFile instead');
+    	assert(typeof Module['pthreadMainPrefixURL'] === 'undefined', 'Module.pthreadMainPrefixURL option was removed, use Module.locateFile instead');
+    	assert(typeof Module['cdInitializerPrefixURL'] === 'undefined', 'Module.cdInitializerPrefixURL option was removed, use Module.locateFile instead');
+    	assert(typeof Module['filePackagePrefixURL'] === 'undefined', 'Module.filePackagePrefixURL option was removed, use Module.locateFile instead');
+
+    	// stack management, and other functionality that is provided by the compiled code,
+    	// should not be used before it is ready
+    	stackSave = stackRestore = stackAlloc = function() {
+    	  abort('cannot use the stack before compiled code is ready to run, and has provided stack access');
+    	};
+
+    	function warnOnce(text) {
+    	  if (!warnOnce.shown) warnOnce.shown = {};
+    	  if (!warnOnce.shown[text]) {
+    		warnOnce.shown[text] = 1;
+    		//err(text);
+    	  }
+    	}
+
+    	var asm2wasmImports = { // special asm2wasm imports
+    		"f64-rem": function(x, y) {
+    			return x % y;
+    		},
+    		"debugger": function() {
+    			debugger;
+    		}
+    	};
+    	var functionPointers = new Array(0);
+
+    	var tempRet0 = 0;
+
+    	var setTempRet0 = function(value) {
+    	  tempRet0 = value;
+    	};
+
+    	var getTempRet0 = function() {
+    	  return tempRet0;
+    	};
+
+
+
+
+    	// === Preamble library stuff ===
+
+    	// Documentation for the public APIs defined in this file must be updated in:
+    	//    site/source/docs/api_reference/preamble.js.rst
+    	// A prebuilt local version of the documentation is available at:
+    	//    site/build/text/docs/api_reference/preamble.js.txt
+    	// You can also build docs locally as HTML or other formats in site/
+    	// An online HTML version (which may be of a different version of Emscripten)
+    	//    is up at http://kripken.github.io/emscripten-site/docs/api_reference/preamble.js.html
+
+
+
+    	if (typeof WebAssembly !== 'object') {
+    	  abort('No WebAssembly support found. Build with -s WASM=0 to target JavaScript instead.');
+    	}
+
+    	/** @type {function(number, string, boolean=)} */
+    	function getValue(ptr, type, noSafe) {
+    	  type = type || 'i8';
+    	  if (type.charAt(type.length-1) === '*') type = 'i32'; // pointers are 32-bit
+    		switch(type) {
+    		  case 'i1': return HEAP8[((ptr)>>0)];
+    		  case 'i8': return HEAP8[((ptr)>>0)];
+    		  case 'i16': return HEAP16[((ptr)>>1)];
+    		  case 'i32': return HEAP32[((ptr)>>2)];
+    		  case 'i64': return HEAP32[((ptr)>>2)];
+    		  case 'float': return HEAPF32[((ptr)>>2)];
+    		  case 'double': return HEAPF64[((ptr)>>3)];
+    		  default: abort('invalid type for getValue: ' + type);
+    		}
+    	  return null;
+    	}
+
+
+
+
+
+    	// Wasm globals
+
+    	var wasmMemory;
+
+    	// Potentially used for direct table calls.
+    	var wasmTable;
+
+
+    	//========================================
+    	// Runtime essentials
+    	//========================================
+
+    	// whether we are quitting the application. no code should run after this.
+    	// set in exit() and abort()
+    	var ABORT = false;
+
+    	/** @type {function(*, string=)} */
+    	function assert(condition, text) {
+    	  if (!condition) {
+    		abort('Assertion failed: ' + text);
+    	  }
+    	}
+
+    	// Returns the C function with a specified identifier (for C++, you need to do manual name mangling)
+    	function getCFunc(ident) {
+    	  var func = Module['_' + ident]; // closure exported function
+    	  assert(func, 'Cannot call unknown function ' + ident + ', make sure it is exported');
+    	  return func;
+    	}
+
+    	// C calling interface.
+    	function ccall(ident, returnType, argTypes, args, opts) {
+    	  // For fast lookup of conversion functions
+    	  var toC = {
+    		'string': function(str) {
+    		  var ret = 0;
+    		  if (str !== null && str !== undefined && str !== 0) { // null string
+    			// at most 4 bytes per UTF-8 code point, +1 for the trailing '\0'
+    			var len = (str.length << 2) + 1;
+    			ret = stackAlloc(len);
+    			stringToUTF8(str, ret, len);
+    		  }
+    		  return ret;
+    		},
+    		'array': function(arr) {
+    		  var ret = stackAlloc(arr.length);
+    		  writeArrayToMemory(arr, ret);
+    		  return ret;
+    		}
+    	  };
+
+    	  function convertReturnValue(ret) {
+    		if (returnType === 'string') return UTF8ToString(ret);
+    		if (returnType === 'boolean') return Boolean(ret);
+    		return ret;
+    	  }
+
+    	  var func = getCFunc(ident);
+    	  var cArgs = [];
+    	  var stack = 0;
+    	  assert(returnType !== 'array', 'Return type should not be "array".');
+    	  if (args) {
+    		for (var i = 0; i < args.length; i++) {
+    		  var converter = toC[argTypes[i]];
+    		  if (converter) {
+    			if (stack === 0) stack = stackSave();
+    			cArgs[i] = converter(args[i]);
+    		  } else {
+    			cArgs[i] = args[i];
+    		  }
+    		}
+    	  }
+    	  var ret = func.apply(null, cArgs);
+    	  ret = convertReturnValue(ret);
+    	  if (stack !== 0) stackRestore(stack);
+    	  return ret;
+    	}
+
+    	function cwrap(ident, returnType, argTypes, opts) {
+    	  return function() {
+    		return ccall(ident, returnType, argTypes, arguments);
+    	  }
+    	}
+
+
+    	// Given a pointer 'ptr' to a null-terminated UTF8-encoded string in the given array that contains uint8 values, returns
+    	// a copy of that string as a Javascript String object.
+
+    	var UTF8Decoder = typeof TextDecoder !== 'undefined' ? new TextDecoder('utf8') : undefined;
+
+    	/**
+    	 * @param {number} idx
+    	 * @param {number=} maxBytesToRead
+    	 * @return {string}
+    	 */
+    	function UTF8ArrayToString(u8Array, idx, maxBytesToRead) {
+    	  var endIdx = idx + maxBytesToRead;
+    	  var endPtr = idx;
+    	  // TextDecoder needs to know the byte length in advance, it doesn't stop on null terminator by itself.
+    	  // Also, use the length info to avoid running tiny strings through TextDecoder, since .subarray() allocates garbage.
+    	  // (As a tiny code save trick, compare endPtr against endIdx using a negation, so that undefined means Infinity)
+    	  while (u8Array[endPtr] && !(endPtr >= endIdx)) ++endPtr;
+
+    	  if (endPtr - idx > 16 && u8Array.subarray && UTF8Decoder) {
+    		return UTF8Decoder.decode(u8Array.subarray(idx, endPtr));
+    	  } else {
+    		var str = '';
+    		// If building with TextDecoder, we have already computed the string length above, so test loop end condition against that
+    		while (idx < endPtr) {
+    		  // For UTF8 byte structure, see:
+    		  // http://en.wikipedia.org/wiki/UTF-8#Description
+    		  // https://www.ietf.org/rfc/rfc2279.txt
+    		  // https://tools.ietf.org/html/rfc3629
+    		  var u0 = u8Array[idx++];
+    		  if (!(u0 & 0x80)) { str += String.fromCharCode(u0); continue; }
+    		  var u1 = u8Array[idx++] & 63;
+    		  if ((u0 & 0xE0) == 0xC0) { str += String.fromCharCode(((u0 & 31) << 6) | u1); continue; }
+    		  var u2 = u8Array[idx++] & 63;
+    		  if ((u0 & 0xF0) == 0xE0) {
+    			u0 = ((u0 & 15) << 12) | (u1 << 6) | u2;
+    		  } else {
+    			if ((u0 & 0xF8) != 0xF0) warnOnce('Invalid UTF-8 leading byte 0x' + u0.toString(16) + ' encountered when deserializing a UTF-8 string on the asm.js/wasm heap to a JS string!');
+    			u0 = ((u0 & 7) << 18) | (u1 << 12) | (u2 << 6) | (u8Array[idx++] & 63);
+    		  }
+
+    		  if (u0 < 0x10000) {
+    			str += String.fromCharCode(u0);
+    		  } else {
+    			var ch = u0 - 0x10000;
+    			str += String.fromCharCode(0xD800 | (ch >> 10), 0xDC00 | (ch & 0x3FF));
+    		  }
+    		}
+    	  }
+    	  return str;
+    	}
+
+    	// Given a pointer 'ptr' to a null-terminated UTF8-encoded string in the emscripten HEAP, returns a
+    	// copy of that string as a Javascript String object.
+    	// maxBytesToRead: an optional length that specifies the maximum number of bytes to read. You can omit
+    	//                 this parameter to scan the string until the first \0 byte. If maxBytesToRead is
+    	//                 passed, and the string at [ptr, ptr+maxBytesToReadr[ contains a null byte in the
+    	//                 middle, then the string will cut short at that byte index (i.e. maxBytesToRead will
+    	//                 not produce a string of exact length [ptr, ptr+maxBytesToRead[)
+    	//                 N.B. mixing frequent uses of UTF8ToString() with and without maxBytesToRead may
+    	//                 throw JS JIT optimizations off, so it is worth to consider consistently using one
+    	//                 style or the other.
+    	/**
+    	 * @param {number} ptr
+    	 * @param {number=} maxBytesToRead
+    	 * @return {string}
+    	 */
+    	function UTF8ToString(ptr, maxBytesToRead) {
+    	  return ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : '';
+    	}
+
+    	// Copies the given Javascript String object 'str' to the given byte array at address 'outIdx',
+    	// encoded in UTF8 form and null-terminated. The copy will require at most str.length*4+1 bytes of space in the HEAP.
+    	// Use the function lengthBytesUTF8 to compute the exact number of bytes (excluding null terminator) that this function will write.
+    	// Parameters:
+    	//   str: the Javascript string to copy.
+    	//   outU8Array: the array to copy to. Each index in this array is assumed to be one 8-byte element.
+    	//   outIdx: The starting offset in the array to begin the copying.
+    	//   maxBytesToWrite: The maximum number of bytes this function can write to the array.
+    	//                    This count should include the null terminator,
+    	//                    i.e. if maxBytesToWrite=1, only the null terminator will be written and nothing else.
+    	//                    maxBytesToWrite=0 does not write any bytes to the output, not even the null terminator.
+    	// Returns the number of bytes written, EXCLUDING the null terminator.
+
+    	function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
+    	  if (!(maxBytesToWrite > 0)) // Parameter maxBytesToWrite is not optional. Negative values, 0, null, undefined and false each don't write out any bytes.
+    		return 0;
+
+    	  var startIdx = outIdx;
+    	  var endIdx = outIdx + maxBytesToWrite - 1; // -1 for string null terminator.
+    	  for (var i = 0; i < str.length; ++i) {
+    		// Gotcha: charCodeAt returns a 16-bit word that is a UTF-16 encoded code unit, not a Unicode code point of the character! So decode UTF16->UTF32->UTF8.
+    		// See http://unicode.org/faq/utf_bom.html#utf16-3
+    		// For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description and https://www.ietf.org/rfc/rfc2279.txt and https://tools.ietf.org/html/rfc3629
+    		var u = str.charCodeAt(i); // possibly a lead surrogate
+    		if (u >= 0xD800 && u <= 0xDFFF) {
+    		  var u1 = str.charCodeAt(++i);
+    		  u = 0x10000 + ((u & 0x3FF) << 10) | (u1 & 0x3FF);
+    		}
+    		if (u <= 0x7F) {
+    		  if (outIdx >= endIdx) break;
+    		  outU8Array[outIdx++] = u;
+    		} else if (u <= 0x7FF) {
+    		  if (outIdx + 1 >= endIdx) break;
+    		  outU8Array[outIdx++] = 0xC0 | (u >> 6);
+    		  outU8Array[outIdx++] = 0x80 | (u & 63);
+    		} else if (u <= 0xFFFF) {
+    		  if (outIdx + 2 >= endIdx) break;
+    		  outU8Array[outIdx++] = 0xE0 | (u >> 12);
+    		  outU8Array[outIdx++] = 0x80 | ((u >> 6) & 63);
+    		  outU8Array[outIdx++] = 0x80 | (u & 63);
+    		} else {
+    		  if (outIdx + 3 >= endIdx) break;
+    		  if (u >= 0x200000) warnOnce('Invalid Unicode code point 0x' + u.toString(16) + ' encountered when serializing a JS string to an UTF-8 string on the asm.js/wasm heap! (Valid unicode code points should be in range 0-0x1FFFFF).');
+    		  outU8Array[outIdx++] = 0xF0 | (u >> 18);
+    		  outU8Array[outIdx++] = 0x80 | ((u >> 12) & 63);
+    		  outU8Array[outIdx++] = 0x80 | ((u >> 6) & 63);
+    		  outU8Array[outIdx++] = 0x80 | (u & 63);
+    		}
+    	  }
+    	  // Null-terminate the pointer to the buffer.
+    	  outU8Array[outIdx] = 0;
+    	  return outIdx - startIdx;
+    	}
+
+    	// Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr',
+    	// null-terminated and encoded in UTF8 form. The copy will require at most str.length*4+1 bytes of space in the HEAP.
+    	// Use the function lengthBytesUTF8 to compute the exact number of bytes (excluding null terminator) that this function will write.
+    	// Returns the number of bytes written, EXCLUDING the null terminator.
+
+    	function stringToUTF8(str, outPtr, maxBytesToWrite) {
+    	  assert(typeof maxBytesToWrite == 'number', 'stringToUTF8(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!');
+    	  return stringToUTF8Array(str, HEAPU8,outPtr, maxBytesToWrite);
+    	}
+
+
+    	// Given a pointer 'ptr' to a null-terminated UTF16LE-encoded string in the emscripten HEAP, returns
+    	// a copy of that string as a Javascript String object.
+
+    	var UTF16Decoder = typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-16le') : undefined;
+
+    	function writeArrayToMemory(array, buffer) {
+    	  assert(array.length >= 0, 'writeArrayToMemory array must have a length (should be an array or typed array)');
+    	  HEAP8.set(array, buffer);
+    	}
+
+
+
+
+
+    	function demangle(func) {
+    	  return func;
+    	}
+
+    	function demangleAll(text) {
+    	  var regex =
+    		/__Z[\w\d_]+/g;
+    	  return text.replace(regex,
+    		function(x) {
+    		  var y = demangle(x);
+    		  return x === y ? x : (y + ' [' + x + ']');
+    		});
+    	}
+
+    	function jsStackTrace() {
+    	  var err = new Error();
+    	  if (!err.stack) {
+    		// IE10+ special cases: It does have callstack info, but it is only populated if an Error object is thrown,
+    		// so try that as a special-case.
+    		try {
+    		  throw new Error(0);
+    		} catch(e) {
+    		  err = e;
+    		}
+    		if (!err.stack) {
+    		  return '(no stack trace available)';
+    		}
+    	  }
+    	  return err.stack.toString();
+    	}
+
+    	function stackTrace() {
+    	  var js = jsStackTrace();
+    	  if (Module['extraStackTrace']) js += '\n' + Module['extraStackTrace']();
+    	  return demangleAll(js);
+    	}
+    	var WASM_PAGE_SIZE = 65536;
+
+    	function alignUp(x, multiple) {
+    	  if (x % multiple > 0) {
+    		x += multiple - (x % multiple);
+    	  }
+    	  return x;
+    	}
+
+    	var /** @type {ArrayBuffer} */
+    	  buffer,
+    	/** @type {Int8Array} */
+    	  HEAP8,
+    	/** @type {Uint8Array} */
+    	  HEAPU8,
+    	/** @type {Int16Array} */
+    	  HEAP16,
+    	/** @type {Uint16Array} */
+    	  HEAPU16,
+    	/** @type {Int32Array} */
+    	  HEAP32,
+    	/** @type {Uint32Array} */
+    	  HEAPU32,
+    	/** @type {Float32Array} */
+    	  HEAPF32,
+    	/** @type {Float64Array} */
+    	  HEAPF64;
+
+    	function updateGlobalBufferViews() {
+    	  Module['HEAP8'] = HEAP8 = new Int8Array(buffer);
+    	  Module['HEAP16'] = HEAP16 = new Int16Array(buffer);
+    	  Module['HEAP32'] = HEAP32 = new Int32Array(buffer);
+    	  Module['HEAPU8'] = HEAPU8 = new Uint8Array(buffer);
+    	  Module['HEAPU16'] = HEAPU16 = new Uint16Array(buffer);
+    	  Module['HEAPU32'] = HEAPU32 = new Uint32Array(buffer);
+    	  Module['HEAPF32'] = HEAPF32 = new Float32Array(buffer);
+    	  Module['HEAPF64'] = HEAPF64 = new Float64Array(buffer);
+    	}
+
+
+    	var STACK_BASE = 5872,
+    		STACK_MAX = 5248752,
+    		DYNAMIC_BASE = 5248752,
+    		DYNAMICTOP_PTR = 5840;
+
+    	assert(STACK_BASE % 16 === 0, 'stack must start aligned');
+    	assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
+
+
+
+    	var TOTAL_STACK = 5242880;
+    	if (Module['TOTAL_STACK']) assert(TOTAL_STACK === Module['TOTAL_STACK'], 'the stack size can no longer be determined at runtime');
+
+    	var INITIAL_TOTAL_MEMORY = Module['TOTAL_MEMORY'] || 16777216;
+    	if (INITIAL_TOTAL_MEMORY < TOTAL_STACK) err('TOTAL_MEMORY should be larger than TOTAL_STACK, was ' + INITIAL_TOTAL_MEMORY + '! (TOTAL_STACK=' + TOTAL_STACK + ')');
+
+    	// Initialize the runtime's memory
+    	// check for full engine support (use string 'subarray' to avoid closure compiler confusion)
+    	assert(typeof Int32Array !== 'undefined' && typeof Float64Array !== 'undefined' && Int32Array.prototype.subarray !== undefined && Int32Array.prototype.set !== undefined,
+    		   'JS engine does not provide full typed array support');
+
+
+
+
+
+
+
+    	// Use a provided buffer, if there is one, or else allocate a new one
+    	if (Module['buffer']) {
+    	  buffer = Module['buffer'];
+    	  assert(buffer.byteLength === INITIAL_TOTAL_MEMORY, 'provided buffer should be ' + INITIAL_TOTAL_MEMORY + ' bytes, but it is ' + buffer.byteLength);
+    	} else {
+    	  // Use a WebAssembly memory where available
+    	  if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
+    		assert(INITIAL_TOTAL_MEMORY % WASM_PAGE_SIZE === 0);
+    		wasmMemory = new WebAssembly.Memory({ 'initial': INITIAL_TOTAL_MEMORY / WASM_PAGE_SIZE });
+    		buffer = wasmMemory.buffer;
+    	  } else
+    	  {
+    		buffer = new ArrayBuffer(INITIAL_TOTAL_MEMORY);
+    	  }
+    	  assert(buffer.byteLength === INITIAL_TOTAL_MEMORY);
+    	}
+    	updateGlobalBufferViews();
+
+
+    	HEAP32[DYNAMICTOP_PTR>>2] = DYNAMIC_BASE;
+
+
+    	// Initializes the stack cookie. Called at the startup of main and at the startup of each thread in pthreads mode.
+    	function writeStackCookie() {
+    	  assert((STACK_MAX & 3) == 0);
+    	  HEAPU32[(STACK_MAX >> 2)-1] = 0x02135467;
+    	  HEAPU32[(STACK_MAX >> 2)-2] = 0x89BACDFE;
+    	}
+
+    	function checkStackCookie() {
+    	  if (HEAPU32[(STACK_MAX >> 2)-1] != 0x02135467 || HEAPU32[(STACK_MAX >> 2)-2] != 0x89BACDFE) {
+    		abort('Stack overflow! Stack cookie has been overwritten, expected hex dwords 0x89BACDFE and 0x02135467, but received 0x' + HEAPU32[(STACK_MAX >> 2)-2].toString(16) + ' ' + HEAPU32[(STACK_MAX >> 2)-1].toString(16));
+    	  }
+    	  // Also test the global address 0 for integrity.
+    	  if (HEAP32[0] !== 0x63736d65 /* 'emsc' */) abort('Runtime error: The application has corrupted its heap memory area (address zero)!');
+    	}
+
+    	function abortStackOverflow(allocSize) {
+    	  abort('Stack overflow! Attempted to allocate ' + allocSize + ' bytes on the stack, but stack has only ' + (STACK_MAX - stackSave() + allocSize) + ' bytes available!');
+    	}
+
+
+    	  HEAP32[0] = 0x63736d65; /* 'emsc' */
+
+
+
+    	// Endianness check (note: assumes compiler arch was little-endian)
+    	HEAP16[1] = 0x6373;
+    	if (HEAPU8[2] !== 0x73 || HEAPU8[3] !== 0x63) throw 'Runtime error: expected the system to be little-endian!';
+
+    	function callRuntimeCallbacks(callbacks) {
+    	  while(callbacks.length > 0) {
+    		var callback = callbacks.shift();
+    		if (typeof callback == 'function') {
+    		  callback();
+    		  continue;
+    		}
+    		var func = callback.func;
+    		if (typeof func === 'number') {
+    		  if (callback.arg === undefined) {
+    			Module['dynCall_v'](func);
+    		  } else {
+    			Module['dynCall_vi'](func, callback.arg);
+    		  }
+    		} else {
+    		  func(callback.arg === undefined ? null : callback.arg);
+    		}
+    	  }
+    	}
+
+    	var __ATPRERUN__  = []; // functions called before the runtime is initialized
+    	var __ATINIT__    = []; // functions called during startup
+    	var __ATMAIN__    = []; // functions called when main() is to be run
+    	var __ATPOSTRUN__ = []; // functions called after the main() is called
+
+    	var runtimeInitialized = false;
+    	var runtimeExited = false;
+
+
+    	function preRun() {
+    	  // compatibility - merge in anything from Module['preRun'] at this time
+    	  if (Module['preRun']) {
+    		if (typeof Module['preRun'] == 'function') Module['preRun'] = [Module['preRun']];
+    		while (Module['preRun'].length) {
+    		  addOnPreRun(Module['preRun'].shift());
+    		}
+    	  }
+    	  callRuntimeCallbacks(__ATPRERUN__);
+    	}
+
+    	function ensureInitRuntime() {
+    	  checkStackCookie();
+    	  if (runtimeInitialized) return;
+    	  runtimeInitialized = true;
+    	  
+    	  callRuntimeCallbacks(__ATINIT__);
+    	}
+
+    	function preMain() {
+    	  checkStackCookie();
+    	  
+    	  callRuntimeCallbacks(__ATMAIN__);
+    	}
+
+    	function postRun() {
+    	  checkStackCookie();
+    	  // compatibility - merge in anything from Module['postRun'] at this time
+    	  if (Module['postRun']) {
+    		if (typeof Module['postRun'] == 'function') Module['postRun'] = [Module['postRun']];
+    		while (Module['postRun'].length) {
+    		  addOnPostRun(Module['postRun'].shift());
+    		}
+    	  }
+    	  callRuntimeCallbacks(__ATPOSTRUN__);
+    	}
+
+    	function addOnPreRun(cb) {
+    	  __ATPRERUN__.unshift(cb);
+    	}
+
+    	function addOnPostRun(cb) {
+    	  __ATPOSTRUN__.unshift(cb);
+    	}
+
+
+    	assert(Math.imul, 'This browser does not support Math.imul(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
+    	assert(Math.fround, 'This browser does not support Math.fround(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
+    	assert(Math.clz32, 'This browser does not support Math.clz32(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
+    	assert(Math.trunc, 'This browser does not support Math.trunc(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
+
+
+
+    	// A counter of dependencies for calling run(). If we need to
+    	// do asynchronous work before running, increment this and
+    	// decrement it. Incrementing must happen in a place like
+    	// Module.preRun (used by emcc to add file preloading).
+    	// Note that you can add dependencies in preRun, even though
+    	// it happens right before run - run will be postponed until
+    	// the dependencies are met.
+    	var runDependencies = 0;
+    	var runDependencyWatcher = null;
+    	var dependenciesFulfilled = null; // overridden to take different actions when all run dependencies are fulfilled
+    	var runDependencyTracking = {};
+
+    	function addRunDependency(id) {
+    	  runDependencies++;
+    	  if (Module['monitorRunDependencies']) {
+    		Module['monitorRunDependencies'](runDependencies);
+    	  }
+    	  if (id) {
+    		assert(!runDependencyTracking[id]);
+    		runDependencyTracking[id] = 1;
+    		if (runDependencyWatcher === null && typeof setInterval !== 'undefined') {
+    		  // Check for missing dependencies every few seconds
+    		  runDependencyWatcher = setInterval(function() {
+    			if (ABORT) {
+    			  clearInterval(runDependencyWatcher);
+    			  runDependencyWatcher = null;
+    			  return;
+    			}
+    		  }, 10000);
+    		}
+    	  }
+    	}
+
+    	function removeRunDependency(id) {
+    	  runDependencies--;
+    	  if (Module['monitorRunDependencies']) {
+    		Module['monitorRunDependencies'](runDependencies);
+    	  }
+    	  if (id) {
+    		assert(runDependencyTracking[id]);
+    		delete runDependencyTracking[id];
+    	  }
+    	  if (runDependencies == 0) {
+    		if (runDependencyWatcher !== null) {
+    		  clearInterval(runDependencyWatcher);
+    		  runDependencyWatcher = null;
+    		}
+    		if (dependenciesFulfilled) {
+    		  var callback = dependenciesFulfilled;
+    		  dependenciesFulfilled = null;
+    		  callback(); // can add another dependenciesFulfilled
+    		}
+    	  }
+    	}
+
+    	Module["preloadedImages"] = {}; // maps url to image data
+    	Module["preloadedAudios"] = {}; // maps url to audio data
+
+
+
+    	// show errors on likely calls to FS when it was not included
+    	var FS = {
+    	  error: function() {
+    		abort('Filesystem support (FS) was not included. The problem is that you are using files from JS, but files were not used from C/C++, so filesystem support was not auto-included. You can force-include filesystem support with  -s FORCE_FILESYSTEM=1');
+    	  },
+    	  init: function() { FS.error(); },
+    	  createDataFile: function() { FS.error(); },
+    	  createPreloadedFile: function() { FS.error(); },
+    	  createLazyFile: function() { FS.error(); },
+    	  open: function() { FS.error(); },
+    	  mkdev: function() { FS.error(); },
+    	  registerDevice: function() { FS.error(); },
+    	  analyzePath: function() { FS.error(); },
+    	  loadFilesFromDB: function() { FS.error(); },
+
+    	  ErrnoError: function ErrnoError() { FS.error(); },
+    	};
+    	Module['FS_createDataFile'] = FS.createDataFile;
+    	Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+
+
+
+    	// Copyright 2017 The Emscripten Authors.  All rights reserved.
+    	// Emscripten is available under two separate licenses, the MIT license and the
+    	// University of Illinois/NCSA Open Source License.  Both these licenses can be
+    	// found in the LICENSE file.
+
+    	// Prefix of data URIs emitted by SINGLE_FILE and related options.
+    	var dataURIPrefix = 'data:application/octet-stream;base64,';
+
+    	// Indicates whether filename is a base64 data URI.
+    	function isDataURI(filename) {
+    	  return String.prototype.startsWith ?
+    		  filename.startsWith(dataURIPrefix) :
+    		  filename.indexOf(dataURIPrefix) === 0;
+    	}
+
+
+
+
+    	var wasmBinaryFile = 'ThirdParty/earcut.wasm';
+    	if (!isDataURI(wasmBinaryFile)) {
+    	  wasmBinaryFile = locateFile(wasmBinaryFile);
+    	}
+
+    	function getBinary() {
+    	  try {
+    		if (Module['wasmBinary']) {
+    		  return new Uint8Array(Module['wasmBinary']);
+    		}
+    		if (Module['readBinary']) {
+    		  return Module['readBinary'](wasmBinaryFile);
+    		} else {
+    		  throw "both async and sync fetching of the wasm failed";
+    		}
+    	  }
+    	  catch (err) {
+    		abort(err);
+    	  }
+    	}
+
+    	function getBinaryPromise() {
+    	  // if we don't have the binary yet, and have the Fetch api, use that
+    	  // in some environments, like Electron's render process, Fetch api may be present, but have a different context than expected, let's only use it on the Web
+    	  if (!Module['wasmBinary'] && (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) && typeof fetch === 'function') {
+    		return fetch(wasmBinaryFile, { credentials: 'same-origin' }).then(function(response) {
+    		  if (!response['ok']) {
+    			throw "failed to load wasm binary file at '" + wasmBinaryFile + "'";
+    		  }
+    		  return response['arrayBuffer']();
+    		}).catch(function () {
+    		  return getBinary();
+    		});
+    	  }
+    	  // Otherwise, getBinary should be able to get it synchronously
+    	  return new Promise(function(resolve, reject) {
+    		resolve(getBinary());
+    	  });
+    	}
+
+
+
+    	// Create the wasm instance.
+    	// Receives the wasm imports, returns the exports.
+    	function createWasm(env) {
+
+    	  // prepare imports
+    	  var info = {
+    		'env': env
+    		,
+    		'global': {
+    		  'NaN': NaN,
+    		  'Infinity': Infinity
+    		},
+    		'global.Math': Math,
+    		'asm2wasm': asm2wasmImports
+    	  };
+    	  // Load the wasm module and create an instance of using native support in the JS engine.
+    	  // handle a generated wasm instance, receiving its exports and
+    	  // performing other necessary setup
+    	  function receiveInstance(instance, module) {
+    		var exports = instance.exports;
+    		Module['asm'] = exports;
+    		removeRunDependency('wasm-instantiate');
+    	  }
+    	  addRunDependency('wasm-instantiate');
+
+
+    	  // Async compilation can be confusing when an error on the page overwrites Module
+    	  // (for example, if the order of elements is wrong, and the one defining Module is
+    	  // later), so we save Module and check it later.
+    	  var trueModule = Module;
+    	  function receiveInstantiatedSource(output) {
+    		// 'output' is a WebAssemblyInstantiatedSource object which has both the module and instance.
+    		// receiveInstance() will swap in the exports (to Module.asm) so they can be called
+    		assert(Module === trueModule, 'the Module object should not be replaced during async compilation - perhaps the order of HTML elements is wrong?');
+    		trueModule = null;
+    		  // TODO: Due to Closure regression https://github.com/google/closure-compiler/issues/3193, the above line no longer optimizes out down to the following line.
+    		  // When the regression is fixed, can restore the above USE_PTHREADS-enabled path.
+    		receiveInstance(output['instance']);
+    	  }
+
+
+    	  function instantiateArrayBuffer(receiver) {
+    		return getBinaryPromise().then(function(binary) {
+    		  return WebAssembly.instantiate(binary, info);
+    		}).then(receiver, function(reason) {
+    		  //err('failed to asynchronously prepare wasm: ' + reason);
+    		  //abort(reason);
+    		});
+    	  }
+
+    	  // Prefer streaming instantiation if available.
+    	  function instantiateAsync() {
+    		if (!Module['wasmBinary'] &&
+    			typeof WebAssembly.instantiateStreaming === 'function' &&
+    			!isDataURI(wasmBinaryFile) &&
+    			typeof fetch === 'function') {
+    		  fetch(wasmBinaryFile, { credentials: 'same-origin' }).then(function (response) {
+    			return WebAssembly.instantiateStreaming(response, info)
+    			  .then(receiveInstantiatedSource, function(reason) {
+    				// We expect the most common failure cause to be a bad MIME type for the binary,
+    				// in which case falling back to ArrayBuffer instantiation should work.
+    				//err('wasm streaming compile failed: ' + reason);
+    				//err('falling back to ArrayBuffer instantiation');
+    				instantiateArrayBuffer(receiveInstantiatedSource);
+    			  });
+    		  });
+    		} else {
+    		  return instantiateArrayBuffer(receiveInstantiatedSource);
+    		}
+    	  }
+    	  // User shell pages can write their own Module.instantiateWasm = function(imports, successCallback) callback
+    	  // to manually instantiate the Wasm module themselves. This allows pages to run the instantiation parallel
+    	  // to any other async startup actions they are performing.
+    	  if (Module['instantiateWasm']) {
+    		try {
+    		  return Module['instantiateWasm'](info, receiveInstance);
+    		} catch(e) {
+    		  //err('Module.instantiateWasm callback failed with error: ' + e);
+    		  return false;
+    		}
+    	  }
+
+    	  instantiateAsync();
+    	  return {}; // no exports yet; we'll fill them in later
+    	}
+
+    	// Provide an "asm.js function" for the application, called to "link" the asm.js module. We instantiate
+    	// the wasm module at that time, and it receives imports and provides exports and so forth, the app
+    	// doesn't need to care that it is wasm or asm.js.
+
+    	Module['asm'] = function(global, env, providedBuffer) {
+    	  // memory was already allocated (so js could use the buffer)
+    	  env['memory'] = wasmMemory
+    	  ;
+    	  // import table
+    	  env['table'] = wasmTable = new WebAssembly.Table({
+    		'initial': 260,
+    		'maximum': 260,
+    		'element': 'anyfunc'
+    	  });
+    	  // With the wasm backend __memory_base and __table_base and only needed for
+    	  // relocatable output.
+    	  env['__memory_base'] = 1024; // tell the memory segments where to place themselves
+    	  // table starts at 0 by default (even in dynamic linking, for the main module)
+    	  env['__table_base'] = 0;
+
+    	  var exports = createWasm(env);
+    	  assert(exports, 'binaryen setup failed (no wasm support?)');
+    	  return exports;
+    	};
+
+
+
+
+
+    	// STATICTOP = STATIC_BASE + 4848;
+    	/* global initializers */ /*__ATINIT__.push();*/
+
+
+
+
+
+
+
+
+    	/* no memory initializer */
+    	var tempDoublePtr = 5856;
+    	assert(tempDoublePtr % 8 == 0);
+
+    	// {{PRE_LIBRARY}}
+
+
+    	  function ___cxa_allocate_exception(size) {
+    		  return _malloc(size);
+    		}
+
+    	  
+    	  var ___exception_infos={};
+    	  
+    	  var ___exception_caught= [];
+    	  
+    	  function ___exception_addRef(ptr) {
+    		  if (!ptr) return;
+    		  var info = ___exception_infos[ptr];
+    		  info.refcount++;
+    		}
+    	  
+    	  function ___exception_deAdjust(adjusted) {
+    		  if (!adjusted || ___exception_infos[adjusted]) return adjusted;
+    		  for (var key in ___exception_infos) {
+    			var ptr = +key; // the iteration key is a string, and if we throw this, it must be an integer as that is what we look for
+    			var adj = ___exception_infos[ptr].adjusted;
+    			var len = adj.length;
+    			for (var i = 0; i < len; i++) {
+    			  if (adj[i] === adjusted) {
+    				return ptr;
+    			  }
+    			}
+    		  }
+    		  return adjusted;
+    		}function ___cxa_begin_catch(ptr) {
+    		  var info = ___exception_infos[ptr];
+    		  if (info && !info.caught) {
+    			info.caught = true;
+    			__ZSt18uncaught_exceptionv.uncaught_exception--;
+    		  }
+    		  if (info) info.rethrown = false;
+    		  ___exception_caught.push(ptr);
+    		  ___exception_addRef(___exception_deAdjust(ptr));
+    		  return ptr;
+    		}
+    function ___cxa_throw(ptr, type, destructor) {
+    		  ___exception_infos[ptr] = {
+    			ptr: ptr,
+    			adjusted: [ptr],
+    			type: type,
+    			destructor: destructor,
+    			refcount: 0,
+    			caught: false,
+    			rethrown: false
+    		  };
+    		  if (!("uncaught_exception" in __ZSt18uncaught_exceptionv)) {
+    			__ZSt18uncaught_exceptionv.uncaught_exception = 1;
+    		  } else {
+    			__ZSt18uncaught_exceptionv.uncaught_exception++;
+    		  }
+    		  throw ptr + " - Exception catching is disabled, this exception cannot be caught. Compile with -s DISABLE_EXCEPTION_CATCHING=0 or DISABLE_EXCEPTION_CATCHING=2 to catch.";
+    		}
+
+    	  function ___cxa_uncaught_exception() {
+    		  return !!__ZSt18uncaught_exceptionv.uncaught_exception;
+    		}
+
+    	  function ___gxx_personality_v0() {
+    		}
+
+    	  function ___lock() {}
+    var SYSCALLS={buffers:[null,[],[]],printChar:function (stream, curr) {
+    			var buffer = SYSCALLS.buffers[stream];
+    			assert(buffer);
+    			if (curr === 0 || curr === 10) {
+    			  (stream === 1 ? out : err)(UTF8ArrayToString(buffer, 0));
+    			  buffer.length = 0;
+    			} else {
+    			  buffer.push(curr);
+    			}
+    		  },varargs:0,get:function (varargs) {
+    			SYSCALLS.varargs += 4;
+    			var ret = HEAP32[(((SYSCALLS.varargs)-(4))>>2)];
+    			return ret;
+    		  },getStr:function () {
+    			var ret = UTF8ToString(SYSCALLS.get());
+    			return ret;
+    		  },get64:function () {
+    			var low = SYSCALLS.get(), high = SYSCALLS.get();
+    			if (low >= 0) assert(high === 0);
+    			else assert(high === -1);
+    			return low;
+    		  },getZero:function () {
+    			assert(SYSCALLS.get() === 0);
+    		  }};function ___syscall140(which, varargs) {SYSCALLS.varargs = varargs;
+    	  try {
+    	   // llseek
+    		  var stream = SYSCALLS.getStreamFromFD(), offset_high = SYSCALLS.get(), offset_low = SYSCALLS.get(), result = SYSCALLS.get(), whence = SYSCALLS.get();
+    		  abort('it should not be possible to operate on streams when !SYSCALLS_REQUIRE_FILESYSTEM');
+    		  return 0;
+    		} catch (e) {
+    		if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+    		return -e.errno;
+    	  }
+    	  }
+
+    	  
+    	  function flush_NO_FILESYSTEM() {
+    		  // flush anything remaining in the buffers during shutdown
+    		  var fflush = Module["_fflush"];
+    		  if (fflush) fflush(0);
+    		  var buffers = SYSCALLS.buffers;
+    		  if (buffers[1].length) SYSCALLS.printChar(1, 10);
+    		  if (buffers[2].length) SYSCALLS.printChar(2, 10);
+    		}function ___syscall146(which, varargs) {SYSCALLS.varargs = varargs;
+    	  try {
+    	   // writev
+    		  // hack to support printf in SYSCALLS_REQUIRE_FILESYSTEM=0
+    		  var stream = SYSCALLS.get(), iov = SYSCALLS.get(), iovcnt = SYSCALLS.get();
+    		  var ret = 0;
+    		  for (var i = 0; i < iovcnt; i++) {
+    			var ptr = HEAP32[(((iov)+(i*8))>>2)];
+    			var len = HEAP32[(((iov)+(i*8 + 4))>>2)];
+    			for (var j = 0; j < len; j++) {
+    			  SYSCALLS.printChar(stream, HEAPU8[ptr+j]);
+    			}
+    			ret += len;
+    		  }
+    		  return ret;
+    		} catch (e) {
+    		if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+    		return -e.errno;
+    	  }
+    	  }
+
+    	  function ___syscall54(which, varargs) {SYSCALLS.varargs = varargs;
+    	  try {
+    	   // ioctl
+    		  return 0;
+    		} catch (e) {
+    		if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+    		return -e.errno;
+    	  }
+    	  }
+
+    	  function ___syscall6(which, varargs) {SYSCALLS.varargs = varargs;
+    	  try {
+    	   // close
+    		  var stream = SYSCALLS.getStreamFromFD();
+    		  abort('it should not be possible to operate on streams when !SYSCALLS_REQUIRE_FILESYSTEM');
+    		  return 0;
+    		} catch (e) {
+    		if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+    		return -e.errno;
+    	  }
+    	  }
+
+    	  function ___unlock() {}
+
+    	  function _abort() {
+    		  Module['abort']();
+    		}
+
+    	  function _emscripten_get_heap_size() {
+    		  return HEAP8.length;
+    		}
+
+    	   
+
+    	   
+
+    	  
+    	  function _emscripten_memcpy_big(dest, src, num) {
+    		  HEAPU8.set(HEAPU8.subarray(src, src+num), dest);
+    		}
+    	  
+    	   
+
+    	   
+
+    	  
+    	  function ___setErrNo(value) {
+    		  if (Module['___errno_location']) HEAP32[((Module['___errno_location']())>>2)]=value;
+    		  else //err('failed to set errno from JS');
+    		  return value;
+    		}
+    	  
+    	  
+    	  function abortOnCannotGrowMemory(requestedSize) {
+    		  abort('Cannot enlarge memory arrays to size ' + requestedSize + ' bytes (OOM). Either (1) compile with  -s TOTAL_MEMORY=X  with X higher than the current value ' + HEAP8.length + ', (2) compile with  -s ALLOW_MEMORY_GROWTH=1  which allows increasing the size at runtime, or (3) if you want malloc to return NULL (0) instead of this abort, compile with  -s ABORTING_MALLOC=0 ');
+    		}
+    	  
+    	  function emscripten_realloc_buffer(size) {
+    		  var PAGE_MULTIPLE = 65536;
+    		  size = alignUp(size, PAGE_MULTIPLE); // round up to wasm page size
+    		  var oldSize = buffer.byteLength;
+    		  // native wasm support
+    		  // note that this is *not* threadsafe. multiple threads can call .grow(), and each
+    		  // presents a delta, so in theory we may over-allocate here (e.g. if two threads
+    		  // ask to grow from 256MB to 512MB, we get 2 requests to add +256MB, and may end
+    		  // up growing to 768MB (even though we may have been able to make do with 512MB).
+    		  // TODO: consider decreasing the step sizes in emscripten_resize_heap
+    		  try {
+    			var result = wasmMemory.grow((size - oldSize) / 65536); // .grow() takes a delta compared to the previous size
+    			if (result !== (-1 | 0)) {
+    			  // success in native wasm memory growth, get the buffer from the memory
+    			  buffer = wasmMemory.buffer;
+    			  return true;
+    			} else {
+    			  return false;
+    			}
+    		  } catch(e) {
+    			console.error('emscripten_realloc_buffer: Attempted to grow from ' + oldSize  + ' bytes to ' + size + ' bytes, but got error: ' + e);
+    			return false;
+    		  }
+    		}function _emscripten_resize_heap(requestedSize) {
+    		  var oldSize = _emscripten_get_heap_size();
+    		  // With pthreads, races can happen (another thread might increase the size in between), so return a failure, and let the caller retry.
+    		  assert(requestedSize > oldSize);
+    	  
+    	  
+    		  var PAGE_MULTIPLE = 65536;
+    		  var LIMIT = 2147483648 - PAGE_MULTIPLE; // We can do one page short of 2GB as theoretical maximum.
+    	  
+    		  if (requestedSize > LIMIT) {
+    			//err('Cannot enlarge memory, asked to go up to ' + requestedSize + ' bytes, but the limit is ' + LIMIT + ' bytes!');
+    			return false;
+    		  }
+    	  
+    		  var MIN_TOTAL_MEMORY = 16777216;
+    		  var newSize = Math.max(oldSize, MIN_TOTAL_MEMORY); // So the loop below will not be infinite, and minimum asm.js memory size is 16MB.
+    	  
+    		  // TODO: see realloc_buffer - for PTHREADS we may want to decrease these jumps
+    		  while (newSize < requestedSize) { // Keep incrementing the heap size as long as it's less than what is requested.
+    			if (newSize <= 536870912) {
+    			  newSize = alignUp(2 * newSize, PAGE_MULTIPLE); // Simple heuristic: double until 1GB...
+    			} else {
+    			  // ..., but after that, add smaller increments towards 2GB, which we cannot reach
+    			  newSize = Math.min(alignUp((3 * newSize + 2147483648) / 4, PAGE_MULTIPLE), LIMIT);
+    			}
+    	  
+    			if (newSize === oldSize) {
+    			  warnOnce('Cannot ask for more memory since we reached the practical limit in browsers (which is just below 2GB), so the request would have failed. Requesting only ' + HEAP8.length);
+    			}
+    		  }
+    	  
+    		  if (!emscripten_realloc_buffer(newSize)) {
+    			//err('Failed to grow the heap from ' + oldSize + ' bytes to ' + newSize + ' bytes, not enough memory!');
+    			return false;
+    		  }
+    	  
+    		  updateGlobalBufferViews();
+    	  
+    	  
+    	  
+    		  return true;
+    		} 
+
+
+    	// ASM_LIBRARY EXTERN PRIMITIVES: Math_max,Math_min,Int8Array,Int32Array
+
+
+    	function nullFunc_ii(x) { err("Invalid function pointer called with signature 'ii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_iidiiii(x) { err("Invalid function pointer called with signature 'iidiiii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_iiii(x) { err("Invalid function pointer called with signature 'iiii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_jiji(x) { err("Invalid function pointer called with signature 'jiji'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_v(x) { err("Invalid function pointer called with signature 'v'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_vi(x) { err("Invalid function pointer called with signature 'vi'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_vii(x) { err("Invalid function pointer called with signature 'vii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_viiii(x) { err("Invalid function pointer called with signature 'viiii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_viiiii(x) { err("Invalid function pointer called with signature 'viiiii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	function nullFunc_viiiiii(x) { err("Invalid function pointer called with signature 'viiiiii'. Perhaps this is an invalid value (e.g. caused by calling a virtual method on a NULL pointer)? Or calling a function with an incorrect type, which will fail? (it is worth building your source files with -Werror (warnings are errors), as warnings can indicate undefined behavior which can cause this)");  err("Build with ASSERTIONS=2 for more info.");abort(x); }
+
+    	var asmGlobalArg = {};
+
+    	var asmLibraryArg = {
+    	  "abort": abort,
+    	  "setTempRet0": setTempRet0,
+    	  "getTempRet0": getTempRet0,
+    	  "abortStackOverflow": abortStackOverflow,
+    	  "nullFunc_ii": nullFunc_ii,
+    	  "nullFunc_iidiiii": nullFunc_iidiiii,
+    	  "nullFunc_iiii": nullFunc_iiii,
+    	  "nullFunc_jiji": nullFunc_jiji,
+    	  "nullFunc_v": nullFunc_v,
+    	  "nullFunc_vi": nullFunc_vi,
+    	  "nullFunc_vii": nullFunc_vii,
+    	  "nullFunc_viiii": nullFunc_viiii,
+    	  "nullFunc_viiiii": nullFunc_viiiii,
+    	  "nullFunc_viiiiii": nullFunc_viiiiii,
+    	  "___cxa_allocate_exception": ___cxa_allocate_exception,
+    	  "___cxa_begin_catch": ___cxa_begin_catch,
+    	  "___cxa_throw": ___cxa_throw,
+    	  "___cxa_uncaught_exception": ___cxa_uncaught_exception,
+    	  "___exception_addRef": ___exception_addRef,
+    	  "___exception_deAdjust": ___exception_deAdjust,
+    	  "___gxx_personality_v0": ___gxx_personality_v0,
+    	  "___lock": ___lock,
+    	  "___setErrNo": ___setErrNo,
+    	  "___syscall140": ___syscall140,
+    	  "___syscall146": ___syscall146,
+    	  "___syscall54": ___syscall54,
+    	  "___syscall6": ___syscall6,
+    	  "___unlock": ___unlock,
+    	  "_abort": _abort,
+    	  "_emscripten_get_heap_size": _emscripten_get_heap_size,
+    	  "_emscripten_memcpy_big": _emscripten_memcpy_big,
+    	  "_emscripten_resize_heap": _emscripten_resize_heap,
+    	  "abortOnCannotGrowMemory": abortOnCannotGrowMemory,
+    	  "emscripten_realloc_buffer": emscripten_realloc_buffer,
+    	  "flush_NO_FILESYSTEM": flush_NO_FILESYSTEM,
+    	  "tempDoublePtr": tempDoublePtr,
+    	  "DYNAMICTOP_PTR": DYNAMICTOP_PTR
+    	};
+    	// EMSCRIPTEN_START_ASM
+    	var asm =Module["asm"]// EMSCRIPTEN_END_ASM
+    	(asmGlobalArg, asmLibraryArg, buffer);
+
+    	var real___ZSt18uncaught_exceptionv = asm["__ZSt18uncaught_exceptionv"];
+    	asm["__ZSt18uncaught_exceptionv"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real___ZSt18uncaught_exceptionv.apply(null, arguments);
+    	};
+
+    	var real____cxa_can_catch = asm["___cxa_can_catch"];
+    	asm["___cxa_can_catch"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real____cxa_can_catch.apply(null, arguments);
+    	};
+
+    	var real____cxa_is_pointer_type = asm["___cxa_is_pointer_type"];
+    	asm["___cxa_is_pointer_type"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real____cxa_is_pointer_type.apply(null, arguments);
+    	};
+
+    	var real____errno_location = asm["___errno_location"];
+    	asm["___errno_location"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real____errno_location.apply(null, arguments);
+    	};
+
+    	var real__earcut = asm["_earcut"];
+    	asm["_earcut"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__earcut.apply(null, arguments);
+    	};
+
+    	var real__fflush = asm["_fflush"];
+    	asm["_fflush"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__fflush.apply(null, arguments);
+    	};
+
+    	var real__free = asm["_free"];
+    	asm["_free"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__free.apply(null, arguments);
+    	};
+
+    	var real__llvm_maxnum_f64 = asm["_llvm_maxnum_f64"];
+    	asm["_llvm_maxnum_f64"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__llvm_maxnum_f64.apply(null, arguments);
+    	};
+
+    	var real__llvm_minnum_f64 = asm["_llvm_minnum_f64"];
+    	asm["_llvm_minnum_f64"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__llvm_minnum_f64.apply(null, arguments);
+    	};
+
+    	var real__malloc = asm["_malloc"];
+    	asm["_malloc"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__malloc.apply(null, arguments);
+    	};
+
+    	var real__sbrk = asm["_sbrk"];
+    	asm["_sbrk"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real__sbrk.apply(null, arguments);
+    	};
+
+    	var real_establishStackSpace = asm["establishStackSpace"];
+    	asm["establishStackSpace"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real_establishStackSpace.apply(null, arguments);
+    	};
+
+    	var real_stackAlloc = asm["stackAlloc"];
+    	asm["stackAlloc"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real_stackAlloc.apply(null, arguments);
+    	};
+
+    	var real_stackRestore = asm["stackRestore"];
+    	asm["stackRestore"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real_stackRestore.apply(null, arguments);
+    	};
+
+    	var real_stackSave = asm["stackSave"];
+    	asm["stackSave"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return real_stackSave.apply(null, arguments);
+    	};
+    	Module["asm"] = asm;
+    	var __ZSt18uncaught_exceptionv = Module["__ZSt18uncaught_exceptionv"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["__ZSt18uncaught_exceptionv"].apply(null, arguments)
+    	};
+
+    	var ___cxa_can_catch = Module["___cxa_can_catch"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["___cxa_can_catch"].apply(null, arguments)
+    	};
+
+    	var ___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["___cxa_is_pointer_type"].apply(null, arguments)
+    	};
+
+    	var ___errno_location = Module["___errno_location"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["___errno_location"].apply(null, arguments)
+    	};
+
+    	var _earcut = Module["_earcut"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_earcut"].apply(null, arguments)
+    	};
+
+    	var _emscripten_replace_memory = Module["_emscripten_replace_memory"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_emscripten_replace_memory"].apply(null, arguments)
+    	};
+
+    	var _fflush = Module["_fflush"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_fflush"].apply(null, arguments)
+    	};
+
+    	var _free = Module["_free"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_free"].apply(null, arguments)
+    	};
+
+    	var _llvm_maxnum_f64 = Module["_llvm_maxnum_f64"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_llvm_maxnum_f64"].apply(null, arguments)
+    	};
+
+    	var _llvm_minnum_f64 = Module["_llvm_minnum_f64"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_llvm_minnum_f64"].apply(null, arguments)
+    	};
+
+    	var _malloc = Module["_malloc"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_malloc"].apply(null, arguments)
+    	};
+
+    	var _memcpy = Module["_memcpy"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_memcpy"].apply(null, arguments)
+    	};
+
+    	var _memset = Module["_memset"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_memset"].apply(null, arguments)
+    	};
+
+    	var _sbrk = Module["_sbrk"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["_sbrk"].apply(null, arguments)
+    	};
+
+    	var establishStackSpace = Module["establishStackSpace"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["establishStackSpace"].apply(null, arguments)
+    	};
+
+    	var stackAlloc = Module["stackAlloc"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["stackAlloc"].apply(null, arguments)
+    	};
+
+    	var stackRestore = Module["stackRestore"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["stackRestore"].apply(null, arguments)
+    	};
+
+    	var stackSave = Module["stackSave"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["stackSave"].apply(null, arguments)
+    	};
+
+    	var dynCall_ii = Module["dynCall_ii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_ii"].apply(null, arguments)
+    	};
+
+    	var dynCall_iidiiii = Module["dynCall_iidiiii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_iidiiii"].apply(null, arguments)
+    	};
+
+    	var dynCall_iiii = Module["dynCall_iiii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_iiii"].apply(null, arguments)
+    	};
+
+    	var dynCall_jiji = Module["dynCall_jiji"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_jiji"].apply(null, arguments)
+    	};
+
+    	var dynCall_v = Module["dynCall_v"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_v"].apply(null, arguments)
+    	};
+
+    	var dynCall_vi = Module["dynCall_vi"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_vi"].apply(null, arguments)
+    	};
+
+    	var dynCall_vii = Module["dynCall_vii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_vii"].apply(null, arguments)
+    	};
+
+    	var dynCall_viiii = Module["dynCall_viiii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_viiii"].apply(null, arguments)
+    	};
+
+    	var dynCall_viiiii = Module["dynCall_viiiii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_viiiii"].apply(null, arguments)
+    	};
+
+    	var dynCall_viiiiii = Module["dynCall_viiiiii"] = function() {
+    	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+    	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+    	  return Module["asm"]["dynCall_viiiiii"].apply(null, arguments)
+    	};
+
+
+
+    	// === Auto-generated postamble setup entry stuff ===
+
+    	Module['asm'] = asm;
+
+    	if (!Module["intArrayFromString"]) Module["intArrayFromString"] = function() { abort("'intArrayFromString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["intArrayToString"]) Module["intArrayToString"] = function() { abort("'intArrayToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	Module["ccall"] = ccall;
+    	Module["cwrap"] = cwrap;
+    	if (!Module["setValue"]) Module["setValue"] = function() { abort("'setValue' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	Module["getValue"] = getValue;
+    	if (!Module["allocate"]) Module["allocate"] = function() { abort("'allocate' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getMemory"]) Module["getMemory"] = function() { abort("'getMemory' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["AsciiToString"]) Module["AsciiToString"] = function() { abort("'AsciiToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stringToAscii"]) Module["stringToAscii"] = function() { abort("'stringToAscii' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["UTF8ArrayToString"]) Module["UTF8ArrayToString"] = function() { abort("'UTF8ArrayToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["UTF8ToString"]) Module["UTF8ToString"] = function() { abort("'UTF8ToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stringToUTF8Array"]) Module["stringToUTF8Array"] = function() { abort("'stringToUTF8Array' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stringToUTF8"]) Module["stringToUTF8"] = function() { abort("'stringToUTF8' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["lengthBytesUTF8"]) Module["lengthBytesUTF8"] = function() { abort("'lengthBytesUTF8' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["UTF16ToString"]) Module["UTF16ToString"] = function() { abort("'UTF16ToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stringToUTF16"]) Module["stringToUTF16"] = function() { abort("'stringToUTF16' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["lengthBytesUTF16"]) Module["lengthBytesUTF16"] = function() { abort("'lengthBytesUTF16' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["UTF32ToString"]) Module["UTF32ToString"] = function() { abort("'UTF32ToString' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stringToUTF32"]) Module["stringToUTF32"] = function() { abort("'stringToUTF32' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["lengthBytesUTF32"]) Module["lengthBytesUTF32"] = function() { abort("'lengthBytesUTF32' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["allocateUTF8"]) Module["allocateUTF8"] = function() { abort("'allocateUTF8' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stackTrace"]) Module["stackTrace"] = function() { abort("'stackTrace' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addOnPreRun"]) Module["addOnPreRun"] = function() { abort("'addOnPreRun' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addOnInit"]) Module["addOnInit"] = function() { abort("'addOnInit' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addOnPreMain"]) Module["addOnPreMain"] = function() { abort("'addOnPreMain' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addOnExit"]) Module["addOnExit"] = function() { abort("'addOnExit' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addOnPostRun"]) Module["addOnPostRun"] = function() { abort("'addOnPostRun' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["writeStringToMemory"]) Module["writeStringToMemory"] = function() { abort("'writeStringToMemory' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["writeArrayToMemory"]) Module["writeArrayToMemory"] = function() { abort("'writeArrayToMemory' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["writeAsciiToMemory"]) Module["writeAsciiToMemory"] = function() { abort("'writeAsciiToMemory' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addRunDependency"]) Module["addRunDependency"] = function() { abort("'addRunDependency' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["removeRunDependency"]) Module["removeRunDependency"] = function() { abort("'removeRunDependency' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["ENV"]) Module["ENV"] = function() { abort("'ENV' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["FS"]) Module["FS"] = function() { abort("'FS' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["FS_createFolder"]) Module["FS_createFolder"] = function() { abort("'FS_createFolder' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createPath"]) Module["FS_createPath"] = function() { abort("'FS_createPath' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createDataFile"]) Module["FS_createDataFile"] = function() { abort("'FS_createDataFile' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createPreloadedFile"]) Module["FS_createPreloadedFile"] = function() { abort("'FS_createPreloadedFile' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createLazyFile"]) Module["FS_createLazyFile"] = function() { abort("'FS_createLazyFile' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createLink"]) Module["FS_createLink"] = function() { abort("'FS_createLink' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_createDevice"]) Module["FS_createDevice"] = function() { abort("'FS_createDevice' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["FS_unlink"]) Module["FS_unlink"] = function() { abort("'FS_unlink' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ). Alternatively, forcing filesystem support (-s FORCE_FILESYSTEM=1) can export this for you"); };
+    	if (!Module["GL"]) Module["GL"] = function() { abort("'GL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["dynamicAlloc"]) Module["dynamicAlloc"] = function() { abort("'dynamicAlloc' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["warnOnce"]) Module["warnOnce"] = function() { abort("'warnOnce' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["loadDynamicLibrary"]) Module["loadDynamicLibrary"] = function() { abort("'loadDynamicLibrary' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["loadWebAssemblyModule"]) Module["loadWebAssemblyModule"] = function() { abort("'loadWebAssemblyModule' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getLEB"]) Module["getLEB"] = function() { abort("'getLEB' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getFunctionTables"]) Module["getFunctionTables"] = function() { abort("'getFunctionTables' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["alignFunctionTables"]) Module["alignFunctionTables"] = function() { abort("'alignFunctionTables' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["registerFunctions"]) Module["registerFunctions"] = function() { abort("'registerFunctions' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["addFunction"]) Module["addFunction"] = function() { abort("'addFunction' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["removeFunction"]) Module["removeFunction"] = function() { abort("'removeFunction' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getFuncWrapper"]) Module["getFuncWrapper"] = function() { abort("'getFuncWrapper' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["prettyPrint"]) Module["prettyPrint"] = function() { abort("'prettyPrint' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["makeBigInt"]) Module["makeBigInt"] = function() { abort("'makeBigInt' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["dynCall"]) Module["dynCall"] = function() { abort("'dynCall' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getCompilerSetting"]) Module["getCompilerSetting"] = function() { abort("'getCompilerSetting' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stackSave"]) Module["stackSave"] = function() { abort("'stackSave' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stackRestore"]) Module["stackRestore"] = function() { abort("'stackRestore' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["stackAlloc"]) Module["stackAlloc"] = function() { abort("'stackAlloc' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["establishStackSpace"]) Module["establishStackSpace"] = function() { abort("'establishStackSpace' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["print"]) Module["print"] = function() { abort("'print' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["printErr"]) Module["printErr"] = function() { abort("'printErr' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["getTempRet0"]) Module["getTempRet0"] = function() { abort("'getTempRet0' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["setTempRet0"]) Module["setTempRet0"] = function() { abort("'setTempRet0' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };
+    	if (!Module["Pointer_stringify"]) Module["Pointer_stringify"] = function() { abort("'Pointer_stringify' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); };if (!Module["ALLOC_NORMAL"]) Object.defineProperty(Module, "ALLOC_NORMAL", { get: function() { abort("'ALLOC_NORMAL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); } });
+    	if (!Module["ALLOC_STACK"]) Object.defineProperty(Module, "ALLOC_STACK", { get: function() { abort("'ALLOC_STACK' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); } });
+    	if (!Module["ALLOC_DYNAMIC"]) Object.defineProperty(Module, "ALLOC_DYNAMIC", { get: function() { abort("'ALLOC_DYNAMIC' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); } });
+    	if (!Module["ALLOC_NONE"]) Object.defineProperty(Module, "ALLOC_NONE", { get: function() { abort("'ALLOC_NONE' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"); } });
+
+
+
+
+    	/**
+    	 * @constructor
+    	 * @extends {Error}
+    	 * @this {ExitStatus}
+    	 */
+    	function ExitStatus(status) {
+    	  this.name = "ExitStatus";
+    	  this.message = "Program terminated with exit(" + status + ")";
+    	  this.status = status;
+    	}	ExitStatus.prototype = new Error();
+    	ExitStatus.prototype.constructor = ExitStatus;
+
+    	dependenciesFulfilled = function runCaller() {
+    	  // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
+    	  if (!Module['calledRun']) run();
+    	  if (!Module['calledRun']) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
+    	};
+
+
+
+
+
+    	/** @type {function(Array=)} */
+    	function run(args) {
+    	  args = args || Module['arguments'];
+
+    	  if (runDependencies > 0) {
+    		return;
+    	  }
+
+    	  writeStackCookie();
+
+    	  preRun();
+
+    	  if (runDependencies > 0) return; // a preRun added a dependency, run will be called later
+    	  if (Module['calledRun']) return; // run may have just been called through dependencies being fulfilled just in this very frame
+
+    	  function doRun() {
+    		if (Module['calledRun']) return; // run may have just been called while the async setStatus time below was happening
+    		Module['calledRun'] = true;
+
+    		if (ABORT) return;
+
+    		ensureInitRuntime();
+
+    		preMain();
+
+    		if (Module['onRuntimeInitialized']) Module['onRuntimeInitialized']();
+
+    		assert(!Module['_main'], 'compiled without a main, but one is present. if you added it from JS, use Module["onRuntimeInitialized"]');
+
+    		postRun();
+    	  }
+
+    	  if (Module['setStatus']) {
+    		Module['setStatus']('Running...');
+    		setTimeout(function() {
+    		  setTimeout(function() {
+    			Module['setStatus']('');
+    		  }, 1);
+    		  doRun();
+    		}, 1);
+    	  } else {
+    		doRun();
+    	  }
+    	  checkStackCookie();
+    	}
+    	Module['run'] = run;
+
+    	var abortDecorators = [];
+
+    	function abort(what) {
+    	  if (Module['onAbort']) {
+    		Module['onAbort'](what);
+    	  }
+
+    	  if (what !== undefined) {
+    		//out(what);
+    		//err(what);
+    		what = '"' + what + '"';
+    	  } else {
+    		what = '';
+    	  }
+
+    	  ABORT = true;
+
+    	  var extra = '';
+    	  var output = 'abort(' + what + ') at ' + stackTrace() + extra;
+    	  if (abortDecorators) {
+    		abortDecorators.forEach(function(decorator) {
+    		  output = decorator(output, what);
+    		});
+    	  }
+    	  throw output;
+    	}
+    	Module['abort'] = abort;
+
+    	if (Module['preInit']) {
+    	  if (typeof Module['preInit'] == 'function') Module['preInit'] = [Module['preInit']];
+    	  while (Module['preInit'].length > 0) {
+    		Module['preInit'].pop()();
+    	  }
+    	}
+
+
+    	  Module["noExitRuntime"] = true;
+
+    	run();
+    } else {
+        var Module = null;
+    }
+
+    var earcutWasm = Module;
+
+
+
+    // {{MODULE_ADDITIONS}}
+
+    var earcutWasmReady = false;
+    if (defined.defined(earcutWasm)) {
+        earcutWasm.onRuntimeInitialized = function () {
+            earcutWasmReady = true;
+        };
+        var earcutwasm = earcutWasm.cwrap('earcut','number',['number','number','number','number','number','number']);
+    }
+
+    var layout$3 = createLayout([
+        {name: 'a_pos', components: 2, type: 'Int16'}
+    ], 4);
+    var members$1 = layout$3.members;
+
+    var EARCUT_MAX_RINGS = 500;
+
+    var FillBucket = function FillBucket(options) {
+        this.zoom = options.zoom;
+        this.overscaling = options.overscaling;
+        this.layers = options.layers;
+        this.layerIds = this.layers.map(function (layer) {
+            return layer.id;
+        });
+        this.index = options.index;
+        this.hasPattern = false;
+        this.patternFeatures = [];
+
+        this.layoutVertexArray = new StructArrayLayout2i4();
+        this.indexArray = new StructArrayLayout3ui6();
+        this.indexArray2 = new StructArrayLayout2ui4();
+        this.programConfigurations = new ProgramConfigurationSet(members$1, options.layers, options.zoom);
+        this.segments = new SegmentVector();
+        this.segments2 = new SegmentVector();
+        this.stateDependentLayerIds = this.layers.filter(function (l) {
+            return l.isStateDependent();
+        }).map(function (l) {
+            return l.id;
+        });
+    };
+
+    FillBucket.prototype.populate = function populate(features, options) {
+        this.hasPattern = hasPattern('fill', this.layers, options);
+        var bucketFeatures = [];
+
+        for (var i = 0, list = features; i < list.length; i += 1) {
+            var ref = list[i];
+            var feature = ref.feature;
+            var index = ref.index;
+            var sourceLayerIndex = ref.sourceLayerIndex;
+
+            if (!this.layers[0]._featureFilter(new EvaluationParameters$1(0), feature)) {
+                continue;
+            }
+
+            var geometry = loadGeometry(feature);
+            var sortKey = 
+                undefined;
+
+            var bucketFeature = {
+                id: feature.id,
+                properties: feature.properties,
+                type: feature.type,
+                sourceLayerIndex: sourceLayerIndex,
+                index: index,
+                geometry: geometry,
+                patterns: {},
+                sortKey: sortKey
+            };
+
+            bucketFeatures.push(bucketFeature);
+        }
+
+        for (var i$1 = 0, list$1 = bucketFeatures; i$1 < list$1.length; i$1 += 1) {
+            var bucketFeature$1 = list$1[i$1];
+
+            var ref$1 = bucketFeature$1;
+            var geometry$1 = ref$1.geometry;
+            var index$1 = ref$1.index;
+            var sourceLayerIndex$1 = ref$1.sourceLayerIndex;
+
+            if (this.hasPattern) {
+                var patternFeature = addPatternDependencies('fill', this.layers, bucketFeature$1, this.zoom, options);
+                // pattern features are added only once the pattern is loaded into the image atlas
+                // so are stored during populate until later updated with positions by tile worker in addFeatures
+                this.patternFeatures.push(patternFeature);
+            } else {
+                this.addFeature(bucketFeature$1, geometry$1, index$1, {}, options.indexData);
+            }
+
+            var feature$1 = features[index$1].feature;
+            options.featureIndex.insert(feature$1, geometry$1, index$1, sourceLayerIndex$1, this.index);
+        }
+    };
+
+    FillBucket.prototype.update = function update(states, vtLayer, imagePositions) {
+        if (!this.stateDependentLayers.length) {
+            return;
+        }
+        this.programConfigurations.updatePaintArrays(states, vtLayer, this.stateDependentLayers, imagePositions);
+    };
+
+    FillBucket.prototype.addFeatures = function addFeatures(options, imagePositions) {
+        for (var i = 0, list = this.patternFeatures; i < list.length; i += 1) {
+            var feature = list[i];
+
+            this.addFeature(feature, feature.geometry, feature.index, imagePositions);
+        }
+    };
+
+    FillBucket.prototype.isEmpty = function isEmpty() {
+        return this.layoutVertexArray.length === 0;
+    };
+
+    FillBucket.prototype.uploadPending = function uploadPending() {
+        return !this.uploaded || this.programConfigurations.needsUpload;
+    };
+    FillBucket.prototype.upload = function upload(context) {
+        if (!this.uploaded) {
+            this.layoutVertexBuffer = context.createVertexBuffer(this.layoutVertexArray, members$1);
+            this.indexBuffer = context.createIndexBuffer(this.indexArray);
+            this.indexBuffer2 = context.createIndexBuffer(this.indexArray2);
+        }
+        this.programConfigurations.upload(context);
+        this.uploaded = true;
+    };
+
+    FillBucket.prototype.destroy = function destroy() {
+        if (!this.layoutVertexBuffer) {
+            return;
+        }
+        this.layoutVertexBuffer.destroy();
+        this.indexBuffer.destroy();
+        this.indexBuffer2.destroy();
+        this.programConfigurations.destroy();
+        this.segments.destroy();
+        this.segments2.destroy();
+    };
+
+    FillBucket.prototype.clear = function clear() {
+        if (defined.defined(this.layoutVertexArray)) {
+            this.layoutVertexArray = null;
+        }
+        if (defined.defined(this.indexArray)) {
+            this.indexArray = null;
+        }
+        if (defined.defined(this.indexArray2)) {
+            this.indexArray2 = null;
+        }
+    };
+
+    FillBucket.prototype.addFeature = function addFeature(feature, geometry, index, imagePositions, indexData) {
+        for (var i$4 = 0, list$2 = classifyRings(geometry, EARCUT_MAX_RINGS); i$4 < list$2.length; i$4 += 1) {
+            var polygon = list$2[i$4];
+
+            var numVertices = 0;
+            for (var i$2 = 0, list = polygon; i$2 < list.length; i$2 += 1) {
+                var ring = list[i$2];
+
+                numVertices += ring.length;
+            }
+
+            var triangleSegment = this.segments.prepareSegment(numVertices, this.layoutVertexArray, this.indexArray);
+            var triangleIndex = triangleSegment.vertexLength;
+
+            var flattened = [];
+            var holeIndices = [];
+
+            for (var i$3 = 0, list$1 = polygon; i$3 < list$1.length; i$3 += 1) {
+                var ring$1 = list$1[i$3];
+
+                if (ring$1.length === 0) {
+                    continue;
+                }
+
+                if (ring$1 !== polygon[0]) {
+                    holeIndices.push(flattened.length / 2);
+                }
+
+                var lineSegment = this.segments2.prepareSegment(ring$1.length, this.layoutVertexArray, this.indexArray2);
+                var lineIndex = lineSegment.vertexLength;
+
+                this.layoutVertexArray.emplaceBack(ring$1[0].x, ring$1[0].y);
+                this.indexArray2.emplaceBack(lineIndex + ring$1.length - 1, lineIndex);
+                flattened.push(ring$1[0].x);
+                flattened.push(ring$1[0].y);
+
+                for (var i = 1; i < ring$1.length; i++) {
+                    this.layoutVertexArray.emplaceBack(ring$1[i].x, ring$1[i].y);
+                    this.indexArray2.emplaceBack(lineIndex + i - 1, lineIndex + i);
+                    flattened.push(ring$1[i].x);
+                    flattened.push(ring$1[i].y);
+                }
+
+                lineSegment.vertexLength += ring$1.length;
+                lineSegment.primitiveLength += ring$1.length;
+            }
+            
+            var indices;
+
+            if (defined.defined(indexData) && defined.defined(indexData[feature.id])) {
+                indices = indexData[feature.id];
+            } else if (earcutWasmReady === true) {
+                var data = new Int32Array(flattened);
+                var dataLength = data.length;
+
+                var offset = earcutWasm._malloc(Int32Array.BYTES_PER_ELEMENT * dataLength); //开辟内存
+                earcutWasm.HEAP32.set(data, offset / Int32Array.BYTES_PER_ELEMENT); //设置值
+
+                var hole = new Int32Array(holeIndices);
+                var holeLength = hole.length;
+                var offset1 = earcutWasm._malloc(Int32Array.BYTES_PER_ELEMENT * holeLength); //开辟内存
+                earcutWasm.HEAP32.set(hole, offset1 / Int32Array.BYTES_PER_ELEMENT); //设置值
+
+                var res = new Int32Array(dataLength * 10);
+                var offset2 = earcutWasm._malloc(Int32Array.BYTES_PER_ELEMENT * dataLength * 10); //开辟内存
+                earcutWasm.HEAP32.set(res, offset2 / Int32Array.BYTES_PER_ELEMENT);
+
+                var len = earcutwasm(offset, dataLength, offset1, holeLength, 2, offset2);
+                var result = new Int32Array(earcutWasm.HEAP32.buffer, offset2, len);
+                indices = new Int32Array(result);
+                earcutWasm._free(offset);
+                earcutWasm._free(offset1);
+                earcutWasm._free(offset2);
+            }  else {
+                indices = earcut2_2_1.earcut(flattened, holeIndices);
+            }
+            
+            for (var i$1 = 0; i$1 < indices.length; i$1 += 3) {
+                this.indexArray.emplaceBack(
+                    triangleIndex + indices[i$1],
+                    triangleIndex + indices[i$1 + 1],
+                    triangleIndex + indices[i$1 + 2]);
+            }
+
+            triangleSegment.vertexLength += numVertices;
+            triangleSegment.primitiveLength += indices.length / 3;
+        }
+        this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, imagePositions);
+    };
+
+    WebWorkerTransfer.register('FillBucket', FillBucket, {omit: ['layers', 'patternFeatures']});
+
+    var Struct = function Struct(structArray           , index      ) {
+        (this   )._structArray = structArray;
+        this._pos1 = index * this.size;
+        this._pos2 = this._pos1 / 2;
+        this._pos4 = this._pos1 / 4;
+        this._pos8 = this._pos1 / 8;
+    };
+
+    var DEFAULT_CAPACITY$1 = 128;
+    var RESIZE_MULTIPLIER$1 = 5;
+
+    /**
+     * `StructArray` provides an abstraction over `ArrayBuffer` and `TypedArray`
+     * making it behave like an array of typed structs.
+     *
+     * Conceptually, a StructArray is comprised of elements, i.e., instances of its
+     * associated struct type. Each particular struct type, together with an
+     * alignment size, determines the memory layout of a StructArray whose elements
+     * are of that type.  Thus, for each such layout that we need, we have
+     * a corrseponding StructArrayLayout class, inheriting from StructArray and
+     * implementing `emplaceBack()` and `_refreshViews()`.
+     *
+     * In some cases, where we need to access particular elements of a StructArray,
+     * we implement a more specific subclass that inherits from one of the
+     * StructArrayLayouts and adds a `get(i): T` accessor that returns a structured
+     * object whose properties are proxies into the underlying memory space for the
+     * i-th element.  This affords the convience of working with (seemingly) plain
+     * Javascript objects without the overhead of serializing/deserializing them
+     * into ArrayBuffers for efficient web worker transfer.
+     *
+     * @private
+     */
+    var StructArray$1 = function StructArray() {
+        this.isTransferred = false;
+        this.capacity = -1;
+        this.resize(0);
+    };
+
+    /**
+     * Serialize a StructArray instance.Serializes both the raw data and the
+     * metadata needed to reconstruct the StructArray base class during
+     * deserialization.
+     */
+    StructArray$1.serialize = function serialize (array, transferables) {
+        //assert_1(!array.isTransferred);
+        if(array.isTransferred){
+            console.log("StructArray array.isTransferred.");
+        }
+
+        array._trim();
+
+        if (transferables) {
+            array.isTransferred = true;
+            transferables.push(array.arrayBuffer);
+        }
+
+        return {
+            length: array.length,
+            arrayBuffer: array.arrayBuffer,
+        };
+    };
+
+    StructArray$1.deserialize = function deserialize (input                     ) {
+        var structArray = Object.create(this.prototype);
+        structArray.arrayBuffer = input.arrayBuffer;
+        structArray.length = input.length;
+        structArray.capacity = input.arrayBuffer.byteLength / structArray.bytesPerElement;
+        structArray._refreshViews();
+        return structArray;
+    };
+
+    /**
+     * Resize the array to discard unused capacity.
+     */
+    StructArray$1.prototype._trim = function _trim () {
+        if (this.length !== this.capacity) {
+            this.capacity = this.length;
+            this.arrayBuffer = this.arrayBuffer.slice(0, this.length * this.bytesPerElement);
+            this._refreshViews();
+        }
+    };
+
+    /**
+     * Resets the the length of the array to 0 without de-allocating capcacity.
+     */
+    StructArray$1.prototype.clear = function clear () {
+        this.length = 0;
+    };
+
+    /**
+     * Resize the array.
+     * If `n` is greater than the current length then additional elements with undefined values are added.
+     * If `n` is less than the current length then the array will be reduced to the first `n` elements.
+     * @param {number} n The new size of the array.
+     */
+    StructArray$1.prototype.resize = function resize (n      ) {
+        //assert_1(!this.isTransferred);
+        this.reserve(n);
+        this.length = n;
+    };
+
+    /**
+     * Indicate a planned increase in size, so that any necessary allocation may
+     * be done once, ahead of time.
+     * @param {number} n The expected size of the array.
+     */
+    StructArray$1.prototype.reserve = function reserve (n      ) {
+        if (n > this.capacity) {
+            this.capacity = Math.max(n, Math.floor(this.capacity * RESIZE_MULTIPLIER$1), DEFAULT_CAPACITY$1);
+            this.arrayBuffer = new ArrayBuffer(this.capacity * this.bytesPerElement);
+
+            var oldUint8Array = this.uint8;
+            this._refreshViews();
+            if (oldUint8Array) { this.uint8.set(oldUint8Array); }
+        }
+    };
+
+    /**
+     * Create TypedArray views for the current ArrayBuffer.
+     */
+    StructArray$1.prototype._refreshViews = function _refreshViews () {
+        throw new Error('_refreshViews() must be implemented by each concrete StructArray layout');
+    };
+    /**
+     * Implementation of the StructArray layout:
+     * [0]: Uint32[1]
+     * [4]: Uint16[2]
+     *
+     * @private
+     */
+    var StructArrayLayout1ul2ui8 = /*@__PURE__*/(function (StructArray) {
+        function StructArrayLayout1ul2ui8 () {
+            StructArray.apply(this, arguments);
+        }
+
+        if ( StructArray ) StructArrayLayout1ul2ui8.__proto__ = StructArray;
+        StructArrayLayout1ul2ui8.prototype = Object.create( StructArray && StructArray.prototype );
+        StructArrayLayout1ul2ui8.prototype.constructor = StructArrayLayout1ul2ui8;
+
+        StructArrayLayout1ul2ui8.prototype._refreshViews = function _refreshViews () {
+            this.uint8 = new Uint8Array(this.arrayBuffer);
+            this.uint32 = new Uint32Array(this.arrayBuffer);
+            this.uint16 = new Uint16Array(this.arrayBuffer);
+        };
+
+        StructArrayLayout1ul2ui8.prototype.emplaceBack = function emplaceBack (v0        , v1        , v2        ) {
+            var i = this.length;
+            this.resize(i + 1);
+            return this.emplace(i, v0, v1, v2);
+        };
+
+        StructArrayLayout1ul2ui8.prototype.emplace = function emplace (i        , v0        , v1        , v2        ) {
+            var o4 = i * 2;
+            var o2 = i * 4;
+            this.uint32[o4 + 0] = v0;
+            this.uint16[o2 + 2] = v1;
+            this.uint16[o2 + 3] = v2;
+            return i;
+        };
+
+        return StructArrayLayout1ul2ui8;
+    }(StructArray$1));
+
+    StructArrayLayout1ul2ui8.prototype.bytesPerElement = 8;
+
+    var FeatureIndexStruct = /*@__PURE__*/(function (Struct) {
+        function FeatureIndexStruct () {
+            Struct.apply(this, arguments);
+        }
+
+        if ( Struct ) FeatureIndexStruct.__proto__ = Struct;
+        FeatureIndexStruct.prototype = Object.create( Struct && Struct.prototype );
+        FeatureIndexStruct.prototype.constructor = FeatureIndexStruct;
+
+        var prototypeAccessors$5 = { featureIndex: { configurable: true },sourceLayerIndex: { configurable: true },bucketIndex: { configurable: true } };
+
+        prototypeAccessors$5.featureIndex.get = function () { return this._structArray.uint32[this._pos4 + 0]; };
+        prototypeAccessors$5.featureIndex.set = function (x        ) { this._structArray.uint32[this._pos4 + 0] = x; };
+        prototypeAccessors$5.sourceLayerIndex.get = function () { return this._structArray.uint16[this._pos2 + 2]; };
+        prototypeAccessors$5.sourceLayerIndex.set = function (x        ) { this._structArray.uint16[this._pos2 + 2] = x; };
+        prototypeAccessors$5.bucketIndex.get = function () { return this._structArray.uint16[this._pos2 + 3]; };
+        prototypeAccessors$5.bucketIndex.set = function (x        ) { this._structArray.uint16[this._pos2 + 3] = x; };
+
+        Object.defineProperties( FeatureIndexStruct.prototype, prototypeAccessors$5 );
+
+        return FeatureIndexStruct;
+    }(Struct));
+
+    FeatureIndexStruct.prototype.size = 8;
+
+    /**
+     * @private
+     */
+    var FeatureIndexArray = /*@__PURE__*/(function (StructArrayLayout1ul2ui8) {
+        function FeatureIndexArray () {
+            StructArrayLayout1ul2ui8.apply(this, arguments);
+        }
+
+        if ( StructArrayLayout1ul2ui8 ) FeatureIndexArray.__proto__ = StructArrayLayout1ul2ui8;
+        FeatureIndexArray.prototype = Object.create( StructArrayLayout1ul2ui8 && StructArrayLayout1ul2ui8.prototype );
+        FeatureIndexArray.prototype.constructor = FeatureIndexArray;
+
+        FeatureIndexArray.prototype.get = function get (index        )                     {
+            //assert_1(!this.isTransferred);
+            return new FeatureIndexStruct(this, index);
+        };
+
+        return FeatureIndexArray;
+    }(StructArrayLayout1ul2ui8));
+
+    WebWorkerTransfer.register('FeatureIndexArray', FeatureIndexArray, {omit: ['layers', 'patternFeatures']});
+    var arrayTypes = {
+        FeatureIndexArray : FeatureIndexArray
+    };
+
+    /**
+     * A standalone point geometry with useful accessor, comparison, and
+     * modification methods.
+     *
+     * @class Point
+     * @param {Number} x the x-coordinate. this could be longitude or screen
+     * pixels, or any other sort of unit.
+     * @param {Number} y the y-coordinate. this could be latitude or screen
+     * pixels, or any other sort of unit.
+     * @example
+     * var point = new Point(-77, 38);
+     */
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    Point.prototype = {
+
+        /**
+         * Clone this point, returning a new point that can be modified
+         * without affecting the old one.
+         * @return {Point} the clone
+         */
+        clone: function() { return new Point(this.x, this.y); },
+
+        /**
+         * Add this point's x & y coordinates to another point,
+         * yielding a new point.
+         * @param {Point} p the other point
+         * @return {Point} output point
+         */
+        add:     function(p) { return this.clone()._add(p); },
+
+        /**
+         * Subtract this point's x & y coordinates to from point,
+         * yielding a new point.
+         * @param {Point} p the other point
+         * @return {Point} output point
+         */
+        sub:     function(p) { return this.clone()._sub(p); },
+
+        /**
+         * Multiply this point's x & y coordinates by point,
+         * yielding a new point.
+         * @param {Point} p the other point
+         * @return {Point} output point
+         */
+        multByPoint:    function(p) { return this.clone()._multByPoint(p); },
+
+        /**
+         * Divide this point's x & y coordinates by point,
+         * yielding a new point.
+         * @param {Point} p the other point
+         * @return {Point} output point
+         */
+        divByPoint:     function(p) { return this.clone()._divByPoint(p); },
+
+        /**
+         * Multiply this point's x & y coordinates by a factor,
+         * yielding a new point.
+         * @param {Point} k factor
+         * @return {Point} output point
+         */
+        mult:    function(k) { return this.clone()._mult(k); },
+
+        /**
+         * Divide this point's x & y coordinates by a factor,
+         * yielding a new point.
+         * @param {Point} k factor
+         * @return {Point} output point
+         */
+        div:     function(k) { return this.clone()._div(k); },
+
+        /**
+         * Rotate this point around the 0, 0 origin by an angle a,
+         * given in radians
+         * @param {Number} a angle to rotate around, in radians
+         * @return {Point} output point
+         */
+        rotate:  function(a) { return this.clone()._rotate(a); },
+
+        /**
+         * Rotate this point around p point by an angle a,
+         * given in radians
+         * @param {Number} a angle to rotate around, in radians
+         * @param {Point} p Point to rotate around
+         * @return {Point} output point
+         */
+        rotateAround:  function(a,p) { return this.clone()._rotateAround(a,p); },
+
+        /**
+         * Multiply this point by a 4x1 transformation matrix
+         * @param {Array<Number>} m transformation matrix
+         * @return {Point} output point
+         */
+        matMult: function(m) { return this.clone()._matMult(m); },
+
+        /**
+         * Calculate this point but as a unit vector from 0, 0, meaning
+         * that the distance from the resulting point to the 0, 0
+         * coordinate will be equal to 1 and the angle from the resulting
+         * point to the 0, 0 coordinate will be the same as before.
+         * @return {Point} unit vector point
+         */
+        unit:    function() { return this.clone()._unit(); },
+
+        /**
+         * Compute a perpendicular point, where the new y coordinate
+         * is the old x coordinate and the new x coordinate is the old y
+         * coordinate multiplied by -1
+         * @return {Point} perpendicular point
+         */
+        perp:    function() { return this.clone()._perp(); },
+
+        /**
+         * Return a version of this point with the x & y coordinates
+         * rounded to integers.
+         * @return {Point} rounded point
+         */
+        round:   function() { return this.clone()._round(); },
+
+        /**
+         * Return the magitude of this point: this is the Euclidean
+         * distance from the 0, 0 coordinate to this point's x and y
+         * coordinates.
+         * @return {Number} magnitude
+         */
+        mag: function() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        },
+
+        /**
+         * Judge whether this point is equal to another point, returning
+         * true or false.
+         * @param {Point} other the other point
+         * @return {boolean} whether the points are equal
+         */
+        equals: function(other) {
+            return this.x === other.x &&
+                this.y === other.y;
+        },
+
+        /**
+         * Calculate the distance from this point to another point
+         * @param {Point} p the other point
+         * @return {Number} distance
+         */
+        dist: function(p) {
+            return Math.sqrt(this.distSqr(p));
+        },
+
+        /**
+         * Calculate the distance from this point to another point,
+         * without the square root step. Useful if you're comparing
+         * relative distances.
+         * @param {Point} p the other point
+         * @return {Number} distance
+         */
+        distSqr: function(p) {
+            var dx = p.x - this.x,
+                dy = p.y - this.y;
+            return dx * dx + dy * dy;
+        },
+
+        /**
+         * Get the angle from the 0, 0 coordinate to this point, in radians
+         * coordinates.
+         * @return {Number} angle
+         */
+        angle: function() {
+            return Math.atan2(this.y, this.x);
+        },
+
+        /**
+         * Get the angle from this point to another point, in radians
+         * @param {Point} b the other point
+         * @return {Number} angle
+         */
+        angleTo: function(b) {
+            return Math.atan2(this.y - b.y, this.x - b.x);
+        },
+
+        /**
+         * Get the angle between this point and another point, in radians
+         * @param {Point} b the other point
+         * @return {Number} angle
+         */
+        angleWith: function(b) {
+            return this.angleWithSep(b.x, b.y);
+        },
+
+        /*
+         * Find the angle of the two vectors, solving the formula for
+         * the cross product a x b = |a||b|sin(θ) for θ.
+         * @param {Number} x the x-coordinate
+         * @param {Number} y the y-coordinate
+         * @return {Number} the angle in radians
+         */
+        angleWithSep: function(x, y) {
+            return Math.atan2(
+                this.x * y - this.y * x,
+                this.x * x + this.y * y);
+        },
+
+        _matMult: function(m) {
+            var x = m[0] * this.x + m[1] * this.y,
+                y = m[2] * this.x + m[3] * this.y;
+            this.x = x;
+            this.y = y;
+            return this;
+        },
+
+        _add: function(p) {
+            this.x += p.x;
+            this.y += p.y;
+            return this;
+        },
+
+        _sub: function(p) {
+            this.x -= p.x;
+            this.y -= p.y;
+            return this;
+        },
+
+        _mult: function(k) {
+            this.x *= k;
+            this.y *= k;
+            return this;
+        },
+
+        _div: function(k) {
+            this.x /= k;
+            this.y /= k;
+            return this;
+        },
+
+        _multByPoint: function(p) {
+            this.x *= p.x;
+            this.y *= p.y;
+            return this;
+        },
+
+        _divByPoint: function(p) {
+            this.x /= p.x;
+            this.y /= p.y;
+            return this;
+        },
+
+        _unit: function() {
+            this._div(this.mag());
+            return this;
+        },
+
+        _perp: function() {
+            var y = this.y;
+            this.y = this.x;
+            this.x = -y;
+            return this;
+        },
+
+        _rotate: function(angle) {
+            var cos = Math.cos(angle),
+                sin = Math.sin(angle),
+                x = cos * this.x - sin * this.y,
+                y = sin * this.x + cos * this.y;
+            this.x = x;
+            this.y = y;
+            return this;
+        },
+
+        _rotateAround: function(angle, p) {
+            var cos = Math.cos(angle),
+                sin = Math.sin(angle),
+                x = p.x + cos * (this.x - p.x) - sin * (this.y - p.y),
+                y = p.y + sin * (this.x - p.x) + cos * (this.y - p.y);
+            this.x = x;
+            this.y = y;
+            return this;
+        },
+
+        _round: function() {
+            this.x = Math.round(this.x);
+            this.y = Math.round(this.y);
+            return this;
+        }
+    };
+
+    /**
+     * Construct a point from an array if necessary, otherwise if the input
+     * is already a Point, or an unknown type, return it unchanged
+     * @param {Array<Number>|Point|*} a any kind of input value
+     * @return {Point} constructed point, or passed-through value.
+     * @example
+     * // this
+     * var point = Point.convert([0, 1]);
+     * // is equivalent to
+     * var point = new Point(0, 1);
+     */
+    Point.convert = function (a) {
+        if (a instanceof Point) {
+            return a;
+        }
+        if (Array.isArray(a)) {
+            return new Point(a[0], a[1]);
+        }
+        return a;
+    };
+
+    function VectorTileFeature(pbf, end, extent, keys, values) {
+        // Public
+        this.properties = {};
+        this.extent = extent;
+        this.type = 0;
+
+        // Private
+        this._pbf = pbf;
+        this._geometry = -1;
+        this._keys = keys;
+        this._values = values;
+
+        pbf.readFields(readFeature, this, end);
+    }
+
+    function readFeature(tag, feature, pbf) {
+        if (tag == 1) feature.id = pbf.readVarint();
+        else if (tag == 2) readTag(pbf, feature);
+        else if (tag == 3) feature.type = pbf.readVarint();
+        else if (tag == 4) feature._geometry = pbf.pos;
+    }
+
+    function readTag(pbf, feature) {
+        var end = pbf.readVarint() + pbf.pos;
+
+        while (pbf.pos < end) {
+            var key = feature._keys[pbf.readVarint()],
+                value = feature._values[pbf.readVarint()];
+            feature.properties[key] = value;
+        }
+    }
+
+    VectorTileFeature.types = ['Unknown', 'Point', 'LineString', 'Polygon'];
+
+    VectorTileFeature.prototype.loadGeometry = function() {
+        var pbf = this._pbf;
+        pbf.pos = this._geometry;
+
+        var end = pbf.readVarint() + pbf.pos,
+            cmd = 1,
+            length = 0,
+            x = 0,
+            y = 0,
+            lines = [],
+            line;
+
+        while (pbf.pos < end) {
+            if (length <= 0) {
+                var cmdLen = pbf.readVarint();
+                cmd = cmdLen & 0x7;
+                length = cmdLen >> 3;
+            }
+
+            length--;
+
+            if (cmd === 1 || cmd === 2) {
+                x += pbf.readSVarint();
+                y += pbf.readSVarint();
+
+                if (cmd === 1) { // moveTo
+                    if (line) lines.push(line);
+                    line = [];
+                }
+
+                line.push(new Point(x, y));
+
+            } else if (cmd === 7) {
+
+                // Workaround for https://github.com/mapbox/mapnik-vector-tile/issues/90
+                if (line) {
+                    line.push(line[0].clone()); // closePolygon
+                }
+
+            } else {
+                throw new Error('unknown command ' + cmd);
+            }
+        }
+
+        if (line) lines.push(line);
+
+        return lines;
+    };
+
+    VectorTileFeature.prototype.bbox = function() {
+        var pbf = this._pbf;
+        pbf.pos = this._geometry;
+
+        var end = pbf.readVarint() + pbf.pos,
+            cmd = 1,
+            length = 0,
+            x = 0,
+            y = 0,
+            x1 = Infinity,
+            x2 = -Infinity,
+            y1 = Infinity,
+            y2 = -Infinity;
+
+        while (pbf.pos < end) {
+            if (length <= 0) {
+                var cmdLen = pbf.readVarint();
+                cmd = cmdLen & 0x7;
+                length = cmdLen >> 3;
+            }
+
+            length--;
+
+            if (cmd === 1 || cmd === 2) {
+                x += pbf.readSVarint();
+                y += pbf.readSVarint();
+                if (x < x1) x1 = x;
+                if (x > x2) x2 = x;
+                if (y < y1) y1 = y;
+                if (y > y2) y2 = y;
+
+            } else if (cmd !== 7) {
+                throw new Error('unknown command ' + cmd);
+            }
+        }
+
+        return [x1, y1, x2, y2];
+    };
+
+    VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
+        var size = this.extent * Math.pow(2, z),
+            x0 = this.extent * x,
+            y0 = this.extent * y,
+            coords = this.loadGeometry(),
+            type = VectorTileFeature.types[this.type],
+            i, j;
+
+        function project(line) {
+            for (var j = 0; j < line.length; j++) {
+                var p = line[j], y2 = 180 - (p.y + y0) * 360 / size;
+                line[j] = [
+                    (p.x + x0) * 360 / size - 180,
+                    360 / Math.PI * Math.atan(Math.exp(y2 * Math.PI / 180)) - 90
+                ];
+            }
+        }
+
+        switch (this.type) {
+            case 1:
+                var points = [];
+                for (i = 0; i < coords.length; i++) {
+                    points[i] = coords[i][0];
+                }
+                coords = points;
+                project(coords);
+                break;
+
+            case 2:
+                for (i = 0; i < coords.length; i++) {
+                    project(coords[i]);
+                }
+                break;
+
+            case 3:
+                coords = classifyRings$1(coords);
+                for (i = 0; i < coords.length; i++) {
+                    for (j = 0; j < coords[i].length; j++) {
+                        project(coords[i][j]);
+                    }
+                }
+                break;
+        }
+
+        if (coords.length === 1) {
+            coords = coords[0];
+        } else {
+            type = 'Multi' + type;
+        }
+
+        var result = {
+            type: "Feature",
+            geometry: {
+                type: type,
+                coordinates: coords
+            },
+            properties: this.properties
+        };
+
+        if ('id' in this) {
+            result.id = this.id;
+        }
+
+        return result;
+    };
+
+    // classifies an array of rings into polygons with outer rings and holes
+
+    function classifyRings$1(rings) {
+        var len = rings.length;
+
+        if (len <= 1) return [rings];
+
+        var polygons = [],
+            polygon,
+            ccw;
+
+        for (var i = 0; i < len; i++) {
+            var area = signedArea(rings[i]);
+            if (area === 0) continue;
+
+            if (ccw === undefined) ccw = area < 0;
+
+            if (ccw === area < 0) {
+                if (polygon) polygons.push(polygon);
+                polygon = [rings[i]];
+
+            } else {
+                polygon.push(rings[i]);
+            }
+        }
+        if (polygon) polygons.push(polygon);
+
+        return polygons;
+    }
+
+    function signedArea(ring) {
+        var sum = 0;
+        for (var i = 0, len = ring.length, j = len - 1, p1, p2; i < len; j = i++) {
+            p1 = ring[i];
+            p2 = ring[j];
+            sum += (p2.x - p1.x) * (p1.y + p2.y);
+        }
+        return sum;
+    }
+
+    function VectorTileLayer(pbf, end) {
+        // Public
+        this.version = 1;
+        this.name = null;
+        this.extent = 4096;
+        this.length = 0;
+
+        // Private
+        this._pbf = pbf;
+        this._keys = [];
+        this._values = [];
+        this._features = [];
+
+        pbf.readFields(readLayer, this, end);
+
+        this.length = this._features.length;
+    }
+
+    function readLayer(tag, layer, pbf) {
+        if (tag === 15) layer.version = pbf.readVarint();
+        else if (tag === 1) layer.name = pbf.readString();
+        else if (tag === 5) layer.extent = pbf.readVarint();
+        else if (tag === 2) layer._features.push(pbf.pos);
+        else if (tag === 3) layer._keys.push(pbf.readString());
+        else if (tag === 4) layer._values.push(readValueMessage(pbf));
+    }
+
+    function readValueMessage(pbf) {
+        var value = null,
+            end = pbf.readVarint() + pbf.pos;
+
+        while (pbf.pos < end) {
+            var tag = pbf.readVarint() >> 3;
+
+            value = tag === 1 ? pbf.readString() :
+                tag === 2 ? pbf.readFloat() :
+                    tag === 3 ? pbf.readDouble() :
+                        tag === 4 ? pbf.readVarint64() :
+                            tag === 5 ? pbf.readVarint() :
+                                tag === 6 ? pbf.readSVarint() :
+                                    tag === 7 ? pbf.readBoolean() : null;
+        }
+
+        return value;
+    }
+
+    // return feature `i` from this layer as a `VectorTileFeature`
+    VectorTileLayer.prototype.feature = function(i) {
+        if (i < 0 || i >= this._features.length) throw new Error('feature index out of bounds');
+
+        this._pbf.pos = this._features[i];
+
+        var end = this._pbf.readVarint() + this._pbf.pos;
+        return new VectorTileFeature(this._pbf, end, this.extent, this._keys, this._values);
+    };
+
+    function VectorTile(pbf, end) {
+        this.layers = pbf.readFields(readTile, {}, end);
+    }
+
+    function readTile(tag, layers, pbf) {
+        if (tag === 3) {
+            var layer = new VectorTileLayer(pbf, pbf.readVarint() + pbf.pos);
+            if (layer.length) layers[layer.name] = layer;
+        }
+    }
+
+    var NUM_PARAMS = 3;
+
+    function GridIndex(extent, n, padding) {
+        var cells = this.cells = [];
+
+        if (extent instanceof ArrayBuffer) {
+            this.arrayBuffer = extent;
+            var array = new Int32Array(this.arrayBuffer);
+            extent = array[0];
+            n = array[1];
+            padding = array[2];
+
+            this.d = n + 2 * padding;
+            for (var k = 0; k < this.d * this.d; k++) {
+                var start = array[NUM_PARAMS + k];
+                var end = array[NUM_PARAMS + k + 1];
+                cells.push(start === end ?
+                        null :
+                        array.subarray(start, end));
+            }
+            var keysOffset = array[NUM_PARAMS + cells.length];
+            var bboxesOffset = array[NUM_PARAMS + cells.length + 1];
+            this.keys = array.subarray(keysOffset, bboxesOffset);
+            this.bboxes = array.subarray(bboxesOffset);
+
+            this.insert = this._insertReadonly;
+
+        } else {
+            this.d = n + 2 * padding;
+            for (var i = 0; i < this.d * this.d; i++) {
+                cells.push([]);
+            }
+            this.keys = [];
+            this.bboxes = [];
+        }
+
+        this.n = n;
+        this.extent = extent;
+        this.padding = padding;
+        this.scale = n / extent;
+        this.uid = 0;
+
+        var p = (padding / n) * extent;
+        this.min = -p;
+        this.max = extent + p;
+    }
+
+
+    GridIndex.prototype.insert = function(key, x1, y1, x2, y2) {
+        this._forEachCell(x1, y1, x2, y2, this._insertCell, this.uid++);
+        this.keys.push(key);
+        this.bboxes.push(x1);
+        this.bboxes.push(y1);
+        this.bboxes.push(x2);
+        this.bboxes.push(y2);
+    };
+
+    GridIndex.prototype._insertReadonly = function() {
+        throw 'Cannot insert into a GridIndex created from an ArrayBuffer.';
+    };
+
+    GridIndex.prototype._insertCell = function(x1, y1, x2, y2, cellIndex, uid) {
+        this.cells[cellIndex].push(uid);
+    };
+
+    GridIndex.prototype.query = function(x1, y1, x2, y2, intersectionTest) {
+        var min = this.min;
+        var max = this.max;
+        if (x1 <= min && y1 <= min && max <= x2 && max <= y2 && !intersectionTest) {
+            // We use `Array#slice` because `this.keys` may be a `Int32Array` and
+            // some browsers (Safari and IE) do not support `TypedArray#slice`
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray/slice#Browser_compatibility
+            return Array.prototype.slice.call(this.keys);
+
+        } else {
+            var result = [];
+            var seenUids = {};
+            this._forEachCell(x1, y1, x2, y2, this._queryCell, result, seenUids, intersectionTest);
+            return result;
+        }
+    };
+
+    GridIndex.prototype._queryCell = function(x1, y1, x2, y2, cellIndex, result, seenUids, intersectionTest) {
+        var cell = this.cells[cellIndex];
+        if (cell !== null) {
+            var keys = this.keys;
+            var bboxes = this.bboxes;
+            for (var u = 0; u < cell.length; u++) {
+                var uid = cell[u];
+                if (seenUids[uid] === undefined) {
+                    var offset = uid * 4;
+                    if (intersectionTest ?
+                        intersectionTest(bboxes[offset + 0], bboxes[offset + 1], bboxes[offset + 2], bboxes[offset + 3]) :
+                        ((x1 <= bboxes[offset + 2]) &&
+                        (y1 <= bboxes[offset + 3]) &&
+                        (x2 >= bboxes[offset + 0]) &&
+                        (y2 >= bboxes[offset + 1]))) {
+                        seenUids[uid] = true;
+                        result.push(keys[uid]);
+                    } else {
+                        seenUids[uid] = false;
+                    }
+                }
+            }
+        }
+    };
+
+    GridIndex.prototype._forEachCell = function(x1, y1, x2, y2, fn, arg1, arg2, intersectionTest) {
+        var cx1 = this._convertToCellCoord(x1);
+        var cy1 = this._convertToCellCoord(y1);
+        var cx2 = this._convertToCellCoord(x2);
+        var cy2 = this._convertToCellCoord(y2);
+        for (var x = cx1; x <= cx2; x++) {
+            for (var y = cy1; y <= cy2; y++) {
+                var cellIndex = this.d * y + x;
+                if (intersectionTest && !intersectionTest(
+                            this._convertFromCellCoord(x),
+                            this._convertFromCellCoord(y),
+                            this._convertFromCellCoord(x + 1),
+                            this._convertFromCellCoord(y + 1))) { continue; }
+                if (fn.call(this, x1, y1, x2, y2, cellIndex, arg1, arg2, intersectionTest)) { return; }
+            }
+        }
+    };
+
+    GridIndex.prototype._convertFromCellCoord = function(x) {
+        return (x - this.padding) / this.scale;
+    };
+
+    GridIndex.prototype._convertToCellCoord = function(x) {
+        return Math.max(0, Math.min(this.d - 1, Math.floor(x * this.scale) + this.padding));
+    };
+
+    GridIndex.prototype.toArrayBuffer = function() {
+        if (this.arrayBuffer) { return this.arrayBuffer; }
+
+        var cells = this.cells;
+
+        var metadataLength = NUM_PARAMS + this.cells.length + 1 + 1;
+        var totalCellLength = 0;
+        for (var i = 0; i < this.cells.length; i++) {
+            totalCellLength += this.cells[i].length;
+        }
+
+        var array = new Int32Array(metadataLength + totalCellLength + this.keys.length + this.bboxes.length);
+        array[0] = this.extent;
+        array[1] = this.n;
+        array[2] = this.padding;
+
+        var offset = metadataLength;
+        for (var k = 0; k < cells.length; k++) {
+            var cell = cells[k];
+            array[NUM_PARAMS + k] = offset;
+            array.set(cell, offset);
+            offset += cell.length;
+        }
+
+        array[NUM_PARAMS + cells.length] = offset;
+        array.set(this.keys, offset);
+        offset += this.keys.length;
+
+        array[NUM_PARAMS + cells.length + 1] = offset;
+        array.set(this.bboxes, offset);
+        offset += this.bboxes.length;
+
+        return array.buffer;
+    };
+
+    WebWorkerTransfer.register('GridIndex', GridIndex, {omit: ['layers', 'patternFeatures']});
+
+    /**
+     * @module util
+     * @private
+     */
+    function Util() {
+    }
+
+    /**
+     * Given a value `t` that varies between 0 and 1, return
+     * an interpolation function that eases between 0 and 1 in a pleasing
+     * cubic in-out fashion.
+     *
+     * @private
+     */
+    Util.easeCubicInOut = function (t) {
+        if (t <= 0) {
+            return 0;
+        }
+        if (t >= 1) {
+            return 1;
+        }
+        var t2 = t * t,
+            t3 = t2 * t;
+        return 4 * (t < 0.5 ? t3 : 3 * (t - t2) + t3 - 0.75);
+    };
+
+    /*
+     * Call an asynchronous function on an array of arguments,
+     * calling `callback` with the completed results of all calls.
+     *
+     * @param array input to each call of the async function.
+     * @param fn an async function with signature (data, callback)
+     * @param callback a callback run after all async work is done.
+     * called with an array, containing the results of each async call.
+     * @private
+     */
+    Util.asyncAll = function (array, fn, callback) {
+        if (!array.length) {
+            return callback(null, []);
+        }
+        var remaining = array.length;
+        var results = new Array(array.length);
+        var error = null;
+        array.forEach(function (item, i) {
+            fn(item, function (err, result) {
+                if (err) {
+                    error = err;
+                }
+                results[i] = ((result     )        ); // https://github.com/facebook/flow/issues/2123
+                if (--remaining === 0) {
+                    callback(error, results);
+                }
+            });
+        });
+    };
+
+    /**
+     * Given a destination object and optionally many source objects,
+     * copy all properties from the source objects into the destination.
+     * The last source object given overrides properties from previous
+     * source objects.
+     *
+     * @param dest destination object
+     * @param sources sources from which properties are pulled
+     * @private
+     */
+    Util.extend = function (dest) {
+        var sources = [], len = arguments.length - 1;
+        while (len-- > 0) sources[ len ] = arguments[ len + 1 ];
+
+        for (var i = 0, list = sources; i < list.length; i += 1) {
+            var src = list[i];
+
+            for (var k in src) {
+                dest[k] = src[k];
+            }
+        }
+        return dest;
+    };
+
+    var id = 1;
+
+    /**
+     * Return a unique numeric id, starting at 1 and incrementing with
+     * each call.
+     *
+     * @returns unique numeric id.
+     * @private
+     */
+    Util.uniqueId = function () {
+        return id++;
+    };
+
+    /**
+     * Return a random UUID (v4). Taken from: https://gist.github.com/jed/982883
+     * @private
+     */
+    Util.uuid = function () {
+        function b(a) {
+            return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) :
+                //$FlowFixMe: Flow doesn't like the implied array literal conversion here
+                ([1e7] + -[1e3] + -4e3 + -8e3 + -1e11).replace(/[018]/g, b);
+        }
+
+        return b();
+    };
+
+    /**
+     * Validate a string to match UUID(v4) of the
+     * form: xxxxxxxx-xxxx-4xxx-[89ab]xxx-xxxxxxxxxxxx
+     * @param str string to validate.
+     * @private
+     */
+    Util.validateUuid = function (str) {
+        return str ? /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str) : false;
+    };
+
+    /**
+     * Given an array of member function names as strings, replace all of them
+     * with bound versions that will always refer to `context` as `this`. This
+     * is useful for classes where otherwise event bindings would reassign
+     * `this` to the evented object or some other value: this lets you ensure
+     * the `this` value always.
+     *
+     * @param fns list of member function names
+     * @param context the context value
+     * @example
+     * function MyClass() {
+    *   bindAll(['ontimer'], this);
+    *   this.name = 'Tom';
+    * }
+     * MyClass.prototype.ontimer = function() {
+    *   alert(this.name);
+    * };
+     * var myClass = new MyClass();
+     * setTimeout(myClass.ontimer, 100);
+     * @private
+     */
+    Util.bindAll = function (fns, context) {
+        fns.forEach(function (fn) {
+            if (!context[fn]) {
+                return;
+            }
+            context[fn] = context[fn].bind(context);
+        });
+    };
+
+    /**
+     * Determine if a string ends with a particular substring
+     *
+     * @private
+     */
+    Util.endsWith = function (string, suffix) {
+        return string.indexOf(suffix, string.length - suffix.length) !== -1;
+    };
+
+    /**
+     * Create an object by mapping all the values of an existing object while
+     * preserving their keys.
+     *
+     * @private
+     */
+    Util.mapObject = function (input, iterator, context) {
+        var output = {};
+        for (var key in input) {
+            output[key] = iterator.call(context || this, input[key], key, input);
+        }
+        return output;
+    };
+
+    /**
+     * Create an object by filtering out values of an existing object.
+     *
+     * @private
+     */
+    Util.filterObject = function (input, iterator, context) {
+        var output = {};
+        for (var key in input) {
+            if (iterator.call(context || this, input[key], key, input)) {
+                output[key] = input[key];
+            }
+        }
+        return output;
+    };
+
+    /**
+     * Deeply clones two objects.
+     *
+     * @private
+     */
+    Util.clone = function (input) {
+        if (Array.isArray(input)) {
+            return input.map(Util.clone);
+        } else if (typeof input === 'object' && input) {
+            return ((Util.mapObject(input, Util.clone)     )   );
+        } else {
+            return input;
+        }
+    };
+
+    Util.deepEqual = function (a, b) {
+        if (Array.isArray(a)) {
+            if (!Array.isArray(b) || a.length !== b.length) {
+                return false;
+            }
+            for (var i = 0; i < a.length; i++) {
+                if (!Util.deepEqual(a[i], b[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (typeof a === 'object' && a !== null && b !== null) {
+            if (!(typeof b === 'object')) {
+                return false;
+            }
+            var keys = Object.keys(a);
+            if (keys.length !== Object.keys(b).length) {
+                return false;
+            }
+            for (var key in a) {
+                if (!Util.deepEqual(a[key], b[key])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return a === b;
+    };
+
+    /**
+     * Check if two arrays have at least one common element.
+     *
+     * @private
+     */
+    Util.arraysIntersect = function (a, b) {
+        for (var l = 0; l < a.length; l++) {
+            if (b.indexOf(a[l]) >= 0) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /**
+     * Indicates if the provided Points are in a counter clockwise (true) or clockwise (false) order
+     *
+     * @private
+     * @returns true for a counter clockwise set of points
+     */
+    // http://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
+    Util.isCounterClockwise = function (a, b, c) {
+        return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
+    };
+
+    /* global self, WorkerGlobalScope */
+    /**
+     *  Retuns true if the when run in the web-worker context.
+     *
+     * @private
+     * @returns {boolean}
+     */
+    Util.isWorker = function () {
+        return typeof WorkerGlobalScope !== 'undefined' && typeof self !== 'undefined' &&
+            self instanceof WorkerGlobalScope;
+    };
+
+    var _isSafari = null;
+
+    /**
+     * Returns true when run in WebKit derived browsers.
+     * This is used as a workaround for a memory leak in Safari caused by using Transferable objects to
+     * transfer data between WebWorkers and the main thread.
+     * https://github.com/mapbox/mapbox-gl-js/issues/8771
+     *
+     * This should be removed once the underlying Safari issue is fixed.
+     *
+     * @private
+     * @param scope {WindowOrWorkerGlobalScope} Since this function is used both on the main thread and WebWorker context,
+     *      let the calling scope pass in the global scope object.
+     * @returns {boolean}
+     */
+    Util.isSafari = function (scope) {
+        if (_isSafari == null) {
+            var userAgent = scope.navigator ? scope.navigator.userAgent : null;
+            _isSafari = !!scope.safari || !!(userAgent && (/\b(iPad|iPhone|iPod)\b/.test(userAgent) || (!!userAgent.match('Safari') && !userAgent.match('Chrome'))));
+        }
+        return _isSafari;
+    };
+
+    /**
+     * Replace tokens in a string template with values in an object
+     *
+     * @param properties a key/value relationship between tokens and replacements
+     * @param text the template string
+     * @returns the template with tokens replaced
+     * @private
+     */
+    Util.resolveTokens = function (properties, text) {
+        return text.replace(/{([^{}]+)}/g, function (match, key) {
+            return key in properties ? String(properties[key]) : '';
+        });
+    };
+
+    /**
+     * Tracks `let` bindings during expression parsing.
+     * @private
+     */
+    var Scope = function Scope(parent, bindings) {
+        if (bindings === void 0) bindings = [];
+
+        this.parent = parent;
+        this.bindings = {};
+        for (var i = 0, list = bindings; i < list.length; i += 1) {
+            var ref = list[i];
+            var name = ref[0];
+            var expression = ref[1];
+
+            this.bindings[name] = expression;
+        }
+    };
+
+    Scope.prototype.concat = function concat(bindings) {
+        return new Scope(this, bindings);
+    };
+
+    Scope.prototype.get = function get(name) {
+        if (this.bindings[name]) {
+            return this.bindings[name];
+        }
+        if (this.parent) {
+            return this.parent.get(name);
+        }
+        throw new Error((name + " not found in scope."));
+    };
+
+    Scope.prototype.has = function has(name) {
+        if (this.bindings[name]) {
+            return true;
+        }
+        return this.parent ? this.parent.has(name) : false;
+    };
+
+    var ParsingError = /*@__PURE__*/(function (Error) {
+        function ParsingError(key        , message        ) {
+            Error.call(this, message);
+            this.message = message;
+            this.key = key;
+        }
+
+        if ( Error ) ParsingError.__proto__ = Error;
+        ParsingError.prototype = Object.create( Error && Error.prototype );
+        ParsingError.prototype.constructor = ParsingError;
+
+        return ParsingError;
+    }(Error));
+
+    var geometryTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
+
+    var EvaluationContext = function EvaluationContext() {
+        this.globals = (null );
+        this.feature = null;
+        this.featureState = null;
+        this.formattedSection = null;
+        this._parseColorCache = {};
+        this.availableImages = null;
+    };
+
+    EvaluationContext.prototype.id = function id () {
+        return this.feature && 'id' in this.feature ? this.feature.id : null;
+    };
+
+    EvaluationContext.prototype.geometryType = function geometryType () {
+        return this.feature ? typeof this.feature.type === 'number' ? geometryTypes[this.feature.type] : this.feature.type : null;
+    };
+
+    EvaluationContext.prototype.properties = function properties () {
+        return this.feature && this.feature.properties || {};
+    };
+
+    EvaluationContext.prototype.parseColor = function parseColor (input    )     {
+        var cached = this._parseColorCache[input];
+        if (!cached) {
+            cached = this._parseColorCache[input] = Color.parse(input);
+        }
+        return cached;
+    };
+
+    function isConstant() {
+    }
+
+    isConstant.isFeatureConstant = function(e){
+        if (e instanceof CompoundExpression) {
+            if (e.name === 'get' && e.args.length === 1) {
+                return false;
+            } else if (e.name === 'feature-state') {
+                return false;
+            } else if (e.name === 'has' && e.args.length === 1) {
+                return false;
+            } else if (
+                e.name === 'properties' ||
+                    e.name === 'geometry-type' ||
+                    e.name === 'id'
+                ) {
+                return false;
+            } else if (/^filter-/.test(e.name)) {
+                return false;
+            }
+        }
+
+        var result = true;
+        e.eachChild(function (arg) {
+            if (result && !isConstant.isFeatureConstant(arg)) {
+                result = false;
+            }
+        });
+        return result;
+    };
+
+    isConstant.isStateConstant = function(e){
+        if (e instanceof CompoundExpression) {
+            if (e.name === 'feature-state') {
+                return false;
+            }
+        }
+        var result = true;
+        e.eachChild(function (arg) {
+            if (result && !isConstant.isStateConstant(arg)) {
+                result = false;
+            }
+        });
+        return result;
+    };
+
+    isConstant.isGlobalPropertyConstant = function(e, properties){
+        if (e instanceof CompoundExpression && properties.indexOf(e.name) >= 0) {
+            return false;
+        }
+        var result = true;
+        e.eachChild(function (arg) {
+            if (result && !isConstant.isGlobalPropertyConstant(arg, properties)) {
+                result = false;
+            }
+        });
+        return result;
+    };
+
+    /**
+     * State associated parsing at a given point in an expression tree.
+     * @private
+     */
+    var ParsingContext = function ParsingContext(registry, path, expectedType, scope, errors) {
+        if (path === void 0) path = [];
+        if (scope === void 0) scope = new Scope();
+        if (errors === void 0) errors = [];
+
+        this.registry = registry;
+        this.path = path;
+        this.key = path.map(function (part) {
+            return ("[" + part + "]");
+        }).join('');
+        this.scope = scope;
+        this.errors = errors;
+        this.expectedType = expectedType;
+    };
+
+    /**
+     * @param expr the JSON expression to parse
+     * @param index the optional argument index if this expression is an argument of a parent expression that's being parsed
+     * @param options
+     * @param options.omitTypeAnnotations set true to omit inferred type annotations.  Caller beware: with this option set, the parsed expression's type will NOT satisfy `expectedType` if it would normally be wrapped in an inferred annotation.
+     * @private
+     */
+    ParsingContext.prototype.parse = function parse(expr, index, expectedType, bindings, options) {
+        if (options === void 0) options = {};
+
+        if (index) {
+            return this.concat(index, expectedType, bindings)._parse(expr, options);
+        }
+        return this._parse(expr, options);
+    };
+
+    ParsingContext.prototype._parse = function _parse(expr, options) {
+        if (expr === null || typeof expr === 'string' || typeof expr === 'boolean' || typeof expr === 'number') {
+            expr = ['literal', expr];
+        }
+
+        function annotate(parsed, type, typeAnnotation) {
+            if (typeAnnotation === 'assert') {
+                return new Assertion(type, [parsed]);
+            } else if (typeAnnotation === 'coerce') {
+                return new Coercion(type, [parsed]);
+            } else {
+                return parsed;
+            }
+        }
+
+        if (Array.isArray(expr)) {
+            if (expr.length === 0) {
+                return this.error("Expected an array with at least one element. If you wanted a literal array, use [\"literal\", []].");
+            }
+
+            var op = expr[0];
+            if (typeof op !== 'string') {
+                this.error(("Expression name must be a string, but found " + (typeof op) + " instead. If you wanted a literal array, use [\"literal\", [...]]."), 0);
+                return null;
+            }
+
+            var Expr = this.registry[op];
+            if (Expr) {
+                var parsed = Expr.parse(expr, this);
+                if (!parsed) {
+                    return null;
+                }
+
+                if (this.expectedType) {
+                    var expected = this.expectedType;
+                    var actual = parsed.type;
+
+                    // When we expect a number, string, boolean, or array but have a value, wrap it in an assertion.
+                    // When we expect a color or formatted string, but have a string or value, wrap it in a coercion.
+                    // Otherwise, we do static type-checking.
+                    //
+                    // These behaviors are overridable for:
+                    //   * The "coalesce" operator, which needs to omit type annotations.
+                    //   * String-valued properties (e.g. `text-field`), where coercion is more convenient than assertion.
+                    //
+                    if ((expected.kind === 'string' || expected.kind === 'number' || expected.kind === 'boolean' || expected.kind === 'object' || expected.kind === 'array') && actual.kind === 'value') {
+                        parsed = annotate(parsed, expected, options.typeAnnotation || 'assert');
+                    } else if ((expected.kind === 'color' || expected.kind === 'formatted' || expected.kind === 'resolvedImage') && (actual.kind === 'value' || actual.kind === 'string')) {
+                        parsed = annotate(parsed, expected, options.typeAnnotation || 'coerce');
+                    } else if (this.checkSubtype(expected, actual)) {
+                        return null;
+                    }
+                }
+
+                // If an expression's arguments are all literals, we can evaluate
+                // it immediately and replace it with a literal value in the
+                // parsed/compiled result. Expressions that expect an image should
+                // not be resolved here so we can later get the available images.
+                if (!(parsed instanceof Literal) && (parsed.type.kind !== 'resolvedImage') && isConstant()) {
+                    var ec = new EvaluationContext();
+                    try {
+                        parsed = new Literal(parsed.type, parsed.evaluate(ec));
+                    } catch (e) {
+                        this.error(e.message);
+                        return null;
+                    }
+                }
+
+                return parsed;
+            }
+
+            return this.error(("Unknown expression \"" + op + "\". If you wanted a literal array, use [\"literal\", [...]]."), 0);
+        } else if (typeof expr === 'undefined') {
+            return this.error("'undefined' value invalid. Use null instead.");
+        } else if (typeof expr === 'object') {
+            return this.error("Bare objects invalid. Use [\"literal\", {...}] instead.");
+        } else {
+            return this.error(("Expected an array, but found " + (typeof expr) + " instead."));
+        }
+    };
+
+    /**
+     * Returns a copy of this context suitable for parsing the subexpression at
+     * index `index`, optionally appending to 'let' binding map.
+     *
+     * Note that `errors` property, intended for collecting errors while
+     * parsing, is copied by reference rather than cloned.
+     * @private
+     */
+    ParsingContext.prototype.concat = function concat(index, expectedType, bindings) {
+        var path = typeof index === 'number' ? this.path.concat(index) : this.path;
+        var scope = bindings ? this.scope.concat(bindings) : this.scope;
+        return new ParsingContext(
+            this.registry,
+            path,
+            expectedType || null,
+            scope,
+            this.errors
+        );
+    };
+
+    /**
+     * Push a parsing (or type checking) error into the `this.errors`
+     * @param error The message
+     * @param keys Optionally specify the source of the error at a child
+     * of the current expression at `this.key`.
+     * @private
+     */
+    ParsingContext.prototype.error = function error(error$1) {
+        var keys = [], len = arguments.length - 1;
+        while (len-- > 0) keys[ len ] = arguments[ len + 1 ];
+
+        var key = "" + (this.key) + (keys.map(function (k) {
+            return ("[" + k + "]");
+        }).join(''));
+        this.errors.push(new ParsingError(key, error$1));
+    };
+
+    /**
+     * Returns null if `t` is a subtype of `expected`; otherwise returns an
+     * error message and also pushes it to `this.errors`.
+     */
+    ParsingContext.prototype.checkSubtype = function checkSubtype$1(expected, t) {
+        var error = checkSubtype(expected, t);
+        if (error) {
+            this.error(error);
+        }
+        return error;
+    };
+
+    var CompoundExpression$1 = function CompoundExpression(name, type, evaluate, args) {
+        this.name = name;
+        this.type = type;
+        this._evaluate = evaluate;
+        this.args = args;
+    };
+
+    CompoundExpression$1.prototype.evaluate = function evaluate(ctx) {
+        return this._evaluate(ctx, this.args);
+    };
+
+    CompoundExpression$1.prototype.eachChild = function eachChild(fn) {
+        this.args.forEach(fn);
+    };
+
+    CompoundExpression$1.prototype.possibleOutputs = function possibleOutputs() {
+        return [undefined];
+    };
+
+    CompoundExpression$1.prototype.serialize = function serialize() {
+        return [this.name].concat(this.args.map(function (arg) {
+            return arg.serialize();
+        }));
+    };
+
+    CompoundExpression$1.parse = function parse(args, context) {
+        var ref$1;
+
+        var op = (args[0] );
+        var definition = CompoundExpression$1.definitions[op];
+        if (!definition) {
+            return context.error(("Unknown expression \"" + op + "\". If you wanted a literal array, use [\"literal\", [...]]."), 0);
+        }
+
+        // Now check argument types against each signature
+        var type = Array.isArray(definition) ?
+            definition[0] : definition.type;
+
+        var availableOverloads = Array.isArray(definition) ?
+            [
+                [definition[1], definition[2]]
+            ] :
+            definition.overloads;
+
+        var overloads = availableOverloads.filter(function (ref) {
+            var signature = ref[0];
+
+            return (
+                !Array.isArray(signature) || // varags
+                    signature.length === args.length - 1 // correct param count
+                );
+        });
+
+        var signatureContext = (null );
+
+        for (var i$3 = 0, list = overloads; i$3 < list.length; i$3 += 1) {
+            // Use a fresh context for each attempted signature so that, if
+            // we eventually succeed, we haven't polluted `context.errors`.
+            var ref = list[i$3];
+            var params = ref[0];
+            var evaluate = ref[1];
+
+            signatureContext = new ParsingContext(context.registry, context.path, null, context.scope);
+
+            // First parse all the args, potentially coercing to the
+            // types expected by this overload.
+            var parsedArgs = [];
+            var argParseFailed = false;
+            for (var i = 1; i < args.length; i++) {
+                var arg = args[i];
+                var expectedType = Array.isArray(params) ?
+                    params[i - 1] :
+                    params.type;
+
+                var parsed = signatureContext.parse(arg, 1 + parsedArgs.length, expectedType);
+                if (!parsed) {
+                    argParseFailed = true;
+                    break;
+                }
+                parsedArgs.push(parsed);
+            }
+            if (argParseFailed) {
+                // Couldn't coerce args of this overload to expected type, move
+                // on to next one.
+                continue;
+            }
+
+            if (Array.isArray(params)) {
+                if (params.length !== parsedArgs.length) {
+                    signatureContext.error(("Expected " + (params.length) + " arguments, but found " + (parsedArgs.length) + " instead."));
+                    continue;
+                }
+            }
+
+            for (var i$1 = 0; i$1 < parsedArgs.length; i$1++) {
+                var expected = Array.isArray(params) ? params[i$1] : params.type;
+                var arg$1 = parsedArgs[i$1];
+                signatureContext.concat(i$1 + 1).checkSubtype(expected, arg$1.type);
+            }
+
+            if (signatureContext.errors.length === 0) {
+                return new CompoundExpression$1(op, type, evaluate, parsedArgs);
+            }
+        }
+
+        //assert_1(!signatureContext || signatureContext.errors.length > 0);
+
+        if (overloads.length === 1) {
+            (ref$1 = context.errors).push.apply(ref$1, signatureContext.errors);
+        } else {
+            var expected$1 = overloads.length ? overloads : availableOverloads;
+            var signatures = expected$1
+                .map(function (ref) {
+                    var params = ref[0];
+
+                    return stringifySignature(params);
+                })
+                .join(' | ');
+
+            var actualTypes = [];
+            // For error message, re-parse arguments without trying to
+            // apply any coercions
+            for (var i$2 = 1; i$2 < args.length; i$2++) {
+                var parsed$1 = context.parse(args[i$2], 1 + actualTypes.length);
+                if (!parsed$1) {
+                    return null;
+                }
+                actualTypes.push(toString(parsed$1.type));
+            }
+            context.error(("Expected arguments of type " + signatures + ", but found (" + (actualTypes.join(', ')) + ") instead."));
+        }
+
+        return null;
+    };
+
+    CompoundExpression$1.register = function register(registry, definitions) {
+        //assert_1(!CompoundExpression.definitions);
+        CompoundExpression$1.definitions = definitions;
+        for (var name in definitions) {
+            registry[name] = CompoundExpression$1;
+        }
+    };
+
+    function stringifySignature(signature) {
+        if (Array.isArray(signature)) {
+            return ("(" + (signature.map(toString).join(', ')) + ")");
+        } else {
+            return ("(" + (toString(signature.type)) + "...)");
+        }
+    }
+    var NumberType$a = {kind: 'number'};
+    var StringType$8 = {kind: 'string'};
+    var BooleanType$8 = {kind: 'boolean'};
+    var ColorType$5 = {kind: 'color'};
+    var ObjectType$3 = {kind: 'object'};
+    var ValueType$a = {kind: 'value'};
+    var ErrorType = {kind: 'error'};
+    var CollatorType$3 = {kind: 'collator'};
+
+    function array$5(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    function varargs(type) {
+        return {type: type};
+    }
+
+    function rgba(ctx, ref) {
+        var r = ref[0];
+        var g = ref[1];
+        var b = ref[2];
+        var a = ref[3];
+
+        r = r.evaluate(ctx);
+        g = g.evaluate(ctx);
+        b = b.evaluate(ctx);
+        var alpha = a ? a.evaluate(ctx) : 1;
+        var error = Values.validateRGBA(r, g, b, alpha);
+        if (error) {
+            throw new RuntimeError(error);
+        }
+        return new Color(r / 255 * alpha, g / 255 * alpha, b / 255 * alpha, alpha);
+    }
+
+    CompoundExpression$1.register(expressions, {
+        'error': [
+            ErrorType,
+            [StringType$8],
+            function (ctx, ref) {
+                var v = ref[0];
+                throw new RuntimeError(v.evaluate(ctx));
+            }
+        ],
+        'typeof': [
+            StringType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return toString(Values.typeOf(v.evaluate(ctx)));
+            }
+        ],
+        'to-rgba': [
+            array$5(NumberType$a, 4),
+            [ColorType$5],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return v.evaluate(ctx).toArray();
+            }
+        ],
+        'rgb': [
+            ColorType$5,
+            [NumberType$a, NumberType$a, NumberType$a],
+            rgba
+        ],
+        'rgba': [
+            ColorType$5,
+            [NumberType$a, NumberType$a, NumberType$a, NumberType$a],
+            rgba
+        ],
+        'has': {
+            type: BooleanType$8,
+            overloads: [
+                [
+                    [StringType$8],
+                    function (ctx, ref) {
+                        var key = ref[0];
+
+                        return has(key.evaluate(ctx), ctx.properties());
+                    }
+                ],
+                [
+                    [StringType$8, ObjectType$3],
+                    function (ctx, ref) {
+                        var key = ref[0];
+                        var obj = ref[1];
+
+                        return has(key.evaluate(ctx), obj.evaluate(ctx));
+                    }
+                ]
+            ]
+        },
+        'get': {
+            type: ValueType$a,
+            overloads: [
+                [
+                    [StringType$8],
+                    function (ctx, ref) {
+                        var key = ref[0];
+
+                        return get(key.evaluate(ctx), ctx.properties());
+                    }
+                ],
+                [
+                    [StringType$8, ObjectType$3],
+                    function (ctx, ref) {
+                        var key = ref[0];
+                        var obj = ref[1];
+
+                        return get(key.evaluate(ctx), obj.evaluate(ctx));
+                    }
+                ]
+            ]
+        },
+        'feature-state': [
+            ValueType$a,
+            [StringType$8],
+            function (ctx, ref) {
+                var key = ref[0];
+
+                return get(key.evaluate(ctx), ctx.featureState || {});
+            }
+        ],
+        'properties': [
+            ObjectType$3,
+            [],
+            function (ctx) {
+                return ctx.properties();
+            }
+        ],
+        'geometry-type': [
+            StringType$8,
+            [],
+            function (ctx) {
+                return ctx.geometryType();
+            }
+        ],
+        'id': [
+            ValueType$a,
+            [],
+            function (ctx) {
+                return ctx.id();
+            }
+        ],
+        'zoom': [
+            NumberType$a,
+            [],
+            function (ctx) {
+                return ctx.globals.zoom;
+            }
+        ],
+        'heatmap-density': [
+            NumberType$a,
+            [],
+            function (ctx) {
+                return ctx.globals.heatmapDensity || 0;
+            }
+        ],
+        'line-progress': [
+            NumberType$a,
+            [],
+            function (ctx) {
+                return ctx.globals.lineProgress || 0;
+            }
+        ],
+        'accumulated': [
+            ValueType$a,
+            [],
+            function (ctx) {
+                return ctx.globals.accumulated === undefined ? null : ctx.globals.accumulated;
+            }
+        ],
+        '+': [
+            NumberType$a,
+            varargs(NumberType$a),
+            function (ctx, args) {
+                var result = 0;
+                for (var i = 0, list = args; i < list.length; i += 1) {
+                    var arg = list[i];
+
+                    result += arg.evaluate(ctx);
+                }
+                return result;
+            }
+        ],
+        '*': [
+            NumberType$a,
+            varargs(NumberType$a),
+            function (ctx, args) {
+                var result = 1;
+                for (var i = 0, list = args; i < list.length; i += 1) {
+                    var arg = list[i];
+
+                    result *= arg.evaluate(ctx);
+                }
+                return result;
+            }
+        ],
+        '-': {
+            type: NumberType$a,
+            overloads: [
+                [
+                    [NumberType$a, NumberType$a],
+                    function (ctx, ref) {
+                        var a = ref[0];
+                        var b = ref[1];
+
+                        return a.evaluate(ctx) - b.evaluate(ctx);
+                    }
+                ],
+                [
+                    [NumberType$a],
+                    function (ctx, ref) {
+                        var a = ref[0];
+
+                        return -a.evaluate(ctx);
+                    }
+                ]
+            ]
+        },
+        '/': [
+            NumberType$a,
+            [NumberType$a, NumberType$a],
+            function (ctx, ref) {
+                var a = ref[0];
+                var b = ref[1];
+
+                return a.evaluate(ctx) / b.evaluate(ctx);
+            }
+        ],
+        '%': [
+            NumberType$a,
+            [NumberType$a, NumberType$a],
+            function (ctx, ref) {
+                var a = ref[0];
+                var b = ref[1];
+
+                return a.evaluate(ctx) % b.evaluate(ctx);
+            }
+        ],
+        'ln2': [
+            NumberType$a,
+            [],
+            function () {
+                return Math.LN2;
+            }
+        ],
+        'pi': [
+            NumberType$a,
+            [],
+            function () {
+                return Math.PI;
+            }
+        ],
+        'e': [
+            NumberType$a,
+            [],
+            function () {
+                return Math.E;
+            }
+        ],
+        '^': [
+            NumberType$a,
+            [NumberType$a, NumberType$a],
+            function (ctx, ref) {
+                var b = ref[0];
+                var e = ref[1];
+
+                return Math.pow(b.evaluate(ctx), e.evaluate(ctx));
+            }
+        ],
+        'sqrt': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var x = ref[0];
+
+                return Math.sqrt(x.evaluate(ctx));
+            }
+        ],
+        'log10': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.log(n.evaluate(ctx)) / Math.LN10;
+            }
+        ],
+        'ln': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.log(n.evaluate(ctx));
+            }
+        ],
+        'log2': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.log(n.evaluate(ctx)) / Math.LN2;
+            }
+        ],
+        'sin': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.sin(n.evaluate(ctx));
+            }
+        ],
+        'cos': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.cos(n.evaluate(ctx));
+            }
+        ],
+        'tan': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.tan(n.evaluate(ctx));
+            }
+        ],
+        'asin': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.asin(n.evaluate(ctx));
+            }
+        ],
+        'acos': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.acos(n.evaluate(ctx));
+            }
+        ],
+        'atan': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.atan(n.evaluate(ctx));
+            }
+        ],
+        'min': [
+            NumberType$a,
+            varargs(NumberType$a),
+            function (ctx, args) {
+                return Math.min.apply(Math, args.map(function (arg) {
+                    return arg.evaluate(ctx);
+                }));
+            }
+        ],
+        'max': [
+            NumberType$a,
+            varargs(NumberType$a),
+            function (ctx, args) {
+                return Math.max.apply(Math, args.map(function (arg) {
+                    return arg.evaluate(ctx);
+                }));
+            }
+        ],
+        'abs': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.abs(n.evaluate(ctx));
+            }
+        ],
+        'round': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                var v = n.evaluate(ctx);
+                // Javascript's Math.round() rounds towards +Infinity for halfway
+                // values, even when they're negative. It's more common to round
+                // away from 0 (e.g., this is what python and C++ do)
+                return v < 0 ? -Math.round(-v) : Math.round(v);
+            }
+        ],
+        'floor': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.floor(n.evaluate(ctx));
+            }
+        ],
+        'ceil': [
+            NumberType$a,
+            [NumberType$a],
+            function (ctx, ref) {
+                var n = ref[0];
+
+                return Math.ceil(n.evaluate(ctx));
+            }
+        ],
+        'filter-==': [
+            BooleanType$8,
+            [StringType$8, ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                return ctx.properties()[(k     ).value] === (v     ).value;
+            }
+        ],
+        'filter-id-==': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return ctx.id() === (v     ).value;
+            }
+        ],
+        'filter-type-==': [
+            BooleanType$8,
+            [StringType$8],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return ctx.geometryType() === (v     ).value;
+            }
+        ],
+        'filter-<': [
+            BooleanType$8,
+            [StringType$8, ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                var a = ctx.properties()[(k     ).value];
+                var b = (v     ).value;
+                return typeof a === typeof b && a < b;
+            }
+        ],
+        'filter-id-<': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                var a = ctx.id();
+                var b = (v     ).value;
+                return typeof a === typeof b && a < b;
+            }
+        ],
+        'filter->': [
+            BooleanType$8,
+            [StringType$8, ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                var a = ctx.properties()[(k     ).value];
+                var b = (v     ).value;
+                return typeof a === typeof b && a > b;
+            }
+        ],
+        'filter-id->': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                var a = ctx.id();
+                var b = (v     ).value;
+                return typeof a === typeof b && a > b;
+            }
+        ],
+        'filter-<=': [
+            BooleanType$8,
+            [StringType$8, ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                var a = ctx.properties()[(k     ).value];
+                var b = (v     ).value;
+                return typeof a === typeof b && a <= b;
+            }
+        ],
+        'filter-id-<=': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                var a = ctx.id();
+                var b = (v     ).value;
+                return typeof a === typeof b && a <= b;
+            }
+        ],
+        'filter->=': [
+            BooleanType$8,
+            [StringType$8, ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                var a = ctx.properties()[(k     ).value];
+                var b = (v     ).value;
+                return typeof a === typeof b && a >= b;
+            }
+        ],
+        'filter-id->=': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                var a = ctx.id();
+                var b = (v     ).value;
+                return typeof a === typeof b && a >= b;
+            }
+        ],
+        'filter-has': [
+            BooleanType$8,
+            [ValueType$a],
+            function (ctx, ref) {
+                var k = ref[0];
+
+                return (k     ).value in ctx.properties();
+            }
+        ],
+        'filter-has-id': [
+            BooleanType$8,
+            [],
+            function (ctx) {
+                return ctx.id() !== null;
+            }
+        ],
+        'filter-type-in': [
+            BooleanType$8,
+            [array$5(StringType$8)],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return (v     ).value.indexOf(ctx.geometryType()) >= 0;
+            }
+        ],
+        'filter-id-in': [
+            BooleanType$8,
+            [array$5(ValueType$a)],
+            function (ctx, ref) {
+                var v = ref[0];
+
+                return (v     ).value.indexOf(ctx.id()) >= 0;
+            }
+        ],
+        'filter-in-small': [
+            BooleanType$8,
+            [StringType$8, array$5(ValueType$a)],
+            // assumes v is an array literal
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                return (v     ).value.indexOf(ctx.properties()[(k     ).value]) >= 0;
+            }
+        ],
+        'filter-in-large': [
+            BooleanType$8,
+            [StringType$8, array$5(ValueType$a)],
+            // assumes v is a array literal with values sorted in ascending order and of a single type
+            function (ctx, ref) {
+                var k = ref[0];
+                var v = ref[1];
+
+                return binarySearch(ctx.properties()[(k     ).value], (v     ).value, 0, (v     ).value.length - 1);
+            }
+        ],
+        'all': {
+            type: BooleanType$8,
+            overloads: [
+                [
+                    [BooleanType$8, BooleanType$8],
+                    function (ctx, ref) {
+                        var a = ref[0];
+                        var b = ref[1];
+
+                        return a.evaluate(ctx) && b.evaluate(ctx);
+                    }
+                ],
+                [
+                    varargs(BooleanType$8),
+                    function (ctx, args) {
+                        for (var i = 0, list = args; i < list.length; i += 1) {
+                            var arg = list[i];
+
+                            if (!arg.evaluate(ctx)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                ]
+            ]
+        },
+        'any': {
+            type: BooleanType$8,
+            overloads: [
+                [
+                    [BooleanType$8, BooleanType$8],
+                    function (ctx, ref) {
+                        var a = ref[0];
+                        var b = ref[1];
+
+                        return a.evaluate(ctx) || b.evaluate(ctx);
+                    }
+                ],
+                [
+                    varargs(BooleanType$8),
+                    function (ctx, args) {
+                        for (var i = 0, list = args; i < list.length; i += 1) {
+                            var arg = list[i];
+
+                            if (arg.evaluate(ctx)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                ]
+            ]
+        },
+        '!': [
+            BooleanType$8,
+            [BooleanType$8],
+            function (ctx, ref) {
+                var b = ref[0];
+
+                return !b.evaluate(ctx);
+            }
+        ],
+        'is-supported-script': [
+            BooleanType$8,
+            [StringType$8],
+            // At parse time this will always return true, so we need to exclude this expression with isGlobalPropertyConstant
+            function (ctx, ref) {
+                var s = ref[0];
+
+                var isSupportedScript = ctx.globals && ctx.globals.isSupportedScript;
+                if (isSupportedScript) {
+                    return isSupportedScript(s.evaluate(ctx));
+                }
+                return true;
+            }
+        ],
+        'upcase': [
+            StringType$8,
+            [StringType$8],
+            function (ctx, ref) {
+                var s = ref[0];
+
+                return s.evaluate(ctx).toUpperCase();
+            }
+        ],
+        'downcase': [
+            StringType$8,
+            [StringType$8],
+            function (ctx, ref) {
+                var s = ref[0];
+
+                return s.evaluate(ctx).toLowerCase();
+            }
+        ],
+        'concat': [
+            StringType$8,
+            varargs(ValueType$a),
+            function (ctx, args) {
+                return args.map(function (arg) {
+                    return Values.toString$1(arg.evaluate(ctx));
+                }).join('');
+            }
+        ],
+        'resolved-locale': [
+            StringType$8,
+            [CollatorType$3],
+            function (ctx, ref) {
+                var collator = ref[0];
+
+                return collator.evaluate(ctx).resolvedLocale();
+            }
+        ]
+    });
+
+    var StyleExpression$1 = function StyleExpression(expression, propertySpec) {
+        this.expression = expression;
+        this._warningHistory = {};
+        this._evaluator = new EvaluationContext();
+        this._defaultValue = propertySpec ? getDefaultValue(propertySpec) : null;
+        this._enumValues = propertySpec && propertySpec.type === 'enum' ? propertySpec.values : null;
+    };
+
+    StyleExpression$1.prototype.evaluateWithoutErrorHandling = function evaluateWithoutErrorHandling(globals, feature, featureState, availableImages, formattedSection) {
+        this._evaluator.globals = globals;
+        this._evaluator.feature = feature;
+        this._evaluator.featureState = featureState;
+        this._evaluator.availableImages = availableImages || null;
+        this._evaluator.formattedSection = formattedSection;
+
+        return this.expression.evaluate(this._evaluator);
+    };
+
+    StyleExpression$1.prototype.evaluate = function evaluate(globals, feature, featureState, availableImages, formattedSection) {
+        this._evaluator.globals = globals;
+        this._evaluator.feature = feature || null;
+        this._evaluator.featureState = featureState || null;
+        this._evaluator.availableImages = availableImages || null;
+        this._evaluator.formattedSection = formattedSection || null;
+
+        try {
+            var val = this.expression.evaluate(this._evaluator);
+            // eslint-disable-next-line no-self-compare
+            if (val === null || val === undefined || (typeof val === 'number' && val !== val)) {
+                return this._defaultValue;
+            }
+            if (this._enumValues && !(val in this._enumValues)) {
+                throw new RuntimeError(("Expected value to be one of " + (Object.keys(this._enumValues).map(function (v) {
+                    return JSON.stringify(v);
+                }).join(', ')) + ", but found " + (JSON.stringify(val)) + " instead."));
+            }
+            return val;
+        } catch (e) {
+            if (!this._warningHistory[e.message]) {
+                this._warningHistory[e.message] = true;
+                if (typeof console !== 'undefined') {
+                    console.warn(e.message);
+                }
+            }
+            return this._defaultValue;
+        }
+    };
+
+    function isFunction(value) {
+        return typeof value === 'object' && value !== null && !Array.isArray(value);
+    }
+
+    function getDefaultValue(spec) {
+        if (spec.type === 'color' && isFunction(spec.default)) {
+            // Special case for heatmap-color: it uses the 'default:' to define a
+            // default color ramp, but createExpression expects a simple value to fall
+            // back to in case of runtime errors
+            return new Color(0, 0, 0, 0);
+        } else if (spec.type === 'color') {
+            return Color.parse(spec.default) || null;
+        } else if (spec.default === undefined) {
+            return null;
+        } else {
+            return spec.default;
+        }
+    }
+
+    function Expression() {
+    }
+
+    function success(value) {
+        return {result: 'success', value: value};
+    }
+
+    function error(value) {
+        return {result: 'error', value: value};
+    }
+
+    Expression.isExpression = function (testExpression) {
+        return Array.isArray(testExpression) && testExpression.length > 0 &&
+            typeof testExpression[0] === 'string' && testExpression[0] in expressions;
+    };
+
+    var NumberType$b = {kind: 'number'};
+    var StringType$9 = {kind: 'string'};
+    var BooleanType$9 = {kind: 'boolean'};
+    var ColorType$6 = {kind: 'color'};
+    var ValueType$b = {kind: 'value'};
+    var FormattedType$3 = {kind: 'formatted'};
+    var ResolvedImageType$4 = {kind: 'resolvedImage'};
+
+    function array$6(itemType, N) {
+        return {
+            kind: 'array',
+            itemType: itemType,
+            N: N
+        };
+    }
+
+    function getExpectedType(spec) {
+        var types = {
+            color: ColorType$6,
+            string: StringType$9,
+            number: NumberType$b,
+            enum: StringType$9,
+            boolean: BooleanType$9,
+            formatted: FormattedType$3,
+            resolvedImage: ResolvedImageType$4
+        };
+
+        if (spec.type === 'array') {
+            return array$6(types[spec.value] || ValueType$b, spec.length);
+        }
+
+        return types[spec.type];
+    }
+
+    Expression.createExpression = function (expression, propertySpec) {
+        var parser = new ParsingContext(expressions, [], propertySpec ? getExpectedType(propertySpec) : undefined);
+        // For string-valued properties, coerce to string at the top level rather than asserting.
+        var parsed = parser.parse(expression, undefined, undefined, undefined,
+            propertySpec && propertySpec.type === 'string' ? {typeAnnotation: 'coerce'} : undefined);
+
+        if (!parsed) {
+            //assert_1(parser.errors.length > 0);
+            return error(parser.errors);
+        }
+
+        return success(new StyleExpression$1(parsed, propertySpec));
+    };
+
+
+    function isFunction$1(value) {
+        return typeof value === 'object' && value !== null && !Array.isArray(value);
+    }
+
+    function extend$1(output) {
+        var inputs = [], len = arguments.length - 1;
+        while (len-- > 0) inputs[ len ] = arguments[ len + 1 ];
+
+        for (var i = 0, list = inputs; i < list.length; i += 1) {
+            var input = list[i];
+
+            for (var k in input) {
+                output[k] = input[k];
+            }
+        }
+        return output;
+    }
+
+    function evaluateIdentityFunction(parameters, propertySpec, input) {
+        if (propertySpec.type === 'color') {
+            input = Color$1.parse(input);
+        } else if (propertySpec.type === 'formatted') {
+            input = Formatted.fromString(input.toString());
+        } else if (propertySpec.type === 'resolvedImage') {
+            input = ResolvedImage.fromString(input.toString());
+        } else if (getType(input) !== propertySpec.type && (propertySpec.type !== 'enum' || !propertySpec.values[input])) {
+            input = undefined;
+        }
+        return coalesce(input, parameters.default, propertySpec.default);
+    }
+
+    function createFunction(parameters, propertySpec) {
+        var isColor = propertySpec.type === 'color';
+        var zoomAndFeatureDependent = parameters.stops && typeof parameters.stops[0][0] === 'object';
+        var featureDependent = zoomAndFeatureDependent || parameters.property !== undefined;
+        var zoomDependent = zoomAndFeatureDependent || !featureDependent;
+        var type = parameters.type || (supportsInterpolation(propertySpec) ? 'exponential' : 'interval');
+
+        if (isColor) {
+            parameters = extend$1({}, parameters);
+
+            if (parameters.stops) {
+                parameters.stops = parameters.stops.map(function (stop) {
+                    return [stop[0], Color$1.parse(stop[1])];
+                });
+            }
+
+            if (parameters.default) {
+                parameters.default = Color$1.parse(parameters.default);
+            } else {
+                parameters.default = Color$1.parse(propertySpec.default);
+            }
+        }
+
+        if (parameters.colorSpace && parameters.colorSpace !== 'rgb' && !colorSpaces[parameters.colorSpace]) { // eslint-disable-line import/namespace
+            throw new Error(("Unknown color space: " + (parameters.colorSpace)));
+        }
+
+        var innerFun;
+        var hashedStops;
+        var categoricalKeyType;
+        if (type === 'exponential') {
+            innerFun = evaluateExponentialFunction;
+        } else if (type === 'interval') {
+            innerFun = evaluateIntervalFunction;
+        } else if (type === 'categorical') {
+            innerFun = evaluateCategoricalFunction;
+
+            // For categorical functions, generate an Object as a hashmap of the stops for fast searching
+            hashedStops = Object.create(null);
+            for (var i = 0, list = parameters.stops; i < list.length; i += 1) {
+                var stop = list[i];
+
+                hashedStops[stop[0]] = stop[1];
+            }
+
+            // Infer key type based on first stop key-- used to encforce strict type checking later
+            categoricalKeyType = typeof parameters.stops[0][0];
+
+        } else if (type === 'identity') {
+            innerFun = evaluateIdentityFunction;
+        } else {
+            throw new Error(("Unknown function type \"" + type + "\""));
+        }
+
+        if (zoomAndFeatureDependent) {
+            var featureFunctions = {};
+            var zoomStops = [];
+            for (var s = 0; s < parameters.stops.length; s++) {
+                var stop$1 = parameters.stops[s];
+                var zoom = stop$1[0].zoom;
+                if (featureFunctions[zoom] === undefined) {
+                    featureFunctions[zoom] = {
+                        zoom: zoom,
+                        type: parameters.type,
+                        property: parameters.property,
+                        default: parameters.default,
+                        stops: []
+                    };
+                    zoomStops.push(zoom);
+                }
+                featureFunctions[zoom].stops.push([stop$1[0].value, stop$1[1]]);
+            }
+
+            var featureFunctionStops = [];
+            for (var i$1 = 0, list$1 = zoomStops; i$1 < list$1.length; i$1 += 1) {
+                var z = list$1[i$1];
+
+                featureFunctionStops.push([featureFunctions[z].zoom, createFunction(featureFunctions[z], propertySpec)]);
+            }
+
+            var interpolationType = {name: 'linear'};
+            return {
+                kind: 'composite',
+                interpolationType: interpolationType,
+                interpolationFactor: Interpolate.interpolationFactor.bind(undefined, interpolationType),
+                zoomStops: featureFunctionStops.map(function (s) {
+                    return s[0];
+                }),
+                evaluate: function evaluate(ref, properties) {
+                    var zoom = ref.zoom;
+
+                    return evaluateExponentialFunction({
+                        stops: featureFunctionStops,
+                        base: parameters.base
+                    }, propertySpec, zoom).evaluate(zoom, properties);
+                }
+            };
+        } else if (zoomDependent) {
+            var interpolationType$1 = type === 'exponential' ?
+            {name: 'exponential', base: parameters.base !== undefined ? parameters.base : 1} : null;
+            return {
+                kind: 'camera',
+                interpolationType: interpolationType$1,
+                interpolationFactor: Interpolate.interpolationFactor.bind(undefined, interpolationType$1),
+                zoomStops: parameters.stops.map(function (s) {
+                    return s[0];
+                }),
+                evaluate: function (ref) {
+                    var zoom = ref.zoom;
+
+                    return innerFun(parameters, propertySpec, zoom, hashedStops, categoricalKeyType);
+                }
+            };
+        } else {
+            return {
+                kind: 'source',
+                evaluate: function evaluate(_, feature) {
+                    var value = feature && feature.properties ? feature.properties[parameters.property] : undefined;
+                    if (value === undefined) {
+                        return coalesce(parameters.default, propertySpec.default);
+                    }
+                    return innerFun(parameters, propertySpec, value, hashedStops, categoricalKeyType);
+                }
+            };
+        }
+    }
+
+    function coalesce(a, b, c) {
+        if (a !== undefined) return a;
+        if (b !== undefined) return b;
+        if (c !== undefined) return c;
+    }
+
+    // serialization wrapper for old-style stop functions normalized to the
+    // expression interface
+    var StylePropertyFunction = function StylePropertyFunction(parameters, specification) {
+        this._parameters = parameters;
+        this._specification = specification;
+        extend$1(this, createFunction(this._parameters, this._specification));
+    };
+
+    StylePropertyFunction.deserialize = function deserialize(serialized) {
+        return ((new StylePropertyFunction(serialized._parameters, serialized._specification))                        );
+    };
+
+    StylePropertyFunction.serialize = function serialize(input) {
+        return {
+            _parameters: input._parameters,
+            _specification: input._specification
+        };
+    };
+
+    Expression.normalizePropertyExpression = function (value, specification) {
+        if (isFunction$1(value)) {
+            return (new StylePropertyFunction(value, specification)     );
+
+        } else if (Expression.isExpression(value)) {
+            var expression = createPropertyExpression(value, specification);
+            if (expression.result === 'error') {
+                // this should have been caught in validation
+                throw new Error(expression.value.map(function (err) {
+                    return ((err.key) + ": " + (err.message));
+                }).join(', '));
+            }
+            return expression.value;
+
+        } else {
+            var constant = value;
+            if (typeof value === 'string' && specification.type === 'color') {
+                constant = Color$1.parse(value);
+            }
+            return {
+                kind: 'constant',
+                evaluate: function () {
+                    return constant;
+                }
+            };
+        }
+    };
+
+    function featureFilter() {
+    }
+
+    featureFilter.isExpressionFilter = function (filter) {
+        if (filter === true || filter === false) {
+            return true;
+        }
+
+        if (!Array.isArray(filter) || filter.length === 0) {
+            return false;
+        }
+        switch (filter[0]) {
+            case 'has':
+                return filter.length >= 2 && filter[1] !== '$id' && filter[1] !== '$type';
+
+            case 'in':
+                return filter.length >= 3 && Array.isArray(filter[2]);
+            case '!in':
+            case '!has':
+            case 'none':
+                return false;
+
+            case '==':
+            case '!=':
+            case '>':
+            case '>=':
+            case '<':
+            case '<=':
+                return filter.length !== 3 || (Array.isArray(filter[1]) || Array.isArray(filter[2]));
+
+            case 'any':
+            case 'all':
+                for (var i = 0, list = filter.slice(1); i < list.length; i += 1) {
+                    var f = list[i];
+
+                    if (!featureFilter.isExpressionFilter(f) && typeof f !== 'boolean') {
+                        return false;
+                    }
+                }
+                return true;
+
+            default:
+                return true;
+        }
+    };
+
+    var filterSpec = {
+        'type': 'boolean',
+        'default': false,
+        'transition': false,
+        'property-type': 'data-driven',
+        'expression': {
+            'interpolated': false,
+            'parameters': ['zoom', 'feature']
+        }
+    };
+
+    /**
+     * Given a filter expressed as nested arrays, return a new function
+     * that evaluates whether a given feature (with a .properties or .tags property)
+     * passes its test.
+     *
+     * @private
+     * @param {Array} filter mapbox gl filter
+     * @returns {Function} filter-evaluating function
+     */
+    featureFilter.createFilter = function (filter) {
+        if (filter === null || filter === undefined) {
+            return function () {
+                return true;
+            };
+        }
+
+        if (!featureFilter.isExpressionFilter(filter)) {
+            filter = convertFilter(filter);
+        }
+
+        var compiled = Expression.createExpression(filter, filterSpec);
+        if (compiled.result === 'error') {
+            throw new Error(compiled.value.map(function (err) {
+                return ((err.key) + ": " + (err.message));
+            }).join(', '));
+        } else {
+            return function (globalProperties, feature) {
+                return compiled.value.evaluate(globalProperties, feature);
+            };
+        }
+    };
+
+    // Comparison function to sort numbers and strings
+    function compare(a, b) {
+        return a < b ? -1 : a > b ? 1 : 0;
+    }
+
+    function convertFilter(filter) {
+        if (!filter) {
+            return true;
+        }
+        var op = filter[0];
+        if (filter.length <= 1) {
+            return (op !== 'any');
+        }
+        var converted =
+            op === '==' ? convertComparisonOp(filter[1], filter[2], '==') :
+                op === '!=' ? convertNegation(convertComparisonOp(filter[1], filter[2], '==')) :
+                    op === '<' ||
+                        op === '>' ||
+                        op === '<=' ||
+                        op === '>=' ? convertComparisonOp(filter[1], filter[2], op) :
+                        op === 'any' ? convertDisjunctionOp(filter.slice(1)) :
+                            op === 'all' ? ['all'].concat(filter.slice(1).map(convertFilter)) :
+                                op === 'none' ? ['all'].concat(filter.slice(1).map(convertFilter).map(convertNegation)) :
+                                    op === 'in' ? convertInOp(filter[1], filter.slice(2)) :
+                                        op === '!in' ? convertNegation(convertInOp(filter[1], filter.slice(2))) :
+                                            op === 'has' ? convertHasOp(filter[1]) :
+                                                op === '!has' ? convertNegation(convertHasOp(filter[1])) :
+                                                    true;
+        return converted;
+    }
+
+    function convertComparisonOp(property, value, op) {
+        switch (property) {
+            case '$type':
+                return [("filter-type-" + op), value];
+            case '$id':
+                return [("filter-id-" + op), value];
+            default:
+                return [("filter-" + op), property, value];
+        }
+    }
+
+    function convertDisjunctionOp(filters) {
+        return ['any'].concat(filters.map(convertFilter));
+    }
+
+    function convertInOp(property, values) {
+        if (values.length === 0) {
+            return false;
+        }
+        switch (property) {
+            case '$type':
+                return ["filter-type-in", ['literal', values]];
+            case '$id':
+                return ["filter-id-in", ['literal', values]];
+            default:
+                if (values.length > 200 && !values.some(function (v) {
+                    return typeof v !== typeof values[0];
+                })) {
+                    return ['filter-in-large', property, ['literal', values.sort(compare)]];
+                } else {
+                    return ['filter-in-small', property, ['literal', values]];
+                }
+        }
+    }
+
+    function convertHasOp(property) {
+        switch (property) {
+            case '$type':
+                return true;
+            case '$id':
+                return ["filter-has-id"];
+            default:
+                return ["filter-has", property];
+        }
+    }
+
+    function convertNegation(filter) {
+        return ['!', filter];
+    }
+
+    var FeatureIndexArray$1 = arrayTypes.FeatureIndexArray;
+    var FeatureIndex = function FeatureIndex(tileID, grid, featureIndexArray) {
+        //this.tileID = tileID;
+        this.x = tileID.x;
+        this.y = tileID.y;
+        this.z = tileID.z;
+        this.grid = grid || new GridIndex(EXTENT, 16, 0);
+        this.featureIndexArray = featureIndexArray || new FeatureIndexArray$1();
+    };
+
+    FeatureIndex.prototype.insert = function insert(feature, geometry, featureIndex, sourceLayerIndex, bucketIndex, is3D) {
+        var key = this.featureIndexArray.length;
+        this.featureIndexArray.emplaceBack(featureIndex, sourceLayerIndex, bucketIndex);
+
+        var grid = this.grid;
+
+        for (var r = 0; r < geometry.length; r++) {
+            var ring = geometry[r];
+
+            var bbox = [Infinity, Infinity, -Infinity, -Infinity];
+            for (var i = 0; i < ring.length; i++) {
+                var p = ring[i];
+                bbox[0] = Math.min(bbox[0], p.x);
+                bbox[1] = Math.min(bbox[1], p.y);
+                bbox[2] = Math.max(bbox[2], p.x);
+                bbox[3] = Math.max(bbox[3], p.y);
+            }
+
+            if (bbox[0] < EXTENT &&
+                bbox[1] < EXTENT &&
+                bbox[2] >= 0 &&
+                bbox[3] >= 0) {
+                grid.insert(key, bbox[0], bbox[1], bbox[2], bbox[3]);
+            }
+        }
+    };
+
+    FeatureIndex.prototype.loadVTLayers = function loadVTLayers() {
+        if (!this.vtLayers) {
+            this.vtLayers = new VectorTile(new pbf.Protobuf(this.rawTileData)).layers;
+            this.sourceLayerCoder = new DictionaryCoder(this.vtLayers ? Object.keys(this.vtLayers).sort() : ['_geojsonTileLayer']);
+        }
+        return this.vtLayers;
+    };
+
+    // Finds non-symbol features in this tile at a particular position.
+    FeatureIndex.prototype.query = function query(args, styleLayers, sourceFeatureState) {
+        var this$1 = this;
+
+        this.loadVTLayers();
+
+        var params = args.params || {},
+            pixelsToTileUnits = EXTENT / args.tileSize,
+            filter = featureFilter.createFilter(params.filter);
+
+        var queryGeometry = args.queryGeometry;
+        var queryPadding = 5;
+
+        var bounds = getBounds(queryGeometry);
+        var matching = this.grid.query(bounds.minX - queryPadding, bounds.minY - queryPadding, bounds.maxX + queryPadding, bounds.maxY + queryPadding);
+        matching.sort(topDownFeatureComparator);
+
+        var result = {};
+        var previousIndex;
+        var loop = function (k) {
+            var index = matching[k];
+
+            // don't check the same feature more than once
+            if (index === previousIndex) {
+                return;
+            }
+            previousIndex = index;
+
+            var match = this$1.featureIndexArray.get(index);
+            var featureGeometry = null;
+            this$1.loadMatchingFeature(
+                result,
+                match.bucketIndex,
+                match.sourceLayerIndex,
+                match.featureIndex,
+                filter,
+                params.layers,
+                styleLayers,
+                function (feature, styleLayer) {
+                    if (!featureGeometry) {
+                        featureGeometry = loadGeometry(feature);
+                    }
+                    var featureState = {};
+    //                    if (feature.id) {
+    //                        // `feature-state` expression evaluation requires feature state to be available
+    //                        featureState = sourceFeatureState.getState(styleLayer.sourceLayer || '_geojsonTileLayer', feature.id);
+    //                    }
+                    return styleLayer.queryIntersectsFeature(queryGeometry, feature, featureState, featureGeometry, this$1.z, args.transform, pixelsToTileUnits, args.pixelPosMatrix);
+                }
+            );
+        };
+
+        for (var k = 0; k < matching.length; k++) loop(k);
+
+        return result;
+    };
+
+    FeatureIndex.prototype.loadMatchingFeature = function loadMatchingFeature(result, bucketIndex, sourceLayerIndex, featureIndex, filter, filterLayerIDs, styleLayers, intersectionTest) {
+        if(!defined.defined(bucketIndex) || !defined.defined(sourceLayerIndex) || !defined.defined(featureIndex)){
+            return;
+        }
+
+        var layerIDs = this.bucketLayerIDs[bucketIndex];
+        if (filterLayerIDs && !Util.arraysIntersect(filterLayerIDs, layerIDs)) {
+            return;
+        }
+
+        var sourceLayerName = this.sourceLayerCoder.decode(sourceLayerIndex);
+        var sourceLayer = this.vtLayers[sourceLayerName];
+        var feature = sourceLayer.feature(featureIndex);
+
+        if (!filter(new EvaluationParameters$1(this.z), feature)) {
+            return;
+        }
+
+        for (var l = 0; l < layerIDs.length; l++) {
+            var layerID = layerIDs[l];
+
+            if (filterLayerIDs && filterLayerIDs.indexOf(layerID) < 0) {
+                continue;
+            }
+
+            var styleLayer = styleLayers[layerID];
+            if (!styleLayer) {
+                continue;
+            }
+
+            var intersectionZ = !intersectionTest || intersectionTest(feature, styleLayer);
+            if (!intersectionZ) {
+                // Only applied for non-symbol features
+                continue;
+            }
+
+    //            var geojsonFeature = new Feature(feature, this.z, this.x, this.y);
+    //            (geojsonFeature ).layer = styleLayer.serialize();
+            feature.layer = styleLayer.serialize();
+            var layerResult = result[layerID];
+            if (layerResult === undefined) {
+                layerResult = result[layerID] = [];
+            }
+            layerResult.push({featureIndex: featureIndex, feature: feature, intersectionZ: intersectionZ});
+        }
+    };
+
+    // Given a set of symbol indexes that have already been looked up,
+    // return a matching set of GeoJSONFeatures
+    FeatureIndex.prototype.lookupSymbolFeatures = function lookupSymbolFeatures(symbolFeatureIndexes, bucketIndex, sourceLayerIndex, filterSpec, filterLayerIDs, styleLayers) {
+        var result = {};
+        this.loadVTLayers();
+
+        var filter = createFilter(filterSpec);
+
+        for (var i = 0, list = symbolFeatureIndexes; i < list.length; i += 1) {
+            var symbolFeatureIndex = list[i];
+
+            this.loadMatchingFeature(
+                result,
+                bucketIndex,
+                sourceLayerIndex,
+                symbolFeatureIndex,
+                filter,
+                filterLayerIDs,
+                styleLayers
+            );
+
+        }
+        return result;
+    };
+
+    FeatureIndex.prototype.hasLayer = function hasLayer(id) {
+        for (var i$1 = 0, list$1 = this.bucketLayerIDs; i$1 < list$1.length; i$1 += 1) {
+            var layerIDs = list$1[i$1];
+
+            for (var i = 0, list = layerIDs; i < list.length; i += 1) {
+                var layerID = list[i];
+
+                if (id === layerID) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    // register(
+    //     'FeatureIndex',
+    //     FeatureIndex,
+    //     {omit: ['rawTileData', 'sourceLayerCoder']}
+    // );
+
+    function getBounds(geometry) {
+        var minX = Infinity;
+        var minY = Infinity;
+        var maxX = -Infinity;
+        var maxY = -Infinity;
+        for (var i = 0, list = geometry; i < list.length; i += 1) {
+            var p = list[i];
+
+            minX = Math.min(minX, p.x);
+            minY = Math.min(minY, p.y);
+            maxX = Math.max(maxX, p.x);
+            maxY = Math.max(maxY, p.y);
+        }
+        return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
+    }
+
+    function topDownFeatureComparator(a, b) {
+        return b - a;
+    }
+
+    WebWorkerTransfer.register('FeatureIndex', FeatureIndex, {omit: ['rawTileData', 'sourceLayerCoder', 'vtLayers']});
+
+    const refProperties = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
+
+    function stringify(obj) {
+        var type = typeof obj;
+        if (type === 'number' || type === 'boolean' || type === 'string' || obj === undefined || obj === null)
+        { return JSON.stringify(obj); }
+
+        if (Array.isArray(obj)) {
+            var str$1 = '[';
+            for (var i$1 = 0, list = obj; i$1 < list.length; i$1 += 1) {
+                var val = list[i$1];
+
+                str$1 += (stringify(val)) + ",";
+            }
+            return (str$1 + "]");
+        }
+
+        var keys = Object.keys(obj).sort();
+
+        var str = '{';
+        for (var i = 0; i < keys.length; i++) {
+            str += (JSON.stringify(keys[i])) + ":" + (stringify(obj[keys[i]])) + ",";
+        }
+        return (str + "}");
+    }
+
+    function getKey(layer) {
+        var key = '';
+        for (var i = 0, list = refProperties; i < list.length; i += 1) {
+            var k = list[i];
+
+            key += "/" + (stringify(layer[k]));
+        }
+        return key;
+    }
+
+    /**
+     * Given an array of layers, return an array of arrays of layers where all
+     * layers in each group have identical layout-affecting properties. These
+     * are the properties that were formerly used by explicit `ref` mechanism
+     * for layers: 'type', 'source', 'source-layer', 'minzoom', 'maxzoom',
+     * 'filter', and 'layout'.
+     *
+     * The input is not modified. The output layers are references to the
+     * input layers.
+     *
+     * @private
+     * @param {Array<Layer>} layers
+     * @param {Object} [cachedKeys] - an object to keep already calculated keys.
+     * @returns {Array<Array<Layer>>}
+     */
+    function groupByLayout(layers, cachedKeys) {
+        var groups = {};
+
+        for (var i = 0; i < layers.length; i++) {
+
+            var k = (cachedKeys && cachedKeys[layers[i].id]) || getKey(layers[i]);
+            // update the cache if there is one
+            if (cachedKeys)
+            { cachedKeys[layers[i].id] = k; }
+
+            var group = groups[k];
+            if (!group) {
+                group = groups[k] = [];
+            }
+            group.push(layers[i]);
+        }
+
+        var result = [];
+
+        for (var k$1 in groups) {
+            result.push(groups[k$1]);
+        }
+
+        return result;
+    }
+
+    var layout$1 = createLayout([
+        {name: 'a_pos', components: 2, type: 'Int16'}
+    ], 4);
+    var members = layout$1.members;
+
+    function addCircleVertex(layoutVertexArray, x, y, extrudeX, extrudeY) {
+        layoutVertexArray.emplaceBack(
+            (x * 2) + ((extrudeX + 1) / 2),
+            (y * 2) + ((extrudeY + 1) / 2));
+    }
+
+    /**
+     * Circles are represented by two triangles.
+     *
+     * Each corner has a pos that is the center of the circle and an extrusion
+     * vector that is where it points.
+     * @private
+     */
+    var CircleBucket = function CircleBucket(options) {
+        this.zoom = options.zoom;
+        this.overscaling = options.overscaling;
+        this.layers = options.layers;
+        this.layerIds = this.layers.map(function (layer) {
+            return layer.id;
+        });
+        this.index = options.index;
+        this.hasPattern = false;
+
+        this.layoutVertexArray = new StructArrayLayout2i4();
+        this.indexArray = new StructArrayLayout3ui6();
+        this.segments = new SegmentVector();
+        this.programConfigurations = new ProgramConfigurationSet(members, options.layers, options.zoom);
+        this.stateDependentLayerIds = this.layers.filter(function (l) {
+            return l.isStateDependent();
+        }).map(function (l) {
+            return l.id;
+        });
+    };
+
+    CircleBucket.prototype.populate = function populate(features, options) {
+        var styleLayer = this.layers[0];
+        var bucketFeatures = [];
+        var circleSortKey = null;
+
+        // Heatmap layers are handled in this bucket and have no evaluated properties, so we check our access
+        if (styleLayer.type === 'circle') {
+            circleSortKey = ((styleLayer )).layout.get('circle-sort-key');
+        }
+
+        for (var i = 0, list = features; i < list.length; i += 1) {
+            var ref = list[i];
+            var feature = ref.feature;
+            var index = ref.index;
+            var sourceLayerIndex = ref.sourceLayerIndex;
+
+            if (this.layers[0]._featureFilter(new EvaluationParameters$1(0), feature)) {
+                var geometry = loadGeometry(feature);
+                var sortKey = circleSortKey ?
+                    circleSortKey.evaluate(feature, {}) :
+                    undefined;
+
+                var bucketFeature = {
+                    id: feature.id,
+                    properties: feature.properties,
+                    type: feature.type,
+                    sourceLayerIndex: sourceLayerIndex,
+                    index: index,
+                    geometry: geometry,
+                    patterns: {},
+                    sortKey: sortKey
+                };
+
+                bucketFeatures.push(bucketFeature);
+            }
+        }
+
+        if (circleSortKey) {
+            bucketFeatures.sort(function (a, b) {
+                // a.sortKey is always a number when in use
+                return ((a.sortKey )    ) - ((b.sortKey )    );
+            });
+        }
+
+        for (var i$1 = 0, list$1 = bucketFeatures; i$1 < list$1.length; i$1 += 1) {
+            var bucketFeature$1 = list$1[i$1];
+
+            var ref$1 = bucketFeature$1;
+            var geometry$1 = ref$1.geometry;
+            var index$1 = ref$1.index;
+            var sourceLayerIndex$1 = ref$1.sourceLayerIndex;
+            var feature$1 = features[index$1].feature;
+
+            this.addFeature(bucketFeature$1, geometry$1, index$1);
+            options.featureIndex.insert(feature$1, geometry$1, index$1, sourceLayerIndex$1, this.index);
+        }
+    };
+
+    CircleBucket.prototype.update = function update(states, vtLayer, imagePositions) {
+        if (!this.stateDependentLayers.length) {
+            return;
+        }
+        this.programConfigurations.updatePaintArrays(states, vtLayer, this.stateDependentLayers, imagePositions);
+    };
+
+    CircleBucket.prototype.isEmpty = function isEmpty() {
+        return this.layoutVertexArray.length === 0;
+    };
+
+    CircleBucket.prototype.uploadPending = function uploadPending() {
+        return !this.uploaded || this.programConfigurations.needsUpload;
+    };
+
+    CircleBucket.prototype.upload = function upload(context) {
+        if (!this.uploaded) {
+            this.layoutVertexBuffer = context.createVertexBuffer(this.layoutVertexArray, members);
+            this.indexBuffer = context.createIndexBuffer(this.indexArray);
+        }
+        this.programConfigurations.upload(context);
+        this.uploaded = true;
+    };
+
+    CircleBucket.prototype.destroy = function destroy() {
+        if (!this.layoutVertexBuffer) {
+            return;
+        }
+        this.layoutVertexBuffer.destroy();
+        this.indexBuffer.destroy();
+        this.programConfigurations.destroy();
+        this.segments.destroy();
+    };
+
+    CircleBucket.prototype.addFeature = function addFeature(feature, geometry, index) {
+        for (var i$1 = 0, list$1 = geometry; i$1 < list$1.length; i$1 += 1) {
+            var ring = list$1[i$1];
+
+            for (var i = 0, list = ring; i < list.length; i += 1) {
+                var point = list[i];
+
+                var x = point.x;
+                var y = point.y;
+
+                // Do not include points that are outside the tile boundaries.
+                if (x < 0 || x >= EXTENT || y < 0 || y >= EXTENT) {
+                    continue;
+                }
+
+                // this geometry will be of the Point type, and we'll derive
+                // two triangles from it.
+                //
+                // ┌─────────┐
+                // │ 3 2 │
+                // │     │
+                // │ 0 1 │
+                // └─────────┘
+
+                var segment = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray, feature.sortKey);
+                var index$1 = segment.vertexLength;
+
+                addCircleVertex(this.layoutVertexArray, x, y, -1, -1);
+                addCircleVertex(this.layoutVertexArray, x, y, 1, -1);
+                addCircleVertex(this.layoutVertexArray, x, y, 1, 1);
+                addCircleVertex(this.layoutVertexArray, x, y, -1, 1);
+
+                this.indexArray.emplaceBack(index$1, index$1 + 1, index$1 + 2);
+                this.indexArray.emplaceBack(index$1, index$1 + 3, index$1 + 2);
+
+                segment.vertexLength += 4;
+                segment.primitiveLength += 2;
+            }
+        }
+
+        this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, {});
+    };
+
+    WebWorkerTransfer.register('CircleBucket', CircleBucket, {omit: ['layers']});
+
+    /**
+     * An implementation of `Property` for properties that do not permit data-driven (source or composite) expressions.
+     * This restriction allows us to declare statically that the result of possibly evaluating this kind of property
+     * is in fact always the scalar type `T`, and can be used without further evaluating the value on a per-feature basis.
+     *
+     * @private
+     */
+    var DataConstantProperty = function DataConstantProperty(specification) {
+        this.specification = specification;
+    };
+
+    DataConstantProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters) {
+        //assert_1(!value.isDataDriven());
+        return value.expression.evaluate(parameters);
+    };
+
+    DataConstantProperty.prototype.interpolate = function interpolate$1(a, b, t) {
+        var interp = (interpolate   )[this.specification.type];
+        if (interp) {
+            return interp(a, b, t);
+        } else {
+            return a;
+        }
+    };
+
+    WebWorkerTransfer.register('DataConstantProperty', DataConstantProperty);
+
+    /**
+     * An implementation of `Property` for properties that permit data-driven (source or composite) expressions.
+     * The result of possibly evaluating this kind of property is `PossiblyEvaluatedPropertyValue<T>`; obtaining
+     * a scalar value `T` requires further evaluation on a per-feature basis.
+     *
+     * @private
+     */
+    var DataDrivenProperty = function DataDrivenProperty(specification, overrides) {
+        this.specification = specification;
+        this.overrides = overrides;
+    };
+
+    DataDrivenProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters, availableImages) {
+        if (value.expression.kind === 'constant' || value.expression.kind === 'camera') {
+            return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: value.expression.evaluate(parameters, (null   ), {}, availableImages)}, parameters);
+        } else {
+            return new PossiblyEvaluatedPropertyValue$1(this, value.expression, parameters);
+        }
+    };
+
+    DataDrivenProperty.prototype.interpolate = function interpolate$2(a, b, t) {
+        // If either possibly-evaluated value is non-constant, give up: we aren't able to interpolate data-driven values.
+        if (a.value.kind !== 'constant' || b.value.kind !== 'constant') {
+            return a;
+        }
+
+        // Special case hack solely for fill-outline-color. The undefined value is subsequently handled in
+        // FillStyleLayer#recalculate, which sets fill-outline-color to the fill-color value if the former
+        // is a PossiblyEvaluatedPropertyValue containing a constant undefined value. In addition to the
+        // return value here, the other source of a PossiblyEvaluatedPropertyValue containing a constant
+        // undefined value is the "default value" for fill-outline-color held in
+        // `Properties#defaultPossiblyEvaluatedValues`, which serves as the prototype of
+        // `PossiblyEvaluated#_values`.
+        if (a.value.value === undefined || b.value.value === undefined) {
+            return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: (undefined   )}, a.parameters);
+        }
+
+        var interp = (interpolate   )[this.specification.type];
+        if (interp) {
+            return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: interp(a.value.value, b.value.value, t)}, a.parameters);
+        } else {
+            return a;
+        }
+    };
+
+    DataDrivenProperty.prototype.evaluate = function evaluate(value, parameters, feature, featureState, availableImages) {
+        if (value.kind === 'constant') {
+            return value.value;
+        } else {
+            return value.evaluate(parameters, feature, featureState, availableImages);
+        }
+    };
+
+    WebWorkerTransfer.register('DataDrivenProperty', DataDrivenProperty);
+
+    var PropertyValue = function PropertyValue(property, value) {
+        this.property = property;
+        this.value = value;
+        this.expression = Expression.normalizePropertyExpression(value === undefined ? property.specification.default : value, property.specification);
+    };
+
+    PropertyValue.prototype.isDataDriven = function isDataDriven() {
+        return this.expression.kind === 'source' || this.expression.kind === 'composite';
+    };
+
+    PropertyValue.prototype.possiblyEvaluate = function possiblyEvaluate(parameters, availableImages) {
+        return this.property.possiblyEvaluate(this, parameters, availableImages);
+    };
+
+    /**
+     * Given a value `t` that varies between 0 and 1, return
+     * an interpolation function that eases between 0 and 1 in a pleasing
+     * cubic in-out fashion.
+     *
+     * @private
+     */
+    function easeCubicInOut(t        )         {
+        if (t <= 0) { return 0; }
+        if (t >= 1) { return 1; }
+        var t2 = t * t,
+            t3 = t2 * t;
+        return 4 * (t < 0.5 ? t3 : 3 * (t - t2) + t3 - 0.75);
+    }
+
+    /**
+     * `TransitioningPropertyValue` implements the first of two intermediate steps in the evaluation chain of a paint
+     * property value. In this step, transitions between old and new values are handled: as long as the transition is in
+     * progress, `TransitioningPropertyValue` maintains a reference to the prior value, and interpolates between it and
+     * the new value based on the current time and the configured transition duration and delay. The product is the next
+     * step in the evaluation chain: the "possibly evaluated" result type `R`. See below for more on this concept.
+     *
+     * @private
+     */
+    var TransitioningPropertyValue = function TransitioningPropertyValue(property, value, prior, transition, now) {
+        this.property = property;
+        this.value = value;
+        this.begin = now + transition.delay || 0;
+        this.end = this.begin + transition.duration || 0;
+        if (property.specification.transition && (transition.delay || transition.duration)) {
+            this.prior = prior;
+        }
+    };
+
+    TransitioningPropertyValue.prototype.possiblyEvaluate = function possiblyEvaluate(parameters, availableImages) {
+        var now = parameters.now || 0;
+        var finalValue = this.value.possiblyEvaluate(parameters, availableImages);
+        var prior = this.prior;
+        if (!prior) {
+            // No prior value.
+            return finalValue;
+        } else if (now > this.end) {
+            // Transition from prior value is now complete.
+            this.prior = null;
+            return finalValue;
+        } else if (this.value.isDataDriven()) {
+            // Transitions to data-driven properties are not supported.
+            // We snap immediately to the data-driven value so that, when we perform layout,
+            // we see the data-driven function and can use it to populate vertex buffers.
+            this.prior = null;
+            return finalValue;
+        } else if (now < this.begin) {
+            // Transition hasn't started yet.
+            return prior.possiblyEvaluate(parameters, availableImages);
+        } else {
+            // Interpolate between recursively-calculated prior value and final.
+            var t = (now - this.begin) / (this.end - this.begin);
+            return this.property.interpolate(prior.possiblyEvaluate(parameters, availableImages), finalValue, easeCubicInOut(t));
+        }
+    };
+
+    /**
+     * @module util
+     * @private
+     */
+    function Util$1() {
+    }
+
+    /**
+     * Given a value `t` that varies between 0 and 1, return
+     * an interpolation function that eases between 0 and 1 in a pleasing
+     * cubic in-out fashion.
+     *
+     * @private
+     */
+    Util$1.easeCubicInOut = function (t) {
+        if (t <= 0) {
+            return 0;
+        }
+        if (t >= 1) {
+            return 1;
+        }
+        var t2 = t * t,
+            t3 = t2 * t;
+        return 4 * (t < 0.5 ? t3 : 3 * (t - t2) + t3 - 0.75);
+    };
+
+    /*
+     * Call an asynchronous function on an array of arguments,
+     * calling `callback` with the completed results of all calls.
+     *
+     * @param array input to each call of the async function.
+     * @param fn an async function with signature (data, callback)
+     * @param callback a callback run after all async work is done.
+     * called with an array, containing the results of each async call.
+     * @private
+     */
+    Util$1.asyncAll = function (array, fn, callback) {
+        if (!array.length) {
+            return callback(null, []);
+        }
+        var remaining = array.length;
+        var results = new Array(array.length);
+        var error = null;
+        array.forEach(function (item, i) {
+            fn(item, function (err, result) {
+                if (err) {
+                    error = err;
+                }
+                results[i] = ((result     )        ); // https://github.com/facebook/flow/issues/2123
+                if (--remaining === 0) {
+                    callback(error, results);
+                }
+            });
+        });
+    };
+
+    /**
+     * Given a destination object and optionally many source objects,
+     * copy all properties from the source objects into the destination.
+     * The last source object given overrides properties from previous
+     * source objects.
+     *
+     * @param dest destination object
+     * @param sources sources from which properties are pulled
+     * @private
+     */
+    Util$1.extend = function (dest) {
+        var sources = [], len = arguments.length - 1;
+        while (len-- > 0) sources[ len ] = arguments[ len + 1 ];
+
+        for (var i = 0, list = sources; i < list.length; i += 1) {
+            var src = list[i];
+
+            for (var k in src) {
+                dest[k] = src[k];
+            }
+        }
+        return dest;
+    };
+
+    var id$1 = 1;
+
+    /**
+     * Return a unique numeric id, starting at 1 and incrementing with
+     * each call.
+     *
+     * @returns unique numeric id.
+     * @private
+     */
+    Util$1.uniqueId = function () {
+        return id$1++;
+    };
+
+    /**
+     * Return a random UUID (v4). Taken from: https://gist.github.com/jed/982883
+     * @private
+     */
+    Util$1.uuid = function () {
+        function b(a) {
+            return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) :
+                //$FlowFixMe: Flow doesn't like the implied array literal conversion here
+                ([1e7] + -[1e3] + -4e3 + -8e3 + -1e11).replace(/[018]/g, b);
+        }
+
+        return b();
+    };
+
+    /**
+     * Validate a string to match UUID(v4) of the
+     * form: xxxxxxxx-xxxx-4xxx-[89ab]xxx-xxxxxxxxxxxx
+     * @param str string to validate.
+     * @private
+     */
+    Util$1.validateUuid = function (str) {
+        return str ? /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str) : false;
+    };
+
+    /**
+     * Given an array of member function names as strings, replace all of them
+     * with bound versions that will always refer to `context` as `this`. This
+     * is useful for classes where otherwise event bindings would reassign
+     * `this` to the evented object or some other value: this lets you ensure
+     * the `this` value always.
+     *
+     * @param fns list of member function names
+     * @param context the context value
+     * @example
+     * function MyClass() {
+    *   bindAll(['ontimer'], this);
+    *   this.name = 'Tom';
+    * }
+     * MyClass.prototype.ontimer = function() {
+    *   alert(this.name);
+    * };
+     * var myClass = new MyClass();
+     * setTimeout(myClass.ontimer, 100);
+     * @private
+     */
+    Util$1.bindAll = function (fns, context) {
+        fns.forEach(function (fn) {
+            if (!context[fn]) {
+                return;
+            }
+            context[fn] = context[fn].bind(context);
+        });
+    };
+
+    /**
+     * Determine if a string ends with a particular substring
+     *
+     * @private
+     */
+    Util$1.endsWith = function (string, suffix) {
+        return string.indexOf(suffix, string.length - suffix.length) !== -1;
+    };
+
+    /**
+     * Create an object by mapping all the values of an existing object while
+     * preserving their keys.
+     *
+     * @private
+     */
+    Util$1.mapObject = function (input, iterator, context) {
+        var output = {};
+        for (var key in input) {
+            output[key] = iterator.call(context || this, input[key], key, input);
+        }
+        return output;
+    };
+
+    /**
+     * Create an object by filtering out values of an existing object.
+     *
+     * @private
+     */
+    Util$1.filterObject = function (input, iterator, context) {
+        var output = {};
+        for (var key in input) {
+            if (iterator.call(context || this, input[key], key, input)) {
+                output[key] = input[key];
+            }
+        }
+        return output;
+    };
+
+    /**
+     * Deeply clones two objects.
+     *
+     * @private
+     */
+    Util$1.clone = function (input) {
+        if (Array.isArray(input)) {
+            return input.map(Util$1.clone);
+        } else if (typeof input === 'object' && input) {
+            return ((Util$1.mapObject(input, Util$1.clone)     )   );
+        } else {
+            return input;
+        }
+    };
+
+    Util$1.deepEqual = function (a, b) {
+        if (Array.isArray(a)) {
+            if (!Array.isArray(b) || a.length !== b.length) {
+                return false;
+            }
+            for (var i = 0; i < a.length; i++) {
+                if (!Util$1.deepEqual(a[i], b[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (typeof a === 'object' && a !== null && b !== null) {
+            if (!(typeof b === 'object')) {
+                return false;
+            }
+            var keys = Object.keys(a);
+            if (keys.length !== Object.keys(b).length) {
+                return false;
+            }
+            for (var key in a) {
+                if (!Util$1.deepEqual(a[key], b[key])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return a === b;
+    };
+
+    /**
+     * Check if two arrays have at least one common element.
+     *
+     * @private
+     */
+    Util$1.arraysIntersect = function (a, b) {
+        for (var l = 0; l < a.length; l++) {
+            if (b.indexOf(a[l]) >= 0) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /**
+     * Indicates if the provided Points are in a counter clockwise (true) or clockwise (false) order
+     *
+     * @private
+     * @returns true for a counter clockwise set of points
+     */
+    // http://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
+    Util$1.isCounterClockwise = function (a, b, c) {
+        return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
+    };
+
+    /* global self, WorkerGlobalScope */
+    /**
+     *  Retuns true if the when run in the web-worker context.
+     *
+     * @private
+     * @returns {boolean}
+     */
+    Util$1.isWorker = function () {
+        return typeof WorkerGlobalScope !== 'undefined' && typeof self !== 'undefined' &&
+            self instanceof WorkerGlobalScope;
+    };
+
+    var _isSafari$1 = null;
+
+    /**
+     * Returns true when run in WebKit derived browsers.
+     * This is used as a workaround for a memory leak in Safari caused by using Transferable objects to
+     * transfer data between WebWorkers and the main thread.
+     * https://github.com/mapbox/mapbox-gl-js/issues/8771
+     *
+     * This should be removed once the underlying Safari issue is fixed.
+     *
+     * @private
+     * @param scope {WindowOrWorkerGlobalScope} Since this function is used both on the main thread and WebWorker context,
+     *      let the calling scope pass in the global scope object.
+     * @returns {boolean}
+     */
+    Util$1.isSafari = function (scope) {
+        if (_isSafari$1 == null) {
+            var userAgent = scope.navigator ? scope.navigator.userAgent : null;
+            _isSafari$1 = !!scope.safari || !!(userAgent && (/\b(iPad|iPhone|iPod)\b/.test(userAgent) || (!!userAgent.match('Safari') && !userAgent.match('Chrome'))));
+        }
+        return _isSafari$1;
+    };
+
+    /**
+     * Replace tokens in a string template with values in an object
+     *
+     * @param properties a key/value relationship between tokens and replacements
+     * @param text the template string
+     * @returns the template with tokens replaced
+     * @private
+     */
+    Util$1.resolveTokens = function (properties, text) {
+        return text.replace(/{([^{}]+)}/g, function (match, key) {
+            return key in properties ? String(properties[key]) : '';
+        });
+    };
+
+    /**
+     * Paint properties are _transitionable_: they can change in a fluid manner, interpolating or cross-fading between
+     * old and new value. The duration of the transition, and the delay before it begins, is configurable.
+     *
+     * `TransitionablePropertyValue` is a compositional class that stores both the property value and that transition
+     * configuration.
+     *
+     * A `TransitionablePropertyValue` can calculate the next step in the evaluation chain for paint property values:
+     * `TransitioningPropertyValue`.
+     *
+     * @private
+     */
+    var TransitionablePropertyValue = function TransitionablePropertyValue(property) {
+        this.property = property;
+        this.value = new PropertyValue(property, undefined);
+    };
+
+    TransitionablePropertyValue.prototype.transitioned = function transitioned(parameters, prior) {
+        return new TransitioningPropertyValue(this.property, this.value, prior, // eslint-disable-line no-use-before-define
+            Util$1.extend({}, parameters.transition, this.transition), parameters.now);
+    };
+
+    TransitionablePropertyValue.prototype.untransitioned = function untransitioned() {
+        return new TransitioningPropertyValue(this.property, this.value, null, {}, 0); // eslint-disable-line no-use-before-define
+    };
+
+    /**
+     * A helper type: given an object type `Properties` whose values are each of type `Property<T, R>`, it calculates
+     * an object type with the same keys, and values of type `R`.
+     *
+     * For properties that don't allow data-driven values, `R` is a scalar type such as `number`, `string`, or `Color`.
+     * For data-driven properties, it is `PossiblyEvaluatedPropertyValue`. Critically, the type definitions are set up
+     * in a way that allows flow to know which of these two cases applies for any given property name, and if you attempt
+     * to use a `PossiblyEvaluatedPropertyValue` as if it was a scalar, or vice versa, you will get a type error. (However,
+     * there's at least one case in which flow fails to produce a type error that you should be aware of: in a context such
+     * as `layer.paint.get('foo-opacity') === 0`, if `foo-opacity` is data-driven, than the left-hand side is of type
+     * `PossiblyEvaluatedPropertyValue<number>`, but flow will not complain about comparing this to a number using `===`.
+     * See https://github.com/facebook/flow/issues/2359.)
+     *
+     * There's also a third, special case possiblity for `R`: for cross-faded properties, it's `?CrossFaded<T>`.
+     *
+     * @private
+     */
+
+    /**
+     * `Properties` holds objects containing default values for the layout or paint property set of a given
+     * layer type. These objects are immutable, and they are used as the prototypes for the `_values` members of
+     * `Transitionable`, `Transitioning`, `Layout`, and `PossiblyEvaluated`. This allows these classes to avoid
+     * doing work in the common case where a property has no explicit value set and should be considered to take
+     * on the default value: using `for (const property of Object.keys(this._values))`, they can iterate over
+     * only the _own_ properties of `_values`, skipping repeated calculation of transitions and possible/final
+     * evaluations for defaults, the result of which will always be the same.
+     *
+     * @private
+     */
+    var Properties = function Properties(properties) {
+        this.properties = properties;
+        this.defaultPropertyValues = ({}   );
+        this.defaultTransitionablePropertyValues = ({}   );
+        this.defaultTransitioningPropertyValues = ({}   );
+        this.defaultPossiblyEvaluatedValues = ({}   );
+        this.overridableProperties = ([]   );
+
+        for (var property in properties) {
+            var prop = properties[property];
+            if (prop.specification.overridable) {
+                this.overridableProperties.push(property);
+            }
+            var defaultPropertyValue = this.defaultPropertyValues[property] =
+                new PropertyValue(prop, undefined);
+            var defaultTransitionablePropertyValue = this.defaultTransitionablePropertyValues[property] =
+                new TransitionablePropertyValue(prop);
+            this.defaultTransitioningPropertyValues[property] =
+                defaultTransitionablePropertyValue.untransitioned();
+            this.defaultPossiblyEvaluatedValues[property] =
+                defaultPropertyValue.possiblyEvaluate(({}   ));
+        }
+    };
+
+    function QueryUtils() {
+    }
+
+    QueryUtils.getMaximumPaintValue = function (property, layer, bucket) {
+        var value = ((layer.paint).get(property)).value;
+        if (value.kind === 'constant') {
+            return value.value;
+        } else {
+            var binders = bucket.programConfigurations.get(layer.id).binders;
+            return binders[property].maxValue;
+        }
+    };
+
+    QueryUtils.translateDistance = function (translate) {
+        return Math.sqrt(translate[0] * translate[0] + translate[1] * translate[1]);
+    };
+
+    QueryUtils.translate = function (queryGeometry, translate, translateAnchor, bearing, pixelsToTileUnits) {
+        if (!translate[0] && !translate[1]) {
+            return queryGeometry;
+        }
+        var pt = Point.convert(translate)._mult(pixelsToTileUnits);
+
+        if (translateAnchor === "viewport") {
+            pt._rotate(-bearing);
+        }
+
+        var translated = [];
+        for (var i = 0; i < queryGeometry.length; i++) {
+            var point = queryGeometry[i];
+            translated.push(point.sub(pt));
+        }
+        return translated;
+    };
+
+    /**
+     * `PossiblyEvaluated` stores a map of all (property name, `R`) pairs for paint or layout properties of a
+     * given layer type.
+     * @private
+     */
+    var PossiblyEvaluated = function PossiblyEvaluated(properties) {
+        this._properties = properties;
+        this._values = (Object.create(properties.defaultPossiblyEvaluatedValues)   );
+    };
+
+    PossiblyEvaluated.prototype.get = function get(name) {
+        return this._values[name];
+    };
+
+    /**
+     * Because layout properties are not transitionable, they have a simpler representation and evaluation chain than
+     * paint properties: `PropertyValue`s are possibly evaluated, producing possibly evaluated values, which are then
+     * fully evaluated.
+     *
+     * `Layout` stores a map of all (property name, `PropertyValue`) pairs for layout properties of a
+     * given layer type. It can calculate the possibly-evaluated values for all of them at once, producing a
+     * `PossiblyEvaluated` instance for the same set of properties.
+     *
+     * @private
+     */
+    var Layout = function Layout(properties                 ) {
+        this._properties = properties;
+        this._values = (Object.create(properties.defaultPropertyValues)   );
+    };
+
+    Layout.prototype.getValue = function getValue (name ) {
+        return Util.clone(this._values[name].value);
+    };
+
+    Layout.prototype.setValue = function setValue (name , value ) {
+        this._values[name] = new PropertyValue(this._values[name].property, value === null ? undefined : Util.clone(value));
+    };
+
+    Layout.prototype.serialize = function serialize () {
+        var result    = {};
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            var value = this.getValue(property);
+            if (value !== undefined) {
+                result[property] = value;
+            }
+        }
+        return result;
+    };
+
+    Layout.prototype.possiblyEvaluate = function possiblyEvaluate (parameters                    , availableImages              )                         {
+        var result = new PossiblyEvaluated(this._properties); // eslint-disable-line no-use-before-define
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            result._values[property] = this._values[property].possiblyEvaluate(parameters, availableImages);
+        }
+        return result;
+    };
+
+    // ------- Transitioning -------
+
+    /**
+     * A helper type: given an object type `Properties` whose values are each of type `Property<T, R>`, it calculates
+     * an object type with the same keys and values of type `TransitioningPropertyValue<T, R>`.
+     *
+     * @private
+     */
+
+
+    /**
+     * `Transitioning` stores a map of all (property name, `TransitioningPropertyValue`) pairs for paint properties of a
+     * given layer type. It can calculate the possibly-evaluated values for all of them at once, producing a
+     * `PossiblyEvaluated` instance for the same set of properties.
+     *
+     * @private
+     */
+    var Transitioning = function Transitioning(properties) {
+        this._properties = properties;
+        this._values = (Object.create(properties.defaultTransitioningPropertyValues)   );
+    };
+
+    Transitioning.prototype.possiblyEvaluate = function possiblyEvaluate(parameters, availableImages) {
+        var result = new PossiblyEvaluated(this._properties); // eslint-disable-line no-use-before-define
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            result._values[property] = this._values[property].possiblyEvaluate(parameters, availableImages);
+        }
+        return result;
+    };
+
+    Transitioning.prototype.hasTransition = function hasTransition() {
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            if (this._values[property].prior) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /**
+     * A helper type: given an object type `Properties` whose values are each of type `Property<T, R>`, it calculates
+     * an object type with the same keys and values of type `TransitionablePropertyValue<T, R>`.
+     *
+     * @private
+     */
+
+
+    /**
+     * `Transitionable` stores a map of all (property name, `TransitionablePropertyValue`) pairs for paint properties of a
+     * given layer type. It can calculate the `TransitioningPropertyValue`s for all of them at once, producing a
+     * `Transitioning` instance for the same set of properties.
+     *
+     * @private
+     */
+    var Transitionable = function Transitionable(properties) {
+        this._properties = properties;
+        this._values = (Object.create(properties.defaultTransitionablePropertyValues)   );
+    };
+
+    Transitionable.prototype.getValue = function getValue(name) {
+        return Util.clone(this._values[name].value.value);
+    };
+
+    Transitionable.prototype.setValue = function setValue(name, value) {
+        if (!this._values.hasOwnProperty(name)) {
+            this._values[name] = new TransitionablePropertyValue(this._values[name].property);
+        }
+        // Note that we do not _remove_ an own property in the case where a value is being reset
+        // to the default: the transition might still be non-default.
+        this._values[name].value = new PropertyValue(this._values[name].property, value === null ? undefined : Util.clone(value));
+    };
+
+    Transitionable.prototype.getTransition = function getTransition(name) {
+        return Util.clone(this._values[name].transition);
+    };
+
+    Transitionable.prototype.setTransition = function setTransition(name, value) {
+        if (!this._values.hasOwnProperty(name)) {
+            this._values[name] = new TransitionablePropertyValue(this._values[name].property);
+        }
+        this._values[name].transition = Util.clone(value) || undefined;
+    };
+
+    Transitionable.prototype.serialize = function serialize() {
+        var result = {};
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            var value = this.getValue(property);
+            if (value !== undefined) {
+                result[property] = value;
+            }
+
+            var transition = this.getTransition(property);
+            if (transition !== undefined) {
+                result[(property + "-transition")] = transition;
+            }
+        }
+        return result;
+    };
+
+    Transitionable.prototype.transitioned = function transitioned(parameters, prior) {
+        var result = new Transitioning(this._properties); // eslint-disable-line no-use-before-define
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            result._values[property] = this._values[property].transitioned(parameters, prior._values[property]);
+        }
+        return result;
+    };
+
+    Transitionable.prototype.untransitioned = function untransitioned() {
+        var result = new Transitioning(this._properties); // eslint-disable-line no-use-before-define
+        for (var i = 0, list = Object.keys(this._values); i < list.length; i += 1) {
+            var property = list[i];
+
+            result._values[property] = this._values[property].untransitioned();
+        }
+        return result;
+    };
+
+    var TRANSITION_SUFFIX = '-transition';
+
+    function endsWith(string, suffix) {
+        return string.indexOf(suffix, string.length - suffix.length) !== -1;
+    }
+
+    function StyleLayer(layer, properties) {
+        //Evented.call(this);
+
+        this.id = layer.id;
+        this.type = layer.type;
+    //        this._featureFilter = function () {
+    //            return true;
+    //        };
+
+        if (layer.type === 'custom') {
+            return;
+        }
+
+        layer = ((layer));
+
+        this.metadata = layer.metadata;
+        this.minzoom = layer.minzoom;
+        this.maxzoom = layer.maxzoom;
+
+        if (layer.type !== 'background') {
+            this.source = layer.source;
+            this.sourceLayer = layer['source-layer'];
+            this.filter = layer.filter;
+        }
+
+        if (properties.layout) {
+            this._unevaluatedLayout = new Layout(properties.layout);
+        }
+
+        if (properties.paint) {
+            this._transitionablePaint = new Transitionable(properties.paint);
+
+            for (var property in layer.paint) {
+                this.setPaintProperty(property, layer.paint[property], {validate: false});
+            }
+            for (var property$1 in layer.layout) {
+                this.setLayoutProperty(property$1, layer.layout[property$1], {validate: false});
+            }
+
+            this._transitioningPaint = this._transitionablePaint.untransitioned();
+        }
+    }
+
+    //    if (Evented) StyleLayer.__proto__ = Evented;
+    //    StyleLayer.prototype = Object.create(Evented && Evented.prototype);
+    //    StyleLayer.prototype.constructor = StyleLayer;
+
+    StyleLayer.prototype.getCrossfadeParameters = function getCrossfadeParameters() {
+        return this._crossfadeParameters;
+    };
+
+    StyleLayer.prototype.getLayoutProperty = function getLayoutProperty(name) {
+        if (name === 'visibility') {
+            return this.visibility;
+        }
+
+        return this._unevaluatedLayout.getValue(name);
+    };
+
+    StyleLayer.prototype.setLayoutProperty = function setLayoutProperty(name, value, options) {
+
+        if (value !== null && value !== undefined) {
+            var key = "layers." + (this.id) + ".layout." + name;
+    //            if (this._validate(validateLayoutProperty$1, key, name, value, options)) {
+    //                return;
+    //            }
+        }
+
+        if (name === 'visibility') {
+            this.visibility = value;
+            return;
+        }
+
+        this._unevaluatedLayout.setValue(name, value);
+    };
+
+    StyleLayer.prototype.getPaintProperty = function getPaintProperty(name) {
+        if (endsWith(name, TRANSITION_SUFFIX)) {
+            return this._transitionablePaint.getTransition(name.slice(0, -TRANSITION_SUFFIX.length));
+        } else {
+            return this._transitionablePaint.getValue(name);
+        }
+    };
+
+    StyleLayer.prototype.setPaintProperty = function setPaintProperty(name, value, options) {
+
+        if (value !== null && value !== undefined) {
+            var key = "layers." + (this.id) + ".paint." + name;
+    //            if (this._validate(validatePaintProperty$1, key, name, value, options)) {
+    //                return false;
+    //            }
+        }
+
+        if (endsWith(name, TRANSITION_SUFFIX)) {
+            this._transitionablePaint.setTransition(name.slice(0, -TRANSITION_SUFFIX.length), (value     ) || undefined);
+            return false;
+        } else {
+            var transitionable = this._transitionablePaint._values[name];
+            var isCrossFadedProperty = transitionable.property.specification["property-type"] === 'cross-faded-data-driven';
+            var wasDataDriven = transitionable.value.isDataDriven();
+            var oldValue = transitionable.value;
+
+            this._transitionablePaint.setValue(name, value);
+            this._handleSpecialPaintPropertyUpdate(name);
+
+            var newValue = this._transitionablePaint._values[name].value;
+            var isDataDriven = newValue.isDataDriven();
+
+            // if a cross-faded value is changed, we need to make sure the new icons get added to each tile's iconAtlas
+            // so a call to _updateLayer is necessary, and we return true from this function so it gets called in
+            // Style#setPaintProperty
+            return isDataDriven || wasDataDriven || isCrossFadedProperty || this._handleOverridablePaintPropertyUpdate(name, oldValue, newValue);
+        }
+    };
+
+    StyleLayer.prototype._handleSpecialPaintPropertyUpdate = function _handleSpecialPaintPropertyUpdate(_) {
+        // No-op; can be overridden by derived classes.
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    StyleLayer.prototype._handleOverridablePaintPropertyUpdate = function _handleOverridablePaintPropertyUpdate(name, oldValue, newValue) {
+        // No-op; can be overridden by derived classes.
+        return false;
+    };
+
+    StyleLayer.prototype.isHidden = function isHidden(zoom) {
+        if (this.minzoom && zoom < this.minzoom) {
+            return true;
+        }
+        if (this.maxzoom && zoom >= this.maxzoom) {
+            return true;
+        }
+        return this.visibility === 'none';
+    };
+
+    StyleLayer.prototype.updateTransitions = function updateTransitions(parameters) {
+        this._transitioningPaint = this._transitionablePaint.transitioned(parameters, this._transitioningPaint);
+    };
+
+    StyleLayer.prototype.hasTransition = function hasTransition() {
+        return this._transitioningPaint.hasTransition();
+    };
+
+    StyleLayer.prototype.recalculate = function recalculate(parameters, availableImages) {
+        if (parameters.getCrossfadeParameters) {
+            this._crossfadeParameters = parameters.getCrossfadeParameters();
+        }
+
+        if (this._unevaluatedLayout) {
+            (this).layout = this._unevaluatedLayout.possiblyEvaluate(parameters, availableImages);
+        }
+
+        (this).paint = this._transitioningPaint.possiblyEvaluate(parameters, availableImages);
+    };
+
+    StyleLayer.prototype.serialize = function serialize() {
+        var output = {
+            'id': this.id,
+            'type': this.type,
+            'source': this.source,
+            'source-layer': this.sourceLayer,
+            'metadata': this.metadata,
+            'minzoom': this.minzoom,
+            'maxzoom': this.maxzoom,
+            'filter': this.filter,
+            'layout': this._unevaluatedLayout && this._unevaluatedLayout.serialize(),
+            'paint': this._transitionablePaint && this._transitionablePaint.serialize()
+        };
+
+        if (this.visibility) {
+            output.layout = output.layout || {};
+            output.layout.visibility = this.visibility;
+        }
+
+        return Util.filterObject(output, function (value, key) {
+            return value !== undefined && !(key === 'layout' && !Object.keys(value).length) && !(key === 'paint' && !Object.keys(value).length);
+        });
+    };
+
+    StyleLayer.prototype._validate = function _validate(validate, key, name, value, options) {
+        return true;
+    //        if (options === void 0) options = {};
+    //
+    //        if (options && options.validate === false) {
+    //            return false;
+    //        }
+    //        return emitValidationErrors(this, validate.call(validateStyle, {
+    //            key: key,
+    //            layerType: this.type,
+    //            objectKey: name,
+    //            value: value,
+    //            styleSpec: spec,
+    //            // Workaround for https://github.com/mapbox/mapbox-gl-js/issues/2407
+    //            style: {glyphs: true, sprite: true}
+    //        }));
+    };
+
+    StyleLayer.prototype.is3D = function is3D() {
+        return false;
+    };
+
+    StyleLayer.prototype.isTileClipped = function isTileClipped() {
+        return false;
+    };
+
+    StyleLayer.prototype.hasOffscreenPass = function hasOffscreenPass() {
+        return false;
+    };
+
+    StyleLayer.prototype.resize = function resize() {
+        // noop
+    };
+
+    StyleLayer.prototype.isStateDependent = function isStateDependent() {
+        return true;
+    //        for (var property in (this     ).paint._values) {
+    //            var value = (this     ).paint.get(property);
+    //            if (!(value instanceof PossiblyEvaluatedPropertyValue) || !supportsPropertyExpression(value.property.specification)) {
+    //                continue;
+    //            }
+    //
+    //            if ((value.value.kind === 'source' || value.value.kind === 'composite') &&
+    //                value.value.isStateDependent) {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    };
+
+    var $version = 8;
+    var $root = {
+        version: {
+            required: true,
+            type: "enum",
+            values: [
+                8
+            ]
+        },
+        name: {
+            type: "string"
+        },
+        metadata: {
+            type: "*"
+        },
+        center: {
+            type: "array",
+            value: "number"
+        },
+        zoom: {
+            type: "number"
+        },
+        bearing: {
+            type: "number",
+            "default": 0,
+            period: 360,
+            units: "degrees"
+        },
+        pitch: {
+            type: "number",
+            "default": 0,
+            units: "degrees"
+        },
+        light: {
+            type: "light"
+        },
+        sources: {
+            required: true,
+            type: "sources"
+        },
+        sprite: {
+            type: "string"
+        },
+        glyphs: {
+            type: "string"
+        },
+        transition: {
+            type: "transition"
+        },
+        layers: {
+            required: true,
+            type: "array",
+            value: "layer"
+        }
+    };
+    var sources = {
+        "*": {
+            type: "source"
+        }
+    };
+    var source = [
+        "source_vector",
+        "source_raster",
+        "source_raster_dem",
+        "source_geojson",
+        "source_video",
+        "source_image"
+    ];
+    var source_vector = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                vector: {
+                }
+            }
+        },
+        url: {
+            type: "string"
+        },
+        tiles: {
+            type: "array",
+            value: "string"
+        },
+        bounds: {
+            type: "array",
+            value: "number",
+            length: 4,
+            "default": [
+                -180,
+                -85.051129,
+                180,
+                85.051129
+            ]
+        },
+        scheme: {
+            type: "enum",
+            values: {
+                xyz: {
+                },
+                tms: {
+                }
+            },
+            "default": "xyz"
+        },
+        minzoom: {
+            type: "number",
+            "default": 0
+        },
+        maxzoom: {
+            type: "number",
+            "default": 22
+        },
+        attribution: {
+            type: "string"
+        },
+        "*": {
+            type: "*"
+        }
+    };
+    var source_raster = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                raster: {
+                }
+            }
+        },
+        url: {
+            type: "string"
+        },
+        tiles: {
+            type: "array",
+            value: "string"
+        },
+        bounds: {
+            type: "array",
+            value: "number",
+            length: 4,
+            "default": [
+                -180,
+                -85.051129,
+                180,
+                85.051129
+            ]
+        },
+        minzoom: {
+            type: "number",
+            "default": 0
+        },
+        maxzoom: {
+            type: "number",
+            "default": 22
+        },
+        tileSize: {
+            type: "number",
+            "default": 512,
+            units: "pixels"
+        },
+        scheme: {
+            type: "enum",
+            values: {
+                xyz: {
+                },
+                tms: {
+                }
+            },
+            "default": "xyz"
+        },
+        attribution: {
+            type: "string"
+        },
+        "*": {
+            type: "*"
+        }
+    };
+    var source_raster_dem = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                "raster-dem": {
+                }
+            }
+        },
+        url: {
+            type: "string"
+        },
+        tiles: {
+            type: "array",
+            value: "string"
+        },
+        bounds: {
+            type: "array",
+            value: "number",
+            length: 4,
+            "default": [
+                -180,
+                -85.051129,
+                180,
+                85.051129
+            ]
+        },
+        minzoom: {
+            type: "number",
+            "default": 0
+        },
+        maxzoom: {
+            type: "number",
+            "default": 22
+        },
+        tileSize: {
+            type: "number",
+            "default": 512,
+            units: "pixels"
+        },
+        attribution: {
+            type: "string"
+        },
+        encoding: {
+            type: "enum",
+            values: {
+                terrarium: {
+                },
+                mapbox: {
+                }
+            },
+            "default": "mapbox"
+        },
+        "*": {
+            type: "*"
+        }
+    };
+    var source_geojson = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                geojson: {
+                }
+            }
+        },
+        data: {
+            type: "*"
+        },
+        maxzoom: {
+            type: "number",
+            "default": 18
+        },
+        attribution: {
+            type: "string"
+        },
+        buffer: {
+            type: "number",
+            "default": 128,
+            maximum: 512,
+            minimum: 0
+        },
+        tolerance: {
+            type: "number",
+            "default": 0.375
+        },
+        cluster: {
+            type: "boolean",
+            "default": false
+        },
+        clusterRadius: {
+            type: "number",
+            "default": 50,
+            minimum: 0
+        },
+        clusterMaxZoom: {
+            type: "number"
+        },
+        clusterProperties: {
+            type: "*"
+        },
+        lineMetrics: {
+            type: "boolean",
+            "default": false
+        },
+        generateId: {
+            type: "boolean",
+            "default": false
+        }
+    };
+    var source_video = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                video: {
+                }
+            }
+        },
+        urls: {
+            required: true,
+            type: "array",
+            value: "string"
+        },
+        coordinates: {
+            required: true,
+            type: "array",
+            length: 4,
+            value: {
+                type: "array",
+                length: 2,
+                value: "number"
+            }
+        }
+    };
+    var source_image = {
+        type: {
+            required: true,
+            type: "enum",
+            values: {
+                image: {
+                }
+            }
+        },
+        url: {
+            required: true,
+            type: "string"
+        },
+        coordinates: {
+            required: true,
+            type: "array",
+            length: 4,
+            value: {
+                type: "array",
+                length: 2,
+                value: "number"
+            }
+        }
+    };
+    var layer = {
+        id: {
+            type: "string",
+            required: true
+        },
+        type: {
+            type: "enum",
+            values: {
+                fill: {
+                },
+                line: {
+                },
+                symbol: {
+                },
+                circle: {
+                },
+                heatmap: {
+                },
+                "fill-extrusion": {
+                },
+                raster: {
+                },
+                hillshade: {
+                },
+                background: {
+                }
+            },
+            required: true
+        },
+        metadata: {
+            type: "*"
+        },
+        source: {
+            type: "string"
+        },
+        "source-layer": {
+            type: "string"
+        },
+        minzoom: {
+            type: "number",
+            minimum: 0,
+            maximum: 24
+        },
+        maxzoom: {
+            type: "number",
+            minimum: 0,
+            maximum: 24
+        },
+        filter: {
+            type: "filter"
+        },
+        layout: {
+            type: "layout"
+        },
+        paint: {
+            type: "paint"
+        }
+    };
+    var layout = [
+        "layout_fill",
+        "layout_line",
+        "layout_circle",
+        "layout_heatmap",
+        "layout_fill-extrusion",
+        "layout_symbol",
+        "layout_raster",
+        "layout_hillshade",
+        "layout_background"
+    ];
+    var layout_background = {
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_fill = {
+        "fill-sort-key": {
+            type: "number",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_circle = {
+        "circle-sort-key": {
+            type: "number",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_heatmap = {
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_line = {
+        "line-cap": {
+            type: "enum",
+            values: {
+                butt: {
+                },
+                round: {
+                },
+                square: {
+                }
+            },
+            "default": "butt",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "line-join": {
+            type: "enum",
+            values: {
+                bevel: {
+                },
+                round: {
+                },
+                miter: {
+                }
+            },
+            "default": "miter",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-miter-limit": {
+            type: "number",
+            "default": 2,
+            requires: [
+                {
+                    "line-join": "miter"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "line-round-limit": {
+            type: "number",
+            "default": 1.05,
+            requires: [
+                {
+                    "line-join": "round"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "line-sort-key": {
+            type: "number",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_symbol = {
+        "symbol-placement": {
+            type: "enum",
+            values: {
+                point: {
+                },
+                line: {
+                },
+                "line-center": {
+                }
+            },
+            "default": "point",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "symbol-spacing": {
+            type: "number",
+            "default": 250,
+            minimum: 1,
+            units: "pixels",
+            requires: [
+                {
+                    "symbol-placement": "line"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "symbol-avoid-edges": {
+            type: "boolean",
+            "default": false,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "symbol-sort-key": {
+            type: "number",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "symbol-z-order": {
+            type: "enum",
+            values: {
+                auto: {
+                },
+                "viewport-y": {
+                },
+                source: {
+                }
+            },
+            "default": "auto",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-allow-overlap": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-ignore-placement": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-optional": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "icon-image",
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-rotation-alignment": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                },
+                auto: {
+                }
+            },
+            "default": "auto",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-size": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            units: "factor of the original icon size",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-text-fit": {
+            type: "enum",
+            values: {
+                none: {
+                },
+                width: {
+                },
+                height: {
+                },
+                both: {
+                }
+            },
+            "default": "none",
+            requires: [
+                "icon-image",
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-text-fit-padding": {
+            type: "array",
+            value: "number",
+            length: 4,
+            "default": [
+                0,
+                0,
+                0,
+                0
+            ],
+            units: "pixels",
+            requires: [
+                "icon-image",
+                "text-field",
+                {
+                    "icon-text-fit": [
+                        "both",
+                        "width",
+                        "height"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-image": {
+            type: "resolvedImage",
+            tokens: true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-rotate": {
+            type: "number",
+            "default": 0,
+            period: 360,
+            units: "degrees",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-padding": {
+            type: "number",
+            "default": 2,
+            minimum: 0,
+            units: "pixels",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-keep-upright": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "icon-image",
+                {
+                    "icon-rotation-alignment": "map"
+                },
+                {
+                    "symbol-placement": [
+                        "line",
+                        "line-center"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-offset": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-anchor": {
+            type: "enum",
+            values: {
+                center: {
+                },
+                left: {
+                },
+                right: {
+                },
+                top: {
+                },
+                bottom: {
+                },
+                "top-left": {
+                },
+                "top-right": {
+                },
+                "bottom-left": {
+                },
+                "bottom-right": {
+                }
+            },
+            "default": "center",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-pitch-alignment": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                },
+                auto: {
+                }
+            },
+            "default": "auto",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-pitch-alignment": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                },
+                auto: {
+                }
+            },
+            "default": "auto",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-rotation-alignment": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                },
+                auto: {
+                }
+            },
+            "default": "auto",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-field": {
+            type: "formatted",
+            "default": "",
+            tokens: true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-font": {
+            type: "array",
+            value: "string",
+            "default": [
+                "Open Sans Regular",
+                "Arial Unicode MS Regular"
+            ],
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-size": {
+            type: "number",
+            "default": 16,
+            minimum: 0,
+            units: "pixels",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-max-width": {
+            type: "number",
+            "default": 10,
+            minimum: 0,
+            units: "ems",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-line-height": {
+            type: "number",
+            "default": 1.2,
+            units: "ems",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-letter-spacing": {
+            type: "number",
+            "default": 0,
+            units: "ems",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-justify": {
+            type: "enum",
+            values: {
+                auto: {
+                },
+                left: {
+                },
+                center: {
+                },
+                right: {
+                }
+            },
+            "default": "center",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-radial-offset": {
+            type: "number",
+            units: "ems",
+            "default": 0,
+            requires: [
+                "text-field"
+            ],
+            "property-type": "data-driven",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            }
+        },
+        "text-variable-anchor": {
+            type: "array",
+            value: "enum",
+            values: {
+                center: {
+                },
+                left: {
+                },
+                right: {
+                },
+                top: {
+                },
+                bottom: {
+                },
+                "top-left": {
+                },
+                "top-right": {
+                },
+                "bottom-left": {
+                },
+                "bottom-right": {
+                }
+            },
+            requires: [
+                "text-field",
+                {
+                    "symbol-placement": [
+                        "point"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-anchor": {
+            type: "enum",
+            values: {
+                center: {
+                },
+                left: {
+                },
+                right: {
+                },
+                top: {
+                },
+                bottom: {
+                },
+                "top-left": {
+                },
+                "top-right": {
+                },
+                "bottom-left": {
+                },
+                "bottom-right": {
+                }
+            },
+            "default": "center",
+            requires: [
+                "text-field",
+                {
+                    "!": "text-variable-anchor"
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-max-angle": {
+            type: "number",
+            "default": 45,
+            units: "degrees",
+            requires: [
+                "text-field",
+                {
+                    "symbol-placement": [
+                        "line",
+                        "line-center"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-writing-mode": {
+            type: "array",
+            value: "enum",
+            values: {
+                horizontal: {
+                },
+                vertical: {
+                }
+            },
+            requires: [
+                "text-field",
+                {
+                    "symbol-placement": [
+                        "point"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-rotate": {
+            type: "number",
+            "default": 0,
+            period: 360,
+            units: "degrees",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-padding": {
+            type: "number",
+            "default": 2,
+            minimum: 0,
+            units: "pixels",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-keep-upright": {
+            type: "boolean",
+            "default": true,
+            requires: [
+                "text-field",
+                {
+                    "text-rotation-alignment": "map"
+                },
+                {
+                    "symbol-placement": [
+                        "line",
+                        "line-center"
+                    ]
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-transform": {
+            type: "enum",
+            values: {
+                none: {
+                },
+                uppercase: {
+                },
+                lowercase: {
+                }
+            },
+            "default": "none",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-offset": {
+            type: "array",
+            value: "number",
+            units: "ems",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            requires: [
+                "text-field",
+                {
+                    "!": "text-radial-offset"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-allow-overlap": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-ignore-placement": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-optional": {
+            type: "boolean",
+            "default": false,
+            requires: [
+                "text-field",
+                "icon-image"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_raster = {
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var layout_hillshade = {
+        visibility: {
+            type: "enum",
+            values: {
+                visible: {
+                },
+                none: {
+                }
+            },
+            "default": "visible",
+            "property-type": "constant"
+        }
+    };
+    var filter = {
+        type: "array",
+        value: "*"
+    };
+    var filter_operator = {
+        type: "enum",
+        values: {
+            "==": {
+            },
+            "!=": {
+            },
+            ">": {
+            },
+            ">=": {
+            },
+            "<": {
+            },
+            "<=": {
+            },
+            "in": {
+            },
+            "!in": {
+            },
+            all: {
+            },
+            any: {
+            },
+            none: {
+            },
+            has: {
+            },
+            "!has": {
+            }
+        }
+    };
+    var geometry_type = {
+        type: "enum",
+        values: {
+            Point: {
+            },
+            LineString: {
+            },
+            Polygon: {
+            }
+        }
+    };
+    var function_stop = {
+        type: "array",
+        minimum: 0,
+        maximum: 24,
+        value: [
+            "number",
+            "color"
+        ],
+        length: 2
+    };
+    var expression = {
+        type: "array",
+        value: "*",
+        minimum: 1
+    };
+    var expression_name = {
+        type: "enum",
+        values: {
+            "let": {
+                group: "Variable binding"
+            },
+            "var": {
+                group: "Variable binding"
+            },
+            literal: {
+                group: "Types"
+            },
+            array: {
+                group: "Types"
+            },
+            at: {
+                group: "Lookup"
+            },
+            "in": {
+                group: "Lookup"
+            },
+            "case": {
+                group: "Decision"
+            },
+            match: {
+                group: "Decision"
+            },
+            coalesce: {
+                group: "Decision"
+            },
+            step: {
+                group: "Ramps, scales, curves"
+            },
+            interpolate: {
+                group: "Ramps, scales, curves"
+            },
+            "interpolate-hcl": {
+                group: "Ramps, scales, curves"
+            },
+            "interpolate-lab": {
+                group: "Ramps, scales, curves"
+            },
+            ln2: {
+                group: "Math"
+            },
+            pi: {
+                group: "Math"
+            },
+            e: {
+                group: "Math"
+            },
+            "typeof": {
+                group: "Types"
+            },
+            string: {
+                group: "Types"
+            },
+            number: {
+                group: "Types"
+            },
+            boolean: {
+                group: "Types"
+            },
+            object: {
+                group: "Types"
+            },
+            collator: {
+                group: "Types"
+            },
+            format: {
+                group: "Types"
+            },
+            image: {
+                group: "Types"
+            },
+            "number-format": {
+                group: "Types"
+            },
+            "to-string": {
+                group: "Types"
+            },
+            "to-number": {
+                group: "Types"
+            },
+            "to-boolean": {
+                group: "Types"
+            },
+            "to-rgba": {
+                group: "Color"
+            },
+            "to-color": {
+                group: "Types"
+            },
+            rgb: {
+                group: "Color"
+            },
+            rgba: {
+                group: "Color"
+            },
+            get: {
+                group: "Lookup"
+            },
+            has: {
+                group: "Lookup"
+            },
+            length: {
+                group: "Lookup"
+            },
+            properties: {
+                group: "Feature data"
+            },
+            "feature-state": {
+                group: "Feature data"
+            },
+            "geometry-type": {
+                group: "Feature data"
+            },
+            id: {
+                group: "Feature data"
+            },
+            zoom: {
+                group: "Zoom"
+            },
+            "heatmap-density": {
+                group: "Heatmap"
+            },
+            "line-progress": {
+                group: "Feature data"
+            },
+            accumulated: {
+                group: "Feature data"
+            },
+            "+": {
+                group: "Math"
+            },
+            "*": {
+                group: "Math"
+            },
+            "-": {
+                group: "Math"
+            },
+            "/": {
+                group: "Math"
+            },
+            "%": {
+                group: "Math"
+            },
+            "^": {
+                group: "Math"
+            },
+            sqrt: {
+                group: "Math"
+            },
+            log10: {
+                group: "Math"
+            },
+            ln: {
+                group: "Math"
+            },
+            log2: {
+                group: "Math"
+            },
+            sin: {
+                group: "Math"
+            },
+            cos: {
+                group: "Math"
+            },
+            tan: {
+                group: "Math"
+            },
+            asin: {
+                group: "Math"
+            },
+            acos: {
+                group: "Math"
+            },
+            atan: {
+                group: "Math"
+            },
+            min: {
+                group: "Math"
+            },
+            max: {
+                group: "Math"
+            },
+            round: {
+                group: "Math"
+            },
+            abs: {
+                group: "Math"
+            },
+            ceil: {
+                group: "Math"
+            },
+            floor: {
+                group: "Math"
+            },
+            "==": {
+                group: "Decision"
+            },
+            "!=": {
+                group: "Decision"
+            },
+            ">": {
+                group: "Decision"
+            },
+            "<": {
+                group: "Decision"
+            },
+            ">=": {
+                group: "Decision"
+            },
+            "<=": {
+                group: "Decision"
+            },
+            all: {
+                group: "Decision"
+            },
+            any: {
+                group: "Decision"
+            },
+            "!": {
+                group: "Decision"
+            },
+            "is-supported-script": {
+                group: "String"
+            },
+            upcase: {
+                group: "String"
+            },
+            downcase: {
+                group: "String"
+            },
+            concat: {
+                group: "String"
+            },
+            "resolved-locale": {
+                group: "String"
+            }
+        }
+    };
+    var light = {
+        anchor: {
+            type: "enum",
+            "default": "viewport",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "property-type": "data-constant",
+            transition: false,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            }
+        },
+        position: {
+            type: "array",
+            "default": [
+                1.15,
+                210,
+                30
+            ],
+            length: 3,
+            value: "number",
+            "property-type": "data-constant",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            }
+        },
+        color: {
+            type: "color",
+            "property-type": "data-constant",
+            "default": "#ffffff",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            transition: true
+        },
+        intensity: {
+            type: "number",
+            "property-type": "data-constant",
+            "default": 0.5,
+            minimum: 0,
+            maximum: 1,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            transition: true
+        }
+    };
+    var paint = [
+        "paint_fill",
+        "paint_line",
+        "paint_circle",
+        "paint_heatmap",
+        "paint_fill-extrusion",
+        "paint_symbol",
+        "paint_raster",
+        "paint_hillshade",
+        "paint_background"
+    ];
+    var paint_fill = {
+        "fill-antialias": {
+            type: "boolean",
+            "default": true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "fill-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "fill-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            requires: [
+                {
+                    "!": "fill-pattern"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "fill-outline-color": {
+            type: "color",
+            transition: true,
+            requires: [
+                {
+                    "!": "fill-pattern"
+                },
+                {
+                    "fill-antialias": true
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "fill-translate": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "fill-translate-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            requires: [
+                "fill-translate"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "fill-pattern": {
+            type: "resolvedImage",
+            transition: true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "cross-faded-data-driven"
+        }
+    };
+    var paint_line = {
+        "line-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            requires: [
+                {
+                    "!": "line-pattern"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-translate": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "line-translate-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            requires: [
+                "line-translate"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "line-width": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-gap-width": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-offset": {
+            type: "number",
+            "default": 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-blur": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "line-dasharray": {
+            type: "array",
+            value: "number",
+            minimum: 0,
+            transition: true,
+            units: "line widths",
+            requires: [
+                {
+                    "!": "line-pattern"
+                }
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "cross-faded"
+        },
+        "line-pattern": {
+            type: "resolvedImage",
+            transition: true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom",
+                    "feature"
+                ]
+            },
+            "property-type": "cross-faded-data-driven"
+        },
+        "line-gradient": {
+            type: "color",
+            transition: false,
+            requires: [
+                {
+                    "!": "line-dasharray"
+                },
+                {
+                    "!": "line-pattern"
+                },
+                {
+                    source: "geojson",
+                    has: {
+                        lineMetrics: true
+                    }
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "line-progress"
+                ]
+            },
+            "property-type": "color-ramp"
+        }
+    };
+    var paint_circle = {
+        "circle-radius": {
+            type: "number",
+            "default": 5,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-blur": {
+            type: "number",
+            "default": 0,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-translate": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "circle-translate-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            requires: [
+                "circle-translate"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "circle-pitch-scale": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "circle-pitch-alignment": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "viewport",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "circle-stroke-width": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-stroke-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "circle-stroke-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        }
+    };
+    var paint_heatmap = {
+        "heatmap-radius": {
+            type: "number",
+            "default": 30,
+            minimum: 1,
+            transition: true,
+            units: "pixels",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "heatmap-weight": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            transition: false,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "heatmap-intensity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "heatmap-color": {
+            type: "color",
+            "default": [
+                "interpolate",
+                [
+                    "linear"
+                ],
+                [
+                    "heatmap-density"
+                ],
+                0,
+                "rgba(0, 0, 255, 0)",
+                0.1,
+                "royalblue",
+                0.3,
+                "cyan",
+                0.5,
+                "lime",
+                0.7,
+                "yellow",
+                1,
+                "red"
+            ],
+            transition: false,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "heatmap-density"
+                ]
+            },
+            "property-type": "color-ramp"
+        },
+        "heatmap-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        }
+    };
+    var paint_symbol = {
+        "icon-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-halo-color": {
+            type: "color",
+            "default": "rgba(0, 0, 0, 0)",
+            transition: true,
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-halo-width": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-halo-blur": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "icon-translate": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            transition: true,
+            units: "pixels",
+            requires: [
+                "icon-image"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "icon-translate-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            requires: [
+                "icon-image",
+                "icon-translate"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            overridable: true,
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-halo-color": {
+            type: "color",
+            "default": "rgba(0, 0, 0, 0)",
+            transition: true,
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-halo-width": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-halo-blur": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            transition: true,
+            units: "pixels",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom",
+                    "feature",
+                    "feature-state"
+                ]
+            },
+            "property-type": "data-driven"
+        },
+        "text-translate": {
+            type: "array",
+            value: "number",
+            length: 2,
+            "default": [
+                0,
+                0
+            ],
+            transition: true,
+            units: "pixels",
+            requires: [
+                "text-field"
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "text-translate-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "map",
+            requires: [
+                "text-field",
+                "text-translate"
+            ],
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        }
+    };
+    var paint_raster = {
+        "raster-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-hue-rotate": {
+            type: "number",
+            "default": 0,
+            period: 360,
+            transition: true,
+            units: "degrees",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-brightness-min": {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-brightness-max": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-saturation": {
+            type: "number",
+            "default": 0,
+            minimum: -1,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-contrast": {
+            type: "number",
+            "default": 0,
+            minimum: -1,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-resampling": {
+            type: "enum",
+            values: {
+                linear: {
+                },
+                nearest: {
+                }
+            },
+            "default": "linear",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "raster-fade-duration": {
+            type: "number",
+            "default": 300,
+            minimum: 0,
+            transition: false,
+            units: "milliseconds",
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        }
+    };
+    var paint_hillshade = {
+        "hillshade-illumination-direction": {
+            type: "number",
+            "default": 335,
+            minimum: 0,
+            maximum: 359,
+            transition: false,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "hillshade-illumination-anchor": {
+            type: "enum",
+            values: {
+                map: {
+                },
+                viewport: {
+                }
+            },
+            "default": "viewport",
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "hillshade-exaggeration": {
+            type: "number",
+            "default": 0.5,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "hillshade-shadow-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "hillshade-highlight-color": {
+            type: "color",
+            "default": "#FFFFFF",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "hillshade-accent-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        }
+    };
+    var paint_background = {
+        "background-color": {
+            type: "color",
+            "default": "#000000",
+            transition: true,
+            requires: [
+                {
+                    "!": "background-pattern"
+                }
+            ],
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        },
+        "background-pattern": {
+            type: "resolvedImage",
+            transition: true,
+            expression: {
+                interpolated: false,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "cross-faded"
+        },
+        "background-opacity": {
+            type: "number",
+            "default": 1,
+            minimum: 0,
+            maximum: 1,
+            transition: true,
+            expression: {
+                interpolated: true,
+                parameters: [
+                    "zoom"
+                ]
+            },
+            "property-type": "data-constant"
+        }
+    };
+    var transition = {
+        duration: {
+            type: "number",
+            "default": 300,
+            minimum: 0,
+            units: "milliseconds"
+        },
+        delay: {
+            type: "number",
+            "default": 0,
+            minimum: 0,
+            units: "milliseconds"
+        }
+    };
+
+    var StyleSpec = {
+        $version: $version,
+        $root: $root,
+        sources: sources,
+        source: source,
+        source_vector: source_vector,
+        source_raster: source_raster,
+        source_raster_dem: source_raster_dem,
+        source_geojson: source_geojson,
+        source_video: source_video,
+        source_image: source_image,
+        layer: layer,
+        layout: layout,
+        layout_background: layout_background,
+        layout_fill: layout_fill,
+        layout_circle: layout_circle,
+        layout_heatmap: layout_heatmap,
+        "layout_fill-extrusion": {
+            visibility: {
+                type: "enum",
+                values: {
+                    visible: {
+                    },
+                    none: {
+                    }
+                },
+                "default": "visible",
+                "property-type": "constant"
+            }
+        },
+        layout_line: layout_line,
+        layout_symbol: layout_symbol,
+        layout_raster: layout_raster,
+        layout_hillshade: layout_hillshade,
+        filter: filter,
+        filter_operator: filter_operator,
+        geometry_type: geometry_type,
+        "function": {
+            expression: {
+                type: "expression"
+            },
+            stops: {
+                type: "array",
+                value: "function_stop"
+            },
+            base: {
+                type: "number",
+                "default": 1,
+                minimum: 0
+            },
+            property: {
+                type: "string",
+                "default": "$zoom"
+            },
+            type: {
+                type: "enum",
+                values: {
+                    identity: {
+                    },
+                    exponential: {
+                    },
+                    interval: {
+                    },
+                    categorical: {
+                    }
+                },
+                "default": "exponential"
+            },
+            colorSpace: {
+                type: "enum",
+                values: {
+                    rgb: {
+                    },
+                    lab: {
+                    },
+                    hcl: {
+                    }
+                },
+                "default": "rgb"
+            },
+            "default": {
+                type: "*",
+                required: false
+            }
+        },
+        function_stop: function_stop,
+        expression: expression,
+        expression_name: expression_name,
+        light: light,
+        paint: paint,
+        paint_fill: paint_fill,
+        "paint_fill-extrusion": {
+            "fill-extrusion-opacity": {
+                type: "number",
+                "default": 1,
+                minimum: 0,
+                maximum: 1,
+                transition: true,
+                expression: {
+                    interpolated: true,
+                    parameters: [
+                        "zoom"
+                    ]
+                },
+                "property-type": "data-constant"
+            },
+            "fill-extrusion-color": {
+                type: "color",
+                "default": "#000000",
+                transition: true,
+                requires: [
+                    {
+                        "!": "fill-extrusion-pattern"
+                    }
+                ],
+                expression: {
+                    interpolated: true,
+                    parameters: [
+                        "zoom",
+                        "feature",
+                        "feature-state"
+                    ]
+                },
+                "property-type": "data-driven"
+            },
+            "fill-extrusion-translate": {
+                type: "array",
+                value: "number",
+                length: 2,
+                "default": [
+                    0,
+                    0
+                ],
+                transition: true,
+                units: "pixels",
+                expression: {
+                    interpolated: true,
+                    parameters: [
+                        "zoom"
+                    ]
+                },
+                "property-type": "data-constant"
+            },
+            "fill-extrusion-translate-anchor": {
+                type: "enum",
+                values: {
+                    map: {
+                    },
+                    viewport: {
+                    }
+                },
+                "default": "map",
+                requires: [
+                    "fill-extrusion-translate"
+                ],
+                expression: {
+                    interpolated: false,
+                    parameters: [
+                        "zoom"
+                    ]
+                },
+                "property-type": "data-constant"
+            },
+            "fill-extrusion-pattern": {
+                type: "resolvedImage",
+                transition: true,
+                expression: {
+                    interpolated: false,
+                    parameters: [
+                        "zoom",
+                        "feature"
+                    ]
+                },
+                "property-type": "cross-faded-data-driven"
+            },
+            "fill-extrusion-height": {
+                type: "number",
+                "default": 0,
+                minimum: 0,
+                units: "meters",
+                transition: true,
+                expression: {
+                    interpolated: true,
+                    parameters: [
+                        "zoom",
+                        "feature",
+                        "feature-state"
+                    ]
+                },
+                "property-type": "data-driven"
+            },
+            "fill-extrusion-base": {
+                type: "number",
+                "default": 0,
+                minimum: 0,
+                units: "meters",
+                transition: true,
+                requires: [
+                    "fill-extrusion-height"
+                ],
+                expression: {
+                    interpolated: true,
+                    parameters: [
+                        "zoom",
+                        "feature",
+                        "feature-state"
+                    ]
+                },
+                "property-type": "data-driven"
+            },
+            "fill-extrusion-vertical-gradient": {
+                type: "boolean",
+                "default": true,
+                transition: false,
+                expression: {
+                    interpolated: false,
+                    parameters: [
+                        "zoom"
+                    ]
+                },
+                "property-type": "data-constant"
+            }
+        },
+        paint_line: paint_line,
+        paint_circle: paint_circle,
+        paint_heatmap: paint_heatmap,
+        paint_symbol: paint_symbol,
+        paint_raster: paint_raster,
+        paint_hillshade: paint_hillshade,
+        paint_background: paint_background,
+        transition: transition,
+        "property-type": {
+            "data-driven": {
+                type: "property-type"
+            },
+            "cross-faded": {
+                type: "property-type"
+            },
+            "cross-faded-data-driven": {
+                type: "property-type"
+            },
+            "color-ramp": {
+                type: "property-type"
+            },
+            "data-constant": {
+                type: "property-type"
+            },
+            constant: {
+                type: "property-type"
+            }
+        }
+    };
+
+    function IntersectionTest() {
+    }
+
+    IntersectionTest.polygonIntersectsPolygon = function (polygonA, polygonB) {
+        for (var i = 0; i < polygonA.length; i++) {
+            if (polygonContainsPoint(polygonB, polygonA[i])) {
+                return true;
+            }
+        }
+
+        for (var i$1 = 0; i$1 < polygonB.length; i$1++) {
+            if (polygonContainsPoint(polygonA, polygonB[i$1])) {
+                return true;
+            }
+        }
+
+        if (lineIntersectsLine(polygonA, polygonB)) {
+            return true;
+        }
+
+        return false;
+    };
+
+    IntersectionTest.polygonIntersectsBufferedPoint = function (polygon, point, radius) {
+        if (polygonContainsPoint(polygon, point)) {
+            return true;
+        }
+        if (pointIntersectsBufferedLine(point, polygon, radius)) {
+            return true;
+        }
+        return false;
+    };
+
+    IntersectionTest.polygonIntersectsMultiPolygon = function (polygon, multiPolygon) {
+        if (polygon.length === 1) {
+            return multiPolygonContainsPoint(multiPolygon, polygon[0]);
+        }
+
+        for (var m = 0; m < multiPolygon.length; m++) {
+            var ring = multiPolygon[m];
+            for (var n = 0; n < ring.length; n++) {
+                if (polygonContainsPoint(polygon, ring[n])) {
+                    return true;
+                }
+            }
+        }
+
+        for (var i = 0; i < polygon.length; i++) {
+            if (multiPolygonContainsPoint(multiPolygon, polygon[i])) {
+                return true;
+            }
+        }
+
+        for (var k = 0; k < multiPolygon.length; k++) {
+            if (lineIntersectsLine(polygon, multiPolygon[k])) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    IntersectionTest.polygonIntersectsBufferedMultiLine = function (polygon, multiLine, radius) {
+        for (var i = 0; i < multiLine.length; i++) {
+            var line = multiLine[i];
+
+            if (polygon.length >= 3) {
+                for (var k = 0; k < line.length; k++) {
+                    if (polygonContainsPoint(polygon, line[k])) {
+                        return true;
+                    }
+                }
+            }
+
+            if (lineIntersectsBufferedLine(polygon, line, radius)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    function lineIntersectsBufferedLine(lineA, lineB, radius) {
+
+        if (lineA.length > 1) {
+            if (lineIntersectsLine(lineA, lineB)) {
+                return true;
+            }
+
+            // Check whether any point in either line is within radius of the other line
+            for (var j = 0; j < lineB.length; j++) {
+                if (pointIntersectsBufferedLine(lineB[j], lineA, radius)) {
+                    return true;
+                }
+            }
+        }
+
+        for (var k = 0; k < lineA.length; k++) {
+            if (pointIntersectsBufferedLine(lineA[k], lineB, radius)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function lineIntersectsLine(lineA, lineB) {
+        if (lineA.length === 0 || lineB.length === 0) {
+            return false;
+        }
+        for (var i = 0; i < lineA.length - 1; i++) {
+            var a0 = lineA[i];
+            var a1 = lineA[i + 1];
+            for (var j = 0; j < lineB.length - 1; j++) {
+                var b0 = lineB[j];
+                var b1 = lineB[j + 1];
+                if (lineSegmentIntersectsLineSegment(a0, a1, b0, b1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function lineSegmentIntersectsLineSegment(a0, a1, b0, b1) {
+        return Util.isCounterClockwise(a0, b0, b1) !== Util.isCounterClockwise(a1, b0, b1) &&
+            Util.isCounterClockwise(a0, a1, b0) !== Util.isCounterClockwise(a0, a1, b1);
+    }
+
+    function pointIntersectsBufferedLine(p, line, radius) {
+        var radiusSquared = radius * radius;
+
+        if (line.length === 1) {
+            return p.distSqr(line[0]) < radiusSquared;
+        }
+
+        for (var i = 1; i < line.length; i++) {
+            // Find line segments that have a distance <= radius^2 to p
+            // In that case, we treat the line as "containing point p".
+            var v = line[i - 1], w = line[i];
+            if (IntersectionTest.distToSegmentSquared(p, v, w) < radiusSquared) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Code from http://stackoverflow.com/a/1501725/331379.
+    IntersectionTest.distToSegmentSquared = function (p, v, w) {
+        var l2 = v.distSqr(w);
+        if (l2 === 0) {
+            return p.distSqr(v);
+        }
+        var t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+        if (t < 0) {
+            return p.distSqr(v);
+        }
+        if (t > 1) {
+            return p.distSqr(w);
+        }
+        return p.distSqr(w.sub(v)._mult(t)._add(v));
+    };
+
+    // point in polygon ray casting algorithm
+    function multiPolygonContainsPoint(rings, p) {
+        var c = false,
+            ring, p1, p2;
+
+        for (var k = 0; k < rings.length; k++) {
+            ring = rings[k];
+            for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                p1 = ring[i];
+                p2 = ring[j];
+                if (((p1.y > p.y) !== (p2.y > p.y)) && (p.x < (p2.x - p1.x) * (p.y - p1.y) / (p2.y - p1.y) + p1.x)) {
+                    c = !c;
+                }
+            }
+        }
+        return c;
+    }
+
+    function polygonContainsPoint(ring, p) {
+        var c = false;
+        for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+            var p1 = ring[i];
+            var p2 = ring[j];
+            if (((p1.y > p.y) !== (p2.y > p.y)) && (p.x < (p2.x - p1.x) * (p.y - p1.y) / (p2.y - p1.y) + p1.x)) {
+                c = !c;
+            }
+        }
+        return c;
+    }
+
+    var layout$2 = new Properties({
+        "circle-sort-key": new DataDrivenProperty(StyleSpec["layout_circle"]["circle-sort-key"])
+    });
+
+    var paint$1 = new Properties({
+        "circle-radius": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-radius"]),
+        "circle-color": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-color"]),
+        "circle-blur": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-blur"]),
+        "circle-opacity": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-opacity"]),
+        "circle-translate": new DataConstantProperty(StyleSpec["paint_circle"]["circle-translate"]),
+        "circle-translate-anchor": new DataConstantProperty(StyleSpec["paint_circle"]["circle-translate-anchor"]),
+        "circle-pitch-scale": new DataConstantProperty(StyleSpec["paint_circle"]["circle-pitch-scale"]),
+        "circle-pitch-alignment": new DataConstantProperty(StyleSpec["paint_circle"]["circle-pitch-alignment"]),
+        "circle-stroke-width": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-stroke-width"]),
+        "circle-stroke-color": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-stroke-color"]),
+        "circle-stroke-opacity": new DataDrivenProperty(StyleSpec["paint_circle"]["circle-stroke-opacity"])
+    });
+
+    // Note: without adding the explicit type annotation, Flow infers weaker types
+    // for these objects from their use in the constructor to StyleLayer, as
+    // {layout?: Properties<...>, paint: Properties<...>}
+    var properties = ({ paint: paint$1, layout: layout$2 });
+
+    var CircleStyleLayer = /*@__PURE__*/(function (StyleLayer) {
+        function CircleStyleLayer(layer) {
+            StyleLayer.call(this, layer, properties);
+        }
+
+        if (StyleLayer) CircleStyleLayer.__proto__ = StyleLayer;
+        CircleStyleLayer.prototype = Object.create(StyleLayer && StyleLayer.prototype);
+        CircleStyleLayer.prototype.constructor = CircleStyleLayer;
+
+        CircleStyleLayer.prototype.createBucket = function createBucket(parameters) {
+            return new CircleBucket(parameters);
+        };
+
+        CircleStyleLayer.prototype.queryRadius = function queryRadius(bucket) {
+            var circleBucket = (bucket     );
+            return QueryUtils.getMaximumPaintValue('circle-radius', this, circleBucket) +
+                QueryUtils.getMaximumPaintValue('circle-stroke-width', this, circleBucket) +
+                QueryUtils.translateDistance(this.paint.get('circle-translate'));
+        };
+
+        CircleStyleLayer.prototype.queryIntersectsFeature = function queryIntersectsFeature(queryGeometry, feature, featureState, geometry, zoom, transform, pixelsToTileUnits, pixelPosMatrix) {
+            pixelPosMatrix = createMat4();
+            var translatedPolygon = QueryUtils.translate(queryGeometry,
+                this.paint.get('circle-translate'),
+                this.paint.get('circle-translate-anchor'),
+                0, pixelsToTileUnits);
+            var radius = this.paint.get('circle-radius').evaluate(feature, featureState);
+            var stroke = this.paint.get('circle-stroke-width').evaluate(feature, featureState);
+            var size = radius + stroke;
+
+            // For pitch-alignment: map, compare feature geometry to query geometry in the plane of the tile
+            // // Otherwise, compare geometry in the plane of the viewport
+            // // A circle with fixed scaling relative to the viewport gets larger in tile space as it moves into the distance
+            // // A circle with fixed scaling relative to the map gets smaller in viewport space as it moves into the distance
+            var alignWithMap = this.paint.get('circle-pitch-alignment') === 'map';
+            var transformedPolygon = alignWithMap ? translatedPolygon : projectQueryGeometry(translatedPolygon, pixelPosMatrix);
+            var transformedSize = alignWithMap ? size * pixelsToTileUnits : size;
+
+            for (var i$1 = 0, list$1 = geometry; i$1 < list$1.length; i$1 += 1) {
+                var ring = list$1[i$1];
+
+                for (var i = 0, list = ring; i < list.length; i += 1) {
+
+                    var point = list[i];
+
+                    var transformedPoint = alignWithMap ? point : projectPoint(point, pixelPosMatrix);
+
+                    var adjustedSize = transformedSize;
+                    var projectedCenter = transformMat4([], [point.x, point.y, 0, 1], pixelPosMatrix);
+                    if (this.paint.get('circle-pitch-scale') === 'viewport' && this.paint.get('circle-pitch-alignment') === 'map') ; else if (this.paint.get('circle-pitch-scale') === 'map' && this.paint.get('circle-pitch-alignment') === 'viewport') ;
+                    adjustedSize *= 10.0;
+
+                    if (IntersectionTest.polygonIntersectsBufferedPoint(transformedPolygon, transformedPoint, adjustedSize)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        return CircleStyleLayer;
+    }(StyleLayer));
+
+    function projectPoint(p, pixelPosMatrix) {
+        var point = transformMat4([], [p.x, p.y, 0, 1], pixelPosMatrix);
+        //return new pointGeometry(point[0] / point[3], point[1] / point[3]);
+        return new Point(point[0], point[1]);
+    }
+
+    function projectQueryGeometry(queryGeometry, pixelPosMatrix) {
+        return queryGeometry.map(function (p) {
+            return projectPoint(p, pixelPosMatrix);
+        });
+    }
+
+    function createMat4() {
+        var out = new Float32Array(16);
+        out[0] = 1;
+        out[5] = 1;
+        out[10] = 1;
+        out[15] = 1;
+        return out;
+    }
+
+    /**
+     * Transforms the vec3 with a mat4.
+     * 4th vector component is implicitly '1'
+     *
+     * @param {vec3} out the receiving vector
+     * @param {vec3} a the vector to transform
+     * @param {mat4} m matrix to transform with
+     * @returns {vec3} out
+     */
+    function transformMat4(out, a, m) {
+        var x = a[0],
+            y = a[1],
+            z = a[2];
+        var w = m[3] * x + m[7] * y + m[11] * z + m[15];
+        w = w || 1.0;
+        out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
+        out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
+        out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
+        return out;
+    }
+
+    /**
+     * An implementation of `Property` for  data driven `line-pattern` which are transitioned by cross-fading
+     * rather than interpolation.
+     *
+     * @private
+     */
+
+    var CrossFadedDataDrivenProperty = /*@__PURE__*/(function (DataDrivenProperty) {
+        function CrossFadedDataDrivenProperty() {
+            DataDrivenProperty.apply(this, arguments);
+        }
+
+        if (DataDrivenProperty) CrossFadedDataDrivenProperty.__proto__ = DataDrivenProperty;
+        CrossFadedDataDrivenProperty.prototype = Object.create(DataDrivenProperty && DataDrivenProperty.prototype);
+        CrossFadedDataDrivenProperty.prototype.constructor = CrossFadedDataDrivenProperty;
+
+        CrossFadedDataDrivenProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters, availableImages) {
+            if (value.value === undefined) {
+                return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: undefined}, parameters);
+            } else if (value.expression.kind === 'constant') {
+                var evaluatedValue = value.expression.evaluate(parameters, (null     ), {}, availableImages);
+                var isImageExpression = value.property.specification.type === 'resolvedImage';
+                var constantValue = isImageExpression && typeof evaluatedValue !== 'string' ? evaluatedValue.name : evaluatedValue;
+                var constant = this._calculate(constantValue, constantValue, constantValue, parameters);
+                return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: constant}, parameters);
+            } else if (value.expression.kind === 'camera') {
+                var cameraVal = this._calculate(
+                    value.expression.evaluate({zoom: parameters.zoom - 1.0}),
+                    value.expression.evaluate({zoom: parameters.zoom}),
+                    value.expression.evaluate({zoom: parameters.zoom + 1.0}),
+                    parameters);
+                return new PossiblyEvaluatedPropertyValue$1(this, {kind: 'constant', value: cameraVal}, parameters);
+            } else {
+                // source or composite expression
+                return new PossiblyEvaluatedPropertyValue$1(this, value.expression, parameters);
+            }
+        };
+
+        CrossFadedDataDrivenProperty.prototype.evaluate = function evaluate(value, globals, feature, featureState, availableImages) {
+            if (value.kind === 'source') {
+                var constant = value.evaluate(globals, feature, featureState, availableImages);
+                return this._calculate(constant, constant, constant, globals);
+            } else if (value.kind === 'composite') {
+                return this._calculate(
+                    value.evaluate({zoom: Math.floor(globals.zoom) - 1.0}, feature, featureState),
+                    value.evaluate({zoom: Math.floor(globals.zoom)}, feature, featureState),
+                    value.evaluate({zoom: Math.floor(globals.zoom) + 1.0}, feature, featureState),
+                    globals);
+            } else {
+                return value.value;
+            }
+        };
+
+        CrossFadedDataDrivenProperty.prototype._calculate = function _calculate(min, mid, max, parameters) {
+            var z = parameters.zoom;
+            return z > parameters.zoomHistory.lastIntegerZoom ? {from: min, to: mid} : {from: max, to: mid};
+        };
+
+        CrossFadedDataDrivenProperty.prototype.interpolate = function interpolate(a) {
+            return a;
+        };
+
+        return CrossFadedDataDrivenProperty;
+    }(DataDrivenProperty));
+
+    WebWorkerTransfer.register('DataDrivenProperty', DataDrivenProperty);
+
+    var layout$4 = new Properties({
+        "fill-sort-key": new DataDrivenProperty(StyleSpec["layout_fill"]["fill-sort-key"])
+    });
+
+    var paint$4 = new Properties({
+        "fill-antialias": new DataConstantProperty(StyleSpec["paint_fill"]["fill-antialias"]),
+        "fill-opacity": new DataDrivenProperty(StyleSpec["paint_fill"]["fill-opacity"]),
+        "fill-color": new DataDrivenProperty(StyleSpec["paint_fill"]["fill-color"]),
+        "fill-outline-color": new DataDrivenProperty(StyleSpec["paint_fill"]["fill-outline-color"]),
+        "fill-translate": new DataConstantProperty(StyleSpec["paint_fill"]["fill-translate"]),
+        "fill-translate-anchor": new DataConstantProperty(StyleSpec["paint_fill"]["fill-translate-anchor"]),
+        "fill-pattern": new CrossFadedDataDrivenProperty(StyleSpec["paint_fill"]["fill-pattern"]),
+    });
+
+    // Note: without adding the explicit type annotation, Flow infers weaker types
+    // for these objects from their use in the constructor to StyleLayer, as
+    // {layout?: Properties<...>, paint: Properties<...>}
+    var properties$3 = ({ paint: paint$4, layout: layout$4 }
+
+        );
+
+    var FillStyleLayer = /*@__PURE__*/(function (StyleLayer) {
+        function FillStyleLayer(layer) {
+            StyleLayer.call(this, layer, properties$3);
+        }
+
+        if (StyleLayer) FillStyleLayer.__proto__ = StyleLayer;
+        FillStyleLayer.prototype = Object.create(StyleLayer && StyleLayer.prototype);
+        FillStyleLayer.prototype.constructor = FillStyleLayer;
+
+        FillStyleLayer.prototype.recalculate = function recalculate(parameters, availableImages) {
+            StyleLayer.prototype.recalculate.call(this, parameters, availableImages);
+
+            var outlineColor = this.paint._values['fill-outline-color'];
+            if (outlineColor.value.kind === 'constant' && outlineColor.value.value === undefined) {
+                this.paint._values['fill-outline-color'] = this.paint._values['fill-color'];
+            }
+        };
+
+        FillStyleLayer.prototype.createBucket = function createBucket(parameters) {
+            return new FillBucket(parameters);
+        };
+
+        FillStyleLayer.prototype.queryRadius = function queryRadius() {
+            return QueryUtils.translateDistance(this.paint.get('fill-translate'));
+        };
+
+        FillStyleLayer.prototype.queryIntersectsFeature = function queryIntersectsFeature(queryGeometry, feature, featureState, geometry, zoom, transform, pixelsToTileUnits) {
+            var translatedPolygon = QueryUtils.translate(queryGeometry,
+                this.paint.get('fill-translate'),
+                this.paint.get('fill-translate-anchor'),
+                0, pixelsToTileUnits);
+            return IntersectionTest.polygonIntersectsMultiPolygon(translatedPolygon, geometry);
+        };
+
+        FillStyleLayer.prototype.isTileClipped = function isTileClipped() {
+            return true;
+        };
+
+        return FillStyleLayer;
+    }(StyleLayer));
+
+    /**
+     * An implementation of `Property` for `*-pattern` and `line-dasharray`, which are transitioned by cross-fading
+     * rather than interpolation.
+     *
+     * @private
+     */
+    var CrossFadedProperty = function CrossFadedProperty(specification) {
+        this.specification = specification;
+    };
+
+    CrossFadedProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters, availableImages) {
+        if (value.value === undefined) {
+            return undefined;
+        } else if (value.expression.kind === 'constant') {
+            var constant = value.expression.evaluate(parameters, (null   ), {}, availableImages);
+            return this._calculate(constant, constant, constant, parameters);
+        } else {
+            //assert_1(!value.isDataDriven());
+            return this._calculate(
+                value.expression.evaluate(new EvaluationParameters(Math.floor(parameters.zoom - 1.0), parameters)),
+                value.expression.evaluate(new EvaluationParameters(Math.floor(parameters.zoom), parameters)),
+                value.expression.evaluate(new EvaluationParameters(Math.floor(parameters.zoom + 1.0), parameters)),
+                parameters);
+        }
+    };
+
+    CrossFadedProperty.prototype._calculate = function _calculate(min, mid, max, parameters) {
+        var z = parameters.zoom;
+        return z > parameters.zoomHistory.lastIntegerZoom ? {from: min, to: mid} : {from: max, to: mid};
+    };
+
+    CrossFadedProperty.prototype.interpolate = function interpolate(a) {
+        return a;
+    };
+
+    WebWorkerTransfer.register('CrossFadedProperty', CrossFadedProperty);
+
+    /**
+     * An implementation of `Property` for `heatmap-color` and `line-gradient`. Interpolation is a no-op, and
+     * evaluation returns a boolean value in order to indicate its presence, but the real
+     * evaluation happens in StyleLayer classes.
+     *
+     * @private
+     */
+
+    var ColorRampProperty = function ColorRampProperty(specification) {
+        this.specification = specification;
+    };
+
+    ColorRampProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters, availableImages) {
+        return !!value.expression.evaluate(parameters, (null   ), {}, availableImages);
+    };
+
+    ColorRampProperty.prototype.interpolate = function interpolate() {
+        return false;
+    };
+
+    WebWorkerTransfer.register('ColorRampProperty', ColorRampProperty);
+
+    var layout$6 = new Properties({
+        "line-cap": new DataConstantProperty(StyleSpec["layout_line"]["line-cap"]),
+        "line-join": new DataDrivenProperty(StyleSpec["layout_line"]["line-join"]),
+        "line-miter-limit": new DataConstantProperty(StyleSpec["layout_line"]["line-miter-limit"]),
+        "line-round-limit": new DataConstantProperty(StyleSpec["layout_line"]["line-round-limit"]),
+        "line-sort-key": new DataDrivenProperty(StyleSpec["layout_line"]["line-sort-key"])
+    });
+
+
+    var paint$6 = new Properties({
+        "line-opacity": new DataDrivenProperty(StyleSpec["paint_line"]["line-opacity"]),
+        "line-color": new DataDrivenProperty(StyleSpec["paint_line"]["line-color"]),
+        "line-translate": new DataConstantProperty(StyleSpec["paint_line"]["line-translate"]),
+        "line-translate-anchor": new DataConstantProperty(StyleSpec["paint_line"]["line-translate-anchor"]),
+        "line-width": new DataDrivenProperty(StyleSpec["paint_line"]["line-width"]),
+        "line-gap-width": new DataDrivenProperty(StyleSpec["paint_line"]["line-gap-width"]),
+        "line-offset": new DataDrivenProperty(StyleSpec["paint_line"]["line-offset"]),
+        "line-blur": new DataDrivenProperty(StyleSpec["paint_line"]["line-blur"]),
+        "line-dasharray": new CrossFadedProperty(StyleSpec["paint_line"]["line-dasharray"]),
+        "line-pattern": new CrossFadedDataDrivenProperty(StyleSpec["paint_line"]["line-pattern"]),
+        "line-gradient": new ColorRampProperty(StyleSpec["paint_line"]["line-gradient"])
+    });
+
+    // Note: without adding the explicit type annotation, Flow infers weaker types
+    // for these objects from their use in the constructor to StyleLayer, as
+    // {layout?: Properties<...>, paint: Properties<...>}
+    var properties$5 = ({ paint: paint$6, layout: layout$6 }
+
+        );
+
+    var LineFloorwidthProperty = /*@__PURE__*/(function (DataDrivenProperty) {
+        function LineFloorwidthProperty() {
+            DataDrivenProperty.apply(this, arguments);
+        }
+
+        if (DataDrivenProperty) LineFloorwidthProperty.__proto__ = DataDrivenProperty;
+        LineFloorwidthProperty.prototype = Object.create(DataDrivenProperty && DataDrivenProperty.prototype);
+        LineFloorwidthProperty.prototype.constructor = LineFloorwidthProperty;
+
+        LineFloorwidthProperty.prototype.possiblyEvaluate = function possiblyEvaluate(value, parameters) {
+            parameters = new EvaluationParameters$1(Math.floor(parameters.zoom), {
+                now: parameters.now,
+                fadeDuration: parameters.fadeDuration,
+                zoomHistory: parameters.zoomHistory,
+                transition: parameters.transition
+            });
+            return DataDrivenProperty.prototype.possiblyEvaluate.call(this, value, parameters);
+        };
+
+        LineFloorwidthProperty.prototype.evaluate = function evaluate(value, globals, feature, featureState) {
+            globals = extend({}, globals, {zoom: Math.floor(globals.zoom)});
+            return DataDrivenProperty.prototype.evaluate.call(this, value, globals, feature, featureState);
+        };
+
+        return LineFloorwidthProperty;
+    }(DataDrivenProperty));
+
+    var lineFloorwidthProperty = new LineFloorwidthProperty(properties$5.paint.properties['line-width'].specification);
+    lineFloorwidthProperty.useIntegerZoom = true;
+
+    var LineStyleLayer = /*@__PURE__*/(function (StyleLayer) {
+        function LineStyleLayer(layer) {
+            StyleLayer.call(this, layer, properties$5);
+        }
+
+        if (StyleLayer) LineStyleLayer.__proto__ = StyleLayer;
+        LineStyleLayer.prototype = Object.create(StyleLayer && StyleLayer.prototype);
+        LineStyleLayer.prototype.constructor = LineStyleLayer;
+
+        LineStyleLayer.prototype._handleSpecialPaintPropertyUpdate = function _handleSpecialPaintPropertyUpdate(name) {
+            if (name === 'line-gradient') {
+                this._updateGradient();
+            }
+        };
+
+        LineStyleLayer.prototype._updateGradient = function _updateGradient() {
+            var expression = this._transitionablePaint._values['line-gradient'].value.expression;
+            this.gradient = renderColorRamp(expression, 'lineProgress');
+            this.gradientTexture = null;
+        };
+
+        LineStyleLayer.prototype.recalculate = function recalculate(parameters, availableImages) {
+            StyleLayer.prototype.recalculate.call(this, parameters, availableImages);
+
+            (this.paint._values     )['line-floorwidth'] =
+                lineFloorwidthProperty.possiblyEvaluate(this._transitioningPaint._values['line-width'].value, parameters);
+        };
+
+        LineStyleLayer.prototype.createBucket = function createBucket(parameters) {
+            return new LineBucket(parameters);
+        };
+
+        LineStyleLayer.prototype.queryRadius = function queryRadius(bucket) {
+            var lineBucket = (bucket     );
+            var width = getLineWidth(
+                QueryUtils.getMaximumPaintValue('line-width', this, lineBucket),
+                QueryUtils.getMaximumPaintValue('line-gap-width', this, lineBucket));
+            var offset = QueryUtils.getMaximumPaintValue('line-offset', this, lineBucket);
+            return width / 2 + Math.abs(offset) + QueryUtils.translateDistance(this.paint.get('line-translate'));
+        };
+
+        LineStyleLayer.prototype.queryIntersectsFeature = function queryIntersectsFeature(queryGeometry, feature, featureState, geometry, zoom, transform, pixelsToTileUnits) {
+            var translatedPolygon = QueryUtils.translate(queryGeometry,
+                this.paint.get('line-translate'),
+                this.paint.get('line-translate-anchor'),
+                0, pixelsToTileUnits);
+            var halfWidth = pixelsToTileUnits / 2 * getLineWidth(
+                this.paint.get('line-width').evaluate(feature, featureState),
+                this.paint.get('line-gap-width').evaluate(feature, featureState));
+            var lineOffset = this.paint.get('line-offset').evaluate(feature, featureState);
+            if (lineOffset) {
+                geometry = offsetLine(geometry, lineOffset * pixelsToTileUnits);
+            }
+
+            return IntersectionTest.polygonIntersectsBufferedMultiLine(translatedPolygon, geometry, halfWidth);
+        };
+
+        LineStyleLayer.prototype.isTileClipped = function isTileClipped() {
+            return true;
+        };
+
+        function getLineWidth(lineWidth, lineGapWidth) {
+            if (lineGapWidth > 0) {
+                return lineGapWidth + 2 * lineWidth;
+            } else {
+                return lineWidth;
+            }
+        }
+
+        function offsetLine(rings, offset) {
+            var newRings = [];
+            var zero = new Point(0, 0);
+            for (var k = 0; k < rings.length; k++) {
+                var ring = rings[k];
+                var newRing = [];
+                for (var i = 0; i < ring.length; i++) {
+                    var a = ring[i - 1];
+                    var b = ring[i];
+                    var c = ring[i + 1];
+                    var aToB = i === 0 ? zero : b.sub(a)._unit()._perp();
+                    var bToC = i === ring.length - 1 ? zero : c.sub(b)._unit()._perp();
+                    var extrude = aToB._add(bToC)._unit();
+
+                    var cosHalfAngle = extrude.x * bToC.x + extrude.y * bToC.y;
+                    extrude._mult(1 / cosHalfAngle);
+
+                    newRing.push(extrude._mult(offset)._add(b));
+                }
+                newRings.push(newRing);
+            }
+            return newRings;
+        }
+
+        return LineStyleLayer;
+    }(StyleLayer));
+
+    function SymbolAttributes() {
+    }
+
+    SymbolAttributes.symbolLayoutAttributes = createLayout([
+        {name: 'a_pos_offset', components: 4, type: 'Int16'},
+        {name: 'a_data', components: 4, type: 'Uint16'},
+        {name: 'a_pixeloffset', components: 4, type: 'Int16'}
+    ], 4);
+
+    SymbolAttributes.dynamicLayoutAttributes = createLayout([
+        {name: 'a_projected_pos', components: 3, type: 'Float32'}
+    ], 4);
+
+    SymbolAttributes.placementOpacityAttributes = createLayout([
+        {name: 'a_fade_opacity', components: 1, type: 'Uint32'}
+    ], 4);
+
+    SymbolAttributes.collisionVertexAttributes = createLayout([
+        {name: 'a_placed', components: 2, type: 'Uint8'},
+        {name: 'a_shift', components: 2, type: 'Float32'}
+    ]);
+
+    SymbolAttributes.collisionBox = createLayout([
+        // the box is centered around the anchor point
+        {type: 'Int16', name: 'anchorPointX'},
+        {type: 'Int16', name: 'anchorPointY'},
+
+        // distances to the edges from the anchor
+        {type: 'Int16', name: 'x1'},
+        {type: 'Int16', name: 'y1'},
+        {type: 'Int16', name: 'x2'},
+        {type: 'Int16', name: 'y2'},
+
+        // the index of the feature in the original vectortile
+        {type: 'Uint32', name: 'featureIndex'},
+        // the source layer the feature appears in
+        {type: 'Uint16', name: 'sourceLayerIndex'},
+        // the bucket the feature appears in
+        {type: 'Uint16', name: 'bucketIndex'},
+
+        // collision circles for lines store their distance to the anchor in tile units
+        // so that they can be ignored if the projected label doesn't extend into
+        // the box area
+        {type: 'Int16', name: 'radius'},
+        {type: 'Int16', name: 'signedDistanceFromAnchor'}
+    ]);
+
+    SymbolAttributes.collisionBoxLayout = createLayout([ // used to render collision boxes for debugging purposes
+        {name: 'a_pos', components: 2, type: 'Int16'},
+        {name: 'a_anchor_pos', components: 2, type: 'Int16'},
+        {name: 'a_extrude', components: 2, type: 'Int16'}
+    ], 4);
+
+    SymbolAttributes.collisionCircleLayout = createLayout([ // used to render collision circles for debugging purposes
+        {name: 'a_pos', components: 2, type: 'Int16'},
+        {name: 'a_anchor_pos', components: 2, type: 'Int16'},
+        {name: 'a_extrude', components: 2, type: 'Int16'}
+    ], 4);
+
+    SymbolAttributes.placement = createLayout([
+        {type: 'Int16', name: 'anchorX'},
+        {type: 'Int16', name: 'anchorY'},
+        {type: 'Uint16', name: 'glyphStartIndex'},
+        {type: 'Uint16', name: 'numGlyphs'},
+        {type: 'Uint32', name: 'vertexStartIndex'},
+        {type: 'Uint32', name: 'lineStartIndex'},
+        {type: 'Uint32', name: 'lineLength'},
+        {type: 'Uint16', name: 'segment'},
+        {type: 'Uint16', name: 'lowerSize'},
+        {type: 'Uint16', name: 'upperSize'},
+        {type: 'Float32', name: 'lineOffsetX'},
+        {type: 'Float32', name: 'lineOffsetY'},
+        {type: 'Uint8', name: 'writingMode'},
+        {type: 'Uint8', name: 'placedOrientation'},
+        {type: 'Uint8', name: 'hidden'},
+        {type: 'Uint32', name: 'crossTileID'},
+        {type: 'Int16', name: 'associatedIconIndex'}
+    ]);
+
+    SymbolAttributes.symbolInstance = createLayout([
+        {type: 'Int16', name: 'anchorX'},
+        {type: 'Int16', name: 'anchorY'},
+        {type: 'Int16', name: 'rightJustifiedTextSymbolIndex'},
+        {type: 'Int16', name: 'centerJustifiedTextSymbolIndex'},
+        {type: 'Int16', name: 'leftJustifiedTextSymbolIndex'},
+        {type: 'Int16', name: 'verticalPlacedTextSymbolIndex'},
+        {type: 'Int16', name: 'placedIconSymbolIndex'},
+        {type: 'Int16', name: 'verticalPlacedIconSymbolIndex'},
+        {type: 'Uint16', name: 'key'},
+        {type: 'Uint16', name: 'textBoxStartIndex'},
+        {type: 'Uint16', name: 'textBoxEndIndex'},
+        {type: 'Uint16', name: 'verticalTextBoxStartIndex'},
+        {type: 'Uint16', name: 'verticalTextBoxEndIndex'},
+        {type: 'Uint16', name: 'iconBoxStartIndex'},
+        {type: 'Uint16', name: 'iconBoxEndIndex'},
+        {type: 'Uint16', name: 'verticalIconBoxStartIndex'},
+        {type: 'Uint16', name: 'verticalIconBoxEndIndex'},
+        {type: 'Uint16', name: 'featureIndex'},
+        {type: 'Uint16', name: 'numHorizontalGlyphVertices'},
+        {type: 'Uint16', name: 'numVerticalGlyphVertices'},
+        {type: 'Uint16', name: 'numIconVertices'},
+        {type: 'Uint16', name: 'numVerticalIconVertices'},
+        {type: 'Uint32', name: 'crossTileID'},
+        {type: 'Float32', name: 'textBoxScale'},
+        {type: 'Float32', components: 2, name: 'textOffset'}
+    ]);
+
+    SymbolAttributes.glyphOffset = createLayout([
+        {type: 'Float32', name: 'offsetX'}
+    ]);
+
+    SymbolAttributes.lineVertex = createLayout([
+        {type: 'Int16', name: 'x'},
+        {type: 'Int16', name: 'y'},
+        {type: 'Int16', name: 'tileUnitDistanceFromAnchor'}
+    ]);
+
+    function mergeLines(features) {
+        var leftIndex = {};
+        var rightIndex = {};
+        var mergedFeatures = [];
+        var mergedIndex = 0;
+
+        function add(k) {
+            mergedFeatures.push(features[k]);
+            mergedIndex++;
+        }
+
+        function mergeFromRight(leftKey, rightKey, geom) {
+            var i = rightIndex[leftKey];
+            delete rightIndex[leftKey];
+            rightIndex[rightKey] = i;
+
+            mergedFeatures[i].geometry[0].pop();
+            mergedFeatures[i].geometry[0] = mergedFeatures[i].geometry[0].concat(geom[0]);
+            return i;
+        }
+
+        function mergeFromLeft(leftKey, rightKey, geom) {
+            var i = leftIndex[rightKey];
+            delete leftIndex[rightKey];
+            leftIndex[leftKey] = i;
+
+            mergedFeatures[i].geometry[0].shift();
+            mergedFeatures[i].geometry[0] = geom[0].concat(mergedFeatures[i].geometry[0]);
+            return i;
+        }
+
+        function getKey(text, geom, onRight) {
+            var point = onRight ? geom[0][geom[0].length - 1] : geom[0][0];
+            return (text + ":" + (point.x) + ":" + (point.y));
+        }
+
+        for (var k = 0; k < features.length; k++) {
+            var feature = features[k];
+            var geom = feature.geometry;
+            var text = feature.text ? feature.text.toString() : null;
+
+            if (!text) {
+                add(k);
+                continue;
+            }
+
+            var leftKey = getKey(text, geom),
+                rightKey = getKey(text, geom, true);
+
+            if ((leftKey in rightIndex) && (rightKey in leftIndex) && (rightIndex[leftKey] !== leftIndex[rightKey])) {
+                // found lines with the same text adjacent to both ends of the current line, merge all three
+                var j = mergeFromLeft(leftKey, rightKey, geom);
+                var i = mergeFromRight(leftKey, rightKey, mergedFeatures[j].geometry);
+
+                delete leftIndex[leftKey];
+                delete rightIndex[rightKey];
+
+                rightIndex[getKey(text, mergedFeatures[i].geometry, true)] = i;
+                mergedFeatures[j].geometry = (null     );
+
+            } else if (leftKey in rightIndex) {
+                // found mergeable line adjacent to the start of the current line, merge
+                mergeFromRight(leftKey, rightKey, geom);
+
+            } else if (rightKey in leftIndex) {
+                // found mergeable line adjacent to the end of the current line, merge
+                mergeFromLeft(leftKey, rightKey, geom);
+
+            } else {
+                // no adjacent lines, add as a new item
+                add(k);
+                leftIndex[leftKey] = mergedIndex - 1;
+                rightIndex[rightKey] = mergedIndex - 1;
+            }
+        }
+
+        return mergedFeatures.filter(function (f) {
+            return f.geometry;
+        });
+    }
+
+    var Shaping = function Shaping() {
+    };
+
+    Shaping.WritingMode = {
+        horizontal: 1,
+        vertical: 2,
+        horizontalOnly: 3
+    };
+
+    // The position of a glyph relative to the text's anchor point.
+
+
+    // A collection of positioned glyphs and some metadata
+
+
+    function isEmpty(positionedLines) {
+        for (var i = 0, list = positionedLines; i < list.length; i += 1) {
+            var line = list[i];
+
+            if (line.positionedGlyphs.length !== 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // Max number of images in label is 6401 U+E000–U+F8FF that covers
+    // Basic Multilingual Plane Unicode Private Use Area (PUA).
+    var PUAbegin = 0xE000;
+    var PUAend = 0xF8FF;
+
+    var SectionOptions = function SectionOptions() {
+        this.scale = 1.0;
+        this.fontStack = "";
+        this.imageName = null;
+    };
+
+    SectionOptions.forText = function forText(scale, fontStack) {
+        var textOptions = new SectionOptions();
+        textOptions.scale = scale || 1;
+        textOptions.fontStack = fontStack;
+        return textOptions;
+    };
+
+    SectionOptions.forImage = function forImage(imageName) {
+        var imageOptions = new SectionOptions();
+        imageOptions.imageName = imageName;
+        return imageOptions;
+    };
+
+    var TaggedString = function TaggedString() {
+        this.text = "";
+        this.sectionIndex = [];
+        this.sections = [];
+        this.imageSectionID = null;
+    };
+
+    TaggedString.fromFeature = function fromFeature(text, defaultFontStack) {
+        var result = new TaggedString();
+        for (var i = 0; i < text.sections.length; i++) {
+            var section = text.sections[i];
+            if (!section.image) {
+                result.addTextSection(section, defaultFontStack);
+            } else {
+                result.addImageSection(section);
+            }
+        }
+        return result;
+    };
+
+    TaggedString.prototype.length = function length() {
+        return this.text.length;
+    };
+
+    TaggedString.prototype.getSection = function getSection(index) {
+        return this.sections[this.sectionIndex[index]];
+    };
+
+    TaggedString.prototype.getSectionIndex = function getSectionIndex(index) {
+        return this.sectionIndex[index];
+    };
+
+    TaggedString.prototype.getCharCode = function getCharCode(index) {
+        return this.text.charCodeAt(index);
+    };
+
+    TaggedString.prototype.verticalizePunctuation = function verticalizePunctuation$1() {
+        //this.text = verticalizePunctuation(this.text);
+    };
+
+    TaggedString.prototype.trim = function trim() {
+        var beginningWhitespace = 0;
+        for (var i = 0;
+             i < this.text.length && whitespace[this.text.charCodeAt(i)];
+             i++) {
+            beginningWhitespace++;
+        }
+        var trailingWhitespace = this.text.length;
+        for (var i$1 = this.text.length - 1;
+             i$1 >= 0 && i$1 >= beginningWhitespace && whitespace[this.text.charCodeAt(i$1)];
+             i$1--) {
+            trailingWhitespace--;
+        }
+        this.text = this.text.substring(beginningWhitespace, trailingWhitespace);
+        this.sectionIndex = this.sectionIndex.slice(beginningWhitespace, trailingWhitespace);
+    };
+
+    TaggedString.prototype.substring = function substring(start, end) {
+        var substring = new TaggedString();
+        substring.text = this.text.substring(start, end);
+        substring.sectionIndex = this.sectionIndex.slice(start, end);
+        substring.sections = this.sections;
+        return substring;
+    };
+
+    TaggedString.prototype.toString = function toString() {
+        return this.text;
+    };
+
+    TaggedString.prototype.getMaxScale = function getMaxScale() {
+        var this$1 = this;
+
+        return this.sectionIndex.reduce(function (max, index) {
+            return Math.max(max, this$1.sections[index].scale);
+        }, 0);
+    };
+
+    TaggedString.prototype.addTextSection = function addTextSection(section, defaultFontStack) {
+        this.text += section.text;
+        this.sections.push(SectionOptions.forText(section.scale, section.fontStack || defaultFontStack));
+        var index = this.sections.length - 1;
+        for (var i = 0; i < section.text.length; ++i) {
+            this.sectionIndex.push(index);
+        }
+    };
+
+    TaggedString.prototype.addImageSection = function addImageSection(section) {
+        var imageName = section.image ? section.image.name : '';
+        if (imageName.length === 0) {
+            //warnOnce("Can't add FormattedSection with an empty image.");
+            return;
+        }
+
+        var nextImageSectionCharCode = this.getNextImageSectionCharCode();
+        if (!nextImageSectionCharCode) {
+            //warnOnce(("Reached maximum number of images " + (PUAend - PUAbegin + 2)));
+            return;
+        }
+
+        this.text += String.fromCharCode(nextImageSectionCharCode);
+        this.sections.push(SectionOptions.forImage(imageName));
+        this.sectionIndex.push(this.sections.length - 1);
+    };
+
+    TaggedString.prototype.getNextImageSectionCharCode = function getNextImageSectionCharCode() {
+        if (!this.imageSectionID) {
+            this.imageSectionID = PUAbegin;
+            return this.imageSectionID;
+        }
+
+        if (this.imageSectionID >= PUAend) {
+            return null;
+        }
+        return ++this.imageSectionID;
+    };
+
+    function breakLines(input, lineBreakPoints) {
+        var lines = [];
+        var text = input.text;
+        var start = 0;
+        for (var i = 0, list = lineBreakPoints; i < list.length; i += 1) {
+            var lineBreak = list[i];
+
+            lines.push(input.substring(start, lineBreak));
+            start = lineBreak;
+        }
+
+        if (start < text.length) {
+            lines.push(input.substring(start, text.length));
+        }
+        return lines;
+    }
+
+    Shaping.shapeText = function(text, glyphMap, glyphPositions, imagePositions, defaultFontStack, maxWidth, lineHeight, textAnchor, textJustify, spacing, translate, writingMode, allowVerticalPlacement, symbolPlacement, layoutTextSize, layoutTextSizeThisZoom){
+        var logicalInput = TaggedString.fromFeature(text, defaultFontStack);
+
+        if (writingMode === Shaping.WritingMode.vertical) {
+            logicalInput.verticalizePunctuation();
+        }
+
+        var lines;
+        {
+            lines = breakLines(logicalInput, determineLineBreaks());
+        }
+
+        var positionedLines = [];
+        var shaping = {
+            positionedLines: positionedLines,
+            text: logicalInput.toString(),
+            top: translate[1],
+            bottom: translate[1],
+            left: translate[0],
+            right: translate[0],
+            writingMode: writingMode,
+            iconsInText: false,
+            verticalizable: false
+        };
+        if (isEmpty(positionedLines)) {
+            return false;
+        }
+
+        return shaping;
+    };
+
+    // using computed properties due to https://github.com/facebook/flow/issues/380
+    /* eslint no-useless-computed-key: 0 */
+
+    var whitespace = {};
+    whitespace[0x09] = true;
+    whitespace[0x0a] = true;
+    whitespace[0x0b] = true;
+    whitespace[0x0c] = true;
+    whitespace[0x0d] = true;
+    whitespace[0x20] = true;
+
+    function determineLineBreaks(logicalInput, spacing, maxWidth, glyphMap, imagePositions, symbolPlacement, layoutTextSize) {
+    //        if (symbolPlacement !== 'point') {
+    //            return [];
+    //        }
+    //
+    //        if (!logicalInput) {
+    //            return [];
+    //        }
+    //
+    //        var potentialLineBreaks = [];
+    //        var targetWidth = determineAverageLineWidth(logicalInput, spacing, maxWidth, glyphMap, imagePositions, layoutTextSize);
+    //
+    //        var hasServerSuggestedBreakpoints = logicalInput.text.indexOf("\u200b") >= 0;
+    //
+    //        var currentX = 0;
+    //
+    //        for (var i = 0; i < logicalInput.length(); i++) {
+    //            var section = logicalInput.getSection(i);
+    //            var codePoint = logicalInput.getCharCode(i);
+    //            if (!whitespace[codePoint]) {
+    //                currentX += getGlyphAdvance(codePoint, section, glyphMap, imagePositions, spacing, layoutTextSize);
+    //            }
+    //
+    //            // Ideographic characters, spaces, and word-breaking punctuation that often appear without
+    //            // surrounding spaces.
+    //            if ((i < logicalInput.length() - 1)) {
+    //                var ideographicBreak = charAllowsIdeographicBreaking(codePoint);
+    //                if (breakable[codePoint] || ideographicBreak || section.imageName) {
+    //
+    //                    potentialLineBreaks.push(
+    //                        evaluateBreak(
+    //                            i + 1,
+    //                            currentX,
+    //                            targetWidth,
+    //                            potentialLineBreaks,
+    //                            calculatePenalty(codePoint, logicalInput.getCharCode(i + 1), ideographicBreak && hasServerSuggestedBreakpoints),
+    //                            false));
+    //                }
+    //            }
+    //        }
+    //
+    //        return leastBadBreaks(
+    //            evaluateBreak(
+    //                logicalInput.length(),
+    //                currentX,
+    //                targetWidth,
+    //                potentialLineBreaks,
+    //                0,
+    //                true));
+    }
+
+    function getAnchorAlignment(anchor) {
+        var horizontalAlign = 0.5, verticalAlign = 0.5;
+
+        switch (anchor) {
+            case 'right':
+            case 'top-right':
+            case 'bottom-right':
+                horizontalAlign = 1;
+                break;
+            case 'left':
+            case 'top-left':
+            case 'bottom-left':
+                horizontalAlign = 0;
+                break;
+        }
+
+        switch (anchor) {
+            case 'bottom':
+            case 'bottom-right':
+            case 'bottom-left':
+                verticalAlign = 1;
+                break;
+            case 'top':
+            case 'top-right':
+            case 'top-left':
+                verticalAlign = 0;
+                break;
+        }
+
+        return {horizontalAlign: horizontalAlign, verticalAlign: verticalAlign};
+    }
+
+
+    Shaping.shapeIcon = function(image, iconOffset, iconAnchor){
+        var ref = getAnchorAlignment(iconAnchor);
+        var horizontalAlign = ref.horizontalAlign;
+        var verticalAlign = ref.verticalAlign;
+        var dx = iconOffset[0];
+        var dy = iconOffset[1];
+        var x1 = dx - image.displaySize[0] * horizontalAlign;
+        var x2 = x1 + image.displaySize[0];
+        var y1 = dy - image.displaySize[1] * verticalAlign;
+        var y2 = y1 + image.displaySize[1];
+        return {image: image, top: y1, bottom: y2, left: x1, right: x2};
+    };
+
+    Shaping.fitIconToText = function(shapedIcon, shapedText, textFit, padding, iconOffset, fontScale){
+    //        assert_1(textFit !== 'none');
+    //        assert_1(Array.isArray(padding) && padding.length === 4);
+    //        assert_1(Array.isArray(iconOffset) && iconOffset.length === 2);
+
+        var image = shapedIcon.image;
+
+        var collisionPadding;
+        if (image.content) {
+            var content = image.content;
+            var pixelRatio = image.pixelRatio || 1;
+            collisionPadding = [
+                content[0] / pixelRatio,
+                content[1] / pixelRatio,
+                image.displaySize[0] - content[2] / pixelRatio,
+                image.displaySize[1] - content[3] / pixelRatio
+            ];
+        }
+
+        // We don't respect the icon-anchor, because icon-text-fit is set. Instead,
+        // the icon will be centered on the text, then stretched in the given
+        // dimensions.
+
+        var textLeft = shapedText.left * fontScale;
+        var textRight = shapedText.right * fontScale;
+
+        var top, right, bottom, left;
+        if (textFit === 'width' || textFit === 'both') {
+            // Stretched horizontally to the text width
+            left = iconOffset[0] + textLeft - padding[3];
+            right = iconOffset[0] + textRight + padding[1];
+        } else {
+            // Centered on the text
+            left = iconOffset[0] + (textLeft + textRight - image.displaySize[0]) / 2;
+            right = left + image.displaySize[0];
+        }
+
+        var textTop = shapedText.top * fontScale;
+        var textBottom = shapedText.bottom * fontScale;
+        if (textFit === 'height' || textFit === 'both') {
+            // Stretched vertically to the text height
+            top = iconOffset[1] + textTop - padding[0];
+            bottom = iconOffset[1] + textBottom + padding[2];
+        } else {
+            // Centered on the text
+            top = iconOffset[1] + (textTop + textBottom - image.displaySize[1]) / 2;
+            bottom = top + image.displaySize[1];
+        }
+
+        return {image: image, top: top, right: right, bottom: bottom, left: left, collisionPadding: collisionPadding};
+    };
+
+    var SIZE_PACK_FACTOR = 128;
+
+    // For {text,icon}-size, get the bucket-level data that will be needed by
+    // the painter to set symbol-size-related uniforms
+    function getSizeData(tileZoom, value) {
+        var expression = value.expression;
+
+        if (expression.kind === 'constant') {
+            var layoutSize = expression.evaluate(new EvaluationParameters$1(tileZoom + 1));
+            return {kind: 'constant', layoutSize: layoutSize};
+
+        } else if (expression.kind === 'source') {
+            return {kind: 'source'};
+
+        } else {
+            var zoomStops = expression.zoomStops;
+            var interpolationType = expression.interpolationType;
+
+            // calculate covering zoom stops for zoom-dependent values
+            var lower = 0;
+            while (lower < zoomStops.length && zoomStops[lower] <= tileZoom) {
+                lower++;
+            }
+            lower = Math.max(0, lower - 1);
+            var upper = lower;
+            while (upper < zoomStops.length && zoomStops[upper] < tileZoom + 1) {
+                upper++;
+            }
+            upper = Math.min(zoomStops.length - 1, upper);
+
+            var minZoom = zoomStops[lower];
+            var maxZoom = zoomStops[upper];
+
+            // We'd like to be able to use CameraExpression or CompositeExpression in these
+            // return types rather than ExpressionSpecification, but the former are not
+            // transferrable across Web Worker boundaries.
+            if (expression.kind === 'composite') {
+                return {kind: 'composite', minZoom: minZoom, maxZoom: maxZoom, interpolationType: interpolationType};
+            }
+
+            // for camera functions, also save off the function values
+            // evaluated at the covering zoom levels
+            var minSize = expression.evaluate(new EvaluationParameters$1(minZoom));
+            var maxSize = expression.evaluate(new EvaluationParameters$1(maxZoom));
+
+            return {kind: 'camera', minZoom: minZoom, maxZoom: maxZoom, minSize: minSize, maxSize: maxSize, interpolationType: interpolationType};
+        }
+    }
+
+    function evaluateSizeForFeature(sizeData, ref, ref$1) {
+        var uSize = ref.uSize;
+        var uSizeT = ref.uSizeT;
+        var lowerSize = ref$1.lowerSize;
+        var upperSize = ref$1.upperSize;
+
+        if (sizeData.kind === 'source') {
+            return lowerSize / SIZE_PACK_FACTOR;
+        } else if (sizeData.kind === 'composite') {
+            return number(lowerSize / SIZE_PACK_FACTOR, upperSize / SIZE_PACK_FACTOR, uSizeT);
+        }
+        return uSize;
+    }
+
+    function evaluateSizeForZoom(sizeData, zoom) {
+        var uSizeT = 0;
+        var uSize = 0;
+
+        if (sizeData.kind === 'constant') {
+            uSize = sizeData.layoutSize;
+
+        } else if (sizeData.kind !== 'source') {
+            var interpolationType = sizeData.interpolationType;
+            var minZoom = sizeData.minZoom;
+            var maxZoom = sizeData.maxZoom;
+
+            // Even though we could get the exact value of the camera function
+            // at z = tr.zoom, we intentionally do not: instead, we interpolate
+            // between the camera function values at a pair of zoom stops covering
+            // [tileZoom, tileZoom + 1] in order to be consistent with this
+            // restriction on composite functions
+    //            var t = !interpolationType ? 0 : clamp(
+    //                Interpolate.interpolationFactor(interpolationType, zoom, minZoom, maxZoom), 0, 1);
+            var t = 0;
+
+            if (sizeData.kind === 'camera') {
+                uSize = number(sizeData.minSize, sizeData.maxSize, t);
+            } else {
+                uSizeT = t;
+            }
+        }
+
+        return {uSizeT: uSizeT, uSize: uSize};
+    }
+
+    var symbolSize = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        getSizeData: getSizeData,
+        evaluateSizeForFeature: evaluateSizeForFeature,
+        evaluateSizeForZoom: evaluateSizeForZoom,
+        SIZE_PACK_FACTOR: SIZE_PACK_FACTOR
+    });
+
+    function transformText(text, layer, feature) {
+        var transform = layer.layout.get('text-transform').evaluate(feature, {});
+        if (transform === 'uppercase') {
+            text = text.toLocaleUpperCase();
+        } else if (transform === 'lowercase') {
+            text = text.toLocaleLowerCase();
+        }
+
+    //        if (plugin.applyArabicShaping) {
+    //            text = plugin.applyArabicShaping(text);
+    //        }
+
+        return text;
+    }
+
+    function transformText$1(text, layer, feature) {
+        text.sections.forEach(function (section) {
+            section.text = transformText(section.text, layer, feature);
+        });
+        return text;
+    }
+
+    // The following table comes from <http://www.unicode.org/Public/12.0.0/ucd/Blocks.txt>.
+    // Keep it synchronized with <http://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt>.
+
+    var unicodeBlockLookup = {
+        // 'Basic Latin': (char) => char >= 0x0000 && char <= 0x007F,
+        'Latin-1 Supplement': function (char) {
+            return char >= 0x0080 && char <= 0x00FF;
+        },
+        // 'Latin Extended-A': (char) => char >= 0x0100 && char <= 0x017F,
+        // 'Latin Extended-B': (char) => char >= 0x0180 && char <= 0x024F,
+        // 'IPA Extensions': (char) => char >= 0x0250 && char <= 0x02AF,
+        // 'Spacing Modifier Letters': (char) => char >= 0x02B0 && char <= 0x02FF,
+        // 'Combining Diacritical Marks': (char) => char >= 0x0300 && char <= 0x036F,
+        // 'Greek and Coptic': (char) => char >= 0x0370 && char <= 0x03FF,
+        // 'Cyrillic': (char) => char >= 0x0400 && char <= 0x04FF,
+        // 'Cyrillic Supplement': (char) => char >= 0x0500 && char <= 0x052F,
+        // 'Armenian': (char) => char >= 0x0530 && char <= 0x058F,
+        //'Hebrew': (char) => char >= 0x0590 && char <= 0x05FF,
+        'Arabic': function (char) {
+            return char >= 0x0600 && char <= 0x06FF;
+        },
+        //'Syriac': (char) => char >= 0x0700 && char <= 0x074F,
+        'Arabic Supplement': function (char) {
+            return char >= 0x0750 && char <= 0x077F;
+        },
+        // 'Thaana': (char) => char >= 0x0780 && char <= 0x07BF,
+        // 'NKo': (char) => char >= 0x07C0 && char <= 0x07FF,
+        // 'Samaritan': (char) => char >= 0x0800 && char <= 0x083F,
+        // 'Mandaic': (char) => char >= 0x0840 && char <= 0x085F,
+        // 'Syriac Supplement': (char) => char >= 0x0860 && char <= 0x086F,
+        'Arabic Extended-A': function (char) {
+            return char >= 0x08A0 && char <= 0x08FF;
+        },
+        // 'Devanagari': (char) => char >= 0x0900 && char <= 0x097F,
+        // 'Bengali': (char) => char >= 0x0980 && char <= 0x09FF,
+        // 'Gurmukhi': (char) => char >= 0x0A00 && char <= 0x0A7F,
+        // 'Gujarati': (char) => char >= 0x0A80 && char <= 0x0AFF,
+        // 'Oriya': (char) => char >= 0x0B00 && char <= 0x0B7F,
+        // 'Tamil': (char) => char >= 0x0B80 && char <= 0x0BFF,
+        // 'Telugu': (char) => char >= 0x0C00 && char <= 0x0C7F,
+        // 'Kannada': (char) => char >= 0x0C80 && char <= 0x0CFF,
+        // 'Malayalam': (char) => char >= 0x0D00 && char <= 0x0D7F,
+        // 'Sinhala': (char) => char >= 0x0D80 && char <= 0x0DFF,
+        // 'Thai': (char) => char >= 0x0E00 && char <= 0x0E7F,
+        // 'Lao': (char) => char >= 0x0E80 && char <= 0x0EFF,
+        // 'Tibetan': (char) => char >= 0x0F00 && char <= 0x0FFF,
+        // 'Myanmar': (char) => char >= 0x1000 && char <= 0x109F,
+        // 'Georgian': (char) => char >= 0x10A0 && char <= 0x10FF,
+        'Hangul Jamo': function (char) {
+            return char >= 0x1100 && char <= 0x11FF;
+        },
+        // 'Ethiopic': (char) => char >= 0x1200 && char <= 0x137F,
+        // 'Ethiopic Supplement': (char) => char >= 0x1380 && char <= 0x139F,
+        // 'Cherokee': (char) => char >= 0x13A0 && char <= 0x13FF,
+        'Unified Canadian Aboriginal Syllabics': function (char) {
+            return char >= 0x1400 && char <= 0x167F;
+        },
+        // 'Ogham': (char) => char >= 0x1680 && char <= 0x169F,
+        // 'Runic': (char) => char >= 0x16A0 && char <= 0x16FF,
+        // 'Tagalog': (char) => char >= 0x1700 && char <= 0x171F,
+        // 'Hanunoo': (char) => char >= 0x1720 && char <= 0x173F,
+        // 'Buhid': (char) => char >= 0x1740 && char <= 0x175F,
+        // 'Tagbanwa': (char) => char >= 0x1760 && char <= 0x177F,
+        'Khmer': function (char) {
+            return char >= 0x1780 && char <= 0x17FF;
+        },
+        // 'Mongolian': (char) => char >= 0x1800 && char <= 0x18AF,
+        'Unified Canadian Aboriginal Syllabics Extended': function (char) {
+            return char >= 0x18B0 && char <= 0x18FF;
+        },
+        // 'Limbu': (char) => char >= 0x1900 && char <= 0x194F,
+        // 'Tai Le': (char) => char >= 0x1950 && char <= 0x197F,
+        // 'New Tai Lue': (char) => char >= 0x1980 && char <= 0x19DF,
+        // 'Khmer Symbols': (char) => char >= 0x19E0 && char <= 0x19FF,
+        // 'Buginese': (char) => char >= 0x1A00 && char <= 0x1A1F,
+        // 'Tai Tham': (char) => char >= 0x1A20 && char <= 0x1AAF,
+        // 'Combining Diacritical Marks Extended': (char) => char >= 0x1AB0 && char <= 0x1AFF,
+        // 'Balinese': (char) => char >= 0x1B00 && char <= 0x1B7F,
+        // 'Sundanese': (char) => char >= 0x1B80 && char <= 0x1BBF,
+        // 'Batak': (char) => char >= 0x1BC0 && char <= 0x1BFF,
+        // 'Lepcha': (char) => char >= 0x1C00 && char <= 0x1C4F,
+        // 'Ol Chiki': (char) => char >= 0x1C50 && char <= 0x1C7F,
+        // 'Cyrillic Extended-C': (char) => char >= 0x1C80 && char <= 0x1C8F,
+        // 'Georgian Extended': (char) => char >= 0x1C90 && char <= 0x1CBF,
+        // 'Sundanese Supplement': (char) => char >= 0x1CC0 && char <= 0x1CCF,
+        // 'Vedic Extensions': (char) => char >= 0x1CD0 && char <= 0x1CFF,
+        // 'Phonetic Extensions': (char) => char >= 0x1D00 && char <= 0x1D7F,
+        // 'Phonetic Extensions Supplement': (char) => char >= 0x1D80 && char <= 0x1DBF,
+        // 'Combining Diacritical Marks Supplement': (char) => char >= 0x1DC0 && char <= 0x1DFF,
+        // 'Latin Extended Additional': (char) => char >= 0x1E00 && char <= 0x1EFF,
+        // 'Greek Extended': (char) => char >= 0x1F00 && char <= 0x1FFF,
+        'General Punctuation': function (char) {
+            return char >= 0x2000 && char <= 0x206F;
+        },
+        // 'Superscripts and Subscripts': (char) => char >= 0x2070 && char <= 0x209F,
+        // 'Currency Symbols': (char) => char >= 0x20A0 && char <= 0x20CF,
+        // 'Combining Diacritical Marks for Symbols': (char) => char >= 0x20D0 && char <= 0x20FF,
+        'Letterlike Symbols': function (char) {
+            return char >= 0x2100 && char <= 0x214F;
+        },
+        'Number Forms': function (char) {
+            return char >= 0x2150 && char <= 0x218F;
+        },
+        // 'Arrows': (char) => char >= 0x2190 && char <= 0x21FF,
+        // 'Mathematical Operators': (char) => char >= 0x2200 && char <= 0x22FF,
+        'Miscellaneous Technical': function (char) {
+            return char >= 0x2300 && char <= 0x23FF;
+        },
+        'Control Pictures': function (char) {
+            return char >= 0x2400 && char <= 0x243F;
+        },
+        'Optical Character Recognition': function (char) {
+            return char >= 0x2440 && char <= 0x245F;
+        },
+        'Enclosed Alphanumerics': function (char) {
+            return char >= 0x2460 && char <= 0x24FF;
+        },
+        // 'Box Drawing': (char) => char >= 0x2500 && char <= 0x257F,
+        // 'Block Elements': (char) => char >= 0x2580 && char <= 0x259F,
+        'Geometric Shapes': function (char) {
+            return char >= 0x25A0 && char <= 0x25FF;
+        },
+        'Miscellaneous Symbols': function (char) {
+            return char >= 0x2600 && char <= 0x26FF;
+        },
+        // 'Dingbats': (char) => char >= 0x2700 && char <= 0x27BF,
+        // 'Miscellaneous Mathematical Symbols-A': (char) => char >= 0x27C0 && char <= 0x27EF,
+        // 'Supplemental Arrows-A': (char) => char >= 0x27F0 && char <= 0x27FF,
+        // 'Braille Patterns': (char) => char >= 0x2800 && char <= 0x28FF,
+        // 'Supplemental Arrows-B': (char) => char >= 0x2900 && char <= 0x297F,
+        // 'Miscellaneous Mathematical Symbols-B': (char) => char >= 0x2980 && char <= 0x29FF,
+        // 'Supplemental Mathematical Operators': (char) => char >= 0x2A00 && char <= 0x2AFF,
+        'Miscellaneous Symbols and Arrows': function (char) {
+            return char >= 0x2B00 && char <= 0x2BFF;
+        },
+        // 'Glagolitic': (char) => char >= 0x2C00 && char <= 0x2C5F,
+        // 'Latin Extended-C': (char) => char >= 0x2C60 && char <= 0x2C7F,
+        // 'Coptic': (char) => char >= 0x2C80 && char <= 0x2CFF,
+        // 'Georgian Supplement': (char) => char >= 0x2D00 && char <= 0x2D2F,
+        // 'Tifinagh': (char) => char >= 0x2D30 && char <= 0x2D7F,
+        // 'Ethiopic Extended': (char) => char >= 0x2D80 && char <= 0x2DDF,
+        // 'Cyrillic Extended-A': (char) => char >= 0x2DE0 && char <= 0x2DFF,
+        // 'Supplemental Punctuation': (char) => char >= 0x2E00 && char <= 0x2E7F,
+        'CJK Radicals Supplement': function (char) {
+            return char >= 0x2E80 && char <= 0x2EFF;
+        },
+        'Kangxi Radicals': function (char) {
+            return char >= 0x2F00 && char <= 0x2FDF;
+        },
+        'Ideographic Description Characters': function (char) {
+            return char >= 0x2FF0 && char <= 0x2FFF;
+        },
+        'CJK Symbols and Punctuation': function (char) {
+            return char >= 0x3000 && char <= 0x303F;
+        },
+        'Hiragana': function (char) {
+            return char >= 0x3040 && char <= 0x309F;
+        },
+        'Katakana': function (char) {
+            return char >= 0x30A0 && char <= 0x30FF;
+        },
+        'Bopomofo': function (char) {
+            return char >= 0x3100 && char <= 0x312F;
+        },
+        'Hangul Compatibility Jamo': function (char) {
+            return char >= 0x3130 && char <= 0x318F;
+        },
+        'Kanbun': function (char) {
+            return char >= 0x3190 && char <= 0x319F;
+        },
+        'Bopomofo Extended': function (char) {
+            return char >= 0x31A0 && char <= 0x31BF;
+        },
+        'CJK Strokes': function (char) {
+            return char >= 0x31C0 && char <= 0x31EF;
+        },
+        'Katakana Phonetic Extensions': function (char) {
+            return char >= 0x31F0 && char <= 0x31FF;
+        },
+        'Enclosed CJK Letters and Months': function (char) {
+            return char >= 0x3200 && char <= 0x32FF;
+        },
+        'CJK Compatibility': function (char) {
+            return char >= 0x3300 && char <= 0x33FF;
+        },
+        'CJK Unified Ideographs Extension A': function (char) {
+            return char >= 0x3400 && char <= 0x4DBF;
+        },
+        'Yijing Hexagram Symbols': function (char) {
+            return char >= 0x4DC0 && char <= 0x4DFF;
+        },
+        'CJK Unified Ideographs': function (char) {
+            return char >= 0x4E00 && char <= 0x9FFF;
+        },
+        'Yi Syllables': function (char) {
+            return char >= 0xA000 && char <= 0xA48F;
+        },
+        'Yi Radicals': function (char) {
+            return char >= 0xA490 && char <= 0xA4CF;
+        },
+        // 'Lisu': (char) => char >= 0xA4D0 && char <= 0xA4FF,
+        // 'Vai': (char) => char >= 0xA500 && char <= 0xA63F,
+        // 'Cyrillic Extended-B': (char) => char >= 0xA640 && char <= 0xA69F,
+        // 'Bamum': (char) => char >= 0xA6A0 && char <= 0xA6FF,
+        // 'Modifier Tone Letters': (char) => char >= 0xA700 && char <= 0xA71F,
+        // 'Latin Extended-D': (char) => char >= 0xA720 && char <= 0xA7FF,
+        // 'Syloti Nagri': (char) => char >= 0xA800 && char <= 0xA82F,
+        // 'Common Indic Number Forms': (char) => char >= 0xA830 && char <= 0xA83F,
+        // 'Phags-pa': (char) => char >= 0xA840 && char <= 0xA87F,
+        // 'Saurashtra': (char) => char >= 0xA880 && char <= 0xA8DF,
+        // 'Devanagari Extended': (char) => char >= 0xA8E0 && char <= 0xA8FF,
+        // 'Kayah Li': (char) => char >= 0xA900 && char <= 0xA92F,
+        // 'Rejang': (char) => char >= 0xA930 && char <= 0xA95F,
+        'Hangul Jamo Extended-A': function (char) {
+            return char >= 0xA960 && char <= 0xA97F;
+        },
+        // 'Javanese': (char) => char >= 0xA980 && char <= 0xA9DF,
+        // 'Myanmar Extended-B': (char) => char >= 0xA9E0 && char <= 0xA9FF,
+        // 'Cham': (char) => char >= 0xAA00 && char <= 0xAA5F,
+        // 'Myanmar Extended-A': (char) => char >= 0xAA60 && char <= 0xAA7F,
+        // 'Tai Viet': (char) => char >= 0xAA80 && char <= 0xAADF,
+        // 'Meetei Mayek Extensions': (char) => char >= 0xAAE0 && char <= 0xAAFF,
+        // 'Ethiopic Extended-A': (char) => char >= 0xAB00 && char <= 0xAB2F,
+        // 'Latin Extended-E': (char) => char >= 0xAB30 && char <= 0xAB6F,
+        // 'Cherokee Supplement': (char) => char >= 0xAB70 && char <= 0xABBF,
+        // 'Meetei Mayek': (char) => char >= 0xABC0 && char <= 0xABFF,
+        'Hangul Syllables': function (char) {
+            return char >= 0xAC00 && char <= 0xD7AF;
+        },
+        'Hangul Jamo Extended-B': function (char) {
+            return char >= 0xD7B0 && char <= 0xD7FF;
+        },
+        // 'High Surrogates': (char) => char >= 0xD800 && char <= 0xDB7F,
+        // 'High Private Use Surrogates': (char) => char >= 0xDB80 && char <= 0xDBFF,
+        // 'Low Surrogates': (char) => char >= 0xDC00 && char <= 0xDFFF,
+        'Private Use Area': function (char) {
+            return char >= 0xE000 && char <= 0xF8FF;
+        },
+        'CJK Compatibility Ideographs': function (char) {
+            return char >= 0xF900 && char <= 0xFAFF;
+        },
+        // 'Alphabetic Presentation Forms': (char) => char >= 0xFB00 && char <= 0xFB4F,
+        'Arabic Presentation Forms-A': function (char) {
+            return char >= 0xFB50 && char <= 0xFDFF;
+        },
+        // 'Variation Selectors': (char) => char >= 0xFE00 && char <= 0xFE0F,
+        'Vertical Forms': function (char) {
+            return char >= 0xFE10 && char <= 0xFE1F;
+        },
+        // 'Combining Half Marks': (char) => char >= 0xFE20 && char <= 0xFE2F,
+        'CJK Compatibility Forms': function (char) {
+            return char >= 0xFE30 && char <= 0xFE4F;
+        },
+        'Small Form Variants': function (char) {
+            return char >= 0xFE50 && char <= 0xFE6F;
+        },
+        'Arabic Presentation Forms-B': function (char) {
+            return char >= 0xFE70 && char <= 0xFEFF;
+        },
+        'Halfwidth and Fullwidth Forms': function (char) {
+            return char >= 0xFF00 && char <= 0xFFEF;
+        }
+        // 'Specials': (char) => char >= 0xFFF0 && char <= 0xFFFF,
+        // 'Linear B Syllabary': (char) => char >= 0x10000 && char <= 0x1007F,
+        // 'Linear B Ideograms': (char) => char >= 0x10080 && char <= 0x100FF,
+        // 'Aegean Numbers': (char) => char >= 0x10100 && char <= 0x1013F,
+        // 'Ancient Greek Numbers': (char) => char >= 0x10140 && char <= 0x1018F,
+        // 'Ancient Symbols': (char) => char >= 0x10190 && char <= 0x101CF,
+        // 'Phaistos Disc': (char) => char >= 0x101D0 && char <= 0x101FF,
+        // 'Lycian': (char) => char >= 0x10280 && char <= 0x1029F,
+        // 'Carian': (char) => char >= 0x102A0 && char <= 0x102DF,
+        // 'Coptic Epact Numbers': (char) => char >= 0x102E0 && char <= 0x102FF,
+        // 'Old Italic': (char) => char >= 0x10300 && char <= 0x1032F,
+        // 'Gothic': (char) => char >= 0x10330 && char <= 0x1034F,
+        // 'Old Permic': (char) => char >= 0x10350 && char <= 0x1037F,
+        // 'Ugaritic': (char) => char >= 0x10380 && char <= 0x1039F,
+        // 'Old Persian': (char) => char >= 0x103A0 && char <= 0x103DF,
+        // 'Deseret': (char) => char >= 0x10400 && char <= 0x1044F,
+        // 'Shavian': (char) => char >= 0x10450 && char <= 0x1047F,
+        // 'Osmanya': (char) => char >= 0x10480 && char <= 0x104AF,
+        // 'Osage': (char) => char >= 0x104B0 && char <= 0x104FF,
+        // 'Elbasan': (char) => char >= 0x10500 && char <= 0x1052F,
+        // 'Caucasian Albanian': (char) => char >= 0x10530 && char <= 0x1056F,
+        // 'Linear A': (char) => char >= 0x10600 && char <= 0x1077F,
+        // 'Cypriot Syllabary': (char) => char >= 0x10800 && char <= 0x1083F,
+        // 'Imperial Aramaic': (char) => char >= 0x10840 && char <= 0x1085F,
+        // 'Palmyrene': (char) => char >= 0x10860 && char <= 0x1087F,
+        // 'Nabataean': (char) => char >= 0x10880 && char <= 0x108AF,
+        // 'Hatran': (char) => char >= 0x108E0 && char <= 0x108FF,
+        // 'Phoenician': (char) => char >= 0x10900 && char <= 0x1091F,
+        // 'Lydian': (char) => char >= 0x10920 && char <= 0x1093F,
+        // 'Meroitic Hieroglyphs': (char) => char >= 0x10980 && char <= 0x1099F,
+        // 'Meroitic Cursive': (char) => char >= 0x109A0 && char <= 0x109FF,
+        // 'Kharoshthi': (char) => char >= 0x10A00 && char <= 0x10A5F,
+        // 'Old South Arabian': (char) => char >= 0x10A60 && char <= 0x10A7F,
+        // 'Old North Arabian': (char) => char >= 0x10A80 && char <= 0x10A9F,
+        // 'Manichaean': (char) => char >= 0x10AC0 && char <= 0x10AFF,
+        // 'Avestan': (char) => char >= 0x10B00 && char <= 0x10B3F,
+        // 'Inscriptional Parthian': (char) => char >= 0x10B40 && char <= 0x10B5F,
+        // 'Inscriptional Pahlavi': (char) => char >= 0x10B60 && char <= 0x10B7F,
+        // 'Psalter Pahlavi': (char) => char >= 0x10B80 && char <= 0x10BAF,
+        // 'Old Turkic': (char) => char >= 0x10C00 && char <= 0x10C4F,
+        // 'Old Hungarian': (char) => char >= 0x10C80 && char <= 0x10CFF,
+        // 'Hanifi Rohingya': (char) => char >= 0x10D00 && char <= 0x10D3F,
+        // 'Rumi Numeral Symbols': (char) => char >= 0x10E60 && char <= 0x10E7F,
+        // 'Old Sogdian': (char) => char >= 0x10F00 && char <= 0x10F2F,
+        // 'Sogdian': (char) => char >= 0x10F30 && char <= 0x10F6F,
+        // 'Elymaic': (char) => char >= 0x10FE0 && char <= 0x10FFF,
+        // 'Brahmi': (char) => char >= 0x11000 && char <= 0x1107F,
+        // 'Kaithi': (char) => char >= 0x11080 && char <= 0x110CF,
+        // 'Sora Sompeng': (char) => char >= 0x110D0 && char <= 0x110FF,
+        // 'Chakma': (char) => char >= 0x11100 && char <= 0x1114F,
+        // 'Mahajani': (char) => char >= 0x11150 && char <= 0x1117F,
+        // 'Sharada': (char) => char >= 0x11180 && char <= 0x111DF,
+        // 'Sinhala Archaic Numbers': (char) => char >= 0x111E0 && char <= 0x111FF,
+        // 'Khojki': (char) => char >= 0x11200 && char <= 0x1124F,
+        // 'Multani': (char) => char >= 0x11280 && char <= 0x112AF,
+        // 'Khudawadi': (char) => char >= 0x112B0 && char <= 0x112FF,
+        // 'Grantha': (char) => char >= 0x11300 && char <= 0x1137F,
+        // 'Newa': (char) => char >= 0x11400 && char <= 0x1147F,
+        // 'Tirhuta': (char) => char >= 0x11480 && char <= 0x114DF,
+        // 'Siddham': (char) => char >= 0x11580 && char <= 0x115FF,
+        // 'Modi': (char) => char >= 0x11600 && char <= 0x1165F,
+        // 'Mongolian Supplement': (char) => char >= 0x11660 && char <= 0x1167F,
+        // 'Takri': (char) => char >= 0x11680 && char <= 0x116CF,
+        // 'Ahom': (char) => char >= 0x11700 && char <= 0x1173F,
+        // 'Dogra': (char) => char >= 0x11800 && char <= 0x1184F,
+        // 'Warang Citi': (char) => char >= 0x118A0 && char <= 0x118FF,
+        // 'Nandinagari': (char) => char >= 0x119A0 && char <= 0x119FF,
+        // 'Zanabazar Square': (char) => char >= 0x11A00 && char <= 0x11A4F,
+        // 'Soyombo': (char) => char >= 0x11A50 && char <= 0x11AAF,
+        // 'Pau Cin Hau': (char) => char >= 0x11AC0 && char <= 0x11AFF,
+        // 'Bhaiksuki': (char) => char >= 0x11C00 && char <= 0x11C6F,
+        // 'Marchen': (char) => char >= 0x11C70 && char <= 0x11CBF,
+        // 'Masaram Gondi': (char) => char >= 0x11D00 && char <= 0x11D5F,
+        // 'Gunjala Gondi': (char) => char >= 0x11D60 && char <= 0x11DAF,
+        // 'Makasar': (char) => char >= 0x11EE0 && char <= 0x11EFF,
+        // 'Tamil Supplement': (char) => char >= 0x11FC0 && char <= 0x11FFF,
+        // 'Cuneiform': (char) => char >= 0x12000 && char <= 0x123FF,
+        // 'Cuneiform Numbers and Punctuation': (char) => char >= 0x12400 && char <= 0x1247F,
+        // 'Early Dynastic Cuneiform': (char) => char >= 0x12480 && char <= 0x1254F,
+        // 'Egyptian Hieroglyphs': (char) => char >= 0x13000 && char <= 0x1342F,
+        // 'Egyptian Hieroglyph Format Controls': (char) => char >= 0x13430 && char <= 0x1343F,
+        // 'Anatolian Hieroglyphs': (char) => char >= 0x14400 && char <= 0x1467F,
+        // 'Bamum Supplement': (char) => char >= 0x16800 && char <= 0x16A3F,
+        // 'Mro': (char) => char >= 0x16A40 && char <= 0x16A6F,
+        // 'Bassa Vah': (char) => char >= 0x16AD0 && char <= 0x16AFF,
+        // 'Pahawh Hmong': (char) => char >= 0x16B00 && char <= 0x16B8F,
+        // 'Medefaidrin': (char) => char >= 0x16E40 && char <= 0x16E9F,
+        // 'Miao': (char) => char >= 0x16F00 && char <= 0x16F9F,
+        // 'Ideographic Symbols and Punctuation': (char) => char >= 0x16FE0 && char <= 0x16FFF,
+        // 'Tangut': (char) => char >= 0x17000 && char <= 0x187FF,
+        // 'Tangut Components': (char) => char >= 0x18800 && char <= 0x18AFF,
+        // 'Kana Supplement': (char) => char >= 0x1B000 && char <= 0x1B0FF,
+        // 'Kana Extended-A': (char) => char >= 0x1B100 && char <= 0x1B12F,
+        // 'Small Kana Extension': (char) => char >= 0x1B130 && char <= 0x1B16F,
+        // 'Nushu': (char) => char >= 0x1B170 && char <= 0x1B2FF,
+        // 'Duployan': (char) => char >= 0x1BC00 && char <= 0x1BC9F,
+        // 'Shorthand Format Controls': (char) => char >= 0x1BCA0 && char <= 0x1BCAF,
+        // 'Byzantine Musical Symbols': (char) => char >= 0x1D000 && char <= 0x1D0FF,
+        // 'Musical Symbols': (char) => char >= 0x1D100 && char <= 0x1D1FF,
+        // 'Ancient Greek Musical Notation': (char) => char >= 0x1D200 && char <= 0x1D24F,
+        // 'Mayan Numerals': (char) => char >= 0x1D2E0 && char <= 0x1D2FF,
+        // 'Tai Xuan Jing Symbols': (char) => char >= 0x1D300 && char <= 0x1D35F,
+        // 'Counting Rod Numerals': (char) => char >= 0x1D360 && char <= 0x1D37F,
+        // 'Mathematical Alphanumeric Symbols': (char) => char >= 0x1D400 && char <= 0x1D7FF,
+        // 'Sutton SignWriting': (char) => char >= 0x1D800 && char <= 0x1DAAF,
+        // 'Glagolitic Supplement': (char) => char >= 0x1E000 && char <= 0x1E02F,
+        // 'Nyiakeng Puachue Hmong': (char) => char >= 0x1E100 && char <= 0x1E14F,
+        // 'Wancho': (char) => char >= 0x1E2C0 && char <= 0x1E2FF,
+        // 'Mende Kikakui': (char) => char >= 0x1E800 && char <= 0x1E8DF,
+        // 'Adlam': (char) => char >= 0x1E900 && char <= 0x1E95F,
+        // 'Indic Siyaq Numbers': (char) => char >= 0x1EC70 && char <= 0x1ECBF,
+        // 'Ottoman Siyaq Numbers': (char) => char >= 0x1ED00 && char <= 0x1ED4F,
+        // 'Arabic Mathematical Alphabetic Symbols': (char) => char >= 0x1EE00 && char <= 0x1EEFF,
+        // 'Mahjong Tiles': (char) => char >= 0x1F000 && char <= 0x1F02F,
+        // 'Domino Tiles': (char) => char >= 0x1F030 && char <= 0x1F09F,
+        // 'Playing Cards': (char) => char >= 0x1F0A0 && char <= 0x1F0FF,
+        // 'Enclosed Alphanumeric Supplement': (char) => char >= 0x1F100 && char <= 0x1F1FF,
+        // 'Enclosed Ideographic Supplement': (char) => char >= 0x1F200 && char <= 0x1F2FF,
+        // 'Miscellaneous Symbols and Pictographs': (char) => char >= 0x1F300 && char <= 0x1F5FF,
+        // 'Emoticons': (char) => char >= 0x1F600 && char <= 0x1F64F,
+        // 'Ornamental Dingbats': (char) => char >= 0x1F650 && char <= 0x1F67F,
+        // 'Transport and Map Symbols': (char) => char >= 0x1F680 && char <= 0x1F6FF,
+        // 'Alchemical Symbols': (char) => char >= 0x1F700 && char <= 0x1F77F,
+        // 'Geometric Shapes Extended': (char) => char >= 0x1F780 && char <= 0x1F7FF,
+        // 'Supplemental Arrows-C': (char) => char >= 0x1F800 && char <= 0x1F8FF,
+        // 'Supplemental Symbols and Pictographs': (char) => char >= 0x1F900 && char <= 0x1F9FF,
+        // 'Chess Symbols': (char) => char >= 0x1FA00 && char <= 0x1FA6F,
+        // 'Symbols and Pictographs Extended-A': (char) => char >= 0x1FA70 && char <= 0x1FAFF,
+        // 'CJK Unified Ideographs Extension B': (char) => char >= 0x20000 && char <= 0x2A6DF,
+        // 'CJK Unified Ideographs Extension C': (char) => char >= 0x2A700 && char <= 0x2B73F,
+        // 'CJK Unified Ideographs Extension D': (char) => char >= 0x2B740 && char <= 0x2B81F,
+        // 'CJK Unified Ideographs Extension E': (char) => char >= 0x2B820 && char <= 0x2CEAF,
+        // 'CJK Unified Ideographs Extension F': (char) => char >= 0x2CEB0 && char <= 0x2EBEF,
+        // 'CJK Compatibility Ideographs Supplement': (char) => char >= 0x2F800 && char <= 0x2FA1F,
+        // 'Tags': (char) => char >= 0xE0000 && char <= 0xE007F,
+        // 'Variation Selectors Supplement': (char) => char >= 0xE0100 && char <= 0xE01EF,
+        // 'Supplementary Private Use Area-A': (char) => char >= 0xF0000 && char <= 0xFFFFF,
+        // 'Supplementary Private Use Area-B': (char) => char >= 0x100000 && char <= 0x10FFFF,
+    };
+
+    var ScriptDetection = function ScriptDetection() {
+    };
+
+    ScriptDetection.allowsVerticalWritingMode = function(chars){
+        for (var i = 0, list = chars; i < list.length; i += 1) {
+            var char = list[i];
+
+            if (charHasUprightVerticalOrientation(char.charCodeAt(0))) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    ScriptDetection.allowsLetterSpacing = function(chars){
+        for (var i = 0, list = chars; i < list.length; i += 1) {
+            var char = list[i];
+
+            if (!charAllowsLetterSpacing(char.charCodeAt(0))) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    function charAllowsLetterSpacing(char) {
+        if (unicodeBlockLookup['Arabic'](char)) {
+            return false;
+        }
+        if (unicodeBlockLookup['Arabic Supplement'](char)) {
+            return false;
+        }
+        if (unicodeBlockLookup['Arabic Extended-A'](char)) {
+            return false;
+        }
+        if (unicodeBlockLookup['Arabic Presentation Forms-A'](char)) {
+            return false;
+        }
+        if (unicodeBlockLookup['Arabic Presentation Forms-B'](char)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // The following logic comes from
+    // <http://www.unicode.org/Public/12.0.0/ucd/VerticalOrientation.txt>.
+    // Keep it synchronized with
+    // <http://www.unicode.org/Public/UCD/latest/ucd/VerticalOrientation.txt>.
+    // The data file denotes with “U” or “Tu” any codepoint that may be drawn
+    // upright in vertical text but does not distinguish between upright and
+    // “neutral” characters.
+
+    // Blocks in the Unicode supplementary planes are excluded from this module due
+    // to <https://github.com/mapbox/mapbox-gl/issues/29>.
+
+    /**
+     * Returns true if the given Unicode codepoint identifies a character with
+     * upright orientation.
+     *
+     * A character has upright orientation if it is drawn upright (unrotated)
+     * whether the line is oriented horizontally or vertically, even if both
+     * adjacent characters can be rotated. For example, a Chinese character is
+     * always drawn upright. An uprightly oriented character causes an adjacent
+     * “neutral” character to be drawn upright as well.
+     * @private
+     */
+    function charHasUprightVerticalOrientation(char) {
+        if (char === 0x02EA /* modifier letter yin departing tone mark */ ||
+            char === 0x02EB /* modifier letter yang departing tone mark */) {
+            return true;
+        }
+
+        // Return early for characters outside all ranges whose characters remain
+        // upright in vertical writing mode.
+        if (char < 0x1100) {
+            return false;
+        }
+
+        if (unicodeBlockLookup['Bopomofo Extended'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Bopomofo'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Compatibility Forms'](char)) {
+            if (!((char >= 0xFE49 /* dashed overline */ && char <= 0xFE4F) /* wavy low line */)) {
+                return true;
+            }
+        }
+        if (unicodeBlockLookup['CJK Compatibility Ideographs'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Compatibility'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Radicals Supplement'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Strokes'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Symbols and Punctuation'](char)) {
+            if (!((char >= 0x3008 /* left angle bracket */ && char <= 0x3011) /* right black lenticular bracket */) && !((char >= 0x3014 /* left tortoise shell bracket */ && char <= 0x301F) /* low double prime quotation mark */) &&
+                char !== 0x3030 /* wavy dash */) {
+                return true;
+            }
+        }
+        if (unicodeBlockLookup['CJK Unified Ideographs Extension A'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['CJK Unified Ideographs'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Enclosed CJK Letters and Months'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hangul Compatibility Jamo'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hangul Jamo Extended-A'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hangul Jamo Extended-B'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hangul Jamo'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hangul Syllables'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Hiragana'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Ideographic Description Characters'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Kanbun'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Kangxi Radicals'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Katakana Phonetic Extensions'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Katakana'](char)) {
+            if (char !== 0x30FC /* katakana-hiragana prolonged sound mark */) {
+                return true;
+            }
+        }
+        if (unicodeBlockLookup['Halfwidth and Fullwidth Forms'](char)) {
+            if (char !== 0xFF08 /* fullwidth left parenthesis */ &&
+                char !== 0xFF09 /* fullwidth right parenthesis */ &&
+                char !== 0xFF0D /* fullwidth hyphen-minus */ && !((char >= 0xFF1A /* fullwidth colon */ && char <= 0xFF1E) /* fullwidth greater-than sign */) &&
+                char !== 0xFF3B /* fullwidth left square bracket */ &&
+                char !== 0xFF3D /* fullwidth right square bracket */ &&
+                char !== 0xFF3F /* fullwidth low line */ && !(char >= 0xFF5B /* fullwidth left curly bracket */ && char <= 0xFFDF) &&
+                char !== 0xFFE3 /* fullwidth macron */ && !(char >= 0xFFE8 /* halfwidth forms light vertical */ && char <= 0xFFEF)) {
+                return true;
+            }
+        }
+        if (unicodeBlockLookup['Small Form Variants'](char)) {
+            if (!((char >= 0xFE58 /* small em dash */ && char <= 0xFE5E) /* small right tortoise shell bracket */) && !((char >= 0xFE63 /* small hyphen-minus */ && char <= 0xFE66) /* small equals sign */)) {
+                return true;
+            }
+        }
+        if (unicodeBlockLookup['Unified Canadian Aboriginal Syllabics'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Unified Canadian Aboriginal Syllabics Extended'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Vertical Forms'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Yijing Hexagram Symbols'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Yi Syllables'](char)) {
+            return true;
+        }
+        if (unicodeBlockLookup['Yi Radicals'](char)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function charInRTLScript(char) {
+        // Main blocks for Hebrew, Arabic, Thaana and other RTL scripts
+        return (char >= 0x0590 && char <= 0x08FF) ||
+            unicodeBlockLookup['Arabic Presentation Forms-A'](char) ||
+            unicodeBlockLookup['Arabic Presentation Forms-B'](char);
+    }
+
+    ScriptDetection.stringContainsRTLText = function(chars){
+        for (var i = 0, list = chars; i < list.length; i += 1) {
+            var char = list[i];
+
+            if (charInRTLScript(char.charCodeAt(0))) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    var vectorTileFeatureTypes$2 = ['Unknown', 'Point', 'LineString', 'Polygon'];
+
+    // Opacity arrays are frequently updated but don't contain a lot of information, so we pack them
+    // tight. Each Uint32 is actually four duplicate Uint8s for the four corners of a glyph
+    // 7 bits are for the current opacity, and the lowest bit is the target opacity
+
+    // actually defined in symbol_attributes.js
+    // const placementOpacityAttributes = [
+    //     { name: 'a_fade_opacity', components: 1, type: 'Uint32' }
+    // ];
+    var shaderOpacityAttributes = [
+        {name: 'a_fade_opacity', components: 1, type: 'Uint8', offset: 0}
+    ];
+
+    function addVertex$1(array, anchorX, anchorY, ox, oy, tx, ty, sizeVertex, isSDF, pixelOffsetX, pixelOffsetY, minFontScaleX, minFontScaleY) {
+        var aSizeX = sizeVertex ? Math.min(MAX_PACKED_SIZE, Math.round(sizeVertex[0])) : 0;
+        var aSizeY = sizeVertex ? Math.min(MAX_PACKED_SIZE, Math.round(sizeVertex[1])) : 0;
+        array.emplaceBack(
+            // a_pos_offset
+            anchorX,
+            anchorY,
+            Math.round(ox * 32),
+            Math.round(oy * 32),
+
+            // a_data
+            tx, // x coordinate of symbol on glyph atlas texture
+            ty, // y coordinate of symbol on glyph atlas texture
+            (aSizeX << 1) + (isSDF ? 1 : 0),
+            aSizeY,
+            pixelOffsetX * 16,
+            pixelOffsetY * 16,
+            minFontScaleX * 256,
+            minFontScaleY * 256
+        );
+    }
+
+    function addDynamicAttributes(dynamicLayoutVertexArray, p, angle) {
+        dynamicLayoutVertexArray.emplaceBack(p.x, p.y, angle);
+        dynamicLayoutVertexArray.emplaceBack(p.x, p.y, angle);
+        dynamicLayoutVertexArray.emplaceBack(p.x, p.y, angle);
+        dynamicLayoutVertexArray.emplaceBack(p.x, p.y, angle);
+    }
+
+    function containsRTLText(formattedText) {
+        for (var i = 0, list = formattedText.sections; i < list.length; i += 1) {
+            var section = list[i];
+
+            if (ScriptDetection.stringContainsRTLText(section.text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var SymbolBuffers = function SymbolBuffers(programConfigurations) {
+        this.layoutVertexArray = new StructArrayLayout4i4ui4i24();
+        this.indexArray = new StructArrayLayout3ui6();
+        this.programConfigurations = programConfigurations;
+        this.segments = new SegmentVector();
+        this.dynamicLayoutVertexArray = new StructArrayLayout3f12();
+        this.opacityVertexArray = new StructArrayLayout1ul4();
+        this.placedSymbolArray = new PlacedSymbolArray();
+    };
+
+    SymbolBuffers.prototype.upload = function upload(context, dynamicIndexBuffer, upload$1, update) {
+        if (upload$1) {
+            this.layoutVertexBuffer = context.createVertexBuffer(this.layoutVertexArray, SymbolAttributes.symbolLayoutAttributes.members);
+            this.indexBuffer = context.createIndexBuffer(this.indexArray, dynamicIndexBuffer);
+            this.dynamicLayoutVertexBuffer = context.createVertexBuffer(this.dynamicLayoutVertexArray, SymbolAttributes.dynamicLayoutAttributes.members, true);
+            this.opacityVertexBuffer = context.createVertexBuffer(this.opacityVertexArray, shaderOpacityAttributes, true);
+            // This is a performance hack so that we can write to opacityVertexArray with uint32s
+            // even though the shaders read uint8s
+            this.opacityVertexBuffer.itemSize = 1;
+        }
+        if (upload$1 || update) {
+            this.programConfigurations.upload(context);
+        }
+    };
+
+    SymbolBuffers.prototype.destroy = function destroy() {
+        if (!this.layoutVertexBuffer) {
+            return;
+        }
+        this.layoutVertexBuffer.destroy();
+        this.indexBuffer.destroy();
+        this.programConfigurations.destroy();
+        this.segments.destroy();
+        this.dynamicLayoutVertexBuffer.destroy();
+        this.opacityVertexBuffer.destroy();
+    };
+
+    SymbolBuffers.prototype.clear = function clear() {
+
+    };
+
+    WebWorkerTransfer.register('SymbolBuffers', SymbolBuffers);
+
+    var CollisionBuffers = function CollisionBuffers(LayoutArray, layoutAttributes, IndexArray) {
+        this.layoutVertexArray = new LayoutArray();
+        this.layoutAttributes = layoutAttributes;
+        this.indexArray = new IndexArray();
+        this.segments = new SegmentVector();
+        this.collisionVertexArray = new StructArrayLayout2ub2f12();
+    };
+
+    CollisionBuffers.prototype.upload = function upload(context) {
+        this.layoutVertexBuffer = context.createVertexBuffer(this.layoutVertexArray, this.layoutAttributes);
+        this.indexBuffer = context.createIndexBuffer(this.indexArray);
+        this.collisionVertexBuffer = context.createVertexBuffer(this.collisionVertexArray, collisionVertexAttributes.members, true);
+    };
+
+    CollisionBuffers.prototype.destroy = function destroy() {
+        if (!this.layoutVertexBuffer) {
+            return;
+        }
+        this.layoutVertexBuffer.destroy();
+        this.indexBuffer.destroy();
+        this.segments.destroy();
+        this.collisionVertexBuffer.destroy();
+    };
+
+    WebWorkerTransfer.register('CollisionBuffers', CollisionBuffers);
+
+    /**
+     * Unlike other buckets, which simply implement #addFeature with type-specific
+     * logic for (essentially) triangulating feature geometries, SymbolBucket
+     * requires specialized behavior:
+     *
+     * 1. WorkerTile#parse(), the logical owner of the bucket creation process,
+     *    calls SymbolBucket#populate(), which resolves text and icon tokens on
+     *    each feature, adds each glyphs and symbols needed to the passed-in
+     *    collections options.glyphDependencies and options.iconDependencies, and
+     *    stores the feature data for use in subsequent step (this.features).
+     *
+     * 2. WorkerTile asynchronously requests from the main thread all of the glyphs
+     *    and icons needed (by this bucket and any others). When glyphs and icons
+     *    have been received, the WorkerTile creates a CollisionIndex and invokes:
+     *
+     * 3. performSymbolLayout(bucket, stacks, icons) perform texts shaping and
+     *    layout on a Symbol Bucket. This step populates:
+     *      `this.symbolInstances`: metadata on generated symbols
+     *      `this.collisionBoxArray`: collision data for use by foreground
+     *      `this.text`: SymbolBuffers for text symbols
+     *      `this.icons`: SymbolBuffers for icons
+     *      `this.iconCollisionBox`: Debug SymbolBuffers for icon collision boxes
+     *      `this.textCollisionBox`: Debug SymbolBuffers for text collision boxes
+     *      `this.iconCollisionCircle`: Debug SymbolBuffers for icon collision circles
+     *      `this.textCollisionCircle`: Debug SymbolBuffers for text collision circles
+     *    The results are sent to the foreground for rendering
+     *
+     * 4. performSymbolPlacement(bucket, collisionIndex) is run on the foreground,
+     *    and uses the CollisionIndex along with current camera settings to determine
+     *    which symbols can actually show on the map. Collided symbols are hidden
+     *    using a dynamic "OpacityVertexArray".
+     *
+     * @private
+     */
+    var SymbolBucket = function SymbolBucket(options) {
+        this.collisionBoxArray = options.collisionBoxArray;
+        this.zoom = options.zoom;
+        this.overscaling = options.overscaling;
+        this.layers = options.layers;
+        this.layerIds = this.layers.map(function (layer) {
+            return layer.id;
+        });
+        this.index = options.index;
+        this.pixelRatio = options.pixelRatio;
+        this.sourceLayerIndex = options.sourceLayerIndex;
+        this.hasPattern = false;
+        this.hasPaintOverrides = false;
+        this.hasRTLText = false;
+
+        var layer = this.layers[0];
+        var unevaluatedLayoutValues = layer._unevaluatedLayout._values;
+
+        this.textSizeData = symbolSize.getSizeData(this.zoom, unevaluatedLayoutValues['text-size']);
+        this.iconSizeData = symbolSize.getSizeData(this.zoom, unevaluatedLayoutValues['icon-size']);
+
+        var layout = this.layers[0].layout;
+        var sortKey = layout.get('symbol-sort-key');
+        var zOrder = layout.get('symbol-z-order');
+        this.sortFeaturesByKey = zOrder !== 'viewport-y' && sortKey.constantOr(1) !== undefined;
+        var zOrderByViewportY = zOrder === 'viewport-y' || (zOrder === 'auto' && !this.sortFeaturesByKey);
+        this.sortFeaturesByY = zOrderByViewportY && (layout.get('text-allow-overlap') || layout.get('icon-allow-overlap') ||
+            layout.get('text-ignore-placement') || layout.get('icon-ignore-placement'));
+
+        if (layout.get('symbol-placement') === 'point') {
+            this.writingModes = layout.get('text-writing-mode').map(function (wm) {
+                return Shaping.WritingMode[wm];
+            });
+        }
+
+        this.stateDependentLayerIds = this.layers.filter(function (l) {
+            return l.isStateDependent();
+        }).map(function (l) {
+                return l.id;
+            });
+
+        this.sourceID = options.sourceID;
+    };
+
+    SymbolBucket.prototype.createArrays = function createArrays() {
+    //        var layout = this.layers[0].layout;
+    //        //this.hasPaintOverrides = SymbolStyleLayer.hasPaintOverrides(layout);
+    //        this.hasPaintOverrides = false;
+    //
+    //        this.text = new SymbolBuffers(new ProgramConfigurationSet(SymbolAttributes.symbolLayoutAttributes.members, this.layers, this.zoom, function (property) {
+    //            return /^text/.test(property);
+    //        }));
+    //        this.icon = new SymbolBuffers(new ProgramConfigurationSet(SymbolAttributes.symbolLayoutAttributes.members, this.layers, this.zoom, function (property) {
+    //            return /^icon/.test(property);
+    //        }));
+    //
+    //        this.textCollisionBox = new CollisionBuffers(StructArrayLayout2i2i2i12, SymbolAttributes.collisionBoxLayout.members, StructArrayLayout2ui4);
+    //        this.iconCollisionBox = new CollisionBuffers(StructArrayLayout2i2i2i12, SymbolAttributes.collisionBoxLayout.members, StructArrayLayout2ui4);
+    //        this.textCollisionCircle = new CollisionBuffers(StructArrayLayout2i2i2i12, SymbolAttributes.collisionCircleLayout.members, StructArrayLayout3ui6);
+    //        this.iconCollisionCircle = new CollisionBuffers(StructArrayLayout2i2i2i12, SymbolAttributes.collisionCircleLayout.members, StructArrayLayout3ui6);
+    //
+    //        this.glyphOffsetArray = new GlyphOffsetArray();
+    //        this.lineVertexArray = new SymbolLineVertexArray();
+    //        this.symbolInstances = new SymbolInstanceArray();
+    };
+
+    SymbolBucket.prototype.calculateGlyphDependencies = function calculateGlyphDependencies(text, stack, textAlongLine, allowVerticalPlacement, doesAllowVerticalWritingMode) {
+        for (var i = 0; i < text.length; i++) {
+            stack[text.charCodeAt(i)] = true;
+        }
+    };
+
+    SymbolBucket.prototype.populate = function populate(features, options) {
+        var layer = this.layers[0];
+        var layout = layer.layout;
+
+        var textFont = layout.get('text-font');
+        var textField = layout.get('text-field');
+        var iconImage = layout.get('icon-image');
+        var hasText =
+            (textField.value.kind !== 'constant' ||
+                (textField.value.value instanceof Formatted$1 && !textField.value.value.isEmpty()) ||
+                textField.value.value.toString().length > 0) &&
+                (textFont.value.kind !== 'constant' || textFont.value.value.length > 0);
+        // we should always resolve the icon-image value if the property was defined in the style
+        // this allows us to fire the styleimagemissing event if image evaluation returns null
+        // the only way to distinguish between null returned from a coalesce statement with no valid images
+        // and null returned because icon-image wasn't defined is to check whether or not iconImage.parameters is an empty object
+        var hasIcon = (iconImage.value.kind !== 'constant' || !!iconImage.value.value) && Object.keys(iconImage.parameters).length > 0;
+        var symbolSortKey = layout.get('symbol-sort-key');
+
+        this.features = [];
+
+        if (!hasText && !hasIcon) {
+            return;
+        }
+
+        var icons = options.iconDependencies;
+        var stacks = options.glyphDependencies;
+        var availableImages = options.availableImages;
+        var globalProperties = new EvaluationParameters$1(this.zoom);
+
+        for (var i$1 = 0, list$1 = features; i$1 < list$1.length; i$1 += 1) {
+            var ref = list$1[i$1];
+            var feature = ref.feature;
+            var index = ref.index;
+            var sourceLayerIndex = ref.sourceLayerIndex;
+
+            if (!layer._featureFilter(globalProperties, feature)) {
+                continue;
+            }
+
+            var text = (void 0);
+            if (hasText) {
+                // Expression evaluation will automatically coerce to Formatted
+                // but plain string token evaluation skips that pathway so do the
+                // conversion here.
+                var resolvedTokens = layer.getValueAndResolveTokens('text-field', feature, availableImages);
+                var formattedText = Formatted$1.factory(resolvedTokens);
+                if (containsRTLText(formattedText)) {
+                    this.hasRTLText = true;
+                }
+                if (
+                    !this.hasRTLText || // non-rtl text so can proceed safely
+                        getRTLTextPluginStatus() === 'unavailable' || // We don't intend to lazy-load the rtl text plugin, so proceed with incorrect shaping
+                        this.hasRTLText && plugin.isParsed() // Use the rtlText plugin to shape text
+                    ) {
+                    text = transformText$1(formattedText, layer, feature);
+                }
+            }
+
+            var icon = (void 0);
+            if (hasIcon) {
+                // Expression evaluation will automatically coerce to Image
+                // but plain string token evaluation skips that pathway so do the
+                // conversion here.
+                var resolvedTokens$1 = layer.getValueAndResolveTokens('icon-image', feature, availableImages);
+                if (resolvedTokens$1 instanceof ResolvedImage$1) {
+                    icon = resolvedTokens$1;
+                } else {
+                    icon = ResolvedImage$1.fromString(resolvedTokens$1);
+                }
+            }
+
+            if (!text && !icon) {
+                continue;
+            }
+
+            var sortKey = this.sortFeaturesByKey ?
+                symbolSortKey.evaluate(feature, {}) :
+                undefined;
+
+            var symbolFeature = {
+                text: text,
+                icon: icon,
+                index: index,
+                sourceLayerIndex: sourceLayerIndex,
+                geometry: loadGeometry(feature),
+                properties: feature.properties,
+                type: vectorTileFeatureTypes$2[feature.type],
+                sortKey: sortKey
+            };
+            if (typeof feature.id !== 'undefined') {
+                symbolFeature.id = feature.id;
+            }
+            this.features.push(symbolFeature);
+
+            if (icon) {
+                icons[icon.name] = true;
+            }
+
+            if (text) {
+                var fontStack = textFont.evaluate(feature, {}).join(',');
+                var textAlongLine = layout.get('text-rotation-alignment') === 'map' && layout.get('symbol-placement') !== 'point';
+                this.allowVerticalPlacement = this.writingModes && this.writingModes.indexOf(Shaping.WritingMode.vertical) >= 0;
+                for (var i = 0, list = text.sections; i < list.length; i += 1) {
+                    var section = list[i];
+
+                    if (!section.image) {
+                        var doesAllowVerticalWritingMode = ScriptDetection.allowsVerticalWritingMode(text.toString());
+                        var sectionFont = section.fontStack || fontStack;
+                        var sectionStack = stacks[sectionFont] = stacks[sectionFont] || {};
+                        this.calculateGlyphDependencies(section.text, sectionStack, textAlongLine, this.allowVerticalPlacement, doesAllowVerticalWritingMode);
+                    } else {
+                        // Add section image to the list of dependencies.
+                        icons[section.image.name] = true;
+                    }
+                }
+            }
+        }
+
+        if (layout.get('symbol-placement') === 'line') {
+            // Merge adjacent lines with the same text to improve labelling.
+            // It's better to place labels on one long line than on many short segments.
+            this.features = mergeLines(this.features);
+        }
+
+        if (this.sortFeaturesByKey) {
+            this.features.sort(function (a, b) {
+                // a.sortKey is always a number when sortFeaturesByKey is true
+                return ((a.sortKey   )      ) - ((b.sortKey   )      );
+            });
+        }
+    };
+
+    SymbolBucket.prototype.update = function update(states, vtLayer, imagePositions) {
+        if (!this.stateDependentLayers.length) {
+            return;
+        }
+        this.text.programConfigurations.updatePaintArrays(states, vtLayer, this.layers, imagePositions);
+        this.icon.programConfigurations.updatePaintArrays(states, vtLayer, this.layers, imagePositions);
+    };
+
+    SymbolBucket.prototype.isEmpty = function isEmpty() {
+        // When the bucket encounters only rtl-text but the plugin isnt loaded, no symbol instances will be created.
+        // In order for the bucket to be serialized, and not discarded as an empty bucket both checks are necessary.
+        return this.symbolInstances.length === 0 && !this.hasRTLText;
+    };
+
+    SymbolBucket.prototype.uploadPending = function uploadPending() {
+        return !this.uploaded || this.text.programConfigurations.needsUpload || this.icon.programConfigurations.needsUpload;
+    };
+
+    SymbolBucket.prototype.upload = function upload(context) {
+    //        if (!this.uploaded) {
+    //            this.textCollisionBox.upload(context);
+    //            this.iconCollisionBox.upload(context);
+    //            this.textCollisionCircle.upload(context);
+    //            this.iconCollisionCircle.upload(context);
+    //        }
+    //        this.text.upload(context, this.sortFeaturesByY, !this.uploaded, this.text.programConfigurations.needsUpload);
+    //        this.icon.upload(context, this.sortFeaturesByY, !this.uploaded, this.icon.programConfigurations.needsUpload);
+    //        this.uploaded = true;
+    };
+
+    SymbolBucket.prototype.destroy = function destroy() {
+    //        this.text.destroy();
+    //        this.icon.destroy();
+    //        this.textCollisionBox.destroy();
+    //        this.iconCollisionBox.destroy();
+    //        this.textCollisionCircle.destroy();
+    //        this.iconCollisionCircle.destroy();
+    };
+
+    SymbolBucket.prototype.clear = function clear() {
+    };
+
+    SymbolBucket.prototype.addToLineVertexArray = function addToLineVertexArray(anchor, line) {
+        var lineStartIndex = this.lineVertexArray.length;
+        if (anchor.segment !== undefined) {
+            var sumForwardLength = anchor.dist(line[anchor.segment + 1]);
+            var sumBackwardLength = anchor.dist(line[anchor.segment]);
+            var vertices = {};
+            for (var i = anchor.segment + 1; i < line.length; i++) {
+                vertices[i] = {x: line[i].x, y: line[i].y, tileUnitDistanceFromAnchor: sumForwardLength};
+                if (i < line.length - 1) {
+                    sumForwardLength += line[i + 1].dist(line[i]);
+                }
+            }
+            for (var i$1 = anchor.segment || 0; i$1 >= 0; i$1--) {
+                vertices[i$1] = {x: line[i$1].x, y: line[i$1].y, tileUnitDistanceFromAnchor: sumBackwardLength};
+                if (i$1 > 0) {
+                    sumBackwardLength += line[i$1 - 1].dist(line[i$1]);
+                }
+            }
+            for (var i$2 = 0; i$2 < line.length; i$2++) {
+                var vertex = vertices[i$2];
+                this.lineVertexArray.emplaceBack(vertex.x, vertex.y, vertex.tileUnitDistanceFromAnchor);
+            }
+        }
+        return {
+            lineStartIndex: lineStartIndex,
+            lineLength: this.lineVertexArray.length - lineStartIndex
+        };
+    };
+
+    SymbolBucket.prototype.addSymbols = function addSymbols(arrays, quads, sizeVertex, lineOffset, alongLine, feature, writingMode, labelAnchor, lineStartIndex, lineLength, associatedIconIndex) {
+        var this$1 = this;
+
+        var indexArray = arrays.indexArray;
+        var layoutVertexArray = arrays.layoutVertexArray;
+        var dynamicLayoutVertexArray = arrays.dynamicLayoutVertexArray;
+
+        var segment = arrays.segments.prepareSegment(4 * quads.length, arrays.layoutVertexArray, arrays.indexArray, feature.sortKey);
+        var glyphOffsetArrayStart = this.glyphOffsetArray.length;
+        var vertexStartIndex = segment.vertexLength;
+
+        var angle = (this.allowVerticalPlacement && writingMode === Shaping.WritingMode.vertical) ? Math.PI / 2 : 0;
+
+        var addSymbol = function (symbol) {
+            var tl = symbol.tl,
+                tr = symbol.tr,
+                bl = symbol.bl,
+                br = symbol.br,
+                tex = symbol.tex,
+                pixelOffsetTL = symbol.pixelOffsetTL,
+                pixelOffsetBR = symbol.pixelOffsetBR,
+                mfsx = symbol.minFontScaleX,
+                mfsy = symbol.minFontScaleY;
+
+            var index = segment.vertexLength;
+
+            var y = symbol.glyphOffset[1];
+            addVertex$1(layoutVertexArray, labelAnchor.x, labelAnchor.y, tl.x, y + tl.y, tex.x, tex.y, sizeVertex, symbol.isSDF, pixelOffsetTL.x, pixelOffsetTL.y, mfsx, mfsy);
+            addVertex$1(layoutVertexArray, labelAnchor.x, labelAnchor.y, tr.x, y + tr.y, tex.x + tex.w, tex.y, sizeVertex, symbol.isSDF, pixelOffsetBR.x, pixelOffsetTL.y, mfsx, mfsy);
+            addVertex$1(layoutVertexArray, labelAnchor.x, labelAnchor.y, bl.x, y + bl.y, tex.x, tex.y + tex.h, sizeVertex, symbol.isSDF, pixelOffsetTL.x, pixelOffsetBR.y, mfsx, mfsy);
+            addVertex$1(layoutVertexArray, labelAnchor.x, labelAnchor.y, br.x, y + br.y, tex.x + tex.w, tex.y + tex.h, sizeVertex, symbol.isSDF, pixelOffsetBR.x, pixelOffsetBR.y, mfsx, mfsy);
+
+            addDynamicAttributes(dynamicLayoutVertexArray, labelAnchor, angle);
+
+            indexArray.emplaceBack(index, index + 1, index + 2);
+            indexArray.emplaceBack(index + 1, index + 2, index + 3);
+
+            segment.vertexLength += 4;
+            segment.primitiveLength += 2;
+
+            this$1.glyphOffsetArray.emplaceBack(symbol.glyphOffset[0]);
+        };
+
+        if (feature.text && feature.text.sections) {
+            var sections = feature.text.sections;
+
+            if (this.hasPaintOverrides) {
+                var currentSectionIndex;
+                var populatePaintArrayForSection = function (sectionIndex, lastSection) {
+                    if (currentSectionIndex !== undefined && (currentSectionIndex !== sectionIndex || lastSection)) {
+                        arrays.programConfigurations.populatePaintArrays(arrays.layoutVertexArray.length, feature, feature.index, {}, sections[currentSectionIndex]);
+                    }
+                    currentSectionIndex = sectionIndex;
+                };
+
+                for (var i = 0, list = quads; i < list.length; i += 1) {
+                    var symbol = list[i];
+
+                    populatePaintArrayForSection(symbol.sectionIndex, false);
+                    addSymbol(symbol);
+                }
+
+                // Populate paint arrays for the last section.
+                populatePaintArrayForSection(currentSectionIndex, true);
+            } else {
+                for (var i$1 = 0, list$1 = quads; i$1 < list$1.length; i$1 += 1) {
+                    var symbol$1 = list$1[i$1];
+
+                    addSymbol(symbol$1);
+                }
+                arrays.programConfigurations.populatePaintArrays(arrays.layoutVertexArray.length, feature, feature.index, {}, sections[0]);
+            }
+
+        } else {
+            for (var i$2 = 0, list$2 = quads; i$2 < list$2.length; i$2 += 1) {
+                var symbol$2 = list$2[i$2];
+
+                addSymbol(symbol$2);
+            }
+            arrays.programConfigurations.populatePaintArrays(arrays.layoutVertexArray.length, feature, feature.index, {});
+        }
+
+        arrays.placedSymbolArray.emplaceBack(labelAnchor.x, labelAnchor.y,
+            glyphOffsetArrayStart, this.glyphOffsetArray.length - glyphOffsetArrayStart, vertexStartIndex,
+            lineStartIndex, lineLength, (labelAnchor.segment   ),
+            sizeVertex ? sizeVertex[0] : 0, sizeVertex ? sizeVertex[1] : 0,
+            lineOffset[0], lineOffset[1],
+            writingMode,
+            // placedOrientation is null initially; will be updated to horizontal(1)/vertical(2) if placed
+            0,
+            (false   ),
+            // The crossTileID is only filled/used on the foreground for dynamic text anchors
+            0,
+            associatedIconIndex
+        );
+    };
+
+    SymbolBucket.prototype._addCollisionDebugVertex = function _addCollisionDebugVertex(layoutVertexArray, collisionVertexArray, point, anchorX, anchorY, extrude) {
+        collisionVertexArray.emplaceBack(0, 0);
+        return layoutVertexArray.emplaceBack(
+            // pos
+            point.x,
+            point.y,
+            // a_anchor_pos
+            anchorX,
+            anchorY,
+            // extrude
+            Math.round(extrude.x),
+            Math.round(extrude.y));
+    };
+
+    SymbolBucket.prototype.addCollisionDebugVertices = function addCollisionDebugVertices(x1, y1, x2, y2, arrays, boxAnchorPoint, symbolInstance, isCircle) {
+        var segment = arrays.segments.prepareSegment(4, arrays.layoutVertexArray, arrays.indexArray);
+        var index = segment.vertexLength;
+
+        var layoutVertexArray = arrays.layoutVertexArray;
+        var collisionVertexArray = arrays.collisionVertexArray;
+
+        var anchorX = symbolInstance.anchorX;
+        var anchorY = symbolInstance.anchorY;
+
+        this._addCollisionDebugVertex(layoutVertexArray, collisionVertexArray, boxAnchorPoint, anchorX, anchorY, new pointGeometry(x1, y1));
+        this._addCollisionDebugVertex(layoutVertexArray, collisionVertexArray, boxAnchorPoint, anchorX, anchorY, new pointGeometry(x2, y1));
+        this._addCollisionDebugVertex(layoutVertexArray, collisionVertexArray, boxAnchorPoint, anchorX, anchorY, new pointGeometry(x2, y2));
+        this._addCollisionDebugVertex(layoutVertexArray, collisionVertexArray, boxAnchorPoint, anchorX, anchorY, new pointGeometry(x1, y2));
+
+        segment.vertexLength += 4;
+        if (isCircle) {
+            var indexArray = (arrays.indexArray   );
+            indexArray.emplaceBack(index, index + 1, index + 2);
+            indexArray.emplaceBack(index, index + 2, index + 3);
+
+            segment.primitiveLength += 2;
+        } else {
+            var indexArray$1 = (arrays.indexArray   );
+            indexArray$1.emplaceBack(index, index + 1);
+            indexArray$1.emplaceBack(index + 1, index + 2);
+            indexArray$1.emplaceBack(index + 2, index + 3);
+            indexArray$1.emplaceBack(index + 3, index);
+
+            segment.primitiveLength += 4;
+        }
+    };
+
+    SymbolBucket.prototype.addDebugCollisionBoxes = function addDebugCollisionBoxes(startIndex, endIndex, symbolInstance, isText) {
+        for (var b = startIndex; b < endIndex; b++) {
+            var box = (this.collisionBoxArray.get(b)   );
+            var x1 = box.x1;
+            var y1 = box.y1;
+            var x2 = box.x2;
+            var y2 = box.y2;
+
+            // If the radius > 0, this collision box is actually a circle
+            // The data we add to the buffers is exactly the same, but we'll render with a different shader.
+            var isCircle = box.radius > 0;
+            this.addCollisionDebugVertices(x1, y1, x2, y2, isCircle ?
+                (isText ? this.textCollisionCircle : this.iconCollisionCircle) : (isText ? this.textCollisionBox : this.iconCollisionBox),
+                box.anchorPoint, symbolInstance, isCircle);
+        }
+    };
+
+    SymbolBucket.prototype.generateCollisionDebugBuffers = function generateCollisionDebugBuffers() {
+        for (var i = 0; i < this.symbolInstances.length; i++) {
+            var symbolInstance = this.symbolInstances.get(i);
+            this.addDebugCollisionBoxes(symbolInstance.textBoxStartIndex, symbolInstance.textBoxEndIndex, symbolInstance, true);
+            this.addDebugCollisionBoxes(symbolInstance.verticalTextBoxStartIndex, symbolInstance.verticalTextBoxEndIndex, symbolInstance, true);
+            this.addDebugCollisionBoxes(symbolInstance.iconBoxStartIndex, symbolInstance.iconBoxEndIndex, symbolInstance, false);
+            this.addDebugCollisionBoxes(symbolInstance.verticalIconBoxStartIndex, symbolInstance.verticalIconBoxEndIndex, symbolInstance, false);
+        }
+    };
+
+    // These flat arrays are meant to be quicker to iterate over than the source
+    // CollisionBoxArray
+    SymbolBucket.prototype._deserializeCollisionBoxesForSymbol = function _deserializeCollisionBoxesForSymbol(collisionBoxArray, textStartIndex, textEndIndex, verticalTextStartIndex, verticalTextEndIndex, iconStartIndex, iconEndIndex, verticalIconStartIndex, verticalIconEndIndex) {
+
+        var collisionArrays = {};
+        for (var k = textStartIndex; k < textEndIndex; k++) {
+            var box = (collisionBoxArray.get(k)   );
+            if (box.radius === 0) {
+                collisionArrays.textBox = {x1: box.x1, y1: box.y1, x2: box.x2, y2: box.y2, anchorPointX: box.anchorPointX, anchorPointY: box.anchorPointY};
+                collisionArrays.textFeatureIndex = box.featureIndex;
+                break; // Only one box allowed per instance
+            } else {
+                if (!collisionArrays.textCircles) {
+                    collisionArrays.textCircles = [];
+                    collisionArrays.textFeatureIndex = box.featureIndex;
+                }
+                var used = 1; // May be updated at collision detection time
+                collisionArrays.textCircles.push(box.anchorPointX, box.anchorPointY, box.radius, box.signedDistanceFromAnchor, used);
+            }
+        }
+        for (var k$1 = verticalTextStartIndex; k$1 < verticalTextEndIndex; k$1++) {
+            var box$1 = (collisionBoxArray.get(k$1)   );
+            if (box$1.radius === 0) {
+                collisionArrays.verticalTextBox = {x1: box$1.x1, y1: box$1.y1, x2: box$1.x2, y2: box$1.y2, anchorPointX: box$1.anchorPointX, anchorPointY: box$1.anchorPointY};
+                collisionArrays.verticalTextFeatureIndex = box$1.featureIndex;
+                break; // Only one box allowed per instance
+            }
+        }
+        for (var k$2 = iconStartIndex; k$2 < iconEndIndex; k$2++) {
+            // An icon can only have one box now, so this indexing is a bit vestigial...
+            var box$2 = (collisionBoxArray.get(k$2)   );
+            if (box$2.radius === 0) {
+                collisionArrays.iconBox = {x1: box$2.x1, y1: box$2.y1, x2: box$2.x2, y2: box$2.y2, anchorPointX: box$2.anchorPointX, anchorPointY: box$2.anchorPointY};
+                collisionArrays.iconFeatureIndex = box$2.featureIndex;
+                break; // Only one box allowed per instance
+            }
+        }
+        for (var k$3 = verticalIconStartIndex; k$3 < verticalIconEndIndex; k$3++) {
+            // An icon can only have one box now, so this indexing is a bit vestigial...
+            var box$3 = (collisionBoxArray.get(k$3)   );
+            if (box$3.radius === 0) {
+                collisionArrays.verticalIconBox = {x1: box$3.x1, y1: box$3.y1, x2: box$3.x2, y2: box$3.y2, anchorPointX: box$3.anchorPointX, anchorPointY: box$3.anchorPointY};
+                collisionArrays.verticalIconFeatureIndex = box$3.featureIndex;
+                break; // Only one box allowed per instance
+            }
+        }
+        return collisionArrays;
+    };
+
+    SymbolBucket.prototype.deserializeCollisionBoxes = function deserializeCollisionBoxes(collisionBoxArray) {
+        this.collisionArrays = [];
+        for (var i = 0; i < this.symbolInstances.length; i++) {
+            var symbolInstance = this.symbolInstances.get(i);
+            this.collisionArrays.push(this._deserializeCollisionBoxesForSymbol(
+                collisionBoxArray,
+                symbolInstance.textBoxStartIndex,
+                symbolInstance.textBoxEndIndex,
+                symbolInstance.verticalTextBoxStartIndex,
+                symbolInstance.verticalTextBoxEndIndex,
+                symbolInstance.iconBoxStartIndex,
+                symbolInstance.iconBoxEndIndex,
+                symbolInstance.verticalIconBoxStartIndex,
+                symbolInstance.verticalIconBoxEndIndex
+            ));
+        }
+    };
+
+    SymbolBucket.prototype.hasTextData = function hasTextData() {
+        return this.text.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.hasIconData = function hasIconData() {
+        return this.icon.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.hasTextCollisionBoxData = function hasTextCollisionBoxData() {
+        return this.textCollisionBox.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.hasIconCollisionBoxData = function hasIconCollisionBoxData() {
+        return this.iconCollisionBox.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.hasTextCollisionCircleData = function hasTextCollisionCircleData() {
+        return this.textCollisionCircle.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.hasIconCollisionCircleData = function hasIconCollisionCircleData() {
+        return this.iconCollisionCircle.segments.get().length > 0;
+    };
+
+    SymbolBucket.prototype.addIndicesForPlacedSymbol = function addIndicesForPlacedSymbol(iconOrText, placedSymbolIndex) {
+        var placedSymbol = iconOrText.placedSymbolArray.get(placedSymbolIndex);
+
+        var endIndex = placedSymbol.vertexStartIndex + placedSymbol.numGlyphs * 4;
+        for (var vertexIndex = placedSymbol.vertexStartIndex; vertexIndex < endIndex; vertexIndex += 4) {
+            iconOrText.indexArray.emplaceBack(vertexIndex, vertexIndex + 1, vertexIndex + 2);
+            iconOrText.indexArray.emplaceBack(vertexIndex + 1, vertexIndex + 2, vertexIndex + 3);
+        }
+    };
+
+    SymbolBucket.prototype.getSortedSymbolIndexes = function getSortedSymbolIndexes(angle) {
+        if (this.sortedAngle === angle && this.symbolInstanceIndexes !== undefined) {
+            return this.symbolInstanceIndexes;
+        }
+        var sin = Math.sin(angle);
+        var cos = Math.cos(angle);
+        var rotatedYs = [];
+        var featureIndexes = [];
+        var result = [];
+
+        for (var i = 0; i < this.symbolInstances.length; ++i) {
+            result.push(i);
+            var symbolInstance = this.symbolInstances.get(i);
+            rotatedYs.push(Math.round(sin * symbolInstance.anchorX + cos * symbolInstance.anchorY) | 0);
+            featureIndexes.push(symbolInstance.featureIndex);
+        }
+
+        result.sort(function (aIndex, bIndex) {
+            return (rotatedYs[aIndex] - rotatedYs[bIndex]) ||
+                (featureIndexes[bIndex] - featureIndexes[aIndex]);
+        });
+
+        return result;
+    };
+
+    SymbolBucket.prototype.sortFeatures = function sortFeatures(angle) {
+        var this$1 = this;
+
+        if (!this.sortFeaturesByY) {
+            return;
+        }
+        if (this.sortedAngle === angle) {
+            return;
+        }
+
+        // The current approach to sorting doesn't sort across segments so don't try.
+        // Sorting within segments separately seemed not to be worth the complexity.
+        if (this.text.segments.get().length > 1 || this.icon.segments.get().length > 1) {
+            return;
+        }
+
+        // If the symbols are allowed to overlap sort them by their vertical screen position.
+        // The index array buffer is rewritten to reference the (unchanged) vertices in the
+        // sorted order.
+
+        // To avoid sorting the actual symbolInstance array we sort an array of indexes.
+        this.symbolInstanceIndexes = this.getSortedSymbolIndexes(angle);
+        this.sortedAngle = angle;
+
+        this.text.indexArray.clear();
+        this.icon.indexArray.clear();
+
+        this.featureSortOrder = [];
+
+        for (var i$1 = 0, list = this.symbolInstanceIndexes; i$1 < list.length; i$1 += 1) {
+            var i = list[i$1];
+
+            var symbolInstance = this.symbolInstances.get(i);
+            this.featureSortOrder.push(symbolInstance.featureIndex);
+
+            [
+                symbolInstance.rightJustifiedTextSymbolIndex,
+                symbolInstance.centerJustifiedTextSymbolIndex,
+                symbolInstance.leftJustifiedTextSymbolIndex
+            ].forEach(function (index, i, array) {
+                    // Only add a given index the first time it shows up,
+                    // to avoid duplicate opacity entries when multiple justifications
+                    // share the same glyphs.
+                    if (index >= 0 && array.indexOf(index) === i) {
+                        this$1.addIndicesForPlacedSymbol(this$1.text, index);
+                    }
+                });
+
+            if (symbolInstance.verticalPlacedTextSymbolIndex >= 0) {
+                this.addIndicesForPlacedSymbol(this.text, symbolInstance.verticalPlacedTextSymbolIndex);
+            }
+
+            if (symbolInstance.placedIconSymbolIndex >= 0) {
+                this.addIndicesForPlacedSymbol(this.icon, symbolInstance.placedIconSymbolIndex);
+            }
+
+            if (symbolInstance.verticalPlacedIconSymbolIndex >= 0) {
+                this.addIndicesForPlacedSymbol(this.icon, symbolInstance.verticalPlacedIconSymbolIndex);
+            }
+        }
+
+        if (this.text.indexBuffer) {
+            this.text.indexBuffer.updateData(this.text.indexArray);
+        }
+        if (this.icon.indexBuffer) {
+            this.icon.indexBuffer.updateData(this.icon.indexArray);
+        }
+    };
+
+    WebWorkerTransfer.register('SymbolBucket', SymbolBucket, {
+        //omit: ['layers', 'collisionBoxArray', 'features', 'compareText']
+        omit: ['layers', 'collisionBoxArray', 'compareText']
+    });
+
+    // this constant is based on the size of StructArray indexes used in a symbol
+    // bucket--namely, glyphOffsetArrayStart
+    // eg the max valid UInt16 is 65,535
+    // See https://github.com/mapbox/mapbox-gl-js/issues/2907 for motivation
+    // lineStartIndex and textBoxStartIndex could potentially be concerns
+    // but we expect there to be many fewer boxes/lines than glyphs
+    SymbolBucket.MAX_GLYPHS = 65535;
+
+    SymbolBucket.addDynamicAttributes = addDynamicAttributes;
+
+    var ColorType$7 = {kind: 'color'};
+    var FormattedType$4 = {kind: 'formatted'};
+
+    var layout$7 = new Properties({
+        "symbol-placement": new DataConstantProperty(StyleSpec["layout_symbol"]["symbol-placement"]),
+        "symbol-spacing": new DataConstantProperty(StyleSpec["layout_symbol"]["symbol-spacing"]),
+        "symbol-avoid-edges": new DataConstantProperty(StyleSpec["layout_symbol"]["symbol-avoid-edges"]),
+        "symbol-sort-key": new DataDrivenProperty(StyleSpec["layout_symbol"]["symbol-sort-key"]),
+        "symbol-z-order": new DataConstantProperty(StyleSpec["layout_symbol"]["symbol-z-order"]),
+        "icon-allow-overlap": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-allow-overlap"]),
+        "icon-ignore-placement": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-ignore-placement"]),
+        "icon-optional": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-optional"]),
+        "icon-rotation-alignment": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-rotation-alignment"]),
+        "icon-size": new DataDrivenProperty(StyleSpec["layout_symbol"]["icon-size"]),
+        "icon-text-fit": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-text-fit"]),
+        "icon-text-fit-padding": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-text-fit-padding"]),
+        "icon-image": new DataDrivenProperty(StyleSpec["layout_symbol"]["icon-image"]),
+        "icon-rotate": new DataDrivenProperty(StyleSpec["layout_symbol"]["icon-rotate"]),
+        "icon-padding": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-padding"]),
+        "icon-keep-upright": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-keep-upright"]),
+        "icon-offset": new DataDrivenProperty(StyleSpec["layout_symbol"]["icon-offset"]),
+        "icon-anchor": new DataDrivenProperty(StyleSpec["layout_symbol"]["icon-anchor"]),
+        "icon-pitch-alignment": new DataConstantProperty(StyleSpec["layout_symbol"]["icon-pitch-alignment"]),
+        "text-pitch-alignment": new DataConstantProperty(StyleSpec["layout_symbol"]["text-pitch-alignment"]),
+        "text-rotation-alignment": new DataConstantProperty(StyleSpec["layout_symbol"]["text-rotation-alignment"]),
+        "text-field": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-field"]),
+        "text-font": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-font"]),
+        "text-size": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-size"]),
+        "text-max-width": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-max-width"]),
+        "text-line-height": new DataConstantProperty(StyleSpec["layout_symbol"]["text-line-height"]),
+        "text-letter-spacing": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-letter-spacing"]),
+        "text-justify": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-justify"]),
+        "text-radial-offset": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-radial-offset"]),
+        "text-variable-anchor": new DataConstantProperty(StyleSpec["layout_symbol"]["text-variable-anchor"]),
+        "text-anchor": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-anchor"]),
+        "text-max-angle": new DataConstantProperty(StyleSpec["layout_symbol"]["text-max-angle"]),
+        "text-writing-mode": new DataConstantProperty(StyleSpec["layout_symbol"]["text-writing-mode"]),
+        "text-rotate": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-rotate"]),
+        "text-padding": new DataConstantProperty(StyleSpec["layout_symbol"]["text-padding"]),
+        "text-keep-upright": new DataConstantProperty(StyleSpec["layout_symbol"]["text-keep-upright"]),
+        "text-transform": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-transform"]),
+        "text-offset": new DataDrivenProperty(StyleSpec["layout_symbol"]["text-offset"]),
+        "text-allow-overlap": new DataConstantProperty(StyleSpec["layout_symbol"]["text-allow-overlap"]),
+        "text-ignore-placement": new DataConstantProperty(StyleSpec["layout_symbol"]["text-ignore-placement"]),
+        "text-optional": new DataConstantProperty(StyleSpec["layout_symbol"]["text-optional"])
+    });
+
+
+    var paint$7 = new Properties({
+        "icon-opacity": new DataDrivenProperty(StyleSpec["paint_symbol"]["icon-opacity"]),
+        "icon-color": new DataDrivenProperty(StyleSpec["paint_symbol"]["icon-color"]),
+        "icon-halo-color": new DataDrivenProperty(StyleSpec["paint_symbol"]["icon-halo-color"]),
+        "icon-halo-width": new DataDrivenProperty(StyleSpec["paint_symbol"]["icon-halo-width"]),
+        "icon-halo-blur": new DataDrivenProperty(StyleSpec["paint_symbol"]["icon-halo-blur"]),
+        "icon-translate": new DataConstantProperty(StyleSpec["paint_symbol"]["icon-translate"]),
+        "icon-translate-anchor": new DataConstantProperty(StyleSpec["paint_symbol"]["icon-translate-anchor"]),
+        "text-opacity": new DataDrivenProperty(StyleSpec["paint_symbol"]["text-opacity"]),
+        "text-color": new DataDrivenProperty(StyleSpec["paint_symbol"]["text-color"], { runtimeType: ColorType$7, getOverride: function (o) {
+            return o.textColor;
+        }, hasOverride: function (o) {
+            return !!o.textColor;
+        } }),
+        "text-halo-color": new DataDrivenProperty(StyleSpec["paint_symbol"]["text-halo-color"]),
+        "text-halo-width": new DataDrivenProperty(StyleSpec["paint_symbol"]["text-halo-width"]),
+        "text-halo-blur": new DataDrivenProperty(StyleSpec["paint_symbol"]["text-halo-blur"]),
+        "text-translate": new DataConstantProperty(StyleSpec["paint_symbol"]["text-translate"]),
+        "text-translate-anchor": new DataConstantProperty(StyleSpec["paint_symbol"]["text-translate-anchor"])
+    });
+
+    // Note: without adding the explicit type annotation, Flow infers weaker types
+    // for these objects from their use in the constructor to StyleLayer, as
+    // {layout?: Properties<...>, paint: Properties<...>}
+    var properties$6 = ({ paint: paint$7, layout: layout$7 }
+        );
+
+    var SymbolStyleLayer = /*@__PURE__*/(function (StyleLayer) {
+        function SymbolStyleLayer(layer) {
+            StyleLayer.call(this, layer, properties$6);
+        }
+
+        if (StyleLayer) SymbolStyleLayer.__proto__ = StyleLayer;
+        SymbolStyleLayer.prototype = Object.create(StyleLayer && StyleLayer.prototype);
+        SymbolStyleLayer.prototype.constructor = SymbolStyleLayer;
+
+        SymbolStyleLayer.prototype.recalculate = function recalculate(parameters, availableImages) {
+            StyleLayer.prototype.recalculate.call(this, parameters, availableImages);
+
+            if (this.layout.get('icon-rotation-alignment') === 'auto') {
+                if (this.layout.get('symbol-placement') !== 'point') {
+                    this.layout._values['icon-rotation-alignment'] = 'map';
+                } else {
+                    this.layout._values['icon-rotation-alignment'] = 'viewport';
+                }
+            }
+
+            if (this.layout.get('text-rotation-alignment') === 'auto') {
+                if (this.layout.get('symbol-placement') !== 'point') {
+                    this.layout._values['text-rotation-alignment'] = 'map';
+                } else {
+                    this.layout._values['text-rotation-alignment'] = 'viewport';
+                }
+            }
+
+            // If unspecified, `*-pitch-alignment` inherits `*-rotation-alignment`
+            if (this.layout.get('text-pitch-alignment') === 'auto') {
+                this.layout._values['text-pitch-alignment'] = this.layout.get('text-rotation-alignment');
+            }
+            if (this.layout.get('icon-pitch-alignment') === 'auto') {
+                this.layout._values['icon-pitch-alignment'] = this.layout.get('icon-rotation-alignment');
+            }
+
+            if (this.layout.get('symbol-placement') === 'point') {
+                var writingModes = this.layout.get('text-writing-mode');
+                if (writingModes) {
+                    // remove duplicates, preserving order
+                    var deduped = [];
+                    for (var i = 0, list = writingModes; i < list.length; i += 1) {
+                        var m = list[i];
+
+                        if (deduped.indexOf(m) < 0) {
+                            deduped.push(m);
+                        }
+                    }
+                    this.layout._values['text-writing-mode'] = deduped;
+                } else {
+                    this.layout._values['text-writing-mode'] = ['horizontal'];
+                }
+            }
+
+            this._setPaintOverrides();
+        };
+
+        SymbolStyleLayer.prototype.getValueAndResolveTokens = function getValueAndResolveTokens(name, feature, availableImages) {
+            var value = this.layout.get(name).evaluate(feature, {}, availableImages);
+            var unevaluated = this._unevaluatedLayout._values[name];
+            if (!unevaluated.isDataDriven() && !Expression.isExpression(unevaluated.value) && value) {
+                return Util.resolveTokens(feature.properties, value);
+            }
+
+            return value;
+        };
+
+        SymbolStyleLayer.prototype.createBucket = function createBucket(parameters) {
+            return new SymbolBucket(parameters);
+        };
+
+        SymbolStyleLayer.prototype.queryRadius = function queryRadius() {
+            return 0;
+        };
+
+        SymbolStyleLayer.prototype.queryIntersectsFeature = function queryIntersectsFeature() {
+            assert_1(false); // Should take a different path in FeatureIndex
+            return false;
+        };
+
+        SymbolStyleLayer.prototype._setPaintOverrides = function _setPaintOverrides() {
+            for (var i = 0, list = properties$6.paint.overridableProperties; i < list.length; i += 1) {
+                var overridable = list[i];
+
+                if (!SymbolStyleLayer.hasPaintOverride(this.layout, overridable)) {
+                    continue;
+                }
+                var overriden = this.paint.get(overridable);
+                var override = new FormatSectionOverride(overriden);
+                var styleExpression = new StyleExpression(override, overriden.property.specification);
+                var expression = null;
+                if (overriden.value.kind === 'constant' || overriden.value.kind === 'source') {
+                    expression = (new ZoomConstantExpression('source', styleExpression)                  );
+                } else {
+                    expression = (new ZoomDependentExpression('composite',
+                        styleExpression,
+                        overriden.value.zoomStops,
+                        overriden.value._interpolationType)                     );
+                }
+                this.paint._values[overridable] = new PossiblyEvaluatedPropertyValue(overriden.property,
+                    expression,
+                    overriden.parameters);
+            }
+        };
+
+        SymbolStyleLayer.prototype._handleOverridablePaintPropertyUpdate = function _handleOverridablePaintPropertyUpdate(name, oldValue, newValue) {
+            if (!this.layout || oldValue.isDataDriven() || newValue.isDataDriven()) {
+                return false;
+            }
+            return SymbolStyleLayer.hasPaintOverride(this.layout, name);
+        };
+
+        SymbolStyleLayer.hasPaintOverride = function hasPaintOverride(layout, propertyName) {
+            var textField = layout.get('text-field');
+            var property = properties$6.paint.properties[propertyName];
+            var hasOverrides = false;
+
+            var checkSections = function (sections) {
+                for (var i = 0, list = sections; i < list.length; i += 1) {
+                    var section = list[i];
+
+                    if (property.overrides && property.overrides.hasOverride(section)) {
+                        hasOverrides = true;
+                        return;
+                    }
+                }
+            };
+
+            if (textField.value.kind === 'constant' && textField.value.value instanceof Formatted$1) {
+                checkSections(textField.value.value.sections);
+            } else if (textField.value.kind === 'source') {
+
+                var checkExpression = function (expression) {
+                    if (hasOverrides) {
+                        return;
+                    }
+
+                    if (expression instanceof Literal && Values$1.typeOf(expression.value) === FormattedType$4) {
+                        var formatted = ((expression.value)     );
+                        checkSections(formatted.sections);
+                    } else if (expression instanceof FormatExpression$1) {
+                        checkSections(expression.sections);
+                    } else {
+                        expression.eachChild(checkExpression);
+                    }
+                };
+
+                var expr = ((textField.value)     );
+                if (expr._styleExpression) {
+                    checkExpression(expr._styleExpression.expression);
+                }
+            }
+
+            return hasOverrides;
+        };
+
+        SymbolStyleLayer.hasPaintOverrides = function hasPaintOverrides(layout) {
+            for (var i = 0, list = properties$6.paint.overridableProperties; i < list.length; i += 1) {
+                var overridable = list[i];
+
+                if (SymbolStyleLayer.hasPaintOverride(layout, overridable)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        return SymbolStyleLayer;
+    }(StyleLayer));
+
+    var subclasses = {
+        circle: CircleStyleLayer,
+        fill: FillStyleLayer,
+        line: LineStyleLayer,
+        symbol : SymbolStyleLayer
+    };
+
+    function createStyleLayer(layer) {
+        if(subclasses[layer.type]){
+            return new subclasses[layer.type](layer);
+        }
+        else{
+            return null;
+        }
+    }
+
+    var StyleLayerIndex = function StyleLayerIndex(layerConfigs) {
+        this.keyCache = {};
+        if (layerConfigs) {
+            this.replace(layerConfigs);
+        }
+    };
+
+    StyleLayerIndex.prototype.replace = function replace (layerConfigs) {
+        this._layerConfigs = {};
+        this._layers = {};
+        this.update(layerConfigs, []);
+    };
+
+    function values(obj) {
+        var result = [];
+        for (var k in obj) {
+            result.push(obj[k]);
+        }
+        return result;
+    }
+
+    StyleLayerIndex.prototype.update = function update (layerConfigs, removedIds) {
+        var this$1 = this;
+
+        for (var i = 0, list = layerConfigs; i < list.length; i += 1) {
+            var layerConfig = list[i];
+
+            this._layerConfigs[layerConfig.id] = layerConfig;
+
+            var layer = createStyleLayer(layerConfig);
+            if(layer == null){
+                continue;
+            }
+            this._layers[layerConfig.id] = layer;
+            layer._featureFilter = featureFilter.createFilter(layer.filter);
+            if (this.keyCache[layerConfig.id])
+            { delete this.keyCache[layerConfig.id]; }
+        }
+        for (var i$1 = 0, list$1 = removedIds; i$1 < list$1.length; i$1 += 1) {
+            var id = list$1[i$1];
+
+            delete this.keyCache[id];
+            delete this._layerConfigs[id];
+            delete this._layers[id];
+        }
+
+        this.familiesBySource = {};
+
+        var groups = groupByLayout(values(this._layerConfigs), this.keyCache);
+
+        for (var i$2 = 0, list$2 = groups; i$2 < list$2.length; i$2 += 1) {
+            var layerConfigs$1 = list$2[i$2];
+
+            var layers = layerConfigs$1.map(function (layerConfig) { return this$1._layers[layerConfig.id]; });
+
+            var layer$1 = layers[0];
+            if (layer$1 == undefined || layer$1.visibility === 'none') {
+                continue;
+            }
+
+            var sourceId = layer$1.source || '';
+            var sourceGroup = this.familiesBySource[sourceId];
+            if (!sourceGroup) {
+                sourceGroup = this.familiesBySource[sourceId] = {};
+            }
+
+            var sourceLayerId = layer$1.sourceLayer;
+            var sourceLayerFamilies = sourceGroup[sourceLayerId];
+            if (!sourceLayerFamilies) {
+                sourceLayerFamilies = sourceGroup[sourceLayerId] = [];
+            }
+
+            sourceLayerFamilies.push(layers);
+        }
+    };
+
+    WebWorkerTransfer.register('FeatureIndex', FeatureIndex, {omit: ['rawTileData', 'sourceLayerCoder']});
+
+    function MVTWorkTile(parameters, transferableObjects) {
+        var pbfData = parameters.pbfData;
+        var layers = parameters.layers;
+        var imageMap = parameters.imageMap;
+        var serializeObj = WebWorkerTransfer.deserialize(parameters.serializeObj);
+        var featureIndex = serializeObj.featureIndex;
+        var zoom = parameters.tileID.z;
+        if(!when.defined(featureIndex)){
+            featureIndex = new FeatureIndex(parameters.tileID);
+            featureIndex.bucketLayerIDs = [];
+        }
+        var result = {};
+        try {
+            var styleIndexLayer = new StyleLayerIndex(layers);
+            var vectorTile = loadVectorTile(pbfData);
+            result = parse(vectorTile, styleIndexLayer, imageMap, featureIndex, zoom, parameters.indexData);
+            result = WebWorkerTransfer.serialize(result, transferableObjects);
+        }
+        catch (err) {
+        }
+        return result;
+    }
+
+    function loadVectorTile(rawData) {
+        if (!when.defined(rawData)) {
+            return;
+        }
+        return new VectorTile(new pbf.Protobuf(rawData));
+    }
+
+    function parse(vectorTile, layerIndex, imageMap, featureIndex, zoom, indexData) {
+        var sourceLayerCoder = new DictionaryCoder(Object.keys(vectorTile.layers).sort());
+        var buckets = {};
+        var options = {
+            featureIndex: featureIndex,
+            iconDependencies: {},
+            patternDependencies: {},
+            glyphDependencies: {},
+            //availableImages: availableImages
+        };
+
+        for (var source in layerIndex.familiesBySource) {
+            //if (source == "") continue;
+            var layerFamilies = layerIndex.familiesBySource[source];
+            for (var sourceLayerId in layerFamilies) {
+                var sourceLayer = vectorTile.layers[sourceLayerId];
+                if (!sourceLayer) {
+                    continue;
+                }
+
+                var sourceLayerIndex = sourceLayerCoder.encode(sourceLayerId);
+                var features = [];
+                for (var index = 0; index < sourceLayer.length; index++) {
+                    var feature = sourceLayer.feature(index);
+                    features.push({feature: feature, index: index, sourceLayerIndex: sourceLayerIndex});
+                }
+
+                for (var i = 0, list = layerFamilies[sourceLayerId]; i < list.length; i += 1) {
+                    var family = list[i];
+                    var layer = family[0];
+    //                    if(defined(layer.minzoom) && zoom < Math.floor(layer.minzoom)){
+    //                        continue;
+    //                    }
+    //                    if(defined(layer.maxzoom) && zoom >= layer.maxzoom){
+    //                        continue;
+    //                    }
+                    if (layer.visibility === 'none') {
+                        continue;
+                    }
+
+                    //recalculateLayers(family, this.zoom, availableImages);
+                    recalculateLayers(family, 0, null);
+
+                    var bucket = buckets[layer.id] = layer.createBucket({
+                        index: featureIndex.bucketLayerIDs.length,
+                        layers: family,
+    //                    zoom: this.zoom,
+    //                    pixelRatio: this.pixelRatio,
+    //                    overscaling : this.overscaling,
+    //                    collisionBoxArray: this.collisionBoxArray,
+                        sourceLayerIndex: sourceLayerIndex,
+                        //sourceID: this.source
+                    });
+
+                    if (when.defined(indexData) && when.defined(indexData[layer.id])) {
+                        options.indexData = indexData[layer.id];
+                    }
+                    bucket.populate(features, options);
+                    featureIndex.bucketLayerIDs.push(family.map(function (l) { return l.id; }));
+                }
+            }
+        }
+
+        var imageAtlas = null;
+
+        for (var key in buckets) {
+            var bucket = buckets[key];
+            if (bucket.hasPattern &&
+                (bucket instanceof LineBucket || bucket instanceof FillBucket)) {
+                //recalculateLayers(bucket.layers, this.zoom, availableImages);
+                if(imageAtlas == null){
+                    imageAtlas = new ImageAtlas({}, imageMap);
+                }
+                bucket.addFeatures(options, imageAtlas.patternPositions);
+            }
+        }
+
+        return {
+            buckets : buckets,
+            imageAtlas : imageAtlas,
+            featureIndex : featureIndex
+        };
+    }
+
+    function recalculateLayers(layers, zoom, availableImages) {
+        // Layers are shared and may have been used by a WorkerTile with a different zoom.
+        var parameters = new EvaluationParameters$1(zoom);
+        for (var i = 0, list = layers; i < list.length; i += 1) {
+            var layer = list[i];
+            layer.recalculate(parameters, availableImages);
+        }
+    }
+
+    var MVTWorkTile$1 = createTaskProcessorWorker(MVTWorkTile);
+
+    return MVTWorkTile$1;
+
+});

@@ -20,79 +20,1656 @@
  * Portions licensed separately.
  * See https://github.com/AnalyticalGraphicsInc/cesium/blob/master/LICENSE.md for full licensing details.
  */
-/**
-  @license
-  when.js - https://github.com/cujojs/when
+define(['./when-8d13db60', './Check-70bec281', './Math-61ede240', './Cartographic-fe4be337', './Cartesian2-85064f09', './BoundingSphere-775c5788', './Cartesian4-5af5bb24', './RuntimeError-ba10bc3e', './WebGLConstants-4c11ee5f', './ComponentDatatype-5862616f', './PrimitiveType-97893bc7', './FeatureDetection-7bd32c34', './buildModuleUrl-14bfe498', './IndexDatatype-9435b55f', './createTaskProcessorWorker', './BoundingRectangle-dc808c42', './Color-69f1845f', './pako_inflate-8ea163f9', './S3MCompressType-097966f6', './unzip-b0fc9445'], function (when, Check, _Math, Cartographic, Cartesian2, BoundingSphere, Cartesian4, RuntimeError, WebGLConstants, ComponentDatatype, PrimitiveType, FeatureDetection, buildModuleUrl, IndexDatatype, createTaskProcessorWorker, BoundingRectangle, Color, pako_inflate, S3MCompressType, unzip) { 'use strict';
 
-  MIT License (c) copyright B Cavalier & J Hann
+    /**
+         * Create a shallow copy of an array from begin to end.
+         *
+         * @param {Array} array The array to fill.
+         * @param {Number} [begin=0] The index to start at.
+         * @param {Number} [end=array.length] The index to end at which is not included.
+         *
+         * @returns {Array} The resulting array.
+         * @private
+         */
+        function arraySlice(array, begin, end) {
+            //>>includeStart('debug', pragmas.debug);
+            Check.Check.defined('array', array);
+            if (when.defined(begin)) {
+                Check.Check.typeOf.number('begin', begin);
+            }
+            if (when.defined(end)) {
+                Check.Check.typeOf.number('end', end);
+            }
+            //>>includeEnd('debug');
 
- * A lightweight CommonJS Promises/A and when() implementation
- * when is part of the cujo.js family of libraries (http://cujojs.com/)
- *
- * Licensed under the MIT License at:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * @version 1.7.1
- */
+            if (typeof array.slice === 'function') {
+                return array.slice(begin, end);
+            }
 
-/**
-@license
-mersenne-twister.js - https://gist.github.com/banksean/300494
+            var copy = Array.prototype.slice.call(array, begin, end);
+            var typedArrayTypes = FeatureDetection.FeatureDetection.typedArrayTypes;
+            var length = typedArrayTypes.length;
+            for (var i = 0; i < length; ++i) {
+                if (array instanceof typedArrayTypes[i]) {
+                    copy = new typedArrayTypes[i](copy);
+                    break;
+                }
+            }
 
-   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.
+            return copy;
+        }
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+    function S3MDracoDecode() {
+    }
 
-     1. Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
+    var draco;
 
-     2. Redistributions in binary form must reproduce the above copyright
-        notice, this list of conditions and the following disclaimer in the
-        documentation and/or other materials provided with the distribution.
+    function decodeIndexArray(dracoGeometry, dracoDecoder) {
+        var numPoints = dracoGeometry.num_points();
+        var numFaces = dracoGeometry.num_faces();
+        var faceIndices = new draco.DracoInt32Array();
+        var numIndices = numFaces * 3;
+        var indexArray = IndexDatatype.IndexDatatype.createTypedArray(numPoints, numIndices);
 
-     3. The names of its contributors may not be used to endorse or promote
-        products derived from this software without specific prior written
-        permission.
+        var offset = 0;
+        for (var i = 0; i < numFaces; ++i) {
+            dracoDecoder.GetFaceFromMesh(dracoGeometry, i, faceIndices);
+            indexArray[offset + 0] = faceIndices.GetValue(0);
+            indexArray[offset + 1] = faceIndices.GetValue(1);
+            indexArray[offset + 2] = faceIndices.GetValue(2);
+            offset += 3;
+        }
 
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+        var indexDataType = IndexDatatype.IndexDatatype.UNSIGNED_SHORT;
+        if (indexArray instanceof Uint32Array) {
+            indexDataType = IndexDatatype.IndexDatatype.UNSIGNED_INT;
+        }
 
-/*! @brief Decompresses an image in memory.
+        draco.destroy(faceIndices);
+        return {
+            typedArray : indexArray,
+            numberOfIndices : numIndices,
+            indexDataType : indexDataType
+        };
+    }
 
-     @param rgba		Storage for the decompressed pixels.
-     @param width	The width of the source image.
-     @param height	The height of the source image.
-     @param blocks	The compressed DXT blocks.
-     @param flags	Compression flags.
 
-     The decompressed pixels will be written as a contiguous array of width*height
-     16 rgba values, with each component as 1 byte each. In memory this is:
+    function decodeQuantizedDracoTypedArray(dracoGeometry, dracoDecoder, dracoAttribute, quantization, vertexArrayLength) {
+        var vertexArray;
+        var attributeData;
+        if (quantization.quantizationBits <= 8) {
+            attributeData = new draco.DracoUInt8Array();
+            vertexArray = new Uint8Array(vertexArrayLength);
+            dracoDecoder.GetAttributeUInt8ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+        } else {
+            attributeData = new draco.DracoUInt16Array();
+            vertexArray = new Uint16Array(vertexArrayLength);
+            dracoDecoder.GetAttributeUInt16ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+        }
 
-     { r1, g1, b1, a1, .... , rn, gn, bn, an } for n = width*height
+        for (var i = 0; i < vertexArrayLength; ++i) {
+            vertexArray[i] = attributeData.GetValue(i);
+        }
 
-     The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression,
-     however, DXT1 will be used by default if none is specified. All other flags
-     are ignored.
+        draco.destroy(attributeData);
+        return vertexArray;
+    }
 
-     Internally this function calls squish::Decompress for each block.
-     */
+    function decodeDracoTypedArray(dracoGeometry, dracoDecoder, dracoAttribute, vertexArrayLength) {
+        var vertexArray;
+        var attributeData;
 
-!function(){!function(e){"use strict";e("ThirdParty/when",[],function(){function e(e,r,n,a){return t(e).then(r,n,a)}function t(e){var t,r;return e instanceof n?t=e:u(e)?(r=o(),e.then(function(e){r.resolve(e)},function(e){r.reject(e)},function(e){r.progress(e)}),t=r.promise):t=a(e),t}function r(t){return e(t,i)}function n(e){this.then=e}function a(e){return new n(function(r){try{return t(r?r(e):e)}catch(e){return i(e)}})}function i(e){return new n(function(r,n){try{return n?t(n(e)):i(e)}catch(e){return i(e)}})}function o(){function e(e,t,r){return l(e,t,r)}function r(e){return d(e)}function a(e){return d(i(e))}function u(e){return y(e)}var s,c,f,E,l,y,d;return c=new n(e),s={then:e,resolve:r,reject:a,progress:u,promise:c,resolver:{resolve:r,reject:a,progress:u}},f=[],E=[],l=function(e,t,r){var n,a;return n=o(),a="function"==typeof r?function(e){try{n.progress(r(e))}catch(e){n.progress(e)}}:function(e){n.progress(e)},f.push(function(r){r.then(e,t).then(n.resolve,n.reject,a)}),E.push(a),n.promise},y=function(e){return h(E,e),e},d=function(e){return e=t(e),l=e.then,d=t,y=p,h(f,e),E=f=A,e},s}function u(e){return e&&"function"==typeof e.then}function s(t,r,n,a,i){return _(2,arguments),e(t,function(t){function u(e){h(e)}function s(e){d(e)}var c,f,E,l,y,d,h,_,T,O;if(T=t.length>>>0,c=Math.max(0,Math.min(r,T)),E=[],f=T-c+1,l=[],y=o(),c)for(_=y.progress,h=function(e){l.push(e),--f||(d=h=p,y.reject(l))},d=function(e){E.push(e),--c||(d=h=p,y.resolve(E))},O=0;O<T;++O)O in t&&e(t[O],s,u,_);else y.resolve(E);return y.then(n,a,i)})}function c(e,t,r,n){function a(e){return t?t(e[0]):e[0]}return s(e,1,a,r,n)}function f(e,t,r,n){return _(1,arguments),l(e,T).then(t,r,n)}function E(){return l(arguments,T)}function l(t,r){return e(t,function(t){var n,a,i,u,s,c;if(i=a=t.length>>>0,n=[],c=o(),i)for(u=function(t,a){e(t,r).then(function(e){n[a]=e,--i||c.resolve(n)},c.reject)},s=0;s<a;s++)s in t?u(t[s],s):--i;else c.resolve(n);return c.promise})}function y(t,r){var n=m.call(arguments,1);return e(t,function(t){var a;return a=t.length,n[0]=function(t,n,i){return e(t,function(t){return e(n,function(e){return r(t,e,i,a)})})},O.apply(t,n)})}function d(t,r,n){var a=arguments.length>2;return e(t,function(e){return e=a?n:e,r.resolve(e),e},function(e){return r.reject(e),i(e)},r.progress)}function h(e,t){for(var r,n=0;r=e[n++];)r(t)}function _(e,t){for(var r,n=t.length;n>e;)if(null!=(r=t[--n])&&"function"!=typeof r)throw new Error("arg "+n+" must be a function")}function p(){}function T(e){return e}var O,m,A;return e.defer=o,e.resolve=t,e.reject=r,e.join=E,e.all=f,e.map=l,e.reduce=y,e.any=c,e.some=s,e.chain=d,e.isPromise=u,n.prototype={always:function(e,t){return this.then(e,e,t)},otherwise:function(e){return this.then(A,e)},yield:function(e){return this.then(function(){return e})},spread:function(e){return this.then(function(t){return f(t,function(t){return e.apply(A,t)})})}},m=[].slice,O=[].reduce||function(e){var t,r,n,a,i;if(i=0,t=Object(this),a=t.length>>>0,r=arguments,r.length<=1)for(;;){if(i in t){n=t[i++];break}if(++i>=a)throw new TypeError}else n=r[1];for(;i<a;++i)i in t&&(n=e(n,t[i],i,t));return n},e})}("function"==typeof define&&define.amd?define:function(e){"object"==typeof exports?module.exports=e():this.when=e()}),define("Core/defined",[],function(){"use strict";function e(e){return void 0!==e&&null!==e}return e}),define("Core/freezeObject",["./defined"],function(e){"use strict";var t=Object.freeze;return e(t)||(t=function(e){return e}),t}),define("Core/defaultValue",["./freezeObject"],function(e){"use strict";function t(e,t){return void 0!==e&&null!==e?e:t}return t.EMPTY_OBJECT=e({}),t}),define("Core/formatError",["./defined"],function(e){"use strict";function t(t){var r,n=t.name,a=t.message;r=e(n)&&e(a)?n+": "+a:t.toString();var i=t.stack;return e(i)&&(r+="\n"+i),r}return t}),define("Workers/createTaskProcessorWorker",["../ThirdParty/when","../Core/defaultValue","../Core/defined","../Core/formatError"],function(e,t,r,n){"use strict";function a(t,r,n){try{return t(r,n)}catch(t){return e.reject(t)}}function i(i){var o;return function(u){var s=u.data,c=[],f={id:s.id,result:void 0,error:void 0};return e(a(i,s.parameters,c)).then(function(e){f.result=e}).otherwise(function(e){e instanceof Error?f.error={name:e.name,message:e.message,stack:e.stack}:f.error=e}).always(function(){r(o)||(o=t(self.webkitPostMessage,self.postMessage)),s.canTransferArrayBuffer||(c.length=0);try{o(f,c)}catch(e){f.result=void 0,f.error="postMessage failed with error: "+n(e)+"\n  with responseMessage: "+JSON.stringify(f),o(f)}})}}return i}),define("Core/DeveloperError",["./defined"],function(e){"use strict";function t(e){this.name="DeveloperError",this.message=e;var t;try{throw new Error}catch(e){t=e.stack}this.stack=t}return e(Object.create)&&(t.prototype=Object.create(Error.prototype),t.prototype.constructor=t),t.prototype.toString=function(){var t=this.name+": "+this.message;return e(this.stack)&&(t+="\n"+this.stack.toString()),t},t.throwInstantiationError=function(){throw new t("This function defines an interface and should not be called directly.")},t}),define("Core/Check",["./defined","./DeveloperError"],function(e,t){"use strict";function r(e){return e+" is required, actual value was undefined"}function n(e,t,r){return"Expected "+r+" to be typeof "+t+", actual typeof was "+e}var a={};return a.typeOf={},a.defined=function(n,a){if(!e(a))throw new t(r(n))},a.typeOf.func=function(e,r){if("function"!=typeof r)throw new t(n(typeof r,"function",e))},a.typeOf.string=function(e,r){if("string"!=typeof r)throw new t(n(typeof r,"string",e))},a.typeOf.number=function(e,r){if("number"!=typeof r)throw new t(n(typeof r,"number",e))},a.typeOf.number.lessThan=function(e,r,n){if(a.typeOf.number(e,r),r>=n)throw new t("Expected "+e+" to be less than "+n+", actual value was "+r)},a.typeOf.number.lessThanOrEquals=function(e,r,n){if(a.typeOf.number(e,r),r>n)throw new t("Expected "+e+" to be less than or equal to "+n+", actual value was "+r)},a.typeOf.number.greaterThan=function(e,r,n){if(a.typeOf.number(e,r),r<=n)throw new t("Expected "+e+" to be greater than "+n+", actual value was "+r)},a.typeOf.number.greaterThanOrEquals=function(e,r,n){if(a.typeOf.number(e,r),r<n)throw new t("Expected "+e+" to be greater than or equal to"+n+", actual value was "+r)},a.typeOf.object=function(e,r){if("object"!=typeof r)throw new t(n(typeof r,"object",e))},a.typeOf.bool=function(e,r){if("boolean"!=typeof r)throw new t(n(typeof r,"boolean",e))},a.typeOf.number.equals=function(e,r,n,i){if(a.typeOf.number(e,n),a.typeOf.number(r,i),n!==i)throw new t(e+" must be equal to "+r+", the actual values are "+n+" and "+i)},a}),define("ThirdParty/mersenne-twister",[],function(){var e=function(e){void 0==e&&(e=(new Date).getTime()),this.N=624,this.M=397,this.MATRIX_A=2567483615,this.UPPER_MASK=2147483648,this.LOWER_MASK=2147483647,this.mt=new Array(this.N),this.mti=this.N+1,this.init_genrand(e)};return e.prototype.init_genrand=function(e){for(this.mt[0]=e>>>0,this.mti=1;this.mti<this.N;this.mti++){var e=this.mt[this.mti-1]^this.mt[this.mti-1]>>>30;this.mt[this.mti]=(1812433253*((4294901760&e)>>>16)<<16)+1812433253*(65535&e)+this.mti,this.mt[this.mti]>>>=0}},e.prototype.genrand_int32=function(){var e,t=new Array(0,this.MATRIX_A);if(this.mti>=this.N){var r;for(this.mti==this.N+1&&this.init_genrand(5489),r=0;r<this.N-this.M;r++)e=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+this.M]^e>>>1^t[1&e];for(;r<this.N-1;r++)e=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+(this.M-this.N)]^e>>>1^t[1&e];e=this.mt[this.N-1]&this.UPPER_MASK|this.mt[0]&this.LOWER_MASK,this.mt[this.N-1]=this.mt[this.M-1]^e>>>1^t[1&e],this.mti=0}return e=this.mt[this.mti++],e^=e>>>11,e^=e<<7&2636928640,e^=e<<15&4022730752,(e^=e>>>18)>>>0},e.prototype.random=function(){return this.genrand_int32()*(1/4294967296)},e}),define("Core/Math",["../ThirdParty/mersenne-twister","./Check","./defaultValue","./defined","./DeveloperError"],function(e,t,r,n,a){"use strict";var i={};i.Radius=6378137,i.EPSILON1=.1,i.EPSILON2=.01,i.EPSILON3=.001,i.EPSILON4=1e-4,i.EPSILON5=1e-5,i.EPSILON6=1e-6,i.EPSILON7=1e-7,i.EPSILON8=1e-8,i.EPSILON9=1e-9,i.EPSILON10=1e-10,i.EPSILON11=1e-11,i.EPSILON12=1e-12,i.EPSILON13=1e-13,i.EPSILON14=1e-14,i.EPSILON15=1e-15,i.EPSILON16=1e-16,i.EPSILON17=1e-17,i.EPSILON18=1e-18,i.EPSILON19=1e-19,i.EPSILON20=1e-20,i.EPSILON21=1e-21,i.GRAVITATIONALPARAMETER=3986004418e5,i.SOLAR_RADIUS=6955e5,i.LUNAR_RADIUS=1737400,i.SIXTY_FOUR_KILOBYTES=65536,i.sign=r(Math.sign,function(e){return e=+e,0===e||e!==e?e:e>0?1:-1}),i.signNotZero=function(e){return e<0?-1:1},i.toSNorm=function(e,t){return t=r(t,255),Math.round((.5*i.clamp(e,-1,1)+.5)*t)},i.fromSNorm=function(e,t){return t=r(t,255),i.clamp(e,0,t)/t*2-1},i.sinh=r(Math.sinh,function(e){return(Math.exp(e)-Math.exp(-e))/2}),i.cosh=r(Math.cosh,function(e){return(Math.exp(e)+Math.exp(-e))/2}),i.lerp=function(e,t,r){return(1-r)*e+r*t},i.PI=Math.PI,i.ONE_OVER_PI=1/Math.PI,i.PI_OVER_TWO=Math.PI/2,i.PI_OVER_THREE=Math.PI/3,i.PI_OVER_FOUR=Math.PI/4,i.PI_OVER_SIX=Math.PI/6,i.THREE_PI_OVER_TWO=3*Math.PI/2,i.TWO_PI=2*Math.PI,i.ONE_OVER_TWO_PI=1/(2*Math.PI),i.RADIANS_PER_DEGREE=Math.PI/180,i.DEGREES_PER_RADIAN=180/Math.PI,i.RADIANS_PER_ARCSECOND=i.RADIANS_PER_DEGREE/3600,i.toRadians=function(e){if(!n(e))throw new a("degrees is required.");return e*i.RADIANS_PER_DEGREE},i.toDegrees=function(e){if(!n(e))throw new a("radians is required.");return e*i.DEGREES_PER_RADIAN},i.convertLongitudeRange=function(e){if(!n(e))throw new a("angle is required.");var t=i.TWO_PI,r=e-Math.floor(e/t)*t;return r<-Math.PI?r+t:r>=Math.PI?r-t:r},i.clampToLatitudeRange=function(e){if(!n(e))throw new a("angle is required.");return i.clamp(e,-1*i.PI_OVER_TWO,i.PI_OVER_TWO)},i.negativePiToPi=function(e){if(!n(e))throw new a("angle is required.");return i.zeroToTwoPi(e+i.PI)-i.PI},i.zeroToTwoPi=function(e){if(!n(e))throw new a("angle is required.");var t=i.mod(e,i.TWO_PI);return Math.abs(t)<i.EPSILON14&&Math.abs(e)>i.EPSILON14?i.TWO_PI:t},i.mod=function(e,t){if(!n(e))throw new a("m is required.");if(!n(t))throw new a("n is required.");return(e%t+t)%t},i.equalsEpsilon=function(e,t,i,o){if(!n(e))throw new a("left is required.");if(!n(t))throw new a("right is required.");if(!n(i))throw new a("relativeEpsilon is required.");o=r(o,i);var u=Math.abs(e-t);return u<=o||u<=i*Math.max(Math.abs(e),Math.abs(t))},i.lessThan=function(e,t,r){if(!n(e))throw new a("first is required.");if(!n(t))throw new a("second is required.");if(!n(r))throw new a("relativeEpsilon is required.");return e-t<-r},i.lessThanOrEquals=function(e,t,r){if(!n(e))throw new a("first is required.");if(!n(t))throw new a("second is required.");if(!n(r))throw new a("relativeEpsilon is required.");return e-t<r},i.greaterThan=function(e,t,r){if(!n(e))throw new a("first is required.");if(!n(t))throw new a("second is required.");if(!n(r))throw new a("relativeEpsilon is required.");return e-t>r},i.greaterThanOrEquals=function(e,t,r){if(!n(e))throw new a("first is required.");if(!n(t))throw new a("second is required.");if(!n(r))throw new a("relativeEpsilon is required.");return e-t>-r};var o=[1];i.factorial=function(e){if("number"!=typeof e||e<0)throw new a("A number greater than or equal to 0 is required.");var t=o.length;if(e>=t)for(var r=o[t-1],n=t;n<=e;n++)o.push(r*n);return o[e]},i.incrementWrap=function(e,t,i){if(i=r(i,0),!n(e))throw new a("n is required.");if(t<=i)throw new a("maximumValue must be greater than minimumValue.");return++e,e>t&&(e=i),e},i.isPowerOfTwo=function(e){if("number"!=typeof e||e<0)throw new a("A number greater than or equal to 0 is required.");return 0!==e&&0==(e&e-1)},i.nextPowerOfTwo=function(e){if("number"!=typeof e||e<0)throw new a("A number greater than or equal to 0 is required.");return--e,e|=e>>1,e|=e>>2,e|=e>>4,e|=e>>8,e|=e>>16,++e},i.clamp=function(e,t,r){if(!n(e))throw new a("value is required");if(!n(t))throw new a("min is required.");if(!n(r))throw new a("max is required.");return e<t?t:e>r?r:e};var u=new e;return i.setRandomNumberSeed=function(t){if(!n(t))throw new a("seed is required.");u=new e(t)},i.nextRandomNumber=function(){return u.random()},i.randomBetween=function(e,t){return i.nextRandomNumber()*(t-e)+e},i.acosClamped=function(e){if(!n(e))throw new a("value is required.");return Math.acos(i.clamp(e,-1,1))},i.asinClamped=function(e){if(!n(e))throw new a("value is required.");return Math.asin(i.clamp(e,-1,1))},i.chordLength=function(e,t){if(!n(e))throw new a("angle is required.");if(!n(t))throw new a("radius is required.");return 2*t*Math.sin(.5*e)},i.logBase=function(e,t){if(!n(e))throw new a("number is required.");if(!n(t))throw new a("base is required.");return Math.log(e)/Math.log(t)},i.cbrt=r(Math.cbrt,function(e){var t=Math.pow(Math.abs(e),1/3);return e<0?-t:t}),i.log2=r(Math.log2,function(e){return Math.log(e)*Math.LOG2E}),i.fog=function(e,t){var r=e*t;return 1-Math.exp(-r*r)},i.fastApproximateAtan=function(e){return t.typeOf.number("x",e),e*(-.1784*Math.abs(e)-.0663*e*e+1.0301)},i.fastApproximateAtan2=function(e,r){t.typeOf.number("x",e),t.typeOf.number("y",r);var n,o,u=Math.abs(e);n=Math.abs(r),o=Math.max(u,n),n=Math.min(u,n);var s=n/o;if(isNaN(s))throw new a("either x or y must be nonzero");return u=i.fastApproximateAtan(s),u=Math.abs(r)>Math.abs(e)?i.PI_OVER_TWO-u:u,u=e<0?i.PI-u:u,u=r<0?-u:u},i}),define("Core/Cartesian3",["./Check","./defaultValue","./defined","./DeveloperError","./freezeObject","./Math"],function(e,t,r,n,a,i){"use strict";function o(e,r,n){this.x=t(e,0),this.y=t(r,0),this.z=t(n,0)}o.fromSpherical=function(n,a){e.typeOf.object("spherical",n),r(a)||(a=new o);var i=n.clock,u=n.cone,s=t(n.magnitude,1),c=s*Math.sin(u);return a.x=c*Math.cos(i),a.y=c*Math.sin(i),a.z=s*Math.cos(u),a},o.fromElements=function(e,t,n,a){return r(a)?(a.x=e,a.y=t,a.z=n,a):new o(e,t,n)},o.clone=function(e,t){if(r(e))return r(t)?(t.x=e.x,t.y=e.y,t.z=e.z,t):new o(e.x,e.y,e.z)},o.fromCartesian4=o.clone,o.packedLength=3,o.pack=function(r,n,a){return e.typeOf.object("value",r),e.defined("array",n),a=t(a,0),n[a++]=r.x,n[a++]=r.y,n[a]=r.z,n},o.unpack=function(n,a,i){return e.defined("array",n),a=t(a,0),r(i)||(i=new o),i.x=n[a++],i.y=n[a++],i.z=n[a],i},o.packArray=function(t,n){e.defined("array",t);var a=t.length;r(n)?n.length=3*a:n=new Array(3*a);for(var i=0;i<a;++i)o.pack(t[i],n,3*i);return n},o.unpackArray=function(t,a){if(e.defined("array",t),e.typeOf.number.greaterThanOrEquals("array.length",t.length,3),t.length%3!=0)throw new n("array length must be a multiple of 3.");var i=t.length;r(a)?a.length=i/3:a=new Array(i/3);for(var u=0;u<i;u+=3){var s=u/3;a[s]=o.unpack(t,u,a[s])}return a},o.fromArray=o.unpack,o.maximumComponent=function(t){return e.typeOf.object("cartesian",t),Math.max(t.x,t.y,t.z)},o.minimumComponent=function(t){return e.typeOf.object("cartesian",t),Math.min(t.x,t.y,t.z)},o.minimumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.min(t.x,r.x),n.y=Math.min(t.y,r.y),n.z=Math.min(t.z,r.z),n},o.maximumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.max(t.x,r.x),n.y=Math.max(t.y,r.y),n.z=Math.max(t.z,r.z),n},o.magnitudeSquared=function(t){return e.typeOf.object("cartesian",t),t.x*t.x+t.y*t.y+t.z*t.z},o.magnitude=function(e){return Math.sqrt(o.magnitudeSquared(e))};var u=new o;o.distance=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitude(u)},o.distanceSquared=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitudeSquared(u)},o.normalize=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var a=o.magnitude(t);if(r.x=t.x/a,r.y=t.y/a,r.z=t.z/a,isNaN(r.x)||isNaN(r.y)||isNaN(r.z))throw new n("normalized result is not a number");return r},o.dot=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),t.x*r.x+t.y*r.y+t.z*r.z},o.multiplyComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x*r.x,n.y=t.y*r.y,n.z=t.z*r.z,n},o.divideComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x/r.x,n.y=t.y/r.y,n.z=t.z/r.z,n},o.add=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x+r.x,n.y=t.y+r.y,n.z=t.z+r.z,n},o.subtract=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x-r.x,n.y=t.y-r.y,n.z=t.z-r.z,n},o.multiplyByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x*r,n.y=t.y*r,n.z=t.z*r,n},o.divideByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x/r,n.y=t.y/r,n.z=t.z/r,n},o.negate=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=-t.x,r.y=-t.y,r.z=-t.z,r},o.abs=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=Math.abs(t.x),r.y=Math.abs(t.y),r.z=Math.abs(t.z),r};var s=new o;o.lerp=function(t,r,n,a){return e.typeOf.object("start",t),e.typeOf.object("end",r),e.typeOf.number("t",n),e.typeOf.object("result",a),o.multiplyByScalar(r,n,s),a=o.multiplyByScalar(t,1-n,a),o.add(s,a,a)};var c=new o,f=new o;o.angleBetween=function(t,r){e.typeOf.object("left",t),e.typeOf.object("right",r),o.normalize(t,c),o.normalize(r,f);var n=o.dot(c,f),a=o.magnitude(o.cross(c,f,c));return Math.atan2(a,n)};var E=new o;o.mostOrthogonalAxis=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var n=o.normalize(t,E);return o.abs(n,n),r=n.x<=n.y?n.x<=n.z?o.clone(o.UNIT_X,r):o.clone(o.UNIT_Z,r):n.y<=n.z?o.clone(o.UNIT_Y,r):o.clone(o.UNIT_Z,r)},o.projectVector=function(t,r,n){e.defined("a",t),e.defined("b",r),e.defined("result",n);var a=o.dot(t,r)/o.dot(r,r);return o.multiplyByScalar(r,a,n)},o.equals=function(e,t){return e===t||r(e)&&r(t)&&e.x===t.x&&e.y===t.y&&e.z===t.z},o.equalsArray=function(e,t,r){return e.x===t[r]&&e.y===t[r+1]&&e.z===t[r+2]},o.equalsEpsilon=function(e,t,n,a){return e===t||r(e)&&r(t)&&i.equalsEpsilon(e.x,t.x,n,a)&&i.equalsEpsilon(e.y,t.y,n,a)&&i.equalsEpsilon(e.z,t.z,n,a)},o.cross=function(t,r,n){e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z,u=r.x,s=r.y,c=r.z,f=i*c-o*s,E=o*u-a*c,l=a*s-i*u;return n.x=f,n.y=E,n.z=l,n},o.midpoint=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=.5*(t.x+r.x),n.y=.5*(t.y+r.y),n.z=.5*(t.z+r.z),n},o.fromDegrees=function(t,r,n,a,u){return e.typeOf.number("longitude",t),e.typeOf.number("latitude",r),t=i.toRadians(t),r=i.toRadians(r),o.fromRadians(t,r,n,a,u)};var l=new o,y=new o,d=new o(40680631590769,40680631590769,40408299984661.445),h=new o(40680631590769,40680631590769,40680631590769);return o.fromRadians=function(n,a,u,s,c){e.typeOf.number("longitude",n),e.typeOf.number("latitude",a),u=t(u,0);var f=r(s)?s.radiiSquared:h;i.equalsEpsilon(i.Radius,6356752.314245179,i.EPSILON10)&&(f=r(s)?s.radiiSquared:d);var E=Math.cos(a);l.x=E*Math.cos(n),l.y=E*Math.sin(n),l.z=Math.sin(a),l=o.normalize(l,l),o.multiplyComponents(f,l,y);var _=Math.sqrt(o.dot(l,y));return y=o.divideByScalar(y,_,y),l=o.multiplyByScalar(l,u,l),r(c)||(c=new o),o.add(y,l,c)},o.fromDegreesArray=function(t,a,i){if(e.defined("coordinates",t),t.length<2||t.length%2!=0)throw new n("the number of coordinates must be a multiple of 2 and at least 2");var u=t.length;r(i)?i.length=u/2:i=new Array(u/2);for(var s=0;s<u;s+=2){var c=t[s],f=t[s+1],E=s/2;i[E]=o.fromDegrees(c,f,0,a,i[E])}return i},o.fromRadiansArray=function(t,a,i){if(e.defined("coordinates",t),t.length<2||t.length%2!=0)throw new n("the number of coordinates must be a multiple of 2 and at least 2");var u=t.length;r(i)?i.length=u/2:i=new Array(u/2);for(var s=0;s<u;s+=2){var c=t[s],f=t[s+1],E=s/2;i[E]=o.fromRadians(c,f,0,a,i[E])}return i},o.fromDegreesArrayHeights=function(t,a,i){if(e.defined("coordinates",t),t.length<3||t.length%3!=0)throw new n("the number of coordinates must be a multiple of 3 and at least 3");var u=t.length;r(i)?i.length=u/3:i=new Array(u/3);for(var s=0;s<u;s+=3){var c=t[s],f=t[s+1],E=t[s+2],l=s/3;i[l]=o.fromDegrees(c,f,E,a,i[l])}return i},o.fromRadiansArrayHeights=function(t,a,i){if(e.defined("coordinates",t),t.length<3||t.length%3!=0)throw new n("the number of coordinates must be a multiple of 3 and at least 3");var u=t.length;r(i)?i.length=u/3:i=new Array(u/3);for(var s=0;s<u;s+=3){var c=t[s],f=t[s+1],E=t[s+2],l=s/3;i[l]=o.fromRadians(c,f,E,a,i[l])}return i},o.ZERO=a(new o(0,0,0)),o.UNIT_X=a(new o(1,0,0)),o.UNIT_Y=a(new o(0,1,0)),o.UNIT_Z=a(new o(0,0,1)),o.prototype.clone=function(e){return o.clone(this,e)},o.prototype.equals=function(e){return o.equals(this,e)},o.prototype.equalsEpsilon=function(e,t,r){return o.equalsEpsilon(this,e,t,r)},o.prototype.toString=function(){return"("+this.x+", "+this.y+", "+this.z+")"},o}),define("Core/Cartesian4",["./Check","./defaultValue","./defined","./DeveloperError","./freezeObject","./Math"],function(e,t,r,n,a,i){"use strict";function o(e,r,n,a){this.x=t(e,0),this.y=t(r,0),this.z=t(n,0),this.w=t(a,0)}o.fromElements=function(e,t,n,a,i){return r(i)?(i.x=e,i.y=t,i.z=n,i.w=a,i):new o(e,t,n,a)},o.fromColor=function(t,n){return e.typeOf.object("color",t),r(n)?(n.x=t.red,n.y=t.green,n.z=t.blue,n.w=t.alpha,n):new o(t.red,t.green,t.blue,t.alpha)},o.clone=function(e,t){if(r(e))return r(t)?(t.x=e.x,t.y=e.y,t.z=e.z,t.w=e.w,t):new o(e.x,e.y,e.z,e.w)},o.packedLength=4,o.pack=function(r,n,a){return e.typeOf.object("value",r),e.defined("array",n),a=t(a,0),n[a++]=r.x,n[a++]=r.y,n[a++]=r.z,n[a]=r.w,n},o.unpack=function(n,a,i){return e.defined("array",n),a=t(a,0),r(i)||(i=new o),i.x=n[a++],i.y=n[a++],i.z=n[a++],i.w=n[a],i},o.packArray=function(t,n){e.defined("array",t);var a=t.length;r(n)?n.length=4*a:n=new Array(4*a);for(var i=0;i<a;++i)o.pack(t[i],n,4*i);return n},o.unpackArray=function(t,n){e.defined("array",t);var a=t.length;r(n)?n.length=a/4:n=new Array(a/4);for(var i=0;i<a;i+=4){var u=i/4;n[u]=o.unpack(t,i,n[u])}return n},o.fromArray=o.unpack,o.maximumComponent=function(t){return e.typeOf.object("cartesian",t),Math.max(t.x,t.y,t.z,t.w)},o.minimumComponent=function(t){return e.typeOf.object("cartesian",t),Math.min(t.x,t.y,t.z,t.w)},o.minimumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.min(t.x,r.x),n.y=Math.min(t.y,r.y),n.z=Math.min(t.z,r.z),n.w=Math.min(t.w,r.w),n},o.maximumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.max(t.x,r.x),n.y=Math.max(t.y,r.y),n.z=Math.max(t.z,r.z),n.w=Math.max(t.w,r.w),n},o.magnitudeSquared=function(t){return e.typeOf.object("cartesian",t),t.x*t.x+t.y*t.y+t.z*t.z+t.w*t.w},o.magnitude=function(e){return Math.sqrt(o.magnitudeSquared(e))};var u=new o;o.distance=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitude(u)},o.distanceSquared=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitudeSquared(u)},o.normalize=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var a=o.magnitude(t);if(r.x=t.x/a,r.y=t.y/a,r.z=t.z/a,r.w=t.w/a,isNaN(r.x)||isNaN(r.y)||isNaN(r.z)||isNaN(r.w))throw new n("normalized result is not a number");return r},o.dot=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),t.x*r.x+t.y*r.y+t.z*r.z+t.w*r.w},o.multiplyComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x*r.x,n.y=t.y*r.y,n.z=t.z*r.z,n.w=t.w*r.w,n},o.divideComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x/r.x,n.y=t.y/r.y,n.z=t.z/r.z,n.w=t.w/r.w,n},o.add=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x+r.x,n.y=t.y+r.y,n.z=t.z+r.z,n.w=t.w+r.w,n},o.subtract=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x-r.x,n.y=t.y-r.y,n.z=t.z-r.z,n.w=t.w-r.w,n},o.multiplyByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x*r,n.y=t.y*r,n.z=t.z*r,n.w=t.w*r,n},o.divideByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x/r,n.y=t.y/r,n.z=t.z/r,n.w=t.w/r,n},o.negate=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=-t.x,r.y=-t.y,r.z=-t.z,r.w=-t.w,r},o.abs=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=Math.abs(t.x),r.y=Math.abs(t.y),r.z=Math.abs(t.z),r.w=Math.abs(t.w),r};var s=new o;o.lerp=function(t,r,n,a){return e.typeOf.object("start",t),e.typeOf.object("end",r),e.typeOf.number("t",n),e.typeOf.object("result",a),o.multiplyByScalar(r,n,s),a=o.multiplyByScalar(t,1-n,a),o.add(s,a,a)};var c=new o;o.mostOrthogonalAxis=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var n=o.normalize(t,c);return o.abs(n,n),r=n.x<=n.y?n.x<=n.z?n.x<=n.w?o.clone(o.UNIT_X,r):o.clone(o.UNIT_W,r):n.z<=n.w?o.clone(o.UNIT_Z,r):o.clone(o.UNIT_W,r):n.y<=n.z?n.y<=n.w?o.clone(o.UNIT_Y,r):o.clone(o.UNIT_W,r):n.z<=n.w?o.clone(o.UNIT_Z,r):o.clone(o.UNIT_W,r)},o.equals=function(e,t){return e===t||r(e)&&r(t)&&e.x===t.x&&e.y===t.y&&e.z===t.z&&e.w===t.w},o.equalsArray=function(e,t,r){return e.x===t[r]&&e.y===t[r+1]&&e.z===t[r+2]&&e.w===t[r+3]},o.equalsEpsilon=function(e,t,n,a){return e===t||r(e)&&r(t)&&i.equalsEpsilon(e.x,t.x,n,a)&&i.equalsEpsilon(e.y,t.y,n,a)&&i.equalsEpsilon(e.z,t.z,n,a)&&i.equalsEpsilon(e.w,t.w,n,a)},o.ZERO=a(new o(0,0,0,0)),o.UNIT_X=a(new o(1,0,0,0)),o.UNIT_Y=a(new o(0,1,0,0)),o.UNIT_Z=a(new o(0,0,1,0)),o.UNIT_W=a(new o(0,0,0,1)),o.prototype.clone=function(e){return o.clone(this,e)},o.prototype.equals=function(e){return o.equals(this,e)},o.prototype.equalsEpsilon=function(e,t,r){return o.equalsEpsilon(this,e,t,r)},o.prototype.toString=function(){return"("+this.x+", "+this.y+", "+this.z+", "+this.w+")"};var f=new Float32Array(1);return o.packFloat=function(t,n){if(e.typeOf.number("value",t),r(n)||(n=new o),f[0]=t,0===(t=f[0]))return o.clone(o.ZERO,n);var a,u=t<0?1:0;isFinite(t)?(t=Math.abs(t),a=Math.floor(i.logBase(t,10))+1,t/=Math.pow(10,a)):(t=.1,a=38);var s=256*t;return n.x=Math.floor(s),s=256*(s-n.x),n.y=Math.floor(s),s=256*(s-n.y),n.z=Math.floor(s),n.w=2*(a+38)+u,n},o.unpackFloat=function(t){e.typeOf.object("packedFloat",t);var r=t.w/2,n=Math.floor(r),a=2*(r-n);if(n-=38,a=2*a-1,a=-a,n>=38)return a<0?Number.NEGATIVE_INFINITY:Number.POSITIVE_INFINITY;var i=a*t.x*(1/256);return i+=a*t.y*(1/65536),(i+=a*t.z*(1/16777216))*Math.pow(10,n)},o}),define("Core/defineProperties",["./defined"],function(e){"use strict";var t=function(){try{return"x"in Object.defineProperty({},"x",{})}catch(e){return!1}}(),r=Object.defineProperties;return t&&e(r)||(r=function(e){return e}),r}),define("Core/Matrix3",["./Cartesian3","./Check","./defaultValue","./defined","./defineProperties","./DeveloperError","./freezeObject","./Math"],function(e,t,r,n,a,i,o,u){"use strict";function s(e,t,n,a,i,o,u,s,c){this[0]=r(e,0),this[1]=r(a,0),this[2]=r(u,0),this[3]=r(t,0),this[4]=r(i,0),this[5]=r(s,0),this[6]=r(n,0),this[7]=r(o,0),this[8]=r(c,0)}function c(e){for(var t=0,r=0;r<9;++r){var n=e[r];t+=n*n}return Math.sqrt(t)}function f(e){for(var t=0,r=0;r<3;++r){var n=e[s.getElementIndex(h[r],d[r])];t+=2*n*n}return Math.sqrt(t)}function E(e,t){for(var r=u.EPSILON15,n=0,a=1,i=0;i<3;++i){var o=Math.abs(e[s.getElementIndex(h[i],d[i])]);o>n&&(a=i,n=o)}var c=1,f=0,E=d[a],l=h[a];if(Math.abs(e[s.getElementIndex(l,E)])>r){var y,_=e[s.getElementIndex(l,l)],p=e[s.getElementIndex(E,E)],T=e[s.getElementIndex(l,E)],O=(_-p)/2/T;y=O<0?-1/(-O+Math.sqrt(1+O*O)):1/(O+Math.sqrt(1+O*O)),c=1/Math.sqrt(1+y*y),f=y*c}return t=s.clone(s.IDENTITY,t),t[s.getElementIndex(E,E)]=t[s.getElementIndex(l,l)]=c,t[s.getElementIndex(l,E)]=f,t[s.getElementIndex(E,l)]=-f,t}s.packedLength=9,s.pack=function(e,n,a){return t.typeOf.object("value",e),t.defined("array",n),a=r(a,0),n[a++]=e[0],n[a++]=e[1],n[a++]=e[2],n[a++]=e[3],n[a++]=e[4],n[a++]=e[5],n[a++]=e[6],n[a++]=e[7],n[a++]=e[8],n},s.unpack=function(e,a,i){return t.defined("array",e),a=r(a,0),n(i)||(i=new s),i[0]=e[a++],i[1]=e[a++],i[2]=e[a++],i[3]=e[a++],i[4]=e[a++],i[5]=e[a++],i[6]=e[a++],i[7]=e[a++],i[8]=e[a++],i},s.clone=function(e,t){if(n(e))return n(t)?(t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[3],t[4]=e[4],t[5]=e[5],t[6]=e[6],t[7]=e[7],t[8]=e[8],t):new s(e[0],e[3],e[6],e[1],e[4],e[7],e[2],e[5],e[8])},s.fromArray=function(e,a,i){return t.defined("array",e),a=r(a,0),n(i)||(i=new s),i[0]=e[a],i[1]=e[a+1],i[2]=e[a+2],i[3]=e[a+3],i[4]=e[a+4],i[5]=e[a+5],i[6]=e[a+6],i[7]=e[a+7],i[8]=e[a+8],i},s.fromColumnMajorArray=function(e,r){return t.defined("values",e),s.clone(e,r)},s.fromRowMajorArray=function(e,r){return t.defined("values",e),n(r)?(r[0]=e[0],r[1]=e[3],r[2]=e[6],r[3]=e[1],r[4]=e[4],r[5]=e[7],r[6]=e[2],r[7]=e[5],r[8]=e[8],r):new s(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8])},s.fromQuaternion=function(e,r){t.typeOf.object("quaternion",e);var a=e.x*e.x,i=e.x*e.y,o=e.x*e.z,u=e.x*e.w,c=e.y*e.y,f=e.y*e.z,E=e.y*e.w,l=e.z*e.z,y=e.z*e.w,d=e.w*e.w,h=a-c-l+d,_=2*(i-y),p=2*(o+E),T=2*(i+y),O=-a+c-l+d,m=2*(f-u),A=2*(o-E),R=2*(f+u),b=-a-c+l+d;return n(r)?(r[0]=h,r[1]=T,r[2]=A,r[3]=_,r[4]=O,r[5]=R,r[6]=p,r[7]=m,r[8]=b,r):new s(h,_,p,T,O,m,A,R,b)},s.fromHeadingPitchRoll=function(e,r){t.typeOf.object("headingPitchRoll",e);var a=Math.cos(-e.pitch),i=Math.cos(-e.heading),o=Math.cos(e.roll),u=Math.sin(-e.pitch),c=Math.sin(-e.heading),f=Math.sin(e.roll),E=a*i,l=-o*c+f*u*i,y=f*c+o*u*i,d=a*c,h=o*i+f*u*c,_=-f*i+o*u*c,p=-u,T=f*a,O=o*a;return n(r)?(r[0]=E,r[1]=d,r[2]=p,r[3]=l,r[4]=h,r[5]=T,r[6]=y,r[7]=_,r[8]=O,r):new s(E,l,y,d,h,_,p,T,O)},s.fromScale=function(e,r){return t.typeOf.object("scale",e),n(r)?(r[0]=e.x,r[1]=0,r[2]=0,r[3]=0,r[4]=e.y,r[5]=0,r[6]=0,r[7]=0,r[8]=e.z,r):new s(e.x,0,0,0,e.y,0,0,0,e.z)},s.fromUniformScale=function(e,r){return t.typeOf.number("scale",e),n(r)?(r[0]=e,r[1]=0,r[2]=0,r[3]=0,r[4]=e,r[5]=0,r[6]=0,r[7]=0,r[8]=e,r):new s(e,0,0,0,e,0,0,0,e)},s.fromCrossProduct=function(e,r){return t.typeOf.object("vector",e),n(r)?(r[0]=0,r[1]=e.z,r[2]=-e.y,r[3]=-e.z,r[4]=0,r[5]=e.x,r[6]=e.y,r[7]=-e.x,r[8]=0,r):new s(0,-e.z,e.y,e.z,0,-e.x,-e.y,e.x,0)},s.fromRotationX=function(e,r){t.typeOf.number("angle",e);var a=Math.cos(e),i=Math.sin(e);return n(r)?(r[0]=1,r[1]=0,r[2]=0,r[3]=0,r[4]=a,r[5]=i,r[6]=0,r[7]=-i,r[8]=a,r):new s(1,0,0,0,a,-i,0,i,a)},s.fromRotationY=function(e,r){t.typeOf.number("angle",e);var a=Math.cos(e),i=Math.sin(e);return n(r)?(r[0]=a,r[1]=0,r[2]=-i,r[3]=0,r[4]=1,r[5]=0,r[6]=i,r[7]=0,r[8]=a,r):new s(a,0,i,0,1,0,-i,0,a)},s.fromRotationZ=function(e,r){t.typeOf.number("angle",e);var a=Math.cos(e),i=Math.sin(e);return n(r)?(r[0]=a,r[1]=i,r[2]=0,r[3]=-i,r[4]=a,r[5]=0,r[6]=0,r[7]=0,r[8]=1,r):new s(a,-i,0,i,a,0,0,0,1)},s.toArray=function(e,r){return t.typeOf.object("matrix",e),n(r)?(r[0]=e[0],r[1]=e[1],r[2]=e[2],r[3]=e[3],r[4]=e[4],r[5]=e[5],r[6]=e[6],r[7]=e[7],r[8]=e[8],r):[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8]]},s.getElementIndex=function(e,r){return t.typeOf.number.greaterThanOrEquals("row",r,0),t.typeOf.number.lessThanOrEquals("row",r,2),t.typeOf.number.greaterThanOrEquals("column",e,0),t.typeOf.number.lessThanOrEquals("column",e,2),3*e+r},s.getColumn=function(e,r,n){t.typeOf.object("matrix",e),t.typeOf.number.greaterThanOrEquals("index",r,0),t.typeOf.number.lessThanOrEquals("index",r,2),t.typeOf.object("result",n);var a=3*r,i=e[a],o=e[a+1],u=e[a+2];return n.x=i,n.y=o,n.z=u,n},
-s.setColumn=function(e,r,n,a){t.typeOf.object("matrix",e),t.typeOf.number.greaterThanOrEquals("index",r,0),t.typeOf.number.lessThanOrEquals("index",r,2),t.typeOf.object("cartesian",n),t.typeOf.object("result",a),a=s.clone(e,a);var i=3*r;return a[i]=n.x,a[i+1]=n.y,a[i+2]=n.z,a},s.getRow=function(e,r,n){t.typeOf.object("matrix",e),t.typeOf.number.greaterThanOrEquals("index",r,0),t.typeOf.number.lessThanOrEquals("index",r,2),t.typeOf.object("result",n);var a=e[r],i=e[r+3],o=e[r+6];return n.x=a,n.y=i,n.z=o,n},s.setRow=function(e,r,n,a){return t.typeOf.object("matrix",e),t.typeOf.number.greaterThanOrEquals("index",r,0),t.typeOf.number.lessThanOrEquals("index",r,2),t.typeOf.object("cartesian",n),t.typeOf.object("result",a),a=s.clone(e,a),a[r]=n.x,a[r+3]=n.y,a[r+6]=n.z,a};var l=new e;s.getScale=function(r,n){return t.typeOf.object("matrix",r),t.typeOf.object("result",n),n.x=e.magnitude(e.fromElements(r[0],r[1],r[2],l)),n.y=e.magnitude(e.fromElements(r[3],r[4],r[5],l)),n.z=e.magnitude(e.fromElements(r[6],r[7],r[8],l)),n};var y=new e;s.getMaximumScale=function(t){return s.getScale(t,y),e.maximumComponent(y)},s.multiply=function(e,r,n){t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n);var a=e[0]*r[0]+e[3]*r[1]+e[6]*r[2],i=e[1]*r[0]+e[4]*r[1]+e[7]*r[2],o=e[2]*r[0]+e[5]*r[1]+e[8]*r[2],u=e[0]*r[3]+e[3]*r[4]+e[6]*r[5],s=e[1]*r[3]+e[4]*r[4]+e[7]*r[5],c=e[2]*r[3]+e[5]*r[4]+e[8]*r[5],f=e[0]*r[6]+e[3]*r[7]+e[6]*r[8],E=e[1]*r[6]+e[4]*r[7]+e[7]*r[8],l=e[2]*r[6]+e[5]*r[7]+e[8]*r[8];return n[0]=a,n[1]=i,n[2]=o,n[3]=u,n[4]=s,n[5]=c,n[6]=f,n[7]=E,n[8]=l,n},s.add=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n[0]=e[0]+r[0],n[1]=e[1]+r[1],n[2]=e[2]+r[2],n[3]=e[3]+r[3],n[4]=e[4]+r[4],n[5]=e[5]+r[5],n[6]=e[6]+r[6],n[7]=e[7]+r[7],n[8]=e[8]+r[8],n},s.subtract=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n[0]=e[0]-r[0],n[1]=e[1]-r[1],n[2]=e[2]-r[2],n[3]=e[3]-r[3],n[4]=e[4]-r[4],n[5]=e[5]-r[5],n[6]=e[6]-r[6],n[7]=e[7]-r[7],n[8]=e[8]-r[8],n},s.multiplyByVector=function(e,r,n){t.typeOf.object("matrix",e),t.typeOf.object("cartesian",r),t.typeOf.object("result",n);var a=r.x,i=r.y,o=r.z,u=e[0]*a+e[3]*i+e[6]*o,s=e[1]*a+e[4]*i+e[7]*o,c=e[2]*a+e[5]*i+e[8]*o;return n.x=u,n.y=s,n.z=c,n},s.multiplyByScalar=function(e,r,n){return t.typeOf.object("matrix",e),t.typeOf.number("scalar",r),t.typeOf.object("result",n),n[0]=e[0]*r,n[1]=e[1]*r,n[2]=e[2]*r,n[3]=e[3]*r,n[4]=e[4]*r,n[5]=e[5]*r,n[6]=e[6]*r,n[7]=e[7]*r,n[8]=e[8]*r,n},s.multiplyByScale=function(e,r,n){return t.typeOf.object("matrix",e),t.typeOf.object("scale",r),t.typeOf.object("result",n),n[0]=e[0]*r.x,n[1]=e[1]*r.x,n[2]=e[2]*r.x,n[3]=e[3]*r.y,n[4]=e[4]*r.y,n[5]=e[5]*r.y,n[6]=e[6]*r.z,n[7]=e[7]*r.z,n[8]=e[8]*r.z,n},s.negate=function(e,r){return t.typeOf.object("matrix",e),t.typeOf.object("result",r),r[0]=-e[0],r[1]=-e[1],r[2]=-e[2],r[3]=-e[3],r[4]=-e[4],r[5]=-e[5],r[6]=-e[6],r[7]=-e[7],r[8]=-e[8],r},s.transpose=function(e,r){t.typeOf.object("matrix",e),t.typeOf.object("result",r);var n=e[0],a=e[3],i=e[6],o=e[1],u=e[4],s=e[7],c=e[2],f=e[5],E=e[8];return r[0]=n,r[1]=a,r[2]=i,r[3]=o,r[4]=u,r[5]=s,r[6]=c,r[7]=f,r[8]=E,r};var d=[1,0,0],h=[2,2,1],_=new s,p=new s;return s.computeEigenDecomposition=function(e,r){t.typeOf.object("matrix",e);var a=u.EPSILON20,i=0,o=0;n(r)||(r={});for(var l=r.unitary=s.clone(s.IDENTITY,r.unitary),y=r.diagonal=s.clone(e,r.diagonal),d=a*c(y);o<10&&f(y)>d;)E(y,_),s.transpose(_,p),s.multiply(y,_,y),s.multiply(p,y,y),s.multiply(l,_,l),++i>2&&(++o,i=0);return r},s.abs=function(e,r){return t.typeOf.object("matrix",e),t.typeOf.object("result",r),r[0]=Math.abs(e[0]),r[1]=Math.abs(e[1]),r[2]=Math.abs(e[2]),r[3]=Math.abs(e[3]),r[4]=Math.abs(e[4]),r[5]=Math.abs(e[5]),r[6]=Math.abs(e[6]),r[7]=Math.abs(e[7]),r[8]=Math.abs(e[8]),r},s.determinant=function(e){t.typeOf.object("matrix",e);var r=e[0],n=e[3],a=e[6],i=e[1],o=e[4],u=e[7],s=e[2],c=e[5],f=e[8];return r*(o*f-c*u)+i*(c*a-n*f)+s*(n*u-o*a)},s.inverse=function(e,r){t.typeOf.object("matrix",e),t.typeOf.object("result",r);var n=e[0],a=e[1],o=e[2],c=e[3],f=e[4],E=e[5],l=e[6],y=e[7],d=e[8],h=s.determinant(e);if(Math.abs(h)<=u.EPSILON15)throw new i("matrix is not invertible");r[0]=f*d-y*E,r[1]=y*o-a*d,r[2]=a*E-f*o,r[3]=l*E-c*d,r[4]=n*d-l*o,r[5]=c*o-n*E,r[6]=c*y-l*f,r[7]=l*a-n*y,r[8]=n*f-c*a;var _=1/h;return s.multiplyByScalar(r,_,r)},s.equals=function(e,t){return e===t||n(e)&&n(t)&&e[0]===t[0]&&e[1]===t[1]&&e[2]===t[2]&&e[3]===t[3]&&e[4]===t[4]&&e[5]===t[5]&&e[6]===t[6]&&e[7]===t[7]&&e[8]===t[8]},s.equalsEpsilon=function(e,r,a){return t.typeOf.number("epsilon",a),e===r||n(e)&&n(r)&&Math.abs(e[0]-r[0])<=a&&Math.abs(e[1]-r[1])<=a&&Math.abs(e[2]-r[2])<=a&&Math.abs(e[3]-r[3])<=a&&Math.abs(e[4]-r[4])<=a&&Math.abs(e[5]-r[5])<=a&&Math.abs(e[6]-r[6])<=a&&Math.abs(e[7]-r[7])<=a&&Math.abs(e[8]-r[8])<=a},s.IDENTITY=o(new s(1,0,0,0,1,0,0,0,1)),s.ZERO=o(new s(0,0,0,0,0,0,0,0,0)),s.COLUMN0ROW0=0,s.COLUMN0ROW1=1,s.COLUMN0ROW2=2,s.COLUMN1ROW0=3,s.COLUMN1ROW1=4,s.COLUMN1ROW2=5,s.COLUMN2ROW0=6,s.COLUMN2ROW1=7,s.COLUMN2ROW2=8,a(s.prototype,{length:{get:function(){return s.packedLength}}}),s.prototype.clone=function(e){return s.clone(this,e)},s.prototype.equals=function(e){return s.equals(this,e)},s.equalsArray=function(e,t,r){return e[0]===t[r]&&e[1]===t[r+1]&&e[2]===t[r+2]&&e[3]===t[r+3]&&e[4]===t[r+4]&&e[5]===t[r+5]&&e[6]===t[r+6]&&e[7]===t[r+7]&&e[8]===t[r+8]},s.prototype.equalsEpsilon=function(e,t){return s.equalsEpsilon(this,e,t)},s.prototype.toString=function(){return"("+this[0]+", "+this[3]+", "+this[6]+")\n("+this[1]+", "+this[4]+", "+this[7]+")\n("+this[2]+", "+this[5]+", "+this[8]+")"},s}),define("Core/RuntimeError",["./defined"],function(e){"use strict";function t(e){this.name="RuntimeError",this.message=e;var t;try{throw new Error}catch(e){t=e.stack}this.stack=t}return e(Object.create)&&(t.prototype=Object.create(Error.prototype),t.prototype.constructor=t),t.prototype.toString=function(){var t=this.name+": "+this.message;return e(this.stack)&&(t+="\n"+this.stack.toString()),t},t}),define("Core/Matrix4",["./Cartesian3","./Cartesian4","./Check","./defaultValue","./defined","./defineProperties","./freezeObject","./Math","./Matrix3","./RuntimeError"],function(e,t,r,n,a,i,o,u,s,c){"use strict";function f(e,t,r,a,i,o,u,s,c,f,E,l,y,d,h,_){this[0]=n(e,0),this[1]=n(i,0),this[2]=n(c,0),this[3]=n(y,0),this[4]=n(t,0),this[5]=n(o,0),this[6]=n(f,0),this[7]=n(d,0),this[8]=n(r,0),this[9]=n(u,0),this[10]=n(E,0),this[11]=n(h,0),this[12]=n(a,0),this[13]=n(s,0),this[14]=n(l,0),this[15]=n(_,0)}f.packedLength=16,f.pack=function(e,t,a){return r.typeOf.object("value",e),r.defined("array",t),a=n(a,0),t[a++]=e[0],t[a++]=e[1],t[a++]=e[2],t[a++]=e[3],t[a++]=e[4],t[a++]=e[5],t[a++]=e[6],t[a++]=e[7],t[a++]=e[8],t[a++]=e[9],t[a++]=e[10],t[a++]=e[11],t[a++]=e[12],t[a++]=e[13],t[a++]=e[14],t[a]=e[15],t},f.unpack=function(e,t,i){return r.defined("array",e),t=n(t,0),a(i)||(i=new f),i[0]=e[t++],i[1]=e[t++],i[2]=e[t++],i[3]=e[t++],i[4]=e[t++],i[5]=e[t++],i[6]=e[t++],i[7]=e[t++],i[8]=e[t++],i[9]=e[t++],i[10]=e[t++],i[11]=e[t++],i[12]=e[t++],i[13]=e[t++],i[14]=e[t++],i[15]=e[t],i},f.clone=function(e,t){if(a(e))return a(t)?(t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[3],t[4]=e[4],t[5]=e[5],t[6]=e[6],t[7]=e[7],t[8]=e[8],t[9]=e[9],t[10]=e[10],t[11]=e[11],t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15],t):new f(e[0],e[4],e[8],e[12],e[1],e[5],e[9],e[13],e[2],e[6],e[10],e[14],e[3],e[7],e[11],e[15])},f.fromArray=f.unpack,f.fromColumnMajorArray=function(e,t){return r.defined("values",e),f.clone(e,t)},f.fromRowMajorArray=function(e,t){return r.defined("values",e),a(t)?(t[0]=e[0],t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=e[1],t[5]=e[5],t[6]=e[9],t[7]=e[13],t[8]=e[2],t[9]=e[6],t[10]=e[10],t[11]=e[14],t[12]=e[3],t[13]=e[7],t[14]=e[11],t[15]=e[15],t):new f(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11],e[12],e[13],e[14],e[15])},f.fromRotationTranslation=function(t,i,o){return r.typeOf.object("rotation",t),i=n(i,e.ZERO),a(o)?(o[0]=t[0],o[1]=t[1],o[2]=t[2],o[3]=0,o[4]=t[3],o[5]=t[4],o[6]=t[5],o[7]=0,o[8]=t[6],o[9]=t[7],o[10]=t[8],o[11]=0,o[12]=i.x,o[13]=i.y,o[14]=i.z,o[15]=1,o):new f(t[0],t[3],t[6],i.x,t[1],t[4],t[7],i.y,t[2],t[5],t[8],i.z,0,0,0,1)},f.fromTranslationQuaternionRotationScale=function(e,t,n,i){r.typeOf.object("translation",e),r.typeOf.object("rotation",t),r.typeOf.object("scale",n),a(i)||(i=new f);var o=n.x,u=n.y,s=n.z,c=t.x*t.x,E=t.x*t.y,l=t.x*t.z,y=t.x*t.w,d=t.y*t.y,h=t.y*t.z,_=t.y*t.w,p=t.z*t.z,T=t.z*t.w,O=t.w*t.w,m=c-d-p+O,A=2*(E-T),R=2*(l+_),b=2*(E+T),N=-c+d-p+O,S=2*(h-y),g=2*(l-_),v=2*(h+y),I=-c-d+p+O;return i[0]=m*o,i[1]=b*o,i[2]=g*o,i[3]=0,i[4]=A*u,i[5]=N*u,i[6]=v*u,i[7]=0,i[8]=R*s,i[9]=S*s,i[10]=I*s,i[11]=0,i[12]=e.x,i[13]=e.y,i[14]=e.z,i[15]=1,i},f.fromTranslationRotationScale=function(e,t){return r.typeOf.object("translationRotationScale",e),f.fromTranslationQuaternionRotationScale(e.translation,e.rotation,e.scale,t)},f.fromTranslation=function(e,t){return r.typeOf.object("translation",e),f.fromRotationTranslation(s.IDENTITY,e,t)},f.fromScale=function(e,t){return r.typeOf.object("scale",e),a(t)?(t[0]=e.x,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=e.y,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[10]=e.z,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t):new f(e.x,0,0,0,0,e.y,0,0,0,0,e.z,0,0,0,0,1)},f.fromUniformScale=function(e,t){return r.typeOf.number("scale",e),a(t)?(t[0]=e,t[1]=0,t[2]=0,t[3]=0,t[4]=0,t[5]=e,t[6]=0,t[7]=0,t[8]=0,t[9]=0,t[10]=e,t[11]=0,t[12]=0,t[13]=0,t[14]=0,t[15]=1,t):new f(e,0,0,0,0,e,0,0,0,0,e,0,0,0,0,1)};var E=new e,l=new e,y=new e;f.fromCamera=function(t,n){r.typeOf.object("camera",t);var i=t.position,o=t.direction,u=t.up;r.typeOf.object("camera.position",i),r.typeOf.object("camera.direction",o),r.typeOf.object("camera.up",u),e.normalize(o,E),e.normalize(e.cross(E,u,l),l),e.normalize(e.cross(l,E,y),y);var s=l.x,c=l.y,d=l.z,h=E.x,_=E.y,p=E.z,T=y.x,O=y.y,m=y.z,A=i.x,R=i.y,b=i.z,N=s*-A+c*-R+d*-b,S=T*-A+O*-R+m*-b,g=h*A+_*R+p*b;return a(n)?(n[0]=s,n[1]=T,n[2]=-h,n[3]=0,n[4]=c,n[5]=O,n[6]=-_,n[7]=0,n[8]=d,n[9]=m,n[10]=-p,n[11]=0,n[12]=N,n[13]=S,n[14]=g,n[15]=1,n):new f(s,c,d,N,T,O,m,S,-h,-_,-p,g,0,0,0,1)},f.computePerspectiveFieldOfView=function(e,t,n,a,i){r.typeOf.number.greaterThan("fovY",e,0),r.typeOf.number.lessThan("fovY",e,Math.PI),r.typeOf.number.greaterThan("near",n,0),r.typeOf.number.greaterThan("far",a,0),r.typeOf.object("result",i);var o=Math.tan(.5*e),u=1/o,s=u/t,c=(a+n)/(n-a),f=2*a*n/(n-a);return i[0]=s,i[1]=0,i[2]=0,i[3]=0,i[4]=0,i[5]=u,i[6]=0,i[7]=0,i[8]=0,i[9]=0,i[10]=c,i[11]=-1,i[12]=0,i[13]=0,i[14]=f,i[15]=0,i},f.computeOrthographicOffCenter=function(e,t,n,a,i,o,u){r.typeOf.number("left",e),r.typeOf.number("right",t),r.typeOf.number("bottom",n),r.typeOf.number("top",a),r.typeOf.number("near",i),r.typeOf.number("far",o),r.typeOf.object("result",u);var s=1/(t-e),c=1/(a-n),f=1/(o-i),E=-(t+e)*s,l=-(a+n)*c,y=-(o+i)*f;return s*=2,c*=2,f*=-2,u[0]=s,u[1]=0,u[2]=0,u[3]=0,u[4]=0,u[5]=c,u[6]=0,u[7]=0,u[8]=0,u[9]=0,u[10]=f,u[11]=0,u[12]=E,u[13]=l,u[14]=y,u[15]=1,u},f.computePerspectiveOffCenter=function(e,t,n,a,i,o,u){r.typeOf.number("left",e),r.typeOf.number("right",t),r.typeOf.number("bottom",n),r.typeOf.number("top",a),r.typeOf.number("near",i),r.typeOf.number("far",o),r.typeOf.object("result",u);var s=2*i/(t-e),c=2*i/(a-n),f=(t+e)/(t-e),E=(a+n)/(a-n),l=-(o+i)/(o-i),y=-2*o*i/(o-i);return u[0]=s,u[1]=0,u[2]=0,u[3]=0,u[4]=0,u[5]=c,u[6]=0,u[7]=0,u[8]=f,u[9]=E,u[10]=l,u[11]=-1,u[12]=0,u[13]=0,u[14]=y,u[15]=0,u},f.computeInfinitePerspectiveOffCenter=function(e,t,n,a,i,o){r.typeOf.number("left",e),r.typeOf.number("right",t),r.typeOf.number("bottom",n),r.typeOf.number("top",a),r.typeOf.number("near",i),r.typeOf.object("result",o);var u=2*i/(t-e),s=2*i/(a-n),c=(t+e)/(t-e),f=(a+n)/(a-n),E=-2*i;return o[0]=u,o[1]=0,o[2]=0,o[3]=0,o[4]=0,o[5]=s,o[6]=0,o[7]=0,o[8]=c,o[9]=f,o[10]=-1,o[11]=-1,o[12]=0,o[13]=0,o[14]=E,o[15]=0,o},f.computeViewportTransformation=function(e,t,a,i){r.typeOf.object("result",i),e=n(e,n.EMPTY_OBJECT);var o=n(e.x,0),u=n(e.y,0),s=n(e.width,0),c=n(e.height,0);t=n(t,0),a=n(a,1);var f=.5*s,E=.5*c,l=.5*(a-t),y=f,d=E,h=l,_=o+f,p=u+E,T=t+l;return i[0]=y,i[1]=0,i[2]=0,i[3]=0,i[4]=0,i[5]=d,i[6]=0,i[7]=0,i[8]=0,i[9]=0,i[10]=h,i[11]=0,i[12]=_,i[13]=p,i[14]=T,i[15]=1,i},f.computeView=function(t,n,a,i,o){return r.typeOf.object("position",t),r.typeOf.object("direction",n),r.typeOf.object("up",a),r.typeOf.object("right",i),r.typeOf.object("result",o),o[0]=i.x,o[1]=a.x,o[2]=-n.x,o[3]=0,o[4]=i.y,o[5]=a.y,o[6]=-n.y,o[7]=0,o[8]=i.z,o[9]=a.z,o[10]=-n.z,o[11]=0,o[12]=-e.dot(i,t),o[13]=-e.dot(a,t),o[14]=e.dot(n,t),o[15]=1,o},f.toArray=function(e,t){return r.typeOf.object("matrix",e),a(t)?(t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[3],t[4]=e[4],t[5]=e[5],t[6]=e[6],t[7]=e[7],t[8]=e[8],t[9]=e[9],t[10]=e[10],t[11]=e[11],t[12]=e[12],t[13]=e[13],t[14]=e[14],t[15]=e[15],t):[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11],e[12],e[13],e[14],e[15]]},f.getElementIndex=function(e,t){return r.typeOf.number.greaterThanOrEquals("row",t,0),r.typeOf.number.lessThanOrEquals("row",t,3),r.typeOf.number.greaterThanOrEquals("column",e,0),r.typeOf.number.lessThanOrEquals("column",e,3),4*e+t},f.getColumn=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.number.greaterThanOrEquals("index",t,0),r.typeOf.number.lessThanOrEquals("index",t,3),r.typeOf.object("result",n);var a=4*t,i=e[a],o=e[a+1],u=e[a+2],s=e[a+3];return n.x=i,n.y=o,n.z=u,n.w=s,n},f.setColumn=function(e,t,n,a){r.typeOf.object("matrix",e),r.typeOf.number.greaterThanOrEquals("index",t,0),r.typeOf.number.lessThanOrEquals("index",t,3),r.typeOf.object("cartesian",n),r.typeOf.object("result",a),a=f.clone(e,a);var i=4*t;return a[i]=n.x,a[i+1]=n.y,a[i+2]=n.z,a[i+3]=n.w,a},f.setTranslation=function(e,t,n){return r.typeOf.object("matrix",e),r.typeOf.object("translation",t),r.typeOf.object("result",n),n[0]=e[0],n[1]=e[1],n[2]=e[2],n[3]=e[3],n[4]=e[4],n[5]=e[5],n[6]=e[6],n[7]=e[7],n[8]=e[8],n[9]=e[9],n[10]=e[10],n[11]=e[11],n[12]=t.x,n[13]=t.y,n[14]=t.z,n[15]=e[15],n};var d=new e;f.setScale=function(t,n,a){r.typeOf.object("matrix",t),r.typeOf.object("scale",n),r.typeOf.object("result",a);var i=f.getScale(t,d),o=e.divideComponents(n,i,d);return f.multiplyByScale(t,o,a)},f.getRow=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.number.greaterThanOrEquals("index",t,0),r.typeOf.number.lessThanOrEquals("index",t,3),r.typeOf.object("result",n);var a=e[t],i=e[t+4],o=e[t+8],u=e[t+12];return n.x=a,n.y=i,n.z=o,n.w=u,n},f.setRow=function(e,t,n,a){return r.typeOf.object("matrix",e),r.typeOf.number.greaterThanOrEquals("index",t,0),r.typeOf.number.lessThanOrEquals("index",t,3),r.typeOf.object("cartesian",n),r.typeOf.object("result",a),a=f.clone(e,a),a[t]=n.x,a[t+4]=n.y,a[t+8]=n.z,a[t+12]=n.w,a};var h=new e;f.getScale=function(t,n){return r.typeOf.object("matrix",t),r.typeOf.object("result",n),n.x=e.magnitude(e.fromElements(t[0],t[1],t[2],h)),n.y=e.magnitude(e.fromElements(t[4],t[5],t[6],h)),n.z=e.magnitude(e.fromElements(t[8],t[9],t[10],h)),n};var _=new e;f.getMaximumScale=function(t){return f.getScale(t,_),e.maximumComponent(_)},f.multiply=function(e,t,n){r.typeOf.object("left",e),r.typeOf.object("right",t),r.typeOf.object("result",n);var a=e[0],i=e[1],o=e[2],u=e[3],s=e[4],c=e[5],f=e[6],E=e[7],l=e[8],y=e[9],d=e[10],h=e[11],_=e[12],p=e[13],T=e[14],O=e[15],m=t[0],A=t[1],R=t[2],b=t[3],N=t[4],S=t[5],g=t[6],v=t[7],I=t[8],M=t[9],w=t[10],x=t[11],C=t[12],P=t[13],L=t[14],U=t[15],B=a*m+s*A+l*R+_*b,F=i*m+c*A+y*R+p*b,D=o*m+f*A+d*R+T*b,j=u*m+E*A+h*R+O*b,z=a*N+s*S+l*g+_*v,G=i*N+c*S+y*g+p*v,V=o*N+f*S+d*g+T*v,q=u*N+E*S+h*g+O*v,k=a*I+s*M+l*w+_*x,Y=i*I+c*M+y*w+p*x,X=o*I+f*M+d*w+T*x,H=u*I+E*M+h*w+O*x,W=a*C+s*P+l*L+_*U,Z=i*C+c*P+y*L+p*U,K=o*C+f*P+d*L+T*U,Q=u*C+E*P+h*L+O*U;return n[0]=B,n[1]=F,n[2]=D,n[3]=j,n[4]=z,n[5]=G,n[6]=V,n[7]=q,n[8]=k,n[9]=Y,n[10]=X,n[11]=H,n[12]=W,n[13]=Z,n[14]=K,n[15]=Q,n},f.add=function(e,t,n){return r.typeOf.object("left",e),r.typeOf.object("right",t),r.typeOf.object("result",n),n[0]=e[0]+t[0],n[1]=e[1]+t[1],n[2]=e[2]+t[2],n[3]=e[3]+t[3],n[4]=e[4]+t[4],n[5]=e[5]+t[5],n[6]=e[6]+t[6],n[7]=e[7]+t[7],n[8]=e[8]+t[8],n[9]=e[9]+t[9],n[10]=e[10]+t[10],n[11]=e[11]+t[11],n[12]=e[12]+t[12],n[13]=e[13]+t[13],n[14]=e[14]+t[14],n[15]=e[15]+t[15],n},f.subtract=function(e,t,n){return r.typeOf.object("left",e),r.typeOf.object("right",t),r.typeOf.object("result",n),n[0]=e[0]-t[0],n[1]=e[1]-t[1],n[2]=e[2]-t[2],n[3]=e[3]-t[3],n[4]=e[4]-t[4],n[5]=e[5]-t[5],n[6]=e[6]-t[6],n[7]=e[7]-t[7],n[8]=e[8]-t[8],n[9]=e[9]-t[9],n[10]=e[10]-t[10],n[11]=e[11]-t[11],n[12]=e[12]-t[12],n[13]=e[13]-t[13],n[14]=e[14]-t[14],n[15]=e[15]-t[15],n},f.multiplyTransformation=function(e,t,n){r.typeOf.object("left",e),r.typeOf.object("right",t),r.typeOf.object("result",n);var a=e[0],i=e[1],o=e[2],u=e[4],s=e[5],c=e[6],f=e[8],E=e[9],l=e[10],y=e[12],d=e[13],h=e[14],_=t[0],p=t[1],T=t[2],O=t[4],m=t[5],A=t[6],R=t[8],b=t[9],N=t[10],S=t[12],g=t[13],v=t[14],I=a*_+u*p+f*T,M=i*_+s*p+E*T,w=o*_+c*p+l*T,x=a*O+u*m+f*A,C=i*O+s*m+E*A,P=o*O+c*m+l*A,L=a*R+u*b+f*N,U=i*R+s*b+E*N,B=o*R+c*b+l*N,F=a*S+u*g+f*v+y,D=i*S+s*g+E*v+d,j=o*S+c*g+l*v+h;return n[0]=I,n[1]=M,n[2]=w,n[3]=0,n[4]=x,n[5]=C,n[6]=P,n[7]=0,n[8]=L,n[9]=U,n[10]=B,n[11]=0,n[12]=F,n[13]=D,n[14]=j,n[15]=1,n},f.multiplyByMatrix3=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("rotation",t),r.typeOf.object("result",n);var a=e[0],i=e[1],o=e[2],u=e[4],s=e[5],c=e[6],f=e[8],E=e[9],l=e[10],y=t[0],d=t[1],h=t[2],_=t[3],p=t[4],T=t[5],O=t[6],m=t[7],A=t[8],R=a*y+u*d+f*h,b=i*y+s*d+E*h,N=o*y+c*d+l*h,S=a*_+u*p+f*T,g=i*_+s*p+E*T,v=o*_+c*p+l*T,I=a*O+u*m+f*A,M=i*O+s*m+E*A,w=o*O+c*m+l*A;return n[0]=R,n[1]=b,n[2]=N,n[3]=0,n[4]=S,n[5]=g,n[6]=v,n[7]=0,n[8]=I,n[9]=M,n[10]=w,n[11]=0,n[12]=e[12],n[13]=e[13],n[14]=e[14],n[15]=e[15],n},f.multiplyByTranslation=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("translation",t),r.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z,u=a*e[0]+i*e[4]+o*e[8]+e[12],s=a*e[1]+i*e[5]+o*e[9]+e[13],c=a*e[2]+i*e[6]+o*e[10]+e[14];return n[0]=e[0],n[1]=e[1],n[2]=e[2],n[3]=e[3],n[4]=e[4],n[5]=e[5],n[6]=e[6],n[7]=e[7],n[8]=e[8],n[9]=e[9],n[10]=e[10],n[11]=e[11],n[12]=u,n[13]=s,n[14]=c,n[15]=e[15],n};var p=new e;f.multiplyByUniformScale=function(e,t,n){return r.typeOf.object("matrix",e),r.typeOf.number("scale",t),r.typeOf.object("result",n),p.x=t,p.y=t,p.z=t,f.multiplyByScale(e,p,n)},f.multiplyByScale=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("scale",t),r.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z;return 1===a&&1===i&&1===o?f.clone(e,n):(n[0]=a*e[0],n[1]=a*e[1],n[2]=a*e[2],n[3]=0,n[4]=i*e[4],n[5]=i*e[5],n[6]=i*e[6],n[7]=0,n[8]=o*e[8],n[9]=o*e[9],n[10]=o*e[10],n[11]=0,n[12]=e[12],n[13]=e[13],n[14]=e[14],n[15]=1,n)},f.multiplyByVector=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("cartesian",t),r.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z,u=t.w,s=e[0]*a+e[4]*i+e[8]*o+e[12]*u,c=e[1]*a+e[5]*i+e[9]*o+e[13]*u,f=e[2]*a+e[6]*i+e[10]*o+e[14]*u,E=e[3]*a+e[7]*i+e[11]*o+e[15]*u;return n.x=s,n.y=c,n.z=f,n.w=E,n},f.multiplyByPointAsVector=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("cartesian",t),r.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z,u=e[0]*a+e[4]*i+e[8]*o,s=e[1]*a+e[5]*i+e[9]*o,c=e[2]*a+e[6]*i+e[10]*o;return n.x=u,n.y=s,n.z=c,n},f.multiplyByPoint=function(e,t,n){r.typeOf.object("matrix",e),r.typeOf.object("cartesian",t),r.typeOf.object("result",n);var a=t.x,i=t.y,o=t.z,u=e[0]*a+e[4]*i+e[8]*o+e[12],s=e[1]*a+e[5]*i+e[9]*o+e[13],c=e[2]*a+e[6]*i+e[10]*o+e[14];return n.x=u,n.y=s,n.z=c,n},f.multiplyByScalar=function(e,t,n){return r.typeOf.object("matrix",e),r.typeOf.number("scalar",t),r.typeOf.object("result",n),n[0]=e[0]*t,n[1]=e[1]*t,n[2]=e[2]*t,n[3]=e[3]*t,n[4]=e[4]*t,n[5]=e[5]*t,n[6]=e[6]*t,n[7]=e[7]*t,n[8]=e[8]*t,n[9]=e[9]*t,n[10]=e[10]*t,n[11]=e[11]*t,n[12]=e[12]*t,n[13]=e[13]*t,n[14]=e[14]*t,n[15]=e[15]*t,n},f.multiplyByPlane=function(n,a,i){r.typeOf.object("matrix",n),r.typeOf.object("plane",a),r.typeOf.object("result",i);var o=new f,u=new f;f.inverse(n,o),f.transpose(o,u);var s=new t(a.normal.x,a.normal.y,a.normal.z,a.distance);f.multiplyByVector(u,s,s),i.normal.x=s.x,i.normal.y=s.y,i.normal.z=s.z;var c=e.magnitude(i.normal);return e.normalize(i.normal,i.normal),i.distance=s.w/c,i},f.negate=function(e,t){return r.typeOf.object("matrix",e),r.typeOf.object("result",t),t[0]=-e[0],t[1]=-e[1],t[2]=-e[2],t[3]=-e[3],t[4]=-e[4],t[5]=-e[5],t[6]=-e[6],t[7]=-e[7],t[8]=-e[8],t[9]=-e[9],t[10]=-e[10],t[11]=-e[11],t[12]=-e[12],t[13]=-e[13],t[14]=-e[14],t[15]=-e[15],t},f.transpose=function(e,t){r.typeOf.object("matrix",e),r.typeOf.object("result",t);var n=e[1],a=e[2],i=e[3],o=e[6],u=e[7],s=e[11];return t[0]=e[0],t[1]=e[4],t[2]=e[8],t[3]=e[12],t[4]=n,t[5]=e[5],t[6]=e[9],t[7]=e[13],t[8]=a,t[9]=o,t[10]=e[10],t[11]=e[14],t[12]=i,t[13]=u,t[14]=s,t[15]=e[15],t},f.abs=function(e,t){return r.typeOf.object("matrix",e),r.typeOf.object("result",t),t[0]=Math.abs(e[0]),t[1]=Math.abs(e[1]),t[2]=Math.abs(e[2]),t[3]=Math.abs(e[3]),t[4]=Math.abs(e[4]),t[5]=Math.abs(e[5]),t[6]=Math.abs(e[6]),t[7]=Math.abs(e[7]),t[8]=Math.abs(e[8]),t[9]=Math.abs(e[9]),t[10]=Math.abs(e[10]),t[11]=Math.abs(e[11]),t[12]=Math.abs(e[12]),t[13]=Math.abs(e[13]),t[14]=Math.abs(e[14]),t[15]=Math.abs(e[15]),t},f.equals=function(e,t){return e===t||a(e)&&a(t)&&e[12]===t[12]&&e[13]===t[13]&&e[14]===t[14]&&e[0]===t[0]&&e[1]===t[1]&&e[2]===t[2]&&e[4]===t[4]&&e[5]===t[5]&&e[6]===t[6]&&e[8]===t[8]&&e[9]===t[9]&&e[10]===t[10]&&e[3]===t[3]&&e[7]===t[7]&&e[11]===t[11]&&e[15]===t[15]},f.equalsEpsilon=function(e,t,n){return r.typeOf.number("epsilon",n),e===t||a(e)&&a(t)&&Math.abs(e[0]-t[0])<=n&&Math.abs(e[1]-t[1])<=n&&Math.abs(e[2]-t[2])<=n&&Math.abs(e[3]-t[3])<=n&&Math.abs(e[4]-t[4])<=n&&Math.abs(e[5]-t[5])<=n&&Math.abs(e[6]-t[6])<=n&&Math.abs(e[7]-t[7])<=n&&Math.abs(e[8]-t[8])<=n&&Math.abs(e[9]-t[9])<=n&&Math.abs(e[10]-t[10])<=n&&Math.abs(e[11]-t[11])<=n&&Math.abs(e[12]-t[12])<=n&&Math.abs(e[13]-t[13])<=n&&Math.abs(e[14]-t[14])<=n&&Math.abs(e[15]-t[15])<=n},f.getTranslation=function(e,t){return r.typeOf.object("matrix",e),r.typeOf.object("result",t),t.x=e[12],t.y=e[13],t.z=e[14],t},f.getRotation=function(e,t){return r.typeOf.object("matrix",e),r.typeOf.object("result",t),t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[4],t[4]=e[5],t[5]=e[6],t[6]=e[8],t[7]=e[9],t[8]=e[10],t};var T=new s,O=new s,m=new t,A=new t(0,0,0,1);return f.inverse=function(e,n){r.typeOf.object("matrix",e),r.typeOf.object("result",n);var a=e[0],i=e[4],o=e[8],E=e[12],l=e[1],y=e[5],d=e[9],h=e[13],_=e[2],p=e[6],R=e[10],b=e[14],N=e[3],S=e[7],g=e[11],v=e[15],I=R*v,M=b*g,w=p*v,x=b*S,C=p*g,P=R*S,L=_*v,U=b*N,B=_*g,F=R*N,D=_*S,j=p*N,z=I*y+x*d+C*h-(M*y+w*d+P*h),G=M*l+L*d+F*h-(I*l+U*d+B*h),V=w*l+U*y+D*h-(x*l+L*y+j*h),q=P*l+B*y+j*d-(C*l+F*y+D*d),k=M*i+w*o+P*E-(I*i+x*o+C*E),Y=I*a+U*o+B*E-(M*a+L*o+F*E),X=x*a+L*i+j*E-(w*a+U*i+D*E),H=C*a+F*i+D*o-(P*a+B*i+j*o);I=o*h,M=E*d,w=i*h,x=E*y,C=i*d,P=o*y,L=a*h,U=E*l,B=a*d,F=o*l,D=a*y,j=i*l;var W=I*S+x*g+C*v-(M*S+w*g+P*v),Z=M*N+L*g+F*v-(I*N+U*g+B*v),K=w*N+U*S+D*v-(x*N+L*S+j*v),Q=P*N+B*S+j*g-(C*N+F*S+D*g),J=w*R+P*b+M*p-(C*b+I*p+x*R),$=B*b+I*_+U*R-(L*R+F*b+M*_),ee=L*p+j*b+x*_-(D*b+w*_+U*p),te=D*R+C*_+F*p-(B*p+j*R+P*_),re=a*z+i*G+o*V+E*q;if(Math.abs(re)<u.EPSILON21){if(s.equalsEpsilon(f.getRotation(e,T),O,u.EPSILON7)&&t.equals(f.getRow(e,3,m),A))return n[0]=0,n[1]=0,n[2]=0,n[3]=0,n[4]=0,n[5]=0,n[6]=0,n[7]=0,n[8]=0,n[9]=0,n[10]=0,n[11]=0,n[12]=-e[12],n[13]=-e[13],n[14]=-e[14],n[15]=1,n;throw new c("matrix is not invertible because its determinate is zero.")}return re=1/re,n[0]=z*re,n[1]=G*re,n[2]=V*re,n[3]=q*re,n[4]=k*re,n[5]=Y*re,n[6]=X*re,n[7]=H*re,n[8]=W*re,n[9]=Z*re,n[10]=K*re,n[11]=Q*re,n[12]=J*re,n[13]=$*re,n[14]=ee*re,n[15]=te*re,n},f.inverseTransformation=function(e,t){r.typeOf.object("matrix",e),r.typeOf.object("result",t);var n=e[0],a=e[1],i=e[2],o=e[4],u=e[5],s=e[6],c=e[8],f=e[9],E=e[10],l=e[12],y=e[13],d=e[14],h=-n*l-a*y-i*d,_=-o*l-u*y-s*d,p=-c*l-f*y-E*d;return t[0]=n,t[1]=o,t[2]=c,t[3]=0,t[4]=a,t[5]=u,t[6]=f,t[7]=0,t[8]=i,t[9]=s,t[10]=E,t[11]=0,t[12]=h,t[13]=_,t[14]=p,t[15]=1,t},f.IDENTITY=o(new f(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)),f.ZERO=o(new f(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)),f.COLUMN0ROW0=0,f.COLUMN0ROW1=1,f.COLUMN0ROW2=2,f.COLUMN0ROW3=3,f.COLUMN1ROW0=4,f.COLUMN1ROW1=5,f.COLUMN1ROW2=6,f.COLUMN1ROW3=7,f.COLUMN2ROW0=8,f.COLUMN2ROW1=9,f.COLUMN2ROW2=10,f.COLUMN2ROW3=11,f.COLUMN3ROW0=12,f.COLUMN3ROW1=13,f.COLUMN3ROW2=14,f.COLUMN3ROW3=15,i(f.prototype,{length:{get:function(){return f.packedLength}}}),f.prototype.clone=function(e){return f.clone(this,e)},f.prototype.equals=function(e){return f.equals(this,e)},f.equalsArray=function(e,t,r){return e[0]===t[r]&&e[1]===t[r+1]&&e[2]===t[r+2]&&e[3]===t[r+3]&&e[4]===t[r+4]&&e[5]===t[r+5]&&e[6]===t[r+6]&&e[7]===t[r+7]&&e[8]===t[r+8]&&e[9]===t[r+9]&&e[10]===t[r+10]&&e[11]===t[r+11]&&e[12]===t[r+12]&&e[13]===t[r+13]&&e[14]===t[r+14]&&e[15]===t[r+15]},f.prototype.equalsEpsilon=function(e,t){return f.equalsEpsilon(this,e,t)},f.prototype.toString=function(){return"("+this[0]+", "+this[4]+", "+this[8]+", "+this[12]+")\n("+this[1]+", "+this[5]+", "+this[9]+", "+this[13]+")\n("+this[2]+", "+this[6]+", "+this[10]+", "+this[14]+")\n("+this[3]+", "+this[7]+", "+this[11]+", "+this[15]+")"},f}),define("Core/scaleToGeodeticSurface",["./Cartesian3","./defined","./DeveloperError","./Math"],function(e,t,r,n){"use strict";function a(a,u,s,c,f){if(!t(a))throw new r("cartesian is required.");if(!t(u))throw new r("oneOverRadii is required.");if(!t(s))throw new r("oneOverRadiiSquared is required.");if(!t(c))throw new r("centerToleranceSquared is required.");var E=a.x,l=a.y,y=a.z,d=u.x,h=u.y,_=u.z,p=E*E*d*d,T=l*l*h*h,O=y*y*_*_,m=p+T+O,A=Math.sqrt(1/m),R=e.multiplyByScalar(a,A,i);if(m<c)return isFinite(A)?e.clone(R,f):void 0;var b=s.x,N=s.y,S=s.z,g=o;g.x=R.x*b*2,g.y=R.y*N*2,g.z=R.z*S*2;var v,I,M,w,x,C,P,L,U,B,F,D=(1-A)*e.magnitude(a)/(.5*e.magnitude(g)),j=0;do{D-=j,M=1/(1+D*b),w=1/(1+D*N),x=1/(1+D*S),C=M*M,P=w*w,L=x*x,U=C*M,B=P*w,F=L*x,v=p*C+T*P+O*L-1,I=p*U*b+T*B*N+O*F*S;j=v/(-2*I)}while(Math.abs(v)>n.EPSILON12);return t(f)?(f.x=E*M,f.y=l*w,f.z=y*x,f):new e(E*M,l*w,y*x)}var i=new e,o=new e;return a}),define("Core/Cartographic",["./Cartesian3","./Check","./defaultValue","./defined","./freezeObject","./Math","./scaleToGeodeticSurface"],function(e,t,r,n,a,i,o){"use strict";function u(e,t,n){this.longitude=r(e,0),this.latitude=r(t,0),this.height=r(n,0)}u.fromRadians=function(e,a,i,o){return t.typeOf.number("longitude",e),t.typeOf.number("latitude",a),i=r(i,0),n(o)?(o.longitude=e,o.latitude=a,o.height=i,o):new u(e,a,i)},u.fromDegrees=function(e,r,n,a){return t.typeOf.number("longitude",e),t.typeOf.number("latitude",r),e=i.toRadians(e),r=i.toRadians(r),u.fromRadians(e,r,n,a)};var s=new e,c=new e,f=new e,E=new e(1/6378137,1/6378137,1/6356752.314245179),l=new e(1/6378137,1/6378137,1/6378137),y=new e(1/40680631590769,1/40680631590769,1/40408299984661.445),d=new e(1/40680631590769,1/40680631590769,1/40680631590769),h=i.EPSILON1;return u.fromCartesian=function(t,r,a){var _=n(r)?r.oneOverRadii:l,p=n(r)?r.oneOverRadiiSquared:d,T=n(r)?r._centerToleranceSquared:h;i.equalsEpsilon(i.Radius,6356752.314245179,i.EPSILON10)&&(_=n(r)?r.oneOverRadii:E,p=n(r)?r.oneOverRadiiSquared:y);var O=o(t,_,p,T,c);if(n(O)){var m=e.multiplyComponents(O,p,s);m=e.normalize(m,m);var A=e.subtract(t,O,f),R=Math.atan2(m.y,m.x),b=Math.asin(m.z),N=i.sign(e.dot(A,t))*e.magnitude(A);return n(a)?(a.longitude=R,a.latitude=b,a.height=N,a):new u(R,b,N)}},u.toCartesian=function(r,n,a){return t.defined("cartographic",r),e.fromRadians(r.longitude,r.latitude,r.height,n,a)},u.sphericalDistance=function(e,r,n,a){if(t.defined("longitudeA",e),t.defined("longitudeB",n),t.defined("latitudeA",r),t.defined("latitudeB",a),e===n&&r===a)return 0;var o=i.toRadians(r),u=i.toRadians(a),s=i.toRadians(e),c=i.toRadians(n),f=s*s+o*o,E=c*c+u*u,l=(s-c)*(s-c)+(o-u)*(o-u),y=(f+E-l)/(2*Math.sqrt(f)*Math.sqrt(E));return y=i.clamp(y,-1,1),Math.acos(y)*i.Radius},u.clone=function(e,t){if(n(e))return n(t)?(t.longitude=e.longitude,t.latitude=e.latitude,t.height=e.height,t):new u(e.longitude,e.latitude,e.height)},u.equals=function(e,t){return e===t||n(e)&&n(t)&&e.longitude===t.longitude&&e.latitude===t.latitude&&e.height===t.height},u.equalsEpsilon=function(e,r,a){return t.typeOf.number("epsilon",a),e===r||n(e)&&n(r)&&Math.abs(e.longitude-r.longitude)<=a&&Math.abs(e.latitude-r.latitude)<=a&&Math.abs(e.height-r.height)<=a},u.ZERO=a(new u(0,0,0)),u.prototype.clone=function(e){return u.clone(this,e)},u.prototype.equals=function(e){return u.equals(this,e)},u.prototype.equalsEpsilon=function(e,t){return u.equalsEpsilon(this,e,t)},u.prototype.toString=function(){return"("+this.longitude+", "+this.latitude+", "+this.height+")"},u}),define("Core/getStringFromTypedArray",["./defaultValue","./defined","./DeveloperError","./RuntimeError"],function(e,t,r,n){"use strict";function a(n,i,o){if(!t(n))throw new r("uint8Array is required.");if(i<0)throw new r("byteOffset cannot be negative.");if(o<0)throw new r("byteLength cannot be negative.");if(i+o>n.byteLength)throw new r("sub-region exceeds array bounds.");return i=e(i,0),o=e(o,n.byteLength-i),n=n.subarray(i,i+o),a.decode(n)}function i(e,t,r){return t<=e&&e<=r}function o(e){for(var t=0,r=0,a=0,o=128,u=191,s=[],c=e.length,f=0;f<c;++f){var E=e[f];if(0===a){if(i(E,0,127)){s.push(E);continue}if(i(E,194,223)){a=1,t=31&E;continue}if(i(E,224,239)){224===E&&(o=160),237===E&&(u=159),a=2,t=15&E;continue}if(i(E,240,244)){240===E&&(o=144),244===E&&(u=143),a=3,t=7&E;continue}throw new n("String decoding failed.")}i(E,o,u)?(o=128,u=191,t=t<<6|63&E,++r===a&&(s.push(t),t=a=r=0)):(t=a=r=0,o=128,u=191,--f)}return s}return a.decodeWithTextDecoder=function(e){return new TextDecoder("utf-8").decode(e)},a.decodeWithFromCharCode=function(e){for(var t="",r=o(e),n=r.length,a=0;a<n;++a){var i=r[a];i<=65535?t+=String.fromCharCode(i):(i-=65536,t+=String.fromCharCode(55296+(i>>10),56320+(1023&i)))}return t},"undefined"!=typeof TextDecoder?a.decode=a.decodeWithTextDecoder:a.decode=a.decodeWithFromCharCode,a}),define("Core/getMagic",["./defaultValue","./getStringFromTypedArray"],function(e,t){"use strict";function r(r,n){return n=e(n,0),t(r,n,Math.min(4,r.length))}return r}),define("Core/Fullscreen",["./defined","./defineProperties"],function(e,t){"use strict";var r,n={requestFullscreen:void 0,exitFullscreen:void 0,fullscreenEnabled:void 0,fullscreenElement:void 0,fullscreenchange:void 0,fullscreenerror:void 0},a={};return t(a,{element:{get:function(){if(a.supportsFullscreen())return document[n.fullscreenElement]}},changeEventName:{get:function(){if(a.supportsFullscreen())return n.fullscreenchange}},errorEventName:{get:function(){if(a.supportsFullscreen())return n.fullscreenerror}},enabled:{get:function(){if(a.supportsFullscreen())return document[n.fullscreenEnabled]}},fullscreen:{get:function(){if(a.supportsFullscreen())return null!==a.element}}}),a.supportsFullscreen=function(){if(e(r))return r;r=!1;var t=document.body;if("function"==typeof t.requestFullscreen)return n.requestFullscreen="requestFullscreen",n.exitFullscreen="exitFullscreen",n.fullscreenEnabled="fullscreenEnabled",n.fullscreenElement="fullscreenElement",n.fullscreenchange="fullscreenchange",n.fullscreenerror="fullscreenerror",r=!0;for(var a,i=["webkit","moz","o","ms","khtml"],o=0,u=i.length;o<u;++o){var s=i[o];a=s+"RequestFullscreen","function"==typeof t[a]?(n.requestFullscreen=a,r=!0):(a=s+"RequestFullScreen","function"==typeof t[a]&&(n.requestFullscreen=a,r=!0)),a=s+"ExitFullscreen","function"==typeof document[a]?n.exitFullscreen=a:(a=s+"CancelFullScreen","function"==typeof document[a]&&(n.exitFullscreen=a)),a=s+"FullscreenEnabled",void 0!==document[a]?n.fullscreenEnabled=a:(a=s+"FullScreenEnabled",void 0!==document[a]&&(n.fullscreenEnabled=a)),a=s+"FullscreenElement",void 0!==document[a]?n.fullscreenElement=a:(a=s+"FullScreenElement",void 0!==document[a]&&(n.fullscreenElement=a)),a=s+"fullscreenchange",void 0!==document["on"+a]&&("ms"===s&&(a="MSFullscreenChange"),n.fullscreenchange=a),
-a=s+"fullscreenerror",void 0!==document["on"+a]&&("ms"===s&&(a="MSFullscreenError"),n.fullscreenerror=a)}return r},a.requestFullscreen=function(e,t){a.supportsFullscreen()&&e[n.requestFullscreen]({vrDisplay:t})},a.exitFullscreen=function(){a.supportsFullscreen()&&document[n.exitFullscreen]()},a}),define("Core/FeatureDetection",["./defaultValue","./defined","./Fullscreen","./RuntimeError","../ThirdParty/when"],function(e,t,r,n,a){"use strict";function i(e){for(var t=e.split("."),r=0,n=t.length;r<n;++r)t[r]=parseInt(t[r],10);return t}function o(){if(!t(v)&&(v=!1,!d())){var e=/ Chrome\/([\.0-9]+)/.exec(g.userAgent);null!==e&&(v=!0,I=i(e[1]))}return v}function u(){return o()&&I}function s(){if(!t(M)&&(M=!1,!o()&&!d()&&/ Safari\/[\.0-9]+/.test(g.userAgent))){var e=/ Version\/([\.0-9]+)/.exec(g.userAgent);null!==e&&(M=!0,w=i(e[1]))}return M}function c(){return s()&&w}function f(){if(!t(x)){x=!1;var e=/ AppleWebKit\/([\.0-9]+)(\+?)/.exec(g.userAgent);null!==e&&(x=!0,C=i(e[1]),C.isNightly=!!e[2])}return x}function E(){return f()&&C}function l(){if(!t(P)){P=!1;var e;"Microsoft Internet Explorer"===g.appName?null!==(e=/MSIE ([0-9]{1,}[\.0-9]{0,})/.exec(g.userAgent))&&(P=!0,L=i(e[1])):"Netscape"===g.appName&&null!==(e=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(g.userAgent))&&(P=!0,L=i(e[1]))}return P}function y(){return l()&&L}function d(){if(!t(U)){U=!1;var e=/ Edge\/([\.0-9]+)/.exec(g.userAgent);null!==e&&(U=!0,B=i(e[1]))}return U}function h(){return d()&&B}function _(){if(!t(F)){F=!1;var e=/Firefox\/([\.0-9]+)/.exec(g.userAgent);null!==e&&(F=!0,D=i(e[1]))}return F}function p(){return t(j)||(j=/Windows/i.test(g.appVersion)),j}function T(){return _()&&D}function O(){return t(z)||(z="object"==typeof process&&"[object process]"===Object.prototype.toString.call(process)),z}function m(){return t(G)||(G=!_()&&"undefined"!=typeof PointerEvent&&(!t(g.pointerEnabled)||g.pointerEnabled)),G}function A(){if(!t(q)){var e=document.createElement("canvas");e.setAttribute("style","image-rendering: -moz-crisp-edges;image-rendering: pixelated;");var r=e.style.imageRendering;q=t(r)&&""!==r,q&&(V=r)}return q}function R(){return A()?V:void 0}function b(){if(t(Y))return Y.promise;Y=a.defer(),d()&&(k=!1,Y.resolve(k));var e=new Image;return e.onload=function(){k=e.width>0&&e.height>0,Y.resolve(k)},e.onerror=function(){k=!1,Y.resolve(k)},e.src="data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",Y.promise}function N(){return t(Y)||b(),k}function S(){var e=window.navigator.userAgent.toLowerCase(),t="ipad"==e.match(/ipad/i),r="iphone os"==e.match(/iphone os/i),n="midp"==e.match(/midp/i),a="rv:1.2.3.4"==e.match(/rv:1.2.3.4/i),i="ucweb"==e.match(/ucweb/i),o="android"==e.match(/android/i),u="windows ce"==e.match(/windows ce/i),s="windows mobile"==e.match(/windows mobile/i);return!(t||r||n||a||i||o||u||s)}var g;g="undefined"!=typeof navigator?navigator:{};var v,I,M,w,x,C,P,L,U,B,F,D,j,z,G,V,q,k,Y,X=[];"undefined"!=typeof ArrayBuffer&&(X.push(Int8Array,Uint8Array,Int16Array,Uint16Array,Int32Array,Uint32Array,Float32Array,Float64Array),"undefined"!=typeof Uint8ClampedArray&&X.push(Uint8ClampedArray),"undefined"!=typeof CanvasPixelArray&&X.push(CanvasPixelArray));var H={isChrome:o,chromeVersion:u,isSafari:s,safariVersion:c,isWebkit:f,webkitVersion:E,isInternetExplorer:l,internetExplorerVersion:y,isEdge:d,edgeVersion:h,isFirefox:_,firefoxVersion:T,isWindows:p,isNodeJs:O,hardwareConcurrency:e(g.hardwareConcurrency,3),supportsPointerEvents:m,supportsImageRenderingPixelated:A,supportsWebP:b,supportsWebPSync:N,imageRenderingValue:R,typedArrayTypes:X,isPCBroswer:S};return H.supportsFullscreen=function(){return r.supportsFullscreen()},H.supportsTypedArrays=function(){return"undefined"!=typeof ArrayBuffer},H.supportsWebWorkers=function(){return"undefined"!=typeof Worker},H.supportsWebAssembly=function(){return"undefined"!=typeof WebAssembly&&!H.isEdge()},H.supportsOffscreenCanvas=function(){return"undefined"!=typeof OffscreenCanvas&&!H.isEdge()},H}),define("Core/WebGLConstants",["./freezeObject"],function(e){"use strict";return e({DEPTH_BUFFER_BIT:256,STENCIL_BUFFER_BIT:1024,COLOR_BUFFER_BIT:16384,POINTS:0,LINES:1,LINE_LOOP:2,LINE_STRIP:3,TRIANGLES:4,TRIANGLE_STRIP:5,TRIANGLE_FAN:6,ZERO:0,ONE:1,SRC_COLOR:768,ONE_MINUS_SRC_COLOR:769,SRC_ALPHA:770,ONE_MINUS_SRC_ALPHA:771,DST_ALPHA:772,ONE_MINUS_DST_ALPHA:773,DST_COLOR:774,ONE_MINUS_DST_COLOR:775,SRC_ALPHA_SATURATE:776,FUNC_ADD:32774,BLEND_EQUATION:32777,BLEND_EQUATION_RGB:32777,BLEND_EQUATION_ALPHA:34877,FUNC_SUBTRACT:32778,FUNC_REVERSE_SUBTRACT:32779,BLEND_DST_RGB:32968,BLEND_SRC_RGB:32969,BLEND_DST_ALPHA:32970,BLEND_SRC_ALPHA:32971,CONSTANT_COLOR:32769,ONE_MINUS_CONSTANT_COLOR:32770,CONSTANT_ALPHA:32771,ONE_MINUS_CONSTANT_ALPHA:32772,BLEND_COLOR:32773,ARRAY_BUFFER:34962,ELEMENT_ARRAY_BUFFER:34963,ARRAY_BUFFER_BINDING:34964,ELEMENT_ARRAY_BUFFER_BINDING:34965,STREAM_DRAW:35040,STATIC_DRAW:35044,DYNAMIC_DRAW:35048,BUFFER_SIZE:34660,BUFFER_USAGE:34661,CURRENT_VERTEX_ATTRIB:34342,FRONT:1028,BACK:1029,FRONT_AND_BACK:1032,CULL_FACE:2884,BLEND:3042,DITHER:3024,STENCIL_TEST:2960,DEPTH_TEST:2929,SCISSOR_TEST:3089,POLYGON_OFFSET_FILL:32823,SAMPLE_ALPHA_TO_COVERAGE:32926,SAMPLE_COVERAGE:32928,NO_ERROR:0,INVALID_ENUM:1280,INVALID_VALUE:1281,INVALID_OPERATION:1282,OUT_OF_MEMORY:1285,CW:2304,CCW:2305,LINE_WIDTH:2849,ALIASED_POINT_SIZE_RANGE:33901,ALIASED_LINE_WIDTH_RANGE:33902,CULL_FACE_MODE:2885,FRONT_FACE:2886,DEPTH_RANGE:2928,DEPTH_WRITEMASK:2930,DEPTH_CLEAR_VALUE:2931,DEPTH_FUNC:2932,STENCIL_CLEAR_VALUE:2961,STENCIL_FUNC:2962,STENCIL_FAIL:2964,STENCIL_PASS_DEPTH_FAIL:2965,STENCIL_PASS_DEPTH_PASS:2966,STENCIL_REF:2967,STENCIL_VALUE_MASK:2963,STENCIL_WRITEMASK:2968,STENCIL_BACK_FUNC:34816,STENCIL_BACK_FAIL:34817,STENCIL_BACK_PASS_DEPTH_FAIL:34818,STENCIL_BACK_PASS_DEPTH_PASS:34819,STENCIL_BACK_REF:36003,STENCIL_BACK_VALUE_MASK:36004,STENCIL_BACK_WRITEMASK:36005,VIEWPORT:2978,SCISSOR_BOX:3088,COLOR_CLEAR_VALUE:3106,COLOR_WRITEMASK:3107,UNPACK_ALIGNMENT:3317,PACK_ALIGNMENT:3333,MAX_TEXTURE_SIZE:3379,MAX_VIEWPORT_DIMS:3386,SUBPIXEL_BITS:3408,RED_BITS:3410,GREEN_BITS:3411,BLUE_BITS:3412,ALPHA_BITS:3413,DEPTH_BITS:3414,STENCIL_BITS:3415,POLYGON_OFFSET_UNITS:10752,POLYGON_OFFSET_FACTOR:32824,TEXTURE_BINDING_2D:32873,SAMPLE_BUFFERS:32936,SAMPLES:32937,SAMPLE_COVERAGE_VALUE:32938,SAMPLE_COVERAGE_INVERT:32939,COMPRESSED_TEXTURE_FORMATS:34467,DONT_CARE:4352,FASTEST:4353,NICEST:4354,GENERATE_MIPMAP_HINT:33170,BYTE:5120,UNSIGNED_BYTE:5121,SHORT:5122,UNSIGNED_SHORT:5123,INT:5124,UNSIGNED_INT:5125,FLOAT:5126,DEPTH_COMPONENT:6402,ALPHA:6406,RGB:6407,RGBA:6408,LUMINANCE:6409,LUMINANCE_ALPHA:6410,UNSIGNED_SHORT_4_4_4_4:32819,UNSIGNED_SHORT_5_5_5_1:32820,UNSIGNED_SHORT_5_6_5:33635,FRAGMENT_SHADER:35632,VERTEX_SHADER:35633,MAX_VERTEX_ATTRIBS:34921,MAX_VERTEX_UNIFORM_VECTORS:36347,MAX_VARYING_VECTORS:36348,MAX_COMBINED_TEXTURE_IMAGE_UNITS:35661,MAX_VERTEX_TEXTURE_IMAGE_UNITS:35660,MAX_TEXTURE_IMAGE_UNITS:34930,MAX_FRAGMENT_UNIFORM_VECTORS:36349,SHADER_TYPE:35663,DELETE_STATUS:35712,LINK_STATUS:35714,VALIDATE_STATUS:35715,ATTACHED_SHADERS:35717,ACTIVE_UNIFORMS:35718,ACTIVE_ATTRIBUTES:35721,SHADING_LANGUAGE_VERSION:35724,CURRENT_PROGRAM:35725,NEVER:512,LESS:513,EQUAL:514,LEQUAL:515,GREATER:516,NOTEQUAL:517,GEQUAL:518,ALWAYS:519,KEEP:7680,REPLACE:7681,INCR:7682,DECR:7683,INVERT:5386,INCR_WRAP:34055,DECR_WRAP:34056,VENDOR:7936,RENDERER:7937,VERSION:7938,NEAREST:9728,LINEAR:9729,NEAREST_MIPMAP_NEAREST:9984,LINEAR_MIPMAP_NEAREST:9985,NEAREST_MIPMAP_LINEAR:9986,LINEAR_MIPMAP_LINEAR:9987,TEXTURE_MAG_FILTER:10240,TEXTURE_MIN_FILTER:10241,TEXTURE_WRAP_S:10242,TEXTURE_WRAP_T:10243,TEXTURE_2D:3553,TEXTURE:5890,TEXTURE_CUBE_MAP:34067,TEXTURE_BINDING_CUBE_MAP:34068,TEXTURE_CUBE_MAP_POSITIVE_X:34069,TEXTURE_CUBE_MAP_NEGATIVE_X:34070,TEXTURE_CUBE_MAP_POSITIVE_Y:34071,TEXTURE_CUBE_MAP_NEGATIVE_Y:34072,TEXTURE_CUBE_MAP_POSITIVE_Z:34073,TEXTURE_CUBE_MAP_NEGATIVE_Z:34074,MAX_CUBE_MAP_TEXTURE_SIZE:34076,TEXTURE0:33984,TEXTURE1:33985,TEXTURE2:33986,TEXTURE3:33987,TEXTURE4:33988,TEXTURE5:33989,TEXTURE6:33990,TEXTURE7:33991,TEXTURE8:33992,TEXTURE9:33993,TEXTURE10:33994,TEXTURE11:33995,TEXTURE12:33996,TEXTURE13:33997,TEXTURE14:33998,TEXTURE15:33999,TEXTURE16:34e3,TEXTURE17:34001,TEXTURE18:34002,TEXTURE19:34003,TEXTURE20:34004,TEXTURE21:34005,TEXTURE22:34006,TEXTURE23:34007,TEXTURE24:34008,TEXTURE25:34009,TEXTURE26:34010,TEXTURE27:34011,TEXTURE28:34012,TEXTURE29:34013,TEXTURE30:34014,TEXTURE31:34015,ACTIVE_TEXTURE:34016,REPEAT:10497,CLAMP_TO_EDGE:33071,MIRRORED_REPEAT:33648,FLOAT_VEC2:35664,FLOAT_VEC3:35665,FLOAT_VEC4:35666,INT_VEC2:35667,INT_VEC3:35668,INT_VEC4:35669,BOOL:35670,BOOL_VEC2:35671,BOOL_VEC3:35672,BOOL_VEC4:35673,FLOAT_MAT2:35674,FLOAT_MAT3:35675,FLOAT_MAT4:35676,SAMPLER_2D:35678,SAMPLER_CUBE:35680,VERTEX_ATTRIB_ARRAY_ENABLED:34338,VERTEX_ATTRIB_ARRAY_SIZE:34339,VERTEX_ATTRIB_ARRAY_STRIDE:34340,VERTEX_ATTRIB_ARRAY_TYPE:34341,VERTEX_ATTRIB_ARRAY_NORMALIZED:34922,VERTEX_ATTRIB_ARRAY_POINTER:34373,VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:34975,IMPLEMENTATION_COLOR_READ_TYPE:35738,IMPLEMENTATION_COLOR_READ_FORMAT:35739,COMPILE_STATUS:35713,LOW_FLOAT:36336,MEDIUM_FLOAT:36337,HIGH_FLOAT:36338,LOW_INT:36339,MEDIUM_INT:36340,HIGH_INT:36341,FRAMEBUFFER:36160,RENDERBUFFER:36161,RGBA4:32854,RGB5_A1:32855,RGB565:36194,DEPTH_COMPONENT16:33189,STENCIL_INDEX:6401,STENCIL_INDEX8:36168,DEPTH_STENCIL:34041,RENDERBUFFER_WIDTH:36162,RENDERBUFFER_HEIGHT:36163,RENDERBUFFER_INTERNAL_FORMAT:36164,RENDERBUFFER_RED_SIZE:36176,RENDERBUFFER_GREEN_SIZE:36177,RENDERBUFFER_BLUE_SIZE:36178,RENDERBUFFER_ALPHA_SIZE:36179,RENDERBUFFER_DEPTH_SIZE:36180,RENDERBUFFER_STENCIL_SIZE:36181,FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:36048,FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:36049,FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL:36050,FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:36051,COLOR_ATTACHMENT0:36064,DEPTH_ATTACHMENT:36096,STENCIL_ATTACHMENT:36128,DEPTH_STENCIL_ATTACHMENT:33306,NONE:0,FRAMEBUFFER_COMPLETE:36053,FRAMEBUFFER_INCOMPLETE_ATTACHMENT:36054,FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:36055,FRAMEBUFFER_INCOMPLETE_DIMENSIONS:36057,FRAMEBUFFER_UNSUPPORTED:36061,FRAMEBUFFER_BINDING:36006,RENDERBUFFER_BINDING:36007,MAX_RENDERBUFFER_SIZE:34024,INVALID_FRAMEBUFFER_OPERATION:1286,UNPACK_FLIP_Y_WEBGL:37440,UNPACK_PREMULTIPLY_ALPHA_WEBGL:37441,CONTEXT_LOST_WEBGL:37442,UNPACK_COLORSPACE_CONVERSION_WEBGL:37443,BROWSER_DEFAULT_WEBGL:37444,COMPRESSED_RGB_S3TC_DXT1_EXT:33776,COMPRESSED_RGBA_S3TC_DXT1_EXT:33777,COMPRESSED_RGBA_S3TC_DXT3_EXT:33778,COMPRESSED_RGBA_S3TC_DXT5_EXT:33779,COMPRESSED_RGB_PVRTC_4BPPV1_IMG:35840,COMPRESSED_RGB_PVRTC_2BPPV1_IMG:35841,COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:35842,COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:35843,COMPRESSED_RGB_ETC1_WEBGL:36196,HALF_FLOAT_OES:36193,DOUBLE:5130,READ_BUFFER:3074,UNPACK_ROW_LENGTH:3314,UNPACK_SKIP_ROWS:3315,UNPACK_SKIP_PIXELS:3316,PACK_ROW_LENGTH:3330,PACK_SKIP_ROWS:3331,PACK_SKIP_PIXELS:3332,COLOR:6144,DEPTH:6145,STENCIL:6146,RED:6403,RGB8:32849,RGBA8:32856,RGB10_A2:32857,TEXTURE_BINDING_3D:32874,UNPACK_SKIP_IMAGES:32877,UNPACK_IMAGE_HEIGHT:32878,TEXTURE_3D:32879,TEXTURE_WRAP_R:32882,MAX_3D_TEXTURE_SIZE:32883,UNSIGNED_INT_2_10_10_10_REV:33640,MAX_ELEMENTS_VERTICES:33e3,MAX_ELEMENTS_INDICES:33001,TEXTURE_MIN_LOD:33082,TEXTURE_MAX_LOD:33083,TEXTURE_BASE_LEVEL:33084,TEXTURE_MAX_LEVEL:33085,MIN:32775,MAX:32776,DEPTH_COMPONENT24:33190,MAX_TEXTURE_LOD_BIAS:34045,TEXTURE_COMPARE_MODE:34892,TEXTURE_COMPARE_FUNC:34893,CURRENT_QUERY:34917,QUERY_RESULT:34918,QUERY_RESULT_AVAILABLE:34919,STREAM_READ:35041,STREAM_COPY:35042,STATIC_READ:35045,STATIC_COPY:35046,DYNAMIC_READ:35049,DYNAMIC_COPY:35050,MAX_DRAW_BUFFERS:34852,DRAW_BUFFER0:34853,DRAW_BUFFER1:34854,DRAW_BUFFER2:34855,DRAW_BUFFER3:34856,DRAW_BUFFER4:34857,DRAW_BUFFER5:34858,DRAW_BUFFER6:34859,DRAW_BUFFER7:34860,DRAW_BUFFER8:34861,DRAW_BUFFER9:34862,DRAW_BUFFER10:34863,DRAW_BUFFER11:34864,DRAW_BUFFER12:34865,DRAW_BUFFER13:34866,DRAW_BUFFER14:34867,DRAW_BUFFER15:34868,MAX_FRAGMENT_UNIFORM_COMPONENTS:35657,MAX_VERTEX_UNIFORM_COMPONENTS:35658,SAMPLER_3D:35679,SAMPLER_2D_SHADOW:35682,FRAGMENT_SHADER_DERIVATIVE_HINT:35723,PIXEL_PACK_BUFFER:35051,PIXEL_UNPACK_BUFFER:35052,PIXEL_PACK_BUFFER_BINDING:35053,PIXEL_UNPACK_BUFFER_BINDING:35055,FLOAT_MAT2x3:35685,FLOAT_MAT2x4:35686,FLOAT_MAT3x2:35687,FLOAT_MAT3x4:35688,FLOAT_MAT4x2:35689,FLOAT_MAT4x3:35690,SRGB:35904,SRGB8:35905,SRGB8_ALPHA8:35907,COMPARE_REF_TO_TEXTURE:34894,RGBA32F:34836,RGB32F:34837,RGBA16F:34842,RGB16F:34843,VERTEX_ATTRIB_ARRAY_INTEGER:35069,MAX_ARRAY_TEXTURE_LAYERS:35071,MIN_PROGRAM_TEXEL_OFFSET:35076,MAX_PROGRAM_TEXEL_OFFSET:35077,MAX_VARYING_COMPONENTS:35659,TEXTURE_2D_ARRAY:35866,TEXTURE_BINDING_2D_ARRAY:35869,R11F_G11F_B10F:35898,UNSIGNED_INT_10F_11F_11F_REV:35899,RGB9_E5:35901,UNSIGNED_INT_5_9_9_9_REV:35902,TRANSFORM_FEEDBACK_BUFFER_MODE:35967,MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:35968,TRANSFORM_FEEDBACK_VARYINGS:35971,TRANSFORM_FEEDBACK_BUFFER_START:35972,TRANSFORM_FEEDBACK_BUFFER_SIZE:35973,TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:35976,RASTERIZER_DISCARD:35977,MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS:35978,MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:35979,INTERLEAVED_ATTRIBS:35980,SEPARATE_ATTRIBS:35981,TRANSFORM_FEEDBACK_BUFFER:35982,TRANSFORM_FEEDBACK_BUFFER_BINDING:35983,RGBA32UI:36208,RGB32UI:36209,RGBA16UI:36214,RGB16UI:36215,RGBA8UI:36220,RGB8UI:36221,RGBA32I:36226,RGB32I:36227,RGBA16I:36232,RGB16I:36233,RGBA8I:36238,RGB8I:36239,RED_INTEGER:36244,RGB_INTEGER:36248,RGBA_INTEGER:36249,SAMPLER_2D_ARRAY:36289,SAMPLER_2D_ARRAY_SHADOW:36292,SAMPLER_CUBE_SHADOW:36293,UNSIGNED_INT_VEC2:36294,UNSIGNED_INT_VEC3:36295,UNSIGNED_INT_VEC4:36296,INT_SAMPLER_2D:36298,INT_SAMPLER_3D:36299,INT_SAMPLER_CUBE:36300,INT_SAMPLER_2D_ARRAY:36303,UNSIGNED_INT_SAMPLER_2D:36306,UNSIGNED_INT_SAMPLER_3D:36307,UNSIGNED_INT_SAMPLER_CUBE:36308,UNSIGNED_INT_SAMPLER_2D_ARRAY:36311,DEPTH_COMPONENT32F:36012,DEPTH32F_STENCIL8:36013,FLOAT_32_UNSIGNED_INT_24_8_REV:36269,FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:33296,FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:33297,FRAMEBUFFER_ATTACHMENT_RED_SIZE:33298,FRAMEBUFFER_ATTACHMENT_GREEN_SIZE:33299,FRAMEBUFFER_ATTACHMENT_BLUE_SIZE:33300,FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE:33301,FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE:33302,FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE:33303,FRAMEBUFFER_DEFAULT:33304,UNSIGNED_INT_24_8:34042,DEPTH24_STENCIL8:35056,UNSIGNED_NORMALIZED:35863,DRAW_FRAMEBUFFER_BINDING:36006,READ_FRAMEBUFFER:36008,DRAW_FRAMEBUFFER:36009,READ_FRAMEBUFFER_BINDING:36010,RENDERBUFFER_SAMPLES:36011,FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:36052,MAX_COLOR_ATTACHMENTS:36063,COLOR_ATTACHMENT1:36065,COLOR_ATTACHMENT2:36066,COLOR_ATTACHMENT3:36067,COLOR_ATTACHMENT4:36068,COLOR_ATTACHMENT5:36069,COLOR_ATTACHMENT6:36070,COLOR_ATTACHMENT7:36071,COLOR_ATTACHMENT8:36072,COLOR_ATTACHMENT9:36073,COLOR_ATTACHMENT10:36074,COLOR_ATTACHMENT11:36075,COLOR_ATTACHMENT12:36076,COLOR_ATTACHMENT13:36077,COLOR_ATTACHMENT14:36078,COLOR_ATTACHMENT15:36079,FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:36182,MAX_SAMPLES:36183,HALF_FLOAT:5131,RG:33319,RG_INTEGER:33320,R8:33321,RG8:33323,R16F:33325,R32F:33326,RG16F:33327,RG32F:33328,R8I:33329,R8UI:33330,R16I:33331,R16UI:33332,R32I:33333,R32UI:33334,RG8I:33335,RG8UI:33336,RG16I:33337,RG16UI:33338,RG32I:33339,RG32UI:33340,VERTEX_ARRAY_BINDING:34229,R8_SNORM:36756,RG8_SNORM:36757,RGB8_SNORM:36758,RGBA8_SNORM:36759,SIGNED_NORMALIZED:36764,COPY_READ_BUFFER:36662,COPY_WRITE_BUFFER:36663,COPY_READ_BUFFER_BINDING:36662,COPY_WRITE_BUFFER_BINDING:36663,UNIFORM_BUFFER:35345,UNIFORM_BUFFER_BINDING:35368,UNIFORM_BUFFER_START:35369,UNIFORM_BUFFER_SIZE:35370,MAX_VERTEX_UNIFORM_BLOCKS:35371,MAX_FRAGMENT_UNIFORM_BLOCKS:35373,MAX_COMBINED_UNIFORM_BLOCKS:35374,MAX_UNIFORM_BUFFER_BINDINGS:35375,MAX_UNIFORM_BLOCK_SIZE:35376,MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS:35377,MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS:35379,UNIFORM_BUFFER_OFFSET_ALIGNMENT:35380,ACTIVE_UNIFORM_BLOCKS:35382,UNIFORM_TYPE:35383,UNIFORM_SIZE:35384,UNIFORM_BLOCK_INDEX:35386,UNIFORM_OFFSET:35387,UNIFORM_ARRAY_STRIDE:35388,UNIFORM_MATRIX_STRIDE:35389,UNIFORM_IS_ROW_MAJOR:35390,UNIFORM_BLOCK_BINDING:35391,UNIFORM_BLOCK_DATA_SIZE:35392,UNIFORM_BLOCK_ACTIVE_UNIFORMS:35394,UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES:35395,UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER:35396,UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER:35398,INVALID_INDEX:4294967295,MAX_VERTEX_OUTPUT_COMPONENTS:37154,MAX_FRAGMENT_INPUT_COMPONENTS:37157,MAX_SERVER_WAIT_TIMEOUT:37137,OBJECT_TYPE:37138,SYNC_CONDITION:37139,SYNC_STATUS:37140,SYNC_FLAGS:37141,SYNC_FENCE:37142,SYNC_GPU_COMMANDS_COMPLETE:37143,UNSIGNALED:37144,SIGNALED:37145,ALREADY_SIGNALED:37146,TIMEOUT_EXPIRED:37147,CONDITION_SATISFIED:37148,WAIT_FAILED:37149,SYNC_FLUSH_COMMANDS_BIT:1,VERTEX_ATTRIB_ARRAY_DIVISOR:35070,ANY_SAMPLES_PASSED:35887,ANY_SAMPLES_PASSED_CONSERVATIVE:36202,SAMPLER_BINDING:35097,RGB10_A2UI:36975,INT_2_10_10_10_REV:36255,TRANSFORM_FEEDBACK:36386,TRANSFORM_FEEDBACK_PAUSED:36387,TRANSFORM_FEEDBACK_ACTIVE:36388,TRANSFORM_FEEDBACK_BINDING:36389,COMPRESSED_R11_EAC:37488,COMPRESSED_SIGNED_R11_EAC:37489,COMPRESSED_RG11_EAC:37490,COMPRESSED_SIGNED_RG11_EAC:37491,COMPRESSED_RGB8_ETC2:37492,COMPRESSED_SRGB8_ETC2:37493,COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2:37494,COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2:37495,COMPRESSED_RGBA8_ETC2_EAC:37496,COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:37497,TEXTURE_IMMUTABLE_FORMAT:37167,MAX_ELEMENT_INDEX:36203,TEXTURE_IMMUTABLE_LEVELS:33503,MAX_TEXTURE_MAX_ANISOTROPY_EXT:34047})}),define("Core/ComponentDatatype",["./defaultValue","./defined","./DeveloperError","./FeatureDetection","./freezeObject","./WebGLConstants"],function(e,t,r,n,a,i){"use strict";if(!n.supportsTypedArrays())return{};var o={BYTE:i.BYTE,UNSIGNED_BYTE:i.UNSIGNED_BYTE,SHORT:i.SHORT,UNSIGNED_SHORT:i.UNSIGNED_SHORT,INT:i.INT,UNSIGNED_INT:i.UNSIGNED_INT,FLOAT:i.FLOAT,DOUBLE:i.DOUBLE};return o.getSizeInBytes=function(e){if(!t(e))throw new r("value is required.");switch(e){case o.BYTE:return Int8Array.BYTES_PER_ELEMENT;case o.UNSIGNED_BYTE:return Uint8Array.BYTES_PER_ELEMENT;case o.SHORT:return Int16Array.BYTES_PER_ELEMENT;case o.UNSIGNED_SHORT:return Uint16Array.BYTES_PER_ELEMENT;case o.INT:return Int32Array.BYTES_PER_ELEMENT;case o.UNSIGNED_INT:return Uint32Array.BYTES_PER_ELEMENT;case o.FLOAT:return Float32Array.BYTES_PER_ELEMENT;case o.DOUBLE:return Float64Array.BYTES_PER_ELEMENT;default:throw new r("componentDatatype is not a valid value.")}},o.fromTypedArray=function(e){return e instanceof Int8Array?o.BYTE:e instanceof Uint8Array?o.UNSIGNED_BYTE:e instanceof Int16Array?o.SHORT:e instanceof Uint16Array?o.UNSIGNED_SHORT:e instanceof Int32Array?o.INT:e instanceof Uint32Array?o.UNSIGNED_INT:e instanceof Float32Array?o.FLOAT:e instanceof Float64Array?o.DOUBLE:void 0},o.validate=function(e){return t(e)&&(e===o.BYTE||e===o.UNSIGNED_BYTE||e===o.SHORT||e===o.UNSIGNED_SHORT||e===o.INT||e===o.UNSIGNED_INT||e===o.FLOAT||e===o.DOUBLE)},o.createTypedArray=function(e,n){if(!t(e))throw new r("componentDatatype is required.");if(!t(n))throw new r("valuesOrLength is required.");switch(e){case o.BYTE:return new Int8Array(n);case o.UNSIGNED_BYTE:return new Uint8Array(n);case o.SHORT:return new Int16Array(n);case o.UNSIGNED_SHORT:return new Uint16Array(n);case o.INT:return new Int32Array(n);case o.UNSIGNED_INT:return new Uint32Array(n);case o.FLOAT:return new Float32Array(n);case o.DOUBLE:return new Float64Array(n);default:throw new r("componentDatatype is not a valid value.")}},o.createArrayBufferView=function(n,a,i,u){if(!t(n))throw new r("componentDatatype is required.");if(!t(a))throw new r("buffer is required.");switch(i=e(i,0),u=e(u,(a.byteLength-i)/o.getSizeInBytes(n)),n){case o.BYTE:return new Int8Array(a,i,u);case o.UNSIGNED_BYTE:return new Uint8Array(a,i,u);case o.SHORT:return new Int16Array(a,i,u);case o.UNSIGNED_SHORT:return new Uint16Array(a,i,u);case o.INT:return new Int32Array(a,i,u);case o.UNSIGNED_INT:return new Uint32Array(a,i,u);case o.FLOAT:return new Float32Array(a,i,u);case o.DOUBLE:return new Float64Array(a,i,u);default:throw new r("componentDatatype is not a valid value.")}},o.fromName=function(e){switch(e){case"BYTE":return o.BYTE;case"UNSIGNED_BYTE":return o.UNSIGNED_BYTE;case"SHORT":return o.SHORT;case"UNSIGNED_SHORT":return o.UNSIGNED_SHORT;case"INT":return o.INT;case"UNSIGNED_INT":return o.UNSIGNED_INT;case"FLOAT":return o.FLOAT;case"DOUBLE":return o.DOUBLE;default:throw new r("name is not a valid value.")}},a(o)}),define("Core/Ellipsoid",["./Cartesian3","./Cartographic","./Check","./defaultValue","./defined","./defineProperties","./DeveloperError","./freezeObject","./Math","./scaleToGeodeticSurface"],function(e,t,r,n,a,i,o,u,s,c){"use strict";function f(t,a,i,o){a=n(a,0),i=n(i,0),o=n(o,0),r.typeOf.number.greaterThanOrEquals("x",a,0),r.typeOf.number.greaterThanOrEquals("y",i,0),r.typeOf.number.greaterThanOrEquals("z",o,0),s.equalsEpsilon(o,6356752.314245179,s.EPSILON10)&&(s.Radius=o),t._radii=new e(a,i,o),t._radiiSquared=new e(a*a,i*i,o*o),t._radiiToTheFourth=new e(a*a*a*a,i*i*i*i,o*o*o*o),t._oneOverRadii=new e(0===a?0:1/a,0===i?0:1/i,0===o?0:1/o),t._oneOverRadiiSquared=new e(0===a?0:1/(a*a),0===i?0:1/(i*i),0===o?0:1/(o*o)),t._minimumRadius=Math.min(a,i,o),t._maximumRadius=Math.max(a,i,o),t._centerToleranceSquared=s.EPSILON1,0!==t._radiiSquared.z&&(t._squaredXOverSquaredZ=t._radiiSquared.x/t._radiiSquared.z)}function E(e,t,r){this._radii=void 0,this._radiiSquared=void 0,this._radiiToTheFourth=void 0,this._oneOverRadii=void 0,this._oneOverRadiiSquared=void 0,this._minimumRadius=void 0,this._maximumRadius=void 0,this._centerToleranceSquared=void 0,this._squaredXOverSquaredZ=void 0,f(this,e,t,r)}i(E.prototype,{radii:{get:function(){return this._radii}},radiiSquared:{get:function(){return this._radiiSquared}},radiiToTheFourth:{get:function(){return this._radiiToTheFourth}},oneOverRadii:{get:function(){return this._oneOverRadii}},oneOverRadiiSquared:{get:function(){return this._oneOverRadiiSquared}},minimumRadius:{get:function(){return this._minimumRadius}},maximumRadius:{get:function(){return this._maximumRadius}}}),E.clone=function(t,r){if(a(t)){var n=t._radii;return a(r)?(e.clone(n,r._radii),e.clone(t._radiiSquared,r._radiiSquared),e.clone(t._radiiToTheFourth,r._radiiToTheFourth),e.clone(t._oneOverRadii,r._oneOverRadii),e.clone(t._oneOverRadiiSquared,r._oneOverRadiiSquared),r._minimumRadius=t._minimumRadius,r._maximumRadius=t._maximumRadius,r._centerToleranceSquared=t._centerToleranceSquared,r):new E(n.x,n.y,n.z)}},E.fromCartesian3=function(e,t){return a(t)||(t=new E),a(e)?(f(t,e.x,e.y,e.z),t):t},E.WGS84=u(new E(6378137,6378137,s.Radius)),E.UNIT_SPHERE=u(new E(1,1,1)),E.MOON=u(new E(s.LUNAR_RADIUS,s.LUNAR_RADIUS,s.LUNAR_RADIUS)),E.prototype.clone=function(e){return E.clone(this,e)},E.packedLength=e.packedLength,E.pack=function(t,a,i){return r.typeOf.object("value",t),r.defined("array",a),i=n(i,0),e.pack(t._radii,a,i),a},E.unpack=function(t,a,i){r.defined("array",t),a=n(a,0);var o=e.unpack(t,a);return E.fromCartesian3(o,i)},E.prototype.geocentricSurfaceNormal=e.normalize,E.prototype.geodeticSurfaceNormalCartographic=function(t,n){r.typeOf.object("cartographic",t);var i=t.longitude,o=t.latitude,u=Math.cos(o),s=u*Math.cos(i),c=u*Math.sin(i),f=Math.sin(o);return a(n)||(n=new e),n.x=s,n.y=c,n.z=f,e.normalize(n,n)},E.prototype.geodeticSurfaceNormal=function(t,r){return a(r)||(r=new e),r=e.multiplyComponents(t,this._oneOverRadiiSquared,r),e.normalize(r,r)};var l=new e,y=new e;E.prototype.cartographicToCartesian=function(t,r){var n=l,i=y;this.geodeticSurfaceNormalCartographic(t,n),e.multiplyComponents(this._radiiSquared,n,i);var o=Math.sqrt(e.dot(n,i));return e.divideByScalar(i,o,i),e.multiplyByScalar(n,t.height,n),a(r)||(r=new e),e.add(i,n,r)},E.prototype.cartographicArrayToCartesianArray=function(e,t){r.defined("cartographics",e);var n=e.length;a(t)?t.length=n:t=new Array(n);for(var i=0;i<n;i++)t[i]=this.cartographicToCartesian(e[i],t[i]);return t};var d=new e,h=new e,_=new e;return E.prototype.cartesianToCartographic=function(r,n){var i=this.scaleToGeodeticSurface(r,h);if(a(i)){var o=this.geodeticSurfaceNormal(i,d),u=e.subtract(r,i,_),c=Math.atan2(o.y,o.x),f=Math.asin(o.z),E=s.sign(e.dot(u,r))*e.magnitude(u);return a(n)?(n.longitude=c,n.latitude=f,n.height=E,n):new t(c,f,E)}},E.prototype.cartesianArrayToCartographicArray=function(e,t){r.defined("cartesians",e);var n=e.length;a(t)?t.length=n:t=new Array(n);for(var i=0;i<n;++i)t[i]=this.cartesianToCartographic(e[i],t[i]);return t},E.prototype.scaleToGeodeticSurface=function(e,t){return c(e,this._oneOverRadii,this._oneOverRadiiSquared,this._centerToleranceSquared,t)},E.prototype.scaleToGeocentricSurface=function(t,n){r.typeOf.object("cartesian",t),a(n)||(n=new e);var i=t.x,o=t.y,u=t.z,s=this._oneOverRadiiSquared,c=1/Math.sqrt(i*i*s.x+o*o*s.y+u*u*s.z);return e.multiplyByScalar(t,c,n)},E.prototype.transformPositionToScaledSpace=function(t,r){return a(r)||(r=new e),e.multiplyComponents(t,this._oneOverRadii,r)},E.prototype.transformPositionFromScaledSpace=function(t,r){return a(r)||(r=new e),e.multiplyComponents(t,this._radii,r)},E.prototype.equals=function(t){return this===t||a(t)&&e.equals(this._radii,t._radii)},E.prototype.toString=function(){return this._radii.toString()},E.prototype.getSurfaceNormalIntersectionWithZAxis=function(t,i,u){if(r.typeOf.object("position",t),!s.equalsEpsilon(this._radii.x,this._radii.y,s.EPSILON15))throw new o("Ellipsoid must be an ellipsoid of revolution (radii.x == radii.y)");r.typeOf.number.greaterThan("Ellipsoid.radii.z",this._radii.z,0),i=n(i,0);var c=this._squaredXOverSquaredZ;if(a(u)||(u=new e),u.x=0,u.y=0,u.z=t.z*(1-c),!(Math.abs(u.z)>=this._radii.z-i))return u},E}),define("Core/GeographicProjection",["./Cartesian3","./Cartographic","./defaultValue","./defined","./defineProperties","./DeveloperError","./Ellipsoid"],function(e,t,r,n,a,i,o){"use strict";function u(e){this._ellipsoid=r(e,o.WGS84),this._semimajorAxis=this._ellipsoid.maximumRadius,this._oneOverSemimajorAxis=1/this._semimajorAxis}return a(u.prototype,{ellipsoid:{get:function(){return this._ellipsoid}}}),u.prototype.project=function(t,r){var a=this._semimajorAxis,i=t.longitude*a,o=t.latitude*a,u=t.height;return n(r)?(r.x=i,r.y=o,r.z=u,r):new e(i,o,u)},u.prototype.unproject=function(e,r){if(!n(e))throw new i("cartesian is required");var a=this._oneOverSemimajorAxis,o=e.x*a,u=e.y*a,s=e.z;return n(r)?(r.longitude=o,r.latitude=u,r.height=s,r):new t(o,u,s)},u}),define("Core/Intersect",["./freezeObject"],function(e){"use strict";return e({OUTSIDE:-1,INTERSECTING:0,INSIDE:1})}),define("Core/Interval",["./defaultValue"],function(e){"use strict";function t(t,r){this.start=e(t,0),this.stop=e(r,0)}return t}),define("Core/Rectangle",["./Cartographic","./Check","./defaultValue","./defined","./defineProperties","./Ellipsoid","./freezeObject","./Math"],function(e,t,r,n,a,i,o,u){"use strict";function s(e,t,n,a){this.west=r(e,0),this.south=r(t,0),this.east=r(n,0),this.north=r(a,0)}a(s.prototype,{width:{get:function(){return s.computeWidth(this)}},height:{get:function(){return s.computeHeight(this)}}}),s.packedLength=4,s.pack=function(e,n,a){return t.typeOf.object("value",e),t.defined("array",n),a=r(a,0),n[a++]=e.west,n[a++]=e.south,n[a++]=e.east,n[a]=e.north,n},s.unpack=function(e,a,i){return t.defined("array",e),a=r(a,0),n(i)||(i=new s),i.west=e[a++],i.south=e[a++],i.east=e[a++],i.north=e[a],i},s.computeWidth=function(e){t.typeOf.object("rectangle",e);var r=e.east,n=e.west;return r<n&&(r+=u.TWO_PI),r-n},s.computeHeight=function(e){return t.typeOf.object("rectangle",e),e.north-e.south},s.fromDegrees=function(e,t,a,i,o){return e=u.toRadians(r(e,0)),t=u.toRadians(r(t,0)),a=u.toRadians(r(a,0)),i=u.toRadians(r(i,0)),n(o)?(o.west=e,o.south=t,o.east=a,o.north=i,o):new s(e,t,a,i)},s.fromRadians=function(e,t,a,i,o){return n(o)?(o.west=r(e,0),o.south=r(t,0),o.east=r(a,0),o.north=r(i,0),o):new s(e,t,a,i)},s.fromCartographicArray=function(e,r){t.defined("cartographics",e);for(var a=Number.MAX_VALUE,i=-Number.MAX_VALUE,o=Number.MAX_VALUE,c=-Number.MAX_VALUE,f=Number.MAX_VALUE,E=-Number.MAX_VALUE,l=0,y=e.length;l<y;l++){var d=e[l];a=Math.min(a,d.longitude),i=Math.max(i,d.longitude),f=Math.min(f,d.latitude),E=Math.max(E,d.latitude);var h=d.longitude>=0?d.longitude:d.longitude+u.TWO_PI;o=Math.min(o,h),c=Math.max(c,h)}return i-a>c-o&&(a=o,i=c,i>u.PI&&(i-=u.TWO_PI),a>u.PI&&(a-=u.TWO_PI)),n(r)?(r.west=a,r.south=f,r.east=i,r.north=E,r):new s(a,f,i,E)},s.fromCartesianArray=function(e,a,o){t.defined("cartesians",e),a=r(a,i.WGS84);for(var c=Number.MAX_VALUE,f=-Number.MAX_VALUE,E=Number.MAX_VALUE,l=-Number.MAX_VALUE,y=Number.MAX_VALUE,d=-Number.MAX_VALUE,h=0,_=e.length;h<_;h++){var p=a.cartesianToCartographic(e[h]);c=Math.min(c,p.longitude),f=Math.max(f,p.longitude),y=Math.min(y,p.latitude),d=Math.max(d,p.latitude);var T=p.longitude>=0?p.longitude:p.longitude+u.TWO_PI;E=Math.min(E,T),l=Math.max(l,T)}return f-c>l-E&&(c=E,f=l,f>u.PI&&(f-=u.TWO_PI),c>u.PI&&(c-=u.TWO_PI)),n(o)?(o.west=c,o.south=y,o.east=f,o.north=d,o):new s(c,y,f,d)},s.clone=function(e,t){if(n(e))return n(t)?(t.west=e.west,t.south=e.south,t.east=e.east,t.north=e.north,t):new s(e.west,e.south,e.east,e.north)},s.equalsEpsilon=function(e,r,a){return t.typeOf.number("absoluteEpsilon",a),e===r||n(e)&&n(r)&&Math.abs(e.west-r.west)<=a&&Math.abs(e.south-r.south)<=a&&Math.abs(e.east-r.east)<=a&&Math.abs(e.north-r.north)<=a},s.prototype.clone=function(e){return s.clone(this,e)},s.prototype.equals=function(e){return s.equals(this,e)},s.equals=function(e,t){return e===t||n(e)&&n(t)&&e.west===t.west&&e.south===t.south&&e.east===t.east&&e.north===t.north},s.prototype.equalsEpsilon=function(e,r){return t.typeOf.number("epsilon",r),s.equalsEpsilon(this,e,r)},s.validate=function(e){t.typeOf.object("rectangle",e);var r=e.north;t.typeOf.number.greaterThanOrEquals("north",r,-u.PI_OVER_TWO),t.typeOf.number.lessThanOrEquals("north",r,u.PI_OVER_TWO);var n=e.south;t.typeOf.number.greaterThanOrEquals("south",n,-u.PI_OVER_TWO),t.typeOf.number.lessThanOrEquals("south",n,u.PI_OVER_TWO);var a=e.west;t.typeOf.number.greaterThanOrEquals("west",a,-Math.PI),t.typeOf.number.lessThanOrEquals("west",a,Math.PI);var i=e.east;t.typeOf.number.greaterThanOrEquals("east",i,-Math.PI),t.typeOf.number.lessThanOrEquals("east",i,Math.PI)},s.southwest=function(r,a){return t.typeOf.object("rectangle",r),n(a)?(a.longitude=r.west,a.latitude=r.south,a.height=0,a):new e(r.west,r.south)},s.northwest=function(r,a){return t.typeOf.object("rectangle",r),n(a)?(a.longitude=r.west,a.latitude=r.north,a.height=0,a):new e(r.west,r.north)},s.northeast=function(r,a){return t.typeOf.object("rectangle",r),n(a)?(a.longitude=r.east,a.latitude=r.north,a.height=0,a):new e(r.east,r.north)},s.southeast=function(r,a){return t.typeOf.object("rectangle",r),n(a)?(a.longitude=r.east,a.latitude=r.south,a.height=0,a):new e(r.east,r.south)},s.center=function(r,a){t.typeOf.object("rectangle",r);var i=r.east,o=r.west;i<o&&(i+=u.TWO_PI);var s=u.negativePiToPi(.5*(o+i)),c=.5*(r.south+r.north);return n(a)?(a.longitude=s,a.latitude=c,a.height=0,a):new e(s,c)},s.intersection=function(e,r,a){t.typeOf.object("rectangle",e),t.typeOf.object("otherRectangle",r);var i=e.east,o=e.west,c=r.east,f=r.west;i<o&&c>0?i+=u.TWO_PI:c<f&&i>0&&(c+=u.TWO_PI),i<o&&f<0?f+=u.TWO_PI:c<f&&o<0&&(o+=u.TWO_PI);var E=u.negativePiToPi(Math.max(o,f)),l=u.negativePiToPi(Math.min(i,c));if(!((e.west<e.east||r.west<r.east)&&l<=E)){var y=Math.max(e.south,r.south),d=Math.min(e.north,r.north);if(!(y>=d))return n(a)?(a.west=E,a.south=y,a.east=l,a.north=d,a):new s(E,y,l,d)}},s.simpleIntersection=function(e,r,a){t.typeOf.object("rectangle",e),t.typeOf.object("otherRectangle",r);var i=Math.max(e.west,r.west),o=Math.max(e.south,r.south),u=Math.min(e.east,r.east),c=Math.min(e.north,r.north);if(!(o>=c||i>=u))return n(a)?(a.west=i,a.south=o,a.east=u,a.north=c,a):new s(i,o,u,c)},s.union=function(e,r,a){t.typeOf.object("rectangle",e),t.typeOf.object("otherRectangle",r),n(a)||(a=new s);var i=e.east,o=e.west,c=r.east,f=r.west;i<o&&c>0?i+=u.TWO_PI:c<f&&i>0&&(c+=u.TWO_PI),
-i<o&&f<0?f+=u.TWO_PI:c<f&&o<0&&(o+=u.TWO_PI);var E=u.convertLongitudeRange(Math.min(o,f)),l=u.convertLongitudeRange(Math.max(i,c));return a.west=E,a.south=Math.min(e.south,r.south),a.east=l,a.north=Math.max(e.north,r.north),a},s.expand=function(e,r,a){return t.typeOf.object("rectangle",e),t.typeOf.object("cartographic",r),n(a)||(a=new s),a.west=Math.min(e.west,r.longitude),a.south=Math.min(e.south,r.latitude),a.east=Math.max(e.east,r.longitude),a.north=Math.max(e.north,r.latitude),a},s.contains=function(e,r){t.typeOf.object("rectangle",e),t.typeOf.object("cartographic",r);var n=r.longitude,a=r.latitude,i=e.west,o=e.east;return o<i&&(o+=u.TWO_PI,n<0&&(n+=u.TWO_PI)),(n>i||u.equalsEpsilon(n,i,u.EPSILON14))&&(n<o||u.equalsEpsilon(n,o,u.EPSILON14))&&a>=e.south&&a<=e.north};var c=new e;return s.subsample=function(e,a,o,f){t.typeOf.object("rectangle",e),a=r(a,i.WGS84),o=r(o,0),n(f)||(f=[]);var E=0,l=e.north,y=e.south,d=e.east,h=e.west,_=c;_.height=o,_.longitude=h,_.latitude=l,f[E]=a.cartographicToCartesian(_,f[E]),E++,_.longitude=d,f[E]=a.cartographicToCartesian(_,f[E]),E++,_.latitude=y,f[E]=a.cartographicToCartesian(_,f[E]),E++,_.longitude=h,f[E]=a.cartographicToCartesian(_,f[E]),E++,_.latitude=l<0?l:y>0?y:0;for(var p=1;p<8;++p)_.longitude=-Math.PI+p*u.PI_OVER_TWO,s.contains(e,_)&&(f[E]=a.cartographicToCartesian(_,f[E]),E++);return 0===_.latitude&&(_.longitude=h,f[E]=a.cartographicToCartesian(_,f[E]),E++,_.longitude=d,f[E]=a.cartographicToCartesian(_,f[E]),E++),f.length=E,f},s.MAX_VALUE=o(new s(-Math.PI,-u.PI_OVER_TWO,Math.PI,u.PI_OVER_TWO)),s}),define("Core/BoundingSphere",["./Cartesian3","./Cartographic","./Check","./defaultValue","./defined","./Ellipsoid","./GeographicProjection","./Intersect","./Interval","./Math","./Matrix3","./Matrix4","./Rectangle"],function(e,t,r,n,a,i,o,u,s,c,f,E,l){"use strict";function y(t,r){this.center=e.clone(n(t,e.ZERO)),this.radius=n(r,0)}var d=new e,h=new e,_=new e,p=new e,T=new e,O=new e,m=new e,A=new e,R=new e,b=new e,N=new e,S=new e,g=4/3*c.PI;y.fromPoints=function(t,r){if(a(r)||(r=new y),!a(t)||0===t.length)return r.center=e.clone(e.ZERO,r.center),r.radius=0,r;var n,i=e.clone(t[0],m),o=e.clone(i,d),u=e.clone(i,h),s=e.clone(i,_),c=e.clone(i,p),f=e.clone(i,T),E=e.clone(i,O),l=t.length;for(n=1;n<l;n++){e.clone(t[n],i);var g=i.x,v=i.y,I=i.z;g<o.x&&e.clone(i,o),g>c.x&&e.clone(i,c),v<u.y&&e.clone(i,u),v>f.y&&e.clone(i,f),I<s.z&&e.clone(i,s),I>E.z&&e.clone(i,E)}var M=e.magnitudeSquared(e.subtract(c,o,A)),w=e.magnitudeSquared(e.subtract(f,u,A)),x=e.magnitudeSquared(e.subtract(E,s,A)),C=o,P=c,L=M;w>L&&(L=w,C=u,P=f),x>L&&(L=x,C=s,P=E);var U=R;U.x=.5*(C.x+P.x),U.y=.5*(C.y+P.y),U.z=.5*(C.z+P.z);var B=e.magnitudeSquared(e.subtract(P,U,A)),F=Math.sqrt(B),D=b;D.x=o.x,D.y=u.y,D.z=s.z;var j=N;j.x=c.x,j.y=f.y,j.z=E.z;var z=e.midpoint(D,j,S),G=0;for(n=0;n<l;n++){e.clone(t[n],i);var V=e.magnitude(e.subtract(i,z,A));V>G&&(G=V);var q=e.magnitudeSquared(e.subtract(i,U,A));if(q>B){var k=Math.sqrt(q);F=.5*(F+k),B=F*F;var Y=k-F;U.x=(F*U.x+Y*i.x)/k,U.y=(F*U.y+Y*i.y)/k,U.z=(F*U.z+Y*i.z)/k}}return F<G?(e.clone(U,r.center),r.radius=F):(e.clone(z,r.center),r.radius=G),r};var v=new o,I=new e,M=new e,w=new t,x=new t;y.fromRectangle2D=function(e,t,r){return y.fromRectangleWithHeights2D(e,t,0,0,r)},y.fromRectangleWithHeights2D=function(t,r,i,o,u){if(a(u)||(u=new y),!a(t))return u.center=e.clone(e.ZERO,u.center),u.radius=0,u;r=n(r,v),l.southwest(t,w),w.height=i,l.northeast(t,x),x.height=o;var s=r.project(w,I),c=r.project(x,M),f=c.x-s.x,E=c.y-s.y,d=c.z-s.z;u.radius=.5*Math.sqrt(f*f+E*E+d*d);var h=u.center;return h.x=s.x+.5*f,h.y=s.y+.5*E,h.z=s.z+.5*d,u};var C=[];y.fromRectangle3D=function(t,r,o,u){if(r=n(r,i.WGS84),o=n(o,0),a(u)||(u=new y),!a(t))return u.center=e.clone(e.ZERO,u.center),u.radius=0,u;var s=l.subsample(t,r,o,C);return y.fromPoints(s,u)},y.fromVertices=function(t,i,o,u){if(a(u)||(u=new y),!a(t)||0===t.length)return u.center=e.clone(e.ZERO,u.center),u.radius=0,u;i=n(i,e.ZERO),o=n(o,3),r.typeOf.number.greaterThanOrEquals("stride",o,3);var s=m;s.x=t[0]+i.x,s.y=t[1]+i.y,s.z=t[2]+i.z;var c,f=e.clone(s,d),E=e.clone(s,h),l=e.clone(s,_),g=e.clone(s,p),v=e.clone(s,T),I=e.clone(s,O),M=t.length;for(c=0;c<M;c+=o){var w=t[c]+i.x,x=t[c+1]+i.y,C=t[c+2]+i.z;s.x=w,s.y=x,s.z=C,w<f.x&&e.clone(s,f),w>g.x&&e.clone(s,g),x<E.y&&e.clone(s,E),x>v.y&&e.clone(s,v),C<l.z&&e.clone(s,l),C>I.z&&e.clone(s,I)}var P=e.magnitudeSquared(e.subtract(g,f,A)),L=e.magnitudeSquared(e.subtract(v,E,A)),U=e.magnitudeSquared(e.subtract(I,l,A)),B=f,F=g,D=P;L>D&&(D=L,B=E,F=v),U>D&&(D=U,B=l,F=I);var j=R;j.x=.5*(B.x+F.x),j.y=.5*(B.y+F.y),j.z=.5*(B.z+F.z);var z=e.magnitudeSquared(e.subtract(F,j,A)),G=Math.sqrt(z),V=b;V.x=f.x,V.y=E.y,V.z=l.z;var q=N;q.x=g.x,q.y=v.y,q.z=I.z;var k=e.midpoint(V,q,S),Y=0;for(c=0;c<M;c+=o){s.x=t[c]+i.x,s.y=t[c+1]+i.y,s.z=t[c+2]+i.z;var X=e.magnitude(e.subtract(s,k,A));X>Y&&(Y=X);var H=e.magnitudeSquared(e.subtract(s,j,A));if(H>z){var W=Math.sqrt(H);G=.5*(G+W),z=G*G;var Z=W-G;j.x=(G*j.x+Z*s.x)/W,j.y=(G*j.y+Z*s.y)/W,j.z=(G*j.z+Z*s.z)/W}}return G<Y?(e.clone(j,u.center),u.radius=G):(e.clone(k,u.center),u.radius=Y),u},y.fromEncodedCartesianVertices=function(t,r,n){if(a(n)||(n=new y),!a(t)||!a(r)||t.length!==r.length||0===t.length)return n.center=e.clone(e.ZERO,n.center),n.radius=0,n;var i=m;i.x=t[0]+r[0],i.y=t[1]+r[1],i.z=t[2]+r[2];var o,u=e.clone(i,d),s=e.clone(i,h),c=e.clone(i,_),f=e.clone(i,p),E=e.clone(i,T),l=e.clone(i,O),g=t.length;for(o=0;o<g;o+=3){var v=t[o]+r[o],I=t[o+1]+r[o+1],M=t[o+2]+r[o+2];i.x=v,i.y=I,i.z=M,v<u.x&&e.clone(i,u),v>f.x&&e.clone(i,f),I<s.y&&e.clone(i,s),I>E.y&&e.clone(i,E),M<c.z&&e.clone(i,c),M>l.z&&e.clone(i,l)}var w=e.magnitudeSquared(e.subtract(f,u,A)),x=e.magnitudeSquared(e.subtract(E,s,A)),C=e.magnitudeSquared(e.subtract(l,c,A)),P=u,L=f,U=w;x>U&&(U=x,P=s,L=E),C>U&&(U=C,P=c,L=l);var B=R;B.x=.5*(P.x+L.x),B.y=.5*(P.y+L.y),B.z=.5*(P.z+L.z);var F=e.magnitudeSquared(e.subtract(L,B,A)),D=Math.sqrt(F),j=b;j.x=u.x,j.y=s.y,j.z=c.z;var z=N;z.x=f.x,z.y=E.y,z.z=l.z;var G=e.midpoint(j,z,S),V=0;for(o=0;o<g;o+=3){i.x=t[o]+r[o],i.y=t[o+1]+r[o+1],i.z=t[o+2]+r[o+2];var q=e.magnitude(e.subtract(i,G,A));q>V&&(V=q);var k=e.magnitudeSquared(e.subtract(i,B,A));if(k>F){var Y=Math.sqrt(k);D=.5*(D+Y),F=D*D;var X=Y-D;B.x=(D*B.x+X*i.x)/Y,B.y=(D*B.y+X*i.y)/Y,B.z=(D*B.z+X*i.z)/Y}}return D<V?(e.clone(B,n.center),n.radius=D):(e.clone(G,n.center),n.radius=V),n},y.fromCornerPoints=function(t,n,i){r.typeOf.object("corner",t),r.typeOf.object("oppositeCorner",n),a(i)||(i=new y);var o=e.midpoint(t,n,i.center);return i.radius=e.distance(o,n),i},y.fromEllipsoid=function(t,n){return r.typeOf.object("ellipsoid",t),a(n)||(n=new y),e.clone(e.ZERO,n.center),n.radius=t.maximumRadius,n};var P=new e;y.fromBoundingSpheres=function(t,r){if(a(r)||(r=new y),!a(t)||0===t.length)return r.center=e.clone(e.ZERO,r.center),r.radius=0,r;var n=t.length;if(1===n)return y.clone(t[0],r);if(2===n)return y.union(t[0],t[1],r);var i,o=[];for(i=0;i<n;i++)o.push(t[i].center);r=y.fromPoints(o,r);var u=r.center,s=r.radius;for(i=0;i<n;i++){var c=t[i];s=Math.max(s,e.distance(u,c.center,P)+c.radius)}return r.radius=s,r};var L=new e,U=new e,B=new e;y.fromOrientedBoundingBox=function(t,n){r.defined("orientedBoundingBox",t),a(n)||(n=new y);var i=t.halfAxes,o=f.getColumn(i,0,L),u=f.getColumn(i,1,U),s=f.getColumn(i,2,B);return e.add(o,u,o),e.add(o,s,o),n.center=e.clone(t.center,n.center),n.radius=e.magnitude(o),n},y.clone=function(t,r){if(a(t))return a(r)?(r.center=e.clone(t.center,r.center),r.radius=t.radius,r):new y(t.center,t.radius)},y.packedLength=4,y.pack=function(e,t,a){r.typeOf.object("value",e),r.defined("array",t),a=n(a,0);var i=e.center;return t[a++]=i.x,t[a++]=i.y,t[a++]=i.z,t[a]=e.radius,t},y.unpack=function(e,t,i){r.defined("array",e),t=n(t,0),a(i)||(i=new y);var o=i.center;return o.x=e[t++],o.y=e[t++],o.z=e[t++],i.radius=e[t],i};var F=new e,D=new e;y.union=function(t,n,i){r.typeOf.object("left",t),r.typeOf.object("right",n),a(i)||(i=new y);var o=t.center,u=t.radius,s=n.center,c=n.radius,f=e.subtract(s,o,F),E=e.magnitude(f);if(u>=E+c)return t.clone(i),i;if(c>=E+u)return n.clone(i),i;var l=.5*(u+E+c),d=e.multiplyByScalar(f,(-u+l)/E,D);return e.add(d,o,d),e.clone(d,i.center),i.radius=l,i};var j=new e;y.expand=function(t,n,a){r.typeOf.object("sphere",t),r.typeOf.object("point",n),a=y.clone(t,a);var i=e.magnitude(e.subtract(n,a.center,j));return i>a.radius&&(a.radius=i),a},y.intersectPlane=function(t,n){r.typeOf.object("sphere",t),r.typeOf.object("plane",n);var a=t.center,i=t.radius,o=n.normal,s=e.dot(o,a)+n.distance;return s<-i?u.OUTSIDE:s<i?u.INTERSECTING:u.INSIDE},y.transform=function(e,t,n){return r.typeOf.object("sphere",e),r.typeOf.object("transform",t),a(n)||(n=new y),n.center=E.multiplyByPoint(t,e.center,n.center),n.radius=E.getMaximumScale(t)*e.radius,n};var z=new e;y.distanceSquaredTo=function(t,n){r.typeOf.object("sphere",t),r.typeOf.object("cartesian",n);var a=e.subtract(t.center,n,z);return e.magnitudeSquared(a)-t.radius*t.radius},y.transformWithoutScale=function(e,t,n){return r.typeOf.object("sphere",e),r.typeOf.object("transform",t),a(n)||(n=new y),n.center=E.multiplyByPoint(t,e.center,n.center),n.radius=e.radius,n};var G=new e;y.computePlaneDistances=function(t,n,i,o){r.typeOf.object("sphere",t),r.typeOf.object("position",n),r.typeOf.object("direction",i),a(o)||(o=new s);var u=e.subtract(t.center,n,G),c=e.dot(i,u);return o.start=c-t.radius,o.stop=c+t.radius,o};for(var V=new e,q=new e,k=new e,Y=new e,X=new e,H=new t,W=new Array(8),Z=0;Z<8;++Z)W[Z]=new e;var K=new o;return y.projectTo2D=function(t,a,i){r.typeOf.object("sphere",t),a=n(a,K);var o=a.ellipsoid,u=t.center,s=t.radius,c=o.geodeticSurfaceNormal(u,V),f=e.cross(e.UNIT_Z,c,q);e.normalize(f,f);var E=e.cross(c,f,k);e.normalize(E,E),e.multiplyByScalar(c,s,c),e.multiplyByScalar(E,s,E),e.multiplyByScalar(f,s,f);var l=e.negate(E,X),d=e.negate(f,Y),h=W,_=h[0];e.add(c,E,_),e.add(_,f,_),_=h[1],e.add(c,E,_),e.add(_,d,_),_=h[2],e.add(c,l,_),e.add(_,d,_),_=h[3],e.add(c,l,_),e.add(_,f,_),e.negate(c,c),_=h[4],e.add(c,E,_),e.add(_,f,_),_=h[5],e.add(c,E,_),e.add(_,d,_),_=h[6],e.add(c,l,_),e.add(_,d,_),_=h[7],e.add(c,l,_),e.add(_,f,_);for(var p=h.length,T=0;T<p;++T){var O=h[T];e.add(u,O,O);var m=o.cartesianToCartographic(O,H);a.project(m,O)}i=y.fromPoints(h,i),u=i.center;var A=u.x,R=u.y,b=u.z;return u.x=b,u.y=A,u.z=R,i},y.isOccluded=function(e,t){return r.typeOf.object("sphere",e),r.typeOf.object("occluder",t),!t.isBoundingSphereVisible(e)},y.equals=function(t,r){return t===r||a(t)&&a(r)&&e.equals(t.center,r.center)&&t.radius===r.radius},y.prototype.intersectPlane=function(e){return y.intersectPlane(this,e)},y.prototype.distanceSquaredTo=function(e){return y.distanceSquaredTo(this,e)},y.prototype.computePlaneDistances=function(e,t,r){return y.computePlaneDistances(this,e,t,r)},y.prototype.isOccluded=function(e){return y.isOccluded(this,e)},y.prototype.equals=function(e){return y.equals(this,e)},y.prototype.clone=function(e){return y.clone(this,e)},y.prototype.volume=function(){var e=this.radius;return g*e*e*e},y}),define("S3MTiles/Enum/S3MPixelFormat",["../../Core/freezeObject"],function(e){"use strict";return e({LUMINANCE_8:1,LUMINANCE_16:2,ALPHA:3,ALPHA_4_LUMINANCE_4:4,LUMINANCE_ALPHA:5,RGB_565:6,BGR565:7,RGB:10,BGR:11,ARGB:12,ABGR:13,BGRA:14,WEBP:25,RGBA:28,DXT1:17,DXT2:18,DXT3:19,DXT4:20,DXT5:21})}),define("Core/DXTTextureDecode",["./defined","../S3MTiles/Enum/S3MPixelFormat"],function(e,t){"use strict";function r(e,t,r,n){var a=e|t<<8,i=a>>11&31,o=a>>5&63,u=31&a;return r[n+0]=i<<3|i>>2,r[n+1]=o<<2|o>>4,r[n+2]=u<<3|u>>2,r[n+3]=255,a}function n(e,t,n,a){for(var i=new Uint8Array(16),o=r(t[n+0],t[n+1],i,0),u=r(t[n+2],t[n+3],i,4),s=0;s<3;s++){var c=i[s],f=i[4+s];a&&o<=u?(i[8+s]=(c+f)/2,i[12+s]=0):(i[8+s]=(2*c+f)/3,i[12+s]=(c+2*f)/3)}i[11]=255,i[15]=a&&o<=u?0:255;for(var E=new Uint8Array(16),s=0;s<4;++s){var l=t[n+4+s];E[4*s+0]=3&l,E[4*s+1]=l>>2&3,E[4*s+2]=l>>4&3,E[4*s+3]=l>>6&3}for(var s=0;s<16;++s)for(var y=4*E[s],d=0;d<4;++d)e[4*s+d]=i[y+d]}function a(e,t,r){for(var n=0;n<8;++n){var a=bytes[r+n],i=15&a,o=240&a;e[8*n+3]=i|i<<4,e[8*n+7]=o|o>>4}}function i(e,t,r){var n=t[r+0],a=t[r+1],i=new Uint8Array(8);if(i[0]=n,i[1]=a,n<=a){for(var o=1;o<5;++o)i[1+o]=((5-o)*n+o*a)/5;i[6]=0,i[7]=255}else for(var o=1;o<7;++o)i[1+o]=((7-o)*n+o*a)/7;for(var u=new Uint8Array(16),r=r+2,s=0,o=0;o<2;++o){for(var c=0,f=0;f<3;++f){c|=t[r++]<<8*f}for(var f=0;f<8;++f){var E=c>>3*f&7;u[s++]=E}}for(var o=0;o<16;++o)e[4*o+3]=i[u[o]]}function o(e,t,r,o){var u=0;0!=(o&(E|l))&&(u=8),n(e,t,r+u,0!=(o&f)),0!=(o&E)?a(e,t,r):0!=(o&l)&&i(e,t,r)}function u(e,t,r,n){for(var a=new Uint16Array(4),i=e,o=0,u=0,s=0,c=0,f=0,E=0,l=0,y=0,d=0,h=t/4,_=r/4,p=0;p<_;p++)for(var T=0;T<h;T++)s=4*((_-p)*h+T),a[0]=n[s],a[1]=n[s+1],c=31&a[0],f=2016&a[0],E=63488&a[0],l=31&a[1],y=2016&a[1],d=63488&a[1],a[2]=5*c+3*l>>3|5*f+3*y>>3&2016|5*E+3*d>>3&63488,a[3]=5*l+3*c>>3|5*y+3*f>>3&2016|5*d+3*E>>3&63488,o=n[s+2],u=4*p*t+4*T,i[u]=a[3&o],i[u+1]=a[o>>2&3],i[u+2]=a[o>>4&3],i[u+3]=a[o>>6&3],u+=t,i[u]=a[o>>8&3],i[u+1]=a[o>>10&3],i[u+2]=a[o>>12&3],i[u+3]=a[o>>14],o=n[s+3],u+=t,i[u]=a[3&o],i[u+1]=a[o>>2&3],i[u+2]=a[o>>4&3],i[u+3]=a[o>>6&3],u+=t,i[u]=a[o>>8&3],i[u+1]=a[o>>10&3],i[u+2]=a[o>>12&3],i[u+3]=a[o>>14];return i}function s(e,t,r,n,a){for(var i=0!=(a&f)?8:16,u=0,s=0;s<r;s+=4)for(var c=0;c<t;c+=4){var E=new Uint8Array(64);o(E,n,u,a);for(var l=0,y=0;y<4;++y)for(var d=0;d<4;++d){var h=c+d,_=s+y;if(h<t&&_<r)for(var p=4*(t*(r-_)+h),T=0;T<4;++T)e[p++]=E[l++];else l+=4}u+=i}}function c(e){}var f=1,E=2,l=4;return c.decode=function(e,r,n,a,i){if(null!=e&&null!=a&&0!=n&&0!=r){var o=0;o=i>t.BGR||i===t.LUMINANCE_ALPHA?l:32|f,o&f&&32&o?u(e,r,n,a):s(e,r,n,a,o)}},c}),define("Core/Cartesian2",["./Check","./defaultValue","./defined","./DeveloperError","./freezeObject","./Math"],function(e,t,r,n,a,i){"use strict";function o(e,r){this.x=t(e,0),this.y=t(r,0)}o.fromElements=function(e,t,n){return r(n)?(n.x=e,n.y=t,n):new o(e,t)},o.clone=function(e,t){if(r(e))return r(t)?(t.x=e.x,t.y=e.y,t):new o(e.x,e.y)},o.fromCartesian3=o.clone,o.fromCartesian4=o.clone,o.packedLength=2,o.pack=function(r,n,a){return e.typeOf.object("value",r),e.defined("array",n),a=t(a,0),n[a++]=r.x,n[a]=r.y,n},o.unpack=function(n,a,i){return e.defined("array",n),a=t(a,0),r(i)||(i=new o),i.x=n[a++],i.y=n[a],i},o.packArray=function(t,n){e.defined("array",t);var a=t.length;r(n)?n.length=2*a:n=new Array(2*a);for(var i=0;i<a;++i)o.pack(t[i],n,2*i);return n},o.unpackArray=function(t,n){e.defined("array",t);var a=t.length;r(n)?n.length=a/2:n=new Array(a/2);for(var i=0;i<a;i+=2){var u=i/2;n[u]=o.unpack(t,i,n[u])}return n},o.fromArray=o.unpack,o.maximumComponent=function(t){return e.typeOf.object("cartesian",t),Math.max(t.x,t.y)},o.minimumComponent=function(t){return e.typeOf.object("cartesian",t),Math.min(t.x,t.y)},o.minimumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.min(t.x,r.x),n.y=Math.min(t.y,r.y),n},o.maximumByComponent=function(t,r,n){return e.typeOf.object("first",t),e.typeOf.object("second",r),e.typeOf.object("result",n),n.x=Math.max(t.x,r.x),n.y=Math.max(t.y,r.y),n},o.magnitudeSquared=function(t){return e.typeOf.object("cartesian",t),t.x*t.x+t.y*t.y},o.magnitude=function(e){return Math.sqrt(o.magnitudeSquared(e))};var u=new o;o.distance=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitude(u)},o.distanceSquared=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.subtract(t,r,u),o.magnitudeSquared(u)},o.normalize=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var a=o.magnitude(t);if(r.x=t.x/a,r.y=t.y/a,isNaN(r.x)||isNaN(r.y))throw new n("normalized result is not a number");return r},o.dot=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),t.x*r.x+t.y*r.y},o.multiplyComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x*r.x,n.y=t.y*r.y,n},o.divideComponents=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x/r.x,n.y=t.y/r.y,n},o.add=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x+r.x,n.y=t.y+r.y,n},o.subtract=function(t,r,n){return e.typeOf.object("left",t),e.typeOf.object("right",r),e.typeOf.object("result",n),n.x=t.x-r.x,n.y=t.y-r.y,n},o.multiplyByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x*r,n.y=t.y*r,n},o.divideByScalar=function(t,r,n){return e.typeOf.object("cartesian",t),e.typeOf.number("scalar",r),e.typeOf.object("result",n),n.x=t.x/r,n.y=t.y/r,n},o.negate=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=-t.x,r.y=-t.y,r},o.abs=function(t,r){return e.typeOf.object("cartesian",t),e.typeOf.object("result",r),r.x=Math.abs(t.x),r.y=Math.abs(t.y),r};var s=new o;o.lerp=function(t,r,n,a){return e.typeOf.object("start",t),e.typeOf.object("end",r),e.typeOf.number("t",n),e.typeOf.object("result",a),o.multiplyByScalar(r,n,s),a=o.multiplyByScalar(t,1-n,a),o.add(s,a,a)};var c=new o,f=new o;o.angleBetween=function(t,r){return e.typeOf.object("left",t),e.typeOf.object("right",r),o.normalize(t,c),o.normalize(r,f),i.acosClamped(o.dot(c,f))};var E=new o;return o.mostOrthogonalAxis=function(t,r){e.typeOf.object("cartesian",t),e.typeOf.object("result",r);var n=o.normalize(t,E);return o.abs(n,n),r=n.x<=n.y?o.clone(o.UNIT_X,r):o.clone(o.UNIT_Y,r)},o.equals=function(e,t){return e===t||r(e)&&r(t)&&e.x===t.x&&e.y===t.y},o.equalsArray=function(e,t,r){return e.x===t[r]&&e.y===t[r+1]},o.equalsEpsilon=function(e,t,n,a){return e===t||r(e)&&r(t)&&i.equalsEpsilon(e.x,t.x,n,a)&&i.equalsEpsilon(e.y,t.y,n,a)},o.ZERO=a(new o(0,0)),o.UNIT_X=a(new o(1,0)),o.UNIT_Y=a(new o(0,1)),o.prototype.clone=function(e){return o.clone(this,e)},o.prototype.equals=function(e){return o.equals(this,e)},o.prototype.equalsEpsilon=function(e,t,r){return o.equalsEpsilon(this,e,t,r)},o.prototype.toString=function(){return"("+this.x+", "+this.y+")"},o}),define("Core/BoundingRectangle",["./Cartesian2","./Cartographic","./Check","./defaultValue","./defined","./GeographicProjection","./Intersect","./Rectangle"],function(e,t,r,n,a,i,o,u){"use strict";function s(e,t,r,a){this.x=n(e,0),this.y=n(t,0),this.width=n(r,0),this.height=n(a,0)}s.packedLength=4,s.pack=function(e,t,a){return r.typeOf.object("value",e),r.defined("array",t),a=n(a,0),t[a++]=e.x,t[a++]=e.y,t[a++]=e.width,t[a]=e.height,t},s.unpack=function(e,t,i){return r.defined("array",e),t=n(t,0),a(i)||(i=new s),i.x=e[t++],i.y=e[t++],i.width=e[t++],i.height=e[t],i},s.fromPoints=function(e,t){if(a(t)||(t=new s),!a(e)||0===e.length)return t.x=0,t.y=0,t.width=0,t.height=0,t;for(var r=e.length,n=e[0].x,i=e[0].y,o=e[0].x,u=e[0].y,c=1;c<r;c++){var f=e[c],E=f.x,l=f.y;n=Math.min(E,n),o=Math.max(E,o),i=Math.min(l,i),u=Math.max(l,u)}return t.x=n,t.y=i,t.width=o-n,t.height=u-i,t};var c=new i,f=new t,E=new t;return s.fromRectangle=function(t,r,i){if(a(i)||(i=new s),!a(t))return i.x=0,i.y=0,i.width=0,i.height=0,i;r=n(r,c);var o=r.project(u.southwest(t,f)),l=r.project(u.northeast(t,E));return e.subtract(l,o,l),i.x=o.x,i.y=o.y,i.width=l.x,i.height=l.y,i},s.clone=function(e,t){if(a(e))return a(t)?(t.x=e.x,t.y=e.y,t.width=e.width,t.height=e.height,t):new s(e.x,e.y,e.width,e.height)},s.union=function(e,t,n){r.typeOf.object("left",e),r.typeOf.object("right",t),a(n)||(n=new s);var i=Math.min(e.x,t.x),o=Math.min(e.y,t.y),u=Math.max(e.x+e.width,t.x+t.width),c=Math.max(e.y+e.height,t.y+t.height);return n.x=i,n.y=o,n.width=u-i,n.height=c-o,n},s.expand=function(e,t,n){r.typeOf.object("rectangle",e),r.typeOf.object("point",t),n=s.clone(e,n);var a=t.x-n.x,i=t.y-n.y;return a>n.width?n.width=a:a<0&&(n.width-=a,n.x=t.x),i>n.height?n.height=i:i<0&&(n.height-=i,n.y=t.y),n},s.intersect=function(e,t){r.typeOf.object("left",e),r.typeOf.object("right",t);var n=e.x,a=e.y,i=t.x,u=t.y;return n>i+t.width||n+e.width<i||a+e.height<u||a>u+t.height?o.OUTSIDE:o.INTERSECTING},s.equals=function(e,t){return e===t||a(e)&&a(t)&&e.x===t.x&&e.y===t.y&&e.width===t.width&&e.height===t.height},s.prototype.clone=function(e){return s.clone(this,e)},s.prototype.intersect=function(e){return s.intersect(this,e)},s.prototype.equals=function(e){return s.equals(this,e)},s}),define("Core/PrimitiveType",["./freezeObject","./WebGLConstants"],function(e,t){"use strict";var r={POINTS:t.POINTS,LINES:t.LINES,LINE_LOOP:t.LINE_LOOP,LINE_STRIP:t.LINE_STRIP,TRIANGLES:t.TRIANGLES,TRIANGLE_STRIP:t.TRIANGLE_STRIP,TRIANGLE_FAN:t.TRIANGLE_FAN,validate:function(e){return e===r.POINTS||e===r.LINES||e===r.LINE_LOOP||e===r.LINE_STRIP||e===r.TRIANGLES||e===r.TRIANGLE_STRIP||e===r.TRIANGLE_FAN}};return e(r)}),define("S3MTiles/Enum/DataFileType",["../../Core/freezeObject"],function(e){"use strict";return e({OSGBFile:0,OSGBCacheFile:1,ClampGroundPolygon:2,ClampObjectPolygon:3,ClampGroundLine:4,ClampObjectLine:5,IconPoint:6,Text:7,PointCloudFile:8,ExtendRegion3D:9,ExtendClampPolygonCache:10,PolylineEffect:11,RegionEffect:12,ClampGroundAndObjectLineCache:13,ClampGroundRealtimeRasterCache:14})}),define("S3MTiles/Enum/VertexCompressOption",["../../Core/freezeObject"],function(e){"use strict";return e({SVC_Vertex:1,SVC_Normal:2,SVC_VertexColor:4,SVC_SecondColor:8,SVC_TexutreCoord:16,SVC_TexutreCoordIsW:32})}),define("S3MTiles/S3MVertexPackage",["../Core/defined","../Core/BoundingSphere","../Core/BoundingRectangle","../Core/Cartesian2","../Core/Cartesian3","../Core/Cartesian4","../Core/ComponentDatatype","../Core/Matrix4","../Core/PrimitiveType","./Enum/DataFileType","./Enum/VertexCompressOption"],function(e,t,r,n,a,i,o,u,s,c,f){"use strict";function E(){}function l(r){var n=new t,i=r.instanceBounds;if(!e(i))return n;var o=new a(i[0],i[1],i[2]),u=new a(i[3],i[4],i[5]),s=a.lerp(o,u,.5,new a),c=a.distance(s,o);return n.center=s,n.radius=c,n}function y(r){var n,i,o=new t,u=new a,s=r.vertexAttributes[0],c=s.componentsPerAttribute,E=e(r.nCompressOptions)&&(r.nCompressOptions&f.SVC_Vertex)===f.SVC_Vertex,l=1;E?(l=r.vertCompressConstant,n=new a(r.minVerticesValue.x,r.minVerticesValue.y,r.minVerticesValue.z),i=new Uint16Array(s.typedArray.buffer,s.typedArray.byteOffset,s.typedArray.byteLength/2)):i=new Float32Array(s.typedArray.buffer,s.typedArray.byteOffset,s.typedArray.byteLength/4);for(var y=[],d=0;d<r.verticesCount;d++)a.fromArray(i,c*d,u),E&&(u=a.multiplyByScalar(u,l,u),u=a.add(u,n,u)),y.push(a.clone(u));return t.fromPoints(y,o),y.length=0,o}function d(r){var n,i,o=new t,u=new a,s=e(r.nCompressOptions)&&(r.nCompressOptions&f.SVC_Vertex)===f.SVC_Vertex,c=r.vertexAttributes[0],E=c.componentsPerAttribute,l=1;s?(l=r.vertCompressConstant,i=new a(r.minVerticesValue.x,r.minVerticesValue.y,r.minVerticesValue.z),n=new Uint16Array(c.typedArray.buffer,c.typedArray.byteOffset,c.typedArray.byteLength/2)):n=new Float32Array(c.typedArray.buffer,c.typedArray.byteOffset,c.typedArray.byteLength/4);for(var y=[],d=0;d<r.verticesCount;d++)a.fromArray(n,E*d,u),s&&(u=a.multiplyByScalar(u,l,u),u=a.add(u,i,u)),y.push(a.clone(u));return t.fromPoints(y,o),y.length=0,o}function h(t){var i,o,u=e(t.nCompressOptions)&&(t.nCompressOptions&f.SVC_Vertex)===f.SVC_Vertex,s=new r,c=t.vertexAttributes[0],E=c.componentsPerAttribute,l=1;u?(l=t.vertCompressConstant,o=new a(t.minVerticesValue.x,t.minVerticesValue.y,t.minVerticesValue.z),i=new Uint16Array(c.typedArray.buffer,c.typedArray.byteOffset,c.typedArray.byteLength/2)):i=new Float32Array(c.typedArray.buffer,c.typedArray.byteOffset,c.typedArray.byteLength/4);for(var y=[],d=0;d<t.verticesCount;d++){var h=i[E*d],_=i[E*d+1];u&&(h=l*h+o.x,_=l*_+o.y),y.push(new n(h,_))}return r.fromPoints(y,s),y.length=0,s}function _(r){var n,i,o=e(r.nCompressOptions)&&(r.nCompressOptions&f.SVC_Vertex)===f.SVC_Vertex,u=new t,s=new a,c=new a,E=r.vertexAttributes[0],l=E.componentsPerAttribute,y=r.attrLocation.aPosition,d=r.vertexAttributes[y],h=r.attrLocation.aTexCoord5,_=r.vertexAttributes[h],p=_.componentsPerAttribute;o?(l=3,p=3,n=O(r,d),i=m(r,_,5)):(n=new Float32Array(E.typedArray.buffer,E.typedArray.byteOffset,E.typedArray.byteLength/4),i=new Float32Array(_.typedArray.buffer,_.typedArray.byteOffset,_.typedArray.byteLength/4));for(var T=[],A=0;A<r.verticesCount;A++)a.fromArray(n,l*A,s),a.fromArray(i,p*A,c),a.add(s,c,s),T.push(a.clone(s));return t.fromPoints(T,u),T.length=0,u}function p(e){var t=s.TRIANGLES;switch(e){case 1:t=s.POINTS;break;case 2:t=s.LINES;break;case 3:t=s.LINE_STRIP;break;case 4:t=s.TRIANGLES}return t}function T(e,t,r,n){var a={};a.indicesCount=6*(e-t),a.indexType=n>65535?1:0,a.primitiveType=s.TRIANGLES;var i;i=0===a.indexType?new Uint16Array(a.indicesCount):new Uint32Array(a.indicesCount);for(var o=0,u=0;u<t;u++){for(var c=0;c<r[u]-1;c++)i[6*(o-u+c)]=4*(o-u+c),i[6*(o-u+c)+1]=4*(o-u+c)+2,i[6*(o-u+c)+2]=4*(o-u+c)+1,i[6*(o-u+c)+3]=4*(o-u+c)+1,i[6*(o-u+c)+4]=4*(o-u+c)+2,i[6*(o-u+c)+5]=4*(o-u+c)+3;o+=r[u]}return a.indicesTypedArray=i,a}function O(e,t){for(var r,n,i,o=t.componentsPerAttribute,u=e.vertCompressConstant,s=new a(e.minVerticesValue.x,e.minVerticesValue.y,e.minVerticesValue.z),c=new Uint16Array(t.typedArray.buffer,t.typedArray.byteOffset,t.typedArray.byteLength/2),f=new Float32Array(3*e.verticesCount),E=0;E<e.verticesCount;E++)r=c[o*E]*u+s.x,n=c[o*E+1]*u+s.y,i=c[o*E+2]*u+s.z,f[3*E]=r,f[3*E+1]=n,f[3*E+2]=i;return f}function m(e,t,r){for(var n,a,o,u=t.componentsPerAttribute,s=e.texCoordCompressConstant[r],c=new i(e.minTexCoordValue[r].x,e.minTexCoordValue[r].y,e.minTexCoordValue[r].z,e.minTexCoordValue[r].w),f=new Uint16Array(t.typedArray.buffer,t.typedArray.byteOffset,t.typedArray.byteLength/2),E=new Float32Array(3*e.verticesCount),l=0;l<e.verticesCount;l++)n=f[u*l]*s+c.x,a=f[u*l+1]*s+c.y,o=f[u*l+2]*s+c.z,E[3*l]=n,E[3*l+1]=a,E[3*l+2]=o;return E}function A(e){for(var t=[],r=e.length,n=0;n<r;n++){var a=p(e[n].primitiveType);a!==s.LINES&&a!==s.LINE_STRIP||t.push(e[n])}return t}function R(e){for(var t=0,r=e.length,n=0;n<r;n++){var a=e[n],i=p(a.primitiveType);i==s.LINES?t+=a.indicesCount/2:i==s.LINE_STRIP&&t++}return t}function b(e){for(var t=0,r=e.length,n=0;n<r;n++){t+=e[n].indicesCount}return t}function N(e,t,r){for(var n,i=[],o=r.length,u=0;u<o;u++){var c,f=r[u];c=0===f.indexType?new Uint16Array(f.indicesTypedArray.buffer,f.indicesTypedArray.byteOffset,f.indicesTypedArray.byteLength/2):new Uint32Array(f.indicesTypedArray.buffer,f.indicesTypedArray.byteOffset,f.indicesTypedArray.byteLength/4);var E=p(f.primitiveType);if(E==s.LINES)for(n=0;n<f.indicesCount;n+=2){var l=[],y=new a;y.x=e[c[n]*t],y.y=e[c[n]*t+1],y.z=e[c[n]*t+2],l.push(y);var d=new a;d.x=e[c[n+1]*t],d.y=e[c[n+1]*t+1],d.z=e[c[n+1]*t+2],l.push(d),i.push(l)}else if(E==s.LINE_STRIP){var l=[];for(n=0;n<f.indicesCount;n++){var h=new a;h.x=e[c[n]*t],h.y=e[c[n]*t+1],h.z=e[c[n]*t+2],l.push(h)}i.push(l)}}return i}return E.calcBoundingSphereInWorker=function(t,r){return r.instanceIndex>-1?l(r):e(r.clampRegionEdge)?_(r):t>=c.ClampGroundPolygon&&t<=c.ClampObjectLine?d(r):t==c.ClampGroundAndObjectLineCache?_(r):y(r)},E.calcBoundingSphere=function(r,n,a){var i,o=r._fileType;return i=n.instanceIndex>-1?l(n):e(n.clampRegionEdge)?_(n):o>=c.ClampGroundPolygon&&o<=c.ClampObjectLine?d(n):o==c.ClampGroundAndObjectLineCache?_(n):y(n),t.transform(i,a,i),i},E.calcBoundingRectangle=function(e,t){var r,n=e._fileType;return n===c.ClampGroundPolygon&&(r=h(t)),r},E.createEdge=function(t,r){if(!(r.length<1)){var n=A(r);if(0!=n.length){var a,i=R(n),u=t.attrLocation.aPosition,s=t.vertexAttributes[u],c=e(t.nCompressOptions)&&(t.nCompressOptions&f.SVC_Vertex)===f.SVC_Vertex,E=s.componentsPerAttribute;c?(E=3,a=O(t,s)):a=new Float32Array(s.typedArray.buffer,s.typedArray.byteOffset,s.typedArray.byteLength/4);for(var l=b(n),y=N(a,E,n),d=4*l-4*i,h=new Float32Array(3*d),_=new Float32Array(3*d),p=new Float32Array(3*d),m=new Int8Array(2*d),S=0,g=0;g<i;g++){for(var v=y[g].length,I=0;I<v;I++){var M=4*S-4*g,w=3*M+12*I,x=y[g][I];0!=I&&(h[w-6]=x.x,h[w-5]=x.y,h[w-4]=x.z,h[w-3]=x.x,h[w-2]=x.y,h[w-1]=x.z),I!=v-1&&(h[w]=x.x,h[w+1]=x.y,h[w+2]=x.z,h[w+3]=x.x,h[w+4]=x.y,h[w+5]=x.z);var C=x;I+1<v&&(C=y[g][I+1]),0!=I&&(p[w-6]=C.x,p[w-5]=C.y,p[w-4]=C.z,p[w-3]=C.x,p[w-2]=C.y,p[w-1]=C.z),I!=v-1&&(p[w]=C.x,p[w+1]=C.y,p[w+2]=C.z,p[w+3]=C.x,p[w+4]=C.y,p[w+5]=C.z);var P=x;I>=1&&(P=y[g][I-1]),0!=I&&(_[w-6]=P.x,_[w-5]=P.y,_[w-4]=P.z,_[w-3]=P.x,_[w-2]=P.y,_[w-1]=P.z),I!=v-1&&(_[w]=P.x,_[w+1]=P.y,_[w+2]=P.z,_[w+3]=P.x,_[w+4]=P.y,_[w+5]=P.z),w=2*M+8*I,0!=I&&(m[w-4]=-1,m[w-3]=-1,m[w-2]=1,m[w-1]=-1),I!=v-1&&(m[w]=-1,m[w+1]=1,m[w+2]=1,m[w+3]=1)}S+=y[g].length}var L={};L.vertexAttributes=[],L.attrLocation={};var U=L.vertexAttributes,B=L.attrLocation;L.instanceCount=0,L.instanceMode=0,B.aPosition=0,U.push({index:B.aPosition,typedArray:h,componentsPerAttribute:3,componentDatatype:o.FLOAT,offsetInBytes:0,strideInBytes:3*Float32Array.BYTES_PER_ELEMENT,normalize:!1}),B.aNormal=1,U.push({index:B.aNormal,typedArray:_,componentsPerAttribute:3,componentDatatype:o.FLOAT,offsetInBytes:0,strideInBytes:3*Float32Array.BYTES_PER_ELEMENT,normalize:!1}),B.aTexCoord0=2,U.push({index:B.aTexCoord0,typedArray:p,componentsPerAttribute:3,componentDatatype:o.FLOAT,offsetInBytes:0,strideInBytes:3*Float32Array.BYTES_PER_ELEMENT,normalize:!1}),B.aTexCoord1=3,U.push({index:B.aTexCoord1,typedArray:m,componentsPerAttribute:2,componentDatatype:o.BYTE,offsetInBytes:0,strideInBytes:2*Int8Array.BYTES_PER_ELEMENT,normalize:!1});for(var F=[],D=0;D<y.length;D++)F.push(y[D].length);return{vertexPackage:L,indexPackage:T(l,i,F,d)}}}},E}),define("S3MTiles/Enum/S3MVersion",["../../Core/freezeObject"],function(e){"use strict";return e({S3M:49,S3M4:1})}),define("S3MTiles/Enum/S3MCompressType",["../../Core/freezeObject"],function(e){"use strict";return e({encNONE:0,enrS3TCDXTN:14,enrPVRTPF_PVRTC2:19,enrPVRTPF_PVRTC:20,enrPVRTPF_PVRTC_4bpp:21,enrPVRTPF_ETC1:22})}),function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define("ThirdParty/pako_inflate",[],e);else{var t;t="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,t.pako=e()}}(function(){return function e(t,r,n){function a(o,u){if(!r[o]){if(!t[o]){var s="function"==typeof require&&require;if(!u&&s)return s(o,!0);if(i)return i(o,!0);var c=new Error("Cannot find module '"+o+"'");throw c.code="MODULE_NOT_FOUND",c}var f=r[o]={exports:{}};t[o][0].call(f.exports,function(e){var r=t[o][1][e];return a(r||e)},f,f.exports,e,t,r,n)}return r[o].exports}for(var i="function"==typeof require&&require,o=0;o<n.length;o++)a(n[o]);return a}({1:[function(e,t,r){"use strict";var n="undefined"!=typeof Uint8Array&&"undefined"!=typeof Uint16Array&&"undefined"!=typeof Int32Array;r.assign=function(e){for(var t=Array.prototype.slice.call(arguments,1);t.length;){var r=t.shift();if(r){if("object"!=typeof r)throw new TypeError(r+"must be non-object");for(var n in r)r.hasOwnProperty(n)&&(e[n]=r[n])}}return e},r.shrinkBuf=function(e,t){return e.length===t?e:e.subarray?e.subarray(0,t):(e.length=t,e)};var a={arraySet:function(e,t,r,n,a){if(t.subarray&&e.subarray)return void e.set(t.subarray(r,r+n),a);for(var i=0;i<n;i++)e[a+i]=t[r+i]},flattenChunks:function(e){var t,r,n,a,i,o;for(n=0,t=0,r=e.length;t<r;t++)n+=e[t].length;for(o=new Uint8Array(n),a=0,t=0,r=e.length;t<r;t++)i=e[t],o.set(i,a),a+=i.length;return o}},i={arraySet:function(e,t,r,n,a){for(var i=0;i<n;i++)e[a+i]=t[r+i]},flattenChunks:function(e){return[].concat.apply([],e)}};r.setTyped=function(e){e?(r.Buf8=Uint8Array,r.Buf16=Uint16Array,r.Buf32=Int32Array,r.assign(r,a)):(r.Buf8=Array,r.Buf16=Array,r.Buf32=Array,r.assign(r,i))},r.setTyped(n)},{}],2:[function(e,t,r){"use strict";function n(e,t){if(t<65537&&(e.subarray&&o||!e.subarray&&i))return String.fromCharCode.apply(null,a.shrinkBuf(e,t));for(var r="",n=0;n<t;n++)r+=String.fromCharCode(e[n]);return r}var a=e("./common"),i=!0,o=!0;try{String.fromCharCode.apply(null,[0])}catch(e){
-i=!1}try{String.fromCharCode.apply(null,new Uint8Array(1))}catch(e){o=!1}for(var u=new a.Buf8(256),s=0;s<256;s++)u[s]=s>=252?6:s>=248?5:s>=240?4:s>=224?3:s>=192?2:1;u[254]=u[254]=1,r.string2buf=function(e){var t,r,n,i,o,u=e.length,s=0;for(i=0;i<u;i++)r=e.charCodeAt(i),55296==(64512&r)&&i+1<u&&56320==(64512&(n=e.charCodeAt(i+1)))&&(r=65536+(r-55296<<10)+(n-56320),i++),s+=r<128?1:r<2048?2:r<65536?3:4;for(t=new a.Buf8(s),o=0,i=0;o<s;i++)r=e.charCodeAt(i),55296==(64512&r)&&i+1<u&&56320==(64512&(n=e.charCodeAt(i+1)))&&(r=65536+(r-55296<<10)+(n-56320),i++),r<128?t[o++]=r:r<2048?(t[o++]=192|r>>>6,t[o++]=128|63&r):r<65536?(t[o++]=224|r>>>12,t[o++]=128|r>>>6&63,t[o++]=128|63&r):(t[o++]=240|r>>>18,t[o++]=128|r>>>12&63,t[o++]=128|r>>>6&63,t[o++]=128|63&r);return t},r.buf2binstring=function(e){return n(e,e.length)},r.binstring2buf=function(e){for(var t=new a.Buf8(e.length),r=0,n=t.length;r<n;r++)t[r]=e.charCodeAt(r);return t},r.buf2string=function(e,t){var r,a,i,o,s=t||e.length,c=new Array(2*s);for(a=0,r=0;r<s;)if((i=e[r++])<128)c[a++]=i;else if((o=u[i])>4)c[a++]=65533,r+=o-1;else{for(i&=2===o?31:3===o?15:7;o>1&&r<s;)i=i<<6|63&e[r++],o--;o>1?c[a++]=65533:i<65536?c[a++]=i:(i-=65536,c[a++]=55296|i>>10&1023,c[a++]=56320|1023&i)}return n(c,a)},r.utf8border=function(e,t){var r;for(t=t||e.length,t>e.length&&(t=e.length),r=t-1;r>=0&&128==(192&e[r]);)r--;return r<0?t:0===r?t:r+u[e[r]]>t?r:t}},{"./common":1}],3:[function(e,t,r){"use strict";function n(e,t,r,n){for(var a=65535&e|0,i=e>>>16&65535|0,o=0;0!==r;){o=r>2e3?2e3:r,r-=o;do{a=a+t[n++]|0,i=i+a|0}while(--o);a%=65521,i%=65521}return a|i<<16|0}t.exports=n},{}],4:[function(e,t,r){"use strict";t.exports={Z_NO_FLUSH:0,Z_PARTIAL_FLUSH:1,Z_SYNC_FLUSH:2,Z_FULL_FLUSH:3,Z_FINISH:4,Z_BLOCK:5,Z_TREES:6,Z_OK:0,Z_STREAM_END:1,Z_NEED_DICT:2,Z_ERRNO:-1,Z_STREAM_ERROR:-2,Z_DATA_ERROR:-3,Z_BUF_ERROR:-5,Z_NO_COMPRESSION:0,Z_BEST_SPEED:1,Z_BEST_COMPRESSION:9,Z_DEFAULT_COMPRESSION:-1,Z_FILTERED:1,Z_HUFFMAN_ONLY:2,Z_RLE:3,Z_FIXED:4,Z_DEFAULT_STRATEGY:0,Z_BINARY:0,Z_TEXT:1,Z_UNKNOWN:2,Z_DEFLATED:8}},{}],5:[function(e,t,r){"use strict";function n(e,t,r,n){var i=a,o=n+r;e^=-1;for(var u=n;u<o;u++)e=e>>>8^i[255&(e^t[u])];return-1^e}var a=function(){for(var e,t=[],r=0;r<256;r++){e=r;for(var n=0;n<8;n++)e=1&e?3988292384^e>>>1:e>>>1;t[r]=e}return t}();t.exports=n},{}],6:[function(e,t,r){"use strict";function n(){this.text=0,this.time=0,this.xflags=0,this.os=0,this.extra=null,this.extra_len=0,this.name="",this.comment="",this.hcrc=0,this.done=!1}t.exports=n},{}],7:[function(e,t,r){"use strict";t.exports=function(e,t){var r,n,a,i,o,u,s,c,f,E,l,y,d,h,_,p,T,O,m,A,R,b,N,S,g;r=e.state,n=e.next_in,S=e.input,a=n+(e.avail_in-5),i=e.next_out,g=e.output,o=i-(t-e.avail_out),u=i+(e.avail_out-257),s=r.dmax,c=r.wsize,f=r.whave,E=r.wnext,l=r.window,y=r.hold,d=r.bits,h=r.lencode,_=r.distcode,p=(1<<r.lenbits)-1,T=(1<<r.distbits)-1;e:do{d<15&&(y+=S[n++]<<d,d+=8,y+=S[n++]<<d,d+=8),O=h[y&p];t:for(;;){if(m=O>>>24,y>>>=m,d-=m,0===(m=O>>>16&255))g[i++]=65535&O;else{if(!(16&m)){if(0==(64&m)){O=h[(65535&O)+(y&(1<<m)-1)];continue t}if(32&m){r.mode=12;break e}e.msg="invalid literal/length code",r.mode=30;break e}A=65535&O,m&=15,m&&(d<m&&(y+=S[n++]<<d,d+=8),A+=y&(1<<m)-1,y>>>=m,d-=m),d<15&&(y+=S[n++]<<d,d+=8,y+=S[n++]<<d,d+=8),O=_[y&T];r:for(;;){if(m=O>>>24,y>>>=m,d-=m,!(16&(m=O>>>16&255))){if(0==(64&m)){O=_[(65535&O)+(y&(1<<m)-1)];continue r}e.msg="invalid distance code",r.mode=30;break e}if(R=65535&O,m&=15,d<m&&(y+=S[n++]<<d,(d+=8)<m&&(y+=S[n++]<<d,d+=8)),(R+=y&(1<<m)-1)>s){e.msg="invalid distance too far back",r.mode=30;break e}if(y>>>=m,d-=m,m=i-o,R>m){if((m=R-m)>f&&r.sane){e.msg="invalid distance too far back",r.mode=30;break e}if(b=0,N=l,0===E){if(b+=c-m,m<A){A-=m;do{g[i++]=l[b++]}while(--m);b=i-R,N=g}}else if(E<m){if(b+=c+E-m,(m-=E)<A){A-=m;do{g[i++]=l[b++]}while(--m);if(b=0,E<A){m=E,A-=m;do{g[i++]=l[b++]}while(--m);b=i-R,N=g}}}else if(b+=E-m,m<A){A-=m;do{g[i++]=l[b++]}while(--m);b=i-R,N=g}for(;A>2;)g[i++]=N[b++],g[i++]=N[b++],g[i++]=N[b++],A-=3;A&&(g[i++]=N[b++],A>1&&(g[i++]=N[b++]))}else{b=i-R;do{g[i++]=g[b++],g[i++]=g[b++],g[i++]=g[b++],A-=3}while(A>2);A&&(g[i++]=g[b++],A>1&&(g[i++]=g[b++]))}break}}break}}while(n<a&&i<u);A=d>>3,n-=A,d-=A<<3,y&=(1<<d)-1,e.next_in=n,e.next_out=i,e.avail_in=n<a?a-n+5:5-(n-a),e.avail_out=i<u?u-i+257:257-(i-u),r.hold=y,r.bits=d}},{}],8:[function(e,t,r){"use strict";function n(e){return(e>>>24&255)+(e>>>8&65280)+((65280&e)<<8)+((255&e)<<24)}function a(){this.mode=0,this.last=!1,this.wrap=0,this.havedict=!1,this.flags=0,this.dmax=0,this.check=0,this.total=0,this.head=null,this.wbits=0,this.wsize=0,this.whave=0,this.wnext=0,this.window=null,this.hold=0,this.bits=0,this.length=0,this.offset=0,this.extra=0,this.lencode=null,this.distcode=null,this.lenbits=0,this.distbits=0,this.ncode=0,this.nlen=0,this.ndist=0,this.have=0,this.next=null,this.lens=new T.Buf16(320),this.work=new T.Buf16(288),this.lendyn=null,this.distdyn=null,this.sane=0,this.back=0,this.was=0}function i(e){var t;return e&&e.state?(t=e.state,e.total_in=e.total_out=t.total=0,e.msg="",t.wrap&&(e.adler=1&t.wrap),t.mode=F,t.last=0,t.havedict=0,t.dmax=32768,t.head=null,t.hold=0,t.bits=0,t.lencode=t.lendyn=new T.Buf32(he),t.distcode=t.distdyn=new T.Buf32(_e),t.sane=1,t.back=-1,M):C}function o(e){var t;return e&&e.state?(t=e.state,t.wsize=0,t.whave=0,t.wnext=0,i(e)):C}function u(e,t){var r,n;return e&&e.state?(n=e.state,t<0?(r=0,t=-t):(r=1+(t>>4),t<48&&(t&=15)),t&&(t<8||t>15)?C:(null!==n.window&&n.wbits!==t&&(n.window=null),n.wrap=r,n.wbits=t,o(e))):C}function s(e,t){var r,n;return e?(n=new a,e.state=n,n.window=null,r=u(e,t),r!==M&&(e.state=null),r):C}function c(e){return s(e,pe)}function f(e){if(Te){var t;for(_=new T.Buf32(512),p=new T.Buf32(32),t=0;t<144;)e.lens[t++]=8;for(;t<256;)e.lens[t++]=9;for(;t<280;)e.lens[t++]=7;for(;t<288;)e.lens[t++]=8;for(R(N,e.lens,0,288,_,0,e.work,{bits:9}),t=0;t<32;)e.lens[t++]=5;R(S,e.lens,0,32,p,0,e.work,{bits:5}),Te=!1}e.lencode=_,e.lenbits=9,e.distcode=p,e.distbits=5}function E(e,t,r,n){var a,i=e.state;return null===i.window&&(i.wsize=1<<i.wbits,i.wnext=0,i.whave=0,i.window=new T.Buf8(i.wsize)),n>=i.wsize?(T.arraySet(i.window,t,r-i.wsize,i.wsize,0),i.wnext=0,i.whave=i.wsize):(a=i.wsize-i.wnext,a>n&&(a=n),T.arraySet(i.window,t,r-n,a,i.wnext),n-=a,n?(T.arraySet(i.window,t,r-n,n,0),i.wnext=n,i.whave=i.wsize):(i.wnext+=a,i.wnext===i.wsize&&(i.wnext=0),i.whave<i.wsize&&(i.whave+=a))),0}function l(e,t){var r,a,i,o,u,s,c,l,y,d,h,_,p,he,_e,pe,Te,Oe,me,Ae,Re,be,Ne,Se,ge=0,ve=new T.Buf8(4),Ie=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];if(!e||!e.state||!e.output||!e.input&&0!==e.avail_in)return C;r=e.state,r.mode===W&&(r.mode=Z),u=e.next_out,i=e.output,c=e.avail_out,o=e.next_in,a=e.input,s=e.avail_in,l=r.hold,y=r.bits,d=s,h=c,be=M;e:for(;;)switch(r.mode){case F:if(0===r.wrap){r.mode=Z;break}for(;y<16;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(2&r.wrap&&35615===l){r.check=0,ve[0]=255&l,ve[1]=l>>>8&255,r.check=m(r.check,ve,2,0),l=0,y=0,r.mode=D;break}if(r.flags=0,r.head&&(r.head.done=!1),!(1&r.wrap)||(((255&l)<<8)+(l>>8))%31){e.msg="incorrect header check",r.mode=le;break}if((15&l)!==B){e.msg="unknown compression method",r.mode=le;break}if(l>>>=4,y-=4,Re=8+(15&l),0===r.wbits)r.wbits=Re;else if(Re>r.wbits){e.msg="invalid window size",r.mode=le;break}r.dmax=1<<Re,e.adler=r.check=1,r.mode=512&l?X:W,l=0,y=0;break;case D:for(;y<16;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(r.flags=l,(255&r.flags)!==B){e.msg="unknown compression method",r.mode=le;break}if(57344&r.flags){e.msg="unknown header flags set",r.mode=le;break}r.head&&(r.head.text=l>>8&1),512&r.flags&&(ve[0]=255&l,ve[1]=l>>>8&255,r.check=m(r.check,ve,2,0)),l=0,y=0,r.mode=j;case j:for(;y<32;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.head&&(r.head.time=l),512&r.flags&&(ve[0]=255&l,ve[1]=l>>>8&255,ve[2]=l>>>16&255,ve[3]=l>>>24&255,r.check=m(r.check,ve,4,0)),l=0,y=0,r.mode=z;case z:for(;y<16;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.head&&(r.head.xflags=255&l,r.head.os=l>>8),512&r.flags&&(ve[0]=255&l,ve[1]=l>>>8&255,r.check=m(r.check,ve,2,0)),l=0,y=0,r.mode=G;case G:if(1024&r.flags){for(;y<16;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.length=l,r.head&&(r.head.extra_len=l),512&r.flags&&(ve[0]=255&l,ve[1]=l>>>8&255,r.check=m(r.check,ve,2,0)),l=0,y=0}else r.head&&(r.head.extra=null);r.mode=V;case V:if(1024&r.flags&&(_=r.length,_>s&&(_=s),_&&(r.head&&(Re=r.head.extra_len-r.length,r.head.extra||(r.head.extra=new Array(r.head.extra_len)),T.arraySet(r.head.extra,a,o,_,Re)),512&r.flags&&(r.check=m(r.check,a,_,o)),s-=_,o+=_,r.length-=_),r.length))break e;r.length=0,r.mode=q;case q:if(2048&r.flags){if(0===s)break e;_=0;do{Re=a[o+_++],r.head&&Re&&r.length<65536&&(r.head.name+=String.fromCharCode(Re))}while(Re&&_<s);if(512&r.flags&&(r.check=m(r.check,a,_,o)),s-=_,o+=_,Re)break e}else r.head&&(r.head.name=null);r.length=0,r.mode=k;case k:if(4096&r.flags){if(0===s)break e;_=0;do{Re=a[o+_++],r.head&&Re&&r.length<65536&&(r.head.comment+=String.fromCharCode(Re))}while(Re&&_<s);if(512&r.flags&&(r.check=m(r.check,a,_,o)),s-=_,o+=_,Re)break e}else r.head&&(r.head.comment=null);r.mode=Y;case Y:if(512&r.flags){for(;y<16;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(l!==(65535&r.check)){e.msg="header crc mismatch",r.mode=le;break}l=0,y=0}r.head&&(r.head.hcrc=r.flags>>9&1,r.head.done=!0),e.adler=r.check=0,r.mode=W;break;case X:for(;y<32;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}e.adler=r.check=n(l),l=0,y=0,r.mode=H;case H:if(0===r.havedict)return e.next_out=u,e.avail_out=c,e.next_in=o,e.avail_in=s,r.hold=l,r.bits=y,x;e.adler=r.check=1,r.mode=W;case W:if(t===v||t===I)break e;case Z:if(r.last){l>>>=7&y,y-=7&y,r.mode=ce;break}for(;y<3;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}switch(r.last=1&l,l>>>=1,y-=1,3&l){case 0:r.mode=K;break;case 1:if(f(r),r.mode=re,t===I){l>>>=2,y-=2;break e}break;case 2:r.mode=$;break;case 3:e.msg="invalid block type",r.mode=le}l>>>=2,y-=2;break;case K:for(l>>>=7&y,y-=7&y;y<32;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if((65535&l)!=(l>>>16^65535)){e.msg="invalid stored block lengths",r.mode=le;break}if(r.length=65535&l,l=0,y=0,r.mode=Q,t===I)break e;case Q:r.mode=J;case J:if(_=r.length){if(_>s&&(_=s),_>c&&(_=c),0===_)break e;T.arraySet(i,a,o,_,u),s-=_,o+=_,c-=_,u+=_,r.length-=_;break}r.mode=W;break;case $:for(;y<14;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(r.nlen=257+(31&l),l>>>=5,y-=5,r.ndist=1+(31&l),l>>>=5,y-=5,r.ncode=4+(15&l),l>>>=4,y-=4,r.nlen>286||r.ndist>30){e.msg="too many length or distance symbols",r.mode=le;break}r.have=0,r.mode=ee;case ee:for(;r.have<r.ncode;){for(;y<3;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.lens[Ie[r.have++]]=7&l,l>>>=3,y-=3}for(;r.have<19;)r.lens[Ie[r.have++]]=0;if(r.lencode=r.lendyn,r.lenbits=7,Ne={bits:r.lenbits},be=R(b,r.lens,0,19,r.lencode,0,r.work,Ne),r.lenbits=Ne.bits,be){e.msg="invalid code lengths set",r.mode=le;break}r.have=0,r.mode=te;case te:for(;r.have<r.nlen+r.ndist;){for(;ge=r.lencode[l&(1<<r.lenbits)-1],_e=ge>>>24,pe=ge>>>16&255,Te=65535&ge,!(_e<=y);){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(Te<16)l>>>=_e,y-=_e,r.lens[r.have++]=Te;else{if(16===Te){for(Se=_e+2;y<Se;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(l>>>=_e,y-=_e,0===r.have){e.msg="invalid bit length repeat",r.mode=le;break}Re=r.lens[r.have-1],_=3+(3&l),l>>>=2,y-=2}else if(17===Te){for(Se=_e+3;y<Se;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}l>>>=_e,y-=_e,Re=0,_=3+(7&l),l>>>=3,y-=3}else{for(Se=_e+7;y<Se;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}l>>>=_e,y-=_e,Re=0,_=11+(127&l),l>>>=7,y-=7}if(r.have+_>r.nlen+r.ndist){e.msg="invalid bit length repeat",r.mode=le;break}for(;_--;)r.lens[r.have++]=Re}}if(r.mode===le)break;if(0===r.lens[256]){e.msg="invalid code -- missing end-of-block",r.mode=le;break}if(r.lenbits=9,Ne={bits:r.lenbits},be=R(N,r.lens,0,r.nlen,r.lencode,0,r.work,Ne),r.lenbits=Ne.bits,be){e.msg="invalid literal/lengths set",r.mode=le;break}if(r.distbits=6,r.distcode=r.distdyn,Ne={bits:r.distbits},be=R(S,r.lens,r.nlen,r.ndist,r.distcode,0,r.work,Ne),r.distbits=Ne.bits,be){e.msg="invalid distances set",r.mode=le;break}if(r.mode=re,t===I)break e;case re:r.mode=ne;case ne:if(s>=6&&c>=258){e.next_out=u,e.avail_out=c,e.next_in=o,e.avail_in=s,r.hold=l,r.bits=y,A(e,h),u=e.next_out,i=e.output,c=e.avail_out,o=e.next_in,a=e.input,s=e.avail_in,l=r.hold,y=r.bits,r.mode===W&&(r.back=-1);break}for(r.back=0;ge=r.lencode[l&(1<<r.lenbits)-1],_e=ge>>>24,pe=ge>>>16&255,Te=65535&ge,!(_e<=y);){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(pe&&0==(240&pe)){for(Oe=_e,me=pe,Ae=Te;ge=r.lencode[Ae+((l&(1<<Oe+me)-1)>>Oe)],_e=ge>>>24,pe=ge>>>16&255,Te=65535&ge,!(Oe+_e<=y);){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}l>>>=Oe,y-=Oe,r.back+=Oe}if(l>>>=_e,y-=_e,r.back+=_e,r.length=Te,0===pe){r.mode=se;break}if(32&pe){r.back=-1,r.mode=W;break}if(64&pe){e.msg="invalid literal/length code",r.mode=le;break}r.extra=15&pe,r.mode=ae;case ae:if(r.extra){for(Se=r.extra;y<Se;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.length+=l&(1<<r.extra)-1,l>>>=r.extra,y-=r.extra,r.back+=r.extra}r.was=r.length,r.mode=ie;case ie:for(;ge=r.distcode[l&(1<<r.distbits)-1],_e=ge>>>24,pe=ge>>>16&255,Te=65535&ge,!(_e<=y);){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(0==(240&pe)){for(Oe=_e,me=pe,Ae=Te;ge=r.distcode[Ae+((l&(1<<Oe+me)-1)>>Oe)],_e=ge>>>24,pe=ge>>>16&255,Te=65535&ge,!(Oe+_e<=y);){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}l>>>=Oe,y-=Oe,r.back+=Oe}if(l>>>=_e,y-=_e,r.back+=_e,64&pe){e.msg="invalid distance code",r.mode=le;break}r.offset=Te,r.extra=15&pe,r.mode=oe;case oe:if(r.extra){for(Se=r.extra;y<Se;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}r.offset+=l&(1<<r.extra)-1,l>>>=r.extra,y-=r.extra,r.back+=r.extra}if(r.offset>r.dmax){e.msg="invalid distance too far back",r.mode=le;break}r.mode=ue;case ue:if(0===c)break e;if(_=h-c,r.offset>_){if((_=r.offset-_)>r.whave&&r.sane){e.msg="invalid distance too far back",r.mode=le;break}_>r.wnext?(_-=r.wnext,p=r.wsize-_):p=r.wnext-_,_>r.length&&(_=r.length),he=r.window}else he=i,p=u-r.offset,_=r.length;_>c&&(_=c),c-=_,r.length-=_;do{i[u++]=he[p++]}while(--_);0===r.length&&(r.mode=ne);break;case se:if(0===c)break e;i[u++]=r.length,c--,r.mode=ne;break;case ce:if(r.wrap){for(;y<32;){if(0===s)break e;s--,l|=a[o++]<<y,y+=8}if(h-=c,e.total_out+=h,r.total+=h,h&&(e.adler=r.check=r.flags?m(r.check,i,h,u-h):O(r.check,i,h,u-h)),h=c,(r.flags?l:n(l))!==r.check){e.msg="incorrect data check",r.mode=le;break}l=0,y=0}r.mode=fe;case fe:if(r.wrap&&r.flags){for(;y<32;){if(0===s)break e;s--,l+=a[o++]<<y,y+=8}if(l!==(4294967295&r.total)){e.msg="incorrect length check",r.mode=le;break}l=0,y=0}r.mode=Ee;case Ee:be=w;break e;case le:be=P;break e;case ye:return L;case de:default:return C}return e.next_out=u,e.avail_out=c,e.next_in=o,e.avail_in=s,r.hold=l,r.bits=y,(r.wsize||h!==e.avail_out&&r.mode<le&&(r.mode<ce||t!==g))&&E(e,e.output,e.next_out,h-e.avail_out)?(r.mode=ye,L):(d-=e.avail_in,h-=e.avail_out,e.total_in+=d,e.total_out+=h,r.total+=h,r.wrap&&h&&(e.adler=r.check=r.flags?m(r.check,i,h,e.next_out-h):O(r.check,i,h,e.next_out-h)),e.data_type=r.bits+(r.last?64:0)+(r.mode===W?128:0)+(r.mode===re||r.mode===Q?256:0),(0===d&&0===h||t===g)&&be===M&&(be=U),be)}function y(e){if(!e||!e.state)return C;var t=e.state;return t.window&&(t.window=null),e.state=null,M}function d(e,t){var r;return e&&e.state?(r=e.state,0==(2&r.wrap)?C:(r.head=t,t.done=!1,M)):C}function h(e,t){var r,n,a=t.length;return e&&e.state?(r=e.state,0!==r.wrap&&r.mode!==H?C:r.mode===H&&(n=1,(n=O(n,t,a,0))!==r.check)?P:E(e,t,a,a)?(r.mode=ye,L):(r.havedict=1,M)):C}var _,p,T=e("../utils/common"),O=e("./adler32"),m=e("./crc32"),A=e("./inffast"),R=e("./inftrees"),b=0,N=1,S=2,g=4,v=5,I=6,M=0,w=1,x=2,C=-2,P=-3,L=-4,U=-5,B=8,F=1,D=2,j=3,z=4,G=5,V=6,q=7,k=8,Y=9,X=10,H=11,W=12,Z=13,K=14,Q=15,J=16,$=17,ee=18,te=19,re=20,ne=21,ae=22,ie=23,oe=24,ue=25,se=26,ce=27,fe=28,Ee=29,le=30,ye=31,de=32,he=852,_e=592,pe=15,Te=!0;r.inflateReset=o,r.inflateReset2=u,r.inflateResetKeep=i,r.inflateInit=c,r.inflateInit2=s,r.inflate=l,r.inflateEnd=y,r.inflateGetHeader=d,r.inflateSetDictionary=h,r.inflateInfo="pako inflate (from Nodeca project)"},{"../utils/common":1,"./adler32":3,"./crc32":5,"./inffast":7,"./inftrees":9}],9:[function(e,t,r){"use strict";var n=e("../utils/common"),a=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258,0,0],i=[16,16,16,16,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,16,72,78],o=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0],u=[16,16,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,64,64];t.exports=function(e,t,r,s,c,f,E,l){var y,d,h,_,p,T,O,m,A,R=l.bits,b=0,N=0,S=0,g=0,v=0,I=0,M=0,w=0,x=0,C=0,P=null,L=0,U=new n.Buf16(16),B=new n.Buf16(16),F=null,D=0;for(b=0;b<=15;b++)U[b]=0;for(N=0;N<s;N++)U[t[r+N]]++;for(v=R,g=15;g>=1&&0===U[g];g--);if(v>g&&(v=g),0===g)return c[f++]=20971520,c[f++]=20971520,l.bits=1,0;for(S=1;S<g&&0===U[S];S++);for(v<S&&(v=S),w=1,b=1;b<=15;b++)if(w<<=1,(w-=U[b])<0)return-1;if(w>0&&(0===e||1!==g))return-1;for(B[1]=0,b=1;b<15;b++)B[b+1]=B[b]+U[b];for(N=0;N<s;N++)0!==t[r+N]&&(E[B[t[r+N]]++]=N);if(0===e?(P=F=E,T=19):1===e?(P=a,L-=257,F=i,D-=257,T=256):(P=o,F=u,T=-1),C=0,N=0,b=S,p=f,I=v,M=0,h=-1,x=1<<v,_=x-1,1===e&&x>852||2===e&&x>592)return 1;for(;;){O=b-M,E[N]<T?(m=0,A=E[N]):E[N]>T?(m=F[D+E[N]],A=P[L+E[N]]):(m=96,A=0),y=1<<b-M,d=1<<I,S=d;do{d-=y,c[p+(C>>M)+d]=O<<24|m<<16|A|0}while(0!==d);for(y=1<<b-1;C&y;)y>>=1;if(0!==y?(C&=y-1,C+=y):C=0,N++,0==--U[b]){if(b===g)break;b=t[r+E[N]]}if(b>v&&(C&_)!==h){for(0===M&&(M=v),p+=S,I=b-M,w=1<<I;I+M<g&&!((w-=U[I+M])<=0);)I++,w<<=1;if(x+=1<<I,1===e&&x>852||2===e&&x>592)return 1;h=C&_,c[h]=v<<24|I<<16|p-f|0}}return 0!==C&&(c[p+C]=b-M<<24|64<<16|0),l.bits=v,0}},{"../utils/common":1}],10:[function(e,t,r){"use strict";t.exports={2:"need dictionary",1:"stream end",0:"","-1":"file error","-2":"stream error","-3":"data error","-4":"insufficient memory","-5":"buffer error","-6":"incompatible version"}},{}],11:[function(e,t,r){"use strict";function n(){this.input=null,this.next_in=0,this.avail_in=0,this.total_in=0,this.output=null,this.next_out=0,this.avail_out=0,this.total_out=0,this.msg="",this.state=null,this.data_type=2,this.adler=0}t.exports=n},{}],"/lib/inflate.js":[function(e,t,r){"use strict";function n(e){if(!(this instanceof n))return new n(e);this.options=u.assign({chunkSize:16384,windowBits:0,to:""},e||{});var t=this.options;t.raw&&t.windowBits>=0&&t.windowBits<16&&(t.windowBits=-t.windowBits,0===t.windowBits&&(t.windowBits=-15)),!(t.windowBits>=0&&t.windowBits<16)||e&&e.windowBits||(t.windowBits+=32),t.windowBits>15&&t.windowBits<48&&0==(15&t.windowBits)&&(t.windowBits|=15),this.err=0,this.msg="",this.ended=!1,this.chunks=[],this.strm=new E,this.strm.avail_out=0;var r=o.inflateInit2(this.strm,t.windowBits);if(r!==c.Z_OK)throw new Error(f[r]);this.header=new l,o.inflateGetHeader(this.strm,this.header)}function a(e,t){var r=new n(t);if(r.push(e,!0),r.err)throw r.msg||f[r.err];return r.result}function i(e,t){return t=t||{},t.raw=!0,a(e,t)}var o=e("./zlib/inflate"),u=e("./utils/common"),s=e("./utils/strings"),c=e("./zlib/constants"),f=e("./zlib/messages"),E=e("./zlib/zstream"),l=e("./zlib/gzheader"),y=Object.prototype.toString;n.prototype.push=function(e,t){var r,n,a,i,f,E,l=this.strm,d=this.options.chunkSize,h=this.options.dictionary,_=!1;if(this.ended)return!1;n=t===~~t?t:!0===t?c.Z_FINISH:c.Z_NO_FLUSH,"string"==typeof e?l.input=s.binstring2buf(e):"[object ArrayBuffer]"===y.call(e)?l.input=new Uint8Array(e):l.input=e,l.next_in=0,l.avail_in=l.input.length;do{if(0===l.avail_out&&(l.output=new u.Buf8(d),l.next_out=0,l.avail_out=d),r=o.inflate(l,c.Z_NO_FLUSH),r===c.Z_NEED_DICT&&h&&(E="string"==typeof h?s.string2buf(h):"[object ArrayBuffer]"===y.call(h)?new Uint8Array(h):h,r=o.inflateSetDictionary(this.strm,E)),r===c.Z_BUF_ERROR&&!0===_&&(r=c.Z_OK,_=!1),r!==c.Z_STREAM_END&&r!==c.Z_OK)return this.onEnd(r),this.ended=!0,!1;l.next_out&&(0!==l.avail_out&&r!==c.Z_STREAM_END&&(0!==l.avail_in||n!==c.Z_FINISH&&n!==c.Z_SYNC_FLUSH)||("string"===this.options.to?(a=s.utf8border(l.output,l.next_out),i=l.next_out-a,f=s.buf2string(l.output,a),l.next_out=i,l.avail_out=d-i,i&&u.arraySet(l.output,l.output,a,i,0),this.onData(f)):this.onData(u.shrinkBuf(l.output,l.next_out)))),0===l.avail_in&&0===l.avail_out&&(_=!0)}while((l.avail_in>0||0===l.avail_out)&&r!==c.Z_STREAM_END);return r===c.Z_STREAM_END&&(n=c.Z_FINISH),n===c.Z_FINISH?(r=o.inflateEnd(this.strm),this.onEnd(r),this.ended=!0,r===c.Z_OK):n!==c.Z_SYNC_FLUSH||(this.onEnd(c.Z_OK),l.avail_out=0,!0)},n.prototype.onData=function(e){this.chunks.push(e)},n.prototype.onEnd=function(e){e===c.Z_OK&&("string"===this.options.to?this.result=this.chunks.join(""):this.result=u.flattenChunks(this.chunks)),this.chunks=[],this.err=e,this.msg=this.strm.msg},r.Inflate=n,r.inflate=a,r.inflateRaw=i,r.ungzip=a},{"./utils/common":1,"./utils/strings":2,"./zlib/constants":4,"./zlib/gzheader":6,"./zlib/inflate":8,"./zlib/messages":10,"./zlib/zstream":11}]},{},[])("/lib/inflate.js")}),define("Workers/S3MBTilesParser",["./createTaskProcessorWorker","../Core/Matrix4","../Core/Cartesian3","../Core/Cartesian4","../Core/Cartographic","../Core/Math","../Core/getMagic","../Core/ComponentDatatype","../Core/getStringFromTypedArray","../Core/BoundingSphere","../Core/DXTTextureDecode","../S3MTiles/S3MVertexPackage","../S3MTiles/Enum/VertexCompressOption","../S3MTiles/Enum/S3MVersion","../S3MTiles/Enum/S3MPixelFormat","../S3MTiles/Enum/S3MCompressType","../ThirdParty/pako_inflate"],function(e,t,r,n,a,i,o,u,s,c,f,E,l,y,d,h,_){"use strict";function p(e,t,r){var n=r,a=e.getUint32(n,!0);n+=Uint32Array.BYTES_PER_ELEMENT;var i=n,o=new Uint8Array(t,n,a);return n+=a*Uint8Array.BYTES_PER_ELEMENT,{dataViewByteOffset:i,byteOffset:n,buffer:o}}function T(e,t,r,n){var a=e.getUint32(n+t,!0);n+=Uint32Array.BYTES_PER_ELEMENT;var i=r.subarray(n,n+a),o=s(i);return n+=a,{string:o,bytesOffset:n}}function O(e,t,r,n,a,i){var o=r,s=e.getUint16(r+n,!0);o+=Uint16Array.BYTES_PER_ELEMENT,i||(o+=Uint16Array.BYTES_PER_ELEMENT);for(var c=0;c<s;c++){var f=e.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var E=e.getUint16(o+n,!0);o+=Uint16Array.BYTES_PER_ELEMENT;e.getUint16(o+n,!0);if(o+=Uint16Array.BYTES_PER_ELEMENT,20==E||35==E);else{var l=f*E*Float32Array.BYTES_PER_ELEMENT,y=t.subarray(o,o+l);o+=l;var d="aTexCoord"+c,h=a.vertexAttributes,_=a.attrLocation;_[d]=h.length,h.push({index:_[d],typedArray:y,componentsPerAttribute:E,componentDatatype:u.FLOAT,offsetInBytes:0,strideInBytes:E*Float32Array.BYTES_PER_ELEMENT,normalize:!1})}}return{bytesOffset:o}}function m(e,t,r,a,i){i.texCoordCompressConstant=[],i.minTexCoordValue=[];var o=r,s=e.getUint16(r+a,!0);o+=Uint16Array.BYTES_PER_ELEMENT,o+=Uint16Array.BYTES_PER_ELEMENT;for(var c=0,f=0;f<s;f++){var E=e.getUint8(o+a,!0);o+=Uint8Array.BYTES_PER_ELEMENT,o+=3*Uint8Array.BYTES_PER_ELEMENT;var l=e.getUint32(o+a,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var y=e.getUint16(o+a,!0);o+=Uint16Array.BYTES_PER_ELEMENT;e.getUint16(o+a,!0);o+=Uint16Array.BYTES_PER_ELEMENT;var d=e.getFloat32(o+a,!0);o+=Float32Array.BYTES_PER_ELEMENT,i.texCoordCompressConstant.push(d);var h=new n;h.x=e.getFloat32(o+a,!0),o+=Float32Array.BYTES_PER_ELEMENT,h.y=e.getFloat32(o+a,!0),o+=Float32Array.BYTES_PER_ELEMENT,h.z=e.getFloat32(o+a,!0),o+=Float32Array.BYTES_PER_ELEMENT,h.w=e.getFloat32(o+a,!0),o+=Float32Array.BYTES_PER_ELEMENT,i.minTexCoordValue.push(h);var _=l*y*Int16Array.BYTES_PER_ELEMENT,p=t.subarray(o,o+_);o+=_;var T=o%4;0!==T&&(o+=4-T);var O="aTexCoord"+c,m=i.vertexAttributes,A=i.attrLocation;if(A[O]=m.length,m.push({index:A[O],typedArray:p,componentsPerAttribute:y,componentDatatype:u.SHORT,offsetInBytes:0,strideInBytes:y*Int16Array.BYTES_PER_ELEMENT,normalize:!1}),E){_=l*Float32Array.BYTES_PER_ELEMENT;var R=t.subarray(o,o+_);o+=_,i.texCoordZMatrix=!0,O="aTexCoordZ"+c,A[O]=m.length,m.push({index:A[O],typedArray:R,componentsPerAttribute:1,componentDatatype:u.FLOAT,offsetInBytes:0,strideInBytes:Float32Array.BYTES_PER_ELEMENT,normalize:!1})}c++}return{bytesOffset:o}}function A(e,t,r,n,a){var i=r,o=e.getUint16(i+n,!0);i+=Uint16Array.BYTES_PER_ELEMENT,i+=Uint16Array.BYTES_PER_ELEMENT;for(var s=a.vertexAttributes,c=a.attrLocation,f=0;f<o;f++){var E=e.getUint32(i+n,!0);i+=Uint32Array.BYTES_PER_ELEMENT;var l=e.getUint16(i+n,!0);i+=Uint16Array.BYTES_PER_ELEMENT;e.getUint16(i+n,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var y=E*l*Float32Array.BYTES_PER_ELEMENT;if(17===l||29===l){var d=t.subarray(i,i+y);a.instanceCount=E,a.instanceMode=l,a.instanceBuffer=d,a.instanceIndex=1;var h=l*E*4,_=d.slice(0,h);a.vertexColorInstance=_;var p;17===l?(p=17*Float32Array.BYTES_PER_ELEMENT,c.uv2=s.length,s.push({index:c.uv2,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:0,strideInBytes:p,instanceDivisor:1}),c.uv3=s.length,s.push({index:c.uv3,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:4*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv4=s.length,s.push({index:c.uv4,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:8*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.secondary_colour=s.length,s.push({index:c.secondary_colour,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:12*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv6=s.length,s.push({index:c.uv6,componentsPerAttribute:4,componentDatatype:u.UNSIGNED_BYTE,normalize:!0,offsetInBytes:16*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1})):29===l&&(p=29*Float32Array.BYTES_PER_ELEMENT,c.uv1=s.length,s.push({index:c.uv1,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:0,strideInBytes:p,instanceDivisor:1,byteLength:y}),c.uv2=s.length,s.push({index:c.uv2,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:4*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv3=s.length,s.push({index:c.uv3,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:8*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv4=s.length,s.push({index:c.uv4,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:12*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv5=s.length,s.push({index:c.uv5,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:16*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv6=s.length,s.push({index:c.uv6,componentsPerAttribute:4,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:20*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv7=s.length,s.push({index:c.uv7,componentsPerAttribute:3,componentDatatype:u.FLOAT,normalize:!1,offsetInBytes:24*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.secondary_colour=s.length,s.push({index:c.secondary_colour,componentsPerAttribute:4,componentDatatype:u.UNSIGNED_BYTE,normalize:!0,offsetInBytes:27*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}),c.uv9=s.length,s.push({index:c.uv9,componentsPerAttribute:4,componentDatatype:u.UNSIGNED_BYTE,normalize:!0,offsetInBytes:28*Float32Array.BYTES_PER_ELEMENT,strideInBytes:p,instanceDivisor:1}))}else{var T=E*l;a.instanceBounds=new Float32Array(T);for(var O=0;O<T;O++)a.instanceBounds[O]=e.getFloat32(i+n+O*Float32Array.BYTES_PER_ELEMENT,!0)}i+=y}return{bytesOffset:i}}function R(e,t,r,n,a){var i=n,o=t.getUint32(i+r,!0);if(a.verticesCount=o,i+=Uint32Array.BYTES_PER_ELEMENT,o<=0)return{bytesOffset:i};var s=t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var c=t.getUint16(i+r,!0);c=s*Float32Array.BYTES_PER_ELEMENT,i+=Uint16Array.BYTES_PER_ELEMENT;var f=o*s*Float32Array.BYTES_PER_ELEMENT,E=e.subarray(i,i+f);i+=f;var l=a.vertexAttributes,y=a.attrLocation;return y.aPosition=l.length,l.push({index:y.aPosition,typedArray:E,componentsPerAttribute:s,componentDatatype:u.FLOAT,offsetInBytes:0,strideInBytes:c,normalize:!1}),{bytesOffset:i}}function b(e,t,r,a,i){var o=a,s=t.getUint32(o+r,!0);if(i.verticesCount=s,o+=Uint32Array.BYTES_PER_ELEMENT,s<=0)return{bytesOffset:o};var c=t.getUint16(o+r,!0);o+=Uint16Array.BYTES_PER_ELEMENT;var f=t.getUint16(o+r,!0);f=c*Int16Array.BYTES_PER_ELEMENT,o+=Uint16Array.BYTES_PER_ELEMENT;var E=t.getFloat32(o+r,!0);o+=Float32Array.BYTES_PER_ELEMENT;var l=new n;l.x=t.getFloat32(o+r,!0),o+=Float32Array.BYTES_PER_ELEMENT,l.y=t.getFloat32(o+r,!0),o+=Float32Array.BYTES_PER_ELEMENT,l.z=t.getFloat32(o+r,!0),o+=Float32Array.BYTES_PER_ELEMENT,l.w=t.getFloat32(o+r,!0),o+=Float32Array.BYTES_PER_ELEMENT,i.vertCompressConstant=E,i.minVerticesValue=l;var y=s*c*Int16Array.BYTES_PER_ELEMENT,d=e.subarray(o,o+y);o+=y;var h=i.vertexAttributes,_=i.attrLocation;return _.aPosition=h.length,h.push({index:_.aPosition,typedArray:d,componentsPerAttribute:c,componentDatatype:u.SHORT,offsetInBytes:0,strideInBytes:f,normalize:!1}),{bytesOffset:o}}function N(e,t,r,n,a){var i=n,o=t.getUint32(i+r,!0);if(i+=Uint32Array.BYTES_PER_ELEMENT,o<=0)return{bytesOffset:i};var s=t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var c=t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var f=o*s*Float32Array.BYTES_PER_ELEMENT,E=e.subarray(i,i+f);if(i+=f,!a.ignoreNormal){var l=a.vertexAttributes,y=a.attrLocation;y.aNormal=l.length,l.push({index:y.aNormal,typedArray:E,componentsPerAttribute:s,componentDatatype:u.FLOAT,offsetInBytes:0,strideInBytes:c,normalize:!1})}return{bytesOffset:i}}function S(e,t,r,n,a){var i=n,o=t.getUint32(i+r,!0);if(i+=Uint32Array.BYTES_PER_ELEMENT,o<=0)return{bytesOffset:i};t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var s=t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT;var c=2*o*Int16Array.BYTES_PER_ELEMENT,f=e.subarray(i,i+c);if(i+=c,!a.ignoreNormal){var E=a.vertexAttributes,l=a.attrLocation;l.aNormal=E.length,E.push({index:l.aNormal,typedArray:f,componentsPerAttribute:2,componentDatatype:u.SHORT,offsetInBytes:0,strideInBytes:s,normalize:!1})}return{bytesOffset:i}}function g(e,t,r,n,a){var i=n,o=t.getUint32(i+r,!0);i+=Uint32Array.BYTES_PER_ELEMENT;var s,c=a.verticesCount;if(o>0){t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT,i+=2*Uint8Array.BYTES_PER_ELEMENT;var f=o*Uint8Array.BYTES_PER_ELEMENT*4;s=e.slice(i,i+f),i+=f}else{s=new Uint8Array(4*c);for(var E=0;E<c;E++)s[4*E]=255,s[4*E+1]=255,s[4*E+2]=255,s[4*E+3]=255}var l=a.vertexAttributes,y=a.attrLocation;return y.aColor=l.length,l.push({index:y.aColor,typedArray:s,componentsPerAttribute:4,componentDatatype:u.UNSIGNED_BYTE,offsetInBytes:0,strideInBytes:4,normalize:!0}),a.vertexColor=s,{bytesOffset:i}}function v(e,t,r,n,a){var i=n,o=t.getUint32(i+r,!0);if(i+=Uint32Array.BYTES_PER_ELEMENT,o<=0)return{bytesOffset:i};t.getUint16(i+r,!0);i+=Uint16Array.BYTES_PER_ELEMENT,i+=2*Uint8Array.BYTES_PER_ELEMENT;var s=o*Uint8Array.BYTES_PER_ELEMENT*4,c=e.subarray(i,i+s);i+=s;var f=a.vertexAttributes,E=a.attrLocation;return E.aSecondColor=f.length,f.push({index:E.aSecondColor,typedArray:c,componentsPerAttribute:4,componentDatatype:u.UNSIGNED_BYTE,offsetInBytes:0,strideInBytes:4,normalize:!0}),{bytesOffset:i}}function I(e,t,r,n){var a=n,i=[],o=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;for(var u=0;u<o;u++){var s={},c=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;var f=t.getUint8(a+r,!0);a+=Uint8Array.BYTES_PER_ELEMENT;t.getUint8(a+r,!0);a+=Uint8Array.BYTES_PER_ELEMENT;var E=t.getUint8(a+r,!0);if(a+=Uint8Array.BYTES_PER_ELEMENT,a+=Uint8Array.BYTES_PER_ELEMENT,c>0){var l=0,y=null;1===f||3===f?(l=c*Uint32Array.BYTES_PER_ELEMENT,y=e.subarray(a,a+l)):(l=c*Uint16Array.BYTES_PER_ELEMENT,y=e.subarray(a,a+l),c%2!=0&&(l+=2)),s.indicesTypedArray=y,a+=l}s.indicesCount=c,s.indexType=f,s.primitiveType=E;var d=[],h=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;for(var _=0;_<h;_++){var p=T(t,r,e,a),O=p.string;a=p.bytesOffset,d.push(O),s.materialCode=O}i.push(s);if(0!==a%4){a+=4-a%4}}return{bytesOffset:a,arrIndexPackage:i}}function M(e,t,r,n,a,i){var o=n,u=t.getUint32(o+r,!0);a.nCompressOptions=u;var s
-;return o+=Uint32Array.BYTES_PER_ELEMENT,(u&l.SVC_Vertex)==l.SVC_Vertex?(s=b(e,t,r,o,a),o=s.bytesOffset):(s=R(e,t,r,o,a),o=s.bytesOffset),(u&l.SVC_Normal)==l.SVC_Normal?(s=S(e,t,r,o,a),o=s.bytesOffset):(s=N(e,t,r,o,a),o=s.bytesOffset),s=g(e,t,r,o,a),o=s.bytesOffset,s=v(e,t,r,o,a),o=s.bytesOffset,(u&l.SVC_TexutreCoord)==l.SVC_TexutreCoord?(s=m(t,e,o,r,a),o=s.bytesOffset):(s=O(t,e,o,r,a,i),o=s.bytesOffset),(u&l.SVC_TexutreCoordIsW)==l.SVC_TexutreCoordIsW&&(a.textureCoordIsW=!0),s=A(t,e,o,r,a),o=s.bytesOffset,{bytesOffset:o}}function w(e,t,r,n,a,i){var o,u=n;return o=R(e,t,r,u,a),u=o.bytesOffset,o=N(e,t,r,u,a),u=o.bytesOffset,o=g(e,t,r,u,a),u=o.bytesOffset,o=v(e,t,r,u,a),u=o.bytesOffset,o=O(t,e,u,r,a,i),u=o.bytesOffset,o=A(t,e,u,r,a),u=o.bytesOffset,{bytesOffset:u}}function x(e){return 0!==e.length&&e[0].materialCode===q}function C(e,t,r,n,a,i){var o=e,u=0,s=t.getUint32(u+r,!0);u+=Uint32Array.BYTES_PER_ELEMENT;for(var c=0;c<s;c++){var f=T(t,r,o,u),l=f.string;u=f.bytesOffset;var y=u%4;0!==y&&(u+=4-y);var d=V.SV_Unkown;d=t.getUint32(u+r,!0),u+=Int32Array.BYTES_PER_ELEMENT;var h={};h.vertexAttributes=[],h.attrLocation={},h.instanceCount=0,h.instanceMode=0,h.instanceIndex=-1,h.ignoreNormal=a.ignoreNormal,d==V.SV_Standard?(f=w(o,t,r,u,h,i),u=f.bytesOffset):d==V.SV_Compressed&&(f=M(o,t,r,u,h,i),u=f.bytesOffset),f=I(o,t,r,u);var _=f.arrIndexPackage;x(_)&&(h.clampRegionEdge=!0);var p;n&&(p=E.createEdge(h,_)),u=f.bytesOffset,a[l]={vertexPackage:h,arrIndexPackage:_,edgeGeometry:p}}}function P(e,r,n,a){for(var i={},o=[],u=new t,s=e,c=0;c<16;c++)u[c]=r.getFloat64(n+a,!0),n+=Float64Array.BYTES_PER_ELEMENT;i.matrix=u,i.skeletonNames=o;var f=r.getUint32(n+a,!0);n+=Uint32Array.BYTES_PER_ELEMENT;for(var E=0;E<f;E++){var l=T(r,a,s,n),y=l.string;n=l.bytesOffset,o.push(y)}return{byteOffset:n,geode:i}}function L(e){var t=e.indexOf("Geometry");if(-1===t)return e;var r=e.substring(t,e.length);return e.replace(r,"")}function U(e,t,n,a){var i={},o=t.getFloat32(n+a,!0);n+=Float32Array.BYTES_PER_ELEMENT;var u=t.getUint16(n+a,!0);n+=Uint16Array.BYTES_PER_ELEMENT,i.rangeMode=u,i.rangeList=o;var s=new r;s.x=t.getFloat64(n+a,!0),n+=Float64Array.BYTES_PER_ELEMENT,s.y=t.getFloat64(n+a,!0),n+=Float64Array.BYTES_PER_ELEMENT,s.z=t.getFloat64(n+a,!0),n+=Float64Array.BYTES_PER_ELEMENT;var f=t.getFloat64(n+a,!0);n+=Float64Array.BYTES_PER_ELEMENT,i.boundingSphere=new c(s,f);var E=e,l=T(t,a,E,n),y=l.string;n=l.bytesOffset,y=y.replace(/(\.s3mbz)|(\.s3mb)/gi,""),y=L(y),i.childTile=y,i.geodes=[];var d=t.getUint32(n+a,!0);n+=Uint32Array.BYTES_PER_ELEMENT;for(var h=0;h<d;h++){var l=P(e,t,n,a);n=l.byteOffset,i.geodes.push(l.geode)}return{pageLOD:i,bytesOffset:n}}function B(e,t,r){var n=0,a={},i=[],o=t.getUint32(n+r,!0);n+=Uint32Array.BYTES_PER_ELEMENT;for(var u=0;u<o;u++){var s=U(e,t,n,r);n=s.bytesOffset,i.push(s.pageLOD)}return a.pageLods=i,a}function F(e,t,r,n,a,i){var o=0,u=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;for(var s=0;s<u;s++){var c=T(r,n,t,o),E=c.string;o=c.bytesOffset;var l=o%4;0!==l&&(o+=4-l);r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var y=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var _=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var p=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var O=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var m=r.getUint32(o+n,!0);o+=Uint32Array.BYTES_PER_ELEMENT;var A=t.subarray(o,o+O);o+=O;var R=null;p===h.enrS3TCDXTN&&1!=e?(f.decode(R,y,_,A,m),R=m>d.BGR||m===d.LUMINANCE_ALPHA?new Uint8Array(y*_*4):new Uint16Array(y*_),f.decode(R,y,_,A,m),i.push(R.buffer),p=0):R=A,a[E]={id:E,width:y,height:_,compressType:p,nFormat:m,imageBuffer:R}}}function D(e,t,r,n){var a=0,i=e,o=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;for(var u=0;u<o;u++){var s=T(t,r,i,a),c=s.string;a=s.bytesOffset;var f=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;var E={};n[c].pickInfo=E;if(-1==n[c].vertexPackage.instanceIndex)for(var l=0;l<f;l++){var y=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;var d=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;for(var h=[],_=0;_<d;_++){var p=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;var O=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT,h.push({vertexColorOffset:p,vertexColorCount:O})}E[y]=h}else for(var l=0;l<f;l++){var y=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;var d=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT;for(var h=[],_=0;_<d;_++){var p=t.getUint32(a+r,!0);a+=Uint32Array.BYTES_PER_ELEMENT,h.push({vertexColorOffset:p,vertexColorCount:1})}E[y]=h}}}function j(e){return e<1e-10&&e>-1e-10}function z(e,t){var r=e.buffer,n=e.isS3MZ,a=e.fileType,i=e.createEdge,o=e.supportCompressType,u=0,c={};c.ignoreNormal=e.ignoreNormal;var f=new DataView(r),l=f.getFloat32(u,!0);u+=Float32Array.BYTES_PER_ELEMENT;var d=!1;if(j(l-1)){var h=f.getUint32(u,!0);u+=Uint32Array.BYTES_PER_ELEMENT;var T=new Uint8Array(r,u);r=_.inflate(T).buffer,t.push(r),f=new DataView(r),u=0}else{d=!0,u=0;var h=f.getInt32(u,!0);if(u+=Int32Array.BYTES_PER_ELEMENT,u+=Uint8Array.BYTES_PER_ELEMENT*h,n){f.getUint32(u,!0);u+=Uint32Array.BYTES_PER_ELEMENT;var T=new Uint8Array(r,u);r=_.inflate(T).buffer,t.push(r),f=new DataView(r),u=0}}var O=f.getUint32(u,!0);u+=Uint32Array.BYTES_PER_ELEMENT;var m=p(f,r,u),A=m.buffer;u=m.byteOffset;var R=B(A,f,m.dataViewByteOffset),b=u%4;0!==b&&(u+=4-b),m=p(f,r,u),C(m.buffer,f,m.dataViewByteOffset,i,c,d),u=m.byteOffset,m=p(f,r,u);m.buffer;u=m.byteOffset,m=p(f,r,u);var N=m.buffer,S={};F(o,N,f,m.dataViewByteOffset,S,t),u=m.byteOffset;var g=f.getUint32(u,!0);u+=Uint32Array.BYTES_PER_ELEMENT;var v=new Uint8Array(r),I=v.subarray(u,u+g),M=s(I);u+=g;var w=JSON.parse(M);(O&G.SVO_HasInstSelInfo)==G.SVO_HasInstSelInfo&&(m=p(f,r,u),D(m.buffer,f,m.dataViewByteOffset,c));for(var x=R.pageLods,P=!0,L=0;L<x.length;L++){var U=x[L];P=""===U.childTile;for(var z=U.geodes,V=0;V<z.length;V++)for(var q=z[V],k=q.skeletonNames,Y=0;Y<k.length;Y++){var X=k[Y];if(P){var H=c[X],W=H.vertexPackage;W.boundingSphere=E.calcBoundingSphereInWorker(a,W)}}}return{result:!0,groupNode:R,geoPackage:c,matrials:w,texturePackage:S,version:y.S3M4}}var G={SVO_HasInstSelInfo:1},V={SV_Unkown:0,SV_Standard:1,SV_Compressed:2},q="ClampGroundAndObjectLinePass";return e(z)})}();
+        // Some attribute types are casted down to 32 bit since Draco only returns 32 bit values
+        switch (dracoAttribute.data_type()) {
+            case 1: case 11: // DT_INT8 or DT_BOOL
+            attributeData = new draco.DracoInt8Array();
+            vertexArray = new Int8Array(vertexArrayLength);
+            dracoDecoder.GetAttributeInt8ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+            break;
+            case 2: // DT_UINT8
+                attributeData = new draco.DracoUInt8Array();
+                vertexArray = new Uint8Array(vertexArrayLength);
+                dracoDecoder.GetAttributeUInt8ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+                break;
+            case 3: // DT_INT16
+                attributeData = new draco.DracoInt16Array();
+                vertexArray = new Int16Array(vertexArrayLength);
+                dracoDecoder.GetAttributeInt16ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+                break;
+            case 4: // DT_UINT16
+                attributeData = new draco.DracoUInt16Array();
+                vertexArray = new Uint16Array(vertexArrayLength);
+                dracoDecoder.GetAttributeUInt16ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+                break;
+            case 5: case 7: // DT_INT32 or DT_INT64
+            attributeData = new draco.DracoInt32Array();
+            vertexArray = new Int32Array(vertexArrayLength);
+            dracoDecoder.GetAttributeInt32ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+            break;
+            case 6: case 8: // DT_UINT32 or DT_UINT64
+            attributeData = new draco.DracoUInt32Array();
+            vertexArray = new Uint32Array(vertexArrayLength);
+            dracoDecoder.GetAttributeUInt32ForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+            break;
+            case 9: case 10: // DT_FLOAT32 or DT_FLOAT64
+            attributeData = new draco.DracoFloat32Array();
+            vertexArray = new Float32Array(vertexArrayLength);
+            dracoDecoder.GetAttributeFloatForAllPoints(dracoGeometry, dracoAttribute, attributeData);
+            break;
+        }
+
+        for (var i = 0; i < vertexArrayLength; ++i) {
+            vertexArray[i] = attributeData.GetValue(i);
+        }
+
+        draco.destroy(attributeData);
+        return vertexArray;
+    }
+
+    function decodeAttribute(dracoGeometry, dracoDecoder, dracoAttribute) {
+        var numPoints = dracoGeometry.num_points();
+        var numComponents = dracoAttribute.num_components();
+
+        var quantization;
+        var transform = new draco.AttributeQuantizationTransform();
+        if (transform.InitFromAttribute(dracoAttribute)) {
+            var minValues = new Array(numComponents);
+            for (var i = 0; i < numComponents; ++i) {
+                minValues[i] = transform.min_value(i);
+            }
+            quantization = {
+                quantizationBits : transform.quantization_bits(),
+                minValues : minValues,
+                range : transform.range(),
+                octEncoded : false
+            };
+        }
+        draco.destroy(transform);
+
+        transform = new draco.AttributeOctahedronTransform();
+        if (transform.InitFromAttribute(dracoAttribute)) {
+            quantization = {
+                quantizationBits : transform.quantization_bits(),
+                octEncoded : true
+            };
+        }
+        draco.destroy(transform);
+
+        var vertexArrayLength = numPoints * numComponents;
+        var vertexArray;
+        if (when.defined(quantization)) {
+            vertexArray = decodeQuantizedDracoTypedArray(dracoGeometry, dracoDecoder, dracoAttribute, quantization, vertexArrayLength);
+        } else {
+            vertexArray = decodeDracoTypedArray(dracoGeometry, dracoDecoder, dracoAttribute, vertexArrayLength);
+        }
+
+        var componentDatatype = ComponentDatatype.ComponentDatatype.fromTypedArray(vertexArray);
+
+        return {
+            array : vertexArray,
+            data : {
+                componentsPerAttribute : numComponents,
+                componentDatatype : componentDatatype,
+                byteOffset : dracoAttribute.byte_offset(),
+                byteStride : ComponentDatatype.ComponentDatatype.getSizeInBytes(componentDatatype) * numComponents,
+                normalized : dracoAttribute.normalized(),
+                quantization : quantization
+            }
+        };
+    }
+
+    function decodeAllAttributes(dracoGeometry, dracoDecoder, vertexPackage, vertexUniqueIDs){
+        var attributes = vertexPackage.vertexAttributes;
+        var attrLocation = vertexPackage.attrLocation;
+        vertexPackage.nCompressOptions = 0;
+        if(when.defined(vertexUniqueIDs.posUniqueID) && vertexUniqueIDs.posUniqueID >= 0){
+            vertexPackage.nCompressOptions |= S3MCompressType.VertexCompressOption.SVC_Vertex;
+            var posAttribute = dracoDecoder.GetAttribute(dracoGeometry, vertexUniqueIDs.posUniqueID);
+            var posAttributeData = decodeAttribute(dracoGeometry, dracoDecoder, posAttribute);
+            var componentsPerAttribute = posAttributeData.data.componentsPerAttribute;
+            vertexPackage.verticesCount = posAttributeData.array.length / componentsPerAttribute;
+            vertexPackage.vertCompressConstant = posAttributeData.data.quantization.range / (1 << posAttributeData.data.quantization.quantizationBits);
+            var minValuesArray = posAttributeData.data.quantization.minValues;
+            vertexPackage.minVerticesValue = new Cartesian4.Cartesian4(minValuesArray[0], minValuesArray[1], minValuesArray[2], 1.0);
+            if(componentsPerAttribute > 3){
+                vertexPackage.minVerticesValue.w = minValuesArray[3];
+            }
+            attrLocation['aPosition'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aPosition'],
+                typedArray: posAttributeData.array,
+                componentsPerAttribute: componentsPerAttribute,
+                componentDatatype: posAttributeData.data.componentDatatype,
+                offsetInBytes: posAttributeData.data.byteOffset,
+                strideInBytes: posAttributeData.data.byteStride,
+                normalize: posAttributeData.data.normalized
+            });
+        }
+        if(when.defined(vertexUniqueIDs.normalUniqueID) && vertexUniqueIDs.normalUniqueID >= 0){
+            vertexPackage.nCompressOptions |= S3MCompressType.VertexCompressOption.SVC_Normal;
+            var normalAttribute = dracoDecoder.GetAttribute(dracoGeometry, vertexUniqueIDs.normalUniqueID);
+            var normalAttributeData = decodeAttribute(dracoGeometry, dracoDecoder, normalAttribute);
+            var normalQuantization = normalAttributeData.data.quantization;
+            vertexPackage.normalRangeConstant = (1 << normalQuantization.quantizationBits) - 1.0;
+            attrLocation['aNormal'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aNormal'],
+                typedArray: normalAttributeData.array,
+                componentsPerAttribute: normalAttributeData.data.componentsPerAttribute,
+                componentDatatype: normalAttributeData.data.componentDatatype,
+                offsetInBytes: normalAttributeData.data.byteOffset,
+                strideInBytes: normalAttributeData.data.byteStride,
+                normalize: normalAttributeData.data.normalized
+            });
+        }
+        if(when.defined(vertexUniqueIDs.colorUniqueID) && vertexUniqueIDs.colorUniqueID >= 0){
+            vertexPackage.nCompressOptions |= S3MCompressType.VertexCompressOption.SVC_VertexColor;
+            var colorAttribute = dracoDecoder.GetAttribute(dracoGeometry, vertexUniqueIDs.colorUniqueID);
+            var colorAttributeData = decodeAttribute(dracoGeometry, dracoDecoder, colorAttribute);
+            attrLocation['aColor'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aColor'],
+                typedArray: colorAttributeData.array,
+                componentsPerAttribute: colorAttributeData.data.componentsPerAttribute,
+                componentDatatype: colorAttributeData.data.componentDatatype,
+                offsetInBytes: colorAttributeData.data.byteOffset,
+                strideInBytes: colorAttributeData.data.byteStride,
+                normalize: colorAttributeData.data.normalized
+            });
+        }
+
+        for(var i = 0 ; i < vertexUniqueIDs.texCoordUniqueIDs.length; i++){
+            vertexPackage.texCoordCompressConstant = [];
+            vertexPackage.minTexCoordValue = [];
+            var texCoordUniqueID = vertexUniqueIDs.texCoordUniqueIDs[i];
+            if(texCoordUniqueID < 0){
+                continue;
+            }
+            var texCoordAttribute = dracoDecoder.GetAttribute(dracoGeometry, texCoordUniqueID);
+            var texAttributeData = decodeAttribute(dracoGeometry, dracoDecoder, texCoordAttribute);
+            if(when.defined(texAttributeData.data.quantization)){
+                vertexPackage.nCompressOptions |= S3MCompressType.VertexCompressOption.SVC_TexutreCoord;
+                vertexPackage.texCoordCompressConstant.push(texAttributeData.data.quantization.range / (1 << texAttributeData.data.quantization.quantizationBits));
+                var minValuesArray = texAttributeData.data.quantization.minValues;
+                vertexPackage.minTexCoordValue.push(new Cartesian2.Cartesian2(minValuesArray[0], minValuesArray[1]));
+            }
+            var attName = 'aTexCoord' + i;
+            attrLocation[attName] = attributes.length;
+            attributes.push({
+                index: attrLocation[attName],
+                typedArray: texAttributeData.array,
+                componentsPerAttribute: texAttributeData.data.componentsPerAttribute,
+                componentDatatype: texAttributeData.data.componentDatatype,
+                offsetInBytes: texAttributeData.data.byteOffset,
+                strideInBytes: texAttributeData.data.byteStride,
+                normalize: texAttributeData.data.normalized
+            });
+        }
+    }
+
+    S3MDracoDecode.dracoDecodePointCloud = function(dracoLib, dataBuffer, byteLength, vertexPackage, vertexUniqueIDs){
+        draco = dracoLib;
+        var dracoDecoder = new draco.Decoder();
+
+        // Skip all parameter types except generic
+        var attributesToSkip = ['POSITION', 'NORMAL', 'COLOR'];
+        for (var i = 0; i < attributesToSkip.length; ++i) {
+            dracoDecoder.SkipAttributeTransform(draco[attributesToSkip[i]]);
+        }
+
+        var buffer = new draco.DecoderBuffer();
+        buffer.Init(dataBuffer, byteLength);
+
+        var geometryType = dracoDecoder.GetEncodedGeometryType(buffer);
+        if (geometryType !== draco.POINT_CLOUD) {
+            throw new RuntimeError.RuntimeError('Draco geometry type must be POINT_CLOUD.');
+        }
+
+        var dracoPointCloud = new draco.PointCloud();
+        var decodingStatus = dracoDecoder.DecodeBufferToPointCloud(buffer, dracoPointCloud);
+        if (!decodingStatus.ok() || dracoPointCloud.ptr === 0) {
+            throw new RuntimeError.RuntimeError('Error decoding draco point cloud: ' + decodingStatus.error_msg());
+        }
+
+        draco.destroy(buffer);
+
+        decodeAllAttributes(dracoPointCloud, dracoDecoder, vertexPackage, vertexUniqueIDs);
+
+        draco.destroy(dracoPointCloud);
+        draco.destroy(dracoDecoder);
+    };
+
+    S3MDracoDecode.dracoDecodeMesh = function(dracoLib, dataBuffer, byteLength, vertexPackage, indexPackage, vertexUniqueIDs){
+        draco = dracoLib;
+        var dracoDecoder = new draco.Decoder();
+
+        // Skip all parameter types except generic
+        var attributesToSkip = ['POSITION', 'NORMAL', 'COLOR', 'TEX_COORD'];
+        for (var i = 0; i < attributesToSkip.length; ++i) {
+            dracoDecoder.SkipAttributeTransform(draco[attributesToSkip[i]]);
+        }
+
+        var buffer = new draco.DecoderBuffer();
+        buffer.Init(dataBuffer, byteLength);
+
+        var geometryType = dracoDecoder.GetEncodedGeometryType(buffer);
+        if (geometryType !== draco.TRIANGULAR_MESH) {
+            throw new RuntimeError.RuntimeError('Unsupported draco mesh geometry type.');
+        }
+
+        var dracoGeometry = new draco.Mesh();
+        var decodingStatus = dracoDecoder.DecodeBufferToMesh(buffer, dracoGeometry);
+        if (!decodingStatus.ok() || dracoGeometry.ptr === 0) {
+            throw new RuntimeError.RuntimeError('Error decoding draco mesh geometry: ' + decodingStatus.error_msg());
+        }
+        draco.destroy(buffer);
+
+        decodeAllAttributes(dracoGeometry, dracoDecoder, vertexPackage, vertexUniqueIDs);
+
+        var indexArray = decodeIndexArray(dracoGeometry, dracoDecoder);
+        indexPackage.indicesTypedArray = indexArray.typedArray;
+        indexPackage.indicesCount = indexArray.numberOfIndices;
+        indexPackage.indexType = indexArray.indexDataType;
+        indexPackage.primitiveType = PrimitiveType.PrimitiveType.TRIANGLES;
+
+        draco.destroy(dracoGeometry);
+        draco.destroy(dracoDecoder);
+    };
+
+    var VERSION = {
+        S3M : 49,
+        S3M4 : 1
+    };
+
+    var S3MVersion = Object.freeze(VERSION);
+
+    var S3MBVertexOptions = {
+        SVO_HasInstSelInfo: 1
+    };
+
+    var S3MBVertexTag = {
+        SV_Unkown: 0,
+        SV_Standard: 1,
+        SV_Compressed: 2,
+        SV_DracoCompressed: 3
+    };
+
+    var dracoLib;
+    var colorScratch = new Color.Color();
+    var CLAMP_GROUND_LINE_PASS_NAME = "ClampGroundAndObjectLinePass";
+    var unzipwasmReady = false;
+    if (when.defined(unzip.unzip)) {
+        unzip.unzip.onRuntimeInitialized = function () {
+            unzipwasmReady = true;
+        };
+        var unzipwasm = unzip.unzip.cwrap('unzip', 'number', ['number', 'number', 'number', 'number']);
+        var freec = unzip.unzip.cwrap('freePointer', null, ['number']);
+    }
+    function loadStream(dataView, dataBuffer, byteOffset) {
+        var newByteOffset = byteOffset;
+        var streamSize = dataView.getUint32(newByteOffset, true);
+        newByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        var bufferByteOffset = newByteOffset;
+            var buffer = new Uint8Array(dataBuffer, newByteOffset, streamSize);
+        newByteOffset += streamSize * Uint8Array.BYTES_PER_ELEMENT;
+        return {
+            dataViewByteOffset: bufferByteOffset,
+            byteOffset: newByteOffset,
+            buffer: buffer
+        };
+    }
+
+    function loadString(dataView, viewByteOffset, typedArray, bufferByteOffset) {
+        var stringLength = dataView.getUint32(bufferByteOffset + viewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        var stringBuffer = typedArray.subarray(bufferByteOffset, bufferByteOffset + stringLength);
+        var strResult = S3MCompressType.getStringFromTypedArray(stringBuffer);
+        bufferByteOffset += stringLength;
+        return {
+            string: strResult,
+            bytesOffset: bufferByteOffset
+        }
+    }
+
+    function loadTexCoord(view, typedArray, bufferByteOffset, viewByteOffset, vertexPackage, isOldVersion) {
+        var newBytesOffset = bufferByteOffset;
+        var nTexCount = view.getUint16(bufferByteOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+
+        if (!isOldVersion) {
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        }
+
+        for (var i = 0; i < nTexCount; i++) {
+            var nTexCoordCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var nDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+            var nTexCoordStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+            if (nDimension == 20 || nDimension == 35) ;
+            else {
+                var byteLength = nTexCoordCount * nDimension * Float32Array.BYTES_PER_ELEMENT;
+                var texCoordBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+                newBytesOffset += byteLength;
+                var str = 'aTexCoord' + i;
+                var attributes = vertexPackage.vertexAttributes;
+                var attrLocation = vertexPackage.attrLocation;
+                attrLocation[str] = attributes.length;
+                attributes.push({
+                    index: attrLocation[str],
+                    typedArray: texCoordBuffer,
+                    componentsPerAttribute: nDimension,
+                    componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                    offsetInBytes: 0,
+                    strideInBytes: nDimension * Float32Array.BYTES_PER_ELEMENT,
+                    normalize: false
+                });
+            }
+        }
+        return {
+            bytesOffset: newBytesOffset
+        };
+    }
+
+    function loadCompressTexCoord(view, typedArray, bufferByteOffset, viewByteOffset, vertexPackage) {
+        vertexPackage.texCoordCompressConstant = [];
+        vertexPackage.minTexCoordValue = [];
+        var newBytesOffset = bufferByteOffset;
+        var nTexCount = view.getUint16(bufferByteOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var texIndex = 0;
+        for (var i = 0; i < nTexCount; i++) {
+            var bNeedTexCoordZ = view.getUint8(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT;
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT * 3;
+            var nTexCoordCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var nDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+            var nTexCoordStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+
+            var texCoordCompressConstant = view.getFloat32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+            vertexPackage.texCoordCompressConstant.push(texCoordCompressConstant);
+
+            var minTexCoordValue = new Cartesian4.Cartesian4();
+            minTexCoordValue.x = view.getFloat32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+            minTexCoordValue.y = view.getFloat32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+            minTexCoordValue.z = view.getFloat32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+            minTexCoordValue.w = view.getFloat32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+            vertexPackage.minTexCoordValue.push(minTexCoordValue);
+
+            var byteLength = nTexCoordCount * nDimension * Int16Array.BYTES_PER_ELEMENT;
+            var texCoordBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+            newBytesOffset += byteLength;
+            var align = newBytesOffset % 4;
+            if (align !== 0) {
+                newBytesOffset += (4 - align);
+            }
+
+
+            var str = 'aTexCoord' + texIndex;
+            var attributes = vertexPackage.vertexAttributes;
+            var attrLocation = vertexPackage.attrLocation;
+            attrLocation[str] = attributes.length;
+            attributes.push({
+                index: attrLocation[str],
+                typedArray: texCoordBuffer,
+                componentsPerAttribute: nDimension,
+                componentDatatype: ComponentDatatype.ComponentDatatype.SHORT,
+                offsetInBytes: 0,
+                strideInBytes: nDimension * Int16Array.BYTES_PER_ELEMENT,
+                normalize: false
+            });
+
+            if (bNeedTexCoordZ) {
+                byteLength = nTexCoordCount * Float32Array.BYTES_PER_ELEMENT;
+                var texCoordZBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+                newBytesOffset += byteLength;
+                vertexPackage.texCoordZMatrix = true;
+                str = 'aTexCoordZ' + texIndex;
+                attrLocation[str] = attributes.length;
+                attributes.push({
+                    index: attrLocation[str],
+                    typedArray: texCoordZBuffer,
+                    componentsPerAttribute: 1,
+                    componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                    offsetInBytes: 0,
+                    strideInBytes: Float32Array.BYTES_PER_ELEMENT,
+                    normalize: false
+                });
+            }
+            texIndex++;
+        }
+        return {
+            bytesOffset: newBytesOffset
+        };
+    }
+
+    function loadInstanceInfo(view, typedArray, bufferByteOffset, viewByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nInstanceInfo = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var attributes = vertexPackage.vertexAttributes;
+        var attrLocation = vertexPackage.attrLocation;
+
+        for (var iIndex = 0; iIndex < nInstanceInfo; iIndex++) {
+            var nTexCoordCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var nTexDimensions = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+            var nTexCoordStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+
+            var byteLength = nTexCoordCount * nTexDimensions * Float32Array.BYTES_PER_ELEMENT;
+            if (nTexDimensions === 17 || nTexDimensions === 29) {
+                var instanceBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+                vertexPackage.instanceCount = nTexCoordCount;
+                vertexPackage.instanceMode = nTexDimensions;
+                vertexPackage.instanceBuffer = instanceBuffer;
+                vertexPackage.instanceIndex = 1;
+                var byteStride;
+                if (nTexDimensions === 17) {
+                    byteStride = Float32Array.BYTES_PER_ELEMENT * 17;
+                    attrLocation['uv2'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv2'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 0,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+
+                    attrLocation['uv3'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv3'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 4 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+
+                    attrLocation['uv4'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv4'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 8 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+
+                    attrLocation['secondary_colour'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['secondary_colour'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 12 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+
+                    attrLocation['uv6'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv6'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
+                        normalize: true,
+                        offsetInBytes: 16 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                }
+                else if (nTexDimensions === 29) {
+                    byteStride = Float32Array.BYTES_PER_ELEMENT * 29;
+                    attrLocation['uv1'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv1'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 0,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1,
+                        byteLength: byteLength
+                    });
+                    attrLocation['uv2'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv2'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 4 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv3'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv3'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 8 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv4'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv4'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 12 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv5'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv5'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 16 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv6'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv6'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 20 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv7'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv7'],
+                        componentsPerAttribute: 3,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                        normalize: false,
+                        offsetInBytes: 24 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['secondary_colour'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['secondary_colour'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
+                        normalize: true,
+                        offsetInBytes: 27 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                    attrLocation['uv9'] = attributes.length;
+                    attributes.push({
+                        index: attrLocation['uv9'],
+                        componentsPerAttribute: 4,
+                        componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
+                        normalize: true,
+                        offsetInBytes: 28 * Float32Array.BYTES_PER_ELEMENT,
+                        strideInBytes: byteStride,
+                        instanceDivisor: 1
+                    });
+                }
+            }
+            else {
+                var valueCount = nTexCoordCount * nTexDimensions;
+                vertexPackage.instanceBounds = new Float32Array(valueCount);
+                for (var k = 0; k < valueCount; k++) {
+                    vertexPackage.instanceBounds[k] = view.getFloat32(newBytesOffset + viewByteOffset + k * Float32Array.BYTES_PER_ELEMENT, true);
+                }
+            }
+            newBytesOffset += byteLength;
+        }
+        return {
+            bytesOffset: newBytesOffset
+        };
+    }
+
+    function loadVertex(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nVerticesCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        vertexPackage.verticesCount = nVerticesCount;
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if (nVerticesCount <= 0) {
+            return {
+                bytesOffset: newBytesOffset
+            };
+        }
+        var nVertexDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var nVertexStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+        nVertexStride = nVertexDimension * Float32Array.BYTES_PER_ELEMENT;
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+
+        var byteLength = nVerticesCount * nVertexDimension * Float32Array.BYTES_PER_ELEMENT;
+        var vertexBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+        newBytesOffset += byteLength;
+
+        var attributes = vertexPackage.vertexAttributes;
+        var attrLocation = vertexPackage.attrLocation;
+        attrLocation['aPosition'] = attributes.length;
+        attributes.push({
+            index: attrLocation['aPosition'],
+            typedArray: vertexBuffer,
+            componentsPerAttribute: nVertexDimension,
+            componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+            offsetInBytes: 0,
+            strideInBytes: nVertexStride,
+            normalize: false
+        });
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function loadCompressVertex(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nVerticesCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        vertexPackage.verticesCount = nVerticesCount;
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if (nVerticesCount <= 0) {
+            return {
+                bytesOffset: newBytesOffset
+            };
+        }
+        var nVertexDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var nVertexStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+        nVertexStride = nVertexDimension * Int16Array.BYTES_PER_ELEMENT;
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+
+        var fVertCompressConstant = view.getFloat32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+        var minVerticesValue = new Cartesian4.Cartesian4();
+        minVerticesValue.x = view.getFloat32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+        minVerticesValue.y = view.getFloat32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+        minVerticesValue.z = view.getFloat32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+        minVerticesValue.w = view.getFloat32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Float32Array.BYTES_PER_ELEMENT;
+
+        vertexPackage.vertCompressConstant = fVertCompressConstant;
+        vertexPackage.minVerticesValue = minVerticesValue;
+
+        var byteLength = nVerticesCount * nVertexDimension * Int16Array.BYTES_PER_ELEMENT;
+        var vertexBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+        newBytesOffset += byteLength;
+
+        var attributes = vertexPackage.vertexAttributes;
+        var attrLocation = vertexPackage.attrLocation;
+        attrLocation['aPosition'] = attributes.length;
+        attributes.push({
+            index: attrLocation['aPosition'],
+            typedArray: vertexBuffer,
+            componentsPerAttribute: nVertexDimension,
+            componentDatatype: ComponentDatatype.ComponentDatatype.SHORT,
+            offsetInBytes: 0,
+            strideInBytes: nVertexStride,
+            normalize: false
+        });
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function loadNormal(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nNormalCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if (nNormalCount <= 0) {
+            return {
+                bytesOffset: newBytesOffset
+            };
+        }
+        var nNormalDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var nNormalStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var byteLength = nNormalCount * nNormalDimension * Float32Array.BYTES_PER_ELEMENT;
+        var normalBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+        newBytesOffset += byteLength;
+        if (!vertexPackage.ignoreNormal) {
+            var attributes = vertexPackage.vertexAttributes;
+            var attrLocation = vertexPackage.attrLocation;
+            attrLocation['aNormal'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aNormal'],
+                typedArray: normalBuffer,
+                componentsPerAttribute: nNormalDimension,
+                componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+                offsetInBytes: 0,
+                strideInBytes: nNormalStride,
+                normalize: false
+            });
+        }
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function loadCompressNormal(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nNormalCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if (nNormalCount <= 0) {
+            return {
+                bytesOffset: newBytesOffset
+            };
+        }
+        var nNormalDimension = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var nNormalStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        var byteLength = nNormalCount * 2 * Int16Array.BYTES_PER_ELEMENT;
+        var normalBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+        newBytesOffset += byteLength;
+        if (!vertexPackage.ignoreNormal) {
+            var attributes = vertexPackage.vertexAttributes;
+            var attrLocation = vertexPackage.attrLocation;
+            attrLocation['aNormal'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aNormal'],
+                typedArray: normalBuffer,
+                componentsPerAttribute: 2,
+                componentDatatype: ComponentDatatype.ComponentDatatype.SHORT,
+                offsetInBytes: 0,
+                strideInBytes: nNormalStride,
+                normalize: false
+            });
+        }
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function loadVertexColor(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nColorCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        var verticesCount = vertexPackage.verticesCount;
+        var vertexColor;
+        if (nColorCount > 0) {
+            var colorStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT * 2;
+            var byteLength = nColorCount * Uint8Array.BYTES_PER_ELEMENT * 4;
+            vertexColor = typedArray.slice(newBytesOffset, newBytesOffset + byteLength);
+            newBytesOffset += byteLength;
+            var attributes = vertexPackage.vertexAttributes;
+            var attrLocation = vertexPackage.attrLocation;
+            attrLocation['aColor'] = attributes.length;
+            attributes.push({
+                index: attrLocation['aColor'],
+                typedArray: vertexColor,
+                componentsPerAttribute: 4,
+                componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
+                offsetInBytes: 0,
+                strideInBytes: 4,
+                normalize: true
+            });
+        }
+
+        return {
+            bytesOffset: newBytesOffset
+        };
+    }
+
+    function loadSecondColor(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage) {
+        var newBytesOffset = bufferByteOffset;
+        var nSecondColorCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if (nSecondColorCount <= 0) {
+            return {
+                bytesOffset: newBytesOffset
+            };
+        }
+        var secondColorStride = view.getUint16(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint16Array.BYTES_PER_ELEMENT;
+        newBytesOffset += Uint8Array.BYTES_PER_ELEMENT * 2;
+        var byteLength = nSecondColorCount * Uint8Array.BYTES_PER_ELEMENT * 4;
+        newBytesOffset += byteLength;
+        return {
+            bytesOffset: newBytesOffset
+        };
+    }
+
+    function loadIndexPackage(typedArray, view, viewByteOffset, bufferByteOffset) {
+        var newBytesOffset = bufferByteOffset;
+        var arrIndexPackage = [];
+        var nIndexPackageCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var k = 0; k < nIndexPackageCount; k++) {
+            var indexPackage = {};
+            var nIndexCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var enIndexType = view.getUint8(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT;
+            var bUseIndex = view.getUint8(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT;
+            var operationType = view.getUint8(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT;
+            newBytesOffset += Uint8Array.BYTES_PER_ELEMENT;
+            if (nIndexCount > 0) {
+                var byteLength = 0;
+                var indexBuffer = null;
+                if (enIndexType === 1 || enIndexType === 3) {
+                    byteLength = nIndexCount * Uint32Array.BYTES_PER_ELEMENT;
+                    indexBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+                }
+                else {
+                    byteLength = nIndexCount * Uint16Array.BYTES_PER_ELEMENT;
+                    indexBuffer = typedArray.subarray(newBytesOffset, newBytesOffset + byteLength);
+                    if (nIndexCount % 2 != 0) {
+                        byteLength += 2;
+                    }
+                }
+                indexPackage.indicesTypedArray = indexBuffer;
+                newBytesOffset += byteLength;
+            }
+            indexPackage.indicesCount = nIndexCount;
+            indexPackage.indexType = enIndexType;
+            indexPackage.primitiveType = operationType;
+
+            var arrPassName = [];
+            var nPassNameCount = view.getUint32(newBytesOffset + viewByteOffset, true);
+            newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            for (var passIndex = 0; passIndex < nPassNameCount; passIndex++) {
+                var res = loadString(view, viewByteOffset, typedArray, newBytesOffset);
+                var strPassName = res.string;
+                newBytesOffset = res.bytesOffset;
+                arrPassName.push(strPassName);
+                indexPackage.materialCode = strPassName;
+            }
+            arrIndexPackage.push(indexPackage);
+
+            var align = newBytesOffset % 4;
+            if (align !== 0) {
+                var nReserved = 4 - newBytesOffset % 4;
+                newBytesOffset += nReserved;
+            }
+        }
+        return {
+            bytesOffset: newBytesOffset,
+            arrIndexPackage: arrIndexPackage
+        };
+    }
+
+    function loadCompressSkeleton(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage, isOldVersion) {
+        var newBytesOffset = bufferByteOffset;
+        var nCompressOptions = view.getUint32(newBytesOffset + viewByteOffset, true);
+        vertexPackage.nCompressOptions = nCompressOptions;
+        var result;
+        newBytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        if ((nCompressOptions & S3MCompressType.VertexCompressOption.SVC_Vertex) == S3MCompressType.VertexCompressOption.SVC_Vertex) {
+            result = loadCompressVertex(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+            newBytesOffset = result.bytesOffset;
+        }
+        else {
+            result = loadVertex(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+            newBytesOffset = result.bytesOffset;
+        }
+
+        if ((nCompressOptions & S3MCompressType.VertexCompressOption.SVC_Normal) == S3MCompressType.VertexCompressOption.SVC_Normal) {
+            result = loadCompressNormal(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+            newBytesOffset = result.bytesOffset;
+        }
+        else {
+            result = loadNormal(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+            newBytesOffset = result.bytesOffset;
+        }
+
+        result = loadVertexColor(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadSecondColor(typedArray, view, viewByteOffset, newBytesOffset);
+        newBytesOffset = result.bytesOffset;
+
+        if ((nCompressOptions & S3MCompressType.VertexCompressOption.SVC_TexutreCoord) == S3MCompressType.VertexCompressOption.SVC_TexutreCoord) {
+            result = loadCompressTexCoord(view, typedArray, newBytesOffset, viewByteOffset, vertexPackage);
+            newBytesOffset = result.bytesOffset;
+        }
+        else {
+            result = loadTexCoord(view, typedArray, newBytesOffset, viewByteOffset, vertexPackage, isOldVersion);
+            newBytesOffset = result.bytesOffset;
+        }
+
+        if ((nCompressOptions & S3MCompressType.VertexCompressOption.SVC_TexutreCoordIsW) == S3MCompressType.VertexCompressOption.SVC_TexutreCoordIsW) {
+            vertexPackage.textureCoordIsW = true;
+        }
+
+        result = loadInstanceInfo(view, typedArray, newBytesOffset, viewByteOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function loadStandardSkeleton(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage, isOldVersion) {
+        var newBytesOffset = bufferByteOffset;
+        var result;
+        result = loadVertex(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadNormal(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadVertexColor(typedArray, view, viewByteOffset, newBytesOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadSecondColor(typedArray, view, viewByteOffset, newBytesOffset);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadTexCoord(view, typedArray, newBytesOffset, viewByteOffset, vertexPackage, isOldVersion);
+        newBytesOffset = result.bytesOffset;
+
+        result = loadInstanceInfo(view, typedArray, newBytesOffset, viewByteOffset, vertexPackage);
+        newBytesOffset = result.bytesOffset;
+
+        return {
+            bytesOffset: newBytesOffset
+        }
+    }
+
+    function isClampGroundLinePass(arrIndexPackage) {
+        if (arrIndexPackage.length === 0) {
+            return false;
+        }
+        return arrIndexPackage[0].materialCode === CLAMP_GROUND_LINE_PASS_NAME;
+    }
+
+    function loadSkeletonEntities(skeletonBuffer, view, viewByteOffset, needCreateEdge, geoPackage, isOldVersion) {
+        var typedArray = skeletonBuffer;
+        var bufferByteOffset = 0;
+        var nCount = view.getUint32(bufferByteOffset + viewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nCount; i++) {
+            // S3MB头名字长度
+            var result = loadString(view, viewByteOffset, typedArray, bufferByteOffset);
+            var strGeometryName = result.string;
+            bufferByteOffset = result.bytesOffset;
+            var align = bufferByteOffset % 4;
+            if (align !== 0) {
+                bufferByteOffset += (4 - align);
+            }
+
+            var nTagValue = S3MBVertexTag.SV_Unkown;
+            nTagValue = view.getUint32(bufferByteOffset + viewByteOffset, true);
+            bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+
+            var vertexPackage = {};
+            vertexPackage.vertexAttributes = [];
+            vertexPackage.attrLocation = {};
+            vertexPackage.instanceCount = 0;
+            vertexPackage.instanceMode = 0;
+            vertexPackage.instanceIndex = -1;
+            vertexPackage.ignoreNormal = geoPackage.ignoreNormal;
+
+            if (nTagValue == S3MBVertexTag.SV_DracoCompressed) {
+                var vertexUniqueIDs = {};
+                vertexUniqueIDs.posUniqueID = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                vertexUniqueIDs.normalUniqueID = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                vertexUniqueIDs.colorUniqueID = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                vertexUniqueIDs.secondColorUniqueID = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+
+                var nTextureCoord = view.getUint16(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int16Array.BYTES_PER_ELEMENT;
+
+                var texCoordUniqueIDs = [];
+                for (var nTexCoordIdx = 0; nTexCoordIdx < nTextureCoord; nTexCoordIdx++) {
+                    var nTexCoordUniqueID = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                    texCoordUniqueIDs.push(nTexCoordUniqueID);
+                    bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                }
+                vertexUniqueIDs.texCoordUniqueIDs = texCoordUniqueIDs;
+
+                var nIndexPackageCount = view.getInt32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                var arrIndexPackage = [];
+                // 目前只支持单索引
+                var indexPackage = {};
+                if (nIndexPackageCount > 0) {
+                    var res = loadString(view, viewByteOffset, typedArray, bufferByteOffset);
+                    var strPassName = res.string;
+                    bufferByteOffset = res.bytesOffset;
+                    indexPackage.materialCode = strPassName;
+                    arrIndexPackage.push(indexPackage);
+                }
+
+                var nDracoBufferSize = view.getUint32(bufferByteOffset + viewByteOffset, true);
+                bufferByteOffset += Int32Array.BYTES_PER_ELEMENT;
+                var dataBuffer = arraySlice(typedArray, bufferByteOffset, bufferByteOffset + nDracoBufferSize);
+                if (nIndexPackageCount > 0) {
+                    S3MDracoDecode.dracoDecodeMesh(dracoLib, dataBuffer, nDracoBufferSize, vertexPackage, indexPackage, vertexUniqueIDs);
+                }
+                else {
+                    S3MDracoDecode.dracoDecodePointCloud(dracoLib, dataBuffer, nDracoBufferSize, vertexPackage, vertexUniqueIDs);
+                }
+
+                bufferByteOffset += nDracoBufferSize;
+                geoPackage[strGeometryName] = {
+                    vertexPackage: vertexPackage,
+                    arrIndexPackage: arrIndexPackage
+                };
+            }
+            else {
+                if (nTagValue == S3MBVertexTag.SV_Standard) {
+                    result = loadStandardSkeleton(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage, isOldVersion);
+                    bufferByteOffset = result.bytesOffset;
+                }
+                else if (nTagValue == S3MBVertexTag.SV_Compressed) {
+                    result = loadCompressSkeleton(typedArray, view, viewByteOffset, bufferByteOffset, vertexPackage, isOldVersion);
+                    bufferByteOffset = result.bytesOffset;
+                }
+
+                result = loadIndexPackage(typedArray, view, viewByteOffset, bufferByteOffset);
+                var arrIndexPackage = result.arrIndexPackage;
+                if (isClampGroundLinePass(arrIndexPackage)) {
+                    vertexPackage.clampRegionEdge = true;
+                }
+
+                var edgeGeometry;
+                if (needCreateEdge) {
+                    edgeGeometry = S3MCompressType.S3MVertexPackage.createEdge(vertexPackage, arrIndexPackage);
+                }
+
+                bufferByteOffset = result.bytesOffset;
+                geoPackage[strGeometryName] = {
+                    vertexPackage: vertexPackage,
+                    arrIndexPackage: arrIndexPackage,
+                    edgeGeometry: edgeGeometry
+                };
+            }
+        }
+    }
+
+    function loadGeodeEntities(shellBuffer, view, bufferByteOffset, dataViewByteOffset) {
+        var geode = {};
+        var skeletonNames = [];
+        var geoMatrix = new BoundingSphere.Matrix4();
+        var typedArray = shellBuffer;
+        for (var matIndex = 0; matIndex < 16; matIndex++) {
+            geoMatrix[matIndex] = view.getFloat64(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Float64Array.BYTES_PER_ELEMENT;
+        }
+        geode.matrix = geoMatrix;
+        geode.skeletonNames = skeletonNames;
+        var nSkeletonCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nSkeletonCount; i++) {
+            var res = loadString(view, dataViewByteOffset, typedArray, bufferByteOffset);
+            var strSkeletonName = res.string;
+            bufferByteOffset = res.bytesOffset;
+            skeletonNames.push(strSkeletonName);
+        }
+        return {
+            byteOffset: bufferByteOffset,
+            geode: geode
+        }
+    }
+
+    function removeUnusedStringTileName(oldTileName) {
+        var index = oldTileName.indexOf('Geometry');
+        if (index === -1) {
+            return oldTileName;
+        }
+        var ignoreString = oldTileName.substring(index, oldTileName.length);
+        return oldTileName.replace(ignoreString, '');
+    }
+
+    function loadPageLODEntities(shellBuffer, view, bufferByteOffset, dataViewByteOffset) {
+        var pageLOD = {};
+        var dbDis = view.getFloat32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Float32Array.BYTES_PER_ELEMENT;
+        var uRangeMode = view.getUint16(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint16Array.BYTES_PER_ELEMENT;
+        pageLOD.rangeMode = uRangeMode;
+        pageLOD.rangeList = dbDis;
+
+        var boundingSphereCenter = new Cartographic.Cartesian3();
+        boundingSphereCenter.x = view.getFloat64(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Float64Array.BYTES_PER_ELEMENT;
+        boundingSphereCenter.y = view.getFloat64(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Float64Array.BYTES_PER_ELEMENT;
+        boundingSphereCenter.z = view.getFloat64(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Float64Array.BYTES_PER_ELEMENT;
+        var radius = view.getFloat64(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Float64Array.BYTES_PER_ELEMENT;
+        pageLOD.boundingSphere = new BoundingSphere.BoundingSphere(boundingSphereCenter, radius);
+
+        var typedArray = shellBuffer;
+        var res = loadString(view, dataViewByteOffset, typedArray, bufferByteOffset);
+        var strChildTile = res.string;
+        bufferByteOffset = res.bytesOffset;
+
+        strChildTile = strChildTile.replace(/(\.s3mbz)|(\.s3mb)/gi, '');
+        strChildTile = removeUnusedStringTileName(strChildTile);
+
+        pageLOD.childTile = strChildTile;
+        pageLOD.geodes = [];
+        var nGeodeCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nGeodeCount; i++) {
+            var res = loadGeodeEntities(shellBuffer, view, bufferByteOffset, dataViewByteOffset);
+            bufferByteOffset = res.byteOffset;
+            pageLOD.geodes.push(res.geode);
+        }
+        return {
+            pageLOD: pageLOD,
+            bytesOffset: bufferByteOffset
+        }
+    }
+
+    function loadShellEntites(shellBuffer, view, dataViewByteOffset) {
+        var bufferByteOffset = 0;
+        var groupNode = {};
+        var pageLods = [];
+        var nCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nCount; i++) {
+            var res = loadPageLODEntities(shellBuffer, view, bufferByteOffset, dataViewByteOffset);
+            bufferByteOffset = res.bytesOffset;
+            pageLods.push(res.pageLOD);
+        }
+        groupNode.pageLods = pageLods;
+        return groupNode;
+    }
+
+    function loadTextureEntities(supportCompressType, textureDataBuffer, dataView, dataViewByteOffset, texturePackage, transferableObjects) {
+        var bufferByteOffset = 0;
+        var nTextureCount = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nTextureCount; i++) {
+            var res = loadString(dataView, dataViewByteOffset, textureDataBuffer, bufferByteOffset);
+            var strTextureName = res.string;
+            bufferByteOffset = res.bytesOffset;
+            var align = bufferByteOffset % 4;
+            if (align !== 0) {
+                bufferByteOffset += (4 - align);
+            }
+
+            var nLevel = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var width = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var height = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var compressType = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var nSize = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var pixelFormat = dataView.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+
+            var textureData = textureDataBuffer.subarray(bufferByteOffset, bufferByteOffset + nSize);
+            bufferByteOffset += nSize;
+
+            var imageTypedArray = null;
+            if (compressType === S3MCompressType.S3MCompressType.enrS3TCDXTN && supportCompressType != 1) {
+                S3MCompressType.DXTTextureDecode.decode(imageTypedArray, width, height, textureData, pixelFormat);
+                if (pixelFormat > S3MCompressType.S3MPixelFormat.BGR || pixelFormat === S3MCompressType.S3MPixelFormat.LUMINANCE_ALPHA) {
+                    imageTypedArray = new Uint8Array(width * height * 4);
+                }
+                else {
+                    imageTypedArray = new Uint16Array(width * height);
+                }
+                S3MCompressType.DXTTextureDecode.decode(imageTypedArray, width, height, textureData, pixelFormat);
+                transferableObjects.push(imageTypedArray.buffer);
+                compressType = 0;
+            }
+            else {
+                imageTypedArray = textureData;
+            }
+
+            texturePackage[strTextureName] = {
+                id: strTextureName,
+                width: width,
+                height: height,
+                compressType: compressType,
+                nFormat: pixelFormat,
+                imageBuffer: imageTypedArray
+            };
+        }
+    }
+
+    function createBatchIdAttribute(vertexPackage, typedArray, instanceDivisor) {
+        var vertexAttributes = vertexPackage.vertexAttributes;
+        var attrLocation = vertexPackage.attrLocation;
+        var len = vertexAttributes.length;
+        var attrName = instanceDivisor === 1 ? 'instanceId' : 'batchId';
+        attrLocation[attrName] = len;
+        vertexAttributes.push({
+            index: len,
+            typedArray: typedArray,
+            componentsPerAttribute: 1,
+            componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
+            offsetInBytes: 0,
+            strideInBytes: 0,
+            instanceDivisor: instanceDivisor
+        });
+    }
+
+    var LEFT_16 = 65536;
+    function loadSelectionInfo(selectionInfoBuffer, view, dataViewByteOffset, geoPackage) {
+        var bufferByteOffset = 0;
+        var typedArray = selectionInfoBuffer;
+        var nGeometryCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+        for (var i = 0; i < nGeometryCount; i++) {
+            // S3MB头名字长度
+            var result = loadString(view, dataViewByteOffset, typedArray, bufferByteOffset);
+            var strGeometryName = result.string;
+            bufferByteOffset = result.bytesOffset;
+            var nSelectInfoCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+            bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var pickInfo = {};
+            geoPackage[strGeometryName].pickInfo = pickInfo;
+            // 非实例化的选择信息
+            var bInstanced = geoPackage[strGeometryName].vertexPackage.instanceIndex;
+            if (bInstanced == -1) {
+                var batchIds = new Float32Array(geoPackage[strGeometryName].vertexPackage.verticesCount);
+                for (var j = 0; j < nSelectInfoCount; j++) {
+                    var nDictID = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                    bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                    var nSize = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                    bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                    var vertexCount = 0, vertexColorOffset = 0;
+                    pickInfo[nDictID] = {
+                        batchId: j
+                    };
+                    for (var k = 0; k < nSize; k++) {
+                        vertexColorOffset = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                        vertexCount = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                        batchIds.fill(j, vertexColorOffset, vertexColorOffset + vertexCount);
+                    }
+
+                    pickInfo[nDictID].vertexColorOffset = vertexColorOffset;
+                    pickInfo[nDictID].vertexCount = vertexCount;
+                }
+                createBatchIdAttribute(geoPackage[strGeometryName].vertexPackage, batchIds, undefined);
+            }
+            else {
+                var instanceCount = geoPackage[strGeometryName].vertexPackage.instanceCount;
+                var instanceArray = geoPackage[strGeometryName].vertexPackage.instanceBuffer;
+                var instanceMode = geoPackage[strGeometryName].vertexPackage.instanceMode;
+                var instanceIds = new Float32Array(instanceCount);
+                for (var j = 0; j < nSelectInfoCount; j++) {
+                    var nDictID = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                    bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                    var nSize = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                    bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                    for (var k = 0; k < nSize; k++) {
+                        var instanceId = view.getUint32(bufferByteOffset + dataViewByteOffset, true);
+                        bufferByteOffset += Uint32Array.BYTES_PER_ELEMENT;
+                    }
+                }
+
+                var beginOffset = instanceMode === 17 ? 16 : 28;
+                beginOffset *= Float32Array.BYTES_PER_ELEMENT;
+                for (j = 0; j < instanceCount; j++) {
+                    instanceIds[j] = j;
+                    var offset = j * instanceMode * Float32Array.BYTES_PER_ELEMENT + beginOffset;
+                    Color.Color.unpack(instanceArray, offset, colorScratch);
+                    var pickId = colorScratch.red + colorScratch.green * 256 + colorScratch.blue * LEFT_16;
+                    if (pickInfo[pickId] === undefined) {
+                        pickInfo[pickId] = {
+                            vertexColorCount: 1,
+                            instanceIds: [],
+                            vertexColorOffset: j
+                        };
+                    }
+
+                    pickInfo[pickId].instanceIds.push(j);
+                }
+
+                createBatchIdAttribute(geoPackage[strGeometryName].vertexPackage, instanceIds, 1);
+            }
+        }
+    }
+
+    function OGDCIS0(x) {
+        return (((x) < 1e-10) && ((x) > -1e-10));
+    }
+
+    function unzipWithwasm(datazip, unzipSize) {
+        var unzipsize = unzipSize || datazip.length * 4;//unzipSize;//
+        var offset = unzip.unzip._malloc(Uint8Array.BYTES_PER_ELEMENT * unzipsize); //开辟内存
+        var tar = new Uint8Array(unzipsize);
+        unzip.unzip.HEAPU8.set(tar, offset / Uint8Array.BYTES_PER_ELEMENT);
+        var offset1 = unzip.unzip._malloc(Uint8Array.BYTES_PER_ELEMENT * datazip.length);
+        unzip.unzip.HEAPU8.set(datazip, offset1 / Uint8Array.BYTES_PER_ELEMENT);
+        
+        var resultLen;
+        while ((resultLen = unzipwasm(offset, unzipsize, offset1, datazip.length)) == 0) {
+            freec(offset); //释放内存
+            unzipsize *= 4;
+            offset = unzip.unzip._malloc(Uint8Array.BYTES_PER_ELEMENT * unzipsize);
+            tar = new Uint8Array(unzipsize);
+            unzip.unzip.HEAPU8.set(tar, offset / Uint8Array.BYTES_PER_ELEMENT);
+        }
+        var res = new Uint8Array(unzip.unzip.HEAPU8.buffer, offset, resultLen);
+        datazip = null;
+        tar = null;
+        var buffer = new Uint8Array(res).buffer;
+        freec(offset);
+        freec(offset1);
+        return buffer;
+    }
+
+    function parseS3MB(parameters, transferableObjects) {
+        var buffer = parameters.buffer;
+        var bZip = parameters.isS3MZ;
+        var fileType = parameters.fileType;
+        var createEdge = parameters.createEdge;
+        var supportCompressType = parameters.supportCompressType;
+        var bytesOffset = 0;
+        var geoPackage = {};
+        geoPackage.ignoreNormal = parameters.ignoreNormal;
+
+        var view = new DataView(buffer);
+
+        var version = view.getFloat32(bytesOffset, true);
+        bytesOffset += Float32Array.BYTES_PER_ELEMENT;
+        var isOldVersion = false;
+        var unzipSize;
+        if (version === 2) {
+            unzipSize = view.getUint32(bytesOffset, true);
+            bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        }
+        if (OGDCIS0(version - 1) || OGDCIS0(version - 2)) {
+            //总字节大小
+            var byteSize = view.getUint32(bytesOffset, true);
+            bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            var datazip = new Uint8Array(buffer, bytesOffset, byteSize);
+
+            if (unzipwasmReady === true) {
+                buffer = unzipWithwasm(datazip, unzipSize);
+            } else {
+                buffer = pako_inflate.pako.inflate(datazip).buffer;
+            }
+
+            transferableObjects.push(buffer);
+            view = new DataView(buffer);
+            bytesOffset = 0;
+        }
+        // 不zip压缩的解析性能，测试用
+        else if (version > 1.199 && version < 1.201) {
+            var byteSize = view.getUint32(bytesOffset, true);
+            bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+            transferableObjects.push(buffer);
+        }
+        else {
+            //老版本的s3mb缓存,解析方式跟UGC保持一致
+            isOldVersion = true;
+            bytesOffset = 0;
+            var byteSize = view.getInt32(bytesOffset, true);
+            bytesOffset += Int32Array.BYTES_PER_ELEMENT;
+            bytesOffset += Uint8Array.BYTES_PER_ELEMENT * byteSize;
+
+            if (bZip) {
+                var zipSize = view.getUint32(bytesOffset, true);
+                bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+                var dataZip = new Uint8Array(buffer, bytesOffset);
+                buffer = pako_inflate.pako.inflate(dataZip).buffer;
+                transferableObjects.push(buffer);
+                view = new DataView(buffer);
+                bytesOffset = 0;
+            }
+        }
+
+        var nOptions = view.getUint32(bytesOffset, true);
+        bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+
+        // load Shell
+        var loadStreamResult = loadStream(view, buffer, bytesOffset);
+        var shellBuffer = loadStreamResult.buffer;
+        bytesOffset = loadStreamResult.byteOffset;
+        var groupNode = loadShellEntites(shellBuffer, view, loadStreamResult.dataViewByteOffset);
+        var align = bytesOffset % 4;
+        if (align !== 0) {
+            bytesOffset += (4 - align);
+        }
+
+        // load skeleton
+        loadStreamResult = loadStream(view, buffer, bytesOffset);
+        var skeletonBuffer = loadStreamResult.buffer;
+        loadSkeletonEntities(skeletonBuffer, view, loadStreamResult.dataViewByteOffset, createEdge, geoPackage, isOldVersion);
+        bytesOffset = loadStreamResult.byteOffset;
+
+        // load secondColor
+        loadStreamResult = loadStream(view, buffer, bytesOffset);
+        var secondColorBuffer = loadStreamResult.buffer;
+        bytesOffset = loadStreamResult.byteOffset;
+
+        // load textureData
+        loadStreamResult = loadStream(view, buffer, bytesOffset);
+        var textureDataBuffer = loadStreamResult.buffer;
+        var texturePackage = {};
+        loadTextureEntities(supportCompressType, textureDataBuffer, view, loadStreamResult.dataViewByteOffset, texturePackage, transferableObjects);
+        bytesOffset = loadStreamResult.byteOffset;
+
+        var strJsonMaterialsLength = view.getUint32(bytesOffset, true);
+        bytesOffset += Uint32Array.BYTES_PER_ELEMENT;
+        var typedArray = new Uint8Array(buffer);
+        var materialBuffer = typedArray.subarray(bytesOffset, bytesOffset + strJsonMaterialsLength);
+        var strJsonMaterials = S3MCompressType.getStringFromTypedArray(materialBuffer);
+        bytesOffset += strJsonMaterialsLength;
+        var matrialObj = JSON.parse(strJsonMaterials);
+
+        var bHasSelectionInfo = (nOptions & S3MBVertexOptions.SVO_HasInstSelInfo) == S3MBVertexOptions.SVO_HasInstSelInfo;
+        if (bHasSelectionInfo) {
+            loadStreamResult = loadStream(view, buffer, bytesOffset);
+            var selectionInfoBuffer = loadStreamResult.buffer;
+            loadSelectionInfo(selectionInfoBuffer, view, loadStreamResult.dataViewByteOffset, geoPackage);
+        }
+
+
+        var pagelodList = groupNode.pageLods;
+        var isLeafNode = true;
+        for (var i = 0; i < pagelodList.length; i++) {
+            var pagelodNode = pagelodList[i];
+            isLeafNode = pagelodNode.childTile === '';
+
+            var geodeList = pagelodNode.geodes;
+            for (var m = 0; m < geodeList.length; m++) {
+                var geodeNode = geodeList[m];
+                var skeletonNames = geodeNode.skeletonNames;
+                for (var n = 0; n < skeletonNames.length; n++) {
+                    var geoName = skeletonNames[n];
+                    if (isLeafNode) {
+                        var geo = geoPackage[geoName];
+                        var vertexPackage = geo.vertexPackage;
+                        vertexPackage.boundingSphere = S3MCompressType.S3MVertexPackage.calcBoundingSphereInWorker(fileType, vertexPackage);
+                    }
+                }
+            }
+        }
+
+        return {
+            result: true,
+            groupNode: groupNode,
+            geoPackage: geoPackage,
+            matrials: matrialObj,
+            texturePackage: texturePackage,
+            version: S3MVersion.S3M4
+        };
+    }
+
+    function initWorker(dracoModule) {
+        dracoLib = dracoModule;
+        self.onmessage = createTaskProcessorWorker(parseS3MB);
+        self.postMessage(true);
+    }
+
+    function S3MBTilesParser(event) {
+        var data = event.data;
+
+        // Expect the first message to be to load a web assembly module
+        var wasmConfig = data.webAssemblyConfig;
+        if (when.defined(wasmConfig)) {
+            if (FeatureDetection.FeatureDetection.isInternetExplorer()) {
+                return require([buildModuleUrl.buildModuleUrl('ThirdParty/Workers/ie-webworker-promise-polyfill.js')], function (e) {
+                    self.Promise = e;
+                    return require([wasmConfig.modulePath], function (dracoModule) {
+                        if (when.defined(wasmConfig.wasmBinaryFile)) {
+                            if (!when.defined(dracoModule)) {
+                                dracoModule = self.DracoDecoderModule;
+                            }
+
+                            dracoModule(wasmConfig).then(function (compiledModule) {
+                                initWorker(compiledModule);
+                            });
+                        } else {
+                            initWorker(dracoModule());
+                        }
+                    });
+                });
+            }
+            // Require and compile WebAssembly module, or use fallback if not supported
+            return require([wasmConfig.modulePath], function (dracoModule) {
+                if (when.defined(wasmConfig.wasmBinaryFile)) {
+                    if (!when.defined(dracoModule)) {
+                        dracoModule = self.DracoDecoderModule;
+                    }
+
+                    dracoModule(wasmConfig).then(function (compiledModule) {
+                        initWorker(compiledModule);
+                    });
+                } else {
+                    initWorker(dracoModule());
+                }
+            });
+        }
+    }
+    //export default createTaskProcessorWorker(S3MBTilesParser);
+
+    return S3MBTilesParser;
+
+});

@@ -20,60 +20,13315 @@
  * Portions licensed separately.
  * See https://github.com/AnalyticalGraphicsInc/cesium/blob/master/LICENSE.md for full licensing details.
  */
-/**
-  @license
-  when.js - https://github.com/cujojs/when
+define(['./when-8d13db60', './Check-70bec281', './Math-61ede240', './FeatureDetection-7bd32c34', './createTaskProcessorWorker', './Color-69f1845f', './pbf-9fe59c76'], function (when, Check, _Math, FeatureDetection, createTaskProcessorWorker, Color, pbf) { 'use strict';
 
-  MIT License (c) copyright B Cavalier & J Hann
+    // 用来根据Mapbox style标准构建过滤器和定义过滤方法
+    function MvtFilter() {
+    }
 
- * A lightweight CommonJS Promises/A and when() implementation
- * when is part of the cujo.js family of libraries (http://cujojs.com/)
- *
- * Licensed under the MIT License at:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * @version 1.7.1
- */
+    /**
+     * 根据根据Mapbox style的过滤器对象构造过滤条件
+     * @param filter 输入过滤器
+     * @returns 返回过滤条件数组
+     */
+    MvtFilter.parseLayerFilter = function(filter) {
+        if (!when.defined(filter) || !(filter instanceof Array)) {
+            return null;
+        }
 
-/**
-@license
-mersenne-twister.js - https://gist.github.com/banksean/300494
+        var filterArray = [];
+        var condition;
+        if (isOperator(filter[0])) {
+            condition = parseSingleFilterArray(filter);
+            if(when.defined(condition)){
+                filterArray.push(condition);
+            }
+        }
+        else{
+            for (var fi = 0; fi < filter.length; fi++) {
+                if (!(filter[fi] instanceof Array)) {
+                    continue;
+                }
 
-   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.
+                if (filter[fi].length !== 3) {
+                    for (var fj = 0; fj < filter[fi].length; fj++) {
+                        if (filter[fi][fj] instanceof Array && filter[fi][fj].length === 3) {
+                            condition = parseSingleFilterArray(filter[fi][fj]);
+                            if(when.defined(condition)){
+                                filterArray.push(condition);
+                            }
+                        }
+                    }
+                } else {
+                    condition = parseSingleFilterArray(filter[fi]);
+                    if(when.defined(condition)){
+                        filterArray.push(condition);
+                    }
+                }
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+            }
+        }
+        return filterArray;
+    };
 
-     1. Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
+    /**
+     * 根据对象的属性进行过滤条件测试
+     * @param filterArray 过滤条件数组
+     * @param properties 对象属性
+     * @returns 通过过滤条件返回true
+     */
+    MvtFilter.filterTest = function(properties, filterArray) {
+        for(var filterIdx = 0, filterCount = filterArray.length; filterIdx < filterCount; filterIdx++){
+            var filter = filterArray[filterIdx];
+            if(!compareFunctions[filter.filterOperator](properties, filter.filterFieldName, filter.filterCompareValue)){
+                return false;
+            }
+        }
+        return true;
+    };
 
-     2. Redistributions in binary form must reproduce the above copyright
-        notice, this list of conditions and the following disclaimer in the
-        documentation and/or other materials provided with the distribution.
+    function parseSingleFilterArray(filterArray){
+        var filterCompareValue = null;
+        var filterFieldName = null;
+        var filterOperator = null;
+        if (isOperator(filterArray[0])) {
+            filterOperator = filterArray[0];
+        }
+        else{
+            return null;
+        }
 
-     3. The names of its contributors may not be used to endorse or promote
-        products derived from this software without specific prior written
-        permission.
+        if(filterArray.length > 1){
+            filterFieldName = filterArray[1];
+            // TODO: 系统字段暂不处理
+            if(filterFieldName[0] === "$" ){
+                return null;
+            }
+        }
+        if(filterArray.length > 2){
+            filterCompareValue = filterArray[2];
+        }
+        return {
+            filterOperator : filterOperator,
+            filterFieldName : filterFieldName,
+            filterCompareValue : filterCompareValue
+        };
+    }
 
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    function isOperator(key) {
+        return ["==", "===", ">=", "<=", ">", "<", "!=", "has"].indexOf(key) !== -1;
+    }
 
-!function(){!function(t){"use strict";t("ThirdParty/when",[],function(){function t(t,r,n,i){return e(t).then(r,n,i)}function e(t){var e,r;return t instanceof n?e=t:a(t)?(r=s(),t.then(function(t){r.resolve(t)},function(t){r.reject(t)},function(t){r.progress(t)}),e=r.promise):e=i(t),e}function r(e){return t(e,o)}function n(t){this.then=t}function i(t){return new n(function(r){try{return e(r?r(t):t)}catch(t){return o(t)}})}function o(t){return new n(function(r,n){try{return n?e(n(t)):o(t)}catch(t){return o(t)}})}function s(){function t(t,e,r){return f(t,e,r)}function r(t){return p(t)}function i(t){return p(o(t))}function a(t){return d(t)}var l,h,u,c,f,d,p;return h=new n(t),l={then:t,resolve:r,reject:i,progress:a,promise:h,resolver:{resolve:r,reject:i,progress:a}},u=[],c=[],f=function(t,e,r){var n,i;return n=s(),i="function"==typeof r?function(t){try{n.progress(r(t))}catch(t){n.progress(t)}}:function(t){n.progress(t)},u.push(function(r){r.then(t,e).then(n.resolve,n.reject,i)}),c.push(i),n.promise},d=function(t){return g(c,t),t},p=function(t){return t=e(t),f=t.then,p=e,d=m,g(u,t),c=u=C,t},l}function a(t){return t&&"function"==typeof t.then}function l(e,r,n,i,o){return y(2,arguments),t(e,function(e){function a(t){g(t)}function l(t){p(t)}var h,u,c,f,d,p,g,y,v,_;if(v=e.length>>>0,h=Math.max(0,Math.min(r,v)),c=[],u=v-h+1,f=[],d=s(),h)for(y=d.progress,g=function(t){f.push(t),--u||(p=g=m,d.reject(f))},p=function(t){c.push(t),--h||(p=g=m,d.resolve(c))},_=0;_<v;++_)_ in e&&t(e[_],l,a,y);else d.resolve(c);return d.then(n,i,o)})}function h(t,e,r,n){function i(t){return e?e(t[0]):t[0]}return l(t,1,i,r,n)}function u(t,e,r,n){return y(1,arguments),f(t,v).then(e,r,n)}function c(){return f(arguments,v)}function f(e,r){return t(e,function(e){var n,i,o,a,l,h;if(o=i=e.length>>>0,n=[],h=s(),o)for(a=function(e,i){t(e,r).then(function(t){n[i]=t,--o||h.resolve(n)},h.reject)},l=0;l<i;l++)l in e?a(e[l],l):--o;else h.resolve(n);return h.promise})}function d(e,r){var n=S.call(arguments,1);return t(e,function(e){var i;return i=e.length,n[0]=function(e,n,o){return t(e,function(e){return t(n,function(t){return r(e,t,o,i)})})},_.apply(e,n)})}function p(e,r,n){var i=arguments.length>2;return t(e,function(t){return t=i?n:t,r.resolve(t),t},function(t){return r.reject(t),o(t)},r.progress)}function g(t,e){for(var r,n=0;r=t[n++];)r(e)}function y(t,e){for(var r,n=e.length;n>t;)if(null!=(r=e[--n])&&"function"!=typeof r)throw new Error("arg "+n+" must be a function")}function m(){}function v(t){return t}var _,S,C;return t.defer=s,t.resolve=e,t.reject=r,t.join=c,t.all=u,t.map=f,t.reduce=d,t.any=h,t.some=l,t.chain=p,t.isPromise=a,n.prototype={always:function(t,e){return this.then(t,t,e)},otherwise:function(t){return this.then(C,t)},yield:function(t){return this.then(function(){return t})},spread:function(t){return this.then(function(e){return u(e,function(e){return t.apply(C,e)})})}},S=[].slice,_=[].reduce||function(t){var e,r,n,i,o;if(o=0,e=Object(this),i=e.length>>>0,r=arguments,r.length<=1)for(;;){if(o in e){n=e[o++];break}if(++o>=i)throw new TypeError}else n=r[1];for(;o<i;++o)o in e&&(n=t(n,e[o],o,e));return n},t})}("function"==typeof define&&define.amd?define:function(t){"object"==typeof exports?module.exports=t():this.when=t()}),define("Core/defined",[],function(){"use strict";function t(t){return void 0!==t&&null!==t}return t}),define("Core/freezeObject",["./defined"],function(t){"use strict";var e=Object.freeze;return t(e)||(e=function(t){return t}),e}),define("Core/defaultValue",["./freezeObject"],function(t){"use strict";function e(t,e){return void 0!==t&&null!==t?t:e}return e.EMPTY_OBJECT=t({}),e}),define("Core/formatError",["./defined"],function(t){"use strict";function e(e){var r,n=e.name,i=e.message;r=t(n)&&t(i)?n+": "+i:e.toString();var o=e.stack;return t(o)&&(r+="\n"+o),r}return e}),define("Workers/createTaskProcessorWorker",["../ThirdParty/when","../Core/defaultValue","../Core/defined","../Core/formatError"],function(t,e,r,n){"use strict";function i(e,r,n){try{return e(r,n)}catch(e){return t.reject(e)}}function o(o){var s;return function(a){var l=a.data,h=[],u={id:l.id,result:void 0,error:void 0};return t(i(o,l.parameters,h)).then(function(t){u.result=t}).otherwise(function(t){t instanceof Error?u.error={name:t.name,message:t.message,stack:t.stack}:u.error=t}).always(function(){r(s)||(s=e(self.webkitPostMessage,self.postMessage)),l.canTransferArrayBuffer||(h.length=0);try{s(u,h)}catch(t){u.result=void 0,u.error="postMessage failed with error: "+n(t)+"\n  with responseMessage: "+JSON.stringify(u),s(u)}})}}return o}),define("Core/DeveloperError",["./defined"],function(t){"use strict";function e(t){this.name="DeveloperError",this.message=t;var e;try{throw new Error}catch(t){e=t.stack}this.stack=e}return t(Object.create)&&(e.prototype=Object.create(Error.prototype),e.prototype.constructor=e),e.prototype.toString=function(){var e=this.name+": "+this.message;return t(this.stack)&&(e+="\n"+this.stack.toString()),e},e.throwInstantiationError=function(){throw new e("This function defines an interface and should not be called directly.")},e}),define("Core/Check",["./defined","./DeveloperError"],function(t,e){"use strict";function r(t){return t+" is required, actual value was undefined"}function n(t,e,r){return"Expected "+r+" to be typeof "+e+", actual typeof was "+t}var i={};return i.typeOf={},i.defined=function(n,i){if(!t(i))throw new e(r(n))},i.typeOf.func=function(t,r){if("function"!=typeof r)throw new e(n(typeof r,"function",t))},i.typeOf.string=function(t,r){if("string"!=typeof r)throw new e(n(typeof r,"string",t))},i.typeOf.number=function(t,r){if("number"!=typeof r)throw new e(n(typeof r,"number",t))},i.typeOf.number.lessThan=function(t,r,n){if(i.typeOf.number(t,r),r>=n)throw new e("Expected "+t+" to be less than "+n+", actual value was "+r)},i.typeOf.number.lessThanOrEquals=function(t,r,n){if(i.typeOf.number(t,r),r>n)throw new e("Expected "+t+" to be less than or equal to "+n+", actual value was "+r)},i.typeOf.number.greaterThan=function(t,r,n){if(i.typeOf.number(t,r),r<=n)throw new e("Expected "+t+" to be greater than "+n+", actual value was "+r)},i.typeOf.number.greaterThanOrEquals=function(t,r,n){if(i.typeOf.number(t,r),r<n)throw new e("Expected "+t+" to be greater than or equal to"+n+", actual value was "+r)},i.typeOf.object=function(t,r){if("object"!=typeof r)throw new e(n(typeof r,"object",t))},i.typeOf.bool=function(t,r){if("boolean"!=typeof r)throw new e(n(typeof r,"boolean",t))},i.typeOf.number.equals=function(t,r,n,o){if(i.typeOf.number(t,n),i.typeOf.number(r,o),n!==o)throw new e(t+" must be equal to "+r+", the actual values are "+n+" and "+o)},i}),define("Core/defineProperties",["./defined"],function(t){"use strict";var e=function(){try{return"x"in Object.defineProperty({},"x",{})}catch(t){return!1}}(),r=Object.defineProperties;return e&&t(r)||(r=function(t){return t}),r}),define("Core/Fullscreen",["./defined","./defineProperties"],function(t,e){"use strict";var r,n={requestFullscreen:void 0,exitFullscreen:void 0,fullscreenEnabled:void 0,fullscreenElement:void 0,fullscreenchange:void 0,fullscreenerror:void 0},i={};return e(i,{element:{get:function(){if(i.supportsFullscreen())return document[n.fullscreenElement]}},changeEventName:{get:function(){if(i.supportsFullscreen())return n.fullscreenchange}},errorEventName:{get:function(){if(i.supportsFullscreen())return n.fullscreenerror}},enabled:{get:function(){if(i.supportsFullscreen())return document[n.fullscreenEnabled]}},fullscreen:{get:function(){if(i.supportsFullscreen())return null!==i.element}}}),i.supportsFullscreen=function(){if(t(r))return r;r=!1;var e=document.body;if("function"==typeof e.requestFullscreen)return n.requestFullscreen="requestFullscreen",n.exitFullscreen="exitFullscreen",n.fullscreenEnabled="fullscreenEnabled",n.fullscreenElement="fullscreenElement",n.fullscreenchange="fullscreenchange",n.fullscreenerror="fullscreenerror",r=!0;for(var i,o=["webkit","moz","o","ms","khtml"],s=0,a=o.length;s<a;++s){var l=o[s];i=l+"RequestFullscreen","function"==typeof e[i]?(n.requestFullscreen=i,r=!0):(i=l+"RequestFullScreen","function"==typeof e[i]&&(n.requestFullscreen=i,r=!0)),i=l+"ExitFullscreen","function"==typeof document[i]?n.exitFullscreen=i:(i=l+"CancelFullScreen","function"==typeof document[i]&&(n.exitFullscreen=i)),i=l+"FullscreenEnabled",void 0!==document[i]?n.fullscreenEnabled=i:(i=l+"FullScreenEnabled",void 0!==document[i]&&(n.fullscreenEnabled=i)),i=l+"FullscreenElement",void 0!==document[i]?n.fullscreenElement=i:(i=l+"FullScreenElement",void 0!==document[i]&&(n.fullscreenElement=i)),i=l+"fullscreenchange",void 0!==document["on"+i]&&("ms"===l&&(i="MSFullscreenChange"),n.fullscreenchange=i),i=l+"fullscreenerror",void 0!==document["on"+i]&&("ms"===l&&(i="MSFullscreenError"),n.fullscreenerror=i)}return r},i.requestFullscreen=function(t,e){i.supportsFullscreen()&&t[n.requestFullscreen]({vrDisplay:e})},i.exitFullscreen=function(){i.supportsFullscreen()&&document[n.exitFullscreen]()},i}),define("Core/RuntimeError",["./defined"],function(t){"use strict";function e(t){this.name="RuntimeError",this.message=t;var e;try{throw new Error}catch(t){e=t.stack}this.stack=e}return t(Object.create)&&(e.prototype=Object.create(Error.prototype),e.prototype.constructor=e),e.prototype.toString=function(){var e=this.name+": "+this.message;return t(this.stack)&&(e+="\n"+this.stack.toString()),e},e}),define("Core/FeatureDetection",["./defaultValue","./defined","./Fullscreen","./RuntimeError","../ThirdParty/when"],function(t,e,r,n,i){"use strict";function o(t){for(var e=t.split("."),r=0,n=e.length;r<n;++r)e[r]=parseInt(e[r],10);return e}function s(){if(!e(O)&&(O=!1,!p())){var t=/ Chrome\/([\.0-9]+)/.exec(R.userAgent);null!==t&&(O=!0,L=o(t[1]))}return O}function a(){return s()&&L}function l(){if(!e(F)&&(F=!1,!s()&&!p()&&/ Safari\/[\.0-9]+/.test(R.userAgent))){var t=/ Version\/([\.0-9]+)/.exec(R.userAgent);null!==t&&(F=!0,w=o(t[1]))}return F}function h(){return l()&&w}function u(){if(!e(M)){M=!1;var t=/ AppleWebKit\/([\.0-9]+)(\+?)/.exec(R.userAgent);null!==t&&(M=!0,A=o(t[1]),A.isNightly=!!t[2])}return M}function c(){return u()&&A}function f(){if(!e(G)){G=!1;var t;"Microsoft Internet Explorer"===R.appName?null!==(t=/MSIE ([0-9]{1,}[\.0-9]{0,})/.exec(R.userAgent))&&(G=!0,b=o(t[1])):"Netscape"===R.appName&&null!==(t=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(R.userAgent))&&(G=!0,b=o(t[1]))}return G}function d(){return f()&&b}function p(){if(!e(P)){P=!1;var t=/ Edge\/([\.0-9]+)/.exec(R.userAgent);null!==t&&(P=!0,D=o(t[1]))}return P}function g(){return p()&&D}function y(){if(!e(k)){k=!1;var t=/Firefox\/([\.0-9]+)/.exec(R.userAgent);null!==t&&(k=!0,N=o(t[1]))}return k}function m(){return e(B)||(B=/Windows/i.test(R.appVersion)),B}function v(){return y()&&N}function _(){return e(Y)||(Y="object"==typeof process&&"[object process]"===Object.prototype.toString.call(process)),Y}function S(){return e(U)||(U=!y()&&"undefined"!=typeof PointerEvent&&(!e(R.pointerEnabled)||R.pointerEnabled)),U}function C(){if(!e(W)){var t=document.createElement("canvas");t.setAttribute("style","image-rendering: -moz-crisp-edges;image-rendering: pixelated;");var r=t.style.imageRendering;W=e(r)&&""!==r,W&&(V=r)}return W}function x(){return C()?V:void 0}function I(){if(e(H))return H.promise;H=i.defer(),p()&&(X=!1,H.resolve(X));var t=new Image;return t.onload=function(){X=t.width>0&&t.height>0,H.resolve(X)},t.onerror=function(){X=!1,H.resolve(X)},t.src="data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",H.promise}function E(){return e(H)||I(),X}function T(){var t=window.navigator.userAgent.toLowerCase(),e="ipad"==t.match(/ipad/i),r="iphone os"==t.match(/iphone os/i),n="midp"==t.match(/midp/i),i="rv:1.2.3.4"==t.match(/rv:1.2.3.4/i),o="ucweb"==t.match(/ucweb/i),s="android"==t.match(/android/i),a="windows ce"==t.match(/windows ce/i),l="windows mobile"==t.match(/windows mobile/i);return!(e||r||n||i||o||s||a||l)}var R;R="undefined"!=typeof navigator?navigator:{};var O,L,F,w,M,A,G,b,P,D,k,N,B,Y,U,V,W,X,H,j=[];"undefined"!=typeof ArrayBuffer&&(j.push(Int8Array,Uint8Array,Int16Array,Uint16Array,Int32Array,Uint32Array,Float32Array,Float64Array),"undefined"!=typeof Uint8ClampedArray&&j.push(Uint8ClampedArray),"undefined"!=typeof CanvasPixelArray&&j.push(CanvasPixelArray));var q={isChrome:s,chromeVersion:a,isSafari:l,safariVersion:h,isWebkit:u,webkitVersion:c,isInternetExplorer:f,internetExplorerVersion:d,isEdge:p,edgeVersion:g,isFirefox:y,firefoxVersion:v,isWindows:m,isNodeJs:_,hardwareConcurrency:t(R.hardwareConcurrency,3),supportsPointerEvents:S,supportsImageRenderingPixelated:C,supportsWebP:I,supportsWebPSync:E,imageRenderingValue:x,typedArrayTypes:j,isPCBroswer:T};return q.supportsFullscreen=function(){return r.supportsFullscreen()},q.supportsTypedArrays=function(){return"undefined"!=typeof ArrayBuffer},q.supportsWebWorkers=function(){return"undefined"!=typeof Worker},q.supportsWebAssembly=function(){return"undefined"!=typeof WebAssembly&&!q.isEdge()},q.supportsOffscreenCanvas=function(){return"undefined"!=typeof OffscreenCanvas&&!q.isEdge()},q}),define("ThirdParty/mersenne-twister",[],function(){var t=function(t){void 0==t&&(t=(new Date).getTime()),this.N=624,this.M=397,this.MATRIX_A=2567483615,this.UPPER_MASK=2147483648,this.LOWER_MASK=2147483647,this.mt=new Array(this.N),this.mti=this.N+1,this.init_genrand(t)};return t.prototype.init_genrand=function(t){for(this.mt[0]=t>>>0,this.mti=1;this.mti<this.N;this.mti++){var t=this.mt[this.mti-1]^this.mt[this.mti-1]>>>30;this.mt[this.mti]=(1812433253*((4294901760&t)>>>16)<<16)+1812433253*(65535&t)+this.mti,this.mt[this.mti]>>>=0}},t.prototype.genrand_int32=function(){var t,e=new Array(0,this.MATRIX_A);if(this.mti>=this.N){var r;for(this.mti==this.N+1&&this.init_genrand(5489),r=0;r<this.N-this.M;r++)t=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+this.M]^t>>>1^e[1&t];for(;r<this.N-1;r++)t=this.mt[r]&this.UPPER_MASK|this.mt[r+1]&this.LOWER_MASK,this.mt[r]=this.mt[r+(this.M-this.N)]^t>>>1^e[1&t];t=this.mt[this.N-1]&this.UPPER_MASK|this.mt[0]&this.LOWER_MASK,this.mt[this.N-1]=this.mt[this.M-1]^t>>>1^e[1&t],this.mti=0}return t=this.mt[this.mti++],t^=t>>>11,t^=t<<7&2636928640,t^=t<<15&4022730752,(t^=t>>>18)>>>0},t.prototype.random=function(){return this.genrand_int32()*(1/4294967296)},t}),define("Core/Math",["../ThirdParty/mersenne-twister","./Check","./defaultValue","./defined","./DeveloperError"],function(t,e,r,n,i){"use strict";var o={};o.Radius=6378137,o.EPSILON1=.1,o.EPSILON2=.01,o.EPSILON3=.001,o.EPSILON4=1e-4,o.EPSILON5=1e-5,o.EPSILON6=1e-6,o.EPSILON7=1e-7,o.EPSILON8=1e-8,o.EPSILON9=1e-9,o.EPSILON10=1e-10,o.EPSILON11=1e-11,o.EPSILON12=1e-12,o.EPSILON13=1e-13,o.EPSILON14=1e-14,o.EPSILON15=1e-15,o.EPSILON16=1e-16,o.EPSILON17=1e-17,o.EPSILON18=1e-18,o.EPSILON19=1e-19,o.EPSILON20=1e-20,o.EPSILON21=1e-21,o.GRAVITATIONALPARAMETER=3986004418e5,o.SOLAR_RADIUS=6955e5,o.LUNAR_RADIUS=1737400,o.SIXTY_FOUR_KILOBYTES=65536,o.sign=r(Math.sign,function(t){return t=+t,0===t||t!==t?t:t>0?1:-1}),o.signNotZero=function(t){return t<0?-1:1},o.toSNorm=function(t,e){return e=r(e,255),Math.round((.5*o.clamp(t,-1,1)+.5)*e)},o.fromSNorm=function(t,e){return e=r(e,255),o.clamp(t,0,e)/e*2-1},o.sinh=r(Math.sinh,function(t){return(Math.exp(t)-Math.exp(-t))/2}),o.cosh=r(Math.cosh,function(t){return(Math.exp(t)+Math.exp(-t))/2}),o.lerp=function(t,e,r){return(1-r)*t+r*e},o.PI=Math.PI,o.ONE_OVER_PI=1/Math.PI,o.PI_OVER_TWO=Math.PI/2,o.PI_OVER_THREE=Math.PI/3,o.PI_OVER_FOUR=Math.PI/4,o.PI_OVER_SIX=Math.PI/6,o.THREE_PI_OVER_TWO=3*Math.PI/2,o.TWO_PI=2*Math.PI,o.ONE_OVER_TWO_PI=1/(2*Math.PI),o.RADIANS_PER_DEGREE=Math.PI/180,o.DEGREES_PER_RADIAN=180/Math.PI,o.RADIANS_PER_ARCSECOND=o.RADIANS_PER_DEGREE/3600,o.toRadians=function(t){if(!n(t))throw new i("degrees is required.");return t*o.RADIANS_PER_DEGREE},o.toDegrees=function(t){if(!n(t))throw new i("radians is required.");return t*o.DEGREES_PER_RADIAN},o.convertLongitudeRange=function(t){if(!n(t))throw new i("angle is required.");var e=o.TWO_PI,r=t-Math.floor(t/e)*e;return r<-Math.PI?r+e:r>=Math.PI?r-e:r},o.clampToLatitudeRange=function(t){if(!n(t))throw new i("angle is required.");return o.clamp(t,-1*o.PI_OVER_TWO,o.PI_OVER_TWO)},o.negativePiToPi=function(t){if(!n(t))throw new i("angle is required.");return o.zeroToTwoPi(t+o.PI)-o.PI},o.zeroToTwoPi=function(t){if(!n(t))throw new i("angle is required.");var e=o.mod(t,o.TWO_PI);return Math.abs(e)<o.EPSILON14&&Math.abs(t)>o.EPSILON14?o.TWO_PI:e},o.mod=function(t,e){if(!n(t))throw new i("m is required.");if(!n(e))throw new i("n is required.");return(t%e+e)%e},o.equalsEpsilon=function(t,e,o,s){if(!n(t))throw new i("left is required.");if(!n(e))throw new i("right is required.");if(!n(o))throw new i("relativeEpsilon is required.");s=r(s,o);var a=Math.abs(t-e);return a<=s||a<=o*Math.max(Math.abs(t),Math.abs(e))},o.lessThan=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e<-r},o.lessThanOrEquals=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e<r},o.greaterThan=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e>r},o.greaterThanOrEquals=function(t,e,r){if(!n(t))throw new i("first is required.");if(!n(e))throw new i("second is required.");if(!n(r))throw new i("relativeEpsilon is required.");return t-e>-r};var s=[1];o.factorial=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");var e=s.length;if(t>=e)for(var r=s[e-1],n=e;n<=t;n++)s.push(r*n);return s[t]},o.incrementWrap=function(t,e,o){if(o=r(o,0),!n(t))throw new i("n is required.");if(e<=o)throw new i("maximumValue must be greater than minimumValue.");return++t,t>e&&(t=o),t},o.isPowerOfTwo=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");return 0!==t&&0==(t&t-1)},o.nextPowerOfTwo=function(t){if("number"!=typeof t||t<0)throw new i("A number greater than or equal to 0 is required.");return--t,t|=t>>1,t|=t>>2,t|=t>>4,t|=t>>8,t|=t>>16,++t},o.clamp=function(t,e,r){if(!n(t))throw new i("value is required");if(!n(e))throw new i("min is required.");if(!n(r))throw new i("max is required.");return t<e?e:t>r?r:t};var a=new t;return o.setRandomNumberSeed=function(e){if(!n(e))throw new i("seed is required.");a=new t(e)},o.nextRandomNumber=function(){return a.random()},o.randomBetween=function(t,e){return o.nextRandomNumber()*(e-t)+t},o.acosClamped=function(t){if(!n(t))throw new i("value is required.");return Math.acos(o.clamp(t,-1,1))},o.asinClamped=function(t){if(!n(t))throw new i("value is required.");return Math.asin(o.clamp(t,-1,1))},o.chordLength=function(t,e){if(!n(t))throw new i("angle is required.");if(!n(e))throw new i("radius is required.");return 2*e*Math.sin(.5*t)},o.logBase=function(t,e){if(!n(t))throw new i("number is required.");if(!n(e))throw new i("base is required.");return Math.log(t)/Math.log(e)},o.cbrt=r(Math.cbrt,function(t){var e=Math.pow(Math.abs(t),1/3);return t<0?-e:e}),o.log2=r(Math.log2,function(t){return Math.log(t)*Math.LOG2E}),o.fog=function(t,e){var r=t*e;return 1-Math.exp(-r*r)},o.fastApproximateAtan=function(t){return e.typeOf.number("x",t),t*(-.1784*Math.abs(t)-.0663*t*t+1.0301)},o.fastApproximateAtan2=function(t,r){e.typeOf.number("x",t),e.typeOf.number("y",r);var n,s,a=Math.abs(t);n=Math.abs(r),s=Math.max(a,n),n=Math.min(a,n);var l=n/s;if(isNaN(l))throw new i("either x or y must be nonzero");return a=o.fastApproximateAtan(l),a=Math.abs(r)>Math.abs(t)?o.PI_OVER_TWO-a:a,a=t<0?o.PI-a:a,a=r<0?-a:a},o}),define("Core/Color",["./Check","./defaultValue","./defined","./FeatureDetection","./freezeObject","./Math"],function(t,e,r,n,i,o){"use strict";function s(t,e,r){return r<0&&(r+=1),r>1&&(r-=1),6*r<1?t+6*(e-t)*r:2*r<1?e:3*r<2?t+(e-t)*(2/3-r)*6:t}function a(t,r,n,i){this.red=e(t,1),this.green=e(r,1),this.blue=e(n,1),this.alpha=e(i,1)}a.fromCartesian4=function(e,n){return t.typeOf.object("cartesian",e),r(n)?(n.red=e.x,n.green=e.y,n.blue=e.z,n.alpha=e.w,n):new a(e.x,e.y,e.z,e.w)},a.fromBytes=function(t,n,i,o,s){return t=a.byteToFloat(e(t,255)),n=a.byteToFloat(e(n,255)),i=a.byteToFloat(e(i,255)),o=a.byteToFloat(e(o,255)),r(s)?(s.red=t,s.green=n,s.blue=i,s.alpha=o,s):new a(t,n,i,o)},a.fromAlpha=function(e,n,i){return t.typeOf.object("color",e),t.typeOf.number("alpha",n),r(i)?(i.red=e.red,i.green=e.green,i.blue=e.blue,i.alpha=n,i):new a(e.red,e.green,e.blue,n)};var l,h,u;n.supportsTypedArrays()&&(l=new ArrayBuffer(4),h=new Uint32Array(l),u=new Uint8Array(l)),a.fromRgba=function(t,e){return h[0]=t,a.fromBytes(u[0],u[1],u[2],u[3],e)},a.fromHsl=function(t,n,i,o,l){t=e(t,0)%1,n=e(n,0),i=e(i,0),o=e(o,1);var h=i,u=i,c=i;if(0!==n){var f;f=i<.5?i*(1+n):i+n-i*n;var d=2*i-f;h=s(d,f,t+1/3),u=s(d,f,t),c=s(d,f,t-1/3)}return r(l)?(l.red=h,l.green=u,l.blue=c,l.alpha=o,l):new a(h,u,c,o)},a.fromRandom=function(n,i){n=e(n,e.EMPTY_OBJECT);var s=n.red;if(!r(s)){var l=e(n.minimumRed,0),h=e(n.maximumRed,1);t.typeOf.number.lessThanOrEquals("minimumRed",l,h),s=l+o.nextRandomNumber()*(h-l)}var u=n.green;if(!r(u)){var c=e(n.minimumGreen,0),f=e(n.maximumGreen,1);t.typeOf.number.lessThanOrEquals("minimumGreen",c,f),u=c+o.nextRandomNumber()*(f-c)}var d=n.blue;if(!r(d)){var p=e(n.minimumBlue,0),g=e(n.maximumBlue,1);t.typeOf.number.lessThanOrEquals("minimumBlue",p,g),d=p+o.nextRandomNumber()*(g-p)}var y=n.alpha;if(!r(y)){var m=e(n.minimumAlpha,0),v=e(n.maximumAlpha,1);t.typeOf.number.lessThanOrEquals("minumumAlpha",m,v),y=m+o.nextRandomNumber()*(v-m)}return r(i)?(i.red=s,i.green=u,i.blue=d,i.alpha=y,i):new a(s,u,d,y)};var c=/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i,f=/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i,d=/^rgba?\(\s*([0-9.]+%?)\s*,\s*([0-9.]+%?)\s*,\s*([0-9.]+%?)(?:\s*,\s*([0-9.]+))?\s*\)$/i,p=/^hsla?\(\s*([0-9.]+)\s*,\s*([0-9.]+%)\s*,\s*([0-9.]+%)(?:\s*,\s*([0-9.]+))?\s*\)$/i;return a.fromCssColorString=function(n,i){t.typeOf.string("color",n),r(i)||(i=new a);var o=a[n.toUpperCase()];if(r(o))return a.clone(o,i),i;var s=c.exec(n);return null!==s?(i.red=parseInt(s[1],16)/15,i.green=parseInt(s[2],16)/15,i.blue=parseInt(s[3],16)/15,i.alpha=1,i):null!==(s=f.exec(n))?(i.red=parseInt(s[1],16)/255,i.green=parseInt(s[2],16)/255,i.blue=parseInt(s[3],16)/255,i.alpha=1,i):null!==(s=d.exec(n))?(i.red=parseFloat(s[1])/("%"===s[1].substr(-1)?100:255),i.green=parseFloat(s[2])/("%"===s[2].substr(-1)?100:255),i.blue=parseFloat(s[3])/("%"===s[3].substr(-1)?100:255),i.alpha=parseFloat(e(s[4],"1.0")),i):null!==(s=p.exec(n))?a.fromHsl(parseFloat(s[1])/360,parseFloat(s[2])/100,parseFloat(s[3])/100,parseFloat(e(s[4],"1.0")),i):i=void 0},a.packedLength=4,a.pack=function(r,n,i){return t.typeOf.object("value",r),t.defined("array",n),i=e(i,0),n[i++]=r.red,n[i++]=r.green,n[i++]=r.blue,n[i]=r.alpha,n},a.unpack=function(n,i,o){return t.defined("array",n),i=e(i,0),r(o)||(o=new a),o.red=n[i++],o.green=n[i++],o.blue=n[i++],o.alpha=n[i],o},a.byteToFloat=function(t){return t/255},a.floatToByte=function(t){return 1===t?255:256*t|0},a.clone=function(t,e){if(r(t))return r(e)?(e.red=t.red,e.green=t.green,e.blue=t.blue,e.alpha=t.alpha,e):new a(t.red,t.green,t.blue,t.alpha)},a.equals=function(t,e){return t===e||r(t)&&r(e)&&t.red===e.red&&t.green===e.green&&t.blue===e.blue&&t.alpha===e.alpha},a.equalsArray=function(t,e,r){return t.red===e[r]&&t.green===e[r+1]&&t.blue===e[r+2]&&t.alpha===e[r+3]},a.prototype.clone=function(t){return a.clone(this,t)},a.prototype.equals=function(t){return a.equals(this,t)},a.prototype.equalsEpsilon=function(t,e){return this===t||r(t)&&Math.abs(this.red-t.red)<=e&&Math.abs(this.green-t.green)<=e&&Math.abs(this.blue-t.blue)<=e&&Math.abs(this.alpha-t.alpha)<=e},a.prototype.toString=function(){return"("+this.red+", "+this.green+", "+this.blue+", "+this.alpha+")"},a.prototype.toCssColorString=function(){var t=a.floatToByte(this.red),e=a.floatToByte(this.green),r=a.floatToByte(this.blue);return 1===this.alpha?"rgb("+t+","+e+","+r+")":"rgba("+t+","+e+","+r+","+this.alpha+")"},a.prototype.toBytes=function(t){var e=a.floatToByte(this.red),n=a.floatToByte(this.green),i=a.floatToByte(this.blue),o=a.floatToByte(this.alpha);return r(t)?(t[0]=e,t[1]=n,t[2]=i,t[3]=o,t):[e,n,i,o]},a.prototype.toRgba=function(){return u[0]=a.floatToByte(this.red),u[1]=a.floatToByte(this.green),u[2]=a.floatToByte(this.blue),u[3]=a.floatToByte(this.alpha),h[0]},a.prototype.brighten=function(e,r){return t.typeOf.number("magnitude",e),t.typeOf.number.greaterThanOrEquals("magnitude",e,0),t.typeOf.object("result",r),e=1-e,r.red=1-(1-this.red)*e,r.green=1-(1-this.green)*e,r.blue=1-(1-this.blue)*e,r.alpha=this.alpha,r},a.prototype.darken=function(e,r){return t.typeOf.number("magnitude",e),t.typeOf.number.greaterThanOrEquals("magnitude",e,0),t.typeOf.object("result",r),e=1-e,r.red=this.red*e,r.green=this.green*e,r.blue=this.blue*e,r.alpha=this.alpha,r},a.prototype.withAlpha=function(t,e){return a.fromAlpha(this,t,e)},a.add=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red+r.red,n.green=e.green+r.green,n.blue=e.blue+r.blue,n.alpha=e.alpha+r.alpha,n},a.subtract=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red-r.red,n.green=e.green-r.green,n.blue=e.blue-r.blue,n.alpha=e.alpha-r.alpha,n},a.multiply=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red*r.red,n.green=e.green*r.green,n.blue=e.blue*r.blue,n.alpha=e.alpha*r.alpha,n},a.divide=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red/r.red,n.green=e.green/r.green,n.blue=e.blue/r.blue,n.alpha=e.alpha/r.alpha,n},a.mod=function(e,r,n){return t.typeOf.object("left",e),t.typeOf.object("right",r),t.typeOf.object("result",n),n.red=e.red%r.red,n.green=e.green%r.green,n.blue=e.blue%r.blue,n.alpha=e.alpha%r.alpha,n},a.multiplyByScalar=function(e,r,n){return t.typeOf.object("color",e),t.typeOf.number("scalar",r),t.typeOf.object("result",n),n.red=e.red*r,n.green=e.green*r,n.blue=e.blue*r,n.alpha=e.alpha*r,n},a.divideByScalar=function(e,r,n){return t.typeOf.object("color",e),t.typeOf.number("scalar",r),t.typeOf.object("result",n),n.red=e.red/r,n.green=e.green/r,n.blue=e.blue/r,n.alpha=e.alpha/r,n},a.ALICEBLUE=i(a.fromCssColorString("#F0F8FF")),a.ANTIQUEWHITE=i(a.fromCssColorString("#FAEBD7")),a.AQUA=i(a.fromCssColorString("#00FFFF")),a.AQUAMARINE=i(a.fromCssColorString("#7FFFD4")),a.AZURE=i(a.fromCssColorString("#F0FFFF")),a.BEIGE=i(a.fromCssColorString("#F5F5DC")),a.BISQUE=i(a.fromCssColorString("#FFE4C4")),a.BLACK=i(a.fromCssColorString("#000000")),a.BLANCHEDALMOND=i(a.fromCssColorString("#FFEBCD")),a.BLUE=i(a.fromCssColorString("#0000FF")),a.BLUEVIOLET=i(a.fromCssColorString("#8A2BE2")),a.BROWN=i(a.fromCssColorString("#A52A2A")),a.BURLYWOOD=i(a.fromCssColorString("#DEB887")),a.CADETBLUE=i(a.fromCssColorString("#5F9EA0")),a.CHARTREUSE=i(a.fromCssColorString("#7FFF00")),a.CHOCOLATE=i(a.fromCssColorString("#D2691E")),a.CORAL=i(a.fromCssColorString("#FF7F50")),a.CORNFLOWERBLUE=i(a.fromCssColorString("#6495ED")),a.CORNSILK=i(a.fromCssColorString("#FFF8DC")),a.CRIMSON=i(a.fromCssColorString("#DC143C")),a.CYAN=i(a.fromCssColorString("#00FFFF")),a.DARKBLUE=i(a.fromCssColorString("#00008B")),a.DARKCYAN=i(a.fromCssColorString("#008B8B")),a.DARKGOLDENROD=i(a.fromCssColorString("#B8860B")),a.DARKGRAY=i(a.fromCssColorString("#A9A9A9")),a.DARKGREEN=i(a.fromCssColorString("#006400")),a.DARKGREY=a.DARKGRAY,a.DARKKHAKI=i(a.fromCssColorString("#BDB76B")),a.DARKMAGENTA=i(a.fromCssColorString("#8B008B")),a.DARKOLIVEGREEN=i(a.fromCssColorString("#556B2F")),a.DARKORANGE=i(a.fromCssColorString("#FF8C00")),a.DARKORCHID=i(a.fromCssColorString("#9932CC")),a.DARKRED=i(a.fromCssColorString("#8B0000")),a.DARKSALMON=i(a.fromCssColorString("#E9967A")),a.DARKSEAGREEN=i(a.fromCssColorString("#8FBC8F")),a.DARKSLATEBLUE=i(a.fromCssColorString("#483D8B")),a.DARKSLATEGRAY=i(a.fromCssColorString("#2F4F4F")),a.DARKSLATEGREY=a.DARKSLATEGRAY,a.DARKTURQUOISE=i(a.fromCssColorString("#00CED1")),a.DARKVIOLET=i(a.fromCssColorString("#9400D3")),a.DEEPPINK=i(a.fromCssColorString("#FF1493")),a.DEEPSKYBLUE=i(a.fromCssColorString("#00BFFF")),a.DIMGRAY=i(a.fromCssColorString("#696969")),a.DIMGREY=a.DIMGRAY,a.DODGERBLUE=i(a.fromCssColorString("#1E90FF")),a.FIREBRICK=i(a.fromCssColorString("#B22222")),a.FLORALWHITE=i(a.fromCssColorString("#FFFAF0")),a.FORESTGREEN=i(a.fromCssColorString("#228B22")),a.FUCHSIA=i(a.fromCssColorString("#FF00FF")),a.GAINSBORO=i(a.fromCssColorString("#DCDCDC")),a.GHOSTWHITE=i(a.fromCssColorString("#F8F8FF")),a.GOLD=i(a.fromCssColorString("#FFD700")),a.GOLDENROD=i(a.fromCssColorString("#DAA520")),a.GRAY=i(a.fromCssColorString("#808080")),a.GREEN=i(a.fromCssColorString("#008000")),a.GREENYELLOW=i(a.fromCssColorString("#ADFF2F")),a.GREY=a.GRAY,a.HONEYDEW=i(a.fromCssColorString("#F0FFF0")),a.HOTPINK=i(a.fromCssColorString("#FF69B4")),a.INDIANRED=i(a.fromCssColorString("#CD5C5C")),a.INDIGO=i(a.fromCssColorString("#4B0082")),a.IVORY=i(a.fromCssColorString("#FFFFF0")),a.KHAKI=i(a.fromCssColorString("#F0E68C")),a.LAVENDER=i(a.fromCssColorString("#E6E6FA")),a.LAVENDAR_BLUSH=i(a.fromCssColorString("#FFF0F5")),a.LAWNGREEN=i(a.fromCssColorString("#7CFC00")),a.LEMONCHIFFON=i(a.fromCssColorString("#FFFACD")),a.LIGHTBLUE=i(a.fromCssColorString("#ADD8E6")),a.LIGHTCORAL=i(a.fromCssColorString("#F08080")),a.LIGHTCYAN=i(a.fromCssColorString("#E0FFFF")),a.LIGHTGOLDENRODYELLOW=i(a.fromCssColorString("#FAFAD2")),a.LIGHTGRAY=i(a.fromCssColorString("#D3D3D3")),a.LIGHTGREEN=i(a.fromCssColorString("#90EE90")),a.LIGHTGREY=a.LIGHTGRAY,a.LIGHTPINK=i(a.fromCssColorString("#FFB6C1")),a.LIGHTSEAGREEN=i(a.fromCssColorString("#20B2AA")),a.LIGHTSKYBLUE=i(a.fromCssColorString("#87CEFA")),a.LIGHTSLATEGRAY=i(a.fromCssColorString("#778899")),a.LIGHTSLATEGREY=a.LIGHTSLATEGRAY,a.LIGHTSTEELBLUE=i(a.fromCssColorString("#B0C4DE")),a.LIGHTYELLOW=i(a.fromCssColorString("#FFFFE0")),a.LIME=i(a.fromCssColorString("#00FF00")),a.LIMEGREEN=i(a.fromCssColorString("#32CD32")),a.LINEN=i(a.fromCssColorString("#FAF0E6")),a.MAGENTA=i(a.fromCssColorString("#FF00FF")),a.MAROON=i(a.fromCssColorString("#800000")),a.MEDIUMAQUAMARINE=i(a.fromCssColorString("#66CDAA")),a.MEDIUMBLUE=i(a.fromCssColorString("#0000CD")),a.MEDIUMORCHID=i(a.fromCssColorString("#BA55D3")),a.MEDIUMPURPLE=i(a.fromCssColorString("#9370DB")),a.MEDIUMSEAGREEN=i(a.fromCssColorString("#3CB371")),a.MEDIUMSLATEBLUE=i(a.fromCssColorString("#7B68EE")),a.MEDIUMSPRINGGREEN=i(a.fromCssColorString("#00FA9A")),a.MEDIUMTURQUOISE=i(a.fromCssColorString("#48D1CC")),a.MEDIUMVIOLETRED=i(a.fromCssColorString("#C71585")),a.MIDNIGHTBLUE=i(a.fromCssColorString("#191970")),a.MINTCREAM=i(a.fromCssColorString("#F5FFFA")),a.MISTYROSE=i(a.fromCssColorString("#FFE4E1")),a.MOCCASIN=i(a.fromCssColorString("#FFE4B5")),a.NAVAJOWHITE=i(a.fromCssColorString("#FFDEAD")),a.NAVY=i(a.fromCssColorString("#000080")),a.OLDLACE=i(a.fromCssColorString("#FDF5E6")),a.OLIVE=i(a.fromCssColorString("#808000")),a.OLIVEDRAB=i(a.fromCssColorString("#6B8E23")),a.ORANGE=i(a.fromCssColorString("#FFA500")),a.ORANGERED=i(a.fromCssColorString("#FF4500")),a.ORCHID=i(a.fromCssColorString("#DA70D6")),a.PALEGOLDENROD=i(a.fromCssColorString("#EEE8AA")),a.PALEGREEN=i(a.fromCssColorString("#98FB98")),a.PALETURQUOISE=i(a.fromCssColorString("#AFEEEE")),a.PALEVIOLETRED=i(a.fromCssColorString("#DB7093")),a.PAPAYAWHIP=i(a.fromCssColorString("#FFEFD5")),a.PEACHPUFF=i(a.fromCssColorString("#FFDAB9")),a.PERU=i(a.fromCssColorString("#CD853F")),a.PINK=i(a.fromCssColorString("#FFC0CB")),a.PLUM=i(a.fromCssColorString("#DDA0DD")),a.POWDERBLUE=i(a.fromCssColorString("#B0E0E6")),
-a.PURPLE=i(a.fromCssColorString("#800080")),a.RED=i(a.fromCssColorString("#FF0000")),a.ROSYBROWN=i(a.fromCssColorString("#BC8F8F")),a.ROYALBLUE=i(a.fromCssColorString("#4169E1")),a.SADDLEBROWN=i(a.fromCssColorString("#8B4513")),a.SALMON=i(a.fromCssColorString("#FA8072")),a.SANDYBROWN=i(a.fromCssColorString("#F4A460")),a.SEAGREEN=i(a.fromCssColorString("#2E8B57")),a.SEASHELL=i(a.fromCssColorString("#FFF5EE")),a.SIENNA=i(a.fromCssColorString("#A0522D")),a.SILVER=i(a.fromCssColorString("#C0C0C0")),a.SKYBLUE=i(a.fromCssColorString("#87CEEB")),a.SLATEBLUE=i(a.fromCssColorString("#6A5ACD")),a.SLATEGRAY=i(a.fromCssColorString("#708090")),a.SLATEGREY=a.SLATEGRAY,a.SNOW=i(a.fromCssColorString("#FFFAFA")),a.SPRINGGREEN=i(a.fromCssColorString("#00FF7F")),a.STEELBLUE=i(a.fromCssColorString("#4682B4")),a.TAN=i(a.fromCssColorString("#D2B48C")),a.TEAL=i(a.fromCssColorString("#008080")),a.THISTLE=i(a.fromCssColorString("#D8BFD8")),a.TOMATO=i(a.fromCssColorString("#FF6347")),a.TURQUOISE=i(a.fromCssColorString("#40E0D0")),a.VIOLET=i(a.fromCssColorString("#EE82EE")),a.WHEAT=i(a.fromCssColorString("#F5DEB3")),a.WHITE=i(a.fromCssColorString("#FFFFFF")),a.WHITESMOKE=i(a.fromCssColorString("#F5F5F5")),a.YELLOW=i(a.fromCssColorString("#FFFF00")),a.YELLOWGREEN=i(a.fromCssColorString("#9ACD32")),a.TRANSPARENT=i(new a(0,0,0,0)),a}),define("Scene/MvtFilter",["../Core/defaultValue","../Core/defined"],function(t,e){"use strict";function r(){}function n(t){var e=null,r=null,n=null;return i(t[0])?(n=t[0],t.length>1&&(r=t[1],"$"===r[0])?null:(t.length>2&&(e=t[2]),{filterOperator:n,filterFieldName:r,filterCompareValue:e})):null}function i(t){return-1!==["==","===",">=","<=",">","<","!=","has"].indexOf(t)}function o(t,e,r){return t[e]==r}function s(t,e,r){return t[e]>r}function a(t,e,r){return t[e]<r}function l(t,e,r){return t[e]>=r}function h(t,e,r){return t[e]<=r}function u(t,e,r){return t[e]!=r}function c(t,r){return e(t[r])}r.parseLayerFilter=function(t){if(!(e(t)&&t instanceof Array))return null;var r,o=[];if(i(t[0]))r=n(t),e(r)&&o.push(r);else for(var s=0;s<t.length;s++)if(t[s]instanceof Array)if(3!==t[s].length)for(var a=0;a<t[s].length;a++)t[s][a]instanceof Array&&3===t[s][a].length&&(r=n(t[s][a]),e(r)&&o.push(r));else r=n(t[s]),e(r)&&o.push(r);return o},r.filterTest=function(t,e){for(var r=0,n=e.length;r<n;r++){var i=e[r];if(!f[i.filterOperator](t,i.filterFieldName,i.filterCompareValue))return!1}return!0};var f={"==":o,"===":o,">":s,"<":a,">=":l,"<=":h,"!=":u,has:c};return r}),define("Scene/MvtStyle",["../Core/Color","../Core/defaultValue","../Core/defined","../Core/defineProperties","../Core/DeveloperError"],function(t,e,r,n,i){"use strict";function o(t,e){if(!t)throw new i("need include ol-debug.js");this._useOffscreen=e,this._openlayer=t}function s(t){var e=t.substring(t.indexOf("(")+1,t.indexOf(")"));e=e.split(",");var r=[];return r.push(parseFloat(e[0])),r.push(parseFloat(e[1])),r.push(parseFloat(e[2])),r.push(parseFloat(e[3])),r}function a(t,e){if(t&&void 0!==e){var r={color:[255*t[0]/t[3],255*t[1]/t[3],255*t[2]/t[3],t[3]],opacity:t[3]};t=r.color,t[3]=r.opacity*e,0===t[3]&&(t=void 0)}return t}function l(t,e){var r=Math.floor(t/65536),n=t-65536*r,i=Math.floor(n/256),o=n-256*i;return c.red=o/256,c.green=i/256,c.blue=r/256,c.alpha=1,c}function h(t,e){var r;do{if(r=t.match(f)){const n=e[r[2]]||"";t=r[1]+n+r[3]}}while(r);return t}function u(t){var e=[.5,.5];return["top-left","top-right","bottom-left","bottom-right"].includes(t)&&(e=[0,0]),"left"===t&&(t="top-left",e=[0,.5]),"right"===t&&(t="top-left",e=[1,.5]),"bottom"===t&&(t="top-left",e=[.5,1]),"top"===t&&(t="top-left",e=[.5,0]),{anchorOffset:e,iconAnchor:t}}n(o.prototype,{proxy:{get:function(){}}}),o.prototype.getStyle=function(){var t=this._openlayer,e=new t.style.Fill({color:""});e.setColor("#ffffff");var r=new t.style.Stroke({color:"",width:1});return r.setWidth(1),r.setColor("#000000"),new t.style.Style({fill:e,stroke:r})},o.prototype.getStyleByMapboxStyle=function(t){var e=this._openlayer,n=t.type,i=t.paint,o=t.layout;if(!r(n)||!r(i))return this.getStyle();if("fill"==n){var l=new e.style.Style({}),h=new e.style.Fill({color:"[255,255,255,1]"});l.setFill(h);var u=i["fill-opacity"];if(r(i["fill-color"])){var c=s(i["fill-color"]);r(u)&&(c[3]*=u),h.setColor(c)}if(r(i["fill-outline-color"])){var f=new e.style.Stroke({color:"",width:1});f.setColor(i["fill-outline-color"]),l.setStroke(f)}return r(i["fill-pattern"])&&(l.fillPatternName=i["fill-pattern"]),l}if("line"==n){var d=new e.style.Style({}),p=new e.style.Stroke({color:"#000000",width:1});d.setStroke(p);var g=i["line-opacity"];if(r(i["line-color"])){var y=s(i["line-color"]);r(g)&&(y[3]*=g)}if(r(i["line-width"])){var m=i["line-width"];p.setWidth(m)}if(r(i["line-dasharray"])){var v=i["line-dasharray"];p.setLineDash(v)}if(r(o)){if(r(o["line-cap"])){var _=o["line-cap"];p.setLineCap(_)}if(r(o["line-join"])){var S=o["line-join"];p.setLineJoin(S)}if(r(o["line-miter-limit"])){var C=o["line-miter-limit"];p.setMiterLimit(C)}}return p.setColor(y),d}if("symbol"==n){var x=new e.style.Style({});return r(o)&&r(o["icon-image"])&&(x.hasIconImage=!0),r(o)&&r(o["text-field"])&&(x.hasTextStyle=!0),x}if("circle"==n){var I=i["circle-radius"],E=i["circle-color"],T=i["circle-stroke-color"],R=i["circle-opacity"],O=i["circle-stroke-opacity"],L=i["circle-stroke-width"],F=new e.style.Circle({radius:I,stroke:0===L?void 0:new e.style.Stroke({width:L,color:a(T,O)}),fill:new e.style.Fill({color:a(E,R)})}),w=new e.style.Style({});return w.setImage(F),w}return this.getStyle()};var c=new t;o.prototype.getIDColorStyle=function(t,e,n,i,o,s){var a=this._openlayer,h=l(e,n),u=h.toCssColorString();if("LineString"==t||"LinearRing"==t||"MultiLineString"==t){var c=4;r(i)&&(c=2*i+s);var f=new a.style.Stroke({color:"",width:c});return f.setColor(u),new a.style.Style({stroke:f})}if("Point"==t||"MultiPoint"==t){var d=new a.style.Circle({radius:o-.5,fill:new a.style.Fill({color:u})}),p=new a.style.Style({});return p.setImage(d),p}var g=new a.style.Fill({color:""});g.setColor(u);var y=new a.style.Style({fill:g});if(r(i)){var f=new a.style.Stroke({color:"",width:r(i)?2*i:4});f.setColor(u),y.setStroke(f)}return y};var f=/^([^]*)\{(.*)\}([^]*)$/;o.prototype.getTextStyle=function(t,n,i){var o=this._openlayer,a=i.paint,l=i.layout,u=l["text-field"],c=h(u,n.getProperties());if(r(c)){var f=new o.style.Style,d=new o.style.Text;f.setText(d);var p=l["text-size"],g=e(l["text-font"],["Open Sans Regular","Arial Unicode MS Regular"]),y=l["text-transform"];"uppercase"==y?c=c.toUpperCase():"lowercase"==y&&(c=c.toLowerCase());var m=(e(l["text-max-width"],10),c);d.setText(m),d.setFont(g),d.setRotation(0);var v=e(l["text-anchor"],"center"),_=e(l["symbol-placement"],"point");if(d.setPlacement(_),"point"==_){var S="center";-1!==v.indexOf("left")?S="left":-1!==v.indexOf("right")&&(S="right"),d.setTextAlign(S)}else d.setTextAlign();var C="middle";0==v.indexOf("bottom")?C="bottom":0==v.indexOf("top")&&(C="top"),d.setTextBaseline(C);var x=e(l["text-offset"],[0,0]),I=e(l["text-translate"],[0,0]);d.setOffsetX(x[0]*p+I[0]),d.setOffsetY(x[1]*p+I[1]);var E=(a["text-opacity"],new o.style.Fill),T=a["text-color"];r(T)&&(T=s(T),E.setColor(T)),d.setFill(E);var R=a["text-halo-color"];if(r(R)){var O=new o.style.Stroke;R=s(R),O.setColor(R),O.setWidth(a["text-halo-width"]),d.setStroke(O)}else d.setStroke(void 0);return f.setZIndex(t.getZIndex()),f.hasIconImage=t.hasIconImage,f.textSize=p,f}};var d={};return o.prototype.setIconImageForStyle=function(t,n,i){var o=this._openlayer,s=i.paint,a=i.layout,l=e(a["icon-size"],1),h=s["icon-color"],c=e(s["icon-translate"],[0,0]),f=e(s["icon-translate-anchor"],"map"),p=e(a["icon-anchor"],"center"),g=u(p),y=g.anchorOffset,m=e(a.iconoffset,[0,0]),v=e(a["icon-opacity"],1),_=a["icon-image"];if(!r(t[_]))return void console.log("miss icon-image "+_);var S=_+"."+l+"."+c+"."+f+"."+p+"."+m;r(h)&&(S+="."+h);var C=d[S];if(!r(C)){var x,I=t[_];this._useOffscreen?x=new OffscreenCanvas(I.width,I.height):(x=document.createElement("canvas"),x.width=I.width,x.height=I.height);x.getContext("2d").putImageData(I,0,0);var E=[c[0]/I.width,c[1]/I.height];C=new o.style.Icon({img:x,anchorOrigin:g.iconAnchor,anchor:[m[0]+y[0]+E[0],m[1]+y[1]-E[1]],imgSize:[x.width,x.height],scale:l}),C.setOpacity(v),d[S]=C}n.setImage(C)},o}),define("Scene/MvtRenderer2D",["../Core/defaultValue","../Core/defined","../Core/defineProperties","./MvtFilter"],function(t,e,r,n){"use strict";function i(t){this._mvtStyleClass=t.mvtStyle,this._openlayer=t.openlayer}function o(t){var e=t.getId();return e-=16777216*Math.floor(e/16777216)}var s=["Default","Polygon","LineString","Image","Symbol","Text"];return r(i.prototype,{}),i.prototype.renderFeatures=function(t){for(var r=t.colorCanvas,i=t.idCanvas,o=t.transform,a=t.layers,l=t.features,h=t.tileLevel,u=t.spriteImageCanvas,c=t.spriteImageDatas,f=t.squaredTolerance,d=t.showBillboard,p=t.renderID,g=t.renderColor,y=t.lineWidthExpand,m=this._openlayer,v=r.getContext("2d"),_=[],S=[],C=[],x=null,I=m.ext.rbush(9),E=new m.render.canvas.ReplayGroup(0,[0,0,4096,4096],8,2,!0,I),T=l.length,R=0;R<T;R++){var O=l[R],L=O.getProperties().layer;O.index=L+O.getId();var F=!1,w=a[L],M=0;for(var A in w){var G=w[A],b=G.mapboxStyleLayer.maxzoom;if(!(h<G.mapboxStyleLayer.minzoom||h>b)){var P=G.filterArray;if(e(P)){var D=O.getProperties();if(!n.filterTest(D,P))continue;x=this._mvtStyleClass.getStyleByMapboxStyle(G.mapboxStyleLayer)}else x=this._mvtStyleClass.getStyleByMapboxStyle(G.mapboxStyleLayer);if(e(x)){if(this.createFillPatternForStyle(x,u,c,v),e(x.hasTextStyle)){var k=this._mvtStyleClass.getTextStyle(x,O,G.mapboxStyleLayer);k.setZIndex(M),d?C.push({feature:O,style:k}):g&&m.renderer.vector.renderFeature_(E,O,k,-1)}if(e(x.hasIconImage)&&!e(x.getImage())){if(d){S.push({feature:O,style:G.mapboxStyleLayer});continue}this._mvtStyleClass.setIconImageForStyle(c,x,G.mapboxStyleLayer)}x.setZIndex(M),this.setPickStyleInFeature(O,x),M++,g&&m.renderer.vector.renderFeature_(E,O,x,-1),F=!0}}}F&&_.push(O)}if(g){E.finish();var N={};E.replay(v,o,0,{},s,N),N&&m.render.canvas.ReplayGroup.replayDeclutter(N,v,0)}return E=null,p&&this.renderIDtoTexture(o,i,_,0,f,y),{idFeatures:_,iconImageObjects:S,textObjects:C}},i.prototype.renderIDtoTexture=function(t,e,r,n,i,a){for(var l=this._openlayer,h=e.getContext("2d"),u=l.ext.rbush(9),c=new l.render.canvas.ReplayGroup(0,[0,0,4096,4096],8,2,!0,u),f=r.length,d=0;d<f;d++){var p=r[d],g=o(p),y=this._mvtStyleClass.getIDColorStyle(p.getGeometry().getType(),g,n,p.lineWidth,p.radius,a);y.setZIndex(p.zIndex),l.renderer.vector.renderFeature_(c,p,y,-1)}c.finish();var m={};c.replay(h,t,0,{},s,m),m&&l.render.canvas.ReplayGroup.replayDeclutter(m,h,0),c=null},i.prototype.createFillPatternForStyle=function(t,r,n,i){if(e(t.fillPatternName)){var o=t.fillPatternName,s=null;if(e(r[o]))s=r[o];else{var a=n[o];if(!e(a))return void console.log("miss sprite "+o);s=document.createElement("canvas"),s.width=a.width,s.height=a.height;s.getContext("2d").putImageData(a,0,0),r[o]=s}t.fill_.color_=i.createPattern(s,"repeat")}},i.prototype.setPickStyleInFeature=function(t,r){var n=this._openlayer;if(t.zIndex=r.getZIndex(),e(r.getStroke())){var i=r.getStroke().getWidth();e(t.lineWidth)?t.lineWidth=Math.max(t.lineWidth,i):t.lineWidth=i}if(e(r.getImage())){var o=r.getImage(),s=1;if(o instanceof n.style.Icon){var a=o.getImageSize();s=Math.max(a[0],a[1])/2,s-=1}else o instanceof n.style.Circle&&(s=o.getRadius());e(t.radius)?t.radius=Math.max(t.radius,s):t.radius=s}},i}),define("ThirdParty/pbf",[],function(){function t(t){this.buf=ArrayBuffer.isView&&ArrayBuffer.isView(t)?t:new Uint8Array(t||0),this.pos=0,this.type=0,this.length=this.buf.length}function e(t,e,r){var i,o,s=r.buf;if(o=s[r.pos++],i=(112&o)>>4,o<128)return n(t,i,e);if(o=s[r.pos++],i|=(127&o)<<3,o<128)return n(t,i,e);if(o=s[r.pos++],i|=(127&o)<<10,o<128)return n(t,i,e);if(o=s[r.pos++],i|=(127&o)<<17,o<128)return n(t,i,e);if(o=s[r.pos++],i|=(127&o)<<24,o<128)return n(t,i,e);if(o=s[r.pos++],i|=(1&o)<<31,o<128)return n(t,i,e);throw new Error("Expected varint not more than 10 bytes")}function r(e){return e.type===t.Bytes?e.readVarint()+e.pos:e.pos+1}function n(t,e,r){return r?4294967296*e+(t>>>0):4294967296*(e>>>0)+(t>>>0)}function i(t,e){var r,n;if(t>=0?(r=t%4294967296|0,n=t/4294967296|0):(r=~(-t%4294967296),n=~(-t/4294967296),4294967295^r?r=r+1|0:(r=0,n=n+1|0)),t>=0x10000000000000000||t<-0x10000000000000000)throw new Error("Given varint doesn't fit into 10 bytes");e.realloc(10),o(r,n,e),s(n,e)}function o(t,e,r){r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos++]=127&t|128,t>>>=7,r.buf[r.pos]=127&t}function s(t,e){var r=(7&t)<<4;e.buf[e.pos++]|=r|((t>>>=3)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t|((t>>>=7)?128:0),t&&(e.buf[e.pos++]=127&t)))))}function a(t,e,r){var n=e<=16383?1:e<=2097151?2:e<=268435455?3:Math.ceil(Math.log(e)/(7*Math.LN2));r.realloc(n);for(var i=r.pos-1;i>=t;i--)r.buf[i+n]=r.buf[i]}function l(t,e){for(var r=0;r<t.length;r++)e.writeVarint(t[r])}function h(t,e){for(var r=0;r<t.length;r++)e.writeSVarint(t[r])}function u(t,e){for(var r=0;r<t.length;r++)e.writeFloat(t[r])}function c(t,e){for(var r=0;r<t.length;r++)e.writeDouble(t[r])}function f(t,e){for(var r=0;r<t.length;r++)e.writeBoolean(t[r])}function d(t,e){for(var r=0;r<t.length;r++)e.writeFixed32(t[r])}function p(t,e){for(var r=0;r<t.length;r++)e.writeSFixed32(t[r])}function g(t,e){for(var r=0;r<t.length;r++)e.writeFixed64(t[r])}function y(t,e){for(var r=0;r<t.length;r++)e.writeSFixed64(t[r])}function m(t,e){return(t[e]|t[e+1]<<8|t[e+2]<<16)+16777216*t[e+3]}function v(t,e,r){t[r]=e,t[r+1]=e>>>8,t[r+2]=e>>>16,t[r+3]=e>>>24}function _(t,e){return(t[e]|t[e+1]<<8|t[e+2]<<16)+(t[e+3]<<24)}function S(t,e,r){for(var n="",i=e;i<r;){var o=t[i],s=null,a=o>239?4:o>223?3:o>191?2:1;if(i+a>r)break;var l,h,u;1===a?o<128&&(s=o):2===a?128==(192&(l=t[i+1]))&&(s=(31&o)<<6|63&l)<=127&&(s=null):3===a?(l=t[i+1],h=t[i+2],128==(192&l)&&128==(192&h)&&((s=(15&o)<<12|(63&l)<<6|63&h)<=2047||s>=55296&&s<=57343)&&(s=null)):4===a&&(l=t[i+1],h=t[i+2],u=t[i+3],128==(192&l)&&128==(192&h)&&128==(192&u)&&((s=(15&o)<<18|(63&l)<<12|(63&h)<<6|63&u)<=65535||s>=1114112)&&(s=null)),null===s?(s=65533,a=1):s>65535&&(s-=65536,n+=String.fromCharCode(s>>>10&1023|55296),s=56320|1023&s),n+=String.fromCharCode(s),i+=a}return n}function C(t,e,r){for(var n,i,o=0;o<e.length;o++){if((n=e.charCodeAt(o))>55295&&n<57344){if(!i){n>56319||o+1===e.length?(t[r++]=239,t[r++]=191,t[r++]=189):i=n;continue}if(n<56320){t[r++]=239,t[r++]=191,t[r++]=189,i=n;continue}n=i-55296<<10|n-56320|65536,i=null}else i&&(t[r++]=239,t[r++]=191,t[r++]=189,i=null);n<128?t[r++]=n:(n<2048?t[r++]=n>>6|192:(n<65536?t[r++]=n>>12|224:(t[r++]=n>>18|240,t[r++]=n>>12&63|128),t[r++]=n>>6&63|128),t[r++]=63&n|128)}return r}var x=function(t,e,r,n,i){var o,s,a=8*i-n-1,l=(1<<a)-1,h=l>>1,u=-7,c=r?i-1:0,f=r?-1:1,d=t[e+c];for(c+=f,o=d&(1<<-u)-1,d>>=-u,u+=a;u>0;o=256*o+t[e+c],c+=f,u-=8);for(s=o&(1<<-u)-1,o>>=-u,u+=n;u>0;s=256*s+t[e+c],c+=f,u-=8);if(0===o)o=1-h;else{if(o===l)return s?NaN:1/0*(d?-1:1);s+=Math.pow(2,n),o-=h}return(d?-1:1)*s*Math.pow(2,o-n)},I=function(t,e,r,n,i,o){var s,a,l,h=8*o-i-1,u=(1<<h)-1,c=u>>1,f=23===i?Math.pow(2,-24)-Math.pow(2,-77):0,d=n?0:o-1,p=n?1:-1,g=e<0||0===e&&1/e<0?1:0;for(e=Math.abs(e),isNaN(e)||e===1/0?(a=isNaN(e)?1:0,s=u):(s=Math.floor(Math.log(e)/Math.LN2),e*(l=Math.pow(2,-s))<1&&(s--,l*=2),e+=s+c>=1?f/l:f*Math.pow(2,1-c),e*l>=2&&(s++,l/=2),s+c>=u?(a=0,s=u):s+c>=1?(a=(e*l-1)*Math.pow(2,i),s+=c):(a=e*Math.pow(2,c-1)*Math.pow(2,i),s=0));i>=8;t[r+d]=255&a,d+=p,a/=256,i-=8);for(s=s<<i|a,h+=i;h>0;t[r+d]=255&s,d+=p,s/=256,h-=8);t[r+d-p]|=128*g},E={read:x,write:I};t.Varint=0,t.Fixed64=1,t.Bytes=2,t.Fixed32=5;return t.prototype={destroy:function(){this.buf=null},readFields:function(t,e,r){for(r=r||this.length;this.pos<r;){var n=this.readVarint(),i=n>>3,o=this.pos;this.type=7&n,t(i,e,this),this.pos===o&&this.skip(n)}return e},readMessage:function(t,e){return this.readFields(t,e,this.readVarint()+this.pos)},readFixed32:function(){var t=m(this.buf,this.pos);return this.pos+=4,t},readSFixed32:function(){var t=_(this.buf,this.pos);return this.pos+=4,t},readFixed64:function(){var t=m(this.buf,this.pos)+4294967296*m(this.buf,this.pos+4);return this.pos+=8,t},readSFixed64:function(){var t=m(this.buf,this.pos)+4294967296*_(this.buf,this.pos+4);return this.pos+=8,t},readFloat:function(){var t=E.read(this.buf,this.pos,!0,23,4);return this.pos+=4,t},readDouble:function(){var t=E.read(this.buf,this.pos,!0,52,8);return this.pos+=8,t},readVarint:function(t){var r,n,i=this.buf;return n=i[this.pos++],r=127&n,n<128?r:(n=i[this.pos++],r|=(127&n)<<7,n<128?r:(n=i[this.pos++],r|=(127&n)<<14,n<128?r:(n=i[this.pos++],r|=(127&n)<<21,n<128?r:(n=i[this.pos],r|=(15&n)<<28,e(r,t,this)))))},readVarint64:function(){return this.readVarint(!0)},readSVarint:function(){var t=this.readVarint();return t%2==1?(t+1)/-2:t/2},readBoolean:function(){return Boolean(this.readVarint())},readString:function(){var t=this.readVarint()+this.pos,e=S(this.buf,this.pos,t);return this.pos=t,e},readBytes:function(){var t=this.readVarint()+this.pos,e=this.buf.subarray(this.pos,t);return this.pos=t,e},readPackedVarint:function(t,e){var n=r(this);for(t=t||[];this.pos<n;)t.push(this.readVarint(e));return t},readPackedSVarint:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSVarint());return t},readPackedBoolean:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readBoolean());return t},readPackedFloat:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFloat());return t},readPackedDouble:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readDouble());return t},readPackedFixed32:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFixed32());return t},readPackedSFixed32:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSFixed32());return t},readPackedFixed64:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readFixed64());return t},readPackedSFixed64:function(t){var e=r(this);for(t=t||[];this.pos<e;)t.push(this.readSFixed64());return t},skip:function(e){var r=7&e;if(r===t.Varint)for(;this.buf[this.pos++]>127;);else if(r===t.Bytes)this.pos=this.readVarint()+this.pos;else if(r===t.Fixed32)this.pos+=4;else{if(r!==t.Fixed64)throw new Error("Unimplemented type: "+r);this.pos+=8}},writeTag:function(t,e){this.writeVarint(t<<3|e)},realloc:function(t){for(var e=this.length||16;e<this.pos+t;)e*=2;if(e!==this.length){var r=new Uint8Array(e);r.set(this.buf),this.buf=r,this.length=e}},finish:function(){return this.length=this.pos,this.pos=0,this.buf.subarray(0,this.length)},writeFixed32:function(t){this.realloc(4),v(this.buf,t,this.pos),this.pos+=4},writeSFixed32:function(t){this.realloc(4),v(this.buf,t,this.pos),this.pos+=4},writeFixed64:function(t){this.realloc(8),v(this.buf,-1&t,this.pos),v(this.buf,Math.floor(t*(1/4294967296)),this.pos+4),this.pos+=8},writeSFixed64:function(t){this.realloc(8),v(this.buf,-1&t,this.pos),v(this.buf,Math.floor(t*(1/4294967296)),this.pos+4),this.pos+=8},writeVarint:function(t){if((t=+t||0)>268435455||t<0)return void i(t,this);this.realloc(4),this.buf[this.pos++]=127&t|(t>127?128:0),t<=127||(this.buf[this.pos++]=127&(t>>>=7)|(t>127?128:0),t<=127||(this.buf[this.pos++]=127&(t>>>=7)|(t>127?128:0),t<=127||(this.buf[this.pos++]=t>>>7&127)))},writeSVarint:function(t){this.writeVarint(t<0?2*-t-1:2*t)},writeBoolean:function(t){this.writeVarint(Boolean(t))},writeString:function(t){t=String(t),this.realloc(4*t.length),this.pos++;var e=this.pos;this.pos=C(this.buf,t,this.pos);var r=this.pos-e;r>=128&&a(e,r,this),this.pos=e-1,this.writeVarint(r),this.pos+=r},writeFloat:function(t){this.realloc(4),E.write(this.buf,t,this.pos,!0,23,4),this.pos+=4},writeDouble:function(t){this.realloc(8),E.write(this.buf,t,this.pos,!0,52,8),this.pos+=8},writeBytes:function(t){var e=t.length;this.writeVarint(e),this.realloc(e);for(var r=0;r<e;r++)this.buf[this.pos++]=t[r]},writeRawMessage:function(t,e){this.pos++;var r=this.pos;t(e,this);var n=this.pos-r;n>=128&&a(r,n,this),this.pos=r-1,this.writeVarint(n),this.pos+=n},writeMessage:function(e,r,n){this.writeTag(e,t.Bytes),this.writeRawMessage(r,n)},writePackedVarint:function(t,e){this.writeMessage(t,l,e)},writePackedSVarint:function(t,e){this.writeMessage(t,h,e)},writePackedBoolean:function(t,e){this.writeMessage(t,f,e)},writePackedFloat:function(t,e){this.writeMessage(t,u,e)},writePackedDouble:function(t,e){this.writeMessage(t,c,e)},writePackedFixed32:function(t,e){this.writeMessage(t,d,e)},writePackedSFixed32:function(t,e){this.writeMessage(t,p,e)},writePackedFixed64:function(t,e){this.writeMessage(t,g,e)},writePackedSFixed64:function(t,e){this.writeMessage(t,y,e)},writeBytesField:function(e,r){this.writeTag(e,t.Bytes),this.writeBytes(r)},writeFixed32Field:function(e,r){this.writeTag(e,t.Fixed32),this.writeFixed32(r)},writeSFixed32Field:function(e,r){this.writeTag(e,t.Fixed32),this.writeSFixed32(r)},writeFixed64Field:function(e,r){this.writeTag(e,t.Fixed64),this.writeFixed64(r)},writeSFixed64Field:function(e,r){this.writeTag(e,t.Fixed64),this.writeSFixed64(r)},writeVarintField:function(e,r){this.writeTag(e,t.Varint),this.writeVarint(r)},writeSVarintField:function(e,r){this.writeTag(e,t.Varint),this.writeSVarint(r)},writeStringField:function(e,r){this.writeTag(e,t.Bytes),this.writeString(r)},writeFloatField:function(e,r){this.writeTag(e,t.Fixed32),this.writeFloat(r)},writeDoubleField:function(e,r){this.writeTag(e,t.Fixed64),this.writeDouble(r)},writeBooleanField:function(t,e){this.writeVarintField(t,Boolean(e))}},t}),define("ThirdParty/supermap3D-openlayer-4.6.5",["./pbf"],function(t){"use strict";function e(){}e.array={},e.array.binarySearch=function(t,r,n){for(var i,o,s=n||e.array.numberSafeCompareFunction,a=0,l=t.length,h=!1;a<l;)i=a+(l-a>>1),o=+s(t[i],r),o<0?a=i+1:(l=i,h=!o);return h?a:~a},e.array.numberSafeCompareFunction=function(t,e){return t>e?1:t<e?-1:0},e.array.includes=function(t,e){return t.indexOf(e)>=0},e.array.linearFindNearest=function(t,e,r){var n=t.length;if(t[0]<=e)return 0;if(e<=t[n-1])return n-1;var i;if(r>0){for(i=1;i<n;++i)if(t[i]<e)return i-1}else if(r<0){for(i=1;i<n;++i)if(t[i]<=e)return i}else for(i=1;i<n;++i){if(t[i]==e)return i;if(t[i]<e)return t[i-1]-e<e-t[i]?i-1:i}return n-1},e.array.reverseSubArray=function(t,e,r){for(;e<r;){var n=t[e];t[e]=t[r],t[r]=n,++e,--r}},e.array.extend=function(t,e){var r,n=Array.isArray(e)?e:[e],i=n.length;for(r=0;r<i;r++)t[t.length]=n[r]},e.array.remove=function(t,e){var r=t.indexOf(e),n=r>-1;return n&&t.splice(r,1),n},e.array.find=function(t,e){for(var r,n=t.length>>>0,i=0;i<n;i++)if(r=t[i],e(r,i,t))return r;return null},e.array.equals=function(t,e){var r=t.length;if(r!==e.length)return!1;for(var n=0;n<r;n++)if(t[n]!==e[n])return!1;return!0},e.array.stableSort=function(t,e){var r,n=t.length,i=Array(t.length);for(r=0;r<n;r++)i[r]={index:r,value:t[r]};for(i.sort(function(t,r){return e(t.value,r.value)||t.index-r.index}),r=0;r<t.length;r++)t[r]=i[r].value},e.array.findIndex=function(t,e){var r;return t.every(function(n,i){return r=i,!e(n,i,t)})?-1:r},e.array.isSorted=function(t,r,n){var i=r||e.array.numberSafeCompareFunction;return t.every(function(e,r){if(0===r)return!0;var o=i(t[r-1],e);return!(o>0||n&&0===o)})},e.ASSUME_TOUCH=!1,e.DEFAULT_MAX_ZOOM=42,e.DEFAULT_MIN_ZOOM=0,e.DEFAULT_RASTER_REPROJECTION_ERROR_THRESHOLD=.5,e.DEFAULT_TILE_SIZE=256,e.DEFAULT_WMS_VERSION="1.3.0",e.ENABLE_CANVAS=!0,e.ENABLE_PROJ4JS=!0,e.ENABLE_RASTER_REPROJECTION=!0,e.ENABLE_WEBGL=!0,e.DEBUG_WEBGL=!0,e.INITIAL_ATLAS_SIZE=256,e.MAX_ATLAS_SIZE=-1,e.MOUSEWHEELZOOM_MAXDELTA=1,e.OVERVIEWMAP_MAX_RATIO=.75,e.OVERVIEWMAP_MIN_RATIO=.1,e.RASTER_REPROJECTION_MAX_SOURCE_TILES=100,e.RASTER_REPROJECTION_MAX_SUBDIVISION=10,e.RASTER_REPROJECTION_MAX_TRIANGLE_WIDTH=.25,e.SIMPLIFY_TOLERANCE=.5,e.WEBGL_TEXTURE_CACHE_HIGH_WATER_MARK=1024,e.VERSION="",e.inherits=function(t,e){t.prototype=Object.create(e.prototype),t.prototype.constructor=t},e.nullFunction=function(){},e.getUid=function(t){return t.ol_uid||(t.ol_uid=++e.uidCounter_)},e.asserts={},e.asserts.assert=function(t,e){},e.has={};var r="undefined"!=typeof navigator?navigator.userAgent.toLowerCase():"";return e.has.FIREFOX=-1!==r.indexOf("firefox"),e.has.SAFARI=-1!==r.indexOf("safari")&&-1==r.indexOf("chrom"),e.has.WEBKIT=-1!==r.indexOf("webkit")&&-1==r.indexOf("edge"),e.has.MAC=-1!==r.indexOf("macintosh"),e.has.DEVICE_PIXEL_RATIO=1,e.has.CANVAS_LINE_DASH=!0,e.structs={},e.CollectionEventType={ADD:"add",REMOVE:"remove"},e.ObjectEventType={PROPERTYCHANGE:"propertychange"},e.events={},e.events.bindListener_=function(t){var r=function(r){var n=t.listener,i=t.bindTo||t.target;return t.callOnce&&e.events.unlistenByKey(t),n.call(i,r)};return t.boundListener=r,r},e.events.findListener_=function(t,e,r,n){for(var i,o=0,s=t.length;o<s;++o)if(i=t[o],i.listener===e&&i.bindTo===r)return n&&(i.deleteIndex=o),i},e.events.getListeners=function(t,e){var r=t.ol_lm;return r?r[e]:void 0},e.events.getListenerMap_=function(t){var e=t.ol_lm;return e||(e=t.ol_lm={}),e},e.events.removeListeners_=function(t,r){var n=e.events.getListeners(t,r);if(n){for(var i=0,o=n.length;i<o;++i)t.removeEventListener(r,n[i].boundListener),e.obj.clear(n[i]);n.length=0;var s=t.ol_lm;s&&(delete s[r],0===Object.keys(s).length&&delete t.ol_lm)}},e.events.listen=function(t,r,n,i,o){var s=e.events.getListenerMap_(t),a=s[r];a||(a=s[r]=[]);var l=e.events.findListener_(a,n,i,!1);return l?o||(l.callOnce=!1):(l={bindTo:i,callOnce:!!o,listener:n,target:t,type:r},t.addEventListener(r,e.events.bindListener_(l)),a.push(l)),l},e.events.listenOnce=function(t,r,n,i){return e.events.listen(t,r,n,i,!0)},e.events.unlisten=function(t,r,n,i){var o=e.events.getListeners(t,r);if(o){var s=e.events.findListener_(o,n,i,!0);s&&e.events.unlistenByKey(s)}},e.events.unlistenByKey=function(t){if(t&&t.target){t.target.removeEventListener(t.type,t.boundListener);var r=e.events.getListeners(t.target,t.type);if(r){var n="deleteIndex"in t?t.deleteIndex:r.indexOf(t);-1!==n&&r.splice(n,1),0===r.length&&e.events.removeListeners_(t.target,t.type)}e.obj.clear(t)}},e.events.unlistenAll=function(t){var r=e.events.getListenerMap_(t);for(var n in r)e.events.removeListeners_(t,n)},e.Disposable=function(){},e.Disposable.prototype.disposed_=!1,e.Disposable.prototype.dispose=function(){this.disposed_||(this.disposed_=!0,this.disposeInternal())},e.Disposable.prototype.disposeInternal=e.nullFunction,e.events.Event={},e.events.Event=function(t){this.propagationStopped,this.type=t,this.target=null},e.events.Event.prototype.preventDefault=e.events.Event.prototype.stopPropagation=function(){this.propagationStopped=!0},e.events.Event.stopPropagation=function(t){t.stopPropagation()},e.events.Event.preventDefault=function(t){t.preventDefault()},e.events.EventTarget={},e.events.EventTarget=function(){e.Disposable.call(this),this.pendingRemovals_={},this.dispatching_={},this.listeners_={}},e.inherits(e.events.EventTarget,e.Disposable),e.events.EventTarget.prototype.addEventListener=function(t,e){var r=this.listeners_[t];r||(r=this.listeners_[t]=[]),-1===r.indexOf(e)&&r.push(e)},e.events.EventTarget.prototype.dispatchEvent=function(t){var r="string"==typeof t?new e.events.Event(t):t,n=r.type;r.target=this;var i,o=this.listeners_[n];if(o){n in this.dispatching_||(this.dispatching_[n]=0,this.pendingRemovals_[n]=0),++this.dispatching_[n];for(var s=0,a=o.length;s<a;++s)if(!1===o[s].call(this,r)||r.propagationStopped){i=!1;break}if(0===--this.dispatching_[n]){var l=this.pendingRemovals_[n];for(delete this.pendingRemovals_[n];l--;)this.removeEventListener(n,e.nullFunction);delete this.dispatching_[n]}return i}},e.events.EventTarget.prototype.disposeInternal=function(){e.events.unlistenAll(this)},e.events.EventTarget.prototype.getListeners=function(t){return this.listeners_[t]},e.events.EventTarget.prototype.hasListener=function(t){return t?t in this.listeners_:Object.keys(this.listeners_).length>0},e.events.EventTarget.prototype.removeEventListener=function(t,r){var n=this.listeners_[t];if(n){var i=n.indexOf(r);t in this.pendingRemovals_?(n[i]=e.nullFunction,++this.pendingRemovals_[t]):(n.splice(i,1),0===n.length&&delete this.listeners_[t])}},e.events.EventType={CHANGE:"change",CLEAR:"clear",CLICK:"click",DBLCLICK:"dblclick",DRAGENTER:"dragenter",DRAGOVER:"dragover",DROP:"drop",ERROR:"error",KEYDOWN:"keydown",KEYPRESS:"keypress",LOAD:"load",MOUSEDOWN:"mousedown",MOUSEMOVE:"mousemove",MOUSEOUT:"mouseout",MOUSEUP:"mouseup",MOUSEWHEEL:"mousewheel",MSPOINTERDOWN:"MSPointerDown",RESIZE:"resize",TOUCHSTART:"touchstart",TOUCHMOVE:"touchmove",TOUCHEND:"touchend",WHEEL:"wheel"},e.Observable=function(){this.revision_=0},e.inherits(e.Observable,e.events.EventTarget),e.Observable.unByKey=function(t){if(Array.isArray(t))for(var r=0,n=t.length;r<n;++r)e.events.unlistenByKey(t[r]);else e.events.unlistenByKey(t)},e.Observable.prototype.changed=function(){++this.revision_},e.Observable.prototype.dispatchEvent,e.Observable.prototype.getRevision=function(){return this.revision_},e.Observable.prototype.on=function(t,r,n){if(Array.isArray(t)){for(var i=t.length,o=new Array(i),s=0;s<i;++s)o[s]=e.events.listen(this,t[s],r,n);return o}return e.events.listen(this,t,r,n)},e.Observable.prototype.once=function(t,r,n){if(Array.isArray(t)){for(var i=t.length,o=new Array(i),s=0;s<i;++s)o[s]=e.events.listenOnce(this,t[s],r,n);return o}return e.events.listenOnce(this,t,r,n)},e.Observable.prototype.un=function(t,r,n){if(Array.isArray(t))for(var i=0,o=t.length;i<o;++i)e.events.unlisten(this,t[i],r,n);else e.events.unlisten(this,t,r,n)},e.uidCounter_=0,e.Object=function(t){e.Observable.call(this),e.getUid(this),this.values_={},void 0!==t&&this.setProperties(t)},e.inherits(e.Object,e.Observable),e.Object.changeEventTypeCache_={},e.Object.getChangeEventType=function(t){return e.Object.changeEventTypeCache_.hasOwnProperty(t)?e.Object.changeEventTypeCache_[t]:e.Object.changeEventTypeCache_[t]="change:"+t},e.Object.prototype.get=function(t){var e;return this.values_.hasOwnProperty(t)&&(e=this.values_[t]),e},e.Object.prototype.getKeys=function(){return Object.keys(this.values_)},e.Object.prototype.getProperties=function(){return e.obj.assign({},this.values_)},e.Object.prototype.notify=function(t,e){return},e.Object.prototype.set=function(t,e,r){if(r)this.values_[t]=e;else{var n=this.values_[t];this.values_[t]=e,n!==e&&this.notify(t,n)}},e.Object.prototype.setProperties=function(t,e){var r;for(r in t)this.set(r,t[r],e)},e.Object.prototype.unset=function(t,e){if(t in this.values_){var r=this.values_[t];delete this.values_[t],e||this.notify(t,r)}},e.Object.Event=function(t,r,n){e.events.Event.call(this,t),this.key=r,this.oldValue=n},e.inherits(e.Object.Event,e.events.Event),e.functions={},e.functions.TRUE=function(){return!0},e.functions.FALSE=function(){return!1},e.math={},e.math.clamp=function(t,e,r){return Math.min(Math.max(t,e),r)},e.math.cosh=function(){return"cosh"in Math?Math.cosh:function(t){var e=Math.exp(t);return(e+1/e)/2}}(),e.math.roundUpToPowerOfTwo=function(t){return e.asserts.assert(0<t,29),Math.pow(2,Math.ceil(Math.log(t)/Math.LN2))},e.math.squaredSegmentDistance=function(t,r,n,i,o,s){var a=o-n,l=s-i;if(0!==a||0!==l){var h=((t-n)*a+(r-i)*l)/(a*a+l*l);h>1?(n=o,i=s):h>0&&(n+=a*h,i+=l*h)}return e.math.squaredDistance(t,r,n,i)},e.math.squaredDistance=function(t,e,r,n){var i=r-t,o=n-e;return i*i+o*o},e.math.solveLinearSystem=function(t){for(var e=t.length,r=0;r<e;r++){for(var n=r,i=Math.abs(t[r][r]),o=r+1;o<e;o++){var s=Math.abs(t[o][r]);s>i&&(i=s,n=o)}if(0===i)return null;var a=t[n];t[n]=t[r],t[r]=a;for(var l=r+1;l<e;l++)for(var h=-t[l][r]/t[r][r],u=r;u<e+1;u++)r==u?t[l][u]=0:t[l][u]+=h*t[r][u]}for(var c=new Array(e),f=e-1;f>=0;f--){c[f]=t[f][e]/t[f][f];for(var d=f-1;d>=0;d--)t[d][e]-=t[d][f]*c[f]}return c},e.math.toDegrees=function(t){return 180*t/Math.PI},
-e.math.toRadians=function(t){return t*Math.PI/180},e.math.modulo=function(t,e){var r=t%e;return r*e<0?r+e:r},e.math.lerp=function(t,e,r){return t+r*(e-t)},e.ImageState={IDLE:0,LOADING:1,LOADED:2,ERROR:3},e.color={},e.color.HEX_COLOR_RE_=/^#(?:[0-9a-f]{3,4}){1,2}$/i,e.color.NAMED_COLOR_RE_=/^([a-z]*)$/i,e.color.asArray=function(t){return Array.isArray(t)?t:e.color.fromString(t)},e.color.asString=function(t){return"string"==typeof t?t:e.color.toString(t)},e.color.fromNamed=function(t){var e=document.createElement("div");e.style.color=t,document.body.appendChild(e);var r=getComputedStyle(e).color;return document.body.removeChild(e),r},e.color.fromString=function(){var t={},r=0;return function(n){var i;if(t.hasOwnProperty(n))i=t[n];else{if(r>=1024){var o,s=0;for(o in t)0==(3&s++)&&(delete t[o],--r)}i=e.color.fromStringInternal_(n),t[n]=i,++r}return i}}(),e.color.fromStringInternal_=function(t){var r,n,i,o,s,a;if(e.color.NAMED_COLOR_RE_.exec(t)&&(t=e.color.fromNamed(t)),e.color.HEX_COLOR_RE_.exec(t)){var l,h=t.length-1;l=h<=4?1:2;var u=4===h||8===h;r=parseInt(t.substr(1+0*l,l),16),n=parseInt(t.substr(1+1*l,l),16),i=parseInt(t.substr(1+2*l,l),16),o=u?parseInt(t.substr(1+3*l,l),16):255,1==l&&(r=(r<<4)+r,n=(n<<4)+n,i=(i<<4)+i,u&&(o=(o<<4)+o)),s=[r,n,i,o/255]}else 0==t.indexOf("rgba(")?(a=t.slice(5,-1).split(",").map(Number),s=e.color.normalize(a)):0==t.indexOf("rgb(")?(a=t.slice(4,-1).split(",").map(Number),a.push(1),s=e.color.normalize(a)):e.asserts.assert(!1,14);return s},e.color.normalize=function(t,r){var n=r||[];return n[0]=e.math.clamp(t[0]+.5|0,0,255),n[1]=e.math.clamp(t[1]+.5|0,0,255),n[2]=e.math.clamp(t[2]+.5|0,0,255),n[3]=e.math.clamp(t[3],0,1),n},e.color.toString=function(t){var e=t[0];e!=(0|e)&&(e=e+.5|0);var r=t[1];r!=(0|r)&&(r=r+.5|0);var n=t[2];return n!=(0|n)&&(n=n+.5|0),"rgba("+e+","+r+","+n+","+(void 0===t[3]?1:t[3])+")"},e.colorlike={},e.colorlike.asColorLike=function(t){return e.colorlike.isColorLike(t)?t:e.color.asString(t)},e.colorlike.isColorLike=function(t){return"string"==typeof t||t instanceof CanvasPattern||t instanceof CanvasGradient},e.css={},e.css.CLASS_HIDDEN="ol-hidden",e.css.CLASS_SELECTABLE="ol-selectable",e.css.CLASS_UNSELECTABLE="ol-unselectable",e.css.CLASS_UNSUPPORTED="ol-unsupported",e.css.CLASS_CONTROL="ol-control",e.css.getFontFamilies=function(){var t,e={};return function(r){if(t||(t=document.createElement("div").style),!(r in e)){t.font=r;var n=t.fontFamily;if(t.font="",!n)return null;e[r]=n.split(/,\s?/)}return e[r]}}(),e.dom={},e.dom.createCanvasContext2D=function(t,e){var r;return r=t&&e?new OffscreenCanvas(t,e):new OffscreenCanvas(1,1),r.getContext("2d")},e.dom.outerWidth=function(t){var e=t.offsetWidth,r=getComputedStyle(t);return e+=parseInt(r.marginLeft,10)+parseInt(r.marginRight,10)},e.dom.outerHeight=function(t){var e=t.offsetHeight,r=getComputedStyle(t);return e+=parseInt(r.marginTop,10)+parseInt(r.marginBottom,10)},e.dom.replaceNode=function(t,e){var r=e.parentNode;r&&r.replaceChild(t,e)},e.dom.removeNode=function(t){return t&&t.parentNode?t.parentNode.removeChild(t):null},e.dom.removeChildren=function(t){for(;t.lastChild;)t.removeChild(t.lastChild)},e.extent={},e.extent.Corner={BOTTOM_LEFT:"bottom-left",BOTTOM_RIGHT:"bottom-right",TOP_LEFT:"top-left",TOP_RIGHT:"top-right"},e.extent.Relationship={UNKNOWN:0,INTERSECTING:1,ABOVE:2,RIGHT:4,BELOW:8,LEFT:16},e.extent.boundingExtent=function(t){for(var r=e.extent.createEmpty(),n=0,i=t.length;n<i;++n)e.extent.extendCoordinate(r,t[n]);return r},e.extent.boundingExtentXYs_=function(t,r,n){var i=Math.min.apply(null,t),o=Math.min.apply(null,r),s=Math.max.apply(null,t),a=Math.max.apply(null,r);return e.extent.createOrUpdate(i,o,s,a,n)},e.extent.buffer=function(t,e,r){return r?(r[0]=t[0]-e,r[1]=t[1]-e,r[2]=t[2]+e,r[3]=t[3]+e,r):[t[0]-e,t[1]-e,t[2]+e,t[3]+e]},e.extent.clone=function(t,e){return e?(e[0]=t[0],e[1]=t[1],e[2]=t[2],e[3]=t[3],e):t.slice()},e.extent.closestSquaredDistanceXY=function(t,e,r){var n,i;return n=e<t[0]?t[0]-e:t[2]<e?e-t[2]:0,i=r<t[1]?t[1]-r:t[3]<r?r-t[3]:0,n*n+i*i},e.extent.containsCoordinate=function(t,r){return e.extent.containsXY(t,r[0],r[1])},e.extent.containsExtent=function(t,e){return t[0]<=e[0]&&e[2]<=t[2]&&t[1]<=e[1]&&e[3]<=t[3]},e.extent.containsXY=function(t,e,r){return t[0]<=e&&e<=t[2]&&t[1]<=r&&r<=t[3]},e.extent.coordinateRelationship=function(t,r){var n=t[0],i=t[1],o=t[2],s=t[3],a=r[0],l=r[1],h=e.extent.Relationship.UNKNOWN;return a<n?h|=e.extent.Relationship.LEFT:a>o&&(h|=e.extent.Relationship.RIGHT),l<i?h|=e.extent.Relationship.BELOW:l>s&&(h|=e.extent.Relationship.ABOVE),h===e.extent.Relationship.UNKNOWN&&(h=e.extent.Relationship.INTERSECTING),h},e.extent.createEmpty=function(){return[1/0,1/0,-1/0,-1/0]},e.extent.createOrUpdate=function(t,e,r,n,i){return i?(i[0]=t,i[1]=e,i[2]=r,i[3]=n,i):[t,e,r,n]},e.extent.createOrUpdateEmpty=function(t){return e.extent.createOrUpdate(1/0,1/0,-1/0,-1/0,t)},e.extent.createOrUpdateFromCoordinate=function(t,r){var n=t[0],i=t[1];return e.extent.createOrUpdate(n,i,n,i,r)},e.extent.createOrUpdateFromCoordinates=function(t,r){var n=e.extent.createOrUpdateEmpty(r);return e.extent.extendCoordinates(n,t)},e.extent.createOrUpdateFromFlatCoordinates=function(t,r,n,i,o){var s=e.extent.createOrUpdateEmpty(o);return e.extent.extendFlatCoordinates(s,t,r,n,i)},e.extent.createOrUpdateFromRings=function(t,r){var n=e.extent.createOrUpdateEmpty(r);return e.extent.extendRings(n,t)},e.extent.equals=function(t,e){return t[0]==e[0]&&t[2]==e[2]&&t[1]==e[1]&&t[3]==e[3]},e.extent.extend=function(t,e){return e[0]<t[0]&&(t[0]=e[0]),e[2]>t[2]&&(t[2]=e[2]),e[1]<t[1]&&(t[1]=e[1]),e[3]>t[3]&&(t[3]=e[3]),t},e.extent.extendCoordinate=function(t,e){e[0]<t[0]&&(t[0]=e[0]),e[0]>t[2]&&(t[2]=e[0]),e[1]<t[1]&&(t[1]=e[1]),e[1]>t[3]&&(t[3]=e[1])},e.extent.extendCoordinates=function(t,r){var n,i;for(n=0,i=r.length;n<i;++n)e.extent.extendCoordinate(t,r[n]);return t},e.extent.extendFlatCoordinates=function(t,r,n,i,o){for(;n<i;n+=o)e.extent.extendXY(t,r[n],r[n+1]);return t},e.extent.extendRings=function(t,r){var n,i;for(n=0,i=r.length;n<i;++n)e.extent.extendCoordinates(t,r[n]);return t},e.extent.extendXY=function(t,e,r){t[0]=Math.min(t[0],e),t[1]=Math.min(t[1],r),t[2]=Math.max(t[2],e),t[3]=Math.max(t[3],r)},e.extent.forEachCorner=function(t,r,n){var i;return(i=r.call(n,e.extent.getBottomLeft(t)))?i:(i=r.call(n,e.extent.getBottomRight(t)))?i:(i=r.call(n,e.extent.getTopRight(t)))?i:(i=r.call(n,e.extent.getTopLeft(t)))||!1},e.extent.getArea=function(t){var r=0;return e.extent.isEmpty(t)||(r=e.extent.getWidth(t)*e.extent.getHeight(t)),r},e.extent.getBottomLeft=function(t){return[t[0],t[1]]},e.extent.getBottomRight=function(t){return[t[2],t[1]]},e.extent.getCenter=function(t){return[(t[0]+t[2])/2,(t[1]+t[3])/2]},e.extent.getCorner=function(t,r){var n;return r===e.extent.Corner.BOTTOM_LEFT?n=e.extent.getBottomLeft(t):r===e.extent.Corner.BOTTOM_RIGHT?n=e.extent.getBottomRight(t):r===e.extent.Corner.TOP_LEFT?n=e.extent.getTopLeft(t):r===e.extent.Corner.TOP_RIGHT?n=e.extent.getTopRight(t):e.asserts.assert(!1,13),n},e.extent.getEnlargedArea=function(t,e){var r=Math.min(t[0],e[0]),n=Math.min(t[1],e[1]);return(Math.max(t[2],e[2])-r)*(Math.max(t[3],e[3])-n)},e.extent.getForViewAndSize=function(t,r,n,i,o){var s=r*i[0]/2,a=r*i[1]/2,l=Math.cos(n),h=Math.sin(n),u=s*l,c=s*h,f=a*l,d=a*h,p=t[0],g=t[1],y=p-u+d,m=p-u-d,v=p+u-d,_=p+u+d,S=g-c-f,C=g-c+f,x=g+c+f,I=g+c-f;return e.extent.createOrUpdate(Math.min(y,m,v,_),Math.min(S,C,x,I),Math.max(y,m,v,_),Math.max(S,C,x,I),o)},e.extent.getHeight=function(t){return t[3]-t[1]},e.extent.getIntersectionArea=function(t,r){var n=e.extent.getIntersection(t,r);return e.extent.getArea(n)},e.extent.getIntersection=function(t,r,n){var i=n||e.extent.createEmpty();return e.extent.intersects(t,r)&&(t[0]>r[0]?i[0]=t[0]:i[0]=r[0],t[1]>r[1]?i[1]=t[1]:i[1]=r[1],t[2]<r[2]?i[2]=t[2]:i[2]=r[2],t[3]<r[3]?i[3]=t[3]:i[3]=r[3]),i},e.extent.getMargin=function(t){return e.extent.getWidth(t)+e.extent.getHeight(t)},e.extent.getSize=function(t){return[t[2]-t[0],t[3]-t[1]]},e.extent.getTopLeft=function(t){return[t[0],t[3]]},e.extent.getTopRight=function(t){return[t[2],t[3]]},e.extent.getWidth=function(t){return t[2]-t[0]},e.extent.intersects=function(t,e){return t[0]<=e[2]&&t[2]>=e[0]&&t[1]<=e[3]&&t[3]>=e[1]},e.extent.isEmpty=function(t){return t[2]<t[0]||t[3]<t[1]},e.extent.returnOrUpdate=function(t,e){return e?(e[0]=t[0],e[1]=t[1],e[2]=t[2],e[3]=t[3],e):t},e.extent.scaleFromCenter=function(t,e){var r=(t[2]-t[0])/2*(e-1),n=(t[3]-t[1])/2*(e-1);t[0]-=r,t[2]+=r,t[1]-=n,t[3]+=n},e.extent.intersectsSegment=function(t,r,n){var i=!1,o=e.extent.coordinateRelationship(t,r),s=e.extent.coordinateRelationship(t,n);if(o===e.extent.Relationship.INTERSECTING||s===e.extent.Relationship.INTERSECTING)i=!0;else{var a,l,h=t[0],u=t[1],c=t[2],f=t[3],d=r[0],p=r[1],g=n[0],y=n[1],m=(y-p)/(g-d);s&e.extent.Relationship.ABOVE&&!(o&e.extent.Relationship.ABOVE)&&(a=g-(y-f)/m,i=a>=h&&a<=c),i||!(s&e.extent.Relationship.RIGHT)||o&e.extent.Relationship.RIGHT||(l=y-(g-c)*m,i=l>=u&&l<=f),i||!(s&e.extent.Relationship.BELOW)||o&e.extent.Relationship.BELOW||(a=g-(y-u)/m,i=a>=h&&a<=c),i||!(s&e.extent.Relationship.LEFT)||o&e.extent.Relationship.LEFT||(l=y-(g-h)*m,i=l>=u&&l<=f)}return i},e.extent.applyTransform=function(t,r,n){var i=[t[0],t[1],t[0],t[3],t[2],t[1],t[2],t[3]];r(i,i,2);var o=[i[0],i[2],i[4],i[6]],s=[i[1],i[3],i[5],i[7]];return e.extent.boundingExtentXYs_(o,s,n)},e.obj={},e.obj.assign="function"==typeof Object.assign?Object.assign:function(t,e){if(void 0===t||null===t)throw new TypeError("Cannot convert undefined or null to object");for(var r=Object(t),n=1,i=arguments.length;n<i;++n){var o=arguments[n];if(void 0!==o&&null!==o)for(var s in o)o.hasOwnProperty(s)&&(r[s]=o[s])}return r},e.obj.clear=function(t){for(var e in t)delete t[e]},e.obj.getValues=function(t){var e=[];for(var r in t)e.push(t[r]);return e},e.obj.isEmpty=function(t){var e;for(e in t)return!1;return!e},e.transform={},e.transform.tmp_=new Array(6),e.transform.create=function(){return[1,0,0,1,0,0]},e.transform.reset=function(t){return e.transform.set(t,1,0,0,1,0,0)},e.transform.multiply=function(t,e){var r=t[0],n=t[1],i=t[2],o=t[3],s=t[4],a=t[5],l=e[0],h=e[1],u=e[2],c=e[3],f=e[4],d=e[5];return t[0]=r*l+i*h,t[1]=n*l+o*h,t[2]=r*u+i*c,t[3]=n*u+o*c,t[4]=r*f+i*d+s,t[5]=n*f+o*d+a,t},e.transform.set=function(t,e,r,n,i,o,s){return t[0]=e,t[1]=r,t[2]=n,t[3]=i,t[4]=o,t[5]=s,t},e.transform.setFromArray=function(t,e){return t[0]=e[0],t[1]=e[1],t[2]=e[2],t[3]=e[3],t[4]=e[4],t[5]=e[5],t},e.transform.apply=function(t,e){var r=e[0],n=e[1];return e[0]=t[0]*r+t[2]*n+t[4],e[1]=t[1]*r+t[3]*n+t[5],e},e.transform.rotate=function(t,r){var n=Math.cos(r),i=Math.sin(r);return e.transform.multiply(t,e.transform.set(e.transform.tmp_,n,i,-i,n,0,0))},e.transform.scale=function(t,r,n){return e.transform.multiply(t,e.transform.set(e.transform.tmp_,r,0,0,n,0,0))},e.transform.translate=function(t,r,n){return e.transform.multiply(t,e.transform.set(e.transform.tmp_,1,0,0,1,r,n))},e.transform.compose=function(t,e,r,n,i,o,s,a){var l=Math.sin(o),h=Math.cos(o);return t[0]=n*h,t[1]=i*l,t[2]=-n*l,t[3]=i*h,t[4]=s*n*h-a*n*l+e,t[5]=s*i*l+a*i*h+r,t},e.transform.invert=function(t){var r=e.transform.determinant(t),n=t[0],i=t[1],o=t[2],s=t[3],a=t[4],l=t[5];return t[0]=s/r,t[1]=-i/r,t[2]=-o/r,t[3]=n/r,t[4]=(o*l-s*a)/r,t[5]=-(n*l-i*a)/r,t},e.transform.determinant=function(t){return t[0]*t[3]-t[1]*t[2]},e.geom={},e.geom.flat={},e.geom.flat.center={},e.geom.flat.reverse={},e.geom.flat.orient={},e.geom.flat.transform={},e.geom.flat.transform.transform2D=function(t,e,r,n,i,o){var s,a=o||[],l=0;for(s=e;s<r;s+=n){var h=t[s],u=t[s+1];a[l++]=i[0]*h+i[2]*u+i[4],a[l++]=i[1]*h+i[3]*u+i[5]}return o&&a.length!=l&&(a.length=l),a},e.geom.flat.transform.rotate=function(t,e,r,n,i,o,s){for(var a=s||[],l=Math.cos(i),h=Math.sin(i),u=o[0],c=o[1],f=0,d=e;d<r;d+=n){var p=t[d]-u,g=t[d+1]-c;a[f++]=u+p*l-g*h,a[f++]=c+p*h+g*l;for(var y=d+2;y<d+n;++y)a[f++]=t[y]}return s&&a.length!=f&&(a.length=f),a},e.geom.flat.transform.scale=function(t,e,r,n,i,o,s,a){for(var l=a||[],h=s[0],u=s[1],c=0,f=e;f<r;f+=n){var d=t[f]-h,p=t[f+1]-u;l[c++]=h+i*d,l[c++]=u+o*p;for(var g=f+2;g<f+n;++g)l[c++]=t[g]}return a&&l.length!=c&&(l.length=c),l},e.geom.GeometryLayout={XY:"XY",XYZ:"XYZ",XYM:"XYM",XYZM:"XYZM"},e.geom.flat.reverse.coordinates=function(t,e,r,n){for(;e<r-n;){var i;for(i=0;i<n;++i){var o=t[e+i];t[e+i]=t[r-n+i],t[r-n+i]=o}e+=n,r-=n}},e.geom.flat.orient.linearRingIsClockwise=function(t,e,r,n){for(var i=0,o=t[r-n],s=t[r-n+1];e<r;e+=n){var a=t[e],l=t[e+1];i+=(a-o)*(l+s),o=a,s=l}return i>0},e.geom.flat.orient.linearRingsAreOriented=function(t,r,n,i,o){var s,a,l=void 0!==o&&o;for(s=0,a=n.length;s<a;++s){var h=n[s],u=e.geom.flat.orient.linearRingIsClockwise(t,r,h,i);if(0===s){if(l&&u||!l&&!u)return!1}else if(l&&!u||!l&&u)return!1;r=h}return!0},e.geom.flat.orient.linearRingssAreOriented=function(t,r,n,i,o){var s,a;for(s=0,a=n.length;s<a;++s)if(!e.geom.flat.orient.linearRingsAreOriented(t,r,n[s],i,o))return!1;return!0},e.geom.flat.orient.orientLinearRings=function(t,r,n,i,o){var s,a,l=void 0!==o&&o;for(s=0,a=n.length;s<a;++s){var h=n[s],u=e.geom.flat.orient.linearRingIsClockwise(t,r,h,i);(0===s?l&&u||!l&&!u:l&&!u||!l&&u)&&e.geom.flat.reverse.coordinates(t,r,h,i),r=h}return r},e.geom.flat.orient.orientLinearRingss=function(t,r,n,i,o){var s,a;for(s=0,a=n.length;s<a;++s)r=e.geom.flat.orient.orientLinearRings(t,r,n[s],i,o);return r},e.geom.flat.simplify={},e.geom.flat.simplify.lineString=function(t,r,n,i,o,s,a){var l=void 0!==a?a:[];return s||(n=e.geom.flat.simplify.radialDistance(t,r,n,i,o,l,0),t=l,r=0,i=2),l.length=e.geom.flat.simplify.douglasPeucker(t,r,n,i,o,l,0),l},e.geom.flat.simplify.douglasPeucker=function(t,r,n,i,o,s,a){var l=(n-r)/i;if(l<3){for(;r<n;r+=i)s[a++]=t[r],s[a++]=t[r+1];return a}var h=new Array(l);h[0]=1,h[l-1]=1;for(var u,c=[r,n-i],f=0;c.length>0;){var d=c.pop(),p=c.pop(),g=0,y=t[p],m=t[p+1],v=t[d],_=t[d+1];for(u=p+i;u<d;u+=i){var S=t[u],C=t[u+1],x=e.math.squaredSegmentDistance(S,C,y,m,v,_);x>g&&(f=u,g=x)}g>o&&(h[(f-r)/i]=1,p+i<f&&c.push(p,f),f+i<d&&c.push(f,d))}for(u=0;u<l;++u)h[u]&&(s[a++]=t[r+u*i],s[a++]=t[r+u*i+1]);return a},e.geom.flat.simplify.douglasPeuckers=function(t,r,n,i,o,s,a,l){var h,u;for(h=0,u=n.length;h<u;++h){var c=n[h];a=e.geom.flat.simplify.douglasPeucker(t,r,c,i,o,s,a),l.push(a),r=c}return a},e.geom.flat.simplify.douglasPeuckerss=function(t,r,n,i,o,s,a,l){var h,u;for(h=0,u=n.length;h<u;++h){var c=n[h],f=[];a=e.geom.flat.simplify.douglasPeuckers(t,r,c,i,o,s,a,f),l.push(f),r=c[c.length-1]}return a},e.geom.flat.simplify.radialDistance=function(t,r,n,i,o,s,a){if(n<=r+i){for(;r<n;r+=i)s[a++]=t[r],s[a++]=t[r+1];return a}var l=t[r],h=t[r+1];s[a++]=l,s[a++]=h;var u=l,c=h;for(r+=i;r<n;r+=i)u=t[r],c=t[r+1],e.math.squaredDistance(l,h,u,c)>o&&(s[a++]=u,s[a++]=c,l=u,h=c);return u==l&&c==h||(s[a++]=u,s[a++]=c),a},e.geom.flat.simplify.snap=function(t,e){return e*Math.round(t/e)},e.geom.flat.simplify.quantize=function(t,r,n,i,o,s,a){if(r==n)return a;var l=e.geom.flat.simplify.snap(t[r],o),h=e.geom.flat.simplify.snap(t[r+1],o);r+=i,s[a++]=l,s[a++]=h;var u,c;do{if(u=e.geom.flat.simplify.snap(t[r],o),c=e.geom.flat.simplify.snap(t[r+1],o),(r+=i)==n)return s[a++]=u,s[a++]=c,a}while(u==l&&c==h);for(;r<n;){var f,d;if(f=e.geom.flat.simplify.snap(t[r],o),d=e.geom.flat.simplify.snap(t[r+1],o),r+=i,f!=u||d!=c){var p=u-l,g=c-h,y=f-l,m=d-h;p*m==g*y&&(p<0&&y<p||p==y||p>0&&y>p)&&(g<0&&m<g||g==m||g>0&&m>g)?(u=f,c=d):(s[a++]=u,s[a++]=c,l=u,h=c,u=f,c=d)}}return s[a++]=u,s[a++]=c,a},e.geom.flat.simplify.quantizes=function(t,r,n,i,o,s,a,l){var h,u;for(h=0,u=n.length;h<u;++h){var c=n[h];a=e.geom.flat.simplify.quantize(t,r,c,i,o,s,a),l.push(a),r=c}return a},e.geom.flat.simplify.quantizess=function(t,r,n,i,o,s,a,l){var h,u;for(h=0,u=n.length;h<u;++h){var c=n[h],f=[];a=e.geom.flat.simplify.quantizes(t,r,c,i,o,s,a,f),l.push(f),r=c[c.length-1]}return a},e.geom.GeometryType={POINT:"Point",LINE_STRING:"LineString",LINEAR_RING:"LinearRing",POLYGON:"Polygon",MULTI_POINT:"MultiPoint",MULTI_LINE_STRING:"MultiLineString",MULTI_POLYGON:"MultiPolygon",GEOMETRY_COLLECTION:"GeometryCollection",CIRCLE:"Circle"},e.geom.Geometry=function(){e.Object.call(this),this.extent_=e.extent.createEmpty(),this.extentRevision_=-1,this.simplifiedGeometryCache={},this.simplifiedGeometryMaxMinSquaredTolerance=0,this.simplifiedGeometryRevision=0,this.tmpTransform_=e.transform.create()},e.inherits(e.geom.Geometry,e.Object),e.geom.Geometry.prototype.clone=function(){},e.geom.Geometry.prototype.closestPointXY=function(t,e,r,n){},e.geom.Geometry.prototype.getClosestPoint=function(t,e){var r=e||[NaN,NaN];return this.closestPointXY(t[0],t[1],r,1/0),r},e.geom.Geometry.prototype.intersectsCoordinate=function(t){return this.containsXY(t[0],t[1])},e.geom.Geometry.prototype.computeExtent=function(t){},e.geom.Geometry.prototype.containsXY=e.functions.FALSE,e.geom.Geometry.prototype.getExtent=function(t){return this.extentRevision_!=this.getRevision()&&(this.extent_=this.computeExtent(this.extent_),this.extentRevision_=this.getRevision()),e.extent.returnOrUpdate(this.extent_,t)},e.geom.Geometry.prototype.rotate=function(t,e){},e.geom.Geometry.prototype.scale=function(t,e,r){},e.geom.Geometry.prototype.simplify=function(t){return this.getSimplifiedGeometry(t*t)},e.geom.Geometry.prototype.getSimplifiedGeometry=function(t){},e.geom.Geometry.prototype.getType=function(){},e.geom.Geometry.prototype.applyTransform=function(t){},e.geom.Geometry.prototype.intersectsExtent=function(t){},e.geom.Geometry.prototype.translate=function(t,e){},e.geom.Geometry.prototype.transform=function(t,r){var n=this.tmpTransform_;t=e.proj.get(t);var i=t.getUnits()==e.proj.Units.TILE_PIXELS?function(i,o,s){var a=t.getExtent(),l=t.getWorldExtent(),h=e.extent.getHeight(l)/e.extent.getHeight(a);return e.transform.compose(n,l[0],l[3],h,-h,0,0,0),e.geom.flat.transform.transform2D(i,0,i.length,s,n,o),e.proj.getTransform(t,r)(i,o,s)}:e.proj.getTransform(t,r);return this.applyTransform(i),this},e.geom.SimpleGeometry=function(){e.geom.Geometry.call(this),this.layout=e.geom.GeometryLayout.XY,this.stride=2,this.flatCoordinates=null},e.inherits(e.geom.SimpleGeometry,e.geom.Geometry),e.geom.SimpleGeometry.getLayoutForStride_=function(t){var r;return 2==t?r=e.geom.GeometryLayout.XY:3==t?r=e.geom.GeometryLayout.XYZ:4==t&&(r=e.geom.GeometryLayout.XYZM),r},e.geom.SimpleGeometry.getStrideForLayout=function(t){var r;return t==e.geom.GeometryLayout.XY?r=2:t==e.geom.GeometryLayout.XYZ||t==e.geom.GeometryLayout.XYM?r=3:t==e.geom.GeometryLayout.XYZM&&(r=4),r},e.geom.SimpleGeometry.prototype.containsXY=e.functions.FALSE,e.geom.SimpleGeometry.prototype.computeExtent=function(t){return e.extent.createOrUpdateFromFlatCoordinates(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t)},e.geom.SimpleGeometry.prototype.getCoordinates=function(){},e.geom.SimpleGeometry.prototype.getFirstCoordinate=function(){return this.flatCoordinates.slice(0,this.stride)},e.geom.SimpleGeometry.prototype.getFlatCoordinates=function(){return this.flatCoordinates},e.geom.SimpleGeometry.prototype.getLastCoordinate=function(){return this.flatCoordinates.slice(this.flatCoordinates.length-this.stride)},e.geom.SimpleGeometry.prototype.getLayout=function(){return this.layout},e.geom.SimpleGeometry.prototype.getSimplifiedGeometry=function(t){if(this.simplifiedGeometryRevision!=this.getRevision()&&(e.obj.clear(this.simplifiedGeometryCache),this.simplifiedGeometryMaxMinSquaredTolerance=0,this.simplifiedGeometryRevision=this.getRevision()),t<0||0!==this.simplifiedGeometryMaxMinSquaredTolerance&&t<=this.simplifiedGeometryMaxMinSquaredTolerance)return this;var r=t.toString();if(this.simplifiedGeometryCache.hasOwnProperty(r))return this.simplifiedGeometryCache[r];var n=this.getSimplifiedGeometryInternal(t);return n.getFlatCoordinates().length<this.flatCoordinates.length?(this.simplifiedGeometryCache[r]=n,n):(this.simplifiedGeometryMaxMinSquaredTolerance=t,this)},e.geom.SimpleGeometry.prototype.getSimplifiedGeometryInternal=function(t){return this},e.geom.SimpleGeometry.prototype.getStride=function(){return this.stride},e.geom.SimpleGeometry.prototype.setFlatCoordinatesInternal=function(t,r){this.stride=e.geom.SimpleGeometry.getStrideForLayout(t),this.layout=t,this.flatCoordinates=r},e.geom.SimpleGeometry.prototype.setCoordinates=function(t,e){},e.geom.SimpleGeometry.prototype.setLayout=function(t,r,n){var i;if(t)i=e.geom.SimpleGeometry.getStrideForLayout(t);else{var o;for(o=0;o<n;++o){if(0===r.length)return this.layout=e.geom.GeometryLayout.XY,void(this.stride=2);r=r[0]}i=r.length,t=e.geom.SimpleGeometry.getLayoutForStride_(i)}this.layout=t,this.stride=i},e.geom.SimpleGeometry.prototype.applyTransform=function(t){this.flatCoordinates&&(t(this.flatCoordinates,this.flatCoordinates,this.stride),this.changed())},e.geom.SimpleGeometry.prototype.rotate=function(t,r){var n=this.getFlatCoordinates();if(n){var i=this.getStride();e.geom.flat.transform.rotate(n,0,n.length,i,t,r,n),this.changed()}},e.geom.SimpleGeometry.prototype.scale=function(t,r,n){var i=r;void 0===i&&(i=t);var o=n;o||(o=e.extent.getCenter(this.getExtent()));var s=this.getFlatCoordinates();if(s){var a=this.getStride();e.geom.flat.transform.scale(s,0,s.length,a,t,i,o,s),this.changed()}},e.geom.SimpleGeometry.prototype.translate=function(t,r){var n=this.getFlatCoordinates();if(n){var i=this.getStride();e.geom.flat.transform.translate(n,0,n.length,i,t,r,n),this.changed()}},e.geom.SimpleGeometry.transform2D=function(t,r,n){var i=t.getFlatCoordinates();if(i){var o=t.getStride();return e.geom.flat.transform.transform2D(i,0,i.length,o,r,n)}return null},e.geom.Polygon=function(t,r){e.geom.SimpleGeometry.call(this),this.ends_=[],this.flatInteriorPointRevision_=-1,this.flatInteriorPoint_=null,this.maxDelta_=-1,this.maxDeltaRevision_=-1,this.orientedRevision_=-1,this.orientedFlatCoordinates_=null,this.setCoordinates(t,r)},e.inherits(e.geom.Polygon,e.geom.SimpleGeometry),e.geom.Polygon.prototype.appendLinearRing=function(t){this.flatCoordinates?e.array.extend(this.flatCoordinates,t.getFlatCoordinates()):this.flatCoordinates=t.getFlatCoordinates().slice(),this.ends_.push(this.flatCoordinates.length),this.changed()},e.geom.Polygon.prototype.clone=function(){var t=new e.geom.Polygon(null);return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice(),this.ends_.slice()),t},e.geom.Polygon.prototype.closestPointXY=function(t,r,n,i){return i<e.extent.closestSquaredDistanceXY(this.getExtent(),t,r)?i:(this.maxDeltaRevision_!=this.getRevision()&&(this.maxDelta_=Math.sqrt(e.geom.flat.closest.getsMaxSquaredDelta(this.flatCoordinates,0,this.ends_,this.stride,0)),this.maxDeltaRevision_=this.getRevision()),e.geom.flat.closest.getsClosestPoint(this.flatCoordinates,0,this.ends_,this.stride,this.maxDelta_,!0,t,r,n,i))},e.geom.Polygon.prototype.containsXY=function(t,r){return e.geom.flat.contains.linearRingsContainsXY(this.getOrientedFlatCoordinates(),0,this.ends_,this.stride,t,r)},e.geom.Polygon.prototype.getArea=function(){return e.geom.flat.area.linearRings(this.getOrientedFlatCoordinates(),0,this.ends_,this.stride)},e.geom.Polygon.prototype.getCoordinates=function(t){var r;return void 0!==t?(r=this.getOrientedFlatCoordinates().slice(),e.geom.flat.orient.orientLinearRings(r,0,this.ends_,this.stride,t)):r=this.flatCoordinates,e.geom.flat.inflate.coordinatess(r,0,this.ends_,this.stride)},e.geom.Polygon.prototype.getEnds=function(){return this.ends_},e.geom.Polygon.prototype.getFlatInteriorPoint=function(){if(this.flatInteriorPointRevision_!=this.getRevision()){var t=e.extent.getCenter(this.getExtent());this.flatInteriorPoint_=e.geom.flat.interiorpoint.linearRings(this.getOrientedFlatCoordinates(),0,this.ends_,this.stride,t,0),this.flatInteriorPointRevision_=this.getRevision()}return this.flatInteriorPoint_},e.geom.Polygon.prototype.getInteriorPoint=function(){return new e.geom.Point(this.getFlatInteriorPoint(),e.geom.GeometryLayout.XYM)},e.geom.Polygon.prototype.getLinearRingCount=function(){return this.ends_.length},e.geom.Polygon.prototype.getLinearRing=function(t){if(t<0||this.ends_.length<=t)return null;var r=new e.geom.LinearRing(null);return r.setFlatCoordinates(this.layout,this.flatCoordinates.slice(0===t?0:this.ends_[t-1],this.ends_[t])),r},e.geom.Polygon.prototype.getLinearRings=function(){var t,r,n=this.layout,i=this.flatCoordinates,o=this.ends_,s=[],a=0;for(t=0,r=o.length;t<r;++t){var l=o[t],h=new e.geom.LinearRing(null);h.setFlatCoordinates(n,i.slice(a,l)),s.push(h),a=l}return s},e.geom.Polygon.prototype.getOrientedFlatCoordinates=function(){if(this.orientedRevision_!=this.getRevision()){var t=this.flatCoordinates;e.geom.flat.orient.linearRingsAreOriented(t,0,this.ends_,this.stride)?this.orientedFlatCoordinates_=t:(this.orientedFlatCoordinates_=t.slice(),this.orientedFlatCoordinates_.length=e.geom.flat.orient.orientLinearRings(this.orientedFlatCoordinates_,0,this.ends_,this.stride)),this.orientedRevision_=this.getRevision()}return this.orientedFlatCoordinates_},e.geom.Polygon.prototype.getSimplifiedGeometryInternal=function(t){var r=[],n=[];r.length=e.geom.flat.simplify.quantizes(this.flatCoordinates,0,this.ends_,this.stride,Math.sqrt(t),r,0,n);var i=new e.geom.Polygon(null);return i.setFlatCoordinates(e.geom.GeometryLayout.XY,r,n),i},e.geom.Polygon.prototype.getType=function(){return e.geom.GeometryType.POLYGON},e.geom.Polygon.prototype.intersectsExtent=function(t){return e.geom.flat.intersectsextent.linearRings(this.getOrientedFlatCoordinates(),0,this.ends_,this.stride,t)},e.geom.Polygon.prototype.setCoordinates=function(t,r){if(t){this.setLayout(r,t,2),this.flatCoordinates||(this.flatCoordinates=[]);var n=e.geom.flat.deflate.coordinatess(this.flatCoordinates,0,t,this.stride,this.ends_);this.flatCoordinates.length=0===n.length?0:n[n.length-1]}else this.setFlatCoordinates(e.geom.GeometryLayout.XY,null,this.ends_)},e.geom.Polygon.prototype.setFlatCoordinates=function(t,e,r){this.setFlatCoordinatesInternal(t,e),this.ends_=r},e.geom.Polygon.circular=function(t,r,n,i){var o,s=i||32,a=[];for(o=0;o<s;++o)e.array.extend(a,t.offset(r,n,2*Math.PI*o/s));a.push(a[0],a[1]);var l=new e.geom.Polygon(null);return l.setFlatCoordinates(e.geom.GeometryLayout.XY,a,[a.length]),l},e.geom.Polygon.fromExtent=function(t){var r=t[0],n=t[1],i=t[2],o=t[3],s=[r,n,r,o,i,o,i,n,r,n],a=new e.geom.Polygon(null);return a.setFlatCoordinates(e.geom.GeometryLayout.XY,s,[s.length]),a},e.geom.Polygon.fromCircle=function(t,r,n){for(var i=r||32,o=t.getStride(),s=t.getLayout(),a=new e.geom.Polygon(null,s),l=o*(i+1),h=new Array(l),u=0;u<l;u++)h[u]=0;var c=[h.length];return a.setFlatCoordinates(s,h,c),e.geom.Polygon.makeRegular(a,t.getCenter(),t.getRadius(),n),a},e.geom.Polygon.makeRegular=function(t,r,n,i){for(var o,s,a=t.getFlatCoordinates(),l=t.getLayout(),h=t.getStride(),u=t.getEnds(),c=a.length/h-1,f=i||0,d=0;d<=c;++d)s=d*h,o=f+2*e.math.modulo(d,c)*Math.PI/c,a[s]=r[0]+n*Math.cos(o),a[s+1]=r[1]+n*Math.sin(o);t.setFlatCoordinates(l,a,u)},e.geom.LineString=function(t,r){e.geom.SimpleGeometry.call(this),this.flatMidpoint_=null,this.flatMidpointRevision_=-1,this.maxDelta_=-1,this.maxDeltaRevision_=-1,this.setCoordinates(t,r)},e.inherits(e.geom.LineString,e.geom.SimpleGeometry),e.geom.LineString.prototype.appendCoordinate=function(t){this.flatCoordinates?e.array.extend(this.flatCoordinates,t):this.flatCoordinates=t.slice(),this.changed()},e.geom.LineString.prototype.clone=function(){var t=new e.geom.LineString(null);return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice()),t},e.geom.LineString.prototype.closestPointXY=function(t,r,n,i){return i<e.extent.closestSquaredDistanceXY(this.getExtent(),t,r)?i:(this.maxDeltaRevision_!=this.getRevision()&&(this.maxDelta_=Math.sqrt(e.geom.flat.closest.getMaxSquaredDelta(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,0)),this.maxDeltaRevision_=this.getRevision()),e.geom.flat.closest.getClosestPoint(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,this.maxDelta_,!1,t,r,n,i))},e.geom.LineString.prototype.forEachSegment=function(t,r){return e.geom.flat.segments.forEach(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t,r)},e.geom.LineString.prototype.getCoordinateAtM=function(t,r){if(this.layout!=e.geom.GeometryLayout.XYM&&this.layout!=e.geom.GeometryLayout.XYZM)return null;var n=void 0!==r&&r;return e.geom.flat.interpolate.lineStringCoordinateAtM(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t,n)},e.geom.LineString.prototype.getCoordinates=function(){return e.geom.flat.inflate.coordinates(this.flatCoordinates,0,this.flatCoordinates.length,this.stride)},e.geom.LineString.prototype.getCoordinateAt=function(t,r){return e.geom.flat.interpolate.lineString(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t,r)},e.geom.LineString.prototype.getLength=function(){return e.geom.flat.length.lineString(this.flatCoordinates,0,this.flatCoordinates.length,this.stride)},e.geom.LineString.prototype.getFlatMidpoint=function(){return this.flatMidpointRevision_!=this.getRevision()&&(this.flatMidpoint_=this.getCoordinateAt(.5,this.flatMidpoint_),this.flatMidpointRevision_=this.getRevision()),this.flatMidpoint_},e.geom.LineString.prototype.getSimplifiedGeometryInternal=function(t){var r=[];r.length=e.geom.flat.simplify.douglasPeucker(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t,r,0);var n=new e.geom.LineString(null);return n.setFlatCoordinates(e.geom.GeometryLayout.XY,r),n},e.geom.LineString.prototype.getType=function(){return e.geom.GeometryType.LINE_STRING},e.geom.LineString.prototype.intersectsExtent=function(t){return e.geom.flat.intersectsextent.lineString(this.flatCoordinates,0,this.flatCoordinates.length,this.stride,t)},e.geom.LineString.prototype.setCoordinates=function(t,r){t?(this.setLayout(r,t,1),this.flatCoordinates||(this.flatCoordinates=[]),this.flatCoordinates.length=e.geom.flat.deflate.coordinates(this.flatCoordinates,0,t,this.stride),this.changed()):this.setFlatCoordinates(e.geom.GeometryLayout.XY,null)},e.geom.LineString.prototype.setFlatCoordinates=function(t,e){this.setFlatCoordinatesInternal(t,e),this.changed()},e.geom.Point=function(t,r){e.geom.SimpleGeometry.call(this),this.setCoordinates(t,r)},e.inherits(e.geom.Point,e.geom.SimpleGeometry),e.geom.Point.prototype.clone=function(){var t=new e.geom.Point(null);return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice()),t},e.geom.Point.prototype.closestPointXY=function(t,r,n,i){var o=this.flatCoordinates,s=e.math.squaredDistance(t,r,o[0],o[1]);if(s<i){var a,l=this.stride;for(a=0;a<l;++a)n[a]=o[a];return n.length=l,s}return i},e.geom.Point.prototype.getCoordinates=function(){return this.flatCoordinates?this.flatCoordinates.slice():[]},e.geom.Point.prototype.computeExtent=function(t){return e.extent.createOrUpdateFromCoordinate(this.flatCoordinates,t)},e.geom.Point.prototype.getType=function(){return e.geom.GeometryType.POINT},e.geom.Point.prototype.intersectsExtent=function(t){return e.extent.containsXY(t,this.flatCoordinates[0],this.flatCoordinates[1])},e.geom.Point.prototype.setCoordinates=function(t,r){t?(this.setLayout(r,t,0),this.flatCoordinates||(this.flatCoordinates=[]),this.flatCoordinates.length=e.geom.flat.deflate.coordinate(this.flatCoordinates,0,t,this.stride),this.changed()):this.setFlatCoordinates(e.geom.GeometryLayout.XY,null)},e.geom.Point.prototype.setFlatCoordinates=function(t,e){this.setFlatCoordinatesInternal(t,e),this.changed()},e.geom.MultiLineString=function(t,r){e.geom.SimpleGeometry.call(this),this.ends_=[],this.maxDelta_=-1,this.maxDeltaRevision_=-1,this.setCoordinates(t,r)},e.inherits(e.geom.MultiLineString,e.geom.SimpleGeometry),e.geom.MultiLineString.prototype.appendLineString=function(t){this.flatCoordinates?e.array.extend(this.flatCoordinates,t.getFlatCoordinates().slice()):this.flatCoordinates=t.getFlatCoordinates().slice(),this.ends_.push(this.flatCoordinates.length),this.changed()},e.geom.MultiLineString.prototype.clone=function(){
-var t=new e.geom.MultiLineString(null);return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice(),this.ends_.slice()),t},e.geom.MultiLineString.prototype.closestPointXY=function(t,r,n,i){return i<e.extent.closestSquaredDistanceXY(this.getExtent(),t,r)?i:(this.maxDeltaRevision_!=this.getRevision()&&(this.maxDelta_=Math.sqrt(e.geom.flat.closest.getsMaxSquaredDelta(this.flatCoordinates,0,this.ends_,this.stride,0)),this.maxDeltaRevision_=this.getRevision()),e.geom.flat.closest.getsClosestPoint(this.flatCoordinates,0,this.ends_,this.stride,this.maxDelta_,!1,t,r,n,i))},e.geom.MultiLineString.prototype.getCoordinateAtM=function(t,r,n){if(this.layout!=e.geom.GeometryLayout.XYM&&this.layout!=e.geom.GeometryLayout.XYZM||0===this.flatCoordinates.length)return null;var i=void 0!==r&&r,o=void 0!==n&&n;return e.geom.flat.interpolate.lineStringsCoordinateAtM(this.flatCoordinates,0,this.ends_,this.stride,t,i,o)},e.geom.MultiLineString.prototype.getCoordinates=function(){return e.geom.flat.inflate.coordinatess(this.flatCoordinates,0,this.ends_,this.stride)},e.geom.MultiLineString.prototype.getEnds=function(){return this.ends_},e.geom.MultiLineString.prototype.getLineString=function(t){if(t<0||this.ends_.length<=t)return null;var r=new e.geom.LineString(null);return r.setFlatCoordinates(this.layout,this.flatCoordinates.slice(0===t?0:this.ends_[t-1],this.ends_[t])),r},e.geom.MultiLineString.prototype.getLineStrings=function(){var t,r,n=this.flatCoordinates,i=this.ends_,o=this.layout,s=[],a=0;for(t=0,r=i.length;t<r;++t){var l=i[t],h=new e.geom.LineString(null);h.setFlatCoordinates(o,n.slice(a,l)),s.push(h),a=l}return s},e.geom.MultiLineString.prototype.getFlatMidpoints=function(){var t,r,n=[],i=this.flatCoordinates,o=0,s=this.ends_,a=this.stride;for(t=0,r=s.length;t<r;++t){var l=s[t],h=e.geom.flat.interpolate.lineString(i,o,l,a,.5);e.array.extend(n,h),o=l}return n},e.geom.MultiLineString.prototype.getSimplifiedGeometryInternal=function(t){var r=[],n=[];r.length=e.geom.flat.simplify.douglasPeuckers(this.flatCoordinates,0,this.ends_,this.stride,t,r,0,n);var i=new e.geom.MultiLineString(null);return i.setFlatCoordinates(e.geom.GeometryLayout.XY,r,n),i},e.geom.MultiLineString.prototype.getType=function(){return e.geom.GeometryType.MULTI_LINE_STRING},e.geom.MultiLineString.prototype.intersectsExtent=function(t){return e.geom.flat.intersectsextent.lineStrings(this.flatCoordinates,0,this.ends_,this.stride,t)},e.geom.MultiLineString.prototype.setCoordinates=function(t,r){if(t){this.setLayout(r,t,2),this.flatCoordinates||(this.flatCoordinates=[]);var n=e.geom.flat.deflate.coordinatess(this.flatCoordinates,0,t,this.stride,this.ends_);this.flatCoordinates.length=0===n.length?0:n[n.length-1],this.changed()}else this.setFlatCoordinates(e.geom.GeometryLayout.XY,null,this.ends_)},e.geom.MultiLineString.prototype.setFlatCoordinates=function(t,e,r){this.setFlatCoordinatesInternal(t,e),this.ends_=r,this.changed()},e.geom.MultiLineString.prototype.setLineStrings=function(t){var r,n,i=this.getLayout(),o=[],s=[];for(r=0,n=t.length;r<n;++r){var a=t[r];0===r&&(i=a.getLayout()),e.array.extend(o,a.getFlatCoordinates()),s.push(o.length)}this.setFlatCoordinates(i,o,s)},e.geom.MultiPoint=function(t,r){e.geom.SimpleGeometry.call(this),this.setCoordinates(t,r)},e.inherits(e.geom.MultiPoint,e.geom.SimpleGeometry),e.geom.MultiPoint.prototype.appendPoint=function(t){this.flatCoordinates?e.array.extend(this.flatCoordinates,t.getFlatCoordinates()):this.flatCoordinates=t.getFlatCoordinates().slice(),this.changed()},e.geom.MultiPoint.prototype.clone=function(){var t=new e.geom.MultiPoint(null);return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice()),t},e.geom.MultiPoint.prototype.closestPointXY=function(t,r,n,i){if(i<e.extent.closestSquaredDistanceXY(this.getExtent(),t,r))return i;var o,s,a,l=this.flatCoordinates,h=this.stride;for(o=0,s=l.length;o<s;o+=h){var u=e.math.squaredDistance(t,r,l[o],l[o+1]);if(u<i){for(i=u,a=0;a<h;++a)n[a]=l[o+a];n.length=h}}return i},e.geom.MultiPoint.prototype.getCoordinates=function(){return e.geom.flat.inflate.coordinates(this.flatCoordinates,0,this.flatCoordinates.length,this.stride)},e.geom.MultiPoint.prototype.getPoint=function(t){var r=this.flatCoordinates?this.flatCoordinates.length/this.stride:0;if(t<0||r<=t)return null;var n=new e.geom.Point(null);return n.setFlatCoordinates(this.layout,this.flatCoordinates.slice(t*this.stride,(t+1)*this.stride)),n},e.geom.MultiPoint.prototype.getPoints=function(){var t,r,n=this.flatCoordinates,i=this.layout,o=this.stride,s=[];for(t=0,r=n.length;t<r;t+=o){var a=new e.geom.Point(null);a.setFlatCoordinates(i,n.slice(t,t+o)),s.push(a)}return s},e.geom.MultiPoint.prototype.getType=function(){return e.geom.GeometryType.MULTI_POINT},e.geom.MultiPoint.prototype.intersectsExtent=function(t){var r,n,i,o,s=this.flatCoordinates,a=this.stride;for(r=0,n=s.length;r<n;r+=a)if(i=s[r],o=s[r+1],e.extent.containsXY(t,i,o))return!0;return!1},e.geom.MultiPoint.prototype.setCoordinates=function(t,r){t?(this.setLayout(r,t,1),this.flatCoordinates||(this.flatCoordinates=[]),this.flatCoordinates.length=e.geom.flat.deflate.coordinates(this.flatCoordinates,0,t,this.stride),this.changed()):this.setFlatCoordinates(e.geom.GeometryLayout.XY,null)},e.geom.MultiPoint.prototype.setFlatCoordinates=function(t,e){this.setFlatCoordinatesInternal(t,e),this.changed()},e.geom.flat.center.linearRingss={},e.geom.flat.center.linearRingss=function(t,r,n,i){var o,s,a=[],l=e.extent.createEmpty();for(o=0,s=n.length;o<s;++o){var h=n[o];l=e.extent.createOrUpdateFromFlatCoordinates(t,r,h[0],i),a.push((l[0]+l[2])/2,(l[1]+l[3])/2),r=h[h.length-1]}return a},e.geom.MultiPolygon=function(t,r){e.geom.SimpleGeometry.call(this),this.endss_=[],this.flatInteriorPointsRevision_=-1,this.flatInteriorPoints_=null,this.maxDelta_=-1,this.maxDeltaRevision_=-1,this.orientedRevision_=-1,this.orientedFlatCoordinates_=null,this.setCoordinates(t,r)},e.inherits(e.geom.MultiPolygon,e.geom.SimpleGeometry),e.geom.MultiPolygon.prototype.appendPolygon=function(t){var r;if(this.flatCoordinates){var n=this.flatCoordinates.length;e.array.extend(this.flatCoordinates,t.getFlatCoordinates()),r=t.getEnds().slice();var i,o;for(i=0,o=r.length;i<o;++i)r[i]+=n}else this.flatCoordinates=t.getFlatCoordinates().slice(),r=t.getEnds().slice(),this.endss_.push();this.endss_.push(r),this.changed()},e.geom.MultiPolygon.prototype.clone=function(){for(var t=new e.geom.MultiPolygon(null),r=this.endss_.length,n=new Array(r),i=0;i<r;++i)n[i]=this.endss_[i].slice();return t.setFlatCoordinates(this.layout,this.flatCoordinates.slice(),n),t},e.geom.MultiPolygon.prototype.closestPointXY=function(t,r,n,i){return i<e.extent.closestSquaredDistanceXY(this.getExtent(),t,r)?i:(this.maxDeltaRevision_!=this.getRevision()&&(this.maxDelta_=Math.sqrt(e.geom.flat.closest.getssMaxSquaredDelta(this.flatCoordinates,0,this.endss_,this.stride,0)),this.maxDeltaRevision_=this.getRevision()),e.geom.flat.closest.getssClosestPoint(this.getOrientedFlatCoordinates(),0,this.endss_,this.stride,this.maxDelta_,!0,t,r,n,i))},e.geom.MultiPolygon.prototype.containsXY=function(t,r){return e.geom.flat.contains.linearRingssContainsXY(this.getOrientedFlatCoordinates(),0,this.endss_,this.stride,t,r)},e.geom.MultiPolygon.prototype.getArea=function(){return e.geom.flat.area.linearRingss(this.getOrientedFlatCoordinates(),0,this.endss_,this.stride)},e.geom.MultiPolygon.prototype.getCoordinates=function(t){var r;return void 0!==t?(r=this.getOrientedFlatCoordinates().slice(),e.geom.flat.orient.orientLinearRingss(r,0,this.endss_,this.stride,t)):r=this.flatCoordinates,e.geom.flat.inflate.coordinatesss(r,0,this.endss_,this.stride)},e.geom.MultiPolygon.prototype.getEndss=function(){return this.endss_},e.geom.MultiPolygon.prototype.getFlatInteriorPoints=function(){if(this.flatInteriorPointsRevision_!=this.getRevision()){var t=e.geom.flat.center.linearRingss(this.flatCoordinates,0,this.endss_,this.stride);this.flatInteriorPoints_=e.geom.flat.interiorpoint.linearRingss(this.getOrientedFlatCoordinates(),0,this.endss_,this.stride,t),this.flatInteriorPointsRevision_=this.getRevision()}return this.flatInteriorPoints_},e.geom.MultiPolygon.prototype.getInteriorPoints=function(){var t=new e.geom.MultiPoint(null);return t.setFlatCoordinates(e.geom.GeometryLayout.XYM,this.getFlatInteriorPoints().slice()),t},e.geom.MultiPolygon.prototype.getOrientedFlatCoordinates=function(){if(this.orientedRevision_!=this.getRevision()){var t=this.flatCoordinates;e.geom.flat.orient.linearRingssAreOriented(t,0,this.endss_,this.stride)?this.orientedFlatCoordinates_=t:(this.orientedFlatCoordinates_=t.slice(),this.orientedFlatCoordinates_.length=e.geom.flat.orient.orientLinearRingss(this.orientedFlatCoordinates_,0,this.endss_,this.stride)),this.orientedRevision_=this.getRevision()}return this.orientedFlatCoordinates_},e.geom.MultiPolygon.prototype.getSimplifiedGeometryInternal=function(t){var r=[],n=[];r.length=e.geom.flat.simplify.quantizess(this.flatCoordinates,0,this.endss_,this.stride,Math.sqrt(t),r,0,n);var i=new e.geom.MultiPolygon(null);return i.setFlatCoordinates(e.geom.GeometryLayout.XY,r,n),i},e.geom.MultiPolygon.prototype.getPolygon=function(t){if(t<0||this.endss_.length<=t)return null;var r;if(0===t)r=0;else{var n=this.endss_[t-1];r=n[n.length-1]}var i=this.endss_[t].slice(),o=i[i.length-1];if(0!==r){var s,a;for(s=0,a=i.length;s<a;++s)i[s]-=r}var l=new e.geom.Polygon(null);return l.setFlatCoordinates(this.layout,this.flatCoordinates.slice(r,o),i),l},e.geom.MultiPolygon.prototype.getPolygons=function(){var t,r,n,i,o=this.layout,s=this.flatCoordinates,a=this.endss_,l=[],h=0;for(t=0,r=a.length;t<r;++t){var u=a[t].slice(),c=u[u.length-1];if(0!==h)for(n=0,i=u.length;n<i;++n)u[n]-=h;var f=new e.geom.Polygon(null);f.setFlatCoordinates(o,s.slice(h,c),u),l.push(f),h=c}return l},e.geom.MultiPolygon.prototype.getType=function(){return e.geom.GeometryType.MULTI_POLYGON},e.geom.MultiPolygon.prototype.intersectsExtent=function(t){return e.geom.flat.intersectsextent.linearRingss(this.getOrientedFlatCoordinates(),0,this.endss_,this.stride,t)},e.geom.MultiPolygon.prototype.setCoordinates=function(t,r){if(t){this.setLayout(r,t,3),this.flatCoordinates||(this.flatCoordinates=[]);var n=e.geom.flat.deflate.coordinatesss(this.flatCoordinates,0,t,this.stride,this.endss_);if(0===n.length)this.flatCoordinates.length=0;else{var i=n[n.length-1];this.flatCoordinates.length=0===i.length?0:i[i.length-1]}this.changed()}else this.setFlatCoordinates(e.geom.GeometryLayout.XY,null,this.endss_)},e.geom.MultiPolygon.prototype.setFlatCoordinates=function(t,e,r){this.setFlatCoordinatesInternal(t,e),this.endss_=r,this.changed()},e.geom.MultiPolygon.prototype.setPolygons=function(t){var r,n,i,o=this.getLayout(),s=[],a=[];for(r=0,n=t.length;r<n;++r){var l=t[r];0===r&&(o=l.getLayout());var h=s.length;i=l.getEnds();var u,c;for(u=0,c=i.length;u<c;++u)i[u]+=h;e.array.extend(s,l.getFlatCoordinates()),a.push(i)}this.setFlatCoordinates(o,s,a)},e.Feature=function(t){if(e.Object.call(this),this.id_=void 0,this.geometryName_="geometry",this.style_=null,this.styleFunction_=void 0,this.geometryChangeKey_=null,void 0!==t)if(t instanceof e.geom.Geometry||!t){var r=t;this.setGeometry(r)}else{var n=t;this.setProperties(n)}},e.inherits(e.Feature,e.Object),e.Feature.prototype.clone=function(){var t=new e.Feature(this.getProperties());t.setGeometryName(this.getGeometryName());var r=this.getGeometry();r&&t.setGeometry(r.clone());var n=this.getStyle();return n&&t.setStyle(n),t},e.Feature.prototype.getGeometry=function(){return this.get(this.geometryName_)},e.Feature.prototype.getId=function(){return this.id_},e.Feature.prototype.getGeometryName=function(){return this.geometryName_},e.Feature.prototype.getStyle=function(){return this.style_},e.Feature.prototype.getStyleFunction=function(){return this.styleFunction_},e.Feature.prototype.handleGeometryChange_=function(){this.changed()},e.Feature.prototype.handleGeometryChanged_=function(){this.geometryChangeKey_&&(e.events.unlistenByKey(this.geometryChangeKey_),this.geometryChangeKey_=null);var t=this.getGeometry();t&&(this.geometryChangeKey_=e.events.listen(t,e.events.EventType.CHANGE,this.handleGeometryChange_,this)),this.changed()},e.Feature.prototype.setGeometry=function(t){this.set(this.geometryName_,t)},e.Feature.prototype.setStyle=function(t){this.style_=t,this.styleFunction_=t?e.Feature.createStyleFunction(t):void 0,this.changed()},e.Feature.prototype.setId=function(t){this.id_=t,this.changed()},e.Feature.prototype.setGeometryName=function(t){e.events.unlisten(this,e.Object.getChangeEventType(this.geometryName_),this.handleGeometryChanged_,this),this.geometryName_=t,e.events.listen(this,e.Object.getChangeEventType(this.geometryName_),this.handleGeometryChanged_,this),this.handleGeometryChanged_()},e.Feature.createStyleFunction=function(t){var r;if("function"==typeof t)r=2==t.length?function(e){return t(this,e)}:t;else{var n;Array.isArray(t)?n=t:(e.asserts.assert(t instanceof e.style.Style,41),n=[t]),r=function(){return n}}return r},e.format={},e.format.Feature=function(){this.defaultDataProjection=null,this.defaultFeatureProjection=null},e.format.Feature.prototype.getReadOptions=function(t,e){var r;return e&&(r={dataProjection:e.dataProjection?e.dataProjection:this.readProjection(t),featureProjection:e.featureProjection}),this.adaptOptions(r)},e.format.Feature.prototype.adaptOptions=function(t){return e.obj.assign({dataProjection:this.defaultDataProjection,featureProjection:this.defaultFeatureProjection},t)},e.format.Feature.prototype.getLastExtent=function(){return null},e.format.Feature.prototype.getType=function(){},e.format.Feature.prototype.readFeature=function(t,e){},e.format.Feature.prototype.readFeatures=function(t,e){},e.format.Feature.prototype.readGeometry=function(t,e){},e.format.Feature.prototype.readProjection=function(t){},e.format.Feature.prototype.writeFeature=function(t,e){},e.format.Feature.prototype.writeFeatures=function(t,e){},e.format.Feature.prototype.writeGeometry=function(t,e){},e.format.Feature.transformWithOptions=function(t,e,r){var n;if(n=t,e&&r&&void 0!==r.decimals){var i=Math.pow(10,r.decimals),o=function(t){for(var e=0,r=t.length;e<r;++e)t[e]=Math.round(t[e]*i)/i;return t};n===t&&(n=n.clone()),n.applyTransform(o)}return n},e.format.MVT=function(t){e.format.Feature.call(this);var r=t||{};this.featureClass_=r.featureClass?r.featureClass:e.render.Feature,this.geometryName_=r.geometryName,this.layerName_=r.layerName?r.layerName:"layer",this.layers_=r.layers?r.layers:null,this.extent_=null},e.inherits(e.format.MVT,e.format.Feature),e.format.MVT.pbfReaders_={layers:function(t,r,n){if(3===t){var i={keys:[],values:[],features:[]},o=n.readVarint()+n.pos;n.readFields(e.format.MVT.pbfReaders_.layer,i,o),i.length=i.features.length,i.length&&(r[i.name]=i)}},layer:function(t,e,r){if(15===t)e.version=r.readVarint();else if(1===t)e.name=r.readString();else if(5===t)e.extent=r.readVarint();else if(2===t)e.features.push(r.pos);else if(3===t)e.keys.push(r.readString());else if(4===t){for(var n=null,i=r.readVarint()+r.pos;r.pos<i;)t=r.readVarint()>>3,n=1===t?r.readString():2===t?r.readFloat():3===t?r.readDouble():4===t?r.readVarint64():5===t?r.readVarint():6===t?r.readSVarint():7===t?r.readBoolean():null;e.values.push(n)}},feature:function(t,e,r){if(1==t)e.id=r.readVarint();else if(2==t)for(var n=r.readVarint()+r.pos;r.pos<n;){var i=e.layer.keys[r.readVarint()],o=e.layer.values[r.readVarint()];e.properties[i]=o}else 3==t?e.type=r.readVarint():4==t&&(e.geometry=r.pos)}},e.format.MVT.readRawFeature_=function(t,r,n){t.pos=r.features[n];var i=t.readVarint()+t.pos,o={layer:r,type:0,properties:{}};return t.readFields(e.format.MVT.pbfReaders_.feature,o,i),o},e.format.MVT.readRawGeometry_=function(t,r,n,i){t.pos=r.geometry;for(var o=t.readVarint()+t.pos,s=1,a=0,l=0,h=0,u=0,c=0;t.pos<o;){if(!a){var f=t.readVarint();s=7&f,a=f>>3}a--,1===s||2===s?(l+=t.readSVarint(),h+=t.readSVarint(),1===s&&u>c&&(i.push(u),c=u),n.push(l,h),u+=2):7===s?u>c&&(n.push(n[c],n[c+1]),u+=2):e.asserts.assert(!1,59)}u>c&&(i.push(u),c=u)},e.format.MVT.getGeometryType_=function(t,r){var n;return 1===t?n=1===r?e.geom.GeometryType.POINT:e.geom.GeometryType.MULTI_POINT:2===t?n=1===r?e.geom.GeometryType.LINE_STRING:e.geom.GeometryType.MULTI_LINE_STRING:3===t&&(n=e.geom.GeometryType.POLYGON),n},e.format.MVT.prototype.createFeature_=function(t,r,n){var i=r.type;if(0===i)return null;var o,s=r.id,a=r.properties;a[this.layerName_]=r.layer.name;var l=[],h=[];e.format.MVT.readRawGeometry_(t,r,l,h);var u,c=e.format.MVT.getGeometryType_(i,h.length);if(c==e.geom.GeometryType.POLYGON){for(var f=[],d=0,p=0,g=0,y=h.length;g<y;++g){var m=h[g];e.geom.flat.orient.linearRingIsClockwise(l,d,m,2)||(f.push(h.slice(p,g+1)),p=g+1),d=m}f.length>1?(h=f,u=new e.geom.MultiPolygon(null)):u=new e.geom.Polygon(null)}else u=c===e.geom.GeometryType.POINT?new e.geom.Point(null):c===e.geom.GeometryType.LINE_STRING?new e.geom.LineString(null):c===e.geom.GeometryType.POLYGON?new e.geom.Polygon(null):c===e.geom.GeometryType.MULTI_POINT?new e.geom.MultiPoint(null):c===e.geom.GeometryType.MULTI_LINE_STRING?new e.geom.MultiLineString(null):null;u.setFlatCoordinates(e.geom.GeometryLayout.XY,l,h),o=new this.featureClass_,this.geometryName_&&o.setGeometryName(this.geometryName_);var v=e.format.Feature.transformWithOptions(u,!1,this.adaptOptions(n));return o.setGeometry(v),o.setId(s),o.setProperties(a),o},e.format.MVT.prototype.readFeatures=function(r,n){var i,o=this.layers_,s=new t(r),a=s.readFields(e.format.MVT.pbfReaders_.layers,{}),l=[];for(var h in a)if(!o||-1!=o.indexOf(h)){if(void 0!==n){var u=n.needSourceLayerNames;if(void 0!==u&&void 0===u[h])continue}i=a[h];for(var c,f=0,d=i.length;f<d;++f)c=e.format.MVT.readRawFeature_(s,i,f),l.push(this.createFeature_(s,c));this.extent_=i?[0,0,i.extent,i.extent]:null}return l},e.style={},e.style.IconImageCache=function(){this.cache_={},this.cacheSize_=0,this.maxCacheSize_=32},e.style.IconImageCache.getKey=function(t,r,n){return r+":"+t+":"+(n?e.color.asString(n):"null")},e.style.IconImageCache.prototype.clear=function(){this.cache_={},this.cacheSize_=0},e.style.IconImageCache.prototype.expire=function(){if(this.cacheSize_>this.maxCacheSize_){var t,e,r=0;for(t in this.cache_)e=this.cache_[t],0!=(3&r++)||e.hasListener()||(delete this.cache_[t],--this.cacheSize_)}},e.style.IconImageCache.prototype.get=function(t,r,n){var i=e.style.IconImageCache.getKey(t,r,n);return i in this.cache_?this.cache_[i]:null},e.style.IconImageCache.prototype.set=function(t,r,n,i){var o=e.style.IconImageCache.getKey(t,r,n);this.cache_[o]=i,++this.cacheSize_},e.style.IconImageCache.prototype.setSize=function(t){this.maxCacheSize_=t,this.expire()},e.style.iconImageCache=new e.style.IconImageCache,e.style.Image=function(t){this.opacity_=t.opacity,this.rotateWithView_=t.rotateWithView,this.rotation_=t.rotation,this.scale_=t.scale,this.snapToPixel_=t.snapToPixel},e.style.Image.prototype.getOpacity=function(){return this.opacity_},e.style.Image.prototype.getRotateWithView=function(){return this.rotateWithView_},e.style.Image.prototype.getRotation=function(){return this.rotation_},e.style.Image.prototype.getScale=function(){return this.scale_},e.style.Image.prototype.getSnapToPixel=function(){return this.snapToPixel_},e.style.Image.prototype.getAnchor=function(){},e.style.Image.prototype.getImage=function(t){},e.style.Image.prototype.getHitDetectionImage=function(t){},e.style.Image.prototype.getImageState=function(){},e.style.Image.prototype.getImageSize=function(){},e.style.Image.prototype.getHitDetectionImageSize=function(){},e.style.Image.prototype.getOrigin=function(){},e.style.Image.prototype.getSize=function(){},e.style.Image.prototype.setOpacity=function(t){this.opacity_=t},e.style.Image.prototype.setRotateWithView=function(t){this.rotateWithView_=t},e.style.Image.prototype.setRotation=function(t){this.rotation_=t},e.style.Image.prototype.setScale=function(t){this.scale_=t},e.style.Image.prototype.setSnapToPixel=function(t){this.snapToPixel_=t},e.style.Image.prototype.listenImageChange=function(t,e){},e.style.Image.prototype.load=function(){},e.style.Image.prototype.unlistenImageChange=function(t,e){},e.style.RegularShape=function(t){this.checksums_=null,this.canvas_=null,this.hitDetectionCanvas_=null,this.fill_=void 0!==t.fill?t.fill:null,this.origin_=[0,0],this.points_=t.points,this.radius_=void 0!==t.radius?t.radius:t.radius1,this.radius2_=t.radius2,this.angle_=void 0!==t.angle?t.angle:0,this.stroke_=void 0!==t.stroke?t.stroke:null,this.anchor_=null,this.size_=null,this.imageSize_=null,this.hitDetectionImageSize_=null,this.atlasManager_=t.atlasManager,this.render_(this.atlasManager_);var r=void 0===t.snapToPixel||t.snapToPixel,n=void 0!==t.rotateWithView&&t.rotateWithView;e.style.Image.call(this,{opacity:1,rotateWithView:n,rotation:void 0!==t.rotation?t.rotation:0,scale:1,snapToPixel:r})},e.inherits(e.style.RegularShape,e.style.Image),e.style.RegularShape.prototype.clone=function(){var t=new e.style.RegularShape({fill:this.getFill()?this.getFill().clone():void 0,points:this.getPoints(),radius:this.getRadius(),radius2:this.getRadius2(),angle:this.getAngle(),snapToPixel:this.getSnapToPixel(),stroke:this.getStroke()?this.getStroke().clone():void 0,rotation:this.getRotation(),rotateWithView:this.getRotateWithView(),atlasManager:this.atlasManager_});return t.setOpacity(this.getOpacity()),t.setScale(this.getScale()),t},e.style.RegularShape.prototype.getAnchor=function(){return this.anchor_},e.style.RegularShape.prototype.getAngle=function(){return this.angle_},e.style.RegularShape.prototype.getFill=function(){return this.fill_},e.style.RegularShape.prototype.getHitDetectionImage=function(t){return this.hitDetectionCanvas_},e.style.RegularShape.prototype.getImage=function(t){return this.canvas_},e.style.RegularShape.prototype.getImageSize=function(){return this.imageSize_},e.style.RegularShape.prototype.getHitDetectionImageSize=function(){return this.hitDetectionImageSize_},e.style.RegularShape.prototype.getImageState=function(){return e.ImageState.LOADED},e.style.RegularShape.prototype.getOrigin=function(){return this.origin_},e.style.RegularShape.prototype.getPoints=function(){return this.points_},e.style.RegularShape.prototype.getRadius=function(){return this.radius_},e.style.RegularShape.prototype.getRadius2=function(){return this.radius2_},e.style.RegularShape.prototype.getSize=function(){return this.size_},e.style.RegularShape.prototype.getStroke=function(){return this.stroke_},e.style.RegularShape.prototype.listenImageChange=function(t,e){},e.style.RegularShape.prototype.load=function(){},e.style.RegularShape.prototype.unlistenImageChange=function(t,e){},e.style.RegularShape.prototype.render_=function(t){var r,n,i="",o="",s=0,a=null,l=0,h=0;this.stroke_&&(n=this.stroke_.getColor(),null===n&&(n=e.render.canvas.defaultStrokeStyle),n=e.colorlike.asColorLike(n),h=this.stroke_.getWidth(),void 0===h&&(h=e.render.canvas.defaultLineWidth),a=this.stroke_.getLineDash(),l=this.stroke_.getLineDashOffset(),e.has.CANVAS_LINE_DASH||(a=null,l=0),o=this.stroke_.getLineJoin(),void 0===o&&(o=e.render.canvas.defaultLineJoin),i=this.stroke_.getLineCap(),void 0===i&&(i=e.render.canvas.defaultLineCap),void 0===(s=this.stroke_.getMiterLimit())&&(s=e.render.canvas.defaultMiterLimit));var u=2*(this.radius_+h)+1,c={strokeStyle:n,strokeWidth:h,size:u,lineCap:i,lineDash:a,lineDashOffset:l,lineJoin:o,miterLimit:s};if(void 0===t){var f=e.dom.createCanvasContext2D(u,u);this.canvas_=f.canvas,u=this.canvas_.width,r=u,this.draw_(c,f,0,0),this.createHitDetectionCanvas_(c)}else{u=Math.round(u);var d,p=!this.fill_;p&&(d=this.drawHitDetectionCanvas_.bind(this,c));var g=this.getChecksum(),y=t.add(g,u,u,this.draw_.bind(this,c),d);this.canvas_=y.image,this.origin_=[y.offsetX,y.offsetY],r=y.image.width,p?(this.hitDetectionCanvas_=y.hitImage,this.hitDetectionImageSize_=[y.hitImage.width,y.hitImage.height]):(this.hitDetectionCanvas_=this.canvas_,this.hitDetectionImageSize_=[r,r])}this.anchor_=[u/2,u/2],this.size_=[u,u],this.imageSize_=[r,r]},e.style.RegularShape.prototype.draw_=function(t,r,n,i){var o,s,a;r.setTransform(1,0,0,1,0,0),r.translate(n,i),r.beginPath();var l=this.points_;if(l===1/0)r.arc(t.size/2,t.size/2,this.radius_,0,2*Math.PI,!0);else{var h=void 0!==this.radius2_?this.radius2_:this.radius_;for(h!==this.radius_&&(l*=2),o=0;o<=l;o++)s=2*o*Math.PI/l-Math.PI/2+this.angle_,a=o%2==0?this.radius_:h,r.lineTo(t.size/2+a*Math.cos(s),t.size/2+a*Math.sin(s))}if(this.fill_){var u=this.fill_.getColor();null===u&&(u=e.render.canvas.defaultFillStyle),r.fillStyle=e.colorlike.asColorLike(u),r.fill()}this.stroke_&&(r.strokeStyle=t.strokeStyle,r.lineWidth=t.strokeWidth,t.lineDash&&(r.setLineDash(t.lineDash),r.lineDashOffset=t.lineDashOffset),r.lineCap=t.lineCap,r.lineJoin=t.lineJoin,r.miterLimit=t.miterLimit,r.stroke()),r.closePath()},e.style.RegularShape.prototype.createHitDetectionCanvas_=function(t){if(this.hitDetectionImageSize_=[t.size,t.size],this.fill_)return void(this.hitDetectionCanvas_=this.canvas_);var r=e.dom.createCanvasContext2D(t.size,t.size);this.hitDetectionCanvas_=r.canvas,this.drawHitDetectionCanvas_(t,r,0,0)},e.style.RegularShape.prototype.drawHitDetectionCanvas_=function(t,r,n,i){r.setTransform(1,0,0,1,0,0),r.translate(n,i),r.beginPath();var o=this.points_;if(o===1/0)r.arc(t.size/2,t.size/2,this.radius_,0,2*Math.PI,!0);else{var s=void 0!==this.radius2_?this.radius2_:this.radius_;s!==this.radius_&&(o*=2);var a,l,h;for(a=0;a<=o;a++)h=2*a*Math.PI/o-Math.PI/2+this.angle_,l=a%2==0?this.radius_:s,r.lineTo(t.size/2+l*Math.cos(h),t.size/2+l*Math.sin(h))}r.fillStyle=e.render.canvas.defaultFillStyle,r.fill(),this.stroke_&&(r.strokeStyle=t.strokeStyle,r.lineWidth=t.strokeWidth,t.lineDash&&(r.setLineDash(t.lineDash),r.lineDashOffset=t.lineDashOffset),r.stroke()),r.closePath()},e.style.RegularShape.prototype.getChecksum=function(){var t=this.stroke_?this.stroke_.getChecksum():"-",e=this.fill_?this.fill_.getChecksum():"-";if(!this.checksums_||t!=this.checksums_[1]||e!=this.checksums_[2]||this.radius_!=this.checksums_[3]||this.radius2_!=this.checksums_[4]||this.angle_!=this.checksums_[5]||this.points_!=this.checksums_[6]){var r="r"+t+e+(void 0!==this.radius_?this.radius_.toString():"-")+(void 0!==this.radius2_?this.radius2_.toString():"-")+(void 0!==this.angle_?this.angle_.toString():"-")+(void 0!==this.points_?this.points_.toString():"-");this.checksums_=[r,t,e,this.radius_,this.radius2_,this.angle_,this.points_]}return this.checksums_[0]},e.style.Circle=function(t){var r=t||{};e.style.RegularShape.call(this,{points:1/0,fill:r.fill,radius:r.radius,snapToPixel:r.snapToPixel,stroke:r.stroke,atlasManager:r.atlasManager})},e.inherits(e.style.Circle,e.style.RegularShape),e.style.Circle.prototype.clone=function(){var t=new e.style.Circle({fill:this.getFill()?this.getFill().clone():void 0,stroke:this.getStroke()?this.getStroke().clone():void 0,radius:this.getRadius(),snapToPixel:this.getSnapToPixel(),atlasManager:this.atlasManager_});return t.setOpacity(this.getOpacity()),t.setScale(this.getScale()),t},e.style.Circle.prototype.setRadius=function(t){this.radius_=t,this.render_(this.atlasManager_)},e.style.Fill=function(t){var e=t||{};this.color_=void 0!==e.color?e.color:null,this.checksum_=void 0},e.style.Fill.prototype.clone=function(){var t=this.getColor();return new e.style.Fill({color:t&&t.slice?t.slice():t||void 0})},e.style.Fill.prototype.getColor=function(){return this.color_},e.style.Fill.prototype.setColor=function(t){this.color_=t,this.checksum_=void 0},e.style.Fill.prototype.getChecksum=function(){return void 0===this.checksum_&&(this.color_ instanceof CanvasPattern||this.color_ instanceof CanvasGradient?this.checksum_=e.getUid(this.color_).toString():this.checksum_="f"+(this.color_?e.color.asString(this.color_):"-")),this.checksum_},e.style.Stroke=function(t){var e=t||{};this.color_=void 0!==e.color?e.color:null,this.lineCap_=e.lineCap,this.lineDash_=void 0!==e.lineDash?e.lineDash:null,this.lineDashOffset_=e.lineDashOffset,this.lineJoin_=e.lineJoin,this.miterLimit_=e.miterLimit,this.width_=e.width,this.checksum_=void 0},e.style.Stroke.prototype.clone=function(){var t=this.getColor();return new e.style.Stroke({color:t&&t.slice?t.slice():t||void 0,lineCap:this.getLineCap(),lineDash:this.getLineDash()?this.getLineDash().slice():void 0,lineDashOffset:this.getLineDashOffset(),lineJoin:this.getLineJoin(),miterLimit:this.getMiterLimit(),width:this.getWidth()})},e.style.Stroke.prototype.getColor=function(){return this.color_},e.style.Stroke.prototype.getLineCap=function(){return this.lineCap_},e.style.Stroke.prototype.getLineDash=function(){return this.lineDash_},e.style.Stroke.prototype.getLineDashOffset=function(){return this.lineDashOffset_},e.style.Stroke.prototype.getLineJoin=function(){return this.lineJoin_},e.style.Stroke.prototype.getMiterLimit=function(){return this.miterLimit_},e.style.Stroke.prototype.getWidth=function(){return this.width_},e.style.Stroke.prototype.setColor=function(t){this.color_=t,this.checksum_=void 0},e.style.Stroke.prototype.setLineCap=function(t){this.lineCap_=t,this.checksum_=void 0},e.style.Stroke.prototype.setLineDash=function(t){this.lineDash_=t,this.checksum_=void 0},e.style.Stroke.prototype.setLineDashOffset=function(t){this.lineDashOffset_=t,this.checksum_=void 0},e.style.Stroke.prototype.setLineJoin=function(t){this.lineJoin_=t,this.checksum_=void 0},e.style.Stroke.prototype.setMiterLimit=function(t){this.miterLimit_=t,this.checksum_=void 0},e.style.Stroke.prototype.setWidth=function(t){this.width_=t,this.checksum_=void 0},e.style.Stroke.prototype.getChecksum=function(){return void 0===this.checksum_&&(this.checksum_="s",this.color_?"string"==typeof this.color_?this.checksum_+=this.color_:this.checksum_+=e.getUid(this.color_).toString():this.checksum_+="-",this.checksum_+=","+(void 0!==this.lineCap_?this.lineCap_.toString():"-")+","+(this.lineDash_?this.lineDash_.toString():"-")+","+(void 0!==this.lineDashOffset_?this.lineDashOffset_:"-")+","+(void 0!==this.lineJoin_?this.lineJoin_:"-")+","+(void 0!==this.miterLimit_?this.miterLimit_.toString():"-")+","+(void 0!==this.width_?this.width_.toString():"-")),this.checksum_},e.style.IconAnchorUnits={FRACTION:"fraction",PIXELS:"pixels"},e.style.IconImage=function(t,r,n,i,o,s){e.events.EventTarget.call(this),this.hitDetectionImage_=null,this.image_=t||new Image,null!==i&&(this.image_.crossOrigin=i),this.canvas_=s?document.createElement("CANVAS"):null,this.color_=s,this.imageListenerKeys_=null,this.imageState_=o,this.size_=n,this.src_=r,this.tainting_=!1,this.imageState_==e.ImageState.LOADED&&this.determineTainting_()},e.inherits(e.style.IconImage,e.events.EventTarget),e.style.IconImage.get=function(t,r,n,i,o,s){var a=e.style.iconImageCache,l=a.get(r,i,s);return l||(l=new e.style.IconImage(t,r,n,i,o,s),a.set(r,i,s,l)),l},e.style.IconImage.prototype.determineTainting_=function(){var t=e.dom.createCanvasContext2D(1,1);try{t.drawImage(this.image_,0,0),t.getImageData(0,0,1,1)}catch(t){this.tainting_=!0}},e.style.IconImage.prototype.dispatchChangeEvent_=function(){this.dispatchEvent(e.events.EventType.CHANGE)},e.style.IconImage.prototype.handleImageError_=function(){this.imageState_=e.ImageState.ERROR,this.unlistenImage_(),this.dispatchChangeEvent_()},e.style.IconImage.prototype.handleImageLoad_=function(){this.imageState_=e.ImageState.LOADED,this.size_&&(this.image_.width=this.size_[0],this.image_.height=this.size_[1]),this.size_=[this.image_.width,this.image_.height],this.unlistenImage_(),this.determineTainting_(),this.replaceColor_(),this.dispatchChangeEvent_()},e.style.IconImage.prototype.getImage=function(t){return this.canvas_?this.canvas_:this.image_},e.style.IconImage.prototype.getImageState=function(){return this.imageState_},e.style.IconImage.prototype.getHitDetectionImage=function(t){if(!this.hitDetectionImage_)if(this.tainting_){var r=this.size_[0],n=this.size_[1],i=e.dom.createCanvasContext2D(r,n);i.fillRect(0,0,r,n),
-this.hitDetectionImage_=i.canvas}else this.hitDetectionImage_=this.image_;return this.hitDetectionImage_},e.style.IconImage.prototype.getSize=function(){return this.size_},e.style.IconImage.prototype.getSrc=function(){return this.src_},e.style.IconImage.prototype.load=function(){if(this.imageState_==e.ImageState.IDLE){this.imageState_=e.ImageState.LOADING,this.imageListenerKeys_=[e.events.listenOnce(this.image_,e.events.EventType.ERROR,this.handleImageError_,this),e.events.listenOnce(this.image_,e.events.EventType.LOAD,this.handleImageLoad_,this)];try{this.image_.src=this.src_}catch(t){this.handleImageError_()}}},e.style.IconImage.prototype.replaceColor_=function(){if(!this.tainting_&&null!==this.color_){this.canvas_.width=this.image_.width,this.canvas_.height=this.image_.height;var t=this.canvas_.getContext("2d");t.drawImage(this.image_,0,0);for(var e=t.getImageData(0,0,this.image_.width,this.image_.height),r=e.data,n=this.color_[0]/255,i=this.color_[1]/255,o=this.color_[2]/255,s=0,a=r.length;s<a;s+=4)r[s]*=n,r[s+1]*=i,r[s+2]*=o;t.putImageData(e,0,0)}},e.style.IconImage.prototype.unlistenImage_=function(){this.imageListenerKeys_.forEach(e.events.unlistenByKey),this.imageListenerKeys_=null},e.style.IconOrigin={BOTTOM_LEFT:"bottom-left",BOTTOM_RIGHT:"bottom-right",TOP_LEFT:"top-left",TOP_RIGHT:"top-right"},e.style.Icon=function(t){var r=t||{};this.anchor_=void 0!==r.anchor?r.anchor:[.5,.5],this.normalizedAnchor_=null,this.anchorOrigin_=void 0!==r.anchorOrigin?r.anchorOrigin:e.style.IconOrigin.TOP_LEFT,this.anchorXUnits_=void 0!==r.anchorXUnits?r.anchorXUnits:e.style.IconAnchorUnits.FRACTION,this.anchorYUnits_=void 0!==r.anchorYUnits?r.anchorYUnits:e.style.IconAnchorUnits.FRACTION,this.crossOrigin_=void 0!==r.crossOrigin?r.crossOrigin:null;var n=void 0!==r.img?r.img:null,i=void 0!==r.imgSize?r.imgSize:null,o=r.src;void 0!==o&&0!==o.length||!n||(o=n.src||e.getUid(n).toString());var s=void 0!==r.src?e.ImageState.IDLE:e.ImageState.LOADED;this.color_=void 0!==r.color?e.color.asArray(r.color):null,this.iconImage_=e.style.IconImage.get(n,o,i,this.crossOrigin_,s,this.color_),this.offset_=void 0!==r.offset?r.offset:[0,0],this.offsetOrigin_=void 0!==r.offsetOrigin?r.offsetOrigin:e.style.IconOrigin.TOP_LEFT,this.origin_=null,this.size_=void 0!==r.size?r.size:null;var a=void 0!==r.opacity?r.opacity:1,l=void 0!==r.rotateWithView&&r.rotateWithView,h=void 0!==r.rotation?r.rotation:0,u=void 0!==r.scale?r.scale:1,c=void 0===r.snapToPixel||r.snapToPixel;e.style.Image.call(this,{opacity:a,rotation:h,scale:u,snapToPixel:c,rotateWithView:l})},e.inherits(e.style.Icon,e.style.Image),e.style.Icon.prototype.clone=function(){return new e.style.Icon({anchor:this.anchor_.slice(),anchorOrigin:this.anchorOrigin_,anchorXUnits:this.anchorXUnits_,anchorYUnits:this.anchorYUnits_,crossOrigin:this.crossOrigin_,color:this.color_&&this.color_.slice?this.color_.slice():this.color_||void 0,src:this.getSrc(),offset:this.offset_.slice(),offsetOrigin:this.offsetOrigin_,size:null!==this.size_?this.size_.slice():void 0,opacity:this.getOpacity(),scale:this.getScale(),snapToPixel:this.getSnapToPixel(),rotation:this.getRotation(),rotateWithView:this.getRotateWithView()})},e.style.Icon.prototype.getAnchor=function(){if(this.normalizedAnchor_)return this.normalizedAnchor_;var t=this.anchor_,r=this.getSize();if(this.anchorXUnits_==e.style.IconAnchorUnits.FRACTION||this.anchorYUnits_==e.style.IconAnchorUnits.FRACTION){if(!r)return null;t=this.anchor_.slice(),this.anchorXUnits_==e.style.IconAnchorUnits.FRACTION&&(t[0]*=r[0]),this.anchorYUnits_==e.style.IconAnchorUnits.FRACTION&&(t[1]*=r[1])}if(this.anchorOrigin_!=e.style.IconOrigin.TOP_LEFT){if(!r)return null;t===this.anchor_&&(t=this.anchor_.slice()),this.anchorOrigin_!=e.style.IconOrigin.TOP_RIGHT&&this.anchorOrigin_!=e.style.IconOrigin.BOTTOM_RIGHT||(t[0]=-t[0]+r[0]),this.anchorOrigin_!=e.style.IconOrigin.BOTTOM_LEFT&&this.anchorOrigin_!=e.style.IconOrigin.BOTTOM_RIGHT||(t[1]=-t[1]+r[1])}return this.normalizedAnchor_=t,this.normalizedAnchor_},e.style.Icon.prototype.getColor=function(){return this.color_},e.style.Icon.prototype.getImage=function(t){return this.iconImage_.getImage(t)},e.style.Icon.prototype.getImageSize=function(){return this.iconImage_.getSize()},e.style.Icon.prototype.getHitDetectionImageSize=function(){return this.getImageSize()},e.style.Icon.prototype.getImageState=function(){return this.iconImage_.getImageState()},e.style.Icon.prototype.getHitDetectionImage=function(t){return this.iconImage_.getHitDetectionImage(t)},e.style.Icon.prototype.getOrigin=function(){if(this.origin_)return this.origin_;var t=this.offset_;if(this.offsetOrigin_!=e.style.IconOrigin.TOP_LEFT){var r=this.getSize(),n=this.iconImage_.getSize();if(!r||!n)return null;t=t.slice(),this.offsetOrigin_!=e.style.IconOrigin.TOP_RIGHT&&this.offsetOrigin_!=e.style.IconOrigin.BOTTOM_RIGHT||(t[0]=n[0]-r[0]-t[0]),this.offsetOrigin_!=e.style.IconOrigin.BOTTOM_LEFT&&this.offsetOrigin_!=e.style.IconOrigin.BOTTOM_RIGHT||(t[1]=n[1]-r[1]-t[1])}return this.origin_=t,this.origin_},e.style.Icon.prototype.getSrc=function(){return this.iconImage_.getSrc()},e.style.Icon.prototype.getSize=function(){return this.size_?this.size_:this.iconImage_.getSize()},e.style.Icon.prototype.listenImageChange=function(t,r){return e.events.listen(this.iconImage_,e.events.EventType.CHANGE,t,r)},e.style.Icon.prototype.load=function(){this.iconImage_.load()},e.style.Icon.prototype.unlistenImageChange=function(t,r){e.events.unlisten(this.iconImage_,e.events.EventType.CHANGE,t,r)},e.style.Text=function(t){var r=t||{};this.font_=r.font,this.rotation_=r.rotation,this.rotateWithView_=r.rotateWithView,this.scale_=r.scale,this.text_=r.text,this.textAlign_=r.textAlign,this.textBaseline_=r.textBaseline,this.fill_=void 0!==r.fill?r.fill:new e.style.Fill({color:e.style.Text.DEFAULT_FILL_COLOR_}),this.maxAngle_=void 0!==r.maxAngle?r.maxAngle:Math.PI/4,this.placement_=void 0!==r.placement?r.placement:e.style.TextPlacement.POINT;var n=void 0===r.overflow?r.exceedLength:r.overflow;this.overflow_=void 0!==n&&n,this.stroke_=void 0!==r.stroke?r.stroke:null,this.offsetX_=void 0!==r.offsetX?r.offsetX:0,this.offsetY_=void 0!==r.offsetY?r.offsetY:0,this.backgroundFill_=r.backgroundFill?r.backgroundFill:null,this.backgroundStroke_=r.backgroundStroke?r.backgroundStroke:null,this.padding_=void 0===r.padding?null:r.padding},e.style.Text.DEFAULT_FILL_COLOR_="#333",e.style.Text.prototype.clone=function(){return new e.style.Text({font:this.getFont(),placement:this.getPlacement(),maxAngle:this.getMaxAngle(),overflow:this.getOverflow(),rotation:this.getRotation(),rotateWithView:this.getRotateWithView(),scale:this.getScale(),text:this.getText(),textAlign:this.getTextAlign(),textBaseline:this.getTextBaseline(),fill:this.getFill()?this.getFill().clone():void 0,stroke:this.getStroke()?this.getStroke().clone():void 0,offsetX:this.getOffsetX(),offsetY:this.getOffsetY()})},e.style.Text.prototype.getOverflow=function(){return this.overflow_},e.style.Text.prototype.getFont=function(){return this.font_},e.style.Text.prototype.getMaxAngle=function(){return this.maxAngle_},e.style.Text.prototype.getPlacement=function(){return this.placement_},e.style.Text.prototype.getOffsetX=function(){return this.offsetX_},e.style.Text.prototype.getOffsetY=function(){return this.offsetY_},e.style.Text.prototype.getFill=function(){return this.fill_},e.style.Text.prototype.getRotateWithView=function(){return this.rotateWithView_},e.style.Text.prototype.getRotation=function(){return this.rotation_},e.style.Text.prototype.getScale=function(){return this.scale_},e.style.Text.prototype.getStroke=function(){return this.stroke_},e.style.Text.prototype.getText=function(){return this.text_},e.style.Text.prototype.getTextAlign=function(){return this.textAlign_},e.style.Text.prototype.getTextBaseline=function(){return this.textBaseline_},e.style.Text.prototype.getBackgroundFill=function(){return this.backgroundFill_},e.style.Text.prototype.getBackgroundStroke=function(){return this.backgroundStroke_},e.style.Text.prototype.getPadding=function(){return this.padding_},e.style.Text.prototype.setOverflow=function(t){this.overflow_=t},e.style.Text.prototype.setFont=function(t){this.font_=t},e.style.Text.prototype.setMaxAngle=function(t){this.maxAngle_=t},e.style.Text.prototype.setOffsetX=function(t){this.offsetX_=t},e.style.Text.prototype.setOffsetY=function(t){this.offsetY_=t},e.style.Text.prototype.setPlacement=function(t){this.placement_=t},e.style.Text.prototype.setFill=function(t){this.fill_=t},e.style.Text.prototype.setRotation=function(t){this.rotation_=t},e.style.Text.prototype.setScale=function(t){this.scale_=t},e.style.Text.prototype.setStroke=function(t){this.stroke_=t},e.style.Text.prototype.setText=function(t){this.text_=t},e.style.Text.prototype.setTextAlign=function(t){this.textAlign_=t},e.style.Text.prototype.setTextBaseline=function(t){this.textBaseline_=t},e.style.Text.prototype.setBackgroundFill=function(t){this.backgroundFill_=t},e.style.Text.prototype.setBackgroundStroke=function(t){this.backgroundStroke_=t},e.style.Text.prototype.setPadding=function(t){this.padding_=t},e.style.Style=function(t){var r=t||{};this.geometry_=null,this.geometryFunction_=e.style.Style.defaultGeometryFunction,void 0!==r.geometry&&this.setGeometry(r.geometry),this.fill_=void 0!==r.fill?r.fill:null,this.image_=void 0!==r.image?r.image:null,this.renderer_=void 0!==r.renderer?r.renderer:null,this.stroke_=void 0!==r.stroke?r.stroke:null,this.text_=void 0!==r.text?r.text:null,this.zIndex_=r.zIndex},e.style.Style.prototype.clone=function(){var t=this.getGeometry();return t&&t.clone&&(t=t.clone()),new e.style.Style({geometry:t,fill:this.getFill()?this.getFill().clone():void 0,image:this.getImage()?this.getImage().clone():void 0,stroke:this.getStroke()?this.getStroke().clone():void 0,text:this.getText()?this.getText().clone():void 0,zIndex:this.getZIndex()})},e.style.Style.prototype.getRenderer=function(){return this.renderer_},e.style.Style.prototype.setRenderer=function(t){this.renderer_=t},e.style.Style.prototype.getGeometry=function(){return this.geometry_},e.style.Style.prototype.getGeometryFunction=function(){return this.geometryFunction_},e.style.Style.prototype.getFill=function(){return this.fill_},e.style.Style.prototype.setFill=function(t){this.fill_=t},e.style.Style.prototype.getImage=function(){return this.image_},e.style.Style.prototype.setImage=function(t){this.image_=t},e.style.Style.prototype.getStroke=function(){return this.stroke_},e.style.Style.prototype.setStroke=function(t){this.stroke_=t},e.style.Style.prototype.getText=function(){return this.text_},e.style.Style.prototype.setText=function(t){this.text_=t},e.style.Style.prototype.getZIndex=function(){return this.zIndex_},e.style.Style.prototype.setGeometry=function(t){"function"==typeof t?this.geometryFunction_=t:"string"==typeof t?this.geometryFunction_=function(e){return e.get(t)}:t?void 0!==t&&(this.geometryFunction_=function(){return t}):this.geometryFunction_=e.style.Style.defaultGeometryFunction,this.geometry_=t},e.style.Style.prototype.setZIndex=function(t){this.zIndex_=t},e.style.Style.createFunction=function(t){var r;if("function"==typeof t)r=t;else{var n;Array.isArray(t)?n=t:(e.asserts.assert(t instanceof e.style.Style,41),n=[t]),r=function(){return n}}return r},e.style.Style.default_=null,e.style.Style.defaultFunction=function(t,r){if(!e.style.Style.default_){var n=new e.style.Fill({color:"rgba(255,255,255,0.4)"}),i=new e.style.Stroke({color:"#3399CC",width:1.25});e.style.Style.default_=[new e.style.Style({image:new e.style.Circle({fill:n,stroke:i,radius:5}),fill:n,stroke:i})]}return e.style.Style.default_},e.style.Style.createDefaultEditing=function(){var t={},r=[255,255,255,1],n=[0,153,255,1];return t[e.geom.GeometryType.POLYGON]=[new e.style.Style({fill:new e.style.Fill({color:[255,255,255,.5]})})],t[e.geom.GeometryType.MULTI_POLYGON]=t[e.geom.GeometryType.POLYGON],t[e.geom.GeometryType.LINE_STRING]=[new e.style.Style({stroke:new e.style.Stroke({color:r,width:5})}),new e.style.Style({stroke:new e.style.Stroke({color:n,width:3})})],t[e.geom.GeometryType.MULTI_LINE_STRING]=t[e.geom.GeometryType.LINE_STRING],t[e.geom.GeometryType.CIRCLE]=t[e.geom.GeometryType.POLYGON].concat(t[e.geom.GeometryType.LINE_STRING]),t[e.geom.GeometryType.POINT]=[new e.style.Style({image:new e.style.Circle({radius:6,fill:new e.style.Fill({color:n}),stroke:new e.style.Stroke({color:r,width:1.5})}),zIndex:1/0})],t[e.geom.GeometryType.MULTI_POINT]=t[e.geom.GeometryType.POINT],t[e.geom.GeometryType.GEOMETRY_COLLECTION]=t[e.geom.GeometryType.POLYGON].concat(t[e.geom.GeometryType.LINE_STRING],t[e.geom.GeometryType.POINT]),t},e.style.Style.defaultGeometryFunction=function(t){return t.getGeometry()},e.ext={},e.ext.rbush=function(){},function(){!function(t){function e(t,e,n,o,s){r(t,e,n||0,o||t.length-1,s||i)}function r(t,e,i,o,s){for(;o>i;){if(o-i>600){var a=o-i+1,l=e-i+1,h=Math.log(a),u=.5*Math.exp(2*h/3),c=.5*Math.sqrt(h*u*(a-u)/a)*(l-a/2<0?-1:1);r(t,e,Math.max(i,Math.floor(e-l*u/a+c)),Math.min(o,Math.floor(e+(a-l)*u/a+c)),s)}var f=t[e],d=i,p=o;for(n(t,i,e),s(t[o],f)>0&&n(t,i,o);d<p;){for(n(t,d,p),d++,p--;s(t[d],f)<0;)d++;for(;s(t[p],f)>0;)p--}0===s(t[i],f)?n(t,i,p):(p++,n(t,p,o)),p<=e&&(i=p+1),e<=p&&(o=p-1)}}function n(t,e,r){var n=t[e];t[e]=t[r],t[r]=n}function i(t,e){return t<e?-1:t>e?1:0}function o(t,e){if(!(this instanceof o))return new o(t,e);this._maxEntries=Math.max(4,t||9),this._minEntries=Math.max(2,Math.ceil(.4*this._maxEntries)),e&&this._initFormat(e),this.clear()}function s(t,e,r){if(!r)return e.indexOf(t);for(var n=0;n<e.length;n++)if(r(t,e[n]))return n;return-1}function a(t,e){l(t,0,t.children.length,e,t)}function l(t,e,r,n,i){i||(i=v(null)),i.minX=1/0,i.minY=1/0,i.maxX=-1/0,i.maxY=-1/0;for(var o,s=e;s<r;s++)o=t.children[s],h(i,t.leaf?n(o):o);return i}function h(t,e){return t.minX=Math.min(t.minX,e.minX),t.minY=Math.min(t.minY,e.minY),t.maxX=Math.max(t.maxX,e.maxX),t.maxY=Math.max(t.maxY,e.maxY),t}function u(t,e){return t.minX-e.minX}function c(t,e){return t.minY-e.minY}function f(t){return(t.maxX-t.minX)*(t.maxY-t.minY)}function d(t){return t.maxX-t.minX+(t.maxY-t.minY)}function p(t,e){return(Math.max(e.maxX,t.maxX)-Math.min(e.minX,t.minX))*(Math.max(e.maxY,t.maxY)-Math.min(e.minY,t.minY))}function g(t,e){var r=Math.max(t.minX,e.minX),n=Math.max(t.minY,e.minY),i=Math.min(t.maxX,e.maxX),o=Math.min(t.maxY,e.maxY);return Math.max(0,i-r)*Math.max(0,o-n)}function y(t,e){return t.minX<=e.minX&&t.minY<=e.minY&&e.maxX<=t.maxX&&e.maxY<=t.maxY}function m(t,e){return e.minX<=t.maxX&&e.minY<=t.maxY&&e.maxX>=t.minX&&e.maxY>=t.minY}function v(t){return{children:t,height:1,leaf:!0,minX:1/0,minY:1/0,maxX:-1/0,maxY:-1/0}}function _(t,e,r,n,i){for(var o,s=[e,r];s.length;)r=s.pop(),e=s.pop(),r-e<=n||(o=e+Math.ceil((r-e)/n/2)*n,S(t,o,e,r,i),s.push(e,o,o,r))}var S=e,C=e;S.default=C;var x=o;o.prototype={all:function(){return this._all(this.data,[])},search:function(t){var e=this.data,r=[],n=this.toBBox;if(!m(t,e))return r;for(var i,o,s,a,l=[];e;){for(i=0,o=e.children.length;i<o;i++)s=e.children[i],a=e.leaf?n(s):s,m(t,a)&&(e.leaf?r.push(s):y(t,a)?this._all(s,r):l.push(s));e=l.pop()}return r},collides:function(t){var e=this.data,r=this.toBBox;if(!m(t,e))return!1;for(var n,i,o,s,a=[];e;){for(n=0,i=e.children.length;n<i;n++)if(o=e.children[n],s=e.leaf?r(o):o,m(t,s)){if(e.leaf||y(t,s))return!0;a.push(o)}e=a.pop()}return!1},load:function(t){if(!t||!t.length)return this;if(t.length<this._minEntries){for(var e=0,r=t.length;e<r;e++)this.insert(t[e]);return this}var n=this._build(t.slice(),0,t.length-1,0);if(this.data.children.length)if(this.data.height===n.height)this._splitRoot(this.data,n);else{if(this.data.height<n.height){var i=this.data;this.data=n,n=i}this._insert(n,this.data.height-n.height-1,!0)}else this.data=n;return this},insert:function(t){return t&&this._insert(t,this.data.height-1),this},clear:function(){return this.data=v([]),this},remove:function(t,e){if(!t)return this;for(var r,n,i,o,a=this.data,l=this.toBBox(t),h=[],u=[];a||h.length;){if(a||(a=h.pop(),n=h[h.length-1],r=u.pop(),o=!0),a.leaf&&-1!==(i=s(t,a.children,e)))return a.children.splice(i,1),h.push(a),this._condense(h),this;o||a.leaf||!y(a,l)?n?(r++,a=n.children[r],o=!1):a=null:(h.push(a),u.push(r),r=0,n=a,a=a.children[0])}return this},toBBox:function(t){return t},compareMinX:u,compareMinY:c,toJSON:function(){return this.data},fromJSON:function(t){return this.data=t,this},_all:function(t,e){for(var r=[];t;)t.leaf?e.push.apply(e,t.children):r.push.apply(r,t.children),t=r.pop();return e},_build:function(t,e,r,n){var i,o=r-e+1,s=this._maxEntries;if(o<=s)return i=v(t.slice(e,r+1)),a(i,this.toBBox),i;n||(n=Math.ceil(Math.log(o)/Math.log(s)),s=Math.ceil(o/Math.pow(s,n-1))),i=v([]),i.leaf=!1,i.height=n;var l,h,u,c,f=Math.ceil(o/s),d=f*Math.ceil(Math.sqrt(s));for(_(t,e,r,d,this.compareMinX),l=e;l<=r;l+=d)for(u=Math.min(l+d-1,r),_(t,l,u,f,this.compareMinY),h=l;h<=u;h+=f)c=Math.min(h+f-1,u),i.children.push(this._build(t,h,c,n-1));return a(i,this.toBBox),i},_chooseSubtree:function(t,e,r,n){for(var i,o,s,a,l,h,u,c;;){if(n.push(e),e.leaf||n.length-1===r)break;for(u=c=1/0,i=0,o=e.children.length;i<o;i++)s=e.children[i],l=f(s),h=p(t,s)-l,h<c?(c=h,u=l<u?l:u,a=s):h===c&&l<u&&(u=l,a=s);e=a||e.children[0]}return e},_insert:function(t,e,r){var n=this.toBBox,i=r?t:n(t),o=[],s=this._chooseSubtree(i,this.data,e,o);for(s.children.push(t),h(s,i);e>=0&&o[e].children.length>this._maxEntries;)this._split(o,e),e--;this._adjustParentBBoxes(i,o,e)},_split:function(t,e){var r=t[e],n=r.children.length,i=this._minEntries;this._chooseSplitAxis(r,i,n);var o=this._chooseSplitIndex(r,i,n),s=v(r.children.splice(o,r.children.length-o));s.height=r.height,s.leaf=r.leaf,a(r,this.toBBox),a(s,this.toBBox),e?t[e-1].children.push(s):this._splitRoot(r,s)},_splitRoot:function(t,e){this.data=v([t,e]),this.data.height=t.height+1,this.data.leaf=!1,a(this.data,this.toBBox)},_chooseSplitIndex:function(t,e,r){var n,i,o,s,a,h,u,c;for(h=u=1/0,n=e;n<=r-e;n++)i=l(t,0,n,this.toBBox),o=l(t,n,r,this.toBBox),s=g(i,o),a=f(i)+f(o),s<h?(h=s,c=n,u=a<u?a:u):s===h&&a<u&&(u=a,c=n);return c},_chooseSplitAxis:function(t,e,r){var n=t.leaf?this.compareMinX:u,i=t.leaf?this.compareMinY:c;this._allDistMargin(t,e,r,n)<this._allDistMargin(t,e,r,i)&&t.children.sort(n)},_allDistMargin:function(t,e,r,n){t.children.sort(n);var i,o,s=this.toBBox,a=l(t,0,e,s),u=l(t,r-e,r,s),c=d(a)+d(u);for(i=e;i<r-e;i++)o=t.children[i],h(a,t.leaf?s(o):o),c+=d(a);for(i=r-e-1;i>=e;i--)o=t.children[i],h(u,t.leaf?s(o):o),c+=d(u);return c},_adjustParentBBoxes:function(t,e,r){for(var n=r;n>=0;n--)h(e[n],t)},_condense:function(t){for(var e,r=t.length-1;r>=0;r--)0===t[r].children.length?r>0?(e=t[r-1].children,e.splice(e.indexOf(t[r]),1)):this.clear():a(t[r],this.toBBox)},_initFormat:function(t){var e=["return a"," - b",";"];this.compareMinX=new Function("a","b",e.join(t[0])),this.compareMinY=new Function("a","b",e.join(t[1])),this.toBBox=new Function("a","return {minX: a"+t[0]+", minY: a"+t[1]+", maxX: a"+t[2]+", maxY: a"+t[3]+"};")}},t.default=x}(this.rbush=this.rbush||{})}.call(e.ext),e.ext.rbush=e.ext.rbush.default,e.render={},e.render.VectorContext=function(){},e.render.VectorContext.prototype.drawCustom=function(t,e,r){},e.render.VectorContext.prototype.drawGeometry=function(t){},e.render.VectorContext.prototype.setStyle=function(t){},e.render.VectorContext.prototype.drawCircle=function(t,e){},e.render.VectorContext.prototype.drawFeature=function(t,e){},e.render.VectorContext.prototype.drawGeometryCollection=function(t,e){},e.render.VectorContext.prototype.drawLineString=function(t,e){},e.render.VectorContext.prototype.drawMultiLineString=function(t,e){},e.render.VectorContext.prototype.drawMultiPoint=function(t,e){},e.render.VectorContext.prototype.drawMultiPolygon=function(t,e){},e.render.VectorContext.prototype.drawPoint=function(t,e){},e.render.VectorContext.prototype.drawPolygon=function(t,e){},e.render.VectorContext.prototype.drawText=function(t,e){},e.render.VectorContext.prototype.setFillStrokeStyle=function(t,e){},e.render.VectorContext.prototype.setImageStyle=function(t,e){},e.render.VectorContext.prototype.setTextStyle=function(t,e){},e.render.ReplayGroup={},e.render.ReplayGroup=function(){},e.render.ReplayGroup.prototype.getReplay=function(t,e){},e.render.ReplayGroup.prototype.isEmpty=function(){},e.render.ReplayType={CIRCLE:"Circle",DEFAULT:"Default",IMAGE:"Image",LINE_STRING:"LineString",POLYGON:"Polygon",TEXT:"Text"},e.geom.flat.length={},e.geom.flat.length.lineString=function(t,e,r,n){var i,o=t[e],s=t[e+1],a=0;for(i=e+n;i<r;i+=n){var l=t[i],h=t[i+1];a+=Math.sqrt((l-o)*(l-o)+(h-s)*(h-s)),o=l,s=h}return a},e.geom.flat.length.linearRing=function(t,r,n,i){var o=e.geom.flat.length.lineString(t,r,n,i),s=t[n-i]-t[r],a=t[n-i+1]-t[r+1];return o+=Math.sqrt(s*s+a*a)},e.geom.flat.textpath={},e.geom.flat.textpath.lineString=function(t,r,n,i,o,s,a,l){var h=[],u=t[r]>t[n-i],c=o.length,f=t[r],d=t[r+1];r+=i;for(var p,g,y,m=t[r],v=t[r+1],_=0,S=Math.sqrt(Math.pow(m-f,2)+Math.pow(v-d,2)),C="",x=0,I=0;I<c;++I){g=u?c-I-1:I;var E=o.charAt(g);C=u?E+C:C+E;var T=s(C)-x;x+=T;for(var R=a+T/2;r<n-i&&_+S<R;)f=m,d=v,r+=i,m=t[r],v=t[r+1],_+=S,S=Math.sqrt(Math.pow(m-f,2)+Math.pow(v-d,2));var O=R-_,L=Math.atan2(v-d,m-f);if(u&&(L+=L>0?-Math.PI:Math.PI),void 0!==y){var F=L-y;if(F+=F>Math.PI?-2*Math.PI:F<-Math.PI?2*Math.PI:0,Math.abs(F)>l)return null}var w=O/S,M=e.math.lerp(f,m,w),A=e.math.lerp(d,v,w);y==L?(u&&(p[0]=M,p[1]=A,p[2]=T/2),p[4]=C):(C=E,x=T,p=[M,A,T/2,L,C],u?h.unshift(p):h.push(p),y=L),a+=T}return h},e.structs.LRUCache=function(t){e.events.EventTarget.call(this),this.highWaterMark=void 0!==t?t:2048,this.count_=0,this.entries_={},this.oldest_=null,this.newest_=null},e.inherits(e.structs.LRUCache,e.events.EventTarget),e.structs.LRUCache.prototype.canExpireCache=function(){return this.getCount()>this.highWaterMark},e.structs.LRUCache.prototype.clear=function(){this.count_=0,this.entries_={},this.oldest_=null,this.newest_=null,this.dispatchEvent(e.events.EventType.CLEAR)},e.structs.LRUCache.prototype.containsKey=function(t){return this.entries_.hasOwnProperty(t)},e.structs.LRUCache.prototype.forEach=function(t,e){for(var r=this.oldest_;r;)t.call(e,r.value_,r.key_,this),r=r.newer},e.structs.LRUCache.prototype.get=function(t){var r=this.entries_[t];return e.asserts.assert(void 0!==r,15),r===this.newest_?r.value_:(r===this.oldest_?(this.oldest_=this.oldest_.newer,this.oldest_.older=null):(r.newer.older=r.older,r.older.newer=r.newer),r.newer=null,r.older=this.newest_,this.newest_.newer=r,this.newest_=r,r.value_)},e.structs.LRUCache.prototype.remove=function(t){var r=this.entries_[t];return e.asserts.assert(void 0!==r,15),r===this.newest_?(this.newest_=r.older,this.newest_&&(this.newest_.newer=null)):r===this.oldest_?(this.oldest_=r.newer,this.oldest_&&(this.oldest_.older=null)):(r.newer.older=r.older,r.older.newer=r.newer),delete this.entries_[t],--this.count_,r.value_},e.structs.LRUCache.prototype.getCount=function(){return this.count_},e.structs.LRUCache.prototype.getKeys=function(){var t,e=new Array(this.count_),r=0;for(t=this.newest_;t;t=t.older)e[r++]=t.key_;return e},e.structs.LRUCache.prototype.getValues=function(){var t,e=new Array(this.count_),r=0;for(t=this.newest_;t;t=t.older)e[r++]=t.value_;return e},e.structs.LRUCache.prototype.peekLast=function(){return this.oldest_.value_},e.structs.LRUCache.prototype.peekLastKey=function(){return this.oldest_.key_},e.structs.LRUCache.prototype.peekFirstKey=function(){return this.newest_.key_},e.structs.LRUCache.prototype.pop=function(){var t=this.oldest_;return delete this.entries_[t.key_],t.newer&&(t.newer.older=null),this.oldest_=t.newer,this.oldest_||(this.newest_=null),--this.count_,t.value_},e.structs.LRUCache.prototype.replace=function(t,e){this.get(t),this.entries_[t].value_=e},e.structs.LRUCache.prototype.set=function(t,r){e.asserts.assert(!(t in this.entries_),16);var n={key_:t,newer:null,older:this.newest_,value_:r};this.newest_?this.newest_.newer=n:this.oldest_=n,this.newest_=n,this.entries_[t]=n,++this.count_},e.structs.LRUCache.prototype.prune=function(){for(;this.canExpireCache();)this.pop()},e.render.canvas={},e.render.canvas.defaultFont="10px sans-serif",e.render.canvas.defaultFillStyle=[0,0,0,1],e.render.canvas.defaultLineCap="round",e.render.canvas.defaultLineDash=[],e.render.canvas.defaultLineDashOffset=0,e.render.canvas.defaultLineJoin="round",e.render.canvas.defaultMiterLimit=10,e.render.canvas.defaultStrokeStyle=[0,0,0,1],e.render.canvas.defaultTextAlign="center",e.render.canvas.defaultTextBaseline="middle",e.render.canvas.defaultPadding=[0,0,0,0],e.render.canvas.defaultLineWidth=1,e.render.canvas.labelCache=new e.structs.LRUCache,e.render.canvas.checkedFonts_={},e.render.canvas.measureContext_=null,e.render.canvas.textHeights_={},e.render.canvas.checkFont=function(){function t(t){var r=e.render.canvas.getMeasureContext();r.font=l,i=r.measureText(h).width;var n=!0;if("monospace"!=t){r.font="32px "+t+",monospace";n=r.measureText(h).width!=i}return n}function r(){var r=!0;for(var i in s)s[i]<o&&(t(i)?(s[i]=o,e.obj.clear(e.render.canvas.textHeights_),e.render.canvas.measureContext_=null,a.clear()):(++s[i],r=!1));r&&(window.clearInterval(n),n=void 0)}var n,i,o=60,s=e.render.canvas.checkedFonts_,a=e.render.canvas.labelCache,l="32px monospace",h="wmytzilWMYTZIL@#/&?$%10";return function(i){var a=e.css.getFontFamilies(i);if(a)for(var l=0,h=a.length;l<h;++l){var u=a[l];u in s||(s[u]=o,t(u)||(s[u]=0,void 0===n&&(n=window.setInterval(r,32))))}}}(),e.render.canvas.getMeasureContext=function(){var t=e.render.canvas.measureContext_;return t||(t=e.render.canvas.measureContext_=e.dom.createCanvasContext2D(1,1)),t},e.render.canvas.measureTextHeight=function(){var t=e.render.canvas.textHeights_;return function(e){var r=t[e];return void 0==r&&(r=t[e]=19),r}}(),e.render.canvas.measureTextWidth=function(t,r){var n=e.render.canvas.getMeasureContext();return t!=n.font&&(n.font=t),n.measureText(r).width},e.render.canvas.rotateAtOffset=function(t,e,r,n){0!==e&&(t.translate(r,n),t.rotate(e),t.translate(-r,-n))},e.render.canvas.resetTransform_=e.transform.create(),e.render.canvas.drawImage=function(t,r,n,i,o,s,a,l,h,u,c){var f;1!=n&&(f=t.globalAlpha,t.globalAlpha=f*n),r&&t.setTransform.apply(t,r),t.drawImage(i,o,s,a,l,h,u,a*c,l*c),f&&(t.globalAlpha=f),r&&t.setTransform.apply(t,e.render.canvas.resetTransform_)},e.render.canvas.Instruction={BEGIN_GEOMETRY:0,BEGIN_PATH:1,CIRCLE:2,CLOSE_PATH:3,CUSTOM:4,DRAW_CHARS:5,DRAW_IMAGE:6,END_GEOMETRY:7,FILL:8,MOVE_TO_LINE_TO:9,SET_FILL_STYLE:10,SET_STROKE_STYLE:11,STROKE:12},e.render.replay={},e.render.replay.ORDER=[e.render.ReplayType.POLYGON,e.render.ReplayType.CIRCLE,e.render.ReplayType.LINE_STRING,e.render.ReplayType.IMAGE,e.render.ReplayType.TEXT,e.render.ReplayType.DEFAULT],e.render.replay.TEXT_ALIGN={},e.render.replay.TEXT_ALIGN.left=0,e.render.replay.TEXT_ALIGN.end=0,e.render.replay.TEXT_ALIGN.center=.5,e.render.replay.TEXT_ALIGN.right=1,e.render.replay.TEXT_ALIGN.start=1,e.render.replay.TEXT_ALIGN.top=0,e.render.replay.TEXT_ALIGN.middle=.5,e.render.replay.TEXT_ALIGN.hanging=.2,e.render.replay.TEXT_ALIGN.alphabetic=.8,e.render.replay.TEXT_ALIGN.ideographic=.8,e.render.replay.TEXT_ALIGN.bottom=1,e.render.canvas.Replay=function(t,r,n,i,o,s){e.render.VectorContext.call(this),this.declutterTree=s,this.tmpExtent_=e.extent.createEmpty(),this.tolerance=t,this.maxExtent=r,this.overlaps=o,this.pixelRatio=i,this.maxLineWidth=0,this.resolution=n,this.fillOrigin_,this.beginGeometryInstruction1_=null,this.beginGeometryInstruction2_=null,this.bufferedMaxExtent_=null,this.instructions=[],this.coordinates=[],this.coordinateCache_={},this.renderedTransform_=e.transform.create(),this.hitDetectionInstructions=[],this.pixelCoordinates_=null,this.state={},this.viewRotation_=0,this.tmpLocalTransform_=e.transform.create(),this.resetTransform_=e.transform.create()},e.inherits(e.render.canvas.Replay,e.render.VectorContext),e.render.canvas.Replay.prototype.replayTextBackground_=function(t,e,r,n,i,o,s){t.beginPath(),t.moveTo.apply(t,e),t.lineTo.apply(t,r),t.lineTo.apply(t,n),t.lineTo.apply(t,i),t.lineTo.apply(t,e),o&&(this.fillOrigin_=o[2],this.fill_(t)),s&&(this.setStrokeStyle_(t,s),t.stroke())},e.render.canvas.Replay.prototype.replayImage_=function(t,r,n,i,o,s,a,l,h,u,c,f,d,p,g,y,m,v){var _=m||v,S=this.tmpLocalTransform_;o*=d,s*=d,r-=o,n-=s,p&&(r=Math.round(r),n=Math.round(n));var C,x,I,E,T=g+u>i.width?i.width-u:g,R=l+c>i.height?i.height-c:l,O=this.tmpExtent_,L=y[3]+T*d+y[1],F=y[0]+R*d+y[2],w=r-y[3],M=n-y[0];(_||0!==f)&&(C=[w,M],x=[w+L,M],I=[w+L,M+F],E=[w,M+F]);var A=null;if(0!==f){var G=r+o,b=n+s;A=e.transform.compose(S,G,b,1,1,f,-G,-b),e.extent.createOrUpdateEmpty(O),e.extent.extendCoordinate(O,e.transform.apply(S,C)),e.extent.extendCoordinate(O,e.transform.apply(S,x)),e.extent.extendCoordinate(O,e.transform.apply(S,I)),e.extent.extendCoordinate(O,e.transform.apply(S,E))}else e.extent.createOrUpdate(w,M,w+L,M+F,O);var P=t.canvas,D=O[0]<=P.width&&O[2]>=0&&O[1]<=P.height&&O[3]>=0;if(a){if(!D&&1==a[4])return;e.extent.extend(a,O);var k=D?[t,A?A.slice(0):null,h,i,u,c,T,R,r,n,d]:null;k&&_&&k.push(m,v,C,x,I,E),a.push(k)}else D&&(_&&this.replayTextBackground_(t,C,x,I,E,m,v),e.render.canvas.drawImage(t,A,h,i,u,c,T,R,r,n,d))},e.render.canvas.Replay.prototype.applyPixelRatio=function(t){var e=this.pixelRatio;return 1==e?t:t.map(function(t){return t*e})},e.render.canvas.Replay.prototype.appendFlatCoordinates=function(t,r,n,i,o,s){var a=this.coordinates.length,l=this.getBufferedMaxExtent();s&&(r+=i);var h,u,c,f=[t[r],t[r+1]],d=[NaN,NaN],p=!0;for(h=r+i;h<n;h+=i)d[0]=t[h],d[1]=t[h+1],c=e.extent.coordinateRelationship(l,d),c!==u?(p&&(this.coordinates[a++]=f[0],this.coordinates[a++]=f[1]),this.coordinates[a++]=d[0],this.coordinates[a++]=d[1],p=!1):c===e.extent.Relationship.INTERSECTING?(this.coordinates[a++]=d[0],this.coordinates[a++]=d[1],p=!1):p=!0,f[0]=d[0],f[1]=d[1],u=c;return(o&&p||h===r+i)&&(this.coordinates[a++]=f[0],this.coordinates[a++]=f[1]),a},e.render.canvas.Replay.prototype.drawCustomCoordinates_=function(t,e,r,n,i){for(var o=0,s=r.length;o<s;++o){var a=r[o],l=this.appendFlatCoordinates(t,e,a,n,!1,!1);i.push(l),e=a}return e},e.render.canvas.Replay.prototype.drawCustom=function(t,r,n){this.beginGeometry(t,r);var i,o,s,a,l,h=t.getType(),u=t.getStride(),c=this.coordinates.length;if(h==e.geom.GeometryType.MULTI_POLYGON){t=t,i=t.getOrientedFlatCoordinates(),a=[];var f=t.getEndss();l=0;for(var d=0,p=f.length;d<p;++d){var g=[];l=this.drawCustomCoordinates_(i,l,f[d],u,g),a.push(g)}this.instructions.push([e.render.canvas.Instruction.CUSTOM,c,a,t,n,e.geom.flat.inflate.coordinatesss])}else h==e.geom.GeometryType.POLYGON||h==e.geom.GeometryType.MULTI_LINE_STRING?(s=[],i=h==e.geom.GeometryType.POLYGON?t.getOrientedFlatCoordinates():t.getFlatCoordinates(),l=this.drawCustomCoordinates_(i,0,t.getEnds(),u,s),this.instructions.push([e.render.canvas.Instruction.CUSTOM,c,s,t,n,e.geom.flat.inflate.coordinatess])):h==e.geom.GeometryType.LINE_STRING||h==e.geom.GeometryType.MULTI_POINT?(i=t.getFlatCoordinates(),o=this.appendFlatCoordinates(i,0,i.length,u,!1,!1),this.instructions.push([e.render.canvas.Instruction.CUSTOM,c,o,t,n,e.geom.flat.inflate.coordinates])):h==e.geom.GeometryType.POINT&&(i=t.getFlatCoordinates(),this.coordinates.push(i[0],i[1]),o=this.coordinates.length,this.instructions.push([e.render.canvas.Instruction.CUSTOM,c,o,t,n]));this.endGeometry(t,r)},e.render.canvas.Replay.prototype.beginGeometry=function(t,r){this.beginGeometryInstruction1_=[e.render.canvas.Instruction.BEGIN_GEOMETRY,r,0],this.instructions.push(this.beginGeometryInstruction1_),this.beginGeometryInstruction2_=[e.render.canvas.Instruction.BEGIN_GEOMETRY,r,0],this.hitDetectionInstructions.push(this.beginGeometryInstruction2_)},e.render.canvas.Replay.prototype.fill_=function(t){if(this.fillOrigin_){var r=e.transform.apply(this.renderedTransform_,this.fillOrigin_.slice());t.translate(r[0],r[1]),
-t.rotate(this.viewRotation_)}t.fill(),this.fillOrigin_&&t.setTransform.apply(t,e.render.canvas.resetTransform_)},e.render.canvas.Replay.prototype.setStrokeStyle_=function(t,r){t.strokeStyle=r[1],t.lineWidth=r[2],t.lineCap=r[3],t.lineJoin=r[4],t.miterLimit=r[5],e.has.CANVAS_LINE_DASH&&(t.lineDashOffset=r[7],t.setLineDash(r[6]))},e.render.canvas.Replay.prototype.renderDeclutter_=function(t,r){if(t&&t.length>5){var n=t[4];if(1==n||n==t.length-5){var i={minX:t[0],minY:t[1],maxX:t[2],maxY:t[3],value:r};if(!this.declutterTree.collides(i)){this.declutterTree.insert(i);for(var o=e.render.canvas.drawImage,s=5,a=t.length;s<a;++s){var l=t[s];l&&(l.length>11&&this.replayTextBackground_(l[0],l[13],l[14],l[15],l[16],l[11],l[12]),o.apply(void 0,l))}}t.length=5,e.extent.createOrUpdateEmpty(t)}}},e.render.canvas.Replay.prototype.replay_=function(t,r,n,i,o,s){var a;this.pixelCoordinates_&&e.array.equals(r,this.renderedTransform_)?a=this.pixelCoordinates_:(this.pixelCoordinates_||(this.pixelCoordinates_=[]),a=e.geom.flat.transform.transform2D(this.coordinates,0,this.coordinates.length,2,r,this.pixelCoordinates_),e.transform.setFromArray(this.renderedTransform_,r));for(var l,h,u,c,f,d,p,g,y,m=!e.obj.isEmpty(n),v=0,_=i.length,S=0,C=0,x=0,I=null,E=null,T=this.coordinateCache_,R=this.viewRotation_,O={context:t,pixelRatio:this.pixelRatio,resolution:this.resolution,rotation:R},L=this.instructions!=i||this.overlaps?0:200;v<_;){var F,w,M,A=i[v],G=A[0];switch(G){case e.render.canvas.Instruction.BEGIN_GEOMETRY:F=A[1],m&&n[e.getUid(F).toString()]||!F.getGeometry()?v=A[2]:void 0===s||e.extent.intersects(s,F.getGeometry().getExtent())?++v:v=A[2]+1;break;case e.render.canvas.Instruction.BEGIN_PATH:C>L&&(this.fill_(t),C=0),x>L&&(t.stroke(),x=0),C||x||(t.beginPath(),c=f=NaN),++v;break;case e.render.canvas.Instruction.CIRCLE:S=A[1];var b=a[S],P=a[S+1],D=a[S+2],k=a[S+3],N=D-b,B=k-P,Y=Math.sqrt(N*N+B*B);t.moveTo(b+Y,P),t.arc(b,P,Y,0,2*Math.PI,!0),++v;break;case e.render.canvas.Instruction.CLOSE_PATH:t.closePath(),++v;break;case e.render.canvas.Instruction.CUSTOM:S=A[1],l=A[2];var U=A[3],V=A[4],W=6==A.length?A[5]:void 0;O.geometry=U,O.feature=F,v in T||(T[v]=[]);var X=T[v];W?W(a,S,l,2,X):(X[0]=a[S],X[1]=a[S+1],X.length=2),V(X,O),++v;break;case e.render.canvas.Instruction.DRAW_IMAGE:S=A[1],l=A[2],y=A[3],h=A[4],u=A[5],g=o?null:A[6];var H,j,q,z=A[7],K=A[8],Z=A[9],J=A[10],Q=A[11],$=A[12],tt=A[13],et=A[14],rt=A[15];for(A.length>16?(H=A[16],j=A[17],q=A[18]):(H=e.render.canvas.defaultPadding,j=q=!1),Q&&($+=R);S<l;S+=2)this.replayImage_(t,a[S],a[S+1],y,h,u,g,z,K,Z,J,$,tt,et,rt,H,j?I:null,q?E:null);this.renderDeclutter_(g,F),++v;break;case e.render.canvas.Instruction.DRAW_CHARS:var nt=A[1],it=A[2],ot=A[3];g=o?null:A[4];var st=A[5],at=A[6],lt=A[7],ht=A[8],ut=A[9],ct=A[10],ft=A[11],dt=A[12],pt=A[13],gt=A[14],yt=e.geom.flat.length.lineString(a,nt,it,2),mt=ht(dt);if(st||mt<=yt){var vt=this.textStates[pt].textAlign,_t=(yt-mt)*e.render.replay.TEXT_ALIGN[vt],St=e.geom.flat.textpath.lineString(a,nt,it,2,dt,ht,_t,lt);if(St){var Ct,xt,It,Et,Tt;if(ct)for(Ct=0,xt=St.length;Ct<xt;++Ct)Tt=St[Ct],It=Tt[4],Et=this.getImage(It,pt,"",ct),h=Tt[2]+ft,u=ot*Et.height+2*(.5-ot)*ft-ut,this.replayImage_(t,Tt[0],Tt[1],Et,h,u,g,Et.height,1,0,0,Tt[3],gt,!1,Et.width,e.render.canvas.defaultPadding,null,null);if(at)for(Ct=0,xt=St.length;Ct<xt;++Ct)Tt=St[Ct],It=Tt[4],Et=this.getImage(It,pt,at,""),h=Tt[2],u=ot*Et.height-ut,this.replayImage_(t,Tt[0],Tt[1],Et,h,u,g,Et.height,1,0,0,Tt[3],gt,!1,Et.width,e.render.canvas.defaultPadding,null,null)}}this.renderDeclutter_(g,F),++v;break;case e.render.canvas.Instruction.END_GEOMETRY:if(void 0!==o){F=A[1];var Rt=o(F);if(Rt)return Rt}++v;break;case e.render.canvas.Instruction.FILL:L?C++:this.fill_(t),++v;break;case e.render.canvas.Instruction.MOVE_TO_LINE_TO:for(S=A[1],l=A[2],w=a[S],M=a[S+1],d=w+.5|0,p=M+.5|0,d===c&&p===f||(t.moveTo(w,M),c=d,f=p),S+=2;S<l;S+=2)w=a[S],M=a[S+1],d=w+.5|0,p=M+.5|0,S!=l-2&&d===c&&p===f||(t.lineTo(w,M),c=d,f=p);++v;break;case e.render.canvas.Instruction.SET_FILL_STYLE:I=A,this.fillOrigin_=A[2],C&&(this.fill_(t),C=0,x&&(t.stroke(),x=0)),t.fillStyle=A[1],++v;break;case e.render.canvas.Instruction.SET_STROKE_STYLE:E=A,x&&(t.stroke(),x=0),this.setStrokeStyle_(t,A),++v;break;case e.render.canvas.Instruction.STROKE:L?x++:t.stroke(),++v;break;default:++v}}C&&this.fill_(t),x&&t.stroke()},e.render.canvas.Replay.prototype.replay=function(t,e,r,n){this.viewRotation_=r,this.replay_(t,e,n,this.instructions,void 0,void 0)},e.render.canvas.Replay.prototype.replayHitDetection=function(t,e,r,n,i,o){return this.viewRotation_=r,this.replay_(t,e,n,this.hitDetectionInstructions,i,o)},e.render.canvas.Replay.prototype.reverseHitDetectionInstructions=function(){var t=this.hitDetectionInstructions;t.reverse();var r,n,i,o=t.length,s=-1;for(r=0;r<o;++r)n=t[r],i=n[0],i==e.render.canvas.Instruction.END_GEOMETRY?s=r:i==e.render.canvas.Instruction.BEGIN_GEOMETRY&&(n[2]=r,e.array.reverseSubArray(this.hitDetectionInstructions,s,r),s=-1)},e.render.canvas.Replay.prototype.setFillStrokeStyle=function(t,r){var n=this.state;if(t){var i=t.getColor();n.fillStyle=e.colorlike.asColorLike(i||e.render.canvas.defaultFillStyle)}else n.fillStyle=void 0;if(r){var o=r.getColor();n.strokeStyle=e.colorlike.asColorLike(o||e.render.canvas.defaultStrokeStyle);var s=r.getLineCap();n.lineCap=void 0!==s?s:e.render.canvas.defaultLineCap;var a=r.getLineDash();n.lineDash=a?a.slice():e.render.canvas.defaultLineDash;var l=r.getLineDashOffset();n.lineDashOffset=l||e.render.canvas.defaultLineDashOffset;var h=r.getLineJoin();n.lineJoin=void 0!==h?h:e.render.canvas.defaultLineJoin;var u=r.getWidth();n.lineWidth=void 0!==u?u:e.render.canvas.defaultLineWidth;var c=r.getMiterLimit();n.miterLimit=void 0!==c?c:e.render.canvas.defaultMiterLimit,n.lineWidth>this.maxLineWidth&&(this.maxLineWidth=n.lineWidth,this.bufferedMaxExtent_=null)}else n.strokeStyle=void 0,n.lineCap=void 0,n.lineDash=null,n.lineDashOffset=void 0,n.lineJoin=void 0,n.lineWidth=void 0,n.miterLimit=void 0},e.render.canvas.Replay.prototype.applyFill=function(t,r){var n=t.fillStyle,i=[e.render.canvas.Instruction.SET_FILL_STYLE,n];if("string"!=typeof n){var o=r.getExtent();i.push([o[0],o[3]])}this.instructions.push(i)},e.render.canvas.Replay.prototype.applyStroke=function(t){this.instructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,t.strokeStyle,t.lineWidth*this.pixelRatio,t.lineCap,t.lineJoin,t.miterLimit,this.applyPixelRatio(t.lineDash),t.lineDashOffset*this.pixelRatio])},e.render.canvas.Replay.prototype.updateFillStyle=function(t,e,r){var n=t.fillStyle;"string"==typeof n&&t.currentFillStyle==n||(e.call(this,t,r),t.currentFillStyle=n)},e.render.canvas.Replay.prototype.updateStrokeStyle=function(t,r){var n=t.strokeStyle,i=t.lineCap,o=t.lineDash,s=t.lineDashOffset,a=t.lineJoin,l=t.lineWidth,h=t.miterLimit;(t.currentStrokeStyle!=n||t.currentLineCap!=i||o!=t.currentLineDash&&!e.array.equals(t.currentLineDash,o)||t.currentLineDashOffset!=s||t.currentLineJoin!=a||t.currentLineWidth!=l||t.currentMiterLimit!=h)&&(r.call(this,t),t.currentStrokeStyle=n,t.currentLineCap=i,t.currentLineDash=o,t.currentLineDashOffset=s,t.currentLineJoin=a,t.currentLineWidth=l,t.currentMiterLimit=h)},e.render.canvas.Replay.prototype.endGeometry=function(t,r){this.beginGeometryInstruction1_[2]=this.instructions.length,this.beginGeometryInstruction1_=null,this.beginGeometryInstruction2_[2]=this.hitDetectionInstructions.length,this.beginGeometryInstruction2_=null;var n=[e.render.canvas.Instruction.END_GEOMETRY,r];this.instructions.push(n),this.hitDetectionInstructions.push(n)},e.render.canvas.Replay.prototype.finish=e.nullFunction,e.render.canvas.Replay.prototype.getBufferedMaxExtent=function(){if(!this.bufferedMaxExtent_&&(this.bufferedMaxExtent_=e.extent.clone(this.maxExtent),this.maxLineWidth>0)){var t=this.resolution*(this.maxLineWidth+1)/2;e.extent.buffer(this.bufferedMaxExtent_,t,this.bufferedMaxExtent_)}return this.bufferedMaxExtent_},e.render.canvas.ImageReplay=function(t,r,n,i,o,s){e.render.canvas.Replay.call(this,t,r,n,i,o,s),this.declutterGroup_=null,this.hitDetectionImage_=null,this.image_=null,this.anchorX_=void 0,this.anchorY_=void 0,this.height_=void 0,this.opacity_=void 0,this.originX_=void 0,this.originY_=void 0,this.rotateWithView_=void 0,this.rotation_=void 0,this.scale_=void 0,this.snapToPixel_=void 0,this.width_=void 0},e.inherits(e.render.canvas.ImageReplay,e.render.canvas.Replay),e.render.canvas.ImageReplay.prototype.drawCoordinates_=function(t,e,r,n){return this.appendFlatCoordinates(t,e,r,n,!1,!1)},e.render.canvas.ImageReplay.prototype.drawPoint=function(t,r){if(this.image_){this.beginGeometry(t,r);var n=t.getFlatCoordinates(),i=t.getStride(),o=this.coordinates.length,s=this.drawCoordinates_(n,0,n.length,i);this.instructions.push([e.render.canvas.Instruction.DRAW_IMAGE,o,s,this.image_,this.anchorX_,this.anchorY_,this.declutterGroup_,this.height_,this.opacity_,this.originX_,this.originY_,this.rotateWithView_,this.rotation_,this.scale_*this.pixelRatio,this.snapToPixel_,this.width_]),this.hitDetectionInstructions.push([e.render.canvas.Instruction.DRAW_IMAGE,o,s,this.hitDetectionImage_,this.anchorX_,this.anchorY_,this.declutterGroup_,this.height_,this.opacity_,this.originX_,this.originY_,this.rotateWithView_,this.rotation_,this.scale_,this.snapToPixel_,this.width_]),this.endGeometry(t,r)}},e.render.canvas.ImageReplay.prototype.drawMultiPoint=function(t,r){if(this.image_){this.beginGeometry(t,r);var n=t.getFlatCoordinates(),i=t.getStride(),o=this.coordinates.length,s=this.drawCoordinates_(n,0,n.length,i);this.instructions.push([e.render.canvas.Instruction.DRAW_IMAGE,o,s,this.image_,this.anchorX_,this.anchorY_,this.declutterGroup_,this.height_,this.opacity_,this.originX_,this.originY_,this.rotateWithView_,this.rotation_,this.scale_*this.pixelRatio,this.snapToPixel_,this.width_]),this.hitDetectionInstructions.push([e.render.canvas.Instruction.DRAW_IMAGE,o,s,this.hitDetectionImage_,this.anchorX_,this.anchorY_,this.declutterGroup_,this.height_,this.opacity_,this.originX_,this.originY_,this.rotateWithView_,this.rotation_,this.scale_,this.snapToPixel_,this.width_]),this.endGeometry(t,r)}},e.render.canvas.ImageReplay.prototype.finish=function(){this.reverseHitDetectionInstructions(),this.anchorX_=void 0,this.anchorY_=void 0,this.hitDetectionImage_=null,this.image_=null,this.height_=void 0,this.scale_=void 0,this.opacity_=void 0,this.originX_=void 0,this.originY_=void 0,this.rotateWithView_=void 0,this.rotation_=void 0,this.snapToPixel_=void 0,this.width_=void 0},e.render.canvas.ImageReplay.prototype.setImageStyle=function(t,e){var r=t.getAnchor(),n=t.getSize(),i=t.getHitDetectionImage(1),o=t.getImage(1),s=t.getOrigin();this.anchorX_=r[0],this.anchorY_=r[1],this.declutterGroup_=e,this.hitDetectionImage_=i,this.image_=o,this.height_=n[1],this.opacity_=t.getOpacity(),this.originX_=s[0],this.originY_=s[1],this.rotateWithView_=t.getRotateWithView(),this.rotation_=t.getRotation(),this.scale_=t.getScale(),this.snapToPixel_=t.getSnapToPixel(),this.width_=n[0]},e.render.canvas.LineStringReplay=function(t,r,n,i,o,s){e.render.canvas.Replay.call(this,t,r,n,i,o,s)},e.inherits(e.render.canvas.LineStringReplay,e.render.canvas.Replay),e.render.canvas.LineStringReplay.prototype.drawFlatCoordinates_=function(t,r,n,i){var o=this.coordinates.length,s=this.appendFlatCoordinates(t,r,n,i,!1,!1),a=[e.render.canvas.Instruction.MOVE_TO_LINE_TO,o,s];return this.instructions.push(a),this.hitDetectionInstructions.push(a),n},e.render.canvas.LineStringReplay.prototype.drawLineString=function(t,r){var n=this.state,i=n.strokeStyle,o=n.lineWidth;if(void 0!==i&&void 0!==o){this.updateStrokeStyle(n,this.applyStroke),this.beginGeometry(t,r),this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,n.strokeStyle,n.lineWidth,n.lineCap,n.lineJoin,n.miterLimit,n.lineDash,n.lineDashOffset],[e.render.canvas.Instruction.BEGIN_PATH]);var s=t.getFlatCoordinates(),a=t.getStride();this.drawFlatCoordinates_(s,0,s.length,a),this.hitDetectionInstructions.push([e.render.canvas.Instruction.STROKE]),this.endGeometry(t,r)}},e.render.canvas.LineStringReplay.prototype.drawMultiLineString=function(t,r){var n=this.state,i=n.strokeStyle,o=n.lineWidth;if(void 0!==i&&void 0!==o){this.updateStrokeStyle(n,this.applyStroke),this.beginGeometry(t,r),this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,n.strokeStyle,n.lineWidth,n.lineCap,n.lineJoin,n.miterLimit,n.lineDash,n.lineDashOffset],[e.render.canvas.Instruction.BEGIN_PATH]);var s,a,l=t.getEnds(),h=t.getFlatCoordinates(),u=t.getStride(),c=0;for(s=0,a=l.length;s<a;++s)c=this.drawFlatCoordinates_(h,c,l[s],u);this.hitDetectionInstructions.push([e.render.canvas.Instruction.STROKE]),this.endGeometry(t,r)}},e.render.canvas.LineStringReplay.prototype.finish=function(){var t=this.state;void 0!=t.lastStroke&&t.lastStroke!=this.coordinates.length&&this.instructions.push([e.render.canvas.Instruction.STROKE]),this.reverseHitDetectionInstructions(),this.state=null},e.render.canvas.LineStringReplay.prototype.applyStroke=function(t){void 0!=t.lastStroke&&t.lastStroke!=this.coordinates.length&&(this.instructions.push([e.render.canvas.Instruction.STROKE]),t.lastStroke=this.coordinates.length),t.lastStroke=0,e.render.canvas.Replay.prototype.applyStroke.call(this,t),this.instructions.push([e.render.canvas.Instruction.BEGIN_PATH])},e.render.canvas.PolygonReplay=function(t,r,n,i,o,s){e.render.canvas.Replay.call(this,t,r,n,i,o,s)},e.inherits(e.render.canvas.PolygonReplay,e.render.canvas.Replay),e.render.canvas.PolygonReplay.prototype.drawFlatCoordinatess_=function(t,r,n,i){var o=this.state,s=void 0!==o.fillStyle,a=void 0!=o.strokeStyle,l=n.length,h=[e.render.canvas.Instruction.BEGIN_PATH];this.instructions.push(h),this.hitDetectionInstructions.push(h);for(var u=0;u<l;++u){var c=n[u],f=this.coordinates.length,d=this.appendFlatCoordinates(t,r,c,i,!0,!a),p=[e.render.canvas.Instruction.MOVE_TO_LINE_TO,f,d];if(this.instructions.push(p),this.hitDetectionInstructions.push(p),a){var g=[e.render.canvas.Instruction.CLOSE_PATH];this.instructions.push(g),this.hitDetectionInstructions.push(g)}r=c}var y=[e.render.canvas.Instruction.FILL];if(this.hitDetectionInstructions.push(y),s&&this.instructions.push(y),a){var m=[e.render.canvas.Instruction.STROKE];this.instructions.push(m),this.hitDetectionInstructions.push(m)}return r},e.render.canvas.PolygonReplay.prototype.drawCircle=function(t,r){var n=this.state,i=n.fillStyle,o=n.strokeStyle;if(void 0!==i||void 0!==o){this.setFillStrokeStyles_(t),this.beginGeometry(t,r),this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_FILL_STYLE,e.color.asString(e.render.canvas.defaultFillStyle)]),void 0!==n.strokeStyle&&this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,n.strokeStyle,n.lineWidth,n.lineCap,n.lineJoin,n.miterLimit,n.lineDash,n.lineDashOffset]);var s=t.getFlatCoordinates(),a=t.getStride(),l=this.coordinates.length;this.appendFlatCoordinates(s,0,s.length,a,!1,!1);var h=[e.render.canvas.Instruction.BEGIN_PATH],u=[e.render.canvas.Instruction.CIRCLE,l];this.instructions.push(h,u),this.hitDetectionInstructions.push(h,u);var c=[e.render.canvas.Instruction.FILL];if(this.hitDetectionInstructions.push(c),void 0!==n.fillStyle&&this.instructions.push(c),void 0!==n.strokeStyle){var f=[e.render.canvas.Instruction.STROKE];this.instructions.push(f),this.hitDetectionInstructions.push(f)}this.endGeometry(t,r)}},e.render.canvas.PolygonReplay.prototype.drawPolygon=function(t,r){var n=this.state;this.setFillStrokeStyles_(t),this.beginGeometry(t,r),this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_FILL_STYLE,e.color.asString(e.render.canvas.defaultFillStyle)]),void 0!==n.strokeStyle&&this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,n.strokeStyle,n.lineWidth,n.lineCap,n.lineJoin,n.miterLimit,n.lineDash,n.lineDashOffset]);var i=t.getEnds(),o=t.getOrientedFlatCoordinates(),s=t.getStride();this.drawFlatCoordinatess_(o,0,i,s),this.endGeometry(t,r)},e.render.canvas.PolygonReplay.prototype.drawMultiPolygon=function(t,r){var n=this.state,i=n.fillStyle,o=n.strokeStyle;if(void 0!==i||void 0!==o){this.setFillStrokeStyles_(t),this.beginGeometry(t,r),this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_FILL_STYLE,e.color.asString(e.render.canvas.defaultFillStyle)]),void 0!==n.strokeStyle&&this.hitDetectionInstructions.push([e.render.canvas.Instruction.SET_STROKE_STYLE,n.strokeStyle,n.lineWidth,n.lineCap,n.lineJoin,n.miterLimit,n.lineDash,n.lineDashOffset]);var s,a,l=t.getEndss(),h=t.getOrientedFlatCoordinates(),u=t.getStride(),c=0;for(s=0,a=l.length;s<a;++s)c=this.drawFlatCoordinatess_(h,c,l[s],u);this.endGeometry(t,r)}},e.render.canvas.PolygonReplay.prototype.finish=function(){this.reverseHitDetectionInstructions(),this.state=null;var t=this.tolerance;if(0!==t){var r,n,i=this.coordinates;for(r=0,n=i.length;r<n;++r)i[r]=e.geom.flat.simplify.snap(i[r],t)}},e.render.canvas.PolygonReplay.prototype.setFillStrokeStyles_=function(t){var e=this.state;void 0!==e.fillStyle&&this.updateFillStyle(e,this.applyFill,t),void 0!==e.strokeStyle&&this.updateStrokeStyle(e,this.applyStroke)},e.geom.flat.straightchunk={},e.geom.flat.straightchunk.lineString=function(t,e,r,n,i){var o,s,a,l,h,u,c,f,d,p=r,g=r,y=0,m=0,v=r;for(o=r;o<n;o+=i){var _=e[o],S=e[o+1];void 0!==l&&(f=_-l,d=S-h,a=Math.sqrt(f*f+d*d),void 0!==u&&(m+=s,Math.acos((u*f+c*d)/(s*a))>t&&(m>y&&(y=m,p=v,g=o),m=0,v=o-i)),s=a,u=f,c=d),l=_,h=S}return m+=a,m>y?[v,o]:[p,g]},e.style.TextPlacement={POINT:"point",LINE:"line"},e.render.canvas.TextReplay=function(t,r,n,i,o,s){e.render.canvas.Replay.call(this,t,r,n,i,o,s),this.declutterGroup_,this.labels_=null,this.text_="",this.textOffsetX_=0,this.textOffsetY_=0,this.textRotateWithView_=void 0,this.textRotation_=0,this.textFillState_=null,this.fillStates={},this.textStrokeState_=null,this.strokeStates={},this.textState_={},this.textStates={},this.textKey_="",this.fillKey_="",this.strokeKey_="",this.widths_={},e.render.canvas.labelCache.prune()},e.inherits(e.render.canvas.TextReplay,e.render.canvas.Replay),e.render.canvas.TextReplay.measureTextWidths=function(t,r,n){var i,o,s=r.length,a=0;for(o=0;o<s;++o)i=e.render.canvas.measureTextWidth(t,r[o]),a=Math.max(a,i),n.push(i);return a},e.render.canvas.TextReplay.prototype.drawText=function(t,r){var n=this.textFillState_,i=this.textStrokeState_,o=this.textState_;if(""!==this.text_&&o&&(n||i)){var s,a,l=this.coordinates.length,h=t.getType(),u=null,c=2,f=2;if(o.placement===e.style.TextPlacement.LINE){if(!e.extent.intersects(this.getBufferedMaxExtent(),t.getExtent()))return;var d;if(u=t.getFlatCoordinates(),f=t.getStride(),h==e.geom.GeometryType.LINE_STRING)d=[u.length];else if(h==e.geom.GeometryType.MULTI_LINE_STRING)d=t.getEnds();else if(h==e.geom.GeometryType.POLYGON)d=t.getEnds().slice(0,1);else if(h==e.geom.GeometryType.MULTI_POLYGON){var p=t.getEndss();for(d=[],s=0,a=p.length;s<a;++s)d.push(p[s][0])}this.beginGeometry(t,r);for(var g,y=o.textAlign,m=0,v=0,_=d.length;v<_;++v){if(void 0==y){var S=e.geom.flat.straightchunk.lineString(o.maxAngle,u,m,d[v],f);m=S[0],g=S[1]}else g=d[v];for(s=m;s<g;s+=f)this.coordinates.push(u[s],u[s+1]);c=this.coordinates.length,m=d[v],this.drawChars_(l,c,this.declutterGroup_),l=c}this.endGeometry(t,r)}else{var C=this.getImage(this.text_,this.textKey_,this.fillKey_,this.strokeKey_),x=C.width/this.pixelRatio;switch(h){case e.geom.GeometryType.POINT:case e.geom.GeometryType.MULTI_POINT:u=t.getFlatCoordinates(),c=u.length;break;case e.geom.GeometryType.LINE_STRING:u=t.getFlatMidpoint();break;case e.geom.GeometryType.CIRCLE:u=t.getCenter();break;case e.geom.GeometryType.MULTI_LINE_STRING:u=t.getFlatMidpoints(),c=u.length;break;case e.geom.GeometryType.POLYGON:if(u=t.getFlatInteriorPoint(),!o.overflow&&u[2]/this.resolution<x)return;f=3;break;case e.geom.GeometryType.MULTI_POLYGON:var I=t.getFlatInteriorPoints();for(u=[],s=0,a=I.length;s<a;s+=3)(o.overflow||I[s+2]/this.resolution>=x)&&u.push(I[s],I[s+1]);if(0==(c=u.length))return}c=this.appendFlatCoordinates(u,0,c,f,!1,!1),this.beginGeometry(t,r),(o.backgroundFill||o.backgroundStroke)&&(this.setFillStrokeStyle(o.backgroundFill,o.backgroundStroke),this.updateFillStyle(this.state,this.applyFill,t),this.updateStrokeStyle(this.state,this.applyStroke)),this.drawTextImage_(C,l,c),this.endGeometry(t,r)}}},e.render.canvas.TextReplay.prototype.getImage=function(t,r,n,i){var o,s=i+r+t+n+this.pixelRatio,a=e.render.canvas.labelCache;if(!a.containsKey(s)){var l=i?this.strokeStates[i]||this.textStrokeState_:null,h=n?this.fillStates[n]||this.textFillState_:null,u=this.textStates[r]||this.textState_,c=this.pixelRatio,f=u.scale*c,d=e.render.replay.TEXT_ALIGN[u.textAlign||e.render.canvas.defaultTextAlign],p=i&&l.lineWidth?l.lineWidth:0,g=t.split("\n"),y=g.length,m=[],v=e.render.canvas.TextReplay.measureTextWidths(u.font,g,m),_=e.render.canvas.measureTextHeight(u.font),S=_*y,C=v+p,x=e.dom.createCanvasContext2D(Math.ceil(C*f),Math.ceil((S+p)*f));o=x.canvas,a.set(s,o),1!=f&&x.scale(f,f),x.font=u.font,i&&(x.strokeStyle=l.strokeStyle,x.lineWidth=p*(e.has.SAFARI?f:1),x.lineCap=l.lineCap,x.lineJoin=l.lineJoin,x.miterLimit=l.miterLimit,e.has.CANVAS_LINE_DASH&&l.lineDash.length&&(x.setLineDash(l.lineDash),x.lineDashOffset=l.lineDashOffset)),n&&(x.fillStyle=h.fillStyle),x.textBaseline="middle",x.textAlign="center";var I,E=.5-d,T=d*o.width/f+E*p;if(i)for(I=0;I<y;++I)x.strokeText(g[I],T+E*m[I],.5*(p+_)+I*_);if(n)for(I=0;I<y;++I)x.fillText(g[I],T+E*m[I],.5*(p+_)+I*_)}return a.get(s)},e.render.canvas.TextReplay.prototype.drawTextImage_=function(t,r,n){var i=this.textState_,o=this.textStrokeState_,s=this.pixelRatio,a=e.render.replay.TEXT_ALIGN[i.textAlign||e.render.canvas.defaultTextAlign],l=e.render.replay.TEXT_ALIGN[i.textBaseline],h=o&&o.lineWidth?o.lineWidth:0,u=a*t.width/s+2*(.5-a)*h,c=l*t.height/s+2*(.5-l)*h;this.instructions.push([e.render.canvas.Instruction.DRAW_IMAGE,r,n,t,(u-this.textOffsetX_)*s,(c-this.textOffsetY_)*s,this.declutterGroup_,t.height,1,0,0,this.textRotateWithView_,this.textRotation_,1,!0,t.width,i.padding==e.render.canvas.defaultPadding?e.render.canvas.defaultPadding:i.padding.map(function(t){return t*s}),!!i.backgroundFill,!!i.backgroundStroke]),this.hitDetectionInstructions.push([e.render.canvas.Instruction.DRAW_IMAGE,r,n,t,(u-this.textOffsetX_)*s,(c-this.textOffsetY_)*s,this.declutterGroup_,t.height,1,0,0,this.textRotateWithView_,this.textRotation_,1/s,!0,t.width,i.padding,!!i.backgroundFill,!!i.backgroundStroke])},e.render.canvas.TextReplay.prototype.drawChars_=function(t,r,n){var i=this.textStrokeState_,o=this.textState_,s=this.textFillState_,a=this.strokeKey_;i&&(a in this.strokeStates||(this.strokeStates[a]={strokeStyle:i.strokeStyle,lineCap:i.lineCap,lineDashOffset:i.lineDashOffset,lineWidth:i.lineWidth,lineJoin:i.lineJoin,miterLimit:i.miterLimit,lineDash:i.lineDash}));var l=this.textKey_;this.textKey_ in this.textStates||(this.textStates[this.textKey_]={font:o.font,textAlign:o.textAlign||e.render.canvas.defaultTextAlign,scale:o.scale});var h=this.fillKey_;s&&(h in this.fillStates||(this.fillStates[h]={fillStyle:s.fillStyle}));var u=this.pixelRatio,c=e.render.replay.TEXT_ALIGN[o.textBaseline],f=this.textOffsetY_*u,d=this.text_,p=o.font,g=o.scale,y=i?i.lineWidth*g/2:0,m=this.widths_[p];m||(this.widths_[p]=m={}),this.instructions.push([e.render.canvas.Instruction.DRAW_CHARS,t,r,c,n,o.overflow,h,o.maxAngle,function(t){var r=m[t];return r||(r=m[t]=e.render.canvas.measureTextWidth(p,t)),r*g*u},f,a,y*u,d,l,1]),this.hitDetectionInstructions.push([e.render.canvas.Instruction.DRAW_CHARS,t,r,c,n,o.overflow,h,o.maxAngle,function(t){var r=m[t];return r||(r=m[t]=e.render.canvas.measureTextWidth(p,t)),r*g},f,a,y,d,l,1/u])},e.render.canvas.TextReplay.prototype.setTextStyle=function(t,r){var n,i,o;if(t){this.declutterGroup_=r;var s=t.getFill();s?(i=this.textFillState_,i||(i=this.textFillState_={}),i.fillStyle=e.colorlike.asColorLike(s.getColor()||e.render.canvas.defaultFillStyle)):i=this.textFillState_=null;var a=t.getStroke();if(a){o=this.textStrokeState_,o||(o=this.textStrokeState_={});var l=a.getLineDash(),h=a.getLineDashOffset(),u=a.getWidth(),c=a.getMiterLimit();o.lineCap=a.getLineCap()||e.render.canvas.defaultLineCap,o.lineDash=l?l.slice():e.render.canvas.defaultLineDash,o.lineDashOffset=void 0===h?e.render.canvas.defaultLineDashOffset:h,o.lineJoin=a.getLineJoin()||e.render.canvas.defaultLineJoin,o.lineWidth=void 0===u?e.render.canvas.defaultLineWidth:u,o.miterLimit=void 0===c?e.render.canvas.defaultMiterLimit:c,o.strokeStyle=e.colorlike.asColorLike(a.getColor()||e.render.canvas.defaultStrokeStyle)}else o=this.textStrokeState_=null;n=this.textState_;var f=t.getFont()||e.render.canvas.defaultFont,d=t.getScale();n.overflow=t.getOverflow(),n.font=f,n.maxAngle=t.getMaxAngle(),n.placement=t.getPlacement(),n.textAlign=t.getTextAlign(),n.textBaseline=t.getTextBaseline()||e.render.canvas.defaultTextBaseline,n.backgroundFill=t.getBackgroundFill(),n.backgroundStroke=t.getBackgroundStroke(),n.padding=t.getPadding()||e.render.canvas.defaultPadding,n.scale=void 0===d?1:d;var p=t.getOffsetX(),g=t.getOffsetY(),y=t.getRotateWithView(),m=t.getRotation();this.text_=t.getText()||"",this.textOffsetX_=void 0===p?0:p,this.textOffsetY_=void 0===g?0:g,this.textRotateWithView_=void 0!==y&&y,this.textRotation_=void 0===m?0:m,this.strokeKey_=o?("string"==typeof o.strokeStyle?o.strokeStyle:e.getUid(o.strokeStyle))+o.lineCap+o.lineDashOffset+"|"+o.lineWidth+o.lineJoin+o.miterLimit+"["+o.lineDash.join()+"]":"",this.textKey_=n.font+n.scale+(n.textAlign||"?"),this.fillKey_=i?"string"==typeof i.fillStyle?i.fillStyle:"|"+e.getUid(i.fillStyle):""}else this.text_=""},e.render.canvas.ReplayGroup=function(t,r,n,i,o,s,a){e.render.ReplayGroup.call(this),this.declutterTree_=s,this.declutterGroup_=null,this.tolerance_=t,this.maxExtent_=r,this.overlaps_=o,this.pixelRatio_=i,this.resolution_=n,this.renderBuffer_=a,this.replaysByZIndex_={},this.hitDetectionContext_=null,this.hitDetectionTransform_=e.transform.create()},e.inherits(e.render.canvas.ReplayGroup,e.render.ReplayGroup),e.render.canvas.ReplayGroup.circleArrayCache_={0:[[!0]]},e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_=function(t,e,r){var n,i=Math.floor(t.length/2);if(e>=i)for(n=i;n<e;n++)t[n][r]=!0;else if(e<i)for(n=e+1;n<i;n++)t[n][r]=!0},e.render.canvas.ReplayGroup.getCircleArray_=function(t){if(void 0!==e.render.canvas.ReplayGroup.circleArrayCache_[t])return e.render.canvas.ReplayGroup.circleArrayCache_[t];for(var r=2*t+1,n=new Array(r),i=0;i<r;i++)n[i]=new Array(r);for(var o=t,s=0,a=0;o>=s;)e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t+o,t+s),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t+s,t+o),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t-s,t+o),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t-o,t+s),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t-o,t-s),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t-s,t-o),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t+s,t-o),e.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(n,t+o,t-s),s++,2*((a+=1+2*s)-o)+1>0&&(o-=1,a+=1-2*o);return e.render.canvas.ReplayGroup.circleArrayCache_[t]=n,n},e.render.canvas.ReplayGroup.replayDeclutter=function(t,r,n){for(var i=Object.keys(t).map(Number).sort(e.array.numberSafeCompareFunction),o={},s=0,a=i.length;s<a;++s)for(var l=t[i[s].toString()],h=0,u=l.length;h<u;){var c=l[h++],f=l[h++];c.replay(r,f,n,o)}},e.render.canvas.ReplayGroup.prototype.addDeclutter=function(t){var r=null;return this.declutterTree_&&(t?(r=this.declutterGroup_,r[4]++):(r=this.declutterGroup_=e.extent.createEmpty(),r.push(1))),r},e.render.canvas.ReplayGroup.prototype.clip=function(t,e){var r=this.getClipCoords(e);t.beginPath(),t.moveTo(r[0],r[1]),t.lineTo(r[2],r[3]),t.lineTo(r[4],r[5]),t.lineTo(r[6],r[7]),t.clip()},e.render.canvas.ReplayGroup.prototype.hasReplays=function(t){for(var e in this.replaysByZIndex_)for(var r=this.replaysByZIndex_[e],n=0,i=t.length;n<i;++n)if(t[n]in r)return!0;return!1},e.render.canvas.ReplayGroup.prototype.finish=function(){var t;for(t in this.replaysByZIndex_){var e,r=this.replaysByZIndex_[t];for(e in r)r[e].finish()}},e.render.canvas.ReplayGroup.prototype.forEachFeatureAtCoordinate=function(t,r,n,i,o,s,a){function l(t){for(var r=c.getImageData(0,0,h,h).data,n=0;n<h;n++)for(var i=0;i<h;i++)if(p[n][i]&&r[4*(i*h+n)+3]>0){var o;return(!d||g!=e.render.ReplayType.IMAGE&&g!=e.render.ReplayType.TEXT||-1!==d.indexOf(t))&&(o=s(t)),o||void c.clearRect(0,0,h,h)}}i=Math.round(i);var h=2*i+1,u=e.transform.compose(this.hitDetectionTransform_,i+.5,i+.5,1/r,-1/r,-n,-t[0],-t[1]),c=this.hitDetectionContext_;c.canvas.width!==h||c.canvas.height!==h?(c.canvas.width=h,c.canvas.height=h):c.clearRect(0,0,h,h);var f;void 0!==this.renderBuffer_&&(f=e.extent.createEmpty(),e.extent.extendCoordinate(f,t),e.extent.buffer(f,r*(this.renderBuffer_+i),f));var d,p=e.render.canvas.ReplayGroup.getCircleArray_(i);this.declutterTree_&&(d=this.declutterTree_.all().map(function(t){return t.value}));var g,y=Object.keys(this.replaysByZIndex_).map(Number);y.sort(e.array.numberSafeCompareFunction);var m,v,_,S,C;for(m=y.length-1;m>=0;--m){var x=y[m].toString();for(_=this.replaysByZIndex_[x],v=e.render.replay.ORDER.length-1;v>=0;--v)if(g=e.render.replay.ORDER[v],void 0!==(S=_[g]))if(!a||g!=e.render.ReplayType.IMAGE&&g!=e.render.ReplayType.TEXT){if(C=S.replayHitDetection(c,u,n,o,l,f))return C}else{var I=a[x];I?I.push(S,u.slice(0)):a[x]=[S,u.slice(0)]}}},e.render.canvas.ReplayGroup.prototype.getClipCoords=function(t){var r=this.maxExtent_,n=r[0],i=r[1],o=r[2],s=r[3],a=[n,i,n,s,o,s,o,i];return e.geom.flat.transform.transform2D(a,0,8,2,t,a),a},e.render.canvas.ReplayGroup.prototype.getReplay=function(t,r){var n=void 0!==t?t.toString():"0",i=this.replaysByZIndex_[n];void 0===i&&(i={},this.replaysByZIndex_[n]=i);var o=i[r];if(void 0===o){o=new(0,e.render.canvas.ReplayGroup.BATCH_CONSTRUCTORS_[r])(this.tolerance_,this.maxExtent_,this.resolution_,this.pixelRatio_,this.overlaps_,this.declutterTree_),i[r]=o}return o},e.render.canvas.ReplayGroup.prototype.getReplays=function(){return this.replaysByZIndex_},e.render.canvas.ReplayGroup.prototype.isEmpty=function(){return e.obj.isEmpty(this.replaysByZIndex_)},e.render.canvas.ReplayGroup.prototype.replay=function(t,r,n,i,o,s){var a=Object.keys(this.replaysByZIndex_).map(Number);a.sort(e.array.numberSafeCompareFunction),t.save(),this.clip(t,r);var l,h,u,c,f,d,p=o||e.render.replay.ORDER;for(l=0,h=a.length;l<h;++l){var g=a[l].toString();for(f=this.replaysByZIndex_[g],u=0,c=p.length;u<c;++u){var y=p[u];if(void 0!==(d=f[y]))if(!s||y!=e.render.ReplayType.IMAGE&&y!=e.render.ReplayType.TEXT)d.replay(t,r,n,i);else{var m=s[g];m?m.push(d,r.slice(0)):s[g]=[d,r.slice(0)]}}}t.restore()},e.render.canvas.ReplayGroup.BATCH_CONSTRUCTORS_={Circle:e.render.canvas.PolygonReplay,Default:e.render.canvas.Replay,Image:e.render.canvas.ImageReplay,LineString:e.render.canvas.LineStringReplay,Polygon:e.render.canvas.PolygonReplay,Text:e.render.canvas.TextReplay},e.renderer={},e.renderer.vector={},e.renderer.vector.defaultOrder=function(t,r){return e.getUid(t)-e.getUid(r)},e.renderer.vector.getSquaredTolerance=function(t,r){var n=e.renderer.vector.getTolerance(t,r);return n*n},e.renderer.vector.getTolerance=function(t,r){return e.SIMPLIFY_TOLERANCE*t/r},e.renderer.vector.renderCircleGeometry_=function(t,r,n,i){var o=n.getFill(),s=n.getStroke();if(o||s){var a=t.getReplay(n.getZIndex(),e.render.ReplayType.CIRCLE);a.setFillStrokeStyle(o,s),a.drawCircle(r,i)}var l=n.getText();if(l){var h=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);h.setTextStyle(l,t.addDeclutter(!1)),h.drawText(r,i)}},e.renderer.vector.renderFeature=function(t,r,n,i,o,s){var a,l,h=!1;return a=n.getImage(),a&&(l=a.getImageState(),l==e.ImageState.LOADED||l==e.ImageState.ERROR?a.unlistenImageChange(o,s):(l==e.ImageState.IDLE&&a.load(),l=a.getImageState(),
-a.listenImageChange(o,s),h=!0)),e.renderer.vector.renderFeature_(t,r,n,i),h},e.renderer.vector.renderFeature_=function(t,r,n,i){var o=n.getGeometryFunction()(r);if(o){var s=o.getSimplifiedGeometry(i);if(n.getRenderer())e.renderer.vector.renderGeometry_(t,s,n,r);else{(0,e.renderer.vector.GEOMETRY_RENDERERS_[s.getType()])(t,s,n,r)}}},e.renderer.vector.renderGeometry_=function(t,r,n,i){if(r.getType()!=e.geom.GeometryType.GEOMETRY_COLLECTION){t.getReplay(n.getZIndex(),e.render.ReplayType.DEFAULT).drawCustom(r,i,n.getRenderer())}else for(var o=r.getGeometries(),s=0,a=o.length;s<a;++s)e.renderer.vector.renderGeometry_(t,o[s],n,i)},e.renderer.vector.renderGeometryCollectionGeometry_=function(t,r,n,i){var o,s,a=r.getGeometriesArray();for(o=0,s=a.length;o<s;++o){(0,e.renderer.vector.GEOMETRY_RENDERERS_[a[o].getType()])(t,a[o],n,i)}},e.renderer.vector.renderLineStringGeometry_=function(t,r,n,i){var o=n.getStroke();if(o){var s=t.getReplay(n.getZIndex(),e.render.ReplayType.LINE_STRING);s.setFillStrokeStyle(null,o),s.drawLineString(r,i)}var a=n.getText();if(a){var l=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);l.setTextStyle(a,t.addDeclutter(!1)),l.drawText(r,i)}},e.renderer.vector.renderMultiLineStringGeometry_=function(t,r,n,i){var o=n.getStroke();if(o){var s=t.getReplay(n.getZIndex(),e.render.ReplayType.LINE_STRING);s.setFillStrokeStyle(null,o),s.drawMultiLineString(r,i)}var a=n.getText();if(a){var l=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);l.setTextStyle(a,t.addDeclutter(!1)),l.drawText(r,i)}},e.renderer.vector.renderMultiPolygonGeometry_=function(t,r,n,i){var o=n.getFill(),s=n.getStroke();if(s||o){var a=t.getReplay(n.getZIndex(),e.render.ReplayType.POLYGON);a.setFillStrokeStyle(o,s),a.drawMultiPolygon(r,i)}var l=n.getText();if(l){var h=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);h.setTextStyle(l,t.addDeclutter(!1)),h.drawText(r,i)}},e.renderer.vector.renderPointGeometry_=function(t,r,n,i){var o=n.getImage();if(o){if(o.getImageState()!=e.ImageState.LOADED)return;var s=t.getReplay(n.getZIndex(),e.render.ReplayType.IMAGE);s.setImageStyle(o,t.addDeclutter(!1)),s.drawPoint(r,i)}var a=n.getText();if(a){var l=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);l.setTextStyle(a,t.addDeclutter(!!o)),l.drawText(r,i)}},e.renderer.vector.renderMultiPointGeometry_=function(t,r,n,i){var o=n.getImage();if(o){if(o.getImageState()!=e.ImageState.LOADED)return;var s=t.getReplay(n.getZIndex(),e.render.ReplayType.IMAGE);s.setImageStyle(o,t.addDeclutter(!1)),s.drawMultiPoint(r,i)}var a=n.getText();if(a){var l=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);l.setTextStyle(a,t.addDeclutter(!!o)),l.drawText(r,i)}},e.renderer.vector.renderPolygonGeometry_=function(t,r,n,i){var o=n.getFill(),s=n.getStroke();if(o||s){var a=t.getReplay(n.getZIndex(),e.render.ReplayType.POLYGON);a.setFillStrokeStyle(o,s),a.drawPolygon(r,i)}var l=n.getText();if(l){var h=t.getReplay(n.getZIndex(),e.render.ReplayType.TEXT);h.setTextStyle(l,t.addDeclutter(!1)),h.drawText(r,i)}},e.renderer.vector.GEOMETRY_RENDERERS_={Point:e.renderer.vector.renderPointGeometry_,LineString:e.renderer.vector.renderLineStringGeometry_,Polygon:e.renderer.vector.renderPolygonGeometry_,MultiPoint:e.renderer.vector.renderMultiPointGeometry_,MultiLineString:e.renderer.vector.renderMultiLineStringGeometry_,MultiPolygon:e.renderer.vector.renderMultiPolygonGeometry_,GeometryCollection:e.renderer.vector.renderGeometryCollectionGeometry_,Circle:e.renderer.vector.renderCircleGeometry_},e}),define("Workers/MVTWorker",["./createTaskProcessorWorker","../Core/Color","../Core/defaultValue","../Core/defined","../Scene/MvtFilter","../Scene/MvtStyle","../Scene/MvtRenderer2D","../ThirdParty/supermap3D-openlayer-4.6.5"],function(t,e,r,n,i,o,s,a){"use strict";function l(t,e){var r=new OffscreenCanvas(t.canvasWidth,t.canvasWidth),i=new OffscreenCanvas(t.canvasWidth,t.canvasWidth),o=t.pbfData,s=t.layers,l=t.transform,c=t.squaredTolerance,d=t.spriteImageDatas,p=t.keepProperties,g=t.tileLevel,y=t.needSourceLayerNames,m=t.selectEnabled,v={};try{var _=new a.format.MVT({featureClass:a.Feature}),S=_.readFeatures(o,{needSourceLayerNames:y}),C=f.renderFeatures({colorCanvas:r,idCanvas:i,transform:l,layers:s,features:S,tileLevel:g,spriteImageCanvas:u,spriteImageDatas:d,squaredTolerance:c,selectEnabled:m,showBillboard:!1});if(p)for(var x=C.idFeatures,I=x.length,E=0;E<I;E++){var T=x[E],R=h(T),O=T.getProperties();n(O.geometry)&&delete O.geometry,v[R]=O}}catch(t){}var L=r.transferToImageBitmap(),F=m?i.transferToImageBitmap():null;return e.push(L),{buffer:L,idBuffer:F,properties:v}}function h(t){var e=t.getId();return e-=16777216*Math.floor(e/16777216)}var u={},c=new o(a,!0),f=new s({mvtStyle:c,openlayer:a,useOffscreen:!0});return t(l)})}();
+    function equalFunction(properties, fieldName, testValue){
+        return properties[fieldName] == testValue;
+    }
+
+    function greaterFunction(properties, fieldName, testValue){
+        return properties[fieldName] > testValue;
+    }
+
+    function lessFunction(properties, fieldName, testValue){
+        return properties[fieldName] < testValue;
+    }
+
+    function greaterEqualFunction(properties, fieldName, testValue){
+        return properties[fieldName] >= testValue;
+    }
+
+    function lessEqualFunction(properties, fieldName, testValue){
+        return properties[fieldName] <= testValue;
+    }
+
+    function notEqualFunction(properties, fieldName, testValue){
+        return properties[fieldName] != testValue;
+    }
+
+    function hasFunction(properties, fieldName){
+        return when.defined(properties[fieldName]);
+    }
+
+    var compareFunctions = {
+        "==" : equalFunction,
+        "===" : equalFunction,
+        ">" : greaterFunction,
+        "<" : lessFunction,
+        ">=" : greaterEqualFunction,
+        "<=" : lessEqualFunction,
+        "!=" : notEqualFunction,
+        "has" : hasFunction
+    };
+
+    function MvtStyle(openlayer, useOffscreen) {
+        if(!openlayer){
+            throw new Check.DeveloperError('need include ol-debug.js');
+        }
+        this._useOffscreen = useOffscreen;
+        this._openlayer = openlayer;
+    }
+
+    Object.defineProperties(MvtStyle.prototype, {
+        proxy: {
+            get: function() {}
+        }
+    });
+
+    MvtStyle.prototype.getStyle = function() {
+        var openlayer = this._openlayer;
+        var fill = new openlayer.style.Fill({
+            color: ""
+        });
+        fill.setColor("#ffffff");
+
+        var stroke = new openlayer.style.Stroke({
+            color: "",
+            width: 1
+        });
+        stroke.setWidth(1);
+        stroke.setColor("#000000");
+
+        var fillAndOutlineStyle = new openlayer.style.Style({
+            fill: fill,
+            stroke: stroke
+        });
+
+        return fillAndOutlineStyle;
+    };
+
+    function parseMapboxColorString(colorString){
+        var tempS = colorString.substring(colorString.indexOf("(") + 1, colorString.indexOf(")"));
+        tempS = tempS.split(",");
+        var resultColor = [];
+        resultColor.push(parseFloat(tempS[0]));
+        resultColor.push(parseFloat(tempS[1]));
+        resultColor.push(parseFloat(tempS[2]));
+        resultColor.push(parseFloat(tempS[3]));
+        return resultColor;
+    }
+
+    function colorWithOpacity(color, opacity) {
+        if (color && opacity !== undefined) {
+            var colorData = {
+                color: [
+                    color[0] * 255 / color[3],
+                    color[1] * 255 / color[3],
+                    color[2] * 255 / color[3],
+                    color[3]
+                ],
+                opacity: color[3]
+            };
+            color = colorData.color;
+            color[3] = colorData.opacity * opacity;
+            if (color[3] === 0) {
+                color = undefined;
+            }
+        }
+        return color;
+    }
+
+    MvtStyle.prototype.getStyleByMapboxStyle = function(mapboxStyle) {
+        var openlayer = this._openlayer;
+        var type = mapboxStyle.type;
+        var paint = mapboxStyle.paint;
+        var layout = mapboxStyle.layout;
+        if(!when.defined(type) || !when.defined(paint)){
+            return this.getStyle();
+        }
+        if(type == "fill"){
+            var fillStyle = new openlayer.style.Style({
+            });
+            var fill = new openlayer.style.Fill({
+                color: "[255,255,255,1]"
+            });
+            fillStyle.setFill(fill);
+            var fillOpcatiy = paint["fill-opacity"];
+            if (when.defined(paint["fill-color"])) {
+                var fillColor = parseMapboxColorString(paint["fill-color"]);
+                if(when.defined(fillOpcatiy)){
+                    fillColor[3] *= fillOpcatiy;
+                }
+                fill.setColor(fillColor);
+            }
+            if (when.defined(paint["fill-outline-color"])) {
+                var fillOutlineStroke = new openlayer.style.Stroke({
+                    color: "",
+                    width: 1
+                });
+                fillOutlineStroke.setColor(paint["fill-outline-color"]);
+                fillStyle.setStroke(fillOutlineStroke);
+            }
+            if (when.defined(paint["fill-pattern"])) {
+                fillStyle.fillPatternName = paint["fill-pattern"];
+            }
+            return fillStyle;
+        }
+        else if(type == "line"){
+            var lineStyle = new openlayer.style.Style({
+            });
+            var lineStroke = new openlayer.style.Stroke({
+                color: "#000000",
+                width: 1
+            });
+            lineStyle.setStroke(lineStroke);
+            var lineOpcatiy = paint["line-opacity"];
+            if (when.defined(paint["line-color"])) {
+                var lineColor = parseMapboxColorString(paint["line-color"]);
+                if(when.defined(lineOpcatiy)){
+                    lineColor[3] *= lineOpcatiy;
+                }
+            }
+            if (when.defined(paint["line-width"])) {
+                var lineWidth = paint["line-width"];
+                lineStroke.setWidth(lineWidth);
+            }
+
+            if (when.defined(paint["line-dasharray"])) {
+                var lineDasharray = paint["line-dasharray"];
+                lineStroke.setLineDash(lineDasharray);
+            }
+
+            if(when.defined(layout)){
+                if (when.defined(layout["line-cap"])) {
+                    var lineCap = layout["line-cap"];
+                    lineStroke.setLineCap(lineCap);
+                }
+                if (when.defined(layout["line-join"])) {
+                    var lineJoin = layout["line-join"];
+                    lineStroke.setLineJoin(lineJoin);
+                }
+                if (when.defined(layout["line-miter-limit"])) {
+                    var lineMiterLimit = layout["line-miter-limit"];
+                    lineStroke.setMiterLimit(lineMiterLimit);
+                }
+            }
+
+            lineStroke.setColor(lineColor);
+            return lineStyle;
+        }
+        else if(type == "symbol"){
+            var iconStyle = new openlayer.style.Style({
+            });
+            if(when.defined(layout) && when.defined(layout["icon-image"])){
+                iconStyle.hasIconImage = true;
+            }
+            if(when.defined(layout) && when.defined(layout["text-field"])){
+                iconStyle.hasTextStyle = true;
+            }
+            return iconStyle;
+        }
+        else if(type == "circle"){
+            var circleRadius = paint["circle-radius"];
+            var circleColor = paint["circle-color"];
+            var circleStrokeColor = paint["circle-stroke-color"];
+            var circleOpacity = paint["circle-opacity"];
+            var circleStrokeOpacity = paint["circle-stroke-opacity"];
+            var circleStrokeWidth = paint["circle-stroke-width"];
+            var iconImg = new openlayer.style.Circle({
+                radius: circleRadius,
+                stroke: circleStrokeWidth === 0 ? undefined : new openlayer.style.Stroke({
+                    width: circleStrokeWidth,
+                    color: colorWithOpacity(circleStrokeColor, circleStrokeOpacity)
+                }),
+                fill: new openlayer.style.Fill({
+                    color: colorWithOpacity(circleColor, circleOpacity)
+                })
+            });
+            var circleStyle = new openlayer.style.Style({
+            });
+            circleStyle.setImage(iconImg);
+            return circleStyle;
+        }
+        else{
+            return this.getStyle();
+        }
+    };
+
+    var scratchIDColor = new Color.Color();
+    function convertIDtoColor(id, layerID){
+        var colorB = Math.floor(id / 65536);
+        var d = id - colorB * 65536;
+        var colorG = Math.floor(d / 256);
+        var colorR = d - colorG * 256;
+        var alpha = 1;
+        scratchIDColor.red = colorR / 256;
+        scratchIDColor.green = colorG / 256;
+        scratchIDColor.blue = colorB / 256;
+        scratchIDColor.alpha = alpha;
+        return scratchIDColor;
+    }
+
+    MvtStyle.prototype.getIDColorStyle = function(geometryType, id, layerID, lineWidth, radius, lineWidthExpand) {
+        var openlayer = this._openlayer;
+        var idColor = convertIDtoColor(id);
+        var cssColor = idColor.toCssColorString();
+        if(geometryType ==  'LineString' || geometryType ==  'LinearRing' || geometryType ==  'MultiLineString'){
+            var expandWidth = 4;
+            if (when.defined(lineWidth)) {
+                expandWidth = lineWidth * 2 + lineWidthExpand;
+            }
+            var scratchIDStroke = new openlayer.style.Stroke({
+                color: "",
+                width: expandWidth
+            });
+            scratchIDStroke.setColor(cssColor);
+            return new openlayer.style.Style({
+                stroke: scratchIDStroke
+            });
+        }
+        else if(geometryType == 'Point' || geometryType == 'MultiPoint'){
+            var iconImg = new openlayer.style.Circle({
+                radius: (radius - 0.5),
+                fill: new openlayer.style.Fill({
+                    color: cssColor
+                })
+            });
+            var circleStyle = new openlayer.style.Style({
+            });
+            circleStyle.setImage(iconImg);
+            return circleStyle;
+        }
+        else{
+            var scratchIDFill = new openlayer.style.Fill({
+                color: ""
+            });
+            scratchIDFill.setColor(cssColor);
+            var resultStyle = new openlayer.style.Style({
+                fill: scratchIDFill
+            });
+            if(when.defined(lineWidth)){
+                var scratchIDStroke = new openlayer.style.Stroke({
+                    color: "",
+                    width: when.defined(lineWidth) ? lineWidth * 2 : 4
+                });
+                scratchIDStroke.setColor(cssColor);
+                resultStyle.setStroke(scratchIDStroke);
+            }
+            return resultStyle;
+        }
+    };
+
+    var templateRegEx = /^([^]*)\{(.*)\}([^]*)$/;
+    function fromTemplate(text, properties) {
+        var parts;
+        do {
+            parts = text.match(templateRegEx);
+            if (parts) {
+                const value = properties[parts[2]] || '';
+                text = parts[1] + value + parts[3];
+            }
+        } while (parts);
+        return text;
+    }
+
+    MvtStyle.prototype.getTextStyle = function(oldStyle, feature, mapboxStyleLayer) {
+        var openlayer = this._openlayer;
+        var paint = mapboxStyleLayer.paint;
+        var layout = mapboxStyleLayer.layout;
+        var textField = layout['text-field'];
+        var label = fromTemplate(textField, feature.getProperties());
+        if(!when.defined(label)){
+            return;
+        }
+        var style = new openlayer.style.Style();
+        var text = new openlayer.style.Text();
+        style.setText(text);
+        var textSize = layout['text-size'];
+        var font = when.defaultValue(layout['text-font'], ['Open Sans Regular', 'Arial Unicode MS Regular']);
+        var textTransform = layout['text-transform'];
+        if (textTransform == 'uppercase') {
+            label = label.toUpperCase();
+        } else if (textTransform == 'lowercase') {
+            label = label.toLowerCase();
+        }
+        var textMaxWidth = when.defaultValue(layout['text-max-width'], 10);
+        //var wrappedLabel = wrapText(label, font, textMaxWidth);
+        var wrappedLabel = label;
+        text.setText(wrappedLabel);
+        text.setFont(font);
+        text.setRotation(0);
+
+        var textAnchor = when.defaultValue(layout['text-anchor'], 'center');
+        var placement = when.defaultValue(layout['symbol-placement'], 'point');
+        text.setPlacement(placement);
+        if (placement == 'point') {
+            var textAlign = 'center';
+            if (textAnchor.indexOf('left') !== -1) {
+                textAlign = 'left';
+            } else if (textAnchor.indexOf('right') !== -1) {
+                textAlign = 'right';
+            }
+            text.setTextAlign(textAlign);
+        } else {
+            text.setTextAlign();
+        }
+        var textBaseline = 'middle';
+        if (textAnchor.indexOf('bottom') == 0) {
+            textBaseline = 'bottom';
+        } else if (textAnchor.indexOf('top') == 0) {
+            textBaseline = 'top';
+        }
+        text.setTextBaseline(textBaseline);
+        var textOffset = when.defaultValue(layout['text-offset'], [0.0, 0.0]);
+        var textTranslate = when.defaultValue(layout['text-translate'], [0.0, 0.0]);
+        text.setOffsetX(textOffset[0] * textSize + textTranslate[0]);
+        text.setOffsetY(textOffset[1] * textSize + textTranslate[1]);
+        var opacity = paint['text-opacity'];
+        var textColorFill = new openlayer.style.Fill();
+        var textColor = paint["text-color"];
+        if(when.defined(textColor)){
+            textColor = parseMapboxColorString(textColor);
+            textColorFill.setColor(textColor);
+        }
+        text.setFill(textColorFill);
+        var textHaloColor = paint["text-halo-color"];
+        if (when.defined(textHaloColor)) {
+            var textHalo = new openlayer.style.Stroke();
+            textHaloColor = parseMapboxColorString(textHaloColor);
+            textHalo.setColor(textHaloColor);
+            textHalo.setWidth(paint['text-halo-width']);
+            text.setStroke(textHalo);
+        } else {
+            text.setStroke(undefined);
+        }
+        style.setZIndex(oldStyle.getZIndex());
+        style.hasIconImage = oldStyle.hasIconImage;
+        style.textSize = textSize;
+        return style;
+    };
+
+    function covertIconAnchor(iconAnchor) {
+        var anchorOffset = [0.5, 0.5];
+        if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(iconAnchor)) {
+            anchorOffset = [0, 0];
+        }
+        if (iconAnchor === 'left') {
+            iconAnchor = 'top-left';
+            anchorOffset = [0, 0.5];
+        }
+        if (iconAnchor === 'right') {
+            iconAnchor = 'top-left';
+            anchorOffset = [1, 0.5];
+        }
+        if (iconAnchor === 'bottom') {
+            iconAnchor = 'top-left';
+            anchorOffset = [0.5, 1];
+        }
+        if (iconAnchor === 'top') {
+            iconAnchor = 'top-left';
+            anchorOffset = [0.5, 0];
+        }
+        return {
+            anchorOffset: anchorOffset,
+            iconAnchor: iconAnchor
+        };
+    }
+
+    var iconImageCache = {};
+
+    MvtStyle.prototype.setIconImageForStyle = function(spriteImageDatas, style, mapboxStyleLayer){
+        var openlayer = this._openlayer;
+        var paint = mapboxStyleLayer.paint;
+        var layout = mapboxStyleLayer.layout;
+        var iconSize = when.defaultValue(layout["icon-size"], 1);
+        var iconColor = paint['icon-color'];
+        var iconTranslate = when.defaultValue(paint['icon-translate'], [0.0, 0.0]);
+        var iconTranslateAnchor = when.defaultValue(paint['icon-translate-anchor'], 'map');
+        var iconAnchor = when.defaultValue(layout['icon-anchor'], 'center');
+        var anchorOffsetAndIconAnchor = covertIconAnchor(iconAnchor);
+        var anchorOffset = anchorOffsetAndIconAnchor.anchorOffset;
+        var iconOffset = when.defaultValue(layout['iconoffset'], [0.0, 0.0]);
+        var iconOpacity = when.defaultValue(layout['icon-opacity'], 1.0);
+        var spriteImageName = layout["icon-image"];
+        if(!when.defined(spriteImageDatas[spriteImageName])){
+            console.log('miss icon-image ' + spriteImageName);
+            return;
+        }
+
+        var icon_cache_key = spriteImageName + '.' + iconSize + '.' + iconTranslate + '.' + iconTranslateAnchor + '.' + iconAnchor + '.' + iconOffset;
+        if (when.defined(iconColor)) {
+            icon_cache_key += '.' + iconColor;
+        }
+        var iconImg = iconImageCache[icon_cache_key];
+        if(!when.defined(iconImg)){
+            var spriteImage = spriteImageDatas[spriteImageName];
+            var canvas;
+            if(this._useOffscreen){
+                canvas = new OffscreenCanvas(spriteImage.width, spriteImage.height);
+            }
+            else{
+                canvas = document.createElement('canvas');
+                canvas.width = spriteImage.width;
+                canvas.height = spriteImage.height;
+            }
+            var ctx = canvas.getContext('2d');
+            ctx.putImageData(spriteImage, 0, 0);
+            var translateOffset = [iconTranslate[0] / spriteImage.width, iconTranslate[1] / spriteImage.height];
+            iconImg = new openlayer.style.Icon({
+                img: canvas,
+                anchorOrigin: anchorOffsetAndIconAnchor.iconAnchor,
+                anchor: [iconOffset[0] + anchorOffset[0] + translateOffset[0], iconOffset[1] + anchorOffset[1] - translateOffset[1]],
+                imgSize: [canvas.width, canvas.height],
+                scale: iconSize
+            });
+            iconImg.setOpacity(iconOpacity);
+            iconImageCache[icon_cache_key] = iconImg;
+        }
+
+        style.setImage(iconImg);
+        //style.setText(undefined);
+    };
+
+    var VALUE_EXTENT = 4096;
+    var replays = ["Default", "Polygon", "LineString", "Image", "Symbol", "Text"];
+
+    function MvtRenderer2D(options) {
+        this._mvtStyleClass = options.mvtStyle;
+        this._openlayer = options.openlayer;
+    }
+
+    Object.defineProperties(MvtRenderer2D.prototype, {
+    });
+
+    MvtRenderer2D.prototype.renderFeatures = function(options) {
+        var canvas = options.colorCanvas;
+        var idCanvas = options.idCanvas;
+        var transform = options.transform;
+        var layers = options.layers;
+        var features = options.features;
+        var tileLevel = options.tileLevel;
+        var spriteImageCanvas = options.spriteImageCanvas;
+        var spriteImageDatas = options.spriteImageDatas;
+        var squaredTolerance = options.squaredTolerance;
+        var showBillboard = options.showBillboard;
+        var renderID = options.renderID;
+        var renderColor = options.renderColor;
+        var lineWidthExpand = options.lineWidthExpand;
+
+        var ol = this._openlayer;
+        var ctx = canvas.getContext('2d');
+
+        var idFeatures = [];
+        var iconImageObjects = [];
+        var textObjects = [];
+        var style = null;
+        var declutterTree = ol.ext.rbush(9);
+        var replayGroup = new ol.render.canvas.ReplayGroup(0, [0, 0, VALUE_EXTENT, VALUE_EXTENT], 8, 2, true, declutterTree);
+
+        var featureLength = features.length;
+        for (var r = 0; r < featureLength; r++) {
+            var feature = features[r];
+            var sourceLayer = feature.getProperties().layer;
+            feature.index = sourceLayer + feature.getId();
+            var featureHasStyle = false;
+            var layerGroupById = layers[sourceLayer];
+            var zIndex = 0;
+            for (var layerId in layerGroupById) {
+                var layerById = layerGroupById[layerId];
+
+                var maxzoom = layerById.mapboxStyleLayer.maxzoom;
+                var minzoom = layerById.mapboxStyleLayer.minzoom;
+                if(tileLevel < minzoom || tileLevel > maxzoom){
+                    continue;
+                }
+
+                var filterArray = layerById.filterArray;
+                if (!when.defined(filterArray)) {
+                    style = this._mvtStyleClass.getStyleByMapboxStyle(layerById.mapboxStyleLayer);
+                }
+                else {
+                    var properties = feature.getProperties();
+                    if (MvtFilter.filterTest(properties, filterArray)) {
+                        style = this._mvtStyleClass.getStyleByMapboxStyle(layerById.mapboxStyleLayer);
+                    }
+                    else {
+                        continue;
+                    }
+                }
+
+                if (!when.defined(style)) {
+                    continue;
+                }
+
+                this.createFillPatternForStyle(style, spriteImageCanvas, spriteImageDatas, ctx);
+
+                if (when.defined(style.hasTextStyle)) {
+                    var textStyle = this._mvtStyleClass.getTextStyle(style, feature, layerById.mapboxStyleLayer);
+                    textStyle.setZIndex(zIndex);
+                    if(showBillboard){
+                        textObjects.push({
+                            feature : feature,
+                            style : textStyle
+                        });
+                    }
+                    else{
+                        if(renderColor){
+                            ol.renderer.vector.renderFeature_(replayGroup, feature, textStyle, -1);
+                        }
+                    }
+                }
+
+                if (when.defined(style.hasIconImage) && !when.defined(style.getImage())) {
+                    if(showBillboard){
+                        iconImageObjects.push({
+                            feature : feature,
+                            style : layerById.mapboxStyleLayer
+                        });
+                        continue;
+                    }
+                    else{
+                        this._mvtStyleClass.setIconImageForStyle(spriteImageDatas, style, layerById.mapboxStyleLayer);
+                    }
+                }
+
+                style.setZIndex(zIndex);
+                this.setPickStyleInFeature(feature, style);
+                zIndex++;
+
+                if(renderColor){
+                    ol.renderer.vector.renderFeature_(replayGroup, feature, style, -1);
+                }
+                featureHasStyle = true;
+            }
+            if (featureHasStyle) {
+                idFeatures.push(feature);
+            }
+        }
+
+        if(renderColor){
+            replayGroup.finish();
+            var declutterReplays = {};
+            replayGroup.replay(ctx, transform, 0, {}, replays, declutterReplays);
+            if (declutterReplays) {
+                ol.render.canvas.ReplayGroup.replayDeclutter(declutterReplays, ctx, 0.0);
+            }
+        }
+
+        replayGroup = null;
+        if(renderID){
+            this.renderIDtoTexture(transform, idCanvas, idFeatures, 0, squaredTolerance, lineWidthExpand);
+        }
+        return {
+            idFeatures : idFeatures,
+            iconImageObjects : iconImageObjects,
+            textObjects : textObjects
+        }
+    };
+
+    MvtRenderer2D.prototype.renderIDtoTexture = function(transform, canvas, features, layerID, tileTolerance, lineWidthExpand) {
+        var ol = this._openlayer;
+        var ctx = canvas.getContext('2d');
+        var declutterTree = ol.ext.rbush(9);
+        var replayGroup = new ol.render.canvas.ReplayGroup(0, [0, 0, VALUE_EXTENT, VALUE_EXTENT], 8, 2, true, declutterTree);
+        var featureLength = features.length;
+        for (var r = 0; r < featureLength; r++) {
+            var feature = features[r];
+            var id = getFeatureID(feature);
+            var idStyle = this._mvtStyleClass.getIDColorStyle(feature.getGeometry().getType(), id, layerID, feature.lineWidth, feature.radius, lineWidthExpand);
+            idStyle.setZIndex(feature.zIndex);
+            ol.renderer.vector.renderFeature_(replayGroup, feature, idStyle, -1);
+        }
+        replayGroup.finish();
+        var declutterReplays = {};
+        replayGroup.replay(ctx, transform, 0, {}, replays, declutterReplays);
+        if (declutterReplays) {
+            ol.render.canvas.ReplayGroup.replayDeclutter(declutterReplays, ctx, 0.0);
+        }
+        replayGroup = null;
+    };
+
+    MvtRenderer2D.prototype.createFillPatternForStyle = function(style, spriteImageCanvas, subSpriteImage, ctx){
+        if(!when.defined(style.fillPatternName)){
+            return;
+        }
+        var patternName = style.fillPatternName;
+        var patternCanvas = null;
+        if (when.defined(spriteImageCanvas[patternName])) {
+            patternCanvas = spriteImageCanvas[patternName];
+        }
+        else {
+            var imageData = subSpriteImage[patternName];
+            if (!when.defined(imageData)) {
+                console.log('miss sprite ' + patternName);
+                return;
+            }
+            patternCanvas = document.createElement('canvas');
+            patternCanvas.width = imageData.width;
+            patternCanvas.height = imageData.height;
+            var spriteCtx = patternCanvas.getContext('2d');
+            spriteCtx.putImageData(imageData, 0, 0);
+            spriteImageCanvas[patternName] = patternCanvas;
+        }
+        style.fill_.color_ = ctx.createPattern(patternCanvas, 'repeat');
+    };
+
+    MvtRenderer2D.prototype.setPickStyleInFeature = function(feature, style){
+        var ol = this._openlayer;
+        feature.zIndex = style.getZIndex();
+        if(when.defined(style.getStroke())){
+            var styleLineWidth = style.getStroke().getWidth();
+            if(when.defined(feature.lineWidth)){
+                feature.lineWidth = Math.max(feature.lineWidth, styleLineWidth);
+            }
+            else{
+                feature.lineWidth = styleLineWidth;
+            }
+        }
+        if(when.defined(style.getImage())){
+            var imageStyle = style.getImage();
+            var radius = 1.0;
+            if(imageStyle instanceof ol.style.Icon ){
+                var imageSize = imageStyle.getImageSize();
+                radius = Math.max(imageSize[0], imageSize[1]) / 2.0;
+                radius -= 1.0;
+            }
+            else if(imageStyle instanceof ol.style.Circle ){
+                radius = imageStyle.getRadius();
+            }
+            if(when.defined(feature.radius)){
+                feature.radius = Math.max(feature.radius, radius);
+            }
+            else{
+                feature.radius = radius;
+            }
+        }
+    };
+
+    function getFeatureID(feature) {
+        var id = feature.getId();
+        // 只在颜色中记录256*256*256这么大范围的ID，超过这个范围的ID舍去
+        var discard = Math.floor(id / 16777216);
+        id = id - discard * 16777216;
+        return id;
+    }
+
+    function ol() {
+        }
+
+        ol.array = {};
+
+        /**
+         * Performs a binary search on the provided sorted list and returns the index of the item if found. If it can't be found it'll return -1.
+         * https://github.com/darkskyapp/binary-search
+         *
+         * @param {Array.<*>} haystack Items to search through.
+         * @param {*} needle The item to look for.
+         * @param {Function=} opt_comparator Comparator function.
+         * @return {number} The index of the item if found, -1 if not.
+         */
+        ol.array.binarySearch = function(haystack, needle, opt_comparator) {
+            var mid, cmp;
+            var comparator = opt_comparator || ol.array.numberSafeCompareFunction;
+            var low = 0;
+            var high = haystack.length;
+            var found = false;
+
+            while (low < high) {
+                /* Note that "(low + high) >>> 1" may overflow, and results in a typecast
+                 * to double (which gives the wrong results). */
+                mid = low + (high - low >> 1);
+                cmp = +comparator(haystack[mid], needle);
+
+                if (cmp < 0.0) { /* Too low. */
+                    low  = mid + 1;
+
+                } else { /* Key found or too high */
+                    high = mid;
+                    found = !cmp;
+                }
+            }
+
+            /* Key not found. */
+            return found ? low : ~low;
+        };
+
+
+        /**
+         * Compare function for array sort that is safe for numbers.
+         * @param {*} a The first object to be compared.
+         * @param {*} b The second object to be compared.
+         * @return {number} A negative number, zero, or a positive number as the first
+         *     argument is less than, equal to, or greater than the second.
+         */
+        ol.array.numberSafeCompareFunction = function(a, b) {
+            return a > b ? 1 : a < b ? -1 : 0;
+        };
+
+
+        /**
+         * Whether the array contains the given object.
+         * @param {Array.<*>} arr The array to test for the presence of the element.
+         * @param {*} obj The object for which to test.
+         * @return {boolean} The object is in the array.
+         */
+        ol.array.includes = function(arr, obj) {
+            return arr.indexOf(obj) >= 0;
+        };
+
+
+        /**
+         * @param {Array.<number>} arr Array.
+         * @param {number} target Target.
+         * @param {number} direction 0 means return the nearest, > 0
+         *    means return the largest nearest, < 0 means return the
+         *    smallest nearest.
+         * @return {number} Index.
+         */
+        ol.array.linearFindNearest = function(arr, target, direction) {
+            var n = arr.length;
+            if (arr[0] <= target) {
+                return 0;
+            } else if (target <= arr[n - 1]) {
+                return n - 1;
+            } else {
+                var i;
+                if (direction > 0) {
+                    for (i = 1; i < n; ++i) {
+                        if (arr[i] < target) {
+                            return i - 1;
+                        }
+                    }
+                } else if (direction < 0) {
+                    for (i = 1; i < n; ++i) {
+                        if (arr[i] <= target) {
+                            return i;
+                        }
+                    }
+                } else {
+                    for (i = 1; i < n; ++i) {
+                        if (arr[i] == target) {
+                            return i;
+                        } else if (arr[i] < target) {
+                            if (arr[i - 1] - target < target - arr[i]) {
+                                return i - 1;
+                            } else {
+                                return i;
+                            }
+                        }
+                    }
+                }
+                return n - 1;
+            }
+        };
+
+
+        /**
+         * @param {Array.<*>} arr Array.
+         * @param {number} begin Begin index.
+         * @param {number} end End index.
+         */
+        ol.array.reverseSubArray = function(arr, begin, end) {
+            while (begin < end) {
+                var tmp = arr[begin];
+                arr[begin] = arr[end];
+                arr[end] = tmp;
+                ++begin;
+                --end;
+            }
+        };
+
+        /**
+         * @param {Array.<VALUE>} arr The array to modify.
+         * @param {Array.<VALUE>|VALUE} data The elements or arrays of elements
+         *     to add to arr.
+         * @template VALUE
+         */
+        ol.array.extend = function(arr, data) {
+            var i;
+            var extension = Array.isArray(data) ? data : [data];
+            var length = extension.length;
+            for (i = 0; i < length; i++) {
+                arr[arr.length] = extension[i];
+            }
+        };
+
+
+        /**
+         * @param {Array.<VALUE>} arr The array to modify.
+         * @param {VALUE} obj The element to remove.
+         * @template VALUE
+         * @return {boolean} If the element was removed.
+         */
+        ol.array.remove = function(arr, obj) {
+            var i = arr.indexOf(obj);
+            var found = i > -1;
+            if (found) {
+                arr.splice(i, 1);
+            }
+            return found;
+        };
+
+
+        /**
+         * @param {Array.<VALUE>} arr The array to search in.
+         * @param {function(VALUE, number, ?) : boolean} func The function to compare.
+         * @template VALUE
+         * @return {VALUE} The element found.
+         */
+        ol.array.find = function(arr, func) {
+            var length = arr.length >>> 0;
+            var value;
+
+            for (var i = 0; i < length; i++) {
+                value = arr[i];
+                if (func(value, i, arr)) {
+                    return value;
+                }
+            }
+            return null;
+        };
+
+
+        /**
+         * @param {Array|Uint8ClampedArray} arr1 The first array to compare.
+         * @param {Array|Uint8ClampedArray} arr2 The second array to compare.
+         * @return {boolean} Whether the two arrays are equal.
+         */
+        ol.array.equals = function(arr1, arr2) {
+            var len1 = arr1.length;
+            if (len1 !== arr2.length) {
+                return false;
+            }
+            for (var i = 0; i < len1; i++) {
+                if (arr1[i] !== arr2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+
+        /**
+         * @param {Array.<*>} arr The array to sort (modifies original).
+         * @param {Function} compareFnc Comparison function.
+         */
+        ol.array.stableSort = function(arr, compareFnc) {
+            var length = arr.length;
+            var tmp = Array(arr.length);
+            var i;
+            for (i = 0; i < length; i++) {
+                tmp[i] = {index: i, value: arr[i]};
+            }
+            tmp.sort(function(a, b) {
+                return compareFnc(a.value, b.value) || a.index - b.index;
+            });
+            for (i = 0; i < arr.length; i++) {
+                arr[i] = tmp[i].value;
+            }
+        };
+
+
+        /**
+         * @param {Array.<*>} arr The array to search in.
+         * @param {Function} func Comparison function.
+         * @return {number} Return index.
+         */
+        ol.array.findIndex = function(arr, func) {
+            var index;
+            var found = !arr.every(function(el, idx) {
+                index = idx;
+                return !func(el, idx, arr);
+            });
+            return found ? index : -1;
+        };
+
+
+        /**
+         * @param {Array.<*>} arr The array to test.
+         * @param {Function=} opt_func Comparison function.
+         * @param {boolean=} opt_strict Strictly sorted (default false).
+         * @return {boolean} Return index.
+         */
+        ol.array.isSorted = function(arr, opt_func, opt_strict) {
+            var compare = opt_func || ol.array.numberSafeCompareFunction;
+            return arr.every(function(currentVal, index) {
+                if (index === 0) {
+                    return true;
+                }
+                var res = compare(arr[index - 1], currentVal);
+                return !(res > 0 || opt_strict && res === 0);
+            });
+        };
+
+
+        ol.ASSUME_TOUCH = false;
+        ol.DEFAULT_MAX_ZOOM = 42;
+        ol.DEFAULT_MIN_ZOOM = 0;
+        ol.DEFAULT_RASTER_REPROJECTION_ERROR_THRESHOLD = 0.5;
+        ol.DEFAULT_TILE_SIZE = 256;
+        ol.DEFAULT_WMS_VERSION = '1.3.0';
+        ol.ENABLE_CANVAS = true;
+        ol.ENABLE_PROJ4JS = true;
+        ol.ENABLE_RASTER_REPROJECTION = true;
+        ol.ENABLE_WEBGL = true;
+        ol.DEBUG_WEBGL = true;
+        ol.INITIAL_ATLAS_SIZE = 256;
+        ol.MAX_ATLAS_SIZE = -1;
+        ol.MOUSEWHEELZOOM_MAXDELTA = 1;
+        ol.OVERVIEWMAP_MAX_RATIO = 0.75;
+        ol.OVERVIEWMAP_MIN_RATIO = 0.1;
+        ol.RASTER_REPROJECTION_MAX_SOURCE_TILES = 100;
+        ol.RASTER_REPROJECTION_MAX_SUBDIVISION = 10;
+        ol.RASTER_REPROJECTION_MAX_TRIANGLE_WIDTH = 0.25;
+        ol.SIMPLIFY_TOLERANCE = 0.5;
+        ol.WEBGL_TEXTURE_CACHE_HIGH_WATER_MARK = 1024;
+        ol.VERSION = '';
+
+        ol.inherits = function(childCtor, parentCtor) {
+            childCtor.prototype = Object.create(parentCtor.prototype);
+            childCtor.prototype.constructor = childCtor;
+        };
+
+        ol.nullFunction = function() {};
+
+        ol.getUid = function(obj) {
+            return obj.ol_uid ||
+                (obj.ol_uid = ++ol.uidCounter_);
+        };
+
+        ol.asserts = {};
+        ol.asserts.assert = function(assertion, errorCode) {
+        };
+
+        ol.has = {};
+
+        var ua = typeof navigator !== 'undefined' ?
+            navigator.userAgent.toLowerCase() : '';
+
+        ol.has.FIREFOX = ua.indexOf('firefox') !== -1;
+        ol.has.SAFARI = ua.indexOf('safari') !== -1 && ua.indexOf('chrom') == -1;
+        ol.has.WEBKIT = ua.indexOf('webkit') !== -1 && ua.indexOf('edge') == -1;
+        ol.has.MAC = ua.indexOf('macintosh') !== -1;
+        ol.has.DEVICE_PIXEL_RATIO = 1;
+        ol.has.CANVAS_LINE_DASH = true;
+
+        ol.structs = {};
+
+        /**
+         * @enum {string}
+         */
+        ol.CollectionEventType = {
+            ADD: 'add',
+            REMOVE: 'remove'
+        };
+
+        /**
+         * @enum {string}
+         */
+        ol.ObjectEventType = {
+            PROPERTYCHANGE: 'propertychange'
+        };
+
+        ol.events = {};
+
+        /**
+         * @param {ol.EventsKey} listenerObj Listener object.
+         * @return {ol.EventsListenerFunctionType} Bound listener.
+         */
+        ol.events.bindListener_ = function(listenerObj) {
+            var boundListener = function(evt) {
+                var listener = listenerObj.listener;
+                var bindTo = listenerObj.bindTo || listenerObj.target;
+                if (listenerObj.callOnce) {
+                    ol.events.unlistenByKey(listenerObj);
+                }
+                return listener.call(bindTo, evt);
+            };
+            listenerObj.boundListener = boundListener;
+            return boundListener;
+        };
+
+        ol.events.findListener_ = function(listeners, listener, opt_this,
+                                           opt_setDeleteIndex) {
+            var listenerObj;
+            for (var i = 0, ii = listeners.length; i < ii; ++i) {
+                listenerObj = listeners[i];
+                if (listenerObj.listener === listener &&
+                    listenerObj.bindTo === opt_this) {
+                    if (opt_setDeleteIndex) {
+                        listenerObj.deleteIndex = i;
+                    }
+                    return listenerObj;
+                }
+            }
+            return undefined;
+        };
+
+
+        /**
+         * @param {ol.EventTargetLike} target Target.
+         * @param {string} type Type.
+         * @return {Array.<ol.EventsKey>|undefined} Listeners.
+         */
+        ol.events.getListeners = function(target, type) {
+            var listenerMap = target.ol_lm;
+            return listenerMap ? listenerMap[type] : undefined;
+        };
+
+
+        /**
+         * Get the lookup of listeners.  If one does not exist on the target, it is
+         * created.
+         * @param {ol.EventTargetLike} target Target.
+         * @return {!Object.<string, Array.<ol.EventsKey>>} Map of
+         *     listeners by event type.
+         * @private
+         */
+        ol.events.getListenerMap_ = function(target) {
+            var listenerMap = target.ol_lm;
+            if (!listenerMap) {
+                listenerMap = target.ol_lm = {};
+            }
+            return listenerMap;
+        };
+
+
+        /**
+         * Clean up all listener objects of the given type.  All properties on the
+         * listener objects will be removed, and if no listeners remain in the listener
+         * map, it will be removed from the target.
+         * @param {ol.EventTargetLike} target Target.
+         * @param {string} type Type.
+         * @private
+         */
+        ol.events.removeListeners_ = function(target, type) {
+            var listeners = ol.events.getListeners(target, type);
+            if (listeners) {
+                for (var i = 0, ii = listeners.length; i < ii; ++i) {
+                    target.removeEventListener(type, listeners[i].boundListener);
+                    ol.obj.clear(listeners[i]);
+                }
+                listeners.length = 0;
+                var listenerMap = target.ol_lm;
+                if (listenerMap) {
+                    delete listenerMap[type];
+                    if (Object.keys(listenerMap).length === 0) {
+                        delete target.ol_lm;
+                    }
+                }
+            }
+        };
+
+        ol.events.listen = function(target, type, listener, opt_this, opt_once) {
+            var listenerMap = ol.events.getListenerMap_(target);
+            var listeners = listenerMap[type];
+            if (!listeners) {
+                listeners = listenerMap[type] = [];
+            }
+            var listenerObj = ol.events.findListener_(listeners, listener, opt_this,
+                false);
+            if (listenerObj) {
+                if (!opt_once) {
+                    // Turn one-off listener into a permanent one.
+                    listenerObj.callOnce = false;
+                }
+            } else {
+                listenerObj = /** @type {ol.EventsKey} */ ({
+                    bindTo: opt_this,
+                    callOnce: !!opt_once,
+                    listener: listener,
+                    target: target,
+                    type: type
+                });
+                target.addEventListener(type, ol.events.bindListener_(listenerObj));
+                listeners.push(listenerObj);
+            }
+
+            return listenerObj;
+        };
+
+        ol.events.listenOnce = function(target, type, listener, opt_this) {
+            return ol.events.listen(target, type, listener, opt_this, true);
+        };
+
+        ol.events.unlisten = function(target, type, listener, opt_this) {
+            var listeners = ol.events.getListeners(target, type);
+            if (listeners) {
+                var listenerObj = ol.events.findListener_(listeners, listener, opt_this,
+                    true);
+                if (listenerObj) {
+                    ol.events.unlistenByKey(listenerObj);
+                }
+            }
+        };
+
+        ol.events.unlistenByKey = function(key) {
+            if (key && key.target) {
+                key.target.removeEventListener(key.type, key.boundListener);
+                var listeners = ol.events.getListeners(key.target, key.type);
+                if (listeners) {
+                    var i = 'deleteIndex' in key ? key.deleteIndex : listeners.indexOf(key);
+                    if (i !== -1) {
+                        listeners.splice(i, 1);
+                    }
+                    if (listeners.length === 0) {
+                        ol.events.removeListeners_(key.target, key.type);
+                    }
+                }
+                ol.obj.clear(key);
+            }
+        };
+
+        ol.events.unlistenAll = function(target) {
+            var listenerMap = ol.events.getListenerMap_(target);
+            for (var type in listenerMap) {
+                ol.events.removeListeners_(target, type);
+            }
+        };
+
+        /**
+         * Objects that need to clean up after themselves.
+         * @constructor
+         */
+        ol.Disposable = function() {};
+
+        ol.Disposable.prototype.disposed_ = false;
+
+        ol.Disposable.prototype.dispose = function() {
+            if (!this.disposed_) {
+                this.disposed_ = true;
+                this.disposeInternal();
+            }
+        };
+
+        ol.Disposable.prototype.disposeInternal = ol.nullFunction;
+
+        ol.events.Event = {};
+
+        ol.events.Event = function(type) {
+            this.propagationStopped;
+            this.type = type;
+            this.target = null;
+        };
+
+        ol.events.Event.prototype.preventDefault =
+
+        /**
+         * Stop event propagation.
+         * @function
+         * @override
+         * @api
+         */
+            ol.events.Event.prototype.stopPropagation = function() {
+                this.propagationStopped = true;
+            };
+
+
+        /**
+         * @param {Event|ol.events.Event} evt Event
+         */
+        ol.events.Event.stopPropagation = function(evt) {
+            evt.stopPropagation();
+        };
+
+
+        /**
+         * @param {Event|ol.events.Event} evt Event
+         */
+        ol.events.Event.preventDefault = function(evt) {
+            evt.preventDefault();
+        };
+
+        ol.events.EventTarget = {};
+
+        ol.events.EventTarget = function() {
+            ol.Disposable.call(this);
+            this.pendingRemovals_ = {};
+            this.dispatching_ = {};
+            this.listeners_ = {};
+
+        };
+        ol.inherits(ol.events.EventTarget, ol.Disposable);
+
+
+        /**
+         * @param {string} type Type.
+         * @param {ol.EventsListenerFunctionType} listener Listener.
+         */
+        ol.events.EventTarget.prototype.addEventListener = function(type, listener) {
+            var listeners = this.listeners_[type];
+            if (!listeners) {
+                listeners = this.listeners_[type] = [];
+            }
+            if (listeners.indexOf(listener) === -1) {
+                listeners.push(listener);
+            }
+        };
+
+        ol.events.EventTarget.prototype.dispatchEvent = function(event) {
+            var evt = typeof event === 'string' ? new ol.events.Event(event) : event;
+            var type = evt.type;
+            evt.target = this;
+            var listeners = this.listeners_[type];
+            var propagate;
+            if (listeners) {
+                if (!(type in this.dispatching_)) {
+                    this.dispatching_[type] = 0;
+                    this.pendingRemovals_[type] = 0;
+                }
+                ++this.dispatching_[type];
+                for (var i = 0, ii = listeners.length; i < ii; ++i) {
+                    if (listeners[i].call(this, evt) === false || evt.propagationStopped) {
+                        propagate = false;
+                        break;
+                    }
+                }
+                --this.dispatching_[type];
+                if (this.dispatching_[type] === 0) {
+                    var pendingRemovals = this.pendingRemovals_[type];
+                    delete this.pendingRemovals_[type];
+                    while (pendingRemovals--) {
+                        this.removeEventListener(type, ol.nullFunction);
+                    }
+                    delete this.dispatching_[type];
+                }
+                return propagate;
+            }
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.events.EventTarget.prototype.disposeInternal = function() {
+            ol.events.unlistenAll(this);
+        };
+
+
+        /**
+         * Get the listeners for a specified event type. Listeners are returned in the
+         * order that they will be called in.
+         *
+         * @param {string} type Type.
+         * @return {Array.<ol.EventsListenerFunctionType>} Listeners.
+         */
+        ol.events.EventTarget.prototype.getListeners = function(type) {
+            return this.listeners_[type];
+        };
+
+
+        /**
+         * @param {string=} opt_type Type. If not provided,
+         *     `true` will be returned if this EventTarget has any listeners.
+         * @return {boolean} Has listeners.
+         */
+        ol.events.EventTarget.prototype.hasListener = function(opt_type) {
+            return opt_type ?
+                opt_type in this.listeners_ :
+                Object.keys(this.listeners_).length > 0;
+        };
+
+
+        /**
+         * @param {string} type Type.
+         * @param {ol.EventsListenerFunctionType} listener Listener.
+         */
+        ol.events.EventTarget.prototype.removeEventListener = function(type, listener) {
+            var listeners = this.listeners_[type];
+            if (listeners) {
+                var index = listeners.indexOf(listener);
+                if (type in this.pendingRemovals_) {
+                    // make listener a no-op, and remove later in #dispatchEvent()
+                    listeners[index] = ol.nullFunction;
+                    ++this.pendingRemovals_[type];
+                } else {
+                    listeners.splice(index, 1);
+                    if (listeners.length === 0) {
+                        delete this.listeners_[type];
+                    }
+                }
+            }
+        };
+
+        /**
+         * @enum {string}
+         * @const
+         */
+        ol.events.EventType = {
+            CHANGE: 'change',
+            CLEAR: 'clear',
+            CLICK: 'click',
+            DBLCLICK: 'dblclick',
+            DRAGENTER: 'dragenter',
+            DRAGOVER: 'dragover',
+            DROP: 'drop',
+            ERROR: 'error',
+            KEYDOWN: 'keydown',
+            KEYPRESS: 'keypress',
+            LOAD: 'load',
+            MOUSEDOWN: 'mousedown',
+            MOUSEMOVE: 'mousemove',
+            MOUSEOUT: 'mouseout',
+            MOUSEUP: 'mouseup',
+            MOUSEWHEEL: 'mousewheel',
+            MSPOINTERDOWN: 'MSPointerDown',
+            RESIZE: 'resize',
+            TOUCHSTART: 'touchstart',
+            TOUCHMOVE: 'touchmove',
+            TOUCHEND: 'touchend',
+            WHEEL: 'wheel'
+        };
+
+        ol.Observable = function() {
+            this.revision_ = 0;
+
+        };
+        ol.inherits(ol.Observable, ol.events.EventTarget);
+
+        ol.Observable.unByKey = function(key) {
+            if (Array.isArray(key)) {
+                for (var i = 0, ii = key.length; i < ii; ++i) {
+                    ol.events.unlistenByKey(key[i]);
+                }
+            } else {
+                ol.events.unlistenByKey(/** @type {ol.EventsKey} */ (key));
+            }
+        };
+
+
+        /**
+         * Increases the revision counter and dispatches a 'change' event.
+         * @api
+         */
+        ol.Observable.prototype.changed = function() {
+            ++this.revision_;
+            //this.dispatchEvent(ol.events.EventType.CHANGE);
+        };
+
+
+        /**
+         * Dispatches an event and calls all listeners listening for events
+         * of this type. The event parameter can either be a string or an
+         * Object with a `type` property.
+         *
+         * @param {{type: string,
+     *     target: (EventTarget|ol.events.EventTarget|undefined)}|ol.events.Event|
+     *     string} event Event object.
+         * @function
+         * @api
+         */
+        ol.Observable.prototype.dispatchEvent;
+
+
+        /**
+         * Get the version number for this object.  Each time the object is modified,
+         * its version number will be incremented.
+         * @return {number} Revision.
+         * @api
+         */
+        ol.Observable.prototype.getRevision = function() {
+            return this.revision_;
+        };
+
+
+        /**
+         * Listen for a certain type of event.
+         * @param {string|Array.<string>} type The event type or array of event types.
+         * @param {function(?): ?} listener The listener function.
+         * @param {Object=} opt_this The object to use as `this` in `listener`.
+         * @return {ol.EventsKey|Array.<ol.EventsKey>} Unique key for the listener. If
+         *     called with an array of event types as the first argument, the return
+         *     will be an array of keys.
+         * @api
+         */
+        ol.Observable.prototype.on = function(type, listener, opt_this) {
+            if (Array.isArray(type)) {
+                var len = type.length;
+                var keys = new Array(len);
+                for (var i = 0; i < len; ++i) {
+                    keys[i] = ol.events.listen(this, type[i], listener, opt_this);
+                }
+                return keys;
+            } else {
+                return ol.events.listen(
+                    this, /** @type {string} */ (type), listener, opt_this);
+            }
+        };
+
+
+        /**
+         * Listen once for a certain type of event.
+         * @param {string|Array.<string>} type The event type or array of event types.
+         * @param {function(?): ?} listener The listener function.
+         * @param {Object=} opt_this The object to use as `this` in `listener`.
+         * @return {ol.EventsKey|Array.<ol.EventsKey>} Unique key for the listener. If
+         *     called with an array of event types as the first argument, the return
+         *     will be an array of keys.
+         * @api
+         */
+        ol.Observable.prototype.once = function(type, listener, opt_this) {
+            if (Array.isArray(type)) {
+                var len = type.length;
+                var keys = new Array(len);
+                for (var i = 0; i < len; ++i) {
+                    keys[i] = ol.events.listenOnce(this, type[i], listener, opt_this);
+                }
+                return keys;
+            } else {
+                return ol.events.listenOnce(
+                    this, /** @type {string} */ (type), listener, opt_this);
+            }
+        };
+
+
+        /**
+         * Unlisten for a certain type of event.
+         * @param {string|Array.<string>} type The event type or array of event types.
+         * @param {function(?): ?} listener The listener function.
+         * @param {Object=} opt_this The object which was used as `this` by the
+         * `listener`.
+         * @api
+         */
+        ol.Observable.prototype.un = function(type, listener, opt_this) {
+            if (Array.isArray(type)) {
+                for (var i = 0, ii = type.length; i < ii; ++i) {
+                    ol.events.unlisten(this, type[i], listener, opt_this);
+                }
+                return;
+            } else {
+                ol.events.unlisten(this, /** @type {string} */ (type), listener, opt_this);
+            }
+        };
+
+        ol.uidCounter_ = 0;
+
+        ol.Object = function(opt_values) {
+            ol.Observable.call(this);
+
+            // Call ol.getUid to ensure that the order of objects' ids is the same as
+            // the order in which they were created.  This also helps to ensure that
+            // object properties are always added in the same order, which helps many
+            // JavaScript engines generate faster code.
+            ol.getUid(this);
+
+            /**
+             * @private
+             * @type {!Object.<string, *>}
+             */
+            this.values_ = {};
+
+            if (opt_values !== undefined) {
+                this.setProperties(opt_values);
+            }
+        };
+        ol.inherits(ol.Object, ol.Observable);
+
+
+        /**
+         * @private
+         * @type {Object.<string, string>}
+         */
+        ol.Object.changeEventTypeCache_ = {};
+
+
+        /**
+         * @param {string} key Key name.
+         * @return {string} Change name.
+         */
+        ol.Object.getChangeEventType = function(key) {
+            return ol.Object.changeEventTypeCache_.hasOwnProperty(key) ?
+                ol.Object.changeEventTypeCache_[key] :
+                (ol.Object.changeEventTypeCache_[key] = 'change:' + key);
+        };
+
+
+        /**
+         * Gets a value.
+         * @param {string} key Key name.
+         * @return {*} Value.
+         * @api
+         */
+        ol.Object.prototype.get = function(key) {
+            var value;
+            if (this.values_.hasOwnProperty(key)) {
+                value = this.values_[key];
+            }
+            return value;
+        };
+
+
+        /**
+         * Get a list of object property names.
+         * @return {Array.<string>} List of property names.
+         * @api
+         */
+        ol.Object.prototype.getKeys = function() {
+            return Object.keys(this.values_);
+        };
+
+
+        /**
+         * Get an object of all property names and values.
+         * @return {Object.<string, *>} Object.
+         * @api
+         */
+        ol.Object.prototype.getProperties = function() {
+            return ol.obj.assign({}, this.values_);
+        };
+
+
+        /**
+         * @param {string} key Key name.
+         * @param {*} oldValue Old value.
+         */
+        ol.Object.prototype.notify = function(key, oldValue) {
+            // FIX ME
+            return;
+        };
+
+
+        /**
+         * Sets a value.
+         * @param {string} key Key name.
+         * @param {*} value Value.
+         * @param {boolean=} opt_silent Update without triggering an event.
+         * @api
+         */
+        ol.Object.prototype.set = function(key, value, opt_silent) {
+            if (opt_silent) {
+                this.values_[key] = value;
+            } else {
+                var oldValue = this.values_[key];
+                this.values_[key] = value;
+                if (oldValue !== value) {
+                    this.notify(key, oldValue);
+                }
+            }
+        };
+
+
+        /**
+         * Sets a collection of key-value pairs.  Note that this changes any existing
+         * properties and adds new ones (it does not remove any existing properties).
+         * @param {Object.<string, *>} values Values.
+         * @param {boolean=} opt_silent Update without triggering an event.
+         * @api
+         */
+        ol.Object.prototype.setProperties = function(values, opt_silent) {
+            var key;
+            for (key in values) {
+                this.set(key, values[key], opt_silent);
+            }
+        };
+
+
+        /**
+         * Unsets a property.
+         * @param {string} key Key name.
+         * @param {boolean=} opt_silent Unset without triggering an event.
+         * @api
+         */
+        ol.Object.prototype.unset = function(key, opt_silent) {
+            if (key in this.values_) {
+                var oldValue = this.values_[key];
+                delete this.values_[key];
+                if (!opt_silent) {
+                    this.notify(key, oldValue);
+                }
+            }
+        };
+
+        ol.Object.Event = function(type, key, oldValue) {
+            ol.events.Event.call(this, type);
+            this.key = key;
+            this.oldValue = oldValue;
+
+        };
+        ol.inherits(ol.Object.Event, ol.events.Event);
+
+        ol.functions = {};
+        /**
+         * Always returns true.
+         * @returns {boolean} true.
+         */
+        ol.functions.TRUE = function() {
+            return true;
+        };
+
+        /**
+         * Always returns false.
+         * @returns {boolean} false.
+         */
+        ol.functions.FALSE = function() {
+            return false;
+        };
+
+        ol.math = {};
+
+        ol.math.clamp = function(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        };
+
+        ol.math.cosh = (function() {
+            // Wrapped in a iife, to save the overhead of checking for the native
+            // implementation on every invocation.
+            var cosh;
+            if ('cosh' in Math) {
+                // The environment supports the native Math.cosh function, use it…
+                cosh = Math.cosh;
+            } else {
+                // … else, use the reference implementation of MDN:
+                cosh = function(x) {
+                    var y = Math.exp(x);
+                    return (y + 1 / y) / 2;
+                };
+            }
+            return cosh;
+        }());
+
+
+        /**
+         * @param {number} x X.
+         * @return {number} The smallest power of two greater than or equal to x.
+         */
+        ol.math.roundUpToPowerOfTwo = function(x) {
+            ol.asserts.assert(0 < x, 29); // `x` must be greater than `0`
+            return Math.pow(2, Math.ceil(Math.log(x) / Math.LN2));
+        };
+
+        ol.math.squaredSegmentDistance = function(x, y, x1, y1, x2, y2) {
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            if (dx !== 0 || dy !== 0) {
+                var t = ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy);
+                if (t > 1) {
+                    x1 = x2;
+                    y1 = y2;
+                } else if (t > 0) {
+                    x1 += dx * t;
+                    y1 += dy * t;
+                }
+            }
+            return ol.math.squaredDistance(x, y, x1, y1);
+        };
+
+        ol.math.squaredDistance = function(x1, y1, x2, y2) {
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            return dx * dx + dy * dy;
+        };
+
+        ol.math.solveLinearSystem = function(mat) {
+            var n = mat.length;
+
+            for (var i = 0; i < n; i++) {
+                // Find max in the i-th column (ignoring i - 1 first rows)
+                var maxRow = i;
+                var maxEl = Math.abs(mat[i][i]);
+                for (var r = i + 1; r < n; r++) {
+                    var absValue = Math.abs(mat[r][i]);
+                    if (absValue > maxEl) {
+                        maxEl = absValue;
+                        maxRow = r;
+                    }
+                }
+
+                if (maxEl === 0) {
+                    return null; // matrix is singular
+                }
+
+                // Swap max row with i-th (current) row
+                var tmp = mat[maxRow];
+                mat[maxRow] = mat[i];
+                mat[i] = tmp;
+
+                // Subtract the i-th row to make all the remaining rows 0 in the i-th column
+                for (var j = i + 1; j < n; j++) {
+                    var coef = -mat[j][i] / mat[i][i];
+                    for (var k = i; k < n + 1; k++) {
+                        if (i == k) {
+                            mat[j][k] = 0;
+                        } else {
+                            mat[j][k] += coef * mat[i][k];
+                        }
+                    }
+                }
+            }
+
+            // Solve Ax=b for upper triangular matrix A (mat)
+            var x = new Array(n);
+            for (var l = n - 1; l >= 0; l--) {
+                x[l] = mat[l][n] / mat[l][l];
+                for (var m = l - 1; m >= 0; m--) {
+                    mat[m][n] -= mat[m][l] * x[l];
+                }
+            }
+            return x;
+        };
+
+        ol.math.toDegrees = function(angleInRadians) {
+            return angleInRadians * 180 / Math.PI;
+        };
+
+        ol.math.toRadians = function(angleInDegrees) {
+            return angleInDegrees * Math.PI / 180;
+        };
+
+        ol.math.modulo = function(a, b) {
+            var r = a % b;
+            return r * b < 0 ? r + b : r;
+        };
+
+        ol.math.lerp = function(a, b, x) {
+            return a + x * (b - a);
+        };
+
+        ol.ImageState = {
+            IDLE: 0,
+            LOADING: 1,
+            LOADED: 2,
+            ERROR: 3
+        };
+
+        ol.color = {};
+
+        ol.color.HEX_COLOR_RE_ = /^#(?:[0-9a-f]{3,4}){1,2}$/i;
+
+        ol.color.NAMED_COLOR_RE_ = /^([a-z]*)$/i;
+
+        ol.color.asArray = function(color) {
+            if (Array.isArray(color)) {
+                return color;
+            } else {
+                return ol.color.fromString(/** @type {string} */ (color));
+            }
+        };
+
+        ol.color.asString = function(color) {
+            if (typeof color === 'string') {
+                return color;
+            } else {
+                return ol.color.toString(color);
+            }
+        };
+
+        ol.color.fromNamed = function(color) {
+            var el = document.createElement('div');
+            el.style.color = color;
+            document.body.appendChild(el);
+            var rgb = getComputedStyle(el).color;
+            document.body.removeChild(el);
+            return rgb;
+        };
+
+        ol.color.fromString = (
+            function() {
+
+                // We maintain a small cache of parsed strings.  To provide cheap LRU-like
+                // semantics, whenever the cache grows too large we simply delete an
+                // arbitrary 25% of the entries.
+
+                /**
+                 * @const
+                 * @type {number}
+                 */
+                var MAX_CACHE_SIZE = 1024;
+
+                /**
+                 * @type {Object.<string, ol.Color>}
+                 */
+                var cache = {};
+
+                /**
+                 * @type {number}
+                 */
+                var cacheSize = 0;
+
+                return (
+                    /**
+                     * @param {string} s String.
+                     * @return {ol.Color} Color.
+                     */
+                        function(s) {
+                        var color;
+                        if (cache.hasOwnProperty(s)) {
+                            color = cache[s];
+                        } else {
+                            if (cacheSize >= MAX_CACHE_SIZE) {
+                                var i = 0;
+                                var key;
+                                for (key in cache) {
+                                    if ((i++ & 3) === 0) {
+                                        delete cache[key];
+                                        --cacheSize;
+                                    }
+                                }
+                            }
+                            color = ol.color.fromStringInternal_(s);
+                            cache[s] = color;
+                            ++cacheSize;
+                        }
+                        return color;
+                    });
+
+            })();
+
+        ol.color.fromStringInternal_ = function(s) {
+            var r, g, b, a, color, parts;
+
+            if (ol.color.NAMED_COLOR_RE_.exec(s)) {
+                s = ol.color.fromNamed(s);
+            }
+
+            if (ol.color.HEX_COLOR_RE_.exec(s)) { // hex
+                var n = s.length - 1; // number of hex digits
+                var d; // number of digits per channel
+                if (n <= 4) {
+                    d = 1;
+                } else {
+                    d = 2;
+                }
+                var hasAlpha = n === 4 || n === 8;
+                r = parseInt(s.substr(1 + 0 * d, d), 16);
+                g = parseInt(s.substr(1 + 1 * d, d), 16);
+                b = parseInt(s.substr(1 + 2 * d, d), 16);
+                if (hasAlpha) {
+                    a = parseInt(s.substr(1 + 3 * d, d), 16);
+                } else {
+                    a = 255;
+                }
+                if (d == 1) {
+                    r = (r << 4) + r;
+                    g = (g << 4) + g;
+                    b = (b << 4) + b;
+                    if (hasAlpha) {
+                        a = (a << 4) + a;
+                    }
+                }
+                color = [r, g, b, a / 255];
+            } else if (s.indexOf('rgba(') == 0) { // rgba()
+                parts = s.slice(5, -1).split(',').map(Number);
+                color = ol.color.normalize(parts);
+            } else if (s.indexOf('rgb(') == 0) { // rgb()
+                parts = s.slice(4, -1).split(',').map(Number);
+                parts.push(1);
+                color = ol.color.normalize(parts);
+            } else {
+                ol.asserts.assert(false, 14); // Invalid color
+            }
+            return /** @type {ol.Color} */ (color);
+        };
+
+
+        /**
+         * @param {ol.Color} color Color.
+         * @param {ol.Color=} opt_color Color.
+         * @return {ol.Color} Clamped color.
+         */
+        ol.color.normalize = function(color, opt_color) {
+            var result = opt_color || [];
+            result[0] = ol.math.clamp((color[0] + 0.5) | 0, 0, 255);
+            result[1] = ol.math.clamp((color[1] + 0.5) | 0, 0, 255);
+            result[2] = ol.math.clamp((color[2] + 0.5) | 0, 0, 255);
+            result[3] = ol.math.clamp(color[3], 0, 1);
+            return result;
+        };
+
+
+        /**
+         * @param {ol.Color} color Color.
+         * @return {string} String.
+         */
+        ol.color.toString = function(color) {
+            var r = color[0];
+            if (r != (r | 0)) {
+                r = (r + 0.5) | 0;
+            }
+            var g = color[1];
+            if (g != (g | 0)) {
+                g = (g + 0.5) | 0;
+            }
+            var b = color[2];
+            if (b != (b | 0)) {
+                b = (b + 0.5) | 0;
+            }
+            var a = color[3] === undefined ? 1 : color[3];
+            return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+        };
+
+        ol.colorlike = {};
+
+        ol.colorlike.asColorLike = function(color) {
+            if (ol.colorlike.isColorLike(color)) {
+                return /** @type {string|CanvasPattern|CanvasGradient} */ (color);
+            } else {
+                return ol.color.asString(/** @type {ol.Color} */ (color));
+            }
+        };
+
+        ol.colorlike.isColorLike = function(color) {
+            return (
+                typeof color === 'string' ||
+                    color instanceof CanvasPattern ||
+                    color instanceof CanvasGradient
+                );
+        };
+
+        ol.css = {};
+        ol.css.CLASS_HIDDEN = 'ol-hidden';
+        ol.css.CLASS_SELECTABLE = 'ol-selectable';
+        ol.css.CLASS_UNSELECTABLE = 'ol-unselectable';
+        ol.css.CLASS_UNSUPPORTED = 'ol-unsupported';
+        ol.css.CLASS_CONTROL = 'ol-control';
+        ol.css.getFontFamilies = (function() {
+            var style;
+            var cache = {};
+            return function(font) {
+                if (!style) {
+                    style = document.createElement('div').style;
+                }
+                if (!(font in cache)) {
+                    style.font = font;
+                    var family = style.fontFamily;
+                    style.font = '';
+                    if (!family) {
+                        return null;
+                    }
+                    cache[font] = family.split(/,\s?/);
+                }
+                return cache[font];
+            };
+        })();
+
+        ol.dom = {};
+
+        /**
+         * Create an html canvas element and returns its 2d context.
+         * @param {number=} opt_width Canvas width.
+         * @param {number=} opt_height Canvas height.
+         * @return {CanvasRenderingContext2D} The context.
+         */
+        ol.dom.createCanvasContext2D = function(opt_width, opt_height) {
+            //var canvas = document.createElement('CANVAS');
+            var canvas;
+            if (opt_width && opt_height) {
+                canvas = new OffscreenCanvas(opt_width, opt_height);
+            }
+            else{
+                canvas = new OffscreenCanvas(1, 1);
+            }
+            return canvas.getContext('2d');
+        };
+
+
+        /**
+         * Get the current computed width for the given element including margin,
+         * padding and border.
+         * Equivalent to jQuery's `$(el).outerWidth(true)`.
+         * @param {!Element} element Element.
+         * @return {number} The width.
+         */
+        ol.dom.outerWidth = function(element) {
+            var width = element.offsetWidth;
+            var style = getComputedStyle(element);
+            width += parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10);
+
+            return width;
+        };
+
+
+        /**
+         * Get the current computed height for the given element including margin,
+         * padding and border.
+         * Equivalent to jQuery's `$(el).outerHeight(true)`.
+         * @param {!Element} element Element.
+         * @return {number} The height.
+         */
+        ol.dom.outerHeight = function(element) {
+            var height = element.offsetHeight;
+            var style = getComputedStyle(element);
+            height += parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
+
+            return height;
+        };
+
+        /**
+         * @param {Node} newNode Node to replace old node
+         * @param {Node} oldNode The node to be replaced
+         */
+        ol.dom.replaceNode = function(newNode, oldNode) {
+            var parent = oldNode.parentNode;
+            if (parent) {
+                parent.replaceChild(newNode, oldNode);
+            }
+        };
+
+        /**
+         * @param {Node} node The node to remove.
+         * @returns {Node} The node that was removed or null.
+         */
+        ol.dom.removeNode = function(node) {
+            return node && node.parentNode ? node.parentNode.removeChild(node) : null;
+        };
+
+        /**
+         * @param {Node} node The node to remove the children from.
+         */
+        ol.dom.removeChildren = function(node) {
+            while (node.lastChild) {
+                node.removeChild(node.lastChild);
+            }
+        };
+
+        ol.extent = {};
+
+        ol.extent.Corner = {
+            BOTTOM_LEFT: 'bottom-left',
+            BOTTOM_RIGHT: 'bottom-right',
+            TOP_LEFT: 'top-left',
+            TOP_RIGHT: 'top-right'
+        };
+
+        /**
+         * Relationship to an extent.
+         * @enum {number}
+         */
+        ol.extent.Relationship = {
+            UNKNOWN: 0,
+            INTERSECTING: 1,
+            ABOVE: 2,
+            RIGHT: 4,
+            BELOW: 8,
+            LEFT: 16
+        };
+
+        /**
+         * Build an extent that includes all given coordinates.
+         *
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @return {ol.Extent} Bounding extent.
+         * @api
+         */
+        ol.extent.boundingExtent = function(coordinates) {
+            var extent = ol.extent.createEmpty();
+            for (var i = 0, ii = coordinates.length; i < ii; ++i) {
+                ol.extent.extendCoordinate(extent, coordinates[i]);
+            }
+            return extent;
+        };
+
+        ol.extent.boundingExtentXYs_ = function(xs, ys, opt_extent) {
+            var minX = Math.min.apply(null, xs);
+            var minY = Math.min.apply(null, ys);
+            var maxX = Math.max.apply(null, xs);
+            var maxY = Math.max.apply(null, ys);
+            return ol.extent.createOrUpdate(minX, minY, maxX, maxY, opt_extent);
+        };
+
+        ol.extent.buffer = function(extent, value, opt_extent) {
+            if (opt_extent) {
+                opt_extent[0] = extent[0] - value;
+                opt_extent[1] = extent[1] - value;
+                opt_extent[2] = extent[2] + value;
+                opt_extent[3] = extent[3] + value;
+                return opt_extent;
+            } else {
+                return [
+                    extent[0] - value,
+                    extent[1] - value,
+                    extent[2] + value,
+                    extent[3] + value
+                ];
+            }
+        };
+
+        ol.extent.clone = function(extent, opt_extent) {
+            if (opt_extent) {
+                opt_extent[0] = extent[0];
+                opt_extent[1] = extent[1];
+                opt_extent[2] = extent[2];
+                opt_extent[3] = extent[3];
+                return opt_extent;
+            } else {
+                return extent.slice();
+            }
+        };
+
+        ol.extent.closestSquaredDistanceXY = function(extent, x, y) {
+            var dx, dy;
+            if (x < extent[0]) {
+                dx = extent[0] - x;
+            } else if (extent[2] < x) {
+                dx = x - extent[2];
+            } else {
+                dx = 0;
+            }
+            if (y < extent[1]) {
+                dy = extent[1] - y;
+            } else if (extent[3] < y) {
+                dy = y - extent[3];
+            } else {
+                dy = 0;
+            }
+            return dx * dx + dy * dy;
+        };
+
+
+        /**
+         * Check if the passed coordinate is contained or on the edge of the extent.
+         *
+         * @param {ol.Extent} extent Extent.
+         * @param {ol.Coordinate} coordinate Coordinate.
+         * @return {boolean} The coordinate is contained in the extent.
+         * @api
+         */
+        ol.extent.containsCoordinate = function(extent, coordinate) {
+            return ol.extent.containsXY(extent, coordinate[0], coordinate[1]);
+        };
+
+
+        /**
+         * Check if one extent contains another.
+         *
+         * An extent is deemed contained if it lies completely within the other extent,
+         * including if they share one or more edges.
+         *
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent 2.
+         * @return {boolean} The second extent is contained by or on the edge of the
+         *     first.
+         * @api
+         */
+        ol.extent.containsExtent = function(extent1, extent2) {
+            return extent1[0] <= extent2[0] && extent2[2] <= extent1[2] &&
+                extent1[1] <= extent2[1] && extent2[3] <= extent1[3];
+        };
+
+
+        /**
+         * Check if the passed coordinate is contained or on the edge of the extent.
+         *
+         * @param {ol.Extent} extent Extent.
+         * @param {number} x X coordinate.
+         * @param {number} y Y coordinate.
+         * @return {boolean} The x, y values are contained in the extent.
+         * @api
+         */
+        ol.extent.containsXY = function(extent, x, y) {
+            return extent[0] <= x && x <= extent[2] && extent[1] <= y && y <= extent[3];
+        };
+
+
+        /**
+         * Get the relationship between a coordinate and extent.
+         * @param {ol.Extent} extent The extent.
+         * @param {ol.Coordinate} coordinate The coordinate.
+         * @return {number} The relationship (bitwise compare with
+         *     ol.extent.Relationship).
+         */
+        ol.extent.coordinateRelationship = function(extent, coordinate) {
+            var minX = extent[0];
+            var minY = extent[1];
+            var maxX = extent[2];
+            var maxY = extent[3];
+            var x = coordinate[0];
+            var y = coordinate[1];
+            var relationship = ol.extent.Relationship.UNKNOWN;
+            if (x < minX) {
+                relationship = relationship | ol.extent.Relationship.LEFT;
+            } else if (x > maxX) {
+                relationship = relationship | ol.extent.Relationship.RIGHT;
+            }
+            if (y < minY) {
+                relationship = relationship | ol.extent.Relationship.BELOW;
+            } else if (y > maxY) {
+                relationship = relationship | ol.extent.Relationship.ABOVE;
+            }
+            if (relationship === ol.extent.Relationship.UNKNOWN) {
+                relationship = ol.extent.Relationship.INTERSECTING;
+            }
+            return relationship;
+        };
+
+
+        /**
+         * Create an empty extent.
+         * @return {ol.Extent} Empty extent.
+         * @api
+         */
+        ol.extent.createEmpty = function() {
+            return [Infinity, Infinity, -Infinity, -Infinity];
+        };
+
+
+        /**
+         * Create a new extent or update the provided extent.
+         * @param {number} minX Minimum X.
+         * @param {number} minY Minimum Y.
+         * @param {number} maxX Maximum X.
+         * @param {number} maxY Maximum Y.
+         * @param {ol.Extent=} opt_extent Destination extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
+            if (opt_extent) {
+                opt_extent[0] = minX;
+                opt_extent[1] = minY;
+                opt_extent[2] = maxX;
+                opt_extent[3] = maxY;
+                return opt_extent;
+            } else {
+                return [minX, minY, maxX, maxY];
+            }
+        };
+
+
+        /**
+         * Create a new empty extent or make the provided one empty.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdateEmpty = function(opt_extent) {
+            return ol.extent.createOrUpdate(
+                Infinity, Infinity, -Infinity, -Infinity, opt_extent);
+        };
+
+
+        /**
+         * @param {ol.Coordinate} coordinate Coordinate.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdateFromCoordinate = function(coordinate, opt_extent) {
+            var x = coordinate[0];
+            var y = coordinate[1];
+            return ol.extent.createOrUpdate(x, y, x, y, opt_extent);
+        };
+
+
+        /**
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdateFromCoordinates = function(coordinates, opt_extent) {
+            var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+            return ol.extent.extendCoordinates(extent, coordinates);
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdateFromFlatCoordinates = function(flatCoordinates, offset, end, stride, opt_extent) {
+            var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+            return ol.extent.extendFlatCoordinates(
+                extent, flatCoordinates, offset, end, stride);
+        };
+
+
+        /**
+         * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.createOrUpdateFromRings = function(rings, opt_extent) {
+            var extent = ol.extent.createOrUpdateEmpty(opt_extent);
+            return ol.extent.extendRings(extent, rings);
+        };
+
+
+        /**
+         * Determine if two extents are equivalent.
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent 2.
+         * @return {boolean} The two extents are equivalent.
+         * @api
+         */
+        ol.extent.equals = function(extent1, extent2) {
+            return extent1[0] == extent2[0] && extent1[2] == extent2[2] &&
+                extent1[1] == extent2[1] && extent1[3] == extent2[3];
+        };
+
+
+        /**
+         * Modify an extent to include another extent.
+         * @param {ol.Extent} extent1 The extent to be modified.
+         * @param {ol.Extent} extent2 The extent that will be included in the first.
+         * @return {ol.Extent} A reference to the first (extended) extent.
+         * @api
+         */
+        ol.extent.extend = function(extent1, extent2) {
+            if (extent2[0] < extent1[0]) {
+                extent1[0] = extent2[0];
+            }
+            if (extent2[2] > extent1[2]) {
+                extent1[2] = extent2[2];
+            }
+            if (extent2[1] < extent1[1]) {
+                extent1[1] = extent2[1];
+            }
+            if (extent2[3] > extent1[3]) {
+                extent1[3] = extent2[3];
+            }
+            return extent1;
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {ol.Coordinate} coordinate Coordinate.
+         */
+        ol.extent.extendCoordinate = function(extent, coordinate) {
+            if (coordinate[0] < extent[0]) {
+                extent[0] = coordinate[0];
+            }
+            if (coordinate[0] > extent[2]) {
+                extent[2] = coordinate[0];
+            }
+            if (coordinate[1] < extent[1]) {
+                extent[1] = coordinate[1];
+            }
+            if (coordinate[1] > extent[3]) {
+                extent[3] = coordinate[1];
+            }
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.extendCoordinates = function(extent, coordinates) {
+            var i, ii;
+            for (i = 0, ii = coordinates.length; i < ii; ++i) {
+                ol.extent.extendCoordinate(extent, coordinates[i]);
+            }
+            return extent;
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.extendFlatCoordinates = function(extent, flatCoordinates, offset, end, stride) {
+            for (; offset < end; offset += stride) {
+                ol.extent.extendXY(
+                    extent, flatCoordinates[offset], flatCoordinates[offset + 1]);
+            }
+            return extent;
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {Array.<Array.<ol.Coordinate>>} rings Rings.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.extendRings = function(extent, rings) {
+            var i, ii;
+            for (i = 0, ii = rings.length; i < ii; ++i) {
+                ol.extent.extendCoordinates(extent, rings[i]);
+            }
+            return extent;
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {number} x X.
+         * @param {number} y Y.
+         */
+        ol.extent.extendXY = function(extent, x, y) {
+            extent[0] = Math.min(extent[0], x);
+            extent[1] = Math.min(extent[1], y);
+            extent[2] = Math.max(extent[2], x);
+            extent[3] = Math.max(extent[3], y);
+        };
+
+
+        /**
+         * This function calls `callback` for each corner of the extent. If the
+         * callback returns a truthy value the function returns that value
+         * immediately. Otherwise the function returns `false`.
+         * @param {ol.Extent} extent Extent.
+         * @param {function(this:T, ol.Coordinate): S} callback Callback.
+         * @param {T=} opt_this Value to use as `this` when executing `callback`.
+         * @return {S|boolean} Value.
+         * @template S, T
+         */
+        ol.extent.forEachCorner = function(extent, callback, opt_this) {
+            var val;
+            val = callback.call(opt_this, ol.extent.getBottomLeft(extent));
+            if (val) {
+                return val;
+            }
+            val = callback.call(opt_this, ol.extent.getBottomRight(extent));
+            if (val) {
+                return val;
+            }
+            val = callback.call(opt_this, ol.extent.getTopRight(extent));
+            if (val) {
+                return val;
+            }
+            val = callback.call(opt_this, ol.extent.getTopLeft(extent));
+            if (val) {
+                return val;
+            }
+            return false;
+        };
+
+
+        /**
+         * Get the size of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {number} Area.
+         * @api
+         */
+        ol.extent.getArea = function(extent) {
+            var area = 0;
+            if (!ol.extent.isEmpty(extent)) {
+                area = ol.extent.getWidth(extent) * ol.extent.getHeight(extent);
+            }
+            return area;
+        };
+
+
+        /**
+         * Get the bottom left coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {ol.Coordinate} Bottom left coordinate.
+         * @api
+         */
+        ol.extent.getBottomLeft = function(extent) {
+            return [extent[0], extent[1]];
+        };
+
+
+        /**
+         * Get the bottom right coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {ol.Coordinate} Bottom right coordinate.
+         * @api
+         */
+        ol.extent.getBottomRight = function(extent) {
+            return [extent[2], extent[1]];
+        };
+
+
+        /**
+         * Get the center coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {ol.Coordinate} Center.
+         * @api
+         */
+        ol.extent.getCenter = function(extent) {
+            return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+        };
+
+
+        /**
+         * Get a corner coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @param {ol.extent.Corner} corner Corner.
+         * @return {ol.Coordinate} Corner coordinate.
+         */
+        ol.extent.getCorner = function(extent, corner) {
+            var coordinate;
+            if (corner === ol.extent.Corner.BOTTOM_LEFT) {
+                coordinate = ol.extent.getBottomLeft(extent);
+            } else if (corner === ol.extent.Corner.BOTTOM_RIGHT) {
+                coordinate = ol.extent.getBottomRight(extent);
+            } else if (corner === ol.extent.Corner.TOP_LEFT) {
+                coordinate = ol.extent.getTopLeft(extent);
+            } else if (corner === ol.extent.Corner.TOP_RIGHT) {
+                coordinate = ol.extent.getTopRight(extent);
+            } else {
+                ol.asserts.assert(false, 13); // Invalid corner
+            }
+            return /** @type {!ol.Coordinate} */ (coordinate);
+        };
+
+
+        /**
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent 2.
+         * @return {number} Enlarged area.
+         */
+        ol.extent.getEnlargedArea = function(extent1, extent2) {
+            var minX = Math.min(extent1[0], extent2[0]);
+            var minY = Math.min(extent1[1], extent2[1]);
+            var maxX = Math.max(extent1[2], extent2[2]);
+            var maxY = Math.max(extent1[3], extent2[3]);
+            return (maxX - minX) * (maxY - minY);
+        };
+
+
+        /**
+         * @param {ol.Coordinate} center Center.
+         * @param {number} resolution Resolution.
+         * @param {number} rotation Rotation.
+         * @param {ol.Size} size Size.
+         * @param {ol.Extent=} opt_extent Destination extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.getForViewAndSize = function(center, resolution, rotation, size, opt_extent) {
+            var dx = resolution * size[0] / 2;
+            var dy = resolution * size[1] / 2;
+            var cosRotation = Math.cos(rotation);
+            var sinRotation = Math.sin(rotation);
+            var xCos = dx * cosRotation;
+            var xSin = dx * sinRotation;
+            var yCos = dy * cosRotation;
+            var ySin = dy * sinRotation;
+            var x = center[0];
+            var y = center[1];
+            var x0 = x - xCos + ySin;
+            var x1 = x - xCos - ySin;
+            var x2 = x + xCos - ySin;
+            var x3 = x + xCos + ySin;
+            var y0 = y - xSin - yCos;
+            var y1 = y - xSin + yCos;
+            var y2 = y + xSin + yCos;
+            var y3 = y + xSin - yCos;
+            return ol.extent.createOrUpdate(
+                Math.min(x0, x1, x2, x3), Math.min(y0, y1, y2, y3),
+                Math.max(x0, x1, x2, x3), Math.max(y0, y1, y2, y3),
+                opt_extent);
+        };
+
+
+        /**
+         * Get the height of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {number} Height.
+         * @api
+         */
+        ol.extent.getHeight = function(extent) {
+            return extent[3] - extent[1];
+        };
+
+
+        /**
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent 2.
+         * @return {number} Intersection area.
+         */
+        ol.extent.getIntersectionArea = function(extent1, extent2) {
+            var intersection = ol.extent.getIntersection(extent1, extent2);
+            return ol.extent.getArea(intersection);
+        };
+
+
+        /**
+         * Get the intersection of two extents.
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent 2.
+         * @param {ol.Extent=} opt_extent Optional extent to populate with intersection.
+         * @return {ol.Extent} Intersecting extent.
+         * @api
+         */
+        ol.extent.getIntersection = function(extent1, extent2, opt_extent) {
+            var intersection = opt_extent ? opt_extent : ol.extent.createEmpty();
+            if (ol.extent.intersects(extent1, extent2)) {
+                if (extent1[0] > extent2[0]) {
+                    intersection[0] = extent1[0];
+                } else {
+                    intersection[0] = extent2[0];
+                }
+                if (extent1[1] > extent2[1]) {
+                    intersection[1] = extent1[1];
+                } else {
+                    intersection[1] = extent2[1];
+                }
+                if (extent1[2] < extent2[2]) {
+                    intersection[2] = extent1[2];
+                } else {
+                    intersection[2] = extent2[2];
+                }
+                if (extent1[3] < extent2[3]) {
+                    intersection[3] = extent1[3];
+                } else {
+                    intersection[3] = extent2[3];
+                }
+            }
+            return intersection;
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @return {number} Margin.
+         */
+        ol.extent.getMargin = function(extent) {
+            return ol.extent.getWidth(extent) + ol.extent.getHeight(extent);
+        };
+
+
+        /**
+         * Get the size (width, height) of an extent.
+         * @param {ol.Extent} extent The extent.
+         * @return {ol.Size} The extent size.
+         * @api
+         */
+        ol.extent.getSize = function(extent) {
+            return [extent[2] - extent[0], extent[3] - extent[1]];
+        };
+
+
+        /**
+         * Get the top left coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {ol.Coordinate} Top left coordinate.
+         * @api
+         */
+        ol.extent.getTopLeft = function(extent) {
+            return [extent[0], extent[3]];
+        };
+
+
+        /**
+         * Get the top right coordinate of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {ol.Coordinate} Top right coordinate.
+         * @api
+         */
+        ol.extent.getTopRight = function(extent) {
+            return [extent[2], extent[3]];
+        };
+
+
+        /**
+         * Get the width of an extent.
+         * @param {ol.Extent} extent Extent.
+         * @return {number} Width.
+         * @api
+         */
+        ol.extent.getWidth = function(extent) {
+            return extent[2] - extent[0];
+        };
+
+
+        /**
+         * Determine if one extent intersects another.
+         * @param {ol.Extent} extent1 Extent 1.
+         * @param {ol.Extent} extent2 Extent.
+         * @return {boolean} The two extents intersect.
+         * @api
+         */
+        ol.extent.intersects = function(extent1, extent2) {
+            return extent1[0] <= extent2[2] &&
+                extent1[2] >= extent2[0] &&
+                extent1[1] <= extent2[3] &&
+                extent1[3] >= extent2[1];
+        };
+
+
+        /**
+         * Determine if an extent is empty.
+         * @param {ol.Extent} extent Extent.
+         * @return {boolean} Is empty.
+         * @api
+         */
+        ol.extent.isEmpty = function(extent) {
+            return extent[2] < extent[0] || extent[3] < extent[1];
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} Extent.
+         */
+        ol.extent.returnOrUpdate = function(extent, opt_extent) {
+            if (opt_extent) {
+                opt_extent[0] = extent[0];
+                opt_extent[1] = extent[1];
+                opt_extent[2] = extent[2];
+                opt_extent[3] = extent[3];
+                return opt_extent;
+            } else {
+                return extent;
+            }
+        };
+
+
+        /**
+         * @param {ol.Extent} extent Extent.
+         * @param {number} value Value.
+         */
+        ol.extent.scaleFromCenter = function(extent, value) {
+            var deltaX = ((extent[2] - extent[0]) / 2) * (value - 1);
+            var deltaY = ((extent[3] - extent[1]) / 2) * (value - 1);
+            extent[0] -= deltaX;
+            extent[2] += deltaX;
+            extent[1] -= deltaY;
+            extent[3] += deltaY;
+        };
+
+
+        /**
+         * Determine if the segment between two coordinates intersects (crosses,
+         * touches, or is contained by) the provided extent.
+         * @param {ol.Extent} extent The extent.
+         * @param {ol.Coordinate} start Segment start coordinate.
+         * @param {ol.Coordinate} end Segment end coordinate.
+         * @return {boolean} The segment intersects the extent.
+         */
+        ol.extent.intersectsSegment = function(extent, start, end) {
+            var intersects = false;
+            var startRel = ol.extent.coordinateRelationship(extent, start);
+            var endRel = ol.extent.coordinateRelationship(extent, end);
+            if (startRel === ol.extent.Relationship.INTERSECTING ||
+                endRel === ol.extent.Relationship.INTERSECTING) {
+                intersects = true;
+            } else {
+                var minX = extent[0];
+                var minY = extent[1];
+                var maxX = extent[2];
+                var maxY = extent[3];
+                var startX = start[0];
+                var startY = start[1];
+                var endX = end[0];
+                var endY = end[1];
+                var slope = (endY - startY) / (endX - startX);
+                var x, y;
+                if (!!(endRel & ol.extent.Relationship.ABOVE) &&
+                    !(startRel & ol.extent.Relationship.ABOVE)) {
+                    // potentially intersects top
+                    x = endX - ((endY - maxY) / slope);
+                    intersects = x >= minX && x <= maxX;
+                }
+                if (!intersects && !!(endRel & ol.extent.Relationship.RIGHT) &&
+                    !(startRel & ol.extent.Relationship.RIGHT)) {
+                    // potentially intersects right
+                    y = endY - ((endX - maxX) * slope);
+                    intersects = y >= minY && y <= maxY;
+                }
+                if (!intersects && !!(endRel & ol.extent.Relationship.BELOW) &&
+                    !(startRel & ol.extent.Relationship.BELOW)) {
+                    // potentially intersects bottom
+                    x = endX - ((endY - minY) / slope);
+                    intersects = x >= minX && x <= maxX;
+                }
+                if (!intersects && !!(endRel & ol.extent.Relationship.LEFT) &&
+                    !(startRel & ol.extent.Relationship.LEFT)) {
+                    // potentially intersects left
+                    y = endY - ((endX - minX) * slope);
+                    intersects = y >= minY && y <= maxY;
+                }
+
+            }
+            return intersects;
+        };
+
+
+        /**
+         * Apply a transform function to the extent.
+         * @param {ol.Extent} extent Extent.
+         * @param {ol.TransformFunction} transformFn Transform function.  Called with
+         * [minX, minY, maxX, maxY] extent coordinates.
+         * @param {ol.Extent=} opt_extent Destination extent.
+         * @return {ol.Extent} Extent.
+         * @api
+         */
+        ol.extent.applyTransform = function(extent, transformFn, opt_extent) {
+            var coordinates = [
+                extent[0], extent[1],
+                extent[0], extent[3],
+                extent[2], extent[1],
+                extent[2], extent[3]
+            ];
+            transformFn(coordinates, coordinates, 2);
+            var xs = [coordinates[0], coordinates[2], coordinates[4], coordinates[6]];
+            var ys = [coordinates[1], coordinates[3], coordinates[5], coordinates[7]];
+            return ol.extent.boundingExtentXYs_(xs, ys, opt_extent);
+        };
+
+        ol.obj = {};
+
+        /**
+         * Polyfill for Object.assign().  Assigns enumerable and own properties from
+         * one or more source objects to a target object.
+         *
+         * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+         * @param {!Object} target The target object.
+         * @param {...Object} var_sources The source object(s).
+         * @return {!Object} The modified target object.
+         */
+        ol.obj.assign = (typeof Object.assign === 'function') ? Object.assign : function(target, var_sources) {
+            if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert undefined or null to object');
+            }
+
+            var output = Object(target);
+            for (var i = 1, ii = arguments.length; i < ii; ++i) {
+                var source = arguments[i];
+                if (source !== undefined && source !== null) {
+                    for (var key in source) {
+                        if (source.hasOwnProperty(key)) {
+                            output[key] = source[key];
+                        }
+                    }
+                }
+            }
+            return output;
+        };
+
+
+        /**
+         * Removes all properties from an object.
+         * @param {Object} object The object to clear.
+         */
+        ol.obj.clear = function(object) {
+            for (var property in object) {
+                delete object[property];
+            }
+        };
+
+
+        /**
+         * Get an array of property values from an object.
+         * @param {Object<K,V>} object The object from which to get the values.
+         * @return {!Array<V>} The property values.
+         * @template K,V
+         */
+        ol.obj.getValues = function(object) {
+            var values = [];
+            for (var property in object) {
+                values.push(object[property]);
+            }
+            return values;
+        };
+
+
+        /**
+         * Determine if an object has any properties.
+         * @param {Object} object The object to check.
+         * @return {boolean} The object is empty.
+         */
+        ol.obj.isEmpty = function(object) {
+            var property;
+            for (property in object) {
+                return false;
+            }
+            return !property;
+        };
+
+        ol.transform = {};
+
+        /**
+         * @private
+         * @type {ol.Transform}
+         */
+        ol.transform.tmp_ = new Array(6);
+
+
+        /**
+         * Create an identity transform.
+         * @return {!ol.Transform} Identity transform.
+         */
+        ol.transform.create = function() {
+            return [1, 0, 0, 1, 0, 0];
+        };
+
+
+        /**
+         * Resets the given transform to an identity transform.
+         * @param {!ol.Transform} transform Transform.
+         * @return {!ol.Transform} Transform.
+         */
+        ol.transform.reset = function(transform) {
+            return ol.transform.set(transform, 1, 0, 0, 1, 0, 0);
+        };
+
+
+        /**
+         * Multiply the underlying matrices of two transforms and return the result in
+         * the first transform.
+         * @param {!ol.Transform} transform1 Transform parameters of matrix 1.
+         * @param {!ol.Transform} transform2 Transform parameters of matrix 2.
+         * @return {!ol.Transform} transform1 multiplied with transform2.
+         */
+        ol.transform.multiply = function(transform1, transform2) {
+            var a1 = transform1[0];
+            var b1 = transform1[1];
+            var c1 = transform1[2];
+            var d1 = transform1[3];
+            var e1 = transform1[4];
+            var f1 = transform1[5];
+            var a2 = transform2[0];
+            var b2 = transform2[1];
+            var c2 = transform2[2];
+            var d2 = transform2[3];
+            var e2 = transform2[4];
+            var f2 = transform2[5];
+
+            transform1[0] = a1 * a2 + c1 * b2;
+            transform1[1] = b1 * a2 + d1 * b2;
+            transform1[2] = a1 * c2 + c1 * d2;
+            transform1[3] = b1 * c2 + d1 * d2;
+            transform1[4] = a1 * e2 + c1 * f2 + e1;
+            transform1[5] = b1 * e2 + d1 * f2 + f1;
+
+            return transform1;
+        };
+
+        /**
+         * Set the transform components a-f on a given transform.
+         * @param {!ol.Transform} transform Transform.
+         * @param {number} a The a component of the transform.
+         * @param {number} b The b component of the transform.
+         * @param {number} c The c component of the transform.
+         * @param {number} d The d component of the transform.
+         * @param {number} e The e component of the transform.
+         * @param {number} f The f component of the transform.
+         * @return {!ol.Transform} Matrix with transform applied.
+         */
+        ol.transform.set = function(transform, a, b, c, d, e, f) {
+            transform[0] = a;
+            transform[1] = b;
+            transform[2] = c;
+            transform[3] = d;
+            transform[4] = e;
+            transform[5] = f;
+            return transform;
+        };
+
+
+        /**
+         * Set transform on one matrix from another matrix.
+         * @param {!ol.Transform} transform1 Matrix to set transform to.
+         * @param {!ol.Transform} transform2 Matrix to set transform from.
+         * @return {!ol.Transform} transform1 with transform from transform2 applied.
+         */
+        ol.transform.setFromArray = function(transform1, transform2) {
+            transform1[0] = transform2[0];
+            transform1[1] = transform2[1];
+            transform1[2] = transform2[2];
+            transform1[3] = transform2[3];
+            transform1[4] = transform2[4];
+            transform1[5] = transform2[5];
+            return transform1;
+        };
+
+
+        /**
+         * Transforms the given coordinate with the given transform returning the
+         * resulting, transformed coordinate. The coordinate will be modified in-place.
+         *
+         * @param {ol.Transform} transform The transformation.
+         * @param {ol.Coordinate|ol.Pixel} coordinate The coordinate to transform.
+         * @return {ol.Coordinate|ol.Pixel} return coordinate so that operations can be
+         *     chained together.
+         */
+        ol.transform.apply = function(transform, coordinate) {
+            var x = coordinate[0], y = coordinate[1];
+            coordinate[0] = transform[0] * x + transform[2] * y + transform[4];
+            coordinate[1] = transform[1] * x + transform[3] * y + transform[5];
+            return coordinate;
+        };
+
+
+        /**
+         * Applies rotation to the given transform.
+         * @param {!ol.Transform} transform Transform.
+         * @param {number} angle Angle in radians.
+         * @return {!ol.Transform} The rotated transform.
+         */
+        ol.transform.rotate = function(transform, angle) {
+            var cos = Math.cos(angle);
+            var sin = Math.sin(angle);
+            return ol.transform.multiply(transform,
+                ol.transform.set(ol.transform.tmp_, cos, sin, -sin, cos, 0, 0));
+        };
+
+
+        /**
+         * Applies scale to a given transform.
+         * @param {!ol.Transform} transform Transform.
+         * @param {number} x Scale factor x.
+         * @param {number} y Scale factor y.
+         * @return {!ol.Transform} The scaled transform.
+         */
+        ol.transform.scale = function(transform, x, y) {
+            return ol.transform.multiply(transform,
+                ol.transform.set(ol.transform.tmp_, x, 0, 0, y, 0, 0));
+        };
+
+
+        /**
+         * Applies translation to the given transform.
+         * @param {!ol.Transform} transform Transform.
+         * @param {number} dx Translation x.
+         * @param {number} dy Translation y.
+         * @return {!ol.Transform} The translated transform.
+         */
+        ol.transform.translate = function(transform, dx, dy) {
+            return ol.transform.multiply(transform,
+                ol.transform.set(ol.transform.tmp_, 1, 0, 0, 1, dx, dy));
+        };
+
+
+        /**
+         * Creates a composite transform given an initial translation, scale, rotation, and
+         * final translation (in that order only, not commutative).
+         * @param {!ol.Transform} transform The transform (will be modified in place).
+         * @param {number} dx1 Initial translation x.
+         * @param {number} dy1 Initial translation y.
+         * @param {number} sx Scale factor x.
+         * @param {number} sy Scale factor y.
+         * @param {number} angle Rotation (in counter-clockwise radians).
+         * @param {number} dx2 Final translation x.
+         * @param {number} dy2 Final translation y.
+         * @return {!ol.Transform} The composite transform.
+         */
+        ol.transform.compose = function(transform, dx1, dy1, sx, sy, angle, dx2, dy2) {
+            var sin = Math.sin(angle);
+            var cos = Math.cos(angle);
+            transform[0] = sx * cos;
+            transform[1] = sy * sin;
+            transform[2] = -sx * sin;
+            transform[3] = sy * cos;
+            transform[4] = dx2 * sx * cos - dy2 * sx * sin + dx1;
+            transform[5] = dx2 * sy * sin + dy2 * sy * cos + dy1;
+            return transform;
+        };
+
+
+        /**
+         * Invert the given transform.
+         * @param {!ol.Transform} transform Transform.
+         * @return {!ol.Transform} Inverse of the transform.
+         */
+        ol.transform.invert = function(transform) {
+            var det = ol.transform.determinant(transform);
+            //ol.asserts.assert(det !== 0, 32); // Transformation matrix cannot be inverted
+
+            var a = transform[0];
+            var b = transform[1];
+            var c = transform[2];
+            var d = transform[3];
+            var e = transform[4];
+            var f = transform[5];
+
+            transform[0] = d / det;
+            transform[1] = -b / det;
+            transform[2] = -c / det;
+            transform[3] = a / det;
+            transform[4] = (c * f - d * e) / det;
+            transform[5] = -(a * f - b * e) / det;
+
+            return transform;
+        };
+
+
+        /**
+         * Returns the determinant of the given matrix.
+         * @param {!ol.Transform} mat Matrix.
+         * @return {number} Determinant.
+         */
+        ol.transform.determinant = function(mat) {
+            return mat[0] * mat[3] - mat[1] * mat[2];
+        };
+
+        ol.geom = {};
+        ol.geom.flat = {};
+        ol.geom.flat.center = {};
+        ol.geom.flat.reverse = {};
+        ol.geom.flat.orient = {};
+
+
+        ol.geom.flat.transform = {};
+        ol.geom.flat.transform.transform2D = function(flatCoordinates, offset, end, stride, transform, opt_dest) {
+            var dest = opt_dest ? opt_dest : [];
+            var i = 0;
+            var j;
+            for (j = offset; j < end; j += stride) {
+                var x = flatCoordinates[j];
+                var y = flatCoordinates[j + 1];
+                dest[i++] = transform[0] * x + transform[2] * y + transform[4];
+                dest[i++] = transform[1] * x + transform[3] * y + transform[5];
+            }
+            if (opt_dest && dest.length != i) {
+                dest.length = i;
+            }
+            return dest;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} angle Angle.
+         * @param {Array.<number>} anchor Rotation anchor point.
+         * @param {Array.<number>=} opt_dest Destination.
+         * @return {Array.<number>} Transformed coordinates.
+         */
+        ol.geom.flat.transform.rotate = function(flatCoordinates, offset, end, stride, angle, anchor, opt_dest) {
+            var dest = opt_dest ? opt_dest : [];
+            var cos = Math.cos(angle);
+            var sin = Math.sin(angle);
+            var anchorX = anchor[0];
+            var anchorY = anchor[1];
+            var i = 0;
+            for (var j = offset; j < end; j += stride) {
+                var deltaX = flatCoordinates[j] - anchorX;
+                var deltaY = flatCoordinates[j + 1] - anchorY;
+                dest[i++] = anchorX + deltaX * cos - deltaY * sin;
+                dest[i++] = anchorY + deltaX * sin + deltaY * cos;
+                for (var k = j + 2; k < j + stride; ++k) {
+                    dest[i++] = flatCoordinates[k];
+                }
+            }
+            if (opt_dest && dest.length != i) {
+                dest.length = i;
+            }
+            return dest;
+        };
+
+
+        /**
+         * Scale the coordinates.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} sx Scale factor in the x-direction.
+         * @param {number} sy Scale factor in the y-direction.
+         * @param {Array.<number>} anchor Scale anchor point.
+         * @param {Array.<number>=} opt_dest Destination.
+         * @return {Array.<number>} Transformed coordinates.
+         */
+        ol.geom.flat.transform.scale = function(flatCoordinates, offset, end, stride, sx, sy, anchor, opt_dest) {
+            var dest = opt_dest ? opt_dest : [];
+            var anchorX = anchor[0];
+            var anchorY = anchor[1];
+            var i = 0;
+            for (var j = offset; j < end; j += stride) {
+                var deltaX = flatCoordinates[j] - anchorX;
+                var deltaY = flatCoordinates[j + 1] - anchorY;
+                dest[i++] = anchorX + sx * deltaX;
+                dest[i++] = anchorY + sy * deltaY;
+                for (var k = j + 2; k < j + stride; ++k) {
+                    dest[i++] = flatCoordinates[k];
+                }
+            }
+            if (opt_dest && dest.length != i) {
+                dest.length = i;
+            }
+            return dest;
+        };
+
+        /**
+         * The coordinate layout for geometries, indicating whether a 3rd or 4th z ('Z')
+         * or measure ('M') coordinate is available. Supported values are `'XY'`,
+         * `'XYZ'`, `'XYM'`, `'XYZM'`.
+         * @enum {string}
+         */
+        ol.geom.GeometryLayout = {
+            XY: 'XY',
+            XYZ: 'XYZ',
+            XYM: 'XYM',
+            XYZM: 'XYZM'
+        };
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         */
+        ol.geom.flat.reverse.coordinates = function(flatCoordinates, offset, end, stride) {
+            while (offset < end - stride) {
+                var i;
+                for (i = 0; i < stride; ++i) {
+                    var tmp = flatCoordinates[offset + i];
+                    flatCoordinates[offset + i] = flatCoordinates[end - stride + i];
+                    flatCoordinates[end - stride + i] = tmp;
+                }
+                offset += stride;
+                end -= stride;
+            }
+        };
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @return {boolean} Is clockwise.
+         */
+        ol.geom.flat.orient.linearRingIsClockwise = function(flatCoordinates, offset, end, stride) {
+            // http://tinyurl.com/clockwise-method
+            // https://github.com/OSGeo/gdal/blob/trunk/gdal/ogr/ogrlinearring.cpp
+            var edge = 0;
+            var x1 = flatCoordinates[end - stride];
+            var y1 = flatCoordinates[end - stride + 1];
+            for (; offset < end; offset += stride) {
+                var x2 = flatCoordinates[offset];
+                var y2 = flatCoordinates[offset + 1];
+                edge += (x2 - x1) * (y2 + y1);
+                x1 = x2;
+                y1 = y2;
+            }
+            return edge > 0;
+        };
+
+
+        /**
+         * Determines if linear rings are oriented.  By default, left-hand orientation
+         * is tested (first ring must be clockwise, remaining rings counter-clockwise).
+         * To test for right-hand orientation, use the `opt_right` argument.
+         *
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Array of end indexes.
+         * @param {number} stride Stride.
+         * @param {boolean=} opt_right Test for right-hand orientation
+         *     (counter-clockwise exterior ring and clockwise interior rings).
+         * @return {boolean} Rings are correctly oriented.
+         */
+        ol.geom.flat.orient.linearRingsAreOriented = function(flatCoordinates, offset, ends, stride, opt_right) {
+            var right = opt_right !== undefined ? opt_right : false;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var isClockwise = ol.geom.flat.orient.linearRingIsClockwise(
+                    flatCoordinates, offset, end, stride);
+                if (i === 0) {
+                    if ((right && isClockwise) || (!right && !isClockwise)) {
+                        return false;
+                    }
+                } else {
+                    if ((right && !isClockwise) || (!right && isClockwise)) {
+                        return false;
+                    }
+                }
+                offset = end;
+            }
+            return true;
+        };
+
+
+        /**
+         * Determines if linear rings are oriented.  By default, left-hand orientation
+         * is tested (first ring must be clockwise, remaining rings counter-clockwise).
+         * To test for right-hand orientation, use the `opt_right` argument.
+         *
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Array of array of end indexes.
+         * @param {number} stride Stride.
+         * @param {boolean=} opt_right Test for right-hand orientation
+         *     (counter-clockwise exterior ring and clockwise interior rings).
+         * @return {boolean} Rings are correctly oriented.
+         */
+        ol.geom.flat.orient.linearRingssAreOriented = function(flatCoordinates, offset, endss, stride, opt_right) {
+            var i, ii;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                if (!ol.geom.flat.orient.linearRingsAreOriented(
+                    flatCoordinates, offset, endss[i], stride, opt_right)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+
+        /**
+         * Orient coordinates in a flat array of linear rings.  By default, rings
+         * are oriented following the left-hand rule (clockwise for exterior and
+         * counter-clockwise for interior rings).  To orient according to the
+         * right-hand rule, use the `opt_right` argument.
+         *
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Ends.
+         * @param {number} stride Stride.
+         * @param {boolean=} opt_right Follow the right-hand rule for orientation.
+         * @return {number} End.
+         */
+        ol.geom.flat.orient.orientLinearRings = function(flatCoordinates, offset, ends, stride, opt_right) {
+            var right = opt_right !== undefined ? opt_right : false;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var isClockwise = ol.geom.flat.orient.linearRingIsClockwise(
+                    flatCoordinates, offset, end, stride);
+                var reverse = i === 0 ?
+                    (right && isClockwise) || (!right && !isClockwise) :
+                    (right && !isClockwise) || (!right && isClockwise);
+                if (reverse) {
+                    ol.geom.flat.reverse.coordinates(flatCoordinates, offset, end, stride);
+                }
+                offset = end;
+            }
+            return offset;
+        };
+
+
+        /**
+         * Orient coordinates in a flat array of linear rings.  By default, rings
+         * are oriented following the left-hand rule (clockwise for exterior and
+         * counter-clockwise for interior rings).  To orient according to the
+         * right-hand rule, use the `opt_right` argument.
+         *
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Array of array of end indexes.
+         * @param {number} stride Stride.
+         * @param {boolean=} opt_right Follow the right-hand rule for orientation.
+         * @return {number} End.
+         */
+        ol.geom.flat.orient.orientLinearRingss = function(flatCoordinates, offset, endss, stride, opt_right) {
+            var i, ii;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                offset = ol.geom.flat.orient.orientLinearRings(
+                    flatCoordinates, offset, endss[i], stride, opt_right);
+            }
+            return offset;
+        };
+
+        ol.geom.flat.simplify = {};
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {boolean} highQuality Highest quality.
+         * @param {Array.<number>=} opt_simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @return {Array.<number>} Simplified line string.
+         */
+        ol.geom.flat.simplify.lineString = function(flatCoordinates, offset, end,
+                                                    stride, squaredTolerance, highQuality, opt_simplifiedFlatCoordinates) {
+            var simplifiedFlatCoordinates = opt_simplifiedFlatCoordinates !== undefined ?
+                opt_simplifiedFlatCoordinates : [];
+            if (!highQuality) {
+                end = ol.geom.flat.simplify.radialDistance(flatCoordinates, offset, end,
+                    stride, squaredTolerance,
+                    simplifiedFlatCoordinates, 0);
+                flatCoordinates = simplifiedFlatCoordinates;
+                offset = 0;
+                stride = 2;
+            }
+            simplifiedFlatCoordinates.length = ol.geom.flat.simplify.douglasPeucker(
+                flatCoordinates, offset, end, stride, squaredTolerance,
+                simplifiedFlatCoordinates, 0);
+            return simplifiedFlatCoordinates;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.douglasPeucker = function(flatCoordinates, offset, end,
+                                                        stride, squaredTolerance, simplifiedFlatCoordinates, simplifiedOffset) {
+            var n = (end - offset) / stride;
+            if (n < 3) {
+                for (; offset < end; offset += stride) {
+                    simplifiedFlatCoordinates[simplifiedOffset++] =
+                        flatCoordinates[offset];
+                    simplifiedFlatCoordinates[simplifiedOffset++] =
+                        flatCoordinates[offset + 1];
+                }
+                return simplifiedOffset;
+            }
+            /** @type {Array.<number>} */
+            var markers = new Array(n);
+            markers[0] = 1;
+            markers[n - 1] = 1;
+            /** @type {Array.<number>} */
+            var stack = [offset, end - stride];
+            var index = 0;
+            var i;
+            while (stack.length > 0) {
+                var last = stack.pop();
+                var first = stack.pop();
+                var maxSquaredDistance = 0;
+                var x1 = flatCoordinates[first];
+                var y1 = flatCoordinates[first + 1];
+                var x2 = flatCoordinates[last];
+                var y2 = flatCoordinates[last + 1];
+                for (i = first + stride; i < last; i += stride) {
+                    var x = flatCoordinates[i];
+                    var y = flatCoordinates[i + 1];
+                    var squaredDistance = ol.math.squaredSegmentDistance(
+                        x, y, x1, y1, x2, y2);
+                    if (squaredDistance > maxSquaredDistance) {
+                        index = i;
+                        maxSquaredDistance = squaredDistance;
+                    }
+                }
+                if (maxSquaredDistance > squaredTolerance) {
+                    markers[(index - offset) / stride] = 1;
+                    if (first + stride < index) {
+                        stack.push(first, index);
+                    }
+                    if (index + stride < last) {
+                        stack.push(index, last);
+                    }
+                }
+            }
+            for (i = 0; i < n; ++i) {
+                if (markers[i]) {
+                    simplifiedFlatCoordinates[simplifiedOffset++] =
+                        flatCoordinates[offset + i * stride];
+                    simplifiedFlatCoordinates[simplifiedOffset++] =
+                        flatCoordinates[offset + i * stride + 1];
+                }
+            }
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Ends.
+         * @param {number} stride Stride.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @param {Array.<number>} simplifiedEnds Simplified ends.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.douglasPeuckers = function(flatCoordinates, offset,
+                                                         ends, stride, squaredTolerance, simplifiedFlatCoordinates,
+                                                         simplifiedOffset, simplifiedEnds) {
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                simplifiedOffset = ol.geom.flat.simplify.douglasPeucker(
+                    flatCoordinates, offset, end, stride, squaredTolerance,
+                    simplifiedFlatCoordinates, simplifiedOffset);
+                simplifiedEnds.push(simplifiedOffset);
+                offset = end;
+            }
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Endss.
+         * @param {number} stride Stride.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @param {Array.<Array.<number>>} simplifiedEndss Simplified endss.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.douglasPeuckerss = function(
+            flatCoordinates, offset, endss, stride, squaredTolerance,
+            simplifiedFlatCoordinates, simplifiedOffset, simplifiedEndss) {
+            var i, ii;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                var ends = endss[i];
+                var simplifiedEnds = [];
+                simplifiedOffset = ol.geom.flat.simplify.douglasPeuckers(
+                    flatCoordinates, offset, ends, stride, squaredTolerance,
+                    simplifiedFlatCoordinates, simplifiedOffset, simplifiedEnds);
+                simplifiedEndss.push(simplifiedEnds);
+                offset = ends[ends.length - 1];
+            }
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.radialDistance = function(flatCoordinates, offset, end,
+                                                        stride, squaredTolerance, simplifiedFlatCoordinates, simplifiedOffset) {
+            if (end <= offset + stride) {
+                // zero or one point, no simplification possible, so copy and return
+                for (; offset < end; offset += stride) {
+                    simplifiedFlatCoordinates[simplifiedOffset++] = flatCoordinates[offset];
+                    simplifiedFlatCoordinates[simplifiedOffset++] =
+                        flatCoordinates[offset + 1];
+                }
+                return simplifiedOffset;
+            }
+            var x1 = flatCoordinates[offset];
+            var y1 = flatCoordinates[offset + 1];
+            // copy first point
+            simplifiedFlatCoordinates[simplifiedOffset++] = x1;
+            simplifiedFlatCoordinates[simplifiedOffset++] = y1;
+            var x2 = x1;
+            var y2 = y1;
+            for (offset += stride; offset < end; offset += stride) {
+                x2 = flatCoordinates[offset];
+                y2 = flatCoordinates[offset + 1];
+                if (ol.math.squaredDistance(x1, y1, x2, y2) > squaredTolerance) {
+                    // copy point at offset
+                    simplifiedFlatCoordinates[simplifiedOffset++] = x2;
+                    simplifiedFlatCoordinates[simplifiedOffset++] = y2;
+                    x1 = x2;
+                    y1 = y2;
+                }
+            }
+            if (x2 != x1 || y2 != y1) {
+                // copy last point
+                simplifiedFlatCoordinates[simplifiedOffset++] = x2;
+                simplifiedFlatCoordinates[simplifiedOffset++] = y2;
+            }
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {number} value Value.
+         * @param {number} tolerance Tolerance.
+         * @return {number} Rounded value.
+         */
+        ol.geom.flat.simplify.snap = function(value, tolerance) {
+            return tolerance * Math.round(value / tolerance);
+        };
+
+
+        /**
+         * Simplifies a line string using an algorithm designed by Tim Schaub.
+         * Coordinates are snapped to the nearest value in a virtual grid and
+         * consecutive duplicate coordinates are discarded.  This effectively preserves
+         * topology as the simplification of any subsection of a line string is
+         * independent of the rest of the line string.  This means that, for examples,
+         * the common edge between two polygons will be simplified to the same line
+         * string independently in both polygons.  This implementation uses a single
+         * pass over the coordinates and eliminates intermediate collinear points.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {number} tolerance Tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.quantize = function(flatCoordinates, offset, end, stride,
+                                                  tolerance, simplifiedFlatCoordinates, simplifiedOffset) {
+            // do nothing if the line is empty
+            if (offset == end) {
+                return simplifiedOffset;
+            }
+            // snap the first coordinate (P1)
+            var x1 = ol.geom.flat.simplify.snap(flatCoordinates[offset], tolerance);
+            var y1 = ol.geom.flat.simplify.snap(flatCoordinates[offset + 1], tolerance);
+            offset += stride;
+            // add the first coordinate to the output
+            simplifiedFlatCoordinates[simplifiedOffset++] = x1;
+            simplifiedFlatCoordinates[simplifiedOffset++] = y1;
+            // find the next coordinate that does not snap to the same value as the first
+            // coordinate (P2)
+            var x2, y2;
+            do {
+                x2 = ol.geom.flat.simplify.snap(flatCoordinates[offset], tolerance);
+                y2 = ol.geom.flat.simplify.snap(flatCoordinates[offset + 1], tolerance);
+                offset += stride;
+                if (offset == end) {
+                    // all coordinates snap to the same value, the line collapses to a point
+                    // push the last snapped value anyway to ensure that the output contains
+                    // at least two points
+                    // FIXME should we really return at least two points anyway?
+                    simplifiedFlatCoordinates[simplifiedOffset++] = x2;
+                    simplifiedFlatCoordinates[simplifiedOffset++] = y2;
+                    return simplifiedOffset;
+                }
+            } while (x2 == x1 && y2 == y1);
+            while (offset < end) {
+                var x3, y3;
+                // snap the next coordinate (P3)
+                x3 = ol.geom.flat.simplify.snap(flatCoordinates[offset], tolerance);
+                y3 = ol.geom.flat.simplify.snap(flatCoordinates[offset + 1], tolerance);
+                offset += stride;
+                // skip P3 if it is equal to P2
+                if (x3 == x2 && y3 == y2) {
+                    continue;
+                }
+                // calculate the delta between P1 and P2
+                var dx1 = x2 - x1;
+                var dy1 = y2 - y1;
+                // calculate the delta between P3 and P1
+                var dx2 = x3 - x1;
+                var dy2 = y3 - y1;
+                // if P1, P2, and P3 are colinear and P3 is further from P1 than P2 is from
+                // P1 in the same direction then P2 is on the straight line between P1 and
+                // P3
+                if ((dx1 * dy2 == dy1 * dx2) &&
+                    ((dx1 < 0 && dx2 < dx1) || dx1 == dx2 || (dx1 > 0 && dx2 > dx1)) &&
+                    ((dy1 < 0 && dy2 < dy1) || dy1 == dy2 || (dy1 > 0 && dy2 > dy1))) {
+                    // discard P2 and set P2 = P3
+                    x2 = x3;
+                    y2 = y3;
+                    continue;
+                }
+                // either P1, P2, and P3 are not colinear, or they are colinear but P3 is
+                // between P3 and P1 or on the opposite half of the line to P2.  add P2,
+                // and continue with P1 = P2 and P2 = P3
+                simplifiedFlatCoordinates[simplifiedOffset++] = x2;
+                simplifiedFlatCoordinates[simplifiedOffset++] = y2;
+                x1 = x2;
+                y1 = y2;
+                x2 = x3;
+                y2 = y3;
+            }
+            // add the last point (P2)
+            simplifiedFlatCoordinates[simplifiedOffset++] = x2;
+            simplifiedFlatCoordinates[simplifiedOffset++] = y2;
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Ends.
+         * @param {number} stride Stride.
+         * @param {number} tolerance Tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @param {Array.<number>} simplifiedEnds Simplified ends.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.quantizes = function(
+            flatCoordinates, offset, ends, stride,
+            tolerance,
+            simplifiedFlatCoordinates, simplifiedOffset, simplifiedEnds) {
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                simplifiedOffset = ol.geom.flat.simplify.quantize(
+                    flatCoordinates, offset, end, stride,
+                    tolerance,
+                    simplifiedFlatCoordinates, simplifiedOffset);
+                simplifiedEnds.push(simplifiedOffset);
+                offset = end;
+            }
+            return simplifiedOffset;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Endss.
+         * @param {number} stride Stride.
+         * @param {number} tolerance Tolerance.
+         * @param {Array.<number>} simplifiedFlatCoordinates Simplified flat
+         *     coordinates.
+         * @param {number} simplifiedOffset Simplified offset.
+         * @param {Array.<Array.<number>>} simplifiedEndss Simplified endss.
+         * @return {number} Simplified offset.
+         */
+        ol.geom.flat.simplify.quantizess = function(
+            flatCoordinates, offset, endss, stride,
+            tolerance,
+            simplifiedFlatCoordinates, simplifiedOffset, simplifiedEndss) {
+            var i, ii;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                var ends = endss[i];
+                var simplifiedEnds = [];
+                simplifiedOffset = ol.geom.flat.simplify.quantizes(
+                    flatCoordinates, offset, ends, stride,
+                    tolerance,
+                    simplifiedFlatCoordinates, simplifiedOffset, simplifiedEnds);
+                simplifiedEndss.push(simplifiedEnds);
+                offset = ends[ends.length - 1];
+            }
+            return simplifiedOffset;
+        };
+
+        ol.geom.GeometryType = {
+            POINT: 'Point',
+            LINE_STRING: 'LineString',
+            LINEAR_RING: 'LinearRing',
+            POLYGON: 'Polygon',
+            MULTI_POINT: 'MultiPoint',
+            MULTI_LINE_STRING: 'MultiLineString',
+            MULTI_POLYGON: 'MultiPolygon',
+            GEOMETRY_COLLECTION: 'GeometryCollection',
+            CIRCLE: 'Circle'
+        };
+
+        /**
+         * @classdesc
+         * Abstract base class; normally only used for creating subclasses and not
+         * instantiated in apps.
+         * Base class for vector geometries.
+         *
+         * To get notified of changes to the geometry, register a listener for the
+         * generic `change` event on your geometry instance.
+         *
+         * @constructor
+         * @abstract
+         * @extends {ol.Object}
+         * @api
+         */
+        ol.geom.Geometry = function() {
+
+            ol.Object.call(this);
+
+            /**
+             * @private
+             * @type {ol.Extent}
+             */
+            this.extent_ = ol.extent.createEmpty();
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.extentRevision_ = -1;
+
+            /**
+             * @protected
+             * @type {Object.<string, ol.geom.Geometry>}
+             */
+            this.simplifiedGeometryCache = {};
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.simplifiedGeometryMaxMinSquaredTolerance = 0;
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.simplifiedGeometryRevision = 0;
+
+            /**
+             * @private
+             * @type {ol.Transform}
+             */
+            this.tmpTransform_ = ol.transform.create();
+
+        };
+        ol.inherits(ol.geom.Geometry, ol.Object);
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @abstract
+         * @return {!ol.geom.Geometry} Clone.
+         */
+        ol.geom.Geometry.prototype.clone = function() {};
+
+
+        /**
+         * @abstract
+         * @param {number} x X.
+         * @param {number} y Y.
+         * @param {ol.Coordinate} closestPoint Closest point.
+         * @param {number} minSquaredDistance Minimum squared distance.
+         * @return {number} Minimum squared distance.
+         */
+        ol.geom.Geometry.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {};
+
+
+        /**
+         * Return the closest point of the geometry to the passed point as
+         * {@link ol.Coordinate coordinate}.
+         * @param {ol.Coordinate} point Point.
+         * @param {ol.Coordinate=} opt_closestPoint Closest point.
+         * @return {ol.Coordinate} Closest point.
+         * @api
+         */
+        ol.geom.Geometry.prototype.getClosestPoint = function(point, opt_closestPoint) {
+            var closestPoint = opt_closestPoint ? opt_closestPoint : [NaN, NaN];
+            this.closestPointXY(point[0], point[1], closestPoint, Infinity);
+            return closestPoint;
+        };
+
+
+        /**
+         * Returns true if this geometry includes the specified coordinate. If the
+         * coordinate is on the boundary of the geometry, returns false.
+         * @param {ol.Coordinate} coordinate Coordinate.
+         * @return {boolean} Contains coordinate.
+         * @api
+         */
+        ol.geom.Geometry.prototype.intersectsCoordinate = function(coordinate) {
+            return this.containsXY(coordinate[0], coordinate[1]);
+        };
+
+
+        /**
+         * @abstract
+         * @param {ol.Extent} extent Extent.
+         * @protected
+         * @return {ol.Extent} extent Extent.
+         */
+        ol.geom.Geometry.prototype.computeExtent = function(extent) {};
+
+
+        /**
+         * @param {number} x X.
+         * @param {number} y Y.
+         * @return {boolean} Contains (x, y).
+         */
+        ol.geom.Geometry.prototype.containsXY = ol.functions.FALSE;
+
+
+        /**
+         * Get the extent of the geometry.
+         * @param {ol.Extent=} opt_extent Extent.
+         * @return {ol.Extent} extent Extent.
+         * @api
+         */
+        ol.geom.Geometry.prototype.getExtent = function(opt_extent) {
+            if (this.extentRevision_ != this.getRevision()) {
+                this.extent_ = this.computeExtent(this.extent_);
+                this.extentRevision_ = this.getRevision();
+            }
+            return ol.extent.returnOrUpdate(this.extent_, opt_extent);
+        };
+
+
+        /**
+         * Rotate the geometry around a given coordinate. This modifies the geometry
+         * coordinates in place.
+         * @abstract
+         * @param {number} angle Rotation angle in radians.
+         * @param {ol.Coordinate} anchor The rotation center.
+         * @api
+         */
+        ol.geom.Geometry.prototype.rotate = function(angle, anchor) {};
+
+
+        /**
+         * Scale the geometry (with an optional origin).  This modifies the geometry
+         * coordinates in place.
+         * @abstract
+         * @param {number} sx The scaling factor in the x-direction.
+         * @param {number=} opt_sy The scaling factor in the y-direction (defaults to
+         *     sx).
+         * @param {ol.Coordinate=} opt_anchor The scale origin (defaults to the center
+         *     of the geometry extent).
+         * @api
+         */
+        ol.geom.Geometry.prototype.scale = function(sx, opt_sy, opt_anchor) {};
+
+
+        /**
+         * Create a simplified version of this geometry.  For linestrings, this uses
+         * the the {@link
+         * https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+         * Douglas Peucker} algorithm.  For polygons, a quantization-based
+         * simplification is used to preserve topology.
+         * @function
+         * @param {number} tolerance The tolerance distance for simplification.
+         * @return {ol.geom.Geometry} A new, simplified version of the original
+         *     geometry.
+         * @api
+         */
+        ol.geom.Geometry.prototype.simplify = function(tolerance) {
+            return this.getSimplifiedGeometry(tolerance * tolerance);
+        };
+
+
+        /**
+         * Create a simplified version of this geometry using the Douglas Peucker
+         * algorithm.
+         * @see https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+         * @abstract
+         * @param {number} squaredTolerance Squared tolerance.
+         * @return {ol.geom.Geometry} Simplified geometry.
+         */
+        ol.geom.Geometry.prototype.getSimplifiedGeometry = function(squaredTolerance) {};
+
+
+        /**
+         * Get the type of this geometry.
+         * @abstract
+         * @return {ol.geom.GeometryType} Geometry type.
+         */
+        ol.geom.Geometry.prototype.getType = function() {};
+
+
+        /**
+         * Apply a transform function to each coordinate of the geometry.
+         * The geometry is modified in place.
+         * If you do not want the geometry modified in place, first `clone()` it and
+         * then use this function on the clone.
+         * @abstract
+         * @param {ol.TransformFunction} transformFn Transform.
+         */
+        ol.geom.Geometry.prototype.applyTransform = function(transformFn) {};
+
+
+        /**
+         * Test if the geometry and the passed extent intersect.
+         * @abstract
+         * @param {ol.Extent} extent Extent.
+         * @return {boolean} `true` if the geometry and the extent intersect.
+         */
+        ol.geom.Geometry.prototype.intersectsExtent = function(extent) {};
+
+
+        /**
+         * Translate the geometry.  This modifies the geometry coordinates in place.  If
+         * instead you want a new geometry, first `clone()` this geometry.
+         * @abstract
+         * @param {number} deltaX Delta X.
+         * @param {number} deltaY Delta Y.
+         */
+        ol.geom.Geometry.prototype.translate = function(deltaX, deltaY) {};
+
+
+        /**
+         * Transform each coordinate of the geometry from one coordinate reference
+         * system to another. The geometry is modified in place.
+         * For example, a line will be transformed to a line and a circle to a circle.
+         * If you do not want the geometry modified in place, first `clone()` it and
+         * then use this function on the clone.
+         *
+         * @param {ol.ProjectionLike} source The current projection.  Can be a
+         *     string identifier or a {@link ol.proj.Projection} object.
+         * @param {ol.ProjectionLike} destination The desired projection.  Can be a
+         *     string identifier or a {@link ol.proj.Projection} object.
+         * @return {ol.geom.Geometry} This geometry.  Note that original geometry is
+         *     modified in place.
+         * @api
+         */
+        ol.geom.Geometry.prototype.transform = function(source, destination) {
+            var tmpTransform = this.tmpTransform_;
+            source = ol.proj.get(source);
+            var transformFn = source.getUnits() == ol.proj.Units.TILE_PIXELS ?
+                function(inCoordinates, outCoordinates, stride) {
+                    var pixelExtent = source.getExtent();
+                    var projectedExtent = source.getWorldExtent();
+                    var scale = ol.extent.getHeight(projectedExtent) / ol.extent.getHeight(pixelExtent);
+                    ol.transform.compose(tmpTransform,
+                        projectedExtent[0], projectedExtent[3],
+                        scale, -scale, 0,
+                        0, 0);
+                    ol.geom.flat.transform.transform2D(inCoordinates, 0, inCoordinates.length, stride,
+                        tmpTransform, outCoordinates);
+                    return ol.proj.getTransform(source, destination)(inCoordinates, outCoordinates, stride);
+                } :
+                ol.proj.getTransform(source, destination);
+            this.applyTransform(transformFn);
+            return this;
+        };
+
+
+        /**
+         * @classdesc
+         * Abstract base class; only used for creating subclasses; do not instantiate
+         * in apps, as cannot be rendered.
+         *
+         * @constructor
+         * @abstract
+         * @extends {ol.geom.Geometry}
+         * @api
+         */
+        ol.geom.SimpleGeometry = function() {
+
+            ol.geom.Geometry.call(this);
+
+            /**
+             * @protected
+             * @type {ol.geom.GeometryLayout}
+             */
+            this.layout = ol.geom.GeometryLayout.XY;
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.stride = 2;
+
+            /**
+             * @protected
+             * @type {Array.<number>}
+             */
+            this.flatCoordinates = null;
+
+        };
+        ol.inherits(ol.geom.SimpleGeometry, ol.geom.Geometry);
+
+
+        /**
+         * @param {number} stride Stride.
+         * @private
+         * @return {ol.geom.GeometryLayout} layout Layout.
+         */
+        ol.geom.SimpleGeometry.getLayoutForStride_ = function(stride) {
+            var layout;
+            if (stride == 2) {
+                layout = ol.geom.GeometryLayout.XY;
+            } else if (stride == 3) {
+                layout = ol.geom.GeometryLayout.XYZ;
+            } else if (stride == 4) {
+                layout = ol.geom.GeometryLayout.XYZM;
+            }
+            return /** @type {ol.geom.GeometryLayout} */ (layout);
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @return {number} Stride.
+         */
+        ol.geom.SimpleGeometry.getStrideForLayout = function(layout) {
+            var stride;
+            if (layout == ol.geom.GeometryLayout.XY) {
+                stride = 2;
+            } else if (layout == ol.geom.GeometryLayout.XYZ || layout == ol.geom.GeometryLayout.XYM) {
+                stride = 3;
+            } else if (layout == ol.geom.GeometryLayout.XYZM) {
+                stride = 4;
+            }
+            return /** @type {number} */ (stride);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.SimpleGeometry.prototype.containsXY = ol.functions.FALSE;
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.SimpleGeometry.prototype.computeExtent = function(extent) {
+            return ol.extent.createOrUpdateFromFlatCoordinates(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride,
+                extent);
+        };
+
+
+        /**
+         * @abstract
+         * @return {Array} Coordinates.
+         */
+        ol.geom.SimpleGeometry.prototype.getCoordinates = function() {};
+
+
+        /**
+         * Return the first coordinate of the geometry.
+         * @return {ol.Coordinate} First coordinate.
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.getFirstCoordinate = function() {
+            return this.flatCoordinates.slice(0, this.stride);
+        };
+
+
+        /**
+         * @return {Array.<number>} Flat coordinates.
+         */
+        ol.geom.SimpleGeometry.prototype.getFlatCoordinates = function() {
+            return this.flatCoordinates;
+        };
+
+
+        /**
+         * Return the last coordinate of the geometry.
+         * @return {ol.Coordinate} Last point.
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.getLastCoordinate = function() {
+            return this.flatCoordinates.slice(this.flatCoordinates.length - this.stride);
+        };
+
+
+        /**
+         * Return the {@link ol.geom.GeometryLayout layout} of the geometry.
+         * @return {ol.geom.GeometryLayout} Layout.
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.getLayout = function() {
+            return this.layout;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.SimpleGeometry.prototype.getSimplifiedGeometry = function(squaredTolerance) {
+            if (this.simplifiedGeometryRevision != this.getRevision()) {
+                ol.obj.clear(this.simplifiedGeometryCache);
+                this.simplifiedGeometryMaxMinSquaredTolerance = 0;
+                this.simplifiedGeometryRevision = this.getRevision();
+            }
+            // If squaredTolerance is negative or if we know that simplification will not
+            // have any effect then just return this.
+            if (squaredTolerance < 0 ||
+                (this.simplifiedGeometryMaxMinSquaredTolerance !== 0 &&
+                    squaredTolerance <= this.simplifiedGeometryMaxMinSquaredTolerance)) {
+                return this;
+            }
+            var key = squaredTolerance.toString();
+            if (this.simplifiedGeometryCache.hasOwnProperty(key)) {
+                return this.simplifiedGeometryCache[key];
+            } else {
+                var simplifiedGeometry =
+                    this.getSimplifiedGeometryInternal(squaredTolerance);
+                var simplifiedFlatCoordinates = simplifiedGeometry.getFlatCoordinates();
+                if (simplifiedFlatCoordinates.length < this.flatCoordinates.length) {
+                    this.simplifiedGeometryCache[key] = simplifiedGeometry;
+                    return simplifiedGeometry;
+                } else {
+                    // Simplification did not actually remove any coordinates.  We now know
+                    // that any calls to getSimplifiedGeometry with a squaredTolerance less
+                    // than or equal to the current squaredTolerance will also not have any
+                    // effect.  This allows us to short circuit simplification (saving CPU
+                    // cycles) and prevents the cache of simplified geometries from filling
+                    // up with useless identical copies of this geometry (saving memory).
+                    this.simplifiedGeometryMaxMinSquaredTolerance = squaredTolerance;
+                    return this;
+                }
+            }
+        };
+
+
+        /**
+         * @param {number} squaredTolerance Squared tolerance.
+         * @return {ol.geom.SimpleGeometry} Simplified geometry.
+         * @protected
+         */
+        ol.geom.SimpleGeometry.prototype.getSimplifiedGeometryInternal = function(squaredTolerance) {
+            return this;
+        };
+
+
+        /**
+         * @return {number} Stride.
+         */
+        ol.geom.SimpleGeometry.prototype.getStride = function() {
+            return this.stride;
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @protected
+         */
+        ol.geom.SimpleGeometry.prototype.setFlatCoordinatesInternal = function(layout, flatCoordinates) {
+            this.stride = ol.geom.SimpleGeometry.getStrideForLayout(layout);
+            this.layout = layout;
+            this.flatCoordinates = flatCoordinates;
+        };
+
+
+        /**
+         * @abstract
+         * @param {Array} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         */
+        ol.geom.SimpleGeometry.prototype.setCoordinates = function(coordinates, opt_layout) {};
+
+
+        /**
+         * @param {ol.geom.GeometryLayout|undefined} layout Layout.
+         * @param {Array} coordinates Coordinates.
+         * @param {number} nesting Nesting.
+         * @protected
+         */
+        ol.geom.SimpleGeometry.prototype.setLayout = function(layout, coordinates, nesting) {
+            /** @type {number} */
+            var stride;
+            if (layout) {
+                stride = ol.geom.SimpleGeometry.getStrideForLayout(layout);
+            } else {
+                var i;
+                for (i = 0; i < nesting; ++i) {
+                    if (coordinates.length === 0) {
+                        this.layout = ol.geom.GeometryLayout.XY;
+                        this.stride = 2;
+                        return;
+                    } else {
+                        coordinates = /** @type {Array} */ (coordinates[0]);
+                    }
+                }
+                stride = coordinates.length;
+                layout = ol.geom.SimpleGeometry.getLayoutForStride_(stride);
+            }
+            this.layout = layout;
+            this.stride = stride;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.applyTransform = function(transformFn) {
+            if (this.flatCoordinates) {
+                transformFn(this.flatCoordinates, this.flatCoordinates, this.stride);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.rotate = function(angle, anchor) {
+            var flatCoordinates = this.getFlatCoordinates();
+            if (flatCoordinates) {
+                var stride = this.getStride();
+                ol.geom.flat.transform.rotate(
+                    flatCoordinates, 0, flatCoordinates.length,
+                    stride, angle, anchor, flatCoordinates);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.scale = function(sx, opt_sy, opt_anchor) {
+            var sy = opt_sy;
+            if (sy === undefined) {
+                sy = sx;
+            }
+            var anchor = opt_anchor;
+            if (!anchor) {
+                anchor = ol.extent.getCenter(this.getExtent());
+            }
+            var flatCoordinates = this.getFlatCoordinates();
+            if (flatCoordinates) {
+                var stride = this.getStride();
+                ol.geom.flat.transform.scale(
+                    flatCoordinates, 0, flatCoordinates.length,
+                    stride, sx, sy, anchor, flatCoordinates);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.SimpleGeometry.prototype.translate = function(deltaX, deltaY) {
+            var flatCoordinates = this.getFlatCoordinates();
+            if (flatCoordinates) {
+                var stride = this.getStride();
+                ol.geom.flat.transform.translate(
+                    flatCoordinates, 0, flatCoordinates.length, stride,
+                    deltaX, deltaY, flatCoordinates);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.SimpleGeometry} simpleGeometry Simple geometry.
+         * @param {ol.Transform} transform Transform.
+         * @param {Array.<number>=} opt_dest Destination.
+         * @return {Array.<number>} Transformed flat coordinates.
+         */
+        ol.geom.SimpleGeometry.transform2D = function(simpleGeometry, transform, opt_dest) {
+            var flatCoordinates = simpleGeometry.getFlatCoordinates();
+            if (!flatCoordinates) {
+                return null;
+            } else {
+                var stride = simpleGeometry.getStride();
+                return ol.geom.flat.transform.transform2D(
+                    flatCoordinates, 0, flatCoordinates.length, stride,
+                    transform, opt_dest);
+            }
+        };
+
+        ol.geom.Polygon = function(coordinates, opt_layout) {
+
+            ol.geom.SimpleGeometry.call(this);
+
+            /**
+             * @type {Array.<number>}
+             * @private
+             */
+            this.ends_ = [];
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.flatInteriorPointRevision_ = -1;
+
+            /**
+             * @private
+             * @type {ol.Coordinate}
+             */
+            this.flatInteriorPoint_ = null;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDelta_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDeltaRevision_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.orientedRevision_ = -1;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.orientedFlatCoordinates_ = null;
+
+            this.setCoordinates(coordinates, opt_layout);
+
+        };
+        ol.inherits(ol.geom.Polygon, ol.geom.SimpleGeometry);
+
+
+        /**
+         * Append the passed linear ring to this polygon.
+         * @param {ol.geom.LinearRing} linearRing Linear ring.
+         * @api
+         */
+        ol.geom.Polygon.prototype.appendLinearRing = function(linearRing) {
+            if (!this.flatCoordinates) {
+                this.flatCoordinates = linearRing.getFlatCoordinates().slice();
+            } else {
+                ol.array.extend(this.flatCoordinates, linearRing.getFlatCoordinates());
+            }
+            this.ends_.push(this.flatCoordinates.length);
+            this.changed();
+        };
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @return {!ol.geom.Polygon} Clone.
+         * @override
+         * @api
+         */
+        ol.geom.Polygon.prototype.clone = function() {
+            var polygon = new ol.geom.Polygon(null);
+            polygon.setFlatCoordinates(
+                this.layout, this.flatCoordinates.slice(), this.ends_.slice());
+            return polygon;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.Polygon.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            if (minSquaredDistance <
+                ol.extent.closestSquaredDistanceXY(this.getExtent(), x, y)) {
+                return minSquaredDistance;
+            }
+            if (this.maxDeltaRevision_ != this.getRevision()) {
+                this.maxDelta_ = Math.sqrt(ol.geom.flat.closest.getsMaxSquaredDelta(
+                    this.flatCoordinates, 0, this.ends_, this.stride, 0));
+                this.maxDeltaRevision_ = this.getRevision();
+            }
+            return ol.geom.flat.closest.getsClosestPoint(
+                this.flatCoordinates, 0, this.ends_, this.stride,
+                this.maxDelta_, true, x, y, closestPoint, minSquaredDistance);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.Polygon.prototype.containsXY = function(x, y) {
+            return ol.geom.flat.contains.linearRingsContainsXY(
+                this.getOrientedFlatCoordinates(), 0, this.ends_, this.stride, x, y);
+        };
+
+
+        /**
+         * Return the area of the polygon on projected plane.
+         * @return {number} Area (on projected plane).
+         * @api
+         */
+        ol.geom.Polygon.prototype.getArea = function() {
+            return ol.geom.flat.area.linearRings(
+                this.getOrientedFlatCoordinates(), 0, this.ends_, this.stride);
+        };
+
+
+        /**
+         * Get the coordinate array for this geometry.  This array has the structure
+         * of a GeoJSON coordinate array for polygons.
+         *
+         * @param {boolean=} opt_right Orient coordinates according to the right-hand
+         *     rule (counter-clockwise for exterior and clockwise for interior rings).
+         *     If `false`, coordinates will be oriented according to the left-hand rule
+         *     (clockwise for exterior and counter-clockwise for interior rings).
+         *     By default, coordinate orientation will depend on how the geometry was
+         *     constructed.
+         * @return {Array.<Array.<ol.Coordinate>>} Coordinates.
+         * @override
+         * @api
+         */
+        ol.geom.Polygon.prototype.getCoordinates = function(opt_right) {
+            var flatCoordinates;
+            if (opt_right !== undefined) {
+                flatCoordinates = this.getOrientedFlatCoordinates().slice();
+                ol.geom.flat.orient.orientLinearRings(
+                    flatCoordinates, 0, this.ends_, this.stride, opt_right);
+            } else {
+                flatCoordinates = this.flatCoordinates;
+            }
+
+            return ol.geom.flat.inflate.coordinatess(
+                flatCoordinates, 0, this.ends_, this.stride);
+        };
+
+
+        /**
+         * @return {Array.<number>} Ends.
+         */
+        ol.geom.Polygon.prototype.getEnds = function() {
+            return this.ends_;
+        };
+
+
+        /**
+         * @return {Array.<number>} Interior point.
+         */
+        ol.geom.Polygon.prototype.getFlatInteriorPoint = function() {
+            if (this.flatInteriorPointRevision_ != this.getRevision()) {
+                var flatCenter = ol.extent.getCenter(this.getExtent());
+                this.flatInteriorPoint_ = ol.geom.flat.interiorpoint.linearRings(
+                    this.getOrientedFlatCoordinates(), 0, this.ends_, this.stride,
+                    flatCenter, 0);
+                this.flatInteriorPointRevision_ = this.getRevision();
+            }
+            return this.flatInteriorPoint_;
+        };
+
+
+        /**
+         * Return an interior point of the polygon.
+         * @return {ol.geom.Point} Interior point as XYM coordinate, where M is the
+         * length of the horizontal intersection that the point belongs to.
+         * @api
+         */
+        ol.geom.Polygon.prototype.getInteriorPoint = function() {
+            return new ol.geom.Point(this.getFlatInteriorPoint(), ol.geom.GeometryLayout.XYM);
+        };
+
+
+        /**
+         * Return the number of rings of the polygon,  this includes the exterior
+         * ring and any interior rings.
+         *
+         * @return {number} Number of rings.
+         * @api
+         */
+        ol.geom.Polygon.prototype.getLinearRingCount = function() {
+            return this.ends_.length;
+        };
+
+
+        /**
+         * Return the Nth linear ring of the polygon geometry. Return `null` if the
+         * given index is out of range.
+         * The exterior linear ring is available at index `0` and the interior rings
+         * at index `1` and beyond.
+         *
+         * @param {number} index Index.
+         * @return {ol.geom.LinearRing} Linear ring.
+         * @api
+         */
+        ol.geom.Polygon.prototype.getLinearRing = function(index) {
+            if (index < 0 || this.ends_.length <= index) {
+                return null;
+            }
+            var linearRing = new ol.geom.LinearRing(null);
+            linearRing.setFlatCoordinates(this.layout, this.flatCoordinates.slice(
+                index === 0 ? 0 : this.ends_[index - 1], this.ends_[index]));
+            return linearRing;
+        };
+
+
+        /**
+         * Return the linear rings of the polygon.
+         * @return {Array.<ol.geom.LinearRing>} Linear rings.
+         * @api
+         */
+        ol.geom.Polygon.prototype.getLinearRings = function() {
+            var layout = this.layout;
+            var flatCoordinates = this.flatCoordinates;
+            var ends = this.ends_;
+            var linearRings = [];
+            var offset = 0;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var linearRing = new ol.geom.LinearRing(null);
+                linearRing.setFlatCoordinates(layout, flatCoordinates.slice(offset, end));
+                linearRings.push(linearRing);
+                offset = end;
+            }
+            return linearRings;
+        };
+
+
+        /**
+         * @return {Array.<number>} Oriented flat coordinates.
+         */
+        ol.geom.Polygon.prototype.getOrientedFlatCoordinates = function() {
+            if (this.orientedRevision_ != this.getRevision()) {
+                var flatCoordinates = this.flatCoordinates;
+                if (ol.geom.flat.orient.linearRingsAreOriented(
+                    flatCoordinates, 0, this.ends_, this.stride)) {
+                    this.orientedFlatCoordinates_ = flatCoordinates;
+                } else {
+                    this.orientedFlatCoordinates_ = flatCoordinates.slice();
+                    this.orientedFlatCoordinates_.length =
+                        ol.geom.flat.orient.orientLinearRings(
+                            this.orientedFlatCoordinates_, 0, this.ends_, this.stride);
+                }
+                this.orientedRevision_ = this.getRevision();
+            }
+            return this.orientedFlatCoordinates_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.Polygon.prototype.getSimplifiedGeometryInternal = function(squaredTolerance) {
+            var simplifiedFlatCoordinates = [];
+            var simplifiedEnds = [];
+            simplifiedFlatCoordinates.length = ol.geom.flat.simplify.quantizes(
+                this.flatCoordinates, 0, this.ends_, this.stride,
+                Math.sqrt(squaredTolerance),
+                simplifiedFlatCoordinates, 0, simplifiedEnds);
+            var simplifiedPolygon = new ol.geom.Polygon(null);
+            simplifiedPolygon.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, simplifiedFlatCoordinates, simplifiedEnds);
+            return simplifiedPolygon;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.Polygon.prototype.getType = function() {
+            return ol.geom.GeometryType.POLYGON;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.Polygon.prototype.intersectsExtent = function(extent) {
+            return ol.geom.flat.intersectsextent.linearRings(
+                this.getOrientedFlatCoordinates(), 0, this.ends_, this.stride, extent);
+        };
+
+
+        /**
+         * Set the coordinates of the polygon.
+         * @param {Array.<Array.<ol.Coordinate>>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @override
+         * @api
+         */
+        ol.geom.Polygon.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null, this.ends_);
+            } else {
+                this.setLayout(opt_layout, coordinates, 2);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                var ends = ol.geom.flat.deflate.coordinatess(
+                    this.flatCoordinates, 0, coordinates, this.stride, this.ends_);
+                this.flatCoordinates.length = ends.length === 0 ? 0 : ends[ends.length - 1];
+                //this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {Array.<number>} ends Ends.
+         */
+        ol.geom.Polygon.prototype.setFlatCoordinates = function(layout, flatCoordinates, ends) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.ends_ = ends;
+            //this.changed();
+        };
+
+
+        /**
+         * Create an approximation of a circle on the surface of a sphere.
+         * @param {ol.Sphere} sphere The sphere.
+         * @param {ol.Coordinate} center Center (`[lon, lat]` in degrees).
+         * @param {number} radius The great-circle distance from the center to
+         *     the polygon vertices.
+         * @param {number=} opt_n Optional number of vertices for the resulting
+         *     polygon. Default is `32`.
+         * @return {ol.geom.Polygon} The "circular" polygon.
+         * @api
+         */
+        ol.geom.Polygon.circular = function(sphere, center, radius, opt_n) {
+            var n = opt_n ? opt_n : 32;
+            /** @type {Array.<number>} */
+            var flatCoordinates = [];
+            var i;
+            for (i = 0; i < n; ++i) {
+                ol.array.extend(
+                    flatCoordinates, sphere.offset(center, radius, 2 * Math.PI * i / n));
+            }
+            flatCoordinates.push(flatCoordinates[0], flatCoordinates[1]);
+            var polygon = new ol.geom.Polygon(null);
+            polygon.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, flatCoordinates, [flatCoordinates.length]);
+            return polygon;
+        };
+
+
+        /**
+         * Create a polygon from an extent. The layout used is `XY`.
+         * @param {ol.Extent} extent The extent.
+         * @return {ol.geom.Polygon} The polygon.
+         * @api
+         */
+        ol.geom.Polygon.fromExtent = function(extent) {
+            var minX = extent[0];
+            var minY = extent[1];
+            var maxX = extent[2];
+            var maxY = extent[3];
+            var flatCoordinates =
+                [minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY];
+            var polygon = new ol.geom.Polygon(null);
+            polygon.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, flatCoordinates, [flatCoordinates.length]);
+            return polygon;
+        };
+
+
+        /**
+         * Create a regular polygon from a circle.
+         * @param {ol.geom.Circle} circle Circle geometry.
+         * @param {number=} opt_sides Number of sides of the polygon. Default is 32.
+         * @param {number=} opt_angle Start angle for the first vertex of the polygon in
+         *     radians. Default is 0.
+         * @return {ol.geom.Polygon} Polygon geometry.
+         * @api
+         */
+        ol.geom.Polygon.fromCircle = function(circle, opt_sides, opt_angle) {
+            var sides = opt_sides ? opt_sides : 32;
+            var stride = circle.getStride();
+            var layout = circle.getLayout();
+            var polygon = new ol.geom.Polygon(null, layout);
+            var arrayLength = stride * (sides + 1);
+            var flatCoordinates = new Array(arrayLength);
+            for (var i = 0; i < arrayLength; i++) {
+                flatCoordinates[i] = 0;
+            }
+            var ends = [flatCoordinates.length];
+            polygon.setFlatCoordinates(layout, flatCoordinates, ends);
+            ol.geom.Polygon.makeRegular(
+                polygon, circle.getCenter(), circle.getRadius(), opt_angle);
+            return polygon;
+        };
+
+
+        /**
+         * Modify the coordinates of a polygon to make it a regular polygon.
+         * @param {ol.geom.Polygon} polygon Polygon geometry.
+         * @param {ol.Coordinate} center Center of the regular polygon.
+         * @param {number} radius Radius of the regular polygon.
+         * @param {number=} opt_angle Start angle for the first vertex of the polygon in
+         *     radians. Default is 0.
+         */
+        ol.geom.Polygon.makeRegular = function(polygon, center, radius, opt_angle) {
+            var flatCoordinates = polygon.getFlatCoordinates();
+            var layout = polygon.getLayout();
+            var stride = polygon.getStride();
+            var ends = polygon.getEnds();
+            var sides = flatCoordinates.length / stride - 1;
+            var startAngle = opt_angle ? opt_angle : 0;
+            var angle, offset;
+            for (var i = 0; i <= sides; ++i) {
+                offset = i * stride;
+                angle = startAngle + (ol.math.modulo(i, sides) * 2 * Math.PI / sides);
+                flatCoordinates[offset] = center[0] + (radius * Math.cos(angle));
+                flatCoordinates[offset + 1] = center[1] + (radius * Math.sin(angle));
+            }
+            polygon.setFlatCoordinates(layout, flatCoordinates, ends);
+        };
+
+        /**
+         * @classdesc
+         * Linestring geometry.
+         *
+         * @constructor
+         * @extends {ol.geom.SimpleGeometry}
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @api
+         */
+        ol.geom.LineString = function(coordinates, opt_layout) {
+
+            ol.geom.SimpleGeometry.call(this);
+
+            /**
+             * @private
+             * @type {ol.Coordinate}
+             */
+            this.flatMidpoint_ = null;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.flatMidpointRevision_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDelta_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDeltaRevision_ = -1;
+
+            this.setCoordinates(coordinates, opt_layout);
+
+        };
+        ol.inherits(ol.geom.LineString, ol.geom.SimpleGeometry);
+
+
+        /**
+         * Append the passed coordinate to the coordinates of the linestring.
+         * @param {ol.Coordinate} coordinate Coordinate.
+         * @api
+         */
+        ol.geom.LineString.prototype.appendCoordinate = function(coordinate) {
+            if (!this.flatCoordinates) {
+                this.flatCoordinates = coordinate.slice();
+            } else {
+                ol.array.extend(this.flatCoordinates, coordinate);
+            }
+            this.changed();
+        };
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @return {!ol.geom.LineString} Clone.
+         * @override
+         * @api
+         */
+        ol.geom.LineString.prototype.clone = function() {
+            var lineString = new ol.geom.LineString(null);
+            lineString.setFlatCoordinates(this.layout, this.flatCoordinates.slice());
+            return lineString;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.LineString.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            if (minSquaredDistance <
+                ol.extent.closestSquaredDistanceXY(this.getExtent(), x, y)) {
+                return minSquaredDistance;
+            }
+            if (this.maxDeltaRevision_ != this.getRevision()) {
+                this.maxDelta_ = Math.sqrt(ol.geom.flat.closest.getMaxSquaredDelta(
+                    this.flatCoordinates, 0, this.flatCoordinates.length, this.stride, 0));
+                this.maxDeltaRevision_ = this.getRevision();
+            }
+            return ol.geom.flat.closest.getClosestPoint(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride,
+                this.maxDelta_, false, x, y, closestPoint, minSquaredDistance);
+        };
+
+
+        /**
+         * Iterate over each segment, calling the provided callback.
+         * If the callback returns a truthy value the function returns that
+         * value immediately. Otherwise the function returns `false`.
+         *
+         * @param {function(this: S, ol.Coordinate, ol.Coordinate): T} callback Function
+         *     called for each segment.
+         * @param {S=} opt_this The object to be used as the value of 'this'
+         *     within callback.
+         * @return {T|boolean} Value.
+         * @template T,S
+         * @api
+         */
+        ol.geom.LineString.prototype.forEachSegment = function(callback, opt_this) {
+            return ol.geom.flat.segments.forEach(this.flatCoordinates, 0,
+                this.flatCoordinates.length, this.stride, callback, opt_this);
+        };
+
+
+        /**
+         * Returns the coordinate at `m` using linear interpolation, or `null` if no
+         * such coordinate exists.
+         *
+         * `opt_extrapolate` controls extrapolation beyond the range of Ms in the
+         * MultiLineString. If `opt_extrapolate` is `true` then Ms less than the first
+         * M will return the first coordinate and Ms greater than the last M will
+         * return the last coordinate.
+         *
+         * @param {number} m M.
+         * @param {boolean=} opt_extrapolate Extrapolate. Default is `false`.
+         * @return {ol.Coordinate} Coordinate.
+         * @api
+         */
+        ol.geom.LineString.prototype.getCoordinateAtM = function(m, opt_extrapolate) {
+            if (this.layout != ol.geom.GeometryLayout.XYM &&
+                this.layout != ol.geom.GeometryLayout.XYZM) {
+                return null;
+            }
+            var extrapolate = opt_extrapolate !== undefined ? opt_extrapolate : false;
+            return ol.geom.flat.interpolate.lineStringCoordinateAtM(this.flatCoordinates, 0,
+                this.flatCoordinates.length, this.stride, m, extrapolate);
+        };
+
+
+        /**
+         * Return the coordinates of the linestring.
+         * @return {Array.<ol.Coordinate>} Coordinates.
+         * @override
+         * @api
+         */
+        ol.geom.LineString.prototype.getCoordinates = function() {
+            return ol.geom.flat.inflate.coordinates(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride);
+        };
+
+
+        /**
+         * Return the coordinate at the provided fraction along the linestring.
+         * The `fraction` is a number between 0 and 1, where 0 is the start of the
+         * linestring and 1 is the end.
+         * @param {number} fraction Fraction.
+         * @param {ol.Coordinate=} opt_dest Optional coordinate whose values will
+         *     be modified. If not provided, a new coordinate will be returned.
+         * @return {ol.Coordinate} Coordinate of the interpolated point.
+         * @api
+         */
+        ol.geom.LineString.prototype.getCoordinateAt = function(fraction, opt_dest) {
+            return ol.geom.flat.interpolate.lineString(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride,
+                fraction, opt_dest);
+        };
+
+
+        /**
+         * Return the length of the linestring on projected plane.
+         * @return {number} Length (on projected plane).
+         * @api
+         */
+        ol.geom.LineString.prototype.getLength = function() {
+            return ol.geom.flat.length.lineString(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride);
+        };
+
+
+        /**
+         * @return {Array.<number>} Flat midpoint.
+         */
+        ol.geom.LineString.prototype.getFlatMidpoint = function() {
+            if (this.flatMidpointRevision_ != this.getRevision()) {
+                this.flatMidpoint_ = this.getCoordinateAt(0.5, this.flatMidpoint_);
+                this.flatMidpointRevision_ = this.getRevision();
+            }
+            return this.flatMidpoint_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.LineString.prototype.getSimplifiedGeometryInternal = function(squaredTolerance) {
+            var simplifiedFlatCoordinates = [];
+            simplifiedFlatCoordinates.length = ol.geom.flat.simplify.douglasPeucker(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride,
+                squaredTolerance, simplifiedFlatCoordinates, 0);
+            var simplifiedLineString = new ol.geom.LineString(null);
+            simplifiedLineString.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, simplifiedFlatCoordinates);
+            return simplifiedLineString;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.LineString.prototype.getType = function() {
+            return ol.geom.GeometryType.LINE_STRING;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.LineString.prototype.intersectsExtent = function(extent) {
+            return ol.geom.flat.intersectsextent.lineString(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride,
+                extent);
+        };
+
+
+        /**
+         * Set the coordinates of the linestring.
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @override
+         * @api
+         */
+        ol.geom.LineString.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null);
+            } else {
+                this.setLayout(opt_layout, coordinates, 1);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                this.flatCoordinates.length = ol.geom.flat.deflate.coordinates(
+                    this.flatCoordinates, 0, coordinates, this.stride);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         */
+        ol.geom.LineString.prototype.setFlatCoordinates = function(layout, flatCoordinates) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.changed();
+        };
+
+        ol.geom.Point = function(coordinates, opt_layout) {
+            ol.geom.SimpleGeometry.call(this);
+            this.setCoordinates(coordinates, opt_layout);
+        };
+        ol.inherits(ol.geom.Point, ol.geom.SimpleGeometry);
+
+        ol.geom.Point.prototype.clone = function() {
+            var point = new ol.geom.Point(null);
+            point.setFlatCoordinates(this.layout, this.flatCoordinates.slice());
+            return point;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.Point.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            var flatCoordinates = this.flatCoordinates;
+            var squaredDistance = ol.math.squaredDistance(
+                x, y, flatCoordinates[0], flatCoordinates[1]);
+            if (squaredDistance < minSquaredDistance) {
+                var stride = this.stride;
+                var i;
+                for (i = 0; i < stride; ++i) {
+                    closestPoint[i] = flatCoordinates[i];
+                }
+                closestPoint.length = stride;
+                return squaredDistance;
+            } else {
+                return minSquaredDistance;
+            }
+        };
+
+        ol.geom.Point.prototype.getCoordinates = function() {
+            return !this.flatCoordinates ? [] : this.flatCoordinates.slice();
+        };
+
+        ol.geom.Point.prototype.computeExtent = function(extent) {
+            return ol.extent.createOrUpdateFromCoordinate(this.flatCoordinates, extent);
+        };
+
+        ol.geom.Point.prototype.getType = function() {
+            return ol.geom.GeometryType.POINT;
+        };
+
+        ol.geom.Point.prototype.intersectsExtent = function(extent) {
+            return ol.extent.containsXY(extent,
+                this.flatCoordinates[0], this.flatCoordinates[1]);
+        };
+
+        ol.geom.Point.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null);
+            } else {
+                this.setLayout(opt_layout, coordinates, 0);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                this.flatCoordinates.length = ol.geom.flat.deflate.coordinate(
+                    this.flatCoordinates, 0, coordinates, this.stride);
+                this.changed();
+            }
+        };
+
+        ol.geom.Point.prototype.setFlatCoordinates = function(layout, flatCoordinates) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.changed();
+        };
+
+        /**
+         * @classdesc
+         * Multi-linestring geometry.
+         *
+         * @constructor
+         * @extends {ol.geom.SimpleGeometry}
+         * @param {Array.<Array.<ol.Coordinate>>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @api
+         */
+        ol.geom.MultiLineString = function(coordinates, opt_layout) {
+
+            ol.geom.SimpleGeometry.call(this);
+
+            /**
+             * @type {Array.<number>}
+             * @private
+             */
+            this.ends_ = [];
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDelta_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDeltaRevision_ = -1;
+
+            this.setCoordinates(coordinates, opt_layout);
+
+        };
+        ol.inherits(ol.geom.MultiLineString, ol.geom.SimpleGeometry);
+
+
+        /**
+         * Append the passed linestring to the multilinestring.
+         * @param {ol.geom.LineString} lineString LineString.
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.appendLineString = function(lineString) {
+            if (!this.flatCoordinates) {
+                this.flatCoordinates = lineString.getFlatCoordinates().slice();
+            } else {
+                ol.array.extend(
+                    this.flatCoordinates, lineString.getFlatCoordinates().slice());
+            }
+            this.ends_.push(this.flatCoordinates.length);
+            this.changed();
+        };
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @return {!ol.geom.MultiLineString} Clone.
+         * @override
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.clone = function() {
+            var multiLineString = new ol.geom.MultiLineString(null);
+            multiLineString.setFlatCoordinates(
+                this.layout, this.flatCoordinates.slice(), this.ends_.slice());
+            return multiLineString;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiLineString.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            if (minSquaredDistance <
+                ol.extent.closestSquaredDistanceXY(this.getExtent(), x, y)) {
+                return minSquaredDistance;
+            }
+            if (this.maxDeltaRevision_ != this.getRevision()) {
+                this.maxDelta_ = Math.sqrt(ol.geom.flat.closest.getsMaxSquaredDelta(
+                    this.flatCoordinates, 0, this.ends_, this.stride, 0));
+                this.maxDeltaRevision_ = this.getRevision();
+            }
+            return ol.geom.flat.closest.getsClosestPoint(
+                this.flatCoordinates, 0, this.ends_, this.stride,
+                this.maxDelta_, false, x, y, closestPoint, minSquaredDistance);
+        };
+
+
+        /**
+         * Returns the coordinate at `m` using linear interpolation, or `null` if no
+         * such coordinate exists.
+         *
+         * `opt_extrapolate` controls extrapolation beyond the range of Ms in the
+         * MultiLineString. If `opt_extrapolate` is `true` then Ms less than the first
+         * M will return the first coordinate and Ms greater than the last M will
+         * return the last coordinate.
+         *
+         * `opt_interpolate` controls interpolation between consecutive LineStrings
+         * within the MultiLineString. If `opt_interpolate` is `true` the coordinates
+         * will be linearly interpolated between the last coordinate of one LineString
+         * and the first coordinate of the next LineString.  If `opt_interpolate` is
+         * `false` then the function will return `null` for Ms falling between
+         * LineStrings.
+         *
+         * @param {number} m M.
+         * @param {boolean=} opt_extrapolate Extrapolate. Default is `false`.
+         * @param {boolean=} opt_interpolate Interpolate. Default is `false`.
+         * @return {ol.Coordinate} Coordinate.
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.getCoordinateAtM = function(m, opt_extrapolate, opt_interpolate) {
+            if ((this.layout != ol.geom.GeometryLayout.XYM &&
+                this.layout != ol.geom.GeometryLayout.XYZM) ||
+                this.flatCoordinates.length === 0) {
+                return null;
+            }
+            var extrapolate = opt_extrapolate !== undefined ? opt_extrapolate : false;
+            var interpolate = opt_interpolate !== undefined ? opt_interpolate : false;
+            return ol.geom.flat.interpolate.lineStringsCoordinateAtM(this.flatCoordinates, 0,
+                this.ends_, this.stride, m, extrapolate, interpolate);
+        };
+
+
+        /**
+         * Return the coordinates of the multilinestring.
+         * @return {Array.<Array.<ol.Coordinate>>} Coordinates.
+         * @override
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.getCoordinates = function() {
+            return ol.geom.flat.inflate.coordinatess(
+                this.flatCoordinates, 0, this.ends_, this.stride);
+        };
+
+
+        /**
+         * @return {Array.<number>} Ends.
+         */
+        ol.geom.MultiLineString.prototype.getEnds = function() {
+            return this.ends_;
+        };
+
+
+        /**
+         * Return the linestring at the specified index.
+         * @param {number} index Index.
+         * @return {ol.geom.LineString} LineString.
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.getLineString = function(index) {
+            if (index < 0 || this.ends_.length <= index) {
+                return null;
+            }
+            var lineString = new ol.geom.LineString(null);
+            lineString.setFlatCoordinates(this.layout, this.flatCoordinates.slice(
+                index === 0 ? 0 : this.ends_[index - 1], this.ends_[index]));
+            return lineString;
+        };
+
+
+        /**
+         * Return the linestrings of this multilinestring.
+         * @return {Array.<ol.geom.LineString>} LineStrings.
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.getLineStrings = function() {
+            var flatCoordinates = this.flatCoordinates;
+            var ends = this.ends_;
+            var layout = this.layout;
+            /** @type {Array.<ol.geom.LineString>} */
+            var lineStrings = [];
+            var offset = 0;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var lineString = new ol.geom.LineString(null);
+                lineString.setFlatCoordinates(layout, flatCoordinates.slice(offset, end));
+                lineStrings.push(lineString);
+                offset = end;
+            }
+            return lineStrings;
+        };
+
+
+        /**
+         * @return {Array.<number>} Flat midpoints.
+         */
+        ol.geom.MultiLineString.prototype.getFlatMidpoints = function() {
+            var midpoints = [];
+            var flatCoordinates = this.flatCoordinates;
+            var offset = 0;
+            var ends = this.ends_;
+            var stride = this.stride;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var midpoint = ol.geom.flat.interpolate.lineString(
+                    flatCoordinates, offset, end, stride, 0.5);
+                ol.array.extend(midpoints, midpoint);
+                offset = end;
+            }
+            return midpoints;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiLineString.prototype.getSimplifiedGeometryInternal = function(squaredTolerance) {
+            var simplifiedFlatCoordinates = [];
+            var simplifiedEnds = [];
+            simplifiedFlatCoordinates.length = ol.geom.flat.simplify.douglasPeuckers(
+                this.flatCoordinates, 0, this.ends_, this.stride, squaredTolerance,
+                simplifiedFlatCoordinates, 0, simplifiedEnds);
+            var simplifiedMultiLineString = new ol.geom.MultiLineString(null);
+            simplifiedMultiLineString.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, simplifiedFlatCoordinates, simplifiedEnds);
+            return simplifiedMultiLineString;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.getType = function() {
+            return ol.geom.GeometryType.MULTI_LINE_STRING;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.intersectsExtent = function(extent) {
+            return ol.geom.flat.intersectsextent.lineStrings(
+                this.flatCoordinates, 0, this.ends_, this.stride, extent);
+        };
+
+
+        /**
+         * Set the coordinates of the multilinestring.
+         * @param {Array.<Array.<ol.Coordinate>>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @override
+         * @api
+         */
+        ol.geom.MultiLineString.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null, this.ends_);
+            } else {
+                this.setLayout(opt_layout, coordinates, 2);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                var ends = ol.geom.flat.deflate.coordinatess(
+                    this.flatCoordinates, 0, coordinates, this.stride, this.ends_);
+                this.flatCoordinates.length = ends.length === 0 ? 0 : ends[ends.length - 1];
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {Array.<number>} ends Ends.
+         */
+        ol.geom.MultiLineString.prototype.setFlatCoordinates = function(layout, flatCoordinates, ends) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.ends_ = ends;
+            this.changed();
+        };
+
+
+        /**
+         * @param {Array.<ol.geom.LineString>} lineStrings LineStrings.
+         */
+        ol.geom.MultiLineString.prototype.setLineStrings = function(lineStrings) {
+            var layout = this.getLayout();
+            var flatCoordinates = [];
+            var ends = [];
+            var i, ii;
+            for (i = 0, ii = lineStrings.length; i < ii; ++i) {
+                var lineString = lineStrings[i];
+                if (i === 0) {
+                    layout = lineString.getLayout();
+                }
+                ol.array.extend(flatCoordinates, lineString.getFlatCoordinates());
+                ends.push(flatCoordinates.length);
+            }
+            this.setFlatCoordinates(layout, flatCoordinates, ends);
+        };
+
+        /**
+         * @classdesc
+         * Multi-point geometry.
+         *
+         * @constructor
+         * @extends {ol.geom.SimpleGeometry}
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @api
+         */
+        ol.geom.MultiPoint = function(coordinates, opt_layout) {
+            ol.geom.SimpleGeometry.call(this);
+            this.setCoordinates(coordinates, opt_layout);
+        };
+        ol.inherits(ol.geom.MultiPoint, ol.geom.SimpleGeometry);
+
+
+        /**
+         * Append the passed point to this multipoint.
+         * @param {ol.geom.Point} point Point.
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.appendPoint = function(point) {
+            if (!this.flatCoordinates) {
+                this.flatCoordinates = point.getFlatCoordinates().slice();
+            } else {
+                ol.array.extend(this.flatCoordinates, point.getFlatCoordinates());
+            }
+            this.changed();
+        };
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @return {!ol.geom.MultiPoint} Clone.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.clone = function() {
+            var multiPoint = new ol.geom.MultiPoint(null);
+            multiPoint.setFlatCoordinates(this.layout, this.flatCoordinates.slice());
+            return multiPoint;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiPoint.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            if (minSquaredDistance <
+                ol.extent.closestSquaredDistanceXY(this.getExtent(), x, y)) {
+                return minSquaredDistance;
+            }
+            var flatCoordinates = this.flatCoordinates;
+            var stride = this.stride;
+            var i, ii, j;
+            for (i = 0, ii = flatCoordinates.length; i < ii; i += stride) {
+                var squaredDistance = ol.math.squaredDistance(
+                    x, y, flatCoordinates[i], flatCoordinates[i + 1]);
+                if (squaredDistance < minSquaredDistance) {
+                    minSquaredDistance = squaredDistance;
+                    for (j = 0; j < stride; ++j) {
+                        closestPoint[j] = flatCoordinates[i + j];
+                    }
+                    closestPoint.length = stride;
+                }
+            }
+            return minSquaredDistance;
+        };
+
+
+        /**
+         * Return the coordinates of the multipoint.
+         * @return {Array.<ol.Coordinate>} Coordinates.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.getCoordinates = function() {
+            return ol.geom.flat.inflate.coordinates(
+                this.flatCoordinates, 0, this.flatCoordinates.length, this.stride);
+        };
+
+
+        /**
+         * Return the point at the specified index.
+         * @param {number} index Index.
+         * @return {ol.geom.Point} Point.
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.getPoint = function(index) {
+            var n = !this.flatCoordinates ?
+                0 : this.flatCoordinates.length / this.stride;
+            if (index < 0 || n <= index) {
+                return null;
+            }
+            var point = new ol.geom.Point(null);
+            point.setFlatCoordinates(this.layout, this.flatCoordinates.slice(
+                index * this.stride, (index + 1) * this.stride));
+            return point;
+        };
+
+
+        /**
+         * Return the points of this multipoint.
+         * @return {Array.<ol.geom.Point>} Points.
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.getPoints = function() {
+            var flatCoordinates = this.flatCoordinates;
+            var layout = this.layout;
+            var stride = this.stride;
+            /** @type {Array.<ol.geom.Point>} */
+            var points = [];
+            var i, ii;
+            for (i = 0, ii = flatCoordinates.length; i < ii; i += stride) {
+                var point = new ol.geom.Point(null);
+                point.setFlatCoordinates(layout, flatCoordinates.slice(i, i + stride));
+                points.push(point);
+            }
+            return points;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.getType = function() {
+            return ol.geom.GeometryType.MULTI_POINT;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.intersectsExtent = function(extent) {
+            var flatCoordinates = this.flatCoordinates;
+            var stride = this.stride;
+            var i, ii, x, y;
+            for (i = 0, ii = flatCoordinates.length; i < ii; i += stride) {
+                x = flatCoordinates[i];
+                y = flatCoordinates[i + 1];
+                if (ol.extent.containsXY(extent, x, y)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+
+        /**
+         * Set the coordinates of the multipoint.
+         * @param {Array.<ol.Coordinate>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPoint.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null);
+            } else {
+                this.setLayout(opt_layout, coordinates, 1);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                this.flatCoordinates.length = ol.geom.flat.deflate.coordinates(
+                    this.flatCoordinates, 0, coordinates, this.stride);
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         */
+        ol.geom.MultiPoint.prototype.setFlatCoordinates = function(layout, flatCoordinates) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.changed();
+        };
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Endss.
+         * @param {number} stride Stride.
+         * @return {Array.<number>} Flat centers.
+         */
+        ol.geom.flat.center.linearRingss = {};
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<Array.<number>>} endss Endss.
+         * @param {number} stride Stride.
+         * @return {Array.<number>} Flat centers.
+         */
+        ol.geom.flat.center.linearRingss = function(flatCoordinates, offset, endss, stride) {
+            var flatCenters = [];
+            var i, ii;
+            var extent = ol.extent.createEmpty();
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                var ends = endss[i];
+                extent = ol.extent.createOrUpdateFromFlatCoordinates(
+                    flatCoordinates, offset, ends[0], stride);
+                flatCenters.push((extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2);
+                offset = ends[ends.length - 1];
+            }
+            return flatCenters;
+        };
+
+        /**
+         * @classdesc
+         * Multi-polygon geometry.
+         *
+         * @constructor
+         * @extends {ol.geom.SimpleGeometry}
+         * @param {Array.<Array.<Array.<ol.Coordinate>>>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @api
+         */
+        ol.geom.MultiPolygon = function(coordinates, opt_layout) {
+
+            ol.geom.SimpleGeometry.call(this);
+
+            /**
+             * @type {Array.<Array.<number>>}
+             * @private
+             */
+            this.endss_ = [];
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.flatInteriorPointsRevision_ = -1;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.flatInteriorPoints_ = null;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDelta_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.maxDeltaRevision_ = -1;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.orientedRevision_ = -1;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.orientedFlatCoordinates_ = null;
+
+            this.setCoordinates(coordinates, opt_layout);
+
+        };
+        ol.inherits(ol.geom.MultiPolygon, ol.geom.SimpleGeometry);
+
+
+        /**
+         * Append the passed polygon to this multipolygon.
+         * @param {ol.geom.Polygon} polygon Polygon.
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.appendPolygon = function(polygon) {
+            /** @type {Array.<number>} */
+            var ends;
+            if (!this.flatCoordinates) {
+                this.flatCoordinates = polygon.getFlatCoordinates().slice();
+                ends = polygon.getEnds().slice();
+                this.endss_.push();
+            } else {
+                var offset = this.flatCoordinates.length;
+                ol.array.extend(this.flatCoordinates, polygon.getFlatCoordinates());
+                ends = polygon.getEnds().slice();
+                var i, ii;
+                for (i = 0, ii = ends.length; i < ii; ++i) {
+                    ends[i] += offset;
+                }
+            }
+            this.endss_.push(ends);
+            this.changed();
+        };
+
+
+        /**
+         * Make a complete copy of the geometry.
+         * @return {!ol.geom.MultiPolygon} Clone.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.clone = function() {
+            var multiPolygon = new ol.geom.MultiPolygon(null);
+
+            var len = this.endss_.length;
+            var newEndss = new Array(len);
+            for (var i = 0; i < len; ++i) {
+                newEndss[i] = this.endss_[i].slice();
+            }
+
+            multiPolygon.setFlatCoordinates(
+                this.layout, this.flatCoordinates.slice(), newEndss);
+            return multiPolygon;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiPolygon.prototype.closestPointXY = function(x, y, closestPoint, minSquaredDistance) {
+            if (minSquaredDistance <
+                ol.extent.closestSquaredDistanceXY(this.getExtent(), x, y)) {
+                return minSquaredDistance;
+            }
+            if (this.maxDeltaRevision_ != this.getRevision()) {
+                this.maxDelta_ = Math.sqrt(ol.geom.flat.closest.getssMaxSquaredDelta(
+                    this.flatCoordinates, 0, this.endss_, this.stride, 0));
+                this.maxDeltaRevision_ = this.getRevision();
+            }
+            return ol.geom.flat.closest.getssClosestPoint(
+                this.getOrientedFlatCoordinates(), 0, this.endss_, this.stride,
+                this.maxDelta_, true, x, y, closestPoint, minSquaredDistance);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiPolygon.prototype.containsXY = function(x, y) {
+            return ol.geom.flat.contains.linearRingssContainsXY(
+                this.getOrientedFlatCoordinates(), 0, this.endss_, this.stride, x, y);
+        };
+
+
+        /**
+         * Return the area of the multipolygon on projected plane.
+         * @return {number} Area (on projected plane).
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getArea = function() {
+            return ol.geom.flat.area.linearRingss(
+                this.getOrientedFlatCoordinates(), 0, this.endss_, this.stride);
+        };
+
+
+        /**
+         * Get the coordinate array for this geometry.  This array has the structure
+         * of a GeoJSON coordinate array for multi-polygons.
+         *
+         * @param {boolean=} opt_right Orient coordinates according to the right-hand
+         *     rule (counter-clockwise for exterior and clockwise for interior rings).
+         *     If `false`, coordinates will be oriented according to the left-hand rule
+         *     (clockwise for exterior and counter-clockwise for interior rings).
+         *     By default, coordinate orientation will depend on how the geometry was
+         *     constructed.
+         * @return {Array.<Array.<Array.<ol.Coordinate>>>} Coordinates.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getCoordinates = function(opt_right) {
+            var flatCoordinates;
+            if (opt_right !== undefined) {
+                flatCoordinates = this.getOrientedFlatCoordinates().slice();
+                ol.geom.flat.orient.orientLinearRingss(
+                    flatCoordinates, 0, this.endss_, this.stride, opt_right);
+            } else {
+                flatCoordinates = this.flatCoordinates;
+            }
+
+            return ol.geom.flat.inflate.coordinatesss(
+                flatCoordinates, 0, this.endss_, this.stride);
+        };
+
+
+        /**
+         * @return {Array.<Array.<number>>} Endss.
+         */
+        ol.geom.MultiPolygon.prototype.getEndss = function() {
+            return this.endss_;
+        };
+
+
+        /**
+         * @return {Array.<number>} Flat interior points.
+         */
+        ol.geom.MultiPolygon.prototype.getFlatInteriorPoints = function() {
+            if (this.flatInteriorPointsRevision_ != this.getRevision()) {
+                var flatCenters = ol.geom.flat.center.linearRingss(
+                    this.flatCoordinates, 0, this.endss_, this.stride);
+                this.flatInteriorPoints_ = ol.geom.flat.interiorpoint.linearRingss(
+                    this.getOrientedFlatCoordinates(), 0, this.endss_, this.stride,
+                    flatCenters);
+                this.flatInteriorPointsRevision_ = this.getRevision();
+            }
+            return this.flatInteriorPoints_;
+        };
+
+
+        /**
+         * Return the interior points as {@link ol.geom.MultiPoint multipoint}.
+         * @return {ol.geom.MultiPoint} Interior points as XYM coordinates, where M is
+         * the length of the horizontal intersection that the point belongs to.
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getInteriorPoints = function() {
+            var interiorPoints = new ol.geom.MultiPoint(null);
+            interiorPoints.setFlatCoordinates(ol.geom.GeometryLayout.XYM,
+                this.getFlatInteriorPoints().slice());
+            return interiorPoints;
+        };
+
+
+        /**
+         * @return {Array.<number>} Oriented flat coordinates.
+         */
+        ol.geom.MultiPolygon.prototype.getOrientedFlatCoordinates = function() {
+            if (this.orientedRevision_ != this.getRevision()) {
+                var flatCoordinates = this.flatCoordinates;
+                if (ol.geom.flat.orient.linearRingssAreOriented(
+                    flatCoordinates, 0, this.endss_, this.stride)) {
+                    this.orientedFlatCoordinates_ = flatCoordinates;
+                } else {
+                    this.orientedFlatCoordinates_ = flatCoordinates.slice();
+                    this.orientedFlatCoordinates_.length =
+                        ol.geom.flat.orient.orientLinearRingss(
+                            this.orientedFlatCoordinates_, 0, this.endss_, this.stride);
+                }
+                this.orientedRevision_ = this.getRevision();
+            }
+            return this.orientedFlatCoordinates_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.geom.MultiPolygon.prototype.getSimplifiedGeometryInternal = function(squaredTolerance) {
+            var simplifiedFlatCoordinates = [];
+            var simplifiedEndss = [];
+            simplifiedFlatCoordinates.length = ol.geom.flat.simplify.quantizess(
+                this.flatCoordinates, 0, this.endss_, this.stride,
+                Math.sqrt(squaredTolerance),
+                simplifiedFlatCoordinates, 0, simplifiedEndss);
+            var simplifiedMultiPolygon = new ol.geom.MultiPolygon(null);
+            simplifiedMultiPolygon.setFlatCoordinates(
+                ol.geom.GeometryLayout.XY, simplifiedFlatCoordinates, simplifiedEndss);
+            return simplifiedMultiPolygon;
+        };
+
+
+        /**
+         * Return the polygon at the specified index.
+         * @param {number} index Index.
+         * @return {ol.geom.Polygon} Polygon.
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getPolygon = function(index) {
+            if (index < 0 || this.endss_.length <= index) {
+                return null;
+            }
+            var offset;
+            if (index === 0) {
+                offset = 0;
+            } else {
+                var prevEnds = this.endss_[index - 1];
+                offset = prevEnds[prevEnds.length - 1];
+            }
+            var ends = this.endss_[index].slice();
+            var end = ends[ends.length - 1];
+            if (offset !== 0) {
+                var i, ii;
+                for (i = 0, ii = ends.length; i < ii; ++i) {
+                    ends[i] -= offset;
+                }
+            }
+            var polygon = new ol.geom.Polygon(null);
+            polygon.setFlatCoordinates(
+                this.layout, this.flatCoordinates.slice(offset, end), ends);
+            return polygon;
+        };
+
+
+        /**
+         * Return the polygons of this multipolygon.
+         * @return {Array.<ol.geom.Polygon>} Polygons.
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getPolygons = function() {
+            var layout = this.layout;
+            var flatCoordinates = this.flatCoordinates;
+            var endss = this.endss_;
+            var polygons = [];
+            var offset = 0;
+            var i, ii, j, jj;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                var ends = endss[i].slice();
+                var end = ends[ends.length - 1];
+                if (offset !== 0) {
+                    for (j = 0, jj = ends.length; j < jj; ++j) {
+                        ends[j] -= offset;
+                    }
+                }
+                var polygon = new ol.geom.Polygon(null);
+                polygon.setFlatCoordinates(
+                    layout, flatCoordinates.slice(offset, end), ends);
+                polygons.push(polygon);
+                offset = end;
+            }
+            return polygons;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.getType = function() {
+            return ol.geom.GeometryType.MULTI_POLYGON;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.intersectsExtent = function(extent) {
+            return ol.geom.flat.intersectsextent.linearRingss(
+                this.getOrientedFlatCoordinates(), 0, this.endss_, this.stride, extent);
+        };
+
+
+        /**
+         * Set the coordinates of the multipolygon.
+         * @param {Array.<Array.<Array.<ol.Coordinate>>>} coordinates Coordinates.
+         * @param {ol.geom.GeometryLayout=} opt_layout Layout.
+         * @override
+         * @api
+         */
+        ol.geom.MultiPolygon.prototype.setCoordinates = function(coordinates, opt_layout) {
+            if (!coordinates) {
+                this.setFlatCoordinates(ol.geom.GeometryLayout.XY, null, this.endss_);
+            } else {
+                this.setLayout(opt_layout, coordinates, 3);
+                if (!this.flatCoordinates) {
+                    this.flatCoordinates = [];
+                }
+                var endss = ol.geom.flat.deflate.coordinatesss(
+                    this.flatCoordinates, 0, coordinates, this.stride, this.endss_);
+                if (endss.length === 0) {
+                    this.flatCoordinates.length = 0;
+                } else {
+                    var lastEnds = endss[endss.length - 1];
+                    this.flatCoordinates.length = lastEnds.length === 0 ?
+                        0 : lastEnds[lastEnds.length - 1];
+                }
+                this.changed();
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.GeometryLayout} layout Layout.
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {Array.<Array.<number>>} endss Endss.
+         */
+        ol.geom.MultiPolygon.prototype.setFlatCoordinates = function(layout, flatCoordinates, endss) {
+            this.setFlatCoordinatesInternal(layout, flatCoordinates);
+            this.endss_ = endss;
+            this.changed();
+        };
+
+
+        /**
+         * @param {Array.<ol.geom.Polygon>} polygons Polygons.
+         */
+        ol.geom.MultiPolygon.prototype.setPolygons = function(polygons) {
+            var layout = this.getLayout();
+            var flatCoordinates = [];
+            var endss = [];
+            var i, ii, ends;
+            for (i = 0, ii = polygons.length; i < ii; ++i) {
+                var polygon = polygons[i];
+                if (i === 0) {
+                    layout = polygon.getLayout();
+                }
+                var offset = flatCoordinates.length;
+                ends = polygon.getEnds();
+                var j, jj;
+                for (j = 0, jj = ends.length; j < jj; ++j) {
+                    ends[j] += offset;
+                }
+                ol.array.extend(flatCoordinates, polygon.getFlatCoordinates());
+                endss.push(ends);
+            }
+            this.setFlatCoordinates(layout, flatCoordinates, endss);
+        };
+
+
+        ol.Feature = function(opt_geometryOrProperties) {
+
+            ol.Object.call(this);
+
+            /**
+             * @private
+             * @type {number|string|undefined}
+             */
+            this.id_ = undefined;
+
+            /**
+             * @type {string}
+             * @private
+             */
+            this.geometryName_ = 'geometry';
+
+            /**
+             * User provided style.
+             * @private
+             * @type {ol.style.Style|Array.<ol.style.Style>|
+       *     ol.FeatureStyleFunction}
+             */
+            this.style_ = null;
+
+            /**
+             * @private
+             * @type {ol.FeatureStyleFunction|undefined}
+             */
+            this.styleFunction_ = undefined;
+
+            /**
+             * @private
+             * @type {?ol.EventsKey}
+             */
+            this.geometryChangeKey_ = null;
+
+    //        ol.events.listen(
+    //            this, ol.Object.getChangeEventType(this.geometryName_),
+    //            this.handleGeometryChanged_, this);
+
+            if (opt_geometryOrProperties !== undefined) {
+                if (opt_geometryOrProperties instanceof ol.geom.Geometry ||
+                    !opt_geometryOrProperties) {
+                    var geometry = opt_geometryOrProperties;
+                    this.setGeometry(geometry);
+                } else {
+                    /** @type {Object.<string, *>} */
+                    var properties = opt_geometryOrProperties;
+                    this.setProperties(properties);
+                }
+            }
+        };
+        ol.inherits(ol.Feature, ol.Object);
+
+
+        /**
+         * Clone this feature. If the original feature has a geometry it
+         * is also cloned. The feature id is not set in the clone.
+         * @return {ol.Feature} The clone.
+         * @api
+         */
+        ol.Feature.prototype.clone = function() {
+            var clone = new ol.Feature(this.getProperties());
+            clone.setGeometryName(this.getGeometryName());
+            var geometry = this.getGeometry();
+            if (geometry) {
+                clone.setGeometry(geometry.clone());
+            }
+            var style = this.getStyle();
+            if (style) {
+                clone.setStyle(style);
+            }
+            return clone;
+        };
+
+
+        /**
+         * Get the feature's default geometry.  A feature may have any number of named
+         * geometries.  The "default" geometry (the one that is rendered by default) is
+         * set when calling {@link ol.Feature#setGeometry}.
+         * @return {ol.geom.Geometry|undefined} The default geometry for the feature.
+         * @api
+         * @observable
+         */
+        ol.Feature.prototype.getGeometry = function() {
+            return /** @type {ol.geom.Geometry|undefined} */ (
+                this.get(this.geometryName_));
+        };
+
+
+        /**
+         * Get the feature identifier.  This is a stable identifier for the feature and
+         * is either set when reading data from a remote source or set explicitly by
+         * calling {@link ol.Feature#setId}.
+         * @return {number|string|undefined} Id.
+         * @api
+         */
+        ol.Feature.prototype.getId = function() {
+            return this.id_;
+        };
+
+
+        /**
+         * Get the name of the feature's default geometry.  By default, the default
+         * geometry is named `geometry`.
+         * @return {string} Get the property name associated with the default geometry
+         *     for this feature.
+         * @api
+         */
+        ol.Feature.prototype.getGeometryName = function() {
+            return this.geometryName_;
+        };
+
+
+        /**
+         * Get the feature's style. Will return what was provided to the
+         * {@link ol.Feature#setStyle} method.
+         * @return {ol.style.Style|Array.<ol.style.Style>|
+     *     ol.FeatureStyleFunction|ol.StyleFunction} The feature style.
+         * @api
+         */
+        ol.Feature.prototype.getStyle = function() {
+            return this.style_;
+        };
+
+
+        /**
+         * Get the feature's style function.
+         * @return {ol.FeatureStyleFunction|undefined} Return a function
+         * representing the current style of this feature.
+         * @api
+         */
+        ol.Feature.prototype.getStyleFunction = function() {
+            return this.styleFunction_;
+        };
+
+
+        /**
+         * @private
+         */
+        ol.Feature.prototype.handleGeometryChange_ = function() {
+            this.changed();
+        };
+
+
+        /**
+         * @private
+         */
+        ol.Feature.prototype.handleGeometryChanged_ = function() {
+            if (this.geometryChangeKey_) {
+                ol.events.unlistenByKey(this.geometryChangeKey_);
+                this.geometryChangeKey_ = null;
+            }
+            var geometry = this.getGeometry();
+            if (geometry) {
+                this.geometryChangeKey_ = ol.events.listen(geometry,
+                    ol.events.EventType.CHANGE, this.handleGeometryChange_, this);
+            }
+            this.changed();
+        };
+
+
+        /**
+         * Set the default geometry for the feature.  This will update the property
+         * with the name returned by {@link ol.Feature#getGeometryName}.
+         * @param {ol.geom.Geometry|undefined} geometry The new geometry.
+         * @api
+         * @observable
+         */
+        ol.Feature.prototype.setGeometry = function(geometry) {
+            this.set(this.geometryName_, geometry);
+        };
+
+
+        /**
+         * Set the style for the feature.  This can be a single style object, an array
+         * of styles, or a function that takes a resolution and returns an array of
+         * styles. If it is `null` the feature has no style (a `null` style).
+         * @param {ol.style.Style|Array.<ol.style.Style>|
+     *     ol.FeatureStyleFunction|ol.StyleFunction} style Style for this feature.
+         * @api
+         * @fires ol.events.Event#event:change
+         */
+        ol.Feature.prototype.setStyle = function(style) {
+            this.style_ = style;
+            this.styleFunction_ = !style ?
+                undefined : ol.Feature.createStyleFunction(style);
+            this.changed();
+        };
+
+
+        /**
+         * Set the feature id.  The feature id is considered stable and may be used when
+         * requesting features or comparing identifiers returned from a remote source.
+         * The feature id can be used with the {@link ol.source.Vector#getFeatureById}
+         * method.
+         * @param {number|string|undefined} id The feature id.
+         * @api
+         * @fires ol.events.Event#event:change
+         */
+        ol.Feature.prototype.setId = function(id) {
+            this.id_ = id;
+            this.changed();
+        };
+
+
+        /**
+         * Set the property name to be used when getting the feature's default geometry.
+         * When calling {@link ol.Feature#getGeometry}, the value of the property with
+         * this name will be returned.
+         * @param {string} name The property name of the default geometry.
+         * @api
+         */
+        ol.Feature.prototype.setGeometryName = function(name) {
+            ol.events.unlisten(
+                this, ol.Object.getChangeEventType(this.geometryName_),
+                this.handleGeometryChanged_, this);
+            this.geometryName_ = name;
+            ol.events.listen(
+                this, ol.Object.getChangeEventType(this.geometryName_),
+                this.handleGeometryChanged_, this);
+            this.handleGeometryChanged_();
+        };
+
+
+        /**
+         * Convert the provided object into a feature style function.  Functions passed
+         * through unchanged.  Arrays of ol.style.Style or single style objects wrapped
+         * in a new feature style function.
+         * @param {ol.FeatureStyleFunction|!Array.<ol.style.Style>|!ol.style.Style} obj
+         *     A feature style function, a single style, or an array of styles.
+         * @return {ol.FeatureStyleFunction} A style function.
+         */
+        ol.Feature.createStyleFunction = function(obj) {
+            var styleFunction;
+
+            if (typeof obj === 'function') {
+                if (obj.length == 2) {
+                    styleFunction = function(resolution) {
+                        return /** @type {ol.StyleFunction} */ (obj)(this, resolution);
+                    };
+                } else {
+                    styleFunction = obj;
+                }
+            } else {
+                /**
+                 * @type {Array.<ol.style.Style>}
+                 */
+                var styles;
+                if (Array.isArray(obj)) {
+                    styles = obj;
+                } else {
+                    ol.asserts.assert(obj instanceof ol.style.Style,
+                        41); // Expected an `ol.style.Style` or an array of `ol.style.Style`
+                    styles = [obj];
+                }
+                styleFunction = function() {
+                    return styles;
+                };
+            }
+            return styleFunction;
+        };
+
+        ol.format = {};
+
+        ol.format.Feature = function() {
+
+            /**
+             * @protected
+             * @type {ol.proj.Projection}
+             */
+            this.defaultDataProjection = null;
+
+            /**
+             * @protected
+             * @type {ol.proj.Projection}
+             */
+            this.defaultFeatureProjection = null;
+
+        };
+
+
+        /**
+         * Adds the data projection to the read options.
+         * @param {Document|Node|Object|string} source Source.
+         * @param {olx.format.ReadOptions=} opt_options Options.
+         * @return {olx.format.ReadOptions|undefined} Options.
+         * @protected
+         */
+        ol.format.Feature.prototype.getReadOptions = function(source, opt_options) {
+            var options;
+            if (opt_options) {
+                options = {
+                    dataProjection: opt_options.dataProjection ?
+                        opt_options.dataProjection : this.readProjection(source),
+                    featureProjection: opt_options.featureProjection
+                };
+            }
+            return this.adaptOptions(options);
+        };
+
+
+        /**
+         * Sets the `defaultDataProjection` on the options, if no `dataProjection`
+         * is set.
+         * @param {olx.format.WriteOptions|olx.format.ReadOptions|undefined} options
+         *     Options.
+         * @protected
+         * @return {olx.format.WriteOptions|olx.format.ReadOptions|undefined}
+         *     Updated options.
+         */
+        ol.format.Feature.prototype.adaptOptions = function(options) {
+            return ol.obj.assign({
+                dataProjection: this.defaultDataProjection,
+                featureProjection: this.defaultFeatureProjection
+            }, options);
+        };
+
+
+        /**
+         * Get the extent from the source of the last {@link readFeatures} call.
+         * @return {ol.Extent} Tile extent.
+         */
+        ol.format.Feature.prototype.getLastExtent = function() {
+            return null;
+        };
+
+
+        /**
+         * @abstract
+         * @return {ol.format.FormatType} Format.
+         */
+        ol.format.Feature.prototype.getType = function() {};
+
+
+        /**
+         * Read a single feature from a source.
+         *
+         * @abstract
+         * @param {Document|Node|Object|string} source Source.
+         * @param {olx.format.ReadOptions=} opt_options Read options.
+         * @return {ol.Feature} Feature.
+         */
+        ol.format.Feature.prototype.readFeature = function(source, opt_options) {};
+
+
+        /**
+         * Read all features from a source.
+         *
+         * @abstract
+         * @param {Document|Node|ArrayBuffer|Object|string} source Source.
+         * @param {olx.format.ReadOptions=} opt_options Read options.
+         * @return {Array.<ol.Feature>} Features.
+         */
+        ol.format.Feature.prototype.readFeatures = function(source, opt_options) {};
+
+
+        /**
+         * Read a single geometry from a source.
+         *
+         * @abstract
+         * @param {Document|Node|Object|string} source Source.
+         * @param {olx.format.ReadOptions=} opt_options Read options.
+         * @return {ol.geom.Geometry} Geometry.
+         */
+        ol.format.Feature.prototype.readGeometry = function(source, opt_options) {};
+
+
+        /**
+         * Read the projection from a source.
+         *
+         * @abstract
+         * @param {Document|Node|Object|string} source Source.
+         * @return {ol.proj.Projection} Projection.
+         */
+        ol.format.Feature.prototype.readProjection = function(source) {};
+
+
+        /**
+         * Encode a feature in this format.
+         *
+         * @abstract
+         * @param {ol.Feature} feature Feature.
+         * @param {olx.format.WriteOptions=} opt_options Write options.
+         * @return {string} Result.
+         */
+        ol.format.Feature.prototype.writeFeature = function(feature, opt_options) {};
+
+
+        /**
+         * Encode an array of features in this format.
+         *
+         * @abstract
+         * @param {Array.<ol.Feature>} features Features.
+         * @param {olx.format.WriteOptions=} opt_options Write options.
+         * @return {string} Result.
+         */
+        ol.format.Feature.prototype.writeFeatures = function(features, opt_options) {};
+
+
+        /**
+         * Write a single geometry in this format.
+         *
+         * @abstract
+         * @param {ol.geom.Geometry} geometry Geometry.
+         * @param {olx.format.WriteOptions=} opt_options Write options.
+         * @return {string} Result.
+         */
+        ol.format.Feature.prototype.writeGeometry = function(geometry, opt_options) {};
+
+
+        /**
+         * @param {ol.geom.Geometry|ol.Extent} geometry Geometry.
+         * @param {boolean} write Set to true for writing, false for reading.
+         * @param {(olx.format.WriteOptions|olx.format.ReadOptions)=} opt_options
+         *     Options.
+         * @return {ol.geom.Geometry|ol.Extent} Transformed geometry.
+         * @protected
+         */
+        ol.format.Feature.transformWithOptions = function(
+            geometry, write, opt_options) {
+
+            /**
+             * @type {ol.geom.Geometry|ol.Extent}
+             */
+            var transformed;
+            {
+                transformed = geometry;
+            }
+            if (write && opt_options && opt_options.decimals !== undefined) {
+                var power = Math.pow(10, opt_options.decimals);
+                // if decimals option on write, round each coordinate appropriately
+                /**
+                 * @param {Array.<number>} coordinates Coordinates.
+                 * @return {Array.<number>} Transformed coordinates.
+                 */
+                var transform = function(coordinates) {
+                    for (var i = 0, ii = coordinates.length; i < ii; ++i) {
+                        coordinates[i] = Math.round(coordinates[i] * power) / power;
+                    }
+                    return coordinates;
+                };
+                if (transformed === geometry) {
+                    transformed = transformed.clone();
+                }
+                transformed.applyTransform(transform);
+            }
+            return transformed;
+        };
+
+
+        ol.format.MVT = function(opt_options) {
+
+            ol.format.Feature.call(this);
+
+            var options = opt_options ? opt_options : {};
+
+            /**
+             * @type {ol.proj.Projection}
+             */
+    //        this.defaultDataProjection = new ol.proj.Projection({
+    //            code: 'EPSG:3857',
+    //            units: ol.proj.Units.TILE_PIXELS
+    //        });
+
+            /**
+             * @private
+             * @type {function((ol.geom.Geometry|Object.<string,*>)=)|
+       *     function(ol.geom.GeometryType,Array.<number>,
+       *         (Array.<number>|Array.<Array.<number>>),Object.<string,*>,number)}
+             */
+            this.featureClass_ = options.featureClass ?
+                options.featureClass : ol.render.Feature;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.geometryName_ = options.geometryName;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.layerName_ = options.layerName ? options.layerName : 'layer';
+
+            /**
+             * @private
+             * @type {Array.<string>}
+             */
+            this.layers_ = options.layers ? options.layers : null;
+
+            /**
+             * @private
+             * @type {ol.Extent}
+             */
+            this.extent_ = null;
+
+        };
+        ol.inherits(ol.format.MVT, ol.format.Feature);
+
+        ol.format.MVT.pbfReaders_ = {
+            layers: function (tag, layers, pbf) {
+                if (tag === 3) {
+                    var layer = {
+                        keys: [],
+                        values: [],
+                        features: []
+                    };
+                    var end = pbf.readVarint() + pbf.pos;
+                    pbf.readFields(ol.format.MVT.pbfReaders_.layer, layer, end);
+                    layer.length = layer.features.length;
+                    if (layer.length) {
+                        layers[layer.name] = layer;
+                    }
+                }
+            },
+            layer: function (tag, layer, pbf) {
+                if (tag === 15) {
+                    layer.version = pbf.readVarint();
+                } else if (tag === 1) {
+                    layer.name = pbf.readString();
+                } else if (tag === 5) {
+                    layer.extent = pbf.readVarint();
+                } else if (tag === 2) {
+                    layer.features.push(pbf.pos);
+                } else if (tag === 3) {
+                    layer.keys.push(pbf.readString());
+                } else if (tag === 4) {
+                    var value = null;
+                    var end = pbf.readVarint() + pbf.pos;
+                    while (pbf.pos < end) {
+                        tag = pbf.readVarint() >> 3;
+                        value = tag === 1 ? pbf.readString() :
+                            tag === 2 ? pbf.readFloat() :
+                                tag === 3 ? pbf.readDouble() :
+                                    tag === 4 ? pbf.readVarint64() :
+                                        tag === 5 ? pbf.readVarint() :
+                                            tag === 6 ? pbf.readSVarint() :
+                                                tag === 7 ? pbf.readBoolean() : null;
+                    }
+                    layer.values.push(value);
+                }
+            },
+            feature: function (tag, feature, pbf) {
+                if (tag == 1) {
+                    feature.id = pbf.readVarint();
+                } else if (tag == 2) {
+                    var end = pbf.readVarint() + pbf.pos;
+                    while (pbf.pos < end) {
+                        var key = feature.layer.keys[pbf.readVarint()];
+                        var value = feature.layer.values[pbf.readVarint()];
+                        feature.properties[key] = value;
+                    }
+                } else if (tag == 3) {
+                    feature.type = pbf.readVarint();
+                } else if (tag == 4) {
+                    feature.geometry = pbf.pos;
+                }
+            }
+        };
+
+        /**
+         * Read a raw feature from the pbf offset stored at index `i` in the raw layer.
+         * @suppress {missingProperties}
+         * @private
+         * @param {ol.ext.PBF} pbf PBF.
+         * @param {Object} layer Raw layer.
+         * @param {number} i Index of the feature in the raw layer's `features` array.
+         * @return {Object} Raw feature.
+         */
+        ol.format.MVT.readRawFeature_ = function (pbf, layer, i) {
+            pbf.pos = layer.features[i];
+            var end = pbf.readVarint() + pbf.pos;
+
+            var feature = {
+                layer: layer,
+                type: 0,
+                properties: {}
+            };
+            pbf.readFields(ol.format.MVT.pbfReaders_.feature, feature, end);
+            return feature;
+        };
+
+        /**
+         * Read the raw geometry from the pbf offset stored in a raw feature's geometry
+         * proeprty.
+         * @suppress {missingProperties}
+         * @private
+         * @param {ol.ext.PBF} pbf PBF.
+         * @param {Object} feature Raw feature.
+         * @param {Array.<number>} flatCoordinates Array to store flat coordinates in.
+         * @param {Array.<number>} ends Array to store ends in.
+         */
+        ol.format.MVT.readRawGeometry_ = function (pbf, feature, flatCoordinates, ends) {
+            pbf.pos = feature.geometry;
+
+            var end = pbf.readVarint() + pbf.pos;
+            var cmd = 1;
+            var length = 0;
+            var x = 0;
+            var y = 0;
+            var coordsLen = 0;
+            var currentEnd = 0;
+
+            while (pbf.pos < end) {
+                if (!length) {
+                    var cmdLen = pbf.readVarint();
+                    cmd = cmdLen & 0x7;
+                    length = cmdLen >> 3;
+                }
+
+                length--;
+
+                if (cmd === 1 || cmd === 2) {
+                    x += pbf.readSVarint();
+                    y += pbf.readSVarint();
+
+                    if (cmd === 1) { // moveTo
+                        if (coordsLen > currentEnd) {
+                            ends.push(coordsLen);
+                            currentEnd = coordsLen;
+                        }
+                    }
+
+                    flatCoordinates.push(x, y);
+                    coordsLen += 2;
+
+                } else if (cmd === 7) {
+
+                    if (coordsLen > currentEnd) {
+                        // close polygon
+                        flatCoordinates.push(
+                            flatCoordinates[currentEnd], flatCoordinates[currentEnd + 1]);
+                        coordsLen += 2;
+                    }
+
+                } else {
+                    ol.asserts.assert(false, 59); // Invalid command found in the PBF
+                }
+            }
+
+            if (coordsLen > currentEnd) {
+                ends.push(coordsLen);
+                currentEnd = coordsLen;
+            }
+
+        };
+
+        /**
+         * @suppress {missingProperties}
+         * @private
+         * @param {number} type The raw feature's geometry type
+         * @param {number} numEnds Number of ends of the flat coordinates of the
+         * geometry.
+         * @return {ol.geom.GeometryType} The geometry type.
+         */
+        ol.format.MVT.getGeometryType_ = function (type, numEnds) {
+            /** @type {ol.geom.GeometryType} */
+            var geometryType;
+            if (type === 1) {
+                geometryType = numEnds === 1 ?
+                    ol.geom.GeometryType.POINT : ol.geom.GeometryType.MULTI_POINT;
+            } else if (type === 2) {
+                geometryType = numEnds === 1 ?
+                    ol.geom.GeometryType.LINE_STRING :
+                    ol.geom.GeometryType.MULTI_LINE_STRING;
+            } else if (type === 3) {
+                geometryType = ol.geom.GeometryType.POLYGON;
+                // MultiPolygon not relevant for rendering - winding order determines
+                // outer rings of polygons.
+            }
+            return geometryType;
+        };
+
+        /**
+         * @private
+         * @param {ol.ext.PBF} pbf PBF
+         * @param {Object} rawFeature Raw Mapbox feature.
+         * @param {olx.format.ReadOptions=} opt_options Read options.
+         * @return {ol.Feature|ol.render.Feature} Feature.
+         */
+        ol.format.MVT.prototype.createFeature_ = function (pbf, rawFeature, opt_options) {
+            var type = rawFeature.type;
+            if (type === 0) {
+                return null;
+            }
+
+            var feature;
+            var id = rawFeature.id;
+            var values = rawFeature.properties;
+            values[this.layerName_] = rawFeature.layer.name;
+
+            var flatCoordinates = [];
+            var ends = [];
+            ol.format.MVT.readRawGeometry_(pbf, rawFeature, flatCoordinates, ends);
+
+            var geometryType = ol.format.MVT.getGeometryType_(type, ends.length);
+
+            var geom;
+            if (geometryType == ol.geom.GeometryType.POLYGON) {
+                var endss = [];
+                var offset = 0;
+                var prevEndIndex = 0;
+                for (var i = 0, ii = ends.length; i < ii; ++i) {
+                    var end = ends[i];
+                    if (!ol.geom.flat.orient.linearRingIsClockwise(flatCoordinates, offset, end, 2)) {
+                        endss.push(ends.slice(prevEndIndex, i + 1));
+                        prevEndIndex = i + 1;
+                    }
+                    offset = end;
+                }
+                if (endss.length > 1) {
+                    ends = endss;
+                    geom = new ol.geom.MultiPolygon(null);
+                } else {
+                    geom = new ol.geom.Polygon(null);
+                }
+            } else {
+                geom = geometryType === ol.geom.GeometryType.POINT ? new ol.geom.Point(null) :
+                    geometryType === ol.geom.GeometryType.LINE_STRING ? new ol.geom.LineString(null) :
+                        geometryType === ol.geom.GeometryType.POLYGON ? new ol.geom.Polygon(null) :
+                            geometryType === ol.geom.GeometryType.MULTI_POINT ? new ol.geom.MultiPoint(null) :
+                                geometryType === ol.geom.GeometryType.MULTI_LINE_STRING ? new ol.geom.MultiLineString(null) :
+                                    null;
+            }
+            geom.setFlatCoordinates(ol.geom.GeometryLayout.XY, flatCoordinates, ends);
+            feature = new this.featureClass_();
+            if (this.geometryName_) {
+                feature.setGeometryName(this.geometryName_);
+            }
+            var geometry = ol.format.Feature.transformWithOptions(geom, false, this.adaptOptions(opt_options));
+            feature.setGeometry(geometry);
+            feature.setId(id);
+            feature.setProperties(values);
+
+            return feature;
+        };
+
+        ol.format.MVT.prototype.readFeatures = function (source, opt_options) {
+            var layers = this.layers_;
+
+            var pbf$1 = new pbf.Protobuf(/** @type {ArrayBuffer} */ (source));
+            var pbfLayers = pbf$1.readFields(ol.format.MVT.pbfReaders_.layers, {});
+            /** @type {Array.<ol.Feature|ol.render.Feature>} */
+            var features = [];
+            var pbfLayer;
+            for (var name in pbfLayers) {
+                if (layers && layers.indexOf(name) == -1) {
+                    continue;
+                }
+
+                if (opt_options !== undefined) {
+                    var needSourceLayerNames = opt_options.needSourceLayerNames;
+                    if (needSourceLayerNames !== undefined && needSourceLayerNames[name] === undefined) {
+                        continue;
+                    }
+                }
+
+                pbfLayer = pbfLayers[name];
+
+                var rawFeature;
+                for (var i = 0, ii = pbfLayer.length; i < ii; ++i) {
+                    rawFeature = ol.format.MVT.readRawFeature_(pbf$1, pbfLayer, i);
+                    features.push(this.createFeature_(pbf$1, rawFeature));
+                }
+                this.extent_ = pbfLayer ? [0, 0, pbfLayer.extent, pbfLayer.extent] : null;
+            }
+
+            return features;
+        };
+
+        ol.style = {};
+
+        /**
+         * Singleton class. Available through {@link ol.style.iconImageCache}.
+         * @constructor
+         */
+        ol.style.IconImageCache = function() {
+            this.cache_ = {};
+            this.cacheSize_ = 0;
+            this.maxCacheSize_ = 32;
+        };
+
+        ol.style.IconImageCache.getKey = function(src, crossOrigin, color) {
+            var colorString = color ? ol.color.asString(color) : 'null';
+            return crossOrigin + ':' + src + ':' + colorString;
+        };
+
+
+        /**
+         * FIXME empty description for jsdoc
+         */
+        ol.style.IconImageCache.prototype.clear = function() {
+            this.cache_ = {};
+            this.cacheSize_ = 0;
+        };
+
+
+        /**
+         * FIXME empty description for jsdoc
+         */
+        ol.style.IconImageCache.prototype.expire = function() {
+            if (this.cacheSize_ > this.maxCacheSize_) {
+                var i = 0;
+                var key, iconImage;
+                for (key in this.cache_) {
+                    iconImage = this.cache_[key];
+                    if ((i++ & 3) === 0 && !iconImage.hasListener()) {
+                        delete this.cache_[key];
+                        --this.cacheSize_;
+                    }
+                }
+            }
+        };
+
+        ol.style.IconImageCache.prototype.get = function(src, crossOrigin, color) {
+            var key = ol.style.IconImageCache.getKey(src, crossOrigin, color);
+            return key in this.cache_ ? this.cache_[key] : null;
+        };
+
+        ol.style.IconImageCache.prototype.set = function(src, crossOrigin, color, iconImage) {
+            var key = ol.style.IconImageCache.getKey(src, crossOrigin, color);
+            this.cache_[key] = iconImage;
+            ++this.cacheSize_;
+        };
+
+        ol.style.IconImageCache.prototype.setSize = function(maxCacheSize) {
+            this.maxCacheSize_ = maxCacheSize;
+            this.expire();
+        };
+
+        /**
+         * The {@link ol.style.IconImageCache} for {@link ol.style.Icon} images.
+         * @api
+         */
+        ol.style.iconImageCache = new ol.style.IconImageCache();
+
+        ol.style.Image = function(options) {
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.opacity_ = options.opacity;
+
+            /**
+             * @private
+             * @type {boolean}
+             */
+            this.rotateWithView_ = options.rotateWithView;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.rotation_ = options.rotation;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.scale_ = options.scale;
+
+            /**
+             * @private
+             * @type {boolean}
+             */
+            this.snapToPixel_ = options.snapToPixel;
+
+        };
+
+        ol.style.Image.prototype.getOpacity = function() {
+            return this.opacity_;
+        };
+
+        ol.style.Image.prototype.getRotateWithView = function() {
+            return this.rotateWithView_;
+        };
+
+        ol.style.Image.prototype.getRotation = function() {
+            return this.rotation_;
+        };
+
+        ol.style.Image.prototype.getScale = function() {
+            return this.scale_;
+        };
+
+        ol.style.Image.prototype.getSnapToPixel = function() {
+            return this.snapToPixel_;
+        };
+
+        ol.style.Image.prototype.getAnchor = function() {};
+
+        ol.style.Image.prototype.getImage = function(pixelRatio) {};
+
+        ol.style.Image.prototype.getHitDetectionImage = function(pixelRatio) {};
+
+        ol.style.Image.prototype.getImageState = function() {};
+
+        ol.style.Image.prototype.getImageSize = function() {};
+
+        ol.style.Image.prototype.getHitDetectionImageSize = function() {};
+
+        ol.style.Image.prototype.getOrigin = function() {};
+
+        ol.style.Image.prototype.getSize = function() {};
+
+        ol.style.Image.prototype.setOpacity = function(opacity) {
+            this.opacity_ = opacity;
+        };
+
+        ol.style.Image.prototype.setRotateWithView = function(rotateWithView) {
+            this.rotateWithView_ = rotateWithView;
+        };
+
+        ol.style.Image.prototype.setRotation = function(rotation) {
+            this.rotation_ = rotation;
+        };
+
+        ol.style.Image.prototype.setScale = function(scale) {
+            this.scale_ = scale;
+        };
+
+        ol.style.Image.prototype.setSnapToPixel = function(snapToPixel) {
+            this.snapToPixel_ = snapToPixel;
+        };
+
+        ol.style.Image.prototype.listenImageChange = function(listener, thisArg) {};
+
+        ol.style.Image.prototype.load = function() {};
+
+        ol.style.Image.prototype.unlistenImageChange = function(listener, thisArg) {};
+
+        /**
+         * @classdesc
+         * Set regular shape style for vector features. The resulting shape will be
+         * a regular polygon when `radius` is provided, or a star when `radius1` and
+         * `radius2` are provided.
+         *
+         * @constructor
+         * @param {olx.style.RegularShapeOptions} options Options.
+         * @extends {ol.style.Image}
+         * @api
+         */
+        ol.style.RegularShape = function(options) {
+            /**
+             * @private
+             * @type {Array.<string>}
+             */
+            this.checksums_ = null;
+
+            /**
+             * @private
+             * @type {HTMLCanvasElement}
+             */
+            this.canvas_ = null;
+
+            /**
+             * @private
+             * @type {HTMLCanvasElement}
+             */
+            this.hitDetectionCanvas_ = null;
+
+            /**
+             * @private
+             * @type {ol.style.Fill}
+             */
+            this.fill_ = options.fill !== undefined ? options.fill : null;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.origin_ = [0, 0];
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.points_ = options.points;
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.radius_ = /** @type {number} */ (options.radius !== undefined ?
+                options.radius : options.radius1);
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.radius2_ = options.radius2;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.angle_ = options.angle !== undefined ? options.angle : 0;
+
+            /**
+             * @private
+             * @type {ol.style.Stroke}
+             */
+            this.stroke_ = options.stroke !== undefined ? options.stroke : null;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.anchor_ = null;
+
+            /**
+             * @private
+             * @type {ol.Size}
+             */
+            this.size_ = null;
+
+            /**
+             * @private
+             * @type {ol.Size}
+             */
+            this.imageSize_ = null;
+
+            /**
+             * @private
+             * @type {ol.Size}
+             */
+            this.hitDetectionImageSize_ = null;
+
+            /**
+             * @protected
+             * @type {ol.style.AtlasManager|undefined}
+             */
+            this.atlasManager_ = options.atlasManager;
+
+            this.render_(this.atlasManager_);
+
+            /**
+             * @type {boolean}
+             */
+            var snapToPixel = options.snapToPixel !== undefined ?
+                options.snapToPixel : true;
+
+            /**
+             * @type {boolean}
+             */
+            var rotateWithView = options.rotateWithView !== undefined ?
+                options.rotateWithView : false;
+
+            ol.style.Image.call(this, {
+                opacity: 1,
+                rotateWithView: rotateWithView,
+                rotation: options.rotation !== undefined ? options.rotation : 0,
+                scale: 1,
+                snapToPixel: snapToPixel
+            });
+        };
+        ol.inherits(ol.style.RegularShape, ol.style.Image);
+
+        ol.style.RegularShape.prototype.clone = function() {
+            var style = new ol.style.RegularShape({
+                fill: this.getFill() ? this.getFill().clone() : undefined,
+                points: this.getPoints(),
+                radius: this.getRadius(),
+                radius2: this.getRadius2(),
+                angle: this.getAngle(),
+                snapToPixel: this.getSnapToPixel(),
+                stroke: this.getStroke() ?  this.getStroke().clone() : undefined,
+                rotation: this.getRotation(),
+                rotateWithView: this.getRotateWithView(),
+                atlasManager: this.atlasManager_
+            });
+            style.setOpacity(this.getOpacity());
+            style.setScale(this.getScale());
+            return style;
+        };
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.RegularShape.prototype.getAnchor = function() {
+            return this.anchor_;
+        };
+
+
+        /**
+         * Get the angle used in generating the shape.
+         * @return {number} Shape's rotation in radians.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getAngle = function() {
+            return this.angle_;
+        };
+
+        /**
+         * Get the fill style for the shape.
+         * @return {ol.style.Fill} Fill style.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getFill = function() {
+            return this.fill_;
+        };
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.getHitDetectionImage = function(pixelRatio) {
+            return this.hitDetectionCanvas_;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.RegularShape.prototype.getImage = function(pixelRatio) {
+            return this.canvas_;
+        };
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.getImageSize = function() {
+            return this.imageSize_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.getHitDetectionImageSize = function() {
+            return this.hitDetectionImageSize_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.getImageState = function() {
+            return ol.ImageState.LOADED;
+        };
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.RegularShape.prototype.getOrigin = function() {
+            return this.origin_;
+        };
+
+
+        /**
+         * Get the number of points for generating the shape.
+         * @return {number} Number of points for stars and regular polygons.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getPoints = function() {
+            return this.points_;
+        };
+
+
+        /**
+         * Get the (primary) radius for the shape.
+         * @return {number} Radius.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getRadius = function() {
+            return this.radius_;
+        };
+
+
+        /**
+         * Get the secondary radius for the shape.
+         * @return {number|undefined} Radius2.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getRadius2 = function() {
+            return this.radius2_;
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.RegularShape.prototype.getSize = function() {
+            return this.size_;
+        };
+
+
+        /**
+         * Get the stroke style for the shape.
+         * @return {ol.style.Stroke} Stroke style.
+         * @api
+         */
+        ol.style.RegularShape.prototype.getStroke = function() {
+            return this.stroke_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.listenImageChange = function(listener, thisArg) {};
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.load = function() {};
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.style.RegularShape.prototype.unlistenImageChange = function(listener, thisArg) {};
+
+
+        /**
+         * @protected
+         * @param {ol.style.AtlasManager|undefined} atlasManager An atlas manager.
+         */
+        ol.style.RegularShape.prototype.render_ = function(atlasManager) {
+            var imageSize;
+            var lineCap = '';
+            var lineJoin = '';
+            var miterLimit = 0;
+            var lineDash = null;
+            var lineDashOffset = 0;
+            var strokeStyle;
+            var strokeWidth = 0;
+
+            if (this.stroke_) {
+                strokeStyle = this.stroke_.getColor();
+                if (strokeStyle === null) {
+                    strokeStyle = ol.render.canvas.defaultStrokeStyle;
+                }
+                strokeStyle = ol.colorlike.asColorLike(strokeStyle);
+                strokeWidth = this.stroke_.getWidth();
+                if (strokeWidth === undefined) {
+                    strokeWidth = ol.render.canvas.defaultLineWidth;
+                }
+                lineDash = this.stroke_.getLineDash();
+                lineDashOffset = this.stroke_.getLineDashOffset();
+                if (!ol.has.CANVAS_LINE_DASH) {
+                    lineDash = null;
+                    lineDashOffset = 0;
+                }
+                lineJoin = this.stroke_.getLineJoin();
+                if (lineJoin === undefined) {
+                    lineJoin = ol.render.canvas.defaultLineJoin;
+                }
+                lineCap = this.stroke_.getLineCap();
+                if (lineCap === undefined) {
+                    lineCap = ol.render.canvas.defaultLineCap;
+                }
+                miterLimit = this.stroke_.getMiterLimit();
+                if (miterLimit === undefined) {
+                    miterLimit = ol.render.canvas.defaultMiterLimit;
+                }
+            }
+
+            var size = 2 * (this.radius_ + strokeWidth) + 1;
+
+            /** @type {ol.RegularShapeRenderOptions} */
+            var renderOptions = {
+                strokeStyle: strokeStyle,
+                strokeWidth: strokeWidth,
+                size: size,
+                lineCap: lineCap,
+                lineDash: lineDash,
+                lineDashOffset: lineDashOffset,
+                lineJoin: lineJoin,
+                miterLimit: miterLimit
+            };
+
+            if (atlasManager === undefined) {
+                // no atlas manager is used, create a new canvas
+                var context = ol.dom.createCanvasContext2D(size, size);
+                this.canvas_ = context.canvas;
+
+                // canvas.width and height are rounded to the closest integer
+                size = this.canvas_.width;
+                imageSize = size;
+
+                this.draw_(renderOptions, context, 0, 0);
+
+                this.createHitDetectionCanvas_(renderOptions);
+            } else {
+                // an atlas manager is used, add the symbol to an atlas
+                size = Math.round(size);
+
+                var hasCustomHitDetectionImage = !this.fill_;
+                var renderHitDetectionCallback;
+                if (hasCustomHitDetectionImage) {
+                    // render the hit-detection image into a separate atlas image
+                    renderHitDetectionCallback =
+                        this.drawHitDetectionCanvas_.bind(this, renderOptions);
+                }
+
+                var id = this.getChecksum();
+                var info = atlasManager.add(
+                    id, size, size, this.draw_.bind(this, renderOptions),
+                    renderHitDetectionCallback);
+
+                this.canvas_ = info.image;
+                this.origin_ = [info.offsetX, info.offsetY];
+                imageSize = info.image.width;
+
+                if (hasCustomHitDetectionImage) {
+                    this.hitDetectionCanvas_ = info.hitImage;
+                    this.hitDetectionImageSize_ =
+                        [info.hitImage.width, info.hitImage.height];
+                } else {
+                    this.hitDetectionCanvas_ = this.canvas_;
+                    this.hitDetectionImageSize_ = [imageSize, imageSize];
+                }
+            }
+
+            this.anchor_ = [size / 2, size / 2];
+            this.size_ = [size, size];
+            this.imageSize_ = [imageSize, imageSize];
+        };
+
+
+        /**
+         * @private
+         * @param {ol.RegularShapeRenderOptions} renderOptions Render options.
+         * @param {CanvasRenderingContext2D} context The rendering context.
+         * @param {number} x The origin for the symbol (x).
+         * @param {number} y The origin for the symbol (y).
+         */
+        ol.style.RegularShape.prototype.draw_ = function(renderOptions, context, x, y) {
+            var i, angle0, radiusC;
+            // reset transform
+            context.setTransform(1, 0, 0, 1, 0, 0);
+
+            // then move to (x, y)
+            context.translate(x, y);
+
+            context.beginPath();
+
+            var points = this.points_;
+            if (points === Infinity) {
+                context.arc(
+                    renderOptions.size / 2, renderOptions.size / 2,
+                    this.radius_, 0, 2 * Math.PI, true);
+            } else {
+                var radius2 = (this.radius2_ !== undefined) ? this.radius2_
+                    : this.radius_;
+                if (radius2 !== this.radius_) {
+                    points = 2 * points;
+                }
+                for (i = 0; i <= points; i++) {
+                    angle0 = i * 2 * Math.PI / points - Math.PI / 2 + this.angle_;
+                    radiusC = i % 2 === 0 ? this.radius_ : radius2;
+                    context.lineTo(renderOptions.size / 2 + radiusC * Math.cos(angle0),
+                        renderOptions.size / 2 + radiusC * Math.sin(angle0));
+                }
+            }
+
+
+            if (this.fill_) {
+                var color = this.fill_.getColor();
+                if (color === null) {
+                    color = ol.render.canvas.defaultFillStyle;
+                }
+                context.fillStyle = ol.colorlike.asColorLike(color);
+                context.fill();
+            }
+            if (this.stroke_) {
+                context.strokeStyle = renderOptions.strokeStyle;
+                context.lineWidth = renderOptions.strokeWidth;
+                if (renderOptions.lineDash) {
+                    context.setLineDash(renderOptions.lineDash);
+                    context.lineDashOffset = renderOptions.lineDashOffset;
+                }
+                context.lineCap = renderOptions.lineCap;
+                context.lineJoin = renderOptions.lineJoin;
+                context.miterLimit = renderOptions.miterLimit;
+                context.stroke();
+            }
+            context.closePath();
+        };
+
+
+        /**
+         * @private
+         * @param {ol.RegularShapeRenderOptions} renderOptions Render options.
+         */
+        ol.style.RegularShape.prototype.createHitDetectionCanvas_ = function(renderOptions) {
+            this.hitDetectionImageSize_ = [renderOptions.size, renderOptions.size];
+            if (this.fill_) {
+                this.hitDetectionCanvas_ = this.canvas_;
+                return;
+            }
+
+            // if no fill style is set, create an extra hit-detection image with a
+            // default fill style
+            var context = ol.dom.createCanvasContext2D(renderOptions.size, renderOptions.size);
+            this.hitDetectionCanvas_ = context.canvas;
+
+            this.drawHitDetectionCanvas_(renderOptions, context, 0, 0);
+        };
+
+
+        /**
+         * @private
+         * @param {ol.RegularShapeRenderOptions} renderOptions Render options.
+         * @param {CanvasRenderingContext2D} context The context.
+         * @param {number} x The origin for the symbol (x).
+         * @param {number} y The origin for the symbol (y).
+         */
+        ol.style.RegularShape.prototype.drawHitDetectionCanvas_ = function(renderOptions, context, x, y) {
+            // reset transform
+            context.setTransform(1, 0, 0, 1, 0, 0);
+
+            // then move to (x, y)
+            context.translate(x, y);
+
+            context.beginPath();
+
+            var points = this.points_;
+            if (points === Infinity) {
+                context.arc(
+                    renderOptions.size / 2, renderOptions.size / 2,
+                    this.radius_, 0, 2 * Math.PI, true);
+            } else {
+                var radius2 = (this.radius2_ !== undefined) ? this.radius2_
+                    : this.radius_;
+                if (radius2 !== this.radius_) {
+                    points = 2 * points;
+                }
+                var i, radiusC, angle0;
+                for (i = 0; i <= points; i++) {
+                    angle0 = i * 2 * Math.PI / points - Math.PI / 2 + this.angle_;
+                    radiusC = i % 2 === 0 ? this.radius_ : radius2;
+                    context.lineTo(renderOptions.size / 2 + radiusC * Math.cos(angle0),
+                        renderOptions.size / 2 + radiusC * Math.sin(angle0));
+                }
+            }
+
+            context.fillStyle = ol.render.canvas.defaultFillStyle;
+            context.fill();
+            if (this.stroke_) {
+                context.strokeStyle = renderOptions.strokeStyle;
+                context.lineWidth = renderOptions.strokeWidth;
+                if (renderOptions.lineDash) {
+                    context.setLineDash(renderOptions.lineDash);
+                    context.lineDashOffset = renderOptions.lineDashOffset;
+                }
+                context.stroke();
+            }
+            context.closePath();
+        };
+
+
+        /**
+         * @return {string} The checksum.
+         */
+        ol.style.RegularShape.prototype.getChecksum = function() {
+            var strokeChecksum = this.stroke_ ?
+                this.stroke_.getChecksum() : '-';
+            var fillChecksum = this.fill_ ?
+                this.fill_.getChecksum() : '-';
+
+            var recalculate = !this.checksums_ ||
+                (strokeChecksum != this.checksums_[1] ||
+                    fillChecksum != this.checksums_[2] ||
+                    this.radius_ != this.checksums_[3] ||
+                    this.radius2_ != this.checksums_[4] ||
+                    this.angle_ != this.checksums_[5] ||
+                    this.points_ != this.checksums_[6]);
+
+            if (recalculate) {
+                var checksum = 'r' + strokeChecksum + fillChecksum +
+                    (this.radius_ !== undefined ? this.radius_.toString() : '-') +
+                    (this.radius2_ !== undefined ? this.radius2_.toString() : '-') +
+                    (this.angle_ !== undefined ? this.angle_.toString() : '-') +
+                    (this.points_ !== undefined ? this.points_.toString() : '-');
+                this.checksums_ = [checksum, strokeChecksum, fillChecksum,
+                    this.radius_, this.radius2_, this.angle_, this.points_];
+            }
+
+            return this.checksums_[0];
+        };
+
+        /**
+         * @classdesc
+         * Set circle style for vector features.
+         *
+         * @constructor
+         * @param {olx.style.CircleOptions=} opt_options Options.
+         * @extends {ol.style.RegularShape}
+         * @api
+         */
+        ol.style.Circle = function(opt_options) {
+
+            var options = opt_options || {};
+
+            ol.style.RegularShape.call(this, {
+                points: Infinity,
+                fill: options.fill,
+                radius: options.radius,
+                snapToPixel: options.snapToPixel,
+                stroke: options.stroke,
+                atlasManager: options.atlasManager
+            });
+
+        };
+        ol.inherits(ol.style.Circle, ol.style.RegularShape);
+
+
+        /**
+         * Clones the style.  If an atlasmanager was provided to the original style it will be used in the cloned style, too.
+         * @return {ol.style.Circle} The cloned style.
+         * @override
+         * @api
+         */
+        ol.style.Circle.prototype.clone = function() {
+            var style = new ol.style.Circle({
+                fill: this.getFill() ? this.getFill().clone() : undefined,
+                stroke: this.getStroke() ? this.getStroke().clone() : undefined,
+                radius: this.getRadius(),
+                snapToPixel: this.getSnapToPixel(),
+                atlasManager: this.atlasManager_
+            });
+            style.setOpacity(this.getOpacity());
+            style.setScale(this.getScale());
+            return style;
+        };
+
+
+        /**
+         * Set the circle radius.
+         *
+         * @param {number} radius Circle radius.
+         * @api
+         */
+        ol.style.Circle.prototype.setRadius = function(radius) {
+            this.radius_ = radius;
+            this.render_(this.atlasManager_);
+        };
+
+        /**
+         * @classdesc
+         * Set fill style for vector features.
+         *
+         * @constructor
+         * @param {olx.style.FillOptions=} opt_options Options.
+         * @api
+         */
+        ol.style.Fill = function(opt_options) {
+
+            var options = opt_options || {};
+
+            /**
+             * @private
+             * @type {ol.Color|ol.ColorLike}
+             */
+            this.color_ = options.color !== undefined ? options.color : null;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Clones the style. The color is not cloned if it is an {@link ol.ColorLike}.
+         * @return {ol.style.Fill} The cloned style.
+         * @api
+         */
+        ol.style.Fill.prototype.clone = function() {
+            var color = this.getColor();
+            return new ol.style.Fill({
+                color: (color && color.slice) ? color.slice() : color || undefined
+            });
+        };
+
+
+        /**
+         * Get the fill color.
+         * @return {ol.Color|ol.ColorLike} Color.
+         * @api
+         */
+        ol.style.Fill.prototype.getColor = function() {
+            return this.color_;
+        };
+
+
+        /**
+         * Set the color.
+         *
+         * @param {ol.Color|ol.ColorLike} color Color.
+         * @api
+         */
+        ol.style.Fill.prototype.setColor = function(color) {
+            this.color_ = color;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * @return {string} The checksum.
+         */
+        ol.style.Fill.prototype.getChecksum = function() {
+            if (this.checksum_ === undefined) {
+                if (
+                    this.color_ instanceof CanvasPattern ||
+                        this.color_ instanceof CanvasGradient
+                    ) {
+                    this.checksum_ = ol.getUid(this.color_).toString();
+                } else {
+                    this.checksum_ = 'f' + (this.color_ ?
+                        ol.color.asString(this.color_) : '-');
+                }
+            }
+
+            return this.checksum_;
+        };
+
+        /**
+         * @classdesc
+         * Set stroke style for vector features.
+         * Note that the defaults given are the Canvas defaults, which will be used if
+         * option is not defined. The `get` functions return whatever was entered in
+         * the options; they will not return the default.
+         *
+         * @constructor
+         * @param {olx.style.StrokeOptions=} opt_options Options.
+         * @api
+         */
+        ol.style.Stroke = function(opt_options) {
+
+            var options = opt_options || {};
+
+            /**
+             * @private
+             * @type {ol.Color|ol.ColorLike}
+             */
+            this.color_ = options.color !== undefined ? options.color : null;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.lineCap_ = options.lineCap;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.lineDash_ = options.lineDash !== undefined ? options.lineDash : null;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.lineDashOffset_ = options.lineDashOffset;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.lineJoin_ = options.lineJoin;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.miterLimit_ = options.miterLimit;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.width_ = options.width;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Clones the style.
+         * @return {ol.style.Stroke} The cloned style.
+         * @api
+         */
+        ol.style.Stroke.prototype.clone = function() {
+            var color = this.getColor();
+            return new ol.style.Stroke({
+                color: (color && color.slice) ? color.slice() : color || undefined,
+                lineCap: this.getLineCap(),
+                lineDash: this.getLineDash() ? this.getLineDash().slice() : undefined,
+                lineDashOffset: this.getLineDashOffset(),
+                lineJoin: this.getLineJoin(),
+                miterLimit: this.getMiterLimit(),
+                width: this.getWidth()
+            });
+        };
+
+
+        /**
+         * Get the stroke color.
+         * @return {ol.Color|ol.ColorLike} Color.
+         * @api
+         */
+        ol.style.Stroke.prototype.getColor = function() {
+            return this.color_;
+        };
+
+
+        /**
+         * Get the line cap type for the stroke.
+         * @return {string|undefined} Line cap.
+         * @api
+         */
+        ol.style.Stroke.prototype.getLineCap = function() {
+            return this.lineCap_;
+        };
+
+
+        /**
+         * Get the line dash style for the stroke.
+         * @return {Array.<number>} Line dash.
+         * @api
+         */
+        ol.style.Stroke.prototype.getLineDash = function() {
+            return this.lineDash_;
+        };
+
+
+        /**
+         * Get the line dash offset for the stroke.
+         * @return {number|undefined} Line dash offset.
+         * @api
+         */
+        ol.style.Stroke.prototype.getLineDashOffset = function() {
+            return this.lineDashOffset_;
+        };
+
+
+        /**
+         * Get the line join type for the stroke.
+         * @return {string|undefined} Line join.
+         * @api
+         */
+        ol.style.Stroke.prototype.getLineJoin = function() {
+            return this.lineJoin_;
+        };
+
+
+        /**
+         * Get the miter limit for the stroke.
+         * @return {number|undefined} Miter limit.
+         * @api
+         */
+        ol.style.Stroke.prototype.getMiterLimit = function() {
+            return this.miterLimit_;
+        };
+
+
+        /**
+         * Get the stroke width.
+         * @return {number|undefined} Width.
+         * @api
+         */
+        ol.style.Stroke.prototype.getWidth = function() {
+            return this.width_;
+        };
+
+
+        /**
+         * Set the color.
+         *
+         * @param {ol.Color|ol.ColorLike} color Color.
+         * @api
+         */
+        ol.style.Stroke.prototype.setColor = function(color) {
+            this.color_ = color;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the line cap.
+         *
+         * @param {string|undefined} lineCap Line cap.
+         * @api
+         */
+        ol.style.Stroke.prototype.setLineCap = function(lineCap) {
+            this.lineCap_ = lineCap;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the line dash.
+         *
+         * Please note that Internet Explorer 10 and lower [do not support][mdn] the
+         * `setLineDash` method on the `CanvasRenderingContext2D` and therefore this
+         * property will have no visual effect in these browsers.
+         *
+         * [mdn]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash#Browser_compatibility
+         *
+         * @param {Array.<number>} lineDash Line dash.
+         * @api
+         */
+        ol.style.Stroke.prototype.setLineDash = function(lineDash) {
+            this.lineDash_ = lineDash;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the line dash offset.
+         *
+         * @param {number|undefined} lineDashOffset Line dash offset.
+         * @api
+         */
+        ol.style.Stroke.prototype.setLineDashOffset = function(lineDashOffset) {
+            this.lineDashOffset_ = lineDashOffset;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the line join.
+         *
+         * @param {string|undefined} lineJoin Line join.
+         * @api
+         */
+        ol.style.Stroke.prototype.setLineJoin = function(lineJoin) {
+            this.lineJoin_ = lineJoin;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the miter limit.
+         *
+         * @param {number|undefined} miterLimit Miter limit.
+         * @api
+         */
+        ol.style.Stroke.prototype.setMiterLimit = function(miterLimit) {
+            this.miterLimit_ = miterLimit;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * Set the width.
+         *
+         * @param {number|undefined} width Width.
+         * @api
+         */
+        ol.style.Stroke.prototype.setWidth = function(width) {
+            this.width_ = width;
+            this.checksum_ = undefined;
+        };
+
+
+        /**
+         * @return {string} The checksum.
+         */
+        ol.style.Stroke.prototype.getChecksum = function() {
+            if (this.checksum_ === undefined) {
+                this.checksum_ = 's';
+                if (this.color_) {
+                    if (typeof this.color_ === 'string') {
+                        this.checksum_ += this.color_;
+                    } else {
+                        this.checksum_ += ol.getUid(this.color_).toString();
+                    }
+                } else {
+                    this.checksum_ += '-';
+                }
+                this.checksum_ += ',' +
+                    (this.lineCap_ !== undefined ?
+                        this.lineCap_.toString() : '-') + ',' +
+                    (this.lineDash_ ?
+                        this.lineDash_.toString() : '-') + ',' +
+                    (this.lineDashOffset_ !== undefined ?
+                        this.lineDashOffset_ : '-') + ',' +
+                    (this.lineJoin_ !== undefined ?
+                        this.lineJoin_ : '-') + ',' +
+                    (this.miterLimit_ !== undefined ?
+                        this.miterLimit_.toString() : '-') + ',' +
+                    (this.width_ !== undefined ?
+                        this.width_.toString() : '-');
+            }
+
+            return this.checksum_;
+        };
+
+        /**
+         * Icon anchor units. One of 'fraction', 'pixels'.
+         * @enum {string}
+         */
+        ol.style.IconAnchorUnits = {
+            FRACTION: 'fraction',
+            PIXELS: 'pixels'
+        };
+
+        /**
+         * @constructor
+         * @param {Image|HTMLCanvasElement} image Image.
+         * @param {string|undefined} src Src.
+         * @param {ol.Size} size Size.
+         * @param {?string} crossOrigin Cross origin.
+         * @param {ol.ImageState} imageState Image state.
+         * @param {ol.Color} color Color.
+         * @extends {ol.events.EventTarget}
+         */
+        ol.style.IconImage = function(image, src, size, crossOrigin, imageState,
+                                      color) {
+
+            ol.events.EventTarget.call(this);
+
+            /**
+             * @private
+             * @type {Image|HTMLCanvasElement}
+             */
+            this.hitDetectionImage_ = null;
+
+            /**
+             * @private
+             * @type {Image|HTMLCanvasElement}
+             */
+            this.image_ = !image ? new Image() : image;
+
+            if (crossOrigin !== null) {
+                this.image_.crossOrigin = crossOrigin;
+            }
+
+            /**
+             * @private
+             * @type {HTMLCanvasElement}
+             */
+            this.canvas_ = color ?
+            /** @type {HTMLCanvasElement} */ (document.createElement('CANVAS')) :
+                null;
+
+            /**
+             * @private
+             * @type {ol.Color}
+             */
+            this.color_ = color;
+
+            /**
+             * @private
+             * @type {Array.<ol.EventsKey>}
+             */
+            this.imageListenerKeys_ = null;
+
+            /**
+             * @private
+             * @type {ol.ImageState}
+             */
+            this.imageState_ = imageState;
+
+            /**
+             * @private
+             * @type {ol.Size}
+             */
+            this.size_ = size;
+
+            /**
+             * @private
+             * @type {string|undefined}
+             */
+            this.src_ = src;
+
+            /**
+             * @private
+             * @type {boolean}
+             */
+            this.tainting_ = false;
+            if (this.imageState_ == ol.ImageState.LOADED) {
+                this.determineTainting_();
+            }
+
+        };
+        ol.inherits(ol.style.IconImage, ol.events.EventTarget);
+
+
+        /**
+         * @param {Image|HTMLCanvasElement} image Image.
+         * @param {string} src Src.
+         * @param {ol.Size} size Size.
+         * @param {?string} crossOrigin Cross origin.
+         * @param {ol.ImageState} imageState Image state.
+         * @param {ol.Color} color Color.
+         * @return {ol.style.IconImage} Icon image.
+         */
+        ol.style.IconImage.get = function(image, src, size, crossOrigin, imageState,
+                                          color) {
+            var iconImageCache = ol.style.iconImageCache;
+            var iconImage = iconImageCache.get(src, crossOrigin, color);
+            if (!iconImage) {
+                iconImage = new ol.style.IconImage(
+                    image, src, size, crossOrigin, imageState, color);
+                iconImageCache.set(src, crossOrigin, color, iconImage);
+            }
+            return iconImage;
+        };
+
+
+        /**
+         * @private
+         */
+        ol.style.IconImage.prototype.determineTainting_ = function() {
+            var context = ol.dom.createCanvasContext2D(1, 1);
+            try {
+                context.drawImage(this.image_, 0, 0);
+                context.getImageData(0, 0, 1, 1);
+            } catch (e) {
+                this.tainting_ = true;
+            }
+        };
+
+
+        /**
+         * @private
+         */
+        ol.style.IconImage.prototype.dispatchChangeEvent_ = function() {
+            this.dispatchEvent(ol.events.EventType.CHANGE);
+        };
+
+
+        /**
+         * @private
+         */
+        ol.style.IconImage.prototype.handleImageError_ = function() {
+            this.imageState_ = ol.ImageState.ERROR;
+            this.unlistenImage_();
+            this.dispatchChangeEvent_();
+        };
+
+
+        /**
+         * @private
+         */
+        ol.style.IconImage.prototype.handleImageLoad_ = function() {
+            this.imageState_ = ol.ImageState.LOADED;
+            if (this.size_) {
+                this.image_.width = this.size_[0];
+                this.image_.height = this.size_[1];
+            }
+            this.size_ = [this.image_.width, this.image_.height];
+            this.unlistenImage_();
+            this.determineTainting_();
+            this.replaceColor_();
+            this.dispatchChangeEvent_();
+        };
+
+
+        /**
+         * @param {number} pixelRatio Pixel ratio.
+         * @return {Image|HTMLCanvasElement} Image or Canvas element.
+         */
+        ol.style.IconImage.prototype.getImage = function(pixelRatio) {
+            return this.canvas_ ? this.canvas_ : this.image_;
+        };
+
+
+        /**
+         * @return {ol.ImageState} Image state.
+         */
+        ol.style.IconImage.prototype.getImageState = function() {
+            return this.imageState_;
+        };
+
+
+        /**
+         * @param {number} pixelRatio Pixel ratio.
+         * @return {Image|HTMLCanvasElement} Image element.
+         */
+        ol.style.IconImage.prototype.getHitDetectionImage = function(pixelRatio) {
+            if (!this.hitDetectionImage_) {
+                if (this.tainting_) {
+                    var width = this.size_[0];
+                    var height = this.size_[1];
+                    var context = ol.dom.createCanvasContext2D(width, height);
+                    context.fillRect(0, 0, width, height);
+                    this.hitDetectionImage_ = context.canvas;
+                } else {
+                    this.hitDetectionImage_ = this.image_;
+                }
+            }
+            return this.hitDetectionImage_;
+        };
+
+
+        /**
+         * @return {ol.Size} Image size.
+         */
+        ol.style.IconImage.prototype.getSize = function() {
+            return this.size_;
+        };
+
+
+        /**
+         * @return {string|undefined} Image src.
+         */
+        ol.style.IconImage.prototype.getSrc = function() {
+            return this.src_;
+        };
+
+
+        /**
+         * Load not yet loaded URI.
+         */
+        ol.style.IconImage.prototype.load = function() {
+            if (this.imageState_ == ol.ImageState.IDLE) {
+                this.imageState_ = ol.ImageState.LOADING;
+                this.imageListenerKeys_ = [
+                    ol.events.listenOnce(this.image_, ol.events.EventType.ERROR,
+                        this.handleImageError_, this),
+                    ol.events.listenOnce(this.image_, ol.events.EventType.LOAD,
+                        this.handleImageLoad_, this)
+                ];
+                try {
+                    this.image_.src = this.src_;
+                } catch (e) {
+                    this.handleImageError_();
+                }
+            }
+        };
+
+
+        /**
+         * @private
+         */
+        ol.style.IconImage.prototype.replaceColor_ = function() {
+            if (this.tainting_ || this.color_ === null) {
+                return;
+            }
+
+            this.canvas_.width = this.image_.width;
+            this.canvas_.height = this.image_.height;
+
+            var ctx = this.canvas_.getContext('2d');
+            ctx.drawImage(this.image_, 0, 0);
+
+            var imgData = ctx.getImageData(0, 0, this.image_.width, this.image_.height);
+            var data = imgData.data;
+            var r = this.color_[0] / 255.0;
+            var g = this.color_[1] / 255.0;
+            var b = this.color_[2] / 255.0;
+
+            for (var i = 0, ii = data.length; i < ii; i += 4) {
+                data[i] *= r;
+                data[i + 1] *= g;
+                data[i + 2] *= b;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        };
+
+
+        /**
+         * Discards event handlers which listen for load completion or errors.
+         *
+         * @private
+         */
+        ol.style.IconImage.prototype.unlistenImage_ = function() {
+            this.imageListenerKeys_.forEach(ol.events.unlistenByKey);
+            this.imageListenerKeys_ = null;
+        };
+
+        /**
+         * Icon origin. One of 'bottom-left', 'bottom-right', 'top-left', 'top-right'.
+         * @enum {string}
+         */
+        ol.style.IconOrigin = {
+            BOTTOM_LEFT: 'bottom-left',
+            BOTTOM_RIGHT: 'bottom-right',
+            TOP_LEFT: 'top-left',
+            TOP_RIGHT: 'top-right'
+        };
+
+        /**
+         * @classdesc
+         * Set icon style for vector features.
+         *
+         * @constructor
+         * @param {olx.style.IconOptions=} opt_options Options.
+         * @extends {ol.style.Image}
+         * @api
+         */
+        ol.style.Icon = function(opt_options) {
+
+            var options = opt_options || {};
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.anchor_ = options.anchor !== undefined ? options.anchor : [0.5, 0.5];
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.normalizedAnchor_ = null;
+
+            /**
+             * @private
+             * @type {ol.style.IconOrigin}
+             */
+            this.anchorOrigin_ = options.anchorOrigin !== undefined ?
+                options.anchorOrigin : ol.style.IconOrigin.TOP_LEFT;
+
+            /**
+             * @private
+             * @type {ol.style.IconAnchorUnits}
+             */
+            this.anchorXUnits_ = options.anchorXUnits !== undefined ?
+                options.anchorXUnits : ol.style.IconAnchorUnits.FRACTION;
+
+            /**
+             * @private
+             * @type {ol.style.IconAnchorUnits}
+             */
+            this.anchorYUnits_ = options.anchorYUnits !== undefined ?
+                options.anchorYUnits : ol.style.IconAnchorUnits.FRACTION;
+
+            /**
+             * @private
+             * @type {?string}
+             */
+            this.crossOrigin_ =
+                options.crossOrigin !== undefined ? options.crossOrigin : null;
+
+            /**
+             * @type {Image|HTMLCanvasElement}
+             */
+            var image = options.img !== undefined ? options.img : null;
+
+            /**
+             * @type {ol.Size}
+             */
+            var imgSize = options.imgSize !== undefined ? options.imgSize : null;
+
+            /**
+             * @type {string|undefined}
+             */
+            var src = options.src;
+
+    //        ol.asserts.assert(!(src !== undefined && image),
+    //            4); // `image` and `src` cannot be provided at the same time
+    //        ol.asserts.assert(!image || (image && imgSize),
+    //            5); // `imgSize` must be set when `image` is provided
+
+            if ((src === undefined || src.length === 0) && image) {
+                src = image.src || ol.getUid(image).toString();
+            }
+    //        ol.asserts.assert(src !== undefined && src.length > 0,
+    //            6); // A defined and non-empty `src` or `image` must be provided
+
+            /**
+             * @type {ol.ImageState}
+             */
+            var imageState = options.src !== undefined ?
+                ol.ImageState.IDLE : ol.ImageState.LOADED;
+
+            /**
+             * @private
+             * @type {ol.Color}
+             */
+            this.color_ = options.color !== undefined ? ol.color.asArray(options.color) :
+                null;
+
+            /**
+             * @private
+             * @type {ol.style.IconImage}
+             */
+            this.iconImage_ = ol.style.IconImage.get(
+                image, /** @type {string} */ (src), imgSize, this.crossOrigin_, imageState, this.color_);
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.offset_ = options.offset !== undefined ? options.offset : [0, 0];
+
+            /**
+             * @private
+             * @type {ol.style.IconOrigin}
+             */
+            this.offsetOrigin_ = options.offsetOrigin !== undefined ?
+                options.offsetOrigin : ol.style.IconOrigin.TOP_LEFT;
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.origin_ = null;
+
+            /**
+             * @private
+             * @type {ol.Size}
+             */
+            this.size_ = options.size !== undefined ? options.size : null;
+
+            /**
+             * @type {number}
+             */
+            var opacity = options.opacity !== undefined ? options.opacity : 1;
+
+            /**
+             * @type {boolean}
+             */
+            var rotateWithView = options.rotateWithView !== undefined ?
+                options.rotateWithView : false;
+
+            /**
+             * @type {number}
+             */
+            var rotation = options.rotation !== undefined ? options.rotation : 0;
+
+            /**
+             * @type {number}
+             */
+            var scale = options.scale !== undefined ? options.scale : 1;
+
+            /**
+             * @type {boolean}
+             */
+            var snapToPixel = options.snapToPixel !== undefined ?
+                options.snapToPixel : true;
+
+            ol.style.Image.call(this, {
+                opacity: opacity,
+                rotation: rotation,
+                scale: scale,
+                snapToPixel: snapToPixel,
+                rotateWithView: rotateWithView
+            });
+
+        };
+        ol.inherits(ol.style.Icon, ol.style.Image);
+
+
+        /**
+         * Clones the style. The underlying Image/HTMLCanvasElement is not cloned.
+         * @return {ol.style.Icon} The cloned style.
+         * @api
+         */
+        ol.style.Icon.prototype.clone = function() {
+            return new ol.style.Icon({
+                anchor: this.anchor_.slice(),
+                anchorOrigin: this.anchorOrigin_,
+                anchorXUnits: this.anchorXUnits_,
+                anchorYUnits: this.anchorYUnits_,
+                crossOrigin: this.crossOrigin_,
+                color: (this.color_ && this.color_.slice) ? this.color_.slice() : this.color_ || undefined,
+                src: this.getSrc(),
+                offset: this.offset_.slice(),
+                offsetOrigin: this.offsetOrigin_,
+                size: this.size_ !== null ? this.size_.slice() : undefined,
+                opacity: this.getOpacity(),
+                scale: this.getScale(),
+                snapToPixel: this.getSnapToPixel(),
+                rotation: this.getRotation(),
+                rotateWithView: this.getRotateWithView()
+            });
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.Icon.prototype.getAnchor = function() {
+            if (this.normalizedAnchor_) {
+                return this.normalizedAnchor_;
+            }
+            var anchor = this.anchor_;
+            var size = this.getSize();
+            if (this.anchorXUnits_ == ol.style.IconAnchorUnits.FRACTION ||
+                this.anchorYUnits_ == ol.style.IconAnchorUnits.FRACTION) {
+                if (!size) {
+                    return null;
+                }
+                anchor = this.anchor_.slice();
+                if (this.anchorXUnits_ == ol.style.IconAnchorUnits.FRACTION) {
+                    anchor[0] *= size[0];
+                }
+                if (this.anchorYUnits_ == ol.style.IconAnchorUnits.FRACTION) {
+                    anchor[1] *= size[1];
+                }
+            }
+
+            if (this.anchorOrigin_ != ol.style.IconOrigin.TOP_LEFT) {
+                if (!size) {
+                    return null;
+                }
+                if (anchor === this.anchor_) {
+                    anchor = this.anchor_.slice();
+                }
+                if (this.anchorOrigin_ == ol.style.IconOrigin.TOP_RIGHT ||
+                    this.anchorOrigin_ == ol.style.IconOrigin.BOTTOM_RIGHT) {
+                    anchor[0] = -anchor[0] + size[0];
+                }
+                if (this.anchorOrigin_ == ol.style.IconOrigin.BOTTOM_LEFT ||
+                    this.anchorOrigin_ == ol.style.IconOrigin.BOTTOM_RIGHT) {
+                    anchor[1] = -anchor[1] + size[1];
+                }
+            }
+            this.normalizedAnchor_ = anchor;
+            return this.normalizedAnchor_;
+        };
+
+
+        /**
+         * Get the icon color.
+         * @return {ol.Color} Color.
+         * @api
+         */
+        ol.style.Icon.prototype.getColor = function() {
+            return this.color_;
+        };
+
+
+        /**
+         * Get the image icon.
+         * @param {number} pixelRatio Pixel ratio.
+         * @return {Image|HTMLCanvasElement} Image or Canvas element.
+         * @override
+         * @api
+         */
+        ol.style.Icon.prototype.getImage = function(pixelRatio) {
+            return this.iconImage_.getImage(pixelRatio);
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.getImageSize = function() {
+            return this.iconImage_.getSize();
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.getHitDetectionImageSize = function() {
+            return this.getImageSize();
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.getImageState = function() {
+            return this.iconImage_.getImageState();
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.getHitDetectionImage = function(pixelRatio) {
+            return this.iconImage_.getHitDetectionImage(pixelRatio);
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.Icon.prototype.getOrigin = function() {
+            if (this.origin_) {
+                return this.origin_;
+            }
+            var offset = this.offset_;
+
+            if (this.offsetOrigin_ != ol.style.IconOrigin.TOP_LEFT) {
+                var size = this.getSize();
+                var iconImageSize = this.iconImage_.getSize();
+                if (!size || !iconImageSize) {
+                    return null;
+                }
+                offset = offset.slice();
+                if (this.offsetOrigin_ == ol.style.IconOrigin.TOP_RIGHT ||
+                    this.offsetOrigin_ == ol.style.IconOrigin.BOTTOM_RIGHT) {
+                    offset[0] = iconImageSize[0] - size[0] - offset[0];
+                }
+                if (this.offsetOrigin_ == ol.style.IconOrigin.BOTTOM_LEFT ||
+                    this.offsetOrigin_ == ol.style.IconOrigin.BOTTOM_RIGHT) {
+                    offset[1] = iconImageSize[1] - size[1] - offset[1];
+                }
+            }
+            this.origin_ = offset;
+            return this.origin_;
+        };
+
+
+        /**
+         * Get the image URL.
+         * @return {string|undefined} Image src.
+         * @api
+         */
+        ol.style.Icon.prototype.getSrc = function() {
+            return this.iconImage_.getSrc();
+        };
+
+
+        /**
+         * @inheritDoc
+         * @api
+         */
+        ol.style.Icon.prototype.getSize = function() {
+            return !this.size_ ? this.iconImage_.getSize() : this.size_;
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.listenImageChange = function(listener, thisArg) {
+            return ol.events.listen(this.iconImage_, ol.events.EventType.CHANGE,
+                listener, thisArg);
+        };
+
+
+        /**
+         * Load not yet loaded URI.
+         * When rendering a feature with an icon style, the vector renderer will
+         * automatically call this method. However, you might want to call this
+         * method yourself for preloading or other purposes.
+         * @override
+         * @api
+         */
+        ol.style.Icon.prototype.load = function() {
+            this.iconImage_.load();
+        };
+
+
+        /**
+         * @override
+         */
+        ol.style.Icon.prototype.unlistenImageChange = function(listener, thisArg) {
+            ol.events.unlisten(this.iconImage_, ol.events.EventType.CHANGE,
+                listener, thisArg);
+        };
+
+        ol.style.Text = function(opt_options) {
+            var options = opt_options || {};
+            this.font_ = options.font;
+            this.rotation_ = options.rotation;
+            this.rotateWithView_ = options.rotateWithView;
+            this.scale_ = options.scale;
+            this.text_ = options.text;
+            this.textAlign_ = options.textAlign;
+            this.textBaseline_ = options.textBaseline;
+            this.fill_ = options.fill !== undefined ? options.fill :
+                new ol.style.Fill({color: ol.style.Text.DEFAULT_FILL_COLOR_});
+            this.maxAngle_ = options.maxAngle !== undefined ? options.maxAngle : Math.PI / 4;
+            this.placement_ = options.placement !== undefined ? options.placement : ol.style.TextPlacement.POINT;
+
+            //TODO Use options.overflow directly after removing @deprecated exceedLength
+            var overflow = options.overflow === undefined ? options.exceedLength : options.overflow;
+
+            this.overflow_ = overflow !== undefined ? overflow : false;
+            this.stroke_ = options.stroke !== undefined ? options.stroke : null;
+            this.offsetX_ = options.offsetX !== undefined ? options.offsetX : 0;
+            this.offsetY_ = options.offsetY !== undefined ? options.offsetY : 0;
+            this.backgroundFill_ = options.backgroundFill ? options.backgroundFill : null;
+            this.backgroundStroke_ = options.backgroundStroke ? options.backgroundStroke : null;
+            this.padding_ = options.padding === undefined ? null : options.padding;
+        };
+
+        ol.style.Text.DEFAULT_FILL_COLOR_ = '#333';
+        ol.style.Text.prototype.clone = function() {
+            return new ol.style.Text({
+                font: this.getFont(),
+                placement: this.getPlacement(),
+                maxAngle: this.getMaxAngle(),
+                overflow: this.getOverflow(),
+                rotation: this.getRotation(),
+                rotateWithView: this.getRotateWithView(),
+                scale: this.getScale(),
+                text: this.getText(),
+                textAlign: this.getTextAlign(),
+                textBaseline: this.getTextBaseline(),
+                fill: this.getFill() ? this.getFill().clone() : undefined,
+                stroke: this.getStroke() ? this.getStroke().clone() : undefined,
+                offsetX: this.getOffsetX(),
+                offsetY: this.getOffsetY()
+            });
+        };
+
+        ol.style.Text.prototype.getOverflow = function() {
+            return this.overflow_;
+        };
+
+        ol.style.Text.prototype.getFont = function() {
+            return this.font_;
+        };
+
+        ol.style.Text.prototype.getMaxAngle = function() {
+            return this.maxAngle_;
+        };
+
+        ol.style.Text.prototype.getPlacement = function() {
+            return this.placement_;
+        };
+
+        ol.style.Text.prototype.getOffsetX = function() {
+            return this.offsetX_;
+        };
+
+        ol.style.Text.prototype.getOffsetY = function() {
+            return this.offsetY_;
+        };
+
+        ol.style.Text.prototype.getFill = function() {
+            return this.fill_;
+        };
+
+        ol.style.Text.prototype.getRotateWithView = function() {
+            return this.rotateWithView_;
+        };
+
+        ol.style.Text.prototype.getRotation = function() {
+            return this.rotation_;
+        };
+
+        ol.style.Text.prototype.getScale = function() {
+            return this.scale_;
+        };
+
+        ol.style.Text.prototype.getStroke = function() {
+            return this.stroke_;
+        };
+
+        ol.style.Text.prototype.getText = function() {
+            return this.text_;
+        };
+
+        ol.style.Text.prototype.getTextAlign = function() {
+            return this.textAlign_;
+        };
+
+        ol.style.Text.prototype.getTextBaseline = function() {
+            return this.textBaseline_;
+        };
+
+        ol.style.Text.prototype.getBackgroundFill = function() {
+            return this.backgroundFill_;
+        };
+
+        ol.style.Text.prototype.getBackgroundStroke = function() {
+            return this.backgroundStroke_;
+        };
+
+        ol.style.Text.prototype.getPadding = function() {
+            return this.padding_;
+        };
+
+        ol.style.Text.prototype.setOverflow = function(overflow) {
+            this.overflow_ = overflow;
+        };
+
+        ol.style.Text.prototype.setFont = function(font) {
+            this.font_ = font;
+        };
+
+        ol.style.Text.prototype.setMaxAngle = function(maxAngle) {
+            this.maxAngle_ = maxAngle;
+        };
+
+        ol.style.Text.prototype.setOffsetX = function(offsetX) {
+            this.offsetX_ = offsetX;
+        };
+
+        ol.style.Text.prototype.setOffsetY = function(offsetY) {
+            this.offsetY_ = offsetY;
+        };
+
+        ol.style.Text.prototype.setPlacement = function(placement) {
+            this.placement_ = placement;
+        };
+
+        ol.style.Text.prototype.setFill = function(fill) {
+            this.fill_ = fill;
+        };
+
+        ol.style.Text.prototype.setRotation = function(rotation) {
+            this.rotation_ = rotation;
+        };
+
+        ol.style.Text.prototype.setScale = function(scale) {
+            this.scale_ = scale;
+        };
+
+        ol.style.Text.prototype.setStroke = function(stroke) {
+            this.stroke_ = stroke;
+        };
+
+        ol.style.Text.prototype.setText = function(text) {
+            this.text_ = text;
+        };
+
+        ol.style.Text.prototype.setTextAlign = function(textAlign) {
+            this.textAlign_ = textAlign;
+        };
+
+        ol.style.Text.prototype.setTextBaseline = function(textBaseline) {
+            this.textBaseline_ = textBaseline;
+        };
+
+        ol.style.Text.prototype.setBackgroundFill = function(fill) {
+            this.backgroundFill_ = fill;
+        };
+
+        ol.style.Text.prototype.setBackgroundStroke = function(stroke) {
+            this.backgroundStroke_ = stroke;
+        };
+
+        ol.style.Text.prototype.setPadding = function(padding) {
+            this.padding_ = padding;
+        };
+
+        ol.style.Style = function(opt_options) {
+
+            var options = opt_options || {};
+
+            /**
+             * @private
+             * @type {string|ol.geom.Geometry|ol.StyleGeometryFunction}
+             */
+            this.geometry_ = null;
+
+            /**
+             * @private
+             * @type {!ol.StyleGeometryFunction}
+             */
+            this.geometryFunction_ = ol.style.Style.defaultGeometryFunction;
+
+            if (options.geometry !== undefined) {
+                this.setGeometry(options.geometry);
+            }
+
+            /**
+             * @private
+             * @type {ol.style.Fill}
+             */
+            this.fill_ = options.fill !== undefined ? options.fill : null;
+
+            /**
+             * @private
+             * @type {ol.style.Image}
+             */
+            this.image_ = options.image !== undefined ? options.image : null;
+
+            /**
+             * @private
+             * @type {ol.StyleRenderFunction|null}
+             */
+            this.renderer_ = options.renderer !== undefined ? options.renderer : null;
+
+            /**
+             * @private
+             * @type {ol.style.Stroke}
+             */
+            this.stroke_ = options.stroke !== undefined ? options.stroke : null;
+
+            /**
+             * @private
+             * @type {ol.style.Text}
+             */
+            this.text_ = options.text !== undefined ? options.text : null;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.zIndex_ = options.zIndex;
+
+        };
+
+
+        /**
+         * Clones the style.
+         * @return {ol.style.Style} The cloned style.
+         * @api
+         */
+        ol.style.Style.prototype.clone = function() {
+            var geometry = this.getGeometry();
+            if (geometry && geometry.clone) {
+                geometry = geometry.clone();
+            }
+            return new ol.style.Style({
+                geometry: geometry,
+                fill: this.getFill() ? this.getFill().clone() : undefined,
+                image: this.getImage() ? this.getImage().clone() : undefined,
+                stroke: this.getStroke() ? this.getStroke().clone() : undefined,
+                text: this.getText() ? this.getText().clone() : undefined,
+                zIndex: this.getZIndex()
+            });
+        };
+
+
+        /**
+         * Get the custom renderer function that was configured with
+         * {@link #setRenderer} or the `renderer` constructor option.
+         * @return {ol.StyleRenderFunction|null} Custom renderer function.
+         * @api
+         */
+        ol.style.Style.prototype.getRenderer = function() {
+            return this.renderer_;
+        };
+
+
+        /**
+         * Sets a custom renderer function for this style. When set, `fill`, `stroke`
+         * and `image` options of the style will be ignored.
+         * @param {ol.StyleRenderFunction|null} renderer Custom renderer function.
+         * @api
+         */
+        ol.style.Style.prototype.setRenderer = function(renderer) {
+            this.renderer_ = renderer;
+        };
+
+
+        /**
+         * Get the geometry to be rendered.
+         * @return {string|ol.geom.Geometry|ol.StyleGeometryFunction}
+         * Feature property or geometry or function that returns the geometry that will
+         * be rendered with this style.
+         * @api
+         */
+        ol.style.Style.prototype.getGeometry = function() {
+            return this.geometry_;
+        };
+
+
+        /**
+         * Get the function used to generate a geometry for rendering.
+         * @return {!ol.StyleGeometryFunction} Function that is called with a feature
+         * and returns the geometry to render instead of the feature's geometry.
+         * @api
+         */
+        ol.style.Style.prototype.getGeometryFunction = function() {
+            return this.geometryFunction_;
+        };
+
+
+        /**
+         * Get the fill style.
+         * @return {ol.style.Fill} Fill style.
+         * @api
+         */
+        ol.style.Style.prototype.getFill = function() {
+            return this.fill_;
+        };
+
+
+        /**
+         * Set the fill style.
+         * @param {ol.style.Fill} fill Fill style.
+         * @api
+         */
+        ol.style.Style.prototype.setFill = function(fill) {
+            this.fill_ = fill;
+        };
+
+
+        /**
+         * Get the image style.
+         * @return {ol.style.Image} Image style.
+         * @api
+         */
+        ol.style.Style.prototype.getImage = function() {
+            return this.image_;
+        };
+
+
+        /**
+         * Set the image style.
+         * @param {ol.style.Image} image Image style.
+         * @api
+         */
+        ol.style.Style.prototype.setImage = function(image) {
+            this.image_ = image;
+        };
+
+
+        /**
+         * Get the stroke style.
+         * @return {ol.style.Stroke} Stroke style.
+         * @api
+         */
+        ol.style.Style.prototype.getStroke = function() {
+            return this.stroke_;
+        };
+
+
+        /**
+         * Set the stroke style.
+         * @param {ol.style.Stroke} stroke Stroke style.
+         * @api
+         */
+        ol.style.Style.prototype.setStroke = function(stroke) {
+            this.stroke_ = stroke;
+        };
+
+
+        /**
+         * Get the text style.
+         * @return {ol.style.Text} Text style.
+         * @api
+         */
+        ol.style.Style.prototype.getText = function() {
+            return this.text_;
+        };
+
+
+        /**
+         * Set the text style.
+         * @param {ol.style.Text} text Text style.
+         * @api
+         */
+        ol.style.Style.prototype.setText = function(text) {
+            this.text_ = text;
+        };
+
+
+        /**
+         * Get the z-index for the style.
+         * @return {number|undefined} ZIndex.
+         * @api
+         */
+        ol.style.Style.prototype.getZIndex = function() {
+            return this.zIndex_;
+        };
+
+
+        /**
+         * Set a geometry that is rendered instead of the feature's geometry.
+         *
+         * @param {string|ol.geom.Geometry|ol.StyleGeometryFunction} geometry
+         *     Feature property or geometry or function returning a geometry to render
+         *     for this style.
+         * @api
+         */
+        ol.style.Style.prototype.setGeometry = function(geometry) {
+            if (typeof geometry === 'function') {
+                this.geometryFunction_ = geometry;
+            } else if (typeof geometry === 'string') {
+                this.geometryFunction_ = function(feature) {
+                    return /** @type {ol.geom.Geometry} */ (feature.get(geometry));
+                };
+            } else if (!geometry) {
+                this.geometryFunction_ = ol.style.Style.defaultGeometryFunction;
+            } else if (geometry !== undefined) {
+                this.geometryFunction_ = function() {
+                    return /** @type {ol.geom.Geometry} */ (geometry);
+                };
+            }
+            this.geometry_ = geometry;
+        };
+
+
+        /**
+         * Set the z-index.
+         *
+         * @param {number|undefined} zIndex ZIndex.
+         * @api
+         */
+        ol.style.Style.prototype.setZIndex = function(zIndex) {
+            this.zIndex_ = zIndex;
+        };
+
+
+        /**
+         * Convert the provided object into a style function.  Functions passed through
+         * unchanged.  Arrays of ol.style.Style or single style objects wrapped in a
+         * new style function.
+         * @param {ol.StyleFunction|Array.<ol.style.Style>|ol.style.Style} obj
+         *     A style function, a single style, or an array of styles.
+         * @return {ol.StyleFunction} A style function.
+         */
+        ol.style.Style.createFunction = function(obj) {
+            var styleFunction;
+
+            if (typeof obj === 'function') {
+                styleFunction = obj;
+            } else {
+                /**
+                 * @type {Array.<ol.style.Style>}
+                 */
+                var styles;
+                if (Array.isArray(obj)) {
+                    styles = obj;
+                } else {
+                    ol.asserts.assert(obj instanceof ol.style.Style,
+                        41); // Expected an `ol.style.Style` or an array of `ol.style.Style`
+                    styles = [obj];
+                }
+                styleFunction = function() {
+                    return styles;
+                };
+            }
+            return styleFunction;
+        };
+
+
+        /**
+         * @type {Array.<ol.style.Style>}
+         * @private
+         */
+        ol.style.Style.default_ = null;
+
+
+        /**
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @param {number} resolution Resolution.
+         * @return {Array.<ol.style.Style>} Style.
+         */
+        ol.style.Style.defaultFunction = function(feature, resolution) {
+            // We don't use an immediately-invoked function
+            // and a closure so we don't get an error at script evaluation time in
+            // browsers that do not support Canvas. (ol.style.Circle does
+            // canvas.getContext('2d') at construction time, which will cause an.error
+            // in such browsers.)
+            if (!ol.style.Style.default_) {
+                var fill = new ol.style.Fill({
+                    color: 'rgba(255,255,255,0.4)'
+                });
+                var stroke = new ol.style.Stroke({
+                    color: '#3399CC',
+                    width: 1.25
+                });
+                ol.style.Style.default_ = [
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                            fill: fill,
+                            stroke: stroke,
+                            radius: 5
+                        }),
+                        fill: fill,
+                        stroke: stroke
+                    })
+                ];
+            }
+            return ol.style.Style.default_;
+        };
+
+
+        /**
+         * Default styles for editing features.
+         * @return {Object.<ol.geom.GeometryType, Array.<ol.style.Style>>} Styles
+         */
+        ol.style.Style.createDefaultEditing = function() {
+            /** @type {Object.<ol.geom.GeometryType, Array.<ol.style.Style>>} */
+            var styles = {};
+            var white = [255, 255, 255, 1];
+            var blue = [0, 153, 255, 1];
+            var width = 3;
+            styles[ol.geom.GeometryType.POLYGON] = [
+                new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [255, 255, 255, 0.5]
+                    })
+                })
+            ];
+            styles[ol.geom.GeometryType.MULTI_POLYGON] =
+                styles[ol.geom.GeometryType.POLYGON];
+
+            styles[ol.geom.GeometryType.LINE_STRING] = [
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: white,
+                        width: width + 2
+                    })
+                }),
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: blue,
+                        width: width
+                    })
+                })
+            ];
+            styles[ol.geom.GeometryType.MULTI_LINE_STRING] =
+                styles[ol.geom.GeometryType.LINE_STRING];
+
+            styles[ol.geom.GeometryType.CIRCLE] =
+                styles[ol.geom.GeometryType.POLYGON].concat(
+                    styles[ol.geom.GeometryType.LINE_STRING]
+                );
+
+
+            styles[ol.geom.GeometryType.POINT] = [
+                new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: width * 2,
+                        fill: new ol.style.Fill({
+                            color: blue
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: white,
+                            width: width / 2
+                        })
+                    }),
+                    zIndex: Infinity
+                })
+            ];
+            styles[ol.geom.GeometryType.MULTI_POINT] =
+                styles[ol.geom.GeometryType.POINT];
+
+            styles[ol.geom.GeometryType.GEOMETRY_COLLECTION] =
+                styles[ol.geom.GeometryType.POLYGON].concat(
+                    styles[ol.geom.GeometryType.LINE_STRING],
+                    styles[ol.geom.GeometryType.POINT]
+                );
+
+            return styles;
+        };
+
+
+        /**
+         * Function that is called with a feature and returns its default geometry.
+         * @param {ol.Feature|ol.render.Feature} feature Feature to get the geometry
+         *     for.
+         * @return {ol.geom.Geometry|ol.render.Feature|undefined} Geometry to render.
+         */
+        ol.style.Style.defaultGeometryFunction = function(feature) {
+            return feature.getGeometry();
+        };
+
+
+        ol.ext = {};
+        ol.ext.rbush = function() {};
+
+        (function() {(function (exports) {
+
+            var quickselect_1 = quickselect;
+            var default_1 = quickselect;
+            function quickselect(arr, k, left, right, compare) {
+                quickselectStep(arr, k, left || 0, right || (arr.length - 1), compare || defaultCompare);
+            }
+            function quickselectStep(arr, k, left, right, compare) {
+                while (right > left) {
+                    if (right - left > 600) {
+                        var n = right - left + 1;
+                        var m = k - left + 1;
+                        var z = Math.log(n);
+                        var s = 0.5 * Math.exp(2 * z / 3);
+                        var sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
+                        var newLeft = Math.max(left, Math.floor(k - m * s / n + sd));
+                        var newRight = Math.min(right, Math.floor(k + (n - m) * s / n + sd));
+                        quickselectStep(arr, k, newLeft, newRight, compare);
+                    }
+                    var t = arr[k];
+                    var i = left;
+                    var j = right;
+                    swap(arr, left, k);
+                    if (compare(arr[right], t) > 0) swap(arr, left, right);
+                    while (i < j) {
+                        swap(arr, i, j);
+                        i++;
+                        j--;
+                        while (compare(arr[i], t) < 0) i++;
+                        while (compare(arr[j], t) > 0) j--;
+                    }
+                    if (compare(arr[left], t) === 0) swap(arr, left, j);
+                    else {
+                        j++;
+                        swap(arr, j, right);
+                    }
+                    if (j <= k) left = j + 1;
+                    if (k <= j) right = j - 1;
+                }
+            }
+            function swap(arr, i, j) {
+                var tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+            function defaultCompare(a, b) {
+                return a < b ? -1 : a > b ? 1 : 0;
+            }
+            quickselect_1.default = default_1;
+
+            var rbush_1 = rbush;
+            function rbush(maxEntries, format) {
+                if (!(this instanceof rbush)) return new rbush(maxEntries, format);
+                this._maxEntries = Math.max(4, maxEntries || 9);
+                this._minEntries = Math.max(2, Math.ceil(this._maxEntries * 0.4));
+                if (format) {
+                    this._initFormat(format);
+                }
+                this.clear();
+            }
+            rbush.prototype = {
+                all: function () {
+                    return this._all(this.data, []);
+                },
+                search: function (bbox) {
+                    var node = this.data,
+                        result = [],
+                        toBBox = this.toBBox;
+                    if (!intersects(bbox, node)) return result;
+                    var nodesToSearch = [],
+                        i, len, child, childBBox;
+                    while (node) {
+                        for (i = 0, len = node.children.length; i < len; i++) {
+                            child = node.children[i];
+                            childBBox = node.leaf ? toBBox(child) : child;
+                            if (intersects(bbox, childBBox)) {
+                                if (node.leaf) result.push(child);
+                                else if (contains(bbox, childBBox)) this._all(child, result);
+                                else nodesToSearch.push(child);
+                            }
+                        }
+                        node = nodesToSearch.pop();
+                    }
+                    return result;
+                },
+                collides: function (bbox) {
+                    var node = this.data,
+                        toBBox = this.toBBox;
+                    if (!intersects(bbox, node)) return false;
+                    var nodesToSearch = [],
+                        i, len, child, childBBox;
+                    while (node) {
+                        for (i = 0, len = node.children.length; i < len; i++) {
+                            child = node.children[i];
+                            childBBox = node.leaf ? toBBox(child) : child;
+                            if (intersects(bbox, childBBox)) {
+                                if (node.leaf || contains(bbox, childBBox)) return true;
+                                nodesToSearch.push(child);
+                            }
+                        }
+                        node = nodesToSearch.pop();
+                    }
+                    return false;
+                },
+                load: function (data) {
+                    if (!(data && data.length)) return this;
+                    if (data.length < this._minEntries) {
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            this.insert(data[i]);
+                        }
+                        return this;
+                    }
+                    var node = this._build(data.slice(), 0, data.length - 1, 0);
+                    if (!this.data.children.length) {
+                        this.data = node;
+                    } else if (this.data.height === node.height) {
+                        this._splitRoot(this.data, node);
+                    } else {
+                        if (this.data.height < node.height) {
+                            var tmpNode = this.data;
+                            this.data = node;
+                            node = tmpNode;
+                        }
+                        this._insert(node, this.data.height - node.height - 1, true);
+                    }
+                    return this;
+                },
+                insert: function (item) {
+                    if (item) this._insert(item, this.data.height - 1);
+                    return this;
+                },
+                clear: function () {
+                    this.data = createNode([]);
+                    return this;
+                },
+                remove: function (item, equalsFn) {
+                    if (!item) return this;
+                    var node = this.data,
+                        bbox = this.toBBox(item),
+                        path = [],
+                        indexes = [],
+                        i, parent, index, goingUp;
+                    while (node || path.length) {
+                        if (!node) {
+                            node = path.pop();
+                            parent = path[path.length - 1];
+                            i = indexes.pop();
+                            goingUp = true;
+                        }
+                        if (node.leaf) {
+                            index = findItem(item, node.children, equalsFn);
+                            if (index !== -1) {
+                                node.children.splice(index, 1);
+                                path.push(node);
+                                this._condense(path);
+                                return this;
+                            }
+                        }
+                        if (!goingUp && !node.leaf && contains(node, bbox)) {
+                            path.push(node);
+                            indexes.push(i);
+                            i = 0;
+                            parent = node;
+                            node = node.children[0];
+                        } else if (parent) {
+                            i++;
+                            node = parent.children[i];
+                            goingUp = false;
+                        } else node = null;
+                    }
+                    return this;
+                },
+                toBBox: function (item) { return item; },
+                compareMinX: compareNodeMinX,
+                compareMinY: compareNodeMinY,
+                toJSON: function () { return this.data; },
+                fromJSON: function (data) {
+                    this.data = data;
+                    return this;
+                },
+                _all: function (node, result) {
+                    var nodesToSearch = [];
+                    while (node) {
+                        if (node.leaf) result.push.apply(result, node.children);
+                        else nodesToSearch.push.apply(nodesToSearch, node.children);
+                        node = nodesToSearch.pop();
+                    }
+                    return result;
+                },
+                _build: function (items, left, right, height) {
+                    var N = right - left + 1,
+                        M = this._maxEntries,
+                        node;
+                    if (N <= M) {
+                        node = createNode(items.slice(left, right + 1));
+                        calcBBox(node, this.toBBox);
+                        return node;
+                    }
+                    if (!height) {
+                        height = Math.ceil(Math.log(N) / Math.log(M));
+                        M = Math.ceil(N / Math.pow(M, height - 1));
+                    }
+                    node = createNode([]);
+                    node.leaf = false;
+                    node.height = height;
+                    var N2 = Math.ceil(N / M),
+                        N1 = N2 * Math.ceil(Math.sqrt(M)),
+                        i, j, right2, right3;
+                    multiSelect(items, left, right, N1, this.compareMinX);
+                    for (i = left; i <= right; i += N1) {
+                        right2 = Math.min(i + N1 - 1, right);
+                        multiSelect(items, i, right2, N2, this.compareMinY);
+                        for (j = i; j <= right2; j += N2) {
+                            right3 = Math.min(j + N2 - 1, right2);
+                            node.children.push(this._build(items, j, right3, height - 1));
+                        }
+                    }
+                    calcBBox(node, this.toBBox);
+                    return node;
+                },
+                _chooseSubtree: function (bbox, node, level, path) {
+                    var i, len, child, targetNode, area, enlargement, minArea, minEnlargement;
+                    while (true) {
+                        path.push(node);
+                        if (node.leaf || path.length - 1 === level) break;
+                        minArea = minEnlargement = Infinity;
+                        for (i = 0, len = node.children.length; i < len; i++) {
+                            child = node.children[i];
+                            area = bboxArea(child);
+                            enlargement = enlargedArea(bbox, child) - area;
+                            if (enlargement < minEnlargement) {
+                                minEnlargement = enlargement;
+                                minArea = area < minArea ? area : minArea;
+                                targetNode = child;
+                            } else if (enlargement === minEnlargement) {
+                                if (area < minArea) {
+                                    minArea = area;
+                                    targetNode = child;
+                                }
+                            }
+                        }
+                        node = targetNode || node.children[0];
+                    }
+                    return node;
+                },
+                _insert: function (item, level, isNode) {
+                    var toBBox = this.toBBox,
+                        bbox = isNode ? item : toBBox(item),
+                        insertPath = [];
+                    var node = this._chooseSubtree(bbox, this.data, level, insertPath);
+                    node.children.push(item);
+                    extend(node, bbox);
+                    while (level >= 0) {
+                        if (insertPath[level].children.length > this._maxEntries) {
+                            this._split(insertPath, level);
+                            level--;
+                        } else break;
+                    }
+                    this._adjustParentBBoxes(bbox, insertPath, level);
+                },
+                _split: function (insertPath, level) {
+                    var node = insertPath[level],
+                        M = node.children.length,
+                        m = this._minEntries;
+                    this._chooseSplitAxis(node, m, M);
+                    var splitIndex = this._chooseSplitIndex(node, m, M);
+                    var newNode = createNode(node.children.splice(splitIndex, node.children.length - splitIndex));
+                    newNode.height = node.height;
+                    newNode.leaf = node.leaf;
+                    calcBBox(node, this.toBBox);
+                    calcBBox(newNode, this.toBBox);
+                    if (level) insertPath[level - 1].children.push(newNode);
+                    else this._splitRoot(node, newNode);
+                },
+                _splitRoot: function (node, newNode) {
+                    this.data = createNode([node, newNode]);
+                    this.data.height = node.height + 1;
+                    this.data.leaf = false;
+                    calcBBox(this.data, this.toBBox);
+                },
+                _chooseSplitIndex: function (node, m, M) {
+                    var i, bbox1, bbox2, overlap, area, minOverlap, minArea, index;
+                    minOverlap = minArea = Infinity;
+                    for (i = m; i <= M - m; i++) {
+                        bbox1 = distBBox(node, 0, i, this.toBBox);
+                        bbox2 = distBBox(node, i, M, this.toBBox);
+                        overlap = intersectionArea(bbox1, bbox2);
+                        area = bboxArea(bbox1) + bboxArea(bbox2);
+                        if (overlap < minOverlap) {
+                            minOverlap = overlap;
+                            index = i;
+                            minArea = area < minArea ? area : minArea;
+                        } else if (overlap === minOverlap) {
+                            if (area < minArea) {
+                                minArea = area;
+                                index = i;
+                            }
+                        }
+                    }
+                    return index;
+                },
+                _chooseSplitAxis: function (node, m, M) {
+                    var compareMinX = node.leaf ? this.compareMinX : compareNodeMinX,
+                        compareMinY = node.leaf ? this.compareMinY : compareNodeMinY,
+                        xMargin = this._allDistMargin(node, m, M, compareMinX),
+                        yMargin = this._allDistMargin(node, m, M, compareMinY);
+                    if (xMargin < yMargin) node.children.sort(compareMinX);
+                },
+                _allDistMargin: function (node, m, M, compare) {
+                    node.children.sort(compare);
+                    var toBBox = this.toBBox,
+                        leftBBox = distBBox(node, 0, m, toBBox),
+                        rightBBox = distBBox(node, M - m, M, toBBox),
+                        margin = bboxMargin(leftBBox) + bboxMargin(rightBBox),
+                        i, child;
+                    for (i = m; i < M - m; i++) {
+                        child = node.children[i];
+                        extend(leftBBox, node.leaf ? toBBox(child) : child);
+                        margin += bboxMargin(leftBBox);
+                    }
+                    for (i = M - m - 1; i >= m; i--) {
+                        child = node.children[i];
+                        extend(rightBBox, node.leaf ? toBBox(child) : child);
+                        margin += bboxMargin(rightBBox);
+                    }
+                    return margin;
+                },
+                _adjustParentBBoxes: function (bbox, path, level) {
+                    for (var i = level; i >= 0; i--) {
+                        extend(path[i], bbox);
+                    }
+                },
+                _condense: function (path) {
+                    for (var i = path.length - 1, siblings; i >= 0; i--) {
+                        if (path[i].children.length === 0) {
+                            if (i > 0) {
+                                siblings = path[i - 1].children;
+                                siblings.splice(siblings.indexOf(path[i]), 1);
+                            } else this.clear();
+                        } else calcBBox(path[i], this.toBBox);
+                    }
+                },
+                _initFormat: function (format) {
+                    var compareArr = ['return a', ' - b', ';'];
+                    this.compareMinX = new Function('a', 'b', compareArr.join(format[0]));
+                    this.compareMinY = new Function('a', 'b', compareArr.join(format[1]));
+                    this.toBBox = new Function('a',
+                        'return {minX: a' + format[0] +
+                            ', minY: a' + format[1] +
+                            ', maxX: a' + format[2] +
+                            ', maxY: a' + format[3] + '};');
+                }
+            };
+            function findItem(item, items, equalsFn) {
+                if (!equalsFn) return items.indexOf(item);
+                for (var i = 0; i < items.length; i++) {
+                    if (equalsFn(item, items[i])) return i;
+                }
+                return -1;
+            }
+            function calcBBox(node, toBBox) {
+                distBBox(node, 0, node.children.length, toBBox, node);
+            }
+            function distBBox(node, k, p, toBBox, destNode) {
+                if (!destNode) destNode = createNode(null);
+                destNode.minX = Infinity;
+                destNode.minY = Infinity;
+                destNode.maxX = -Infinity;
+                destNode.maxY = -Infinity;
+                for (var i = k, child; i < p; i++) {
+                    child = node.children[i];
+                    extend(destNode, node.leaf ? toBBox(child) : child);
+                }
+                return destNode;
+            }
+            function extend(a, b) {
+                a.minX = Math.min(a.minX, b.minX);
+                a.minY = Math.min(a.minY, b.minY);
+                a.maxX = Math.max(a.maxX, b.maxX);
+                a.maxY = Math.max(a.maxY, b.maxY);
+                return a;
+            }
+            function compareNodeMinX(a, b) { return a.minX - b.minX; }
+            function compareNodeMinY(a, b) { return a.minY - b.minY; }
+            function bboxArea(a)   { return (a.maxX - a.minX) * (a.maxY - a.minY); }
+            function bboxMargin(a) { return (a.maxX - a.minX) + (a.maxY - a.minY); }
+            function enlargedArea(a, b) {
+                return (Math.max(b.maxX, a.maxX) - Math.min(b.minX, a.minX)) *
+                    (Math.max(b.maxY, a.maxY) - Math.min(b.minY, a.minY));
+            }
+            function intersectionArea(a, b) {
+                var minX = Math.max(a.minX, b.minX),
+                    minY = Math.max(a.minY, b.minY),
+                    maxX = Math.min(a.maxX, b.maxX),
+                    maxY = Math.min(a.maxY, b.maxY);
+                return Math.max(0, maxX - minX) *
+                    Math.max(0, maxY - minY);
+            }
+            function contains(a, b) {
+                return a.minX <= b.minX &&
+                    a.minY <= b.minY &&
+                    b.maxX <= a.maxX &&
+                    b.maxY <= a.maxY;
+            }
+            function intersects(a, b) {
+                return b.minX <= a.maxX &&
+                    b.minY <= a.maxY &&
+                    b.maxX >= a.minX &&
+                    b.maxY >= a.minY;
+            }
+            function createNode(children) {
+                return {
+                    children: children,
+                    height: 1,
+                    leaf: true,
+                    minX: Infinity,
+                    minY: Infinity,
+                    maxX: -Infinity,
+                    maxY: -Infinity
+                };
+            }
+            function multiSelect(arr, left, right, n, compare) {
+                var stack = [left, right],
+                    mid;
+                while (stack.length) {
+                    right = stack.pop();
+                    left = stack.pop();
+                    if (right - left <= n) continue;
+                    mid = left + Math.ceil((right - left) / n / 2) * n;
+                    quickselect_1(arr, mid, left, right, compare);
+                    stack.push(left, mid, mid, right);
+                }
+            }
+
+            exports['default'] = rbush_1;
+
+        }((this.rbush = this.rbush || {})));}).call(ol.ext);
+        ol.ext.rbush = ol.ext.rbush.default;
+
+        ol.render = {};
+
+        /**
+         * Context for drawing geometries.  A vector context is available on render
+         * events and does not need to be constructed directly.
+         * @constructor
+         * @abstract
+         * @struct
+         * @api
+         */
+        ol.render.VectorContext = function() {
+        };
+
+        ol.render.VectorContext.prototype.drawCustom = function(geometry, feature, renderer) {};
+        ol.render.VectorContext.prototype.drawGeometry = function(geometry) {};
+        ol.render.VectorContext.prototype.setStyle = function(style) {};
+        ol.render.VectorContext.prototype.drawCircle = function(circleGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawFeature = function(feature, style) {};
+        ol.render.VectorContext.prototype.drawGeometryCollection = function(geometryCollectionGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawLineString = function(lineStringGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawMultiLineString = function(multiLineStringGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawMultiPoint = function(multiPointGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawMultiPolygon = function(multiPolygonGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawPoint = function(pointGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawPolygon = function(polygonGeometry, feature) {};
+        ol.render.VectorContext.prototype.drawText = function(geometry, feature) {};
+        ol.render.VectorContext.prototype.setFillStrokeStyle = function(fillStyle, strokeStyle) {};
+        ol.render.VectorContext.prototype.setImageStyle = function(imageStyle, opt_declutterGroup) {};
+        ol.render.VectorContext.prototype.setTextStyle = function(textStyle, opt_declutterGroup) {};
+
+        ol.render.ReplayGroup = {};
+
+        ol.render.ReplayGroup = function() {};
+
+        ol.render.ReplayGroup.prototype.getReplay = function(zIndex, replayType) {};
+
+        ol.render.ReplayGroup.prototype.isEmpty = function() {};
+
+        ol.render.ReplayType = {
+            CIRCLE: 'Circle',
+            DEFAULT: 'Default',
+            IMAGE: 'Image',
+            LINE_STRING: 'LineString',
+            POLYGON: 'Polygon',
+            TEXT: 'Text'
+        };
+
+        ol.geom.flat.length = {};
+
+        ol.geom.flat.length.lineString = function(flatCoordinates, offset, end, stride) {
+            var x1 = flatCoordinates[offset];
+            var y1 = flatCoordinates[offset + 1];
+            var length = 0;
+            var i;
+            for (i = offset + stride; i < end; i += stride) {
+                var x2 = flatCoordinates[i];
+                var y2 = flatCoordinates[i + 1];
+                length += Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+                x1 = x2;
+                y1 = y2;
+            }
+            return length;
+        };
+
+        ol.geom.flat.length.linearRing = function(flatCoordinates, offset, end, stride) {
+            var perimeter =
+                ol.geom.flat.length.lineString(flatCoordinates, offset, end, stride);
+            var dx = flatCoordinates[end - stride] - flatCoordinates[offset];
+            var dy = flatCoordinates[end - stride + 1] - flatCoordinates[offset + 1];
+            perimeter += Math.sqrt(dx * dx + dy * dy);
+            return perimeter;
+        };
+
+        ol.geom.flat.textpath = {};
+
+        ol.geom.flat.textpath.lineString = function(
+            flatCoordinates, offset, end, stride, text, measure, startM, maxAngle) {
+            var result = [];
+
+            // Keep text upright
+            var reverse = flatCoordinates[offset] > flatCoordinates[end - stride];
+
+            var numChars = text.length;
+
+            var x1 = flatCoordinates[offset];
+            var y1 = flatCoordinates[offset + 1];
+            offset += stride;
+            var x2 = flatCoordinates[offset];
+            var y2 = flatCoordinates[offset + 1];
+            var segmentM = 0;
+            var segmentLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+            var chunk = '';
+            var chunkLength = 0;
+            var data, index, previousAngle;
+            for (var i = 0; i < numChars; ++i) {
+                index = reverse ? numChars - i - 1 : i;
+                var char = text.charAt(index);
+                chunk = reverse ? char + chunk : chunk + char;
+                var charLength = measure(chunk) - chunkLength;
+                chunkLength += charLength;
+                var charM = startM + charLength / 2;
+                while (offset < end - stride && segmentM + segmentLength < charM) {
+                    x1 = x2;
+                    y1 = y2;
+                    offset += stride;
+                    x2 = flatCoordinates[offset];
+                    y2 = flatCoordinates[offset + 1];
+                    segmentM += segmentLength;
+                    segmentLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                }
+                var segmentPos = charM - segmentM;
+                var angle = Math.atan2(y2 - y1, x2 - x1);
+                if (reverse) {
+                    angle += angle > 0 ? -Math.PI : Math.PI;
+                }
+                if (previousAngle !== undefined) {
+                    var delta = angle - previousAngle;
+                    delta += (delta > Math.PI) ? -2 * Math.PI : (delta < -Math.PI) ? 2 * Math.PI : 0;
+                    if (Math.abs(delta) > maxAngle) {
+                        return null;
+                    }
+                }
+                var interpolate = segmentPos / segmentLength;
+                var x = ol.math.lerp(x1, x2, interpolate);
+                var y = ol.math.lerp(y1, y2, interpolate);
+                if (previousAngle == angle) {
+                    if (reverse) {
+                        data[0] = x;
+                        data[1] = y;
+                        data[2] = charLength / 2;
+                    }
+                    data[4] = chunk;
+                } else {
+                    chunk = char;
+                    chunkLength = charLength;
+                    data = [x, y, charLength / 2, angle, chunk];
+                    if (reverse) {
+                        result.unshift(data);
+                    } else {
+                        result.push(data);
+                    }
+                    previousAngle = angle;
+                }
+                startM += charLength;
+            }
+            return result;
+        };
+
+
+        ol.structs.LRUCache = function(opt_highWaterMark) {
+            ol.events.EventTarget.call(this);
+            this.highWaterMark = opt_highWaterMark !== undefined ? opt_highWaterMark : 2048;
+            this.count_ = 0;
+            this.entries_ = {};
+            this.oldest_ = null;
+            this.newest_ = null;
+        };
+
+        ol.inherits(ol.structs.LRUCache, ol.events.EventTarget);
+
+        ol.structs.LRUCache.prototype.canExpireCache = function() {
+            return this.getCount() > this.highWaterMark;
+        };
+
+        ol.structs.LRUCache.prototype.clear = function() {
+            this.count_ = 0;
+            this.entries_ = {};
+            this.oldest_ = null;
+            this.newest_ = null;
+            this.dispatchEvent(ol.events.EventType.CLEAR);
+        };
+
+        ol.structs.LRUCache.prototype.containsKey = function(key) {
+            return this.entries_.hasOwnProperty(key);
+        };
+
+        ol.structs.LRUCache.prototype.forEach = function(f, opt_this) {
+            var entry = this.oldest_;
+            while (entry) {
+                f.call(opt_this, entry.value_, entry.key_, this);
+                entry = entry.newer;
+            }
+        };
+
+        ol.structs.LRUCache.prototype.get = function(key) {
+            var entry = this.entries_[key];
+            ol.asserts.assert(entry !== undefined,
+                15); // Tried to get a value for a key that does not exist in the cache
+            if (entry === this.newest_) {
+                return entry.value_;
+            } else if (entry === this.oldest_) {
+                this.oldest_ = /** @type {ol.LRUCacheEntry} */ (this.oldest_.newer);
+                this.oldest_.older = null;
+            } else {
+                entry.newer.older = entry.older;
+                entry.older.newer = entry.newer;
+            }
+            entry.newer = null;
+            entry.older = this.newest_;
+            this.newest_.newer = entry;
+            this.newest_ = entry;
+            return entry.value_;
+        };
+
+        ol.structs.LRUCache.prototype.remove = function(key) {
+            var entry = this.entries_[key];
+            ol.asserts.assert(entry !== undefined, 15); // Tried to get a value for a key that does not exist in the cache
+            if (entry === this.newest_) {
+                this.newest_ = /** @type {ol.LRUCacheEntry} */ (entry.older);
+                if (this.newest_) {
+                    this.newest_.newer = null;
+                }
+            } else if (entry === this.oldest_) {
+                this.oldest_ = /** @type {ol.LRUCacheEntry} */ (entry.newer);
+                if (this.oldest_) {
+                    this.oldest_.older = null;
+                }
+            } else {
+                entry.newer.older = entry.older;
+                entry.older.newer = entry.newer;
+            }
+            delete this.entries_[key];
+            --this.count_;
+            return entry.value_;
+        };
+
+        ol.structs.LRUCache.prototype.getCount = function() {
+            return this.count_;
+        };
+
+        ol.structs.LRUCache.prototype.getKeys = function() {
+            var keys = new Array(this.count_);
+            var i = 0;
+            var entry;
+            for (entry = this.newest_; entry; entry = entry.older) {
+                keys[i++] = entry.key_;
+            }
+            return keys;
+        };
+
+        ol.structs.LRUCache.prototype.getValues = function() {
+            var values = new Array(this.count_);
+            var i = 0;
+            var entry;
+            for (entry = this.newest_; entry; entry = entry.older) {
+                values[i++] = entry.value_;
+            }
+            return values;
+        };
+
+        ol.structs.LRUCache.prototype.peekLast = function() {
+            return this.oldest_.value_;
+        };
+
+        ol.structs.LRUCache.prototype.peekLastKey = function() {
+            return this.oldest_.key_;
+        };
+
+        ol.structs.LRUCache.prototype.peekFirstKey = function() {
+            return this.newest_.key_;
+        };
+
+        ol.structs.LRUCache.prototype.pop = function() {
+            var entry = this.oldest_;
+            delete this.entries_[entry.key_];
+            if (entry.newer) {
+                entry.newer.older = null;
+            }
+            this.oldest_ = /** @type {ol.LRUCacheEntry} */ (entry.newer);
+            if (!this.oldest_) {
+                this.newest_ = null;
+            }
+            --this.count_;
+            return entry.value_;
+        };
+
+        ol.structs.LRUCache.prototype.replace = function(key, value) {
+            this.get(key);  // update `newest_`
+            this.entries_[key].value_ = value;
+        };
+
+        ol.structs.LRUCache.prototype.set = function(key, value) {
+            ol.asserts.assert(!(key in this.entries_),
+                16); // Tried to set a value for a key that is used already
+            var entry = /** @type {ol.LRUCacheEntry} */ ({
+                key_: key,
+                newer: null,
+                older: this.newest_,
+                value_: value
+            });
+            if (!this.newest_) {
+                this.oldest_ = entry;
+            } else {
+                this.newest_.newer = entry;
+            }
+            this.newest_ = entry;
+            this.entries_[key] = entry;
+            ++this.count_;
+        };
+
+        ol.structs.LRUCache.prototype.prune = function() {
+            while (this.canExpireCache()) {
+                this.pop();
+            }
+        };
+
+        ol.render.canvas = {};
+        ol.render.canvas.defaultFont = '10px sans-serif';
+        ol.render.canvas.defaultFillStyle = [0, 0, 0, 1];
+        ol.render.canvas.defaultLineCap = 'round';
+        ol.render.canvas.defaultLineDash = [];
+        ol.render.canvas.defaultLineDashOffset = 0;
+        ol.render.canvas.defaultLineJoin = 'round';
+        ol.render.canvas.defaultMiterLimit = 10;
+        ol.render.canvas.defaultStrokeStyle = [0, 0, 0, 1];
+        ol.render.canvas.defaultTextAlign = 'center';
+        ol.render.canvas.defaultTextBaseline = 'middle';
+        ol.render.canvas.defaultPadding = [0, 0, 0, 0];
+        ol.render.canvas.defaultLineWidth = 1;
+        ol.render.canvas.labelCache = new ol.structs.LRUCache();
+        ol.render.canvas.checkedFonts_ = {};
+        ol.render.canvas.measureContext_ = null;
+        ol.render.canvas.textHeights_ = {};
+
+        /**
+         * Clears the label cache when a font becomes available.
+         * @param {string} fontSpec CSS font spec.
+         */
+        ol.render.canvas.checkFont = (function() {
+            var retries = 60;
+            var checked = ol.render.canvas.checkedFonts_;
+            var labelCache = ol.render.canvas.labelCache;
+            var font = '32px monospace';
+            var text = 'wmytzilWMYTZIL@#/&?$%10';
+            var interval, referenceWidth;
+
+            function isAvailable(fontFamily) {
+                var context = ol.render.canvas.getMeasureContext();
+                context.font = font;
+                referenceWidth = context.measureText(text).width;
+                var available = true;
+                if (fontFamily != 'monospace') {
+                    context.font = '32px ' + fontFamily + ',monospace';
+                    var width = context.measureText(text).width;
+                    // If width and referenceWidth are the same, then the 'monospace'
+                    // fallback was used instead of the font we wanted, so the font is not
+                    // available.
+                    available = width != referenceWidth;
+                }
+                return available;
+            }
+
+            function check() {
+                var done = true;
+                for (var font in checked) {
+                    if (checked[font] < retries) {
+                        if (isAvailable(font)) {
+                            checked[font] = retries;
+                            ol.obj.clear(ol.render.canvas.textHeights_);
+                            // Make sure that loaded fonts are picked up by Safari
+                            ol.render.canvas.measureContext_ = null;
+                            labelCache.clear();
+                        } else {
+                            ++checked[font];
+                            done = false;
+                        }
+                    }
+                }
+                if (done) {
+                    window.clearInterval(interval);
+                    interval = undefined;
+                }
+            }
+
+            return function(fontSpec) {
+                var fontFamilies = ol.css.getFontFamilies(fontSpec);
+                if (!fontFamilies) {
+                    return;
+                }
+                for (var i = 0, ii = fontFamilies.length; i < ii; ++i) {
+                    var fontFamily = fontFamilies[i];
+                    if (!(fontFamily in checked)) {
+                        checked[fontFamily] = retries;
+                        if (!isAvailable(fontFamily)) {
+                            checked[fontFamily] = 0;
+                            if (interval === undefined) {
+                                interval = window.setInterval(check, 32);
+                            }
+                        }
+                    }
+                }
+            };
+        })();
+
+
+        /**
+         * @return {CanvasRenderingContext2D} Measure context.
+         */
+        ol.render.canvas.getMeasureContext = function() {
+            var context = ol.render.canvas.measureContext_;
+            if (!context) {
+                context = ol.render.canvas.measureContext_ = ol.dom.createCanvasContext2D(1, 1);
+            }
+            return context;
+        };
+
+
+        /**
+         * @param {string} font Font to use for measuring.
+         * @return {ol.Size} Measurement.
+         */
+        ol.render.canvas.measureTextHeight = (function() {
+            var heights = ol.render.canvas.textHeights_;
+            return function(font) {
+                var height = heights[font];
+                if (height == undefined) {
+    //                if (!span) {
+    //                    span = document.createElement('span');
+    //                    span.textContent = 'M';
+    //                    span.style.margin = span.style.padding = '0 !important';
+    //                    span.style.position = 'absolute !important';
+    //                    span.style.left = '-99999px !important';
+    //                }
+    //                span.style.font = font;
+    //                document.body.appendChild(span);
+    //                height = heights[font] = span.offsetHeight;
+    //                document.body.removeChild(span);
+                    height = heights[font] = 19; // FIXME sunyl
+                }
+                return height;
+            };
+        })();
+
+
+        /**
+         * @param {string} font Font.
+         * @param {string} text Text.
+         * @return {number} Width.
+         */
+        ol.render.canvas.measureTextWidth = function(font, text) {
+            var measureContext = ol.render.canvas.getMeasureContext();
+            if (font != measureContext.font) {
+                measureContext.font = font;
+            }
+            return measureContext.measureText(text).width;
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {number} rotation Rotation.
+         * @param {number} offsetX X offset.
+         * @param {number} offsetY Y offset.
+         */
+        ol.render.canvas.rotateAtOffset = function(context, rotation, offsetX, offsetY) {
+            if (rotation !== 0) {
+                context.translate(offsetX, offsetY);
+                context.rotate(rotation);
+                context.translate(-offsetX, -offsetY);
+            }
+        };
+
+
+        ol.render.canvas.resetTransform_ = ol.transform.create();
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform|null} transform Transform.
+         * @param {number} opacity Opacity.
+         * @param {HTMLImageElement|HTMLCanvasElement|HTMLVideoElement} image Image.
+         * @param {number} originX Origin X.
+         * @param {number} originY Origin Y.
+         * @param {number} w Width.
+         * @param {number} h Height.
+         * @param {number} x X.
+         * @param {number} y Y.
+         * @param {number} scale Scale.
+         */
+        ol.render.canvas.drawImage = function(context,
+                                              transform, opacity, image, originX, originY, w, h, x, y, scale) {
+            var alpha;
+            if (opacity != 1) {
+                alpha = context.globalAlpha;
+                context.globalAlpha = alpha * opacity;
+            }
+            if (transform) {
+                context.setTransform.apply(context, transform);
+            }
+
+            context.drawImage(image, originX, originY, w, h, x, y, w * scale, h * scale);
+
+            if (alpha) {
+                context.globalAlpha = alpha;
+            }
+            if (transform) {
+                context.setTransform.apply(context, ol.render.canvas.resetTransform_);
+            }
+        };
+
+
+        /**
+         * @enum {number}
+         */
+        ol.render.canvas.Instruction = {
+            BEGIN_GEOMETRY: 0,
+            BEGIN_PATH: 1,
+            CIRCLE: 2,
+            CLOSE_PATH: 3,
+            CUSTOM: 4,
+            DRAW_CHARS: 5,
+            DRAW_IMAGE: 6,
+            END_GEOMETRY: 7,
+            FILL: 8,
+            MOVE_TO_LINE_TO: 9,
+            SET_FILL_STYLE: 10,
+            SET_STROKE_STYLE: 11,
+            STROKE: 12
+        };
+
+        ol.render.replay = {};
+
+        ol.render.replay.ORDER = [
+            ol.render.ReplayType.POLYGON,
+            ol.render.ReplayType.CIRCLE,
+            ol.render.ReplayType.LINE_STRING,
+            ol.render.ReplayType.IMAGE,
+            ol.render.ReplayType.TEXT,
+            ol.render.ReplayType.DEFAULT
+        ];
+
+        ol.render.replay.TEXT_ALIGN = {};
+        ol.render.replay.TEXT_ALIGN['left'] = 0;
+        ol.render.replay.TEXT_ALIGN['end'] = 0;
+        ol.render.replay.TEXT_ALIGN['center'] = 0.5;
+        ol.render.replay.TEXT_ALIGN['right'] = 1;
+        ol.render.replay.TEXT_ALIGN['start'] = 1;
+        ol.render.replay.TEXT_ALIGN['top'] = 0;
+        ol.render.replay.TEXT_ALIGN['middle'] = 0.5;
+        ol.render.replay.TEXT_ALIGN['hanging'] = 0.2;
+        ol.render.replay.TEXT_ALIGN['alphabetic'] = 0.8;
+        ol.render.replay.TEXT_ALIGN['ideographic'] = 0.8;
+        ol.render.replay.TEXT_ALIGN['bottom'] = 1;
+
+
+        ol.render.canvas.Replay = function(tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree) {
+            ol.render.VectorContext.call(this);
+
+            /**
+             * @type {?}
+             */
+            this.declutterTree = declutterTree;
+
+            /**
+             * @private
+             * @type {ol.Extent}
+             */
+            this.tmpExtent_ = ol.extent.createEmpty();
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.tolerance = tolerance;
+
+            /**
+             * @protected
+             * @const
+             * @type {ol.Extent}
+             */
+            this.maxExtent = maxExtent;
+
+            /**
+             * @protected
+             * @type {boolean}
+             */
+            this.overlaps = overlaps;
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.pixelRatio = pixelRatio;
+
+            /**
+             * @protected
+             * @type {number}
+             */
+            this.maxLineWidth = 0;
+
+            /**
+             * @protected
+             * @const
+             * @type {number}
+             */
+            this.resolution = resolution;
+
+            /**
+             * @private
+             * @type {ol.Coordinate}
+             */
+            this.fillOrigin_;
+
+            /**
+             * @private
+             * @type {Array.<*>}
+             */
+            this.beginGeometryInstruction1_ = null;
+
+            /**
+             * @private
+             * @type {Array.<*>}
+             */
+            this.beginGeometryInstruction2_ = null;
+
+            /**
+             * @private
+             * @type {ol.Extent}
+             */
+            this.bufferedMaxExtent_ = null;
+
+            /**
+             * @protected
+             * @type {Array.<*>}
+             */
+            this.instructions = [];
+
+            /**
+             * @protected
+             * @type {Array.<number>}
+             */
+            this.coordinates = [];
+
+            /**
+             * @private
+             * @type {Object.<number,ol.Coordinate|Array.<ol.Coordinate>|Array.<Array.<ol.Coordinate>>>}
+             */
+            this.coordinateCache_ = {};
+
+            /**
+             * @private
+             * @type {!ol.Transform}
+             */
+            this.renderedTransform_ = ol.transform.create();
+
+            /**
+             * @protected
+             * @type {Array.<*>}
+             */
+            this.hitDetectionInstructions = [];
+
+            /**
+             * @private
+             * @type {Array.<number>}
+             */
+            this.pixelCoordinates_ = null;
+
+            /**
+             * @protected
+             * @type {ol.CanvasFillStrokeState}
+             */
+            this.state = /** @type {ol.CanvasFillStrokeState} */ ({});
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.viewRotation_ = 0;
+
+            /**
+             * @private
+             * @type {!ol.Transform}
+             */
+            this.tmpLocalTransform_ = ol.transform.create();
+
+            /**
+             * @private
+             * @type {!ol.Transform}
+             */
+            this.resetTransform_ = ol.transform.create();
+        };
+        ol.inherits(ol.render.canvas.Replay, ol.render.VectorContext);
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Coordinate} p1 1st point of the background box.
+         * @param {ol.Coordinate} p2 2nd point of the background box.
+         * @param {ol.Coordinate} p3 3rd point of the background box.
+         * @param {ol.Coordinate} p4 4th point of the background box.
+         * @param {Array.<*>} fillInstruction Fill instruction.
+         * @param {Array.<*>} strokeInstruction Stroke instruction.
+         */
+        ol.render.canvas.Replay.prototype.replayTextBackground_ = function(context, p1, p2, p3, p4,
+                                                                           fillInstruction, strokeInstruction) {
+            context.beginPath();
+            context.moveTo.apply(context, p1);
+            context.lineTo.apply(context, p2);
+            context.lineTo.apply(context, p3);
+            context.lineTo.apply(context, p4);
+            context.lineTo.apply(context, p1);
+            if (fillInstruction) {
+                this.fillOrigin_ = /** @type {Array.<number>} */ (fillInstruction[2]);
+                this.fill_(context);
+            }
+            if (strokeInstruction) {
+                this.setStrokeStyle_(context, /** @type {Array.<*>} */ (strokeInstruction));
+                context.stroke();
+            }
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {number} x X.
+         * @param {number} y Y.
+         * @param {HTMLImageElement|HTMLCanvasElement|HTMLVideoElement} image Image.
+         * @param {number} anchorX Anchor X.
+         * @param {number} anchorY Anchor Y.
+         * @param {ol.DeclutterGroup} declutterGroup Declutter group.
+         * @param {number} height Height.
+         * @param {number} opacity Opacity.
+         * @param {number} originX Origin X.
+         * @param {number} originY Origin Y.
+         * @param {number} rotation Rotation.
+         * @param {number} scale Scale.
+         * @param {boolean} snapToPixel Snap to pixel.
+         * @param {number} width Width.
+         * @param {Array.<number>} padding Padding.
+         * @param {Array.<*>} fillInstruction Fill instruction.
+         * @param {Array.<*>} strokeInstruction Stroke instruction.
+         */
+        ol.render.canvas.Replay.prototype.replayImage_ = function(context, x, y, image,
+                                                                  anchorX, anchorY, declutterGroup, height, opacity, originX, originY,
+                                                                  rotation, scale, snapToPixel, width, padding, fillInstruction, strokeInstruction) {
+            var fillStroke = fillInstruction || strokeInstruction;
+            var localTransform = this.tmpLocalTransform_;
+            anchorX *= scale;
+            anchorY *= scale;
+            x -= anchorX;
+            y -= anchorY;
+            if (snapToPixel) {
+                x = Math.round(x);
+                y = Math.round(y);
+            }
+
+            var w = (width + originX > image.width) ? image.width - originX : width;
+            var h = (height + originY > image.height) ? image.height - originY : height;
+            var box = this.tmpExtent_;
+            var boxW = padding[3] + w * scale + padding[1];
+            var boxH = padding[0] + h * scale + padding[2];
+            var boxX = x - padding[3];
+            var boxY = y - padding[0];
+
+            /** @type {ol.Coordinate} */
+            var p1;
+            /** @type {ol.Coordinate} */
+            var p2;
+            /** @type {ol.Coordinate} */
+            var p3;
+            /** @type {ol.Coordinate} */
+            var p4;
+            if (fillStroke || rotation !== 0) {
+                p1 = [boxX, boxY];
+                p2 = [boxX + boxW, boxY];
+                p3 = [boxX + boxW, boxY + boxH];
+                p4 = [boxX, boxY + boxH];
+            }
+
+            var transform = null;
+            if (rotation !== 0) {
+                var centerX = x + anchorX;
+                var centerY = y + anchorY;
+                transform = ol.transform.compose(localTransform,
+                    centerX, centerY, 1, 1, rotation, -centerX, -centerY);
+
+                ol.extent.createOrUpdateEmpty(box);
+                ol.extent.extendCoordinate(box, ol.transform.apply(localTransform, p1));
+                ol.extent.extendCoordinate(box, ol.transform.apply(localTransform, p2));
+                ol.extent.extendCoordinate(box, ol.transform.apply(localTransform, p3));
+                ol.extent.extendCoordinate(box, ol.transform.apply(localTransform, p4));
+            } else {
+                ol.extent.createOrUpdate(boxX, boxY, boxX + boxW, boxY + boxH, box);
+            }
+            var canvas = context.canvas;
+            var intersects = box[0] <= canvas.width && box[2] >= 0 && box[1] <= canvas.height && box[3] >= 0;
+            if (declutterGroup) {
+                if (!intersects && declutterGroup[4] == 1) {
+                    return;
+                }
+                ol.extent.extend(declutterGroup, box);
+                var declutterArgs = intersects ?
+                    [context, transform ? transform.slice(0) : null, opacity, image, originX, originY, w, h, x, y, scale] :
+                    null;
+                if (declutterArgs && fillStroke) {
+                    declutterArgs.push(fillInstruction, strokeInstruction, p1, p2, p3, p4);
+                }
+                declutterGroup.push(declutterArgs);
+            } else if (intersects) {
+                if (fillStroke) {
+                    this.replayTextBackground_(context, p1, p2, p3, p4,
+                        /** @type {Array.<*>} */ (fillInstruction),
+                        /** @type {Array.<*>} */ (strokeInstruction));
+                }
+                ol.render.canvas.drawImage(context, transform, opacity, image, originX, originY, w, h, x, y, scale);
+            }
+        };
+
+
+        /**
+         * @protected
+         * @param {Array.<number>} dashArray Dash array.
+         * @return {Array.<number>} Dash array with pixel ratio applied
+         */
+        ol.render.canvas.Replay.prototype.applyPixelRatio = function(dashArray) {
+            var pixelRatio = this.pixelRatio;
+            return pixelRatio == 1 ? dashArray : dashArray.map(function(dash) {
+                return dash * pixelRatio;
+            });
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @param {boolean} closed Last input coordinate equals first.
+         * @param {boolean} skipFirst Skip first coordinate.
+         * @protected
+         * @return {number} My end.
+         */
+        ol.render.canvas.Replay.prototype.appendFlatCoordinates = function(flatCoordinates, offset, end, stride, closed, skipFirst) {
+
+            var myEnd = this.coordinates.length;
+            var extent = this.getBufferedMaxExtent();
+            if (skipFirst) {
+                offset += stride;
+            }
+            var lastCoord = [flatCoordinates[offset], flatCoordinates[offset + 1]];
+            var nextCoord = [NaN, NaN];
+            var skipped = true;
+
+            var i, lastRel, nextRel;
+            for (i = offset + stride; i < end; i += stride) {
+                nextCoord[0] = flatCoordinates[i];
+                nextCoord[1] = flatCoordinates[i + 1];
+                nextRel = ol.extent.coordinateRelationship(extent, nextCoord);
+                if (nextRel !== lastRel) {
+                    if (skipped) {
+                        this.coordinates[myEnd++] = lastCoord[0];
+                        this.coordinates[myEnd++] = lastCoord[1];
+                    }
+                    this.coordinates[myEnd++] = nextCoord[0];
+                    this.coordinates[myEnd++] = nextCoord[1];
+                    skipped = false;
+                } else if (nextRel === ol.extent.Relationship.INTERSECTING) {
+                    this.coordinates[myEnd++] = nextCoord[0];
+                    this.coordinates[myEnd++] = nextCoord[1];
+                    skipped = false;
+                } else {
+                    skipped = true;
+                }
+                lastCoord[0] = nextCoord[0];
+                lastCoord[1] = nextCoord[1];
+                lastRel = nextRel;
+            }
+
+            // Last coordinate equals first or only one point to append:
+            if ((closed && skipped) || i === offset + stride) {
+                this.coordinates[myEnd++] = lastCoord[0];
+                this.coordinates[myEnd++] = lastCoord[1];
+            }
+            return myEnd;
+        };
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Ends.
+         * @param {number} stride Stride.
+         * @param {Array.<number>} replayEnds Replay ends.
+         * @return {number} Offset.
+         */
+        ol.render.canvas.Replay.prototype.drawCustomCoordinates_ = function(flatCoordinates, offset, ends, stride, replayEnds) {
+            for (var i = 0, ii = ends.length; i < ii; ++i) {
+                var end = ends[i];
+                var replayEnd = this.appendFlatCoordinates(flatCoordinates, offset, end, stride, false, false);
+                replayEnds.push(replayEnd);
+                offset = end;
+            }
+            return offset;
+        };
+
+
+        /**
+         * @inheritDoc.
+         */
+        ol.render.canvas.Replay.prototype.drawCustom = function(geometry, feature, renderer) {
+            this.beginGeometry(geometry, feature);
+            var type = geometry.getType();
+            var stride = geometry.getStride();
+            var replayBegin = this.coordinates.length;
+            var flatCoordinates, replayEnd, replayEnds, replayEndss;
+            var offset;
+            if (type == ol.geom.GeometryType.MULTI_POLYGON) {
+                geometry = /** @type {ol.geom.MultiPolygon} */ (geometry);
+                flatCoordinates = geometry.getOrientedFlatCoordinates();
+                replayEndss = [];
+                var endss = geometry.getEndss();
+                offset = 0;
+                for (var i = 0, ii = endss.length; i < ii; ++i) {
+                    var myEnds = [];
+                    offset = this.drawCustomCoordinates_(flatCoordinates, offset, endss[i], stride, myEnds);
+                    replayEndss.push(myEnds);
+                }
+                this.instructions.push([ol.render.canvas.Instruction.CUSTOM,
+                    replayBegin, replayEndss, geometry, renderer, ol.geom.flat.inflate.coordinatesss]);
+            } else if (type == ol.geom.GeometryType.POLYGON || type == ol.geom.GeometryType.MULTI_LINE_STRING) {
+                replayEnds = [];
+                flatCoordinates = (type == ol.geom.GeometryType.POLYGON) ?
+                /** @type {ol.geom.Polygon} */ (geometry).getOrientedFlatCoordinates() :
+                    geometry.getFlatCoordinates();
+                offset = this.drawCustomCoordinates_(flatCoordinates, 0,
+                    /** @type {ol.geom.Polygon|ol.geom.MultiLineString} */ (geometry).getEnds(),
+                    stride, replayEnds);
+                this.instructions.push([ol.render.canvas.Instruction.CUSTOM,
+                    replayBegin, replayEnds, geometry, renderer, ol.geom.flat.inflate.coordinatess]);
+            } else if (type == ol.geom.GeometryType.LINE_STRING || type == ol.geom.GeometryType.MULTI_POINT) {
+                flatCoordinates = geometry.getFlatCoordinates();
+                replayEnd = this.appendFlatCoordinates(
+                    flatCoordinates, 0, flatCoordinates.length, stride, false, false);
+                this.instructions.push([ol.render.canvas.Instruction.CUSTOM,
+                    replayBegin, replayEnd, geometry, renderer, ol.geom.flat.inflate.coordinates]);
+            } else if (type == ol.geom.GeometryType.POINT) {
+                flatCoordinates = geometry.getFlatCoordinates();
+                this.coordinates.push(flatCoordinates[0], flatCoordinates[1]);
+                replayEnd = this.coordinates.length;
+                this.instructions.push([ol.render.canvas.Instruction.CUSTOM,
+                    replayBegin, replayEnd, geometry, renderer]);
+            }
+            this.endGeometry(geometry, feature);
+        };
+
+
+        /**
+         * @protected
+         * @param {ol.geom.Geometry|ol.render.Feature} geometry Geometry.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         */
+        ol.render.canvas.Replay.prototype.beginGeometry = function(geometry, feature) {
+            this.beginGeometryInstruction1_ =
+                [ol.render.canvas.Instruction.BEGIN_GEOMETRY, feature, 0];
+            this.instructions.push(this.beginGeometryInstruction1_);
+            this.beginGeometryInstruction2_ =
+                [ol.render.canvas.Instruction.BEGIN_GEOMETRY, feature, 0];
+            this.hitDetectionInstructions.push(this.beginGeometryInstruction2_);
+        };
+
+
+        /**
+         * @private
+         * @param {CanvasRenderingContext2D} context Context.
+         */
+        ol.render.canvas.Replay.prototype.fill_ = function(context) {
+            if (this.fillOrigin_) {
+                var origin = ol.transform.apply(this.renderedTransform_, this.fillOrigin_.slice());
+                context.translate(origin[0], origin[1]);
+                context.rotate(this.viewRotation_);
+            }
+            context.fill();
+            if (this.fillOrigin_) {
+                context.setTransform.apply(context, ol.render.canvas.resetTransform_);
+            }
+        };
+
+
+        /**
+         * @private
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {Array.<*>} instruction Instruction.
+         */
+        ol.render.canvas.Replay.prototype.setStrokeStyle_ = function(context, instruction) {
+            context.strokeStyle = /** @type {ol.ColorLike} */ (instruction[1]);
+            context.lineWidth = /** @type {number} */ (instruction[2]);
+            context.lineCap = /** @type {string} */ (instruction[3]);
+            context.lineJoin = /** @type {string} */ (instruction[4]);
+            context.miterLimit = /** @type {number} */ (instruction[5]);
+            if (ol.has.CANVAS_LINE_DASH) {
+                context.lineDashOffset = /** @type {number} */ (instruction[7]);
+                context.setLineDash(/** @type {Array.<number>} */ (instruction[6]));
+            }
+        };
+
+
+        /**
+         * @param {ol.DeclutterGroup} declutterGroup Declutter group.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         */
+        ol.render.canvas.Replay.prototype.renderDeclutter_ = function(declutterGroup, feature) {
+            if (declutterGroup && declutterGroup.length > 5) {
+                var groupCount = declutterGroup[4];
+                if (groupCount == 1 || groupCount == declutterGroup.length - 5) {
+                    /** @type {ol.RBushEntry} */
+                    var box = {
+                        minX: /** @type {number} */ (declutterGroup[0]),
+                        minY: /** @type {number} */ (declutterGroup[1]),
+                        maxX: /** @type {number} */ (declutterGroup[2]),
+                        maxY: /** @type {number} */ (declutterGroup[3]),
+                        value: feature
+                    };
+                    if (!this.declutterTree.collides(box)) {
+                        this.declutterTree.insert(box);
+                        var drawImage = ol.render.canvas.drawImage;
+                        for (var j = 5, jj = declutterGroup.length; j < jj; ++j) {
+                            var declutterData = /** @type {Array} */ (declutterGroup[j]);
+                            if (declutterData) {
+                                if (declutterData.length > 11) {
+                                    this.replayTextBackground_(declutterData[0],
+                                        declutterData[13], declutterData[14], declutterData[15], declutterData[16],
+                                        declutterData[11], declutterData[12]);
+                                }
+                                drawImage.apply(undefined, declutterData);
+                            }
+                        }
+                    }
+                    declutterGroup.length = 5;
+                    ol.extent.createOrUpdateEmpty(declutterGroup);
+                }
+            }
+        };
+
+
+        /**
+         * @private
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform} transform Transform.
+         * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
+         *     to skip.
+         * @param {Array.<*>} instructions Instructions array.
+         * @param {function((ol.Feature|ol.render.Feature)): T|undefined}
+         *     featureCallback Feature callback.
+         * @param {ol.Extent=} opt_hitExtent Only check features that intersect this
+         *     extent.
+         * @return {T|undefined} Callback result.
+         * @template T
+         */
+        ol.render.canvas.Replay.prototype.replay_ = function(
+            context, transform, skippedFeaturesHash,
+            instructions, featureCallback, opt_hitExtent) {
+            /** @type {Array.<number>} */
+            var pixelCoordinates;
+            if (this.pixelCoordinates_ && ol.array.equals(transform, this.renderedTransform_)) {
+                pixelCoordinates = this.pixelCoordinates_;
+            } else {
+                if (!this.pixelCoordinates_) {
+                    this.pixelCoordinates_ = [];
+                }
+                pixelCoordinates = ol.geom.flat.transform.transform2D(
+                    this.coordinates, 0, this.coordinates.length, 2,
+                    transform, this.pixelCoordinates_);
+                ol.transform.setFromArray(this.renderedTransform_, transform);
+            }
+            var skipFeatures = !ol.obj.isEmpty(skippedFeaturesHash);
+            var i = 0; // instruction index
+            var ii = instructions.length; // end of instructions
+            var d = 0; // data index
+            var dd; // end of per-instruction data
+            var anchorX, anchorY, prevX, prevY, roundX, roundY, declutterGroup, image;
+            var pendingFill = 0;
+            var pendingStroke = 0;
+            var lastFillInstruction = null;
+            var lastStrokeInstruction = null;
+            var coordinateCache = this.coordinateCache_;
+            var viewRotation = this.viewRotation_;
+
+            var state = /** @type {olx.render.State} */ ({
+                context: context,
+                pixelRatio: this.pixelRatio,
+                resolution: this.resolution,
+                rotation: viewRotation
+            });
+
+            // When the batch size gets too big, performance decreases. 200 is a good
+            // balance between batch size and number of fill/stroke instructions.
+            var batchSize =
+                this.instructions != instructions || this.overlaps ? 0 : 200;
+            while (i < ii) {
+                var instruction = instructions[i];
+                var type = /** @type {ol.render.canvas.Instruction} */ (instruction[0]);
+                var /** @type {ol.Feature|ol.render.Feature} */ feature, x, y;
+                switch (type) {
+                    case ol.render.canvas.Instruction.BEGIN_GEOMETRY:
+                        feature = /** @type {ol.Feature|ol.render.Feature} */ (instruction[1]);
+                        if ((skipFeatures &&
+                            skippedFeaturesHash[ol.getUid(feature).toString()]) ||
+                            !feature.getGeometry()) {
+                            i = /** @type {number} */ (instruction[2]);
+                        } else if (opt_hitExtent !== undefined && !ol.extent.intersects(
+                            opt_hitExtent, feature.getGeometry().getExtent())) {
+                            i = /** @type {number} */ (instruction[2]) + 1;
+                        } else {
+                            ++i;
+                        }
+                        break;
+                    case ol.render.canvas.Instruction.BEGIN_PATH:
+                        if (pendingFill > batchSize) {
+                            this.fill_(context);
+                            pendingFill = 0;
+                        }
+                        if (pendingStroke > batchSize) {
+                            context.stroke();
+                            pendingStroke = 0;
+                        }
+                        if (!pendingFill && !pendingStroke) {
+                            context.beginPath();
+                            prevX = prevY = NaN;
+                        }
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.CIRCLE:
+                        d = /** @type {number} */ (instruction[1]);
+                        var x1 = pixelCoordinates[d];
+                        var y1 = pixelCoordinates[d + 1];
+                        var x2 = pixelCoordinates[d + 2];
+                        var y2 = pixelCoordinates[d + 3];
+                        var dx = x2 - x1;
+                        var dy = y2 - y1;
+                        var r = Math.sqrt(dx * dx + dy * dy);
+                        context.moveTo(x1 + r, y1);
+                        context.arc(x1, y1, r, 0, 2 * Math.PI, true);
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.CLOSE_PATH:
+                        context.closePath();
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.CUSTOM:
+                        d = /** @type {number} */ (instruction[1]);
+                        dd = instruction[2];
+                        var geometry = /** @type {ol.geom.SimpleGeometry} */ (instruction[3]);
+                        var renderer = instruction[4];
+                        var fn = instruction.length == 6 ? instruction[5] : undefined;
+                        state.geometry = geometry;
+                        state.feature = feature;
+                        if (!(i in coordinateCache)) {
+                            coordinateCache[i] = [];
+                        }
+                        var coords = coordinateCache[i];
+                        if (fn) {
+                            fn(pixelCoordinates, d, dd, 2, coords);
+                        } else {
+                            coords[0] = pixelCoordinates[d];
+                            coords[1] = pixelCoordinates[d + 1];
+                            coords.length = 2;
+                        }
+                        renderer(coords, state);
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.DRAW_IMAGE:
+                        d = /** @type {number} */ (instruction[1]);
+                        dd = /** @type {number} */ (instruction[2]);
+                        image =  /** @type {HTMLCanvasElement|HTMLVideoElement|Image} */
+                            (instruction[3]);
+                        // Remaining arguments in DRAW_IMAGE are in alphabetical order
+                        anchorX = /** @type {number} */ (instruction[4]);
+                        anchorY = /** @type {number} */ (instruction[5]);
+                        declutterGroup = featureCallback ? null : /** @type {ol.DeclutterGroup} */ (instruction[6]);
+                        var height = /** @type {number} */ (instruction[7]);
+                        var opacity = /** @type {number} */ (instruction[8]);
+                        var originX = /** @type {number} */ (instruction[9]);
+                        var originY = /** @type {number} */ (instruction[10]);
+                        var rotateWithView = /** @type {boolean} */ (instruction[11]);
+                        var rotation = /** @type {number} */ (instruction[12]);
+                        var scale = /** @type {number} */ (instruction[13]);
+                        var snapToPixel = /** @type {boolean} */ (instruction[14]);
+                        var width = /** @type {number} */ (instruction[15]);
+
+                        var padding, backgroundFill, backgroundStroke;
+                        if (instruction.length > 16) {
+                            padding = /** @type {Array.<number>} */ (instruction[16]);
+                            backgroundFill = /** @type {boolean} */ (instruction[17]);
+                            backgroundStroke = /** @type {boolean} */ (instruction[18]);
+                        } else {
+                            padding = ol.render.canvas.defaultPadding;
+                            backgroundFill = backgroundStroke = false;
+                        }
+
+                        if (rotateWithView) {
+                            rotation += viewRotation;
+                        }
+                        for (; d < dd; d += 2) {
+                            this.replayImage_(context,
+                                pixelCoordinates[d], pixelCoordinates[d + 1], image, anchorX, anchorY,
+                                declutterGroup, height, opacity, originX, originY, rotation, scale,
+                                snapToPixel, width, padding,
+                                backgroundFill ? /** @type {Array.<*>} */ (lastFillInstruction) : null,
+                                backgroundStroke ? /** @type {Array.<*>} */ (lastStrokeInstruction) : null);
+                        }
+                        this.renderDeclutter_(declutterGroup, feature);
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.DRAW_CHARS:
+                        var begin = /** @type {number} */ (instruction[1]);
+                        var end = /** @type {number} */ (instruction[2]);
+                        var baseline = /** @type {number} */ (instruction[3]);
+                        declutterGroup = featureCallback ? null : /** @type {ol.DeclutterGroup} */ (instruction[4]);
+                        var overflow = /** @type {number} */ (instruction[5]);
+                        var fillKey = /** @type {string} */ (instruction[6]);
+                        var maxAngle = /** @type {number} */ (instruction[7]);
+                        var measure = /** @type {function(string):number} */ (instruction[8]);
+                        var offsetY = /** @type {number} */ (instruction[9]);
+                        var strokeKey = /** @type {string} */ (instruction[10]);
+                        var strokeWidth =  /** @type {number} */ (instruction[11]);
+                        var text = /** @type {string} */ (instruction[12]);
+                        var textKey = /** @type {string} */ (instruction[13]);
+                        var textScale = /** @type {number} */ (instruction[14]);
+
+                        var pathLength = ol.geom.flat.length.lineString(pixelCoordinates, begin, end, 2);
+                        var textLength = measure(text);
+                        if (overflow || textLength <= pathLength) {
+                            var textAlign = /** @type {ol.render.canvas.TextReplay} */ (this).textStates[textKey].textAlign;
+                            var startM = (pathLength - textLength) * ol.render.replay.TEXT_ALIGN[textAlign];
+                            var parts = ol.geom.flat.textpath.lineString(
+                                pixelCoordinates, begin, end, 2, text, measure, startM, maxAngle);
+                            if (parts) {
+                                var c, cc, chars, label, part;
+                                if (strokeKey) {
+                                    for (c = 0, cc = parts.length; c < cc; ++c) {
+                                        part = parts[c]; // x, y, anchorX, rotation, chunk
+                                        chars = /** @type {string} */ (part[4]);
+                                        label = /** @type {ol.render.canvas.TextReplay} */ (this).getImage(chars, textKey, '', strokeKey);
+                                        anchorX = /** @type {number} */ (part[2]) + strokeWidth;
+                                        anchorY = baseline * label.height + (0.5 - baseline) * 2 * strokeWidth - offsetY;
+                                        this.replayImage_(context,
+                                            /** @type {number} */ (part[0]), /** @type {number} */ (part[1]), label,
+                                            anchorX, anchorY, declutterGroup, label.height, 1, 0, 0,
+                                            /** @type {number} */ (part[3]), textScale, false, label.width,
+                                            ol.render.canvas.defaultPadding, null, null);
+                                    }
+                                }
+                                if (fillKey) {
+                                    for (c = 0, cc = parts.length; c < cc; ++c) {
+                                        part = parts[c]; // x, y, anchorX, rotation, chunk
+                                        chars = /** @type {string} */ (part[4]);
+                                        label = /** @type {ol.render.canvas.TextReplay} */ (this).getImage(chars, textKey, fillKey, '');
+                                        anchorX = /** @type {number} */ (part[2]);
+                                        anchorY = baseline * label.height - offsetY;
+                                        this.replayImage_(context,
+                                            /** @type {number} */ (part[0]), /** @type {number} */ (part[1]), label,
+                                            anchorX, anchorY, declutterGroup, label.height, 1, 0, 0,
+                                            /** @type {number} */ (part[3]), textScale, false, label.width,
+                                            ol.render.canvas.defaultPadding, null, null);
+                                    }
+                                }
+                            }
+                        }
+                        this.renderDeclutter_(declutterGroup, feature);
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.END_GEOMETRY:
+                        if (featureCallback !== undefined) {
+                            feature = /** @type {ol.Feature|ol.render.Feature} */ (instruction[1]);
+                            var result = featureCallback(feature);
+                            if (result) {
+                                return result;
+                            }
+                        }
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.FILL:
+                        if (batchSize) {
+                            pendingFill++;
+                        } else {
+                            this.fill_(context);
+                        }
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.MOVE_TO_LINE_TO:
+                        d = /** @type {number} */ (instruction[1]);
+                        dd = /** @type {number} */ (instruction[2]);
+                        x = pixelCoordinates[d];
+                        y = pixelCoordinates[d + 1];
+                        roundX = (x + 0.5) | 0;
+                        roundY = (y + 0.5) | 0;
+                        if (roundX !== prevX || roundY !== prevY) {
+                            context.moveTo(x, y);
+                            prevX = roundX;
+                            prevY = roundY;
+                        }
+                        for (d += 2; d < dd; d += 2) {
+                            x = pixelCoordinates[d];
+                            y = pixelCoordinates[d + 1];
+                            roundX = (x + 0.5) | 0;
+                            roundY = (y + 0.5) | 0;
+                            if (d == dd - 2 || roundX !== prevX || roundY !== prevY) {
+                                context.lineTo(x, y);
+                                prevX = roundX;
+                                prevY = roundY;
+                            }
+                        }
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.SET_FILL_STYLE:
+                        lastFillInstruction = instruction;
+                        this.fillOrigin_ = instruction[2];
+
+                        if (pendingFill) {
+                            this.fill_(context);
+                            pendingFill = 0;
+                            if (pendingStroke) {
+                                context.stroke();
+                                pendingStroke = 0;
+                            }
+                        }
+
+                        context.fillStyle = /** @type {ol.ColorLike} */ (instruction[1]);
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.SET_STROKE_STYLE:
+                        lastStrokeInstruction = instruction;
+                        if (pendingStroke) {
+                            context.stroke();
+                            pendingStroke = 0;
+                        }
+                        this.setStrokeStyle_(context, /** @type {Array.<*>} */ (instruction));
+                        ++i;
+                        break;
+                    case ol.render.canvas.Instruction.STROKE:
+                        if (batchSize) {
+                            pendingStroke++;
+                        } else {
+                            context.stroke();
+                        }
+                        ++i;
+                        break;
+                    default:
+                        ++i; // consume the instruction anyway, to avoid an infinite loop
+                        break;
+                }
+            }
+            if (pendingFill) {
+                this.fill_(context);
+            }
+            if (pendingStroke) {
+                context.stroke();
+            }
+            return undefined;
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform} transform Transform.
+         * @param {number} viewRotation View rotation.
+         * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
+         *     to skip.
+         */
+        ol.render.canvas.Replay.prototype.replay = function(
+            context, transform, viewRotation, skippedFeaturesHash) {
+            this.viewRotation_ = viewRotation;
+            this.replay_(context, transform,
+                skippedFeaturesHash, this.instructions, undefined, undefined);
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform} transform Transform.
+         * @param {number} viewRotation View rotation.
+         * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
+         *     to skip.
+         * @param {function((ol.Feature|ol.render.Feature)): T=} opt_featureCallback
+         *     Feature callback.
+         * @param {ol.Extent=} opt_hitExtent Only check features that intersect this
+         *     extent.
+         * @return {T|undefined} Callback result.
+         * @template T
+         */
+        ol.render.canvas.Replay.prototype.replayHitDetection = function(
+            context, transform, viewRotation, skippedFeaturesHash,
+            opt_featureCallback, opt_hitExtent) {
+            this.viewRotation_ = viewRotation;
+            return this.replay_(context, transform, skippedFeaturesHash,
+                this.hitDetectionInstructions, opt_featureCallback, opt_hitExtent);
+        };
+
+
+        /**
+         * Reverse the hit detection instructions.
+         */
+        ol.render.canvas.Replay.prototype.reverseHitDetectionInstructions = function() {
+            var hitDetectionInstructions = this.hitDetectionInstructions;
+            // step 1 - reverse array
+            hitDetectionInstructions.reverse();
+            // step 2 - reverse instructions within geometry blocks
+            var i;
+            var n = hitDetectionInstructions.length;
+            var instruction;
+            var type;
+            var begin = -1;
+            for (i = 0; i < n; ++i) {
+                instruction = hitDetectionInstructions[i];
+                type = /** @type {ol.render.canvas.Instruction} */ (instruction[0]);
+                if (type == ol.render.canvas.Instruction.END_GEOMETRY) {
+                    begin = i;
+                } else if (type == ol.render.canvas.Instruction.BEGIN_GEOMETRY) {
+                    instruction[2] = i;
+                    ol.array.reverseSubArray(this.hitDetectionInstructions, begin, i);
+                    begin = -1;
+                }
+            }
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.Replay.prototype.setFillStrokeStyle = function(fillStyle, strokeStyle) {
+            var state = this.state;
+            if (fillStyle) {
+                var fillStyleColor = fillStyle.getColor();
+                state.fillStyle = ol.colorlike.asColorLike(fillStyleColor ?
+                    fillStyleColor : ol.render.canvas.defaultFillStyle);
+            } else {
+                state.fillStyle = undefined;
+            }
+            if (strokeStyle) {
+                var strokeStyleColor = strokeStyle.getColor();
+                state.strokeStyle = ol.colorlike.asColorLike(strokeStyleColor ?
+                    strokeStyleColor : ol.render.canvas.defaultStrokeStyle);
+                var strokeStyleLineCap = strokeStyle.getLineCap();
+                state.lineCap = strokeStyleLineCap !== undefined ?
+                    strokeStyleLineCap : ol.render.canvas.defaultLineCap;
+                var strokeStyleLineDash = strokeStyle.getLineDash();
+                state.lineDash = strokeStyleLineDash ?
+                    strokeStyleLineDash.slice() : ol.render.canvas.defaultLineDash;
+                var strokeStyleLineDashOffset = strokeStyle.getLineDashOffset();
+                state.lineDashOffset = strokeStyleLineDashOffset ?
+                    strokeStyleLineDashOffset : ol.render.canvas.defaultLineDashOffset;
+                var strokeStyleLineJoin = strokeStyle.getLineJoin();
+                state.lineJoin = strokeStyleLineJoin !== undefined ?
+                    strokeStyleLineJoin : ol.render.canvas.defaultLineJoin;
+                var strokeStyleWidth = strokeStyle.getWidth();
+                state.lineWidth = strokeStyleWidth !== undefined ?
+                    strokeStyleWidth : ol.render.canvas.defaultLineWidth;
+                var strokeStyleMiterLimit = strokeStyle.getMiterLimit();
+                state.miterLimit = strokeStyleMiterLimit !== undefined ?
+                    strokeStyleMiterLimit : ol.render.canvas.defaultMiterLimit;
+
+                if (state.lineWidth > this.maxLineWidth) {
+                    this.maxLineWidth = state.lineWidth;
+                    // invalidate the buffered max extent cache
+                    this.bufferedMaxExtent_ = null;
+                }
+            } else {
+                state.strokeStyle = undefined;
+                state.lineCap = undefined;
+                state.lineDash = null;
+                state.lineDashOffset = undefined;
+                state.lineJoin = undefined;
+                state.lineWidth = undefined;
+                state.miterLimit = undefined;
+            }
+        };
+
+
+        /**
+         * @param {ol.CanvasFillStrokeState} state State.
+         * @param {ol.geom.Geometry|ol.render.Feature} geometry Geometry.
+         */
+        ol.render.canvas.Replay.prototype.applyFill = function(state, geometry) {
+            var fillStyle = state.fillStyle;
+            var fillInstruction = [ol.render.canvas.Instruction.SET_FILL_STYLE, fillStyle];
+            if (typeof fillStyle !== 'string') {
+                var fillExtent = geometry.getExtent();
+                fillInstruction.push([fillExtent[0], fillExtent[3]]);
+            }
+            this.instructions.push(fillInstruction);
+        };
+
+
+        /**
+         * @param {ol.CanvasFillStrokeState} state State.
+         */
+        ol.render.canvas.Replay.prototype.applyStroke = function(state) {
+            this.instructions.push([
+                ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                state.strokeStyle, state.lineWidth * this.pixelRatio, state.lineCap,
+                state.lineJoin, state.miterLimit,
+                this.applyPixelRatio(state.lineDash), state.lineDashOffset * this.pixelRatio
+            ]);
+        };
+
+
+        /**
+         * @param {ol.CanvasFillStrokeState} state State.
+         * @param {function(this:ol.render.canvas.Replay, ol.CanvasFillStrokeState, (ol.geom.Geometry|ol.render.Feature))} applyFill Apply fill.
+         * @param {ol.geom.Geometry|ol.render.Feature} geometry Geometry.
+         */
+        ol.render.canvas.Replay.prototype.updateFillStyle = function(state, applyFill, geometry) {
+            var fillStyle = state.fillStyle;
+            if (typeof fillStyle !== 'string' || state.currentFillStyle != fillStyle) {
+                applyFill.call(this, state, geometry);
+                state.currentFillStyle = fillStyle;
+            }
+        };
+
+
+        /**
+         * @param {ol.CanvasFillStrokeState} state State.
+         * @param {function(this:ol.render.canvas.Replay, ol.CanvasFillStrokeState)} applyStroke Apply stroke.
+         */
+        ol.render.canvas.Replay.prototype.updateStrokeStyle = function(state, applyStroke) {
+            var strokeStyle = state.strokeStyle;
+            var lineCap = state.lineCap;
+            var lineDash = state.lineDash;
+            var lineDashOffset = state.lineDashOffset;
+            var lineJoin = state.lineJoin;
+            var lineWidth = state.lineWidth;
+            var miterLimit = state.miterLimit;
+            if (state.currentStrokeStyle != strokeStyle ||
+                state.currentLineCap != lineCap ||
+                (lineDash != state.currentLineDash && !ol.array.equals(state.currentLineDash, lineDash)) ||
+                state.currentLineDashOffset != lineDashOffset ||
+                state.currentLineJoin != lineJoin ||
+                state.currentLineWidth != lineWidth ||
+                state.currentMiterLimit != miterLimit) {
+                applyStroke.call(this, state);
+                state.currentStrokeStyle = strokeStyle;
+                state.currentLineCap = lineCap;
+                state.currentLineDash = lineDash;
+                state.currentLineDashOffset = lineDashOffset;
+                state.currentLineJoin = lineJoin;
+                state.currentLineWidth = lineWidth;
+                state.currentMiterLimit = miterLimit;
+            }
+        };
+
+
+        /**
+         * @param {ol.geom.Geometry|ol.render.Feature} geometry Geometry.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         */
+        ol.render.canvas.Replay.prototype.endGeometry = function(geometry, feature) {
+            this.beginGeometryInstruction1_[2] = this.instructions.length;
+            this.beginGeometryInstruction1_ = null;
+            this.beginGeometryInstruction2_[2] = this.hitDetectionInstructions.length;
+            this.beginGeometryInstruction2_ = null;
+            var endGeometryInstruction =
+                [ol.render.canvas.Instruction.END_GEOMETRY, feature];
+            this.instructions.push(endGeometryInstruction);
+            this.hitDetectionInstructions.push(endGeometryInstruction);
+        };
+
+
+        /**
+         * FIXME empty description for jsdoc
+         */
+        ol.render.canvas.Replay.prototype.finish = ol.nullFunction;
+
+
+        /**
+         * Get the buffered rendering extent.  Rendering will be clipped to the extent
+         * provided to the constructor.  To account for symbolizers that may intersect
+         * this extent, we calculate a buffered extent (e.g. based on stroke width).
+         * @return {ol.Extent} The buffered rendering extent.
+         * @protected
+         */
+        ol.render.canvas.Replay.prototype.getBufferedMaxExtent = function() {
+            if (!this.bufferedMaxExtent_) {
+                this.bufferedMaxExtent_ = ol.extent.clone(this.maxExtent);
+                if (this.maxLineWidth > 0) {
+                    var width = this.resolution * (this.maxLineWidth + 1) / 2;
+                    ol.extent.buffer(this.bufferedMaxExtent_, width, this.bufferedMaxExtent_);
+                }
+            }
+            return this.bufferedMaxExtent_;
+        };
+
+        /**
+         * @constructor
+         * @extends {ol.render.canvas.Replay}
+         * @param {number} tolerance Tolerance.
+         * @param {ol.Extent} maxExtent Maximum extent.
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @param {boolean} overlaps The replay can have overlapping geometries.
+         * @param {?} declutterTree Declutter tree.
+         * @struct
+         */
+        ol.render.canvas.ImageReplay = function(
+            tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree) {
+            ol.render.canvas.Replay.call(this,
+                tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree);
+
+            /**
+             * @private
+             * @type {ol.DeclutterGroup}
+             */
+            this.declutterGroup_ = null;
+
+            /**
+             * @private
+             * @type {HTMLCanvasElement|HTMLVideoElement|Image}
+             */
+            this.hitDetectionImage_ = null;
+
+            /**
+             * @private
+             * @type {HTMLCanvasElement|HTMLVideoElement|Image}
+             */
+            this.image_ = null;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.anchorX_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.anchorY_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.height_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.opacity_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.originX_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.originY_ = undefined;
+
+            /**
+             * @private
+             * @type {boolean|undefined}
+             */
+            this.rotateWithView_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.rotation_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.scale_ = undefined;
+
+            /**
+             * @private
+             * @type {boolean|undefined}
+             */
+            this.snapToPixel_ = undefined;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.width_ = undefined;
+
+        };
+        ol.inherits(ol.render.canvas.ImageReplay, ol.render.canvas.Replay);
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @private
+         * @return {number} My end.
+         */
+        ol.render.canvas.ImageReplay.prototype.drawCoordinates_ = function(flatCoordinates, offset, end, stride) {
+            return this.appendFlatCoordinates(
+                flatCoordinates, offset, end, stride, false, false);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ImageReplay.prototype.drawPoint = function(pointGeometry, feature) {
+            if (!this.image_) {
+                return;
+            }
+            this.beginGeometry(pointGeometry, feature);
+            var flatCoordinates = pointGeometry.getFlatCoordinates();
+            var stride = pointGeometry.getStride();
+            var myBegin = this.coordinates.length;
+            var myEnd = this.drawCoordinates_(
+                flatCoordinates, 0, flatCoordinates.length, stride);
+            this.instructions.push([
+                ol.render.canvas.Instruction.DRAW_IMAGE, myBegin, myEnd, this.image_,
+                // Remaining arguments to DRAW_IMAGE are in alphabetical order
+                this.anchorX_, this.anchorY_, this.declutterGroup_, this.height_, this.opacity_,
+                this.originX_, this.originY_, this.rotateWithView_, this.rotation_,
+                this.scale_ * this.pixelRatio, this.snapToPixel_, this.width_
+            ]);
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.DRAW_IMAGE, myBegin, myEnd,
+                this.hitDetectionImage_,
+                // Remaining arguments to DRAW_IMAGE are in alphabetical order
+                this.anchorX_, this.anchorY_, this.declutterGroup_, this.height_, this.opacity_,
+                this.originX_, this.originY_, this.rotateWithView_, this.rotation_,
+                this.scale_, this.snapToPixel_, this.width_
+            ]);
+            this.endGeometry(pointGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ImageReplay.prototype.drawMultiPoint = function(multiPointGeometry, feature) {
+            if (!this.image_) {
+                return;
+            }
+            this.beginGeometry(multiPointGeometry, feature);
+            var flatCoordinates = multiPointGeometry.getFlatCoordinates();
+            var stride = multiPointGeometry.getStride();
+            var myBegin = this.coordinates.length;
+            var myEnd = this.drawCoordinates_(
+                flatCoordinates, 0, flatCoordinates.length, stride);
+            this.instructions.push([
+                ol.render.canvas.Instruction.DRAW_IMAGE, myBegin, myEnd, this.image_,
+                // Remaining arguments to DRAW_IMAGE are in alphabetical order
+                this.anchorX_, this.anchorY_, this.declutterGroup_, this.height_, this.opacity_,
+                this.originX_, this.originY_, this.rotateWithView_, this.rotation_,
+                this.scale_ * this.pixelRatio, this.snapToPixel_, this.width_
+            ]);
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.DRAW_IMAGE, myBegin, myEnd,
+                this.hitDetectionImage_,
+                // Remaining arguments to DRAW_IMAGE are in alphabetical order
+                this.anchorX_, this.anchorY_, this.declutterGroup_, this.height_, this.opacity_,
+                this.originX_, this.originY_, this.rotateWithView_, this.rotation_,
+                this.scale_, this.snapToPixel_, this.width_
+            ]);
+            this.endGeometry(multiPointGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ImageReplay.prototype.finish = function() {
+            this.reverseHitDetectionInstructions();
+            // FIXME this doesn't really protect us against further calls to draw*Geometry
+            this.anchorX_ = undefined;
+            this.anchorY_ = undefined;
+            this.hitDetectionImage_ = null;
+            this.image_ = null;
+            this.height_ = undefined;
+            this.scale_ = undefined;
+            this.opacity_ = undefined;
+            this.originX_ = undefined;
+            this.originY_ = undefined;
+            this.rotateWithView_ = undefined;
+            this.rotation_ = undefined;
+            this.snapToPixel_ = undefined;
+            this.width_ = undefined;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ImageReplay.prototype.setImageStyle = function(imageStyle, declutterGroup) {
+            var anchor = imageStyle.getAnchor();
+            var size = imageStyle.getSize();
+            var hitDetectionImage = imageStyle.getHitDetectionImage(1);
+            var image = imageStyle.getImage(1);
+            var origin = imageStyle.getOrigin();
+            this.anchorX_ = anchor[0];
+            this.anchorY_ = anchor[1];
+            this.declutterGroup_ = /** @type {ol.DeclutterGroup} */ (declutterGroup);
+            this.hitDetectionImage_ = hitDetectionImage;
+            this.image_ = image;
+            this.height_ = size[1];
+            this.opacity_ = imageStyle.getOpacity();
+            this.originX_ = origin[0];
+            this.originY_ = origin[1];
+            this.rotateWithView_ = imageStyle.getRotateWithView();
+            this.rotation_ = imageStyle.getRotation();
+            this.scale_ = imageStyle.getScale();
+            this.snapToPixel_ = imageStyle.getSnapToPixel();
+            this.width_ = size[0];
+        };
+
+        /**
+         * @constructor
+         * @extends {ol.render.canvas.Replay}
+         * @param {number} tolerance Tolerance.
+         * @param {ol.Extent} maxExtent Maximum extent.
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @param {boolean} overlaps The replay can have overlapping geometries.
+         * @param {?} declutterTree Declutter tree.
+         * @struct
+         */
+        ol.render.canvas.LineStringReplay = function(
+            tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree) {
+            ol.render.canvas.Replay.call(this,
+                tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree);
+        };
+        ol.inherits(ol.render.canvas.LineStringReplay, ol.render.canvas.Replay);
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {number} end End.
+         * @param {number} stride Stride.
+         * @private
+         * @return {number} end.
+         */
+        ol.render.canvas.LineStringReplay.prototype.drawFlatCoordinates_ = function(flatCoordinates, offset, end, stride) {
+            var myBegin = this.coordinates.length;
+            var myEnd = this.appendFlatCoordinates(
+                flatCoordinates, offset, end, stride, false, false);
+            var moveToLineToInstruction =
+                [ol.render.canvas.Instruction.MOVE_TO_LINE_TO, myBegin, myEnd];
+            this.instructions.push(moveToLineToInstruction);
+            this.hitDetectionInstructions.push(moveToLineToInstruction);
+            return end;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.LineStringReplay.prototype.drawLineString = function(lineStringGeometry, feature) {
+            var state = this.state;
+            var strokeStyle = state.strokeStyle;
+            var lineWidth = state.lineWidth;
+            if (strokeStyle === undefined || lineWidth === undefined) {
+                return;
+            }
+            this.updateStrokeStyle(state, this.applyStroke);
+            this.beginGeometry(lineStringGeometry, feature);
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                state.strokeStyle, state.lineWidth, state.lineCap, state.lineJoin,
+                state.miterLimit, state.lineDash, state.lineDashOffset
+            ], [
+                ol.render.canvas.Instruction.BEGIN_PATH
+            ]);
+            var flatCoordinates = lineStringGeometry.getFlatCoordinates();
+            var stride = lineStringGeometry.getStride();
+            this.drawFlatCoordinates_(flatCoordinates, 0, flatCoordinates.length, stride);
+            this.hitDetectionInstructions.push([ol.render.canvas.Instruction.STROKE]);
+            this.endGeometry(lineStringGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.LineStringReplay.prototype.drawMultiLineString = function(multiLineStringGeometry, feature) {
+            var state = this.state;
+            var strokeStyle = state.strokeStyle;
+            var lineWidth = state.lineWidth;
+            if (strokeStyle === undefined || lineWidth === undefined) {
+                return;
+            }
+            this.updateStrokeStyle(state, this.applyStroke);
+            this.beginGeometry(multiLineStringGeometry, feature);
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                state.strokeStyle, state.lineWidth, state.lineCap, state.lineJoin,
+                state.miterLimit, state.lineDash, state.lineDashOffset
+            ], [
+                ol.render.canvas.Instruction.BEGIN_PATH
+            ]);
+            var ends = multiLineStringGeometry.getEnds();
+            var flatCoordinates = multiLineStringGeometry.getFlatCoordinates();
+            var stride = multiLineStringGeometry.getStride();
+            var offset = 0;
+            var i, ii;
+            for (i = 0, ii = ends.length; i < ii; ++i) {
+                offset = this.drawFlatCoordinates_(
+                    flatCoordinates, offset, ends[i], stride);
+            }
+            this.hitDetectionInstructions.push([ol.render.canvas.Instruction.STROKE]);
+            this.endGeometry(multiLineStringGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.LineStringReplay.prototype.finish = function() {
+            var state = this.state;
+            if (state.lastStroke != undefined && state.lastStroke != this.coordinates.length) {
+                this.instructions.push([ol.render.canvas.Instruction.STROKE]);
+            }
+            this.reverseHitDetectionInstructions();
+            this.state = null;
+        };
+
+
+        /**
+         * @inheritDoc.
+         */
+        ol.render.canvas.LineStringReplay.prototype.applyStroke = function(state) {
+            if (state.lastStroke != undefined && state.lastStroke != this.coordinates.length) {
+                this.instructions.push([ol.render.canvas.Instruction.STROKE]);
+                state.lastStroke = this.coordinates.length;
+            }
+            state.lastStroke = 0;
+            ol.render.canvas.Replay.prototype.applyStroke.call(this, state);
+            this.instructions.push([ol.render.canvas.Instruction.BEGIN_PATH]);
+        };
+
+        /**
+         * @constructor
+         * @extends {ol.render.canvas.Replay}
+         * @param {number} tolerance Tolerance.
+         * @param {ol.Extent} maxExtent Maximum extent.
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @param {boolean} overlaps The replay can have overlapping geometries.
+         * @param {?} declutterTree Declutter tree.
+         * @struct
+         */
+        ol.render.canvas.PolygonReplay = function(
+            tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree) {
+            ol.render.canvas.Replay.call(this,
+                tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree);
+        };
+        ol.inherits(ol.render.canvas.PolygonReplay, ol.render.canvas.Replay);
+
+
+        /**
+         * @param {Array.<number>} flatCoordinates Flat coordinates.
+         * @param {number} offset Offset.
+         * @param {Array.<number>} ends Ends.
+         * @param {number} stride Stride.
+         * @private
+         * @return {number} End.
+         */
+        ol.render.canvas.PolygonReplay.prototype.drawFlatCoordinatess_ = function(flatCoordinates, offset, ends, stride) {
+            var state = this.state;
+            var fill = state.fillStyle !== undefined;
+            var stroke = state.strokeStyle != undefined;
+            var numEnds = ends.length;
+            var beginPathInstruction = [ol.render.canvas.Instruction.BEGIN_PATH];
+            this.instructions.push(beginPathInstruction);
+            this.hitDetectionInstructions.push(beginPathInstruction);
+            for (var i = 0; i < numEnds; ++i) {
+                var end = ends[i];
+                var myBegin = this.coordinates.length;
+                var myEnd = this.appendFlatCoordinates(
+                    flatCoordinates, offset, end, stride, true, !stroke);
+                var moveToLineToInstruction =
+                    [ol.render.canvas.Instruction.MOVE_TO_LINE_TO, myBegin, myEnd];
+                this.instructions.push(moveToLineToInstruction);
+                this.hitDetectionInstructions.push(moveToLineToInstruction);
+                if (stroke) {
+                    // Performance optimization: only call closePath() when we have a stroke.
+                    // Otherwise the ring is closed already (see appendFlatCoordinates above).
+                    var closePathInstruction = [ol.render.canvas.Instruction.CLOSE_PATH];
+                    this.instructions.push(closePathInstruction);
+                    this.hitDetectionInstructions.push(closePathInstruction);
+                }
+                offset = end;
+            }
+            var fillInstruction = [ol.render.canvas.Instruction.FILL];
+            this.hitDetectionInstructions.push(fillInstruction);
+            if (fill) {
+                this.instructions.push(fillInstruction);
+            }
+            if (stroke) {
+                var strokeInstruction = [ol.render.canvas.Instruction.STROKE];
+                this.instructions.push(strokeInstruction);
+                this.hitDetectionInstructions.push(strokeInstruction);
+            }
+            return offset;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.PolygonReplay.prototype.drawCircle = function(circleGeometry, feature) {
+            var state = this.state;
+            var fillStyle = state.fillStyle;
+            var strokeStyle = state.strokeStyle;
+            if (fillStyle === undefined && strokeStyle === undefined) {
+                return;
+            }
+            this.setFillStrokeStyles_(circleGeometry);
+            this.beginGeometry(circleGeometry, feature);
+            // always fill the circle for hit detection
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.SET_FILL_STYLE,
+                ol.color.asString(ol.render.canvas.defaultFillStyle)
+            ]);
+            if (state.strokeStyle !== undefined) {
+                this.hitDetectionInstructions.push([
+                    ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                    state.strokeStyle, state.lineWidth, state.lineCap, state.lineJoin,
+                    state.miterLimit, state.lineDash, state.lineDashOffset
+                ]);
+            }
+            var flatCoordinates = circleGeometry.getFlatCoordinates();
+            var stride = circleGeometry.getStride();
+            var myBegin = this.coordinates.length;
+            this.appendFlatCoordinates(
+                flatCoordinates, 0, flatCoordinates.length, stride, false, false);
+            var beginPathInstruction = [ol.render.canvas.Instruction.BEGIN_PATH];
+            var circleInstruction = [ol.render.canvas.Instruction.CIRCLE, myBegin];
+            this.instructions.push(beginPathInstruction, circleInstruction);
+            this.hitDetectionInstructions.push(beginPathInstruction, circleInstruction);
+            var fillInstruction = [ol.render.canvas.Instruction.FILL];
+            this.hitDetectionInstructions.push(fillInstruction);
+            if (state.fillStyle !== undefined) {
+                this.instructions.push(fillInstruction);
+            }
+            if (state.strokeStyle !== undefined) {
+                var strokeInstruction = [ol.render.canvas.Instruction.STROKE];
+                this.instructions.push(strokeInstruction);
+                this.hitDetectionInstructions.push(strokeInstruction);
+            }
+            this.endGeometry(circleGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.PolygonReplay.prototype.drawPolygon = function(polygonGeometry, feature) {
+            var state = this.state;
+            this.setFillStrokeStyles_(polygonGeometry);
+            this.beginGeometry(polygonGeometry, feature);
+            // always fill the polygon for hit detection
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.SET_FILL_STYLE,
+                ol.color.asString(ol.render.canvas.defaultFillStyle)]
+            );
+            if (state.strokeStyle !== undefined) {
+                this.hitDetectionInstructions.push([
+                    ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                    state.strokeStyle, state.lineWidth, state.lineCap, state.lineJoin,
+                    state.miterLimit, state.lineDash, state.lineDashOffset
+                ]);
+            }
+            var ends = polygonGeometry.getEnds();
+            var flatCoordinates = polygonGeometry.getOrientedFlatCoordinates();
+            var stride = polygonGeometry.getStride();
+            this.drawFlatCoordinatess_(flatCoordinates, 0, ends, stride);
+            this.endGeometry(polygonGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.PolygonReplay.prototype.drawMultiPolygon = function(multiPolygonGeometry, feature) {
+            var state = this.state;
+            var fillStyle = state.fillStyle;
+            var strokeStyle = state.strokeStyle;
+            if (fillStyle === undefined && strokeStyle === undefined) {
+                return;
+            }
+            this.setFillStrokeStyles_(multiPolygonGeometry);
+            this.beginGeometry(multiPolygonGeometry, feature);
+            // always fill the multi-polygon for hit detection
+            this.hitDetectionInstructions.push([
+                ol.render.canvas.Instruction.SET_FILL_STYLE,
+                ol.color.asString(ol.render.canvas.defaultFillStyle)
+            ]);
+            if (state.strokeStyle !== undefined) {
+                this.hitDetectionInstructions.push([
+                    ol.render.canvas.Instruction.SET_STROKE_STYLE,
+                    state.strokeStyle, state.lineWidth, state.lineCap, state.lineJoin,
+                    state.miterLimit, state.lineDash, state.lineDashOffset
+                ]);
+            }
+            var endss = multiPolygonGeometry.getEndss();
+            var flatCoordinates = multiPolygonGeometry.getOrientedFlatCoordinates();
+            var stride = multiPolygonGeometry.getStride();
+            var offset = 0;
+            var i, ii;
+            for (i = 0, ii = endss.length; i < ii; ++i) {
+                offset = this.drawFlatCoordinatess_(
+                    flatCoordinates, offset, endss[i], stride);
+            }
+            this.endGeometry(multiPolygonGeometry, feature);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.PolygonReplay.prototype.finish = function() {
+            this.reverseHitDetectionInstructions();
+            this.state = null;
+            // We want to preserve topology when drawing polygons.  Polygons are
+            // simplified using quantization and point elimination. However, we might
+            // have received a mix of quantized and non-quantized geometries, so ensure
+            // that all are quantized by quantizing all coordinates in the batch.
+            var tolerance = this.tolerance;
+            if (tolerance !== 0) {
+                var coordinates = this.coordinates;
+                var i, ii;
+                for (i = 0, ii = coordinates.length; i < ii; ++i) {
+                    coordinates[i] = ol.geom.flat.simplify.snap(coordinates[i], tolerance);
+                }
+            }
+        };
+
+
+        /**
+         * @private
+         * @param {ol.geom.Geometry|ol.render.Feature} geometry Geometry.
+         */
+        ol.render.canvas.PolygonReplay.prototype.setFillStrokeStyles_ = function(geometry) {
+            var state = this.state;
+            var fillStyle = state.fillStyle;
+            if (fillStyle !== undefined) {
+                this.updateFillStyle(state, this.applyFill, geometry);
+            }
+            if (state.strokeStyle !== undefined) {
+                this.updateStrokeStyle(state, this.applyStroke);
+            }
+        };
+
+        ol.geom.flat.straightchunk = {};
+        ol.geom.flat.straightchunk.lineString = function(maxAngle, flatCoordinates, offset, end, stride) {
+            var chunkStart = offset;
+            var chunkEnd = offset;
+            var chunkM = 0;
+            var m = 0;
+            var start = offset;
+            var acos, i, m12, m23, x1, y1, x12, y12, x23, y23;
+            for (i = offset; i < end; i += stride) {
+                var x2 = flatCoordinates[i];
+                var y2 = flatCoordinates[i + 1];
+                if (x1 !== undefined) {
+                    x23 = x2 - x1;
+                    y23 = y2 - y1;
+                    m23 = Math.sqrt(x23 * x23 + y23 * y23);
+                    if (x12 !== undefined) {
+                        m += m12;
+                        acos = Math.acos((x12 * x23 + y12 * y23) / (m12 * m23));
+                        if (acos > maxAngle) {
+                            if (m > chunkM) {
+                                chunkM = m;
+                                chunkStart = start;
+                                chunkEnd = i;
+                            }
+                            m = 0;
+                            start = i - stride;
+                        }
+                    }
+                    m12 = m23;
+                    x12 = x23;
+                    y12 = y23;
+                }
+                x1 = x2;
+                y1 = y2;
+            }
+            m += m23;
+            return m > chunkM ? [start, i] : [chunkStart, chunkEnd];
+        };
+
+        ol.style.TextPlacement = {
+            POINT: 'point',
+            LINE: 'line'
+        };
+
+        ol.render.canvas.TextReplay = function(
+            tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree) {
+            ol.render.canvas.Replay.call(this,
+                tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree);
+
+            /**
+             * @private
+             * @type {ol.DeclutterGroup}
+             */
+            this.declutterGroup_;
+
+            /**
+             * @private
+             * @type {Array.<HTMLCanvasElement>}
+             */
+            this.labels_ = null;
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.text_ = '';
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.textOffsetX_ = 0;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.textOffsetY_ = 0;
+
+            /**
+             * @private
+             * @type {boolean|undefined}
+             */
+            this.textRotateWithView_ = undefined;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.textRotation_ = 0;
+
+            /**
+             * @private
+             * @type {?ol.CanvasFillState}
+             */
+            this.textFillState_ = null;
+
+            /**
+             * @type {Object.<string, ol.CanvasFillState>}
+             */
+            this.fillStates = {};
+
+            /**
+             * @private
+             * @type {?ol.CanvasStrokeState}
+             */
+            this.textStrokeState_ = null;
+
+            /**
+             * @type {Object.<string, ol.CanvasStrokeState>}
+             */
+            this.strokeStates = {};
+
+            /**
+             * @private
+             * @type {ol.CanvasTextState}
+             */
+            this.textState_ = /** @type {ol.CanvasTextState} */ ({});
+
+            /**
+             * @type {Object.<string, ol.CanvasTextState>}
+             */
+            this.textStates = {};
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.textKey_ = '';
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.fillKey_ = '';
+
+            /**
+             * @private
+             * @type {string}
+             */
+            this.strokeKey_ = '';
+
+            /**
+             * @private
+             * @type {Object.<string, Object.<string, number>>}
+             */
+            this.widths_ = {};
+
+            var labelCache = ol.render.canvas.labelCache;
+            labelCache.prune();
+
+        };
+        ol.inherits(ol.render.canvas.TextReplay, ol.render.canvas.Replay);
+
+
+        /**
+         * @param {string} font Font to use for measuring.
+         * @param {Array.<string>} lines Lines to measure.
+         * @param {Array.<number>} widths Array will be populated with the widths of
+         * each line.
+         * @return {number} Width of the whole text.
+         */
+        ol.render.canvas.TextReplay.measureTextWidths = function(font, lines, widths) {
+            var numLines = lines.length;
+            var width = 0;
+            var currentWidth, i;
+            for (i = 0; i < numLines; ++i) {
+                currentWidth = ol.render.canvas.measureTextWidth(font, lines[i]);
+                width = Math.max(width, currentWidth);
+                widths.push(currentWidth);
+            }
+            return width;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.TextReplay.prototype.drawText = function(geometry, feature) {
+            var fillState = this.textFillState_;
+            var strokeState = this.textStrokeState_;
+            var textState = this.textState_;
+            if (this.text_ === '' || !textState || (!fillState && !strokeState)) {
+                return;
+            }
+
+            var begin = this.coordinates.length;
+
+            var geometryType = geometry.getType();
+            var flatCoordinates = null;
+            var end = 2;
+            var stride = 2;
+            var i, ii;
+
+            if (textState.placement === ol.style.TextPlacement.LINE) {
+                if (!ol.extent.intersects(this.getBufferedMaxExtent(), geometry.getExtent())) {
+                    return;
+                }
+                var ends;
+                flatCoordinates = geometry.getFlatCoordinates();
+                stride = geometry.getStride();
+                if (geometryType == ol.geom.GeometryType.LINE_STRING) {
+                    ends = [flatCoordinates.length];
+                } else if (geometryType == ol.geom.GeometryType.MULTI_LINE_STRING) {
+                    ends = geometry.getEnds();
+                } else if (geometryType == ol.geom.GeometryType.POLYGON) {
+                    ends = geometry.getEnds().slice(0, 1);
+                } else if (geometryType == ol.geom.GeometryType.MULTI_POLYGON) {
+                    var endss = geometry.getEndss();
+                    ends = [];
+                    for (i = 0, ii = endss.length; i < ii; ++i) {
+                        ends.push(endss[i][0]);
+                    }
+                }
+                this.beginGeometry(geometry, feature);
+                var textAlign = textState.textAlign;
+                var flatOffset = 0;
+                var flatEnd;
+                for (var o = 0, oo = ends.length; o < oo; ++o) {
+                    if (textAlign == undefined) {
+                        var range = ol.geom.flat.straightchunk.lineString(
+                            textState.maxAngle, flatCoordinates, flatOffset, ends[o], stride);
+                        flatOffset = range[0];
+                        flatEnd = range[1];
+                    } else {
+                        flatEnd = ends[o];
+                    }
+                    for (i = flatOffset; i < flatEnd; i += stride) {
+                        this.coordinates.push(flatCoordinates[i], flatCoordinates[i + 1]);
+                    }
+                    end = this.coordinates.length;
+                    flatOffset = ends[o];
+                    this.drawChars_(begin, end, this.declutterGroup_);
+                    begin = end;
+                }
+                this.endGeometry(geometry, feature);
+
+            } else {
+                var label = this.getImage(this.text_, this.textKey_, this.fillKey_, this.strokeKey_);
+                var width = label.width / this.pixelRatio;
+                switch (geometryType) {
+                    case ol.geom.GeometryType.POINT:
+                    case ol.geom.GeometryType.MULTI_POINT:
+                        flatCoordinates = geometry.getFlatCoordinates();
+                        end = flatCoordinates.length;
+                        break;
+                    case ol.geom.GeometryType.LINE_STRING:
+                        flatCoordinates = /** @type {ol.geom.LineString} */ (geometry).getFlatMidpoint();
+                        break;
+                    case ol.geom.GeometryType.CIRCLE:
+                        flatCoordinates = /** @type {ol.geom.Circle} */ (geometry).getCenter();
+                        break;
+                    case ol.geom.GeometryType.MULTI_LINE_STRING:
+                        flatCoordinates = /** @type {ol.geom.MultiLineString} */ (geometry).getFlatMidpoints();
+                        end = flatCoordinates.length;
+                        break;
+                    case ol.geom.GeometryType.POLYGON:
+                        flatCoordinates = /** @type {ol.geom.Polygon} */ (geometry).getFlatInteriorPoint();
+                        if (!textState.overflow && flatCoordinates[2] / this.resolution < width) {
+                            return;
+                        }
+                        stride = 3;
+                        break;
+                    case ol.geom.GeometryType.MULTI_POLYGON:
+                        var interiorPoints = /** @type {ol.geom.MultiPolygon} */ (geometry).getFlatInteriorPoints();
+                        flatCoordinates = [];
+                        for (i = 0, ii = interiorPoints.length; i < ii; i += 3) {
+                            if (textState.overflow || interiorPoints[i + 2] / this.resolution >= width) {
+                                flatCoordinates.push(interiorPoints[i], interiorPoints[i + 1]);
+                            }
+                        }
+                        end = flatCoordinates.length;
+                        if (end == 0) {
+                            return;
+                        }
+                        break;
+                }
+                end = this.appendFlatCoordinates(flatCoordinates, 0, end, stride, false, false);
+                this.beginGeometry(geometry, feature);
+                if (textState.backgroundFill || textState.backgroundStroke) {
+                    this.setFillStrokeStyle(textState.backgroundFill, textState.backgroundStroke);
+                    this.updateFillStyle(this.state, this.applyFill, geometry);
+                    this.updateStrokeStyle(this.state, this.applyStroke);
+                }
+                this.drawTextImage_(label, begin, end);
+                this.endGeometry(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {string} text Text.
+         * @param {string} textKey Text style key.
+         * @param {string} fillKey Fill style key.
+         * @param {string} strokeKey Stroke style key.
+         * @return {HTMLCanvasElement} Image.
+         */
+        ol.render.canvas.TextReplay.prototype.getImage = function(text, textKey, fillKey, strokeKey) {
+            var label;
+            var key = strokeKey + textKey + text + fillKey + this.pixelRatio;
+
+            var labelCache = ol.render.canvas.labelCache;
+            if (!labelCache.containsKey(key)) {
+                var strokeState = strokeKey ? this.strokeStates[strokeKey] || this.textStrokeState_ : null;
+                var fillState = fillKey ? this.fillStates[fillKey] || this.textFillState_ : null;
+                var textState = this.textStates[textKey] || this.textState_;
+                var pixelRatio = this.pixelRatio;
+                var scale = textState.scale * pixelRatio;
+                var align =  ol.render.replay.TEXT_ALIGN[textState.textAlign || ol.render.canvas.defaultTextAlign];
+                var strokeWidth = strokeKey && strokeState.lineWidth ? strokeState.lineWidth : 0;
+
+                var lines = text.split('\n');
+                var numLines = lines.length;
+                var widths = [];
+                var width = ol.render.canvas.TextReplay.measureTextWidths(textState.font, lines, widths);
+                var lineHeight = ol.render.canvas.measureTextHeight(textState.font);
+                var height = lineHeight * numLines;
+                var renderWidth = (width + strokeWidth);
+                var context = ol.dom.createCanvasContext2D(
+                    Math.ceil(renderWidth * scale),
+                    Math.ceil((height + strokeWidth) * scale));
+                label = context.canvas;
+                labelCache.set(key, label);
+                if (scale != 1) {
+                    context.scale(scale, scale);
+                }
+                context.font = textState.font;
+                if (strokeKey) {
+                    context.strokeStyle = strokeState.strokeStyle;
+                    context.lineWidth = strokeWidth * (ol.has.SAFARI ? scale : 1);
+                    context.lineCap = strokeState.lineCap;
+                    context.lineJoin = strokeState.lineJoin;
+                    context.miterLimit = strokeState.miterLimit;
+                    if (ol.has.CANVAS_LINE_DASH && strokeState.lineDash.length) {
+                        context.setLineDash(strokeState.lineDash);
+                        context.lineDashOffset = strokeState.lineDashOffset;
+                    }
+                }
+                if (fillKey) {
+                    context.fillStyle = fillState.fillStyle;
+                }
+                context.textBaseline = 'middle';
+                context.textAlign = 'center';
+                var leftRight = (0.5 - align);
+                var x = align * label.width / scale + leftRight * strokeWidth;
+                var i;
+                if (strokeKey) {
+                    for (i = 0; i < numLines; ++i) {
+                        context.strokeText(lines[i], x + leftRight * widths[i], 0.5 * (strokeWidth + lineHeight) + i * lineHeight);
+                    }
+                }
+                if (fillKey) {
+                    for (i = 0; i < numLines; ++i) {
+                        context.fillText(lines[i], x + leftRight * widths[i], 0.5 * (strokeWidth + lineHeight) + i * lineHeight);
+                    }
+                }
+            }
+            return labelCache.get(key);
+        };
+
+
+        /**
+         * @private
+         * @param {HTMLCanvasElement} label Label.
+         * @param {number} begin Begin.
+         * @param {number} end End.
+         */
+        ol.render.canvas.TextReplay.prototype.drawTextImage_ = function(label, begin, end) {
+            var textState = this.textState_;
+            var strokeState = this.textStrokeState_;
+            var pixelRatio = this.pixelRatio;
+            var align = ol.render.replay.TEXT_ALIGN[textState.textAlign || ol.render.canvas.defaultTextAlign];
+            var baseline = ol.render.replay.TEXT_ALIGN[textState.textBaseline];
+            var strokeWidth = strokeState && strokeState.lineWidth ? strokeState.lineWidth : 0;
+
+            var anchorX = align * label.width / pixelRatio + 2 * (0.5 - align) * strokeWidth;
+            var anchorY = baseline * label.height / pixelRatio + 2 * (0.5 - baseline) * strokeWidth;
+            this.instructions.push([ol.render.canvas.Instruction.DRAW_IMAGE, begin, end,
+                label, (anchorX - this.textOffsetX_) * pixelRatio, (anchorY - this.textOffsetY_) * pixelRatio,
+                this.declutterGroup_, label.height, 1, 0, 0, this.textRotateWithView_, this.textRotation_,
+                1, true, label.width,
+                textState.padding == ol.render.canvas.defaultPadding ?
+                    ol.render.canvas.defaultPadding : textState.padding.map(function(p) {
+                    return p * pixelRatio;
+                }),
+                !!textState.backgroundFill, !!textState.backgroundStroke
+            ]);
+            this.hitDetectionInstructions.push([ol.render.canvas.Instruction.DRAW_IMAGE, begin, end,
+                label, (anchorX - this.textOffsetX_) * pixelRatio, (anchorY - this.textOffsetY_) * pixelRatio,
+                this.declutterGroup_, label.height, 1, 0, 0, this.textRotateWithView_, this.textRotation_,
+                1 / pixelRatio, true, label.width, textState.padding,
+                !!textState.backgroundFill, !!textState.backgroundStroke
+            ]);
+        };
+
+
+        /**
+         * @private
+         * @param {number} begin Begin.
+         * @param {number} end End.
+         * @param {ol.DeclutterGroup} declutterGroup Declutter group.
+         */
+        ol.render.canvas.TextReplay.prototype.drawChars_ = function(begin, end, declutterGroup) {
+            var strokeState = this.textStrokeState_;
+            var textState = this.textState_;
+            var fillState = this.textFillState_;
+
+            var strokeKey = this.strokeKey_;
+            if (strokeState) {
+                if (!(strokeKey in this.strokeStates)) {
+                    this.strokeStates[strokeKey] = /** @type {ol.CanvasStrokeState} */ ({
+                        strokeStyle: strokeState.strokeStyle,
+                        lineCap: strokeState.lineCap,
+                        lineDashOffset: strokeState.lineDashOffset,
+                        lineWidth: strokeState.lineWidth,
+                        lineJoin: strokeState.lineJoin,
+                        miterLimit: strokeState.miterLimit,
+                        lineDash: strokeState.lineDash
+                    });
+                }
+            }
+            var textKey = this.textKey_;
+            if (!(this.textKey_ in this.textStates)) {
+                this.textStates[this.textKey_] = /** @type {ol.CanvasTextState} */ ({
+                    font: textState.font,
+                    textAlign: textState.textAlign || ol.render.canvas.defaultTextAlign,
+                    scale: textState.scale
+                });
+            }
+            var fillKey = this.fillKey_;
+            if (fillState) {
+                if (!(fillKey in this.fillStates)) {
+                    this.fillStates[fillKey] = /** @type {ol.CanvasFillState} */ ({
+                        fillStyle: fillState.fillStyle
+                    });
+                }
+            }
+
+            var pixelRatio = this.pixelRatio;
+            var baseline = ol.render.replay.TEXT_ALIGN[textState.textBaseline];
+
+            var offsetY = this.textOffsetY_ * pixelRatio;
+            var text = this.text_;
+            var font = textState.font;
+            var textScale = textState.scale;
+            var strokeWidth = strokeState ? strokeState.lineWidth * textScale / 2 : 0;
+            var widths = this.widths_[font];
+            if (!widths) {
+                this.widths_[font] = widths = {};
+            }
+            this.instructions.push([ol.render.canvas.Instruction.DRAW_CHARS,
+                begin, end, baseline, declutterGroup,
+                textState.overflow, fillKey, textState.maxAngle,
+                function(text) {
+                    var width = widths[text];
+                    if (!width) {
+                        width = widths[text] = ol.render.canvas.measureTextWidth(font, text);
+                    }
+                    return width * textScale * pixelRatio;
+                },
+                offsetY, strokeKey, strokeWidth * pixelRatio, text, textKey, 1
+            ]);
+            this.hitDetectionInstructions.push([ol.render.canvas.Instruction.DRAW_CHARS,
+                begin, end, baseline, declutterGroup,
+                textState.overflow, fillKey, textState.maxAngle,
+                function(text) {
+                    var width = widths[text];
+                    if (!width) {
+                        width = widths[text] = ol.render.canvas.measureTextWidth(font, text);
+                    }
+                    return width * textScale;
+                },
+                offsetY, strokeKey, strokeWidth, text, textKey, 1 / pixelRatio
+            ]);
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.TextReplay.prototype.setTextStyle = function(textStyle, declutterGroup) {
+            var textState, fillState, strokeState;
+            if (!textStyle) {
+                this.text_ = '';
+            } else {
+                this.declutterGroup_ = /** @type {ol.DeclutterGroup} */ (declutterGroup);
+
+                var textFillStyle = textStyle.getFill();
+                if (!textFillStyle) {
+                    fillState = this.textFillState_ = null;
+                } else {
+                    fillState = this.textFillState_;
+                    if (!fillState) {
+                        fillState = this.textFillState_ = /** @type {ol.CanvasFillState} */ ({});
+                    }
+                    fillState.fillStyle = ol.colorlike.asColorLike(
+                        textFillStyle.getColor() || ol.render.canvas.defaultFillStyle);
+                }
+
+                var textStrokeStyle = textStyle.getStroke();
+                if (!textStrokeStyle) {
+                    strokeState = this.textStrokeState_ = null;
+                } else {
+                    strokeState = this.textStrokeState_;
+                    if (!strokeState) {
+                        strokeState = this.textStrokeState_ = /** @type {ol.CanvasStrokeState} */ ({});
+                    }
+                    var lineDash = textStrokeStyle.getLineDash();
+                    var lineDashOffset = textStrokeStyle.getLineDashOffset();
+                    var lineWidth = textStrokeStyle.getWidth();
+                    var miterLimit = textStrokeStyle.getMiterLimit();
+                    strokeState.lineCap = textStrokeStyle.getLineCap() || ol.render.canvas.defaultLineCap;
+                    strokeState.lineDash = lineDash ? lineDash.slice() : ol.render.canvas.defaultLineDash;
+                    strokeState.lineDashOffset =
+                        lineDashOffset === undefined ? ol.render.canvas.defaultLineDashOffset : lineDashOffset;
+                    strokeState.lineJoin = textStrokeStyle.getLineJoin() || ol.render.canvas.defaultLineJoin;
+                    strokeState.lineWidth =
+                        lineWidth === undefined ? ol.render.canvas.defaultLineWidth : lineWidth;
+                    strokeState.miterLimit =
+                        miterLimit === undefined ? ol.render.canvas.defaultMiterLimit : miterLimit;
+                    strokeState.strokeStyle = ol.colorlike.asColorLike(
+                        textStrokeStyle.getColor() || ol.render.canvas.defaultStrokeStyle);
+                }
+
+                textState = this.textState_;
+                var font = textStyle.getFont() || ol.render.canvas.defaultFont;
+                //ol.render.canvas.checkFont(font);  // FIXME sunyl
+                var textScale = textStyle.getScale();
+                textState.overflow = textStyle.getOverflow();
+                textState.font = font;
+                textState.maxAngle = textStyle.getMaxAngle();
+                textState.placement = textStyle.getPlacement();
+                textState.textAlign = textStyle.getTextAlign();
+                textState.textBaseline = textStyle.getTextBaseline() || ol.render.canvas.defaultTextBaseline;
+                textState.backgroundFill = textStyle.getBackgroundFill();
+                textState.backgroundStroke = textStyle.getBackgroundStroke();
+                textState.padding = textStyle.getPadding() || ol.render.canvas.defaultPadding;
+                textState.scale = textScale === undefined ? 1 : textScale;
+
+                var textOffsetX = textStyle.getOffsetX();
+                var textOffsetY = textStyle.getOffsetY();
+                var textRotateWithView = textStyle.getRotateWithView();
+                var textRotation = textStyle.getRotation();
+                this.text_ = textStyle.getText() || '';
+                this.textOffsetX_ = textOffsetX === undefined ? 0 : textOffsetX;
+                this.textOffsetY_ = textOffsetY === undefined ? 0 : textOffsetY;
+                this.textRotateWithView_ = textRotateWithView === undefined ? false : textRotateWithView;
+                this.textRotation_ = textRotation === undefined ? 0 : textRotation;
+
+                this.strokeKey_ = strokeState ?
+                    (typeof strokeState.strokeStyle == 'string' ? strokeState.strokeStyle : ol.getUid(strokeState.strokeStyle)) +
+                        strokeState.lineCap + strokeState.lineDashOffset + '|' + strokeState.lineWidth +
+                        strokeState.lineJoin + strokeState.miterLimit + '[' + strokeState.lineDash.join() + ']' :
+                    '';
+                this.textKey_ = textState.font + textState.scale + (textState.textAlign || '?');
+                this.fillKey_ = fillState ?
+                    (typeof fillState.fillStyle == 'string' ? fillState.fillStyle : ('|' + ol.getUid(fillState.fillStyle))) :
+                    '';
+            }
+        };
+
+        /**
+         * @constructor
+         * @extends {ol.render.ReplayGroup}
+         * @param {number} tolerance Tolerance.
+         * @param {ol.Extent} maxExtent Max extent.
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @param {boolean} overlaps The replay group can have overlapping geometries.
+         * @param {?} declutterTree Declutter tree
+         * for declutter processing in postrender.
+         * @param {number=} opt_renderBuffer Optional rendering buffer.
+         * @struct
+         */
+        ol.render.canvas.ReplayGroup = function(
+            tolerance, maxExtent, resolution, pixelRatio, overlaps, declutterTree, opt_renderBuffer) {
+            ol.render.ReplayGroup.call(this);
+
+            /**
+             * Declutter tree.
+             * @private
+             */
+            this.declutterTree_ = declutterTree;
+
+            /**
+             * @type {ol.DeclutterGroup}
+             * @private
+             */
+            this.declutterGroup_ = null;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.tolerance_ = tolerance;
+
+            /**
+             * @private
+             * @type {ol.Extent}
+             */
+            this.maxExtent_ = maxExtent;
+
+            /**
+             * @private
+             * @type {boolean}
+             */
+            this.overlaps_ = overlaps;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.pixelRatio_ = pixelRatio;
+
+            /**
+             * @private
+             * @type {number}
+             */
+            this.resolution_ = resolution;
+
+            /**
+             * @private
+             * @type {number|undefined}
+             */
+            this.renderBuffer_ = opt_renderBuffer;
+
+            /**
+             * @private
+             * @type {!Object.<string,
+       *        Object.<ol.render.ReplayType, ol.render.canvas.Replay>>}
+             */
+            this.replaysByZIndex_ = {};
+
+            /**
+             * @private
+             * @type {CanvasRenderingContext2D}
+             */
+            // FIXME
+            this.hitDetectionContext_ = null;
+
+            /**
+             * @private
+             * @type {ol.Transform}
+             */
+            this.hitDetectionTransform_ = ol.transform.create();
+        };
+        ol.inherits(ol.render.canvas.ReplayGroup, ol.render.ReplayGroup);
+
+
+        /**
+         * This cache is used for storing calculated pixel circles for increasing performance.
+         * It is a static property to allow each Replaygroup to access it.
+         * @type {Object.<number, Array.<Array.<(boolean|undefined)>>>}
+         * @private
+         */
+        ol.render.canvas.ReplayGroup.circleArrayCache_ = {
+            0: [[true]]
+        };
+
+
+        /**
+         * This method fills a row in the array from the given coordinate to the
+         * middle with `true`.
+         * @param {Array.<Array.<(boolean|undefined)>>} array The array that will be altered.
+         * @param {number} x X coordinate.
+         * @param {number} y Y coordinate.
+         * @private
+         */
+        ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_ = function(array, x, y) {
+            var i;
+            var radius = Math.floor(array.length / 2);
+            if (x >= radius) {
+                for (i = radius; i < x; i++) {
+                    array[i][y] = true;
+                }
+            } else if (x < radius) {
+                for (i = x + 1; i < radius; i++) {
+                    array[i][y] = true;
+                }
+            }
+        };
+
+
+        /**
+         * This methods creates a circle inside a fitting array. Points inside the
+         * circle are marked by true, points on the outside are undefined.
+         * It uses the midpoint circle algorithm.
+         * A cache is used to increase performance.
+         * @param {number} radius Radius.
+         * @returns {Array.<Array.<(boolean|undefined)>>} An array with marked circle points.
+         * @private
+         */
+        ol.render.canvas.ReplayGroup.getCircleArray_ = function(radius) {
+            if (ol.render.canvas.ReplayGroup.circleArrayCache_[radius] !== undefined) {
+                return ol.render.canvas.ReplayGroup.circleArrayCache_[radius];
+            }
+
+            var arraySize = radius * 2 + 1;
+            var arr = new Array(arraySize);
+            for (var i = 0; i < arraySize; i++) {
+                arr[i] = new Array(arraySize);
+            }
+
+            var x = radius;
+            var y = 0;
+            var error = 0;
+
+            while (x >= y) {
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius + x, radius + y);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius + y, radius + x);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius - y, radius + x);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius - x, radius + y);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius - x, radius - y);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius - y, radius - x);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius + y, radius - x);
+                ol.render.canvas.ReplayGroup.fillCircleArrayRowToMiddle_(arr, radius + x, radius - y);
+
+                y++;
+                error += 1 + 2 * y;
+                if (2 * (error - x) + 1 > 0) {
+                    x -= 1;
+                    error += 1 - 2 * x;
+                }
+            }
+
+            ol.render.canvas.ReplayGroup.circleArrayCache_[radius] = arr;
+            return arr;
+        };
+
+
+        /**
+         * @param {!Object.<string, Array.<*>>} declutterReplays Declutter replays.
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {number} rotation Rotation.
+         */
+        ol.render.canvas.ReplayGroup.replayDeclutter = function(declutterReplays, context, rotation) {
+            var zs = Object.keys(declutterReplays).map(Number).sort(ol.array.numberSafeCompareFunction);
+            var skippedFeatureUids = {};
+            for (var z = 0, zz = zs.length; z < zz; ++z) {
+                var replayData = declutterReplays[zs[z].toString()];
+                for (var i = 0, ii = replayData.length; i < ii;) {
+                    var replay = replayData[i++];
+                    var transform = replayData[i++];
+                    replay.replay(context, transform, rotation, skippedFeatureUids);
+                }
+            }
+        };
+
+
+        /**
+         * @param {boolean} group Group with previous replay.
+         * @return {ol.DeclutterGroup} Declutter instruction group.
+         */
+        ol.render.canvas.ReplayGroup.prototype.addDeclutter = function(group) {
+            var declutter = null;
+            if (this.declutterTree_) {
+                if (group) {
+                    declutter = this.declutterGroup_;
+                    /** @type {number} */ (declutter[4])++;
+                } else {
+                    declutter = this.declutterGroup_ = ol.extent.createEmpty();
+                    declutter.push(1);
+                }
+            }
+            return declutter;
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform} transform Transform.
+         */
+        ol.render.canvas.ReplayGroup.prototype.clip = function(context, transform) {
+            var flatClipCoords = this.getClipCoords(transform);
+            context.beginPath();
+            context.moveTo(flatClipCoords[0], flatClipCoords[1]);
+            context.lineTo(flatClipCoords[2], flatClipCoords[3]);
+            context.lineTo(flatClipCoords[4], flatClipCoords[5]);
+            context.lineTo(flatClipCoords[6], flatClipCoords[7]);
+            context.clip();
+        };
+
+
+        /**
+         * @param {Array.<ol.render.ReplayType>} replays Replays.
+         * @return {boolean} Has replays of the provided types.
+         */
+        ol.render.canvas.ReplayGroup.prototype.hasReplays = function(replays) {
+            for (var zIndex in this.replaysByZIndex_) {
+                var candidates = this.replaysByZIndex_[zIndex];
+                for (var i = 0, ii = replays.length; i < ii; ++i) {
+                    if (replays[i] in candidates) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+
+        /**
+         * FIXME empty description for jsdoc
+         */
+        ol.render.canvas.ReplayGroup.prototype.finish = function() {
+            var zKey;
+            for (zKey in this.replaysByZIndex_) {
+                var replays = this.replaysByZIndex_[zKey];
+                var replayKey;
+                for (replayKey in replays) {
+                    replays[replayKey].finish();
+                }
+            }
+        };
+
+
+        /**
+         * @param {ol.Coordinate} coordinate Coordinate.
+         * @param {number} resolution Resolution.
+         * @param {number} rotation Rotation.
+         * @param {number} hitTolerance Hit tolerance in pixels.
+         * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
+         *     to skip.
+         * @param {function((ol.Feature|ol.render.Feature)): T} callback Feature
+         *     callback.
+         * @param {Object.<string, ol.DeclutterGroup>} declutterReplays Declutter
+         *     replays.
+         * @return {T|undefined} Callback result.
+         * @template T
+         */
+        ol.render.canvas.ReplayGroup.prototype.forEachFeatureAtCoordinate = function(
+            coordinate, resolution, rotation, hitTolerance, skippedFeaturesHash, callback, declutterReplays) {
+
+            hitTolerance = Math.round(hitTolerance);
+            var contextSize = hitTolerance * 2 + 1;
+            var transform = ol.transform.compose(this.hitDetectionTransform_,
+                hitTolerance + 0.5, hitTolerance + 0.5,
+                1 / resolution, -1 / resolution,
+                -rotation,
+                -coordinate[0], -coordinate[1]);
+            var context = this.hitDetectionContext_;
+
+            if (context.canvas.width !== contextSize || context.canvas.height !== contextSize) {
+                context.canvas.width = contextSize;
+                context.canvas.height = contextSize;
+            } else {
+                context.clearRect(0, 0, contextSize, contextSize);
+            }
+
+            /**
+             * @type {ol.Extent}
+             */
+            var hitExtent;
+            if (this.renderBuffer_ !== undefined) {
+                hitExtent = ol.extent.createEmpty();
+                ol.extent.extendCoordinate(hitExtent, coordinate);
+                ol.extent.buffer(hitExtent, resolution * (this.renderBuffer_ + hitTolerance), hitExtent);
+            }
+
+            var mask = ol.render.canvas.ReplayGroup.getCircleArray_(hitTolerance);
+            var declutteredFeatures;
+            if (this.declutterTree_) {
+                declutteredFeatures = this.declutterTree_.all().map(function(entry) {
+                    return entry.value;
+                });
+            }
+
+            var replayType;
+
+            /**
+             * @param {ol.Feature|ol.render.Feature} feature Feature.
+             * @return {?} Callback result.
+             */
+            function featureCallback(feature) {
+                var imageData = context.getImageData(0, 0, contextSize, contextSize).data;
+                for (var i = 0; i < contextSize; i++) {
+                    for (var j = 0; j < contextSize; j++) {
+                        if (mask[i][j]) {
+                            if (imageData[(j * contextSize + i) * 4 + 3] > 0) {
+                                var result;
+                                if (!(declutteredFeatures && (replayType == ol.render.ReplayType.IMAGE || replayType == ol.render.ReplayType.TEXT)) ||
+                                    declutteredFeatures.indexOf(feature) !== -1) {
+                                    result = callback(feature);
+                                }
+                                if (result) {
+                                    return result;
+                                } else {
+                                    context.clearRect(0, 0, contextSize, contextSize);
+                                    return undefined;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /** @type {Array.<number>} */
+            var zs = Object.keys(this.replaysByZIndex_).map(Number);
+            zs.sort(ol.array.numberSafeCompareFunction);
+
+            var i, j, replays, replay, result;
+            for (i = zs.length - 1; i >= 0; --i) {
+                var zIndexKey = zs[i].toString();
+                replays = this.replaysByZIndex_[zIndexKey];
+                for (j = ol.render.replay.ORDER.length - 1; j >= 0; --j) {
+                    replayType = ol.render.replay.ORDER[j];
+                    replay = replays[replayType];
+                    if (replay !== undefined) {
+                        if (declutterReplays &&
+                            (replayType == ol.render.ReplayType.IMAGE || replayType == ol.render.ReplayType.TEXT)) {
+                            var declutter = declutterReplays[zIndexKey];
+                            if (!declutter) {
+                                declutterReplays[zIndexKey] = [replay, transform.slice(0)];
+                            } else {
+                                declutter.push(replay, transform.slice(0));
+                            }
+                        } else {
+                            result = replay.replayHitDetection(context, transform, rotation,
+                                skippedFeaturesHash, featureCallback, hitExtent);
+                            if (result) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+            return undefined;
+        };
+
+
+        /**
+         * @param {ol.Transform} transform Transform.
+         * @return {Array.<number>} Clip coordinates.
+         */
+        ol.render.canvas.ReplayGroup.prototype.getClipCoords = function(transform) {
+            var maxExtent = this.maxExtent_;
+            var minX = maxExtent[0];
+            var minY = maxExtent[1];
+            var maxX = maxExtent[2];
+            var maxY = maxExtent[3];
+            var flatClipCoords = [minX, minY, minX, maxY, maxX, maxY, maxX, minY];
+            ol.geom.flat.transform.transform2D(
+                flatClipCoords, 0, 8, 2, transform, flatClipCoords);
+            return flatClipCoords;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ReplayGroup.prototype.getReplay = function(zIndex, replayType) {
+            var zIndexKey = zIndex !== undefined ? zIndex.toString() : '0';
+            var replays = this.replaysByZIndex_[zIndexKey];
+            if (replays === undefined) {
+                replays = {};
+                this.replaysByZIndex_[zIndexKey] = replays;
+            }
+            var replay = replays[replayType];
+            if (replay === undefined) {
+                var Constructor = ol.render.canvas.ReplayGroup.BATCH_CONSTRUCTORS_[replayType];
+                replay = new Constructor(this.tolerance_, this.maxExtent_,
+                    this.resolution_, this.pixelRatio_, this.overlaps_, this.declutterTree_);
+                replays[replayType] = replay;
+            }
+            return replay;
+        };
+
+
+        /**
+         * @return {Object.<string, Object.<ol.render.ReplayType, ol.render.canvas.Replay>>} Replays.
+         */
+        ol.render.canvas.ReplayGroup.prototype.getReplays = function() {
+            return this.replaysByZIndex_;
+        };
+
+
+        /**
+         * @inheritDoc
+         */
+        ol.render.canvas.ReplayGroup.prototype.isEmpty = function() {
+            return ol.obj.isEmpty(this.replaysByZIndex_);
+        };
+
+
+        /**
+         * @param {CanvasRenderingContext2D} context Context.
+         * @param {ol.Transform} transform Transform.
+         * @param {number} viewRotation View rotation.
+         * @param {Object.<string, boolean>} skippedFeaturesHash Ids of features
+         *     to skip.
+         * @param {Array.<ol.render.ReplayType>=} opt_replayTypes Ordered replay types
+         *     to replay. Default is {@link ol.render.replay.ORDER}
+         * @param {Object.<string, ol.DeclutterGroup>=} opt_declutterReplays Declutter
+         *     replays.
+         */
+        ol.render.canvas.ReplayGroup.prototype.replay = function(context,
+                                                                 transform, viewRotation, skippedFeaturesHash, opt_replayTypes, opt_declutterReplays) {
+
+            /** @type {Array.<number>} */
+            var zs = Object.keys(this.replaysByZIndex_).map(Number);
+            zs.sort(ol.array.numberSafeCompareFunction);
+
+            // setup clipping so that the parts of over-simplified geometries are not
+            // visible outside the current extent when panning
+            context.save();
+            this.clip(context, transform);
+
+            var replayTypes = opt_replayTypes ? opt_replayTypes : ol.render.replay.ORDER;
+            var i, ii, j, jj, replays, replay;
+            for (i = 0, ii = zs.length; i < ii; ++i) {
+                var zIndexKey = zs[i].toString();
+                replays = this.replaysByZIndex_[zIndexKey];
+                for (j = 0, jj = replayTypes.length; j < jj; ++j) {
+                    var replayType = replayTypes[j];
+                    replay = replays[replayType];
+                    if (replay !== undefined) {
+                        if (opt_declutterReplays &&
+                            (replayType == ol.render.ReplayType.IMAGE || replayType == ol.render.ReplayType.TEXT)) {
+                            var declutter = opt_declutterReplays[zIndexKey];
+                            if (!declutter) {
+                                opt_declutterReplays[zIndexKey] = [replay, transform.slice(0)];
+                            } else {
+                                declutter.push(replay, transform.slice(0));
+                            }
+                        } else {
+                            replay.replay(context, transform, viewRotation, skippedFeaturesHash);
+                        }
+                    }
+                }
+            }
+
+            context.restore();
+        };
+
+
+        /**
+         * @const
+         * @private
+         * @type {Object.<ol.render.ReplayType,
+     *                function(new: ol.render.canvas.Replay, number, ol.Extent,
+     *                number, number, boolean, Array.<ol.DeclutterGroup>)>}
+         */
+        ol.render.canvas.ReplayGroup.BATCH_CONSTRUCTORS_ = {
+            'Circle': ol.render.canvas.PolygonReplay,
+            'Default': ol.render.canvas.Replay,
+            'Image': ol.render.canvas.ImageReplay,
+            'LineString': ol.render.canvas.LineStringReplay,
+            'Polygon': ol.render.canvas.PolygonReplay,
+            'Text': ol.render.canvas.TextReplay
+        };
+
+        ol.renderer = {};
+        ol.renderer.vector = {};
+
+        /**
+         * @param {ol.Feature|ol.render.Feature} feature1 Feature 1.
+         * @param {ol.Feature|ol.render.Feature} feature2 Feature 2.
+         * @return {number} Order.
+         */
+        ol.renderer.vector.defaultOrder = function(feature1, feature2) {
+            return ol.getUid(feature1) - ol.getUid(feature2);
+        };
+
+
+        /**
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @return {number} Squared pixel tolerance.
+         */
+        ol.renderer.vector.getSquaredTolerance = function(resolution, pixelRatio) {
+            var tolerance = ol.renderer.vector.getTolerance(resolution, pixelRatio);
+            return tolerance * tolerance;
+        };
+
+
+        /**
+         * @param {number} resolution Resolution.
+         * @param {number} pixelRatio Pixel ratio.
+         * @return {number} Pixel tolerance.
+         */
+        ol.renderer.vector.getTolerance = function(resolution, pixelRatio) {
+            return ol.SIMPLIFY_TOLERANCE * resolution / pixelRatio;
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.Circle} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderCircleGeometry_ = function(replayGroup, geometry, style, feature) {
+            var fillStyle = style.getFill();
+            var strokeStyle = style.getStroke();
+            if (fillStyle || strokeStyle) {
+                var circleReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.CIRCLE);
+                circleReplay.setFillStrokeStyle(fillStyle, strokeStyle);
+                circleReplay.drawCircle(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(false));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @param {ol.style.Style} style Style.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @param {function(this: T, ol.events.Event)} listener Listener function.
+         * @param {T} thisArg Value to use as `this` when executing `listener`.
+         * @return {boolean} `true` if style is loading.
+         * @template T
+         */
+        ol.renderer.vector.renderFeature = function(
+            replayGroup, feature, style, squaredTolerance, listener, thisArg) {
+            var loading = false;
+            var imageStyle, imageState;
+            imageStyle = style.getImage();
+            if (imageStyle) {
+                imageState = imageStyle.getImageState();
+                if (imageState == ol.ImageState.LOADED ||
+                    imageState == ol.ImageState.ERROR) {
+                    imageStyle.unlistenImageChange(listener, thisArg);
+                } else {
+                    if (imageState == ol.ImageState.IDLE) {
+                        imageStyle.load();
+                    }
+                    imageState = imageStyle.getImageState();
+                    imageStyle.listenImageChange(listener, thisArg);
+                    loading = true;
+                }
+            }
+            ol.renderer.vector.renderFeature_(replayGroup, feature, style,
+                squaredTolerance);
+
+            return loading;
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @param {ol.style.Style} style Style.
+         * @param {number} squaredTolerance Squared tolerance.
+         * @private
+         */
+        ol.renderer.vector.renderFeature_ = function(
+            replayGroup, feature, style, squaredTolerance) {
+            var geometry = style.getGeometryFunction()(feature);
+            if (!geometry) {
+                return;
+            }
+            var simplifiedGeometry = geometry.getSimplifiedGeometry(squaredTolerance);
+            var renderer = style.getRenderer();
+            if (renderer) {
+                ol.renderer.vector.renderGeometry_(replayGroup, simplifiedGeometry, style, feature);
+            } else {
+                var geometryRenderer =
+                    ol.renderer.vector.GEOMETRY_RENDERERS_[simplifiedGeometry.getType()];
+                geometryRenderer(replayGroup, simplifiedGeometry, style, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.Geometry} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderGeometry_ = function(replayGroup, geometry, style, feature) {
+            if (geometry.getType() == ol.geom.GeometryType.GEOMETRY_COLLECTION) {
+                var geometries = /** @type {ol.geom.GeometryCollection} */ (geometry).getGeometries();
+                for (var i = 0, ii = geometries.length; i < ii; ++i) {
+                    ol.renderer.vector.renderGeometry_(replayGroup, geometries[i], style, feature);
+                }
+                return;
+            }
+            var replay = replayGroup.getReplay(style.getZIndex(), ol.render.ReplayType.DEFAULT);
+            replay.drawCustom(/** @type {ol.geom.SimpleGeometry} */ (geometry), feature, style.getRenderer());
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.GeometryCollection} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderGeometryCollectionGeometry_ = function(replayGroup, geometry, style, feature) {
+            var geometries = geometry.getGeometriesArray();
+            var i, ii;
+            for (i = 0, ii = geometries.length; i < ii; ++i) {
+                var geometryRenderer =
+                    ol.renderer.vector.GEOMETRY_RENDERERS_[geometries[i].getType()];
+                geometryRenderer(replayGroup, geometries[i], style, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.LineString|ol.render.Feature} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
+            var strokeStyle = style.getStroke();
+            if (strokeStyle) {
+                var lineStringReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.LINE_STRING);
+                lineStringReplay.setFillStrokeStyle(null, strokeStyle);
+                lineStringReplay.drawLineString(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(false));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.MultiLineString|ol.render.Feature} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
+            var strokeStyle = style.getStroke();
+            if (strokeStyle) {
+                var lineStringReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.LINE_STRING);
+                lineStringReplay.setFillStrokeStyle(null, strokeStyle);
+                lineStringReplay.drawMultiLineString(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(false));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.MultiPolygon} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
+            var fillStyle = style.getFill();
+            var strokeStyle = style.getStroke();
+            if (strokeStyle || fillStyle) {
+                var polygonReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.POLYGON);
+                polygonReplay.setFillStrokeStyle(fillStyle, strokeStyle);
+                polygonReplay.drawMultiPolygon(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(false));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.Point|ol.render.Feature} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderPointGeometry_ = function(replayGroup, geometry, style, feature) {
+            var imageStyle = style.getImage();
+            if (imageStyle) {
+                if (imageStyle.getImageState() != ol.ImageState.LOADED) {
+                    return;
+                }
+                var imageReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.IMAGE);
+                imageReplay.setImageStyle(imageStyle, replayGroup.addDeclutter(false));
+                imageReplay.drawPoint(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(!!imageStyle));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.MultiPoint|ol.render.Feature} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderMultiPointGeometry_ = function(replayGroup, geometry, style, feature) {
+            var imageStyle = style.getImage();
+            if (imageStyle) {
+                if (imageStyle.getImageState() != ol.ImageState.LOADED) {
+                    return;
+                }
+                var imageReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.IMAGE);
+                imageReplay.setImageStyle(imageStyle, replayGroup.addDeclutter(false));
+                imageReplay.drawMultiPoint(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(!!imageStyle));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @param {ol.render.ReplayGroup} replayGroup Replay group.
+         * @param {ol.geom.Polygon|ol.render.Feature} geometry Geometry.
+         * @param {ol.style.Style} style Style.
+         * @param {ol.Feature|ol.render.Feature} feature Feature.
+         * @private
+         */
+        ol.renderer.vector.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
+            var fillStyle = style.getFill();
+            var strokeStyle = style.getStroke();
+            if (fillStyle || strokeStyle) {
+                var polygonReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.POLYGON);
+                polygonReplay.setFillStrokeStyle(fillStyle, strokeStyle);
+                polygonReplay.drawPolygon(geometry, feature);
+            }
+            var textStyle = style.getText();
+            if (textStyle) {
+                var textReplay = replayGroup.getReplay(
+                    style.getZIndex(), ol.render.ReplayType.TEXT);
+                textReplay.setTextStyle(textStyle, replayGroup.addDeclutter(false));
+                textReplay.drawText(geometry, feature);
+            }
+        };
+
+
+        /**
+         * @const
+         * @private
+         * @type {Object.<ol.geom.GeometryType,
+     *                function(ol.render.ReplayGroup, ol.geom.Geometry,
+     *                         ol.style.Style, Object)>}
+         */
+        ol.renderer.vector.GEOMETRY_RENDERERS_ = {
+            'Point': ol.renderer.vector.renderPointGeometry_,
+            'LineString': ol.renderer.vector.renderLineStringGeometry_,
+            'Polygon': ol.renderer.vector.renderPolygonGeometry_,
+            'MultiPoint': ol.renderer.vector.renderMultiPointGeometry_,
+            'MultiLineString': ol.renderer.vector.renderMultiLineStringGeometry_,
+            'MultiPolygon': ol.renderer.vector.renderMultiPolygonGeometry_,
+            'GeometryCollection': ol.renderer.vector.renderGeometryCollectionGeometry_,
+            'Circle': ol.renderer.vector.renderCircleGeometry_
+        };
+
+    var spriteImageCanvas = {};
+
+    var mvtStyleClass = new MvtStyle(ol, true);
+    var mvtRenderer2D = new MvtRenderer2D({
+        mvtStyle: mvtStyleClass,
+        openlayer: ol,
+        useOffscreen: true
+    });
+
+    function MVTWorker(parameters, transferableObjects) {
+        var canvas = new OffscreenCanvas(parameters.canvasWidth, parameters.canvasWidth);
+        var idCanvas = new OffscreenCanvas(parameters.canvasWidth, parameters.canvasWidth);
+        var pbfData = parameters.pbfData;
+        var layers = parameters.layers;
+        var transform = parameters.transform;
+        var squaredTolerance = parameters.squaredTolerance;
+        var spriteImageDatas = parameters.spriteImageDatas;
+        var keepProperties = parameters.keepProperties;
+        var tileLevel = parameters.tileLevel;
+        var needSourceLayerNames = parameters.needSourceLayerNames;
+        var selectEnabled = parameters.selectEnabled;
+        var featureProperties = {};
+
+        try {
+            var mvtParser = new ol.format.MVT({
+                featureClass: ol.Feature
+            });
+            var features = mvtParser.readFeatures(pbfData, {
+                needSourceLayerNames: needSourceLayerNames
+            });
+            var renderResult = mvtRenderer2D.renderFeatures({
+                colorCanvas: canvas,
+                idCanvas: idCanvas,
+                transform: transform,
+                layers: layers,
+                features: features,
+                tileLevel: tileLevel,
+                spriteImageCanvas: spriteImageCanvas,
+                spriteImageDatas: spriteImageDatas,
+                squaredTolerance: squaredTolerance,
+                selectEnabled: selectEnabled,
+                showBillboard: false
+            });
+
+            if (keepProperties) {
+                var featuresToRender = renderResult.idFeatures;
+                var featuresToRenderLength = featuresToRender.length;
+                for (var i = 0; i < featuresToRenderLength; i++) {
+                    var feature = featuresToRender[i];
+                    var featureID = getFeatureID$1(feature);
+                    var propertiesWithoutGeometry = feature.getProperties();
+                    if (when.defined(propertiesWithoutGeometry.geometry)) {
+                        delete propertiesWithoutGeometry.geometry;
+                    }
+                    featureProperties[featureID] = propertiesWithoutGeometry;
+                }
+            }
+        }
+        catch (err) {
+        }
+
+        var imageBitmap = canvas.transferToImageBitmap();
+        var idImageBitmap = selectEnabled ? idCanvas.transferToImageBitmap() : null;
+        transferableObjects.push(imageBitmap);
+        return {
+            buffer: imageBitmap,
+            idBuffer: idImageBitmap,
+            properties: featureProperties
+        };
+    }
+
+    function getFeatureID$1(feature) {
+        var id = feature.getId();
+        // 只在颜色中记录256*256*256这么大范围的ID，超过这个范围的ID舍去
+        var discard = Math.floor(id / 16777216);
+        id = id - discard * 16777216;
+        return id;
+    }
+
+    var MVTWorker$1 = createTaskProcessorWorker(MVTWorker);
+
+    return MVTWorker$1;
+
+});
