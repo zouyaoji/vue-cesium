@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     onDonorClick () {
-      console.log()
       this.$router.push({ name: this.lang === 'zh' ? '赞助' : 'Donations' })
     }
   }

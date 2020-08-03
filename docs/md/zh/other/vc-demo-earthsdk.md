@@ -1,6 +1,6 @@
 # EarthSDK 例子
 
-使用 CesiumLab 的 EarthSDK 开发时开发时只需要在引入 vue-cesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 路径即可:
+使用 CesiumLab 的 EarthSDK 开发时只需要在引入 vue-cesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 路径即可:
 
 ```js
 Vue.use(VueCesium, {
