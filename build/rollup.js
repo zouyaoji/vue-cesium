@@ -83,6 +83,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/mixins/tool'), srcPath),
     packagesFromPath(utils.resolve('src/exts'), srcPath),
     packagesFromPath(utils.resolve('src/exts/imageryProvider'), srcPath),
+    packagesFromPath(utils.resolve('src/exts/materialProperty'), srcPath),
     packagesFromPath(utils.resolve('src/exts/wind'), srcPath),
     packagesFromPath(utils.resolve('src/utils'), srcPath)
   ]).then((otherPackages) => {
