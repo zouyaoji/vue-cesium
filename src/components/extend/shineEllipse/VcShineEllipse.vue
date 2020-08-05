@@ -1,6 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity :position="position" ref="entity">
+    <vc-entity :position="position" ref="entity" :show="show">
       <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius" :semiMinorAxis="radius"></vc-graphics-ellipse>
     </vc-entity>
   </i>
@@ -8,11 +8,11 @@
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { position, color } from '../../../mixins/mixinProps'
+import { position, color, show } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 export default {
   name: 'vc-shine-ellipse',
-  mixins: [cmp, position, color],
+  mixins: [cmp, position, color, show],
   props: {
     height: {
       type: Number,

@@ -1,23 +1,18 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-entity :position="position" ref="entity">
-      <vc-graphics-point
-        :color="callBackColor"
-        :heightReference="2"
-        :outlineWidth="0"
-        :pixelSize="pixelSize"
-      ></vc-graphics-point>
+      <vc-graphics-point :color="callBackColor" :heightReference="2" :outlineWidth="0" :pixelSize="pixelSize" :show="show"></vc-graphics-point>
     </vc-entity>
   </i>
 </template>
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { position, color } from '../../../mixins/mixinProps'
+import { position, color, show } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 export default {
   name: 'vc-shine-point',
-  mixins: [cmp, position, color],
+  mixins: [cmp, position, color, show],
   props: {
     pixelSize: {
       type: Number,

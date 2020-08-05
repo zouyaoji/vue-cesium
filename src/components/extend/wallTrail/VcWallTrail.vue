@@ -7,6 +7,7 @@
         :minimumHeights="minimumHeights"
         :outline="outline"
         :positions="positions"
+        :show="show"
       ></vc-graphics-wall>
     </vc-entity>
   </i>
@@ -14,12 +15,12 @@
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { positions, minimumHeights, maximumHeights, outline } from '../../../mixins/mixinProps'
+import { positions, minimumHeights, maximumHeights, outline, show } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 import PolylineTrailMaterialProperty from '../../../exts/materialProperty/PolylineTrailMaterialProperty'
 export default {
   name: 'vc-trail-wall',
-  mixins: [cmp, positions, minimumHeights, maximumHeights, outline],
+  mixins: [cmp, positions, minimumHeights, maximumHeights, outline, show],
   props: {
     color: {
       type: Object | String | Array,

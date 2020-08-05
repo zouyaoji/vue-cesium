@@ -1,6 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity ref="entity">
+    <vc-entity ref="entity" :show="show">
       <vc-graphics-polyline :material="material" :positions="positions" :width="width" :clampToGround="clampToGround"></vc-graphics-polyline>
     </vc-entity>
   </i>
@@ -8,12 +8,12 @@
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { positions, width, clampToGround } from '../../../mixins/mixinProps'
+import { positions, width, clampToGround, show } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 import PolylineTrailMaterialProperty from '../../../exts/materialProperty/PolylineTrailMaterialProperty'
 export default {
   name: 'vc-trail-polyline',
-  mixins: [cmp, positions, width, clampToGround],
+  mixins: [cmp, positions, width, clampToGround, show],
   props: {
     color: {
       type: Object | String | Array,

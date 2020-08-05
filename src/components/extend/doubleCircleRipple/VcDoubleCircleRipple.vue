@@ -1,9 +1,9 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity :position="position" ref="entity1">
+    <vc-entity :position="position" ref="entity1" :show="show">
       <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius1" :semiMinorAxis="radius1"></vc-graphics-ellipse>
     </vc-entity>
-    <vc-entity :position="position" ref="entity2" v-if="showEntity2">
+    <vc-entity :position="position" ref="entity2" v-if="showEntity2" :show="show">
       <vc-graphics-ellipse
         :height="height"
         :material="material"
@@ -16,10 +16,11 @@
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { position } from '../../../mixins/mixinProps'
+import { position, show, color } from '../../../mixins/mixinProps'
+import { makeColor } from '../../../utils/cesiumHelpers'
 export default {
   name: 'vc-ripple-circle-double',
-  mixins: [cmp, position],
+  mixins: [cmp, position, show, color],
   props: {
     height: {
       type: Number,
@@ -58,7 +59,8 @@ export default {
       this._reject = reject
     })
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
-      const { minRadius, maxRadius, imageUrl, interval, changeRadius1, changeRadius2 } = this
+      const { minRadius, maxRadius, imageUrl, interval, changeRadius1, changeRadius2, color } = this
+      const cesiumColor = makeColor(color)
       this.r1 = minRadius
       this.r2 = maxRadius
       this.material = {
@@ -68,7 +70,7 @@ export default {
             image: imageUrl,
             transparent: true,
             color: () => {
-              return Cesium.Color.WHITE.withAlpha(1 - this.r1 / maxRadius) // entity的颜色透明 并不影响材质，并且 entity也会透明哦
+              return cesiumColor.withAlpha(1 - this.r1 / maxRadius) // entity的颜色透明 并不影响材质，并且 entity也会透明哦
             }
           }
         }
