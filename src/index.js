@@ -121,8 +121,13 @@ import * as VcShineEllipse from './components/extend/shineEllipse'
 import * as VcShinePoint from './components/extend/shinePoint'
 import * as VcPolylineTrail from './components/extend/polylineTrail'
 import * as VcWallTrail from './components/extend/wallTrail'
-
+import * as VcHTMLOverlay from './components/extend/htmlOverlay'
+// 类
+import PolylineTrailMaterialProperty from './exts/materialProperty/PolylineTrailMaterialProperty'
+// 语言
 import lang from './exts/lang'
+// 样式
+import './assets/styles/main.scss'
 
 /**
  * @const {string} VueCesium version
@@ -264,6 +269,7 @@ function plugin (Vue, options = {}) {
   Vue.use(VcShinePoint, options)
   Vue.use(VcPolylineTrail, options)
   Vue.use(VcWallTrail, options)
+  Vue.use(VcHTMLOverlay, options)
   // 控件
   Vue.use(VcNavigation, options)
   Vue.use(VcNavigationSM, options)
@@ -398,7 +404,10 @@ export {
   VcShinePoint,
   VcPolylineTrail,
   VcWallTrail,
+  VcHTMLOverlay,
 
   VcNavigation,
-  VcNavigationSM
+  VcNavigationSM,
+
+  PolylineTrailMaterialProperty
 }
