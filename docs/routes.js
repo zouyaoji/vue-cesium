@@ -963,6 +963,14 @@ const routeMap = [
           zh: '流动墙',
           en: 'VcWallTrail'
         }
+      },
+      {
+        path: 'vc-overlay-html',
+        component: 'extend/vc-overlay-html',
+        name: {
+          zh: 'HTML元素',
+          en: 'VcHTMLOverlay'
+        }
       }
     ]
   }

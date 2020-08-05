@@ -345,6 +345,7 @@ The `vc-trail-polyline` is used to load the flowling line effect. Refer to [ysCe
 | name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | positions | Array | | `optional` Specifies an array of positions representing lines. **Structure: [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
+| show | Boolean | `true` | `optional` Specifies whether the line is visible. |
 | width | Number | `1.0` | `optional` Specify the width of the line in pixels. |
 | clampToGround | Boolean | `false` | `optional` Whether the specified line is attached to the ground. |
 | color | Object\|String\|Array | `'yellow'` | `optional` Specify the color of the line. |

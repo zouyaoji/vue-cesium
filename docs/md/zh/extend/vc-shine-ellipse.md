@@ -80,6 +80,7 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` 指定闪圆效果实体添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
+| show | Boolean | `true` | `optional` 指定闪圆效果是否可见。|
 | height | Number | `undefined` | `optional` 指定闪圆效果效果椭圆高度。单位米。|
 | radius | Number | `0` | `optional` 指定闪圆效果效果半径。单位米。|
 | color | Object\|String\|Array | `'white'` | `optional` 指定闪圆效果颜色。 |

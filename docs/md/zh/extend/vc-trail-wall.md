@@ -116,6 +116,7 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | positions | Array | | `optional` 指定墙的位置数组。 **结构：[{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
+| show | Boolean | `true` | `optional` 指定流动墙是否可见。|
 | minimumHeights | Array | | `optional` 指定 wall 底部的高度数组。 |
 | maximumHeights | Array | | `optional` 指定 wall 顶部的高度数组。 |
 | outline | Boolean | `false` | `optional` 指定 wall 是否绘制轮廓线。 |

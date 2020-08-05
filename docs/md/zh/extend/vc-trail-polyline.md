@@ -346,6 +346,7 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | positions | Array | | `optional` 指定表示线条的位置数组。 **结构：[{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
+| show | Boolean | `true` | `optional` 指定流动线是否可见。|
 | width | Number | `1.0` | `optional` 指定线的宽度（像素）。 |
 | clampToGround | Boolean | `false` | `optional` 指定线是否贴地。 |
 | color | Object\|String\|Array | `'yellow'` | `optional` 指定线的颜色。 |

@@ -116,6 +116,7 @@ The `vc-trail-wall` is used to load the flowing wall effect. Refer to [ysCesium|
 | name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | positions | Array | | `optional` Specifies an array of positions representing wall. **Structure: [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]** |
+| show | Boolean | `true` | `optional` Specifies whether the wall is visible. |
 | minimumHeights | Array | | `optional` Specifies the height array of the bottom of the wall. |
 | maximumHeights | Array | | `optional` Specifies the height array of the top of the wall. |
 | outline | Boolean | `false` | `optional` Specifies whether the wall draws contour lines. |

@@ -57,7 +57,7 @@ function getAllPackages () {
     {
       entry: config.entry,
       jsName: 'index',
-      cssName: undefined,
+      cssName: 'style',
       globName: config.fullname,
       amdName: config.fullname
     }

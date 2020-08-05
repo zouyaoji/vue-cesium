@@ -80,6 +80,7 @@ The `vc-shine-point` component is used to load the flash point effect. Refer to 
 | name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` Specify the location where the flash point effect entity is added. structure:{ lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| show | Boolean | `true` | `optional` Specifies whether the point is visible. |
 | pixelSize | Number | `10` | `optional` Specify the pixel value of the flash point effect point.|
 | color | Object\|String\|Array | `'white'` | `optional` Specify the flash point effect color. |
 | deviationAlpha | Number | `0.05` | `optional` Specify the flash point effect color Alpha value to change the scale, the larger the value, the faster the flash. Ranges: (0, 1)|

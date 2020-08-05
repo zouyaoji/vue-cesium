@@ -6,3 +6,5 @@ coverage
 .travis.yml
 server.js
 test
+.github
+.vscode

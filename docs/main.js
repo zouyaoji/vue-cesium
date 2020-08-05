@@ -13,9 +13,11 @@ import 'material-design-icons/iconfont/material-icons.css'
 import './fonts/iconfont.css'
 import 'vue-material/dist/vue-material.css'
 import 'vue-slider-component/theme/default.css'
+
 import * as VueCesium from '../src/index.js'
 // import * as VueCesium from '../lib/index.js'
 // import lang from '../lang/en-us'
+// import '../lib/style.css'
 // import '../lib/vc-navigation.css'
 // import '../lib/vc-navigation-sm.css'
 Vue.use(VueCesium, {

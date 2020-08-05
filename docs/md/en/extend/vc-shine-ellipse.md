@@ -80,6 +80,7 @@ The `vc-shine-ellipse` component is used to load the flash circle effect. Refer 
 | name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` Specify the location where the flash circle effect entity is added. structure:{ lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| show | Boolean | `true` | `optional` Specifies whether the ellipse circle ripple effect is visible. |
 | height | Number | `undefined` | `optional` Specify the height of the ellipse for the flash circle effect in meters.|
 | radius | Number | `0` | `optional` Specify the flash circle effect radius in meters.|
 | color | Object\|String\|Array | `'white'` | `optional` Specify the color of the flash circle effect. |
