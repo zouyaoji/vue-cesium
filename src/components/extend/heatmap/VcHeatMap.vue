@@ -74,7 +74,8 @@ export default {
   },
   watch: {
     changeProps: {
-      handler (val, oldValue) {
+      async handler (val, oldValue) {
+        await this.$parent.createPromise
         if (JSON.stringify(val) === JSON.stringify(oldValue)) return
         const { _heatmapInstance } = this
         if (JSON.stringify(val.bounds) !== JSON.stringify(oldValue.bounds)) {
@@ -90,9 +91,9 @@ export default {
       deep: true
     }
   },
-  methods: {
-    async createCesiumObject () {
-      const { Cesium, bounds, options, min, max, data, defaultOptions, type } = this
+  mounted () {
+    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+      const { bounds, options, min, max, data, defaultOptions } = this
       this._WMP = new Cesium.WebMercatorProjection()
       this._id = this.getID()
       options.gradient = options.gradient ? options.gradient : defaultOptions.gradient
@@ -125,6 +126,11 @@ export default {
           }
         })
       })
+    })
+  },
+  methods: {
+    async createCesiumObject () {
+      const { type } = this
       return this.$refs[type].createPromise.then(({ Cesium, viewer, cesiumObject }) => {
         if (!this.$refs[type]._mounted) {
           return this.$refs[type].load().then(({ Cesium, viewer, cesiumObject }) => {
