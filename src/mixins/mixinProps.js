@@ -236,7 +236,7 @@ const disableDepthTestDistance = {
  */
 const dimensions = {
   props: {
-    dimensions: Object
+    dimensions: Object | Function
   }
 }
 

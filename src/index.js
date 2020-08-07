@@ -117,6 +117,7 @@ import * as VcWindMap from './components/extend/windmap'
 import * as VcScanCircle from './components/extend/scanCircle'
 import * as VcScanRadar from './components/extend/scanRadar'
 import * as VcDoubleCircleRipple from './components/extend/doubleCircleRipple'
+import * as VcDoubleRotatingCircle from './components/extend/doubleRoatatingCircle'
 import * as VcShineEllipse from './components/extend/shineEllipse'
 import * as VcShinePoint from './components/extend/shinePoint'
 import * as VcPolylineTrail from './components/extend/polylineTrail'
@@ -265,6 +266,7 @@ function plugin (Vue, options = {}) {
   Vue.use(VcScanCircle, options)
   Vue.use(VcScanRadar, options)
   Vue.use(VcDoubleCircleRipple, options)
+  Vue.use(VcDoubleRotatingCircle, options)
   Vue.use(VcShineEllipse, options)
   Vue.use(VcShinePoint, options)
   Vue.use(VcPolylineTrail, options)
@@ -400,6 +402,7 @@ export {
   VcScanCircle,
   VcScanRadar,
   VcDoubleCircleRipple,
+  VcDoubleRotatingCircle,
   VcShineEllipse,
   VcShinePoint,
   VcPolylineTrail,
