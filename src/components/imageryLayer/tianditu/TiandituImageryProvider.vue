@@ -1,9 +1,10 @@
 <script>
 import mixinImageryProvider from '../../../mixins/providers/mixinImageryProvider'
 import TiandituImageryProvider from '../../../exts/imageryProvider/TiandituImageryProvider'
+import { minimumLevel, maximumLevel } from '../../../mixins/mixinProps'
 export default {
   name: 'vc-provider-imagery-tianditu',
-  mixins: [mixinImageryProvider],
+  mixins: [minimumLevel, maximumLevel, mixinImageryProvider],
   props: {
     mapStyle: String,
     token: String,
