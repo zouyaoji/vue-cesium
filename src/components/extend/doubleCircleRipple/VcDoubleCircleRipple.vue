@@ -1,15 +1,10 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity :position="position" ref="entity1" :show="show">
+    <vc-entity :position="position" :show="show" ref="entity1">
       <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius1" :semiMinorAxis="radius1"></vc-graphics-ellipse>
     </vc-entity>
-    <vc-entity :position="position" ref="entity2" v-if="showEntity2" :show="show">
-      <vc-graphics-ellipse
-        :height="height"
-        :material="material"
-        :semiMajorAxis="radius2"
-        :semiMinorAxis="radius2"
-      ></vc-graphics-ellipse>
+    <vc-entity :position="position" :show="show" ref="entity2">
+      <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius2" :semiMinorAxis="radius2"></vc-graphics-ellipse>
     </vc-entity>
   </i>
 </template>
@@ -49,16 +44,29 @@ export default {
       material: {},
       radius1: 0,
       radius2: 0,
-      showEntity2: false,
-      nowaiting: true
+      nowaiting: true,
+      flag: false
     }
   },
   mounted () {
-    this._entity2Promise = new Promise((resolve, reject) => {
-      this._resolve = resolve
-      this._reject = reject
-    })
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
+      this.init()
+    })
+  },
+  methods: {
+    async createCesiumObject () {
+      return Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise]).then((entities) => {
+        if (!this.$refs.entity1._mounted || !this.$refs.entity1._mounted) {
+          this.init()
+          return Promise.all([this.$refs.entity1.load(), this.$refs.entity2.load()]).then((entities) => {
+            return entities
+          })
+        } else {
+          return entities
+        }
+      })
+    },
+    init () {
       const { minRadius, maxRadius, imageUrl, interval, changeRadius1, changeRadius2, color } = this
       const cesiumColor = makeColor(color)
       this.r1 = minRadius
@@ -76,31 +84,16 @@ export default {
         }
       }
       this.radius1 = new Cesium.CallbackProperty(changeRadius1, false)
-      this.radius2 = new Cesium.CallbackProperty(changeRadius2, false)
       setTimeout(() => {
-        this.showEntity2 = true
-        this._resolve(true)
+        this.radius2 = new Cesium.CallbackProperty(changeRadius2, false)
       }, interval)
-    })
-  },
-  methods: {
-    async createCesiumObject () {
-      return this._entity2Promise.then(() => {
-        return Promise.all([this.$refs.entity1.createPromise, this.$refs.entity2.createPromise]).then((entities) => {
-          if (!this.$refs.entity1._mounted || !this.$refs.entity1._mounted) {
-            return Promise.all([this.$refs.entity1.load(), this.$refs.entity2.load()]).then((entities) => {
-              return entities
-            })
-          } else {
-            return entities
-          }
-        })
-      })
     },
     async mount () {
       return true
     },
     async unmount () {
+      this.radius1 = 0
+      this.radius2 = 0
       return this.$refs.entity1 && this.$refs.entity2 ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()]) : true
     },
     changeRadius1 () {
