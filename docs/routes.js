@@ -933,6 +933,14 @@ const routeMap = [
         }
       },
       {
+        path: 'vc-circle-roatating-double',
+        component: 'extend/vc-circle-roatating-double',
+        name: {
+          zh: '双圆旋转',
+          en: 'VcDoubleRotatingCircle'
+        }
+      },
+      {
         path: 'vc-shine-ellipse',
         component: 'extend/vc-shine-ellipse',
         name: {

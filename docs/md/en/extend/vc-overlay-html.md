@@ -1,12 +1,12 @@
-# HTML 元素
+# VcHTMLOverlay
 
-`vc-overlay-html` 组件用于添加 HTML 标签到场景中。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
 
-## 示例
+## Example
 
-### 添加 HTML 元素到场景
+### Load a VcHTMLOverlay
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
@@ -178,7 +178,7 @@
   </style>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
@@ -351,20 +351,21 @@
 </style>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| position | Object | | `required` 指定 HTML 元素添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| pixelOffset | Number | `10` | `optional` 指定 HTML 元素像素偏移值。|
-| show | Boolean | `true` | `optional` 指定 HTML 元素是否可见。|
-| hiddenOnBack | Number | `0.05` | `optional` 指定 HTML 元素在地球背面时是否隐藏。|
+| position | Object | | `required` Specify where the HTML element is added. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| pixelOffset | Number | `10` | `optional` Specify the pixel offset value of the HTML element. |
+| show | Boolean | `true` | `optional` Specifies whether the HTML element is visible. |
+| hiddenOnBack | Number | `0.05` | `optional` Specifies whether the HTML element is hidden when it is on the back of the earth. |
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数                           | 描述                                                                  |
-| ------ | ------------------------------ | --------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及 HTML 对象。 |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and a HTML Element. |

@@ -102,10 +102,7 @@
   <div class="viewer">
     <vc-viewer @ready="ready" @layerAdded="layerAdded">
       <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-tianditu
-          mapStyle="cva_c"
-          token="436ce7e50d27eede2f2929307e6b33c0"
-        ></vc-provider-imagery-tianditu>
+        <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-tianditu
@@ -186,12 +183,14 @@
 
 ## 属性
 
-| 属性名   | 类型           | 默认值                 | 描述                                                                         |
-| -------- | -------------- | ---------------------- | ---------------------------------------------------------------------------- |
-| mapStyle | String         | `'img_w'`              | `optional` 天地图服务地图类型。                                              |
-| credit   | String\|Object | `'天地图全球影像服务'` | `optional` 服务版权描述信息。                                                |
-| token    | String         |                        | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
-| protocol | String         | `https`                | `optional` 指定请求协议类型。可以是`https`或者`http`                         |
+| 属性名       | 类型           | 默认值                 | 描述                                                                         |
+| ------------ | -------------- | ---------------------- | ---------------------------------------------------------------------------- |
+| mapStyle     | String         | `'img_w'`              | `optional` 天地图服务地图类型。                                              |
+| credit       | String\|Object | `'天地图全球影像服务'` | `optional` 服务版权描述信息。                                                |
+| token        | String         |                        | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
+| protocol     | String         | `https`                | `optional` 指定请求协议类型。可以是`https`或者`http`                         |
+| minimumLevel | Number         | `0`                    | `optional` 最小层级。                                                        |
+| maximumLevel | Number         | `20`                   | `optional` 最大层级。                                                        |
 
 ---
 

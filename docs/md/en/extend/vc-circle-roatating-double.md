@@ -1,29 +1,30 @@
-# 双圆涟漪
+# VcDoubleRotatingCircle
 
-`vc-ripple-circle-double` 组件用于加载双圆涟漪效果，实质是通过 `vc-entity` 和 `vc-graphics-ellipse` 按一定时间间隔加载 2 个圆，然后不停循环修改圆的半径及材质透明度实现。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-circle-roatating-double` component is used to load the double-circle rippling effect. The essence is to load 2 circles through `vc-entity` and `vc-graphics-ellipse`, respectively, give the circle pictures, rotate them, and combine them Out effect. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
 
-## 示例
+## Example
 
-### 加载双圆涟漪效果
+### Load a VcDoubleRotatingCircle
 
-#### 预览
+#### Preview
 
 <doc-preview>
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-ripple-circle-double
+        <vc-circle-roatating-double
           @ready="subReady"
-          imageUrl="./statics/SampleData/images/redCircle2.png"
+          material1="./statics/SampleData/images/circle1.png"
+          material2="./statics/SampleData/images/circle2.png"
           :position="position"
           ref="circle"
           v-if="flag"
-        ></vc-ripple-circle-double>
+        ></vc-circle-roatating-double>
         <vc-entity>
           <vc-graphics-polyline :positions="positions" :width="5" :material="material"></vc-graphics-polyline>
         </vc-entity>
         <vc-layer-imagery>
-          <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+          <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0" :maximumLevel="17"></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
@@ -58,24 +59,29 @@
   </script>
 </doc-preview>
 
-#### 代码
+#### Code
 
 ```html
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-ripple-circle-double
+      <vc-circle-roatating-double
         @ready="subReady"
-        imageUrl="./statics/SampleData/images/redCircle2.png"
+        material1="./statics/SampleData/images/circle1.png"
+        material2="./statics/SampleData/images/circle2.png"
         :position="position"
         ref="circle"
         v-if="flag"
-      ></vc-ripple-circle-double>
+      ></vc-circle-roatating-double>
       <vc-entity>
         <vc-graphics-polyline :positions="positions" :width="5" :material="material"></vc-graphics-polyline>
       </vc-entity>
       <vc-layer-imagery>
-        <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+        <vc-provider-imagery-tianditu
+          mapStyle="img_c"
+          token="436ce7e50d27eede2f2929307e6b33c0"
+          :maximumLevel="17"
+        ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
   </div>
@@ -98,7 +104,7 @@
     methods: {
       ready(cesiumInstance) {
         this.cesiumInstance = cesiumInstance
-        // 方便测试使用
+        // Easy to test and use
         // vm.flag = false
         // vm.$refs.circle.unload()
         // vm.$refs.circle.load()
@@ -115,25 +121,26 @@
 </script>
 ```
 
-## 属性
+## Instance Properties
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
+| name | type | default | description |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
-| position | Object | | `required` 指定双圆涟漪效果实体添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| show | Boolean | `true` | `optional` 指定双圆涟漪效果是否可见。|
-| height | Number | `undefined` | `optional` 指定双圆涟漪效果椭圆高度。单位米。|
-| minRadius | Number | `0` | `optional` 指定双圆涟漪效果最小半径。单位米。|
-| maxRadius | Number | `3000` | `optional` 指定双圆涟漪效果最大半径。单位米。|
-| deviationRadius | Number | `20` | `optional` 双圆半径改变大小的差值，值越大速度越快。|
-| interval | Number | `3000` | `optional` 两个圆的时间间隔，单位毫秒。 |
-| imageUrl | String | `''` | `optional` 指定用于表达双圆涟漪效果的图片。 |
-| color | Object\|String\|Array | `'white'` | `optional` 指定双圆涟漪效果效果颜色。 |
+| position | Object | | `required` Specify the position where the double circle rotation effect entity is added. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
+| show | Boolean | `true` | `optional` Specify whether the double circle rotation effect is visible.|
+| height | Number | `undefined` | `optional` Specify the height of the double circle rotation effect circle in meters.|
+| radius1 | Number | `1500` | `optional` Specify the radius of the inner circle in meters.|
+| radius2 | Number | `3000` | `optional` Specify the radius of the outer circle in meters.|
+| material1 | Object\|String\|Array | | `optional` Specify the inner circle material.|
+| material2 | Object\|String\|Array | | `optional` Specify the outer circle material.|
+| deviationRotation1 | Number | `-0.03` | `optional` Specify the difference in internal rotation angle change. |
+| deviationRotation2 | String | `0.05` | `optional` Specify the difference of the rotation angle of the outer circle. |
 
 ---
 
-## 事件
+## Events
 
-| 事件名 | 参数                           | 描述                                                              |
-| ------ | ------------------------------ | ----------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及实体数组。 |
+<!-- prettier-ignore -->
+| name | parameter | description |
+| ---- | --------- | ----------- |
+| ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and an Entity array. |

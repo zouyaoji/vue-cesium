@@ -81,7 +81,7 @@
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` 指定闪点效果实体添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
 | show | Boolean | `true` | `optional` 指定闪点效果是否可见。|
-| pixelSize | Number | `10` | `optional` 指定闪点效果效果点的像素值。|
+| pixelSize | Number | `10` | `optional` 指定闪点的像素大小。|
 | color | Object\|String\|Array | `'white'` | `optional` 指定闪点效果颜色。 |
 | deviationAlpha | Number | `0.05` | `optional` 指定闪点效果颜色 Alpha 值改变尺度，值越大闪得越快。取值范围: (0, 1)|
 

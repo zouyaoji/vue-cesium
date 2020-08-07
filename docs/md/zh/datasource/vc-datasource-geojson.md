@@ -42,7 +42,7 @@
           cesiumInstance.viewer.zoomTo(cesiumInstance.cesiumObject)
         },
         MOUSE_MOVE (movement) {
-          const { Cesium, viewer } = cesiumInstance
+          const { Cesium, viewer } = this.cesiumInstance
           // Pick a new feature
           var pickedFeature = viewer.scene.pick(movement.endPosition)
           if (!Cesium.defined(pickedFeature)) {
