@@ -109,6 +109,7 @@ import * as VcDrawHandlerPolygon from './components/tool/drawHandlerPolygon'
 // 控件
 import * as VcNavigation from './components/control/navigation'
 import * as VcNavigationSM from './components/control/navigationSM'
+import * as VcOverviewMap from './components/control/overviewMap'
 // 扩展
 import * as VcFlood from './components/extend/flood'
 import * as VcHeatMap from './components/extend/heatmap'
@@ -275,6 +276,7 @@ function plugin (Vue, options = {}) {
   // 控件
   Vue.use(VcNavigation, options)
   Vue.use(VcNavigationSM, options)
+  Vue.use(VcOverviewMap, options)
 
   lang.install($vc, options.lang)
   Vue.prototype.$vc = $vc
@@ -411,6 +413,7 @@ export {
 
   VcNavigation,
   VcNavigationSM,
+  VcOverviewMap,
 
   PolylineTrailMaterialProperty
 }

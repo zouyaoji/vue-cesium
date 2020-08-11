@@ -814,6 +814,14 @@ const routeMap = [
           zh: '导航-sm',
           en: 'VcNavigationSM'
         }
+      },
+      {
+        path: 'vc-map-overview',
+        component: 'control/vc-map-overview',
+        name: {
+          zh: '鹰眼',
+          en: 'VcOverviewMap'
+        }
       }
     ]
   },

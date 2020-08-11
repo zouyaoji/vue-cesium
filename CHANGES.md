@@ -1,5 +1,12 @@
 # 更新日志
 
+## 2.1.6 - 2020-08-15
+
+### 增加
+
+- [`vc-overlay-html`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-overlay-html) HTML 元素组件。
+- [`vc-overlay-html`](https://zouyaoji.top/vue-cesium/#/zh/control/vc-map-overview) 鹰眼地图组件。
+
 ## 2.1.5 - 2020-08-01
 
 ### 增加

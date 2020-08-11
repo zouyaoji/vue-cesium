@@ -12,7 +12,7 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" style="overflow: hidden; position: absolute">
-        <vc-overlay-html ref="html" v-if="flag" :position="position1">
+        <vc-overlay-html ref="html" :position="position1">
           <div class="vc-box">aa</div>
         </vc-overlay-html>
         <vc-entity :position="position1">
@@ -184,7 +184,7 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" style="overflow: hidden; position: absolute">
-      <vc-overlay-html ref="html" v-if="flag" :position="position1">
+      <vc-overlay-html ref="html" :position="position1">
         <div class="vc-box">aa</div>
       </vc-overlay-html>
       <vc-entity :position="position1">

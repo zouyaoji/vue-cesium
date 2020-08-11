@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" style="overflow: hidden; position: absolute">
-        <vc-overlay-html ref="html" v-if="flag" :position="position1">
+        <vc-overlay-html ref="html" :position="position1">
           <div class="vc-box">aa</div>
         </vc-overlay-html>
         <vc-entity :position="position1">
@@ -184,7 +184,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" style="overflow: hidden; position: absolute">
-      <vc-overlay-html ref="html" v-if="flag" :position="position1">
+      <vc-overlay-html ref="html" :position="position1">
         <div class="vc-box">aa</div>
       </vc-overlay-html>
       <vc-entity :position="position1">
@@ -306,7 +306,7 @@
     width: 0;
     height: 100px;
     bottom: 0;
-    background: url('/statics/SampleData/images/line.png');
+    background: url('~/statics/SampleData/images/line.png');
     animation: goLine 0.5s forwards;
   }
   @keyframes goLine {
@@ -323,7 +323,7 @@
     left: 50px;
     right: 0;
     bottom: 100px;
-    background: url('/statics/SampleData/images/layer_border.png') no-repeat;
+    background: url('~/statics/SampleData/images/layer_border.png') no-repeat;
     background-size: 100% 100%;
     color: white;
     padding: 20px 5px 5px 20px;

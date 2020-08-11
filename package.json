@@ -50,6 +50,7 @@
     "@turf/helpers": "^6.1.4",
     "@turf/isobands": "^5.1.5",
     "heatmap.js": "^2.0.5",
+    "leaflet": "^1.6.0",
     "lodash.debounce": "^4.0.8",
     "proj4": "^2.6.0"
   },
