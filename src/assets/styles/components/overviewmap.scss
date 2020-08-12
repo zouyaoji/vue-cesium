@@ -4,7 +4,8 @@
   height: 150px;
   position: absolute;
   right: 10px;
-  top: 50px;
+	top: 50px;
+	box-sizing: unset;
 }
 .leaflet-control-minimap {
 	border:solid rgba(255, 255, 255, 1.0) 4px;
