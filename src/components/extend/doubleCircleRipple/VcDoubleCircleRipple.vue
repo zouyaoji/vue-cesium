@@ -49,7 +49,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+    this.getParent(this.$parent).createPromise.then(({ Cesium, viewer }) => {
       this.init()
     })
   },

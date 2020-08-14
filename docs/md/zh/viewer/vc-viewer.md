@@ -13,7 +13,8 @@
     <div class="viewer" ref="viewerContainer">
       <vc-viewer ref="vcViewer" :animation="animation" :baseLayerPicker="baseLayerPicker" :timeline="timeline"
         :fullscreenButton="fullscreenButton" :fullscreenElement="fullscreenElement" :infoBox="infoBox" @ready="ready">
-        <vc-navigation></vc-navigation>
+        <vc-navigation :options="options"></vc-navigation>
+        <vc-map-overview></vc-map-overview>
         <vc-layer-imagery>
           <vc-provider-imagery-tianditu
             mapStyle="img_c"
@@ -42,6 +43,40 @@
     export default {
       data () {
         return {
+          options: {
+            enableCompass: true,
+            enableZoomControl: true,
+            // enableZoomControl: {
+            //   // 缩放比例
+            //    zoomAmount: 2,
+            //   // 用于在使用重置导航重置地图视图时设置默认视图控制。接受的值是经纬度{lng: number, lat: number, height: number}或者 rectangle{west: number,south: number,east: number,north: number}
+            //   defaultResetView: {
+            //     lng: 105, lat: 29.999999999999993, height: 19059568.497290563, heading: 360, pitch: -90, roll: 0
+            //   },
+            //   overrideCamera: false
+            // },
+            enableDistanceLegend: true,
+            enableLocationBar: true,
+            // enableLocationBar: {
+            //   // 获取更精确的高程
+            //   gridFileUrl: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
+            // },
+            enableCompassOuterRing: true,
+            enablePrintView: true,
+            // enablePrintView: {
+            //   // 是否添加 Credit
+            //   showCredit: true,
+            //   // 是否自动打印
+            //   printAutomatically: false
+            // },
+            // enableMyLocation: true,
+            enableMyLocation: {
+              // 使用高德api定位
+              amap: {
+                key: '42d22e6ed83f077bc28b7864718726de'
+              }
+            }
+          },
           animation: true,
           timeline: true,
           baseLayerPicker: false,
@@ -59,6 +94,8 @@
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
+          window.viewer = viewer
+          window.vm = this
           viewer.scene.globe.depthTestAgainstTerrain = true
           viewer.scene.globe.enableLighting = true
           this.fullscreenElement = this.$refs.viewerContainer

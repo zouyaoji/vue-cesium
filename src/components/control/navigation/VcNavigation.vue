@@ -1,5 +1,5 @@
 <template>
-  <div class="vc-navigationContainer" v-if="canRender">
+  <div class="vc-navigationContainer" v-if="canRender" ref="navigationContainer">
     <div class="vc-navigation">
       <div class="vc-navigation-navs">
         <div class="vc-navigation-control" v-if="defaultOptions.enableCompass">
@@ -100,7 +100,9 @@ export default {
   watch: {
     options: {
       handler () {
-        this.reload()
+        this.reload().then(() => {
+          this.viewer.widgetResized.raiseEvent()
+        })
       },
       deep: true
     }
@@ -118,7 +120,10 @@ export default {
       this.$nextTick(() => {
         const viewerContainer = this.viewer._element
         viewerContainer.appendChild(this.$el)
+        this.viewer.VcNavigationContaner = this.$refs.navigationContainer
       })
+
+      return this.$el
     },
     widgetResized () {
       this.ldBottom = this.viewer.timeline ? this.viewer.timeline.container.getBoundingClientRect().height + 2 : 2
@@ -133,7 +138,7 @@ export default {
       return true
     },
     async unmount () {
-      this.cesiumNavigation && this.viewer.cesiumWidget.cesiumNavigation.destroy()
+      this.viewer.widgetResized.removeEventListener(this.widgetResized)
       return true
     },
     legendChanged (e) {
@@ -154,7 +159,7 @@ export default {
     Object.defineProperties(this, {
       cesiumNavigation: {
         enumerable: true,
-        get: () => this.$services && this.cesiumObject
+        get: () => this.cesiumObject
       }
     })
   }

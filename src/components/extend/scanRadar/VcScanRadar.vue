@@ -21,7 +21,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+    this.getParent(this.$parent).createPromise.then(({ Cesium, viewer }) => {
       const { $props, transformProps } = this
       const options = transformProps($props)
       const cartographicCenter = Cesium.Cartographic.fromCartesian(options.position)

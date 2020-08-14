@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+    this.getParent(this.$parent).createPromise.then(({ Cesium, viewer }) => {
       const { color, imageUrl, interval, loop } = this
       const colorCesium = makeColor(color)
       this.material = new PolylineTrailMaterialProperty(colorCesium, interval, imageUrl, loop)

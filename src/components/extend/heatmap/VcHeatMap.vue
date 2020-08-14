@@ -75,7 +75,7 @@ export default {
   watch: {
     changeProps: {
       async handler (val, oldValue) {
-        await this.$parent.createPromise
+        await this.getParent(this.$parent).createPromise
         if (JSON.stringify(val) === JSON.stringify(oldValue)) return
         const { _heatmapInstance } = this
         if (JSON.stringify(val.bounds) !== JSON.stringify(oldValue.bounds)) {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+    this.getParent(this.$parent).createPromise.then(({ Cesium, viewer }) => {
       const { bounds, options, min, max, data, defaultOptions } = this
       this._WMP = new Cesium.WebMercatorProjection()
       this._id = this.getID()

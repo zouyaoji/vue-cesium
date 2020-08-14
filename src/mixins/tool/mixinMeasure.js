@@ -71,7 +71,7 @@ const props = {
 const watch = {
   async measuring (val) {
     let nextTick = false
-    const { polylines, startNew, type } = this
+    const { polylines, startNew, type, $parent, getParent } = this
     const polyline = polylines[polylines.length - 1]
     if (!val && polyline && !polyline.positions.length) {
       this.polylines.pop()
@@ -93,7 +93,7 @@ const watch = {
       }
 
       const drawCmpNames = ['vc-handler-draw-polyline', 'vc-handler-draw-point', 'vc-handler-draw-polygon']
-      for (let $node of this.$parent.$slots.default || []) {
+      for (let $node of getParent($parent).$slots.default || []) {
         if ($node.componentOptions && measureCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.measuring = false
           nextTick = true

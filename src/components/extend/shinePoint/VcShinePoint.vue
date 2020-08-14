@@ -30,7 +30,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.createPromise.then(({ Cesium, viewer }) => {
+    this.getParent(this.$parent).createPromise.then(({ Cesium, viewer }) => {
       const { deviationAlpha, color } = this
       const colorObject = makeColor(color)
       this.flag = true

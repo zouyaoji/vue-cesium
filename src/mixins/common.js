@@ -5,7 +5,7 @@ import { warn } from '../utils/log'
 
 const VM_PROP = 'vm'
 /**
- * Get the parent component. 获取父组件方法。
+ * Get the parent component. 获取 vc-viewer 组件。
  * @param {VueComponent} $component.
  */
 const getParent = ($component) =>
@@ -225,7 +225,11 @@ const methods = {
     } else {
       await this.$parent.createPromise
     }
-  }
+  },
+  /**
+   * 获取 vc-viewer 组件
+   */
+  getParent
 }
 /**
  * VueCesium common minxin
