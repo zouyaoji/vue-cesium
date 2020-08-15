@@ -29,5 +29,9 @@ export default {
     },
     printView: 'Printing to share your map with others',
     centreMap: 'Centre map at your current location'
+  },
+  overviewmap: {
+    show: 'Show',
+    hidden: 'Hidden'
   }
 }

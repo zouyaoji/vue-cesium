@@ -275,8 +275,8 @@ function plugin (Vue, options = {}) {
   Vue.use(VcHTMLOverlay, options)
   // 控件
   Vue.use(VcNavigation, options)
-  Vue.use(VcNavigationSM, options)
-  Vue.use(VcOverviewMap, options)
+  // Vue.use(VcNavigationSM, options)
+  // Vue.use(VcOverviewMap, options)
 
   lang.install($vc, options.lang)
   Vue.prototype.$vc = $vc

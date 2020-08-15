@@ -1,6 +1,6 @@
 # 鹰眼
 
-`vc-map-overview` 组件用于加载鹰眼部件。**注意：** 使用此组件需要引入 `import 'vue-cesium/lib/vc-map-overview.css'`，需要`css-loader`。
+`vc-map-overview` 组件用于加载鹰眼部件。**注意：** 使用此组件需要引入 `import 'vue-cesium/lib/vc-map-overview.css'`。此组件默认没有引入，需要单独引入。
 
 ## 示例
 
@@ -23,7 +23,8 @@
     export default {
       data () {
         return {
-          timeline: true
+          timeline: true,
+          flag: true
         }
       },
       methods: {
@@ -73,13 +74,16 @@
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | url | String | `'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'` | `optional` 指定鹰眼加载的地图 url。  |
 | width | Number | `150` | `optional` 指定鹰眼控件宽度。 |
-| height | Number | `150` | `optional` 指定鹰眼控件高度 |
+| height | Number | `150` | `optional` 指定鹰眼控件高度。 |
 | anchor | String | `'bottomright'` | `optional` 指定鹰眼位置。 `topleft`、`topright`、`bottomleft`、`bottomright` |
+| aimingRectOptions | Object | `{ color: '#ff1100', weight: 3 }` | `optional` 指定鹰眼表示当前地图范围矩形参数。 |
+| shadowRectOptions | Object | `{ color: '#0000AA', weight: 1, opacity: 0, fillOpacity: 0 }` | `optional` 指定鹰眼地图蒙版参数。 |
+| toggleDisplay | Boolean | `true` | `optional` 指定鹰眼收缩按钮是否可见。 |
 
 ---
 
 ## 事件
 
-| 事件名        | 参数             | 描述                                                |
-| ------------- | ---------------- | --------------------------------------------------- |
-| ready         | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |
+| 事件名 | 参数             | 描述                                                |
+| ------ | ---------------- | --------------------------------------------------- |
+| ready  | {Cesium, viewer} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例。 |

@@ -1,6 +1,6 @@
 # VcHTMLOverlay
 
-The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+The `vc-overlay-html` component is used to add HTML tags to the scene. **Note** To use this component, you need to import the `import'vue-cesium/lib/style.css'` style file.Refer to [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
 
 ## Example
 
@@ -306,7 +306,7 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to 
     width: 0;
     height: 100px;
     bottom: 0;
-    background: url('/statics/SampleData/images/line.png');
+    background: url('~docs/assets/images/line.png');
     animation: goLine 0.5s forwards;
   }
   @keyframes goLine {
@@ -323,7 +323,7 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. Refer to 
     left: 50px;
     right: 0;
     bottom: 100px;
-    background: url('/statics/SampleData/images/layer_border.png') no-repeat;
+    background: url('~docs/assets/images/layer_border.png') no-repeat;
     background-size: 100% 100%;
     color: white;
     padding: 20px 5px 5px 20px;

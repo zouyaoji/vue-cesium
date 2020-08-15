@@ -29,5 +29,9 @@ export default {
     },
     printView: '打印分享',
     centreMap: '定位您的位置'
+  },
+  overviewmap: {
+    show: '显示鹰眼',
+    hidden: '隐藏鹰眼'
   }
 }

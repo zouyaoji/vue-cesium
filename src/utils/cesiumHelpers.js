@@ -28,6 +28,8 @@ export function makeCartesian3 (val, isConstant = false) {
     return new Cartesian3(val.x, val.y, val.z)
   } else if (val && val.hasOwnProperty('lng')) {
     return Cartesian3.fromDegrees(val.lng, val.lat, val.height)
+  } else if (isArray(val)) {
+    return new Cartesian3(val[0], val[1], val[2])
   }
   return val
 }
@@ -144,7 +146,7 @@ export function makeDistanceDisplayCondition (val, isConstant = false) {
     return new CallbackProperty(val, isConstant)
   }
   if (val && val.hasOwnProperty('near')) {
-    return new DistanceDisplayCondition(val.near, val.nearValue, val.far, val.farValue)
+    return new DistanceDisplayCondition(val.near, val.far)
   }
   return val
 }

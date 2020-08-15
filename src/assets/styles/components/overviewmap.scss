@@ -1,5 +1,5 @@
 
-.leaflet-control-minimap {
+.vc-leaflet-control-minimap {
   border: solid rgba(255, 255, 255, 1) 4px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
   border-radius: 3px;
@@ -10,68 +10,68 @@
   z-index: 10;
 }
 
-.leaflet-control-minimap a {
+.vc-leaflet-control-minimap a {
   background-color: rgba(255, 255, 255, 1);
   background-repeat: no-repeat;
   z-index: 99999;
   transition: all 0.6s;
 }
 
-.leaflet-control-minimap a.minimized-bottomright {
+.vc-leaflet-control-minimap a.minimized-bottomright {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
   border-radius: 0px;
 }
 
-.leaflet-control-minimap a.minimized-topleft {
+.vc-leaflet-control-minimap a.minimized-topleft {
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
   border-radius: 0px;
 }
 
-.leaflet-control-minimap a.minimized-bottomleft {
+.vc-leaflet-control-minimap a.minimized-bottomleft {
   -webkit-transform: rotate(270deg) !important;
   transform: rotate(270deg) !important;
   border-radius: 0px;
 }
 
-.leaflet-control-minimap a.minimized-topright {
+.vc-leaflet-control-minimap a.minimized-topright {
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
   border-radius: 0px;
 }
 
-.leaflet-control-minimap-toggle-display {
+.vc-leaflet-control-minimap-toggle-display {
   background-image: url('../../images/vc-overview-map-toggle.svg');
   background-size: cover;
   position: absolute;
   border-radius: 3px 0px 0px 0px;
 }
 
-.leaflet-oldie .leaflet-control-minimap-toggle-display {
+.leaflet-oldie .vc-leaflet-control-minimap-toggle-display {
   background-image: url('../../images/vc-overview-map-toggle.png');
 }
 
-.leaflet-control-minimap-toggle-display-bottomright {
+.vc-leaflet-control-minimap-toggle-display-bottomright {
   bottom: 0;
   right: 0;
 }
 
-.leaflet-control-minimap-toggle-display-topleft {
+.vc-leaflet-control-minimap-toggle-display-topleft {
   top: 0;
   left: 0;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
-.leaflet-control-minimap-toggle-display-bottomleft {
+.vc-leaflet-control-minimap-toggle-display-bottomleft {
   bottom: 0;
   left: 0;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 
-.leaflet-control-minimap-toggle-display-topright {
+.vc-leaflet-control-minimap-toggle-display-topright {
   top: 0;
   right: 0;
   -webkit-transform: rotate(270deg);
@@ -79,14 +79,14 @@
 }
 
 /* Old IE */
-.leaflet-oldie .leaflet-control-minimap {
+.leaflet-oldie .vc-leaflet-control-minimap {
   border: 1px solid #999;
 }
 
-.leaflet-oldie .leaflet-control-minimap a {
+.leaflet-oldie .vc-leaflet-control-minimap a {
   background-color: #fff;
 }
 
-.leaflet-oldie .leaflet-control-minimap a.minimized {
+.leaflet-oldie .vc-leaflet-control-minimap a.minimized {
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
 }

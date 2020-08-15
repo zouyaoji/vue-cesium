@@ -1,5 +1,5 @@
 <template>
-  <div :style="ovStyle" class="leaflet-control-minimap" id="vc-overview-map" ref="leafletContainer"></div>
+  <div :style="ovStyle" class="vc-leaflet-control-minimap" id="vc-overview-map" ref="leafletContainer"></div>
 </template>
 
 <script>

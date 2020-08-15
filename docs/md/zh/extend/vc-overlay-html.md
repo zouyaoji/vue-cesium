@@ -1,6 +1,6 @@
 # HTML 元素
 
-`vc-overlay-html` 组件用于添加 HTML 标签到场景中。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
+`vc-overlay-html` 组件用于添加 HTML 标签到场景中。**注意** 使用此组件需要引入`import 'vue-cesium/lib/style.css'`样式文件。参考 [ysCesium|跃焱邵隼](https://www.wellyyss.cn/ysCesium/main/app.html) 。
 
 ## 示例
 
@@ -306,7 +306,7 @@
     width: 0;
     height: 100px;
     bottom: 0;
-    background: url('~/statics/SampleData/images/line.png');
+    background: url('~docs/assets/images/line.png');
     animation: goLine 0.5s forwards;
   }
   @keyframes goLine {
@@ -323,7 +323,7 @@
     left: 50px;
     right: 0;
     bottom: 100px;
-    background: url('~/statics/SampleData/images/layer_border.png') no-repeat;
+    background: url('~docs/assets/images/layer_border.png') no-repeat;
     background-size: 100% 100%;
     color: white;
     padding: 20px 5px 5px 20px;
@@ -365,6 +365,6 @@
 
 ## 事件
 
-| 事件名 | 参数                           | 描述                                                                  |
-| ------ | ------------------------------ | --------------------------------------------------------------------- |
+| 事件名 | 参数                           | 描述                                                                |
+| ------ | ------------------------------ | ------------------------------------------------------------------- |
 | ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及 HTML 对象。 |

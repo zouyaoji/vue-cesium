@@ -1,3 +1,17 @@
+/**
+  @license
+  3D-Wind-Field - https://github.com/RaymanNg/3D-Wind-Field
+
+  Copyright (c) 2019 RaymanNg
+
+ * Visualize the wind on earth, powered by Cesium JS.
+ *
+ * Licensed under the MIT License at:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * @version -
+ */
+
 import ParticleSystem from './particleSystem'
 import Util from './util'
 class Wind3D {

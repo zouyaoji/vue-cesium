@@ -84,6 +84,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/exts'), srcPath),
     packagesFromPath(utils.resolve('src/exts/imageryProvider'), srcPath),
     packagesFromPath(utils.resolve('src/exts/materialProperty'), srcPath),
+    packagesFromPath(utils.resolve('src/exts/overviewMapControl'), srcPath),
     packagesFromPath(utils.resolve('src/exts/wind'), srcPath),
     packagesFromPath(utils.resolve('src/utils'), srcPath)
   ]).then((otherPackages) => {
@@ -123,6 +124,13 @@ function entryToPackage (entry, basePath = srcPath) {
       jsName,
       pkgName,
       cssName: 'vc-navigation-sm'
+    }
+  } else if (jsName === 'control/overviewMap/index') {
+    pkg = {
+      entry: entryPath,
+      jsName,
+      pkgName,
+      cssName: 'vc-map-overview'
     }
   } else {
     pkg = {

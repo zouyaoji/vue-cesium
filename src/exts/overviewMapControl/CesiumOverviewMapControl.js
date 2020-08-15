@@ -171,7 +171,7 @@ CesiumOverviewMapControl.prototype = {
   },
   _addToggleButton: function () {
     this._toggleDisplayButton = this.options.toggleDisplay ? this._createButton(
-      '', this._toggleButtonInitialTitleText(), ('leaflet-control-minimap-toggle-display leaflet-control-minimap-toggle-display-' +
+      '', this._toggleButtonInitialTitleText(), ('vc-leaflet-control-minimap-toggle-display vc-leaflet-control-minimap-toggle-display-' +
                 this.options.position), this._container, this._toggleDisplayButtonClicked, this) : undefined
     // this._toggleDisplayButton.style.zIndex = 99999;
     this._toggleDisplayButton.style.width = this.options.collapsedWidth + 'px'
