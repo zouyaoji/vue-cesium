@@ -1,4 +1,29 @@
-﻿import * as L from 'leaflet'
+/**
+ * @license
+ *
+ * OverviewMapForCesium
+ *
+ * See: https://github.com/leation/OverviewMapForCesium
+ *
+ * @author leation
+ *
+ *   Copyright 2019 leation
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+
+import * as L from 'leaflet'
 
 var CesiumOverviewMapControl = function () {
   this.init.apply(this, arguments)
@@ -11,6 +36,7 @@ CesiumOverviewMapControl.prototype = {
   _miniMapMoving: false,
   _userToggledDisplay: false,
   _minimized: false,
+  vm: null,
   viewer: null,
   tileLayer: null,
   options: {
@@ -29,7 +55,7 @@ CesiumOverviewMapControl.prototype = {
     collapsedHeight: 19,
     aimingRectOptions: { color: '#ff7800', weight: 1, interactive: false },
     shadowRectOptions: { color: '#000000', weight: 1, interactive: false, opacity: 0, fillOpacity: 0 },
-    strings: { hideText: '隐藏鹰眼', showText: '显示鹰眼' },
+    // strings: { hideText: '隐藏鹰眼', showText: '显示鹰眼' },
     mapOptions: {
       toggleDisplay: true,
       aimingRectOptions: {
@@ -44,10 +70,11 @@ CesiumOverviewMapControl.prototype = {
       }
     }
   },
-  init: function (viewer, layer, options) {
+  init: function (viewer, layer, options, vm) {
     this.viewer = viewer
     this.tileLayer = layer
     this._container = options.container
+    this.vm = vm
     L.Util.setOptions(this, options)
 
     this.options.aimingRectOptions.interactive = false
@@ -153,9 +180,9 @@ CesiumOverviewMapControl.prototype = {
 
   _toggleButtonInitialTitleText: function () {
     if (this.options.minimized) {
-      return this.options.strings.showText
+      return this.vm.$vc.lang.overviewmap.show
     } else {
-      return this.options.strings.hideText
+      return this.vm.$vc.lang.overviewmap.hidden
     }
   },
 
@@ -205,7 +232,7 @@ CesiumOverviewMapControl.prototype = {
       this._container.style.width = this.options.collapsedWidth + 'px'
       this._container.style.height = this.options.collapsedHeight + 'px'
       this._toggleDisplayButton.className += (' minimized-' + this.options.position)
-      this._toggleDisplayButton.title = this.options.strings.showText
+      this._toggleDisplayButton.title = this.vm.$vc.lang.overviewmap.show
     } else {
       this._container.style.display = 'none'
     }
@@ -218,7 +245,7 @@ CesiumOverviewMapControl.prototype = {
       this._container.style.height = this.options.height + 'px'
       this._toggleDisplayButton.className = this._toggleDisplayButton.className
         .replace('minimized-' + this.options.position, '')
-      this._toggleDisplayButton.title = this.options.strings.hideText
+      this._toggleDisplayButton.title = this.vm.$vc.lang.overviewmap.hidden
     } else {
       this._container.style.display = 'block'
     }

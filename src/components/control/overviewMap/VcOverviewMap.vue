@@ -27,6 +27,30 @@ export default {
     anchor: {
       type: String,
       default: 'bottomright'
+    },
+    aimingRectOptions: {
+      type: Object,
+      default: () => {
+        return {
+          color: '#ff1100',
+          weight: 3
+        }
+      }
+    },
+    shadowRectOptions: {
+      type: Object,
+      default: () => {
+        return {
+          color: '#0000AA',
+          weight: 1,
+          opacity: 0,
+          fillOpacity: 0
+        }
+      }
+    },
+    toggleDisplay: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -71,7 +95,7 @@ export default {
   },
   methods: {
     async createCesiumObject () {
-      const { viewer, width, height, anchor } = this
+      const { viewer, width, height, anchor, aimingRectOptions, shadowRectOptions, toggleDisplay } = this
       var url = 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
       var layer = new L.TileLayer(url, {
         minZoom: 0,
@@ -80,24 +104,16 @@ export default {
       var container = this.$refs.leafletContainer
       var options = {
         container: container,
-        toggleDisplay: true,
+        toggleDisplay: toggleDisplay,
         width: width,
         height: height,
         position: anchor,
-        aimingRectOptions: {
-          color: '#ff1100',
-          weight: 3
-        },
-        shadowRectOptions: {
-          color: '#0000AA',
-          weight: 1,
-          opacity: 0,
-          fillOpacity: 0
-        }
+        aimingRectOptions: aimingRectOptions,
+        shadowRectOptions: shadowRectOptions
       }
       viewer.widgetResized.addEventListener(this.widgetResized)
       this.widgetResized()
-      return new CesiumOverviewMapControl(viewer, layer, options)
+      return new CesiumOverviewMapControl(viewer, layer, options, this)
     },
     widgetResized () {
       let bottom = 10
