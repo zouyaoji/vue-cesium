@@ -135,7 +135,9 @@ const methods = {
     if (!Cesium.defined(cartesian)) {
       return
     }
-    polyline.positions.pop()
+    if (polyline.positions.length > 1) {
+      polyline.positions.pop()
+    }
     if (mode === 0) {
       startNew()
     } else {
