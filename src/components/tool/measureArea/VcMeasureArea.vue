@@ -92,7 +92,7 @@
             :backgroundColor="backgroundColor"
             :fillColor="fillColor"
             :font="font"
-            :horizontalOrigin="1"
+            :horizontalOrigin="0"
             :key="'label' + index + 'position' + subIndex"
             :labelStyle="labelStyle"
             :outlineColor="outlineColor"
@@ -105,7 +105,8 @@
             "
             :showBackground="showBackground"
             :text="getDistanceText(polyline.distances[subIndex + 1] - polyline.distances[subIndex])"
-            v-if="alongLine"
+            :verticalOrigin="0"
+            v-if="alongLine && polyline.positions.length > 1 && subIndex + 1 < polyline.distances.length"
           ></vc-primitive-label>
         </template>
       </template>
@@ -131,6 +132,10 @@ export default {
     }
   },
   props: {
+    removeLastPosition: {
+      type: Boolean,
+      default: true
+    },
     clampToGround: {
       type: Boolean,
       default: false
@@ -269,7 +274,7 @@ export default {
       return area
     },
     /**
-     * 用 @turf/area 获取传入坐标的构成的多边形的面积。
+     * 用 @turf/area 获取传入坐标的构成的多边形的面积。实际上是投影面积。
      * @param {Array.Cartesian}
      * @returns {Number} 返回面积数值。
      */

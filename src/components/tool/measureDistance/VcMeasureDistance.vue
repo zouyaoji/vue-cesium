@@ -60,7 +60,7 @@
             :backgroundColor="backgroundColor"
             :fillColor="fillColor"
             :font="font"
-            :horizontalOrigin="1"
+            :horizontalOrigin="0"
             :key="'label' + index + 'position' + subIndex"
             :labelStyle="labelStyle"
             :outlineColor="outlineColor"
@@ -69,6 +69,7 @@
             :position="getMidPoistion(polyline.positions[subIndex], polyline.positions[subIndex + 1])"
             :showBackground="showBackground"
             :text="getDistanceText(polyline.distances[subIndex + 1] - polyline.distances[subIndex])"
+            :verticalOrigin="0"
             v-if="
               ((subIndex !== polyline.positions.length - 1 && polyline.positions.length > 2 + subIndex) ||
                 (polyline.positions.length > 2 + subIndex ||
@@ -104,6 +105,10 @@ export default {
       default: false
     },
     alongLine: {
+      type: Boolean,
+      default: true
+    },
+    removeLastPosition: {
       type: Boolean,
       default: true
     }

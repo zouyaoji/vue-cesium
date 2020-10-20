@@ -20,6 +20,7 @@
           @activeEvt="activeEvt"
           @measureEvt="measureEvt"
           @movingEvt="movingEvt"
+          :removeLastPosition="removeLastPosition"
         ></vc-measure-distance>
         <vc-measure-area
           ref="measureArea"
@@ -27,12 +28,14 @@
           @measureEvt="measureEvt"
           @movingEvt="movingEvt"
           :clampToGround="clampToGround"
+          :removeLastPosition="removeLastPosition"
         ></vc-measure-area>
         <vc-measure-height
           ref="measureHeight"
           @activeEvt="activeEvt"
           @measureEvt="measureEvt"
           @movingEvt="movingEvt"
+          :removeLastPosition="removeLastPosition"
         ></vc-measure-height>
         <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
@@ -42,8 +45,11 @@
         >
         <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? '停止' : '面积' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? '停止' : '高度' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">贴地</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+        <span>贴地</span>
+        <md-switch v-model="clampToGround"></md-switch>
+        <span>移除最后一个点</span>
+        <md-switch v-model="removeLastPosition"></md-switch>
       </div>
     </div>
   </template>
@@ -56,7 +62,8 @@
           distanceMeasuring: false,
           areaMeasuring: false,
           heightMeasuring: false,
-          clampToGround: false
+          clampToGround: false,
+          removeLastPosition: true
         }
       },
       methods: {
@@ -105,6 +112,7 @@
         @activeEvt="activeEvt"
         @measureEvt="measureEvt"
         @movingEvt="movingEvt"
+        :removeLastPosition="removeLastPosition"
       ></vc-measure-distance>
       <vc-measure-area
         ref="measureArea"
@@ -112,6 +120,7 @@
         @measureEvt="measureEvt"
         @movingEvt="movingEvt"
         :clampToGround="clampToGround"
+        :removeLastPosition="removeLastPosition"
       ></vc-measure-area>
       <vc-measure-height
         ref="measureHeight"
@@ -127,8 +136,11 @@
       >
       <md-button class="md-raised md-accent" @click="toggle('measureArea')">{{ areaMeasuring ? '停止' : '面积' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('measureHeight')">{{ heightMeasuring ? '停止' : '高度' }}</md-button>
-      <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">贴地</md-button>
       <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+      <span>贴地</span>
+      <md-switch v-model="clampToGround"></md-switch>
+      <span>移除最后一个点</span>
+      <md-switch v-model="removeLastPosition"></md-switch>
     </div>
   </div>
 </template>
@@ -182,16 +194,17 @@
 
 ### vc-measure-distance
 
-| 属性名           | 类型    | 默认值                                                      | 描述                                                 |
-| ---------------- | ------- | ----------------------------------------------------------- | ---------------------------------------------------- |
-| mode             | Number  | `1`                                                         | `optional` 测量模式，0 连续测量，1 测量一次就结束。  |
-| font             | String  | `'100 20px SimSun'`                                         | `optional` 指定 label 字体。                         |
-| depthTest        | Boolean | `false`                                                     | `optional` 指定标签文字和线对象是参与深度测试。      |
-| arcType          | Number  | `0`                                                         | `optional` 指定线的呈现方式， 0 空间直线，1 测地线。 |
-| clampToGround    | Boolean | `false`                                                     | `optional` 是否贴地量算。                            |
-| alongLine        | Boolean | `true`                                                      | `optional` 是否显示沿线标注。                        |
-| polylineWidth    | Number  | `2`                                                         | `optional` 指定线宽度。                              |
-| polylineMaterial | Object  | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质                                |
+| 属性名             | 类型    | 默认值                                                      | 描述                                                                 |
+| ------------------ | ------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| mode               | Number  | `1`                                                         | `optional` 测量模式，0 连续测量，1 测量一次就结束。                  |
+| font               | String  | `'100 20px SimSun'`                                         | `optional` 指定 label 字体。                                         |
+| depthTest          | Boolean | `false`                                                     | `optional` 指定标签文字和线对象是参与深度测试。                      |
+| arcType            | Number  | `0`                                                         | `optional` 指定线的呈现方式， 0 空间直线，1 测地线。                 |
+| clampToGround      | Boolean | `false`                                                     | `optional` 是否贴地量算。                                            |
+| alongLine          | Boolean | `true`                                                      | `optional` 是否显示沿线标注。                                        |
+| polylineWidth      | Number  | `2`                                                         | `optional` 指定线宽度。                                              |
+| polylineMaterial   | Object  | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质                                                |
+| removeLastPosition | Boolean | `true`                                                      | `optional` 结束时是否移除最后一个位置。触摸屏设置位`false`体验更好。 |
 
 ---
 
@@ -207,6 +220,7 @@
 | polylineMaterial | Object  | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }`              | `optional` 指定线材质                               |
 | polylineWidth    | Number  | `2`                                                                      | `optional` 指定线宽度。                             |
 | polygonMaterial  | Object  | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` 指定面材质。                             |
+| removeLastPosition | Boolean | `true`                                                      | `optional` 结束时是否移除最后一个位置。触摸屏设置位`false`体验更好。 |
 
 ---
 

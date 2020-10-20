@@ -121,6 +121,8 @@ const methods = {
     handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
     handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
     this.handler = handler
+    this.enterMoveAction = false
+    this.lastCartesianRemoved = false
     return this.polylines
   },
   async mount () {
@@ -142,18 +144,54 @@ const methods = {
     const nIndex = polylines.length - 1
     const polyline = polylines[nIndex]
 
+    if (type === 'distanceMeasuring' || type === 'areaMeasuring') {
+      // 鼠标移动事件添加的移动点需要移除
+      if (this.enterMoveAction) {
+        polyline.positions.pop()
+        polyline.distances && polyline.distances.pop()
+        this.lastCartesianRemoved = true
+      }
+    }
+
+    polyline.positions.push(cartesian)
+    const length = polyline.positions.length
+    if (length > 1) {
+      // 重复点不计算
+      if (Cesium.Cartesian3.distance(polyline.positions[length - 1], polyline.positions[length - 2]) < 1e-3) {
+        polyline.positions.pop()
+        return
+      }
+    }
+
     switch (type) {
       case 'distanceMeasuring':
-        polyline.positions.push(cartesian)
+        polyline.distance = this.getDistance(polyline.positions)
         polyline.distances.push(polyline.distance)
         onMeasureEvt(polyline, nIndex)
         break
       case 'areaMeasuring':
-        polyline.positions.push(cartesian)
+        polyline.area = this.getSurfaceArea(polyline.positions)
+        polyline.projectedArea = this.getProjectedArea(polyline.positions)
+        polyline.distance = this.getDistance(polyline.positions)
         polyline.distances.push(polyline.distance)
+
+        if (polyline.positions.length > 2 && !this.enterMoveAction) {
+          if (this.moveLastDistance) {
+            polyline.distances.pop()
+          }
+
+          let clonePoistions = Cesium.clone(polyline.positions, true)
+          clonePoistions.push(polyline.positions[0])
+          let distance = this.getDistance(clonePoistions)
+          polyline.distances.push(distance)
+          polyline.distance = distance
+          this.moveLastDistance = true
+        }
+
         onMeasureEvt(polyline, nIndex)
         break
       case 'heightMeasuring':
+        polyline.positions.pop()
         if (polyline.positions.length === 0) {
           polyline.positions.push(cartesian)
           this.startPoint = cartesian
@@ -179,17 +217,23 @@ const methods = {
     if (!Cesium.defined(cartesian)) {
       return
     }
+    this.enterMoveAction = true
     const listener = this.$listeners['movingEvt']
     listener && this.$emit('movingEvt', movement.endPosition, type)
     if (type === 'distanceMeasuring' || type === 'areaMeasuring') {
       if (polyline.positions.length >= 2) {
-        polyline.positions.pop()
-        polyline.distances && polyline.distances.pop()
+        // 如果鼠标左键点击事件移除了 不需要再移除
+        if (!this.lastCartesianRemoved) {
+          polyline.positions.pop()
+          polyline.distances && polyline.distances.pop()
+        }
+
         if (type === 'areaMeasuring') {
           polyline.distances && polyline.distances.pop()
         }
       }
       polyline.positions.push(cartesian)
+      this.lastCartesianRemoved = false
       if (type === 'distanceMeasuring') {
         let distance = this.getDistance(polyline.positions)
         polyline.distances.push(distance)
@@ -202,71 +246,22 @@ const methods = {
         polyline.projectedArea = this.getProjectedArea(polyline.positions)
 
         let distance = this.getDistance(polyline.positions)
-        polyline.distance = distance
         polyline.distances.push(distance)
+        polyline.distance = distance
 
-        let clonePoistions = Cesium.clone(polyline.positions, true)
-        clonePoistions.push(polyline.positions[0])
-        distance = this.getDistance(clonePoistions)
-        polyline.distance = distance
-        polyline.distances.push(distance)
+        if (polyline.positions.length >= 2) {
+          let clonePoistions = Cesium.clone(polyline.positions, true)
+          clonePoistions.push(polyline.positions[0])
+          distance = this.getDistance(clonePoistions)
+          polyline.distances.push(distance)
+          polyline.distance = distance
+        }
       }
       await this.$nextTick()
       onMeasureEvt(polyline, nIndex)
     } else {
       const { labels } = this
-      let endPoint = cartesian
-      let normalStart = {}
-      Cesium.Cartesian3.normalize(this.startPoint, normalStart)
-      let planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
-      let hypPoint = {}
-      polyline.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
-      let labelPositonHeight = {}
-      let labelPositonH = {}
-      let labelPositonS = {}
-      if (polyline.height >= 0) {
-        Cesium.Plane.projectPointOntoPlane(planeStart, endPoint, hypPoint)
-        Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonHeight)
-        Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonH)
-        polyline.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
-      } else {
-        let normalEnd = {}
-        Cesium.Cartesian3.normalize(endPoint, normalEnd)
-        let planeEnd = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(endPoint, new Cesium.Cartesian3(0, 0, 0)))
-        Cesium.Plane.projectPointOntoPlane(planeEnd, this.startPoint, hypPoint)
-        Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonHeight)
-        Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonH)
-        polyline.distanceH = Cesium.Cartesian3.distance(endPoint, hypPoint)
-      }
-      polyline.distanceS = Cesium.Cartesian3.distance(this.startPoint, endPoint)
-      Cesium.Cartesian3.midpoint(this.startPoint, endPoint, labelPositonS)
-      polyline.height = Math.abs(polyline.height)
-      if (polyline.positions.length !== 1) {
-        polyline.positions.pop()
-        polyline.positions.pop()
-        labels.pop()
-        labels.pop()
-        labels.pop()
-      }
-      polyline.positions.push(endPoint)
-      polyline.positions.push(hypPoint)
-      let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
-      labels.push({
-        text: this.$vc.lang.measure.verticalHeight + ': ' + labelTextHeight,
-        position: labelPositonHeight
-      })
-      let labelTextH =
-        polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
-      labels.push({
-        text: this.$vc.lang.measure.horizontalDistance + ': ' + labelTextH,
-        position: labelPositonH
-      })
-      let labelTextS =
-        polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
-      labels.push({
-        text: this.$vc.lang.measure.spaceDistance + ': ' + labelTextS,
-        position: labelPositonS
-      })
+      this.getHeight(cartesian, polyline)
       await this.$nextTick()
       onMeasureEvt(polyline, labels)
     }
@@ -275,7 +270,7 @@ const methods = {
     if (!this.measuring) {
       return
     }
-    const { viewer, polylines, mode, startNew, onMeasureEvt, type } = this
+    const { viewer, polylines, mode, startNew, onMeasureEvt, type, removeLastPosition } = this
     if (!polylines.length) {
       return
     }
@@ -289,8 +284,10 @@ const methods = {
       return
     }
     if (type === 'distanceMeasuring') {
-      polyline.positions.pop()
-      polyline.distances.pop()
+      if (removeLastPosition) {
+        polyline.positions.pop()
+        polyline.distances.pop()
+      }
       const { getDistance } = this
       polyline.distance = getDistance(polyline.positions)
       if (polyline.positions.length === 1) {
@@ -300,14 +297,32 @@ const methods = {
         return pre + cur.positions.length - 1
       }, 0) - 1
     } else if (type === 'areaMeasuring') {
-      polyline.positions.pop()
-      polyline.distances.pop()
+      if (removeLastPosition) {
+        polyline.positions.pop()
+        polyline.distances.pop()
+      }
+
       const { getSurfaceArea, getProjectedArea } = this
       polyline.area = getSurfaceArea(polyline.positions)
       polyline.projectedArea = getProjectedArea(polyline.positions)
+      polyline.distance = this.getDistance(polyline.positions)
+
+      if (polyline.positions.length >= 2 && this.enterMoveAction) {
+        polyline.distances.pop()
+
+        let clonePoistions = Cesium.clone(polyline.positions, true)
+        clonePoistions.push(polyline.positions[0])
+        let distance = this.getDistance(clonePoistions)
+        polyline.distances.push(distance)
+        polyline.distance = distance
+      }
+      this.moveLastDistance = false
+
       if (polyline.positions.length <= 2) {
         polyline.positions = []
       }
+    } else {
+      this.getHeight(cartesian, polyline)
     }
 
     if (mode === 0) {
@@ -389,6 +404,61 @@ const methods = {
     const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(pointTwo)
     const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
     return geodesic.surfaceDistance
+  },
+  getHeight (endPoint, polyline) {
+    const { labels } = this
+    // let endPoint = cartesian
+    let normalStart = {}
+    Cesium.Cartesian3.normalize(this.startPoint, normalStart)
+    let planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
+    let hypPoint = {}
+    polyline.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
+    let labelPositonHeight = {}
+    let labelPositonH = {}
+    let labelPositonS = {}
+    if (polyline.height <= 0) {
+      Cesium.Plane.projectPointOntoPlane(planeStart, endPoint, hypPoint)
+      Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonHeight)
+      Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonH)
+      polyline.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
+    } else {
+      let normalEnd = {}
+      Cesium.Cartesian3.normalize(endPoint, normalEnd)
+      let planeEnd = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(endPoint, new Cesium.Cartesian3(0, 0, 0)))
+      Cesium.Plane.projectPointOntoPlane(planeEnd, this.startPoint, hypPoint)
+      Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonHeight)
+      Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonH)
+      polyline.distanceH = Cesium.Cartesian3.distance(endPoint, hypPoint)
+    }
+    polyline.distanceS = Cesium.Cartesian3.distance(this.startPoint, endPoint)
+    Cesium.Cartesian3.midpoint(this.startPoint, endPoint, labelPositonS)
+    polyline.height = Math.abs(polyline.height)
+    if (polyline.positions.length !== 1) {
+      polyline.positions.pop()
+      polyline.positions.pop()
+      labels.pop()
+      labels.pop()
+      labels.pop()
+    }
+    polyline.positions.push(endPoint)
+    polyline.positions.push(hypPoint)
+    let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
+    labels.push({
+      text: this.$vc.lang.measure.verticalHeight + ': ' + labelTextHeight,
+      position: labelPositonHeight
+    })
+    let labelTextH =
+      polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
+    labels.push({
+      text: this.$vc.lang.measure.horizontalDistance + ': ' + labelTextH,
+      position: labelPositonH
+    })
+    let labelTextS =
+      polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
+    labels.push({
+      text: this.$vc.lang.measure.spaceDistance + ': ' + labelTextS,
+      position: labelPositonS
+    })
   },
   onMeasureEvt (polyline, index, flag = false) {
     if (!this.depthTest) {

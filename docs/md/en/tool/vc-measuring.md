@@ -1,8 +1,8 @@
 # MeasureTool
 
-- The `measure-distance` component is used for distance measurement.
-- The `measure-area` component is used for area measurement.
-- The `measure-height` component is used for high measurement.
+- The `vc-measure-distance` component is used for distance measurement.
+- The `vc-measure-area` component is used for area measurement.
+- The `vc-measure-height` component is used for high measurement.
 
 ## Example
 
@@ -20,6 +20,7 @@
           @activeEvt="activeEvt"
           @measureEvt="measureEvt"
           @movingEvt="movingEvt"
+          :removeLastPosition="removeLastPosition"
         ></vc-measure-distance>
         <vc-measure-area
           ref="measureArea"
@@ -27,6 +28,7 @@
           @measureEvt="measureEvt"
           @movingEvt="movingEvt"
           :clampToGround="clampToGround"
+          :removeLastPosition="removeLastPosition"
         ></vc-measure-area>
         <vc-measure-height
           ref="measureHeight"
@@ -44,8 +46,11 @@
         <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
           >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
         >
-        <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">clampToGround</md-button>
         <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+        <span>clampToGround</span>
+        <md-switch v-model="clampToGround"></md-switch>
+        <span>removeLastPosition</span>
+        <md-switch v-model="removeLastPosition"></md-switch>
       </div>
     </div>
   </template>
@@ -58,7 +63,8 @@
           distanceMeasuring: false,
           areaMeasuring: false,
           heightMeasuring: false,
-          clampToGround: false
+          clampToGround: false,
+          removeLastPosition: true
         }
       },
       methods: {
@@ -105,6 +111,7 @@
         @activeEvt="activeEvt"
         @measureEvt="measureEvt"
         @movingEvt="movingEvt"
+        :removeLastPosition="removeLastPosition"
       ></vc-measure-distance>
       <vc-measure-area
         ref="measureArea"
@@ -112,6 +119,7 @@
         @measureEvt="measureEvt"
         @movingEvt="movingEvt"
         :clampToGround="clampToGround"
+        :removeLastPosition="removeLastPosition"
       ></vc-measure-area>
       <vc-measure-height
         ref="measureHeight"
@@ -129,8 +137,11 @@
       <md-button class="md-raised md-accent" @click="toggle('measureHeight')"
         >{{ heightMeasuring ? 'stop' : 'height' }}</md-button
       >
-      <md-button class="md-raised md-accent" @click="clampToGround=!clampToGround">clampToGround</md-button>
       <md-button class="md-raised md-accent" @click="clear">clear</md-button>
+      <span>clampToGround</span>
+      <md-switch v-model="clampToGround"></md-switch>
+      <span>removeLastPosition</span>
+      <md-switch v-model="removeLastPosition"></md-switch>
     </div>
   </div>
 </template>
@@ -143,7 +154,8 @@
         distanceMeasuring: false,
         areaMeasuring: false,
         heightMeasuring: false,
-        clampToGround: false
+        clampToGround: false,
+        removeLastPosition: true
       }
     },
     methods: {
@@ -180,7 +192,7 @@
 
 ## Instance Properties
 
-### measure-distance
+### vc-measure-distance
 
 <!-- prettier-ignore -->
 | name | type | default | description |
@@ -193,10 +205,11 @@
 | alongLine | Boolean | `true` | `optional` Whether to display labels along the line. |
 | polylineWidth | Number | `2` | `optional` Specify the polyline width. |
 | polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
+| removeLastPosition | Boolean | `true` | `optional` Whether to remove the last position at the end. The touch screen setting bit `false` has a better experience. |
 
 ---
 
-### measure-area
+### vc-measure-area
 
 <!-- prettier-ignore -->
 | name | type | default | description |
@@ -210,10 +223,11 @@
 | polylineWidth | Number | `2` | `optional` Specify the polyline width. |
 | polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
 | polygonMaterial | Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` Specify polygon material. |
+| removeLastPosition | Boolean | `true` | `optional` Whether to remove the last position at the end. The touch screen setting bit `false` has a better experience. |
 
 ---
 
-### measure-height
+### vc-measure-height
 
 <!-- prettier-ignore -->
 | name | type | default | description |
@@ -223,6 +237,7 @@
 | depthTest | Boolean | `false` | `optional` Specify whether label text and line objects are always displayed. |
 | polylineWidth | Number | `2` | `optional` Specify the polyline width. |
 | polylineMaterial | Object | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` Specify polyline material. |
+|  | Boolean | `true` | `optional` Whether to remove the last position at the end. The touch screen setting bit `false` has a better experience. |
 
 ---
 
