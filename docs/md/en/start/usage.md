@@ -307,9 +307,9 @@ Vue.use(ImageryLayer)
       }
     },
     mounted() {
-      this.$refs.viewer.createPromise.then(({Cesium, viewer} => {
+      this.$refs.viewer.createPromise.then(({Cesium, viewer}) => {
         console.log('viewer is loaded.')
-      }))
+      })
     },
     methods: {
       ready(cesiumInstance) {
