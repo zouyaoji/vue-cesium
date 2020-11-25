@@ -101,7 +101,7 @@
           LEFT_CLICK () {
             console.log('LEFT_CLICK')
           },
-          ready(cesiumInstance) {
+          ready (cesiumInstance) {
             const { Cesium, viewer } = cesiumInstance
             this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
             this.billboard = new Cesium.BillboardGraphics({

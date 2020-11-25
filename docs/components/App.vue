@@ -86,7 +86,7 @@ h2 {
 }
 
 .doc {
-  padding: 0 5rem 5rem;
+  padding: 0 2rem 2rem;
 
   blockquote {
     &::before {

@@ -71,6 +71,7 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
           @ready="subReady"
           clipCoords="./statics/SampleData/shp/guilin.json"
         >
+          <!-- <vc-kriging-map ref="krigingmap" v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors"      @ready="subReady" :clipCoords="[109.61826, 24.25883, 111.49207, 26.38528]"> -->
         </vc-kriging-map>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
       </vc-viewer>
@@ -118,12 +119,14 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
 | name          | type          | default         | description                                                                                            |
 | ------------- | ------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
 | krigingModel  | string        | `'exponential'` | `optional` Specify the name of the kriging model. The value is 'gaussian', 'spherical', 'exponential'. |
-| krigingSigma2 | Object        |                 | `optional` Specify the kriging interpolation sigma parameter.                                          |
-| krigingAlpha  | Object        |                 | `optional` Specifies the kriging interpolation alpha parameter.                                        |
+| krigingSigma2 | Number        |                 | `optional` Specify the kriging interpolation sigma parameter.                                          |
+| krigingAlpha  | Number        |                 | `optional` Specifies the kriging interpolation alpha parameter.                                        |
+| canvasAlpha   | Number        | `1`             | `optional` Specify the alpha parameter when rendering.                                                 |
 | colors        | Array         |                 | `optional` Specifies the patch color segmented color array.                                            |
 | breaks        | Array         |                 | `optional` Specify a patched array of color patches.                                                   |
-| clipCoords    | Array\|String | `[]`            | `optional` Specifies the coordinate array or json file address of the colormap crop.                   |
+| clipCoords    | Array\|String | `[]`            | `required` Specifies the coordinate array or json file address of the colormap crop.                   |
 | show          | Boolean       | `true`          | `optional` Specifies whether the speckle map is displayed.                                             |
+| cell          | Number        |                 | `optional` Specify the interpolation resolution.                                                       |
 
 ---
 

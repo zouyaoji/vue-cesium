@@ -1,6 +1,6 @@
 # MapboxImageryProvider
 
-The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted by Mapbox.
+The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted by Mapbox.This method is abandoned by mapbox. For details, please refer to [Explanation](https://blog.mapbox.com/deprecating-studio-classic-styles-d8892ac38cb4), you can register a mapbox account, add a custom style map and use `vc-provider -imagery-style-mapbox` component loads.
 
 ## Example
 

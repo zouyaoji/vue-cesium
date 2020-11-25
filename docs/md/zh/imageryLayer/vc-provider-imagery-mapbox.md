@@ -1,6 +1,6 @@
 # MapboxImageryProvider
 
-`vc-provider-imagery-mapbox` 组件用于加载由 Mapbox 托管的影像服务图层。
+`vc-provider-imagery-mapbox` 组件用于加载由 Mapbox 托管的影像服务图层。这个方式被 mapbox 废弃了，详见[说明](https://blog.mapbox.com/deprecating-studio-classic-styles-d8892ac38cb4)，可注册mapbox账号，添加自定义风格地图再用 `vc-provider-imagery-style-mapbox` 组件加载。
 
 ## 示例
 
@@ -41,6 +41,7 @@
       data () {
         return {
           mapId: 'mapbox.streets',
+          accessToken: 'pk.eyJ1Ijoiem91eWFvamkiLCJhIjoiY2tjdjlha3pzMDIxeDJ1bWxhaWNnaGNkdSJ9.WaGuuQT8YcWTPx3KNQfF7A',
           options: [{
             value: 'mapbox.satellite',
             label: '卫星'
