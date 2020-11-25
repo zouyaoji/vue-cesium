@@ -122,7 +122,8 @@ const verticalOrigin = {
  */
 const heightReference = {
   props: {
-    heightReference: Number
+    heightReference: Number,
+    default: 0
   }
 }
 

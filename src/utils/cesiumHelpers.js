@@ -295,6 +295,9 @@ export function makeRectangle (val, isConstant = false) {
   if (val instanceof RectangleGraphics) {
     return val
   }
+  if (val instanceof Rectangle) {
+    return val
+  }
   if (isArray(val) && val.length === 4) {
     return Rectangle.fromDegrees(val[0], val[1], val[2], val[3])
   }

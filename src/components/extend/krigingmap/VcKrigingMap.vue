@@ -1,9 +1,6 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-datasource-geojson :data="data" :options="datasourceOptions" :show="show" ref="geojsonDatasource" v-if="data !== null"></vc-datasource-geojson>
-    <!-- <vc-entity>
-      <vc-graphics-polygon :hierarchy="hierarchy1" :material="material1" ref="polygon1"></vc-graphics-polygon>
-    </vc-entity>-->
   </i>
 </template>
 <script>
@@ -16,8 +13,7 @@ export default {
   name: 'vc-kriging-map',
   data () {
     return {
-      material1: {},
-      hierarchy1: {},
+      coordinates: { west: 0, south: 0, east: 0, north: 0 },
       data: null,
       datasourceOptions: {
         clampToGround: true
@@ -44,7 +40,7 @@ export default {
     },
     canvasAlpha: {
       type: Number,
-      default: 0.75
+      default: 1
     },
     colors: {
       type: Array,
@@ -67,7 +63,8 @@ export default {
     show: {
       type: Boolean,
       default: true
-    }
+    },
+    cell: Number
   },
   created () {
     this._creatPromise = new Promise((resolve, reject) => {
@@ -77,12 +74,22 @@ export default {
   },
   mounted () {
     this.getParent(this.$parent).createPromise.then(async ({ Cesium, viewer }) => {
-      const { values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha, breaks, clipCoords } = this
+      const { values, lngs, lats, krigingModel, krigingSigma2, breaks, clipCoords, krigingAlpha } = this
       const variogram = kriging.train(values, lngs, lats, krigingModel, krigingSigma2, krigingAlpha)
 
       let coordinates = []
+
       if (clipCoords instanceof Array) {
-        coordinates = clipCoords
+        if (clipCoords.length > 0 && clipCoords[0][0]) {
+          // 传的是 geojson 面
+          coordinates = clipCoords
+        } else {
+          // 传的是一个 bounds 数组 (左下和右上)
+          coordinates.push([
+            [clipCoords[0], clipCoords[1]], [clipCoords[0], clipCoords[3]],
+            [clipCoords[2], clipCoords[3]], [clipCoords[2], clipCoords[1]]
+          ])
+        }
       } else if (typeof clipCoords === 'string') {
         let requstData = await Cesium.Resource.fetchJson(clipCoords)
         coordinates = requstData.features[0].geometry.coordinates
@@ -105,9 +112,8 @@ export default {
       } else {
         rectangle = Cesium.Rectangle.fromDegrees(coords[0], coords[1], coords[2], coords[3])
       }
-      // this.hierarchy1 = new Cesium.PolygonHierarchy(
-      //   Cesium.Cartesian3.fromDegreesArray(coords)
-      // )
+      this.coordinates = rectangle
+
       let extent = [
         Cesium.Math.toDegrees(rectangle.west),
         Cesium.Math.toDegrees(rectangle.south),
@@ -115,19 +121,20 @@ export default {
         Cesium.Math.toDegrees(rectangle.north)
       ]
 
-      let grid = kriging.grid(coordinates, variogram, (extent[2] - extent[0]) / 200)
+      let grid = kriging.grid(coordinates, variogram, this.cell ? this.cell : (extent[2] - extent[0]) / 200)
 
       let fc = this.gridFeatureCollection(grid, [extent[0], extent[2]], [extent[1], extent[3]])
       var collection = featureCollection(fc)
       // console.log(collection)
       var isobandsResult = isobands(collection, breaks, { zProperty: 'value' })
       // console.log(isobandsResult)
-      // function sortArea (a, b) {
+      // const sortArea = (a, b) => {
       //   return area(b) - area(a)
       // }
-      // 按照面积对图层进行排序，规避turf的一个bug
+      // // 按照面积对图层进行排序，规避turf的一个bug
       // isobandsResult.features.sort(sortArea)
       this.data = isobandsResult
+
       this._resolve(true)
     })
   },
@@ -147,12 +154,15 @@ export default {
       })
     },
     setPolygonColor (cesiumObject) {
-      const { breaks, colors } = this
+      const { breaks, colors, canvasAlpha } = this
       cesiumObject.entities.values.reduce((pre, cur) => {
-        const index = breaks.indexOf(parseFloat(cur.properties.getValue().value.split('-')[0]))
-        cur.polygon.material = Cesium.Color.fromCssColorString(colors[index])
+        const value = cur.properties.getValue(Cesium.JulianDate.now).value
+        const breakValue = value.substr(0, value.lastIndexOf('-'))
+        const index = breaks.indexOf(parseFloat(breakValue))
+        cur.polygon.material = Cesium.Color.fromCssColorString(colors[index]).withAlpha(canvasAlpha)
         cur.polygon.outline = false
       }, [])
+
       return cesiumObject
     },
     gridFeatureCollection (grid, xlim, ylim) {

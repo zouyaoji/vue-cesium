@@ -1,15 +1,16 @@
 <template>
-  <div class="vc-navigationContainer" v-if="canRender" ref="navigationContainer">
+  <div class="vc-navigationContainer" ref="navigationContainer" v-if="canRender">
     <div class="vc-navigation">
       <div class="vc-navigation-navs">
         <div class="vc-navigation-control" v-if="defaultOptions.enableCompass">
-          <vc-compass :enableCompassOuterRing="defaultOptions.enableCompassOuterRing"></vc-compass>
+          <vc-compass :enableCompassOuterRing="defaultOptions.enableCompassOuterRing" ref="VcCompass"></vc-compass>
         </div>
         <div class="vc-navigation-control" v-if="defaultOptions.enableZoomControl">
           <vc-zoom-control
             :defaultResetView="defaultOptions.enableZoomControl.defaultResetView"
             :overrideCamera="defaultOptions.enableZoomControl.overrideCamera || false"
             :zoomAmount="defaultOptions.enableZoomControl.zoomAmount || 2"
+            ref="VcZoomControl"
           ></vc-zoom-control>
         </div>
       </div>
@@ -18,6 +19,7 @@
           <vc-print-view-btn
             :printAutomatically="defaultOptions.enablePrintView.printAutomatically"
             :showCredit="defaultOptions.enablePrintView.showCredit"
+            ref="VcPrintViewBtn"
           ></vc-print-view-btn>
         </div>
         <div class="vc-navigation-control" v-if="defaultOptions.enableMyLocation">
@@ -26,8 +28,12 @@
       </div>
     </div>
     <div :style="ldStyle" class="vc-location-distance">
-      <vc-location-bar :mouseCoords="mouseCoords" v-if="mouseCoords !== undefined && defaultOptions.enableLocationBar"></vc-location-bar>
-      <vc-distance-legend @legendChanged="legendChanged" v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
+      <vc-location-bar
+        :mouseCoords="mouseCoords"
+        ref="VcLocationBar"
+        v-if="mouseCoords !== undefined && defaultOptions.enableLocationBar"
+      ></vc-location-bar>
+      <vc-distance-legend @legendChanged="legendChanged" ref="VcDistanceLengend" v-if="defaultOptions.enableDistanceLegend"></vc-distance-legend>
     </div>
   </div>
 </template>
