@@ -358,7 +358,6 @@
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` 指定 HTML 元素添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
 | pixelOffset | Number | `10` | `optional` 指定 HTML 元素像素偏移值。|
-| show | Boolean | `true` | `optional` 指定 HTML 元素是否可见。|
 | hiddenOnBack | Number | `0.05` | `optional` 指定 HTML 元素在地球背面时是否隐藏。|
 
 ---
@@ -368,3 +367,4 @@
 | 事件名 | 参数                           | 描述                                                                |
 | ------ | ------------------------------ | ------------------------------------------------------------------- |
 | ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例, 以及 HTML 对象。 |
+| click  | event                          | 鼠标点击该组件元素触发，事件鼠标参数。                              |

@@ -358,7 +358,6 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. **Note** 
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` Specify where the HTML element is added. structure: { lng: number, lat: number, height: number } or Cesium.Cartesian3 |
 | pixelOffset | Number | `10` | `optional` Specify the pixel offset value of the HTML element. |
-| show | Boolean | `true` | `optional` Specifies whether the HTML element is visible. |
 | hiddenOnBack | Number | `0.05` | `optional` Specifies whether the HTML element is hidden when it is on the back of the earth. |
 
 ---
@@ -369,3 +368,4 @@ The `vc-overlay-html` component is used to add HTML tags to the scene. **Note** 
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and a HTML Element. |
+| click  | event                         | Triggered when the mouse clicks on the component element, event mouse parameters. |
