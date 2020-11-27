@@ -464,7 +464,7 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
 | changedEvent | | Triggers when the underlying data changes. |
 | errorEvent | | Triggers if an error is encountered during processing. |
 | loadingEvent | | Triggers the data source either starts or stops loading. |
-| clusterEvent | (clusteredEntities, cluster) | Gets the event that is fired when entities are added or removed from the collection.|
-| collectionChanged | (collection, added, removed, changed) | Gets the event that will be raised when a new cluster will be displayed.|
+| clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed. |
+| collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection.|
 
 ---
