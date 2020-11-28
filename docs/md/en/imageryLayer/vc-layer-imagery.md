@@ -12,8 +12,12 @@ The `vc-layer-imagery` component is used to load Cesium images. You can directly
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-       <vc-layer-imagery ref="layer" :alpha="alpha" :imageryProvider="imageryProvider" :brightness="brightness" :contrast="contrast">
-       </vc-layer-imagery>
+       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-tianditu
+            mapStyle="img_c"
+            token="436ce7e50d27eede2f2929307e6b33c0"
+          ></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>alpha</span>
@@ -32,16 +36,12 @@ The `vc-layer-imagery` component is used to load Cesium images. You can directly
         return {
           alpha: 1,
           brightness: 1,
-          contrast: 1,
-          imageryProvider: {}
+          contrast: 1
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.imageryProvider = new Cesium.MapboxImageryProvider({
-            mapId: 'mapbox.streets'
-          })
         }
       }
     }
@@ -54,13 +54,11 @@ The `vc-layer-imagery` component is used to load Cesium images. You can directly
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-layer-imagery
-        ref="layer"
-        :alpha="alpha"
-        :imageryProvider="imageryProvider"
-        :brightness="brightness"
-        :contrast="contrast"
-      >
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-tianditu
+          mapStyle="img_c"
+          token="436ce7e50d27eede2f2929307e6b33c0"
+        ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
@@ -80,16 +78,12 @@ The `vc-layer-imagery` component is used to load Cesium images. You can directly
       return {
         alpha: 1,
         brightness: 1,
-        contrast: 1,
-        imageryProvider: {}
+        contrast: 1
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        this.imageryProvider = new Cesium.MapboxImageryProvider({
-          mapId: 'mapbox.streets'
-        })
       }
     }
   }
@@ -117,7 +111,7 @@ The `vc-layer-imagery` component is used to load Cesium images. You can directly
 cutoutRectangle|Rectangle||`optional` Cartographic rectangle for cutting out a portion of this ImageryLayer.|
 | colorToAlpha | Object | |`optional` Color to be used as alpha.|
 | colorToAlphaThreshold | Number | `0.004` |`optional` Threshold for color-to-alpha.|
-
+| sortOrder | Number |  |`optional` Relative order of layers.|
 ---
 
 - Refer to the official document: **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**

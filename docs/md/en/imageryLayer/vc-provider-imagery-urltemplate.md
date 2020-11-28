@@ -11,11 +11,11 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" @layerAdded="layerAdded">
-        <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast">
+      <vc-viewer @ready="ready">
+        <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast" :sortOrder="20">
           <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
         </vc-layer-imagery>
-        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
           <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
         </vc-layer-imagery>
       </vc-viewer>
@@ -60,15 +60,6 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
           this.cesiumInstance = cesiumInstance
-        },
-        layerAdded() {
-          if (
-            this.$refs.layerText.imageryLayer &&
-            this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-          ) {
-            const { viewer } = this.cesiumInstance
-            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-          }
         }
       }
     }
@@ -80,11 +71,11 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" @layerAdded="layerAdded">
-      <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast">
+    <vc-viewer @ready="ready">
+      <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast" :sortOrder="20">
         <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
         <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
     </vc-viewer>
@@ -130,15 +121,6 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
-      },
-      layerAdded() {
-        if (
-          this.$refs.layerText.imageryLayer &&
-          this.url !== 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-        ) {
-          const { viewer } = this.cesiumInstance
-          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-        }
       }
     }
   }

@@ -12,8 +12,12 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-       <vc-layer-imagery :alpha="alpha" :imageryProvider="imageryProvider" :brightness="brightness" :contrast="contrast">
-       </vc-layer-imagery>
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+          <vc-provider-imagery-tianditu
+            mapStyle="img_c"
+            token="436ce7e50d27eede2f2929307e6b33c0"
+          ></vc-provider-imagery-tianditu>
+        </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
         <span>透明度</span>
@@ -32,16 +36,12 @@
         return {
           alpha: 1,
           brightness: 1,
-          contrast: 1,
-          imageryProvider: {}
+          contrast: 1
         }
       },
       methods: {
         ready (cesiumInstance) {
           const {Cesium, viewer} = cesiumInstance
-          this.imageryProvider = new Cesium.MapboxImageryProvider({
-            mapId: 'mapbox.streets'
-          })
         }
       }
     }
@@ -54,36 +54,36 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-layer-imagery :alpha="alpha" :imageryProvider="imageryProvider" :brightness="brightness" :contrast="contrast">
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-provider-imagery-tianditu
+          mapStyle="img_c"
+          token="436ce7e50d27eede2f2929307e6b33c0"
+        ></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
       <span>透明度</span>
-      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
+      <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
       <span>亮度</span>
-      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"></vue-slider>
+      <vue-slider v-model="brightness" :min="0" :max="3" :interval="0.01"  ></vue-slider>
       <span>对比度</span>
-      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
+      <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"  ></vue-slider>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         alpha: 1,
         brightness: 1,
-        contrast: 1,
-        imageryProvider: {}
+        contrast: 1
       }
     },
     methods: {
-      ready(cesiumInstance) {
-        const { Cesium, viewer } = cesiumInstance
-        this.imageryProvider = new Cesium.MapboxImageryProvider({
-          mapId: 'mapbox.streets'
-        })
+      ready (cesiumInstance) {
+        const {Cesium, viewer} = cesiumInstance
       }
     }
   }
@@ -112,6 +112,7 @@
 | cutoutRectangle | Object | | `optional` 指定裁剪此影像图层的矩形范围。 **结构：{ west: number, south: number, east: number, north: number }** |
 | colorToAlpha | Object | |`optional` 指定透明时的颜色。|
 | colorToAlphaThreshold | Number | `0.004` |`optional` 颜色到alpha的阈值。|
+| sortOrder | Number |  |`optional` 图层相对顺序。|
 
 ---
 

@@ -11,14 +11,14 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" @layerAdded="layerAdded">
-        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-viewer @ready="ready">
+        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
           <vc-provider-imagery-tianditu
             mapStyle="cva_c"
             token="436ce7e50d27eede2f2929307e6b33c0"
           ></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
-        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
           <vc-provider-imagery-tianditu
             :mapStyle="mapStyle"
             token="436ce7e50d27eede2f2929307e6b33c0"
@@ -83,12 +83,6 @@
         ready({ Cesium, viewer }) {
           this.Cesium = Cesium
           this.viewer = viewer
-        },
-        layerAdded() {
-          if (this.$refs.layerText.imageryLayer) {
-            const { viewer } = this
-            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-          }
         }
       }
     }
@@ -100,11 +94,11 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" @layerAdded="layerAdded">
-      <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+    <vc-viewer @ready="ready">
+      <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
         <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
         <vc-provider-imagery-tianditu
           :mapStyle="mapStyle"
           token="436ce7e50d27eede2f2929307e6b33c0"
@@ -169,12 +163,6 @@
       ready({ Cesium, viewer }) {
         this.Cesium = Cesium
         this.viewer = viewer
-      },
-      layerAdded() {
-        if (this.$refs.layerText.imageryLayer) {
-          const { viewer } = this
-          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-        }
       }
     }
   }

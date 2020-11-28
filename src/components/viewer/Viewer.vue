@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-08-03 18:45:47
+ * @Last Modified time: 2020-11-28 13:21:36
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -799,9 +799,14 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       return { Cesium, viewer }
     },
     layerAdded (layer) {
-      if (this.viewer.baseLayerPicker) {
-        this.viewer.imageryLayers.raiseToTop(layer)
+      const { viewer } = this
+      if (viewer.baseLayerPicker) {
+        viewer.imageryLayers.raiseToTop(layer)
       }
+      // 维护影像图层顺序
+      layer.sortOrder = Cesium.defined(layer.sortOrder) ? layer.sortOrder : 9999
+      viewer.imageryLayers._layers.sort((a, b) => (a.sortOrder - b.sortOrder))
+      viewer.imageryLayers._update()
     },
     localeDateTimeFormatter (datetime, viewModel, ignoredate) {
       if (this.UTCoffset) {

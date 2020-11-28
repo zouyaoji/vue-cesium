@@ -46,7 +46,8 @@ export default {
     colorToAlphaThreshold: {
       type: Number,
       default: 0.004
-    }
+    },
+    sortOrder: Number
   },
   methods: {
     /**
@@ -58,7 +59,8 @@ export default {
       return new Cesium.ImageryLayer(requiredArg || {}, options)
     },
     async mount () {
-      const { viewer, imageryLayer } = this
+      const { viewer, imageryLayer, sortOrder } = this
+      imageryLayer.sortOrder = sortOrder
       viewer.imageryLayers.add(imageryLayer)
       return !this.viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     },

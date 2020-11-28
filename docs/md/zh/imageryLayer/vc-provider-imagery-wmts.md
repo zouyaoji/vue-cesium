@@ -11,8 +11,8 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" @layerAdded="layerAdded">
-        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-viewer @ready="ready">
+        <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
           <vc-provider-imagery-wmts
             :url="urlText"
             :wmtsStyle="style"
@@ -25,7 +25,7 @@
             :layer="layer2"
           ></vc-provider-imagery-wmts>
         </vc-layer-imagery>
-        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
           <vc-provider-imagery-wmts
             :url="url"
             :wmtsStyle="style"
@@ -115,12 +115,6 @@
           const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
           this.tilingScheme = new Cesium.GeographicTilingScheme()
-        },
-        layerAdded() {
-          if (this.$refs.layerText.imageryLayer) {
-            const { viewer } = this.cesiumInstance
-            viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-          }
         }
       }
     }
@@ -132,8 +126,8 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" @layerAdded="layerAdded">
-      <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+    <vc-viewer @ready="ready">
+      <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
         <vc-provider-imagery-wmts
           :url="urlText"
           :wmtsStyle="style"
@@ -146,7 +140,7 @@
           :layer="layer2"
         ></vc-provider-imagery-wmts>
       </vc-layer-imagery>
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
         <vc-provider-imagery-wmts
           :url="url"
           :wmtsStyle="style"
@@ -236,12 +230,6 @@
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
         this.tilingScheme = new Cesium.GeographicTilingScheme()
-      },
-      layerAdded() {
-        if (this.$refs.layerText.imageryLayer) {
-          const { viewer } = this.cesiumInstance
-          viewer.imageryLayers.raiseToTop(this.$refs.layerText.imageryLayer)
-        }
       }
     }
   }
