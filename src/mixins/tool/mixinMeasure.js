@@ -519,6 +519,7 @@ export default {
       handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
       handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
       handler.removeInputAction(Cesium.ScreenSpaceEventType.RIGHT_CLICK)
+      handler.destroy()
     }
   }
 }
