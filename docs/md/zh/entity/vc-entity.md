@@ -19,7 +19,7 @@
         @cameraClicked="cameraClicked"
         @closeClicked="closeClicked"
       >
-        <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+        <vc-entity @click="entityClick" @mousedown="entityClick" @dblclick="entityClick" ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
       </vc-viewer>
       <div ref="bubbleContainer" id="bubbleContainer" hidden>
         <button id="test">Test</button>
@@ -81,6 +81,9 @@
           const feature = this.viewer.scene.pick(movement.position)
           console.log(feature)
         },
+        entityClick (e) {
+          console.log(e)
+        },
         cameraClicked(e) {
           console.log('cameraClicked', e)
         },
@@ -104,6 +107,9 @@
       @selectedEntityChanged="selectedEntityChanged"
       @cameraClicked="cameraClicked"
       @closeClicked="closeClicked"
+      @click="entityClick"
+      @mousedown="entityClick"
+      @dblclick="entityClick"
     >
       <vc-entity ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
     </vc-viewer>
@@ -172,6 +178,15 @@
       },
       closeClicked(e) {
         console.log('closeClicked', e)
+      },
+      entityClick(e) {
+        console.log(e)
+      },
+      cameraClicked(e) {
+        console.log('cameraClicked', e)
+      },
+      closeClicked(e) {
+        console.log('closeClicked', e)
       }
     }
   }
@@ -215,9 +230,14 @@
 
 ## 事件
 
-| 事件名            | 参数                           | 描述                                                                             |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready             | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| definitionChanged |                                | 每当更改或修改属性或子属性时触发该事件。                                         |
+| 事件名            | 参数                                                | 描述                                                                             |
+| ----------------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| definitionChanged |                                                     | 每当更改或修改属性或子属性时触发该事件。                                         |
+| mousedown         | {button,surfacePosition,target,type,windowPosition} | 鼠标在该实体上按下时触发。                                                       |
+| mouseup           | {button,surfacePosition,target,type,windowPosition} | 鼠标在该实体上弹起时触发。                                                       |
+| click             | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该实体时触发。                                                           |
+| dblclick          | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该实体时触发。                                                       |
+| mousemove         | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该实体时触发。                                                         |
 
 ---

@@ -12,7 +12,7 @@ The `vc-primitive` component is used to load a primitive that represents geometr
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive :appearance="appearance" :geometryInstances="geometryInstances"></vc-primitive>
+        <vc-primitive @click="clicked" :appearance="appearance" :geometryInstances="geometryInstances"></vc-primitive>
       </vc-viewer>
     </div>
   </template>
@@ -56,6 +56,9 @@ The `vc-primitive` component is used to load a primitive that represents geometr
             }),
             materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
           })
+        },
+        clicked(e) {
+          console.log(e)
         }
       }
     }
@@ -68,7 +71,7 @@ The `vc-primitive` component is used to load a primitive that represents geometr
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-primitive :appearance="appearance" :geometryInstances="geometryInstances"></vc-primitive>
+      <vc-primitive @click="clicked" :appearance="appearance" :geometryInstances="geometryInstances"></vc-primitive>
     </vc-viewer>
   </div>
 </template>
@@ -112,6 +115,9 @@ The `vc-primitive` component is used to load a primitive that represents geometr
           }),
           materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
         })
+      },
+      clicked(e) {
+        console.log(e)
       }
     }
   }
@@ -148,5 +154,10 @@ Refer to the official document: **[Primitive](https://cesium.com/docs/cesiumjs-r
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on this primitive. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the primitive. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the primitive. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this primitive. |
 
 ---

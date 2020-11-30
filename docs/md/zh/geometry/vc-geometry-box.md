@@ -14,7 +14,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK">
-        <vc-primitive :appearance="appearance">
+        <vc-primitive  @click="clicked" :appearance="appearance">
           <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes" :modelMatrix="modelMatrix">
             <vc-geometry-box ref="box" :dimensions="dimensions"></vc-geometry-box>
           </vc-instance-geometry>
@@ -53,7 +53,11 @@
         })
       },
       methods: {
+        clicked (a) {
+          console.log(a)
+        },
         ready({ Cesium, viewer, cesiumObject }) {
+          window.viewer = viewer
           this.viewer = viewer
           const { ColorGeometryInstanceAttribute, PerInstanceColorAppearance, Matrix4, Cartesian3, Transforms } = Cesium
           this.attributes = {

@@ -12,9 +12,9 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive-billboard :billboards="billboards"></vc-collection-primitive-billboard>
+        <vc-collection-primitive-billboard :billboards="billboards" @click="clicked" @dblclick="dblclick"></vc-collection-primitive-billboard>
         <vc-collection-primitive-billboard>
-          <vc-primitive-billboard
+          <vc-primitive-billboard @click="clicked"
             :image="image"
             :scale="0.4"
             :show="show"
@@ -53,6 +53,12 @@
             billboards.push(billboard)
           }
           this.billboards = billboards
+        },
+        clicked (a) {
+          console.log(a)
+        },
+        dblclick (a) {
+          console.log(a)
         }
       }
     }
@@ -65,9 +71,9 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive-billboard :billboards="billboards"></vc-collection-primitive-billboard>
+      <vc-collection-primitive-billboard @click="clicked" :billboards="billboards"></vc-collection-primitive-billboard>
       <vc-collection-primitive-billboard>
-        <vc-primitive-billboard
+        <vc-primitive-billboard @click="clicked"
           :image="image"
           :scale="0.4"
           :show="show"
@@ -106,6 +112,12 @@
           billboards.push(billboard)
         }
         this.billboards = billboards
+      },
+      clicked (a) {
+        console.log(a)
+      },
+      dblclick (a) {
+        console.log(a)
       }
     }
   }
@@ -129,8 +141,13 @@
 
 ## 事件
 
-| 事件名 | 参数                           | 描述                                                                             |
-| ------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| 事件名    | 参数                                                | 描述                                                                             |
+| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                   |
+| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                   |
+| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元集合时触发。                                                       |
+| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                   |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                     |
 
 ---

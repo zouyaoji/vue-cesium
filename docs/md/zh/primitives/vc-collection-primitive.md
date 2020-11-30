@@ -12,14 +12,14 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive :show="show">
+        <vc-collection-primitive @click="clicked" :show="show">
           <vc-collection-primitive-billboard :billboards="billboards1"></vc-collection-primitive-billboard>
           <vc-collection-primitive>
             <vc-collection-primitive-billboard :billboards="billboards2"></vc-collection-primitive-billboard>
           </vc-collection-primitive>
         </vc-collection-primitive>
-        <vc-collection-primitive>
-          <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
+        <vc-collection-primitive >
+          <vc-primitive-model @click="clicked" :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
           </vc-primitive-model>
         </vc-collection-primitive>
       </vc-viewer>
@@ -62,6 +62,9 @@
           this.billboards1 = billboards1
           this.billboards2 = billboards2
           this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+        },
+        clicked (e) {
+          console.log(e)
         }
       }
     }
@@ -74,13 +77,13 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive :show="show">
+      <vc-collection-primitive @click="clicked" :show="show">
         <vc-collection-primitive-billboard :billboards="billboards1"></vc-collection-primitive-billboard>
         <vc-collection-primitive>
           <vc-collection-primitive-billboard :billboards="billboards2"></vc-collection-primitive-billboard>
         </vc-collection-primitive>
       </vc-collection-primitive>
-      <vc-collection-primitive>
+      <vc-collection-primitive @click="clicked">
         <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
         </vc-primitive-model>
       </vc-collection-primitive>
@@ -124,6 +127,9 @@
         this.billboards1 = billboards1
         this.billboards2 = billboards2
         this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+      },
+      clicked (e) {
+        console.log(e)
       }
     }
   }
@@ -143,8 +149,13 @@
 
 ## 事件
 
-| 事件名 | 参数                           | 描述                                                                             |
-| ------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| 事件名    | 参数                                                | 描述                                                                             |
+| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                       |
+| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                       |
+| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元集合时触发。                                                           |
+| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                       |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                         |
 
 ---

@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready">
+      <vc-viewer @ready="ready" baseLayerPicker>
         <vc-layer-imagery ref="layerText" :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
           <vc-provider-imagery-tianditu
             mapStyle="cva_c"
@@ -83,6 +83,8 @@
         ready({ Cesium, viewer }) {
           this.Cesium = Cesium
           this.viewer = viewer
+          window.vm = this
+          window.viewer = viewer
         }
       }
     }

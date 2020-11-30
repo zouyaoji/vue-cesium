@@ -20,6 +20,7 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
             :position="position"
+            @click="clicked"
           ></vc-primitive-billboard>
         </vc-collection-primitive-billboard>
       </vc-viewer>
@@ -42,6 +43,9 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+        },
+        clicked(e) {
+          console.log(e)
         }
       }
     }
@@ -62,6 +66,7 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
           :distanceDisplayCondition="distanceDisplayCondition"
           :horizontalOrigin="horizontalOrigin"
           :position="position"
+          @click="clicked"
         ></vc-primitive-billboard>
       </vc-collection-primitive-billboard>
     </vc-viewer>
@@ -84,6 +89,9 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+      },
+      clicked(e) {
+        console.log(e)
       }
     }
   }
@@ -126,5 +134,9 @@ The `vc-primitive-billboard` component is used to load a viewport-aligned image 
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on this primitive. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the primitive. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the primitive. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this primitive. |
 ---

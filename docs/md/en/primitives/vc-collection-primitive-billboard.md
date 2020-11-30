@@ -12,9 +12,9 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive-billboard :billboards="billboards"></vc-collection-primitive-billboard>
+        <vc-collection-primitive-billboard :billboards="billboards" @click="clicked" @dblclick="dblclick"></vc-collection-primitive-billboard>
         <vc-collection-primitive-billboard>
-          <vc-primitive-billboard
+          <vc-primitive-billboard @click="clicked"
             :image="image"
             :scale="0.4"
             :show="show"
@@ -53,6 +53,12 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
             billboards.push(billboard)
           }
           this.billboards = billboards
+        },
+        clicked (a) {
+          console.log(a)
+        },
+        dblclick (a) {
+          console.log(a)
         }
       }
     }
@@ -65,9 +71,9 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive-billboard :billboards="billboards"></vc-collection-primitive-billboard>
+      <vc-collection-primitive-billboard @click="clicked" :billboards="billboards"></vc-collection-primitive-billboard>
       <vc-collection-primitive-billboard>
-        <vc-primitive-billboard
+        <vc-primitive-billboard @click="clicked"
           :image="image"
           :scale="0.4"
           :show="show"
@@ -106,6 +112,12 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
           billboards.push(billboard)
         }
         this.billboards = billboards
+      },
+      clicked (a) {
+        console.log(a)
+      },
+      dblclick (a) {
+        console.log(a)
       }
     }
   }
@@ -133,5 +145,10 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on the collection of primitives. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the collection of primitives. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks the collection of primitives. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive collection. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to the primitive collection. |
 
 ---

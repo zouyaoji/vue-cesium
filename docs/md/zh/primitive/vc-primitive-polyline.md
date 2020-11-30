@@ -12,10 +12,10 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" scene3DOnly>
-        <vc-collection-primitive-polyline>
+        <vc-collection-primitive-polyline @click="clicked">
           <vc-primitive-polyline :positions="positions1" :material="material1" :width="5"></vc-primitive-polyline>
           <vc-primitive-polyline :positions="positions2" :material="material2" :width="10"></vc-primitive-polyline>
-          <vc-primitive-polyline :positions="positions3" :material="material3" :width="10"></vc-primitive-polyline>
+          <vc-primitive-polyline @click="clicked" :positions="positions3" :material="material3" :width="10"></vc-primitive-polyline>
         </vc-collection-primitive-polyline>
       </vc-viewer>
     </div>
@@ -72,6 +72,9 @@
               }
             }
           })
+        },
+        clicked (e) {
+          console.log(e)
         }
       }
     }
@@ -97,22 +100,13 @@
     data() {
       return {
         polyline1: {},
-        positions1: [
-          { lng: 90, lat: 20, height: 10000 },
-          { lng: 120, lat: 20, height: 10000 }
-        ],
+        positions1: [{ lng: 90, lat: 20, height: 10000 }, { lng: 120, lat: 20, height: 10000 }],
         material1: undefined,
         polyline2: {},
-        positions2: [
-          { lng: 90, lat: 30, height: 10000 },
-          { lng: 120, lat: 30, height: 10000 }
-        ],
+        positions2: [{ lng: 90, lat: 30, height: 10000 }, { lng: 120, lat: 30, height: 10000 }],
         material2: undefined,
         polyline3: {},
-        positions3: [
-          { lng: 90, lat: 40, height: 10000 },
-          { lng: 120, lat: 40, height: 10000 }
-        ],
+        positions3: [{ lng: 90, lat: 40, height: 10000 }, { lng: 120, lat: 40, height: 10000 }],
         material3: undefined,
         polylines: []
       }
@@ -168,8 +162,13 @@
 
 ## 事件
 
-| 事件名 | 参数                           | 描述                                                                             |
-| ------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready  | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| 事件名    | 参数                                                | 描述                                                                             |
+| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上按下时触发。                                                       |
+| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上弹起时触发。                                                       |
+| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元时触发。                                                           |
+| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元时触发。                                                       |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元时触发。                                                         |
 
 ---

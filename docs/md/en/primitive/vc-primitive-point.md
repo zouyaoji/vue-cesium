@@ -151,5 +151,9 @@ The `vc-primitive-point` component is used to load a graphical point positioned 
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on this primitive. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the primitive. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the primitive. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this primitive. |
 ---

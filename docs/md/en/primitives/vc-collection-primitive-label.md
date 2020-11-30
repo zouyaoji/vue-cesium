@@ -167,5 +167,9 @@ The `vc-collection-primitive-label` component is used to load a renderable colle
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on the collection of primitives. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the collection of primitives. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks the collection of primitives. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive collection. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to the primitive collection. |
 ---

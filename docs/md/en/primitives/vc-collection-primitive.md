@@ -12,13 +12,13 @@ The `vc-collection-primitive` component is used to load a collection of primitiv
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive :show="show">
+        <vc-collection-primitive :show="show" @click="clicked">
           <vc-collection-primitive-billboard :billboards="billboards1"></vc-collection-primitive-billboard>
           <vc-collection-primitive>
             <vc-collection-primitive-billboard :billboards="billboards2"></vc-collection-primitive-billboard>
           </vc-collection-primitive>
         </vc-collection-primitive>
-        <vc-collection-primitive>
+        <vc-collection-primitive @click="clicked">
           <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
           </vc-primitive-model>
         </vc-collection-primitive>
@@ -62,6 +62,9 @@ The `vc-collection-primitive` component is used to load a collection of primitiv
           this.billboards1 = billboards1
           this.billboards2 = billboards2
           this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+        },
+        clicked(e) {
+          console.log(e)
         }
       }
     }
@@ -74,13 +77,13 @@ The `vc-collection-primitive` component is used to load a collection of primitiv
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive :show="show">
+      <vc-collection-primitive :show="show" @click="clicked">
         <vc-collection-primitive-billboard :billboards="billboards1"></vc-collection-primitive-billboard>
         <vc-collection-primitive>
           <vc-collection-primitive-billboard :billboards="billboards2"></vc-collection-primitive-billboard>
         </vc-collection-primitive>
       </vc-collection-primitive>
-      <vc-collection-primitive>
+      <vc-collection-primitive @click="clicked">
         <vc-primitive-model :url="url" :modelMatrix="modelMatrix" :scale="10000" :minimumPixelSize="128" :maximumScale="200000">
         </vc-primitive-model>
       </vc-collection-primitive>
@@ -124,6 +127,9 @@ The `vc-collection-primitive` component is used to load a collection of primitiv
         this.billboards1 = billboards1
         this.billboards2 = billboards2
         this.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
+      },
+      clicked (e) {
+        console.log(e)
       }
     }
   }
@@ -147,5 +153,9 @@ The `vc-collection-primitive` component is used to load a collection of primitiv
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on the collection of primitives. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the collection of primitives. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks the collection of primitives. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive collection. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to the primitive collection. |
 ---

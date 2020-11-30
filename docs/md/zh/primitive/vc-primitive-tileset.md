@@ -22,6 +22,7 @@
           @tileLoad="tileLoad"
           @tileUnload="tileUnload"
           @tileVisible="tileVisible"
+          @click="clickd"
         >
         </vc-primitive-tileset>
       </vc-viewer>
@@ -54,6 +55,9 @@
         }
       },
       methods: {
+        clickd (a) {
+          console.log(a)
+        },
         ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const { Cesium, viewer } = cesiumInstance
@@ -235,5 +239,10 @@
 | tileLoad | | tile 加载完成后触发该事件。 |
 | tileUnload | | tile 加载未成功加载时触发该事件。 |
 | tileVisible | | tile 可见性发生改变时触发该事件。 |
+| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上按下时触发。 |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
+| click | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元时触发。 |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元时触发。 |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元时触发。 |
 
 ---

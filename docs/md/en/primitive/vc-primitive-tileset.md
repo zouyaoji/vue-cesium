@@ -26,8 +26,8 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
         </vc-primitive-tileset>
       </vc-viewer>
       <div class="demo-tool">
-        <span>切换地址</span>
-        <md-select v-model="url" placeholder="切换地址">
+        <span>Switch Source</span>
+        <md-select v-model="url" placeholder="Switch Source">
           <md-option v-for="item in options" :key="item.value" :value="item.value">
             {{item.label}}
           </md-option>
@@ -112,8 +112,8 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
       </vc-primitive-tileset>
     </vc-viewer>
     <div class="demo-tool">
-      <span>切换地址</span>
-      <md-select v-model="url" placeholder="切换地址">
+      <span>Switch Source</span>
+      <md-select v-model="url" placeholder="Switch Source">
         <md-option v-for="item in options" :key="item.value" :value="item.value">
           {{item.label}}
         </md-option>
@@ -235,5 +235,9 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
 | tileLoad | | The event fired to indicate that a tile's content was loaded.The loaded Cesium3DTile is passed to the event listener. |
 | tileUnload | | The event fired to indicate that a tile's content was unloaded.The unloaded Cesium3DTile is passed to the event listener.This event is fired immediately before the tile's content is unload |
 | tileVisible | | This event fires once for each visible tile in a frame. This can be used to manually style a tileset.The visible Cesium3DTile is passed to the event listener. |
-
+| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on this primitive. |
+| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the primitive. |
+| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the primitive. |
+| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive. |
+| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this primitive. |
 ---

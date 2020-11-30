@@ -14,7 +14,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK">
-        <vc-primitive :appearance="appearance">
+        <vc-primitive  @click="clicked" :appearance="appearance">
           <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes" :modelMatrix="modelMatrix">
             <vc-geometry-box ref="box" :dimensions="dimensions"></vc-geometry-box>
           </vc-instance-geometry>
@@ -76,6 +76,9 @@
         LEFT_CLICK(movement) {
           const feature = this.viewer.scene.pick(movement.position)
           console.log(feature)
+        },
+        clicked(e) {
+          console.log(e)
         }
       }
     }
@@ -88,7 +91,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready" @LEFT_CLICK="LEFT_CLICK">
-      <vc-primitive :appearance="appearance">
+      <vc-primitive @click="clicked" :appearance="appearance">
         <vc-instance-geometry :geometry.sync="geometry" :attributes="attributes" :modelMatrix="modelMatrix">
           <vc-geometry-box ref="box" :dimensions="dimensions"></vc-geometry-box>
         </vc-instance-geometry>
@@ -150,6 +153,9 @@
       LEFT_CLICK(movement) {
         const feature = this.viewer.scene.pick(movement.position)
         console.log(feature)
+      },
+      clicked(e) {
+        console.log(e)
       }
     }
   }
