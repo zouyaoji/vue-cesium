@@ -8,14 +8,18 @@
  */
 import cmp from '../virtualCmp'
 import mergeDescriptors from '../../utils/mergeDescriptors'
+import mixinPickEvent from '../event/mixinPickEvent'
 
 const methods = {
   async mount () {
-    const { primitives, collection } = this
+    const { primitives, collection, registerEvents } = this
+    registerEvents(true)
+    collection._vcParent = primitives
     return primitives && primitives.add(collection)
   },
   async unmount () {
-    const { primitives, collection } = this
+    const { primitives, collection, registerEvents } = this
+    registerEvents(false)
     return primitives && primitives.remove(collection)
   },
   getServices () {
@@ -32,8 +36,14 @@ const methods = {
 }
 
 export default {
-  mixins: [cmp],
+  mixins: [cmp, mixinPickEvent],
   methods,
+  props: {
+    enbaleEvent: {
+      type: Boolean,
+      default: true
+    }
+  },
   stubVNode: {
     attrs () {
       return {

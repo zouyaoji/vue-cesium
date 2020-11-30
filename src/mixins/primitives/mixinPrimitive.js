@@ -10,10 +10,11 @@
 import cmp from '../virtualCmp'
 import mergeDescriptors from '../../utils/mergeDescriptors'
 import bindEvents from '../../utils/bindEvent'
+import mixinPickEvent from '../event/mixinPickEvent'
 
 const methods = {
   async mount () {
-    const { primitives, primitive } = this
+    const { primitives, primitive, registerEvents } = this
     primitive.readyPromise && primitive.readyPromise.then(primitive => {
       const listener = this.$listeners['readyPromise']
       listener && this.$emit('readyPromise', primitive)
@@ -21,13 +22,16 @@ const methods = {
       throw new Cesium.DeveloperError(error)
     })
     bindEvents.call(this, primitive, undefined, true)
+    registerEvents(true)
+    primitive._vcParent = primitives
     return primitives && primitives.add(primitive)
   },
   async unmount () {
-    const { primitives, primitive } = this
+    const { primitives, primitive, registerEvents } = this
     this.childCount = 0
     this.instances = []
     bindEvents.call(this, primitive, undefined, false)
+    registerEvents(false)
     return primitives && primitives.remove(primitive)
   },
   async setGeometryInstances (geometryInstance, index) {
@@ -62,7 +66,13 @@ export default {
       instances: []
     }
   },
-  mixins: [cmp],
+  props: {
+    enbaleEvent: {
+      type: Boolean,
+      default: true
+    }
+  },
+  mixins: [cmp, mixinPickEvent],
   methods,
   stubVNode: {
     attrs () {

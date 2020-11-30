@@ -5,7 +5,7 @@
  * Billboard
  */
 import cmp from '../virtualCmp'
-
+import mixinPickEvent from '../event/mixinPickEvent'
 const methods = {
   /**
    * 重写 createCesiumObject 方法。
@@ -16,16 +16,24 @@ const methods = {
     return primitives && primitives.add(options)
   },
   async mount () {
-    const { primitives, primitive } = this
+    const { primitives, primitive, registerEvents } = this
+    registerEvents(true)
     return primitives && primitives.contains(primitive)
   },
   async unmount () {
-    const { primitives, primitive } = this
+    const { primitives, primitive, registerEvents } = this
+    registerEvents(false)
     return primitives && primitives.remove(primitive)
   }
 }
 export default {
-  mixins: [cmp],
+  props: {
+    enbaleEvent: {
+      type: Boolean,
+      default: true
+    }
+  },
+  mixins: [cmp, mixinPickEvent],
   methods,
   stubVNode: {
     empty () {

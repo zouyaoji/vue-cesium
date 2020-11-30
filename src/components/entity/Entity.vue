@@ -1,5 +1,6 @@
 <script>
 import cmp from '../../mixins/virtualCmp'
+import mixinPickEvent from '../../mixins/event/mixinPickEvent'
 import { position } from '../../mixins/mixinProps'
 import mergeDescriptors from '../../utils/mergeDescriptors'
 import bindEvents from '../../utils/bindEvent'
@@ -7,7 +8,7 @@ import { Events } from '../../utils/events'
 
 export default {
   name: 'vc-entity',
-  mixins: [cmp, position],
+  mixins: [cmp, position, mixinPickEvent],
   props: {
     id: String,
     name: String,
@@ -37,17 +38,23 @@ export default {
     properties: Object,
     polylineVolume: Object,
     rectangle: Object,
-    wall: Object
+    wall: Object,
+    enbaleEvent: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     async mount () {
-      const { entities, entity } = this
+      const { entities, entity, registerEvents } = this
+      registerEvents(true)
       bindEvents.call(this, entity, Events['entity-events'])
       return entities && entities.add(entity)
     },
     async unmount () {
-      const { entities, entity } = this
+      const { entities, entity, registerEvents } = this
       bindEvents.call(this, entity, Events['entity-events'], false)
+      registerEvents(false)
       return entities && entities.remove(entity)
     },
     setGraphics (graphics, type) {
