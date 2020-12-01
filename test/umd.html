@@ -34,6 +34,7 @@
       <div id="map">
         <vc-viewer ref="viewer" animation timeline @ready="ready" @LEFT_CLICK="LEFT_CLICK" @moveStart="moveStart">
           <vc-navigation></vc-navigation>
+          <vc-map-overview></vc-map-overview>
           <vc-layer-imagery>
             <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
           </vc-layer-imagery>
@@ -67,13 +68,16 @@
     <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
     <script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/vue-cesium@latest/lib/vc-navigation.css"></link>
+    <link rel="stylesheet" href="https://unpkg.com/vue-cesium@latest/lib/vc-map-overview.css"></link>
     <!-- <script src="../lib/index.umd.js"></script>
-    <link rel="stylesheet" href="../lib/vc-navigation.css"></link> -->
+    <link rel="stylesheet" href="../lib/vc-navigation.css"></link>
+    <link rel="stylesheet" href="../lib/vc-map-overview.css"></link> -->
     <script>
+      console.log(VueCesium)
       Vue.use(VueCesium, {
         cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
       }) // All VueCesium components now globally installed
-
+      Vue.use(VueCesium.VcOverviewMap)
       /* eslint-disable no-new */
       new Vue({
         el: '#app',

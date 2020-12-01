@@ -6,7 +6,7 @@
 import cmp from '../../../mixins/virtualCmp'
 import CesiumOverviewMapControl from '../../../exts/overviewMapControl/CesiumOverviewMapControl'
 import '../../../assets/styles/components/overviewmap.scss'
-import * as L from 'leaflet'
+import { TileLayer } from 'leaflet/dist/leaflet-src.esm'
 import 'leaflet/dist/leaflet.css'
 export default {
   name: 'vc-map-overview',
@@ -97,7 +97,7 @@ export default {
     async createCesiumObject () {
       const { viewer, width, height, anchor, aimingRectOptions, shadowRectOptions, toggleDisplay } = this
       var url = 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-      var layer = new L.TileLayer(url, {
+      var layer = new TileLayer(url, {
         minZoom: 0,
         maxZoom: 20
       })
