@@ -1,5 +1,14 @@
 # 更新日志
 
+## 2.1.7 - 2020-12-01
+
+## 修改
+- 解决 [#87](https://github.com/zouyaoji/vue-cesium/issues/87) 提到的按需引入的问题。
+- [`vc-datasource-geojson`](https://zouyaoji.top/vue-cesium/#/zh/datasource/vc-datasource-geojson) 等数据源组件都支持通过 `entities` 属性添加实体集合。
+- 实体组件 [`vc-entity`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-entity), 图元组件 [`vc-primitive`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-primitive), 图元集合组件 ['vc-collection-primitive'](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-collection-primitive) 增加响应鼠标点击事件。
+- [`vc-layer-imagery`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-layer-imagery]) 影像图层组件新增一个属性 `sortOrder` 维护图层相对顺序。
+- [`vc-measure-distance`, `vc-measure-area`, `vc-measure-height`](https://zouyaoji.top/vue-cesium/#/zh/tool/vc-measuring) 量算工具支持触摸屏操作。
+
 ## 2.1.6 - 2020-08-15
 
 ### 增加
@@ -18,7 +27,7 @@
 - [`vc-shine-point`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-shine-point) 闪点效果组件。
 - [`vc-trail-polyline`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动线效果组件。
 - [`vc-trail-wall`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-trail-polyline) 流动墙效果组件。
-- [`vc-provider-imagery-style-mapbox`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-provider-imagery-style-mapbox) 加载mapbox自定义地图服务。
+- [`vc-provider-imagery-style-mapbox`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-provider-imagery-style-mapbox) 加载 mapbox 自定义地图服务。
 - 支持引入 cesiumlab 的 earthsdk (1.4.17+).
 
 ## 2.1.4 - 2020-05-26
@@ -27,7 +36,7 @@
 
 - 量算和绘制组件 activeEvt 事件的触发顺序调整。
 - 量算和绘制组件中绘制的面改为双面。
-- 量算距离和量算面积组件解决距离单位km时数值不正确问题。
+- 量算距离和量算面积组件解决距离单位 km 时数值不正确问题。
 - `vc-navigation` 全屏模式下位置不正确的问题。
 
 ## 2.1.3 - 2020-05-14
@@ -35,7 +44,7 @@
 ### 修改
 
 - `vc-viewer` 增加 removeCesiumScript 属性，确定`vc-viewer`在销毁时是否移除 CesiumJS 标签。fixed: #58
-- `vc-navigation` 解决单页面添加多个`vc-viewer` 初始化不正常的问题。增加相机高度。增加heading, pitch, roll属性。
+- `vc-navigation` 解决单页面添加多个`vc-viewer` 初始化不正常的问题。增加相机高度。增加 heading, pitch, roll 属性。
 
 ## 2.1.2 - 2020-05-13
 

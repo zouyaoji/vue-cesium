@@ -25,7 +25,7 @@ export default {
       e: 'E',
       n: 'N',
       elev: 'Elev',
-      cameraHeight: 'CameraHeight'
+      cameraHeight: 'CameraH'
     },
     printView: 'Printing to share your map with others',
     centreMap: 'Centre map at your current location'

@@ -78,6 +78,7 @@ function getAllPackages () {
     packagesFromPath(utils.resolve('src/mixins'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/providers'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/datasource'), srcPath),
+    packagesFromPath(utils.resolve('src/mixins/event'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/graphics'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/primitives'), srcPath),
     packagesFromPath(utils.resolve('src/mixins/tool'), srcPath),

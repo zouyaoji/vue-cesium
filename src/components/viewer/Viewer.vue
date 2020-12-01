@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-11-28 15:41:51
+ * @Last Modified time: 2020-11-30 14:56:55
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -180,6 +180,10 @@ export default {
       default: -(new Date().getTimezoneOffset())
     },
     removeCesiumScript: {
+      type: Boolean,
+      default: true
+    },
+    autoSortImageryLayers: {
       type: Boolean,
       default: true
     }
@@ -799,14 +803,16 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       return { Cesium, viewer }
     },
     layerAdded (layer) {
-      const { viewer } = this
+      const { viewer, autoSortImageryLayers } = this
       if (viewer.baseLayerPicker) {
         viewer.imageryLayers.raiseToTop(layer)
       }
       // 维护影像图层顺序
-      layer.sortOrder = Cesium.defined(layer.sortOrder) ? layer.sortOrder : 9999
-      viewer.imageryLayers._layers.sort((a, b) => (a.sortOrder - b.sortOrder))
-      viewer.imageryLayers._update()
+      if (autoSortImageryLayers) {
+        layer.sortOrder = Cesium.defined(layer.sortOrder) ? layer.sortOrder : 9999
+        viewer.imageryLayers._layers.sort((a, b) => (a.sortOrder - b.sortOrder))
+        viewer.imageryLayers._update()
+      }
     },
     localeDateTimeFormatter (datetime, viewModel, ignoredate) {
       if (this.UTCoffset) {

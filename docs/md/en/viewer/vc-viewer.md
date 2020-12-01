@@ -199,6 +199,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 |TZcode|String|`UTM`| `optional` Time zone code.|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` The time difference (minutes) of UTC time.|
 |removeCesiumScript|Boolean|`true`| `optional` Whether to remove CesiumJS script tags when vc-viewer is destroyed.|
+|autoSortImageryLayers|Boolean|`true`| `optional` Whether to automatically sort image layers according to the layer sortOrder property when adding image layers.|
 ---
 
 ## Events

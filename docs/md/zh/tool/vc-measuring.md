@@ -153,7 +153,8 @@
         distanceMeasuring: false,
         areaMeasuring: false,
         heightMeasuring: false,
-        clampToGround: false
+        clampToGround: false,
+        removeLastPosition: true
       }
     },
     methods: {

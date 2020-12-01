@@ -250,6 +250,7 @@
 |TZcode|String|`UTM`| `optional` 时区代码。|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` UTC时间的时差（分钟）。|
 |removeCesiumScript|Boolean|`true`| `optional` vc-viewer销毁时是否移除CesiumJS标签.|
+|autoSortImageryLayers|Boolean|`true`| `optional` 添加影像图层时是否根据图层sortOrder属性自动排序。|
 ---
 
 ## 事件
