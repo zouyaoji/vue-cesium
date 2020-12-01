@@ -1,16 +1,16 @@
-import CesiumWindMap from './VcWindMap.vue'
+import VcWindMap from './VcWindMap.vue'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
     return
   }
   plugin.installed = true
-  Vue.component(CesiumWindMap.name, CesiumWindMap)
+  Vue.component(VcWindMap.name, VcWindMap)
 }
 
 export default plugin
 
 export {
-  CesiumWindMap,
+  VcWindMap,
   plugin as install
 }

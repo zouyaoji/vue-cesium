@@ -136,9 +136,9 @@ import './assets/styles/main.scss'
  */
 const VERSION = 'C_PKG_VERSION'
 
-const $vc = {
-  VERSION
-}
+// const $vc = {
+//   VERSION
+// }
 
 /**
  * Register all VueCesium components.
@@ -278,8 +278,8 @@ function plugin (Vue, options = {}) {
   // Vue.use(VcNavigationSM, options)
   // Vue.use(VcOverviewMap, options)
 
-  lang.install($vc, options.lang)
-  Vue.prototype.$vc = $vc
+  // lang.install($vc, options.lang)
+  // Vue.prototype.$vc = $vc
 }
 
 export default plugin
