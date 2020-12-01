@@ -16,6 +16,10 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
           data="./statics/SampleData/lineData/streamline.json"
           @ready="subReady"
           :show="show"
+          :options="options"
+          ref="ds"
+          @click="clicked"
+          :entities="entities"
         ></vc-datasource-geojson>
       </vc-viewer>
     </div>
@@ -25,15 +29,37 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
     export default {
       data() {
         return {
-          show: true
+          show: true,
+          options: {
+            stroke: 'red'
+          },
+          entities: []
         }
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+           for (let i = 0; i < 100; i++) {
+            this.entities.push({
+              position: { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 },
+              label: {
+                text: i.toString(),
+                pixelOffset: {x: 25, y: 20}
+              },
+              point: {
+                pixelSize: 8,
+                outlineWidth: 2,
+                color: 'red',
+                outlineColor: 'yellow'
+              }
+            })
+          }
         },
         subReady(cesiumInstance) {
           cesiumInstance.viewer.zoomTo(cesiumInstance.cesiumObject)
+        },
+        clicked(e) {
+          console.log(e)
         }
       }
     }
@@ -47,9 +73,12 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-datasource-geojson
-        data="./statics/SampleData/lineData/streamline.json"
         @ready="subReady"
         :show="show"
+        :options="options"
+        ref="ds"
+        @click="clicked"
+        :entities="entities"
       ></vc-datasource-geojson>
     </vc-viewer>
   </div>
@@ -59,15 +88,37 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
   export default {
     data() {
       return {
-        show: true
+        show: true,
+        options: {
+          stroke: 'red'
+        },
+        entities: []
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+        for (let i = 0; i < 100; i++) {
+          this.entities.push({
+            position: { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 },
+            label: {
+              text: i.toString(),
+              pixelOffset: { x: 25, y: 20 }
+            },
+            point: {
+              pixelSize: 8,
+              outlineWidth: 2,
+              color: 'red',
+              outlineColor: 'yellow'
+            }
+          })
+        }
       },
       subReady(cesiumInstance) {
         cesiumInstance.viewer.zoomTo(cesiumInstance.cesiumObject)
+      },
+      clicked(e) {
+        console.log(e)
       }
     }
   }
@@ -76,20 +127,22 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
 
 ## Instance Properties
 
-| name          | type                  | default | description                                                          |
-| ------------- | --------------------- | ------- | -------------------------------------------------------------------- |
-| data          | String\|Object        |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded.   |
-| show          | Boolean               | `true`  | `optional` Gets whether or not this data source should be displayed. |
-| options       | Object                |         | `optional` An object with the following properties:                  |
-| sourceUri     | String                |         | The default size of the map pin created for each point, in pixels.   |
-| markerSize    | Number                |         |                                                                      |
-| markerSymbol  | String                |         |                                                                      |
-| markerColor   | String\|Object\|Array |         |                                                                      |
-| stroke        | String\|Object\|Array |         |                                                                      |
-| strokeWidth   | Number                |         |                                                                      |
-| fill          | String\|Object\|Array |         |                                                                      |
-| clampToGround | Boolean               | `false` |                                                                      |
-| credit        | String\|Object        |         |                                                                      |
+| name          | type                  | default | description                                                                   |
+| ------------- | --------------------- | ------- | ----------------------------------------------------------------------------- |
+| data          | String\|Object        |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded.            |
+| show          | Boolean               | `true`  | `optional` Gets whether or not this data source should be displayed.          |
+| entities      | Array                 | `[]`    | `optional` Specify the collection of entities to be added to this datasource. |
+| options       | Object                |         | `optional` An object with the following properties:                           |
+| ------------- | --------------------- | ------- | --------------------------------------------------------------------          |
+| sourceUri     | String                |         | The default size of the map pin created for each point, in pixels.            |
+| markerSize    | Number                |         |                                                                               |
+| markerSymbol  | String                |         |                                                                               |
+| markerColor   | String\|Object\|Array |         |                                                                               |
+| stroke        | String\|Object\|Array |         |                                                                               |
+| strokeWidth   | Number                |         |                                                                               |
+| fill          | String\|Object\|Array |         |                                                                               |
+| clampToGround | Boolean               | `false` |                                                                               |
+| credit        | String\|Object        |         |                                                                               |
 
 ---
 
@@ -106,4 +159,5 @@ The `vc-datasource-geojson` component is used to load a dataSource which process
 | loadingEvent | | Triggers the data source either starts or stops loading. |
 | clusterEvent | (clusteredEntities, cluster) | Gets the event that is fired when entities are added or removed from the collection.|
 | collectionChanged | (collection, added, removed, changed) | Gets the event that will be raised when a new cluster will be displayed.|
+
 ---

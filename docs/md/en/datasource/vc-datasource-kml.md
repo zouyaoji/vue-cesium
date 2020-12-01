@@ -64,17 +64,19 @@ Non visual feature data, such as atom:author and ExtendedData is exposed via an 
 
 ## Instance Properties
 
-| name          | type           | default | description                                                          |
-| ------------- | -------------- | ------- | -------------------------------------------------------------------- |
-| data          | String\|Object |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded.   |
-| show          | Boolean        | `true`  | `optional` Gets whether or not this data source should be displayed. |
-| options       | Object         |         | `optional` An object with the following properties:                  |
-| camera        | Object         |         |                                                                      |
-| canvas        | Object         |         |                                                                      |
-| sourceUri     | String         |         |                                                                      |
-| clampToGround | Boolean        | `false` |                                                                      |
-| ellipsoid     | Object         |         |                                                                      |
-| credit        | String\|Object |         |                                                                      |
+| name          | type           | default | description                                                                   |
+| ------------- | -------------- | ------- | ----------------------------------------------------------------------------- |
+| data          | String\|Object |         | `required` A url, GeoJSON object, or TopoJSON object to be loaded.            |
+| show          | Boolean        | `true`  | `optional` Gets whether or not this data source should be displayed.          |
+| entities      | Array          | `[]`    | `optional` Specify the collection of entities to be added to this datasource. |
+| options       | Object         |         | `optional` An object with the following properties:                           |
+| ------------- | -------------- | ------- | ----------------------------------------------------------------------------- |
+| camera        | Object         |         |                                                                               |
+| canvas        | Object         |         |                                                                               |
+| sourceUri     | String         |         |                                                                               |
+| clampToGround | Boolean        | `false` |                                                                               |
+| ellipsoid     | Object         |         |                                                                               |
+| credit        | String\|Object |         |                                                                               |
 
 ---
 
@@ -91,4 +93,5 @@ Non visual feature data, such as atom:author and ExtendedData is exposed via an 
 | loadingEvent | | Triggers the data source either starts or stops loading. |
 | clusterEvent | (clusteredEntities, cluster) | Gets the event that is fired when entities are added or removed from the collection.|
 | collectionChanged | (collection, added, removed, changed) | Gets the event that will be raised when a new cluster will be displayed.|
+
 ---

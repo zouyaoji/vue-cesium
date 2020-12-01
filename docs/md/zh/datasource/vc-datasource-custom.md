@@ -12,8 +12,8 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-datasource-custom ref="datasource" name="custom">
-          <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+        <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="clicked">
+          <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
           <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
             <vc-graphics-cylinder
               ref="cylinder1"
@@ -43,6 +43,7 @@
             @ready="datasourceReady(itemOut)"
             @clusterEvent="datasourceClusterEvent"
             v-if="itemOut.type == 'point'"
+            @click="clicked"
           >
             <template v-for="(item, index) of itemOut.data">
               <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
@@ -81,7 +82,23 @@
           position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
           material2: 'RED',
 
-          datas: []
+          datas: [],
+          entities: [
+            {
+              position: {lng: 105, lat: 35, height: 200},
+              point: {
+                pixelSize: 5,
+                color: 'red'
+              }
+            },
+            {
+              position: {lng: 105, lat: 36, height: 300},
+              point: {
+                pixelSize: 8,
+                color: 'yellow'
+              }
+            }
+          ]
         }
       },
       mounted() {
@@ -118,6 +135,9 @@
             alignedAxis: Cesium.Cartesian3.ZERO // default
           })
           this.addPoints(true)
+        },
+        clicked (e) {
+          console.log(e)
         },
         datasourceReady(instance) {
           let { Cesium, viewer, cesiumObject } = instance
@@ -231,7 +251,7 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-datasource-custom ref="datasource" name="custom">
+      <vc-datasource-custom ref="datasource" name="custom" :entities="entities">
         <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
         <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
           <vc-graphics-cylinder
@@ -262,6 +282,7 @@
           @ready="datasourceReady(itemOut)"
           @clusterEvent="datasourceClusterEvent"
           v-if="itemOut.type == 'point'"
+          @click="clicked"
         >
           <template v-for="(item, index) of itemOut.data">
             <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
@@ -300,7 +321,23 @@
         position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
         material2: 'RED',
 
-        datas: []
+        datas: [],
+        entities: [
+          {
+            position: { lng: 105, lat: 35, height: 200 },
+            point: {
+              pixelSize: 5,
+              color: 'red'
+            }
+          },
+          {
+            position: { lng: 105, lat: 36, height: 300 },
+            point: {
+              pixelSize: 8,
+              color: 'yellow'
+            }
+          }
+        ]
       }
     },
     mounted() {
@@ -438,6 +475,9 @@
         } else {
           this.datas = []
         }
+      },
+      clicked(e) {
+        console.log(e)
       }
     }
   }
@@ -446,10 +486,11 @@
 
 ## 属性
 
-| 属性名 | 类型    | 默认值 | 描述                            |
-| ------ | ------- | ------ | ------------------------------- |
-| name   | String  |        | `optional` 指定数据源名字。     |
-| show   | Boolean | `true` | `optional` 指定数据源是否显示。 |
+| 属性名   | 类型    | 默认值 | 描述                                        |
+| -------- | ------- | ------ | ------------------------------------------- |
+| name     | String  |        | `optional` 指定数据源名字。                 |
+| show     | Boolean | `true` | `optional` 指定数据源是否显示。             |
+| entities | Array   | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
 
 ---
 
@@ -457,13 +498,18 @@
 
 ## 事件
 
-| 事件名            | 参数                                  | 描述                                                                             |
-| ----------------- | ------------------------------------- | -------------------------------------------------------------------------------- |
-| ready             | {Cesium, viewer, cesiumObject}        | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| changedEvent      |                                       | 数据源改变时触发。                                                               |
-| errorEvent        |                                       | 数据源发生错误时触发。                                                           |
-| loadingEvent      |                                       | 数据源开始或结束加载时触发。                                                     |
-| clusterEvent      | (clusteredEntities, cluster)          | 数据源聚合事件。                                                                 |
-| collectionChanged | (collection, added, removed, changed) | 数据源实体集合改变时触发。                                                       |
+| 事件名            | 参数                                                | 描述                                                                             |
+| ----------------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| changedEvent      |                                                     | 数据源改变时触发。                                                               |
+| errorEvent        |                                                     | 数据源发生错误时触发。                                                           |
+| loadingEvent      |                                                     | 数据源开始或结束加载时触发。                                                     |
+| clusterEvent      | (clusteredEntities, cluster)                        | 数据源聚合事件。                                                                 |
+| collectionChanged | (collection, added, removed, changed)               | 数据源实体集合改变时触发。                                                       |
+| mousedown         | {button,surfacePosition,target,type,windowPosition} | 鼠标在该数据源上按下时触发。                                                     |
+| mouseup           | {button,surfacePosition,target,type,windowPosition} | 鼠标在该数据源上弹起时触发。                                                     |
+| click             | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该数据源时触发。                                                         |
+| dblclick          | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该数据源时触发。                                                     |
+| mousemove         | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该数据源时触发。                                                       |
 
 ---

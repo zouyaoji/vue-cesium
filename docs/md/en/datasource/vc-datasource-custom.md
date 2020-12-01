@@ -12,8 +12,8 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-datasource-custom ref="datasource" name="custom">
-          <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+        <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="clicked">
+          <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
           <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
             <vc-graphics-cylinder
               ref="cylinder1"
@@ -43,6 +43,7 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
             @ready="datasourceReady(itemOut)"
             @clusterEvent="datasourceClusterEvent"
             v-if="itemOut.type == 'point'"
+            @click="clicked"
           >
             <template v-for="(item, index) of itemOut.data">
               <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
@@ -81,7 +82,23 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
           position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
           material2: 'RED',
 
-          datas: []
+          datas: [],
+          entities: [
+            {
+              position: { lng: 105, lat: 35, height: 200 },
+              point: {
+                pixelSize: 5,
+                color: 'red'
+              }
+            },
+            {
+              position: { lng: 105, lat: 36, height: 300 },
+              point: {
+                pixelSize: 8,
+                color: 'yellow'
+              }
+            }
+          ]
         }
       },
       mounted() {
@@ -219,6 +236,9 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
           } else {
             this.datas = []
           }
+        },
+        clicked (e) {
+          console.log(e)
         }
       }
     }
@@ -231,8 +251,8 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-datasource-custom ref="datasource" name="custom">
-        <vc-entity ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+      <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="clicked">
+        <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
         <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
           <vc-graphics-cylinder
             ref="cylinder1"
@@ -262,6 +282,7 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
           @ready="datasourceReady(itemOut)"
           @clusterEvent="datasourceClusterEvent"
           v-if="itemOut.type == 'point'"
+          @click="clicked"
         >
           <template v-for="(item, index) of itemOut.data">
             <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
@@ -300,7 +321,23 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
         position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
         material2: 'RED',
 
-        datas: []
+        datas: [],
+        entities: [
+          {
+            position: { lng: 105, lat: 35, height: 200 },
+            point: {
+              pixelSize: 5,
+              color: 'red'
+            }
+          },
+          {
+            position: { lng: 105, lat: 36, height: 300 },
+            point: {
+              pixelSize: 8,
+              color: 'yellow'
+            }
+          }
+        ]
       }
     },
     mounted() {
@@ -438,6 +475,9 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
         } else {
           this.datas = []
         }
+      },
+      clicked (e) {
+        console.log(e)
       }
     }
   }
@@ -446,10 +486,11 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
 
 ## Instance Properties
 
-| name | type    | default | description                                                          |
-| ---- | ------- | ------- | -------------------------------------------------------------------- |
-| data | String  |         | `optional` Gets or sets a human-readable name for this instance.     |
-| show | Boolean | `true`  | `optional` Gets whether or not this data source should be displayed. |
+| name     | type    | default | description                                                                   |
+| -------- | ------- | ------- | ----------------------------------------------------------------------------- |
+| data     | String  |         | `optional` Gets or sets a human-readable name for this instance.              |
+| show     | Boolean | `true`  | `optional` Gets whether or not this data source should be displayed.          |
+| entities | Array   | `[]`    | `optional` Specify the collection of entities to be added to this datasource. |
 
 ---
 

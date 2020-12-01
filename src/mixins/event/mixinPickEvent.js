@@ -1,4 +1,4 @@
-
+import { isArray } from '../../utils/util.js'
 const methods = {
   registerEvents (flag) {
     const { viewer, enbaleEvent } = this
@@ -98,9 +98,13 @@ const methods = {
       )
     }
 
-    if (pickedFeature.id === cesiumObject || pickedFeature.primitive === cesiumObject || pickedFeature.collection === cesiumObject ||
-      getParentCollection(pickedFeature.collection || pickedFeature.primitive, cesiumObject) === cesiumObject ||
-      (cesiumObject._billboardCollection && cesiumObject._billboardCollection === pickedFeature.collection)) {
+    if (pickedFeature.id === cesiumObject || // vc-entity
+      pickedFeature.primitive === cesiumObject || // vc-primitive
+      pickedFeature.collection === cesiumObject || // vc-collection-primitive-xxx
+      getParentCollection(pickedFeature.collection || pickedFeature.primitive, cesiumObject) === cesiumObject || //
+      (cesiumObject._billboardCollection && cesiumObject._billboardCollection === pickedFeature.collection) || // vc-primitive-tileset vc-primitive-collection
+      (pickedFeature.id && (isArray(pickedFeature.id) ? pickedFeature.id[0].entityCollection.owner === cesiumObject
+        : pickedFeature.id.entityCollection.owner === cesiumObject))) { // vc-datasource-xxx
       this.$emit(type, { type: `on${type}`, windowPosition: position, surfacePosition: intersection, target: pickedFeature, button })
     }
   }

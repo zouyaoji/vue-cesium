@@ -66,13 +66,15 @@ The `vc-datasource-czml` component is used to load a dataSource which processes 
 
 ## Instance Properties
 
-| name      | type           | default | description                                                          |
-| --------- | -------------- | ------- | -------------------------------------------------------------------- |
-| czml      | String\|Object |         | `required` A url or CZML object to be processed..                    |
-| show      | Boolean        | `true`  | `optional` Gets whether or not this data source should be displayed. |
-| options   | Object         |         | `optional` An object with the following properties:                  |
-| sourceUri | String         |         |                                                                      |
-| credit    | String\|Object |         |                                                                      |
+| name      | type           | default | description                                                                   |
+| --------- | -------------- | ------- | ----------------------------------------------------------------------------- |
+| czml      | String\|Object |         | `required` A url or CZML object to be processed..                             |
+| show      | Boolean        | `true`  | `optional` Gets whether or not this data source should be displayed.          |
+| entities  | Array          | `[]`    | `optional` Specify the collection of entities to be added to this datasource. |
+| options   | Object         |         | `optional` An object with the following properties:                           |
+| --------- | -------------- | ------- | ----------------------------------------------------------------------------- |
+| sourceUri | String         |         |                                                                               |
+| credit    | String\|Object |         |                                                                               |
 
 ---
 
