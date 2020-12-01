@@ -106,6 +106,10 @@ Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
 [16533444](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
 
+![开心农场](https://zouyaoji.top/vue-cesium/statics/assets/images/开心农场.png)
+
+![数字视觉](https://zouyaoji.top/vue-cesium/statics/assets/images/数字视觉.png)
+
 ## Reference
 
 Two good vue components projects: [vue-baidu-map](https://github.com/Dafrok/vue-baidu-map) and [vuelayers](https://github.com/ghettovoice/vuelayers/).
