@@ -2,6 +2,12 @@
 
 The `vc-map-overview` component is used to load the eagle eye component. **Note:** To use this component, you need to import `import'vue-cesium/lib/vc-map-overview.css'`. This component is not introduced by default and needs to be introduced separately.
 
+```js
+import { VueCesium, VcOverviewMap } from 'vue-cesium'
+Vue.use(VueCesium, options)
+Vue.use(VcOverviewMap)
+import 'vue-cesium/lib/vc-map-overview.css'
+```
 ## Example
 
 ### Load a VcOverviewMap

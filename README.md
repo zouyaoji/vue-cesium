@@ -94,21 +94,15 @@ Copyright (c) 2018-present, zouyaoji <370681295@qq.com>
 
   <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/statics/assets/images/paypal.png" height="40" /></a>
 
-- WeChat
+- WeChat | AliPay
 
-  ![WeChat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png)
-
-- AliPay
-
-  ![AliPay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)
+  ![WeChat](https://zouyaoji.top/vue-cesium/statics/assets/images/wechat.png) ![AliPay](https://zouyaoji.top/vue-cesium/statics/assets/images/alipay.png)
 
 ## QQGroup
 
 [16533444](https://jq.qq.com/?_wv=1027&k=5BCrKOi)
 
-![开心农场](https://zouyaoji.top/vue-cesium/statics/assets/images/开心农场.png)
-
-![数字视觉](https://zouyaoji.top/vue-cesium/statics/assets/images/数字视觉.png)
+![开心农场](https://zouyaoji.top/vue-cesium/statics/assets/images/开心农场.png) ![数字视觉](https://zouyaoji.top/vue-cesium/statics/assets/images/数字视觉.png)
 
 ## Reference
 

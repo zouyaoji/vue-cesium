@@ -2,6 +2,12 @@
 
 `vc-map-overview` 组件用于加载鹰眼部件。**注意：** 使用此组件需要引入 `import 'vue-cesium/lib/vc-map-overview.css'`。此组件默认没有引入，需要单独引入。
 
+```js
+import { VueCesium, VcOverviewMap } from 'vue-cesium'
+Vue.use(VueCesium, options)
+Vue.use(VcOverviewMap)
+import 'vue-cesium/lib/vc-map-overview.css'
+```
 ## 示例
 
 ### 加载鹰眼部件
