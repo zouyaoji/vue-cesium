@@ -3,6 +3,8 @@
 ## 2.1.7 - 2020-12-01
 
 ## 修改
+
+- 解决 umd 模式下鹰眼组件不正常的问题。
 - 解决 [#87](https://github.com/zouyaoji/vue-cesium/issues/87) 提到的按需引入的问题。
 - [`vc-datasource-geojson`](https://zouyaoji.top/vue-cesium/#/zh/datasource/vc-datasource-geojson) 等数据源组件都支持通过 `entities` 属性添加实体集合。
 - 实体组件 [`vc-entity`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-entity), 图元组件 [`vc-primitive`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-primitive), 图元集合组件 ['vc-collection-primitive'](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-collection-primitive) 增加响应鼠标点击事件。
