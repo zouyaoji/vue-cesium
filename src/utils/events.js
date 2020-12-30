@@ -99,5 +99,15 @@ export const Events = {
       name: 'entities',
       events: ['collectionChanged']
     }
+  ],
+  'mouse-events': [
+    'mousedown',
+    'mouseup',
+    'click',
+    'clickout',
+    'dblclick',
+    'mousemove',
+    'mouseover',
+    'mouseout'
   ]
 }
