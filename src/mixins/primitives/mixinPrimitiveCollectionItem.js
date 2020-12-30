@@ -18,7 +18,7 @@ const methods = {
   async mount () {
     const { primitives, primitive, registerEvents } = this
     registerEvents(true)
-    return primitives && primitives.contains(primitive)
+    return primitives && !primitives.isDestroyed() && primitives.contains(primitive)
   },
   async unmount () {
     const { primitives, primitive, registerEvents } = this

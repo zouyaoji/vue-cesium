@@ -4,6 +4,9 @@ import specialProps from '../utils/specialProps'
 import { warn } from '../utils/log'
 
 const VM_PROP = 'vm'
+
+const graphics = ['billboard', 'box', 'corridor', 'cylinder', 'ellipse', 'ellipsoid', 'label', 'model', 'tileset',
+  'path', 'plane', 'point', 'polygon', 'polyline', 'polylineVolume', 'rectangle', 'wall']
 /**
  * Get the parent component. 获取 vc-viewer 组件。
  * @param {VueComponent} $component.
@@ -65,7 +68,8 @@ const methods = {
         // If the component cannot be rendered without the parent component, the parent component needs to be removed.
         // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
         return this.renderByParent ? this.$parent.unload() : true
-      }) : false
+      })
+      : false
   },
   /**
    * Reload components asynchronously. 异步重载组件.
@@ -92,7 +96,9 @@ const methods = {
   setPropWatchers (register) {
     if (register) {
       const { $props, specialPropsKeys, cesiumClass, cesiumObject } = this
-      if (!cesiumClass || !Cesium[cesiumClass]) { return }
+      if (!cesiumClass || !Cesium[cesiumClass]) {
+        return
+      }
       const constructor = Cesium[cesiumClass]
       const args = []
       for (let i = 0; i < constructor.length; i++) {
@@ -102,54 +108,55 @@ const methods = {
       // detect whether the component property responds dynamically or reloads the component when the property changes.
       // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测属性改变时组件属性是动态响应还是重载组件。
       let instance = cesiumObject || applyToConstructor(constructor, args)
-      $props && Object.keys($props).forEach(vueProp => {
-        let cesiumProp = vueProp
-        if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
-          cesiumProp = 'style'
-        } else if (vueProp === 'bmKey') {
-          cesiumProp = 'key'
-        }
-        const pd = instance && Object.getOwnPropertyDescriptor(instance, cesiumProp)
-        const pdProto = instance && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(instance), cesiumProp)
-        const hasSetter = (pd && pd.writable) || (pdProto && pdProto.set)
-        // 如果在vue文件中已经监听了改 props 这儿不再监听了
-        // If you have listened to the props in the vue file, you will not add any more listeners here.
-        if (this._watchers.filter(v => v.expression === vueProp).length > 0) {
-          return
-        }
-        // returns an unwatch function that stops firing the callback
-        const unwatch = this.$watch(
-          vueProp,
-          async (val) => {
-            // Wait for child components to be created.
-            // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
-            await this.createPromise
-            if (hasSetter) {
-              // Attributes are writable and directly respond to changes in attributes.
-              // 属性可写，直接动态响应属性的改变。
-              const { cesiumObject } = this
+      $props &&
+        Object.keys($props).forEach((vueProp) => {
+          let cesiumProp = vueProp
+          if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
+            cesiumProp = 'style'
+          } else if (vueProp === 'bmKey') {
+            cesiumProp = 'key'
+          }
+          const pd = instance && Object.getOwnPropertyDescriptor(instance, cesiumProp)
+          const pdProto = instance && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(instance), cesiumProp)
+          const hasSetter = (pd && pd.writable) || (pdProto && pdProto.set)
+          // 如果在vue文件中已经监听了改 props 这儿不再监听了
+          // If you have listened to the props in the vue file, you will not add any more listeners here.
+          if (this._watchers.filter((v) => v.expression === vueProp).length > 0) {
+            return
+          }
+          // returns an unwatch function that stops firing the callback
+          const unwatch = this.$watch(
+            vueProp,
+            async (val) => {
+              // Wait for child components to be created.
+              // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
+              await this.createPromise
+              if (hasSetter) {
+                // Attributes are writable and directly respond to changes in attributes.
+                // 属性可写，直接动态响应属性的改变。
+                const { cesiumObject } = this
 
-              if (specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler) {
-                const newVal = specialProps[vueProp].handler.call(this, val)
-                // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
-                // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
-                if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp]._callback))) {
-                  cesiumObject[cesiumProp] = newVal
+                if (specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler) {
+                  const newVal = specialProps[vueProp].handler.call(this, val)
+                  // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
+                  // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
+                  if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp]._callback))) {
+                    cesiumObject[cesiumProp] = newVal
+                  }
+                } else {
+                  cesiumObject[cesiumProp] = val
                 }
+                return true
               } else {
-                cesiumObject[cesiumProp] = val
+                // The attribute is not writable, and the property is changed indirectly through reloading the component.
+                // 属性不可写，通过重加载组件间接实现改变属性
+                return this.reload()
               }
-              return true
-            } else {
-              // The attribute is not writable, and the property is changed indirectly through reloading the component.
-              // 属性不可写，通过重加载组件间接实现改变属性
-              return this.reload()
-            }
-          },
-          { deep: specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].deep }
-        )
-        this.unwatchFns.push(unwatch)
-      })
+            },
+            { deep: specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].deep }
+          )
+          this.unwatchFns.push(unwatch)
+        })
       // Destroy temporary objects.
       // 销毁临时对象
       instance = undefined
@@ -186,10 +193,9 @@ const methods = {
    * @param {Object} props
    */
   transformProps (props) {
-    const { specialPropsKeys, isEmptyObj, cesiumClass } = this
+    const { cesiumClass } = this
     const options = {}
-    const graphics = ['billboard', 'box', 'corridor', 'cylinder', 'ellipse', 'ellipsoid', 'label', 'model', 'tileset', 'path', 'plane', 'point',
-      'polygon', 'polyline', 'polylineVolume', 'rectangle', 'wall']
+
     props && Object.keys(props).forEach((vueProp) => {
       let cesiumProp = vueProp
       // The properties of the following Cesium instance objects are HTML or Vue reserved words and require special handling.
@@ -200,14 +206,14 @@ const methods = {
         cesiumProp = 'key'
       }
 
-      if (graphics.indexOf(cesiumProp) !== -1 && (getClassName(props[vueProp]) !== 'undefined' && getClassName(props[vueProp]).indexOf('Graphics') === -1) &&
-        (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
+      if (
+        graphics.indexOf(cesiumProp) !== -1 &&
+        (getClassName(props[vueProp]) !== 'undefined' && getClassName(props[vueProp]).indexOf('Graphics') === -1) &&
+        (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)
+      ) {
         options[cesiumProp] = this.transformProps(props[vueProp])
       } else {
-        options[cesiumProp] =
-          specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler && (!isEmptyObj(props[vueProp]) || typeof props[vueProp] === 'function')
-            ? specialProps[vueProp].handler.call(this, props[vueProp])
-            : props[vueProp]
+        options[cesiumProp] = this.transformProp(vueProp, props[vueProp])
       }
     })
 
@@ -215,6 +221,20 @@ const methods = {
     // 移除空对象，避免 Cesium 对象初始化时传入空值导致初始化报错。
     this.removeNullItem(options)
     return options
+  },
+  transformProp (prop, value) {
+    const { specialPropsKeys, isEmptyObj, cesiumClass } = this
+
+    if (graphics.indexOf(prop) !== -1 && (getClassName(value) !== 'undefined' && getClassName(value).indexOf('Graphics') === -1) &&
+      (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
+      return this.transformProps(value)
+    } else {
+      return specialPropsKeys.indexOf(prop) !== -1 &&
+        specialProps[prop].handler &&
+        (!isEmptyObj(value) || typeof value === 'function')
+        ? specialProps[prop].handler.call(this, value)
+        : value
+    }
   },
   /**
    * The action before the component is loaded. 组件加载前的操作。
@@ -320,7 +340,7 @@ function getClassName (objClass) {
     var strFun = objClass.constructor.toString()
     var className = strFun.substr(0, strFun.indexOf('('))
     className = className.replace('function', '')
-    return className.replace(/(^\s*)|(\s*$)/ig, '')
+    return className.replace(/(^\s*)|(\s*$)/gi, '')
   }
-  return typeof (objClass)
+  return typeof objClass
 }
