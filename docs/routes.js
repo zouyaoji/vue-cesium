@@ -115,7 +115,7 @@ const routeMap = [
         path: 'vc-provider-imagery-arcgis-mapserver',
         component: 'imageryLayer/vc-provider-imagery-arcgis-mapserver',
         name: {
-          zh: 'ArcGISMapServer影像',
+          zh: 'ArcGISMapServer地图',
           en: 'ArcGisMapServerImageryProvider'
         }
       },
@@ -123,7 +123,7 @@ const routeMap = [
         path: 'vc-provider-imagery-bingmaps',
         component: 'imageryLayer/vc-provider-imagery-bingmaps',
         name: {
-          zh: 'BingMaps影像',
+          zh: 'BingMaps地图',
           en: 'BingMapsImageryProvider'
         }
       },
@@ -131,7 +131,7 @@ const routeMap = [
         path: 'vc-provider-imagery-grid',
         component: 'imageryLayer/vc-provider-imagery-grid',
         name: {
-          zh: '经纬格网影像',
+          zh: '经纬格网地图',
           en: 'GridImageryProvider'
         }
       },
@@ -139,7 +139,7 @@ const routeMap = [
         path: 'vc-provider-imagery-ion',
         component: 'imageryLayer/vc-provider-imagery-ion',
         name: {
-          zh: 'CesiumIon影像',
+          zh: 'CesiumIon地图',
           en: 'IonImageryProvider'
         }
       },
@@ -147,7 +147,7 @@ const routeMap = [
         path: 'vc-provider-imagery-mapbox',
         component: 'imageryLayer/vc-provider-imagery-mapbox',
         name: {
-          zh: 'Mapbox影像',
+          zh: 'Mapbox地图',
           en: 'MapboxImageryProvider'
         }
       },
@@ -155,7 +155,7 @@ const routeMap = [
         path: 'vc-provider-imagery-style-mapbox',
         component: 'imageryLayer/vc-provider-imagery-style-mapbox',
         name: {
-          zh: 'MapboxStyle影像',
+          zh: 'MapboxStyle地图',
           en: 'MapboxStyleImageryProvider'
         }
       },
@@ -163,7 +163,7 @@ const routeMap = [
         path: 'vc-provider-imagery-openstreetmap',
         component: 'imageryLayer/vc-provider-imagery-openstreetmap',
         name: {
-          zh: 'OpenStreetMap影像',
+          zh: 'OpenStreetMap地图',
           en: 'OpenStreetMapImageryProvider'
         }
       },
@@ -171,7 +171,7 @@ const routeMap = [
         path: 'vc-provider-imagery-tile-single',
         component: 'imageryLayer/vc-provider-imagery-tile-single',
         name: {
-          zh: 'Singletile影像',
+          zh: 'Singletile地图',
           en: 'SingleTileImageryProvider'
         }
       },
@@ -179,7 +179,7 @@ const routeMap = [
         path: 'vc-provider-imagery-tile-coordinates',
         component: 'imageryLayer/vc-provider-imagery-tile-coordinates',
         name: {
-          zh: 'TileCoordinates影像',
+          zh: 'TileCoordinates地图',
           en: 'TileCoordinatesImageryProvider'
         }
       },
@@ -187,7 +187,7 @@ const routeMap = [
         path: 'vc-provider-imagery-tile-mapservice',
         component: 'imageryLayer/vc-provider-imagery-tile-mapservice',
         name: {
-          zh: 'TileMapService影像',
+          zh: 'TileMapService地图',
           en: 'TileMapServiceImageryProvider'
         }
       },
@@ -195,7 +195,7 @@ const routeMap = [
         path: 'vc-provider-imagery-urltemplate',
         component: 'imageryLayer/vc-provider-imagery-urltemplate',
         name: {
-          zh: 'UrlTemplate影像',
+          zh: 'UrlTemplate地图',
           en: 'UrlTemplateImageryProvider'
         }
       },
@@ -203,7 +203,7 @@ const routeMap = [
         path: 'vc-provider-imagery-wms',
         component: 'imageryLayer/vc-provider-imagery-wms',
         name: {
-          zh: 'WMS影像',
+          zh: 'WMS地图',
           en: 'WebMapServiceImageryProvider'
         }
       },
@@ -211,7 +211,7 @@ const routeMap = [
         path: 'vc-provider-imagery-wmts',
         component: 'imageryLayer/vc-provider-imagery-wmts',
         name: {
-          zh: 'WMTS影像',
+          zh: 'WMTS地图',
           en: 'WebMapTileServiceImageryProvider'
         }
       },
@@ -219,8 +219,16 @@ const routeMap = [
         path: 'vc-provider-imagery-tianditu',
         component: 'imageryLayer/vc-provider-imagery-tianditu',
         name: {
-          zh: '天地图影像',
+          zh: '天地图',
           en: 'TiandituImageryProvider'
+        }
+      },
+      {
+        path: 'vc-provider-imagery-baidumap',
+        component: 'imageryLayer/vc-provider-imagery-baidumap',
+        name: {
+          zh: '百度地图',
+          en: 'BaiduMapImageryProvider'
         }
       },
       {

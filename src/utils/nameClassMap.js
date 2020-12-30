@@ -23,7 +23,8 @@ const nameClassMap = {
   'vc-provider-imagery-wmts': 'WebMapTileServiceImageryProvider',
   'vc-provider-imagery-tianditu': 'TiandituImageryProvider',
   'vc-provider-imagery-supermap': 'SuperMapImageryProvider',
-  'vc-provider-imagery-tiledcache ': 'UrlTemplateImageryProvider',
+  'vc-provider-imagery-tiledcache': 'UrlTemplateImageryProvider',
+  'vc-provider-imagery-baidumap': 'BaiduMapImageryProvider',
   // 地形
   'vc-provider-terrain-arcgis-tiled-elevation': 'ArcGISTiledElevationTerrainProvider',
   'vc-provider-terrain-cesium': 'CesiumTerrainProvider',
