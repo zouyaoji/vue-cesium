@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce'
+import { debounce } from 'lodash'
 import prettifyCoordinates from './prettifyCoordinates'
 import prettifyProjection from './prettifyProjection'
 import EarthGravityModel1996 from './EarthGravityModel1996'
@@ -33,12 +33,12 @@ class MouseCoords {
   }
 
   updateCoordinatesFromCesium (viewer, position) {
-    const { Cartographic, defined, EllipsoidTerrainProvider, Intersections2D } = Cesium
+    const { Cartographic, defined, EllipsoidTerrainProvider, Intersections2D, SceneMode } = Cesium
     const scene = viewer.scene
     const camera = scene.camera
     const pickRay = camera.getPickRay(position)
     const globe = scene.globe
-    const pickedTriangle = pickTriangleOnGlobe.call(globe, pickRay, scene)
+    const pickedTriangle = globe.pickTriangle(pickRay, scene)
     if (defined(pickedTriangle)) {
       // Get a fast, accurate-ish height every time the mouse moves.
       const ellipsoid = globe.ellipsoid
@@ -46,7 +46,7 @@ class MouseCoords {
       const v0 = ellipsoid.cartesianToCartographic(pickedTriangle.v0)
       const v1 = ellipsoid.cartesianToCartographic(pickedTriangle.v1)
       const v2 = ellipsoid.cartesianToCartographic(pickedTriangle.v2)
-      const intersection = ellipsoid.cartesianToCartographic(pickedTriangle.intersection)
+      const intersection = ellipsoid.cartesianToCartographic(scene.mode === SceneMode.SCENE3D ? pickedTriangle.intersection : scene.globe.pick(pickRay, scene))
       let errorBar
 
       if (globe.terrainProvider instanceof EllipsoidTerrainProvider) {
@@ -149,133 +149,6 @@ class MouseCoords {
       }
     )
   }
-}
-var scratchArray = []
-var scratchSphereIntersectionResult = {
-  start: 0.0,
-  stop: 0.0
-}
-function pickTriangleOnGlobe (ray, scene, result) {
-  const { BoundingSphere, Cartesian3, defined, DeveloperError, IntersectionTests, SceneMode } = Cesium
-  // >>includeStart('debug', pragmas.debug);
-  if (!defined(ray)) {
-    throw new DeveloperError('ray is required')
-  }
-  if (!defined(scene)) {
-    throw new DeveloperError('scene is required')
-  }
-  // >>includeEnd('debug');
-
-  var mode = scene.mode
-  var projection = scene.mapProjection
-
-  var sphereIntersections = scratchArray
-  sphereIntersections.length = 0
-
-  var tilesToRender = this._surface._tilesToRender
-  var length = tilesToRender.length
-
-  var tile
-  var i
-
-  for (i = 0; i < length; ++i) {
-    tile = tilesToRender[i]
-    var surfaceTile = tile.data
-
-    if (!defined(surfaceTile)) {
-      continue
-    }
-
-    var boundingVolume = surfaceTile.pickBoundingSphere
-    if (mode !== SceneMode.SCENE3D) {
-      BoundingSphere.fromRectangleWithHeights2D(tile.rectangle, projection, surfaceTile.minimumHeight, surfaceTile.maximumHeight, boundingVolume)
-      Cartesian3.fromElements(boundingVolume.center.z, boundingVolume.center.x, boundingVolume.center.y, boundingVolume.center)
-    } else {
-      BoundingSphere.clone(surfaceTile.boundingSphere3D, boundingVolume)
-    }
-
-    var boundingSphereIntersection = IntersectionTests.raySphere(ray, boundingVolume, scratchSphereIntersectionResult)
-    if (defined(boundingSphereIntersection)) {
-      sphereIntersections.push(tile)
-    }
-  }
-
-  sphereIntersections.sort(createComparePickTileFunction(ray.origin))
-
-  var intersection
-  length = sphereIntersections.length
-  for (i = 0; i < length; ++i) {
-    intersection = pickTriangleOnGlobeSurface.call(sphereIntersections[i].data, ray, scene.mode, scene.mapProjection, true, result)
-    if (defined(intersection)) {
-      intersection.tile = sphereIntersections[i]
-      break
-    }
-  }
-
-  return intersection
-}
-
-function createComparePickTileFunction (rayOrigin) {
-  const { BoundingSphere } = Cesium
-  return function (a, b) {
-    var aDist = BoundingSphere.distanceSquaredTo(a.data.pickBoundingSphere, rayOrigin)
-    var bDist = BoundingSphere.distanceSquaredTo(b.data.pickBoundingSphere, rayOrigin)
-
-    return aDist - bDist
-  }
-}
-
-var scratchV0 = {}
-var scratchV1 = {}
-var scratchV2 = {}
-var scratchResult = {}
-
-function pickTriangleOnGlobeSurface (ray, mode, projection, cullBackFaces) {
-  const { defined, IntersectionTests } = Cesium
-  var mesh = this.renderedMesh
-  if (!defined(mesh)) {
-    return undefined
-  }
-
-  var vertices = mesh.vertices
-  var indices = mesh.indices
-  var encoding = mesh.encoding
-
-  var length = indices.length
-  for (var i = 0; i < length; i += 3) {
-    var i0 = indices[i]
-    var i1 = indices[i + 1]
-    var i2 = indices[i + 2]
-
-    var v0 = getPosition(encoding, mode, projection, vertices, i0, scratchV0)
-    var v1 = getPosition(encoding, mode, projection, vertices, i1, scratchV1)
-    var v2 = getPosition(encoding, mode, projection, vertices, i2, scratchV2)
-
-    var intersection = IntersectionTests.rayTriangle(ray, v0, v1, v2, cullBackFaces, scratchResult)
-    if (defined(intersection)) {
-      return {
-        intersection: intersection,
-        v0: v0,
-        v1: v1,
-        v2: v2
-      }
-    }
-  }
-
-  return undefined
-};
-
-function getPosition (encoding, mode, projection, vertices, index, result) {
-  encoding.decodePosition(vertices, index, result)
-  const { Cartesian3, defined, SceneMode } = Cesium
-  if (defined(mode) && mode !== SceneMode.SCENE3D) {
-    var ellipsoid = projection.ellipsoid
-    var positionCart = ellipsoid.cartesianToCartographic(result)
-    projection.project(positionCart, result)
-    Cartesian3.fromElements(result.z, result.x, result.y, result)
-  }
-
-  return result
 }
 
 export default MouseCoords
