@@ -52,6 +52,8 @@
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          window.vm = this
+          window.viewer = viewer
           const polylines = []
           for (var i = 0; i < 1000; i++) {
             let polyline = {}
@@ -183,13 +185,16 @@
 
 ## 事件
 
-| 事件名    | 参数                                                | 描述                                                                             |
-| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                   |
-| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                   |
-| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元集合时触发。                                                       |
-| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                   |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                     |
+| 事件名    | 参数                                                       | 描述                                                                             |
+| --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                             | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                   |
+| mouseup   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                   |
+| click     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元集合时触发。                                                       |
+| clickout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元集合外部时触。                                                     |
+| dblclick  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                   |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上移动时触发。                                                   |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                     |
+| mouseout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元集合时触发。                                                       |
 
 ---

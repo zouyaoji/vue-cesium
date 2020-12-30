@@ -68,7 +68,7 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
             this.frame = this.viewer.infoBox.frame
             this.frame.contentWindow.addEventListener('click', this.frameClick)
           } else {
-            this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+            this.frame.contentWindow && this.frame.contentWindow.removeEventListener('click', this.frameClick)
           }
         },
         frameClick(event) {
@@ -108,7 +108,17 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
       @cameraClicked="cameraClicked"
       @closeClicked="closeClicked"
     >
-      <vc-entity @click="entityClick" @mousedown="entityClick" @dblclick="entityClick" ref="entity" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+      <vc-entity
+        @click="entityClick"
+        @mousedown="entityClick"
+        @dblclick="entityClick"
+        ref="entity"
+        :position="position"
+        :billboard="billboard"
+        :description="description"
+        :id="id"
+      >
+      </vc-entity>
     </vc-viewer>
     <div ref="bubbleContainer" id="bubbleContainer" hidden>
       <button id="test">Test</button>
@@ -157,7 +167,7 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
           this.frame = this.viewer.infoBox.frame
           this.frame.contentWindow.addEventListener('click', this.frameClick)
         } else {
-          this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+          this.frame.contentWindow && this.frame.contentWindow.removeEventListener('click', this.frameClick)
         }
       },
       frameClick(event) {
@@ -176,7 +186,7 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
       closeClicked(e) {
         console.log('closeClicked', e)
       },
-      entityClick (e) {
+      entityClick(e) {
         console.log(e)
       }
     }
@@ -226,10 +236,13 @@ The `vc-entity` component is used to load Cesium entities. Used as a `vc-viewer`
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | definitionChanged | | Triggers whenever a property or sub-property is changed or modified. |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on the entity. |
-| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the entity. |
-| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the entity. |
-| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the entity. |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this entity. |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse is pressed on the entity. |
+| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse bounces on the entity. |
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse clicks on the entity. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Touch when the mouse clicks outside the entity.|
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the left mouse button double-clicks the entity. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves on this entity. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves to this entity. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves out of the entity. |
 
 ---

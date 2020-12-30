@@ -12,11 +12,20 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive-billboard :billboards="billboards" @click="clicked" @dblclick="dblclick"></vc-collection-primitive-billboard>
+        <vc-collection-primitive-billboard
+          ref="billboardCollection"
+          :billboards="billboards"
+          @click="clicked"
+          @mouseout="mouseout"
+          @mouseover="mouseover"
+        ></vc-collection-primitive-billboard>
         <vc-collection-primitive-billboard>
-          <vc-primitive-billboard @click="clicked"
+          <vc-primitive-billboard
+            @click="clicked"
+            @mouseout="mouseout"
+            @mouseover="mouseover"
             :image="image"
-            :scale="0.4"
+            :scale="scale"
             :show="show"
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
@@ -35,30 +44,52 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
           id: 'Hello Vue Cesium',
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
           position: { lng: 108, lat: 35, height: 10000 },
-          billboard: {},
           show: true,
           distanceDisplayCondition: { near: 0, far: 20000000 },
-          horizontalOrigin: 0
+          horizontalOrigin: 0,
+          scale: 0.25
         }
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           const billboards = []
-          for (var i = 0; i < 500; i++) {
+          for (var i = 0; i < 50; i++) {
             let billboard = {}
             billboard.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
-            billboard.image = 'https://zouyaoji.top/vue-cesium/favicon.png'
-            billboard.scale = 0.1
+            billboard.image = Cesium.writeTextToCanvas(i + 1, {
+              font: '100px sans-serif',
+              strokeWidth: 2
+            }).toDataURL()
+            billboard.scale = 0.25
+            billboard.id = i
             billboards.push(billboard)
           }
           this.billboards = billboards
+          window.vm = this
+          window.viewer = viewer
         },
-        clicked (a) {
+        clicked(e) {
           console.log(a)
         },
-        dblclick (a) {
-          console.log(a)
+        mouseout(e) {
+          console.log(e)
+          if (e.cesiumObject instanceof Cesium.Billboard) {
+            this.scale = 0.25 // or e.cesiumObject.scale = 0.25
+          } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+            console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+            this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.25 // or e.pickedFeature.primitive.scale = 0.25
+          }
+        },
+        mouseover(e) {
+          console.log(e)
+          if (e.cesiumObject instanceof Cesium.Billboard) {
+            this.scale = 0.5 // or e.cesiumObject.scale = 0.5
+            e.pickedFeature.primitive.scale = 0.5
+          } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+            console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+            this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.5 // or e.pickedFeature.primitive.scale = 0.5
+          }
         }
       }
     }
@@ -71,11 +102,20 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive-billboard @click="clicked" :billboards="billboards"></vc-collection-primitive-billboard>
+      <vc-collection-primitive-billboard
+        ref="billboardCollection"
+        :billboards="billboards"
+        @click="clicked"
+        @mouseout="mouseout"
+        @mouseover="mouseover"
+      ></vc-collection-primitive-billboard>
       <vc-collection-primitive-billboard>
-        <vc-primitive-billboard @click="clicked"
+        <vc-primitive-billboard
+          @click="clicked"
+          @mouseout="mouseout"
+          @mouseover="mouseover"
           :image="image"
-          :scale="0.4"
+          :scale="scale"
           :show="show"
           :distanceDisplayCondition="distanceDisplayCondition"
           :horizontalOrigin="horizontalOrigin"
@@ -94,30 +134,52 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
         id: 'Hello Vue Cesium',
         image: 'https://zouyaoji.top/vue-cesium/favicon.png',
         position: { lng: 108, lat: 35, height: 10000 },
-        billboard: {},
         show: true,
         distanceDisplayCondition: { near: 0, far: 20000000 },
-        horizontalOrigin: 0
+        horizontalOrigin: 0,
+        scale: 0.25
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         const billboards = []
-        for (var i = 0; i < 500; i++) {
+        for (var i = 0; i < 50; i++) {
           let billboard = {}
           billboard.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
-          billboard.image = 'https://zouyaoji.top/vue-cesium/favicon.png'
-          billboard.scale = 0.1
+          billboard.image = Cesium.writeTextToCanvas(i + 1, {
+            font: '100px sans-serif',
+            strokeWidth: 2
+          }).toDataURL()
+          billboard.scale = 0.25
+          billboard.id = i
           billboards.push(billboard)
         }
         this.billboards = billboards
+        window.vm = this
+        window.viewer = viewer
       },
-      clicked (a) {
+      clicked(e) {
         console.log(a)
       },
-      dblclick (a) {
-        console.log(a)
+      mouseout(e) {
+        console.log(e)
+        if (e.cesiumObject instanceof Cesium.Billboard) {
+          this.scale = 0.25 // or e.cesiumObject.scale = 0.25
+        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+          console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+          this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.25 // or e.pickedFeature.primitive.scale = 0.25
+        }
+      },
+      mouseover(e) {
+        console.log(e)
+        if (e.cesiumObject instanceof Cesium.Billboard) {
+          this.scale = 0.5 // or e.cesiumObject.scale = 0.5
+          e.pickedFeature.primitive.scale = 0.5
+        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+          console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+          this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.5 // or e.pickedFeature.primitive.scale = 0.5
+        }
       }
     }
   }
@@ -145,10 +207,13 @@ The `vc-collection-primitive-billboard` component is used to load a renderable c
 | name | parameter | description |
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on the collection of primitives. |
-| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the collection of primitives. |
-| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks the collection of primitives. |
-| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive collection. |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to the primitive collection. |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse is pressed on the collection of primitives. |
+| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse bounces on the collection of primitives. |
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse clicks on the collection of primitives. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Touch when the mouse clicks outside the collection of primitives.|
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the left mouse button double-clicks the collection of primitives. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves on the collection of primitives. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves to the collection of primitives. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves out of the collection of primitives. |
 
 ---

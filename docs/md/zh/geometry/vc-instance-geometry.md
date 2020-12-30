@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-primitive :appearance="appearance">
+        <vc-primitive :appearance="appearance" @click="clicked">
           <vc-instance-geometry
             id="top"
             :geometry="geometry"
@@ -93,6 +93,9 @@
             }),
             materialSupport: Cesium.MaterialAppearance.MaterialSupport.TEXTURED
           })
+        },
+        clicked (e) {
+          console.log(e)
         }
       }
     }

@@ -1,13 +1,27 @@
 # 更新日志
 
+## 2.1.8 - 2020-
+
+### 增加
+
+- [`vc-provider-imagery-baidumap`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-provider-imagery-baidumap) 加载百度瓦片地图服务。
+
+### 修改
+
+- 影像 provider 增加属性 `projectionTransforms`，用于瓦片的投影变换。
+- `vc-collection-primitive-xxx`, `vc-datasource-xxx` 的集合属性增加动态修改支持。 如[`vc-collection-primitive-billboard`](https://zouyaoji.top/vue-cesium/#/zh/primitives/vc-collection-primitive-billboard)。
+- `vc-navigation` 解决二维模式下位置坐标异常问题。
+- 实体、图元、几何体等可拾取的对象组件事件优化，并增加 `moveout`、`moveover`、`clickout` 事件响应。
+- `vc-viewer` 增加 `cesiumReady` 事件，当 CesiumJS 加载成功时触发。
+
 ## 2.1.7 - 2020-12-01
 
-## 修改
+### 修改
 
-- 解决 umd 模式下鹰眼组件不正常的问题。
+- 解决 `umd` 模式下鹰眼组件不正常的问题。
 - 解决 [#87](https://github.com/zouyaoji/vue-cesium/issues/87) 提到的按需引入的问题。
 - [`vc-datasource-geojson`](https://zouyaoji.top/vue-cesium/#/zh/datasource/vc-datasource-geojson) 等数据源组件都支持通过 `entities` 属性添加实体集合。
-- 实体组件 [`vc-entity`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-entity), 图元组件 [`vc-primitive`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-primitive), 图元集合组件 ['vc-collection-primitive'](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-collection-primitive) 增加响应鼠标点击事件。
+- 实体组件 [`vc-entity`](https://zouyaoji.top/vue-cesium/#/zh/entity/vc-entity), 图元组件 [`vc-primitive`](https://zouyaoji.top/vue-cesium/#/zh/primitive/vc-primitive), 图元集合组件 ['vc-collection-primitive'](https://zouyaoji.top/vue-cesium/#/zh/primitives/vc-collection-primitive) 增加响应鼠标点击事件。
 - [`vc-layer-imagery`](https://zouyaoji.top/vue-cesium/#/zh/imageryLayer/vc-layer-imagery]) 影像图层组件新增一个属性 `sortOrder` 维护图层相对顺序。
 - [`vc-measure-distance`, `vc-measure-area`, `vc-measure-height`](https://zouyaoji.top/vue-cesium/#/zh/tool/vc-measuring) 量算工具支持触摸屏操作。
 

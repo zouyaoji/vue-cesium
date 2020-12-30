@@ -397,9 +397,4 @@ The `vc-primitive-particle` component is used to load a ParticleSystem manages t
 | ---- | --------- | ----------- |
 | ready | {Cesium, viewer, cesiumObject} | Triggers when the component is ready. It returns a core class of Cesium, a viewer instance, and the cesiumObject. |
 | complete  | | Fires an event when the particle system has reached the end of its lifetime. |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse is pressed on this primitive. |
-| mouseup | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse bounces on the primitive. |
-| click | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse clicks on the primitive. |
-| dblclick | {button,surfacePosition,target,type,windowPosition} | Triggered when the left mouse button double-clicks the primitive. |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | Triggered when the mouse moves to this primitive. |
 ---

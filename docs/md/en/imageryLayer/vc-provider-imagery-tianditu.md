@@ -186,6 +186,7 @@ The `vc-provider-imagery-tianditu` component is used to load WMTS image service 
 | protocol | String | `https` | `optional` The network protocol of service, can be `https` or `http` |
 |minimumLevel|Number|`0`|`optional`The minimum tile level to request, or undefined if there is no minimum. This parameter is ignored when accessing a tiled server.|
 |maximumLevel|Number|`20`|`optional`The maximum tile level to request, or undefined if there is no maximum. This parameter is ignored when accessing a tiled server.|
+| projectionTransforms |  Boolean\|Object | `false` | `optional` Specify the projection transformation parameters. **structure: { from: 'GCJ02', to: 'WGS84' }** |
 
 ---
 

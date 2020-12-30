@@ -16,7 +16,10 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
           <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
-          <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
+          <vc-provider-imagery-urltemplate :projectionTransforms="projectionTransforms" :url="url"></vc-provider-imagery-urltemplate>
+        </vc-layer-imagery>
+        <vc-layer-imagery :sortOrder="5">
+          <vc-provider-imagery-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
@@ -53,7 +56,11 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
           }],
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          projectionTransforms: {
+            from: 'GCJ02',
+            to: 'WGS84'
+          }
         }
       },
       methods: {
@@ -76,7 +83,10 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
         <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
-        <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
+        <vc-provider-imagery-urltemplate :projectionTransforms="projectionTransforms" :url="url"></vc-provider-imagery-urltemplate>
+      </vc-layer-imagery>
+      <vc-layer-imagery :sortOrder="5">
+        <vc-provider-imagery-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
@@ -87,7 +97,7 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
       <span>contrast</span>
       <vue-slider v-model="contrast" :min="0" :max="3" :interval="0.01"></vue-slider>
       <span>changeUrl</span>
-      <md-select v-model="url" placeholder="请选择服务">
+      <md-select v-model="url" placeholder="changeUrl">
         <md-option v-for="item in options" :key="item.value" :value="item.value">
           {{item.label}}
         </md-option>
@@ -114,7 +124,11 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
         ],
         alpha: 1,
         brightness: 1,
-        contrast: 1
+        contrast: 1,
+        projectionTransforms: {
+          from: 'GCJ02',
+          to: 'WGS84'
+        }
       }
     },
     methods: {
@@ -148,6 +162,7 @@ The `vc-provider-imagery-urltemplate` component is used to load a single imagery
 |getFeatureInfoFormats|Array||`optional`The formats in which to get feature information at a specific location when UrlTemplateImageryProvider#pickFeatures is invoked. If this parameter is not specified, feature picking is disabled.|
 |enablePickFeatures|Boolean|`true`|`optional`If true, UrlTemplateImageryProvider#pickFeatures will request the options.pickFeaturesUrl and attempt to interpret the features included in the response. If false, UrlTemplateImageryProvider#pickFeatures will immediately return undefined (indicating no pickable features) without communicating with the server. Set this property to false if you know your data source does not support picking features or if you don't want this provider's features to be pickable. Note that this can be dynamically overridden by modifying the UriTemplateImageryProvider#enablePickFeatures property.|
 |customTags|Object||`optional`Allow to replace custom keywords in the URL template. The object must have strings as keys and functions as values.|
+| projectionTransforms |  Boolean\|Object | `false` | `optional` Specify the projection transformation parameters. **structure: { from: 'GCJ02', to: 'WGS84' }** |
 
 ---
 

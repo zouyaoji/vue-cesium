@@ -215,17 +215,18 @@
 <!-- prettier-ignore -->
 |属性名|类型|默认值|描述|
 |------|------|-----|---|
-|animation|Boolean|`false`|`optional`是否显示动画控件|
-|baseLayerPicker| Boolean|`false`|`optional`是否显示基础图层切换按钮|
-|fullscreenButton|Boolean| `false`| `optional`是否显示全屏切换按钮|
-|vrButton|Boolean|`false`|`optional`是否显示 VR 功能按钮|
-|geocoder|Boolean|`false`|`optional`是否显示地理编码器搜索框|
-|homeButton|Boolean|`false`|`optional`是否显示主页按钮|
-|infoBox|Boolean|`true`|`optional`是否显示信息框|
-|sceneModePicker|Boolean|`false`|`optional`是否显示场景模式切换按钮|
-|selectionIndicator|Boolean|`true`|`optional`是否显示选择指示符|
-|timeline|Boolean|`false`|`optional`是否显示时间轴控件|
-|navigationHelpButton|Boolean|`false`|`optional`是否显示导航帮助按钮|
+|animation|Boolean|`false`|`optional`是否显示动画控件。|
+|baseLayerPicker| Boolean|`false`|`optional`是否显示基础图层切换按钮。|
+|fullscreenButton|Boolean| `false`| `optional`是否显示全屏切换按钮。|
+|vrButton|Boolean|`false`|`optional`是否显示 VR 功能按钮。|
+|geocoder|Boolean|`false`|`optional`是否显示地理编码器搜索框。|
+|homeButton|Boolean|`false`|`optional`是否显示主页按钮。|
+|infoBox|Boolean|`true`|`optional`是否显示信息框。|
+|sceneMode|Number|`3`|`optional` 指定场景模式。`1` 哥伦布视图，`2` 二维视图， `3` 三维视图。 |
+|sceneModePicker|Boolean|`false`|`optional`是否显示场景模式切换按钮。|
+|selectionIndicator|Boolean|`true`|`optional`是否显示选择指示符。|
+|timeline|Boolean|`false`|`optional`是否显示时间轴控件。|
+|navigationHelpButton|Boolean|`false`|`optional`是否显示导航帮助按钮。|
 |navigationInstructionsInitiallyVisible|Boolean|`false`|`optional`是展开导航帮助面板，否点击navigationHelpButton才能展开面板。|
 |scene3DOnly|Boolean|`false`|`optional`如果为true，则每个几何实例仅以3D形式呈现以节省GPU内存。|
 |shouldAnimate|Boolean|`false`|`optional`true if the clock should attempt to advance simulation time by default, false otherwise. |
@@ -299,6 +300,8 @@
 |RIGHT_DOWN|{position: point}|鼠标右键按下事件。|ScreenSpaceEventType|
 |RIGHT_UP|{position: point}|鼠标弹起事件。|ScreenSpaceEventType|
 |WHEEL|delta|鼠标中轮滚动事件。|ScreenSpaceEventType|
+|cesiumReady|Cesium|CesiumJS加载完成时触发。||
+|ready|{Cesium, viewer}|vc-viewer加载完成时触发。||
 
 ---
 

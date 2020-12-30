@@ -12,11 +12,14 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast" :sortOrder="20">
+        <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
           <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
-          <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
+          <vc-provider-imagery-urltemplate :projectionTransforms="projectionTransforms" :url="url"></vc-provider-imagery-urltemplate>
+        </vc-layer-imagery>
+        <vc-layer-imagery :sortOrder="5">
+          <vc-provider-imagery-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
@@ -54,17 +57,26 @@
             {
               value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
               label: '高德矢量地图服务'
+            },
+            {
+              value: 'https://www.songluck.com/raster/osm_chengdu/{z}/{x}/{y}.png',
+              label: 'mapbox 栅格瓦片地图'
             }
           ],
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          projectionTransforms: {
+            from: 'GCJ02',
+            to: 'WGS84'
+          }
         }
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           this.cesiumInstance = cesiumInstance
+          window.vm = this
         }
       }
     }
@@ -77,12 +89,17 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <!-- 高德注记图层 需要放最上层 -->
-      <vc-layer-imagery :alpha="alpha" ref="layerText" :brightness="brightness" :contrast="contrast" :sortOrder="20">
+      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
         <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
-        <vc-provider-imagery-urltemplate :url="url"></vc-provider-imagery-urltemplate>
+        <vc-provider-imagery-urltemplate
+          :projectionTransforms="projectionTransforms"
+          :url="url"
+        ></vc-provider-imagery-urltemplate>
+      </vc-layer-imagery>
+      <vc-layer-imagery :sortOrder="5">
+        <vc-provider-imagery-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
@@ -120,17 +137,26 @@
           {
             value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: '高德矢量地图服务'
+          },
+          {
+            value: 'https://www.songluck.com/raster/osm_chengdu/{z}/{x}/{y}.png',
+            label: 'mapbox栅格瓦片地图服务'
           }
         ],
         alpha: 1,
         brightness: 1,
-        contrast: 1
+        contrast: 1,
+        projectionTransforms: {
+          from: 'GCJ02',
+          to: 'WGS84'
+        }
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         this.cesiumInstance = cesiumInstance
+        window.vm = this
       }
     }
   }
@@ -158,6 +184,7 @@
 | getFeatureInfoFormats | Array | | `optional`格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
 | enablePickFeatures | Boolean | `true` | `optional`是否开启图层拾取。 |
 | customTags | Object | | `optional`替换 url 模板中的自定义关键字。 |
+| projectionTransforms |  Boolean\|Object | `false` | `optional` 指定投影变换参数。**结构： { from: 'GCJ02', to: 'WGS84' }** |
 
 ---
 

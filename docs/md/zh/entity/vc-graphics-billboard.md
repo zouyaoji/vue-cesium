@@ -12,10 +12,18 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity ref="entity" :position="position" :description="description" :id="id" :billboard.sync="billboard">
-           <vc-graphics-billboard
+        <vc-entity
+          ref="entity"
+          @mouseover="mouseover"
+          @mouseout="mouseout"
+          :position="position"
+          :description="description"
+          :id="id"
+          :billboard.sync="billboard"
+        >
+          <vc-graphics-billboard
             :image="image"
-            :scale="0.25"
+            :scale="scale"
             :show="show"
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
@@ -31,7 +39,7 @@
 
   <script>
     export default {
-      data () {
+      data() {
         return {
           id: 'Hello Vue Cesium',
           description: 'This is a billboard',
@@ -40,17 +48,24 @@
           billboard: {},
           show: true,
           distanceDisplayCondition: { near: 0, far: 20000000 },
-          horizontalOrigin: 0
+          horizontalOrigin: 0,
+          scale: 0.25
         }
       },
-      mounted () {
-        this.$refs.entity.createPromise.then( ({Cesium, viewer, cesiumObject}) => {
+      mounted() {
+        this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
           viewer.zoomTo(cesiumObject)
         })
       },
       methods: {
-        ready (cesiumInstance) {
-          const {Cesium, viewer} = cesiumInstance
+        ready(cesiumInstance) {
+          const { Cesium, viewer } = cesiumInstance
+        },
+        mouseover() {
+          this.scale = 0.5
+        },
+        mouseout() {
+          this.scale = 0.25
         }
       }
     }
@@ -63,10 +78,18 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-entity :position="position" :description="description" :id="id" :billboard.sync="billboard">
+      <vc-entity
+        ref="entity"
+        @mouseover="mouseover"
+        @mouseout="mouseout"
+        :position="position"
+        :description="description"
+        :id="id"
+        :billboard.sync="billboard"
+      >
         <vc-graphics-billboard
           :image="image"
-          :scale="0.25"
+          :scale="scale"
           :show="show"
           :distanceDisplayCondition="distanceDisplayCondition"
           :horizontalOrigin="horizontalOrigin"
@@ -91,7 +114,8 @@
         billboard: {},
         show: true,
         distanceDisplayCondition: { near: 0, far: 20000000 },
-        horizontalOrigin: 0
+        horizontalOrigin: 0,
+        scale: 0.25
       }
     },
     mounted() {
@@ -102,6 +126,12 @@
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
+      },
+      mouseover() {
+        this.scale = 0.5
+      },
+      mouseout() {
+        this.scale = 0.25
       }
     }
   }

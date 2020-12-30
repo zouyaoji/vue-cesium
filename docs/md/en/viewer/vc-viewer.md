@@ -172,6 +172,7 @@ The container is an empty DOM node which used to mount other components or DOM n
 |geocoder|Boolean|`false`|`optional`If set to false, the Geocoder widget will not be created.|
 |homeButton|Boolean|`false`|`optional`If set to false, the HomeButton widget will not be created.|
 |infoBox|Boolean|`true`|`optional`If set to false, the InfoBox widget will not be created.|
+|sceneMode|Number|`3`|`optional` The initial scene mode. |
 |sceneModePicker|Boolean|`false`|`optional`If set to false, the SceneModePicker widget will not be created.|
 |selectionIndicator|Boolean|`true`|`optional`If set to false, the SelectionIndicator widget will not be created.|
 |timeline|Boolean|`false`|`optional`If set to false, the Timeline widget will not be created.|
@@ -247,6 +248,8 @@ The container is an empty DOM node which used to mount other components or DOM n
 |RIGHT_DOWN|{position: point}|Represents a mouse left button down event.|ScreenSpaceEventType|
 |RIGHT_UP|{position: point}|Represents a mouse right button up event.|ScreenSpaceEventType|
 |WHEEL|delta|Represents a mouse wheel event.|ScreenSpaceEventType|
+|cesiumReady|Cesium|Triggered when CesiumJS has finished loading.||
+|ready|{Cesium, viewer}|Triggered when vc-viewer has finished loading.||
 ---
 
 - Refer to the official documentation: [Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)

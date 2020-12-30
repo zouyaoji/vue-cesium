@@ -25,6 +25,19 @@
             </vc-primitive-label>
           </template>
         </vc-collection-primitive-label>
+        <vc-collection-primitive-point @click="clicked">
+          <template v-for="(polyline, index) of polylines2">
+            <template v-for="(position, subIndex) of polyline.positions">
+              <vc-primitive-point
+                :position="position"
+                :key="'point' + index + 'position' + subIndex"
+                :pixelSize="8"
+                @click="clicked"
+                :disableDepthTestDistance="Number.POSITIVE_INFINITY"
+              ></vc-primitive-point>
+            </template>
+          </template>
+        </vc-collection-primitive-point>
       </vc-viewer>
     </div>
   </template>
@@ -55,12 +68,37 @@
               ],
               area: 200000.55
             }
+          ],
+          polylines2: [
+            {
+              positions: [
+                { lng: 80.24884033203125, lat: 25.313117980957031, height: 1183.3186645507812 },
+                { lng: 85.24906555725647, lat: 30.312892755731806, height: 1183.3186645507812 }
+              ],
+              area: 111
+            },
+            {
+              positions: [
+                { lng: 85.24884033203125, lat: 30.313392639160156, height: 1183.804443359375 },
+                { lng: 90.24906555725632, lat: 35.31316741393502, height: 1183.6849884241819 }
+              ],
+              area: 222
+            },
+            {
+              positions: [
+                { lng: 95.24884033203125, lat: 35.313655853271484, height: 1184.2783203125 },
+                { lng: 98.24906555725632, lat: 40.313430628046348, height: 1184.1093236654997 }
+              ],
+              area: 333
+            }
           ]
         }
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          window.vm = this
+          this.cesiumInstance = cesiumInstance
         },
         clicked(e) {
           console.log(e)
@@ -126,7 +164,7 @@
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
       },
-      clicked (e) {
+      clicked(e) {
         console.log(e)
       }
     }
@@ -170,13 +208,16 @@
 
 ## 事件
 
-| 事件名    | 参数                                                | 描述                                                                             |
-| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上按下时触发。                                                       |
-| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元上弹起时触发。                                                       |
-| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元时触发。                                                           |
-| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元时触发。                                                       |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元时触发。                                                         |
+| 事件名    | 参数                                                       | 描述                                                                             |
+| --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                             | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。                                                       |
+| mouseup   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。                                                       |
+| click     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。                                                           |
+| clickout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。                                                         |
+| dblclick  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。                                                       |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。                                                       |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。                                                         |
+| mouseout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。                                                           |
 
 ---

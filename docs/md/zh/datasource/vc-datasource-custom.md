@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="clicked">
-          <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+          <!-- <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
           <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
             <vc-graphics-cylinder
               ref="cylinder1"
@@ -33,7 +33,7 @@
               :bottomRadius="200000.0"
               :material="material2"
             ></vc-graphics-cylinder>
-          </vc-entity>
+          </vc-entity> -->
         </vc-datasource-custom>
         <template v-for="(itemOut, indexOut) of datas">
           <vc-datasource-custom
@@ -46,7 +46,7 @@
             @click="clicked"
           >
             <template v-for="(item, index) of itemOut.data">
-              <vc-entity :key="index" :position="getPosition(item)" :ref="'entity' + index">
+              <vc-entity :key="index" :position="getPosition(item)" @click="clicked" :ref="'entity' + index">
                 <vc-graphics-billboard
                   :image="itemOut.iconUrl"
                   :scale="0.5"
@@ -97,30 +97,39 @@
                 pixelSize: 8,
                 color: 'yellow'
               }
+            },
+            {
+              position: {lng: 105, lat: 37, height: 400},
+              billboard: {
+                image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+                scale: 0.5
+              }
             }
           ]
         }
       },
       mounted() {
-        Promise.all([
-          this.$refs.entity1.createPromise,
-          this.$refs.cylinder1.createPromise,
-          this.$refs.cylinder2.createPromise
-        ]).then((instances) => {
-          // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
-          instances[0].viewer.camera.setView({
-            destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
-            orientation: {
-              heading: 0.07310634629277768,
-              pitch: -1.5094668006074268,
-              roll: 0.0003451814958399524
-            }
-          })
-        })
+        // Promise.all([
+        //   this.$refs.entity1.createPromise,
+        //   this.$refs.cylinder1.createPromise,
+        //   this.$refs.cylinder2.createPromise
+        // ]).then((instances) => {
+        //   // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+        //   instances[0].viewer.camera.setView({
+        //     destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
+        //     orientation: {
+        //       heading: 0.07310634629277768,
+        //       pitch: -1.5094668006074268,
+        //       roll: 0.0003451814958399524
+        //     }
+        //   })
+        // })
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
+          window.vm = this
+          window.viewer = this
           this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
           this.billboard = new Cesium.BillboardGraphics({
             image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
@@ -189,8 +198,8 @@
         },
         getPosition(item) {
           return {
-            lng: item.Longitude,
-            lat: item.Latitude,
+            lng: Number(item.Longitude),
+            lat: Number(item.Latitude),
             height: 1000
           }
         },
@@ -425,8 +434,8 @@
       },
       getPosition(item) {
         return {
-          lng: item.Longitude,
-          lat: item.Latitude,
+          lng: Number(item.Longitude),
+          lat: Number(item.Latitude),
           height: 1000
         }
       },
@@ -498,18 +507,21 @@
 
 ## 事件
 
-| 事件名            | 参数                                                | 描述                                                                             |
-| ----------------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ready             | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| changedEvent      |                                                     | 数据源改变时触发。                                                               |
-| errorEvent        |                                                     | 数据源发生错误时触发。                                                           |
-| loadingEvent      |                                                     | 数据源开始或结束加载时触发。                                                     |
-| clusterEvent      | (clusteredEntities, cluster)                        | 数据源聚合事件。                                                                 |
-| collectionChanged | (collection, added, removed, changed)               | 数据源实体集合改变时触发。                                                       |
-| mousedown         | {button,surfacePosition,target,type,windowPosition} | 鼠标在该数据源上按下时触发。                                                     |
-| mouseup           | {button,surfacePosition,target,type,windowPosition} | 鼠标在该数据源上弹起时触发。                                                     |
-| click             | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该数据源时触发。                                                         |
-| dblclick          | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该数据源时触发。                                                     |
-| mousemove         | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该数据源时触发。                                                       |
+| 事件名            | 参数                                                       | 描述                                                                             |
+| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready             | {Cesium, viewer, cesiumObject}                             | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| changedEvent      |                                                            | 数据源改变时触发。                                                               |
+| errorEvent        |                                                            | 数据源发生错误时触发。                                                           |
+| loadingEvent      |                                                            | 数据源开始或结束加载时触发。                                                     |
+| clusterEvent      | (clusteredEntities, cluster)                               | 数据源聚合事件。                                                                 |
+| collectionChanged | (collection, added, removed, changed)                      | 数据源实体集合改变时触发。                                                       |
+| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。                                                     |
+| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。                                                     |
+| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。                                                         |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。                                                       |
+| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。                                                     |
+| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。                                                     |
+| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。                                                       |
+| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。                                                         |
 
 ---

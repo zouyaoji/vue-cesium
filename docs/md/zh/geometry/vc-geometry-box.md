@@ -19,7 +19,7 @@
             <vc-geometry-box ref="box" :dimensions="dimensions"></vc-geometry-box>
           </vc-instance-geometry>
         </vc-primitive>
-        <vc-primitive :appearance="appearance">
+        <vc-primitive @click="clicked" :appearance="appearance">
           <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix2">
             <vc-geometry-outline-box ref="boxOutline" :dimensions="dimensions"></vc-geometry-outline-box>
           </vc-instance-geometry>

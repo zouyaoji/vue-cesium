@@ -507,5 +507,12 @@ The `vc-datasource-custom` component is used to load a dataSource which can be u
 | loadingEvent | | Triggers the data source either starts or stops loading. |
 | clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed. |
 | collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection.|
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse clicks on the datasource. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Touch when the mouse clicks outside the datasource.|
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the left mouse button double-clicks the datasource. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves on this datasource. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves to this datasource. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves out of the datasource. |
+
 
 ---

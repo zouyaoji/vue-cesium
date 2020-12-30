@@ -12,11 +12,20 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-collection-primitive-billboard :billboards="billboards" @click="clicked" @dblclick="dblclick"></vc-collection-primitive-billboard>
+        <vc-collection-primitive-billboard
+          ref="billboardCollection"
+          :billboards="billboards"
+          @click="clicked"
+          @mouseout="mouseout"
+          @mouseover="mouseover"
+        ></vc-collection-primitive-billboard>
         <vc-collection-primitive-billboard>
-          <vc-primitive-billboard @click="clicked"
+          <vc-primitive-billboard
+            @click="clicked"
+            @mouseout="mouseout"
+            @mouseover="mouseover"
             :image="image"
-            :scale="0.4"
+            :scale="scale"
             :show="show"
             :distanceDisplayCondition="distanceDisplayCondition"
             :horizontalOrigin="horizontalOrigin"
@@ -35,30 +44,52 @@
           id: 'Hello Vue Cesium',
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
           position: { lng: 108, lat: 35, height: 10000 },
-          billboard: {},
           show: true,
           distanceDisplayCondition: { near: 0, far: 20000000 },
-          horizontalOrigin: 0
+          horizontalOrigin: 0,
+          scale: 0.25
         }
       },
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
           const billboards = []
-          for (var i = 0; i < 500; i++) {
+          for (var i = 0; i < 50; i++) {
             let billboard = {}
             billboard.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
-            billboard.image = 'https://zouyaoji.top/vue-cesium/favicon.png'
-            billboard.scale = 0.1
+            billboard.image = Cesium.writeTextToCanvas(i + 1, {
+              font: '100px sans-serif',
+              strokeWidth: 2
+            }).toDataURL()
+            billboard.scale = 0.25
+            billboard.id = i
             billboards.push(billboard)
           }
           this.billboards = billboards
+          window.vm = this
+          window.viewer = viewer
         },
-        clicked (a) {
+        clicked(e) {
           console.log(a)
         },
-        dblclick (a) {
-          console.log(a)
+        mouseout(e) {
+          console.log(e)
+          if (e.cesiumObject instanceof Cesium.Billboard) {
+            this.scale = 0.25 // or e.cesiumObject.scale = 0.25
+          } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+            console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+            this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.25 // or e.pickedFeature.primitive.scale = 0.25
+          }
+        },
+        mouseover(e) {
+          console.log(e)
+          if (e.cesiumObject instanceof Cesium.Billboard) {
+            this.scale = 0.5 // or e.cesiumObject.scale = 0.5
+            e.pickedFeature.primitive.scale = 0.5
+          } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+            console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+            this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.5 // or e.pickedFeature.primitive.scale = 0.5
+          }
         }
       }
     }
@@ -71,11 +102,20 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-collection-primitive-billboard @click="clicked" :billboards="billboards"></vc-collection-primitive-billboard>
+      <vc-collection-primitive-billboard
+        ref="billboardCollection"
+        :billboards="billboards"
+        @click="clicked"
+        @mouseout="mouseout"
+        @mouseover="mouseover"
+      ></vc-collection-primitive-billboard>
       <vc-collection-primitive-billboard>
-        <vc-primitive-billboard @click="clicked"
+        <vc-primitive-billboard
+          @click="clicked"
+          @mouseout="mouseout"
+          @mouseover="mouseover"
           :image="image"
-          :scale="0.4"
+          :scale="scale"
           :show="show"
           :distanceDisplayCondition="distanceDisplayCondition"
           :horizontalOrigin="horizontalOrigin"
@@ -94,30 +134,52 @@
         id: 'Hello Vue Cesium',
         image: 'https://zouyaoji.top/vue-cesium/favicon.png',
         position: { lng: 108, lat: 35, height: 10000 },
-        billboard: {},
         show: true,
         distanceDisplayCondition: { near: 0, far: 20000000 },
-        horizontalOrigin: 0
+        horizontalOrigin: 0,
+        scale: 0.25
       }
     },
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
         const billboards = []
-        for (var i = 0; i < 500; i++) {
+        for (var i = 0; i < 50; i++) {
           let billboard = {}
           billboard.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
-          billboard.image = 'https://zouyaoji.top/vue-cesium/favicon.png'
-          billboard.scale = 0.1
+          billboard.image = Cesium.writeTextToCanvas(i + 1, {
+            font: '100px sans-serif',
+            strokeWidth: 2
+          }).toDataURL()
+          billboard.scale = 0.25
+          billboard.id = i
           billboards.push(billboard)
         }
         this.billboards = billboards
+        window.vm = this
+        window.viewer = viewer
       },
-      clicked (a) {
+      clicked(e) {
         console.log(a)
       },
-      dblclick (a) {
-        console.log(a)
+      mouseout(e) {
+        console.log(e)
+        if (e.cesiumObject instanceof Cesium.Billboard) {
+          this.scale = 0.25 // or e.cesiumObject.scale = 0.25
+        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+          console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+          this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.25 // or e.pickedFeature.primitive.scale = 0.25
+        }
+      },
+      mouseover(e) {
+        console.log(e)
+        if (e.cesiumObject instanceof Cesium.Billboard) {
+          this.scale = 0.5 // or e.cesiumObject.scale = 0.5
+          e.pickedFeature.primitive.scale = 0.5
+        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
+          console.log(e.pickedFeature.primitive.vcIndex, this.billboards[e.pickedFeature.primitive.vcIndex])
+          this.billboards[e.pickedFeature.primitive.vcIndex].scale = 0.5 // or e.pickedFeature.primitive.scale = 0.5
+        }
       }
     }
   }
@@ -141,13 +203,16 @@
 
 ## 事件
 
-| 事件名    | 参数                                                | 描述                                                                             |
-| --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ready     | {Cesium, viewer, cesiumObject}                      | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| mousedown | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                   |
-| mouseup   | {button,surfacePosition,target,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                   |
-| click     | {button,surfacePosition,target,type,windowPosition} | 鼠标单击该图元集合时触发。                                                       |
-| dblclick  | {button,surfacePosition,target,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                   |
-| mousemove | {button,surfacePosition,target,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                     |
+| 事件名    | 参数                                                       | 描述                                                                             |
+| --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ready     | {Cesium, viewer, cesiumObject}                             | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上按下时触发。                                                   |
+| mouseup   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上弹起时触发。                                                   |
+| click     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元集合时触发。                                                       |
+| clickout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元集合外部时触。                                                     |
+| dblclick  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元集合时触发。                                                   |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元集合上移动时触发。                                                   |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元集合时触发。                                                     |
+| mouseout  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元集合时触发。                                                       |
 
 ---
