@@ -9,7 +9,7 @@ const TiandituMapsStyleLabels = {}
 class TiandituImageryProvider {
   constructor (options) {
     Object.keys(TiandituMapsStyle).forEach(key => {
-      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://[subdomain].tianditu.gov.cn/' + TiandituMapsStyle[key] + '/wmts'
+      TiandituMapsStyleUrl[TiandituMapsStyle[key]] = options.protocol + '://{s}.tianditu.gov.cn/' + TiandituMapsStyle[key] + '/wmts'
       TiandituMapsStyleLayer[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(0, 3)
       TiandituMapsStyleID[TiandituMapsStyle[key]] = TiandituMapsStyle[key].slice(4)
       TiandituMapsStyleFormat[TiandituMapsStyle[key]] = 'tiles'
@@ -48,27 +48,27 @@ class TiandituImageryProvider {
     })
     const { Credit, defaultValue, Event, GeographicTilingScheme, WebMercatorTilingScheme, when } = Cesium
     options = defaultValue(options, {})
-    this.m_mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
-    this.m_url = defaultValue(options.url, TiandituMapsStyleUrl[this.m_mapStyle])
-    this.m_token = options.token
-    this.m_layer = defaultValue(options.layer, TiandituMapsStyleLayer[this.m_mapStyle])
-    this.m_style = defaultValue(options.style, 'default')
-    this.m_tileMatrixSetID = defaultValue(options.tileMatrixSetID, TiandituMapsStyleID[this.m_mapStyle])
-    this.m_tileMatrixLabels = defaultValue(options.tileMatrixLabels, TiandituMapsStyleLabels[this.m_mapStyle])
-    this.m_format = defaultValue(options.format, TiandituMapsStyleFormat[this.m_mapStyle])
-    this.m_epsgCode = TiandituMapsStyleEPSG[this.m_mapStyle]
-    this.m_tilingScheme = this.m_epsgCode === '900913' ? new WebMercatorTilingScheme() : new GeographicTilingScheme()
-    this.m_tileWidth = defaultValue(options.tileWidth, 256)
-    this.m_tileHeight = defaultValue(options.tileHeight, 256)
-    this.m_minimumLevel = defaultValue(options.minimumLevel, 0)
-    this.m_maximumLevel = defaultValue(options.maximumLevel, TiandituMapsStyleLabels[this.m_mapStyle].length)
-    this.m_rectangle = defaultValue(options.rectangle, this.tilingScheme.rectangle)
-    this.m_readyPromise = when.resolve(true)
-    this.m_errorEvent = new Event()
+    this._mapStyle = defaultValue(options.mapStyle, TiandituMapsStyle.IMG_W)
+    this._url = options.url || defaultValue(options.url, TiandituMapsStyleUrl[this._mapStyle])
+    this._token = options.token
+    this._layer = defaultValue(options.layer, TiandituMapsStyleLayer[this._mapStyle])
+    this._style = defaultValue(options.style, 'default')
+    this._tileMatrixSetID = defaultValue(options.tileMatrixSetID, TiandituMapsStyleID[this._mapStyle])
+    this._tileMatrixLabels = defaultValue(options.tileMatrixLabels, TiandituMapsStyleLabels[this._mapStyle])
+    this._format = defaultValue(options.format, TiandituMapsStyleFormat[this._mapStyle])
+    this._epsgCode = TiandituMapsStyleEPSG[this._mapStyle]
+    this._tilingScheme = this._epsgCode === '900913' ? new WebMercatorTilingScheme() : new GeographicTilingScheme()
+    this._tileWidth = defaultValue(options.tileWidth, 256)
+    this._tileHeight = defaultValue(options.tileHeight, 256)
+    this._minimumLevel = defaultValue(options.minimumLevel, 0)
+    this._maximumLevel = defaultValue(options.maximumLevel, TiandituMapsStyleLabels[this._mapStyle].length)
+    this._rectangle = defaultValue(options.rectangle, this.tilingScheme.rectangle)
+    this._readyPromise = when.resolve(true)
+    this._errorEvent = new Event()
     const credit = defaultValue(options.credit, '天地图全球影像服务')
-    this.m_credit = typeof credit === 'string' ? new Credit(credit) : credit
-    this.m_subdomains = defaultValue(options.subdomains, ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'])
-    this.m_tileDiscardPolicy = options.tileDiscardPolicy
+    this._credit = typeof credit === 'string' ? new Credit(credit) : credit
+    this._subdomains = defaultValue(options.subdomains, ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'])
+    this._tileDiscardPolicy = options.tileDiscardPolicy
   }
 
   requestImage (x, y, level) {
@@ -79,46 +79,46 @@ class TiandituImageryProvider {
   pickFeatures () { }
 
   get url () {
-    return this.m_url
+    return this._url
   }
   get mapStyle () {
-    return this.m_mapStyle
+    return this._mapStyle
   }
   get tileWidth () {
-    return this.m_tileWidth
+    return this._tileWidth
   }
   get tileHeight () {
-    return this.m_tileHeight
+    return this._tileHeight
   }
   get maximumLevel () {
-    return this.m_maximumLevel
+    return this._maximumLevel
   }
   get minimumLevel () {
-    return this.m_minimumLevel
+    return this._minimumLevel
   }
   get tilingScheme () {
-    return this.m_tilingScheme
+    return this._tilingScheme
   }
   get rectangle () {
-    return this.m_rectangle
+    return this._rectangle
   }
   get errorEvent () {
-    return this.m_errorEvent
+    return this._errorEvent
   }
   get ready () {
     return true
   }
   get readyPromise () {
-    return this.m_readyPromise
+    return this._readyPromise
   }
   get credit () {
-    return this.m_credit
+    return this._credit
   }
   get hasAlphaChannel () {
     return true
   }
   get tileDiscardPolicy () {
-    return this.m_tileDiscardPolicy
+    return this._tileDiscardPolicy
   }
 }
 
@@ -137,25 +137,25 @@ function buildImageResource (x, y, level) {
     version: '1.0.0',
     request: 'GetTile'
   })
-  this.m_epsgCode === '900913' && (level -= 1)
-  const tileMatrixLabels = this.m_tileMatrixLabels
+  this._epsgCode === '900913' && (level -= 1)
+  const tileMatrixLabels = this._tileMatrixLabels
   const tileMatrixLabel = defined(tileMatrixLabels) ? tileMatrixLabels[level] : level.toString()
-  const subdomains = this.m_subdomains
-  let url = this.m_url.replace('[subdomain]', subdomains[(x + y + level) % subdomains.length])
+  const subdomains = this._subdomains
+  let url = this._url.replace('{s}', subdomains[(x + y + level) % subdomains.length])
   const uri = new Uri(url)
   let obj = queryToObject(defaultValue(uri.query, ''))
   obj = combine(options, obj)
   obj.tilematrix = tileMatrixLabel
-  obj.layer = this.m_layer
-  obj.style = this.m_style
+  obj.layer = this._layer
+  obj.style = this._style
   obj.tilerow = y
   obj.tilecol = x
-  obj.tilematrixset = this.m_tileMatrixSetID
-  obj.format = this.m_format
+  obj.tilematrixset = this._tileMatrixSetID
+  obj.format = this._format
   uri.query = objectToQuery(obj)
   url = uri.toString()
-  defined(this.m_proxy) && (url = this.m_proxy.getURL(url))
-  defined(this.m_token) && (url += '&tk=' + this.m_token)
+  defined(this._proxy) && (url = this._proxy.getURL(url))
+  defined(this._token) && (url += '&tk=' + this._token)
   return url
 }
 
