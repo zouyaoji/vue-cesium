@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2020-11-30 14:56:55
+ * @Last Modified time: 2020-12-26 23:58:13
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -511,15 +511,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
     },
     camera: {
       handler (val) {
-        const { viewer } = this
-        viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(val.position.lng, val.position.lat, val.position.height),
-          orientation: {
-            heading: Cesium.Math.toRadians(val.heading || 360),
-            pitch: Cesium.Math.toRadians(val.pitch || -90),
-            roll: Cesium.Math.toRadians(val.roll || 0)
-          }
-        })
+        this.setCamera(val)
       },
       deep: true
     },
@@ -743,36 +735,41 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         this.earth = new global.XE.Earth($el, options)
         viewer = this.earth.czm.viewer
       }
+      this.viewer = viewer
 
       if (Cesium.defined(this.camera)) {
-        viewer.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(
-            this.camera.position.lng,
-            this.camera.position.lat,
-            this.camera.position.height
-          ),
-          orientation: {
-            heading: Cesium.Math.toRadians(this.camera.heading || 360),
-            pitch: Cesium.Math.toRadians(this.camera.pitch || -90),
-            roll: Cesium.Math.toRadians(this.camera.roll || 0)
-          }
-        })
+        this.setCamera(this.camera)
       }
 
       let _this = this
       viewer.camera.changed.addEventListener(() => {
         const listener = _this.$listeners['update:camera']
         const cartographic = viewer.camera.positionCartographic
-        const camera = {
-          position: {
-            lng: Cesium.Math.toDegrees(cartographic.longitude),
-            lat: Cesium.Math.toDegrees(cartographic.latitude),
-            height: cartographic.height
-          },
-          heading: Cesium.Math.toDegrees(viewer.camera.heading),
-          pitch: Cesium.Math.toDegrees(viewer.camera.pitch),
-          roll: Cesium.Math.toDegrees(viewer.camera.roll)
+        let camera
+        if (this.camera.lng) {
+          camera = {
+            position: {
+              lng: Cesium.Math.toDegrees(cartographic.longitude),
+              lat: Cesium.Math.toDegrees(cartographic.latitude),
+              height: cartographic.height
+            },
+            heading: Cesium.Math.toDegrees(viewer.camera.heading),
+            pitch: Cesium.Math.toDegrees(viewer.camera.pitch),
+            roll: Cesium.Math.toDegrees(viewer.camera.roll)
+          }
+        } else {
+          camera = {
+            position: {
+              x: viewer.camera.position.x,
+              y: viewer.camera.position.y,
+              z: viewer.camera.position.z
+            },
+            heading: viewer.camera.heading,
+            pitch: viewer.camera.pitch,
+            roll: viewer.camera.roll
+          }
         }
+
         if (listener) {
           this.$emit('update:camera', camera)
         }
@@ -795,12 +792,34 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
       viewer.widgetResized = new Cesium.Event()
       viewer.imageryLayers.layerAdded.addEventListener(this.layerAdded)
-      this.viewer = viewer
       registerEvents(true)
       global.XE ? this.$emit('ready', { Cesium, viewer, earth: this.earth }) : this.$emit('ready', { Cesium, viewer })
       this._mounted = true
       this._resolve({ Cesium, viewer })
       return { Cesium, viewer }
+    },
+    setCamera (val) {
+      const { viewer } = this
+      const position = val.position
+      if (position.lng && position.lat) {
+        viewer.camera.setView({
+          destination: Cesium.Cartesian3.fromDegrees(position.lng, position.lat, position.height || 0),
+          orientation: {
+            heading: Cesium.Math.toRadians(val.heading || 360),
+            pitch: Cesium.Math.toRadians(val.pitch || -90),
+            roll: Cesium.Math.toRadians(val.roll || 0)
+          }
+        })
+      } else if (position.x && position.y && position.z) {
+        viewer.camera.setView({
+          destination: new Cesium.Cartesian3(position.x, position.y, position.z),
+          orientation: {
+            heading: val.heading || 2 * Math.PI,
+            pitch: val.pitch || -Math.PI / 2,
+            roll: val.roll || 0
+          }
+        })
+      }
     },
     layerAdded (layer) {
       const { viewer, autoSortImageryLayers } = this
@@ -947,7 +966,13 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
   mounted () {
     const { init, beforeInit } = this
     beforeInit()
-      .then(() => init())
+      .then(() => {
+        const listener = this.$listeners['cesiumReady']
+        listener && this.$emit('cesiumReady', Cesium)
+        this.$nextTick(() => {
+          init()
+        })
+      })
     // .catch((e) => _reject(new Error(`[C_PKG_FULLNAME] ERROR: ` + 'An error occurred during the initialization of the Viewer!')))
   },
   created () {
@@ -1000,10 +1025,12 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
   destroyed () {
     const { viewer, removeCesiumScript, earth, registerEvents } = this
     registerEvents(false)
+    this.$vc._screenSpaceEventHandler && this.$vc._screenSpaceEventHandler.destroy()
     global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
 
     this.viewer = undefined
     this._mounted = false
+    this.$vc._screenSpaceEventHandler = undefined
 
     if (removeCesiumScript && global.Cesium) {
       let scripts = document.getElementsByTagName('script')
