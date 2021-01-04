@@ -120,7 +120,7 @@
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^8.0.1",
     "netcdfjs": "^1.0.0",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^8.0.1",
     "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "ora": "^4.0.2",
