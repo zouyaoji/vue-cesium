@@ -1,6 +1,6 @@
 # BaiduMapImageryProvider
 
-`vc-provider-imagery-baidumap` 组件用于百度栅格瓦片地图服务。
+`vc-provider-imagery-baidumap` 组件用于百度栅格瓦片地图服务。**提示** 在线文档加载非 `https` 协议服务会被拦截，`bdimg.com` 域名的瓦片请用本地代码测试。
 
 ## 示例
 
@@ -11,7 +11,7 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready">
+      <vc-viewer @ready="ready" :camera="camera">
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
           <vc-provider-imagery-baidumap :url="url" :projectionTransforms="projectionTransforms"></vc-provider-imagery-baidumap>
         </vc-layer-imagery>
@@ -52,15 +52,29 @@
             {
               value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
               label: '百度矢量瓦片地图-暗色'
+            },
+            {
+              value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
+              label: '百度矢量瓦片地图-成都'
             }
           ],
-          url: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
+          url: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
           alpha: 1,
           brightness: 1,
           contrast: 1,
           projectionTransforms: {
             form: 'BD09',
             to: 'WGS84'
+          },
+          camera: {
+            position: {
+              x: -1336250.5076601694,
+              y: 5333101.760774733,
+              z: 3229877.420756886
+            },
+            heading: 6.259802922203329,
+            pitch: -1.5382656190477708,
+            roll: 0
           }
         }
       },
@@ -81,7 +95,7 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready">
+    <vc-viewer @ready="ready" :camera="camera">
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
         <vc-provider-imagery-baidumap :url="url" :projectionTransforms="projectionTransforms"></vc-provider-imagery-baidumap>
       </vc-layer-imagery>
@@ -122,15 +136,29 @@
           {
             value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
             label: '百度矢量瓦片地图-暗色'
+          },
+          {
+            value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
+            label: '百度矢量瓦片地图-成都'
           }
         ],
-        url: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
+        url: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
         alpha: 1,
         brightness: 1,
         contrast: 1,
         projectionTransforms: {
           form: 'BD09',
           to: 'WGS84'
+        },
+        camera: {
+          position: {
+            x: -1336250.5076601694,
+            y: 5333101.760774733,
+            z: 3229877.420756886
+          },
+          heading: 6.259802922203329,
+          pitch: -1.5382656190477708,
+          roll: 0
         }
       }
     },
@@ -148,13 +176,13 @@
 
 ## 属性
 
-| 属性名               | 类型            | 默认值                         | 描述                                                                  |
-| -------------------- | --------------- | ------------------------------ | --------------------------------------------------------------------- |
-| url                  | String          | `http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}` | `optional` 指定服务地址。 |
-| credit               | String\|Object  | `''`                           | `optional` 服务版权描述信息。                                         |
-| minimumLevel         | Number          | `0`                            | `optional` 最小层级。                                                 |
-| maximumLevel         | Number          | `18`                           | `optional` 最大层级。                                                 |
-| projectionTransforms | Boolean\|Object | `false`                        | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| 属性名               | 类型            | 默认值                                                                      | 描述                                                                  |
+| -------------------- | --------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| url                  | String          | `http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}` | `optional` 指定服务地址。                                             |
+| credit               | String\|Object  | `''`                                                                        | `optional` 服务版权描述信息。                                         |
+| minimumLevel         | Number          | `0`                                                                         | `optional` 最小层级。                                                 |
+| maximumLevel         | Number          | `18`                                                                        | `optional` 最大层级。                                                 |
+| projectionTransforms | Boolean\|Object | `false`                                                                     | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 
 ## 事件
 

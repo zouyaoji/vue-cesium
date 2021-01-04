@@ -52,7 +52,7 @@
     "coordtransform": "^2.1.2",
     "heatmap.js": "^2.0.5",
     "leaflet": "^1.6.0",
-    "lodash": "^4.17.20",
+    "lodash-es": "^4.17.20",
     "proj4": "^2.6.0"
   },
   "devDependencies": {

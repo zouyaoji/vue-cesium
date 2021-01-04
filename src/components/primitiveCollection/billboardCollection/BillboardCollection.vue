@@ -1,5 +1,5 @@
 <script>
-import { differenceBy } from 'lodash'
+import { differenceBy } from 'lodash-es'
 import { scene, blendOption } from '../../../mixins/mixinProps'
 import mixinPrimitiveCollection from '../../../mixins/primitives/mixinPrimitiveCollection'
 

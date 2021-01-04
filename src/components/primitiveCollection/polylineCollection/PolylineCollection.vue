@@ -1,5 +1,5 @@
 <script>
-import { differenceBy } from 'lodash'
+import { differenceBy } from 'lodash-es'
 import { modelMatrix, debugShowBoundingVolume } from '../../../mixins/mixinProps'
 import mixinPrimitiveCollection from '../../../mixins/primitives/mixinPrimitiveCollection'
 

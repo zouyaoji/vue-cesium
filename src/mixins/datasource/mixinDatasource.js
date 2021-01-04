@@ -1,4 +1,4 @@
-import { differenceBy } from 'lodash'
+import { differenceBy } from 'lodash-es'
 import bindEvents from '../../utils/bindEvent'
 import { Events } from '../../utils/events'
 import cmp from '../virtualCmp'
