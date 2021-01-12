@@ -86,8 +86,8 @@
 
           this.material3 = 'https://zouyaoji.top/vue-cesium/favicon.png'
           this.outlineColor3 = `BLACK`
-          this.rotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
-          this.stRotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
+          this.rotation3 = this.getRotationValue
+          this.stRotation3 = this.getRotationValue
           this.classificationType3 = Cesium.ClassificationType.TERRAIN
         },
         getRotationValue() {
@@ -179,8 +179,8 @@
 
         this.material3 = 'https://zouyaoji.top/vue-cesium/favicon.png'
         this.outlineColor3 = `BLACK`
-        this.rotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
-        this.stRotation3 = new Cesium.CallbackProperty(this.getRotationValue, false)
+        this.rotation3 = this.getRotationValue
+        this.stRotation3 = this.getRotationValue
         this.classificationType3 = Cesium.ClassificationType.TERRAIN
       },
       getRotationValue() {

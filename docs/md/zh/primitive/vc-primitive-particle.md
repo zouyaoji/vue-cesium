@@ -16,6 +16,7 @@
           v-for="(option, index) of options"
           :key="index"
           :image="option.image"
+          :color="option.color"
           :startColor="option.startColor"
           :endColor="option.endColor"
           :particleLife="option.particleLife"
@@ -29,7 +30,6 @@
           :modelMatrix="option.modelMatrix"
           :emitterModelMatrix="option.emitterModelMatrix"
           @complete="complete"
-          @click="clicked"
         >
         </vc-primitive-particle>
       </vc-viewer>
@@ -45,9 +45,6 @@
         }
       },
       methods: {
-        clicked (e) {
-          console.log(e)
-        },
         complete () {
           console.log('cc')
         },
@@ -101,6 +98,8 @@
             }
           ]
 
+          const options = []
+
           for (var i = 0; i < numberOfFireworks; ++i) {
             var x = Cesium.Math.randomBetween(xMin, xMax)
             var y = Cesium.Math.randomBetween(yMin, yMax)
@@ -119,9 +118,9 @@
               )
             }
 
-            this.createFirework(offset, color, bursts)
+            options.push(this.createFirework(offset, color, bursts))
           }
-
+          this.options = options
           var camera = viewer.scene.camera
           var cameraOffset = new Cesium.Cartesian3(-300.0, 0.0, 0.0)
           camera.lookAtTransform(this.modelMatrix, cameraOffset)
@@ -152,7 +151,8 @@
           var minLife = 0.3
           var maxLife = 1.0
           var life = normalSize * (maxLife - minLife) + minLife
-          this.options.push({
+          return {
+            color: {},
             image: this.getImage(),
             startColor: color,
             endColor: color.withAlpha(0.0),
@@ -166,7 +166,7 @@
             updateCallback: force,
             modelMatrix: this.modelMatrix,
             emitterModelMatrix: emitterModelMatrix
-          })
+          }
         },
         getImage() {
           let particleCanvas = this.particleCanvas

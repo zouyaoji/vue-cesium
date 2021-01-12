@@ -843,48 +843,6 @@ const routeMap = [
   //   children: []
   // },
   {
-    path: 'other',
-    component: CateView,
-    name: {
-      zh: '其他',
-      en: 'Other'
-    },
-    children: [
-      {
-        path: 'vc-collection-stage-process-post',
-        component: 'other/vc-collection-stage-process-post',
-        name: {
-          zh: '后处理集合',
-          en: 'PostProcessStageCollection'
-        }
-      },
-      {
-        path: 'vc-stage-process-post',
-        component: 'other/vc-stage-process-post',
-        name: {
-          zh: '后处理',
-          en: 'PostProcessStage'
-        }
-      },
-      {
-        path: 'vc-demo-supermap',
-        component: 'other/vc-demo-supermap',
-        name: {
-          zh: '超图例子',
-          en: 'SuperMap Demo'
-        }
-      },
-      {
-        path: 'vc-demo-earthsdk',
-        component: 'other/vc-demo-earthsdk',
-        name: {
-          zh: 'EarthSDK例子',
-          en: 'EarthSDK Demo'
-        }
-      }
-    ]
-  },
-  {
     path: 'extend',
     component: CateView,
     name: {
@@ -994,6 +952,48 @@ const routeMap = [
         name: {
           zh: 'HTML元素',
           en: 'VcHTMLOverlay'
+        }
+      }
+    ]
+  },
+  {
+    path: 'other',
+    component: CateView,
+    name: {
+      zh: '其他',
+      en: 'Other'
+    },
+    children: [
+      {
+        path: 'vc-collection-stage-process-post',
+        component: 'other/vc-collection-stage-process-post',
+        name: {
+          zh: '后处理集合',
+          en: 'PostProcessStageCollection'
+        }
+      },
+      {
+        path: 'vc-stage-process-post',
+        component: 'other/vc-stage-process-post',
+        name: {
+          zh: '后处理',
+          en: 'PostProcessStage'
+        }
+      },
+      {
+        path: 'vc-demo-supermap',
+        component: 'other/vc-demo-supermap',
+        name: {
+          zh: '超图例子',
+          en: 'SuperMap Demo'
+        }
+      },
+      {
+        path: 'vc-demo-earthsdk',
+        component: 'other/vc-demo-earthsdk',
+        name: {
+          zh: 'EarthSDK例子',
+          en: 'EarthSDK Demo'
         }
       }
     ]

@@ -19,7 +19,7 @@ The `vc-geometry-polyline-ground` component is used to load a polyline on terrai
         </vc-primitive-polyline-ground>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
         <vc-layer-imagery>
-          <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+          <vc-provider-imagery-arcgis-mapserver url="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"></vc-provider-imagery-arcgis-mapserver>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
@@ -64,7 +64,7 @@ The `vc-geometry-polyline-ground` component is used to load a polyline on terrai
       </vc-primitive-polyline-ground>
       <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
       <vc-layer-imagery>
-        <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+        <vc-provider-imagery-arcgis-mapserver url="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"></vc-provider-imagery-arcgis-mapserver>
       </vc-layer-imagery>
     </vc-viewer>
   </div>

@@ -13,7 +13,12 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-entity :polyline.sync="polyline1">
-          <vc-graphics-polyline :positions="positions1" :material="material1" :width="5" :clampToGround="false" heightPositions></vc-graphics-polyline>
+          <vc-graphics-polyline
+            :positions="positions1"
+            :material="material1"
+            :width="5"
+            :clampToGround="false"
+          ></vc-graphics-polyline>
         </vc-entity>
         <vc-entity :polyline.sync="polyline2">
           <vc-graphics-polyline :positions="positions2" :material="material2" :width="10"></vc-graphics-polyline>
@@ -30,16 +35,10 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
       data() {
         return {
           polyline1: {},
-          positions1: [
-            { lng: 90, lat: 20, height: 10000 },
-            { lng: 120, lat: 20, height: 10000 }
-          ],
+          positions1: [{ lng: 90, lat: 20, height: 10000 }, { lng: 120, lat: 20, height: 10000 }],
           material1: undefined,
           polyline2: {},
-          positions2: [
-            { lng: 90, lat: 30, height: 10000 },
-            { lng: 120, lat: 30, height: 10000 }
-          ],
+          positions2: [{ lng: 90, lat: 30, height: 10000 }, { lng: 120, lat: 30, height: 10000 }],
           material2: undefined,
           polyline3: {},
           positions3: [],
@@ -49,16 +48,18 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
       methods: {
         ready(cesiumInstance) {
           const { Cesium, viewer } = cesiumInstance
-          this.material1 = Cesium.Color.RED
-          this.material2 = new Cesium.PolylineGlowMaterialProperty({
-            glowPower: 0.2,
-            color: Cesium.Color.BLUE
-          })
+          this.material1 = 'red'
+          this.material2 = {
+            fabric: {
+              type: 'PolylineGlow',
+              uniforms: {
+                glowPower: 0.2,
+                color: 'blue'
+              }
+            }
+          }
           this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
-          this.positions3 = [
-            { lng: 90, lat: 40, height: 10000 },
-            { lng: 120, lat: 40, height: 10000 }
-          ]
+          this.positions3 = [{ lng: 90, lat: 40, height: 10000 }, { lng: 120, lat: 40, height: 10000 }]
         }
       }
     }
@@ -77,7 +78,6 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
           :material="material1"
           :width="5"
           :clampToGround="false"
-          heightPositions
         ></vc-graphics-polyline>
       </vc-entity>
       <vc-entity :polyline.sync="polyline2">
@@ -95,16 +95,10 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
     data() {
       return {
         polyline1: {},
-        positions1: [
-          { lng: 90, lat: 20, height: 10000 },
-          { lng: 120, lat: 20, height: 10000 }
-        ],
+        positions1: [{ lng: 90, lat: 20, height: 10000 }, { lng: 120, lat: 20, height: 10000 }],
         material1: undefined,
         polyline2: {},
-        positions2: [
-          { lng: 90, lat: 30, height: 10000 },
-          { lng: 120, lat: 30, height: 10000 }
-        ],
+        positions2: [{ lng: 90, lat: 30, height: 10000 }, { lng: 120, lat: 30, height: 10000 }],
         material2: undefined,
         polyline3: {},
         positions3: [],
@@ -114,16 +108,18 @@ The `vc-graphics-polyline` component is used to load a polyline which the first 
     methods: {
       ready(cesiumInstance) {
         const { Cesium, viewer } = cesiumInstance
-        this.material1 = Cesium.Color.RED
-        this.material2 = new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.2,
-          color: Cesium.Color.BLUE
-        })
+        this.material1 = 'red'
+        this.material2 = {
+          fabric: {
+            type: 'PolylineGlow',
+            uniforms: {
+              glowPower: 0.2,
+              color: 'blue'
+            }
+          }
+        }
         this.material3 = new Cesium.PolylineArrowMaterialProperty(Cesium.Color.PURPLE)
-        this.positions3 = [
-          { lng: 90, lat: 40, height: 10000 },
-          { lng: 120, lat: 40, height: 10000 }
-        ]
+        this.positions3 = [{ lng: 90, lat: 40, height: 10000 }, { lng: 120, lat: 40, height: 10000 }]
       }
     }
   }

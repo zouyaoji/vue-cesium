@@ -12,7 +12,7 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-kriging-map v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors" @ready="subReady" clipCoords="./statics/SampleData/shp/guilin.json">
+        <vc-kriging-map v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors" @ready="subReady" clipCoords="./statics/SampleData/shp/china/guilin.json">
         </vc-kriging-map>
         <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
       </vc-viewer>
@@ -33,7 +33,7 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
         async ready (cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const {Cesium, viewer} = this.cesiumInstance
-          let data = await Cesium.Resource.fetchJson({url: './statics/SampleData/weather/guilin.json'})
+          let data = await Cesium.Resource.fetchJson({url: './statics/SampleData/weather/precipitation/guilin.json'})
           let lngs = []
           let lats = []
           let values = []
@@ -69,7 +69,7 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
           :lats="lats"
           :colors="colors"
           @ready="subReady"
-          clipCoords="./statics/SampleData/shp/guilin.json"
+          clipCoords="./statics/SampleData/shp/china/guilin.json"
         >
           <!-- <vc-kriging-map ref="krigingmap" v-if="values.length !== 0" :breaks="breaks" :values="values" :lngs="lngs" :lats="lats" :colors="colors"      @ready="subReady" :clipCoords="[109.61826, 24.25883, 111.49207, 26.38528]"> -->
         </vc-kriging-map>
@@ -92,7 +92,7 @@ The `vc-kriging-map` component is used to load VcKrigingMap, based on `kriging.j
         async ready(cesiumInstance) {
           this.cesiumInstance = cesiumInstance
           const { Cesium, viewer } = this.cesiumInstance
-          let data = await Cesium.Resource.fetchJson({ url: './statics/SampleData/weather/guilin.json' })
+          let data = await Cesium.Resource.fetchJson({url: './statics/SampleData/weather/precipitation/guilin.json'})
           let lngs = []
           let lats = []
           let values = []

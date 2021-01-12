@@ -15,7 +15,7 @@ import 'vue-material/dist/vue-material.css'
 import 'vue-slider-component/theme/default.css'
 
 import * as VueCesium from '../src/index.js'
-import { VcOverviewMap } from '../src/index.js'
+import { VcOverviewMap, VcNavigationSM } from '../src/index.js'
 // import * as VueCesium from '../lib/index.js'
 // import lang from '../lang/en-us'
 // import '../lib/style.css'
@@ -34,12 +34,12 @@ Vue.use(VueCesium, {
   cesiumPath: './statics/Cesium/Cesium.js',
   // cesiumPath: './statics/CesiumUnminified/Cesium.js',
 
-
   // lang: lang,
   accessToken:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })
 Vue.use(VcOverviewMap)
+Vue.use(VcNavigationSM)
 
 Vue.use(VueRouter)
 Vue.use(VueMaterial)

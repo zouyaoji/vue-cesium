@@ -28,7 +28,7 @@
           <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
         </vc-entity>
         <vc-layer-imagery>
-          <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+          <vc-provider-imagery-arcgis-mapserver url="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"></vc-provider-imagery-arcgis-mapserver>
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
@@ -154,7 +154,7 @@
         <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
       </vc-entity>
       <vc-layer-imagery>
-        <vc-provider-imagery-mapbox mapId="mapbox.streets"></vc-provider-imagery-mapbox>
+        <vc-provider-imagery-arcgis-mapserver url="https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"></vc-provider-imagery-arcgis-mapserver>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">

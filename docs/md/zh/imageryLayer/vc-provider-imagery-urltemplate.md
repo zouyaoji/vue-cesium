@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
-          <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
+          <vc-provider-imagery-urltemplate :url="urlText" :projectionTransforms="projectionTransforms"></vc-provider-imagery-urltemplate>
         </vc-layer-imagery>
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
           <vc-provider-imagery-urltemplate :projectionTransforms="projectionTransforms" :url="url"></vc-provider-imagery-urltemplate>
@@ -90,7 +90,7 @@
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
-        <vc-provider-imagery-urltemplate :url="urlText"></vc-provider-imagery-urltemplate>
+        <vc-provider-imagery-urltemplate :url="urlText" :projectionTransforms="projectionTransforms"></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
         <vc-provider-imagery-urltemplate

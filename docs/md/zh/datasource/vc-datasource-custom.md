@@ -13,7 +13,7 @@
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="clicked">
-          <!-- <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
+          <vc-entity @click="clicked" ref="entity1" :position="position" :billboard="billboard" :description="description" :id="id"> </vc-entity>
           <vc-entity ref="enttiy2" :position="position1" :description="description" :cylinder.sync="cylinder1">
             <vc-graphics-cylinder
               ref="cylinder1"
@@ -33,7 +33,7 @@
               :bottomRadius="200000.0"
               :material="material2"
             ></vc-graphics-cylinder>
-          </vc-entity> -->
+          </vc-entity>
         </vc-datasource-custom>
         <template v-for="(itemOut, indexOut) of datas">
           <vc-datasource-custom
@@ -109,21 +109,21 @@
         }
       },
       mounted() {
-        // Promise.all([
-        //   this.$refs.entity1.createPromise,
-        //   this.$refs.cylinder1.createPromise,
-        //   this.$refs.cylinder2.createPromise
-        // ]).then((instances) => {
-        //   // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
-        //   instances[0].viewer.camera.setView({
-        //     destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
-        //     orientation: {
-        //       heading: 0.07310634629277768,
-        //       pitch: -1.5094668006074268,
-        //       roll: 0.0003451814958399524
-        //     }
-        //   })
-        // })
+        Promise.all([
+          this.$refs.entity1.createPromise,
+          this.$refs.cylinder1.createPromise,
+          this.$refs.cylinder2.createPromise
+        ]).then((instances) => {
+          // instances[0].viewer.zoomTo(this.$refs.datasource.cesiumObject)
+          instances[0].viewer.camera.setView({
+            destination: new Cesium.Cartesian3(-2310285.0191093646, 5365872.967043371, 3108924.304301176),
+            orientation: {
+              heading: 0.07310634629277768,
+              pitch: -1.5094668006074268,
+              roll: 0.0003451814958399524
+            }
+          })
+        })
       },
       methods: {
         ready(cesiumInstance) {

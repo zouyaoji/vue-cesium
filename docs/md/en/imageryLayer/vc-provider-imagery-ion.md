@@ -13,7 +13,7 @@ The `vc-provider-imagery-ion` component is used to load tiled imagery of the Ces
     <div class="viewer">
       <vc-viewer @ready="ready">
         <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-          <vc-provider-imagery-ion :assetId="3812"></vc-provider-imagery-ion>
+          <vc-provider-imagery-ion :assetId="4" :accessToken="accessToken"></vc-provider-imagery-ion>
         </vc-layer-imagery>
       </vc-viewer>
       <div class="demo-tool">
@@ -33,7 +33,8 @@ The `vc-provider-imagery-ion` component is used to load tiled imagery of the Ces
         return {
           alpha: 1,
           brightness: 1,
-          contrast: 1
+          contrast: 1,
+          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
         }
       },
       methods: {
@@ -53,7 +54,7 @@ The `vc-provider-imagery-ion` component is used to load tiled imagery of the Ces
   <div class="viewer">
     <vc-viewer @ready="ready">
       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-        <vc-provider-imagery-ion :assetId="3812"></vc-provider-imagery-ion>
+        <vc-provider-imagery-ion :assetId="4" :accessToken="accessToken"></vc-provider-imagery-ion>
       </vc-layer-imagery>
     </vc-viewer>
     <div class="demo-tool">
@@ -73,7 +74,9 @@ The `vc-provider-imagery-ion` component is used to load tiled imagery of the Ces
       return {
         alpha: 1,
         brightness: 1,
-        contrast: 1
+        contrast: 1,
+        accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
       }
     },
     methods: {

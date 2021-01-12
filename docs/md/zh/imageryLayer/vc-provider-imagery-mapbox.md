@@ -1,6 +1,6 @@
 # MapboxImageryProvider
 
-`vc-provider-imagery-mapbox` 组件用于加载由 Mapbox 托管的影像服务图层。这个方式被 mapbox 废弃了，详见[说明](https://blog.mapbox.com/deprecating-studio-classic-styles-d8892ac38cb4)，可注册mapbox账号，添加自定义风格地图再用 `vc-provider-imagery-style-mapbox` 组件加载。
+`vc-provider-imagery-mapbox` 组件用于加载由 Mapbox 托管的影像服务图层。但这个方式被 mapbox 废弃了，详见[说明](https://blog.mapbox.com/deprecating-studio-classic-styles-d8892ac38cb4)，可注册mapbox账号，添加自定义风格地图再用 `vc-provider-imagery-style-mapbox` 组件加载。
 
 ## 示例
 
@@ -12,11 +12,11 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-       <vc-layer-imagery ref="layer" :alpha="alpha" :brightness="brightness" :contrast="contrast">
+       <!-- <vc-layer-imagery ref="layer" :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-mapbox ref="mapbox" :mapId="mapId"></vc-provider-imagery-mapbox>
-       </vc-layer-imagery>
+       </vc-layer-imagery> -->
       </vc-viewer>
-      <div class="demo-tool">
+      <!-- <div class="demo-tool">
         <span>透明度</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
         <span>亮度</span>
@@ -32,7 +32,7 @@
             {{item.label}}
           </md-option>
         </md-select>
-      </div>
+      </div> -->
     </div>
   </template>
 
@@ -70,11 +70,11 @@
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <!-- <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-mapbox :mapId="mapId"></vc-provider-imagery-mapbox>
-      </vc-layer-imagery>
+      </vc-layer-imagery> -->
     </vc-viewer>
-    <div class="demo-tool">
+    <!-- <div class="demo-tool">
       <span>透明度</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
       <span>亮度</span>
@@ -87,7 +87,7 @@
           {{item.label}}
         </md-option>
       </md-select>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -12,11 +12,11 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-       <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+       <!-- <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-mapbox :mapId="mapId"></vc-provider-imagery-mapbox>
-       </vc-layer-imagery>
+       </vc-layer-imagery> -->
       </vc-viewer>
-      <div class="demo-tool">
+      <!-- <div class="demo-tool">
         <span>alpha</span>
         <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"  ></vue-slider>
         <span>brightness</span>
@@ -32,7 +32,7 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
             {{item.label}}
           </md-option>
         </md-select>
-      </div>
+      </div> -->
     </div>
   </template>
 
@@ -69,11 +69,11 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
 <template>
   <div class="viewer">
     <vc-viewer @ready="ready">
-      <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
+      <!-- <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
         <vc-provider-imagery-mapbox :mapId="mapId"></vc-provider-imagery-mapbox>
-      </vc-layer-imagery>
+      </vc-layer-imagery> -->
     </vc-viewer>
-    <div class="demo-tool">
+    <!-- <div class="demo-tool">
       <span>alpha</span>
       <vue-slider v-model="alpha" :min="0" :max="1" :interval="0.01"></vue-slider>
       <span>brightness</span>
@@ -86,7 +86,7 @@ The `vc-provider-imagery-mapbox` component is used to load tiled imagery hosted 
           {{item.label}}
         </md-option>
       </md-select>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -68,7 +68,7 @@
             this.frame = this.viewer.infoBox.frame
             this.frame.contentWindow.addEventListener('click', this.frameClick)
           } else {
-            this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+            this.frame.contentWindow && this.frame.contentWindow.removeEventListener('click', this.frameClick)
           }
         },
         frameClick(event) {
@@ -160,7 +160,7 @@
           this.frame = this.viewer.infoBox.frame
           this.frame.contentWindow.addEventListener('click', this.frameClick)
         } else {
-          this.frame && this.frame.contentWindow.removeEventListener('click', this.frameClick)
+          this.frame.contentWindow && this.frame.contentWindow.removeEventListener('click', this.frameClick)
         }
       },
       frameClick(event) {
