@@ -10,6 +10,7 @@ import {
   outlineWidth,
   shadows
 } from '../../../mixins/mixinProps'
+import { makeCartesian2 } from '../../../utils/cesiumHelpers'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
 export default {
   name: 'vc-graphics-plane',
@@ -26,7 +27,13 @@ export default {
     mixinGraphic
   ],
   props: {
-    plane: Object
+    // 和 BoxGraphics.dimensions 区分
+    plane: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
   }
 }
 </script>

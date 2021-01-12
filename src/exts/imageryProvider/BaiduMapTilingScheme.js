@@ -8,8 +8,7 @@ const coordtransform = require('coordtransform')
  */
 class BaiduMapMercatorTilingScheme {
   constructor (options) {
-    const { defaultValue, Ellipsoid, WebMercatorProjection, Cartesian2,
-      Cartographic, Math: CesiumMath, Rectangle } = Cesium
+    const { defaultValue, Ellipsoid, WebMercatorProjection, Cartesian2, Cartographic, Math: CesiumMath, Rectangle } = Cesium
     options = options || {}
     this._ellipsoid = defaultValue(options.ellipsoid, Ellipsoid.WGS84)
     this._projection = new WebMercatorProjection(this._ellipsoid)
@@ -18,10 +17,16 @@ class BaiduMapMercatorTilingScheme {
       result = result || {}
 
       if (options.toWGS84) {
-        result = coordtransform.wgs84togcj02(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
+        result = coordtransform.wgs84togcj02(
+          CesiumMath.toDegrees(cartographic.longitude),
+          CesiumMath.toDegrees(cartographic.latitude)
+        )
         result = coordtransform.gcj02tobd09(result[0], result[1])
       } else {
-        result = coordtransform.gcj02tobd09(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
+        result = coordtransform.gcj02tobd09(
+          CesiumMath.toDegrees(cartographic.longitude),
+          CesiumMath.toDegrees(cartographic.latitude)
+        )
       }
       result[0] = Math.min(result[0], 180)
       result[0] = Math.max(result[0], -180)
@@ -34,7 +39,7 @@ class BaiduMapMercatorTilingScheme {
     this._projection.unproject = function (cartographic, result) {
       result = result || {}
       result = projection.mercatorToLngLat(new Point(cartographic.x, cartographic.y))
-      result[0] = (result[0] + 180) % 360 - 180
+      result[0] = ((result[0] + 180) % 360) - 180
       if (options.toWGS84) {
         result = coordtransform.bd09togcj02(result.lng, result.lat)
         result = coordtransform.gcj02towgs84(result[0], result[1])
@@ -48,8 +53,12 @@ class BaiduMapMercatorTilingScheme {
     this._rectangleNortheastInMeters = new Cartesian2(20037726.37, 12474104.17)
     const rectangleSouthwestInMeters = this._projection.unproject(this._rectangleSouthwestInMeters)
     const rectangleNortheastInMeters = this._projection.unproject(this._rectangleNortheastInMeters)
-    this._rectangle = new Rectangle(rectangleSouthwestInMeters.longitude,
-      rectangleSouthwestInMeters.latitude, rectangleNortheastInMeters.longitude, rectangleNortheastInMeters.latitude)
+    this._rectangle = new Rectangle(
+      rectangleSouthwestInMeters.longitude,
+      rectangleSouthwestInMeters.latitude,
+      rectangleNortheastInMeters.longitude,
+      rectangleNortheastInMeters.latitude
+    )
 
     this.resolutions = []
     for (let i = 0; i < 19; i++) {
@@ -67,9 +76,9 @@ class BaiduMapMercatorTilingScheme {
 
   rectangleToNativeRectangle (rectangle, result) {
     const { defined, Rectangle } = Cesium
-    var projection = this._projection
-    var southwest = projection.project(Rectangle.southwest(rectangle))
-    var northeast = projection.project(Rectangle.northeast(rectangle))
+    const projection = this._projection
+    const southwest = projection.project(Rectangle.southwest(rectangle))
+    const northeast = projection.project(Rectangle.northeast(rectangle))
 
     if (!defined(result)) {
       return new Rectangle(southwest.x, southwest.y, northeast.x, northeast.y)
@@ -106,12 +115,8 @@ class BaiduMapMercatorTilingScheme {
     const nativeRectangle = this.tileXYToNativeRectangle(x, y, level, result)
 
     const projection = this._projection
-    const southwest = projection.unproject(
-      new Cartesian2(nativeRectangle.west, nativeRectangle.south)
-    )
-    const northeast = projection.unproject(
-      new Cartesian2(nativeRectangle.east, nativeRectangle.north)
-    )
+    const southwest = projection.unproject(new Cartesian2(nativeRectangle.west, nativeRectangle.south))
+    const northeast = projection.unproject(new Cartesian2(nativeRectangle.east, nativeRectangle.north))
 
     nativeRectangle.west = southwest.longitude
     nativeRectangle.south = southwest.latitude
@@ -122,14 +127,14 @@ class BaiduMapMercatorTilingScheme {
 
   positionToTileXY (position, level, result) {
     const { Rectangle, defined, Cartesian2 } = Cesium
-    var rectangle = this._rectangle
+    const rectangle = this._rectangle
     if (!Rectangle.contains(rectangle, position)) {
       // outside the bounds of the tiling scheme
       return undefined
     }
 
-    var projection = this._projection
-    var webMercatorPosition = projection.project(position)
+    const projection = this._projection
+    const webMercatorPosition = projection.project(position)
     if (!defined(webMercatorPosition)) {
       return undefined
     }

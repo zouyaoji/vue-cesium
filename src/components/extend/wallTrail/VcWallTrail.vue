@@ -23,7 +23,7 @@ export default {
   mixins: [cmp, positions, minimumHeights, maximumHeights, outline, show],
   props: {
     color: {
-      type: Object | String | Array,
+      type: [Object, String, Array],
       default: 'yellow'
     },
     interval: {

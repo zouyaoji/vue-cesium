@@ -11,7 +11,7 @@ export default {
   ],
   props: {
     assetId: Number,
-    server: String | Object
+    server: [String, Object]
   }
 }
 </script>

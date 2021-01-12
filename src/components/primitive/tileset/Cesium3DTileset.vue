@@ -5,8 +5,11 @@ import {
   shadows,
   clippingPlanes,
   debugShowBoundingVolume,
-  debugWireframe
+  debugWireframe,
+  imageBasedLightingFactor,
+  url
 } from '../../../mixins/mixinProps'
+import { makeCartesian3 } from '../../../utils/cesiumHelpers'
 import mixinPrimitive from '../../../mixins/primitives/mixinPrimitive'
 export default {
   name: 'vc-primitive-tileset',
@@ -17,10 +20,17 @@ export default {
     clippingPlanes,
     debugShowBoundingVolume,
     debugWireframe,
+    imageBasedLightingFactor,
+    url,
     mixinPrimitive
   ],
   props: {
-    url: String | Object,
+    lightColor: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    },
     maximumScreenSpaceError: {
       type: Number,
       default: 16
@@ -76,8 +86,6 @@ export default {
     classificationType: Number,
     ellipsoid: Object,
     pointCloudShading: Object,
-    imageBasedLightingFactor: Object,
-    lightColor: Object,
     debugFreezeFrame: {
       type: Boolean,
       default: false

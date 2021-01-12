@@ -1,7 +1,7 @@
 <template>
   <i :class="$options.name" style="display: none !important">
-    <vc-entity :position="position" ref="entity" :show="show">
-      <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius" :semiMinorAxis="radius"></vc-graphics-ellipse>
+    <vc-entity ref="entity" :position="position" :show="show">
+      <vc-graphics-ellipse :height="height" :material="material" :semi-major-axis="radius" :semi-minor-axis="radius" />
     </vc-entity>
   </i>
 </template>
@@ -60,6 +60,14 @@ export default {
       }
     })
   },
+  created () {
+    Object.defineProperties(this, {
+      entity: {
+        enumerable: true,
+        get: () => this.cesiumObject
+      }
+    })
+  },
   methods: {
     async createCesiumObject () {
       return this.$refs.entity.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
@@ -78,14 +86,6 @@ export default {
     async unmount () {
       return this.$refs.entity && this.$refs.entity.unload()
     }
-  },
-  created () {
-    Object.defineProperties(this, {
-      entity: {
-        enumerable: true,
-        get: () => this.cesiumObject
-      }
-    })
   }
 }
 </script>

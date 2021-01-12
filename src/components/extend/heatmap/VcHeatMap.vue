@@ -148,8 +148,11 @@ export default {
       const { options, defaultOptions } = this
       this._mBounds = this.wgs84ToMercatorBounds(bounds)
       this.setWidthAndHeight(this._mBounds)
-      options.radius = Math.round(options.radius ? options.radius : this.width > this.height
-        ? this.width / defaultOptions.radiusFactor : this.height / defaultOptions.radiusFactor)
+      options.radius = Math.round(options.radius
+        ? options.radius
+        : this.width > this.height
+          ? this.width / defaultOptions.radiusFactor
+          : this.height / defaultOptions.radiusFactor)
       this._spacing = options.radius * defaultOptions.spacingFactor
       this._xoffset = this._mBounds.west
       this._yoffset = this._mBounds.south
@@ -200,7 +203,7 @@ export default {
       this.height = this.height / this._factor
     },
     getContainer (width, height, id) {
-      var c = document.createElement('div')
+      const c = document.createElement('div')
       if (id) {
         c.setAttribute('id', id)
       }
@@ -209,10 +212,10 @@ export default {
       return c
     },
     getID (len) {
-      var text = ''
-      var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      let text = ''
+      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-      for (var i = 0; i < ((len) || 8); i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)) }
+      for (let i = 0; i < ((len) || 8); i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)) }
 
       return text
     },
@@ -221,7 +224,7 @@ export default {
       *  p: the WGS84 location like {x: lon, y: lat}
       */
     wgs84ToMercator (p) {
-      var mp = this._WMP.project(Cesium.Cartographic.fromDegrees(p.x, p.y))
+      const mp = this._WMP.project(Cesium.Cartographic.fromDegrees(p.x, p.y))
       return {
         x: mp.x,
         y: mp.y
@@ -232,8 +235,8 @@ export default {
       *  bb: the WGS84 bounding box like {north, east, south, west}
       */
     wgs84ToMercatorBounds (bounds) {
-      var sw = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.west, bounds.south))
-      var ne = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.east, bounds.north))
+      const sw = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.west, bounds.south))
+      const ne = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.east, bounds.north))
       return {
         north: ne.y,
         east: ne.x,
@@ -246,7 +249,7 @@ export default {
       *  p: the mercator lcation like {x, y}
       */
     mercatorToWgs84 (p) {
-      var wp = this._WMP.unproject(new Cesium.Cartesian3(p.x, p.y))
+      const wp = this._WMP.unproject(new Cesium.Cartesian3(p.x, p.y))
       return {
         x: wp.longitude,
         y: wp.latitude
@@ -258,8 +261,8 @@ export default {
       *  bb: the mercator bounding box like {north, east, south, west}
       */
     mercatorToWgs84Bounds (bb) {
-      var sw = this._WMP.unproject(new Cesium.Cartesian3(bb.west, bb.south))
-      var ne = this._WMP.unproject(new Cesium.Cartesian3(bb.east, bb.north))
+      const sw = this._WMP.unproject(new Cesium.Cartesian3(bb.west, bb.south))
+      const ne = this._WMP.unproject(new Cesium.Cartesian3(bb.east, bb.north))
       return {
         north: this.rad2deg(ne.latitude),
         east: this.rad2deg(ne.longitude),
@@ -273,7 +276,7 @@ export default {
       *  d: the degrees to be converted to radians
       */
     deg2rad (d) {
-      var r = d * (Math.PI / 180.0)
+      const r = d * (Math.PI / 180.0)
       return r
     },
 
@@ -282,7 +285,7 @@ export default {
       *  r: the radians to be converted to degrees
       */
     rad2deg (r) {
-      var d = r / (Math.PI / 180.0)
+      const d = r / (Math.PI / 180.0)
       return d
     },
     /*  Set an array of heatmap locations
@@ -311,10 +314,10 @@ export default {
      */
     setWGS84Data (min, max, data) {
       if (data && data.length > 0 && min !== null && min !== false && max !== null && max !== false) {
-        var convdata = []
-        for (var i = 0; i < data.length; i++) {
-          var gp = data[i]
-          var hp = this.wgs84PointToHeatmapPoint(gp)
+        const convdata = []
+        for (let i = 0; i < data.length; i++) {
+          const gp = data[i]
+          const hp = this.wgs84PointToHeatmapPoint(gp)
           if (gp.value || gp.value === 0) {
             hp.value = gp.value
           }
@@ -338,7 +341,7 @@ export default {
      *  p: a WGS84 location like {x: lon, y:lat}
      */
     mercatorPointToHeatmapPoint (p) {
-      var pn = {}
+      const pn = {}
       pn.x = Math.round((p.x - this._xoffset) / this._factor + this._spacing)
       pn.y = Math.round((p.y - this._yoffset) / this._factor + this._spacing)
       pn.y = this.height - pn.y

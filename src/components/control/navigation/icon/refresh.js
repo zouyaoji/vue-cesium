@@ -1,6 +1,6 @@
 import VcIconSvg from './VcIconSvg.vue'
 VcIconSvg.register({
-  'refresh': {
+  refresh: {
     width: 50,
     height: 50,
     viewBox: '0 0 50 50',

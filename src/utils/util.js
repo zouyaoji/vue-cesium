@@ -1,5 +1,3 @@
-// import specialProps from '../utils/specialProps'
-
 const toString = Object.prototype.toString
 
 export const checkType = (val) => Object.prototype.toString.call(val).slice(8, -1)
@@ -13,10 +11,10 @@ export const clone = (object, deep) => {
 
   deep = deep || false
 
-  var result = new object.constructor()
-  for (var propertyName in object) {
-    if (object.hasOwnProperty(propertyName)) {
-      var value = object[propertyName]
+  const result = new object.constructor()
+  for (const propertyName in object) {
+    if (Object.prototype.hasOwnProperty.call(object, propertyName)) {
+      let value = object[propertyName]
       if (deep) {
         value = clone(value, deep)
       }
@@ -31,14 +29,22 @@ export function getString (arrayBuffer, encoding) {
   if (!(arrayBuffer instanceof Uint8Array) && !(arrayBuffer instanceof ArrayBuffer) && arrayBuffer.buffer) {
     arrayBuffer = arrayBuffer.buffer
   }
-  var decoder = new TextDecoder(encoding)
-  var decodedText = decoder.decode(arrayBuffer, { stream: true })
+  const decoder = new TextDecoder(encoding)
+  const decodedText = decoder.decode(arrayBuffer, { stream: true })
   return decodedText
 }
 
 export function isEmptyObj (o) {
-  for (var attr in o) return !1
-  return !0
+  if (isUndefined(o)) {
+    return true
+  }
+
+  if (o instanceof Element) {
+    return false
+  }
+
+  const arr = Object.keys(o)
+  return arr.length === 0
 }
 /**
  * 通过 class 名获取 Dom 元素。
@@ -132,215 +138,15 @@ export function lnglatValidator (longitude, latitude) {
   }
   return true
 }
-// /**
-//  * 普通对象 {x: number, y: number } 转换为 Cesium.Cartesian2 对象
-//  * @param {Object} val
-//  * @returns {Object}
-//  */
-// export function makeCartesian2 (val) {
-//   return val && new Cesium.Cartesian2(val.x, val.y)
-// }
-
-// /**
-//  * 普通对象 {x: number, y: number, z: number } 转换为 Cesium.Cartesian3 对象
-//  * @param {Object} val
-//  * @returns {Object}
-//  */
-// export function makeCartesian3 (val) {
-//   if (typeof val === 'function') {
-//     return new Cesium.CallbackProperty(val, false)
-//   } else if (val && Object.prototype.hasOwnProperty.call(val, 'x')) {
-//     return new Cesium.Cartesian3(val.x, val.y, val.z)
-//   } else if (val && Object.prototype.hasOwnProperty.call(val, 'lng')) {
-//     return Cesium.Cartesian3.fromDegrees(val.lng, val.lat, val.height)
-//   }
-//   return val
-// }
-
-// /**
-//  * 普通数组 [lng, lat, height, ……，lng, lat, height] 转换为 Cesium.Cartesian3 数组
-//  * @param {Array} val
-//  * @returns {Array<Cartesian3>}
-//  */
-// export function makeCartesian3Array (vals) {
-//   if ((vals && vals instanceof Array && vals[0] instanceof Cesium.Cartesian3) || vals._callback) {
-//     return vals
-//   }
-
-//   const coordinates = []
-//   vals.forEach((item) => {
-//     coordinates.push(item.lng)
-//     coordinates.push(item.lat)
-//     coordinates.push(item.height)
-//   })
-
-//   return coordinates.length >= 3 ? Cesium.Cartesian3.fromDegreesArrayHeights(coordinates) : vals
-// }
-// /**
-//  * 普通数组 [lng, lat, ……，lng, lat] 转换为 Cesium.Cartesian2 数组
-//  * @param {Array} vals
-//  * @returns {Array<Cartesian2>}
-//  */
-// export function makeCartesian2Array (vals) {
-//   const cartesian2Array = []
-//   vals.forEach((item) => {
-//     cartesian2Array.push(new Cesium.Cartesian2(item.x, item.y))
-//   })
-//   return cartesian2Array
-// }
-
-// /**
-//  *
-//  * @param {Object} val
-//  */
-// export function makeQuaternion (val) {
-//   return val.x ? new Cesium.Quaternion(val.x, val.y, val.z, val.w) : val
-// }
-
-// /**
-//  * 解析 HierarchyJson
-//  * @param {Object} val
-//  */
-// function parsePolygonHierarchyJson (val) {
-//   val.forEach((element) => {
-//     element.positions = makeCartesian3Array(element.positions)
-//     if (element.holes) {
-//       parsePolygonHierarchyJson(element.holes)
-//     }
-//   })
-// }
-
-// /**
-//  * 普通数组或对象转 Cesium.PolygonHierarchy 对象。
-//  * @param {Object|Array} val
-//  */
-// export function makePolygonHierarchy (val) {
-//   if (val instanceof Array && val.length >= 3) {
-//     return new Cesium.PolygonHierarchy(makeCartesian3Array(val))
-//   }
-//   if (Cesium.defined(val.positions)) {
-//     val.positions = makeCartesian3Array(val.positions)
-//     parsePolygonHierarchyJson(val.holes)
-//   }
-
-//   return val
-// }
-// /**
-//  * 普通对象 {near: number, nearValue: number, far: number, farValue: number} 转 Cesium.NearFarScalar 对象。
-//  * @param {Object} val
-//  * @returns {NearFarScalar}
-//  */
-// export function makeNearFarScalar (val) {
-//   return val && new Cesium.NearFarScalar(val.near, val.nearValue, val.far, val.farValue)
-// }
-// /**
-//  * 普通对象 {near: number, far: number} 转 Cesium.DistanceDisplayCondition 对象。
-//  * @param {Object} val
-//  * @returns {DistanceDisplayCondition}
-//  */
-// export function makeDistanceDisplayCondition (val) {
-//   return val && new Cesium.DistanceDisplayCondition(val.near, val.far)
-// }
-// /**
-//  * 普通对象或数组 [r, g, b, a] 或字符串转 Cesium.Color 对象。
-//  * @param {String|Array|Object} val
-//  * @returns {Color}
-//  */
-// export function makeColor (val) {
-//   if (val instanceof Cesium.Color) {
-//     return val
-//   } else if (val instanceof Array) {
-//     return new Cesium.Color(val[0], val[1], val[2], val[3])
-//   } else if (typeof val === 'string') {
-//     return Cesium.Color.fromCssColorString(val)
-//   }
-//   return val
-// }
-// /**
-//  * 普通对象或数组 [r, g, b, a] 或字符串转 Material
-//  * @param {String|Array|Object} val
-//  */
-// export function makeMaterial (val) {
-//   if (val instanceof Array || (typeof val === 'string' && !/(.*)\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/.test(val))) {
-//     return makeColor(val)
-//   } else if (val && val.hasOwnProperty('fabric')) {
-//     const f = (obj) => {
-//       for (var i in obj) {
-//         if (!isArray(obj[i]) && typeof obj[i] === 'object') {
-//           f(obj[i])
-//         } else {
-//           const specialPropsKeys = Object.keys(specialProps)
-//           if (specialPropsKeys.indexOf(i) !== -1 && specialProps[i].handler && !isEmptyObj(obj[i])) {
-//             const result = specialProps[i].handler.call(this, obj[i])
-//             // Cesium 通过对象属性个数判断具体材质类型的，通过 Cesium.combine 移除 vue 传的一些属性
-//             obj[i] = Cesium.combine(result, result, true)
-//           }
-//         }
-//       }
-//     }
-//     f(val)
-//     return new Cesium.Material(val)
-//   }
-//   return val
-// }
-// /**
-//  * 普通对象 {west: number, south: number, east: number, north: number} 转 Cesium.Rectangle 对象。
-//  * @param {Object} val
-//  * @returns {Rectangle}
-//  */
-// export function makeRectangle (val) {
-//   // Entiy 的 rectangle 属性不能调用这个方法
-//   if (val instanceof Cesium.RectangleGraphics) {
-//     return val
-//   } else if (val instanceof Array && val.length === 4) {
-//     return Cesium.Rectangle.fromDegrees(val[0], val[1], val[2], val[3])
-//   }
-//   return val && Cesium.Rectangle.fromDegrees(val.west, val.south, val.east, val.north)
-// }
-// /**
-//  * 普通对象 {x: number, y: number, width: number, height: number} 转 Cesium.BoundingRectangle 对象。
-//  * @param {Object} val
-//  * @returns {BoundingRectangle}
-//  */
-// export function makeBoundingRectangle (val) {
-//   return val && new Cesium.BoundingRectangle(val.x, val.y, val.width, val.height)
-// }
-// /**
-//  * 普通对象 {normal: number, distance: number} 转 Cesium.Plane 对象。
-//  * @param {Object} val
-//  * @returns {Plane}
-//  */
-// export function makePlane (val) {
-//   // Entiy 和 PlaneGraphics 都有个 plane 属性 要区别一下
-//   if (val instanceof Cesium.PlaneGraphics) {
-//     return val
-//   }
-//   if (val) {
-//     Cesium.Cartesian3.normalize(makeCartesian3(val.normal), val.normal)
-//     return new Cesium.Plane(val.normal, val.distance)
-//   }
-//   return val
-// }
-
-// /**
-//  * 普通对象转平移、旋转、缩放变换对象。
-//  * @param {*} val
-//  */
-// export function makeTranslationRotationScale (val) {
-//   return (
-//     val &&
-//     new Cesium.TranslationRotationScale(makeCartesian3(val.translation), makeQuaternion(val.rotation), makeCartesian3(val.scale))
-//   )
-// }
 
 export function dirname (path) {
   if (typeof path !== 'string') path = path + ''
   if (path.length === 0) return '.'
-  var code = path.charCodeAt(0)
-  var hasRoot = code === 47 /* / */
-  var end = -1
-  var matchedSlash = true
-  for (var i = path.length - 1; i >= 1; --i) {
+  let code = path.charCodeAt(0)
+  const hasRoot = code === 47 /* / */
+  let end = -1
+  let matchedSlash = true
+  for (let i = path.length - 1; i >= 1; --i) {
     code = path.charCodeAt(i)
     if (code === 47 /* / */) {
       if (!matchedSlash) {
@@ -363,15 +169,15 @@ export function dirname (path) {
 }
 
 export function Platform () {
-  var ua = navigator.userAgent
-  var isWindowsPhone = /(?:Windows Phone)/.test(ua)
-  var isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone
-  var isAndroid = /(?:Android)/.test(ua)
-  var isFireFox = /(?:Firefox)/.test(ua)
-  var isChrome = /(?:Chrome|CriOS)/.test(ua)
-  var isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua))
-  var isPhone = /(?:iPhone)/.test(ua) && !isTablet
-  var isPc = !isPhone && !isAndroid && !isSymbian
+  const ua = navigator.userAgent
+  const isWindowsPhone = /(?:Windows Phone)/.test(ua)
+  const isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone
+  const isAndroid = /(?:Android)/.test(ua)
+  const isFireFox = /(?:Firefox)/.test(ua)
+  const isChrome = /(?:Chrome|CriOS)/.test(ua)
+  const isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua))
+  const isPhone = /(?:iPhone)/.test(ua) && !isTablet
+  const isPc = !isPhone && !isAndroid && !isSymbian
   return {
     isTablet: isTablet,
     isPhone: isPhone,
@@ -385,13 +191,13 @@ export function captureScreenshot (viewer, showSplitter = false) {
   const { when } = Cesium
   const deferred = when.defer()
   const scene = viewer.scene
-  var removeCallback = scene.postRender.addEventListener(function () {
+  const removeCallback = scene.postRender.addEventListener(function () {
     removeCallback()
     try {
       const cesiumCanvas = viewer.scene.canvas
 
       // If we're using the splitter, draw the split position as a vertical white line.
-      let canvas = cesiumCanvas
+      const canvas = cesiumCanvas
       // if (showSplitter) {
       //   canvas = document.createElement('canvas')
       //   canvas.width = cesiumCanvas.width
@@ -440,24 +246,28 @@ export function drawTriangle (options) {
   options.borderColor = options.borderColor || 'orange'
   options.borderWidth = options.borderWidth || 1
 
-  var cv = document.createElement('canvas')
+  const cv = document.createElement('canvas')
   cv.width = options.width
   cv.height = options.height
-  var ctx = cv.getContext('2d')
+  const ctx = cv.getContext('2d')
   ctx.beginPath()
-  if (options.direction === 1) { // left
+  if (options.direction === 1) {
+    // left
     ctx.moveTo(cv.width, 0)
     ctx.lineTo(0, cv.height / 2)
     ctx.lineTo(cv.width, cv.height)
-  } else if (options.direction === 2) { // top
+  } else if (options.direction === 2) {
+    // top
     ctx.moveTo(0, cv.height)
     ctx.lineTo(cv.width / 2, 0)
     ctx.lineTo(cv.width, cv.height)
-  } else if (options.direction === 3) { // right
+  } else if (options.direction === 3) {
+    // right
     ctx.moveTo(0, cv.height)
     ctx.lineTo(cv.width, cv.height / 2)
     ctx.lineTo(0, 0)
-  } else { // bottom
+  } else {
+    // bottom
     ctx.moveTo(0, 0)
     ctx.lineTo(cv.width / 2, cv.height)
     ctx.lineTo(cv.width, 0)
@@ -480,16 +290,17 @@ export function drawText (text, options) {
   options = options || {
     font: '20px sans-serif'
   }
-  var backcolor = options.backgroundColor
-  var padding = options.padding
+  const backcolor = options.backgroundColor
+  const padding = options.padding
   delete options.backgroundColor
   delete options.padding
 
-  var lines = text.split(/[\r]?\n+/)
-  var lineImgs = []
-  var w = 0; var h = 0
-  for (var i = 0; i < lines.length; i++) {
-    var tempCv = Cesium.writeTextToCanvas(lines[i], options)
+  const lines = text.split(/[\r]?\n+/)
+  const lineImgs = []
+  let w = 0
+  let h = 0
+  for (let i = 0; i < lines.length; i++) {
+    const tempCv = Cesium.writeTextToCanvas(lines[i], options)
     if (tempCv) {
       lineImgs.push(tempCv)
       h += tempCv.height
@@ -499,7 +310,7 @@ export function drawText (text, options) {
   options.backgroundColor = backcolor
   options.padding = padding
 
-  var cv = options.canvas
+  let cv = options.canvas
   if (!cv) {
     w += padding * 2
     h += padding * 2.25
@@ -508,7 +319,7 @@ export function drawText (text, options) {
     cv.height = h
   }
 
-  var ctx = cv.getContext('2d')
+  const ctx = cv.getContext('2d')
   if (backcolor) {
     ctx.fillStyle = backcolor.toCssColorString()
   } else {
@@ -529,14 +340,21 @@ export function drawText (text, options) {
       ctx.strokeRect(0, 0, cv.width, cv.height)
     }
   } else {
-    drawRoundedRect({
-      x: 0, y: 0, width: cv.width, height: cv.height
-    }, options.borderRadius, ctx)
+    drawRoundedRect(
+      {
+        x: 0,
+        y: 0,
+        width: cv.width,
+        height: cv.height
+      },
+      options.borderRadius,
+      ctx
+    )
   }
 
   delete ctx.strokeStyle
   delete ctx.fillStyle
-  var y = 0
+  let y = 0
   for (let i = 0; i < lineImgs.length; i++) {
     ctx.drawImage(lineImgs[i], 0 + padding, y + padding)
     y += lineImgs[i].height
@@ -558,7 +376,7 @@ function drawRoundedRect (rect, r, ctx) {
 }
 
 export function getExtension (fileName) {
-  var start = fileName.lastIndexOf('.')
+  const start = fileName.lastIndexOf('.')
   if (start >= 0) {
     return fileName.substring(start, fileName.length)
   }
@@ -570,8 +388,8 @@ export function changeExtension (fname, newExt) {
 }
 
 export function readAsArrayBuffer (file) {
-  var promise = Cesium.when.defer()
-  var fr = new FileReader()
+  const promise = Cesium.when.defer()
+  const fr = new FileReader()
   fr.onload = function (e) {
     promise.resolve(e.target.result)
   }
@@ -586,8 +404,8 @@ export function readAsArrayBuffer (file) {
 }
 
 export function readAsText (file) {
-  var promise = Cesium.when.defer()
-  var fr = new FileReader()
+  const promise = Cesium.when.defer()
+  const fr = new FileReader()
   fr.onload = function (e) {
     promise.resolve(e.target.result)
   }
@@ -602,8 +420,8 @@ export function readAsText (file) {
 }
 
 export function readAllBytes (file) {
-  var promise = Cesium.when.defer()
-  var fr = new FileReader()
+  const promise = Cesium.when.defer()
+  const fr = new FileReader()
   fr.onload = function (e) {
     promise.resolve(new Uint8Array(e.target.result))
   }

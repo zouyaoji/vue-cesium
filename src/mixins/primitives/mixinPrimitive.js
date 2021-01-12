@@ -16,7 +16,7 @@ const methods = {
   async mount () {
     const { primitives, primitive, registerEvents } = this
     primitive.readyPromise && primitive.readyPromise.then(primitive => {
-      const listener = this.$listeners['readyPromise']
+      const listener = this.$listeners.readyPromise
       listener && this.$emit('readyPromise', primitive)
     }).otherwise(error => {
       throw new Cesium.DeveloperError(error)

@@ -19,10 +19,10 @@ class IndexedDBScheduler {
     if (!Cesium.defined(options.name)) {
       throw new Cesium.DeveloperError('options.name is required.')
     }
-    let deferred = Cesium.when.defer()
+    const deferred = Cesium.when.defer()
     this.dbname = options.name
-    let dbRequest = window.indexedDB.open(this.dbname)
-    let that = this
+    const dbRequest = window.indexedDB.open(this.dbname)
+    const that = this
     dbRequest.onsuccess = event => {
       that.db = event.target.result
       that.version = that.db.version
@@ -44,6 +44,7 @@ class IndexedDBScheduler {
     this.cachestatus = {}
     return deferred.promise
   }
+
   /**
    * 检查对象仓库是否存在。
    * @param {String} storeName 对象仓库（表）名称
@@ -51,6 +52,7 @@ class IndexedDBScheduler {
   checkObjectStoreExist (storeName) {
     return Cesium.defined(this.db) ? this.db.objectStoreNames.contains(storeName) : false
   }
+
   /**
   *  创建 IndexedDB 浏对象仓库，IndexedDB 是浏览器提供的本地数据库
   * @param {String} storeName 对象仓库（表）名称
@@ -68,14 +70,14 @@ class IndexedDBScheduler {
       this.creatingTable = true
       const version = parseInt(this.db.version)
       this.db.close()
-      let that = this
+      const that = this
       // 打开或新建 IndexedDB 数据库
-      let dbRequest = window.indexedDB.open(this.dbname, version + 1)
+      const dbRequest = window.indexedDB.open(this.dbname, version + 1)
       dbRequest.onupgradeneeded = event => {
-        let db = event.target.result
+        const db = event.target.result
         that.db = db
         // 创建对象仓库（表）
-        let objectStore = db.createObjectStore(storeName, {
+        const objectStore = db.createObjectStore(storeName, {
           keyPath: 'id'
         })
         if (Cesium.defined(objectStore)) {
@@ -87,7 +89,7 @@ class IndexedDBScheduler {
           that.cachestatus = that.cachestatus || {}
           that.cachestatus[storeName] = {}
           that.db.close()
-          let dbRequest = window.indexedDB.open(that.dbname)
+          const dbRequest = window.indexedDB.open(that.dbname)
           dbRequest.onsuccess = event => {
             that.db = event.target.result
             deferred.resolve(true)
@@ -131,7 +133,7 @@ class IndexedDBScheduler {
     if (db.objectStoreNames.contains(storeName)) {
       cachestatus[storeName] = cachestatus[storeName] || {}
       try {
-        let request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
           id: id,
           value: value
         })
@@ -150,7 +152,7 @@ class IndexedDBScheduler {
       }
     } else {
       this.createObjectStore(storeName).then(() => {
-        let request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
           id: id,
           value: value
         })
@@ -166,6 +168,7 @@ class IndexedDBScheduler {
     }
     return deferred.promise
   }
+
   /**
    * 向对象仓库读取数据。
    * @param {String} storeName 对象仓库（表）名称
@@ -182,11 +185,11 @@ class IndexedDBScheduler {
       return null
     }
     try {
-      let transaction = db.transaction([storeName])
-      let objectStore = transaction.objectStore(storeName)
-      let request = objectStore.get(id)
+      const transaction = db.transaction([storeName])
+      const objectStore = transaction.objectStore(storeName)
+      const request = objectStore.get(id)
       request.onsuccess = e => {
-        return Cesium.defined(e.target.result) ? void deferred.resolve(e.target.result.value) : void deferred.reject(null)
+        return Cesium.defined(e.target.result) ? deferred.resolve(e.target.result.value) : deferred.reject(null)
       }
       request.onerror = e => {
         deferred.reject(null)
@@ -196,6 +199,7 @@ class IndexedDBScheduler {
     }
     return deferred.promise
   }
+
   /**
    * 更新数据。
    * @param {String} storeName
@@ -215,7 +219,7 @@ class IndexedDBScheduler {
       return deferred.promise
     }
     try {
-      let request = db.transaction([storeName], 'readwrite')
+      const request = db.transaction([storeName], 'readwrite')
         .objectStore(storeName)
         .put({ id: id, value: value })
       request.onsuccess = () => {
@@ -229,6 +233,7 @@ class IndexedDBScheduler {
     }
     return deferred.promise
   }
+
   /**
    * 移除数据。
    * @param {String} storeName
@@ -248,7 +253,7 @@ class IndexedDBScheduler {
       return deferred.promise
     }
     try {
-      let request = db.transaction([storeName], 'readwrite')
+      const request = db.transaction([storeName], 'readwrite')
         .objectStore(storeName)
         .delete(id)
       request.onsuccess = () => {
@@ -262,6 +267,7 @@ class IndexedDBScheduler {
     }
     return deferred.promise
   }
+
   /**
    *  清空对象仓库
    * @param {String} storeName
@@ -280,7 +286,7 @@ class IndexedDBScheduler {
     }
 
     try {
-      let request = db.transaction([storeName], 'readwrite')
+      const request = db.transaction([storeName], 'readwrite')
         .objectStore(storeName)
         .clear()
       request.onsuccess = () => {

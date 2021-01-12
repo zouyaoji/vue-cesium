@@ -102,10 +102,10 @@ class Wind3D {
   }
 
   updateViewerParameters () {
-    var viewRectangle = this.camera.computeViewRectangle(
+    const viewRectangle = this.camera.computeViewRectangle(
       this.scene.globe.ellipsoid
     )
-    var lonLatRange = Util.viewRectangleToLonLatRange(viewRectangle)
+    const lonLatRange = Util.viewRectangleToLonLatRange(viewRectangle)
     this.viewerParameters.lonRange.x = lonLatRange.lon.min
     this.viewerParameters.lonRange.y = lonLatRange.lon.max
     this.viewerParameters.latRange.x = lonLatRange.lat.min
@@ -116,7 +116,7 @@ class Wind3D {
     this.viewerParameters.latDataRange.x = this.data.lat.min
     this.viewerParameters.latDataRange.y = this.data.lat.max
 
-    var pixelSize = this.camera.getPixelSize(
+    const pixelSize = this.camera.getPixelSize(
       this.globeBoundingSphere,
       this.scene.drawingBufferWidth,
       this.scene.drawingBufferHeight

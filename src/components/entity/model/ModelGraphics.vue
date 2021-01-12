@@ -1,26 +1,9 @@
 <script>
 import mixinModel from '../../../mixins/graphics/mixinModel'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
+import { imageBasedLightingFactor, lightColor, uri, nodeTransformations, runAnimations, articulations } from '../../../mixins/mixinProps'
 export default {
   name: 'vc-graphics-model',
-  mixins: [mixinModel, mixinGraphic],
-  props: {
-    uri: String,
-    runAnimations: {
-      type: Boolean,
-      default: true
-    },
-    imageBasedLightingFactor: {
-      type: Object,
-      default: () => {
-        return {
-          x: 1.0, y: 1.0
-        }
-      }
-    },
-    lightColor: Object,
-    nodeTransformations: Object,
-    articulations: Object
-  }
+  mixins: [mixinModel, mixinGraphic, imageBasedLightingFactor, lightColor, uri, nodeTransformations, runAnimations, articulations]
 }
 </script>

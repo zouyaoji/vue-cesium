@@ -1,12 +1,29 @@
 import services from './services'
 import nameClassMap from '../utils/nameClassMap'
-import specialProps from '../utils/specialProps'
-import { warn } from '../utils/log'
+import { isFunction } from '../utils/util'
+import * as allProps from '../mixins/mixinProps'
 
 const VM_PROP = 'vm'
 
-const graphics = ['billboard', 'box', 'corridor', 'cylinder', 'ellipse', 'ellipsoid', 'label', 'model', 'tileset',
-  'path', 'plane', 'point', 'polygon', 'polyline', 'polylineVolume', 'rectangle', 'wall']
+const graphics = [
+  'billboard',
+  'box',
+  'corridor',
+  'cylinder',
+  'ellipse',
+  'ellipsoid',
+  'label',
+  'model',
+  'tileset',
+  'path',
+  'plane',
+  'point',
+  'polygon',
+  'polyline',
+  'polylineVolume',
+  'rectangle',
+  'wall'
+]
 /**
  * Get the parent component. 获取 vc-viewer 组件。
  * @param {VueComponent} $component.
@@ -39,14 +56,15 @@ const methods = {
     }
     // Register vue Watchers. 注册 Vue 侦听器。
     setPropWatchers(true)
+    const that = this
     return createCesiumObject().then(async (cesiumObject) => {
-      this.originInstance = cesiumObject
+      that.originInstance = cesiumObject
       // Load the created Cesium object. 加载创建的 Cesium 对象。
       return mount().then(() => {
-        this._mounted = true
+        that._mounted = true
         // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
-        this.$emit('ready', { Cesium, viewer, cesiumObject, vm: this })
-        return { Cesium, viewer, cesiumObject, vm: this }
+        that.$emit('ready', { Cesium, viewer, cesiumObject, vm: that })
+        return { Cesium, viewer, cesiumObject, vm: that }
       })
     })
   },
@@ -59,16 +77,17 @@ const methods = {
     for (const $node of (this.$slots.default || []).map((vnode) => vnode.componentInstance).filter((cmp) => !!cmp)) {
       await $node.unload()
     }
+    const that = this
     return this._mounted
       ? this.unmount().then(async () => {
-        // Teardown the watchers. 注销 Vue 侦听器。
-        this.setPropWatchers(false)
-        this.originInstance = undefined
-        this._mounted = false
-        // If the component cannot be rendered without the parent component, the parent component needs to be removed.
-        // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
-        return this.renderByParent ? this.$parent.unload() : true
-      })
+          // Teardown the watchers. 注销 Vue 侦听器。
+          that.setPropWatchers(false)
+          that.originInstance = undefined
+          that._mounted = false
+          // If the component cannot be rendered without the parent component, the parent component needs to be removed.
+          // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
+          return that.renderByParent ? that.$parent.unload() : true
+        })
       : false
   },
   /**
@@ -76,8 +95,9 @@ const methods = {
    * @returns {Promise<Boolean>} returns true on success and false on failure. 成功返回 true，失败返回 false。
    */
   async reload () {
+    const that = this
     return this.unload().then(() => {
-      return this.load()
+      return that.load()
     })
   },
   /**
@@ -95,49 +115,45 @@ const methods = {
    */
   setPropWatchers (register) {
     if (register) {
-      const { $props, specialPropsKeys, cesiumClass, cesiumObject } = this
+      const { cesiumClass } = this
       if (!cesiumClass || !Cesium[cesiumClass]) {
         return
       }
-      const constructor = Cesium[cesiumClass]
-      const args = []
-      for (let i = 0; i < constructor.length; i++) {
-        args.push({})
-      }
-      // Create a temporary object to get the writability of the current Cesium object or the props on its prototype chain to
-      // detect whether the component property responds dynamically or reloads the component when the property changes.
-      // 创建一个临时对象来获取当前 Cesium 对象或它原型链上的 prop 的可写性，以检测属性改变时组件属性是动态响应还是重载组件。
-      let instance = cesiumObject || applyToConstructor(constructor, args)
-      $props &&
-        Object.keys($props).forEach((vueProp) => {
+      const that = this
+      that.$options.props &&
+        Object.keys(that.$options.props).forEach((vueProp) => {
           let cesiumProp = vueProp
           if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
             cesiumProp = 'style'
           } else if (vueProp === 'bmKey') {
             cesiumProp = 'key'
           }
-          const pd = instance && Object.getOwnPropertyDescriptor(instance, cesiumProp)
-          const pdProto = instance && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(instance), cesiumProp)
-          const hasSetter = (pd && pd.writable) || (pdProto && pdProto.set)
           // 如果在vue文件中已经监听了改 props 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
           if (that.$options.watch && that.$options.watch[vueProp]) {
             return
           }
+          const watcherOptions = that.$options.props[vueProp].watcherOptions
+
           // returns an unwatch function that stops firing the callback
-          const unwatch = this.$watch(
+          const unwatch = that.$watch(
             vueProp,
             async (val) => {
               // Wait for child components to be created.
               // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
-              await this.createPromise
+              await that.createPromise
+              const { cesiumObject } = this
+              // Get the writability of the current cesiumobject or the props on its prototype chain to
+              // detect whether the component property responds dynamically or reloads the component when the property changes.
+              // 通过 cesiumObject 对象或它原型链上的 prop 的可写性，以检测属性改变时组件属性是动态响应还是重载组件。
+              const pd = cesiumObject && Object.getOwnPropertyDescriptor(cesiumObject, cesiumProp)
+              const pdProto = cesiumObject && Object.getOwnPropertyDescriptor(Object.getPrototypeOf(cesiumObject), cesiumProp)
+              const hasSetter = (pd && (pd.writable || pd.set)) || (pdProto && (pdProto.writable || pdProto.set))
               if (hasSetter) {
                 // Attributes are writable and directly respond to changes in attributes.
                 // 属性可写，直接动态响应属性的改变。
-                const { cesiumObject } = this
-
-                if (specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].handler) {
-                  const newVal = specialProps[vueProp].handler.call(this, val)
+                if (watcherOptions && watcherOptions.cesiumObjectBuilder) {
+                  const newVal = watcherOptions.cesiumObjectBuilder.call(that, val)
                   // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
                   // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
                   if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp]._callback))) {
@@ -150,16 +166,13 @@ const methods = {
               } else {
                 // The attribute is not writable, and the property is changed indirectly through reloading the component.
                 // 属性不可写，通过重加载组件间接实现改变属性
-                return this.reload()
+                return that.reload()
               }
             },
-            { deep: specialPropsKeys.indexOf(vueProp) !== -1 && specialProps[vueProp].deep }
+            { deep: watcherOptions && watcherOptions.deep }
           )
-          this.unwatchFns.push(unwatch)
+          that.unwatchFns.push(unwatch)
         })
-      // Destroy temporary objects.
-      // 销毁临时对象
-      instance = undefined
     } else {
       // Stops firing the callback.
       // 注销 watchers。
@@ -195,27 +208,28 @@ const methods = {
   transformProps (props) {
     const { cesiumClass } = this
     const options = {}
+    const that = this
+    props &&
+      Object.keys(props).forEach((vueProp) => {
+        let cesiumProp = vueProp
+        // The properties of the following Cesium instance objects are HTML or Vue reserved words and require special handling.
+        // 以下 Cesium 实例对象的属性是 HTML 或 Vue 保留字，需要特别处理一下。
+        if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
+          cesiumProp = 'style'
+        } else if (vueProp === 'bmKey') {
+          cesiumProp = 'key'
+        }
 
-    props && Object.keys(props).forEach((vueProp) => {
-      let cesiumProp = vueProp
-      // The properties of the following Cesium instance objects are HTML or Vue reserved words and require special handling.
-      // 以下 Cesium 实例对象的属性是 HTML 或 Vue 保留字，需要特别处理一下。
-      if (vueProp === 'labelStyle' || vueProp === 'wmtsStyle') {
-        cesiumProp = 'style'
-      } else if (vueProp === 'bmKey') {
-        cesiumProp = 'key'
-      }
-
-      if (
-        graphics.indexOf(cesiumProp) !== -1 &&
-        (getClassName(props[vueProp]) !== 'undefined' && getClassName(props[vueProp]).indexOf('Graphics') === -1) &&
-        (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)
-      ) {
-        options[cesiumProp] = this.transformProps(props[vueProp])
-      } else {
-        options[cesiumProp] = this.transformProp(vueProp, props[vueProp])
-      }
-    })
+        if (
+          graphics.indexOf(cesiumProp) !== -1 &&
+          (getClassName(props[vueProp]) !== 'undefined' && getClassName(props[vueProp]).indexOf('Graphics') === -1) &&
+          (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)
+        ) {
+          options[cesiumProp] = that.transformProps(props[vueProp])
+        } else {
+          options[cesiumProp] = that.transformProp(vueProp, props[vueProp])
+        }
+      })
 
     // Remove empty objects to avoid initialization errors when Cesium objects are initialized with null values.
     // 移除空对象，避免 Cesium 对象初始化时传入空值导致初始化报错。
@@ -223,17 +237,22 @@ const methods = {
     return options
   },
   transformProp (prop, value) {
-    const { specialPropsKeys, isEmptyObj, cesiumClass } = this
+    const { isEmptyObj, cesiumClass } = this
 
-    if (graphics.indexOf(prop) !== -1 && (getClassName(value) !== 'undefined' && getClassName(value).indexOf('Graphics') === -1) &&
-      (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)) {
+    if (
+      graphics.indexOf(prop) !== -1 &&
+      (getClassName(value) !== 'undefined' && getClassName(value).indexOf('Graphics') === -1) &&
+      (cesiumClass === 'Entity' || cesiumClass.indexOf('DataSource') !== -1)
+    ) {
       return this.transformProps(value)
     } else {
-      return specialPropsKeys.indexOf(prop) !== -1 &&
-        specialProps[prop].handler &&
-        (!isEmptyObj(value) || typeof value === 'function')
-        ? specialProps[prop].handler.call(this, value)
-        : value
+      const cmpName = this.$options.name
+      const propOptions = allProps[prop] && allProps[prop].props[prop]
+      return propOptions && propOptions.watcherOptions && !isEmptyObj(value)
+        ? propOptions.watcherOptions.cesiumObjectBuilder.call(this, value)
+        : isFunction(value) && (cmpName && (cmpName.indexOf('graphics') !== -1 || cmpName === 'vc-entity'))
+          ? new Cesium.CallbackProperty(value, false)
+          : value
     }
   },
   /**
@@ -266,7 +285,6 @@ export default {
   created () {
     this._mounted = false
     this.cesiumClass = nameClassMap[this.$options.name]
-    this.specialPropsKeys = Object.keys(specialProps)
     const { beforeLoad, load } = this
     const $parent = getParent(this.$parent)
     // this._createPromise = Promise.resolve(beforeLoad()).then(() => load())
@@ -304,41 +322,10 @@ export default {
   }
 }
 
-/**
- * Use the apply method to call the Cesium constructor to initialize the Cesium instance. 使用 apply 调用 Cesium 构造函数初始化 Cesium 实例。
- * @param {Function} constructor Cesium 构造函数。
- * @param {Array} argArray 构造函数参数。
- * @returns {Object} 返回 Cesium 实例。
- */
-function applyToConstructor (constructor, argArray) {
-  let instance
-  try {
-    let args = [{}].concat(argArray)
-    // 动态创建 Cesium 临时实例，大部分都能正常创建，但有部分参数是不可省略的，暂时没想到更好的办法
-    // args[1].url = ''
-    args[1].mapId = {}
-    args[1].geometry = {}
-    args[1].rectangle = Cesium.Rectangle.MAX_VALUE
-    args[1].polygonHierarchy = {}
-    args[1].assetId = 1
-    args[1].layers = ''
-    args[2] = new Cesium.PolylineCollection({})
-
-    const FactoryFunction = constructor.bind.apply(constructor, args)
-    instance = new FactoryFunction()
-    args = undefined
-  } catch (e) {
-    if (process.env.VUECESIUM_DEBUG) {
-      warn(e)
-    }
-  }
-  return instance
-}
-
 function getClassName (objClass) {
   if (objClass && objClass.constructor) {
-    var strFun = objClass.constructor.toString()
-    var className = strFun.substr(0, strFun.indexOf('('))
+    const strFun = objClass.constructor.toString()
+    let className = strFun.substr(0, strFun.indexOf('('))
     className = className.replace('function', '')
     return className.replace(/(^\s*)|(\s*$)/gi, '')
   }

@@ -58,7 +58,7 @@ export default {
  * @param {*} o
  */
 function proccessObject (o) {
-  for (var attr in o) {
+  for (const attr in o) {
     if (o[attr] === null || o[attr] === undefined) delete o[attr]
     else if (typeof o[attr] === 'object') {
       // this.removeNullItem(o[attr])
@@ -72,7 +72,7 @@ function proccessObject (o) {
  * @param {*} arr
  */
 function processArray (arr) {
-  for (var i = arr.length - 1; i >= 0; i--) {
+  for (let i = arr.length - 1; i >= 0; i--) {
     /* if (arr[i] === null || arr[i] === undefined) arr.splice(i, 1);
             else */ if (
       typeof arr[i] === 'object'
@@ -91,7 +91,7 @@ function processArray (arr) {
   * @returns {Object}
   */
 function removeNullItem (o, arr, i) {
-  var s = {}.toString.call(o)
+  const s = {}.toString.call(o)
   if (s === '[object Array]') {
     if (processArray(o) === true) {
       // o也是数组，并且删除完子项，从所属数组中删除

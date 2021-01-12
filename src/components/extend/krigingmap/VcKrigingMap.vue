@@ -55,7 +55,7 @@ export default {
       }
     },
     clipCoords: {
-      type: Array | String,
+      type: [Array, String],
       default: () => {
         return []
       }
@@ -91,11 +91,11 @@ export default {
           ])
         }
       } else if (typeof clipCoords === 'string') {
-        let requstData = await Cesium.Resource.fetchJson(clipCoords)
+        const requstData = await Cesium.Resource.fetchJson(clipCoords)
         coordinates = requstData.features[0].geometry.coordinates
       }
 
-      let coords = []
+      const coords = []
       for (let i = 0; i < coordinates[0].length; i++) {
         for (let j = 0; j < 2; j++) {
           coords.push(coordinates[0][i][j])
@@ -114,19 +114,19 @@ export default {
       }
       this.coordinates = rectangle
 
-      let extent = [
+      const extent = [
         Cesium.Math.toDegrees(rectangle.west),
         Cesium.Math.toDegrees(rectangle.south),
         Cesium.Math.toDegrees(rectangle.east),
         Cesium.Math.toDegrees(rectangle.north)
       ]
 
-      let grid = kriging.grid(coordinates, variogram, this.cell ? this.cell : (extent[2] - extent[0]) / 200)
+      const grid = kriging.grid(coordinates, variogram, this.cell ? this.cell : (extent[2] - extent[0]) / 200)
 
-      let fc = this.gridFeatureCollection(grid, [extent[0], extent[2]], [extent[1], extent[3]])
-      var collection = featureCollection(fc)
+      const fc = this.gridFeatureCollection(grid, [extent[0], extent[2]], [extent[1], extent[3]])
+      const collection = featureCollection(fc)
       // console.log(collection)
-      var isobandsResult = isobands(collection, breaks, { zProperty: 'value' })
+      const isobandsResult = isobands(collection, breaks, { zProperty: 'value' })
       // console.log(isobandsResult)
       // const sortArea = (a, b) => {
       //   return area(b) - area(a)
@@ -161,16 +161,17 @@ export default {
         const index = breaks.indexOf(parseFloat(breakValue))
         cur.polygon.material = Cesium.Color.fromCssColorString(colors[index]).withAlpha(canvasAlpha)
         cur.polygon.outline = false
+        return true
       }, [])
 
       return cesiumObject
     },
     gridFeatureCollection (grid, xlim, ylim) {
       // var range = grid.zlim[1] - grid.zlim[0]
-      var i, j, x, y, z
-      var n = grid.data.length // 列数
-      var m = grid.data[0].length // 行数
-      var pointArray = []
+      let i, j, x, y, z
+      const n = grid.data.length // 列数
+      const m = grid.data[0].length // 行数
+      const pointArray = []
 
       for (i = 0; i < n; i++) {
         for (j = 0; j < m; j++) {

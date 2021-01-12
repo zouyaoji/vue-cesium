@@ -148,11 +148,11 @@ export default {
       return true
     },
     legendChanged (e) {
-      const listener = this.$listeners['legendChanged']
+      const listener = this.$listeners.legendChanged
       listener && this.$emit('legendChanged', e)
     },
     geolocation (e) {
-      const listener = this.$listeners['geolocation']
+      const listener = this.$listeners.geolocation
       listener && this.$emit('geolocation', e)
     }
   },

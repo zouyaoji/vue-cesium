@@ -4,7 +4,8 @@ import {
   arcType,
   clampToGround,
   classificationType,
-  zIndex
+  zIndex,
+  depthFailMaterial
 } from '../../../mixins/mixinProps'
 import mixinPolyline from '../../../mixins/graphics/mixinPolyline'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
@@ -17,11 +18,9 @@ export default {
     clampToGround,
     classificationType,
     zIndex,
+    depthFailMaterial,
     mixinPolyline,
     mixinGraphic
-  ],
-  props: {
-    depthFailMaterial: Object | Array | String
-  }
+  ]
 }
 </script>

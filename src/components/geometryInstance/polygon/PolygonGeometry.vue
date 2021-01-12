@@ -6,7 +6,7 @@ export default {
   name: 'vc-geometry-polygon',
   mixins: [mixinPolygon, ellipsoid, vertexFormat, mixinGeometry],
   props: {
-    polygonHierarchy: Object | Array
+    polygonHierarchy: [Object, Array]
   }
 }
 </script>

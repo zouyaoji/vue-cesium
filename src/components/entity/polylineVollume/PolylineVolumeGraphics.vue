@@ -8,7 +8,8 @@ import {
   outline,
   outlineColor,
   outlineWidth,
-  shadows
+  shadows,
+  shape
 } from '../../../mixins/mixinProps'
 import mixinPolylineVolume from '../../../mixins/graphics/mixinPolylineVolume'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
@@ -24,11 +25,9 @@ export default {
     outlineColor,
     outlineWidth,
     shadows,
+    shape,
     mixinPolylineVolume,
     mixinGraphic
-  ],
-  props: {
-    shape: Array
-  }
+  ]
 }
 </script>

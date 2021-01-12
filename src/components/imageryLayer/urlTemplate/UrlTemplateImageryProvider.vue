@@ -32,7 +32,7 @@ export default {
     mixinImageryProvider
   ],
   props: {
-    pickFeaturesUrl: String | Object,
+    pickFeaturesUrl: [String, Object],
     urlSchemeZeroPadding: Object,
     hasAlphaChannel: {
       type: Boolean,

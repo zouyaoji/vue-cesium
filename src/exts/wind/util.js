@@ -1,6 +1,6 @@
-var Util = (function () {
-  var fullscreenQuad = null
-  var getFullscreenQuad = function () {
+const Util = (function () {
+  let fullscreenQuad = null
+  const getFullscreenQuad = function () {
     if (!Cesium.defined(fullscreenQuad)) {
       fullscreenQuad = new Cesium.Geometry({
         attributes: new Cesium.GeometryAttributes({
@@ -35,20 +35,20 @@ var Util = (function () {
     return fullscreenQuad
   }
 
-  var createTexture = function (options, typedArray) {
+  const createTexture = function (options, typedArray) {
     if (Cesium.defined(typedArray)) {
       // typed array needs to be passed as source option, this is required by Cesium.Texture
-      var source = {}
+      const source = {}
       source.arrayBufferView = typedArray
       options.source = source
     }
 
-    var texture = new Cesium.Texture(options)
+    const texture = new Cesium.Texture(options)
     return texture
   }
 
-  var createFramebuffer = function (context, colorTexture, depthTexture) {
-    var framebuffer = new Cesium.Framebuffer({
+  const createFramebuffer = function (context, colorTexture, depthTexture) {
+    const framebuffer = new Cesium.Framebuffer({
       context: context,
       colorTextures: [colorTexture],
       depthTexture: depthTexture
@@ -56,29 +56,29 @@ var Util = (function () {
     return framebuffer
   }
 
-  var createRawRenderState = function (options) {
-    var translucent = true
-    var closed = false
-    var existing = {
+  const createRawRenderState = function (options) {
+    const translucent = true
+    const closed = false
+    const existing = {
       viewport: options.viewport,
       depthTest: options.depthTest,
       depthMask: options.depthMask,
       blending: options.blending
     }
 
-    var rawRenderState = Cesium.Appearance.getDefaultRenderState(translucent, closed, existing)
+    const rawRenderState = Cesium.Appearance.getDefaultRenderState(translucent, closed, existing)
     return rawRenderState
   }
 
-  var viewRectangleToLonLatRange = function (viewRectangle) {
-    var range = {}
+  const viewRectangleToLonLatRange = function (viewRectangle) {
+    const range = {}
 
-    var postiveWest = Cesium.Math.mod(viewRectangle.west, Cesium.Math.TWO_PI)
-    var postiveEast = Cesium.Math.mod(viewRectangle.east, Cesium.Math.TWO_PI)
-    var width = viewRectangle.width
+    const postiveWest = Cesium.Math.mod(viewRectangle.west, Cesium.Math.TWO_PI)
+    const postiveEast = Cesium.Math.mod(viewRectangle.east, Cesium.Math.TWO_PI)
+    const width = viewRectangle.width
 
-    var longitudeMin
-    var longitudeMax
+    let longitudeMin
+    let longitudeMax
     if (width > Cesium.Math.THREE_PI_OVER_TWO) {
       longitudeMin = 0.0
       longitudeMax = Cesium.Math.TWO_PI
@@ -97,13 +97,13 @@ var Util = (function () {
       max: Cesium.Math.toDegrees(longitudeMax)
     }
 
-    var south = viewRectangle.south
-    var north = viewRectangle.north
-    var height = viewRectangle.height
+    const south = viewRectangle.south
+    const north = viewRectangle.north
+    const height = viewRectangle.height
 
-    var extendHeight = height > Cesium.Math.PI / 12 ? height / 2 : 0
-    var extendedSouth = Cesium.Math.clampToLatitudeRange(south - extendHeight)
-    var extendedNorth = Cesium.Math.clampToLatitudeRange(north + extendHeight)
+    const extendHeight = height > Cesium.Math.PI / 12 ? height / 2 : 0
+    let extendedSouth = Cesium.Math.clampToLatitudeRange(south - extendHeight)
+    let extendedNorth = Cesium.Math.clampToLatitudeRange(north + extendHeight)
 
     // extend the bound in high latitude area to make sure it can cover all the visible area
     if (extendedSouth < -Cesium.Math.PI_OVER_THREE) {

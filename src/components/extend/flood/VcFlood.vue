@@ -41,13 +41,13 @@ export default {
       default: 10
     },
     color: {
-      type: Object | Array | String,
+      type: [Object, Array, String],
       default: 'rgba(40,150,200,0.6)'
     }
   },
   watch: {
     flooding (val) {
-      const listener = this.$listeners['activeEvt']
+      const listener = this.$listeners.activeEvt
       if (val) {
         if (this.floodDone) {
           this.extrudedHeight = this.extrudedHeight >= this.minHeight ? this.minHeight : 0.1
@@ -69,7 +69,6 @@ export default {
     async createCesiumObject () {
       const { Cesium, minHeight, color } = this
       this.attributes = {
-        // eslint-disable-next-line new-cap
         color: Cesium.ColorGeometryInstanceAttribute.fromColor(makeColor(color))
       }
       this.extrudedHeight = minHeight
@@ -92,9 +91,7 @@ export default {
         this.flooding = false
       }
     },
-    clear () {
-
-    },
+    clear () {},
     async mount () {
       return true
     },

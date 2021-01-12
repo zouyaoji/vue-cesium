@@ -98,7 +98,7 @@ class MouseCoords {
     const longitude = CesiumMath.toDegrees(coordinates.longitude)
 
     if (this.useProjection) {
-      var prettyProjection = prettifyProjection(
+      const prettyProjection = prettifyProjection(
         longitude,
         latitude,
         this.proj4Projection,
@@ -110,7 +110,7 @@ class MouseCoords {
       this.east = prettyProjection.east
     }
 
-    var prettyCoordinate = prettifyCoordinates(longitude, latitude, {
+    const prettyCoordinate = prettifyCoordinates(longitude, latitude, {
       height: coordinates.height,
       errorBar: errorBar
     })

@@ -81,42 +81,55 @@ class TiandituImageryProvider {
   get url () {
     return this._url
   }
+
   get mapStyle () {
     return this._mapStyle
   }
+
   get tileWidth () {
     return this._tileWidth
   }
+
   get tileHeight () {
     return this._tileHeight
   }
+
   get maximumLevel () {
     return this._maximumLevel
   }
+
   get minimumLevel () {
     return this._minimumLevel
   }
+
   get tilingScheme () {
     return this._tilingScheme
   }
+
   get rectangle () {
     return this._rectangle
   }
+
   get errorEvent () {
     return this._errorEvent
   }
+
   get ready () {
     return true
   }
+
   get readyPromise () {
     return this._readyPromise
   }
+
   get credit () {
     return this._credit
   }
+
   get hasAlphaChannel () {
     return true
   }
+
   get tileDiscardPolicy () {
     return this._tileDiscardPolicy
   }

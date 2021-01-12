@@ -96,13 +96,13 @@ export default {
   methods: {
     async createCesiumObject () {
       const { viewer, width, height, anchor, aimingRectOptions, shadowRectOptions, toggleDisplay } = this
-      var url = 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-      var layer = new TileLayer(url, {
+      const url = 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+      const layer = new TileLayer(url, {
         minZoom: 0,
         maxZoom: 20
       })
-      var container = this.$refs.leafletContainer
-      var options = {
+      const container = this.$refs.leafletContainer
+      const options = {
         container: container,
         toggleDisplay: toggleDisplay,
         width: width,

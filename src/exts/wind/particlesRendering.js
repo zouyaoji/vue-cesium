@@ -81,10 +81,10 @@ class ParticlesRendering {
   createSegmentsGeometry (particleSystemOptions) {
     const repeatVertex = 4
 
-    var st = []
-    for (var s = 0; s < particleSystemOptions.particlesTextureSize; s++) {
-      for (var t = 0; t < particleSystemOptions.particlesTextureSize; t++) {
-        for (var i = 0; i < repeatVertex; i++) {
+    let st = []
+    for (let s = 0; s < particleSystemOptions.particlesTextureSize; s++) {
+      for (let t = 0; t < particleSystemOptions.particlesTextureSize; t++) {
+        for (let i = 0; i < repeatVertex; i++) {
           st.push(s / particleSystemOptions.particlesTextureSize)
           st.push(t / particleSystemOptions.particlesTextureSize)
         }
@@ -92,12 +92,12 @@ class ParticlesRendering {
     }
     st = new Float32Array(st)
 
-    var normal = []
+    let normal = []
     const pointToUse = [-1, 1]
     const offsetSign = [-1, 1]
     for (let i = 0; i < particleSystemOptions.maxParticles; i++) {
       for (let j = 0; j < repeatVertex / 2; j++) {
-        for (var k = 0; k < repeatVertex / 2; k++) {
+        for (let k = 0; k < repeatVertex / 2; k++) {
           normal.push(pointToUse[j])
           normal.push(offsetSign[k])
           normal.push(0)
@@ -107,7 +107,7 @@ class ParticlesRendering {
     normal = new Float32Array(normal)
 
     const indexSize = 6 * particleSystemOptions.maxParticles
-    var vertexIndexes = new Uint32Array(indexSize)
+    const vertexIndexes = new Uint32Array(indexSize)
     for (let i = 0, j = 0, vertex = 0; i < particleSystemOptions.maxParticles; i++) {
       vertexIndexes[j++] = vertex + 0
       vertexIndexes[j++] = vertex + 1
@@ -118,7 +118,7 @@ class ParticlesRendering {
       vertex += 4
     }
 
-    var geometry = new Cesium.Geometry({
+    const geometry = new Cesium.Geometry({
       attributes: new Cesium.GeometryAttributes({
         st: new Cesium.GeometryAttribute({
           componentDatatype: Cesium.ComponentDatatype.FLOAT,
@@ -243,8 +243,7 @@ class ParticlesRendering {
         autoClear: true,
         preExecute: function () {
           // swap framebuffers before binding
-          var temp
-          temp = that.framebuffers.currentTrails
+          const temp = that.framebuffers.currentTrails
           that.framebuffers.currentTrails = that.framebuffers.nextTrails
           that.framebuffers.nextTrails = temp
 

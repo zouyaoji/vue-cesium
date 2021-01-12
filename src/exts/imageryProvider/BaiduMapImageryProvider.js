@@ -4,7 +4,7 @@ class BaiduMapImageryProvider {
   constructor (options) {
     const { Resource, defaultValue, Credit, when, Event } = Cesium
     this._url = options.url || `${options.protocol}://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}`
-    var resource = Resource.createIfNeeded(this._url)
+    const resource = Resource.createIfNeeded(this._url)
     resource.appendForwardSlash()
 
     this._ready = false
@@ -16,7 +16,7 @@ class BaiduMapImageryProvider {
     this._maximumLevel = options.maximumLevel || 18
     this._tilingScheme = new BaiduMapMercatorTilingScheme(options)
     this._rectangle = defaultValue(options.rectangle, this._tilingScheme.rectangle)
-    var credit = options.credit
+    let credit = options.credit
     if (typeof credit === 'string') {
       credit = new Credit(credit)
     }

@@ -26,7 +26,7 @@
 // import * as L from 'leaflet'
 import { Util, DomEvent, CRS, Map, rectangle, DomUtil, LatLngBounds, Browser, LatLng } from 'leaflet/dist/leaflet-src.esm'
 
-var CesiumOverviewMapControl = function () {
+const CesiumOverviewMapControl = function () {
   this.init.apply(this, arguments)
 }
 
@@ -85,12 +85,12 @@ CesiumOverviewMapControl.prototype = {
     this._showInitView()
   },
   updateAimingRect: function () {
-    var _this = this
-    var rect = _this._getViewRange()
+    const _this = this
+    const rect = _this._getViewRange()
     _this._aimingRect.setBounds(rect)
   },
   _initMap: function () {
-    var _this = this
+    const _this = this
 
     this._container.style.width = this.options.width + 'px'
     this._container.style.height = this.options.height + 'px'
@@ -98,7 +98,7 @@ CesiumOverviewMapControl.prototype = {
     DomEvent.disableClickPropagation(_this._container)
     DomEvent.on(_this._container, 'mousewheel', DomEvent.stopPropagation)
 
-    var mapOptions = {
+    let mapOptions = {
       attributionControl: false,
       dragging: !_this.options.centerFixed,
       zoomControl: _this.options.zoomControl,
@@ -123,7 +123,7 @@ CesiumOverviewMapControl.prototype = {
 
     _this._miniMap = new Map(_this._container, mapOptions)
 
-    var layer = this.tileLayer
+    const layer = this.tileLayer
     _this._miniMap.addLayer(layer)
 
     // These bools are used to prevent infinite loops of the two maps
@@ -140,63 +140,69 @@ CesiumOverviewMapControl.prototype = {
       this._addToggleButton()
     }
 
-    _this._miniMap.whenReady(Util.bind(function () {
-      var bounds = _this._getViewRange()
-      _this._aimingRect = rectangle(bounds, _this.options.aimingRectOptions).addTo(_this._miniMap)
-      _this._shadowRect = rectangle(bounds, _this.options.shadowRectOptions).addTo(_this._miniMap)
+    _this._miniMap.whenReady(
+      Util.bind(function () {
+        const bounds = _this._getViewRange()
+        _this._aimingRect = rectangle(bounds, _this.options.aimingRectOptions).addTo(_this._miniMap)
+        _this._shadowRect = rectangle(bounds, _this.options.shadowRectOptions).addTo(_this._miniMap)
 
-      var camera = _this.viewer.scene.camera
-      camera.moveEnd.addEventListener(function (e) {
-        var rect = _this._getViewRange()
-        if (!_this._miniMapMoving) {
-          _this._viewerMoving = true
-          var zrect = _this._getZoomOutRange(rect)
-          _this._miniMap.fitBounds(zrect)
-          _this._setDisplay(_this._decideMinimized())
-        } else {
-          _this._miniMapMoving = false
-        }
-        _this._aimingRect.setBounds(rect)
-      })
-      camera.moveStart.addEventListener(function (e) {
-        var rect = _this._getViewRange()
-        _this._aimingRect.setBounds(rect)
-      })
+        const camera = _this.viewer.scene.camera
+        camera.moveEnd.addEventListener(function (e) {
+          const rect = _this._getViewRange()
+          if (!_this._miniMapMoving) {
+            _this._viewerMoving = true
+            const zrect = _this._getZoomOutRange(rect)
+            _this._miniMap.fitBounds(zrect)
+            _this._setDisplay(_this._decideMinimized())
+          } else {
+            _this._miniMapMoving = false
+          }
+          _this._aimingRect.setBounds(rect)
+        })
+        camera.moveStart.addEventListener(function (e) {
+          const rect = _this._getViewRange()
+          _this._aimingRect.setBounds(rect)
+        })
 
-      _this._miniMap.on('movestart', _this._onMiniMapMoveStarted, _this)
-      _this._miniMap.on('move', _this._onMiniMapMoving, _this)
-      _this._miniMap.on('moveend', _this._onMiniMapMoved, _this)
-    }, _this))
+        _this._miniMap.on('movestart', _this._onMiniMapMoveStarted, _this)
+        _this._miniMap.on('move', _this._onMiniMapMoving, _this)
+        _this._miniMap.on('moveend', _this._onMiniMapMoved, _this)
+      }, _this)
+    )
 
     return _this._container
   },
   _addToggleButton: function () {
-    this._toggleDisplayButton = this.options.toggleDisplay ? this._createButton(
-      '', this._toggleButtonInitialTitleText(), ('vc-leaflet-control-minimap-toggle-display vc-leaflet-control-minimap-toggle-display-' +
-                this.options.position), this._container, this._toggleDisplayButtonClicked, this) : undefined
+    this._toggleDisplayButton = this.options.toggleDisplay
+      ? this._createButton(
+          '',
+          this._toggleButtonInitialTitleText(),
+          'vc-leaflet-control-minimap-toggle-display vc-leaflet-control-minimap-toggle-display-' + this.options.position,
+          this._container,
+          this._toggleDisplayButtonClicked,
+          this
+        )
+      : undefined
     // this._toggleDisplayButton.style.zIndex = 99999;
     this._toggleDisplayButton.style.width = this.options.collapsedWidth + 'px'
     this._toggleDisplayButton.style.height = this.options.collapsedHeight + 'px'
   },
 
   _toggleButtonInitialTitleText: function () {
-    if (this.options.minimized) {
-      return this.vm.$vc.lang.overviewmap.show
-    } else {
+    if (!this.options.minimized) {
       return this.vm.$vc.lang.overviewmap.hidden
     }
   },
 
   _createButton: function (html, title, className, container, fn, context) {
-    var link = DomUtil.create('a', className, container)
+    const link = DomUtil.create('a', className, container)
     link.innerHTML = html
     link.href = '#'
     link.title = title
 
-    var stop = DomEvent.stopPropagation
+    const stop = DomEvent.stopPropagation
 
-    DomEvent
-      .on(link, 'click', stop)
+    DomEvent.on(link, 'click', stop)
       .on(link, 'mousedown', stop)
       .on(link, 'dblclick', stop)
       .on(link, 'click', DomEvent.preventDefault)
@@ -214,8 +220,8 @@ CesiumOverviewMapControl.prototype = {
     }
   },
   _showInitView: function () {
-    var rect = this._getViewRange()
-    var zrect = this._getZoomOutRange(rect)
+    const rect = this._getViewRange()
+    const zrect = this._getZoomOutRange(rect)
     this._miniMap.fitBounds(zrect)
   },
   _setDisplay: function (minimize) {
@@ -232,7 +238,7 @@ CesiumOverviewMapControl.prototype = {
     if (this.options.toggleDisplay) {
       this._container.style.width = this.options.collapsedWidth + 'px'
       this._container.style.height = this.options.collapsedHeight + 'px'
-      this._toggleDisplayButton.className += (' minimized-' + this.options.position)
+      this._toggleDisplayButton.className += ' minimized-' + this.options.position
       this._toggleDisplayButton.title = this.vm.$vc.lang.overviewmap.show
     } else {
       this._container.style.display = 'none'
@@ -244,8 +250,7 @@ CesiumOverviewMapControl.prototype = {
     if (this.options.toggleDisplay) {
       this._container.style.width = this.options.width + 'px'
       this._container.style.height = this.options.height + 'px'
-      this._toggleDisplayButton.className = this._toggleDisplayButton.className
-        .replace('minimized-' + this.options.position, '')
+      this._toggleDisplayButton.className = this._toggleDisplayButton.className.replace('minimized-' + this.options.position, '')
       this._toggleDisplayButton.title = this.vm.$vc.lang.overviewmap.hidden
     } else {
       this._container.style.display = 'block'
@@ -255,16 +260,21 @@ CesiumOverviewMapControl.prototype = {
   },
   _onMiniMapMoveStarted: function (e) {
     if (!this.options.centerFixed) {
-      var lastAimingRect = this._aimingRect.getBounds()
-      var sw = this._miniMap.latLngToContainerPoint(lastAimingRect.getSouthWest())
-      var ne = this._miniMap.latLngToContainerPoint(lastAimingRect.getNorthEast())
+      const lastAimingRect = this._aimingRect.getBounds()
+      const sw = this._miniMap.latLngToContainerPoint(lastAimingRect.getSouthWest())
+      const ne = this._miniMap.latLngToContainerPoint(lastAimingRect.getNorthEast())
       this._lastAimingRectPosition = { sw: sw, ne: ne }
     }
   },
   _onMiniMapMoving: function (e) {
     if (!this.options.centerFixed) {
       if (!this._viewerMoving && this._lastAimingRectPosition) {
-        this._shadowRect.setBounds(new LatLngBounds(this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.sw), this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.ne)))
+        this._shadowRect.setBounds(
+          new LatLngBounds(
+            this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.sw),
+            this._miniMap.containerPointToLatLng(this._lastAimingRectPosition.ne)
+          )
+        )
         this._shadowRect.setStyle({ opacity: 1, fillOpacity: 0.3 })
       }
     }
@@ -273,13 +283,13 @@ CesiumOverviewMapControl.prototype = {
     if (!this._viewerMoving) {
       this._miniMapMoving = true
 
-      var rect = this._shadowRect.getBounds()
-      var west = rect.getWest()
-      var east = rect.getEast()
-      var north = rect.getNorth()
-      var south = rect.getSouth()
-      var destination = Cesium.Rectangle.fromDegrees(west, south, east, north)
-      var orientation = {
+      const rect = this._shadowRect.getBounds()
+      const west = rect.getWest()
+      const east = rect.getEast()
+      const north = rect.getNorth()
+      const south = rect.getSouth()
+      const destination = Cesium.Rectangle.fromDegrees(west, south, east, north)
+      const orientation = {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
         roll: 0.0
@@ -294,7 +304,7 @@ CesiumOverviewMapControl.prototype = {
     }
   },
   _isZoomLevelFixed: function () {
-    var zoomLevelFixed = this.options.zoomLevelFixed
+    const zoomLevelFixed = this.options.zoomLevelFixed
     return this._isDefined(zoomLevelFixed) && this._isInteger(zoomLevelFixed)
   },
   _decideMinimized: function () {
@@ -303,7 +313,7 @@ CesiumOverviewMapControl.prototype = {
     }
 
     if (this.options.autoToggleDisplay) {
-      var bounds = this._getViewRange()
+      const bounds = this._getViewRange()
       if (bounds.contains(this._miniMap.getBounds())) {
         return true
       }
@@ -330,29 +340,26 @@ CesiumOverviewMapControl.prototype = {
     DomEvent.off(this._container, 'transitionend', this._fireToggleEvents, this)
   },
   _getViewRange: function () {
-    var viewer = this.viewer
-    var camera = viewer.scene.camera
-    var range = camera.computeViewRectangle()
-    var west = range.west / Math.PI * 180
-    var east = range.east / Math.PI * 180
-    var north = range.north / Math.PI * 180
-    var south = range.south / Math.PI * 180
-    var bounds = new LatLngBounds(
-      new LatLng(north, west),
-      new LatLng(south, east)
-    )
+    const viewer = this.viewer
+    const camera = viewer.scene.camera
+    const range = camera.computeViewRectangle()
+    const west = (range.west / Math.PI) * 180
+    const east = (range.east / Math.PI) * 180
+    const north = (range.north / Math.PI) * 180
+    const south = (range.south / Math.PI) * 180
+    const bounds = new LatLngBounds(new LatLng(north, west), new LatLng(south, east))
     return bounds
   },
   _getZoomOutRange: function (rect) {
-    var west = rect.getWest()
-    var east = rect.getEast()
-    var north = rect.getNorth()
-    var south = rect.getSouth()
-    var factor = 3.0
-    var xdis = Math.abs(east - west)
-    var ydis = Math.abs(north - south)
-    var xoff = xdis * (factor - 1) / 2.0
-    var yoff = ydis * (factor - 1) / 2.0
+    let west = rect.getWest()
+    let east = rect.getEast()
+    let north = rect.getNorth()
+    let south = rect.getSouth()
+    const factor = 3.0
+    const xdis = Math.abs(east - west)
+    const ydis = Math.abs(north - south)
+    const xoff = (xdis * (factor - 1)) / 2.0
+    const yoff = (ydis * (factor - 1)) / 2.0
     west -= xoff
     east += xoff
     north += yoff
@@ -369,10 +376,7 @@ CesiumOverviewMapControl.prototype = {
     if (south < -90) {
       south = -90
     }
-    var bounds = new LatLngBounds(
-      new LatLng(north, west),
-      new LatLng(south, east)
-    )
+    const bounds = new LatLngBounds(new LatLng(north, west), new LatLng(south, east))
     return bounds
   },
   CLASS_NAME: 'CesiumOverviewMapControl'

@@ -1,8 +1,12 @@
 <script>
+import {
+  clearColor,
+  scissorRectangle
+} from '../../mixins/mixinProps'
 import cmp from '../../mixins/virtualCmp'
 export default {
   name: 'vc-stage-process-post',
-  mixins: [cmp],
+  mixins: [clearColor, scissorRectangle, cmp],
   props: {
     fragmentShader: String,
     uniforms: Object,
@@ -10,13 +14,12 @@ export default {
       type: Number
     },
     forcePowerOfTwo: {
-      type: false
+      type: Boolean,
+      default: false
     },
     sampleMode: Number,
     pixelFormat: Number,
     pixelDatatype: Number,
-    clearColor: Object | Array | String,
-    scissorRectangle: Object,
     name: String
   },
   methods: {

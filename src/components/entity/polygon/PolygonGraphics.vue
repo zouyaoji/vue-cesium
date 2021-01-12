@@ -11,7 +11,8 @@ import {
   outlineWidth,
   shadows,
   classificationType,
-  zIndex
+  zIndex,
+  hierarchy
 } from '../../../mixins/mixinProps'
 import mixinPolygon from '../../../mixins/graphics/mixinPolygon'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
@@ -30,11 +31,9 @@ export default {
     shadows,
     classificationType,
     zIndex,
+    hierarchy,
     mixinPolygon,
     mixinGraphic
-  ],
-  props: {
-    hierarchy: Array | Object | Function
-  }
+  ]
 }
 </script>

@@ -127,14 +127,14 @@ export default {
         rectangle: rectangle,
         customTags: {
           scale: (imageryProvider, x, y, level) => {
-            var s = 1 / scales[level]
+            const s = 1 / scales[level]
             return padWithZerosIfNecessary(imageryProvider, '{scale}', s)
           }
         }
       })
     },
     padWithZerosIfNecessary (imageryProvider, key, value) {
-      if (imageryProvider && imageryProvider.urlSchemeZeroPadding && imageryProvider.urlSchemeZeroPadding.hasOwnProperty(key)) {
+      if (imageryProvider && imageryProvider.urlSchemeZeroPadding && Object.prototype.hasOwnProperty.call(imageryProvider.urlSchemeZeroPadding, key)) {
         const paddingTemplate = imageryProvider.urlSchemeZeroPadding[key]
         if (typeof paddingTemplate === 'string') {
           const paddingTemplateWidth = paddingTemplate.length

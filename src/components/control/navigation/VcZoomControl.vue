@@ -61,7 +61,7 @@ export default {
               }
             })
           } catch (e) {
-            console.error(`[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!`)
+            console.error('[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!')
           }
         }
       }
@@ -88,16 +88,18 @@ export default {
         //                return;
         //            }
 
-        var camera = scene.camera
-        var orientation
+        const camera = scene.camera
+        let orientation
 
         switch (scene.mode) {
-          case SceneMode.MORPHING:
+          case SceneMode.MORPHING: {
             break
-          case SceneMode.SCENE2D:
+          }
+          case SceneMode.SCENE2D: {
             camera.zoomIn(camera.positionCartographic.height * (1 - relativeAmount))
             break
-          default:
+          }
+          default: {
             let focus
 
             if (defined(this.viewer.trackedEntity)) {
@@ -110,9 +112,7 @@ export default {
               // Camera direction is not pointing at the globe, so use the ellipsoid horizon point as
               // the focal point.
               const ray = new Ray(
-                camera.worldToCameraCoordinatesPoint(
-                  scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic)
-                ),
+                camera.worldToCameraCoordinatesPoint(scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic)),
                 camera.directionWC
               )
               focus = IntersectionTests.grazingAltitudeLocation(ray, scene.globe.ellipsoid)
@@ -130,17 +130,10 @@ export default {
             }
             const cartesian3Scratch = new Cartesian3()
             const direction = Cartesian3.subtract(camera.position, focus, cartesian3Scratch)
-            const movementVector = Cartesian3.multiplyByScalar(
-              direction,
-              relativeAmount,
-              direction
-            )
+            const movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction)
             const endPosition = Cartesian3.add(focus, movementVector, focus)
 
-            if (
-              Cesium.defined(this.viewer.trackedEntity) ||
-              scene.mode === SceneMode.COLUMBUS_VIEW
-            ) {
+            if (Cesium.defined(this.viewer.trackedEntity) || scene.mode === SceneMode.COLUMBUS_VIEW) {
               // sometimes flyTo does not work (jumps to wrong position) so just set the position without any animation
               // do not use flyTo when tracking an entity because during animatiuon the position of the entity may change
               camera.position = endPosition
@@ -152,6 +145,7 @@ export default {
                 convert: false
               })
             }
+          }
         }
       }
     },
@@ -192,7 +186,7 @@ export default {
               }
             })
           } catch (e) {
-            console.error(`[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!`)
+            console.error('[C_PKG_FULLNAME] ERROR: options.defaultResetView Cesium rectangle is  invalid!')
           }
         } else {
           camera.flyTo({
@@ -212,8 +206,6 @@ export default {
       // the focal point.
       return IntersectionTests.grazingAltitudeLocation(ray, Ellipsoid.WGS84)
     }
-
   }
-
 }
 </script>

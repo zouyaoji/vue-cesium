@@ -17,7 +17,7 @@ export default {
   ],
   props: {
     color: {
-      type: Object | String | Array,
+      type: [Object, String, Array],
       default: 'YELLOW'
     }
   }

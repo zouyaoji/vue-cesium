@@ -42,8 +42,8 @@ export default {
       type: Number,
       default: 3000
     },
-    material1: Object | String | Array,
-    material2: Object | String | Array,
+    material1: [Object, String, Array],
+    material2: [Object, String, Array],
     deviationRotation1: {
       type: Number,
       default: -0.03
@@ -140,7 +140,9 @@ export default {
       this.rotation2 = undefined
       this.stRotation1 = undefined
       this.stRotation2 = undefined
-      return this.$refs.entity1 && this.$refs.entity2 ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()]) : true
+      return this.$refs.entity1 && this.$refs.entity2
+        ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()])
+        : true
     }
   },
   created () {

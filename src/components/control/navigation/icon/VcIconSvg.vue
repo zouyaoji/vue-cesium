@@ -3,10 +3,9 @@
 </template>
 
 <script>
-let icons = {}
+const icons = {}
 let notLoadedIcons = []
 let defaultWidth = ''
-// eslint-disable-next-line no-unused-vars
 let defaultHeight = ''
 let classPrefix = 'vc-svg'
 let isStroke = false
@@ -68,7 +67,7 @@ export default {
     },
 
     iconData () {
-      let iconData = icons[this.iconName]
+      const iconData = icons[this.iconName]
       if (iconData || this.loaded) {
         return iconData
       }
@@ -110,8 +109,8 @@ export default {
     },
 
     box () {
-      let width = this.width || 16
-      let height = this.width || 16
+      const width = this.width || 16
+      const height = this.width || 16
 
       if (this.iconData) {
         if (this.iconData.viewBox) {
@@ -124,8 +123,8 @@ export default {
     },
 
     style () {
-      let digitReg = /^\d+$/
-      let scale = Number(this.scale)
+      const digitReg = /^\d+$/
+      const scale = Number(this.scale)
       let width
       let height
 
@@ -139,10 +138,10 @@ export default {
           : this.width || defaultWidth
         height = digitReg.test(this.height)
           ? this.height + 'px'
-          : this.height || defaultWidth
+          : this.height || defaultHeight
       }
 
-      let style = {}
+      const style = {}
 
       if (width) {
         style.width = width
@@ -163,7 +162,7 @@ export default {
 
   methods: {
     addColor (data) {
-      let reg = /<(path|rect|circle|polygon|line|polyline|ellipse)\s/gi
+      const reg = /<(path|rect|circle|polygon|line|polyline|ellipse)\s/gi
       let i = 0
       return data.replace(reg, match => {
         let color =
@@ -181,14 +180,14 @@ export default {
           color = color.split('r-')[1]
         }
 
-        let style = fill ? 'fill' : 'stroke'
-        let reverseStyle = fill ? 'stroke' : 'fill'
+        const style = fill ? 'fill' : 'stroke'
+        const reverseStyle = fill ? 'stroke' : 'fill'
         return match + `${style}="${color}" ${reverseStyle}="none" `
       })
     },
 
     addOriginalColor (data) {
-      let styleReg = /_fill="|_stroke="/gi
+      const styleReg = /_fill="|_stroke="/gi
       return data.replace(styleReg, styleName => {
         return styleName && styleName.slice(1)
       })
@@ -198,7 +197,7 @@ export default {
       // If use original and colors, clear double fill or stroke
       if (this.original && this.colors.length > 0) {
         // eslint-disable-next-line no-useless-escape
-        let reg = /<(path|rect|circle|polygon|line|polyline|ellipse)(\sfill|\sstroke)([="\w\s\.\-\+#\$\&>]+)(fill|stroke)/gi
+        const reg = /<(path|rect|circle|polygon|line|polyline|ellipse)(\sfill|\sstroke)([="\w\s\.\-\+#\$\&>]+)(fill|stroke)/gi
         pathData = pathData.replace(reg, (match, p1, p2, p3, p4) => {
           return `<${p1}${p2}${p3}_${p4}`
         })
@@ -209,7 +208,7 @@ export default {
 
     setTitle (pathData) {
       if (this.title) {
-        let title = this.title
+        const title = this.title
           // eslint-disable-next-line no-useless-escape
           .replace(/\</gi, '&lt;')
           .replace(/>/gi, '&gt;')
@@ -225,7 +224,7 @@ export default {
   },
 
   install (Vue, options = {}) {
-    let tagName = options.tagName || 'svgicon'
+    const tagName = options.tagName || 'svgicon'
 
     if (options.classPrefix) {
       classPrefix = options.classPrefix
@@ -243,7 +242,7 @@ export default {
 
   // register icons
   register (data) {
-    for (let name in data) {
+    for (const name in data) {
       if (!icons[name]) {
         icons[name] = data[name]
       }

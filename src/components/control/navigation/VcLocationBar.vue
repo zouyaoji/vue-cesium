@@ -72,8 +72,8 @@ export default {
     onMouseMove (event) {
       const { Cartesian2 } = Cesium
 
-      let clientX = event.type === 'mousemove' ? event.clientX : event.changedTouches[0].clientX
-      let clientY = event.type === 'mousemove' ? event.clientY : event.changedTouches[0].clientY
+      const clientX = event.type === 'mousemove' ? event.clientX : event.changedTouches[0].clientX
+      const clientY = event.type === 'mousemove' ? event.clientY : event.changedTouches[0].clientY
       if (clientX === this.lastMouseX && clientY === this.lastMouseY) {
         return
       }
@@ -94,16 +94,16 @@ export default {
   }
 }
 
-var scratchArray = []
-var scratchSphereIntersectionResult = {
+const scratchArray = []
+const scratchSphereIntersectionResult = {
   start: 0.0,
   stop: 0.0
 }
 
-var scratchV0 = {}
-var scratchV1 = {}
-var scratchV2 = {}
-var scratchResult = {}
+const scratchV0 = {}
+const scratchV1 = {}
+const scratchV2 = {}
+const scratchResult = {}
 function extend () {
   const {
     Globe,
@@ -130,27 +130,27 @@ function extend () {
 
       cullBackFaces = defaultValue(cullBackFaces, true)
 
-      var mode = scene.mode
-      var projection = scene.mapProjection
+      const mode = scene.mode
+      const projection = scene.mapProjection
 
-      var sphereIntersections = scratchArray
+      const sphereIntersections = scratchArray
       sphereIntersections.length = 0
 
-      var tilesToRender = this._surface._tilesToRender
-      var length = tilesToRender.length
+      const tilesToRender = this._surface._tilesToRender
+      let length = tilesToRender.length
 
-      var tile
-      var i
+      let tile
+      let i
 
       for (i = 0; i < length; ++i) {
         tile = tilesToRender[i]
-        var surfaceTile = tile.data
+        const surfaceTile = tile.data
 
         if (!defined(surfaceTile)) {
           continue
         }
 
-        var boundingVolume = surfaceTile.pickBoundingSphere
+        const boundingVolume = surfaceTile.pickBoundingSphere
         if (mode !== SceneMode.SCENE3D) {
           BoundingSphere.fromRectangleWithHeights2D(
             tile.rectangle,
@@ -169,7 +169,7 @@ function extend () {
           BoundingSphere.clone(surfaceTile.boundingSphere3D, boundingVolume)
         }
 
-        var boundingSphereIntersection = IntersectionTests.raySphere(ray, boundingVolume, scratchSphereIntersectionResult)
+        const boundingSphereIntersection = IntersectionTests.raySphere(ray, boundingVolume, scratchSphereIntersectionResult)
         if (defined(boundingSphereIntersection)) {
           sphereIntersections.push(tile)
         }
@@ -177,7 +177,7 @@ function extend () {
 
       sphereIntersections.sort(createComparePickTileFunction(ray.origin))
 
-      var intersection
+      let intersection
       length = sphereIntersections.length
       for (i = 0; i < length; ++i) {
         intersection = sphereIntersections[i].data.pickTriangle(ray, scene.mode, scene.mapProjection, cullBackFaces, result)
@@ -193,26 +193,26 @@ function extend () {
   GlobeSurfaceTile.prototype.pickTriangle =
     GlobeSurfaceTile.prototype.pickTriangle ||
     function (ray, mode, projection, cullBackFaces) {
-      var mesh = this.renderedMesh
+      const mesh = this.renderedMesh
       if (!defined(mesh)) {
         return undefined
       }
 
-      var vertices = mesh.vertices
-      var indices = mesh.indices
-      var encoding = mesh.encoding
+      const vertices = mesh.vertices
+      const indices = mesh.indices
+      const encoding = mesh.encoding
 
-      var length = indices.length
-      for (var i = 0; i < length; i += 3) {
-        var i0 = indices[i]
-        var i1 = indices[i + 1]
-        var i2 = indices[i + 2]
+      const length = indices.length
+      for (let i = 0; i < length; i += 3) {
+        const i0 = indices[i]
+        const i1 = indices[i + 1]
+        const i2 = indices[i + 2]
 
-        var v0 = getPosition(encoding, mode, projection, vertices, i0, scratchV0)
-        var v1 = getPosition(encoding, mode, projection, vertices, i1, scratchV1)
-        var v2 = getPosition(encoding, mode, projection, vertices, i2, scratchV2)
+        const v0 = getPosition(encoding, mode, projection, vertices, i0, scratchV0)
+        const v1 = getPosition(encoding, mode, projection, vertices, i1, scratchV1)
+        const v2 = getPosition(encoding, mode, projection, vertices, i2, scratchV2)
 
-        var intersection = IntersectionTests.rayTriangle(ray, v0, v1, v2, cullBackFaces, scratchResult)
+        const intersection = IntersectionTests.rayTriangle(ray, v0, v1, v2, cullBackFaces, scratchResult)
         if (defined(intersection)) {
           return {
             intersection: intersection,
@@ -230,8 +230,8 @@ function extend () {
 function createComparePickTileFunction (rayOrigin) {
   const { BoundingSphere } = Cesium
   return function (a, b) {
-    var aDist = BoundingSphere.distanceSquaredTo(a.data.pickBoundingSphere, rayOrigin)
-    var bDist = BoundingSphere.distanceSquaredTo(b.data.pickBoundingSphere, rayOrigin)
+    const aDist = BoundingSphere.distanceSquaredTo(a.data.pickBoundingSphere, rayOrigin)
+    const bDist = BoundingSphere.distanceSquaredTo(b.data.pickBoundingSphere, rayOrigin)
 
     return aDist - bDist
   }
@@ -241,8 +241,8 @@ function getPosition (encoding, mode, projection, vertices, index, result) {
   encoding.decodePosition(vertices, index, result)
   const { Cartesian3, defined, SceneMode } = Cesium
   if (defined(mode) && mode !== SceneMode.SCENE3D) {
-    var ellipsoid = projection.ellipsoid
-    var positionCart = ellipsoid.cartesianToCartographic(result)
+    const ellipsoid = projection.ellipsoid
+    const positionCart = ellipsoid.cartesianToCartographic(result)
     projection.project(positionCart, result)
     Cartesian3.fromElements(result.z, result.x, result.y, result)
   }

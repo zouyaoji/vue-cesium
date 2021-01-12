@@ -7,13 +7,13 @@ const methods = {
   async mount () {
     const { imageryProvider, providerContainer, projectionTransforms } = this
     imageryProvider.readyPromise.then(() => {
-      const listener = this.$listeners['readyPromise']
+      const listener = this.$listeners.readyPromise
       listener && this.$emit('readyPromise', imageryProvider)
     }).otherwise(error => {
       throw new Cesium.DeveloperError(error)
     })
     if (projectionTransforms && projectionTransforms.from !== projectionTransforms.to) {
-      let ignoreTransforms = this.$options.name === 'vc-provider-imagery-baidumap' ||
+      const ignoreTransforms = this.$options.name === 'vc-provider-imagery-baidumap' ||
         (this.$options.name === 'vc-provider-imagery-tianditu' && imageryProvider._epsgCode === '4490')
       if (!ignoreTransforms) {
         const { WebMercatorTilingScheme, Cartographic, Math: CesiumMath } = Cesium

@@ -6,15 +6,15 @@
  *
  * @private
  */
-var CameraFlightPath = {}
+const CameraFlightPath = {}
 
 function getAltitude (frustum, dx, dy) {
   const { PerspectiveFrustum, PerspectiveOffCenterFrustum } = Cesium
-  var near
-  var top
-  var right
+  let near
+  let top
+  let right
   if (frustum instanceof PerspectiveFrustum) {
-    var tanTheta = Math.tan(0.5 * frustum.fovy)
+    const tanTheta = Math.tan(0.5 * frustum.fovy)
     near = frustum.near
     top = frustum.near * tanTheta
     right = frustum.aspectRatio * top
@@ -29,27 +29,27 @@ function getAltitude (frustum, dx, dy) {
   return Math.max(dx, dy)
 }
 
-var scratchCart = {}
-var scratchCart2 = {}
+const scratchCart = {}
+const scratchCart2 = {}
 
 function createPitchFunction (startPitch, endPitch, heightFunction, pitchAdjustHeight) {
   const { defined, Math: CesiumMath } = Cesium
   if (defined(pitchAdjustHeight) && heightFunction(0.5) > pitchAdjustHeight) {
-    var startHeight = heightFunction(0.0)
-    var endHeight = heightFunction(1.0)
-    var middleHeight = heightFunction(0.5)
+    const startHeight = heightFunction(0.0)
+    const endHeight = heightFunction(1.0)
+    const middleHeight = heightFunction(0.5)
 
-    var d1 = middleHeight - startHeight
-    var d2 = middleHeight - endHeight
+    const d1 = middleHeight - startHeight
+    const d2 = middleHeight - endHeight
 
     return function (time) {
-      var altitude = heightFunction(time)
+      const altitude = heightFunction(time)
       if (time <= 0.5) {
-        var t1 = (altitude - startHeight) / d1
+        const t1 = (altitude - startHeight) / d1
         return CesiumMath.lerp(startPitch, -CesiumMath.PI_OVER_TWO, t1)
       }
 
-      var t2 = (altitude - endHeight) / d2
+      const t2 = (altitude - endHeight) / d2
       return CesiumMath.lerp(-CesiumMath.PI_OVER_TWO, endPitch, 1 - t2)
     }
   }
@@ -60,32 +60,32 @@ function createPitchFunction (startPitch, endPitch, heightFunction, pitchAdjustH
 
 function createHeightFunction (camera, destination, startHeight, endHeight, optionAltitude) {
   const { Cartesian3, defined, Math: CesiumMath } = Cesium
-  var altitude = optionAltitude
-  var maxHeight = Math.max(startHeight, endHeight)
+  let altitude = optionAltitude
+  const maxHeight = Math.max(startHeight, endHeight)
 
   if (!defined(altitude)) {
-    var start = camera.position
-    var end = destination
-    var up = camera.up
-    var right = camera.right
-    var frustum = camera.frustum
+    const start = camera.position
+    const end = destination
+    const up = camera.up
+    const right = camera.right
+    const frustum = camera.frustum
 
-    var diff = Cartesian3.subtract(start, end, scratchCart)
-    var verticalDistance = Cartesian3.magnitude(Cartesian3.multiplyByScalar(up, Cartesian3.dot(diff, up), scratchCart2))
-    var horizontalDistance = Cartesian3.magnitude(Cartesian3.multiplyByScalar(right, Cartesian3.dot(diff, right), scratchCart2))
+    const diff = Cartesian3.subtract(start, end, scratchCart)
+    const verticalDistance = Cartesian3.magnitude(Cartesian3.multiplyByScalar(up, Cartesian3.dot(diff, up), scratchCart2))
+    const horizontalDistance = Cartesian3.magnitude(Cartesian3.multiplyByScalar(right, Cartesian3.dot(diff, right), scratchCart2))
 
     altitude = Math.min(getAltitude(frustum, verticalDistance, horizontalDistance) * 0.2, 1000000000.0)
   }
 
   if (maxHeight < altitude) {
-    var power = 8.0
-    var factor = 1000000.0
+    const power = 8.0
+    const factor = 1000000.0
 
-    var s = -Math.pow((altitude - startHeight) * factor, 1.0 / power)
-    var e = Math.pow((altitude - endHeight) * factor, 1.0 / power)
+    const s = -Math.pow((altitude - startHeight) * factor, 1.0 / power)
+    const e = Math.pow((altitude - endHeight) * factor, 1.0 / power)
 
     return function (t) {
-      var x = t * (e - s) + s
+      const x = t * (e - s) + s
       return -Math.pow(x, power) / factor + altitude
     }
   }
@@ -110,21 +110,21 @@ function adjustAngleForLERP (startAngle, endAngle) {
   return startAngle
 }
 
-var scratchStart = {}
+const scratchStart = {}
 
 function createUpdateCV (scene, duration, destination, heading, pitch, roll, optionAltitude) {
   const { Cartesian2, Cartesian3, Math: CesiumMath } = Cesium
-  var camera = scene.camera
+  const camera = scene.camera
 
-  var start = Cartesian3.clone(camera.position, scratchStart)
-  var startPitch = camera.pitch
-  var startHeading = adjustAngleForLERP(camera.heading, heading)
-  var startRoll = adjustAngleForLERP(camera.roll, roll)
+  const start = Cartesian3.clone(camera.position, scratchStart)
+  const startPitch = camera.pitch
+  const startHeading = adjustAngleForLERP(camera.heading, heading)
+  const startRoll = adjustAngleForLERP(camera.roll, roll)
 
-  var heightFunction = createHeightFunction(camera, destination, start.z, destination.z, optionAltitude)
+  const heightFunction = createHeightFunction(camera, destination, start.z, destination.z, optionAltitude)
 
   function update (value) {
-    var time = value.time / duration
+    const time = value.time / duration
 
     camera.setView({
       orientation: {
@@ -151,7 +151,7 @@ function useLongestFlight (startCart, destCart) {
 
 function useShortestFlight (startCart, destCart) {
   const { Math: CesiumMath } = Cesium
-  var diff = startCart.longitude - destCart.longitude
+  const diff = startCart.longitude - destCart.longitude
   if (diff < -CesiumMath.PI) {
     startCart.longitude += CesiumMath.TWO_PI
   } else if (diff > CesiumMath.PI) {
@@ -159,8 +159,8 @@ function useShortestFlight (startCart, destCart) {
   }
 }
 
-var scratchStartCart = {}
-var scratchEndCart = {}
+const scratchStartCart = {}
+const scratchEndCart = {}
 
 function createUpdate3D (
   scene,
@@ -175,37 +175,37 @@ function createUpdate3D (
   optionPitchAdjustHeight
 ) {
   const { Cartesian3, Cartographic, defined, Math: CesiumMath } = Cesium
-  var camera = scene.camera
-  var projection = scene.mapProjection
-  var ellipsoid = projection.ellipsoid
+  const camera = scene.camera
+  const projection = scene.mapProjection
+  const ellipsoid = projection.ellipsoid
 
-  var startCart = Cartographic.clone(camera.positionCartographic, scratchStartCart)
-  var startPitch = camera.pitch
-  var startHeading = adjustAngleForLERP(camera.heading, heading)
-  var startRoll = adjustAngleForLERP(camera.roll, roll)
+  const startCart = Cartographic.clone(camera.positionCartographic, scratchStartCart)
+  const startPitch = camera.pitch
+  const startHeading = adjustAngleForLERP(camera.heading, heading)
+  const startRoll = adjustAngleForLERP(camera.roll, roll)
 
-  var destCart = ellipsoid.cartesianToCartographic(destination, scratchEndCart)
+  const destCart = ellipsoid.cartesianToCartographic(destination, scratchEndCart)
   startCart.longitude = CesiumMath.zeroToTwoPi(startCart.longitude)
   destCart.longitude = CesiumMath.zeroToTwoPi(destCart.longitude)
 
-  var useLongFlight = false
+  let useLongFlight = false
 
   if (defined(optionFlyOverLongitude)) {
-    var hitLon = CesiumMath.zeroToTwoPi(optionFlyOverLongitude)
+    const hitLon = CesiumMath.zeroToTwoPi(optionFlyOverLongitude)
 
-    var lonMin = Math.min(startCart.longitude, destCart.longitude)
-    var lonMax = Math.max(startCart.longitude, destCart.longitude)
+    const lonMin = Math.min(startCart.longitude, destCart.longitude)
+    const lonMax = Math.max(startCart.longitude, destCart.longitude)
 
-    var hitInside = hitLon >= lonMin && hitLon <= lonMax
+    const hitInside = hitLon >= lonMin && hitLon <= lonMax
 
     if (defined(optionFlyOverLongitudeWeight)) {
       // Distance inside  (0...2Pi)
-      var din = Math.abs(startCart.longitude - destCart.longitude)
+      const din = Math.abs(startCart.longitude - destCart.longitude)
       // Distance outside (0...2Pi)
-      var dot = CesiumMath.TWO_PI - din
+      const dot = CesiumMath.TWO_PI - din
 
-      var hitDistance = hitInside ? din : dot
-      var offDistance = hitInside ? dot : din
+      const hitDistance = hitInside ? din : dot
+      const offDistance = hitInside ? dot : din
 
       if (hitDistance < offDistance * optionFlyOverLongitudeWeight && !hitInside) {
         useLongFlight = true
@@ -221,8 +221,8 @@ function createUpdate3D (
     useShortestFlight(startCart, destCart)
   }
 
-  var heightFunction = createHeightFunction(camera, destination, startCart.height, destCart.height, optionAltitude)
-  var pitchFunction = createPitchFunction(startPitch, pitch, heightFunction, optionPitchAdjustHeight)
+  const heightFunction = createHeightFunction(camera, destination, startCart.height, destCart.height, optionAltitude)
+  const pitchFunction = createPitchFunction(startPitch, pitch, heightFunction, optionPitchAdjustHeight)
 
   // Isolate scope for update function.
   // to have local copies of vars used in lerp
@@ -230,15 +230,15 @@ function createUpdate3D (
   // createUpdate3D (createAnimationTween)
   // before you played animation, variables will be overwriten.
   function isolateUpdateFunction () {
-    var startLongitude = startCart.longitude
-    var destLongitude = destCart.longitude
-    var startLatitude = startCart.latitude
-    var destLatitude = destCart.latitude
+    const startLongitude = startCart.longitude
+    const destLongitude = destCart.longitude
+    const startLatitude = startCart.latitude
+    const destLatitude = destCart.latitude
 
     return function update (value) {
-      var time = value.time / duration
+      const time = value.time / duration
 
-      var position = Cartesian3.fromRadians(
+      const position = Cartesian3.fromRadians(
         CesiumMath.lerp(startLongitude, destLongitude, time),
         CesiumMath.lerp(startLatitude, destLatitude, time),
         heightFunction(time)
@@ -259,16 +259,16 @@ function createUpdate3D (
 
 function createUpdate2D (scene, duration, destination, heading, pitch, roll, optionAltitude) {
   const { Cartesian2, Cartesian3, Math: CesiumMath } = Cesium
-  var camera = scene.camera
+  const camera = scene.camera
 
-  var start = Cartesian3.clone(camera.position, scratchStart)
-  var startHeading = adjustAngleForLERP(camera.heading, heading)
+  const start = Cartesian3.clone(camera.position, scratchStart)
+  const startHeading = adjustAngleForLERP(camera.heading, heading)
 
-  var startHeight = camera.frustum.right - camera.frustum.left
-  var heightFunction = createHeightFunction(camera, destination, startHeight, destination.z, optionAltitude)
+  const startHeight = camera.frustum.right - camera.frustum.left
+  const heightFunction = createHeightFunction(camera, destination, startHeight, destination.z, optionAltitude)
 
   function update (value) {
-    var time = value.time / duration
+    const time = value.time / duration
 
     camera.setView({
       orientation: {
@@ -278,12 +278,12 @@ function createUpdate2D (scene, duration, destination, heading, pitch, roll, opt
 
     Cartesian2.lerp(start, destination, time, camera.position)
 
-    var zoom = heightFunction(time)
+    const zoom = heightFunction(time)
 
-    var frustum = camera.frustum
-    var ratio = frustum.top / frustum.right
+    const frustum = camera.frustum
+    const ratio = frustum.top / frustum.right
 
-    var incrementAmount = (zoom - (frustum.right - frustum.left)) * 0.5
+    const incrementAmount = (zoom - (frustum.right - frustum.left)) * 0.5
     frustum.right += incrementAmount
     frustum.left -= incrementAmount
     frustum.top = ratio * frustum.right
@@ -292,8 +292,8 @@ function createUpdate2D (scene, duration, destination, heading, pitch, roll, opt
   return update
 }
 
-var scratchCartographic = {}
-var scratchDestination = {}
+const scratchCartographic = {}
+const scratchDestination = {}
 
 function emptyFlight (complete, cancel) {
   return {
@@ -319,7 +319,7 @@ function wrapCallback (controller, cb) {
 CameraFlightPath.createTween = function (scene, options) {
   const { Cartesian2, Cartesian3, defaultValue, defined, DeveloperError, EasingFunction, Math: CesiumMath, SceneMode } = Cesium
   options = defaultValue(options, defaultValue.EMPTY_OBJECT)
-  var destination = options.destination
+  let destination = options.destination
 
   // >>includeStart('debug', pragmas.debug);
   if (!defined(scene)) {
@@ -329,51 +329,51 @@ CameraFlightPath.createTween = function (scene, options) {
     throw new DeveloperError('destination is required.')
   }
   // >>includeEnd('debug');
-  var mode = scene.mode
+  const mode = scene.mode
 
   if (mode === SceneMode.MORPHING) {
     return emptyFlight()
   }
 
-  var convert = defaultValue(options.convert, true)
-  var projection = scene.mapProjection
-  var ellipsoid = projection.ellipsoid
-  var maximumHeight = options.maximumHeight
-  var flyOverLongitude = options.flyOverLongitude
-  var flyOverLongitudeWeight = options.flyOverLongitudeWeight
-  var pitchAdjustHeight = options.pitchAdjustHeight
-  var easingFunction = options.easingFunction
+  const convert = defaultValue(options.convert, true)
+  const projection = scene.mapProjection
+  const ellipsoid = projection.ellipsoid
+  const maximumHeight = options.maximumHeight
+  const flyOverLongitude = options.flyOverLongitude
+  const flyOverLongitudeWeight = options.flyOverLongitudeWeight
+  const pitchAdjustHeight = options.pitchAdjustHeight
+  let easingFunction = options.easingFunction
 
   if (convert && mode !== SceneMode.SCENE3D) {
     ellipsoid.cartesianToCartographic(destination, scratchCartographic)
     destination = projection.project(scratchCartographic, scratchDestination)
   }
 
-  var camera = scene.camera
-  var transform = options.endTransform
+  const camera = scene.camera
+  const transform = options.endTransform
   if (defined(transform)) {
     camera._setTransform(transform)
   }
 
-  var duration = options.duration
+  let duration = options.duration
   if (!defined(duration)) {
     duration = Math.ceil(Cartesian3.distance(camera.position, destination) / 1000000.0) + 2.0
     duration = Math.min(duration, 3.0)
   }
 
-  var heading = defaultValue(options.heading, 0.0)
-  var pitch = defaultValue(options.pitch, -CesiumMath.PI_OVER_TWO)
-  var roll = defaultValue(options.roll, 0.0)
+  const heading = defaultValue(options.heading, 0.0)
+  const pitch = defaultValue(options.pitch, -CesiumMath.PI_OVER_TWO)
+  const roll = defaultValue(options.roll, 0.0)
 
-  var controller = scene.screenSpaceCameraController
+  const controller = scene.screenSpaceCameraController
   controller.enableInputs = false
 
-  var complete = wrapCallback(controller, options.complete)
-  var cancel = wrapCallback(controller, options.cancel)
+  const complete = wrapCallback(controller, options.complete)
+  const cancel = wrapCallback(controller, options.cancel)
 
-  var frustum = camera.frustum
+  const frustum = camera.frustum
 
-  var empty = scene.mode === SceneMode.SCENE2D
+  let empty = scene.mode === SceneMode.SCENE2D
   empty = empty && Cartesian2.equalsEpsilon(camera.position, destination, CesiumMath.EPSILON6)
   empty =
     empty &&
@@ -400,14 +400,14 @@ CameraFlightPath.createTween = function (scene, options) {
     return emptyFlight(complete, cancel)
   }
 
-  var updateFunctions = new Array(4)
+  const updateFunctions = new Array(4)
   updateFunctions[SceneMode.SCENE2D] = createUpdate2D
   updateFunctions[SceneMode.SCENE3D] = createUpdate3D
   updateFunctions[SceneMode.COLUMBUS_VIEW] = createUpdateCV
 
   if (duration <= 0.0) {
-    var newOnComplete = function () {
-      var update = updateFunctions[mode](
+    const newOnComplete = function () {
+      const update = updateFunctions[mode](
         scene,
         1.0,
         destination,
@@ -428,7 +428,7 @@ CameraFlightPath.createTween = function (scene, options) {
     return emptyFlight(newOnComplete, cancel)
   }
 
-  var update = updateFunctions[mode](
+  const update = updateFunctions[mode](
     scene,
     duration,
     destination,
@@ -442,8 +442,8 @@ CameraFlightPath.createTween = function (scene, options) {
   )
 
   if (!defined(easingFunction)) {
-    var startHeight = camera.positionCartographic.height
-    var endHeight = mode === SceneMode.SCENE3D ? ellipsoid.cartesianToCartographic(destination).height : destination.z
+    const startHeight = camera.positionCartographic.height
+    const endHeight = mode === SceneMode.SCENE3D ? ellipsoid.cartesianToCartographic(destination).height : destination.z
 
     if (startHeight > endHeight && startHeight > 11500.0) {
       easingFunction = EasingFunction.CUBIC_OUT

@@ -93,7 +93,7 @@ const watch = {
       }
 
       const drawCmpNames = ['vc-handler-draw-polyline', 'vc-handler-draw-point', 'vc-handler-draw-polygon']
-      for (let $node of getParent($parent).$slots.default || []) {
+      for (const $node of getParent($parent).$slots.default || []) {
         if ($node.componentOptions && measureCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.measuring = false
           nextTick = true
@@ -105,9 +105,9 @@ const watch = {
       }
       startNew()
     }
-    nextTick && await this.$nextTick()
+    nextTick && (await this.$nextTick())
     this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
-    const listener = this.$listeners['activeEvt']
+    const listener = this.$listeners.activeEvt
     listener && this.$emit('activeEvt', { type: type, isActive: val })
   }
 }
@@ -136,7 +136,7 @@ const methods = {
       return
     }
     const { Cesium, viewer, polylines, type, onMeasureEvt } = this
-    let cartesian = viewer.scene.pickPosition(movement.position)
+    const cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
@@ -180,9 +180,9 @@ const methods = {
             polyline.distances.pop()
           }
 
-          let clonePoistions = Cesium.clone(polyline.positions, true)
+          const clonePoistions = Cesium.clone(polyline.positions, true)
           clonePoistions.push(polyline.positions[0])
-          let distance = this.getDistance(clonePoistions)
+          const distance = this.getDistance(clonePoistions)
           polyline.distances.push(distance)
           polyline.distance = distance
           this.moveLastDistance = true
@@ -213,12 +213,12 @@ const methods = {
     if (!polyline.positions.length) {
       return
     }
-    let cartesian = viewer.scene.pickPosition(movement.endPosition)
+    const cartesian = viewer.scene.pickPosition(movement.endPosition)
     if (!Cesium.defined(cartesian)) {
       return
     }
     this.enterMoveAction = true
-    const listener = this.$listeners['movingEvt']
+    const listener = this.$listeners.movingEvt
     listener && this.$emit('movingEvt', movement.endPosition, type)
     if (type === 'distanceMeasuring' || type === 'areaMeasuring') {
       if (polyline.positions.length >= 2) {
@@ -235,12 +235,13 @@ const methods = {
       polyline.positions.push(cartesian)
       this.lastCartesianRemoved = false
       if (type === 'distanceMeasuring') {
-        let distance = this.getDistance(polyline.positions)
+        const distance = this.getDistance(polyline.positions)
         polyline.distances.push(distance)
         polyline.distance = distance
-        nIndex = polylines.reduce((pre, cur) => {
-          return pre + cur.positions.length - 1
-        }, 0) - 1
+        nIndex =
+          polylines.reduce((pre, cur) => {
+            return pre + cur.positions.length - 1
+          }, 0) - 1
       } else {
         polyline.area = this.getSurfaceArea(polyline.positions)
         polyline.projectedArea = this.getProjectedArea(polyline.positions)
@@ -250,7 +251,7 @@ const methods = {
         polyline.distance = distance
 
         if (polyline.positions.length >= 2) {
-          let clonePoistions = Cesium.clone(polyline.positions, true)
+          const clonePoistions = Cesium.clone(polyline.positions, true)
           clonePoistions.push(polyline.positions[0])
           distance = this.getDistance(clonePoistions)
           polyline.distances.push(distance)
@@ -279,7 +280,7 @@ const methods = {
     if (polyline.positions.length === 0) {
       return
     }
-    let cartesian = viewer.scene.pickPosition(movement.position)
+    const cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
@@ -293,9 +294,10 @@ const methods = {
       if (polyline.positions.length === 1) {
         polyline.positions = []
       }
-      nIndex = polylines.reduce((pre, cur) => {
-        return pre + cur.positions.length - 1
-      }, 0) - 1
+      nIndex =
+        polylines.reduce((pre, cur) => {
+          return pre + cur.positions.length - 1
+        }, 0) - 1
     } else if (type === 'areaMeasuring') {
       if (removeLastPosition) {
         polyline.positions.pop()
@@ -310,9 +312,9 @@ const methods = {
       if (polyline.positions.length >= 2 && this.enterMoveAction) {
         polyline.distances.pop()
 
-        let clonePoistions = Cesium.clone(polyline.positions, true)
+        const clonePoistions = Cesium.clone(polyline.positions, true)
         clonePoistions.push(polyline.positions[0])
-        let distance = this.getDistance(clonePoistions)
+        const distance = this.getDistance(clonePoistions)
         polyline.distances.push(distance)
         polyline.distance = distance
       }
@@ -408,23 +410,23 @@ const methods = {
   getHeight (endPoint, polyline) {
     const { labels } = this
     // let endPoint = cartesian
-    let normalStart = {}
+    const normalStart = {}
     Cesium.Cartesian3.normalize(this.startPoint, normalStart)
-    let planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
-    let hypPoint = {}
+    const planeStart = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(this.startPoint, new Cesium.Cartesian3(0, 0, 0)))
+    const hypPoint = {}
     polyline.height = Cesium.Plane.getPointDistance(planeStart, endPoint)
-    let labelPositonHeight = {}
-    let labelPositonH = {}
-    let labelPositonS = {}
+    const labelPositonHeight = {}
+    const labelPositonH = {}
+    const labelPositonS = {}
     if (polyline.height <= 0) {
       Cesium.Plane.projectPointOntoPlane(planeStart, endPoint, hypPoint)
       Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonHeight)
       Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonH)
       polyline.distanceH = Cesium.Cartesian3.distance(this.startPoint, hypPoint)
     } else {
-      let normalEnd = {}
+      const normalEnd = {}
       Cesium.Cartesian3.normalize(endPoint, normalEnd)
-      let planeEnd = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(endPoint, new Cesium.Cartesian3(0, 0, 0)))
+      const planeEnd = new Cesium.Plane(normalStart, -Cesium.Cartesian3.distance(endPoint, new Cesium.Cartesian3(0, 0, 0)))
       Cesium.Plane.projectPointOntoPlane(planeEnd, this.startPoint, hypPoint)
       Cesium.Cartesian3.midpoint(this.startPoint, hypPoint, labelPositonHeight)
       Cesium.Cartesian3.midpoint(endPoint, hypPoint, labelPositonH)
@@ -442,18 +444,18 @@ const methods = {
     }
     polyline.positions.push(endPoint)
     polyline.positions.push(hypPoint)
-    let labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
+    const labelTextHeight = polyline.height > 1000 ? (polyline.height / 1000).toFixed(2) + 'km' : polyline.height.toFixed(2) + 'm'
     labels.push({
       text: this.$vc.lang.measure.verticalHeight + ': ' + labelTextHeight,
       position: labelPositonHeight
     })
-    let labelTextH =
+    const labelTextH =
       polyline.distanceH > 1000 ? (polyline.distanceH / 1000).toFixed(2) + 'km' : polyline.distanceH.toFixed(2) + 'm'
     labels.push({
       text: this.$vc.lang.measure.horizontalDistance + ': ' + labelTextH,
       position: labelPositonH
     })
-    let labelTextS =
+    const labelTextS =
       polyline.distanceS > 1000 ? (polyline.distanceS / 1000).toFixed(2) + 'km' : polyline.distanceS.toFixed(2) + 'm'
     labels.push({
       text: this.$vc.lang.measure.spaceDistance + ': ' + labelTextS,
@@ -477,7 +479,7 @@ const methods = {
       this.$refs.labelCollection.cesiumObject._billboardCollection._rsTranslucent = rs
       this.$refs.labelCollection.cesiumObject._backgroundBillboardCollection._rsTranslucent = rs
 
-      const listener = this.$listeners['measureEvt']
+      const listener = this.$listeners.measureEvt
       const { type } = this
       if (type === 'distanceMeasuring' || type === 'areaMeasuring') {
         listener &&
@@ -489,7 +491,7 @@ const methods = {
           })
       } else {
         const labels = index
-        let labelsResult = {
+        const labelsResult = {
           labelHeight: this.$refs.labelCollection.cesiumObject.get(labels.length - 3),
           labelH: this.$refs.labelCollection.cesiumObject.get(labels.length - 2),
           labelS: this.$refs.labelCollection.cesiumObject.get(labels.length - 1)

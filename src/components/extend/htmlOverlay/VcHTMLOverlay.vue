@@ -63,7 +63,7 @@ export default {
       }
     },
     onClick (e) {
-      const listener = this.$listeners['click']
+      const listener = this.$listeners.click
       listener && this.$emit('click', e)
     }
   },

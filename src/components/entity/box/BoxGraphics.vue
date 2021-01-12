@@ -22,6 +22,6 @@ export default {
     outlineWidth,
     shadows,
     mixinBox,
-    mixinGraphic ]
+    mixinGraphic]
 }
 </script>

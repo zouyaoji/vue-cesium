@@ -6,7 +6,7 @@ export default {
   mixins: [mixinDatasource],
   props: {
     czml: {
-      type: String | Object,
+      type: [String, Object],
       required: true
     },
     options: Object

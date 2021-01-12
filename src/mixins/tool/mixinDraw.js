@@ -42,7 +42,7 @@ const watch = {
           break
       }
       const measureCmpNames = ['vc-measure-height', 'vc-measure-distance', 'vc-measure-area']
-      for (let $node of getParent($parent).$slots.default || []) {
+      for (const $node of getParent($parent).$slots.default || []) {
         if ($node.componentOptions && drawCmpNames.indexOf($node.componentOptions.tag) !== -1) {
           $node.child.drawing = false
           nextTick = true
@@ -57,7 +57,7 @@ const watch = {
     }
     nextTick && await this.$nextTick()
     this.viewer.canvas.setAttribute('style', val ? 'cursor: crosshair' : 'cursor: auto')
-    const listener = this.$listeners['activeEvt']
+    const listener = this.$listeners.activeEvt
     listener && this.$emit('activeEvt', { type: drawType, isActive: val })
   }
 }
@@ -66,7 +66,7 @@ const computed = {}
 const methods = {
   async createCesiumObject () {
     const { viewer } = this
-    let handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
     handler.setInputAction(this.LEFT_CLICK, Cesium.ScreenSpaceEventType.LEFT_CLICK)
     handler.setInputAction(this.MOUSE_MOVE, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
     handler.setInputAction(this.RIGHT_CLICK, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
@@ -84,7 +84,7 @@ const methods = {
       return
     }
     const { Cesium, viewer, polylines, onDrawingEvt } = this
-    let cartesian = viewer.scene.pickPosition(movement.position)
+    const cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
@@ -106,7 +106,7 @@ const methods = {
     if (!polyline.positions.length) {
       return
     }
-    let cartesian = viewer.scene.pickPosition(movement.endPosition)
+    const cartesian = viewer.scene.pickPosition(movement.endPosition)
     if (!Cesium.defined(cartesian)) {
       return
     }
@@ -114,7 +114,7 @@ const methods = {
       polyline.positions.pop()
     }
     polyline.positions.push(cartesian)
-    const listener = this.$listeners['movingEvt']
+    const listener = this.$listeners.movingEvt
     listener && this.$emit('movingEvt', movement.endPosition, drawType)
     onDrawingEvt(polyline, nIndex)
   },
@@ -131,7 +131,7 @@ const methods = {
     if (polyline.positions.length === 0) {
       return
     }
-    let cartesian = viewer.scene.pickPosition(movement.position)
+    const cartesian = viewer.scene.pickPosition(movement.position)
     if (!Cesium.defined(cartesian)) {
       return
     }
@@ -173,7 +173,7 @@ const methods = {
         this.$refs.polylineCollection && (this.$refs.polylineCollection.cesiumObject._opaqueRS.depthTest.enabled = false)
       }
     }
-    const listener = this.$listeners['drawEvt']
+    const listener = this.$listeners.drawEvt
     listener &&
       this.$emit('drawEvt', {
         polyline: polyline,

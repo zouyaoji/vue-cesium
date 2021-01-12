@@ -16,7 +16,7 @@ export default {
     VcIconSvg
   },
   props: {
-    enableMyLocation: Object | Boolean
+    enableMyLocation: [Object, Boolean]
   },
   mounted () {
     this.$parent.createPromise.then(({ Cesium, viewer }) => {
@@ -27,9 +27,9 @@ export default {
       const { enableMyLocation } = this
       if (enableMyLocation.amap && enableMyLocation.amap.key) {
         AMapLoader.load({
-          'key': enableMyLocation.amap.key,
-          'version': '2.0',
-          'plugins': ['AMap.Geolocation']
+          key: enableMyLocation.amap.key,
+          version: '2.0',
+          plugins: ['AMap.Geolocation']
         }).then((AMap) => {
           this.AMap = AMap
           this.amapGeolocation = new AMap.Geolocation({
@@ -40,7 +40,7 @@ export default {
             timeout: 20000
           })
         }).catch(e => {
-          console.error(`[C_PKG_FULLNAME] ERROR: ` + e)
+          console.error('[C_PKG_FULLNAME] ERROR: ' + e)
         })
       }
     })
@@ -48,9 +48,9 @@ export default {
   destroyed () {
     this.viewer.dataSources.remove(this.datasource, true)
     if (this.amapGeolocation) {
-      let scripts = document.getElementsByTagName('script')
-      let removeScripts = []
-      for (let script of scripts) {
+      const scripts = document.getElementsByTagName('script')
+      const removeScripts = []
+      for (const script of scripts) {
         if (script.src.indexOf('/webapi.amap.com/maps') > -1) {
           removeScripts.push(script)
         }
@@ -72,7 +72,7 @@ export default {
               lat: result.position.lat
             })
           } else {
-            console.error(`[C_PKG_FULLNAME] ERROR: ` + result.message)
+            console.error('[C_PKG_FULLNAME] ERROR: ' + result.message)
           }
         })
       } else {
@@ -94,22 +94,22 @@ export default {
           })
         }, this.handleLocationError, options)
       } else {
-        console.error(`[C_PKG_FULLNAME] ERROR: ` + 'Your browser cannot provide your location.')
+        console.error('[C_PKG_FULLNAME] ERROR: ' + 'Your browser cannot provide your location.')
       }
     },
     // This next function modelled on Cesium.geoJsonDataSource's defaultDescribe.
     describeWithoutUnderscores (properties, nameProperty) {
-      var html = ''
+      let html = ''
       if (properties instanceof Cesium.PropertyBag) {
         // unwrap the properties from the PropertyBag
         properties = properties.getValue(Cesium.JulianDate.now())
       }
-      for (var key in properties) {
-        if (properties.hasOwnProperty(key)) {
+      for (let key in properties) {
+        if (Object.prototype.hasOwnProperty.call(properties, key)) {
           if (key === nameProperty) {
             continue
           }
-          var value = properties[key]
+          let value = properties[key]
           if (typeof value === 'object') {
             value = this.describeWithoutUnderscores(value)
           } else {
@@ -175,7 +175,7 @@ export default {
       })
     },
     handleLocationError (err) {
-      console.error(`[C_PKG_FULLNAME] ERROR: ` + err.message)
+      console.error('[C_PKG_FULLNAME] ERROR: ' + err.message)
     }
   }
 }

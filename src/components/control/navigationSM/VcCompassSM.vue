@@ -180,7 +180,8 @@ export default {
         (compassRectangle.bottom - compassRectangle.top) / 2.0
       )
       const clickLocation =
-        event.type === 'mouseup' ? new Cartesian2(event.clientX - compassRectangle.left, event.clientY - compassRectangle.top)
+        event.type === 'mouseup'
+          ? new Cartesian2(event.clientX - compassRectangle.left, event.clientY - compassRectangle.top)
           : new Cartesian2(
             event.changedTouches[0].clientX - compassRectangle.left,
             event.changedTouches[0].clientY - compassRectangle.top
@@ -400,8 +401,11 @@ function rotateEast (viewModel, compassElement, cursorVector) {
     UP: 3,
     DOWN: 4
   }
-  roateDirection = angle >= -a && a >= angle ? roateType.DOWN : angle >= a && 3 * a >= angle ? roateType.RIGHT
-    : angle >= 3 * a && 5 * a >= angle ? roateType.UP : roateType.LEFT
+  roateDirection = angle >= -a && a >= angle
+    ? roateType.DOWN
+    : angle >= a && 3 * a >= angle
+      ? roateType.RIGHT
+      : angle >= 3 * a && 5 * a >= angle ? roateType.UP : roateType.LEFT
   viewModel.rotateEastTickFunction = () => {
     const scene = viewModel.viewer.scene
     const camera = scene.camera
@@ -500,8 +504,8 @@ function tilt (viewModel, compassElement, cursorVector) {
 
 function getTiltbarPosition () {
   const { Math: CesiumMath } = Cesium
-  let pitch = CesiumMath.PI_OVER_TWO + this.viewer.scene.camera.pitch
-  let length = Math.PI / 2 / 20
+  const pitch = CesiumMath.PI_OVER_TWO + this.viewer.scene.camera.pitch
+  const length = Math.PI / 2 / 20
   let level = Math.floor(pitch / length)
   level = level > 19 ? 19 : level
   level = level < 0 ? 0 : level

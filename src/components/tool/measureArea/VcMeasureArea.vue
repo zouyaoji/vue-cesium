@@ -168,7 +168,8 @@ export default {
         let totalDistance = 0
         for (let i = 0; i < polyline.positions.length; i++) {
           const positions = [polyline.positions[i], polyline.positions.length - 1 !== i
-            ? polyline.positions[i + 1] : polyline.positions[0]]
+            ? polyline.positions[i + 1]
+            : polyline.positions[0]]
           const distance = getDistance(positions)
           totalDistance += distance
           distances.push(totalDistance)
@@ -280,20 +281,20 @@ export default {
      */
     getProjectedArea (positions) {
       const { Cartographic, Math: CesiumMath } = Cesium
-      let array = []
+      const array = []
       for (let i = 0, len = positions.length; i < len; i++) {
-        let cartographic = Cartographic.fromCartesian(positions[i])
-        let longitude = CesiumMath.toDegrees(cartographic.longitude).toFixed(6)
-        let latitude = CesiumMath.toDegrees(cartographic.latitude).toFixed(6)
+        const cartographic = Cartographic.fromCartesian(positions[i])
+        const longitude = CesiumMath.toDegrees(cartographic.longitude).toFixed(6)
+        const latitude = CesiumMath.toDegrees(cartographic.latitude).toFixed(6)
         array.push({ x: longitude, y: latitude })
       }
-      let arrs = []
-      let tems = []
+      const arrs = []
+      const tems = []
       arrs.push(tems)
       for (let i = 0, len = array.length; i < len; i++) {
         tems.push([array[i].x, array[i].y])
       }
-      let polygons = {
+      const polygons = {
         type: 'FeatureCollection',
         features: [
           {

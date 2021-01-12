@@ -62,7 +62,7 @@ export default {
     getDistance (positions) {
       let distance = 0
       for (let i = 0; i < positions.length - 1; i++) {
-        let s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
+        const s = Cesium.Cartesian3.distance(positions[i], positions[i + 1])
         distance = distance + s
       }
       return distance

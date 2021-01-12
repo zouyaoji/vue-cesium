@@ -1,7 +1,8 @@
 <script>
 import {
   show,
-  uri
+  uri,
+  maximumScreenSpaceError
 } from '../../../mixins/mixinProps'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
 export default {
@@ -9,10 +10,8 @@ export default {
   mixins: [
     show,
     uri,
+    maximumScreenSpaceError,
     mixinGraphic
-  ],
-  props: {
-    maximumScreenSpaceError: Number
-  }
+  ]
 }
 </script>

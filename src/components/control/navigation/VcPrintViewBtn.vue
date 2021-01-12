@@ -15,8 +15,7 @@ import Vue from 'vue'
 export default {
   name: 'vc-view-print',
   components: {
-    VcIconSvg,
-    VcPrintView
+    VcIconSvg
   },
   props: {
     printAutomatically: Boolean,

@@ -9,7 +9,7 @@
  * @param {Number} options.digits The number of digits to fix the lat / lon to.
  */
 function prettifyCoordinates (longitude, latitude, options) {
-  var result = {}
+  const result = {}
   const { defaultValue, defined } = Cesium
   const optionsDefaulted = defaultValue(options, {})
   const digits = defaultValue(optionsDefaulted.digits, 5)

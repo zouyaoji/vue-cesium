@@ -51,7 +51,7 @@ class ParticleSystem {
   }
 
   clearFramebuffers () {
-    var clearCommand = new Cesium.ClearCommand({
+    const clearCommand = new Cesium.ClearCommand({
       color: new Cesium.Color(0.0, 0.0, 0.0, 0.0),
       depth: 1.0,
       framebuffer: undefined,
@@ -75,11 +75,11 @@ class ParticleSystem {
     )
 
     if (maxParticlesChanged) {
-      var geometry = this.particlesRendering.createSegmentsGeometry(
+      const geometry = this.particlesRendering.createSegmentsGeometry(
         this.particleSystemOptions
       )
       this.particlesRendering.primitives.segments.geometry = geometry
-      var vertexArray = Cesium.VertexArray.fromGeometry({
+      const vertexArray = Cesium.VertexArray.fromGeometry({
         context: this.context,
         geometry: geometry,
         attributeLocations: this.particlesRendering.primitives.segments
@@ -91,7 +91,7 @@ class ParticleSystem {
   }
 
   applyParticleSystemOptions (particleSystemOptions) {
-    var maxParticlesChanged = false
+    let maxParticlesChanged = false
     if (
       this.particleSystemOptions.maxParticles !==
       particleSystemOptions.maxParticles

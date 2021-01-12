@@ -5,10 +5,10 @@ export default {
   name: 'vc-graphics-path',
   mixins: [show, distanceDisplayCondition, width, material, mixinGraphic],
   props: {
-    leadTime: Number,
-    trailTime: Number,
+    leadTime: [Number, Object, Function],
+    trailTime: [Number, Object, Function],
     resolution: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 60
     }
   }

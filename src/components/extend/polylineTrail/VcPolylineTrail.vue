@@ -16,7 +16,7 @@ export default {
   mixins: [cmp, positions, width, clampToGround, show],
   props: {
     color: {
-      type: Object | String | Array,
+      type: [Object, String, Array],
       default: 'yellow'
     },
     interval: {

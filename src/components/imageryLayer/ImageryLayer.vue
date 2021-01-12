@@ -1,34 +1,35 @@
 <script>
+import { cutoutRectangle, colorToAlpha } from '../../mixins/mixinProps'
 import mergeDescriptors from '../../utils/mergeDescriptors'
 import cmp from '../../mixins/virtualCmp'
 export default {
   name: 'vc-layer-imagery',
-  mixins: [cmp],
+  mixins: [cmp, cutoutRectangle, colorToAlpha],
   props: {
     imageryProvider: Object,
     rectangle: Object,
     alpha: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 1.0
     },
     brightness: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 1.0
     },
     contrast: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 1.0
     },
     hue: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 0.0
     },
     saturation: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 1.0
     },
     gamma: {
-      type: Number | Function,
+      type: [Number, Function],
       default: 1.0
     },
     splitDirection: Number,
@@ -41,8 +42,6 @@ export default {
     maximumAnisotropy: Number,
     minimumTerrainLevel: Number,
     maximumTerrainLevel: Number,
-    cutoutRectangle: Object,
-    colorToAlpha: Object,
     colorToAlphaThreshold: {
       type: Number,
       default: 0.004

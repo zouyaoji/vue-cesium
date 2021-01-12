@@ -3,7 +3,7 @@
  * The Earth Gravity Model 1996 (EGM96) geoid.
  * @param {String} gridFileUrl The URL of the WW15MGH.DAC file.
  */
-var EarthGravityModel1996 = function (gridFileUrl) {
+const EarthGravityModel1996 = function (gridFileUrl) {
   this.gridFileUrl = gridFileUrl
   this.data = undefined
 
@@ -38,8 +38,8 @@ EarthGravityModel1996.prototype.getHeight = function (longitude, latitude) {
 
 EarthGravityModel1996.prototype.getHeights = function (cartographicArray) {
   return getHeightData(this).then(function (data) {
-    for (var i = 0; i < cartographicArray.length; ++i) {
-      var cartographic = cartographicArray[i]
+    for (let i = 0; i < cartographicArray.length; ++i) {
+      const cartographic = cartographicArray[i]
       cartographic.height = getHeightFromData(
         data,
         cartographic.longitude,
@@ -59,9 +59,9 @@ function getHeightData (model) {
   return when(model.data, function (data) {
     if (!(model.data instanceof Int16Array)) {
       // Data file is big-endian, all relevant platforms are little endian, so swap the byte order.
-      var byteView = new Uint8Array(data)
-      for (var k = 0; k < byteView.length; k += 2) {
-        var tmp = byteView[k]
+      const byteView = new Uint8Array(data)
+      for (let k = 0; k < byteView.length; k += 2) {
+        const tmp = byteView[k]
         byteView[k] = byteView[k + 1]
         byteView[k + 1] = tmp
       }
@@ -74,7 +74,7 @@ function getHeightData (model) {
 
 function getHeightFromData (data, longitude, latitude) {
   const { Math: CesiumMath } = Cesium
-  var recordIndex = (720 * (CesiumMath.PI_OVER_TWO - latitude)) / Math.PI
+  let recordIndex = (720 * (CesiumMath.PI_OVER_TWO - latitude)) / Math.PI
   if (recordIndex < 0) {
     recordIndex = 0
   } else if (recordIndex > 720) {
@@ -82,25 +82,25 @@ function getHeightFromData (data, longitude, latitude) {
   }
 
   longitude = CesiumMath.zeroToTwoPi(longitude)
-  var heightIndex = (1440 * longitude) / CesiumMath.TWO_PI
+  let heightIndex = (1440 * longitude) / CesiumMath.TWO_PI
   if (heightIndex < 0) {
     heightIndex = 0
   } else if (heightIndex > 1440) {
     heightIndex = 1440
   }
 
-  var i = heightIndex | 0
-  var j = recordIndex | 0
+  const i = heightIndex | 0
+  const j = recordIndex | 0
 
-  var xMinusX1 = heightIndex - i
-  var yMinusY1 = recordIndex - j
-  var x2MinusX = 1.0 - xMinusX1
-  var y2MinusY = 1.0 - yMinusY1
+  const xMinusX1 = heightIndex - i
+  const yMinusY1 = recordIndex - j
+  const x2MinusX = 1.0 - xMinusX1
+  const y2MinusY = 1.0 - yMinusY1
 
-  var f11 = getHeightValue(data, j, i)
-  var f21 = getHeightValue(data, j, i + 1)
-  var f12 = getHeightValue(data, j + 1, i)
-  var f22 = getHeightValue(data, j + 1, i + 1)
+  const f11 = getHeightValue(data, j, i)
+  const f21 = getHeightValue(data, j, i + 1)
+  const f12 = getHeightValue(data, j + 1, i)
+  const f22 = getHeightValue(data, j + 1, i + 1)
 
   return (
     (f11 * x2MinusX * y2MinusY +
@@ -130,7 +130,7 @@ function getHeightValue (data, recordIndex, heightIndex) {
 
 function loadArrayBuffer (urlOrResource) {
   const { Resource } = Cesium
-  var resource = Resource.createIfNeeded(urlOrResource)
+  const resource = Resource.createIfNeeded(urlOrResource)
   return resource.fetchArrayBuffer()
 }
 

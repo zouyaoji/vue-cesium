@@ -1,22 +1,9 @@
 <script>
+import { data, options } from '../../../mixins/mixinProps'
 import mixinDatasource from '../../../mixins/datasource/mixinDatasource'
 export default {
   name: 'vc-datasource-kml',
-  mixins: [mixinDatasource],
-  props: {
-    data: {
-      type: String | Object,
-      required: true
-    },
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          clampToGround: false
-        }
-      }
-    }
-  },
+  mixins: [data, options, mixinDatasource],
   methods: {
     async createCesiumObject () {
       const { $props, transformProps, viewer } = this

@@ -13,7 +13,7 @@ export default {
       el.setAttribute('dir', lang.rtl ? 'rtl' : 'ltr')
       el.setAttribute('lang', lang.isoName)
 
-      if ($vc.lang !== void 0) {
+      if ($vc.lang !== undefined) {
         $vc.lang = lang
       } else {
         Vue.util.defineReactive($vc, 'lang', lang)
@@ -28,7 +28,7 @@ export default {
   },
 
   getLocale () {
-    let val =
+    const val =
       navigator.language ||
       navigator.languages[0] ||
       navigator.browserLanguage ||

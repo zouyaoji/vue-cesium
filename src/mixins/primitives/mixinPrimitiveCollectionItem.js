@@ -13,17 +13,18 @@ const methods = {
   async createCesiumObject () {
     const { $props, transformProps, primitives } = this
     const options = transformProps($props)
+    console.log(options)
     return primitives && primitives.add(options)
   },
   async mount () {
     const { primitives, primitive, registerEvents } = this
     registerEvents(true)
-    return primitives && !primitives.isDestroyed() && primitives.contains(primitive)
+    return primitives && primitives.contains(primitive)
   },
   async unmount () {
     const { primitives, primitive, registerEvents } = this
     registerEvents(false)
-    return primitives && primitives.remove(primitive)
+    return primitives && !primitives.isDestroyed() && primitives.remove(primitive)
   }
 }
 export default {

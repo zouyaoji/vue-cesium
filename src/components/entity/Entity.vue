@@ -1,14 +1,14 @@
 <script>
 import cmp from '../../mixins/virtualCmp'
 import mixinPickEvent from '../../mixins/event/mixinPickEvent'
-import { position } from '../../mixins/mixinProps'
+import { position, plane } from '../../mixins/mixinProps'
 import mergeDescriptors from '../../utils/mergeDescriptors'
 import bindEvents from '../../utils/bindEvent'
 import { Events } from '../../utils/events'
 
 export default {
   name: 'vc-entity',
-  mixins: [cmp, position, mixinPickEvent],
+  mixins: [cmp, position, plane, mixinPickEvent],
   props: {
     id: String,
     name: String,
@@ -17,7 +17,7 @@ export default {
       type: Boolean,
       default: true
     },
-    description: String | Object,
+    description: [String, Object],
     orientation: Object,
     viewFrom: Object,
     parent: Object,
@@ -31,7 +31,6 @@ export default {
     model: Object,
     tileset: Object,
     path: Object,
-    plane: Object,
     point: Object,
     polygon: Object,
     polyline: Object,

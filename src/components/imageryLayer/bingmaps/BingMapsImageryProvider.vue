@@ -9,7 +9,6 @@ export default {
   name: 'vc-provider-imagery-bingmaps',
   mixins: [url, ellipsoid, tileDiscardPolicy, mixinImageryProvider],
   props: {
-    url: String | Object,
     bmKey: String,
     tileProtocol: String,
     mapStyle: {

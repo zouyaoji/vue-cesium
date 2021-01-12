@@ -20,7 +20,7 @@ const methods = {
   async unmount () {
     const { primitives, collection, registerEvents } = this
     registerEvents(false)
-    return primitives && !primitives.isDestroyed() && primitives.remove(collection)
+    return primitives && !collection.isDestroyed() && primitives.remove(collection)
   },
   getServices () {
     const vm = this

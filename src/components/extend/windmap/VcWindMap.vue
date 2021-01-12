@@ -45,26 +45,22 @@ export default {
       const { viewer, particleSystemOptions } = this
       if (!this.isEmptyObj(this.data)) {
         this.data.colorTable = this.loadColorTable()
-        let windMap = new Wind3D(
-          viewer,
-          this.data,
-          particleSystemOptions
-        )
+        const windMap = new Wind3D(viewer, this.data, particleSystemOptions)
         return windMap
       }
       return true
     },
     loadColorTable () {
-      let json = this.colorTable
-      let colorNum = json['ncolors']
-      let colorTable = json['colorTable']
-      let colorsArray = new Float32Array(3 * colorNum)
+      const json = this.colorTable
+      const colorNum = json.ncolors
+      const colorTable = json.colorTable
+      const colorsArray = new Float32Array(3 * colorNum)
       for (let i = 0; i < colorNum; i++) {
         colorsArray[3 * i] = colorTable[3 * i]
         colorsArray[3 * i + 1] = colorTable[3 * i + 1]
         colorsArray[3 * i + 2] = colorTable[3 * i + 2]
       }
-      let result = {}
+      const result = {}
       result.colorNum = colorNum
       result.array = colorsArray
       return result

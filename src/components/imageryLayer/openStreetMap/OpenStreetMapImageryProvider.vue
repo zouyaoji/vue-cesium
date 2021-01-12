@@ -23,7 +23,7 @@ export default {
       default: 'https://a.tile.openstreetmap.org'
     },
     credit: {
-      type: String | Object,
+      type: [String, Object],
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
     }
   }

@@ -11,7 +11,8 @@ import {
   outlineWidth,
   shadows,
   classificationType,
-  zIndex
+  zIndex,
+  coordinates
 } from '../../../mixins/mixinProps'
 import mixinRectangle from '../../../mixins/graphics/mixinRectangle'
 import mixinGraphic from '../../../mixins/graphics/mixinGraphic'
@@ -30,11 +31,9 @@ export default {
     shadows,
     classificationType,
     zIndex,
+    coordinates,
     mixinRectangle,
     mixinGraphic
-  ],
-  props: {
-    coordinates: Object
-  }
+  ]
 }
 </script>

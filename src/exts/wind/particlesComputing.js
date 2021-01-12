@@ -11,7 +11,7 @@ class ParticlesComputing {
   }
 
   createWindTextures (context, data) {
-    var windTextureOptions = {
+    const windTextureOptions = {
       context: context,
       width: data.dimensions.lon,
       height: data.dimensions.lat * data.dimensions.lev,
@@ -32,8 +32,8 @@ class ParticlesComputing {
   }
 
   randomizeParticles (maxParticles, viewerParameters) {
-    var array = new Float32Array(4 * maxParticles)
-    for (var i = 0; i < maxParticles; i++) {
+    const array = new Float32Array(4 * maxParticles)
+    for (let i = 0; i < maxParticles; i++) {
       array[4 * i] = Cesium.Math.randomBetween(viewerParameters.lonRange.x, viewerParameters.lonRange.y)
       array[4 * i + 1] = Cesium.Math.randomBetween(viewerParameters.latRange.x, viewerParameters.latRange.y)
       array[4 * i + 2] = Cesium.Math.randomBetween(this.data.lev.min, this.data.lev.max)
@@ -43,7 +43,7 @@ class ParticlesComputing {
   }
 
   createParticlesTextures (context, particleSystemOptions, viewerParameters) {
-    var particlesTextureOptions = {
+    const particlesTextureOptions = {
       context: context,
       width: particleSystemOptions.particlesTextureSize,
       height: particleSystemOptions.particlesTextureSize,
@@ -57,7 +57,7 @@ class ParticlesComputing {
       })
     }
 
-    var particlesArray = this.randomizeParticles(particleSystemOptions.maxParticles, viewerParameters)
+    const particlesArray = this.randomizeParticles(particleSystemOptions.maxParticles, viewerParameters)
 
     this.particlesTextures = {
       particlesWind: Util.createTexture(particlesTextureOptions),
@@ -157,8 +157,7 @@ class ParticlesComputing {
         outputTexture: this.particlesTextures.nextParticlesSpeed,
         preExecute: function () {
           // swap textures before binding
-          var temp
-          temp = that.particlesTextures.currentParticlesSpeed
+          const temp = that.particlesTextures.currentParticlesSpeed
           that.particlesTextures.currentParticlesSpeed = that.particlesTextures.postProcessingSpeed
           that.particlesTextures.postProcessingSpeed = temp
 
@@ -183,8 +182,7 @@ class ParticlesComputing {
         outputTexture: this.particlesTextures.nextParticlesPosition,
         preExecute: function () {
           // swap textures before binding
-          var temp
-          temp = that.particlesTextures.currentParticlesPosition
+          const temp = that.particlesTextures.currentParticlesPosition
           that.particlesTextures.currentParticlesPosition = that.particlesTextures.postProcessingPosition
           that.particlesTextures.postProcessingPosition = temp
 
@@ -215,7 +213,7 @@ class ParticlesComputing {
             return viewerParameters.latDataRange
           },
           randomCoef: function () {
-            var randomCoef = Math.random()
+            const randomCoef = Math.random()
             return randomCoef
           },
           dropRate: function () {

@@ -1,15 +1,15 @@
 <script>
+import { url } from '../../../mixins/mixinProps'
 import mixinTerrainProvider from '../../../mixins/providers/mixinTerrainProvider'
 export default {
-  name: 'vc-provider-terrain-cesium',
-  mixins: [mixinTerrainProvider],
+  name: 'VcProviderTerrainCesium',
+  mixins: [url, mixinTerrainProvider],
   props: {
-    url: String | Object,
     requestVertexNormals: Boolean,
     requestWaterMask: Boolean,
     requestMetadata: Boolean,
     ellipsoid: Object,
-    credit: String | Object
+    credit: [String, Object]
   },
   methods: {
     /**
@@ -17,7 +17,7 @@ export default {
      */
     async createCesiumObject () {
       const { url, requestVertexNormals, requestWaterMask, requestMetadata, ellipsoid, credit } = this
-      let options = {
+      const options = {
         url,
         requestVertexNormals,
         requestWaterMask,
@@ -26,7 +26,9 @@ export default {
         credit
       }
       this.removeNullItem(options)
-      return options.url ? new Cesium.CesiumTerrainProvider(options) : Cesium.createWorldTerrain({ requestVertexNormals, requestWaterMask })
+      return options.url
+        ? new Cesium.CesiumTerrainProvider(options)
+        : Cesium.createWorldTerrain({ requestVertexNormals, requestWaterMask })
     }
   }
 }

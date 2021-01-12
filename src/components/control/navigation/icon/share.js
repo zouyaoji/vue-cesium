@@ -1,6 +1,6 @@
 import VcIconSvg from './VcIconSvg.vue'
 VcIconSvg.register({
-  'share': {
+  share: {
     width: 16,
     height: 16,
     viewBox: '0 0 16 16',

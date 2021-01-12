@@ -2,7 +2,13 @@
 import {
   show,
   modelMatrix,
-  image
+  image,
+  color,
+  startColor,
+  endColor,
+  imageSize,
+  minimumImageSize,
+  maximumImageSize
 } from '../../../mixins/mixinProps'
 import mixinPrimitive from '../../../mixins/primitives/mixinPrimitive'
 export default {
@@ -11,10 +17,15 @@ export default {
     show,
     modelMatrix,
     image,
+    color,
+    startColor,
+    endColor,
+    imageSize,
+    minimumImageSize,
+    maximumImageSize,
     mixinPrimitive
   ],
   props: {
-    color: Object | String | Array,
     updateCallback: Function,
     emitter: Object,
     emitterModelMatrix: Object,
@@ -27,11 +38,6 @@ export default {
     scale: Number,
     startScale: Number,
     endScale: Number,
-    startColor: Object | String | Array,
-    endColor: Object | String | Array,
-    imageSize: Object,
-    minimumImageSize: Object,
-    maximumImageSize: Object,
     speed: Number,
     minimumSpeed: Number,
     maximumSpeed: Number,

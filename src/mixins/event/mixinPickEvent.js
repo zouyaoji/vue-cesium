@@ -58,7 +58,7 @@ function action (movement) {
     callbackNameOut = 'clickout'
   }
 
-  var pickedFeature = viewer.scene.pick(position)
+  const pickedFeature = viewer.scene.pick(position)
   if (!Cesium.defined(pickedFeature)) {
     if (this.pickedFeature) { // 没有拾取到对象，this.pickedFeature又有记录，说明移出了。
       pickedFeatureAndCallbackNames.push({
@@ -95,7 +95,7 @@ function action (movement) {
   let intersection
   const scene = viewer.scene
   if (scene.mode === Cesium.SceneMode.SCENE3D) {
-    let ray = scene.camera.getPickRay(position)
+    const ray = scene.camera.getPickRay(position)
     intersection = scene.globe.pick(ray, scene)
   } else {
     intersection = scene.camera.pickEllipsoid(position, Cesium.Ellipsoid.WGS84)

@@ -1,6 +1,6 @@
 import VcIconSvg from './VcIconSvg.vue'
 VcIconSvg.register({
-  'decrease': {
+  decrease: {
     width: 50,
     height: 6,
     viewBox: '0 0 50 6',
