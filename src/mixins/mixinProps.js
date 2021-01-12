@@ -1,691 +1,955 @@
-import {
-  lnglatValidator
-} from '../utils/util'
+import { lnglatValidator } from '../utils/util'
 
+import {
+  makeDistanceDisplayCondition,
+  makeCartesian2,
+  makeCartesian2Array,
+  makeCartesian3,
+  makeColor,
+  makeNearFarScalar,
+  makeMaterial,
+  makeCartesian3Array,
+  makeRectangle,
+  makeBoundingRectangle,
+  makePlane,
+  makePolygonHierarchy,
+  makeTranslationRotationScale,
+  makeQuaternion,
+  makeOptions
+} from '../utils/cesiumHelpers'
+
+// 下面属性作为实体加载时 可以传 Function
+// Entity start
 /**
- * @const {Object}  position mixin
+ * @const {Object, Array, Function}  position mixin
+ * 坐标位置属性。
+ * @example
+ * :position = { lng: number, lat: number, height: number }
+ * :position = { x: number, y: number, z: number }
+ * :position = [number, number, number]
  */
 const position = {
   props: {
     position: {
-      type: Object | Function,
-      validator: val => {
+      type: [Object, Array, Function],
+      validator: (val) => {
         return val && Object.prototype.hasOwnProperty.call(val, 'lng') ? lnglatValidator(val.lng, val.lat) : true
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
       }
     }
   }
 }
 
 /**
- * @const {Boolean}  show mixin
+ * @const {Object, Array, Function} orientation mixin
  */
-const show = {
+const orientation = {
   props: {
-    show: {
-      type: Boolean,
-      default: true
+    orientation: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeQuaternion
+      }
+    }
+  }
+}
+// Entity end
+
+// BillboardGraphics start
+/**
+ * @const {Object, Array, Function} alignedAxis mixin
+ */
+const alignedAxis = {
+  props: {
+    alignedAxis: {
+      type: [Object, Array, Function],
+      default: () => {
+        return {
+          x: 0,
+          y: 0,
+          z: 0
+        }
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
     }
   }
 }
 
 /**
- * @const {Object}  distanceDisplayCondition mixin
+ * @const {Object, String, Array, Function} color mixin
+ */
+const color = {
+  props: {
+    color: {
+      type: [Object, String, Array, Function],
+      default: 'white',
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} disableDepthTestDistance mixin
+ */
+const disableDepthTestDistance = {
+  props: {
+    disableDepthTestDistance: [Number, Object, Function]
+  }
+}
+
+/**
+ * @const {Object, Array, Function}  distanceDisplayCondition mixin
  */
 const distanceDisplayCondition = {
   props: {
-    distanceDisplayCondition: Object
+    distanceDisplayCondition: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeDistanceDisplayCondition
+      }
+    }
   }
 }
 
 /**
- * @const {String | Object} image mixin
+ * @const {Object, Array, Function}  eyeOffset mixin
+ */
+const eyeOffset = {
+  props: {
+    eyeOffset: {
+      type: [Object, Array, Function],
+      default: () => {
+        return {
+          x: 0,
+          y: 0,
+          z: 0
+        }
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} height mixin
+ */
+const height = {
+  props: {
+    height: [Number, Object, Function]
+  }
+}
+
+/**
+ * @const {Number, Object, Function} heightReference mixin
+ */
+const heightReference = {
+  props: {
+    heightReference: [Number, Object, Function],
+    default: 0
+  }
+}
+
+/**
+ * @const {Number, Object, Function} horizontalOrigin mixin
+ */
+const horizontalOrigin = {
+  props: {
+    horizontalOrigin: {
+      type: [Number, Object, Function],
+      default: 0
+    }
+  }
+}
+
+/**
+ * @const {String, Object, HTMLCanvasElement, Function} image mixin
  */
 const image = {
   props: {
-    image: String | Object
+    image: [String, Object, HTMLCanvasElement, Function]
   }
 }
 
 /**
- * @const {Number} scale mixin
+ * @const {Object, Array, Function} imageSubRegion mixin
+ */
+const imageSubRegion = {
+  props: {
+    imageSubRegion: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeBoundingRectangle
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array, Function}  pixelOffset mixin
+ */
+const pixelOffset = {
+  props: {
+    pixelOffset: {
+      type: [Object, Array, Function],
+      default: () => {
+        return {
+          x: 0,
+          y: 0
+        }
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array, Function} pixelOffsetScaleByDistance mixin
+ */
+const pixelOffsetScaleByDistance = {
+  props: {
+    pixelOffsetScaleByDistance: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeNearFarScalar
+      }
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} rotation mixin
+ */
+const rotation = {
+  props: {
+    rotation: {
+      type: [Number, Object, Function],
+      default: 0
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} scale mixin
  */
 const scale = {
   props: {
     scale: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 1.0
     }
   }
 }
 
 /**
- * @const {Object}  pixelOffset mixin
- */
-const pixelOffset = {
-  props: {
-    pixelOffset: {
-      type: Object,
-      default: () => {
-        return {
-          x: 0,
-          y: 0
-        }
-      }
-    }
-  }
-}
-
-/**
- * @const {Object}  eyeOffset mixin
- */
-const eyeOffset = {
-  props: {
-    eyeOffset: {
-      type: Object,
-      default: () => {
-        return {
-          x: 0,
-          y: 0,
-          z: 0
-        }
-      }
-    }
-  }
-}
-
-/**
- * @const {Number} horizontalOrigin mixin
- */
-const horizontalOrigin = {
-  props: {
-    horizontalOrigin: {
-      type: Number,
-      default: 0
-    }
-  }
-}
-
-/**
- * @const {Number}  verticalOrigin mixin
- */
-const verticalOrigin = {
-  props: {
-    verticalOrigin: {
-      type: Number,
-      default: 0
-    }
-  }
-}
-
-/**
- * @const {Number} heightReference mixin
- */
-const heightReference = {
-  props: {
-    heightReference: Number,
-    default: 0
-  }
-}
-
-/**
- * @const {Object|String|Array} color mixin
- */
-const color = {
-  props: {
-    color: {
-      type: Object | String | Array,
-      default: 'white'
-    }
-  }
-}
-
-/**
- * @const {Number|Object} rotation mixin
- */
-const rotation = {
-  props: {
-    rotation: {
-      type: Number | Object,
-      default: 0
-    }
-  }
-}
-
-/**
- * @const {Object} alignedAxis mixin
- */
-const alignedAxis = {
-  props: {
-    alignedAxis: {
-      type: Object,
-      default: () => {
-        return {
-          x: 0,
-          y: 0,
-          z: 0
-        }
-      }
-    }
-  }
-}
-
-/**
- * @const {Boolean} sizeInMeters mixin
- */
-const sizeInMeters = {
-  props: {
-    sizeInMeters: Boolean
-  }
-}
-
-/**
- * @const {Number} width mixin
- */
-const width = {
-  props: {
-    width: Number
-  }
-}
-
-/**
- * @const {Number} height mixin
- */
-const height = {
-  props: {
-    height: Number
-  }
-}
-
-/**
- * @const {Object} scaleByDistance mixin
+ * @const {Object, Array, Function} scaleByDistance mixin
  */
 const scaleByDistance = {
   props: {
-    scaleByDistance: Object
+    scaleByDistance: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeNearFarScalar
+      }
+    }
   }
 }
 
 /**
- * @const {Object} translucencyByDistance mixin
+ * @const {Boolean, Object, Function}  show mixin
  */
-const translucencyByDistance = {
+const show = {
   props: {
-    translucencyByDistance: Object
-  }
-}
-
-/**
- * @const {Object} pixelOffsetScaleByDistance mixin
- */
-const pixelOffsetScaleByDistance = {
-  props: {
-    pixelOffsetScaleByDistance: Object
-  }
-}
-
-/**
- * @const {Number} disableDepthTestDistance mixin
- */
-const disableDepthTestDistance = {
-  props: {
-    disableDepthTestDistance: Number
-  }
-}
-
-/**
- * @const {Object} dimensions mixin
- */
-const dimensions = {
-  props: {
-    dimensions: Object | Function
-  }
-}
-
-/**
- * @const {Boolean} fill mixin
- */
-const fill = {
-  props: {
-    fill: {
-      type: Boolean,
+    show: {
+      type: [Boolean, Object, Function],
       default: true
     }
   }
 }
 
 /**
- * @const {Object|String|Array} material mixin
+ * @const {Boolean, Object, Function} sizeInMeters mixin
  */
-const material = {
+const sizeInMeters = {
   props: {
-    material: {
-      type: Object | String | Array,
-      default: 'white'
+    sizeInMeters: [Boolean, Object, Function],
+    default: false
+  }
+}
+
+/**
+ * @const {Object, Array, Function} translucencyByDistance mixin
+ */
+const translucencyByDistance = {
+  props: {
+    translucencyByDistance: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeNearFarScalar
+      }
     }
   }
 }
 
 /**
- * @const {Boolean} outline mixin
+ * @const {Number, Object, Function}  verticalOrigin mixin
+ */
+const verticalOrigin = {
+  props: {
+    verticalOrigin: {
+      type: [Number, Object, Function],
+      default: 0
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} width mixin
+ */
+const width = {
+  props: {
+    width: [Number, Object, Function]
+  }
+}
+// BillboardGraphics end
+
+// BoxGraphics start
+/**
+ * @const {Object, Array, Function} dimensions mixin
+ * // 和 PlaneGraphics.dimensions 区分
+ */
+const dimensions = {
+  props: {
+    dimensions: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
+  }
+}
+
+/**
+ * @const {Boolean, Object, Function} fill mixin
+ */
+const fill = {
+  props: {
+    fill: {
+      type: [Boolean, Object, Function],
+      default: true
+    }
+  }
+}
+
+/**
+ * @const {Object, String, Array, Function} material mixin
+ */
+const material = {
+  props: {
+    material: {
+      type: [Object, String, Array, Function],
+      default: 'white',
+      watcherOptions: {
+        cesiumObjectBuilder: makeMaterial
+      }
+    }
+  }
+}
+
+/**
+ * @const {Boolean, Object, Function} outline mixin
  */
 const outline = {
   props: {
     outline: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: false
     }
   }
 }
 
 /**
- * @const {Object|String|Array} outlineColor mixin
+ * @const {Object, String, Array, Function} outlineColor mixin
  */
 const outlineColor = {
   props: {
     outlineColor: {
-      type: Object | String | Array,
-      default: 'black'
+      type: [Object, String, Array, Function],
+      default: 'black',
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
     }
   }
 }
 
 /**
- * @const {Number} outlineWidth mixin
+ * @const {Number, Object, Function} outlineWidth mixin
  */
 const outlineWidth = {
   props: {
     outlineWidth: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 1.0
     }
   }
 }
 
 /**
- * @const {Number} shadows mixin
+ * @const {Number, Object, Function} shadows mixin
  */
 const shadows = {
   props: {
-    shadows: Number
+    shadows: [Number, Object, Function]
   }
 }
+// BoxGraphics end
 
+// CorridorGraphics start
 /**
- * @const {Array} positions mixin
+ * @const {Array, Object, Function} positions mixin
  */
 const positions = {
   props: {
-    positions: Array | Object
+    type: [Array, Object, Function],
+    positions: {
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3Array,
+        exclude: '_callback'
+      }
+    }
   }
 }
 
 /**
- * @const {Number} extrudedHeight mixin
+ * @const {Number, Object, Function} extrudedHeight mixin
  */
 const extrudedHeight = {
   props: {
-    extrudedHeight: Number
+    extrudedHeight: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} extrudedHeightReference mixin
+ * @const {Number, Object, Function} extrudedHeightReference mixin
  */
 const extrudedHeightReference = {
   props: {
-    extrudedHeightReference: Number
+    extrudedHeightReference: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} cornerType mixin
+ * @const {Number, Object, Function} cornerType mixin
  */
 const cornerType = {
   props: {
     cornerType: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0
     }
   }
 }
 
 /**
- * @const {Number} granularity mixin
+ * @const {Number, Object, Function} granularity mixin
  */
 const granularity = {
   props: {
-    granularity: Number
+    granularity: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} classificationType mixin
+ * @const {Number, Object, Function} classificationType mixin
  */
 const classificationType = {
   props: {
     classificationType: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 2
     }
   }
 }
 
 /**
- * @const {Number} zIndex mixin
+ * @const {Number, Object, Function} zIndex mixin
  */
 const zIndex = {
   props: {
-    zIndex: Number
+    zIndex: [Number, Object, Function]
   }
 }
+// CorridorGraphics end
+
+// CylinderGraphics start
 
 /**
- * @const {Number} length mixin
+ * @const {Number, Object, Function} length mixin
  */
 const length = {
   props: {
-    length: Number
+    length: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} topRadius mixin
+ * @const {Number, Object, Function} topRadius mixin
  */
 const topRadius = {
   props: {
-    topRadius: Number
+    topRadius: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} bottomRadius mixin
+ * @const {Number, Object, Function} bottomRadius mixin
  */
 const bottomRadius = {
   props: {
-    bottomRadius: Number
+    bottomRadius: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} numberOfVerticalLines mixin
+ * @const {Number, Object, Function} numberOfVerticalLines mixin
  */
 const numberOfVerticalLines = {
   props: {
     numberOfVerticalLines: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 16
     }
   }
 }
 
 /**
- * @const {Number} slices mixin
+ * @const {Number, Object, Function} slices mixin
  */
 const slices = {
   props: {
     slices: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 128
     }
   }
 }
+// CylinderGraphics end
 
+// EllipseGraphics start
 /**
- * @const {Number} semiMajorAxis mixin
+ * @const {Number, Object, Function} semiMajorAxis mixin
  */
 const semiMajorAxis = {
   props: {
-    semiMajorAxis: [Number, Object]
+    semiMajorAxis: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number} semiMinorAxis mixin
+ * @const {Number, Object, Function} semiMinorAxis mixin
  */
 const semiMinorAxis = {
   props: {
-    semiMinorAxis: [Number, Object]
+    semiMinorAxis: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Number|Object} stRotation mixin
+ * @const {Number, Object, Function} stRotation mixin
  */
 const stRotation = {
   props: {
     stRotation: {
-      type: [Number, Object],
+      type: [Number, Object, Function],
       default: 0.0
     }
   }
 }
+// EllipseGraphics end
 
+// EllipsoidGraphics start
 /**
- * @const {Number} radii mixin
+ * @const {Number, Object, Function} radii mixin
  */
 const radii = {
   props: {
-    radii: Object
+    radii: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
   }
 }
 
 /**
- * @const {Number} stackPartitions mixin
+ * @const {Object, Array, Function} innerRadii mixin
+ */
+const innerRadii = {
+  props: {
+    innerRadii: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} minimumClock mixin
+ */
+const minimumClock = {
+  props: {
+    minimumClock: {
+      type: [Number, Object, Function],
+      default: 0.0
+    }
+  }
+}
+/**
+ * @const {Number, Object, Function} maximumClock mixin
+ */
+const maximumClock = {
+  props: {
+    maximumClock: {
+      type: [Number, Object, Function],
+      default: 2 * Math.PI
+    }
+  }
+}
+/**
+ * @const {Number, Object, Function} minimumCone mixin
+ */
+const minimumCone = {
+  props: {
+    minimumCone: {
+      type: [Number, Object, Function],
+      default: 0.0
+    }
+  }
+}
+/**
+ * @const {Number, Object, Function} maximumCone mixin
+ */
+const maximumCone = {
+  props: {
+    maximumCone: {
+      type: [Number, Object, Function],
+      default: Math.PI
+    }
+  }
+}
+
+/**
+ * @const {Number, Object, Function} stackPartitions mixin
  */
 const stackPartitions = {
   props: {
     stackPartitions: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 64
     }
   }
 }
 
 /**
- * @const {Number} slicePartitions mixin
+ * @const {Number, Object, Function} slicePartitions mixin
  */
 const slicePartitions = {
   props: {
     slicePartitions: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 64
     }
   }
 }
 
 /**
- * @const {Number} subdivisions mixin
+ * @const {Number, Object, Function} subdivisions mixin
  */
 const subdivisions = {
   props: {
     subdivisions: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 128
     }
   }
 }
+// EllipsoidGraphics end
 
+// LabelGraphics start
 /**
- * @const {String} text mixin
+ * @const {String, Object, Function} text mixin
  */
 const text = {
   props: {
-    text: String
+    text: [String, Object, Function]
   }
 }
 
 /**
- * @const {String} font mixin
+ * @const {String, Object, Function} font mixin
  */
 const font = {
   props: {
     font: {
-      type: String,
+      type: [String, Object, Function],
       default: '30px sans-serif'
     }
   }
 }
 
 /**
- * @const {Number} labelStyle mixin
+ * @const {Number, Object, Function} labelStyle mixin
  */
 const labelStyle = {
   props: {
     labelStyle: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0
     }
   }
 }
 
 /**
- * @const {Boolean} showBackground mixin
+ * @const {Boolean, Object, Function} showBackground mixin
  */
 const showBackground = {
   props: {
     showBackground: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: false
     }
   }
 }
 
 /**
- * @const {Object/String/Array} backgroundColor mixin
+ * @const {Object, String, Array, Function} backgroundColor mixin
  */
 const backgroundColor = {
   props: {
     backgroundColor: {
-      type: Object | String | Array,
+      type: [Object, String, Array, Function],
       default: () => {
         return [0.165, 0.165, 0.165, 0.8]
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
       }
     }
   }
 }
 
 /**
- * @const {Object} backgroundPadding mixin
+ * @const {Object, Array, Function} backgroundPadding mixin
  */
 const backgroundPadding = {
   props: {
     backgroundPadding: {
-      type: Object,
+      type: [Object, Array, Function],
       default: () => {
         return { x: 7, y: 5 }
+      },
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
       }
     }
   }
 }
 
 /**
- * @const {Object|String|Array} fillColor mixin
+ * @const {Object, String, Array, Function} fillColor mixin
  */
 const fillColor = {
   props: {
     fillColor: {
-      type: Object | String | Array,
-      default: 'WHITE'
+      type: [Object, String, Array, Function],
+      default: 'white',
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
     }
   }
 }
+// LabelGraphics end
 
+// ModelGraphics start
 /**
- * @const {String} uri mixin
+ * @const {String, Object, Function} uri mixin
  */
 const uri = {
   props: {
-    uri: String
+    uri: [String, Object, Function]
   }
 }
 
 /**
- * @const {Number} minimumPixelSize mixin
+ * @const {Number, Object, Function} minimumPixelSize mixin
  */
 const minimumPixelSize = {
   props: {
     minimumPixelSize: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0.0
     }
   }
 }
 
 /**
- * @const {Number} maximumScale mixin
+ * @const {Number, Object, Function} maximumScale mixin
  */
 const maximumScale = {
   props: {
-    maximumScale: Number
+    maximumScale: [Number, Object, Function]
   }
 }
 
 /**
- * @const {Boolean} incrementallyLoadTextures mixin
+ * @const {Boolean, Object, Function} incrementallyLoadTextures mixin
  */
 const incrementallyLoadTextures = {
   props: {
     incrementallyLoadTextures: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: true
     }
   }
 }
 
 /**
- * @const {Boolean} clampAnimations mixin
+ * @const {Boolean, Object, Function} clampAnimations mixin
+ */
+const runAnimations = {
+  props: {
+    clampAnimations: {
+      type: [Boolean, Object, Function],
+      default: true
+    }
+  }
+}
+
+/**
+ * @const {Boolean, Object, Function} clampAnimations mixin
  */
 const clampAnimations = {
   props: {
     clampAnimations: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: true
     }
   }
 }
 
 /**
- * @const {Object|String|Array} silhouetteColor mixin
+ * @const {Object, String, Array, Function} silhouetteColor mixin
  */
 const silhouetteColor = {
   props: {
-    silhouetteColor: Object | String | Array
+    silhouetteColor: {
+      typy: [Object, String, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
   }
 }
 
 /**
- * @const {Number} silhouetteSize mixin
+ * @const {Number, Object, Function} silhouetteSize mixin
  */
 const silhouetteSize = {
   props: {
     silhouetteSize: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0.0
     }
   }
 }
 
 /**
- * @const {Number} colorBlendMode mixin
+ * @const {Number, Object, Function} colorBlendMode mixin
  */
 const colorBlendMode = {
   props: {
     colorBlendMode: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0
     }
   }
 }
 
 /**
- * @const {Number} colorBlendAmount mixin
+ * @const {Number, Object, Function} colorBlendAmount mixin
  */
 const colorBlendAmount = {
   props: {
     colorBlendAmount: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 0.5
     }
+  }
+}
+
+/**
+ * @const {Object, Array, Function} imageBasedLightingFactor mixin
+ */
+const imageBasedLightingFactor = {
+  props: {
+    imageBasedLightingFactor: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, String, Array, Function} lightColor mixin
+ * 注意区别 Cesium3DTileset 的 lightColor
+ */
+const lightColor = {
+  props: {
+    lightColor: {
+      typy: [Object, String, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Function} nodeTransformations mixin
+ */
+const nodeTransformations = {
+  props: {
+    nodeTransformations: {
+      type: [Object, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeTranslationRotationScale
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Function} articulations mixin
+ */
+const articulations = {
+  props: {
+    articulations: [Object, Function]
   }
 }
 
@@ -697,104 +961,239 @@ const clippingPlanes = {
     clippingPlanes: Object
   }
 }
+// ModelGraphics end
 
+// PathGraphics start
+// PathGraphics end
+
+// PlaneGraphics start
 /**
- * @const {Number} pixelSize mixin
+ * @const {Object, Array, Function} plane mixin
+ */
+const plane = {
+  props: {
+    plane: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makePlane
+      }
+    }
+  }
+}
+// PlaneGraphics end
+
+// PointGraphics start
+/**
+ * @const {Number, Object, Function} pixelSize mixin
  */
 const pixelSize = {
   props: {
     pixelSize: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 1
+    }
+  }
+}
+// PointGraphics end
+
+// PolygonGraphics start
+
+/**
+ * @const {Object, Array, Function} hierarchy mixin
+ */
+const hierarchy = {
+  props: {
+    hierarchy: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makePolygonHierarchy,
+        exclude: '_callback'
+      }
     }
   }
 }
 
 /**
- * @const {Boolean} perPositionHeight mixin
+ * @const {Boolean, Object, Function} perPositionHeight mixin
  */
 const perPositionHeight = {
   props: {
     perPositionHeight: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: false
     }
   }
 }
 
 /**
- * @const {Boolean} closeTop mixin
+ * @const {Boolean, Object, Function} closeTop mixin
  */
 const closeTop = {
   props: {
     closeTop: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: true
     }
   }
 }
 
 /**
- * @const {Boolean} closeBottom mixin
+ * @const {Boolean, Object, Function} closeBottom mixin
  */
 const closeBottom = {
   props: {
     closeBottom: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: true
     }
   }
 }
 
 /**
- * @const {Number} arcType mixin
+ * @const {Number, Object, Function} arcType mixin
  */
 const arcType = {
   props: {
     arcType: {
-      type: Number,
+      type: [Number, Object, Function],
       default: 1
     }
   }
 }
+// PolygonGraphics end
 
+// PolylineGraphics start
 /**
- * @const {Boolean} clampToGround mixin
+ * @const {Object, String, Array, Function} depthFailMaterial  mixin
  */
-const clampToGround = {
+const depthFailMaterial = {
   props: {
-    clampToGround: {
-      type: Boolean,
-      default: false
+    depthFailMaterial: {
+      type: [Object, String, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeMaterial
+      }
     }
   }
 }
 
 /**
- * @const Array{} minimumHeights mixin
+ * @const {Boolean, Object, Function} clampToGround mixin
+ */
+const clampToGround = {
+  props: {
+    clampToGround: {
+      type: [Boolean, Object, Function],
+      default: false
+    }
+  }
+}
+// PolylineGraphics end
+
+// PolylineVolumeGraphics start
+/**
+ * @const {Array, Object, Function} shape mixin
+ */
+const shape = {
+  props: {
+    shape: {
+      type: [Array, Object, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2Array
+      }
+    }
+  }
+}
+// PolylineVolumeGraphics end
+
+// RectangleGraphics start
+/**
+ * @const {Object, Array, Function} coordinates mixin
+ */
+const coordinates = {
+  props: {
+    coordinates: {
+      type: [Object, Array, Function],
+      watcherOptions: {
+        cesiumObjectBuilder: makeRectangle
+      }
+    }
+  }
+}
+// RectangleGraphics end
+
+// Cesium3DTilesetGraphics start
+/**
+ * @const {Number, Object, Function} maximumScreenSpaceError mixin
+ */
+const maximumScreenSpaceError = {
+  props: {
+    maximumScreenSpaceError: {
+      type: [Number, Object, Function],
+      default: 16
+    }
+  }
+}
+// Cesium3DTilesetGraphics end
+
+// WallGraphics start
+/**
+ * @const {Array, Object, Function} minimumHeights mixin
  */
 const minimumHeights = {
   props: {
-    minimumHeights: Array
+    minimumHeights: [Array, Object, Function]
   }
 }
 
 /**
- * @const {Array} maximumHeights mixin
+ * @const {Array, Object, Function} maximumHeights mixin
  */
 const maximumHeights = {
   props: {
-    maximumHeights: Array
+    maximumHeights: [Array, Object, Function]
+  }
+}
+// WallGraphics end
+// Entity end
+
+// ImageryLayer start
+/**
+ * @const {Object, Array} cutoutRectangle mixin
+ */
+const cutoutRectangle = {
+  props: {
+    cutoutRectangle: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeRectangle
+      }
+    }
   }
 }
 
+/**
+ * @const {Object, String, Array} colorToAlpha mixin
+ */
+const colorToAlpha = {
+  props: {
+    colorToAlpha: {
+      type: [Object, String, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+// ImageryLayer end
+
 // imageryProvider
 /**
- * @const {String|Object} url mixin
+ * @const {String, Object} url mixin
  */
 const url = {
   props: {
-    url: String | Object
+    url: [String, Object]
   }
 }
 
@@ -838,11 +1237,16 @@ const enablePickFeatures = {
 }
 
 /**
- * @const {Object} rectangle mixin
+ * @const {Object, Array} rectangle mixin
  */
 const rectangle = {
   props: {
-    rectangle: Object
+    rectangle: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeRectangle
+      }
+    }
   }
 }
 
@@ -865,12 +1269,12 @@ const ellipsoid = {
 }
 
 /**
- * @const {String|Object} credit mixin
+ * @const {String, Object} credit mixin
  */
 const credit = {
   props: {
     credit: {
-      type: String | Object,
+      type: [String, Object],
       default: ''
     }
   }
@@ -955,11 +1359,11 @@ const format = {
 }
 
 /**
- * @const {String|Array} subdomains mixin
+ * @const {String, Array} subdomains mixin
  */
 const subdomains = {
   props: {
-    subdomains: String | Array
+    subdomains: [String, Array]
   }
 }
 
@@ -1056,11 +1460,11 @@ const appearance = {
 }
 
 /**
- * @const {Array|Object} geometryInstances mixin
+ * @const {Array, Object} geometryInstances mixin
  */
 const geometryInstances = {
   props: {
-    geometryInstances: Array | Object
+    geometryInstances: [Array, Object]
   }
 }
 
@@ -1169,11 +1573,16 @@ const vertexFormat = {
 }
 
 /**
- * @const {Object} center mixin
+ * @const {Object, Array} center mixin
  */
 const center = {
   props: {
-    center: Object
+    center: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
   }
 }
 
@@ -1183,58 +1592,6 @@ const center = {
 const radius = {
   props: {
     radius: Number
-  }
-}
-/**
- * @const {Object} innerRadii mixin
- */
-const innerRadii = {
-  props: {
-    innerRadii: Object
-  }
-}
-/**
- * @const {Object} minimumClock mixin
- */
-const minimumClock = {
-  props: {
-    minimumClock: {
-      type: Number,
-      default: 0.0
-    }
-  }
-}
-/**
- * @const {Object} maximumClock mixin
- */
-const maximumClock = {
-  props: {
-    maximumClock: {
-      type: Number,
-      default: 2 * Math.PI
-    }
-  }
-}
-/**
- * @const {Object} minimumCone mixin
- */
-const minimumCone = {
-  props: {
-    minimumCone: {
-      type: Number,
-      default: 0.0
-    }
-  }
-}
-/**
- * @const {Object} maximumCone mixin
- */
-const maximumCone = {
-  props: {
-    maximumCone: {
-      type: Number,
-      default: Math.PI
-    }
   }
 }
 
@@ -1248,20 +1605,16 @@ const frustum = {
 }
 
 /**
- * @const {Object} origin mixin
+ * @const {Object, Array} origin mixin
  */
 const origin = {
   props: {
-    origin: Object
-  }
-}
-
-/**
- * @const {Object} orientation mixin
- */
-const orientation = {
-  props: {
-    orientation: Object
+    origin: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
   }
 }
 
@@ -1270,11 +1623,213 @@ const orientation = {
  */
 const polygonHierarchy = {
   props: {
-    polygonHierarchy: Object | Array
+    polygonHierarchy: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makePolygonHierarchy
+      }
+    }
   }
 }
 
+/**
+ * @const {Object, String, Array} startColor mixin
+ */
+const startColor = {
+  props: {
+    startColor: {
+      type: [Object, String, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, String, Array} endColor mixin
+ */
+const endColor = {
+  props: {
+    endColor: {
+      type: [Object, String, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array} minimumImageSize mixin
+ */
+const minimumImageSize = {
+  props: {
+    minimumImageSize: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array} maximumImageSize mixin
+ */
+const maximumImageSize = {
+  props: {
+    maximumImageSize: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array} imageSize mixin
+ */
+const imageSize = {
+  props: {
+    imageSize: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2
+      }
+    }
+  }
+}
+
+/**
+ * @const {Array} shapePositions mixin
+ */
+const shapePositions = {
+  props: {
+    shapePositions: {
+      type: Array,
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian2Array
+      }
+    }
+  }
+}
+
+/**
+ * @const {Array} polylinePositions mixin
+ */
+const polylinePositions = {
+  props: {
+    polylinePositions: {
+      type: Array,
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3Array
+      }
+    }
+  }
+}
+
+// datasouce
+/**
+ * @const {String, Object} data mixin
+ */
+const data = {
+  props: {
+    data: {
+      type: [String, Object],
+      required: true
+    }
+  }
+}
+
+/**
+ * @const {Object} options mixin
+ */
+const options = {
+  props: {
+    options: {
+      type: Object,
+      watcherOptions: {
+        cesiumObjectBuilder: makeOptions,
+        deep: true
+      }
+    }
+  }
+}
+
+// PostProcessStage start
+/**
+ * @const {String, Array, Object} glowColor mixin
+ */
+const glowColor = {
+  props: {
+    glowColor: {
+      type: [String, Array, Object],
+      default: () => [0.0, 1.0, 0.0, 0.05],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {String, Array, Object} clearColor mixin
+ */
+const clearColor = {
+  props: {
+    clearColor: {
+      type: [String, Array, Object],
+      watcherOptions: {
+        cesiumObjectBuilder: makeColor
+      }
+    }
+  }
+}
+
+/**
+ * @const {Object, Array} scissorRectangle mixin
+ */
+const scissorRectangle = {
+  props: {
+    scissorRectangle: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeBoundingRectangle
+      }
+    }
+  }
+}
+
+// PostProcessStage end
+
 export {
+  maximumScreenSpaceError,
+  runAnimations,
+  articulations,
+  scissorRectangle,
+  clearColor,
+  glowColor,
+  options,
+  data,
+  imageSubRegion,
+  coordinates,
+  nodeTransformations,
+  hierarchy,
+  plane,
+  colorToAlpha,
+  cutoutRectangle,
+  polylinePositions,
+  shapePositions,
+  imageSize,
+  maximumImageSize,
+  minimumImageSize,
+  endColor,
+  startColor,
+  shape,
+  lightColor,
+  imageBasedLightingFactor,
   polygonHierarchy,
   orientation,
   origin,
@@ -1365,6 +1920,7 @@ export {
   disableDepthTestDistance,
   dimensions,
   fill,
+  depthFailMaterial,
   material,
   outline,
   outlineColor,
