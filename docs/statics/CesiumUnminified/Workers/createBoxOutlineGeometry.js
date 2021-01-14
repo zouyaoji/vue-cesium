@@ -21,7 +21,7 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./when-cbf8cd21', './Check-35e1a91d', './Math-d4357f39', './Cartesian2-d70cd429', './Transforms-6f36fec5', './RuntimeError-f4c64df1', './WebGLConstants-95ceb4e9', './ComponentDatatype-607c9a0c', './GeometryAttribute-57b7635e', './GeometryAttributes-90846c5f', './GeometryOffsetAttribute-9c676324'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute) { 'use strict';
+define(['./when-54c2dc71', './Check-6c0211bc', './Math-850675ea', './Cartesian2-ea28baad', './Transforms-75068085', './RuntimeError-2109023a', './WebGLConstants-76bb35d1', './ComponentDatatype-a26dd044', './GeometryAttribute-e92aa207', './GeometryAttributes-4fcfcf40', './GeometryOffsetAttribute-d746452d'], function (when, Check, _Math, Cartesian2, Transforms, RuntimeError, WebGLConstants, ComponentDatatype, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute) { 'use strict';
 
   var diffScratch = new Cartesian2.Cartesian3();
 

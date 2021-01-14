@@ -21,7 +21,7 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./when-cbf8cd21', './RuntimeError-f4c64df1', './WebGLConstants-95ceb4e9', './createTaskProcessorWorker'], function (when, RuntimeError, WebGLConstants, createTaskProcessorWorker) { 'use strict';
+define(['./when-54c2dc71', './RuntimeError-2109023a', './WebGLConstants-76bb35d1', './createTaskProcessorWorker'], function (when, RuntimeError, WebGLConstants, createTaskProcessorWorker) { 'use strict';
 
   /**
    * Describes a compressed texture and contains a compressed texture buffer.
