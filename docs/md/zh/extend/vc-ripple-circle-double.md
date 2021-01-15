@@ -19,6 +19,14 @@
           ref="circle"
           v-if="flag"
         ></vc-ripple-circle-double>
+        <vc-ripple-circle-double
+          @ready="subReady"
+          imageUrl="./statics/SampleData/images/redCircle2.png"
+          :position="position"
+          ref="circle"
+          v-if="flag"
+          :height="3000"
+        ></vc-ripple-circle-double>
         <vc-entity>
           <vc-graphics-polyline :positions="positions" :width="5" :material="material"></vc-graphics-polyline>
         </vc-entity>
@@ -70,6 +78,14 @@
         :position="position"
         ref="circle"
         v-if="flag"
+      ></vc-ripple-circle-double>
+      <vc-ripple-circle-double
+        @ready="subReady"
+        imageUrl="./statics/SampleData/images/redCircle2.png"
+        :position="position"
+        ref="circle"
+        v-if="flag"
+        :height="3000"
       ></vc-ripple-circle-double>
       <vc-entity>
         <vc-graphics-polyline :positions="positions" :width="5" :material="material"></vc-graphics-polyline>

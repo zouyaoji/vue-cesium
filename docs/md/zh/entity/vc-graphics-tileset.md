@@ -12,7 +12,7 @@
   <template>
     <div class="viewer">
       <vc-viewer @ready="ready">
-        <vc-entity ref="entity" :position="position" :description="description" :orientation="orientation" :id="id">
+        <vc-entity ref="entity" :position="position" :description="description" :id="id">
            <vc-graphics-tileset
             :uri="uri"
           ></vc-graphics-tileset>
@@ -28,7 +28,7 @@
           uri: 'https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json',
           id: 'Hello Vue Cesium',
           description: 'This is a 3DTilesetGraphics',
-          position: { lng: 108, lat: 35, height: -5000 },
+          position: { lng: 108, lat: 35, height: 5000 },
           orientation: {}
         }
       },

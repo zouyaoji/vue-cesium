@@ -5,8 +5,8 @@
         :height="height"
         :material="material1"
         :rotation="rotation1"
-        :semiMajorAxis="r1"
-        :semiMinorAxis="r1"
+        :semiMajorAxis="radius1"
+        :semiMinorAxis="radius1"
         :stRotation="stRotation1"
       ></vc-graphics-ellipse>
     </vc-entity>
@@ -15,8 +15,8 @@
         :height="height"
         :material="material2"
         :rotation="rotation2"
-        :semiMajorAxis="r2"
-        :semiMinorAxis="r2"
+        :semiMajorAxis="radius2"
+        :semiMinorAxis="radius2"
         :stRotation="stRotation2"
       ></vc-graphics-ellipse>
     </vc-entity>
@@ -25,15 +25,11 @@
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { position, show } from '../../../mixins/mixinProps'
+import { position, show, height } from '../../../mixins/mixinProps'
 export default {
   name: 'vc-circle-roatating-double',
-  mixins: [cmp, position, show],
+  mixins: [cmp, position, show, height],
   props: {
-    height: {
-      type: Number,
-      default: undefined
-    },
     radius1: {
       type: Number,
       default: 1500
@@ -55,8 +51,6 @@ export default {
   },
   data () {
     return {
-      r1: 0,
-      r2: 0,
       rotation1: 0,
       stRotation1: 0,
       rotation2: 0,
@@ -83,59 +77,29 @@ export default {
       })
     },
     init () {
-      const { deviationRotation1, deviationRotation2, radius1, radius2 } = this
-      let scratchR1 = 0.01
-      let scratchR2 = 0.01
-      let startFlag = false
-      setTimeout(() => {
-        startFlag = true
-      })
-      this.r1 = new Cesium.CallbackProperty(() => {
-        if (startFlag) {
-          scratchR1 += radius1 / 20
-          if (scratchR1 >= radius1) {
-            scratchR1 = radius1
-          }
-        }
-        return scratchR1
-      }, false)
-
-      this.r2 = new Cesium.CallbackProperty(() => {
-        if (startFlag) {
-          scratchR2 += radius2 / 20
-          if (scratchR2 >= radius2) {
-            scratchR2 = radius2
-          }
-        }
-        return scratchR2
-      }, false)
+      const { deviationRotation1, deviationRotation2 } = this
 
       let startrotation1 = Cesium.Math.toRadians(30)
-      this.rotation1 = new Cesium.CallbackProperty(() => {
+      const getRotationValue1 = () => {
         startrotation1 += deviationRotation1
         return startrotation1
-      }, false)
-      this.stRotation1 = new Cesium.CallbackProperty(() => {
-        startrotation1 += deviationRotation1
-        return startrotation1
-      }, false)
+      }
+      this.rotation1 = getRotationValue1
+      this.stRotation1 = getRotationValue1
 
       let startrotation2 = Cesium.Math.toRadians(30)
-      this.rotation2 = new Cesium.CallbackProperty(() => {
+
+      const getRotationValue2 = () => {
         startrotation2 += deviationRotation2
         return startrotation2
-      }, false)
-      this.stRotation2 = new Cesium.CallbackProperty(() => {
-        startrotation2 += deviationRotation2
-        return startrotation2
-      }, false)
+      }
+      this.rotation2 = getRotationValue2
+      this.stRotation2 = getRotationValue2
     },
     async mount () {
       return true
     },
     async unmount () {
-      this.r1 = undefined
-      this.r2 = undefined
       this.rotation1 = undefined
       this.rotation2 = undefined
       this.stRotation1 = undefined

@@ -8,11 +8,12 @@ export default {
     async createCesiumObject () {
       const { $props, transformProps, viewer } = this
       const options = transformProps($props)
-      if (!options.camera) {
-        options.camera = viewer.camera
+      options.options = options.options || {}
+      if (!options.options.camera) {
+        options.options.camera = viewer.camera
       }
-      if (!options.canvas) {
-        options.canvas = viewer.canvas
+      if (!options.options.canvas) {
+        options.options.canvas = viewer.canvas
       }
       return Cesium.KmlDataSource.load(options.data, options.options)
     }

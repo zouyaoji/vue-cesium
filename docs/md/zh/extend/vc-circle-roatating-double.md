@@ -20,6 +20,15 @@
           ref="circle"
           v-if="flag"
         ></vc-circle-roatating-double>
+        <vc-circle-roatating-double
+          @ready="subReady"
+          material1="./statics/SampleData/images/circle1.png"
+          material2="./statics/SampleData/images/circle2.png"
+          :position="position"
+          ref="circle"
+          v-if="flag"
+          :height="3000"
+        ></vc-circle-roatating-double>
         <vc-entity>
           <vc-graphics-polyline :positions="positions" :width="5" :material="material"></vc-graphics-polyline>
         </vc-entity>

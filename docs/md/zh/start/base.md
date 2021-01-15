@@ -5,7 +5,7 @@
 <!-- prettier-ignore -->
 | 事件名 | 参数 | 描述 |
 | ----- | ---- | ----- |
-| ready | {Cesium, viewer} | viewer 组件渲染完毕时触发，返回一个 Cesium 的核心类和 viewer 实例。该项目组件是异步加载，请**不要**尝试在组件的生命周期中访问 Cesium 核心类和 viewer 实例，如有需要，请在所需组件的 `ready` 事件回调函数的参数中获取。 |
+| ready | { Cesium, viewer, cesiumObject } | viewer 组件渲染完毕时触发，返回一个 Cesium 的核心类和 viewer 实例。该项目组件是异步加载，请**不要**尝试在组件的生命周期中访问 Cesium 核心类和 viewer 实例，如有需要，请在所需组件的 `ready` 事件回调函数的参数中获取。 |
 
 ## 全局组件实例方法
 
@@ -30,6 +30,8 @@
   x: number,
   y: number
 }
+
+[x, y]
 ```
 
 ### Cartesian2 Array
@@ -38,6 +40,8 @@
 
 ```JavaScript
 [{ x: number, y: number },...,{ x: number, y: number }]
+
+[x, y, ..., x, y]
 ```
 
 ### Cartesian3
@@ -50,12 +54,14 @@
   lat: number,
   height: number
 }
-// 或者
+
 {
-  x: number,
-  y: number,
+  x: number
+  y: number
   z: number
 }
+
+[x, y, z]
 ```
 
 ### Cartesian3 Array
@@ -64,6 +70,8 @@
 
 ```JavaScript
 [{ lng: number, lat: number, height: number },...,{ lng: number, lat: number, height: number }]
+
+[x1, y1, z1, ..., xn, yn, zn]
 ```
 
 ### Rectangle
@@ -72,6 +80,8 @@
 
 ```JavaScript
 { west: number, south: number, east: number, north: number }
+
+[west, south, east, north]
 ```
 
 ### DistanceDisplayCondition
@@ -83,6 +93,8 @@
   near: number,
   far: number
 }
+
+[near , far]
 ```
 
 ### NearFarScalar
@@ -96,6 +108,8 @@
   far: number,
   farValue: number
 }
+
+[near, nearValue, far, farValue]
 ```
 
 ### Color
@@ -135,5 +149,3 @@ color: [1.0, 1.0, 1.0, 1.0]
 ## 参考
 
 > [Cesium 官方文档](https://cesium.com/docs/cesiumjs-ref-doc/index.html)
-
-> [超图 WebGL3D 官方文档](http://support.supermap.com.cn:8090/webgl/Build/Documentation/index.html)

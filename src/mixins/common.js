@@ -115,7 +115,7 @@ const methods = {
    */
   setPropWatchers (register) {
     if (register) {
-      const { cesiumClass } = this
+      const { cesiumClass, transformProp } = this
       if (!cesiumClass || !Cesium[cesiumClass]) {
         return
       }
@@ -142,7 +142,7 @@ const methods = {
               // Wait for child components to be created.
               // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
               await that.createPromise
-              const { cesiumObject } = this
+              const { cesiumObject } = that
               // Get the writability of the current cesiumobject or the props on its prototype chain to
               // detect whether the component property responds dynamically or reloads the component when the property changes.
               // 通过 cesiumObject 对象或它原型链上的 prop 的可写性，以检测属性改变时组件属性是动态响应还是重载组件。
@@ -160,7 +160,7 @@ const methods = {
                     cesiumObject[cesiumProp] = newVal
                   }
                 } else {
-                  cesiumObject[cesiumProp] = val
+                  cesiumObject[cesiumProp] = transformProp(cesiumProp, val)
                 }
                 return true
               } else {

@@ -7,6 +7,7 @@
 - 常用属性支持传 `Array`。
 - 实体属性支持传 `Function`。
 - 修复生产环境组件移除异常问题。 [#92](https://github.com/zouyaoji/vue-cesium/issues/92)
+- [`vc-ripple-circle-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-ripple-circle-double), [`vc-circle-roatating-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-circle-roatating-double) 解决设置高度异常问题。
 
 ### 修改
 

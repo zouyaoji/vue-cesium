@@ -50,10 +50,10 @@
               value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
               label: '高德影像地图服务'
             },
-            {
-              value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
-              label: '谷歌影像地图服务'
-            },
+            // {
+            //   value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+            //   label: '谷歌影像地图服务'
+            // },
             {
               value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
               label: '高德矢量地图服务'
@@ -130,10 +130,10 @@
             value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
             label: '高德影像地图服务'
           },
-          {
-            value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
-            label: '谷歌影像地图服务'
-          },
+          // {
+          //   value: 'https://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali',
+          //   label: '谷歌影像地图服务'
+          // },
           {
             value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
             label: '高德矢量地图服务'

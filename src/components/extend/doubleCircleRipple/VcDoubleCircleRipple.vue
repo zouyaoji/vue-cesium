@@ -1,29 +1,35 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-entity :position="position" :show="show" ref="entity1">
-      <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius1" :semiMinorAxis="radius1"></vc-graphics-ellipse>
+      <vc-graphics-ellipse
+        :height="height"
+        :material="material"
+        :semiMajorAxis="radius1"
+        :semiMinorAxis="radius1"
+      ></vc-graphics-ellipse>
     </vc-entity>
     <vc-entity :position="position" :show="show" ref="entity2">
-      <vc-graphics-ellipse :height="height" :material="material" :semiMajorAxis="radius2" :semiMinorAxis="radius2"></vc-graphics-ellipse>
+      <vc-graphics-ellipse
+        :height="height"
+        :material="material"
+        :semiMajorAxis="radius2"
+        :semiMinorAxis="radius2"
+      ></vc-graphics-ellipse>
     </vc-entity>
   </i>
 </template>
 
 <script>
 import cmp from '../../../mixins/virtualCmp'
-import { position, show, color } from '../../../mixins/mixinProps'
+import { position, show, color, height } from '../../../mixins/mixinProps'
 import { makeColor } from '../../../utils/cesiumHelpers'
 export default {
   name: 'vc-ripple-circle-double',
-  mixins: [cmp, position, show, color],
+  mixins: [cmp, position, show, color, height],
   props: {
-    height: {
-      type: Number,
-      default: undefined
-    },
     minRadius: {
       type: Number,
-      default: 0
+      default: 0.1
     },
     maxRadius: {
       type: Number,
@@ -31,7 +37,7 @@ export default {
     },
     deviationRadius: {
       type: Number,
-      default: 20
+      default: 40
     },
     interval: {
       type: Number,
@@ -42,10 +48,9 @@ export default {
   data () {
     return {
       material: {},
-      radius1: 0,
-      radius2: 0,
-      nowaiting: true,
-      flag: false
+      radius1: undefined,
+      radius2: undefined,
+      nowaiting: true
     }
   },
   mounted () {
@@ -70,7 +75,7 @@ export default {
       const { minRadius, maxRadius, imageUrl, interval, changeRadius1, changeRadius2, color } = this
       const cesiumColor = makeColor(color)
       this.r1 = minRadius
-      this.r2 = maxRadius
+      this.r2 = minRadius
       this.material = {
         fabric: {
           type: 'Image',
@@ -83,9 +88,9 @@ export default {
           }
         }
       }
-      this.radius1 = new Cesium.CallbackProperty(changeRadius1, false)
+      this.radius1 = changeRadius1
       setTimeout(() => {
-        this.radius2 = new Cesium.CallbackProperty(changeRadius2, false)
+        this.radius2 = changeRadius2
       }, interval)
     },
     async mount () {
@@ -94,21 +99,35 @@ export default {
     async unmount () {
       this.radius1 = 0
       this.radius2 = 0
-      return this.$refs.entity1 && this.$refs.entity2 ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()]) : true
+      return this.$refs.entity1 && this.$refs.entity2
+        ? Promise.all([this.$refs.entity1.unload(), this.$refs.entity2.unload()])
+        : true
     },
     changeRadius1 () {
       const { deviationRadius, maxRadius, minRadius } = this
-      this.r1 += deviationRadius
-      if (this.r1 >= maxRadius) {
-        this.r1 = minRadius
+      if (!this.flag1) {
+        this.r1 += deviationRadius
+        if (this.r1 >= maxRadius) {
+          this.r1 = minRadius
+        }
+        this.flag1 = true
+      } else {
+        this.flag1 = false
       }
+
       return this.r1
     },
     changeRadius2 () {
       const { deviationRadius, maxRadius, minRadius } = this
-      this.r2 += deviationRadius
-      if (this.r2 >= maxRadius) {
-        this.r2 = minRadius
+      if (!this.flag2) {
+        this.r2 += deviationRadius
+        if (this.r2 >= maxRadius) {
+          this.r2 = minRadius
+        }
+
+        this.flag2 = true
+      } else {
+        this.flag2 = false
       }
       return this.r2
     }

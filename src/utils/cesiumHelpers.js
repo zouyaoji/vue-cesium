@@ -319,7 +319,12 @@ export function makeMaterialProperty (val, isConstant = false) {
     val instanceof Resource ||
     val instanceof HTMLCanvasElement ||
     val instanceof HTMLVideoElement) {
-    const result = new ImageMaterialProperty()
+    const result = new ImageMaterialProperty({
+      image: val,
+      repeat: makeCartesian2({ x: 1.0, y: 1.0 }),
+      color: Color.WHITE,
+      transparent: true
+    })
     result.image = val
     return result
   }

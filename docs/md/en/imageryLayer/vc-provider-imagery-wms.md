@@ -31,7 +31,7 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
     export default {
       data () {
         return {
-          url: 'https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
+          url: 'http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
           layers: 'Hydrography:bores',
           parameters: {
             transparent : true,
@@ -84,7 +84,7 @@ The `vc-provider-imagery-wms` component is used to load tiled imagery hosted by 
   export default {
     data() {
       return {
-        url: 'https://nationalmap.gov.au/proxy/http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
+        url: 'http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows',
         layers: 'Hydrography:bores',
         parameters: {
           transparent: true,
