@@ -82,9 +82,13 @@ export default {
         pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
         const pointOptionsTransform = transformProps(pointOptions)
         const point = pointColletion.add(pointOptionsTransform)
+        for (const prop in pointOptionsTransform) {
+          if (!point[prop]) {
+            point[prop] = pointOptionsTransform[prop]
+          }
+        }
         point.vcIndex = i
       }
-
       return pointColletion
     }
   }

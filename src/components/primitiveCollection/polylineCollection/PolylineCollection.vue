@@ -82,6 +82,11 @@ export default {
         polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
         const polylineOptionsTransform = transformProps(polylineOptions)
         const polyline = polylineCollection.add(polylineOptionsTransform)
+        for (const prop in polylineOptionsTransform) {
+          if (!polyline[prop]) {
+            polyline[prop] = polylineOptionsTransform[prop]
+          }
+        }
         polyline.vcIndex = i
       }
 

@@ -83,6 +83,11 @@ export default {
         billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
         const billboardOptionsTransform = transformProps(billboardOptions)
         const billboard = billboardCollection.add(billboardOptionsTransform)
+        for (const prop in billboardOptionsTransform) {
+          if (!billboard[prop]) {
+            billboard[prop] = billboardOptionsTransform[prop]
+          }
+        }
         billboard.vcIndex = i
       }
       return billboardCollection

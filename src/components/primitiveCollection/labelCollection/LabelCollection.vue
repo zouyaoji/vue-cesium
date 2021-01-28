@@ -81,8 +81,13 @@ export default {
         const labelOptions = labels[i]
         labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
         const labelOptionsTransform = transformProps(labelOptions)
-        const laebl = labelColletion.add(labelOptionsTransform)
-        laebl.vcIndex = i
+        const label = labelColletion.add(labelOptionsTransform)
+        for (const prop in labelOptionsTransform) {
+          if (!label[prop]) {
+            label[prop] = labelOptionsTransform[prop]
+          }
+        }
+        label.vcIndex = i
       }
       return labelColletion
     }
