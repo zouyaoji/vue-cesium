@@ -357,7 +357,7 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------- | ------- | ------ | -------------------------------------------------------------------------- |
 | position | Object | | `required` 指定 HTML 元素添加的位置。结构：{ lng: number, lat: number, height: number } 或者 Cesium.Cartesian3 |
-| pixelOffset | Number | `10` | `optional` 指定 HTML 元素像素偏移值。|
+| pixelOffset | Number | `[0, 0]` | `optional` 指定 HTML 元素像素偏移值。|
 | hiddenOnBack | Number | `0.05` | `optional` 指定 HTML 元素在地球背面时是否隐藏。|
 
 ---
