@@ -1,5 +1,5 @@
 <template>
-  <i :class="$options.name" style="display: none !important">
+  <i :class="$options.name">
     <vc-collection-primitive :show="show">
       <vc-collection-primitive ref="groundPolylineCollection" v-if="clampToGround">
         <template v-for="(polyline, index) of polylines">
@@ -15,28 +15,25 @@
           </vc-primitive-polyline-ground>
         </template>
       </vc-collection-primitive>
-      <vc-collection-primitive-polyline ref="polylineCollection" v-else>
-        <vc-primitive-polyline
-          :key="index"
-          :material="polylineMaterial"
-          :positions="polyline.positions"
-          :width="polylineWidth"
-          v-for="(polyline, index) of polylines"
-        ></vc-primitive-polyline>
+      <vc-collection-primitive-polyline ref="polylineCollection" :polylines="primitivePolylines" v-else>
       </vc-collection-primitive-polyline>
-      <vc-collection-primitive-point ref="pointCollection">
-        <template v-for="(polyline, index) of polylines">
-          <template v-for="(position, subIndex) of polyline.positions">
-            <vc-primitive-point
-              :color="pointColor"
-              :key="'point' + index + 'position' + subIndex"
-              :pixelSize="pointPixelSize"
-              :position="position"
-            ></vc-primitive-point>
-          </template>
-        </template>
+      <vc-collection-primitive-point ref="pointCollection" :points="points" @mouseover="pointMouseOver" @mouseout="pointMouseOut">
       </vc-collection-primitive-point>
     </vc-collection-primitive>
+    <vc-overlay-html :position="toolbarPosition" v-if="showToolbar">
+      <button :title="$vc.lang.draw.editingMove" class="vc-btn" type="button" @click="onEditClick('move')">
+        <vc-icon-svg name="icon-move"></vc-icon-svg>
+      </button>
+      <button :title="$vc.lang.draw.editingInsert" class="vc-btn" type="button" @click="onEditClick('insert')">
+        <vc-icon-svg name="icon-add"></vc-icon-svg>
+      </button>
+      <button :title="$vc.lang.draw.editingDelete" class="vc-btn" type="button" @click="onEditClick('delete')">
+        <vc-icon-svg name="icon-delete"></vc-icon-svg>
+      </button>
+    </vc-overlay-html>
+    <vc-overlay-html :position="tooltipPosition" v-if="showTooltip && showDrawTip" :pixelOffset="[32, 32]">
+      <div class="vc-html-bubble">{{ tooltip }}</div>
+    </vc-overlay-html>
   </i>
 </template>
 
@@ -48,10 +45,7 @@ export default {
   mixins: [mixinDraw],
   data () {
     return {
-      drawType: 'polylineDrawing',
-      drawing: false,
-      polylines: [],
-      nowaiting: true
+      drawType: 'polylineDrawing'
     }
   },
   props: {
@@ -79,6 +73,21 @@ export default {
     clampToGround: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    primitivePolylines () {
+      const polylines = []
+      this.polylines.forEach((item, index) => {
+        const polyline = {
+          material: this.polylineMaterial,
+          positions: item.positions,
+          width: this.polylineWidth,
+          polylineIndex: index
+        }
+        polylines.push(polyline)
+      })
+      return polylines
     }
   },
   methods: {

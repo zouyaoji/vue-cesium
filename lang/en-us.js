@@ -8,6 +8,14 @@ export default {
     spaceDistance: 'SD',
     verticalHeight: 'VH'
   },
+  draw: {
+    drawingTip1: 'Click the left button to draw the starting point.',
+    drawingTip2: 'Click the left button to draw the next point, and click the right button to end the drawing.',
+    drawingTip3: 'Click to end editing.',
+    editingMove: 'Move',
+    editingInsert: 'Insert',
+    editingDelete: 'Delete'
+  },
   navigation: {
     compass: {
       description: 'Drag outer ring: rotate view.\nDrag inner gyroscope: free orbit.\nDouble-click: reset view.\nTIP: You can also free orbit by holding the CTRL key and dragging the map.',

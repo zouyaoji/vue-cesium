@@ -11,6 +11,7 @@ import * as PolylineCollection from '../../primitiveCollection/polylineCollectio
 import * as Polyline from '../../primitive/polyline'
 import * as PointPrimitiveCollection from '../../primitiveCollection/pointCollection'
 import * as PointPrimitive from '../../primitive/point'
+import * as VcHTMLOverlay from '../../extend/htmlOverlay'
 
 function plugin (Vue, options = {}) {
   if (plugin.installed) {
@@ -29,6 +30,7 @@ function plugin (Vue, options = {}) {
   Vue.use(Polyline)
   Vue.use(PointPrimitiveCollection)
   Vue.use(PointPrimitive)
+  Vue.use(VcHTMLOverlay)
 
   Vue.component(VcDrawHandlerPolygon.name, VcDrawHandlerPolygon)
 }

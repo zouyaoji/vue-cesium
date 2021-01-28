@@ -13,12 +13,13 @@
 <doc-preview>
   <template>
     <div class="viewer">
-      <vc-viewer @ready="ready" scene3DOnly>
+      <vc-viewer @ready="ready" scene3DOnly :infoBox="false">
         <vc-handler-draw-point
           ref="handlerPoint"
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
+          :editable="editable"
         ></vc-handler-draw-point>
         <vc-handler-draw-polyline
           :clampToGround="clampToGround"
@@ -26,6 +27,7 @@
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
+          :editable="editable"
         ></vc-handler-draw-polyline>
         <vc-handler-draw-polygon
           :clampToGround="clampToGround"
@@ -33,6 +35,7 @@
           @activeEvt="activeEvt"
           @movingEvt="movingEvt"
           @drawEvt="drawEvt"
+          :editable="editable"
         ></vc-handler-draw-polygon>
         <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
       </vc-viewer>
@@ -40,8 +43,9 @@
         <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
         <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
-        <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">贴地</md-button>
         <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+        <md-checkbox v-model="editable" class="md-primary">编辑</md-checkbox>
+        <md-checkbox v-model="clampToGround" class="md-primary">贴地(线、面)</md-checkbox>
       </div>
     </div>
   </template>
@@ -54,7 +58,8 @@
           pointDrawing: false,
           polylineDrawing: false,
           polygonDrawing: false,
-          clampToGround: false
+          clampToGround: false,
+          editable: false
         }
       },
       methods: {
@@ -64,7 +69,6 @@
           var scene = viewer.scene
           scene.debugShowFramesPerSecond = true
           this.cesiumInstance = cesiumInstance
-          this.tooltip = createTooltip(viewer.cesiumWidget.container)
           viewer.scene.globe.depthTestAgainstTerrain = true
         },
         toggle(type) {
@@ -80,10 +84,10 @@
           this[_.type] = _.isActive
         },
         movingEvt(windowPosition) {
-          this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
+          // this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
         },
         drawEvt(result) {
-          result.finished && this.tooltip.setVisible(false)
+          // result.finished && this.tooltip.setVisible(false)
           console.log(result)
         },
         readyPromise(tileset) {
@@ -93,54 +97,6 @@
       }
     }
   </script>
-  <style>
-    .twipsy {
-      display: block;
-      position: absolute;
-      visibility: visible;
-      max-width: 200px;
-      min-width: 100px;
-      padding: 5px;
-      font-size: 11px;
-      z-index: 1000;
-      opacity: 0.8;
-      -khtml-opacity: 0.8;
-      -moz-opacity: 0.8;
-      filter: alpha(opacity=80);
-    }
-    .twipsy.left .twipsy-arrow {
-      top: 50%;
-      right: 0;
-      margin-top: -5px;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-left: 5px solid #000000;
-    }
-    .twipsy.right .twipsy-arrow {
-      top: 50%;
-      left: 0;
-      margin-top: -5px;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-right: 5px solid #000000;
-    }
-    .twipsy-inner {
-      padding: 3px 8px;
-      background-color: #000000;
-      color: white;
-      text-align: center;
-      max-width: 200px;
-      text-decoration: none;
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      border-radius: 4px;
-    }
-    .twipsy-arrow {
-      position: absolute;
-      width: 0;
-      height: 0;
-    }
-  </style>
 </doc-preview>
 
 #### 代码
@@ -148,12 +104,13 @@
 ```html
 <template>
   <div class="viewer">
-    <vc-viewer @ready="ready" scene3DOnly>
+    <vc-viewer @ready="ready" scene3DOnly :infoBox="false">
       <vc-handler-draw-point
         ref="handlerPoint"
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
+        :editable="editable"
       ></vc-handler-draw-point>
       <vc-handler-draw-polyline
         :clampToGround="clampToGround"
@@ -161,6 +118,7 @@
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
+        :editable="editable"
       ></vc-handler-draw-polyline>
       <vc-handler-draw-polygon
         :clampToGround="clampToGround"
@@ -168,6 +126,7 @@
         @activeEvt="activeEvt"
         @movingEvt="movingEvt"
         @drawEvt="drawEvt"
+        :editable="editable"
       ></vc-handler-draw-polygon>
       <vc-primitive-tileset :url="modelUrl" @readyPromise="readyPromise"></vc-primitive-tileset>
     </vc-viewer>
@@ -175,8 +134,9 @@
       <md-button class="md-raised md-accent" @click="toggle('handlerPoint')">{{ pointDrawing ? '停止' : '点' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('handlerLine')">{{ polylineDrawing ? '停止' : '线' }}</md-button>
       <md-button class="md-raised md-accent" @click="toggle('handlerPolygon')">{{ polygonDrawing ? '停止' : '面' }}</md-button>
-      <md-button class="md-raised md-accent" @click="clampToGround = !clampToGround">贴地</md-button>
       <md-button class="md-raised md-accent" @click="clear">清除</md-button>
+      <md-checkbox v-model="editable" class="md-primary">编辑</md-checkbox>
+      <md-checkbox v-model="clampToGround" class="md-primary">贴地(线、面)</md-checkbox>
     </div>
   </div>
 </template>
@@ -189,7 +149,8 @@
         pointDrawing: false,
         polylineDrawing: false,
         polygonDrawing: false,
-        clampToGround: false
+        clampToGround: false,
+        editable: false
       }
     },
     methods: {
@@ -199,7 +160,6 @@
         var scene = viewer.scene
         scene.debugShowFramesPerSecond = true
         this.cesiumInstance = cesiumInstance
-        this.tooltip = createTooltip(viewer.cesiumWidget.container)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
       toggle(type) {
@@ -215,10 +175,10 @@
         this[_.type] = _.isActive
       },
       movingEvt(windowPosition) {
-        this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
+        // this.tooltip.showAt(windowPosition, '<p>左键绘制, 右键结束绘制.</p>')
       },
       drawEvt(result) {
-        result.finished && this.tooltip.setVisible(false)
+        // result.finished && this.tooltip.setVisible(false)
         console.log(result)
       },
       readyPromise(tileset) {
@@ -228,54 +188,6 @@
     }
   }
 </script>
-<style>
-  .twipsy {
-    display: block;
-    position: absolute;
-    visibility: visible;
-    max-width: 200px;
-    min-width: 100px;
-    padding: 5px;
-    font-size: 11px;
-    z-index: 1000;
-    opacity: 0.8;
-    -khtml-opacity: 0.8;
-    -moz-opacity: 0.8;
-    filter: alpha(opacity=80);
-  }
-  .twipsy.left .twipsy-arrow {
-    top: 50%;
-    right: 0;
-    margin-top: -5px;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 5px solid #000000;
-  }
-  .twipsy.right .twipsy-arrow {
-    top: 50%;
-    left: 0;
-    margin-top: -5px;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-right: 5px solid #000000;
-  }
-  .twipsy-inner {
-    padding: 3px 8px;
-    background-color: #000000;
-    color: white;
-    text-align: center;
-    max-width: 200px;
-    text-decoration: none;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-  }
-  .twipsy-arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
-</style>
 ```
 
 ## 属性
@@ -288,6 +200,8 @@
 | pointColor     | String\|Array\|Object | `'rgb(255,229,0)'` | `optional` 指定点颜色。                             |
 | pointPixelSize | Number                | `8`                | `optional` 指定点的像素大小。                       |
 | show           | Boolean               | `true`             | `optional` 指定绘制的点是否可见。                   |
+| editable       | Boolean               | `false`            | `optional` 指定是否可编辑。                         |
+| showDrawTip    | Boolean               | `true`             | `optional` 指定是否显示绘制提示。                   |
 
 ### vc-handler-draw-polyline
 
@@ -297,10 +211,12 @@
 | depthTest        | Boolean               | `false`                                                     | `optional` 指定绘制的线对象是否参与深度测试。       |
 | pointColor       | String\|Array\|Object | `'rgb(255,229,0)'`                                          | `optional` 指定点颜色。                             |
 | pointPixelSize   | Number                | `8`                                                         | `optional` 指定点的像素大小。                       |
-| polylineMaterial | Object                | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质。                               |
+| polylineMaterial | Object                | `fabric: { type: 'Color', uniforms: { color: '#51ff00' } }` | `optional` 指定线材质。                             |
 | polylineWidth    | Number                | `2`                                                         | `optional` 指定线宽度。                             |
 | clampToGround    | Boolean               | `false`                                                     | `optional` 指定绘制的线是否贴地。                   |
 | show             | Boolean               | `true`                                                      | `optional` 指定绘制的线是否可见。                   |
+| editable         | Boolean               | `false`                                                     | `optional` 指定是否可编辑。                         |
+| showDrawTip      | Boolean               | `true`                                                      | `optional` 指定是否显示绘制提示。                   |
 
 ### vc-handler-draw-polygon
 
@@ -316,6 +232,8 @@
 | polygonMaterial | Object | `fabric: { type: 'Color', uniforms: { color: 'rgba(255,165,0,0.25)' } }` | `optional` 指定面材质。 |
 | clampToGround | Boolean | `false` | `optional` 指定绘制的面是否贴地。 |
 | show | Boolean | `true` | `optional` 指定绘制的面是否可见。 |
+| editable | Boolean | `false` | `optional` 指定是否可编辑。 |
+| showDrawTip | Boolean | `true` | `optional` 指定是否显示绘制提示。 |
 
 ---
 
