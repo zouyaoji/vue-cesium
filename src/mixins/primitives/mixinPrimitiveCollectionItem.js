@@ -13,7 +13,6 @@ const methods = {
   async createCesiumObject () {
     const { $props, transformProps, primitives } = this
     const options = transformProps($props)
-    console.log(options)
     return primitives && primitives.add(options)
   },
   async mount () {
