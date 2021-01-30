@@ -190,10 +190,21 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
 | maximumScreenSpaceError | Number | 16 | `optional` The maximum screen space error used to drive level of detail refinement. |
 | maximumMemoryUsage | Number | 512 | `optional` The maximum amount of memory in MB that can be used by the tileset. |
 | cullWithChildrenBounds | Boolean | true | `optional` Optimization option. Whether to cull tiles using the union of their children bounding volumes. |
-| dynamicScreenSpaceError | Boolean | false | `optional` Optimization option. Reduce the screen space error for tiles that are further away from the camera. | |
+| cullRequestsWhileMoving | Boolean | `true` | `optional` Optimization option. Don't request tiles that will likely be unused when they come back because of the camera's movement. This optimization only applies to stationary tilesets. |
+| cullRequestsWhileMovingMultiplier | Number | `60.0` | `optional` Optimization option. Multiplier used in culling requests while moving. Larger is more aggressive culling, smaller less aggressive culling. |
+| preloadWhenHidden | Boolean| `false` | `optional` Preload tiles when tileset.show is false. Loads tiles as if the tileset is visible but does not render them.|
+| preloadFlightDestinations | Boolean | `true` | `optional` Optimization option. Preload tiles at the camera's flight destination while the camera is in flight.|
+| preferLeaves | Boolean | `false` | `optional` Optimization option. Prefer loading of leaves first.|
+| dynamicScreenSpaceError | Boolean | false | `optional` Optimization option. Reduce the screen space error for tiles that are further away from the camera. |
 | dynamicScreenSpaceErrorDensity | Number | 0.00278 | `optional` Density used to adjust the dynamic screen space error, similar to fog density. |
 | dynamicScreenSpaceErrorFactor | Number | 4.0 | `optional` A factor used to increase the computed dynamic screen space error. |
 | dynamicScreenSpaceErrorHeightFalloff | Number | 0.25 | `optional` A ratio of the tileset's height at which the density starts to falloff. |
+| progressiveResolutionHeightFraction | Number | `0.3` | `optional` Optimization option. If between (0.0, 0.5], tiles at or above the screen space error for the reduced screen resolution of progressiveResolutionHeightFraction*screenHeight will be prioritized first. This can help get a quick layer of tiles down while full resolution tiles continue to load.|
+| foveatedScreenSpaceError | Boolean | `true` | `optional` Optimization option. Prioritize loading tiles in the center of the screen by temporarily raising the screen space error for tiles around the edge of the screen. Screen space error returns to normal once all the tiles in the center of the screen as determined by the Cesium3DTileset#foveatedConeSize are loaded.|
+| foveatedConeSize | Number | `0.1` | `optional` Optimization option. Used when Cesium3DTileset#foveatedScreenSpaceError is true to control the cone size that determines which tiles are deferred. Tiles that are inside this cone are loaded immediately. Tiles outside the cone are potentially deferred based on how far outside the cone they are and their screen space error. This is controlled by Cesium3DTileset#foveatedInterpolationCallback and Cesium3DTileset#foveatedMinimumScreenSpaceErrorRelaxation. Setting this to 0.0 means the cone will be the line formed by the camera position and its view direction. Setting this to 1.0 means the cone encompasses the entire field of view of the camera, disabling the effect. |
+| foveatedMinimumScreenSpaceErrorRelaxation | Number | `0.0` | `optional` Optimization option. Used when Cesium3DTileset#foveatedScreenSpaceError is true to control the starting screen space error relaxation for tiles outside the foveated cone. The screen space error will be raised starting with tileset value up to Cesium3DTileset#maximumScreenSpaceError based on the provided Cesium3DTileset#foveatedInterpolationCallback.|
+| foveatedInterpolationCallback | Function| | `optional` Optimization option. Used when Cesium3DTileset#foveatedScreenSpaceError is true to control how much to raise the screen space error for tiles outside the foveated cone, interpolating between Cesium3DTileset#foveatedMinimumScreenSpaceErrorRelaxation and Cesium3DTileset#maximumScreenSpaceError |
+| foveatedTimeDelay | Number | `0.2` | `optional` Optimization option. Used when Cesium3DTileset#foveatedScreenSpaceError is true to control how long in seconds to wait after the camera stops moving before deferred tiles start loading in. This time delay prevents requesting tiles around the edges of the screen when the camera is moving. Setting this to 0.0 will immediately request all tiles in any given view.|
 | skipLevelOfDetail | Boolean | true | `optional` Optimization option. Determines if level of detail skipping should be applied during the traversal. |
 | baseScreenSpaceError | Number | 1024 | `optional` When skipLevelOfDetail is true, the screen space error that must be reached before skipping levels of detail. |
 | skipScreenSpaceErrorFactor | Number | 16 | `optional` When skipLevelOfDetail is true, a multiplier defining the minimum screen space error to skip. Used in conjunction with skipLevels to determine which tiles to load. |
@@ -206,6 +217,11 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
 | pointCloudShading | Object | | `optional` Options for constructing a PointCloudShading object to control point attenuation based on geometric error and lighting. |
 | imageBasedLightingFactor | Cartesian2 | new Cartesian2(1.0, 1.0) | `optional` Scales the diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox. |
 | lightColor | Cartesian3 | | `optional` The color and intensity of the sunlight used to shade models. |
+| luminanceAtZenith | Number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map. |
+| sphericalHarmonicCoefficients | Array | `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting. |
+| specularEnvironmentMaps | String | | `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
+| backFaceCulling | Boolean |`false`|| `optional` Whether to cull back-facing geometry. When true, back face culling is determined by the glTF material's doubleSided property; when false, back face culling is disabled. |
+| debugHeatmapTilePropertyName | String || `optional` The tile variable to colorize as a heatmap. All rendered tiles will be colorized relative to each other's specified variable value.|
 | debugFreezeFrame | Boolean | false | `optional` For debugging only. Determines if only the tiles from last frame should be used for rendering. |
 | debugColorizeTiles | Boolean | false | `optional` For debugging only. When true, assigns a random color to each tile. |
 | debugWireframe | Boolean | false | `optional` For debugging only. When true, render's each tile's content as a wireframe. |
@@ -216,7 +232,6 @@ The `vc-primitive-tileset` component is used to load a 3D Tiles tileset, used fo
 | debugShowRenderingStatistics | Boolean | false | `optional` For debugging only. When true, draws labels to indicate the number of commands, points, triangles and features for each tile. |
 | debugShowMemoryUsage | Boolean | false | `optional` For debugging only. When true, draws labels to indicate the texture and geometry memory in megabytes used by each tile. |
 | debugShowUrl | Boolean | false | `optional` For debugging only. When true, draws labels to indicate the url of each tile. |
-| isZoomTo | Boolean | true | `optional` Determines whether zoomTo the tile. |
 
 ---
 

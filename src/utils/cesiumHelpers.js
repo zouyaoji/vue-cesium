@@ -76,20 +76,37 @@ export function makeCartesian3 (val, isConstant = false) {
  */
 export function makeCartesian3Array (vals, isConstant = false) {
   const { CallbackProperty, Cartesian3 } = Cesium
-
   if (isArray(vals)) {
     if (vals[0] instanceof Cartesian3 || vals._callback) {
       return vals
     }
-
-    if (isObject(vals[0])) {
+    if (isArray(vals[0])) {
       const coordinates = []
-      vals.forEach((item) => {
-        coordinates.push(item.lng)
-        coordinates.push(item.lat)
-        coordinates.push(item.height || 0)
-      })
-      return Cartesian3.fromDegreesArrayHeights(coordinates)
+      for (let i = 0; i < vals.length; i++) {
+        coordinates.push(vals[i][0])
+        coordinates.push(vals[i][1])
+        coordinates.push(vals[i][2] || 0)
+      }
+      return Cartesian3.fromRadiansArrayHeights(coordinates)
+    } else if (isObject(vals[0])) {
+      const coordinates = []
+      if (vals[0].lng) {
+        vals.forEach((item) => {
+          coordinates.push(item.lng)
+          coordinates.push(item.lat)
+          coordinates.push(item.height || 0)
+        })
+        return Cartesian3.fromDegreesArrayHeights(coordinates)
+      } else {
+        if (vals[0].x) {
+          vals.forEach((item) => {
+            coordinates.push(item.x)
+            coordinates.push(item.y)
+            coordinates.push(item.z || 0)
+          })
+          return Cartesian3.fromRadiansArrayHeights(coordinates)
+        }
+      }
     }
 
     return Cartesian3.fromDegreesArrayHeights(vals)

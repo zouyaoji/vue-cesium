@@ -5,7 +5,13 @@ import {
   aaMixin,
   debugShowBoundingVolume,
   scene,
-  debugWireframe
+  debugWireframe,
+  lightColor2,
+  imageBasedLightingFactor,
+  luminanceAtZenith,
+  sphericalHarmonicCoefficients,
+  specularEnvironmentMaps,
+  backFaceCulling
 } from '../../../mixins/mixinProps'
 import mixinModel from '../../../mixins/graphics/mixinModel'
 import mixinPrimitive from '../../../mixins/primitives/mixinPrimitive'
@@ -18,6 +24,12 @@ export default {
     debugShowBoundingVolume,
     scene,
     debugWireframe,
+    lightColor2,
+    imageBasedLightingFactor,
+    luminanceAtZenith,
+    sphericalHarmonicCoefficients,
+    specularEnvironmentMaps,
+    backFaceCulling,
     mixinModel,
     mixinPrimitive
   ],

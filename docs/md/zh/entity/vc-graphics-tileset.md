@@ -178,7 +178,6 @@
 | debugShowRenderingStatistics | Boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签以表示每个 tile 的 commonds、points、triangles、features 的数量。 |
 | debugShowMemoryUsage | Boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签表示每个 tile 的纹理和几何内存，以 mb 为单位。 |
 | debugShowUrl | Boolean | false | `optional` 仅调试可用，如果为 true，则绘制标签表示每个 tile 的网址。 |
-| isZoomTo | Boolean | true | `optional` 加载到 scene 之后是否定位到该模型。 |
 
 ---
 

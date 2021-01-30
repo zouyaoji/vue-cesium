@@ -7,9 +7,15 @@ import {
   debugShowBoundingVolume,
   debugWireframe,
   imageBasedLightingFactor,
-  url
+  url,
+  classificationType,
+  ellipsoid,
+  lightColor2,
+  luminanceAtZenith,
+  sphericalHarmonicCoefficients,
+  specularEnvironmentMaps,
+  backFaceCulling
 } from '../../../mixins/mixinProps'
-import { makeCartesian3 } from '../../../utils/cesiumHelpers'
 import mixinPrimitive from '../../../mixins/primitives/mixinPrimitive'
 export default {
   name: 'vc-primitive-tileset',
@@ -22,15 +28,16 @@ export default {
     debugWireframe,
     imageBasedLightingFactor,
     url,
+    classificationType,
+    ellipsoid,
+    lightColor2,
+    luminanceAtZenith,
+    sphericalHarmonicCoefficients,
+    specularEnvironmentMaps,
+    backFaceCulling,
     mixinPrimitive
   ],
   props: {
-    lightColor: {
-      type: [Object, Array],
-      watcherOptions: {
-        cesiumObjectBuilder: makeCartesian3
-      }
-    },
     maximumScreenSpaceError: {
       type: Number,
       default: 16
@@ -42,6 +49,26 @@ export default {
     cullWithChildrenBounds: {
       type: Boolean,
       default: true
+    },
+    cullRequestsWhileMoving: {
+      type: Boolean,
+      default: true
+    },
+    cullRequestsWhileMovingMultiplier: {
+      type: Number,
+      default: 60.0
+    },
+    preloadWhenHidden: {
+      type: Boolean,
+      default: false
+    },
+    preloadFlightDestinations: {
+      type: Boolean,
+      default: true
+    },
+    preferLeaves: {
+      type: Boolean,
+      default: false
     },
     dynamicScreenSpaceError: {
       type: Boolean,
@@ -58,6 +85,27 @@ export default {
     dynamicScreenSpaceErrorHeightFalloff: {
       type: Number,
       default: 0.25
+    },
+    progressiveResolutionHeightFraction: {
+      type: Number,
+      default: 0.3
+    },
+    foveatedScreenSpaceError: {
+      type: Boolean,
+      default: true
+    },
+    foveatedConeSize: {
+      type: Number,
+      default: 0.1
+    },
+    foveatedMinimumScreenSpaceErrorRelaxation: {
+      type: Number,
+      default: 0.0
+    },
+    foveatedInterpolationCallback: Function,
+    foveatedTimeDelay: {
+      type: Number,
+      default: 0.2
     },
     skipLevelOfDetail: {
       type: Boolean,
@@ -83,9 +131,8 @@ export default {
       type: Boolean,
       default: false
     },
-    classificationType: Number,
-    ellipsoid: Object,
     pointCloudShading: Object,
+    debugHeatmapTilePropertyName: String,
     debugFreezeFrame: {
       type: Boolean,
       default: false

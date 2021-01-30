@@ -475,8 +475,7 @@ const granularity = {
 const classificationType = {
   props: {
     classificationType: {
-      type: [Number, Object, Function],
-      default: 2
+      type: [Number, Object, Function]
     }
   }
 }
@@ -1730,6 +1729,68 @@ const polylinePositions = {
   }
 }
 
+/**
+ * @const {Object, String, Array} lightColor2 mixin
+ * 用于 Cesium3DTileset 和 Model
+ */
+const lightColor2 = {
+  props: {
+    lightColor: {
+      type: [Object, Array],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3
+      }
+    }
+  }
+}
+
+/**
+ * @const {Number} luminanceAtZenith mixin
+ */
+const luminanceAtZenith = {
+  props: {
+    luminanceAtZenith: {
+      type: Number,
+      default: 0.2
+    }
+  }
+}
+
+/**
+ * @const {Array, Object} sphericalHarmonicCoefficients mixin
+ */
+const sphericalHarmonicCoefficients = {
+  props: {
+    sphericalHarmonicCoefficients: {
+      type: [Array, Object],
+      watcherOptions: {
+        cesiumObjectBuilder: makeCartesian3Array
+      }
+    }
+  }
+}
+
+/**
+ * @const {String} specularEnvironmentMaps mixin
+ */
+const specularEnvironmentMaps = {
+  props: {
+    specularEnvironmentMaps: String
+  }
+}
+
+/**
+ * @const {Boolean} backFaceCulling mixin
+ */
+const backFaceCulling = {
+  props: {
+    backFaceCulling: {
+      type: Boolean,
+      default: true
+    }
+  }
+}
+
 // datasouce
 /**
  * @const {String, Object} data mixin
@@ -1805,6 +1866,10 @@ const scissorRectangle = {
 // PostProcessStage end
 
 export {
+  backFaceCulling,
+  specularEnvironmentMaps,
+  sphericalHarmonicCoefficients,
+  luminanceAtZenith,
   maximumScreenSpaceError,
   runAnimations,
   articulations,
@@ -1829,6 +1894,7 @@ export {
   startColor,
   shape,
   lightColor,
+  lightColor2,
   imageBasedLightingFactor,
   polygonHierarchy,
   orientation,
