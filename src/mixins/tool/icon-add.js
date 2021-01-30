@@ -1,4 +1,4 @@
-import VcIconSvg from './VcIconSvg.vue'
+import VcIconSvg from '../../components/control/navigation/icon/VcIconSvg.vue'
 VcIconSvg.register({
   'icon-add': {
     width: 48,

@@ -1,7 +1,7 @@
 import cmp from '../virtualCmp'
-import '../../components/control/navigation/icon/icon-move'
-import '../../components/control/navigation/icon/icon-add'
-import '../../components/control/navigation/icon/icon-delete'
+import './icon-move'
+import './icon-add'
+import './icon-delete'
 import VcIconSvg from '../../components/control/navigation/icon/VcIconSvg.vue'
 
 const props = {
