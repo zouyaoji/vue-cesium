@@ -86,7 +86,7 @@
     "node-notifier": "^6.0.0",
     "node-sass": "^4.13.0",
     "ora": "^4.0.2",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "prismjs": "^1.17.1",
     "rollup": "^1.27.1",
     "rollup-plugin-babel": "^4.3.3",
