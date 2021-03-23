@@ -52,6 +52,11 @@ export const Events = {
       // viewer.infoBox.viewModel
       name: ['infoBox', 'viewModel'],
       events: ['cameraClicked', 'closeClicked']
+    },
+    // viewer.scene.globe
+    {
+      name: ['scene', 'globe'],
+      events: ['imageryLayersUpdatedEvent', 'terrainProviderChanged', 'tileLoadProgressEvent']
     }
   ],
   'viewer-mouse-events': [
