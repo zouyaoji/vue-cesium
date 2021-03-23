@@ -1,12 +1,11 @@
 <template>
   <i :class="$options.name" style="display: none !important">
     <vc-primitive-classification
-      :appearance="appearance"
       :asynchronous="false"
-      :show="extrudedHeight !== 0 && extrudedHeight !== ''"
+      :show="extrudedHeight !== 0"
       ref="primitive"
     >
-      <vc-instance-geometry :attributes="attributes" :geometry.sync="geometry">
+      <vc-instance-geometry :attributes="attributes">
         <vc-geometry-polygon :extrudedHeight="extrudedHeight" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon>
       </vc-instance-geometry>
     </vc-primitive-classification>
@@ -20,7 +19,6 @@ export default {
   name: 'vc-analytics-flood',
   data () {
     return {
-      geometry: null,
       attributes: null,
       extrudedHeight: 0.1,
       flooding: false,
@@ -68,8 +66,10 @@ export default {
   methods: {
     async createCesiumObject () {
       const { Cesium, minHeight, color } = this
+      const { ColorGeometryInstanceAttribute } = Cesium
+
       this.attributes = {
-        color: Cesium.ColorGeometryInstanceAttribute.fromColor(makeColor(color))
+        color: ColorGeometryInstanceAttribute.fromColor(makeColor(color))
       }
       this.extrudedHeight = minHeight
       return this.$refs.primitive.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
@@ -85,7 +85,7 @@ export default {
     onTick () {
       const { maxHeight, speed } = this
       if (this.extrudedHeight < maxHeight) {
-        this.extrudedHeight = this.extrudedHeight + speed
+        this.extrudedHeight = this.extrudedHeight + speed / 12.0
       } else {
         this.floodDone = true
         this.flooding = false
