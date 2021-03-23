@@ -4,7 +4,7 @@
       <vc-graphics-rectangle :coordinates="coordinates" :material="material"></vc-graphics-rectangle>
     </vc-entity>
     <vc-primitive-ground :appearance="appearance" :show="show" ref="0" v-else-if="type === 0">
-      <vc-instance-geometry :geometry.sync="geometry">
+      <vc-instance-geometry>
         <vc-geometry-rectangle :rectangle="coordinates"></vc-geometry-rectangle>
       </vc-instance-geometry>
     </vc-primitive-ground>
@@ -29,7 +29,8 @@ export default {
         maxOpacity: 0.8, // the maximum opacity used if not given in the heatmap options object
         minOpacity: 0.1, // the minimum opacity used if not given in the heatmap options object
         blur: 0.85, // the blur used if not given in the heatmap options object
-        gradient: { // the gradient used if not given in the heatmap options object
+        gradient: {
+          // the gradient used if not given in the heatmap options object
           '.3': 'blue',
           '.65': 'yellow',
           '.8': 'orange',
@@ -38,7 +39,6 @@ export default {
       },
       material: null,
       appearance: null,
-      geometry: null,
       coordinates: { west: 0, south: 0, east: 0, north: 0 },
       layerUrl: '',
       nowaiting: true
@@ -97,15 +97,24 @@ export default {
       this._WMP = new Cesium.WebMercatorProjection()
       this._id = this.getID()
       options.gradient = options.gradient ? options.gradient : defaultOptions.gradient
+      const { breaks, colors } = options
+
+      if (breaks && breaks.length !== 0 && (colors && colors.length !== 0)) {
+        if (breaks.length + 1 === colors.length) {
+          breaks.push(max)
+        }
+        options.gradient = {}
+        const Δ = max - min
+        for (let i = 0; i < breaks.length; i++) {
+          options.gradient[`${(breaks[i] - min) / Δ}`] = colors[i]
+        }
+      }
+
       options.maxOpacity = options.maxOpacity ? options.maxOpacity : defaultOptions.maxOpacity
       options.minOpacity = options.minOpacity ? options.minOpacity : defaultOptions.minOpacity
       options.blur = options.blur ? options.blur : defaultOptions.blur
       this.setBounds(bounds)
-      this._container = this.getContainer(
-        this.width,
-        this.height,
-        this._id
-      )
+      this._container = this.getContainer(this.width, this.height, this._id)
       this.options.container = this._container
       this._heatmapInstance = h337.create(this.options)
       this._container.children[0].setAttribute('id', this._id + '-hm')
@@ -148,11 +157,13 @@ export default {
       const { options, defaultOptions } = this
       this._mBounds = this.wgs84ToMercatorBounds(bounds)
       this.setWidthAndHeight(this._mBounds)
-      options.radius = Math.round(options.radius
-        ? options.radius
-        : this.width > this.height
-          ? this.width / defaultOptions.radiusFactor
-          : this.height / defaultOptions.radiusFactor)
+      options.radius = Math.round(
+        options.radius
+          ? options.radius
+          : this.width > this.height
+            ? this.width / defaultOptions.radiusFactor
+            : this.height / defaultOptions.radiusFactor
+      )
       this._spacing = options.radius * defaultOptions.spacingFactor
       this._xoffset = this._mBounds.west
       this._yoffset = this._mBounds.south
@@ -215,14 +226,16 @@ export default {
       let text = ''
       const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-      for (let i = 0; i < ((len) || 8); i++) { text += possible.charAt(Math.floor(Math.random() * possible.length)) }
+      for (let i = 0; i < (len || 8); i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length))
+      }
 
       return text
     },
     /*  Convert a WGS84 location into a mercator location
-      *
-      *  p: the WGS84 location like {x: lon, y: lat}
-      */
+     *
+     *  p: the WGS84 location like {x: lon, y: lat}
+     */
     wgs84ToMercator (p) {
       const mp = this._WMP.project(Cesium.Cartographic.fromDegrees(p.x, p.y))
       return {
@@ -231,9 +244,9 @@ export default {
       }
     },
     /*  Convert a WGS84 bounding box into a mercator bounding box
-      *
-      *  bb: the WGS84 bounding box like {north, east, south, west}
-      */
+     *
+     *  bb: the WGS84 bounding box like {north, east, south, west}
+     */
     wgs84ToMercatorBounds (bounds) {
       const sw = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.west, bounds.south))
       const ne = this._WMP.project(Cesium.Cartographic.fromDegrees(bounds.east, bounds.north))
@@ -245,9 +258,9 @@ export default {
       }
     },
     /*  Convert a mercator location into a WGS84 location
-      *
-      *  p: the mercator lcation like {x, y}
-      */
+     *
+     *  p: the mercator lcation like {x, y}
+     */
     mercatorToWgs84 (p) {
       const wp = this._WMP.unproject(new Cesium.Cartesian3(p.x, p.y))
       return {
@@ -257,9 +270,9 @@ export default {
     },
 
     /*  Convert a mercator bounding box into a WGS84 bounding box
-      *
-      *  bb: the mercator bounding box like {north, east, south, west}
-      */
+     *
+     *  bb: the mercator bounding box like {north, east, south, west}
+     */
     mercatorToWgs84Bounds (bb) {
       const sw = this._WMP.unproject(new Cesium.Cartesian3(bb.west, bb.south))
       const ne = this._WMP.unproject(new Cesium.Cartesian3(bb.east, bb.north))
@@ -272,18 +285,18 @@ export default {
     },
 
     /*  Convert degrees into radians
-      *
-      *  d: the degrees to be converted to radians
-      */
+     *
+     *  d: the degrees to be converted to radians
+     */
     deg2rad (d) {
       const r = d * (Math.PI / 180.0)
       return r
     },
 
     /*  Convert radians into degrees
-      *
-      *  r: the radians to be converted to degrees
-      */
+     *
+     *  r: the radians to be converted to degrees
+     */
     rad2deg (r) {
       const d = r / (Math.PI / 180.0)
       return d
@@ -332,9 +345,7 @@ export default {
      *  p: a WGS84 location like {x:lon, y:lat}
      */
     wgs84PointToHeatmapPoint (p) {
-      return this.mercatorPointToHeatmapPoint(
-        this.wgs84ToMercator(p)
-      )
+      return this.mercatorPointToHeatmapPoint(this.wgs84ToMercator(p))
     },
     /*  Convert a mercator location to the corresponding heatmap location
      *
