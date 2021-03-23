@@ -1,6 +1,18 @@
 # 更新日志
 
-## 2.1.9 - 2021-01-XX
+## 2.2.1 - 2021-03-23
+
+- 解决 umd 打包 coordtransform 引用问题。
+- `vc-heatmap` 组件支持用 `breaks` 和 `colors` 属性确定颜色方案。
+
+## 2.2.0 - 2021-01-30
+
+### 修改
+
+- 绘制组件增加编辑功能。
+- [`vc-primitive-model`](https://zouyaoji.top/vue-cesium/#/zh/primitive/vc-primitive-model)和[`vc-primitive-tileset`](https://zouyaoji.top/vue-cesium/#/zh/primitive/vc-primitive-tileset) 组件同步官方属性。
+
+## 2.1.9 - 2021-01-10
 
 ### 修改
 

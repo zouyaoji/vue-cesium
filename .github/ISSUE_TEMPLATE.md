@@ -1,7 +1,15 @@
 <!--
+IMPORTANT: Please use the following link to create a new issue:
 
-注意：请使用 [ISSUE 生成器](https://zouyaoji.top/vue-cesium/#/zh/issues) 创建新 ISSUE，不符合条件的 ISSUE 将被机器人自动关闭！
+  https://zouyaoji.top/vue-cesium/#/en/issues
 
-Attention: Please create issues according to [issue generator](https://zouyaoji.top/vue-cesium/#/en/issues), or bot will close it.
+If your issue was not created using the app above, it will be closed immediately.
 
+########
+
+重要: 请使用以下链接创建新 issue
+
+  https://zouyaoji.top/vue-cesium/#/zh/issues
+
+未通过以上链接创建的 issue 会被机器人直接关闭。
 -->
