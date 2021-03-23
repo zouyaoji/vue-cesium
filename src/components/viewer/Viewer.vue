@@ -2,7 +2,7 @@
  * @Author: zouyaoji
  * @Date: 2018-02-06 17:56:48
  * @Last Modified by: zouyaoji
- * @Last Modified time: 2021-01-12 17:33:49
+ * @Last Modified time: 2021-03-16 09:15:27
  */
 <template>
   <div id="cesiumContainer" ref="viewer" style="width:100%; height:100%;">
@@ -241,7 +241,7 @@ export default {
         const geocoder = new Cesium.Geocoder({
           container: geocoderContainer,
           geocoderServices: Cesium.defined(this.geocoder)
-            ? Cesium.isArray(this.geocoder)
+            ? Array.isArray(this.geocoder)
                 ? this.geocoder
                 : [this.geocoder]
             : undefined,
@@ -705,7 +705,7 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
         terrainProvider,
         skyBox,
         skyAtmosphere,
-        fullscreenElement: this.isEmptyObj(fullscreenElement) ? this.$refs.viewer : fullscreenElement,
+        fullscreenElement: this.isEmptyObj(fullscreenElement) ? $el : fullscreenElement,
         useDefaultRenderLoop,
         targetFrameRate,
         showRenderLoopErrors,
@@ -742,8 +742,8 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
       }
 
       const that = this
-      viewer.camera.changed.addEventListener(() => {
-        const listener = that.$listeners['update:camera']
+      const listener = that.$listeners['update:camera']
+      listener && viewer.camera.changed.addEventListener(() => {
         const cartographic = viewer.camera.positionCartographic
         let camera
         if (that.camera.position.lng) {
@@ -753,9 +753,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
               lat: Cesium.Math.toDegrees(cartographic.latitude),
               height: cartographic.height
             },
-            heading: Cesium.Math.toDegrees(viewer.camera.heading),
-            pitch: Cesium.Math.toDegrees(viewer.camera.pitch),
-            roll: Cesium.Math.toDegrees(viewer.camera.roll)
+            heading: Cesium.Math.toDegrees(viewer.camera.heading || 360),
+            pitch: Cesium.Math.toDegrees(viewer.camera.pitch || -90),
+            roll: Cesium.Math.toDegrees(viewer.camera.roll || 0)
           }
         } else {
           camera = {
@@ -764,9 +764,9 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
               y: viewer.camera.position.y,
               z: viewer.camera.position.z
             },
-            heading: viewer.camera.heading,
-            pitch: viewer.camera.pitch,
-            roll: viewer.camera.roll
+            heading: viewer.camera.heading || 2 * Math.PI,
+            pitch: viewer.camera.pitch || -Math.PI / 2,
+            roll: viewer.camera.roll || 0
           }
         }
 

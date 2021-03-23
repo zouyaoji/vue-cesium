@@ -39,7 +39,7 @@ export default {
   mixins: [cmp, mixinPickEvent],
   methods,
   props: {
-    enbaleEvent: {
+    enableEvent: {
       type: Boolean,
       default: true
     }

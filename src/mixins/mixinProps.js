@@ -152,8 +152,10 @@ const height = {
  */
 const heightReference = {
   props: {
-    heightReference: [Number, Object, Function],
-    default: 0
+    heightReference: {
+      type: [Number, Object, Function],
+      default: 0
+    }
   }
 }
 
@@ -281,8 +283,10 @@ const show = {
  */
 const sizeInMeters = {
   props: {
-    sizeInMeters: [Boolean, Object, Function],
-    default: false
+    sizeInMeters: {
+      type: [Boolean, Object, Function],
+      default: false
+    }
   }
 }
 

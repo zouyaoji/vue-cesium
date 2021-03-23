@@ -2,9 +2,9 @@ import { isArray } from '../../utils/util.js'
 import { Events } from '../../utils/events'
 const methods = {
   registerEvents (flag) {
-    const { viewer, cesiumObject, enbaleEvent } = this
+    const { viewer, cesiumObject, enableEvent } = this
     const that = this
-    if (flag && enbaleEvent) {
+    if (flag && enableEvent) {
       if (!this.$vc._screenSpaceEventHandler) {
         this.$vc._screenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
         const handler = this.$vc._screenSpaceEventHandler

@@ -420,7 +420,7 @@ export function makeMaterialProperty (val, isConstant = false) {
  */
 export function makeMaterial (val) {
   const cmpName = this.$options.name
-  if (cmpName && cmpName.indexOf('graphics') !== -1) {
+  if (cmpName && (cmpName.indexOf('graphics') !== -1 || cmpName.indexOf('datasource') !== -1)) {
     return makeMaterialProperty(val)
   }
 

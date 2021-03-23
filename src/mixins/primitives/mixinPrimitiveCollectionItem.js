@@ -28,7 +28,7 @@ const methods = {
 }
 export default {
   props: {
-    enbaleEvent: {
+    enableEvent: {
       type: Boolean,
       default: true
     }

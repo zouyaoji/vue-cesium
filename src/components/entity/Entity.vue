@@ -38,7 +38,7 @@ export default {
     polylineVolume: Object,
     rectangle: Object,
     wall: Object,
-    enbaleEvent: {
+    enableEvent: {
       type: Boolean,
       default: true
     }
