@@ -1,7 +1,7 @@
 import bindEvents from '../../utils/bindEvent'
 import { Events } from '../../utils/events'
 import cmp from '../virtualCmp'
-const coordtransform = require('coordtransform')
+import * as coordtransform from '../../utils/coordtransform'
 
 const methods = {
   async mount () {

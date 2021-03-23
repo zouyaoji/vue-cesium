@@ -1,6 +1,6 @@
 import BaiduMapMercatorProjection from './BaiduMapMercatorProjection'
 import Point from './Point'
-const coordtransform = require('coordtransform')
+import * as coordtransform from '../../utils/coordtransform'
 
 /**
  * A tiling scheme for geometry referenced to a BaiduMapMercatorProjection {@link https://cesium.com/docs/cesiumjs-ref-doc/WebMercatorTilingScheme.html}
