@@ -778,7 +778,6 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     })
 
     console.log('loaded-viewer')
-    window.viewer = viewer
     return readyObj
   }
 
