@@ -1,0 +1,7 @@
+{
+  "vc-viewer": {
+    "attributes": ["animation", "baseLayerPicker"],
+    "subtags": ["vc-entity"],
+    "description": "视图组件"
+  }
+}
