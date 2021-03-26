@@ -1,8 +1,6 @@
-import { inject } from 'vue'
-import { EntityEmitType, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { vcKey } from '@vue-cesium/utils/config'
 
 export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -30,7 +28,6 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
-    renderVNode: commonState.renderVNode,
     getCesiumObject: () => vcInstance.cesiumObject,
   }
 }
