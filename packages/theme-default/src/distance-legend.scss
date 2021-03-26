@@ -1,0 +1,29 @@
+@import './core/variables.scss';
+@import './core/mixins.scss';
+
+.vc-distance-legend{
+  position: absolute;
+  z-index: $z-top;
+  margin-right: 5px;
+  box-sizing: border-box;
+  float: left;
+  padding: 5px 5px;
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1;
+  border: 0;
+  outline: 0;
+  font-family: monospace, sans-serif;
+  max-height: 21px;
+  margin-top: 5px;
+
+  .vc-bar {
+    margin: 0 auto;
+    display: block;
+    @include transition(all 0.5s ease-in-out);
+  }
+}
+
+.vc-location-other-controls .vc-distance-legend {
+  position: relative;
+}

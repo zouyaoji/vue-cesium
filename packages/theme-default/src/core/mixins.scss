@@ -1,0 +1,18 @@
+
+@mixin transition($transition...) {
+  -moz-transition: $transition;
+  -o-transition: $transition;
+  -webkit-transition: $transition;
+  transition: $transition;
+}
+
+%clearfix {
+  clear: both;
+
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+    clear: both;
+  }
+}

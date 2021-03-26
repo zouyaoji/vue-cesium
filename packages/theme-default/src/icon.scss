@@ -1,0 +1,133 @@
+@import './core/variables.scss';
+
+@font-face {
+  font-family: 'vc-icons';
+  src: url('#{$font-path}/iconfont.eot');
+  src: url('#{$font-path}/iconfont.woff2') format('woff2'), url('#{$font-path}/iconfont.woff') format('woff'),
+    url('#{$font-path}/iconfont.ttf') format('truetype'), url('#{$font-path}/iconfont.svg#vc-icons') format('svg');
+}
+
+.vc-icon {
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  text-align: center;
+  position: relative;
+  box-sizing: content-box;
+  fill: currentColor;
+  &:before,
+  &:after {
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg,
+  i {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.vc-icon,
+.vc-icons,
+.material-icons,
+.material-icons-outlined,
+.material-icons-round,
+.material-icons-sharp {
+  // user-select: none;
+  cursor: inherit;
+  font-size: inherit;
+  display: block;
+  align-items: center;
+  justify-content: center;
+}
+
+[class^='#{$namespace}-icons-'],
+[class*=' #{$namespace}-icons-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'vc-icons' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: block;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.#{$namespace}-icons-share:before {
+  content: '\e608';
+}
+
+.#{$namespace}-icons-reset:before {
+  content: '\e67f';
+}
+
+.#{$namespace}-icons-zoom-in:before {
+  content: '\e606';
+}
+
+.#{$namespace}-icons-zoom-out:before {
+  content: '\e605';
+}
+
+.#{$namespace}-icons-geolocation:before {
+  content: '\e604';
+}
+
+.#{$namespace}-icons-compass-rotation-marker:before {
+  content: '\e603';
+}
+
+.#{$namespace}-icons-compass-outer:before {
+  content: '\e602';
+}
+
+.#{$namespace}-icons-compass-inner:before {
+  content: '\e601';
+}
+
+.#{$namespace}-icons-vue-cesium:before {
+  content: '\e600';
+}
+
+.#{$namespace}-icons-weixin:before {
+  content: '\e660';
+}
+
+.#{$namespace}-icons-github:before {
+  content: '\e620';
+}
+
+.#{$namespace}-icons-gitter:before {
+  content: '\eba2';
+}
+
+.#{$namespace}-icons-qq:before {
+  content: '\e610';
+}
+
+.#{$namespace}-icons-vue:before {
+  content: '\e6b9';
+}
+
+.#{$namespace}-icons-cesium:before {
+  content: '\e734';
+}
+
+.#{$namespace}-icons-photo:before {
+  content: '\e631';
+}
+
+.#{$namespace}-icons-capture:before {
+  content: '\e63c';
+}
