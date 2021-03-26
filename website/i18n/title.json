@@ -1,0 +1,14 @@
+{
+  "zh-CN": {
+    "home": "VueCesium - Vue 3.x components for CesiumJS",
+    "guide": "指南 | VueCesium",
+    "component": "组件 | VueCesium",
+    "resource": "资源 | VueCesium"
+  },
+  "en-US": {
+    "home": "VueCesium - Vue 3.x components for CesiumJS",
+    "guide": "Guide | VueCesium",
+    "component": "Component | VueCesium",
+    "resource": "Resource | VueCesium"
+  }
+}
