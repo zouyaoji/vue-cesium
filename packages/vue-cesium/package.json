@@ -1,0 +1,9 @@
+{
+  "name": "vue-cesium",
+  "version": "3.0.0-beta",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.0.7"
+  }
+}
