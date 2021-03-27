@@ -63,7 +63,7 @@ Next, if you need Viewer, edit main.js:
 
 ```javascript
 import { createApp } from 'vue'
-import { VcViewer } from 'vue-viewer'
+import { VcViewer } from 'vue-cesium'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -94,7 +94,48 @@ components.forEach((component) => {
 
 ### Global config
 
-- To be added
+When importing VueCesium, you can define a global config object. For now this object has two properties: `cesiumPath` and `accessToken`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, and `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. According to the method of introducing VueCesium, the specific operations are as follows:
+
+Fully import VueCesium:
+
+```js
+import { createApp } from 'vue'
+import VueCesium from 'vue-cesium';
+import App from './App.vue';
+
+const app = createApp(App)
+app.use(VueCesium, {
+  // cesiumPath is the path of Cesium.js, such as
+  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'Your CesiumJS Path',
+  // To use the data source of Cesium ion, you need to apply for an account at https://cesium.com/ion/ to obtain Access Token.
+  // If not specified, it may cause CesiumIon's online image and terrain loading failure
+  accessToken: 'Your Cesium Ion defaultAccessToken'
+}
+
+```
+
+Partial import VueCesium
+
+```js
+import { createApp } from 'vue'
+import { VcViewer } from 'element-plus'
+import App from './App.vue'
+
+const option = {
+  // cesiumPath is the path of Cesium.js, such as
+  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'Your CesiumJS Path',
+  // To use the data source of Cesium ion, you need to apply for an account at https://cesium.com/ion/ to obtain Access Token.
+  // If not specified, it may cause CesiumIon's online image and terrain loading failure
+  accessToken: 'Your Cesium Ion defaultAccessToken'
+}
+const app = createApp(App)
+app.config.globalProperties.$VueCesium = option
+app.use(VcViewer)
+```
 
 ### Start coding
 

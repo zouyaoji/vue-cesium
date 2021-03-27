@@ -87,14 +87,53 @@ const components = [VcViewer]
 
 const app = createApp(App)
 
-components.forEach((component) => {
+components.forEach(component => {
   app.component(component.name, component)
 })
 ```
 
 ### 全局配置
 
-- 待完善
+在引入 VueCesium 时，可以传入一个全局配置对象。该对象目前支持 `cesiumPath` 与 `accessToken` 字段。`cesiumPath` 用于指定 VueCesium 加载的 `CesiumJS` 库，`accessToken` 用于设置 `Cesium.Ion.defaultAccessToken` 。按照引入 VueCesium 的方式，具体操作如下：
+
+完整引入 VueCesium：
+
+```js
+import { createApp } from 'vue'
+import VueCesium from 'vue-cesium';
+import App from './App.vue';
+
+const app = createApp(App)
+app.use(VueCesium, {
+  // cesiumPath 是指引用的Cesium.js路径，如
+  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'Your CesiumJS Path',
+  // 使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载失败
+  accessToken: 'Your Cesium Ion defaultAccessToken'
+}
+
+```
+
+按需引入 VueCesium
+
+```js
+import { createApp } from 'vue'
+import { VcViewer } from 'element-plus'
+import App from './App.vue'
+
+const option = {
+  // cesiumPath 是指引用的Cesium.js路径，如
+  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'Your CesiumJS Path',
+  // 使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载不
+  accessToken: 'Your Cesium Ion defaultAccessToken'
+}
+const app = createApp(App)
+app.config.globalProperties.$VueCesium = option
+app.use(VcViewer)
+```
 
 ### 开始使用
 
