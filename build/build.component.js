@@ -1,7 +1,7 @@
 /* eslint-disable */
 const pkg = require('../package.json')
 const path = require('path')
-const { getPackages } =  require('@lerna/project')
+const { getPackages } = require('@lerna/project')
 const css = require('rollup-plugin-css-only')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const vue = require('rollup-plugin-vue')
@@ -16,10 +16,8 @@ const runBuild = async () => {
   const pkgs = await getPackages()
   const inputs = pkgs
     .map(pkg => pkg.name)
-    .filter(name =>
-      name.includes('@vue-cesium') &&
-      !name.includes('utils'),
-    ).slice(process.argv[2], process.argv[3])
+    .filter(name => name.includes('@vue-cesium') && !name.includes('utils') && !name.includes('theme-default'))
+    .slice(process.argv[2], process.argv[3])
 
   build(inputs[index])
 
@@ -32,30 +30,25 @@ const runBuild = async () => {
         css(),
         vue({
           target: 'browser',
-          css: false,
+          css: false
         }),
         typescript({
           tsconfigOverride: {
             compilerOptions: {
-              declaration: false,
+              declaration: false
             },
-            'exclude': [
-              'node_modules',
-              '__tests__',
-            ],
+            exclude: ['node_modules', '__tests__']
           },
-          abortOnError: false,
-        }),
+          abortOnError: false
+        })
       ],
       external(id) {
-        return /^vue/.test(id)
-          || /^@vue-cesium/.test(id)
-          || deps.some(k => new RegExp('^' + k).test(id))
-      },
+        return /^vue/.test(id) || /^@vue-cesium/.test(id) || deps.some(k => new RegExp('^' + k).test(id))
+      }
     }
     const getOutFile = () => {
       const compName = name.split('@vue-cesium/')[1]
-      if(noElPrefixFile.test(name)) {
+      if (noElPrefixFile.test(name)) {
         return `lib/${compName}/index.js`
       }
       return `lib/vc-${compName}/index.js`
@@ -68,7 +61,7 @@ const runBuild = async () => {
           if (noElPrefixFile.test(id)) return id.replace('@vue-cesium', '..')
           return id.replace('@vue-cesium/', '../vc-')
         }
-      },
+      }
     }
 
     const bundle = await rollup.rollup(inputOptions)

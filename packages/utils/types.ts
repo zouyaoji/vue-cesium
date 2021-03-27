@@ -85,14 +85,8 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   reload?(): Promise<boolean>
   __updateGraphics? (cesiumObject: AnyObject, type: EntityEmitType): boolean
   createPromise?: Promise<ReadyObj>
+  getCesiumObject?(): ReadyObj
 }>
-
-interface StubVNodeType {
-  attrs?(instance: VcComponentInternalInstance): HTMLAttributes
-  comment?(instance: VcComponentInternalInstance):  string
-  slots?: Array<any>
-  tag?: string
-}
 
 interface VcViewerProvider {
   Cesium: AnyObject
@@ -235,7 +229,7 @@ export {
   AnyFunction, AnyObject, CameraObj, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
   Cartesian2Option, Cartesian3Option, Cartesian4Option, CartographicInDegreeOption, PolygonHierarchyOption, NearFarScalarOption,
   DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
-  TranslationRotationScaleOption, StubVNodeType, NavigationOption, HeadingPitchRollOption
+  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption
 }
 
 export type { Cesium }
