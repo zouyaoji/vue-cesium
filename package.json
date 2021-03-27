@@ -1,26 +1,8 @@
 {
   "name": "vue-cesium",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "version": "3.0.0-beta",
   "description": "Vue 3.x components for CesiumJS.",
-  "files": [
-    "lib",
-    "es",
-    "packages",
-    "vetur"
-  ],
-  "main": "lib/index.js",
-  "module": "lib/index.esm.js",
-  "typings": "lib/index.d.ts",
-  "unpkg": "lib/index.js",
-  "style": "lib/theme-chalk/index.css",
-  "vetur": {
-    "tags": "./vetur/tags.json",
-    "attributes": "./vetur/attributes.json"
-  },
   "scripts": {
     "cz": "npx git-cz",
     "test": "jest",
@@ -47,13 +29,6 @@
     "upgrade:vue": "bash ./scripts/update-versions.sh",
     "fast-build": "sh ./scripts/build.sh"
   },
-  "author": "zouyaoji <370681295@qq.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zouyaoji/vue-cesium.git"
-  },
-  "homepage": "https://zouyaoji.top/vue-cesium",
   "peerDependencies": {
     "vue": "^3.0.7"
   },
@@ -70,6 +45,8 @@
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
@@ -95,6 +72,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^4.2.2",
     "css-minimizer-webpack-plugin": "1.1.5",
+    "cz-conventional-changelog": "^3.3.0",
     "element-plus": "^1.0.2-beta.35",
     "element-theme-chalk": "^2.15.1",
     "eslint": "^7.19.0",
@@ -103,8 +81,11 @@
     "file-save": "^0.2.0",
     "highlight.js": "^10.4.1",
     "html-webpack-plugin": "4.3.0",
+    "husky": "^4.2.5",
+    "import-from": "^3.0.0",
     "jest": "^26.6.3",
     "lerna": "^3.22.1",
+    "lint-staged": "^10.2.13",
     "markdown-it": "^11.0.0",
     "markdown-it-anchor": "^5.3.0",
     "markdown-it-chain": "^1.3.0",
@@ -135,5 +116,50 @@
     "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0"
-  }
+  },
+  "author": "zouyaoji <370681295@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zouyaoji/vue-cesium.git"
+  },
+  "homepage": "https://zouyaoji.top/vue-cesium",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push-todo-open": "npm run test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": "eslint --fix"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "files": [
+    "lib",
+    "es",
+    "packages",
+    "vetur"
+  ],
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "unpkg": "lib/index.js",
+  "style": "lib/theme-default/index.css",
+  "vetur": {
+    "tags": "./vetur/tags.json",
+    "attributes": "./vetur/attributes.json"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }
