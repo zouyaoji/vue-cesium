@@ -5,7 +5,7 @@ export type TranslatePair = {
 }
 
 export type Language = {
-  name: string,
+  name: string
   nativeName: string
   vc: TranslatePair
 }
@@ -18,8 +18,8 @@ export const i18n = (fn: (...args: any[]) => string) => {
   i18nHandler = fn
 }
 
-function template(str: string, option) {
-  if(!str || !option) return str
+function template (str: string, option) {
+  if (!str || !option) return str
 
   return str.replace(/\{(\w+)\}/g, (match, key) => {
     return option[key]

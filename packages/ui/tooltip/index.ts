@@ -129,6 +129,7 @@ export default defineComponent({
       }
 
       registerTimeout(() => {
+        // eslint-disable-next-line vue/require-explicit-emits
         emit('show', evt)
       }, props.transitionDuration)
     }
@@ -141,6 +142,7 @@ export default defineComponent({
 
       registerTimeout(() => {
         hidePortal()
+        // eslint-disable-next-line vue/require-explicit-emits
         emit('hide', evt)
       }, props.transitionDuration)
     }
