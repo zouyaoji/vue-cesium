@@ -5,8 +5,8 @@
       "path": "/changelog"
     },
     {
-      "name": "官方沙盒",
-      "href": "https://sandcastle.cesium.com/"
+      "name": "2.0 文档",
+      "href": "https://zouyaoji.top/vue-cesium-v2/#/"
     },
     {
       "name": "开发指南",
@@ -87,8 +87,8 @@
       "path": "/changelog"
     },
     {
-      "name": "Cesium Sandcastle",
-      "href": "https://sandcastle.cesium.com/"
+      "name": "Version 2.0 documentation",
+      "href": "https://zouyaoji.top/vue-cesium-v2/#/"
     },
     {
       "name": "Development",
