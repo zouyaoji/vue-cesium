@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>VueCesium UMD</title>
+
+    <style>
+      html,
+      body,
+      #app {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body * {
+        box-sizing: border-box;
+      }
+
+      #map {
+        flex: 1 1 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="map">
+        <vc-viewer ref="viewer" animation timeline @ready="ready" @left_click="test" @changed="changed" @postRender="postRender">
+          <vc-navigation></vc-navigation>
+          <vc-layer-imagery>
+            <vc-provider-imagery-openstreetmap></vc-provider-imagery-openstreetmap>
+          </vc-layer-imagery>
+          <vc-datasource-custom name="custom" ref="custom">
+            <vc-entity :position="position" :billboard="billboard" :description="description" :id="id"></vc-entity>
+            <vc-entity :position="position1" :description="description" :cylinder.sync="cylinder1">
+              <vc-graphics-cylinder
+                ref="cylinder"
+                :length="400000.0"
+                :topRadius="200000.0"
+                :bottomRadius="200000.0"
+                :material="material1"
+                :outline="true"
+                :outlineColor="outlineColor1"
+              ></vc-graphics-cylinder>
+            </vc-entity>
+            <vc-entity :position="position2" :description="description" :cylinder.sync="cylinder2">
+              <vc-graphics-cylinder
+                :length="400000.0"
+                :topRadius="0.0"
+                :bottomRadius="200000.0"
+                :material="material2"
+              ></vc-graphics-cylinder>
+            </vc-entity>
+          </vc-datasource-custom>
+        </vc-viewer>
+      </div>
+      <div></div>
+    </div>
+
+    <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-cesium@latest/lib/index.umd.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-cesium@latest/lib/vc-navigation.css"></link>
+    <!-- <script src="../lib/index.umd.js"></script>
+    <link rel="stylesheet" href="../lib/vc-navigation.css"></link> -->
+    <script>
+      Vue.use(VueCesium, {
+        cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+      }) // All VueCesium components now globally installed
+
+      /* eslint-disable no-new */
+      new Vue({
+        el: '#app',
+        data: {
+          show: true,
+          id: 'This is a billboard',
+          description: 'Hello Vue Cesium',
+          image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+          position: { lng: 108, lat: 35, height: 100 },
+          billboard: {},
+          description: 'Hello Vue Cesium',
+          cylinder1: {},
+          position1: { lng: 105.0, lat: 40.0, height: 200000.0 },
+          outlineColor1: 'DARK_GREEN',
+          material1: {},
+
+          cylinder2: {},
+          position2: { lng: 110.0, lat: 40.0, height: 200000.0 },
+          material2: 'RED'
+        },
+        methods: {
+          postRender () {
+            console.log('s')
+          },
+          changed () {
+            console.log('bb')
+          },
+          test () {
+            console.log('aa')
+          },
+          ready(cesiumInstance) {
+            const { Cesium, viewer } = cesiumInstance
+            this.material1 = Cesium.Color.GREEN.withAlpha(0.5)
+            this.billboard = new Cesium.BillboardGraphics({
+              image: 'https://zouyaoji.top/vue-cesium/favicon.png', // default: undefined
+              show: true, // default
+              pixelOffset: new Cesium.Cartesian2(0, -50), // default: (0, 0)
+              eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0), // default
+              horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // default
+              verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // default: CENTER
+              scale: 0.5, // default: 1.0
+              color: Cesium.Color.LIME, // default: WHITE
+              alignedAxis: Cesium.Cartesian3.ZERO // default
+            })
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
