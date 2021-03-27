@@ -1,17 +1,16 @@
-import { inject, h, onUnmounted, createCommentVNode } from 'vue'
+import { inject, onUnmounted } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction } from '@vue-cesium/utils/util'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import {
   AnyObject,
   ReadyObj,
-  StubVNodeType,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
   VcViewerProvider
 } from '@vue-cesium/utils/types'
 import * as cesiumProps from '@vue-cesium/utils/cesiumProps'
-import { useEvents } from '@vue-cesium/composables'
+import useEvents from '../use-events'
 import { vcKey } from '@vue-cesium/utils/config'
 import { t } from '@vue-cesium/locale'
 

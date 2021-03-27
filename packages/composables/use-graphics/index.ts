@@ -1,5 +1,5 @@
 import { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { useCommon } from '@vue-cesium/composables'
+import useCommon from '../use-common'
 import { kebabCase } from '@vue-cesium/utils/util'
 
 export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
