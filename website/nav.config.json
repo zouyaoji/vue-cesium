@@ -1,0 +1,166 @@
+{
+  "zh-CN": [
+    {
+      "name": "更新日志",
+      "path": "/changelog"
+    },
+    {
+      "name": "2.0 文档",
+      "href": "https://zouyaoji.top/vue-cesium-v2/#/"
+    },
+    {
+      "name": "开发指南",
+      "children": [
+        {
+          "path": "/installation",
+          "name": "安装"
+        },
+        {
+          "path": "/quickstart",
+          "name": "快速上手"
+        },
+        {
+          "path": "/i18n",
+          "name": "国际化"
+        },
+        {
+          "path": "/migration-from-2.x",
+          "name": "从 VueCesium 2.x 升级"
+        },
+        {
+          "path": "/base",
+          "name": "基础"
+        }
+      ]
+    },
+    {
+      "name": "组件",
+      "groups": [
+        {
+          "groupName": "视图",
+          "list": [
+            {
+              "path": "/vc-viewer",
+              "title": "Viewer 视图"
+            }
+          ]
+        },
+        {
+          "groupName": "控件",
+          "list": [
+            {
+              "path": "/vc-navigation",
+              "title": "导航"
+            }
+          ]
+        },
+        {
+          "groupName": "影像",
+          "list": []
+        },
+        {
+          "groupName": "地形",
+          "list": []
+        },
+        {
+          "groupName": "数据源",
+          "list": []
+        },
+        {
+          "groupName": "实体",
+          "list": []
+        },
+        {
+          "groupName": "图元集合",
+          "list": []
+        },
+        {
+          "groupName": "几何体",
+          "list": []
+        }
+      ]
+    }
+  ],
+  "en-US": [
+    {
+      "name": "Changelog",
+      "path": "/changelog"
+    },
+    {
+      "name": "Version 2.0 documentation",
+      "href": "https://zouyaoji.top/vue-cesium-v2/#/"
+    },
+    {
+      "name": "Development",
+      "children": [
+        {
+          "path": "/installation",
+          "name": "Installation"
+        },
+        {
+          "path": "/quickstart",
+          "name": "Quick Start"
+        },
+        {
+          "path": "/i18n",
+          "name": "Internationalization"
+        },
+        {
+          "path": "/migration-from-2.x",
+          "name": "Migration from VueCesium 2.x"
+        },
+        {
+          "path": "/base",
+          "name": "Base"
+        }
+      ]
+    },
+    {
+      "name": "Components",
+      "groups": [
+        {
+          "groupName": "Viewer",
+          "list": [
+            {
+              "path": "/vc-viewer",
+              "title": "Viewer"
+            }
+          ]
+        },
+        {
+          "groupName": "Control",
+          "list": [
+            {
+              "path": "/vc-navigation",
+              "title": "Navigation"
+            }
+          ]
+        },
+        {
+          "groupName": "Imagery",
+          "list": []
+        },
+        {
+          "groupName": "Terrain",
+          "list": []
+        },
+        {
+          "groupName": "Datasource",
+          "list": []
+        },
+        {
+          "groupName": "Entity",
+          "list": []
+        },
+        {
+          "groupName": "PrimitiveCollection",
+          "list": []
+        },
+        {
+          "groupName": "Geometry",
+          "list": []
+        }
+      ]
+    }
+  ]
+}

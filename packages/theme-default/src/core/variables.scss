@@ -1,0 +1,121 @@
+$space-base   : 16px !default;
+$space-x-base : $space-base !default;
+$space-y-base : $space-base !default;
+
+$breakpoint-xs: 599px !default;
+$breakpoint-sm: 1023px !default;
+$breakpoint-md: 1439px !default;
+$breakpoint-lg: 1919px !default;
+
+$flex-cols      : 12 !default;
+$flex-gutter-xs : ($space-base * .25) !default;
+$flex-gutter-sm : ($space-base * .5) !default;
+$flex-gutter-md : $space-base !default;
+$flex-gutter-lg : ($space-base * 1.5) !default;
+$flex-gutter-xl : ($space-base * 3) !default;
+
+$body-font-size   : 14px !default;
+$body-line-height : 1.5 !default;
+
+$flex-gutter: ('none': 0, 'xs': $flex-gutter-xs, 'sm': $flex-gutter-sm, 'md': $flex-gutter-md, 'lg': $flex-gutter-lg, 'xl': $flex-gutter-xl) !default;
+
+$sizes: ('xs': 0, 'sm': ($breakpoint-xs + 1), 'md': ($breakpoint-sm + 1), 'lg': ($breakpoint-md + 1), 'xl': ($breakpoint-lg + 1)) !default;
+
+$breakpoint-xs-min: 0 !default;
+$breakpoint-xs-max: $breakpoint-xs !default;
+
+$breakpoint-sm-min: map-get($sizes, "sm") !default;
+$breakpoint-sm-max: $breakpoint-sm !default;
+
+$breakpoint-md-min: map-get($sizes, "md") !default;
+$breakpoint-md-max: $breakpoint-md !default;
+
+$breakpoint-lg-min: map-get($sizes, "lg") !default;
+$breakpoint-lg-max: $breakpoint-lg !default;
+
+$breakpoint-xl-min: map-get($sizes, "xl") !default;
+$breakpoint-xl-max: 9999px !default;
+
+$primary                 : #1976D2 !default;
+$secondary               : #26A69A !default;
+$accent                  : #9C27B0 !default;
+// used by dark mode
+$dark-page               : #121212 !default;
+$dark                    : #1d1d1d !default;
+$positive                : #21BA45 !default;
+$negative                : #C10015 !default;
+$info                    : #31CCEC !default;
+$warning                 : #F2C037 !default;
+$dimmed-background       : rgba(0, 0, 0, .4) !default;
+$light-dimmed-background : rgba(255, 255, 255, .6) !default;
+$separator-color         : rgba(0, 0, 0, .12) !default;
+$separator-dark-color    : rgba(255, 255, 255, .28) !default;
+
+$red                     : #f44336 !default;
+$pink                    : #e91e63 !default;
+$purple                  : #9c27b0 !default;
+$deep-purple             : #673ab7 !default;
+$indigo                  : #3f51b5 !default;
+$blue                    : #2196f3 !default;
+$light-blue              : #03a9f4 !default;
+$cyan                    : #00bcd4 !default;
+$teal                    : #009688 !default;
+$green                   : #4caf50 !default;
+$light-green             : #8bc34a !default;
+$lime                    : #cddc39 !default;
+$yellow                  : #ffeb3b !default;
+$amber                   : #ffc107 !default;
+$orange                  : #ff9800 !default;
+$deep-orange             : #ff5722 !default;
+$brown                   : #795548 !default;
+$grey                    : #9e9e9e !default;
+$blue-grey               : #607d8b !default;
+
+$shadow-color            : #000 !default;
+
+$z-fab                   : 990 !default;
+$z-side                  : 1000 !default;
+$z-marginals             : 2000 !default;
+$z-fixed-drawer          : 3000 !default;
+$z-fullscreen            : 6000 !default;
+$z-menu                  : 6000 !default;
+$z-top                   : 7000 !default;
+$z-tooltip               : 9000 !default;
+$z-notify                : 9500 !default;
+$z-max                   : 9998 !default;
+
+$elevation-umbra         : rgba($shadow-color, .2) !default;
+$elevation-penumbra      : rgba($shadow-color, .14) !default;
+$elevation-ambient       : rgba($shadow-color, .12) !default;
+$shadow-2  : 0 1px 5px $elevation-umbra, 0 2px 2px $elevation-penumbra, 0 3px 1px -2px $elevation-ambient !default;
+$shadow-5  : 0 3px 5px -1px $elevation-umbra, 0 5px 8px $elevation-penumbra, 0 1px 14px $elevation-ambient !default;
+
+$generic-border-radius          : 4px !default;
+$generic-hover-transition       : .3s cubic-bezier(.25, .8, .5, 1) !default;
+$typography-font-family         : 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$min-line-height                : 1.12 !default;
+
+$button-border-radius           : 3px !default;
+$button-padding                 : 4px 16px !default;
+$button-dense-padding           : .285em !default;
+$button-transition              : $generic-hover-transition !default;
+$button-font-size               : 16px !default;
+$button-line-height             : 1em !default;
+$button-font-weight             : 500 !default;
+$button-shadow                  : $shadow-2 !default;
+$button-shadow-active           : $shadow-5 !default;
+$button-rounded-border-radius   : 28px !default;
+$button-push-border-radius      : 7px !default;
+
+$tooltip-color                  : #fafafa !default;
+$tooltip-background             : #757575 !default;
+$tooltip-padding                : 6px 10px !default;
+$tooltip-border-radius          : $generic-border-radius !default;
+$tooltip-fontsize               : 10px !default;
+$tooltip-mobile-padding         : 8px 16px !default;
+$tooltip-mobile-fontsize        : 14px !default;
+
+$charcoal-grey                  : #3f4854;
+$btn-default-line-height        : 20px;
+$font-path                      : 'fonts' !default;
+$namespace                      : 'vc';

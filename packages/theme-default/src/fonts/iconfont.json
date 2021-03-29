@@ -1,0 +1,128 @@
+{
+  "id": "2419801",
+  "name": "vue-cesium",
+  "font_family": "vc-icons",
+  "css_prefix_text": "vc-icons-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7988932",
+      "name": "capture",
+      "font_class": "capture",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "20519285",
+      "name": "geolocation",
+      "font_class": "geolocation",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "400062",
+      "name": "照相",
+      "font_class": "photo",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "13169296",
+      "name": "reset",
+      "font_class": "reset2",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "20390469",
+      "name": "zoom-in",
+      "font_class": "ic_add",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "20390021",
+      "name": "zoom-out",
+      "font_class": "ic_zoom_out_2",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "20368672",
+      "name": "share",
+      "font_class": "share",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "20368658",
+      "name": "compass-rotation-marker",
+      "font_class": "compass-rotation-marker",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "20368657",
+      "name": "compass-outer",
+      "font_class": "compass-outer",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "20368656",
+      "name": "compass-inner",
+      "font_class": "compass-inner",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "20362105",
+      "name": "vue-cesium",
+      "font_class": "vue-cesium",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "397422",
+      "name": "icon-weixin",
+      "font_class": "weixin",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "1312401",
+      "name": "icon_github",
+      "font_class": "github",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "15378390",
+      "name": "gitter",
+      "font_class": "gitter",
+      "unicode": "eba2",
+      "unicode_decimal": 60322
+    },
+    {
+      "icon_id": "14055554",
+      "name": "QQ",
+      "font_class": "qq",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "13304145",
+      "name": "vue",
+      "font_class": "vue",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
+      "icon_id": "19116148",
+      "name": "cesium",
+      "font_class": "cesium",
+      "unicode": "e734",
+      "unicode_decimal": 59188
+    }
+  ]
+}

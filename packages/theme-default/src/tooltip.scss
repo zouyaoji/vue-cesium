@@ -1,0 +1,23 @@
+@import './core/variables.scss';
+
+.vc-tooltip--style {
+  font-size: $tooltip-fontsize;
+  color: $tooltip-color;
+  background: $tooltip-background;
+  border-radius: $tooltip-border-radius;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.vc-tooltip {
+  z-index: $z-tooltip;
+  position: fixed !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: $tooltip-padding;
+
+  @media (max-width: $breakpoint-xs-max) {
+    font-size: $tooltip-mobile-fontsize;
+    padding: $tooltip-mobile-padding;
+  }
+}

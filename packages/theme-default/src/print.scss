@@ -1,0 +1,12 @@
+@import './core/variables.scss';
+
+.vc-print {
+  cursor: pointer;
+  text-align: center;
+  z-index: $z-top;
+  pointer-events: auto;
+}
+
+.vc-navigation .vc-print {
+  position: relative;
+}

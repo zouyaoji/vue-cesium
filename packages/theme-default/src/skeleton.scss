@@ -1,0 +1,209 @@
+@import './core/variables.scss';
+
+.vc-skeleton {
+  background: $separator-color;
+  border-radius: $generic-border-radius;
+
+  &--anim {
+    cursor: wait;
+  }
+
+  /*
+    maintain size even with border
+    for types that have height specified
+   */
+  box-sizing: border-box;
+
+  &:before {
+    content: " ";
+  }
+
+  &--type {
+    &-text {
+      transform: scale(1, 0.5);
+    }
+
+    &-circle,
+    &-VcAvatar {
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+    }
+
+    &-VcBtn {
+      width: 90px;
+      height: 36px;
+    }
+
+    &-VcBadge {
+      width: 70px;
+      height: 16px;
+    }
+
+    &-VcChip {
+      width: 90px;
+      height: 28px;
+      border-radius: 16px;
+    }
+
+    &-VcToolbar {
+      height: 50px;
+    }
+
+    &-VcCheckbox,
+    &-VcRadio {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    &-VcToggle {
+      width: 56px;
+      height: 40px;
+      border-radius: 7px;
+    }
+
+    &-VcSlider,
+    &-VcRange {
+      height: 40px;
+    }
+
+    &-VcInput {
+      height: 56px;
+    }
+  }
+
+  &--bordered {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  &--square {
+    border-radius: 0;
+  }
+
+  &--anim-fade {
+    animation: vc-skeleton--fade 1.5s linear 0.5s infinite;
+  }
+
+  &--anim-pulse {
+    animation: vc-skeleton--pulse 1.5s ease-in-out 0.5s infinite;
+  }
+
+  &--anim-pulse-x {
+    animation: vc-skeleton--pulse-x 1.5s ease-in-out 0.5s infinite;
+  }
+
+  &--anim-pulse-y {
+    animation: vc-skeleton--pulse-y 1.5s ease-in-out 0.5s infinite;
+  }
+
+  &--anim-wave,
+  &--anim-blink,
+  &--anim-pop {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+    }
+  }
+
+  &--anim-blink:after {
+    background: rgba(255, 255, 255, 0.7);
+    animation: vc-skeleton--fade 1.5s linear 0.5s infinite;
+  }
+
+  &--anim-wave:after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    animation: vc-skeleton--wave 1.5s linear 0.5s infinite;
+  }
+
+  &--dark {
+    background: rgba(255, 255, 255, 0.05);
+
+    &.vc-skeleton--bordered {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    &.vc-skeleton--anim-wave:after {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    }
+
+    &.vc-skeleton--anim-blink:after {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+@keyframes vc-skeleton--fade {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes vc-skeleton--pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vc-skeleton--pulse-x {
+  0% {
+    transform: scaleX(1);
+  }
+
+  50% {
+    transform: scaleX(0.75);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes vc-skeleton--pulse-y {
+  0% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(0.75);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes vc-skeleton--wave {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}

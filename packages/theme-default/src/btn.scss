@@ -1,0 +1,204 @@
+@import './core/variables.scss';
+
+.vc-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  outline: 0;
+  border: 0;
+  vertical-align: middle;
+  font-size: $button-font-size;
+  line-height: $button-line-height;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  font-weight: $button-font-weight;
+  text-transform: uppercase;
+  text-align: center;
+  // width: auto;
+  // height: auto;
+  cursor: default;
+  padding: $button-padding;
+  min-height: 2em;
+
+  svg: {
+    width: 100%;
+    height: 100%;
+  }
+
+  .vc-icon, .vc-spinner {
+    font-size: $button-line-height;
+  }
+
+  &.disabled {
+    opacity: 0.7 !important;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: inherit;
+    box-shadow: $button-shadow;
+  }
+
+  &--actionable {
+    cursor: pointer;
+
+    &.vc-btn--standard {
+      &:before {
+        // This places the button active raise shadow behind adjacent elements
+        // Active raise shadow will still be visible under adjacent transparent elements, this is ok and coherent with a desired transparency effect.
+        // Visible active raise shadow can be removed by specifying a background color to the button
+        // Visible active raise shadow can be removed by specifying a flat or outline button type
+        transition: box-shadow $button-transition;
+      }
+
+      &:active,
+      &.vc-btn--active {
+        &:before {
+          box-shadow: $button-shadow-active;
+        }
+      }
+    }
+  }
+
+  &--no-uppercase {
+    text-transform: none;
+  }
+
+  &--rectangle {
+    border-radius: $button-border-radius;
+  }
+
+  &--outline {
+    background: transparent !important;
+
+    &:before {
+      border: 1px solid currentColor;
+    }
+  }
+
+  &--push {
+    border-radius: $button-push-border-radius;
+
+    &:before {
+      border-bottom: 3px solid rgba(0, 0, 0, 0.15);
+    }
+
+    &.vc-btn--actionable {
+      transition: transform $button-transition;
+
+      &:before {
+        transition: border-width $button-transition;
+      }
+
+      &:active,
+      &.vc-btn--active {
+        transform: translateY(2px);
+
+        &:before {
+          border-bottom-width: 0;
+        }
+      }
+    }
+  }
+
+  &--rounded {
+    border-radius: $button-rounded-border-radius;
+  }
+
+  &--round {
+    border-radius: 50%;
+    padding: 0;
+    min-width: 2em;
+    min-height: 2em;
+  }
+
+  &--flat, &--outline, &--unelevated {
+    &:before {
+      box-shadow: none;
+    }
+  }
+
+  &--dense {
+    padding: $button-dense-padding;
+    min-height: 1.5em;
+
+    &.vc-btn--round {
+      padding: 0;
+      min-height: 1.2em;
+      min-width: 1.2em;
+    }
+
+    .on-left {
+      margin-right: 6px;
+    }
+
+    .on-right {
+      margin-left: 6px;
+    }
+  }
+
+  &--fab, &--fab-mini {
+    .vc-icon {
+      font-size: 24px;
+    }
+  }
+
+  &--fab {
+    padding: 16px;
+    min-height: 56px;
+    min-width: 56px;
+
+    .vc-icon {
+      margin: auto;
+    }
+  }
+
+  &--fab-mini {
+    padding: 8px;
+    min-height: 40px;
+    min-width: 40px;
+  }
+
+  // workaround for alignment/sizing change when showing loader
+  &__content {
+    transition: opacity 0.3s;
+    z-index: 0;
+
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  &__progress {
+    border-radius: inherit;
+    z-index: 0;
+
+    &-indicator {
+      z-index: -1;
+      transform: translateX(-100%);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    &--dark {
+      .vc-btn__progress-indicator {
+        background: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  &--flat, &--outline {
+    .vc-btn__progress-indicator {
+      opacity: 0.2;
+      background: currentColor;
+    }
+  }
+}

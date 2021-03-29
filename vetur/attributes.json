@@ -1,0 +1,3 @@
+{
+  "animation": {"type": "boolean", "description": "是否显示动画控制部件"}
+}

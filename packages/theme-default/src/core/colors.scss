@@ -1,0 +1,267 @@
+:root {
+  --vc-primary:    #{$primary};
+  --vc-secondary:  #{$secondary};
+  --vc-accent:     #{$accent};
+  --vc-positive:   #{$positive};
+  --vc-negative:   #{$negative};
+  --vc-info:       #{$info};
+  --vc-warning:    #{$warning};
+  --vc-dark:       #{$dark};
+  --vc-dark-page:  #{$dark-page};
+}
+
+.text-dark {
+  color: var(--vc-dark) !important;
+}
+
+.bg-dark {
+  background: var(--vc-dark) !important;
+}
+
+.text-primary {
+  color: var(--vc-primary) !important;
+}
+
+.bg-primary {
+  background: var(--vc-primary) !important;
+}
+
+.text-secondary {
+  color: var(--vc-secondary) !important;
+}
+
+.bg-secondary {
+  background: var(--vc-secondary) !important;
+}
+
+.text-accent {
+  color: var(--vc-accent) !important;
+}
+
+.bg-accent {
+  background: var(--vc-accent) !important;
+}
+
+.text-positive {
+  color: var(--vc-positive) !important;
+}
+
+.bg-positive {
+  background: var(--vc-positive) !important;
+}
+
+.text-negative {
+  color: var(--vc-negative) !important;
+}
+
+.bg-negative {
+  background: var(--vc-negative) !important;
+}
+
+.text-info {
+  color: var(--vc-info) !important;
+}
+
+.bg-info {
+  background: var(--vc-info) !important;
+}
+
+.text-warning {
+  color: var(--vc-warning) !important;
+}
+
+.bg-warning {
+  background: var(--vc-warning) !important;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.bg-white {
+  background: #fff !important;
+}
+
+.text-black {
+  color: #000 !important;
+}
+
+.bg-black {
+  background: #000 !important;
+}
+
+.text-transparent {
+  color: transparent !important;
+}
+
+.bg-transparent {
+  background: transparent !important;
+}
+
+.text-separator {
+  color: $separator-color !important;
+}
+
+.bg-separator {
+  background: $separator-color !important;
+}
+
+.text-dark-separator {
+  color: $separator-dark-color !important;
+}
+
+.bg-dark-separator {
+  background: $separator-dark-color !important;
+}
+
+.text-red {
+  color: $red !important;
+}
+
+.text-pink {
+  color: $pink !important;
+}
+
+.text-purple {
+  color: $purple !important;
+}
+
+.text-deep-purple {
+  color: $deep-purple !important;
+}
+
+.text-indigo {
+  color: $indigo !important;
+}
+
+.text-blue {
+  color: $blue !important;
+}
+
+.text-light-blue {
+  color: $light-blue !important;
+}
+
+.text-cyan {
+  color: $cyan !important;
+}
+
+.text-teal {
+  color: $teal !important;
+}
+
+.text-green {
+  color: $green !important;
+}
+
+.text-light-green {
+  color: $light-green !important;
+}
+
+.text-lime {
+  color: $lime !important;
+}
+
+.text-yellow {
+  color: $yellow !important;
+}
+
+.text-amber {
+  color: $amber !important;
+}
+
+.text-orange {
+  color: $orange !important;
+}
+
+.text-deep-orange {
+  color: $deep-orange !important;
+}
+
+.text-brown {
+  color: $brown !important;
+}
+
+.text-grey {
+  color: $grey !important;
+}
+
+.text-blue-grey {
+  color: $blue-grey !important;
+}
+
+.bg-red {
+  background: $red !important;
+}
+
+.bg-pink {
+  background: $pink !important;
+}
+
+.bg-purple {
+  background: $purple !important;
+}
+
+.bg-deep-purple {
+  background: $deep-purple !important;
+}
+
+.bg-indigo {
+  background: $indigo !important;
+}
+
+.bg-blue {
+  background: $blue !important;
+}
+
+.bg-light-blue {
+  background: $light-blue !important;
+}
+
+.bg-cyan {
+  background: $cyan !important;
+}
+
+.bg-teal {
+  background: $teal !important;
+}
+
+.bg-green {
+  background: $green !important;
+}
+
+.bg-light-green {
+  background: $light-green !important;
+}
+
+.bg-lime {
+  background: $lime !important;
+}
+
+.bg-yellow {
+  background: $yellow !important;
+}
+
+.bg-amber {
+  background: $amber !important;
+}
+
+.bg-orange {
+  background: $orange !important;
+}
+
+.bg-deep-orange {
+  background: $deep-orange !important;
+}
+
+.bg-brown {
+  background: $brown !important;
+}
+
+.bg-grey {
+  background: $grey !important;
+}
+
+.bg-blue-grey {
+  background: $blue-grey !important;
+}
