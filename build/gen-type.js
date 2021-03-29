@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
 const path = require('path')
-const { noElPrefixFile } = require('./common')
+const { noVcPrefixFile } = require('./common')
 
 const outsideImport = /import .* from '..\/(.*?)\/src\/.*/
 
@@ -27,7 +27,7 @@ fs.rmdirSync(path.resolve(__dirname, '../lib/test-utils'), { recursive: true })
 // component
 const libDirPath = path.resolve(__dirname, '../lib')
 fs.readdirSync(libDirPath).forEach(comp => {
-  if (!noElPrefixFile.test(comp)) {
+  if (!noVcPrefixFile.test(comp)) {
     if (fs.lstatSync(path.resolve(libDirPath, comp)).isDirectory()) {
       // rename
       const newCompName = `vc-${comp}`

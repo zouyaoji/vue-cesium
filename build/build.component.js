@@ -7,7 +7,7 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const vue = require('rollup-plugin-vue')
 const rollup = require('rollup')
 const typescript = require('rollup-plugin-typescript2')
-const { noElPrefixFile } = require('./common')
+const { noVcPrefixFile } = require('./common')
 
 const deps = Object.keys(pkg.dependencies)
 
@@ -48,7 +48,7 @@ const runBuild = async () => {
     }
     const getOutFile = () => {
       const compName = name.split('@vue-cesium/')[1]
-      if (noElPrefixFile.test(name)) {
+      if (noVcPrefixFile.test(name)) {
         return `lib/${compName}/index.js`
       }
       return `lib/vc-${compName}/index.js`
@@ -58,7 +58,7 @@ const runBuild = async () => {
       file: getOutFile(),
       paths(id) {
         if (/^@vue-cesium/.test(id)) {
-          if (noElPrefixFile.test(id)) return id.replace('@vue-cesium', '..')
+          if (noVcPrefixFile.test(id)) return id.replace('@vue-cesium', '..')
           return id.replace('@vue-cesium/', '../vc-')
         }
       }

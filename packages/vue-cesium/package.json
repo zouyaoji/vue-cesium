@@ -1,9 +1,23 @@
 {
   "name": "vue-cesium",
   "version": "3.0.1-beta.0",
+  "description": "> TODO: description",
+  "author": "zouyaoji <370681295@qq.com>",
+  "homepage": "https://github.com/zouyaoji/vue-cesium#readme",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zouyaoji/vue-cesium.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zouyaoji/vue-cesium/issues"
+  },
   "license": "MIT",
   "peerDependencies": {
-    "vue": "^3.0.7"
+    "@vue-cesium/ui": "^0.0.0",
+    "@vue-cesium/controls": "^0.0.0",
+    "@vue-cesium/viewer": "^0.0.0",
+    "@vue-cesium/entity": "^0.0.0",
+    "@vue-cesium/graphics": "^0.0.0"
   }
 }

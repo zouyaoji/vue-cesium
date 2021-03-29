@@ -6,7 +6,7 @@ const autoprefixer = require('gulp-autoprefixer')
 const cssmin = require('gulp-cssmin')
 const rename = require('gulp-rename')
 
-const noElPrefixFile = /(index|base)/
+const noVcPrefixFile = /(index|base)/
 
 function compile() {
   return src('./src/*.scss')
@@ -14,7 +14,7 @@ function compile() {
     .pipe(autoprefixer({ cascade: false }))
     .pipe(cssmin())
     .pipe(rename(function (path) {
-      if(!noElPrefixFile.test(path.basename)) {
+      if(!noVcPrefixFile.test(path.basename)) {
         path.basename = `vc-${path.basename}`
       }
     }))
