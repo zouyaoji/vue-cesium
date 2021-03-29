@@ -1,5 +1,5 @@
 import { CameraObj, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { flyToCamera } from '@vue-cesium/utils/cesiumHelpers'
+import { flyToCamera } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
 import { VcTooltip } from '@vue-cesium/ui'

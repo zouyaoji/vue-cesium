@@ -22,7 +22,7 @@ import {
   show,
   distanceDisplayCondition,
   imageSubRegion
-} from '@vue-cesium/utils/cesiumProps'
+} from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcGraphicsBillboard',
   props: {

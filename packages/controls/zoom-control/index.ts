@@ -2,7 +2,7 @@ import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProper
 import { CameraObj, VcComponentInternalInstance, VcBtnOptions } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { setViewerCamera } from '@vue-cesium/utils/cesiumHelpers'
+import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/ui'

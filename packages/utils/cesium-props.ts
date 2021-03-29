@@ -1,4 +1,4 @@
-import { lnglatValidator, hasOwn, isObject, isFunction, isArray } from '../utils/util'
+import { lnglatValidator, hasOwn, isObject, isFunction, isArray } from './util'
 
 import {
   makeDistanceDisplayCondition,
@@ -16,7 +16,7 @@ import {
   makeTranslationRotationScale,
   makeQuaternion,
   makeOptions,
-} from '../utils/cesiumHelpers'
+} from './cesium-helpers'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start

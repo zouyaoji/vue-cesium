@@ -2,7 +2,7 @@ import { createCommentVNode, CSSProperties, defineComponent, getCurrentInstance,
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import { captureScreenshot } from '@vue-cesium/utils/cesiumHelpers'
+import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
 import { VcBtn, VcTooltip, VcIcon } from '@vue-cesium/ui'
 import { useCommon } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'

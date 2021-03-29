@@ -9,7 +9,7 @@ import {
   VcComponentPublicInstance,
   VcViewerProvider
 } from '@vue-cesium/utils/types'
-import * as cesiumProps from '@vue-cesium/utils/cesiumProps'
+import * as cesiumProps from '@vue-cesium/utils/cesium-props'
 import useEvents from '../use-events'
 import { vcKey } from '@vue-cesium/utils/config'
 import { t } from '@vue-cesium/locale'

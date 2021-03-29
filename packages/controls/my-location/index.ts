@@ -16,7 +16,7 @@ import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
-import { makeColor } from '@vue-cesium/utils/cesiumHelpers'
+import { makeColor } from '@vue-cesium/utils/cesium-helpers'
 import { isFunction } from '@vue-cesium/utils/util'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'

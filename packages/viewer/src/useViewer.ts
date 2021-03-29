@@ -2,7 +2,7 @@ import { ExtractPropTypes, watch, ref, onMounted, onUnmounted, nextTick, reactiv
 import mitt, { Emitter } from 'mitt'
 import { t } from '@vue-cesium/locale'
 import defaultProps from './defaultProps'
-import { mergeDescriptors } from '@vue-cesium/utils/mergeDescriptors'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import {
@@ -14,7 +14,7 @@ import {
 } from '@vue-cesium/utils/types'
 import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
-import { setViewerCamera } from '@vue-cesium/utils/cesiumHelpers'
+import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 
 export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcInstance: VcComponentInternalInstance) {
   console.log('viewer creating')
