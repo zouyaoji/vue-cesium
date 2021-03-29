@@ -48,7 +48,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"0":"DOCS en-US0","1":"DOCS en-US1","2":"DOCS en-US2","3":"DOCS en-US3","4":"DOCS en-US4","5":"DOCS en-US5","6":"DOCS en-US6","7":"DOCS zh-CN0","8":"DOCS zh-CN1","9":"DOCS zh-CN2","10":"DOCS zh-CN3","11":"DOCS zh-CN4","12":"DOCS zh-CN5","13":"DOCS zh-CN6","14":"DOCS zh-CN7","16":"zh-CN0","17":"zh-CN1","18":"zh-CN2","19":"zh-CN3","20":"zh-CN4","21":"zh-CN5","22":"zh-CN6"}[chunkId]||chunkId) + "." + "df36075d5cb9f1bf13f7" + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"0":"DOCS en-US0","1":"DOCS en-US1","2":"DOCS en-US2","3":"DOCS en-US3","4":"DOCS en-US4","5":"DOCS en-US5","6":"DOCS en-US6","7":"DOCS zh-CN0","8":"DOCS zh-CN1","9":"DOCS zh-CN2","10":"DOCS zh-CN3","11":"DOCS zh-CN4","12":"DOCS zh-CN5","13":"DOCS zh-CN6","14":"DOCS zh-CN7","16":"zh-CN0","17":"zh-CN1","18":"zh-CN2","19":"zh-CN3","20":"zh-CN4","21":"zh-CN5","22":"zh-CN6"}[chunkId]||chunkId) + "." + "086fbcfa9591ebff3875" + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -82437,7 +82437,6 @@ var zh_hans = __webpack_require__(36);
 
 
 
-
 var appvue_type_script_lang_js_lang = location.hash.replace('#', '').split('/')[1] || Language.CN;
 
 var appvue_type_script_lang_js_localize = function localize(lang) {
@@ -82464,19 +82463,20 @@ appvue_type_script_lang_js_localize(appvue_type_script_lang_js_lang);
     });
 
     var suggestJump = function suggestJump() {
-      if (false) {}
-      var href = location.href;
-      var preferGithub = localStorage.getItem('PREFER_GITHUB');
-      var cnHref = href.indexOf('element-plus.gitee.io') > -1;
-      if (cnHref || preferGithub) return;
-      setTimeout(function () {
-        if (lang.value !== Language.CN) return;
-        Nu.confirm('建议大陆用户访问部署在国内的站点，是否跳转？', '提示').then(function () {
-          location.replace('https://element-plus.gitee.io');
-        }).catch(function () {
-          localStorage.setItem('PREFER_GITHUB', 'true');
-        });
-      }, 1000);
+      if (false) {} // const href = location.href
+      // const preferGithub = localStorage.getItem('PREFER_GITHUB')
+      // const cnHref = href.indexOf('zouyaoji.gitee.io') > -1
+      // if (cnHref || preferGithub) return
+      // setTimeout(() => {
+      //   if (lang.value !== Language.CN) return
+      //   ElMessageBox.confirm('建议大陆用户访问部署在国内的站点，是否跳转？', '提示')
+      //     .then(() => {
+      //       location.replace('https://zouyaoji.gitee.io')
+      //     })
+      //     .catch(() => {
+      //       localStorage.setItem('PREFER_GITHUB', 'true')
+      //     })
+      // }, 1000)
     };
 
     Object(vue_esm_browser["bb" /* watch */])(function () {
