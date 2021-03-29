@@ -35,20 +35,20 @@ export default defineComponent({
     const suggestJump = () => {
       if (process.env.NODE_ENV !== 'production') return
 
-      const href = location.href
-      const preferGithub = localStorage.getItem('PREFER_GITHUB')
-      const cnHref = href.indexOf('element-plus.gitee.io') > -1
-      if (cnHref || preferGithub) return
-      setTimeout(() => {
-        if (lang.value !== Language.CN) return
-        ElMessageBox.confirm('建议大陆用户访问部署在国内的站点，是否跳转？', '提示')
-          .then(() => {
-            location.replace('https://element-plus.gitee.io')
-          })
-          .catch(() => {
-            localStorage.setItem('PREFER_GITHUB', 'true')
-          })
-      }, 1000)
+      // const href = location.href
+      // const preferGithub = localStorage.getItem('PREFER_GITHUB')
+      // const cnHref = href.indexOf('zouyaoji.gitee.io') > -1
+      // if (cnHref || preferGithub) return
+      // setTimeout(() => {
+      //   if (lang.value !== Language.CN) return
+      //   ElMessageBox.confirm('建议大陆用户访问部署在国内的站点，是否跳转？', '提示')
+      //     .then(() => {
+      //       location.replace('https://zouyaoji.gitee.io')
+      //     })
+      //     .catch(() => {
+      //       localStorage.setItem('PREFER_GITHUB', 'true')
+      //     })
+      // }, 1000)
     }
 
     watch(() => lang.value, val => {
