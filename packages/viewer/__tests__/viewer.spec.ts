@@ -28,12 +28,12 @@ describe('Viewer.vue', () => {
       },
       attachTo: div
     })
-    // expect(wrapper.text()).toEqual(AXIOM)
+    expect(wrapper.text()).toEqual(AXIOM)
     // console.log(wrapper)
     //
     // 为啥不执行 $script.onload ？？ 导致测试没法加载 CesiumJS.
     const vm = wrapper.vm as VcComponentPublicInstance
-    await vm.createPromise
+    // await vm.createPromise
     console.log('onViewerReady11')
     // console.log(vm.getCesiumObject())
   }, 25000)
