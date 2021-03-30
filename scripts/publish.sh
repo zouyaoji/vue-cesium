@@ -10,4 +10,4 @@ cat package.json \
 | sed "s/\(\"name\": \"vue-cesium\"\)/\1,\n  \"version\": \"${TAG_VERSION}\"/g" > package.json.bak
 
 cat package.json.bak > package.json
-npm publish --registry ${REGISTRY}
+npm publish --tag beta --registry ${REGISTRY}
