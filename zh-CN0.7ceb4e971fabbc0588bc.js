@@ -73,30 +73,25 @@ const script = {}
 script.render = md_loader_CHANGELOG_zh_CNvue_type_template_id_11d5ac6a_render
 
 /* harmony default export */ var CHANGELOG_zh_CN = (script);
-// CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/dist/templateLoader.js??ref--6!./node_modules/vue-loader/dist??ref--2-0!./website/md-loader!./CHANGELOG.en-US.md?vue&type=template&id=6653a682
+// CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/dist/templateLoader.js??ref--6!./node_modules/vue-loader/dist??ref--2-0!./website/md-loader!./CHANGELOG.en-US.md?vue&type=template&id=699cd214
 
-var md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_hoisted_1 = {
+var md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_hoisted_1 = {
   class: "content element-doc"
 };
 
-var md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_hoisted_2 = /*#__PURE__*/Object(vue_esm_browser["n" /* createVNode */])("h2", {
-  id: "geng-xin-ri-zhi"
-}, [/*#__PURE__*/Object(vue_esm_browser["n" /* createVNode */])("a", {
-  class: "header-anchor",
-  href: "#geng-xin-ri-zhi"
-}, "¶"), /*#__PURE__*/Object(vue_esm_browser["m" /* createTextVNode */])(" 更新日志")], -1);
+var md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_hoisted_2 = /*#__PURE__*/Object(vue_esm_browser["l" /* createStaticVNode */])("<h2 id=\"changelog\"><a class=\"header-anchor\" href=\"#changelog\">¶</a> Changelog</h2><h3 id=\"3.0.1-beta.0\"><a class=\"header-anchor\" href=\"#3.0.1-beta.0\">¶</a> 3.0.1-beta.0</h3><p><em>2021-03-30</em></p><h4 id=\"features\"><a class=\"header-anchor\" href=\"#features\">¶</a> Features</h4><ul><li>add new feature vue-cesium@v3.0.1-beta.0</li></ul>", 5);
 
-function md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_render(_ctx, _cache) {
+function md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_render(_ctx, _cache) {
   var _component_right_nav = Object(vue_esm_browser["O" /* resolveComponent */])("right-nav");
 
-  return Object(vue_esm_browser["F" /* openBlock */])(), Object(vue_esm_browser["i" /* createBlock */])("section", md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_hoisted_1, [md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_hoisted_2, Object(vue_esm_browser["n" /* createVNode */])(_component_right_nav)]);
+  return Object(vue_esm_browser["F" /* openBlock */])(), Object(vue_esm_browser["i" /* createBlock */])("section", md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_hoisted_1, [md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_hoisted_2, Object(vue_esm_browser["n" /* createVNode */])(_component_right_nav)]);
 }
-// CONCATENATED MODULE: ./CHANGELOG.en-US.md?vue&type=template&id=6653a682
+// CONCATENATED MODULE: ./CHANGELOG.en-US.md?vue&type=template&id=699cd214
 
 // CONCATENATED MODULE: ./CHANGELOG.en-US.md
 
 const CHANGELOG_en_US_script = {}
-CHANGELOG_en_US_script.render = md_loader_CHANGELOG_en_USvue_type_template_id_6653a682_render
+CHANGELOG_en_US_script.render = md_loader_CHANGELOG_en_USvue_type_template_id_699cd214_render
 
 /* harmony default export */ var CHANGELOG_en_US = (CHANGELOG_en_US_script);
 // EXTERNAL MODULE: ./website/i18n/page.json
