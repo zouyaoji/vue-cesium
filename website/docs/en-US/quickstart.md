@@ -4,7 +4,7 @@ This part walks you through the process of using VueCesium in a webpack project.
 
 ### Use Starter Kit
 
-We provide a general [project template](https://github.com/zouyaoji/vue-cesium-starter) for you, and also a Vite [template(https://github.com/zouyaoji/vue-cesium-vite-starter)].
+We provide a general [project template](https://github.com/zouyaoji/vue-cesium-starter) for you, and also a Vite [template](https://github.com/zouyaoji/vue-cesium-vite-starter).
 
 If you prefer not to use them, please read the following.
 
@@ -19,6 +19,7 @@ In main.js:
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
+import 'vue-cesium/lib/theme-default/index.css'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -120,7 +121,7 @@ Partial import VueCesium
 
 ```js
 import { createApp } from 'vue'
-import { VcViewer } from 'element-plus'
+import { VcViewer } from 'vue-cesium'
 import App from './App.vue'
 
 const option = {
