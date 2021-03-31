@@ -1,3 +1,4 @@
 {
-  "animation": {"type": "boolean", "description": "是否显示动画控制部件"}
+  "animation": {"type": "boolean", "description": "是否显示动画控制部件"},
+  "cesiumReady": {"type": "event", "description": "CesiumJS加载完成时触发。"}
 }

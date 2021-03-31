@@ -5,7 +5,7 @@
 Installing with npm is recommended and it works seamlessly with [webpack](https://webpack.js.org/).
 
 ```shell
-npm install vue-cesium --save
+npm install vue-cesium@next --save
 ```
 
 ### CDN
@@ -14,13 +14,13 @@ Get the latest version from [unpkg.com/vue-cesium](https://unpkg.com/vue-cesium/
 
 ```html
 <!-- import CSS -->
-<link rel="stylesheet" href="import 'vue-cesium/lib/theme-default/index.css'">
+<link rel="stylesheet" href="https://unpkg.com/vue-cesium@next/lib/theme-default/index.css">
 <!-- import JavaScript -->
-<script src="https://unpkg.com/vue-cesium@2.1.7/lib/index.umd.js"></script>
+<script src="https://unpkg.com/vue-cesium@next/lib/index.full.js"></script>
 ```
 
 :::tip
-We recommend our users to lock Element Plus's version when using CDN. Please refer to [unpkg.com](https://unpkg.com) for more information.
+We recommend our users to lock VueCesium's version when using CDN. Please refer to [unpkg.com](https://unpkg.com) for more information.
 :::
 
 ### Hello world

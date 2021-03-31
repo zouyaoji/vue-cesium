@@ -209,10 +209,10 @@ ${this.codepen.style}
         `ipt src="//unpkg.com/element-plus/lib/index.full.js"></scr` +
         'ipt>' +
         '\n<scr' +
-        `ipt src="//unpkg.com/vue-cesium/lib/index.full.js"></scr` +
+        `ipt src="//unpkg.com/vue-cesium@next/lib/index.full.js"></scr` +
         'ipt>'
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
-      let cssTpl = `@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium/lib/theme-default/index.css");\n${(style || '').trim()}\n`
+      let cssTpl = `@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium@next/lib/theme-default/index.css");\n${(style || '').trim()}\n`
       let jsTpl = script
         ? script
           .replace(/export default/, 'var Main =')

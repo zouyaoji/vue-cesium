@@ -19,6 +19,7 @@
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
+import 'vue-cesium/lib/theme-default/index.css'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -119,7 +120,7 @@ app.use(VueCesium, {
 
 ```js
 import { createApp } from 'vue'
-import { VcViewer } from 'element-plus'
+import { VcViewer } from 'vue-cesium'
 import App from './App.vue'
 
 const option = {

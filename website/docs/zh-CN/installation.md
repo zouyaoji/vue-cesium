@@ -5,7 +5,7 @@
 推荐使用 npm 的方式安装，它能更好地和 [webpack](https://webpack.js.org/) 打包工具配合使用。
 
 ```shell
-npm install vue-cesium --save
+npm install vue-cesium@next --save
 ```
 
 ### CDN
@@ -14,8 +14,10 @@ npm install vue-cesium --save
 
 ```html
 <!-- 引入样式 -->
-<!-- 引入组件库 暂时写2的版本-->
-<script src="https://unpkg.com/vue-cesium@2.1.7/lib/index.umd.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-cesium@next/lib/theme-default/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/vue-cesium@next/lib/index.full.js"></script>
+
 ```
 
 :::tip

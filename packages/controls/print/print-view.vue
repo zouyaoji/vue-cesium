@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <img :src="options?.image" :alt="t('vc.navigation.screenshot')" class="vc-map-image">
+      <img :src="options && options.image" :alt="t('vc.navigation.screenshot')" class="vc-map-image">
     </p>
     <h1 v-if="options.credits.length && options.showCredit">{{ t('vc.navigation.credit') }}</h1>
     <ul v-if="options.credits.length && options.showCredit">
