@@ -38,7 +38,6 @@ export default defineComponent({
       const href = location.href
       const preferGithub = localStorage.getItem('PREFER_GITHUB')
       const cnHref = href.indexOf('zouyaoji.gitee.io') > -1
-      console.log(location)
       if (cnHref || preferGithub) return
       setTimeout(() => {
         if (lang.value !== Language.CN) return
