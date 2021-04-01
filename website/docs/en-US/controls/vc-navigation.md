@@ -3,7 +3,7 @@
 The `vc-navigation` component mainly includes 2 parts, (1) compass, zoom, and other floating buttons; (2) position and distance scale toolbar. **Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
 
 :::tip
-Tip: The navigation component has been refactored in version 3.0. It is now a collection component and now supports custom styles, including icons, sizes, color positions, etc. The icon currently uses Unicode and does not support multi-color. If you need to support multi-color, please refer to the method of using Symbol introduced by Alibaba Cloud iconfont: [Portal](https://www.iconfont.cn/help/detail?spm= a313x.7781069.1998910419.d8cf4382a&helptype=code).
+Tip: The navigation component has been refactored in version 3.0. It is now a collection component and now supports custom styles, including icons, sizes, color positions, etc. The icon currently uses Unicode and does not support multi-color. If you need to support multi-color, please refer to the method of using Symbol introduced by Alibaba Cloud iconfont: [Portal](https://www.iconfont.cn/help/detail?spm=a313x.7781069.1998910419.d8cf4382a&helptype=code)
 :::
 
 ### Basic usage

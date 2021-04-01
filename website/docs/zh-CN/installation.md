@@ -33,4 +33,4 @@ npm install vue-cesium@next --save
   (<a href='https://codepen.io/zouyaoji'>@zouyaoji</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
-如果是通过 npm 安装，并希望配合 webpack 使用，请阅读下一节：[快速上手](/#/zh-CN/component/quickstart)。
+如果是通过 npm 安装，并希望配合 webpack 使用，请阅读下一节：[快速上手](./#/zh-CN/component/quickstart)。

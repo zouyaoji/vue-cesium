@@ -49,7 +49,7 @@
           "groupName": "控件",
           "list": [
             {
-              "path": "/vc-navigation",
+              "path": "/controls/vc-navigation",
               "title": "导航"
             }
           ]
@@ -68,7 +68,24 @@
         },
         {
           "groupName": "实体",
-          "list": []
+          "list": [
+            {
+              "path": "/vc-entity",
+              "title": "实体实例"
+            },
+            {
+              "path": "/grahpics/vc-graphics-billboard",
+              "title": "布告板"
+            },
+            {
+              "path": "/grahpics/vc-graphics-box",
+              "title": "立方盒"
+            },
+            {
+              "path": "/grahpics/vc-graphics-corridor",
+              "title": "走廊"
+            }
+          ]
         },
         {
           "groupName": "图元集合",
@@ -128,10 +145,10 @@
           ]
         },
         {
-          "groupName": "Control",
+          "groupName": "Controls",
           "list": [
             {
-              "path": "/vc-navigation",
+              "path": "/controls/vc-navigation",
               "title": "Navigation"
             }
           ]
@@ -150,7 +167,16 @@
         },
         {
           "groupName": "Entity",
-          "list": []
+          "list": [
+            {
+              "path": "/vc-entity",
+              "title": "Entity Instance"
+            },
+            {
+              "path": "/grahpics/vc-graphics-billboard",
+              "title": "BillboardGraphics"
+            }
+          ]
         },
         {
           "groupName": "PrimitiveCollection",
