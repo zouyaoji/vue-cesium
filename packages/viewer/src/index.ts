@@ -17,6 +17,12 @@ export default defineComponent({
     instance.cesiumEvents = ['selectedEntityChanged', 'trackedEntityChanged']
     instance.cesiumMembersEvents = viewerEvents
     const viewerStates = useViewer(props, ctx, instance)
+    // debug only
+    const tags = [
+      ...Object.keys(instance.props),
+      ...instance.proxy.$options.emits
+    ]
+    console.log(tags)
 
     // provide
     provide(vcKey, viewerStates.getServices())

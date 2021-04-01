@@ -15,6 +15,12 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { t } from '@vue-cesium/locale'
 
 export default function(props, { emit }, vcInstance: VcComponentInternalInstance) {
+  // debug only
+  const tags = [
+    ...Object.keys(vcInstance.proxy.$options.props),
+    ...vcInstance.proxy.$options.emits
+  ]
+  console.log(tags)
   // state
   let unwatchFns = []
   vcInstance.mounted = false
