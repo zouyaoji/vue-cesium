@@ -32,4 +32,4 @@ If you are using CDN, a hello-world page is easy with VueCesium. [Online Demo](h
   (<a href='https://codepen.io/zouyaoji'>@zouyaoji</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
-If you are using npm and wish to apply webpack, please continue to the next page: [Quick Start](/#/zh-CN/component/quickstart).
+If you are using npm and wish to apply webpack, please continue to the next page: [Quick Start](./#/zh-CN/component/quickstart).

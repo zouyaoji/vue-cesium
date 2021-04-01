@@ -2,57 +2,60 @@ import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  image,
+  show,
+  text,
+  font,
+  labelStyle,
   scale,
+  showBackground,
+  backgroundColor,
+  backgroundPadding,
   pixelOffset,
   eyeOffset,
   horizontalOrigin,
   verticalOrigin,
   heightReference,
-  color,
-  rotation,
-  alignedAxis,
-  sizeInMeters,
-  width,
-  height,
-  scaleByDistance,
+  fillColor,
+  outlineColor,
+  outlineWidth,
   translucencyByDistance,
   pixelOffsetScaleByDistance,
-  disableDepthTestDistance,
-  show,
+  scaleByDistance,
   distanceDisplayCondition,
-  imageSubRegion
+  disableDepthTestDistance
 } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
-  name: 'VcGraphicsBillboard',
+  name: 'VcGraphicsLabel',
   props: {
-    ...image,
+    ...show,
+    ...text,
+    ...font,
+    ...labelStyle,
     ...scale,
+    ...showBackground,
+    ...backgroundColor,
+    ...backgroundPadding,
     ...pixelOffset,
     ...eyeOffset,
     ...horizontalOrigin,
     ...verticalOrigin,
     ...heightReference,
-    ...color,
-    ...rotation,
-    ...alignedAxis,
-    ...sizeInMeters,
-    ...width,
-    ...height,
-    ...scaleByDistance,
+    ...fillColor,
+    ...outlineColor,
+    ...outlineWidth,
     ...translucencyByDistance,
     ...pixelOffsetScaleByDistance,
-    ...disableDepthTestDistance,
-    ...show,
+    ...scaleByDistance,
     ...distanceDisplayCondition,
-    ...imageSubRegion
+    ...disableDepthTestDistance
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
-  setup(props, ctx) {
+  setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'BillboardGraphics'
+    instance.cesiumClass = 'LabelGraphics'
     useGraphics(props, ctx, instance)
+
     return () => createCommentVNode(instance.proxy.$options.name)
   }
 })

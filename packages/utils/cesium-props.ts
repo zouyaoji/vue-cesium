@@ -15,7 +15,7 @@ import {
   makePolygonHierarchy,
   makeTranslationRotationScale,
   makeQuaternion,
-  makeOptions,
+  makeOptions
 } from './cesium-helpers'
 
 // 下面属性作为实体加载时 可以传 Function
@@ -35,9 +35,9 @@ const position = {
       return val && Object.prototype.hasOwnProperty.call(val, 'lng') ? lnglatValidator(val.lng, val.lat) : true
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -47,9 +47,9 @@ const orientation = {
   orientation: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeQuaternion,
-    },
-  },
+      cesiumObjectBuilder: makeQuaternion
+    }
+  }
 }
 // Entity end
 
@@ -64,13 +64,13 @@ const alignedAxis = {
       return {
         x: 0,
         y: 0,
-        z: 0,
+        z: 0
       }
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -81,16 +81,16 @@ const color = {
     type: [Object, String, Array, Function],
     default: 'white',
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
  * @const {Number, Object, Function} disableDepthTestDistance mixin
  */
 const disableDepthTestDistance = {
-  disableDepthTestDistance: [Number, Object, Function],
+  disableDepthTestDistance: [Number, Object, Function]
 }
 
 /**
@@ -100,9 +100,9 @@ const distanceDisplayCondition = {
   distanceDisplayCondition: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeDistanceDisplayCondition,
-    },
-  },
+      cesiumObjectBuilder: makeDistanceDisplayCondition
+    }
+  }
 }
 
 /**
@@ -115,20 +115,20 @@ const eyeOffset = {
       return {
         x: 0,
         y: 0,
-        z: 0,
+        z: 0
       }
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
  * @const {Number, Object, Function} height mixin
  */
 const height = {
-  height: [Number, Object, Function],
+  height: [Number, Object, Function]
 }
 
 /**
@@ -137,8 +137,8 @@ const height = {
 const heightReference = {
   heightReference: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
@@ -147,15 +147,15 @@ const heightReference = {
 const horizontalOrigin = {
   horizontalOrigin: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
  * @const {String, Object, HTMLCanvasElement, Function} image mixin
  */
 const image = {
-  image: [String, Object, HTMLCanvasElement, Function],
+  image: [String, Object, HTMLCanvasElement, Function]
 }
 
 /**
@@ -165,9 +165,9 @@ const imageSubRegion = {
   imageSubRegion: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeBoundingRectangle,
-    },
-  },
+      cesiumObjectBuilder: makeBoundingRectangle
+    }
+  }
 }
 
 /**
@@ -179,7 +179,7 @@ const pixelOffset = {
     default: () => {
       return {
         x: 0,
-        y: 0,
+        y: 0
       }
     },
     validator: v => {
@@ -197,9 +197,9 @@ const pixelOffset = {
       return false
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -209,9 +209,9 @@ const pixelOffsetScaleByDistance = {
   pixelOffsetScaleByDistance: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeNearFarScalar,
-    },
-  },
+      cesiumObjectBuilder: makeNearFarScalar
+    }
+  }
 }
 
 /**
@@ -220,8 +220,8 @@ const pixelOffsetScaleByDistance = {
 const rotation = {
   rotation: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
@@ -230,8 +230,8 @@ const rotation = {
 const scale = {
   scale: {
     type: [Number, Object, Function],
-    default: 1.0,
-  },
+    default: 1.0
+  }
 }
 
 /**
@@ -241,9 +241,9 @@ const scaleByDistance = {
   scaleByDistance: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeNearFarScalar,
-    },
-  },
+      cesiumObjectBuilder: makeNearFarScalar
+    }
+  }
 }
 
 /**
@@ -252,8 +252,8 @@ const scaleByDistance = {
 const show = {
   show: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -262,8 +262,8 @@ const show = {
 const sizeInMeters = {
   sizeInMeters: {
     type: [Boolean, Object, Function],
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -273,9 +273,9 @@ const translucencyByDistance = {
   translucencyByDistance: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeNearFarScalar,
-    },
-  },
+      cesiumObjectBuilder: makeNearFarScalar
+    }
+  }
 }
 
 /**
@@ -284,15 +284,15 @@ const translucencyByDistance = {
 const verticalOrigin = {
   verticalOrigin: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
  * @const {Number, Object, Function} width mixin
  */
 const width = {
-  width: [Number, Object, Function],
+  width: [Number, Object, Function]
 }
 // BillboardGraphics end
 
@@ -305,9 +305,9 @@ const dimensions = {
   dimensions: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -316,8 +316,8 @@ const dimensions = {
 const fill = {
   fill: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -328,9 +328,9 @@ const material = {
     type: [Object, String, Array, Function],
     default: 'white',
     watcherOptions: {
-      cesiumObjectBuilder: makeMaterial,
-    },
-  },
+      cesiumObjectBuilder: makeMaterial
+    }
+  }
 }
 
 /**
@@ -339,8 +339,8 @@ const material = {
 const outline = {
   outline: {
     type: [Boolean, Object, Function],
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -351,9 +351,9 @@ const outlineColor = {
     type: [Object, String, Array, Function],
     default: 'black',
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -362,15 +362,15 @@ const outlineColor = {
 const outlineWidth = {
   outlineWidth: {
     type: [Number, Object, Function],
-    default: 1.0,
-  },
+    default: 1.0
+  }
 }
 
 /**
  * @const {Number, Object, Function} shadows mixin
  */
 const shadows = {
-  shadows: [Number, Object, Function],
+  shadows: [Number, Object, Function]
 }
 // BoxGraphics end
 
@@ -379,27 +379,27 @@ const shadows = {
  * @const {Array, Object, Function} positions mixin
  */
 const positions = {
-  type: [Array, Object, Function],
   positions: {
+    type: [Array, Object, Function],
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array,
-      exclude: '_callback',
-    },
-  },
+      exclude: '_callback'
+    }
+  }
 }
 
 /**
  * @const {Number, Object, Function} extrudedHeight mixin
  */
 const extrudedHeight = {
-  extrudedHeight: [Number, Object, Function],
+  extrudedHeight: [Number, Object, Function]
 }
 
 /**
  * @const {Number, Object, Function} extrudedHeightReference mixin
  */
 const extrudedHeightReference = {
-  extrudedHeightReference: [Number, Object, Function],
+  extrudedHeightReference: [Number, Object, Function]
 }
 
 /**
@@ -408,15 +408,15 @@ const extrudedHeightReference = {
 const cornerType = {
   cornerType: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
  * @const {Number, Object, Function} granularity mixin
  */
 const granularity = {
-  granularity: [Number, Object, Function],
+  granularity: [Number, Object, Function]
 }
 
 /**
@@ -424,15 +424,15 @@ const granularity = {
  */
 const classificationType = {
   classificationType: {
-    type: [Number, Object, Function],
-  },
+    type: [Number, Object, Function]
+  }
 }
 
 /**
  * @const {Number, Object, Function} zIndex mixin
  */
 const zIndex = {
-  zIndex: [Number, Object, Function],
+  zIndex: [Number, Object, Function]
 }
 // CorridorGraphics end
 
@@ -442,21 +442,21 @@ const zIndex = {
  * @const {Number, Object, Function} length mixin
  */
 const length = {
-  length: [Number, Object, Function],
+  length: [Number, Object, Function]
 }
 
 /**
  * @const {Number, Object, Function} topRadius mixin
  */
 const topRadius = {
-  topRadius: [Number, Object, Function],
+  topRadius: [Number, Object, Function]
 }
 
 /**
  * @const {Number, Object, Function} bottomRadius mixin
  */
 const bottomRadius = {
-  bottomRadius: [Number, Object, Function],
+  bottomRadius: [Number, Object, Function]
 }
 
 /**
@@ -465,8 +465,8 @@ const bottomRadius = {
 const numberOfVerticalLines = {
   numberOfVerticalLines: {
     type: [Number, Object, Function],
-    default: 16,
-  },
+    default: 16
+  }
 }
 
 /**
@@ -475,8 +475,8 @@ const numberOfVerticalLines = {
 const slices = {
   slices: {
     type: [Number, Object, Function],
-    default: 128,
-  },
+    default: 128
+  }
 }
 // CylinderGraphics end
 
@@ -485,14 +485,14 @@ const slices = {
  * @const {Number, Object, Function} semiMajorAxis mixin
  */
 const semiMajorAxis = {
-  semiMajorAxis: [Number, Object, Function],
+  semiMajorAxis: [Number, Object, Function]
 }
 
 /**
  * @const {Number, Object, Function} semiMinorAxis mixin
  */
 const semiMinorAxis = {
-  semiMinorAxis: [Number, Object, Function],
+  semiMinorAxis: [Number, Object, Function]
 }
 
 /**
@@ -501,8 +501,8 @@ const semiMinorAxis = {
 const stRotation = {
   stRotation: {
     type: [Number, Object, Function],
-    default: 0.0,
-  },
+    default: 0.0
+  }
 }
 // EllipseGraphics end
 
@@ -514,9 +514,9 @@ const radii = {
   radii: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -526,9 +526,9 @@ const innerRadii = {
   innerRadii: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -537,8 +537,8 @@ const innerRadii = {
 const minimumClock = {
   minimumClock: {
     type: [Number, Object, Function],
-    default: 0.0,
-  },
+    default: 0.0
+  }
 }
 /**
  * @const {Number, Object, Function} maximumClock mixin
@@ -546,8 +546,8 @@ const minimumClock = {
 const maximumClock = {
   maximumClock: {
     type: [Number, Object, Function],
-    default: 2 * Math.PI,
-  },
+    default: 2 * Math.PI
+  }
 }
 /**
  * @const {Number, Object, Function} minimumCone mixin
@@ -555,8 +555,8 @@ const maximumClock = {
 const minimumCone = {
   minimumCone: {
     type: [Number, Object, Function],
-    default: 0.0,
-  },
+    default: 0.0
+  }
 }
 /**
  * @const {Number, Object, Function} maximumCone mixin
@@ -564,8 +564,8 @@ const minimumCone = {
 const maximumCone = {
   maximumCone: {
     type: [Number, Object, Function],
-    default: Math.PI,
-  },
+    default: Math.PI
+  }
 }
 
 /**
@@ -574,8 +574,8 @@ const maximumCone = {
 const stackPartitions = {
   stackPartitions: {
     type: [Number, Object, Function],
-    default: 64,
-  },
+    default: 64
+  }
 }
 
 /**
@@ -584,8 +584,8 @@ const stackPartitions = {
 const slicePartitions = {
   slicePartitions: {
     type: [Number, Object, Function],
-    default: 64,
-  },
+    default: 64
+  }
 }
 
 /**
@@ -594,8 +594,8 @@ const slicePartitions = {
 const subdivisions = {
   subdivisions: {
     type: [Number, Object, Function],
-    default: 128,
-  },
+    default: 128
+  }
 }
 // EllipsoidGraphics end
 
@@ -604,7 +604,7 @@ const subdivisions = {
  * @const {String, Object, Function} text mixin
  */
 const text = {
-  text: [String, Object, Function],
+  text: [String, Object, Function]
 }
 
 /**
@@ -613,8 +613,8 @@ const text = {
 const font = {
   font: {
     type: [String, Object, Function],
-    default: '30px sans-serif',
-  },
+    default: '30px sans-serif'
+  }
 }
 
 /**
@@ -623,8 +623,8 @@ const font = {
 const labelStyle = {
   labelStyle: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
@@ -633,8 +633,8 @@ const labelStyle = {
 const showBackground = {
   showBackground: {
     type: [Boolean, Object, Function],
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -647,9 +647,9 @@ const backgroundColor = {
       return [0.165, 0.165, 0.165, 0.8]
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -662,9 +662,9 @@ const backgroundPadding = {
       return { x: 7, y: 5 }
     },
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -675,9 +675,9 @@ const fillColor = {
     type: [Object, String, Array, Function],
     default: 'white',
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 // LabelGraphics end
 
@@ -686,7 +686,7 @@ const fillColor = {
  * @const {String, Object, Function} uri mixin
  */
 const uri = {
-  uri: [String, Object, Function],
+  uri: [String, Object, Function]
 }
 
 /**
@@ -695,15 +695,15 @@ const uri = {
 const minimumPixelSize = {
   minimumPixelSize: {
     type: [Number, Object, Function],
-    default: 0.0,
-  },
+    default: 0.0
+  }
 }
 
 /**
  * @const {Number, Object, Function} maximumScale mixin
  */
 const maximumScale = {
-  maximumScale: [Number, Object, Function],
+  maximumScale: [Number, Object, Function]
 }
 
 /**
@@ -712,8 +712,8 @@ const maximumScale = {
 const incrementallyLoadTextures = {
   incrementallyLoadTextures: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -722,8 +722,8 @@ const incrementallyLoadTextures = {
 const runAnimations = {
   clampAnimations: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -732,8 +732,8 @@ const runAnimations = {
 const clampAnimations = {
   clampAnimations: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -741,11 +741,11 @@ const clampAnimations = {
  */
 const silhouetteColor = {
   silhouetteColor: {
-    typy: [Object, String, Array, Function],
+    type: [Object, String, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -754,8 +754,8 @@ const silhouetteColor = {
 const silhouetteSize = {
   silhouetteSize: {
     type: [Number, Object, Function],
-    default: 0.0,
-  },
+    default: 0.0
+  }
 }
 
 /**
@@ -764,8 +764,8 @@ const silhouetteSize = {
 const colorBlendMode = {
   colorBlendMode: {
     type: [Number, Object, Function],
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
@@ -774,8 +774,8 @@ const colorBlendMode = {
 const colorBlendAmount = {
   colorBlendAmount: {
     type: [Number, Object, Function],
-    default: 0.5,
-  },
+    default: 0.5
+  }
 }
 
 /**
@@ -785,9 +785,9 @@ const imageBasedLightingFactor = {
   imageBasedLightingFactor: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -796,11 +796,11 @@ const imageBasedLightingFactor = {
  */
 const lightColor = {
   lightColor: {
-    typy: [Object, String, Array, Function],
+    type: [Object, String, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -810,23 +810,23 @@ const nodeTransformations = {
   nodeTransformations: {
     type: [Object, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeTranslationRotationScale,
-    },
-  },
+      cesiumObjectBuilder: makeTranslationRotationScale
+    }
+  }
 }
 
 /**
  * @const {Object, Function} articulations mixin
  */
 const articulations = {
-  articulations: [Object, Function],
+  articulations: [Object, Function]
 }
 
 /**
  * @const {Object} clippingPlanes mixin
  */
 const clippingPlanes = {
-  clippingPlanes: Object,
+  clippingPlanes: Object
 }
 // ModelGraphics end
 
@@ -841,9 +841,9 @@ const plane = {
   plane: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makePlane,
-    },
-  },
+      cesiumObjectBuilder: makePlane
+    }
+  }
 }
 // PlaneGraphics end
 
@@ -854,8 +854,8 @@ const plane = {
 const pixelSize = {
   pixelSize: {
     type: [Number, Object, Function],
-    default: 1,
-  },
+    default: 1
+  }
 }
 // PointGraphics end
 
@@ -869,9 +869,9 @@ const hierarchy = {
     type: [Object, Array, Function],
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
-      exclude: '_callback',
-    },
-  },
+      exclude: '_callback'
+    }
+  }
 }
 
 /**
@@ -880,8 +880,8 @@ const hierarchy = {
 const perPositionHeight = {
   perPositionHeight: {
     type: [Boolean, Object, Function],
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -890,8 +890,8 @@ const perPositionHeight = {
 const closeTop = {
   closeTop: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -900,8 +900,8 @@ const closeTop = {
 const closeBottom = {
   closeBottom: {
     type: [Boolean, Object, Function],
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -910,8 +910,8 @@ const closeBottom = {
 const arcType = {
   arcType: {
     type: [Number, Object, Function],
-    default: 1,
-  },
+    default: 1
+  }
 }
 // PolygonGraphics end
 
@@ -923,9 +923,9 @@ const depthFailMaterial = {
   depthFailMaterial: {
     type: [Object, String, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeMaterial,
-    },
-  },
+      cesiumObjectBuilder: makeMaterial
+    }
+  }
 }
 
 /**
@@ -934,8 +934,8 @@ const depthFailMaterial = {
 const clampToGround = {
   clampToGround: {
     type: [Boolean, Object, Function],
-    default: false,
-  },
+    default: false
+  }
 }
 // PolylineGraphics end
 
@@ -947,9 +947,9 @@ const shape = {
   shape: {
     type: [Array, Object, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2Array,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2Array
+    }
+  }
 }
 // PolylineVolumeGraphics end
 
@@ -961,9 +961,9 @@ const coordinates = {
   coordinates: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeRectangle,
-    },
-  },
+      cesiumObjectBuilder: makeRectangle
+    }
+  }
 }
 // RectangleGraphics end
 
@@ -974,8 +974,8 @@ const coordinates = {
 const maximumScreenSpaceError = {
   maximumScreenSpaceError: {
     type: [Number, Object, Function],
-    default: 16,
-  },
+    default: 16
+  }
 }
 // Cesium3DTilesetGraphics end
 
@@ -984,14 +984,14 @@ const maximumScreenSpaceError = {
  * @const {Array, Object, Function} minimumHeights mixin
  */
 const minimumHeights = {
-  minimumHeights: [Array, Object, Function],
+  minimumHeights: [Array, Object, Function]
 }
 
 /**
  * @const {Array, Object, Function} maximumHeights mixin
  */
 const maximumHeights = {
-  maximumHeights: [Array, Object, Function],
+  maximumHeights: [Array, Object, Function]
 }
 // WallGraphics end
 // Entity end
@@ -1004,9 +1004,9 @@ const cutoutRectangle = {
   cutoutRectangle: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeRectangle,
-    },
-  },
+      cesiumObjectBuilder: makeRectangle
+    }
+  }
 }
 
 /**
@@ -1016,9 +1016,9 @@ const colorToAlpha = {
   colorToAlpha: {
     type: [Object, String, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 // ImageryLayer end
 
@@ -1027,28 +1027,28 @@ const colorToAlpha = {
  * @const {String, Object} url mixin
  */
 const url = {
-  url: [String, Object],
+  url: [String, Object]
 }
 
 /**
  * @const {String} token mixin
  */
 const token = {
-  token: String,
+  token: String
 }
 
 /**
  * @const {Object} tileDiscardPolicy mixin
  */
 const tileDiscardPolicy = {
-  tileDiscardPolicy: Object,
+  tileDiscardPolicy: Object
 }
 
 /**
  * @const {String} layers mixin
  */
 const layers = {
-  layers: String,
+  layers: String
 }
 
 /**
@@ -1057,8 +1057,8 @@ const layers = {
 const enablePickFeatures = {
   enablePickFeatures: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -1068,23 +1068,23 @@ const rectangle = {
   rectangle: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeRectangle,
-    },
-  },
+      cesiumObjectBuilder: makeRectangle
+    }
+  }
 }
 
 /**
  * @const {Object} tilingScheme mixin
  */
 const tilingScheme = {
-  tilingScheme: Object,
+  tilingScheme: Object
 }
 
 /**
  * @const {Object} ellipsoid mixin
  */
 const ellipsoid = {
-  ellipsoid: Object,
+  ellipsoid: Object
 }
 
 /**
@@ -1093,8 +1093,8 @@ const ellipsoid = {
 const credit = {
   credit: {
     type: [String, Object],
-    default: '',
-  },
+    default: ''
+  }
 }
 
 /**
@@ -1103,8 +1103,8 @@ const credit = {
 const tileWidth = {
   tileWidth: {
     type: Number,
-    default: 256,
-  },
+    default: 256
+  }
 }
 
 /**
@@ -1113,15 +1113,15 @@ const tileWidth = {
 const tileHeight = {
   tileHeight: {
     type: Number,
-    default: 256,
-  },
+    default: 256
+  }
 }
 
 /**
  * @const {Number} maximumLevel mixin
  */
 const maximumLevel = {
-  maximumLevel: Number,
+  maximumLevel: Number
 }
 
 /**
@@ -1130,8 +1130,8 @@ const maximumLevel = {
 const minimumLevel = {
   minimumLevel: {
     type: Number,
-    default: 0,
-  },
+    default: 0
+  }
 }
 
 /**
@@ -1140,15 +1140,15 @@ const minimumLevel = {
 const fileExtension = {
   fileExtension: {
     type: String,
-    default: 'png',
-  },
+    default: 'png'
+  }
 }
 
 /**
  * @const {String} accessToken mixin
  */
 const accessToken = {
-  accessToken: String,
+  accessToken: String
 }
 
 /**
@@ -1157,36 +1157,36 @@ const accessToken = {
 const format = {
   format: {
     type: String,
-    default: 'png',
-  },
+    default: 'png'
+  }
 }
 
 /**
  * @const {String, Array} subdomains mixin
  */
 const subdomains = {
-  subdomains: [String, Array],
+  subdomains: [String, Array]
 }
 
 /**
  * @const {Array} getFeatureInfoFormats mixin
  */
 const getFeatureInfoFormats = {
-  getFeatureInfoFormats: Array,
+  getFeatureInfoFormats: Array
 }
 
 /**
  * @const {Object} clock mixin
  */
 const clock = {
-  clock: Object,
+  clock: Object
 }
 
 /**
  * @const {Object} times mixin
  */
 const times = {
-  times: Object,
+  times: Object
 }
 
 // primitive 相关
@@ -1199,12 +1199,12 @@ const times = {
 const aaMixin = {
   allowPicking: {
     type: Boolean,
-    default: true,
+    default: true
   },
   asynchronous: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -1213,8 +1213,8 @@ const aaMixin = {
 const debugShowShadowVolume = {
   debugShowShadowVolume: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -1223,8 +1223,8 @@ const debugShowShadowVolume = {
 const releaseGeometryInstances = {
   releaseGeometryInstances: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
@@ -1233,22 +1233,22 @@ const releaseGeometryInstances = {
 const interleave = {
   interleave: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
  * @const {Object} appearance mixin
  */
 const appearance = {
-  appearance: Object,
+  appearance: Object
 }
 
 /**
  * @const {Array, Object} geometryInstances mixin
  */
 const geometryInstances = {
-  geometryInstances: [Array, Object],
+  geometryInstances: [Array, Object]
 }
 
 /**
@@ -1259,19 +1259,19 @@ const geometryInstances = {
 const vcMixin = {
   vertexCacheOptimize: {
     type: Boolean,
-    default: false,
+    default: false
   },
   compressVertices: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 }
 
 /**
  * @const {Object} modelMatrix mixin
  */
 const modelMatrix = {
-  modelMatrix: Object,
+  modelMatrix: Object
 }
 
 /**
@@ -1280,15 +1280,15 @@ const modelMatrix = {
 const debugShowBoundingVolume = {
   debugShowBoundingVolume: {
     tyep: Boolean,
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
  * @const {Object} scene mixin
  */
 const scene = {
-  scene: Object,
+  scene: Object
 }
 
 /**
@@ -1297,15 +1297,15 @@ const scene = {
 const blendOption = {
   blendOption: {
     type: Number,
-    default: 2,
-  },
+    default: 2
+  }
 }
 
 /**
  * @const {*} id mixin
  */
 const id = {
-  id: null,
+  id: null
 }
 
 /**
@@ -1314,8 +1314,8 @@ const id = {
 const loop = {
   loop: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 }
 
 /**
@@ -1324,8 +1324,8 @@ const loop = {
 const debugWireframe = {
   debugWireframe: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 }
 
 // geometry 相关
@@ -1334,7 +1334,7 @@ const debugWireframe = {
  * @const {Object} vertexFormat mixin
  */
 const vertexFormat = {
-  vertexFormat: Object,
+  vertexFormat: Object
 }
 
 /**
@@ -1344,23 +1344,23 @@ const center = {
   center: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
  * @const {Object} radius mixin
  */
 const radius = {
-  radius: Number,
+  radius: Number
 }
 
 /**
  * @const {Object} frustum mixin
  */
 const frustum = {
-  frustum: Object,
+  frustum: Object
 }
 
 /**
@@ -1370,9 +1370,9 @@ const origin = {
   origin: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -1382,9 +1382,9 @@ const polygonHierarchy = {
   polygonHierarchy: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makePolygonHierarchy,
-    },
-  },
+      cesiumObjectBuilder: makePolygonHierarchy
+    }
+  }
 }
 
 /**
@@ -1394,9 +1394,9 @@ const startColor = {
   startColor: {
     type: [Object, String, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -1406,9 +1406,9 @@ const endColor = {
   endColor: {
     type: [Object, String, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -1418,9 +1418,9 @@ const minimumImageSize = {
   minimumImageSize: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -1430,9 +1430,9 @@ const maximumImageSize = {
   maximumImageSize: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -1442,9 +1442,9 @@ const imageSize = {
   imageSize: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2
+    }
+  }
 }
 
 /**
@@ -1454,9 +1454,9 @@ const shapePositions = {
   shapePositions: {
     type: Array,
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian2Array,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian2Array
+    }
+  }
 }
 
 /**
@@ -1466,9 +1466,9 @@ const polylinePositions = {
   polylinePositions: {
     type: Array,
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3Array,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3Array
+    }
+  }
 }
 
 /**
@@ -1479,9 +1479,9 @@ const lightColor2 = {
   lightColor: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3
+    }
+  }
 }
 
 /**
@@ -1490,8 +1490,8 @@ const lightColor2 = {
 const luminanceAtZenith = {
   luminanceAtZenith: {
     type: Number,
-    default: 0.2,
-  },
+    default: 0.2
+  }
 }
 
 /**
@@ -1501,16 +1501,16 @@ const sphericalHarmonicCoefficients = {
   sphericalHarmonicCoefficients: {
     type: [Array, Object],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3Array,
-    },
-  },
+      cesiumObjectBuilder: makeCartesian3Array
+    }
+  }
 }
 
 /**
  * @const {String} specularEnvironmentMaps mixin
  */
 const specularEnvironmentMaps = {
-  specularEnvironmentMaps: String,
+  specularEnvironmentMaps: String
 }
 
 /**
@@ -1519,8 +1519,8 @@ const specularEnvironmentMaps = {
 const backFaceCulling = {
   backFaceCulling: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 }
 
 // datasouce
@@ -1530,8 +1530,8 @@ const backFaceCulling = {
 const data = {
   data: {
     type: [String, Object],
-    required: true,
-  },
+    required: true
+  }
 }
 
 /**
@@ -1542,9 +1542,9 @@ const options = {
     type: Object,
     watcherOptions: {
       cesiumObjectBuilder: makeOptions,
-      deep: true,
-    },
-  },
+      deep: true
+    }
+  }
 }
 
 // PostProcessStage start
@@ -1556,9 +1556,9 @@ const glowColor = {
     type: [String, Array, Object],
     default: () => [0.0, 1.0, 0.0, 0.05],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -1568,9 +1568,9 @@ const clearColor = {
   clearColor: {
     type: [String, Array, Object],
     watcherOptions: {
-      cesiumObjectBuilder: makeColor,
-    },
-  },
+      cesiumObjectBuilder: makeColor
+    }
+  }
 }
 
 /**
@@ -1580,9 +1580,9 @@ const scissorRectangle = {
   scissorRectangle: {
     type: [Object, Array],
     watcherOptions: {
-      cesiumObjectBuilder: makeBoundingRectangle,
-    },
-  },
+      cesiumObjectBuilder: makeBoundingRectangle
+    }
+  }
 }
 
 // PostProcessStage end
@@ -1735,5 +1735,5 @@ export {
   tilingScheme,
   ellipsoid,
   credit,
-  tileWidth,
+  tileWidth
 }

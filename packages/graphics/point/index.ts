@@ -2,57 +2,39 @@ import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
-  image,
-  scale,
-  pixelOffset,
-  eyeOffset,
-  horizontalOrigin,
-  verticalOrigin,
+  show,
+  pixelSize,
   heightReference,
   color,
-  rotation,
-  alignedAxis,
-  sizeInMeters,
-  width,
-  height,
+  outlineColor,
+  outlineWidth,
   scaleByDistance,
   translucencyByDistance,
-  pixelOffsetScaleByDistance,
-  disableDepthTestDistance,
-  show,
   distanceDisplayCondition,
-  imageSubRegion
+  disableDepthTestDistance
 } from '@vue-cesium/utils/cesium-props'
+
 export default defineComponent({
-  name: 'VcGraphicsBillboard',
+  name: 'VcGraphicsPoint',
   props: {
-    ...image,
-    ...scale,
-    ...pixelOffset,
-    ...eyeOffset,
-    ...horizontalOrigin,
-    ...verticalOrigin,
+    ...show,
+    ...pixelSize,
     ...heightReference,
     ...color,
-    ...rotation,
-    ...alignedAxis,
-    ...sizeInMeters,
-    ...width,
-    ...height,
+    ...outlineColor,
+    ...outlineWidth,
     ...scaleByDistance,
     ...translucencyByDistance,
-    ...pixelOffsetScaleByDistance,
-    ...disableDepthTestDistance,
-    ...show,
     ...distanceDisplayCondition,
-    ...imageSubRegion
+    ...disableDepthTestDistance
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
-  setup(props, ctx) {
+  setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'BillboardGraphics'
+    instance.cesiumClass = 'PointGraphics'
     useGraphics(props, ctx, instance)
+
     return () => createCommentVNode(instance.proxy.$options.name)
   }
 })

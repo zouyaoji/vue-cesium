@@ -769,6 +769,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     listenerReady && emit('ready', readyObj)
     vcMitt?.emit('ready', readyObj)
     nextTick(() => {
+      viewer.resize()
       onViewerWidgetResized({
         type: 'viewer',
         status: 'added',
@@ -849,9 +850,6 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     console.log('viewer---unloaded')
     unloadingResolve(true)
     $vc.viewerUnloadingPromise = undefined
-    nextTick(() => {
-      viewer.resize()
-    })
     isReady.value = false
     return true
   }

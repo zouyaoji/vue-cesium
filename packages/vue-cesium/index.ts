@@ -4,7 +4,25 @@ import VcViewer from '@vue-cesium/viewer'
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
 import VcEntity from '@vue-cesium/entity'
 // grapics
-import { VcGraphicsBillboard } from '@vue-cesium/graphics'
+import {
+  VcGraphicsBillboard,
+  VcGraphicsBox,
+  VcGraphicsCorridor,
+  VcGraphicsCylinder,
+  VcGraphicsEllipse,
+  VcGraphicsEllipsoid,
+  VcGraphicsLabel,
+  VcGraphicsModel,
+  VcGraphicsPath,
+  VcGraphicsPlane,
+  VcGraphicsPoint,
+  VcGraphicsPolygon,
+  VcGraphicsPolyline,
+  VcGraphicsPolylineVolume,
+  VcGraphicsRectangle,
+  VcGraphicsTileset,
+  VcGraphicsWall
+} from '@vue-cesium/graphics'
 
 import { use, i18n } from '@vue-cesium/locale'
 // if you encountered problems alike "Can't resolve './version'"
@@ -22,9 +40,34 @@ const defaultInstallOpt: InstallOptions = {
   accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo',
 }
 
-const components = [VcViewer,
-  VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation,
-  VcEntity, VcGraphicsBillboard]
+const components = [
+  VcViewer,
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcLocationBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcEntity,
+  VcGraphicsBillboard,
+  VcGraphicsBox,
+  VcGraphicsCorridor,
+  VcGraphicsCylinder,
+  VcGraphicsEllipse,
+  VcGraphicsEllipsoid,
+  VcGraphicsLabel,
+  VcGraphicsModel,
+  VcGraphicsPath,
+  VcGraphicsPlane,
+  VcGraphicsPoint,
+  VcGraphicsPolygon,
+  VcGraphicsPolyline,
+  VcGraphicsPolylineVolume,
+  VcGraphicsRectangle,
+  VcGraphicsTileset,
+  VcGraphicsWall
+]
 
 const install = (app: App, opt: InstallOptions): void => {
   const option = Object.assign(defaultInstallOpt, opt)
@@ -46,8 +89,34 @@ const install = (app: App, opt: InstallOptions): void => {
 
 export {
   VcViewer,
-  VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation,
-  VcEntity, VcGraphicsBillboard, version, install, locale
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcLocationBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcEntity,
+  VcGraphicsBillboard,
+  VcGraphicsBox,
+  VcGraphicsCorridor,
+  VcGraphicsCylinder,
+  VcGraphicsEllipse,
+  VcGraphicsEllipsoid,
+  VcGraphicsLabel,
+  VcGraphicsModel,
+  VcGraphicsPath,
+  VcGraphicsPlane,
+  VcGraphicsPoint,
+  VcGraphicsPolygon,
+  VcGraphicsPolyline,
+  VcGraphicsPolylineVolume,
+  VcGraphicsRectangle,
+  VcGraphicsTileset,
+  VcGraphicsWall,
+  version,
+  install,
+  locale
 }
 export * from '@vue-cesium/composables'
 export default {

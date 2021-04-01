@@ -574,7 +574,7 @@ export function makeMaterialProperty(
 export function makeMaterial(val: string | Array<number> | MaterialOption) {
   const vcInstance = this as VcComponentInternalInstance
   const cmpName = vcInstance.proxy.$options.name
-  if (cmpName && (cmpName.indexOf('graphics') || cmpName.indexOf('datasource')) !== -1) {
+  if (cmpName && (cmpName.indexOf('Graphics') || cmpName.indexOf('Datasource')) !== -1) {
     return makeMaterialProperty(val)
   }
   const { Material, combine } = Cesium

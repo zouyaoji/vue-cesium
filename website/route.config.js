@@ -135,7 +135,7 @@ langs.forEach(lang => {
   route = route.concat(generateMiscRoutes(lang.lang))
 })
 
-let userLanguage = localStorage.getItem('ELEMENT_LANGUAGE') || window.navigator.language || Language.EN
+let userLanguage = localStorage.getItem('VUECESIUM_LANGUAGE') || window.navigator.language || Language.EN
 let defaultPath = Language.EN
 if (userLanguage.indexOf('zh-') !== -1) {
   defaultPath = Language.CN

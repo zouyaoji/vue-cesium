@@ -23,11 +23,12 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     )
   }
 
-  return {
+  // expose public methods
+  Object.assign(vcInstance.proxy, {
     createPromise: commonState.createPromise,
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
     getCesiumObject: () => vcInstance.cesiumObject,
-  }
+  })
 }
