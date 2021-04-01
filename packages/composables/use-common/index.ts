@@ -267,7 +267,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
       const cmpName = vcInstance.proxy.$options.name
       const propOption = cesiumProps[prop] && cesiumProps[prop][prop]
       return propOption && propOption.watcherOptions && !isEmptyObj(value)
-        ? propOption.watcherOptions.cesiumObjectBuilder.call(this, value)
+        ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value)
         : isFunction(value) && cmpName && (cmpName.indexOf('graphics') !== -1 || cmpName === 'vc-entity')
           ? new Cesium.CallbackProperty(value, false)
           : value
