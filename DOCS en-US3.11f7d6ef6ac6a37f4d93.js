@@ -1,6 +1,6 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[3],{
 
-/***/ 411:
+/***/ 420:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10,7 +10,7 @@ __webpack_require__.r(__webpack_exports__);
 // EXTERNAL MODULE: ./node_modules/vue/dist/vue.esm-browser.js
 var vue_esm_browser = __webpack_require__(0);
 
-// CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/dist/templateLoader.js??ref--6!./node_modules/vue-loader/dist??ref--2-0!./website/md-loader!./website/docs/en-US/installation.md?vue&type=template&id=5b429466
+// CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/dist/templateLoader.js??ref--6!./node_modules/vue-loader/dist??ref--2-0!./website/md-loader!./website/docs/en-US/installation.md?vue&type=template&id=c3f3bd0c
 
 var _hoisted_1 = {
   class: "content element-doc"
@@ -33,7 +33,7 @@ var _hoisted_12 = /*#__PURE__*/Object(vue_esm_browser["n" /* createVNode */])("i
 }, "\n  See the Pen <a href='https://codepen.io/zouyaoji/pen/bGBOyJM'>VueCesium Demo</a> by zouyaoji\n  (<a href='https://codepen.io/zouyaoji'>@zouyaoji</a>) on <a href='https://codepen.io'>CodePen</a>.\n", -1);
 
 var _hoisted_13 = /*#__PURE__*/Object(vue_esm_browser["n" /* createVNode */])("p", null, [/*#__PURE__*/Object(vue_esm_browser["m" /* createTextVNode */])("If you are using npm and wish to apply webpack, please continue to the next page: "), /*#__PURE__*/Object(vue_esm_browser["n" /* createVNode */])("a", {
-  href: "/#/zh-CN/component/quickstart"
+  href: "./#/zh-CN/component/quickstart"
 }, "Quick Start"), /*#__PURE__*/Object(vue_esm_browser["m" /* createTextVNode */])(".")], -1);
 
 function render(_ctx, _cache) {
@@ -41,7 +41,7 @@ function render(_ctx, _cache) {
 
   return Object(vue_esm_browser["F" /* openBlock */])(), Object(vue_esm_browser["i" /* createBlock */])("section", _hoisted_1, [_hoisted_2, _hoisted_12, _hoisted_13, Object(vue_esm_browser["n" /* createVNode */])(_component_right_nav)]);
 }
-// CONCATENATED MODULE: ./website/docs/en-US/installation.md?vue&type=template&id=5b429466
+// CONCATENATED MODULE: ./website/docs/en-US/installation.md?vue&type=template&id=c3f3bd0c
 
 // CONCATENATED MODULE: ./website/docs/en-US/installation.md
 
