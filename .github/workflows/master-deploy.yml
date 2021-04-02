@@ -38,12 +38,12 @@ jobs:
       #   run: curl "$TRIGGERSYNCURL"
 
       - name: Sync to Gitee
-          uses: x-dr/sync-repo-to-gitee@v1.0
-          env:
-            # 在 Settings->Secrets 配置 GITEE_KEY
-            SSH_KEY: ${{ secrets.GITEE_KEY }}
-          with:
-            # 注意替换为你的 GitHub 源仓库地址
-            github-repo: "git@github.com:zouyaoji/vue-cesium.git"
-            # 注意替换为你的 Gitee 目标仓库地址
-            gitee-repo: "git@gitee.com:zouyaoji/vue-cesium.git"
+        uses: x-dr/sync-repo-to-gitee@v1.0
+        env:
+          # 在 Settings->Secrets 配置 GITEE_KEY
+          SSH_KEY: ${{ secrets.GITEE_KEY }}
+        with:
+          # 注意替换为你的 GitHub 源仓库地址
+          github-repo: "git@github.com:zouyaoji/vue-cesium.git"
+          # 注意替换为你的 Gitee 目标仓库地址
+          gitee-repo: "git@gitee.com:zouyaoji/vue-cesium.git"
