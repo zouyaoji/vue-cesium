@@ -33,7 +33,7 @@ export default defineComponent({
     const isComponent = computed(() => /^component-/.test(route.name || ''))
 
     const suggestJump = () => {
-      // if (process.env.NODE_ENV !== 'production') return
+      if (process.env.NODE_ENV !== 'production') return
 
       const href = location.href
       const preferGithub = localStorage.getItem('PREFER_GITHUB')

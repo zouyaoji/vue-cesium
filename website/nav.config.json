@@ -56,7 +56,20 @@
         },
         {
           "groupName": "影像",
-          "list": []
+          "list": [
+            {
+              "path": "/vc-layer-imagery",
+              "title": "影像实例"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-arcgis-mapserver",
+              "title": "ArcGIS"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-baidumap",
+              "title": "Baidu"
+            }
+          ]
         },
         {
           "groupName": "地形",
@@ -67,22 +80,22 @@
           "list": []
         },
         {
-          "groupName": "实体",
+          "groupName": "Graphics对象",
           "list": [
             {
               "path": "/vc-entity",
-              "title": "实体实例"
+              "title": "实体"
             },
             {
-              "path": "/grahpics/vc-graphics-billboard",
+              "path": "/graphics/vc-graphics-billboard",
               "title": "布告板"
             },
             {
-              "path": "/grahpics/vc-graphics-box",
+              "path": "/graphics/vc-graphics-box",
               "title": "立方盒"
             },
             {
-              "path": "/grahpics/vc-graphics-corridor",
+              "path": "/graphics/vc-graphics-corridor",
               "title": "走廊"
             }
           ]
@@ -154,8 +167,21 @@
           ]
         },
         {
-          "groupName": "Imagery",
-          "list": []
+          "groupName": "Imageries",
+          "list": [
+            {
+              "path": "/vc-layer-imagery",
+              "title": "ImageryLayer"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-arcgis-mapserver",
+              "title": "ArcGIS"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-baidumap",
+              "title": "Baidu"
+            }
+          ]
         },
         {
           "groupName": "Terrain",
@@ -166,15 +192,23 @@
           "list": []
         },
         {
-          "groupName": "Entity",
+          "groupName": "Graphics",
           "list": [
             {
               "path": "/vc-entity",
-              "title": "Entity Instance"
+              "title": "Entity"
             },
             {
               "path": "/grahpics/vc-graphics-billboard",
               "title": "BillboardGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-box",
+              "title": "BoxGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-corridor",
+              "title": "CorridorGraphics"
             }
           ]
         },
