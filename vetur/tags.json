@@ -119,7 +119,26 @@
       "vc-location-bar",
       "vc-distance-legend",
       "vc-navigation",
-      "vc-entity"
+      "vc-layer-imagery",
+      "vc-provider-imagery-arcgis-mapserver",
+      "vc-provider-imagery-baidumap",
+      "vc-entity",
+      "vc-graphics-billboard",
+      "vc-graphics-box",
+      "vc-graphics-corridor",
+      "vc-graphics-cylinder",
+      "vc-graphics-ellipse",
+      "vc-graphics-ellipsoid",
+      "vc-graphics-label",
+      "vc-graphics-model",
+      "vc-graphics-path",
+      "vc-graphics-plane",
+      "vc-graphics-point",
+      "vc-graphics-polygon",
+      "vc-graphics-polyline",
+      "vc-graphics-rectangle",
+      "vc-graphics-tileset",
+      "vc-graphics-wall"
     ],
     "description": "A base widget for building applications. It composites all of the standard Cesium widgets into one reusable package. The widget can always be extended by using mixins, which add functionality useful for a variety of applications."
   },
@@ -274,6 +293,73 @@
     ],
     "description": "Adds to the viewer a distance legend bar."
   },
+  "vc-layer-imagery": {
+    "attributes": [
+      "imageryProvider",
+      "rectangle",
+      "alpha",
+      "nightAlpha",
+      "dayAlpha",
+      "brightness",
+      "contrast",
+      "hue",
+      "saturation",
+      "gamma",
+      "splitDirection",
+      "minificationFilter",
+      "magnificationFilter",
+      "show",
+      "maximumAnisotropy",
+      "minimumTerrainLevel",
+      "maximumTerrainLevel",
+      "cutoutRectangle",
+      "colorToAlpha",
+      "colorToAlphaThreshold",
+      "sortOrder",
+      "beforeLoad",
+      "ready",
+      "destroyed"
+    ],
+    "description": "An imagery layer that displays tiled image data from a single imagery provider on a Globe."
+  },
+  "vc-provider-imagery-arcgis-mapserver": {
+    "attributes": [
+      "url",
+      "token",
+      "tileDiscardPolicy",
+      "usePreCachedTilesIfAvailable",
+      "layers",
+      "enablePickFeatures",
+      "rectangle",
+      "tilingScheme",
+      "ellipsoid",
+      "credit",
+      "tileWidth",
+      "tileHeight",
+      "maximumLevel",
+      "beforeLoad",
+      "ready",
+      "destroyed"
+    ],
+    "description": "Provides tiled imagery hosted by an ArcGIS MapServer. By default, the server's pre-cached tiles are used, if available."
+  },
+  "vc-provider-imagery-baidumap": {
+    "attributes": [
+      "url",
+      "rectangle",
+      "ellipsoid",
+      "tileDiscardPolicy",
+      "credit",
+      "minimumLevel",
+      "maximumLevel",
+      "protocol",
+      "projectionTransforms",
+      "beforeLoad",
+      "ready",
+      "destroyed"
+    ],
+    "description": "Provides tiled imagery hosted by baidu map or other sever which similar to the Baidu map tile slicing scheme."
+  },
   "vc-entity": {
     "attributes": [
       "position",
@@ -348,7 +434,130 @@
   },
   "vc-graphics-billboard": {
     "attributes": [
+      "image",
+      "scale",
+      "pixelOffset",
+      "eyeOffset",
+      "horizontalOrigin",
+      "verticalOrigin",
+      "heightReference",
+      "color",
+      "rotation",
+      "alignedAxis",
+      "sizeInMeters",
+      "width",
+      "height",
+      "scaleByDistance",
+      "translucencyByDistance",
+      "pixelOffsetScaleByDistance",
+      "disableDepthTestDistance",
+      "show",
+      "distanceDisplayCondition",
+      "imageSubRegion",
+      "beforeLoad",
+      "ready",
+      "destroyed"
     ],
+    "description": "Describes a two dimensional icon located at the position of the containing Entity."
+  },
+  "vc-graphics-box": {
+    "attributes": [
+      "show",
+      "dimensions",
+      "heightReference",
+      "fill",
+      "material",
+      "outline",
+      "outlineColor",
+      "outlineWidth",
+      "shadows",
+      "distanceDisplayCondition",
+      "beforeLoad",
+      "ready",
+      "destroyed"
+    ],
+    "description": "Describes a box. The center position and orientation are determined by the containing Entity."
+  },
+  "vc-graphics-corridor": {
+    "attributes": [
+      "show",
+      "positions",
+      "width",
+      "height",
+      "heightReference",
+      "extrudedHeight",
+      "extrudedHeightReference",
+      "cornerType",
+      "granularity",
+      "fill",
+      "material",
+      "outline",
+      "outlineColor",
+      "outlineWidth",
+      "shadows",
+      "distanceDisplayCondition",
+      "classificationType",
+      "zIndex",
+      "beforeLoad",
+      "ready",
+      "destroyed"
+    ],
+    "description": "Describes a corridor, which is a shape defined by a centerline and width that conforms to the curvature of the globe. It can be placed on the surface or at altitude and can optionally be extruded into a volume."
+  },
+  "vc-graphics-cylinder": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-ellipse": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-ellipsoid": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-label": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-model": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-path": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-plane": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-point": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-polygon": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-polyline": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-polyline-volume": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-rectangle": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-tileset": {
+    "attributes": [],
+    "description": ""
+  },
+  "vc-graphics-wall": {
+    "attributes": [],
     "description": ""
   }
 }

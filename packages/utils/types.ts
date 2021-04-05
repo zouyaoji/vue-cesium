@@ -45,7 +45,7 @@ interface ReadyObj {
   earth?: AnyObject
 }
 
-interface CameraObj {
+interface CameraOption {
   position?: Cartesian3Option | CartographicInDegreeOption | Array<number>
   retangle?: RectangleInDegreeOption | Array<number>
   heading?: number
@@ -83,9 +83,10 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   load?(): Promise<ReadyObj | boolean>
   unload?(): Promise<boolean>
   reload?(): Promise<boolean>
-  __updateGraphics? (cesiumObject: AnyObject, type: EntityEmitType): boolean
   createPromise?: Promise<ReadyObj>
   getCesiumObject?(): ReadyObj
+  __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
+  __setProvider?(cesiumObject: AnyObject) : boolean
 }>
 
 interface VcViewerProvider {
@@ -100,6 +101,7 @@ interface VcViewerProvider {
   postProcessStages: Cesium.PostProcessStageCollection
   viewerMitt: Emitter
   entityViewModel?: VcComponentPublicInstance
+  imageryLayerViewModel?: VcComponentPublicInstance
   layout: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
@@ -226,7 +228,7 @@ interface NavigationOption {
 }
 
 export {
-  AnyFunction, AnyObject, CameraObj, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
+  AnyFunction, AnyObject, CameraOption, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
   Cartesian2Option, Cartesian3Option, Cartesian4Option, CartographicInDegreeOption, PolygonHierarchyOption, NearFarScalarOption,
   DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
   TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption

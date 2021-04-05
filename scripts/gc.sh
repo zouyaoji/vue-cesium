@@ -32,7 +32,7 @@ mkdir -p "$DIRNAME/__tests__"
 # cat > $DIRNAME/src/index.vue <<EOF
 cat > $DIRNAME/src/index.ts <<EOF
 import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, inject, createCommentVNode } from 'vue'
+import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 export default defineComponent({
   name: 'Vc${NAME}',
@@ -47,7 +47,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const { $services } = commonState
+    const { \$services } = commonState
     const { emit } = ctx
     // methods
     instance.createCesiumObject = async () => {

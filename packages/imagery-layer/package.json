@@ -1,0 +1,12 @@
+{
+  "name": "@vue-cesium/imagery-layer",
+  "version": "3.0.0-beta",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.0.7"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^2.0.0-rc.4"
+  }
+}

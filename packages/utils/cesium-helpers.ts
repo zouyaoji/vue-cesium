@@ -15,7 +15,7 @@ import {
   BoundingRectangleOption,
   PlaneOption,
   TranslationRotationScaleOption,
-  CameraObj,
+  CameraOption,
   HeadingPitchRollOption
 } from './types'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName } from './util'
@@ -778,7 +778,7 @@ export function captureScreenshot(viewer: CesiumNative.Viewer) {
   return promise
 }
 
-export function makeCameraOptions(camera: CameraObj) {
+export function makeCameraOptions(camera: CameraOption) {
   const { Math: CesiumMath, Rectangle } = Cesium
 
   let destination: CesiumNative.Cartesian3 | CesiumNative.Rectangle = undefined
@@ -825,7 +825,7 @@ export function makeCameraOptions(camera: CameraObj) {
   }
 }
 
-export function setViewerCamera(viewer: CesiumNative.Viewer, camera: CameraObj) {
+export function setViewerCamera(viewer: CesiumNative.Viewer, camera: CameraOption) {
   const { destination, orientation } = makeCameraOptions(camera)
   viewer.camera.setView({
     destination: destination,
@@ -833,7 +833,7 @@ export function setViewerCamera(viewer: CesiumNative.Viewer, camera: CameraObj) 
   })
 }
 
-export function flyToCamera(viewer: CesiumNative.Viewer, camera: CameraObj, options?) {
+export function flyToCamera(viewer: CesiumNative.Viewer, camera: CameraOption, options?) {
   const { destination, orientation } = makeCameraOptions(camera)
   viewer.camera.flyTo({
     destination: options.destination || destination,
