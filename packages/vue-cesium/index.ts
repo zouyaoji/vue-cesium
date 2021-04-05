@@ -2,6 +2,8 @@ import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
+import VcImageryLayer from '@vue-cesium/imagery-layer'
+import { VcProviderImageryArcgisMapserver, VcProviderImageryBaidumap, VcProviderImageryBingmaps } from '@vue-cesium/providers'
 import VcEntity from '@vue-cesium/entity'
 // grapics
 import {
@@ -42,6 +44,7 @@ const defaultInstallOpt: InstallOptions = {
 
 const components = [
   VcViewer,
+
   VcCompass,
   VcZoomControl,
   VcPrint,
@@ -49,6 +52,12 @@ const components = [
   VcLocationBar,
   VcDistanceLegend,
   VcNavigation,
+
+  VcImageryLayer,
+  VcProviderImageryArcgisMapserver,
+  VcProviderImageryBaidumap,
+  VcProviderImageryBingmaps,
+
   VcEntity,
   VcGraphicsBillboard,
   VcGraphicsBox,
@@ -89,6 +98,7 @@ const install = (app: App, opt: InstallOptions): void => {
 
 export {
   VcViewer,
+
   VcCompass,
   VcZoomControl,
   VcPrint,
@@ -96,6 +106,12 @@ export {
   VcLocationBar,
   VcDistanceLegend,
   VcNavigation,
+
+  VcImageryLayer,
+  VcProviderImageryArcgisMapserver,
+  VcProviderImageryBaidumap,
+  VcProviderImageryBingmaps,
+
   VcEntity,
   VcGraphicsBillboard,
   VcGraphicsBox,

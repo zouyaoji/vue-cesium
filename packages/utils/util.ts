@@ -52,7 +52,10 @@ export function dirname (path: string): string {
 export function removeEmpty (obj: unknown): AnyObject {
   const finalObj: AnyObject = {}
   Object.keys(obj).forEach(key => {
-    if (obj[key] && typeof obj[key] === 'object') {
+    const className = getObjClassName(obj[key])
+    if (obj[key] && isArray(obj[key])) {
+      finalObj[key] = obj[key]
+    } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) { // Do not process cesium objects
       const nestedObj = removeEmpty(obj[key])
       if (Object.keys(nestedObj).length) {
         finalObj[key] = nestedObj
@@ -63,7 +66,6 @@ export function removeEmpty (obj: unknown): AnyObject {
   })
   return finalObj
 }
-
 
 export function isEmptyObj (obj: unknown): boolean {
   if (isUndefined(obj)) {
