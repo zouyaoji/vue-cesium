@@ -1,4 +1,4 @@
-import { CameraObj, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { CameraOption, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { flyToCamera } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
@@ -156,7 +156,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         })
       }
 
-      const resetView: CameraObj = props.defaultResetView
+      const resetView: CameraOption = props.defaultResetView
       const options = {
         duration: props.durationReset,
         complete: complete,

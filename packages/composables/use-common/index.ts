@@ -1,6 +1,6 @@
 import { inject, onUnmounted } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import { getObjClassName, isEmptyObj, isFunction } from '@vue-cesium/utils/util'
+import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import {
   AnyObject,
@@ -14,13 +14,16 @@ import useEvents from '../use-events'
 import { vcKey } from '@vue-cesium/utils/config'
 import { t } from '@vue-cesium/locale'
 
-export default function(props, { emit }, vcInstance: VcComponentInternalInstance) {
+export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   // debug only
-  const tags = [
-    ...Object.keys(vcInstance.proxy.$options.props),
-    ...vcInstance.proxy.$options.emits
-  ]
-  console.log(tags)
+  if (process.env.NODE_ENV !== 'production') {
+    const tags = [
+      ...Object.keys(vcInstance.proxy.$options.props),
+      ...vcInstance.proxy.$options.emits
+    ]
+    console.log(tags)
+  }
+
   // state
   let unwatchFns = []
   vcInstance.mounted = false
@@ -85,7 +88,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
     if (!parentVcInstance.cesiumObject) {
       console.log('load parent')
-      return await (vcInstance.proxy as VcComponentPublicInstance)?.load()
+      return await (parentVcInstance.proxy as VcComponentPublicInstance)?.load()
     }
 
     setPropsWatcher(true)
@@ -124,6 +127,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
       const vcChildCmp = vcInstance.children[i].proxy as VcComponentPublicInstance
+      console.log(vcInstance.children[i])
       await vcChildCmp.unload()
     }
     return unmount().then(async () => {
@@ -131,11 +135,11 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
       vcInstance.cesiumObject = undefined
       vcInstance.mounted = false
       emit('destroyed', vcInstance)
-      console.log(`${vcInstance.cesiumClass}---unloaded`)
+      console.log(`${vcInstance.cesiumClass}---unmounted`)
 
       // If the component cannot be rendered without the parent component, the parent component needs to be removed.
       // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
-      return vcInstance.renderByParent ? (parentVcInstance.proxy as VcComponentPublicInstance).unload() : true
+      return vcInstance.renderByParent && !vcInstance.unloadingPromise ? (parentVcInstance.proxy as VcComponentPublicInstance).unload() : true
     })
   }
 
@@ -233,7 +237,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
   }
 
   const transformProps = props => {
-    const options: AnyObject = {}
+    let options: AnyObject = {}
     props &&
       Object.keys(props).forEach(vueProp => {
         let cesiumProp = vueProp
@@ -257,6 +261,8 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
           options[cesiumProp] = transformProp(vueProp, props[vueProp])
         }
       })
+
+    options = removeEmpty(options)
     return options
   }
 
@@ -305,6 +311,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     console.log(`${vcInstance.cesiumClass}---onUnmounted`)
     vcInstance.unloadingPromise = new Promise((reslove, reject) => {
       unload().then(() => {
+        console.log(`${vcInstance.cesiumClass}---unloaded`)
         reslove(true)
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()
@@ -317,6 +324,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     load,
     unload,
     reload,
-    createPromise
+    createPromise,
+    transformProps
   }
 }

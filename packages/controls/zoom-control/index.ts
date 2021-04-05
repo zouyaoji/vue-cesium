@@ -1,5 +1,5 @@
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch } from 'vue'
-import { CameraObj, VcComponentInternalInstance, VcBtnOptions } from '@vue-cesium/utils/types'
+import { CameraOption, VcComponentInternalInstance, VcBtnOptions } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
@@ -64,7 +64,7 @@ export default defineComponent({
         nextTick(() => {
           const { viewer } = $services
           if (props.overrideViewerCamera) {
-            const resetView: CameraObj = props.defaultResetView
+            const resetView: CameraOption = props.defaultResetView
             setViewerCamera(viewer, resetView)
           }
 

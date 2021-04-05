@@ -8,9 +8,10 @@ import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import {
   Cesium as CesiumNative,
   VcComponentInternalInstance,
-  CameraObj,
+  CameraOption,
   ReadyObj,
-  VcComponentPublicInstance
+  VcComponentPublicInstance,
+  AnyObject
 } from '@vue-cesium/utils/types'
 import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
@@ -632,7 +633,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
 
     const url = buildModuleUrl('Assets/Textures/NaturalEarthII')
 
-    const options = {
+    let options: AnyObject = {
       animation,
       baseLayerPicker,
       fullscreenButton,
@@ -683,7 +684,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
       maximumRenderTimeChange,
       navigation
     }
-    removeEmpty(options)
+    options = removeEmpty(options)
 
     let viewer: CesiumNative.Viewer
 
@@ -705,7 +706,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     listener &&
       viewer.camera.changed.addEventListener(() => {
         const cartographic = viewer.camera.positionCartographic
-        let cameraNew: CameraObj
+        let cameraNew: CameraOption
         if (camera.position.lng) {
           cameraNew = {
             position: {
