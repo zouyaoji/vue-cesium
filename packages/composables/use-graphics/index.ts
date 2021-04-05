@@ -1,25 +1,26 @@
-import { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { EntityEmitType, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 
 export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
+  vcInstance.cesiumEvents = ['definitionChanged']
   const commonState = useCommon(props, ctx, vcInstance)
-  const { $services } = commonState
   // methods
   vcInstance.mount = async () => {
     const { cesiumObject } = vcInstance
-    const { entityViewModel } = $services
     const cmpNameArr = kebabCase(vcInstance.proxy.$options.name).split('-')
     const emitType = (cmpNameArr.length === 3 ? `update:${cmpNameArr[2]}` : 'update:polylineVolume') as EntityEmitType
-    return entityViewModel && entityViewModel.__updateGraphics(cesiumObject, emitType)
+    const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
+    return parentVM && parentVM.__updateGraphics(cesiumObject, emitType)
   }
   vcInstance.unmount = async () => {
-    const { entityViewModel } = $services
     const cmpNameArr = kebabCase(vcInstance.proxy.$options.name).split('-')
     const emitType = (cmpNameArr.length === 3 ? `update:${cmpNameArr[2]}` : 'update:polylineVolume') as EntityEmitType
+    const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
     return (
-      entityViewModel && entityViewModel.__updateGraphics(undefined, emitType)
+      parentVM && parentVM.__updateGraphics(undefined, emitType)
     )
   }
 

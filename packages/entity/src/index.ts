@@ -1,9 +1,7 @@
-import { defineComponent, getCurrentInstance, h, HTMLAttributes, provide } from 'vue'
+import { defineComponent, getCurrentInstance, h } from 'vue'
 import { Cesium as CesiumNative, EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { position, plane } from '@vue-cesium/utils/cesium-props'
-import { vcKey } from '@vue-cesium/utils/config'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 
@@ -99,19 +97,6 @@ export default defineComponent({
       }
       return true
     }
-
-    const getServices = () => {
-      return mergeDescriptors($services, {
-        get entity () {
-          return instance.cesiumObject
-        },
-        get entityViewModel () {
-          return instance.proxy
-        }
-      })
-    }
-
-    provide(vcKey, getServices())
 
     // expose public methods
     Object.assign(instance.proxy, {
