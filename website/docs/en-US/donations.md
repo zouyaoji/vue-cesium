@@ -27,6 +27,5 @@
 
 ### Foreword
 
-Thanks to every contributor.
-
-The schoolmates who have donated, if you want to show your information, please contact me.
+- Thanks to every contributor.
+- The schoolmates who have donated, if you want to show your information, please contact me.
