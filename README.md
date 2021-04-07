@@ -37,11 +37,11 @@ This project is still under heavy development. Feel free to join us and make you
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/dev/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/dev/README.md)
 
+- [中文 for vue 2.x](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
+- [English for vue 2.x](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
+
 ## Documentation
 You can find for more details, API, and other docs on [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
-
-
-Join our [Gitter](https://gitter.im/vue-cesium/vue-cesium-en) to start communicating with everybody.
 
 ## Bootstrap project
 With command
