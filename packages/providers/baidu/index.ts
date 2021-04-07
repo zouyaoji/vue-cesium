@@ -40,15 +40,14 @@ export default defineComponent({
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcBaiduMapImageryProvider'
-    userProviders(props, ctx, instance)
+    instance.cesiumClass = 'BaiduMapImageryProvider'
+    const providersState = userProviders(props, ctx, instance)
     // methods
     instance.createCesiumObject = async () => {
-      // if (unwatchFns.length === 0) { setPropWatchers(true) }
-      const options = {
-        ...props
-      }
-      return new BaiduMapImageryProvider(options)
+      Cesium.BaiduMapImageryProvider = Cesium.BaiduMapImageryProvider || BaiduMapImageryProvider
+      if (providersState.unwatchFns.length === 0) { providersState.setPropsWatcher(true) }
+      const options = providersState.transformProps(props)
+      return new Cesium.BaiduMapImageryProvider(options)
     }
 
     return () => createCommentVNode(instance.proxy.$options.name)

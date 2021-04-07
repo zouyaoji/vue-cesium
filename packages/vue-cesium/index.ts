@@ -3,7 +3,25 @@ import VcViewer from '@vue-cesium/viewer'
 // controls
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
 import VcImageryLayer from '@vue-cesium/imagery-layer'
-import { VcProviderImageryArcgisMapserver, VcProviderImageryBaidumap, VcProviderImageryBingmaps } from '@vue-cesium/providers'
+import {
+  VcProviderImageryArcgisMapserver,
+  VcProviderImageryBaidumap,
+  VcProviderImageryBingmaps,
+  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGrid,
+  VcProviderImageryIon,
+  VcProviderImageryStyleMapbox,
+  VcProviderImageryOsm,
+  VcProviderImageryTileSingle,
+  VcProviderImagerySupermap,
+  VcProviderImageryTianditu,
+  VcProviderImageryTileCoordinates,
+  VcProviderImageryTileMapservice,
+  VcProviderImageryTiledcache,
+  VcProviderImageryUrltemplate,
+  VcProviderImageryWms,
+  VcProviderImageryWmts
+} from '@vue-cesium/providers'
 import VcEntity from '@vue-cesium/entity'
 // grapics
 import {
@@ -57,6 +75,20 @@ const components = [
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
+  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGrid,
+  VcProviderImageryIon,
+  VcProviderImageryStyleMapbox,
+  VcProviderImageryOsm,
+  VcProviderImageryTileSingle,
+  VcProviderImagerySupermap,
+  VcProviderImageryTianditu,
+  VcProviderImageryTileCoordinates,
+  VcProviderImageryTileMapservice,
+  VcProviderImageryTiledcache,
+  VcProviderImageryUrltemplate,
+  VcProviderImageryWms,
+  VcProviderImageryWmts,
 
   VcEntity,
   VcGraphicsBillboard,
@@ -111,6 +143,20 @@ export {
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
+  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGrid,
+  VcProviderImageryIon,
+  VcProviderImageryStyleMapbox,
+  VcProviderImageryOsm,
+  VcProviderImageryTileSingle,
+  VcProviderImagerySupermap,
+  VcProviderImageryTianditu,
+  VcProviderImageryTileCoordinates,
+  VcProviderImageryTileMapservice,
+  VcProviderImageryTiledcache,
+  VcProviderImageryUrltemplate,
+  VcProviderImageryWms,
+  VcProviderImageryWmts,
 
   VcEntity,
   VcGraphicsBillboard,

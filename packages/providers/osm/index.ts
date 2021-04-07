@@ -10,7 +10,7 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 
 export default defineComponent({
-  name: 'VcProviderImageryOpenstreetmap',
+  name: 'VcProviderImageryOsm',
   props: {
     url: {
       type: String,
