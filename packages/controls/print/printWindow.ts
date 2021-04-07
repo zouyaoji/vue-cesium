@@ -30,10 +30,8 @@ function printWindow (windowToPrint) {
     windowToPrint.matchMedia('print').addListener(function (evt) {
       cancelTimeout()
       if (evt.matches) {
-        // console.log(i18next.t('core.printWindow.printMediaStart'))
         ++printInProgressCount
       } else {
-        // console.log(i18next.t('core.printWindow.printMediaEnd'))
         --printInProgressCount
         resolveIfZero()
       }
@@ -42,12 +40,10 @@ function printWindow (windowToPrint) {
 
   windowToPrint.onbeforeprint = function () {
     cancelTimeout()
-    // console.log(i18next.t('core.printWindow.onbeforeprint'))
     ++printInProgressCount
   }
   windowToPrint.onafterprint = function () {
     cancelTimeout()
-    // console.log(i18next.t('core.printWindow.onafterprint'))
     --printInProgressCount
     resolveIfZero()
   }

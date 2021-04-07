@@ -94,7 +94,7 @@ export default defineComponent({
               resolve(amapGeolocation)
             })
             .catch(e => {
-              // todo errlog
+              commonState.logger.error(e)
               reject(e)
             })
         })
@@ -207,8 +207,6 @@ export default defineComponent({
             )
           } else {
             handleLocationError(t('vc.navigation.myLocation.fail'))
-            // Todo errlog
-            // console.error('[C_PKG_FULLNAME] ERROR: ' + result.message)
           }
         })
       } else if (props.geolocation) {
@@ -230,7 +228,6 @@ export default defineComponent({
           }
         )
       } else {
-        // Todo errlog
         handleLocationError(t('vc.navigation.myLocation.fail'))
       }
     }
@@ -354,8 +351,7 @@ export default defineComponent({
 
     const handleLocationError = err => {
       positioning.value = false
-      // Todo errlog
-      // console.error('[C_PKG_FULLNAME] ERROR: ' + err.message)
+      commonState.logger.error(err.message)
     }
 
     const getLoadingCmp = () => {

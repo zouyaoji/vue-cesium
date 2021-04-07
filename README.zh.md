@@ -37,11 +37,12 @@
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/dev/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/dev/README.md)
 
+- [中文 for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.zh.md)
+- [English for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.md)
+
 ## 文档
-老地方 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-
-推荐进 QQ 群进行交流。也可以上 [Gitter](https://gitter.im/vue-cesium/vue-cesium-en) 遇见老外。
+[https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
 ## 开始
 

@@ -19,7 +19,6 @@ export default function (props, vcInstance: VcComponentInternalInstance) {
       })
   }
   const registerEvents = register => {
-    console.log(`registerEvents: ${vcInstance.cesiumClass}-${register}`)
     const { viewer, cesiumObject } = vcInstance
     const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
     if (register && props.enableEvent) {

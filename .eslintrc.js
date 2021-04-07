@@ -45,6 +45,7 @@ module.exports = {
         }
       }
     ],
+    '@typescript-eslint/no-this-alias': 'off',
     // vue
     'vue/no-v-html': 'off',
     'vue/singleline-html-element-content-newline': 'off',
@@ -66,6 +67,6 @@ module.exports = {
       }
     ],
     'vue/require-default-prop': 'off',
-    'vue/html-closing-bracket-spacing': 'error'
+    'vue/html-closing-bracket-spacing': 'error',
   }
 }

@@ -4,7 +4,7 @@ import { userProviders } from '@vue-cesium/composables'
 import { accessToken, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } from '@vue-cesium/utils/cesium-props'
 
 export default defineComponent({
-  name: 'VcProviderImageryStyleMapbox',
+  name: 'VcProviderImageryMapboxStyle',
   props: {
     url: {
       type: String,

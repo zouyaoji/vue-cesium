@@ -1,5 +1,71 @@
 ## 更新日志
 
+### 3.0.1-beta.1
+*2021-04-07*
+
+#### 增加
+
+- `vc-layer-imagery`
+- `vc-provider-imagery-arcgis-mapserver`
+- `vc-provider-imagery-baidumap`
+- `vc-provider-imagery-bingmaps`
+- `vc-provider-imagery-googleearth-enterprise`
+- `vc-provider-imagery-grid`
+- `vc-provider-imagery-ion`
+- `vc-provider-imagery-mapbox-style`
+- `vc-provider-imagery-osm`
+- `vc-provider-imagery-tile-single`
+- `vc-provider-imagery-tile-coordinates`
+- `vc-provider-imagery-tile-mapservice`
+- `vc-provider-imagery-urltemplate`
+- `vc-provider-imagery-wms`
+- `vc-provider-imagery-wmts`
+- `vc-provider-imagery-tianditu`
+- `vc-provider-imagery-supermap`
+- `vc-provider-imagery-tiledcache`
+- `vc-graphics-billboard`
+- `vc-graphics-box`
+- `vc-graphics-corridor`
+- `vc-graphics-cylinder`
+- `vc-graphics-ellipse`
+- `vc-graphics-ellipsoid`
+- `vc-graphics-label`
+- `vc-graphics-model`
+- `vc-graphics-tileset`
+- `vc-graphics-path`
+- `vc-graphics-plane`
+- `vc-graphics-point`
+- `vc-graphics-polygon`
+- `vc-graphics-polyline`
+- `vc-graphics-polyline-volume`
+- `vc-graphics-rectangle`
+- `vc-graphics-wall`
+
+### 3.0.1-beta.0
+*2021-03-30*
+
+#### 增加
+
+- 增加 `vc-viewer` 组件。
+- 重构并升级 `vc-navigation` 组件，分离 `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-my-location`, `vc-location-bar`, `vc-distance-legend` 为独立组件。
+- 增加 `vc-entity` 组件。
+
+#### 修改
+
+- 适配 vue 3.0，参考 Element Plus 项目，采用 TypeScript 编写，lerna 管理项目。
+
+### 2.2.1 - 2021-03-27
+
+- 解决 umd 打包 coordtransform 引用问题。
+- `vc-heatmap` 组件支持用 `breaks` 和 `colors` 属性确定颜色方案。
+
+### 2.2.0 - 2021-01-30
+
+#### 修改
+
+- 绘制组件增加编辑功能。
+- [`vc-primitive-model`](https://zouyaoji.top/vue-cesium/#/zh/primitive/vc-primitive-model)和[`vc-primitive-tileset`](https://zouyaoji.top/vue-cesium/#/zh/primitive/vc-primitive-tileset) 组件同步官方属性。
+
 ### 2.1.9 - 2021-01-XX
 
 #### 修改
@@ -9,7 +75,6 @@
 - 修复生产环境组件移除异常问题。 [#92](https://github.com/zouyaoji/vue-cesium/issues/92)
 - [`vc-ripple-circle-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-ripple-circle-double), [`vc-circle-roatating-double`](https://zouyaoji.top/vue-cesium/#/zh/extend/vc-circle-roatating-double) 解决设置高度异常问题。
 - `vc-viewer` camera 属性更新与绑定不一致的问题。
-
 
 ### 2.1.8 - 2021-01-04
 

@@ -30,7 +30,7 @@
     "fast-build": "sh ./scripts/build.sh"
   },
   "peerDependencies": {
-    "vue": "^3.0.7"
+    "vue": "^3.0.11"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^0.0.7",
@@ -74,7 +74,7 @@
     "css-loader": "^4.2.2",
     "css-minimizer-webpack-plugin": "1.1.5",
     "cz-conventional-changelog": "^3.3.0",
-    "element-plus": "^1.0.2-beta.35",
+    "element-plus": "^1.0.2-beta.36",
     "element-theme-chalk": "^2.15.1",
     "eslint": "^7.19.0",
     "eslint-plugin-vue": "^7.0.0-beta.0",
@@ -106,9 +106,9 @@
     "throttle-debounce": "2.3.0",
     "transliteration": "^2.1.11",
     "ts-loader": "^8.0.15",
-    "typescript": "^4.0.2",
+    "typescript": "^4.2.3",
     "url-loader": "^4.1.1",
-    "vue": "^3.0.7",
+    "vue": "^3.0.11",
     "vue-jest": "5.0.0-alpha.5",
     "vue-loader": "^16.1.2",
     "vue-router": "^4.0.2",

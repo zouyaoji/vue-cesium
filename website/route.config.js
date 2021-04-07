@@ -94,25 +94,25 @@ const registerRoute = navConfig => {
 let route = registerRoute(navConfig)
 
 const generateMiscRoutes = function(lang) {
-  let guideRoute = {
-    path: `/${lang}/guide`, // 指南
-    redirect: `/${lang}/guide/design`,
-    component: load(lang, 'guide'),
-    children: [
-      {
-        path: 'design', // 设计原则
-        name: 'guide-design' + lang,
-        meta: { lang },
-        component: load(lang, 'design')
-      },
-      // {
-      //   path: 'nav', // 导航
-      //   name: 'guide-nav' + lang,
-      //   meta: { lang },
-      //   component: load(lang, 'nav')
-      // }
-    ]
-  }
+  // let guideRoute = {
+  //   path: `/${lang}/guide`, // 指南
+  //   redirect: `/${lang}/guide/design`,
+  //   component: load(lang, 'guide'),
+  //   children: [
+  //     {
+  //       path: 'design', // 设计原则
+  //       name: 'guide-design' + lang,
+  //       meta: { lang },
+  //       component: load(lang, 'design')
+  //     },
+  //     // {
+  //     //   path: 'nav', // 导航
+  //     //   name: 'guide-nav' + lang,
+  //     //   meta: { lang },
+  //     //   component: load(lang, 'nav')
+  //     // }
+  //   ]
+  // }
 
   let resourceRoute = {
     path: `/${lang}/resource`, // 资源
@@ -128,7 +128,15 @@ const generateMiscRoutes = function(lang) {
     component: load(lang, 'index')
   }
 
-  return [guideRoute, resourceRoute, indexRoute]
+  let donationsRoute = {
+    path: `/${lang}/donations`, // donations
+    meta: { lang },
+    name: 'donations' + lang,
+    component: load(lang, 'donations')
+  }
+
+  // return [guideRoute, resourceRoute, indexRoute]
+  return [resourceRoute, indexRoute, donationsRoute]
 }
 
 langs.forEach(lang => {

@@ -4,28 +4,28 @@ import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
 import { useGraphics } from '@vue-cesium/composables'
 import {
   show,
-  dimensions,
   fill,
   material,
   outline,
   outlineColor,
   outlineWidth,
   shadows,
-  distanceDisplayCondition
+  distanceDisplayCondition,
+  plane
 } from '@vue-cesium/utils/cesium-props'
 
 export default defineComponent({
   name: 'VcGraphicsPlane',
   props: {
     ...show,
+    ...plane,
     // 和 BoxGraphics.dimensions 区分
-    plane: {
+    dimensions: {
       type: [Object, Array, Function],
       watcherOptions: {
         cesiumObjectBuilder: makeCartesian2
       }
     },
-    ...dimensions,
     ...fill,
     ...material,
     ...outline,

@@ -10,7 +10,7 @@
       </div>
       <div class="footer-main">
         <h4>{{ langConfig.community }}</h4>
-        <a :href="gitterLink" class="footer-main-link" target="_blank">{{ langConfig.gitter }}</a>
+        <!-- <a :href="gitterLink" class="footer-main-link" target="_blank">{{ langConfig.gitter }}</a> -->
         <a href="https://github.com/zouyaoji/vue-cesium/issues" class="footer-main-link" target="_blank">{{ langConfig.feedback }}</a>
         <a :href="`https://github.com/zouyaoji/vue-cesium/blob/master/.github/CONTRIBUTING.${ lang }.md`" class="footer-main-link" target="_blank">{{ langConfig.contribution }}</a>
       </div>

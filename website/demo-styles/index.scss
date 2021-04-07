@@ -20,6 +20,12 @@
       z-index: 100;
       color: white;
       background-color: rgba(0, 0, 0, 0.2);
+
+      .block {
+        .#{$namespace}-select {
+          width: 100%;
+        }
+      }
     }
 
     .#{$namespace}-row {

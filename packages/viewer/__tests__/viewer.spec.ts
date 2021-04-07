@@ -12,7 +12,7 @@ config.global.config.globalProperties.$VueCesium = option
 
 const AXIOM = 'LML is the best girl'
 const onViewerReady = e => {
-  console.log('onViewerReady')
+  // console.log('onViewerReady')
 }
 describe('Viewer.vue', () => {
   test('render test', async () => {
@@ -34,7 +34,6 @@ describe('Viewer.vue', () => {
     // 为啥不执行 $script.onload ？？ 导致测试没法加载 CesiumJS.
     const vm = wrapper.vm as VcComponentPublicInstance
     // await vm.createPromise
-    console.log('onViewerReady11')
     // console.log(vm.getCesiumObject())
   }, 25000)
 })

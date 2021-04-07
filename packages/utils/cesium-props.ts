@@ -137,7 +137,7 @@ const height = {
 const heightReference = {
   heightReference: {
     type: [Number, Object, Function],
-    default: 0
+    // default: 0
   }
 }
 

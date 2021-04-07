@@ -149,7 +149,7 @@ interface Cartesian4Option {
 ;[(x: number), (y: number), (z: number), (w: number)]
 ```
 
-### Rectange
+### Rectange(coordinates)
 
 表达 `Cesium.Rectange` 有 3 种方式:
 
@@ -396,6 +396,30 @@ interface PlaneOption {
 ;[(plane: Array<number> | Array<Cartesian3Option>), (distance: number)]
 ```
 
+### TranslationRotationScale
+
+表达 `Cesium.TranslationRotationScale` 的方式有 2 种：
+
+- `TranslationRotationScaleOption`
+
+```js
+interface TranslationRotationScaleOption {
+  translation: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>
+  rotation: Cesium.Quaternion | Cartesian4Option | Array<number>
+  scale: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>
+}
+```
+
+- `Array<any>`
+
+```js
+;[
+  (translation: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>),
+  (rotation: Cesium.Quaternion | Cartesian4Option | Array<number>),
+  (scale: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>)
+]
+```
+
 ## 常量
 
 ### HorizontalOrigin
@@ -459,6 +483,43 @@ interface PlaneOption {
 | TERRAIN        | 0   | 只贴地      |
 | CESIUM_3D_TILE | 1   | 只贴 3DTile |
 | BOTH           | 2   | 都贴        |
+
+### BingMapsStyle
+
+描述 BingMaps 风格
+
+| 常量                         | 值                         | 描述                 |
+| ---------------------------- | -------------------------- | -------------------- |
+| AERIAL                       | 'Aerial'                   | 卫星影像             |
+| AERIAL_WITH_LABELS           | 'AerialWithLabels'         | 卫星影像带标注       |
+| AERIAL_WITH_LABELS_ON_DEMAND | 'AerialWithLabelsOnDemand' | 卫星影像带主要的标注 |
+| ROAD                         | 'Road'                     | 道路                 |
+| ROAD_ON_DEMAND               | 'RoadOnDemand'             | 主要道路             |
+| CANVAS_DARK                  | 'CanvasDark'               | 暗色                 |
+| CANVAS_LIGHT                 | 'CanvasGray'               | 亮色                 |
+| CANVAS_GRAY                  | 'CanvasLight'              | 灰色                 |
+| ORDNANCE_SURVEY              | 'OrdnanceSurvey'           | ---                  |
+| COLLINS_BART                 | 'CollinsBart'              | ---                  |
+
+### LabelStyle
+
+描述文本风格
+
+| 常量             | 值  | 描述       |
+| ---------------- | --- | ---------- |
+| FILL             | 0   | 填充       |
+| OUTLINE          | 1   | 轮廓       |
+| FILL_AND_OUTLINE | 2   | 填充和轮廓 |
+
+### ArcType
+
+描述线段样式
+
+| 常量     | 值  | 描述                   |
+| -------- | --- | ---------------------- |
+| NONE     | 0   | 直线                   |
+| GEODESIC | 1   | 测地线                 |
+| RHUMB    | 2   | 按照恒向线或等倾角螺旋 |
 
 ## 参考
 

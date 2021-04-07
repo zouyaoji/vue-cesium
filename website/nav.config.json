@@ -5,7 +5,7 @@
       "path": "/changelog"
     },
     {
-      "name": "2.0 文档",
+      "name": "2.x 文档",
       "href": "https://zouyaoji.top/vue-cesium-v2/#/"
     },
     {
@@ -59,7 +59,7 @@
           "list": [
             {
               "path": "/vc-layer-imagery",
-              "title": "影像实例"
+              "title": "影像图层"
             },
             {
               "path": "/providers/vc-provider-imagery-arcgis-mapserver",
@@ -67,7 +67,51 @@
             },
             {
               "path": "/providers/vc-provider-imagery-baidumap",
-              "title": "Baidu"
+              "title": "百度地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-bingmaps",
+              "title": "必应地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-ion",
+              "title": "CesiumIon"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-mapbox-style",
+              "title": "MapBox"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-osm",
+              "title": "OpenStreetMap"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-supermap",
+              "title": "超图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tianditu",
+              "title": "天地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tile-mapservice",
+              "title": "TileMap"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tile-single",
+              "title": "单文件瓦片"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-urltemplate",
+              "title": "模板URL"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wms",
+              "title": "WMS"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wmts",
+              "title": "WMTS"
             }
           ]
         },
@@ -97,6 +141,58 @@
             {
               "path": "/graphics/vc-graphics-corridor",
               "title": "走廊"
+            },
+            {
+              "path": "/graphics/vc-graphics-cylinder",
+              "title": "圆柱(锥)体"
+            },
+            {
+              "path": "/graphics/vc-graphics-ellipse",
+              "title": "椭圆"
+            },
+            {
+              "path": "/graphics/vc-graphics-ellipsoid",
+              "title": "(椭)球体"
+            },
+            {
+              "path": "/graphics/vc-graphics-label",
+              "title": "文本"
+            },
+            {
+              "path": "/graphics/vc-graphics-model",
+              "title": "模型"
+            },
+            {
+              "path": "/graphics/vc-graphics-path",
+              "title": "路径"
+            },
+            {
+              "path": "/graphics/vc-graphics-plane",
+              "title": "平面"
+            },
+            {
+              "path": "/graphics/vc-graphics-point",
+              "title": "点"
+            },
+            {
+              "path": "/graphics/vc-graphics-polyline",
+              "title": "线"
+            },
+            {
+              "path": "/graphics/vc-graphics-polygon",
+              "title": "面"
+            },
+            {
+              "path": "/graphics/vc-graphics-polyline-volume",
+              "title": "线柱体"
+            },
+            {
+              "path": "/graphics/vc-graphics-rectangle",
+              "title": "矩形"
+            },
+            {
+              "path": "/graphics/vc-graphics-wall",
+              "title": "墙"
             }
           ]
         },
@@ -117,7 +213,7 @@
       "path": "/changelog"
     },
     {
-      "name": "Version 2.0 documentation",
+      "name": "v2.x docs",
       "href": "https://zouyaoji.top/vue-cesium-v2/#/"
     },
     {
@@ -180,6 +276,50 @@
             {
               "path": "/providers/vc-provider-imagery-baidumap",
               "title": "Baidu"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-bingmaps",
+              "title": "BingMaps"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-ion",
+              "title": "CesiumIon"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-mapbox-style",
+              "title": "MapBox"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-osm",
+              "title": "OpenStreetMap"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-supermap",
+              "title": "SuperMap"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-arcgis-tianditu",
+              "title": "Tianditu"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tile-mapservice",
+              "title": "TileMap"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tile-single",
+              "title": "TileSingle"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-urltemplate",
+              "title": "Urltemplate"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wms",
+              "title": "WMS"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wmts",
+              "title": "WMTS"
             }
           ]
         },
@@ -209,6 +349,58 @@
             {
               "path": "/graphics/vc-graphics-corridor",
               "title": "CorridorGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-cylinder",
+              "title": "CylinderGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-ellipse",
+              "title": "EllipseGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-ellipsoid",
+              "title": "EllipsoidGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-label",
+              "title": "LabelGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-model",
+              "title": "ModelGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-path",
+              "title": "PathGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-plane",
+              "title": "PlaneGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-point",
+              "title": "PointGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-polyline",
+              "title": "PolylineGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-polygon",
+              "title": "PolygonGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-polyline-volume",
+              "title": "PolylineVolumeGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-rectangle",
+              "title": "RectangleGraphics"
+            },
+            {
+              "path": "/graphics/vc-graphics-wall",
+              "title": "WallGraphics"
             }
           ]
         },

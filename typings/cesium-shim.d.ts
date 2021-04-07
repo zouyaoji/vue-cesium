@@ -6,12 +6,13 @@ declare module 'cesium' {
    * Returns a formatted string
    * @param args
    */
-  function sprintf(...args: any[]): string
-  function createDefaultImageryProviderViewModels(): void
-  function createDefaultTerrainProviderViewModels(): void
+  function sprintf (...args: any[]): string
+  function createDefaultImageryProviderViewModels (): void
+  function createDefaultTerrainProviderViewModels (): void
   const knockout: any
   const when: any
   const Tween: any
+  function appendForwardSlash (url: string): string
 
   interface Viewer {
     viewerWidgetResized?: CesiumNative.Event
@@ -40,8 +41,8 @@ declare module 'cesium' {
   }
 
   interface Timeline {
-    makeLabel(time: CesiumNative.JulianDate): string
-    addEventListener(type, listener, useCapture): void
+    makeLabel (time: CesiumNative.JulianDate): string
+    addEventListener (type, listener, useCapture): void
   }
 
   interface Scene {
@@ -66,10 +67,17 @@ declare module 'cesium' {
 
   interface ImageryLayerCollection {
     _layers: CesiumNative.ImageryLayer[]
-    _update(): void
+    _update (): void
   }
 
-  class SuperMapImageryProvider {}
+  // eslint-disable-next-line no-var
+  var Uri: any
+  // eslint-disable-next-line no-var
+  var SuperMapImageryProvider: any
+  // eslint-disable-next-line no-var
+  var TiandituImageryProvider: any
+  // eslint-disable-next-line no-var
+  var BaiduMapImageryProvider: any
 }
 
 declare global {

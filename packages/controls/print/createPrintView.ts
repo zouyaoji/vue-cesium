@@ -33,7 +33,6 @@ const createPrintView = options => {
   const { printWindow = window.open(), closeCallback } = options
   if (closeCallback) {
     printWindow.addEventListener('unload', () => {
-      console.log('unload')
       closeCallback(printWindow)
     })
   }

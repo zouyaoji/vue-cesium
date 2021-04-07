@@ -10,18 +10,20 @@ import {
   VcViewerProvider
 } from '@vue-cesium/utils/types'
 import * as cesiumProps from '@vue-cesium/utils/cesium-props'
-import useEvents from '../use-events'
 import { vcKey } from '@vue-cesium/utils/config'
+import useLog from '../private/use-log'
 import { t } from '@vue-cesium/locale'
+import useEvents from '../use-events'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
-  // debug only
+  const logger = useLog(vcInstance)
+
   if (process.env.NODE_ENV !== 'production') {
     const tags = [
       ...Object.keys(vcInstance.proxy.$options.props),
       ...vcInstance.proxy.$options.emits
     ]
-    console.log(tags)
+    logger.log(tags)
   }
 
   // state
@@ -76,7 +78,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return false
     }
 
-    console.log(`${vcInstance.cesiumClass}---load`)
+    logger.log(`${vcInstance.cesiumClass}---load`)
 
     await beforeLoad()
 
@@ -87,7 +89,6 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     // If you call the unload method to unload the component, the Cesium object of the parent component may be unloaded. You need to load the parent component first.
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
     if (!parentVcInstance.cesiumObject) {
-      console.log('load parent')
       return await (parentVcInstance.proxy as VcComponentPublicInstance)?.load()
     }
 
@@ -104,7 +105,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy }
           emit('ready', readyObj)
           vcMitt.emit('ready', readyObj)
-          console.log(`${vcInstance.cesiumClass}---loaded`)
+          logger.log(`${vcInstance.cesiumClass}---loaded`)
           return readyObj
         }
       )
@@ -123,11 +124,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return false
     }
 
-    console.log(`${vcInstance.cesiumClass}---unload`)
+    logger.log(`${vcInstance.cesiumClass}---unload`)
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
       const vcChildCmp = vcInstance.children[i].proxy as VcComponentPublicInstance
-      console.log(vcInstance.children[i])
       await vcChildCmp.unload()
     }
     return unmount().then(async () => {
@@ -135,7 +135,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       vcInstance.cesiumObject = undefined
       vcInstance.mounted = false
       emit('destroyed', vcInstance)
-      console.log(`${vcInstance.cesiumClass}---unmounted`)
+      logger.log(`${vcInstance.cesiumClass}---unmounted`)
 
       // If the component cannot be rendered without the parent component, the parent component needs to be removed.
       // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
@@ -160,7 +160,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   const createCesiumObject = async () => {
-    console.log('do createCesiumObject')
+    logger.log('do createCesiumObject')
     if (isFunction(vcInstance.createCesiumObject)) {
       return vcInstance.createCesiumObject()
     } else {
@@ -277,10 +277,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return transformProps(value)
     } else {
       const cmpName = vcInstance.proxy.$options.name
-      const propOption = cesiumProps[prop] && cesiumProps[prop][prop]
-      return propOption && propOption.watcherOptions && !isEmptyObj(value)
+      const propOption = vcInstance.proxy.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
+      return (propOption?.watcherOptions) && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value)
-        : isFunction(value) && cmpName && (cmpName.indexOf('graphics') !== -1 || cmpName === 'vc-entity')
+        : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'vc-entity')
           ? new Cesium.CallbackProperty(value, false)
           : value
     }
@@ -306,12 +306,12 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       reject(e)
     }
   })
-  console.log(`${vcInstance.cesiumClass}---onCreated`)
+  logger.log(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
-    console.log(`${vcInstance.cesiumClass}---onUnmounted`)
+    logger.log(`${vcInstance.cesiumClass}---onUnmounted`)
     vcInstance.unloadingPromise = new Promise((reslove, reject) => {
       unload().then(() => {
-        console.log(`${vcInstance.cesiumClass}---unloaded`)
+        logger.log(`${vcInstance.cesiumClass}---unloaded`)
         reslove(true)
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()
@@ -325,6 +325,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     unload,
     reload,
     createPromise,
-    transformProps
+    transformProps,
+    unwatchFns,
+    setPropsWatcher,
+    logger
   }
 }

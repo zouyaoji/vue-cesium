@@ -12,11 +12,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <vc-provider-imagery-baidumap
-        ref="provider"
-        url="https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png"
-        :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
-      ></vc-provider-imagery-baidumap>
+      <vc-provider-imagery-baidumap ref="provider" :url="url" :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"></vc-provider-imagery-baidumap>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
@@ -34,6 +30,10 @@
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">对比度</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
+          <span class="demonstration">切换服务</span>
+          <el-select v-model="url" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
         </div>
       </el-col>
     </el-row>
@@ -50,6 +50,25 @@
       const alpha = ref(1)
       const brightness = ref(1)
       const contrast = ref(1)
+      const options = [
+        {
+          value: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
+          label: '百度矢量瓦片地图'
+        },
+        {
+          value: 'http://shangetu1.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46',
+          label: '百度影像瓦片地图'
+        },
+        {
+          value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
+          label: '百度矢量瓦片地图-暗色'
+        },
+        {
+          value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
+          label: '百度矢量瓦片地图-Custom'
+        }
+      ]
+      const url = ref('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png')
       // methods
       const unload = () => {
         provider.value.unload()
@@ -60,7 +79,6 @@
       const load = () => {
         provider.value.load()
       }
-      window.vm = instance
       return {
         provider,
         unload,
@@ -68,7 +86,9 @@
         load,
         alpha,
         brightness,
-        contrast
+        contrast,
+        options,
+        url
       }
     }
   }
@@ -87,7 +107,7 @@
 | credit | String\|Object | `''` | `optional` 服务版权描述信息。 |
 | minimumLevel | Number | `0` | `optional` 最小层级。 |
 | maximumLevel | Number | `18` | `optional` 最大层级。 |
-| projectionTransforms | Boolean\|Object | `false` | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| projectionTransforms | Boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 
 :::tip
 
@@ -134,4 +154,4 @@
 
 ### 参考
 
-- 资料： [openlayers#3522](https://github.com/openlayers/openlayers/issues/3522)
+- 资料： **[openlayers#3522](https://github.com/openlayers/openlayers/issues/3522)**
