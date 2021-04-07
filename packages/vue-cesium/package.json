@@ -18,6 +18,8 @@
     "@vue-cesium/controls": "^0.0.0",
     "@vue-cesium/viewer": "^0.0.0",
     "@vue-cesium/entity": "^0.0.0",
-    "@vue-cesium/graphics": "^0.0.0"
+    "@vue-cesium/graphics": "^0.0.0",
+    "@vue-cesium/imagery-layer": "^0.0.0",
+    "@vue-cesium/providers": "^0.0.0"
   }
 }

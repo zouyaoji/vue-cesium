@@ -3,6 +3,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
+import useLog from '@vue-cesium/composables/private/use-log'
 import { VcBtn, VcTooltip, VcIcon } from '@vue-cesium/ui'
 import { useCommon } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
@@ -135,7 +136,6 @@ export default defineComponent({
         }
 
         if (props.printAutomatically || props.showPrintView) {
-          console.log(props.showPrintView, props.printAutomatically)
           if (props.showPrintView) {
             showPrintView(imgSrc)
           } else if (props.printAutomatically) {
@@ -179,8 +179,7 @@ export default defineComponent({
           if (printAutomatically) {
             printWindow(windowToPrint)
               .otherwise(e => {
-                // todo errlog
-                console.log(e)
+                commonState.logger.warn(e)
               })
               .always(() => {
                 if (iframe) {
