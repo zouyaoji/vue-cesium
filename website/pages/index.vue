@@ -21,7 +21,7 @@
     </div>
     <div class="cards">
       <ul class="container">
-        <li>
+        <!-- <li>
           <div class="card">
             <img src="~examples/assets/images/guide.png" alt="">
             <h3>{{ langConfig[3] }}</h3>
@@ -34,7 +34,7 @@
               {{ langConfig[5] }}
             </router-link>
           </div>
-        </li>
+        </li> -->
         <li>
           <div class="card">
             <img src="~examples/assets/images/component.png" alt="">
@@ -190,6 +190,8 @@ export default {
     padding: 0;
     margin: 0 -11px;
     width: auto;
+    display: flex;
+    justify-content: center;
     &::before, &::after {
       display: table;
       content: "";

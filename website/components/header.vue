@@ -25,11 +25,11 @@
           <li v-show="isComponentPage" class="nav-item nav-algolia-search">
             <algolia-search />
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link active-class="active" :to="`/${lang}/guide`">
               {{ langConfig.guide }}
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link active-class="active" :to="`/${lang}/component`">
               {{ langConfig.components }}
@@ -38,6 +38,11 @@
           <li class="nav-item">
             <router-link active-class="active" :to="`/${lang}/resource`" exact>
               {{ langConfig.resource }}
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link active-class="active" :to="`/${lang}/donations`" exact>
+              {{ langConfig.donations }}
             </router-link>
           </li>
 

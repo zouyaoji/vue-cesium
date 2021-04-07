@@ -59,7 +59,6 @@
       const load = () => {
         provider.value.load()
       }
-      window.vm = instance
       return {
         provider,
         unload,
@@ -139,4 +138,4 @@
 
 ### 参考
 
-- 官方文档： [ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)
+- 官方文档： **[ArcGisMapServerImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGisMapServerImageryProvider.html)**

@@ -12,7 +12,14 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- 通过属性加载 和 子组件分别加载 -->
-    <vc-entity ref="entity1" :position="options.position1" :description="options.description">
+    <vc-entity
+      ref="entity1"
+      :position="options.position1"
+      :description="options.description"
+      @click="onEntityEvt"
+      @mouseover="onEntityEvt"
+      @mouseout="onEntityEvt"
+    >
       <vc-graphics-box :dimensions="options.dimensions1" :material="options.material1"></vc-graphics-box>
     </vc-entity>
     <vc-entity ref="entity2" :position="options.position2" :description="options.description">
@@ -60,7 +67,6 @@
       // life cycle
       onMounted(() => {
         Promise.all([entity1.value.createPromise, entity2.value.createPromise, entity3.value.createPromise]).then(instances => {
-          window.viewer = instances[0].viewer
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

@@ -11,7 +11,14 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-entity ref="entity1" :name="options.name1" :description="options.description">
+    <vc-entity
+      ref="entity1"
+      :name="options.name1"
+      :description="options.description"
+      @click="onEntityEvt"
+      @mouseover="onEntityEvt"
+      @mouseout="onEntityEvt"
+    >
       <vc-graphics-corridor :positions="options.positions1" :material="options.material1" :width="200000.0"></vc-graphics-corridor>
     </vc-entity>
     <vc-entity ref="entity2" :name="options.name2" :description="options.description">
@@ -94,7 +101,6 @@
       // life cycle
       onMounted(() => {
         Promise.all([entity1.value.createPromise, entity2.value.createPromise, entity3.value.createPromise]).then(instances => {
-          window.viewer = instances[0].viewer
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })
