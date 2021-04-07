@@ -59,7 +59,7 @@
           "list": [
             {
               "path": "/vc-layer-imagery",
-              "title": "ImageryLayer"
+              "title": "影像图层"
             },
             {
               "path": "/providers/vc-provider-imagery-arcgis-mapserver",
@@ -67,11 +67,11 @@
             },
             {
               "path": "/providers/vc-provider-imagery-baidumap",
-              "title": "Baidu"
+              "title": "百度地图"
             },
             {
               "path": "/providers/vc-provider-imagery-bingmaps",
-              "title": "BingMaps"
+              "title": "必应地图"
             },
             {
               "path": "/providers/vc-provider-imagery-ion",
@@ -83,15 +83,15 @@
             },
             {
               "path": "/providers/vc-provider-imagery-osm",
-              "title": "OSM"
+              "title": "OpenStreetMap"
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",
-              "title": "SuperMap"
+              "title": "超图"
             },
             {
               "path": "/providers/vc-provider-imagery-tianditu",
-              "title": "Tianditu"
+              "title": "天地图"
             },
             {
               "path": "/providers/vc-provider-imagery-tile-mapservice",
@@ -99,11 +99,11 @@
             },
             {
               "path": "/providers/vc-provider-imagery-tile-single",
-              "title": "TileSingle"
+              "title": "单文件瓦片"
             },
             {
               "path": "/providers/vc-provider-imagery-urltemplate",
-              "title": "Urltemplate"
+              "title": "模板URL"
             },
             {
               "path": "/providers/vc-provider-imagery-wms",
@@ -291,7 +291,7 @@
             },
             {
               "path": "/providers/vc-provider-imagery-osm",
-              "title": "OSM"
+              "title": "OpenStreetMap"
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",

@@ -1,6 +1,6 @@
 ## TileMap
 
-`vc-provider-imagery-tile-mapservice` 组件用于加载由 [MapTiler](https://www.maptiler.com), [GDAL2Tiles](http://www.klokan.cz/projects/gdal2tiles/) 等生成的瓦片影像服务。**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+`vc-provider-imagery-tile-mapservice` 组件用于加载由 [MapTiler](https://www.maptiler.com), [GDAL2Tiles](http://www.klokan.cz/projects/gdal2tiles/) 等生成的影像瓦片服务。**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
 ### 基础用法
 
