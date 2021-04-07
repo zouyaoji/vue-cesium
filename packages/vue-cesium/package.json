@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "3.0.1-beta.0",
+  "version": "3.0.1-beta.1",
   "description": "> TODO: description",
   "author": "zouyaoji <370681295@qq.com>",
   "homepage": "https://github.com/zouyaoji/vue-cesium#readme",
@@ -14,12 +14,12 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@vue-cesium/ui": "^0.0.0",
     "@vue-cesium/controls": "^0.0.0",
-    "@vue-cesium/viewer": "^0.0.0",
     "@vue-cesium/entity": "^0.0.0",
     "@vue-cesium/graphics": "^0.0.0",
     "@vue-cesium/imagery-layer": "^0.0.0",
-    "@vue-cesium/providers": "^0.0.0"
+    "@vue-cesium/providers": "^0.0.0",
+    "@vue-cesium/ui": "^0.0.0",
+    "@vue-cesium/viewer": "^0.0.0"
   }
 }
