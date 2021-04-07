@@ -13,12 +13,13 @@ import {
   VcComponentPublicInstance,
   AnyObject
 } from '@vue-cesium/utils/types'
+import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
+import useLog from '@vue-cesium/composables/private/use-log'
 import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
-import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 
-export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcInstance: VcComponentInternalInstance) {
-  console.log('viewer creating')
+export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcInstance: VcComponentInternalInstance) {
+
   // state
   let resolve, reject
   const createPromise = new Promise<ReadyObj>((_resolve, _reject) => {
@@ -44,6 +45,9 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     animationContainerRC: undefined,
     bottomContainerRC: undefined
   })
+
+  const logger = useLog(vcInstance)
+  logger.log('viewer creating')
 
   // watch
   watch(
@@ -157,7 +161,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
       } else if (!defined(viewer.homeButton) || viewer.homeButton.isDestroyed()) {
         const homeButton = new HomeButton(toolbar, viewer.scene)
         if (defined(viewer.geocoder)) {
-          viewer._eventHelper.add(homeButton.viewModel.command.afterExecute, function() {
+          viewer._eventHelper.add(homeButton.viewModel.command.afterExecute, function () {
             const viewModel = viewer.geocoder.viewModel
             viewModel.searchText = ''
             viewModel.isSearchInProgress && (viewModel as any).search()
@@ -316,7 +320,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
               window.localStorage.setItem('cesium-hasSeenNavHelp', 'true')
             }
           }
-        } catch (e) {}
+        } catch (e) { }
         const navigationHelpButton = new NavigationHelpButton({
           container: toolbar,
           instructionsInitiallyVisible: defaultValue(props.navigationInstructionsInitiallyVisible, showNavHelp)
@@ -451,7 +455,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
         viewerElement.appendChild(vrContainer)
         const vrButton = new VRButton(vrContainer, viewer.scene, viewerElement)
         const viewModelCommand = vrButton.viewModel.command as any
-        ;(vrButton.viewModel as any)._command = function(VRButtonViewModel) {
+          ; (vrButton.viewModel as any)._command = function (VRButtonViewModel) {
           viewModelCommand()
           enableVRUI(viewer, VRButtonViewModel.isVRMode)
         }
@@ -537,7 +541,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     () => props.showCredit,
     val => {
       const { viewer } = vcInstance
-      ;(viewer.cesiumWidget.creditContainer as HTMLElement).style.display = val ? 'inline' : 'none'
+        ; (viewer.cesiumWidget.creditContainer as HTMLElement).style.display = val ? 'inline' : 'none'
       viewer.viewerWidgetResized.raiseEvent({
         type: 'credit',
         status: val ? 'added' : 'removed',
@@ -559,8 +563,8 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
   /**
    * 检测是否引入 CesiumJS
    */
-  const beforeLoad = async function(): Promise<void> {
-    console.log('beforeLoad - viewer')
+  const beforeLoad = async function (): Promise<void> {
+    logger.log('beforeLoad - viewer')
     const listener = getInstanceListener(vcInstance, 'beforeLoad')
     listener && emit('beforeLoad', vcInstance)
     $vc.scriptPromise = $vc.scriptPromise || getCesiumScript()
@@ -570,8 +574,8 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
    * 初始化 Viewer，成功返回 {Cesium, viewer, instance}， 失败返回false。
    * @returns ReadyObj
    */
-  const load = async function(): Promise<boolean | ReadyObj> {
-    console.log('loading-viewer')
+  const load = async function (): Promise<boolean | ReadyObj> {
+    logger.log('loading-viewer')
     if (vcInstance.mounted) {
       return false
     }
@@ -746,6 +750,12 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
       viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      if ((props as any).logo) {
+        logger.warn("'logo' is deprecated. Use `showCredit` prop instead. ")
+      }
+    }
+
     !props.showCredit && ((viewer.cesiumWidget.creditContainer as HTMLElement).style.display = 'none')
 
     props.debugShowFramesPerSecond && (viewer.scene.debugShowFramesPerSecond = true)
@@ -779,19 +789,19 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
       isReady.value = true
     })
 
-    console.log('loaded-viewer')
+    logger.log('loaded-viewer')
     return readyObj
   }
 
   /**
    * Viewer 销毁方法。
    */
-  const unload = async function() {
+  const unload = async function () {
     if (!vcInstance.mounted) {
       return false
     }
 
-    console.log('viewer---unloading')
+    logger.log('viewer---unloading')
     let unloadingResolve
     $vc.viewerUnloadingPromise = new Promise((resolve, reject) => {
       unloadingResolve = resolve
@@ -848,14 +858,14 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     }
     const listener = getInstanceListener(vcInstance, 'destroyed')
     listener && emit('destroyed', vcInstance)
-    console.log('viewer---unloaded')
+    logger.log('viewer---unloaded')
     unloadingResolve(true)
     $vc.viewerUnloadingPromise = undefined
     isReady.value = false
     return true
   }
 
-  const reload = function() {
+  const reload = function () {
     return unload().then(() => {
       return load()
     })
@@ -864,8 +874,8 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
   /**
    * 动态引入 CesiumJS
    */
-  const getCesiumScript = function(): Promise<typeof Cesium> {
-    console.log('getCesiumScript')
+  const getCesiumScript = function (): Promise<typeof Cesium> {
+    logger.log('getCesiumScript')
     if (!global.Cesium) {
       // const $vc = useGlobalConfig()
       const cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
@@ -908,7 +918,6 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     status: string
     target: HTMLElement
   }) => {
-    console.log('onViewerWidgetResized')
     const { viewer } = vcInstance
     const toolbarElement = viewer._toolbar as HTMLElement
     if (
@@ -983,7 +992,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
    * @param viewModel
    * @param ignoredate
    */
-  const localeDateTimeFormatter = function(
+  const localeDateTimeFormatter = function (
     date: CesiumNative.JulianDate,
     viewModel?: CesiumNative.AnimationViewModel,
     ignoredate?: boolean
@@ -1021,17 +1030,17 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
    * @param time
    * @param viewModel
    */
-  const localeTimeFormatter = function(time: CesiumNative.JulianDate, viewModel: CesiumNative.AnimationViewModel): string {
+  const localeTimeFormatter = function (time: CesiumNative.JulianDate, viewModel: CesiumNative.AnimationViewModel): string {
     return localeDateTimeFormatter(time, viewModel, true)
   }
 
-  const onTimelineScrubfunction = function(e) {
+  const onTimelineScrubfunction = function (e) {
     const clock = e.clock
     clock.currentTime = e.timeJulian
     clock.shouldAnimate = false
   }
 
-  const enableVRUI = function(viewer, enabled) {
+  const enableVRUI = function (viewer, enabled) {
     const geocoder = viewer._geocoder
     const homeButton = viewer._homeButton
     const sceneModePicker = viewer._sceneModePicker
@@ -1081,7 +1090,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     }
   }
 
-  const resizeToolbar = function(parent, child) {
+  const resizeToolbar = function (parent, child) {
     Array.prototype.slice.call(parent.children).forEach(element => {
       switch (element.className) {
         case 'cesium-viewer-geocoderContainer':
@@ -1109,7 +1118,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     Array.prototype.slice.call(parent.children).forEach(element => {
       arr.push(element)
     })
-    arr.sort(function(a, b) {
+    arr.sort(function (a, b) {
       return a.customIndex - b.customIndex
     })
     for (let i = 0; i < arr.length; i++) {
@@ -1117,38 +1126,38 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
     }
   }
 
-  const getServices = function() {
+  const getServices = function () {
     return mergeDescriptors(
       {},
       {
-        get layout() {
+        get layout () {
           return layout
         },
-        get vm() {
+        get vm () {
           return vcInstance
         },
-        get Cesium() {
+        get Cesium () {
           return vcInstance.Cesium
         },
-        get viewer(): CesiumNative.Viewer {
+        get viewer (): CesiumNative.Viewer {
           return vcInstance.viewer
         },
-        get dataSources(): CesiumNative.DataSourceCollection {
+        get dataSources (): CesiumNative.DataSourceCollection {
           return vcInstance.viewer?.dataSources
         },
-        get entities() {
+        get entities () {
           return vcInstance.viewer?.entities
         },
-        get imageryLayers() {
+        get imageryLayers () {
           return vcInstance.viewer?.imageryLayers
         },
-        get primitives() {
+        get primitives () {
           return vcInstance.viewer?.scene.primitives
         },
-        get groundPrimitives() {
+        get groundPrimitives () {
           return vcInstance.viewer?.scene.groundPrimitives
         },
-        get postProcessStages() {
+        get postProcessStages () {
           return vcInstance.viewer?.postProcessStages
         }
       }
@@ -1165,7 +1174,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
   // lifecycle
   onMounted(async () => {
     try {
-      console.log('viewer - onMounted')
+      logger.log('viewer - onMounted')
       await $vc.viewerUnloadingPromise
       resolve(load())
     } catch (e) {
@@ -1174,7 +1183,7 @@ export default function(props: ExtractPropTypes<typeof defaultProps>, ctx, vcIns
   })
 
   onUnmounted(() => {
-    console.log('viewer - onUnmounted')
+    logger.log('viewer - onUnmounted')
     unload().then(() => {
       vcMitt.all.clear()
     })
