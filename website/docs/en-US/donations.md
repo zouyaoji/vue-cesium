@@ -1,5 +1,6 @@
 
-## Donations
+## Donation
+### Donations
 
 - We accept donations through these channels:
 
@@ -7,8 +8,8 @@
 
   - WeChat / AliPay
 
-    [WeChat](https://zouyaoji.top/vue-cesium/images/wechat.png)
-    [AliPay](https://zouyaoji.top/vue-cesium/images/alipay.png)
+    ![WeChat](https://zouyaoji.top/vue-cesium/images/wechat.png)
+    ![AliPay](https://zouyaoji.top/vue-cesium/images/alipay.png)
 
 ### Sponsors
 
