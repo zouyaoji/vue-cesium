@@ -1,16 +1,15 @@
 import { defineComponent, getCurrentInstance, h, provide } from 'vue'
 import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
-import { vcKey } from '@vue-cesium/utils/config'
 import defaultProps from './defaultProps'
+import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
 export default defineComponent({
   name: 'VcLayerImagery',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed'],
-  setup(props, ctx) {
+  emits: ['beforeLoad', 'ready', 'destroyed', 'update:imageryProvider'],
+  setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ImageryLayer'
@@ -35,7 +34,6 @@ export default defineComponent({
       return !viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     }
     instance.unmount = async () => {
-      console.log('imagery layer unmount')
       const { viewer } = $services
       const imageryLayer = instance.cesiumObject as CesiumNative.ImageryLayer
       return !viewer.isDestroyed() && viewer.imageryLayers.remove(imageryLayer)
@@ -44,21 +42,10 @@ export default defineComponent({
     const setProvider = provider => {
       const imageryLayer = instance.cesiumObject as CesiumNative.ImageryLayer
       (imageryLayer as any)._imageryProvider = provider
+      const listener = getInstanceListener(instance, 'update:imageryProvider')
+      if (listener) emit('update:imageryProvider', provider)
       return true
     }
-
-    const getServices = () => {
-      return mergeDescriptors($services, {
-        get imageryLayer () {
-          return instance.cesiumObject
-        },
-        get imageryLayerViewModel () {
-          return instance.proxy
-        }
-      })
-    }
-
-    provide(vcKey, getServices())
 
     // expose public methods
     Object.assign(instance.proxy, {
