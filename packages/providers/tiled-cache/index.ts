@@ -13,6 +13,7 @@ import {
   tileWidth,
   tileHeight
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryTiledcache',
@@ -153,6 +154,6 @@ export default defineComponent({
       }
       return value
     }
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

@@ -3,6 +3,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { userProviders } from '@vue-cesium/composables'
 import { url, minimumLevel, maximumLevel } from '@vue-cesium/utils/cesium-props'
 import SuperMapImageryProvider from './SuperMapImageryProvider'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImagerySupermap',
@@ -33,6 +34,6 @@ export default defineComponent({
       const options = providersState.transformProps(props)
       return new Cesium.SuperMapImageryProvider(options)
     }
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

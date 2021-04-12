@@ -5,6 +5,7 @@ import {
   tilingScheme, ellipsoid, tileWidth, tileHeight, glowColor
 } from '@vue-cesium/utils/cesium-props'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryGrid',
@@ -47,6 +48,6 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GridImageryProvider'
     userProviders(props, ctx, instance)
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

@@ -8,6 +8,7 @@ import {
   maximumLevel,
   ellipsoid
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryOsm',
@@ -32,6 +33,6 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'OpenStreetMapImageryProvider'
     userProviders(props, ctx, instance)
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

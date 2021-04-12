@@ -4,6 +4,7 @@ import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcLayerImagery',
@@ -60,7 +61,7 @@ export default defineComponent({
 
     return () => (
       h('i', {
-        class: instance.proxy.$options.name,
+        class: kebabCase(instance.proxy.$options.name),
         style: { display: 'none !important' }
       }, hSlot(ctx.slots.default))
     )

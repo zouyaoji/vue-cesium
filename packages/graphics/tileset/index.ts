@@ -6,6 +6,7 @@ import {
   uri,
   maximumScreenSpaceError
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcGraphicsTileset',
@@ -21,6 +22,6 @@ export default defineComponent({
     instance.cesiumClass = 'TilesetGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

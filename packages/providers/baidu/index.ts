@@ -11,6 +11,7 @@ import {
   minimumLevel,
   maximumLevel
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryBaidumap',
@@ -50,6 +51,6 @@ export default defineComponent({
       return new Cesium.BaiduMapImageryProvider(options)
     }
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

@@ -7,6 +7,7 @@ import {
   credit,
   ellipsoid,
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryTileSingle',
@@ -22,6 +23,6 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'SingleTileImageryProvider'
     userProviders(props, ctx, instance)
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

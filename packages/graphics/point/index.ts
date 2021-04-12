@@ -13,6 +13,7 @@ import {
   distanceDisplayCondition,
   disableDepthTestDistance
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcGraphicsPoint',
@@ -35,6 +36,6 @@ export default defineComponent({
     instance.cesiumClass = 'PointGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

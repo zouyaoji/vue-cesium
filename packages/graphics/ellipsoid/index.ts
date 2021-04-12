@@ -21,6 +21,7 @@ import {
   shadows,
   distanceDisplayCondition,
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'VcGraphicsEllipsoid',
   props: {
@@ -50,6 +51,6 @@ export default defineComponent({
     instance.cesiumClass = 'EllipsoidGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })
