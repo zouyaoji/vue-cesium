@@ -1,4 +1,4 @@
-import { VcComponentPublicInstance, Cesium as CesiumNative, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
 import { h, nextTick } from 'vue'

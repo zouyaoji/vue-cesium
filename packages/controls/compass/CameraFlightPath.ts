@@ -1,4 +1,4 @@
-import { Cesium as CesiumNative, AnyFunction } from '@vue-cesium/utils/types'
+import { AnyFunction } from '@vue-cesium/utils/types'
 /**
  * Creates tweens for camera flights.
  * <br /><br />
@@ -210,8 +210,8 @@ function createPitchFunction(startPitch, endPitch, heightFunction, pitchAdjustHe
 }
 
 function createHeightFunction(
-  camera: CesiumNative.Camera,
-  destination: CesiumNative.Cartesian3,
+  camera: Cesium.Camera,
+  destination: Cesium.Cartesian3,
   startHeight: number,
   endHeight: number,
   optionAltitude
@@ -270,9 +270,9 @@ function adjustAngleForLERP(startAngle: number, endAngle: number) {
 const scratchStart: any = {}
 
 function createUpdateCV(
-  scene: CesiumNative.Scene,
+  scene: Cesium.Scene,
   duration: number,
-  destination: CesiumNative.Cartesian3,
+  destination: Cesium.Cartesian3,
   heading: number,
   pitch: number,
   roll: number,

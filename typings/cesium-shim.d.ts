@@ -1,48 +1,38 @@
-import { AnyFunction, Cesium as CesiumNative } from '@vue-cesium/utils/types'
-// import * as CesiumNative from 'cesium'
-
-declare module 'cesium' {
-  /**
-   * Returns a formatted string
-   * @param args
-   */
+declare namespace Cesium {
+  function createDefaultImageryProviderViewModels (): Array<ProviderViewModel>
+  function createDefaultTerrainProviderViewModels (): Array<ProviderViewModel>
   function sprintf (...args: any[]): string
-  function createDefaultImageryProviderViewModels (): void
-  function createDefaultTerrainProviderViewModels (): void
+  function appendForwardSlash (url: string): string
   const knockout: any
   const when: any
-  const Tween: any
-  function appendForwardSlash (url: string): string
-
+  const Uri: any
   interface Viewer {
-    viewerWidgetResized?: CesiumNative.Event
-    globe?: CesiumNative.Globe
-    VcNavigationContaner?: HTMLElement
-    _selectionIndicator?: CesiumNative.SelectionIndicator
-    _infoBox?: CesiumNative.InfoBox
-    _geocoder?: CesiumNative.Geocoder
-    _homeButton?: CesiumNative.HomeButton
-    _sceneModePicker?: CesiumNative.SceneModePicker
-    _projectionPicker?: CesiumNative.ProjectionPicker
-    _baseLayerPicker?: CesiumNative.BaseLayerPicker
+    viewerWidgetResized?: Event
+    _selectionIndicator?: SelectionIndicator
+    _infoBox?: InfoBox
+    _geocoder?: Geocoder
+    _homeButton?: HomeButton
+    _sceneModePicker?: SceneModePicker
+    _projectionPicker?: ProjectionPicker
+    _baseLayerPicker?: BaseLayerPicker
     _baseLayerPickerDropDown?: Element
-    _navigationHelpButton?: CesiumNative.NavigationHelpButton
-    _animation?: CesiumNative.Animation
-    _timeline?: CesiumNative.Timeline
-    _fullscreenButton?: CesiumNative.FullscreenButton
-    _vrButton?: CesiumNative.VRButton
+    _navigationHelpButton?: NavigationHelpButton
+    _animation?: Animation
+    _timeline?: Timeline
+    _fullscreenButton?: FullscreenButton
+    _vrButton?: VRButton
     _terrainExaggeration: number
-    _eventHelper?: CesiumNative.EventHelper
+    _eventHelper?: EventHelper
     _toolbar?: Element
-    _onInfoBoxCameraClicked?: AnyFunction
-    _onInfoBoxClockClicked?: AnyFunction
-    _clearObjects?: AnyFunction
-    _clearTrackedObject?: AnyFunction
+    _onInfoBoxCameraClicked?(val: InfoBoxViewModel): void
+    _onInfoBoxClockClicked?(val: InfoBoxViewModel): void
+    _clearObjects?: () => void
+    _clearTrackedObject?(val: InfoBoxViewModel): void
   }
 
   interface Timeline {
-    makeLabel (time: CesiumNative.JulianDate): string
-    addEventListener (type, listener, useCapture): void
+    makeLabel?(time: JulianDate): string
+    addEventListener?(type, listener, useCapture): void
   }
 
   interface Scene {
@@ -51,11 +41,21 @@ declare module 'cesium' {
   }
 
   interface Globe {
-    pickTriangle: AnyFunction
+    pickTriangle?(ray: Ray, scene: Scene, projection: MapProjection, cullBackFaces: boolean): {
+      intersection: Cartesian3
+      v0: Cartesian3
+      v1: Cartesian3
+      v2: Cartesian3
+    } | undefined
   }
 
   class GlobeSurfaceTile {
-    pickTriangle: AnyFunction
+    pickTriangle?(ray: Ray, mode: SceneMode, projection: MapProjection, cullBackFaces: boolean): {
+      intersection: Cartesian3
+      v0: Cartesian3
+      v1: Cartesian3
+      v2: Cartesian3
+    } | undefined
   }
 
   interface ImageryLayer {
@@ -66,12 +66,11 @@ declare module 'cesium' {
   }
 
   interface ImageryLayerCollection {
-    _layers: CesiumNative.ImageryLayer[]
+    _layers: ImageryLayer[]
     _update (): void
   }
 
-  // eslint-disable-next-line no-var
-  var Uri: any
+
   // eslint-disable-next-line no-var
   var SuperMapImageryProvider: any
   // eslint-disable-next-line no-var
@@ -80,13 +79,9 @@ declare module 'cesium' {
   var BaiduMapImageryProvider: any
 }
 
-declare global {
-  // eslint-disable-next-line no-var
-  var Cesium: typeof CesiumNative
-  // eslint-disable-next-line no-var
-  var XE: any
-  // eslint-disable-next-line no-var
-  var XbsjCesium: any
-  // eslint-disable-next-line no-var
-  var XbsjEarth: any
-}
+// eslint-disable-next-line no-var
+declare var XE: any
+// eslint-disable-next-line no-var
+declare var XbsjCesium: any
+// eslint-disable-next-line no-var
+declare var XbsjEarth: any

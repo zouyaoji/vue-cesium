@@ -12,7 +12,7 @@ import {
   VcSpinnerOrbit,
   VcSpinnerBars
 } from '@vue-cesium/ui'
-import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
@@ -45,7 +45,7 @@ export default defineComponent({
     const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
-    let datasource: CesiumNative.CustomDataSource = undefined
+    let datasource: Cesium.CustomDataSource = undefined
     let amapGeolocation = undefined
     // watch
     watch(

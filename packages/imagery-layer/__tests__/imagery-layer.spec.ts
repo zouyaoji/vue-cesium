@@ -1,4 +1,4 @@
-import { VcComponentPublicInstance, Cesium as CesiumNative, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcLayerImagery from '../src'
 import VcViewer from '@vue-cesium/viewer'
@@ -46,7 +46,7 @@ describe('VcLayerImagery', () => {
     expect(wrapper.vm.$refs.layer).toBeDefined()
     const testVm = wrapper.vm.$refs.layer as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let layer = readyObj.cesiumObject as CesiumNative.ImageryLayer
+    let layer = readyObj.cesiumObject as Cesium.ImageryLayer
     expect(layer instanceof Cesium.ImageryLayer).toBe(true)
     expect(layer.imageryProvider instanceof Cesium.OpenStreetMapImageryProvider).toBe(true)
     expect(layer.imageryProvider.maximumLevel).toEqual(17)
@@ -54,10 +54,10 @@ describe('VcLayerImagery', () => {
     expect(layer.brightness).toEqual(0.7)
     expect(layer.contrast).toEqual(0.6)
     await testVm.unload()
-    layer = testVm.getCesiumObject() as CesiumNative.ImageryLayer
+    layer = testVm.getCesiumObject() as Cesium.ImageryLayer
     expect(layer).toBeUndefined()
     await testVm.load()
-    layer = testVm.getCesiumObject() as CesiumNative.ImageryLayer
+    layer = testVm.getCesiumObject() as Cesium.ImageryLayer
     expect(layer).toBeDefined()
   }, 10000)
 })

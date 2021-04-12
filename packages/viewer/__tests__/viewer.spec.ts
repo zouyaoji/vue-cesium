@@ -1,4 +1,4 @@
-import { VcComponentPublicInstance, Cesium as CesiumNative } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { mount, config } from '@vue/test-utils'
 import Viewer from '../src'
@@ -17,7 +17,7 @@ describe('VcViewer', () => {
     const vm = wrapper.vm as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
     await vm.createPromise
-    const viewer = vm.getCesiumObject() as CesiumNative.Viewer
+    const viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer instanceof Cesium.Viewer).toBe(true)
     expect((viewer.bottomContainer as HTMLElement).style.display !== 'inline').toBe(true)
     expect(viewer.animation).toBeUndefined()
@@ -68,7 +68,7 @@ describe('VcViewer', () => {
     const vm = wrapper.vm as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
     await vm.createPromise
-    let viewer = vm.getCesiumObject() as CesiumNative.Viewer
+    let viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer instanceof Cesium.Viewer).toBe(true)
     // showCredit
     expect((viewer.bottomContainer as HTMLElement).style.display === 'none').toBe(true)
@@ -158,11 +158,11 @@ describe('VcViewer', () => {
     expect(viewerReady).toBe(true)
     await vm.unload()
     expect(viewerReady).toBe(false)
-    viewer = vm.getCesiumObject() as CesiumNative.Viewer
+    viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer).toBeUndefined()
     await vm.load()
     expect(viewerReady).toBe(true)
-    viewer = vm.getCesiumObject() as CesiumNative.Viewer
+    viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer instanceof Cesium.Viewer).toBe(true)
   }, 20000)
 })

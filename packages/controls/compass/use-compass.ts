@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { AnyFunction, VcComponentInternalInstance, Cesium as CesiumNative } from '@vue-cesium/utils/types'
+import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import CameraFlightPath from './CameraFlightPath'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import { VcTooltip } from '@vue-cesium/ui'
@@ -178,7 +178,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     }
   }
 
-  const orbit = (instance: VcComponentInternalInstance, compassElement: HTMLElement, cursorVector: CesiumNative.Cartesian2) => {
+  const orbit = (instance: VcComponentInternalInstance, compassElement: HTMLElement, cursorVector: Cesium.Cartesian2) => {
     const { Cartesian2, Cartesian3, defined, getTimestamp, Math: CesiumMath, Matrix4, Ellipsoid, Ray, SceneMode, Transforms } = Cesium
     let scene = instance.viewer.scene
     let camera = scene.camera
@@ -343,7 +343,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     updateAngleAndOpacity(cursorVector, compassElement.getBoundingClientRect().width)
   }
 
-  const rotate = (instance: VcComponentInternalInstance, compassElement: HTMLElement, cursorVector: CesiumNative.Cartesian2) => {
+  const rotate = (instance: VcComponentInternalInstance, compassElement: HTMLElement, cursorVector: Cesium.Cartesian2) => {
     if (!props.enableCompassOuterRing) {
       return
     }

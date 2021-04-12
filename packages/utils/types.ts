@@ -1,5 +1,3 @@
-// 并没打包 仅用于 cesium api 提示 和 类型判断功能
-import * as Cesium from 'cesium'
 import { Emitter } from 'mitt'
 import type { App, CSSProperties, HTMLAttributes } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
@@ -233,5 +231,3 @@ export {
   DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
   TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption
 }
-
-export type { Cesium }

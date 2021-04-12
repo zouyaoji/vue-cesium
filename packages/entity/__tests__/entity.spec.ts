@@ -1,4 +1,4 @@
-import { VcComponentPublicInstance, Cesium as CesiumNative, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcEntity from '../src'
 import VcViewer from '@vue-cesium/viewer'
@@ -63,7 +63,7 @@ describe('VcEntity', () => {
     expect(wrapper.vm.$refs.entity).toBeDefined()
     const testVm = wrapper.vm.$refs.entity as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let entity = readyObj.cesiumObject as CesiumNative.Entity
+    let entity = readyObj.cesiumObject as Cesium.Entity
     expect(entity instanceof Cesium.Entity).toBe(true)
     expect(entity.position.getValue(void 0).equalsEpsilon(Cesium.Cartesian3.fromDegrees(108, 32), Cesium.Math.EPSILON6)).toBe(true)
     expect(entity.point).toBeDefined()
@@ -85,10 +85,10 @@ describe('VcEntity', () => {
     // wrapper.find('canvas').element.dispatchEvent(pointerdownEvent)
     // wrapper.find('canvas').element.dispatchEvent(pointerupEvent)
     await testVm.unload()
-    entity = testVm.getCesiumObject() as CesiumNative.Entity
+    entity = testVm.getCesiumObject() as Cesium.Entity
     expect(entity).toBeUndefined()
     await testVm.load()
-    entity = testVm.getCesiumObject() as CesiumNative.Entity
+    entity = testVm.getCesiumObject() as Cesium.Entity
     expect(entity).toBeDefined()
   }, 10000)
 })

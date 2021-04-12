@@ -1,5 +1,5 @@
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { Cesium as CesiumNative, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import * as coordtransform from '@vue-cesium/utils/coordtransform'
 import useCommon from '../use-common'
 
@@ -10,7 +10,7 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
   vcInstance.renderByParent = true
   // computed
   vcInstance.mount = async () => {
-    const imageryProvider = vcInstance.cesiumObject as CesiumNative.ImageryProvider
+    const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
     imageryProvider.readyPromise.then(() => {
       const listener = getInstanceListener(vcInstance, 'readyPromise')
       listener && ctx.emit('readyPromise', imageryProvider)

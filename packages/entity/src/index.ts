@@ -1,5 +1,5 @@
 import { defineComponent, getCurrentInstance, h } from 'vue'
-import { Cesium as CesiumNative, EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
+import { EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { position, plane } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -86,7 +86,7 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
-      return $services?.entities?.remove(instance.cesiumObject as CesiumNative.Entity)
+      return $services?.entities?.remove(instance.cesiumObject as Cesium.Entity)
     }
 
     const updateGraphics = (graphics, emitType: EntityEmitType) => {
