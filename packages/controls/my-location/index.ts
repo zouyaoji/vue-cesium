@@ -111,7 +111,7 @@ export default defineComponent({
           }
         })
       })
-      Promise.all([promiseAppend, promiseLoadAmap]).then(e => {
+      return Promise.all([promiseAppend, promiseLoadAmap]).then(e => {
         return e[0]
       })
     }
