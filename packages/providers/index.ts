@@ -5,7 +5,7 @@ import VcProviderImageryBingmaps from './bingmaps'
 import VcProviderImageryGoogleearthEnterprise from './google-earth'
 import VcProviderImageryGrid from './grid'
 import VcProviderImageryIon from './ion'
-import VcProviderImageryStyleMapbox from './mapbox-style'
+import VcProviderImageryMapboxStyle from './mapbox-style'
 import VcProviderImageryOsm from './osm'
 import VcProviderImageryTileSingle from './single-tile'
 import VcProviderImagerySupermap from './supermap'
@@ -24,7 +24,7 @@ const components = [
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -50,7 +50,7 @@ export {
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
