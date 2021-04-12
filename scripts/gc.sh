@@ -31,7 +31,7 @@ mkdir -p "$DIRNAME/__tests__"
 
 # cat > $DIRNAME/src/index.vue <<EOF
 cat > $DIRNAME/src/index.ts <<EOF
-import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -102,7 +102,7 @@ cat > $DIRNAME/package.json <<EOF
 EOF
 
 cat > $DIRNAME/__tests__/$INPUT_NAME.spec.ts <<EOF
-import { VcComponentPublicInstance, Cesium as CesiumNative, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance,  ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
 import Vc$NAME from '../src'
