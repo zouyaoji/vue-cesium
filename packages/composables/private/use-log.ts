@@ -4,14 +4,16 @@ import { isString } from '@vue-cesium/utils/util'
 export default function(vcInstance: VcComponentInternalInstance) {
   const makeLog = (prefix = '') => {
     return function(...args) {
-      if (prefix) {
-        if (isString(args[0])) {
-          args[0] = prefix.trim() + ' ' + args[0]
-        } else {
-          args = [prefix.trim(), ...args]
+      if (process.env.NODE_ENV !== 'production') {
+        if (prefix) {
+          if (isString(args[0])) {
+            args[0] = prefix.trim() + ' ' + args[0]
+          } else {
+            args = [prefix.trim(), ...args]
+          }
         }
+        console.log(...args)
       }
-      console.log(...args)
     }
   }
 

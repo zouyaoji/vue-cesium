@@ -38,7 +38,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     return
   }
   const parentVcInstance = getVcParentInstance(vcInstance)
-  const eventsState = useEvents(props, vcInstance)
+  const eventsState = useEvents(props, vcInstance, logger)
   vcInstance.children = []
 
   const entityGraphics = [

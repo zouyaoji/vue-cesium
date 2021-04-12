@@ -3,7 +3,7 @@ import { AnyObject, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { isArray } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
-export default function (props, vcInstance: VcComponentInternalInstance) {
+export default function (props, vcInstance: VcComponentInternalInstance, logger) {
   const $vc = vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions
   const bindEvents = (cesiumObject: AnyObject, cesiumEvents: Array<string>, register = true) => {
     const ev = cesiumEvents || vcInstance.cesiumEvents || []
@@ -14,7 +14,7 @@ export default function (props, vcInstance: VcComponentInternalInstance) {
           const methodName = register ? 'addEventListener' : 'removeEventListener'
           listener && cesiumObject[eventName][methodName](listener)
         } else if (process.env.VUECESIUM_DEBUG) {
-          // warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
+          logger.warn('Add event linstener of ' + eventName + ' failed, try to upgrade Cesium to latest version.')
         }
       })
   }
