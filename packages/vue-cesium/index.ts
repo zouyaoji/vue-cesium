@@ -2,7 +2,7 @@ import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
-import VcImageryLayer from '@vue-cesium/imagery-layer'
+import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
@@ -71,7 +71,7 @@ const components = [
   VcDistanceLegend,
   VcNavigation,
 
-  VcImageryLayer,
+  VcLayerImagery,
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
@@ -139,7 +139,7 @@ export {
   VcDistanceLegend,
   VcNavigation,
 
-  VcImageryLayer,
+  VcLayerImagery,
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
