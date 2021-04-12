@@ -372,6 +372,25 @@ otherOpts: {
 }
 ```
 
+```js
+// zoomOutOptions
+{
+  name: 'vc-icons-zoom-out',
+  size: '24px',
+  color: '#fff',
+  background: 'transparent',
+  round: true,
+  flat: true,
+  label: undefined,
+  stack: false,
+  tooltip: {
+    delay: 500,
+    anchor: 'bottom middle',
+    offset: [0, 20]
+  }
+}
+```
+
 :::
 
 ### VcZoomControl 事件
