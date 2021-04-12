@@ -1,16 +1,5 @@
-<template>
-  <div>
-    <p>
-      <img :src="options && options.image" :alt="t('vc.navigation.screenshot')" class="vc-map-image">
-    </p>
-    <h1 v-if="options.credits.length && options.showCredit">{{ t('vc.navigation.credit') }}</h1>
-    <ul v-if="options.credits.length && options.showCredit">
-      <li v-for="(credit, index) in credits" :key="'credit' + index" v-html="credit"></li>
-    </ul>
-  </div>
-</template>
-<script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref } from 'vue'
+
+import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref, h, createCommentVNode } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { t } from '@vue-cesium/locale'
 
@@ -19,7 +8,7 @@ const VcPrintView = defineComponent({
   props: {
     options: Object
   },
-  setup(props) {
+  setup (props) {
     // state
     const ready = ref(false)
     const printingStarted = ref(false)
@@ -79,11 +68,33 @@ const VcPrintView = defineComponent({
     onUnmounted(() => {
       stopCheckingForImages()
     })
-    return {
-      t
+
+    return () => {
+      const child = []
+      child.push(h('p', {}, h('img', {
+        src: props.options?.image,
+        alt: t('vc.navigation.screenshot'),
+        class: 'vc-map-image'
+      })))
+      if (props.options?.credits.length && props.options?.showCredit) {
+        child.push(h('h1', {}, t('vc.navigation.credit')))
+      } else {
+        child.push(createCommentVNode('v-if'))
+      }
+      if (props.options?.credits.length && props.options?.showCredit) {
+        const inner = []
+        props.options?.credits.forEach(credit => {
+          inner.push(h('li', {
+            innerHTML: credit
+          }))
+        })
+        child.push(h('ul', {}, inner))
+      } else {
+        child.push(createCommentVNode('v-if'))
+      }
+      return h('div', {}, child)
     }
   }
 })
 
 export default VcPrintView
-</script>
