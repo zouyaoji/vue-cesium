@@ -1009,14 +1009,14 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         second: 'numeric',
         hour12: false
       })
-      .replaceAll(',', '')
+      .replace(/,/g, '')
     const dateString: string = jsDate
       .toLocaleString(t('name'), {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       })
-      .replaceAll(',', '')
+      .replace(/,/g, '')
 
     if (!ignoredate && (viewModel || jsDate.getHours() + jsDate.getMinutes() === 0)) {
       return dateString
