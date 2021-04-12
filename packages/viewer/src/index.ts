@@ -1,5 +1,5 @@
 
-import { defineComponent, provide, getCurrentInstance, h, createCommentVNode } from 'vue'
+import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, ExtractPropTypes } from 'vue'
 import useViewer from './useViewer'
 import defaultProps from './defaultProps'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
@@ -7,12 +7,13 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { viewerEvents, emits } from './events'
 import { VcSkeleton } from '@vue-cesium/ui'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcViewer',
   props: defaultProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumEvents = ['selectedEntityChanged', 'trackedEntityChanged']
     instance.cesiumMembersEvents = viewerEvents
@@ -46,7 +47,7 @@ export default defineComponent({
         createCommentVNode('vc-viewer'),
         h('div', {
           ref: viewerStates.viewerRef,
-          class: 'VcViewer',
+          class: kebabCase(instance.proxy.$options.name),
           id: 'cesiumContainer',
           style: { width: '100%', height: '100%' }
         }, hSlot(ctx.slots.default))
