@@ -47,7 +47,7 @@ export function getModifierDirections(mod) {
 }
 
 export const getTouchTarget =
-  (platform().isIOS|| window.navigator.vendor.toLowerCase().indexOf('apple') > -1)
+  (platform().isIOS|| navigator.vendor.toLowerCase().indexOf('apple') > -1)
     ? () => document
     : target => target
 

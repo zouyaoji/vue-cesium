@@ -84,7 +84,7 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   unload?(): Promise<boolean>
   reload?(): Promise<boolean>
   createPromise?: Promise<ReadyObj>
-  getCesiumObject?(): ReadyObj
+  getCesiumObject?(): unknown
   __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
   __setProvider?(cesiumObject: AnyObject) : boolean
 }>
