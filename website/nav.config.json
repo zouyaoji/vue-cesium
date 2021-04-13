@@ -99,7 +99,7 @@
             },
             {
               "path": "/providers/vc-provider-imagery-tile-single",
-              "title": "单文件瓦片"
+              "title": "单瓦片"
             },
             {
               "path": "/providers/vc-provider-imagery-urltemplate",
@@ -117,7 +117,20 @@
         },
         {
           "groupName": "地形",
-          "list": []
+          "list": [
+            {
+              "path": "/providers/vc-provider-terrain-cesium",
+              "title": "CesiumTerrain"
+            },
+            {
+              "path": "/providers/vc-provider-terrain-arcgis-tiled-elevation",
+              "title": "ArcGISTiledElevation"
+            },
+            {
+              "path": "/providers/vc-provider-terrain-tianditu",
+              "title": "TiandituTerrain"
+            }
+          ]
         },
         {
           "groupName": "数据源",
@@ -325,7 +338,16 @@
         },
         {
           "groupName": "Terrain",
-          "list": []
+          "list": [
+            {
+              "path": "/providers/vc-provider-terrain-cesium",
+              "title": "CesiumTerrain"
+            },
+            {
+              "path": "/providers/vc-provider-terrain-arcgis-tiled-elevation",
+              "title": "ArcGISTiledElevation"
+            }
+          ]
         },
         {
           "groupName": "Datasource",
