@@ -531,7 +531,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       const { defined } = Cesium
       if (defined(val)) {
         for (let i = 0; i < viewer.imageryLayers.length; i++) {
-          viewer.imageryLayers[i].imageryProvider === oldVal && viewer.imageryLayers.remove(viewer.imageryLayers[i])
+          viewer.imageryLayers.get(i).imageryProvider === oldVal && viewer.imageryLayers.remove(viewer.imageryLayers[i])
         }
         viewer.imageryLayers.addImageryProvider(val)
       }
