@@ -6,6 +6,7 @@ declare namespace Cesium {
   const knockout: any
   const when: any
   const Uri: any
+  const AttributeCompression: any
   interface Viewer {
     viewerWidgetResized?: Event
     _selectionIndicator?: SelectionIndicator
@@ -75,6 +76,8 @@ declare namespace Cesium {
   var SuperMapImageryProvider: any
   // eslint-disable-next-line no-var
   var TiandituImageryProvider: any
+  // eslint-disable-next-line no-var
+  var GeoTerrainProvider: any
   // eslint-disable-next-line no-var
   var BaiduMapImageryProvider: any
 }

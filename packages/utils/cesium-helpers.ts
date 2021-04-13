@@ -788,7 +788,7 @@ export function makeCameraOptions (camera: CameraOption) {
   if (hasOwn(camera, 'position')) {
     const position = camera.position
     destination = makeCartesian3(position) as Cesium.Cartesian3
-    if (hasOwn(position, 'lng') && hasOwn(position, 'lat')) {
+    if ((hasOwn(position, 'lng') && hasOwn(position, 'lat')) || isArray(position)) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading || 360),
         pitch: CesiumMath.toRadians(camera.pitch || -90),
@@ -805,7 +805,7 @@ export function makeCameraOptions (camera: CameraOption) {
     const rectangle = camera.retangle
     destination = makeRectangle(rectangle) as Cesium.Rectangle
     Rectangle.validate(destination)
-    if (hasOwn(rectangle, 'west') && hasOwn(rectangle, 'south') && hasOwn(rectangle, 'east') && hasOwn(rectangle, 'north')) {
+    if ((hasOwn(rectangle, 'west') && hasOwn(rectangle, 'south') && hasOwn(rectangle, 'east') && hasOwn(rectangle, 'north')) || isArray(rectangle)) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading || 360),
         pitch: CesiumMath.toRadians(camera.pitch || -90),

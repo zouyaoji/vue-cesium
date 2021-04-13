@@ -19,11 +19,17 @@ import {
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
-  VcProviderImageryWmts
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainTianditu
 } from '../index'
 
 const option = {
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+  accessToken:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 }
 
 config.global.config.globalProperties = {}
@@ -651,3 +657,100 @@ describe('VcProviderImageryWmts', () => {
     expect(provider).toBeDefined()
   }, 10000)
 })
+
+const cesiumTerrainApp = {
+  components: {
+    VcViewer,
+    VcProviderTerrainCesium
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-provider-terrain-cesium ref="provider"></vc-provider-terrain-cesium>
+      </vc-viewer>
+    </div>
+  `
+}
+
+describe('VcProviderTerrainCesium', () => {
+  test('render test', async () => {
+    const wrapper = mount(cesiumTerrainApp)
+    const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
+    const readyObj: ReadyObj = await testVm.createPromise
+    let provider = readyObj.cesiumObject as Cesium.CesiumTerrainProvider
+    expect(provider).toBeDefined()
+    await provider.readyPromise
+    expect(provider.ready).toBe(true)
+    await testVm.unload()
+    provider = testVm.getCesiumObject() as Cesium.CesiumTerrainProvider
+    expect(provider).toBeUndefined()
+    await testVm.load()
+    provider = testVm.getCesiumObject() as Cesium.CesiumTerrainProvider
+    expect(provider).toBeDefined()
+  }, 10000)
+})
+
+
+const arcgisTiledElevationApp = {
+  components: {
+    VcViewer,
+    VcProviderTerrainArcgisTiledElevation
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-provider-terrain-arcgis-tiled-elevation ref="provider"></vc-provider-terrain-arcgis-tiled-elevation>
+      </vc-viewer>
+    </div>
+  `
+}
+
+describe('ArcGISTiledElevationTerrainProvider', () => {
+  test('render test', async () => {
+    const wrapper = mount(arcgisTiledElevationApp)
+    const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
+    const readyObj: ReadyObj = await testVm.createPromise
+    let provider = readyObj.cesiumObject as Cesium.ArcGISTiledElevationTerrainProvider
+    expect(provider).toBeDefined()
+    await provider.readyPromise
+    expect(provider.ready).toBe(true)
+    await testVm.unload()
+    provider = testVm.getCesiumObject() as Cesium.ArcGISTiledElevationTerrainProvider
+    expect(provider).toBeUndefined()
+    await testVm.load()
+    provider = testVm.getCesiumObject() as Cesium.ArcGISTiledElevationTerrainProvider
+    expect(provider).toBeDefined()
+  }, 10000)
+})
+
+// const tiandituTerrainApp = {
+//   components: {
+//     VcViewer,
+//     VcProviderTerrainTianditu
+//   },
+//   template: `
+//     <div class="test-viewer">
+//       <vc-viewer>
+//         <vc-provider-terrain-tianditu ref="provider" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-terrain-tianditu>
+//       </vc-viewer>
+//     </div>
+//   `
+// }
+
+// describe('VcProviderTerrainTianditu', () => {
+//   test('render test', async () => {
+//     const wrapper = mount(tiandituTerrainApp)
+//     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
+//     const readyObj: ReadyObj = await testVm.createPromise
+//     let provider = readyObj.cesiumObject
+//     expect(provider).toBeDefined()
+//     await provider.readyPromise
+//     expect(provider.ready).toBe(true)
+//     await testVm.unload()
+//     provider = testVm.getCesiumObject()
+//     expect(provider).toBeUndefined()
+//     await testVm.load()
+//     provider = testVm.getCesiumObject()
+//     expect(provider).toBeDefined()
+//   }, 10000)
+// })

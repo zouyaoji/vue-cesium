@@ -17,6 +17,7 @@ import {
   makeQuaternion,
   makeOptions
 } from './cesium-helpers'
+import { PropType } from 'vue'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start
@@ -1092,7 +1093,7 @@ const ellipsoid = {
  */
 const credit = {
   credit: {
-    type: [String, Object],
+    type: [String, Object] as PropType<string | Cesium.Credit>,
     default: ''
   }
 }
