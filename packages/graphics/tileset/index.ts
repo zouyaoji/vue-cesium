@@ -19,7 +19,7 @@ export default defineComponent({
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'TilesetGraphics'
+    instance.cesiumClass = 'Cesium3DTilesetGraphics'
     useGraphics(props, ctx, instance)
 
     return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
