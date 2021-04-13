@@ -20,7 +20,12 @@ import {
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
-  VcProviderImageryWmts
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu
 } from '@vue-cesium/providers'
 import VcEntity from '@vue-cesium/entity'
 // grapics
@@ -90,6 +95,11 @@ const components = [
   VcProviderImageryWms,
   VcProviderImageryWmts,
 
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu,
+
   VcEntity,
   VcGraphicsBillboard,
   VcGraphicsBox,
@@ -157,6 +167,11 @@ export {
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu,
 
   VcEntity,
   VcGraphicsBillboard,
