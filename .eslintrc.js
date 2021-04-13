@@ -14,9 +14,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   extends: ['plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended'],
-  globals: {
-    Cesium: true
-  },
   rules: {
     // js/ts
     'eol-last': 'error',

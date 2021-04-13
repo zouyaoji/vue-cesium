@@ -35,8 +35,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^0.0.7",
     "lodash": "^4.17.20",
-    "mitt": "^2.1.0",
-    "proj4": "^2.7.2"
+    "mitt": "^2.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.13",
