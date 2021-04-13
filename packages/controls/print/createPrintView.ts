@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import VcPrintView from './print-view.vue'
+import VcPrintView from './print-view'
 import { t } from '@vue-cesium/locale'
 
 const styles = `

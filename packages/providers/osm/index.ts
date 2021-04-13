@@ -8,6 +8,7 @@ import {
   maximumLevel,
   ellipsoid
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryOsm',
@@ -26,12 +27,12 @@ export default defineComponent({
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
     },
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'OpenStreetMapImageryProvider'
     userProviders(props, ctx, instance)
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

@@ -2,14 +2,11 @@ import { debounce } from 'lodash'
 import prettifyCoordinates from './prettifyCoordinates'
 import prettifyProjection from './prettifyProjection'
 import EarthGravityModel1996 from './EarthGravityModel1996'
-
-import { Cesium as CesiumNative } from '@vue-cesium/utils/types'
-
 interface MouseCoords {
   proj4Projection: string
   projectionUnits: string
   proj4longlat: string
-  lastHeightSamplePosition: CesiumNative.Cartographic
+  lastHeightSamplePosition: Cesium.Cartographic
   accurateSamplingDebounceTime: number
   tileRequestInFlight: Promise<any>
   elevation: string

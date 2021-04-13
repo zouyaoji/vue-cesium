@@ -39,6 +39,6 @@ export default defineComponent({
     instance.cesiumClass = 'PolylineGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode()
   }
 })

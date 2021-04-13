@@ -1,5 +1,4 @@
 import {
-  Cesium as CesiumNative,
   AnyFunction,
   Cartesian2Option,
   Cartesian3Option,
@@ -30,9 +29,9 @@ import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getOb
  * const position = makeCartesian2(options)
  */
 export function makeCartesian2 (
-  val: CesiumNative.CallbackProperty | CesiumNative.Cartesian2 | Cartesian2Option | Array<number> | AnyFunction,
+  val: Cesium.CallbackProperty | Cesium.Cartesian2 | Cartesian2Option | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.Cartesian2 | CesiumNative.CallbackProperty {
+): Cesium.Cartesian2 | Cesium.CallbackProperty {
   const { Cartesian2, CallbackProperty } = Cesium
 
   if (val instanceof Cesium.Cartesian2 || val instanceof CallbackProperty) {
@@ -73,15 +72,15 @@ export function makeCartesian2 (
  */
 export function makeCartesian3 (
   val:
-    | CesiumNative.CallbackProperty
-    | CesiumNative.Cartesian3
+    | Cesium.CallbackProperty
+    | Cesium.Cartesian3
     | Cartesian3Option
     | CartographicInDegreeOption
     | Array<number>
     | AnyFunction,
   isConstant = false
-): CesiumNative.Cartesian3 | CesiumNative.CallbackProperty | CesiumNative.SampledPositionProperty |
-  CesiumNative.CompositePositionProperty | CesiumNative.ConstantPositionProperty | CesiumNative.TimeIntervalCollectionPositionProperty {
+): Cesium.Cartesian3 | Cesium.CallbackProperty | Cesium.SampledPositionProperty |
+  Cesium.CompositePositionProperty | Cesium.ConstantPositionProperty | Cesium.TimeIntervalCollectionPositionProperty {
   const { CallbackProperty, Cartesian3, SampledPositionProperty, CompositePositionProperty, ConstantPositionProperty, TimeIntervalCollectionPositionProperty } = Cesium
 
   if (val instanceof Cartesian3 || val instanceof CallbackProperty || val instanceof SampledPositionProperty ||
@@ -117,15 +116,15 @@ export function makeCartesian3 (
  */
 export function makeCartesian3Array (
   vals:
-    | CesiumNative.CallbackProperty
-    | Array<CesiumNative.Cartesian3>
+    | Cesium.CallbackProperty
+    | Array<Cesium.Cartesian3>
     | Array<Cartesian3Option>
     | Array<CartographicInDegreeOption>
     | Array<number>
     | Array<Array<number>>
     | AnyFunction,
   isConstant = false
-): Array<CesiumNative.Cartesian3> | CesiumNative.CallbackProperty {
+): Array<Cesium.Cartesian3> | Cesium.CallbackProperty {
   const { CallbackProperty, Cartesian3 } = Cesium
 
   if (vals instanceof CallbackProperty) {
@@ -136,7 +135,7 @@ export function makeCartesian3Array (
     if (vals[0] instanceof Cartesian3) {
       // If the first element is Cartesian3, it is considered to be Array<Cartesian3>.
       // 第一个元素为Cartesian3,认为已经存的是 Array<Cartesian3> 数组了
-      return vals as Array<CesiumNative.Cartesian3>
+      return vals as Array<Cesium.Cartesian3>
     }
 
     if (isArray(vals[0])) {
@@ -187,14 +186,14 @@ export function makeCartesian3Array (
  */
 export function makeCartesian2Array (
   vals:
-    | CesiumNative.CallbackProperty
-    | Array<CesiumNative.Cartesian2>
+    | Cesium.CallbackProperty
+    | Array<Cesium.Cartesian2>
     | Array<Cartesian2Option>
     | Array<Array<number>>
     | Array<number>
     | AnyFunction,
   isConstant
-): CesiumNative.CallbackProperty | Array<CesiumNative.Cartesian2> {
+): Cesium.CallbackProperty | Array<Cesium.Cartesian2> {
   const { CallbackProperty, Cartesian2 } = Cesium
 
   if (vals instanceof CallbackProperty) {
@@ -203,10 +202,10 @@ export function makeCartesian2Array (
 
   if (isArray(vals)) {
     if (vals[0] instanceof Cartesian2) {
-      return vals as Array<CesiumNative.Cartesian2>
+      return vals as Array<Cesium.Cartesian2>
     }
 
-    const points: Array<CesiumNative.Cartesian2> = []
+    const points: Array<Cesium.Cartesian2> = []
     if (isArray(vals[0])) {
       const values = vals as Array<Array<number>>
       values.forEach(item => {
@@ -238,9 +237,9 @@ export function makeCartesian2Array (
  * const orientation = makeQuaternion(options) // returns Cesium.Quaternion
  */
 export function makeQuaternion (
-  val: CesiumNative.CallbackProperty | CesiumNative.Quaternion | Cartesian4Option | Array<number> | AnyFunction,
+  val: Cesium.CallbackProperty | Cesium.Quaternion | Cartesian4Option | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.CallbackProperty | CesiumNative.Quaternion | CesiumNative.VelocityOrientationProperty {
+): Cesium.CallbackProperty | Cesium.Quaternion | Cesium.VelocityOrientationProperty {
   const { CallbackProperty, Quaternion, VelocityOrientationProperty } = Cesium
 
   if (val instanceof Quaternion || val instanceof CallbackProperty || val instanceof VelocityOrientationProperty) {
@@ -269,7 +268,7 @@ export function makeQuaternion (
  */
 function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>) {
   val.forEach(item => {
-    item.positions = makeCartesian3Array(item.positions) as Array<CesiumNative.Cartesian3>
+    item.positions = makeCartesian3Array(item.positions) as Array<Cesium.Cartesian3>
     if (item.holes) {
       parsePolygonHierarchyJson(item.holes)
     }
@@ -282,15 +281,15 @@ function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>) {
  */
 export function makePolygonHierarchy (
   val:
-    | CesiumNative.CallbackProperty
-    | CesiumNative.PolygonHierarchy
+    | Cesium.CallbackProperty
+    | Cesium.PolygonHierarchy
     | PolygonHierarchyOption
-    | Array<CesiumNative.Cartesian3>
+    | Array<Cesium.Cartesian3>
     | Array<Cartesian3Option>
     | Array<Array<number>>
     | AnyFunction,
   isConstant = false
-): CesiumNative.CallbackProperty | CesiumNative.PolygonHierarchy | PolygonHierarchyOption {
+): Cesium.CallbackProperty | Cesium.PolygonHierarchy | PolygonHierarchyOption {
   const { PolygonHierarchy, CallbackProperty } = Cesium
 
   if (val instanceof PolygonHierarchy || val instanceof CallbackProperty) {
@@ -302,13 +301,13 @@ export function makePolygonHierarchy (
   }
 
   if (isArray(val) && val.length >= 3) {
-    const points = makeCartesian3Array(val) as Array<CesiumNative.Cartesian3>
+    const points = makeCartesian3Array(val) as Array<Cesium.Cartesian3>
     return new PolygonHierarchy(points)
   }
 
   if (isPlainObject(val) && hasOwn(val, 'positions')) {
     const value = val as PolygonHierarchyOption
-    value.positions = makeCartesian3Array(value.positions) as Array<CesiumNative.Cartesian3>
+    value.positions = makeCartesian3Array(value.positions) as Array<Cesium.Cartesian3>
     parsePolygonHierarchyJson(value.holes)
     return value
   }
@@ -326,9 +325,9 @@ export function makePolygonHierarchy (
  * const nearFarScalar = makeNearFarScalar(options)
  */
 export function makeNearFarScalar (
-  val: CesiumNative.NearFarScalar | CesiumNative.CallbackProperty | NearFarScalarOption | Array<number> | AnyFunction,
+  val: Cesium.NearFarScalar | Cesium.CallbackProperty | NearFarScalarOption | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.NearFarScalar | CesiumNative.CallbackProperty {
+): Cesium.NearFarScalar | Cesium.CallbackProperty {
   const { NearFarScalar, CallbackProperty } = Cesium
 
   if (val instanceof NearFarScalar || val instanceof CallbackProperty) {
@@ -360,9 +359,9 @@ export function makeNearFarScalar (
  * const distanceDisplayCondition = makeDistanceDisplayCondition(options) // return Cesium.DistanceDisplayCondition
  */
 export function makeDistanceDisplayCondition (
-  val: CesiumNative.DistanceDisplayCondition | CesiumNative.CallbackProperty | DistanceDisplayConditionOption | Array<number> | AnyFunction,
+  val: Cesium.DistanceDisplayCondition | Cesium.CallbackProperty | DistanceDisplayConditionOption | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.DistanceDisplayCondition | CesiumNative.CallbackProperty {
+): Cesium.DistanceDisplayCondition | Cesium.CallbackProperty {
   const { DistanceDisplayCondition, CallbackProperty } = Cesium
 
   if (val instanceof DistanceDisplayCondition || val instanceof CallbackProperty) {
@@ -396,9 +395,9 @@ export function makeDistanceDisplayCondition (
  * const color = makeColor(options) // return Cesium.Color
  */
 export function makeColor (
-  val: CesiumNative.Color | CesiumNative.CallbackProperty | string | Array<number> | ColorInByteOption | Cartesian4Option | AnyFunction,
+  val: Cesium.Color | Cesium.CallbackProperty | string | Array<number> | ColorInByteOption | Cartesian4Option | AnyFunction,
   isConstant = false
-): CesiumNative.Color | CesiumNative.CallbackProperty {
+): Cesium.Color | Cesium.CallbackProperty {
   const { Color, CallbackProperty } = Cesium
 
   if (val instanceof Color || val instanceof CallbackProperty) {
@@ -436,17 +435,17 @@ export function makeColor (
  */
 export function makeMaterialProperty (
   val:
-    | CesiumNative.CallbackProperty
-    | CesiumNative.Color
-    | CesiumNative.CheckerboardMaterialProperty
-    | CesiumNative.ColorMaterialProperty
-    | CesiumNative.GridMaterialProperty
-    | CesiumNative.ImageMaterialProperty
-    | CesiumNative.PolylineArrowMaterialProperty
-    | CesiumNative.PolylineDashMaterialProperty
-    | CesiumNative.PolylineGlowMaterialProperty
-    | CesiumNative.PolylineOutlineMaterialProperty
-    | CesiumNative.StripeMaterialProperty
+    | Cesium.CallbackProperty
+    | Cesium.Color
+    | Cesium.CheckerboardMaterialProperty
+    | Cesium.ColorMaterialProperty
+    | Cesium.GridMaterialProperty
+    | Cesium.ImageMaterialProperty
+    | Cesium.PolylineArrowMaterialProperty
+    | Cesium.PolylineDashMaterialProperty
+    | Cesium.PolylineGlowMaterialProperty
+    | Cesium.PolylineOutlineMaterialProperty
+    | Cesium.StripeMaterialProperty
     | MaterialOption
     | string
     | Array<number>
@@ -609,9 +608,9 @@ export function makeMaterial (val: string | Array<number> | MaterialOption) {
  * @returns {Rectangle}
  */
 export function makeRectangle (
-  val: CesiumNative.Rectangle | CesiumNative.CallbackProperty | RectangleInDegreeOption | Cartesian4Option | Array<number> | AnyFunction,
+  val: Cesium.Rectangle | Cesium.CallbackProperty | RectangleInDegreeOption | Cartesian4Option | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.Rectangle | CesiumNative.CallbackProperty | CesiumNative.RectangleGraphics {
+): Cesium.Rectangle | Cesium.CallbackProperty | Cesium.RectangleGraphics {
   const { Rectangle, RectangleGraphics, CallbackProperty } = Cesium
 
   // Entiy 的 rectangle 属性不能调用这个方法
@@ -650,9 +649,9 @@ export function makeRectangle (
  * const boundingRectangle = makeBoundingRectangle(options)
  */
 export function makeBoundingRectangle (
-  val: CesiumNative.BoundingRectangle | CesiumNative.CallbackProperty | BoundingRectangleOption | Array<number> | AnyFunction,
+  val: Cesium.BoundingRectangle | Cesium.CallbackProperty | BoundingRectangleOption | Array<number> | AnyFunction,
   isConstant = false
-): CesiumNative.BoundingRectangle | CesiumNative.CallbackProperty {
+): Cesium.BoundingRectangle | Cesium.CallbackProperty {
   const { BoundingRectangle, CallbackProperty } = Cesium
 
   if (val instanceof BoundingRectangle || val instanceof CallbackProperty) {
@@ -681,9 +680,9 @@ export function makeBoundingRectangle (
  * @returns {Plane}
  */
 export function makePlane (
-  val: CesiumNative.CallbackProperty | CesiumNative.Plane | PlaneOption | Array<any> | AnyFunction,
+  val: Cesium.CallbackProperty | Cesium.Plane | PlaneOption | Array<any> | AnyFunction,
   isConstant = false
-): CesiumNative.CallbackProperty | CesiumNative.Plane | CesiumNative.PlaneGraphics {
+): Cesium.CallbackProperty | Cesium.Plane | Cesium.PlaneGraphics {
   const { Cartesian3, Plane, PlaneGraphics, CallbackProperty } = Cesium
 
   // Entiy 和 PlaneGraphics 都有个 plane 属性 要区别一下
@@ -693,12 +692,12 @@ export function makePlane (
 
   if (isPlainObject(val) && hasOwn(val, 'normal')) {
     const value = val as PlaneOption
-    Cartesian3.normalize(makeCartesian3(value.normal) as CesiumNative.Cartesian3, value.normal as CesiumNative.Cartesian3)
-    return new Plane(value.normal as CesiumNative.Cartesian3, value.distance)
+    Cartesian3.normalize(makeCartesian3(value.normal) as Cesium.Cartesian3, value.normal as Cesium.Cartesian3)
+    return new Plane(value.normal as Cesium.Cartesian3, value.distance)
   }
 
   if (isArray(val)) {
-    const point3D = makeCartesian3(val[0]) as CesiumNative.Cartesian3
+    const point3D = makeCartesian3(val[0]) as Cesium.Cartesian3
     const normalizePoint3D = Cartesian3.normalize(point3D, new Cartesian3())
     return new Plane(normalizePoint3D, val[1])
   }
@@ -715,7 +714,7 @@ export function makePlane (
  * @param {*} val
  */
 export function makeTranslationRotationScale (
-  val: CesiumNative.TranslationRotationScale | CesiumNative.CallbackProperty | TranslationRotationScaleOption | AnyFunction | Array<any>,
+  val: Cesium.TranslationRotationScale | Cesium.CallbackProperty | TranslationRotationScaleOption | AnyFunction | Array<any>,
   isConstant = false
 ) {
   const { TranslationRotationScale, CallbackProperty } = Cesium
@@ -726,17 +725,17 @@ export function makeTranslationRotationScale (
   if (isPlainObject(val) && hasOwn(val, 'translation')) {
     const value = val as TranslationRotationScaleOption
     return new TranslationRotationScale(
-      makeCartesian3(value.translation) as CesiumNative.Cartesian3,
-      makeQuaternion(value.rotation) as CesiumNative.Quaternion,
-      makeCartesian3(value.scale) as CesiumNative.Cartesian3
+      makeCartesian3(value.translation) as Cesium.Cartesian3,
+      makeQuaternion(value.rotation) as Cesium.Quaternion,
+      makeCartesian3(value.scale) as Cesium.Cartesian3
     )
   }
 
   if (isArray(val)) {
     return new TranslationRotationScale(
-      makeCartesian3(val[0]) as CesiumNative.Cartesian3,
-      makeQuaternion(val[1]) as CesiumNative.Quaternion,
-      makeCartesian3(val[2]) as CesiumNative.Cartesian3
+      makeCartesian3(val[0]) as Cesium.Cartesian3,
+      makeQuaternion(val[1]) as Cesium.Quaternion,
+      makeCartesian3(val[2]) as Cesium.Cartesian3
     )
   }
 
@@ -761,7 +760,7 @@ export function makeOptions (val) {
   return val
 }
 
-export function captureScreenshot (viewer: CesiumNative.Viewer) {
+export function captureScreenshot (viewer: Cesium.Viewer) {
   const scene = viewer.scene
   const promise: Promise<string> = new Promise((resolve, reject) => {
     const removeCallback = viewer.scene.postRender.addEventListener(() => {
@@ -783,13 +782,13 @@ export function captureScreenshot (viewer: CesiumNative.Viewer) {
 export function makeCameraOptions (camera: CameraOption) {
   const { Math: CesiumMath, Rectangle } = Cesium
 
-  let destination: CesiumNative.Cartesian3 | CesiumNative.Rectangle = undefined
+  let destination: Cesium.Cartesian3 | Cesium.Rectangle = undefined
   let orientation: HeadingPitchRollOption = {}
 
   if (hasOwn(camera, 'position')) {
     const position = camera.position
-    destination = makeCartesian3(position) as CesiumNative.Cartesian3
-    if (hasOwn(position, 'lng') && hasOwn(position, 'lat')) {
+    destination = makeCartesian3(position) as Cesium.Cartesian3
+    if ((hasOwn(position, 'lng') && hasOwn(position, 'lat')) || isArray(position)) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading || 360),
         pitch: CesiumMath.toRadians(camera.pitch || -90),
@@ -804,9 +803,9 @@ export function makeCameraOptions (camera: CameraOption) {
     }
   } else if (hasOwn(camera, 'rectangle')) {
     const rectangle = camera.retangle
-    destination = makeRectangle(rectangle) as CesiumNative.Rectangle
+    destination = makeRectangle(rectangle) as Cesium.Rectangle
     Rectangle.validate(destination)
-    if (hasOwn(rectangle, 'west') && hasOwn(rectangle, 'south') && hasOwn(rectangle, 'east') && hasOwn(rectangle, 'north')) {
+    if ((hasOwn(rectangle, 'west') && hasOwn(rectangle, 'south') && hasOwn(rectangle, 'east') && hasOwn(rectangle, 'north')) || isArray(rectangle)) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading || 360),
         pitch: CesiumMath.toRadians(camera.pitch || -90),
@@ -827,7 +826,7 @@ export function makeCameraOptions (camera: CameraOption) {
   }
 }
 
-export function setViewerCamera (viewer: CesiumNative.Viewer, camera: CameraOption) {
+export function setViewerCamera (viewer: Cesium.Viewer, camera: CameraOption) {
   const { destination, orientation } = makeCameraOptions(camera)
   viewer.camera.setView({
     destination: destination,
@@ -835,7 +834,7 @@ export function setViewerCamera (viewer: CesiumNative.Viewer, camera: CameraOpti
   })
 }
 
-export function flyToCamera (viewer: CesiumNative.Viewer, camera: CameraOption, options?) {
+export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, options?) {
   const { destination, orientation } = makeCameraOptions(camera)
   viewer.camera.flyTo({
     destination: options.destination || destination,

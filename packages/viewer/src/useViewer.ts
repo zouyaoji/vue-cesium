@@ -6,7 +6,6 @@ import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import {
-  Cesium as CesiumNative,
   VcComponentInternalInstance,
   CameraOption,
   ReadyObj,
@@ -33,11 +32,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   const vcMitt: Emitter = mitt()
   const { emit } = ctx
 
+  const logger = useLog(vcInstance)
+
   vcInstance.mounted = false
   vcInstance.vcMitt = vcMitt
   vcInstance.cesiumClass = 'Viewer'
   vcInstance.children = []
-  const eventsState = useEvents(props, vcInstance)
+  const eventsState = useEvents(props, vcInstance, logger)
 
   const layout = reactive({
     toolbarContainerRC: undefined,
@@ -46,7 +47,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     bottomContainerRC: undefined
   })
 
-  const logger = useLog(vcInstance)
+
   logger.log('viewer creating')
 
   // watch
@@ -254,7 +255,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         )
         viewer.imageryLayers.lowerToBottom(baseLayer)
       } else if (!defined(viewer.baseLayerPicker) || viewer.baseLayerPicker.isDestroyed()) {
-        const createBaseLayerPicker = !defined(viewer.globe) && (!defined(viewer.baseLayerPicker) || props.baseLayerPicker !== false)
+        const createBaseLayerPicker = !defined(viewer.scene.globe) && (!defined(viewer.baseLayerPicker) || props.baseLayerPicker !== false)
 
         if (createBaseLayerPicker && defined(props.imageryProvider)) {
           throw new DeveloperError(`options.imageryProvider is not available when using the BaseLayerPicker widget.
@@ -530,7 +531,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       const { defined } = Cesium
       if (defined(val)) {
         for (let i = 0; i < viewer.imageryLayers.length; i++) {
-          viewer.imageryLayers[i].imageryProvider === oldVal && viewer.imageryLayers.remove(viewer.imageryLayers[i])
+          viewer.imageryLayers.get(i).imageryProvider === oldVal && viewer.imageryLayers.remove(viewer.imageryLayers[i])
         }
         viewer.imageryLayers.addImageryProvider(val)
       }
@@ -690,7 +691,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     }
     options = removeEmpty(options)
 
-    let viewer: CesiumNative.Viewer
+    let viewer: Cesium.Viewer
 
     if (!global.XE) {
       viewer = new Viewer($(viewerRef), options)
@@ -739,8 +740,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       })
 
     if (defined(viewer.animation)) {
-      viewer.animation.viewModel.dateFormatter = localeDateTimeFormatter as CesiumNative.AnimationViewModel.DateFormatter
-      viewer.animation.viewModel.timeFormatter = localeTimeFormatter as CesiumNative.AnimationViewModel.TimeFormatter
+      viewer.animation.viewModel.dateFormatter = localeDateTimeFormatter as Cesium.AnimationViewModel.DateFormatter
+      viewer.animation.viewModel.timeFormatter = localeTimeFormatter as Cesium.AnimationViewModel.TimeFormatter
     }
 
     if (defined(viewer.timeline)) {
@@ -972,8 +973,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * 添加影像图层事件回调方法，在此维护影像图层相对顺序。
    * @param layer 添加的图层。
    */
-  const onImageryLayerAdded = (layer: CesiumNative.ImageryLayer) => {
-    const viewer = vcInstance.viewer as CesiumNative.Viewer
+  const onImageryLayerAdded = (layer: Cesium.ImageryLayer) => {
+    const viewer = vcInstance.viewer as Cesium.Viewer
     const { autoSortImageryLayers } = props
 
     if (viewer.baseLayerPicker) {
@@ -982,7 +983,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     const { defined } = Cesium
     if (autoSortImageryLayers) {
       layer.sortOrder = defined(layer.sortOrder) ? layer.sortOrder : 9999
-      viewer.imageryLayers._layers.sort((a: CesiumNative.ImageryLayer, b: CesiumNative.ImageryLayer) => a.sortOrder - b.sortOrder)
+      viewer.imageryLayers._layers.sort((a: Cesium.ImageryLayer, b: Cesium.ImageryLayer) => a.sortOrder - b.sortOrder)
       viewer.imageryLayers._update()
     }
   }
@@ -993,8 +994,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * @param ignoredate
    */
   const localeDateTimeFormatter = function (
-    date: CesiumNative.JulianDate,
-    viewModel?: CesiumNative.AnimationViewModel,
+    date: Cesium.JulianDate,
+    viewModel?: Cesium.AnimationViewModel,
     ignoredate?: boolean
   ): string {
     const { JulianDate } = Cesium
@@ -1009,14 +1010,14 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         second: 'numeric',
         hour12: false
       })
-      .replaceAll(',', '')
+      .replace(/,/g, '')
     const dateString: string = jsDate
       .toLocaleString(t('name'), {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       })
-      .replaceAll(',', '')
+      .replace(/,/g, '')
 
     if (!ignoredate && (viewModel || jsDate.getHours() + jsDate.getMinutes() === 0)) {
       return dateString
@@ -1030,7 +1031,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * @param time
    * @param viewModel
    */
-  const localeTimeFormatter = function (time: CesiumNative.JulianDate, viewModel: CesiumNative.AnimationViewModel): string {
+  const localeTimeFormatter = function (time: Cesium.JulianDate, viewModel: Cesium.AnimationViewModel): string {
     return localeDateTimeFormatter(time, viewModel, true)
   }
 
@@ -1139,10 +1140,10 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         get Cesium () {
           return vcInstance.Cesium
         },
-        get viewer (): CesiumNative.Viewer {
+        get viewer (): Cesium.Viewer {
           return vcInstance.viewer
         },
-        get dataSources (): CesiumNative.DataSourceCollection {
+        get dataSources (): Cesium.DataSourceCollection {
           return vcInstance.viewer?.dataSources
         },
         get entities () {

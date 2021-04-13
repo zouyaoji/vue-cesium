@@ -13,6 +13,7 @@ import {
   tileWidth,
   tileHeight,
   maximumLevel } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'VcProviderImageryArcgisMapserver',
   props: {
@@ -36,12 +37,12 @@ export default defineComponent({
     ...tileHeight,
     ...maximumLevel
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ArcGisMapServerImageryProvider'
     userProviders(props, ctx, instance)
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

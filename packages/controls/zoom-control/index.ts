@@ -9,6 +9,7 @@ import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/ui'
 import { useCommon } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { t } from '@vue-cesium/locale'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcZoomControl',
@@ -217,6 +218,7 @@ export default defineComponent({
       }
 
       const content = h(VcBtn, {
+        class: `vc-${kebabCase(type)}`,
         ref: btnRef,
         size: options.size,
         flat: options.flat,

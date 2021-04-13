@@ -3,7 +3,7 @@ import { PropType } from 'vue'
 export default {
   gridFileUrl: {
     type: String,
-    default: 'https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC'
+    default: 'https://zouyaoji.top/vue-cesium/SampleData/WW15MGH.DAC'
   },
   position: {
     type: String,

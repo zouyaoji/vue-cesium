@@ -1,10 +1,10 @@
 
 import { getCurrentInstance } from 'vue'
-import type { Ref } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
 import isUndefined from 'lodash/isUndefined'
+import isNull from 'lodash/isNull'
+import camelCase from 'lodash/camelCase'
 import { AnyFunction, AnyObject } from './types'
-import { camelCase } from 'lodash'
 
 export function useGlobalConfig () {
   const vm: any = getCurrentInstance()
@@ -68,13 +68,15 @@ export function removeEmpty (obj: unknown): AnyObject {
 }
 
 export function isEmptyObj (obj: unknown): boolean {
-  if (isUndefined(obj)) {
+  if (isUndefined(obj) || isNull(obj)) {
     return true
   }
 
   if (obj instanceof Element) {
     return false
   }
+
+
 
   const arr = Object.keys(obj)
   return arr.length === 0

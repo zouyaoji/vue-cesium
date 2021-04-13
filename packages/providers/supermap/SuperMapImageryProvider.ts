@@ -1,5 +1,4 @@
 import IndexedDBScheduler from './IndexedDBScheduler'
-import { Cesium as CesiumNative } from '@vue-cesium/utils/types'
 class SuperMapImageryProvider {
   tablename: string
   _indexedDBScheduler: any

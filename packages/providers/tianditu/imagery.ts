@@ -3,6 +3,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { userProviders } from '@vue-cesium/composables'
 import { minimumLevel, maximumLevel, rectangle } from '@vue-cesium/utils/cesium-props'
 import TiandituImageryProvider from './TiandituImageryProvider'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcProviderImageryTianditu',
@@ -17,7 +18,7 @@ export default defineComponent({
       default: 'https'
     }
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -30,6 +31,6 @@ export default defineComponent({
       const options = providersState.transformProps(props)
       return new Cesium.TiandituImageryProvider(options)
     }
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

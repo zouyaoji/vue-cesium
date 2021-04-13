@@ -7,7 +7,8 @@ module.exports = {
       }
     }
   },
-  testEnvironment: 'jsdom',
+  runner: 'jest-electron/runner',
+  testEnvironment: 'jest-electron/environment',
   transform: {
     '^.+\\.vue$': 'vue-jest',
     '^.+\\.(t|j)sx?$': [
@@ -31,5 +32,11 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   // u can change this option to a more specific folder for test single component or util when dev
   // for example, ['<rootDir>/packages/input']
-  roots: ['<rootDir>']
+  roots: ['<rootDir>'],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['html', 'lcov', 'text'],
+  collectCoverageFrom: [
+    'packages/*/src/**/*.ts'
+  ]
 }

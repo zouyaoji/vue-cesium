@@ -24,6 +24,7 @@ import {
   classificationType,
   zIndex
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcGraphicsPolygon',
@@ -57,6 +58,6 @@ export default defineComponent({
     instance.cesiumClass = 'PolygonGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

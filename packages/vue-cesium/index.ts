@@ -2,7 +2,7 @@ import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
-import VcImageryLayer from '@vue-cesium/imagery-layer'
+import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
@@ -10,7 +10,7 @@ import {
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -20,7 +20,12 @@ import {
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
-  VcProviderImageryWmts
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu
 } from '@vue-cesium/providers'
 import VcEntity from '@vue-cesium/entity'
 // grapics
@@ -71,14 +76,14 @@ const components = [
   VcDistanceLegend,
   VcNavigation,
 
-  VcImageryLayer,
+  VcLayerImagery,
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -89,6 +94,11 @@ const components = [
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu,
 
   VcEntity,
   VcGraphicsBillboard,
@@ -139,14 +149,14 @@ export {
   VcDistanceLegend,
   VcNavigation,
 
-  VcImageryLayer,
+  VcLayerImagery,
   VcProviderImageryArcgisMapserver,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -157,6 +167,11 @@ export {
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu,
 
   VcEntity,
   VcGraphicsBillboard,

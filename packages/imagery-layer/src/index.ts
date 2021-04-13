@@ -1,9 +1,10 @@
 import { defineComponent, getCurrentInstance, h, provide } from 'vue'
-import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcLayerImagery',
@@ -23,24 +24,24 @@ export default defineComponent({
     // methods
     instance.createCesiumObject = async () => {
       const options = commonState.transformProps(props)
-      const imageryProvider = (props.imageryProvider || {}) as CesiumNative.ImageryProvider
+      const imageryProvider = (props.imageryProvider || {}) as Cesium.ImageryProvider
       return new Cesium.ImageryLayer(imageryProvider, options)
     }
     instance.mount = async () => {
       const { viewer } = $services
-      const imageryLayer = instance.cesiumObject as CesiumNative.ImageryLayer
+      const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
       imageryLayer.sortOrder = props.sortOrder
       viewer.imageryLayers.add(imageryLayer)
       return !viewer.isDestroyed() && viewer.imageryLayers.contains(imageryLayer)
     }
     instance.unmount = async () => {
       const { viewer } = $services
-      const imageryLayer = instance.cesiumObject as CesiumNative.ImageryLayer
+      const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
       return !viewer.isDestroyed() && viewer.imageryLayers.remove(imageryLayer)
     }
 
     const setProvider = provider => {
-      const imageryLayer = instance.cesiumObject as CesiumNative.ImageryLayer
+      const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
       (imageryLayer as any)._imageryProvider = provider
       const listener = getInstanceListener(instance, 'update:imageryProvider')
       if (listener) emit('update:imageryProvider', provider)
@@ -60,7 +61,7 @@ export default defineComponent({
 
     return () => (
       h('i', {
-        class: instance.proxy.$options.name,
+        class: kebabCase(instance.proxy.$options.name),
         style: { display: 'none !important' }
       }, hSlot(ctx.slots.default))
     )

@@ -24,6 +24,7 @@ import {
   articulations,
   clippingPlanes
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'VcGraphicsModel',
   props: {
@@ -56,6 +57,6 @@ export default defineComponent({
     instance.cesiumClass = 'ModelGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

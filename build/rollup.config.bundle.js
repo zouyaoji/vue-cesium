@@ -29,8 +29,9 @@ export default [
         tsconfigOverride: {
           'include': [
             'packages/**/*',
-            'typings/vue-shim.d.ts',
+            'typings/Cesium.d.ts',
             'typings/cesium-shim.d.ts',
+            'typings/vue-shim.d.ts',
           ],
           'exclude': [
             'node_modules',

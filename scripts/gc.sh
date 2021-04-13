@@ -31,9 +31,10 @@ mkdir -p "$DIRNAME/__tests__"
 
 # cat > $DIRNAME/src/index.vue <<EOF
 cat > $DIRNAME/src/index.ts <<EOF
-import { Cesium as CesiumNative, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'Vc${NAME}',
   props: { },
@@ -69,7 +70,7 @@ export default defineComponent({
       getCesiumObject: () => instance.cesiumObject
     })
 
-    return () => createCommentVNode(instance.proxy.\$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.\$options.name))
   }
 })
 EOF
@@ -101,19 +102,43 @@ cat > $DIRNAME/package.json <<EOF
 EOF
 
 cat > $DIRNAME/__tests__/$INPUT_NAME.spec.ts <<EOF
-import { mount } from '@vue/test-utils'
-import $NAME from '../src'
+import { VcComponentPublicInstance,  ReadyObj } from '@vue-cesium/utils/types'
+import { mount, config } from '@vue/test-utils'
+import VcViewer from '@vue-cesium/viewer'
+import Vc$NAME from '../src'
 
-const AXIOM = 'LML is the best girl'
+const option = {
+  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+}
 
-describe('$NAME.vue', () => {
-  test('render test', () => {
-    const wrapper = mount($NAME, {
-      slots: {
-        default: AXIOM,
-      },
-    })
-    expect(wrapper.text()).toEqual(AXIOM)
-  })
+config.global.config.globalProperties = {}
+config.global.config.globalProperties.\$VueCesium = option
+
+const App = {
+  components: {
+    VcViewer,
+    Vc$NAME
+  },
+  template: \`
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-$NAME ref="$INPUT_NAME"></vc-$NAME>
+      </vc-viewer>
+    </div>
+ \`,
+  data () {
+    return {
+
+    }
+  }
+}
+
+describe('Vc$NAME', () => {
+  test('render test', async () => {
+    const wrapper = mount(App)
+    expect(wrapper.vm.\$refs.$INPUT_NAME).toBeDefined()
+    const testVm = wrapper.vm.\$refs.$INPUT_NAME as VcComponentPublicInstance
+    const readyObj: ReadyObj = await testVm.createPromise
+  }, 10000)
 })
 EOF

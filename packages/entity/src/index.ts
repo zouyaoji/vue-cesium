@@ -1,9 +1,10 @@
 import { defineComponent, getCurrentInstance, h } from 'vue'
-import { Cesium as CesiumNative, EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
+import { EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { position, plane } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcEntity',
@@ -85,7 +86,7 @@ export default defineComponent({
     }
 
     instance.unmount = async () => {
-      return $services?.entities?.remove(instance.cesiumObject as CesiumNative.Entity)
+      return $services?.entities?.remove(instance.cesiumObject as Cesium.Entity)
     }
 
     const updateGraphics = (graphics, emitType: EntityEmitType) => {
@@ -112,7 +113,7 @@ export default defineComponent({
 
     return () =>(
       h('i', {
-        class: instance.proxy.$options.name,
+        class: kebabCase(instance.proxy.$options.name),
         style: { display: 'none !important' }
       }, hSlot(ctx.slots.default))
     )

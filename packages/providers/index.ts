@@ -1,21 +1,27 @@
 import { App } from 'vue'
-import VcProviderImageryArcgisMapserver from './arcgis'
+import VcProviderImageryArcgisMapserver from './arcgis/imagery'
 import VcProviderImageryBaidumap from './baidu'
 import VcProviderImageryBingmaps from './bingmaps'
 import VcProviderImageryGoogleearthEnterprise from './google-earth'
 import VcProviderImageryGrid from './grid'
 import VcProviderImageryIon from './ion'
-import VcProviderImageryStyleMapbox from './mapbox-style'
+import VcProviderImageryMapboxStyle from './mapbox-style'
 import VcProviderImageryOsm from './osm'
 import VcProviderImageryTileSingle from './single-tile'
 import VcProviderImagerySupermap from './supermap'
-import VcProviderImageryTianditu from './tianditu'
+import VcProviderImageryTianditu from './tianditu/imagery'
 import VcProviderImageryTileCoordinates from './tile-coordinates'
 import VcProviderImageryTileMapservice from './tile-map-service'
 import VcProviderImageryTiledcache from './tiled-cache'
 import VcProviderImageryUrltemplate from './url-template'
 import VcProviderImageryWms from './wms'
 import VcProviderImageryWmts from './wmts'
+
+import VcProviderTerrainCesium from './cesium-terrain'
+import VcProviderTerrainArcgisTiledElevation from './arcgis/terrain'
+import VcProviderTerrainVrTheworld from './vr-theworld'
+import VcProviderTerrainTianditu from './tianditu/terrain'
+
 
 const components = [
   VcProviderImageryArcgisMapserver,
@@ -24,7 +30,7 @@ const components = [
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -34,7 +40,12 @@ const components = [
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
-  VcProviderImageryWmts
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu
 ]
 
 const install = (app: App): void => {
@@ -50,7 +61,7 @@ export {
   VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryStyleMapbox,
+  VcProviderImageryMapboxStyle,
   VcProviderImageryOsm,
   VcProviderImageryTileSingle,
   VcProviderImagerySupermap,
@@ -60,7 +71,12 @@ export {
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
-  VcProviderImageryWmts
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu
 }
 
 export default {

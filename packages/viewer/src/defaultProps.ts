@@ -1,4 +1,4 @@
-import { CameraOption, Cesium } from '@vue-cesium/utils/types'
+import { CameraOption } from '@vue-cesium/utils/types'
 import { PropType } from 'vue'
 
 export default {

@@ -23,6 +23,7 @@ import {
   rotation,
   granularity
 } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'VcGraphicsEllipse',
   props: {
@@ -54,6 +55,6 @@ export default defineComponent({
     instance.cesiumClass = 'EllipseGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

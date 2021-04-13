@@ -1,15 +1,12 @@
-import { Cesium as CesiumNative } from './types'
-
 const hasSymbol = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol'
-
 export interface InstallOptions {
   cesiumPath?: string
   accessToken?: string
   lang?: any
   i18n?: (...args: any[]) => string
   scriptPromise?: Promise<unknown>
-  pickScreenSpaceEventHandler?: CesiumNative.ScreenSpaceEventHandler
-  viewerScreenSpaceEventHandler?: CesiumNative.ScreenSpaceEventHandler
+  pickScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
+  viewerScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
   viewerUnloadingPromise?: Promise<boolean>
 }
 

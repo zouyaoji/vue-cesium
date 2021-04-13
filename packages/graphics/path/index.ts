@@ -2,6 +2,7 @@ import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import { show, width, material, distanceDisplayCondition } from '@vue-cesium/utils/cesium-props'
+import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
   name: 'VcGraphicsPath',
   props: {
@@ -23,6 +24,6 @@ export default defineComponent({
     instance.cesiumClass = 'PathGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(instance.proxy.$options.name)
+    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

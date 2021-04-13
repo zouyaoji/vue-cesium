@@ -6,16 +6,21 @@ const { noVcPrefixFile } = require('./common')
 const outsideImport = /import .* from '..\/(.*?)\/src\/.*/
 
 // global.d.ts
-fs.copyFileSync(
-  path.resolve(__dirname, '../typings/vue-shim.d.ts'),
-  path.resolve(__dirname, '../lib/vue-cesium.d.ts'),
-)
+const cesiumShimBuffer =  fs.readFileSync(path.resolve(__dirname, '../typings/cesium-shim.d.ts'))
+const vueShimBuffer =  fs.readFileSync(path.resolve(__dirname, '../typings/vue-shim.d.ts'))
+const cesiumBuffer =  fs.readFileSync(path.resolve(__dirname, '../typings/Cesium.d.ts'))
 
+fs.appendFileSync(path.resolve(__dirname, '../lib/vue-cesium.d.ts'), vueShimBuffer)
+fs.appendFileSync(path.resolve(__dirname, '../lib/vue-cesium.d.ts'), cesiumShimBuffer)
+fs.appendFileSync(path.resolve(__dirname, '../lib/vue-cesium.d.ts'), cesiumBuffer)
 // index.d.ts
 const newIndexPath = path.resolve(__dirname, '../lib/index.d.ts')
 fs.copyFileSync(path.resolve(__dirname, '../lib/vue-cesium/index.d.ts'), newIndexPath)
 const index = fs.readFileSync(newIndexPath)
-const newIndex = index.toString().replace(/@vue-cesium\//g, './vc-').replace('vc-utils', 'utils')
+const newIndex = index
+  .toString()
+  .replace(/@vue-cesium\//g, './vc-')
+  .replace('vc-utils', 'utils')
 fs.writeFileSync(newIndexPath, newIndex)
 
 // remove ep
@@ -31,14 +36,16 @@ fs.readdirSync(libDirPath).forEach(comp => {
     if (fs.lstatSync(path.resolve(libDirPath, comp)).isDirectory()) {
       // rename
       const newCompName = `vc-${comp}`
-      fs.renameSync(path.resolve(libDirPath, comp),
-        path.resolve(libDirPath, newCompName))
+      fs.renameSync(path.resolve(libDirPath, comp), path.resolve(libDirPath, newCompName))
       // re-import
       const imp = fs.readFileSync(path.resolve(__dirname, '../lib', newCompName, 'index.d.ts')).toString()
-      if(outsideImport.test(imp) || imp.includes('@vue-cesium/')) {
-        const newImp = imp.replace(outsideImport, (i, c) => {
-          return i.replace(`../${c}`, `../vc-${c}`)
-        }).replace('@vue-cesium/', '../vc-').replace('vc-utils', 'utils')
+      if (outsideImport.test(imp) || imp.includes('@vue-cesium/')) {
+        const newImp = imp
+          .replace(outsideImport, (i, c) => {
+            return i.replace(`../${c}`, `../vc-${c}`)
+          })
+          .replace('@vue-cesium/', '../vc-')
+          .replace('vc-utils', 'utils')
         fs.writeFileSync(path.resolve(__dirname, '../lib', newCompName, 'index.d.ts'), newImp)
       }
     }

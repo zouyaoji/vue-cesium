@@ -126,7 +126,10 @@ export default defineComponent({
       }
 
       if (props.showPerformanceInfo) {
-        viewer.scene._performanceDisplay._container.style.display = 'block'
+        if (viewer.scene._performanceDisplay) {
+          viewer.scene._performanceDisplay._container.style.display = 'block'
+        }
+
         viewer.scene.postRender.removeEventListener(onScenePostRender)
       }
 
