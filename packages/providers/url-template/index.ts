@@ -40,7 +40,7 @@ export default defineComponent({
     ...enablePickFeatures,
     customTags: Object
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

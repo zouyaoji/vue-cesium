@@ -21,7 +21,7 @@ export default defineComponent({
       default: 'MapQuest, SuperMap iServer Imagery'
     }
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

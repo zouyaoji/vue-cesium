@@ -42,7 +42,7 @@ export default defineComponent({
       default: 256
     },
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

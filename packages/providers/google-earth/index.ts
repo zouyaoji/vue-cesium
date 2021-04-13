@@ -17,7 +17,7 @@ export default defineComponent({
     ...credit,
     metadata: Object
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

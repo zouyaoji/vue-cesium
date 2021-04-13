@@ -27,7 +27,7 @@ export default defineComponent({
       default: 'MapQuest, Open Street Map and contributors, CC-BY-SA'
     },
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
