@@ -6,7 +6,6 @@ declare namespace Cesium {
   const knockout: any
   const when: any
   const Uri: any
-  const AttributeCompression: any
   interface Viewer {
     viewerWidgetResized?: Event
     _selectionIndicator?: SelectionIndicator
@@ -50,7 +49,7 @@ declare namespace Cesium {
     } | undefined
   }
 
-  class GlobeSurfaceTile {
+  interface GlobeSurfaceTile {
     pickTriangle?(ray: Ray, mode: SceneMode, projection: MapProjection, cullBackFaces: boolean): {
       intersection: Cartesian3
       v0: Cartesian3
@@ -70,7 +69,6 @@ declare namespace Cesium {
     _layers: ImageryLayer[]
     _update (): void
   }
-
 
   // eslint-disable-next-line no-var
   var SuperMapImageryProvider: any

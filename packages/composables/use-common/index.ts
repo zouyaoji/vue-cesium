@@ -325,6 +325,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     unload,
     reload,
     createPromise,
+    transformProp,
     transformProps,
     unwatchFns,
     setPropsWatcher,

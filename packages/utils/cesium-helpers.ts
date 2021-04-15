@@ -750,7 +750,7 @@ export function makeOptions (val) {
   const cmpName = vcInstance.proxy.$options.name
   const result: any = {}
   switch (cmpName) {
-    case 'vc-datasource-geojson':
+    case 'VcDatasourceGeojson':
       Object.assign(result, val)
       result && result.markerColor && (result.markerColor = makeColor(result.markerColor))
       result && result.stroke && (result.stroke = makeColor(result.stroke))
