@@ -2,6 +2,7 @@ import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
+// imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
   VcProviderImageryArcgisMapserver,
@@ -27,6 +28,15 @@ import {
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu
 } from '@vue-cesium/providers'
+
+// datasources
+import {
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml
+} from '@vue-cesium/datasources'
+
 import VcEntity from '@vue-cesium/entity'
 // grapics
 import {
@@ -100,6 +110,11 @@ const components = [
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
 
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml,
+
   VcEntity,
   VcGraphicsBillboard,
   VcGraphicsBox,
@@ -172,6 +187,11 @@ export {
   VcProviderTerrainArcgisTiledElevation,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
+
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml,
 
   VcEntity,
   VcGraphicsBillboard,
