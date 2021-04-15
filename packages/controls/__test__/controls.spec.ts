@@ -1,13 +1,10 @@
 import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
-import { h, nextTick } from 'vue'
 import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '../index'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { data } from '../../../lib/utils/cesium-props'
 
 const option = {
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
 }
 
 config.global.config.globalProperties = {}
