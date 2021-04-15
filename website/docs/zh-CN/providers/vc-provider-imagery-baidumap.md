@@ -1,6 +1,6 @@
 ## BaiduMap
 
-`vc-provider-imagery-baidumap` 组件用于加载百度地图或者跟百度地图一样的切片方案的瓦片服务。**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+`vc-provider-imagery-baidumap` 组件用于加载百度地图或者跟百度地图一样的切片方案的瓦片服务，支持用`projectionTransforms`属性`纠偏`。**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
 ### 基础用法
 

@@ -1,4 +1,4 @@
-.demo-block.demo-vc-viewer {
+.demo-block.demo-vc-datasource-custom {
   .#{$namespace}-row {
     border-radius: 100px;
     align-items: baseline;
@@ -21,5 +21,9 @@
     &:first-child {
       margin-left: 20px;
     }
+  }
+
+  .#{$namespace}-switch__label.is-active {
+    color: #409eff;
   }
 }

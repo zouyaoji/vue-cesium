@@ -134,7 +134,24 @@
         },
         {
           "groupName": "数据源",
-          "list": []
+          "list": [
+            {
+              "path": "/datasources/vc-datasource-custom",
+              "title": "Custom"
+            },
+            {
+              "path": "/datasources/vc-datasource-czml",
+              "title": "Czml"
+            },
+            {
+              "path": "/datasources/vc-datasource-geojson",
+              "title": "GeoJson"
+            },
+            {
+              "path": "/datasources/vc-datasource-kml",
+              "title": "Kml"
+            }
+          ]
         },
         {
           "groupName": "Graphics对象",
