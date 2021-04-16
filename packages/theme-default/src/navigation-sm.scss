@@ -1,0 +1,226 @@
+@import './core/variables.scss';
+
+// navigation
+.vc-navigation-sm {
+  display: block;
+  position: absolute;
+  padding: 0;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 300px;
+  width: 128px;
+  z-index: $z-top;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // pointer-events: none;
+
+  &:hover,
+  &:active {
+    .vc-compass-tilt-sm {
+      visibility: visible !important;
+    }
+    .vc-compass-tiltbar-sm {
+      visibility: visible !important;
+    }
+    .vc-compass-arrows-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-e-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-n-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-s-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-w-sm {
+      visibility: visible !important;
+    }
+  }
+
+  &:hover,
+  &:active {
+    .vc-zoom-control-sm {
+      visibility: visible !important;
+    }
+  }
+}
+// compass
+.vc-compass-sm {
+  pointer-events: auto;
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  overflow: hidden;
+
+  .vc-compass-outer-ring-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    transform: rotate(0rad);
+    -webkit-transform: rotate(0rad);
+    background-image: url('./images/vc-compass-outer-ring-sm.png');
+  }
+
+  .vc-compass-outer-ring-sm:active {
+    background-image: url('./images/vc-compass-outer-ring-active-sm.png');
+  }
+  .vc-compass-tilt-sm {
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    background-image: url('./images/vc-tilt-sm.png');
+  }
+
+  .vc-compass-arrows-sm {
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    top: 0px;
+    background-image: url('./images/vc-compass-arrows-sm.png');
+  }
+
+  .vc-compass-tiltbar-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-image: url('./images/vc-tiltbar-sm.png');
+    background-repeat: no-repeat;
+    z-index: $z-top;
+  }
+
+  .vc-arrows-e-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 52px;
+    left: 68px;
+
+    &:active {
+      background-image: url('./images/vc-arrows-e-sm.png');
+    }
+  }
+
+  .vc-arrows-n-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 32px;
+    left: 53px;
+    &:active {
+      background-image: url('./images/vc-arrows-n-sm.png');
+    }
+  }
+
+  .vc-arrows-s-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 74px;
+    left: 53px;
+    &:active {
+      background-image: url('./images/vc-arrows-s-sm.png');
+    }
+  }
+
+  .vc-arrows-w-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 52px;
+    left: 35px;
+    &:active {
+      background-image: url('./images/vc-arrows-w-sm.png');
+    }
+  }
+
+  &:hover,
+  &:active {
+    .vc-compass-tilt-sm {
+      visibility: visible !important;
+    }
+    .vc-compass-tiltbar-sm {
+      visibility: visible !important;
+    }
+    .vc-compass-arrows-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-e-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-n-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-s-sm {
+      visibility: visible !important;
+    }
+    .vc-arrows-w-sm {
+      visibility: visible !important;
+    }
+  }
+}
+
+.vc-navigation-sm .vc-compass-sm {
+  position: relative;
+}
+
+// zoom-control
+.vc-zoom-control-sm {
+  position: absolute;
+  width: 30px;
+  height: 150px;
+  background-image: url('./images/vc-zoom-control-sm.png');
+
+  .vc-zoomin-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    &:active {
+      background-image: url('./images/vc-zoomin-sm.png');
+    }
+  }
+
+  .vc-zoomout-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    bottom: 0px;
+
+    &:active {
+      background-image: url('./images/vc-zoomout-sm.png');
+    }
+  }
+
+  .vc-zoombar-sm {
+    cursor: pointer;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 65px;
+    background-image: url('./images/vc-zoombar-sm.png');
+  }
+
+  &:hover,
+  &:active {
+    visibility: visible !important;
+
+    // .vc-zoom-control-sm {
+    //   visibility: visible !important;
+    // }
+  }
+}
+.vc-navigation-sm .vc-zoom-control-sm {
+  position: relative;
+}

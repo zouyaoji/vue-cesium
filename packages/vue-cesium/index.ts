@@ -1,7 +1,18 @@
 import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
-import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
+import {
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcLocationBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm
+} from '@vue-cesium/controls'
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
@@ -85,6 +96,9 @@ const components = [
   VcLocationBar,
   VcDistanceLegend,
   VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm,
 
   VcLayerImagery,
   VcProviderImageryArcgisMapserver,
@@ -163,6 +177,9 @@ export {
   VcLocationBar,
   VcDistanceLegend,
   VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm,
 
   VcLayerImagery,
   VcProviderImageryArcgisMapserver,
