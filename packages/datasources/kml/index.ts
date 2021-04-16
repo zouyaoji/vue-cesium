@@ -19,7 +19,8 @@ export default defineComponent({
     ...data,
     ...options
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged', 'changedEvent', 'errorEvent', 'loadingEvent'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged',
+    'changedEvent', 'errorEvent', 'loadingEvent', 'refreshEvent', 'unsupportedNodeEvent'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

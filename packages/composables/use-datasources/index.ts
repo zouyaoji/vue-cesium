@@ -34,7 +34,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
       if (!vcInstance.mounted) {
         return
       }
-      console.log(newVal, oldVal)
       const datasource = vcInstance.cesiumObject as Cesium.DataSource
       if (newVal.length === oldVal.length) {
         for (let i = 0; i < newVal.length; i++) {

@@ -24,6 +24,7 @@ export type VcBtnOptions = {
     delay: number
     anchor: string
     offset: Array<number>
+    tip: string
   }
 }
 

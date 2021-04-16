@@ -35,7 +35,6 @@ describe('VcViewer', () => {
     }
     let clicked = false
     const onLeftClick = () => {
-      console.log('123')
       clicked = true
     }
     const wrapper = mount(Viewer, {
