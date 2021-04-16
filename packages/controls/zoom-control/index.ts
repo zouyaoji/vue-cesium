@@ -181,17 +181,17 @@ export default defineComponent({
       if (type === 'zoomIn') {
         btnRef = zoomInRef
         tooltipRef = zoomControlState.zoomInTooltipRef
-        tip = t('vc.navigation.zoomCotrol.zoomInTip')
+        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomInTip')
         onClick = zoomControlState.zoomIn
       } else if (type === 'zoomOut') {
         btnRef = zoomOutRef
         tooltipRef = zoomControlState.zoomOutTooltipRef
-        tip = t('vc.navigation.zoomCotrol.zoomOutTip')
+        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomOutTip')
         onClick = zoomControlState.zoomOut
       } else if (type === 'zoomReset') {
         btnRef = zoomResetRef
         tooltipRef = zoomControlState.resetTooltipRef
-        tip = t('vc.navigation.zoomCotrol.zoomResetTip')
+        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomResetTip')
         onClick = zoomControlState.zoomReset
       }
       const inner = []

@@ -39,7 +39,8 @@ export default {
     default: () => ({
       delay: 1000,
       anchor: 'bottom middle',
-      offset: [0, 20]
+      offset: [0, 20],
+      tip: void 0
     })
   }
 }

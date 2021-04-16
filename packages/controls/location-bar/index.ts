@@ -385,7 +385,7 @@ export default defineComponent({
               ...props.tooltip
             },
             () => h('strong', null,
-              t('vc.navigation.locationbar.tip')
+              props.tooltip.tip || t('vc.navigation.locationbar.tip')
             ))
           )
         } else {
