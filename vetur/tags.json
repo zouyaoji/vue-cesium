@@ -113,14 +113,24 @@
     ],
     "subtags": [
       "vc-compass",
+      "vc-compass-sm",
       "vc-zoom-control",
+      "vc-zoom-control-sm",
       "vc-print",
       "vc-my-location",
       "vc-location-bar",
       "vc-distance-legend",
       "vc-navigation",
+      "vc-navigation-sm",
       "vc-layer-imagery",
-      "vc-entity"
+      "vc-entity",
+      "vc-provider-terrain-cesium",
+      "vc-provider-terrain-arcgis-tiled-elevation",
+      "vc-provider-terrain-tianditu",
+      "vc-datasource-custom",
+      "vc-datasource-czml",
+      "vc-datasource-geojson",
+      "vc-datasource-kml"
     ],
     "description": "A base widget for building applications. It composites all of the standard Cesium widgets into one reusable package. The widget can always be extended by using mixins, which add functionality useful for a variety of applications."
   },
@@ -145,6 +155,10 @@
     ],
     "description": "Adds to the viewer a user friendly compass, navigator (zoom in/out), print button, location button, and distance scale graphical user interface."
   },
+  "vc-navigation-sm": {
+    "attributes": ["position", "offset", "compassOpts", "zoomOpts", "beforeLoad", "ready", "destroyed", "zoomEvt", "compassEvt"],
+    "description": "Adds to the viewer a user friendly compass, navigator (zoom in/out)."
+  },
   "vc-compass": {
     "attributes": [
       "enableCompassOuterRing",
@@ -154,6 +168,21 @@
       "outerOptions",
       "innerOptions",
       "markerOptions",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "compassEvt"
+    ],
+    "description": "Adds to the viewer a user friendly compass."
+  },
+  "vc-compass-sm": {
+    "attributes": [
+      "enableCompassOuterRing",
+      "duration",
+      "tooltip",
+      "autoHidden",
+      "position",
+      "offset",
       "beforeLoad",
       "ready",
       "destroyed",
@@ -183,6 +212,10 @@
       "destroyed",
       "zoomEvt"
     ],
+    "description": "Adds to the viewer a navigator (zoom in/out)."
+  },
+  "vc-zoom-control-sm": {
+    "attributes": ["position", "offset", "autoHidden", "tooltip", "beforeLoad", "ready", "destroyed", "zoomEvt"],
     "description": "Adds to the viewer a navigator (zoom in/out)."
   },
   "vc-print": {
@@ -937,5 +970,105 @@
       "destroyed"
     ],
     "description": "Describes a two dimensional wall defined as a line strip and optional maximum and minimum heights. The wall conforms to the curvature of the globe and can be placed along the surface or at altitude."
+  },
+  "vc-provider-terrain-cesium": {
+    "attributes": [
+      "url",
+      "requestVertexNormals",
+      "requestWaterMask",
+      "requestMetadata",
+      "ellipsoid",
+      "credit",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "readyPromise"
+    ],
+    "description": "A TerrainProvider that accesses terrain data in a Cesium terrain format."
+  },
+  "vc-provider-terrain-arcgis-tiled-elevation": {
+    "attributes": ["url", "ellipsoid", "token", "beforeLoad", "ready", "destroyed", "readyPromise"],
+    "description": "A TerrainProvider that produces terrain geometry by tessellating height maps retrieved from Elevation Tiles of an ArcGIS ImageService."
+  },
+  "vc-provider-terrain-tianditu": {
+    "attributes": ["url", "subdomains", "pluginPath", "dataType", "tileType", "token", "beforeLoad", "ready", "destroyed", "readyPromise"],
+    "description": "A TerrainProvider that produces terrain geometry by tessellating height maps retrieved from Elevation Tiles of Tianditu Service."
+  },
+  "vc-datasource-custom": {
+    "attributes": [
+      "show",
+      "enableEvent",
+      "entities",
+      "name",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "definitionChanged",
+      "clusterEvent",
+      "collectionChanged",
+      "changedEvent",
+      "errorEvent",
+      "loadingEvent"
+    ],
+    "description": "A DataSource implementation which can be used to manually manage a group of entities."
+  },
+  "vc-datasource-czml": {
+    "attributes": [
+      "show",
+      "enableEvent",
+      "entities",
+      "czml",
+      "options",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "definitionChanged",
+      "clusterEvent",
+      "collectionChanged",
+      "changedEvent",
+      "errorEvent",
+      "loadingEvent"
+    ],
+    "description": "A DataSource which processes CZML."
+  },
+  "vc-datasource-geojson": {
+    "attributes": [
+      "show",
+      "enableEvent",
+      "entities",
+      "data",
+      "options",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "definitionChanged",
+      "clusterEvent",
+      "collectionChanged",
+      "changedEvent",
+      "errorEvent",
+      "loadingEvent"
+    ],
+    "description": "A DataSource which processes both GeoJSON and TopoJSON data. simplestyle-spec properties will also be used if they are present."
+  },
+  "vc-datasource-kml": {
+    "attributes": [
+      "show",
+      "enableEvent",
+      "entities",
+      "data",
+      "options",
+      "beforeLoad",
+      "ready",
+      "destroyed",
+      "definitionChanged",
+      "clusterEvent",
+      "collectionChanged",
+      "changedEvent",
+      "errorEvent",
+      "loadingEvent",
+      "refreshEvent",
+      "unsupportedNodeEvent"
+    ],
+    "description": "A DataSource which processes Keyhole Markup Language 2.2 (KML)."
   }
 }

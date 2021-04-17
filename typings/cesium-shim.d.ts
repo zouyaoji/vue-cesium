@@ -6,6 +6,7 @@ declare namespace Cesium {
   const knockout: any
   const when: any
   const Uri: any
+  const GlobeSurfaceTile: any
   interface Viewer {
     viewerWidgetResized?: Event
     _selectionIndicator?: SelectionIndicator
@@ -24,6 +25,7 @@ declare namespace Cesium {
     _terrainExaggeration: number
     _eventHelper?: EventHelper
     _toolbar?: Element
+    _element?: Element
     _onInfoBoxCameraClicked?(val: InfoBoxViewModel): void
     _onInfoBoxClockClicked?(val: InfoBoxViewModel): void
     _clearObjects?: () => void
@@ -37,6 +39,7 @@ declare namespace Cesium {
 
   interface Scene {
     frameState: any
+    pickPositionWorldCoordinates (pickPositionWorldCoordinates: Cesium.Cartesian2, result?: Cesium.Cartesian3) : Cesium.Cartesian3
     _performanceDisplay: any
   }
 
@@ -49,14 +52,14 @@ declare namespace Cesium {
     } | undefined
   }
 
-  interface GlobeSurfaceTile {
-    pickTriangle?(ray: Ray, mode: SceneMode, projection: MapProjection, cullBackFaces: boolean): {
-      intersection: Cartesian3
-      v0: Cartesian3
-      v1: Cartesian3
-      v2: Cartesian3
-    } | undefined
-  }
+  // interface GlobeSurfaceTile {
+  //   pickTriangle?(ray: Ray, mode: SceneMode, projection: MapProjection, cullBackFaces: boolean): {
+  //     intersection: Cartesian3
+  //     v0: Cartesian3
+  //     v1: Cartesian3
+  //     v2: Cartesian3
+  //   } | undefined
+  // }
 
   interface ImageryLayer {
     /**
@@ -78,6 +81,7 @@ declare namespace Cesium {
   var GeoTerrainProvider: any
   // eslint-disable-next-line no-var
   var BaiduMapImageryProvider: any
+
 }
 
 // eslint-disable-next-line no-var
