@@ -44,7 +44,7 @@ export default {
         lng: '经度',
         address: '地址'
       },
-      locationbar: {
+      statusBar: {
         lat: '纬度',
         lng: '经度',
         zone: '带号',

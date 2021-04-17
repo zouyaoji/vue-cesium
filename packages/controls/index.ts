@@ -3,7 +3,7 @@ import VcCompass from './compass'
 import VcZoomControl from './zoom-control'
 import VcPrint from './print'
 import VcMyLocation from './my-location'
-import VcLocationBar from './location-bar'
+import VcStatusBar from './status-bar'
 import VcDistanceLegend from './distance-legend'
 import VcNavigation from './navigation'
 import VcCompassSm from './navigation-sm/compass-sm'
@@ -15,7 +15,7 @@ const components = [
   VcZoomControl,
   VcPrint,
   VcMyLocation,
-  VcLocationBar,
+  VcStatusBar,
   VcDistanceLegend,
   VcNavigation,
   VcCompassSm,
@@ -34,7 +34,7 @@ export {
   VcZoomControl,
   VcPrint,
   VcMyLocation,
-  VcLocationBar,
+  VcStatusBar,
   VcDistanceLegend,
   VcNavigation,
   VcCompassSm,

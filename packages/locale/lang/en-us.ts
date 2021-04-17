@@ -45,7 +45,7 @@ export default {
         lng: 'Lng',
         address: 'Address'
       },
-      locationbar: {
+      statusBar: {
         lat: 'Lat',
         lng: 'Lng',
         zone: 'ZONE',

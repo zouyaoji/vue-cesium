@@ -222,7 +222,7 @@ interface NavigationOption {
   zoomControlOptions?: AnyObject | boolean
   printViewOptions?: AnyObject | boolean
   myLocationOptions?: AnyObject | boolean
-  locationBarOptions?: AnyObject | boolean
+  statusBarOptions?: AnyObject | boolean
   distanceLegendOptions?: AnyObject | boolean
 }
 

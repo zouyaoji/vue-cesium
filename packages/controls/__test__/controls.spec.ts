@@ -1,7 +1,7 @@
 import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
-import { VcCompass, VcCompassSm, VcZoomControl, VcZoomControlSm, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation, VcNavigationSm } from '../index'
+import { VcCompass, VcCompassSm, VcZoomControl, VcZoomControlSm, VcPrint, VcMyLocation, VcStatusBar, VcDistanceLegend, VcNavigation, VcNavigationSm } from '../index'
 
 const option = {
   cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
@@ -297,33 +297,33 @@ describe('VcMyLocation', () => {
   }, 10000)
 })
 
-const locationBarApp = {
+const statusBarApp = {
   components: {
     VcViewer,
-    VcLocationBar
+    VcStatusBar
   },
   template: `
     <vc-viewer>
-      <vc-location-bar ref="locationBar" position="bottom"></vc-location-bar>
+      <vc-status-bar ref="statusBar" position="bottom"></vc-status-bar>
     </vc-viewer>
   `
 }
 
-describe('VcLocationBar', () => {
+describe('VcStatusBar', () => {
   test('render test', async () => {
-    const wrapperApp = mount(locationBarApp)
-    const locationBarVm = wrapperApp.vm.$refs.locationBar as VcComponentPublicInstance
-    const redyObj: ReadyObj = await locationBarVm.createPromise
-    let locationBarEl = redyObj.cesiumObject
-    expect(locationBarEl instanceof HTMLElement).toBe(true)
-    expect(wrapperApp.find('.vc-location-bar').classes()).toContain('absolute-bottom')
+    const wrapperApp = mount(statusBarApp)
+    const statusBarVm = wrapperApp.vm.$refs.statusBar as VcComponentPublicInstance
+    const redyObj: ReadyObj = await statusBarVm.createPromise
+    let statusBarEl = redyObj.cesiumObject
+    expect(statusBarEl instanceof HTMLElement).toBe(true)
+    expect(wrapperApp.find('.vc-status-bar').classes()).toContain('absolute-bottom')
 
-    await locationBarVm.unload()
-    locationBarEl = locationBarVm.getCesiumObject()
-    expect(locationBarEl).toBeUndefined()
-    await locationBarVm.load()
-    locationBarEl = locationBarVm.getCesiumObject()
-    expect(locationBarEl).toBeDefined()
+    await statusBarVm.unload()
+    statusBarEl = statusBarVm.getCesiumObject()
+    expect(statusBarEl).toBeUndefined()
+    await statusBarVm.load()
+    statusBarEl = statusBarVm.getCesiumObject()
+    expect(statusBarEl).toBeDefined()
   }, 10000)
 })
 

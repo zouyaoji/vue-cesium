@@ -18,7 +18,7 @@ import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { useCommon } from '@vue-cesium/composables'
 import VcDistanceLegend from '../distance-legend'
-import VcLocationBar from '../location-bar'
+import VcStatusBar from '../status-bar'
 import VcZoomControl from '../zoom-control'
 import VcMyLocation from '../my-location'
 import VcCompass from '../compass'
@@ -28,7 +28,7 @@ export default defineComponent({
   name: 'VcNavigation',
   inheritAttrs: false,
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt', 'compassEvt', 'locationEvt', 'printEvt', 'locationBarEvt', 'distanceLegendEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt', 'compassEvt', 'locationEvt', 'printEvt', 'statusBarEvt', 'distanceLegendEvt'],
   setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -48,7 +48,7 @@ export default defineComponent({
     const zoomControlRef = ref<typeof VcZoomControl>(null)
     const printRef = ref<typeof VcPrint>(null)
     const myLocationRef = ref<typeof VcMyLocation>(null)
-    const locationBarRef = ref<typeof VcLocationBar>(null)
+    const statusBarRef = ref<typeof VcStatusBar>(null)
     const distanceLegendRef = ref<typeof VcDistanceLegend>(null)
     const rootStyle = reactive<CSSProperties>({})
     const secondRootStyle = reactive<CSSProperties>({})
@@ -63,7 +63,7 @@ export default defineComponent({
           $(zoomControlRef)?.reload()
           $(myLocationRef)?.reload()
           $(printRef)?.reload()
-          $(locationBarRef)?.reload()
+          $(statusBarRef)?.reload()
           $(distanceLegendRef)?.reload()
         })
       },
@@ -105,8 +105,8 @@ export default defineComponent({
       const listener = getInstanceListener(instance, 'locationEvt')
       listener && emit('locationEvt', e)
     }
-    const onLocationBarEvt = e => {
-      const listener = getInstanceListener(instance, 'locationBarEvt')
+    const onstatusBarEvt = e => {
+      const listener = getInstanceListener(instance, 'statusBarEvt')
       listener && emit('locationEvt', e)
     }
     const onDistanceLegendEvt = e => {
@@ -216,9 +216,9 @@ export default defineComponent({
       }
 
       let height2 = 0
-      const locationBarRefTarget = $(locationBarRef)?.$el as HTMLElement
-      if (locationBarRefTarget !== void 0) {
-        height2 += locationBarRefTarget.getBoundingClientRect().height
+      const statusBarRefTarget = $(statusBarRef)?.$el as HTMLElement
+      if (statusBarRefTarget !== void 0) {
+        height2 += statusBarRefTarget.getBoundingClientRect().height
       }
       Object.assign(secondRootStyle, cssSecondRoot, { height: `${height2}px` })
     }
@@ -319,10 +319,10 @@ export default defineComponent({
               class: 'vc-location-other-controls ' + positionStateOther.classes.value,
               style: secondRootStyle
             }, [
-              h(VcLocationBar, {
-                ref: locationBarRef,
-                ...otherControlOptions.value.locationbarOpts,
-                onLocationBarEvt
+              h(VcStatusBar, {
+                ref: statusBarRef,
+                ...otherControlOptions.value.statusBarOpts,
+                onstatusBarEvt
               }),
               h(VcDistanceLegend, {
                 ref: distanceLegendRef,
