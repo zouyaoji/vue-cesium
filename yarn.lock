@@ -4962,6 +4962,13 @@ component-emitter@^1.2.1:
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
   integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
+components-helper@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/components-helper/-/components-helper-1.0.2.tgz#064e604dde0e81a31b8dc5b6180ae5ba999d0c58"
+  integrity sha512-szHWmB64SomAv454oH/Y0gyn4YvQEhR4XDb8rW+paJpGWpn8bsx9wmqKg38KxIyQRXW9edrhaIdsS/tG+oldIw==
+  dependencies:
+    fast-glob "^3.2.5"
+
 compressible@~2.0.16:
   version "2.0.18"
   resolved "https://registry.yarnpkg.com/compressible/-/compressible-2.0.18.tgz#af53cca6b070d4c3c0750fbd77286a6d7cc46fba"
@@ -6813,7 +6820,7 @@ fast-glob@^2.2.6:
     merge2 "^1.2.3"
     micromatch "^3.1.10"
 
-fast-glob@^3.1.1, fast-glob@^3.2.4:
+fast-glob@^3.1.1, fast-glob@^3.2.4, fast-glob@^3.2.5:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.5.tgz#7939af2a656de79a4f1901903ee8adcaa7cb9661"
   integrity sha512-2DtFcgT68wiTTiwZ2hNdJfcHNke9XOfnwmBRWXhmeKM8rF0TGwmC/Qto3S7RoZKp5cilZbxzO5iTNTQsJ+EeDg==
