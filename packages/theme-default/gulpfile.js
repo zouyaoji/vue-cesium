@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { series, src, dest } = require('gulp')
 const sass = require('gulp-dart-sass')
+const postcss = require('gulp-postcss')
 const autoprefixer = require('gulp-autoprefixer')
 const cssmin = require('gulp-cssmin')
 const rename = require('gulp-rename')
@@ -11,6 +12,7 @@ const noVcPrefixFile = /(index|base)/
 function compile() {
   return src('./src/*.scss')
     .pipe(sass.sync())
+    .pipe(postcss())
     .pipe(autoprefixer({ cascade: false }))
     .pipe(cssmin())
     .pipe(rename(function (path) {
