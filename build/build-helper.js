@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const helper = require('components-helper')
+const helper = require('./components-helper')
 const { name, version } = require('../package.json')
 // const icon = require('../website/icon.json')
 // const icons = icon.map(item => 'el-icon-' + item).join('/')
