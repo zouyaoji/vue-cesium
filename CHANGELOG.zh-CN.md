@@ -1,5 +1,21 @@
 ## 更新日志
 
+### 3.0.1-beta.2
+*2021-04-18*
+
+#### 增加
+
+- `vc-provider-terrain-cesium`
+- `vc-provider-terrain-arcgis-tiled-elevation`
+- `vc-provider-terrain-tianditu`
+- `vc-datasource-custom`
+- `vc-datasource-czml`
+- `vc-datasource-geojson`
+- `vc-datasource-kml`
+- `vc-navigation-sm`
+- `vc-compass-sm`
+- `vc-zoom-control-sm`
+
 ### 3.0.1-beta.1
 *2021-04-07*
 
@@ -47,7 +63,7 @@
 #### 增加
 
 - 增加 `vc-viewer` 组件。
-- 重构并升级 `vc-navigation` 组件，分离 `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-my-location`, `vc-location-bar`, `vc-distance-legend` 为独立组件。
+- 重构并升级 `vc-navigation` 组件，分离 `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-my-location`, `vc-status-bar`, `vc-distance-legend` 为独立组件。
 - 增加 `vc-entity` 组件。
 
 #### 修改

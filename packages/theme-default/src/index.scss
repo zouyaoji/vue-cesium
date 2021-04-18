@@ -10,11 +10,12 @@
 
 
 @import "./navigation.scss";
+@import "./navigation-sm.scss";
 @import "./compass.scss";
 @import "./zoom-control.scss";
 @import "./print.scss";
 @import "./my-location.scss";
-@import "./location-bar.scss";
+@import "./status-bar.scss";
 @import "./distance-legend.scss";
 
 @import "./core/flex.scss";

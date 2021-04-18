@@ -1,7 +1,19 @@
 import type { App } from 'vue'
 import VcViewer from '@vue-cesium/viewer'
 // controls
-import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '@vue-cesium/controls'
+import {
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcStatusBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm
+} from '@vue-cesium/controls'
+// imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
   VcProviderImageryArcgisMapserver,
@@ -27,6 +39,15 @@ import {
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu
 } from '@vue-cesium/providers'
+
+// datasources
+import {
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml
+} from '@vue-cesium/datasources'
+
 import VcEntity from '@vue-cesium/entity'
 // grapics
 import {
@@ -72,9 +93,12 @@ const components = [
   VcZoomControl,
   VcPrint,
   VcMyLocation,
-  VcLocationBar,
+  VcStatusBar,
   VcDistanceLegend,
   VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm,
 
   VcLayerImagery,
   VcProviderImageryArcgisMapserver,
@@ -99,6 +123,11 @@ const components = [
   VcProviderTerrainArcgisTiledElevation,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
+
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml,
 
   VcEntity,
   VcGraphicsBillboard,
@@ -145,9 +174,12 @@ export {
   VcZoomControl,
   VcPrint,
   VcMyLocation,
-  VcLocationBar,
+  VcStatusBar,
   VcDistanceLegend,
   VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm,
 
   VcLayerImagery,
   VcProviderImageryArcgisMapserver,
@@ -172,6 +204,11 @@ export {
   VcProviderTerrainArcgisTiledElevation,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
+
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml,
 
   VcEntity,
   VcGraphicsBillboard,

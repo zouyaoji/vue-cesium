@@ -1530,7 +1530,7 @@ const backFaceCulling = {
  */
 const data = {
   data: {
-    type: [String, Object],
+    type: [String, Object] as PropType<string | Cesium.Resource>,
     required: true
   }
 }

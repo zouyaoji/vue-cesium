@@ -44,7 +44,7 @@ export default {
         lng: '经度',
         address: '地址'
       },
-      locationbar: {
+      statusBar: {
         lat: '纬度',
         lng: '经度',
         zone: '带号',
@@ -57,6 +57,16 @@ export default {
         roll: '侧翻',
         cameraHeight: '视高',
         tip: '点击切换鼠标显示坐标为 UTM 投影坐标'
+      }
+    },
+    navigationSm: {
+      compass: {
+        outerTip: '旋转视图：顺/逆时针方向拖拽罗盘外环；重置视图：双击罗盘外环。',
+      },
+      zoomCotrol: {
+        zoomInTip: '放大',
+        zoomBarTip: '按住滑块向上放大，向下缩小。',
+        zoomOutTip: '缩小'
       }
     },
     overviewmap: {

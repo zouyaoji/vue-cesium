@@ -3,7 +3,6 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
-import useLog from '@vue-cesium/composables/private/use-log'
 import { VcBtn, VcTooltip, VcIcon } from '@vue-cesium/ui'
 import { useCommon } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
@@ -245,7 +244,7 @@ export default defineComponent({
               onBeforeShow: onTooltipBeforeShow,
               ...props.tooltip
             },
-            () => h('strong', null, t('vc.navigation.print.printTip')))
+            () => h('strong', null, props.tooltip.tip || t('vc.navigation.print.printTip')))
           )
         } else {
           inner.push(createCommentVNode('v-if'))

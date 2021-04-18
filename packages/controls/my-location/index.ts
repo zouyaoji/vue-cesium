@@ -64,7 +64,7 @@ export default defineComponent({
     )
     // computed
     const myLocationTip = computed(() => {
-      return positioning.value ? t('vc.navigation.myLocation.positioning') : t('vc.navigation.myLocation.myLocationTip')
+      return positioning.value ? t('vc.navigation.myLocation.positioning') : props.tooltip.tip || t('vc.navigation.myLocation.myLocationTip')
     })
     // methods
     instance.createCesiumObject = async () => {
@@ -263,7 +263,7 @@ export default defineComponent({
       const listener = getInstanceListener(instance, 'locationEvt')
       listener &&
         ctx.emit('locationEvt', {
-          type: 'myLocation',
+          type: 'location',
           position,
           detail,
           entity: myPositionEntity

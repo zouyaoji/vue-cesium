@@ -1,6 +1,6 @@
 @import './core/variables.scss';
 
-.vc-location-bar{
+.vc-status-bar{
   cursor: pointer;
   position: absolute;
   z-index: $z-top;
@@ -46,6 +46,6 @@
   }
 }
 
-.vc-location-other-controls .vc-location-bar {
+.vc-location-other-controls .vc-status-bar {
   position: relative;
 }

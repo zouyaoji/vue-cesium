@@ -108,7 +108,7 @@ import VcViewer from '@vue-cesium/viewer'
 import Vc$NAME from '../src'
 
 const option = {
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
 }
 
 config.global.config.globalProperties = {}

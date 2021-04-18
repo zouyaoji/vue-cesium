@@ -1,6 +1,8 @@
 ## VcNavigation
 
-The `vc-navigation` component adds to the viewer a user friendly compass, navigator (zoom in/out), and distance scale graphical user interface. mainly includes 2 parts, (1) compass, zoom, and other floating buttons; (2) position and distance scale toolbar. **Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
+Navigation components, including compass, zoom, other floating buttons, position and distance scale toolbar controls. It is composed of `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-mylocation`, `vc-status-bar`, and `vc-distance-legend`.
+
+**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
 
 :::tip
 Tip: The navigation component has been refactored in version 3.0. It is now a collection component and now supports custom styles, including icons, sizes, color positions, etc. The icon currently uses Unicode and does not support multi-color. If you need to support multi-color, please refer to the method of using Symbol introduced by Alibaba Cloud iconfont: [Portal](https://www.iconfont.cn/help/detail?spm=a313x.7781069.1998910419.d8cf4382a&helptype=code)
@@ -28,7 +30,7 @@ Basic usage of navigation components.
       @zoomEvt="onNavigationEvt"
       @printEvt="onNavigationEvt"
       @locationEvt="onNavigationEvt"
-      @locationBarEvt="onNavigationEvt"
+      @statusBarEvt="onNavigationEvt"
       @distanceLegendEvt="onNavigationEvt"
     >
     </vc-navigation>
@@ -73,7 +75,7 @@ Basic usage of navigation components.
         // otherOpts: {
         //   position: 'bottom-right',
         //   offset: [2, 3],
-        //   locationbarOpts:  // Same as vc-location-bar
+        //   statusBarOpts:  // Same as vc-status-bar
         //   distancelegendOpts: // Same as vc-distance-legend
         // }
       }
@@ -107,7 +109,7 @@ Basic usage of navigation components.
 
 ### Extended usage
 
-Customize navigation components as needed. The available components are: `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-mylocation`, `vc-location-bar`, `vc-distance-legend`.
+Customize navigation components as needed. The available components are: `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-mylocation`, `vc-status-bar`, `vc-distance-legend`.
 
 :::demo Customize each navigation component as needed
 
@@ -149,10 +151,10 @@ Customize navigation components as needed. The available components are: `vc-com
     <vc-my-location color="#9C27B0" position="top-left" :offset="[0, 60]" label="Location" stack :round="false" background="#F2C037"></vc-my-location>
     <!-- custom API -->
     <vc-my-location position="top-left" :offset="[60, 0]" :customAPI="() => ({lng: 108, lat: 32})"></vc-my-location>
-    <vc-location-bar position="bottom"></vc-location-bar>
-    <vc-location-bar position="bottom" :offset="[300, 35]" :showCameraInfo="false" :showPerformanceInfo="false"></vc-location-bar>
-    <vc-location-bar position="bottom" :offset="[-300, 35]" :showCameraInfo="false" :showMouseInfo="false"></vc-location-bar>
-    <vc-location-bar position="top-left" :offset="[120, 3]" :showMouseInfo="false" :showPerformanceInfo="false"></vc-location-bar>
+    <vc-status-bar position="bottom"></vc-status-bar>
+    <vc-status-bar position="bottom" :offset="[300, 35]" :showCameraInfo="false" :showPerformanceInfo="false"></vc-status-bar>
+    <vc-status-bar position="bottom" :offset="[-300, 35]" :showCameraInfo="false" :showMouseInfo="false"></vc-status-bar>
+    <vc-status-bar position="top-left" :offset="[120, 3]" :showMouseInfo="false" :showPerformanceInfo="false"></vc-status-bar>
     <vc-distance-legend position="bottom-left" :offset="[5, 70]" background="#26A69A" barBackground="#F2C037" :width="80"></vc-distance-legend>
     <vc-distance-legend position="bottom-left" :offset="[5, 35]"></vc-distance-legend>
   </vc-viewer>
@@ -161,17 +163,18 @@ Customize navigation components as needed. The available components are: `vc-com
 
 :::
 
-### VcNavigation Attributes
+### VcNavigation Props
 
-| Attribute    | Type          | Default                 | Description                                                                             |
-| ------------ | ------------- | ----------------------- | --------------------------------------------------------------------------------------- |
-| position     | String        | `top-right`             | `optional` Specify the position of the component.                                       |
-| offset       | Array         | `[0, 0]`                | `optional` Specify the offset of the component.                                         |
-| compassOpts  | Object\|false | Same as `VcCompass`     | `optional` Specify the compass options of the component. false means no display.        |
-| zoomOpts     | Object\|false | Same as `VcZoomControl` | `optional` Specify the zoom options of the component. false means no display.           |
-| printOpts    | Object\|false | Same as `VcPrint`       | `optional` Specify the print options of the component. false means no display.          |
-| locationOpts | Object\|false | Same as `VcMyLocation`  | `optional` Specify the location options of the component. false means no display.       |
-| otherOpts    | Object\|false |                         | `optional` Specify the other controls options of the component. false means no display. |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specify the offset of the component. |
+| compassOpts | Object\|false | Same as `VcCompass` | `optional` Specify the compass options of the component. false means no display. |
+| zoomOpts | Object\|false | Same as `VcZoomControl` | `optional` Specify the zoom options of the component. false means no display. |
+| printOpts | Object\|false | Same as `VcPrint` | `optional` Specify the print options of the component. false means no display. |
+| locationOpts | Object\|false | Same as `VcMyLocation` | `optional` Specify the location options of the component. false means no display. |
+| otherOpts | Object\|false | | `optional` Specify the other controls options of the component. false means no display. |
 
 :::tip
 
@@ -181,7 +184,7 @@ Tip: For other controls (position bar and distance scale bar, regarded as a whol
 otherOpts: {
   position: 'botttom-right',
   offset:[2, 3],
-  locationbarOpts: {}, // Same as VcLocationBar
+  statusBarOpts: {}, // Same as VcStatusBar
   distancelegendOpts: {} // Same as VcDistanceLegend
 }
 ```
@@ -190,26 +193,35 @@ otherOpts: {
 
 ### VcNavigation Events
 
-| name              | parameter | description                                                           |
-| ----------------- | --------- | --------------------------------------------------------------------- |
-| zoomEvt           |           | Triggered when the zoom control is operated.                          |
-| compassEvt        |           | Triggered when the compass control is operated.                       |
-| locationEvt       |           | Triggered when the positioning control is operated.                   |
-| printEvt          |           | Triggered when the print control is operated.                         |
-| locationBarEvt    |           | Triggered when the related parameters of the position control change. |
-| distanceLegendEvt |           | Triggered when the distance scale changes.                            |
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ---- | ---------- | ----------- |
+| zoomEvt | {camera, status, target, type} | Triggered when the zoom control is operated. |
+| compassEvt | {camera, status, target, type} | Triggered when the compass control is operated. |
+| locationEvt | {detail, entity, position, type} | Triggered when the positioning control is operated. |
+| printEvt | {image, status, type} | Triggered when the print control is operated. |
+| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggered when the related parameters of the position control change. |
+| distanceLegendEvt | {distance,status,type} | Triggered when the distance scale changes. |
+| beforeLoad | Vue Instance | Triggered before the cesiumObject is loaded. |
+| ready | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed | Vue Instance | Triggered when the cesiumObject is destroyed. |
 
-### VcCompass Attributes
+### VcCompass
 
-| Attribute              | Type   | Default     | Description                                                                                    |
-| ---------------------- | ------ | ----------- | ---------------------------------------------------------------------------------------------- |
-| position               | String | `top-right` | `optional` Specify the compass position. (Valid when used independently)                       |
-| offset                 | Array  | `[0, 0]`    | `optional` Specifies the position-based offset of the compass. (Valid when used independently) |
-| enableCompassOuterRing | String | `true`      | `optional` Specify whether the outer ring of the compass can be operated.                      |
-| duration               | Number | `1.5`       | `optional` Specify the flight time to restore the pitch angle, in seconds.                     |
-| outerOptions           | Object |             | `optional` Specify the parameters of the compass outer ring.                                   |
-| innerOptions           | Object |             | `optional` Specify the parameters of the inner circle of the compass.                          |
-| markerOptions          | Object |             | `optional` Specify the parameters of the maker when the compass rotates.                       |
+Compass component.
+
+### VcCompass Props
+
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the compass. |
+| enableCompassOuterRing | String | `true` | `optional` Specify whether the outer ring of the compass can be operated. |
+| duration | Number | `1.5` | `optional` Specify the flight time to restore the pitch angle, in seconds. |
+| outerOptions | Object | | `optional` Specify the parameters of the compass outer ring. |
+| innerOptions | Object | | `optional` Specify the parameters of the inner circle of the compass. |
+| markerOptions | Object | | `optional` Specify the parameters of the maker when the compass rotates. |
 
 :::tip
 Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
@@ -259,17 +271,20 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 
 ### VcCompass Events
 
-| name       | parameter | description                                     |
-| ---------- | --------- | ----------------------------------------------- |
-| compassEvt |           | Triggered when the compass control is operated. |
+| Name       | parameters                         | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| compassEvt | {camera, status, target, type}     | Triggered when the compass control is operated.         |
+| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
 
-### VcZoomControl Attributes
+### VcZoomControl Props
 
 <!-- prettier-ignore -->
-| Attribute | Type | Default | Description |
-| -------------------- | ------- | ---------- | --------------------- |
-| position | String | `'top-right'` | `optional` Specify the position of the zoom control. (Valid when used independently) |
-| offset | Array | `[0, 0]` | `optional` Specifies the offset of the zoom control. (Valid when used independently) |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the offset of the zoom control. |
 | enableResetButton | Boolean | `true` | `optional` Specify whether to enable the reset button. |
 | zoomAmount | Number | `2` | `optional` Specify the zoom amount of zoom in and zoom out. |
 | duration | String | `0.5` | `optional` Specify the time of the zoom-in and zoom-out process, in seconds. |
@@ -373,16 +388,19 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcZoomControl Events
 
-| name    | parameter | description                                  |
-| ------- | --------- | -------------------------------------------- |
-| zoomEvt |           | Triggered when the zoom control is operated. |
+| name       | parameter                          | description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| zoomEvt    | {camera, status, target, type}     | Triggered when the zoom control is operated.            |
+| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
 
-### VcPrint Attributes
+### VcPrint Props
 
 <!-- prettier-ignore -->
-| Attribute | Type | Default | Description |
-| --------------------- | ------- | -------------------- | ------------------------------------------------------------------------------------- |
-| position | String | `'top-right'` | `optional` Specify the position of the print control. (Valid when used independently) |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` Specifies the offset of the print control. (Valid when used independently) |
 | showCredit | Boolean | `true` | `optional` Specify whether to display the copyright information of the loaded data when printing pictures. |
 | showPrintView | Boolean | `true` | `optional` Specify whether to display the print preview. |
@@ -400,17 +418,20 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcPrint Events
 
-| name     | parameter | description                                   |
-| -------- | --------- | --------------------------------------------- |
-| printEvt |           | Triggered when the print control is operated. |
+| name       | parameter                          | description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| printEvt   | {image, status,type}               | Triggered when the print control is operated.           |
+| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
 
-### VcMyLocation Attributes
+### VcMyLocation Props
 
 <!-- prettier-ignore -->
-| Attribute | Type | Default | Description |
-| ------------ | --------------------- | ---------------------- | ------------------------------ |
-| position | String | `'top-right'` | `optional` Specify the position of the positioning button. (Valid when used independently) |
-| offset | Array | `[0, 0]` | `optional` Specifies the offset of the positioning button based on the position. (Valid when used independently)|
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the offset of the positioning button based on the position.|
 | geolocation | Object | | `optional` Specify the browser geolocation positioning parameters. |
 | id | String | | `optional` Specify the id of the loading point after the positioning is successful. |
 | pointColor | Array\|Object\|String | | `optional` Specify the color of the loading point after the positioning is successful. |
@@ -433,17 +454,20 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcMyLocation Events
 
-| name        | parameter | description                                        |
-| ----------- | --------- | -------------------------------------------------- |
-| locationEvt |           | Triggered when the positioning button is operated. |
+| name        | parameter                          | description                                             |
+| ----------- | ---------------------------------- | ------------------------------------------------------- |
+| locationEvt | {detail,entity,position, type}     | Triggered when the positioning button is operated.      |
+| beforeLoad  | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready       | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed   | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
 
-### VcLocationBar Attributes
+### VcStatusBar Props
 
 <!-- prettier-ignore -->
-|Attribute|Type|Default|Description|
-| ------------------- | ------- | ---------------- | -------------------------------------------------------------- |
-| position | String | `'bottom-right'` | `optional` Specify the position of the information bar control. (Valid when used independently) |
-| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the information bar control. (Valid when used independently) |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the information bar control. |
 | gridFileUrl | String | `https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC`| `optional` Specify the mouse to pick up the height model, use this to improve the accuracy of the height obtained. |
 | color | String | `'#fff'` | `optional` Specify the color of the information bar. |
 | background | String | `'#3f4854'` | `optional` Specify the background of the information bar. |
@@ -454,17 +478,20 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcMyLocation Events
 
-| name           | parameter | description                                                                |
-| -------------- | --------- | -------------------------------------------------------------------------- |
-| locationBarEvt |           | Triggered when the relevant parameters of the information bar are changed. |
+| name         | parameter                                                    | description                                             |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------- |
+| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggered when the status bar parameter changes.        |
+| beforeLoad   | Vue Instance                                                 | Triggered before the cesiumObject is loaded.            |
+| ready        | {Cesium, viewer, cesiumObject, vm}                           | Triggered when the cesiumObject is successfully loaded. |
+| destroyed    | Vue Instance                                                 | Triggered when the cesiumObject is destroyed.           |
 
-### VcDistanceLegend Attributes
+### VcDistanceLegend Props
 
 <!-- prettier-ignore -->
-| Attribute | Type | Default | Description |
-| ------------- | ------ | ---------------- | ------------------------------------------------------------------ |
-| position | String | `'bottom-right'` | `optional` Specify the position of the distance scale control. (Valid when used independently) |
-| offset | Array | `[0, 0]` | `optional` Specifies the offset of the distance scale control based on the position. (Valid when used independently)|
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the position of the component. | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the offset of the distance scale control based on the position.|
 | color | String | `'#fff'` | `optional` Specify the color of the distance scale control. |
 | background | String | `'#3f4854'` | `optional` Specify the distance scale background. |
 | width | Number | `100` | `optional` Specify the width of the distance scale. |
@@ -472,6 +499,9 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcDistanceLegend Events
 
-| name              | parameter | description            |
-| ----------------- | --------- | ---------------------- |
-| distanceLegendEvt |           | Triggered when the distance scale changes. |
+| name              | parameter                          | description                                             |
+| ----------------- | ---------------------------------- | ------------------------------------------------------- |
+| distanceLegendEvt | {distance,status,type}             | Triggered when the distance scale changes.              |
+| beforeLoad        | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed         | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |

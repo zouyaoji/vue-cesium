@@ -9,7 +9,7 @@
     "gen": "bash ./scripts/gc.sh",
     "bootstrap": "yarn --frozen-lockfile && npx lerna bootstrap && yarn gen:version",
     "gen:version": "node build/gen-version.js",
-    "build": "yarn bootstrap && yarn clean:lib && yarn build:esm-bundle && yarn build:lib && yarn build:lib-full && yarn build:esm && yarn build:utils && yarn build:locale && yarn build:locale-umd",
+    "build": "yarn bootstrap && yarn clean:lib && yarn build:esm-bundle && yarn build:lib && yarn build:lib-full && yarn build:esm && yarn build:utils && yarn build:locale && yarn build:locale-umd && yarn build:theme && yarn build:helper",
     "clean:lib": "rimraf lib && rimraf es",
     "build:lib": "cross-env LIBMODE=core webpack --config ./build/webpack.config.js",
     "build:lib-full": "cross-env LIBMODE=full webpack --config ./build/webpack.config.js",
@@ -21,6 +21,7 @@
     "build:locale-umd": "node ./build/build-locale.js",
     "build:css": "cross-env BABEL_ENV=utils babel packages/utils --extensions .ts --out-dir lib/utils",
     "build:theme": "rimraf packages/theme-default/lib && gulp build --gulpfile packages/theme-default/gulpfile.js && cp-cli packages/theme-default/lib lib/theme-default && rimraf packages/theme-default/lib",
+    "build:helper": "node build/build-helper.js",
     "lint": "eslint ./packages --ext .vue,.js,.ts",
     "lint-fix": "eslint --fix ./packages --ext .vue,.js,.ts",
     "website-build": "rimraf website-dist && cross-env NODE_ENV=production webpack --config ./website/webpack.config.js",
@@ -66,6 +67,7 @@
     "babel-preset-vue": "^2.0.2",
     "chalk": "^4.1.0",
     "clipboard-copy": "^4.0.1",
+    "components-helper": "^1.0.2",
     "copy-webpack-plugin": "6.4.1",
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.3",
@@ -154,9 +156,10 @@
   "unpkg": "lib/index.js",
   "style": "lib/theme-default/index.css",
   "vetur": {
-    "tags": "./vetur/tags.json",
-    "attributes": "./vetur/attributes.json"
+    "tags": "./lib/tags.json",
+    "attributes": "./lib/attributes.json"
   },
+  "web-types": "lib/web-types.json",
   "browserslist": [
     "> 1%",
     "last 2 versions",

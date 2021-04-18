@@ -3,11 +3,25 @@ import VcCompass from './compass'
 import VcZoomControl from './zoom-control'
 import VcPrint from './print'
 import VcMyLocation from './my-location'
-import VcLocationBar from './location-bar'
+import VcStatusBar from './status-bar'
 import VcDistanceLegend from './distance-legend'
 import VcNavigation from './navigation'
+import VcCompassSm from './navigation-sm/compass-sm'
+import VcZoomControlSm from './navigation-sm/zoom-control-sm'
+import VcNavigationSm from './navigation-sm'
 
-const components = [VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation]
+const components = [
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcStatusBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm
+]
 
 const install = (app: App): void => {
   components.forEach(cmp => {
@@ -15,7 +29,18 @@ const install = (app: App): void => {
   })
 }
 
-export { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation }
+export {
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcStatusBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm
+}
 
 export default {
   install

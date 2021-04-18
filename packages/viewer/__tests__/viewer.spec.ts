@@ -5,7 +5,7 @@ import Viewer from '../src'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
 
 const option = {
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
 }
 
 config.global.config.globalProperties = {}
@@ -35,7 +35,6 @@ describe('VcViewer', () => {
     }
     let clicked = false
     const onLeftClick = () => {
-      console.log('123')
       clicked = true
     }
     const wrapper = mount(Viewer, {

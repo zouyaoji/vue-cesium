@@ -16,10 +16,10 @@
     - [`【并非善类】`](https://www.cnblogs.com/JinXinYuan)
     - ...
 
-### 贡献
+<!-- ### 贡献
 
   - [`【z4none】`](https://github.com/z4none) 提出 vc-viewer 组件相机问题 [#27](https://github.com/zouyaoji/vue-cesium/issues/27)。
-  - [`【alicjamusial】`](https://github.com/alicjamusial) 提出单页面初始化多个 vc-viewer 组件崩溃问题 [#58](https://github.com/zouyaoji/vue-cesium/issues/58)。
+  - [`【alicjamusial】`](https://github.com/alicjamusial) 提出单页面初始化多个 vc-viewer 组件崩溃问题 [#58](https://github.com/zouyaoji/vue-cesium/issues/58)。 -->
 
 ### 鸣谢
 

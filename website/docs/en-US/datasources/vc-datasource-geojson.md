@@ -1,0 +1,146 @@
+## VcDatasourceGeojson
+
+加载 [GeoJSON](https://geojson.org/) 和 [TopoJSON](https://github.com/topojson/topojson) 格式的数据源。相当于初始化一个 `Cesium.GeoJsonDataSource` 实例。
+
+### 基础用法
+
+GeoJson 数据源组件的基础用法。
+
+:::demo 使用 `vc-datasource-geojson` 标签在三维球上添加 GeoJSON 格式数据源对象。
+
+```html
+<el-row ref="viewerContainer" class="demo-viewer">
+  <vc-viewer>
+    <vc-datasource-geojson
+      ref="datasourceRef"
+      data="./SampleData/geojson/china.json"
+      @ready="onDatasourceReady"
+      :show="show"
+      :options="options"
+      @click="onClicked"
+      :entities="entities"
+    ></vc-datasource-geojson>
+  </vc-viewer>
+  <el-row class="demo-toolbar">
+    <el-button type="danger" round @click="unload">销毁</el-button>
+    <el-button type="danger" round @click="load">加载</el-button>
+    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
+  </el-row>
+</el-row>
+
+<script>
+  import { ref, reactive, getCurrentInstance, onMounted, watch } from 'vue'
+  export default {
+    setup() {
+      // state
+      const show = ref(true)
+      const datasourceRef = ref(null)
+      const options = reactive({
+        stroke: 'red'
+      })
+      const entities = reactive([])
+
+      for (let i = 0; i < 100; i++) {
+        entities.push({
+          position: { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 },
+          label: {
+            text: i.toString(),
+            pixelOffset: { x: 25, y: 20 }
+          },
+          point: {
+            pixelSize: 8,
+            outlineWidth: 2,
+            color: 'red',
+            outlineColor: 'yellow'
+          }
+        })
+      }
+      // methods
+      const onClicked = e => {
+        console.log(e)
+      }
+      const unload = () => {
+        datasourceRef.value.unload()
+      }
+      const reload = () => {
+        datasourceRef.value.reload()
+      }
+      const load = () => {
+        datasourceRef.value.load()
+      }
+      const onDatasourceReady = ({ Cesium, viewer, cesiumObject }) => {
+        viewer.zoomTo(cesiumObject)
+      }
+
+      return {
+        unload,
+        reload,
+        load,
+        show,
+        onClicked,
+        onDatasourceReady,
+        datasourceRef,
+        options,
+        entities
+      }
+    }
+  }
+</script>
+```
+
+:::
+
+### 属性
+
+| 属性名   | 类型           | 默认值 | 描述                                                   |
+| -------- | -------------- | ------ | ------------------------------------------------------ |
+| data     | String\|Object |        | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。 |
+| show     | Boolean        | `true` | `optional` 指定数据源是否显示。                        |
+| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。            |
+| options  | Object         |        | `optional` 指定数据源参数。                            |
+
+:::tip
+
+提示：`options` 可指定以下属性。
+
+```js
+{
+  sourceUri: string                         // 重写 url 以解析相对路径。
+  markerSize: number                        // 点大小
+  markerSymbol: string                      // 点风格符号
+  markerColor: string|object|Array<number>  // 点颜色
+  stroke: string|object|Array<number>       // 线、面轮廓颜色
+  strokeWidth: number                       // 线、面轮廓宽度
+  fill: string|object|Array<number>         // 面填充色
+  clampToGround: boolean                    // 是否贴地 false
+  credit: string | object                   // 数据源描述信息
+}
+```
+
+:::
+
+### 事件
+
+| 事件名            | 参数                                                       | 描述                         |
+| ----------------- | ---------------------------------------------------------- | ---------------------------- |
+| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
+| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
+| changedEvent      |                                                            | 数据源改变时触发。           |
+| errorEvent        |                                                            | 数据源发生错误时触发。       |
+| loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |
+| clusterEvent      | (clusteredEntities, cluster)                               | 数据源聚合事件。             |
+| collectionChanged | (collection, added, removed, changed)                      | 数据源实体集合改变时触       |
+| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
+| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
+| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。   |
+| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
+| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
+| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |
+| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。     |
+
+### 参考
+
+- 官方文档： **[GeoJsonDataSource](https://cesium.com/docs/cesiumjs-ref-doc/GeoJsonDataSource.html)**

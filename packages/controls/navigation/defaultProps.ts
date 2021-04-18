@@ -5,7 +5,7 @@ import { defaultProps as compassDefaultProps }  from '../compass/defaultProps'
 import { defaultProps as zoomDefaultProps } from '../zoom-control/defaultProps'
 import printDefaultProps from '../print/defaultProps'
 import locationDefaultProps from '../my-location/defaultProps'
-import locationbarDefaultProps from '../location-bar/defaultProps'
+import statusBarDefaultProps from '../status-bar/defaultProps'
 import distancelegendDefaultProps from '../distance-legend/defaultProps'
 
 const defaultProps = {
@@ -31,7 +31,7 @@ const defaultProps = {
     default: () => ({
       position: 'bottom-right',
       offset: [2, 3],
-      locationbarOpts: getDefaultOptionByProps(locationbarDefaultProps, ['position', 'offset']),
+      statusBarOpts: getDefaultOptionByProps(statusBarDefaultProps, ['position', 'offset']),
       distancelegendOpts: getDefaultOptionByProps(distancelegendDefaultProps, ['position', 'offset'])
     })
   }

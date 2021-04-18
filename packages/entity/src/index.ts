@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, h } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { position, plane } from '@vue-cesium/utils/cesium-props'
@@ -111,11 +111,11 @@ export default defineComponent({
       __updateGraphics: updateGraphics
     })
 
-    return () =>(
+    return () => ctx.slots.default ? (
       h('i', {
         class: kebabCase(instance.proxy.$options.name),
         style: { display: 'none !important' }
       }, hSlot(ctx.slots.default))
-    )
+    ) : createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

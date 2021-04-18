@@ -1,0 +1,29 @@
+.demo-block.demo-vc-datasource-custom {
+  .#{$namespace}-row {
+    border-radius: 100px;
+    align-items: baseline;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .#{$namespace}-button {
+    margin: 10px 10px 10px 0;
+
+    &:first-child {
+      margin-left: 20px;
+    }
+  }
+
+  .#{$namespace}-switch {
+    margin: 20px 20px 20px 0;
+
+    &:first-child {
+      margin-left: 20px;
+    }
+  }
+
+  .#{$namespace}-switch__label.is-active {
+    color: #409eff;
+  }
+}

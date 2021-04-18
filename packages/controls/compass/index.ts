@@ -181,7 +181,7 @@ export default defineComponent({
                 ref: compassState.iconOuterTooltipRef,
                 ...outerOptions.value.tooltip,
                 onBeforeShow: compassState.onTooltipBeforeShow
-              }, () => h('strong', {}, t('vc.navigation.compass.outerTip')))
+              }, () => h('strong', {}, outerOptions.value.tooltip.tip || t('vc.navigation.compass.outerTip')))
               : createCommentVNode('v-if')
           ])
         )
@@ -203,7 +203,7 @@ export default defineComponent({
                 ref: compassState.iconInnerTooltipRef,
                 ...innerOptions.value.tooltip,
                 onBeforeShow: compassState.onTooltipBeforeShow
-              }, () => h('strong', {}, t('vc.navigation.compass.innerTip')))
+              }, () => h('strong', {}, innerOptions.value.tooltip.tip || t('vc.navigation.compass.innerTip')))
               : createCommentVNode('v-if')
           ])
         )

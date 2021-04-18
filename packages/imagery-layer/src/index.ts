@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, h, provide } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, provide } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
@@ -59,11 +59,11 @@ export default defineComponent({
       __setProvider: setProvider
     })
 
-    return () => (
+    return () => ctx.slots.default ? (
       h('i', {
         class: kebabCase(instance.proxy.$options.name),
         style: { display: 'none !important' }
       }, hSlot(ctx.slots.default))
-    )
+    ) : createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

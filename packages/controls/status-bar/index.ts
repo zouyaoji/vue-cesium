@@ -10,13 +10,13 @@ import defaultProps from './defaultProps'
 import { t } from '@vue-cesium/locale'
 
 export default defineComponent({
-  name: 'VcLocationBar',
+  name: 'VcStatusBar',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'locationBarEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'statusBarEvt'],
   setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcLocationBar'
+    instance.cesiumClass = 'VcStatusBar'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
@@ -216,10 +216,10 @@ export default defineComponent({
           const position = new Cartesian2(clientX - rect.left, clientY - rect.top)
           mouseCoordsInfo.value.updateCoordinatesFromCesium(viewer, position)
         }
-        const listener = getInstanceListener(instance, 'locationBarEvt')
+        const listener = getInstanceListener(instance, 'statusBarEvt')
         listener &&
-          ctx.emit('locationBarEvt', {
-            type: 'locationBar',
+          ctx.emit('statusBarEvt', {
+            type: 'statusBar',
             mouseCoordsInfo: mouseCoordsInfo.value,
             cameraInfo: cameraInfo,
             performanceInfo: performanceInfo,
@@ -255,13 +255,13 @@ export default defineComponent({
               }, [
                 h('span', {
                   ...ctx.attrs
-                }, t('vc.navigation.locationbar.lng')),
+                }, t('vc.navigation.statusBar.lng')),
                 h('span', {}, mouseCoordsInfo.value?.longitude)
               ]),
               h('div', {
                 class: 'vc-section ellipsis'
               }, [
-                h('span', {}, t('vc.navigation.locationbar.lat')),
+                h('span', {}, t('vc.navigation.statusBar.lat')),
                 h('span', {}, mouseCoordsInfo.value?.latitude)
               ])
             )
@@ -272,7 +272,7 @@ export default defineComponent({
               }, [
                 h('span', {
                   ...ctx.attrs
-                }, t('vc.navigation.locationbar.zone')),
+                }, t('vc.navigation.statusBar.zone')),
                 h('span', null, mouseCoordsInfo.value?.utmZone)
               ]),
               h('div', {
@@ -280,7 +280,7 @@ export default defineComponent({
               }, [
                 h('span', {
                   ...ctx.attrs
-                }, t('vc.navigation.locationbar.e')),
+                }, t('vc.navigation.statusBar.e')),
                 h('span', null, mouseCoordsInfo.value?.east)
               ]),
               h('div', {
@@ -288,7 +288,7 @@ export default defineComponent({
               }, [
                 h('span', {
                   ...ctx.attrs
-                }, t('vc.navigation.locationbar.n')),
+                }, t('vc.navigation.statusBar.n')),
                 h('span', null, mouseCoordsInfo.value?.north)
               ])
             )
@@ -301,7 +301,7 @@ export default defineComponent({
               }, [
                 h('span', {
                   ...ctx.attrs
-                }, t('vc.navigation.locationbar.elev')),
+                }, t('vc.navigation.statusBar.elev')),
                 h('span', {}, mouseCoordsInfo.value?.elevation)
               ])
             )
@@ -320,7 +320,7 @@ export default defineComponent({
             }, [
               h('span', {
                 ...ctx.attrs
-              }, t('vc.navigation.locationbar.level')),
+              }, t('vc.navigation.statusBar.level')),
               h('span', null, cameraInfo.level)
             ]),
             h('div', {
@@ -328,7 +328,7 @@ export default defineComponent({
             }, [
               h('span', {
                 ...ctx.attrs
-              }, t('vc.navigation.locationbar.heading')),
+              }, t('vc.navigation.statusBar.heading')),
               h('span', null, `${cameraInfo.heading}°`)
             ]),
             h('div', {
@@ -336,7 +336,7 @@ export default defineComponent({
             }, [
               h('span', {
                 ...ctx.attrs
-              }, t('vc.navigation.locationbar.pitch')),
+              }, t('vc.navigation.statusBar.pitch')),
               h('span', null, `${cameraInfo.pitch}°`)
             ]),
             h('div', {
@@ -344,7 +344,7 @@ export default defineComponent({
             }, [
               h('span', {
                 ...ctx.attrs
-              }, t('vc.navigation.locationbar.roll')),
+              }, t('vc.navigation.statusBar.roll')),
               h('span', null, `${cameraInfo.roll}°`)
             ]),
             h('div', {
@@ -352,7 +352,7 @@ export default defineComponent({
             }, [
               h('span', {
                 ...ctx.attrs
-              }, t('vc.navigation.locationbar.cameraHeight')),
+              }, t('vc.navigation.statusBar.cameraHeight')),
               h('span', null, `${cameraInfo.height}m`)
             ])
           )
@@ -385,7 +385,7 @@ export default defineComponent({
               ...props.tooltip
             },
             () => h('strong', null,
-              t('vc.navigation.locationbar.tip')
+              props.tooltip.tip || t('vc.navigation.statusBar.tip')
             ))
           )
         } else {
@@ -394,7 +394,7 @@ export default defineComponent({
 
         return h(VcBtn, {
           ref: rootRef,
-          class: 'vc-location-bar ' + positionState.classes.value,
+          class: 'vc-status-bar ' + positionState.classes.value,
           style: rootStyle,
           noCaps: true,
           onClick: toggleUseProjection

@@ -2,6 +2,7 @@
 @import 'vc-viewer.scss';
 @import 'vc-navigation.scss';
 @import 'vc-layer-imagery.scss';
+@import 'vc-datasource-custom.scss';
 
 .demo-block {
   font-weight: 400;
@@ -42,6 +43,10 @@
       &:first-child {
         margin-left: 20px;
       }
+    }
+
+    .#{$namespace}-switch__label {
+      color: white;
     }
   }
 }

@@ -1,13 +1,10 @@
 import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
-import { h, nextTick } from 'vue'
-import { VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcLocationBar, VcDistanceLegend, VcNavigation } from '../index'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { data } from '../../../lib/utils/cesium-props'
+import { VcCompass, VcCompassSm, VcZoomControl, VcZoomControlSm, VcPrint, VcMyLocation, VcStatusBar, VcDistanceLegend, VcNavigation, VcNavigationSm } from '../index'
 
 const option = {
-  cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
 }
 
 config.global.config.globalProperties = {}
@@ -60,6 +57,39 @@ describe('VcCompass', () => {
     expect(innerEl.style.fontSize).toEqual('60px')
     expect(innerEl.style.background).toEqual('transparent')
 
+    await compassVm.unload()
+    compassEl = compassVm.getCesiumObject()
+    expect(compassEl).toBeUndefined()
+    await compassVm.load()
+    compassEl = compassVm.getCesiumObject()
+    expect(compassEl).toBeDefined()
+
+  }, 10000)
+})
+
+const compassSmApp = {
+  components: {
+    VcViewer,
+    VcCompassSm
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-compass-sm ref="compass" position="bottom" :offset="[-200, 20]"></vc-compass-sm>
+      </vc-viewer>
+    </div>
+  `
+}
+
+describe('VcCompassSm', () => {
+  test('render test', async () => {
+    const wrapperApp = mount(compassSmApp)
+    const compassVm = wrapperApp.vm.$refs.compass as VcComponentPublicInstance
+    const redyObj: ReadyObj = await compassVm.createPromise
+    let compassEl = redyObj.cesiumObject
+    expect(compassEl instanceof HTMLElement).toBe(true)
+    expect(wrapperApp.find('.vc-compass-sm').exists()).toBe(true)
+    expect(wrapperApp.find('.vc-compass-sm').classes()).toContain('absolute-bottom')
     await compassVm.unload()
     compassEl = compassVm.getCesiumObject()
     expect(compassEl).toBeUndefined()
@@ -141,6 +171,39 @@ describe('VcZoomControl', () => {
     await zoomControlVm.load()
     zoomControlEl = zoomControlVm.getCesiumObject()
     expect(zoomControlEl).toBeDefined()
+  }, 10000)
+})
+
+const zoomControlSmApp = {
+  components: {
+    VcViewer,
+    VcZoomControlSm
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-zoom-control-sm ref="zoomControl" position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
+      </vc-viewer>
+    </div>
+  `
+}
+
+describe('VcZoomControlSm', () => {
+  test('render test', async () => {
+    const wrapperApp = mount(zoomControlSmApp)
+    const zoomControlVm = wrapperApp.vm.$refs.zoomControl as VcComponentPublicInstance
+    const redyObj: ReadyObj = await zoomControlVm.createPromise
+    let compassEl = redyObj.cesiumObject
+    expect(compassEl instanceof HTMLElement).toBe(true)
+    expect(wrapperApp.find('.vc-zoom-control-sm').exists()).toBe(true)
+    expect(wrapperApp.find('.vc-zoom-control-sm').classes()).toContain('absolute-bottom')
+    await zoomControlVm.unload()
+    compassEl = zoomControlVm.getCesiumObject()
+    expect(compassEl).toBeUndefined()
+    await zoomControlVm.load()
+    compassEl = zoomControlVm.getCesiumObject()
+    expect(compassEl).toBeDefined()
+
   }, 10000)
 })
 
@@ -234,33 +297,33 @@ describe('VcMyLocation', () => {
   }, 10000)
 })
 
-const locationBarApp = {
+const statusBarApp = {
   components: {
     VcViewer,
-    VcLocationBar
+    VcStatusBar
   },
   template: `
     <vc-viewer>
-      <vc-location-bar ref="locationBar" position="bottom"></vc-location-bar>
+      <vc-status-bar ref="statusBar" position="bottom"></vc-status-bar>
     </vc-viewer>
   `
 }
 
-describe('VcLocationBar', () => {
+describe('VcStatusBar', () => {
   test('render test', async () => {
-    const wrapperApp = mount(locationBarApp)
-    const locationBarVm = wrapperApp.vm.$refs.locationBar as VcComponentPublicInstance
-    const redyObj: ReadyObj = await locationBarVm.createPromise
-    let locationBarEl = redyObj.cesiumObject
-    expect(locationBarEl instanceof HTMLElement).toBe(true)
-    expect(wrapperApp.find('.vc-location-bar').classes()).toContain('absolute-bottom')
+    const wrapperApp = mount(statusBarApp)
+    const statusBarVm = wrapperApp.vm.$refs.statusBar as VcComponentPublicInstance
+    const redyObj: ReadyObj = await statusBarVm.createPromise
+    let statusBarEl = redyObj.cesiumObject
+    expect(statusBarEl instanceof HTMLElement).toBe(true)
+    expect(wrapperApp.find('.vc-status-bar').classes()).toContain('absolute-bottom')
 
-    await locationBarVm.unload()
-    locationBarEl = locationBarVm.getCesiumObject()
-    expect(locationBarEl).toBeUndefined()
-    await locationBarVm.load()
-    locationBarEl = locationBarVm.getCesiumObject()
-    expect(locationBarEl).toBeDefined()
+    await statusBarVm.unload()
+    statusBarEl = statusBarVm.getCesiumObject()
+    expect(statusBarEl).toBeUndefined()
+    await statusBarVm.load()
+    statusBarEl = statusBarVm.getCesiumObject()
+    expect(statusBarEl).toBeDefined()
   }, 10000)
 })
 
@@ -325,5 +388,41 @@ describe('VcNavigation', () => {
     await navigationVm.load()
     navigationEl = navigationVm.getCesiumObject()
     expect(navigationEl).toBeDefined()
+  }, 10000)
+})
+
+
+const navigationSmApp = {
+  components: {
+    VcViewer,
+    VcNavigationSm
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-viewer>
+        <vc-navigation-sm ref="navigation"></vc-navigation-sm>
+      </vc-viewer>
+    </div>
+  `
+}
+
+describe('VcNavigationSm', () => {
+  test('render test', async () => {
+    const wrapperApp = mount(navigationSmApp)
+    const navigationVm = wrapperApp.vm.$refs.navigation as VcComponentPublicInstance
+    const redyObj: ReadyObj = await navigationVm.createPromise
+    let navigationEl = redyObj.cesiumObject
+    expect(navigationEl instanceof HTMLElement).toBe(true)
+    expect(wrapperApp.find('.vc-navigation-sm').classes()).toContain('absolute-top-right')
+    expect(wrapperApp.find('.vc-compass-sm').exists()).toBe(true)
+    expect(wrapperApp.find('.vc-zoom-control-sm').exists()).toBe(true)
+
+    await navigationVm.unload()
+    navigationEl = navigationVm.getCesiumObject()
+    expect(navigationEl).toBeUndefined()
+    await navigationVm.load()
+    navigationEl = navigationVm.getCesiumObject()
+    expect(navigationEl).toBeDefined()
+
   }, 10000)
 })
