@@ -1,6 +1,6 @@
-## 自定义数据源
+## VcDatasourceCustom
 
-`vc-datasource-custom` 组件用于加载自定义数据源，相当于初始化一个 `Cesium.CustomDataSource` 实例，手动管理一组实体对象。
+加载自定义数据源，相当于初始化一个 `Cesium.CustomDataSource` 实例，手动管理一组实体对象。
 
 ### 基础用法
 
@@ -11,7 +11,7 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-datasource-custom ref="datasourceRef" name="custom" :entities="entities" @click="onClicked" :show="show">
+    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :show="show">
       <vc-entity
         ref="entity1"
         @click="onClicked"
@@ -43,6 +43,7 @@
       </vc-entity>
     </vc-datasource-custom>
     <vc-datasource-custom
+      ref="datasourceRef"
       @click="onClicked"
       :key="index"
       :show="show"
@@ -256,6 +257,9 @@
 
 | 事件名            | 参数                                                       | 描述                         |
 | ----------------- | ---------------------------------------------------------- | ---------------------------- |
+| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
+| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
 | changedEvent      |                                                            | 数据源改变时触发。           |
 | errorEvent        |                                                            | 数据源发生错误时触发。       |
 | loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |

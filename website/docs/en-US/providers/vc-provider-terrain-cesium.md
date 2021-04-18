@@ -1,6 +1,6 @@
-## Cesium 地形
+## VcProviderTerrainCesium
 
-`vc-provider-terrain-cesium` 组件用于加载 Cesium 格式地形。如果 `url` 为空，默认通过 `Cesium.createWorldTerrain` 加载 CesiumIon 在线全球地形，需要 CesiumIon 授权， 具体可以到 [`https://cesium.com/ion/`](https://cesium.com/ion/) 申请一个账户，获取 Access Token。
+加载 Cesium 格式地形，相当于初始化一个 `Cesium.CesiumTerrainProvider` 实例。如果 `url` 为空，默认通过 `Cesium.createWorldTerrain` 加载 CesiumIon 在线全球地形，需要 CesiumIon 授权， 具体可以到 [`https://cesium.com/ion/`](https://cesium.com/ion/) 申请一个账户，获取 Access Token。
 
 ### 基础用法
 
@@ -78,11 +78,13 @@
 
 ### 事件
 
-| 事件名       | 参数                           | 描述                                                                             |
-| ------------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| ready        | {Cesium, viewer, cesiumObject} | 该组件渲染完毕时触发，返回 Cesium 类, viewer 实例，以及当前组件的 cesiumObject。 |
-| errorEvent   | TileProviderError              | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。                |
-| readyPromise | TerrainProvider                | 当图层提供者可用时触发, 返回 TerrainProvider 实例。                              |
+| 事件名       | 参数                               | 描述                                                              |
+| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
+| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
+| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
+| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | TerrainProvider                    | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
 
 ### 参考
 

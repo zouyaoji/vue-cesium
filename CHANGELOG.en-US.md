@@ -1,5 +1,21 @@
 ## Changelog
 
+### 3.0.1-beta.2
+*2021-04-18*
+
+#### New feature
+
+- `vc-provider-terrain-cesium`
+- `vc-provider-terrain-arcgis-tiled-elevation`
+- `vc-provider-terrain-tianditu`
+- `vc-datasource-custom`
+- `vc-datasource-czml`
+- `vc-datasource-geojson`
+- `vc-datasource-kml`
+- `vc-navigation-sm`
+- `vc-compass-sm`
+- `vc-zoom-control-sm`
+
 ### 3.0.1-beta.1
 *2021-04-07*
 
@@ -47,7 +63,7 @@
 #### New feature
 
 - Added `vc-viewer` component.
-- Refactor and upgrade the `vc-navigation` component, separate `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-my-location`, `vc-location-bar`, `vc -distance-legend` is an independent component.
+- Refactor and upgrade the `vc-navigation` component, separate `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-my-location`, `vc-status-bar`, `vc -distance-legend` is an independent component.
 - Added `vc-entity` component.
 
 #### Chore updates

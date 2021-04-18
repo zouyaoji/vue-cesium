@@ -5,11 +5,11 @@
 :::tip
 Tip: All components of vue-cesium include these 3 events, and subsequent documents may not list them again.
 
-| Event name | Parameters           | Description                            |
-| ---------- | -------------------- | -------------------------------------- |
-| beforeLoad | Vue Instance         | Triggered before loading.              |
-| ready      | {Cesium, viewer, vm} | Triggered when the load is successful. |
-| destroyed  | Vue Instance         | Triggered when destroyed.              |
+| Event name | Parameters                         | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
 
 :::
 

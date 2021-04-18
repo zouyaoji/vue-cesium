@@ -1,6 +1,8 @@
-## (椭)球体
+## VcGraphicsEllipsoid
 
-`vc-graphics-ellipsoid` 组件用于加载(椭)球实体，相当于初始化一个 `Cesium.EllipsoidGraphics` 实例。需要作为 `vc-entity` 的子组件才能正常加载。
+加载(椭)球实体，相当于初始化一个 `Cesium.EllipsoidGraphics` 实例。
+
+**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -98,9 +100,12 @@
 
 ### 事件
 
-| 事件名            | 参数 | 描述                                     |
-| ----------------- | ---- | ---------------------------------------- |
-| definitionChanged |      | 每当更改或修改属性或子属性时触发该事件。 |
+| 事件名            | 参数                               | 描述                                     |
+| ----------------- | ---------------------------------- | ---------------------------------------- |
+| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
+| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
+| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
+| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
 
 ### 参考
 

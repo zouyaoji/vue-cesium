@@ -41,7 +41,7 @@
           "list": [
             {
               "path": "/vc-viewer",
-              "title": "Viewer 视图"
+              "title": "Viewer"
             }
           ]
         },
@@ -51,6 +51,10 @@
             {
               "path": "/controls/vc-navigation",
               "title": "导航"
+            },
+            {
+              "path": "/controls/vc-navigation-sm",
+              "title": "导航sm"
             }
           ]
         },
@@ -67,11 +71,11 @@
             },
             {
               "path": "/providers/vc-provider-imagery-baidumap",
-              "title": "百度地图"
+              "title": "百度"
             },
             {
               "path": "/providers/vc-provider-imagery-bingmaps",
-              "title": "必应地图"
+              "title": "必应"
             },
             {
               "path": "/providers/vc-provider-imagery-ion",
@@ -289,6 +293,10 @@
             {
               "path": "/controls/vc-navigation",
               "title": "Navigation"
+            },
+            {
+              "path": "/controls/vc-navigation-sm",
+              "title": "Navigation-SM"
             }
           ]
         },
@@ -301,55 +309,55 @@
             },
             {
               "path": "/providers/vc-provider-imagery-arcgis-mapserver",
-              "title": "ArcGIS"
+              "title": "ArcGisMapServerImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-baidumap",
-              "title": "Baidu"
+              "title": "BaidumapImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-bingmaps",
-              "title": "BingMaps"
+              "title": "BingMapsImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-ion",
-              "title": "CesiumIon"
+              "title": "IonImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-mapbox-style",
-              "title": "MapBox"
+              "title": "MapboxStyleImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-osm",
-              "title": "OpenStreetMap"
+              "title": "OpenStreetMapImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",
-              "title": "SuperMap"
+              "title": "SuperMapImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-arcgis-tianditu",
-              "title": "Tianditu"
+              "title": "TiandituImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-tile-mapservice",
-              "title": "TileMap"
+              "title": "TileMapServiceImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-tile-single",
-              "title": "TileSingle"
+              "title": "SingleTileImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-urltemplate",
-              "title": "Urltemplate"
+              "title": "UrlTemplateImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-wms",
-              "title": "WMS"
+              "title": "WebMapServiceImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-wmts",
-              "title": "WMTS"
+              "title": "WebMapTileServiceImageryProvider"
             }
           ]
         },
@@ -358,17 +366,34 @@
           "list": [
             {
               "path": "/providers/vc-provider-terrain-cesium",
-              "title": "CesiumTerrain"
+              "title": "CesiumTerrainProvider"
             },
             {
               "path": "/providers/vc-provider-terrain-arcgis-tiled-elevation",
-              "title": "ArcGISTiledElevation"
+              "title": "ArcGISTiledElevationTerrainProvider"
             }
           ]
         },
         {
           "groupName": "Datasource",
-          "list": []
+          "list": [
+            {
+              "path": "/datasources/vc-datasource-custom",
+              "title": "CustomDataSource"
+            },
+            {
+              "path": "/datasources/vc-datasource-czml",
+              "title": "CzmlDataSource"
+            },
+            {
+              "path": "/datasources/vc-datasource-geojson",
+              "title": "GeoJsonDataSource"
+            },
+            {
+              "path": "/datasources/vc-datasource-kml",
+              "title": "KmlDataSource"
+            }
+          ]
         },
         {
           "groupName": "Graphics",

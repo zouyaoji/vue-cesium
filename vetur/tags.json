@@ -150,7 +150,7 @@
       "compassEvt",
       "locationEvt",
       "printEvt",
-      "locationBarEvt",
+      "statusBarEvt",
       "distanceLegendEvt"
     ],
     "description": "Adds to the viewer a user friendly compass, navigator (zoom in/out), print button, location button, and distance scale graphical user interface."
@@ -289,7 +289,7 @@
       "beforeLoad",
       "ready",
       "destroyed",
-      "locationBarEvt"
+      "statusBarEvt"
     ],
     "description": "Adds to the viewer a location bar."
   },

@@ -1,6 +1,6 @@
-## CZML 数据源
+## VcDatasourceCzml
 
-`vc-datasource-czml` 组件用于加载 [CZML](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CZML-Guide) 格式数据源。相当于初始化一个 `Cesium.CzmlDataSource` 实例。
+加载 [CZML](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CZML-Guide) 格式数据源。相当于初始化一个 `Cesium.CzmlDataSource` 实例。
 
 ### 基础用法
 
@@ -10,7 +10,7 @@ Czml 数据源组件的基础用法。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="onViewerReady" shouldAnimate>
+  <vc-viewer shouldAnimate>
     <vc-datasource-czml
       ref="datasourceRef"
       czml="./SampleData/simple.czml"
@@ -69,20 +69,33 @@ Czml 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名    | 类型           | 默认值 | 描述                                        |
-| --------- | -------------- | ------ | ------------------------------------------- |
-| czml      | String\|Object |        | `required` 指定 czml 对象或者 url。         |
-| show      | Boolean        | `true` | `optional` 指定数据源是否可见。             |
-| entities  | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| options   | Object         |        | `optional` 指定以下属性：                   |
-| --------- | -------------- | ------ | ------------------------------------------  |
-| sourceUri | String         |        | `optional` 重写 url 以解析相对路径。        |
-| credit    | String\|Object |        | `optional` 数据源描述信息。                 |
+| 属性名   | 类型           | 默认值 | 描述                                        |
+| -------- | -------------- | ------ | ------------------------------------------- |
+| czml     | String\|Object |        | `required` 指定 czml 对象或者 url。         |
+| show     | Boolean        | `true` | `optional` 指定数据源是否可见。             |
+| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| options  | Object         |        | `optional` 指定数据源参数。                 |
+
+:::tip
+
+提示：`options` 可指定以下属性。
+
+```js
+{
+  sourceUri: string // 重写 url 以解析相对路径。
+  credit: string | object // 数据源描述信息。
+}
+```
+
+:::
 
 ### 事件
 
 | 事件名            | 参数                                                       | 描述                         |
 | ----------------- | ---------------------------------------------------------- | ---------------------------- |
+| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
+| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
 | changedEvent      |                                                            | 数据源改变时触发。           |
 | errorEvent        |                                                            | 数据源发生错误时触发。       |
 | loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |

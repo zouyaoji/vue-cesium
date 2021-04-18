@@ -1,6 +1,6 @@
-## GeoJSON 数据源
+## VcDatasourceGeojson
 
-`vc-datasource-geojson` 组件用于加载 [GeoJSON](https://geojson.org/) 和 [TopoJSON](https://github.com/topojson/topojson) 格式的数据源。相当于初始化一个 `Cesium.GeoJsonDataSource` 实例。
+加载 [GeoJSON](https://geojson.org/) 和 [TopoJSON](https://github.com/topojson/topojson) 格式的数据源。相当于初始化一个 `Cesium.GeoJsonDataSource` 实例。
 
 ### 基础用法
 
@@ -93,27 +93,40 @@ GeoJson 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名        | 类型                  | 默认值  | 描述                                                   |
-| ------------- | --------------------- | ------- | ------------------------------------------------------ |
-| data          | String\|Object        |         | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。 |
-| show          | Boolean               | `true`  | `optional` 指定数据源是否显示。                        |
-| entities      | Array                 | `[]`    | `optional` 指定要添加到该数据源的实体集合。             |
-| options       | Object                |         | `optional` 指定以下属性：                              |
-| ---------     | --------------        | ------  | ------------------------------------------             |
-| sourceUri     | String                |         |                                                        |
-| markerSize    | Number                |         | 点大小。                                               |
-| markerSymbol  | String                |         | 点风格。                                               |
-| markerColor   | String\|Object\|Array |         | 点颜色。                                               |
-| stroke        | String\|Object\|Array |         | 线、面轮廓颜色。                                       |
-| strokeWidth   | Number                |         | 线、面轮廓宽度。                                       |
-| fill          | String\|Object\|Array |         | 面填充色。                                             |
-| clampToGround | Boolean               | `false` | 是否贴地。                                             |
-| credit        | String\|Object        |         | 版权信息。                                             |
+| 属性名   | 类型           | 默认值 | 描述                                                   |
+| -------- | -------------- | ------ | ------------------------------------------------------ |
+| data     | String\|Object |        | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。 |
+| show     | Boolean        | `true` | `optional` 指定数据源是否显示。                        |
+| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。            |
+| options  | Object         |        | `optional` 指定数据源参数。                            |
+
+:::tip
+
+提示：`options` 可指定以下属性。
+
+```js
+{
+  sourceUri: string                         // 重写 url 以解析相对路径。
+  markerSize: number                        // 点大小
+  markerSymbol: string                      // 点风格符号
+  markerColor: string|object|Array<number>  // 点颜色
+  stroke: string|object|Array<number>       // 线、面轮廓颜色
+  strokeWidth: number                       // 线、面轮廓宽度
+  fill: string|object|Array<number>         // 面填充色
+  clampToGround: boolean                    // 是否贴地 false
+  credit: string | object                   // 数据源描述信息
+}
+```
+
+:::
 
 ### 事件
 
 | 事件名            | 参数                                                       | 描述                         |
 | ----------------- | ---------------------------------------------------------- | ---------------------------- |
+| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
+| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
 | changedEvent      |                                                            | 数据源改变时触发。           |
 | errorEvent        |                                                            | 数据源发生错误时触发。       |
 | loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |

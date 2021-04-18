@@ -6,11 +6,11 @@
 提示： vue-cesium 所有组件都包含下列 3 个事件，后续文档可能不再列出。
 :::
 
-| 事件名     | 参数                 | 描述             |
-| ---------- | -------------------- | ---------------- |
-| beforeLoad | Vue Instance         | 初始化前触发。   |
-| ready      | {Cesium, viewer, vm} | 初始化完成触发。 |
-| destroyed  | Vue Instance         | 销毁完成时触发。 |
+| 事件名     | 参数                               | 描述                 |
+| ---------- | ---------------------------------- | -------------------- |
+| beforeLoad | Vue Instance                       | 对象加载前触发。     |
+| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
+| destroyed  | Vue Instance                       | 对象销毁时触发。     |
 
 ### 全局组件实例方法
 

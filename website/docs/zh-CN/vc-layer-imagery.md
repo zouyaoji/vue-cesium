@@ -1,6 +1,8 @@
-## 影像图层
+## VcLayerImagery
 
-`vc-layer-imagery` 组件用于加载影像图层，相当于初始化一个 `Cesium.ImageryLayer` 实例。需要作为 `vc-viewer` 的子组件才能正常加载。可以直接指定 `vc-layer-imagery` 的 `imageryProvider` 属性，也用 VueCesium 提供的 `vc-provider-xxx` 系列组件作为 `vc-layer-imagery` 子组件挂载各个 `imageryProvider`，但一个影像图层只能挂载一个 `provider`。
+加载影像图层，相当于初始化一个 `Cesium.ImageryLayer` 实例。
+
+需要作为 `vc-viewer` 的子组件才能正常加载。可以直接指定 `vc-layer-imagery` 的 `imageryProvider` 属性，也用 VueCesium 提供的 `vc-provider-xxx` 系列组件作为 `vc-layer-imagery` 子组件挂载各个 `imageryProvider`，但一个影像图层只能挂载一个 `provider`。
 
 ### 基础用法
 
@@ -84,7 +86,6 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | -------------- | ----------------------- | ------ | --------------------------------------- |
 | sortOrder | Number | |`optional` 指定图层相对顺序。|
-| --- | --- | --- | --- |
 | imageryProvider | Object | | `optional` 指定影像图层的瓦片提供方式。 |
 | rectangle | Rectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
 | alpha | Number\|function | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
@@ -98,7 +99,7 @@
 | splitDirection | Number | `0` | `optional` 指定影像图层分割方向。 |
 | minificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
 | magnificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
-| show | Boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false。 |
+| show | Boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false |
 | maximumAnisotropy | Number | | `optional` 指定纹理过滤的最大各向异性级别。 如果未指定此参数，则将使用 WebGL 堆栈支持的最大各向异性。 较大的值使图像在水平视图中看起来更好。 |
 | minimumTerrainLevel | Number | | `optional` 指定最小地形细节层次。level 0 是最小细节层次。 |
 | maximumTerrainLevel | Number | | `optional` 指定最大地形细节层次。 |
@@ -140,6 +141,14 @@
 ```
 
 :::
+
+### 事件
+
+| 事件名     | 参数                               | 描述               |
+| ---------- | ---------------------------------- | ------------------ |
+| beforeLoad | Vue Instance                       | 对象加载前触发。   |
+| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载完成触发。 |
+| destroyed  | Vue Instance                       | 对象销毁时触发。   |
 
 ### 参考
 

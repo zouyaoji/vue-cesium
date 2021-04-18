@@ -1,6 +1,8 @@
 ## VcEntity
 
-The `vc-entity` component is used to load the `Cesium.Entity` instance. It needs to be a subcomponent of `vc-viewer`, `vc-datasource-custom`, `vc-datasource-geojson`, `vc-datasource-kml`, `vc-datasource-czml` to load normally. When using, you can directly specify the various `graphic` attributes of `vc-entity`, and use the `vc-graphics-xxx` series components provided by VueCesium as the `vc-entity` sub-components to mount each `graphic`, but under one entity Only one of the same type `grahpic` can be mounted. If you need to load a large collection of entity instances, it is recommended to add them under the data source component.
+Load the solid graphics. It is equivalent to initializing a `Cesium.Entity` instance.
+
+It needs to be a sub-component of `vc-viewer`, `vc-datasource-custom`, `vc-datasource-geojson`, `vc-datasource-kml`, `vc-datasource-czml` to load normally. When using, you can directly specify the various `graphic` attributes of `vc-entity`, and use the `vc-graphics-xxx` series components provided by VueCesium as the `vc-entity` sub-components to mount each `graphic`, but under one entity Only one of the same type `grahpic` can be mounted. If you need to load a large collection of entity instances, it is recommended to add them under the data source component.
 
 ### Basic usage
 
@@ -150,6 +152,9 @@ Tip: In addition to passing `Cesium.Cartesian3`, `position` property can also pa
 
 | name              | parameter                                                  | description                                                          |
 | ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                                               | Triggered before the cesiumObject is loaded.                         |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | Triggered when the cesiumObject is successfully loaded.              |
+| destroyed         | Vue Instance                                               | Triggered when the cesiumObject is destroyed.                        |
 | definitionChanged |                                                            | Triggers whenever a property or sub-property is changed or modified. |
 | mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse is pressed on the entity.                   |
 | mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse bounces on the entity.                      |

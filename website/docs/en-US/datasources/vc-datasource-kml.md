@@ -1,6 +1,6 @@
-## KML 数据源
+## VcDatasourceKml
 
-`vc-datasource-geojson` 组件用于加载 KML(2.2) 格式的数据源。相当于初始化一个 `Cesium.KmlDataSource` 实例。
+加载 KML(2.2) 格式的数据源。相当于初始化一个 `Cesium.KmlDataSource` 实例。
 
 ### 基础用法
 
@@ -69,24 +69,35 @@ KML 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名        | 类型           | 默认值  | 描述                                        |
-| ------------- | -------------- | ------- | ------------------------------------------- |
-| data          | String\|Object |         | `required` 指定要加载的 KML 对象 url。      |
-| show          | Boolean        | `true`  | `optional` 指定数据源是否显示。             |
-| entities      | Array          | `[]`    | `optional` 指定要添加到该数据源的实体集合。 |
-| options       | Object         |         | `optional` 指定以下属性：                   |
-| ---------     | -------------- | ------  | ------------------------------------------  |
-| camera        | Object         |         | `optional` 指定相机参数。                   |
-| canvas        | Object         |         | `optional` 指定 canvas。                    |
-| sourceUri     | String         |         | `optional` 重写 url 以解析相对路径。        |
-| clampToGround | Boolean        | `false` | `optional` 指定是否贴地。                   |
-| ellipsoid     | Object         |         | `optional` 指定参考椭球体参数。             |
-| credit        | String\|Object |         | `optional` 指定数据源描述信息。             |
+| 属性名   | 类型           | 默认值 | 描述                                        |
+| -------- | -------------- | ------ | ------------------------------------------- |
+| data     | String\|Object |        | `required` 指定要加载的 KML 对象 url。      |
+| show     | Boolean        | `true` | `optional` 指定数据源是否显示。             |
+| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| options  | Object         |        | `optional` 指定数据源参数。                 |
+
+:::tip
+
+提示：`options` 可指定以下属性。
+
+```js
+{
+  camera: object // 指定相机参数。
+  canvas: object // 指定 canvas。
+  sourceUri: string // 重写 url 以解析相对路径。
+  clampToGround: boolean // 指定是否贴地。 false
+  ellipsoid: object // 指定参考椭球体参数。 false
+  credit: string | object // 指定数据源描述信息。
+}
+```
 
 ### 事件
 
 | 事件名               | 参数                                                       | 描述                         |
 | -------------------- | ---------------------------------------------------------- | ---------------------------- |
+| beforeLoad           | Vue Instance                                               | 对象加载前触发。             |
+| ready                | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
+| destroyed            | Vue Instance                                               | 对象销毁时触发。             |
 | changedEvent         |                                                            | 数据源改变时触发。           |
 | errorEvent           |                                                            | 数据源发生错误时触发。       |
 | loadingEvent         |                                                            | 数据源开始或结束加载时触发。 |

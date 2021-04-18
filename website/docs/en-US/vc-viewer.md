@@ -1,6 +1,8 @@
 ## VcViewer
 
-`vc-viewer`, The basic component used to build the `Cesium` application is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or components. **Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under this component to load normally. After the initialization is complete, you can obtain the returned `Cesium` and `Viewer` instances in the `ready` event for Cesium API development, or use `ref` to obtain the component's `createPromise` object to get the Viewer instance.
+The basic component used to build the `Cesium` application is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or components.
+
+**Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under this component to load normally. After the initialization is complete, you can obtain the returned `Cesium` and `Viewer` instances in the `ready` event for Cesium API development, or use `ref` to obtain the component's `createPromise` object to get the Viewer instance.
 
 ### Basic usage
 
@@ -181,7 +183,6 @@ Basic usage of `vc-viewer`.
 |requestRenderMode|Boolean|`false`|`optional`If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling reduces the CPU/GPU usage of your application and uses less battery on mobile, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering.|
 |maximumRenderTimeChange|Number|`0.0`|`optional`	If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.|
 |camera|Object|| `optional` Scene camera position. Default positioning to China worldwide. **structure: { position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
-
 
 ### Events
 
