@@ -179,7 +179,7 @@ export default defineComponent({
               ctx.emit('distanceLegendEvt', {
                 type: 'distanceLegend',
                 distance,
-                statue: 'legendChanged'
+                statue: 'changed'
               })
           }
         }

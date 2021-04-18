@@ -54,7 +54,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     }
 
     const compassElement = e.currentTarget as HTMLElement
-    const compassRectangle = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const compassRectangle = compassElement.getBoundingClientRect()
     const maxDistance = compassRectangle.width / 2.0
     const center = new Cartesian2((compassRectangle.right - compassRectangle.left) / 2.0, (compassRectangle.bottom - compassRectangle.top) / 2.0)
     let clickLocation
@@ -120,7 +120,8 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
       emit('compassEvt', {
         type: 'reset',
         camera: viewer.camera,
-        status: 'start'
+        status: 'start',
+        target: e.currentTarget
       })
     const rotateFrame = Transforms.eastNorthUpToFixedFrame(center, Ellipsoid.WGS84)
     const lookVector = Cartesian3.subtract(center, camera.position, new Cartesian3())
@@ -134,7 +135,8 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
           emit('compassEvt', {
             type: 'reset',
             camera: viewer.camera,
-            status: 'complete'
+            status: 'complete',
+            target: e.currentTarget
           })
       },
       cancel: () => {
@@ -142,7 +144,8 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
           emit('compassEvt', {
             type: 'reset',
             camera: viewer.camera,
-            status: 'cancel'
+            status: 'cancel',
+            target: e.currentTarget
           })
       }
     })

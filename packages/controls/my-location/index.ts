@@ -263,7 +263,7 @@ export default defineComponent({
       const listener = getInstanceListener(instance, 'locationEvt')
       listener &&
         ctx.emit('locationEvt', {
-          type: 'myLocation',
+          type: 'location',
           position,
           detail,
           entity: myPositionEntity

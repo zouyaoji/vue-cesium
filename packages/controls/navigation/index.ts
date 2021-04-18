@@ -105,13 +105,13 @@ export default defineComponent({
       const listener = getInstanceListener(instance, 'locationEvt')
       listener && emit('locationEvt', e)
     }
-    const onstatusBarEvt = e => {
+    const onStatusBarEvt = e => {
       const listener = getInstanceListener(instance, 'statusBarEvt')
-      listener && emit('locationEvt', e)
+      listener && emit('statusBarEvt', e)
     }
     const onDistanceLegendEvt = e => {
       const listener = getInstanceListener(instance, 'distanceLegendEvt')
-      listener && emit('locationEvt', e)
+      listener && emit('distanceLegendEvt', e)
     }
 
     instance.createCesiumObject = async () => {
@@ -322,7 +322,7 @@ export default defineComponent({
               h(VcStatusBar, {
                 ref: statusBarRef,
                 ...otherControlOptions.value.statusBarOpts,
-                onstatusBarEvt
+                onStatusBarEvt
               }),
               h(VcDistanceLegend, {
                 ref: distanceLegendRef,

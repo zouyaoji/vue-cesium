@@ -10,15 +10,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const zoomOutTooltipRef = ref<typeof VcTooltip>(null)
   const resetTooltipRef = ref<typeof VcTooltip>(null)
 
-  const zoomIn = () => {
-    zoom(1 / props.zoomAmount)
+  const zoomIn = e => {
+    zoom(1 / props.zoomAmount, e)
   }
 
-  const zoomOut = () => {
-    zoom(props.zoomAmount)
+  const zoomOut = e => {
+    zoom(props.zoomAmount, e)
   }
 
-  const zoom = relativeAmount => {
+  const zoom = (relativeAmount, e) => {
     $(zoomInTooltipRef)?.hide()
     $(zoomOutTooltipRef)?.hide()
 
@@ -81,11 +81,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction)
           const endPosition = Cartesian3.add(focus, movementVector, focus)
           const type = relativeAmount < 1 ? 'zoomIn' : 'zoomOut'
+          const target = e.currentTarget
           const listener = getInstanceListener(vcInstance, 'zoomEvt')
           listener && emit('zoomEvt', {
             type: type,
             camera: viewer.camera,
-            status: 'start'
+            status: 'start',
+            target: target
           })
           if (Cesium.defined(viewer.trackedEntity) || scene.mode === SceneMode.COLUMBUS_VIEW) {
             // sometimes flyTo does not work (jumps to wrong position) so just set the position without any animation
@@ -101,14 +103,16 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
                 listener && emit('zoomEvt', {
                   type: type,
                   camera: viewer.camera,
-                  status: 'complete'
+                  status: 'complete',
+                  target: target
                 })
               },
               cancel: () => {
                 listener && emit('zoomEvt', {
                   type: type,
                   camera: viewer.camera,
-                  status: 'cancel'
+                  status: 'cancel',
+                  target: target
                 })
               }
             })
@@ -118,7 +122,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
-  const zoomReset = () => {
+  const zoomReset = e => {
     $(resetTooltipRef)?.hide()
     const { viewer } = $services
     const scene = viewer.scene
@@ -134,25 +138,29 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       viewer.trackedEntity = trackedEntity
     } else {
       const listener = getInstanceListener(vcInstance, 'zoomEvt')
+      const target = e.currentTarget
       // reset to a default position or view defined in the options
       listener && emit('zoomEvt', {
         type: 'zoomReset',
         camera: viewer.camera,
-        status: 'start'
+        status: 'start',
+        target: target
       })
 
       const complete = () => {
         listener && emit('zoomEvt', {
           type: 'zoomReset',
           camera: viewer.camera,
-          status: 'complete'
+          status: 'complete',
+          target: target
         })
       }
       const cancel = () => {
         listener && emit('zoomEvt', {
           type: 'zoomReset',
           camera: viewer.camera,
-          status: 'cancel'
+          status: 'cancel',
+          target: target
         })
       }
 
