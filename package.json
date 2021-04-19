@@ -69,6 +69,7 @@
     "clipboard-copy": "^4.0.1",
     "components-helper": "^1.0.2",
     "copy-webpack-plugin": "6.4.1",
+    "coveralls": "^3.1.0",
     "cp-cli": "^2.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^4.2.2",
