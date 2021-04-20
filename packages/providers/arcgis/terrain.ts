@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, token } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
@@ -18,7 +18,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ArcGISTiledElevationTerrainProvider'
-    userProviders(props, ctx, instance)
+    useProviders(props, ctx, instance)
     return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

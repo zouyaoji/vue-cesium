@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import {
   url,
   ellipsoid,
@@ -22,7 +22,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GoogleEarthEnterpriseImageryProvider'
-    userProviders(props, ctx, instance)
+    useProviders(props, ctx, instance)
     return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

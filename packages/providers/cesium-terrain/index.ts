@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
@@ -27,7 +27,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'CesiumTerrainProvider'
-    const providersState = userProviders(props, ctx, instance)
+    const providersState = useProviders(props, ctx, instance)
     // methods
     instance.createCesiumObject = async () => {
       if (providersState.unwatchFns.length === 0) {

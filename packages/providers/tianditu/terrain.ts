@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders, useVueCesium } from '@vue-cesium/composables'
+import { useProviders, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
@@ -36,7 +36,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GeoTerrainProvider'
-    const providersState = userProviders(props, ctx, instance)
+    const providersState = useProviders(props, ctx, instance)
     const vc = useVueCesium()
     let $script
     // methods

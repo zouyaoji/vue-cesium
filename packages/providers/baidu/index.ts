@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, toRefs } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import BaiduMapImageryProvider from './BaiduMapImageryProvider'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import {
   url,
   rectangle,
@@ -42,7 +42,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'BaiduMapImageryProvider'
-    const providersState = userProviders(props, ctx, instance)
+    const providersState = useProviders(props, ctx, instance)
     // methods
     instance.createCesiumObject = async () => {
       Cesium.BaiduMapImageryProvider = Cesium.BaiduMapImageryProvider || BaiduMapImageryProvider
