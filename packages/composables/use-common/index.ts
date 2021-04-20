@@ -1,6 +1,7 @@
 import { inject, onUnmounted } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import {
   AnyObject,
@@ -286,6 +287,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
+  const getServices = () => {
+    return mergeDescriptors({}, $services || {})
+  }
+
   // lifecycle
   const createPromise = new Promise<ReadyObj | boolean>((resolve, reject) => {
     try {
@@ -329,6 +334,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     transformProps,
     unwatchFns,
     setPropsWatcher,
-    logger
+    logger,
+    getServices
   }
 }

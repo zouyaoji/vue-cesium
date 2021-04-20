@@ -87,7 +87,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   }
 
   const getServices = () => {
-    return mergeDescriptors(commonState.$services, {
+    return mergeDescriptors(commonState.getServices(), {
       get datasource () {
         return vcInstance.cesiumObject as Cesium.DataSource
       },
