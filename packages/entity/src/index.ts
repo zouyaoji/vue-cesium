@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
-import { position, plane } from '@vue-cesium/utils/cesium-props'
+import { position, plane, enableEvent } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -39,10 +39,7 @@ export default defineComponent({
     polylineVolume: Object,
     rectangle: Object,
     wall: Object,
-    enableEvent: {
-      type: Boolean,
-      default: true
-    }
+    ...enableEvent
   },
   emits: [
     'beforeLoad',

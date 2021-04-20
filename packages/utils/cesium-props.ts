@@ -1028,7 +1028,7 @@ const colorToAlpha = {
  * @const {String, Object} url mixin
  */
 const url = {
-  url: [String, Object]
+  url: [String, Object] as PropType<string | Cesium.Resource>
 }
 
 /**
@@ -1195,13 +1195,19 @@ const times = {
 /**
  * @const {Boolean}
  * allowPicking
- * asynchronous
  */
-const aaMixin = {
+const allowPicking = {
   allowPicking: {
     type: Boolean,
     default: true
-  },
+  }
+}
+
+/**
+ * @const {Boolean}
+ * asynchronous
+ */
+const asynchronous = {
   asynchronous: {
     type: Boolean,
     default: true
@@ -1255,13 +1261,18 @@ const geometryInstances = {
 /**
  * @const {Boolean}
  * vertexCacheOptimize
- * compressVertices
  */
-const vcMixin = {
+const vertexCacheOptimize = {
   vertexCacheOptimize: {
     type: Boolean,
     default: false
-  },
+  }
+}
+/**
+ * @const {Boolean}
+ * compressVertices
+ */
+const compressVertices = {
   compressVertices: {
     type: Boolean,
     default: true
@@ -1306,7 +1317,7 @@ const blendOption = {
  * @const {*} id mixin
  */
 const id = {
-  id: null
+  id: null as PropType<any>
 }
 
 /**
@@ -1588,7 +1599,15 @@ const scissorRectangle = {
 
 // PostProcessStage end
 
+// custom
+const enableEvent = {
+  enableEvent: {
+    type: Boolean,
+    default: true
+  }
+}
 export {
+  enableEvent,
   backFaceCulling,
   specularEnvironmentMaps,
   sphericalHarmonicCoefficients,
@@ -1640,8 +1659,10 @@ export {
   releaseGeometryInstances,
   debugShowShadowVolume,
   id,
-  aaMixin,
-  vcMixin,
+  allowPicking,
+  asynchronous,
+  vertexCacheOptimize,
+  compressVertices,
   modelMatrix,
   debugShowBoundingVolume,
   scene,

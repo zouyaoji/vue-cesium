@@ -1,17 +1,14 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userDatasources, useVueCesium } from '@vue-cesium/composables'
+import { useDatasources, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, options, data } from '@vue-cesium/utils/cesium-props'
+import { show, enableEvent, options, data } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcDatasourceKml',
   props: {
     ...show,
-    enableEvent: {
-      type: Boolean,
-      default: true
-    },
+    ...enableEvent,
     entities: {
       type: Array,
       default: () => []
@@ -25,7 +22,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'KmlDataSource'
-    userDatasources(props, ctx, instance)
+    useDatasources(props, ctx, instance)
     const vc = useVueCesium()
 
     instance.createCesiumObject = async () => {
