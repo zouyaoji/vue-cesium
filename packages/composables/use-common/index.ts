@@ -28,6 +28,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   // state
+  vcInstance.alreadyListening = []
   let unwatchFns = []
   vcInstance.mounted = false
   const vcMitt: Emitter = mitt()
@@ -186,11 +187,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           }
           // 如果在vue文件中已经监听了改 props 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
-          if (vcInstance.proxy.$options.watch?.[vueProp]) {
+          if (vcInstance.proxy.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
             return
           }
 
-          const watcherOptions = vcInstance.proxy.$options.props[vueProp].watcherOptions
+          const watcherOptions = vcInstance.proxy.$options.props[vueProp]?.watcherOptions
           // returns an unwatch function that stops firing the callback
           const unwatch = vcInstance.proxy.$watch(
             vueProp,
@@ -322,6 +323,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         vcMitt.all.clear()
       })
     })
+    vcInstance.alreadyListening = []
   })
 
   return {
