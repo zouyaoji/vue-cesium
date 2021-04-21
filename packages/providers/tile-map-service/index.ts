@@ -16,7 +16,7 @@ import {
 import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
-  name: 'VcProviderImageryTileMapservice',
+  name: 'VcProviderImageryTilemap',
   props: {
     ...url,
     ...fileExtension,

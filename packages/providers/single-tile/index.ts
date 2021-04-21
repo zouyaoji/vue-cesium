@@ -10,7 +10,7 @@ import {
 import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
-  name: 'VcProviderImageryTileSingle',
+  name: 'VcProviderImagerySingletile',
   props: {
     ...url,
     ...rectangle,

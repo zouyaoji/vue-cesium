@@ -15,7 +15,7 @@ import {
   maximumLevel } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
-  name: 'VcProviderImageryArcgisMapserver',
+  name: 'VcProviderImageryArcgis',
   props: {
     url: {
       type: String,

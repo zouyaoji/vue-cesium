@@ -4,7 +4,7 @@ import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, token } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
-  name: 'VcProviderTerrainArcgisTiledElevation',
+  name: 'VcProviderTerrainArcgis',
   props: {
     url: {
       type: [String, Object] as PropType<string | Promise<string> | Promise<Cesium.Resource> | Cesium.Resource>,

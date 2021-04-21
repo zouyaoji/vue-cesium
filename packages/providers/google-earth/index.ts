@@ -9,7 +9,7 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
-  name: 'VcProviderImageryGoogleearthEnterprise',
+  name: 'VcProviderImageryGoogle',
   props: {
     ...url,
     ...ellipsoid,

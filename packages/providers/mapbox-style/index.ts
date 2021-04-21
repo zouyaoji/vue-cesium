@@ -5,7 +5,7 @@ import { accessToken, ellipsoid, minimumLevel, maximumLevel, rectangle, credit }
 import { kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
-  name: 'VcProviderImageryMapboxStyle',
+  name: 'VcProviderImageryMapbox',
   props: {
     url: {
       type: String,
