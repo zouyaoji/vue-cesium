@@ -25,7 +25,7 @@ import {
   text,
   translucencyByDistance,
   verticalOrigin,
-  enableEvent
+  enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 
@@ -59,7 +59,7 @@ export default defineComponent({
     },
     ...translucencyByDistance,
     ...verticalOrigin,
-    ...enableEvent
+    ...enableMouseEvent
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup(props, ctx) {

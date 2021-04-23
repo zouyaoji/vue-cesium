@@ -3,12 +3,12 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, enableEvent, options } from '@vue-cesium/utils/cesium-props'
+import { show, enableMouseEvent, options } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcDatasourceCzml',
   props: {
     ...show,
-    ...enableEvent,
+    ...enableMouseEvent,
     entities: {
       type: Array,
       default: () => []

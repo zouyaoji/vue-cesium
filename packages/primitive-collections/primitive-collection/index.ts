@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import { show, enableEvent } from '@vue-cesium/utils/cesium-props'
+import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 
@@ -13,7 +13,7 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    ...enableEvent
+    ...enableMouseEvent
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup (props, ctx) {

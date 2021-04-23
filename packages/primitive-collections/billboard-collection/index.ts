@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual'
 import {
   scene,
   blendOption,
-  enableEvent
+  enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -17,7 +17,7 @@ export default defineComponent({
   props: {
     ...scene,
     ...blendOption,
-    ...enableEvent,
+    ...enableMouseEvent,
     billboards: {
       type: Array,
       default: () => []

@@ -10,7 +10,7 @@ import {
   scene,
   blendOption,
   show,
-  enableEvent
+  enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -23,7 +23,7 @@ export default defineComponent({
     ...scene,
     ...blendOption,
     ...show,
-    ...enableEvent,
+    ...enableMouseEvent,
     labels: {
       type: Array,
       default: () => []

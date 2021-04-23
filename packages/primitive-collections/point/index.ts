@@ -12,7 +12,7 @@ import {
   scaleByDistance,
   show,
   translucencyByDistance,
-  enableEvent
+  enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 
@@ -29,7 +29,7 @@ export default defineComponent({
     ...scaleByDistance,
     ...show,
     ...translucencyByDistance,
-    ...enableEvent
+    ...enableMouseEvent
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup(props, ctx) {

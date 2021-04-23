@@ -21,41 +21,44 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
   const registerEvents = register => {
     const { viewer, cesiumObject } = vcInstance
     const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
-    if (register && props.enableEvent) {
-      if (!$vc.pickScreenSpaceEventHandler) {
-        $vc.pickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
-        $vc.viewerScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
-        viewerScreenSpaceEvents.forEach(type => {
-          const listener = getInstanceListener(vcInstance, type)
-          listener && $vc.viewerScreenSpaceEventHandler.setInputAction(listener, ScreenSpaceEventType[type])
 
-          $vc.pickScreenSpaceEventHandler.setInputAction(pickedAction.bind({ eventName: type, viewer }), ScreenSpaceEventType[type])
-        })
-      }
-
-      bindEvents(cesiumObject, vcInstance.cesiumEvents || [], register)
-
-      vcInstance.cesiumMembersEvents?.forEach(eventName => {
-        const cesiumIntanceMember =
-          isArray(eventName.name) && eventName.name.length > 0
-            ? cesiumObject[eventName.name[0]][eventName.name[1]]
-            : cesiumObject[eventName.name as string]
-        cesiumIntanceMember && bindEvents(cesiumIntanceMember, eventName.events, register)
+    if (!$vc.pickScreenSpaceEventHandler || !$vc.viewerScreenSpaceEventHandler) {
+      $vc.pickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
+      $vc.viewerScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
+      viewerScreenSpaceEvents.forEach(type => {
+        const listener = getInstanceListener(vcInstance, type)
+        listener && $vc.viewerScreenSpaceEventHandler.setInputAction(listener, ScreenSpaceEventType[type])
+        // vc-viewer 率先绑定
+        $vc.pickScreenSpaceEventHandler.setInputAction(pickedAction.bind({ eventName: type, viewer }), ScreenSpaceEventType[type])
       })
+    }
 
+    bindEvents(cesiumObject, vcInstance.cesiumEvents || [], register)
+
+    vcInstance.cesiumMembersEvents?.forEach(eventName => {
+      const cesiumIntanceMember =
+        isArray(eventName.name) && eventName.name.length > 0
+          ? cesiumObject[eventName.name[0]][eventName.name[1]]
+          : cesiumObject[eventName.name as string]
+      cesiumIntanceMember && bindEvents(cesiumIntanceMember, eventName.events, register)
+    })
+
+    if (props.enableMouseEvent) {
       pickEvents.forEach(eventName => {
         const listener = getInstanceListener(vcInstance, eventName)
-        listener && (cesiumObject[eventName] = listener)
-      })
-    } else {
-      pickEvents.forEach(eventName => {
-        const listener = getInstanceListener(vcInstance, eventName)
-        listener && delete cesiumObject[eventName]
+        if (register) {
+          listener && (cesiumObject[eventName] = listener)
+        } else {
+          listener && delete cesiumObject[eventName]
+        }
       })
     }
   }
 
   function pickedAction (movement) {
+    if (!props.enableMouseEvent) {
+      return
+    }
     const { viewer, eventName } = this
     const position = movement.position || movement.endPosition
     if (!position) {

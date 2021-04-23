@@ -8,7 +8,7 @@ import {
   modelMatrix,
   debugShowBoundingVolume,
   show,
-  enableEvent
+  enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -19,7 +19,7 @@ export default defineComponent({
     ...modelMatrix,
     ...debugShowBoundingVolume,
     ...show,
-    ...enableEvent,
+    ...enableMouseEvent,
     polylines: {
       type: Array,
       default: () => []
