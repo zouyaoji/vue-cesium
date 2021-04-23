@@ -1,17 +1,14 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userDatasources } from '@vue-cesium/composables'
+import { useDatasources } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, options, data } from '@vue-cesium/utils/cesium-props'
+import { show, enableMouseEvent, options, data } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcDatasourceGeojson',
   props: {
     ...show,
-    enableEvent: {
-      type: Boolean,
-      default: true
-    },
+    ...enableMouseEvent,
     entities: {
       type: Array,
       default: () => []
@@ -24,7 +21,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GeoJsonDataSource'
-    const datasourceState = userDatasources(props, ctx, instance)
+    const datasourceState = useDatasources(props, ctx, instance)
 
     instance.createCesiumObject = async () => {
       const options = datasourceState.transformProps(props)

@@ -131,49 +131,20 @@ export function makeCartesian3Array (
     return vals
   }
 
-  if (isArray(vals)) {
-    if (vals[0] instanceof Cartesian3) {
-      // If the first element is Cartesian3, it is considered to be Array<Cartesian3>.
-      // 第一个元素为Cartesian3,认为已经存的是 Array<Cartesian3> 数组了
-      return vals as Array<Cesium.Cartesian3>
-    }
+  if (isFunction(vals)) {
+    return new CallbackProperty(vals, isConstant)
+  }
 
-    if (isArray(vals[0])) {
-      const values = vals as Array<Array<number>>
-      const coordinates: Array<number> = []
-      values.forEach(item => {
-        coordinates.push(item[0])
-        coordinates.push(item[1])
-        coordinates.push(item[2] || 0)
+  if (isArray(vals)) {
+    if (isArray(vals[0]) || isPlainObject(vals[0])) {
+      const results = []
+      vals.forEach(val => {
+        results.push(makeCartesian3(val))
       })
-      return Cartesian3.fromDegreesArrayHeights(coordinates) // 认为是经纬度
-    } else if (isPlainObject(vals[0])) {
-      // 类数组
-      const coordinates: Array<number> = []
-      if (hasOwn(vals[0], 'lng') && hasOwn(vals[0], 'lat')) {
-        const values = vals as Array<CartographicInDegreeOption>
-        values.forEach(item => {
-          coordinates.push(item.lng)
-          coordinates.push(item.lat)
-          coordinates.push(item.height || 0)
-        })
-        return Cartesian3.fromDegreesArrayHeights(coordinates)
-      } else if (hasOwn(vals[0], 'x') && hasOwn(vals[0], 'y') && hasOwn(vals[0], 'z')) {
-        const values = vals as Array<Cartesian3Option>
-        values.forEach(item => {
-          coordinates.push(item.x)
-          coordinates.push(item.y)
-          coordinates.push(item.z || 0)
-        })
-        return Cartesian3.fromRadiansArrayHeights(coordinates)
-      }
+      return results
     }
 
     return Cartesian3.fromDegreesArrayHeights(vals as Array<number>)
-  }
-
-  if (isFunction(vals)) {
-    return new CallbackProperty(vals, isConstant)
   }
 
   return undefined
@@ -200,29 +171,16 @@ export function makeCartesian2Array (
     return vals
   }
 
-  if (isArray(vals)) {
-    if (vals[0] instanceof Cartesian2) {
-      return vals as Array<Cesium.Cartesian2>
-    }
-
-    const points: Array<Cesium.Cartesian2> = []
-    if (isArray(vals[0])) {
-      const values = vals as Array<Array<number>>
-      values.forEach(item => {
-        const point = new Cartesian2(item[0], item[1])
-        points.push(point)
-      })
-    } else if (isPlainObject(vals[0]) && hasOwn(vals[0], 'x') && hasOwn(vals[0], 'y')) {
-      const values = vals as Array<Cartesian2Option>
-      values.forEach(item => {
-        points.push(new Cartesian2(item.x, item.y))
-      })
-    }
-    return points
-  }
-
   if (isFunction(vals)) {
     return new CallbackProperty(vals, isConstant)
+  }
+
+  if (isArray(vals)) {
+    const points: Array<Cesium.Cartesian2> = []
+    vals.forEach(val => {
+      points.push(makeCartesian2(val) as Cesium.Cartesian2)
+    })
+    return points
   }
 
   return undefined
@@ -427,6 +385,23 @@ export function makeColor (
   }
 
   return undefined
+}
+
+export function makeColors (
+  vals: Cesium.Color[] | string[] | number[][] | ColorInByteOption[] | Cartesian4Option[]
+): Cesium.Color[] {
+
+  if (isArray(vals)) {
+    const results: Cesium.Color[] = []
+    vals.forEach(val => {
+      results.push(makeColor(val) as Cesium.Color)
+    })
+
+    return results
+
+  } else {
+    return vals
+  }
 }
 
 /**

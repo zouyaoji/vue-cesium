@@ -6,6 +6,7 @@ import {
   makeCartesian2Array,
   makeCartesian3,
   makeColor,
+  makeColors,
   makeNearFarScalar,
   makeMaterial,
   makeCartesian3Array,
@@ -645,7 +646,7 @@ const backgroundColor = {
   backgroundColor: {
     type: [Object, String, Array, Function],
     default: () => {
-      return [0.165, 0.165, 0.165, 0.8]
+      return { x: 0.165, y: 0.165, z: 0.165, w: 0.8 }
     },
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -1028,7 +1029,7 @@ const colorToAlpha = {
  * @const {String, Object} url mixin
  */
 const url = {
-  url: [String, Object]
+  url: [String, Object] as PropType<string | Cesium.Resource>
 }
 
 /**
@@ -1195,13 +1196,19 @@ const times = {
 /**
  * @const {Boolean}
  * allowPicking
- * asynchronous
  */
-const aaMixin = {
+const allowPicking = {
   allowPicking: {
     type: Boolean,
     default: true
-  },
+  }
+}
+
+/**
+ * @const {Boolean}
+ * asynchronous
+ */
+const asynchronous = {
   asynchronous: {
     type: Boolean,
     default: true
@@ -1255,13 +1262,18 @@ const geometryInstances = {
 /**
  * @const {Boolean}
  * vertexCacheOptimize
- * compressVertices
  */
-const vcMixin = {
+const vertexCacheOptimize = {
   vertexCacheOptimize: {
     type: Boolean,
     default: false
-  },
+  }
+}
+/**
+ * @const {Boolean}
+ * compressVertices
+ */
+const compressVertices = {
   compressVertices: {
     type: Boolean,
     default: true
@@ -1306,7 +1318,7 @@ const blendOption = {
  * @const {*} id mixin
  */
 const id = {
-  id: null
+  id: null as PropType<any>
 }
 
 /**
@@ -1524,6 +1536,15 @@ const backFaceCulling = {
   }
 }
 
+const colors = {
+  colors: {
+    type: Array,
+    watcherOptions: {
+      cesiumObjectBuilder: makeColors
+    }
+  }
+}
+
 // datasouce
 /**
  * @const {String, Object} data mixin
@@ -1588,7 +1609,16 @@ const scissorRectangle = {
 
 // PostProcessStage end
 
+// custom
+const enableMouseEvent = {
+  enableMouseEvent: {
+    type: Boolean,
+    default: true
+  }
+}
 export {
+  colors,
+  enableMouseEvent,
   backFaceCulling,
   specularEnvironmentMaps,
   sphericalHarmonicCoefficients,
@@ -1640,8 +1670,10 @@ export {
   releaseGeometryInstances,
   debugShowShadowVolume,
   id,
-  aaMixin,
-  vcMixin,
+  allowPicking,
+  asynchronous,
+  vertexCacheOptimize,
+  compressVertices,
   modelMatrix,
   debugShowBoundingVolume,
   scene,

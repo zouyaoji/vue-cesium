@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import {
   token,
   tileDiscardPolicy,
@@ -15,7 +15,7 @@ import {
   maximumLevel } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 export default defineComponent({
-  name: 'VcProviderImageryArcgisMapserver',
+  name: 'VcProviderImageryArcgis',
   props: {
     url: {
       type: String,
@@ -42,7 +42,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ArcGisMapServerImageryProvider'
-    userProviders(props, ctx, instance)
+    useProviders(props, ctx, instance)
     return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
   }
 })

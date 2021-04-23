@@ -173,7 +173,7 @@ export default {
     type: Boolean,
     default: true
   },
-  enableEvent: {
+  enableMouseEvent: {
     type: Boolean,
     default: true
   },

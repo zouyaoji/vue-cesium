@@ -1,9 +1,11 @@
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { provide, watch } from 'vue'
+import { onUnmounted, provide, watch } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
-import differenceBy from 'lodash/differenceBy'
+import cloneDeep from 'lodash/cloneDeep'
+import differenceWith from 'lodash/differenceWith'
+import isEqual from 'lodash/isEqual'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -28,33 +30,40 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   ]
   const commonState = useCommon(props, ctx, vcInstance)
   // watcher
-  watch(
-    () => [...props.entities],
+  vcInstance.alreadyListening.push('entities')
+  let unwatchFns = []
+  unwatchFns.push(watch(
+    () => cloneDeep(props.entities),
     (newVal, oldVal) => {
       if (!vcInstance.mounted) {
         return
       }
       const datasource = vcInstance.cesiumObject as Cesium.DataSource
-      if (newVal.length === oldVal.length) {
-        for (let i = 0; i < newVal.length; i++) {
+      const adds = differenceWith(newVal, oldVal, isEqual)
+      const deletes = differenceWith(oldVal, newVal, isEqual)
+      if (newVal.length === oldVal.length && adds.length === deletes.length) {
+        // 视为修改操作
+        // Treated as modified
+        for (let i = 0; i < adds.length; i++) {
           const options = newVal[i]
-          const entity = datasource.entities.getById(options.id)
-          entity && Object.keys(options).forEach(prop => {
-            if (prop !== 'id') {
-              entity[prop] = commonState.transformProp(prop, options[prop])
-            }
+          const modifyEntity = datasource.entities.getById(deletes[i].id)
+          modifyEntity && Object.keys(options).forEach(prop => {
+            modifyEntity[prop] = commonState.transformProp(prop, options[prop])
           })
         }
       } else {
-        const deletedEntities = differenceBy(oldVal, newVal, 'id')
-        for (let i = 0; i < deletedEntities.length; i++) {
-          const entity = deletedEntities[i]
-          datasource.entities.remove(entity)
+        const deletedEntities = []
+        for (let i = 0; i < deletes.length; i++) {
+          const deleteEntity = datasource.entities.getById(deletes[i].id)
+          deletedEntities.push(deleteEntity)
         }
 
-        const addedEntities = differenceBy(newVal, datasource.entities.values, 'id')
-        for (let i = 0; i < addedEntities.length; i++) {
-          const entityOptions = addedEntities[i]
+        deletedEntities.forEach(v => {
+          datasource.entities.remove(v)
+        })
+
+        for (let i = 0; i < adds.length; i++) {
+          const entityOptions = adds[i]
           const entityOptionsTransform = commonState.transformProps(entityOptions)
           const entityAdded = datasource.entities.add(entityOptionsTransform)
           entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
@@ -64,7 +73,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     {
       deep: true
     }
-  )
+  ))
   // methods
   vcInstance.mount = async () => {
     const dataSources = commonState.$services.dataSources
@@ -87,7 +96,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   }
 
   const getServices = () => {
-    return mergeDescriptors(commonState.$services, {
+    return mergeDescriptors(commonState.getServices(), {
       get datasource () {
         return vcInstance.cesiumObject as Cesium.DataSource
       },
@@ -96,6 +105,12 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
       }
     })
   }
+
+  // life cycle
+  onUnmounted(() => {
+    unwatchFns.forEach(item => item())
+    unwatchFns = []
+  })
 
   // provide
   provide(vcKey, getServices())
@@ -106,6 +121,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
+    cesiumObject: vcInstance.cesiumObject,
     getCesiumObject: () => vcInstance.cesiumObject
   })
 

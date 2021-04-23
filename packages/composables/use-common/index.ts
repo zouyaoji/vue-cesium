@@ -1,9 +1,9 @@
 import { inject, onUnmounted } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
+import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import {
-  AnyObject,
   ReadyObj,
   VcComponentInternalInstance,
   VcComponentPublicInstance,
@@ -18,15 +18,8 @@ import useEvents from '../use-events'
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   const logger = useLog(vcInstance)
 
-  if (process.env.NODE_ENV !== 'production') {
-    const tags = [
-      ...Object.keys(vcInstance.proxy.$options.props),
-      ...vcInstance.proxy.$options.emits
-    ]
-    logger.log(tags)
-  }
-
   // state
+  vcInstance.alreadyListening = []
   let unwatchFns = []
   vcInstance.mounted = false
   const vcMitt: Emitter = mitt()
@@ -102,7 +95,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           vcInstance.mounted = true
           parentVcInstance.children.push(vcInstance)
           // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
-          const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy }
+          const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
           emit('ready', readyObj)
           vcMitt.emit('ready', readyObj)
           logger.log(`${vcInstance.cesiumClass}---loaded`)
@@ -120,17 +113,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const unload = async () => {
     await beforeUnload()
 
-    if (!vcInstance.mounted) {
-      return false
-    }
-
-    logger.log(`${vcInstance.cesiumClass}---unload`)
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
       const vcChildCmp = vcInstance.children[i].proxy as VcComponentPublicInstance
       await vcChildCmp.unload()
     }
-    return unmount().then(async () => {
+
+    return vcInstance.mounted ? unmount().then(async () => {
       setPropsWatcher(false)
       vcInstance.cesiumObject = undefined
       vcInstance.mounted = false
@@ -140,7 +129,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       // If the component cannot be rendered without the parent component, the parent component needs to be removed.
       // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
       return vcInstance.renderByParent && !vcInstance.unloadingPromise ? (parentVcInstance.proxy as VcComponentPublicInstance).unload() : true
-    })
+    }) : false
   }
 
   const reload = async () => {
@@ -185,11 +174,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           }
           // 如果在vue文件中已经监听了改 props 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
-          if (vcInstance.proxy.$options.watch?.[vueProp]) {
+          if (vcInstance.proxy.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
             return
           }
 
-          const watcherOptions = vcInstance.proxy.$options.props[vueProp].watcherOptions
+          const watcherOptions = vcInstance.proxy.$options.props[vueProp]?.watcherOptions
           // returns an unwatch function that stops firing the callback
           const unwatch = vcInstance.proxy.$watch(
             vueProp,
@@ -237,7 +226,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   const transformProps = props => {
-    let options: AnyObject = {}
+    let options: any = {}
     props &&
       Object.keys(props).forEach(vueProp => {
         let cesiumProp = vueProp
@@ -286,6 +275,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
+  const getServices = () => {
+    return mergeDescriptors({}, $services || {})
+  }
+
   // lifecycle
   const createPromise = new Promise<ReadyObj | boolean>((resolve, reject) => {
     try {
@@ -317,6 +310,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         vcMitt.all.clear()
       })
     })
+    vcInstance.alreadyListening = []
   })
 
   return {
@@ -329,6 +323,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     transformProps,
     unwatchFns,
     setPropsWatcher,
-    logger
+    logger,
+    getServices
   }
 }

@@ -3,26 +3,25 @@ import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
-  VcProviderImageryArcgisMapserver,
+  VcProviderImageryArcgis,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
-  // VcProviderImageryGoogleearthEnterprise,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryMapboxStyle,
+  VcProviderImageryMapbox,
   VcProviderImageryOsm,
-  VcProviderImageryTileSingle,
+  VcProviderImagerySingletile,
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTileMapservice,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
 
   VcProviderTerrainCesium,
-  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainArcgis,
   VcProviderTerrainTianditu
 } from '../index'
 
@@ -39,20 +38,20 @@ const arcgisApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryArcgisMapserver
+    VcProviderImageryArcgis
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-arcgis-mapserver ref="provider"></vc-provider-imagery-arcgis-mapserver>
+          <vc-provider-imagery-arcgis ref="provider"></vc-provider-imagery-arcgis>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryArcgisMapserver', () => {
+describe('VcProviderImageryArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
@@ -230,26 +229,26 @@ const mapboxApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryMapboxStyle
+    VcProviderImageryMapbox
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-mapbox-style
+          <vc-provider-imagery-mapbox
             ref="provider"
             url="https://api.mapbox.com/styles/v1"
             username="zouyaoji"
             styleId="ckd49hwdn0u641irz36komsmt"
             accessToken="pk.eyJ1Ijoiem91eWFvamkiLCJhIjoiY2tjdjlha3pzMDIxeDJ1bWxhaWNnaGNkdSJ9.WaGuuQT8YcWTPx3KNQfF7A"
-          ></vc-provider-imagery-mapbox-style>
+          ></vc-provider-imagery-mapbox>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryMapboxStyle', () => {
+describe('VcProviderImageryMapbox', () => {
   test('render test', async () => {
     const wrapper = mount(mapboxApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
@@ -310,20 +309,20 @@ const singletileApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTileSingle
+    VcProviderImagerySingletile
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tile-single ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-provider-imagery-tile-single>
+          <vc-provider-imagery-singletile ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-provider-imagery-singletile>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTileSingle', () => {
+describe('VcProviderImagerySingletile', () => {
   test('render test', async () => {
     const wrapper = mount(singletileApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
@@ -456,25 +455,25 @@ const tileMapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTileMapservice
+    VcProviderImageryTms
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tile-mapservice
+          <vc-provider-imagery-tms
             ref="provider"
             url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
             :rectangle="[-120, 20, -60, 40]"
             :maximumLevel="4"
-          ></vc-provider-imagery-tile-mapservice>
+          ></vc-provider-imagery-tms>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTileMapservice', () => {
+describe('VcProviderImageryTms', () => {
   test('render test', async () => {
     const wrapper = mount(tileMapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
@@ -694,18 +693,18 @@ describe('VcProviderTerrainCesium', () => {
 const arcgisTiledElevationApp = {
   components: {
     VcViewer,
-    VcProviderTerrainArcgisTiledElevation
+    VcProviderTerrainArcgis
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
-        <vc-provider-terrain-arcgis-tiled-elevation ref="provider"></vc-provider-terrain-arcgis-tiled-elevation>
+        <vc-provider-terrain-arcgis ref="provider"></vc-provider-terrain-arcgis>
       </vc-viewer>
     </div>
   `
 }
 
-describe('ArcGISTiledElevationTerrainProvider', () => {
+describe('VcProviderTerrainArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisTiledElevationApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance

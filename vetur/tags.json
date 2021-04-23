@@ -37,7 +37,7 @@
       "UTCOffset",
       "removeCesiumScript",
       "autoSortImageryLayers",
-      "enableEvent",
+      "enableMouseEvent",
       "skeleton",
       "beforeLoad",
       "cesiumReady",
@@ -125,7 +125,7 @@
       "vc-layer-imagery",
       "vc-entity",
       "vc-provider-terrain-cesium",
-      "vc-provider-terrain-arcgis-tiled-elevation",
+      "vc-provider-terrain-arcgis",
       "vc-provider-terrain-tianditu",
       "vc-datasource-custom",
       "vc-datasource-czml",
@@ -559,7 +559,7 @@
       "polylineVolume",
       "rectangle",
       "wall",
-      "enableEvent",
+      "enableMouseEvent",
       "beforeLoad",
       "ready",
       "destroyed",
@@ -986,7 +986,7 @@
     ],
     "description": "A TerrainProvider that accesses terrain data in a Cesium terrain format."
   },
-  "vc-provider-terrain-arcgis-tiled-elevation": {
+  "vc-provider-terrain-arcgis": {
     "attributes": ["url", "ellipsoid", "token", "beforeLoad", "ready", "destroyed", "readyPromise"],
     "description": "A TerrainProvider that produces terrain geometry by tessellating height maps retrieved from Elevation Tiles of an ArcGIS ImageService."
   },
@@ -997,7 +997,7 @@
   "vc-datasource-custom": {
     "attributes": [
       "show",
-      "enableEvent",
+      "enableMouseEvent",
       "entities",
       "name",
       "beforeLoad",
@@ -1015,7 +1015,7 @@
   "vc-datasource-czml": {
     "attributes": [
       "show",
-      "enableEvent",
+      "enableMouseEvent",
       "entities",
       "czml",
       "options",
@@ -1034,7 +1034,7 @@
   "vc-datasource-geojson": {
     "attributes": [
       "show",
-      "enableEvent",
+      "enableMouseEvent",
       "entities",
       "data",
       "options",
@@ -1053,7 +1053,7 @@
   "vc-datasource-kml": {
     "attributes": [
       "show",
-      "enableEvent",
+      "enableMouseEvent",
       "entities",
       "data",
       "options",

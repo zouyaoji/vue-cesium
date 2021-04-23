@@ -40,7 +40,7 @@ export default defineComponent({
       return !viewer.isDestroyed() && viewer.imageryLayers.remove(imageryLayer)
     }
 
-    const setProvider = provider => {
+    const updateProvider = provider => {
       const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
       (imageryLayer as any)._imageryProvider = provider
       const listener = getInstanceListener(instance, 'update:imageryProvider')
@@ -54,9 +54,10 @@ export default defineComponent({
       load: commonState.load,
       unload: commonState.unload,
       reload: commonState.reload,
+      cesiumObject: instance.cesiumObject,
       getCesiumObject: () => instance.cesiumObject,
       // private but needed by VcProviderXXX
-      __setProvider: setProvider
+      __updateProvider: updateProvider
     })
 
     return () => ctx.slots.default ? (

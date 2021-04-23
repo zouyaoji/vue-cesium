@@ -95,6 +95,7 @@
           }
         }
       ])
+      const instance = getCurrentInstance()
       const clusterSch = ref(true)
       let _viewer
       // watch
@@ -147,6 +148,7 @@
         datasourceRef.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
+        window.vm = instance
         _viewer = viewer
         const options = {
           id: '1001',

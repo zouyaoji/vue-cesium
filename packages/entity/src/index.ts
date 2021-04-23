@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { EntityEmitType, VcComponentInternalInstance, } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
-import { position, plane } from '@vue-cesium/utils/cesium-props'
+import { position, plane, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -39,10 +39,7 @@ export default defineComponent({
     polylineVolume: Object,
     rectangle: Object,
     wall: Object,
-    enableEvent: {
-      type: Boolean,
-      default: true
-    }
+    ...enableMouseEvent
   },
   emits: [
     'beforeLoad',
@@ -96,6 +93,7 @@ export default defineComponent({
       } else {
         instance.cesiumObject[emitType.substr(7)] = graphics
       }
+      graphics && (graphics._vcParent = instance.cesiumObject)
       return true
     }
 
@@ -105,6 +103,7 @@ export default defineComponent({
       load: commonState.load,
       unload: commonState.unload,
       reload: commonState.reload,
+      cesiumObject: instance.cesiumObject,
       getCesiumObject: () => instance.cesiumObject,
 
       // private but needed by VcGraphicsXXX

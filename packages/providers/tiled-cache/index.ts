@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { userProviders } from '@vue-cesium/composables'
+import { useProviders } from '@vue-cesium/composables'
 import {
   url,
   format,
@@ -62,7 +62,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'UrlTemplateImageryProvider'
-    const providersState = userProviders(props, ctx, instance)
+    const providersState = useProviders(props, ctx, instance)
     // methods
     instance.createCesiumObject = async () => {
       const options = providersState.transformProps(props)

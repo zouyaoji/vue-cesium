@@ -770,12 +770,12 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         Cesium,
         viewer,
         earth: vcInstance.earth,
-        vm: vcInstance.proxy
+        vm: vcInstance.proxy as VcComponentPublicInstance
       }
       : {
         Cesium,
         viewer,
-        vm: vcInstance.proxy
+        vm: vcInstance.proxy as VcComponentPublicInstance
       }
     const listenerReady = getInstanceListener(vcInstance, 'ready')
     listenerReady && emit('ready', readyObj)

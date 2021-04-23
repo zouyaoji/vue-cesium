@@ -523,4 +523,4 @@ interface TranslationRotationScaleOption {
 
 ## 参考
 
-> [Cesium 官方文档](https://cesium.com/docs/cesiumjs-ref-doc/index.html)
+> [官方文档](https://cesium.com/docs/cesiumjs-ref-doc/index.html)
