@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: yarn test
       - name: Coveralls
-      - run: cat ./coverage/lcov.info | node_modules/.bin/coveralls
+        run: cat ./coverage/lcov.info | node_modules/.bin/coveralls
 
   publish:
     needs: test
