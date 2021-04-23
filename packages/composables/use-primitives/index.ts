@@ -11,25 +11,51 @@
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { provide, ref, reactive } from 'vue'
+import { provide, ref } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { isArray } from '@vue-cesium/utils/util'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
-  vcInstance.cesiumEvents = ['readyPromise']
   const commonState = useCommon(props, ctx, vcInstance)
   const childCount = ref(0)
   const instances = ref([])
   // methods
+  vcInstance.createCesiumObject = async () => {
+    const options = commonState.transformProps(props)
+    if (!options.asynchronous) {
+      await Cesium[vcInstance.cesiumClass].initializeTerrainHeights?.()
+    }
+    if (props.geometryInstances) {
+      if (isArray(props.geometryInstances)) {
+        instances.value.push(...props.geometryInstances)
+        childCount.value += props.geometryInstances.length
+      } else {
+        childCount.value += 1
+        instances.value.push(props.geometryInstances)
+      }
+    }
+    return new Cesium[vcInstance.cesiumClass](options)
+  }
+
   vcInstance.mount = async () => {
     const primitives = commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
     primitive.readyPromise && primitive.readyPromise.then(e => {
       const listener = getInstanceListener(vcInstance, 'readyPromise')
-      listener && ctx.emit('readyPromise', e)
+      listener && ctx.emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy)
     })
+    ; (primitive as any)._vcParent = primitives
     const object = primitives && primitives.add(primitive)
+    if (vcInstance.cesiumClass === 'ParticleSystem') {
+      const intervalId = setInterval(() => {
+        if (Cesium.defined(object._billboardCollection)) {
+          object._billboardCollection._vcParent = object
+          clearInterval(intervalId)
+        }
+      }, 500)
+    }
     return Cesium.defined(object)
   }
   vcInstance.unmount = async () => {
@@ -45,10 +71,10 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     if (index === childCount.value - 1) {
       const listener = getInstanceListener(vcInstance, 'update:geometryInstances')
       if (listener) {
-        this.$emit('update:geometryInstances', instances)
+        ctx.emit('update:geometryInstances', instances)
       } else {
         const primitive = vcInstance.cesiumObject as Cesium.Primitive
-        (primitive as any).geometryInstances = index === 0 ? instance : instances
+        (primitive as any).geometryInstances = index === 0 ? instance : instances.value
       }
     }
     return true
@@ -71,10 +97,12 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
+    cesiumObject: vcInstance.cesiumObject,
     getCesiumObject: () => vcInstance.cesiumObject,
 
-    // private but needed by VcGeometryXXX
-    __updateGeometryInstances: updateGeometryInstances
+    // private but needed by VcInstanceGeometry
+    __updateGeometryInstances: updateGeometryInstances,
+    __childCount: childCount
   })
 
   return {

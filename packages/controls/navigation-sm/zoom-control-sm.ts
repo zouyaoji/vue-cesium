@@ -137,6 +137,7 @@ export default defineComponent({
       load: commonState.load,
       unload: commonState.unload,
       reload: commonState.reload,
+      cesiumObject: instance.cesiumObject,
       getCesiumObject: () => instance.cesiumObject
     })
 

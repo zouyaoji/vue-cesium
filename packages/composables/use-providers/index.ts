@@ -16,7 +16,7 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
       imageryProvider.readyPromise.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && ctx.emit('readyPromise', imageryProvider)
+        listener && ctx.emit('readyPromise', imageryProvider, viewer, vcInstance.proxy)
       })
 
       if (props.projectionTransforms && props.projectionTransforms.from !== props.projectionTransforms.to) {
@@ -56,12 +56,12 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
         }
       }
       const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
-      return parentVM && parentVM.__setProvider(imageryProvider)
+      return parentVM && parentVM.__updateProvider(imageryProvider)
     } else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && ctx.emit('readyPromise', terrainProvider)
+        listener && ctx.emit('readyPromise', terrainProvider, viewer, vcInstance.proxy)
       })
       viewer.terrainProvider = terrainProvider
       return true
@@ -71,12 +71,12 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     const { viewer } = commonState.$services
     if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
       const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
-      return parentVM && parentVM.__setProvider(undefined)
+      return parentVM && parentVM.__updateProvider(undefined)
     } else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && ctx.emit('readyPromise', terrainProvider)
+        listener && ctx.emit('readyPromise', terrainProvider, viewer, vcInstance.proxy)
       })
       viewer.terrainProvider = terrainProvider
       return true
@@ -89,6 +89,7 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
+    cesiumObject: vcInstance.cesiumObject,
     getCesiumObject: () => vcInstance.cesiumObject
   })
 

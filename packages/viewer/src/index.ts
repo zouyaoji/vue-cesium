@@ -28,6 +28,7 @@ export default defineComponent({
       load: viewerStates.load,
       unload: viewerStates.unload,
       reload: viewerStates.reload,
+      cesiumObject: instance.cesiumObject,
       getCesiumObject: () => instance.cesiumObject
     })
 

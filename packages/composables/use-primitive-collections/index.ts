@@ -53,6 +53,7 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     load: commonState.load,
     unload: commonState.unload,
     reload: commonState.reload,
+    cesiumObject: vcInstance.cesiumObject,
     getCesiumObject: () => vcInstance.cesiumObject
   })
 
