@@ -78,7 +78,7 @@
     "element-plus": "^1.0.2-beta.36",
     "element-theme-chalk": "^2.15.1",
     "eslint": "^7.19.0",
-    "eslint-plugin-vue": "^7.0.0-beta.0",
+    "eslint-plugin-vue": "^7.9.0",
     "file-loader": "^6.0.0",
     "file-save": "^0.2.0",
     "highlight.js": "^10.4.1",

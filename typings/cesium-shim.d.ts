@@ -73,6 +73,22 @@ declare namespace Cesium {
     _update (): void
   }
 
+  interface BillboardCollection {
+    _billboards: Billboard []
+  }
+
+  interface LabelCollection {
+    _labels: Label []
+  }
+
+  interface PointPrimitiveCollection {
+    _points: PointPrimitive []
+  }
+
+  interface PolylineCollection {
+    _polylines: Polyline []
+  }
+
   // eslint-disable-next-line no-var
   var SuperMapImageryProvider: any
   // eslint-disable-next-line no-var

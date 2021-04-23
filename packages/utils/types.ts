@@ -1,5 +1,5 @@
 import { Emitter } from 'mitt'
-import type { App, CSSProperties, HTMLAttributes } from 'vue'
+import type { App, Ref } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
 
 export type SFCWithInstall<T> = T & { install (app: App): void; }
@@ -76,6 +76,7 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   mount?(): Promise<boolean>
   unmount?(): Promise<boolean>
   children?: Array<VcComponentInternalInstance>
+  alreadyListening: string []
 }
 
 type VcComponentPublicInstance = ComponentPublicInstance<{
@@ -83,9 +84,13 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   unload?(): Promise<boolean>
   reload?(): Promise<boolean>
   createPromise?: Promise<ReadyObj>
+  cesiumObject: unknown
   getCesiumObject?(): unknown
   __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
-  __setProvider?(cesiumObject: AnyObject) : boolean
+  __updateProvider?(cesiumObject: Cesium.ImageryProvider) : boolean
+  __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number) : boolean
+  __updateGeometry?(cesiumObject: Cesium.Geometry) : boolean
+  __childCount?: Ref<number>
 }>
 
 interface VcViewerProvider {

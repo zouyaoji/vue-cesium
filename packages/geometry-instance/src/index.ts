@@ -46,7 +46,6 @@ export default defineComponent({
     }
 
     const updateGeometry = geometry => {
-      console.log('updateGeometry')
       const listener = getInstanceListener(instance, 'update:geometry')
       if (listener) {
         emit('update:geometry', geometry)

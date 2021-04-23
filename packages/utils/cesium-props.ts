@@ -6,6 +6,7 @@ import {
   makeCartesian2Array,
   makeCartesian3,
   makeColor,
+  makeColors,
   makeNearFarScalar,
   makeMaterial,
   makeCartesian3Array,
@@ -645,7 +646,7 @@ const backgroundColor = {
   backgroundColor: {
     type: [Object, String, Array, Function],
     default: () => {
-      return [0.165, 0.165, 0.165, 0.8]
+      return { x: 0.165, y: 0.165, z: 0.165, w: 0.8 }
     },
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -1535,6 +1536,15 @@ const backFaceCulling = {
   }
 }
 
+const colors = {
+  colors: {
+    type: Array,
+    watcherOptions: {
+      cesiumObjectBuilder: makeColors
+    }
+  }
+}
+
 // datasouce
 /**
  * @const {String, Object} data mixin
@@ -1600,14 +1610,15 @@ const scissorRectangle = {
 // PostProcessStage end
 
 // custom
-const enableEvent = {
-  enableEvent: {
+const enableMouseEvent = {
+  enableMouseEvent: {
     type: Boolean,
     default: true
   }
 }
 export {
-  enableEvent,
+  colors,
+  enableMouseEvent,
   backFaceCulling,
   specularEnvironmentMaps,
   sphericalHarmonicCoefficients,

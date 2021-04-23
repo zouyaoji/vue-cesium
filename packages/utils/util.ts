@@ -53,7 +53,7 @@ export function removeEmpty (obj: unknown): AnyObject {
   const finalObj: AnyObject = {}
   Object.keys(obj).forEach(key => {
     const className = getObjClassName(obj[key])
-    if (obj[key] && isArray(obj[key])) {
+    if ((obj[key] && isArray(obj[key]) || obj[key] instanceof Element)) {
       finalObj[key] = obj[key]
     } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) { // Do not process cesium objects
       const nestedObj = removeEmpty(obj[key])

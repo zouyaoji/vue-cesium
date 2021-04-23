@@ -6419,10 +6419,10 @@ escodegen@^1.14.1, escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-plugin-vue@^7.0.0-beta.0:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-7.7.0.tgz#a90df4595e670821bf243bd2750ededdb74948b8"
-  integrity sha512-mYz4bpLGv5jx6YG/GvKkqbGSfV7uma2u1P3mLA41Q5vQl8W1MeuTneB8tfsLq6xxxesFubcrOC0BZBJ5R+eaCQ==
+eslint-plugin-vue@^7.9.0:
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-7.9.0.tgz#f8e83a2a908f4c43fc8304f5401d4ff671f3d560"
+  integrity sha512-2Q0qQp5+5h+pZvJKCbG1/jCRUYrdgAz5BYKGyTlp2NU8mx09u3Hp7PsH6d5qef6ojuPoCXMnrbbDxeoplihrSw==
   dependencies:
     eslint-utils "^2.1.0"
     natural-compare "^1.4.0"
