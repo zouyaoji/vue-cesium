@@ -139,7 +139,7 @@
 |showCredit|Boolean|`true`| `optional` 是否显示默认 Logo 和 加载数据版权信息。|
 |autoSortImageryLayers|Boolean|`true`| `optional` 添加影像图层时是否根据图层 `sortOrder` 属性自动排序。|
 |removeCesiumScript|Boolean|`true`| `optional` 指定`vc-viewer` 销毁时是否移除CesiumJS标签。|
-|enableEvent|Boolean|`true`| `optional` 指定是否触发事件。|
+|enableMouseEvent|Boolean|`true`| `optional` 指定是否触发事件。|
 |skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` 指定初始化时是否显示骨架背景。动画可选值 `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
 |TZcode|String|`UTM`| `optional` 自定义 Timeline 格式化日期是所用时区代码。|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` 本地时间与UTC时间的时差（分钟）。自定义 Timeline 格式化日期使用。|
@@ -251,4 +251,4 @@
 
 ### 参考
 
-- 官方文档： [Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)
+- 官方文档： **[Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)**

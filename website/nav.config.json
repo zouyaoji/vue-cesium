@@ -41,7 +41,7 @@
           "list": [
             {
               "path": "/vc-viewer",
-              "title": "Viewer"
+              "title": "Viewer 场景视图"
             }
           ]
         },
@@ -50,11 +50,11 @@
           "list": [
             {
               "path": "/controls/vc-navigation",
-              "title": "导航"
+              "title": "VcNavigation 导航"
             },
             {
               "path": "/controls/vc-navigation-sm",
-              "title": "导航sm"
+              "title": "VcNavigationSm 导航"
             }
           ]
         },
@@ -63,76 +63,81 @@
           "list": [
             {
               "path": "/vc-layer-imagery",
-              "title": "影像图层"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-arcgis-mapserver",
-              "title": "ArcGIS"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-baidumap",
-              "title": "百度"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-bingmaps",
-              "title": "必应"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-ion",
-              "title": "CesiumIon"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-mapbox-style",
-              "title": "MapBox"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-osm",
-              "title": "OpenStreetMap"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-supermap",
-              "title": "超图"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-tianditu",
-              "title": "天地图"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-tile-mapservice",
-              "title": "TileMap"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-tile-single",
-              "title": "单瓦片"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-urltemplate",
-              "title": "模板URL"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-wms",
-              "title": "WMS"
-            },
-            {
-              "path": "/providers/vc-provider-imagery-wmts",
-              "title": "WMTS"
+              "title": "ImageryLayer 影像图层"
             }
           ]
         },
         {
-          "groupName": "地形",
+          "groupName": "影像提供者",
+          "list": [
+            {
+              "path": "/providers/vc-provider-imagery-arcgis",
+              "title": "ArcGisMapServerImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-baidumap",
+              "title": "BaidumapImageryProvider 百度地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-bingmaps",
+              "title": "BingMapsImageryProvider 必应地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-ion",
+              "title": "IonImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-mapbox",
+              "title": "MapboxStyleImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-osm",
+              "title": "OpenStreetMapImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-supermap",
+              "title": "SuermapImageryProvider 超图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tianditu",
+              "title": "TiandituImageryProvider 天地图"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-tms",
+              "title": "TileMapServiceImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-singletile",
+              "title": "SingleTileImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-urltemplate",
+              "title": "UrlTemplateImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wms",
+              "title": "WebMapServiceImageryProvider"
+            },
+            {
+              "path": "/providers/vc-provider-imagery-wmts",
+              "title": "WebMapTileServiceImageryProvider"
+            }
+          ]
+        },
+        {
+          "groupName": "地形提供者",
           "list": [
             {
               "path": "/providers/vc-provider-terrain-cesium",
-              "title": "CesiumTerrain"
+              "title": "CesiumTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-arcgis-tiled-elevation",
-              "title": "ArcGISTiledElevation"
+              "path": "/providers/vc-provider-terrain-arcgis",
+              "title": "ArcGISTiledElevationTerrainProvider"
             },
             {
               "path": "/providers/vc-provider-terrain-tianditu",
-              "title": "TiandituTerrain"
+              "title": "TiandituTerrainProvider 天地图"
             }
           ]
         },
@@ -141,102 +146,234 @@
           "list": [
             {
               "path": "/datasources/vc-datasource-custom",
-              "title": "Custom"
+              "title": "CustomDataSource"
             },
             {
               "path": "/datasources/vc-datasource-czml",
-              "title": "Czml"
+              "title": "CzmlDataSource"
             },
             {
               "path": "/datasources/vc-datasource-geojson",
-              "title": "GeoJson"
+              "title": "GeoJsonDataSource"
             },
             {
               "path": "/datasources/vc-datasource-kml",
-              "title": "Kml"
+              "title": "KmlDataSource"
             }
           ]
         },
         {
-          "groupName": "Graphics对象",
+          "groupName": "实体",
           "list": [
             {
               "path": "/vc-entity",
-              "title": "实体"
-            },
+              "title": "Entity 实体"
+            }
+          ]
+        },
+        {
+          "groupName": "图形",
+          "list": [
             {
               "path": "/graphics/vc-graphics-billboard",
-              "title": "布告板"
+              "title": "BillboardGraphics 布告板"
             },
             {
               "path": "/graphics/vc-graphics-box",
-              "title": "立方盒"
+              "title": "BoxGraphics 立方盒"
             },
             {
               "path": "/graphics/vc-graphics-corridor",
-              "title": "走廊"
+              "title": "CorridorGraphics 廊道"
             },
             {
               "path": "/graphics/vc-graphics-cylinder",
-              "title": "圆柱(锥)体"
+              "title": "CylinderGraphics 圆柱(锥)体"
             },
             {
               "path": "/graphics/vc-graphics-ellipse",
-              "title": "椭圆"
+              "title": "EllipseGraphics 椭圆"
             },
             {
               "path": "/graphics/vc-graphics-ellipsoid",
-              "title": "(椭)球体"
+              "title": "EllipsoidGraphics (椭)球体"
             },
             {
               "path": "/graphics/vc-graphics-label",
-              "title": "文本"
+              "title": "LabelGraphics 文本"
             },
             {
               "path": "/graphics/vc-graphics-model",
-              "title": "模型"
+              "title": "ModelGraphics 模型"
             },
             {
               "path": "/graphics/vc-graphics-path",
-              "title": "路径"
+              "title": "PathGraphics 路径"
             },
             {
               "path": "/graphics/vc-graphics-plane",
-              "title": "平面"
+              "title": "PlaneGraphics 平面"
             },
             {
               "path": "/graphics/vc-graphics-point",
-              "title": "点"
+              "title": "PointGraphics 点"
             },
             {
               "path": "/graphics/vc-graphics-polyline",
-              "title": "线"
+              "title": "PolylineGraphics 线"
             },
             {
               "path": "/graphics/vc-graphics-polygon",
-              "title": "面"
+              "title": "PolygonGraphics 面"
             },
             {
               "path": "/graphics/vc-graphics-polyline-volume",
-              "title": "线柱体"
+              "title": "PolylineVolumeGraphics 线柱体"
             },
             {
               "path": "/graphics/vc-graphics-rectangle",
-              "title": "矩形"
+              "title": "RectangleGraphics 矩形"
             },
             {
               "path": "/graphics/vc-graphics-wall",
-              "title": "墙"
+              "title": "WallGraphics 墙"
+            }
+          ]
+        },
+        {
+          "groupName": "图元",
+          "list": [
+            {
+              "path": "/primitives/vc-primitive",
+              "title": "Primitive 普通图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-classification",
+              "title": "ClassificationPrimitive 分类图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-ground",
+              "title": "GroundPrimitive 贴地图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-polyline-ground",
+              "title": "GroundPolylinePrimitive 贴地线图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-model",
+              "title": "Model 模型图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-tileset",
+              "title": "Cesium3DTileset 模型图元"
+            },
+            {
+              "path": "/primitives/vc-primitive-particle",
+              "title": "ParticleSystem 粒子图元"
             }
           ]
         },
         {
           "groupName": "图元集合",
-          "list": []
+          "list": [
+            {
+              "path": "/primitives/vc-collection-billboard",
+              "title": "BillboardCollection 布告板集合"
+            },
+            {
+              "path": "/primitives/vc-collection-label",
+              "title": "LabelCollection 标签集合"
+            },
+            {
+              "path": "/primitives/vc-collection-point",
+              "title": "PointCollection 点集合"
+            },
+            {
+              "path": "/primitives/vc-collection-polyline",
+              "title": "PolylineCollection 线集合"
+            },
+            {
+              "path": "/primitives/vc-collection-primitive",
+              "title": "PrimitiveCollection 图元集合"
+            }
+          ]
         },
         {
-          "groupName": "几何体",
-          "list": []
+          "groupName": "几何图形",
+          "list": [
+            {
+              "path": "/geometries/vc-instance-geometry",
+              "title": "GeometryInstance 几何实例"
+            },
+            {
+              "path": "/geometries/vc-geometry-box",
+              "title": "BoxGeometry 立方盒"
+            },
+            {
+              "path": "/geometries/vc-geometry-circle",
+              "title": "CircleGeometry 圆"
+            },
+            {
+              "path": "/geometries/vc-geometry-corridor",
+              "title": "CorridorGeometry 廊道"
+            },
+            {
+              "path": "/geometries/vc-geometry-cylinder",
+              "title": "CylinderGeometry 圆柱(锥)体"
+            },
+            {
+              "path": "/geometries/vc-geometry-ellipse",
+              "title": "EllipseGeometry 椭圆"
+            },
+            {
+              "path": "/geometries/vc-geometry-ellipsoid",
+              "title": "EllipsoidGeometry (椭)球体"
+            },
+            {
+              "path": "/geometries/vc-geometry-frustum",
+              "title": "FrustumGeometry 视锥体"
+            },
+            {
+              "path": "/geometries/vc-geometry-plane",
+              "title": "PlaneGeometry 平面"
+            },
+            {
+              "path": "/geometries/vc-geometry-polygon",
+              "title": "PolygonGeometry 多边形"
+            },
+            {
+              "path": "/geometries/vc-geometry-polygon-coplanar",
+              "title": "CoplanarPolygonGeometry 共面多边形"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline",
+              "title": "PolylineGeometry 多段线"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-ground",
+              "title": "GroundPolylineGeometry 贴地线"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-simple",
+              "title": "SimplePolylineGeometry 线段"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-volume",
+              "title": "PolylineVolumeGeometry 线柱体"
+            },
+            {
+              "path": "/geometries/vc-geometry-rectangle",
+              "title": "RectangleGeometry 矩形"
+            },
+            {
+              "path": "/geometries/vc-geometry-sphere",
+              "title": "SphereGeometry 球体"
+            },
+            {
+              "path": "/geometries/vc-geometry-wall",
+              "title": "WallGeometry 墙"
+            }
+          ]
         }
       ]
     }
@@ -292,23 +429,28 @@
           "list": [
             {
               "path": "/controls/vc-navigation",
-              "title": "Navigation"
+              "title": "VcNavigation"
             },
             {
               "path": "/controls/vc-navigation-sm",
-              "title": "Navigation-SM"
+              "title": "VcNavigationSm"
             }
           ]
         },
         {
-          "groupName": "Imageries",
+          "groupName": "Imagery",
           "list": [
             {
               "path": "/vc-layer-imagery",
               "title": "ImageryLayer"
-            },
+            }
+          ]
+        },
+        {
+          "groupName": "ImageryProvider",
+          "list": [
             {
-              "path": "/providers/vc-provider-imagery-arcgis-mapserver",
+              "path": "/providers/vc-provider-imagery-arcgis",
               "title": "ArcGisMapServerImageryProvider"
             },
             {
@@ -324,7 +466,7 @@
               "title": "IonImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-mapbox-style",
+              "path": "/providers/vc-provider-imagery-mapbox",
               "title": "MapboxStyleImageryProvider"
             },
             {
@@ -333,18 +475,18 @@
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",
-              "title": "SuperMapImageryProvider"
+              "title": "SuermapImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-arcgis-tianditu",
+              "path": "/providers/vc-provider-imagery-tianditu",
               "title": "TiandituImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-tile-mapservice",
+              "path": "/providers/vc-provider-imagery-tms",
               "title": "TileMapServiceImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-tile-single",
+              "path": "/providers/vc-provider-imagery-singletile",
               "title": "SingleTileImageryProvider"
             },
             {
@@ -362,20 +504,20 @@
           ]
         },
         {
-          "groupName": "Terrain",
+          "groupName": "TerrainProvider",
           "list": [
             {
               "path": "/providers/vc-provider-terrain-cesium",
               "title": "CesiumTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-arcgis-tiled-elevation",
+              "path": "/providers/vc-provider-terrain-arcgis",
               "title": "ArcGISTiledElevationTerrainProvider"
             }
           ]
         },
         {
-          "groupName": "Datasource",
+          "groupName": "DataSource",
           "list": [
             {
               "path": "/datasources/vc-datasource-custom",
@@ -396,14 +538,19 @@
           ]
         },
         {
-          "groupName": "Graphics",
+          "groupName": "Entity",
           "list": [
             {
               "path": "/vc-entity",
               "title": "Entity"
-            },
+            }
+          ]
+        },
+        {
+          "groupName": "Graphics",
+          "list": [
             {
-              "path": "/grahpics/vc-graphics-billboard",
+              "path": "/graphics/vc-graphics-billboard",
               "title": "BillboardGraphics"
             },
             {
@@ -469,12 +616,139 @@
           ]
         },
         {
+          "groupName": "Primitive",
+          "list": [
+            {
+              "path": "/primitives/vc-primitive",
+              "title": "Primitive"
+            },
+            {
+              "path": "/primitives/vc-primitive-classification",
+              "title": "ClassificationPrimitive"
+            },
+            {
+              "path": "/primitives/vc-primitive-ground",
+              "title": "GroundPrimitive"
+            },
+            {
+              "path": "/primitives/vc-primitive-ground-polyline",
+              "title": "GroundPolylinePrimitive"
+            },
+            {
+              "path": "/primitives/vc-primitive-model",
+              "title": "Model"
+            },
+            {
+              "path": "/primitives/vc-primitive-tileset",
+              "title": "Cesium3DTileset"
+            },
+            {
+              "path": "/primitives/vc-primitive-particle",
+              "title": "ParticleSystem"
+            }
+          ]
+        },
+        {
           "groupName": "PrimitiveCollection",
-          "list": []
+          "list": [
+            {
+              "path": "/primitives/vc-collection-billboard",
+              "title": "BillboardCollection"
+            },
+            {
+              "path": "/primitives/vc-collection-label",
+              "title": "LabelCollection"
+            },
+            {
+              "path": "/primitives/vc-collection-point",
+              "title": "PointCollection"
+            },
+            {
+              "path": "/primitives/vc-collection-polyline",
+              "title": "PolylineCollection"
+            },
+            {
+              "path": "/primitives/vc-collection-primitive",
+              "title": "PrimitiveCollection"
+            }
+          ]
         },
         {
           "groupName": "Geometry",
-          "list": []
+          "list": [
+            {
+              "path": "/geometries/vc-instance-geometry",
+              "title": "GeometryInstance"
+            },
+            {
+              "path": "/geometries/vc-geometry-box",
+              "title": "BoxGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-circle",
+              "title": "CircleGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-corridor",
+              "title": "CorridorGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-cylinder",
+              "title": "CylinderGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-ellipse",
+              "title": "EllipseGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-ellipsoid",
+              "title": "EllipsoidGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-frustum",
+              "title": "FrustumGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-plane",
+              "title": "PlaneGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polygon",
+              "title": "PolygonGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polygon-coplanar",
+              "title": "CoplanarPolygonGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline",
+              "title": "PolylineGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-ground",
+              "title": "GroundPolylineGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-simple",
+              "title": "SimplePolylineGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-polyline-volume",
+              "title": "PolylineVolumeGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-rectangle",
+              "title": "RectangleGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-sphere",
+              "title": "SphereGeometry"
+            },
+            {
+              "path": "/geometries/vc-geometry-wall",
+              "title": "WallGeometry"
+            }
+          ]
         }
       ]
     }

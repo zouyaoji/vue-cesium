@@ -1,12 +1,61 @@
 ## Changelog
 
+### 3.0.1-beta.3
+*2021-04-23*
+
+#### New feature
+
+- `vc-primitive`
+- `vc-primitive-classfication`
+- `vc-primitive-ground`
+- `vc-primitive-polyline-ground`
+- `vc-primitive-model`
+- `vc-primitive-tileset`
+- `vc-primitive-particle`
+- `vc-collection-billboard`
+- `vc-collection-label`
+- `vc-collection-point`
+- `vc-collection-polyline`
+- `vc-collection-primitive`
+- `vc-instance-geometry`
+- `vc-geometry-box`
+- `vc-geometry-box-outline`
+- `vc-geometry-circle`
+- `vc-geometry-circle-outline`
+- `vc-geometry-corridor`
+- `vc-geometry-corridor-outline`
+- `vc-geometry-cylinder`
+- `vc-geometry-cylinder-outline`
+- `vc-geometry-ellipse`
+- `vc-geometry-ellipse-outline`
+- `vc-geometry-ellipsoid`
+- `vc-geometry-ellipsoid-outline`
+- `vc-geometry-frustum`
+- `vc-geometry-frustum-outline`
+- `vc-geometry-plane`
+- `vc-geometry-plane-outline`
+- `vc-geometry-polygon`
+- `vc-geometry-polygon-outline`
+- `vc-geometry-polygon-coplanar`
+- `vc-geometry-polygon-coplanar-outline`
+- `vc-geometry-polyline`
+- `vc-geometry-polyline-ground`
+- `vc-geometry-polyline-simple`
+- `vc-geometry-polyline-volume`
+- `vc-geometry-rectangle`
+- `vc-geometry-rectangle-outline`
+- `vc-geometry-sphere`
+- `vc-geometry-sphere-outline`
+- `vc-geometry-wall`
+- `vc-geometry-wall-outline`
+
 ### 3.0.1-beta.2
 *2021-04-18*
 
 #### New feature
 
 - `vc-provider-terrain-cesium`
-- `vc-provider-terrain-arcgis-tiled-elevation`
+- `vc-provider-terrain-arcgis`
 - `vc-provider-terrain-tianditu`
 - `vc-datasource-custom`
 - `vc-datasource-czml`

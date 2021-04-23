@@ -138,7 +138,7 @@ Basic usage of `vc-viewer`.
 |showCredit|Boolean|`true`| `optional` Whether to display the default Logo and loading data copyright information.|
 |autoSortImageryLayers|Boolean|`true`| `optional`Whether to automatically sort image layers according to the layer `sortOrder` property when adding image layers.|
 |removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS tag when `vc-viewer` is destroyed.|
-|enableEvent|Boolean|`true`| `optional` Specify whether to trigger the event.|
+|enableMouseEvent|Boolean|`true`| `optional` Specify whether to trigger the event.|
 |skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` Specify whether to display the skeleton background during initialization. Animation optional values `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
 |TZcode|String|`UTM`| `optional` The custom Timeline formatted date is the time zone code used.|
 |UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` The time difference (minutes) between local time and UTC time. Customize Timeline to format the date to use.|
