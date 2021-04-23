@@ -1,1 +1,1 @@
-"undefined"==typeof self&&(self={}),self.onmessage=function(e){"use strict";var s=e.data.array,a=self.webkitPostMessage||self.postMessage;try{a({array:s},[s.buffer])}catch(e){a({})}};
+"undefined"==typeof self&&(self={}),self.onmessage=function(s){var e=s.data.array,s=self.webkitPostMessage||self.postMessage;try{s({array:e},[e.buffer])}catch(e){s({})}};
