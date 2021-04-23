@@ -16,26 +16,26 @@ import {
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
-  VcProviderImageryArcgisMapserver,
+  VcProviderImageryArcgis,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
-  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGoogle,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryMapboxStyle,
+  VcProviderImageryMapbox,
   VcProviderImageryOsm,
-  VcProviderImageryTileSingle,
+  VcProviderImagerySingletile,
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTileMapservice,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
 
   VcProviderTerrainCesium,
-  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainArcgis,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu
 } from '@vue-cesium/providers'
@@ -70,6 +70,68 @@ import {
   VcGraphicsWall
 } from '@vue-cesium/graphics'
 
+// primitives
+import {
+  VcPrimitiveClassification,
+  VcPrimitiveGround,
+  VcPrimitiveGroundPolyline,
+  VcPrimitiveModel,
+  VcPrimitive,
+  VcPrimitiveTileset,
+  VcPrimitiveParticle
+} from '@vue-cesium/primitives'
+
+// primitive-collections
+import {
+  VcCollectionBillboard,
+  VcCollectionLabel,
+  VcCollectionPoint,
+  VcCollectionPolyline,
+  VcCollectionPrimitive,
+
+  VcBillboard,
+  VcLabel,
+  VcPoint,
+  VcPolyline
+} from '@vue-cesium/primitive-collections'
+
+// geometries
+import VcInstanceGeometry from '@vue-cesium/geometry-instance'
+
+import {
+  VcGeometryBox,
+  VcGeometryBoxOutline,
+  VcGeometryCircle,
+  VcGeometryCircleOutline,
+  VcGeometryPolygonCoplanar,
+  VcGeometryPolygonCoplanarOutline,
+  VcGeometryCorridor,
+  VcGeometryCorridorOutline,
+  VcGeometryCylinder,
+  VcGeometryCylinderOutline,
+  VcGeometryEllipse,
+  VcGeometryEllipseOutline,
+  VcGeometryEllipsoid,
+  VcGeometryEllipsoidOutline,
+  VcGeometryFrustum,
+  VcGeometryFrustumOutline,
+  VcGeometryPolylineGround,
+  VcGeometryPlane,
+  VcGeometryPlaneOutline,
+  VcGeometryPolygon,
+  VcGeometryPolygonOutline,
+  VcGeometryPolyline,
+  VcGeometryPolylineVolume,
+  VcGeometryPolylineVolumeOutline,
+  VcGeometryRectangle,
+  VcGeometryRectangleOutline,
+  VcGeometryPolylineSimple,
+  VcGeometrySphere,
+  VcGeometrySphereOutline,
+  VcGeometryWall,
+  VcGeometryWallOutline
+} from '@vue-cesium/geometries'
+
 import { use, i18n } from '@vue-cesium/locale'
 // if you encountered problems alike "Can't resolve './version'"
 // please run `yarn bootstrap` first
@@ -101,26 +163,26 @@ const components = [
   VcNavigationSm,
 
   VcLayerImagery,
-  VcProviderImageryArcgisMapserver,
+  VcProviderImageryArcgis,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
-  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGoogle,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryMapboxStyle,
+  VcProviderImageryMapbox,
   VcProviderImageryOsm,
-  VcProviderImageryTileSingle,
+  VcProviderImagerySingletile,
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTileMapservice,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
 
   VcProviderTerrainCesium,
-  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainArcgis,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
 
@@ -146,7 +208,60 @@ const components = [
   VcGraphicsPolylineVolume,
   VcGraphicsRectangle,
   VcGraphicsTileset,
-  VcGraphicsWall
+  VcGraphicsWall,
+
+  VcPrimitiveClassification,
+  VcPrimitiveGround,
+  VcPrimitiveGroundPolyline,
+  VcPrimitiveModel,
+  VcPrimitive,
+  VcPrimitiveTileset,
+  VcPrimitiveParticle,
+
+  VcCollectionBillboard,
+  VcCollectionLabel,
+  VcCollectionPoint,
+  VcCollectionPolyline,
+  VcCollectionPrimitive,
+
+  VcBillboard,
+  VcLabel,
+  VcPoint,
+  VcPolyline,
+
+  VcInstanceGeometry,
+
+  VcGeometryBox,
+  VcGeometryBoxOutline,
+  VcGeometryCircle,
+  VcGeometryCircleOutline,
+  VcGeometryPolygonCoplanar,
+  VcGeometryPolygonCoplanarOutline,
+  VcGeometryCorridor,
+  VcGeometryCorridorOutline,
+  VcGeometryCylinder,
+  VcGeometryCylinderOutline,
+  VcGeometryEllipse,
+  VcGeometryEllipseOutline,
+  VcGeometryEllipsoid,
+  VcGeometryEllipsoidOutline,
+  VcGeometryFrustum,
+  VcGeometryFrustumOutline,
+  VcGeometryPolylineGround,
+  VcGeometryPlane,
+  VcGeometryPlaneOutline,
+  VcGeometryPolygon,
+  VcGeometryPolygonOutline,
+  VcGeometryPolyline,
+  VcGeometryPolylineVolume,
+  VcGeometryPolylineVolumeOutline,
+  VcGeometryRectangle,
+  VcGeometryRectangleOutline,
+  VcGeometryPolylineSimple,
+  VcGeometrySphere,
+  VcGeometrySphereOutline,
+  VcGeometryWall,
+  VcGeometryWallOutline
 ]
 
 const install = (app: App, opt: InstallOptions): void => {
@@ -182,26 +297,26 @@ export {
   VcNavigationSm,
 
   VcLayerImagery,
-  VcProviderImageryArcgisMapserver,
+  VcProviderImageryArcgis,
   VcProviderImageryBaidumap,
   VcProviderImageryBingmaps,
-  VcProviderImageryGoogleearthEnterprise,
+  VcProviderImageryGoogle,
   VcProviderImageryGrid,
   VcProviderImageryIon,
-  VcProviderImageryMapboxStyle,
+  VcProviderImageryMapbox,
   VcProviderImageryOsm,
-  VcProviderImageryTileSingle,
+  VcProviderImagerySingletile,
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTileMapservice,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
   VcProviderImageryWmts,
 
   VcProviderTerrainCesium,
-  VcProviderTerrainArcgisTiledElevation,
+  VcProviderTerrainArcgis,
   VcProviderTerrainVrTheworld,
   VcProviderTerrainTianditu,
 
@@ -228,6 +343,60 @@ export {
   VcGraphicsRectangle,
   VcGraphicsTileset,
   VcGraphicsWall,
+
+  VcPrimitiveClassification,
+  VcPrimitiveGround,
+  VcPrimitiveGroundPolyline,
+  VcPrimitiveModel,
+  VcPrimitive,
+  VcPrimitiveTileset,
+  VcPrimitiveParticle,
+
+  VcCollectionBillboard,
+  VcCollectionLabel,
+  VcCollectionPoint,
+  VcCollectionPolyline,
+  VcCollectionPrimitive,
+
+  VcBillboard,
+  VcLabel,
+  VcPoint,
+  VcPolyline,
+
+  VcInstanceGeometry,
+
+  VcGeometryBox,
+  VcGeometryBoxOutline,
+  VcGeometryCircle,
+  VcGeometryCircleOutline,
+  VcGeometryPolygonCoplanar,
+  VcGeometryPolygonCoplanarOutline,
+  VcGeometryCorridor,
+  VcGeometryCorridorOutline,
+  VcGeometryCylinder,
+  VcGeometryCylinderOutline,
+  VcGeometryEllipse,
+  VcGeometryEllipseOutline,
+  VcGeometryEllipsoid,
+  VcGeometryEllipsoidOutline,
+  VcGeometryFrustum,
+  VcGeometryFrustumOutline,
+  VcGeometryPolylineGround,
+  VcGeometryPlane,
+  VcGeometryPlaneOutline,
+  VcGeometryPolygon,
+  VcGeometryPolygonOutline,
+  VcGeometryPolyline,
+  VcGeometryPolylineVolume,
+  VcGeometryPolylineVolumeOutline,
+  VcGeometryRectangle,
+  VcGeometryRectangleOutline,
+  VcGeometryPolylineSimple,
+  VcGeometrySphere,
+  VcGeometrySphereOutline,
+  VcGeometryWall,
+  VcGeometryWallOutline,
+
   version,
   install,
   locale
