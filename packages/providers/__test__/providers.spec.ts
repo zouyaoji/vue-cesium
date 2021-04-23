@@ -14,7 +14,7 @@ import {
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTilemap,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
@@ -455,25 +455,25 @@ const tileMapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTilemap
+    VcProviderImageryTms
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tilemap
+          <vc-provider-imagery-tms
             ref="provider"
             url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
             :rectangle="[-120, 20, -60, 40]"
             :maximumLevel="4"
-          ></vc-provider-imagery-tilemap>
+          ></vc-provider-imagery-tms>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTilemap', () => {
+describe('VcProviderImageryTms', () => {
   test('render test', async () => {
     const wrapper = mount(tileMapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance

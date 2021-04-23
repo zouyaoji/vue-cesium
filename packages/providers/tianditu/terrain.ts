@@ -64,7 +64,7 @@ export default defineComponent({
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(instance, 'readyPromise')
-        listener && ctx.emit('readyPromise', terrainProvider)
+        listener && ctx.emit('readyPromise', terrainProvider, vc.viewer, instance.proxy)
       })
       vc.viewer.terrainProvider = terrainProvider
       $script?.parentNode.removeChild($script)

@@ -11,7 +11,7 @@ import VcProviderImagerySingletile from './single-tile'
 import VcProviderImagerySupermap from './supermap'
 import VcProviderImageryTianditu from './tianditu/imagery'
 import VcProviderImageryTileCoordinates from './tile-coordinates'
-import VcProviderImageryTilemap from './tile-map-service'
+import VcProviderImageryTms from './tile-map-service'
 import VcProviderImageryTiledcache from './tiled-cache'
 import VcProviderImageryUrltemplate from './url-template'
 import VcProviderImageryWms from './wms'
@@ -36,7 +36,7 @@ const components = [
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTilemap,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
@@ -67,7 +67,7 @@ export {
   VcProviderImagerySupermap,
   VcProviderImageryTianditu,
   VcProviderImageryTileCoordinates,
-  VcProviderImageryTilemap,
+  VcProviderImageryTms,
   VcProviderImageryTiledcache,
   VcProviderImageryUrltemplate,
   VcProviderImageryWms,
