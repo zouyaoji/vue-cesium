@@ -43,3 +43,35 @@
 ### vc-primitive-polyline-ground
 
 - Renamed to `vc-primitive-ground-polyline`
+
+### vc-collection-primitive-billboard
+
+- Renamed to `vc-collection-billboard`
+
+### vc-primitive-billboard
+
+- Renamed to `vc-billboard`
+
+### vc-collection-primitive-label
+
+- Renamed to `vc-collection-label`
+
+### vc-primitive-label
+
+- Renamed to `vc-label`
+
+### vc-collection-primitive-point
+
+- Renamed to `vc-collection-point`
+
+### vc-primitive-point
+
+- Renamed to `vc-point`
+
+### vc-collection-primitive-polyline
+
+- Renamed to `vc-collection-polyline`
+
+### vc-primitive-polyline
+
+- Renamed to `vc-polyline`
