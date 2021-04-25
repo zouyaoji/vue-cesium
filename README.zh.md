@@ -25,8 +25,9 @@
 
 <p align="center">VueCesium - 一套为 GISer 准备的基于 Vue 3.x 的 Cesium 组件库。</p>
 
-* 💪 Vue 3.0 Composition API
-* 🔥 Written in TypeScript
+- 💪 Vue 3.0 Composition API
+- 🔥 Written in TypeScript
+- 🎸 IntelliSense for vetur
 
 ## 状态: Beta
 
@@ -55,6 +56,7 @@ $ yarn bootstrap
 将安装所有依赖，并且用 `lerna bootstrap` 初始化项目。
 
 ## 预览
+
 命令
 
 ```bash
@@ -82,6 +84,7 @@ yarn cz
 ```
 
 例如
+
 ```
 [TYPE](SCOPE):DESCRIPTION#[ISSUE]
 # example feat(viewer):add type 'viewer' for form usage #1234

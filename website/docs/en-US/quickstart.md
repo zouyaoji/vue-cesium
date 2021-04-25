@@ -95,7 +95,7 @@ components.forEach((component) => {
 
 ### Global config
 
-When importing VueCesium, you can define a global config object. For now this object has two properties: `cesiumPath` and `accessToken`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, and `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. According to the method of introducing VueCesium, the specific operations are as follows:
+When importing VueCesium, you can define a global config object. For now this object has two properties: `cesiumPath` and `accessToken`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, support loading the official version of Cesium or a third-party version developed based on Cesium, **Note:** Please use the files in the Build directory. And `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. According to the method of introducing VueCesium, the specific operations are as follows:
 
 Fully import VueCesium:
 
