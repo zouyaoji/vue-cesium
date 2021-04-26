@@ -172,7 +172,7 @@
 | granularity       | Number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
 | cornerType        | Number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
 
-### VcGeometryPolylineVolumeOutlinevvv 事件
+### VcGeometryPolylineVolumeOutline 事件
 
 | 事件名     | 参数                               | 描述                 |
 | ---------- | ---------------------------------- | -------------------- |

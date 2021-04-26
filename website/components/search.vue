@@ -77,18 +77,15 @@ export default {
 
   methods: {
     initIndex() {
-      const client = algoliasearch('4C63BTGP6S', '0729c3c7f4dc8db7395ad0b19c0748d2')
-      this.index = client.initIndex(`element-${this.lang ? this.langs[this.lang].index : 'zh'}`)
+      const client = algoliasearch('0R3ZAIXMAH', '4f58affd3789543c7f5ece8c680cf159')
+      this.index = client.initIndex(`vue-cesium-${this.lang ? this.langs[this.lang].index : 'zh'}`)
     },
 
     querySearch(query, cb) {
       if (!query) return
-      this.index.search({ query, hitsPerPage: 6 }, (err, res) => {
-        if (err) {
-          console.error(err)
-          return
-        }
+      this.index.search(query, { hitsPerPage: 12 }).then(res => {
         if (res.hits.length > 0) {
+          console.log(res.hits)
           this.isEmpty = false
           cb(
             res.hits
@@ -104,12 +101,15 @@ export default {
                 return {
                   anchor: hit.anchor,
                   component: hit.component,
+                  path: hit.path,
                   highlightedCompo: hit._highlightResult.component.value,
                   title: hit._highlightResult.title.value,
                   content
                 }
               })
               .concat({ img: true })
+              // .sort((a, b) => b.ranking - a.ranking)
+              // .reverse()
           )
         } else {
           this.isEmpty = true
@@ -117,19 +117,22 @@ export default {
         }
       })
     },
-
     handleSelect(val) {
       if (val.img || val.isEmpty) return
-      const component = val.component || ''
+      const path = val.path || ''
       const anchor = val.anchor
-      this.$router.push(`/${this.lang}/component/${component}${anchor ? `#${anchor}` : ''}`)
+      this.$router.push(`/${this.lang}/component/${path}${anchor ? `#${anchor}` : ''}`)
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .algolia-search {
-  width: 450px !important;
+  width: 400px !important;
+
+  .el-autocomplete-suggestion {
+    width: 400px !important;
+  }
 
   &.is-empty {
     .el-autocomplete-suggestion__list {

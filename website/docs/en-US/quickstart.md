@@ -113,7 +113,7 @@ app.use(VueCesium, {
   // To use the data source of Cesium ion, you need to apply for an account at https://cesium.com/ion/ to obtain Access Token.
   // If not specified, it may cause CesiumIon's online image and terrain loading failure
   accessToken: 'Your Cesium Ion defaultAccessToken'
-}
+})
 
 ```
 

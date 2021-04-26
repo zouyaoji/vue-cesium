@@ -17,20 +17,27 @@
       <vc-instance-geometry>
         <vc-geometry-polyline
           ref="geometryRef"
-          :positions="[
-            { lng: 102.1, lat: 29.5 },
-            { lng: 106.2, lat: 29.5 },
-            { lng: 106.2, lat: 33.5 },
-            { lng: 108.2, lat: 35.5 },
-            { lng: 102.1, lat: 33.5 }
-          ]"
+          :positions="positions1"
+          :colors="colors1"
           :width="4"
+          :vertexFormat="vertexFormat"
+        ></vc-geometry-polyline>
+      </vc-instance-geometry>
+      <vc-instance-geometry>
+        <vc-geometry-polyline
+          ref="geometryRef"
+          :positions="positions2"
+          :colors="colors2"
+          :width="4"
+          :vertexFormat="vertexFormat"
+          colorsPerVertex
         ></vc-geometry-polyline>
       </vc-instance-geometry>
     </vc-primitive>
     <vc-layer-imagery>
       <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
     </vc-layer-imagery>
+    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -47,6 +54,11 @@
       const instance = getCurrentInstance()
       const geometryRef = ref(null)
       const appearance = ref(null)
+      const positions1 = ref([])
+      const colors1 = ref([])
+      const positions2 = ref([])
+      const colors2 = ref([])
+      const vertexFormat = ref(null)
       // methods
       const onClicked = e => {
         console.log(e)
@@ -62,7 +74,15 @@
       }
       const onViewerReady = ({ Cesium, viewer }) => {
         console.log('onViewerReady')
-        appearance.value = new Cesium.PolylineMaterialAppearance()
+        for (let i = 0; i < 12; ++i) {
+          positions1.value.push(Cesium.Cartesian3.fromDegrees(105.0 + 5 * i, 35.0))
+          colors1.value.push(Cesium.Color.fromRandom({ alpha: 1.0 }))
+
+          positions2.value.push(Cesium.Cartesian3.fromDegrees(105.0 + 5 * i, 30.0))
+          colors2.value.push(Cesium.Color.fromRandom({ alpha: 1.0 }))
+        }
+        appearance.value = new Cesium.PolylineColorAppearance()
+        vertexFormat.value = Cesium.PolylineColorAppearance.VERTEX_FORMAT
       }
       // lifecycle
       onMounted(() => {
@@ -79,7 +99,12 @@
         onClicked,
         onViewerReady,
         geometryRef,
-        appearance
+        appearance,
+        positions1,
+        colors1,
+        positions2,
+        colors2,
+        vertexFormat
       }
     }
   }

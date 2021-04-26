@@ -107,12 +107,12 @@
 ### 属性
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| ---------------------------- | ------- | -------------------- |--|
+| 属性名 | 类型 | 默认值 | 描述 |可选值|
+| ---------------------------- | ------- | -------------------- |--|---|
 | url | String \| Object | `'https://dev.virtualearth.net'` | `required` 指定服务地址。 |
 | **bmKey** | String | | `optional`指定 BingMaps 地图 API 秘钥，可到[https://www.bingmapsportal.com/](https://www.bingmapsportal.com/)申请 Key。 **注意是bmKey** |
 | tileProtocol | String | | `optional`指定地图是 http 还是 https 加载，默认与页面相同。 |
-| mapStyle | String | `'Aerial'` | `optional`指定加载的 BingMaps 类型。 |
+| mapStyle | String | `'Aerial'` | `optional`指定加载的 BingMaps 类型。 |Aerial/AerialWithLabels/AerialWithLabelsOnDemand/CanvasDark/CanvasGray/CanvasLight/CollinsBart/OrdnanceSurvey/Road/RoadOnDemand|
 | culture | String | `''` | `optional`指定服务的描述信息。 |
 | ellipsoid | Object | | `optional`参考椭球体 |
 | tileDiscardPolicy | Object | | `optional`指定 tile 无效时的舍弃瓦片的方案。 |
