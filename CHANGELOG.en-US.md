@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.1-beta.4
+*2021-04-26*
+
+#### Bug 修复
+
+- Document search function.
+- The intellisense  of Vetur is invalid.
+
 ### 3.0.1-beta.3
 *2021-04-23*
 

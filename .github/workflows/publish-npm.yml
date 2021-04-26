@@ -3,6 +3,8 @@ name: Publish to NPM registry
 on:
   release:
     types: [created]
+    branches:
+      - master
 
 jobs:
   test:
@@ -37,6 +39,7 @@ jobs:
         run: yarn fast-build
         env:
           TAG_VERSION: ${{env.TAG_VERSION}}
+          ALGOLIA_KEY: ${{secrets.ALGOLIA_KEY}}
       - name: generate npm token
         run: echo "//registry.npmjs.com/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ./.npmrc
       - name: Publish npm

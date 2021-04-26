@@ -1,4 +1,4 @@
-import { lnglatValidator, hasOwn, isObject, isFunction, isArray } from './util'
+import { hasOwn, isObject, isFunction, isArray } from './util'
 
 import {
   makeDistanceDisplayCondition,
@@ -33,9 +33,6 @@ import { PropType } from 'vue'
 const position = {
   position: {
     type: [Object, Array, Function],
-    validator: val => {
-      return val && Object.prototype.hasOwnProperty.call(val, 'lng') ? lnglatValidator(val.lng, val.lat) : true
-    },
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }

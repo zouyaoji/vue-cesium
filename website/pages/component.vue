@@ -214,6 +214,7 @@ export default {
 
         td {
           color: #606266;
+          word-break: break-word;
         }
 
         th:first-child, td:first-child {
