@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/theme-default",
-  "version": "3.0.1-beta.5",
+  "version": "3.0.1-beta.5.1",
   "main": "lib/index.css",
   "style": "lib/index.css",
   "files": [
