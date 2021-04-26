@@ -69,25 +69,14 @@ Czml 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名   | 类型           | 默认值 | 描述                                        |
-| -------- | -------------- | ------ | ------------------------------------------- |
-| czml     | String\|Object |        | `required` 指定 czml 对象或者 url。         |
-| show     | Boolean        | `true` | `optional` 指定数据源是否可见。             |
-| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| options  | Object         |        | `optional` 指定数据源参数。                 |
-
-:::tip
-
-提示：`options` 可指定以下属性。
-
-```js
-{
-  sourceUri: string // 重写 url 以解析相对路径。
-  credit: string | object // 数据源描述信息。
-}
-```
-
-:::
+| 属性名           | 类型           | 默认值 | 描述                                        |
+| ---------------- | -------------- | ------ | ------------------------------------------- |
+| czml             | String\|Object |        | `required` 指定 czml 对象或者 url。         |
+| show             | Boolean        | `true` | `optional` 指定数据源是否可见。             |
+| enableMouseEvent | Boolean        | `true` | `optional` 指定鼠标事件是否生效。           |
+| entities         | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| sourceUri        | String         |        | `optional` 指定引用资源 url 的相对路径。    |
+| credit           | String\|Object |        | `optional` 指定数据源描述信息。             |
 
 ### 事件
 

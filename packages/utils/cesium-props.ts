@@ -1553,6 +1553,12 @@ const data = {
   }
 }
 
+const sourceUri = {
+  sourceUri: {
+    type: [String, Object] as PropType<string | Cesium.Resource>
+  }
+}
+
 /**
  * @const {Object} options mixin
  */
@@ -1614,6 +1620,7 @@ const enableMouseEvent = {
   }
 }
 export {
+  sourceUri,
   colors,
   enableMouseEvent,
   backFaceCulling,

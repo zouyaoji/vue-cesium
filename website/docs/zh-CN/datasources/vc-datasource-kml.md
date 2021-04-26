@@ -69,27 +69,18 @@ KML 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名   | 类型           | 默认值 | 描述                                        |
-| -------- | -------------- | ------ | ------------------------------------------- |
-| data     | String\|Object |        | `required` 指定要加载的 KML 对象 url。      |
-| show     | Boolean        | `true` | `optional` 指定数据源是否显示。             |
-| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| options  | Object         |        | `optional` 指定数据源参数。                 |
-
-:::tip
-
-提示：`options` 可指定以下属性。
-
-```js
-{
-  camera: object // 指定相机参数。
-  canvas: object // 指定 canvas。
-  sourceUri: string // 重写 url 以解析相对路径。
-  clampToGround: boolean // 指定是否贴地。 false
-  ellipsoid: object // 指定参考椭球体参数。 false
-  credit: string | object // 指定数据源描述信息。
-}
-```
+| 属性名           | 类型              | 默认值  | 描述                                        |
+| ---------------- | ----------------- | ------- | ------------------------------------------- |
+| data             | String\|Object    |         | `required` 指定要加载的 KML 对象 url。      |
+| show             | Boolean           | `true`  | `optional` 指定数据源是否显示。             |
+| enableMouseEvent | Boolean           | `true`  | `optional` 指定鼠标事件是否生效。           |
+| entities         | Array             | `[]`    | `optional` 指定要添加到该数据源的实体集合。 |
+| camera           | Object            |         | `optional` 指定相机参数。                   |
+| canvas           | HTMLCanvasElement |         | `optional` 指定画布。                       |
+| sourceUri        | String            |         | `optional` 指定引用资源 url 的相对路径。    |
+| clampToGround    | Boolean           | `false` | `optional` 指定线、面对象是否贴地。         |
+| ellipsoid        | Object            |         | `optional` 指定参考椭球。                   |
+| credit           | String\|Object    |         | `optional` 指定数据源描述信息。             |
 
 ### 事件
 

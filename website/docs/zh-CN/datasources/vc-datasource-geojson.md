@@ -93,32 +93,23 @@ GeoJson 数据源组件的基础用法。
 
 ### 属性
 
-| 属性名   | 类型           | 默认值 | 描述                                                   |
-| -------- | -------------- | ------ | ------------------------------------------------------ |
-| data     | String\|Object |        | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。 |
-| show     | Boolean        | `true` | `optional` 指定数据源是否显示。                        |
-| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。            |
-| options  | Object         |        | `optional` 指定数据源参数。                            |
-
-:::tip
-
-提示：`options` 可指定以下属性。
-
-```js
-{
-  sourceUri: string                         // 重写 url 以解析相对路径。
-  markerSize: number                        // 点大小
-  markerSymbol: string                      // 点风格符号
-  markerColor: string|object|Array<number>  // 点颜色
-  stroke: string|object|Array<number>       // 线、面轮廓颜色
-  strokeWidth: number                       // 线、面轮廓宽度
-  fill: string|object|Array<number>         // 面填充色
-  clampToGround: boolean                    // 是否贴地 false
-  credit: string | object                   // 数据源描述信息
-}
-```
-
-:::
+| 属性名           | 类型                  | 默认值  | 描述                                                                              |
+| ---------------- | --------------------- | ------- | --------------------------------------------------------------------------------- |
+| data             | String\|Object        |         | `required` 指定要加载的 GeoJSON 或者 TopoJSON 的 url。                            |
+| show             | Boolean               | `true`  | `optional` 指定数据源是否显示。                                                   |
+| enableMouseEvent | Boolean               | `true`  | `optional` 指定鼠标事件是否生效。                                                 |
+| entities         | Array                 | `[]`    | `optional` 指定要添加到该数据源的实体集合。                                       |
+| options          | Object                |         | `optional` 指定数据源参数。                                                       |
+| sourceUri        | String                |         | `optional` 指定引用资源 url 的相对路径。                                          |
+| describe         | Function              |         | `optional` 指定数据源描述信息函数，该函数返回一个字符串，将属性转换为 html 描述。 |
+| markerSize       | Number                | `48`    | `optional` 指定点对象创建的图钉的像素大小。                                       |
+| markerSymbol     | String                |         | `optional` 指定点对象创建的图钉的风格符号。                                       |
+| markerColor      | Object\|String\|Array |         | `optional` 指定点对象创建的图钉的颜色。                                           |
+| stroke           | Object\|String\|Array |         | `optional` 指定线、面对象的边框颜色。                                             |
+| strokeWidth      | Number                | `2`     | `optional` 指定线、面对象的边框宽度。                                             |
+| fill             | Object\|String\|Array |         | `optional` 指定面对象的填充色。                                                   |
+| clampToGround    | Boolean               | `false` | `optional` 指定对象是否贴地。                                                     |
+| credit           | String\|Object        |         | `optional` 指定数据源描述信息。                                                   |
 
 ### 事件
 
