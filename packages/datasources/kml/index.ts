@@ -3,7 +3,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, enableMouseEvent, options, data } from '@vue-cesium/utils/cesium-props'
+import { show, enableMouseEvent, data, sourceUri, clampToGround, ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcDatasourceKml',
   props: {
@@ -14,7 +14,12 @@ export default defineComponent({
       default: () => []
     },
     ...data,
-    ...options
+    camera: Object,
+    canvas: HTMLCanvasElement,
+    ...sourceUri,
+    ...clampToGround,
+    ...ellipsoid,
+    ...credit
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged',
     'changedEvent', 'errorEvent', 'loadingEvent', 'refreshEvent', 'unsupportedNodeEvent'],
@@ -22,11 +27,11 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'KmlDataSource'
-    useDatasources(props, ctx, instance)
+    const datasourcesState = useDatasources(props, ctx, instance)
     const vc = useVueCesium()
 
     instance.createCesiumObject = async () => {
-      const options = (props.options || {}) as Cesium.KmlDataSource.LoadOptions
+      const options = datasourcesState.transformProps(props)
       if (!options.camera) {
         options.camera = vc.viewer.camera
       }

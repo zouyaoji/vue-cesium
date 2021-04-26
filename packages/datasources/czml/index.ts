@@ -3,7 +3,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { show, enableMouseEvent, options } from '@vue-cesium/utils/cesium-props'
+import { show, enableMouseEvent, sourceUri, credit } from '@vue-cesium/utils/cesium-props'
 export default defineComponent({
   name: 'VcDatasourceCzml',
   props: {
@@ -17,17 +17,19 @@ export default defineComponent({
       type: [String, Object],
       required: true
     },
-    ...options
+    ...sourceUri,
+    ...credit
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged', 'changedEvent', 'errorEvent', 'loadingEvent'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'CzmlDataSource'
-    useDatasources(props, ctx, instance)
+    const datasourcesState = useDatasources(props, ctx, instance)
 
     instance.createCesiumObject = async () => {
-      return Cesium.CzmlDataSource.load(props.czml, props.options)
+      const options = datasourcesState.transformProps(props)
+      return Cesium.CzmlDataSource.load(props.czml, options)
     }
 
     return () => ctx.slots.default ? (

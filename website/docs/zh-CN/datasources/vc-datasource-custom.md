@@ -249,11 +249,12 @@
 
 ### 属性
 
-| 属性名   | 类型    | 默认值 | 描述                                        |
-| -------- | ------- | ------ | ------------------------------------------- |
-| name     | String  |        | `optional` 指定数据源名称。                 |
-| show     | Boolean | `true` | `optional` 指定数据源是否显示。             |
-| entities | Array   | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| 属性名           | 类型    | 默认值 | 描述                                        |
+| ---------------- | ------- | ------ | ------------------------------------------- |
+| name             | String  |        | `optional` 指定数据源名称。                 |
+| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。           |
+| show             | Boolean | `true` | `optional` 指定数据源是否显示。             |
+| entities         | Array   | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
 
 ### 事件
 
