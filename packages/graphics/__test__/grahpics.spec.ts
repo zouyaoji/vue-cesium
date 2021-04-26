@@ -38,7 +38,7 @@ const billboardApp = {
   template: `
     <div class="test-viewer">
       <vc-viewer>
-        <vc-entity ref="entity" position="[90, 40, 10000]">
+        <vc-entity ref="entity" :position="[90, 40, 10000]">
           <vc-graphics-billboard
             ref="graphics"
             image="https://zouyaoji.top/vue-cesium/favicon.png"
@@ -80,7 +80,7 @@ const boxApp = {
   template: `
     <div class="test-viewer">
       <vc-viewer>
-        <vc-entity ref="entity" position="[90, 40, 10000]">
+        <vc-entity ref="entity" :position="[90, 40, 10000]">
           <vc-graphics-box
             ref="graphics"
             :dimensions="{ x: 400000.0, y: 300000.0, z: 500000.0 }"
