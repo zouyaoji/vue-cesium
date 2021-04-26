@@ -32,8 +32,6 @@ yarn build:theme
 
 yarn build:helper
 
-yarn build:indices
-
 # Post build clean up
 
 rm ./es.gz
