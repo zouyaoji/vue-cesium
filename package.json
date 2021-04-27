@@ -5,7 +5,7 @@
   "description": "Vue 3.x components for CesiumJS.",
   "scripts": {
     "cz": "npx git-cz",
-    "test": "jest",
+    "test": "jest --coverage && coveralls < coverage/lcov.info",
     "gen": "bash ./scripts/gc.sh",
     "bootstrap": "yarn --frozen-lockfile && npx lerna bootstrap && yarn gen:version",
     "gen:version": "node build/gen-version.js",

@@ -27,9 +27,6 @@ jobs:
         env:
           ALGOLIA_KEY: ${{secrets.ALGOLIA_KEY}}
 
-      - name: Coveralls
-        run: cat ./coverage/lcov.info | node_modules/.bin/coveralls
-
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
