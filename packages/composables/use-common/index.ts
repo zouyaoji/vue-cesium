@@ -71,7 +71,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return false
     }
 
-    logger.log(`${vcInstance.cesiumClass}---load`)
+    logger.debug(`${vcInstance.cesiumClass}---loading`)
 
     await beforeLoad()
 
@@ -98,7 +98,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
           emit('ready', readyObj)
           vcMitt.emit('ready', readyObj)
-          logger.log(`${vcInstance.cesiumClass}---loaded`)
+          logger.debug(`${vcInstance.cesiumClass}---loaded`)
           return readyObj
         }
       )
@@ -124,7 +124,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       vcInstance.cesiumObject = undefined
       vcInstance.mounted = false
       emit('destroyed', vcInstance)
-      logger.log(`${vcInstance.cesiumClass}---unmounted`)
+      logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
       // If the component cannot be rendered without the parent component, the parent component needs to be removed.
       // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
@@ -149,7 +149,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   const createCesiumObject = async () => {
-    logger.log('do createCesiumObject')
+    logger.debug('do createCesiumObject')
     if (isFunction(vcInstance.createCesiumObject)) {
       return vcInstance.createCesiumObject()
     } else {
@@ -299,12 +299,12 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       reject(e)
     }
   })
-  logger.log(`${vcInstance.cesiumClass}---onCreated`)
+  logger.debug(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
-    logger.log(`${vcInstance.cesiumClass}---onUnmounted`)
+    logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
     vcInstance.unloadingPromise = new Promise((reslove, reject) => {
       unload().then(() => {
-        logger.log(`${vcInstance.cesiumClass}---unloaded`)
+        logger.debug(`${vcInstance.cesiumClass}---unloaded`)
         reslove(true)
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()

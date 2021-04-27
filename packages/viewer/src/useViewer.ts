@@ -48,7 +48,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   })
 
 
-  logger.log('viewer creating')
+  logger.debug('viewer creating')
 
   // watch
   watch(
@@ -565,7 +565,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * 检测是否引入 CesiumJS
    */
   const beforeLoad = async function (): Promise<void> {
-    logger.log('beforeLoad - viewer')
+    logger.debug('beforeLoad - viewer')
     const listener = getInstanceListener(vcInstance, 'beforeLoad')
     listener && emit('beforeLoad', vcInstance)
     $vc.scriptPromise = $vc.scriptPromise || getCesiumScript()
@@ -576,7 +576,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * @returns ReadyObj
    */
   const load = async function (): Promise<boolean | ReadyObj> {
-    logger.log('loading-viewer')
+    logger.debug('loading-viewer')
     if (vcInstance.mounted) {
       return false
     }
@@ -790,7 +790,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       isReady.value = true
     })
 
-    logger.log('loaded-viewer')
+    logger.debug('loaded-viewer')
     return readyObj
   }
 
@@ -802,7 +802,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       return false
     }
 
-    logger.log('viewer---unloading')
+    logger.debug('viewer---unloading')
     let unloadingResolve
     $vc.viewerUnloadingPromise = new Promise((resolve, reject) => {
       unloadingResolve = resolve
@@ -859,7 +859,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     }
     const listener = getInstanceListener(vcInstance, 'destroyed')
     listener && emit('destroyed', vcInstance)
-    logger.log('viewer---unloaded')
+    logger.debug('viewer---unloaded')
     unloadingResolve(true)
     $vc.viewerUnloadingPromise = undefined
     isReady.value = false
@@ -876,7 +876,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    * 动态引入 CesiumJS
    */
   const getCesiumScript = function (): Promise<typeof Cesium> {
-    logger.log('getCesiumScript')
+    logger.debug('getCesiumScript')
     if (!global.Cesium) {
       // const $vc = useGlobalConfig()
       const cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
@@ -1175,7 +1175,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   // lifecycle
   onMounted(async () => {
     try {
-      logger.log('viewer - onMounted')
+      logger.debug('viewer - onMounted')
       await $vc.viewerUnloadingPromise
       resolve(load())
     } catch (e) {
@@ -1184,7 +1184,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   })
 
   onUnmounted(() => {
-    logger.log('viewer - onUnmounted')
+    logger.debug('viewer - onUnmounted')
     unload().then(() => {
       vcMitt.all.clear()
     })
