@@ -3,7 +3,7 @@ import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-ces
 import * as coordtransform from '@vue-cesium/utils/coordtransform'
 import useCommon from '../use-common'
 
-export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
+export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   vcInstance.cesiumEvents = ['errorEvent']
   const commonState = useCommon(props, ctx, vcInstance)
@@ -21,8 +21,8 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
 
       if (props.projectionTransforms && props.projectionTransforms.from !== props.projectionTransforms.to) {
         const ignoreTransforms =
-        vcInstance.proxy.$options.name === 'VcProviderImageryBaidumap' ||
-        (vcInstance.proxy.$options.name === 'vc-provider-imagery-tianditu' && (imageryProvider as any)._epsgCode === '4490')
+          vcInstance.proxy.$options.name === 'VcProviderImageryBaidumap' ||
+          (vcInstance.proxy.$options.name === 'VcProviderImageryTianditu' && (imageryProvider as any)._epsgCode === '4490')
         if (!ignoreTransforms) {
           const { WebMercatorTilingScheme, Cartographic, Math: CesiumMath } = Cesium
           const tilingScheme = new WebMercatorTilingScheme()
@@ -40,18 +40,18 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
           }
 
           if (projectMethods && unprojectMethods) {
-            projection.project = function(cartographic, result) {
-            // result = result || {}
+            projection.project = function (cartographic, result) {
+              result = result || new Cesium.Cartesian3()
               result = coordtransform[projectMethods](CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
               return nativeProject.call(this, new Cartographic(CesiumMath.toRadians(result[0]), CesiumMath.toRadians(result[1])))
             }
-            projection.unproject = function(cartesian2, result) {
-            // result = result || {}
+            projection.unproject = function (cartesian2, result) {
+              result = result || new Cartographic()
               const cartographic = nativeUnProject.call(this, cartesian2)
               result = coordtransform[unprojectMethods](CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
               return new Cartographic(CesiumMath.toRadians(result[0]), CesiumMath.toRadians(result[1]))
             }
-            ;(imageryProvider as any)._tilingScheme = tilingScheme
+            ; (imageryProvider as any)._tilingScheme = tilingScheme
           }
         }
       }
