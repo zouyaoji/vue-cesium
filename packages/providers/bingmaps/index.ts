@@ -2,7 +2,6 @@ import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
-  url,
   ellipsoid,
   tileDiscardPolicy
 } from '@vue-cesium/utils/cesium-props'
