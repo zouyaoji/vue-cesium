@@ -11,7 +11,8 @@ import {
   tilingScheme,
   ellipsoid,
   tileWidth,
-  tileHeight
+  tileHeight,
+  projectionTransforms
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 
@@ -28,7 +29,8 @@ export default defineComponent({
     ...ellipsoid,
     ...tileWidth,
     ...tileHeight,
-    flipXY: Boolean
+    flipXY: Boolean,
+    ...projectionTransforms
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {

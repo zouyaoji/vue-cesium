@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { url, minimumLevel, maximumLevel } from '@vue-cesium/utils/cesium-props'
+import { url, minimumLevel, maximumLevel, projectionTransforms } from '@vue-cesium/utils/cesium-props'
 import SuperMapImageryProvider from './SuperMapImageryProvider'
 import { kebabCase } from '@vue-cesium/utils/util'
 
@@ -19,7 +19,8 @@ export default defineComponent({
     credit: {
       type: String,
       default: 'MapQuest, SuperMap iServer Imagery'
-    }
+    },
+    ...projectionTransforms
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {

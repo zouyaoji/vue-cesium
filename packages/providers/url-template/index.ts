@@ -13,7 +13,8 @@ import {
   tileWidth,
   tileHeight,
   getFeatureInfoFormats,
-  enablePickFeatures
+  enablePickFeatures,
+  projectionTransforms
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 
@@ -38,7 +39,8 @@ export default defineComponent({
     },
     ...getFeatureInfoFormats,
     ...enablePickFeatures,
-    customTags: Object
+    customTags: Object,
+    ...projectionTransforms
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
   setup (props, ctx) {
