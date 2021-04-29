@@ -11,30 +11,32 @@ const subtags = require('../website/subtags.json')
 helper({
   name,
   version: _version,
-  entry: 'website/docs/en-US/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart).md',
-  outDir: 'lib',
+  entry: 'website/docs/zh-CN/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart).md',
+  // entry: 'website/docs/zh-CN/vc-entity.md',
+  // outDir: 'lib',
+  outDir: 'vetur',
   reComponentName,
   reDocUrl,
   reAttribute,
-  props: 'Props', // 属性
-  propsName: 'Name', // 属性名
-  propsDescription: 'Description', // 描述
-  propsType: 'Type', // 类型
-  propsDefault: 'Default', // 默认值
-  propsOptions: 'Accepted Values', // 可选值
-  defaultValSeparators: ['', '.'],
-  events: 'Events', // 事件
-  eventsName: 'Name', // 事件名
-  eventsDescription: 'Description', // 描述
-  slots: 'Slots', // 插槽
-  slotsName: 'Name', // 插槽名
-  slotsDescription: 'Description', // 描述
-  directives: 'Directives', // 指令
-  directivesName: 'Name', // 指令名
-  directivesDescription: 'Description', // 描述
-  directivesType: 'Type', // 类型
+  props: '属性', // Props
+  propsName: '属性名', // Name
+  propsDescription: '描述', // Description
+  propsType: '类型', // Type
+  propsDefault: '默认值', // Default
+  propsOptions: '可选值', // Accepted Values
+  defaultValSeparators: ['', '。'],
+  events: '事件', // Events
+  eventsName: '事件名', // Name
+  eventsDescription: '描述', // Description
+  slots: '插槽', // Slots
+  slotsName: '插槽名', // Name
+  slotsDescription: '描述', // Description
+  directives: '插槽', // Directives
+  directivesName: '插槽名', // Name
+  directivesDescription: '描述', // Description
+  directivesType: '类型', // Type
   titleRegExp: '#+\\s+(.*)\\n+([^(#|\\n)]*)',
-  tableRegExp: '#+\\s+(.*\\s*Props|.*\\s*Events|.*\\s*Slots|.*\\s*Directives)\\s*\\n*.*\\n+(\\|?.+\\|.+)\\n\\|?\\s*:?-+:?\\s*\\|.+((\\n\\|?.+\\|.+)+)',
+  tableRegExp: '#+\\s+(.*\\s*属性|.*\\s*事件|.*\\s*插槽|.*\\s*指令)\\s*\\n*.*\\n+(\\|?.+\\|.+)\\n\\|?\\s*:?-+:?\\s*\\|.+((\\n\\|?.+\\|.+)+)',
   subtagsMap: subtags
 })
 
@@ -46,9 +48,9 @@ function reComponentName(title) {
 }
 
 function reDocUrl(fileName, header, path) {
-  const regExp = /website\/docs\/en-US\/(.*).md/
+  const regExp = /website\/docs\/zh-CN\/(.*).md/
   const pathContent = path.match(regExp)
-  const docs = `https://zouyaoji.top/vue-cesium/#/en-US/component/${pathContent[1]}/`
+  const docs = `https://zouyaoji.top/vue-cesium/#/zh-CN/component/${pathContent[1]}/`
   const _header = slugify(header ? header.replace(/[ ]+/g, '-').toLowerCase() : undefined)
   return docs + (_header ? '#' + _header : '')
 }
@@ -57,26 +59,26 @@ function reAttribute(value, key, item) {
   const _value = value.match(/^\*\*(.*)\*\*$/)
   const str = _value ? _value[1] : value
 
-  if (key === 'Accepted Values' && /icon/i.test(item[0])) {
+  if (key === '可选值' && /icon/i.test(item[0])) {
     // return icons
   } else if (key === 'Name' && /^(-|—)$/.test(str)) {
     return 'default'
   } else if (str === '' || /^(-|—)$/.test(str) || /^-*$/.test(str)) {
     return undefined
-  } else if (key === 'Name' && /v-model:(.+)/.test(str)) {
+  } else if (key === '属性名' && /v-model:(.+)/.test(str)) {
     const _str = str.match(/v-model:(.+)/)
     return _str ? _str[1] : undefined
-  } else if (key === 'Name' && /v-model/.test(str)) {
+  } else if (key === '属性名' && /v-model/.test(str)) {
     return 'model-value'
-  } else if (key === 'Name') {
+  } else if (key === '属性名') {
     return str.replace(/\B([A-Z])/g, '-$1').toLowerCase()
-  } else if (key === 'Type') {
+  } else if (key === '类型') {
     return str
       .replace(/\s*\/\s*/g, '|')
       .replace(/\s*,\s*/g, '|')
       .replace(/\(.*\)/g, '')
       .toLowerCase()
-  } else if (key === 'Accepted Values') {
+  } else if (key === '可选值') {
     return /\[.+\]\(.+\)/.test(str) || /^\*$/.test(str) ? undefined : str.replace(/`/g, '')
   } else {
     return str
