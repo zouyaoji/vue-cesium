@@ -82,7 +82,7 @@ declare namespace Cesium {
   }
 
   interface PointPrimitiveCollection {
-    _points: PointPrimitive []
+    _pointPrimitives: PointPrimitive []
   }
 
   interface PolylineCollection {

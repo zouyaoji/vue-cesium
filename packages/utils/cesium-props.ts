@@ -783,6 +783,7 @@ const colorBlendAmount = {
 const imageBasedLightingFactor = {
   imageBasedLightingFactor: {
     type: [Object, Array, Function],
+    default: () => [1.0, 1.0],
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
     }
@@ -1188,6 +1189,12 @@ const times = {
   times: Object
 }
 
+const projectionTransforms = {
+  projectionTransforms: {
+    type: [Boolean, Object],
+    default: false
+  }
+}
 // primitive 相关
 
 /**
@@ -1620,6 +1627,7 @@ const enableMouseEvent = {
   }
 }
 export {
+  projectionTransforms,
   sourceUri,
   colors,
   enableMouseEvent,
