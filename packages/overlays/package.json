@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/overlays",
-  "version": "3.0.0-beta",
+  "version": "3.0.1-beta.5.2",
   "main": "dist/index.js",
   "license": "MIT",
   "peerDependencies": {
