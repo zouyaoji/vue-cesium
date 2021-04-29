@@ -1,0 +1,7 @@
+@import './core/variables.scss';
+.vc-html-container {
+  display: none;
+  position: absolute;
+  // pointer-events: none;
+  z-index: $z-top;
+}

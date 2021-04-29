@@ -132,6 +132,10 @@ import {
   VcGeometryWallOutline
 } from '@vue-cesium/geometries'
 
+import {
+  VcOverlayHtml
+} from '@vue-cesium/overlays'
+
 import { use, i18n } from '@vue-cesium/locale'
 // if you encountered problems alike "Can't resolve './version'"
 // please run `yarn bootstrap` first
@@ -261,7 +265,9 @@ const components = [
   VcGeometrySphere,
   VcGeometrySphereOutline,
   VcGeometryWall,
-  VcGeometryWallOutline
+  VcGeometryWallOutline,
+
+  VcOverlayHtml
 ]
 
 const install = (app: App, opt: InstallOptions): void => {
@@ -396,6 +402,8 @@ export {
   VcGeometrySphereOutline,
   VcGeometryWall,
   VcGeometryWallOutline,
+
+  VcOverlayHtml,
 
   version,
   install,
