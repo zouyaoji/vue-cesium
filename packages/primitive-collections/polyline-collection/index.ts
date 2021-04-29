@@ -1,9 +1,8 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import differenceWith from 'lodash/differenceWith'
 import cloneDeep from 'lodash/cloneDeep'
-import isEqual from 'lodash/isEqual'
+import differenceBy from 'lodash/differenceBy'
 import {
   modelMatrix,
   debugShowBoundingVolume,
@@ -42,20 +41,34 @@ export default defineComponent({
           return
         }
         const polylineCollection = instance.cesiumObject as Cesium.PolylineCollection
-        const adds = differenceWith(newVal, oldVal, isEqual)
-        const deletes = differenceWith(oldVal, newVal, isEqual)
 
-        if (newVal.length === oldVal.length && adds.length === deletes.length) {
+        if (newVal.length === oldVal.length) {
           // 视为修改操作
           // Treated as modified
-          for (let i = 0; i < adds.length; i++) {
-            const options = adds[i] as Cesium.Billboard
-            const modifyPolyline = polylineCollection._polylines.find(v => v.id === deletes[i].id)
-            modifyPolyline && Object.keys(options).forEach(prop => {
-              modifyPolyline[prop] = primitiveCollectionsState.transformProp(prop, options[prop])
-            })
+          const modifies = []
+          for (let i = 0; i < newVal.length; i++) {
+            const options = newVal[i]
+            const oldOptions = oldVal[i]
+
+            if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
+              modifies.push({
+                newOptions: options,
+                oldOptions: oldOptions
+              })
+            }
           }
+
+          modifies.forEach(modify => {
+            const modifyPolyline = polylineCollection._polylines.find(v => v.id === modify.oldOptions.id)
+            modifyPolyline && Object.keys(modify.newOptions).forEach(prop => {
+              if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                modifyPolyline[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+              }
+            })
+          })
         } else {
+          const adds: any = differenceBy(newVal, oldVal, 'id')
+          const deletes: any = differenceBy(oldVal, newVal, 'id')
           const deletePolylines = []
           for (let i = 0; i < deletes.length; i++) {
             const deletePolyline = polylineCollection._polylines.find(v => v.id === deletes[i].id)
@@ -68,9 +81,9 @@ export default defineComponent({
 
           for (let i = 0; i < adds.length; i++) {
             const polylineOptions = newVal[i] as Cesium.Billboard
+            polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
             const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
-            const polylineAdded = polylineCollection.add(polylineOptionsTransform)
-            polylineAdded.id !== polylineOptions.id && (polylineOptions.id = polylineAdded.id)
+            polylineCollection.add(polylineOptionsTransform)
           }
         }
       },
@@ -85,9 +98,9 @@ export default defineComponent({
 
       for (let i = 0; i < props.polylines.length; i++) {
         const polylineOptions = props.polylines[i] as Cesium.Polyline
+        polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
         const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
-        const polyline = polylineCollection.add(polylineOptionsTransform)
-        polylineOptions.id !== polyline.id && (polylineOptions.id = polyline.id)
+        polylineCollection.add(polylineOptionsTransform)
       }
       return polylineCollection
     }

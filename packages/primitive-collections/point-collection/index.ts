@@ -1,9 +1,8 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import differenceWith from 'lodash/differenceWith'
 import cloneDeep from 'lodash/cloneDeep'
-import isEqual from 'lodash/isEqual'
+import differenceBy from 'lodash/differenceBy'
 import {
   modelMatrix,
   debugShowBoundingVolume,
@@ -44,23 +43,37 @@ export default defineComponent({
           return
         }
         const pointCollection = instance.cesiumObject as Cesium.PointPrimitiveCollection
-        const adds = differenceWith(newVal, oldVal, isEqual)
-        const deletes = differenceWith(oldVal, newVal, isEqual)
 
-        if (newVal.length === oldVal.length && adds.length === deletes.length) {
+        if (newVal.length === oldVal.length) {
           // 视为修改操作
           // Treated as modified
-          for (let i = 0; i < adds.length; i++) {
-            const options = adds[i] as Cesium.Billboard
-            const modifyPoint = pointCollection._points.find(v => v.id === deletes[i].id)
-            modifyPoint && Object.keys(options).forEach(prop => {
-              modifyPoint[prop] = primitiveCollectionsState.transformProp(prop, options[prop])
-            })
+          const modifies = []
+          for (let i = 0; i < newVal.length; i++) {
+            const options = newVal[i]
+            const oldOptions = oldVal[i]
+
+            if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
+              modifies.push({
+                newOptions: options,
+                oldOptions: oldOptions
+              })
+            }
           }
+
+          modifies.forEach(modify => {
+            const modifyPoint = pointCollection._pointPrimitives.find(v => v.id === modify.oldOptions.id)
+            modifyPoint && Object.keys(modify.newOptions).forEach(prop => {
+              if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                modifyPoint[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+              }
+            })
+          })
         } else {
+          const adds: any = differenceBy(newVal, oldVal, 'id')
+          const deletes: any = differenceBy(oldVal, newVal, 'id')
           const deletePoints = []
           for (let i = 0; i < deletes.length; i++) {
-            const deletePoint = pointCollection._points.find(v => v.id === deletes[i].id)
+            const deletePoint = pointCollection._pointPrimitives.find(v => v.id === deletes[i].id)
             deletePoint && deletePoints.push(deletePoint)
           }
 
@@ -70,9 +83,9 @@ export default defineComponent({
 
           for (let i = 0; i < adds.length; i++) {
             const pointOptions = newVal[i] as Cesium.Billboard
+            pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
             const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-            const pointAdded = pointCollection.add(pointOptionsTransform)
-            pointAdded.id !== pointOptions.id && (pointOptions.id = pointAdded.id)
+            pointCollection.add(pointOptionsTransform)
           }
         }
       },
@@ -87,9 +100,9 @@ export default defineComponent({
 
       for (let i = 0; i < props.points.length; i++) {
         const pointOptions = props.points[i] as Cesium.PointPrimitive
+        pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
         const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-        const point = pointCollection.add(pointOptionsTransform)
-        pointOptions.id !== point.id && (pointOptions.id = point.id)
+        pointCollection.add(pointOptionsTransform)
       }
       return pointCollection
     }

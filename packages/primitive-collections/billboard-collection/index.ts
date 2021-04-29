@@ -1,12 +1,12 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
-import differenceWith from 'lodash/differenceWith'
 import cloneDeep from 'lodash/cloneDeep'
-import isEqual from 'lodash/isEqual'
+import differenceBy from 'lodash/differenceBy'
 import {
   scene,
   blendOption,
+  show,
   enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -17,6 +17,7 @@ export default defineComponent({
   props: {
     ...scene,
     ...blendOption,
+    ...show,
     ...enableMouseEvent,
     billboards: {
       type: Array,
@@ -39,20 +40,33 @@ export default defineComponent({
           return
         }
         const billboardCollection = instance.cesiumObject as Cesium.BillboardCollection
-        const adds = differenceWith(newVal, oldVal, isEqual)
-        const deletes = differenceWith(oldVal, newVal, isEqual)
-
-        if (newVal.length === oldVal.length && adds.length === deletes.length) {
+        if (newVal.length === oldVal.length) {
           // 视为修改操作
           // Treated as modified
-          for (let i = 0; i < adds.length; i++) {
-            const options = adds[i] as Cesium.Billboard
-            const modifyBillboard = billboardCollection._billboards.find(v => v.id === deletes[i].id)
-            modifyBillboard && Object.keys(options).forEach(prop => {
-              modifyBillboard[prop] = primitiveCollectionsState.transformProp(prop, options[prop])
-            })
+          const modifies = []
+          for (let i = 0; i < newVal.length; i++) {
+            const options = newVal[i]
+            const oldOptions = oldVal[i]
+
+            if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
+              modifies.push({
+                newOptions: options,
+                oldOptions: oldOptions
+              })
+            }
           }
+
+          modifies.forEach(modify => {
+            const modifyBillboard = billboardCollection._billboards.find(v => v.id === modify.oldOptions.id)
+            modifyBillboard && Object.keys(modify.newOptions).forEach(prop => {
+              if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                modifyBillboard[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+              }
+            })
+          })
         } else {
+          const adds: any = differenceBy(newVal, oldVal, 'id')
+          const deletes: any = differenceBy(oldVal, newVal, 'id')
           const deleteBillboards = []
           for (let i = 0; i < deletes.length; i++) {
             const deleteBillboard = billboardCollection._billboards.find(v => v.id === deletes[i].id)
@@ -65,9 +79,9 @@ export default defineComponent({
 
           for (let i = 0; i < adds.length; i++) {
             const billboardOptions = newVal[i] as Cesium.Billboard
+            billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
             const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
-            const billboardAdded = billboardCollection.add(billboardOptionsTransform)
-            billboardAdded.id !== billboardOptions.id && (billboardOptions.id = billboardAdded.id)
+            billboardCollection.add(billboardOptionsTransform)
           }
         }
       },
@@ -83,9 +97,9 @@ export default defineComponent({
 
       for (let i = 0; i < props.billboards.length; i++) {
         const billboardOptions = props.billboards[i] as Cesium.Billboard
+        billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
         const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
-        const billboard = billboardCollection.add(billboardOptionsTransform)
-        billboardOptions.id !== billboard.id && (billboardOptions.id = billboard.id)
+        billboardCollection.add(billboardOptionsTransform)
       }
       return billboardCollection
     }
