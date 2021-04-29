@@ -1,12 +1,12 @@
 ## VcProviderTerrainArcgis
 
-加载 ArcGISTiledElevation 格式地形，相当于初始化一个 `Cesium.ArcGISTiledElevationTerrainProvider` 实例。
+Loading a terrain provider that produces terrain geometry by tessellating height maps retrieved from Elevation Tiles of an ArcGIS ImageService. It is equivalent to initializing a `Cesium.ArcGISTiledElevationTerrainProvider` instance.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-terrain-arcgis` 组件的基础用法。
+Basic usage of the `vc-provider-terrain-arcgis` component.
 
-:::demo 使用 `vc-provider-terrain-arcgis` 标签在三维球上添加由 ArcGIS MapServer 提供的在线地形瓦片服务。
+:::demo Use the `vc-provider-terrain-arcgis` tag to add the online terrain tile provided by an ArcGIS ImageService.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -15,9 +15,9 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
   </div>
 </el-row>
@@ -65,24 +65,25 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名    | 类型           | 默认值 | 描述                          |
-| --------- | -------------- | ------ | ----------------------------- |
-| url       | String\|Object |        | `required` 指定服务地址。     |
-| token     | String         |        | `optional` 指定服务授权令牌。 |
-| ellipsoid | Object         |        | `optional` 指定参考椭球体。   |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String\|Object | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` The URL of the ArcGIS ImageServer service. |
+| token | String | | `optional` The authorization token to use to connect to the service. |
+| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.|
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | TerrainProvider                    | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | TerrainProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[ArcGISTiledElevationTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html)**
+- Refer to the official documentation: **[ArcGISTiledElevationTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html)**

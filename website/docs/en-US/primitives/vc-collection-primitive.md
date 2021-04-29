@@ -1,16 +1,16 @@
 ## VcCollectionPrimitive
 
-加载通用图元集合，相当于初始化一个 `Cesium.PrimitiveCollection` 实例。
+Loading a collection of primitives. It is equivalent to initializing a `Cesium.PrimitiveCollection` instance.
 
 :::tip
-`vc-viewer` 初始化得到的 `Viewer` 实例自带的一个成员属性 `Scene.primitives(PrimitiveCollection)`。它可作为一切图元的父组件，如有需要也可以作为子集嵌套一层或多层。
+A member attribute `Scene.primitives(PrimitiveCollection)` of the `Viewer` instance that is initialized by `vc-viewer`. It is also a primitive itself so collections can be added to collections forming a hierarchy.
 :::
 
-### 基础用法
+### Basic usage
 
-通用图元集合组件的基础用法。
+Basic usage of VcCollectionPrimitive component.
 
-:::demo 使用 `vc-collection-primitive` 标签在三维球上添加布告板图元集合和模型图元。
+:::demo Use the `vc-collection-primitive` tag to add a collection of billboard primitives and model primitives to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -34,10 +34,10 @@
     </vc-collection-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="Show/Hide"> </el-switch>
   </el-row>
 </el-row>
 
@@ -102,30 +102,30 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名            | 类型    | 默认值 | 描述                                                |
-| ----------------- | ------- | ------ | --------------------------------------------------- |
-| show              | Boolean | `true` | `optional` 指定图元集合中的图元是否显示。           |
-| destroyPrimitives | Boolean | `true` | `optional` 指定移除图元集合时是否销毁集合中的图元。 |
-| enableMouseEvent  | Boolean | `true` | `optional` 指定鼠标事件是否生效。                   |
+| Name              | Type    | Default | Description                                                                                |
+| ----------------- | ------- | ------- | ------------------------------------------------------------------------------------------ |
+| show              | Boolean | `true`  | `optional` Determines if the primitives in the collection will be shown.                   |
+| destroyPrimitives | Boolean | `true`  | `optional` Determines if primitives in the collection are destroyed when they are removed. |
+| enableMouseEvent  | Boolean | `true`  | `optional` Specify whether the mouse event takes effect.                                   |
 
-### 事件
+### Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[PrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PrimitiveCollection.html)**
+- Refer to the official documentation: **[PrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PrimitiveCollection.html)**

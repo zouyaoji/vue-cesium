@@ -1,14 +1,14 @@
 ## VcGeometryEllipsoid
 
-加载(椭)球体，相当于初始化一个 `Cesium.EllipsoidGeometry` 实例。
+Loading a ellipsoid geometry. It is equivalent to initializing a `Cesium.EllipsoidGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-(椭)球体几何图形组件的基础用法。
+The basic usage of VcGeometryEllipsoid component.
 
-:::demo 使用 `vc-geometry-ellipsoid` 和 `vc-geometry-ellipsoid-outline` 标签在三维球上添加(椭)球体。
+:::demo Use the `vc-geometry-ellipsoid` and `vc-geometry-ellipsoid-outline` tags to add ellipsoid sphere to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -33,10 +33,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -126,56 +126,58 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名          | 类型          | 默认值 | 描述                                                        |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
 | --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii           | Object\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
-| innerRadii      | Number        |        | `optional` 指定椭球体在 x、y、z 方向上的内半径。            |
-| minimumClock    | Number        | `0.0`  | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最小角度。 |
-| maximumClock    | Number        | `2*PI` | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最大角度。 |
-| minimumCone     | Number        | `0.0`  | `optional` 指定椭球体从 z 轴正半轴到 z 轴负半轴的最小角度。 |
-| maximumCone     | Number        | `PI`   | `optional` 指定椭球体从 z 轴正半轴到 z 轴负半轴的最大角度。 |
-| stackPartitions | Number        | `64`   | `optional` 指定将椭球体横向划分为层的次数。                 |
-| slicePartitions | Number        | `64`   | `optional` 指定将椭球体纵向划分为片的次数。                 |
-| vertexFormat    | Object        |        | `optional` 指定椭球体顶点属性渲染方式。                     |
+| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| innerRadii | Number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
+| minimumClock | Number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
+| maximumClock | Number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
+| minimumCone | Number | `0.0` | `optional` The minimum angle measured from the positive z-axis and toward the negative z-axis. |
+| maximumCone | Number | `PI` | `optional` The maximum angle measured from the positive z-axis and toward the negative z-axis. |
+| stackPartitions | Number | `10` | `optional` The number of times to partition the ellipsoid into stacks. |
+| slicePartitions | Number | `8` | `optional` The number of times to partition the ellipsoid into radial slices.|
+| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryEllipsoidOutline
 
-加载(椭)球体几何图形边框，相当于初始化一个 `Cesium.EllipsoidOutlineGeometry` 实例。
+Loading a ellipsoid geometry outline. It is equivalent to initializing a `Cesium.EllipsoidOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryEllipsoidOutline 属性
+### VcGeometryEllipsoidOutline Props
 
-| 属性名          | 类型          | 默认值 | 描述                                                        |
-| --------------- | ------------- | ------ | ----------------------------------------------------------- |
-| radii           | Object\|Array |        | `optional` 指定椭球体在 x、y、z 方向上的半径。              |
-| innerRadii      | Number        |        | `optional` 指定椭球体在 x、y、z 方向上的内半径。            |
-| minimumClock    | Number        | `0.0`  | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最小角度。 |
-| maximumClock    | Number        | `2*PI` | `optional` 指定椭球体在 xy 平面内从 x 轴到 y 轴的最大角度。 |
-| minimumCone     | Number        | `0.0`  | `optional` 指定椭球体从 z 轴正半轴到 z 轴负半轴的最小角度。 |
-| maximumCone     | Number        | `PI`   | `optional` 指定椭球体从 z 轴正半轴到 z 轴负半轴的最大角度。 |
-| stackPartitions | Number        | `10`   | `optional` 指定将椭球体横向划分为层的次数。                 |
-| slicePartitions | Number        | `8`    | `optional` 指定将椭球体纵向划分为片的次数。                 |
-| subdivisions    | Number        | `128`  | `optional` 指定椭球体轮廓线上的点数，确定弧线的光滑粒度。   |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| --------------- | ------------- | ------- | ----------------------------------------------------------- |
+| radii | Object\|Array | | `optional` The radii of the ellipsoid in the x, y, and z directions. |
+| innerRadii | Number | | `optional` The inner radii of the ellipsoid in the x, y, and z directions.|
+| minimumClock | Number | `0.0` | `optional` The minimum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
+| maximumClock | Number | `2*PI` | `optional` The maximum angle lying in the xy-plane measured from the positive x-axis and toward the positive y-axis. |
+| minimumCone | Number | `0.0` | `optional` The minimum angle measured from the positive z-axis and toward the negative z-axis. |
+| maximumCone | Number | `PI` | `optional` The maximum angle measured from the positive z-axis and toward the negative z-axis. |
+| stackPartitions | Number | `10` | `optional` The count of stacks for the ellipsoid (1 greater than the number of parallel lines). |
+| slicePartitions | Number | `8` | `optional` The count of slices for the ellipsoid (Equal to the number of radial lines).|
+| subdivisions | Number | `128` | `optional` The number of points per line, determining the granularity of the curvature. |
 
-### VcGeometryEllipsoidOutline 事件
+### VcGeometryEllipsoidOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[EllipsoidGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGeometry.html)、[EllipsoidOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidOutlineGeometry.html)**
+- Refer to the official documentation: **[EllipsoidGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGeometry.html)、[EllipsoidOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidOutlineGeometry.html)**

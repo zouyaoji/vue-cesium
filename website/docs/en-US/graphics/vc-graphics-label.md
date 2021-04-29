@@ -1,20 +1,20 @@
 ## VcGraphicsLabel
 
-加载文本实体，相当于初始化一个 `Cesium.LabelGraphics` 实例。
+Loading a label graphic. It is equivalent to initializing a `Cesium.LabelGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-文本实体组件的基础用法。
+Basic usage of the VcGraphicsLabel component.
 
-:::demo 使用 `vc-graphics-label` 标签在三维球上添加文本实体对象。
+:::demo Use the `vc-graphics-label` tag to add a label to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-entity :position="[114, 40, 300000]" description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
-      <vc-graphics-label text="Hello Vue Cesium" font="20px sans-serif" :pixelOffset="[0, 20]"></vc-graphics-label>
+      <vc-graphics-label text="Hello Vue Cesium" font="20px sans-serif" :pixelOffset="[0, 20]" fillColor="red"></vc-graphics-label>
     </vc-entity>
   </vc-viewer>
 </el-row>
@@ -42,41 +42,42 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                     | 类型                  | 默认值                       | 描述                                               |
-| -------------------------- | --------------------- | ---------------------------- | -------------------------------------------------- |
-| show                       | Boolean               | `true`                       | `optional` 指定 label 是否显示。                   |
-| text                       | String                |                              | `optional` 指定 label 文字，支持'\n'换行符。       |
-| font                       | String                | `'30px sans-serif'`          | `optional` 指定 label CSS 字体。                   |
-| labelStyle                 | Number                | `0`                          | `optional` 指定 label 绘制风格。                   |
-| scale                      | Number                | `1.0`                        | `optional` 指定 label 缩放比例。                   |
-| showBackground             | Boolean               | `false`                      | `optional` 指定 label 是否显示背景。               |
-| backgroundColor            | Object\|String\|Array | `[0.165, 0.165, 0.165, 0.8]` | `optional` 指定 label 背景颜色。                   |
-| backgroundPadding          | Object                | `{x: 7, y: 5}`               | `optional` 指定 label 背景偏移量。                 |
-| pixelOffset                | Object                | `{x: 0, y: 0}`               | `optional` 指定 label 像素偏移量。                 |
-| eyeOffset                  | Object                | `{x: 0, y: 0, z: 0}`         | `optional` 指定 label 视角偏移量。                 |
-| horizontalOrigin           | Number                | `0`                          | `optional` 指定 label 水平对齐方式。               |
-| verticalOrigin             | Number                | `0`                          | `optional` 指定 label 垂直对齐方式。               |
-| heightReference            | Number                | `0`                          | `optional` 指定 label 高度模式。                   |
-| fillColor                  | Object\|String\|Array | `white`                      | `optional` 指定 label 填充颜色。                   |
-| outlineColor               | Object\|String\|Array | `black`                      | `optional` 指定 label 轮廓线颜色。                 |
-| outlineWidth               | Number                | `1.0`                        | `optional` 指定 label 轮廓线宽度。                 |
-| translucencyByDistance     | Object                |                              | `optional` 指定 label 透明度随相机距离改变的参数。 |
-| pixelOffsetScaleByDistance | Object                |                              | `optional` 指定 label 偏移量随相机距离改变的参数。 |
-| scaleByDistance            | Object                |                              | `optional` 指定 label 缩放随相机距离改变的参数。   |
-| distanceDisplayCondition   | Object                |                              | `optional` 指定 label 相机距离的显示条件。         |
-| disableDepthTestDistance   | Number                |                              | `optional` 指定 label 的深度测试距离。             |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the label. |
+| text | String | | `optional` A Property specifying the text. Explicit newlines '\n' are supported. |
+| font | String | `'30px sans-serif'` | `optional` A Property specifying the CSS font. |
+| labelStyle | Number | `0` | `optional` A Property specifying the LabelStyle. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
+| scale | Number | `1.0` | `optional` A numeric Property specifying the scale to apply to the text. |
+| showBackground | Boolean | `false` | `optional` A boolean Property specifying the visibility of the background behind the label. |
+| backgroundColor | Object\|String\|Array | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` A Property specifying the background Color. |
+| backgroundPadding | Object\|Array | `{x: 7, y: 5}` | `optional` A Cartesian2 Property specifying the horizontal and vertical background padding in pixels. |
+| pixelOffset | Object\|Array | `{x: 0, y: 0 }` | `optional` A Cartesian2 Property specifying the pixel offset. |
+| eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset.|
+| horizontalOrigin | Number | `0` | `optional` A Property specifying the HorizontalOrigin. |
+| verticalOrigin | Number | `0` | `optional` A Property specifying the VerticalOrigin. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. |
+| fillColor | Object\|String\|Array | `white` | `optional` A Property specifying the fill Color. |
+| outlineColor | Object\|String\|Array | `black` | `optional` A Property specifying the outline Color. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the outline width. |
+| translucencyByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
+| pixelOffsetScaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
+| scaleByDistance | Object\|Array | | `optional` A NearFarScalar Property used to set scale based on distance from the camera. |
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this label will be displayed. |
+| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
+| Name   | Parameters | Description |
 | ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.                       |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                          |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[LabelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/LabelGraphics.html)**
+- Refer to the official documentation: **[LabelGraphics](https://cesium.com/docs/cesiumjs-ref-doc/LabelGraphics.html)**

@@ -374,6 +374,15 @@
               "title": "WallGeometry 墙"
             }
           ]
+        },
+        {
+          "groupName": "覆盖物",
+          "list": [
+            {
+              "path": "/overlays/vc-overlay-html",
+              "title": "VcOverlayHtml"
+            }
+          ]
         }
       ]
     }
@@ -513,6 +522,10 @@
             {
               "path": "/providers/vc-provider-terrain-arcgis",
               "title": "ArcGISTiledElevationTerrainProvider"
+            },
+            {
+              "path": "/providers/vc-provider-terrain-tianditu",
+              "title": "TiandituTerrainProvider"
             }
           ]
         },
@@ -631,7 +644,7 @@
               "title": "GroundPrimitive"
             },
             {
-              "path": "/primitives/vc-primitive-ground-polyline",
+              "path": "/primitives/vc-primitive-polyline-ground",
               "title": "GroundPolylinePrimitive"
             },
             {
@@ -747,6 +760,15 @@
             {
               "path": "/geometries/vc-geometry-wall",
               "title": "WallGeometry"
+            }
+          ]
+        },
+        {
+          "groupName": "Overlays",
+          "list": [
+            {
+              "path": "/overlays/vc-overlay-html",
+              "title": "VcOverlayHtml"
             }
           ]
         }

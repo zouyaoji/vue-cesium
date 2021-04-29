@@ -8,7 +8,7 @@
 
 椭圆多边形几何图形组件的基础用法。
 
-:::demo 使用 `vc-geometry-ellipse` 和 `vc-geometry-ellipse-outline` 标签在三维球上添加共面多边形。
+:::demo 使用 `vc-geometry-ellipse` 和 `vc-geometry-ellipse-outline` 标签在三维球上添加椭圆。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">

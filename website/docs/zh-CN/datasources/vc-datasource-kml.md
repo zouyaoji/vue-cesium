@@ -99,7 +99,7 @@ KML 数据源组件的基础用法。
 | mousedown            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
 | mouseup              | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
 | click                | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。   |
+| clickout             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触发。   |
 | dblclick             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
 | mousemove            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
 | mouseover            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |

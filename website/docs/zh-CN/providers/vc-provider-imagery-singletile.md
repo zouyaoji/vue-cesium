@@ -76,12 +76,12 @@
 
 ### 属性
 
-| 属性名    | 类型           | 默认值 | 描述                                                |
-| --------- | -------------- | ------ | --------------------------------------------------- |
-| url       | String         |        | `required`指定服务地址。                            |
-| rectangle | Object         |        | `optional`图层的矩形范围,此矩形限制了影像可见范围。 |
-| credit    | String\|Object |        | `optional`指定服务的描述信息。                      |
-| ellipsoid | Object         |        | `optional`参考椭球体。                              |
+| 属性名    | 类型           | 默认值 | 描述                                                 |
+| --------- | -------------- | ------ | ---------------------------------------------------- |
+| url       | String         |        | `required` 指定服务地址。                            |
+| rectangle | Object\|Object |        | `optional` 图层的矩形范围,此矩形限制了影像可见范围。 |
+| credit    | String\|Object |        | `optional` 指定服务的描述信息。                      |
+| ellipsoid | Object         |        | `optional` 参考椭球体。                              |
 
 ### 事件
 

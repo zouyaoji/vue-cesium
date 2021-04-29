@@ -99,7 +99,7 @@
 | tileWidth        | Number                 | `256`          | `optional` 像元宽度。                                                               |
 | tileHeight       | Number                 | `256`          | `optional` 像元高度。                                                               |
 | tilingScheme     | TilingScheme           |                | `optional` 指定切片方案。                                                           |
-| rectangle        | Object                 |                | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                |
+| rectangle        | Object\|Array          |                | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                |
 | minimumLevel     | Number                 | `0`            | `optional` 图层可以显示的最小层级。                                                 |
 | maximumLevel     | Number                 |                | `optional` 图层可以显示的最大层级，undefined 表示没有限制。                         |
 | ellipsoid        | Ellipsoid              |                | `optional` 参考椭球体，没指定默认 WGS84 椭球。                                      |

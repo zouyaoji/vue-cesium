@@ -1,14 +1,14 @@
 ## VcGraphicsPolylineVolume
 
-加载线柱体，相当于初始化一个 `Cesium.PolylineVolumeGraphics` 实例。
+Loading a polyline volume graphic. It is equivalent to initializing a `Cesium.PolylineVolumeGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-线柱体组件的基础用法。
+Basic usage of the VcGraphicsPolylineVolume component.
 
-:::demo 使用 `vc-graphics-polyline-volume` 标签在三维球上添加线柱体对象。
+:::demo Use the `vc-graphics-polyline-volume` tag to add some polyline volumes to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -106,32 +106,33 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值  | 描述                                                  |
-| ------------------------ | --------------------- | ------- | ----------------------------------------------------- |
-| show                     | Boolean               | `true`  | `optional` 指定 volume 是否显示。                     |
-| positions                | Array                 |         | `optional` 指定 volume 位置信息数组。                 |
-| shape                    | Array                 |         | `optional` 指定表达 volume 拉伸的形状参数。           |
-| cornerType               | Number                | `0`     | `optional` 指定 volume 转角类型。                     |
-| granularity              | Number                |         | `optional` 指定每个经度和纬度之间的角距离。           |
-| fill                     | Boolean               | `true`  | `optional` 指定 volume 是否填充材质。                 |
-| material                 | Object\|String\|Array |         | `optional` 指定 volume 材质。                         |
-| outline                  | Boolean               | `false` | `optional` 指定 volume 是否绘制轮廓线。               |
-| outlineColor             | Object\|String\|Array |         | `optional` 指定 volume 轮廓线颜色。                   |
-| outlineWidth             | Number                | `1.0`   | `optional` 指定 volume 轮廓线宽度。                   |
-| shadows                  | Number                | `0`     | `optional` 指定 volume 是否投射或接受每个光源的阴影。 |
-| distanceDisplayCondition | Object                |         | `optional` 指定 volume 随相机距离改变是否显示参数。   |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the volume. |
+| positions | Array | | `optional` A Property specifying the array of Cartesian3 positions which define the line strip. |
+| shape | Array | | `optional` A Property specifying the array of Cartesian2 positions which define the shape to be extruded. |
+| cornerType | Number | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the volume is filled with the provided material. |
+| material | Object\|String\|Array | | `optional` A Property specifying the material used to fill the volume. |
+| outline | Boolean | false | `optional` A boolean Property specifying whether the volume is outlined. |
+| outlineColor | Object\|String\|Array | | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this volume will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[PolylineVolumeGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGraphics.html)**
+- Refer to the official documentation: **[PolylineVolumeGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGraphics.html)**

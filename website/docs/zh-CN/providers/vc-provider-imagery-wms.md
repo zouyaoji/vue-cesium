@@ -6,7 +6,7 @@
 
 ### 基础用法
 
-`vc-provider-imagery-ion` 组件的基础用法。
+`vc-provider-imagery-wms` 组件的基础用法。
 
 :::demo 使用 `vc-layer-imagery` 标签在三维球上添加由 Cesium Ion REST API 提供的影像瓦片服务图层。
 
@@ -96,7 +96,7 @@
 | getFeatureInfoParameters | Object          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |
 | enablePickFeatures       | Boolean         | `true`  | `optional` 指定是否支持拾取对象，通过 GetFeatureInfo 获取，需要服务支持。          |
 | getFeatureInfoFormats    | Array           |         | `optional` 指定 WMS GetFeatureInfo 请求的格式。                                    |
-| rectangle                | Object          |         | `optional` 指定 WMS 图层矩形范围。                                                 |
+| rectangle                | Object\|Array   |         | `optional` 指定 WMS 图层矩形范围。                                                 |
 | tilingScheme             | Object          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
 | ellipsoid                | Object          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
 | tileWidth                | Number          | `256`   | `optional` 指定像元宽度。                                                          |

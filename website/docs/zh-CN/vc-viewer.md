@@ -133,8 +133,8 @@
 ### 属性
 
 <!-- prettier-ignore -->
-|属性名|类型|默认值|描述|
-|------|------|-----|---|
+|属性名|类型|默认值|描述|可选值|
+|------|------|-----|---|---|
 |camera|Object|| `optional` 指定初始化场景相机位置，默认定位到全球范围内的中国。  |
 |showCredit|Boolean|`true`| `optional` 是否显示默认 Logo 和 加载数据版权信息。|
 |autoSortImageryLayers|Boolean|`true`| `optional` 添加影像图层时是否根据图层 `sortOrder` 属性自动排序。|
@@ -171,15 +171,15 @@
 |useBrowserRecommendedResolution|Boolean|`true`|`optional`如果为true，则以浏览器建议的分辨率进行渲染，并忽略window.devicePixelRatio。|
 |automaticallyTrackDataSourceClocks|Boolean|`true`|`optional`如果设置为true，将自动跟踪新添加数据源的时钟设置，如果数据源的时钟变更，则更新。如需单独设置时钟，请将此项设置为false。|
 |contextOptions|Object||`optional`Context and WebGL 创建属性与传递给Scene匹配的选项。|
-|sceneMode|Number|`3`|`optional` 指定场景模式。`1` 哥伦布视图，`2` 二维视图， `3` 三维视图。 |
+|sceneMode|Number|`3`|`optional` 指定场景模式。**COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
 |orderIndependentTranslucency|Boolean|`true`|`optional`如果此项设置为true，并且使用设备支持，将使用与顺序无关的半透明。|
 |creditContainer|Element \| String||`optional`指定包含CreditDisplay信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
 |creditViewport|Element \| String||`optional`指定包含CreditDisplay弹出框信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
 |dataSources|Object||`optional` 指定初始化时加载的数据源集合。如果指定了数据源集合，`Viewer` 销毁时不会销毁它。|
 |terrainExaggeration|Number|`1.0`|`optional`用于夸大地形的标量。请注意，设置地形夸张不会修改其它任何数据。|
 |shadows|Boolean|`false`|`optional`确定阴影是否由太阳投射形成。|
-|terrainShadows|Number|`3`|`optional`确定地形是否投射或接受来自太阳的阴影。|
-|mapMode2D|Number|`1`|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。|
+|terrainShadows|Number|`3`|`optional`确定地形是否反射或接受来自太阳的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+|mapMode2D|Number|`1`|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
 |projectionPicker|Boolean|`false`|`optional`是否显示投影切换按钮。|
 |requestRenderMode|Boolean|`false`|`optional`如果为true，则仅根据场景中的更改确定是否需要渲染帧。 启用可减少应用程序的CPU / GPU使用率，并减少移动设备上的电池消耗，但需要使用Scene＃requestRender在此模式下显式渲染新帧。 在API的其他部分对场景进行更改后，在许多情况下这是必要的。|
 |maximumRenderTimeChange|Number|`0.0`|`optional`如果requestRenderMode为true，则此值定义在请求渲染之前允许的最大模拟时间更改。|

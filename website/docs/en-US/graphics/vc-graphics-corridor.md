@@ -1,14 +1,14 @@
 ## VcGraphicsCorridor
 
-加载走廊实体，相当于初始化一个 `Cesium.CorridorGraphics` 实例。
+Loading a corridor graphic. It is equivalent to initializing a `Cesium.CorridorGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-走廊实体组件的基础用法。
+Basic usage of the VcGraphicsCorridor component.
 
-:::demo 使用 `vc-graphics-corridor` 标签在三维球上添加走廊实体。
+:::demo Use the `vc-graphics-corridor` tag to add some corridors to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -122,38 +122,39 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                     | 默认值    | 描述                                                        |
-| ------------------------ | ------------------------ | --------- | ----------------------------------------------------------- |
-| show                     | Boolean                  | `true`    | `optional` 指定 corridor 是否显示。                         |
-| positions                | Array\<Cartesian3\>      |           | `optional` 指定描述 corridor 位置的经纬度(高度)数组。       |
-| width                    | Number                   |           | `optional` 指定 corridor 边之间的距离。                     |
-| height                   | Number                   | `0`       | `optional` 指定 corridor 高度。                             |
-| heightReference          | HeightReference          |           | `optional` 指定 corridor 高度模式。                         |
-| extrudedHeight           | Number                   |           | `optional` 指定 corridor 拉伸高度。                         |
-| extrudedHeightReference  | HeightReference          |           | `optional` 指定 corridor 拉伸高度模式。                     |
-| cornerType               | CornerType               | `0`       | `optional` 指定 corridor 转角样式。                         |
-| granularity              | Number                   |           | `optional` 指定每个经纬度之间的采样粒度。                   |
-| fill                     | Boolean                  | `true`    | `optional` 指定 corridor 是否填充材质。                     |
-| material                 | Object\|String\|Array    | `'white'` | `optional` 指定 corridor 的材质。                           |
-| outline                  | Boolean                  | `false`   | `optional` 指定 corridor 是否绘制轮廓线。                   |
-| outlineColor             | Object\|String\|Array    | `'black'` | `optional` 指定 corridor 轮廓线颜色。                       |
-| outlineWidth             | Number                   | `1.0`     | `optional` 指定 corridor 轮廓线宽度。                       |
-| shadows                  | ShadowMode               | `0`       | `optional` 指定 corridor 是否接收或者发射每个点光源的阴影。 |
-| distanceDisplayCondition | DistanceDisplayCondition |           | `optional` 指定 corridor 随相机距离改变是否显示参数。       |
-| classificationType       | ClassificationType       | `2`       | `optional` 指定 corridor 的贴对象模式。                     |
-| zIndex                   | Number                   |           | `optional` 指定 corridor 顺序，没有高度和拉伸高度才有效。   |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | -----| ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the corridor. |
+| positions | Array | | `optional` A Property specifying the array of Cartesian3 positions that define the centerline of the corridor. |
+| width | Number | | `optional` A numeric Property specifying the distance between the edges of the corridor. |
+| height | Number | | `optional` A numeric Property specifying the altitude of the corridor relative to the ellipsoid surface. |
+| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the corridor's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| cornerType | Number | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| granularity | Number | | `optional` A numeric Property specifying the distance between each latitude and longitude. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the corridor is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the corridor. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the corridor is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the corridor casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this corridor will be displayed.|
+| classificationType | Number | `2` | `optional` An enum Property specifying whether this corridor will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| zIndex | Number | | `optional` A Property specifying the zIndex of the corridor, used for ordering. Only has an effect if height and extrudedHeight are undefined, and if the corridor is static. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)**
+- Refer to the official documentation: **[CorridorGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGraphics.html)**

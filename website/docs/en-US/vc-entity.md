@@ -83,14 +83,14 @@ Basic usage of `vc-entity`.
 
 :::
 
-### Attributes
+### Props
 
-| Attribute      | Type                    | Default | Description                                                                               |
+| Name           | Type                    | Default | Description                                                                               |
 | -------------- | ----------------------- | ------- | ----------------------------------------------------------------------------------------- |
 | id             | String                  |         | `optional` A unique identifier for this object. If none is provided, a GUID is generated. |
 | name           | String                  |         | `optional` A human readable name to display to users. It does not have to be unique.      |
 | availability   |                         |         | `optional` The availability, if any, associated with this object.                         |
-| show           | Boolean                 | true    | `optional` A boolean value indicating if the entity and its children are displayed.       |
+| show           | Boolean                 | `true`  | `optional` A boolean value indicating if the entity and its children are displayed.       |
 | description    |                         |         | `optional` A string Property specifying an HTML description for this entity.              |
 | position       | Object\|Array\|Function |         | `optional` A Property specifying the entity position.                                     |
 | orientation    |                         |         | `optional` A Property specifying the entity orientation.                                  |
@@ -150,21 +150,21 @@ Tip: In addition to passing `Cesium.Cartesian3`, `position` property can also pa
 
 ### Events
 
-| name              | parameter                                                  | description                                                          |
+| Name              | Parameters                                                 | Description                                                          |
 | ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad        | Vue Instance                                               | Triggered before the cesiumObject is loaded.                         |
-| ready             | {Cesium, viewer, cesiumObject, vm}                         | Triggered when the cesiumObject is successfully loaded.              |
-| destroyed         | Vue Instance                                               | Triggered when the cesiumObject is destroyed.                        |
+| beforeLoad        | Vue Instance                                               | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                         |
 | definitionChanged |                                                            | Triggers whenever a property or sub-property is changed or modified. |
-| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse is pressed on the entity.                   |
-| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse bounces on the entity.                      |
-| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse clicks on the entity.                       |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Touch when the mouse clicks outside the entity.                      |
-| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the left mouse button double-clicks the entity.       |
-| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves on this entity.                       |
-| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves to this entity.                       |
-| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggered when the mouse moves out of the entity.                    |
+| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the entity.                    |
+| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces on the entity.                       |
+| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the entity.                        |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the entity.                   |
+| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the entity.        |
+| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this entity.                        |
+| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this entity.                        |
+| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the entity.                     |
 
 ### Reference
 
-- Refer to the official documentation: [Entity](https://cesium.com/docs/cesiumjs-ref-doc/Entity.html)
+- Refer to the official documentation: **[Entity](https://cesium.com/docs/cesiumjs-ref-doc/Entity.html)**

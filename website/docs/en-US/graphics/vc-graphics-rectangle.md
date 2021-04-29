@@ -1,14 +1,14 @@
 ## VcGraphicsRectangle
 
-加载矩形实体，相当于初始化一个 `Cesium.RectangleGraphics` 实例。
+Loading a rectangle graphic. It is equivalent to initializing a `Cesium.RectangleGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-矩形实体组件的基础用法。
+Basic usage of VcGraphicsRectangle component.
 
-:::demo 使用 `vc-graphics-rectangle` 标签在三维球上添加矩形实体对象。
+:::demo Use the `vc-graphics-rectangle` tag to add some rectangles to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -87,38 +87,39 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                         |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------------------ |
-| show                     | Boolean               | `true`    | `optional` 指定 rectangle 是否显示。                         |
-| coordinates              | Object                |           | `optional` 指定 rectangle 的 Rectangle 属性。                |
-| height                   | Number                | `0`       | `optional` 指定 rectangle 高度。                             |
-| heightReference          | Number                |           | `optional` 指定 rectangle 高度模式。                         |
-| extrudedHeight           | Number                |           | `optional` 指定 rectangle 拉伸高度。                         |
-| extrudedHeightReference  | Number                |           | `optional` 指定 rectangle 拉伸高度模式。                     |
-| rotation                 | Number                | `0.0`     | `optional` 指定 rectangle 按正北顺时针的旋转角。             |
-| stRotation               | Number                | `0.0`     | `optional` 指定 rectangle 按正北逆时针旋转纹理。             |
-| granularity              | Number                |           | `optional` 指定每个经纬度之间的采样粒度。                    |
-| fill                     | Boolean               | `true`    | `optional` 指定 rectangle 是否填充材质。                     |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 rectangle 材质。                             |
-| outline                  | Boolean               | `false`   | `optional` 指定 rectangle 是否绘制轮廓线。                   |
-| outlineColor             | Object\|String\|Array | `'BALCK'` | `optional` 指定 rectangle 轮廓线颜色。                       |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 rectangle 轮廓线宽度。                       |
-| shadows                  | Number                | `0`       | `optional` 指定 rectangle 是否投射或接收阴影。               |
-| distanceDisplayCondition | Object                |           | `optional` 指定 rectangle 随相机距离改变是否显示参数。       |
-| classificationType       | Number                | `2`       | `optional` 指定 rectangle 贴对象模式 。                      |
-| zIndex                   | Number                | `0`       | `optional` 指定 rectangle 顺序，没设置高度和拉伸高度时有效。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the rectangle. |
+| coordinates | Object\|Array | | `optional` The Property specifying the Rectangle. |
+| height | Number | `0` | `optional` A numeric Property specifying the altitude of the rectangle relative to the ellipsoid surface. |
+| heightReference | Number | `true` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the rectangle's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| rotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle clockwise from north. |
+| stRotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the rectangle texture counter-clockwise from north. |
+| granularity | Number | | `optional` A numeric Property specifying the angular distance between points on the rectangle. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the rectangle is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the rectangle. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the rectangle is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the rectangle casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
+| classificationType | Number | `2` | `optional` An enum Property specifying whether this rectangle will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | Number | `0` | `optional` A Property specifying the zIndex used for ordering ground geometry. Only has an effect if the rectangle is constant and neither height or extrudedHeight are specified. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)**
+- Refer to the official documentation: **[RectangleGraphics](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGraphics.html)**

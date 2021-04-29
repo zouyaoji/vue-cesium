@@ -1,14 +1,14 @@
 ## VcLayerImagery
 
-加载影像图层，相当于初始化一个 `Cesium.ImageryLayer` 实例。
+Loading an image layer is equivalent to initializing a `Cesium.ImageryLayer` instance.
 
-需要作为 `vc-viewer` 的子组件才能正常加载。可以直接指定 `vc-layer-imagery` 的 `imageryProvider` 属性，也用 VueCesium 提供的 `vc-provider-xxx` 系列组件作为 `vc-layer-imagery` 子组件挂载各个 `imageryProvider`，但一个影像图层只能挂载一个 `provider`。
+It needs to be a child component of `vc-viewer` to load normally. You can directly specify the `imageryProvider` property of `vc-layer-imagery`, and use the `vc-provider-xxx` series components provided by VueCesium as the `vc-layer-imagery` sub-components to mount each `imageryProvider`, but an image Only one `provider` can be attached to a layer.
 
-### 基础用法
+### Basic usage
 
-影像图层组件的基础用法。
+The basic usage of the image layer component.
 
-:::demo 使用 `vc-layer-imagery` 组件在三维球上添加 `OpenStreetMapImageryProvider` 影像服务瓦片图层。
+:::demo Use the `vc-layer-imagery` component to add the `OpenStreetMapImageryProvider` image service tile layer on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -17,18 +17,18 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="3" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="3" :step="0.01"></el-slider>
         </div>
       </el-col>
@@ -80,36 +80,36 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| -------------- | ----------------------- | ------ | --------------------------------------- |
-| sortOrder | Number | |`optional` 指定图层相对顺序。|
-| imageryProvider | Object | | `optional` 指定影像图层的瓦片提供方式。 |
-| rectangle | Rectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
-| alpha | Number\|function | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| nightAlpha | Number\|function | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| dayAlpha | Number\|function | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| brightness | Number\|function | `1.0`| `optional` 指定影像图层亮度值。值为 1.0 表示使用原图；值大于 1.0 时图像将变亮；值小于 1.0 时图像将变暗。 |
-| contrast | Number\|function | `1.0` | `optional` 指定影像图层对比度。值为 1.0 表示使用原图；值大于 1.0 表示增加对比度；值小于 1.0 表示降低对比度。 |
-| hue | Number\|function | `0.0` | `optional` 指定影像图层色调。值为 0.0 表示使用原图。 |
-| saturation | Number\|function | `1.0` | `optional` 指定影像图层饱和度。值为 1.0 表示使用原图；值大于 1.0 表示增加饱和度；值小于 1.0 表示降低饱和度。 |
-| gamma | Number\|function | `1.0` | `optional` 指定影像图层伽马校正。值为 1.0 表示使用原图。 |
-| splitDirection | Number | `0` | `optional` 指定影像图层分割方向。 |
-| minificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
-| magnificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
-| show | Boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false |
-| maximumAnisotropy | Number | | `optional` 指定纹理过滤的最大各向异性级别。 如果未指定此参数，则将使用 WebGL 堆栈支持的最大各向异性。 较大的值使图像在水平视图中看起来更好。 |
-| minimumTerrainLevel | Number | | `optional` 指定最小地形细节层次。level 0 是最小细节层次。 |
-| maximumTerrainLevel | Number | | `optional` 指定最大地形细节层次。 |
-| cutoutRectangle | Rectangle | | `optional` 指定裁剪此影像图层的矩形范围。 |
-| colorToAlpha | Object | |`optional` 指定透明时的颜色。|
-| colorToAlphaThreshold | Number | `0.004` |`optional` 指定颜色到 alpha 的阈值。|
+| Name | Type | Default | Description | Accepted Values |
+| -------------- | ----------------------- | ------ | --------------------------------------- |---|
+| sortOrder | Number | |`optional` Specify the relative order of the layers.|
+| imageryProvider | Object | | `optional` The imagery provider to use. |
+| rectangle | Rectangle | `imageryProvider.rectangle` | `optional` The rectangle of the layer. This rectangle can limit the visible portion of the imagery provider. |
+| alpha | Number\|function | `1.0` | `optional` The alpha blending value of this layer, from 0.0 to 1.0.  |
+| nightAlpha | Number\|function | `1.0` | `optional` The alpha blending value of this layer on the night side of the globe, from 0.0 to 1.0.  |
+| dayAlpha | Number\|function | `1.0` | `optional` The alpha blending value of this layer on the day side of the globe, from 0.0 to 1.0.  |
+| brightness | Number\|function | `1.0`| `optional` The brightness of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 makes the imagery darker while greater than 1.0 makes it brighter.  |
+| contrast | Number\|function | `1.0` | `optional` The contrast of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the contrast while greater than 1.0 increases it.  |
+| hue | Number\|function | `0.0` | `optional` The hue of this layer. 0.0 uses the unmodified imagery color. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level).  |
+| saturation | Number\|function | `1.0` | `optional` The saturation of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the saturation while greater than 1.0 increases it. |
+|gamma|Number\|function|`1.0`|`optional`The gamma correction to apply to this layer. 1.0 uses the unmodified imagery color. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the gamma is required, and it is expected to return the gamma value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.|
+|splitDirection|Number| `0` |`optional`The ImagerySplitDirection split to apply to this layer.  **LEFT: -1, NONE: 0, RIGHT: 1** |-1/0/1|
+|minificationFilter|Number|`9729`|`optional` The texture minification filter to apply to this layer. Possible values are TextureMinificationFilter.LINEAR and TextureMinificationFilter.NEAREST. **NEAREST: 9728, LINEAR: 9729, NEAREST_MIPMAP_NEAREST: 9984, LINEAR_MIPMAP_NEAREST: 9985, NEAREST_MIPMAP_LINEAR: 9986, NEAREST_MIPMAP_NEAREST: 9984** |9728/9729/9984/9985/9986|
+|magnificationFilter|Number|`9729`|`optional` The texture minification filter to apply to this layer. Possible values are TextureMagnificationFilter.LINEAR and TextureMagnificationFilter.NEAREST. **NEAREST: 9728, LINEAR: 9729** |9728/9729|
+|show|Boolean|`true`|`optional` True if the layer is shown; otherwise, false.|
+|maximumAnisotropy|Number|maximum supported|`optional` The maximum anisotropy level to use for texture filtering. If this parameter is not specified, the maximum anisotropy supported by the WebGL stack will be used. Larger values make the imagery look better in horizon views.|
+|minimumTerrainLevel|Number||`optional`The minimum terrain level-of-detail at which to show this imagery layer, or undefined to show it at all levels. Level zero is the least-detailed level.|
+|maximumTerrainLevel|Number||`optional`The maximum terrain level-of-detail at which to show this imagery layer, or undefined to show it at all levels. Level zero is the least-detailed level.|
+cutoutRectangle|Rectangle||`optional` Cartographic rectangle for cutting out a portion of this ImageryLayer.|
+| colorToAlpha | Object | |`optional` Color to be used as alpha.|
+| colorToAlphaThreshold | Number | `0.004` |`optional` Threshold for color-to-alpha.|
 
 :::tip
 
-提示：`rectangle` 属性除了可传 `Cesium.Rectangle` 还可以传 `PlainObject(RectangleInDegreeOption|Cartesian4Option`) 和 `Array<number>` (度)
+Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can also pass `PlainObject(RectangleInDegreeOption|Cartesian4Option`) and `Array<number>` (degrees)
 
 :::
 
@@ -142,14 +142,14 @@
 
 :::
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述               |
-| ---------- | ---------------------------------- | ------------------ |
-| beforeLoad | Vue Instance                       | 对象加载前触发。   |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载完成触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。   |
+| Name       | Parameters                         | Description                             |
+| ---------- | ---------------------------------- | --------------------------------------- |
+| beforeLoad | Vue Instance                       | Triggers before the object is loaded.  |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the object is loaded.    |
+| destroyed  | Vue Instance                       | Triggers when the object is destroyed. |
 
-### 参考
+### Reference
 
-- 官方文档： **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**
+- Official documents: **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**

@@ -130,11 +130,11 @@ Basic usage of `vc-viewer`.
 
 :::
 
-### Attributes
+### Props
 
 <!-- prettier-ignore -->
-|Attribute|Type|Default|Description|
-|------|------|-----|---|
+|Name|Type|Default|Description|Accepted Values|
+|------|------|-----|---|---|
 |showCredit|Boolean|`true`| `optional` Whether to display the default Logo and loading data copyright information.|
 |autoSortImageryLayers|Boolean|`true`| `optional`Whether to automatically sort image layers according to the layer `sortOrder` property when adding image layers.|
 |removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS tag when `vc-viewer` is destroyed.|
@@ -170,15 +170,15 @@ Basic usage of `vc-viewer`.
 |showRenderLoopErrors|Boolean|`true`|`optional`If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.|
 |automaticallyTrackDataSourceClocks|Boolean|`true`|`optional`If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.|
 |contextOptions|Object||`optional`Context and WebGL creation properties corresponding to options passed to Scene.|
-|sceneMode|Number|`3`|`optional` The initial scene mode. |
+|sceneMode|Number|`3`|`optional` The initial scene mode. **COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
 |orderIndependentTranslucency|Boolean|`true`|`optional`If true and the configuration supports it, use order independent translucency.|
 |creditContainer|Element \| String||`optional`The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.|
 |creditViewport|Element \| String||`optional`The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.|
 |dataSources|Object||`optional` The collection of data sources visualized by the widget. If this parameter is provided, the instance is assumed to be owned by the caller and will not be destroyed when the viewer is destroyed.|
 |terrainExaggeration|Number|`1.0`|`optional`A scalar used to exaggerate the terrain. Note that terrain exaggeration will not modify any other primitive as they are positioned relative to the ellipsoid.|
 |shadows|Boolean|`false`|`optional`Determines if shadows are cast by the sun.|
-|terrainShadows|Number|`3`|`optional`Determines if the terrain casts or receives shadows from the sun.**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3, NUMBER_OF_SHADOW_MODES: 4**||
-|mapMode2D|Number|`1`|`optional`Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.|
+|terrainShadows|Number|`3`|`optional`Determines if the terrain casts or receives shadows from the sun.**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+|mapMode2D|Number|`1`|`optional`Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
 |projectionPicker|Boolean|`false`|`optional`If set to true, the ProjectionPicker widget will be created.|
 |requestRenderMode|Boolean|`false`|`optional`If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling reduces the CPU/GPU usage of your application and uses less battery on mobile, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering.|
 |maximumRenderTimeChange|Number|`0.0`|`optional`	If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.|
@@ -187,13 +187,13 @@ Basic usage of `vc-viewer`.
 ### Events
 
 <!-- prettier-ignore -->
-| name|parameter|description|source|
+| Name|Parameters|Description|Source|
 |------|----|----|---|
-|cesiumReady|Cesium|Triggered when CesiumJS is successfully loaded.| - |
-|beforeLoad|Vue Instance|Triggered before vc-viewer is loaded.| - |
-|ready|{Cesium, viewer, vm}|Triggered when vc-viewer is successfully loaded.| - |
-|destroyed| Vue Instance |Triggered when vc-viewer is destroyed.| - |
-|viewerWidgetResized| |Triggered when a component changes on vc-viewer.| - |
+|cesiumReady|Cesium|Triggers when CesiumJS is successfully loaded.| - |
+|beforeLoad|Vue Instance|Triggers before vc-viewer is loaded.| - |
+|ready|{Cesium, viewer, vm}|Triggers when vc-viewer is successfully loaded.| - |
+|destroyed| Vue Instance |Triggers when vc-viewer is destroyed.| - |
+|viewerWidgetResized| |Triggers when a component changes on vc-viewer.| - |
 |------|----|----|---|
 |selectedEntityChanged|Entity| Gets the event that is raised when the selected entity changes. |Viewer|
 |trackedEntityChanged|Entity| Gets the event that is raised when the tracked entity changes. |Viewer|
@@ -237,7 +237,7 @@ Basic usage of `vc-viewer`.
 |rightUp|{position: point}|Represents a mouse right button up event.|ScreenSpaceEventType|
 |wheel|delta|Represents a mouse wheel event.|ScreenSpaceEventType|
 |imageryLayersUpdatedEvent||Gets an event that's raised when an imagery layer is added, shown, hidden, moved, or removed.|Viewer.scene.globe|
-|terrainProviderChanged||Gets an event that's raised when the terrain provider is changed. This should be the same as the scene triggered.|Viewer.scene.globe|
+|terrainProviderChanged||Gets an event that's raised when the terrain provider is changed. This should be the same as the scene Triggers.|Viewer.scene.globe|
 |tileLoadProgressEvent||Gets an event that's raised when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.|Viewer.scene.globe|
 
 ### Ref methods

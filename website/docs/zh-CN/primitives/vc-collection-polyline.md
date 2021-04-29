@@ -24,7 +24,7 @@
         }"
         :width="5"
       ></vc-polyline>
-      <vc-primitive-polyline
+      <vc-polyline
         :positions="[[90, 30, 10000], [120, 30, 10000]]"
         :material="{
           fabric: {
@@ -35,8 +35,8 @@
           }
         }"
         :width="10"
-      ></vc-primitive-polyline>
-      <vc-primitive-polyline
+      ></vc-polyline>
+      <vc-polyline
         :positions="[[90, 40, 10000], [120, 40, 10000]]"
         :material="{
           fabric: {
@@ -47,7 +47,7 @@
           }
         }"
         :width="10"
-      ></vc-primitive-polyline>
+      ></vc-polyline>
     </vc-collection-polyline>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -124,7 +124,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
@@ -159,7 +159,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

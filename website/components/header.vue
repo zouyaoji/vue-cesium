@@ -6,18 +6,30 @@
           <router-link :to="`/${lang}`">
             <!-- logo -->
             <slot>
-              <img
-                src="../assets/images/vue-cesium-logo.svg"
-                alt="vue-cesium-logo"
-                class="nav-logo"
-              >
-              <img
-                src="../assets/images/vue-cesium-logo-small.svg"
-                alt="element-logo"
-                class="nav-logo-small"
-              >
+              <img src="../assets/images/vue-cesium-logo.svg" alt="vue-cesium-logo" class="nav-logo">
+              <img src="../assets/images/vue-cesium-logo-small.svg" alt="element-logo" class="nav-logo-small">
             </slot>
           </router-link>
+        </h1>
+        <h1>
+          <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
+            <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic">
+          </a>
+        </h1>
+        <h1>
+          <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
+            <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">
+          </a>
+        </h1>
+        <h1>
+          <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
+            <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social">
+          </a>
+        </h1>
+        <h1>
+          <a href="https://github.com/zouyaoji/vue-cesium/issues" target="_blank">
+            <img src="https://img.shields.io/github/issues/zouyaoji/vue-cesium">
+          </a>
         </h1>
 
         <!-- nav -->
@@ -52,29 +64,14 @@
           </li>
 
           <!-- 版本选择器 -->
-          <li
-            v-if="false"
-            v-show="isComponentPage"
-            class="nav-item nav-versions"
-          >
-            <el-dropdown
-              trigger="click"
-              class="nav-dropdown"
-              :class="{ 'is-active': verDropdownVisible }"
-            >
+          <li v-if="false" v-show="isComponentPage" class="nav-item nav-versions">
+            <el-dropdown trigger="click" class="nav-dropdown" :class="{ 'is-active': verDropdownVisible }">
               <span>
                 {{ version }}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu
-                class="nav-dropdown-list"
-                @input="handleVerDropdownToggle"
-              >
-                <el-dropdown-item
-                  v-for="item in Object.keys(versions)"
-                  :key="item"
-                  @click="switchVersion(item)"
-                >
+              <el-dropdown-menu class="nav-dropdown-list" @input="handleVerDropdownToggle">
+                <el-dropdown-item v-for="item in Object.keys(versions)" :key="item" @click="switchVersion(item)">
                   {{ item }}
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -83,25 +80,14 @@
 
           <!-- 语言选择器 -->
           <li class="nav-item lang-item">
-            <el-dropdown
-              trigger="click"
-              class="nav-dropdown nav-lang"
-              :class="{ 'is-active': langDropdownVisible }"
-            >
+            <el-dropdown trigger="click" class="nav-dropdown nav-lang" :class="{ 'is-active': langDropdownVisible }">
               <span>
                 {{ displayedLang }}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <template #dropdown>
-                <el-dropdown-menu
-                  class="nav-dropdown-list"
-                  @input="handleLangDropdownToggle"
-                >
-                  <el-dropdown-item
-                    v-for="(value, key) in langs"
-                    :key="key"
-                    @click="switchLang(key)"
-                  >
+                <el-dropdown-menu class="nav-dropdown-list" @input="handleLangDropdownToggle">
+                  <el-dropdown-item v-for="(value, key) in langs" :key="key" @click="switchLang(key)">
                     {{ value }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -122,7 +108,7 @@ const version = '1.0.0' // element version
 
 export default {
   components: {
-    AlgoliaSearch,
+    AlgoliaSearch
   },
   data() {
     return {
@@ -133,8 +119,8 @@ export default {
       langDropdownVisible: true,
       langs: {
         [Language.CN]: '中文',
-        [Language.EN]: 'English',
-      },
+        [Language.EN]: 'English'
+      }
     }
   },
 
@@ -150,7 +136,7 @@ export default {
     },
     isComponentPage() {
       return /^component/.test(this.$route.name)
-    },
+    }
   },
   created() {
     // const xhr = new XMLHttpRequest()
@@ -184,8 +170,8 @@ export default {
 
     handleLangDropdownToggle(visible) {
       this.langDropdownVisible = visible
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -219,6 +205,7 @@ export default {
     float: left;
     font-size: 32px;
     font-weight: normal;
+    margin-right: 10px;
 
     a {
       color: #333;

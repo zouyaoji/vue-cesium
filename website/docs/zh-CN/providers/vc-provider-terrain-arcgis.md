@@ -67,11 +67,12 @@
 
 ### 属性
 
-| 属性名    | 类型           | 默认值 | 描述                          |
-| --------- | -------------- | ------ | ----------------------------- |
-| url       | String\|Object |        | `required` 指定服务地址。     |
-| token     | String         |        | `optional` 指定服务授权令牌。 |
-| ellipsoid | Object         |        | `optional` 指定参考椭球体。   |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String\|Object | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` 指定服务地址。 |
+| token | String | | `optional` 指定服务授权令牌。 |
+| ellipsoid | Object | | `optional` 指定参考椭球体。 |
 
 ### 事件
 

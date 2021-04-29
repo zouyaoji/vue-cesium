@@ -127,11 +127,11 @@
 | debugWireframe | Boolean | `false` | `optional` 可选的仅用于调试。 仅用于调试。 在线框中绘制模型。 |
 | heightReference | Number | `0` | `optional` 指定 model 的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | scene | Object | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
-| distanceDisplayCondition | Object | | `optional` 指定 model 随相机改变的显示条件。|
-| color | Object\|String\|Array | `'WHITE'` | `optional` 指定 model 渲染混合的颜色。 |
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 model 随相机改变的显示条件。|
+| color | Object\|String\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
 | colorBlendMode | Number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |
 | colorBlendAmount | Number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
-| silhouetteColor | Object\|String\|Array | `'RED'` | `optional` 指定 model 轮廓线颜色。 |
+| silhouetteColor | Object\|String\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | Number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
 | clippingPlanes | Object | | `optional` 指定 model 屏幕裁剪参数。 |
 | dequantizeInShader | Boolean | `true` | `optional` 确定是否在 GPU 上对 Draco 编码的模型进行了反量化。 这减少了编码模型的总内存使用量。|
@@ -155,7 +155,7 @@
 | mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click        | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
 | dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

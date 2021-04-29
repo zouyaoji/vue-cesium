@@ -1,14 +1,14 @@
 ## VcProviderImageryUrltemplate
 
-通过一个约定的 URL 模板来请求加载影像图层，相当于初始化一个 `Cesium.UrlTemplateImageryProvider` 实例。。比如加载的高德，腾讯等影像瓦片服务，URL 都是一个固定的规范，都可以通过该组件轻松实现。
+Loading a tiled imagery provider that provides imagery by requesting tiles using a specified URL template. It is equivalent to initializing a `Cesium.UrlTemplateImageryProvider` instance.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-urltemplate` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-urltemplate` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加高德地图影像瓦片图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with UrlTemplateImageryProvider to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -23,21 +23,21 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">切换地图</span>
-          <el-select v-model="url" placeholder="请选择">
+          <span class="demonstration">Switch</span>
+          <el-select v-model="url" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -64,15 +64,15 @@
       const options = [
         {
           value: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-          label: '高德影像地图服务'
+          label: 'amap-image'
         },
         {
           value: 'https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}',
-          label: '高德矢量地图服务'
+          label: 'amap-vector'
         },
         {
           value: 'https://www.songluck.com/raster/osm_chengdu/{z}/{x}/{y}.png',
-          label: 'mapbox 栅格瓦片地图'
+          label: 'custom mapbox'
         }
       ]
       const url = ref('https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}')
@@ -105,38 +105,39 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                | 类型            | 默认值  | 描述                                                                                        |
-| --------------------- | --------------- | ------- | ------------------------------------------------------------------------------------------- |
-| url                   | String\|Object  |         | `required`指定服务地址。                                                                    |
-| pickFeaturesUrl       | String\|Object  |         | `optional`指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
-| urlSchemeZeroPadding  | Object          |         | `optional` 指定每个瓦片中心的偏移值。                                                       |
-| subdomains            | String          | `'abc'` | `optional` 指定服务的轮询子域名。                                                           |
-| credit                | String          | `''`    | `optional`指定服务的描述信息                                                                |
-| minimumLevel          | Number          | `0`     | `optional`最小层级。                                                                        |
-| maximumLevel          | Number          |         | `optional`最大层级。                                                                        |
-| rectangle             | Object          |         | `optional`图层的矩形范围,此矩形限制了影像可见范围。                                         |
-| tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                             |
-| ellipsoid             | Object          |         | `optional`参考椭球体。                                                                      |
-| tileWidth             | Number          | `256`   | `optional`像元宽度。                                                                        |
-| tileHeight            | Number          | `256`   | `optional`像元高度。                                                                        |
-| hasAlphaChannel       | Boolean         | `true`  | `optional`设置为 true 表示图层包含 alpha 透明通道，反之没有。                               |
-| getFeatureInfoFormats | Array           |         | `optional`格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
-| enablePickFeatures    | Boolean         | `true`  | `optional`是否开启图层拾取。                                                                |
-| customTags            | Object          |         | `optional`替换 url 模板中的自定义关键字。                                                   |
-| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定投影变换参数。                                                               |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+|url|String\|Object||`required` The URL template to use to request tiles.|
+|pickFeaturesUrl|String\|Object||`optional` The URL template to use to pick features. |
+|urlSchemeZeroPadding|Object||`optional` Gets the URL scheme zero padding for each tile coordinate.|
+|subdomains|String\|Array|`'abc'`|`optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain.|
+|credit|String\|Object|`''`|`optional` A credit for the data source, which is displayed on the canvas.|
+|minimumLevel|Number|`0`|`optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.|
+|maximumLevel|Number||`optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit.|
+|rectangle|Object||`optional` The rectangle, in radians, covered by the image. |
+|tilingScheme|Object||`optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used.|
+|ellipsoid|Object||`optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.|
+|tileWidth|Number|`256`|`optional` Pixel width of image tiles.|
+|tileHeight|Number|`256`|`optional` Pixel height of image tiles.|
+|hasAlphaChannel|Boolean|`true`|`optional` true if the images provided by this imagery provider include an alpha channel; otherwise, false. If this property is false, an alpha channel, if present, will be ignored. If this property is true, any images without an alpha channel will be treated as if their alpha is 1.0 everywhere. When this property is false, memory usage and texture upload time are potentially reduced.|
+|getFeatureInfoFormats|Array||`optional` The formats in which to get feature information at a specific location when UrlTemplateImageryProvider#pickFeatures is invoked. If this parameter is not specified, feature picking is disabled.|
+|enablePickFeatures|Boolean|`true`|`optional` If true, UrlTemplateImageryProvider#pickFeatures will request the options.pickFeaturesUrl and attempt to interpret the features included in the response. If false, UrlTemplateImageryProvider#pickFeatures will immediately return undefined (indicating no pickable features) without communicating with the server. Set this property to false if you know your data source does not support picking features or if you don't want this provider's features to be pickable. Note that this can be dynamically overridden by modifying the UriTemplateImageryProvider#enablePickFeatures property.|
+|customTags|Object||`optional` Allow to replace custom keywords in the URL template. The object must have strings as keys and functions as values.|
+| projectionTransforms | Boolean\|Object | `false` | `optional` Specify the projection transformation parameters. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[UrlTemplateImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/UrlTemplateImageryProvider.html)**
+- Refer to the official documentation: **[UrlTemplateImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/UrlTemplateImageryProvider.html)**

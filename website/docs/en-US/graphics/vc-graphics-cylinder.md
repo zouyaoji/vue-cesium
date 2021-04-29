@@ -1,14 +1,14 @@
 ## VcGraphicsCylinder
 
-加载圆柱、圆锥、圆台实体，相当于初始化一个 `Cesium.CylinderGraphics` 实例。
+Loading a cylinder graphic. It is equivalent to initializing a `Cesium.CylinderGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-圆柱(锥)体组件的基础用法。
+Basic usage of the VcGraphicsCylinder component.
 
-:::demo 使用 `vc-graphics-cylinder` 标签在三维球上添加圆柱和圆锥体。
+:::demo Use the `vc-graphics-cylinder` tag to add some cylinders to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -70,34 +70,35 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                      |
-| ------------------------ | --------------------- | --------- | --------------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 cylinder 是否显示。                       |
-| length                   | Array                 |           | `optional` 指定 cylinder 的长。                           |
-| topRadius                | Number                |           | `optional` 指定 cylinder 的顶部半径。                     |
-| bottomRadius             | Number                |           | `optional` 指定 cylinder 的底部半径。                     |
-| heightReference          | Number                |           | `optional` 指定 cylinder 高度模式。                       |
-| fill                     | Boolean               | `true`    | `optional` 指定 cylinder 是否填充材质。                   |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 cylinder 的材质。                         |
-| outline                  | Boolean               | `false`   | `optional` 指定 cylinder 是否绘制轮廓线。                 |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 cylinder 轮廓线颜色。                     |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 cylinder 轮廓线宽度。                     |
-| numberOfVerticalLines    | Number                | `16`      | `optional` 指定沿轮廓线周长绘制的垂直线数。               |
-| slices                   | Number                | `128`     | `optional` 指定 cylinder 边节点数量。                     |
-| shadows                  | Number                | `0`       | `optional` 指定 cylinder 是否投射或接收每个点光源的阴影。 |
-| distanceDisplayCondition | Object                |           | `optional` 指定 cylinder 随相机距离显示条件。             |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the cylinder. |
+| length | Array | | `optional` A numeric Property specifying the length of the cylinder. |
+| topRadius | Number | | `optional` A numeric Property specifying the radius of the top of the cylinder. |
+| bottomRadius | Number | | `optional` A numeric Property specifying the radius of the bottom of the cylinder. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the cylinder is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the cylinder. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the cylinder is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| numberOfVerticalLines | Number | `16` | `optional` A numeric Property specifying the number of vertical lines to draw along the perimeter for the outline. |
+| slices | Number | `128` | `optional` The number of edges around the perimeter of the cylinder. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the cylinder casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this cylinder will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)**
+- Refer to the official documentation: **[CylinderGraphics](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGraphics.html)**

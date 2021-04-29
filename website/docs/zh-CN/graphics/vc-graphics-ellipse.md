@@ -83,28 +83,29 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                     |
-| ------------------------ | --------------------- | --------- | -------------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 ellipse 是否显示。                       |
-| semiMajorAxis            | Number                |           | `optional` 指定 ellipse 长半轴。                         |
-| semiMinorAxis            | Number                |           | `optional` 指定 ellipse 短半轴。                         |
-| height                   | Number                | `0`       | `optional` 指定 ellipse 高度。                           |
-| heightReference          | Number                |           | `optional` 指定 ellipse 高度模式。                       |
-| extrudedHeight           | Number                |           | `optional` 指定 ellipse 拉伸高度。                       |
-| extrudedHeightReference  | Number                |           | `optional` 指定 ellipse 拉伸高度模式。                   |
-| rotation                 | Number                | `0.0`     | `optional` 指定 ellipse 正北逆时针旋转角度。             |
-| stRotation               | Number                | `0.0`     | `optional` 指定 ellipse 纹理正北逆时针旋转角度。         |
-| granularity              | Number                |           | `optional` 指定每个经纬度之间的采样粒度。                |
-| fill                     | Boolean               | `true`    | `optional` 指定 ellipse 是否填充材质。                   |
-| material                 | Object\|String\|Array | `'white'` | `optional` 指定 ellipse 材质。                           |
-| outline                  | Boolean               | `false`   | `optional` 指定 ellipse 是否绘制轮廓线。                 |
-| outlineColor             | Object\|String\|Array | `'black'` | `optional` 指定 ellipse 轮廓线颜色。                     |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 ellipse 轮廓线宽度。                     |
-| numberOfVerticalLines    | Number                | `16`      | `optional` 指定 ellipse 沿轮廓周长绘制的垂直线数。       |
-| shadows                  | Number                | `0`       | `optional` 指定 ellipse 是否投射接收每一个光源的阴影。   |
-| distanceDisplayCondition | Object                |           | `optional` 指定 ellipse 随相机距离的显示条件。           |
-| classificationType       | Number                | `2`       | `optional` 指定 ellipse 的贴地模式。                     |
-| zIndex                   | Number                |           | `optional` 指定 ellipse 顺序，没有高度和拉伸高度才有效。 |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ----- | ------ | ---- | ----- | ---- |
+| show | Boolean | `true` | `optional` 指定 ellipse 是否显示。 |
+| semiMajorAxis | Number | | `optional` 指定 ellipse 长半轴。 |
+| semiMinorAxis | Number | | `optional` 指定 ellipse 短半轴。 |
+| height | Number | `0` | `optional` 指定 ellipse 高度。 |
+| heightReference | Number | | `optional` 指定 ellipse 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| extrudedHeight | Number | | `optional` 指定 ellipse 拉伸高度。 |
+| extrudedHeightReference | Number | | `optional` 指定 ellipse 拉伸高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| rotation | Number | `0.0` | `optional` 指定 ellipse 正北逆时针旋转角度。 |
+| stRotation | Number | `0.0` | `optional` 指定 ellipse 纹理正北逆时针旋转角度。 |
+| granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 |
+| fill | Boolean | `true` | `optional` 指定 ellipse 是否填充材质。 |
+| material | Object\|String\|Array | `'white'` | `optional` 指定 ellipse 材质。 |
+| outline | Boolean | `false` | `optional` 指定 ellipse 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 ellipse 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 ellipse 轮廓线宽度。 |
+| numberOfVerticalLines | Number | `16` | `optional` 指定 ellipse 沿轮廓周长绘制的垂直线数。 |
+| shadows | Number | `0` | `optional` 指定 ellipse 是否投射接收每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 ellipse 随相机距离的显示条件。 |
+| classificationType | Number | `2` | `optional` 指定 ellipse 的贴地模式。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | Number | | `optional` 指定 ellipse 顺序，没有高度和拉伸高度才有效。 |
 
 ### 事件
 

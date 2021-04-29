@@ -1,14 +1,14 @@
 ## VcGraphicsPolygon
 
-加载点实体，相当于初始化一个 `Cesium.PolygonGraphics` 实例。
+Loading a polygon graphic. It is equivalent to initializing a `Cesium.PolygonGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-面实体组件的基础用法。
+Basic usage of VcGraphicsPolygon component.
 
-:::demo 使用 `vc-graphics-polygon` 标签在三维球上添加面实体对象。
+:::demo Use the `vc-graphics-polygon` tag to add some polygons to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -151,41 +151,42 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                     |
-| ------------------------ | --------------------- | --------- | -------------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 polygon 是否显示。                       |
-| hierarchy                | Object\|Array         |           | `optional` 指定 polygon 的 PolygonHierarchy 属性。       |
-| height                   | Number                | `0`       | `optional` 指定 polygon 的高度。                         |
-| heightReference          | Number                |           | `optional` 指定 polygon 高度模式。                       |
-| extrudedHeight           | Number                |           | `optional` 指定 polygon 拉伸高度。                       |
-| extrudedHeightReference  | Number                |           | `optional` 指定 polygon 拉伸的高度模式。                 |
-| stRotation               | Number\|Object        | `0.0`     | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。   |
-| granularity              | Number                |           | `optional` 指定每个经纬度之间的采样粒度。                |
-| fill                     | Boolean               | `true`    | `optional` 指定 polygon 是否填充材质。                   |
-| material                 | Object\|String\|Array | `'white'` | `optional` 指定 polygon 材质。                           |
-| outline                  | Boolean               | `false`   | `optional` 指定 polygon 是否绘制轮廓线。                 |
-| outlineColor             | Object\|String\|Array | `'black'` | `optional` 指定 polygon 轮廓线颜色。                     |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 polygon 轮廓线宽度。                     |
-| perPositionHeight        | Boolean               | `false`   | `optional` 指定 polygon 是否使用每个位置的高度。         |
-| closeTop                 | Boolean               | `true`    | `optional` 指定 polygon 拉伸出来的顶部是否闭合。         |
-| closeBottom              | Boolean               | `true`    | `optional` 指定 polygon 拉伸出来的底部是否闭合。         |
-| arcType                  | Number                | `1`       | `optional` 指定 polygon 线条类型。                       |
-| shadows                  | Number                | `0`       | `optional` 指定 polygon 是否投射或接收阴影。             |
-| distanceDisplayCondition | Object                |           | `optional` 指定 polygon 随相机距离改变是否显示参数。     |
-| classificationType       | Number                | `2`       | `optional` 指定 polygon 贴对象模式。                     |
-| zIndex                   | Number                | `0`       | `optional` 指定 polygon 顺序，没有高度和拉伸高度时有效。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the polygon. |
+| hierarchy | Object\|Array | | `optional` A Property specifying the PolygonHierarchy. |
+| height | Number | `0` | `optional` A numeric Property specifying the altitude of the polygon relative to the ellipsoid surface. |
+| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the polygon's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| stRotation | Number | `0.0` | `optional` A numeric property specifying the rotation of the polygon texture counter-clockwise from north. |
+| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the polygon is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the polygon. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the polygon is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `0` | `optional` A numeric Property specifying the the outline width in pixels. |
+| perPositionHeight | Boolean | `false` | `optional` A boolean specifying whether or not the the height of each position is used. |
+| closeTop | Boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
+| closeBottom | Boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
+| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
+| shadows | Number | `0` | `optional` An enum Property specifying whether the polygon casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this polygon will be displayed.  |
+| classificationType | Number | `2` | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | Number | `0` | `optional` A property specifying the zIndex used for ordering ground geometry. Only has an effect if the polygon is constant and neither height or extrudedHeight are specified. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[PolygonGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html)**
+- Refer to the official documentation: **[PolygonGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html)**

@@ -1,14 +1,14 @@
 ## VcGeometryCorridor
 
-加载廊道几何图形，相当于初始化一个 `Cesium.CorridorGeometry` 实例。
+Loading a corridor geometry is equivalent to initializing a `Cesium.CorridorGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-廊道几何图形组件的基础用法。
+Basic usage of VcGeometryCorridor component.
 
-:::demo 使用 `vc-geometry-corridor` 和 `vc-geometry-corridor-outline` 标签在三维球上添加廊道。
+:::demo Use the `vc-geometry-corridor` and `vc-geometry-corridor-outline` tags to add a corridor on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -115,53 +115,55 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名         | 类型   | 默认值 | 描述                                                                      | 可选值 |
-| -------------- | ------ | ------ | ------------------------------------------------------------------------- | ------ |
-| positions      | Array  |        | `required` 指定描述 corridor 位置的经纬度(高度)数组。                     |
-| width          | Number |        | `required` 指定 corridor 边之间的距离。                                   |
-| ellipsoid      | Object |        | `optional` 指定 corridor 参考椭球体。                                     |
-| granularity    | Number |        | `optional` 指定每个经纬度之间的采样粒度。                                 |
-| height         | Number | `0`    | `optional` 指定 corridor 高度。                                           |
-| extrudedHeight | Number |        | `optional` 指定 corridor 拉伸高度。                                       |
-| vertexFormat   | Object |        | `optional` 指定 corridor 要缓存的顶点属性。                               |
-| cornerType     | Number | `0`    | `optional` 指定 corridor 转角样式。**ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| positions | Array | | `required` An array of positions that define the center of the corridor. |
+| width | Number | | `required` The distance between the edges of the corridor in meters. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | Number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
+| extrudedHeight | Number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed.|
+| cornerType | Number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryCorridorOutline
 
-加载廊道边框，相当于初始化一个 `Cesium.CorridorOutlineGeometry` 实例。
+Loading a corridor geometry outline. It is equivalent to initializing a `Cesium.CorridorOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryCorridorOutline 属性
+### VcGeometryCorridorOutline Props
 
-| 属性名         | 类型   | 默认值 | 描述                                                                      | 可选值 |
-| -------------- | ------ | ------ | ------------------------------------------------------------------------- | ------ |
-| positions      | Array  |        | `required` 指定描述 corridor 位置的经纬度(高度)数组。                     |
-| width          | Number |        | `required` 指定 corridor 边之间的距离。                                   |
-| ellipsoid      | Object |        | `optional` 指定 corridor 参考椭球体。                                     |
-| granularity    | Number |        | `optional` 指定每个经纬度之间的采样粒度。                                 |
-| height         | Number | `0`    | `optional` 指定 corridor 高度。                                           |
-| extrudedHeight | Number |        | `optional` 指定 corridor 拉伸高度。                                       |
-| cornerType     | Number | `0`    | `optional` 指定 corridor 转角样式。**ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| positions | Array | | `required` An array of positions that define the center of the corridor outline. |
+| width | Number | | `required` The distance between the edges of the corridor outline. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | Number | `0` | `optional` The distance in meters between the ellipsoid surface and the positions. |
+| extrudedHeight | Number | | `optional` The distance in meters between the ellipsoid surface and the extruded face. |
+| cornerType | Number | `0` | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
-### VcGeometryPolygonCoplanarOutline 事件
+### VcGeometryPolygonCoplanarOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[CorridorGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGeometry.html)、[CorridorOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CorridorOutlineGeometry.html)**
+- Refer to the official documentation: **[CorridorGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CorridorGeometry.html)、[CorridorOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CorridorOutlineGeometry.html)**

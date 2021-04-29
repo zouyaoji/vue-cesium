@@ -1,14 +1,14 @@
 ## VcProviderImageryWmts
 
-用于加载 OGC 标准 [WMTS 1.0.0](http://www.opengeospatial.org/standards/wmts) 影像服务，相当于初始化一个 `Cesium.WebMapTileServiceImageryProvider` 实例。
+Loading a tiled imagery provider that provides tiled imagery served by [WMTS 1.0.0](http://www.opengeospatial.org/standards/wmts) compliant servers. It is equivalent to initializing a `Cesium.WebMapTileServiceImageryProvider` instance.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-wmts` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-wmts` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由 ArcGIS MapServer 提供的 WMTS 影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with WebMapTileServiceImageryProvider to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -27,18 +27,18 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
         </div>
       </el-col>
@@ -83,39 +83,40 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名           | 类型                   | 默认值         | 描述                                                                                |
-| ---------------- | ---------------------- | -------------- | ----------------------------------------------------------------------------------- |
-| url              | String\|Object         |                | `required` 指定 wmts 服务地址。                                                     |
-| format           | String                 | `'image/jpeg'` | `optional` 指定服务的 MIME 类型。                                                   |
-| layer            | String                 |                | `required` 指定 WMTS 请求图层名称。                                                 |
-| wmtsStyle        | String                 |                | `required` 指定 WMTS 请求样式名称。                                                 |
-| tileMatrixSetID  | String                 |                | `required` 指定 WMTS 请求的 TileMatrixSet 的标识符。                                |
-| tileMatrixLabels | Array                  |                | `optional` 指定 TileMatrix 中用于 WMTS 请求的标识符列表，每个 TileMatrix 级别一个。 |
-| clock            | Clock                  |                | `optional` 确定时间维度值时使用的 Clock 实例。 指定 options.times 时必需。          |
-| times            | TimeIntervalCollection |                | `optional` TimeIntervalCollection，其 data 属性是一个包含时间动态维度及其值的对象。 |
-| dimensions       | Object                 |                | `optional` 指定包含静态尺寸及其值的对象。                                           |
-| tileWidth        | Number                 | `256`          | `optional` 像元宽度。                                                               |
-| tileHeight       | Number                 | `256`          | `optional` 像元高度。                                                               |
-| tilingScheme     | TilingScheme           |                | `optional` 指定切片方案。                                                           |
-| rectangle        | Object                 |                | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                |
-| minimumLevel     | Number                 | `0`            | `optional` 图层可以显示的最小层级。                                                 |
-| maximumLevel     | Number                 |                | `optional` 图层可以显示的最大层级，undefined 表示没有限制。                         |
-| ellipsoid        | Ellipsoid              |                | `optional` 参考椭球体，没指定默认 WGS84 椭球。                                      |
-| credit           | Credit\| String        |                | `optional` 数据源描述信息。                                                         |
-| subdomains       | String \| Array        | `'abc'`        | `optional` 指定 URL 模板中{s}占位符的子域。                                         |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String\|Object | | `required`The base URL for the WMTS GetTile operation (for KVP-encoded requests) or the tile-URL template (for RESTful requests). The tile-URL template should contain the following variables: {style}, {TileMatrixSet}, {TileMatrix}, {TileRow}, {TileCol}. The first two are optional if actual values are hardcoded or not required by the server. The {s} keyword may be used to specify subdomains.。 |
+| format | String | `'image/jpeg'` | `optional` The MIME type for images to retrieve from the server. |
+| wmtsStyle | String | | `required`The layer name for WMTS requests. |
+| style | String | | `required`The style name for WMTS requests. |
+| tileMatrixSetID | String | | `required`The identifier of the TileMatrixSet to use for WMTS requests. |
+| tileMatrixLabels | Array | | `optional` A list of identifiers in the TileMatrix to use for WMTS requests, one per TileMatrix level. |
+| clock | Clock | | `optional` A Clock instance that is used when determining the value for the time dimension. Required when options.times is specified. |
+| times | TimeIntervalCollection | | `optional` TimeIntervalCollection with its data property being an object containing time dynamic dimension and their values. |
+| dimensions | Object | | `optional` A object containing static dimensions and their values. |
+| tileWidth | Number | `256` | `optional` The tile width in pixels. |
+| tileHeight | Number | `256` | `optional` The tile height in pixels. |
+| tilingScheme | TilingScheme | | `optional` The tiling scheme corresponding to the organization of the tiles in the TileMatrixSet. |
+| rectangle | Object\|Array | | `optional` The rectangle covered by the layer. |
+| minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. |
+| maximumLevel | Number | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| ellipsoid | Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| credit | Credit | String | | `optional` A credit for the data source, which is displayed on the canvas. |
+| subdomains | String \| Array | `'abc'` | `optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html)**
+- Refer to the official documentation: **[WebMapTileServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapTileServiceImageryProvider.html)**

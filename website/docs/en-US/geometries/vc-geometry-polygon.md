@@ -1,14 +1,14 @@
 ## VcGeometryPolygon
 
-加载多边形，相当于初始化一个 `Cesium.PolygonGeometry` 实例。
+Loading a polygon geometry. It is equivalent to initializing a `Cesium.PolygonGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-多边形几何图形组件的基础用法。
+Basic usage of VcGeometryPolygon component.
 
-:::demo 使用 `vc-geometry-polygon` 和 `vc-geometry-polygon-outline` 标签在三维球上添加多边形。
+:::demo Use the `vc-geometry-polygon` and `vc-geometry-polygon-outline` tags to add polygons on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -36,10 +36,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -141,57 +141,59 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
-| ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性，可以包含岛洞。     |
-| height            | Number        | `0`     | `optional` 指定 polygon 的高度。                                     |
-| extrudedHeight    | Number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
-| stRotation        | Number        | `0.0`   | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。               |
-| ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
-| granularity       | Number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
-| perPositionHeight | Boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
-| closeTop          | Boolean       | `true`  | `optional` 指定 polygon 拉伸出来的顶部是否闭合。                     |
-| closeBottom       | Boolean       | `true`  | `optional` 指定 polygon 拉伸出来的底部是否闭合。                     |
-| arcType           | Number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ----------------- | ------------- | ------- | -------------------------------------------------------------------- | --------------- |
+| polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
+| height | Number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
+| extrudedHeight | Number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| stRotation | Number\|Object | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| perPositionHeight | Boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
+| closeTop | Boolean | `true` | `optional` When false, leaves off the top of an extruded polygon open. |
+| closeBottom | Boolean | `true` | `optional` When false, leaves off the bottom of an extruded polygon open. |
+| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryPolygonOutline
 
-加载多边形几何图形边框，相当于初始化一个 `Cesium.PolygonOutlineGeometry` 实例。
+Loading a polygon geometry outline. It is equivalent to initializing a `Cesium.PolygonOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryPolygonOutline 属性
+### VcGeometryPolygonOutline Props
 
-| 属性名            | 类型          | 默认值  | 描述                                                                 | 可选值 |
-| ----------------- | ------------- | ------- | -------------------------------------------------------------------- | ------ |
-| polygonHierarchy  | Object\|Array |         | `optional` 指定 polygon 的 PolygonHierarchy 属性。                   |
-| height            | Number        | `0`     | `optional` 指定 polygon 的高度。                                     |
-| extrudedHeight    | Number        |         | `optional` 指定 polygon 拉伸高度。                                   |
-| vertexFormat      | Object        |         | `optional` 指定 polygon 要缓存的顶点属性。                           |
-| ellipsoid         | Object        |         | `optional` 指定 polygon 参考椭球体。                                 |
-| granularity       | Number        |         | `optional` 指定 polygon 每个纬度和经度之间的距离（以弧度为单位）。   |
-| perPositionHeight | Boolean       | `false` | `optional` 指定 polygon 是否使用每个位置的高度。                     |
-| arcType           | Number        | `1`     | `optional` 指定 polygon 线条类型。**NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| polygonHierarchy | Object\|Array | | `required` A polygon hierarchy that can include holes. |
+| height | Number | `0` | `optional` The distance in meters between the polygon and the ellipsoid surface. |
+| extrudedHeight | Number | | `optional` The distance in meters between the polygon's extruded face and the ellipsoid surface. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| perPositionHeight | Boolean | `false` | `optional` Use the height of options.positions for each position instead of using options.height to determine the height. |
+| arcType | Number | `1` | `optional` The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** | 0/1/2|
 
-### VcGeometryPolygonOutline 事件
+### VcGeometryPolygonOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[PolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGeometry.html)、[PolygonOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonOutlineGeometry.html)**
+- Refer to the official documentation: **[PolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGeometry.html)、[PolygonOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolygonOutlineGeometry.html)**

@@ -1,19 +1,19 @@
 ## VcGraphicsBillboard
 
-加载布告板实体，相当于初始化一个 `Cesium.BillboardGraphics` 实例。
+Loading a billboard graphic. It is equivalent to initializing a `Cesium.BillboardGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-布告板组件的基础用法。
+Basic usage of VcGraphicsBillboard component.
 
-:::demo 使用 `vc-graphics-billboard` 标签在三维球上添加实体布告板。
+:::demo Use the `vc-graphics-billboard` tag to add a billboard with entity on the viwewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <!-- 通过属性加载 和 子组件分别加载 -->
+    <!-- Load through attributes and load subcomponents separately -->
     <vc-entity ref="entity" :position="position" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-billboard
         ref="billboard"
@@ -26,10 +26,10 @@
     </vc-entity>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="Show/Hide"> </el-switch>
   </el-row>
 </el-row>
 
@@ -92,40 +92,41 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                     | 类型                     | 默认值               | 描述                                                         |
-| -------------------------- | ------------------------ | -------------------- | ------------------------------------------------------------ |
-| show                       | Boolean                  | `true`               | `optional` 指定 billboard 是否显示。                         |
-| image                      | String\|Object           |                      | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
-| scale                      | Number                   | `1.0`                | `optional` 指定 billboard 图片的缩放比例。                   |
-| pixelOffset                | Cartesian2               | `{x: 0, y: 0}`       | `optional` 指定 billboard 像素偏移。                         |
-| eyeOffset                  | Cartesian3               | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移。                         |
-| horizontalOrigin           | Number                   | `0`                  | `optional` 指定 billboard 水平对齐方式。                     |
-| verticalOrigin             | Number                   | `0`                  | `optional` 指定 billboard 垂直对齐方式。                     |
-| heightReference            | Number                   | `0`                  | `optional` 指定 billboard 高度模式。                         |
-| color                      | Color                    | `'white'`            | `optional` 指定 billboard 图片的颜色。                       |
-| rotation                   | Number                   | `0`                  | `optional` 指定 billboard 沿 x 轴方向旋转的角度。            |
-| alignedAxis                | Cartesian3               | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。             |
-| sizeInMeters               | Boolean                  |                      | `optional` 指定 billboard 的单位是否是米。                   |
-| width                      | Number                   |                      | `optional` 指定 billboard 的宽度（像素）。                   |
-| height                     | Number                   |                      | `optional` 指定 billboard 的高度（像素）。                   |
-| scaleByDistance            | NearFarScalar            |                      | `optional` 指定 billboard 随相机距离缩放的参数。             |
-| translucencyByDistance     | NearFarScalar            |                      | `optional` 指定 billboard 随相机距离透明度改变的参数。       |
-| pixelOffsetScaleByDistance | NearFarScalar            |                      | `optional` 指定 billboard 随相机距离像素偏移改变的参数。     |
-| imageSubRegion             | Object                   |                      | `optional` 指定 billboard 的子区域，相对于左下角。           |
-| distanceDisplayCondition   | DistanceDisplayCondition |                      | `optional` 指定 billboard 随相机距离改变是否显示参数。       |
-| disableDepthTestDistance   | Number                   |                      | `optional` 指定 billboard 深度检测距离。                     |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the billboard. |
+| image | String\|Object | | `optional` A Property specifying the Image, URI, or Canvas to use for the billboard. |
+| scale | Number | `1.0` | `optional` A numeric Property specifying the scale to apply to the image size. |
+| pixelOffset | Object\|Array\|Function | `{x: 0, y: 0}` | `optional` A Cartesian2 Property specifying the pixel offset. |
+| eyeOffset | Object\|Array\|Function | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the eye offset. |
+| horizontalOrigin | Number | `0` | `optional` A Property specifying the HorizontalOrigin. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
+| verticalOrigin | Number | `0` | `optional` A Property specifying the VerticalOrigin. **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| color | Color | `'white'` | `optional` A Property specifying the tint Color of the image. |
+| rotation | Number | `0` | `optional` A numeric Property specifying the rotation about the alignedAxis. |
+| alignedAxis | Object\|Array\|Function | `{x: 0, y: 0, z: 0}` | `optional` A Cartesian3 Property specifying the unit vector axis of rotation. |
+| sizeInMeters | Boolean | | `optional` A boolean Property specifying whether this billboard's size should be measured in meters. |
+| width | Number | | `optional` A numeric Property specifying the width of the billboard in pixels, overriding the native size. |
+| height | Number | | `optional` A numeric Property specifying the height of the billboard in pixels, overriding the native size. |
+| scaleByDistance | Object\|Array\|Function | | `optional` A NearFarScalar Property used to scale the point based on distance from the camera. |
+| translucencyByDistance | Object\|Array\|Function | | `optional` A NearFarScalar Property used to set translucency based on distance from the camera. |
+| pixelOffsetScaleByDistance | Object\|Array\|Function | | `optional` A NearFarScalar Property used to set pixelOffset based on distance from the camera. |
+| imageSubRegion | Object | | `optional` A Property specifying a BoundingRectangle that defines a sub-region of the image to use for the billboard, rather than the entire image, measured in pixels from the bottom-left. |
+| distanceDisplayCondition | Object\|Array\|Function | | `optional` A Property specifying at what distance from the camera that this billboard will be displayed. |
+| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)**
+- Refer to the official documentation: **[BillboardGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BillboardGraphics.html)**

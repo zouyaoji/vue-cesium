@@ -1,12 +1,12 @@
 ## VcProviderTerrainTianditu
 
-加载天地图在线地形。
+Loading a terrain provider that produces terrain geometry by tessellating height maps retrieved from Elevation Tiles of an Tianditu REST API.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-terrain-tianditu` 组件的基础用法。
+Basic usage of the `vc-provider-terrain-tianditu` component.
 
-:::demo 使用 `vc-provider-terrain-tianditu` 标签在三维球上添加由天地图提供的在线地形瓦片服务。
+:::demo Use the `vc-provider-terrain-tianditu` tag to add the online terrain tile service provided by Tianditu to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -21,9 +21,9 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
   </div>
 </el-row>
@@ -47,7 +47,6 @@
         provider.value.load()
       }
       const ready = ({ Cesium, viewer }) => {
-        window.viewer = viewer
       }
       return {
         ready,
@@ -63,28 +62,28 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| --------------- | ------- | -------------------------------- | ------------------------------------------------------------------- |
-| url | String | `'https://{s}.tianditu.gov.cn/'` | `required` 指定服务地址。 |
-| subdomains | Array | `false` | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` 指定轮询子域名。 |
-| pluginPath | String | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` 指定天地图地形插件库地址。 |
-| dataType | String | `int` | `optional` 指定数据类型。 |
-| tileType | String | `heightmap` | `optional` 指定瓦片类型。 |
-| token | String | | `optional` 指定天地图服务秘钥。 |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String | `'https://{s}.tianditu.gov.cn/'` | `required` Specify the service address. |
+| subdomains | Array | `false` | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` Specify the polling subdomain name. |
+| pluginPath | String | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` Specify the address of the Tiantu terrain plugin library. |
+| dataType | String | `int` | `optional` Specify the data type. |
+| tileType | String | `heightmap` | `optional` Specify the tile type. |
+| token | String | | `optional` Specify the Tiantu service secret key. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                           | 描述                                                                             |
-| ------------ | ------------------------------ | -------------------------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError              | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。                |
-| readyPromise | TerrainProvider                | 当图层提供者可用时触发, 返回 TerrainProvider 实例。                              |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | TerrainProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 资料： **[天地图帮助文档](http://lbs.tianditu.gov.cn/docs/#/sanwei/)**
+- **[Documents of Tianditu](http://lbs.tianditu.gov.cn/docs/#/sanwei/)**

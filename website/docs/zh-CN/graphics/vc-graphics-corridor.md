@@ -124,26 +124,27 @@
 
 ### 属性
 
-| 属性名                   | 类型                     | 默认值    | 描述                                                        |
-| ------------------------ | ------------------------ | --------- | ----------------------------------------------------------- |
-| show                     | Boolean                  | `true`    | `optional` 指定 corridor 是否显示。                         |
-| positions                | Array\<Cartesian3\>      |           | `optional` 指定描述 corridor 位置的经纬度(高度)数组。       |
-| width                    | Number                   |           | `optional` 指定 corridor 边之间的距离。                     |
-| height                   | Number                   | `0`       | `optional` 指定 corridor 高度。                             |
-| heightReference          | HeightReference          |           | `optional` 指定 corridor 高度模式。                         |
-| extrudedHeight           | Number                   |           | `optional` 指定 corridor 拉伸高度。                         |
-| extrudedHeightReference  | HeightReference          |           | `optional` 指定 corridor 拉伸高度模式。                     |
-| cornerType               | CornerType               | `0`       | `optional` 指定 corridor 转角样式。                         |
-| granularity              | Number                   |           | `optional` 指定每个经纬度之间的采样粒度。                   |
-| fill                     | Boolean                  | `true`    | `optional` 指定 corridor 是否填充材质。                     |
-| material                 | Object\|String\|Array    | `'white'` | `optional` 指定 corridor 的材质。                           |
-| outline                  | Boolean                  | `false`   | `optional` 指定 corridor 是否绘制轮廓线。                   |
-| outlineColor             | Object\|String\|Array    | `'black'` | `optional` 指定 corridor 轮廓线颜色。                       |
-| outlineWidth             | Number                   | `1.0`     | `optional` 指定 corridor 轮廓线宽度。                       |
-| shadows                  | ShadowMode               | `0`       | `optional` 指定 corridor 是否接收或者发射每个点光源的阴影。 |
-| distanceDisplayCondition | DistanceDisplayCondition |           | `optional` 指定 corridor 随相机距离改变是否显示参数。       |
-| classificationType       | ClassificationType       | `2`       | `optional` 指定 corridor 的贴对象模式。                     |
-| zIndex                   | Number                   |           | `optional` 指定 corridor 顺序，没有高度和拉伸高度才有效。   |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ------ | ----| ----- | ---- | ------ |
+| show | Boolean | `true` | `optional` 指定 corridor 是否显示。 |
+| positions | Array | | `optional` 指定描述 corridor 位置的经纬度(高度)数组。 |
+| width | Number | | `optional` 指定 corridor 边之间的距离。 |
+| height | Number | | `optional` 指定 corridor 高度。 |
+| heightReference | Number | | `optional` 指定 corridor 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | Number | | `optional` 指定 corridor 拉伸高度。 |
+| extrudedHeightReference | Number | | `optional` 指定 corridor 拉伸高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| cornerType | Number | `0` | `optional` 指定 corridor 转角样式。 |
+| granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 |
+| fill | Boolean | `true` | `optional` 指定 corridor 是否填充材质。 |
+| material | Object\|String\|Array | `'white'` | `optional` 指定 corridor 的材质。 |
+| outline | Boolean | `false` | `optional` 指定 corridor 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 corridor 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 corridor 轮廓线宽度。 |
+| shadows | Number | `0` | `optional` 指定 corridor 是否接收或者发射每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | Object\|Array\|Function | | `optional` 指定 corridor 随相机距离改变是否显示参数。 |
+| classificationType | Number | `2` | `optional` 指定 corridor 的贴对象模式。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | Number | | `optional` 指定 corridor 顺序，没有高度和拉伸高度才有效。 |
 
 ### 事件
 

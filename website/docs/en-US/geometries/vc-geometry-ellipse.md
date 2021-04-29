@@ -1,14 +1,14 @@
 ## VcGeometryEllipse
 
-加载椭圆几何图形，相当于初始化一个 `Cesium.EllipseGeometry` 实例。
+Loading an ellipse geometry. It is equivalent to initializing a `Cesium.EllipseGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-椭圆多边形几何图形组件的基础用法。
+Basic usage of VcGeometryEllipse component.
 
-:::demo 使用 `vc-geometry-ellipse` 和 `vc-geometry-ellipse-outline` 标签在三维球上添加共面多边形。
+:::demo Use the `vc-geometry-ellipse` and `vc-geometry-ellipse-outline` tags to add an ellipse on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -37,10 +37,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -121,58 +121,58 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名         | 类型          | 默认值 | 描述                                                |
-| -------------- | ------------- | ------ | --------------------------------------------------- |
-| center         | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
-| semiMajorAxis  | Number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
-| semiMinorAxis  | Number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid      | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
-| height         | Number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
-| extrudedHeight | Number        |        | `optional` 指定椭圆拉伸高度。                       |
-| rotation       | Number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |
-| stRotation     | Number        | `0.0`  | `optional` 指定椭圆纹理以正北逆时针方向旋转的角度。 |
-| granularity    | Number        |        | `optional` 指定椭圆上点之间的角距离（弧度）。       |
-| vertexFormat   | Object        |        | `optional` 指定顶点属性渲染方式。                   |
+| Name           | Type           | Default | Description                                                                                      |
+| -------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| center         | Object\|Array  |         | `required` The ellipse's center point in the fixed frame.                                        |
+| semiMajorAxis  | Number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
+| semiMinorAxis  | Number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
+| ellipsoid      | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
+| height         | Number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
+| extrudedHeight | Number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
+| rotation       | Number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
+| stRotation     | Number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| granularity    | Number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
+| vertexFormat   | Object         |         | `optional` The vertex attributes to be computed.                                                 |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryEllipseOutline
 
-加载椭圆几何图形边框，相当于初始化一个 `Cesium.EllipseOutlineGeometry` 实例。
+Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.EllipseOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryEllipseOutline 属性
+### VcGeometryEllipseOutline Props
 
-| 属性名                | 类型          | 默认值 | 描述                                                |
-| --------------------- | ------------- | ------ | --------------------------------------------------- |
-| center                | Object\|Array |        | `required` 指定椭圆的中心位置。                     |
-| semiMajorAxis         | Number        |        | `required` 指定椭圆的长半轴长度，单位是米。         |
-| semiMinorAxis         | Number        |        | `required` 指定椭圆的短半轴长度，单位是米。         |
-| ellipsoid             | Object        |        | `optional` 指定椭圆的参考椭球体。                   |
-| height                | Number        | `0`    | `optional` 指定椭圆离地表的高度。                   |
-| extrudedHeight        | Number        |        | `optional` 指定椭圆拉伸高度。                       |
-| rotation              | Number        | `0.0`  | `optional` 指定椭圆以正北逆时针方向旋转的角度。     |
-| stRotation            | Number        | `0.0`  | `optional` 指定椭圆纹理以正北逆时针方向旋转的角度。 |
-| granularity           | Number        |        | `optional` 指定椭圆上点之间的角距离（弧度）。       |
-| numberOfVerticalLines | Number        | `16`   | `optional` 指定拉伸的椭圆连接顶部与底部的线条数量。 |
+| Name                  | Type           | Default | Description                                                                                      |
+| --------------------- | -------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| center                | Object         |         | `required` The ellipse's center point in the fixed frame.                                        |
+| semiMajorAxis         | Number         |         | `required` The length of the ellipse's semi-major axis in meters.                                |
+| semiMinorAxis         | Number         |         | `required` The length of the ellipse's semi-minor axis in meters.                                |
+| ellipsoid             | Object         |         | `optional` The ellipsoid the ellipse will be on.                                                 |
+| height                | Number         | `0`     | `optional` The distance in meters between the ellipse and the ellipsoid surface.                 |
+| extrudedHeight        | Number         |         | `optional` The distance in meters between the ellipse's extruded face and the ellipsoid surface. |
+| rotation              | Number         | `0.0`   | `optional` The angle of rotation counter-clockwise from north.                                   |
+| stRotation            | Number\|Object | `0.0`   | `optional` The rotation of the texture coordinates counter-clockwise from north.                 |
+| granularity           | Number         |         | `optional` The angular distance between points on the ellipse in radians.                        |
+| numberOfVerticalLines | Number         | `16`    | `optional` Number of lines to draw between the top and bottom surface of an extruded ellipse.    |
 
-### VcGeometryEllipseOutline 事件
+### VcGeometryEllipseOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[EllipseGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipseGeometry.html)、[EllipseOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipseOutlineGeometry.html)**
+- Refer to the official documentation: **[EllipseGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipseGeometry.html)、[EllipseOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/EllipseOutlineGeometry.html)**

@@ -91,19 +91,20 @@
 
 ### 属性
 
-| 属性名        | 类型           | 默认值  | 描述                                           |
-| ------------- | -------------- | ------- | ---------------------------------------------- |
-| url           | String\|Object | `'.'`   | `optional` 指定图片服务地址。                  |
-| fileExtension | String         | `'png'` | `optional` 指定图片服务影像扩展名。            |
-| credit        | String\|Object | `''`    | `optional` 指定服务版权描述信息。              |
-| minimumLevel  | Number         | `0`     | `optional` 指定服务最小层级。                  |
-| maximumLevel  | Number         |         | `optional` 指定服务最大层级。                  |
-| rectangle     | Object         |         | `optional` 指定影像加载的矩形范围。            |
-| tilingScheme  | Object         |         | `optional` 指定服务坐标系参数。                |
-| ellipsoid     | Object         |         | `optional` 指定参考椭球体。默认 WGS84 椭球体。 |
-| tileWidth     | Number         | `256`   | `optional` 指定图像瓦片宽度。                  |
-| tileHeight    | Number         | `256`   | `optional` 指定图像瓦片高度。                  |
-| flipXY        | Boolean        |         | `optional` 指定是否翻转 XY                     |
+| 属性名               | 类型            | 默认值  | 描述                                           |
+| -------------------- | --------------- | ------- | ---------------------------------------------- |
+| url                  | String\|Object  | `'.'`   | `optional` 指定图片服务地址。                  |
+| fileExtension        | String          | `'png'` | `optional` 指定图片服务影像扩展名。            |
+| credit               | String\|Object  | `''`    | `optional` 指定服务版权描述信息。              |
+| minimumLevel         | Number          | `0`     | `optional` 指定服务最小层级。                  |
+| maximumLevel         | Number          |         | `optional` 指定服务最大层级。                  |
+| rectangle            | Object\|Array   |         | `optional` 指定影像加载的矩形范围。            |
+| tilingScheme         | Object          |         | `optional` 指定服务坐标系参数。                |
+| ellipsoid            | Object          |         | `optional` 指定参考椭球体。默认 WGS84 椭球体。 |
+| tileWidth            | Number          | `256`   | `optional` 指定图像瓦片宽度。                  |
+| tileHeight           | Number          | `256`   | `optional` 指定图像瓦片高度。                  |
+| flipXY               | Boolean         |         | `optional` 指定是否翻转 XY                     |
+| projectionTransforms | Boolean\|Object | `false` | `optional` 指定投影变换参数。                  |
 
 ### 事件
 

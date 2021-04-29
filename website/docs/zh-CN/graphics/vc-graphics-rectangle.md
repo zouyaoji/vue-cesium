@@ -89,26 +89,27 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                         |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------------------ |
-| show                     | Boolean               | `true`    | `optional` 指定 rectangle 是否显示。                         |
-| coordinates              | Object                |           | `optional` 指定 rectangle 的 Rectangle 属性。                |
-| height                   | Number                | `0`       | `optional` 指定 rectangle 高度。                             |
-| heightReference          | Number                |           | `optional` 指定 rectangle 高度模式。                         |
-| extrudedHeight           | Number                |           | `optional` 指定 rectangle 拉伸高度。                         |
-| extrudedHeightReference  | Number                |           | `optional` 指定 rectangle 拉伸高度模式。                     |
-| rotation                 | Number                | `0.0`     | `optional` 指定 rectangle 按正北顺时针的旋转角。             |
-| stRotation               | Number                | `0.0`     | `optional` 指定 rectangle 按正北逆时针旋转纹理。             |
-| granularity              | Number                |           | `optional` 指定每个经纬度之间的采样粒度。                    |
-| fill                     | Boolean               | `true`    | `optional` 指定 rectangle 是否填充材质。                     |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 rectangle 材质。                             |
-| outline                  | Boolean               | `false`   | `optional` 指定 rectangle 是否绘制轮廓线。                   |
-| outlineColor             | Object\|String\|Array | `'BALCK'` | `optional` 指定 rectangle 轮廓线颜色。                       |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 rectangle 轮廓线宽度。                       |
-| shadows                  | Number                | `0`       | `optional` 指定 rectangle 是否投射或接收阴影。               |
-| distanceDisplayCondition | Object                |           | `optional` 指定 rectangle 随相机距离改变是否显示参数。       |
-| classificationType       | Number                | `2`       | `optional` 指定 rectangle 贴对象模式 。                      |
-| zIndex                   | Number                | `0`       | `optional` 指定 rectangle 顺序，没设置高度和拉伸高度时有效。 |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ------ | --- | ------ | --- | ----  |
+| show | Boolean | `true` | `optional` 指定 rectangle 是否显示。 |
+| coordinates | Object\|Array | | `optional` 指定 rectangle 的 Rectangle 属性。 |
+| height | Number | `0` | `optional` 指定 rectangle 高度。 |
+| heightReference | Number | | `optional` 指定 rectangle 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| extrudedHeight | Number | | `optional` 指定 rectangle 拉伸高度。 |
+| extrudedHeightReference | Number | | `optional` 指定 rectangle 拉伸高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| rotation | Number | `0.0` | `optional` 指定 rectangle 按正北顺时针的旋转角。 |
+| stRotation | Number | `0.0` | `optional` 指定 rectangle 按正北逆时针旋转纹理。 |
+| granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 |
+| fill | Boolean | `true` | `optional` 指定 rectangle 是否填充材质。 |
+| material | Object\|String\|Array | `'white'` | `optional` 指定 rectangle 材质。 |
+| outline | Boolean | `false` | `optional` 指定 rectangle 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 rectangle 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 rectangle 轮廓线宽度。 |
+| shadows | Number | `0` | `optional` 指定 rectangle 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 rectangle 随相机距离改变是否显示参数。 |
+| classificationType | Number | `2` | `optional` 指定 rectangle 贴对象模式 。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | Number | `0` | `optional` 指定 rectangle 顺序，没设置高度和拉伸高度时有效。 |
 
 ### 事件
 

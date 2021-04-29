@@ -1,14 +1,14 @@
 ## VcGeometryCylinder
 
-加载圆柱(锥)体，相当于初始化一个 `Cesium.CylinderGeometry` 实例。
+Loading a cylinder geometry. It is equivalent to initializing a `Cesium.CylinderGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-共面多边形几何图形组件的基础用法。
+Basic usage of VcGeometryCylinder component.
 
-:::demo 使用 `vc-geometry-cylinder` 和 `vc-geometry-cylinder-outline` 标签在三维球上添加共面多边形。
+:::demo Use the `vc-geometry-cylinder` and `vc-geometry-cylinder-outline` tags to add a cylinder (cone) to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -39,10 +39,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -133,48 +133,48 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名       | 类型   | 默认值 | 描述                              |
-| ------------ | ------ | ------ | --------------------------------- |
-| length       | Array  |        | `required` 指定圆柱体长度。       |
-| topRadius    | Number |        | `required` 指定圆柱体顶部半径。   |
-| bottomRadius | Number |        | `required` 指定圆柱体底部半径。   |
-| slices       | Number | `128`  | `optional` 指定圆柱圆周边数。     |
-| vertexFormat | Object |        | `optional` 指定顶点属性渲染方式。 |
+| Name         | Type   | Default | Description                                                                        |
+| ------------ | ------ | ------- | ---------------------------------------------------------------------------------- |
+| length       | Array  |         | `required` A numeric Property specifying the length of the cylinder.               |
+| topRadius    | Number |         | `required` A numeric Property specifying the radius of the top of the cylinder.    |
+| bottomRadius | Number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder. |
+| slices       | Number | `128`   | `optional` The number of edges around the perimeter of the cylinder.               |
+| vertexFormat | Object |         | `optional` The vertex attributes to be computed.                                   |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryCylinderOutline
 
-加载圆柱(锥)体边框，相当于初始化一个 `Cesium.CylinderOutlineGeometry` 实例。
+Loading a cylinder geometry outline. It is equivalent to initializing a `Cesium.CylinderOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryCylinderOutline 属性
+### VcGeometryCylinderOutline Props
 
-| 属性名                | 类型   | 默认值 | 描述                                      |
-| --------------------- | ------ | ------ | ----------------------------------------- |
-| length                | Array  |        | `required` 指定圆柱体长度。               |
-| topRadius             | Number |        | `required` 指定圆柱体顶部半径。           |
-| bottomRadius          | Number |        | `required` 指定圆柱体底部半径。           |
-| slices                | Number | `128`  | `optional` 指定圆柱圆周边数。             |
-| numberOfVerticalLines | Number | `16`   | `optional` 指定圆柱体顶部到底部的线条数。 |
+| Name                  | Type   | Default | Description                                                                             |
+| --------------------- | ------ | ------- | --------------------------------------------------------------------------------------- |
+| length                | Array  |         | `required` A numeric Property specifying the length of the cylinder.                    |
+| topRadius             | Number |         | `required` A numeric Property specifying the radius of the top of the cylinder.         |
+| bottomRadius          | Number |         | `required` A numeric Property specifying the radius of the bottom of the cylinder.      |
+| slices                | Number | `128`   | `optional` The number of edges around the perimeter of the cylinder.                    |
+| numberOfVerticalLines | Number | `16`    | `optional` Number of lines to draw between the top and bottom surfaces of the cylinder. |
 
-### VcGeometryCylinderOutline 事件
+### VcGeometryCylinderOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[CylinderGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGeometry.html)、[CylinderOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CylinderOutlineGeometry.html)**
+- Refer to the official documentation: **[CylinderGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CylinderGeometry.html)、[CylinderOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CylinderOutlineGeometry.html)**

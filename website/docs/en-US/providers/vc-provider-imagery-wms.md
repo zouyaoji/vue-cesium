@@ -1,14 +1,14 @@
 ## VcProviderImageryWms
 
-用于加载 WMS 标准影像服务，相当于初始化一个 `Cesium.WebMapServiceImageryProvider` 实例。
+Loading a tiled imagery provider that provides tiled imagery hosted by a Web Map Service (WMS) server. It is equivalent to initializing a `Cesium.WebMapServiceImageryProvider` instance.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-ion` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-wms` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由 Cesium Ion REST API 提供的影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with WebMapServiceImageryProvider to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -24,18 +24,18 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
         </div>
       </el-col>
@@ -86,40 +86,41 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型            | 默认值  | 描述                                                                               |
-| ------------------------ | --------------- | ------- | ---------------------------------------------------------------------------------- |
-| url                      | String\|Object  |         | `required` 指定 WMS 服务地址。                                                     |
-| layers                   | String          |         | `required` 指定服务图层，多个图层用","隔开。                                       |
-| parameters               | Object          |         | `optional` 在 GetMap URL 中传递给 WMS 服务器的其他参数。                           |
-| getFeatureInfoParameters | Object          |         | `optional` 在 GetFeatureInfo URL 中传递给 WMS 服务器的其他参数。                   |
-| enablePickFeatures       | Boolean         | `true`  | `optional` 指定是否支持拾取对象，通过 GetFeatureInfo 获取，需要服务支持。          |
-| getFeatureInfoFormats    | Array           |         | `optional` 指定 WMS GetFeatureInfo 请求的格式。                                    |
-| rectangle                | Object          |         | `optional` 指定 WMS 图层矩形范围。                                                 |
-| tilingScheme             | Object          |         | `optional` 指定 WMS 服务瓦片投影参数。                                             |
-| ellipsoid                | Object          |         | `optional` 指定 WMS 服务椭球体参数，如果指定了 tilingScheme 此属性无效。           |
-| tileWidth                | Number          | `256`   | `optional` 指定像元宽度。                                                          |
-| tileHeight               | Number          | `256`   | `optional` 指定像元高度。                                                          |
-| minimumLevel             | Number          | `0`     | `optional` 指定图层可以显示的最小层级。                                            |
-| maximumLevel             | Number          |         | `optional` 指定图层可以显示的最大层级，undefined 表示没有限制。                    |
-| crs                      | String          |         | `optional` 指定 CRS 规范，用于 WMS 规范> = 1.3.0。                                 |
-| srs                      | String          |         | `optional` 指定 SRS 规范，用于 WMS 规范 1.1.0 或 1.1.1                             |
-| credit                   | Credit\| String |         | `optional` 指定服务描述信息。                                                      |
-| subdomains               | String\| Array  | `'abc'` | `optional` 指定服务子域 。                                                         |
-| clock                    | Object          |         | `optional` 确定时间维度的值时使用的 Clock 实例。 当指定 options.times 时是必需的。 |
-| times                    | Object          |         | `optional` TimeIntervalCollection 及其数据属性是一个包含时间动态维度及其值的对象。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String\|Object | | `required` The URL of the WMS service. The URL supports the same keywords as the UrlTemplateImageryProvider. |
+| layers | String | | `required` The layers to include, separated by commas. |
+| parameters | Object | | `optional` Additional parameters to pass to the WMS server in the GetMap URL. |
+| getFeatureInfoParameters | Object | | `optional` Additional parameters to pass to the WMS server in the GetFeatureInfo URL. |
+| enablePickFeatures | Boolean | `true` | `optional` If true, WebMapServiceImageryProvider#pickFeatures will invoke the GetFeatureInfo operation on the WMS server and return the features included in the response. If false, WebMapServiceImageryProvider#pickFeatures will immediately return undefined (indicating no pickable features) without communicating with the server. Set this property to false if you know your WMS server does not support GetFeatureInfo or if you don't want this provider's features to be pickable. Note that this can be dynamically overridden by modifying the WebMapServiceImageryProvider#enablePickFeatures property. |
+| getFeatureInfoFormats | Array | | `optional` The formats in which to try WMS GetFeatureInfo requests. |
+| rectangle | Object\|Array | | `optional` The rectangle of the layer. |
+| tilingScheme | Object | | `optional` The tiling scheme to use to divide the world into tiles. |
+| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used. |
+| tileWidth | Number | `256` | `optional` The width of each tile in pixels. |
+| tileHeight | Number | `256` | `optional` The height of each tile in pixels. |
+| minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
+| maximumLevel | Number | | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. If not specified, there is no limit. |
+| crs | String | | `optional` CRS specification, for use with WMS specification >= 1.3.0. |
+| srs | String | | `optional` SRS specification, for use with WMS specification 1.1.0 or 1.1.1 |
+| credit | Credit\| String | | `optional` A credit for the data source, which is displayed on the canvas. |
+| subdomains | String\| Array | `'abc'` | `optional` The subdomains to use for the {s} placeholder in the URL template. If this parameter is a single string, each character in the string is a subdomain. If it is an array, each element in the array is a subdomain. |
+| clock | Object | | `optional` A Clock instance that is used when determining the value for the time dimension. Required when options.times is specified. |
+| times | Object | | `optional` TimeIntervalCollection with its data property being an object containing time dynamic dimension and their values. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[WebMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)**
+- Refer to the official documentation: **[WebMapServiceImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/WebMapServiceImageryProvider.html)**

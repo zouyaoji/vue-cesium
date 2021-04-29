@@ -82,18 +82,19 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                             |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------ |
-| show                     | Boolean               | `true`    | `optional` 指定 plane 是否显示。                 |
-| plane                    | Object                |           | `optional` 指定 plane 的法线和距离。             |
-| dimensions               | Object                |           | `optional` 指定 plane 的宽和高。                 |
-| fill                     | Boolean               | `true`    | `optional` 指定 plane 是否填充材质。             |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 plane 的材质。                   |
-| outline                  | Boolean               | `false`   | `optional` 指定 plane 是否绘制轮廓线。           |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 plane 轮廓线颜色。               |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 plane 轮廓线宽度。               |
-| shadows                  | Number                | `0`       | `optional` 指定 plane 是否投射或接收阴影。       |
-| distanceDisplayCondition | Object                |           | `optional` 指定 plane 随相机距离改变的显示条件。 |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| --- | -------- | ------ | -------- | --- |
+| show | Boolean | `true` | `optional` 指定 plane 是否显示。 |
+| plane | Object\|Array | | `optional` 指定 plane 的法线和距离。 |
+| dimensions | Object\|Array | | `optional` 指定 plane 的宽和高。 |
+| fill | Boolean | `true` | `optional` 指定 plane 是否填充材质。 |
+| material | Object\|String\|Array | `'WHITE'` | `optional` 指定 plane 的材质。 |
+| outline | Boolean | `false` | `optional` 指定 plane 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` 指定 plane 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 plane 轮廓线宽度。 |
+| shadows | Number | `0` | `optional` 指定 plane 是否投射或接收阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 plane 随相机距离改变的显示条件。 |
 
 ### 事件
 

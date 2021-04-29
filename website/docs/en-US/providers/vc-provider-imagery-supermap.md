@@ -1,14 +1,14 @@
 ## VcProviderImagerySupermap
 
-加载由超图 iServer 提供的影像瓦片服务。
+Loading a tiled imagery provider that provides tiled imagery hosted by a SuperMap iServer.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-supermap` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-supermap` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由超图 iServer 提供的影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with VcProviderImagerySupermap to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -23,18 +23,18 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
         </div>
       </el-col>
@@ -87,27 +87,27 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名       | 类型    | 默认值                                 | 描述                                                    |
-| ------------ | ------- | -------------------------------------- | ------------------------------------------------------- |
-| url          | String  |                                        | `required` 超图 iserver 影像服务地址。                  |
-| name         | String  |                                        | `optional` 影像图层名称。                               |
-| minimumLevel | Number  | `0`                                    | `optional` 最小层级。                                   |
-| maximumLevel | Number  | `20`                                   | `optional` 最大层级。                                   |
-| transparent  | Boolean | `true`                                 | `optional` 设置请求的地图服务的参数是否为 transparent。 |
-| credit       | Boolean | `'MapQuest, SuperMap iServer Imagery'` | `optional` 影像服务描述信息。                           |
+| Name         | Type    | Default                                | Description                                                                        |
+| ------------ | ------- | -------------------------------------- | ---------------------------------------------------------------------------------- |
+| url          | String  |                                        | `required` The URL of the SuperMap iServer service.                                |
+| name         | String  |                                        | `optional` The name of the layer.                                                  |
+| minimumLevel | Number  | `0`                                    | `optional` The minimum tile level to request, or undefined if there is no minimum. |
+| maximumLevel | Number  | `20`                                   | `optional` The maximum tile level to request, or undefined if there is no maximum. |
+| transparent  | Boolean | `true`                                 | `optional` Whether the parameter of the requested map service is transparent.      |
+| credit       | Boolean | `'MapQuest, SuperMap iServer Imagery'` | `optional` A credit for the data source, which is displayed on the canvas.         |
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 资料： **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/SuperMapImageryProvider.html)**
+- **[SuperMapImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/SuperMapImageryProvider.html)**

@@ -5,19 +5,19 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.org/zouyaoji/vue-cesium">
-    <img src="https://img.shields.io/travis/zouyaoji/vue-cesium?style=plastic">
+  <a href="https://github.com/zouyaoji/vue-cesium/actions/workflows/publish-npm.yml" target="_blank">
+    <img src="https://img.shields.io/github/workflow/status/zouyaoji/vue-cesium/Publish%20to%20NPM%20registry?style=plastic">
   </a>
-  <a href="https://www.npmjs.com/package/vue-cesium">
-    <img src="https://img.shields.io/npm/v/vue-cesium?style=plastic">
+  <a href="https://www.npmjs.com/package/vue-cesium" target="_blank">
+    <img src="https://img.shields.io/npm/v/vue-cesium/next?style=plastic">
   </a>
-  <a href="https://www.npmjs.com/package/vue-cesium">
+  <a href="https://npmcharts.com/compare/vue-cesium?minimal=true" target="_blank">
     <img src="https://img.shields.io/npm/dm/vue-cesium?style=plastic">
   </a>
-  <a href="https://github.com/zouyaoji/vue-cesium/blob/dev/LICENSE">
+  <a href="https://github.com/zouyaoji/vue-cesium/blob/dev/LICENSE" target="_blank">
     <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
   </a>
-  <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev">
+  <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev" target="_blank">
     <img src="https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic">
   </a>
   <br>

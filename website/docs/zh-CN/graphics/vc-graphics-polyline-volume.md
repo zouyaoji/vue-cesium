@@ -108,20 +108,21 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值  | 描述                                                  |
-| ------------------------ | --------------------- | ------- | ----------------------------------------------------- |
-| show                     | Boolean               | `true`  | `optional` 指定 volume 是否显示。                     |
-| positions                | Array                 |         | `optional` 指定 volume 位置信息数组。                 |
-| shape                    | Array                 |         | `optional` 指定表达 volume 拉伸的形状参数。           |
-| cornerType               | Number                | `0`     | `optional` 指定 volume 转角类型。                     |
-| granularity              | Number                |         | `optional` 指定每个经度和纬度之间的角距离。           |
-| fill                     | Boolean               | `true`  | `optional` 指定 volume 是否填充材质。                 |
-| material                 | Object\|String\|Array |         | `optional` 指定 volume 材质。                         |
-| outline                  | Boolean               | `false` | `optional` 指定 volume 是否绘制轮廓线。               |
-| outlineColor             | Object\|String\|Array |         | `optional` 指定 volume 轮廓线颜色。                   |
-| outlineWidth             | Number                | `1.0`   | `optional` 指定 volume 轮廓线宽度。                   |
-| shadows                  | Number                | `0`     | `optional` 指定 volume 是否投射或接受每个光源的阴影。 |
-| distanceDisplayCondition | Object                |         | `optional` 指定 volume 随相机距离改变是否显示参数。   |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ------ | ----- | ----- | -----| ------ |
+| show | Boolean | `true` | `optional` 指定 volume 是否显示。 |
+| positions | Array | | `optional` 指定 volume 位置信息数组。 |
+| shape | Array | | `optional` 指定表达 volume 拉伸的形状参数。 |
+| cornerType | Number | `0` | `optional` 指定 volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| granularity | Number | | `optional` 指定每个经度和纬度之间的角距离。 |
+| fill | Boolean | `true` | `optional` 指定 volume 是否填充材质。 |
+| material | Object\|String\|Array | | `optional` 指定 volume 材质。 |
+| outline | Boolean | `false` | `optional` 指定 volume 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | | `optional` 指定 volume 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 volume 轮廓线宽度。 |
+| shadows | Number | `0` | `optional` 指定 volume 是否投射或接受每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 volume 随相机距离改变是否显示参数。 |
 
 ### 事件
 

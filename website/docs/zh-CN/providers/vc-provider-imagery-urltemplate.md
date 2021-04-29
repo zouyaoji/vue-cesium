@@ -1,6 +1,6 @@
 ## VcProviderImageryUrltemplate
 
-通过一个约定的 URL 模板来请求加载影像图层，相当于初始化一个 `Cesium.UrlTemplateImageryProvider` 实例。。比如加载的高德，腾讯等影像瓦片服务，URL 都是一个固定的规范，都可以通过该组件轻松实现。
+通过一个约定的 URL 模板来请求加载影像图层，相当于初始化一个 `Cesium.UrlTemplateImageryProvider` 实例。比如加载的高德，腾讯等影像瓦片服务，URL 都是一个固定的规范，都可以通过该组件轻松实现。
 
 **注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
@@ -107,25 +107,25 @@
 
 ### 属性
 
-| 属性名                | 类型            | 默认值  | 描述                                                                                        |
-| --------------------- | --------------- | ------- | ------------------------------------------------------------------------------------------- |
-| url                   | String\|Object  |         | `required`指定服务地址。                                                                    |
-| pickFeaturesUrl       | String\|Object  |         | `optional`指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
-| urlSchemeZeroPadding  | Object          |         | `optional` 指定每个瓦片中心的偏移值。                                                       |
-| subdomains            | String          | `'abc'` | `optional` 指定服务的轮询子域名。                                                           |
-| credit                | String          | `''`    | `optional`指定服务的描述信息                                                                |
-| minimumLevel          | Number          | `0`     | `optional`最小层级。                                                                        |
-| maximumLevel          | Number          |         | `optional`最大层级。                                                                        |
-| rectangle             | Object          |         | `optional`图层的矩形范围,此矩形限制了影像可见范围。                                         |
-| tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                             |
-| ellipsoid             | Object          |         | `optional`参考椭球体。                                                                      |
-| tileWidth             | Number          | `256`   | `optional`像元宽度。                                                                        |
-| tileHeight            | Number          | `256`   | `optional`像元高度。                                                                        |
-| hasAlphaChannel       | Boolean         | `true`  | `optional`设置为 true 表示图层包含 alpha 透明通道，反之没有。                               |
-| getFeatureInfoFormats | Array           |         | `optional`格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
-| enablePickFeatures    | Boolean         | `true`  | `optional`是否开启图层拾取。                                                                |
-| customTags            | Object          |         | `optional`替换 url 模板中的自定义关键字。                                                   |
-| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定投影变换参数。                                                               |
+| 属性名                | 类型            | 默认值  | 描述                                                                                         |
+| --------------------- | --------------- | ------- | -------------------------------------------------------------------------------------------- |
+| url                   | String\|Object  |         | `required` 指定服务地址。                                                                    |
+| pickFeaturesUrl       | String\|Object  |         | `optional` 指定拾取对象属性的 url，如果无效，会返回 undefined。                              |
+| urlSchemeZeroPadding  | Object          |         | `optional` 指定每个瓦片中心的偏移值。                                                        |
+| subdomains            | String          | `'abc'` | `optional` 指定服务的轮询子域名。                                                            |
+| credit                | String          | `''`    | `optional` 指定服务的描述信息                                                                |
+| minimumLevel          | Number          | `0`     | `optional` 最小层级。                                                                        |
+| maximumLevel          | Number          |         | `optional` 最大层级。                                                                        |
+| rectangle\|Object     | Object          |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
+| tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                              |
+| ellipsoid             | Object          |         | `optional` 参考椭球体。                                                                      |
+| tileWidth             | Number          | `256`   | `optional` 像元宽度。                                                                        |
+| tileHeight            | Number          | `256`   | `optional` 像元高度。                                                                        |
+| hasAlphaChannel       | Boolean         | `true`  | `optional` 设置为 true 表示图层包含 alpha 透明通道，反之没有。                               |
+| getFeatureInfoFormats | Array           |         | `optional` 格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
+| enablePickFeatures    | Boolean         | `true`  | `optional` 是否开启图层拾取。                                                                |
+| customTags            | Object          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
+| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定投影变换参数。                                                                |
 
 ### 事件
 

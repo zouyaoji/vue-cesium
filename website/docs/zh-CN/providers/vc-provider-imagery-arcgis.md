@@ -88,7 +88,7 @@
 | usePreCachedTilesIfAvailable | Boolean | `true` | `optional` 如果为 true，则使用服务器的预缓存切片（如果可用）。 |
 | layers | String | | `optional` 指定要显示的层，用逗号分开，如果为 undefined 则显示全部。 |
 | enablePickFeatures | Boolean | `true` | `optional` 指定是否拾取对象，在 infobox 弹出信息。 |
-| rectangle | Object | | `optional` 指定图层的矩形范围，此矩形限制了影像可见范围。 |
+| rectangle | Object\|Object | | `optional` 指定图层的矩形范围，此矩形限制了影像可见范围。 |
 | tilingScheme | Object | | `optional` 指定将影像瓦片展开到地球的投影方案。 |
 | ellipsoid | Object | | `optional` 指定参考椭球体。 |
 | tileWidth | Number | `256` | `optional` 指定每一张瓦片的像素宽度。 |

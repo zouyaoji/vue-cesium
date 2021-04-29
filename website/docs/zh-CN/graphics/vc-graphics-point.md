@@ -63,18 +63,19 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                               |
-| ------------------------ | --------------------- | --------- | -------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 point 是否显示。                   |
-| pixelSize                | Number                | `1`       | `optional` 指定 point 像素大小。                   |
-| heightReference          | Number                | `0`       | `optional` 指定 point 高度模式。                   |
-| color                    | Object\|String\|Array | `'WHITE'` | `optional` 指定 point 颜色。                       |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 point 轮廓颜色。                   |
-| outlineWidth             | Number                | `0`       | `optional` 指定 point 轮廓像素宽度。               |
-| scaleByDistance          | Object                |           | `optional` 指定 point 随相机距离改变的缩放参数。   |
-| translucencyByDistance   | Object                |           | `optional` 指定 point 随相机距离改变的透明度参数。 |
-| distanceDisplayCondition | Object                |           | `optional` 指定 point 随相机距离显隐参数。         |
-| disableDepthTestDistance | Number                |           | `optional` 指定 point 深度测试参数。               |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ------- | --- | ----- | ------ | --- |
+| show | Boolean | `true` | `optional` 指定 point 是否显示。 |
+| pixelSize | Number | `1` | `optional` 指定 point 像素大小。 |
+| heightReference | Number | `0` | `optional` 指定 point 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| color | Object\|String\|Array | `'white'` | `optional` 指定 point 颜色。 |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 point 轮廓颜色。 |
+| outlineWidth | Number | `0` | `optional` 指定 point 轮廓像素宽度。 |
+| scaleByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的缩放参数。 |
+| translucencyByDistance | Object\|Array | | `optional` 指定 point 随相机距离改变的透明度参数。 |
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 point 随相机距离显隐参数。 |
+| disableDepthTestDistance | Number | | `optional` 指定 point 深度测试参数。 |
 
 ### 事件
 

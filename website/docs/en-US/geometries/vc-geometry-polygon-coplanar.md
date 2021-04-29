@@ -1,14 +1,14 @@
 ## VcGeometryPolygonCoplanar
 
-加载共面多边形，相当于初始化一个 `Cesium.CoplanarPolygonGeometry` 实例。
+Loading a coplanar polygon geometry. It is equivalent to initializing a `Cesium.CoplanarPolygonGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-共面多边形几何图形组件的基础用法。
+Basic usage of VcGeometryPolygonCoplanar component.
 
-:::demo 使用 `vc-geometry-polygon-coplanar` 和 `vc-geometry-polygon-coplanar-outline` 标签在三维球上添加共面多边形。
+:::demo Use the `vc-geometry-polygon-coplanar` and `vc-geometry-polygon-coplanar-outline` tags to add coplanar polygons on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -116,43 +116,43 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名           | 类型          | 默认值 | 描述                                                   |
-| ---------------- | ------------- | ------ | ------------------------------------------------------ |
-| polygonHierarchy | Object\|Array |        | `optional` 指定 polygon 的位置，可以包含岛洞。         |
-| stRotation       | Number        | `0.0`  | `optional` 指定 polygon 纹理按正北方向逆时针旋转角度。 |
-| vertexFormat     | Object        |        | `optional` 指定 polygon 要缓存的顶点属性。             |
-| ellipsoid        | Object        |        | `optional` 指定 polygon 参考椭球体。                   |
+| Name             | Type           | Default | Description                                                                                               |
+| ---------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| polygonHierarchy | Object\|Array  |         | `required` A polygon hierarchy that can include holes.                                                    |
+| vertexFormat     | Object         |         | `optional` The vertex attributes to be computed.                                                          |
+| stRotation       | Number\|Object | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| ellipsoid        | Object         |         | `optional` The ellipsoid to be used as a reference.                                                       |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryPolygonCoplanarOutline
 
-加载圆几何图形边框，相当于初始化一个 `Cesium.CircleOutlineGeometry` 实例。
+Loading a coplanar polygon geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryPolygonCoplanarOutline 属性
+### VcGeometryPolygonCoplanarOutline Props
 
-| 属性名           | 类型          | 默认值 | 描述                                           |
-| ---------------- | ------------- | ------ | ---------------------------------------------- |
-| polygonHierarchy | Object\|Array |        | `optional` 指定 polygon 的位置，可以包含岛洞。 |
+| Name             | Type          | Default | Description                                            |
+| ---------------- | ------------- | ------- | ------------------------------------------------------ |
+| polygonHierarchy | Object\|Array |         | `optional` A polygon hierarchy that can include holes. |
 
-### VcGeometryPolygonCoplanarOutline 事件
+### VcGeometryPolygonCoplanarOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[CoplanarPolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CoplanarPolygonGeometry.html)、[CoplanarPolygonOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CoplanarPolygonOutlineGeometry.html)**
+- Refer to the official documentation: **[CoplanarPolygonGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CoplanarPolygonGeometry.html)、[CoplanarPolygonOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CoplanarPolygonOutlineGeometry.html)**

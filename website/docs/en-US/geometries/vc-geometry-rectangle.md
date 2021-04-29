@@ -1,14 +1,14 @@
 ## VcGeometryRectangle
 
-加载矩形几何图形，相当于初始化一个 `Cesium.RectangleGeometry` 实例。
+Loading a rectangle geometry. It is equivalent to initializing a `Cesium.RectangleGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-矩形几何图形组件的基础用法。
+Basic usage of VcGeometryRectangle component.
 
-:::demo 使用 `vc-geometry-rectangle` 和 `vc-geometry-rectangle-outline` 标签在三维球上添加矩形。
+:::demo Use the `vc-geometry-rectangle` and `vc-geometry-rectangle-outline` tags to add a rectangle on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -111,52 +111,55 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名         | 类型          | 默认值 | 描述                                                             |
-| -------------- | ------------- | ------ | ---------------------------------------------------------------- |
-| rectangle      | Object\|Array |        | `required` 指定矩形四至参数。                                    |
-| vertexFormat   | Number        |        | `optional` 指定矩形要缓存的顶点属性。                            |
-| ellipsoid      | Object        |        | `optional` 指定矩形所在的椭球体。                                |
-| granularity    | Number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。        |
-| height         | Number        | `0`    | `optional` 指定矩形高度。                                        |
-| rotation       | Number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。        |
-| stRotation     | Number        | `0.0`  | `optional` 指定矩形的纹理旋转坐标（弧度）， 逆时针方向为正旋转。 |
-| extrudedHeight | Number        |        | `optional` 指定矩形拉伸高度。                                    |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
+| vertexFormat | Number | | `optional` The vertex attributes to be computed. |
+| ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | Number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
+| rotation | Number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
+| stRotation | Number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | Number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryRectangleOutline
 
-加载矩形几何图形边框，相当于初始化一个 `Cesium.CircleOutlineGeometry` 实例。
+Loading a rectangle geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryRectangleOutline 属性
+### VcGeometryRectangleOutline Props
 
-| 属性名         | 类型          | 默认值 | 描述                                                      |
-| -------------- | ------------- | ------ | --------------------------------------------------------- |
-| rectangle      | Object\|Array |        | `required` 指定矩形四至参数。                             |
-| ellipsoid      | Object        |        | `optional` 指定矩形所在的椭球体。                         |
-| granularity    | Number        |        | `optional` 指定每个纬度和经度之间的距离（以弧度为单位）。 |
-| height         | Number        | `0`    | `optional` 指定矩形高度。                                 |
-| rotation       | Number        | `0.0`  | `optional` 指定矩形的旋转角（弧度），逆时针方向为正旋转。 |
-| extrudedHeight | Number        |        | `optional` 指定矩形拉伸高度。                             |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| rectangle | Object\|Array | | `required` A cartographic rectangle with north, south, east and west properties. |
+| ellipsoid | Object | | `optional` The ellipsoid on which the rectangle lies. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| height | Number | `0` | `optional` The distance in meters between the rectangle and the ellipsoid surface. |
+| rotation | Number | `0.0` | `optional` The rotation of the rectangle, in radians. A positive rotation is counter-clockwise. |
+| stRotation | Number | `0.0` | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
+| extrudedHeight | Number | | `optional` The distance in meters between the rectangle's extruded face and the ellipsoid surface. |
 
-### VcGeometryRectangleOutline 事件
+### VcGeometryRectangleOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)、[RectangleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleOutlineGeometry.html)**
+- Refer to the official documentation: **[RectangleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleGeometry.html)、[RectangleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/RectangleOutlineGeometry.html)**

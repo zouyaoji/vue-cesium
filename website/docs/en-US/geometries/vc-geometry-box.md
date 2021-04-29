@@ -1,14 +1,14 @@
 ## VcGeometryBox
 
-加载立方盒几何体，相当于初始化一个 `Cesium.BoxGeometry` 实例。
+Loading a box geometry. It is equivalent to initializing a `Cesium.BoxGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-立方盒几何体组件的基础用法。
+Basic usage of VcGeometryBox component.
 
-:::demo 使用 `vc-geometry-box` 和 `vc-geometry-box-outline` 标签在三维球上添加立方盒几何体对象。
+:::demo Use the `vc-geometry-box` and `vc-geometry-box-outline` tags to add cube box geometry objects on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -115,41 +115,41 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名       | 类型   | 默认值 | 描述                              |
-| ------------ | ------ | ------ | --------------------------------- |
-| dimensions   | Object |        | `required` 指定 box 的长宽高。    |
-| vertexFormat | Object |        | `optional` 指定要计算的顶点属性。 |
+| Name         | Type   | Default | Description                                                                                                 |
+| ------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
+| dimensions   | Object |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
+| vertexFormat | Object |         | `optional` The vertex attributes to be computed.                                                            |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryBoxOutline
 
-加载立方盒几何体边框，相当于初始化一个 `Cesium.BoxOutlineGeometry` 实例。
+Loading a box geometry outline. It is equivalent to initializing a `Cesium.BoxOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryBoxOutline 属性
+### VcGeometryBoxOutline Props
 
-| 属性名     | 类型   | 默认值 | 描述                           |
-| ---------- | ------ | ------ | ------------------------------ |
-| dimensions | Object |        | `required` 指定 box 的长宽高。 |
+| Name       | Type   | Default | Description                                                                                                 |
+| ---------- | ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
+| dimensions | Object |         | `required` The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3. |
 
-### VcGeometryBoxOutline 事件
+### VcGeometryBoxOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[BoxGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxGeometry.html)、[BoxOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxOutlineGeometry.html)**
+- Refer to the official documentation: **[BoxGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxGeometry.html)、[BoxOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/BoxOutlineGeometry.html)**

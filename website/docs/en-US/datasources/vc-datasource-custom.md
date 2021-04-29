@@ -1,12 +1,12 @@
 ## VcDatasourceCustom
 
-加载自定义数据源，相当于初始化一个 `Cesium.CustomDataSource` 实例，手动管理一组实体对象。
+Load a custom datasource. It is equivalent to initializing a `Cesium.CustomDataSource` instance and manually managing a group of entity objects.
 
-### 基础用法
+### Basic usage
 
-自定义数据源组件的基础用法。
+Basic usage of VcDatasourceCustom component.
 
-:::demo 使用 `vc-datasource-custom` 标签在三维球上添加几组自定义数据源对象，并做聚合管理。
+:::demo Use the `vc-datasource-custom` tag to add several sets of custom datasource objects on the viewer, and do aggregation management.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -56,11 +56,11 @@
     </vc-datasource-custom>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
-    <el-switch v-model="clusterSch" active-color="#13ce66" inactive-text="聚合方案1" active-text="聚合方案2"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="Show/Hide"> </el-switch>
+    <el-switch v-model="clusterSch" active-color="#13ce66" inactive-text="Scheme1" active-text="Scheme2"> </el-switch>
   </el-row>
 </el-row>
 
@@ -192,7 +192,6 @@
           cluster.label.pixelOffset = new Cesium.Cartesian2(-7, 5)
           cluster.label.disableDepthTestDistance = Number.POSITIVE_INFINITY
           cluster.point.show = true
-          //聚合体属性
           cluster.point.id = cluster.label.id
           cluster.point.color = Cesium.Color.LIGHTSLATEGRAY
           if (clusteredEntities.length >= 100) {
@@ -245,35 +244,36 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名   | 类型    | 默认值 | 描述                                        |
-| -------- | ------- | ------ | ------------------------------------------- |
-| name     | String  |        | `optional` 指定数据源名称。                 |
-| show     | Boolean | `true` | `optional` 指定数据源是否显示。             |
-| entities | Array   | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| Name     | Type    | Default | Description                                                                    |
+| -------- | ------- | ------- | ------------------------------------------------------------------------------ |
+| name     | String  |         | `optional` A human-readable name for this instance.                            |
+| show     | Boolean | `true`  | `optional` Specify whether the data source is displayed.                       |
+| entities | Array   | `[]`    | `optional` Specify the collection of entities to be added to this data source. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                                                       | 描述                         |
-| ----------------- | ---------------------------------------------------------- | ---------------------------- |
-| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
-| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
-| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
-| changedEvent      |                                                            | 数据源改变时触发。           |
-| errorEvent        |                                                            | 数据源发生错误时触发。       |
-| loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |
-| clusterEvent      | (clusteredEntities, cluster)                               | 数据源聚合事件。             |
-| collectionChanged | (collection, added, removed, changed)                      | 数据源实体集合改变时触       |
-| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
-| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
-| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。   |
-| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
-| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
-| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |
-| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。     |
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------------- |
+| beforeLoad | Vue Instance | Triggers before the cesiumObject is loaded. |
+| ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
+| changedEvent | | Gets an event that will be raised when the underlying data changes. |
+| errorEvent | | Gets an event that will be raised if an error is encountered during processing. |
+| loadingEvent | | Gets an event that will be raised when the data source either starts or stops loading. |
+| clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed |
+| collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection. |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the data source. |
+| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on the data source. |
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the data source. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the data source. |
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the data source. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on the data source. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
 
-### 参考
+### Reference
 
-- 官方文档： **[CustomDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CustomDataSource.html)**
+- Refer to the official documentation: **[CustomDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CustomDataSource.html)**

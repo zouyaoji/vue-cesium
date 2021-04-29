@@ -1,14 +1,14 @@
 ## VcGraphicsPath
 
-加载与时间关联的路径实体，相当于初始化一个 `Cesium.PathGraphics` 实例。
+Loading a path graphic. It is equivalent to initializing a `Cesium.PathGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-路径实体组件的基础用法。
+Basic usage of the VcGraphicsPath component.
 
-:::demo 使用 `vc-graphics-path` 标签在三维球上添加路径实体对象。
+:::demo Use the `vc-graphics-path` tag to add a path to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -30,9 +30,9 @@
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="viewTopDown">俯视</el-button>
-    <el-button type="danger" round @click="viewSide">侧视</el-button>
-    <el-button type="danger" round @click="viewAircraft">跟随</el-button>
+    <el-button type="danger" round @click="viewTopDown">ViewTopDown</el-button>
+    <el-button type="danger" round @click="viewSide">ViewSide</el-button>
+    <el-button type="danger" round @click="viewAircraft">ViewAircraft</el-button>
   </el-row>
 </el-row>
 
@@ -135,27 +135,28 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                              |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 path 是否显示。                   |
-| leadTime                 | Number                |           | `optional` 指定 path 前面要显示的秒数。           |
-| trailTime                | Number                |           | `optional` 指定 path 后面要显示的秒数。           |
-| width                    | Number                | `1.0`     | `optional` 指定 path 像素宽度。                   |
-| resolution               | Number                | `60`      | `optional` 指定 path 步进最大秒数。               |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 path 材质。                       |
-| distanceDisplayCondition | Object                |           | `optional` 指定 path 随相机距离改变是否显示参数。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the path. |
+| leadTime | Object | | `optional` A Property specifying the number of seconds behind the object to show. |
+| trailTime | Object | | `optional` A Property specifying the number of seconds in front of the object to show. |
+| width | Number | `1.0` | `optional` A numeric Property specifying the width in pixels. |
+| resolution | Number | `60` | `optional` A numeric Property specifying the maximum number of seconds to step when sampling the position. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to draw the path. |
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this path will be displayed.  |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)**
+- Refer to the official documentation: **[PathGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PathGraphics.html)**

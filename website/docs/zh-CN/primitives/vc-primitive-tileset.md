@@ -62,8 +62,8 @@
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ------ | ---- | ------ | ---- |---|
 | url | String | | `required` 指定 tileset JSON 文件地址。 |
-| show | Boolean | `true` | `optional`是否显示 tileset 模型。 |
-| modelMatrix | Matrix4 | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
+| show | Boolean | `true` | `optional` 是否显示 tileset 模型。 |
+| modelMatrix | Object | `Matrix4.IDENTITY` | `optional` 一个 4x4 变换矩阵，用于转换 tileset 的根块。 |
 | shadows | Number | `1` | `optional` 确定 tileset 是否投射或接收来自每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
 | maximumScreenSpaceError | Number | `16` | `optional` 用于驱动细节细化级别的最大屏幕空间错误。 |
 | maximumMemoryUsage | Number | `512` | `optional` tileset 可以使用的最大内存量（MB）。 |
@@ -84,21 +84,22 @@
 | foveatedInterpolationCallback | Function| | `optional` 优化选项。 当 Cesium3DTileset#foveatedScreenSpaceError 为 true 时使用，以控制在凹入圆锥体外部的图块引发屏幕空间误差的程度，并在 Cesium3DTileset#foveatedMinimumScreenSpaceErrorRelaxation 和 Cesium3DTileset#maximumScreenSpaceError 之间进行插值 |
 | foveatedTimeDelay | Number | `0.2` | `optional` 优化选项。 当 Cesium3DTileset#foveatedScreenSpaceError 为 true 时使用，用于控制相机停止移动之后要等待多长时间（秒）才开始加载延迟的图块。此时间延迟可防止在相机移动时在屏幕边缘周围请求图块。 将此设置为 0.0 将立即请求任何给定视图中的所有图块。|
 | skipLevelOfDetail | Boolean | true | `optional` 优化选项。 确定在遍历期间是否应该应用详细信息跳过级别。 |
-| baseScreenSpaceError | Number | 1024 | `optional` 当 skipLevelOfDetail 为 true 时，在跳过详细级别之前必须达到的屏幕空间错误。 |
-| skipScreenSpaceErrorFactor | Number | 16 | `optional` 当 skipLevelOfDetail 为 true 时，定义要跳过的最小屏幕空间错误的乘数。 与 skipLevels 结合使用以确定要加载的切片。 |
+| baseScreenSpaceError | Number | `1024` | `optional` 当 skipLevelOfDetail 为 true 时，在跳过详细级别之前必须达到的屏幕空间错误。 |
+| skipScreenSpaceErrorFactor | Number | `16` | `optional` 当 skipLevelOfDetail 为 true 时，定义要跳过的最小屏幕空间错误的乘数。 与 skipLevels 结合使用以确定要加载的切片。 |
 | skipLevels | Number | 1 | `optional`当 skipLevelOfDetail 为 true 时，一个常量定义加载切片时要跳过的最小级别数。 当它为 0 时，不会跳过任何级别。与 skipScreenSpaceErrorFactor 结合使用以确定要加载的切片。 |
 | immediatelyLoadDesiredLevelOfDetail | Boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，将只下载满足最大屏幕空间错误的切片。跳过因子将被忽略，并且只加载所需的切片。 |
 | loadSiblings | Boolean | false | `optional` 当 skipLevelOfDetail 为 true 时，确定在遍历期间是否始终下载可见切片的兄弟节点。 |
-| clippingPlanes | ClippingPlaneCollection | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
-| classificationType | ClassificationType | | `optional` 确定此 tileset 是否会对 terrain，3D Tiles 或两者进行分类。 有关限制和限制的详细信息，请参阅 Cesium3DTileset＃classificationType。 |
-| ellipsoid | Ellipsoid | Ellipsoid.WGS84 | `optional` 决定地球的大小和形状参考椭球体。 |
+| clippingPlanes | Object | | `optional` ClippingPlaneCollection 用于有选择地禁用渲染 tileset。 |
+| classificationType | Number | | `optional` 确定此 tileset 是否会对 terrain，3D Tiles 或两者进行分类。 有关限制和限制的详细信息，请参阅 Cesium3DTileset＃classificationType。**TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| ellipsoid | Object | Object | `optional` 决定地球的大小和形状参考椭球体。 |
 | pointCloudShading | Object | | `optional` 用于构造 PointCloudShading 对象以基于几何误差和光照控制点衰减的选项。 |
-| imageBasedLightingFactor | Cartesian2 | new Cartesian2(1.0, 1.0) | `optional` 地球、天空、大气层的光照缩放因子。 |
-| lightColor | Cartesian3 | | `optional` 模型阴影的颜色和强度。 |
+| imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
+| lightColor | Object\|Array | | `optional` 模型阴影的颜色和强度。 |
 | luminanceAtZenith | Number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。 |
 | sphericalHarmonicCoefficients | Array | `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
 | specularEnvironmentMaps | String | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |
 | backFaceCulling | Boolean |`false`| `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于 glTF 材料的 doubleSided 属性； 如果为假，则禁用背面剔除。|
+| vectorClassificationOnly | Boolean |`false`| `optional` 是否仅应使用图块集的矢量图块进行分类。|
 | debugHeatmapTilePropertyName | String || `optional` tile 变量以着色为热图。 所有渲染的图块将相对于彼此的指定变量值进行着色。|
 | debugFreezeFrame | Boolean | false | `optional` 仅调试可用，确定是否只使用最后一帧的切片进行渲染。 |
 | debugColorizeTiles | Boolean | false | `optional` 仅调试可用，如果为 true，则给每个 tile 一个随机颜色。 |
@@ -123,7 +124,7 @@
 | mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click        | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
 | dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

@@ -47,7 +47,6 @@
         provider.value.load()
       }
       const ready = ({ Cesium, viewer }) => {
-        window.viewer = viewer
       }
       return {
         ready,

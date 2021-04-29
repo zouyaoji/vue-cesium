@@ -94,7 +94,7 @@
 | ellipsoid | Object | | `optional`参考椭球体，没指定的话默认 WGS84。 |
 | minimumLevel | Number | `0` | `optional`最小层级。 |
 | maximumLevel | Number | | `optional`最大层级。 |
-| rectangle | Object | | `optional`图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
+| rectangle | Object\|Object | | `optional`图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
 | credit | String | | `optional`服务描述信息。 |
 
 :::tip

@@ -1,12 +1,16 @@
 ## VcPrimitiveModel
 
-加载模型图元，相当于初始化一个 `Cesium.Model` 实例。
+Loading a 3D model based on glTF, the runtime asset format for WebGL, OpenGL ES, and OpenGL. It is equivalent to initializing a `Cesium.Model` instance.
 
-### 基础用法
+Cesium includes support for geometry and materials, glTF animations, and glTF skinning. In addition, individual glTF nodes are pickable with Scene#pick and animatable with Model#getNode. glTF cameras and lights are not currently supported.
 
-模型图元组件的基础用法。
+An external glTF asset is created with Model.fromGltf. glTF JSON can also be created at runtime and passed to this constructor function. In either case, the Model#readyPromise is resolved when the model is ready to render, i.e., when the external binary, image, and shader files are downloaded and the WebGL resources are created.
 
-:::demo 使用 `vc-primitive-model` 标签在三维球上添加模型并改变它的光照。
+### Basic usage
+
+Basic usage of VcPrimitiveGround component.
+
+:::demo Use the `vc-primitive-model` tag to add a model to the viewer and change its lighting.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -28,16 +32,16 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">顶点亮度</span>
+          <span class="demonstration">Luminance at Zenith</span>
           <el-slider v-model="luminanceAtZenith" :min="0" :max="2" :step="0.01"></el-slider>
-          <el-checkbox v-model="proceduralEnvironmentLighting" :min="0" :max="5" :step="0.01">使用程序内置的环境光照</el-checkbox>
+          <el-checkbox v-model="proceduralEnvironmentLighting" :min="0" :max="5" :step="0.01">Use procedural environment lighting</el-checkbox>
         </div>
       </el-col>
     </el-row>
@@ -105,62 +109,62 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ------ | ---- | ------ | ---- |---|
-| url | String | | `required` 指定 gltf 文件的 url 地址。 |
-| basePath | String | | `optional` 指定 glTF JSON 中 url 的相对路径。 |
-| show | Boolean | `true` | `optional` 指定 model 图元是否显示。 |
-| modelMatrix | Object | | `optional` 指定将模型从模型坐标转换为世界坐标的 4x4 矩阵。 |
-| scale | Number | `1.0` | `optional` 指定 model 缩放比例。 |
-| minimumPixelSize | Number | `0.0` | `optional` 指定 model 的最小像素。 |
-| maximumScale | Number | | `optional` 指定 model 最大像素。 |
-| id | \* | | `optional` 指定与 model 关联的信息，拾取时将返回该属性。 |
-| allowPicking | Boolean | `true` | `optional` 指定与 model 是否可以被拾取。 |
-| incrementallyLoadTextures | Boolean | `true` | `optional` 指定在加载模型后纹理是否可以继续加载。 |
-| asynchronous | Boolean | `true` | `optional` 确定在加载所有 glTF 文件后，是否将模型 WebGL 资源创建分散在几个帧或块上，直到完成。 |
-| clampAnimations | Boolean | `true` | `optional` 指定动画在没有帧动画的时候保持最后一个姿势。 |
-| shadows | Number | `1` | `optional` 指定 model 是否投射或接收每个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| debugShowBoundingVolume | Boolean | `false` | `optional` 可选的仅用于调试。 为模型中的每个 DrawCommand 绘制边界球。 |
-| debugWireframe | Boolean | `false` | `optional` 可选的仅用于调试。 仅用于调试。 在线框中绘制模型。 |
-| heightReference | Number | `0` | `optional` 指定 model 的高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| scene | Object | `false` | `optional` 指定model的scene参数，使用 heightReference 属性的模型必须传递。 |
-| distanceDisplayCondition | Object | | `optional` 指定 model 随相机改变的显示条件。|
-| color | Object\|String\|Array | `'WHITE'` | `optional` 指定 model 渲染混合的颜色。 |
-| colorBlendMode | Number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |
-| colorBlendAmount | Number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
-| silhouetteColor | Object\|String\|Array | `'RED'` | `optional` 指定 model 轮廓线颜色。 |
-| silhouetteSize | Number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
-| clippingPlanes | Object | | `optional` 指定 model 屏幕裁剪参数。 |
-| dequantizeInShader | Boolean | `true` | `optional` 确定是否在 GPU 上对 Draco 编码的模型进行了反量化。 这减少了编码模型的总内存使用量。|
-| imageBasedLightingFactor | Array\|Object | | `optional` 缩放来自地球，天空，大气层和星空盒的基于漫反射和镜面反射图像的照明。|
-| lightColor | Array\|Object | | `optional` 为模型着色时的浅色。 未定义时，将使用场景的灯光颜色。 |
-| luminanceAtZenith | Number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。|
-| sphericalHarmonicCoefficients | Array\|Object || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。|
-| specularEnvironmentMaps | String ||`optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。|
-| credit | Object\|String | | `optional` 指定 model 的描述信息。 |
-| backFaceCulling | Boolean | `true` | `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于材质的 doubleSided 属性； 如果为假，则禁用背面剔除。 如果 Model#color 是半透明的或 Model#silhouetteSize 大于 0.0，则不会剔除背面|
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| url | String | | `required` The url to the .gltf file. |
+| basePath | String | | `optional` The base path that paths in the glTF JSON are relative to. |
+| show | Boolean | `true` | `optional` Determines if the model primitive will be shown. |
+| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the model from model to world coordinates. |
+| scale | Number | `1.0` | `optional` A uniform scale applied to this model. |
+| minimumPixelSize | Number | `0.0` | `optional` The approximate minimum pixel size of the model regardless of zoom. |
+| maximumScale | Number | | `optional` The maximum scale for the model. |
+| id | \* | | `optional` A user-defined object to return when the model is picked with Scene#pick. |
+| allowPicking | Boolean | `true` | `optional` When true, each glTF mesh and primitive is pickable with Scene#pick. |
+| incrementallyLoadTextures | Boolean | `true` | `optional` Determine if textures may continue to stream in after the model is loaded. |
+| asynchronous | Boolean | `true` | `optional` Determines if model WebGL resource creation will be spread out over several frames or block until completion once all glTF files are loaded. |
+| clampAnimations | Boolean | `true` | `optional` Determines if the model's animations should hold a pose over frames where no keyframes are specified. |
+| shadows | Number | `1` | `optional` Determines whether the model casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Draws the bounding sphere for each DrawCommand in the model. |
+| debugWireframe | Boolean | `false` | `optional` For debugging only. Draws the model in wireframe. |
+| heightReference | Number | `0` | `optional` Determines how the model is drawn relative to terrain. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |
+| scene | Object | `false` | `optional` Must be passed in for models that use the height reference property. |
+| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this model will be displayed. |
+| color | Object\|String\|Array | `'white'` | `optional` A color that blends with the model's rendered color. |
+| colorBlendMode | Number | `0` | `optional` Defines how the color blends with the model. **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** |0/1/2|
+| colorBlendAmount | Number | `0.5` | `optional` Value used to determine the color strength when the colorBlendMode is MIX. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two. |
+| silhouetteColor | Object\|String\|Array | `'red'` | `optional` The silhouette color. If more than 256 models have silhouettes enabled, there is a small chance that overlapping models will have minor artifacts. |
+| silhouetteSize | Number | `0.0` | `optional` The size of the silhouette in pixels. |
+| clippingPlanes | Object | | `optional` The ClippingPlaneCollection used to selectively disable rendering the model. |
+| dequantizeInShader | Boolean | `true` | `optional` Determines if a Draco encoded model is dequantized on the GPU. This decreases total memory usage for encoded models.|
+| imageBasedLightingFactor | Array\|Object | | `optional` Scales diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox.|
+| lightColor | Array\|Object | | `optional` The light color when shading the model. When undefined the scene's light color is used instead. |
+| luminanceAtZenith | Number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map.|
+| sphericalHarmonicCoefficients | Array\|Object || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting.|
+| specularEnvironmentMaps | String || `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
+| credit | Object\|String | | `optional` A credit for the model, which is displayed on the canvas. |
+| backFaceCulling | Boolean | `true` | `optional` Whether to cull back-facing geometry. When true, back face culling is determined by the material's doubleSided property; when false, back face culling is disabled. Back faces are not culled if Model#color is translucent or Model#silhouetteSize is greater than 0.0. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                                                       | 描述                       |
-| ------------ | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad   | Vue Instance                                               | 对象加载前触发。           |
-| ready        | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed    | Vue Instance                                               | 对象销毁时触发。           |
-| readyPromise |                                                            | 模型对象可用时触发。       |
-| mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click        | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name         | Parameters                                                 | Description                                                      |
+| ------------ | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready        | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed    | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| readyPromise |                                                            | Triggers when the primitive is ready to render.                  |
+| mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click        | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[Model](https://cesium.com/docs/cesiumjs-ref-doc/Model.html)**
+- Refer to the official documentation: **[Model](https://cesium.com/docs/cesiumjs-ref-doc/Model.html)**

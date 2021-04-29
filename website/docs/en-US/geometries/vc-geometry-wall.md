@@ -1,14 +1,14 @@
 ## VcGeometryWall
 
-加载墙体几何图形，相当于初始化一个 `Cesium.WallGeometry` 实例。
+Loading a wall geometry. It is equivalent to initializing a `Cesium.WallGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-墙体几何图形组件的基础用法。
+Basic usage of VcGeometryWall component.
 
-:::demo 使用 `vc-geometry-wall` 和 `vc-geometry-wal-outline` 标签在三维球上添加墙体。
+:::demo Use the `vc-geometry-wall` and `vc-geometry-wal-outline` tags to add a wall to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -119,49 +119,52 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名         | 类型   | 默认值 | 描述                                              |
-| -------------- | ------ | ------ | ------------------------------------------------- |
-| positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | Number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
-| maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
-| minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
-| ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |
-| vertexFormat   | Object |        | `optional` 指定顶点属性渲染方式。                 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| positions | Array | | `required` An array of Cartesian objects, which are the points of the wall. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
+| minimumHeights | Array | | `optional`An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
+| ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed.|
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryWallOutline
 
-加载墙体几何图形边框，相当于初始化一个 `Cesium.WallOutlineGeometry` 实例。
+Loading a wall geometry outline. It is equivalent to initializing a `Cesium.WallOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryWallOutline 属性
+### VcGeometryWallOutline Props
 
-| 属性名         | 类型   | 默认值 | 描述                                              |
-| -------------- | ------ | ------ | ------------------------------------------------- |
-| positions      | Array  |        | `required` 指定 wall 位置数组。                   |
-| granularity    | Number |        | `optional` 指定每个纬度和经度之间的距离（弧度）。 |
-| maximumHeights | Array  |        | `optional` 指定 wall 顶部的高度数组。             |
-| minimumHeights | Array  |        | `optional` 指定 wall 底部的高度数组。             |
-| ellipsoid      | Object |        | `optional` 指定参考椭球体。                       |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| positions | Array | | `required` An array of Cartesian objects, which are the points of the wall. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| maximumHeights | Array | | `optional` An array parallel to positions that give the maximum height of the wall at positions. If undefined, the height of each position in used.|
+| minimumHeights | Array | | `optional` An array parallel to positions that give the minimum height of the wall at positions. If undefined, the height at each position is 0.0.|
+| ellipsoid | Object | | `optional` The ellipsoid for coordinate manipulation. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed.|
 
-### VcGeometryWallOutline 事件
+### VcGeometryWallOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[WallGeometry](https://cesium.com/docs/cesiumjs-ref-doc/WallGeometry.html)、[WallOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/WallOutlineGeometry.html)**
+- Refer to the official documentation: **[WallGeometry](https://cesium.com/docs/cesiumjs-ref-doc/WallGeometry.html)、[WallOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/WallOutlineGeometry.html)**

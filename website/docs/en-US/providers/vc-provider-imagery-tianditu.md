@@ -1,19 +1,19 @@
 ## VcProviderImageryTianditu
 
-加载天地图影像瓦片服务。
+Loading a tiled imagery provider that provides tiled imagery hosted by a Tianditu REST API.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-tianditu` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-tianditu` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由天地图提供的影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with VcProviderImageryTianditu to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <!-- 注记层 -->
+    <!-- Annotation layer -->
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
       <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
@@ -23,21 +23,21 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">切换风格</span>
-          <el-select v-model="mapStyle" placeholder="请选择">
+          <span class="demonstration">Switch</span>
+          <el-select v-model="mapStyle" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -59,27 +59,27 @@
       const options = [
         {
           value: 'img_c',
-          label: '全球影像地图服务(经纬度)'
+          label: 'img_c'
         },
         {
           value: 'img_w',
-          label: '全球影像地图服务(墨卡托)'
+          label: 'img_w'
         },
         {
           value: 'vec_c',
-          label: '全球矢量地图服务(经纬度)'
+          label: 'vec_c'
         },
         {
           value: 'vec_w',
-          label: '全球矢量地图服务(墨卡托)'
+          label: 'vec_w'
         },
         {
           value: 'ter_c',
-          label: '全球地形晕渲服务(经纬度)'
+          label: 'ter_c'
         },
         {
           value: 'ter_w',
-          label: '全球地形晕渲服务(墨卡托)'
+          label: 'ter_w'
         }
       ]
       const mapStyle = ref('img_c')
@@ -111,53 +111,30 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名               | 类型            | 默认值                 | 描述                                                                         |
-| -------------------- | --------------- | ---------------------- | ---------------------------------------------------------------------------- |
-| mapStyle             | String          | `'img_w'`              | `optional` 天地图服务地图类型。                                              |
-| credit               | String\|Object  | `'天地图全球影像服务'` | `optional` 服务版权描述信息。                                                |
-| token                | String          |                        | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
-| protocol             | String          | `https`                | `optional` 指定请求协议类型。可以是`https`或者`http`                         |
-| rectangle            | Object          |                        | `optional`图层的矩形范围，此矩形限制了影像可见范围。                         |
-| minimumLevel         | Number          | `0`                    | `optional` 最小层级。                                                        |
-| maximumLevel         | Number          | `20`                   | `optional` 最大层级。                                                        |
-| projectionTransforms | Boolean\|Object | `false`                | `optional` 指定投影变换参数。**结构： { from: 'GCJ02', to: 'WGS84' }**       |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| mapStyle | String | `'img_w'` | `optional` The map type of Tianditu service. |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w|
+| credit | String\|Object | `'天地图全球影像服务'` | `optional` A credit for the data source, which is displayed on the canvas.  |
+| token | String | | `optional` Tianditu application key. [Application Address](http://lbs.tianditu.gov.cn/home.html) |
+| protocol | String | `https` | `optional` Specify the request protocol type. Can be `https` or `http`. |
+| rectangle | Object | | `optional` The rectangle of the layer. This rectangle can limit the visible portion of the imagery provider. |
+| minimumLevel | Number | `0` | `optional` The minimum tile level to request, or undefined if there is no minimum.  |
+| maximumLevel | Number | `20` | `optional` The maximum tile level to request, or undefined if there is no maximum. |
+| projectionTransforms | Boolean\|Object | `false` | `optional` Specify the projection transformation parameters. |
 
-:::tip
+### Events
 
-提示：
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-- mapStyle 可取值：
-  - 'cia_c': 天地图全球中文注记服务（经纬度坐标系）。
-  - 'cia_w': 天地图全球中文注记服务（墨卡托投影坐标系）。
-  - 'cta_c': 天地图全球地形中文注记服务（经纬度坐标系）。
-  - 'cta_w': 天地图全球地形中文注记服务（墨卡托投影坐标系）。
-  - 'cva_c': 天地图全球矢量中文注记服务（经纬度坐标系）。
-  - 'cva_w': 天地图全球矢量中文注记服务（墨卡托投影坐标系）。
-  - 'ela_c': 天地图全球影像英文注记服务（经纬度坐标系）。
-  - 'ela_w': 天地图全球影像英文注记服务（墨卡托投影坐标系）。
-  - 'eva_c': 天地图全球矢量英文注记服务（经纬度坐标系）。
-  - 'eva_w': 天地图全球矢量英文注记服务（墨卡托投影坐标系）。
-  - 'img_c': 天地图全球影像地图服务（经纬度坐标系）。
-  - 'img_w': 天地图全球影像地图服务（墨卡托投影坐标系）。
-  - 'ter_c': 天地图全球地形晕渲服务（经纬度坐标系）。
-  - 'ter_w': 天地图全球地形晕渲服务（墨卡托投影坐标系）。
-  - 'vec_c': 天地图全球矢量地图服务（经纬度坐标系）。
-  - 'vec_w': 天地图全球矢量地图服务（墨卡托投影坐标系）。
+### Reference
 
-:::
-
-### 事件
-
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
-
-### 参考
-
-- 资料： **[TiandituImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/TiandituImageryProvider.html)**
+- **[TiandituImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/TiandituImageryProvider.html)**

@@ -1,14 +1,14 @@
 ## VcGeometryCircle
 
-加载圆几何图形，相当于初始化一个 `Cesium.CircleGeometry` 实例。
+Loading a circle geometry. It is equivalent to initializing a `Cesium.CircleGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-圆几何图形组件的基础用法。
+Basic usage of VcGeometryCircle component.
 
-:::demo 使用 `vc-geometry-circle` 和 `vc-geometry-circle-outline` 标签在三维球上添加圆形。
+:::demo Use the `vc-geometry-circle` and `vc-geometry-circle-outline` tags to add a circle on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -111,53 +111,53 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名         | 类型   | 默认值 | 描述                                                                     |
-| -------------- | ------ | ------ | ------------------------------------------------------------------------ |
-| center         | Object |        | `required` 指定圆形中心点。                                              |
-| radius         | Number |        | `required` 指定圆形半径。                                                |
-| ellipsoid      | Object |        | `optional` 指定圆形参考椭球体。                                          |
-| height         | Number | `0.0`  | `optional` 指定圆形离地表的高度（米）。                                  |
-| granularity    | Number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。                          |
-| vertexFormat   | Object |        | `optional` 指定要计算的顶点属性。                                        |
-| extrudedHeight | Number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                                    |
-| stRotation     | Number | `0.0`  | `optional` 指定圆形纹理的旋转坐标（以弧度为单位）。 正旋转为逆时针方向。 |
+| Name           | Type   | Default | Description                                                                                               |
+| -------------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
+| center         | Object |         | `required` The circle's center point in the fixed frame.                                                  |
+| radius         | Number |         | `required` The radius in meters.                                                                          |
+| ellipsoid      | Object |         | `optional` The ellipsoid the circle will be on.                                                           |
+| height         | Number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                           |
+| granularity    | Number | `0.02`  | `optional` The angular distance between points on the circle in radians.                                  |
+| vertexFormat   | Object |         | `optional` The vertex attributes to be computed.                                                          |
+| extrudedHeight | Number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface.           |
+| stRotation     | Number | `0.0`   | `optional` The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryCicleOutline
 
-加载圆几何图形边框，相当于初始化一个 `Cesium.CircleOutlineGeometry` 实例。
+Loading the circle geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryCicleOutline 属性
+### VcGeometryCicleOutline Props
 
-| 属性名                | 类型   | 默认值 | 描述                                                  |
-| --------------------- | ------ | ------ | ----------------------------------------------------- |
-| center                | Object |        | `required` 指定圆形中心点。                           |
-| radius                | Number |        | `required` 指定圆形半径。                             |
-| ellipsoid             | Object |        | `optional` 指定圆形参考椭球体。                       |
-| height                | Number | `0.0`  | `optional` 指定圆形离地表的高度（米）。               |
-| granularity           | Number | `0.02` | `optional` 指定圆形圆弧每个点的角间距（弧度）。       |
-| extrudedHeight        | Number | `0.0`  | `optional` 指定圆形拉伸的高度（米）。                 |
-| numberOfVerticalLines | Number | `16`   | `optional` 指定圆形在拉伸时顶部与底部之间绘制的线数。 |
+| Name                  | Type   | Default | Description                                                                                     |
+| --------------------- | ------ | ------- | ----------------------------------------------------------------------------------------------- |
+| center                | Object |         | `required` The circle's center point in the fixed frame.                                        |
+| radius                | Number |         | `required` The radius in meters.                                                                |
+| ellipsoid             | Object |         | `optional` The ellipsoid the circle will be on.                                                 |
+| height                | Number | `0.0`   | `optional` The distance in meters between the circle and the ellipsoid surface.                 |
+| granularity           | Number | `0.02`  | `optional` The angular distance between points on the circle in radians.                        |
+| extrudedHeight        | Number | `0.0`   | `optional` The distance in meters between the circle's extruded face and the ellipsoid surface. |
+| numberOfVerticalLines | Number | `16`    | `optional` Number of lines to draw between the top and bottom of an extruded circle.            |
 
-### VcGeometryCicleOutline 事件
+### VcGeometryCicleOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[CircleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CircleGeometry.html)、[CircleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CircleOutlineGeometry.html)**
+- Refer to the official documentation: **[CircleGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CircleGeometry.html)、[CircleOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/CircleOutlineGeometry.html)**

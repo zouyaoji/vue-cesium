@@ -1,14 +1,14 @@
 ## VcProviderImageryBaidumap
 
-加载百度地图或者跟百度地图一样的切片方案的瓦片服务，支持用`projectionTransforms`属性`纠偏`。
+Loading a tiled imagery provider that provides tiled imagery hosted by Baidu Map. You can use `projectionTransforms` to transform the coordinates of the tiles.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-baidumap` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-baidumap` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由百度地图提供的影像瓦片服务图层。**注意**： 暂未找到 https 服务，示例只处理了几层。
+:::demo Use the `vc-layer-imagery` tag to add a imagery layer provided by Baidu Maps on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -19,21 +19,21 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">切换服务</span>
-          <el-select v-model="url" placeholder="请选择">
+          <span class="demonstration">Swich</span>
+          <el-select v-model="url" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -55,19 +55,19 @@
       const options = [
         {
           value: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
-          label: '百度矢量瓦片地图'
+          label: 'vector'
         },
         {
           value: 'http://shangetu1.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46',
-          label: '百度影像瓦片地图'
+          label: 'image'
         },
         {
           value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
-          label: '百度矢量瓦片地图-暗色'
+          label: 'vector-dark'
         },
         {
           value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
-          label: '百度矢量瓦片地图-Custom'
+          label: 'vector-custom'
         }
       ]
       const url = ref('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png')
@@ -99,21 +99,21 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| ---------------------------- | ------- | -------------------- |--|
-| url | String | `'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}'` | `optional` 指定服务地址。 |
-| rectangle | Object | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
-| credit | String\|Object | `''` | `optional` 服务版权描述信息。 |
-| minimumLevel | Number | `0` | `optional` 最小层级。 |
-| maximumLevel | Number | `18` | `optional` 最大层级。 |
-| projectionTransforms | Boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String | `'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}'` | `optional` Specify the service address. |
+| rectangle | Object\|Object | | `optional` The rectangle of the layer. This parameter is ignored when accessing a tiled layer. |
+| credit | String\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
+| minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
+| maximumLevel | Number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| projectionTransforms | Boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
 
 :::tip
 
-提示：`rectangle` 属性除了可传 `Cesium.Rectangle` 还可以传 `PlainObject(RectangleInDegreeOption|Cartesian4Option`) 和 `Array<number>` (度)
+Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can also pass `PlainObject(RectangleInDegreeOption|Cartesian4Option`) and `Array<number>` (degrees)
 
 :::
 
@@ -146,16 +146,16 @@
 
 :::
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 资料： **[openlayers#3522](https://github.com/openlayers/openlayers/issues/3522)**
+- **[openlayers#3522](https://github.com/openlayers/openlayers/issues/3522)**

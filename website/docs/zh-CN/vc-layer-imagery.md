@@ -83,8 +83,8 @@
 ### 属性
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| -------------- | ----------------------- | ------ | --------------------------------------- |
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| -------------- | ----------------------- | ------ | --------------------------------------- |---|
 | sortOrder | Number | |`optional` 指定图层相对顺序。|
 | imageryProvider | Object | | `optional` 指定影像图层的瓦片提供方式。 |
 | rectangle | Rectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
@@ -96,9 +96,9 @@
 | hue | Number\|function | `0.0` | `optional` 指定影像图层色调。值为 0.0 表示使用原图。 |
 | saturation | Number\|function | `1.0` | `optional` 指定影像图层饱和度。值为 1.0 表示使用原图；值大于 1.0 表示增加饱和度；值小于 1.0 表示降低饱和度。 |
 | gamma | Number\|function | `1.0` | `optional` 指定影像图层伽马校正。值为 1.0 表示使用原图。 |
-| splitDirection | Number | `0` | `optional` 指定影像图层分割方向。 |
-| minificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
-| magnificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 |
+| splitDirection | Number | `0` | `optional` 指定影像图层分割方向。 **LEFT: -1, NONE: 0, RIGHT: 1**|-1/0/1|
+| minificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。 **NEAREST: 9728, LINEAR: 9729, NEAREST_MIPMAP_NEAREST: 9984, LINEAR_MIPMAP_NEAREST: 9985, NEAREST_MIPMAP_LINEAR: 9986**|9728/9729/9984/9985/9986|
+| magnificationFilter | Number | `9729` | `optional` 指定影像图层纹理缩小过滤器。**NEAREST: 9728, LINEAR: 9729** |9728/9729|
 | show | Boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false |
 | maximumAnisotropy | Number | | `optional` 指定纹理过滤的最大各向异性级别。 如果未指定此参数，则将使用 WebGL 堆栈支持的最大各向异性。 较大的值使图像在水平视图中看起来更好。 |
 | minimumTerrainLevel | Number | | `optional` 指定最小地形细节层次。level 0 是最小细节层次。 |

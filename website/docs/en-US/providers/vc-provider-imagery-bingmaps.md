@@ -1,20 +1,20 @@
 ## VcProviderImageryBingmaps
 
-加载微软必应地图影像服务，相当于初始化一个 `Cesium.BingMapsImageryProvider` 实例。
+Loading a tiled imagery provider using the Bing Maps Imagery REST API. It is equivalent to initializing a `Cesium.BingMapsImageryProvider` instance.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-bingmaps` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-bingmaps` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由微软必应地图提供的影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with BingMapsImageryProvider to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <!-- 可到(https://www.bingmapsportal.com/)申请Key。 -->
+      <!-- (https://www.bingmapsportal.com/) Apply for Key. -->
       <vc-provider-imagery-bingmaps
         ref="provider"
         bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
@@ -24,21 +24,21 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">切换风格</span>
-          <el-select v-model="mapStyle" placeholder="请选择">
+          <span class="demonstration">Switch</span>
+          <el-select v-model="mapStyle" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -104,24 +104,22 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| ---------------------------- | ------- | -------------------- |--|
-| url | String \| Object | `'https://dev.virtualearth.net'` | `required` 指定服务地址。 |
-| **bmKey** | String | | `optional`指定 BingMaps 地图 API 秘钥，可到[https://www.bingmapsportal.com/](https://www.bingmapsportal.com/)申请 Key。 **注意是bmKey** |
-| tileProtocol | String | | `optional`指定地图是 http 还是 https 加载，默认与页面相同。 |
-| mapStyle | String | `'Aerial'` | `optional`指定加载的 BingMaps 类型。 |
-| culture | String | `''` | `optional`指定服务的描述信息。 |
-| ellipsoid | Object | | `optional`参考椭球体 |
-| tileDiscardPolicy | Object | | `optional`指定 tile 无效时的舍弃瓦片的方案。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| url | String \| Object | `'https://dev.virtualearth.net'` | `required` The url of the Bing Maps server hosting the imagery. |
+| **bmKey** | String | | `optional` The Bing Maps key for your application, which can be created at [https://www.bingmapsportal.com/](https://www.bingmapsportal.com/). **Note that it is bmKey** |
+| tileProtocol | String | | `optional` The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page. |
+| mapStyle | String | `'Aerial'` | `optional` The type of Bing Maps imagery to load. |Aerial/AerialWithLabels/AerialWithLabelsOnDemand/CanvasDark/CanvasGray/CanvasLight/
+| culture | String | `''` | `optional` The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See http://msdn.microsoft.com/en-us/library/hh441729.aspx for information on the supported cultures. |
+| ellipsoid | Object | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| tileDiscardPolicy | Object | | `optional` The policy that determines if a tile is invalid and should be discarded. By default, a DiscardEmptyTileImagePolicy will be used, with the expectation that the Bing Maps server will send a zero-length response for missing tiles. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter. |
 
 :::tip
 
-提示： `mapStyle` 可选值 `Aerial`, `AerialWithLabels`, `AerialWithLabelsOnDemand`, `CanvasDark`, `CanvasGray`, `CanvasLight`, `CollinsBart`, `OrdnanceSurvey`, `Road`, `RoadOnDemand`。
-
-`rectangle` 属性除了可传 `Cesium.Rectangle` 还可以传 `PlainObject(RectangleInDegreeOption|Cartesian4Option`) 和 `Array<number>` (度)
+Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can also pass `PlainObject(RectangleInDegreeOption|Cartesian4Option`) and `Array<number>` (degrees)
 
 :::
 
@@ -154,16 +152,16 @@
 
 :::
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)**
+- Refer to the official documentation: **[BingMapsImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/BingMapsImageryProvider.html)**

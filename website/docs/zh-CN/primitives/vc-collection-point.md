@@ -99,13 +99,14 @@
 
 ### 属性
 
-| 属性名                  | 类型    | 默认值  | 描述                                                                 |
-| ----------------------- | ------- | ------- | -------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。         |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。        |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                        |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                    |
-| points                  | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-point` 组件属性相同。 |
+| 属性名                  | 类型    | 默认值  | 描述                                                                                   | 可选值 |
+| ----------------------- | ------- | ------- | -------------------------------------------------------------------------------------- | ------ |
+| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
+| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                          |
+| blendOption             | Number  | `2`     | `optional` 指定颜色混合选项。 **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2** | 0/1/2  |
+| show                    | Boolean | `true`  | `optional` 指定该图元集合是否显示。                                                    |
+| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                                      |
+| points                  | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-point` 组件属性相同。                   |
 
 ### 事件
 
@@ -117,7 +118,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
@@ -133,17 +134,17 @@
 
 | 属性名                   | 类型                      | 默认值    | 描述                                                     |
 | ------------------------ | ------------------------- | --------- | -------------------------------------------------------- |
-| color                    | Object\|Array\|String     | `'WHITE'` | `optional` 指定 point 的颜色。                           |
+| color                    | Object\|Array\|String     | `'white'` | `optional` 指定 point 的颜色。                           |
 | disableDepthTestDistance | Number                    |           | `optional` 指定 point 深度检测距离。                     |
 | distanceDisplayCondition | Object\|Array             |           | `optional` 指定 point 显示条件随相机距离改变的参数。     |
 | id                       | \*                        |           | `optional` 指定与 point 关联的信息，拾取时返回该属性值。 |
-| outlineColor             | Object \| Array \| String | `'BLACK'` | `optional` 指定 point 的轮廓颜色。                       |
+| outlineColor             | Object \| Array \| String | `'black'` | `optional` 指定 point 的轮廓颜色。                       |
 | outlineWidth             | Number                    | `0`       | `optional` 指定 point 的轮廓宽度。                       |
 | pixelSize                | Number                    | `1`       | `optional` 指定 point 的像素大小。                       |
 | position                 | Object\|Array             |           | `optional` 指定 point 的位置。                           |
-| scaleByDistance          | Object                    |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
+| scaleByDistance          | Object\|Array             |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
 | show                     | Boolean                   | `true`    | `optional` 指定 point 是否显示。                         |
-| translucencyByDistance   | Object                    |           | `optional` 指定 point 透明度随相机距离改变的参数。       |
+| translucencyByDistance   | Object\|Array             |           | `optional` 指定 point 透明度随相机距离改变的参数。       |
 | enableMouseEvent         | Boolean                   | `true`    | `optional` 指定鼠标事件是否生效。                        |
 
 ### VcPoint 事件
@@ -156,7 +157,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

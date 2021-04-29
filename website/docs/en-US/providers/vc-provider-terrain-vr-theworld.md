@@ -1,12 +1,12 @@
 ## VcProviderTerrainVrTheworld
 
-加载 VrTheWorld 格式地形。
+Loading a terrain provider that that produces terrain geometry by tessellating height maps retrieved from a VT MÄK VR-TheWorld server. It is equivalent to initializing a `Cesium.VRTheWorldTerrainProvider` instance.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-terrain-vr-theworld` 组件的基础用法。
+Basic usage of the `vc-provider-terrain-vr-theworld` component.
 
-:::demo 使用 `vc-provider-terrain-vr-theworld` 标签在三维球上添加由 VrTheWorld 提供的在线地形瓦片服务。
+:::demo Use the `vc-provider-terrain-vr-theworld` tag to add the online terrain tile service provided by VrTheWorld to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -15,9 +15,9 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
   </div>
 </el-row>
@@ -65,24 +65,24 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名    | 类型           | 默认值 | 描述                          |
-| --------- | -------------- | ------ | ----------------------------- |
-| url       | String\|Object |        | `required` 指定服务地址。     |
-| token     | String         |        | `optional` 指定服务授权令牌。 |
-| ellipsoid | Object         |        | `optional` 指定参考椭球体。   |
+| Name      | Type           | Default | Description                                                                                |
+| --------- | -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| url       | String\|Object |         | `required` The URL of the VR-TheWorld TileMap.                                             |
+| token     | String         |         | `optional` The ellipsoid. If this parameter is not specified, the WGS84 ellipsoid is used. |
+| ellipsoid | Object         |         | `optional` A credit for the data source, which is displayed on the canvas.                 |
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | TerrainProvider                    | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | TerrainProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[ArcGISTiledElevationTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html)**
+- Refer to the official documentation: **[VRTheWorldTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html)**

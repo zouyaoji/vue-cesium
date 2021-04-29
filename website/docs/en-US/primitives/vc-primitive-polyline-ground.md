@@ -1,14 +1,14 @@
 ## VcPrimitivePolylineGround
 
-加载贴地(3DTiles)线几何图形，相当于初始化一个 `Cesium.GroundPolylineGeometry` 实例。
+Loading a polyline draped over the terrain or 3D Tiles in the Scene. It is equivalent to initializing a `Cesium.GroundPolylinePrimitive` instance.
 
-**注意:** 仅支持添加贴地线几何图形 `vc-geometry-polyline-ground`。
+**Note:** Only to be used with GeometryInstances containing GroundPolylineGeometry(`vc-geometry-polyline-ground`).
 
-### 基础用法
+### Basic usage
 
-贴地线几何图形组件的基础用法。
+Basic usage of VcPrimitiveGround component.
 
-:::demo 使用 `vc-primitive-polyline-ground` 标签在三维球上添加贴地线。
+:::demo Use the `vc-primitive-polyline-ground`, `vc-instance-geometry` and `vc-geometry-polyline-ground` tag to add a ground line to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -31,9 +31,9 @@
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -95,31 +95,31 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ------ | ---- | ------ | ---- |---|
-| geometryInstances | Object\|Array | | `optional` 指定要渲染的贴地线几何体实例或者它的实例集合。 |
-| appearance | Object | | `optional` 指定图元的外观参数。 |
-| show | Boolean | `true` | `optional` 指定图元是否显示。 |
-| interleave | Boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |
-| releaseGeometryInstances | Boolean | `true` | `optional` 指定是否保留图元对几何体实例的输入，不保留可以节省内存。 |
-| allowPicking | Boolean | `true` | `optional` 指定图元是否可以被 Scene.pick 拾取，关闭拾取可以节省内存。 |
-| asynchronous | Boolean | `true` | `optional` 指定图元时异步加载还是同步加载。 |
-| classificationType | Number | `2` | `optional` 指定是贴地形还是贴 3DTiles，还是两者都贴。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示图元的边界球，用于调试使用。 |
-| debugShowShadowVolume | Boolean | `false` | `optional` 指定是否绘制图元中每个几何图形的阴影体积，用于调试使用。 |
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| geometryInstances | Object\|Array | | `optional` GeometryInstances containing GroundPolylineGeometry. |
+| appearance | Object | | `optional` The Appearance used to render the polyline. Defaults to a white color Material on a PolylineMaterialAppearance. |
+| show | Boolean | `true` | `optional` Determines if this primitive will be shown. |
+| interleave | Boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
+| releaseGeometryInstances | Boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
+| allowPicking | Boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| asynchronous | Boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
+| classificationType | Number | `2` | `optional` Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| debugShowShadowVolume | Boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation to have effect. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[GroundPolylinePrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html)**
+- Refer to the official documentation: **[GroundPolylinePrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html)**

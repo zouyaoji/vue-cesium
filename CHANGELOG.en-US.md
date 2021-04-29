@@ -1,9 +1,21 @@
 ## Changelog
 
+### 3.0.1-beta.5.2
+*2021-04-29*
+
+#### New feature
+
+- `vc-overlay-html`, Load HTML element overlays by geographic location.
+
+#### Optimization
+
+- Improve some English documents.
+- The language of Vetur's smart prompt is changed to English by default.
+
 ### 3.0.1-beta.4
 *2021-04-26*
 
-#### Bug 修复
+#### Bug fixes
 
 - Document search function.
 - The intellisense  of Vetur is invalid.

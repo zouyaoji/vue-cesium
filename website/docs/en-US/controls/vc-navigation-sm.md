@@ -1,14 +1,14 @@
 ## VcNavigationSm
 
-导航组件 —— 高仿超图样式。由 `vc-compass-sm`、`vc-zoom-control-sm` 组合而成。
+The navigation component that mimics the supermap. It is composed of `vc-compass-sm` and `vc-zoom-control-sm`.
 
-**注意：** 该需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
+**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
 
-### 基础用法
+### Basic usage
 
-导航组件的基础用法。
+Basic usage of VcNavigationSm component.
 
-:::demo 将 `vc-navigation-sm` 标签作为 `vc-viewer` 的子组件挂载即可。
+:::demo Just mount the `vc-navigation-sm` tag as a subcomponent of `vc-viewer`.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -20,9 +20,9 @@
     <vc-zoom-control-sm position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 <script>
@@ -47,18 +47,18 @@
 
 :::
 
-### VcNavigationSm 属性
+### VcNavigationSm Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 ||
-| compassOpts | Object\|false | 与 `VcCompassSm` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 ||
-| zoomOpts | Object\|false | 与 `VcZoomControlSm` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 ||
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| position | String | `top-right` | `optional` Specify the location of the navigation component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the navigation component. ||
+| compassOpts | Object\|false | Same as `VcCompassSm` | `optional` Specify the compass control parameters, false means not to display. ||
+| zoomOpts | Object\|false | Same as `VcZoomControlSm` | `optional` Specify the zoom control parameters, false means not display. ||
 
 :::tip
-提示 `compassOpts`、`zoomOpts` 默认参数：
+Default parameters of `compassOpts`, `zoomOpts`:
 :::
 :::tipflex
 
@@ -72,7 +72,7 @@
     delay: 1000,
     anchor: 'bottom middle',
     offset: [0, 20],
-    tip: void 0 // 未指定则用对应语言的默认值
+    tip: void 0 // If not specified, the default value of the corresponding language is used
   }
 }
 ```
@@ -94,52 +94,51 @@
 
 :::
 
-### VcNavigationSm 事件
+### VcNavigationSm Events
 
-| 事件名     | 参数 | 描述                 |
-| ---------- | ---- | -------------------- |
-| zoomEvt    |      | 操作缩放控件时触发。 |
-| compassEvt |      | 操作罗盘控件时触发。 |
+| Name       | Parameters | Description                                    |
+| ---------- | ---------- | ---------------------------------------------- |
+| zoomEvt    |            | Triggers when the zoom control is operated.    |
+| compassEvt |            | Triggers when the compass control is operated. |
 
 ### VcCompass
 
-罗盘组件。
+Compass components.
 
-### VcCompassSm 属性
+### VcCompassSm Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
+| Name | Type | Default | Description | Accepted Values |
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| position | String | `top-right` | `optional` 指定罗盘位置。 ||
-| offset | Array | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
-| enableCompassOuterRing | String | `true` | `optional` 指定罗盘外环是否可以操作。 ||
-| duration | Number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
-| tooltip | Object | | `optional` 指定罗盘提示信息参数。 |
-| autoHidden | Boolean | `true` | `optional` 指定是否自动隐藏罗盘部分控件。 ||
+| position | String | `top-right` | `optional` Specify the compass position. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the compass. ||
+| enableCompassOuterRing | String | `true` | `optional` Specify whether the outer ring of the compass can be operated. ||
+| duration | Number | `1.5` | `optional` Specify the flight time of double-clicking the compass to restore the pitch angle, in seconds. ||
+| tooltip | Object | | `optional` Specify the compass prompt information. |
+| autoHidden | Boolean | `true` | `optional` Specify whether to automatically hide parts of the compass controls. ||
 
-### VcCompassSm 事件
+### VcCompassSm Events
 
-| 事件名     | 参数 | 描述                 |
-| ---------- | ---- | -------------------- |
-| compassEvt |      | 操作罗盘控件时触发。 |
+| Name       | Parameters | Description                                    |
+| ---------- | ---------- | ---------------------------------------------- |
+| compassEvt |            | Triggers when the compass control is operated. |
 
 ### VcZoomControlSm
 
-缩放组件。
+Zoom component.
 
-### VcZoomControlSm 属性
+### VcZoomControlSm Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
+| Name | Type | Default | Description | Accepted Values |
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 ||
-| tooltip | Object | | `optional` 指定罗盘提示信息参数。 ||
-| autoHidden | Boolean | `true` | `optional` 指定是否自动隐藏放大控件。 ||
+| position | String | `top-right` | `optional` Specify the position of the zoom component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the zoom control. ||
+| tooltip | Object | | `optional` Specify the compass prompt information. ||
+| autoHidden | Boolean | `true` | `optional` Specify whether to automatically hide the zoom control. ||
 
-### VcZoomControlSm 事件
+### VcZoomControlSm Events
 
-| 事件名  | 参数 | 描述                 |
-| ------- | ---- | -------------------- |
-| zoomEvt |      | 操作缩放控件时触发。 |
+| Name    | Parameters | Description                                 |
+| ------- | ---------- | ------------------------------------------- |
+| zoomEvt |            | Triggers when the zoom control is operated. |

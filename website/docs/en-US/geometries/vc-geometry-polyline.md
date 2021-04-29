@@ -1,14 +1,14 @@
 ## VcGeometryPolyline
 
-加载多段线几何图形，相当于初始化一个 `Cesium.PolylineGeometry` 实例。
+Loading a polyline geometry modeled as a line strip. It is equivalent to initializing a `Cesium.PolylineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-多段线几何图形组件的基础用法。
+Basic usage of VcGeometryPolyline component.
 
-:::demo 使用 `vc-geometry-polyline` 标签在三维球上添加多段线。
+:::demo Use the `vc-geometry-polyline` tag to add a polyline on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -40,9 +40,9 @@
     <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -113,27 +113,28 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名          | 类型    | 默认值  | 描述                                                                             | 可选值 |
-| --------------- | ------- | ------- | -------------------------------------------------------------------------------- | ------ |
-| positions       | Array   |         | `required` 指定表示线条的位置数组。                                              |
-| width           | Number  | `1.0`   | `optional` 指定线的宽度（像素）。                                                |
-| colors          | Array   |         | `optional` 指定每个顶点或每个线段的颜色数组。                                    |
-| colorsPerVertex | Boolean | `false` | `optional` 指定颜色数组是根据线段数取均值还是通过线段顶点插值。                  |
-| arcType         | Number  | `1`     | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                     | 0/1/2  |
-| granularity     | Number  |         | `optional` 指定每个纬度和经度之间的距离（以弧度为单位），arcType 不为 0 时有效。 |
-| vertexFormat    | Object  |         | `optional` 指定要缓存的顶点属性类型。                                            |
-| ellipsoid       | Object  |         | `optional` 指定参考椭球体。                                                      |        |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| positions | Array | | `required` An array of Cartesian3 defining the positions in the polyline as a line strip.|
+| width | Number | `1.0` | `optional` The width in pixels. |
+| colors | Array | | `optional` An Array of Color defining the per vertex or per segment colors. |
+| colorsPerVertex | Boolean | `false` | `optional` A boolean that determines whether the colors will be flat across each segment of the line or interpolated across the vertices. |
+| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[PolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGeometry.html)**
+- Refer to the official documentation: **[PolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineGeometry.html)**

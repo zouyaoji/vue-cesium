@@ -1,8 +1,9 @@
 @import 'element-theme-chalk/src/mixins/config.scss';
 @import 'vc-viewer.scss';
-@import 'vc-navigation.scss';
+// @import 'vc-navigation.scss';
 @import 'vc-layer-imagery.scss';
 @import 'vc-datasource-custom.scss';
+@import 'vc-overlay-html.scss';
 
 .demo-block {
   font-weight: 400;
@@ -12,6 +13,7 @@
   .demo-viewer {
     width: 100%;
     height: 500px;
+    overflow: hidden;
 
     .demo-toolbar {
       position: absolute;

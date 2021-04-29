@@ -1,19 +1,19 @@
 ## VcGraphicsBox
 
-加载立方盒实体，相当于初始化一个 `Cesium.BoxGraphics` 实例。
+Loading a box graphic. It is equivalent to initializing a `Cesium.BoxGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-立方盒组件的基础用法。
+Basic usage of the VcGraphicsBox component.
 
-:::demo 使用 `vc-graphics-box` 标签在三维球上添加实体立方盒。
+:::demo Use the `vc-graphics-box` tag to add some entity with box on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <!-- 通过属性加载 和 子组件分别加载 -->
+    <!-- Load through attributes and load subcomponents separately -->
     <vc-entity
       ref="entity1"
       :position="options.position1"
@@ -87,30 +87,31 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                     | 默认值    | 描述                                                  |
-| ------------------------ | ------------------------ | --------- | ----------------------------------------------------- |
-| show                     | Boolean                  | `true`    | `optional` 指定 box 是否可见。                        |
-| dimensions               | Cartesian3               |           | `optional` 指定 box 的长宽高。                        |
-| heightReference          | HeightReference          |           | `optional` 指定 box 高度模式。                        |
-| fill                     | Boolean                  | `true`    | `optional` 指定 box 是否按提供的材质填充。            |
-| material                 | MaterialProperty         | `'WHITE'` | `optional` 指定 box 材质。                            |
-| outline                  | Boolean                  | `false`   | `optional` 指定是否绘制 box 轮廓线。                  |
-| outlineColor             | Color                    | `'BLACK'` | `optional` 指定是否绘制 box 轮廓线的颜色。            |
-| outlineWidth             | Number                   | `1.0`     | `optional` 指定绘制 box 轮廓线的宽度。                |
-| shadows                  | ShadowMode               | `0`       | `optional` 指定这些是否投射或接收来自每个光源的阴影。 |
-| distanceDisplayCondition | DistanceDisplayCondition |           | `optional` 指定 box 显示条件。                        |
+<!-- prettier-ignore -->
+| Name  | Type | Default | Description | Accepted Values |
+| ----- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the box. |
+| dimensions | Object\|Array\|Function | | `optional` A Cartesian3 Property specifying the length, width, and height of the box. |
+| heightReference | Number | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | Boolean | true | `optional` A boolean Property specifying whether the box is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the box. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the box is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)**
+- Refer to the official documentation: **[BoxGraphics](https://cesium.com/docs/cesiumjs-ref-doc/BoxGraphics.html)**

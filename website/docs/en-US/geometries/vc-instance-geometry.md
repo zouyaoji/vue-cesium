@@ -1,14 +1,14 @@
 ## VcInstanceGeometry
 
-加载实例化的几何体，相当于初始化一个 `Cesium.GeometryInstance` 实例。
+Loading a geometry instance, which allows one Geometry object to be positions in several different locations and colored uniquely. It is equivalent to initializing a `Cesium.GeometryInstance` instance.
 
-**注意**：需要作为 `vc-primitive`、`vc-primitive-classification`、`vc-primitive-ground`、`vc-primitive-polyline-ground` 的子组件才能正常加载。
+**Note**: It needs to be a sub-component of `vc-primitive`, `vc-primitive-classification`, `vc-primitive-ground`, and `vc-primitive-polyline-ground` to load normally.
 
-### 基础用法
+### Basic usage
 
-几何体实例组件的基础用法。
+Basic usage of geometry instance components.
 
-:::demo 使用 `vc-instance-geometry` 标签在三维球上添加立方盒几何体对象。
+:::demo Use the `vc-instance-geometry` tag to add a cube box geometry object on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -39,9 +39,9 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -85,7 +85,6 @@
         // instancePolygon.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
-        window.vm = instance
         geometry.value = Cesium.BoxGeometry.fromDimensions({
           vertexFormat: Cesium.VertexFormat.POSITION_AND_NORMAL,
           dimensions: new Cesium.Cartesian3(1000000.0, 1000000.0, 250000.0)
@@ -157,23 +156,23 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名      | 类型   | 默认值 | 描述                                                                                                           |
-| ----------- | ------ | ------ | -------------------------------------------------------------------------------------------------------------- |
-| geometry    | Object |        | `required` 指定 geometry。                                                                                     |
-| modelMatrix | Object |        | `optional` 指定将几何图形从模型坐标转换为世界坐标的模型矩阵。                                                  |
-| id          | \*     |        | `optional` 指定与 geometry 关联的信息，拾取时或者 Primitive#getGeometryInstanceAttributes 方法将返回该属性值。 |
-| attributes  | Object |        | `optional` 指定每个实例的属性。                                                                                |
+| Name        | Type   | Default | Description                                                                                            |
+| ----------- | ------ | ------- | ------------------------------------------------------------------------------------------------------ |
+| geometry    | Object |         | `optional` The geometry to instance.                                                                   |
+| modelMatrix | Object |         | `optional` The model matrix that transforms to transform the geometry from model to world coordinates. |
+| id          | Object |         | `optional` A user-defined object to return when the instance is picked with `Scene#pick`.              |
+| attributes  | Object |         | `optional` Per-instance attributes like a show or color attribute shown in the example below.          |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[GeometryInstance](https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html)**
+- Refer to the official documentation: **[GeometryInstance](https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html)**

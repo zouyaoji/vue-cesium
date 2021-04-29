@@ -1,12 +1,12 @@
 ## VcCollectionBillboard
 
-加载布告板图元集合，相当于初始化一个 `Cesium.BillboardCollection` 实例。渲染海量布告板时建议用 `billboards` 属性表达。
+Loading a renderable collection of billboards. It is equivalent to initializing a `Cesium.BillboardCollection` instance. It is recommended to use the `billboards` prop to express when rendering massive billboards.
 
-### 基础用法
+### Basic usage
 
-布告板图元集合组件的基础用法。
+Basic usage of VcCollectionBillboard component.
 
-:::demo 使用 `vc-collection-billboard` 标签在三维球上添加布告板图元集合对象。
+:::demo Use the `vc-collection-billboard` and `vc-billboard` tag to add a billboard primitive collection object to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -21,9 +21,9 @@
     </vc-collection-billboard>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -99,82 +99,85 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                  | 类型    | 默认值  | 描述                                                                         |
-| ----------------------- | ------- | ------- | ---------------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                 |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                                |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                            |
-| scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。            |
-| billboards              | Array   | `[]`    | `optional` 指定布告板集合数组。 数组对象结构与 `vc-billboard` 组件属性相同。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| scene | Object | | `optional` Must be passed in for billboards that use the height reference property or will be depth tested against the globe. |
+| blendOption | Number | | `optional` The billboard blending option. The default is used for rendering both opaque and translucent billboards. However, if either all of the billboards are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x. **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2**|0/1/2|
+| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| billboards | Array | `[]` | `optional` Specify an array of billboard collections. The structure of the array object is the same as the attribute of the `vc-billboard` component. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
 ### VcBillboard
 
-加载布告板图元，相当于初始化一个 `Cesium.Billboard` 实例。
+Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to initializing a `Cesium.Billboard` instance.
 
-**注意：** 需要作为 `vc-collection-billboard` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-collection-billboard` to load normally.
 
-### VcBillboard 属性
+### VcBillboard Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
-| color | Object\|String\|Array | `'white'` | `optional` 指定 billboard 图片的颜色。 |
-| disableDepthTestDistance | Number | | `optional` 指定 billboard 的深度检测距离。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 billboard 显示条件随相机距离改变的参数。 |
-| eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移量。|
-| height | Number | | `optional` 指定 billboard 的高度（像素）。 |
-| heightReference | Number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| horizontalOrigin | Number | `0` | `optional` 指定 billboard 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/2|
-| id | \* | | `optional` 指定与 billboard 关联的信息，拾取时返回该属性值。 |
-| image | String\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
-| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移量。 |
-| pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 billboard 像素偏移量随相机距离改变的参数。|
-| position | Object\|Array | | `optional` 指定 billboard 的位置。|
-| rotation | Number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
-| scale | Number | `1.0` | `optional` 指定 billboard 缩放比例。 |
-| scaleByDistance | Object\|Array | | `optional` 指定 billboard 随缩比例随相机距离改变的参数。|
-| show | Boolean | `true` | `optional` 指定 billboard 是否显示。 |
-| sizeInMeters | Boolean | | `optional` 指定 billboard 的单位是否是米。 |
-| translucencyByDistance | Object\|Array | | `optional` 指定 billboard 透明度随相机距离改变参数。|
-| verticalOrigin | Number | `0` | `optional` 指定 billboard 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| alignedAxis | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` The aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector. |
+| color | Object\|String\|Array | `'white'` | `optional` The color that is multiplied with the billboard's texture. |
+| disableDepthTestDistance | Number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
+| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this billboard will be displayed.|
+| eyeOffset | Object\|Array | `{x: 0, y: 0, z: 0}` | `optional` The 3D Cartesian offset applied to this billboard in eye coordinates.|
+| height | Number | | `optional` The height for the billboard. If undefined, the image height will be used. |
+| heightReference | Number | `0` | `optional` The height reference of this billboard. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| horizontalOrigin | Number | `0` | `optional` The horizontal origin of this billboard, which determines if the billboard is to the left, center, or right of its anchor position. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/2|
+| id | \* | | `optional` The user-defined object returned when the billboard is picked. |
+| image | String\|Object | | `optional` The image to be used for this billboard. If a texture has already been created for the given image, the existing texture is used. |
+| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this billboard. |
+| pixelOffsetScaleByDistance | Object\|Array | | `optional` The near and far pixel offset scaling properties of a Billboard based on the billboard's distance from the camera.|
+| position | Object\|Array | | `optional` The position of this billboard.|
+| rotation | Number | `0` | `optional` The rotation angle in radians. |
+| scale | Number | `1.0` | `optional`  The uniform scale that is multiplied with the billboard's image size in pixels. |
+| scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a Billboard based on the billboard's distance from the camera.|
+| show | Boolean | `true` | `optional` Determines if this billboard will be shown. Use this to hide or show a billboard, instead of removing it and re-adding it to the collection. |
+| sizeInMeters | Boolean | | `optional` Determines if the billboard size is in meters or pixels. true to size the billboard in meters; otherwise, the size is in pixels. |
+| translucencyByDistance | Object\|Array | | `optional` The near and far translucency properties of a Billboard based on the billboard's distance from the camera.|
+| verticalOrigin | Number | `0` | `optional` The vertical origin of this billboard, which determines if the billboard is to the above, below, or at the center of its anchor position. **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| width  | Number | | `optional` The width for the billboard. If undefined, the image width will be used. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### VcBillboard 事件
+### VcBillboard Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[BillboardCollection](https://cesium.com/docs/cesiumjs-ref-doc/BillboardCollection.html)**、**[Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html)**
+- Refer to the official documentation: **[BillboardCollection](https://cesium.com/docs/cesiumjs-ref-doc/BillboardCollection.html)**、**[Billboard](https://cesium.com/docs/cesiumjs-ref-doc/Billboard.html)**

@@ -1,14 +1,14 @@
 ## VcGraphicsWall
 
-加载墙实体，相当于初始化一个 `Cesium.WallGraphics` 实例。
+Loading a wall graphic. It is equivalent to initializing a `Cesium.WallGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-墙体组件的基础用法。
+Basic usage of the VcGraphicsWall component.
 
-:::demo 使用 `vc-graphics-wall` 标签在三维球上添加墙体对象。
+:::demo Use the `vc-graphics-wall` tag to add some walls to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -79,32 +79,33 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                            |
-| ------------------------ | --------------------- | --------- | ----------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 wall 是否显示。                 |
-| positions                | Array                 |           | `optional` 指定 wall 顶部的位置数组。           |
-| minimumHeights           | Array                 |           | `optional` 指定 wall 底部的高度数组。           |
-| maximumHeights           | Array                 |           | `optional` 指定 wall 顶部的高度数组。           |
-| granularity              | Number                |           | `optional` 指定每个纬度和经度之间的角距离。     |
-| fill                     | Boolean               | `true`    | `optional` 指定 wall 是否填充材质。             |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 wall 材质。                     |
-| outline                  | Boolean               | `false`   | `optional` 指定 wall 是否绘制轮廓线。           |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 wall 轮廓线颜色。               |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 wall 轮廓线宽度。               |
-| shadows                  | Number                | `0`       | `optional` 指定 wall 是否投射或接收阴影。       |
-| distanceDisplayCondition | Object                |           | `optional` 指定 wall 随相机距离改变的显示条件。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the wall. |
+| positions | Array | | `optional` A Property specifying the array of Cartesian3 positions which define the top of the wall.  |
+| minimumHeights | Array | | `optional` A Property specifying an array of heights to be used for the bottom of the wall instead of the globe surface. |
+| maximumHeights | Array | | `optional` A Property specifying an array of heights to be used for the top of the wall instead of the height of each position. |
+| granularity | Number | | `optional` A numeric Property specifying the angular distance between each latitude and longitude point. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the wall is filled with the provided material. |
+| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the wall. |
+| outline | Boolean | false | `optional` A boolean Property specifying whether the wall is outlined. |
+| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the wall casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this wall will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)**
+- Refer to the official documentation: **[WallGraphics](https://cesium.com/docs/cesiumjs-ref-doc/WallGraphics.html)**

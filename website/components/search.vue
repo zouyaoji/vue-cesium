@@ -85,7 +85,6 @@ export default {
       if (!query) return
       this.index.search(query, { hitsPerPage: 12 }).then(res => {
         if (res.hits.length > 0) {
-          console.log(res.hits)
           this.isEmpty = false
           cb(
             res.hits

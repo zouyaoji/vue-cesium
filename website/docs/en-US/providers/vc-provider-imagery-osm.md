@@ -1,14 +1,14 @@
 ## VcProviderImageryOsm
 
-加载 OpenStreetMap 提供的或者其他 `Slippy` 格式的影像瓦片服务，相当于初始化一个 `Cesium.OpenStreetMapImageryProvider` 实例。
+Loading a tiled imagery provider that provides tiled imagery hosted by OpenStreetMap or another provider of Slippy tiles. It is equivalent to initializing a `Cesium.OpenStreetMapImageryProvider` instance.
 
-**注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-layer-imagery` to load normally.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-imagery-osm` 组件的基础用法。
+Basic usage of the `vc-provider-imagery-osm` component.
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由 OpenStreetMap 提供的影像瓦片服务图层。
+:::demo Use the `vc-layer-imagery` tag to add the imagery layer with OpenStreetMapImageryProvider to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -19,18 +19,18 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
     <el-row>
       <el-col>
         <div class="block">
-          <span class="demonstration">透明度</span>
+          <span class="demonstration">Alpha</span>
           <el-slider v-model="alpha" :min="0" :max="1" :step="0.01"></el-slider>
-          <span class="demonstration">亮度</span>
+          <span class="demonstration">Brightness</span>
           <el-slider v-model="brightness" :min="0" :max="5" :step="0.01"></el-slider>
-          <span class="demonstration">对比度</span>
+          <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
         </div>
       </el-col>
@@ -74,23 +74,22 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名        | 类型   | 默认值                                                   | 描述                                                 |
-| ------------- | ------ | -------------------------------------------------------- | ---------------------------------------------------- |
-| url           | String | `'https://a.tile.openstreetmap.org'`                     | `optional`指定 OpenStreetMap 服务地址。              |
-| fileExtension | String | `'png'`                                                  | `required`指定图片格式。                             |
-| rectangle     | Object |                                                          | `optional`图层的矩形范围，此矩形限制了影像可见范围。 |
-| minimumLevel  | Number | `0`                                                      | `optional`最小层级。                                 |
-| maximumLevel  | Number |                                                          | `optional`最大层级。                                 |
-| ellipsoid     | Object |                                                          | `optional`参考椭球体，没指定的话默认 WGS84。         |
-| credit        | String | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`服务描述信息。                             |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String | `'https://a.tile.openstreetmap.org'` | `optional`The OpenStreetMap server url. |
+| fileExtension | String | `'png'` | `required`The file extension for images on the server. |
+| rectangle | Object\|Array | | `optional` The rectangle of the layer. |
+| minimumLevel | Number | `0` | `optional`The minimum level-of-detail supported by the imagery provider. |
+| maximumLevel | Number | | `optional`The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| ellipsoid | Object | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| credit | String\| Object | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`A credit for the data source, which is displayed on the canvas. |
 
 :::tip
 
-提示： `mapStyle` 可选值 `Aerial`, `AerialWithLabels`, `AerialWithLabelsOnDemand`, `CanvasDark`, `CanvasGray`, `CanvasLight`, `CollinsBart`, `OrdnanceSurvey`, `Road`, `RoadOnDemand`。
-
-`rectangle` 属性除了可传 `Cesium.Rectangle` 还可以传 `PlainObject(RectangleInDegreeOption|Cartesian4Option`) 和 `Array<number>` (度)
+Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can also pass `PlainObject(RectangleInDegreeOption|Cartesian4Option`) and `Array<number>` (degrees)
 
 :::
 
@@ -123,16 +122,16 @@
 
 :::
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[OpenStreetMapImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html)**
+- Refer to the official documentation: **[OpenStreetMapImageryProvider](https://cesium.com/docs/cesiumjs-ref-doc/OpenStreetMapImageryProvider.html)**

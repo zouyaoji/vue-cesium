@@ -1,14 +1,14 @@
 ## VcGeometryFrustum
 
-加载视锥体，相当于初始化一个 `Cesium.FrustumGeometry` 实例。
+Loading a frustum geometry. It is equivalent to initializing a `Cesium.FrustumGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-视锥体几何图形组件的基础用法。
+Basic usage of the VcGeometryFrustum component.
 
-:::demo 使用 `vc-geometry-frustum` 和 `vc-geometry-frustum-outline` 标签在三维球上添加视锥体。
+:::demo Use the `vc-geometry-frustum` and `vc-geometry-frustum-outline` tags to add a frustum on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -36,10 +36,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -130,45 +130,45 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名       | 类型          | 默认值 | 描述                                |
-| ------------ | ------------- | ------ | ----------------------------------- |
-| frustum      | Object        |        | `optional` 指定视锥体参数。         |
-| origin       | Object\|Array |        | `optional` 指定视锥体原点。         |
-| orientation  | Object\|Array |        | `optional` 指定视锥体旋转参数。     |
-| vertexFormat | Object        |        | `optional` 指定视锥体顶点渲染方式。 |
+| Name         | Type          | Default | Description                                      |
+| ------------ | ------------- | ------- | ------------------------------------------------ |
+| frustum      | Object        |         | `optional` The frustum.                          |
+| origin       | Object\|Array |         | `optional` The origin of the frustum.            |
+| orientation  | Object\|Array |         | `optional` The orientation of the frustum.       |
+| vertexFormat | Object        |         | `optional` The vertex attributes to be computed. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryFrustumOutline
 
-加载视锥体几何图形边框，相当于初始化一个 `Cesium.FrustumOutlineGeometry` 实例。
+Loading a frustum geometry outline. It is equivalent to initializing a `Cesium.FrustumOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryFrustumOutline 属性
+### VcGeometryFrustumOutline Props
 
-| 属性名      | 类型          | 默认值 | 描述                            |
-| ----------- | ------------- | ------ | ------------------------------- |
-| frustum     | Object        |        | `optional` 指定视锥体参数。     |
-| origin      | Object\|Array |        | `optional` 指定视锥体原点。     |
-| orientation | Object\|Array |        | `optional` 指定视锥体旋转参数。 |
+| Name        | Type          | Default | Description                                |
+| ----------- | ------------- | ------- | ------------------------------------------ |
+| frustum     | Object        |         | `optional` The frustum.                    |
+| origin      | Object\|Array |         | `optional` The origin of the frustum.      |
+| orientation | Object\|Array |         | `optional` The orientation of the frustum. |
 
-### VcGeometryFrustumOutline 事件
+### VcGeometryFrustumOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[FrustumGeometry](https://cesium.com/docs/cesiumjs-ref-doc/FrustumGeometry.html)、[FrustumOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/FrustumOutlineGeometry.html)**
+- Refer to the official documentation: **[FrustumGeometry](https://cesium.com/docs/cesiumjs-ref-doc/FrustumGeometry.html)、[FrustumOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/FrustumOutlineGeometry.html)**

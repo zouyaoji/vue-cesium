@@ -101,14 +101,15 @@
 
 ### 属性
 
-| 属性名                  | 类型    | 默认值  | 描述                                                                         |
-| ----------------------- | ------- | ------- | ---------------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                 |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                                |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                            |
-| scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。            |
-| billboards              | Array   | `[]`    | `optional` 指定布告板集合数组。 数组对象结构与 `vc-billboard` 组件属性相同。 |
+| 属性名                  | 类型    | 默认值  | 描述                                                                                   | 可选值 |
+| ----------------------- | ------- | ------- | -------------------------------------------------------------------------------------- | ------ |
+| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。                           |
+| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。                          |
+| blendOption             | Number  | `2`     | `optional` 指定颜色混合选项。 **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2** | 0/1/2  |
+| scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。                      |
+| show                    | Boolean | `true`  | `optional` 指定该图元集合是否显示。                                                    |
+| billboards              | Array   | `[]`    | `optional` 指定布告板集合数组。 数组对象结构与 `vc-billboard` 组件属性相同。           |
+| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                                      |
 
 ### 事件
 
@@ -120,7 +121,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
@@ -157,6 +158,7 @@
 | sizeInMeters | Boolean | | `optional` 指定 billboard 的单位是否是米。 |
 | translucencyByDistance | Object\|Array | | `optional` 指定 billboard 透明度随相机距离改变参数。|
 | verticalOrigin | Number | `0` | `optional` 指定 billboard 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| width | Number | | `optional` 指定 billboard 的宽度（像素）。 |
 | enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
 
 ### VcBillboard 事件
@@ -169,7 +171,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

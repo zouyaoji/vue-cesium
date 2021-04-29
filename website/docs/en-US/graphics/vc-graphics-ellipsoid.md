@@ -1,14 +1,14 @@
 ## VcGraphicsEllipsoid
 
-加载(椭)球实体，相当于初始化一个 `Cesium.EllipsoidGraphics` 实例。
+Loading an ellipsoid graphic. It is equivalent to initializing a `Cesium.EllipsoidGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-(椭)球体组件的基础用法。
+Basic usage of the VcGraphicsEllipsoid component.
 
-:::demo 使用 `vc-graphics-ellipsoid` 标签在三维球上添加球体、椭球体。
+:::demo Use the `vc-graphics-ellipsoid` tag to add some ellipsoids to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -80,33 +80,34 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                       |
-| ------------------------ | --------------------- | --------- | ---------------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 ellipsoid 是否显示。                       |
-| radii                    | Object                |           | `optional` 指定 ellipsoid 的半径参数。                     |
-| heightReference          | Number                |           | `optional` 指定 ellipsoid 高度模式。                       |
-| fill                     | Boolean               | `true`    | `optional` 指定 ellipsoid 是否填充材质。                   |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。                           |
-| outline                  | Boolean               | `false`   | `optional` 指定 ellipsoid 是否绘制轮廓线。                 |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。                     |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 ellipsoid 轮廓线宽度。                     |
-| stackPartitions          | Number                | `64`      | `optional` 指定 ellipsoid 横向线数量。                     |
-| slicePartitions          | Number                | `64`      | `optional` 指定 ellipsoid 径向线数量。                     |
-| subdivisions             | Number                | `128`     | `optional` 指定 ellipsoid 每个轮环的样本数，确定曲率粒度。 |
-| shadows                  | Number                | `0`       | `optional` 指定 ellipsoid 是否投射或接受每一个光源的阴影。 |
-| distanceDisplayCondition | Object                |           | `optional` 指定 ellipsoid 随相机距离的显示条件。           |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the ellipsoid. |
+| radii | Object | | `optional` A Cartesian3 Property specifying the radii of the ellipsoid. |
+| heightReference | Number | | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the ellipsoid is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the ellipsoid. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the ellipsoid is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| stackPartitions | Number | `64` | `optional` A Property specifying the number of stacks. |
+| slicePartitions | Number | `64` | `optional` A Property specifying the number of radial slices. |
+| subdivisions | Number | `128` | `optional` A Property specifying the number of samples per outline ring, determining the granularity of the curvature. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the ellipsoid casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this ellipsoid will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)**
+- Refer to the official documentation: **[EllipsoidGraphics](https://cesium.com/docs/cesiumjs-ref-doc/EllipsoidGraphics.html)**

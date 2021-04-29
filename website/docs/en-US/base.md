@@ -1,39 +1,225 @@
-# Base
+## Base
 
-## Global component events
+### Global component events
 
 :::tip
-Tip: All components of vue-cesium include these 3 events, and subsequent documents may not list them again.
-
-| Event name | Parameters                         | Description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
-
+Tip: All components of vue-cesium include these events, and subsequent documents may not list them again.
 :::
 
-## Global component instance method
+| Name       | Parameters                         | Description                                             |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
+
+### Global component instance method
 
 :::tip
 Tip: All components of vue-cesium include these 4 methods, which may not be listed in subsequent documents.
+:::
 
-| Method name     | Parameters | Description                                                    |
+| Name            | Parameters | Description                                                    |
 | --------------- | ---------- | -------------------------------------------------------------- |
 | load            |            | Load the component.                                            |
 | unload          |            | Uninstall the component.                                       |
 | reload          |            | Complete a component unloading/reloading method.               |
 | getCesiumObject | Object     | Get the Cesium object or HTMLElement loaded by this component. |
 
+### Constants
+
+Since Cesium cannot be obtained before the initialization of the `vc-viewer` component is completed, some constants of Cesium cannot be obtained directly through Cesium when the component is bound, but it is still possible to pass their values directly.
+
+:::tipflex
+
+```html
+<!-- Wrong way -->
+<template>
+  <vc-viewer :sceneMode="Cesium.SceneMode.SCENE3D"></vc-viewer>
+</template>
+```
+
+```html
+<!-- Right way -->
+<template>
+  <vc-viewer :sceneMode="3"></vc-viewer>
+</template>
+```
+
 :::
 
-## 类型
+#### HorizontalOrigin
 
-`vue-cesium` 各组件传参支持直接传 Cesium 实例化的参数，但需要在 `vc-viewer` 组件 `ready` 事件之后来初始化这些参数。为了简化开发，特将一些常用的参数抽象成`简单对象(PlainObject)`，可以提前对这些对象进行赋值。以下分别描述：
+The horizontal location of an origin relative to an object, e.g., a Billboard or Label. For example, setting the horizontal origin to LEFT or RIGHT will display a billboard to the left or right (in screen space) of the anchor position.
+
+| Name   | Value | Description                                           |
+| ------ | ----- | ----------------------------------------------------- |
+| CENTER | 0     | The origin is at the horizontal center of the object. |
+| LEFT   | 1     | The origin is on the left side of the object.         |
+| RIGHT  | -1    | The origin is on the right side of the object.        |
+
+#### VerticalOrigin
+
+The vertical location of an origin relative to an object, e.g., a Billboard or Label. For example, setting the vertical origin to TOP or BOTTOM will display a billboard above or below (in screen space) the anchor position.
+
+| Name     | Value | Description                                                                                                             |
+| -------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
+| CENTER   | 0     | The origin is at the vertical center between BASELINE and TOP.                                                          |
+| BOTTOM   | 1     | The origin is at the bottom of the object.                                                                              |
+| BASELINE | 2     | If the object contains text, the origin is at the baseline of the text, else the origin is at the bottom of the object. |
+| TOP      | -1    | The origin is at the top of the object.                                                                                 |
+
+#### HeightReference
+
+Represents the position relative to the terrain.
+
+| Name               | Value | Description                                          |
+| ------------------ | ----- | ---------------------------------------------------- |
+| NONE               | 0     | The position is absolute.                            |
+| CLAMP_TO_GROUND    | 1     | The position is clamped to the terrain.              |
+| RELATIVE_TO_GROUND | 2     | The position height is the height above the terrain. |
+
+#### ShadowMode
+
+Specifies whether the object casts or receives shadows from light sources when shadows are enabled.
+
+| Name         | Value | Description                                  |
+| ------------ | ----- | -------------------------------------------- |
+| DISABLED     | 0     | The object does not cast or receive shadows. |
+| ENABLED      | 1     | The object casts and receives shadows.       |
+| CAST_ONLY    | 2     | The object casts shadows only.               |
+| RECEIVE_ONLY | 3     | The object receives shadows only.            |
+
+#### CornerType
+
+Style options for corners.
+
+| Name    | Value | Description                                         |
+| ------- | ----- | --------------------------------------------------- |
+| ROUNDED | 0     | Corner has a smooth edge.                           |
+| MITERED | 1     | Corner point is the intersection of adjacent edges. |
+| BEVELED | 2     | Corner is clipped.                                  |
+
+#### ClassificationType
+
+Whether a classification affects terrain, 3D Tiles or both.
+
+| Name           | Value | Description                                   |
+| -------------- | ----- | --------------------------------------------- |
+| TERRAIN        | 0     | Only terrain will be classified.              |
+| CESIUM_3D_TILE | 1     | Only 3D Tiles will be classified.             |
+| BOTH           | 2     | Both terrain and 3D Tiles will be classified. |
+
+#### BingMapsStyle
+
+The types of imagery provided by Bing Maps.
+
+| Name                         | Value                      | Description                                                                    |
+| ---------------------------- | -------------------------- | ------------------------------------------------------------------------------ |
+| AERIAL                       | 'Aerial'                   | Aerial imagery.                                                                |
+| AERIAL_WITH_LABELS           | 'AerialWithLabels'         | Aerial imagery with a road overlay.                                            |
+| AERIAL_WITH_LABELS_ON_DEMAND | 'AerialWithLabelsOnDemand' | Aerial imagery with a road overlay.                                            |
+| ROAD                         | 'Road'                     | Roads without additional imagery.                                              |
+| ROAD_ON_DEMAND               | 'RoadOnDemand'             | Roads without additional imagery.                                              |
+| CANVAS_DARK                  | 'CanvasDark'               | A dark version of the road maps.                                               |
+| CANVAS_LIGHT                 | 'CanvasGray'               | A lighter version of the road maps.                                            |
+| CANVAS_GRAY                  | 'CanvasLight'              | A grayscale version of the road maps.                                          |
+| ORDNANCE_SURVEY              | 'OrdnanceSurvey'           | Ordnance Survey imagery. This imagery is visible only for the London, UK area. |
+| COLLINS_BART                 | 'CollinsBart'              | Collins Bart imagery.                                                          |
+
+#### LabelStyle
+
+Describes how to draw a label.
+
+| Name             | Value | Description                                     |
+| ---------------- | ----- | ----------------------------------------------- |
+| FILL             | 0     | Fill the text of the label, but do not outline. |
+| OUTLINE          | 1     | Outline the text of the label, but do not fill. |
+| FILL_AND_OUTLINE | 2     | Fill and outline the text of the label.         |
+
+#### ArcType
+
+ArcType defines the path that should be taken connecting vertices.
+
+| Name     | Value | Description                                                          |
+| -------- | ----- | -------------------------------------------------------------------- |
+| NONE     | 0     | Straight line that does not conform to the surface of the ellipsoid. |
+| GEODESIC | 1     | Follow geodesic path.                                                |
+| RHUMB    | 2     | Follow rhumb or loxodrome path.                                      |
+
+#### SceneMode
+
+Indicates if the scene is viewed in 3D, 2D, or 2.5D Columbus view.
+
+| Name          | Value | Description                                                                                                                     |
+| ------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------- |
+| MORPHING      | 0     | Morphing between mode, e.g., 3D to 2D.                                                                                          |
+| COLUMBUS_VIEW | 1     | Columbus View mode. A 2.5D perspective view where the map is laid out flat and objects with non-zero height are drawn above it. |
+| SCENE2D       | 2     | 2D mode. The map is viewed top-down with an orthographic projection.                                                            |
+| SCENE3D       | 3     | 3D mode. A traditional 3D perspective view of the globe.                                                                        |
+
+#### MapMode2D
+
+Describes how the map will operate in 2D.
+
+| Name            | Value | Description                                                        |
+| --------------- | ----- | ------------------------------------------------------------------ |
+| ROTATE          | 0     | The 2D map can be rotated about the z axis.                        |
+| INFINITE_SCROLL | 1     | The 2D map can be scrolled infinitely in the horizontal direction. |
+
+#### Reference
+
+> **[Official document](https://cesium.com/docs/cesiumjs-ref-doc/global.html)**
+
+### Datatype
+
+The parameter passing of each component of `vue-cesium` supports directly passing the parameters of Cesium instantiation, but because Cesium cannot get it before the completion of the `vc-viewer` component initialization, so if it is to pass the parameters of the Cesium instance, it needs to be in `vc-viewer` These parameters are initialized after the component `ready` event. In order to simplify development, some commonly used parameters are abstracted into PlainObjects, which can be assigned in advance.
+
+:::tipflex
+
+```html
+<!-- Complete writing -->
+<template>
+  <vc-viewer @ready="onViewerReady">
+    <vc-entity :position="position" :point="point"> </vc-entity>
+  </vc-viewer>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        position: null,
+        point: null
+      }
+    },
+    methods: {
+      onViewerReady({ Cesium, viewer }) {
+        this.position = Cesium.Cartesian3.fromDegrees(108, 35, 1000)
+        this.point = new Cesium.PointGraphics({
+          pixelSize: 28,
+          color: Cesium.Color.RED
+        })
+      }
+    }
+  }
+</script>
+```
+
+```html
+<!-- Suggested writing -->
+<template>
+  <vc-viewer>
+    <vc-entity :position="[108, 35, 1000]" :point="{pixelSize: 28, color: 'red'}"> </vc-entity>
+  </vc-viewer>
+</template>
+```
+
+:::
+
+The following are described separately:
 
 ### Cartesian2
 
-表达 `Cesium.Cartesian2` 有 2 种方式：
+There are 2 ways to express `Cesium.Cartesian2`:
 
 - `Cartesian2Option`
 
@@ -52,7 +238,7 @@ interface Cartesian2Option {
 
 ### Array\<Cartesian2\>
 
-表达 `Array<Cartesian2>` 有 2 种方式：
+There are 2 ways to express `Array<Cartesian2>`:
 
 - `Array<Cartesian2Option>`
 
@@ -68,7 +254,7 @@ interface Cartesian2Option {
 
 ### Cartesian3
 
-表达 `Cesium.Cartesian3` 有 3 种方式:
+There are 3 ways to express `Cesium.Cartesian3`:
 
 - `Cartesian3Option`
 
@@ -83,7 +269,7 @@ interface Cartesian3Option {
 - `CartographicInDegreeOption`
 
 ```js
-// 单位度
+// in degrees
 interface CartographicInDegreeOption {
   lng: number
   lat: number
@@ -94,13 +280,13 @@ interface CartographicInDegreeOption {
 - `Array<number>`
 
 ```js
-// 单位度
+// in degrees
 ;[(lng: number), (lat: number), (height: number)]
 ```
 
 ### Array\<Cartesian3\>
 
-表达 `Array<Cartesian3>` 有 4 种方式:
+There are 4 ways to express `Array<Cartesian3>`:
 
 - `Array<Cartesian3Option>`
 
@@ -112,27 +298,27 @@ interface CartographicInDegreeOption {
 - `Array<CartographicInDegreeOption>`
 
 ```js
-// 单位度
+// in degrees
 [{ lng: number, lat: number, height?: number },..., { lng: number, lat: number, height?: number }]
 ```
 
 - `Array<number>`
 
 ```js
-// 经度、纬度、高度（单位度）
+// in degrees
 [lng: number, lat: number, height: number, ..., lng: number, lat: number, height: number]
 ```
 
 - `Array<Array<number>>`
 
 ```js
-// 经度、纬度、高度（单位度）
+// in degrees
 [[lng: number, lat: number, height: number], ..., [lng: number, lat: number, height: number]]
 ```
 
 ### Cartesian4
 
-表达 `Cesium.Cartesian4` 有 2 种方式:
+There are 2 ways to express `Cesium.Cartesian4`:
 
 - `Cartesian4Option`
 
@@ -153,12 +339,12 @@ interface Cartesian4Option {
 
 ### Rectange(coordinates)
 
-表达 `Cesium.Rectange` 有 3 种方式:
+There are 3 ways to express `Cesium.Rectange`:
 
 - `RectangleInDegreeOption`
 
 ```js
-// 单位度
+// in degrees
 interface RectangleInDegreeOption {
   west: number
   south: number
@@ -170,7 +356,7 @@ interface RectangleInDegreeOption {
 - `Cartesian4Option`
 
 ```js
-// 单位弧度
+// in radian
 interface Cartesian4Option {
   x?: number
   y?: number
@@ -182,13 +368,13 @@ interface Cartesian4Option {
 - `Array<number>`
 
 ```js
-// 单位度
+// // in degrees
 ;[(west: number), (south: number), (east: number), (north: number)]
 ```
 
 ### Camera
 
-表达 `Cesium.Camera` 有 1 种方式:
+There are 1 ways to express `Cesium.Camera`:
 
 - `CameraOption`
 
@@ -204,7 +390,7 @@ interface CameraOption {
 
 ### PolygonHierarchy
 
-表达 `Cesium.PolygonHierarchy` 的方式有 2 种:
+There are 2 ways to express `Cesium.PolygonHierarchy`:
 
 - `PolygonHierarchyOption`
 
@@ -223,7 +409,7 @@ interface PolygonHierarchyOption {
 
 ### NearFarScalar
 
-表达 `Cesium.NearFarScalar` 的方式有 2 种：
+There are 2 ways to express `Cesium.NearFarScalar`:
 
 - `NearFarScalarOption`
 
@@ -244,7 +430,7 @@ interface NearFarScalarOption {
 
 ### DistanceDisplayCondition
 
-表达 `Cesium.DistanceDisplayCondition` 的方式有 2 种：
+There are 2 ways to express `Cesium.DistanceDisplayCondition`:
 
 - `DistanceDisplayConditionOption`
 
@@ -263,7 +449,7 @@ interface DistanceDisplayConditionOption {
 
 ### Color
 
-表达 `Cesium.Color` 的方式有 4 种：
+There are 4 ways to express `Cesium.Color`:
 
 - `string`
 
@@ -295,7 +481,7 @@ interface ColorInByteOption {
 - `Cartesian4Option`
 
 ```js
-// 范围从0（无强度）到1.0（全强度）。
+// The range is from 0 (no intensity) to 1.0 (full intensity).
 interface Cartesian4Option {
   x?: number
   y?: number
@@ -306,12 +492,12 @@ interface Cartesian4Option {
 
 ### Material
 
-表达 `Cesium.Material`, `Cesium.MaterialProperty` 的方式有 3 种：
+There are 3 ways to express `Cesium.Material`, `Cesium.MaterialProperty`:
 
 - `string`
 
 ```js
-// 颜色或者图片url
+// color or image url
 'red'
 'https://zouyaoji.top/vue-cesium/favicon.png'
 ```
@@ -319,7 +505,7 @@ interface Cartesian4Option {
 - `Array<number>`
 
 ```js
-// 颜色
+// color
 ;[255, 0, 0, 255]
 ```
 
@@ -360,7 +546,7 @@ interface MaterialOption {
 
 ### BoundingRectangle
 
-表达 `Cesium.BoundingRectangle` 的方式有 2 种：
+There are 2 ways to express `Cesium.BoundingRectangle`:
 
 - `BoundingRectangleOption`
 
@@ -381,7 +567,7 @@ interface BoundingRectangleOption {
 
 ### Plane
 
-表达 `Cesium.Plane` 的方式有 2 种：
+There are 2 ways to express `Cesium.Plane`:
 
 - `PlaneOption`
 
@@ -400,7 +586,7 @@ interface PlaneOption {
 
 ### TranslationRotationScale
 
-表达 `Cesium.TranslationRotationScale` 的方式有 2 种：
+There are 2 ways to express `Cesium.TranslationRotationScale`:
 
 - `TranslationRotationScaleOption`
 
@@ -421,108 +607,3 @@ interface TranslationRotationScaleOption {
   (scale: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>)
 ]
 ```
-
-## 常量
-
-### HorizontalOrigin
-
-用于描述文本、布告板等对象水平对齐方式。
-
-| 常量   | 值  | 描述     |
-| ------ | --- | -------- |
-| CENTER | 0   | 居中对齐 |
-| LEFT   | 1   | 左对齐   |
-| RIGHT  | -1  | 右对齐   |
-
-### VerticalOrigin
-
-用于描述文本、布告板等对象垂直对齐方式。
-
-| 常量     | 值  | 描述     |
-| -------- | --- | -------- |
-| CENTER   | 0   | 居中对齐 |
-| BOTTOM   | 1   | 底部对齐 |
-| BASELINE | 2   | 基线对齐 |
-| TOP      | -1  | 顶部对齐 |
-
-### HeightReference
-
-用于描述文本、布告板等对象高度模式。
-
-| 常量               | 值  | 描述       |
-| ------------------ | --- | ---------- |
-| NONE               | 0   | 无         |
-| CLAMP_TO_GROUND    | 1   | 贴地       |
-| RELATIVE_TO_GROUND | 2   | 相对于地面 |
-
-### ShadowMode
-
-用于描述阴影接收方式。
-
-| 常量         | 值  | 描述   |
-| ------------ | --- | ------ |
-| DISABLED     | 0   | 不生效 |
-| ENABLED      | 1   | 生效   |
-| CAST_ONLY    | 2   | 仅发射 |
-| RECEIVE_ONLY | 3   | 仅接收 |
-
-### CornerType
-
-用于描述 corridor 转角样式
-
-| 常量    | 值  | 描述 |
-| ------- | --- | ---- |
-| ROUNDED | 0   | 圆角 |
-| MITERED | 1   | 直角 |
-| BEVELED | 2   | 斜角 |
-
-### ClassificationType
-
-描述贴对象方式
-
-| 常量           | 值  | 描述        |
-| -------------- | --- | ----------- |
-| TERRAIN        | 0   | 只贴地      |
-| CESIUM_3D_TILE | 1   | 只贴 3DTile |
-| BOTH           | 2   | 都贴        |
-
-### BingMapsStyle
-
-描述 BingMaps 风格
-
-| 常量                         | 值                         | 描述                 |
-| ---------------------------- | -------------------------- | -------------------- |
-| AERIAL                       | 'Aerial'                   | 卫星影像             |
-| AERIAL_WITH_LABELS           | 'AerialWithLabels'         | 卫星影像带标注       |
-| AERIAL_WITH_LABELS_ON_DEMAND | 'AerialWithLabelsOnDemand' | 卫星影像带主要的标注 |
-| ROAD                         | 'Road'                     | 道路                 |
-| ROAD_ON_DEMAND               | 'RoadOnDemand'             | 主要道路             |
-| CANVAS_DARK                  | 'CanvasDark'               | 暗色                 |
-| CANVAS_LIGHT                 | 'CanvasGray'               | 亮色                 |
-| CANVAS_GRAY                  | 'CanvasLight'              | 灰色                 |
-| ORDNANCE_SURVEY              | 'OrdnanceSurvey'           | ---                  |
-| COLLINS_BART                 | 'CollinsBart'              | ---                  |
-
-### LabelStyle
-
-描述文本风格
-
-| 常量             | 值  | 描述       |
-| ---------------- | --- | ---------- |
-| FILL             | 0   | 填充       |
-| OUTLINE          | 1   | 轮廓       |
-| FILL_AND_OUTLINE | 2   | 填充和轮廓 |
-
-### ArcType
-
-描述线段样式
-
-| 常量     | 值  | 描述                   |
-| -------- | --- | ---------------------- |
-| NONE     | 0   | 直线                   |
-| GEODESIC | 1   | 测地线                 |
-| RHUMB    | 2   | 按照恒向线或等倾角螺旋 |
-
-## 参考
-
-> [Cesium 官方文档](https://cesium.com/docs/cesiumjs-ref-doc/index.html)

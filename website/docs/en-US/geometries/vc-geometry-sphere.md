@@ -1,14 +1,14 @@
-## VcGeometryPlane
+## VcGeometrySphere
 
-加载球体几何图形，相当于初始化一个 `Cesium.SphereGeometry` 实例。
+Loading a sphere geometry. It is equivalent to initializing a `Cesium.SphereGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-球体几何图形组件的基础用法。
+The basic usage of VcGeometrySphere component.
 
-:::demo 使用 `vc-geometry-sphere` 和 `vc-geometry-sphere-outline` 标签在三维球上添加球体。
+:::demo Use the `vc-geometry-sphere` and `vc-geometry-sphere-outline` tags to add a sphere to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -118,46 +118,46 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名          | 类型   | 默认值 | 描述                                      |
-| --------------- | ------ | ------ | ----------------------------------------- |
-| radius          | Number | `1.0`  | `optional` 指定球体半径。                 |
-| stackPartitions | Number | `0.0`  | `optional` 指定将球体横向划分为层的次数。 |
-| slicePartitions | Number | `10`   | `optional` 指定将球体纵向划分为片的次数。 |
-| vertexFormat    | Object |        | `optional` 指定椭球体顶点属性渲染方式。   |
+| Name            | Type   | Default | Description                                                                   |
+| --------------- | ------ | ------- | ----------------------------------------------------------------------------- |
+| radius          | Number | `1.0`   | `optional` The radius of the sphere.                                          |
+| stackPartitions | Number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.        |
+| slicePartitions | Number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices. |
+| vertexFormat    | Object |         | `optional` The vertex attributes to be computed.                              |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometrySphereOutline
 
-加载球体几何图形边框，相当于初始化一个 `Cesium.SphereOutlineGeometry` 实例。
+Loading a sphere geometry outline. It is equivalent to initializing a `Cesium.SphereOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometrySphereOutline 属性
+### VcGeometrySphereOutline Props
 
-| 属性名          | 类型   | 默认值 | 描述                                                    |
-| --------------- | ------ | ------ | ------------------------------------------------------- |
-| radius          | Number | `1.0`  | `optional` 指定球体半径。                               |
-| stackPartitions | Number | `0.0`  | `optional` 指定将球体横向划分为层的次数。               |
-| slicePartitions | Number | `10`   | `optional` 指定将球体纵向划分为片的次数。               |
-| subdivisions    | Number | `200`  | `optional` 指定球体轮廓线上的点数，确定弧线的光滑粒度。 |
+| Name            | Type   | Default | Description                                                                              |
+| --------------- | ------ | ------- | ---------------------------------------------------------------------------------------- |
+| radius          | Number | `1.0`   | `optional` The radius of the sphere.                                                     |
+| stackPartitions | Number | `0.0`   | `optional` The number of times to partition the ellipsoid into stacks.                   |
+| slicePartitions | Number | `10`    | `optional` The number of times to partition the ellipsoid into radial slices.            |
+| subdivisions    | Number | `200`   | `optional` The number of points per line, determining the granularity of the curvature . |
 
-### VcGeometrySphereOutline 事件
+### VcGeometrySphereOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[SphereGeometry](https://cesium.com/docs/cesiumjs-ref-doc/SphereGeometry.html)、[SphereOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/SphereOutlineGeometry.html)**
+- Refer to the official documentation: **[SphereGeometry](https://cesium.com/docs/cesiumjs-ref-doc/SphereGeometry.html)、[SphereOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/SphereOutlineGeometry.html)**

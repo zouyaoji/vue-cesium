@@ -1,12 +1,12 @@
 ## VcCollectionLabel
 
-加载标签图元集合，相当于初始化一个 `Cesium.LabelCollection` 实例。渲染海量文本标签时建议用 `labels` 属性表达。
+Loading a renderable collection of labels. It is equivalent to initializing a `Cesium.LabelCollection` instance. It is recommended to use the `labels` prop to express when rendering massive labels.
 
-### 基础用法
+### Basic usage
 
-文本标签图元集合组件的基础用法。
+Basic usage of VcCollectionLabel component.
 
-:::demo 使用 `vc-collection-label` 标签在三维球上添加标签图元集合。
+:::demo Use the `vc-collection-label` and `vc-label` tag to add a label primitive collection object to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -16,16 +16,16 @@
         v-for="(polyline, index) of polylines"
         :position="polyline.positions[polyline.positions.length-1]"
         :key="'label'+index"
-        :text="'面积'+(polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
+        :text="'Area'+(polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
         showBackground
         :horizontalOrigin="1"
       ></vc-label>
     </vc-collection-label>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -119,86 +119,88 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                  | 类型    | 默认值  | 描述                                                                       |
-| ----------------------- | ------- | ------- | -------------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。               |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。              |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                              |
-| scene                   | Object  |         | `optional` 指定场景参数，使用深度检测或者高度参考时必须传该属性。          |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                          |
-| labels                  | Array   | `[]`    | `optional` 指定标签集合数组。 数组对象结构与 `vc-billboard` 组件属性相同。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| scene | Object | | `optional` Must be passed in for billboards that use the height reference property or will be depth tested against the globe. |
+| blendOption | Number | | `optional` The billboard blending option. The default is used for rendering both opaque and translucent billboards. However, if either all of the billboards are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x. **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2**|0/1/2|
+| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| labels | Array | `[]` | `optional` Specify an array of label collections. The structure of the array object is the same as the attribute of the `vc-label` component. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
 ### VcLabel
 
-加载文本标签图元，相当于初始化一个 `Cesium.Label` 实例。
+Loading a viewport-aligned text positioned in the 3D scene. It is equivalent to initializing a `Cesium.Label` instance.
 
-**注意：** 需要作为 `vc-collection-label` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-collection-billboard` to load normally.
 
-### VcLabel 属性
+### VcLabel Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ------------------------ | ------- | ------------------ | ------------------------------------------- |---|
-| backgroundColor  | Object\|Array\|String | { x: 0.165, y: 0.165, z: 0.165, w: 0.8 } | `optional` 指定 label 背景颜色。 |
-| backgroundPadding  | Object\|Array | | `optional` 指定 label 背景x、y方向偏移量。|
-| disableDepthTestDistance | Number | | `optional` 指定 label 的深度检测距离。 |
-| distanceDisplayCondition | Object\|Array | | `optional` 指定 label 显示条件随相机距离改变的参数。 |
-| eyeOffset | Object\Array | `{x: 0, y: 0, z: 0}` | `optional` 指定 label 视角偏移量。|
-| fillColor | Object\|String\|Array | `white` | `optional` 指定 label 填充颜色。 |
-| font | String | `'30px sans-serif'` | `optional` 指定 label CSS 字体。 |
-| heightReference | Number | `0` | `optional` 指定 label 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| horizontalOrigin | Number | `0` | `optional` 指定 label 水平对齐方式。**CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
-| id | \* | | `optional` 指定与 label 关联的信息，拾取时返回该属性值。 |
-| outlineColor | Object\|Array\|String | `'BLACK'` | `optional` 指定 label 的轮廓颜色。 |
-| outlineWidth | Number | `0` | `optional` 指定 label 的轮廓宽度。 |
-| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` 指定 label 像素偏移量。 |
-| pixelOffsetScaleByDistance | Object\|Array | | `optional` 指定 label 像素偏移量随相机距离改变的参数。|
-| position | Object | | `optional` 指定 label 的位置。|
-| scale | Number | `1.0` | `optional` 指定 label 缩放比例。 |
-| scaleByDistance | Object\|Array | | `optional` 指定 label 的缩放比例随相机距离改变的参数。|
-| show | Boolean | `true` | `optional` 指定 label 是否显示。 |
-| showBackground | Boolean | `false` | `optional` 指定 label 是否显示背景。 |
-| labelStyle | Number | `0` | `optional` 指定 label 绘制风格。**FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
-| text | String | | `optional` 指定 label 文字，支持'\n'换行符。 |
-| totalScale  | Number | `1.0` | `optional` 获取 label 的总比例，该比例是标签的比例乘以所计算的所需字体的相对大小与生成的字形大小的比例。 |
-| translucencyByDistance | Object\|Array | | `optional` 指定 label 透明度随相机距离改变的参数。|
-| verticalOrigin | Number | `0` | `optional` 指定 label 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| backgroundColor  | Object\|Array\|String | `{ x: 0.165, y: 0.165, z: 0.165, w: 0.8 }` | `optional` The background color of this label. |
+| backgroundPadding  | Object\|Array | | `optional` The background padding, in pixels, of this label.|
+| disableDepthTestDistance | Number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
+| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this label will be displayed. |
+| eyeOffset | Object\Array | `{x: 0, y: 0, z: 0}` | `optional` The 3D Cartesian offset applied to this label in eye coordinates.|
+| fillColor | Object\|String\|Array | `white` | `optional` The fill color of this label. |
+| font | String | `'30px sans-serif'` | `optional`  The font used to draw this label. Fonts are specified using the same syntax as the CSS 'font' property. |
+| heightReference | Number | `0` | `optional` The height reference of this billboard. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| horizontalOrigin | Number | `0` | `optional` The horizontal origin of this label, which determines if the label is drawn to the left, center, or right of its anchor position. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
+| id | \* | | `optional` The user-defined value returned when the label is picked. |
+| outlineColor | Object\|Array\|String | `'black'` | `optional` The outline color of this label. |
+| outlineWidth | Number | `0` | `optional` The outline width of this label. |
+| pixelOffset | Object\|Array | `{x: 0, y: 0}` | `optional` The pixel offset in screen space from the origin of this label. |
+| pixelOffsetScaleByDistance | Object\|Array | | `optional` The near and far pixel offset scaling properties of a Label based on the Label's distance from the camera.|
+| position | Object | | `optional` The position of this label.|
+| scale | Number | `1.0` | `optional` The uniform scale that is multiplied with the label's size in pixels. |
+| scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a Label based on the label's distance from the camera. |
+| show | Boolean | `true` | `optional` Determines if this label will be shown. Use this to hide or show a label, instead of removing it and re-adding it to the collection. |
+| showBackground | Boolean | `false` | `optional` Determines if a background behind this label will be shown. |
+| labelStyle | Number | `0` | `optional` The style of this label. **FILL: 0, OUTLINE: 1, FILL_AND_OUTLINE: 2** |0/1/2|
+| text | String | | `optional` The text of this label. |
+| totalScale  | Number | `1.0` | `optional` The total scale of the label, which is the label's scale multiplied by the computed relative size of the desired font compared to the generated glyph size. |
+| translucencyByDistance | Object\|Array | | `optional` The near and far translucency properties of a Label based on the Label's distance from the camera.|
+| verticalOrigin | Number | `0` | `optional` The vertical origin of this label, which determines if the label is to the above, below, or at the center of its anchor position.**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### VcLabel 事件
+### VcLabel Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)**、**[Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html)**
+- Refer to the official documentation: **[LabelCollection](https://cesium.com/docs/cesiumjs-ref-doc/LabelCollection.html)**、**[Label](https://cesium.com/docs/cesiumjs-ref-doc/Label.html)**

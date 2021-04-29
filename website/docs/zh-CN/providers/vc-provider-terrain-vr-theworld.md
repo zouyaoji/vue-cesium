@@ -85,4 +85,4 @@
 
 ### 参考
 
-- 官方文档： **[ArcGISTiledElevationTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/ArcGISTiledElevationTerrainProvider.html)**
+- 官方文档： **[VRTheWorldTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/VRTheWorldTerrainProvider.html)**

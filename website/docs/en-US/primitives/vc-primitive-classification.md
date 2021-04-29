@@ -1,14 +1,20 @@
 ## VcPrimitiveClassification
 
-加载分类图元，相当于初始化一个 `Cesium.ClassificationPrimitive` 实例，用于在场景中高亮表达一个闭合的几何体对象。
+Loading a volume enclosing geometry in the Scene to be highlighted. It is equivalent to initializing a `Cesium.ClassificationPrimitive` instance.
 
-**注意：** 支持加载 BoxGeometry、 CylinderGeometry、 EllipsoidGeometry、PolylineVolumeGeometry 和 SphereGeometry；而 CircleGeometry、 CorridorGeometry、 EllipseGeometry、 PolygonGeometry 和 RectangleGeometry 需要拉伸才能正常渲染。
+A primitive combines geometry instances with an Appearance that describes the full shading, including Material and RenderState. Roughly, the geometry instance defines the structure and placement, and the appearance defines the visual characteristics. Decoupling geometry and appearance allows us to mix and match most of them and add a new geometry or appearance independently of each other. Only PerInstanceColorAppearance with the same color across all instances is supported at this time when using ClassificationPrimitive directly. For full Appearance support when classifying terrain or 3D Tiles use GroundPrimitive instead.
 
-### 基础用法
+For correct rendering, this feature requires the EXT_frag_depth WebGL extension. For hardware that do not support this extension, there will be rendering artifacts for some viewing angles.
 
-分类图元组件的基础用法。
+Valid geometries are BoxGeometry, CylinderGeometry, EllipsoidGeometry, PolylineVolumeGeometry, and SphereGeometry.
 
-:::demo 使用 `vc-primitive-classification` 标签在三维球上添加拉伸的多边形。
+Geometries that follow the surface of the ellipsoid, such as CircleGeometry, CorridorGeometry, EllipseGeometry, PolygonGeometry, and RectangleGeometry, are also valid if they are extruded volumes; otherwise, they will not be rendered.
+
+### Basic usage
+
+Basic usage of VcPrimitiveClassification component.
+
+:::demo Use the `vc-primitive-classification`, `vc-instance-geometry` and `vc-geometry-polygon` tag to add a highlighted closed and extruded polygon to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -32,9 +38,9 @@
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -81,41 +87,41 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |可选值|
-| ------ | ---- | ------ | ---- |---|
-| geometryInstances | Object\|Array | | `optional` 指定要渲染的几何体实例或者几何体实例集合。 |
-| appearance | Object | | `optional` 指定图元的外观参数。 |
-| show | Boolean | `true` | `optional` 指定图元是否显示。 |
-| vertexCacheOptimize | Boolean | `false` | `optional` 指定是否优化几何体顶点着色器之前和之后的缓存。 |
-| interleave | Boolean | `false` | `optional` 指定是否交错几何体顶点属性，true 时可以稍微改善渲染性能，但会增加加载时间。 |
-| compressVertices | Boolean | `true` | `optional` 指定是否压缩几何体顶点，压缩可以以节省内存。 |
-| releaseGeometryInstances | Boolean | `true` | `optional` 指定是否保留图元对几何体实例的输入，不保留可以节省内存。 |
-| allowPicking | Boolean | `true` | `optional` 指定图元是否可以被 Scene.pick 拾取，关闭拾取可以节省内存。 |
-| asynchronous | Boolean | `true` | `optional` 指定图元时异步加载还是同步加载。 |
-| classificationType | Number | `2` | `optional` 指定是贴地形还是贴 3DTiles，还是两者都贴。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示图元的边界球，用于调试使用。 |
-| debugShowShadowVolume | Boolean | `false` | `optional` 指定是否绘制图元中每个几何图形的阴影体积，用于调试使用。 |
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| geometryInstances | Object\|Array | | `optional` The geometry instances to render. This can either be a single instance or an array of length one.|
+| appearance | Object | | `optional` The appearance used to render the primitive. Defaults to a flat PerInstanceColorAppearance when GeometryInstances have a color attribute. |
+| show | Boolean | `true` | `optional` Determines if this primitive will be shown. |
+| vertexCacheOptimize | Boolean | `false` | `optional` When true, geometry vertices are optimized for the pre and post-vertex-shader caches. |
+| interleave | Boolean | `false` | `optional` When true, geometry vertex attributes are interleaved, which can slightly improve rendering performance but increases load time. |
+| compressVertices | Boolean | `true` | `optional` When true, the geometry vertices are compressed, which will save memory. |
+| releaseGeometryInstances | Boolean | `true` | `optional` When true, the primitive does not keep a reference to the input geometryInstances to save memory. |
+| allowPicking | Boolean | `true` | `optional` When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved. |
+| asynchronous | Boolean | `true` | `optional` Determines if the primitive will be created asynchronously or block until ready.|
+| classificationType | Number | `2` | `optional`Determines whether terrain, 3D Tiles or both will be classified. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| debugShowShadowVolume | Boolean | `false` | `optional` For debugging only. Determines if the shadow volume for each geometry in the primitive is drawn. Must be true on creation for the volumes to be created before the geometry is released or options.releaseGeometryInstance must be false. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)**
+- Refer to the official documentation: **[ClassificationPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/ClassificationPrimitive.html)**

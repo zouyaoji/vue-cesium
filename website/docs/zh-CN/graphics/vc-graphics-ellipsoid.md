@@ -82,21 +82,22 @@
 
 ### 属性
 
-| 属性名                   | 类型                  | 默认值    | 描述                                                       |
-| ------------------------ | --------------------- | --------- | ---------------------------------------------------------- |
-| show                     | Boolean               | `true`    | `optional` 指定 ellipsoid 是否显示。                       |
-| radii                    | Object                |           | `optional` 指定 ellipsoid 的半径参数。                     |
-| heightReference          | Number                |           | `optional` 指定 ellipsoid 高度模式。                       |
-| fill                     | Boolean               | `true`    | `optional` 指定 ellipsoid 是否填充材质。                   |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。                           |
-| outline                  | Boolean               | `false`   | `optional` 指定 ellipsoid 是否绘制轮廓线。                 |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。                     |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 ellipsoid 轮廓线宽度。                     |
-| stackPartitions          | Number                | `64`      | `optional` 指定 ellipsoid 横向线数量。                     |
-| slicePartitions          | Number                | `64`      | `optional` 指定 ellipsoid 径向线数量。                     |
-| subdivisions             | Number                | `128`     | `optional` 指定 ellipsoid 每个轮环的样本数，确定曲率粒度。 |
-| shadows                  | Number                | `0`       | `optional` 指定 ellipsoid 是否投射或接受每一个光源的阴影。 |
-| distanceDisplayCondition | Object                |           | `optional` 指定 ellipsoid 随相机距离的显示条件。           |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ----- | ----- | ----- | --- | ------ |
+| show | Boolean | `true` | `optional` 指定 ellipsoid 是否显示。 |
+| radii | Object | | `optional` 指定 ellipsoid 的半径参数。 |
+| heightReference | Number | | `optional` 指定 ellipsoid 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** | 0/1/2 |
+| fill | Boolean | `true` | `optional` 指定 ellipsoid 是否填充材质。 |
+| material | Object\|String\|Array | `'WHITE'` | `optional` 指定 ellipsoid 材质。 |
+| outline | Boolean | `false` | `optional` 指定 ellipsoid 是否绘制轮廓线。 |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` 指定 ellipsoid 轮廓线颜色。 |
+| outlineWidth | Number | `1.0` | `optional` 指定 ellipsoid 轮廓线宽度。 |
+| stackPartitions | Number | `64` | `optional` 指定 ellipsoid 横向线数量。 |
+| slicePartitions | Number | `64` | `optional` 指定 ellipsoid 径向线数量。 |
+| subdivisions | Number | `128` | `optional` 指定 ellipsoid 每个轮环的样本数，确定曲率粒度。 |
+| shadows | Number | `0` | `optional` 指定 ellipsoid 是否投射或接受每一个光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` 指定 ellipsoid 随相机距离的显示条件。 |
 
 ### 事件
 

@@ -1,12 +1,12 @@
 ## VcDatasourceCzml
 
-加载 [CZML](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CZML-Guide) 格式数据源。相当于初始化一个 `Cesium.CzmlDataSource` 实例。
+Load [CZML](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CZML-Guide) format datasource. It is equivalent to initializing a `Cesium.CzmlDataSource` instance.
 
-### 基础用法
+### Basic usage
 
-Czml 数据源组件的基础用法。
+Basic usage of VcDatasourceCzml component.
 
-:::demo 使用 `vc-datasource-czml` 标签在三维球上添加 CZML 格式数据源对象。
+:::demo Use the `vc-datasource-czml` tag to add CZML format datasource objects on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -20,10 +20,10 @@ Czml 数据源组件的基础用法。
     ></vc-datasource-czml>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="Show/Hide"> </el-switch>
   </el-row>
 </el-row>
 
@@ -67,49 +67,39 @@ Czml 数据源组件的基础用法。
 
 :::
 
-### 属性
+### Props
 
-| 属性名   | 类型           | 默认值 | 描述                                        |
-| -------- | -------------- | ------ | ------------------------------------------- |
-| czml     | String\|Object |        | `required` 指定 czml 对象或者 url。         |
-| show     | Boolean        | `true` | `optional` 指定数据源是否可见。             |
-| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| options  | Object         |        | `optional` 指定数据源参数。                 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| -------- | -------------- | ------- | ------------------------------------------- |
+| czml | String\|Object | | `required` An optional name for the data source. This value will be overwritten if a loaded document contains a name. |
+| show | Boolean | `true` | `optional` Specifies whether the datasource is visible. |
+| entities | Array | `[]` | `optional` Specify the collection of entities to be added to this datasource. |
+| sourceUri | String | | `optional` Overrides the url to use for resolving relative links. |
+| credit | String\|Object | | `optional` A credit for the data source, which is displayed on the canvas. |
 
-:::tip
+### Events
 
-提示：`options` 可指定以下属性。
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ---- | ------------------- | --------------------- |
+| beforeLoad | Vue Instance | Triggers before the cesiumObject is loaded. |
+| ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
+| changedEvent | | Gets an event that will be raised when the underlying data changes. |
+| errorEvent | | Gets an event that will be raised if an error is encountered during processing. |
+| loadingEvent | | Gets an event that will be raised when the data source either starts or stops loading. |
+| clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed |
+| collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection. |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the data source. |
+| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on the data source. |
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the data source. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the data source. |
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the data source. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on the data source. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
 
-```js
-{
-  sourceUri: string // 重写 url 以解析相对路径。
-  credit: string | object // 数据源描述信息。
-}
-```
+### Reference
 
-:::
-
-### 事件
-
-| 事件名            | 参数                                                       | 描述                         |
-| ----------------- | ---------------------------------------------------------- | ---------------------------- |
-| beforeLoad        | Vue Instance                                               | 对象加载前触发。             |
-| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
-| destroyed         | Vue Instance                                               | 对象销毁时触发。             |
-| changedEvent      |                                                            | 数据源改变时触发。           |
-| errorEvent        |                                                            | 数据源发生错误时触发。       |
-| loadingEvent      |                                                            | 数据源开始或结束加载时触发。 |
-| clusterEvent      | (clusteredEntities, cluster)                               | 数据源聚合事件。             |
-| collectionChanged | (collection, added, removed, changed)                      | 数据源实体集合改变时触       |
-| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
-| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
-| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。   |
-| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
-| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
-| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |
-| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。     |
-
-### 参考
-
-- 官方文档： **[CzmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CzmlDataSource.html)**
+- Refer to the official documentation: **[CzmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CzmlDataSource.html)**

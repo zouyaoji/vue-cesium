@@ -1,12 +1,12 @@
 ## VcPrimitiveParticle
 
-加载粒子系统图元，相当于初始化一个 `Cesium.ParticleSystem` 实例。
+Loading a ParticleSystem manages the updating and display of a collection of particles. It is equivalent to initializing a `Cesium.ParticleSystem` instance.
 
-### 基础用法
+### Basic usage
 
-粒子系统图元组件的基础用法。
+Basic usage of VcPrimitiveParticle component.
 
-:::demo 使用 `vc-primitive-particle` 标签在三维球上添加烟花粒子效果。
+:::demo Use the `vc-primitive-particle` tag to add firework particle effects to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -35,9 +35,9 @@
     </vc-primitive-particle>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -55,7 +55,6 @@
         this.list.indexOf(el) === -1 && this.list.push(el)
       },
       onViewerReady({ Cesium, viewer }) {
-        window.viewer = viewer
         var scene = viewer.scene
         scene.debugShowFramesPerSecond = true
         Cesium.Math.setRandomNumberSeed(315)
@@ -215,58 +214,58 @@
 
 :::
 
-### 属性
+### Props
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| ------ | ---- | ------ | ---- |
-| show | Boolean | true | `optional` 是否显示粒子。  |
-| updateCallback | Function | | `optional` 更新回调函数。|
-| emitter | Object |  | `optional` 粒子触发器类型。 |
-| modelMatrix | Object | | `optional` 4x4转换矩阵，可将粒子系统从模型转换为世界坐标。 |
-| emitterModelMatrix | Object | | `optional` 4x4转换矩阵，用于转换粒子系统局部坐标系内的粒子系统发射器。 |
-| emissionRate | Number | `5` | `optional` 每秒要发射的粒子数。 |
-| bursts | Array | `false` | `optional` ParticleBurst 数组，在周期性时间发射粒子。 |
-| loop | Boolean | `true` | `optional` 粒子系统完成后是否应循环其爆发。 |
-| scale | Number | `1.0` | `optional` 设置比例尺，以在其粒子寿命期间应用到粒子图像。 |
-| startScale | Number |  | `optional` 在粒子寿命开始时应用于粒子图像的初始比例。|
-| endScale | Number | | `optional` 在粒子寿命结束时应用于粒子图像的最终比例。 |
-| color | Object\|Array\|String | | `optional` 设置粒子在其粒子寿命期间的颜色。 |
-| startColor | Object\|Array\|String | | `optional` 粒子在其生命初期的颜色。 |
-| endColor | Object\|Array\|String | | `optional` 粒子寿命结束时的颜色。|
-| image | Object\|String | | `optional` 用于广告牌的URI，HTMLImageElement或HTMLCanvasElement。 |
-| imageSize | Object | | `optional` 如果设置，则将覆盖用来缩放粒子图像尺寸（以像素为单位）的minimumImageSize和maximumImageSize输入。 |
-| minimumImageSize | Object\|Array | | `optional` 设置宽度的最小范围，以高度为单位，在该范围之上可以随机缩放粒子图像的尺寸（以像素为单位）。 |
-| maximumImageSize | Object\|Array | | `optional` 设置最大边界（宽度乘以高度），在该边界以下可以随机缩放粒子图像的尺寸（以像素为单位）。 |
-| speed | Number | `1.0` | `optional` 如果设置，则用该值覆盖minimumSpeed和maximumSpeed输入。 |
-| minimumSpeed | Number | | `optional` 设置以米/秒为单位的最小范围，在该范围上可以随机选择粒子的实际速度。|
-| maximumSpeed | Number | | `optional` 设置以米/秒为单位的最大范围，在该范围内将随机选择粒子的实际速度。 |
-| lifetime | Number | | `optional` 粒子系统发射粒子的时间（以秒为单位）。 |
-| particleLife | Number | `5.0` | `optional` 如果设置，则使用此值覆盖minimumParticleLife和maximumParticleLife输入。 |
-| minimumParticleLife | Number | | `optional` 设置以秒为单位的粒子寿命的可能持续时间的最小范围，在该范围内可以随机选择粒子的实际寿命。 |
-| maximumParticleLife | Number | | `optional` 设置以秒为单位的粒子生命的可能持续时间的最大范围，在该范围内将随机选择粒子的实际生命。 |
-| mass | Number | `1.0` | `optional` 设置粒子的最小和最大质量（以千克为单位）。 |
-| minimumMass | Number | | `optional` 设置粒子质量的最小范围（以千克为单位）。 粒子的实际质量将被选择为高于此值的随机量。 |
-| maximumMass | Number | | `optional` 设置最大粒子质量（以千克为单位）。 粒子的实际质量将选择为低于此值的随机量。 |
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。 |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| show | Boolean | true | `optional`Whether to display the particle system. |
+| updateCallback | Function | | `optional` The callback function to be called each frame to update a particle.|
+| emitter | Object | | `optional` The particle emitter for this system. |
+| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system from model to world coordinates. |
+| emitterModelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms the particle system emitter within the particle systems local coordinate system. |
+| emissionRate | Number | `5` | `optional` The number of particles to emit per second. |
+| bursts | Array | `false` | `optional` An array of [ParticleBurst](https://cesium.com/docs/cesiumjs-ref-doc/ParticleBurst.html), emitting bursts of particles at periodic times.|
+| loop | Boolean | `true` | `optional` Whether the particle system should loop its bursts when it is complete. |
+| scale | Number | `1.0` | `optional` Sets the scale to apply to the image of the particle for the duration of its particleLife. |
+| startScale | Number | | `optional` The final scale to apply to the image of the particle at the end of its life. |
+| endScale | Number | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| color | Object\|Array\|String | | `optional` Sets the color of a particle for the duration of its particleLife. |
+| startColor | Object\|Array\|String | | `optional` The color of the particle at the beginning of its life. |
+| endColor | Object\|Array\|String | | `optional` The color of the particle at the end of its life.|
+| image | Object\|String | | `optional` The URI, HTMLImageElement, or HTMLCanvasElement to use for the billboard. |
+| imageSize | Object | | `optional` If set, overrides the minimumImageSize and maximumImageSize inputs that scale the particle image's dimensions in pixels. |
+| minimumImageSize | Object | | `optional` Sets the minimum bound, width by height, above which to randomly scale the particle image's dimensions in pixels. |
+| maximumImageSize | Object | | `optional` Sets the maximum bound, width by height, below which to randomly scale the particle image's dimensions in pixels. |
+| speed | Number | `1.0` | `optional` If set, overrides the minimumSpeed and maximumSpeed inputs with this value. |
+| minimumSpeed | Number | | `optional` Sets the minimum bound in meters per second above which a particle's actual speed will be randomly chosen.|
+| maximumSpeed | Number | | `optional` Sets the maximum bound in meters per second below which a particle's actual speed will be randomly chosen. |
+| lifetime | Number | | `optional` How long the particle system will emit particles, in seconds. |
+| particleLife | Number | `5.0` | `optional` If set, overrides the minimumParticleLife and maximumParticleLife inputs with this value. |
+| minimumParticleLife | Number | | `optional` Sets the minimum bound in seconds for the possible duration of a particle's life above which a particle's actual life will be randomly chosen. |
+| maximumParticleLife | Number | | `optional` Sets the maximum bound in seconds for the possible duration of a particle's life below which a particle's actual life will be randomly chosen. |
+| mass | Number | `1.0` | `optional` Sets the minimum and maximum mass of particles in kilograms. |
+| minimumMass | Number | | `optional` Sets the minimum bound for the mass of a particle in kilograms. A particle's actual mass will be chosen as a random amount above this value. |
+| maximumMass | Number | | `optional` Sets the maximum mass of particles in kilograms. A particle's actual mass will be chosen as a random amount below this value. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名       | 参数                                                       | 描述                       |
-| ------------ | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad   | Vue Instance                                               | 对象加载前触发。           |
-| ready        | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed    | Vue Instance                                               | 对象销毁时触发。           |
-| readyPromise |                                                            | 模型对象可用时触发。       |
-| mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click        | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout     | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name         | Parameters                                                 | Description                                                      |
+| ------------ | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready        | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed    | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| readyPromise |                                                            | Triggers when the primitive is ready to render.                  |
+| mousedown    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click        | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout     | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[ParticleSystem](https://cesium.com/docs/cesiumjs-ref-doc/ParticleSystem.html)**
+- Refer to the official documentation: **[ParticleSystem](https://cesium.com/docs/cesiumjs-ref-doc/ParticleSystem.html)**

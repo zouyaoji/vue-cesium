@@ -1,12 +1,12 @@
 ## VcCollectionPoint
 
-加载点图元集合，相当于初始化一个 `Cesium.PointPrimitiveCollection` 实例。渲染海量点时建议用 `points` 属性表达。
+Loading a renderable collection of points. It is equivalent to initializing a `Cesium.PointPrimitiveCollection` instance. It is recommended to use the `points` prop to express when rendering massive points.
 
-### 基础用法
+### Basic usage
 
-点图元集合组件的基础用法。
+Basic usage of VcCollectionPoint component.
 
-:::demo 使用 `vc-collection-point` 标签在三维球上添加点图元集合。
+:::demo Use the `vc-collection-point` and `vc-point` tag to add a point primitive collection object to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -20,9 +20,9 @@
     </vc-collection-point>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
 </el-row>
 
@@ -97,71 +97,74 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                  | 类型    | 默认值  | 描述                                                                 |
-| ----------------------- | ------- | ------- | -------------------------------------------------------------------- |
-| modelMatrix             | Object  |         | `optional` 指定 4x4 变换矩阵，将每个点从模型转换为世界坐标。         |
-| debugShowBoundingVolume | Boolean | `false` | `optional` 指定是否显示此图元的 BoundingVolume， 仅调试使用。        |
-| blendOption             | Number  |         | `optional` 指定颜色混合选项。                                        |
-| enableMouseEvent        | Boolean | `true`  | `optional` 指定鼠标事件是否生效。                                    |
-| points                  | Array   | `[]`    | `optional` 指定点集合数组。 数组对象结构与 `vc-point` 组件属性相同。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| modelMatrix | Object | | `optional` The 4x4 transformation matrix that transforms each billboard from model to world coordinates. |
+| debugShowBoundingVolume | Boolean | `false` | `optional` For debugging only. Determines if this primitive's commands' bounding spheres are shown. |
+| blendOption | Number | | `optional` The billboard blending option. The default is used for rendering both opaque and translucent billboards. However, if either all of the billboards are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x. **OPAQUE: 0, TRANSLUCENT: 1, OPAQUE_AND_TRANSLUCENT: 2**|0/1/2|
+| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| points | Array | `[]` | `optional` Specify an array of points collections. The structure of the array object is the same as the attribute of the `vc-point` component. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
 ### VcPoint
 
-加载点图元，相当于初始化一个 `Cesium.PointPrimitive` 实例。
+Loading a graphical point positioned in the 3D scene. It is equivalent to initializing a `Cesium.PointPrimitive` instance.
 
-**注意：** 需要作为 `vc-collection-point` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-collection-point` to load normally.
 
-### VcPoint 属性
+### VcPoint Props
 
-| 属性名                   | 类型                      | 默认值    | 描述                                                     |
-| ------------------------ | ------------------------- | --------- | -------------------------------------------------------- |
-| color                    | Object\|Array\|String     | `'WHITE'` | `optional` 指定 point 的颜色。                           |
-| disableDepthTestDistance | Number                    |           | `optional` 指定 point 深度检测距离。                     |
-| distanceDisplayCondition | Object\|Array             |           | `optional` 指定 point 显示条件随相机距离改变的参数。     |
-| id                       | \*                        |           | `optional` 指定与 point 关联的信息，拾取时返回该属性值。 |
-| outlineColor             | Object \| Array \| String | `'BLACK'` | `optional` 指定 point 的轮廓颜色。                       |
-| outlineWidth             | Number                    | `0`       | `optional` 指定 point 的轮廓宽度。                       |
-| pixelSize                | Number                    | `1`       | `optional` 指定 point 的像素大小。                       |
-| position                 | Object\|Array             |           | `optional` 指定 point 的位置。                           |
-| scaleByDistance          | Object                    |           | `optional` 指定 point 缩放比例随相机距离改变的参数。     |
-| show                     | Boolean                   | `true`    | `optional` 指定 point 是否显示。                         |
-| translucencyByDistance   | Object                    |           | `optional` 指定 point 透明度随相机距离改变的参数。       |
-| enableMouseEvent         | Boolean                   | `true`    | `optional` 指定鼠标事件是否生效。                        |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| color | Object\|Array\|String | `'white'` | `optional` The inner color of the point. |
+| disableDepthTestDistance | Number | | `optional` The distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied. |
+| distanceDisplayCondition | Object\|Array | | `optional` The condition specifying at what distance from the camera that this point will be displayed. |
+| id | \* | | `optional` The user-defined value returned when the point is picked. |
+| outlineColor | Object \| Array \| String | `'black'` | `optional` The outline color of the point. |
+| outlineWidth | Number | `0` | `optional`The outline width in pixels. This width adds to pixelSize, increasing the total size of the point. |
+| pixelSize | Number | `1` | `optional` The inner size of the point in pixels. |
+| position | Object\|Array | | `optional` The position of this point. |
+| scaleByDistance | Object\|Array | | `optional` The near and far scaling properties of a point based on the point's distance from the camera |
+| show | Boolean | `true` | `optional` Determines if this point will be shown. Use this to hide or show a point, instead of removing it and re-adding it to the collection. |
+| translucencyByDistance | Object\|Array | | `optional` The near and far translucency properties of a point based on the point's distance from the camera. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
 
-### VcPoint 事件
+### VcPoint Events
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触。   |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
-### 参考
+### Reference
 
-- 官方文档： **[PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html)**、**[PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html)**
+- Refer to the official documentation: **[PointPrimitiveCollection](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitiveCollection.html)**、**[PointPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/PointPrimitive.html)**

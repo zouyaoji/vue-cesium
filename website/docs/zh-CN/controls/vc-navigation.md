@@ -5,7 +5,9 @@
 **注意：** 需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
 
 :::tip
+
 提示：3.0 版本对导航组件进行了重构，现在是一个集合组件，现在支持自定义风格，包括图标、大小、颜色位置等。如需高度定制，可分别参考各子组件的例子。自带的图标用的是 Unicode 方式，不支持多色，需要支持多色请参考阿里云 iconfont 介绍的使用 Symbol 的方法：[传送门](https://www.iconfont.cn/help/detail?spm=a313x.7781069.1998910419.d8cf4382a&helptype=code)。
+
 :::
 
 ### 基础用法
@@ -520,11 +522,11 @@ otherOpts: {
 
 ### VcStatusBar 事件
 
-| 事件名       | 参数                                                         | 描述                       |
-| ------------ | ------------------------------------------------------------ | -------------------------- |
-| beforeLoad   | Vue Instance                                                 | 对象加载前触发。           |
-| ready        | {Cesium, viewer, cesiumObject, vm}                           | 对象加载成功时触发。       |
-| destroyed    | Vue Instance                                                 | 对象销毁时触发。           |
+| 事件名       | 参数                                                         | 描述                   |
+| ------------ | ------------------------------------------------------------ | ---------------------- |
+| beforeLoad   | Vue Instance                                                 | 对象加载前触发。       |
+| ready        | {Cesium, viewer, cesiumObject, vm}                           | 对象加载成功时触发。   |
+| destroyed    | Vue Instance                                                 | 对象销毁时触发。       |
 | statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | 状态栏参数改变时触发。 |
 
 ### VcDistanceLegend

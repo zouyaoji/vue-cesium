@@ -1,14 +1,14 @@
 ## VcGeometryPolylineVolume
 
-加载线柱体，相当于初始化一个 `Cesium.PolylineVolumeGeometry` 实例。
+Loading a polyline with a volume(a 2D shape extruded along a polyline). It is equivalent to initializing a `Cesium.PolylineVolumeGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-线柱体几何图形组件的基础用法。
+The basic usage of the VcGeometryPolylineVolume component.
 
-:::demo 使用 `vc-geometry-polyline-volume` 和 `vc-geometry-polyline-volume-outline` 标签在三维球上添加线柱体。
+:::demo Use the `vc-geometry-polyline-volume` and `vc-geometry-polyline-volume-outline` tags to add a polyline with a volume on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -34,10 +34,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -137,49 +137,51 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名            | 类型   | 默认值 | 描述                                                                              | 可选值 |
-| ----------------- | ------ | ------ | --------------------------------------------------------------------------------- | ------ |
-| polylinePositions | Array  |        | `required` 指定 polyline volume 位置信息。                                        |
-| shapePositions    | Array  |        | `required` 指定 polyline volume 拉伸的形状数组。                                  |
-| ellipsoid         | Object |        | `optional` 指定 polyline volume 参考椭球体。                                      |
-| granularity       | Number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
-| vertexFormat      | Object |        | `optional` 指定 polyline volume 顶点属性渲染方式。                                |
-| cornerType        | Number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| polylinePositions | Array | | `required` An array of Cartesain3 positions that define the center of the polyline volume. |
+| shapePositions | Array | | `required` An array of Cartesian2 positions that define the shape to be extruded along the polyline.|
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| vertexFormat | Object | | `optional` The vertex attributes to be computed. |
+| cornerType | Number | | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryPolylineVolumeOutline
 
-加载线柱体几何图形边框，相当于初始化一个 `Cesium.PolylineVolumeOutlineGeometry` 实例。
+Loading a polyline with a volume outline. It is equivalent to initializing a `Cesium.PolylineVolumeOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryPolylineVolumeOutline 属性
+### VcGeometryPolylineVolumeOutline Props
 
-| 属性名            | 类型   | 默认值 | 描述                                                                              | 可选值 |
-| ----------------- | ------ | ------ | --------------------------------------------------------------------------------- | ------ |
-| polylinePositions | Array  |        | `required` 指定 polyline volume 位置信息。                                        |
-| shapePositions    | Array  |        | `required` 指定 polyline volume 拉伸的形状数组。                                  |
-| ellipsoid         | Object |        | `optional` 指定 polyline volume 参考椭球体。                                      |
-| granularity       | Number |        | `optional` 指定 polyline volume 每个经纬度之间的距离（弧度）。                    |
-| cornerType        | Number |        | `optional` 指定 polyline volume 转角类型。 **ROUNDED: 0, MITERED: 1, BEVELED: 2** | 0/1/2  |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| polylinePositions | Array | | `required` An array of Cartesain3 positions that define the center of the polyline volume. |
+| shapePositions | Array | | `required` An array of Cartesian2 positions that define the shape to be extruded along the polyline. |
+| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer. |
+| cornerType | Number | | `optional` Determines the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
 
-### VcGeometryPolylineVolumeOutline 事件
+### VcGeometryPolylineVolumeOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[PolylineVolumeGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGeometry.html)、[PolylineVolumeOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeOutlineGeometry.html)**
+- Refer to the official documentation: **[PolylineVolumeGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeGeometry.html)、[PolylineVolumeOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PolylineVolumeOutlineGeometry.html)**

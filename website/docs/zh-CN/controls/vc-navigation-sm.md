@@ -110,8 +110,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| position | String | `top-right` | `optional` 指定罗盘位置。 ||
+| position | String | `top-right` | `optional` 指定罗盘位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
 | offset | Array | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
 | enableCompassOuterRing | String | `true` | `optional` 指定罗盘外环是否可以操作。 ||
 | duration | Number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
@@ -133,7 +132,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| position | String | `top-right` | `optional` 指定缩放控件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
 | offset | Array | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 ||
 | tooltip | Object | | `optional` 指定罗盘提示信息参数。 ||
 | autoHidden | Boolean | `true` | `optional` 指定是否自动隐藏放大控件。 ||

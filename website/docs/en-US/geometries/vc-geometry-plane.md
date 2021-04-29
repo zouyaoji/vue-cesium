@@ -1,14 +1,14 @@
 ## VcGeometryPlane
 
-加载平面几何图形，相当于初始化一个 `Cesium.PlaneGeometry` 实例。
+Loading a plane geometry. It is equivalent to initializing a `Cesium.PlaneGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### 基础用法
+### Basic usage
 
-平面几何图形组件的基础用法。
+Basic usage of VcGeometryPlane component.
 
-:::demo 使用 `vc-geometry-plane` 和 `vc-geometry-plane-outline` 标签在三维球上添加平面。
+:::demo Use the `vc-geometry-plane` and `vc-geometry-plane-outline` tags to add a plane on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -25,10 +25,10 @@
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="outline" active-color="#13ce66" inactive-text="边框"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="outline" active-color="#13ce66" inactive-text="Show border"> </el-switch>
   </el-row>
 </el-row>
 
@@ -126,40 +126,40 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名       | 类型   | 默认值 | 描述                              |
-| ------------ | ------ | ------ | --------------------------------- |
-| vertexFormat | Object |        | `optional` 指定顶点坐标渲染类型。 |
+| Name         | Type   | Default | Description                                      |
+| ------------ | ------ | ------- | ------------------------------------------------ |
+| vertexFormat | Object |         | `optional` The vertex attributes to be computed. |
 
-### 事件
+### Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcGeometryPlaneOutline
 
-加载平面几何图形边框，相当于初始化一个 `Cesium.PlaneOutlineGeometry` 实例。
+Loading a plane geometry outline. It is equivalent to initializing a `Cesium.PlaneOutlineGeometry` instance.
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
 
-### VcGeometryPlaneOutline 属性
+### VcGeometryPlaneOutline Props
 
-| 属性名 | 类型 | 默认值 | 描述 |
-| ------ | ---- | ------ | ---- |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
 
 
-### VcGeometryPlaneOutline 事件
+### VcGeometryPlaneOutline Events
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
-### 参考
+### Reference
 
-- 官方文档： **[PlaneGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGeometry.html)、[PlaneOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PlaneOutlineGeometry.html)**
+- Refer to the official documentation: **[PlaneGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGeometry.html)、[PlaneOutlineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/PlaneOutlineGeometry.html)**

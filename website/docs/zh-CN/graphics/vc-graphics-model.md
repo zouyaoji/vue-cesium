@@ -56,8 +56,8 @@
 ### 属性
 
 <!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 |
-| ----- | ---- | ----- | ----- |
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ----- | ---- | ----- | ----- | ---- |
 | show | Boolean | `true` | `optional` 指定 model 是否显示。 |
 | uri | String | | `optional` 指定 model 的 url 地址。 |
 | scale | Number | `1.0` | `optional` 指定 model 缩放比例。 |
@@ -66,16 +66,16 @@
 | incrementallyLoadTextures | Boolean | `true` | `optional` 指定在加载模型后纹理是否可以继续流入。 |
 | runAnimations | Boolean | `true` | `optional` 指定是否启动模型中的动画。 |
 | clampAnimations | Boolean | `true` | `optional` 指定动画在没有帧动画的时候保持最后一个姿势。 |
-| shadows | Number | `1` | `optional` 指定 model 是否投射或接收每个光源的阴影。 |
-| heightReference | Number | `0` | `optional` 指定 model 的高度模式。 |
-| silhouetteColor | Object\|String\|Array | `'RED'` | `optional` 指定 model 轮廓线颜色。 |
+| shadows | Number | `1` | `optional` 指定 model 是否投射或接收每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| heightReference | Number | `0` | `optional` 指定 model 的高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| silhouetteColor | Object\|String\|Array | `'red'` | `optional` 指定 model 轮廓线颜色。 |
 | silhouetteSize | Number | `0.0` | `optional` 指定 model 轮廓线像素尺寸。 |
-| color | Object\|String\|Array | `'WHITE'` | `optional` 指定 model 渲染混合的颜色。 |
-| colorBlendMode | Number | `0` | `optional` 指定 model 与颜色混合模式。 |
+| color | Object\|String\|Array | `'white'` | `optional` 指定 model 渲染混合的颜色。 |
+| colorBlendMode | Number | `0` | `optional` 指定 model 与颜色混合模式。 **HIGHLIGHT: 0, REPLACE: 1, MIX: 2** | 0/1/2 |
 | colorBlendAmount | Number | `0.5` | `optional` 指定 colorBlendMode 为 MIX 的颜色强度。0 表示模型颜色，1 表示纯色，0-1 表示混合。 |
-| imageBasedLightingFactor | Object | `{x: 1.0, y: 1.0}` | `optional` 指定漫反射和镜面反射因子。 |
+| imageBasedLightingFactor | Object\|Array | `{x: 1.0, y: 1.0}` | `optional` 指定漫反射和镜面反射因子。 |
 | lightColor | Object\|String\|Array | | `optional` 指定着色模型时要使用的灯光颜色的属性。未指定是太阳颜色。 |
-| distanceDisplayCondition | Object | | `optional` 指定模型随相机改变的显示条件。 |
+| distanceDisplayCondition | Object\|Array | | `optional` 指定模型随相机改变的显示条件。 |
 | nodeTransformations | Object | | `optional` 设置 TranslationRotationScale 节点转换参数。 |
 | articulations | Object | | `optional` |
 | clippingPlanes | Object | | `optional` 指定模型屏幕裁剪参数。 |

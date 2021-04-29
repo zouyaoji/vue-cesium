@@ -1,12 +1,12 @@
 ## VcProviderTerrainCesium
 
-加载 Cesium 格式地形，相当于初始化一个 `Cesium.CesiumTerrainProvider` 实例。如果 `url` 为空，默认通过 `Cesium.createWorldTerrain` 加载 CesiumIon 在线全球地形，需要 CesiumIon 授权， 具体可以到 [`https://cesium.com/ion/`](https://cesium.com/ion/) 申请一个账户，获取 Access Token。
+Loading a terrain provider that accesses terrain data in a Cesium terrain format. It is equivalent to initializing a `Cesium.CesiumTerrainProvider` instance. If the `url` is empty, the CesiumIon online global terrain will be loaded via `Cesium.createWorldTerrain` by default. CesiumIon authorization is required. For details, go to [`https://cesium.com/ion/`](https://cesium.com/ion/) Apply for an account and get Access Token.
 
-### 基础用法
+### Basic usage
 
-`vc-provider-terrain-cesium` 组件的基础用法。
+Basic usage of the `vc-provider-terrain-cesium` component.
 
-:::demo 使用 `vc-provider-terrain-cesium` 标签在三维球上添加由 Cesium Ion 提供的在线地形瓦片服务。
+:::demo Use the `vc-provider-terrain-cesium` tag to add the online terrain tile provided by Cesium Ion to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -15,9 +15,9 @@
   </vc-viewer>
   <div class="demo-toolbar">
     <el-row>
-      <el-button type="danger" round @click="unload">销毁</el-button>
-      <el-button type="danger" round @click="load">加载</el-button>
-      <el-button type="danger" round @click="reload">重载</el-button>
+      <el-button type="danger" round @click="unload">Unload</el-button>
+      <el-button type="danger" round @click="load">Load</el-button>
+      <el-button type="danger" round @click="reload">Reload</el-button>
     </el-row>
   </div>
 </el-row>
@@ -65,27 +65,28 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名               | 类型    | 默认值  | 描述                                                        |
-| -------------------- | ------- | ------- | ----------------------------------------------------------- |
-| url                  | String  |         | `required` 指定服务地址。                                   |
-| requestVertexNormals | Boolean | `false` | `optional` 指定是否请求其他光照信息，否则使用每个顶点法线。 |
-| requestWaterMask     | Boolean | `false` | `optional` 指定是否请求水面数据。                           |
-| requestMetadata      | Boolean | `true`  | `optional` 指定是否请求每个切片元数据。                     |
-| ellipsoid            | Object  |         | `optional` 指定参考椭球体。                                 |
-| credit               | String  |         | `optional` 指定服务的描述信息                               |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| url | String | | `required` The URL of the Cesium terrain server. |
+| requestVertexNormals | Boolean | `false` | `optional` Flag that indicates if the client should request additional lighting information from the server, in the form of per vertex normals if available.|
+| requestWaterMask | Boolean | `false` | `optional` Flag that indicates if the client should request per tile water masks from the server, if available.|
+| requestMetadata | Boolean | `true` | `optional` Flag that indicates if the client should request per tile metadata from the server, if available.|
+| ellipsoid | Object | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used.|
+| credit | String | | `optional` A credit for the data source, which is displayed on the canvas.|
 
-### 事件
+### Events
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | TerrainProvider                    | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
+| Name         | Parameters                         | Description                                                          |
+| ------------ | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad   | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready        | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                  | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | TerrainProvider                    | Triggers when the provider is ready for use.                         |
 
-### 参考
+### Reference
 
-- 官方文档： **[CesiumTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html)**
+- Refer to the official documentation: **[CesiumTerrainProvider](https://cesium.com/docs/cesiumjs-ref-doc/CesiumTerrainProvider.html)**

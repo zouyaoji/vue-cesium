@@ -85,7 +85,6 @@
         // instancePolygon.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
-        window.vm = instance
         geometry.value = Cesium.BoxGeometry.fromDimensions({
           vertexFormat: Cesium.VertexFormat.POSITION_AND_NORMAL,
           dimensions: new Cesium.Cartesian3(1000000.0, 1000000.0, 250000.0)

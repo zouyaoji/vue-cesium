@@ -105,7 +105,7 @@
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------------- | ------- | -------------------- |--|
 | url | String | `'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}'` | `optional` 指定服务地址。 |
-| rectangle | Object | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
+| rectangle | Object\|Object | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
 | credit | String\|Object | `''` | `optional` 服务版权描述信息。 |
 | minimumLevel | Number | `0` | `optional` 最小层级。 |
 | maximumLevel | Number | `18` | `optional` 最大层级。 |

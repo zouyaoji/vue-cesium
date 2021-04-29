@@ -89,14 +89,15 @@
 
 ### 属性
 
-| 属性名       | 类型    | 默认值                                 | 描述                                                    |
-| ------------ | ------- | -------------------------------------- | ------------------------------------------------------- |
-| url          | String  |                                        | `required` 超图 iserver 影像服务地址。                  |
-| name         | String  |                                        | `optional` 影像图层名称。                               |
-| minimumLevel | Number  | `0`                                    | `optional` 最小层级。                                   |
-| maximumLevel | Number  | `20`                                   | `optional` 最大层级。                                   |
-| transparent  | Boolean | `true`                                 | `optional` 设置请求的地图服务的参数是否为 transparent。 |
-| credit       | Boolean | `'MapQuest, SuperMap iServer Imagery'` | `optional` 影像服务描述信息。                           |
+| 属性名               | 类型            | 默认值                                 | 描述                                                    |
+| -------------------- | --------------- | -------------------------------------- | ------------------------------------------------------- |
+| url                  | String          |                                        | `required` 超图 iserver 影像服务地址。                  |
+| name                 | String          |                                        | `optional` 影像图层名称。                               |
+| minimumLevel         | Number          | `0`                                    | `optional` 最小层级。                                   |
+| maximumLevel         | Number          | `20`                                   | `optional` 最大层级。                                   |
+| transparent          | Boolean         | `true`                                 | `optional` 设置请求的地图服务的参数是否为 transparent。 |
+| credit               | Boolean         | `'MapQuest, SuperMap iServer Imagery'` | `optional` 影像服务描述信息。                           |
+| projectionTransforms | Boolean\|Object | `false`                                | `optional` 指定投影变换参数。                           |
 
 ### 事件
 

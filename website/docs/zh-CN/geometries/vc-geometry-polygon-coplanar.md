@@ -135,7 +135,7 @@
 
 ### VcGeometryPolygonCoplanarOutline
 
-加载圆几何图形边框，相当于初始化一个 `Cesium.CircleOutlineGeometry` 实例。
+加载共面多边形几何图形边框，相当于初始化一个 `Cesium.CoplanarPolygonOutlineGeometry` 实例。
 
 **注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
 

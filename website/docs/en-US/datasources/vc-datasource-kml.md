@@ -1,12 +1,12 @@
 ## VcDatasourceKml
 
-加载 KML(2.2) 格式的数据源。相当于初始化一个 `Cesium.KmlDataSource` 实例。
+Load the data source in KML(2.2) format. It is equivalent to initializing a `Cesium.KmlDataSource` instance.
 
-### 基础用法
+### Basic usage
 
-KML 数据源组件的基础用法。
+Basic usage of VcDatasourceKml component.
 
-:::demo 使用 `vc-datasource-geojson` 标签在三维球上添加 KML 格式数据源对象。
+:::demo Use the `vc-datasource-geojson` tag to add KML format datasource objects on the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -20,10 +20,10 @@ KML 数据源组件的基础用法。
     ></vc-datasource-kml>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">销毁</el-button>
-    <el-button type="danger" round @click="load">加载</el-button>
-    <el-button type="danger" round @click="reload">重载</el-button>
-    <el-switch v-model="show" active-color="#13ce66" inactive-text="显示/隐藏"> </el-switch>
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-switch v-model="show" active-color="#13ce66" inactive-text="Show/Hide"> </el-switch>
   </el-row>
 </el-row>
 
@@ -67,53 +67,44 @@ KML 数据源组件的基础用法。
 
 :::
 
-### 属性
+### Props
 
-| 属性名   | 类型           | 默认值 | 描述                                        |
-| -------- | -------------- | ------ | ------------------------------------------- |
-| data     | String\|Object |        | `required` 指定要加载的 KML 对象 url。      |
-| show     | Boolean        | `true` | `optional` 指定数据源是否显示。             |
-| entities | Array          | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
-| options  | Object         |        | `optional` 指定数据源参数。                 |
+| Name          | Type              | Default | Description                                                                                             |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------- |
+| data          | String\|Object    |         | `required` Overrides the url to use for resolving relative links and other KML network features.        |
+| show          | Boolean           | `true`  | `optional` Specify whether the data source is displayed.                                                |
+| entities      | Array             | `[]`    | `optional` Specify the collection of entities to be added to this data source.                          |
+| camera        | Object            |         | `optional` The camera that is used for viewRefreshModes and sending camera properties to network links. |
+| canvas        | HTMLCanvasElement |         | `optional` The canvas that is used for sending viewer properties to network links.                      |
+| sourceUri     | String            |         | `optional` Overrides the url to use for resolving relative links and other KML network features.        |
+| clampToGround | Boolean           | `false` | `optional` true if the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground. |
+| ellipsoid     | Object            |         | `optional` The global ellipsoid used for geographical calculations.                                     |
+| credit        | String\|Object    |         | `optional` A credit for the data source, which is displayed on the canvas.                              |
 
-:::tip
+### Events
 
-提示：`options` 可指定以下属性。
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ---- | --------- | ------------ |
+| beforeLoad | Vue Instance | Triggers before the cesiumObject is loaded. |
+| ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
+| changedEvent | | Gets an event that will be raised when the underlying data changes. |
+| errorEvent | | Gets an event that will be raised if an error is encountered during processing. |
+| loadingEvent | | Gets an event that will be raised when the data source either starts or stops loading. |
+| refreshEvent | | Triggers when the data source refreshes the node. |
+| unsupportedNodeEvent | | Triggers when the data source has unsupported nodes. |
+| clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed |
+| collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection. |
+| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the data source. |
+| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on the data source. |
+| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the data source. |
+| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the data source. |
+| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the data source. |
+| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on the data source. |
+| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
+| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
 
-```js
-{
-  camera: object // 指定相机参数。
-  canvas: object // 指定 canvas。
-  sourceUri: string // 重写 url 以解析相对路径。
-  clampToGround: boolean // 指定是否贴地。 false
-  ellipsoid: object // 指定参考椭球体参数。 false
-  credit: string | object // 指定数据源描述信息。
-}
-```
+### Reference
 
-### 事件
-
-| 事件名               | 参数                                                       | 描述                         |
-| -------------------- | ---------------------------------------------------------- | ---------------------------- |
-| beforeLoad           | Vue Instance                                               | 对象加载前触发。             |
-| ready                | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。         |
-| destroyed            | Vue Instance                                               | 对象销毁时触发。             |
-| changedEvent         |                                                            | 数据源改变时触发。           |
-| errorEvent           |                                                            | 数据源发生错误时触发。       |
-| loadingEvent         |                                                            | 数据源开始或结束加载时触发。 |
-| refreshEvent         |                                                            | 数据源刷新节点时触发。       |
-| unsupportedNodeEvent |                                                            | 数据源有不支持的节点时触发。 |
-| clusterEvent         | (clusteredEntities, cluster)                               | 数据源聚合事件。             |
-| collectionChanged    | (collection, added, removed, changed)                      | 数据源实体集合改变时触       |
-| mousedown            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
-| mouseup              | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
-| click                | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触。   |
-| dblclick             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
-| mousemove            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
-| mouseover            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |
-| mouseout             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。     |
-
-### 参考
-
-- 官方文档： **[KmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html)**
+- Refer to the official documentation: **[KmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html)**

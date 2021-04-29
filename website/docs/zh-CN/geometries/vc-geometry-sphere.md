@@ -1,4 +1,4 @@
-## VcGeometryPlane
+## VcGeometrySphere
 
 加载球体几何图形，相当于初始化一个 `Cesium.SphereGeometry` 实例。
 

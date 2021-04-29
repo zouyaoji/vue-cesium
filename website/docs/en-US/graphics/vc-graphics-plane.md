@@ -1,14 +1,14 @@
 ## VcGraphicsPlane
 
-加载平面实体，相当于初始化一个 `Cesium.PlaneGraphics` 实例。
+Loading a plane graphic. It is equivalent to initializing a `Cesium.PlaneGraphics` instance.
 
-**注意：** 需要作为 `vc-entity` 的子组件才能正常加载。
+**Note:** It needs to be a subcomponent of `vc-entity` to load normally.
 
-### 基础用法
+### Basic usage
 
-平面实体组件的基础用法。
+Basic usage of the VcGraphicsPlane component.
 
-:::demo 使用 `vc-graphics-plane` 标签在三维球上添加平面实体对象。
+:::demo Use the `vc-graphics-plane` tag to add plane to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -80,30 +80,31 @@
 
 :::
 
-### 属性
+### Props
 
-| 属性名                   | 类型                  | 默认值    | 描述                                             |
-| ------------------------ | --------------------- | --------- | ------------------------------------------------ |
-| show                     | Boolean               | `true`    | `optional` 指定 plane 是否显示。                 |
-| plane                    | Object                |           | `optional` 指定 plane 的法线和距离。             |
-| dimensions               | Object                |           | `optional` 指定 plane 的宽和高。                 |
-| fill                     | Boolean               | `true`    | `optional` 指定 plane 是否填充材质。             |
-| material                 | Object\|String\|Array | `'WHITE'` | `optional` 指定 plane 的材质。                   |
-| outline                  | Boolean               | `false`   | `optional` 指定 plane 是否绘制轮廓线。           |
-| outlineColor             | Object\|String\|Array | `'BLACK'` | `optional` 指定 plane 轮廓线颜色。               |
-| outlineWidth             | Number                | `1.0`     | `optional` 指定 plane 轮廓线宽度。               |
-| shadows                  | Number                | `0`       | `optional` 指定 plane 是否投射或接收阴影。       |
-| distanceDisplayCondition | Object                |           | `optional` 指定 plane 随相机距离改变的显示条件。 |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description | Accepted Values |
+| ---- | ---- | ------- | ----------- | --------------- |
+| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the plane. |
+| plane | Object\|Array | | `optional` A Plane Property specifying the normal and distance for the plane. |
+| dimensions | Object\|Array | | `optional` A Cartesian2 Property specifying the width and height of the plane. |
+| fill | Boolean | `true` | `optional` A boolean Property specifying whether the plane is filled with the provided material. |
+| material | Object\|String\|Array | `'WHITE'` | `optional` A Property specifying the material used to fill the plane. |
+| outline | Boolean | `false` | `optional` A boolean Property specifying whether the plane is outlined. |
+| outlineColor | Object\|String\|Array | `'BLACK'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | Number | `0` | `optional` An enum Property specifying whether the plane casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this plane will be displayed. |
 
-### 事件
+### Events
 
-| 事件名            | 参数                               | 描述                                     |
-| ----------------- | ---------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                       | 对象销毁时触发。                         |
-| definitionChanged |                                    | 每当更改或修改属性或子属性时触发该事件。 |
+| Name              | Parameters                         | Description                                                          |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
 
-### 参考
+### Reference
 
-- 官方文档： **[PlaneGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGraphics.html)**
+- Refer to the official documentation: **[PlaneGraphics](https://cesium.com/docs/cesiumjs-ref-doc/PlaneGraphics.html)**

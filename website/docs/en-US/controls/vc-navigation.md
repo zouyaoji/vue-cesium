@@ -5,12 +5,14 @@ Navigation components, including compass, zoom, other floating buttons, position
 **Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
 
 :::tip
+
 Tip: The navigation component has been refactored in version 3.0. It is now a collection component and now supports custom styles, including icons, sizes, color positions, etc. The icon currently uses Unicode and does not support multi-color. If you need to support multi-color, please refer to the method of using Symbol introduced by Alibaba Cloud iconfont: [Portal](https://www.iconfont.cn/help/detail?spm=a313x.7781069.1998910419.d8cf4382a&helptype=code)
+
 :::
 
 ### Basic usage
 
-Basic usage of navigation components.
+Basic usage of VcNavigation component.
 
 :::demo Just mount the `vc-navigation` tag as a subcomponent of `vc-viewer`.
 
@@ -36,7 +38,7 @@ Basic usage of navigation components.
     </vc-navigation>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">Load</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="load">Unload</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
   </el-row>
@@ -196,15 +198,15 @@ otherOpts: {
 <!-- prettier-ignore -->
 | Name | Parameters | Description |
 | ---- | ---------- | ----------- |
-| zoomEvt | {camera, status, target, type} | Triggered when the zoom control is operated. |
-| compassEvt | {camera, status, target, type} | Triggered when the compass control is operated. |
-| locationEvt | {detail, entity, position, type} | Triggered when the positioning control is operated. |
-| printEvt | {image, status, type} | Triggered when the print control is operated. |
-| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggered when the related parameters of the position control change. |
-| distanceLegendEvt | {distance,status,type} | Triggered when the distance scale changes. |
-| beforeLoad | Vue Instance | Triggered before the cesiumObject is loaded. |
-| ready | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed | Vue Instance | Triggered when the cesiumObject is destroyed. |
+| zoomEvt | {camera, status, target, type} | Triggers when the zoom control is operated. |
+| compassEvt | {camera, status, target, type} | Triggers when the compass control is operated. |
+| locationEvt | {detail, entity, position, type} | Triggers when the positioning control is operated. |
+| printEvt | {image, status, type} | Triggers when the print control is operated. |
+| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggers when the related parameters of the position control change. |
+| distanceLegendEvt | {distance,status,type} | Triggers when the distance scale changes. |
+| beforeLoad | Vue Instance | Triggers before the cesiumObject is loaded. |
+| ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
 
 ### VcCompass
 
@@ -271,12 +273,12 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 
 ### VcCompass Events
 
-| Name       | parameters                         | Description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| compassEvt | {camera, status, target, type}     | Triggered when the compass control is operated.         |
-| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
+| Name       | parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| compassEvt | {camera, status, target, type}     | Triggers when the compass control is operated.         |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcZoomControl Props
 
@@ -388,12 +390,12 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcZoomControl Events
 
-| name       | parameter                          | description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| zoomEvt    | {camera, status, target, type}     | Triggered when the zoom control is operated.            |
-| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| zoomEvt    | {camera, status, target, type}     | Triggers when the zoom control is operated.            |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcPrint Props
 
@@ -418,12 +420,12 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcPrint Events
 
-| name       | parameter                          | description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| printEvt   | {image, status,type}               | Triggered when the print control is operated.           |
-| beforeLoad | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| printEvt   | {image, status,type}               | Triggers when the print control is operated.           |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcMyLocation Props
 
@@ -454,12 +456,12 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcMyLocation Events
 
-| name        | parameter                          | description                                             |
-| ----------- | ---------------------------------- | ------------------------------------------------------- |
-| locationEvt | {detail,entity,position, type}     | Triggered when the positioning button is operated.      |
-| beforeLoad  | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready       | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed   | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
+| Name        | Parameters                         | Description                                            |
+| ----------- | ---------------------------------- | ------------------------------------------------------ |
+| locationEvt | {detail,entity,position, type}     | Triggers when the positioning button is operated.      |
+| beforeLoad  | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready       | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed   | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
 ### VcStatusBar Props
 
@@ -478,12 +480,12 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcMyLocation Events
 
-| name         | parameter                                                    | description                                             |
-| ------------ | ------------------------------------------------------------ | ------------------------------------------------------- |
-| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggered when the status bar parameter changes.        |
-| beforeLoad   | Vue Instance                                                 | Triggered before the cesiumObject is loaded.            |
-| ready        | {Cesium, viewer, cesiumObject, vm}                           | Triggered when the cesiumObject is successfully loaded. |
-| destroyed    | Vue Instance                                                 | Triggered when the cesiumObject is destroyed.           |
+| Name         | Parameters                                                   | Description                                            |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------ |
+| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | Triggers when the status bar parameter changes.        |
+| beforeLoad   | Vue Instance                                                 | Triggers before the cesiumObject is loaded.            |
+| ready        | {Cesium, viewer, cesiumObject, vm}                           | Triggers when the cesiumObject is successfully loaded. |
+| destroyed    | Vue Instance                                                 | Triggers when the cesiumObject is destroyed.           |
 
 ### VcDistanceLegend Props
 
@@ -499,9 +501,9 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 
 ### VcDistanceLegend Events
 
-| name              | parameter                          | description                                             |
-| ----------------- | ---------------------------------- | ------------------------------------------------------- |
-| distanceLegendEvt | {distance,status,type}             | Triggered when the distance scale changes.              |
-| beforeLoad        | Vue Instance                       | Triggered before the cesiumObject is loaded.            |
-| ready             | {Cesium, viewer, cesiumObject, vm} | Triggered when the cesiumObject is successfully loaded. |
-| destroyed         | Vue Instance                       | Triggered when the cesiumObject is destroyed.           |
+| Name              | Parameters                         | Description                                            |
+| ----------------- | ---------------------------------- | ------------------------------------------------------ |
+| distanceLegendEvt | {distance,status,type}             | Triggers when the distance scale changes.              |
+| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |

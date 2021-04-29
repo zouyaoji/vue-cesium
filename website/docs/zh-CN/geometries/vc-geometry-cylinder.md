@@ -6,9 +6,9 @@
 
 ### 基础用法
 
-共面多边形几何图形组件的基础用法。
+圆柱(锥)体几何图形组件的基础用法。
 
-:::demo 使用 `vc-geometry-cylinder` 和 `vc-geometry-cylinder-outline` 标签在三维球上添加共面多边形。
+:::demo 使用 `vc-geometry-cylinder` 和 `vc-geometry-cylinder-outline` 标签在三维球上添加圆柱(锥)体。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
