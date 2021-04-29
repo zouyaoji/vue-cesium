@@ -1,11 +1,10 @@
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { onUnmounted, provide, watch } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
 import cloneDeep from 'lodash/cloneDeep'
-import differenceWith from 'lodash/differenceWith'
-import isEqual from 'lodash/isEqual'
+import differenceBy from 'lodash/differenceBy'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -39,19 +38,43 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
         return
       }
       const datasource = vcInstance.cesiumObject as Cesium.DataSource
-      const adds = differenceWith(newVal, oldVal, isEqual)
-      const deletes = differenceWith(oldVal, newVal, isEqual)
-      if (newVal.length === oldVal.length && adds.length === deletes.length) {
+
+      if (newVal.length === oldVal.length) {
         // 视为修改操作
         // Treated as modified
-        for (let i = 0; i < adds.length; i++) {
+        const modifies = []
+        for (let i = 0; i < newVal.length; i++) {
           const options = newVal[i]
-          const modifyEntity = datasource.entities.getById(deletes[i].id)
-          modifyEntity && Object.keys(options).forEach(prop => {
-            modifyEntity[prop] = commonState.transformProp(prop, options[prop])
-          })
+          const oldOptions = oldVal[i]
+
+          if (JSON.stringify(options) !== JSON.stringify(oldOptions) ) {
+            modifies.push({
+              newOptions: options,
+              oldOptions: oldOptions
+            })
+          }
         }
+
+        modifies.forEach(v => {
+          const modifyEntity = datasource.entities.getById(v.oldOptions.id)
+          if (v.oldOptions.id === v.newOptions.id) {
+            modifyEntity && Object.keys(v.newOptions).forEach(prop => {
+              if (v.oldOptions[prop] !== v.newOptions[prop]) {
+                modifyEntity[prop] = commonState.transformProp(prop, v.newOptions[prop])
+              }
+            })
+          } else {
+            // 改了 id
+            datasource.entities.remove(modifyEntity)
+            const entityOptions = v.newOptions
+            const entityOptionsTransform = commonState.transformProps(entityOptions)
+            const entityAdded = datasource.entities.add(entityOptionsTransform)
+            entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
+          }
+        })
       } else {
+        const adds: any = differenceBy(newVal, oldVal, 'id')
+        const deletes: any = differenceBy(oldVal, newVal, 'id')
         const deletedEntities = []
         for (let i = 0; i < deletes.length; i++) {
           const deleteEntity = datasource.entities.getById(deletes[i].id)
