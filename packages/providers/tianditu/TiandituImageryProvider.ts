@@ -62,6 +62,8 @@ class TiandituImageryProvider {
         case 'eia_c':
         case 'eva_w':
         case 'eva_c':
+        case 'ibo_c':
+        case 'ibo_w':
           TiandituMapsStyleLabels[TiandituMapsStyle[key]] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
           break
       }

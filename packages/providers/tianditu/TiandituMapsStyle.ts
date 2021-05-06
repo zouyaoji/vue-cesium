@@ -14,6 +14,8 @@ const TiandituMapsStyle = {
   EIA_W: 'eia_w',
   EIA_C: 'eia_c',
   EVA_W: 'eva_w',
-  EVA_C: 'eva_c'
+  EVA_C: 'eva_c',
+  IBO_C: 'ibo_c',
+  IBO_W: 'ibo_w'
 }
 export default TiandituMapsStyle
