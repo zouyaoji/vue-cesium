@@ -897,13 +897,15 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         $script.onload = () => {
           if (global.Cesium) {
             resolve(global.Cesium)
+            const listener = getInstanceListener(vcInstance, 'cesiumReady')
+            listener && emit('cesiumReady', global.Cesium)
           } else if (global.XE) {
             // 兼容 cesiumlab earthsdk
             global.XE.ready().then(() => {
               resolve(global.Cesium)
+              const listener = getInstanceListener(vcInstance, 'cesiumReady')
+              listener && emit('cesiumReady', global.Cesium)
             })
-            const listener = getInstanceListener(vcInstance, 'cesiumReady')
-            listener && emit('cesiumReady', global.Cesium)
           } else {
             reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
           }
