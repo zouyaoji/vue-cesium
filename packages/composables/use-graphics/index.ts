@@ -23,14 +23,4 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
       parentVM && parentVM.__updateGraphics(undefined, emitType)
     )
   }
-
-  // expose public methods
-  Object.assign(vcInstance.proxy, {
-    createPromise: commonState.createPromise,
-    load: commonState.load,
-    unload: commonState.unload,
-    reload: commonState.reload,
-    cesiumObject: vcInstance.cesiumObject,
-    getCesiumObject: () => vcInstance.cesiumObject
-  })
 }

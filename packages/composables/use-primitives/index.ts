@@ -93,13 +93,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // expose public methods
   Object.assign(vcInstance.proxy, {
-    createPromise: commonState.createPromise,
-    load: commonState.load,
-    unload: commonState.unload,
-    reload: commonState.reload,
-    cesiumObject: vcInstance.cesiumObject,
-    getCesiumObject: () => vcInstance.cesiumObject,
-
     // private but needed by VcInstanceGeometry
     __updateGeometryInstances: updateGeometryInstances,
     __childCount: childCount

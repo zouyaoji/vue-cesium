@@ -103,16 +103,6 @@ export default defineComponent({
       unwatchFns = []
     })
 
-    // expose public methods
-    Object.assign(instance.proxy, {
-      createPromise: commonState.createPromise,
-      load: commonState.load,
-      unload: commonState.unload,
-      reload: commonState.reload,
-      cesiumObject: instance.cesiumObject,
-      getCesiumObject: () => instance.cesiumObject
-    })
-
     return () => {
       if (canRender.value) {
         return h('div', {

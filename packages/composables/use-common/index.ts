@@ -99,6 +99,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('ready', readyObj)
           vcMitt.emit('ready', readyObj)
           logger.debug(`${vcInstance.cesiumClass}---loaded`)
+          Object.assign(vcInstance.proxy, {
+            cesiumObject: vcInstance.cesiumObject
+          })
           return readyObj
         }
       )
@@ -311,6 +314,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       })
     })
     vcInstance.alreadyListening = []
+  })
+
+  // expose public methods
+  Object.assign(vcInstance.proxy, {
+    createPromise: createPromise,
+    load: load,
+    unload: unload,
+    reload: reload,
+    getCesiumObject: () => vcInstance.cesiumObject
   })
 
   return {
