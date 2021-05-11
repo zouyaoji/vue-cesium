@@ -1,8 +1,10 @@
 import { App } from 'vue'
 import VcOverlayHtml from './html'
+import VcOverlayHeatmap from './heatmap'
 
 const components = [
-  VcOverlayHtml
+  VcOverlayHtml,
+  VcOverlayHeatmap
 ]
 
 const install = (app: App): void => {
@@ -12,7 +14,8 @@ const install = (app: App): void => {
 }
 
 export {
-  VcOverlayHtml
+  VcOverlayHtml,
+  VcOverlayHeatmap
 }
 
 export default {

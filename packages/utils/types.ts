@@ -28,6 +28,8 @@ export type VcBtnOptions = {
   }
 }
 
+export type ColorSegments = [number, [number, number, number]] | [number, string | ColorInByteOption | Cartesian4Option | Cesium.Color]
+
 interface AnyFunction {
   (...args: any[]): any
 }
@@ -76,7 +78,7 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   mount?(): Promise<boolean>
   unmount?(): Promise<boolean>
   children?: Array<VcComponentInternalInstance>
-  alreadyListening: string []
+  alreadyListening: string[]
 }
 
 type VcComponentPublicInstance = ComponentPublicInstance<{
@@ -87,9 +89,9 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   cesiumObject: unknown
   getCesiumObject?(): unknown
   __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
-  __updateProvider?(cesiumObject: Cesium.ImageryProvider) : boolean
-  __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number) : boolean
-  __updateGeometry?(cesiumObject: Cesium.Geometry) : boolean
+  __updateProvider?(cesiumObject: Cesium.ImageryProvider): boolean
+  __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number): boolean
+  __updateGeometry?(cesiumObject: Cesium.Geometry): boolean
   __childCount?: Ref<number>
 }>
 
@@ -231,9 +233,20 @@ interface NavigationOption {
   distanceLegendOptions?: AnyObject | boolean
 }
 
+interface HeatmapConfiguration extends h337.HeatmapConfiguration {
+  useEntitiesIfAvailable?: boolean
+  minCanvasSize?: number
+  maxCanvasSize?: number
+  radiusFactor?: number
+  spacingFactor?: number
+  maxOpacity?: number
+  minOpacity?: number
+}
+
+
 export {
   AnyFunction, AnyObject, CameraOption, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
   Cartesian2Option, Cartesian3Option, Cartesian4Option, CartographicInDegreeOption, PolygonHierarchyOption, NearFarScalarOption,
   DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
-  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption
+  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption, HeatmapConfiguration
 }

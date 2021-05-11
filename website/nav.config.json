@@ -380,7 +380,11 @@
           "list": [
             {
               "path": "/overlays/vc-overlay-html",
-              "title": "VcOverlayHtml"
+              "title": "VcOverlayHtml HTML 元素"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap 热力图"
             }
           ]
         }
@@ -769,6 +773,10 @@
             {
               "path": "/overlays/vc-overlay-html",
               "title": "VcOverlayHtml"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap"
             }
           ]
         }

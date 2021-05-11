@@ -133,7 +133,8 @@ import {
 } from '@vue-cesium/geometries'
 
 import {
-  VcOverlayHtml
+  VcOverlayHtml,
+  VcOverlayHeatmap
 } from '@vue-cesium/overlays'
 
 import { use, i18n } from '@vue-cesium/locale'
@@ -267,7 +268,8 @@ const components = [
   VcGeometryWall,
   VcGeometryWallOutline,
 
-  VcOverlayHtml
+  VcOverlayHtml,
+  VcOverlayHeatmap
 ]
 
 const install = (app: App, opt: InstallOptions): void => {
@@ -404,6 +406,7 @@ export {
   VcGeometryWallOutline,
 
   VcOverlayHtml,
+  VcOverlayHeatmap,
 
   version,
   install,
