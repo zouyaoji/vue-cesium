@@ -56,7 +56,7 @@ const defaultProps = {
   zoomInOptions: {
     type: Object as PropType<VcBtnOptions>,
     default: () => ({
-      name: 'vc-icons-zoom-in',
+      icon: 'vc-icons-zoom-in',
       size: '24px',
       color: '#fff',
       background: 'transparent',
@@ -75,7 +75,7 @@ const defaultProps = {
   zoomOutOptions: {
     type: Object as PropType<VcBtnOptions>,
     default: () => ({
-      name: 'vc-icons-zoom-out',
+      icon: 'vc-icons-zoom-out',
       size: '24px',
       color: '#fff',
       background: 'transparent',
@@ -94,7 +94,7 @@ const defaultProps = {
   zoomResetOptions: {
     type: Object as PropType<VcBtnOptions>,
     default: () => ({
-      name: 'vc-icons-reset',
+      icon: 'vc-icons-reset',
       size: '24px',
       color: '#fff',
       background: 'transparent',

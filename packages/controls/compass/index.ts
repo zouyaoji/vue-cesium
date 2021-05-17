@@ -165,7 +165,7 @@ export default defineComponent({
           }, () => [
             h(VcIcon, {
               size: outerOptions.value.size,
-              name: outerOptions.value.name
+              name: outerOptions.value.icon
             }),
             outerOptions.value.tooltip
               ? h(VcTooltip, {
@@ -187,7 +187,7 @@ export default defineComponent({
           }, () => [
             h(VcIcon, {
               size: innerOptions.value.size,
-              name: innerOptions.value.name
+              name: innerOptions.value.icon
             }),
             innerOptions.value.tooltip
               ? h(VcTooltip, {
@@ -208,7 +208,7 @@ export default defineComponent({
             }, () => [
               h(VcIcon, {
                 size: markerOptions.value.size,
-                name: markerOptions.value.name,
+                name: markerOptions.value.icon,
                 style: rotationMarkerStyle.value
               })
             ]) : createCommentVNode('v-if')

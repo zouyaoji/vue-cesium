@@ -220,7 +220,7 @@ export default defineComponent({
         const inner = []
         inner.push(
           h(VcIcon, {
-            name: props.name,
+            name: props.icon,
             size: props.size
           })
         )

@@ -14,7 +14,7 @@ const defaultProps = {
   outerOptions: {
     type: Object,
     default: () => ({
-      name: 'vc-icons-compass-outer',
+      icon: 'vc-icons-compass-outer',
       size: '96px',
       color: '#3f4854',
       background: 'transparent',
@@ -29,7 +29,7 @@ const defaultProps = {
   innerOptions: {
     type: Object,
     default: () => ({
-      name: 'vc-icons-compass-inner',
+      icon: 'vc-icons-compass-inner',
       size: '24px',
       color: '#3f4854',
       background: '#fff',
@@ -44,7 +44,7 @@ const defaultProps = {
   markerOptions: {
     type: Object,
     default: () => ({
-      name: 'vc-icons-compass-rotation-marker',
+      icon: 'vc-icons-compass-rotation-marker',
       size: '96px',
       color: '#1976D2'
     })

@@ -198,7 +198,7 @@ export default defineComponent({
 
       inner.push(
         h(VcIcon, {
-          name: options.name,
+          name: options.icon,
           size: options.size
         })
       )

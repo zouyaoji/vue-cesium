@@ -61,7 +61,7 @@ export default {
   customAPI: Function,
   description: Function,
   ...positionProps,
-  name: {
+  icon: {
     type: String,
     default: 'vc-icons-geolocation'
   },

@@ -52,11 +52,11 @@
         compassOpts: {
           enableCompassOuterRing: true,
           outerOptions: {
-            name: 'svguse:#vc-icons-compass-outer', // svg 加载方式
+            icon: 'svguse:#vc-icons-compass-outer', // svg 加载方式
             size: '120px'
           },
           innerOptions: {
-            name: 'fa fa-compass',
+            icon: 'fa fa-compass',
             size: '24px',
             color: '#3f4854',
             background: '#fff',
@@ -135,14 +135,14 @@
   <vc-viewer>
     <vc-compass
       position="left"
-      :outerOptions="{name: 'svguse:#vc-icons-compass-outer', size: '250px'}"
-      :innerOptions="{name: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
+      :outerOptions="{icon: 'svguse:#vc-icons-compass-outer', size: '250px'}"
+      :innerOptions="{icon: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
     ></vc-compass>
-    <vc-compass position="top" :outerOptions="{name: 'svguse:#vc-icons-qq'}"></vc-compass>
+    <vc-compass position="top" :outerOptions="{icon: 'svguse:#vc-icons-qq'}"></vc-compass>
     <vc-compass
       position="top-right"
-      :outerOptions="{name: 'fa fa-circle-o-notch'}"
-      :innerOptions="{name: 'fa fa-circle', background: 'transparent'}"
+      :outerOptions="{icon: 'fa fa-circle-o-notch'}"
+      :innerOptions="{icon: 'fa fa-circle', background: 'transparent'}"
     ></vc-compass>
     <vc-compass position="right" :enableCompassOuterRing="false"></vc-compass>
     <vc-zoom-control
@@ -162,7 +162,7 @@
       :round="false"
       label="打印分享"
       background="#31CCEC"
-      name="fa fa-print"
+      icon="fa fa-print"
     ></vc-print>
     <!-- 浏览器定位 -->
     <vc-my-location position="top-left" color="#C10015"></vc-my-location>
@@ -258,7 +258,7 @@ otherOpts: {
 ```js
 // outerOptions
 {
-  name: 'vc-icons-compass-outer', // 图标名称
+  icon: 'vc-icons-compass-outer', // 图标名称
   size: '96px',                   // 外环尺寸
   color: '#3f4854',               // 外环颜色
   background: 'transparent',      // 外环背景
@@ -273,7 +273,7 @@ otherOpts: {
 ```js
 // innerOptions
 {
-  name: 'vc-icons-compass-outer',
+  icon: 'vc-icons-compass-outer',
   size: '96px',
   color: '#3f4854',
   background: 'transparent',
@@ -288,7 +288,7 @@ otherOpts: {
 ```js
 // markerOptions
 {
-  name: 'vc-icons-compass-rotation-marker',
+  icon: 'vc-icons-compass-rotation-marker',
   size: '96px',
   color: '#1976D2'
 }
@@ -361,7 +361,7 @@ otherOpts: {
 ```js
 // zoomInOptions
 {
-  name: 'vc-icons-zoom-in',
+  icon: 'vc-icons-zoom-in',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -380,7 +380,7 @@ otherOpts: {
 ```js
 // zoomResetOptions
 {
-  name: 'vc-icons-reset',
+  icon: 'vc-icons-reset',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -399,7 +399,7 @@ otherOpts: {
 ```js
 // zoomOutOptions
 {
-  name: 'vc-icons-zoom-out',
+  icon: 'vc-icons-zoom-out',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -448,7 +448,7 @@ otherOpts: {
 | duration | Number | `3` | `optional` 指定定位成功后飞行时间，单位秒。 ||
 | customAPI | Function | | `optional` 指定自定义定位 API。 ||
 | description | Function | `0.01` | `optional` 指定自定义定位成功后该点的描述文字。 ||
-| name | String | `vc-icons-geolocation` | `optional` 指定定位按钮图标。 ||
+| icon | String | `vc-icons-geolocation` | `optional` 指定定位按钮图标。 ||
 | size | String | `'24px'` | `optional` 指定定位按钮尺寸。 ||
 | color | String | `'#3f4854'` | `optional` 指定定位按钮颜色。 ||
 | background | String | `'#fff'` | `optional` 指定定位按钮背景。 ||
@@ -482,7 +482,7 @@ otherOpts: {
 | showPrintView | Boolean | `true` | `optional` 指定是否显示打印预览。 ||
 | printAutomatically | Boolean | `false` | `optional` 指定是否自动打印。需要 showPrintView 设置为 false。 ||
 | downloadAutomatically | Boolean | `false` | `optional` 指定是否下载打印的图片。 ||
-| name | String | `'vc-icons-capture'` | `optional` 指定打印按钮图标。 ||
+| icon | String | `'vc-icons-capture'` | `optional` 指定打印按钮图标。 ||
 | size | String | `'24px'` | `optional` 指定打印按钮尺寸。 ||
 | color | String | `'#3f4854'` | `optional` 指定打印按钮颜色。 ||
 | background | String | `'#fff'` | `optional` 指定打印按钮背景。 ||

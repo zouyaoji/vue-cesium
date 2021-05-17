@@ -52,11 +52,11 @@ Basic usage of VcNavigation component.
         compassOpts: {
           enableCompassOuterRing: true,
           outerOptions: {
-            name: 'svguse:#vc-icons-compass-outer', // svg 加载方式
+            icon: 'svguse:#vc-icons-compass-outer', // svg 加载方式
             size: '120px'
           },
           innerOptions: {
-            name: 'fa fa-compass',
+            icon: 'fa fa-compass',
             size: '24px',
             color: '#3f4854',
             background: '#fff'
@@ -120,14 +120,14 @@ Customize navigation components as needed. The available components are: `vc-com
   <vc-viewer>
     <vc-compass
       position="left"
-      :outerOptions="{name: 'svguse:#vc-icons-compass-outer', size: '250px'}"
-      :innerOptions="{name: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
+      :outerOptions="{icon: 'svguse:#vc-icons-compass-outer', size: '250px'}"
+      :innerOptions="{icon: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
     ></vc-compass>
-    <vc-compass position="top" :outerOptions="{name: 'svguse:#vc-icons-qq'}"></vc-compass>
+    <vc-compass position="top" :outerOptions="{icon: 'svguse:#vc-icons-qq'}"></vc-compass>
     <vc-compass
       position="top-right"
-      :outerOptions="{name: 'fa fa-circle-o-notch'}"
-      :innerOptions="{name: 'fa fa-circle', background: 'transparent'}"
+      :outerOptions="{icon: 'fa fa-circle-o-notch'}"
+      :innerOptions="{icon: 'fa fa-circle', background: 'transparent'}"
     ></vc-compass>
     <vc-compass position="right" :enableCompassOuterRing="false"></vc-compass>
     <vc-zoom-control
@@ -147,7 +147,7 @@ Customize navigation components as needed. The available components are: `vc-com
       :round="false"
       label="Print/Share"
       background="#31CCEC"
-      name="fa fa-print"
+      icon="fa fa-print"
     ></vc-print>
     <vc-my-location position="top-left" color="#C10015"></vc-my-location>
     <vc-my-location color="#9C27B0" position="top-left" :offset="[0, 60]" label="Location" stack :round="false" background="#F2C037"></vc-my-location>
@@ -233,7 +233,7 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 ```js
 // outerOptions
 {
-  name: 'vc-icons-compass-outer', // Icon name
+  icon: 'vc-icons-compass-outer', // Icon name
   size: '96px',                   // Outer ring size
   color: '#3f4854',               // Outer ring color
   background: 'transparent',      // Outer ring background
@@ -248,7 +248,7 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 ```js
 // innerOptions
 {
-  name: 'vc-icons-compass-outer',
+  icon: 'vc-icons-compass-outer',
   size: '96px',
   color: '#3f4854',
   background: 'transparent',
@@ -263,7 +263,7 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 ```js
 // markerOptions
 {
-  name: 'vc-icons-compass-rotation-marker',
+  icon: 'vc-icons-compass-rotation-marker',
   size: '96px',
   color: '#1976D2'
 }
@@ -332,7 +332,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 ```js
 // zoomInOptions
 {
-  name: 'vc-icons-zoom-in',
+  icon: 'vc-icons-zoom-in',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -351,7 +351,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 ```js
 // zoomResetOptions
 {
-  name: 'vc-icons-reset',
+  icon: 'vc-icons-reset',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -370,7 +370,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 ```js
 // zoomOutOptions
 {
-  name: 'vc-icons-zoom-out',
+  icon: 'vc-icons-zoom-out',
   size: '24px',
   color: '#fff',
   background: 'transparent',
@@ -408,7 +408,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | showPrintView | Boolean | `true` | `optional` Specify whether to display the print preview. |
 | printAutomatically | Boolean | `false` | `optional` Specify whether to print automatically. Need to set showPrintView to false. |
 | downloadAutomatically | Boolean | `false` | `optional` Specify whether to download the printed pictures. |
-| name | String | `'vc-icons-capture'` | `optional` Specify the print button icon. |
+| icon | String | `'vc-icons-capture'` | `optional` Specify the print button icon. |
 | size | String | `'24px'` | `optional` Specify the size of the print button. |
 | color | String | `'#3f4854'` | `optional` Specify the color of the print button. |
 | background | String | `'#fff'` | `optional` Specify the background of the print button. |
@@ -444,7 +444,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | duration | Number | `3` | `optional` Specify the flight time after successful positioning, in seconds. |
 | customAPI | Function | | `optional` Specify a custom API for positioning. |
 | description | Function | `0.01` | `optional` Specify the method of customizing the description text of the point after successful positioning. |
-| name | String | `vc-icons-geolocation` | `optional` Specify the positioning button icon. |
+| icon | String | `vc-icons-geolocation` | `optional` Specify the positioning button icon. |
 | size | String | `'24px'` | `optional` Specify the positioning button size. |
 | color | String | `'#3f4854'` | `optional` Specify the positioning button color. |
 | background | String | `'#fff'` | `optional` Specify the positioning button background. |
