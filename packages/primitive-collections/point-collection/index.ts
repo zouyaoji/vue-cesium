@@ -85,7 +85,9 @@ export default defineComponent({
             const pointOptions = newVal[i] as Cesium.Billboard
             pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
             const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-            pointCollection.add(pointOptionsTransform)
+            const point = pointCollection.add(pointOptionsTransform)
+
+            primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
           }
         }
       },
@@ -102,7 +104,9 @@ export default defineComponent({
         const pointOptions = props.points[i] as Cesium.PointPrimitive
         pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
         const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-        pointCollection.add(pointOptionsTransform)
+        const point = pointCollection.add(pointOptionsTransform)
+
+        primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
       }
       return pointCollection
     }

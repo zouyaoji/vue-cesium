@@ -83,7 +83,8 @@ export default defineComponent({
             const polylineOptions = newVal[i] as Cesium.Billboard
             polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
             const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
-            polylineCollection.add(polylineOptionsTransform)
+            const polyline = polylineCollection.add(polylineOptionsTransform)
+            primitiveCollectionsState.addCustomProp(polyline, polylineOptionsTransform)
           }
         }
       },
@@ -100,7 +101,8 @@ export default defineComponent({
         const polylineOptions = props.polylines[i] as Cesium.Polyline
         polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
         const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
-        polylineCollection.add(polylineOptionsTransform)
+        const polyline = polylineCollection.add(polylineOptionsTransform)
+        primitiveCollectionsState.addCustomProp(polyline, polylineOptionsTransform)
       }
       return polylineCollection
     }
