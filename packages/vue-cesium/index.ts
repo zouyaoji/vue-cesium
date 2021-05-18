@@ -13,6 +13,8 @@ import {
   VcZoomControlSm,
   VcNavigationSm
 } from '@vue-cesium/controls'
+// tools
+import VcMeasurements from '@vue-cesium/measurements'
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
@@ -144,7 +146,6 @@ import { version as version_ } from './version'
 import type { InstallOptions } from '@vue-cesium/utils/config'
 import { setConfig } from '@vue-cesium/utils/config'
 
-
 const version = version_
 const locale = use
 
@@ -166,6 +167,8 @@ const components = [
   VcCompassSm,
   VcZoomControlSm,
   VcNavigationSm,
+
+  VcMeasurements,
 
   VcLayerImagery,
   VcProviderImageryArcgis,
@@ -303,6 +306,8 @@ export {
   VcCompassSm,
   VcZoomControlSm,
   VcNavigationSm,
+
+  VcMeasurements,
 
   VcLayerImagery,
   VcProviderImageryArcgis,
