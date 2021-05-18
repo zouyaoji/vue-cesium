@@ -23,13 +23,17 @@ function isOnGlobalDialog(vm) {
 // You MUST specify "inheritAttrs: false" in your component
 
 export default function(vm, innerRef, renderPortalContent, checkGlobalDialog?) {
-
   let portalEl = null
+
+  if (vm.props?.teleport?.to) {
+    portalEl = vm.props?.teleport?.to
+  }
+
   const onGlobalDialog = checkGlobalDialog === true && isOnGlobalDialog(vm)
   const portalIsActive = ref(false)
 
   function showPortal() {
-    if (onGlobalDialog === false) {
+    if (onGlobalDialog === false && portalEl === null) {
       portalEl = createGlobalNode()
     }
 
@@ -48,7 +52,7 @@ export default function(vm, innerRef, renderPortalContent, checkGlobalDialog?) {
       portalList.splice(index, 1)
     }
 
-    if (portalEl !== null) {
+    if (portalEl !== null && !vm.props?.teleport?.to) {
       removeGlobalNode(portalEl)
       portalEl = null
     }

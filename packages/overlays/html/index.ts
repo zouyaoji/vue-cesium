@@ -5,6 +5,7 @@ import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { position, pixelOffset } from '@vue-cesium/utils/cesium-props'
 import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
+import usePortal from '@vue-cesium/composables/private/use-portal'
 
 export default defineComponent({
   name: 'VcOverlayHtml',
@@ -15,7 +16,8 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    customClass: String
+    customClass: String,
+    teleport: Object
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup (props, ctx) {
@@ -47,7 +49,7 @@ export default defineComponent({
     unwatchFns.push(watch(
       () => props.pixelOffset,
       val => {
-        offset.value = makeCartesian3(val) as Cesium.Cartesian3
+        offset.value = makeCartesian2(val) as Cesium.Cartesian3
       }
     ))
 
@@ -58,6 +60,7 @@ export default defineComponent({
     instance.mount = async () => {
       const { viewer } = $services
       canRender.value = true
+      showPortal()
       offset.value = makeCartesian2(props.pixelOffset) as Cesium.Cartesian2
       position.value = makeCartesian3(props.position) as Cesium.Cartesian3
       viewer.scene.preRender.addEventListener(onPreRender)
@@ -67,6 +70,7 @@ export default defineComponent({
       const { viewer } = $services
       viewer.scene.preRender.removeEventListener(onPreRender)
       canRender.value = false
+      hidePortal()
       return true
     }
     const onPreRender = () => {
@@ -74,8 +78,8 @@ export default defineComponent({
       const scratch = new Cesium.Cartesian2()
       const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, scratch)
       if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
-        rootStyle.left = canvasPosition.x + offset.value.x + 'px'
-        rootStyle.top = canvasPosition.y + offset.value.y + 'px'
+        rootStyle.left = canvasPosition.x + offset.value?.x + 'px'
+        rootStyle.top = canvasPosition.y + offset.value?.y + 'px'
 
         if (props.autoHidden) {
           const cameraPosition = viewer.camera.position
@@ -103,7 +107,7 @@ export default defineComponent({
       unwatchFns = []
     })
 
-    return () => {
+    const renderPortalContent = () => {
       if (canRender.value) {
         return h('div', {
           ref: rootRef,
@@ -112,6 +116,23 @@ export default defineComponent({
         }, hSlot(ctx.slots.default))
       } else {
         return createCommentVNode('v-if')
+      }
+    }
+
+    const { showPortal, hidePortal, renderPortal } = usePortal(instance, rootRef, renderPortalContent)
+    if (props.teleport && props.teleport.to) {
+      return renderPortal
+    } else {
+      return () => {
+        if (canRender.value) {
+          return h('div', {
+            ref: rootRef,
+            class: `vc-html-container${props.customClass ? ' ' + props.customClass : ''}`,
+            style: rootStyle
+          }, hSlot(ctx.slots.default))
+        } else {
+          return createCommentVNode('v-if')
+        }
       }
     }
   }
