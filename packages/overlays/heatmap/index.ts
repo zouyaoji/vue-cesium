@@ -44,7 +44,6 @@ export default defineComponent({
     const rootRef = ref<HTMLElement>(null)
     const project = ref<Cesium.WebMercatorProjection | Cesium.GeographicProjection>(null)
     const defaultOptions: HeatmapConfiguration = {
-      useEntitiesIfAvailable: true, // whether to use entities if a Viewer is supplied or always use an ImageryProvider
       minCanvasSize: 700, // minimum size (in pixels) for the heatmap canvas
       maxCanvasSize: 2000, // maximum size (in pixels) for the heatmap canvas
       radiusFactor: 60, // data point size factor used if no radius is given (the greater of height and width divided by this number yields the used radius)
