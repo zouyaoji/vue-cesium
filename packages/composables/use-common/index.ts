@@ -81,7 +81,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
     // If you call the unload method to unload the component, the Cesium object of the parent component may be unloaded. You need to load the parent component first.
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
-    if (!parentVcInstance.cesiumObject) {
+    if (!parentVcInstance.cesiumObject && !parentVcInstance.nowaiting) {
       return await (parentVcInstance.proxy as VcComponentPublicInstance)?.load()
     }
 
@@ -228,7 +228,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
-  const transformProps = props => {
+  const transformProps = <T>(props: T) => {
     let options: any = {}
     props &&
       Object.keys(props).forEach(vueProp => {
@@ -255,7 +255,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       })
 
     options = removeEmpty(options)
-    return options
+    return options as T
   }
 
   const transformProp = (prop, value) => {
