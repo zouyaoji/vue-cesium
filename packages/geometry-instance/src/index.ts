@@ -30,7 +30,7 @@ export default defineComponent({
     const vcIndex = ref(0)
     // methods
     instance.createCesiumObject = async () => {
-      const options = commonState.transformProps(props)
+      const options = commonState.transformProps(props) as any
       if (!options.geometry) {
         options.geometry = new Cesium.Geometry({ attributes: new Cesium.GeometryAttributes() })
       }
