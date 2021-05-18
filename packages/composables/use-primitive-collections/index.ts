@@ -44,6 +44,14 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     })
   }
 
+  const addCustomProp = (obj, options) => {
+    for (const prop in options) {
+      if (!obj[prop]) {
+        obj[prop] = options[prop]
+      }
+    }
+  }
+
   // provide
   provide(vcKey, getServices())
 
@@ -51,6 +59,7 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     transformProps: commonState.transformProps,
     transformProp: commonState.transformProp,
     unwatchFns: commonState.unwatchFns,
-    setPropsWatcher: commonState.setPropsWatcher
+    setPropsWatcher: commonState.setPropsWatcher,
+    addCustomProp: addCustomProp
   }
 }
