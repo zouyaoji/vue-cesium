@@ -18,8 +18,10 @@ import {
 import VcTooltip from './tooltip'
 import VcAjaxBar from './ajax-bar'
 import VcSkeleton from './skeleton'
+import VcFab from './fab/fab'
+import VcFabAction from './fab/fab-action'
 
-const components = [VcBtn, VcIcon, VcSpinner, VcTooltip, VcAjaxBar, VcSkeleton]
+const components = [VcBtn, VcIcon, VcSpinner, VcTooltip, VcAjaxBar, VcSkeleton, VcFab, VcFabAction]
 
 const install =  (app: App): void => {
   components.forEach(cmp => {
@@ -44,7 +46,9 @@ export {
   VcSpinnerPuff,
   VcSpinnerRings,
   VcSpinnerTail,
-  VcSpinner
+  VcSpinner,
+  VcFab,
+  VcFabAction
 }
 
 export default {
