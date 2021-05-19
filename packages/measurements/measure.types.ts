@@ -1,7 +1,6 @@
-import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcFabAction } from '@vue-cesium/ui'
-import { AnyObject } from '@vue-cesium/utils/types'
-import { ComputedRef, CSSProperties, Ref } from 'vue'
+import { CSSProperties, Ref } from 'vue'
+import { clearActionDefault, componentDistanceActionDefault, componentDistanceMeasurementDefault, distanceActionDefault, distanceMeasurementDefault } from './defaultProps'
 import VcMeasurementDistance from './distance'
 
 interface DistanceMeasurementPolyline {
@@ -26,12 +25,13 @@ interface DistanceMeasurementPolyline {
 interface MeasurementsOption {
   name: string
   actionRef: Ref<typeof VcFabAction>
-  actionOpts: AnyObject
+  actionOpts: typeof distanceActionDefault | typeof componentDistanceActionDefault | typeof clearActionDefault
   measurementRef: Ref<typeof VcMeasurementDistance>
-  measurementOpts: AnyObject
+  measurementOpts: typeof distanceMeasurementDefault | typeof componentDistanceMeasurementDefault
   actionStyle?: CSSProperties
-  actionClass?: ComputedRef<string>
+  actionClass?: string
   tip?: string
+  cmp: typeof VcMeasurementDistance
 }
 
 export {

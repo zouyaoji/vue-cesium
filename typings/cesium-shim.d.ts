@@ -7,6 +7,7 @@ declare namespace Cesium {
   const when: any
   const Uri: any
   const GlobeSurfaceTile: any
+  const ManagedArray: any
   interface Viewer {
     viewerWidgetResized?: Event
     _selectionIndicator?: SelectionIndicator

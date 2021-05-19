@@ -19,6 +19,7 @@ import {
   makeOptions
 } from './cesium-helpers'
 import { PropType } from 'vue'
+import { CartographicInDegreeOption, Cartesian3Option } from './types'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start
@@ -34,7 +35,8 @@ const position = {
   position: {
     type: [Object, Array, Function],
     watcherOptions: {
-      cesiumObjectBuilder: makeCartesian3
+      cesiumObjectBuilder: makeCartesian3,
+      // deep: true
     }
   }
 }
@@ -174,7 +176,7 @@ const imageSubRegion = {
  */
 const pixelOffset = {
   pixelOffset: {
-    type: [Object, Array, Function],
+    type: [Object, Array, Function] as PropType<Array<number> | Cesium.Cartesian2>,
     default: () => {
       return {
         x: 0,
@@ -291,7 +293,7 @@ const verticalOrigin = {
  * @const {Number, Object, Function} width mixin
  */
 const width = {
-  width: [Number, Object, Function]
+  width: [Number, Object, Function] as PropType<number>
 }
 // BillboardGraphics end
 
@@ -379,10 +381,12 @@ const shadows = {
  */
 const positions = {
   positions: {
-    type: [Array, Object, Function],
+    type: [Array, Object, Function] as PropType<Array<Cesium.Cartesian3> | Array<number> | Array<Array<number>>
+      | Array<Cartesian3Option> | Array<CartographicInDegreeOption>>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array,
-      exclude: '_callback'
+      exclude: '_callback',
+      deep: true
     }
   }
 }
@@ -1288,7 +1292,7 @@ const compressVertices = {
  * @const {Object} modelMatrix mixin
  */
 const modelMatrix = {
-  modelMatrix: Object
+  modelMatrix: Object as PropType<Cesium.Matrix4>
 }
 
 /**
@@ -1305,7 +1309,7 @@ const debugShowBoundingVolume = {
  * @const {Object} scene mixin
  */
 const scene = {
-  scene: Object
+  scene: Object as PropType<Cesium.Scene>
 }
 
 /**

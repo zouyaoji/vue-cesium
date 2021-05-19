@@ -1,3 +1,4 @@
+import { MeasurementsOption } from '@vue-cesium/measurements/measure.types'
 import { Emitter } from 'mitt'
 import type { App, Ref } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
@@ -12,7 +13,7 @@ export type EntityEmitType = CommonEmitType | 'update:billboard' | 'update:box' 
 
 
 export type VcBtnOptions = {
-  name?: string
+  icon?: string
   size?: string
   color?: string
   background?: string
@@ -108,12 +109,15 @@ interface VcViewerProvider {
   viewerMitt: Emitter
   entityViewModel?: VcComponentPublicInstance
   imageryLayerViewModel?: VcComponentPublicInstance
-  layout: {
+  layout?: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
     animationContainerRC: Partial<DOMRect>
     bottomContainerRC: Partial<DOMRect>
   }
+  measurementVm?: VcComponentInternalInstance
+  selectedMeasurementOption?: MeasurementsOption
+  favActived: boolean
 }
 
 interface Cartesian2Option {
