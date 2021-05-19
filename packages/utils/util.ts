@@ -114,6 +114,14 @@ export function lnglatValidator (longitude: number, latitude: number) {
   return true
 }
 
+export function defaultValue(a, b) {
+  if (a !== undefined && a !== null) {
+    return a
+  }
+  return b
+}
+
+
 const getDefaultOptionByProps = (props: AnyObject, ignores: Array<string> = []) => {
   const defaultOptions: AnyObject = {}
   Object.keys(props).forEach(key => {

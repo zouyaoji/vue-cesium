@@ -7,6 +7,7 @@ export interface InstallOptions {
   scriptPromise?: Promise<unknown>
   pickScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
   viewerScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
+  measurementMouseHandler?: Cesium.ScreenSpaceEventHandler
   viewerUnloadingPromise?: Promise<boolean>
 }
 
@@ -22,4 +23,8 @@ const getConfig = (key: keyof InstallOptions): unknown => {
 
 const vcKey = hasSymbol ? Symbol('VueCesium') : 'VueCesium'
 
-export { getConfig, setConfig, vcKey }
+const fabKey = hasSymbol ? Symbol('_vc_f_') : '_vc_f_'
+
+const measurementKey = hasSymbol ? Symbol('_vc_measurement_') : '_vc_measurement_'
+
+export { getConfig, setConfig, vcKey, fabKey, measurementKey }
