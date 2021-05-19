@@ -1,21 +1,43 @@
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode, ref, h, reactive, CSSProperties, computed, ExtractPropTypes, provide, nextTick } from 'vue'
-import { useCommon } from '@vue-cesium/composables'
-import { isString, kebabCase, camelize } from '@vue-cesium/utils/util'
-import { VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
+
+import {
+  defineComponent,
+  getCurrentInstance,
+  createCommentVNode,
+  ref,
+  h,
+  reactive,
+  CSSProperties,
+  ExtractPropTypes,
+  provide,
+  nextTick,
+} from 'vue'
+import {
+  defaultProps,
+  defaultOptions,
+  measurementFabDefault,
+  distanceActionDefault,
+  componentDistanceActionDefault,
+  distanceMeasurementDefault,
+  componentDistanceMeasurementDefault,
+  clearActionDefault
+} from './defaultProps'
+import { useCommon, useHandler } from '@vue-cesium/composables'
+import { camelize } from '@vue-cesium/utils/util'
 import { $ } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/ui'
-import { defaultProps, defaultOptions, measurementFabDefault, distanceActionDefault, componentDistanceActionDefault } from './defaultProps'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import VcMeasurementDistance from './distance'
 import { MeasurementsOption } from './measure.types'
 import { t } from '@vue-cesium/locale'
 import { vcKey } from '@vue-cesium/utils/config'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
+import { VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
+
 export default defineComponent({
   name: 'VcMeasurements',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'measureEvt', 'updateFab'],
   setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -33,99 +55,49 @@ export default defineComponent({
     const positionState = usePosition(props, $services)
     const rootRef = ref<HTMLElement>(null)
     const fabRef = ref<typeof VcFab>(null)
-    const measurementMouseHandler = ref<Cesium.ScreenSpaceEventHandler>(null)
-    const selectedMeasurementOption = ref<MeasurementsOption>(void 0)
+
+    let selectedMeasurementOption: MeasurementsOption = undefined
     const fabExtanded = ref(false)
     const mounted = ref(false)
 
     const options: any = {}
     // computed
-    const measurementFabOptions = computed<typeof measurementFabDefault>(() => {
-      return Object.assign({}, defaultOptions.measurementFabOptions, props.measurementFabOptions)
-    })
-
-    const distanceActionOpts = computed<typeof distanceActionDefault>(() => {
-      return Object.assign({}, defaultOptions.distanceActionOpts, props.distanceActionOpts)
-    })
-
-    const distanceMeasurementOpts = computed(() => {
-      return Object.assign({}, defaultOptions.distanceMeasurementOpts, props.distanceMeasurementOpts)
-    })
-
-    const componentDistanceActionOpts = computed<typeof componentDistanceActionDefault>(() => {
-      return Object.assign({}, defaultOptions.componentDistanceActionOpts, props.componentDistanceActionOpts)
-    })
-
-    const componentDistanceMeasurementOpts = computed(() => {
-      return Object.assign({}, defaultOptions.componentDistanceMeasurementOpts, props.componentDistanceMeasurementOpts)
-    })
-
-    const clearActionOpts = computed(() => {
-      return Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts)
-    })
-
-
+    const measurementFabOptions = reactive<typeof measurementFabDefault>(
+      Object.assign({}, defaultOptions.measurementFabOptions, props.measurementFabOptions)
+    )
+    const distanceActionOpts = reactive<typeof distanceActionDefault>(Object.assign({}, defaultOptions.distanceActionOpts, props.distanceActionOpts))
+    const distanceMeasurementOpts = reactive<typeof distanceMeasurementDefault>(
+      Object.assign({}, defaultOptions.distanceMeasurementOpts, props.distanceMeasurementOpts)
+    )
+    const componentDistanceActionOpts = reactive<typeof componentDistanceActionDefault>(
+      Object.assign({}, defaultOptions.componentDistanceActionOpts, props.componentDistanceActionOpts)
+    )
+    const componentDistanceMeasurementOpts = reactive<typeof componentDistanceMeasurementDefault>(
+      Object.assign({}, defaultOptions.componentDistanceMeasurementOpts, props.componentDistanceMeasurementOpts)
+    )
+    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
 
     options.distanceActionOpts = distanceActionOpts
     options.distanceMeasurementOpts = distanceMeasurementOpts
     options.componentDistanceActionOpts = componentDistanceActionOpts
     options.componentDistanceMeasurementOpts = componentDistanceMeasurementOpts
 
-    const measurementsOptions = computed<Array<MeasurementsOption>>(() => {
-      return props.measurements.map(measurement => ({
-        name: measurement,
-        actionRef: ref<typeof VcFabAction>(null),
-        actionOpts: options[`${camelize(measurement)}ActionOpts`],
-        measurementRef: ref<typeof VcMeasurementDistance>(null),
-        measurementOpts: options[`${camelize(measurement)}MeasurementOpts`],
-        actionStyle: {
-          background: options[`${camelize(measurement)}ActionOpts`].value.color,
-          color: options[`${camelize(measurement)}ActionOpts`].value.textColor
-        },
-        actionClass: computed<string>(() => {
-          return `vc-measure-${measurement} vc-measure-button${measurement === selectedMeasurementOption.value?.name ? ' active' : ''}`
-        }),
-        tip: options[`${camelize(measurement)}ActionOpts`].value.tooltip.tip || t(`vc.measurement.${camelize(measurement)}.tip`)
-      }))
-    })
-
-    const fabStyle = computed(() => {
-      return {
-        background: measurementFabOptions.value.color,
-        color: measurementFabOptions.value.textColor
-      }
-    })
+    const measurementsOptions: Array<MeasurementsOption> = props.measurements.map(measurement => ({
+      name: measurement,
+      actionRef: ref<typeof VcFabAction>(null),
+      actionOpts: options[`${camelize(measurement)}ActionOpts`],
+      measurementRef: ref<typeof VcMeasurementDistance>(null),
+      measurementOpts: options[`${camelize(measurement)}MeasurementOpts`],
+      actionStyle: {
+        background: options[`${camelize(measurement)}ActionOpts`].color,
+        color: options[`${camelize(measurement)}ActionOpts`].textColor
+      },
+      actionClass: `vc-measure-${measurement} vc-measure-button${measurement === selectedMeasurementOption?.name ? ' active' : ''}`,
+      tip: options[`${camelize(measurement)}ActionOpts`].tooltip.tip || t(`vc.measurement.${camelize(measurement)}.tip`),
+      cmp: getMeasurementCmp(measurement)
+    }))
 
     // methods
-    instance.createCesiumObject = async () => {
-      const { viewer } = $services
-      canRender.value = true
-
-      measurementMouseHandler.value = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
-      return true
-    }
-
-    instance.mount = async () => {
-      updateRootStyle()
-      mounted.value = true
-      nextTick(() => {
-        measurementFabOptions.value.autoExpand && fabRef.value.toggle()
-      })
-      return true
-    }
-
-    instance.unmount = async () => {
-      if (selectedMeasurementOption.value) {
-        toggleAction(selectedMeasurementOption.value.name)
-        selectedMeasurementOption.value = undefined
-      }
-
-      deactivate()
-      measurementMouseHandler.value.destroy()
-      mounted.value = false
-      return true
-    }
-
     /**
      *
      * @param movement 屏幕坐标
@@ -133,120 +105,70 @@ export default defineComponent({
      * @param shift
      */
     const handleClick = (movement, options?) => {
-      selectedMeasurementOption.value?.measurementRef.handleClick?.(movement.position, options)
+      selectedMeasurementOption?.measurementRef.value.handleClick?.(movement.position, options)
 
-      let measurementVm
+      let measurementOptions
       if ((instance.proxy as any).editingMeasurementName) {
-        measurementVm = measurementsOptions.value.find(v => v.name === (instance.proxy as any).editingMeasurementName)
+        measurementOptions = measurementsOptions.find(v => v.name === (instance.proxy as any).editingMeasurementName)
       }
 
-      if (measurementVm !== selectedMeasurementOption.value) {
-        measurementVm?.measurementRef.value.handleClick?.(movement.position, options)
+      if (measurementOptions !== selectedMeasurementOption) {
+        measurementOptions?.measurementRef.value.handleClick?.(movement.position, options)
       }
-    }
-
-    const clearAll = () => {
-      measurementsOptions.value.forEach(measurementsOption => {
-        measurementsOption.measurementRef.value.clear()
-      })
     }
 
     const handleMouseMove = (movement, options?) => {
-      selectedMeasurementOption.value?.measurementRef.handleMouseMove?.(movement.endPosition, options)
+      selectedMeasurementOption?.measurementRef.value.handleMouseMove?.(movement.endPosition, options)
 
-      let measurementVm
+      let measurementOptions
       if ((instance.proxy as any).editingMeasurementName) {
-        measurementVm = measurementsOptions.value.find(v => v.name === (instance.proxy as any).editingMeasurementName)
+        measurementOptions = measurementsOptions.find(v => v.name === (instance.proxy as any).editingMeasurementName)
       }
 
-      if (measurementVm !== selectedMeasurementOption.value) {
-        measurementVm?.measurementRef.value.handleMouseMove?.(movement.endPosition, options)
+      if (measurementOptions !== selectedMeasurementOption) {
+        measurementOptions?.measurementRef.value.handleMouseMove?.(movement.endPosition, options)
       }
     }
 
-    const onLeftClick = movement => {
-      handleClick(movement, {
-        button: 0
+    const { activate, deactivate, destroy: destroyHandler } = useHandler($services, {
+      handleClick,
+      handleMouseMove
+    })
+
+    instance.createCesiumObject = async () => {
+      canRender.value = true
+      return true
+    }
+
+    instance.mount = async () => {
+      updateRootStyle()
+      mounted.value = true
+      nextTick(() => {
+        measurementFabOptions.autoExpand && fabRef.value.toggle()
       })
+      return true
     }
 
-    const onLeftClickShift = movement => {
-      handleClick(movement, {
-        button: 0,
-        shift: true
-      })
+    instance.unmount = async () => {
+      if (selectedMeasurementOption) {
+        toggleAction(selectedMeasurementOption)
+        selectedMeasurementOption = undefined
+      }
+
+      deactivate()
+      destroyHandler()
+      mounted.value = false
+      return true
     }
 
-    const onLeftClickCtrl = movement => {
-      handleClick(movement, {
-        button: 0,
-        ctrl: true
-      })
-    }
-
-    const onRightClick = movement => {
-      handleClick(movement, {
-        button: 2
-      })
-    }
-
-    const onRightClickCtrl = movement => {
-      handleClick(movement, {
-        button: 2,
-        ctrl: true
-      })
-    }
-
-    const onMouseMove = movement => {
-      handleMouseMove(movement)
-    }
-
-    const onMouseMoveShift = movement => {
-      handleMouseMove(movement, {
-        shift: true
-      })
-    }
-
-    const onLeftDown = movement => {
-      selectedMeasurementOption.value?.measurementRef.handleLeftDown?.(movement.position)
-    }
-
-    const onLeftUp = movement => {
-      selectedMeasurementOption.value?.measurementRef.handleLeftUp?.(movement.position)
-    }
-
-    const onDoubleClick = movement => {
-      selectedMeasurementOption.value?.measurementRef.handleDoubleClick?.(movement.position)
-    }
-
-    const activate = () => {
-      const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium
-      const sseh = measurementMouseHandler.value
-      sseh.setInputAction(onLeftClick, ScreenSpaceEventType.LEFT_CLICK)
-      sseh.setInputAction(onLeftClickShift, ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.SHIFT)
-      sseh.setInputAction(onLeftClickCtrl, ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.CTRL)
-      sseh.setInputAction(onRightClick, ScreenSpaceEventType.RIGHT_CLICK)
-      sseh.setInputAction(onRightClickCtrl, ScreenSpaceEventType.RIGHT_CLICK, KeyboardEventModifier.CTRL)
-      sseh.setInputAction(onMouseMove, ScreenSpaceEventType.MOUSE_MOVE)
-      sseh.setInputAction(onMouseMoveShift, ScreenSpaceEventType.MOUSE_MOVE, KeyboardEventModifier.SHIFT)
-      sseh.setInputAction(onLeftDown, ScreenSpaceEventType.LEFT_DOWN)
-      sseh.setInputAction(onLeftUp, ScreenSpaceEventType.LEFT_UP)
-      sseh.setInputAction(onDoubleClick, ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
-    }
-
-    const deactivate = () => {
-      const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium
-      const sseh = measurementMouseHandler.value
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK)
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.SHIFT)
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.CTRL)
-      sseh.removeInputAction(ScreenSpaceEventType.RIGHT_CLICK)
-      sseh.removeInputAction(ScreenSpaceEventType.RIGHT_CLICK, KeyboardEventModifier.CTRL)
-      sseh.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE)
-      sseh.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE, KeyboardEventModifier.SHIFT)
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_DOWN)
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_UP)
-      sseh.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
+    function getMeasurementCmp (name) {
+      switch (name) {
+        case 'distance':
+        case 'component-distance':
+          return VcMeasurementDistance
+        default:
+          return void 0
+      }
     }
 
     const updateRootStyle = () => {
@@ -278,30 +200,31 @@ export default defineComponent({
 
     const restoreColor = ref(null)
     const restoreCursor = ref(null)
-    const toggleAction = e => {
+    const toggleAction = (measurementOption: MeasurementsOption) => {
       const { viewer } = $services
-      if (isString(e)) {
-        e = measurementsOptions.value.find(v => v.name === e)
+      if (selectedMeasurementOption !== void 0) {
+        selectedMeasurementOption.actionOpts.color = restoreColor.value
+        selectedMeasurementOption.measurementRef.value.stop?.()
+        emit('activeEvt', {
+          type: selectedMeasurementOption.name,
+          isActive: false
+        })
       }
-      if (selectedMeasurementOption.value !== void 0) {
-        selectedMeasurementOption.value.actionOpts.color = restoreColor.value
-        selectedMeasurementOption.value.measurementRef.stop?.()
-        e.measurementRef.value.stop?.()
-        // e.actionOpts.value.color = restoreColor.value
-      }
-      if (selectedMeasurementOption.value?.name === e.name) {
-        // deactivate()
-        selectedMeasurementOption.value = undefined
+      if (selectedMeasurementOption?.name === measurementOption.name) {
+        selectedMeasurementOption = undefined
         viewer.canvas.setAttribute('style', `cursor: ${restoreCursor.value}`)
-        e.actionOpts.value.color = restoreColor.value
+        measurementOption.actionOpts.color = restoreColor.value
       } else {
-        // activate()
-        selectedMeasurementOption.value = e
-        e.measurementRef.value.startNew?.()
-        restoreColor.value = e.actionOpts.value.color
-        e.actionOpts.value.color = props.activeColor
+        selectedMeasurementOption = measurementOption
+        measurementOption.measurementRef.value.startNew?.()
+        restoreColor.value = measurementOption.actionOpts.color
+        measurementOption.actionOpts.color = props.activeColor
         restoreCursor.value = getComputedStyle(viewer.canvas).cursor
         viewer.canvas.setAttribute('style', 'cursor: crosshair')
+        emit('activeEvt', {
+          type: measurementOption.name,
+          isActive: true
+        })
       }
     }
 
@@ -310,23 +233,33 @@ export default defineComponent({
       if (value) {
         activate()
       } else {
-        selectedMeasurementOption.value = undefined
+        if (selectedMeasurementOption) {
+          toggleAction(selectedMeasurementOption)
+        }
         deactivate()
       }
+      emit('updateFab', value)
     }
 
-    const getMeasurementCmp = name => {
-      switch (name) {
-        case 'distance':
-        case 'component-distance':
-          return VcMeasurementDistance
-      }
+
+    const clearAll = () => {
+      measurementsOptions.forEach(measurementsOption => {
+        measurementsOption.measurementRef.value.clear()
+      })
+
+      selectedMeasurementOption && toggleAction(selectedMeasurementOption)
     }
 
     const getServices = () => {
       return mergeDescriptors(commonState.getServices(), {
         get measurementVm () {
           return instance
+        },
+        get selectedMeasurementOption () {
+          return selectedMeasurementOption
+        },
+        get favActived () {
+          return fabExtanded.value
         }
       })
     }
@@ -341,62 +274,77 @@ export default defineComponent({
         const fabActionChildren = []
         const measurementChilden = []
 
-        measurementsOptions.value.forEach(measurementOptions => {
+        measurementsOptions.forEach(measurementOptions => {
           const measurement = camelize(measurementOptions.name)
           if (options[`${measurement}ActionOpts`]) {
-            fabActionChildren.push(h(VcFabAction, {
-              ref: measurementOptions.actionRef,
-              style: measurementOptions.actionStyle,
-              class: measurementOptions.actionClass.value,
-              ...measurementOptions.actionOpts.value,
-              onClick: toggleAction.bind(undefined, measurementOptions)
-            }, () => h(VcTooltip, {
-              ...measurementOptions.actionOpts.tooltip
-            }, () => h('strong', null, measurementOptions.tip))
-            ))
+            fabActionChildren.push(
+              h(VcFabAction, {
+                ref: measurementOptions.actionRef,
+                style: measurementOptions.actionStyle,
+                class: measurementOptions.actionClass,
+                ...measurementOptions.actionOpts,
+                onClick: () => {
+                  toggleAction(measurementOptions)
+                }
+              }, () => h(VcTooltip, {
+                ...measurementOptions.actionOpts.tooltip
+              }, () => h('strong', null, measurementOptions.tip)))
+            )
 
-            measurementChilden.push(h(getMeasurementCmp(measurementOptions.name), {
-              ref: measurementOptions.measurementRef,
-              editable: props.editable,
-              ...measurementOptions.measurementOpts.value
-            }))
+            measurementOptions.cmp && measurementChilden.push(
+              h(measurementOptions.cmp, {
+                ref: measurementOptions.measurementRef,
+                editable: props.editable,
+                onMeasureEvt: e => {
+                  emit('measureEvt', e)
+                },
+                ...measurementOptions.measurementOpts
+              })
+            )
           }
         })
 
-        if (measurementsOptions.value.length) {
-          fabActionChildren.push(h(VcFabAction, {
-            // ref: clearActionOpts.value.actionRef,
+        measurementsOptions.length && fabActionChildren.push(
+          h(VcFabAction, {
             style: {
-              background: clearActionOpts.value.color,
-              color: clearActionOpts.value.textColor
+              background: clearActionOpts.color,
+              color: clearActionOpts.textColor
             },
             class: 'vc-measure-button vc-measure-clear',
-            ...clearActionOpts.value,
-            onClick: clearAll,
+            ...clearActionOpts,
+            onClick: clearAll
           }, () => h(VcTooltip, {
-            ...clearActionOpts.value.tooltip
-          }, () => h('strong', null, clearActionOpts.value.tooltip.tip || t('vc.measurement.clear')))
-          ))
-        }
+            ...clearActionOpts.tooltip
+          }, () => h('strong', null, clearActionOpts.tooltip.tip || t('vc.measurement.clear.tip'))))
+        )
 
         const root = []
         if (mounted.value) {
-          root.push(h('div', {
-            ref: rootRef,
-            class: 'vc-measurements-container ' + positionState.classes.value,
-            style: rootStyle
-          }, h(VcFab, {
-            ref: fabRef,
-            class: 'vc-measure-button',
-            style: fabStyle.value,
-            'onUpdate:modelValue': onUpdateFab,
-            ...measurementFabOptions.value
-          }, {
-            default: () => fabActionChildren,
-            tooltip: () => h(VcTooltip, {
-              ...measurementFabOptions.value.tooltip
-            }, () => h('strong', null, measurementFabOptions.value.tooltip.tip || (fabExtanded.value ? t('vc.measurement.collapse') : t('vc.measurement.expand'))))
-          })))
+          root.push(
+            h('div', {
+              ref: rootRef,
+              class: 'vc-measurements-container ' + positionState.classes.value,
+              style: rootStyle
+            }, h(VcFab, {
+              ref: fabRef,
+              class: 'vc-measure-button',
+              style: {
+                background: measurementFabOptions.color,
+                color: measurementFabOptions.textColor
+              },
+              'onUpdate:modelValue': onUpdateFab,
+              ...measurementFabOptions
+            }, {
+              default: () => fabActionChildren,
+              tooltip: () =>
+                h(VcTooltip, {
+                  ...measurementFabOptions.tooltip
+                }, () => h(
+                  'strong',
+                  null,
+                  measurementFabOptions.tooltip.tip || (fabExtanded.value ? t('vc.measurement.collapse') : t('vc.measurement.expand'))))
+            }))
+          )
         }
         root.push(h(VcCollectionPrimitive, {
           show: props.show

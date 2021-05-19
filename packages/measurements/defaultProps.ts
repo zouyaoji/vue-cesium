@@ -150,7 +150,7 @@ const componentDistanceMeasurementDefault = Object.assign({}, distanceMeasuremen
 })
 
 const clearActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-measure-component-distance',
+  icon: 'vc-icons-clear',
   color: 'red'
 })
 
@@ -203,5 +203,8 @@ export {
   defaultOptions,
   measurementFabDefault,
   distanceActionDefault,
-  componentDistanceActionDefault
+  distanceMeasurementDefault,
+  componentDistanceActionDefault,
+  componentDistanceMeasurementDefault,
+  clearActionDefault
 }

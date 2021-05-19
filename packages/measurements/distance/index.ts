@@ -18,7 +18,7 @@ import MeasureUnits from '../MeasureUnits'
 export default defineComponent({
   name: 'VcMeasurementDistance',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -180,10 +180,11 @@ export default defineComponent({
     }
 
     const handleClick = (movement, options?) => {
-      const { viewer, measurementVm } = $services
+      const { viewer, measurementVm, selectedMeasurementOption } = $services
 
       if (options.button === 2 && options.ctrl) {
-        (measurementVm.proxy as any).toggleAction('distance')
+        const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'distance')
+        ;(measurementVm.proxy as any).toggleAction(measurementsOption)
         return
       }
 
@@ -197,7 +198,7 @@ export default defineComponent({
 
       const { defined } = Cesium
       const scene = viewer.scene
-      const index = polylines.value.length - 1
+      const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : polylines.value.length - 1
       const polyline: DistanceMeasurementPolyline = polylines.value[index]
       const positions = polyline.positions
 
@@ -213,6 +214,14 @@ export default defineComponent({
         polyline.startPoint = position
         status = DrawStatus.Drawing
         drawTip.value = t('vc.measurement.distance.drawTip2')
+        emit('measureEvt', {
+          index: index,
+          polylines: polylines,
+          type: props.showComponentLines ? 'component-distance' : 'distance',
+          finished: false,
+          position: position,
+          windowPoistion: movement
+        })
       } else {
         if (status === DrawStatus.Drawing) {
           polyline.endPoint = polyline.positions[1]
@@ -226,10 +235,19 @@ export default defineComponent({
           canShowDrawTip.value = false
         }
 
-        if ((measurementVm.proxy as any).selectedMeasurementOption.value) {
+        if (selectedMeasurementOption) {
           drawTip.value = t('vc.measurement.distance.drawTip1')
           canShowDrawTip.value = true
         }
+
+        emit('measureEvt', {
+          index: index,
+          polylines: polylines,
+          type: props.showComponentLines ? 'component-distance' : 'distance',
+          finished: true,
+          position: polyline.positions[1],
+          windowPoistion: movement
+        })
       }
     }
 
@@ -268,6 +286,15 @@ export default defineComponent({
           updateComponents(polyline)
         }
       }
+
+      emit('measureEvt', {
+        index: index,
+        polylines: polylines,
+        type: props.showComponentLines ? 'component-distance' : 'distance',
+        finished: false,
+        position: position,
+        windowPoistion: movement
+      })
     }
 
     const updateComponents = (polyline: DistanceMeasurementPolyline) => {
@@ -333,8 +360,8 @@ export default defineComponent({
 
     const restoreCursor = ref(null)
     const onMouseoverPoints = e => {
-      if (props.editable && status !== DrawStatus.Drawing) {
-        const { viewer } = $services
+      const { favActived, viewer } = $services
+      if (props.editable && status !== DrawStatus.Drawing && favActived) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
         mouseoverPoint.value = e.pickedFeature.primitive
         editorPosition.value = e.pickedFeature.primitive.position
