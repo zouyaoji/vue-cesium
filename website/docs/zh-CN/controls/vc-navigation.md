@@ -152,7 +152,7 @@
       :zoomResetOptions="{size: '48px', color: '#21BA45'}"
     ></vc-zoom-control>
     <vc-zoom-control position="bottom" :enableResetButton="false" borderRadius="0" :offset="[0, 120]"></vc-zoom-control>
-    <vc-print position="bottom-right" downloadAutomatically></vc-print>
+    <vc-print position="bottom-right" downloadAutomatically :color="color" :background="background"></vc-print>
     <vc-print
       position="bottom-right"
       :offset="[40, 20]"
@@ -187,6 +187,19 @@
     <vc-distance-legend position="bottom-left" :offset="[5, 35]"></vc-distance-legend>
   </vc-viewer>
 </el-row>
+<script>
+  export default {
+    data () {
+      return {
+        color: 'red',
+        background: 'yellow'
+      }
+    },
+    mounted () {
+      window.vm = this
+    }
+  }
+</script>
 ```
 
 :::

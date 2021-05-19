@@ -59,6 +59,15 @@
           ]
         },
         {
+          "groupName": "工具",
+          "list": [
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements 量算"
+            }
+          ]
+        },
+        {
           "groupName": "影像",
           "list": [
             {
@@ -447,6 +456,15 @@
             {
               "path": "/controls/vc-navigation-sm",
               "title": "VcNavigationSm"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements"
             }
           ]
         },

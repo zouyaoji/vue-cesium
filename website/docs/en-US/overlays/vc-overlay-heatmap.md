@@ -30,6 +30,7 @@ Basic usage of VcOverlayHeatmap component.
     <vc-layer-imagery>
       <vc-provider-imagery-osm></vc-provider-imagery-osm>
     </vc-layer-imagery>
+    <vc-datasource-geojson data="./SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
@@ -75,8 +76,7 @@ Basic usage of VcOverlayHeatmap component.
           radius: 10,
           maxOpacity: 0.6,
           minOpacity: 0.3,
-          blur: 0.75,
-          spacingFactor: 10
+          blur: 0.75
         }
       }
     },

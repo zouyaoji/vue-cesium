@@ -33,6 +33,7 @@
     <vc-layer-imagery :sortOrder="10">
       <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
+    <vc-datasource-geojson data="./SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -78,8 +79,7 @@
           radius: 10,
           maxOpacity: 0.6,
           minOpacity: 0.3,
-          blur: 0.75,
-          spacingFactor: 10
+          blur: 0.75
         }
       }
     },

@@ -9,7 +9,7 @@
     <!-- 引入 fontawesome 图标资源-->
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 引入 阿里云 图标资源-->
-    <script src="//at.alicdn.com/t/font_2419801_x5q0qmeckc9.js"></script>
+    <script src="//at.alicdn.com/t/font_2419801_be7wqi1oxh5.js"></script>
   </head>
   <body>
     <div id="app"></div>
