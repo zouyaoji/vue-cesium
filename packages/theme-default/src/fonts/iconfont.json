@@ -6,6 +6,111 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21688642",
+      "name": "clear",
+      "font_class": "clear",
+      "unicode": "eba8",
+      "unicode_decimal": 60328
+    },
+    {
+      "icon_id": "21688643",
+      "name": "clear",
+      "font_class": "remove-all",
+      "unicode": "eba9",
+      "unicode_decimal": 60329
+    },
+    {
+      "icon_id": "21688640",
+      "name": "remove",
+      "font_class": "remove",
+      "unicode": "eba7",
+      "unicode_decimal": 60327
+    },
+    {
+      "icon_id": "21643894",
+      "name": "增加",
+      "font_class": "insert",
+      "unicode": "eba6",
+      "unicode_decimal": 60326
+    },
+    {
+      "icon_id": "21641568",
+      "name": "删除",
+      "font_class": "delete",
+      "unicode": "eba5",
+      "unicode_decimal": 60325
+    },
+    {
+      "icon_id": "21626179",
+      "name": "Arrows, move, position",
+      "font_class": "move",
+      "unicode": "eba4",
+      "unicode_decimal": 60324
+    },
+    {
+      "icon_id": "21559393",
+      "name": "measure-distance",
+      "font_class": "measure-distance",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "21559394",
+      "name": "measure-horizontal-distance",
+      "font_class": "measure-horizontal-distance",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "21557943",
+      "name": "measure-point-coordinates",
+      "font_class": "measure-point-coordinates",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "21564333",
+      "name": "measure-component-distance",
+      "font_class": "measure-component-distance",
+      "unicode": "eba3",
+      "unicode_decimal": 60323
+    },
+    {
+      "icon_id": "21556927",
+      "name": "measure-area",
+      "font_class": "measure-area",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "21556928",
+      "name": "measure-height-from-terrain",
+      "font_class": "measure-height-from-terrain",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "21556930",
+      "name": "measure-button",
+      "font_class": "measure-button",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "21556931",
+      "name": "measure-vertical-distance",
+      "font_class": "measure-vertical-distance",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "21556932",
+      "name": "measure-polyline-distance",
+      "font_class": "measure-polyline-distance",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
       "icon_id": "7988932",
       "name": "capture",
       "font_class": "capture",

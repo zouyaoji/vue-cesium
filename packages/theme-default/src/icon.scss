@@ -2,9 +2,9 @@
 
 @font-face {
   font-family: 'vc-icons';
-  src: url('#{$font-path}/iconfont.eot');
+  // src: url('#{$font-path}/iconfont.eot');
   src: url('#{$font-path}/iconfont.woff2') format('woff2'), url('#{$font-path}/iconfont.woff') format('woff'),
-    url('#{$font-path}/iconfont.ttf') format('truetype'), url('#{$font-path}/iconfont.svg#vc-icons') format('svg');
+    url('#{$font-path}/iconfont.ttf') format('truetype'), /*url('#{$font-path}/iconfont.svg#vc-icons') format('svg')*/;
 }
 
 .vc-icon {
@@ -130,4 +130,64 @@
 
 .#{$namespace}-icons-capture:before {
   content: '\e63c';
+}
+
+.#{$namespace}-icons-measure-polyline-distance:before {
+  content: '\e611';
+}
+
+.#{$namespace}-icons-measure-vertical-distance:before {
+  content: '\e60f';
+}
+
+.#{$namespace}-icons-measure-button:before {
+  content: '\e60e';
+}
+
+.#{$namespace}-icons-measure-height-from-terrain:before {
+  content: '\e60c';
+}
+
+.#{$namespace}-icons-measure-area:before {
+  content: '\e60b';
+}
+
+.#{$namespace}-icons-measure-component-distance:before {
+  content: '\eba3';
+}
+
+.#{$namespace}-icons-measure-point-coordinates:before {
+  content: '\e60d';
+}
+
+.#{$namespace}-icons-measure-horizontal-distance:before {
+  content: '\e609';
+}
+
+.#{$namespace}-icons-measure-distance:before {
+  content: '\e607';
+}
+
+.#{$namespace}-icons-move:before {
+  content: '\eba4';
+}
+
+.#{$namespace}-icons-delete:before {
+  content: '\eba5';
+}
+
+.#{$namespace}-icons-insert:before {
+  content: '\eba6';
+}
+
+.#{$namespace}-icons-remove:before {
+  content: '\eba7';
+}
+
+.#{$namespace}-icons-move-all:before {
+  content: '\eba9';
+}
+
+.#{$namespace}-icons-clear:before {
+  content: '\eba8';
 }

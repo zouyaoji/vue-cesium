@@ -1,0 +1,10 @@
+@import './core/variables.scss';
+
+// 导航控件
+.vc-measurements-container {
+  position: absolute;
+  z-index: $z-fab;
+  // .vc-measure-button .active {
+  //   opacity: 0.7 !important;
+  // }
+}
