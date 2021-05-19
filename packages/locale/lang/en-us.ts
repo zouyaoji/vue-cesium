@@ -3,8 +3,29 @@ export default {
   nativeName: 'English (US)',
   vc: {
     loadError: 'needs to be child of VcViewer',
-    measure: {
-      distance: 'Distance',
+    measurement: {
+      expand: 'Expand',
+      collapse: 'Collapse',
+      editor: {
+        move: 'Move the measurement point',
+        delete: 'Delete the measurement point',
+        deletLine: 'Delete the measurement polyline'
+      },
+      distance: {
+        tip: 'Distance',
+        drawTip1: 'Click the left mouse button to draw the starting point of distance measurement.',
+        drawTip2: 'Click the left mouse button to draw the end point of the distance measurement.',
+        drawTip3: 'Drag the mouse to modify the position of the node, and click the left mouse button to confirm the modification.',
+      },
+      componentDistance: {
+        tip: 'Component Distance',
+        drawTip1: 'Click the left mouse button to draw the starting point of component distance measurement.',
+        drawTip2: 'Click the left mouse button to draw the end point of the component distance measurement.',
+        drawTip3: 'Drag the mouse to modify the position of the node, and click the left mouse button to confirm the modification.',
+      },
+      clear:{
+        tip: 'Clear measurement results'
+      },
       area: 'Area',
       horizontalDistance: 'HD',
       spaceDistance: 'SD',

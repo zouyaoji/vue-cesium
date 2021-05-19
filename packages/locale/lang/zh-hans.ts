@@ -3,8 +3,30 @@ export default {
   nativeName: '中文(简体)',
   vc: {
     loadError: '加载失败，必须作为 VcViewer 的子组件加载。',
-    measure: {
-      distance: '距离',
+    measurement: {
+      expand: '展开',
+      collapse: '收起',
+      editor: {
+        move: '移动节点',
+        delete: '删除节点',
+        deletLine: '删除线'
+      },
+      distance: {
+        tip: '距离量算',
+        drawTip1: '点击鼠标左键绘制距离量算起点。',
+        drawTip2: '点击鼠标左键绘制距离量算终点。',
+        drawTip3: '拖拽鼠标修改节点位置，点击鼠标左键确定修改。',
+      },
+      componentDistance: {
+        tip: '三角量算',
+        drawTip1: '点击鼠标左键绘制三角量算起点。',
+        drawTip2: '点击鼠标左键绘制三角量算终点。',
+        drawTip3: '拖拽鼠标修改节点位置，点击鼠标左键确定修改。',
+      },
+      clear:{
+        tip: '清除量算结果'
+      },
+      // distance: '距离',
       area: '面积',
       horizontalDistance: '水平距离',
       spaceDistance: '空间距离',
