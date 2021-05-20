@@ -820,12 +820,9 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       eventsState.registerEvents(false)
     }
 
-    $vc.pickScreenSpaceEventHandler && $vc.pickScreenSpaceEventHandler.destroy()
-    $vc.viewerScreenSpaceEventHandler && $vc.viewerScreenSpaceEventHandler.destroy()
+    viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
+    viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
     global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
-
-    $vc.pickScreenSpaceEventHandler = undefined
-    $vc.viewerScreenSpaceEventHandler = undefined
     vcInstance.viewer = undefined
     vcInstance.mounted = false
     const { removeCesiumScript } = props

@@ -31,6 +31,8 @@ declare namespace Cesium {
     _onInfoBoxClockClicked?(val: InfoBoxViewModel): void
     _clearObjects?: () => void
     _clearTrackedObject?(val: InfoBoxViewModel): void
+    _vcPickScreenSpaceEventHandler: ScreenSpaceEventHandler
+    _vcViewerScreenSpaceEventHandler: ScreenSpaceEventHandler
   }
 
   interface Timeline {

@@ -5,9 +5,8 @@ export interface InstallOptions {
   lang?: any
   i18n?: (...args: any[]) => string
   scriptPromise?: Promise<unknown>
-  pickScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
-  viewerScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
-  measurementMouseHandler?: Cesium.ScreenSpaceEventHandler
+  // pickScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
+  // viewerScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
   viewerUnloadingPromise?: Promise<boolean>
 }
 

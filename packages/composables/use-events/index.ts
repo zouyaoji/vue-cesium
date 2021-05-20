@@ -4,7 +4,6 @@ import { isArray } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
 export default function (props, vcInstance: VcComponentInternalInstance, logger) {
-  const $vc = vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions
   const bindEvents = (cesiumObject: AnyObject, cesiumEvents: Array<string>, register = true) => {
     const ev = cesiumEvents || vcInstance.cesiumEvents || []
     ev &&
@@ -22,14 +21,14 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     const { viewer, cesiumObject } = vcInstance
     const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
 
-    if (!$vc.pickScreenSpaceEventHandler || !$vc.viewerScreenSpaceEventHandler) {
-      $vc.pickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
-      $vc.viewerScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
+    if (!viewer._vcPickScreenSpaceEventHandler || !viewer._vcViewerScreenSpaceEventHandler) {
+      viewer._vcPickScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
+      viewer._vcViewerScreenSpaceEventHandler = new ScreenSpaceEventHandler(viewer.canvas)
       viewerScreenSpaceEvents.forEach(type => {
         const listener = getInstanceListener(vcInstance, type)
-        listener && $vc.viewerScreenSpaceEventHandler.setInputAction(listener, ScreenSpaceEventType[type])
+        listener && viewer._vcViewerScreenSpaceEventHandler.setInputAction(listener, ScreenSpaceEventType[type])
         // vc-viewer 率先绑定
-        $vc.pickScreenSpaceEventHandler.setInputAction(pickedAction.bind({ eventName: type, viewer }), ScreenSpaceEventType[type])
+        viewer._vcPickScreenSpaceEventHandler.setInputAction(pickedAction.bind({ eventName: type, viewer }), ScreenSpaceEventType[type])
       })
     }
 
