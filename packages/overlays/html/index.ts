@@ -75,8 +75,7 @@ export default defineComponent({
     }
     const onPreRender = () => {
       const { viewer } = $services
-      const scratch = new Cesium.Cartesian2()
-      const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, scratch)
+      const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, {} as any)
       if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
         rootStyle.left = canvasPosition.x + offset.value?.x + 'px'
         rootStyle.top = canvasPosition.y + offset.value?.y + 'px'
@@ -107,7 +106,7 @@ export default defineComponent({
       unwatchFns = []
     })
 
-    const renderPortalContent = () => {
+    const renderContent = () => {
       if (canRender.value) {
         return h('div', {
           ref: rootRef,
@@ -118,22 +117,15 @@ export default defineComponent({
         return createCommentVNode('v-if')
       }
     }
+    const renderPortalContent = () => {
+      return renderContent()
+    }
 
     const { showPortal, hidePortal, renderPortal } = usePortal(instance, rootRef, renderPortalContent)
     if (props.teleport && props.teleport.to) {
       return renderPortal
     } else {
-      return () => {
-        if (canRender.value) {
-          return h('div', {
-            ref: rootRef,
-            class: `vc-html-container${props.customClass ? ' ' + props.customClass : ''}`,
-            style: rootStyle
-          }, hSlot(ctx.slots.default))
-        } else {
-          return createCommentVNode('v-if')
-        }
-      }
+      return () => renderContent()
     }
   }
 })
