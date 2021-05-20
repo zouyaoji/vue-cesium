@@ -179,7 +179,7 @@ export default defineComponent({
       drawTipPosition.value = [0, 0, 0]
     }
 
-    const handleClick = (movement, options?) => {
+    const handleMouseClick = (movement, options?) => {
       const { viewer, measurementVm, selectedMeasurementOption } = $services
 
       if (options.button === 2 && options.ctrl) {
@@ -360,8 +360,8 @@ export default defineComponent({
 
     const restoreCursor = ref(null)
     const onMouseoverPoints = e => {
-      const { favActived, viewer } = $services
-      if (props.editable && status !== DrawStatus.Drawing && favActived) {
+      const { isActive, viewer } = $services
+      if (props.editable && status !== DrawStatus.Drawing && isActive) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
         mouseoverPoint.value = e.pickedFeature.primitive
         editorPosition.value = e.pickedFeature.primitive.position
@@ -440,7 +440,7 @@ export default defineComponent({
     }
 
     // expose public methods
-    const publicMethods = { startNew, stop, clear, handleClick, handleMouseMove }
+    const publicMethods = { startNew, stop, clear, handleMouseClick, handleMouseMove }
     Object.assign(instance.proxy, publicMethods)
 
     return () => {
@@ -570,14 +570,15 @@ export default defineComponent({
       })
 
       if (props.drawtip.show && canShowDrawTip.value) {
+        const { viewer } = $services
         children.push(h(VcOverlayHtml, {
           position: drawTipPosition.value,
           pixelOffset: props.drawtip.pixelOffset,
           teleport: {
-            to: '#cesiumContainer'
+            to: viewer.container
           }
         }, () => h('div', {
-          class: 'vc-drawtip vc-tooltip vc-tooltip--style'
+          class: 'vc-drawtip vc-tooltip--style'
         }, drawTip.value)))
       }
 
@@ -614,11 +615,12 @@ export default defineComponent({
         //   ))
         // }
 
+        const { viewer } = $services
         children.push(h(VcOverlayHtml, {
           position: editorPosition.value,
           pixelOffset: props.editorOpts?.pixelOffset,
           teleport: {
-            to: '#cesiumContainer'
+            to: viewer.container
           }
         }, () => h('div', {
           class: 'vc-editor'
