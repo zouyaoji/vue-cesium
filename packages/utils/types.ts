@@ -117,7 +117,7 @@ interface VcViewerProvider {
   }
   measurementVm?: VcComponentInternalInstance
   selectedMeasurementOption?: MeasurementsOption
-  favActived: boolean
+  isActive: boolean
 }
 
 interface Cartesian2Option {

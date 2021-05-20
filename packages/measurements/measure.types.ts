@@ -32,6 +32,7 @@ interface MeasurementsOption {
   actionClass?: string
   tip?: string
   cmp: typeof VcMeasurementDistance
+  isActive: boolean
 }
 
 export {

@@ -94,7 +94,8 @@ export default defineComponent({
       },
       actionClass: `vc-measure-${measurement} vc-measure-button${measurement === selectedMeasurementOption?.name ? ' active' : ''}`,
       tip: options[`${camelize(measurement)}ActionOpts`].tooltip.tip || t(`vc.measurement.${camelize(measurement)}.tip`),
-      cmp: getMeasurementCmp(measurement)
+      cmp: getMeasurementCmp(measurement),
+      isActive: false
     }))
 
     // methods
@@ -104,8 +105,9 @@ export default defineComponent({
      * @param button 鼠标按键 0 左键, 1 中键, 2 右键
      * @param shift
      */
-    const handleClick = (movement, options?) => {
-      selectedMeasurementOption?.measurementRef.value.handleClick?.(movement.position, options)
+    const handleMouseClick = (movement, options?) => {
+      const measurementCmp: any = (selectedMeasurementOption?.measurementRef.value || selectedMeasurementOption?.measurementRef)
+      measurementCmp?.handleMouseClick?.(movement.position, options)
 
       let measurementOptions
       if ((instance.proxy as any).editingMeasurementName) {
@@ -113,12 +115,14 @@ export default defineComponent({
       }
 
       if (measurementOptions !== selectedMeasurementOption) {
-        measurementOptions?.measurementRef.value.handleClick?.(movement.position, options)
+        const measurementCmp: any = (measurementOptions?.measurementRef.value || measurementOptions?.measurementRef)
+        measurementCmp?.handleMouseClick?.(movement.position, options)
       }
     }
 
     const handleMouseMove = (movement, options?) => {
-      selectedMeasurementOption?.measurementRef.value.handleMouseMove?.(movement.endPosition, options)
+      const measurementCmp: any = (selectedMeasurementOption?.measurementRef.value || selectedMeasurementOption?.measurementRef)
+      measurementCmp?.handleMouseMove?.(movement.endPosition, options)
 
       let measurementOptions
       if ((instance.proxy as any).editingMeasurementName) {
@@ -126,26 +130,28 @@ export default defineComponent({
       }
 
       if (measurementOptions !== selectedMeasurementOption) {
-        measurementOptions?.measurementRef.value.handleMouseMove?.(movement.endPosition, options)
+        const measurementCmp: any = (measurementOptions?.measurementRef.value || measurementOptions?.measurementRef)
+        measurementCmp?.handleMouseMove?.(movement.endPosition, options)
       }
     }
 
-    const { activate, deactivate, destroy: destroyHandler } = useHandler($services, {
-      handleClick,
+    const { activate, deactivate, destroy: destroyHandler, isActive } = useHandler($services, {
+      handleMouseClick,
       handleMouseMove
     })
 
     instance.createCesiumObject = async () => {
       canRender.value = true
-      return true
+      return measurementsOptions
     }
 
     instance.mount = async () => {
       updateRootStyle()
       mounted.value = true
       nextTick(() => {
-        measurementFabOptions.autoExpand && fabRef.value.toggle()
+        measurementFabOptions.autoExpand && fabRef.value?.toggle()
       })
+      activate()
       return true
     }
 
@@ -204,7 +210,9 @@ export default defineComponent({
       const { viewer } = $services
       if (selectedMeasurementOption !== void 0) {
         selectedMeasurementOption.actionOpts.color = restoreColor.value
-        selectedMeasurementOption.measurementRef.value.stop?.()
+        const measurementCmp: any = (selectedMeasurementOption.measurementRef.value || selectedMeasurementOption.measurementRef)
+        measurementCmp.stop()
+        selectedMeasurementOption.isActive = false
         emit('activeEvt', {
           type: selectedMeasurementOption.name,
           isActive: false
@@ -216,13 +224,15 @@ export default defineComponent({
         measurementOption.actionOpts.color = restoreColor.value
       } else {
         selectedMeasurementOption = measurementOption
-        measurementOption.measurementRef.value.startNew?.()
-        restoreColor.value = measurementOption.actionOpts.color
-        measurementOption.actionOpts.color = props.activeColor
+        const measurementCmp: any = (selectedMeasurementOption.measurementRef.value || selectedMeasurementOption.measurementRef)
+        measurementCmp.startNew()
+        restoreColor.value = selectedMeasurementOption.actionOpts.color
+        selectedMeasurementOption.actionOpts.color = props.activeColor
         restoreCursor.value = getComputedStyle(viewer.canvas).cursor
         viewer.canvas.setAttribute('style', 'cursor: crosshair')
+        selectedMeasurementOption.isActive = true
         emit('activeEvt', {
-          type: measurementOption.name,
+          type: selectedMeasurementOption.name,
           isActive: true
         })
       }
@@ -258,8 +268,8 @@ export default defineComponent({
         get selectedMeasurementOption () {
           return selectedMeasurementOption
         },
-        get favActived () {
-          return fabExtanded.value
+        get isActive () {
+          return isActive
         }
       })
     }
@@ -325,7 +335,7 @@ export default defineComponent({
               ref: rootRef,
               class: 'vc-measurements-container ' + positionState.classes.value,
               style: rootStyle
-            }, h(VcFab, {
+            }, ctx.slots.body !== void 0 ? ctx.slots.body() : h(VcFab, {
               ref: fabRef,
               class: 'vc-measure-button',
               style: {

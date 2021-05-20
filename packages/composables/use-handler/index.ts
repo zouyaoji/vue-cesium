@@ -1,11 +1,8 @@
-import { EntityEmitType, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider } from '@vue-cesium/utils/types'
-import useCommon from '../use-common'
-import { kebabCase } from '@vue-cesium/utils/util'
-import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import {  VcViewerProvider } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
 
 export default function($services: VcViewerProvider, {
-  handleClick = undefined,
+  handleMouseClick = undefined,
   handleMouseDown = undefined,
   handleMouseUp = undefined,
   handleMouseMove = undefined,
@@ -14,16 +11,22 @@ export default function($services: VcViewerProvider, {
   handlePinch = undefined
 }) {
   // state
-  const measurementMouseHandler = ref<Cesium.ScreenSpaceEventHandler>(null)
+  const handler = ref<Cesium.ScreenSpaceEventHandler>(null)
+  const isActive = ref(false)
 
   //methods
   const activate = () => {
-    const { ScreenSpaceEventType, KeyboardEventModifier, ScreenSpaceEventHandler } = Cesium
-    if (!measurementMouseHandler.value) {
-      const { viewer } = $services
-      measurementMouseHandler.value = new ScreenSpaceEventHandler(viewer.canvas)
+    if (isActive.value) {
+      return
     }
-    const sseh = measurementMouseHandler.value
+
+    const { ScreenSpaceEventType, KeyboardEventModifier, ScreenSpaceEventHandler } = Cesium
+    if (!handler.value) {
+      const { viewer } = $services
+      handler.value = new ScreenSpaceEventHandler(viewer.canvas)
+    }
+
+    const sseh = handler.value
     sseh.setInputAction(onLeftClick, ScreenSpaceEventType.LEFT_CLICK)
     sseh.setInputAction(onLeftClickShift, ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.SHIFT)
     sseh.setInputAction(onLeftClickCtrl, ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.CTRL)
@@ -83,13 +86,20 @@ export default function($services: VcViewerProvider, {
     sseh.setInputAction(onPinchMove, ScreenSpaceEventType.PINCH_MOVE)
     sseh.setInputAction(onPinchMoveShift, ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.SHIFT)
     sseh.setInputAction(onPinchMoveCtrl, ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.CTRL)
+    isActive.value = true
   }
 
 
   const deactivate = () => {
+    if (!isActive.value) {
+      return
+    }
     const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium
 
-    const sseh = measurementMouseHandler.value
+    const sseh = handler.value
+    if (!sseh) {
+      return
+    }
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK)
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.SHIFT)
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.CTRL)
@@ -149,67 +159,68 @@ export default function($services: VcViewerProvider, {
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE)
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.SHIFT)
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.CTRL)
+    isActive.value = false
   }
 
   const destroy = () => {
-    measurementMouseHandler.value?.destroy()
+    handler.value?.destroy()
   }
 
   const onLeftClick = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 0
     })
   }
 
   const onLeftClickShift = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 0,
       shift: true
     })
   }
 
   const onLeftClickCtrl = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 0,
       ctrl: true
     })
   }
 
   const onMiddleClick = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 1
     })
   }
 
   const onMiddleClickShift = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 1,
       shift: true
     })
   }
 
   const onMiddleClickCtrl = movement => {
-    handleClick?.(movement, {
+    handleMouseClick?.(movement, {
       button: 1,
       ctrl: true
     })
   }
 
   const onRightClick = movement => {
-    handleClick(movement, {
+    handleMouseClick(movement, {
       button: 2
     })
   }
 
   const onRightClickShift = movement => {
-    handleClick(movement, {
+    handleMouseClick(movement, {
       button: 2,
       shift: true
     })
   }
 
   const onRightClickCtrl = movement => {
-    handleClick(movement, {
+    handleMouseClick(movement, {
       button: 2,
       ctrl: true
     })
@@ -451,6 +462,7 @@ export default function($services: VcViewerProvider, {
   return {
     activate,
     deactivate,
-    destroy
+    destroy,
+    isActive
   }
 }
