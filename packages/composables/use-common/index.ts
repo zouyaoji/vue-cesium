@@ -86,6 +86,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
 
     setPropsWatcher(true)
+    console.log(vcInstance.cesiumClass)
 
     return createCesiumObject().then(async cesiumObject => {
       vcInstance.cesiumObject = cesiumObject
@@ -285,16 +286,16 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   // lifecycle
   const createPromise = new Promise<ReadyObj | boolean>((resolve, reject) => {
     try {
-      let isLoad = false
+      let isLoading = false
       if ($services.viewer) {
-        isLoad = true
+        isLoading = true
         load().then(e => {
           resolve(e)
-          isLoad = false
+          isLoading = false
         })
       }
       parentVcInstance.vcMitt.on('ready', () => {
-        if (!isLoad) {
+        if (!isLoading) {
           resolve(load())
         }
       })
@@ -305,10 +306,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   logger.debug(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
     logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
-    vcInstance.unloadingPromise = new Promise((reslove, reject) => {
+    vcInstance.unloadingPromise = new Promise((resolve, reject) => {
       unload().then(() => {
         logger.debug(`${vcInstance.cesiumClass}---unloaded`)
-        reslove(true)
+        resolve(true)
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()
       })
