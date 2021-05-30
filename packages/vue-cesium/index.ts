@@ -14,7 +14,7 @@ import {
   VcNavigationSm
 } from '@vue-cesium/controls'
 // tools
-import VcMeasurements from '@vue-cesium/measurements'
+import VcMeasurements, { MeasureUnits, DistanceUnits, AreaUnits, VolumeUnits, AngleUnits } from '@vue-cesium/measurements'
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
@@ -412,6 +412,9 @@ export {
 
   VcOverlayHtml,
   VcOverlayHeatmap,
+
+  // others
+  MeasureUnits, DistanceUnits, AreaUnits, VolumeUnits, AngleUnits,
 
   version,
   install,

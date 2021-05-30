@@ -5,18 +5,14 @@ export default {
   ...enableMouseEvent,
   editable: Boolean,
   show: Boolean,
-  showComponentLines: {
-    type: Boolean,
-    default: false
-  },
-  measureUnits: MeasureUnits,
+  measureUnits: Object,
   drawtip: Object,
   pointOpts: Object,
   polylineOpts: Object,
   labelOpts: Object,
-  xLabelOpts: Object,
-  xAngleLabelOpts: Object,
-  yLabelOpts: Object,
-  yAngleLabelOpts: Object,
-  editorOpts: Object
+  labelsOpts: Object,
+  editorOpts: Object,
+  locale: String,
+  decimals: Object,
+  showAngleLabel: Boolean
 }

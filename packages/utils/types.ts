@@ -1,7 +1,8 @@
-import { MeasurementsOption } from '@vue-cesium/measurements/measure.types'
+
 import { Emitter } from 'mitt'
 import type { App, Ref } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
+import { MeasurementInstanceOpts } from '../measurements/src/measure.types'
 
 export type SFCWithInstall<T> = T & { install (app: App): void; }
 
@@ -116,8 +117,9 @@ interface VcViewerProvider {
     bottomContainerRC: Partial<DOMRect>
   }
   measurementVm?: VcComponentInternalInstance
-  selectedMeasurementOption?: MeasurementsOption
-  isActive: boolean
+  selectedMeasurementOption?: MeasurementInstanceOpts
+  measurementHandlerActive: boolean
+  getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
 }
 
 interface Cartesian2Option {

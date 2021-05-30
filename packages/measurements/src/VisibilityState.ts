@@ -40,7 +40,7 @@ class VisibilityState {
   }
 
   restore (scene: Cesium.Scene) {
-    this.count = 0,
+    this.count = 0
     this.restorePrimitiveCollection(scene.primitives)
     this.restorePrimitiveCollection(scene.groundPrimitives)
   }

@@ -3,42 +3,6 @@ export default {
   nativeName: 'English (US)',
   vc: {
     loadError: 'needs to be child of VcViewer',
-    measurement: {
-      expand: 'Expand',
-      collapse: 'Collapse',
-      editor: {
-        move: 'Move the measurement point',
-        delete: 'Delete the measurement point',
-        deletLine: 'Delete the measurement polyline'
-      },
-      distance: {
-        tip: 'Distance',
-        drawTip1: 'Click the left mouse button to draw the starting point of distance measurement.',
-        drawTip2: 'Click the left mouse button to draw the end point of the distance measurement.',
-        drawTip3: 'Drag the mouse to modify the position of the node, and click the left mouse button to confirm the modification.',
-      },
-      componentDistance: {
-        tip: 'Component Distance',
-        drawTip1: 'Click the left mouse button to draw the starting point of component distance measurement.',
-        drawTip2: 'Click the left mouse button to draw the end point of the component distance measurement.',
-        drawTip3: 'Drag the mouse to modify the position of the node, and click the left mouse button to confirm the modification.',
-      },
-      clear:{
-        tip: 'Clear measurement results'
-      },
-      area: 'Area',
-      horizontalDistance: 'HD',
-      spaceDistance: 'SD',
-      verticalHeight: 'VH'
-    },
-    draw: {
-      drawingTip1: 'Click the left button to draw the starting point.',
-      drawingTip2: 'Click the left button to draw the next point, and click the right button to end the drawing.',
-      drawingTip3: 'Click to end editing.',
-      editingMove: 'Move',
-      editingInsert: 'Insert',
-      editingDelete: 'Delete'
-    },
     navigation: {
       compass: {
         outerTip: 'Drag outer ring: rotate view. Double-click: reset view.',
@@ -90,6 +54,79 @@ export default {
         zoomBarTip: 'Drag the bar up to zoom in, and down to zoom out.',
         zoomOutTip: 'Zoom out'
       }
+    },
+    measurement: {
+      expand: 'Expand',
+      collapse: 'Collapse',
+      editor: {
+        move: 'Move the measurement point',
+        insert: 'Insert the measurement point',
+        remove: 'Remove the measurement point',
+        removeAll: 'Remove all the measurement point'
+      },
+      distance: {
+        tip: 'Distance',
+        drawTip1: 'Click the left button to draw the starting point of the distance measurement.',
+        drawTip2: 'Click the left mouse button to draw the end point of the distance measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      componentDistance: {
+        tip: 'Component Distance',
+        drawTip1: 'Click the left mouse button to draw the starting point of component distance measurement.',
+        drawTip2: 'Click the left mouse button to draw the end point of the component distance measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      polyline: {
+        tip: 'Polyline Distance',
+        drawTip1: 'Click the left button to draw the first point.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      horizontal: {
+        tip: 'Horizontal Distance',
+        drawTip1: 'Click the left button to draw the first point.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      vertical: {
+        tip: 'Vertical Distance',
+        drawTip1: 'Click the left button to draw the starting point of the vertical distance measurement.',
+        drawTip2: 'Click the left button to draw the end point of the vertical distance measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      height: {
+        tip: 'Height ',
+        drawTip1: 'Click the left button to draw the height measurement point.',
+        drawTip2: 'Click the left button to draw the height measurement point.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      area: {
+        tip: 'Area',
+        drawTip1: 'Click the left button to draw the first point.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      point: {
+        tip: 'Point Coordinate',
+        drawTip1: 'Click the left button to draw the point coordinate measurement.',
+        drawTip2: 'Click the left button to draw the point coordinate measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+        lng: 'lng:',
+        lat: 'lat:',
+        height: 'height:',
+        slope: 'slope:'
+      },
+      clear: {
+        tip: 'Clear measurement results'
+      },
+    },
+    draw: {
+      drawingTip1: 'Click the left button to draw the starting point.',
+      drawingTip2: 'Click the left button to draw the next point, and click the right button to end the drawing.',
+      drawingTip3: 'Click to end editing.',
+      editingMove: 'Move',
+      editingInsert: 'Insert',
+      editingDelete: 'Delete'
     },
     overviewmap: {
       show: 'Show',

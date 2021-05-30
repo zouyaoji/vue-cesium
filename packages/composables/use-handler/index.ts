@@ -164,6 +164,7 @@ export default function($services: VcViewerProvider, {
 
   const destroy = () => {
     handler.value?.destroy()
+    handler.value = undefined
   }
 
   const onLeftClick = movement => {

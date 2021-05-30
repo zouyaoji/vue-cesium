@@ -57,12 +57,25 @@ class MeasureUnits {
     this.slopeUnits = defaultValue(options.slopeUnits, AngleUnits.DEGREES)
   }
 
+  static numberToString = function(number, locale, decimals) {
+    return numberToFormattedString(number, locale, decimals)
+  }
+
   static distanceToString (distance: number, distanceUnits: string, locale?, decimals?) {
     distance = MeasureUnits.convertDistance(distance, DistanceUnits.METERS, distanceUnits)
     return (
       numberToFormattedString(distance, locale, decimals) +
       MeasureUnits.getDistanceUnitSpacing(distanceUnits) +
       MeasureUnits.getDistanceUnitSymbol(distanceUnits)
+    )
+  }
+
+  static areaToString (area: number, areaUnits: string, locale?, decimals?) {
+    area = MeasureUnits.convertArea(area, AreaUnits.SQUARE_METERS, areaUnits)
+    return (
+      numberToFormattedString(area, locale, decimals) +
+      MeasureUnits.getAreaUnitSpacing(areaUnits) +
+      MeasureUnits.getAreaUnitSymbol(areaUnits)
     )
   }
 
@@ -84,13 +97,26 @@ class MeasureUnits {
       const degrees = Math.floor(angleDegrees)
       const minutes = 60 * (angleDegrees - degrees)
       const seconds = Math.floor(minutes)
-      return prefix + degrees + '° ' + seconds + "' " + numberToFormattedString(60 * (minutes - seconds), void 0, r) + '"'
+      return prefix + degrees + '° ' + seconds + "' " + numberToFormattedString(60 * (minutes - seconds), void 0, decimals) + '"'
     }
     if (angleUnits === AngleUnits.RATIO) {
     }
   }
 
+  static volumeToString (volume: number, volumeUnits: string, locale?, decimals?) {
+    volume = MeasureUnits.convertArea(volume, VolumeUnits.CUBIC_METERS, volumeUnits)
+    return (
+      numberToFormattedString(volume, locale, decimals) +
+      MeasureUnits.getVolumeUnitSpacing(volumeUnits) +
+      MeasureUnits.getVolumeUnitSymbol(volumeUnits)
+    )
+  }
+
   static getDistanceUnitSpacing (distanceUnits: string) {
+    return ' '
+  }
+
+  static getAreaUnitSpacing (distanceUnits: string) {
     return ' '
   }
 
@@ -98,6 +124,9 @@ class MeasureUnits {
     return angleUnits === AngleUnits.RADIANS ? ' ' : ''
   }
 
+  static getVolumeUnitSpacing (distanceUnits: string) {
+    return ' '
+  }
 
   static getDistanceUnitSymbol (distanceUnits: string) {
     switch (distanceUnits) {
@@ -121,6 +150,52 @@ class MeasureUnits {
     }
   }
 
+  static getAreaUnitSymbol (areaUnits: string) {
+    switch (areaUnits) {
+      case AreaUnits.SQUARE_METERS:
+        return 'm²'
+      case AreaUnits.SQUARE_CENTIMETERS:
+        return 'cm²'
+      case AreaUnits.SQUARE_KILOMETERS:
+        return 'km²'
+      case AreaUnits.SQUARE_FEET:
+        return 'sq ft'
+      case AreaUnits.SQUARE_INCHES:
+        return 'sq in'
+      case AreaUnits.SQUARE_YARDS:
+        return 'sq yd'
+      case AreaUnits.SQUARE_MILES:
+        return 'sq mi'
+      case AreaUnits.ACRES:
+        return 'ac'
+      case AreaUnits.HECTARES:
+        return 'ha'
+      default:
+        return void 0
+    }
+  }
+
+  static getVolumeUnitSymbol (volumeUnits) {
+    switch (volumeUnits) {
+      case VolumeUnits.CUBIC_METERS:
+        return 'm³'
+      case VolumeUnits.CUBIC_CENTIMETERS:
+        return 'cm³'
+      case VolumeUnits.CUBIC_KILOMETERS:
+        return 'km³'
+      case VolumeUnits.CUBIC_FEET:
+        return 'cu ft'
+      case VolumeUnits.CUBIC_INCHES:
+        return 'cu in'
+      case VolumeUnits.CUBIC_YARDS:
+        return 'cu yd'
+      case VolumeUnits.CUBIC_MILES:
+        return 'cu mi'
+      default:
+        return void 0
+    }
+  }
+
   static getAngleUnitSymbol (angleUnits) {
     return angleUnits === AngleUnits.DEGREES ? '°' : angleUnits === AngleUnits.RADIANS ? 'rad' : angleUnits === AngleUnits.GRADE ? '%' : void 0
   }
@@ -131,8 +206,30 @@ class MeasureUnits {
       : distance * getDistanceUnitConversion(distanceUnitsFrom) * (1 / getDistanceUnitConversion(distanceUnitsTo))
   }
 
-  longitudeToString () {
-    //
+  static convertArea (area: number, areaUnitsFrom: string, areaUnitsTo: string) {
+    return areaUnitsFrom === areaUnitsTo
+      ? area
+      : area * getAreaUnitConversion(areaUnitsFrom) * (1 / getAreaUnitConversion(areaUnitsTo))
+  }
+
+  static convertVolume (volume: number, volumeUnitsFrom: string, volumeUnitsTo: string) {
+    return volumeUnitsFrom === volumeUnitsTo
+      ? volume
+      : volume * getVolumeUnitConversion(volumeUnitsFrom) * (1 / getVolumeUnitConversion(volumeUnitsTo))
+  }
+
+  static convertAngle (angle: number, angleUnitsFrom: string, angleUnitsTo: string) {
+    return angleUnitsFrom === angleUnitsTo
+      ? angle
+      : convertAngleFromRadians(convertAngleToRadians(angle, angleUnitsFrom), angleUnitsTo)
+  }
+
+  static longitudeToString (longitude, angleUnits, locale, decimals) {
+    return MeasureUnits.angleToString(Math.abs(longitude), angleUnits, locale, decimals) + ' ' + (longitude < 0 ? 'W' : 'E')
+  }
+
+  static latitudeToString (latitude, angleUnits, locale, decimals) {
+    return MeasureUnits.angleToString(Math.abs(latitude), angleUnits, locale, decimals) + ' ' + (latitude < 0 ? 'S' : 'N')
   }
 }
 
