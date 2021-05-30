@@ -132,7 +132,8 @@
         appearanceOutline,
         attributesOutline,
         outline,
-        polygonHierarchy
+        polygonHierarchy,
+        vertexFormat
       }
     }
   }

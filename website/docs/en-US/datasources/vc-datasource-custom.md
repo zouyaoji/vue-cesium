@@ -131,7 +131,7 @@ Basic usage of VcDatasourceCustom component.
             }
           })
         } else {
-          datas = []
+          datasources = []
         }
       }
       const onClicked = e => {
