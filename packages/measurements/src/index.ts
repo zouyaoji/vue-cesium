@@ -1,4 +1,3 @@
-
 import {
   defineComponent,
   getCurrentInstance,
@@ -44,7 +43,7 @@ import { t } from '@vue-cesium/locale'
 import { vcKey } from '@vue-cesium/utils/config'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import VisibilityState from './VisibilityState'
+import { VisibilityState } from '@vue-cesium/shared'
 import VcMeasurementDistance from './distance'
 import VcMeasurementPolyline from './polyline'
 import VcMeasurementHorizontal from './horizontal'
@@ -401,7 +400,7 @@ export default defineComponent({
         get getWorldPosition () {
           return getWorldPosition
         },
-        get measurementHandlerActive () {
+        get drawingHandlerActive () {
           return isActive
         }
       })

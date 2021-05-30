@@ -5,14 +5,14 @@ import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
 import { makeMaterial, getGeodesicDistance, restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { HorizontalMeasurementDrawing } from '../measure.types'
-import DrawStatus from '../DrawStatus'
+import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
 import { VcGeometryPolyline } from '@vue-cesium/geometries'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
-import MeasureUnits from '../MeasureUnits'
+import { MeasureUnits } from '@vue-cesium/shared'
 
 export default defineComponent({
   name: 'VcMeasurementHorizontal',
@@ -386,12 +386,12 @@ export default defineComponent({
     }
 
     const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-      cesiumObject._vcId = 'MeasurementHorizontal'
+      cesiumObject._vcId = 'VcMeasurementHorizontal'
     }
 
     const onMouseoverPoints = e => {
-      const { measurementHandlerActive, viewer } = $services
-      if (props.editable && drawStatus.value !== DrawStatus.Drawing && measurementHandlerActive) {
+      const { drawingHandlerActive, viewer } = $services
+      if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
         mouseoverPoint.value = e.pickedFeature.primitive
         editorPosition.value = e.pickedFeature.primitive.position

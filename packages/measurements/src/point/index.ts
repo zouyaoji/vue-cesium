@@ -4,12 +4,12 @@ import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
 import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { PointMeasurement } from '../measure.types'
-import DrawStatus from '../DrawStatus'
+import { DrawStatus } from '@vue-cesium/shared'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
-import MeasureUnits from '../MeasureUnits'
+import { MeasureUnits } from '@vue-cesium/shared'
 
 export default defineComponent({
   name: 'VcMeasurementPoint',
@@ -308,8 +308,8 @@ export default defineComponent({
     }
 
     const onMouseoverPoints = e => {
-      const { measurementHandlerActive, viewer } = $services
-      if (props.editable && drawStatus.value !== DrawStatus.Drawing && measurementHandlerActive) {
+      const { drawingHandlerActive, viewer } = $services
+      if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
         mouseoverPoint.value = e.pickedFeature.primitive
         editorPosition.value = e.pickedFeature.primitive.position
@@ -363,7 +363,7 @@ export default defineComponent({
     }
 
     const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-      cesiumObject._vcId = 'MeasurementPoint'
+      cesiumObject._vcId = 'VcMeasurementPoint'
     }
 
     const getLabelText = (point: PointMeasurement) => {

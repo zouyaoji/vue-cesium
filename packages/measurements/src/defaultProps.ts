@@ -2,7 +2,7 @@ import { positionProps } from '@vue-cesium/composables/private/use-position'
 import { show } from '@vue-cesium/utils/cesium-props'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 import { PropType } from 'vue'
-import MeasureUnits from './MeasureUnits'
+import { MeasureUnits } from '@vue-cesium/shared'
 
 const actionOptions = {
   externalLabel: false,
@@ -460,7 +460,7 @@ const defaultProps = {
     default: () => distanceActionDefault
   },
   distanceMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof distanceMeasurementDefault>,
     default: () => distanceMeasurementDefault
   },
   componentDistanceActionOpts: {
@@ -468,59 +468,59 @@ const defaultProps = {
     default: () => componentDistanceActionDefault
   },
   componentDistanceMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof componentDistanceMeasurementDefault>,
     default: () => componentDistanceMeasurementDefault
   },
   polylineActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof polylineActionDefault>,
     default: () => polylineActionDefault
   },
   polylineMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof polylineMeasurementDefault>,
     default: () => polylineMeasurementDefault
   },
   horizontalActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof horizontalActionDefault>,
     default: () => horizontalActionDefault
   },
   horizontalMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof horizontalMeasurementDefault>,
     default: () => horizontalMeasurementDefault
   },
   verticalActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof verticalActionDefault>,
     default: () => verticalActionDefault
   },
   verticalMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof verticalMeasurementDefault>,
     default: () => verticalMeasurementDefault
   },
   heightActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof heightActionDefault>,
     default: () => heightActionDefault
   },
   heightMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof heightMeasurementDefault>,
     default: () => heightMeasurementDefault
   },
   areaActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof areaActionDefault>,
     default: () => areaActionDefault
   },
   areaMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof areaMeasurementDefault>,
     default: () => areaMeasurementDefault
   },
   pointActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof pointActionDefault>,
     default: () => pointActionDefault
   },
   pointMeasurementOpts: {
-    type: Object,
+    type: Object as PropType<typeof pointMeasurementDefault>,
     default: () => pointMeasurementDefault
   },
   clearActionOpts: {
-    type: Object,
+    type: Object as PropType<typeof clearActionDefault>,
     default: () => clearActionDefault
   }
 }

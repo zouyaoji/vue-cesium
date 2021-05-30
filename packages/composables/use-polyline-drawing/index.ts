@@ -1,9 +1,9 @@
 
 import { ref } from 'vue'
 import { VcViewerProvider } from '@vue-cesium/utils/types'
-import DrawStatus from './DrawStatus'
-import { PolylineDrawing } from './measure.types'
+import { DrawStatus } from '@vue-cesium/shared'
 import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
+import { PolylineDrawing } from '@vue-cesium/measurements/src/measure.types'
 
 export default function (props, $services: VcViewerProvider, drawTipOpts) {
   // state
@@ -207,8 +207,8 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
   }
 
   const onMouseoverPoints = e => {
-    const { measurementHandlerActive, viewer } = $services
-    if (props.editable && drawStatus.value !== DrawStatus.Drawing && measurementHandlerActive) {
+    const { drawingHandlerActive, viewer } = $services
+    if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
       mouseoverPoint.value = e.pickedFeature.primitive
       editorPosition.value = e.pickedFeature.primitive.position

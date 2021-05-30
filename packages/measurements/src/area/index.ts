@@ -5,15 +5,15 @@ import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
 import { makeMaterial, getGeodesicDistance } from '@vue-cesium/utils/cesium-helpers'
 import { PolygonMeasurementDrawing } from '../measure.types'
-import DrawStatus from '../DrawStatus'
+import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
 import { VcGeometryPolygon, VcGeometryPolyline } from '@vue-cesium/geometries'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
-import MeasureUnits from '../MeasureUnits'
-import usePolylineDrawing from '../usePolylineDrawing'
+import { MeasureUnits } from '@vue-cesium/shared'
+import { usePolylineDrawing } from '@vue-cesium/composables'
 
 export default defineComponent({
   name: 'VcMeasurementArea',
@@ -216,7 +216,7 @@ export default defineComponent({
     }
 
     const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-      cesiumObject._vcId = 'MeasurementArea'
+      cesiumObject._vcId = 'VcMeasurementArea'
     }
 
     const onEditorClick = e => {
