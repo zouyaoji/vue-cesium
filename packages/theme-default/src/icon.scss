@@ -191,3 +191,19 @@
 .#{$namespace}-icons-clear:before {
   content: '\eba8';
 }
+
+.#{$namespace}-icons-drawing-button:before {
+  content: '\ebaa';
+}
+
+.#{$namespace}-icons-drawing-point:before {
+  content: '\ebab';
+}
+
+.#{$namespace}-icons-drawing-polyline:before {
+  content: '\ebac';
+}
+
+.#{$namespace}-icons-drawing-polygon:before {
+  content: '\ebae';
+}

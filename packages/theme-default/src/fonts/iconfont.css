@@ -1,8 +1,8 @@
 @font-face {
   font-family: "vc-icons"; /* Project id 2419801 */
-  src: url('iconfont.woff2?t=1621354750078') format('woff2'),
-       url('iconfont.woff?t=1621354750078') format('woff'),
-       url('iconfont.ttf?t=1621354750078') format('truetype');
+  src: url('iconfont.woff2?t=1622359770057') format('woff2'),
+       url('iconfont.woff?t=1622359770057') format('woff'),
+       url('iconfont.ttf?t=1622359770057') format('truetype');
 }
 
 .vc-icons {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.vc-icons-drawing-polygon:before {
+  content: "\ebae";
+}
+
+.vc-icons-drawing-point:before {
+  content: "\ebab";
+}
+
+.vc-icons-drawing-button:before {
+  content: "\ebaa";
 }
 
 .vc-icons-clear:before {
@@ -47,6 +59,10 @@
 
 .vc-icons-measure-point-coordinates:before {
   content: "\e60d";
+}
+
+.vc-icons-drawing-polyline:before {
+  content: "\ebac";
 }
 
 .vc-icons-measure-component-distance:before {

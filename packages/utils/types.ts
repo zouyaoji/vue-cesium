@@ -2,6 +2,7 @@
 import { Emitter } from 'mitt'
 import type { App, Ref } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
+import { DrawingInstanceOpts } from '../drawings/src/drawing.types'
 import { MeasurementInstanceOpts } from '../measurements/src/measure.types'
 
 export type SFCWithInstall<T> = T & { install (app: App): void; }
@@ -118,7 +119,9 @@ interface VcViewerProvider {
   }
   measurementVm?: VcComponentInternalInstance
   selectedMeasurementOption?: MeasurementInstanceOpts
-  measurementHandlerActive: boolean
+  drawingVm?: VcComponentInternalInstance
+  selectedDrawingOption?: DrawingInstanceOpts
+  drawingHandlerActive: boolean
   getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
 }
 

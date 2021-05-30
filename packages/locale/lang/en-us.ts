@@ -120,13 +120,25 @@ export default {
         tip: 'Clear measurement results'
       },
     },
-    draw: {
-      drawingTip1: 'Click the left button to draw the starting point.',
-      drawingTip2: 'Click the left button to draw the next point, and click the right button to end the drawing.',
-      drawingTip3: 'Click to end editing.',
-      editingMove: 'Move',
-      editingInsert: 'Insert',
-      editingDelete: 'Delete'
+    drawing: {
+      point: {
+        tip: 'Drawing point',
+        drawTip1: 'Click the left button to draw a point.',
+        drawTip2: 'Click the left button to draw a point.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      polyline: {
+        tip: 'Drawing polyline',
+        drawTip1: 'Click the left button to draw the first point.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      polygon: {
+        tip: 'Drawing polygon',
+        drawTip1: 'Click the left button to draw the first point.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
     },
     overviewmap: {
       show: 'Show',

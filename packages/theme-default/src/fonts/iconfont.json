@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21918048",
+      "name": "多边形",
+      "font_class": "drawing-polygon",
+      "unicode": "ebae",
+      "unicode_decimal": 60334
+    },
+    {
+      "icon_id": "21915108",
+      "name": "点",
+      "font_class": "drawing-point",
+      "unicode": "ebab",
+      "unicode_decimal": 60331
+    },
+    {
+      "icon_id": "21915058",
+      "name": "绘制",
+      "font_class": "drawing-button",
+      "unicode": "ebaa",
+      "unicode_decimal": 60330
+    },
+    {
       "icon_id": "21688642",
       "name": "clear",
       "font_class": "clear",
@@ -67,6 +88,13 @@
       "font_class": "measure-point-coordinates",
       "unicode": "e60d",
       "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "21915120",
+      "name": "measure-polyline-distance",
+      "font_class": "drawing-polyline",
+      "unicode": "ebac",
+      "unicode_decimal": 60332
     },
     {
       "icon_id": "21564333",

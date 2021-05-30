@@ -14,7 +14,8 @@ import {
   VcNavigationSm
 } from '@vue-cesium/controls'
 // tools
-import VcMeasurements, { MeasureUnits, DistanceUnits, AreaUnits, VolumeUnits, AngleUnits } from '@vue-cesium/measurements'
+import VcMeasurements from '@vue-cesium/measurements'
+import VcDrawings from '@vue-cesium/drawings'
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
@@ -169,6 +170,7 @@ const components = [
   VcNavigationSm,
 
   VcMeasurements,
+  VcDrawings,
 
   VcLayerImagery,
   VcProviderImageryArcgis,
@@ -308,6 +310,7 @@ export {
   VcNavigationSm,
 
   VcMeasurements,
+  VcDrawings,
 
   VcLayerImagery,
   VcProviderImageryArcgis,
@@ -413,14 +416,12 @@ export {
   VcOverlayHtml,
   VcOverlayHeatmap,
 
-  // others
-  MeasureUnits, DistanceUnits, AreaUnits, VolumeUnits, AngleUnits,
-
   version,
   install,
   locale
 }
 export * from '@vue-cesium/composables'
+export * from '@vue-cesium/shared'
 export default {
   version,
   install,

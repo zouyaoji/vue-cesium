@@ -119,13 +119,25 @@ export default {
         tip: '清除量算结果'
       },
     },
-    draw: {
-      drawingTip1: '单击左键绘制起点。',
-      drawingTip2: '单击左键绘制下一个点，单击右键结束绘制。',
-      drawingTip3: '单击结束编辑。',
-      editingMove: '移动节点',
-      editingInsert: '插入节点',
-      editingDelete: '删除节点'
+    drawing: {
+      point: {
+        tip: '绘制点',
+        drawTip1: '点击左键绘制点。',
+        drawTip2: '点击左键绘制点。',
+        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      polyline: {
+        tip: '绘制线',
+        drawTip1: '单击左键绘制第一个点。',
+        drawTip2: '单击左键绘制下一个点，双击左键结束绘制。',
+        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
+      },
+      polygon: {
+        tip: '绘制面',
+        drawTip1: '单击左键绘制第一个点。',
+        drawTip2: '点击左键绘制下一个点，双击左键结束绘制。',
+        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
+      },
     },
     overviewmap: {
       show: '显示鹰眼',
