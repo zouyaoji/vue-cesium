@@ -86,7 +86,6 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
 
     setPropsWatcher(true)
-    console.log(vcInstance.cesiumClass)
 
     return createCesiumObject().then(async cesiumObject => {
       vcInstance.cesiumObject = cesiumObject

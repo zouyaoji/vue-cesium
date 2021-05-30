@@ -821,7 +821,10 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     }
 
     viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
-    viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
+    viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
+    viewer._vcPickScreenSpaceEventHandler = undefined
+    viewer._vcViewerScreenSpaceEventHandler = undefined
+
     global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
     vcInstance.viewer = undefined
     vcInstance.mounted = false

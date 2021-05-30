@@ -1,4 +1,4 @@
-import { CSSProperties, defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
+import { CSSProperties, defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, TeleportProps, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
@@ -17,7 +17,7 @@ export default defineComponent({
       default: true
     },
     customClass: String,
-    teleport: Object
+    teleport: Object as PropType<TeleportProps>
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup (props, ctx) {
@@ -122,7 +122,7 @@ export default defineComponent({
     }
 
     const { showPortal, hidePortal, renderPortal } = usePortal(instance, rootRef, renderPortalContent)
-    if (props.teleport && props.teleport.to) {
+    if (props.teleport && props.teleport.to && !props.teleport.disabled) {
       return renderPortal
     } else {
       return () => renderContent()
