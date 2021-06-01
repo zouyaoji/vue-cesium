@@ -96,7 +96,7 @@ Basic usage of VcPrimitiveTileset component.
 | imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` Scales the diffuse and specular image-based lighting from the earth, sky, atmosphere and star skybox. |
 | lightColor | Object\|Array | | `optional` The light color when shading models. When undefined the scene's light color is used instead. |
 | luminanceAtZenith | Number | `0.2` | `optional` The sun's luminance at the zenith in kilo candela per meter squared to use for this model's procedural environment map. |
-| sphericalHarmonicCoefficients | Array | `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting. |
+| sphericalHarmonicCoefficients | Array || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting. |
 | specularEnvironmentMaps | String | | `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
 | backFaceCulling | Boolean |`false`| `optional`Whether to cull back-facing geometry. When true, back face culling is determined by the glTF material's doubleSided property; when false, back face culling is disabled.|
 | vectorClassificationOnly | Boolean |`false`| `optional` Indicates that only the tileset's vector tiles should be used for classification. |

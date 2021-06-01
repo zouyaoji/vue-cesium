@@ -125,7 +125,7 @@ const corridorApp = {
             :outline="true"
             material="red"
             :width="200000.0"
-            :outlineColor="white"
+            outlineColor="white"
           ></vc-graphics-corridor>
         </vc-entity>
       </vc-viewer>

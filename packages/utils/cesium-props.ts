@@ -1615,7 +1615,7 @@ const clearColor = {
  */
 const scissorRectangle = {
   scissorRectangle: {
-    type: [Object, Array] as PropType<Cesium.Rectangle>,
+    type: [Object, Array] as PropType<Cesium.BoundingRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeBoundingRectangle
     }

@@ -96,7 +96,7 @@
 | imageBasedLightingFactor | Object\|Array | `[1.0, 1.0]` | `optional` 地球、天空、大气层的光照缩放因子。 |
 | lightColor | Object\|Array | | `optional` 模型阴影的颜色和强度。 |
 | luminanceAtZenith | Number | `0.2` | `optional` 太阳在天顶的亮度，以每平方米千坎德拉为单位，用于该模型的过程环境图。 |
-| sphericalHarmonicCoefficients | Array | `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
+| sphericalHarmonicCoefficients | Array || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
 | specularEnvironmentMaps | String | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |
 | backFaceCulling | Boolean |`false`| `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于 glTF 材料的 doubleSided 属性； 如果为假，则禁用背面剔除。|
 | vectorClassificationOnly | Boolean |`false`| `optional` 是否仅应使用图块集的矢量图块进行分类。|
