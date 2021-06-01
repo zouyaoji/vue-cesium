@@ -10,7 +10,7 @@ import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueCesium, {
-  cesiumPath: 'http://dc.dvgis.cn/libs/dc-sdk/dc.base.min.js'
+  cesiumPath: 'https://dc.dvgis.cn/libs/dc-sdk/dc.base.min.js'
 })
 app.mount('#app')
 ```
@@ -82,7 +82,7 @@ app.mount('#app')
           offset: [0, 32],
           position: 'bottom-right'
         },
-        cesiumPath: 'http://dc.dvgis.cn/libs/dc-sdk/dc.base.min.js'
+        cesiumPath: 'https://dc.dvgis.cn/libs/dc-sdk/dc.base.min.js'
       }
     },
     mounted() {
