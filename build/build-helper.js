@@ -11,7 +11,7 @@ const subtags = require('../website/subtags.json')
 helper({
   name,
   version: _version,
-  entry: 'website/docs/en-US/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart).md',
+  entry: 'website/docs/en-US/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart|platforms).md',
   outDir: 'lib',
   reComponentName,
   reDocUrl,

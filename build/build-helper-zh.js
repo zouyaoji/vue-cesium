@@ -11,7 +11,7 @@ const subtags = require('../website/subtags.json')
 helper({
   name,
   version: _version,
-  entry: 'website/docs/zh-CN/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart).md',
+  entry: 'website/docs/zh-CN/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart|platforms).md',
   // entry: 'website/docs/zh-CN/vc-entity.md',
   // outDir: 'lib',
   outDir: 'vetur',
