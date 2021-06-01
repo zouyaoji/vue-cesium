@@ -1,14 +1,16 @@
 ## VcMeasurements
 
-Load measurement tool components.
+Load measurement tool components, including distance measurement, component distance measurement, polyline distance measurement, horizontal distance measurement, vertical distance measurement, height measurement, area measurement, and point coordinate measurement.
 
 **Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
 
 :::tip
 
-Tip: Version 3.0 has reorganized the measurement component into one component.
+Tip: Version 3.0 has restructured the measurement component into one component, which is simple and supports custom styles, and optimizes the interaction.
 
 The drawing interaction is also optimized. The overall drawing is left-click, right-click to cancel the last drawn point, and double-click to end the drawing. Among them, horizontal measurement can also hold shift to draw a point in a fixed direction.
+
+ctrl + right click to cancel drawing.
 
 :::
 
@@ -267,7 +269,7 @@ Tip: The measurement component is mainly composed of two parts: (1) the floating
 
 :::tip
 
-Tip: Each measurement button (FabAction) corresponds to the measurement parameters xxxMeasurementOpts.
+Tip: Each measurement button (FabAction) corresponds to the measurement parameters xxxMeasurementOpts, used to customize drawing objects..
 
 :::
 
