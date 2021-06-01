@@ -47,6 +47,7 @@ interface ReadyObj {
   cesiumObject?: AnyObject
   vm?: VcComponentPublicInstance
   earth?: AnyObject
+  map?: AnyObject
 }
 
 interface CameraOption {
@@ -69,7 +70,6 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   Cesium?: AnyObject
   viewer?: Cesium.Viewer
   viewerElement?: HTMLElement
-  earth?: AnyObject
   cesiumEvents?: Array<string>
   cesiumMembersEvents?: Array<CesiumMembersEvent>
   cesiumClass?: string
@@ -82,6 +82,10 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   unmount?(): Promise<boolean>
   children?: Array<VcComponentInternalInstance>
   alreadyListening: string[]
+  // third
+  earth?: AnyObject
+  map?: AnyObject
+  dcViewer?: AnyObject
 }
 
 type VcComponentPublicInstance = ComponentPublicInstance<{

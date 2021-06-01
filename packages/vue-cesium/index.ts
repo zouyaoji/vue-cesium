@@ -285,6 +285,7 @@ const install = (app: App, opt: InstallOptions): void => {
   }
   app.config.globalProperties.$VueCesium = option
   setConfig(option)
+  app.config.globalProperties.$VueCesium.version = version
 
   components.forEach(component => {
     app.component(component.name, component)

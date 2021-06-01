@@ -1,3 +1,5 @@
+import { AnyObject } from './types'
+
 const hasSymbol = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol'
 export interface InstallOptions {
   cesiumPath?: string
@@ -5,9 +7,9 @@ export interface InstallOptions {
   lang?: any
   i18n?: (...args: any[]) => string
   scriptPromise?: Promise<unknown>
-  // pickScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
-  // viewerScreenSpaceEventHandler?: Cesium.ScreenSpaceEventHandler
   viewerUnloadingPromise?: Promise<boolean>
+  version?: string
+  cfg?: AnyObject
 }
 
 let $VueCesium = {} as InstallOptions

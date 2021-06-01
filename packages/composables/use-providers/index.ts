@@ -14,7 +14,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
       vcInstance.renderByParent = true
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
-      imageryProvider.readyPromise.then(() => {
+      imageryProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
         listener && ctx.emit('readyPromise', imageryProvider, viewer, vcInstance.proxy)
       })
