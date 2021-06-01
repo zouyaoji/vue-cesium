@@ -1,6 +1,9 @@
+
 import { Emitter } from 'mitt'
 import type { App, Ref } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
+import { DrawingInstanceOpts } from '../drawings/src/drawing.types'
+import { MeasurementInstanceOpts } from '../measurements/src/measure.types'
 
 export type SFCWithInstall<T> = T & { install (app: App): void; }
 
@@ -12,7 +15,7 @@ export type EntityEmitType = CommonEmitType | 'update:billboard' | 'update:box' 
 
 
 export type VcBtnOptions = {
-  name?: string
+  icon?: string
   size?: string
   color?: string
   background?: string
@@ -28,6 +31,8 @@ export type VcBtnOptions = {
   }
 }
 
+export type ColorSegments = [number, [number, number, number]] | [number, string | ColorInByteOption | Cartesian4Option | Cesium.Color]
+
 interface AnyFunction {
   (...args: any[]): any
 }
@@ -42,6 +47,7 @@ interface ReadyObj {
   cesiumObject?: AnyObject
   vm?: VcComponentPublicInstance
   earth?: AnyObject
+  map?: AnyObject
 }
 
 interface CameraOption {
@@ -64,7 +70,6 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   Cesium?: AnyObject
   viewer?: Cesium.Viewer
   viewerElement?: HTMLElement
-  earth?: AnyObject
   cesiumEvents?: Array<string>
   cesiumMembersEvents?: Array<CesiumMembersEvent>
   cesiumClass?: string
@@ -76,7 +81,11 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   mount?(): Promise<boolean>
   unmount?(): Promise<boolean>
   children?: Array<VcComponentInternalInstance>
-  alreadyListening: string []
+  alreadyListening: string[]
+  // third
+  earth?: AnyObject
+  map?: AnyObject
+  dcViewer?: AnyObject
 }
 
 type VcComponentPublicInstance = ComponentPublicInstance<{
@@ -87,9 +96,9 @@ type VcComponentPublicInstance = ComponentPublicInstance<{
   cesiumObject: unknown
   getCesiumObject?(): unknown
   __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
-  __updateProvider?(cesiumObject: Cesium.ImageryProvider) : boolean
-  __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number) : boolean
-  __updateGeometry?(cesiumObject: Cesium.Geometry) : boolean
+  __updateProvider?(cesiumObject: Cesium.ImageryProvider): boolean
+  __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number): boolean
+  __updateGeometry?(cesiumObject: Cesium.Geometry): boolean
   __childCount?: Ref<number>
 }>
 
@@ -106,12 +115,18 @@ interface VcViewerProvider {
   viewerMitt: Emitter
   entityViewModel?: VcComponentPublicInstance
   imageryLayerViewModel?: VcComponentPublicInstance
-  layout: {
+  layout?: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
     animationContainerRC: Partial<DOMRect>
     bottomContainerRC: Partial<DOMRect>
   }
+  measurementVm?: VcComponentInternalInstance
+  selectedMeasurementOption?: MeasurementInstanceOpts
+  drawingVm?: VcComponentInternalInstance
+  selectedDrawingOption?: DrawingInstanceOpts
+  drawingHandlerActive: boolean
+  getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
 }
 
 interface Cartesian2Option {
@@ -231,9 +246,20 @@ interface NavigationOption {
   distanceLegendOptions?: AnyObject | boolean
 }
 
+interface HeatmapConfiguration extends h337.HeatmapConfiguration {
+  useEntitiesIfAvailable?: boolean
+  minCanvasSize?: number
+  maxCanvasSize?: number
+  radiusFactor?: number
+  spacingFactor?: number
+  maxOpacity?: number
+  minOpacity?: number
+}
+
+
 export {
   AnyFunction, AnyObject, CameraOption, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
   Cartesian2Option, Cartesian3Option, Cartesian4Option, CartographicInDegreeOption, PolygonHierarchyOption, NearFarScalarOption,
   DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
-  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption
+  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption, HeatmapConfiguration
 }

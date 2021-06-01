@@ -16,13 +16,14 @@ import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
 import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
+import { getMars3dConfig } from './loadUtil'
 
 export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcInstance: VcComponentInternalInstance) {
 
   // state
-  let resolve, reject
+  let createResolve, reject
   const createPromise = new Promise<ReadyObj>((_resolve, _reject) => {
-    resolve = _resolve
+    createResolve = _resolve
     reject = _reject
   })
 
@@ -47,6 +48,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     bottomContainerRC: undefined
   })
 
+  let loadLibs = []
 
   logger.debug('viewer creating')
 
@@ -583,6 +585,10 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
 
     await beforeLoad()
 
+    if (typeof Cesium === 'undefined') {
+      return
+    }
+
     const { Ion, buildModuleUrl, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
     const accessToken = props.accessToken ? props.accessToken : $vc.accessToken
     Ion.defaultAccessToken = accessToken
@@ -692,13 +698,19 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     options = removeEmpty(options)
 
     let viewer: Cesium.Viewer
-
-    if (!global.XE) {
-      viewer = new Viewer($(viewerRef), options)
-    } else {
+    if (global.mars3d) {
+      vcInstance.map = new mars3d.Map($(viewerRef).id, options)
+      viewer = vcInstance.map._viewer
+    } else if (global.DC) {
+      vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
+      viewer = vcInstance.dcViewer.delegate
+    } else if (global.XE) {
       vcInstance.earth = new global.XE.Earth($(viewerRef), options)
       viewer = vcInstance.earth.czm.viewer
+    } else {
+      viewer = new Viewer($(viewerRef), options)
     }
+
     vcInstance.Cesium = Cesium
     vcInstance.viewer = viewer
     vcInstance.viewerElement = (viewer as any)._element
@@ -765,18 +777,33 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     viewer.viewerWidgetResized.addEventListener(onViewerWidgetResized)
     viewer.imageryLayers.layerAdded.addEventListener(onImageryLayerAdded)
     eventsState.registerEvents(true)
-    const readyObj: ReadyObj = global.XE
-      ? {
-        Cesium,
-        viewer,
-        earth: vcInstance.earth,
-        vm: vcInstance.proxy as VcComponentPublicInstance
-      }
-      : {
-        Cesium,
-        viewer,
-        vm: vcInstance.proxy as VcComponentPublicInstance
-      }
+    const readyObj: ReadyObj = {
+      Cesium,
+      viewer,
+      vm: vcInstance.proxy as VcComponentPublicInstance
+    }
+    if (global.XE) {
+      Object.assign(readyObj, {
+        earth: vcInstance.earth
+      })
+    } else if (global.mars3d) {
+      Object.assign(readyObj, {
+        map: vcInstance.map
+      })
+    } else if (global.DC) {
+      Object.assign(readyObj, {
+        dcViewer: vcInstance.dcViewer
+      })
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      logger.capsule('VueCesium', `v${$vc.version}`)
+      logger.success('VueCesium  https://github.com/zouyaoji/vue-cesium')
+      logger.success('Document  https://zouyaoji.top/vue-cesium')
+      logger.success(`Please don't be stingy with your star, thank you ~`)
+      logger.success(`请不要吝啬您的 star，谢谢 ~ `)
+    }
+
     const listenerReady = getInstanceListener(vcInstance, 'ready')
     listenerReady && emit('ready', readyObj)
     vcMitt?.emit('ready', readyObj)
@@ -807,6 +834,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     $vc.viewerUnloadingPromise = new Promise((resolve, reject) => {
       unloadingResolve = resolve
     })
+    console.log($vc.viewerUnloadingPromise)
 
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
@@ -814,18 +842,27 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       await vcChildCmp.unload()
     }
 
-    const { viewer, earth } = vcInstance
+    const { viewer, earth, map, dcViewer } = vcInstance
     if (global.Cesium) {
       viewer.imageryLayers.layerAdded.removeEventListener(onImageryLayerAdded)
       eventsState.registerEvents(false)
     }
 
-    $vc.pickScreenSpaceEventHandler && $vc.pickScreenSpaceEventHandler.destroy()
-    $vc.viewerScreenSpaceEventHandler && $vc.viewerScreenSpaceEventHandler.destroy()
-    global.XE ? earth && earth.destroy() : viewer && viewer.destroy()
+    viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
+    viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
+    viewer._vcPickScreenSpaceEventHandler = undefined
+    viewer._vcViewerScreenSpaceEventHandler = undefined
 
-    $vc.pickScreenSpaceEventHandler = undefined
-    $vc.viewerScreenSpaceEventHandler = undefined
+    if (global.XE) {
+      earth && earth.destroy()
+    } else if (global.mars3d) {
+      map && map.destroy()
+    } else if (global.DC) {
+      dcViewer && dcViewer.destroy()
+    } else {
+      viewer && viewer.destroy()
+    }
+
     vcInstance.viewer = undefined
     vcInstance.mounted = false
     const { removeCesiumScript } = props
@@ -841,21 +878,27 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
           script.src.indexOf('/viewerCesiumNavigationMixin.js') > -1 && removeScripts.push(script)
           script.src.indexOf('/XbsjEarth.js') > -1 && removeScripts.push(script)
         }
+
+        loadLibs.includes(script.src) && !removeScripts.includes(script) && removeScripts.push(script)
       }
-      removeScripts.forEach(script => {
-        script.parentNode.removeChild(script)
-      })
+
       const links = document.getElementsByTagName('link')
       for (const link of links) {
-        if (link.href.indexOf('Widgets/widgets.css') > -1) {
-          document.getElementsByTagName('head')[0].removeChild(link)
-        }
+        link.href.includes('Widgets/widgets.css') && !removeScripts.includes(link) && removeScripts.push(link)
+        loadLibs.includes(link.href) && !removeScripts.includes(link) && removeScripts.push(link)
       }
+      removeScripts.forEach(script => {
+        script.parentNode && script.parentNode.removeChild(script)
+      })
       global.Cesium && (global.Cesium = undefined)
       global.XbsjCesium && (global.XbsjCesium = undefined)
       global.XbsjEarth && (global.XbsjEarth = undefined)
       global.XE && (global.XE = undefined)
+      global.mars3d && (global.mars3d = undefined)
+      global.DC && (global.DC = undefined)
+      global.DcCore && (global.DcCore = undefined)
       $vc.scriptPromise = undefined
+      loadLibs = []
     }
     const listener = getInstanceListener(vcInstance, 'destroyed')
     listener && emit('destroyed', vcInstance)
@@ -875,43 +918,115 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   /**
    * 动态引入 CesiumJS
    */
-  const getCesiumScript = function (): Promise<typeof Cesium> {
+  const getCesiumScript = async function (): Promise<typeof Cesium> {
     logger.debug('getCesiumScript')
     if (!global.Cesium) {
       // const $vc = useGlobalConfig()
-      const cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
-
+      let cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
       const dirName = dirname(cesiumPath)
-      // 引入样式 earthsdk 会自动引 不用引入了
-      if (cesiumPath.indexOf('/XbsjEarth.js') === -1) {
-        const $link = document.createElement('link')
-        $link.rel = 'stylesheet'
-        document.head.appendChild($link)
-        $link.href = `${dirName}/Widgets/widgets.css`
+      if (!cesiumPath.includes('.js')) {
+        // 认为是mars3d
+        if (cesiumPath.lastIndexOf('/') !== cesiumPath.length - 1) {
+          cesiumPath += '/'
+        }
+        const libsConfig = getMars3dConfig(cesiumPath)
+        const include = $vc.cfg?.include || 'mars3d'
+        const arrInclude = include.split(',')
+        const keys = {}
+        for (let i = 0, len = arrInclude.length; i < len; i++) {
+          const key = arrInclude[i]
+          if (keys[key]) {
+            //规避重复引入lib
+            continue
+          }
+          keys[key] = true
+          loadLibs.push(...libsConfig[key])
+        }
+      } else if (cesiumPath.includes('dc.base')) {
+        loadLibs.push(cesiumPath)
+        loadLibs.push(cesiumPath.replace('dc.base', 'dc.core'))
+        loadLibs.push(cesiumPath.replace('dc.base', 'dc.core').replace('.js', '.css'))
+      } else if (cesiumPath.includes('/XbsjEarth.js')) {
+        loadLibs.push(cesiumPath)
+      } else {
+        loadLibs.push(cesiumPath)
+        loadLibs.push(`${dirName}/Widgets/widgets.css`)
       }
 
-      const $script = document.createElement('script')
-      document.body.appendChild($script)
-      $script.src = cesiumPath
-      return new Promise((resolve, reject) => {
-        $script.onload = () => {
-          if (global.Cesium) {
-            resolve(global.Cesium)
-          } else if (global.XE) {
-            // 兼容 cesiumlab earthsdk
-            global.XE.ready().then(() => {
-              resolve(global.Cesium)
-            })
+      const secondaryLibs = loadLibs
+      if (!cesiumPath.includes('.js')) {
+        // mars3d 必须要等 Cesium 先初始化
+        const primaryLib = loadLibs.find(v => v.includes('Cesium.js'))
+        await loadScript(primaryLib)
+        secondaryLibs.splice(secondaryLibs.indexOf(primaryLib), 1)
+      }
+
+      const scriptLoadPromises = []
+      secondaryLibs.forEach(url => {
+        const cssExpr = new RegExp('\\.css')
+        if (cssExpr.test(url)) {
+          scriptLoadPromises.push(loadLink(url))
+        } else {
+          scriptLoadPromises.push(loadScript(url))
+        }
+      })
+
+      return Promise.all(scriptLoadPromises).then(() => {
+        if (global.Cesium) {
+          const listener = getInstanceListener(vcInstance, 'cesiumReady')
+          listener && emit('cesiumReady', global.Cesium)
+          return global.Cesium
+        } else if (global.XE) {
+          // 兼容 cesiumlab earthsdk
+          return global.XE.ready().then(() => {
+            // resolve(global.Cesium)
             const listener = getInstanceListener(vcInstance, 'cesiumReady')
             listener && emit('cesiumReady', global.Cesium)
-          } else {
-            reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
-          }
+            return global.Cesium
+          })
+        } else if (global.DC) {
+          // 兼容  dc-sdk
+          global.DC.use(global.DcCore.default)
+          global.DC.baseUrl = `${dirName}/resources/`
+          global.DC.ready(() => {
+            global.Cesium = DC.Namespace.Cesium
+
+            const listener = getInstanceListener(vcInstance, 'cesiumReady')
+            listener && emit('cesiumReady', global.DC)
+            return global.Cesium
+          })
+          return global.Cesium
+        } else {
+          reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
         }
       })
     } else {
       return Promise.resolve(global.Cesium)
     }
+  }
+
+  const loadScript = src => {
+    const $script = document.createElement('script')
+    $script.async = true
+    $script.src = src
+    document.body.appendChild($script)
+    return new Promise((resolve, reject) => {
+      $script.onload = () => {
+        resolve(true)
+      }
+    })
+  }
+
+  const loadLink = src => {
+    const $link = document.createElement('link')
+    $link.rel = 'stylesheet'
+    $link.href = src
+    document.head.appendChild($link)
+    return new Promise((resolve, reject) => {
+      $link.onload = () => {
+        resolve(true)
+      }
+    })
   }
 
   const onViewerWidgetResized = (e?: {
@@ -1177,7 +1292,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     try {
       logger.debug('viewer - onMounted')
       await $vc.viewerUnloadingPromise
-      resolve(load())
+      createResolve(load())
     } catch (e) {
       reject(e)
     }

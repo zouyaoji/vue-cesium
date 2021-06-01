@@ -132,7 +132,7 @@
             }
           })
         } else {
-          datas = []
+          datasources = []
         }
       }
       const onClicked = e => {

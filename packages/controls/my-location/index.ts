@@ -377,22 +377,12 @@ export default defineComponent({
       }
     }
 
-    // expose public methods
-    Object.assign(instance.proxy, {
-      createPromise: commonState.createPromise,
-      load: commonState.load,
-      unload: commonState.unload,
-      reload: commonState.reload,
-      cesiumObject: instance.cesiumObject,
-      getCesiumObject: () => instance.cesiumObject
-    })
-
     return () => {
       if (canRender.value) {
         const inner = []
         inner.push(
           h(VcIcon, {
-            name: props.name,
+            name: props.icon,
             size: props.size
           })
         )

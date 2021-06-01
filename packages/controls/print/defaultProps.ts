@@ -18,7 +18,7 @@ export default {
     default: false
   },
   ...positionProps,
-  name: {
+  icon: {
     type: String,
     default: 'vc-icons-capture'
   },

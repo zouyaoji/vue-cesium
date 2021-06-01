@@ -81,7 +81,8 @@ export default defineComponent({
             const billboardOptions = newVal[i] as Cesium.Billboard
             billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
             const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
-            billboardCollection.add(billboardOptionsTransform)
+            const billboard = billboardCollection.add(billboardOptionsTransform)
+            primitiveCollectionsState.addCustomProp(billboard, billboardOptionsTransform)
           }
         }
       },
@@ -99,7 +100,8 @@ export default defineComponent({
         const billboardOptions = props.billboards[i] as Cesium.Billboard
         billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
         const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
-        billboardCollection.add(billboardOptionsTransform)
+        const billboard = billboardCollection.add(billboardOptionsTransform)
+        primitiveCollectionsState.addCustomProp(billboard, billboardOptionsTransform)
       }
       return billboardCollection
     }

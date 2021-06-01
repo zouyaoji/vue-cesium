@@ -1,3 +1,3 @@
 module.exports = {
-  noVcPrefixFile: /(utils|directives|hooks|ui|composables|controls|locale)/
+  noVcPrefixFile: /(composables|controls|datasources|directives|geometries|graphics|locale|overlays|primitive-collections|providers|ui|utils)/
 }

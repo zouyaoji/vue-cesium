@@ -44,23 +44,22 @@ export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
     })
   }
 
+  const addCustomProp = (obj, options) => {
+    for (const prop in options) {
+      if (!obj[prop]) {
+        obj[prop] = options[prop]
+      }
+    }
+  }
+
   // provide
   provide(vcKey, getServices())
-
-  // expose public methods
-  Object.assign(vcInstance.proxy, {
-    createPromise: commonState.createPromise,
-    load: commonState.load,
-    unload: commonState.unload,
-    reload: commonState.reload,
-    cesiumObject: vcInstance.cesiumObject,
-    getCesiumObject: () => vcInstance.cesiumObject
-  })
 
   return {
     transformProps: commonState.transformProps,
     transformProp: commonState.transformProp,
     unwatchFns: commonState.unwatchFns,
-    setPropsWatcher: commonState.setPropsWatcher
+    setPropsWatcher: commonState.setPropsWatcher,
+    addCustomProp: addCustomProp
   }
 }

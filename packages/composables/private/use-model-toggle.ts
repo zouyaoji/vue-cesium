@@ -15,11 +15,11 @@ export const useModelToggleEmits = ['update:modelValue', 'before-show', 'show', 
 
 export default function({
   showing,
-  canShow, // optional
-  hideOnRouteChange, // optional
-  handleShow, // optional
-  handleHide, // optional
-  processOnMount // optional
+  canShow = undefined, // optional
+  hideOnRouteChange = undefined, // optional
+  handleShow = undefined, // optional
+  handleHide = undefined, // optional
+  processOnMount = undefined // optional
 }) {
   const vm = getCurrentInstance()
   const { props, emit, proxy } = vm
@@ -65,7 +65,7 @@ export default function({
 
     emit('before-show', evt)
 
-    if(evt.cancel === true) {
+    if(evt && evt.cancel === true) {
       return
     }
 

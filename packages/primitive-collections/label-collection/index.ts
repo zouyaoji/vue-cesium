@@ -87,7 +87,8 @@ export default defineComponent({
             const labelOptions = newVal[i] as Cesium.Billboard
             labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
             const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
-            labelCollection.add(labelOptionsTransform)
+            const label = labelCollection.add(labelOptionsTransform)
+            primitiveCollectionsState.addCustomProp(label, labelOptionsTransform)
           }
         }
       },
@@ -104,7 +105,8 @@ export default defineComponent({
         const labelOptions = props.labels[i] as Cesium.Label
         labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
         const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
-        labelCollection.add(labelOptionsTransform)
+        const label = labelCollection.add(labelOptionsTransform)
+        primitiveCollectionsState.addCustomProp(label, labelOptionsTransform)
       }
       return labelCollection
     }

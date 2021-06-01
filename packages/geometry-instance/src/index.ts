@@ -30,7 +30,7 @@ export default defineComponent({
     const vcIndex = ref(0)
     // methods
     instance.createCesiumObject = async () => {
-      const options = commonState.transformProps(props)
+      const options = commonState.transformProps(props) as any
       if (!options.geometry) {
         options.geometry = new Cesium.Geometry({ attributes: new Cesium.GeometryAttributes() })
       }
@@ -70,13 +70,6 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      createPromise: commonState.createPromise,
-      load: commonState.load,
-      unload: commonState.unload,
-      reload: commonState.reload,
-      cesiumObject: instance.cesiumObject,
-      getCesiumObject: () => instance.cesiumObject,
-
       // private but needed by VcGeometryXXX
       __updateGeometry: updateGeometry
     })

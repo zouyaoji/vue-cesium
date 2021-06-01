@@ -81,7 +81,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
     // If you call the unload method to unload the component, the Cesium object of the parent component may be unloaded. You need to load the parent component first.
     // 如果调用过 unload 方法卸载组件，父组件的 Cesium 对象可能会被卸载 需要先加载父组件。
-    if (!parentVcInstance.cesiumObject) {
+    if (!parentVcInstance.cesiumObject && !parentVcInstance.nowaiting) {
       return await (parentVcInstance.proxy as VcComponentPublicInstance)?.load()
     }
 
@@ -99,6 +99,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('ready', readyObj)
           vcMitt.emit('ready', readyObj)
           logger.debug(`${vcInstance.cesiumClass}---loaded`)
+          Object.assign(vcInstance.proxy, {
+            cesiumObject: vcInstance.cesiumObject
+          })
           return readyObj
         }
       )
@@ -225,7 +228,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
-  const transformProps = props => {
+  const transformProps = <T>(props: T) => {
     let options: any = {}
     props &&
       Object.keys(props).forEach(vueProp => {
@@ -252,7 +255,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       })
 
     options = removeEmpty(options)
-    return options
+    return options as T
   }
 
   const transformProp = (prop, value) => {
@@ -282,16 +285,16 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   // lifecycle
   const createPromise = new Promise<ReadyObj | boolean>((resolve, reject) => {
     try {
-      let isLoad = false
+      let isLoading = false
       if ($services.viewer) {
-        isLoad = true
+        isLoading = true
         load().then(e => {
           resolve(e)
-          isLoad = false
+          isLoading = false
         })
       }
       parentVcInstance.vcMitt.on('ready', () => {
-        if (!isLoad) {
+        if (!isLoading) {
           resolve(load())
         }
       })
@@ -302,15 +305,24 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   logger.debug(`${vcInstance.cesiumClass}---onCreated`)
   onUnmounted(() => {
     logger.debug(`${vcInstance.cesiumClass}---onUnmounted`)
-    vcInstance.unloadingPromise = new Promise((reslove, reject) => {
+    vcInstance.unloadingPromise = new Promise((resolve, reject) => {
       unload().then(() => {
         logger.debug(`${vcInstance.cesiumClass}---unloaded`)
-        reslove(true)
+        resolve(true)
         vcInstance.unloadingPromise = undefined
         vcMitt.all.clear()
       })
     })
     vcInstance.alreadyListening = []
+  })
+
+  // expose public methods
+  Object.assign(vcInstance.proxy, {
+    createPromise: createPromise,
+    load: load,
+    unload: unload,
+    reload: reload,
+    getCesiumObject: () => vcInstance.cesiumObject
   })
 
   return {

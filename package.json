@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^0.0.7",
+    "heatmap.js": "^2.0.5",
     "lodash": "^4.17.20",
     "mitt": "^2.1.0"
   },
@@ -52,6 +53,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
+    "@types/heatmap.js": "^2.0.36",
     "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.168",
     "@types/merge-descriptors": "^1.0.1",

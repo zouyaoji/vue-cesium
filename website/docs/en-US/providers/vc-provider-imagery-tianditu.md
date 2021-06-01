@@ -80,7 +80,15 @@ Basic usage of the `vc-provider-imagery-tianditu` component.
         {
           value: 'ter_w',
           label: 'ter_w'
-        }
+        },
+        {
+          value: 'ibo_c',
+          label: 'ibo_c'
+        },
+        {
+          value: 'ibo_w',
+          label: 'ibo_w'
+        },
       ]
       const mapStyle = ref('img_c')
       // methods
@@ -116,7 +124,7 @@ Basic usage of the `vc-provider-imagery-tianditu` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| mapStyle | String | `'img_w'` | `optional` The map type of Tianditu service. |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w|
+| mapStyle | String | `'img_w'` | `optional` The map type of Tianditu service. |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
 | credit | String\|Object | `'天地图全球影像服务'` | `optional` A credit for the data source, which is displayed on the canvas.  |
 | token | String | | `optional` Tianditu application key. [Application Address](http://lbs.tianditu.gov.cn/home.html) |
 | protocol | String | `https` | `optional` Specify the request protocol type. Can be `https` or `http`. |

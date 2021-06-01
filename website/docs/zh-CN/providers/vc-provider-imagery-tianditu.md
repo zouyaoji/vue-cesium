@@ -80,7 +80,15 @@
         {
           value: 'ter_w',
           label: '全球地形晕渲服务(墨卡托)'
-        }
+        },
+        {
+          value: 'ibo_c',
+          label: '全球境界(经纬度)'
+        },
+        {
+          value: 'ibo_w',
+          label: '全球境界(墨卡托)'
+        },
       ]
       const mapStyle = ref('img_c')
       // methods
@@ -116,7 +124,7 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ---- | ------ | --- | ------ |
-| mapStyle | String | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w|
+| mapStyle | String | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
 | credit | String\|Object | `'天地图全球影像服务'` | `optional` 服务版权描述信息。 |
 | token | String | | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
 | protocol | String | `https` | `optional` 指定请求协议类型。可以是`https`或者`http`。 |

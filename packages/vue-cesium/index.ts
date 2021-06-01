@@ -13,6 +13,9 @@ import {
   VcZoomControlSm,
   VcNavigationSm
 } from '@vue-cesium/controls'
+// tools
+import VcMeasurements from '@vue-cesium/measurements'
+import VcDrawings from '@vue-cesium/drawings'
 // imagery-layer
 import VcLayerImagery from '@vue-cesium/imagery-layer'
 import {
@@ -133,7 +136,8 @@ import {
 } from '@vue-cesium/geometries'
 
 import {
-  VcOverlayHtml
+  VcOverlayHtml,
+  VcOverlayHeatmap
 } from '@vue-cesium/overlays'
 
 import { use, i18n } from '@vue-cesium/locale'
@@ -142,7 +146,6 @@ import { use, i18n } from '@vue-cesium/locale'
 import { version as version_ } from './version'
 import type { InstallOptions } from '@vue-cesium/utils/config'
 import { setConfig } from '@vue-cesium/utils/config'
-
 
 const version = version_
 const locale = use
@@ -166,141 +169,8 @@ const components = [
   VcZoomControlSm,
   VcNavigationSm,
 
-  VcLayerImagery,
-  VcProviderImageryArcgis,
-  VcProviderImageryBaidumap,
-  VcProviderImageryBingmaps,
-  VcProviderImageryGoogle,
-  VcProviderImageryGrid,
-  VcProviderImageryIon,
-  VcProviderImageryMapbox,
-  VcProviderImageryOsm,
-  VcProviderImagerySingletile,
-  VcProviderImagerySupermap,
-  VcProviderImageryTianditu,
-  VcProviderImageryTileCoordinates,
-  VcProviderImageryTms,
-  VcProviderImageryTiledcache,
-  VcProviderImageryUrltemplate,
-  VcProviderImageryWms,
-  VcProviderImageryWmts,
-
-  VcProviderTerrainCesium,
-  VcProviderTerrainArcgis,
-  VcProviderTerrainVrTheworld,
-  VcProviderTerrainTianditu,
-
-  VcDatasourceCustom,
-  VcDatasourceCzml,
-  VcDatasourceGeojson,
-  VcDatasourceKml,
-
-  VcEntity,
-  VcGraphicsBillboard,
-  VcGraphicsBox,
-  VcGraphicsCorridor,
-  VcGraphicsCylinder,
-  VcGraphicsEllipse,
-  VcGraphicsEllipsoid,
-  VcGraphicsLabel,
-  VcGraphicsModel,
-  VcGraphicsPath,
-  VcGraphicsPlane,
-  VcGraphicsPoint,
-  VcGraphicsPolygon,
-  VcGraphicsPolyline,
-  VcGraphicsPolylineVolume,
-  VcGraphicsRectangle,
-  VcGraphicsTileset,
-  VcGraphicsWall,
-
-  VcPrimitiveClassification,
-  VcPrimitiveGround,
-  VcPrimitiveGroundPolyline,
-  VcPrimitiveModel,
-  VcPrimitive,
-  VcPrimitiveTileset,
-  VcPrimitiveParticle,
-
-  VcCollectionBillboard,
-  VcCollectionLabel,
-  VcCollectionPoint,
-  VcCollectionPolyline,
-  VcCollectionPrimitive,
-
-  VcBillboard,
-  VcLabel,
-  VcPoint,
-  VcPolyline,
-
-  VcInstanceGeometry,
-
-  VcGeometryBox,
-  VcGeometryBoxOutline,
-  VcGeometryCircle,
-  VcGeometryCircleOutline,
-  VcGeometryPolygonCoplanar,
-  VcGeometryPolygonCoplanarOutline,
-  VcGeometryCorridor,
-  VcGeometryCorridorOutline,
-  VcGeometryCylinder,
-  VcGeometryCylinderOutline,
-  VcGeometryEllipse,
-  VcGeometryEllipseOutline,
-  VcGeometryEllipsoid,
-  VcGeometryEllipsoidOutline,
-  VcGeometryFrustum,
-  VcGeometryFrustumOutline,
-  VcGeometryPolylineGround,
-  VcGeometryPlane,
-  VcGeometryPlaneOutline,
-  VcGeometryPolygon,
-  VcGeometryPolygonOutline,
-  VcGeometryPolyline,
-  VcGeometryPolylineVolume,
-  VcGeometryPolylineVolumeOutline,
-  VcGeometryRectangle,
-  VcGeometryRectangleOutline,
-  VcGeometryPolylineSimple,
-  VcGeometrySphere,
-  VcGeometrySphereOutline,
-  VcGeometryWall,
-  VcGeometryWallOutline,
-
-  VcOverlayHtml
-]
-
-const install = (app: App, opt: InstallOptions): void => {
-  const option = Object.assign(defaultInstallOpt, opt)
-  locale(option.lang)
-  if (option.i18n) {
-    i18n(option.i18n)
-  }
-  app.config.globalProperties.$VueCesium = option
-  setConfig(option)
-
-  components.forEach(component => {
-    app.component(component.name, component)
-  })
-
-  // plugins.forEach(plugin => {
-  //   app.use(plugin as any)
-  // })
-}
-
-export {
-  VcViewer,
-
-  VcCompass,
-  VcZoomControl,
-  VcPrint,
-  VcMyLocation,
-  VcStatusBar,
-  VcDistanceLegend,
-  VcNavigation,
-  VcCompassSm,
-  VcZoomControlSm,
-  VcNavigationSm,
+  VcMeasurements,
+  VcDrawings,
 
   VcLayerImagery,
   VcProviderImageryArcgis,
@@ -404,12 +274,155 @@ export {
   VcGeometryWallOutline,
 
   VcOverlayHtml,
+  VcOverlayHeatmap
+]
+
+const install = (app: App, opt: InstallOptions): void => {
+  const option = Object.assign(defaultInstallOpt, opt)
+  locale(option.lang)
+  if (option.i18n) {
+    i18n(option.i18n)
+  }
+  app.config.globalProperties.$VueCesium = option
+  setConfig(option)
+  app.config.globalProperties.$VueCesium.version = version
+
+  components.forEach(component => {
+    app.component(component.name, component)
+  })
+
+  // plugins.forEach(plugin => {
+  //   app.use(plugin as any)
+  // })
+}
+
+export {
+  VcViewer,
+
+  VcCompass,
+  VcZoomControl,
+  VcPrint,
+  VcMyLocation,
+  VcStatusBar,
+  VcDistanceLegend,
+  VcNavigation,
+  VcCompassSm,
+  VcZoomControlSm,
+  VcNavigationSm,
+
+  VcMeasurements,
+  VcDrawings,
+
+  VcLayerImagery,
+  VcProviderImageryArcgis,
+  VcProviderImageryBaidumap,
+  VcProviderImageryBingmaps,
+  VcProviderImageryGoogle,
+  VcProviderImageryGrid,
+  VcProviderImageryIon,
+  VcProviderImageryMapbox,
+  VcProviderImageryOsm,
+  VcProviderImagerySingletile,
+  VcProviderImagerySupermap,
+  VcProviderImageryTianditu,
+  VcProviderImageryTileCoordinates,
+  VcProviderImageryTms,
+  VcProviderImageryTiledcache,
+  VcProviderImageryUrltemplate,
+  VcProviderImageryWms,
+  VcProviderImageryWmts,
+
+  VcProviderTerrainCesium,
+  VcProviderTerrainArcgis,
+  VcProviderTerrainVrTheworld,
+  VcProviderTerrainTianditu,
+
+  VcDatasourceCustom,
+  VcDatasourceCzml,
+  VcDatasourceGeojson,
+  VcDatasourceKml,
+
+  VcEntity,
+  VcGraphicsBillboard,
+  VcGraphicsBox,
+  VcGraphicsCorridor,
+  VcGraphicsCylinder,
+  VcGraphicsEllipse,
+  VcGraphicsEllipsoid,
+  VcGraphicsLabel,
+  VcGraphicsModel,
+  VcGraphicsPath,
+  VcGraphicsPlane,
+  VcGraphicsPoint,
+  VcGraphicsPolygon,
+  VcGraphicsPolyline,
+  VcGraphicsPolylineVolume,
+  VcGraphicsRectangle,
+  VcGraphicsTileset,
+  VcGraphicsWall,
+
+  VcPrimitiveClassification,
+  VcPrimitiveGround,
+  VcPrimitiveGroundPolyline,
+  VcPrimitiveModel,
+  VcPrimitive,
+  VcPrimitiveTileset,
+  VcPrimitiveParticle,
+
+  VcCollectionBillboard,
+  VcCollectionLabel,
+  VcCollectionPoint,
+  VcCollectionPolyline,
+  VcCollectionPrimitive,
+
+  VcBillboard,
+  VcLabel,
+  VcPoint,
+  VcPolyline,
+
+  VcInstanceGeometry,
+
+  VcGeometryBox,
+  VcGeometryBoxOutline,
+  VcGeometryCircle,
+  VcGeometryCircleOutline,
+  VcGeometryPolygonCoplanar,
+  VcGeometryPolygonCoplanarOutline,
+  VcGeometryCorridor,
+  VcGeometryCorridorOutline,
+  VcGeometryCylinder,
+  VcGeometryCylinderOutline,
+  VcGeometryEllipse,
+  VcGeometryEllipseOutline,
+  VcGeometryEllipsoid,
+  VcGeometryEllipsoidOutline,
+  VcGeometryFrustum,
+  VcGeometryFrustumOutline,
+  VcGeometryPolylineGround,
+  VcGeometryPlane,
+  VcGeometryPlaneOutline,
+  VcGeometryPolygon,
+  VcGeometryPolygonOutline,
+  VcGeometryPolyline,
+  VcGeometryPolylineVolume,
+  VcGeometryPolylineVolumeOutline,
+  VcGeometryRectangle,
+  VcGeometryRectangleOutline,
+  VcGeometryPolylineSimple,
+  VcGeometrySphere,
+  VcGeometrySphereOutline,
+  VcGeometryWall,
+  VcGeometryWallOutline,
+
+  VcOverlayHtml,
+  VcOverlayHeatmap,
 
   version,
   install,
   locale
 }
 export * from '@vue-cesium/composables'
+export * from '@vue-cesium/shared'
 export default {
   version,
   install,

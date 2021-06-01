@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, h, provide } from 'vue'
+import { createCommentVNode, defineComponent, ExtractPropTypes, getCurrentInstance, h, provide } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'VcLayerImagery',
   props: defaultProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'update:imageryProvider'],
-  setup (props, ctx) {
+  setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'ImageryLayer'
@@ -50,12 +50,6 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      createPromise: commonState.createPromise,
-      load: commonState.load,
-      unload: commonState.unload,
-      reload: commonState.reload,
-      cesiumObject: instance.cesiumObject,
-      getCesiumObject: () => instance.cesiumObject,
       // private but needed by VcProviderXXX
       __updateProvider: updateProvider
     })

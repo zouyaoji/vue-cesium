@@ -27,6 +27,7 @@
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :otherOpts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
+      <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -59,7 +60,8 @@
         showCredit: true,
         fullscreenElement: document.body,
         point: {
-          pixelSize: 28
+          pixelSize: 28,
+          color: 'red'
         },
         label: {
           text: 'Hello World',
@@ -103,7 +105,6 @@
       onLeftClick(e) {
         console.log(e)
       },
-
       load() {
         this.$refs.vcViewer.load().then(e => {
           console.log(e)

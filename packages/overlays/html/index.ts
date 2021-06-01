@@ -1,10 +1,11 @@
-import { CSSProperties, defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
+import { CSSProperties, defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, TeleportProps, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { position, pixelOffset } from '@vue-cesium/utils/cesium-props'
 import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
+import usePortal from '@vue-cesium/composables/private/use-portal'
 
 export default defineComponent({
   name: 'VcOverlayHtml',
@@ -15,7 +16,8 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    customClass: String
+    customClass: String,
+    teleport: Object as PropType<TeleportProps>
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup (props, ctx) {
@@ -47,7 +49,7 @@ export default defineComponent({
     unwatchFns.push(watch(
       () => props.pixelOffset,
       val => {
-        offset.value = makeCartesian3(val) as Cesium.Cartesian3
+        offset.value = makeCartesian2(val) as Cesium.Cartesian3
       }
     ))
 
@@ -58,6 +60,7 @@ export default defineComponent({
     instance.mount = async () => {
       const { viewer } = $services
       canRender.value = true
+      showPortal()
       offset.value = makeCartesian2(props.pixelOffset) as Cesium.Cartesian2
       position.value = makeCartesian3(props.position) as Cesium.Cartesian3
       viewer.scene.preRender.addEventListener(onPreRender)
@@ -67,15 +70,15 @@ export default defineComponent({
       const { viewer } = $services
       viewer.scene.preRender.removeEventListener(onPreRender)
       canRender.value = false
+      hidePortal()
       return true
     }
     const onPreRender = () => {
       const { viewer } = $services
-      const scratch = new Cesium.Cartesian2()
-      const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, scratch)
+      const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, {} as any)
       if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
-        rootStyle.left = canvasPosition.x + offset.value.x + 'px'
-        rootStyle.top = canvasPosition.y + offset.value.y + 'px'
+        rootStyle.left = canvasPosition.x + offset.value?.x + 'px'
+        rootStyle.top = canvasPosition.y + offset.value?.y + 'px'
 
         if (props.autoHidden) {
           const cameraPosition = viewer.camera.position
@@ -103,17 +106,7 @@ export default defineComponent({
       unwatchFns = []
     })
 
-    // expose public methods
-    Object.assign(instance.proxy, {
-      createPromise: commonState.createPromise,
-      load: commonState.load,
-      unload: commonState.unload,
-      reload: commonState.reload,
-      cesiumObject: instance.cesiumObject,
-      getCesiumObject: () => instance.cesiumObject
-    })
-
-    return () => {
+    const renderContent = () => {
       if (canRender.value) {
         return h('div', {
           ref: rootRef,
@@ -123,6 +116,16 @@ export default defineComponent({
       } else {
         return createCommentVNode('v-if')
       }
+    }
+    const renderPortalContent = () => {
+      return renderContent()
+    }
+
+    const { showPortal, hidePortal, renderPortal } = usePortal(instance, rootRef, renderPortalContent)
+    if (props.teleport && props.teleport.to && !props.teleport.disabled) {
+      return renderPortal
+    } else {
+      return () => renderContent()
     }
   }
 })

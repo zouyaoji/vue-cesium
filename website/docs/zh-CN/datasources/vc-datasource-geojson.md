@@ -16,7 +16,7 @@ GeoJson 数据源组件的基础用法。
       data="./SampleData/geojson/china.json"
       @ready="onDatasourceReady"
       :show="show"
-      :options="options"
+      stroke="red"
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
@@ -36,9 +36,6 @@ GeoJson 数据源组件的基础用法。
       // state
       const show = ref(true)
       const datasourceRef = ref(null)
-      const options = reactive({
-        stroke: 'red'
-      })
       const entities = reactive([])
       for (let i = 0; i < 1000; i++) {
         entities.push({
@@ -80,7 +77,6 @@ GeoJson 数据源组件的基础用法。
         onClicked,
         onDatasourceReady,
         datasourceRef,
-        options,
         entities
       }
     }

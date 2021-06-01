@@ -819,3 +819,25 @@ export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, option
     cancel: options.cancel
   })
 }
+
+export function getGeodesicDistance(ps1: Cesium.Cartesian3, ps2: Cesium.Cartesian3) {
+  const { Ellipsoid, EllipsoidGeodesic } = Cesium
+  const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(ps1)
+  const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(ps2)
+  const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
+  return geodesic.surfaceDistance
+}
+
+const restoreCursors = []
+export function setViewerCursor (viewer: Cesium.Viewer, cursor: string) {
+  const restoreCursor = getComputedStyle(viewer.canvas).cursor
+  restoreCursors[restoreCursors.length - 1] !== restoreCursor && restoreCursors.push(restoreCursor)
+  viewer.canvas.setAttribute('style', `cursor: ${cursor}`)
+}
+
+export function restoreViewerCursor (viewer: Cesium.Viewer, count = 1) {
+  for (let i = 0; i < count; i++) {
+    const cursor = restoreCursors.pop()
+    viewer.canvas.setAttribute('style', `cursor: ${cursor}`)
+  }
+}

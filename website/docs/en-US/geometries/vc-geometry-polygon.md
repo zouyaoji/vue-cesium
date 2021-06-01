@@ -132,7 +132,8 @@ Basic usage of VcGeometryPolygon component.
         appearanceOutline,
         attributesOutline,
         outline,
-        polygonHierarchy
+        polygonHierarchy,
+        vertexFormat
       }
     }
   }

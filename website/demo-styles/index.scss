@@ -5,6 +5,13 @@
 @import 'vc-datasource-custom.scss';
 @import 'vc-overlay-html.scss';
 
+.text-brand {
+  color: #a2aa33;
+}
+.bg-brand {
+  background: #a2aa33;
+}
+
 .demo-block {
   font-weight: 400;
   line-height: 20px;
@@ -48,6 +55,10 @@
     }
 
     .#{$namespace}-switch__label {
+      color: white;
+    }
+
+    .#{$namespace}-checkbox__label {
       color: white;
     }
   }

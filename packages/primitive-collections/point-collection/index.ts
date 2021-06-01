@@ -43,7 +43,6 @@ export default defineComponent({
           return
         }
         const pointCollection = instance.cesiumObject as Cesium.PointPrimitiveCollection
-
         if (newVal.length === oldVal.length) {
           // 视为修改操作
           // Treated as modified
@@ -61,7 +60,7 @@ export default defineComponent({
           }
 
           modifies.forEach(modify => {
-            const modifyPoint = pointCollection._pointPrimitives.find(v => v.id === modify.oldOptions.id)
+            const modifyPoint = pointCollection._pointPrimitives.find(v => v && v.id === modify.oldOptions.id)
             modifyPoint && Object.keys(modify.newOptions).forEach(prop => {
               if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
                 modifyPoint[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
@@ -85,7 +84,9 @@ export default defineComponent({
             const pointOptions = newVal[i] as Cesium.Billboard
             pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
             const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-            pointCollection.add(pointOptionsTransform)
+            const point = pointCollection.add(pointOptionsTransform)
+
+            primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
           }
         }
       },
@@ -102,7 +103,9 @@ export default defineComponent({
         const pointOptions = props.points[i] as Cesium.PointPrimitive
         pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
         const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-        pointCollection.add(pointOptionsTransform)
+        const point = pointCollection.add(pointOptionsTransform)
+
+        primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
       }
       return pointCollection
     }

@@ -16,7 +16,7 @@ Basic usage of VcDatasourceGeojson component.
       data="./SampleData/geojson/china.json"
       @ready="onDatasourceReady"
       :show="show"
-      :options="options"
+      stroke="red"
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
@@ -36,9 +36,6 @@ Basic usage of VcDatasourceGeojson component.
       // state
       const show = ref(true)
       const datasourceRef = ref(null)
-      const options = reactive({
-        stroke: 'red'
-      })
       const entities = reactive([])
 
       for (let i = 0; i < 100; i++) {
@@ -81,7 +78,6 @@ Basic usage of VcDatasourceGeojson component.
         onClicked,
         onDatasourceReady,
         datasourceRef,
-        options,
         entities
       }
     }

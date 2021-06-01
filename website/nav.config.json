@@ -59,6 +59,19 @@
           ]
         },
         {
+          "groupName": "工具",
+          "list": [
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements 量算"
+            },
+            {
+              "path": "/tools/vc-drawings",
+              "title": "VcDrawings 绘制"
+            }
+          ]
+        },
+        {
           "groupName": "影像",
           "list": [
             {
@@ -380,7 +393,32 @@
           "list": [
             {
               "path": "/overlays/vc-overlay-html",
-              "title": "VcOverlayHtml"
+              "title": "VcOverlayHtml HTML 元素"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap 热力图"
+            }
+          ]
+        },
+        {
+          "groupName": "其他平台",
+          "list": [
+            {
+              "path": "/platforms/vc-demo-supermap",
+              "title": "SuperMap iClient3D 超图"
+            },
+            {
+              "path": "/platforms/vc-demo-earth-sdk",
+              "title": "EarthSDK 西部世界"
+            },
+            {
+              "path": "/platforms/vc-demo-mars3d",
+              "title": "Mars3D 火星科技"
+            },
+            {
+              "path": "/platforms/vc-demo-dc-sdk",
+              "title": "DC-SDK 数字视觉"
             }
           ]
         }
@@ -443,6 +481,19 @@
             {
               "path": "/controls/vc-navigation-sm",
               "title": "VcNavigationSm"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements"
+            },
+            {
+              "path": "/tools/vc-drawings",
+              "title": "VcDrawings"
             }
           ]
         },
@@ -769,6 +820,31 @@
             {
               "path": "/overlays/vc-overlay-html",
               "title": "VcOverlayHtml"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap"
+            }
+          ]
+        },
+        {
+          "groupName": "Third Platforms",
+          "list": [
+            {
+              "path": "/platforms/vc-demo-supermap",
+              "title": "SuperMap iClient3D for WebGL"
+            },
+            {
+              "path": "/platforms/vc-demo-earth-sdk",
+              "title": "EarthSDK"
+            },
+            {
+              "path": "/platforms/vc-demo-mars3d",
+              "title": "Mars3D"
+            },
+            {
+              "path": "/platforms/vc-demo-dc-sdk",
+              "title": "DC-SDK"
             }
           ]
         }
