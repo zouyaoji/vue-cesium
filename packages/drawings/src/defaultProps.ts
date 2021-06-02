@@ -157,7 +157,8 @@ const polylineDrawingDefault = {
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete',
     })
-  }
+  },
+  loop: false
 }
 
 const polygonDrawingDefault = {

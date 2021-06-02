@@ -31,6 +31,7 @@ ctrl + 右键取消绘制。
       :offset="[20, 20]"
       :editable="editable"
       @ready="drawingsReady"
+      :polylineDrawingOpts="polylineDrawingOpts2"
     >
       <template #body>
         <div class="custom-drawings">
@@ -69,6 +70,9 @@ ctrl + 右键取消绘制。
         editable: false,
         drawingFabOptions1: {
           direction: 'right'
+        },
+        polylineDrawingOpts2: {
+          loop: true
         }
       }
     },
@@ -370,7 +374,8 @@ ctrl + 右键取消绘制。
         ]
       }
     }
-  }
+  },
+  loop: false
 }
 ```
 

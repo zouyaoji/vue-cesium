@@ -62,7 +62,7 @@ export default defineComponent({
             }))
           })
         } else {
-          const drawingsOption = (drawingVm.proxy as any).measurementsOptions.find(v => v.name === 'polygon')
+          const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === 'polygon')
             ; (drawingVm.proxy as any).toggleAction(drawingsOption)
         }
       }
