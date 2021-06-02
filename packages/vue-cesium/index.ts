@@ -140,6 +140,12 @@ import {
   VcOverlayHeatmap
 } from '@vue-cesium/overlays'
 
+import {
+  VcPostProcessStage,
+  VcPostProcessStageScan,
+  VcPostProcessStageCollection
+} from '@vue-cesium/post-processes'
+
 import { use, i18n } from '@vue-cesium/locale'
 // if you encountered problems alike "Can't resolve './version'"
 // please run `yarn bootstrap` first
@@ -274,7 +280,11 @@ const components = [
   VcGeometryWallOutline,
 
   VcOverlayHtml,
-  VcOverlayHeatmap
+  VcOverlayHeatmap,
+
+  VcPostProcessStage,
+  VcPostProcessStageScan,
+  VcPostProcessStageCollection
 ]
 
 const install = (app: App, opt: InstallOptions): void => {
@@ -416,6 +426,10 @@ export {
 
   VcOverlayHtml,
   VcOverlayHeatmap,
+
+  VcPostProcessStage,
+  VcPostProcessStageScan,
+  VcPostProcessStageCollection,
 
   version,
   install,

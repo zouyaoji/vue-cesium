@@ -402,6 +402,23 @@
           ]
         },
         {
+          "groupName": "后期处理",
+          "list": [
+            {
+              "path": "/post-processes/vc-post-process-stage",
+              "title": "VcPostProcessStage"
+            },
+            {
+              "path": "/post-processes/vc-post-process-stage-scan",
+              "title": "VcPostProcessStageScan 扫描"
+            },
+            {
+              "path": "/post-processes/vc-post-process-stage-collection",
+              "title": "VcPostProcessStageCollection 后处理集合"
+            }
+          ]
+        },
+        {
           "groupName": "其他平台",
           "list": [
             {
@@ -824,6 +841,23 @@
             {
               "path": "/overlays/vc-overlay-heatmap",
               "title": "VcOverlayHeatmap"
+            }
+          ]
+        },
+        {
+          "groupName": "PostProcess",
+          "list": [
+            {
+              "path": "/post-processes/vc-post-process-stage",
+              "title": "VcPostProcessStage"
+            },
+            {
+              "path": "/post-processes/vc-post-process-stage-scan",
+              "title": "VcPostProcessStageScan"
+            },
+            {
+              "path": "/post-processes/vc-post-process-stage-collection",
+              "title": "VcPostProcessStageCollection"
             }
           ]
         },
