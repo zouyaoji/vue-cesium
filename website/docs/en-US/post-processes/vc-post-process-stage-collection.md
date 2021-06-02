@@ -102,9 +102,9 @@ Basic usage of VcPostProcessStageCollection component.
 
 ### Props
 
-| Name          | Type  | Default | Description                                                           |
-| ------------- | ----- | ------- | --------------------------------------------------------------------- |
-| postProcesses | Array |         | `optional` 指定后处理集合。 属性与 `vc-post-process-stage` 保持一致。 |
+| Name          | Type  | Default | Description                                                                                               |
+| ------------- | ----- | ------- | --------------------------------------------------------------------------------------------------------- |
+| postProcesses | Array |         | `optional` Specify the post-processing collection. The props are consistent with `vc-post-process-stage`. |
 
 ### Events
 
