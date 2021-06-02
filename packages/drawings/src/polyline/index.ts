@@ -13,13 +13,13 @@ import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { usePolylineDrawing } from '@vue-cesium/composables'
 
 export default defineComponent({
-  name: 'VcMeasurementPolyline',
+  name: 'VcDrawingPolyline',
   props: defaultProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcMeasurementPolyline'
+    instance.cesiumClass = 'VcDrawingPolyline'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
@@ -62,7 +62,7 @@ export default defineComponent({
             }))
           })
         } else {
-          const drawingsOption = (drawingVm.proxy as any).measurementsOptions.find(v => v.name === 'polyline')
+          const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === 'polyline')
           ;(drawingVm.proxy as any).toggleAction(drawingsOption)
         }
       }

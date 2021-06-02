@@ -7,5 +7,6 @@ export default {
   drawtip: Object,
   pointOpts: Object,
   polylineOpts: Object,
-  editorOpts: Object
+  editorOpts: Object,
+  loop: Boolean
 }

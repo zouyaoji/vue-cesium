@@ -1,0 +1,90 @@
+## VcPostProcessStageScan
+
+Packaged scanning effects, radar scanning and circular scanning.
+
+### Basic usage
+
+Basic usage of VcPostProcessStageScan component.
+
+:::demo Use the `vc-post-process-stage-scan` tag to add post-processing scanning effects on the viewer.
+
+```html
+<el-row ref="viewerContainer" class="demo-viewer">
+  <vc-viewer @ready="onViewerReady">
+    <vc-post-process-stage-scan ref="radar" type="radar" :options="options1"></vc-post-process-stage-scan>
+    <vc-post-process-stage-scan ref="circle" type="circle" :options="options2"></vc-post-process-stage-scan>
+    <vc-layer-imagery>
+      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+    </vc-layer-imagery>
+  </vc-viewer>
+  <el-row class="demo-toolbar">
+    <el-button type="danger" round @click="unload">Unload</el-button>
+    <el-button type="danger" round @click="load">Load</el-button>
+    <el-button type="danger" round @click="load">Reload</el-button>
+  </el-row>
+</el-row>
+
+<script>
+  export default {
+    data() {
+      return {
+        options1: {
+          position: [117.217124, 31.809777],
+          radius: 1500,
+          interval: 1500,
+          color: [255, 255, 0, 255]
+        },
+        options2: {
+          position: [117.257124, 31.809777],
+          radius: 1500,
+          interval: 1500,
+          color: [255, 0, 0, 255]
+        }
+      }
+    },
+    methods: {
+      onViewerReady({ viewer }) {
+        viewer.scene.globe.depthTestAgainstTerrain = true
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(117.237124, 31.809777, 10000.0),
+          orientation: {
+            heading: Cesium.Math.toRadians(0), // east, default value is 0.0 (north)
+            pitch: Cesium.Math.toRadians(-90), // default value (looking down)
+            roll: 0.0 // default value
+          },
+          duration: 3
+        })
+      },
+      unload() {
+        this.$refs.circle.unload()
+        this.$refs.radar.unload()
+      },
+      load() {
+        this.$refs.circle.load()
+        this.$refs.radar.load()
+      },
+      reload() {
+        this.$refs.circle.reload()
+        this.$refs.radar.reload()
+      }
+    }
+  }
+</script>
+```
+
+:::
+
+### Props
+
+| Name    | Type   | Default                                                                     | Description                                                      |
+| ------- | ------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| type    | String | `'radar'`                                                                   | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
+| options | Object | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` 指定 entity 名称，名称可不必唯一。                    |
+
+### Events
+
+| Name       | Parameters                         | Description                                            |
+| ---------- | ---------------------------------- | ------------------------------------------------------ |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |

@@ -96,7 +96,6 @@ export default defineComponent({
     options.polygonActionOpts = polygonActionOpts
     options.polygonDrawingOpts = polygonDrawingOpts
     options.clearActionOpts = clearActionOpts
-    window.options = options
 
     const drawingsOptions: Array<DrawingInstanceOpts> = props.drawings.map(drawing => ({
       name: drawing,

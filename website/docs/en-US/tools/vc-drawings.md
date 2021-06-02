@@ -30,6 +30,7 @@ Basic usage of drawing components.
       ref="drawingsRef4"
       position="bottom-left"
       :mainFabOpts="drawingFabOptions1"
+      :polylineDrawingOpts="polylineDrawingOpts2"
       :offset="[20, 20]"
       :editable="editable"
       @ready="drawingsReady"
@@ -71,6 +72,9 @@ Basic usage of drawing components.
         editable: false,
         drawingFabOptions1: {
           direction: 'right'
+        },
+        polylineDrawingOpts2: {
+          loop: true
         }
       }
     },
@@ -372,7 +376,8 @@ Tip: Each drawing button (FabAction) corresponds to the drawing parameters xxxDr
         ]
       }
     }
-  }
+  },
+  loop: false
 }
 ```
 
