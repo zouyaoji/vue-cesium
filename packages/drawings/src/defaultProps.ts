@@ -168,7 +168,7 @@ const polygonDrawingDefault = {
     pixelOffset: [32, 32]
   },
   pointOpts: pointOptsDefault,
-  polylineOpts: Object.assign(polylineOptsDefault, {
+  polylineOpts: Object.assign({}, polylineOptsDefault, {
     depthFailMaterial: {
       fabric: {
         type: 'Color',
