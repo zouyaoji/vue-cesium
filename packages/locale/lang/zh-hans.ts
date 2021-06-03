@@ -44,16 +44,6 @@ export default {
         tip: '点击切换鼠标显示坐标为 UTM 投影坐标'
       }
     },
-    navigationSm: {
-      compass: {
-        outerTip: '旋转视图：顺/逆时针方向拖拽罗盘外环；重置视图：双击罗盘外环。',
-      },
-      zoomCotrol: {
-        zoomInTip: '放大',
-        zoomBarTip: '按住滑块向上放大，向下缩小。',
-        zoomOutTip: '缩小'
-      }
-    },
     measurement: {
       expand: '展开',
       collapse: '收起',
@@ -117,7 +107,7 @@ export default {
       },
       clear:{
         tip: '清除量算结果'
-      },
+      }
     },
     drawing: {
       point: {
@@ -139,7 +129,7 @@ export default {
         drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
       },
     },
-    overviewmap: {
+    overview: {
       show: '显示鹰眼',
       hidden: '隐藏鹰眼'
     }

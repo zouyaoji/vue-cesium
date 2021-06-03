@@ -76,10 +76,11 @@ Basic usage of VcPostProcessStageScan component.
 
 ### Props
 
-| Name    | Type   | Default                                                                     | Description                                                      |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
 | ------- | ------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| type    | String | `'radar'`                                                                   | `optional` 指定 entity 的唯一标识符。如果没有提供，则生成 GUID。 |
-| options | Object | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` 指定 entity 名称，名称可不必唯一。                    |
+| type | String | `'radar'` | `optional` Specify the scan type, optional values are'radar','circle'. |
+| options | Object | `{ position: [0, 0], radius: 1500, interval: 3500, color: [0, 0, 0, 255] }` | `optional` Specify optional parameters. |
 
 ### Events
 

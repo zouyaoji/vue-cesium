@@ -818,6 +818,10 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     })
 
     logger.debug('loaded-viewer')
+
+    Object.assign(vcInstance.proxy, {
+      cesiumObject: viewer
+    })
     return readyObj
   }
 

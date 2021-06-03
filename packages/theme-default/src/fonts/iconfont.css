@@ -1,8 +1,8 @@
 @font-face {
   font-family: "vc-icons"; /* Project id 2419801 */
-  src: url('iconfont.woff2?t=1622359770057') format('woff2'),
-       url('iconfont.woff?t=1622359770057') format('woff'),
-       url('iconfont.ttf?t=1622359770057') format('truetype');
+  src: url('iconfont.woff2?t=1622692174025') format('woff2'),
+       url('iconfont.woff?t=1622692174025') format('woff'),
+       url('iconfont.ttf?t=1622692174025') format('truetype');
 }
 
 .vc-icons {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.vc-icons-overview-toggle:before {
+  content: "\ebaf";
 }
 
 .vc-icons-drawing-polygon:before {

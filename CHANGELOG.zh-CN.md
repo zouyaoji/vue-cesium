@@ -1,11 +1,26 @@
 ## 更新日志
 
+### 3.0.1-beta.6
+*2021-06-03*
+
+#### 新特性
+
+- `vc-overlay-heatmap`, 增加热力图组件，可用于可视化温度、降水等要素。
+- `vc-measurements`, 增加友好的量算工具。
+- `vc-drawings`, 增加友好的绘制工具。
+- `vc-post-process-stage` 增加后期处理组件。
+- `vc-post-process-stage-scan` 增加后期处理扫描组件。
+- `vc-post-process-stage-collection` 增加后期处理集合组件。
+- `vc-overview-map` 增加鹰眼组件。
+- 新增兼容第三方[mars3d](https://zouyaoji.top/vue-cesium/#/zh-CN/component/platforms/vc-demo-mars3d) 库。
+- 新增兼容第三方 [dc-sdk](https://zouyaoji.top/vue-cesium/#/zh-CN/component/platforms/vc-demo-dc-sdk) 库。
+
 ### 3.0.1-beta.5.2
 *2021-04-29*
 
 #### 新特性
 
-- `vc-overlay-html`, 按地理位置加载 HTML 元素覆盖物。
+- `vc-overlay-html`, 增加 HTML 元素覆盖物组件。
 
 #### 优化
 

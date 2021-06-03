@@ -9,6 +9,7 @@ import VcNavigation from './navigation'
 import VcCompassSm from './navigation-sm/compass-sm'
 import VcZoomControlSm from './navigation-sm/zoom-control-sm'
 import VcNavigationSm from './navigation-sm'
+import VcOverviewMap from './vc-overview-map'
 
 const components = [
   VcCompass,
@@ -20,7 +21,8 @@ const components = [
   VcNavigation,
   VcCompassSm,
   VcZoomControlSm,
-  VcNavigationSm
+  VcNavigationSm,
+  VcOverviewMap
 ]
 
 const install = (app: App): void => {
@@ -39,7 +41,8 @@ export {
   VcNavigation,
   VcCompassSm,
   VcZoomControlSm,
-  VcNavigationSm
+  VcNavigationSm,
+  VcOverviewMap
 }
 
 export default {
