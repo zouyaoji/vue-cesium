@@ -29,7 +29,6 @@ const zoomOptsDefault = {
   }
 }
 
-
 export default defineComponent({
   name: 'VcNavigationSm',
   inheritAttrs: false,
