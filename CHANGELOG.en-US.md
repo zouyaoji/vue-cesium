@@ -1,5 +1,20 @@
 ## Changelog
 
+### 3.0.1-beta.6
+*2021-06-03*
+
+#### 新特性
+
+- `vc-overlay-heatmap`, The heat map component is added, which can be used to visualize factors such as temperature and precipitation.
+- `vc-measurements`, Add friendly measuring tools.
+- `vc-drawings`, Add friendly drawing tools.
+- `vc-post-process-stage` Add post-processing component.
+- `vc-post-process-stage-scan` Add post-processing scanning component.
+- `vc-post-process-stage-collection` Add post-processing assembly component.
+- `vc-overview-map` Add overview map control component.
+- Added compatible third-party [mars3d](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-mars3d) library.
+- Added compatible third-party [dc-sdk](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-dc-sdk) library.
+
 ### 3.0.1-beta.5.2
 *2021-04-29*
 
