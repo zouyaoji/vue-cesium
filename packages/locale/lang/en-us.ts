@@ -20,7 +20,6 @@ export default {
         credit: 'Map Credits',
         screenshot: 'Screenshot'
       },
-
       myLocation: {
         myLocationTip: 'Centre map at your current location',
         positioning: 'Positioning...',
@@ -44,16 +43,6 @@ export default {
         cameraHeight: 'CameraH',
         tip: 'Click to switch the mouse display coordinates to UTM projection coordinates'
       },
-    },
-    navigationSm: {
-      compass: {
-        outerTip: 'Drag outer ring: rotate view. Double-click: reset view.',
-      },
-      zoomCotrol: {
-        zoomInTip: 'Zoom in',
-        zoomBarTip: 'Drag the bar up to zoom in, and down to zoom out.',
-        zoomOutTip: 'Zoom out'
-      }
     },
     measurement: {
       expand: 'Expand',
@@ -140,7 +129,7 @@ export default {
         drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
       },
     },
-    overviewmap: {
+    overview: {
       show: 'Show',
       hidden: 'Hidden'
     }

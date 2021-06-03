@@ -55,6 +55,10 @@
             {
               "path": "/controls/vc-navigation-sm",
               "title": "VcNavigationSm 导航"
+            },
+            {
+              "path": "/controls/vc-overview-map",
+              "title": "VcOverviewMap 鹰眼图"
             }
           ]
         },
@@ -498,6 +502,10 @@
             {
               "path": "/controls/vc-navigation-sm",
               "title": "VcNavigationSm"
+            },
+            {
+              "path": "/controls/vc-overview-map",
+              "title": "VcOverviewMap"
             }
           ]
         },
