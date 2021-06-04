@@ -3,7 +3,7 @@
 ### 3.0.1-beta.6
 *2021-06-03*
 
-#### 新特性
+#### New feature
 
 - `vc-overlay-heatmap`, The heat map component is added, which can be used to visualize factors such as temperature and precipitation.
 - `vc-measurements`, Add friendly measuring tools.
