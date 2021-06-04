@@ -846,6 +846,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       await vcChildCmp.unload()
     }
 
+    vcInstance.children.length = 0
+
     const { viewer, earth, map, dcViewer } = vcInstance
     if (global.Cesium) {
       viewer.imageryLayers.layerAdded.removeEventListener(onImageryLayerAdded)

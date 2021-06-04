@@ -122,6 +122,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       await vcChildCmp.unload()
     }
 
+    vcInstance.children.length = 0
+
     return vcInstance.mounted ? unmount().then(async () => {
       setPropsWatcher(false)
       vcInstance.cesiumObject = undefined
@@ -294,7 +296,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         })
       }
       parentVcInstance.vcMitt.on('ready', () => {
-        if (!isLoading) {
+        if (!isLoading && !vcInstance.isUnmounted) {
           resolve(load())
         }
       })

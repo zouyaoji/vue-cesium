@@ -52,7 +52,7 @@ export default function (vcInstance: VcComponentInternalInstance) {
       }
 
       if (process.env.NODE_ENV === 'development') {
-        // success(...args)
+        // console.log(...args)
       }
     }
   }
