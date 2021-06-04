@@ -296,7 +296,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         })
       }
       parentVcInstance.vcMitt.on('ready', () => {
-        if (!isLoading) {
+        if (!isLoading && !vcInstance.isUnmounted) {
           resolve(load())
         }
       })
