@@ -110,6 +110,8 @@ export default {
       }
     },
     drawing: {
+      expand: '展开',
+      collapse: '收起',
       point: {
         tip: '绘制点',
         drawTip1: '点击左键绘制点。',

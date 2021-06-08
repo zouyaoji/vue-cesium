@@ -110,6 +110,8 @@ export default {
       },
     },
     drawing: {
+      expand: 'Expand',
+      collapse: 'Collapse',
       point: {
         tip: 'Drawing point',
         drawTip1: 'Click the left button to draw a point.',
