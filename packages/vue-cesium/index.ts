@@ -12,7 +12,8 @@ import {
   VcCompassSm,
   VcZoomControlSm,
   VcNavigationSm,
-  VcOverviewMap
+  VcOverviewMap,
+  VcSelectionIndicator
 } from '@vue-cesium/controls'
 // tools
 import VcMeasurements from '@vue-cesium/measurements'
@@ -176,6 +177,7 @@ const components = [
   VcZoomControlSm,
   VcNavigationSm,
   VcOverviewMap,
+  VcSelectionIndicator,
 
   VcMeasurements,
   VcDrawings,
@@ -322,6 +324,7 @@ export {
   VcZoomControlSm,
   VcNavigationSm,
   VcOverviewMap,
+  VcSelectionIndicator,
 
   VcMeasurements,
   VcDrawings,

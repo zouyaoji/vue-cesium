@@ -44,6 +44,7 @@ declare namespace Cesium {
     frameState: any
     pickPositionWorldCoordinates (pickPositionWorldCoordinates: Cesium.Cartesian2, result?: Cesium.Cartesian3) : Cesium.Cartesian3
     _performanceDisplay: any
+    tweens: any
   }
 
   interface Globe {

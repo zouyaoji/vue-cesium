@@ -59,6 +59,10 @@
             {
               "path": "/controls/vc-overview-map",
               "title": "VcOverviewMap 鹰眼图"
+            },
+            {
+              "path": "/controls/vc-selection-indicator",
+              "title": "VcSelectionIndicator 选择器"
             }
           ]
         },
@@ -506,6 +510,10 @@
             {
               "path": "/controls/vc-overview-map",
               "title": "VcOverviewMap"
+            },
+            {
+              "path": "/controls/vc-selection-indicator",
+              "title": "VcSelectionIndicator"
             }
           ]
         },
