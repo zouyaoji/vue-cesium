@@ -63,6 +63,10 @@
             {
               "path": "/controls/vc-selection-indicator",
               "title": "VcSelectionIndicator 选择器"
+            },
+            {
+              "path": "/controls/vc-ajax-bar",
+              "title": "VcAjaxBar 请求进度条"
             }
           ]
         },
@@ -514,6 +518,10 @@
             {
               "path": "/controls/vc-selection-indicator",
               "title": "VcSelectionIndicator"
+            },
+            {
+              "path": "/controls/vc-ajax-bar",
+              "title": "VcAjaxBar"
             }
           ]
         },

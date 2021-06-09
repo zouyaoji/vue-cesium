@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, CSSProperties, PropType } from 'vue'
 
 import { between } from '@vue-cesium/utils/private/format'
 
@@ -76,7 +76,7 @@ function restoreAjax (start, stop) {
 }
 
 export default defineComponent({
-  name: 'QAjaxBar',
+  name: 'VcAjaxBar',
 
   props: {
     position: {
@@ -90,7 +90,12 @@ export default defineComponent({
     },
     color: String,
     skipHijack: Boolean,
-    reverse: Boolean
+    reverse: Boolean,
+    positioning: {
+      type: String,
+      default: 'absolute',
+      validator: (val: string) => ['absolute', 'fixed'].includes(val)
+    }
   },
 
   emits: ['start', 'stop'],
@@ -119,7 +124,7 @@ export default defineComponent({
     const style = computed(() => {
       const active = onScreen.value
 
-      const obj = translate({
+      const obj:CSSProperties = translate({
         p: progress.value,
         pos: props.position,
         active,
@@ -130,6 +135,8 @@ export default defineComponent({
 
       obj[sizeProp.value] = props.size
       obj.opacity = active ? 1 : 0
+      obj.position = props.positioning === 'absolute' ? 'absolute' : 'fixed'
+      obj.backgroundColor = props.color
 
       return obj
     })

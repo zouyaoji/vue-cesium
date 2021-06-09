@@ -148,6 +148,28 @@ import {
   VcPostProcessStageCollection
 } from '@vue-cesium/post-processes'
 
+import {
+  VcBtn,
+  VcIcon,
+  VcTooltip,
+  VcAjaxBar,
+  VcSkeleton,
+  VcSpinnerBall,
+  VcSpinnerBars,
+  VcSpinnerDots,
+  VcSpinnerGears,
+  VcSpinnerHourglass,
+  VcSpinnerIos,
+  VcSpinnerOrbit,
+  VcSpinnerOval,
+  VcSpinnerPuff,
+  VcSpinnerRings,
+  VcSpinnerTail,
+  VcSpinner,
+  VcFab,
+  VcFabAction
+} from '@vue-cesium/ui'
+
 import { use, i18n } from '@vue-cesium/locale'
 // if you encountered problems alike "Can't resolve './version'"
 // please run `yarn bootstrap` first
@@ -288,7 +310,27 @@ const components = [
 
   VcPostProcessStage,
   VcPostProcessStageScan,
-  VcPostProcessStageCollection
+  VcPostProcessStageCollection,
+
+  VcBtn,
+  VcIcon,
+  VcTooltip,
+  VcAjaxBar,
+  VcSkeleton,
+  VcSpinnerBall,
+  VcSpinnerBars,
+  VcSpinnerDots,
+  VcSpinnerGears,
+  VcSpinnerHourglass,
+  VcSpinnerIos,
+  VcSpinnerOrbit,
+  VcSpinnerOval,
+  VcSpinnerPuff,
+  VcSpinnerRings,
+  VcSpinnerTail,
+  VcSpinner,
+  VcFab,
+  VcFabAction
 ]
 
 const install = (app: App, opt: InstallOptions): void => {
@@ -436,6 +478,26 @@ export {
   VcPostProcessStage,
   VcPostProcessStageScan,
   VcPostProcessStageCollection,
+
+  VcBtn,
+  VcIcon,
+  VcTooltip,
+  VcAjaxBar,
+  VcSkeleton,
+  VcSpinnerBall,
+  VcSpinnerBars,
+  VcSpinnerDots,
+  VcSpinnerGears,
+  VcSpinnerHourglass,
+  VcSpinnerIos,
+  VcSpinnerOrbit,
+  VcSpinnerOval,
+  VcSpinnerPuff,
+  VcSpinnerRings,
+  VcSpinnerTail,
+  VcSpinner,
+  VcFab,
+  VcFabAction,
 
   version,
   install,
