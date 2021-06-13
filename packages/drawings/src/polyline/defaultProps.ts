@@ -8,5 +8,6 @@ export default {
   pointOpts: Object,
   polylineOpts: Object,
   editorOpts: Object,
-  loop: Boolean
+  loop: Boolean,
+  clampToGround: Boolean
 }

@@ -1,16 +1,17 @@
 import { defineComponent, getCurrentInstance, ref, h, nextTick, toRef } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
-import { VcPrimitive } from '@vue-cesium/primitives'
+import { VcPrimitive, VcPrimitiveGround, VcPrimitiveGroundPolyline } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
 import { makeMaterial } from '@vue-cesium/utils/cesium-helpers'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
-import { VcGeometryPolygon, VcGeometryPolyline } from '@vue-cesium/geometries'
+import { VcGeometryPolygon, VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/geometries'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { usePolylineDrawing } from '@vue-cesium/composables'
+import { DrawStatus } from '@vue-cesium/shared'
 
 export default defineComponent({
   name: 'VcDrawingPolygon',
@@ -125,14 +126,13 @@ export default defineComponent({
     Object.assign(instance.proxy, publicMethods)
 
     return () => {
-      const { PolylineMaterialAppearance, EllipsoidSurfaceAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
+      const { PolylineMaterialAppearance, EllipsoidSurfaceAppearance, createGuid } = Cesium
 
-      const polylineOpts = {
-        width: props.polylineOpts.width,
-        vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-        ellipsoid: defaultValue(props.polylineOpts.ellipsoid, Ellipsoid.WGS84),
-        arcType: props.polylineOpts.arcType
+      const polylineOpts: any = {
+        ...props.polylineOpts,
+        vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
       }
+      props.clampToGround && delete polylineOpts.arcType
       const children = []
       polylineDrawingState.polylines.value.forEach((polyline, index) => {
         // points
@@ -144,7 +144,8 @@ export default defineComponent({
               position: position,
               id: createGuid(),
               _vcPolylineIndx: index, // for editor
-              ...props.pointOpts
+              ...props.pointOpts,
+              show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints,
             onMouseout: polylineDrawingState.onMouseoutPoints
@@ -153,7 +154,7 @@ export default defineComponent({
         if (polyline.positions.length > 1) {
           // polyline
           children.push(
-            h(VcPrimitive, {
+            h(props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive, {
               show: polyline.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new PolylineMaterialAppearance({
@@ -165,7 +166,7 @@ export default defineComponent({
               asynchronous: false
             }, () => h(VcInstanceGeometry, {
               id: createGuid()
-            }, () => h(VcGeometryPolyline, {
+            }, () => h(props.clampToGround ? VcGeometryPolylineGround : VcGeometryPolyline, {
               positions: polyline.positions,
               ...polylineOpts
             })))
@@ -174,7 +175,7 @@ export default defineComponent({
         if (polyline.positions.length > 2) {
           // polygon
           children.push(
-            h(VcPrimitive, {
+            h(props.clampToGround ? VcPrimitiveGround : VcPrimitive, {
               show: polyline.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new EllipsoidSurfaceAppearance({
