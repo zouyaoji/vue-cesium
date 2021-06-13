@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/drawings",
-  "version": "3.0.1-beta.6",
+  "version": "3.0.1-beta.7",
   "main": "dist/index.js",
   "license": "MIT",
   "peerDependencies": {
