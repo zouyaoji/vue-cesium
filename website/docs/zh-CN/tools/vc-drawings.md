@@ -22,7 +22,14 @@ ctrl + 右键取消绘制。
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- 修改定位 和 位置偏移 -->
-    <vc-drawings ref="drawingsRef" position="bottom-left" :mainFabOpts="drawingFabOptions1" :offset="[20, 80]" :editable="editable"></vc-drawings>
+    <vc-drawings
+      ref="drawingsRef"
+      position="bottom-left"
+      :mainFabOpts="drawingFabOptions1"
+      :offset="[20, 80]"
+      :editable="editable"
+      :clampToGround="clampToGround"
+    ></vc-drawings>
     <!-- 结合 slot 改变默认 UI -->
     <vc-drawings
       ref="drawingsRef4"
@@ -30,6 +37,7 @@ ctrl + 右键取消绘制。
       :mainFabOpts="drawingFabOptions1"
       :offset="[20, 20]"
       :editable="editable"
+      :clampToGround="clampToGround"
       @ready="drawingsReady"
       :polylineDrawingOpts="polylineDrawingOpts2"
     >
@@ -59,6 +67,7 @@ ctrl + 右键取消绘制。
     <el-button type="danger" round @click="load">加载</el-button>
     <el-button type="danger" round @click="reload">重载</el-button>
     <el-checkbox v-model="editable">可编辑</el-checkbox>
+    <el-checkbox v-model="clampToGround">贴地</el-checkbox>
   </el-row>
 </el-row>
 
@@ -68,6 +77,7 @@ ctrl + 右键取消绘制。
       return {
         drawingsOpts: [],
         editable: false,
+        clampToGround: false,
         drawingFabOptions1: {
           direction: 'right'
         },
@@ -122,6 +132,7 @@ ctrl + 右键取消绘制。
 | drawings | Array | `['point', 'polyline', 'polygon']` | `optional` 指定要加载的绘制实例。 |
 | activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
 | editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
+| clampToGround | Boolean | `false` | `optional` 指定绘制结果对象是否贴地或模型。仅线、面对象生效。 |
 | mainFabOpts | Object | | `optional` 指定绘制组件浮动按钮的样式选项。 |
 | pointActionOpts | Object | `` | `optional` 指定点绘制按钮的样式选项。|
 | pointDrawingOpts | Object | | `optional` 指定点绘制参数。|

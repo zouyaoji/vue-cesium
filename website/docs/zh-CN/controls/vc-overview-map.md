@@ -12,7 +12,7 @@
 
 鹰眼图组件的基础用法。
 
-:::demo 使用 `vc-overview-map` 标签在三维球上鹰眼图组件。
+:::demo 使用 `vc-overview-map` 标签在三维球上加载鹰眼图组件。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -48,8 +48,8 @@
         </vc-entity>
       </vc-overview-map>
     </vc-overview-map>
+    <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
     <vc-layer-imagery :sortOrder="10">
-      <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
       <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
     <vc-entity

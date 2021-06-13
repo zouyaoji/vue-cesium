@@ -10,7 +10,7 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="onViewerReady">
+  <vc-viewer @ready="onViewerReady" :sceneMode="2">
     <vc-post-process-stage-scan ref="radar" type="radar" :options="options1"></vc-post-process-stage-scan>
     <vc-post-process-stage-scan ref="circle" type="circle" :options="options2"></vc-post-process-stage-scan>
     <!-- 底图 -->
