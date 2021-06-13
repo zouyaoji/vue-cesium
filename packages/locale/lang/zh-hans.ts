@@ -110,6 +110,14 @@ export default {
       }
     },
     drawing: {
+      expand: '展开',
+      collapse: '收起',
+      editor: {
+        move: '移动节点',
+        insert: '插入节点',
+        remove: '移除节点',
+        removeAll: '移除所有节点'
+      },
       point: {
         tip: '绘制点',
         drawTip1: '点击左键绘制点。',
@@ -128,6 +136,18 @@ export default {
         drawTip2: '点击左键绘制下一个点，双击左键结束绘制。',
         drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
       },
+      rectangle: {
+        tip: '绘制矩形',
+        drawTip1: '单击左键绘制矩形起点。',
+        drawTip2: '单击左键绘制矩形终点。',
+        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
+      },
+      circle: {
+        tip: '绘制圆',
+        drawTip1: '单击左键绘制圆形起点。',
+        drawTip2: '单击左键绘制圆形终点。',
+        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
+      }
     },
     overview: {
       show: '显示鹰眼',

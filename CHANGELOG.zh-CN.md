@@ -1,5 +1,19 @@
 ## 更新日志
 
+### 3.0.1-beta.7
+*2021-06-13*
+
+#### 新特性
+
+- `vc-selection-indicator` 自定义选择器组件，替换 Cesium 自带的 selectionIndicator。
+- `vc-ajax-bar` http 请求进度条控件。
+- `vc-drawings` 组件绘制的线面对象支持贴地，增加绘制矩形和圆形。
+
+#### Bug 修复
+
+- `vc-viewer` 的 `infoBox` 属性为 `false` 时组件加载异常问题。
+- 修复量算组件和绘制组件中面对象编辑第一点异常的问题。
+
 ### 3.0.1-beta.6
 *2021-06-03*
 

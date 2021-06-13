@@ -24,7 +24,14 @@ Basic usage of drawing components.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- Custom positioning and position offset -->
-    <vc-drawings ref="drawingsRef" position="bottom-left" :mainFabOpts="drawingFabOptions1" :offset="[20, 80]" :editable="editable"></vc-drawings>
+    <vc-drawings
+      ref="drawingsRef"
+      position="bottom-left"
+      :mainFabOpts="drawingFabOptions1"
+      :offset="[20, 80]"
+      :editable="editable"
+      :clampToGround="clampToGround"
+    ></vc-drawings>
     <!-- Customize UI through slot -->
     <vc-drawings
       ref="drawingsRef4"
@@ -33,6 +40,7 @@ Basic usage of drawing components.
       :polylineDrawingOpts="polylineDrawingOpts2"
       :offset="[20, 20]"
       :editable="editable"
+      :clampToGround="clampToGround"
       @ready="drawingsReady"
     >
       <template #body>
@@ -61,6 +69,7 @@ Basic usage of drawing components.
     <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
     <el-checkbox v-model="editable">editable</el-checkbox>
+    <el-checkbox v-model="clampToGround">clampToGround</el-checkbox>
   </el-row>
 </el-row>
 
@@ -70,6 +79,7 @@ Basic usage of drawing components.
       return {
         drawingsOpts: [],
         editable: false,
+        clampToGround: false,
         drawingFabOptions1: {
           direction: 'right'
         },
@@ -124,6 +134,7 @@ Basic usage of drawing components.
 | drawings | Array | `['point', 'polyline', 'polygon']` | `optional` Specify the drawing instance to be loaded. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
+| clampToGround | Boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
 | mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the drawing component. |
 | pointActionOpts | Object | `` | `optional` Specify the style options of the poingt drawing action button.|
 | pointDrawingOpts | Object | | `optional` Specify poingt drawing parameters.|
@@ -540,10 +551,10 @@ Tip: Each drawing button (FabAction) corresponds to the drawing parameters xxxDr
 | beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
-| drawEvt    |                                    | Triggered when drawing.                              |
+| drawEvt    |                                    | Triggered when drawing.                                |
 
 ### Slots
 
-| name | Description                                     |
-| ---- | ----------------------------------------------- |
+| name | Description                                 |
+| ---- | ------------------------------------------- |
 | body | Used to customize the drawing component UI. |

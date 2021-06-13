@@ -36,7 +36,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
 
     vcInstance.cesiumMembersEvents?.forEach(eventName => {
       const cesiumIntanceMember =
-        isArray(eventName.name) && eventName.name.length > 0
+        isArray(eventName.name) && eventName.name.length > 0 && cesiumObject[eventName.name[0]]
           ? cesiumObject[eventName.name[0]][eventName.name[1]]
           : cesiumObject[eventName.name as string]
       cesiumIntanceMember && bindEvents(cesiumIntanceMember, eventName.events, register)

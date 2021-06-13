@@ -9,6 +9,6 @@ export default {
   polylineOpts: Object,
   polygonOpts: Object,
   editorOpts: Object,
-  loop: Boolean,
-  clampToGround: Boolean
+  clampToGround: Boolean,
+  edge: Number
 }

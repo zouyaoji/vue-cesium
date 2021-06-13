@@ -1,0 +1,10 @@
+@import './core/variables.scss';
+
+// 绘制组件
+.vc-drawings-container {
+  position: absolute;
+  z-index: $z-fab;
+  // .vc-drawing-button .active {
+  //   opacity: 0.7 !important;
+  // }
+}

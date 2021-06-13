@@ -42,6 +42,7 @@ const mainFabDefault = Object.assign({}, actionOptions, {
 })
 
 const pointOptsDefault = {
+  show: true,
   color: 'rgb(255,229,0)',
   pixelSize: 8,
   outlineColor: 'black',
@@ -121,6 +122,14 @@ const polygonActionDefault = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-polygon',
 })
 
+const rectangleActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-rectangle',
+})
+
+const circleActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-circle',
+})
+
 const pointDrawingDefault = {
   show: true,
   drawtip: {
@@ -195,6 +204,23 @@ const polygonDrawingDefault = {
   loop: true
 }
 
+const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
+  pointOpts: Object.assign({}, pointOptsDefault, {
+    show: false
+  }),
+  editorOpts: {
+    pixelOffset: [4, -4],
+    move: Object.assign({}, editorOptsDefault),
+    removeAll: Object.assign({}, editorOptsDefault, {
+      icon: 'vc-icons-delete',
+    })
+  },
+  edge: 4
+})
+
+const circleDrawingDefault = Object.assign({}, rectangleDrawingDefault, {
+  edge: 360
+})
 
 const clearActionDefault = Object.assign({}, actionOptions, {
   icon: 'vc-icons-clear',
@@ -206,13 +232,17 @@ const defaultProps = {
   ...show,
   drawings: {
     type: Array as PropType<Array<string>>,
-    default: () => ['point', 'polyline', 'polygon']
+    default: () => ['point', 'polyline', 'polygon', 'rectangle', 'circle']
   },
   activeColor: {
     type: String,
     default: 'positive'
   },
   editable: {
+    type: Boolean,
+    default: false
+  },
+  clampToGround: {
     type: Boolean,
     default: false
   },
@@ -244,6 +274,22 @@ const defaultProps = {
     type: Object as PropType<typeof polygonDrawingDefault>,
     default: () => polygonDrawingDefault
   },
+  rectangleActionOpts: {
+    type: Object as PropType<typeof rectangleActionDefault>,
+    default: () => rectangleActionDefault
+  },
+  rectangleDrawingOpts: {
+    type: Object as PropType<typeof rectangleDrawingDefault>,
+    default: () => rectangleDrawingDefault
+  },
+  circleActionOpts: {
+    type: Object as PropType<typeof circleActionDefault>,
+    default: () => circleActionDefault
+  },
+  circleDrawingOpts: {
+    type: Object as PropType<typeof circleDrawingDefault>,
+    default: () => circleDrawingDefault
+  },
   clearActionOpts: {
     type: Object as PropType<typeof clearActionDefault>,
     default: () => clearActionDefault
@@ -261,5 +307,9 @@ export {
   polylineDrawingDefault,
   polygonActionDefault,
   polygonDrawingDefault,
+  rectangleActionDefault,
+  rectangleDrawingDefault,
+  circleActionDefault,
+  circleDrawingDefault,
   clearActionDefault
 }

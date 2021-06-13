@@ -820,12 +820,57 @@ export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, option
   })
 }
 
-export function getGeodesicDistance(ps1: Cesium.Cartesian3, ps2: Cesium.Cartesian3) {
+export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Cartesian3) {
   const { Ellipsoid, EllipsoidGeodesic } = Cesium
-  const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(ps1)
-  const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(ps2)
+  const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(start)
+  const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(end)
   const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
   return geodesic.surfaceDistance
+}
+
+export function getHeadingPitchRoll (start: Cesium.Cartesian3, end: Cesium.Cartesian3, scene: Cesium.Scene, result?: Array<number>) {
+  const { Camera, Cartesian3, Math: CesiumMath } = Cesium
+  const camera = new Camera(scene)
+  if (Cartesian3.equals(start, end)) {
+    return undefined
+  }
+
+  let direction = Cartesian3.subtract(end, start, {} as any)
+  direction = Cartesian3.normalize(direction, direction)
+  let up = Cartesian3.subtract(start, new Cartesian3(), {} as any)
+  up = Cartesian3.normalize(up, up)
+  camera.setView({
+    destination: start,
+    orientation: {
+      direction,
+      up
+    }
+  })
+
+  result = result || [0, 0, 0]
+  let heading = camera.heading
+  heading -= CesiumMath.PI_OVER_TWO
+  if (heading < 0) {
+    heading += CesiumMath.TWO_PI
+  }
+  result.splice(0, result.length, heading, camera.pitch, camera.roll)
+  return result
+}
+
+export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: number, distance: number) {
+  const { HeadingPitchRoll, Transforms, Ellipsoid, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic } = Cesium
+  const hpr = new HeadingPitchRoll(heading, 0, 0)
+  const scale = new Cartesian3(1, 1, 1)
+  const matrix = Transforms.headingPitchRollToFixedFrame(start, hpr)
+  const translation = Matrix4.getColumn(matrix, 1, new Cartesian4())
+  const axis = new Cartesian3(translation.x, translation.y, translation.z)
+  const quaternion = Quaternion.fromAxisAngle(axis, distance * Ellipsoid.WGS84.oneOverRadii.x)
+  const hprMatrix = Matrix4.fromTranslationQuaternionRotationScale(Cartesian3.ZERO, quaternion, scale)
+  const position = Matrix4.multiplyByPoint(hprMatrix, start, new Cartesian3())
+  const startCartographic = Cartographic.fromCartesian(start)
+  const positionCartographic = Cartographic.fromCartesian(position)
+  positionCartographic.height = startCartographic.height
+  return Cartographic.toCartesian(positionCartographic)
 }
 
 const restoreCursors = []

@@ -1,5 +1,19 @@
 ## Changelog
 
+### 3.0.1-beta.7
+*2021-06-13*
+
+#### New feature
+
+- `vc-selection-indicator` a custom selector component to replace the selectionIndicator that comes with Cesium.
+- `vc-ajax-bar` http request progress bar control.
+- `vc-drawings` supports grounding, and add the function of drawing rectangles and circles.
+
+#### Bug fixes
+
+- When the `infoBox` property of `vc-viewer` is set to `false`, the component is loaded abnormally.
+- Fix the problem that the first point of the area object editing in the measuring component and drawing component is abnormal.
+
 ### 3.0.1-beta.6
 *2021-06-03*
 

@@ -121,6 +121,14 @@ export function defaultValue(a, b) {
   return b
 }
 
+export function inherit (base, derived) {
+  function F() {
+    //
+  }
+  F.prototype = base.prototype
+  derived.prototype = new F()
+  derived.prototype.constructor = derived
+}
 
 const getDefaultOptionByProps = (props: AnyObject, ignores: Array<string> = []) => {
   const defaultOptions: AnyObject = {}

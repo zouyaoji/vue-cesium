@@ -46,7 +46,8 @@ export default defineComponent({
         const distances = []
         let distance = 0
         const angles = []
-        const positions = polyline.positions
+        const positions = polyline.positions.slice()
+        positions.length > 2 && positions.push(positions[0])
         for (let i = 0; i < positions.length - 1; i++) {
           let s = 0
           if (props.polylineOpts.arcType === 0) {
@@ -295,8 +296,10 @@ export default defineComponent({
             onMouseout: polylineDrawingState.onMouseoutPoints
           })
         )
-        if (polyline.positions.length > 1) {
+        const positions = polyline.positions.slice()
+        if (positions.length > 1) {
           // polyline
+          positions.push(positions[0])
           children.push(
             h(VcPrimitive, {
               show: polyline.show,
@@ -311,12 +314,12 @@ export default defineComponent({
             }, () => h(VcInstanceGeometry, {
               id: createGuid()
             }, () => h(VcGeometryPolyline, {
-              positions: polyline.positions,
+              positions: positions,
               ...polylineOpts
             })))
           )
         }
-        if (polyline.positions.length > 2) {
+        if (positions.length > 2) {
           // polygon
           children.push(
             h(VcPrimitive, {
@@ -342,7 +345,7 @@ export default defineComponent({
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {
-              polygonHierarchy: polyline.positions,
+              polygonHierarchy: positions,
               ...props.polygonOpts
             })))
           )

@@ -19,6 +19,14 @@ interface PointDrawing {
   drawStatus: number
 }
 
+interface PolygonDrawing {
+  show: boolean
+  positions: Array<Cesium.Cartesian3>
+  polygonPositions: Array<Cesium.Cartesian3>
+  drawStatus: number
+  height?: number
+}
+
 interface DrawingInstanceOpts {
   name: string
   actionRef: Ref<typeof VcFabAction>
@@ -34,5 +42,6 @@ interface DrawingInstanceOpts {
 
 export {
   PointDrawing,
+  PolygonDrawing,
   DrawingInstanceOpts
 }

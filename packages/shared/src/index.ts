@@ -6,5 +6,5 @@ export {
   VisibilityState,
   DrawStatus,
   MeasureUnits,
-  DistanceUnits, AreaUnits, VolumeUnits, AngleUnits
+  DistanceUnits, AreaUnits, VolumeUnits, AngleUnits,
 }
