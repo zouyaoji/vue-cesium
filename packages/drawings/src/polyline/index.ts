@@ -121,7 +121,7 @@ export default defineComponent({
     Object.assign(instance.proxy, publicMethods)
 
     return () => {
-      const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
+      const { PolylineMaterialAppearance, createGuid } = Cesium
 
       const polylineOpts: any = {
         ...props.polylineOpts,
@@ -130,8 +130,10 @@ export default defineComponent({
       props.clampToGround && delete polylineOpts.arcType
       const children = []
       polylineDrawingState.polylines.value.forEach((polyline, index) => {
-        if (polyline.positions.length > 1) {
+        const positions = polyline.positions.slice()
+        if (positions.length > 1) {
           // polyline
+          polyline.loop && positions.push(positions[0])
           children.push(
             h(props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive, {
               show: polyline.show,
@@ -146,7 +148,7 @@ export default defineComponent({
             }, () => h(VcInstanceGeometry, {
               id: createGuid()
             }, () => h(props.clampToGround ? VcGeometryPolylineGround : VcGeometryPolyline, {
-              positions: polyline.positions,
+              positions: positions,
               ...polylineOpts
             })))
           )

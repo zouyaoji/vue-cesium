@@ -39,12 +39,6 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       return primitiveCollectionRef
     }
-    instance.mount = async () => {
-      return true
-    }
-    instance.unmount = async () => {
-      return true
-    }
 
     const handleMouseClick = (movement: Cesium.Cartesian2, options?) => {
       const result = polylineDrawingState.handleMouseClick(movement, options)
@@ -151,8 +145,10 @@ export default defineComponent({
             onMouseout: polylineDrawingState.onMouseoutPoints
           })
         )
-        if (polyline.positions.length > 1) {
+        const positions = polyline.positions.slice()
+        if (positions.length > 1) {
           // polyline
+          positions.push(positions[0])
           children.push(
             h(props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive, {
               show: polyline.show,
@@ -167,12 +163,12 @@ export default defineComponent({
             }, () => h(VcInstanceGeometry, {
               id: createGuid()
             }, () => h(props.clampToGround ? VcGeometryPolylineGround : VcGeometryPolyline, {
-              positions: polyline.positions,
+              positions: positions,
               ...polylineOpts
             })))
           )
         }
-        if (polyline.positions.length > 2) {
+        if (positions.length > 2) {
           // polygon
           children.push(
             h(props.clampToGround ? VcPrimitiveGround : VcPrimitive, {
@@ -198,7 +194,7 @@ export default defineComponent({
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {
-              polygonHierarchy: polyline.positions,
+              polygonHierarchy: positions,
               ...props.polygonOpts
             })))
           )

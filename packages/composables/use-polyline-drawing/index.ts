@@ -43,7 +43,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     canShowDrawTip.value = false
     drawTipPosition.value = [0, 0, 0]
   }
-  let pushed = false
+
   const handleMouseClick = (movement: Cesium.Cartesian2, options?) => {
     if (options.button === 2 && options.ctrl) {
       stop()
@@ -106,16 +106,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
           drawTip.value = drawTipOpts.drawTip1
           restoreViewerCursor(viewer)
         } else {
-          if (polyline.loop) {
-            if (pushed){
-              tempPositions.pop()
-            }
-            tempPositions.push(position)
-            tempPositions.push(tempPositions[0])
-            pushed = true
-          } else {
-            tempPositions.push(position)
-          }
+          tempPositions.push(position)
 
           polyline.positions = tempPositions
           polyline.show = true
@@ -165,15 +156,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     } else {
       const tempPositions = polyline.tempPositions.slice()
 
-      if (polyline.loop) {
-        if (pushed){
-          tempPositions.pop()
-        }
-        tempPositions.push(position)
-        tempPositions.push(tempPositions[0])
-      } else {
-        tempPositions.push(position)
-      }
+      tempPositions.push(position)
       polyline.positions = tempPositions
     }
 
@@ -244,6 +227,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     const { viewer } = $services
     editorType = e
     if (e === 'move') {
+      console.log('move')
       drawTip.value = drawTipOpts.drawTip3
       drawStatus.value = DrawStatus.Drawing
       editingPoint.value = mouseoverPoint.value
