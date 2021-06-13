@@ -21,7 +21,11 @@ import {
   polylineDrawingDefault,
   polygonActionDefault,
   polygonDrawingDefault,
-  clearActionDefault
+  clearActionDefault,
+  rectangleActionDefault,
+  rectangleDrawingDefault,
+  circleActionDefault,
+  circleDrawingDefault
 } from './defaultProps'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { camelize } from '@vue-cesium/utils/util'
@@ -38,6 +42,7 @@ import { VisibilityState } from '@vue-cesium/shared'
 import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
+import VcDrawingRegularPolygon from './regular-polygon'
 
 import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 
@@ -86,6 +91,14 @@ export default defineComponent({
     const polygonDrawingOpts = reactive<typeof polygonDrawingDefault>(
       Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts)
     )
+    const rectangleActionOpts = reactive<typeof rectangleActionDefault>(Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts))
+    const rectangleDrawingOpts = reactive<typeof rectangleDrawingDefault>(
+      Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts)
+    )
+    const circleActionOpts = reactive<typeof circleActionDefault>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleDrawingOpts = reactive<typeof circleDrawingDefault>(
+      Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts)
+    )
 
     const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
 
@@ -95,6 +108,10 @@ export default defineComponent({
     options.polylineDrawingOpts = polylineDrawingOpts
     options.polygonActionOpts = polygonActionOpts
     options.polygonDrawingOpts = polygonDrawingOpts
+    options.rectangleActionOpts = rectangleActionOpts
+    options.rectangleDrawingOpts = rectangleDrawingOpts
+    options.circleActionOpts = circleActionOpts
+    options.circleDrawingOpts = circleDrawingOpts
     options.clearActionOpts = clearActionOpts
 
     const drawingsOptions: Array<DrawingInstanceOpts> = props.drawings.map(drawing => ({
@@ -107,9 +124,9 @@ export default defineComponent({
         background: options[`${camelize(drawing)}ActionOpts`].color,
         color: options[`${camelize(drawing)}ActionOpts`].textColor
       },
-      actionClass: `vc-measure-${drawing} vc-measure-button${drawing === selectedDrawingOption?.name ? ' active' : ''}`,
+      actionClass: `vc-draw-${drawing} vc-draw-button${drawing === selectedDrawingOption?.name ? ' active' : ''}`,
       tip: options[`${camelize(drawing)}ActionOpts`].tooltip.tip || t(`vc.drawing.${camelize(drawing)}.tip`),
-      cmp: getMeasurementCmp(drawing),
+      cmp: getDrawingCmp(drawing),
       isActive: false
     }))
 
@@ -124,13 +141,13 @@ export default defineComponent({
       const drawingCmp: any = (selectedDrawingOption?.drawingRef.value || selectedDrawingOption?.drawingRef)
       drawingCmp?.handleMouseClick?.(movement.position, options)
 
-      let measurementOptions
+      let drawingOptions
       if ((instance.proxy as any).editingDrawingName) {
-        measurementOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
+        drawingOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
       }
 
-      if (measurementOptions !== selectedDrawingOption) {
-        const drawingCmp: any = (measurementOptions?.drawingRef.value || measurementOptions?.drawingRef)
+      if (drawingOptions !== selectedDrawingOption) {
+        const drawingCmp: any = (drawingOptions?.drawingRef.value || drawingOptions?.drawingRef)
         drawingCmp?.handleMouseClick?.(movement.position, options)
       }
     }
@@ -139,13 +156,13 @@ export default defineComponent({
       const drawingCmp: any = (selectedDrawingOption?.drawingRef.value || selectedDrawingOption?.drawingRef)
       drawingCmp?.handleMouseMove?.(movement.endPosition, options)
 
-      let measurementOptions
+      let drawingOptions
       if ((instance.proxy as any).editingDrawingName) {
-        measurementOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
+        drawingOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
       }
 
-      if (measurementOptions !== selectedDrawingOption) {
-        const drawingCmp: any = (measurementOptions?.drawingRef.value || measurementOptions?.drawingRef)
+      if (drawingOptions !== selectedDrawingOption) {
+        const drawingCmp: any = (drawingOptions?.drawingRef.value || drawingOptions?.drawingRef)
         drawingCmp?.handleMouseMove?.(movement.endPosition, options)
       }
     }
@@ -154,13 +171,13 @@ export default defineComponent({
       const drawingCmp: any = (selectedDrawingOption?.drawingRef.value || selectedDrawingOption?.drawingRef)
       drawingCmp?.handleDoubleClick?.(movement.position, options)
 
-      let measurementOptions
+      let drawingOptions
       if ((instance.proxy as any).editingDrawingName) {
-        measurementOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
+        drawingOptions = drawingsOptions.find(v => v.name === (instance.proxy as any).editingDrawingName)
       }
 
-      if (measurementOptions !== selectedDrawingOption) {
-        const drawingCmp: any = (measurementOptions?.drawingRef.value || measurementOptions?.drawingRef)
+      if (drawingOptions !== selectedDrawingOption) {
+        const drawingCmp: any = (drawingOptions?.drawingRef.value || drawingOptions?.drawingRef)
         drawingCmp?.handleDoubleClick?.(movement.position, options)
       }
     }
@@ -199,7 +216,7 @@ export default defineComponent({
       return true
     }
 
-    function getMeasurementCmp (name) {
+    function getDrawingCmp (name) {
       switch (name) {
         case 'point':
           return VcDrawingPoint
@@ -207,6 +224,9 @@ export default defineComponent({
           return VcDrawingPolyline
         case 'polygon':
           return VcDrawingPolygon
+        case 'rectangle':
+        case 'circle':
+          return VcDrawingRegularPolygon
         default:
           return void 0
       }
@@ -351,11 +371,11 @@ export default defineComponent({
     return () => {
       if (canRender.value) {
         const fabActionChildren = []
-        const measurementChilden = []
+        const drawingChildren = []
 
         drawingsOptions.forEach(drawingOptions => {
-          const measurement = camelize(drawingOptions.name)
-          if (options[`${measurement}ActionOpts`]) {
+          const drawing = camelize(drawingOptions.name)
+          if (options[`${drawing}ActionOpts`]) {
             fabActionChildren.push(
               h(VcFabAction, {
                 ref: drawingOptions.actionRef,
@@ -370,11 +390,12 @@ export default defineComponent({
               }, () => h('strong', null, drawingOptions.tip)))
             )
 
-            drawingOptions.cmp && measurementChilden.push(
+            drawingOptions.cmp && drawingChildren.push(
               h(drawingOptions.cmp, {
                 ref: drawingOptions.drawingRef,
                 editable: props.editable,
-                onMeasureEvt: e => {
+                clampToGround: props.clampToGround,
+                onDrawEvt: e => {
                   emit('drawEvt', e)
                 },
                 ...drawingOptions.drawingOpts
@@ -389,7 +410,7 @@ export default defineComponent({
               background: clearActionOpts.color,
               color: clearActionOpts.textColor
             },
-            class: 'vc-measure-button vc-measure-clear',
+            class: 'vc-draw-button vc-draw-clear',
             ...clearActionOpts,
             onClick: clearAll
           }, () => h(VcTooltip, {
@@ -402,11 +423,11 @@ export default defineComponent({
           root.push(
             h('div', {
               ref: containerRef,
-              class: 'vc-measurements-container ' + positionState.classes.value,
+              class: 'vc-drawings-container ' + positionState.classes.value,
               style: containerStyle
             }, ctx.slots.body !== void 0 ? ctx.slots.body() : h(VcFab, {
               ref: fabRef,
-              class: 'vc-measure-button',
+              class: 'vc-draw-button',
               style: {
                 background: mainFabOpts.color,
                 color: mainFabOpts.textColor
@@ -429,7 +450,7 @@ export default defineComponent({
           ref: primitiveCollection,
           show: props.show,
           onReady: onPrimitiveCollectionReady
-        }, () => measurementChilden))
+        }, () => drawingChildren))
 
         return root
       } else {

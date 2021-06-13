@@ -130,6 +130,18 @@ export default {
         drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
         drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
       },
+      rectangle: {
+        tip: 'Drawing rectangle',
+        drawTip1: 'Click the left button to draw the starting point of the rectangle.',
+        drawTip2: 'Click the left button to draw the end of the rectangle.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      },
+      circle: {
+        tip: 'Drawing circle',
+        drawTip1: 'Click the left button to draw the starting point of the circle.',
+        drawTip2: 'Click the left button to draw the end of the circle.',
+        drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
+      }
     },
     overview: {
       show: 'Show',

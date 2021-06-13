@@ -208,6 +208,14 @@
   content: '\ebae';
 }
 
+.#{$namespace}-icons-drawing-rectangle:before {
+  content: '\ebb0';
+}
+
+.#{$namespace}-icons-drawing-circle:before {
+  content: '\ebb1';
+}
+
 .#{$namespace}-icons-overview-toggle:before {
   content: '\ebaf';
 }
