@@ -273,11 +273,9 @@ export default defineComponent({
     return () => {
       const { PolylineMaterialAppearance, EllipsoidSurfaceAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
 
-      const polylineOpts = {
-        width: props.polylineOpts.width,
+      const polylineOpts: any = {
+        ...props.polylineOpts,
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-        ellipsoid: defaultValue(props.polylineOpts.ellipsoid, Ellipsoid.WGS84),
-        arcType: props.polylineOpts.arcType
       }
       const children = []
       polylinesRender.value.forEach((polyline, index) => {
@@ -302,7 +300,7 @@ export default defineComponent({
           positions.push(positions[0])
           children.push(
             h(VcPrimitive, {
-              show: polyline.show,
+              show: polyline.show && polylineOpts.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new PolylineMaterialAppearance({
                 material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
@@ -323,7 +321,7 @@ export default defineComponent({
           // polygon
           children.push(
             h(VcPrimitive, {
-              show: polyline.show,
+              show: polyline.show && props.polygonOpts.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new EllipsoidSurfaceAppearance({
                 material: makeMaterial.call(instance, props.polygonOpts.material) as Cesium.Material,

@@ -69,7 +69,8 @@ const polylineOptsDefault = {
   },
   width: 2,
   arcType: 0,
-  ellipsoid: undefined
+  ellipsoid: undefined,
+  show: true
 }
 
 const polygonOptsDefault = {
@@ -90,7 +91,8 @@ const polygonOptsDefault = {
     }
   },
   perPositionHeight: true,
-  arcType: undefined
+  arcType: undefined,
+  show: true
 }
 
 const editorOptsDefault = {

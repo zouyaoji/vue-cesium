@@ -151,7 +151,7 @@ export default defineComponent({
           positions.push(positions[0])
           children.push(
             h(props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive, {
-              show: polyline.show,
+              show: polyline.show && polylineOpts.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new PolylineMaterialAppearance({
                 material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
@@ -172,7 +172,7 @@ export default defineComponent({
           // polygon
           children.push(
             h(props.clampToGround ? VcPrimitiveGround : VcPrimitive, {
-              show: polyline.show,
+              show: polyline.show && props.polygonOpts.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new EllipsoidSurfaceAppearance({
                 material: makeMaterial.call(instance, props.polygonOpts.material) as Cesium.Material,

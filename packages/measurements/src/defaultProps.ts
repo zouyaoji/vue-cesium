@@ -82,7 +82,8 @@ const polylineOptsDefault = {
   },
   width: 2,
   arcType: 0,
-  ellipsoid: undefined
+  ellipsoid: undefined,
+  show: true
 }
 
 const editorOptsDefault = {
@@ -352,6 +353,7 @@ const areaMeasurementDefault = {
     }
   }),
   polygonOpts: {
+    show: true,
     material: {
       fabric: {
         type: 'Color',
