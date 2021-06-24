@@ -430,7 +430,8 @@ const pointMeasurementDefault = {
     height: 2,
     slope: 3
   },
-  locale: undefined
+  locale: undefined,
+  heightReference: 1
 }
 
 const clearActionDefault = Object.assign({}, actionOptions, {

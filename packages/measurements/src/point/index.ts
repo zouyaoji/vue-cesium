@@ -198,7 +198,7 @@ export default defineComponent({
         const postionCartographic = ellipsoid.cartesianToCartographic(position, {} as any)
         const globe = scene.globe
         let height = defined(globe) ? defaultValue(globe.getHeight(postionCartographic), 0) : 0
-        height = postionCartographic.height - height
+        height = props.heightReference === 0 ? postionCartographic.height : postionCartographic.height - height
         CesiumMath.equalsEpsilon(height, 0, CesiumMath.EPSILON3) && (height = 0)
         let slope = 0
 
