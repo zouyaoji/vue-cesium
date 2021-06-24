@@ -79,6 +79,13 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
       }
     }
 
+    const { defined, Cartesian2 } = Cesium
+    lastClickPosition = lastClickPosition || new Cesium.Cartesian2(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)
+
+    if ((Cartesian2.magnitude(Cartesian2.subtract(lastClickPosition, movement, {} as any)) < mouseDelta)) {
+      return
+    }
+
     if (options.button === 2 && drawStatus.value === DrawStatus.Drawing) {
       if (tempPositions.length > 1) {
         tempPositions.pop()
@@ -90,41 +97,37 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
       return
     }
 
-    const { defined, Cartesian2 } = Cesium
-    lastClickPosition = lastClickPosition || new Cesium.Cartesian2(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)
-    if (!(Cartesian2.magnitude(Cartesian2.subtract(lastClickPosition, movement, {} as any)) < mouseDelta)) {
-      const scene = viewer.scene
-      const position = getWorldPosition(scene, movement, {} as any)
-      let finished = false
-      let type = 'new'
-      if (defined(position)) {
-        if (editingPoint.value) {
-          drawStatus.value = DrawStatus.AfterDraw
-          editingPoint.value = undefined
-          finished = true
-          type = editorType
-          drawTip.value = drawTipOpts.drawTip1
-          restoreViewerCursor(viewer)
-        } else {
-          tempPositions.push(position)
+    const scene = viewer.scene
+    const position = getWorldPosition(scene, movement, {} as any)
+    let finished = false
+    let type = 'new'
+    if (defined(position)) {
+      if (editingPoint.value) {
+        drawStatus.value = DrawStatus.AfterDraw
+        editingPoint.value = undefined
+        finished = true
+        type = editorType
+        drawTip.value = drawTipOpts.drawTip1
+        restoreViewerCursor(viewer)
+      } else {
+        tempPositions.push(position)
 
-          polyline.positions = tempPositions
-          polyline.show = true
-          polyline.drawStatus = DrawStatus.Drawing
-          drawStatus.value = DrawStatus.Drawing
-          canShowDrawTip.value = true
-          drawTip.value = drawTipOpts.drawTip2
-        }
+        polyline.positions = tempPositions
+        polyline.show = true
+        polyline.drawStatus = DrawStatus.Drawing
+        drawStatus.value = DrawStatus.Drawing
+        canShowDrawTip.value = true
+        drawTip.value = drawTipOpts.drawTip2
+      }
 
-        Cartesian2.clone(movement, lastClickPosition)
-        return {
-          index: index,
-          polylines: polylines,
-          finished: finished,
-          position: position,
-          windowPoistion: movement,
-          type: type
-        }
+      Cartesian2.clone(movement, lastClickPosition)
+      return {
+        index: index,
+        polylines: polylines,
+        finished: finished,
+        position: position,
+        windowPoistion: movement,
+        type: type
       }
     }
   }
