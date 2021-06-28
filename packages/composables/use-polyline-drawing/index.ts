@@ -230,7 +230,6 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     const { viewer } = $services
     editorType = e
     if (e === 'move') {
-      console.log('move')
       drawTip.value = drawTipOpts.drawTip3
       drawStatus.value = DrawStatus.Drawing
       editingPoint.value = mouseoverPoint.value

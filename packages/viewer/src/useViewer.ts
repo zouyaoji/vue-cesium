@@ -838,7 +838,6 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     $vc.viewerUnloadingPromise = new Promise((resolve, reject) => {
       unloadingResolve = resolve
     })
-    console.log($vc.viewerUnloadingPromise)
 
     // If the component has subcomponents, you need to remove the subcomponents first. 如果该组件带有子组件，需要先移除子组件。
     for (let i = 0; i < vcInstance.children.length; i++) {
