@@ -1,5 +1,18 @@
 ## Changelog
 
+### 3.0.1-beta.8
+*2021-06-28*
+
+#### New feature
+
+- The polyline and polygon of vc-drawings, vc-measurements support the setting of display and hidden.
+- The height of the coordinate measuring component supports absolute height and relative height.
+
+#### Bug fixes
+
+- The mouseover and mouseout events of the GeoJSON data source component trigger errors.
+- The distance measurement and area measurement cancel the drawing of the previous point occasionally crash.
+
 ### 3.0.1-beta.7
 *2021-06-13*
 

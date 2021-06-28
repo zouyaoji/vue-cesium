@@ -131,7 +131,7 @@ Basic usage of drawing components.
 | position | String | `'top-right'` | `optional` Specify the location of the drawing component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | Boolean | `true` | `optional` Specify whether the drawn result is visible. |
-| drawings | Array | `['point', 'polyline', 'polygon']` | `optional` Specify the drawing instance to be loaded. |
+| drawings | Array | `['point', 'polyline', 'polygon', 'rectangle', 'circle']` | `optional` Specify the drawing instance to be loaded. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
 | clampToGround | Boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |

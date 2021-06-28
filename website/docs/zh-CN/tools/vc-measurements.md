@@ -77,12 +77,14 @@ ctrl + 右键取消绘制。
     <vc-layer-imagery>
       <vc-provider-imagery-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
+    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
     <el-button type="danger" round @click="load">加载</el-button>
     <el-button type="danger" round @click="reload">重载</el-button>
     <el-checkbox v-model="editable">可编辑</el-checkbox>
+    <el-checkbox v-model="addTerrain">地形</el-checkbox>
   </el-row>
 </el-row>
 
@@ -91,6 +93,7 @@ ctrl + 右键取消绘制。
   export default {
     data() {
       return {
+        addTerrain: false,
         editable: false,
         measurementFabOptions1: {
           direction: 'right'
@@ -155,11 +158,11 @@ ctrl + 右键取消绘制。
         this.$refs.measurementsRef4.toggleAction(measurementOpts)
       },
       onTilesetReady(tileset, viewer) {
-        const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
-        const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
-        const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
-        const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
-        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+        // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
+        // const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
+        // const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
+        // const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
+        // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
@@ -1552,7 +1555,8 @@ ctrl + 右键取消绘制。
     lat: 6,
     height: 2,
     slope: 3
-  }
+  },
+  heightReference: 1 // 0 是绝对高度 1 是相对地面高度
 }
 ```
 

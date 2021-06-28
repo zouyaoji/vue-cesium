@@ -129,7 +129,7 @@ ctrl + 右键取消绘制。
 | position | String | `'top-right'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` 指定绘制组件基于位置的偏移量。 |
 | show | Boolean | `true` | `optional` 指定绘制的结果是否可见。 |
-| drawings | Array | `['point', 'polyline', 'polygon']` | `optional` 指定要加载的绘制实例。 |
+| drawings | Array | `['point', 'polyline', 'polygon', 'rectangle', 'circle']` | `optional` 指定要加载的绘制实例。 |
 | activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
 | editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
 | clampToGround | Boolean | `false` | `optional` 指定绘制结果对象是否贴地或模型。仅线、面对象生效。 |

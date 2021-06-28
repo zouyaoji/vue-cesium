@@ -1552,7 +1552,8 @@ Tip: Each measurement button (FabAction) corresponds to the measurement paramete
     lat: 6,
     height: 2,
     slope: 3
-  }
+  },
+  heightReference: 1 // 0 absolute 1 relative ground
 }
 ```
 
