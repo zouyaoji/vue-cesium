@@ -13,7 +13,7 @@ export default defineComponent({
   name: 'VcViewer',
   props: defaultProps,
   emits: emits,
-  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
+  setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumEvents = ['selectedEntityChanged', 'trackedEntityChanged']
     instance.cesiumMembersEvents = viewerEvents
@@ -21,7 +21,6 @@ export default defineComponent({
 
     // provide
     provide(vcKey, viewerStates.getServices())
-
     // expose public methods
     Object.assign(instance.proxy, {
       createPromise: viewerStates.createPromise,
@@ -34,7 +33,7 @@ export default defineComponent({
 
     return () => {
       const children = []
-      if (props.skeleton && !viewerStates.isReady.value){
+      if (props.skeleton && !viewerStates.isReady.value) {
         children.push(
           h(VcSkeleton, {
             ...props.skeleton,
@@ -49,8 +48,8 @@ export default defineComponent({
         h('div', {
           ref: viewerStates.viewerRef,
           class: kebabCase(instance.proxy.$options.name),
-          id: 'cesiumContainer',
-          style: { width: '100%', height: '100%' }
+          id: ctx.attrs.id || 'cesiumContainer',
+          style: ctx.attrs.style || { width: '100%', height: '100%' }
         }, hSlot(ctx.slots.default))
       )
       return children
