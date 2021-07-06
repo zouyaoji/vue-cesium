@@ -1,23 +1,12 @@
-
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
-import {
-  VcBtn,
-  VcTooltip,
-  VcIcon,
-  VcSpinnerPuff,
-  VcSpinnerOval,
-  VcSpinnerTail,
-  VcSpinnerIos,
-  VcSpinnerOrbit,
-  VcSpinnerBars
-} from '@vue-cesium/ui'
+import { VcBtn, VcTooltip, VcIcon, VcSpinnerPuff, VcSpinnerOval, VcSpinnerTail, VcSpinnerIos, VcSpinnerOrbit, VcSpinnerBars } from '@vue-cesium/ui'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
-import { isFunction } from '@vue-cesium/utils/util'
+import { isArray, isFunction } from '@vue-cesium/utils/util'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { t } from '@vue-cesium/locale'
@@ -26,7 +15,7 @@ export default defineComponent({
   name: 'VcMyLocation',
   props: defaultProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'locationEvt'],
-  setup (props, ctx) {
+  setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMyLocation'
@@ -236,7 +225,7 @@ export default defineComponent({
       const longitude = position.lng
       const latitude = position.lat
       const address = position.address
-      const { Cartesian3, Rectangle, Ellipsoid, sampleTerrain } = Cesium
+      const { Cartesian3, Rectangle, Ellipsoid, sampleTerrain, defined, SceneMode } = Cesium
       const { viewer } = $services
       datasource.entities.removeAll()
       const myPositionEntity = datasource.entities.add({
@@ -281,13 +270,14 @@ export default defineComponent({
       const positions = [Rectangle.center(rectangle)]
 
       // Perform an elevation query at the centre of the rectangle
-      return sampleTerrain(terrainProvider, level, positions).then(function (results) {
+      return sampleTerrain(terrainProvider, level, positions).then(function(results) {
         // Add terrain elevation to camera altitude
         const finalDestinationCartographic: any = {
           longitude: destination.longitude,
           latitude: destination.latitude,
           height: destination.height + results[0].height
         }
+        // const finalDestination = Ellipsoid.WGS84.cartographicToCartesian(finalDestinationCartographic)
         const finalDestination = Ellipsoid.WGS84.cartographicToCartesian(finalDestinationCartographic)
         listener &&
           ctx.emit('locationEvt', {
@@ -295,10 +285,15 @@ export default defineComponent({
             camera: viewer.camera,
             status: 'start'
           })
-        camera.flyTo({
-          duration: props.duration,
-          destination: finalDestination,
-          complete: () => {
+        const options: any = {
+          duration: props.duration
+        }
+
+        defined(props.maximumHeight) && (options.maximumHeight = props.maximumHeight)
+        defined(props.hpr) && isArray(props.hpr) && (options.offset = new Cesium.HeadingPitchRange(props.hpr[0], props.hpr[1], props.hpr[2]))
+
+        if (viewer.scene.mode === SceneMode.SCENE2D || viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+          return viewer.flyTo(myPositionEntity, options).then(() => {
             positioning.value = false
             listener &&
               ctx.emit('locationEvt', {
@@ -306,17 +301,31 @@ export default defineComponent({
                 camera: viewer.camera,
                 status: 'complete'
               })
-          },
-          cancel: () => {
-            positioning.value = false
-            listener &&
-              ctx.emit('locationEvt', {
-                type: 'zoomIn',
-                camera: viewer.camera,
-                status: 'cancel'
-              })
-          }
-        })
+          })
+        } else{
+          camera.flyTo({
+            duration: props.duration,
+            destination: finalDestination,
+            complete: () => {
+              positioning.value = false
+              listener &&
+                      ctx.emit('locationEvt', {
+                        type: 'zoomIn',
+                        camera: viewer.camera,
+                        status: 'complete'
+                      })
+            },
+            cancel: () => {
+              positioning.value = false
+              listener &&
+                      ctx.emit('locationEvt', {
+                        type: 'zoomIn',
+                        camera: viewer.camera,
+                        status: 'cancel'
+                      })
+            }
+          })
+        }
       })
     }
 
@@ -387,43 +396,52 @@ export default defineComponent({
           })
         )
 
-        inner.push(
-          h('div', null, props.label)
-        )
+        inner.push(h('div', null, props.label))
 
         if (props.tooltip) {
           inner.push(
-            h(VcTooltip, {
-              ref: tooltipRef,
-              // onBeforeShow: onTooltipBeforeShow,
-              ...props.tooltip
-            },
-            () => h('strong', null, myLocationTip.value))
+            h(
+              VcTooltip,
+              {
+                ref: tooltipRef,
+                // onBeforeShow: onTooltipBeforeShow,
+                ...props.tooltip
+              },
+              () => h('strong', null, myLocationTip.value)
+            )
           )
         } else {
           inner.push(createCommentVNode('v-if'))
         }
 
-        return h('div', {
-          ref: rootRef,
-          class: 'vc-my-location ' + positionState.classes.value,
-          style: rootStyle
-        }, [
-          h(VcBtn, {
-            ref: btnRef,
-            size: props.size,
-            flat: props.flat,
-            stack: props.stack,
-            round: props.round,
-            loading: positioning.value,
-            dense: true,
-            style: { color: props.color, background: props.background },
-            onClick: onHandleClick
-          }, {
-            default: () => inner,
-            loading: () => h(getLoadingCmp())
-          })
-        ])
+        return h(
+          'div',
+          {
+            ref: rootRef,
+            class: 'vc-my-location ' + positionState.classes.value,
+            style: rootStyle
+          },
+          [
+            h(
+              VcBtn,
+              {
+                ref: btnRef,
+                size: props.size,
+                flat: props.flat,
+                stack: props.stack,
+                round: props.round,
+                loading: positioning.value,
+                dense: true,
+                style: { color: props.color, background: props.background },
+                onClick: onHandleClick
+              },
+              {
+                default: () => inner,
+                loading: () => h(getLoadingCmp())
+              }
+            )
+          ]
+        )
       } else {
         return createCommentVNode('v-if')
       }
