@@ -58,6 +58,11 @@ export default {
     type: Number,
     default: 0.01
   },
+  maximumHeight: Number,
+  hpr: {
+    type: Array,
+    default: () => ([0, 0, 3000])
+  },
   customAPI: Function,
   description: Function,
   ...positionProps,
