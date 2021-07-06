@@ -4,7 +4,7 @@ import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { isUndefined, kebabCase } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcLayerImagery',
@@ -41,10 +41,15 @@ export default defineComponent({
     }
 
     const updateProvider = provider => {
-      const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
-      (imageryLayer as any)._imageryProvider = provider
-      const listener = getInstanceListener(instance, 'update:imageryProvider')
-      if (listener) emit('update:imageryProvider', provider)
+      if (isUndefined(provider)) {
+        return instance.unmount()
+      } else {
+        const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
+        (imageryLayer as any)._imageryProvider = provider
+        const listener = getInstanceListener(instance, 'update:imageryProvider')
+        if (listener) emit('update:imageryProvider', provider)
+      }
+
       return true
     }
 
