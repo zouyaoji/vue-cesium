@@ -4,7 +4,7 @@ This part walks you through the process of using VueCesium in a webpack project.
 
 ### Use Starter Kit
 
-We provide a general [project template](https://github.com/zouyaoji/vue-cesium-starter) for you, and also a Vite [template](https://github.com/zouyaoji/vue-cesium-vite-starter).
+We provide a general [project template](https://github.com/zouyaoji/vue-cesium-starter) for you, and also a [Vite template](https://github.com/zouyaoji/vue-cesium-vite-starter), and a [Vite electron template](https://github.com/zouyaoji/vue-cesium-electron-vite-starter).
 
 If you prefer not to use them, please read the following.
 
