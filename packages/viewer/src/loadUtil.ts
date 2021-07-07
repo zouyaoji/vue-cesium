@@ -36,9 +36,9 @@ export function getMars3dConfig(libpath: string) {
       libpath + 'mars3d/plugins/heatmap/heatmap.min.js',
       libpath + 'mars3d/plugins/heatmap/mars3d-heatmap.js',
     ],
-    "mars3d-wind": [//风场图层插件
-      libpath + "mars3d/plugins/wind/netcdfjs.js", //m10_windLayer解析nc
-      libpath + "mars3d/plugins/wind/mars3d-wind.js"
+    'mars3d-wind': [//风场图层插件
+      libpath + 'mars3d/plugins/wind/netcdfjs.js', //m10_windLayer解析nc
+      libpath + 'mars3d/plugins/wind/mars3d-wind.js'
     ],
     'mars3d': [
       //三维地球“主库”
