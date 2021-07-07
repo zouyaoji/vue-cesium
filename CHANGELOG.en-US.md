@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.1-beta.9
+*2021-07-07*
+
+#### Bug fixes
+
+- Fixed the issue that the `VcProviderImagerySupermap` component on the Supermap platform crashed when the layer was removed.
+- Fixed the issue that the `VcNavigation` component positioning error in 2D and Columbus views, #118.
+- Fixed the issue that the `vc-viewer` component pass non-Prop Attributes and throws warnings.
+
 ### 3.0.1-beta.8
 *2021-06-28*
 
