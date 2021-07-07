@@ -4,7 +4,7 @@
 
 ### 使用 Starter Kit
 
-我们提供了通用的[项目模板](https://github.com/zouyaoji/vue-cesium-starter)，你可以直接使用，另外我们还提供了 Vite [模板](https://github.com/zouyaoji/vue-cesium-vite-starter)。
+我们提供了通用的[项目模板](https://github.com/zouyaoji/vue-cesium-starter)，你可以直接使用，另外我们还提供了 [Vite 模板](https://github.com/zouyaoji/vue-cesium-vite-starter) 以及 [Vite + Electron 模板](https://github.com/zouyaoji/vue-cesium-electron-vite-starter)。
 
 如果不希望使用我们提供的模板，请继续阅读。
 
@@ -106,7 +106,7 @@ import App from './App.vue';
 
 const app = createApp(App)
 app.use(VueCesium, {
-  // cesiumPath 是指引用的Cesium.js路径，如
+  // cesiumPath 是指引用的Cesium.js 路径，如
   // cesiumPath: /static/Cesium/Cesium.js
   // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
   cesiumPath: 'Your CesiumJS Path',
@@ -124,8 +124,7 @@ import { VcViewer } from 'vue-cesium'
 import App from './App.vue'
 
 const option = {
-  // cesiumPath 是指引用的Cesium.js路径，如
-  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath 是指引用的 Cesium.js 路径，如
   // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
   cesiumPath: 'Your CesiumJS Path',
   // 使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载失败
