@@ -89,11 +89,14 @@ export default function (instance: VcComponentInternalInstance, props, $services
   }
 
   const pickFromScreenPosition = (screenPosition: Cesium.Cartesian2) => {
-    const { Ellipsoid } = Cesium
+    const { Ellipsoid, defined } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
     const pickRay = scene.camera.getPickRay(screenPosition)
     const pickPosition = scene.globe.pick(pickRay, scene)
+    if (!defined(pickPosition)) {
+      return
+    }
     const pickPositionCartographic = Ellipsoid.WGS84.cartesianToCartographic(
       pickPosition
     )
