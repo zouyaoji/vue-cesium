@@ -21,7 +21,7 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', './Transforms-1ede5d55', './Cartesian2-e7502022', './when-54335d57', './TerrainEncoding-1382452a', './IndexDatatype-a6fe1d66', './Math-34872ab7', './OrientedBoundingBox-5c59eedb', './Check-24483042', './WebMercatorProjection-920f5986', './createTaskProcessorWorker', './IntersectionTests-94f3c1ad', './Plane-e75c0031', './RuntimeError-88a32665', './ComponentDatatype-cac6b6fa', './WebGLConstants-95ceb4e9'], function (AttributeCompression, EllipsoidTangentPlane, Transforms, Cartesian2, when, TerrainEncoding, IndexDatatype, _Math, OrientedBoundingBox, Check, WebMercatorProjection, createTaskProcessorWorker, IntersectionTests, Plane, RuntimeError, ComponentDatatype, WebGLConstants) { 'use strict';
+define(['./AxisAlignedBoundingBox-574d1269', './Cartesian2-e9bb1bb3', './when-208fe5b0', './TerrainEncoding-8d274519', './IndexDatatype-3a89c589', './Math-56f06cd5', './Transforms-9651fa9c', './Check-5e798bbf', './WebMercatorProjection-7b54c659', './createTaskProcessorWorker', './AttributeCompression-d1cd1d9c', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './RuntimeError-7f634f5d'], function (AxisAlignedBoundingBox, Cartesian2, when, TerrainEncoding, IndexDatatype, _Math, Transforms, Check, WebMercatorProjection, createTaskProcessorWorker, AttributeCompression, ComponentDatatype, WebGLConstants, RuntimeError) { 'use strict';
 
   /**
    * Provides terrain or other geometry for the surface of an ellipsoid.  The surface geometry is
@@ -47,6 +47,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * are passed an instance of {@link TileProviderError}.
      * @memberof TerrainProvider.prototype
      * @type {Event}
+     * @readonly
      */
     errorEvent: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -58,6 +59,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * not be called before {@link TerrainProvider#ready} returns true.
      * @memberof TerrainProvider.prototype
      * @type {Credit}
+     * @readonly
      */
     credit: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -68,6 +70,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * not be called before {@link TerrainProvider#ready} returns true.
      * @memberof TerrainProvider.prototype
      * @type {TilingScheme}
+     * @readonly
      */
     tilingScheme: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -77,6 +80,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * Gets a value indicating whether or not the provider is ready for use.
      * @memberof TerrainProvider.prototype
      * @type {Boolean}
+     * @readonly
      */
     ready: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -99,6 +103,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * called before {@link TerrainProvider#ready} returns true.
      * @memberof TerrainProvider.prototype
      * @type {Boolean}
+     * @readonly
      */
     hasWaterMask: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -109,6 +114,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * This function should not be called before {@link TerrainProvider#ready} returns true.
      * @memberof TerrainProvider.prototype
      * @type {Boolean}
+     * @readonly
      */
     hasVertexNormals: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -121,6 +127,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
      * information is not available.
      * @memberof TerrainProvider.prototype
      * @type {TileAvailability}
+     * @readonly
      */
     availability: {
       get: Check.DeveloperError.throwInstantiationError,
@@ -447,7 +454,7 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
    * @param {Number} x The X coordinate of the tile for which to request geometry.
    * @param {Number} y The Y coordinate of the tile for which to request geometry.
    * @param {Number} level The level of the tile for which to request geometry.
-   * @returns {Boolean} Undefined if not supported by the terrain provider, otherwise true or false.
+   * @returns {Boolean|undefined} Undefined if not supported by the terrain provider, otherwise true or false.
    */
   TerrainProvider.prototype.getTileDataAvailable =
     Check.DeveloperError.throwInstantiationError;
@@ -471,9 +478,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
   var scratchMaximum = new Cartesian2.Cartesian3();
   var cartographicScratch = new Cartesian2.Cartographic();
   var toPack = new Cartesian2.Cartesian2();
-  var scratchNormal = new Cartesian2.Cartesian3();
-  var scratchToENU = new Transforms.Matrix4();
-  var scratchFromENU = new Transforms.Matrix4();
 
   function createVerticesFromQuantizedTerrainMesh(
     parameters,
@@ -489,6 +493,11 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       parameters.northIndices.length;
     var includeWebMercatorT = parameters.includeWebMercatorT;
 
+    var exaggeration = parameters.exaggeration;
+    var exaggerationRelativeHeight = parameters.exaggerationRelativeHeight;
+    var hasExaggeration = exaggeration !== 1.0;
+    var includeGeodeticSurfaceNormals = hasExaggeration;
+
     var rectangle = Cartesian2.Rectangle.clone(parameters.rectangle);
     var west = rectangle.west;
     var south = rectangle.south;
@@ -497,9 +506,8 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
 
     var ellipsoid = Cartesian2.Ellipsoid.clone(parameters.ellipsoid);
 
-    var exaggeration = parameters.exaggeration;
-    var minimumHeight = parameters.minimumHeight * exaggeration;
-    var maximumHeight = parameters.maximumHeight * exaggeration;
+    var minimumHeight = parameters.minimumHeight;
+    var maximumHeight = parameters.maximumHeight;
 
     var center = parameters.relativeToCenter;
     var fromENU = Transforms.Transforms.eastNorthUpToFixedFrame(center, ellipsoid);
@@ -532,6 +540,9 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
     var heights = new Array(quantizedVertexCount);
     var positions = new Array(quantizedVertexCount);
     var webMercatorTs = includeWebMercatorT
+      ? new Array(quantizedVertexCount)
+      : [];
+    var geodeticSurfaceNormals = includeGeodeticSurfaceNormals
       ? new Array(quantizedVertexCount)
       : [];
 
@@ -586,6 +597,10 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
           oneOverMercatorHeight;
       }
 
+      if (includeGeodeticSurfaceNormals) {
+        geodeticSurfaceNormals[i] = ellipsoid.geodeticSurfaceNormal(position);
+      }
+
       Transforms.Matrix4.multiplyByPoint(toENU, position, cartesian3Scratch);
 
       Cartesian2.Cartesian3.minimumByComponent(cartesian3Scratch, minimum, minimum);
@@ -617,23 +632,9 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       return uvs[a].x - uvs[b].x;
     });
 
-    var orientedBoundingBox;
-    var boundingSphere;
-
-    if (exaggeration !== 1.0) {
-      // Bounding volumes need to be recomputed since the tile payload assumes no exaggeration.
-      boundingSphere = Transforms.BoundingSphere.fromPoints(positions);
-      orientedBoundingBox = OrientedBoundingBox.OrientedBoundingBox.fromRectangle(
-        rectangle,
-        minimumHeight,
-        maximumHeight,
-        ellipsoid
-      );
-    }
-
     var occludeePointInScaledSpace;
-    if (exaggeration !== 1.0 || minimumHeight < 0.0) {
-      // Horizon culling point needs to be recomputed since the tile payload assumes no exaggeration.
+    if (minimumHeight < 0.0) {
+      // Horizon culling point needs to be recomputed since the tile is at least partly under the ellipsoid.
       var occluder = new TerrainEncoding.EllipsoidalOccluder(ellipsoid);
       occludeePointInScaledSpace = occluder.computeHorizonCullingPointPossiblyUnderEllipsoid(
         center,
@@ -700,16 +701,20 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       )
     );
 
-    var aaBox = new EllipsoidTangentPlane.AxisAlignedBoundingBox(minimum, maximum, center);
+    var aaBox = new AxisAlignedBoundingBox.AxisAlignedBoundingBox(minimum, maximum, center);
     var encoding = new TerrainEncoding.TerrainEncoding(
+      center,
       aaBox,
       hMin,
       maximumHeight,
       fromENU,
       hasVertexNormals,
-      includeWebMercatorT
+      includeWebMercatorT,
+      includeGeodeticSurfaceNormals,
+      exaggeration,
+      exaggerationRelativeHeight
     );
-    var vertexStride = encoding.getStride();
+    var vertexStride = encoding.stride;
     var size =
       quantizedVertexCount * vertexStride + edgeVertexCount * vertexStride;
     var vertexBuffer = new Float32Array(size);
@@ -720,32 +725,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
         var n = j * 2.0;
         toPack.x = octEncodedNormals[n];
         toPack.y = octEncodedNormals[n + 1];
-
-        if (exaggeration !== 1.0) {
-          var normal = AttributeCompression.AttributeCompression.octDecode(
-            toPack.x,
-            toPack.y,
-            scratchNormal
-          );
-          var fromENUNormal = Transforms.Transforms.eastNorthUpToFixedFrame(
-            positions[j],
-            ellipsoid,
-            scratchFromENU
-          );
-          var toENUNormal = Transforms.Matrix4.inverseTransformation(
-            fromENUNormal,
-            scratchToENU
-          );
-
-          Transforms.Matrix4.multiplyByPointAsVector(toENUNormal, normal, normal);
-          normal.z *= exaggeration;
-          Cartesian2.Cartesian3.normalize(normal, normal);
-
-          Transforms.Matrix4.multiplyByPointAsVector(fromENUNormal, normal, normal);
-          Cartesian2.Cartesian3.normalize(normal, normal);
-
-          AttributeCompression.AttributeCompression.octEncode(normal, toPack);
-        }
       }
 
       bufferIndex = encoding.encode(
@@ -755,7 +734,8 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
         uvs[j],
         heights[j],
         toPack,
-        webMercatorTs[j]
+        webMercatorTs[j],
+        geodeticSurfaceNormals[j]
       );
     }
 
@@ -792,7 +772,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       ellipsoid,
       rectangle,
       parameters.westSkirtHeight,
-      exaggeration,
       southMercatorY,
       oneOverMercatorHeight,
       westLongitudeOffset,
@@ -810,7 +789,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       ellipsoid,
       rectangle,
       parameters.southSkirtHeight,
-      exaggeration,
       southMercatorY,
       oneOverMercatorHeight,
       southLongitudeOffset,
@@ -828,7 +806,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       ellipsoid,
       rectangle,
       parameters.eastSkirtHeight,
-      exaggeration,
       southMercatorY,
       oneOverMercatorHeight,
       eastLongitudeOffset,
@@ -846,7 +823,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       ellipsoid,
       rectangle,
       parameters.northSkirtHeight,
-      exaggeration,
       southMercatorY,
       oneOverMercatorHeight,
       northLongitudeOffset,
@@ -876,8 +852,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
       center: center,
       minimumHeight: minimumHeight,
       maximumHeight: maximumHeight,
-      boundingSphere: boundingSphere,
-      orientedBoundingBox: orientedBoundingBox,
       occludeePointInScaledSpace: occludeePointInScaledSpace,
       encoding: encoding,
       indexCountWithoutSkirts: parameters.indices.length,
@@ -941,7 +915,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
     ellipsoid,
     rectangle,
     skirtLength,
-    exaggeration,
     southMercatorY,
     oneOverMercatorHeight,
     longitudeOffset,
@@ -979,32 +952,6 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
         var n = index * 2.0;
         toPack.x = octEncodedNormals[n];
         toPack.y = octEncodedNormals[n + 1];
-
-        if (exaggeration !== 1.0) {
-          var normal = AttributeCompression.AttributeCompression.octDecode(
-            toPack.x,
-            toPack.y,
-            scratchNormal
-          );
-          var fromENUNormal = Transforms.Transforms.eastNorthUpToFixedFrame(
-            cartesian3Scratch,
-            ellipsoid,
-            scratchFromENU
-          );
-          var toENUNormal = Transforms.Matrix4.inverseTransformation(
-            fromENUNormal,
-            scratchToENU
-          );
-
-          Transforms.Matrix4.multiplyByPointAsVector(toENUNormal, normal, normal);
-          normal.z *= exaggeration;
-          Cartesian2.Cartesian3.normalize(normal, normal);
-
-          Transforms.Matrix4.multiplyByPointAsVector(fromENUNormal, normal, normal);
-          Cartesian2.Cartesian3.normalize(normal, normal);
-
-          AttributeCompression.AttributeCompression.octEncode(normal, toPack);
-        }
       }
 
       var webMercatorT;
@@ -1017,6 +964,11 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
           oneOverMercatorHeight;
       }
 
+      var geodeticSurfaceNormal;
+      if (encoding.hasGeodeticSurfaceNormals) {
+        geodeticSurfaceNormal = ellipsoid.geodeticSurfaceNormal(position);
+      }
+
       vertexBufferIndex = encoding.encode(
         vertexBuffer,
         vertexBufferIndex,
@@ -1024,7 +976,8 @@ define(['./AttributeCompression-9ad7a83d', './EllipsoidTangentPlane-6385da14', '
         uv,
         cartographicScratch.height,
         toPack,
-        webMercatorT
+        webMercatorT,
+        geodeticSurfaceNormal
       );
     }
   }

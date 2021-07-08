@@ -21,7 +21,7 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./AttributeCompression-9ad7a83d', './Transforms-1ede5d55', './Cartesian2-e7502022', './when-54335d57', './TerrainEncoding-1382452a', './IndexDatatype-a6fe1d66', './Check-24483042', './Math-34872ab7', './OrientedBoundingBox-5c59eedb', './createTaskProcessorWorker', './RuntimeError-88a32665', './ComponentDatatype-cac6b6fa', './WebGLConstants-95ceb4e9', './EllipsoidTangentPlane-6385da14', './IntersectionTests-94f3c1ad', './Plane-e75c0031'], function (AttributeCompression, Transforms, Cartesian2, when, TerrainEncoding, IndexDatatype, Check, _Math, OrientedBoundingBox, createTaskProcessorWorker, RuntimeError, ComponentDatatype, WebGLConstants, EllipsoidTangentPlane, IntersectionTests, Plane) { 'use strict';
+define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './when-208fe5b0', './TerrainEncoding-8d274519', './IndexDatatype-3a89c589', './Check-5e798bbf', './Math-56f06cd5', './OrientedBoundingBox-dfa225d1', './createTaskProcessorWorker', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './EllipsoidTangentPlane-e79f0327', './AxisAlignedBoundingBox-574d1269', './IntersectionTests-4352af03', './Plane-9825d2dd'], function (AttributeCompression, Transforms, Cartesian2, when, TerrainEncoding, IndexDatatype, Check, _Math, OrientedBoundingBox, createTaskProcessorWorker, RuntimeError, ComponentDatatype, WebGLConstants, EllipsoidTangentPlane, AxisAlignedBoundingBox, IntersectionTests, Plane) { 'use strict';
 
   /**
    * Contains functions for operating on 2D triangles.
@@ -424,7 +424,6 @@ define(['./AttributeCompression-9ad7a83d', './Transforms-1ede5d55', './Cartesian
 
     var encoding = TerrainEncoding.TerrainEncoding.clone(parameters.encoding);
     var hasVertexNormals = encoding.hasVertexNormals;
-    var exaggeration = parameters.exaggeration;
 
     var vertexCount = 0;
     var quantizedVertexCount = parameters.vertexCountWithoutSkirts;
@@ -450,7 +449,7 @@ define(['./AttributeCompression-9ad7a83d', './Transforms-1ede5d55', './Cartesian
         i,
         decodeTexCoordsScratch
       );
-      height = encoding.decodeHeight(parentVertices, i) / exaggeration;
+      height = encoding.decodeHeight(parentVertices, i);
 
       u = _Math.CesiumMath.clamp((texCoords.x * maxShort) | 0, 0, maxShort);
       v = _Math.CesiumMath.clamp((texCoords.y * maxShort) | 0, 0, maxShort);

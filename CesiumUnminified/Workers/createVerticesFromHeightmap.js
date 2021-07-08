@@ -21,7 +21,7 @@
  * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
  */
 
-define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transforms-1ede5d55', './when-54335d57', './Check-24483042', './TerrainEncoding-1382452a', './Math-34872ab7', './OrientedBoundingBox-5c59eedb', './WebMercatorProjection-920f5986', './RuntimeError-88a32665', './createTaskProcessorWorker', './IntersectionTests-94f3c1ad', './Plane-e75c0031', './AttributeCompression-9ad7a83d', './ComponentDatatype-cac6b6fa', './WebGLConstants-95ceb4e9'], function (Cartesian2, EllipsoidTangentPlane, Transforms, when, Check, TerrainEncoding, _Math, OrientedBoundingBox, WebMercatorProjection, RuntimeError, createTaskProcessorWorker, IntersectionTests, Plane, AttributeCompression, ComponentDatatype, WebGLConstants) { 'use strict';
+define(['./Cartesian2-e9bb1bb3', './AxisAlignedBoundingBox-574d1269', './Transforms-9651fa9c', './when-208fe5b0', './Check-5e798bbf', './TerrainEncoding-8d274519', './Math-56f06cd5', './OrientedBoundingBox-dfa225d1', './WebMercatorProjection-7b54c659', './RuntimeError-7f634f5d', './createTaskProcessorWorker', './AttributeCompression-d1cd1d9c', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './EllipsoidTangentPlane-e79f0327', './IntersectionTests-4352af03', './Plane-9825d2dd'], function (Cartesian2, AxisAlignedBoundingBox, Transforms, when, Check, TerrainEncoding, _Math, OrientedBoundingBox, WebMercatorProjection, RuntimeError, createTaskProcessorWorker, AttributeCompression, ComponentDatatype, WebGLConstants, EllipsoidTangentPlane, IntersectionTests, Plane) { 'use strict';
 
   /**
    * The encoding that is used for a heightmap
@@ -89,6 +89,7 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
    *                 a heightmap with a geographic projection, this is degrees.  For the web mercator
    *                 projection, this is meters.
    * @param {Number} [options.exaggeration=1.0] The scale used to exaggerate the terrain.
+   * @param {Number} [options.exaggerationRelativeHeight=0.0] The height from which terrain is exaggerated.
    * @param {Rectangle} [options.rectangle] The rectangle covered by the heightmap, in geodetic coordinates with north, south, east and
    *                 west properties in radians.  Either rectangle or nativeRectangle must be provided.  If both
    *                 are provided, they're assumed to be consistent.
@@ -144,7 +145,7 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
    * });
    *
    * var encoding = statistics.encoding;
-   * var position = encoding.decodePosition(statistics.vertices, index * encoding.getStride());
+   * var position = encoding.decodePosition(statistics.vertices, index);
    */
   HeightmapTessellator.computeVertices = function (options) {
     //>>includeStart('debug', pragmas.debug);
@@ -179,20 +180,21 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
     var width = options.width;
     var height = options.height;
     var skirtHeight = options.skirtHeight;
+    var hasSkirts = skirtHeight > 0.0;
 
     var isGeographic = when.defaultValue(options.isGeographic, true);
     var ellipsoid = when.defaultValue(options.ellipsoid, Cartesian2.Ellipsoid.WGS84);
 
     var oneOverGlobeSemimajorAxis = 1.0 / ellipsoid.maximumRadius;
 
-    var nativeRectangle = options.nativeRectangle;
+    var nativeRectangle = Cartesian2.Rectangle.clone(options.nativeRectangle);
+    var rectangle = Cartesian2.Rectangle.clone(options.rectangle);
 
     var geographicWest;
     var geographicSouth;
     var geographicEast;
     var geographicNorth;
 
-    var rectangle = options.rectangle;
     if (!when.defined(rectangle)) {
       if (isGeographic) {
         geographicWest = toRadians(nativeRectangle.west);
@@ -219,8 +221,15 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
     var relativeToCenter = options.relativeToCenter;
     var hasRelativeToCenter = when.defined(relativeToCenter);
     relativeToCenter = hasRelativeToCenter ? relativeToCenter : Cartesian2.Cartesian3.ZERO;
-    var exaggeration = when.defaultValue(options.exaggeration, 1.0);
     var includeWebMercatorT = when.defaultValue(options.includeWebMercatorT, false);
+
+    var exaggeration = when.defaultValue(options.exaggeration, 1.0);
+    var exaggerationRelativeHeight = when.defaultValue(
+      options.exaggerationRelativeHeight,
+      0.0
+    );
+    var hasExaggeration = exaggeration !== 1.0;
+    var includeGeodeticSurfaceNormals = hasExaggeration;
 
     var structure = when.defaultValue(
       options.structure,
@@ -305,13 +314,16 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
     var heights = new Array(vertexCount);
     var uvs = new Array(vertexCount);
     var webMercatorTs = includeWebMercatorT ? new Array(vertexCount) : [];
+    var geodeticSurfaceNormals = includeGeodeticSurfaceNormals
+      ? new Array(vertexCount)
+      : [];
 
     var startRow = 0;
     var endRow = height;
     var startCol = 0;
     var endCol = width;
 
-    if (skirtHeight > 0.0) {
+    if (hasSkirts) {
       --startRow;
       ++endRow;
       --startCol;
@@ -404,7 +416,7 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
           }
         }
 
-        heightSample = (heightSample * heightScale + heightOffset) * exaggeration;
+        heightSample = heightSample * heightScale + heightOffset;
 
         maximumHeight = Math.max(maximumHeight, heightSample);
         minimumHeight = Math.min(minimumHeight, heightSample);
@@ -470,19 +482,24 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
         position.y = rSurfaceY + nY * heightSample;
         position.z = rSurfaceZ + nZ * heightSample;
 
+        Transforms.Matrix4.multiplyByPoint(toENU, position, cartesian3Scratch);
+        Cartesian2.Cartesian3.minimumByComponent(cartesian3Scratch, minimum, minimum);
+        Cartesian2.Cartesian3.maximumByComponent(cartesian3Scratch, maximum, maximum);
+        hMin = Math.min(hMin, heightSample);
+
         positions[index] = position;
-        heights[index] = heightSample;
         uvs[index] = new Cartesian2.Cartesian2(u, v);
+        heights[index] = heightSample;
 
         if (includeWebMercatorT) {
           webMercatorTs[index] = webMercatorT;
         }
 
-        Transforms.Matrix4.multiplyByPoint(toENU, position, cartesian3Scratch);
-
-        Cartesian2.Cartesian3.minimumByComponent(cartesian3Scratch, minimum, minimum);
-        Cartesian2.Cartesian3.maximumByComponent(cartesian3Scratch, maximum, maximum);
-        hMin = Math.min(hMin, heightSample);
+        if (includeGeodeticSurfaceNormals) {
+          geodeticSurfaceNormals[index] = ellipsoid.geodeticSurfaceNormal(
+            position
+          );
+        }
       }
     }
 
@@ -507,16 +524,20 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
       );
     }
 
-    var aaBox = new EllipsoidTangentPlane.AxisAlignedBoundingBox(minimum, maximum, relativeToCenter);
+    var aaBox = new AxisAlignedBoundingBox.AxisAlignedBoundingBox(minimum, maximum, relativeToCenter);
     var encoding = new TerrainEncoding.TerrainEncoding(
+      relativeToCenter,
       aaBox,
       hMin,
       maximumHeight,
       fromENU,
       false,
-      includeWebMercatorT
+      includeWebMercatorT,
+      includeGeodeticSurfaceNormals,
+      exaggeration,
+      exaggerationRelativeHeight
     );
-    var vertices = new Float32Array(vertexCount * encoding.getStride());
+    var vertices = new Float32Array(vertexCount * encoding.stride);
 
     var bufferIndex = 0;
     for (var j = 0; j < vertexCount; ++j) {
@@ -527,7 +548,8 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
         uvs[j],
         heights[j],
         undefined,
-        webMercatorTs[j]
+        webMercatorTs[j],
+        geodeticSurfaceNormals[j]
       );
     }
 
@@ -2386,9 +2408,7 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
           data.pixels = {};
 
           // File header
-          if (!Lerc2Helpers.readHeaderInfo(input, data)) {
-            return;
-          }
+          if (!Lerc2Helpers.readHeaderInfo(input, data)) ;
           var headerInfo = data.headerInfo;
           var fileVersion = headerInfo.fileVersion;
           var OutPixelTypeArray = Lerc2Helpers.getDataTypeArray(headerInfo.imageType);
@@ -2673,7 +2693,7 @@ define(['./Cartesian2-e7502022', './EllipsoidTangentPlane-6385da14', './Transfor
 
     return {
       vertices: vertices.buffer,
-      numberOfAttributes: statistics.encoding.getStride(),
+      numberOfAttributes: statistics.encoding.stride,
       minimumHeight: statistics.minimumHeight,
       maximumHeight: statistics.maximumHeight,
       gridWidth: parameters.width,
