@@ -1,13 +1,14 @@
 ## 更新日志
 
 ### 3.0.1-beta.9
-*2021-06-13*
+*2021-07-08*
 
 #### Bug 修复
 
 - 修复在超图平台上 `VcProviderImagerySupermap` 组件移除图层崩溃的问题。
 - 修复二维和哥伦布视图下 `VcNavigation` 组件定位不准的问题，#118。
-- 修复 `vc-viewer` 组件上传非 Prop 的 Attribute 抛出警告问题。
+- 修复 `VcViewer` 组件上传非 Prop 的 Attribute 抛出警告问题。
+- 修复 `VcSelectionIndicator` 在地球之外拾取抛出错误的问题。
 
 ### 3.0.1-beta.8
 *2021-06-13*
