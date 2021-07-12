@@ -14,13 +14,13 @@ import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { PolygonDrawing } from '../drawing.types'
 
 export default defineComponent({
-  name: 'VcDrawingRegularPolygon',
+  name: 'VcDrawingRectangle',
   props: defaultProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcDrawingRegularPolygon'
+    instance.cesiumClass = 'VcDrawingRectangle'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
@@ -40,42 +40,34 @@ export default defineComponent({
     const editingPoint = ref(null)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePosition = undefined
-    let drawName = 'rectangle'
-    if (props.edge === 4) {
-      drawName = 'rectangle'
-    } else if (props.edge === 360) {
-      drawName = 'circle'
-    }
+    const drawName = 'rectangle'
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
-      const { defined, Cartographic } = Cesium
-      polylines.value.forEach((polylineSegment, index) => {
+      const { Cartographic, Rectangle } = Cesium
+      polylines.value.forEach(polylineSegment => {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
-
-        const hpr = getHeadingPitchRoll(startPosition, endPosition, $services.viewer.scene)
-        if (defined(hpr)) {
-          const positions = []
-          const startCartographic = Cartographic.fromCartesian(startPosition)
-          const endCartographic = Cartographic.fromCartesian(endPosition)
-
-          !props.clampToGround && (endCartographic.height = startCartographic.height)
-          positions.push(Cartographic.toCartesian(endCartographic))
-          const distance = getGeodesicDistance(startPosition, endPosition)
-          for (let i = 0; i < props.edge - 1; i++) {
-            const position = getPolylineSegmentEndpoint(startPosition, hpr[0] += Math.PI * 2 / props.edge, distance)
-            positions.push(position)
-          }
-
-          const polyline: PolygonDrawing = {
-            ...polylineSegment,
-            polygonPositions: positions,
-            height: startCartographic.height
-          }
-
-          results.push(polyline)
+        if (Cesium.Cartesian3.equals(startPosition, endPosition)) {
+          return
         }
+        const startCartographic = Cartographic.fromCartesian(startPosition)
+        const endCartographic = Cartographic.fromCartesian(endPosition)
+        const height = startCartographic.height
+        !props.clampToGround && (endCartographic.height = height)
+
+        const rectangle = Rectangle.fromCartesianArray(polylineSegment.positions)
+        const arr = [rectangle.west, rectangle.north, height, rectangle.east, rectangle.north, height, rectangle.east,
+          rectangle.south, height, rectangle.west, rectangle.south, height, rectangle.west, rectangle.north, height]
+        const positions = Cesium.Cartesian3.fromRadiansArrayHeights(arr)
+
+        const polyline: PolygonDrawing = {
+          ...polylineSegment,
+          polygonPositions: positions,
+          height: height
+        }
+
+        results.push(polyline)
       })
       return results
     })

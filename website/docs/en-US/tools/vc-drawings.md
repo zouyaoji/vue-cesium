@@ -38,6 +38,7 @@ Basic usage of drawing components.
       position="bottom-left"
       :mainFabOpts="drawingFabOptions1"
       :polylineDrawingOpts="polylineDrawingOpts2"
+      :rectangleDrawingOpts="rectangleDrawingOpts2"
       :offset="[20, 20]"
       :editable="editable"
       :clampToGround="clampToGround"
@@ -85,6 +86,9 @@ Basic usage of drawing components.
         },
         polylineDrawingOpts2: {
           loop: true
+        },
+        rectangleDrawingOpts2: {
+          regular: false
         }
       }
     },
@@ -204,6 +208,8 @@ Tip: The drawing component is mainly composed of two parts: (1) the floating act
 :::tip
 
 Tip: Each drawing button (FabAction) corresponds to the drawing parameters xxxDrawingOpts, used to customize drawing objects.
+
+See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/drawings/src/defaultProps.ts)
 
 :::
 

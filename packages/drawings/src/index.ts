@@ -43,6 +43,7 @@ import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
 import VcDrawingRegularPolygon from './regular-polygon'
+import VcDrawingRectangle from './rectangle'
 
 import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 
@@ -225,6 +226,11 @@ export default defineComponent({
         case 'polygon':
           return VcDrawingPolygon
         case 'rectangle':
+          if (rectangleDrawingOpts.regular) {
+            return VcDrawingRegularPolygon
+          } else {
+            return VcDrawingRectangle
+          }
         case 'circle':
           return VcDrawingRegularPolygon
         default:

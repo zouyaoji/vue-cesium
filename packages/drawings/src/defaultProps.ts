@@ -217,7 +217,8 @@ const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
       icon: 'vc-icons-delete',
     })
   },
-  edge: 4
+  edge: 4,
+  regular: true // regular
 })
 
 const circleDrawingDefault = Object.assign({}, rectangleDrawingDefault, {

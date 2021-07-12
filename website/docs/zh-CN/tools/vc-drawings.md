@@ -40,6 +40,7 @@ ctrl + 右键取消绘制。
       :clampToGround="clampToGround"
       @ready="drawingsReady"
       :polylineDrawingOpts="polylineDrawingOpts2"
+      :rectangleDrawingOpts="rectangleDrawingOpts2"
     >
       <template #body>
         <div class="custom-drawings">
@@ -83,6 +84,9 @@ ctrl + 右键取消绘制。
         },
         polylineDrawingOpts2: {
           loop: true
+        },
+        rectangleDrawingOpts2: {
+          regular: false
         }
       }
     },
@@ -202,6 +206,8 @@ ctrl + 右键取消绘制。
 :::tip
 
 提示：每个绘制按钮（FabAction）对应有属性 xxxDrawingOpts，用于自定义绘制对象。
+
+详见：[defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/drawings/src/defaultProps.ts)
 
 :::
 
