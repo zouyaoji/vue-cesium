@@ -87,3 +87,13 @@
 ### 参考
 
 - 资料： **[天地图帮助文档](http://lbs.tianditu.gov.cn/docs/#/sanwei/)**
+
+### 已知问题
+
+- 使用未压缩的构建库 `/CesiumUnminified/Cesium.js` 会抛出异常。
+  ``` html
+  cesiumTdt.js:12 Uncaught ReferenceError: Zlib is not defined
+    at cesiumTdt.js:12
+    at XMLHttpRequest.i.onreadystatechange (cesiumTdt.js:12)
+  ```
+  引入 `/Cesium/Cesium.js` 即可解决。

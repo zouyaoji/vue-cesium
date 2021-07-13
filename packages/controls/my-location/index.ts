@@ -15,7 +15,7 @@ export default defineComponent({
   name: 'VcMyLocation',
   props: defaultProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'locationEvt'],
-  setup(props, ctx) {
+  setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMyLocation'
@@ -258,6 +258,25 @@ export default defineComponent({
           entity: myPositionEntity
         })
 
+      const options: any = {
+        duration: props.duration
+      }
+
+      defined(props.maximumHeight) && (options.maximumHeight = props.maximumHeight)
+      defined(props.hpr) && isArray(props.hpr) && (options.offset = new Cesium.HeadingPitchRange(props.hpr[0], props.hpr[1], props.hpr[2]))
+
+      if (viewer.scene.mode === SceneMode.SCENE2D || viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
+        return viewer.flyTo(myPositionEntity, options).then(() => {
+          positioning.value = false
+          listener &&
+              ctx.emit('locationEvt', {
+                type: 'zoomIn',
+                camera: viewer.camera,
+                status: 'complete'
+              })
+        })
+      }
+
       // west, south, east, north, result
       const factor = props.factor
       const rectangle = Rectangle.fromDegrees(longitude - factor, latitude - factor, longitude + factor, latitude + factor)
@@ -270,7 +289,7 @@ export default defineComponent({
       const positions = [Rectangle.center(rectangle)]
 
       // Perform an elevation query at the centre of the rectangle
-      return sampleTerrain(terrainProvider, level, positions).then(function(results) {
+      return sampleTerrain(terrainProvider, level, positions).then(function (results) {
         // Add terrain elevation to camera altitude
         const finalDestinationCartographic: any = {
           longitude: destination.longitude,
@@ -285,15 +304,11 @@ export default defineComponent({
             camera: viewer.camera,
             status: 'start'
           })
-        const options: any = {
-          duration: props.duration
-        }
 
-        defined(props.maximumHeight) && (options.maximumHeight = props.maximumHeight)
-        defined(props.hpr) && isArray(props.hpr) && (options.offset = new Cesium.HeadingPitchRange(props.hpr[0], props.hpr[1], props.hpr[2]))
-
-        if (viewer.scene.mode === SceneMode.SCENE2D || viewer.scene.mode === SceneMode.COLUMBUS_VIEW) {
-          return viewer.flyTo(myPositionEntity, options).then(() => {
+        camera.flyTo({
+          duration: props.duration,
+          destination: finalDestination,
+          complete: () => {
             positioning.value = false
             listener &&
               ctx.emit('locationEvt', {
@@ -301,31 +316,17 @@ export default defineComponent({
                 camera: viewer.camera,
                 status: 'complete'
               })
-          })
-        } else{
-          camera.flyTo({
-            duration: props.duration,
-            destination: finalDestination,
-            complete: () => {
-              positioning.value = false
-              listener &&
-                      ctx.emit('locationEvt', {
-                        type: 'zoomIn',
-                        camera: viewer.camera,
-                        status: 'complete'
-                      })
-            },
-            cancel: () => {
-              positioning.value = false
-              listener &&
-                      ctx.emit('locationEvt', {
-                        type: 'zoomIn',
-                        camera: viewer.camera,
-                        status: 'cancel'
-                      })
-            }
-          })
-        }
+          },
+          cancel: () => {
+            positioning.value = false
+            listener &&
+              ctx.emit('locationEvt', {
+                type: 'zoomIn',
+                camera: viewer.camera,
+                status: 'cancel'
+              })
+          }
+        })
       })
     }
 
@@ -404,7 +405,7 @@ export default defineComponent({
               VcTooltip,
               {
                 ref: tooltipRef,
-                // onBeforeShow: onTooltipBeforeShow,
+                onBeforeShow: onTooltipBeforeShow,
                 ...props.tooltip
               },
               () => h('strong', null, myLocationTip.value)
