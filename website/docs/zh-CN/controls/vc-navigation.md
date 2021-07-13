@@ -18,8 +18,8 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer>
-    <vc-navigation ref="navigation"></vc-navigation>
+  <vc-viewer sceneModePicker>
+    <vc-navigation ref="navigation" :offset="[35, 35]"></vc-navigation>
     <!-- 自定义风格 -->
     <vc-navigation
       :position="position"
