@@ -121,7 +121,7 @@
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",
-              "title": "SuermapImageryProvider 超图"
+              "title": "SupermapImageryProvider 超图"
             },
             {
               "path": "/providers/vc-provider-imagery-tianditu",
@@ -576,7 +576,7 @@
             },
             {
               "path": "/providers/vc-provider-imagery-supermap",
-              "title": "SuermapImageryProvider"
+              "title": "SupermapImageryProvider"
             },
             {
               "path": "/providers/vc-provider-imagery-tianditu",
