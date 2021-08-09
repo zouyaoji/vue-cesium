@@ -19,7 +19,11 @@ export default defineComponent({
     ...sourceUri,
     ...clampToGround,
     ...ellipsoid,
-    ...credit
+    ...credit,
+    destroy: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged',
     'changedEvent', 'errorEvent', 'loadingEvent', 'refreshEvent', 'unsupportedNodeEvent'],
@@ -31,7 +35,7 @@ export default defineComponent({
     const vc = useVueCesium()
 
     instance.createCesiumObject = async () => {
-      const options = datasourcesState.transformProps(props)
+      const options: any = datasourcesState.transformProps(props)
       if (!options.camera) {
         options.camera = vc.viewer.camera
       }

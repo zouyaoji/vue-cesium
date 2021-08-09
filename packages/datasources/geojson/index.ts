@@ -48,7 +48,11 @@ export default defineComponent({
       }
     },
     ...clampToGround,
-    ...credit
+    ...credit,
+    destroy: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged', 'changedEvent', 'errorEvent', 'loadingEvent'],
   setup (props, ctx) {
@@ -58,7 +62,7 @@ export default defineComponent({
     const datasourcesState = useDatasources(props, ctx, instance)
 
     instance.createCesiumObject = async () => {
-      const options = datasourcesState.transformProps(props)
+      const options: any = datasourcesState.transformProps(props)
       return Cesium.GeoJsonDataSource.load(props.data, options)
     }
 

@@ -13,7 +13,11 @@ export default defineComponent({
       type: Array,
       default: () => []
     },
-    name: String
+    name: String,
+    destroy: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged', 'changedEvent', 'errorEvent', 'loadingEvent'],
   setup (props, ctx) {

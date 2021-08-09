@@ -18,7 +18,11 @@ export default defineComponent({
       required: true
     },
     ...sourceUri,
-    ...credit
+    ...credit,
+    destroy: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'definitionChanged', 'clusterEvent', 'collectionChanged', 'changedEvent', 'errorEvent', 'loadingEvent'],
   setup (props, ctx) {

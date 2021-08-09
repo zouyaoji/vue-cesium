@@ -115,7 +115,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   vcInstance.unmount = async () => {
     const dataSources = commonState.$services.dataSources
     const datasource = vcInstance.cesiumObject as Cesium.DataSource
-    return dataSources && dataSources.remove(datasource)
+    return dataSources && dataSources.remove(datasource, props.destroy)
   }
 
   const getServices = () => {
