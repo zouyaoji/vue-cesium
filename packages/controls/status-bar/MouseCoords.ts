@@ -21,6 +21,9 @@ interface MouseCoords {
 }
 interface MouseCoordsOption {
   gridFileUrl: string
+  proj4Projection: string
+  projectionUnits: string
+  proj4longlat: string
 }
 class MouseCoords {
   constructor(options: MouseCoordsOption) {
@@ -28,9 +31,9 @@ class MouseCoords {
     const gridFileUrl = options.gridFileUrl
     gridFileUrl && (this.geoidModel = new EarthGravityModel1996(gridFileUrl))
 
-    this.proj4Projection = '+proj=utm +ellps=GRS80 +units=m +no_defs'
-    this.projectionUnits = 'm'
-    this.proj4longlat = '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'
+    this.proj4Projection = options.proj4Projection
+    this.projectionUnits = options.projectionUnits
+    this.proj4longlat = options.proj4longlat
 
     this.lastHeightSamplePosition = new Cartographic()
     this.accurateSamplingDebounceTime = 250

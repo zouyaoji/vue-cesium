@@ -5,6 +5,18 @@ export default {
     type: String,
     default: 'https://zouyaoji.top/vue-cesium/SampleData/WW15MGH.DAC'
   },
+  proj4Projection: {
+    type: String,
+    default: '+proj=utm +ellps=GRS80 +units=m +no_defs'
+  },
+  projectionUnits: {
+    type: String,
+    default: 'm'
+  },
+  proj4longlat: {
+    type: String,
+    default: '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'
+  },
   position: {
     type: String,
     default: 'bottom-right',

@@ -68,7 +68,12 @@ export default defineComponent({
       const viewerElement = (viewer as any)._element as HTMLElement
 
       if (props.showMouseInfo) {
-        mouseCoordsInfo.value = new MouseCoords({ gridFileUrl: props.gridFileUrl })
+        mouseCoordsInfo.value = new MouseCoords({
+          gridFileUrl: props.gridFileUrl,
+          proj4Projection: props.proj4Projection,
+          projectionUnits: props.projectionUnits,
+          proj4longlat: props.proj4longlat,
+        })
 
         viewerElement.addEventListener('wheel', onMouseMove, false)
         viewerElement.addEventListener('mousemove', onMouseMove, false)
