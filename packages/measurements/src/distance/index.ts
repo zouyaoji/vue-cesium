@@ -48,7 +48,8 @@ export default defineComponent({
       polylines.value.forEach((polylineSegment, index) => {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
-        const distance = props.polylineOpts.arcType === 0 ? Cartesian3.distance(startPosition, endPosition) : getGeodesicDistance(startPosition, endPosition)
+        const distance = props.polylineOpts.arcType === 0 ? Cartesian3.distance(startPosition, endPosition)
+          : getGeodesicDistance(startPosition, endPosition, $services.viewer.scene.globe.ellipsoid)
         const labelPosition = Cartesian3.midpoint(startPosition, endPosition, {} as any)
         const polyline: DistanceMeasurementPolylineSegment = {
           ...polylineSegment,

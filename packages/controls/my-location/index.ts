@@ -225,7 +225,7 @@ export default defineComponent({
       const longitude = position.lng
       const latitude = position.lat
       const address = position.address
-      const { Cartesian3, Rectangle, Ellipsoid, sampleTerrain, defined, SceneMode } = Cesium
+      const { Cartesian3, Rectangle, sampleTerrain, defined, SceneMode } = Cesium
       const { viewer } = $services
       datasource.entities.removeAll()
       const myPositionEntity = datasource.entities.add({
@@ -283,7 +283,7 @@ export default defineComponent({
       const camera = viewer.scene.camera
       // Work out the destination that the camera would naturally fly to
       const destinationCartesian = camera.getRectangleCameraCoordinates(rectangle)
-      const destination = Ellipsoid.WGS84.cartesianToCartographic(destinationCartesian)
+      const destination = viewer.scene.globe.ellipsoid.cartesianToCartographic(destinationCartesian)
       const terrainProvider = viewer.scene.globe.terrainProvider
       const level = props.level // A sufficiently coarse tile level that still has approximately accurate height
       const positions = [Rectangle.center(rectangle)]
@@ -296,8 +296,7 @@ export default defineComponent({
           latitude: destination.latitude,
           height: destination.height + results[0].height
         }
-        // const finalDestination = Ellipsoid.WGS84.cartographicToCartesian(finalDestinationCartographic)
-        const finalDestination = Ellipsoid.WGS84.cartographicToCartesian(finalDestinationCartographic)
+        const finalDestination = viewer.scene.globe.ellipsoid.cartographicToCartesian(finalDestinationCartographic)
         listener &&
           ctx.emit('locationEvt', {
             type: 'zoomIn',

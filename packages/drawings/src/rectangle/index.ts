@@ -3,7 +3,7 @@ import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-ces
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive, VcPrimitiveGround, VcPrimitiveGroundPolyline } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { makeMaterial, setViewerCursor, restoreViewerCursor, getGeodesicDistance, getHeadingPitchRoll, getPolylineSegmentEndpoint } from '@vue-cesium/utils/cesium-helpers'
+import { makeMaterial, setViewerCursor, restoreViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
 import { VcGeometryPolygon, VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/geometries'

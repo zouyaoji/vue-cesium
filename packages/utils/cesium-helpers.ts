@@ -820,10 +820,10 @@ export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, option
   })
 }
 
-export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Cartesian3) {
-  const { Ellipsoid, EllipsoidGeodesic } = Cesium
-  const pickedPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(start)
-  const lastPointCartographic = Ellipsoid.WGS84.cartesianToCartographic(end)
+export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Cartesian3, ellipsoid: Cesium.Ellipsoid) {
+  const { EllipsoidGeodesic } = Cesium
+  const pickedPointCartographic = ellipsoid.cartesianToCartographic(start)
+  const lastPointCartographic = ellipsoid.cartesianToCartographic(end)
   const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
   return geodesic.surfaceDistance
 }
@@ -857,14 +857,14 @@ export function getHeadingPitchRoll (start: Cesium.Cartesian3, end: Cesium.Carte
   return result
 }
 
-export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: number, distance: number) {
-  const { HeadingPitchRoll, Transforms, Ellipsoid, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic } = Cesium
+export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: number, distance: number, ellipsoid: Cesium.Ellipsoid) {
+  const { HeadingPitchRoll, Transforms, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic } = Cesium
   const hpr = new HeadingPitchRoll(heading, 0, 0)
   const scale = new Cartesian3(1, 1, 1)
   const matrix = Transforms.headingPitchRollToFixedFrame(start, hpr)
   const translation = Matrix4.getColumn(matrix, 1, new Cartesian4())
   const axis = new Cartesian3(translation.x, translation.y, translation.z)
-  const quaternion = Quaternion.fromAxisAngle(axis, distance * Ellipsoid.WGS84.oneOverRadii.x)
+  const quaternion = Quaternion.fromAxisAngle(axis, distance * ellipsoid.oneOverRadii.x)
   const hprMatrix = Matrix4.fromTranslationQuaternionRotationScale(Cartesian3.ZERO, quaternion, scale)
   const position = Matrix4.multiplyByPoint(hprMatrix, start, new Cartesian3())
   const startCartographic = Cartographic.fromCartesian(start)

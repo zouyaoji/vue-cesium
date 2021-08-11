@@ -123,7 +123,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
         status: 'start',
         target: e.currentTarget
       })
-    const rotateFrame = Transforms.eastNorthUpToFixedFrame(center, Ellipsoid.WGS84)
+    const rotateFrame = Transforms.eastNorthUpToFixedFrame(center, viewer.scene.globe.ellipsoid)
     const lookVector = Cartesian3.subtract(center, camera.position, new Cartesian3())
     const flight = CameraFlightPath.createTween(scene, {
       destination: Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0.0, 0.0, Cartesian3.magnitude(lookVector)), new Cartesian3()),
@@ -178,7 +178,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
   }
 
   const orbit = (compassElement: HTMLElement, cursorVector: Cesium.Cartesian2) => {
-    const { Cartesian2, Cartesian3, defined, getTimestamp, Math: CesiumMath, Matrix4, Ellipsoid, Ray, SceneMode, Transforms } = Cesium
+    const { Cartesian2, Cartesian3, defined, getTimestamp, Math: CesiumMath, Matrix4, Ray, SceneMode, Transforms } = Cesium
     let scene = vcInstance.viewer.scene
     let camera = scene.camera
     const sscc = scene.screenSpaceCameraController
@@ -244,10 +244,10 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
 
     const center = scene.globe.pick(ray, scene, centerScratch)
     if (!defined(center)) {
-      orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, Ellipsoid.WGS84, newTransformScratch)
+      orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = true
     } else {
-      orbitFrame = Transforms.eastNorthUpToFixedFrame(center, Ellipsoid.WGS84, newTransformScratch)
+      orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = false
     }
 
@@ -362,7 +362,7 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
     document.removeEventListener('touchmove', rotateMouseMoveFunction, false)
     document.removeEventListener('mouseup', rotateMouseUpFunction, false)
     document.removeEventListener('touchend', rotateMouseUpFunction, false)
-    const { Cartesian2, Cartesian3, defined, Math: CesiumMath, Matrix4, Ellipsoid, Ray, Transforms } = Cesium
+    const { Cartesian2, Cartesian3, defined, Math: CesiumMath, Matrix4, Ray, Transforms } = Cesium
     rotateMouseMoveFunction = undefined
     rotateMouseUpFunction = undefined
 
@@ -386,10 +386,10 @@ export default function(props, { emit }, vcInstance: VcComponentInternalInstance
 
     const viewCenter = scene.globe.pick(ray, scene, centerScratch)
     if (!defined(viewCenter)) {
-      rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, Ellipsoid.WGS84, newTransformScratch)
+      rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = true
     } else {
-      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, Ellipsoid.WGS84, newTransformScratch)
+      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = false
     }
 

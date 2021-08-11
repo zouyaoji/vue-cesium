@@ -123,12 +123,12 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     }
 
     let intersection
-    const scene = viewer.scene
+    const scene = viewer.scene as Cesium.Scene
     if (scene.mode === Cesium.SceneMode.SCENE3D) {
       const ray = scene.camera.getPickRay(position)
       intersection = scene.globe.pick(ray, scene)
     } else {
-      intersection = scene.camera.pickEllipsoid(position, Cesium.Ellipsoid.WGS84)
+      intersection = scene.camera.pickEllipsoid(position, scene.globe.ellipsoid)
     }
 
     let button = -1

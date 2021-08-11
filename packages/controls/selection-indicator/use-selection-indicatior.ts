@@ -89,7 +89,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
   }
 
   const pickFromScreenPosition = (screenPosition: Cesium.Cartesian2) => {
-    const { Ellipsoid, defined } = Cesium
+    const { defined } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
     const pickRay = scene.camera.getPickRay(screenPosition)
@@ -97,7 +97,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     if (!defined(pickPosition)) {
       return
     }
-    const pickPositionCartographic = Ellipsoid.WGS84.cartesianToCartographic(
+    const pickPositionCartographic = scene.globe.ellipsoid.cartesianToCartographic(
       pickPosition
     )
 
@@ -116,7 +116,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
       [pickRasterPromise],
       undefined,
       pickPositionCartographic.height,
-      false
+      false,
+      viewer
     )
     pickedFeatures.value = result
   }
@@ -128,8 +129,9 @@ export default function (instance: VcComponentInternalInstance, props, $services
     featurePromises,
     imageryLayers,
     defaultHeight,
-    ignoreSplitter) => {
-    const { Ellipsoid, defined, defaultValue, when } = Cesium
+    ignoreSplitter,
+    viewer) => {
+    const { defined, defaultValue, when } = Cesium
     ignoreSplitter = defaultValue(ignoreSplitter, false)
     const result = new PickedFeatures()
 
@@ -155,7 +157,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
                   }
 
                   if (!defined(feature.position)) {
-                    feature.position = Ellipsoid.WGS84.cartesianToCartographic(
+                    feature.position = viewer.scene.globe.ellipsoid.cartesianToCartographic(
                       pickPosition
                     )
                   }
@@ -168,7 +170,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
                   ) {
                     feature.position.height = defaultHeight
                   }
-                  return Feature.fromImageryLayerFeature(feature)
+                  return Feature.fromImageryLayerFeature(feature, viewer)
                 }.bind(this)
               )
 

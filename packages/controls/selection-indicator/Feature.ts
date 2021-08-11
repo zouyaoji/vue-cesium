@@ -77,8 +77,7 @@ class Feature {
     return feature
   }
 
-  static fromImageryLayerFeature (imageryFeature) {
-    const { Ellipsoid } = Cesium
+  static fromImageryLayerFeature (imageryFeature, viewer: Cesium.Viewer) {
     const feature = new Feature({
       id: imageryFeature.name
     })
@@ -88,7 +87,7 @@ class Feature {
     feature.data = imageryFeature.data
 
     feature.imageryLayer = imageryFeature.imageryLayer
-    feature.position = Ellipsoid.WGS84.cartographicToCartesian(
+    feature.position = viewer.scene.globe.ellipsoid.cartographicToCartesian(
       imageryFeature.position
     )
     feature.coords = imageryFeature.coords

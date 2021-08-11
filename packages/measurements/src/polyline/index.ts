@@ -50,7 +50,7 @@ export default defineComponent({
         for (let i = 0; i < positions.length - 1; i++) {
           let s = 0
           if (props.polylineOpts.arcType === 0) {
-            s = getGeodesicDistance(positions[i], positions[i + 1])
+            s = getGeodesicDistance(positions[i], positions[i + 1], $services.viewer.scene.globe.ellipsoid)
           } else {
             s = Cartesian3.distance(positions[i], positions[i + 1])
           }
