@@ -1,10 +1,10 @@
-import { CameraOption, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { CameraOption, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import { flyToCamera } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
 import { VcTooltip } from '@vue-cesium/ui'
 
-export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services) {
+export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
   const zoomInTooltipRef = ref<typeof VcTooltip>(null)
   const zoomOutTooltipRef = ref<typeof VcTooltip>(null)
@@ -53,7 +53,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           if (defined(viewer.trackedEntity)) {
             focus = new Cesium.Cartesian3()
           } else {
-            focus = getCameraFocus(viewer)
+            focus = getCameraFocus(viewer.scene)
           }
 
           if (!Cesium.defined(focus)) {
