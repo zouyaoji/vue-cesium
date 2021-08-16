@@ -697,6 +697,10 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     }
     options = removeEmpty(options)
 
+    if (Cesium.VERSION >= '1.83') {
+      delete options.terrainExaggeration
+    }
+
     let viewer: Cesium.Viewer
     if (global.mars3d) {
       vcInstance.map = new mars3d.Map($(viewerRef).id, options)
@@ -716,7 +720,12 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     vcInstance.viewerElement = (viewer as any)._element
     vcInstance.mounted = true
 
+    if (Cesium.VERSION >= '1.83') {
+      viewer.scene.globe.terrainExaggeration = terrainExaggeration
+    }
+
     // vue-cesium 扩展补充
+    // vue-cesium extension
     defined(camera) && setViewerCamera(viewer, camera)
 
     const listener = getInstanceListener(vcInstance, 'update:camera')

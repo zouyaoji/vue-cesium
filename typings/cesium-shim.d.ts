@@ -8,6 +8,7 @@ declare namespace Cesium {
   const Uri: any
   const GlobeSurfaceTile: any
   const ManagedArray: any
+  const VERSION: string
   interface Viewer {
     viewerWidgetResized?: Event
     _selectionIndicator?: SelectionIndicator
@@ -110,3 +111,9 @@ declare var XE: any
 declare var XbsjCesium: any
 // eslint-disable-next-line no-var
 declare var XbsjEarth: any
+// eslint-disable-next-line no-var
+declare var mars3d: any
+// eslint-disable-next-line no-var
+declare var DC: any
+// eslint-disable-next-line no-var
+declare var DcCore: any
