@@ -14,5 +14,5 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": false
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "lib"]
 }
