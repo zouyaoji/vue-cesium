@@ -66,8 +66,8 @@ export default {
   terrainProviderViewModels: Array as PropType<Array<Cesium.ProviderViewModel>>,
   imageryProvider: Object as PropType<Cesium.ImageryProvider>,
   terrainProvider: Object as PropType<Cesium.TerrainProvider>,
-  skyBox: Object as PropType<Cesium.SkyBox>,
-  skyAtmosphere: Object as PropType<Cesium.SkyAtmosphere>,
+  skyBox: [Object, Boolean] as PropType<Cesium.SkyBox>,
+  skyAtmosphere: [Object, Boolean] as PropType<Cesium.SkyAtmosphere>,
   fullscreenElement: {
     type: [String, Element] as PropType<string | Element>
   },
@@ -99,8 +99,8 @@ export default {
     type: Boolean,
     default: true
   },
-  creditContainer: String,
-  creditViewport: String,
+  creditContainer: [String, Element] as PropType<string | Element>,
+  creditViewport: [String, Element] as PropType<string | Element>,
   dataSources: Object as PropType<Cesium.DataSourceCollection>,
   terrainExaggeration: {
     type: Number,
