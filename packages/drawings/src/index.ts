@@ -401,6 +401,7 @@ export default defineComponent({
                 ref: drawingOptions.drawingRef,
                 editable: props.editable,
                 clampToGround: props.clampToGround,
+                mode: props.mode,
                 onDrawEvt: e => {
                   emit('drawEvt', e)
                 },

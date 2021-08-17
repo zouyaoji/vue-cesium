@@ -187,6 +187,7 @@ Basic usage of measurement components.
 | position | String | `'top-right'` | `optional` Specify the location of the measurement component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | Boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
+| mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
 | measurements | Array | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point']` | `optional` Specify the measurement instance to be loaded. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the measurement result can be edited. |

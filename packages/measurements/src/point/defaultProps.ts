@@ -11,5 +11,6 @@ export default {
   editorOpts: Object,
   locale: String,
   decimals: Object,
-  heightReference: Number
+  heightReference: Number,
+  mode: Number
 }

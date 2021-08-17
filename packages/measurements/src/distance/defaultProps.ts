@@ -19,5 +19,6 @@ export default {
   yAngleLabelOpts: Object,
   editorOpts: Object,
   locale: String,
-  decimals: Object
+  decimals: Object,
+  mode: Number
 }

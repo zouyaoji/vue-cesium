@@ -78,6 +78,7 @@ export default defineComponent({
     }
 
     const handleDoubleClick = movement => {
+      const { drawingVm, selectedDrawingOption } = $services
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
@@ -86,6 +87,10 @@ export default defineComponent({
             emit('drawEvt', Object.assign(result, {
               name: 'polyline'
             }))
+
+            if (props.mode === 1) {
+              (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+            }
           })
         }
       }

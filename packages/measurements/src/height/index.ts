@@ -73,7 +73,7 @@ export default defineComponent({
     }
 
     const handleMouseClick = (movement, options?) => {
-      const { viewer, measurementVm, getWorldPosition } = $services
+      const { viewer, measurementVm, getWorldPosition, selectedMeasurementOption } = $services
 
       if (options.button === 2 && options.ctrl) {
         const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'height')
@@ -129,6 +129,10 @@ export default defineComponent({
             position: position,
             windowPoistion: movement
           })
+
+          if (props.mode === 1) {
+            (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+          }
         })
       } else {
         (measurementVm.proxy as any).editingMeasurementName = undefined

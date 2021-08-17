@@ -177,6 +177,10 @@ export default defineComponent({
           restoreViewerCursor(viewer)
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
+        } else {
+          if (props.mode === 1) {
+            (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+          }
         }
 
         if (selectedMeasurementOption) {

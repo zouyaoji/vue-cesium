@@ -16,5 +16,6 @@ export default {
   decimals: Object,
   showDistanceLabel: Boolean,
   showAngleLabel: Boolean,
-  loop: Boolean
+  loop: Boolean,
+  mode: Number
 }

@@ -13,5 +13,6 @@ export default {
   editorOpts: Object,
   locale: String,
   decimals: Object,
-  showAngleLabel: Boolean
+  showAngleLabel: Boolean,
+  mode: Number
 }

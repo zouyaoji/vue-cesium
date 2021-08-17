@@ -37,7 +37,7 @@ import { camelize } from '@vue-cesium/utils/util'
 import { $ } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/ui'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { MeasurementInstanceOpts } from './measure.types'
 import { t } from '@vue-cesium/locale'
 import { vcKey } from '@vue-cesium/utils/config'
@@ -441,6 +441,7 @@ export default defineComponent({
               h(measurementOptions.cmp, {
                 ref: measurementOptions.measurementRef,
                 editable: props.editable,
+                mode: props.mode,
                 onMeasureEvt: e => {
                   emit('measureEvt', e)
                 },

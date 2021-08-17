@@ -10,5 +10,6 @@ export default {
   polygonOpts: Object,
   editorOpts: Object,
   clampToGround: Boolean,
-  edge: Number
+  edge: Number,
+  mode: Number
 }

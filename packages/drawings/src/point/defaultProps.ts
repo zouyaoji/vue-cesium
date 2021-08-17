@@ -6,5 +6,6 @@ export default {
   editable: Boolean,
   drawtip: Object,
   pointOpts: Object,
-  editorOpts: Object
+  editorOpts: Object,
+  mode: Number
 }

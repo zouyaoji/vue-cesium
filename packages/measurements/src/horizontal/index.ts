@@ -324,6 +324,7 @@ export default defineComponent({
     }
 
     const handleDoubleClick = movement => {
+      const { measurementVm, selectedMeasurementOption } = $services
       if (drawStatus.value === DrawStatus.Drawing) {
         const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : polylines.value.length - 1
         const polyline: HorizontalMeasurementDrawing = polylines.value[index]
@@ -342,6 +343,10 @@ export default defineComponent({
             windowPoistion: movement,
             type: 'new'
           }, polylinesRender.value[index]))
+
+          if (props.mode === 1) {
+            (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+          }
         })
       }
     }

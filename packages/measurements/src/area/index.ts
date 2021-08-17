@@ -190,6 +190,7 @@ export default defineComponent({
     }
 
     const handleDoubleClick = movement => {
+      const { measurementVm, selectedMeasurementOption } = $services
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
@@ -199,6 +200,10 @@ export default defineComponent({
               name: 'area'
             }, polylinesRender.value[result.index]))
           })
+
+          if (props.mode === 1) {
+            (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+          }
         }
       }
     }

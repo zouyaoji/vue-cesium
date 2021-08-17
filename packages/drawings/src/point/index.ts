@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, watch, onUnmounted } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
@@ -143,6 +143,10 @@ export default defineComponent({
           ; (drawingVm.proxy as any).editingDrawingName = undefined
           restoreViewerCursor(viewer)
           canShowDrawTip.value = false
+        } else {
+          if (props.mode === 1) {
+            (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+          }
         }
 
         if (selectedDrawingOption) {
@@ -281,22 +285,24 @@ export default defineComponent({
       const { createGuid } = Cesium
 
       const children = []
+      const pointsRender = []
       points.value.forEach((point, index) => {
-
-        // point
-        children.push(h(VcCollectionPoint, {
-          enableMouseEvent: props.enableMouseEvent,
-          show: point.show,
-          points: [{
+        pointsRender.push(
+          {
+            show: point.show,
             position: point.position,
             id: createGuid(),
             _vcPolylineIndx: index, // for editor
             ...props.pointOpts
-          }],
-          onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
-        }))
+          }
+        )
       })
+      children.push(h(VcCollectionPoint, {
+        enableMouseEvent: props.enableMouseEvent,
+        points: pointsRender,
+        onMouseover: onMouseoverPoints,
+        onMouseout: onMouseoutPoints
+      }))
 
       if (props.drawtip.show && canShowDrawTip.value) {
         const { viewer } = $services

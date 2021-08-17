@@ -15,5 +15,6 @@ export default {
   locale: String,
   decimals: Object,
   showAngleLabel: Boolean,
-  showDashedLine: Boolean
+  showDashedLine: Boolean,
+  mode: Number
 }

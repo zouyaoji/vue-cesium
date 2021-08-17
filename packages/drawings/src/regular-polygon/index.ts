@@ -173,6 +173,10 @@ export default defineComponent({
           restoreViewerCursor(viewer)
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
+        } else {
+          if (props.mode === 1) {
+            (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+          }
         }
 
         if (selectedDrawingOption) {

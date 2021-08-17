@@ -239,7 +239,7 @@ const defaultProps = {
   ...show,
   mode: {
     type: Number,
-    default: 0
+    default: 1
   },
   drawings: {
     type: Array as PropType<Array<string>>,

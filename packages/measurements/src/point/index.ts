@@ -146,6 +146,10 @@ export default defineComponent({
           ; (measurementVm.proxy as any).editingMeasurementName = undefined
           restoreViewerCursor(viewer)
           canShowDrawTip.value = false
+        } else {
+          if (props.mode === 1) {
+            (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+          }
         }
 
         if (selectedMeasurementOption) {

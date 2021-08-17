@@ -190,6 +190,7 @@ ctrl + 右键取消绘制。
 | position | String | `'top-right'` | `optional` 指定量算组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` 指定量算组件基于位置的偏移量。 |
 | show | Boolean | `true` | `optional` 指定绘制的量算结果是否可见。 |
+| mode | Number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
 | measurements | Array | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point']` | `optional` 指定要加载的量算实例。 |
 | activeColor | String | `'positive'` | `optional` 指定量算实例激活时的颜色。 |
 | editable | Boolean | `false` | `optional` 指定量算结果对象是否可编辑。 |

@@ -29,6 +29,7 @@ ctrl + 右键取消绘制。
       :offset="[20, 80]"
       :editable="editable"
       :clampToGround="clampToGround"
+      @drawEvt="drawEvt"
     ></vc-drawings>
     <!-- 结合 slot 改变默认 UI -->
     <vc-drawings
@@ -62,12 +63,14 @@ ctrl + 右键取消绘制。
     <vc-layer-imagery>
       <vc-provider-imagery-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
+    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
     <el-button type="danger" round @click="load">加载</el-button>
     <el-button type="danger" round @click="reload">重载</el-button>
     <el-checkbox v-model="editable">可编辑</el-checkbox>
+    <el-checkbox v-model="addTerrain">地形</el-checkbox>
     <el-checkbox v-model="clampToGround">贴地</el-checkbox>
   </el-row>
 </el-row>
@@ -76,6 +79,7 @@ ctrl + 右键取消绘制。
   export default {
     data() {
       return {
+        addTerrain: false,
         drawingsOpts: [],
         editable: false,
         clampToGround: false,
@@ -109,6 +113,9 @@ ctrl + 右键取消绘制。
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
+      drawEvt (e) {
+        console.log(e)
+      },
       unload() {
         this.$refs.drawingsRef.unload()
       },
@@ -133,6 +140,7 @@ ctrl + 右键取消绘制。
 | position | String | `'top-right'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
 | offset | Array | `[0, 0]` | `optional` 指定绘制组件基于位置的偏移量。 |
 | show | Boolean | `true` | `optional` 指定绘制的结果是否可见。 |
+| mode | Number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
 | drawings | Array | `['point', 'polyline', 'polygon', 'rectangle', 'circle']` | `optional` 指定要加载的绘制实例。 |
 | activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
 | editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |

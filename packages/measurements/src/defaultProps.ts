@@ -442,6 +442,10 @@ const clearActionDefault = Object.assign({}, actionOptions, {
 const defaultProps = {
   ...positionProps,
   ...show,
+  mode: {
+    type: Number,
+    default: 1
+  },
   measurements: {
     type: Array as PropType<Array<string>>,
     default: () => ['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point']

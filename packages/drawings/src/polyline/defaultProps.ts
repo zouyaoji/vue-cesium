@@ -9,5 +9,6 @@ export default {
   polylineOpts: Object,
   editorOpts: Object,
   loop: Boolean,
-  clampToGround: Boolean
+  clampToGround: Boolean,
+  mode: Number
 }
