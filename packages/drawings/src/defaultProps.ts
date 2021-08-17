@@ -210,6 +210,10 @@ const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
   pointOpts: Object.assign({}, pointOptsDefault, {
     show: false
   }),
+  drawtip: {
+    show: true,
+    pixelOffset: [32, 32]
+  },
   editorOpts: {
     pixelOffset: [4, -4],
     move: Object.assign({}, editorOptsDefault),
@@ -233,6 +237,10 @@ const clearActionDefault = Object.assign({}, actionOptions, {
 const defaultProps = {
   ...positionProps,
   ...show,
+  mode: {
+    type: Number,
+    default: 0
+  },
   drawings: {
     type: Array as PropType<Array<string>>,
     default: () => ['point', 'polyline', 'polygon', 'rectangle', 'circle']

@@ -121,13 +121,13 @@ export default {
       polyline: {
         tip: 'Drawing polyline',
         drawTip1: 'Click the left button to draw the first point.',
-        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the drawing.',
         drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
       },
       polygon: {
         tip: 'Drawing polygon',
         drawTip1: 'Click the left button to draw the first point.',
-        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the measurement.',
+        drawTip2: 'Click the left button to draw the next point, and double-click the left button to end the drawing.',
         drawTip3: 'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.',
       },
       rectangle: {
