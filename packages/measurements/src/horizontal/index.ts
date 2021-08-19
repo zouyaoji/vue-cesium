@@ -1,9 +1,9 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, watch, nextTick, toRef } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, computed, nextTick } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { makeMaterial, getGeodesicDistance, restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
+import { makeMaterial, getGeodesicDistance } from '@vue-cesium/utils/cesium-helpers'
 import { HorizontalMeasurementDrawing } from '../measure.types'
 import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
@@ -17,7 +17,7 @@ import { MeasureUnits } from '@vue-cesium/shared'
 export default defineComponent({
   name: 'VcMeasurementHorizontal',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -112,6 +112,7 @@ export default defineComponent({
         result.push({
           ...polyline,
           labels,
+          angles,
           distance,
           distances,
           dashedLines
@@ -165,7 +166,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (measurementVm.proxy as any).editingMeasurementName = undefined
-        restoreViewerCursor(viewer)
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -196,9 +196,19 @@ export default defineComponent({
         drawStatus.value = DrawStatus.AfterDraw
         editingPoint.value = undefined
         drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.horizontal.drawTip1')
-        restoreViewerCursor(viewer)
         ; (measurementVm.proxy as any).editingMeasurementName = undefined
         canShowDrawTip.value = defined(selectedMeasurementOption)
+        nextTick(() => {
+          emit('measureEvt', Object.assign({
+            index: index,
+            polylines: polylines,
+            name: 'horizontal',
+            finished: true,
+            position: polyline.positions[polyline.positions.length - 1],
+            windowPoistion: movement,
+            type: editorType,
+          }, polylinesRender.value[index]), viewer)
+        })
         return
       }
 
@@ -236,8 +246,9 @@ export default defineComponent({
           name: 'horizontal',
           finished: false,
           position: polyline.positions[polyline.positions.length - 1],
-          windowPoistion: movement
-        }, polylinesRender.value[index]))
+          windowPoistion: movement,
+          type: 'new',
+        }, polylinesRender.value[index]), viewer)
       })
     }
 
@@ -295,12 +306,10 @@ export default defineComponent({
         }
 
         let type = 'new'
-        let finished = false
         if (editingPoint.value) {
           const positions = polyline.positions
           positions.splice(editingPoint.value._index, 1, intersectionPosition)
           type = editorType
-          finished = true
           drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.horizontal.drawTip1')
         } else {
           const tempPositions = polyline.tempPositions.slice()
@@ -315,16 +324,16 @@ export default defineComponent({
           index: index,
           polylines: polylines,
           name: 'horizontal',
-          finished,
+          finished: false,
           position: polyline.positions[polyline.positions.length - 1],
           windowPoistion: movement,
           type,
-        }, polylinesRender.value[index]))
+        }, polylinesRender.value[index]), viewer)
       }
     }
 
     const handleDoubleClick = movement => {
-      const { measurementVm, selectedMeasurementOption } = $services
+      const { measurementVm, selectedMeasurementOption, viewer } = $services
       if (drawStatus.value === DrawStatus.Drawing) {
         const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : polylines.value.length - 1
         const polyline: HorizontalMeasurementDrawing = polylines.value[index]
@@ -342,7 +351,7 @@ export default defineComponent({
             position: polyline.positions[polyline.positions.length - 1],
             windowPoistion: movement,
             type: 'new'
-          }, polylinesRender.value[index]))
+          }, polylinesRender.value[index]), viewer)
 
           if (props.mode === 1) {
             (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
@@ -403,16 +412,20 @@ export default defineComponent({
         showEditor.value = true
         canShowDrawTip.value = false
         drawTipPosition.value = [0, 0, 0]
-        setViewerCursor(viewer, 'pointer')
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'horizontal'
+      }, viewer)
     }
 
     const onMouseoutPoints = e => {
-      if (props.editable) {
-        const { viewer, selectedMeasurementOption } = $services
+      const { viewer, selectedMeasurementOption } = $services
 
+      if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
           e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
@@ -421,6 +434,12 @@ export default defineComponent({
 
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'horizontal'
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -441,8 +460,6 @@ export default defineComponent({
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
         ; (measurementVm.proxy as any).editingMeasurementName = 'horizontal'
-        // restoreViewerCursor(viewer)
-        setViewerCursor(viewer, 'move')
       } else if (e === 'insert') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
@@ -451,16 +468,21 @@ export default defineComponent({
         canShowDrawTip.value = true
         drawStatus.value = DrawStatus.Drawing
         drawTip.value = props.drawtip.drawTip3 || t('vc.measurement.horizontal.drawTip3')
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
         polyline.positions.splice(mouseoverPoint.value._index, 1)
       } else if (e === 'removeAll') {
-        restoreViewerCursor(viewer)
         const index = mouseoverPoint.value._vcPolylineIndx
         polylines.value.splice(index, 1)
       }
+
+      emit('editorEvt', {
+        type: e,
+        polylines: polylines,
+        name: 'horizontal',
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const updateLabelPosition = () => {

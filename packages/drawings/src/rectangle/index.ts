@@ -3,7 +3,7 @@ import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-ces
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive, VcPrimitiveGround, VcPrimitiveGroundPolyline } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { makeMaterial, setViewerCursor, restoreViewerCursor } from '@vue-cesium/utils/cesium-helpers'
+import { makeMaterial } from '@vue-cesium/utils/cesium-helpers'
 import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
 import { VcGeometryPolygon, VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/geometries'
@@ -16,7 +16,7 @@ import { PolygonDrawing } from '../drawing.types'
 export default defineComponent({
   name: 'VcDrawingRectangle',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -41,6 +41,7 @@ export default defineComponent({
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePosition = undefined
     const drawName = 'rectangle'
+    let editorType = ''
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
@@ -118,7 +119,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (drawingVm.proxy as any).editingDrawingName = undefined
-        restoreViewerCursor(viewer)
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -132,6 +132,7 @@ export default defineComponent({
       }
 
       const { defined } = Cesium
+      let type = 'new'
       if (drawStatus.value === DrawStatus.BeforeDraw) {
         const scene = viewer.scene
         const position = getWorldPosition(scene, movement, {} as any)
@@ -152,19 +153,19 @@ export default defineComponent({
             name: drawName,
             finished: false,
             position: position,
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       } else {
         polyline.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
-
         if (editingPoint.value) {
           editingPoint.value = undefined
           ; (drawingVm.proxy as any).editingDrawingName = undefined
-          restoreViewerCursor(viewer)
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
+          type = editorType
         } else {
           if (props.mode === 1) {
             (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
@@ -183,8 +184,9 @@ export default defineComponent({
             name: drawName,
             finished: true,
             position: polyline.positions[1],
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       }
     }
@@ -217,6 +219,7 @@ export default defineComponent({
         const endCartographic = Cartographic.fromCartesian(position)
         !props.clampToGround && (endCartographic.height = startCartographic.height)
         positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic)
+        const type = editingPoint.value ? editorType : 'new'
 
         nextTick(() => {
           emit('drawEvt', Object.assign({
@@ -225,8 +228,9 @@ export default defineComponent({
             name: drawName,
             finished: false,
             position: polyline.positions[1],
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       }
     }
@@ -240,16 +244,20 @@ export default defineComponent({
         showEditor.value = true
         canShowDrawTip.value = false
         drawTipPosition.value = [0, 0, 0]
-        setViewerCursor(viewer, 'pointer')
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: drawName
+      }, viewer)
     }
 
     const onMouseoutPoints = e => {
-      if (props.editable) {
-        const { viewer, selectedDrawingOption } = $services
+      const { viewer, selectedDrawingOption } = $services
 
+      if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
           e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
@@ -257,6 +265,12 @@ export default defineComponent({
         }
         selectedDrawingOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: drawName
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -267,6 +281,8 @@ export default defineComponent({
         return
       }
 
+      editorType = e
+
       const { viewer, drawingVm } = $services
       if (e === 'move') {
         drawTip.value = props.drawtip.drawTip3 || t(`vc.drawing.${drawName}.drawTip3`)
@@ -275,17 +291,21 @@ export default defineComponent({
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
         ; (drawingVm.proxy as any).editingDrawingName = drawName
-        // restoreViewerCursor(viewer)
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
         polyline.positions.splice(mouseoverPoint.value._index, 1)
       } else if (e === 'removeAll') {
-        restoreViewerCursor(viewer)
         const index = mouseoverPoint.value._vcPolylineIndx
         polylines.value.splice(index, 1)
       }
+
+      emit('editorEvt', {
+        type: e,
+        polylines: polylines,
+        name: drawName,
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const clear = () => {

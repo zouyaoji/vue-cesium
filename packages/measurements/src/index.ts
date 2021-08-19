@@ -52,12 +52,10 @@ import VcMeasurementHeight from './height'
 import VcMeasurementPoint from './point'
 import VcMeasurementArea from './area'
 
-import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
-
 export default defineComponent({
   name: 'VcMeasurements',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'measureEvt', 'updateFab'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'measureEvt', 'editorEvt', 'mouseEvt', 'fabUpdated'],
   setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -344,12 +342,12 @@ export default defineComponent({
         selectedMeasurementOption.isActive = false
         emit('activeEvt', {
           type: selectedMeasurementOption.name,
-          isActive: false
-        })
+          isActive: false,
+          option: selectedMeasurementOption,
+        }, viewer)
       }
       if (selectedMeasurementOption?.name === measurementOption.name) {
         selectedMeasurementOption = undefined
-        restoreViewerCursor(viewer)
         measurementOption.actionOpts.color = restoreColor.value
       } else {
         selectedMeasurementOption = measurementOption
@@ -358,12 +356,12 @@ export default defineComponent({
         restoreColor.value = selectedMeasurementOption.actionOpts.color
         selectedMeasurementOption.actionOpts.color = props.activeColor
         restoreCursor.value = getComputedStyle(viewer.canvas).cursor
-        setViewerCursor(viewer, 'crosshair')
         selectedMeasurementOption.isActive = true
         emit('activeEvt', {
           type: selectedMeasurementOption.name,
-          isActive: true
-        })
+          isActive: true,
+          option: selectedMeasurementOption,
+        }, viewer)
       }
     }
 
@@ -377,7 +375,7 @@ export default defineComponent({
         }
         deactivate()
       }
-      emit('updateFab', value)
+      emit('fabUpdated', value)
     }
 
 
@@ -413,7 +411,7 @@ export default defineComponent({
     provide(vcKey, getServices())
 
     // expose public methods
-    Object.assign(instance.proxy, { measurementsOptions, selectedMeasurementOption, clearAll, deactivate, activate, toggleAction })
+    Object.assign(instance.proxy, { measurementsOptions, clearAll, deactivate, activate, toggleAction })
 
     return () => {
       if (canRender.value) {
@@ -442,8 +440,14 @@ export default defineComponent({
                 ref: measurementOptions.measurementRef,
                 editable: props.editable,
                 mode: props.mode,
-                onMeasureEvt: e => {
-                  emit('measureEvt', e)
+                onMeasureEvt: (e, viewer) => {
+                  emit('measureEvt', e, viewer)
+                },
+                onEditorEvt: (e, viewer) => {
+                  emit('editorEvt', e, viewer)
+                },
+                onMouseEvt: (e, viewer) => {
+                  emit('mouseEvt', e, viewer)
                 },
                 ...measurementOptions.measurementOpts
               })

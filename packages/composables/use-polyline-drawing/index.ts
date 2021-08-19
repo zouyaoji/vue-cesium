@@ -1,11 +1,9 @@
-
 import { ref } from 'vue'
 import { VcViewerProvider } from '@vue-cesium/utils/types'
 import { DrawStatus } from '@vue-cesium/shared'
-import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { PolylineDrawing } from '@vue-cesium/measurements/src/measure.types'
 
-export default function (props, $services: VcViewerProvider, drawTipOpts) {
+export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
   // state
   const polylines = ref<Array<PolylineDrawing>>([])
   const drawStatus = ref(DrawStatus.BeforeDraw)
@@ -16,6 +14,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
   const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
   const mouseoverPoint = ref(null)
   const editingPoint = ref(null)
+  const { emit } = ctx
   let editorType = ''
   let lastClickPosition: Cesium.Cartesian2 = undefined
   let restorePosition = undefined
@@ -63,7 +62,6 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     const { viewer, getWorldPosition } = $services
 
     if (options.button === 2 && editingPoint.value) {
-      restoreViewerCursor(viewer)
       drawStatus.value = DrawStatus.AfterDraw
       polyline.drawStatus = DrawStatus.AfterDraw
       polyline.positions[editingPoint.value._index] = restorePosition
@@ -108,7 +106,6 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
         finished = true
         type = editorType
         drawTip.value = drawTipOpts.drawTip1
-        restoreViewerCursor(viewer)
       } else {
         tempPositions.push(position)
 
@@ -192,7 +189,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
     }
   }
 
-  const onMouseoverPoints = e => {
+  const onMouseoverPoints = function(e) {
     const { drawingHandlerActive, viewer } = $services
     if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
@@ -200,26 +197,33 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
       editorPosition.value = e.pickedFeature.primitive.position
       showEditor.value = true
       canShowDrawTip.value = false
-      setViewerCursor(viewer, 'pointer')
     }
+
+    emit('mouseEvt', {
+      type: e.type,
+      name: this,
+      target: e
+    }, viewer)
   }
-  const onMouseoutPoints = e => {
+  const onMouseoutPoints = function(e) {
+    const { viewer, selectedMeasurementOption } = $services
+
     if (props.editable) {
-      const { viewer, selectedMeasurementOption } = $services
       e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
       editorPosition.value = [0, 0, 0]
       mouseoverPoint.value = undefined
       showEditor.value = false
-
-      if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-        restoreViewerCursor(viewer)
-      }
-
       selectedMeasurementOption && (canShowDrawTip.value = true)
     }
+
+    emit('mouseEvt', {
+      type: e.type,
+      target: e,
+      name: this
+    }, viewer)
   }
 
-  const onEditorClick = e => {
+  const onEditorClick = function(e) {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
 
@@ -234,7 +238,6 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
       drawStatus.value = DrawStatus.Drawing
       editingPoint.value = mouseoverPoint.value
       canShowDrawTip.value = true
-      setViewerCursor(viewer, 'move')
       restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
     } else if (e === 'insert') {
       const index = mouseoverPoint.value._vcPolylineIndx
@@ -244,17 +247,21 @@ export default function (props, $services: VcViewerProvider, drawTipOpts) {
       canShowDrawTip.value = true
       drawStatus.value = DrawStatus.Drawing
       drawTip.value = drawTipOpts.drawTip3
-      setViewerCursor(viewer, 'move')
     } else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       const polyline = polylines.value[index]
       polyline.positions.length > 2 && polyline.positions.splice(mouseoverPoint.value._index, 1)
-      // restoreViewerCursor(viewer)
     } else if (e === 'removeAll') {
       const index = mouseoverPoint.value._vcPolylineIndx
       polylines.value.splice(index, 1)
-      // restoreViewerCursor(viewer)
     }
+
+    emit('editorEvt', {
+      type: e,
+      polylines: polylines,
+      name: this,
+      index: mouseoverPoint.value._vcPolylineIndx
+    }, viewer)
   }
 
   return {

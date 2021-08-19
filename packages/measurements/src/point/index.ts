@@ -1,8 +1,7 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, watch, onUnmounted } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { PointMeasurement } from '../measure.types'
 import { DrawStatus } from '@vue-cesium/shared'
 import defaultProps from './defaultProps'
@@ -14,7 +13,7 @@ import { MeasureUnits } from '@vue-cesium/shared'
 export default defineComponent({
   name: 'VcMeasurementPoint',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -38,6 +37,8 @@ export default defineComponent({
     const editingPoint = ref(null)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePoint = undefined
+    let editorType = ''
+
     let unwatchFns = []
     // watch
     unwatchFns.push(watch(
@@ -98,7 +99,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (measurementVm.proxy as any).editingMeasurementName = undefined
-        restoreViewerCursor(viewer)
         points.value[index] = restorePoint
         drawStatus.value = DrawStatus.AfterDraw
         points.value[index].drawStatus = DrawStatus.AfterDraw
@@ -112,6 +112,7 @@ export default defineComponent({
       }
 
       const { defined } = Cesium
+      let type = 'new'
 
       if (drawStatus.value === DrawStatus.BeforeDraw) {
         const scene = viewer.scene
@@ -134,8 +135,9 @@ export default defineComponent({
             name: 'point',
             finished: true,
             position: position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       } else {
         drawStatus.value = DrawStatus.AfterDraw
@@ -144,8 +146,8 @@ export default defineComponent({
         if (editingPoint.value) {
           editingPoint.value = undefined
           ; (measurementVm.proxy as any).editingMeasurementName = undefined
-          restoreViewerCursor(viewer)
           canShowDrawTip.value = false
+          type = editorType
         } else {
           if (props.mode === 1) {
             (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
@@ -164,8 +166,9 @@ export default defineComponent({
             name: 'point',
             finished: true,
             position: points.value[index].position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       }
     }
@@ -222,8 +225,9 @@ export default defineComponent({
             name: 'point',
             finished: false,
             position: position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: editingPoint.value ? editorType : 'new'
+          }, viewer)
         })
       }
     }
@@ -319,23 +323,30 @@ export default defineComponent({
         editorPosition.value = e.pickedFeature.primitive.position
         showEditor.value = true
         canShowDrawTip.value = false
-        setViewerCursor(viewer, 'pointer')
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'point'
+      }, viewer)
     }
     const onMouseoutPoints = e => {
+      const { viewer, selectedMeasurementOption } = $services
+
       if (props.editable) {
-        const { viewer, selectedMeasurementOption } = $services
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
         editorPosition.value = [0, 0, 0]
         mouseoverPoint.value = undefined
         showEditor.value = false
-
-        if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
-        }
-
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'point'
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -346,6 +357,8 @@ export default defineComponent({
         return
       }
 
+      editorType = e
+
       const { viewer, measurementVm } = $services
       if (e === 'move') {
         drawTip.value = t('vc.measurement.point.drawTip3')
@@ -354,11 +367,17 @@ export default defineComponent({
         canShowDrawTip.value = true
         restorePoint = Object.assign({}, points.value[editingPoint.value._vcPolylineIndx])
         ; (measurementVm.proxy as any).editingMeasurementName = 'point'
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         points.value.splice(index, 1)
       }
+
+      emit('editorEvt', {
+        type: e,
+        points: points,
+        name: 'point',
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const clear = () => {
@@ -398,37 +417,37 @@ export default defineComponent({
       const { createGuid } = Cesium
 
       const children = []
+      const pointsRender = []
+      const labelsRender = []
+
       points.value.forEach((point, index) => {
-
-        // point
-        children.push(h(VcCollectionPoint, {
-          enableMouseEvent: props.enableMouseEvent,
+        pointsRender.push({
           show: point.show,
-          points: [{
-            position: point.position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts
-          }],
-          onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
-        }))
+          position: point.position,
+          id: createGuid(),
+          _vcPolylineIndx: index, // for editor
+          ...props.pointOpts
+        })
 
-        // label
-        const labels = []
-        labels.push({
+        labelsRender.push({
           position: point.position,
           id: createGuid(),
           text: getLabelText(point),
           ...props.labelOpts
         })
-
-        children.push(h(VcCollectionLabel, {
-          enableMouseEvent: props.enableMouseEvent,
-          show: point.show,
-          labels: labels
-        }))
       })
+
+      children.push(h(VcCollectionPoint, {
+        enableMouseEvent: props.enableMouseEvent,
+        points: pointsRender,
+        onMouseover: onMouseoverPoints,
+        onMouseout: onMouseoutPoints
+      }))
+
+      children.push(h(VcCollectionLabel, {
+        enableMouseEvent: props.enableMouseEvent,
+        labels: labelsRender
+      }))
 
       if (props.drawtip.show && canShowDrawTip.value) {
         const { viewer } = $services

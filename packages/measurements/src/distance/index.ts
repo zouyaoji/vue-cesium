@@ -3,7 +3,7 @@ import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-ces
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { makeMaterial, makeCartesian2, getGeodesicDistance, setViewerCursor, restoreViewerCursor } from '@vue-cesium/utils/cesium-helpers'
+import { makeMaterial, makeCartesian2, getGeodesicDistance } from '@vue-cesium/utils/cesium-helpers'
 import { DistanceMeasurementPolylineSegment, PolylineSegment } from '../measure.types'
 import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
@@ -17,7 +17,7 @@ import { MeasureUnits } from '@vue-cesium/shared'
 export default defineComponent({
   name: 'VcMeasurementDistance',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -41,6 +41,8 @@ export default defineComponent({
     const editingPoint = ref(null)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePosition = undefined
+    let editorType = ''
+
     // computed
     const polylinesRender = computed<Array<DistanceMeasurementPolylineSegment>>(() => {
       const results: Array<DistanceMeasurementPolylineSegment> = []
@@ -131,7 +133,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (measurementVm.proxy as any).editingMeasurementName = undefined
-        restoreViewerCursor(viewer)
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -145,6 +146,7 @@ export default defineComponent({
       }
 
       const { defined } = Cesium
+      let type = 'new'
       if (drawStatus.value === DrawStatus.BeforeDraw) {
         const scene = viewer.scene
         const position = getWorldPosition(scene, movement, {} as any)
@@ -164,8 +166,9 @@ export default defineComponent({
             name: props.showComponentLines ? 'component-distance' : 'distance',
             finished: false,
             position: position,
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       } else {
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -174,9 +177,9 @@ export default defineComponent({
         if (editingPoint.value) {
           editingPoint.value = undefined
           ; (measurementVm.proxy as any).editingMeasurementName = undefined
-          restoreViewerCursor(viewer)
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
+          type = editorType
         } else {
           if (props.mode === 1) {
             (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
@@ -195,8 +198,9 @@ export default defineComponent({
             name: props.showComponentLines ? 'component-distance' : 'distance',
             finished: true,
             position: polyline.positions[1],
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       }
     }
@@ -225,7 +229,7 @@ export default defineComponent({
         const polyline: PolylineSegment = polylines.value[index]
         const positions = polyline.positions
         positions[editingPoint.value ? editingPoint.value._index : 1] = position
-
+        const type = editingPoint.value ? editorType : 'new'
         nextTick(() => {
           emit('measureEvt', Object.assign({
             index: index,
@@ -233,8 +237,9 @@ export default defineComponent({
             name: props.showComponentLines ? 'component-distance' : 'distance',
             finished: false,
             position: polyline.positions[1],
-            windowPoistion: movement
-          }, polylinesRender.value[index]))
+            windowPoistion: movement,
+            type: type
+          }, polylinesRender.value[index]), viewer)
         })
       }
     }
@@ -371,16 +376,19 @@ export default defineComponent({
         showEditor.value = true
         canShowDrawTip.value = false
         drawTipPosition.value = [0, 0, 0]
-        setViewerCursor(viewer, 'pointer')
       }
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: props.showComponentLines ? 'component-distance' : 'distance'
+      }, viewer)
     }
 
     const onMouseoutPoints = e => {
-      if (props.editable) {
-        const { viewer, selectedMeasurementOption } = $services
+      const { viewer, selectedMeasurementOption } = $services
 
+      if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
           e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
@@ -388,6 +396,12 @@ export default defineComponent({
         }
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: props.showComponentLines ? 'component-distance' : 'distance'
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -398,6 +412,8 @@ export default defineComponent({
         return
       }
 
+      editorType = e
+
       const { viewer, measurementVm } = $services
       if (e === 'move') {
         drawTip.value = props.drawtip.drawTip3 || t('vc.measurement.distance.drawTip3')
@@ -406,17 +422,21 @@ export default defineComponent({
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
         ; (measurementVm.proxy as any).editingMeasurementName = props.showComponentLines ? 'component-distance' : 'distance'
-        // restoreViewerCursor(viewer)
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
         polyline.positions.splice(mouseoverPoint.value._index, 1)
       } else if (e === 'removeAll') {
-        restoreViewerCursor(viewer)
         const index = mouseoverPoint.value._vcPolylineIndx
         polylines.value.splice(index, 1)
       }
+
+      emit('editorEvt', {
+        type: e,
+        polylines: polylines,
+        name: props.showComponentLines ? 'component-distance' : 'distance',
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const clear = () => {

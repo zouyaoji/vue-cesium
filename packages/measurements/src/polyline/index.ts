@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, watch, nextTick, toRef } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, toRef } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/primitives'
@@ -18,7 +18,7 @@ import { usePolylineDrawing } from '@vue-cesium/composables'
 export default defineComponent({
   name: 'VcMeasurementPolyline',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -34,7 +34,7 @@ export default defineComponent({
     drawTip.value.drawTip1 = drawTip.value.drawingTip1 || t('vc.measurement.polyline.drawTip1')
     drawTip.value.drawTip2 = drawTip.value.drawingTip2 || t('vc.measurement.polyline.drawTip2')
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.measurement.polyline.drawTip3')
-    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value)
+    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
 
     // computed
@@ -120,7 +120,7 @@ export default defineComponent({
       const { defined } = Cesium
 
       if (defined(result)) {
-        const { measurementVm, selectedMeasurementOption } = $services
+        const { measurementVm, selectedMeasurementOption, viewer } = $services
         if (defined(result.position)) {
           if (result.type !== 'new') {
             (measurementVm.proxy as any).editingMeasurementName = undefined
@@ -129,7 +129,7 @@ export default defineComponent({
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'polyline'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
           })
         } else {
           const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'polyline')
@@ -142,18 +142,19 @@ export default defineComponent({
       const result = polylineDrawingState.handleMouseMove(movement)
       const { defined } = Cesium
       if (defined(result)) {
+        const { viewer } = $services
         if (defined(result.position)) {
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'polyline'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
           })
         }
       }
     }
 
     const handleDoubleClick = movement => {
-      const { measurementVm, selectedMeasurementOption } = $services
+      const { measurementVm, selectedMeasurementOption, viewer } = $services
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
@@ -161,7 +162,7 @@ export default defineComponent({
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'polyline'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
 
             if (props.mode === 1) {
               (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
@@ -188,8 +189,8 @@ export default defineComponent({
       cesiumObject._vcId = 'VcMeasurementPolyline'
     }
 
-    const onEditorClick = e => {
-      polylineDrawingState.onEditorClick(e)
+    const onEditorClick = function(e) {
+      polylineDrawingState.onEditorClick.bind(this)(e)
       const { measurementVm } = $services
         ; (measurementVm.proxy as any).editingMeasurementName = 'polyline'
     }
@@ -281,8 +282,8 @@ export default defineComponent({
               _vcPolylineIndx: index, // for editor
               ...props.pointOpts
             })),
-            onMouseover: polylineDrawingState.onMouseoverPoints,
-            onMouseout: polylineDrawingState.onMouseoutPoints
+            onMouseover: polylineDrawingState.onMouseoverPoints.bind('polyline'),
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline')
           })
         )
 
@@ -326,7 +327,7 @@ export default defineComponent({
                 h(VcBtn, {
                   style: { color: editorOpts[key].color, background: editorOpts[key].background },
                   ...opts,
-                  onclick: onEditorClick.bind(undefined, key)
+                  onclick: onEditorClick.bind('polyline', key)
                 }, () => h(VcTooltip, {
                   ...editorOpts[key].tooltip
                 }, () => h('strong', null, editorOpts[key].tooltip?.tip || t(`vc.measurement.editor.${key}`))))

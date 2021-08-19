@@ -18,7 +18,7 @@ import { usePolylineDrawing } from '@vue-cesium/composables'
 export default defineComponent({
   name: 'VcMeasurementArea',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -34,7 +34,7 @@ export default defineComponent({
     drawTip.value.drawTip1 = drawTip.value.drawingTip1 || t('vc.measurement.area.drawTip1')
     drawTip.value.drawTip2 = drawTip.value.drawingTip2 || t('vc.measurement.area.drawTip2')
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.measurement.area.drawTip3')
-    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value)
+    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
 
     // computed
@@ -157,7 +157,7 @@ export default defineComponent({
       const { defined } = Cesium
 
       if (defined(result)) {
-        const { measurementVm, selectedMeasurementOption } = $services
+        const { measurementVm, selectedMeasurementOption, viewer } = $services
         if (defined(result.position)) {
           if (result.type !== 'new') {
             (measurementVm.proxy as any).editingMeasurementName = undefined
@@ -166,7 +166,7 @@ export default defineComponent({
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'area'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
           })
         } else {
           const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'area')
@@ -179,18 +179,19 @@ export default defineComponent({
       const result = polylineDrawingState.handleMouseMove(movement)
       const { defined } = Cesium
       if (defined(result)) {
+        const { viewer } = $services
         if (defined(result.position)) {
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'area'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
           })
         }
       }
     }
 
     const handleDoubleClick = movement => {
-      const { measurementVm, selectedMeasurementOption } = $services
+      const { measurementVm, selectedMeasurementOption, viewer } = $services
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
@@ -198,7 +199,7 @@ export default defineComponent({
           nextTick(() => {
             emit('measureEvt', Object.assign(result, {
               name: 'area'
-            }, polylinesRender.value[result.index]))
+            }, polylinesRender.value[result.index]), viewer)
           })
 
           if (props.mode === 1) {
@@ -225,8 +226,8 @@ export default defineComponent({
       cesiumObject._vcId = 'VcMeasurementArea'
     }
 
-    const onEditorClick = e => {
-      polylineDrawingState.onEditorClick(e)
+    const onEditorClick = function(e) {
+      polylineDrawingState.onEditorClick.bind(this)(e)
       const { measurementVm } = $services
         ; (measurementVm.proxy as any).editingMeasurementName = 'area'
     }
@@ -295,8 +296,8 @@ export default defineComponent({
               _vcPolylineIndx: index, // for editor
               ...props.pointOpts
             })),
-            onMouseover: polylineDrawingState.onMouseoverPoints,
-            onMouseout: polylineDrawingState.onMouseoutPoints
+            onMouseover: polylineDrawingState.onMouseoverPoints.bind('area'),
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('area')
           })
         )
         const positions = polyline.positions.slice()
@@ -393,7 +394,7 @@ export default defineComponent({
                 h(VcBtn, {
                   style: { color: editorOpts[key].color, background: editorOpts[key].background },
                   ...opts,
-                  onclick: onEditorClick.bind(undefined, key)
+                  onClick: onEditorClick.bind('area', key)
                 }, () => h(VcTooltip, {
                   ...editorOpts[key].tooltip
                 }, () => h('strong', null, editorOpts[key].tooltip?.tip || t(`vc.measurement.editor.${key}`))))

@@ -1,10 +1,10 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, nextTick } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/primitives'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { makeMaterial, restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
-import { PolylineSegment, HeightMeasurementPolylineSegment } from '../measure.types'
+import { makeMaterial } from '@vue-cesium/utils/cesium-helpers'
+import { HeightMeasurementPolylineSegment } from '../measure.types'
 import { DrawStatus } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/geometry-instance'
 import { VcGeometryPolyline } from '@vue-cesium/geometries'
@@ -17,7 +17,7 @@ import { MeasureUnits } from '@vue-cesium/shared'
 export default defineComponent({
   name: 'VcMeasurementHeight',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'mouseEvt', 'editorEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -41,6 +41,7 @@ export default defineComponent({
     const editingPoint = ref(null)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePosition = undefined
+    let editorType = ''
 
     // methods
     instance.createCesiumObject = async () => {
@@ -90,7 +91,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (measurementVm.proxy as any).editingMeasurementName = undefined
-        restoreViewerCursor(viewer)
         makePositions(polyline, restorePosition)
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -104,7 +104,7 @@ export default defineComponent({
       }
 
       const { defined } = Cesium
-
+      const type = 'new'
       if (drawStatus.value === DrawStatus.BeforeDraw) {
         const scene = viewer.scene
         const position = getWorldPosition(scene, movement, {} as any)
@@ -127,8 +127,9 @@ export default defineComponent({
             name: 'height',
             finished: true,
             position: position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
 
           if (props.mode === 1) {
             (measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
@@ -139,7 +140,7 @@ export default defineComponent({
         polyline.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
         drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.height.drawTip1')
-
+        const type = editingPoint.value ? editorType : 'new'
         nextTick(() => {
           emit('measureEvt', {
             index: index,
@@ -147,8 +148,9 @@ export default defineComponent({
             name: 'height',
             finished: true,
             position: polylines.value[index].positions[0],
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       }
     }
@@ -175,7 +177,7 @@ export default defineComponent({
       const index = editingPoint.value._vcPolylineIndx
       const polyline: HeightMeasurementPolylineSegment = polylines.value[index]
       makePositions(polyline, position)
-
+      const type = editingPoint.value ? editorType : 'new'
       nextTick(() => {
         emit('measureEvt', {
           index: index,
@@ -183,8 +185,9 @@ export default defineComponent({
           name: 'height',
           finished: false,
           position: position,
-          windowPoistion: movement
-        })
+          windowPoistion: movement,
+          type: type
+        }, viewer)
       })
     }
 
@@ -211,23 +214,30 @@ export default defineComponent({
         editorPosition.value = e.pickedFeature.primitive.position
         showEditor.value = true
         canShowDrawTip.value = false
-        setViewerCursor(viewer, 'pointer')
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'height'
+      }, viewer)
     }
     const onMouseoutPoints = e => {
+      const { viewer, selectedMeasurementOption } = $services
+
       if (props.editable) {
-        const { viewer, selectedMeasurementOption } = $services
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
         editorPosition.value = [0, 0, 0]
         mouseoverPoint.value = undefined
         showEditor.value = false
-
-        if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
-        }
-
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        target: e,
+        name: 'height'
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -238,6 +248,8 @@ export default defineComponent({
         return
       }
 
+      editorType = e
+
       const { viewer, measurementVm } = $services
       if (e === 'move') {
         drawTip.value = t('vc.measurement.height.drawTip3')
@@ -246,17 +258,21 @@ export default defineComponent({
         canShowDrawTip.value = true
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         ; (measurementVm.proxy as any).editingMeasurementName = 'height'
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
         polyline.positions.splice(mouseoverPoint.value._index, 1)
-        // restoreViewerCursor(viewer)
       } else if (e === 'removeAll') {
         const index = mouseoverPoint.value._vcPolylineIndx
         polylines.value.splice(index, 1)
-        // restoreViewerCursor(viewer)
       }
+
+      emit('editorEvt', {
+        type: e,
+        polylines: polylines,
+        name: 'height',
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const clear = () => {

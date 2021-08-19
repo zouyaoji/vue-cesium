@@ -16,7 +16,7 @@ import { DrawStatus } from '@vue-cesium/shared'
 export default defineComponent({
   name: 'VcDrawingPolyline',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -32,7 +32,7 @@ export default defineComponent({
     drawTip.value.drawTip1 = drawTip.value.drawingTip1 || t('vc.drawing.polyline.drawTip1')
     drawTip.value.drawTip2 = drawTip.value.drawingTip2 || t('vc.drawing.polyline.drawTip2')
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.drawing.polyline.drawTip3')
-    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value)
+    const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
 
     // methods
@@ -45,7 +45,7 @@ export default defineComponent({
       const { defined } = Cesium
 
       if (defined(result)) {
-        const { drawingVm, selectedDrawingOption } = $services
+        const { drawingVm, selectedDrawingOption, viewer } = $services
         if (defined(result.position)) {
           if (result.type !== 'new') {
             (drawingVm.proxy as any).editingDrawingName = undefined
@@ -54,7 +54,7 @@ export default defineComponent({
           nextTick(() => {
             emit('drawEvt', Object.assign(result, {
               name: 'polyline'
-            }))
+            }), viewer)
           })
         } else {
           const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === 'polyline')
@@ -67,18 +67,19 @@ export default defineComponent({
       const result = polylineDrawingState.handleMouseMove(movement)
       const { defined } = Cesium
       if (defined(result)) {
+        const { viewer } = $services
         if (defined(result.position)) {
           nextTick(() => {
             emit('drawEvt', Object.assign(result, {
               name: 'polyline'
-            }))
+            }), viewer)
           })
         }
       }
     }
 
     const handleDoubleClick = movement => {
-      const { drawingVm, selectedDrawingOption } = $services
+      const { drawingVm, selectedDrawingOption, viewer } = $services
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
@@ -86,7 +87,7 @@ export default defineComponent({
           nextTick(() => {
             emit('drawEvt', Object.assign(result, {
               name: 'polyline'
-            }))
+            }), viewer)
 
             if (props.mode === 1) {
               (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
@@ -170,8 +171,8 @@ export default defineComponent({
               ...props.pointOpts,
               show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
-            onMouseover: polylineDrawingState.onMouseoverPoints,
-            onMouseout: polylineDrawingState.onMouseoutPoints
+            onMouseover: polylineDrawingState.onMouseoverPoints.bind('polyline'),
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline')
           })
         )
       })
@@ -206,7 +207,7 @@ export default defineComponent({
                 h(VcBtn, {
                   style: { color: editorOpts[key].color, background: editorOpts[key].background },
                   ...opts,
-                  onclick: onEditorClick.bind(undefined, key)
+                  onclick: onEditorClick.bind('polyline', key)
                 }, () => h(VcTooltip, {
                   ...editorOpts[key].tooltip
                 }, () => h('strong', null, editorOpts[key].tooltip?.tip || t(`vc.drawing.editor.${key}`))))

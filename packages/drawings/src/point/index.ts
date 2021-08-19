@@ -2,7 +2,6 @@ import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmount
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/primitive-collections'
-import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
 import { DrawStatus } from '@vue-cesium/shared'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/overlays'
@@ -13,7 +12,7 @@ import { PointDrawing } from '../drawing.types'
 export default defineComponent({
   name: 'VcDrawingPoint',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -38,6 +37,7 @@ export default defineComponent({
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePoint = undefined
     let unwatchFns = []
+    let editorType = ''
     // watch
     unwatchFns.push(watch(
       () => props.editable,
@@ -95,7 +95,6 @@ export default defineComponent({
 
       if (options.button === 2 && editingPoint.value) {
         (drawingVm.proxy as any).editingDrawingName = undefined
-        restoreViewerCursor(viewer)
         points.value[index] = restorePoint
         drawStatus.value = DrawStatus.AfterDraw
         points.value[index].drawStatus = DrawStatus.AfterDraw
@@ -109,7 +108,7 @@ export default defineComponent({
       }
 
       const { defined } = Cesium
-
+      let type = 'new'
       if (drawStatus.value === DrawStatus.BeforeDraw) {
         const scene = viewer.scene
         const position = getWorldPosition(scene, movement, {} as any)
@@ -131,8 +130,9 @@ export default defineComponent({
             name: 'point',
             finished: true,
             position: position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       } else {
         drawStatus.value = DrawStatus.AfterDraw
@@ -141,8 +141,8 @@ export default defineComponent({
         if (editingPoint.value) {
           editingPoint.value = undefined
           ; (drawingVm.proxy as any).editingDrawingName = undefined
-          restoreViewerCursor(viewer)
           canShowDrawTip.value = false
+          type = editorType
         } else {
           if (props.mode === 1) {
             (drawingVm.proxy as any).toggleAction(selectedDrawingOption)
@@ -161,8 +161,9 @@ export default defineComponent({
             name: 'point',
             finished: true,
             position: points.value[index].position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       }
     }
@@ -195,6 +196,7 @@ export default defineComponent({
 
         const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : points.value.length - 1
         const point: PointDrawing = points.value[index]
+        const type = editingPoint.value ? editorType : 'new'
 
         point.position = position
         point.show = true
@@ -206,8 +208,9 @@ export default defineComponent({
             name: 'point',
             finished: false,
             position: position,
-            windowPoistion: movement
-          })
+            windowPoistion: movement,
+            type: type
+          }, viewer)
         })
       }
     }
@@ -220,23 +223,29 @@ export default defineComponent({
         editorPosition.value = e.pickedFeature.primitive.position
         showEditor.value = true
         canShowDrawTip.value = false
-        setViewerCursor(viewer, 'pointer')
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        name: 'point',
+        target: e
+      }, viewer)
     }
     const onMouseoutPoints = e => {
+      const { viewer, selectedDrawingOption } = $services
       if (props.editable) {
-        const { viewer, selectedDrawingOption } = $services
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
         editorPosition.value = [0, 0, 0]
         mouseoverPoint.value = undefined
         showEditor.value = false
-
-        if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          restoreViewerCursor(viewer)
-        }
-
         selectedDrawingOption && (canShowDrawTip.value = true)
       }
+
+      emit('mouseEvt', {
+        type: e.type,
+        name: 'point',
+        target: e
+      }, viewer)
     }
 
     const onEditorClick = e => {
@@ -246,7 +255,7 @@ export default defineComponent({
       if (!props.editable) {
         return
       }
-
+      editorType = e
       const { viewer, drawingVm } = $services
       if (e === 'move') {
         drawTip.value = t('vc.drawing.point.drawTip3')
@@ -255,11 +264,17 @@ export default defineComponent({
         canShowDrawTip.value = true
         restorePoint = Object.assign({}, points.value[editingPoint.value._vcPolylineIndx])
         ; (drawingVm.proxy as any).editingDrawingName = 'point'
-        setViewerCursor(viewer, 'move')
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         points.value.splice(index, 1)
       }
+
+      emit('editorEvt', {
+        type: e,
+        name: 'point',
+        points: points,
+        index: mouseoverPoint.value._vcPolylineIndx
+      }, viewer)
     }
 
     const clear = () => {

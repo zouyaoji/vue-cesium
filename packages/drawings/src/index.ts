@@ -1,4 +1,3 @@
-
 import {
   defineComponent,
   getCurrentInstance,
@@ -28,11 +27,11 @@ import {
   circleDrawingDefault
 } from './defaultProps'
 import { useCommon, useHandler } from '@vue-cesium/composables'
-import { camelize } from '@vue-cesium/utils/util'
+import { camelize, isString } from '@vue-cesium/utils/util'
 import { $ } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/ui'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { DrawingInstanceOpts } from './drawing.types'
 import { t } from '@vue-cesium/locale'
 import { vcKey } from '@vue-cesium/utils/config'
@@ -45,12 +44,10 @@ import VcDrawingPolygon from './polygon'
 import VcDrawingRegularPolygon from './regular-polygon'
 import VcDrawingRectangle from './rectangle'
 
-import { restoreViewerCursor, setViewerCursor } from '@vue-cesium/utils/cesium-helpers'
-
 export default defineComponent({
   name: 'VcDrawings',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'drawEvt', 'updateFab'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'editorEvt', 'drawEvt', 'mouseEvt', 'fabUpdated'],
   setup (props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -293,9 +290,14 @@ export default defineComponent({
     }
 
     const restoreColor = ref(null)
-    const restoreCursor = ref(null)
-    const toggleAction = (drawingOption: DrawingInstanceOpts) => {
+    const toggleAction = (drawingOption: DrawingInstanceOpts | string) => {
       const { viewer } = $services
+      if (isString(drawingOption)) {
+        drawingOption = drawingsOptions.find(v => v.name === drawingOption)
+      }
+      if (!drawingOption) {
+        commonState.logger.error('Invalid drawingOption or drawingOption name')
+      }
       if (selectedDrawingOption !== void 0) {
         selectedDrawingOption.actionOpts.color = restoreColor.value
         const drawingCmp: any = (selectedDrawingOption.drawingRef.value || selectedDrawingOption.drawingRef)
@@ -303,12 +305,12 @@ export default defineComponent({
         selectedDrawingOption.isActive = false
         emit('activeEvt', {
           type: selectedDrawingOption.name,
+          option: selectedDrawingOption,
           isActive: false
-        })
+        }, viewer)
       }
       if (selectedDrawingOption?.name === drawingOption.name) {
         selectedDrawingOption = undefined
-        restoreViewerCursor(viewer)
         drawingOption.actionOpts.color = restoreColor.value
       } else {
         selectedDrawingOption = drawingOption
@@ -316,13 +318,12 @@ export default defineComponent({
         drawingCmp.startNew()
         restoreColor.value = selectedDrawingOption.actionOpts.color
         selectedDrawingOption.actionOpts.color = props.activeColor
-        restoreCursor.value = getComputedStyle(viewer.canvas).cursor
-        setViewerCursor(viewer, 'crosshair')
         selectedDrawingOption.isActive = true
         emit('activeEvt', {
           type: selectedDrawingOption.name,
+          option: selectedDrawingOption,
           isActive: true
-        })
+        }, viewer)
       }
     }
 
@@ -336,7 +337,7 @@ export default defineComponent({
         }
         deactivate()
       }
-      emit('updateFab', value)
+      emit('fabUpdated', value)
     }
 
 
@@ -372,7 +373,7 @@ export default defineComponent({
     provide(vcKey, getServices())
 
     // expose public methods
-    Object.assign(instance.proxy, { drawingsOptions, selectedDrawingOption, clearAll, deactivate, activate, toggleAction })
+    Object.assign(instance.proxy, { drawingsOptions, clearAll, deactivate, activate, toggleAction })
 
     return () => {
       if (canRender.value) {
@@ -402,8 +403,14 @@ export default defineComponent({
                 editable: props.editable,
                 clampToGround: props.clampToGround,
                 mode: props.mode,
-                onDrawEvt: e => {
-                  emit('drawEvt', e)
+                onDrawEvt: (e, viewer) => {
+                  emit('drawEvt', e, viewer)
+                },
+                onEditorEvt: (e, viewer) => {
+                  emit('editorEvt', e, viewer)
+                },
+                onMouseEvt: (e, viewer) => {
+                  emit('mouseEvt', e, viewer)
                 },
                 ...drawingOptions.drawingOpts
               })
