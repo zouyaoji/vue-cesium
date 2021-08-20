@@ -24,7 +24,17 @@ ctrl + 右键取消绘制。
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- 修改定位 和 位置偏移 -->
-    <vc-measurements ref="measurementsRef" position="bottom-left" :mainFabOpts="measurementFabOptions1" :offset="[20, 80]" :editable="editable">
+    <vc-measurements
+      @measureEvt="measureEvt"
+      @activeEvt="activeEvt"
+      @editorEvt="editorEvt"
+      @mouseEvt="mouseEvt"
+      ref="measurementsRef"
+      position="bottom-left"
+      :mainFabOpts="measurementFabOptions1"
+      :offset="[20, 80]"
+      :editable="editable"
+    >
     </vc-measurements>
     <!-- 修改加载的量算实例 -->
     <vc-measurements
@@ -165,6 +175,54 @@ ctrl + 右键取消绘制。
         // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
+        this.restoreCursorMove = 'auto'
+        this.drawing = false
+      },
+      measureEvt(e, viewer) {
+        console.log(e)
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (e.finished) {
+          this.drawing = false
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove}`)
+          }
+        } else {
+          this.drawing = true
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', 'cursor: move')
+          }
+          if (e.type === 'new') {
+            viewer.canvas.setAttribute('style', 'cursor: crosshair')
+          }
+        }
+      },
+      activeEvt(e, viewer) {
+        console.log(e)
+        viewer.canvas.setAttribute('style', `cursor: ${e.isActive ? 'crosshair' : 'auto'}`)
+        if (!e.isActive) {
+          this.drawing = false
+          this.restoreCursorMove = 'auto'
+        }
+      },
+      editorEvt(e, viewer) {
+        console.log(e)
+        if (e.type === 'move') {
+          const restoreCursor = getComputedStyle(viewer.canvas).cursor
+          viewer.canvas.setAttribute('style', 'cursor: move')
+          this.drawing = true
+        }
+      },
+      mouseEvt(e, viewer) {
+        console.log(e)
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (!this.drawing) {
+          if (e.type === 'onmouseover') {
+            this.restoreCursorMove = restoreCursor
+            viewer.canvas.setAttribute('style', 'cursor: pointer')
+          } else {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove || 'auto'}`)
+          }
+        }
       },
       unload() {
         this.$refs.measurementsRef.unload()
@@ -1565,12 +1623,15 @@ ctrl + 右键取消绘制。
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
-| measureEvt |                                    | 量算时触发。         |
+| 事件名     | 参数                               | 描述                         |
+| ---------- | ---------------------------------- | ---------------------------- |
+| beforeLoad | Vue Instance                       | 对象加载前触发。             |
+| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。         |
+| destroyed  | Vue Instance                       | 对象销毁时触发。             |
+| measureEvt | (measureParam, viewer)             | 量算时触发。                 |
+| activeEvt  | (activeParam, viewer)              | 切换量算 Action 时触发。     |
+| editorEvt  | (editParam, viewer)                | 点击编辑按钮时触发。         |
+| mouseEvt   | (mouseParam, viewer)               | 鼠标移进、移除绘制点时触发。 |
 
 ### 插槽
 

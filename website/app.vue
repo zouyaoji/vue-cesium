@@ -89,9 +89,7 @@ export default defineComponent({
 
     return h('div', {
       id: 'app',
-      class: {
-        'is-component': this.isComponent,
-      },
+      class: [this.isComponent ? 'is-component' : '', this.lang],
     }, [mainHeader, contentWrapper])
   },
 })

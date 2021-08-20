@@ -17,7 +17,7 @@
     <vc-entity
       ref="entity"
       :billboard="billboard"
-      :position="{lng: 108, lat: 32}"
+      :position="position"
       :point="point"
       :label="label"
       @click="onEntityEvt"
@@ -50,12 +50,14 @@
         billboard: {
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
           scale: 0.5
-        }
+        },
+        position: {lng: 108, lat: 32}
       }
     },
     methods: {
       onEntityEvt(e) {
         console.log(e)
+        window.vm = this
         if (e.type === 'onmouseover') {
           this.billboard = {
             image: 'https://zouyaoji.top/vue-cesium/favicon.png',

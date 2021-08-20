@@ -553,12 +553,15 @@ See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/dra
 
 ### Events
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
-| drawEvt    |                                    | Triggered when drawing.                                |
+| Name       | Parameters                         | Description                                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------------------------------- |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.                               |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.                    |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.                              |
+| drawEvt    | (drawParam, viewer)                | Triggered when drawing.                                                   |
+| activeEvt  | (activeParam, viewer)              | Triggered when the drawing action is switched.                            |
+| editorEvt  | (editParam, viewer)                | Triggered when the edit button is clicked.                                |
+| mouseEvt   | (mouseParam, viewer)               | Triggered when the mouse is mouse over or mouse out on the drawing point. |
 
 ### Slots
 

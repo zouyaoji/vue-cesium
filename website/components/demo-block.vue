@@ -213,6 +213,77 @@ ${this.codepen.style}
         'ipt>'
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
       let cssTpl = `@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium@next/lib/theme-default/index.css");\n${(style || '').trim()}\n`
+      cssTpl += `
+        .demo-viewer .el-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-viewer .el-row {
+            border-radius: 100px;
+            align-items: baseline;
+        }
+
+        .demo-viewer .demo-toolbar {
+            position: absolute;
+            left: 1%;
+            top: 1%;
+            min-width: 185px;
+            z-index: 100;
+            color: #fff;
+            background-color: rgba(0,0,0,.2);
+        }
+
+        .demo-vc-viewer .el-switch:first-child {
+            margin-left: 20px;
+        }
+
+        .demo-vc-viewer .el-switch {
+            margin: 20px 20px 20px 0;
+        }
+
+        .demo-vc-datasource-custom {
+          .el-switch__label.is-active {
+            color: #409eff;
+          }
+        }
+
+        .block {
+          padding: 30px 24px;
+          overflow: hidden;
+          border-bottom: solid 1px #eff2f6;
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
+        .el-row {
+            border-radius: 100px;
+            align-items: baseline;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+          .el-button {
+            margin: 10px 10px 10px 0;
+
+            &:first-child {
+              margin-left: 20px;
+            }
+          }
+
+          .el-switch {
+            margin: 20px 20px 20px 0;
+
+            &:first-child {
+              margin-left: 20px;
+            }
+          }
+
+          .el-switch__label {
+            color: white;
+          }
+        `
       let jsTpl = script
         ? script
           .replace(/export default/, 'var Main =')

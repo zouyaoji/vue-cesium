@@ -1,5 +1,28 @@
 ## Changelog
 
+### 3.0.1-beta.11
+*2021-08-12*
+
+#### New feature
+
+- Do some compatibility processing for the 1.83+ version of `terrainExaggeration`.
+- The datasource component adds a `destroy` attribute to indicate whether the datasource is destroyed when it is removed.
+
+#### Bug fixes
+
+- The unified calculation involving the use of `Ellipsoid.WGS84` is changed to the calculation using `scene.globe.ellipsoid` to avoid problems caused by Ellipsoid not WGS84 in some cases, such as the development of a lunar platform.
+- The `vc-viewer` component supports `skyBox` and `skyAtmosphere` types, adding Boolean.
+
+#### Optimization
+
+- Adding `editorEvt` and `mouseEvt` events to measuring and drawing components, remove the default and modify the mouse cursor style during drawing.
+
+### 3.0.1-beta.10
+*2021-07-13*
+#### New feature
+
+- Draw a rectangle to add a rectangle that is true south and true north.
+
 ### 3.0.1-beta.9
 *2021-07-07*
 

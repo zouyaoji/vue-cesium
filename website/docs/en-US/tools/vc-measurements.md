@@ -1562,12 +1562,15 @@ Tip: Each measurement button (FabAction) corresponds to the measurement paramete
 
 ### Events
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
-| measureEvt |                                    | Triggered when measuring.                              |
+| Name       | Parameters                         | Description                                                               |
+| ---------- | ---------------------------------- | ------------------------------------------------------------------------- |
+| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.                               |
+| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.                    |
+| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.                              |
+| measureEvt | (measureParam, viewer)             | Triggered when measuring.                                                 |
+| activeEvt  | (activeParam, viewer)              | Triggered when the measurement action is switched.                        |
+| editorEvt  | (editParam, viewer)                | Triggered when the edit button is clicked.                                |
+| mouseEvt   | (mouseParam, viewer)               | Triggered when the mouse is mouse over or mouse out on the drawing point. |
 
 ### Slots
 

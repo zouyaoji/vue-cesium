@@ -30,8 +30,11 @@ ctrl + 右键取消绘制。
       :editable="editable"
       :clampToGround="clampToGround"
       @drawEvt="drawEvt"
+      @activeEvt="activeEvt"
+      @editorEvt="editorEvt"
+      @mouseEvt="mouseEvt"
     ></vc-drawings>
-    <!-- 结合 slot 改变默认 UI -->
+    <!-- 结合 slot 改变默认 UI，自定义绘制方法 -->
     <vc-drawings
       ref="drawingsRef4"
       position="bottom-left"
@@ -76,6 +79,7 @@ ctrl + 右键取消绘制。
 </el-row>
 
 <script>
+  let viewer = undefined
   export default {
     data() {
       return {
@@ -102,7 +106,7 @@ ctrl + 右键取消绘制。
         this.drawingsOpts = cesiumObject
       },
       toggle(drawingOpts) {
-        this.$refs.drawingsRef4.toggleAction(drawingOpts)
+        this.$refs.drawingsRef4.toggleAction(drawingOpts.name)
       },
       onTilesetReady(tileset, viewer) {
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
@@ -112,9 +116,53 @@ ctrl + 右键取消绘制。
         tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
+        this.restoreCursorMove = 'auto'
+        this.drawing = false
       },
-      drawEvt (e) {
+      drawEvt(e, viewer) {
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        console.log(e, this.restoreCursorMove)
+        if (e.finished) {
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove}`)
+          }
+          this.drawing = false
+        } else {
+          this.drawing = true
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', 'cursor: move')
+          }
+          if (e.type === 'new') {
+            viewer.canvas.setAttribute('style', 'cursor: crosshair')
+          }
+        }
+      },
+      activeEvt(e, viewer) {
         console.log(e)
+        viewer.canvas.setAttribute('style', `cursor: ${e.isActive ? 'crosshair' : 'auto'}`)
+        if (!e.isActive) {
+          this.drawing = false
+          this.restoreCursorMove = 'auto'
+        }
+      },
+      editorEvt(e, viewer) {
+        if (e.type === 'move') {
+          const restoreCursor = getComputedStyle(viewer.canvas).cursor
+          viewer.canvas.setAttribute('style', 'cursor: move')
+          this.drawing = true
+        }
+      },
+      mouseEvt(e, viewer) {
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (!this.drawing) {
+          console.log(e)
+          if (e.type === 'onmouseover') {
+            this.restoreCursorMove = restoreCursor
+            viewer.canvas.setAttribute('style', 'cursor: pointer')
+          } else {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove || 'auto'}`)
+          }
+        }
       },
       unload() {
         this.$refs.drawingsRef.unload()
@@ -557,12 +605,15 @@ ctrl + 右键取消绘制。
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
-| drawEvt    |                                    | 绘制时触发。         |
+| 事件名     | 参数                               | 描述                         |
+| ---------- | ---------------------------------- | ---------------------------- |
+| beforeLoad | Vue Instance                       | 对象加载前触发。             |
+| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。         |
+| destroyed  | Vue Instance                       | 对象销毁时触发。             |
+| drawEvt    | (drawParam, viewer)                | 绘制时触发。                 |
+| activeEvt  | (activeParam, viewer)              | 切换绘制 Action 时触发。     |
+| editorEvt  | (editParam, viewer)                | 点击编辑按钮时触发。         |
+| mouseEvt   | (mouseParam, viewer)               | 鼠标移进、移除绘制点时触发。 |
 
 ### 插槽
 

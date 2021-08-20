@@ -1,6 +1,6 @@
 ## VcProviderImageryUrltemplate
 
-通过一个约定的 URL 模板来请求加载影像图层，相当于初始化一个 `Cesium.UrlTemplateImageryProvider` 实例。比如加载的高德，腾讯等影像瓦片服务，URL 都是一个固定的规范，都可以通过该组件轻松实现。
+通过一个约定的 URL 模板来请求加载影像图层，相当于初始化一个 `Cesium.UrlTemplateImageryProvider` 实例。比如加载的高德，腾讯等影像瓦片服务，URL 都是一个固定的规范，都可以通过该组件轻松实现。并且支持对高德等火星坐标系底图 `纠偏`。
 
 **注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
@@ -125,7 +125,7 @@
 | getFeatureInfoFormats | Array           |         | `optional` 格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
 | enablePickFeatures    | Boolean         | `true`  | `optional` 是否开启图层拾取。                                                                |
 | customTags            | Object          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
-| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定投影变换参数。                                                                |
+| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定纠偏参数。                                                                |
 
 ### 事件
 

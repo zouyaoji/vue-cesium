@@ -20,6 +20,10 @@ body{
 #app {
   height: 100%;
 
+  &.en-US {
+    font-family: Consolas, "Liberation Mono", Menlo, "Courier New", Courier, Monaco, monospace;
+  }
+
   &.is-component {
     overflow-y: hidden;
 
