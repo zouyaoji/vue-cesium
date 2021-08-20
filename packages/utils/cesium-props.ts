@@ -36,7 +36,7 @@ const position = {
     type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3,
-      // deep: true
+      deep: true
     }
   }
 }
