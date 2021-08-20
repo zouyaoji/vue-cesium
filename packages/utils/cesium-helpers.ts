@@ -78,15 +78,19 @@ export function makeCartesian3 (
     | CartographicInDegreeOption
     | Array<number>
     | AnyFunction,
+  ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
 ): Cesium.Cartesian3 | Cesium.CallbackProperty | Cesium.SampledPositionProperty |
   Cesium.CompositePositionProperty | Cesium.ConstantPositionProperty | Cesium.TimeIntervalCollectionPositionProperty {
-  const { CallbackProperty, Cartesian3, SampledPositionProperty, CompositePositionProperty, ConstantPositionProperty, TimeIntervalCollectionPositionProperty } = Cesium
+  const { CallbackProperty, Cartesian3, Ellipsoid, SampledPositionProperty,
+    CompositePositionProperty, ConstantPositionProperty, TimeIntervalCollectionPositionProperty } = Cesium
 
   if (val instanceof Cartesian3 || val instanceof CallbackProperty || val instanceof SampledPositionProperty ||
     val instanceof CompositePositionProperty || val instanceof ConstantPositionProperty || val instanceof TimeIntervalCollectionPositionProperty) {
     return val
   }
+
+  ellipsoid = ellipsoid || Ellipsoid.WGS84
 
   if (isPlainObject(val)) {
     if (hasOwn(val, 'x') && hasOwn(val, 'y') && hasOwn(val, 'z')) {
@@ -94,12 +98,12 @@ export function makeCartesian3 (
       return new Cartesian3(value.x, value.y, value.z)
     } else if (hasOwn(val, 'lng') && hasOwn(val, 'lat')) {
       const value = val as CartographicInDegreeOption
-      return Cartesian3.fromDegrees(value.lng, value.lat, value.height || 0)
+      return Cartesian3.fromDegrees(value.lng, value.lat, value.height || 0, ellipsoid)
     }
   }
   // 经纬度数组
   if (isArray(val)) {
-    return Cartesian3.fromDegrees(val[0], val[1], val[2] || 0)
+    return Cartesian3.fromDegrees(val[0], val[1], val[2] || 0, ellipsoid)
   }
 
   if (isFunction(val)) {
@@ -123,9 +127,10 @@ export function makeCartesian3Array (
     | Array<number>
     | Array<Array<number>>
     | AnyFunction,
+  ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
 ): Array<Cesium.Cartesian3> | Cesium.CallbackProperty {
-  const { CallbackProperty, Cartesian3 } = Cesium
+  const { CallbackProperty, Cartesian3, Ellipsoid } = Cesium
 
   if (vals instanceof CallbackProperty) {
     return vals
@@ -135,16 +140,18 @@ export function makeCartesian3Array (
     return new CallbackProperty(vals, isConstant)
   }
 
+  ellipsoid = ellipsoid || Ellipsoid.WGS84
+
   if (isArray(vals)) {
     if (isArray(vals[0]) || isPlainObject(vals[0])) {
       const results = []
       vals.forEach(val => {
-        results.push(makeCartesian3(val))
+        results.push(makeCartesian3(val, ellipsoid))
       })
       return results
     }
 
-    return Cartesian3.fromDegreesArrayHeights(vals as Array<number>)
+    return Cartesian3.fromDegreesArrayHeights(vals as Array<number>, ellipsoid)
   }
 
   return undefined
@@ -224,11 +231,11 @@ export function makeQuaternion (
  * 解析 HierarchyJson
  * @param {Object} val
  */
-function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>) {
+function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>, ellipsoid?: Cesium.Ellipsoid) {
   val.forEach(item => {
-    item.positions = makeCartesian3Array(item.positions) as Array<Cesium.Cartesian3>
+    item.positions = makeCartesian3Array(item.positions, ellipsoid) as Array<Cesium.Cartesian3>
     if (item.holes) {
-      parsePolygonHierarchyJson(item.holes)
+      parsePolygonHierarchyJson(item.holes, ellipsoid)
     }
   })
 }
@@ -246,6 +253,7 @@ export function makePolygonHierarchy (
     | Array<Cartesian3Option>
     | Array<Array<number>>
     | AnyFunction,
+  ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
 ): Cesium.CallbackProperty | Cesium.PolygonHierarchy | PolygonHierarchyOption {
   const { PolygonHierarchy, CallbackProperty } = Cesium
@@ -259,14 +267,14 @@ export function makePolygonHierarchy (
   }
 
   if (isArray(val) && val.length >= 3) {
-    const points = makeCartesian3Array(val) as Array<Cesium.Cartesian3>
+    const points = makeCartesian3Array(val, ellipsoid) as Array<Cesium.Cartesian3>
     return new PolygonHierarchy(points)
   }
 
   if (isPlainObject(val) && hasOwn(val, 'positions')) {
     const value = val as PolygonHierarchyOption
-    value.positions = makeCartesian3Array(value.positions) as Array<Cesium.Cartesian3>
-    parsePolygonHierarchyJson(value.holes)
+    value.positions = makeCartesian3Array(value.positions, ellipsoid) as Array<Cesium.Cartesian3>
+    parsePolygonHierarchyJson(value.holes, ellipsoid)
     return value
   }
 
@@ -667,6 +675,7 @@ export function makePlane (
 
   if (isPlainObject(val) && hasOwn(val, 'normal')) {
     const value = val as PlaneOption
+    // normal 法向量 需要写成 {x: number, y: number, z: number} 形式
     Cartesian3.normalize(makeCartesian3(value.normal) as Cesium.Cartesian3, value.normal as Cesium.Cartesian3)
     return new Plane(value.normal as Cesium.Cartesian3, value.distance)
   }
@@ -699,6 +708,8 @@ export function makeTranslationRotationScale (
 
   if (isPlainObject(val) && hasOwn(val, 'translation')) {
     const value = val as TranslationRotationScaleOption
+    // note
+    // translation scale需要写成 { x: number, y: number, z: number } 的形式
     return new TranslationRotationScale(
       makeCartesian3(value.translation) as Cesium.Cartesian3,
       makeQuaternion(value.rotation) as Cesium.Quaternion,
@@ -754,7 +765,7 @@ export function captureScreenshot (viewer: Cesium.Viewer) {
   return promise
 }
 
-export function makeCameraOptions (camera: CameraOption) {
+export function makeCameraOptions (camera: CameraOption, ellipsoid?: Cesium.Ellipsoid) {
   const { Math: CesiumMath, Rectangle } = Cesium
 
   let destination: Cesium.Cartesian3 | Cesium.Rectangle = undefined
@@ -762,7 +773,7 @@ export function makeCameraOptions (camera: CameraOption) {
 
   if (hasOwn(camera, 'position')) {
     const position = camera.position
-    destination = makeCartesian3(position) as Cesium.Cartesian3
+    destination = makeCartesian3(position, ellipsoid) as Cesium.Cartesian3
     if ((hasOwn(position, 'lng') && hasOwn(position, 'lat')) || isArray(position)) {
       orientation = {
         heading: CesiumMath.toRadians(camera.heading || 360),
@@ -802,7 +813,7 @@ export function makeCameraOptions (camera: CameraOption) {
 }
 
 export function setViewerCamera (viewer: Cesium.Viewer, camera: CameraOption) {
-  const { destination, orientation } = makeCameraOptions(camera)
+  const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.setView({
     destination: destination,
     orientation: orientation
@@ -810,7 +821,7 @@ export function setViewerCamera (viewer: Cesium.Viewer, camera: CameraOption) {
 }
 
 export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, options?) {
-  const { destination, orientation } = makeCameraOptions(camera)
+  const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.flyTo({
     destination: options.destination || destination,
     orientation: options.orientation || orientation,
@@ -858,7 +869,8 @@ export function getHeadingPitchRoll (start: Cesium.Cartesian3, end: Cesium.Carte
 }
 
 export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: number, distance: number, ellipsoid: Cesium.Ellipsoid) {
-  const { HeadingPitchRoll, Transforms, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic } = Cesium
+  const { HeadingPitchRoll, Transforms, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic, Ellipsoid } = Cesium
+  ellipsoid = ellipsoid || Ellipsoid.WGS84
   const hpr = new HeadingPitchRoll(heading, 0, 0)
   const scale = new Cartesian3(1, 1, 1)
   const matrix = Transforms.headingPitchRollToFixedFrame(start, hpr)
@@ -867,10 +879,10 @@ export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: n
   const quaternion = Quaternion.fromAxisAngle(axis, distance * ellipsoid.oneOverRadii.x)
   const hprMatrix = Matrix4.fromTranslationQuaternionRotationScale(Cartesian3.ZERO, quaternion, scale)
   const position = Matrix4.multiplyByPoint(hprMatrix, start, new Cartesian3())
-  const startCartographic = Cartographic.fromCartesian(start)
-  const positionCartographic = Cartographic.fromCartesian(position)
+  const startCartographic = Cartographic.fromCartesian(start, ellipsoid)
+  const positionCartographic = Cartographic.fromCartesian(position, ellipsoid)
   positionCartographic.height = startCartographic.height
-  return Cartographic.toCartesian(positionCartographic)
+  return Cartographic.toCartesian(positionCartographic, ellipsoid)
 }
 
 const restoreCursors = []

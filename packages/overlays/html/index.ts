@@ -42,7 +42,7 @@ export default defineComponent({
     unwatchFns.push(watch(
       () => props.position,
       val => {
-        position.value = makeCartesian3(val) as Cesium.Cartesian3
+        position.value = makeCartesian3(val, $services.viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
       }
     ))
 
@@ -62,7 +62,7 @@ export default defineComponent({
       canRender.value = true
       showPortal()
       offset.value = makeCartesian2(props.pixelOffset) as Cesium.Cartesian2
-      position.value = makeCartesian3(props.position) as Cesium.Cartesian3
+      position.value = makeCartesian3(props.position, viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
       viewer.scene.preRender.addEventListener(onPreRender)
       return true
     }

@@ -51,6 +51,7 @@ export default defineComponent({
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
       const { defined, Cartographic } = Cesium
+      const { viewer } = $services
       polylines.value.forEach((polylineSegment, index) => {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
@@ -58,14 +59,14 @@ export default defineComponent({
         const hpr = getHeadingPitchRoll(startPosition, endPosition, $services.viewer.scene)
         if (defined(hpr)) {
           const positions = []
-          const startCartographic = Cartographic.fromCartesian(startPosition)
-          const endCartographic = Cartographic.fromCartesian(endPosition)
+          const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
+          const endCartographic = Cartographic.fromCartesian(endPosition, viewer.scene.globe.ellipsoid)
 
           !props.clampToGround && (endCartographic.height = startCartographic.height)
-          positions.push(Cartographic.toCartesian(endCartographic))
-          const distance = getGeodesicDistance(startPosition, endPosition, $services.viewer.scene.globe.ellipsoid)
+          positions.push(Cartographic.toCartesian(endCartographic), viewer.scene.globe.ellipsoid)
+          const distance = getGeodesicDistance(startPosition, endPosition, viewer.scene.globe.ellipsoid)
           for (let i = 0; i < props.edge - 1; i++) {
-            const position = getPolylineSegmentEndpoint(startPosition, hpr[0] += Math.PI * 2 / props.edge, distance, $services.viewer.scene.globe.ellipsoid)
+            const position = getPolylineSegmentEndpoint(startPosition, hpr[0] += Math.PI * 2 / props.edge, distance, viewer.scene.globe.ellipsoid)
             positions.push(position)
           }
 
@@ -224,10 +225,10 @@ export default defineComponent({
         const polyline: PolygonDrawing = polylines.value[index]
         const positions = polyline.positions
         const startPosition = positions[0]
-        const startCartographic = Cartographic.fromCartesian(startPosition)
-        const endCartographic = Cartographic.fromCartesian(position)
+        const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
+        const endCartographic = Cartographic.fromCartesian(position, viewer.scene.globe.ellipsoid)
         !props.clampToGround && (endCartographic.height = startCartographic.height)
-        positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic)
+        positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid)
         const type = editingPoint.value ? editorType : 'new'
         nextTick(() => {
           emit('drawEvt', Object.assign({

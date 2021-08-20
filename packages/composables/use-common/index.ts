@@ -202,7 +202,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
                 // Attributes are writable and directly respond to changes in attributes.
                 // 属性可写，直接动态响应属性的改变。
                 if (watcherOptions && watcherOptions.cesiumObjectBuilder) {
-                  const newVal = watcherOptions.cesiumObjectBuilder.call(vcInstance, val)
+                  const newVal = watcherOptions.cesiumObjectBuilder.call(vcInstance, val, vcInstance.viewer.scene.globe.ellipsoid)
                   // If an exclude condition has been defined for the object, such as "_callback", Cesium will automatically handle it internally and no longer need to be assigned.
                   // 如果对象已经定义了 exclude 条件，如已经定义了“_callback”，Cesium 内部会自动处理的 不用再赋值了。
                   if (!(Cesium.defined(cesiumObject[cesiumProp]) && Cesium.defined(cesiumObject[cesiumProp]._callback))) {
@@ -273,7 +273,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const cmpName = vcInstance.proxy.$options.name
       const propOption = vcInstance.proxy.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
       return (propOption?.watcherOptions) && !isEmptyObj(value)
-        ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value)
+        ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
         : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity')
           ? new Cesium.CallbackProperty(value, false)
           : value

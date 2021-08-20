@@ -45,22 +45,23 @@ export default defineComponent({
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
-      const { Cartographic, Rectangle } = Cesium
+      const { Cartographic, Rectangle, Cartesian3 } = Cesium
+      const { viewer } = $services
       polylines.value.forEach(polylineSegment => {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
-        if (Cesium.Cartesian3.equals(startPosition, endPosition)) {
+        if (Cartesian3.equals(startPosition, endPosition)) {
           return
         }
-        const startCartographic = Cartographic.fromCartesian(startPosition)
-        const endCartographic = Cartographic.fromCartesian(endPosition)
+        const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
+        const endCartographic = Cartographic.fromCartesian(endPosition, viewer.scene.globe.ellipsoid)
         const height = startCartographic.height
         !props.clampToGround && (endCartographic.height = height)
 
-        const rectangle = Rectangle.fromCartesianArray(polylineSegment.positions)
+        const rectangle = Rectangle.fromCartesianArray(polylineSegment.positions, viewer.scene.globe.ellipsoid)
         const arr = [rectangle.west, rectangle.north, height, rectangle.east, rectangle.north, height, rectangle.east,
           rectangle.south, height, rectangle.west, rectangle.south, height, rectangle.west, rectangle.north, height]
-        const positions = Cesium.Cartesian3.fromRadiansArrayHeights(arr)
+        const positions = Cartesian3.fromRadiansArrayHeights(arr, viewer.scene.globe.ellipsoid)
 
         const polyline: PolygonDrawing = {
           ...polylineSegment,
@@ -215,10 +216,10 @@ export default defineComponent({
         const polyline: PolygonDrawing = polylines.value[index]
         const positions = polyline.positions
         const startPosition = positions[0]
-        const startCartographic = Cartographic.fromCartesian(startPosition)
-        const endCartographic = Cartographic.fromCartesian(position)
+        const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
+        const endCartographic = Cartographic.fromCartesian(position, viewer.scene.globe.ellipsoid)
         !props.clampToGround && (endCartographic.height = startCartographic.height)
-        positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic)
+        positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid)
         const type = editingPoint.value ? editorType : 'new'
 
         nextTick(() => {

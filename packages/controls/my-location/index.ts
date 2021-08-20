@@ -5,7 +5,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
-import { makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { makeColor, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { isArray, isFunction } from '@vue-cesium/utils/util'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
@@ -195,7 +195,7 @@ export default defineComponent({
               result
             )
           } else {
-            handleLocationError(t('vc.navigation.myLocation.fail'))
+            handleLocationError(t('vc.navigation.myLocation.fail'), result.message)
           }
         })
       } else if (props.geolocation) {
@@ -225,12 +225,12 @@ export default defineComponent({
       const longitude = position.lng
       const latitude = position.lat
       const address = position.address
-      const { Cartesian3, Rectangle, sampleTerrain, defined, SceneMode } = Cesium
+      const { Rectangle, sampleTerrain, defined, SceneMode } = Cesium
       const { viewer } = $services
       datasource.entities.removeAll()
       const myPositionEntity = datasource.entities.add({
         id: props.id,
-        position: Cartesian3.fromDegrees(longitude, latitude),
+        position: makeCartesian3([longitude, latitude], viewer.scene.globe.ellipsoid) as Cesium.Cartesian3,
         point: {
           color: makeColor(props.pointColor),
           pixelSize: props.pixelSize,
@@ -358,9 +358,9 @@ export default defineComponent({
       return html
     }
 
-    const handleLocationError = err => {
+    const handleLocationError = (...args) => {
       positioning.value = false
-      commonState.logger.error(err.message)
+      commonState.logger.error(...args)
     }
 
     const getLoadingCmp = () => {

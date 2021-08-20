@@ -328,7 +328,7 @@ const scratchStartCart: any = {}
 const scratchEndCart: any = {}
 
 function createUpdate3D(
-  scene,
+  scene: Cesium.Scene,
   duration,
   destination,
   heading,
@@ -406,7 +406,8 @@ function createUpdate3D(
       const position = Cartesian3.fromRadians(
         CesiumMath.lerp(startLongitude, destLongitude, time),
         CesiumMath.lerp(startLatitude, destLatitude, time),
-        heightFunction(time)
+        heightFunction(time),
+        scene.globe.ellipsoid
       )
 
       camera.setView({
