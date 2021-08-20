@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/measurements",
-  "version": "3.0.1-beta.8",
+  "version": "3.0.1-beta.11",
   "main": "dist/index.js",
   "license": "MIT",
   "peerDependencies": {
