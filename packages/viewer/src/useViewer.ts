@@ -809,8 +809,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       logger.capsule('VueCesium', `v${$vc.version}`)
       logger.success('VueCesium  https://github.com/zouyaoji/vue-cesium')
       logger.success('Document  https://zouyaoji.top/vue-cesium')
-      logger.success(`Please don't be stingy with your star, thank you ~`)
-      logger.success(`请不要吝啬您的 star，谢谢 ~ `)
+      logger.success(`If you like it, give it a star reward, ^_^`)
+      logger.success(`表示赞，给它一个星星奖励，^_^`)
     }
 
     const listenerReady = getInstanceListener(vcInstance, 'ready')
