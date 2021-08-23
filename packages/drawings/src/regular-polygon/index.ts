@@ -63,7 +63,7 @@ export default defineComponent({
           const endCartographic = Cartographic.fromCartesian(endPosition, viewer.scene.globe.ellipsoid)
 
           !props.clampToGround && (endCartographic.height = startCartographic.height)
-          positions.push(Cartographic.toCartesian(endCartographic), viewer.scene.globe.ellipsoid)
+          positions.push(Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid))
           const distance = getGeodesicDistance(startPosition, endPosition, viewer.scene.globe.ellipsoid)
           for (let i = 0; i < props.edge - 1; i++) {
             const position = getPolylineSegmentEndpoint(startPosition, hpr[0] += Math.PI * 2 / props.edge, distance, viewer.scene.globe.ellipsoid)
