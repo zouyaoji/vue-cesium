@@ -1,7 +1,14 @@
 ## Changelog
 
 ### 3.0.1-beta.11
-*2021-08-12*
+*2021-08-23*
+
+#### Bug fixes
+
+- `vc-drawings` Fix the crash when drawing circles and rectangles.
+
+### 3.0.1-beta.11
+*2021-08-20*
 
 #### New feature
 
