@@ -33,6 +33,7 @@ module.exports = {
   // u can change this option to a more specific folder for test single component or util when dev
   // for example, ['<rootDir>/packages/input']
   roots: ['<rootDir>'],
+  modulePathIgnorePatterns: ['<rootDir>/packages/vue-cesium'],
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'lcov', 'text'],

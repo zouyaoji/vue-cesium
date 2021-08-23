@@ -832,7 +832,8 @@ export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, option
 }
 
 export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Cartesian3, ellipsoid: Cesium.Ellipsoid) {
-  const { EllipsoidGeodesic } = Cesium
+  const { EllipsoidGeodesic, Ellipsoid } = Cesium
+  ellipsoid = ellipsoid || Ellipsoid.WGS84
   const pickedPointCartographic = ellipsoid.cartesianToCartographic(start)
   const lastPointCartographic = ellipsoid.cartesianToCartographic(end)
   const geodesic = new EllipsoidGeodesic(pickedPointCartographic, lastPointCartographic)
