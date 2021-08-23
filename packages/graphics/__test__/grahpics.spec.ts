@@ -353,7 +353,8 @@ const pathApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPath
+    VcGraphicsPath,
+    VcGraphicsPoint
   },
   template: `
     <div class="test-viewer">
@@ -603,14 +604,13 @@ const polylineVolumeApp = {
       <vc-viewer>
         <vc-entity>
           <vc-graphics-polyline-volume
-            ref="graphics"
             :positions="[-90,32,0,-90,36,100000,-94,36,0]"
             :shape="[{ x: -50000, y: -50000 }, { x: 50000, y: -50000 }, { x: -50000, y: 50000 }, { x: -50000, y: 50000 }]"
             :material="[0,255,0,125]"
             :outline="true"
             outlineColor="black"
             :cornerType="2"
-            ref="polylineVolume2"
+            ref="graphics"
           ></vc-graphics-polyline-volume>
         </vc-entity>
       </vc-viewer>
