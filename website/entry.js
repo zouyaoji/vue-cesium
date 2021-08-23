@@ -36,19 +36,17 @@ app.component('FooterNav', FooterNav)
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes
 })
 app.use(ElementPlus)
 app.use(VueCesium, {
-  // cesiumPath: './CesiumUnminified/Cesium.js',
-  cesiumPath: './Cesium/Cesium.js',
+  cesiumPath: process.env.NODE_ENV === 'development' ? './CesiumUnminified/Cesium.js' : './Cesium/Cesium.js',
   // cesiumPath: 'https://unpkg.com/cesium@latest/Build/Cesium/Cesium.js',
   accessToken:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })
 app.use(router)
 router.isReady().then(() => {
-
   router.afterEach(async route => {
     await nextTick()
     const data = title[route.meta.lang]
@@ -61,7 +59,6 @@ router.isReady().then(() => {
     document.title = 'Element'
     ga('send', 'event', 'PageView', route.name)
   })
-
 })
 
 app.mount('#app')
