@@ -48,10 +48,10 @@ export default {
       expand: 'Expand',
       collapse: 'Collapse',
       editor: {
-        move: 'Move the measurement point',
-        insert: 'Insert the measurement point',
-        remove: 'Remove the measurement point',
-        removeAll: 'Remove all the measurement point'
+        move: 'Move the point',
+        insert: 'Insert a point',
+        remove: 'Remove the point',
+        removeAll: 'Remove all the points'
       },
       distance: {
         tip: 'Distance',
@@ -112,6 +112,12 @@ export default {
     drawing: {
       expand: 'Expand',
       collapse: 'Collapse',
+      editor: {
+        move: 'Move the point',
+        insert: 'Insert a point',
+        remove: 'Remove the point',
+        removeAll: 'Remove all the points'
+      },
       point: {
         tip: 'Drawing point',
         drawTip1: 'Click the left button to draw a point.',

@@ -490,6 +490,7 @@ export default defineComponent({
         canShowDrawTip.value = true
         drawStatus.value = DrawStatus.Drawing
         drawTip.value = props.drawtip.drawTip3 || t('vc.measurement.horizontal.drawTip3')
+        ; (measurementVm.proxy as any).editingMeasurementName = 'horizontal'
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]

@@ -114,10 +114,13 @@ export default defineComponent({
       cesiumObject._vcId = 'VcDrawingPolyline'
     }
 
-    const onEditorClick = e => {
-      polylineDrawingState.onEditorClick(e)
-      const { drawingVm } = $services
+    const onEditorClick = function(e) {
+      polylineDrawingState.onEditorClick.bind(this)(e)
+
+      if (e === 'move' || e === 'insert') {
+        const { drawingVm } = $services
         ; (drawingVm.proxy as any).editingDrawingName = 'polyline'
+      }
     }
 
     // expose public methods

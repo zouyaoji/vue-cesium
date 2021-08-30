@@ -133,7 +133,7 @@ export default {
       polygon: {
         tip: '绘制面',
         drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '点击左键绘制下一个点，单击左键结束绘制。',
+        drawTip2: '单击左键绘制下一个点，双击左键结束绘制。',
         drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
       },
       rectangle: {

@@ -228,8 +228,11 @@ export default defineComponent({
 
     const onEditorClick = function(e) {
       polylineDrawingState.onEditorClick.bind(this)(e)
-      const { measurementVm } = $services
+
+      if (e === 'move' || e === 'insert') {
+        const { measurementVm } = $services
         ; (measurementVm.proxy as any).editingMeasurementName = 'area'
+      }
     }
 
     const updateLabelPosition = () => {
