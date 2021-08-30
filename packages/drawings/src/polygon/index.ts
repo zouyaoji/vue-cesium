@@ -126,7 +126,7 @@ export default defineComponent({
     Object.assign(instance.proxy, publicMethods)
 
     return () => {
-      const { PolylineMaterialAppearance, EllipsoidSurfaceAppearance, createGuid } = Cesium
+      const { PolylineMaterialAppearance, MaterialAppearance, createGuid } = Cesium
 
       const polylineOpts: any = {
         ...props.polylineOpts,
@@ -180,18 +180,26 @@ export default defineComponent({
             h(props.clampToGround ? VcPrimitiveGround : VcPrimitive, {
               show: polyline.show && props.polygonOpts.show,
               enableMouseEvent: props.enableMouseEvent,
-              appearance: new EllipsoidSurfaceAppearance({
+              appearance: new MaterialAppearance({
                 material: makeMaterial.call(instance, props.polygonOpts.material) as Cesium.Material,
+                faceForward: true,
                 renderState: {
                   cull: {
+                    enabled: false
+                  },
+                  depthTest: {
                     enabled: false
                   }
                 }
               }),
-              depthFailAppearance: new EllipsoidSurfaceAppearance({
+              depthFailAppearance: new MaterialAppearance({
                 material: makeMaterial.call(instance, props.polygonOpts.depthFailMaterial) as Cesium.Material,
+                faceForward: true,
                 renderState: {
                   cull: {
+                    enabled: false
+                  },
+                  depthTest: {
                     enabled: false
                   }
                 }
@@ -227,7 +235,7 @@ export default defineComponent({
         if (polylineDrawingState.mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {
-            if (!Array.isArray(editorOpts[key])) {
+            if (!Array.isArray(editorOpts[key]) && typeof editorOpts[key] !== 'number') {
               const opts = {
                 ...editorOpts[key]
               }
@@ -252,7 +260,9 @@ export default defineComponent({
           pixelOffset: props.editorOpts?.pixelOffset,
           teleport: {
             to: viewer.container
-          }
+          },
+          onMouseenter: polylineDrawingState.onMouseenterEditor,
+          onMouseleave: polylineDrawingState.onMouseleaveEditor
         }, () => h('div', {
           class: 'vc-editor'
         }, buttons)))

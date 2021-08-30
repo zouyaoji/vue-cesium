@@ -13,6 +13,7 @@ import { VcOverlayHtml } from '@vue-cesium/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
+import useTimeout from '@vue-cesium/composables/private/use-timeout'
 
 export default defineComponent({
   name: 'VcMeasurementHeight',
@@ -42,6 +43,7 @@ export default defineComponent({
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
     let restorePosition = undefined
     let editorType = ''
+    const { registerTimeout, removeTimeout } = useTimeout()
 
     // methods
     instance.createCesiumObject = async () => {
@@ -210,10 +212,14 @@ export default defineComponent({
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
-        mouseoverPoint.value = e.pickedFeature.primitive
-        editorPosition.value = e.pickedFeature.primitive.position
-        showEditor.value = true
-        canShowDrawTip.value = false
+        removeTimeout()
+        registerTimeout(() => {
+          mouseoverPoint.value = e.pickedFeature.primitive
+          editorPosition.value = e.pickedFeature.primitive.position
+          showEditor.value = true
+          canShowDrawTip.value = false
+          drawTipPosition.value = [0, 0, 0]
+        }, props.editorOpts.delay)
       }
 
       emit('mouseEvt', {
@@ -227,9 +233,12 @@ export default defineComponent({
 
       if (props.editable) {
         e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
-        editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value = undefined
-        showEditor.value = false
+        removeTimeout()
+        registerTimeout(() => {
+          editorPosition.value = [0, 0, 0]
+          mouseoverPoint.value = undefined
+          showEditor.value = false
+        }, props.editorOpts.hideDelay)
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
 
@@ -238,6 +247,19 @@ export default defineComponent({
         target: e,
         name: 'height'
       }, viewer)
+    }
+    const onMouseenterEditor = evt => {
+      removeTimeout()
+    }
+
+    const onMouseleaveEditor = evt => {
+      removeTimeout()
+      registerTimeout(() => {
+        editorPosition.value = [0, 0, 0]
+        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value = undefined
+        showEditor.value = false
+      }, props.editorOpts.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -367,7 +389,7 @@ export default defineComponent({
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {
-            if (!Array.isArray(editorOpts[key])) {
+            if (!Array.isArray(editorOpts[key]) && typeof editorOpts[key] !== 'number') {
               const opts = {
                 ...editorOpts[key]
               }
@@ -392,7 +414,9 @@ export default defineComponent({
           pixelOffset: props.editorOpts?.pixelOffset,
           teleport: {
             to: viewer.container
-          }
+          },
+          onMouseenter: onMouseenterEditor,
+          onMouseleave: onMouseleaveEditor
         }, () => h('div', {
           class: 'vc-editor'
         }, buttons)))

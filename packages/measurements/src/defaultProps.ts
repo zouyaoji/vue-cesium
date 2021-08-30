@@ -123,7 +123,9 @@ const distanceMeasurementDefault = {
     pixelOffset: [10, 10]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete',
@@ -199,7 +201,9 @@ const polylineMeasurementDefault = {
     pixelOffset: [5, 5]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     insert: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-insert',
@@ -259,7 +263,9 @@ const horizontalMeasurementDefault = {
     pixelOffset: [5, 5]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     insert: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-insert',
@@ -295,7 +301,9 @@ const verticalMeasurementDefault = {
     pixelOffset: [10, 10]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete',
@@ -322,7 +330,9 @@ const heightMeasurementDefault = {
     pixelOffset: [10, 10]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete',
@@ -381,7 +391,9 @@ const areaMeasurementDefault = {
     pixelOffset: [5, 5]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     insert: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-insert',
@@ -418,7 +430,9 @@ const pointMeasurementDefault = {
     pixelOffset: [10, 0]
   }),
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     remove: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-remove',

@@ -19,7 +19,7 @@ export default defineComponent({
     customClass: String,
     teleport: Object as PropType<TeleportProps>
   },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'mouseenter', 'mouseleave', 'click'],
   setup (props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -111,12 +111,28 @@ export default defineComponent({
         return h('div', {
           ref: rootRef,
           class: `vc-html-container${props.customClass ? ' ' + props.customClass : ''}`,
-          style: rootStyle
+          style: rootStyle,
+          onMouseenter: onMouseenter,
+          onMouseleave: onMouseleave,
+          onClick: onClick
         }, hSlot(ctx.slots.default))
       } else {
         return createCommentVNode('v-if')
       }
     }
+
+    const onClick = evt => {
+      ctx.emit('click', evt)
+    }
+
+    const onMouseenter = evt => {
+      ctx.emit('mouseenter', evt)
+    }
+
+    const onMouseleave = evt => {
+      ctx.emit('mouseleave', evt)
+    }
+
     const renderPortalContent = () => {
       return renderContent()
     }

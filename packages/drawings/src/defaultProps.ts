@@ -140,7 +140,9 @@ const pointDrawingDefault = {
   },
   pointOpts: pointOptsDefault,
   editorOpts: {
-    pixelOffset: [4, -4],
+    delay: 1000,
+    hideDelay: 1000,
+    pixelOffset: [16, -8],
     move: Object.assign({}, editorOptsDefault),
     remove: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-remove',
@@ -157,7 +159,9 @@ const polylineDrawingDefault = {
   pointOpts: pointOptsDefault,
   polylineOpts: polylineOptsDefault,
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     insert: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-insert',
@@ -191,7 +195,9 @@ const polygonDrawingDefault = {
   }),
   polygonOpts: polygonOptsDefault,
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     insert: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-insert',
@@ -215,7 +221,9 @@ const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
     pixelOffset: [32, 32]
   },
   editorOpts: {
-    pixelOffset: [4, -4],
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
     move: Object.assign({}, editorOptsDefault),
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete',

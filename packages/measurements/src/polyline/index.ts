@@ -317,7 +317,7 @@ export default defineComponent({
         if (polylineDrawingState.mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {
-            if (!Array.isArray(editorOpts[key])) {
+            if (!Array.isArray(editorOpts[key]) && typeof editorOpts[key] !== 'number') {
               const opts = {
                 ...editorOpts[key]
               }
@@ -342,7 +342,9 @@ export default defineComponent({
           pixelOffset: props.editorOpts?.pixelOffset,
           teleport: {
             to: viewer.container
-          }
+          },
+          onMouseenter: polylineDrawingState.onMouseenterEditor,
+          onMouseleave: polylineDrawingState.onMouseleaveEditor
         }, () => h('div', {
           class: 'vc-editor'
         }, buttons)))
