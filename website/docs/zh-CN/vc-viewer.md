@@ -21,6 +21,7 @@
     :fullscreenElement="fullscreenElement"
     :infoBox="infoBox"
     :showCredit="showCredit"
+    @cesiumReady="onCesiumReady"
     @ready="onViewerReady"
     @leftClick="onLeftClick"
   >
@@ -95,6 +96,9 @@
     methods: {
       onViewerReady({ Cesium, viewer }) {
         this.loading = false
+      },
+      onCesiumReady (e) {
+        console.log(e)
       },
       onNavigationEvt(e) {
         console.log(e)

@@ -109,6 +109,8 @@ ctrl + 右键取消绘制。
         this.$refs.drawingsRef4.toggleAction(drawingOpts.name)
       },
       onTilesetReady(tileset, viewer) {
+        window.vm = this
+        window.viewer = viewer
         const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
         const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
         const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
@@ -121,7 +123,6 @@ ctrl + 右键取消绘制。
       },
       drawEvt(e, viewer) {
         const restoreCursor = getComputedStyle(viewer.canvas).cursor
-        console.log(e, this.restoreCursorMove)
         if (e.finished) {
           if (e.type === 'move') {
             viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove}`)
@@ -147,9 +148,10 @@ ctrl + 右键取消绘制。
       },
       editorEvt(e, viewer) {
         if (e.type === 'move') {
-          const restoreCursor = getComputedStyle(viewer.canvas).cursor
           viewer.canvas.setAttribute('style', 'cursor: move')
           this.drawing = true
+        } else {
+          viewer.canvas.setAttribute('style', 'cursor: auto')
         }
       },
       mouseEvt(e, viewer) {

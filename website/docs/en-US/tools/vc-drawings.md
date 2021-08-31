@@ -31,6 +31,10 @@ Basic usage of drawing components.
       :offset="[20, 80]"
       :editable="editable"
       :clampToGround="clampToGround"
+      @drawEvt="drawEvt"
+      @activeEvt="activeEvt"
+      @editorEvt="editorEvt"
+      @mouseEvt="mouseEvt"
     ></vc-drawings>
     <!-- Customize UI through slot -->
     <vc-drawings
@@ -110,6 +114,51 @@ Basic usage of drawing components.
         tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
+      },
+      drawEvt(e, viewer) {
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (e.finished) {
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove}`)
+          }
+          this.drawing = false
+        } else {
+          this.drawing = true
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', 'cursor: move')
+          }
+          if (e.type === 'new') {
+            viewer.canvas.setAttribute('style', 'cursor: crosshair')
+          }
+        }
+      },
+      activeEvt(e, viewer) {
+        console.log(e)
+        viewer.canvas.setAttribute('style', `cursor: ${e.isActive ? 'crosshair' : 'auto'}`)
+        if (!e.isActive) {
+          this.drawing = false
+          this.restoreCursorMove = 'auto'
+        }
+      },
+      editorEvt(e, viewer) {
+        if (e.type === 'move') {
+          viewer.canvas.setAttribute('style', 'cursor: move')
+          this.drawing = true
+        } else {
+          viewer.canvas.setAttribute('style', 'cursor: auto')
+        }
+      },
+      mouseEvt(e, viewer) {
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (!this.drawing) {
+          console.log(e)
+          if (e.type === 'onmouseover') {
+            this.restoreCursorMove = restoreCursor
+            viewer.canvas.setAttribute('style', 'cursor: pointer')
+          } else {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove || 'auto'}`)
+          }
+        }
       },
       unload() {
         this.$refs.drawingsRef.unload()

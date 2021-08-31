@@ -1,6 +1,17 @@
 ## Changelog
 
-### 3.0.1-beta.11
+### 3.0.1-beta.13
+*2021-08-31*
+
+#### New feature
+
+- Adding the properties of delayed appearance and delayed disappearance for the edit buttons of `VcDrawings` and `VcMeasurements` components.
+
+#### Bug fixes
+
+- The abnormal problems after removing nodes of `VcDrawings` and `VcMeasurements`.
+
+### 3.0.1-beta.12
 *2021-08-23*
 
 #### Bug fixes

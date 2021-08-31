@@ -84,6 +84,19 @@
           ]
         },
         {
+          "groupName": "覆盖物",
+          "list": [
+            {
+              "path": "/overlays/vc-overlay-html",
+              "title": "VcOverlayHtml HTML 元素"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap 热力图"
+            }
+          ]
+        },
+        {
           "groupName": "影像",
           "list": [
             {
@@ -401,19 +414,6 @@
           ]
         },
         {
-          "groupName": "覆盖物",
-          "list": [
-            {
-              "path": "/overlays/vc-overlay-html",
-              "title": "VcOverlayHtml HTML 元素"
-            },
-            {
-              "path": "/overlays/vc-overlay-heatmap",
-              "title": "VcOverlayHeatmap 热力图"
-            }
-          ]
-        },
-        {
           "groupName": "后期处理",
           "list": [
             {
@@ -535,6 +535,19 @@
             {
               "path": "/tools/vc-drawings",
               "title": "VcDrawings"
+            }
+          ]
+        },
+        {
+          "groupName": "Overlays",
+          "list": [
+            {
+              "path": "/overlays/vc-overlay-html",
+              "title": "VcOverlayHtml"
+            },
+            {
+              "path": "/overlays/vc-overlay-heatmap",
+              "title": "VcOverlayHeatmap"
             }
           ]
         },
@@ -852,19 +865,6 @@
             {
               "path": "/geometries/vc-geometry-wall",
               "title": "WallGeometry"
-            }
-          ]
-        },
-        {
-          "groupName": "Overlays",
-          "list": [
-            {
-              "path": "/overlays/vc-overlay-html",
-              "title": "VcOverlayHtml"
-            },
-            {
-              "path": "/overlays/vc-overlay-heatmap",
-              "title": "VcOverlayHeatmap"
             }
           ]
         },
