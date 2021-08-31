@@ -75,7 +75,8 @@ export default defineComponent({
           const polyline: PolygonDrawing = {
             ...polylineSegment,
             polygonPositions: positions,
-            height: startCartographic.height
+            height: startCartographic.height,
+            radius: distance
           }
 
           results.push(polyline)
@@ -360,8 +361,22 @@ export default defineComponent({
       props.clampToGround && delete polylineOpts.arcType
       const children = []
       polylinesRender.value.forEach((polyline, index) => {
+        // point
+        children.push(h(VcCollectionPoint, {
+          enableMouseEvent: props.enableMouseEvent,
+          show: polyline.show,
+          points: polyline.positions.map(position => ({
+            position: position,
+            id: createGuid(),
+            _vcPolylineIndx: index, // for editor
+            ...props.pointOpts,
+            show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
+          })),
+          onMouseover: onMouseoverPoints,
+          onMouseout: onMouseoutPoints
+        }))
+        // polyline
         if (polyline.polygonPositions.length > 1) {
-          // polyline
           const positions = polyline.polygonPositions.slice()
           positions.push(positions[0])
           children.push(
@@ -382,40 +397,14 @@ export default defineComponent({
               ...polylineOpts
             }))))
         }
-        // point
-        children.push(h(VcCollectionPoint, {
-          enableMouseEvent: props.enableMouseEvent,
-          show: polyline.show,
-          points: polyline.positions.map(position => ({
-            position: position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts,
-            show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
-          })),
-          onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
-        }))
+        // polygon
         if (polyline.polygonPositions.length > 2) {
-          // polygon
           children.push(
             h(props.clampToGround ? VcPrimitiveGround : VcPrimitive, {
               show: polyline.show && props.polygonOpts.show,
               enableMouseEvent: props.enableMouseEvent,
               appearance: new MaterialAppearance({
                 material: makeMaterial.call(instance, props.polygonOpts.material) as Cesium.Material,
-                faceForward: true,
-                renderState: {
-                  cull: {
-                    enabled: false
-                  },
-                  depthTest: {
-                    enabled: false
-                  }
-                }
-              }),
-              depthFailAppearance: new MaterialAppearance({
-                material: makeMaterial.call(instance, props.polygonOpts.depthFailMaterial) as Cesium.Material,
                 faceForward: true,
                 renderState: {
                   cull: {

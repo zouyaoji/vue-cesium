@@ -25,6 +25,7 @@ interface PolygonDrawing {
   polygonPositions: Array<Cesium.Cartesian3>
   drawStatus: number
   height?: number
+  radius?: number
 }
 
 interface DrawingInstanceOpts {
