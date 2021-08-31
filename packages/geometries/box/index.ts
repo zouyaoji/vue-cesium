@@ -18,7 +18,7 @@ export default defineComponent({
 
     // methods
     instance.createCesiumObject = async () => {
-      const options = geometriesState.transformProps(props)
+      const options: any = geometriesState.transformProps(props)
       return Cesium.BoxGeometry.fromDimensions(options)
     }
 
