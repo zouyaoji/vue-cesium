@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2021-09-03 16:48:25
+ * @LastEditTime: 2021-09-03 17:12:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -25,7 +25,7 @@
   ![WeChat](https://zouyaoji.top/vue-cesium/images/wechat.png)
   ![AliPay](https://zouyaoji.top/vue-cesium/images/alipay.png)
 
-### 捐赠者名单
+### 捐赠者
 
 - 特别感谢以下捐赠者，如果你不想自己的名字显示在这里，可以发邮件或者 qq 告诉我。
 
@@ -36,7 +36,7 @@
   - [`【木遥】`](https://github.com/muyao1987)
   - ...
 
-### 鸣谢
+### 贡献者
 
 - 特别感谢每一位贡献及帮助过vue-cesium开发的同学。
 
