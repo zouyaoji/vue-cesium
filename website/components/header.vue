@@ -23,12 +23,17 @@
         </h1>
         <h1>
           <a href="https://github.com/zouyaoji/vue-cesium/stargazers" target="_blank">
-            <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=social">
+            <img src="https://img.shields.io/github/stars/zouyaoji/vue-cesium?style=plastic">
           </a>
         </h1>
         <h1>
           <a href="https://github.com/zouyaoji/vue-cesium/issues" target="_blank">
-            <img src="https://img.shields.io/github/issues/zouyaoji/vue-cesium">
+            <img src="https://img.shields.io/github/issues/zouyaoji/vue-cesium?style=plastic">
+          </a>
+        </h1>
+        <h1>
+          <a href="https://github.com/zouyaoji/vue-cesium/issues" target="_blank">
+            <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
           </a>
         </h1>
 

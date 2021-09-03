@@ -10,6 +10,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcMeasurementPoint',
@@ -40,6 +41,7 @@ export default defineComponent({
     let restorePoint = undefined
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     let unwatchFns = []
     // watch
@@ -464,12 +466,14 @@ export default defineComponent({
         enableMouseEvent: props.enableMouseEvent,
         points: pointsRender,
         onMouseover: onMouseoverPoints,
-        onMouseout: onMouseoutPoints
+        onMouseout: onMouseoutPoints,
+        onReady: onVcCollectionPointReady
       }))
 
       children.push(h(VcCollectionLabel, {
         enableMouseEvent: props.enableMouseEvent,
-        labels: labelsRender
+        labels: labelsRender,
+        onReady: onVcCollectionLabelReady
       }))
 
       if (props.drawtip.show && canShowDrawTip.value) {

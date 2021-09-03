@@ -14,6 +14,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcMeasurementDistance',
@@ -44,6 +45,7 @@ export default defineComponent({
     let restorePosition = undefined
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
     const polylinesRender = computed<Array<DistanceMeasurementPolylineSegment>>(() => {
@@ -553,7 +555,8 @@ export default defineComponent({
             ...props.pointOpts
           })),
           onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
+          onMouseout: onMouseoutPoints,
+          onReady: onVcCollectionPointReady
         }))
 
         // label
@@ -596,7 +599,8 @@ export default defineComponent({
         children.push(h(VcCollectionLabel, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          labels: labels
+          labels: labels,
+          onReady: onVcCollectionLabelReady
         }))
       })
 

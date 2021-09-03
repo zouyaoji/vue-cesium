@@ -14,6 +14,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { usePolylineDrawing } from '@vue-cesium/composables'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcMeasurementPolyline',
@@ -36,6 +37,7 @@ export default defineComponent({
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.measurement.polyline.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
+    const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
     const polylinesRender = computed<Array<PolylineMeasurementDrawing>>(() => {
@@ -285,7 +287,8 @@ export default defineComponent({
               ...props.pointOpts
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints.bind('polyline'),
-            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline')
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline'),
+            onReady: onVcCollectionPointReady
           })
         )
 
@@ -294,7 +297,8 @@ export default defineComponent({
           h(VcCollectionLabel, {
             enableMouseEvent: props.enableMouseEvent,
             show: polyline.show,
-            labels: polyline.labels
+            labels: polyline.labels,
+            onReady: onVcCollectionLabelReady
           })
         )
       })

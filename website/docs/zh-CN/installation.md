@@ -1,3 +1,11 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:03
+ * @LastEditTime: 2021-09-03 16:09:58
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\installation.md
+-->
 ## 安装
 
 ### npm 安装
@@ -6,6 +14,12 @@
 
 ```shell
 npm install vue-cesium@next --save
+```
+
+或者
+
+```shell
+yarn add vue-cesium@next
 ```
 
 ### CDN

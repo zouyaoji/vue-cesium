@@ -12,6 +12,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { usePolylineDrawing } from '@vue-cesium/composables'
 import { DrawStatus } from '@vue-cesium/shared'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcDrawingPolyline',
@@ -34,6 +35,7 @@ export default defineComponent({
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.drawing.polyline.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
+    const { onVcCollectionPointReady } = useCustomUpdate()
 
     // methods
     instance.createCesiumObject = async () => {
@@ -175,7 +177,8 @@ export default defineComponent({
               show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints.bind('polyline'),
-            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline')
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline'),
+            onReady: onVcCollectionPointReady
           })
         )
       })

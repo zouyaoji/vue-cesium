@@ -66,8 +66,14 @@ export default {
   terrainProviderViewModels: Array as PropType<Array<Cesium.ProviderViewModel>>,
   imageryProvider: Object as PropType<Cesium.ImageryProvider>,
   terrainProvider: Object as PropType<Cesium.TerrainProvider>,
-  skyBox: [Object, Boolean] as PropType<Cesium.SkyBox>,
-  skyAtmosphere: [Object, Boolean] as PropType<Cesium.SkyAtmosphere>,
+  skyBox: {
+    type: [Object, Boolean] as PropType<Cesium.SkyBox>,
+    default: () => undefined
+  },
+  skyAtmosphere: {
+    type: [Object, Boolean] as PropType<Cesium.SkyAtmosphere>,
+    default: () => undefined
+  },
   fullscreenElement: {
     type: [String, Element] as PropType<string | Element>
   },

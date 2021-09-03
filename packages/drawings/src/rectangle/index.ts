@@ -13,6 +13,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { PolygonDrawing } from '../drawing.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcDrawingRectangle',
@@ -44,6 +45,8 @@ export default defineComponent({
     const drawName = 'rectangle'
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady, onVcPrimitiveReady } = useCustomUpdate()
+
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
@@ -354,6 +357,21 @@ export default defineComponent({
       props.clampToGround && delete polylineOpts.arcType
       const children = []
       polylinesRender.value.forEach((polyline, index) => {
+        // point
+        children.push(h(VcCollectionPoint, {
+          enableMouseEvent: props.enableMouseEvent,
+          show: polyline.show,
+          points: polyline.positions.map(position => ({
+            position: position,
+            id: createGuid(),
+            _vcPolylineIndx: index, // for editor
+            ...props.pointOpts,
+            show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
+          })),
+          onMouseover: onMouseoverPoints,
+          onMouseout: onMouseoutPoints,
+          onReady: onVcCollectionPointReady
+        }))
         if (polyline.polygonPositions.length > 1) {
           // polyline
           const positions = polyline.polygonPositions.slice()
@@ -376,20 +394,6 @@ export default defineComponent({
               ...polylineOpts
             }))))
         }
-        // point
-        children.push(h(VcCollectionPoint, {
-          enableMouseEvent: props.enableMouseEvent,
-          show: polyline.show,
-          points: polyline.positions.map(position => ({
-            position: position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts,
-            show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
-          })),
-          onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
-        }))
         if (polyline.polygonPositions.length > 2) {
           // polygon
           children.push(
@@ -401,18 +405,14 @@ export default defineComponent({
                 renderState: {
                   cull: {
                     enabled: false
-                  }
-                }
-              }),
-              depthFailAppearance: new MaterialAppearance({
-                material: makeMaterial.call(instance, props.polygonOpts.depthFailMaterial) as Cesium.Material,
-                renderState: {
-                  cull: {
+                  },
+                  depthTest: {
                     enabled: false
                   }
                 }
               }),
               asynchronous: false,
+              onReady: onVcPrimitiveReady
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {

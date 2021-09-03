@@ -9,6 +9,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { PointDrawing } from '../drawing.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcDrawingPoint',
@@ -40,6 +41,8 @@ export default defineComponent({
     let unwatchFns = []
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady } = useCustomUpdate()
+
     // watch
     unwatchFns.push(watch(
       () => props.editable,
@@ -340,7 +343,8 @@ export default defineComponent({
         enableMouseEvent: props.enableMouseEvent,
         points: pointsRender,
         onMouseover: onMouseoverPoints,
-        onMouseout: onMouseoutPoints
+        onMouseout: onMouseoutPoints,
+        onReady: onVcCollectionPointReady
       }))
 
       if (props.drawtip.show && canShowDrawTip.value) {

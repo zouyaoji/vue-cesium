@@ -13,6 +13,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { PolygonDrawing } from '../drawing.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcDrawingRegularPolygon',
@@ -49,6 +50,7 @@ export default defineComponent({
     }
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady, onVcPrimitiveReady } = useCustomUpdate()
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
       const results: Array<PolygonDrawing> = []
@@ -373,7 +375,8 @@ export default defineComponent({
             show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
           })),
           onMouseover: onMouseoverPoints,
-          onMouseout: onMouseoutPoints
+          onMouseout: onMouseoutPoints,
+          onReady: onVcCollectionPointReady
         }))
         // polyline
         if (polyline.polygonPositions.length > 1) {
@@ -415,7 +418,8 @@ export default defineComponent({
                   }
                 }
               }),
-              asynchronous: false
+              asynchronous: false,
+              onReady: onVcPrimitiveReady
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {
