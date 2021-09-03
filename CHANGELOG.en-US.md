@@ -1,5 +1,16 @@
 ## Changelog
 
+### 3.0.1-beta.14
+*2021-09-03*
+
+#### Bug fixes
+
+- The problem of using EarthSDK to report an error, #121.
+
+#### Optimization
+
+- The point of `VcDrawings` and `VcMeasurements` component is rendered to the top to avoid the point being covered by the polygon and cannot be picked up and make it can not be edited.
+
 ### 3.0.1-beta.13
 *2021-08-31*
 

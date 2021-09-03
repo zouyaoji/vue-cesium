@@ -1,3 +1,11 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:03
+ * @LastEditTime: 2021-09-03 16:10:00
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\en-US\installation.md
+-->
 ## Installation
 
 ### npm
@@ -6,6 +14,11 @@ Installing with npm is recommended and it works seamlessly with [webpack](https:
 
 ```shell
 npm install vue-cesium@next --save
+```
+or
+
+```shell
+yarn add vue-cesium@next
 ```
 
 ### CDN

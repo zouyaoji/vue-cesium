@@ -1,3 +1,11 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-29 16:12:05
+ * @LastEditTime: 2021-09-03 16:55:00
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\README.zh.md
+-->
 # VUE CESIUM
 
 <p align="center">
@@ -89,3 +97,7 @@ yarn cz
 [TYPE](SCOPE):DESCRIPTION#[ISSUE]
 # example feat(viewer):add type 'viewer' for form usage #1234
 ```
+
+## 捐赠者&贡献者
+
+[链接](https://zouyaoji.top/vue-cesium/#/zh-CN/donations)
