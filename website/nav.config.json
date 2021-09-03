@@ -434,16 +434,16 @@
           "groupName": "其他平台",
           "list": [
             {
+              "path": "/platforms/vc-demo-mars3d",
+              "title": "Mars3D 火星科技"
+            },
+            {
               "path": "/platforms/vc-demo-supermap",
               "title": "SuperMap iClient3D 超图"
             },
             {
               "path": "/platforms/vc-demo-earth-sdk",
               "title": "EarthSDK 西部世界"
-            },
-            {
-              "path": "/platforms/vc-demo-mars3d",
-              "title": "Mars3D 火星科技"
             },
             {
               "path": "/platforms/vc-demo-dc-sdk",
@@ -889,16 +889,16 @@
           "groupName": "Third Platforms",
           "list": [
             {
+              "path": "/platforms/vc-demo-mars3d",
+              "title": "Mars3D"
+            },
+            {
               "path": "/platforms/vc-demo-supermap",
               "title": "SuperMap iClient3D for WebGL"
             },
             {
               "path": "/platforms/vc-demo-earth-sdk",
               "title": "EarthSDK"
-            },
-            {
-              "path": "/platforms/vc-demo-mars3d",
-              "title": "Mars3D"
             },
             {
               "path": "/platforms/vc-demo-dc-sdk",

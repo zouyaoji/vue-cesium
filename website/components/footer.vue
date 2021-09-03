@@ -62,7 +62,8 @@ export default {
     },
 
     gitterLink() {
-      return this.lang === Language.CN ? 'https://gitter.im/vue-cesium/vue-cesium-zh' : 'https://gitter.im/vue-cesium/vue-cesium-en'
+      // return this.lang === Language.CN ? 'https://gitter.im/vue-cesium/vue-cesium-zh' : 'https://gitter.im/vue-cesium/vue-cesium-en'
+      return 'https://github.com/zouyaoji/vue-cesium/discussions'
     },
   },
 }
