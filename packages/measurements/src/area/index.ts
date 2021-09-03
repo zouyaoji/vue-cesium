@@ -14,6 +14,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { usePolylineDrawing } from '@vue-cesium/composables'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcMeasurementArea',
@@ -36,6 +37,7 @@ export default defineComponent({
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.measurement.area.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
+    const { onVcCollectionPointReady, onVcPrimitiveReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
     const polylinesRender = computed<Array<PolygonMeasurementDrawing>>(() => {
@@ -300,7 +302,17 @@ export default defineComponent({
               ...props.pointOpts
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints.bind('area'),
-            onMouseout: polylineDrawingState.onMouseoutPoints.bind('area')
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('area'),
+            onReady: onVcCollectionPointReady
+          })
+        )
+        // labels
+        children.push(
+          h(VcCollectionLabel, {
+            enableMouseEvent: props.enableMouseEvent,
+            show: polyline.show,
+            labels: polyline.labels,
+            onReady: onVcCollectionLabelReady
           })
         )
         const positions = polyline.positions.slice()
@@ -337,18 +349,14 @@ export default defineComponent({
                 renderState: {
                   cull: {
                     enabled: false
-                  }
-                }
-              }),
-              depthFailAppearance: new EllipsoidSurfaceAppearance({
-                material: makeMaterial.call(instance, props.polygonOpts.depthFailMaterial) as Cesium.Material,
-                renderState: {
-                  cull: {
+                  },
+                  depthTest: {
                     enabled: false
                   }
                 }
               }),
-              asynchronous: false
+              asynchronous: false,
+              onReady: onVcPrimitiveReady
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {
@@ -357,14 +365,6 @@ export default defineComponent({
             })))
           )
         }
-        // labels
-        children.push(
-          h(VcCollectionLabel, {
-            enableMouseEvent: props.enableMouseEvent,
-            show: polyline.show,
-            labels: polyline.labels
-          })
-        )
       })
 
       if (props.drawtip.show && polylineDrawingState.canShowDrawTip.value) {

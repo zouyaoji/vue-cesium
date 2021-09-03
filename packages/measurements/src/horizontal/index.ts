@@ -14,6 +14,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcMeasurementHorizontal',
@@ -45,6 +46,7 @@ export default defineComponent({
     const mouseDelta = 10
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
+    const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
     const polylinesRender = computed<Array<HorizontalMeasurementDrawing>>(() => {
@@ -619,7 +621,8 @@ export default defineComponent({
               ...props.pointOpts
             })),
             onMouseover: onMouseoverPoints,
-            onMouseout: onMouseoutPoints
+            onMouseout: onMouseoutPoints,
+            onReady: onVcCollectionPointReady
           })
         )
 
@@ -628,7 +631,8 @@ export default defineComponent({
           h(VcCollectionLabel, {
             enableMouseEvent: props.enableMouseEvent,
             show: polyline.show,
-            labels: polyline.labels
+            labels: polyline.labels,
+            onReady: onVcCollectionLabelReady
           })
         )
       })

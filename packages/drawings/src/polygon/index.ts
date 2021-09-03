@@ -12,6 +12,7 @@ import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/ui'
 import { usePolylineDrawing } from '@vue-cesium/composables'
 import { DrawStatus } from '@vue-cesium/shared'
+import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
 
 export default defineComponent({
   name: 'VcDrawingPolygon',
@@ -34,7 +35,7 @@ export default defineComponent({
     drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.drawing.polygon.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
     const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-
+    const { onVcCollectionPointReady, onVcPrimitiveReady } = useCustomUpdate()
     // methods
     instance.createCesiumObject = async () => {
       return primitiveCollectionRef
@@ -151,7 +152,8 @@ export default defineComponent({
               show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints.bind('polygon'),
-            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polygon')
+            onMouseout: polylineDrawingState.onMouseoutPoints.bind('polygon'),
+            onReady: onVcCollectionPointReady
           })
         )
         const positions = polyline.positions.slice()
@@ -195,19 +197,8 @@ export default defineComponent({
                   }
                 }
               }),
-              depthFailAppearance: new MaterialAppearance({
-                material: makeMaterial.call(instance, props.polygonOpts.depthFailMaterial) as Cesium.Material,
-                faceForward: true,
-                renderState: {
-                  cull: {
-                    enabled: false
-                  },
-                  depthTest: {
-                    enabled: false
-                  }
-                }
-              }),
-              asynchronous: false
+              asynchronous: false,
+              onReady: onVcPrimitiveReady
             }, () => h(VcInstanceGeometry, {
               id: createGuid(),
             }, () => h(VcGeometryPolygon, {
