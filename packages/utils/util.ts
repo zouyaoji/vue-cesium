@@ -49,8 +49,10 @@ export function dirname (path: string): string {
   return path.slice(0, end)
 }
 
-export function removeEmpty (obj: unknown): AnyObject {
+export function removeEmpty (obj: any): AnyObject {
+  const proto = Object.getPrototypeOf(obj)
   const finalObj: AnyObject = {}
+  Object.setPrototypeOf(finalObj, proto)
   Object.keys(obj).forEach(key => {
     const className = getObjClassName(obj[key])
     if ((obj[key] && isArray(obj[key]) || obj[key] instanceof Element)) {

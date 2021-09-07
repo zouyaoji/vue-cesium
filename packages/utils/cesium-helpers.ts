@@ -582,7 +582,14 @@ export function makeMaterial (val: string | Array<number> | MaterialOption) {
     f(val)
     return new Material(val as MaterialOption)
   }
-  return val
+
+  if (isArray(val) || isString(val)) {
+    const material = Material.fromType('Color')
+    material.uniforms.color = makeColor(val)
+    return material
+  }
+
+  return undefined
 }
 
 /**
