@@ -1,5 +1,17 @@
 ## 更新日志
 
+### 3.0.1-beta.15
+*2021-09-09*
+
+#### Bug 修复
+
+- Cesium@1.85版本天地图影像组件 `vc-provider-imagery-tianditu` 报错问题修复。
+- removeEmpty 方法丢掉原型链上的属性导致材质报错问题修复。
+
+#### 优化
+
+- 默认 Cesium 库的 CDN 地址改为 `https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js`。
+
 ### 3.0.1-beta.14
 *2021-09-03*
 

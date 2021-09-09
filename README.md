@@ -1,3 +1,11 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-03 16:57:27
+ * @LastEditTime: 2021-09-09 11:48:55
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\README.md
+-->
 # VUE CESIUM
 
 <p align="center">
@@ -38,8 +46,8 @@ This project is still under heavy development. Feel free to join us and make you
 - [中文](https://github.com/zouyaoji/vue-cesium/blob/dev/README.zh.md)
 - [English](https://github.com/zouyaoji/vue-cesium/blob/dev/README.md)
 
-- [中文 for vue 2.x](https://github.com/zouyaoji/vue-cesium/blob/master/README.zh.md)
-- [English for vue 2.x](https://github.com/zouyaoji/vue-cesium/blob/master/README.md)
+- [中文 for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.zh.md)
+- [English for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.md)
 
 ## Documentation
 

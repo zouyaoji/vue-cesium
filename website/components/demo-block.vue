@@ -206,13 +206,13 @@ ${this.codepen.style}
         'ipt src="//unpkg.com/vue@next"></scr' +
         'ipt>' +
         '\n<scr' +
-        `ipt src="//unpkg.com/element-plus/lib/index.full.js"></scr` +
+        `ipt src="//unpkg.com/element-plus"></scr` +
         'ipt>' +
         '\n<scr' +
         `ipt src="//unpkg.com/vue-cesium@next/lib/index.full.js"></scr` +
         'ipt>'
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
-      let cssTpl = `@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium@next/lib/theme-default/index.css");\n${(style || '').trim()}\n`
+      let cssTpl = `@import url("//unpkg.com/element-plus/dist/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium@next/lib/theme-default/index.css");\n${(style || '').trim()}\n`
       cssTpl += `
         .demo-viewer .el-row:last-child {
             margin-bottom: 0;

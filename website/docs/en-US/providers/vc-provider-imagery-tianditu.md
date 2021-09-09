@@ -145,4 +145,4 @@ Basic usage of the `vc-provider-imagery-tianditu` component.
 
 ### Reference
 
-- **[TiandituImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/TiandituImageryProvider.html)**
+- **[MapService](http://lbs.tianditu.gov.cn/server/MapService.html)**

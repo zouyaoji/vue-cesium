@@ -1,5 +1,17 @@
 ## Changelog
 
+### 3.0.1-beta.15
+*2021-09-09*
+
+#### Bug fixes
+
+- The `vc-provider-imagery-tianditu` component reporting problem in Cesium@1.85 version.
+- The removeEmpty method loses the attributes on the prototype chain and causes the material to report an error.
+
+#### Optimization
+
+- The CDN address of the Cesium library is changed to `https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js`.
+
 ### 3.0.1-beta.14
 *2021-09-03*
 

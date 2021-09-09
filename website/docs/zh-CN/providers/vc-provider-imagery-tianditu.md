@@ -154,6 +154,8 @@
   - 'ter_w': 天地图全球地形晕渲服务（墨卡托投影坐标系）。
   - 'vec_c': 天地图全球矢量地图服务（经纬度坐标系）。
   - 'vec_w': 天地图全球矢量地图服务（墨卡托投影坐标系）。
+  - 'ibo_c': 天地图全球矢量地图服务（经纬度坐标系）。
+  - 'ibo_w': 天地图全球境界服务（墨卡托投影坐标系）。
 
 :::
 
@@ -169,4 +171,4 @@
 
 ### 参考
 
-- 资料： **[TiandituImageryProvider](http://support.supermap.com.cn:8090/webgl/docs/Documentation/TiandituImageryProvider.html)**
+- 资料： **[MapService](http://lbs.tianditu.gov.cn/server/MapService.html)**
