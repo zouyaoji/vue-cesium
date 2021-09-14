@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { VcViewerProvider } from '@vue-cesium/utils/types'
 import { DrawStatus } from '@vue-cesium/shared'
-import { PolylineDrawing } from '@vue-cesium/measurements/src/measure.types'
+import { PolylineDrawing } from '@vue-cesium/components/measurements/src/measure.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 
 export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
@@ -83,7 +83,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     const { defined, Cartesian2 } = Cesium
     lastClickPosition = lastClickPosition || new Cesium.Cartesian2(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)
 
-    if ((Cartesian2.magnitude(Cartesian2.subtract(lastClickPosition, movement, {} as any)) < mouseDelta)) {
+    if (Cartesian2.magnitude(Cartesian2.subtract(lastClickPosition, movement, {} as any)) < mouseDelta) {
       return
     }
 
@@ -192,7 +192,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     }
   }
 
-  const onMouseoverPoints = function(e) {
+  const onMouseoverPoints = function (e) {
     const { drawingHandlerActive, viewer } = $services
     if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
@@ -206,13 +206,17 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
       }, props.editorOpts.delay)
     }
 
-    emit('mouseEvt', {
-      type: e.type,
-      name: this,
-      target: e
-    }, viewer)
+    emit(
+      'mouseEvt',
+      {
+        type: e.type,
+        name: this,
+        target: e
+      },
+      viewer
+    )
   }
-  const onMouseoutPoints = function(e) {
+  const onMouseoutPoints = function (e) {
     const { viewer, selectedMeasurementOption } = $services
 
     if (props.editable) {
@@ -226,11 +230,15 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
       selectedMeasurementOption && (canShowDrawTip.value = true)
     }
 
-    emit('mouseEvt', {
-      type: e.type,
-      target: e,
-      name: this
-    }, viewer)
+    emit(
+      'mouseEvt',
+      {
+        type: e.type,
+        target: e,
+        name: this
+      },
+      viewer
+    )
   }
 
   const onMouseenterEditor = evt => {
@@ -247,7 +255,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     }, props.editorOpts.hideDelay)
   }
 
-  const onEditorClick = function(e) {
+  const onEditorClick = function (e) {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
 
@@ -280,12 +288,16 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
       polylines.value.splice(index, 1)
     }
 
-    emit('editorEvt', {
-      type: e,
-      polylines: polylines,
-      name: this,
-      index: mouseoverPoint.value._vcPolylineIndx
-    }, viewer)
+    emit(
+      'editorEvt',
+      {
+        type: e,
+        polylines: polylines,
+        name: this,
+        index: mouseoverPoint.value._vcPolylineIndx
+      },
+      viewer
+    )
   }
 
   return {
