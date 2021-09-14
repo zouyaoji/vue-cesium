@@ -1,5 +1,6 @@
 import { positionProps } from '@vue-cesium/composables/private/use-position'
 import { t } from '@vue-cesium/locale'
+import { PropType } from 'vue'
 
 export default {
   geolocation: {
@@ -31,7 +32,7 @@ export default {
     default: t('vc.navigation.myLocation.centreMap')
   },
   pointColor: {
-    type: [Array, Object, String],
+    type: [Array, Object, String] as PropType<Cesium.Color>,
     default: '#08ABD5'
   },
   pixelSize: {
@@ -43,7 +44,7 @@ export default {
     default: 3
   },
   outlineColor: {
-    type: [Array, Object, String],
+    type: [Array, Object, String] as PropType<Cesium.Color>,
     default: '#ffffff'
   },
   level: {

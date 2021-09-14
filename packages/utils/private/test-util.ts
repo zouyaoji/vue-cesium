@@ -5,11 +5,10 @@ function defaultValue(a, b) {
   return b
 }
 
-
-export function createPointerEvent (type, options?) {
+export function createPointerEvent(type, options?) {
   options = defaultValue(options, {})
   const event = new window.PointerEvent(type, {
-    canBubble: defaultValue(options.canBubble, true),
+    // canBubble: defaultValue(options.canBubble, true),
     cancelable: defaultValue(options.cancelable, true),
     view: defaultValue(options.view, window),
     detail: defaultValue(options.detail, 0),
@@ -23,18 +22,18 @@ export function createPointerEvent (type, options?) {
     metaKey: defaultValue(options.metaKey, false),
     button: defaultValue(options.button, 0),
     relatedTarget: defaultValue(options.relatedTarget, null),
-    offsetX: defaultValue(options.offsetX, 0),
-    offsetY: defaultValue(options.offsetY, 0),
+    // offsetX: defaultValue(options.offsetX, 0),
+    // offsetY: defaultValue(options.offsetY, 0),
     width: defaultValue(options.width, 0),
     height: defaultValue(options.height, 0),
     pressure: defaultValue(options.pressure, 0),
-    rotation: defaultValue(options.rotation, 0),
+    // rotation: defaultValue(options.rotation, 0),
     tiltX: defaultValue(options.tiltX, 0),
     tiltY: defaultValue(options.tiltY, 0),
     pointerId: defaultValue(options.pointerId, 1),
     pointerType: defaultValue(options.pointerType, 'mouse'),
-    hwTimestamp: defaultValue(options.hwTimestamp, 0),
-    isPrimary: defaultValue(options.isPrimary, 0),
+    // hwTimestamp: defaultValue(options.hwTimestamp, 0),
+    isPrimary: defaultValue(options.isPrimary, 0)
   })
   return event
 }
@@ -76,7 +75,6 @@ export function createMouseEvent(type, options) {
   )
   return event
 }
-
 
 /**
  * 等待 ms 毫秒，返回 Promise

@@ -9,4 +9,4 @@ ImageryLayer.install = (app: App): void => {
 const _ImageryLayer = ImageryLayer as SFCWithInstall<typeof ImageryLayer>
 
 export default _ImageryLayer
-export const VcImageryLayer = _ImageryLayer
+export const VcLayerImagery = _ImageryLayer

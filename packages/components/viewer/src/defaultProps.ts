@@ -146,7 +146,7 @@ export default {
   },
   accessToken: String,
   camera: {
-    type: Object as PropType<CameraOption>,
+    type: Object,
     default: () => ({
       position: {
         lng: 105,

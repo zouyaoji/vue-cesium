@@ -9,6 +9,7 @@ import createPrintView from './createPrintView'
 import defaultProps from './defaultProps'
 import printWindow from './printWindow'
 import { t } from '@vue-cesium/locale'
+import { isPlainObject } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcPrint',
@@ -227,7 +228,7 @@ export default defineComponent({
         )
 
         inner.push(h('div', null, props.label))
-        if (props.tooltip) {
+        if (isPlainObject(props.tooltip)) {
           inner.push(
             h(
               VcTooltip,
@@ -236,7 +237,7 @@ export default defineComponent({
                 onBeforeShow: onTooltipBeforeShow,
                 ...props.tooltip
               },
-              () => h('strong', null, props.tooltip.tip || t('vc.navigation.print.printTip'))
+              () => h('strong', null, (isPlainObject(props.tooltip) && props.tooltip.tip) || t('vc.navigation.print.printTip'))
             )
           )
         } else {

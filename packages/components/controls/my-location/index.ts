@@ -16,7 +16,7 @@ import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/p
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
 import { makeColor, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
-import { isArray, isFunction } from '@vue-cesium/utils/util'
+import { isArray, isFunction, isPlainObject } from '@vue-cesium/utils/util'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { t } from '@vue-cesium/locale'
@@ -63,7 +63,9 @@ export default defineComponent({
     )
     // computed
     const myLocationTip = computed(() => {
-      return positioning.value ? t('vc.navigation.myLocation.positioning') : props.tooltip.tip || t('vc.navigation.myLocation.myLocationTip')
+      return positioning.value
+        ? t('vc.navigation.myLocation.positioning')
+        : (isPlainObject(props.tooltip) && props.tooltip.tip) || t('vc.navigation.myLocation.myLocationTip')
     })
     // methods
     instance.createCesiumObject = async () => {
@@ -408,7 +410,7 @@ export default defineComponent({
 
         inner.push(h('div', null, props.label))
 
-        if (props.tooltip) {
+        if (isPlainObject(props.tooltip)) {
           inner.push(
             h(
               VcTooltip,

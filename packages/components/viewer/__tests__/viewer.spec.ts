@@ -1,7 +1,7 @@
-import { VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { CameraOption, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { mount, config } from '@vue/test-utils'
-import Viewer from '../src'
+import VcViewer from '../src'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
 
 const option = {
@@ -13,8 +13,8 @@ config.global.config.globalProperties.$VueCesium = option
 
 describe('VcViewer', () => {
   test('render test default', async () => {
-    const wrapper = mount(Viewer)
-    const vm = wrapper.vm as VcComponentPublicInstance
+    const wrapper = mount(VcViewer)
+    const vm = wrapper.vm as unknown as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
     await vm.createPromise
     const viewer = vm.getCesiumObject() as Cesium.Viewer
@@ -37,7 +37,8 @@ describe('VcViewer', () => {
     const onLeftClick = () => {
       clicked = true
     }
-    const wrapper = mount(Viewer, {
+
+    const wrapper = mount(VcViewer, {
       props: {
         showCredit: false,
         animation: true,
@@ -64,7 +65,7 @@ describe('VcViewer', () => {
         onClick: onLeftClick
       }
     })
-    const vm = wrapper.vm as VcComponentPublicInstance
+    const vm = wrapper.vm as unknown as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
     await vm.createPromise
     let viewer = vm.getCesiumObject() as Cesium.Viewer

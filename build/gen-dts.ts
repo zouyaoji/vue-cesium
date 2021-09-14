@@ -28,8 +28,8 @@ const genVueTypes = async (root, outDir = path.resolve(__dirname, '../dist/types
       },
       skipLibCheck: true
     },
-    tsConfigFilePath: TSCONFIG_PATH,
-    skipAddingFilesFromTsConfig: true
+    tsConfigFilePath: TSCONFIG_PATH
+    // skipAddingFilesFromTsConfig: true
   })
 
   const sourceFiles = []

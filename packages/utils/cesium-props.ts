@@ -137,7 +137,7 @@ const height = {
  */
 const heightReference = {
   heightReference: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function]
     // default: 0
   }
 }
@@ -252,7 +252,7 @@ const scaleByDistance = {
  */
 const show = {
   show: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean>,
     default: true
   }
 }
@@ -381,8 +381,9 @@ const shadows = {
  */
 const positions = {
   positions: {
-    type: [Array, Object, Function] as PropType<Array<Cesium.Cartesian3> | Array<number> | Array<Array<number>>
-      | Array<Cartesian3Option> | Array<CartographicInDegreeOption>>,
+    type: [Array, Object, Function] as PropType<
+      Array<Cesium.Cartesian3> | Array<number> | Array<Array<number>> | Array<Cartesian3Option> | Array<CartographicInDegreeOption>
+    >,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array,
       exclude: '_callback',
