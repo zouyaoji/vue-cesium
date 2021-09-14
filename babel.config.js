@@ -8,39 +8,35 @@ module.exports = {
       '@babel/env',
       {
         loose: true,
-        modules: false,
-      },
+        modules: false
+      }
     ],
-    '@babel/typescript',
+    '@babel/typescript'
   ],
   plugins: [
     '@vue/babel-plugin-jsx',
-    '@babel/proposal-class-properties',
+    '@babel/plugin-proposal-nullish-coalescing-operator',
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
     '@babel/transform-runtime',
-    'lodash',
+    'lodash'
   ],
   overrides: [
     {
       test: /\.vue$/,
-      plugins: [
-        '@babel/transform-typescript',
-      ],
-    },
+      plugins: ['@babel/transform-typescript']
+    }
   ],
   env: {
     utils: {
-      ignore: [
-        '**/*.test.ts',
-        '**/*.spec.ts',
-      ],
+      ignore: ['**/*.test.ts', '**/*.spec.ts'],
       presets: [
         [
           '@babel/env',
           {
             loose: true,
-            modules: false,
-          },
-        ],
+            modules: false
+          }
+        ]
       ],
       plugins: [
         [
@@ -48,11 +44,11 @@ module.exports = {
           {
             root: ['vue-cesium'],
             alias: {
-              '@vue-cesium': 'vue-cesium/lib',
-            },
-          },
-        ],
-      ],
-    },
-  },
+              '@vue-cesium': 'vue-cesium/lib'
+            }
+          }
+        ]
+      ]
+    }
+  }
 }

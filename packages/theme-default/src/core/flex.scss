@@ -1,18 +1,25 @@
-@import "../helpers/string.scss";
+@use 'sass:math';
+
+@import '../helpers/string.scss';
 
 @mixin fg($name, $size) {
   $noProcNotZero: $size > 0;
 
   @media (min-width: $size) {
     #{str-fe(".col<name>", $name, $noProcNotZero)} {
-      &, &-auto, &-grow, &-shrink {
-        .row > &, .flex > & {
+      &,
+      &-auto,
+      &-grow,
+      &-shrink {
+        .row > &,
+        .flex > & {
           width: auto;
           min-width: 0;
           max-width: 100%;
         }
 
-        .column > &, .flex > & {
+        .column > &,
+        .flex > & {
           height: auto;
           min-height: 0;
           max-height: 100%;
@@ -37,7 +44,7 @@
     }
 
     @for $i from 0 through $flex-cols {
-      $ic: quote("" + $i);
+      $ic: quote('' + $i);
 
       #{str-fe(".col<name>-<i>", $name, $noProcNotZero, $ic)} {
         @extend .col#{$name}-auto;
@@ -46,19 +53,19 @@
       .row {
         #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
           height: auto;
-          width: toFixed(percentage($i / $flex-cols), 10000);
+          width: toFixed(percentage(math.div($i, $flex-cols)), 10000);
         }
 
-        @if $i != 0 or $name != "" {
+        @if $i != 0 or $name != '' {
           #{str-fe("> .offset<name>-<i>", $name, $noProcNotZero, $ic)} {
-            margin-left: toFixed(percentage($i / $flex-cols), 10000);
+            margin-left: toFixed(percentage(math.div($i, $flex-cols)), 10000);
           }
         }
       }
 
       .column {
         #{str-fe("> .col<name>-<i>", $name, $noProcNotZero, $ic)} {
-          height: toFixed(percentage($i / $flex-cols), 10000);
+          height: toFixed(percentage(math.div($i, $flex-cols)), 10000);
           width: auto;
         }
       }
@@ -73,7 +80,9 @@
   }
 }
 
-.row, .column, .flex {
+.row,
+.column,
+.flex {
   display: flex;
   flex-wrap: wrap;
 
@@ -273,5 +282,5 @@
 }
 
 @each $name, $size in $sizes {
-  @include fg("-" + $name, $size);
+  @include fg('-' + $name, $size);
 }

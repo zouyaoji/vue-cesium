@@ -1,8 +1,0 @@
-{
-  "props": {
-    "show": {
-      "type": "Boolean",
-      "desc": "A boolean Property specifying the visibility of the box."
-    }
-  }
-}

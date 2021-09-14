@@ -1,18 +1,31 @@
-
 import { Emitter } from 'mitt'
-import type { App, Ref } from 'vue'
+import type { App, Ref, Plugin, CSSProperties } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
-import { DrawingInstanceOpts } from '../drawings/src/drawing.types'
-import { MeasurementInstanceOpts } from '../measurements/src/measure.types'
-
-export type SFCWithInstall<T> = T & { install (app: App): void; }
+import { DrawingInstanceOpts } from '@vue-cesium/components/drawings/src/drawing.types'
+import { MeasurementInstanceOpts } from '@vue-cesium/components/measurements/src/measure.types'
 
 export type CommonEmitType = 'beforeLoad' | 'ready' | 'destroyed'
 
-export type EntityEmitType = CommonEmitType | 'update:billboard' | 'update:box' | 'update:corridor' | 'update:cylinder' | 'update:ellipse'
-  | 'update:ellipsoid' | 'update:ellipse' | 'update:label' | 'update:model' | 'update:path' | 'update:plane' | 'update:point' | 'update:polygon'
-  | 'update:polyline' | 'update:polylineVolume' | 'update:rectangle' | 'update:tileset' | 'update:wall'
-
+export type EntityEmitType =
+  | CommonEmitType
+  | 'update:billboard'
+  | 'update:box'
+  | 'update:corridor'
+  | 'update:cylinder'
+  | 'update:ellipse'
+  | 'update:ellipsoid'
+  | 'update:ellipse'
+  | 'update:label'
+  | 'update:model'
+  | 'update:path'
+  | 'update:plane'
+  | 'update:point'
+  | 'update:polygon'
+  | 'update:polyline'
+  | 'update:polylineVolume'
+  | 'update:rectangle'
+  | 'update:tileset'
+  | 'update:wall'
 
 export type VcBtnOptions = {
   icon?: string
@@ -33,9 +46,19 @@ export type VcBtnOptions = {
 
 export type ColorSegments = [number, [number, number, number]] | [number, string | ColorInByteOption | Cartesian4Option | Cesium.Color]
 
-interface AnyFunction {
-  (...args: any[]): any
+export type VcMittEvents = {
+  ready: ReadyObj
 }
+
+export type AnyFunction<T> = (...args: any[]) => T
+
+export type SFCWithInstall<T> = T & Plugin
+
+export type RefElement = HTMLElement | null
+
+export type Nullable<T> = T | null
+
+export type StyleValue = string | CSSProperties | Array<StyleValue>
 
 interface AnyObject {
   [propName: string]: any
@@ -75,7 +98,7 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   cesiumClass?: string
   nowaiting?: boolean
   renderByParent?: boolean
-  vcMitt?: Emitter
+  vcMitt?: Emitter<VcMittEvents>
   cesiumObject?: AnyObject | HTMLElement
   createCesiumObject?(): Promise<unknown>
   mount?(): Promise<boolean>
@@ -112,7 +135,7 @@ interface VcViewerProvider {
   primitives: Cesium.PrimitiveCollection
   groundPrimitives: Cesium.PrimitiveCollection
   postProcessStages: Cesium.PostProcessStageCollection
-  viewerMitt: Emitter
+  viewerMitt: Emitter<VcMittEvents>
   entityViewModel?: VcComponentPublicInstance
   imageryLayerViewModel?: VcComponentPublicInstance
   layout?: {
@@ -201,7 +224,7 @@ interface MaterialOption {
     }
   }
   strict?: boolean
-  translucent?: boolean | AnyFunction
+  translucent?: boolean | AnyFunction<void>
   minificationFilter?: Cesium.TextureMinificationFilter
   magnificationFilter?: Cesium.TextureMagnificationFilter
 }
@@ -256,10 +279,28 @@ interface HeatmapConfiguration extends h337.HeatmapConfiguration {
   minOpacity?: number
 }
 
-
 export {
-  AnyFunction, AnyObject, CameraOption, ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, CesiumMembersEvent,
-  Cartesian2Option, Cartesian3Option, Cartesian4Option, CartographicInDegreeOption, PolygonHierarchyOption, NearFarScalarOption,
-  DistanceDisplayConditionOption, ColorInByteOption, MaterialOption, RectangleInDegreeOption, BoundingRectangleOption, PlaneOption,
-  TranslationRotationScaleOption, NavigationOption, HeadingPitchRollOption, HeatmapConfiguration
+  AnyObject,
+  CameraOption,
+  ReadyObj,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcViewerProvider,
+  CesiumMembersEvent,
+  Cartesian2Option,
+  Cartesian3Option,
+  Cartesian4Option,
+  CartographicInDegreeOption,
+  PolygonHierarchyOption,
+  NearFarScalarOption,
+  DistanceDisplayConditionOption,
+  ColorInByteOption,
+  MaterialOption,
+  RectangleInDegreeOption,
+  BoundingRectangleOption,
+  PlaneOption,
+  TranslationRotationScaleOption,
+  NavigationOption,
+  HeadingPitchRollOption,
+  HeatmapConfiguration
 }

@@ -3,12 +3,7 @@ import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import {
-  ReadyObj,
-  VcComponentInternalInstance,
-  VcComponentPublicInstance,
-  VcViewerProvider
-} from '@vue-cesium/utils/types'
+import { ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcMittEvents, VcViewerProvider } from '@vue-cesium/utils/types'
 import * as cesiumProps from '@vue-cesium/utils/cesium-props'
 import { vcKey } from '@vue-cesium/utils/config'
 import useLog from '../private/use-log'
@@ -22,7 +17,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   vcInstance.alreadyListening = []
   let unwatchFns = []
   vcInstance.mounted = false
-  const vcMitt: Emitter = mitt()
+  const vcMitt: Emitter<VcMittEvents> = mitt()
   vcInstance.vcMitt = vcMitt
   const $services = inject<VcViewerProvider>(vcKey)
 
@@ -90,21 +85,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     return createCesiumObject().then(async cesiumObject => {
       vcInstance.cesiumObject = cesiumObject
       // Load the created Cesium object. 加载创建的 Cesium 对象。
-      return mount().then(
-        (): ReadyObj => {
-          vcInstance.mounted = true
-          parentVcInstance.children.push(vcInstance)
-          // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
-          const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
-          emit('ready', readyObj)
-          vcMitt.emit('ready', readyObj)
-          logger.debug(`${vcInstance.cesiumClass}---loaded`)
-          Object.assign(vcInstance.proxy, {
-            cesiumObject: vcInstance.cesiumObject
-          })
-          return readyObj
-        }
-      )
+      return mount().then((): ReadyObj => {
+        vcInstance.mounted = true
+        parentVcInstance.children.push(vcInstance)
+        // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
+        const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
+        emit('ready', readyObj)
+        vcMitt.emit('ready', readyObj)
+        logger.debug(`${vcInstance.cesiumClass}---loaded`)
+        Object.assign(vcInstance.proxy, {
+          cesiumObject: vcInstance.cesiumObject
+        })
+        return readyObj
+      })
     })
   }
 
@@ -124,17 +117,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
     vcInstance.children.length = 0
 
-    return vcInstance.mounted ? unmount().then(async () => {
-      setPropsWatcher(false)
-      vcInstance.cesiumObject = undefined
-      vcInstance.mounted = false
-      emit('destroyed', vcInstance)
-      logger.debug(`${vcInstance.cesiumClass}---unmounted`)
+    return vcInstance.mounted
+      ? unmount().then(async () => {
+          setPropsWatcher(false)
+          vcInstance.cesiumObject = undefined
+          vcInstance.mounted = false
+          emit('destroyed', vcInstance)
+          logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
-      // If the component cannot be rendered without the parent component, the parent component needs to be removed.
-      // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
-      return vcInstance.renderByParent && !vcInstance.unloadingPromise ? (parentVcInstance.proxy as VcComponentPublicInstance).unload() : true
-    }) : false
+          // If the component cannot be rendered without the parent component, the parent component needs to be removed.
+          // 如果该组件的渲染和父组件是绑定在一起的，需要移除父组件。
+          return vcInstance.renderByParent && !vcInstance.unloadingPromise ? (parentVcInstance.proxy as VcComponentPublicInstance).unload() : true
+        })
+      : false
   }
 
   const reload = async () => {
@@ -272,11 +267,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     } else {
       const cmpName = vcInstance.proxy.$options.name
       const propOption = vcInstance.proxy.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
-      return (propOption?.watcherOptions) && !isEmptyObj(value)
+      return propOption?.watcherOptions && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
         : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity')
-          ? new Cesium.CallbackProperty(value, false)
-          : value
+        ? new Cesium.CallbackProperty(value, false)
+        : value
     }
   }
 

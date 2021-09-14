@@ -50,7 +50,7 @@ export function getInstanceListener(vcInstance: VcComponentInternalInstance, lis
     return undefined
   }
   const listener = props[`on${capitalize(listenerName)}`] || props[`on${capitalize(camelCase(listenerName))}`]
-  return listener as AnyFunction
+  return listener as AnyFunction<any>
 }
 
 /**
@@ -63,7 +63,5 @@ export function $<T>(ref: Ref<T>) {
 
 export function getVcParentInstance(instance: VcComponentInternalInstance): VcComponentInternalInstance {
   const parentInstance = instance.parent as VcComponentInternalInstance
-  return !parentInstance.cesiumClass && parentInstance.proxy.$options.name !== 'VcViewer'
-    ? getVcParentInstance(parentInstance)
-    : parentInstance
+  return !parentInstance.cesiumClass && parentInstance.proxy.$options.name !== 'VcViewer' ? getVcParentInstance(parentInstance) : parentInstance
 }

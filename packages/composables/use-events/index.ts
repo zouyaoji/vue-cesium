@@ -1,4 +1,3 @@
-import { InstallOptions } from '@vue-cesium/utils/config'
 import { AnyObject, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { isArray } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -54,7 +53,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     }
   }
 
-  function pickedAction (movement) {
+  function pickedAction(movement) {
     if (!props.enableMouseEvent) {
       return
     }
@@ -92,7 +91,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
         // 没有拾取到对象，this.pickedFeature又有记录，说明移出了。
         pickedFeatureAndCallbackNames.push({
           callbackName: callbackNameOut,
-          pickedFeature: this.pickedFeature,
+          pickedFeature: this.pickedFeature
         })
       }
 
@@ -102,19 +101,19 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
         pickedFeatureAndCallbackNames.push({
           // 拾取到对象，this.pickedFeature也有记录，两者不同，说明操作到另外一个对象上去了
           callbackName: callbackNameOut,
-          pickedFeature: this.pickedFeature,
+          pickedFeature: this.pickedFeature
         })
       }
       if (callbackName === 'mousemove' && (!this.pickedFeature || this.pickedFeature.id !== pickedFeature.id)) {
         pickedFeatureAndCallbackNames.push({
           callbackName: 'mouseover',
-          pickedFeature,
+          pickedFeature
         })
       }
 
       pickedFeatureAndCallbackNames.push({
         callbackName,
-        pickedFeature,
+        pickedFeature
       })
     }
 
@@ -149,20 +148,20 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           eventSourceList.push({
             callbackName,
             cesiumObject: pickedFeature.id[0].entityCollection.owner,
-            pickedFeature,
+            pickedFeature
           })
         } else if (pickedFeature.id instanceof Cesium.Entity) {
           // 实体
           eventSourceList.push({
             callbackName,
             cesiumObject: pickedFeature.id,
-            pickedFeature,
+            pickedFeature
           })
           // 数据源
           eventSourceList.push({
             callbackName,
             cesiumObject: pickedFeature.id.entityCollection.owner,
-            pickedFeature,
+            pickedFeature
           })
         }
       }
@@ -171,7 +170,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
         eventSourceList.push({
           callbackName,
           cesiumObject: pickedFeature.primitive,
-          pickedFeature,
+          pickedFeature
         })
       }
 
@@ -179,7 +178,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
         eventSourceList.push({
           callbackName,
           cesiumObject: e,
-          pickedFeature,
+          pickedFeature
         })
         if (e._vcParent) {
           getParentCollection(e._vcParent)
@@ -190,7 +189,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
         eventSourceList.push({
           callbackName,
           cesiumObject: pickedFeature.collection,
-          pickedFeature,
+          pickedFeature
         })
         if (pickedFeature.collection._vcParent) {
           getParentCollection(pickedFeature.collection._vcParent)
@@ -206,7 +205,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           surfacePosition: intersection,
           pickedFeature: event.pickedFeature,
           button,
-          cesiumObject: event.cesiumObject,
+          cesiumObject: event.cesiumObject
         })
     })
 
@@ -214,7 +213,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
   }
   return {
     bindEvents,
-    registerEvents,
+    registerEvents
   }
 }
 
@@ -233,7 +232,7 @@ const viewerScreenSpaceEvents: Array<string> = [
   'RIGHT_CLICK',
   'RIGHT_DOWN',
   'RIGHT_UP',
-  'WHEEL',
+  'WHEEL'
 ]
 
 const pickEvents: Array<string> = ['mousedown', 'mouseup', 'click', 'clickout', 'dblclick', 'mousemove', 'mouseover', 'mouseout']

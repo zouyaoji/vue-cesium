@@ -12,8 +12,23 @@ module.exports = {
     browser: true,
     node: true
   },
-  plugins: ['@typescript-eslint'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended'],
+  plugins: ['@typescript-eslint', 'prettier'],
+  extends: ['plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended', 'prettier'],
+  overrides: [
+    {
+      files: ['*.ts'],
+      rules: {
+        'no-undef': 'off'
+      }
+    },
+    {
+      // not tested
+      files: ['**/__tests__/**'],
+      rules: {
+        'no-console': 'off'
+      }
+    }
+  ],
   rules: {
     // js/ts
     'eol-last': 'error',
@@ -64,6 +79,6 @@ module.exports = {
       }
     ],
     'vue/require-default-prop': 'off',
-    'vue/html-closing-bracket-spacing': 'error',
+    'vue/html-closing-bracket-spacing': 'error'
   }
 }

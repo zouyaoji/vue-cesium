@@ -16,3 +16,4 @@ lib
 website/play/index.vue
 packages/vue-cesium/version.ts
 /es/
+es

@@ -10,6 +10,7 @@ export interface InstallOptions {
   viewerUnloadingPromise?: Promise<boolean>
   version?: string
   cfg?: AnyObject
+  locale?: any
 }
 
 let $VueCesium = {} as InstallOptions

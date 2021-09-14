@@ -20,20 +20,15 @@ import 'highlight.js/styles/color-brewer.css'
 import './demo-styles/index.scss'
 import './assets/styles/common.scss'
 import './assets/styles/fonts/style.css'
-import icon from './icon.json'
 
 import App from './app.vue'
 import ElementPlus from 'element-plus'
-import 'element-plus/lib/theme-chalk/index.css'
-import 'element-plus/lib/theme-chalk/display.css'
+import 'element-plus/dist/index.css'
 
 import VueCesium from 'vue-cesium'
 import '../packages/theme-default/src/index.scss'
-// import '../lib/theme-default/index.css'
 
 const app = createApp(App)
-
-app.config.globalProperties.$icon = icon
 
 app.component('DemoBlock', demoBlock)
 app.component('RightNav', RightNav)

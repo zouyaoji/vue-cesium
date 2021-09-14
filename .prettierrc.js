@@ -9,5 +9,13 @@ module.exports = {
   jsxSingleQuote: true,
   trailingComma: 'none',
   bracketSpacing: true,
-  jsxBracketSameLine: true
+  jsxBracketSameLine: true,
+  overrides: [
+    {
+      files: '.prettierrc',
+      options: {
+        parser: 'json'
+      }
+    }
+  ]
 }

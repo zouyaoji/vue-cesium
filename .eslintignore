@@ -3,3 +3,6 @@ dist/*
 lib/*
 /index.js
 website/public/*
+node_modules
+packages/*/es
+packages/*/lib

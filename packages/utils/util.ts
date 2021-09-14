@@ -1,4 +1,3 @@
-
 import { getCurrentInstance } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
 import isUndefined from 'lodash/isUndefined'
@@ -6,7 +5,7 @@ import isNull from 'lodash/isNull'
 import camelCase from 'lodash/camelCase'
 import { AnyFunction, AnyObject } from './types'
 
-export function useGlobalConfig () {
+export function useGlobalConfig() {
   const vm: any = getCurrentInstance()
   if ('$VueCesium' in vm.proxy) {
     return vm.proxy.$VueCesium
@@ -14,13 +13,13 @@ export function useGlobalConfig () {
   return {}
 }
 
-export function getFileNameByPath (path: string): string {
+export function getFileNameByPath(path: string): string {
   const posStart = path.lastIndexOf('/')
   const posEnd = path.lastIndexOf('.')
   return path.substring(posStart + 1, posEnd)
 }
 
-export function dirname (path: string): string {
+export function dirname(path: string): string {
   if (typeof path !== 'string') path = path + ''
   if (path.length === 0) return '.'
   let code = path.charCodeAt(0)
@@ -49,15 +48,16 @@ export function dirname (path: string): string {
   return path.slice(0, end)
 }
 
-export function removeEmpty (obj: any): AnyObject {
+export function removeEmpty(obj: any): AnyObject {
   const proto = Object.getPrototypeOf(obj)
   const finalObj: AnyObject = {}
   Object.setPrototypeOf(finalObj, proto)
   Object.keys(obj).forEach(key => {
     const className = getObjClassName(obj[key])
-    if ((obj[key] && isArray(obj[key]) || obj[key] instanceof Element)) {
+    if ((obj[key] && isArray(obj[key])) || obj[key] instanceof Element) {
       finalObj[key] = obj[key]
-    } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) { // Do not process cesium objects
+    } else if (obj[key] && typeof obj[key] === 'object' && !Cesium[className]) {
+      // Do not process cesium objects
       const nestedObj = removeEmpty(obj[key])
       if (Object.keys(nestedObj).length) {
         finalObj[key] = nestedObj
@@ -69,7 +69,7 @@ export function removeEmpty (obj: any): AnyObject {
   return finalObj
 }
 
-export function isEmptyObj (obj: unknown): boolean {
+export function isEmptyObj(obj: unknown): boolean {
   if (isUndefined(obj) || isNull(obj)) {
     return true
   }
@@ -78,16 +78,13 @@ export function isEmptyObj (obj: unknown): boolean {
     return false
   }
 
-
-
   const arr = Object.keys(obj)
   return arr.length === 0
 }
 
 export const kebabCase = hyphenate
 
-
-export function getObjClassName (obj: AnyObject): string {
+export function getObjClassName(obj: AnyObject): string {
   if (obj && obj.constructor) {
     const strFun = obj.constructor.toString()
     let className = strFun.substr(0, strFun.indexOf('('))
@@ -103,7 +100,7 @@ export function getObjClassName (obj: AnyObject): string {
  * @param {Number} latitude
  * @returns {Boolean}
  */
-export function lnglatValidator (longitude: number, latitude: number) {
+export function lnglatValidator(longitude: number, latitude: number) {
   // 经度，整数部分为0-180小数部分为0到6位
   const longreg = /^(-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,15})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,15}|180)$/
   if (!longreg.test(longitude.toString())) {
@@ -123,7 +120,7 @@ export function defaultValue(a, b) {
   return b
 }
 
-export function inherit (base, derived) {
+export function inherit(base, derived) {
   function F() {
     //
   }
@@ -137,15 +134,15 @@ const getDefaultOptionByProps = (props: AnyObject, ignores: Array<string> = []) 
   Object.keys(props).forEach(key => {
     if (ignores.indexOf(key) === -1) {
       const value: {
-        default?: AnyFunction | AnyObject
+        default?: AnyFunction<any> | AnyObject
       } = props[key]
       defaultOptions[key] = isFunction(value)
         ? undefined
         : isPlainObject(value)
-          ? isFunction(value.default)
-            ? value.default()
-            : value.default
-          : value
+        ? isFunction(value.default)
+          ? value.default()
+          : value.default
+        : value
     }
   })
 

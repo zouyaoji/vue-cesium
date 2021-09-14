@@ -77,21 +77,6 @@ ${NAME}.install = (app: App): void => {
 export default ${NAME}
 EOF
 
-cat > $DIRNAME/package.json <<EOF
-{
-  "name": "@vue-cesium/$INPUT_NAME",
-  "version": "3.0.0-beta",
-  "main": "dist/index.js",
-  "license": "MIT",
-  "peerDependencies": {
-    "vue": "^3.0.11"
-  },
-  "devDependencies": {
-    "@vue/test-utils": "^2.0.0-rc.4"
-  }
-}
-EOF
-
 cat > $DIRNAME/__tests__/$INPUT_NAME.spec.ts <<EOF
 import { VcComponentPublicInstance,  ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
@@ -99,7 +84,7 @@ import VcViewer from '@vue-cesium/viewer'
 import Vc$NAME from '../src'
 
 const option = {
-  cesiumPath: 'https://zouyaoji.top/vue-cesium/Cesium/Cesium.js'
+  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
 }
 
 config.global.config.globalProperties = {}

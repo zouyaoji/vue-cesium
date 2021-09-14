@@ -6,12 +6,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const isProd = process.env.NODE_ENV === 'production'
+/*
+ * 是否使用生产环境的 vue
+ */
+const isVueProd = process.env.VUE_BUNDLE === 'production' || isProd
+const vueBundle = isVueProd ? 'vue.esm-browser.prod.js' : 'vue.esm-browser.js'
 const isPlay = !!process.env.PLAY_ENV
 
+/** @type { import('webpack').Configuration } */
 const config = {
   mode: isProd ? 'production' : 'development',
   devtool: !isProd && 'cheap-module-eval-source-map',
@@ -79,15 +86,19 @@ const config = {
     new CopyWebpackPlugin({
       patterns: [
         // { from: 'source', to: 'dest' },
-        { from: path.resolve(__dirname, './public'),
+        {
+          from: path.resolve(__dirname, './public'),
           to: '.'
         }
       ]
-    })
+    }),
+    new ProgressBarPlugin()
   ],
   devServer: {
     inline: true,
-    hot: true,
+    // 如果使用 vue 的生产环境构建包，无法启用 hmr
+    // 因为生产环境下 vue 没有注入 hmr 必须的 __VUE_HMR_RUNTIME__ api
+    hot: !isVueProd,
     stats: 'minimal',
     publicPath: '/',
     contentBase: __dirname,

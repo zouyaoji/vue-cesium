@@ -12,7 +12,8 @@
     "sourceMap": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": false
+    "forceConsistentCasingInFileNames": false,
+    "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "**/__tests__", "dist/**", "packages/*/es", "packages/*/lib"]
 }

@@ -28,8 +28,8 @@ import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getOb
  * // const options = [x: 100, y: 100]
  * const position = makeCartesian2(options)
  */
-export function makeCartesian2 (
-  val: Cesium.CallbackProperty | Cesium.Cartesian2 | Cartesian2Option | Array<number> | AnyFunction,
+export function makeCartesian2(
+  val: Cesium.CallbackProperty | Cesium.Cartesian2 | Cartesian2Option | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.Cartesian2 | Cesium.CallbackProperty {
   const { Cartesian2, CallbackProperty } = Cesium
@@ -70,23 +70,35 @@ export function makeCartesian2 (
  * // const options = [108, 35, 1000]
  * const position = makeCartesian3 (options) // return Cesium.Cartesian3
  */
-export function makeCartesian3 (
-  val:
-    | Cesium.CallbackProperty
-    | Cesium.Cartesian3
-    | Cartesian3Option
-    | CartographicInDegreeOption
-    | Array<number>
-    | AnyFunction,
+export function makeCartesian3(
+  val: Cesium.CallbackProperty | Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number> | AnyFunction<any>,
   ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
-): Cesium.Cartesian3 | Cesium.CallbackProperty | Cesium.SampledPositionProperty |
-  Cesium.CompositePositionProperty | Cesium.ConstantPositionProperty | Cesium.TimeIntervalCollectionPositionProperty {
-  const { CallbackProperty, Cartesian3, Ellipsoid, SampledPositionProperty,
-    CompositePositionProperty, ConstantPositionProperty, TimeIntervalCollectionPositionProperty } = Cesium
+):
+  | Cesium.Cartesian3
+  | Cesium.CallbackProperty
+  | Cesium.SampledPositionProperty
+  | Cesium.CompositePositionProperty
+  | Cesium.ConstantPositionProperty
+  | Cesium.TimeIntervalCollectionPositionProperty {
+  const {
+    CallbackProperty,
+    Cartesian3,
+    Ellipsoid,
+    SampledPositionProperty,
+    CompositePositionProperty,
+    ConstantPositionProperty,
+    TimeIntervalCollectionPositionProperty
+  } = Cesium
 
-  if (val instanceof Cartesian3 || val instanceof CallbackProperty || val instanceof SampledPositionProperty ||
-    val instanceof CompositePositionProperty || val instanceof ConstantPositionProperty || val instanceof TimeIntervalCollectionPositionProperty) {
+  if (
+    val instanceof Cartesian3 ||
+    val instanceof CallbackProperty ||
+    val instanceof SampledPositionProperty ||
+    val instanceof CompositePositionProperty ||
+    val instanceof ConstantPositionProperty ||
+    val instanceof TimeIntervalCollectionPositionProperty
+  ) {
     return val
   }
 
@@ -118,7 +130,7 @@ export function makeCartesian3 (
  * @param {Array} val
  * @returns {Array<Cartesian3>}
  */
-export function makeCartesian3Array (
+export function makeCartesian3Array(
   vals:
     | Cesium.CallbackProperty
     | Array<Cesium.Cartesian3>
@@ -126,7 +138,7 @@ export function makeCartesian3Array (
     | Array<CartographicInDegreeOption>
     | Array<number>
     | Array<Array<number>>
-    | AnyFunction,
+    | AnyFunction<any>,
   ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
 ): Array<Cesium.Cartesian3> | Cesium.CallbackProperty {
@@ -162,14 +174,8 @@ export function makeCartesian3Array (
  * @param {Array} vals
  * @returns {Array<Cartesian2>}
  */
-export function makeCartesian2Array (
-  vals:
-    | Cesium.CallbackProperty
-    | Array<Cesium.Cartesian2>
-    | Array<Cartesian2Option>
-    | Array<Array<number>>
-    | Array<number>
-    | AnyFunction,
+export function makeCartesian2Array(
+  vals: Cesium.CallbackProperty | Array<Cesium.Cartesian2> | Array<Cartesian2Option> | Array<Array<number>> | Array<number> | AnyFunction<any>,
   isConstant
 ): Cesium.CallbackProperty | Array<Cesium.Cartesian2> {
   const { CallbackProperty, Cartesian2 } = Cesium
@@ -201,8 +207,8 @@ export function makeCartesian2Array (
  * // const options = [0, 0, 0, 0]
  * const orientation = makeQuaternion(options) // returns Cesium.Quaternion
  */
-export function makeQuaternion (
-  val: Cesium.CallbackProperty | Cesium.Quaternion | Cartesian4Option | Array<number> | AnyFunction,
+export function makeQuaternion(
+  val: Cesium.CallbackProperty | Cesium.Quaternion | Cartesian4Option | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.CallbackProperty | Cesium.Quaternion | Cesium.VelocityOrientationProperty {
   const { CallbackProperty, Quaternion, VelocityOrientationProperty } = Cesium
@@ -231,7 +237,7 @@ export function makeQuaternion (
  * 解析 HierarchyJson
  * @param {Object} val
  */
-function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>, ellipsoid?: Cesium.Ellipsoid) {
+function parsePolygonHierarchyJson(val: Array<PolygonHierarchyOption>, ellipsoid?: Cesium.Ellipsoid) {
   val.forEach(item => {
     item.positions = makeCartesian3Array(item.positions, ellipsoid) as Array<Cesium.Cartesian3>
     if (item.holes) {
@@ -244,7 +250,7 @@ function parsePolygonHierarchyJson (val: Array<PolygonHierarchyOption>, ellipsoi
  * 普通数组或对象转 Cesium.PolygonHierarchy 对象。
  * @param {Object|Array} val
  */
-export function makePolygonHierarchy (
+export function makePolygonHierarchy(
   val:
     | Cesium.CallbackProperty
     | Cesium.PolygonHierarchy
@@ -252,7 +258,7 @@ export function makePolygonHierarchy (
     | Array<Cesium.Cartesian3>
     | Array<Cartesian3Option>
     | Array<Array<number>>
-    | AnyFunction,
+    | AnyFunction<any>,
   ellipsoid?: Cesium.Ellipsoid,
   isConstant = false
 ): Cesium.CallbackProperty | Cesium.PolygonHierarchy | PolygonHierarchyOption {
@@ -290,8 +296,8 @@ export function makePolygonHierarchy (
  * // const options = [1000, 1.0, 10000, 1.5]
  * const nearFarScalar = makeNearFarScalar(options)
  */
-export function makeNearFarScalar (
-  val: Cesium.NearFarScalar | Cesium.CallbackProperty | NearFarScalarOption | Array<number> | AnyFunction,
+export function makeNearFarScalar(
+  val: Cesium.NearFarScalar | Cesium.CallbackProperty | NearFarScalarOption | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.NearFarScalar | Cesium.CallbackProperty {
   const { NearFarScalar, CallbackProperty } = Cesium
@@ -324,8 +330,8 @@ export function makeNearFarScalar (
  * // const options = {near: 0, far: 1000}
  * const distanceDisplayCondition = makeDistanceDisplayCondition(options) // return Cesium.DistanceDisplayCondition
  */
-export function makeDistanceDisplayCondition (
-  val: Cesium.DistanceDisplayCondition | Cesium.CallbackProperty | DistanceDisplayConditionOption | Array<number> | AnyFunction,
+export function makeDistanceDisplayCondition(
+  val: Cesium.DistanceDisplayCondition | Cesium.CallbackProperty | DistanceDisplayConditionOption | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.DistanceDisplayCondition | Cesium.CallbackProperty {
   const { DistanceDisplayCondition, CallbackProperty } = Cesium
@@ -360,8 +366,8 @@ export function makeDistanceDisplayCondition (
  * // const options = {red: 255, green: 0, bule: 0, alpha: 255}
  * const color = makeColor(options) // return Cesium.Color
  */
-export function makeColor (
-  val: Cesium.Color | Cesium.CallbackProperty | string | Array<number> | ColorInByteOption | Cartesian4Option | AnyFunction,
+export function makeColor(
+  val: Cesium.Color | Cesium.CallbackProperty | string | Array<number> | ColorInByteOption | Cartesian4Option | AnyFunction<any>,
   isConstant = false
 ): Cesium.Color | Cesium.CallbackProperty {
   const { Color, CallbackProperty } = Cesium
@@ -395,10 +401,7 @@ export function makeColor (
   return undefined
 }
 
-export function makeColors (
-  vals: Cesium.Color[] | string[] | number[][] | ColorInByteOption[] | Cartesian4Option[]
-): Cesium.Color[] {
-
+export function makeColors(vals: Cesium.Color[] | string[] | number[][] | ColorInByteOption[] | Cartesian4Option[]): Cesium.Color[] {
   if (isArray(vals)) {
     const results: Cesium.Color[] = []
     vals.forEach(val => {
@@ -406,7 +409,6 @@ export function makeColors (
     })
 
     return results
-
   } else {
     return vals
   }
@@ -416,7 +418,7 @@ export function makeColors (
  * 普通对象或数组 [r, g, b, a] 或字符串转 MaterialProperty
  * @param {String|Array|Object} val
  */
-export function makeMaterialProperty (
+export function makeMaterialProperty(
   val:
     | Cesium.CallbackProperty
     | Cesium.Color
@@ -435,7 +437,7 @@ export function makeMaterialProperty (
     | HTMLImageElement
     | HTMLCanvasElement
     | HTMLVideoElement
-    | AnyFunction,
+    | AnyFunction<any>,
   isConstant = false
 ) {
   const {
@@ -555,7 +557,7 @@ export function makeMaterialProperty (
  * 转 Material
  * @param {String|Array|Object} val
  */
-export function makeMaterial (val: string | Array<number> | MaterialOption) {
+export function makeMaterial(val: string | Array<number> | MaterialOption) {
   const vcInstance = this as VcComponentInternalInstance
   const cmpName = vcInstance.proxy.$options.name
   if (cmpName && (cmpName.indexOf('Graphics') || cmpName.indexOf('Datasource')) !== -1) {
@@ -597,8 +599,8 @@ export function makeMaterial (val: string | Array<number> | MaterialOption) {
  * @param {Object} val
  * @returns {Rectangle}
  */
-export function makeRectangle (
-  val: Cesium.Rectangle | Cesium.CallbackProperty | RectangleInDegreeOption | Cartesian4Option | Array<number> | AnyFunction,
+export function makeRectangle(
+  val: Cesium.Rectangle | Cesium.CallbackProperty | RectangleInDegreeOption | Cartesian4Option | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.Rectangle | Cesium.CallbackProperty | Cesium.RectangleGraphics {
   const { Rectangle, RectangleGraphics, CallbackProperty } = Cesium
@@ -638,8 +640,8 @@ export function makeRectangle (
  * // const options = {x: 0, y: 0, width: 100, height: 100}
  * const boundingRectangle = makeBoundingRectangle(options)
  */
-export function makeBoundingRectangle (
-  val: Cesium.BoundingRectangle | Cesium.CallbackProperty | BoundingRectangleOption | Array<number> | AnyFunction,
+export function makeBoundingRectangle(
+  val: Cesium.BoundingRectangle | Cesium.CallbackProperty | BoundingRectangleOption | Array<number> | AnyFunction<any>,
   isConstant = false
 ): Cesium.BoundingRectangle | Cesium.CallbackProperty {
   const { BoundingRectangle, CallbackProperty } = Cesium
@@ -669,8 +671,8 @@ export function makeBoundingRectangle (
  * @param {Object} val
  * @returns {Plane}
  */
-export function makePlane (
-  val: Cesium.CallbackProperty | Cesium.Plane | PlaneOption | Array<any> | AnyFunction,
+export function makePlane(
+  val: Cesium.CallbackProperty | Cesium.Plane | PlaneOption | Array<any> | AnyFunction<any>,
   isConstant = false
 ): Cesium.CallbackProperty | Cesium.Plane | Cesium.PlaneGraphics {
   const { Cartesian3, Plane, PlaneGraphics, CallbackProperty } = Cesium
@@ -704,8 +706,8 @@ export function makePlane (
  * 普通对象转平移、旋转、缩放变换对象。
  * @param {*} val
  */
-export function makeTranslationRotationScale (
-  val: Cesium.TranslationRotationScale | Cesium.CallbackProperty | TranslationRotationScaleOption | AnyFunction | Array<any>,
+export function makeTranslationRotationScale(
+  val: Cesium.TranslationRotationScale | Cesium.CallbackProperty | TranslationRotationScaleOption | AnyFunction<any> | Array<any>,
   isConstant = false
 ) {
   const { TranslationRotationScale, CallbackProperty } = Cesium
@@ -738,7 +740,7 @@ export function makeTranslationRotationScale (
   return undefined
 }
 
-export function makeOptions (val) {
+export function makeOptions(val) {
   const vcInstance = this as VcComponentInternalInstance
   const cmpName = vcInstance.proxy.$options.name
   const result: any = {}
@@ -753,7 +755,7 @@ export function makeOptions (val) {
   return val
 }
 
-export function captureScreenshot (viewer: Cesium.Viewer) {
+export function captureScreenshot(viewer: Cesium.Viewer) {
   const scene = viewer.scene
   const promise: Promise<string> = new Promise((resolve, reject) => {
     const removeCallback = viewer.scene.postRender.addEventListener(() => {
@@ -772,7 +774,7 @@ export function captureScreenshot (viewer: Cesium.Viewer) {
   return promise
 }
 
-export function makeCameraOptions (camera: CameraOption, ellipsoid?: Cesium.Ellipsoid) {
+export function makeCameraOptions(camera: CameraOption, ellipsoid?: Cesium.Ellipsoid) {
   const { Math: CesiumMath, Rectangle } = Cesium
 
   let destination: Cesium.Cartesian3 | Cesium.Rectangle = undefined
@@ -819,7 +821,7 @@ export function makeCameraOptions (camera: CameraOption, ellipsoid?: Cesium.Elli
   }
 }
 
-export function setViewerCamera (viewer: Cesium.Viewer, camera: CameraOption) {
+export function setViewerCamera(viewer: Cesium.Viewer, camera: CameraOption) {
   const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.setView({
     destination: destination,
@@ -827,7 +829,7 @@ export function setViewerCamera (viewer: Cesium.Viewer, camera: CameraOption) {
   })
 }
 
-export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, options?) {
+export function flyToCamera(viewer: Cesium.Viewer, camera: CameraOption, options?) {
   const { destination, orientation } = makeCameraOptions(camera, viewer.scene.globe.ellipsoid)
   viewer.camera.flyTo({
     destination: options.destination || destination,
@@ -838,7 +840,7 @@ export function flyToCamera (viewer: Cesium.Viewer, camera: CameraOption, option
   })
 }
 
-export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Cartesian3, ellipsoid: Cesium.Ellipsoid) {
+export function getGeodesicDistance(start: Cesium.Cartesian3, end: Cesium.Cartesian3, ellipsoid: Cesium.Ellipsoid) {
   const { EllipsoidGeodesic, Ellipsoid } = Cesium
   ellipsoid = ellipsoid || Ellipsoid.WGS84
   const pickedPointCartographic = ellipsoid.cartesianToCartographic(start)
@@ -847,7 +849,7 @@ export function getGeodesicDistance (start: Cesium.Cartesian3, end: Cesium.Carte
   return geodesic.surfaceDistance
 }
 
-export function getHeadingPitchRoll (start: Cesium.Cartesian3, end: Cesium.Cartesian3, scene: Cesium.Scene, result?: Array<number>) {
+export function getHeadingPitchRoll(start: Cesium.Cartesian3, end: Cesium.Cartesian3, scene: Cesium.Scene, result?: Array<number>) {
   const { Camera, Cartesian3, Math: CesiumMath } = Cesium
   const camera = new Camera(scene)
   if (Cartesian3.equals(start, end)) {
@@ -876,7 +878,7 @@ export function getHeadingPitchRoll (start: Cesium.Cartesian3, end: Cesium.Carte
   return result
 }
 
-export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: number, distance: number, ellipsoid: Cesium.Ellipsoid) {
+export function getPolylineSegmentEndpoint(start: Cesium.Cartesian3, heading: number, distance: number, ellipsoid: Cesium.Ellipsoid) {
   const { HeadingPitchRoll, Transforms, Matrix4, Cartesian3, Cartesian4, Quaternion, Cartographic, Ellipsoid } = Cesium
   ellipsoid = ellipsoid || Ellipsoid.WGS84
   const hpr = new HeadingPitchRoll(heading, 0, 0)
@@ -894,13 +896,13 @@ export function getPolylineSegmentEndpoint (start: Cesium.Cartesian3, heading: n
 }
 
 const restoreCursors = []
-export function setViewerCursor (viewer: Cesium.Viewer, cursor: string) {
+export function setViewerCursor(viewer: Cesium.Viewer, cursor: string) {
   const restoreCursor = getComputedStyle(viewer.canvas).cursor
   restoreCursors[restoreCursors.length - 1] !== restoreCursor && restoreCursors.push(restoreCursor)
   viewer.canvas.setAttribute('style', `cursor: ${cursor}`)
 }
 
-export function restoreViewerCursor (viewer: Cesium.Viewer, count = 1) {
+export function restoreViewerCursor(viewer: Cesium.Viewer, count = 1) {
   for (let i = 0; i < count; i++) {
     const cursor = restoreCursors.pop()
     viewer.canvas.setAttribute('style', `cursor: ${cursor}`)
