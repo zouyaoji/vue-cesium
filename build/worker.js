@@ -76,12 +76,12 @@ const TSCONFIG_PATH = path.resolve(process.cwd(), 'tsconfig.dts.json')
       })
 
       // console.log(sourceFile.getStructure())
-      const ElementPlusSign = '@element-plus/'
+      const VueCesiumSign = '@vue-cesium/'
 
-      sourceFile.getImportDeclarations(dec => dec.getModuleSpecifierValue().startsWith(ElementPlusSign)).map(modifySpecifier)
+      sourceFile.getImportDeclarations(dec => dec.getModuleSpecifierValue().startsWith(VueCesiumSign)).map(modifySpecifier)
 
       function modifySpecifier(d) {
-        const replaceTo = 'element-plus/es/' + d.getModuleSpecifierValue().slice(ElementPlusSign.length)
+        const replaceTo = 'vue-cesium/es/' + d.getModuleSpecifierValue().slice(VueCesiumSign.length)
         d.setModuleSpecifier(replaceTo)
       }
 

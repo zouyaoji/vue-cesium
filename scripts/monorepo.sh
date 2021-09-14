@@ -30,8 +30,8 @@ rsync -a dist/entry/types/ dist/vue-cesium/lib/
 yarn build:helper
 
 echo "copy index.css"
-cp dist/vue-cesium/theme-chalk/index.css dist/vue-cesium/dist/index.css
-cp -R dist/vue-cesium/theme-chalk/fonts dist/vue-cesium/dist/fonts
+cp dist/vue-cesium/theme-default/index.css dist/vue-cesium/dist/index.css
+cp -R dist/vue-cesium/theme-default/fonts dist/vue-cesium/dist/fonts
 
 echo "syncing style.js"
 rsync -a dist/styles/es/ dist/vue-cesium/es/components/
