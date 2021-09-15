@@ -1,20 +1,18 @@
 import path from 'path'
 import fs from 'fs'
-import { Project } from 'ts-morph'
+import { Project, SourceFile } from 'ts-morph'
 import vueCompiler from '@vue/compiler-sfc'
-import klawSync from 'klaw-sync'
+import { sync as globSync } from 'fast-glob'
 import chalk from 'chalk'
 
 const TSCONFIG_PATH = path.resolve(__dirname, '../tsconfig.json')
-const DEMO_RE = /\/demo\/\w+\.vue$/
-const TEST_RE = /__test__|__tests__/
-const excludedFiles = ['mock', 'package.json', 'spec', 'test', 'tests', 'css', '.DS_Store']
-const exclude = (path: string) => !excludedFiles.some(f => path.includes(f))
+console.log('TSCONFIG_PATH', TSCONFIG_PATH)
 
 /**
  * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
  */
-const genVueTypes = async (root, outDir = path.resolve(__dirname, '../dist/types')) => {
+const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../dist/types')) => {
+  console.log('baseUrl', path.resolve(__dirname, '../'))
   const project = new Project({
     compilerOptions: {
       allowJs: true,
@@ -26,21 +24,21 @@ const genVueTypes = async (root, outDir = path.resolve(__dirname, '../dist/types
       paths: {
         '@vue-cesium/*': ['packages/*']
       },
-      skipLibCheck: true
+      skipLibCheck: true,
+      strict: false
     },
     tsConfigFilePath: TSCONFIG_PATH
     // skipAddingFilesFromTsConfig: true
   })
 
-  const sourceFiles = []
+  const sourceFiles: SourceFile[] = []
 
-  const filePaths = klawSync(root, {
-    nodir: true
-  })
-    .map(item => item.path)
-    .filter(path => !DEMO_RE.test(path))
-    .filter(path => !TEST_RE.test(path))
-    .filter(exclude)
+  const excludedFiles = [/\/demo\/\w+\.vue$/, /__test__|__tests__/, 'mock', 'package.json', 'spec', 'test', 'tests', 'css', '.DS_Store']
+  const filePaths = globSync('**/*', {
+    cwd: root,
+    onlyFiles: true,
+    absolute: true
+  }).filter(path => !excludedFiles.some(f => (f instanceof RegExp ? f.test(path) : path.includes(f))))
 
   await Promise.all(
     filePaths.map(async file => {
@@ -81,7 +79,8 @@ const genVueTypes = async (root, outDir = path.resolve(__dirname, '../dist/types
   })
 
   for (const sourceFile of sourceFiles) {
-    console.log(chalk.yellow('Generating definition for file: ' + chalk.bold(sourceFile.getBaseName())))
+    const relativePath = path.relative(root, sourceFile.getFilePath())
+    console.log(chalk.yellow(`Generating definition for file: ${chalk.bold(relativePath)}`))
 
     const emitOutput = sourceFile.getEmitOutput()
     for (const outputFile of emitOutput.getOutputFiles()) {

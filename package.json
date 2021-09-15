@@ -1,6 +1,9 @@
 {
   "name": "vue-cesium",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "version": "3.0.0-beta",
   "description": "Vue 3.x components for CesiumJS.",
   "scripts": {
@@ -11,12 +14,13 @@
     "update:version": "esno build/update-version.ts",
     "bootstrap": "yarn --frozen-lockfile && npx lerna bootstrap && yarn gen:version",
     "clean:lib": "rimraf lib && rimraf es && rimraf dist",
-    "build:locale-umd": "esno ./build/build-locale.ts",
+    "build": "sh scripts/build.sh",
     "build:helper": "esno build/build-helper.ts",
+    "build:helper-zh": "node build/build-helper-zh.js",
     "build:indices": "esno build/build-indices.ts",
     "build:comps": "rimraf dist/components && esno build/components.ts",
     "build:style": "gulp --cwd ./build",
-    "build:prod": "sh scripts/monorepo.sh",
+    "build:prod": "sh scripts/publish.sh",
     "build:directives": "cd packages/directives && yarn clean && yarn build",
     "build:composables": "cd packages/composables && yarn clean && yarn build",
     "build:locale": "cd packages/locale && yarn clean && yarn build",
@@ -24,7 +28,6 @@
     "build:theme": "cd packages/theme-default && yarn clean && yarn build",
     "build:utils": "cd packages/utils && yarn clean && yarn build",
     "build:full-bundle": "esno build/full-bundle.ts",
-    "build:helper-zh": "node build/build-helper-zh.js",
     "format": "prettier --write .",
     "lint": "eslint ./packages --ext .vue,.js,.ts,.jsx,.tsx && prettier --check .",
     "lint:fix": "eslint --fix ./packages --ext .vue,.js,.ts,.jsx,.tsx && prettier --write .",
@@ -53,9 +56,6 @@
     ],
     "*.{scss,css,json,yaml,yml,md,html}": "prettier --write"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "browserslist": [
     "> 1%",
     "not ie 11",
