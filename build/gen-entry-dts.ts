@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-16 17:58:22
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\build\gen-entry-dts.ts
+ */
 import path from 'path'
 import fs from 'fs'
 import chalk from 'chalk'
@@ -18,13 +26,14 @@ const gen = async () => {
       skipLibCheck: true,
       esModuleInterop: true,
       target: 99, // ESNext
-      downlevelIteration: true,
-      types: ['../typings']
+      downlevelIteration: true
     },
     skipFileDependencyResolution: true,
     tsConfigFilePath: TSCONFIG_PATH,
     skipAddingFilesFromTsConfig: true
   })
+  project.addSourceFilesAtPaths(['typings/Cesium.d.ts', 'typings/cesium-shim.d.ts', 'typings/vue-shim.d.ts'])
+
   const sourceFiles = []
   files.map(f => {
     const sourceFile = project.addSourceFileAtPath(f)

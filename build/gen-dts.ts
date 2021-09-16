@@ -42,8 +42,6 @@ const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../di
     absolute: true
   }).filter(path => !excludedFiles.some(f => (f instanceof RegExp ? f.test(path) : path.includes(f))))
 
-  console.log('filePaths', filePaths)
-
   await Promise.all(
     filePaths.map(async file => {
       if (file.endsWith('.vue')) {

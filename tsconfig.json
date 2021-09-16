@@ -12,9 +12,10 @@
     "sourceMap": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": false
   },
   "exclude": ["node_modules", "dist/**", "packages/*/es", "packages/*/lib"]
 }

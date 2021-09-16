@@ -9,7 +9,7 @@
   "types": "index.d.ts",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib es",
     "build": "gulp build"
   },
   "bugs": {

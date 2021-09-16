@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-16 16:23:24
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\composables\gulpfile.ts
+ */
 import gulp from 'gulp'
 import ts from 'gulp-typescript'
 import path from 'path'
@@ -6,9 +14,9 @@ import rewriter from '../../build/gulp-rewriter'
 
 export const esm = './es'
 export const cjs = './lib'
-const tsProject = ts.createProject('tsconfig.json')
+const tsProject = ts.createProject('../../tsconfig.json')
 
-const inputs = ['./**/*.ts', '!./node_modules', '!./gulpfile.ts', '!./__tests__/*.ts']
+const inputs = ['./**/*.ts', '!./node_modules', '!./gulpfile.ts', '!./__tests__/*.ts', '!./es/**', '../../typings/**/*.ts']
 
 function compileEsm() {
   return gulp.src(inputs).pipe(tsProject()).pipe(rewriter()).pipe(gulp.dest(esm))
@@ -18,7 +26,7 @@ function compileCjs() {
   return gulp
     .src(inputs)
     .pipe(
-      ts.createProject('tsconfig.json', {
+      ts.createProject('../../tsconfig.json', {
         module: 'commonjs'
       })()
     )

@@ -1,4 +1,13 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 10:53:42
+ * @LastEditTime: 2021-09-16 14:36:42
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\gulpfile.ts
+ */
 import gulp from 'gulp'
+import debug from 'gulp-debug'
 import ts from 'gulp-typescript'
 import path from 'path'
 import { buildOutput } from '../../build/paths'
@@ -8,7 +17,7 @@ import type { Settings } from 'gulp-typescript'
 export const esm = './es'
 export const cjs = './lib'
 
-const inputs = ['./**/*.ts', '!gulpfile.ts', '!./node_modules', '!./tests/*.ts']
+const inputs = ['./**/*.ts', '!gulpfile.ts', '!./node_modules', '!./tests/*.ts', '../../typings/**/*.ts']
 
 function createProject(settings: Settings = {}) {
   return ts.createProject('../../tsconfig.json', {
@@ -20,7 +29,7 @@ function createProject(settings: Settings = {}) {
 }
 
 function compileEsm() {
-  return gulp.src(inputs).pipe(createProject()()).pipe(gulp.dest(esm))
+  return gulp.src(inputs).pipe(debug()).pipe(createProject()()).pipe(gulp.dest(esm))
 }
 
 function compileCjs() {
