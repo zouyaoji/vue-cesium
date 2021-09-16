@@ -1,13 +1,9 @@
 import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance } from 'vue'
-
 import VcIcon from '../icon'
-import { VcSpinner } from '../index'
-
+import { Spinner as VcSpinner } from '../spinner'
 import { Ripple } from '@vue-cesium/directives'
-
 import useBtn, { useBtnProps } from './use-btn'
 import { hMergeSlot, hDir } from '@vue-cesium/utils/private/render'
-
 import { stop, prevent, stopAndPrevent, listenOpts } from '@vue-cesium/utils/private/event'
 import { getTouchTarget } from '@vue-cesium/utils/private/touch'
 import { isKeyCode } from '@vue-cesium/utils/private/key-composition'

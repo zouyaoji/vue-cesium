@@ -40,6 +40,7 @@ const defaultTranslator = (...args: any[]) => {
     if (!value) return ''
     current = value
   }
+  return template(value, option)
 }
 
 export const t = (...args: any[]): string => {
@@ -47,7 +48,6 @@ export const t = (...args: any[]): string => {
     const translation = i18nHandler(...args)
     return translation || defaultTranslator(...args)
   }
-
   return defaultTranslator(...args)
 }
 

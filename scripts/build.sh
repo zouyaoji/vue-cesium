@@ -18,7 +18,7 @@ yarn build:style
 yarn build:theme
 yarn build:locale
 yarn build:utils
-yarn build:hooks
+yarn build:composables
 yarn build:directives
 yarn build:tokens
 yarn build:full-bundle

@@ -1327,7 +1327,7 @@ const blendOption = {
  * @const {*} id mixin
  */
 const id = {
-  id: null as PropType<any>
+  id: null as unknown as PropType<any>
 }
 
 /**

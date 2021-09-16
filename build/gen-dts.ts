@@ -12,6 +12,7 @@ console.log('TSCONFIG_PATH', TSCONFIG_PATH)
  * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
  */
 const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../dist/types')) => {
+  console.log('outDir', outDir)
   console.log('baseUrl', path.resolve(__dirname, '../'))
   const project = new Project({
     compilerOptions: {
@@ -27,9 +28,10 @@ const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../di
       skipLibCheck: true,
       strict: false
     },
-    tsConfigFilePath: TSCONFIG_PATH
-    // skipAddingFilesFromTsConfig: true
+    tsConfigFilePath: TSCONFIG_PATH,
+    skipAddingFilesFromTsConfig: true
   })
+  project.addSourceFilesAtPaths(['typings/Cesium.d.ts', 'typings/cesium-shim.d.ts', 'typings/vue-shim.d.ts'])
 
   const sourceFiles: SourceFile[] = []
 
@@ -39,6 +41,8 @@ const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../di
     onlyFiles: true,
     absolute: true
   }).filter(path => !excludedFiles.some(f => (f instanceof RegExp ? f.test(path) : path.includes(f))))
+
+  console.log('filePaths', filePaths)
 
   await Promise.all(
     filePaths.map(async file => {

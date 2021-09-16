@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "commonjs",
     "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -12,8 +12,9 @@
     "sourceMap": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": false,
-    "resolveJsonModule": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "strict": true
   },
   "exclude": ["node_modules", "dist/**", "packages/*/es", "packages/*/lib"]
 }
