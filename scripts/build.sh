@@ -1,4 +1,12 @@
 #!/bin/sh
+###
+ # @Author: zouyaoji@https://github.com/zouyaoji
+ # @Date: 2021-09-16 10:53:42
+ # @LastEditTime: 2021-09-16 16:26:17
+ # @LastEditors: zouyaoji
+ # @Description:
+ # @FilePath: \vue-cesium@next\scripts\build.sh
+###
 
 set -e
 
@@ -20,7 +28,7 @@ yarn build:locale
 yarn build:utils
 yarn build:composables
 yarn build:directives
-yarn build:tokens
+yarn build:shared
 yarn build:full-bundle
 
 rsync -a dist/entry/types/ dist/vue-cesium/es/
