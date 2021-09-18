@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-18 09:56:59
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\build\gulpfile.ts
+ */
 import gulp from 'gulp'
 import ts from 'gulp-typescript'
 import path from 'path'
@@ -14,9 +22,9 @@ const tsProject = ts.createProject('tsconfig.json', {
 
 const rewriter = () => {
   return through2.obj(function (file, _, cb) {
-    const compIdentifier = new RegExp('@element-plus/components', 'g')
+    const compIdentifier = new RegExp('@vue-cesium/components', 'g')
     const compReplacer = '../../../components'
-    const themeIdentifier = new RegExp('@element-plus/theme-chalk', 'g')
+    const themeIdentifier = new RegExp('@vue-cesium/theme-default', 'g')
     const themeReplacer = '../../../../theme-chalk'
     file.contents = Buffer.from(file.contents.toString().replace(compIdentifier, compReplacer).replace(themeIdentifier, themeReplacer))
     cb(null, file)

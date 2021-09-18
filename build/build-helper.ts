@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-18 13:29:50
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\build\build-helper.ts
+ */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // const helper = require('./components-helper')
 // import helper from 'components-helper'
@@ -15,7 +23,7 @@ helper({
   name,
   version: _version,
   entry: 'website/docs/en-US/**/!(base|donations|i18n|installation|migration-from-2.x|quickstart|platforms).md',
-  outDir: 'lib',
+  outDir: 'dist/vue-cesium',
   reComponentName,
   reDocUrl,
   reAttribute,
