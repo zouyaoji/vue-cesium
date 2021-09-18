@@ -1,5 +1,12 @@
-import { setConfig } from '@vue-cesium/utils/config'
-import { LocaleInjectionKey, localeProviderMaker } from '@vue-cesium/composables'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-18 13:47:23
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\vue-cesium\make-installer.ts
+ */
+
 import { version } from './version'
 
 import type { App, Plugin } from 'vue'
@@ -9,27 +16,12 @@ const makeInstaller = (components: Plugin[] = []) => {
   const apps: App[] = []
 
   const install = (app: App, opts: InstallOptions) => {
-    const defaultInstallOpt: InstallOptions = {
-      cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
-      accessToken:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
-    }
-
-    const option = Object.assign(defaultInstallOpt, opts)
     if (apps.includes(app)) return
     apps.push(app)
 
     components.forEach(c => {
-      app.use(c)
+      app.use(c, opts)
     })
-
-    if (option.locale) {
-      const localeProvides = localeProviderMaker(opts.locale)
-      app.provide(LocaleInjectionKey, localeProvides)
-    }
-
-    app.config.globalProperties.$VueCesium = option
-    setConfig(option)
   }
 
   return {

@@ -1,8 +1,35 @@
-import { SFCWithInstall } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-18 14:20:44
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\viewer\index.ts
+ */
 import { App } from 'vue'
+import { InstallOptions } from '@vue-cesium/utils/config'
+import { SFCWithInstall } from '@vue-cesium/utils/types'
+import { setConfig } from '@vue-cesium/utils/config'
+import { LocaleInjectionKey, localeProviderMaker } from '@vue-cesium/composables'
 import Viewer from './src'
 
-Viewer.install = (app: App): void => {
+Viewer.install = (app: App, opts: InstallOptions): void => {
+  const defaultInstallOpt: InstallOptions = {
+    cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+    accessToken:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
+  }
+
+  const option = Object.assign(defaultInstallOpt, opts)
+
+  if (option.locale) {
+    const localeProvides = localeProviderMaker(opts.locale)
+    app.provide(LocaleInjectionKey, localeProvides)
+  }
+
+  app.config.globalProperties.$VueCesium = option
+  setConfig(option)
+
   app.component(Viewer.name, Viewer)
 }
 

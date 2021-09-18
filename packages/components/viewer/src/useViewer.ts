@@ -928,7 +928,6 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   const getCesiumScript = async function (): Promise<typeof Cesium> {
     logger.debug('getCesiumScript')
     if (!global.Cesium) {
-      // const $vc = useGlobalConfig()
       let cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
       const dirName = dirname(cesiumPath)
       if (!cesiumPath.includes('.js')) {
@@ -1290,7 +1289,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   onMounted(async () => {
     try {
       logger.debug('viewer - onMounted')
-      await $vc.viewerUnloadingPromise
+      await $vc?.viewerUnloadingPromise
       createResolve(load())
     } catch (e) {
       reject(e)
