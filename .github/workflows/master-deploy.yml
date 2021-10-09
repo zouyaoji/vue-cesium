@@ -2,10 +2,10 @@ name: Deploy Doc Website
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  master-deploy:
+  main-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,6 +49,6 @@ jobs:
           SSH_KEY: ${{ secrets.GITEE_KEY }}
         with:
           # 注意替换为你的 GitHub 源仓库地址
-          github-repo: "git@github.com:zouyaoji/vue-cesium.git"
+          github-repo: 'git@github.com:zouyaoji/vue-cesium.git'
           # 注意替换为你的 Gitee 目标仓库地址
-          gitee-repo: "git@gitee.com:zouyaoji/vue-cesium.git"
+          gitee-repo: 'git@gitee.com:zouyaoji/vue-cesium.git'
