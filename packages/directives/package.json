@@ -21,7 +21,7 @@
     "url": "git://github.com:zouyaoji/vue-cesium.git"
   },
   "peerDependencies": {
-    "vue": "^3.2.11"
+    "vue": "^3.2.13"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.9",

@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-23 16:15:57
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\babel.config.js
+ */
 module.exports = {
   // ATTENTION!!
   // Preset ordering is reversed, so `@babel/typescript` will called first

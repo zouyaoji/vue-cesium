@@ -17,5 +17,5 @@
     "resolveJsonModule": true,
     "strict": true
   },
-  "exclude": ["node_modules", "dist/**", "packages/*/es", "packages/*/lib"]
+  "exclude": ["node_modules", "dist/**", "packages/*/es", "packages/*/lib", "build"]
 }

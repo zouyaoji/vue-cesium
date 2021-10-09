@@ -19,7 +19,7 @@
     "build:helper-zh": "node build/build-helper-zh.js",
     "build:indices": "esno build/build-indices.ts",
     "build:comps": "rimraf dist/components && esno build/components.ts",
-    "build:style": "cd packages/theme-default && yarn clean && yarn build",
+    "build:style": "gulp --cwd ./build",
     "build:prod": "sh scripts/publish.sh",
     "build:directives": "cd packages/directives && yarn clean && yarn build",
     "build:composables": "cd packages/composables && yarn clean && yarn build",
@@ -62,7 +62,7 @@
     "not op_mini all"
   ],
   "peerDependencies": {
-    "vue": "^3.2.11"
+    "vue": "^3.2.13"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
@@ -167,7 +167,7 @@
     "ts-node": "^10.1.0",
     "typescript": "^4.4.3",
     "url-loader": "^4.1.1",
-    "vue": "^3.2.11",
+    "vue": "^3.2.13",
     "vue-jest": "5.0.0-alpha.5",
     "vue-loader": "^16.1.2",
     "vue-router": "^4.0.2",

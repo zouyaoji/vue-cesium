@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-30 21:57:01
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\.eslintrc.js
+ */
 module.exports = {
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -56,6 +64,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-this-alias': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     // vue
     'vue/no-v-html': 'off',
     'vue/singleline-html-element-content-newline': 'off',
