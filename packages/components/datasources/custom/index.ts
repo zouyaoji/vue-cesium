@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-23 23:21:45
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\datasources\custom\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources } from '@vue-cesium/composables'
@@ -35,11 +43,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

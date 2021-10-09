@@ -146,6 +146,6 @@ export default defineComponent({
       }
       return value
     }
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

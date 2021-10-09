@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-06-01 18:06:23
+ * @LastEditTime: 2021-10-02 23:08:20
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\composables\use-providers\index.ts
+ */
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import * as coordtransform from '@vue-cesium/utils/coordtransform'
@@ -7,6 +15,9 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   vcInstance.cesiumEvents = ['errorEvent']
   const commonState = useCommon(props, ctx, vcInstance)
+  if (commonState === void 0) {
+    return
+  }
 
   // methods
   vcInstance.mount = async () => {
@@ -21,8 +32,8 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
       if (props.projectionTransforms && props.projectionTransforms.from !== props.projectionTransforms.to) {
         const ignoreTransforms =
-          vcInstance.proxy.$options.name === 'VcProviderImageryBaidumap' ||
-          (vcInstance.proxy.$options.name === 'VcProviderImageryTianditu' && (imageryProvider as any)._epsgCode === '4490')
+          vcInstance.proxy?.$options.name === 'VcProviderImageryBaidumap' ||
+          (vcInstance.proxy?.$options.name === 'VcProviderImageryTianditu' && (imageryProvider as any)._epsgCode === '4490')
         if (!ignoreTransforms) {
           const { WebMercatorTilingScheme, Cartographic, Math: CesiumMath } = Cesium
           const tilingScheme = new WebMercatorTilingScheme()
@@ -43,20 +54,20 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
             projection.project = function (cartographic, result) {
               result = result || new Cesium.Cartesian3()
               result = coordtransform[projectMethods](CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
-              return nativeProject.call(this, new Cartographic(CesiumMath.toRadians(result[0]), CesiumMath.toRadians(result[1])))
+              return nativeProject.call(this, new Cartographic(CesiumMath.toRadians(result?.[0]), CesiumMath.toRadians(result?.[1])))
             }
             projection.unproject = function (cartesian2, result) {
               result = result || new Cartographic()
               const cartographic = nativeUnProject.call(this, cartesian2)
               result = coordtransform[unprojectMethods](CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
-              return new Cartographic(CesiumMath.toRadians(result[0]), CesiumMath.toRadians(result[1]))
+              return new Cartographic(CesiumMath.toRadians(result?.[0]), CesiumMath.toRadians(result?.[1]))
             }
-            ; (imageryProvider as any)._tilingScheme = tilingScheme
+            ;(imageryProvider as any)._tilingScheme = tilingScheme
           }
         }
       }
       const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
-      return parentVM && parentVM.__updateProvider(imageryProvider)
+      return parentVM && parentVM.__updateProvider?.(imageryProvider)
     } else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
       terrainProvider.readyPromise.then(() => {
@@ -71,7 +82,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     const { viewer } = commonState.$services
     if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
       const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
-      return parentVM && parentVM.__updateProvider(undefined)
+      return parentVM && parentVM.__updateProvider?.(undefined)
     } else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {

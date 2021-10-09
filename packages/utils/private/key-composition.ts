@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:02
+ * @LastEditTime: 2021-10-02 23:15:01
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\private\key-composition.ts
+ */
 let lastKeyCompositionStatus = false
 
 export function onKeyDownComposition(evt) {
@@ -9,5 +17,5 @@ export function shouldIgnoreKey(evt) {
 }
 
 export function isKeyCode(evt, keyCodes) {
-  return shouldIgnoreKey(evt) === true ? false : [].concat(keyCodes).includes(evt.keyCode)
+  return shouldIgnoreKey(evt) === true ? false : ([] as any).concat(keyCodes).includes(evt.keyCode)
 }

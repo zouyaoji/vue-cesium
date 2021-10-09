@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-27 10:32:46
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\geometries\polygon-outline\index.ts
+ */
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
@@ -31,6 +39,6 @@ export default defineComponent({
     instance.cesiumClass = 'PolygonOutlineGeometry'
     useGeometries(props, ctx, instance)
 
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })

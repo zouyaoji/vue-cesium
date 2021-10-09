@@ -1,17 +1,30 @@
-import {  VcViewerProvider } from '@vue-cesium/utils/types'
+import { VcViewerProvider, AnyFunction } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
 
-export default function($services: VcViewerProvider, {
-  handleMouseClick = undefined,
-  handleMouseDown = undefined,
-  handleMouseUp = undefined,
-  handleMouseMove = undefined,
-  handleDoubleClick = undefined,
-  handleMouseWheel = undefined,
-  handlePinch = undefined
-}) {
+interface HandlerActions {
+  handleMouseClick?: AnyFunction<void>
+  handleMouseDown?: AnyFunction<void>
+  handleMouseUp?: AnyFunction<void>
+  handleMouseMove?: AnyFunction<void>
+  handleDoubleClick?: AnyFunction<void>
+  handleMouseWheel?: AnyFunction<void>
+  handlePinch?: AnyFunction<void>
+}
+
+export default function (
+  $services: VcViewerProvider,
+  {
+    handleMouseClick = undefined,
+    handleMouseDown = undefined,
+    handleMouseUp = undefined,
+    handleMouseMove = undefined,
+    handleDoubleClick = undefined,
+    handleMouseWheel = undefined,
+    handlePinch = undefined
+  }: HandlerActions
+) {
   // state
-  const handler = ref<Cesium.ScreenSpaceEventHandler>(null)
+  const handler = ref<Cesium.ScreenSpaceEventHandler | undefined>(undefined)
   const isActive = ref(false)
 
   //methods
@@ -88,7 +101,6 @@ export default function($services: VcViewerProvider, {
     sseh.setInputAction(onPinchMoveCtrl, ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.CTRL)
     isActive.value = true
   }
-
 
   const deactivate = () => {
     if (!isActive.value) {
@@ -208,20 +220,20 @@ export default function($services: VcViewerProvider, {
   }
 
   const onRightClick = movement => {
-    handleMouseClick(movement, {
+    handleMouseClick?.(movement, {
       button: 2
     })
   }
 
   const onRightClickShift = movement => {
-    handleMouseClick(movement, {
+    handleMouseClick?.(movement, {
       button: 2,
       shift: true
     })
   }
 
   const onRightClickCtrl = movement => {
-    handleMouseClick(movement, {
+    handleMouseClick?.(movement, {
       button: 2,
       ctrl: true
     })

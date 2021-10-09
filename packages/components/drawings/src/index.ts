@@ -1,4 +1,16 @@
-import { defineComponent, getCurrentInstance, createCommentVNode, ref, h, reactive, CSSProperties, ExtractPropTypes, provide, nextTick } from 'vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  createCommentVNode,
+  ref,
+  h,
+  reactive,
+  CSSProperties,
+  ExtractPropTypes,
+  provide,
+  nextTick,
+  VNode
+} from 'vue'
 import {
   defaultProps,
   defaultOptions,
@@ -16,7 +28,7 @@ import {
   circleDrawingDefault
 } from './defaultProps'
 import { useCommon, useHandler } from '@vue-cesium/composables'
-import { camelize, isString } from '@vue-cesium/utils/util'
+import { camelize, isString, isUndefined } from '@vue-cesium/utils/util'
 import { $ } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
@@ -52,14 +64,14 @@ export default defineComponent({
     const canRender = ref(false)
     const containerStyle = reactive<CSSProperties>({})
     const positionState = usePosition(props, $services)
-    const containerRef = ref<HTMLElement>(null)
-    const fabRef = ref<typeof VcFab>(null)
+    const containerRef = ref<HTMLElement | null>(null)
+    const fabRef = ref<typeof VcFab | null>(null)
 
-    let selectedDrawingOption: DrawingInstanceOpts = undefined
+    let selectedDrawingOption: DrawingInstanceOpts | undefined
     const fabExtanded = ref(false)
     const mounted = ref(false)
     const primitiveCollection = ref(null)
-    let visibilityState: VisibilityState = void 0
+    let visibilityState: VisibilityState
 
     const options: any = {}
     // computed
@@ -97,9 +109,9 @@ export default defineComponent({
 
     const drawingsOptions: Array<DrawingInstanceOpts> = props.drawings.map(drawing => ({
       name: drawing,
-      actionRef: ref<typeof VcFabAction>(null),
+      actionRef: ref<typeof VcFabAction | null>(null),
       actionOpts: options[`${camelize(drawing)}ActionOpts`],
-      drawingRef: ref<typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon>(null),
+      drawingRef: ref<typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon | null>(null),
       drawingOpts: options[`${camelize(drawing)}DrawingOpts`],
       actionStyle: {
         background: options[`${camelize(drawing)}ActionOpts`].color,
@@ -225,7 +237,7 @@ export default defineComponent({
 
     const getWorldPosition = (scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3) => {
       const { Cesium3DTileFeature, Cesium3DTileset, Cartesian3, defined, Model, Ray } = Cesium
-      let position = void 0
+      let position: Cesium.Cartesian3 | undefined = void 0
       const cartesianScratch: any = {}
       const rayScratch = new Ray()
       if (scene.pickPositionSupported) {
@@ -244,7 +256,7 @@ export default defineComponent({
       if (defined(scene.globe)) {
         const ray = scene.camera.getPickRay(windowPosition, rayScratch)
         position = scene.globe.pick(ray, scene, cartesianScratch)
-        return defined(position) ? Cartesian3.clone(position, result) : void 0
+        return !isUndefined(position) && defined(position) ? Cartesian3.clone(position, result) : void 0
       }
 
       return void 0
@@ -277,17 +289,18 @@ export default defineComponent({
       Object.assign(containerStyle, css)
     }
 
-    const restoreColor = ref(null)
-    const toggleAction = (drawingOption: DrawingInstanceOpts | string) => {
+    const restoreColor = ref<string | null | undefined>(null)
+    const toggleAction = (drawingOption: DrawingInstanceOpts | string | undefined) => {
       const { viewer } = $services
       if (isString(drawingOption)) {
         drawingOption = drawingsOptions.find(v => v.name === drawingOption)
       }
       if (!drawingOption) {
         commonState.logger.error('Invalid drawingOption or drawingOption name')
+        return
       }
       if (selectedDrawingOption !== void 0) {
-        selectedDrawingOption.actionOpts.color = restoreColor.value
+        selectedDrawingOption.actionOpts.color = restoreColor.value || ''
         const drawingCmp: any = selectedDrawingOption.drawingRef.value || selectedDrawingOption.drawingRef
         drawingCmp?.stop?.()
         selectedDrawingOption.isActive = false
@@ -301,14 +314,14 @@ export default defineComponent({
           viewer
         )
       }
-      if (selectedDrawingOption?.name === drawingOption.name) {
+      if (selectedDrawingOption?.name === drawingOption?.name) {
         selectedDrawingOption = undefined
-        drawingOption.actionOpts.color = restoreColor.value
+        drawingOption.actionOpts.color = restoreColor.value || 'red'
       } else {
         selectedDrawingOption = drawingOption
-        const drawingCmp: any = selectedDrawingOption.drawingRef.value || selectedDrawingOption.drawingRef
+        const drawingCmp: any = selectedDrawingOption?.drawingRef.value || selectedDrawingOption?.drawingRef
         drawingCmp.startNew()
-        restoreColor.value = selectedDrawingOption.actionOpts.color
+        restoreColor.value = selectedDrawingOption?.actionOpts.color
         selectedDrawingOption.actionOpts.color = props.activeColor
         selectedDrawingOption.isActive = true
         emit(
@@ -372,8 +385,8 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const fabActionChildren = []
-        const drawingChildren = []
+        const fabActionChildren: Array<VNode> = []
+        const drawingChildren: Array<VNode> = []
 
         drawingsOptions.forEach(drawingOptions => {
           const drawing = camelize(drawingOptions.name)
@@ -447,7 +460,7 @@ export default defineComponent({
             )
           )
 
-        const root = []
+        const root: Array<VNode> = []
         if (mounted.value) {
           root.push(
             h(

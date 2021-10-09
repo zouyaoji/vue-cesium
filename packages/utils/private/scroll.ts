@@ -32,7 +32,7 @@ export function getHorizontalScrollPosition(scrollTarget) {
   return scrollTarget === window ? window.pageXOffset || window.scrollX || document.body.scrollLeft || 0 : scrollTarget.scrollLeft
 }
 
-export function animVerticalScrollTo(el, to, duration = 0, prevTime = undefined) {
+export function animVerticalScrollTo(el, to, duration = 0, prevTime?) {
   prevTime = prevTime || performance.now()
   const pos = getVerticalScrollPosition(el)
 
@@ -53,7 +53,7 @@ export function animVerticalScrollTo(el, to, duration = 0, prevTime = undefined)
   })
 }
 
-export function animHorizontalScrollTo(el, to, duration = 0 , prevTime = undefined) {
+export function animHorizontalScrollTo(el, to, duration = 0, prevTime?) {
   prevTime = prevTime || performance.now()
   const pos = getHorizontalScrollPosition(el)
 

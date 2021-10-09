@@ -1,4 +1,16 @@
-import { defineComponent, getCurrentInstance, createCommentVNode, ref, h, reactive, CSSProperties, ExtractPropTypes, provide, nextTick } from 'vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  createCommentVNode,
+  ref,
+  h,
+  reactive,
+  CSSProperties,
+  ExtractPropTypes,
+  provide,
+  nextTick,
+  VNode
+} from 'vue'
 import {
   defaultProps,
   defaultOptions,
@@ -60,14 +72,14 @@ export default defineComponent({
     const canRender = ref(false)
     const containerStyle = reactive<CSSProperties>({})
     const positionState = usePosition(props, $services)
-    const containerRef = ref<HTMLElement>(null)
-    const fabRef = ref<typeof VcFab>(null)
+    const containerRef = ref<HTMLElement | null>(null)
+    const fabRef = ref<typeof VcFab | null>(null)
 
-    let selectedMeasurementOption: MeasurementInstanceOpts = undefined
+    let selectedMeasurementOption: MeasurementInstanceOpts
     const fabExtanded = ref(false)
     const mounted = ref(false)
     const primitiveCollection = ref(null)
-    let visibilityState: VisibilityState = void 0
+    let visibilityState: VisibilityState
 
     const options: any = {}
     // computed
@@ -131,7 +143,7 @@ export default defineComponent({
 
     const measurementsOptions: Array<MeasurementInstanceOpts> = props.measurements.map(measurement => ({
       name: measurement,
-      actionRef: ref<typeof VcFabAction>(null),
+      actionRef: ref<typeof VcFabAction | null>(null),
       actionOpts: options[`${camelize(measurement)}ActionOpts`],
       measurementRef: ref<
         | typeof VcMeasurementDistance
@@ -141,6 +153,7 @@ export default defineComponent({
         | typeof VcMeasurementHeight
         | typeof VcMeasurementArea
         | typeof VcMeasurementPoint
+        | null
       >(null),
       measurementOpts: options[`${camelize(measurement)}MeasurementOpts`],
       actionStyle: {
@@ -235,7 +248,7 @@ export default defineComponent({
     instance.unmount = async () => {
       if (selectedMeasurementOption) {
         toggleAction(selectedMeasurementOption)
-        selectedMeasurementOption = undefined
+        ;(selectedMeasurementOption as any) = undefined
       }
 
       deactivate()
@@ -262,13 +275,13 @@ export default defineComponent({
         case 'area':
           return VcMeasurementArea
         default:
-          return void 0
+          return null
       }
     }
 
     const getWorldPosition = (scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3) => {
       const { Cesium3DTileFeature, Cesium3DTileset, Cartesian3, defined, Model, Ray } = Cesium
-      let position = void 0
+      let position
       const cartesianScratch: any = {}
       const rayScratch = new Ray()
       if (scene.pickPositionSupported) {
@@ -320,12 +333,12 @@ export default defineComponent({
       Object.assign(containerStyle, css)
     }
 
-    const restoreColor = ref(null)
-    const restoreCursor = ref(null)
+    const restoreColor = ref<any>(null)
+    const restoreCursor = ref<any>(null)
     const toggleAction = (measurementOption: MeasurementInstanceOpts) => {
       const { viewer } = $services
       if (selectedMeasurementOption !== void 0) {
-        selectedMeasurementOption.actionOpts.color = restoreColor.value
+        selectedMeasurementOption.actionOpts.color = restoreColor.value || 'red'
         const measurementCmp: any = selectedMeasurementOption.measurementRef.value || selectedMeasurementOption.measurementRef
         measurementCmp?.stop?.()
         selectedMeasurementOption.isActive = false
@@ -340,15 +353,15 @@ export default defineComponent({
         )
       }
       if (selectedMeasurementOption?.name === measurementOption.name) {
-        selectedMeasurementOption = undefined
-        measurementOption.actionOpts.color = restoreColor.value
+        ;(selectedMeasurementOption as any) = undefined
+        measurementOption.actionOpts.color = restoreColor.value || 'red'
       } else {
         selectedMeasurementOption = measurementOption
         const measurementCmp: any = selectedMeasurementOption.measurementRef.value || selectedMeasurementOption.measurementRef
         measurementCmp.startNew()
-        restoreColor.value = selectedMeasurementOption.actionOpts.color
+        restoreColor.value = selectedMeasurementOption.actionOpts.color || 'red'
         selectedMeasurementOption.actionOpts.color = props.activeColor
-        restoreCursor.value = getComputedStyle(viewer.canvas).cursor
+        restoreCursor.value = getComputedStyle(viewer.canvas).cursor || 'auto'
         selectedMeasurementOption.isActive = true
         emit(
           'activeEvt',
@@ -411,8 +424,8 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const fabActionChildren = []
-        const measurementChilden = []
+        const fabActionChildren: Array<VNode> = []
+        const measurementChilden: Array<VNode> = []
 
         measurementsOptions.forEach(measurementOptions => {
           const measurement = camelize(measurementOptions.name)
@@ -485,7 +498,7 @@ export default defineComponent({
             )
           )
 
-        const root = []
+        const root: Array<VNode> = []
         if (mounted.value) {
           root.push(
             h(

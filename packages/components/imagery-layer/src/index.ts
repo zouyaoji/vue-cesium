@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-27 10:51:34
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
+ */
 import { createCommentVNode, defineComponent, ExtractPropTypes, getCurrentInstance, h, provide } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -42,7 +50,7 @@ export default defineComponent({
 
     const updateProvider = provider => {
       if (isUndefined(provider)) {
-        return instance.unmount()
+        return instance.unmount?.()
       } else {
         const imageryLayer = instance.cesiumObject as Cesium.ImageryLayer
         ;(imageryLayer as any)._imageryProvider = provider
@@ -64,11 +72,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })

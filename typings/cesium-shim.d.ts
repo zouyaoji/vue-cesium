@@ -1,8 +1,8 @@
 declare namespace Cesium {
-  function createDefaultImageryProviderViewModels (): Array<ProviderViewModel>
-  function createDefaultTerrainProviderViewModels (): Array<ProviderViewModel>
-  function sprintf (...args: any[]): string
-  function appendForwardSlash (url: string): string
+  function createDefaultImageryProviderViewModels(): Array<ProviderViewModel>
+  function createDefaultTerrainProviderViewModels(): Array<ProviderViewModel>
+  function sprintf(...args: any[]): string
+  function appendForwardSlash(url: string): string
   const knockout: any
   const when: any
   const Uri: any
@@ -10,7 +10,7 @@ declare namespace Cesium {
   const ManagedArray: any
   const VERSION: string
   interface Viewer {
-    viewerWidgetResized?: Event
+    viewerWidgetResized: Event
     _selectionIndicator?: SelectionIndicator
     _infoBox?: InfoBox
     _geocoder?: Geocoder
@@ -43,18 +43,25 @@ declare namespace Cesium {
 
   interface Scene {
     frameState: any
-    pickPositionWorldCoordinates (pickPositionWorldCoordinates: Cesium.Cartesian2, result?: Cesium.Cartesian3) : Cesium.Cartesian3
+    pickPositionWorldCoordinates(pickPositionWorldCoordinates: Cesium.Cartesian2, result?: Cesium.Cartesian3): Cesium.Cartesian3
     _performanceDisplay: any
     tweens: any
   }
 
   interface Globe {
-    pickTriangle?(ray: Ray, scene: Scene, projection: MapProjection, cullBackFaces: boolean): {
-      intersection: Cartesian3
-      v0: Cartesian3
-      v1: Cartesian3
-      v2: Cartesian3
-    } | undefined
+    pickTriangle?(
+      ray: Ray,
+      scene: Scene,
+      projection: MapProjection,
+      cullBackFaces: boolean
+    ):
+      | {
+          intersection: Cartesian3
+          v0: Cartesian3
+          v1: Cartesian3
+          v2: Cartesian3
+        }
+      | undefined
   }
 
   // interface GlobeSurfaceTile {
@@ -75,23 +82,23 @@ declare namespace Cesium {
 
   interface ImageryLayerCollection {
     _layers: ImageryLayer[]
-    _update (): void
+    _update(): void
   }
 
   interface BillboardCollection {
-    _billboards: Billboard []
+    _billboards: Billboard[]
   }
 
   interface LabelCollection {
-    _labels: Label []
+    _labels: Label[]
   }
 
   interface PointPrimitiveCollection {
-    _pointPrimitives: PointPrimitive []
+    _pointPrimitives: PointPrimitive[]
   }
 
   interface PolylineCollection {
-    _polylines: Polyline []
+    _polylines: Polyline[]
   }
 
   // eslint-disable-next-line no-var
@@ -102,7 +109,6 @@ declare namespace Cesium {
   var GeoTerrainProvider: any
   // eslint-disable-next-line no-var
   var BaiduMapImageryProvider: any
-
 }
 
 // eslint-disable-next-line no-var

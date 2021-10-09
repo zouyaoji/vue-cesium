@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import cloneDeep from 'lodash/cloneDeep'
@@ -27,7 +27,7 @@ export default defineComponent({
     const primitiveCollectionsState = usePrimitiveCollections(props, ctx, instance)
 
     // watcher
-    let unwatchFns = []
+    let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
       watch(
         () => cloneDeep(props.billboards),
@@ -39,7 +39,7 @@ export default defineComponent({
           if (newVal.length === oldVal.length) {
             // 视为修改操作
             // Treated as modified
-            const modifies = []
+            const modifies: Array<any> = []
             for (let i = 0; i < newVal.length; i++) {
               const options = newVal[i]
               const oldOptions = oldVal[i]
@@ -57,14 +57,14 @@ export default defineComponent({
               modifyBillboard &&
                 Object.keys(modify.newOptions).forEach(prop => {
                   if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
-                    modifyBillboard[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                    modifyBillboard[prop] = primitiveCollectionsState?.transformProp(prop, modify.newOptions[prop])
                   }
                 })
             })
           } else {
             const adds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
-            const deleteBillboards = []
+            const deleteBillboards: Array<Cesium.Billboard> = []
             for (let i = 0; i < deletes.length; i++) {
               const deleteBillboard = billboardCollection._billboards.find(v => v.id === deletes[i].id)
               deleteBillboard && deleteBillboards.push(deleteBillboard)
@@ -77,9 +77,9 @@ export default defineComponent({
             for (let i = 0; i < adds.length; i++) {
               const billboardOptions = newVal[i] as Cesium.Billboard
               billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
-              const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
+              const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
               const billboard = billboardCollection.add(billboardOptionsTransform)
-              primitiveCollectionsState.addCustomProp(billboard, billboardOptionsTransform)
+              primitiveCollectionsState?.addCustomProp(billboard, billboardOptionsTransform)
             }
           }
         },
@@ -91,15 +91,15 @@ export default defineComponent({
     instance.alreadyListening.push('billboards')
     // methods
     instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState.transformProps(props)
+      const options = primitiveCollectionsState?.transformProps(props)
       const billboardCollection = new Cesium.BillboardCollection(options)
 
       for (let i = 0; i < props.billboards.length; i++) {
         const billboardOptions = props.billboards[i] as Cesium.Billboard
         billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
-        const billboardOptionsTransform = primitiveCollectionsState.transformProps(billboardOptions)
+        const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
         const billboard = billboardCollection.add(billboardOptionsTransform)
-        primitiveCollectionsState.addCustomProp(billboard, billboardOptionsTransform)
+        primitiveCollectionsState?.addCustomProp(billboard, billboardOptionsTransform)
       }
       return billboardCollection
     }
@@ -115,11 +115,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

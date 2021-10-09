@@ -1,5 +1,5 @@
 import { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
-import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch } from 'vue'
+import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch, WatchStopHandle } from 'vue'
 import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
 import { $ } from '@vue-cesium/utils/private/vm'
@@ -11,13 +11,13 @@ export default function (instance: VcComponentInternalInstance, props, $services
   const screenPositionY = ref(offScreen)
   const transform = ''
   const opacity = 1.0
-  const position = ref<Cesium.Cartesian3>(null)
-  const rootRef = ref<HTMLElement>(null)
+  const position = ref<Cesium.Cartesian3>()
+  const rootRef = ref<HTMLElement | null>()
   let selectionIndicatorTween
   let selectionIndicatorIsAppearing
-  const pickedFeatures = ref(null)
-  const selectedFeature = ref(null)
-  let unwatchFns = []
+  const pickedFeatures = ref<any>(null)
+  const selectedFeature = ref<any>(null)
+  let unwatchFns: Array<WatchStopHandle> = []
   // computed
   const rootStyle = reactive<CSSProperties>({
     top: screenPositionY.value,
@@ -28,20 +28,20 @@ export default function (instance: VcComponentInternalInstance, props, $services
   // watch
   unwatchFns.push(
     watch(selectedFeature, val => {
-      const selectedFeature = val
+      const selectedFeature: any = val
       const { defined } = Cesium
-      if (defined(selectedFeature) && defined(selectedFeature.position)) {
+      if (defined(selectedFeature) && defined(selectedFeature?.position)) {
         const { viewer } = $services
         // Todo 高亮逻辑
         position.value =
-          selectedFeature.position instanceof Cesium.Cartesian3
-            ? selectedFeature.position
-            : selectedFeature.position.getValue(viewer.clock.currentTime)
+          selectedFeature?.position instanceof Cesium.Cartesian3
+            ? selectedFeature?.position
+            : selectedFeature?.position?.getValue(viewer.clock.currentTime)
         animateAppear()
-        instance.proxy.$emit('pickEvt', selectedFeature)
+        instance.proxy?.$emit('pickEvt', selectedFeature)
       } else {
         animateDepart()
-        instance.proxy.$emit('pickEvt', selectedFeature)
+        instance.proxy?.$emit('pickEvt', selectedFeature)
       }
 
       update()
@@ -93,7 +93,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     if (!defined(pickPosition)) {
       return
     }
-    const pickPositionCartographic = scene.globe.ellipsoid.cartesianToCartographic(pickPosition)
+    const pickPositionCartographic = scene.globe.ellipsoid.cartesianToCartographic(pickPosition || new Cesium.Cartesian3())
 
     const vectorFeatures = pickVectorFeatures(screenPosition)
 
@@ -133,41 +133,39 @@ export default function (instance: VcComponentInternalInstance, props, $services
 
     result.allFeaturesAvailablePromise = when
       .all(featurePromises)
-      .then(
-        function (allFeatures) {
-          result.isLoading = false
+      .then(function (this, allFeatures) {
+        result.isLoading = false
 
-          result.features = allFeatures.reduce(
-            function (resultFeaturesSoFar, imageryLayerFeatures, i) {
-              if (!defined(imageryLayerFeatures)) {
-                return resultFeaturesSoFar
-              }
+        result.features = allFeatures.reduce(
+          function (this, resultFeaturesSoFar, imageryLayerFeatures, i) {
+            if (!defined(imageryLayerFeatures)) {
+              return resultFeaturesSoFar
+            }
 
-              const features = imageryLayerFeatures.map(
-                function (feature) {
-                  if (defined(imageryLayers)) {
-                    feature.imageryLayer = imageryLayers[i]
-                  }
+            const features = imageryLayerFeatures.map(
+              function (feature) {
+                if (defined(imageryLayers)) {
+                  feature.imageryLayer = imageryLayers[i]
+                }
 
-                  if (!defined(feature.position)) {
-                    feature.position = viewer.scene.globe.ellipsoid.cartesianToCartographic(pickPosition)
-                  }
+                if (!defined(feature.position)) {
+                  feature.position = viewer.scene.globe.ellipsoid.cartesianToCartographic(pickPosition)
+                }
 
-                  // If the picked feature does not have a height, use the height of the picked location.
-                  // This at least avoids major parallax effects on the selection indicator.
-                  if (!defined(feature.position.height) || feature.position.height === 0.0) {
-                    feature.position.height = defaultHeight
-                  }
-                  return Feature.fromImageryLayerFeature(feature, viewer)
-                }.bind(this)
-              )
+                // If the picked feature does not have a height, use the height of the picked location.
+                // This at least avoids major parallax effects on the selection indicator.
+                if (!defined(feature.position.height) || feature.position.height === 0.0) {
+                  feature.position.height = defaultHeight
+                }
+                return Feature.fromImageryLayerFeature(feature, viewer)
+              }.bind(this)
+            )
 
-              return resultFeaturesSoFar.concat(features)
-            }.bind(this),
-            defaultValue(existingFeatures, [])
-          )
-        }.bind(this)
-      )
+            return resultFeaturesSoFar.concat(features)
+          }.bind(this),
+          defaultValue(existingFeatures, [])
+        )
+      })
       .otherwise(function () {
         result.isLoading = false
         result.error = 'An unknown error occurred while picking features.'
@@ -178,7 +176,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
 
   const pickVectorFeatures = (screenPosition: Cesium.Cartesian2) => {
     // Pick vector features
-    const vectorFeatures = []
+    const vectorFeatures: Array<any> = []
     const { defined, Entity } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
@@ -264,7 +262,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
         const containerWidth = container.clientWidth
         const containerHeight = container.clientHeight
         const selectionIndicatorElement = $(rootRef)
-        const indicatorSize = selectionIndicatorElement.clientWidth
+        const indicatorSize = selectionIndicatorElement?.clientWidth || 0
         const halfSize = indicatorSize * 0.5
 
         screenPosition.x = Math.min(Math.max(screenPosition.x, -indicatorSize), containerWidth + indicatorSize) - halfSize

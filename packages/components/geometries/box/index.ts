@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-10-08 15:23:47
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\geometries\box\index.ts
+ */
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
@@ -18,10 +26,10 @@ export default defineComponent({
 
     // methods
     instance.createCesiumObject = async () => {
-      const options: any = geometriesState.transformProps(props)
+      const options: any = geometriesState?.transformProps(props)
       return Cesium.BoxGeometry.fromDimensions(options)
     }
 
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

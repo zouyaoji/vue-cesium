@@ -6,7 +6,7 @@ class Feature {
   currentProperties: any
   currentDescription: any
   updateCounters: any
-  cesiumEntity: Cesium.Entity
+  cesiumEntity: any
   name: any
   description: any
   properties: any
@@ -16,7 +16,11 @@ class Feature {
   coords: any
   constructor(options) {
     const { Entity, knockout } = Cesium
-    Entity.call(this, options)
+    const entity = new Entity()
+    const proto = Object.getPrototypeOf(entity)
+    Object.setPrototypeOf(this, proto)
+    // Entity.call(this as any, options)
+    Object.assign(this, entity)
     // addCustomFeatureProperties(this)
     this.currentProperties = undefined
 
@@ -42,7 +46,7 @@ class Feature {
     if (inherited) {
       return
     }
-    inherit(Cesium.Entity, Feature)
+    // inherit(Cesium.Entity, Feature)
     inherited = true
   }
 

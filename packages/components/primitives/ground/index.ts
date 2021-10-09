@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-30 22:50:00
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitives\ground\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
@@ -42,25 +50,17 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GroundPrimitive'
     usePrimitives(props, ctx, instance)
-    // methods
-    // instance.createCesiumObject = async () => {
-    //   const { GroundPrimitive } = Cesium
-    //   const options = primitivesState.transformProps(props)
-    //   if (!options.asynchronous) {
-    //     await GroundPrimitive.initializeTerrainHeights()
-    //   }
-    //   return new GroundPrimitive(options)
-    // }
+    const name = instance.proxy?.$options.name || ''
     return () =>
       ctx.slots.default
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(name),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(name))
   }
 })

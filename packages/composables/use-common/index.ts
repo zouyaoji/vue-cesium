@@ -1,4 +1,4 @@
-import { inject, onUnmounted } from 'vue'
+import { inject, onUnmounted, WatchStopHandle } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
@@ -15,7 +15,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // state
   vcInstance.alreadyListening = []
-  let unwatchFns = []
+  let unwatchFns: Array<WatchStopHandle> = []
   vcInstance.mounted = false
   const vcMitt: Emitter<VcMittEvents> = mitt()
   vcInstance.vcMitt = vcMitt
@@ -174,13 +174,13 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           }
           // 如果在vue文件中已经监听了改 props 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
-          if (vcInstance.proxy.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
+          if (vcInstance.proxy?.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
             return
           }
 
-          const watcherOptions = vcInstance.proxy.$options.props[vueProp]?.watcherOptions
+          const watcherOptions = vcInstance.proxy?.$options.props[vueProp]?.watcherOptions
           // returns an unwatch function that stops firing the callback
-          const unwatch = vcInstance.proxy.$watch(
+          const unwatch = vcInstance.proxy?.$watch(
             vueProp,
             async val => {
               // Wait for child components to be created.
@@ -214,10 +214,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               }
             },
             {
-              deep: watcherOptions?.deep
+              // position 要排除 SampledPositionProperty 不然会卡死
+              deep: vueProp === 'position' ? !((vcInstance.proxy as any).position instanceof Cesium.SampledPositionProperty) : watcherOptions?.deep
             }
           )
-          unwatchFns.push(unwatch)
+          unwatchFns.push(unwatch!)
         })
     } else {
       unwatchFns.forEach(item => item())
@@ -265,8 +266,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     ) {
       return transformProps(value)
     } else {
-      const cmpName = vcInstance.proxy.$options.name
-      const propOption = vcInstance.proxy.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
+      const cmpName = vcInstance.proxy?.$options.name
+      const propOption = vcInstance.proxy?.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
       return propOption?.watcherOptions && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
         : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity')

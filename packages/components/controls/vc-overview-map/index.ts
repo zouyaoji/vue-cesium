@@ -3,7 +3,20 @@ import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, onUnmounted, PropType, reactive, ref } from 'vue'
+import {
+  computed,
+  createCommentVNode,
+  CSSProperties,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  onUnmounted,
+  PropType,
+  reactive,
+  ref,
+  VNode,
+  WatchStopHandle
+} from 'vue'
 import VcViewer from '@vue-cesium/components/viewer'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { t } from '@vue-cesium/locale'
@@ -53,15 +66,15 @@ export default defineComponent({
       return
     }
     const { $services } = commonState
-    const rootRef = ref<HTMLElement>(null)
+    const rootRef = ref<HTMLElement | null>(null)
     const rootStyle = reactive<CSSProperties>({})
-    const toggleBtnRef = ref<typeof VcBtn>(null)
-    const tooltipRef = ref<typeof VcTooltip>(null)
-    const viewerRef = ref<typeof VcViewer>(null)
+    const toggleBtnRef = ref<typeof VcBtn | null>(null)
+    const tooltipRef = ref<typeof VcTooltip | null>(null)
+    const viewerRef = ref<typeof VcViewer | null>(null)
     const positionState = usePosition(props, $services)
     let minimized = false
-    let unwatchFns = []
-    let overviewViewer: Cesium.Viewer = undefined
+    let unwatchFns: Array<WatchStopHandle> = []
+    let overviewViewer: Cesium.Viewer
 
     // computed
     const toggleOpts = computed(() => {
@@ -177,8 +190,8 @@ export default defineComponent({
       if (toggleOpts.value.show) {
         const reg = /(\d+)/g
         const regResult = reg.exec(props.border)
-        const boder = regResult.length ? parseFloat(regResult[0]) : 0
-        const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef).$el)
+        const boder = regResult?.length ? parseFloat(regResult[0]) : 0
+        const toggleBtnRefStyle = getComputedStyle($(toggleBtnRef)?.$el)
         rootStyle.width = `${parseFloat(toggleBtnRefStyle.width) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
         rootStyle.height = `${parseFloat(toggleBtnRefStyle.height) + parseFloat(toggleBtnRefStyle.padding) + boder}px`
       } else {
@@ -202,7 +215,7 @@ export default defineComponent({
     })
 
     return () => {
-      const children = []
+      const children: Array<VNode> = []
       children.push(
         h(
           VcBtn,

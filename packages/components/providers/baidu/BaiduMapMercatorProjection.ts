@@ -76,15 +76,15 @@ class BaiduMapMercatorProjection {
    */
   static getDistanceByMC = function (point1, point2) {
     if (!point1 || !point2) return 0
-    point1 = this.convertMC2LL(point1)
+    point1 = BaiduMapMercatorProjection.convertMC2LL(point1)
     if (!point1) return 0
-    const x1 = this.toRadians(point1.lng)
-    const y1 = this.toRadians(point1.lat)
-    point2 = this.convertMC2LL(point2)
+    const x1 = BaiduMapMercatorProjection.toRadians(point1.lng)
+    const y1 = BaiduMapMercatorProjection.toRadians(point1.lat)
+    point2 = BaiduMapMercatorProjection.convertMC2LL(point2)
     if (!point2) return 0
-    const x2 = this.toRadians(point2.lng)
-    const y2 = this.toRadians(point2.lat)
-    return this.getDistance(x1, x2, y1, y2)
+    const x2 = BaiduMapMercatorProjection.toRadians(point2.lng)
+    const y2 = BaiduMapMercatorProjection.toRadians(point2.lat)
+    return BaiduMapMercatorProjection.getDistance(x1, x2, y1, y2)
   }
 
   /**
@@ -95,15 +95,15 @@ class BaiduMapMercatorProjection {
    */
   static getDistanceByLL = function (point1, point2) {
     if (!point1 || !point2) return 0
-    point1.lng = this.getLoop(point1.lng, -180, 180)
-    point1.lat = this.getRange(point1.lat, -74, 74)
-    point2.lng = this.getLoop(point2.lng, -180, 180)
-    point2.lat = this.getRange(point2.lat, -74, 74)
-    const x1 = this.toRadians(point1.lng)
-    const y1 = this.toRadians(point1.lat)
-    const x2 = this.toRadians(point2.lng)
-    const y2 = this.toRadians(point2.lat)
-    return this.getDistance(x1, x2, y1, y2)
+    point1.lng = BaiduMapMercatorProjection.getLoop(point1.lng, -180, 180)
+    point1.lat = BaiduMapMercatorProjection.getRange(point1.lat, -74, 74)
+    point2.lng = BaiduMapMercatorProjection.getLoop(point2.lng, -180, 180)
+    point2.lat = BaiduMapMercatorProjection.getRange(point2.lat, -74, 74)
+    const x1 = BaiduMapMercatorProjection.toRadians(point1.lng)
+    const y1 = BaiduMapMercatorProjection.toRadians(point1.lat)
+    const x2 = BaiduMapMercatorProjection.toRadians(point2.lng)
+    const y2 = BaiduMapMercatorProjection.toRadians(point2.lat)
+    return BaiduMapMercatorProjection.getDistance(x1, x2, y1, y2)
   }
 
   /**
@@ -114,14 +114,14 @@ class BaiduMapMercatorProjection {
   static convertMC2LL = function (point) {
     let factor
     const temp = new Point(Math.abs(point.lng), Math.abs(point.lat))
-    for (let i = 0; i < this.MCBAND.length; i++) {
-      if (temp.lat >= this.MCBAND[i]) {
-        factor = this.MC2LL[i]
+    for (let i = 0; i < BaiduMapMercatorProjection.MCBAND.length; i++) {
+      if (temp.lat >= BaiduMapMercatorProjection.MCBAND[i]) {
+        factor = BaiduMapMercatorProjection.MC2LL[i]
         break
       }
     }
-    const lnglat = this.convertor(point, factor)
-    return new Point(lnglat.lng.toFixed(6), lnglat.lat.toFixed(6))
+    const lnglat = BaiduMapMercatorProjection.convertor(point, factor)
+    return new Point(lnglat?.lng.toFixed(6), lnglat?.lat.toFixed(6))
   }
 
   /**
@@ -131,25 +131,25 @@ class BaiduMapMercatorProjection {
    */
   static convertLL2MC = function (point) {
     let factor
-    point.lng = this.getLoop(point.lng, -180, 180)
-    point.lat = this.getRange(point.lat, -74, 74)
+    point.lng = BaiduMapMercatorProjection.getLoop(point.lng, -180, 180)
+    point.lat = BaiduMapMercatorProjection.getRange(point.lat, -74, 74)
     const temp = new Point(point.lng, point.lat)
-    for (let i = 0; i < this.LLBAND.length; i++) {
-      if (temp.lat >= this.LLBAND[i]) {
-        factor = this.LL2MC[i]
+    for (let i = 0; i < BaiduMapMercatorProjection.LLBAND.length; i++) {
+      if (temp.lat >= BaiduMapMercatorProjection.LLBAND[i]) {
+        factor = BaiduMapMercatorProjection.LL2MC[i]
         break
       }
     }
     if (!factor) {
-      for (let i = this.LLBAND.length - 1; i >= 0; i--) {
-        if (temp.lat <= -this.LLBAND[i]) {
-          factor = this.LL2MC[i]
+      for (let i = BaiduMapMercatorProjection.LLBAND.length - 1; i >= 0; i--) {
+        if (temp.lat <= -BaiduMapMercatorProjection.LLBAND[i]) {
+          factor = BaiduMapMercatorProjection.LL2MC[i]
           break
         }
       }
     }
-    const mc = this.convertor(point, factor)
-    return new Point(mc.lng.toFixed(2), mc.lat.toFixed(2))
+    const mc = BaiduMapMercatorProjection.convertor(point, factor)
+    return new Point(mc?.lng.toFixed(2), mc?.lat.toFixed(2))
   }
 
   static convertor = function (fromPoint, factor) {
@@ -172,7 +172,7 @@ class BaiduMapMercatorProjection {
   }
 
   static getDistance = function (x1, x2, y1, y2) {
-    return this.EARTHRADIUS * Math.acos(Math.sin(y1) * Math.sin(y2) + Math.cos(y1) * Math.cos(y2) * Math.cos(x2 - x1))
+    return BaiduMapMercatorProjection.EARTHRADIUS * Math.acos(Math.sin(y1) * Math.sin(y2) + Math.cos(y1) * Math.cos(y2) * Math.cos(x2 - x1))
   }
 
   static toRadians = function (angdeg) {

@@ -78,7 +78,7 @@ export function isEmptyObj(obj: unknown): boolean {
     return false
   }
 
-  const arr = Object.keys(obj)
+  const arr = Object.keys(obj as any)
   return arr.length === 0
 }
 

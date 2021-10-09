@@ -1,5 +1,5 @@
-import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref, h, createCommentVNode } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref, h, createCommentVNode, VNode } from 'vue'
+import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { t } from '@vue-cesium/locale'
 
 const VcPrintView = defineComponent({
@@ -19,7 +19,7 @@ const VcPrintView = defineComponent({
         return
       }
 
-      const imageTags = props.options.printWindow.document.getElementsByTagName('img')
+      const imageTags = props.options?.printWindow.document.getElementsByTagName('img')
       if (imageTags.length === 0) {
         return
       }
@@ -34,7 +34,7 @@ const VcPrintView = defineComponent({
         ready.value = allImagesReady
 
         if (ready.value && !printingStarted.value) {
-          if (props.options.readyCallback) {
+          if (props.options?.readyCallback) {
             props.options.readyCallback(props.options.printWindow)
           }
           printingStarted.value = true
@@ -42,7 +42,7 @@ const VcPrintView = defineComponent({
       }
     }
 
-    let _stopCheckingForImages = undefined
+    let _stopCheckingForImages: AnyFunction<void>
 
     const stopCheckingForImages = () => {
       if (_stopCheckingForImages) {
@@ -51,7 +51,7 @@ const VcPrintView = defineComponent({
     }
 
     onMounted(() => {
-      const printWindow = props.options.printWindow
+      const printWindow = props.options?.printWindow
       const mainWindow = window
 
       const printWindowIntervalId = printWindow?.setInterval(checkForImagesReady, 200)
@@ -60,7 +60,7 @@ const VcPrintView = defineComponent({
       _stopCheckingForImages = () => {
         printWindow.clearInterval(printWindowIntervalId)
         mainWindow.clearInterval(mainWindowIntervalId)
-        _stopCheckingForImages = undefined
+        ;(_stopCheckingForImages as any) = undefined
       }
     })
 
@@ -69,7 +69,7 @@ const VcPrintView = defineComponent({
     })
 
     return () => {
-      const child = []
+      const child: Array<VNode> = []
       child.push(
         h(
           'p',
@@ -87,7 +87,7 @@ const VcPrintView = defineComponent({
         child.push(createCommentVNode('v-if'))
       }
       if (props.options?.credits.length && props.options?.showCredit) {
-        const inner = []
+        const inner: Array<VNode> = []
         props.options?.credits.forEach(credit => {
           inner.push(
             h('li', {

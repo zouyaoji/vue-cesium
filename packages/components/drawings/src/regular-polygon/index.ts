@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive, VcPrimitiveGround, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
@@ -14,6 +14,7 @@ import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { PolygonDrawing } from '../drawing.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
+import { isUndefined } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcDrawingRegularPolygon',
@@ -38,10 +39,10 @@ export default defineComponent({
     const drawTip = ref('')
     const showEditor = ref(false)
     const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-    const mouseoverPoint = ref(null)
-    const editingPoint = ref(null)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-    let restorePosition = undefined
+    const mouseoverPoint = ref<any>(null)
+    const editingPoint = ref<any>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
+    let restorePosition
     let drawName = 'rectangle'
     if (props.edge === 4) {
       drawName = 'rectangle'
@@ -61,16 +62,21 @@ export default defineComponent({
         const endPosition = polylineSegment.positions[1]
 
         const hpr = getHeadingPitchRoll(startPosition, endPosition, $services.viewer.scene)
-        if (defined(hpr)) {
-          const positions = []
+        if (!isUndefined(hpr) && defined(hpr)) {
+          const positions: Array<Cesium.Cartesian3> = []
           const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
           const endCartographic = Cartographic.fromCartesian(endPosition, viewer.scene.globe.ellipsoid)
 
           !props.clampToGround && (endCartographic.height = startCartographic.height)
           positions.push(Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid))
           const distance = getGeodesicDistance(startPosition, endPosition, viewer.scene.globe.ellipsoid)
-          for (let i = 0; i < props.edge - 1; i++) {
-            const position = getPolylineSegmentEndpoint(startPosition, (hpr[0] += (Math.PI * 2) / props.edge), distance, viewer.scene.globe.ellipsoid)
+          for (let i = 0; i < (props.edge || 4) - 1; i++) {
+            const position = getPolylineSegmentEndpoint(
+              startPosition,
+              (hpr[0] += (Math.PI * 2) / (props.edge || 4)),
+              distance,
+              viewer.scene.globe.ellipsoid
+            )
             positions.push(position)
           }
 
@@ -102,7 +108,7 @@ export default defineComponent({
       polylines.value.push(polyline)
       drawStatus.value = DrawStatus.BeforeDraw
       canShowDrawTip.value = true
-      drawTip.value = props.drawtip.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
+      drawTip.value = props.drawtip?.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
     }
 
     const stop = () => {
@@ -118,8 +124,8 @@ export default defineComponent({
       const { viewer, drawingVm: drawingVm, selectedDrawingOption, getWorldPosition } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === drawName)
-        ;(drawingVm.proxy as any).toggleAction(drawingsOption)
+        const drawingsOption = (drawingVm?.proxy as any).drawingsOptions.find(v => v.name === drawName)
+        ;(drawingVm?.proxy as any).toggleAction(drawingsOption)
         return
       }
 
@@ -132,12 +138,12 @@ export default defineComponent({
       const positions = polyline.positions
 
       if (options.button === 2 && editingPoint.value) {
-        ;(drawingVm.proxy as any).editingDrawingName = undefined
+        ;(drawingVm?.proxy as any).editingDrawingName = undefined
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
         editingPoint.value = undefined
-        drawTip.value = props.drawtip.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
+        drawTip.value = props.drawtip?.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
         return
       }
 
@@ -159,7 +165,7 @@ export default defineComponent({
         polyline.show = true
         drawStatus.value = DrawStatus.Drawing
         polyline.drawStatus = DrawStatus.Drawing
-        drawTip.value = props.drawtip.drawTip2 || t(`vc.drawing.${drawName}.drawTip2`)
+        drawTip.value = props.drawtip?.drawTip2 || t(`vc.drawing.${drawName}.drawTip2`)
         nextTick(() => {
           emit(
             'drawEvt',
@@ -184,18 +190,18 @@ export default defineComponent({
 
         if (editingPoint.value) {
           editingPoint.value = undefined
-          ;(drawingVm.proxy as any).editingDrawingName = undefined
+          ;(drawingVm?.proxy as any).editingDrawingName = undefined
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
           type = editorType
         } else {
           if (props.mode === 1) {
-            ;(drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+            ;(drawingVm?.proxy as any).toggleAction(selectedDrawingOption)
           }
         }
 
         if (selectedDrawingOption) {
-          drawTip.value = props.drawtip.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
+          drawTip.value = props.drawtip?.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
           canShowDrawTip.value = true
         }
 
@@ -273,7 +279,7 @@ export default defineComponent({
     const onMouseoverPoints = e => {
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
         removeTimeout()
         registerTimeout(() => {
           mouseoverPoint.value = e.pickedFeature.primitive
@@ -281,7 +287,7 @@ export default defineComponent({
           showEditor.value = true
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
-        }, props.editorOpts.delay)
+        }, props.editorOpts?.delay)
       }
 
       emit(
@@ -300,13 +306,13 @@ export default defineComponent({
 
       if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
+          e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
           removeTimeout()
           registerTimeout(() => {
             editorPosition.value = [0, 0, 0]
             mouseoverPoint.value = undefined
             showEditor.value = false
-          }, props.editorOpts.hideDelay)
+          }, props.editorOpts?.hideDelay)
         }
         selectedDrawingOption && (canShowDrawTip.value = true)
       }
@@ -330,10 +336,10 @@ export default defineComponent({
       removeTimeout()
       registerTimeout(() => {
         editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
         mouseoverPoint.value = undefined
         showEditor.value = false
-      }, props.editorOpts.hideDelay)
+      }, props.editorOpts?.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -346,12 +352,12 @@ export default defineComponent({
       editorType = e
       const { viewer, drawingVm } = $services
       if (e === 'move') {
-        drawTip.value = props.drawtip.drawTip3 || t(`vc.drawing.${drawName}.drawTip3`)
+        drawTip.value = props.drawtip?.drawTip3 || t(`vc.drawing.${drawName}.drawTip3`)
         drawStatus.value = DrawStatus.Drawing
         editingPoint.value = mouseoverPoint.value
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
-        ;(drawingVm.proxy as any).editingDrawingName = drawName
+        ;(drawingVm?.proxy as any).editingDrawingName = drawName
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
@@ -394,7 +400,7 @@ export default defineComponent({
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
       }
       props.clampToGround && delete polylineOpts.arcType
-      const children = []
+      const children: Array<VNode> = []
       polylinesRender.value.forEach((polyline, index) => {
         // point
         children.push(
@@ -406,7 +412,7 @@ export default defineComponent({
               id: createGuid(),
               _vcPolylineIndx: index, // for editor
               ...props.pointOpts,
-              show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
             onMouseover: onMouseoverPoints,
             onMouseout: onMouseoutPoints,
@@ -424,10 +430,10 @@ export default defineComponent({
                 show: polyline.show && polylineOpts.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -452,10 +458,10 @@ export default defineComponent({
             h(
               props.clampToGround ? VcPrimitiveGround : VcPrimitive,
               {
-                show: polyline.show && props.polygonOpts.show,
+                show: polyline.show && props.polygonOpts?.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new MaterialAppearance({
-                  material: makeMaterial.call(instance, props.polygonOpts.material) as Cesium.Material,
+                  material: makeMaterial.call(instance, props.polygonOpts?.material) as Cesium.Material,
                   faceForward: true,
                   renderState: {
                     cull: {
@@ -486,14 +492,14 @@ export default defineComponent({
         }
       })
 
-      if (props.drawtip.show && canShowDrawTip.value) {
+      if (props.drawtip?.show && canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
             VcOverlayHtml,
             {
               position: drawTipPosition.value,
-              pixelOffset: props.drawtip.pixelOffset,
+              pixelOffset: props.drawtip?.pixelOffset,
               teleport: {
                 to: viewer.container
               }
@@ -511,7 +517,7 @@ export default defineComponent({
       }
 
       if (showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

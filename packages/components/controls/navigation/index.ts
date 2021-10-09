@@ -9,7 +9,8 @@ import {
   h,
   createCommentVNode,
   ExtractPropTypes,
-  computed
+  computed,
+  VNode
 } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
@@ -42,14 +43,14 @@ export default defineComponent({
     const { $services } = commonState
     const positionState = usePosition(props, $services)
     const positionStateOther = usePosition(props.otherOpts || { position: 'bottom-right' }, $services)
-    const rootRef = ref<HTMLElement>(null)
-    const secondRootRef = ref<HTMLElement>(null)
-    const compassRef = ref<typeof VcCompass>(null)
-    const zoomControlRef = ref<typeof VcZoomControl>(null)
-    const printRef = ref<typeof VcPrint>(null)
-    const myLocationRef = ref<typeof VcMyLocation>(null)
-    const statusBarRef = ref<typeof VcStatusBar>(null)
-    const distanceLegendRef = ref<typeof VcDistanceLegend>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const secondRootRef = ref<HTMLElement | null>(null)
+    const compassRef = ref<typeof VcCompass | null>(null)
+    const zoomControlRef = ref<typeof VcZoomControl | null>(null)
+    const printRef = ref<typeof VcPrint | null>(null)
+    const myLocationRef = ref<typeof VcMyLocation | null>(null)
+    const statusBarRef = ref<typeof VcStatusBar | null>(null)
+    const distanceLegendRef = ref<typeof VcDistanceLegend | null>(null)
     const rootStyle = reactive<CSSProperties>({})
     const secondRootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
@@ -107,7 +108,7 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       canRender.value = true
       const { viewer } = $services
-      viewer.viewerWidgetResized.addEventListener(onViewerWidgetResized)
+      viewer.viewerWidgetResized?.addEventListener(onViewerWidgetResized)
       return new Promise((resolve, reject) => {
         nextTick(() => {
           const viewerElement = (viewer as any)._element
@@ -121,7 +122,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -134,8 +135,8 @@ export default defineComponent({
       const viewerElement = (viewer as any)._element
       viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
       viewerElement.contains($(secondRootRef)) && viewerElement.removeChild($(secondRootRef))
-      viewer.viewerWidgetResized.removeEventListener(onViewerWidgetResized)
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.removeEventListener(onViewerWidgetResized)
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -215,7 +216,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const inner = []
+        const inner: VNode[] = []
         if (compassOptions.value && props.compassOpts !== false) {
           inner.push(
             h(
@@ -297,7 +298,7 @@ export default defineComponent({
         let children = [h('div', { class: 'vc-navigation-controls' }, inner)]
         children = hMergeSlot(ctx.slots.default, children)
 
-        const root = []
+        const root: VNode[] = []
         root.push(
           h(
             'div',

@@ -20,7 +20,7 @@ export default defineComponent({
   setup(props, { slots }) {
     const sizeStyle = useSize(props)
     const style = computed(() => {
-      const css: CSSProperties = sizeStyle.value
+      const css: CSSProperties | null = sizeStyle.value
       if (!css) {
         return undefined
       }
@@ -139,8 +139,8 @@ export default defineComponent({
         style: style.value,
         'aria-hidden': 'true',
         role: 'presentation',
-        viewBox: undefined,
-        src: undefined
+        viewBox: '',
+        src: ''
       }
 
       if (type.value.none === true) {
@@ -176,7 +176,9 @@ export default defineComponent({
           data.style.width = data.style.fontSize
           data.style.height = data.style.fontSize
         }
-
+        // console.log(h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })])))
+        const test = h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })]))
+        console.log(test)
         return h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })]))
       }
 

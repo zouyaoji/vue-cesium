@@ -1,4 +1,4 @@
-import { createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive } from 'vue'
+import { createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive, VNode } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
@@ -25,13 +25,13 @@ export default defineComponent({
       return
     }
     const { $services } = commonState
-    const rootRef = ref<HTMLElement>(null)
-    const tooltipRef = ref<typeof VcTooltip>(null)
-    const btnRef = ref<typeof VcBtn>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const tooltipRef = ref<typeof VcTooltip | null>(null)
+    const btnRef = ref<typeof VcBtn | null>(null)
     const positionState = usePosition(props, $services)
     const creatingPrintView = ref(false)
     const parentInstance = getVcParentInstance(instance)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     // watch
@@ -68,7 +68,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -83,7 +83,7 @@ export default defineComponent({
 
       const { viewer } = $services
 
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -219,7 +219,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const inner = []
+        const inner: Array<VNode> = []
         inner.push(
           h(VcIcon, {
             name: props.icon,

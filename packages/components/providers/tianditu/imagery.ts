@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-10-01 23:14:02
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\imagery.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -33,6 +41,6 @@ export default defineComponent({
       const options = providersState.transformProps(props)
       return new Cesium.TiandituImageryProvider(options)
     }
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

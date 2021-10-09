@@ -6,9 +6,9 @@ import { VcTooltip } from '@vue-cesium/components/ui'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
-  const zoomInTooltipRef = ref<typeof VcTooltip>(null)
-  const zoomOutTooltipRef = ref<typeof VcTooltip>(null)
-  const resetTooltipRef = ref<typeof VcTooltip>(null)
+  const zoomInTooltipRef = ref<typeof VcTooltip | null>(null)
+  const zoomOutTooltipRef = ref<typeof VcTooltip | null>(null)
+  const resetTooltipRef = ref<typeof VcTooltip | null>(null)
 
   const zoomIn = e => {
     zoom(1 / props.zoomAmount, e)

@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, nextTick } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, nextTick, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/components/primitives'
@@ -39,10 +39,10 @@ export default defineComponent({
     const drawTip = ref('')
     const showEditor = ref(false)
     const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-    const mouseoverPoint = ref(null)
-    const editingPoint = ref(null)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-    let restorePosition = undefined
+    const mouseoverPoint = ref<any>(null)
+    const editingPoint = ref<any>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
+    let restorePosition
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
     const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
@@ -65,7 +65,7 @@ export default defineComponent({
       polylines.value.push(polyline)
       drawStatus.value = DrawStatus.BeforeDraw
       canShowDrawTip.value = true
-      drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.height.drawTip1')
+      drawTip.value = props.drawtip?.drawingTip1 || t('vc.measurement.height.drawTip1')
     }
 
     const stop = () => {
@@ -81,8 +81,8 @@ export default defineComponent({
       const { viewer, measurementVm, getWorldPosition, selectedMeasurementOption } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'height')
-        ;(measurementVm.proxy as any).toggleAction(measurementsOption)
+        const measurementsOption = (measurementVm?.proxy as any).measurementsOptions.find(v => v.name === 'height')
+        ;(measurementVm?.proxy as any).toggleAction(measurementsOption)
         return
       }
 
@@ -94,12 +94,12 @@ export default defineComponent({
       const polyline: HeightMeasurementPolylineSegment = polylines.value[index]
 
       if (options.button === 2 && editingPoint.value) {
-        ;(measurementVm.proxy as any).editingMeasurementName = undefined
+        ;(measurementVm?.proxy as any).editingMeasurementName = undefined
         makePositions(polyline, restorePosition)
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
         editingPoint.value = undefined
-        drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.height.drawTip1')
+        drawTip.value = props.drawtip?.drawTip1 || t('vc.measurement.height.drawTip1')
         return
       }
 
@@ -122,7 +122,7 @@ export default defineComponent({
         polyline.show = true
         polyline.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
-        drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.height.drawTip1')
+        drawTip.value = props.drawtip?.drawingTip1 || t('vc.measurement.height.drawTip1')
 
         nextTick(() => {
           emit(
@@ -140,14 +140,14 @@ export default defineComponent({
           )
 
           if (props.mode === 1) {
-            ;(measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+            ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
           }
         })
       } else {
-        ;(measurementVm.proxy as any).editingMeasurementName = undefined
+        ;(measurementVm?.proxy as any).editingMeasurementName = undefined
         polyline.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
-        drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.height.drawTip1')
+        drawTip.value = props.drawtip?.drawingTip1 || t('vc.measurement.height.drawTip1')
         const type = editingPoint.value ? editorType : 'new'
         nextTick(() => {
           emit(
@@ -225,7 +225,7 @@ export default defineComponent({
     const onMouseoverPoints = e => {
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
         removeTimeout()
         registerTimeout(() => {
           mouseoverPoint.value = e.pickedFeature.primitive
@@ -233,7 +233,7 @@ export default defineComponent({
           showEditor.value = true
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
-        }, props.editorOpts.delay)
+        }, props.editorOpts?.delay)
       }
 
       emit(
@@ -250,13 +250,13 @@ export default defineComponent({
       const { viewer, selectedMeasurementOption } = $services
 
       if (props.editable) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
         removeTimeout()
         registerTimeout(() => {
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
           showEditor.value = false
-        }, props.editorOpts.hideDelay)
+        }, props.editorOpts?.hideDelay)
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
 
@@ -278,10 +278,10 @@ export default defineComponent({
       removeTimeout()
       registerTimeout(() => {
         editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
         mouseoverPoint.value = undefined
         showEditor.value = false
-      }, props.editorOpts.hideDelay)
+      }, props.editorOpts?.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -301,7 +301,7 @@ export default defineComponent({
         editingPoint.value = mouseoverPoint.value
         canShowDrawTip.value = true
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
-        ;(measurementVm.proxy as any).editingMeasurementName = 'height'
+        ;(measurementVm?.proxy as any).editingMeasurementName = 'height'
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
@@ -340,12 +340,12 @@ export default defineComponent({
       const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
 
       const polylineOpts = {
-        width: props.polylineOpts.width,
+        width: props.polylineOpts?.width,
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-        ellipsoid: defaultValue(props.polylineOpts.ellipsoid, Ellipsoid.WGS84),
-        arcType: props.polylineOpts.arcType
+        ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84),
+        arcType: props.polylineOpts?.arcType
       }
-      const children = []
+      const children: Array<VNode> = []
       polylines.value.forEach((polyline, index) => {
         if (polyline.positions.length > 1) {
           // polyline
@@ -356,10 +356,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -397,11 +397,15 @@ export default defineComponent({
         )
 
         // label
-        const labels = []
+        const labels: Array<{
+          position: Cesium.Cartesian3
+          id: string
+          text: string
+        }> = []
         labels.push({
           position: polyline.labelPosition,
           id: createGuid(),
-          text: MeasureUnits.distanceToString(polyline.distance, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+          text: MeasureUnits.distanceToString(polyline.distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           ...props.labelOpts
         })
 
@@ -415,14 +419,14 @@ export default defineComponent({
         )
       })
 
-      if (props.drawtip.show && canShowDrawTip.value) {
+      if (props.drawtip?.show && canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
             VcOverlayHtml,
             {
               position: drawTipPosition.value,
-              pixelOffset: props.drawtip.pixelOffset,
+              pixelOffset: props.drawtip?.pixelOffset,
               teleport: {
                 to: viewer.container
               }
@@ -440,7 +444,7 @@ export default defineComponent({
       }
 
       if (showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

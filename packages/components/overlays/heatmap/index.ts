@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed, PropType } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed, PropType, WatchStopHandle, VNode } from 'vue'
 import { ColorSegments, HeatmapConfiguration, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { show, rectangle } from '@vue-cesium/utils/cesium-props'
@@ -14,8 +14,14 @@ export default defineComponent({
   props: {
     ...show,
     ...rectangle,
-    min: Number,
-    max: Number,
+    min: {
+      type: Number,
+      default: 0
+    },
+    max: {
+      type: Number,
+      default: 100
+    },
     data: [Array, String] as PropType<Array<any> | string>,
     options: Object,
     type: {
@@ -39,10 +45,11 @@ export default defineComponent({
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
+      1
       return
     }
-    const rootRef = ref<HTMLElement>(null)
-    const project = ref<Cesium.WebMercatorProjection | Cesium.GeographicProjection>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const project = ref<Cesium.WebMercatorProjection | Cesium.GeographicProjection>(null!)
     const defaultOptions: HeatmapConfiguration = {
       minCanvasSize: 700, // minimum size (in pixels) for the heatmap canvas
       maxCanvasSize: 2000, // maximum size (in pixels) for the heatmap canvas
@@ -61,28 +68,28 @@ export default defineComponent({
       xField: 'x',
       yField: 'y',
       valueField: 'value',
-      container: undefined
+      container: undefined!
     }
-    const coordinates = ref(null)
-    const material = ref(null)
-    const image = ref(null)
-    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround>(null)
-    const appearance = ref(null)
+    const coordinates = ref<any>(null)
+    const material = ref<any>(null)
+    const image = ref<any>(null)
+    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround | null>(null)
+    const appearance = ref<any>(null)
     const canRender = ref(false)
-    const config = ref(null)
+    const config = ref<any>(null)
 
     const vcParent = getVcParentInstance(instance)
-    ;(vcParent.proxy as VcComponentPublicInstance).createPromise.then(() => {
+    ;(vcParent.proxy as VcComponentPublicInstance).createPromise?.then(() => {
       canRender.value = true
     })
 
     // computed
-    const options = computed(() => {
+    const options = computed<HeatmapConfiguration>(() => {
       return Object.assign({}, defaultOptions, props.options)
     })
 
     // watcch
-    let unwatchFns = []
+    let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
       watch(
         () => image,
@@ -123,8 +130,8 @@ export default defineComponent({
         () => [props.max, props.min],
         vals => {
           const heatmapInstance = instance.cesiumObject as h337.Heatmap<string, string, string>
-          heatmapInstance.setDataMax(vals[0])
-          heatmapInstance.setDataMin(vals[1])
+          heatmapInstance.setDataMax(vals[0] || 0)
+          heatmapInstance.setDataMin(vals[1] || 0)
           image.value = heatmapInstance.getDataURL()
         }
       )
@@ -257,7 +264,7 @@ export default defineComponent({
         options.value.radius = width > height ? width / options.value.radiusFactor : height / options.value.radiusFactor
       }
 
-      const spacing = options.value.radius * options.value.spacingFactor
+      const spacing = (options.value.radius || 1) * options.value.spacingFactor
       const xoffset = mbb.west
       const yoffset = mbb.south
       width = Math.round(width + spacing * 2)
@@ -289,9 +296,13 @@ export default defineComponent({
     const setData = (data, heatmapInstance: h337.Heatmap<string, string, string>) => {
       if (data) {
         const { height, xoffset, yoffset, factor, spacing } = config.value
-        const xField = options.value.xField
-        const yField = options.value.yField
-        const datas = []
+        const xField = options.value.xField || 'x'
+        const yField = options.value.yField || 'y'
+        const valueField = options.value.valueField || 'value'
+        const datas: Array<{
+          x: number
+          y: number
+        }> = []
         for (let i = 0; i < data.length; i++) {
           const gp = data[i]
           if (!Cesium.defined(gp.id)) {
@@ -303,10 +314,10 @@ export default defineComponent({
             y: Math.round((mp.y - yoffset) / factor + spacing)
           }
           hp.y = height - hp.y
-          if (gp[options.value.valueField] || gp[options.value.valueField] === 0) {
-            hp[options.value.valueField] = gp[options.value.valueField]
+          if (gp[valueField] || gp[valueField] === 0) {
+            hp[valueField] = gp[valueField]
           }
-          if (hp[options.value.valueField] > props.max || hp[options.value.valueField] < props.min) {
+          if (hp[valueField] > props.max || hp[valueField] < props.min) {
             continue
           }
           datas.push(hp)
@@ -336,7 +347,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const child = []
+        const child: Array<VNode> = []
         if (props.type === 'entity' && image.value) {
           child.push(
             h(VcEntity, {

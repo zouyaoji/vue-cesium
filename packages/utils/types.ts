@@ -67,7 +67,7 @@ interface AnyObject {
 interface ReadyObj {
   Cesium: AnyObject
   viewer: Cesium.Viewer
-  cesiumObject?: AnyObject
+  cesiumObject?: AnyObject | Array<AnyObject>
   vm?: VcComponentPublicInstance
   earth?: AnyObject
   map?: AnyObject
@@ -87,23 +87,23 @@ interface CesiumMembersEvent {
 }
 
 interface VcComponentInternalInstance extends ComponentInternalInstance {
-  mounted?: boolean
-  loading?: boolean
+  mounted: boolean
+  loading: boolean
   unloadingPromise?: Promise<boolean>
-  Cesium?: AnyObject
-  viewer?: Cesium.Viewer
+  Cesium: AnyObject
+  viewer: Cesium.Viewer
   viewerElement?: HTMLElement
   cesiumEvents?: Array<string>
   cesiumMembersEvents?: Array<CesiumMembersEvent>
-  cesiumClass?: string
+  cesiumClass: string
   nowaiting?: boolean
   renderByParent?: boolean
-  vcMitt?: Emitter<VcMittEvents>
+  vcMitt: Emitter<VcMittEvents>
   cesiumObject?: AnyObject | HTMLElement
   createCesiumObject?(): Promise<unknown>
-  mount?(): Promise<boolean>
-  unmount?(): Promise<boolean>
-  children?: Array<VcComponentInternalInstance>
+  mount?(): Promise<boolean | undefined>
+  unmount?(): Promise<boolean | undefined>
+  children: Array<VcComponentInternalInstance>
   alreadyListening: string[]
   // third
   earth?: AnyObject
@@ -112,14 +112,14 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
 }
 
 type VcComponentPublicInstance = ComponentPublicInstance<{
-  load?(): Promise<ReadyObj | boolean>
-  unload?(): Promise<boolean>
-  reload?(): Promise<boolean>
-  createPromise?: Promise<ReadyObj>
+  load(): Promise<ReadyObj | boolean>
+  unload(): Promise<boolean>
+  reload(): Promise<boolean>
+  createPromise: Promise<ReadyObj>
   cesiumObject: unknown
-  getCesiumObject?(): unknown
-  __updateGraphics?(cesiumObject: AnyObject, type: EntityEmitType): boolean
-  __updateProvider?(cesiumObject: Cesium.ImageryProvider): boolean
+  getCesiumObject(): any
+  __updateGraphics?(cesiumObject: AnyObject | undefined, type: EntityEmitType): boolean
+  __updateProvider?(cesiumObject: Cesium.ImageryProvider | undefined): boolean
   __updateGeometryInstances?(cesiumObject: Cesium.GeometryInstance, index: number): boolean
   __updateGeometry?(cesiumObject: Cesium.Geometry): boolean
   __childCount?: Ref<number>
@@ -271,12 +271,13 @@ interface NavigationOption {
 
 interface HeatmapConfiguration extends h337.HeatmapConfiguration {
   useEntitiesIfAvailable?: boolean
-  minCanvasSize?: number
-  maxCanvasSize?: number
-  radiusFactor?: number
-  spacingFactor?: number
-  maxOpacity?: number
-  minOpacity?: number
+  minCanvasSize: number
+  maxCanvasSize: number
+  radiusFactor: number
+  spacingFactor: number
+  maxOpacity: number
+  minOpacity: number
+  container: HTMLElement
 }
 
 export {

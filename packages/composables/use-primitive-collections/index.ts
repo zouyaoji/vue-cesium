@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-06-04 13:55:35
+ * @LastEditTime: 2021-10-02 23:06:20
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collections\index.ts
+ */
 /**
  * for
  * PrimitiveCollection
@@ -20,9 +28,12 @@ export type Collection =
   | Cesium.PointPrimitiveCollection
   | Cesium.PolylineCollection
 
-export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
+export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   const commonState = useCommon(props, ctx, vcInstance)
+  if (commonState === void 0) {
+    return
+  }
   // methods
   vcInstance.mount = async () => {
     const primitives = commonState.$services.primitives

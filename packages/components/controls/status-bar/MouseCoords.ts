@@ -8,7 +8,7 @@ interface MouseCoords {
   proj4longlat: string
   lastHeightSamplePosition: Cesium.Cartographic
   accurateSamplingDebounceTime: number
-  tileRequestInFlight: Promise<any>
+  tileRequestInFlight: any
   elevation: string
   utmZone: string
   latitude: string
@@ -39,12 +39,12 @@ class MouseCoords {
     this.accurateSamplingDebounceTime = 250
     this.tileRequestInFlight = undefined
 
-    this.elevation = undefined
-    this.utmZone = undefined
-    this.latitude = undefined
-    this.longitude = undefined
-    this.north = undefined
-    this.east = undefined
+    this.elevation = ''
+    this.utmZone = ''
+    this.latitude = ''
+    this.longitude = ''
+    this.north = ''
+    this.east = ''
     this.useProjection = false
     this.debounceSampleAccurateHeight = debounce(this.sampleAccurateHeight, this.accurateSamplingDebounceTime)
 
@@ -108,12 +108,12 @@ class MouseCoords {
         this.debounceSampleAccurateHeight(terrainProvider, intersection)
       }
     } else {
-      this.elevation = undefined
-      this.utmZone = undefined
-      this.latitude = undefined
-      this.longitude = undefined
-      this.north = undefined
-      this.east = undefined
+      this.elevation = ''
+      this.utmZone = ''
+      this.latitude = ''
+      this.longitude = ''
+      this.north = ''
+      this.east = ''
     }
   }
 
@@ -171,7 +171,7 @@ class MouseCoords {
   }
 }
 
-const scratchArray = []
+const scratchArray: Array<any> = []
 const scratchSphereIntersectionResult = {
   start: 0.0,
   stop: 0.0
@@ -184,7 +184,7 @@ export function extendForMouseCoords() {
   const { Globe, GlobeSurfaceTile, BoundingSphere, defaultValue, Cartesian3, defined, DeveloperError, IntersectionTests, SceneMode } = Cesium
   Globe.prototype.pickTriangle =
     Globe.prototype.pickTriangle ||
-    function (ray, scene, cullBackFaces, result) {
+    function (this, ray, scene, cullBackFaces, result) {
       // >>includeStart('debug', pragmas.debug);
       if (!defined(ray)) {
         throw new DeveloperError('ray is required')
@@ -247,7 +247,7 @@ export function extendForMouseCoords() {
 
   GlobeSurfaceTile.prototype.pickTriangle =
     GlobeSurfaceTile.prototype.pickTriangle ||
-    function (ray, mode, projection, cullBackFaces) {
+    function (this: any, ray, mode, projection, cullBackFaces) {
       const mesh = this.renderedMesh
       if (!defined(mesh)) {
         return undefined

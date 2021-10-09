@@ -1,4 +1,12 @@
-import { defineComponent, getCurrentInstance, ref, h, nextTick, toRef } from 'vue'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-26 17:06:42
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\drawings\src\polyline\index.ts
+ */
+import { defineComponent, getCurrentInstance, ref, h, nextTick, toRef, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
@@ -30,11 +38,11 @@ export default defineComponent({
     const { $services } = commonState
     const { emit } = ctx
     const drawTip = toRef(props, 'drawtip')
-    drawTip.value.drawTip1 = drawTip.value.drawingTip1 || t('vc.drawing.polyline.drawTip1')
-    drawTip.value.drawTip2 = drawTip.value.drawingTip2 || t('vc.drawing.polyline.drawTip2')
-    drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.drawing.polyline.drawTip3')
+    ;(drawTip.value as any).drawTip1 = drawTip.value?.drawingTip1 || t('vc.drawing.polyline.drawTip1')
+    ;(drawTip.value as any).drawTip2 = drawTip.value?.drawingTip2 || t('vc.drawing.polyline.drawTip2')
+    ;(drawTip.value as any).drawTip3 = drawTip.value?.drawingTip3 || t('vc.drawing.polyline.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
     const { onVcCollectionPointReady } = useCustomUpdate()
 
     // methods
@@ -48,9 +56,9 @@ export default defineComponent({
 
       if (defined(result)) {
         const { drawingVm, selectedDrawingOption, viewer } = $services
-        if (defined(result.position)) {
-          if (result.type !== 'new') {
-            ;(drawingVm.proxy as any).editingDrawingName = undefined
+        if (defined(result?.position)) {
+          if (result?.type !== 'new') {
+            ;(drawingVm?.proxy as any).editingDrawingName = undefined
             polylineDrawingState.canShowDrawTip.value = defined(selectedDrawingOption)
           }
           nextTick(() => {
@@ -63,8 +71,8 @@ export default defineComponent({
             )
           })
         } else {
-          const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === 'polyline')
-          ;(drawingVm.proxy as any).toggleAction(drawingsOption)
+          const drawingsOption = (drawingVm?.proxy as any).drawingsOptions.find(v => v.name === 'polyline')
+          ;(drawingVm?.proxy as any).toggleAction(drawingsOption)
         }
       }
     }
@@ -74,7 +82,7 @@ export default defineComponent({
       const { defined } = Cesium
       if (defined(result)) {
         const { viewer } = $services
-        if (defined(result.position)) {
+        if (defined(result?.position)) {
           nextTick(() => {
             emit(
               'drawEvt',
@@ -93,7 +101,7 @@ export default defineComponent({
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
-        if (defined(result.position)) {
+        if (defined(result?.position)) {
           nextTick(() => {
             emit(
               'drawEvt',
@@ -104,7 +112,7 @@ export default defineComponent({
             )
 
             if (props.mode === 1) {
-              ;(drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+              ;(drawingVm?.proxy as any).toggleAction(selectedDrawingOption)
             }
           })
         }
@@ -128,12 +136,12 @@ export default defineComponent({
       cesiumObject._vcId = 'VcDrawingPolyline'
     }
 
-    const onEditorClick = function (e) {
+    const onEditorClick = function (this, e) {
       polylineDrawingState.onEditorClick.bind(this)(e)
 
       if (e === 'move' || e === 'insert') {
         const { drawingVm } = $services
-        ;(drawingVm.proxy as any).editingDrawingName = 'polyline'
+        ;(drawingVm?.proxy as any).editingDrawingName = 'polyline'
       }
     }
 
@@ -157,7 +165,7 @@ export default defineComponent({
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
       }
       props.clampToGround && delete polylineOpts.arcType
-      const children = []
+      const children: Array<VNode> = []
       polylineDrawingState.polylines.value.forEach((polyline, index) => {
         const positions = polyline.positions.slice()
         if (positions.length > 1) {
@@ -170,10 +178,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -202,7 +210,7 @@ export default defineComponent({
               id: createGuid(),
               _vcPolylineIndx: index, // for editor
               ...props.pointOpts,
-              show: props.pointOpts.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
             })),
             onMouseover: polylineDrawingState.onMouseoverPoints.bind('polyline'),
             onMouseout: polylineDrawingState.onMouseoutPoints.bind('polyline'),
@@ -211,7 +219,7 @@ export default defineComponent({
         )
       })
 
-      if (props.drawtip.show && polylineDrawingState.canShowDrawTip.value) {
+      if (props.drawtip?.show && polylineDrawingState.canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
@@ -236,7 +244,7 @@ export default defineComponent({
       }
 
       if (polylineDrawingState.showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (polylineDrawingState.mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

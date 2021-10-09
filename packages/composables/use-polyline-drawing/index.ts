@@ -13,12 +13,12 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
   const drawTip = ref('')
   const showEditor = ref(false)
   const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-  const mouseoverPoint = ref(null)
-  const editingPoint = ref(null)
+  const mouseoverPoint = ref<any>(null)
+  const editingPoint = ref<any>(null)
   const { emit } = ctx
   let editorType = ''
-  let lastClickPosition: Cesium.Cartesian2 = undefined
-  let restorePosition = undefined
+  let lastClickPosition: Cesium.Cartesian2
+  let restorePosition
   const { registerTimeout, removeTimeout } = useTimeout()
 
   const mouseDelta = 10
@@ -67,7 +67,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     if (options.button === 2 && editingPoint.value) {
       drawStatus.value = DrawStatus.AfterDraw
       polyline.drawStatus = DrawStatus.AfterDraw
-      polyline.positions[editingPoint.value._index] = restorePosition
+      polyline.positions[editingPoint.value._index] = restorePosition!
       editingPoint.value = undefined
       drawTip.value = drawTipOpts.drawTip1
       return {
@@ -192,7 +192,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     }
   }
 
-  const onMouseoverPoints = function (e) {
+  const onMouseoverPoints = function (this, e) {
     const { drawingHandlerActive, viewer } = $services
     if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
@@ -216,7 +216,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
       viewer
     )
   }
-  const onMouseoutPoints = function (e) {
+  const onMouseoutPoints = function (this, e) {
     const { viewer, selectedMeasurementOption } = $services
 
     if (props.editable) {
@@ -255,7 +255,7 @@ export default function (props, $services: VcViewerProvider, drawTipOpts, ctx) {
     }, props.editorOpts.hideDelay)
   }
 
-  const onEditorClick = function (e) {
+  const onEditorClick = function (this, e) {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
 

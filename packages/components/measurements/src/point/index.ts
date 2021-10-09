@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted, WatchStopHandle, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
@@ -35,15 +35,15 @@ export default defineComponent({
     const drawTip = ref('')
     const showEditor = ref(false)
     const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-    const mouseoverPoint = ref(null)
-    const editingPoint = ref(null)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-    let restorePoint = undefined
+    const mouseoverPoint = ref<any>(null)
+    const editingPoint = ref<any>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
+    let restorePoint
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
     const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
-    let unwatchFns = []
+    let unwatchFns: Array<WatchStopHandle> = []
     // watch
     unwatchFns.push(
       watch(
@@ -51,7 +51,7 @@ export default defineComponent({
         val => {
           const { measurementVm, selectedMeasurementOption } = $services
           if (val && selectedMeasurementOption?.name === 'point') {
-            ;(measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+            ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
           }
         }
       )
@@ -75,7 +75,7 @@ export default defineComponent({
       points.value.push(point)
       drawStatus.value = DrawStatus.Drawing
       canShowDrawTip.value = true
-      drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.point.drawTip1')
+      drawTip.value = props.drawtip?.drawingTip1 || t('vc.measurement.point.drawTip1')
     }
 
     const stop = () => {
@@ -91,8 +91,8 @@ export default defineComponent({
       const { viewer, measurementVm, getWorldPosition, selectedMeasurementOption } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'point')
-        ;(measurementVm.proxy as any).toggleAction(measurementsOption)
+        const measurementsOption = (measurementVm?.proxy as any).measurementsOptions.find(v => v.name === 'point')
+        ;(measurementVm?.proxy as any).toggleAction(measurementsOption)
         return
       }
 
@@ -104,12 +104,12 @@ export default defineComponent({
       const point: PointMeasurement = points.value[index]
 
       if (options.button === 2 && editingPoint.value) {
-        ;(measurementVm.proxy as any).editingMeasurementName = undefined
+        ;(measurementVm?.proxy as any).editingMeasurementName = undefined
         points.value[index] = restorePoint
         drawStatus.value = DrawStatus.AfterDraw
         points.value[index].drawStatus = DrawStatus.AfterDraw
         editingPoint.value = undefined
-        drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.point.drawTip1')
+        drawTip.value = props.drawtip?.drawTip1 || t('vc.measurement.point.drawTip1')
         return
       }
 
@@ -132,7 +132,7 @@ export default defineComponent({
         point.show = true
         point.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
-        drawTip.value = props.drawtip.drawingTip1 || t('vc.measurement.point.drawTip1')
+        drawTip.value = props.drawtip?.drawingTip1 || t('vc.measurement.point.drawTip1')
 
         nextTick(() => {
           emit(
@@ -155,12 +155,12 @@ export default defineComponent({
 
         if (editingPoint.value) {
           editingPoint.value = undefined
-          ;(measurementVm.proxy as any).editingMeasurementName = undefined
+          ;(measurementVm?.proxy as any).editingMeasurementName = undefined
           canShowDrawTip.value = false
           type = editorType
         } else {
           if (props.mode === 1) {
-            ;(measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+            ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
           }
         }
 
@@ -336,7 +336,7 @@ export default defineComponent({
     const onMouseoverPoints = e => {
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
         removeTimeout()
         registerTimeout(() => {
           mouseoverPoint.value = e.pickedFeature.primitive
@@ -344,7 +344,7 @@ export default defineComponent({
           showEditor.value = true
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
-        }, props.editorOpts.delay)
+        }, props.editorOpts?.delay)
       }
 
       emit(
@@ -361,13 +361,13 @@ export default defineComponent({
       const { viewer, selectedMeasurementOption } = $services
 
       if (props.editable) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
         removeTimeout()
         registerTimeout(() => {
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
           showEditor.value = false
-        }, props.editorOpts.hideDelay)
+        }, props.editorOpts?.hideDelay)
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
 
@@ -390,10 +390,10 @@ export default defineComponent({
       removeTimeout()
       registerTimeout(() => {
         editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
         mouseoverPoint.value = undefined
         showEditor.value = false
-      }, props.editorOpts.hideDelay)
+      }, props.editorOpts?.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -413,7 +413,7 @@ export default defineComponent({
         editingPoint.value = mouseoverPoint.value
         canShowDrawTip.value = true
         restorePoint = Object.assign({}, points.value[editingPoint.value._vcPolylineIndx])
-        ;(measurementVm.proxy as any).editingMeasurementName = 'point'
+        ;(measurementVm?.proxy as any).editingMeasurementName = 'point'
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         points.value.splice(index, 1)
@@ -451,27 +451,27 @@ export default defineComponent({
       return (
         `${t('vc.measurement.point.lng')}${MeasureUnits.angleToString(
           positionCartographic.longitude,
-          props.measureUnits.angleUnits,
+          props.measureUnits?.angleUnits,
           props.locale,
-          props.decimals.lng
+          props.decimals?.lng
         )}\n` +
         `${t('vc.measurement.point.lat')}${MeasureUnits.angleToString(
           positionCartographic.latitude,
-          props.measureUnits.angleUnits,
+          props.measureUnits?.angleUnits,
           props.locale,
-          props.decimals.lat
+          props.decimals?.lat
         )}\n` +
         `${t('vc.measurement.point.height')}${MeasureUnits.distanceToString(
           point.height,
-          props.measureUnits.distanceUnits,
+          props.measureUnits?.distanceUnits,
           props.locale,
-          props.decimals.height
+          props.decimals?.height
         )}\n` +
         `${t('vc.measurement.point.slope')}${MeasureUnits.angleToString(
           point.slope,
-          props.measureUnits.slopeUnits,
+          props.measureUnits?.slopeUnits,
           props.locale,
-          props.decimals.slope
+          props.decimals?.slope
         )}`
       )
     }
@@ -489,9 +489,9 @@ export default defineComponent({
     return () => {
       const { createGuid } = Cesium
 
-      const children = []
-      const pointsRender = []
-      const labelsRender = []
+      const children: Array<VNode> = []
+      const pointsRender: Array<any> = []
+      const labelsRender: Array<any> = []
 
       points.value.forEach((point, index) => {
         pointsRender.push({
@@ -528,7 +528,7 @@ export default defineComponent({
         })
       )
 
-      if (props.drawtip.show && canShowDrawTip.value) {
+      if (props.drawtip?.show && canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
@@ -553,7 +553,7 @@ export default defineComponent({
       }
 
       if (showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

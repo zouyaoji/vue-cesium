@@ -57,11 +57,11 @@ class MeasureUnits {
     this.slopeUnits = defaultValue(options.slopeUnits, AngleUnits.DEGREES)
   }
 
-  static numberToString = function(number, locale, decimals) {
+  static numberToString = function (number, locale, decimals) {
     return numberToFormattedString(number, locale, decimals)
   }
 
-  static distanceToString (distance: number, distanceUnits: string, locale?, decimals?) {
+  static distanceToString(distance: number, distanceUnits: string, locale?, decimals?) {
     distance = MeasureUnits.convertDistance(distance, DistanceUnits.METERS, distanceUnits)
     return (
       numberToFormattedString(distance, locale, decimals) +
@@ -70,24 +70,18 @@ class MeasureUnits {
     )
   }
 
-  static areaToString (area: number, areaUnits: string, locale?, decimals?) {
+  static areaToString(area: number, areaUnits: string, locale?, decimals?) {
     area = MeasureUnits.convertArea(area, AreaUnits.SQUARE_METERS, areaUnits)
-    return (
-      numberToFormattedString(area, locale, decimals) +
-      MeasureUnits.getAreaUnitSpacing(areaUnits) +
-      MeasureUnits.getAreaUnitSymbol(areaUnits)
-    )
+    return numberToFormattedString(area, locale, decimals) + MeasureUnits.getAreaUnitSpacing(areaUnits) + MeasureUnits.getAreaUnitSymbol(areaUnits)
   }
 
-  static angleToString (angle: number, angleUnits: string, locale?, decimals?) {
+  static angleToString(angle: number, angleUnits: string, locale?, decimals?) {
     const { Math: CesiumMath } = Cesium
     if (angleUnits === AngleUnits.DEGREES || angleUnits === AngleUnits.RADIANS || angleUnits === AngleUnits.GRADE) {
       angle = convertAngleFromRadians(angle, angleUnits)
 
       return (
-        numberToFormattedString(angle, locale, decimals) +
-        MeasureUnits.getAngleUnitSpacing(angleUnits) +
-        MeasureUnits.getAngleUnitSymbol(angleUnits)
+        numberToFormattedString(angle, locale, decimals) + MeasureUnits.getAngleUnitSpacing(angleUnits) + MeasureUnits.getAngleUnitSymbol(angleUnits)
       )
     }
 
@@ -103,7 +97,7 @@ class MeasureUnits {
     }
   }
 
-  static volumeToString (volume: number, volumeUnits: string, locale?, decimals?) {
+  static volumeToString(volume: number, volumeUnits: string, locale?, decimals?) {
     volume = MeasureUnits.convertArea(volume, VolumeUnits.CUBIC_METERS, volumeUnits)
     return (
       numberToFormattedString(volume, locale, decimals) +
@@ -112,23 +106,23 @@ class MeasureUnits {
     )
   }
 
-  static getDistanceUnitSpacing (distanceUnits: string) {
+  static getDistanceUnitSpacing(distanceUnits: string) {
     return ' '
   }
 
-  static getAreaUnitSpacing (distanceUnits: string) {
+  static getAreaUnitSpacing(distanceUnits: string) {
     return ' '
   }
 
-  static getAngleUnitSpacing (angleUnits: string) {
+  static getAngleUnitSpacing(angleUnits: string) {
     return angleUnits === AngleUnits.RADIANS ? ' ' : ''
   }
 
-  static getVolumeUnitSpacing (distanceUnits: string) {
+  static getVolumeUnitSpacing(distanceUnits: string) {
     return ' '
   }
 
-  static getDistanceUnitSymbol (distanceUnits: string) {
+  static getDistanceUnitSymbol(distanceUnits: string) {
     switch (distanceUnits) {
       case DistanceUnits.METERS:
         return 'm'
@@ -150,7 +144,7 @@ class MeasureUnits {
     }
   }
 
-  static getAreaUnitSymbol (areaUnits: string) {
+  static getAreaUnitSymbol(areaUnits: string) {
     switch (areaUnits) {
       case AreaUnits.SQUARE_METERS:
         return 'm²'
@@ -175,7 +169,7 @@ class MeasureUnits {
     }
   }
 
-  static getVolumeUnitSymbol (volumeUnits) {
+  static getVolumeUnitSymbol(volumeUnits) {
     switch (volumeUnits) {
       case VolumeUnits.CUBIC_METERS:
         return 'm³'
@@ -196,44 +190,40 @@ class MeasureUnits {
     }
   }
 
-  static getAngleUnitSymbol (angleUnits) {
+  static getAngleUnitSymbol(angleUnits) {
     return angleUnits === AngleUnits.DEGREES ? '°' : angleUnits === AngleUnits.RADIANS ? 'rad' : angleUnits === AngleUnits.GRADE ? '%' : void 0
   }
 
-  static convertDistance (distance: number, distanceUnitsFrom: string, distanceUnitsTo: string) {
+  static convertDistance(distance: number, distanceUnitsFrom: string, distanceUnitsTo: string) {
     return distanceUnitsFrom === distanceUnitsTo
       ? distance
       : distance * getDistanceUnitConversion(distanceUnitsFrom) * (1 / getDistanceUnitConversion(distanceUnitsTo))
   }
 
-  static convertArea (area: number, areaUnitsFrom: string, areaUnitsTo: string) {
-    return areaUnitsFrom === areaUnitsTo
-      ? area
-      : area * getAreaUnitConversion(areaUnitsFrom) * (1 / getAreaUnitConversion(areaUnitsTo))
+  static convertArea(area: number, areaUnitsFrom: string, areaUnitsTo: string) {
+    return areaUnitsFrom === areaUnitsTo ? area : area * getAreaUnitConversion(areaUnitsFrom) * (1 / getAreaUnitConversion(areaUnitsTo))
   }
 
-  static convertVolume (volume: number, volumeUnitsFrom: string, volumeUnitsTo: string) {
+  static convertVolume(volume: number, volumeUnitsFrom: string, volumeUnitsTo: string) {
     return volumeUnitsFrom === volumeUnitsTo
       ? volume
       : volume * getVolumeUnitConversion(volumeUnitsFrom) * (1 / getVolumeUnitConversion(volumeUnitsTo))
   }
 
-  static convertAngle (angle: number, angleUnitsFrom: string, angleUnitsTo: string) {
-    return angleUnitsFrom === angleUnitsTo
-      ? angle
-      : convertAngleFromRadians(convertAngleToRadians(angle, angleUnitsFrom), angleUnitsTo)
+  static convertAngle(angle: number, angleUnitsFrom: string, angleUnitsTo: string) {
+    return angleUnitsFrom === angleUnitsTo ? angle : convertAngleFromRadians(convertAngleToRadians(angle, angleUnitsFrom), angleUnitsTo)
   }
 
-  static longitudeToString (longitude, angleUnits, locale, decimals) {
+  static longitudeToString(longitude, angleUnits, locale, decimals) {
     return MeasureUnits.angleToString(Math.abs(longitude), angleUnits, locale, decimals) + ' ' + (longitude < 0 ? 'W' : 'E')
   }
 
-  static latitudeToString (latitude, angleUnits, locale, decimals) {
+  static latitudeToString(latitude, angleUnits, locale, decimals) {
     return MeasureUnits.angleToString(Math.abs(latitude), angleUnits, locale, decimals) + ' ' + (latitude < 0 ? 'S' : 'N')
   }
 }
 
-function getDistanceUnitConversion (distanceUnits: string) {
+function getDistanceUnitConversion(distanceUnits: string) {
   switch (distanceUnits) {
     case DistanceUnits.METERS:
       return 1
@@ -252,11 +242,11 @@ function getDistanceUnitConversion (distanceUnits: string) {
     case DistanceUnits.MILES:
       return 1609.344
     default:
-      return void 0
+      return 1
   }
 }
 
-function getAreaUnitConversion (areaUnits: string) {
+function getAreaUnitConversion(areaUnits: string) {
   switch (areaUnits) {
     case AreaUnits.SQUARE_METERS:
       return 1
@@ -277,11 +267,11 @@ function getAreaUnitConversion (areaUnits: string) {
     case AreaUnits.HECTARES:
       return 10000
     default:
-      return void 0
+      return 1
   }
 }
 
-function getVolumeUnitConversion (volumeUnits: string) {
+function getVolumeUnitConversion(volumeUnits: string) {
   switch (volumeUnits) {
     case VolumeUnits.CUBIC_METERS:
       return 1
@@ -298,11 +288,11 @@ function getVolumeUnitConversion (volumeUnits: string) {
     case VolumeUnits.CUBIC_MILES:
       return 4168181825.44058
     default:
-      return void 0
+      return 1
   }
 }
 
-function convertAngleToRadians (angle, angleUnits) {
+function convertAngleToRadians(angle, angleUnits) {
   const { defined, Math: CesiumMath, RuntimeError } = Cesium
   if (angleUnits === AngleUnits.RADIANS) return angle
   if (angleUnits === AngleUnits.DEGREES) return CesiumMath.toRadians(angle)
@@ -310,7 +300,7 @@ function convertAngleToRadians (angle, angleUnits) {
   if (angleUnits === AngleUnits.RATIO) return Math.atan(angle)
   if (angleUnits === AngleUnits.DEGREES_MINUTES_SECONDS) {
     const degreesMinutesSecondsRegex = /(-?)(\d+)\s*°\s*(\d+)\s*'\s*([\d.,]+)"\s*([WENS]?)/i
-    const result = degreesMinutesSecondsRegex.exec(angle)
+    const result = degreesMinutesSecondsRegex.exec(angle) || []
     if (!defined(result)) throw new RuntimeError('Could not convert angle to radians: ' + angle)
     let r = 0 < result[1].length ? -1 : 1
     const degrees = parseInt(result[2])
@@ -323,7 +313,7 @@ function convertAngleToRadians (angle, angleUnits) {
   }
 }
 
-function convertAngleFromRadians (angle, angleUnits) {
+function convertAngleFromRadians(angle, angleUnits) {
   const { Math: CesiumMath } = Cesium
   if (angleUnits === AngleUnits.RADIANS) {
     return angle
@@ -342,7 +332,7 @@ function convertAngleFromRadians (angle, angleUnits) {
   return void 0
 }
 
-function numberToFormattedString (number, locale, decimals) {
+function numberToFormattedString(number, locale, decimals) {
   const options = getLocaleFormatStringOptions(decimals, number, locale)
   const strLocale = number.toLocaleString(locale, options)
   const negativeZero = -0
@@ -350,7 +340,7 @@ function numberToFormattedString (number, locale, decimals) {
   return strLocale === negativeZero.toLocaleString(locale, options) ? positiveZero.toLocaleString(locale, options) : strLocale
 }
 
-function getLocaleFormatStringOptions (decimals, number?, locale?) {
+function getLocaleFormatStringOptions(decimals, number?, locale?) {
   let numberFormatter = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0

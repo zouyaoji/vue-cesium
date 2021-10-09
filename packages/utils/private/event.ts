@@ -17,8 +17,8 @@ try {
       })
     }
   })
-  window.addEventListener('qtest', null, opts)
-  window.removeEventListener('qtest', null, opts)
+  window.addEventListener('qtest', null as any, opts)
+  window.removeEventListener('qtest', null as any, opts)
 } catch (e) {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -59,7 +59,7 @@ export function getEventPath(e) {
     return e.composedPath()
   }
 
-  const path = []
+  const path: Array<Document | Window> = []
   let el = e.target
 
   while (el) {
@@ -90,7 +90,7 @@ export function getMouseWheelDistance(e) {
   }
 
   if (e.shiftKey && !x) {
-    [y, x] = [x, y]
+    ;[y, x] = [x, y]
   }
 
   return { x, y }
@@ -117,13 +117,13 @@ export function preventDraggable(el, status) {
   const fn =
     status === true
       ? el => {
-        el.__dragPrevented = true
-        el.addEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
-      }
+          el.__dragPrevented = true
+          el.addEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
+        }
       : el => {
-        delete el.__dragPrevented
-        el.removeEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
-      }
+          delete el.__dragPrevented
+          el.removeEventListener('dragstart', prevent, listenOpts.notPassiveCapture)
+        }
 
   el.querySelectorAll('a, img').forEach(fn)
 }

@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import cloneDeep from 'lodash/cloneDeep'
@@ -26,9 +26,12 @@ export default defineComponent({
     instance.cesiumClass = 'PolylineCollection'
     const primitiveCollectionsState = usePrimitiveCollections(props, ctx, instance)
 
+    if (primitiveCollectionsState === void 0) {
+      return
+    }
     // watcher
     instance.alreadyListening.push('polylines')
-    let unwatchFns = []
+    let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
       watch(
         () => cloneDeep(props.polylines),
@@ -41,7 +44,7 @@ export default defineComponent({
           if (newVal.length === oldVal.length) {
             // 视为修改操作
             // Treated as modified
-            const modifies = []
+            const modifies: Array<any> = []
             for (let i = 0; i < newVal.length; i++) {
               const options = newVal[i]
               const oldOptions = oldVal[i]
@@ -66,7 +69,7 @@ export default defineComponent({
           } else {
             const adds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
-            const deletePolylines = []
+            const deletePolylines: Array<Cesium.Polyline> = []
             for (let i = 0; i < deletes.length; i++) {
               const deletePolyline = polylineCollection._polylines.find(v => v.id === deletes[i].id)
               deletePolyline && deletePolylines.push(deletePolyline)
@@ -111,16 +114,17 @@ export default defineComponent({
       unwatchFns = []
     })
 
+    const name = instance.proxy?.$options.name || ''
     return () =>
       ctx.slots.default
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(name),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(name))
   }
 })

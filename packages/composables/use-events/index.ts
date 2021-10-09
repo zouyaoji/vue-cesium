@@ -18,6 +18,9 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
   }
   const registerEvents = register => {
     const { viewer, cesiumObject } = vcInstance
+    if (cesiumObject === void 0) {
+      return
+    }
     const { ScreenSpaceEventHandler, ScreenSpaceEventType } = Cesium
 
     if (!viewer._vcPickScreenSpaceEventHandler || !viewer._vcViewerScreenSpaceEventHandler) {
@@ -53,7 +56,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     }
   }
 
-  function pickedAction(movement) {
+  function pickedAction(this, movement) {
     if (!props.enableMouseEvent) {
       return
     }
@@ -63,7 +66,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       return
     }
 
-    const pickedFeatureAndCallbackNames = []
+    const pickedFeatureAndCallbackNames: Array<any> = []
 
     let callbackName
     if (eventName.indexOf('LEFT_DOUBLE_CLICK') !== -1) {
@@ -138,7 +141,7 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     } else if (eventName.indexOf('RIGHT') !== -1) {
       button = 2
     }
-    const eventSourceList = []
+    const eventSourceList: Array<any> = []
     pickedFeatureAndCallbackNames.forEach(item => {
       const callbackName = item.callbackName
       const pickedFeature = item.pickedFeature

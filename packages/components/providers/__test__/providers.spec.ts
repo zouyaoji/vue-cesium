@@ -96,7 +96,7 @@ describe('VcProviderImageryBaidumap', () => {
     const wrapper = mount(baiduApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let provider = readyObj.cesiumObject
+    let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png/')
     await provider.readyPromise
@@ -365,7 +365,7 @@ describe('VcProviderImagerySupermap', () => {
     const wrapper = mount(supermapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let provider = readyObj.cesiumObject
+    let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult/')
     await provider.readyPromise
@@ -401,7 +401,7 @@ describe('VcProviderImageryTianditu', () => {
     const wrapper = mount(tiandituApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let provider = readyObj.cesiumObject
+    let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://{s}.tianditu.gov.cn/cva_c/wmts')
     await provider.readyPromise
@@ -517,7 +517,7 @@ describe('VcProviderImageryTiledcache', () => {
     const wrapper = mount(tiledCacheApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
     const readyObj: ReadyObj = await testVm.createPromise
-    let provider = readyObj.cesiumObject
+    let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     await provider.readyPromise
     expect(provider.url).toEqual('https://songluck.com/gis/TiledCacheService/TiledCacheServlet?dir=WhiteMap&scale={scale}&col={x}&row={y}&format=png')

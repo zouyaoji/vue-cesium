@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-30 22:50:48
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitives\particle\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
@@ -69,6 +77,6 @@ export default defineComponent({
     instance.cesiumClass = 'ParticleSystem'
     instance.cesiumEvents = ['complete']
     usePrimitives(props, ctx, instance)
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

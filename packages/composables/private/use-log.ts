@@ -64,12 +64,23 @@ export default function (vcInstance: VcComponentInternalInstance) {
   const typeColor = (type = 'default') => {
     let color = ''
     switch (type) {
-      case 'default': color = '#35495E'; break
-      case 'primary': color = '#3488ff'; break
-      case 'success': color = '#43B883'; break
-      case 'warning': color = '#e6a23c'; break
-      case 'danger': color = '#f56c6c'; break
-      default: break
+      case 'default':
+        color = '#35495E'
+        break
+      case 'primary':
+        color = '#3488ff'
+        break
+      case 'success':
+        color = '#43B883'
+        break
+      case 'warning':
+        color = '#e6a23c'
+        break
+      case 'danger':
+        color = '#f56c6c'
+        break
+      default:
+        break
     }
     return color
   }
@@ -92,10 +103,7 @@ export default function (vcInstance: VcComponentInternalInstance) {
    * @description 打印彩色文字
    */
   const colorful = textArr => {
-    console.log(
-      `%c${textArr.map(t => t.text || '').join('%c')}`,
-      ...textArr.map(t => `color: ${typeColor(t.type)};`)
-    )
+    console.log(`%c${textArr.map(t => t.text || '').join('%c')}`, ...textArr.map(t => `color: ${typeColor(t.type)};`))
   }
 
   const success = text => {
@@ -115,10 +123,10 @@ export default function (vcInstance: VcComponentInternalInstance) {
   }
 
   return {
-    log: makeLog(`[VueCesium] ${vcInstance.proxy.$options.name}`),
-    warn: makeWarn(`[VueCesium] WARN ${vcInstance.proxy.$options.name}`),
-    error: makeError(`[VueCesium] ERR ${vcInstance.proxy.$options.name}`),
-    debug: makeDebug(`[VueCesium] Debug ${vcInstance.proxy.$options.name}`),
+    log: makeLog(`[VueCesium] ${vcInstance?.proxy?.$options.name}`),
+    warn: makeWarn(`[VueCesium] WARN ${vcInstance?.proxy?.$options.name}`),
+    error: makeError(`[VueCesium] ERR ${vcInstance?.proxy?.$options.name}`),
+    debug: makeDebug(`[VueCesium] Debug ${vcInstance?.proxy?.$options.name}`),
     capsule,
     success,
     warning,

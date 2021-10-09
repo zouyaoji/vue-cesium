@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-26 14:44:30
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, toRefs } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import BaiduMapImageryProvider from './BaiduMapImageryProvider'
@@ -27,6 +35,10 @@ export default defineComponent({
           to: 'WGS84'
         }
       }
+    },
+    bdStyle: {
+      type: String,
+      default: 'dark'
     }
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
@@ -45,6 +57,6 @@ export default defineComponent({
       return new Cesium.BaiduMapImageryProvider(options)
     }
 
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

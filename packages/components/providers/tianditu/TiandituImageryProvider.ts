@@ -205,7 +205,7 @@ class TiandituImageryProvider {
  * @param {number} level
  * @private
  */
-function buildImageResource(x, y, level) {
+function buildImageResource(this, x, y, level) {
   const { combine, defined, defaultValue, queryToObject, objectToQuery, Uri } = Cesium
   const freezeObject = Object.freeze
   const options = freezeObject({

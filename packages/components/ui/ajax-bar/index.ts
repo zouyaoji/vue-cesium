@@ -1,11 +1,12 @@
 import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, CSSProperties, PropType } from 'vue'
 
 import { between } from '@vue-cesium/utils/private/format'
+import { AnyFunction } from '@vue-cesium/utils/types'
 
 const xhr = XMLHttpRequest,
   send = xhr.prototype.send,
-  stackStart = [],
-  stackStop = []
+  stackStart: Array<AnyFunction<void>> = [],
+  stackStop: Array<AnyFunction<void>> = []
 
 let highjackCount = 0
 
@@ -71,7 +72,7 @@ function highjackAjax(start, stop) {
     })
     this.addEventListener('loadend', endHandler, false)
     // eslint-disable-next-line prefer-rest-params
-    send.apply(this, arguments)
+    send.apply(this, arguments as any)
   }
 }
 
@@ -111,7 +112,7 @@ export default defineComponent({
   emits: ['start', 'stop'],
 
   setup(props, { emit }) {
-    const { proxy } = getCurrentInstance()
+    const { proxy } = getCurrentInstance()!
 
     const progress = ref(0)
     const onScreen = ref(false)

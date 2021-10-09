@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/components/primitives'
@@ -15,6 +15,7 @@ import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { MeasureUnits } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
+import { isUndefined } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcMeasurementDistance',
@@ -39,10 +40,10 @@ export default defineComponent({
     const drawTip = ref('')
     const showEditor = ref(false)
     const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-    const mouseoverPoint = ref(null)
-    const editingPoint = ref(null)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-    let restorePosition = undefined
+    const mouseoverPoint = ref<any>(null)
+    const editingPoint = ref<any>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
+    let restorePosition
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
     const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
@@ -55,7 +56,7 @@ export default defineComponent({
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
         const distance =
-          props.polylineOpts.arcType === 0
+          props.polylineOpts?.arcType === 0
             ? Cartesian3.distance(startPosition, endPosition)
             : getGeodesicDistance(startPosition, endPosition, $services.viewer.scene.globe.ellipsoid)
         const labelPosition = Cartesian3.midpoint(startPosition, endPosition, {} as any)
@@ -106,7 +107,7 @@ export default defineComponent({
       polylines.value.push(polyline)
       drawStatus.value = DrawStatus.BeforeDraw
       canShowDrawTip.value = true
-      drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.distance.drawTip1')
+      drawTip.value = props.drawtip?.drawTip1 || t('vc.measurement.distance.drawTip1')
     }
 
     const stop = () => {
@@ -122,10 +123,10 @@ export default defineComponent({
       const { viewer, measurementVm, selectedMeasurementOption, getWorldPosition } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(
+        const measurementsOption = (measurementVm?.proxy as any).measurementsOptions.find(
           v => v.name === (props.showComponentLines ? 'component-distance' : 'distance')
         )
-        ;(measurementVm.proxy as any).toggleAction(measurementsOption)
+        ;(measurementVm?.proxy as any).toggleAction(measurementsOption)
         return
       }
 
@@ -138,12 +139,12 @@ export default defineComponent({
       const positions = polyline.positions
 
       if (options.button === 2 && editingPoint.value) {
-        ;(measurementVm.proxy as any).editingMeasurementName = undefined
+        ;(measurementVm?.proxy as any).editingMeasurementName = undefined
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
         editingPoint.value = undefined
-        drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.distance.drawTip1')
+        drawTip.value = props.drawtip?.drawTip1 || t('vc.measurement.distance.drawTip1')
         return
       }
 
@@ -164,7 +165,7 @@ export default defineComponent({
         positions[1] = position
         polyline.show = true
         drawStatus.value = DrawStatus.Drawing
-        drawTip.value = props.drawtip.drawTip2 || t('vc.measurement.distance.drawTip2')
+        drawTip.value = props.drawtip?.drawTip2 || t('vc.measurement.distance.drawTip2')
         nextTick(() => {
           emit(
             'measureEvt',
@@ -189,18 +190,18 @@ export default defineComponent({
 
         if (editingPoint.value) {
           editingPoint.value = undefined
-          ;(measurementVm.proxy as any).editingMeasurementName = undefined
+          ;(measurementVm?.proxy as any).editingMeasurementName = undefined
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
           type = editorType
         } else {
           if (props.mode === 1) {
-            ;(measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+            ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
           }
         }
 
         if (selectedMeasurementOption) {
-          drawTip.value = props.drawtip.drawTip1 || t('vc.measurement.distance.drawTip1')
+          drawTip.value = props.drawtip?.drawTip1 || t('vc.measurement.distance.drawTip1')
           canShowDrawTip.value = true
         }
 
@@ -302,6 +303,9 @@ export default defineComponent({
       }
 
       const xyPolylinePositions = polyline.xyPolylinePositions
+      if (xyPolylinePositions === undefined) {
+        return
+      }
       xyPolylinePositions[0] = startPoint
       xyPolylinePositions[2] = endPoint
       let normal = ellipsoid.geodeticSurfaceNormal(startPoint, {} as any)
@@ -319,6 +323,9 @@ export default defineComponent({
         diffrenceX = Cartesian3.multiplyByScalar(diffrenceX, factor, diffrenceX)
         diffrenceY = Cartesian3.multiplyByScalar(diffrenceY, factor, diffrenceY)
         const xyBoxPositions = polyline.xyBoxPositions
+        if (xyBoxPositions === undefined) {
+          return
+        }
         Cartesian3.add(xyPoint, diffrenceX, xyBoxPositions[0])
         Cartesian3.add(xyBoxPositions[0], diffrenceY, xyBoxPositions[1])
         Cartesian3.add(xyPoint, diffrenceY, xyBoxPositions[2])
@@ -343,7 +350,7 @@ export default defineComponent({
         const { defined, SceneTransforms, HorizontalOrigin } = Cesium
         const { viewer } = $services
         const scene = viewer.scene
-        const primitiveCollection = primitiveCollectionRef.value.cesiumObject as Cesium.PrimitiveCollection
+        const primitiveCollection = primitiveCollectionRef.value?.cesiumObject as Cesium.PrimitiveCollection
         const positions = polyline.positions
         const startPosition = positions[0]
         const endPosition = positions[1]
@@ -355,22 +362,25 @@ export default defineComponent({
           )
           if (labelCollection.length) {
             const label = labelCollection[index].get(0)
-            let yLabel: Cesium.Label, xAngleLabel: Cesium.Label, yPixelOffset: Cesium.Cartesian2, xPixelOffset: Cesium.Cartesian2
+            let yLabel: Cesium.Label | undefined,
+              xAngleLabel: Cesium.Label | undefined,
+              yPixelOffset: Cesium.Cartesian2 | undefined,
+              xPixelOffset: Cesium.Cartesian2 | undefined
             if (props.showComponentLines) {
               yLabel = labelCollection[index].get(2)
               xAngleLabel = labelCollection[index].get(3)
-              yPixelOffset = makeCartesian2(props.yLabelOpts.pixelOffset) as Cesium.Cartesian2
-              xPixelOffset = makeCartesian2(props.xAngleLabelOpts.pixelOffset) as Cesium.Cartesian2
+              yPixelOffset = makeCartesian2(props.yLabelOpts?.pixelOffset) as Cesium.Cartesian2
+              xPixelOffset = makeCartesian2(props.xAngleLabelOpts?.pixelOffset) as Cesium.Cartesian2
             }
 
             if ((startPositionWindow.y - endPositionWindow.y) / (endPositionWindow.x - startPositionWindow.x) > 0) {
-              if (defined(yLabel)) {
+              if (!isUndefined(yLabel) && !isUndefined(yPixelOffset)) {
                 yPixelOffset.x = -9
                 yLabel.pixelOffset = yPixelOffset
                 yLabel.horizontalOrigin = HorizontalOrigin.RIGHT
               }
 
-              if (defined(xAngleLabel)) {
+              if (!isUndefined(xAngleLabel) && !isUndefined(xPixelOffset)) {
                 xPixelOffset.x = 12
                 xAngleLabel.pixelOffset = xPixelOffset
                 xAngleLabel.horizontalOrigin = HorizontalOrigin.LEFT
@@ -378,13 +388,13 @@ export default defineComponent({
 
               label.horizontalOrigin = HorizontalOrigin.LEFT
             } else {
-              if (defined(yLabel)) {
+              if (!isUndefined(yLabel) && !isUndefined(yPixelOffset)) {
                 yPixelOffset.x = 9
                 yLabel.pixelOffset = yPixelOffset
                 yLabel.horizontalOrigin = HorizontalOrigin.LEFT
               }
 
-              if (defined(xAngleLabel)) {
+              if (!isUndefined(xAngleLabel) && !isUndefined(xPixelOffset)) {
                 xPixelOffset.x = -12
                 xAngleLabel.pixelOffset = xPixelOffset
                 xAngleLabel.horizontalOrigin = HorizontalOrigin.RIGHT
@@ -400,7 +410,7 @@ export default defineComponent({
     const onMouseoverPoints = e => {
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
         removeTimeout()
         registerTimeout(() => {
           mouseoverPoint.value = e.pickedFeature.primitive
@@ -408,7 +418,7 @@ export default defineComponent({
           showEditor.value = true
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
-        }, props.editorOpts.delay)
+        }, props.editorOpts?.delay)
       }
       emit(
         'mouseEvt',
@@ -426,13 +436,13 @@ export default defineComponent({
 
       if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
-          e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
+          e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
           removeTimeout()
           registerTimeout(() => {
             editorPosition.value = [0, 0, 0]
             mouseoverPoint.value = undefined
             showEditor.value = false
-          }, props.editorOpts.hideDelay)
+          }, props.editorOpts?.hideDelay)
         }
         selectedMeasurementOption && (canShowDrawTip.value = true)
       }
@@ -456,10 +466,10 @@ export default defineComponent({
       removeTimeout()
       registerTimeout(() => {
         editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
         mouseoverPoint.value = undefined
         showEditor.value = false
-      }, props.editorOpts.hideDelay)
+      }, props.editorOpts?.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -474,12 +484,12 @@ export default defineComponent({
 
       const { viewer, measurementVm } = $services
       if (e === 'move') {
-        drawTip.value = props.drawtip.drawTip3 || t('vc.measurement.distance.drawTip3')
+        drawTip.value = props.drawtip?.drawTip3 || t('vc.measurement.distance.drawTip3')
         drawStatus.value = DrawStatus.Drawing
         editingPoint.value = mouseoverPoint.value
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
-        ;(measurementVm.proxy as any).editingMeasurementName = props.showComponentLines ? 'component-distance' : 'distance'
+        ;(measurementVm?.proxy as any).editingMeasurementName = props.showComponentLines ? 'component-distance' : 'distance'
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
@@ -518,12 +528,12 @@ export default defineComponent({
       const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
 
       const polylineOpts = {
-        width: props.polylineOpts.width,
+        width: props.polylineOpts?.width,
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-        ellipsoid: defaultValue(props.polylineOpts.ellipsoid, Ellipsoid.WGS84),
-        arcType: props.polylineOpts.arcType
+        ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84),
+        arcType: props.polylineOpts?.arcType
       }
-      const children = []
+      const children: Array<VNode> = []
       polylinesRender.value.forEach((polyline, index) => {
         if (polyline.positions.length > 1) {
           // polyline
@@ -534,10 +544,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -556,7 +566,7 @@ export default defineComponent({
             )
           )
         }
-        if (polyline.xyPolylinePositions?.length > 1) {
+        if (polyline.xyPolylinePositions && polyline.xyPolylinePositions.length > 1) {
           // xyPolyline
           children.push(
             h(
@@ -565,10 +575,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -587,7 +597,7 @@ export default defineComponent({
             )
           )
         }
-        if (polyline.xyBoxPositions?.length > 1) {
+        if (polyline.xyBoxPositions && polyline.xyBoxPositions.length > 1) {
           // xyBox
           children.push(
             h(
@@ -596,10 +606,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -636,39 +646,43 @@ export default defineComponent({
         )
 
         // label
-        const labels = []
+        const labels: Array<{
+          position: Cesium.Cartesian3 | undefined
+          id: string
+          text: string | undefined
+        }> = []
         labels.push({
           position: polyline.labelPosition,
           id: createGuid(),
-          text: MeasureUnits.distanceToString(polyline.distance, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+          text: MeasureUnits.distanceToString(polyline.distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           ...props.labelOpts
         })
         if (props.showComponentLines) {
           labels.push({
             position: polyline.xLabelPosition,
             id: createGuid(),
-            text: MeasureUnits.distanceToString(polyline.xDistance, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+            text: MeasureUnits.distanceToString(polyline.xDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
             ...props.xLabelOpts
           })
 
           labels.push({
             position: polyline.yLabelPosition,
             id: createGuid(),
-            text: MeasureUnits.distanceToString(polyline.yDistance, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+            text: MeasureUnits.distanceToString(polyline.yDistance || 0, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
             ...props.yLabelOpts
           })
 
           labels.push({
             position: polyline.xAnglePosition,
             id: createGuid(),
-            text: MeasureUnits.angleToString(polyline.xAngle, props.measureUnits.angleUnits, props.locale, props.decimals.angle),
+            text: MeasureUnits.angleToString(polyline.xAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
             ...props.xAngleLabelOpts
           })
 
           labels.push({
             position: polyline.yAnglePosition,
             id: createGuid(),
-            text: MeasureUnits.angleToString(polyline.yAngle, props.measureUnits.angleUnits, props.locale, props.decimals.angle),
+            text: MeasureUnits.angleToString(polyline.yAngle || 0, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
             ...props.yAngleLabelOpts
           })
         }
@@ -682,14 +696,14 @@ export default defineComponent({
         )
       })
 
-      if (props.drawtip.show && canShowDrawTip.value) {
+      if (props.drawtip?.show && canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
             VcOverlayHtml,
             {
               position: drawTipPosition.value,
-              pixelOffset: props.drawtip.pixelOffset,
+              pixelOffset: props.drawtip?.pixelOffset,
               teleport: {
                 to: viewer.container
               }
@@ -707,7 +721,7 @@ export default defineComponent({
       }
 
       if (showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

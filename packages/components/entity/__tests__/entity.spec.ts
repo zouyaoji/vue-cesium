@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-27 10:20:16
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\entity\__tests__\entity.spec.ts
+ */
 import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcEntity from '../src'
@@ -62,17 +70,17 @@ describe('VcEntity', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.entity).toBeDefined()
     const testVm = wrapper.vm.$refs.entity as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let entity = readyObj.cesiumObject as Cesium.Entity
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let entity = readyObj?.cesiumObject as Cesium.Entity
     expect(entity instanceof Cesium.Entity).toBe(true)
-    expect(entity.position.getValue(void 0).equalsEpsilon(Cesium.Cartesian3.fromDegrees(108, 32), Cesium.Math.EPSILON6)).toBe(true)
+    expect(entity.position?.getValue(Cesium.JulianDate.now()).equalsEpsilon(Cesium.Cartesian3.fromDegrees(108, 32), Cesium.Math.EPSILON6)).toBe(true)
     expect(entity.point).toBeDefined()
     expect(entity.label).toBeDefined()
     expect(entity.billboard).toBeDefined()
-    expect(entity.point.pixelSize.getValue(void 0)).toEqual(28)
-    expect(entity.point.color.getValue(void 0)).toEqual(Cesium.Color.fromCssColorString('red'))
-    expect(entity.label.text.getValue(void 0)).toEqual('Hello VueCesium')
-    expect(entity.billboard.image.getValue(void 0)).toEqual('https://zouyaoji.top/vue-cesium/favicon.png')
+    expect(entity.point?.pixelSize?.getValue(Cesium.JulianDate.now())).toEqual(28)
+    expect(entity.point?.color?.getValue(Cesium.JulianDate.now())).toEqual(Cesium.Color.fromCssColorString('red'))
+    expect(entity.label?.text?.getValue(Cesium.JulianDate.now())).toEqual('Hello VueCesium')
+    expect(entity.billboard?.image?.getValue(Cesium.JulianDate.now())).toEqual('https://zouyaoji.top/vue-cesium/favicon.png')
     // const positionDom = readyObj.viewer.scene.cartesianToCanvasCoordinates(entity.position.getValue(void 0), new Cesium.Cartesian2())
     // const pointerdownEvent = createPointerEvent('pointerdown', {
     //   clientX: positionDom.x,
@@ -84,11 +92,11 @@ describe('VcEntity', () => {
     // })
     // wrapper.find('canvas').element.dispatchEvent(pointerdownEvent)
     // wrapper.find('canvas').element.dispatchEvent(pointerupEvent)
-    await testVm.unload()
-    entity = testVm.getCesiumObject() as Cesium.Entity
+    await testVm.unload?.()
+    entity = testVm.getCesiumObject?.() as Cesium.Entity
     expect(entity).toBeUndefined()
-    await testVm.load()
-    entity = testVm.getCesiumObject() as Cesium.Entity
+    await testVm.load?.()
+    entity = testVm.getCesiumObject?.() as Cesium.Entity
     expect(entity).toBeDefined()
   }, 10000)
 })

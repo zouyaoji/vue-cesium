@@ -1,4 +1,12 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, PropType, ref, watch } from 'vue'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-30 22:11:18
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-collection\index.ts
+ */
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, PropType, ref, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -23,15 +31,15 @@ export default defineComponent({
       return
     }
     const { $services } = commonState
-    const stages = []
-    let unwatchFns = []
+    const stages: Array<Cesium.PostProcessStage | Cesium.PostProcessStageComposite> = []
+    let unwatchFns: Array<WatchStopHandle> = []
     // watch
     unwatchFns.push(
       watch(
         () => props.postProcesses,
         val => {
           if (instance.mounted) {
-            ;(instance.proxy as VcComponentPublicInstance).reload()
+            ;(instance.proxy as VcComponentPublicInstance).reload?.()
           }
         },
         { deep: true }
@@ -72,11 +80,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

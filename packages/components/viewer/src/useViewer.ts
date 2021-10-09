@@ -20,7 +20,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     reject = _reject
   })
 
-  const viewerRef = ref<HTMLElement>(null)
+  const viewerRef = ref<HTMLElement>(null!)
   const isReady = ref(false)
   const $vc = vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions
   const vcMitt: Emitter<VcMittEvents> = mitt()
@@ -41,7 +41,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     bottomContainerRC: undefined
   })
 
-  let loadLibs = []
+  let loadLibs: Array<string> = []
 
   logger.debug('viewer creating')
 
@@ -54,13 +54,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let selectionIndicatorContainer
       if (defined(viewer.selectionIndicator) && !viewer.selectionIndicator.isDestroyed() && !val) {
         selectionIndicatorContainer = viewer.selectionIndicator.container
-        viewerElement.removeChild(selectionIndicatorContainer)
+        viewerElement?.removeChild(selectionIndicatorContainer)
         viewer.selectionIndicator.destroy()
         viewer._selectionIndicator = undefined
       } else if (!defined(viewer.selectionIndicator) || viewer.selectionIndicator.isDestroyed()) {
         selectionIndicatorContainer = document.createElement('div')
         selectionIndicatorContainer.className = 'cesium-viewer-selectionIndicatorContainer'
-        viewerElement.appendChild(selectionIndicatorContainer)
+        viewerElement?.appendChild(selectionIndicatorContainer)
         const selectionIndicator = new SelectionIndicator(selectionIndicatorContainer, viewer.scene)
         viewer._selectionIndicator = selectionIndicator
       }
@@ -84,17 +84,17 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         const infoBoxViewModel = viewer.infoBox.viewModel
         infoBoxViewModel && eventsState.bindEvents(infoBoxViewModel, events, false)
         infoBoxContainer = viewer.infoBox.container
-        viewerElement.removeChild(infoBoxContainer)
+        viewerElement?.removeChild(infoBoxContainer)
         viewer.infoBox.destroy()
         viewer._infoBox = undefined
       } else if (!defined(viewer.infoBox) || viewer.infoBox.isDestroyed()) {
         infoBoxContainer = document.createElement('div')
         infoBoxContainer.className = 'cesium-viewer-infoBoxContainer'
-        viewerElement.appendChild(infoBoxContainer)
+        viewerElement?.appendChild(infoBoxContainer)
         const infoBox = new InfoBox(infoBoxContainer)
         const infoBoxViewModel = infoBox.viewModel
-        viewer._eventHelper.add(infoBoxViewModel.cameraClicked, viewer._onInfoBoxCameraClicked, viewer)
-        viewer._eventHelper.add(infoBoxViewModel.closeClicked, viewer._onInfoBoxClockClicked, viewer)
+        viewer._onInfoBoxCameraClicked && viewer._eventHelper?.add(infoBoxViewModel.cameraClicked, viewer._onInfoBoxCameraClicked, viewer)
+        viewer._onInfoBoxClockClicked && viewer._eventHelper?.add(infoBoxViewModel.closeClicked, viewer._onInfoBoxClockClicked, viewer)
         infoBoxViewModel && eventsState.bindEvents(infoBoxViewModel, events, true)
         viewer._infoBox = infoBox
       }
@@ -116,13 +116,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let geocoderContainer
       if (defined(viewer.geocoder) && !viewer.geocoder.isDestroyed() && !val) {
         geocoderContainer = viewer.geocoder.container
-        toolbar.removeChild(geocoderContainer)
+        toolbar?.removeChild(geocoderContainer)
         viewer.geocoder.destroy()
         viewer._geocoder = undefined
       } else if (!defined(viewer.geocoder) || viewer.geocoder.isDestroyed()) {
         geocoderContainer = document.createElement('div')
         geocoderContainer.className = 'cesium-viewer-geocoderContainer'
-        toolbar.appendChild(geocoderContainer)
+        toolbar?.appendChild(geocoderContainer)
         const geocoder = new Geocoder({
           container: geocoderContainer,
           geocoderServices:
@@ -133,7 +133,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
               : undefined,
           scene: viewer.scene
         })
-        viewer._eventHelper.add(geocoder.viewModel.search.beforeExecute, viewer._clearObjects, viewer)
+        viewer._clearObjects && viewer._eventHelper?.add(geocoder.viewModel.search.beforeExecute, viewer._clearObjects, viewer)
         viewer._geocoder = geocoder
         resizeToolbar(toolbar, geocoderContainer)
       }
@@ -155,15 +155,15 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         viewer.homeButton.destroy()
         viewer._homeButton = undefined
       } else if (!defined(viewer.homeButton) || viewer.homeButton.isDestroyed()) {
-        const homeButton = new HomeButton(toolbar, viewer.scene)
+        const homeButton = new HomeButton(toolbar!, viewer.scene)
         if (defined(viewer.geocoder)) {
-          viewer._eventHelper.add(homeButton.viewModel.command.afterExecute, function () {
+          viewer._eventHelper?.add(homeButton.viewModel.command.afterExecute, function () {
             const viewModel = viewer.geocoder.viewModel
             viewModel.searchText = ''
             viewModel.isSearchInProgress && (viewModel as any).search()
           })
         }
-        viewer._eventHelper.add(homeButton.viewModel.command.beforeExecute, viewer._clearTrackedObject, viewer)
+        viewer._clearTrackedObject && viewer._eventHelper?.add(homeButton.viewModel.command.beforeExecute, viewer._clearTrackedObject, viewer)
         viewer._homeButton = homeButton
         resizeToolbar(toolbar, homeButton)
       }
@@ -189,7 +189,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
           throw new DeveloperError('options.sceneModePicker is not available when options.scene3DOnly is set to true.')
         }
         if (!props.scene3DOnly && props.sceneModePicker) {
-          const sceneModePicker = new SceneModePicker(toolbar, viewer.scene)
+          const sceneModePicker = new SceneModePicker(toolbar!, viewer.scene)
           viewer._sceneModePicker = sceneModePicker
           resizeToolbar(toolbar, sceneModePicker)
         }
@@ -212,7 +212,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         viewer.projectionPicker.destroy()
         viewer._projectionPicker = undefined
       } else if (!defined(viewer.projectionPicker) || viewer.projectionPicker.isDestroyed()) {
-        const projectionPicker = new ProjectionPicker(toolbar, viewer.scene)
+        const projectionPicker = new ProjectionPicker(toolbar!, viewer.scene)
         viewer._projectionPicker = projectionPicker
         resizeToolbar(toolbar, projectionPicker)
       }
@@ -271,7 +271,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         if (createBaseLayerPicker) {
           const imageryProviderViewModels = defaultValue(props.imageryProviderViewModels, createDefaultImageryProviderViewModels())
           const terrainProviderViewModels = defaultValue(props.terrainProviderViewModels, createDefaultTerrainProviderViewModels())
-          const baseLayerPicker = new BaseLayerPicker(toolbar, {
+          const baseLayerPicker = new BaseLayerPicker(toolbar!, {
             globe: viewer.scene.globe,
             imageryProviderViewModels: imageryProviderViewModels,
             selectedImageryProviderViewModel: imageryProviderViewModels[0],
@@ -279,9 +279,9 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
             selectedTerrainProviderViewModel: terrainProviderViewModels[0]
           })
 
-          const elements = toolbar.getElementsByClassName('cesium-baseLayerPicker-dropDown')
+          const elements = toolbar?.getElementsByClassName('cesium-baseLayerPicker-dropDown')
 
-          const baseLayerPickerDropDown = elements[0]
+          const baseLayerPickerDropDown = elements?.[0]
           viewer._baseLayerPickerDropDown = baseLayerPickerDropDown
           viewer._baseLayerPicker = baseLayerPicker
           viewer.imageryLayers.raiseToTop(viewer.imageryLayers.get(0))
@@ -318,7 +318,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
           }
         } catch (e) {}
         const navigationHelpButton = new NavigationHelpButton({
-          container: toolbar,
+          container: toolbar!,
           instructionsInitiallyVisible: defaultValue(props.navigationInstructionsInitiallyVisible, showNavHelp)
         })
         viewer._navigationHelpButton = navigationHelpButton
@@ -340,13 +340,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let animationContainer
       if (defined(viewer.animation) && !viewer.animation.isDestroyed() && !val) {
         animationContainer = viewer.animation.container
-        viewerElement.removeChild(animationContainer)
+        viewerElement?.removeChild(animationContainer)
         viewer.animation.destroy()
         viewer._animation = undefined
       } else if (!defined(viewer.animation) || viewer.animation.isDestroyed()) {
         animationContainer = document.createElement('div')
         animationContainer.className = 'cesium-viewer-animationContainer'
-        viewerElement.appendChild(animationContainer)
+        viewerElement?.appendChild(animationContainer)
         const animation = new Animation(animationContainer, new AnimationViewModel(viewer.clockViewModel))
         animation.viewModel.dateFormatter = localeDateTimeFormatter
         animation.viewModel.timeFormatter = localeTimeFormatter
@@ -369,18 +369,18 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let timelineContainer
       if (defined(viewer.timeline) && !viewer.timeline.isDestroyed() && !val) {
         timelineContainer = viewer.timeline.container
-        viewerElement.removeChild(timelineContainer)
+        viewerElement?.removeChild(timelineContainer)
         viewer.timeline.destroy()
         viewer._timeline = undefined
       } else if (!defined(viewer.timeline) || viewer.timeline.isDestroyed()) {
         timelineContainer = document.createElement('div')
         timelineContainer.className = 'cesium-viewer-timelineContainer'
-        viewerElement.appendChild(timelineContainer)
+        viewerElement?.appendChild(timelineContainer)
         const timeline = new Timeline(timelineContainer, viewer.clock)
         timeline.makeLabel = time => {
           return localeDateTimeFormatter(time)
         }
-        timeline.addEventListener('settime', onTimelineScrubfunction, false)
+        timeline.addEventListener?.('settime', onTimelineScrubfunction, false)
         timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime)
         viewer._timeline = timeline
       }
@@ -401,13 +401,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let fullscreenContainer
       if (defined(viewer.fullscreenButton) && !viewer.fullscreenButton.isDestroyed() && !val) {
         fullscreenContainer = viewer.fullscreenButton.container
-        viewerElement.removeChild(fullscreenContainer)
+        viewerElement?.removeChild(fullscreenContainer)
         viewer.fullscreenButton.destroy()
         viewer._fullscreenButton = undefined
       } else if (!defined(viewer.fullscreenButton) || viewer.fullscreenButton.isDestroyed()) {
         fullscreenContainer = document.createElement('div')
         fullscreenContainer.className = 'cesium-viewer-fullscreenContainer'
-        viewerElement.appendChild(fullscreenContainer)
+        viewerElement?.appendChild(fullscreenContainer)
         const fullscreenButton = new FullscreenButton(fullscreenContainer, viewerElement)
         viewer._fullscreenButton = fullscreenButton
       }
@@ -442,13 +442,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       let vrContainer
       if (defined(viewer.vrButton) && !viewer.vrButton.isDestroyed() && !val) {
         vrContainer = viewer.vrButton.container
-        viewerElement.removeChild(vrContainer)
+        viewerElement?.removeChild(vrContainer)
         viewer.vrButton.destroy()
         viewer._vrButton = undefined
       } else if (!defined(viewer.vrButton) || viewer.vrButton.isDestroyed()) {
         vrContainer = document.createElement('div')
         vrContainer.className = 'cesium-viewer-vrContainer'
-        viewerElement.appendChild(vrContainer)
+        viewerElement?.appendChild(vrContainer)
         const vrButton = new VRButton(vrContainer, viewer.scene, viewerElement)
         const viewModelCommand = vrButton.viewModel.command as any
         ;(vrButton.viewModel as any)._command = function (VRButtonViewModel) {
@@ -507,7 +507,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   watch(
     () => props.terrainProvider,
     val => {
-      vcInstance.viewer.terrainProvider = val
+      val && (vcInstance.viewer.terrainProvider = val)
     }
   )
 
@@ -528,7 +528,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
         for (let i = 0; i < viewer.imageryLayers.length; i++) {
           viewer.imageryLayers.get(i).imageryProvider === oldVal && viewer.imageryLayers.remove(viewer.imageryLayers[i])
         }
-        viewer.imageryLayers.addImageryProvider(val)
+        val && viewer.imageryLayers.addImageryProvider(val)
       }
     }
   )
@@ -579,12 +579,12 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     await beforeLoad()
 
     if (typeof Cesium === 'undefined') {
-      return
+      return false
     }
 
     const { Ion, buildModuleUrl, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
     const accessToken = props.accessToken ? props.accessToken : $vc.accessToken
-    Ion.defaultAccessToken = accessToken
+    Ion.defaultAccessToken = accessToken!
 
     const {
       animation,
@@ -697,13 +697,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     let viewer: Cesium.Viewer
     if (global.mars3d) {
       vcInstance.map = new mars3d.Map($(viewerRef).id, options)
-      viewer = vcInstance.map._viewer
+      viewer = vcInstance.map?._viewer
     } else if (global.DC) {
       vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
-      viewer = vcInstance.dcViewer.delegate
+      viewer = vcInstance.dcViewer?.delegate
     } else if (global.XE) {
       vcInstance.earth = new global.XE.Earth($(viewerRef), options)
-      viewer = vcInstance.earth.czm.viewer
+      viewer = vcInstance.earth?.czm.viewer
     } else {
       viewer = new Viewer($(viewerRef), options)
     }
@@ -798,14 +798,6 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       })
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      logger.capsule('VueCesium', `v${$vc.version}`)
-      logger.success('VueCesium  https://github.com/zouyaoji/vue-cesium')
-      logger.success('Document  https://zouyaoji.top/vue-cesium')
-      logger.success(`If you like it, give it a star reward, ^_^`)
-      logger.success(`表示赞，给它一个星星奖励，^_^`)
-    }
-
     const listenerReady = getInstanceListener(vcInstance, 'ready')
     listenerReady && emit('ready', readyObj)
     vcMitt?.emit('ready', readyObj)
@@ -857,8 +849,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
 
     viewer._vcPickScreenSpaceEventHandler && viewer._vcPickScreenSpaceEventHandler.destroy()
     viewer._vcViewerScreenSpaceEventHandler && viewer._vcViewerScreenSpaceEventHandler.destroy()
-    viewer._vcPickScreenSpaceEventHandler = undefined
-    viewer._vcViewerScreenSpaceEventHandler = undefined
+    viewer._vcPickScreenSpaceEventHandler = undefined!
+    viewer._vcViewerScreenSpaceEventHandler = undefined!
 
     if (global.XE) {
       earth && earth.destroy()
@@ -870,12 +862,12 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       viewer && viewer.destroy()
     }
 
-    vcInstance.viewer = undefined
+    vcInstance.viewer = undefined!
     vcInstance.mounted = false
     const { removeCesiumScript } = props
     if (removeCesiumScript && global.Cesium) {
       const scripts = document.getElementsByTagName('script')
-      const removeScripts = []
+      const removeScripts: Array<HTMLScriptElement | HTMLLinkElement> = []
       for (const script of scripts) {
         script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
         script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
@@ -897,7 +889,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       removeScripts.forEach(script => {
         script.parentNode && script.parentNode.removeChild(script)
       })
-      global.Cesium && (global.Cesium = undefined)
+      global.Cesium && (global.Cesium = undefined!)
       global.XbsjCesium && (global.XbsjCesium = undefined)
       global.XbsjEarth && (global.XbsjEarth = undefined)
       global.XE && (global.XE = undefined)
@@ -929,13 +921,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     logger.debug('getCesiumScript')
     if (!global.Cesium) {
       let cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
-      const dirName = dirname(cesiumPath)
-      if (!cesiumPath.includes('.js')) {
+      const dirName = dirname(cesiumPath!)
+      if (!cesiumPath?.includes('.js')) {
         // 认为是mars3d
-        if (cesiumPath.lastIndexOf('/') !== cesiumPath.length - 1) {
+        if (cesiumPath?.lastIndexOf('/') !== cesiumPath!.length - 1) {
           cesiumPath += '/'
         }
-        const libsConfig = getMars3dConfig(cesiumPath)
+        const libsConfig = getMars3dConfig(cesiumPath!)
         const include = $vc.cfg?.include || 'mars3d'
         const arrInclude = include.split(',')
         const keys = {}
@@ -960,14 +952,14 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       }
 
       const secondaryLibs = loadLibs
-      if (!cesiumPath.includes('.js')) {
+      if (!cesiumPath?.includes('.js')) {
         // mars3d 必须要等 Cesium 先初始化
         const primaryLib = loadLibs.find(v => v.includes('Cesium.js'))
         await loadScript(primaryLib)
-        secondaryLibs.splice(secondaryLibs.indexOf(primaryLib), 1)
+        secondaryLibs.splice(secondaryLibs.indexOf(primaryLib!), 1)
       }
 
-      const scriptLoadPromises = []
+      const scriptLoadPromises: Array<Promise<unknown>> = []
       secondaryLibs.forEach(url => {
         const cssExpr = new RegExp('\\.css')
         if (cssExpr.test(url)) {
@@ -1043,7 +1035,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       getComputedStyle(toolbarElement).visibility !== 'hidden' &&
       getComputedStyle(toolbarElement).display !== 'none'
     ) {
-      layout.toolbarContainerRC = toolbarElement.getBoundingClientRect()
+      ;(layout.toolbarContainerRC as any) = toolbarElement.getBoundingClientRect()!
     } else {
       layout.toolbarContainerRC = undefined
     }
@@ -1054,7 +1046,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       getComputedStyle(bottomContainer).visibility !== 'hidden' &&
       getComputedStyle(bottomContainer).display !== 'none'
     ) {
-      layout.bottomContainerRC = bottomContainer.getBoundingClientRect()
+      ;(layout.bottomContainerRC as any) = bottomContainer.getBoundingClientRect()
     } else {
       layout.bottomContainerRC = undefined
     }
@@ -1065,7 +1057,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       getComputedStyle(timelineContainer).visibility !== 'hidden' &&
       getComputedStyle(timelineContainer).display !== 'none'
     ) {
-      layout.timelineContainerRC = timelineContainer.getBoundingClientRect()
+      ;(layout.timelineContainerRC as any) = timelineContainer.getBoundingClientRect()
     } else {
       layout.timelineContainerRC = undefined
     }
@@ -1076,7 +1068,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       getComputedStyle(animationContainer).visibility !== 'hidden' &&
       getComputedStyle(animationContainer).display !== 'none'
     ) {
-      layout.animationContainerRC = animationContainer.getBoundingClientRect()
+      ;(layout.animationContainerRC as any) = animationContainer.getBoundingClientRect()
     } else {
       layout.animationContainerRC = undefined
     }
@@ -1100,7 +1092,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     const { defined } = Cesium
     if (autoSortImageryLayers) {
       layer.sortOrder = defined(layer.sortOrder) ? layer.sortOrder : 9999
-      viewer.imageryLayers._layers.sort((a: Cesium.ImageryLayer, b: Cesium.ImageryLayer) => a.sortOrder - b.sortOrder)
+      viewer.imageryLayers._layers.sort((a: Cesium.ImageryLayer, b: Cesium.ImageryLayer) => a.sortOrder! - b.sortOrder!)
       viewer.imageryLayers._update()
     }
   }
@@ -1228,7 +1220,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
           break
       }
     })
-    const arr = []
+    const arr: any[] = []
     Array.prototype.slice.call(parent.children).forEach(element => {
       arr.push(element)
     })

@@ -1,4 +1,12 @@
-import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, ExtractPropTypes } from 'vue'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-10-01 23:32:51
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\viewer\src\index.ts
+ */
+import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, ExtractPropTypes, VNode } from 'vue'
 import useViewer from './useViewer'
 import defaultProps from './defaultProps'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
@@ -31,7 +39,7 @@ export default defineComponent({
     })
 
     return () => {
-      const children = []
+      const children: Array<VNode> = []
       if (isPlainObject(props.skeleton) && !viewerStates.isReady.value) {
         children.push(
           h(VcSkeleton, {
@@ -48,7 +56,7 @@ export default defineComponent({
           'div',
           {
             ref: viewerStates.viewerRef,
-            class: kebabCase(instance.proxy.$options.name),
+            class: kebabCase(instance.proxy?.$options.name || ''),
             id: ctx.attrs.id || 'cesiumContainer',
             style: ctx.attrs.style || { width: '100%', height: '100%' }
           },

@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, watch, nextTick, ref, CSSProperties, reactive, h, createCommentVNode, computed } from 'vue'
+import { defineComponent, getCurrentInstance, watch, nextTick, ref, CSSProperties, reactive, h, createCommentVNode, computed, VNode } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -56,9 +56,9 @@ export default defineComponent({
     const canRender = ref(false)
     const { $services } = commonState
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement>(null)
-    const compassRef = ref<typeof VcCompassSm>(null)
-    const zoomControlRef = ref<typeof VcZoomControlSm>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const compassRef = ref<typeof VcCompassSm | null>(null)
+    const zoomControlRef = ref<typeof VcZoomControlSm | null>(null)
     const rootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
     // watch
@@ -92,7 +92,7 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       canRender.value = true
       const { viewer } = $services
-      viewer.viewerWidgetResized.addEventListener(onViewerWidgetResized)
+      viewer.viewerWidgetResized?.addEventListener(onViewerWidgetResized)
       return new Promise((resolve, reject) => {
         nextTick(() => {
           const viewerElement = (viewer as any)._element
@@ -105,7 +105,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -117,8 +117,8 @@ export default defineComponent({
       const { viewer } = $services
       const viewerElement = (viewer as any)._element
       viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
-      viewer.viewerWidgetResized.removeEventListener(onViewerWidgetResized)
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.removeEventListener(onViewerWidgetResized)
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -154,7 +154,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        let children = []
+        let children: Array<VNode> = []
         children = hMergeSlot(ctx.slots.default, children)
         if (props.compassOpts) {
           children.push(

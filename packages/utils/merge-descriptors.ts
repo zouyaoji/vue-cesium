@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:02
+ * @LastEditTime: 2021-10-02 23:27:05
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\merge-descriptors.ts
+ */
 /*!
  * merge-descriptors
  * Copyright(c) 2014 Jonathan Ong
@@ -44,18 +52,17 @@ function merge(dest, src, redefine) {
 
     // Copy descriptor
     const descriptor = Object.getOwnPropertyDescriptor(src, name)
-    Object.defineProperty(dest, name, descriptor)
+    Object.defineProperty(dest, name, descriptor!)
   })
 
   return dest
 }
 
-
 /**
  * @param {...Object} args
  * @returns {Object}
  */
-export function mergeDescriptors (...args: any[]) {
+export function mergeDescriptors(...args: any[]) {
   let redefine: boolean
   if (typeof args[args.length - 1] !== 'object') {
     redefine = args.pop()

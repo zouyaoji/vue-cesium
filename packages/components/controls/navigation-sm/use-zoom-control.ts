@@ -2,13 +2,14 @@ import { AnyFunction, VcComponentInternalInstance, VcViewerProvider } from '@vue
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
 import { VcTooltip } from '@vue-cesium/components/ui'
+import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
   const zoombarTop = ref(65)
-  const zoomInTooltipRef = ref<typeof VcTooltip>(null)
-  const zoomOutTooltipRef = ref<typeof VcTooltip>(null)
-  const zoomBarTooltipRef = ref<typeof VcTooltip>(null)
+  const zoomInTooltipRef = ref<typeof VcTooltip | null>(null)
+  const zoomOutTooltipRef = ref<typeof VcTooltip | null>(null)
+  const zoomBarTooltipRef = ref<typeof VcTooltip | null>(null)
   let screenSpaceEventHandler: Cesium.ScreenSpaceEventHandler
 
   let zoominTickFunction: AnyFunction<void>
@@ -39,8 +40,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     $(zoomBarTooltipRef)?.hide()
     screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
     defined(zoominTickFunction) && viewer.clock.onTick.removeEventListener(zoominTickFunction)
-    zoominMouseUpFunction = undefined
-    zoominTickFunction = undefined
+    ;(zoominMouseUpFunction as any) = undefined
+    ;(zoominTickFunction as any) = undefined
     isZoomin = true
     zoominLastTimestamp = getTimestamp()
     const scene = viewer.scene
@@ -53,8 +54,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       isZoomin = false
       screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
       defined(zoominTickFunction) && viewer.clock.onTick.removeEventListener(zoominTickFunction)
-      zoominMouseUpFunction = undefined
-      zoominTickFunction = undefined
+      ;(zoominMouseUpFunction as any) = undefined
+      ;(zoominTickFunction as any) = undefined
     }
 
     screenSpaceEventHandler.setInputAction(zoominMouseUpFunction, ScreenSpaceEventType.LEFT_UP)
@@ -69,8 +70,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     const { viewer } = $services
     screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
     defined(zoomoutTickFunction) && viewer.clock.onTick.removeEventListener(zoomoutTickFunction)
-    zoomoutMouseUpFunction = undefined
-    zoomoutTickFunction = undefined
+    ;(zoomoutMouseUpFunction as any) = undefined
+    ;(zoomoutTickFunction as any) = undefined
     iszoomout = false
     zoomoutLastTimestamp = getTimestamp()
     const scene = viewer.scene
@@ -83,8 +84,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       iszoomout = false
       screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
       defined(zoomoutTickFunction) && viewer.clock.onTick.removeEventListener(zoomoutTickFunction)
-      zoomoutMouseUpFunction = undefined
-      zoomoutTickFunction = undefined
+      ;(zoomoutMouseUpFunction as any) = undefined
+      ;(zoomoutTickFunction as any) = undefined
     }
 
     screenSpaceEventHandler.setInputAction(zoomoutMouseUpFunction, ScreenSpaceEventType.LEFT_UP)
@@ -102,8 +103,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     document.removeEventListener('mouseup', zoomBarScrollMouseUpFunction, false)
     document.removeEventListener('touchend', zoomBarScrollMouseUpFunction, false)
     defined(zoombarTickFunction) && viewer.clock.onTick.removeEventListener(zoombarTickFunction)
-    zoomBarScrollMouseUpFunction = undefined
-    zoombarTickFunction = undefined
+    ;(zoomBarScrollMouseUpFunction as any) = undefined
+    ;(zoombarTickFunction as any) = undefined
     isZoomBarScrolling = true
     const scene = viewer.scene
     const camera = scene.camera
@@ -160,9 +161,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       document.removeEventListener('mouseup', zoomBarScrollMouseUpFunction, false)
       document.removeEventListener('touchend', zoomBarScrollMouseUpFunction, false)
       defined(zoombarTickFunction) && viewer.clock.onTick.removeEventListener(zoombarTickFunction)
-      zoomBarScrollMouseUpFunction = undefined
-      zoomBarScrollMouseMoveFunction = undefined
-      zoombarTickFunction = undefined
+      ;(zoomBarScrollMouseUpFunction as any) = undefined
+      ;(zoomBarScrollMouseMoveFunction as any) = undefined
+      ;(zoombarTickFunction as any) = undefined
       zoombarTop.value = 65
     }
     document.addEventListener('mousemove', zoomBarScrollMouseMoveFunction, false)
@@ -201,6 +202,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
       const pickPosition = camera.pickEllipsoid(centerPixel, viewer.scene.globe.ellipsoid)
       if (
+        isObject(pickPosition) &&
         defined(pickPosition) &&
         !isNaN(pickPosition.x) &&
         !isNaN(pickPosition.y) &&
@@ -238,7 +240,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const ray = camera.getPickRay(mousePosition)
       const rayIntersection = globe.pick(ray, scene)
       const pickDistance = defined(depthIntersection) ? Cartesian3.distance(depthIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
-      const rayDistance = defined(rayIntersection) ? Cartesian3.distance(rayIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
+      const rayDistance =
+        isObject(rayIntersection) && defined(rayIntersection) ? Cartesian3.distance(rayIntersection, camera.positionWC) : Number.POSITIVE_INFINITY
       return rayDistance > pickDistance ? depthIntersection : rayIntersection
     }
   }

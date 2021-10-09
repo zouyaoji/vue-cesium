@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-10-02 10:54:09
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\private\vm.ts
+ */
 import { Ref } from 'vue'
 import { AnyFunction, VcComponentInternalInstance } from '../types'
 import { camelCase, capitalize } from '../util'
@@ -63,5 +71,5 @@ export function $<T>(ref: Ref<T>) {
 
 export function getVcParentInstance(instance: VcComponentInternalInstance): VcComponentInternalInstance {
   const parentInstance = instance.parent as VcComponentInternalInstance
-  return !parentInstance.cesiumClass && parentInstance.proxy.$options.name !== 'VcViewer' ? getVcParentInstance(parentInstance) : parentInstance
+  return !parentInstance.cesiumClass && parentInstance.proxy?.$options.name !== 'VcViewer' ? getVcParentInstance(parentInstance) : parentInstance
 }

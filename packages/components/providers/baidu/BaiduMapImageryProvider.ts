@@ -17,9 +17,25 @@ class BaiduMapImageryProvider {
   _subdomains: any
   _errorEvent: any
   _readyPromise: any
+  _style: string
   constructor(options) {
     const { Resource, defaultValue, Credit, when, Event } = Cesium
-    this._url = options.url || `${options.protocol}://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}`
+    if (options.url) {
+      this._url = options.url
+      this._subdomains = defaultValue(options.subdomains, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    } else {
+      if (options.bdStyle === 'img') {
+        this._url = `${options.protocol}://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46`
+        this._subdomains = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      } else if (options.bdStyle === 'vec') {
+        this._url = `${options.protocol}://online{s}.map.bdimg.com/tile/?qt=tile&x={x}&y={y}&z={z}&styles=sl&v=020`
+        this._subdomains = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      } else {
+        this._url = `${options.protocol}://api{s}.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&scale=1&customid={style}`
+        this._subdomains = ['0', '1', '2']
+      }
+    }
+
     const resource = (Resource as any).createIfNeeded(this._url)
     resource.appendForwardSlash()
 
@@ -39,22 +55,11 @@ class BaiduMapImageryProvider {
     this._credit = credit
     this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
     this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
-    this._subdomains = defaultValue(options.subdomains, [
-      'online0',
-      'online1',
-      'online2',
-      'online3',
-      'online4',
-      'online5',
-      'online6',
-      'online7',
-      'online8',
-      'online9'
-    ])
     this._errorEvent = new Event()
     this._readyPromise = when.defer()
     this._ready = true
     this._readyPromise.resolve(true)
+    this._style = options.bdStyle
   }
 
   get url() {
@@ -155,11 +160,12 @@ class BaiduMapImageryProvider {
   }
 }
 
-function buildImageResource(x, y, level, request) {
+function buildImageResource(this, x, y, level, request) {
   let url = this._url
   const subdomains = this._subdomains
   url = url
     .replace('{s}', subdomains[(x + y + level) % subdomains.length])
+    .replace('{style}', this._style)
     .replace('{x}', x)
     .replace('{y}', -y)
     .replace('{z}', level)

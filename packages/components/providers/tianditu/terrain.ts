@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-10-01 23:14:21
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders, useVueCesium } from '@vue-cesium/composables'
@@ -49,7 +57,7 @@ export default defineComponent({
           if (providersState.unwatchFns.length === 0) {
             providersState.setPropsWatcher(true)
           }
-          const terrainUrls = []
+          const terrainUrls: Array<string> = []
 
           for (let i = 0; i < props.subdomains.length; i++) {
             const url = props.url.replace('{s}', props.subdomains[i]) + 'mapservice/swdx?tk=' + props.token
@@ -68,12 +76,12 @@ export default defineComponent({
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(instance, 'readyPromise')
-        listener && ctx.emit('readyPromise', terrainProvider, vc.viewer, instance.proxy)
+        listener && ctx.emit('readyPromise', terrainProvider, vc?.viewer, instance.proxy)
       })
-      vc.viewer.terrainProvider = terrainProvider
+      vc && (vc.viewer.terrainProvider = terrainProvider)
       $script?.parentNode.removeChild($script)
       return true
     }
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

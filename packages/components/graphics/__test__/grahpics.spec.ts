@@ -57,16 +57,16 @@ describe('VcGraphicsBillboard', () => {
   test('render test', async () => {
     const wrapper = mount(billboardApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.BillboardGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.BillboardGraphics
     expect(graphics instanceof Cesium.BillboardGraphics).toBe(true)
-    expect(graphics.scale.getValue(void 0)).toEqual(0.25)
-    expect(graphics.image.getValue(void 0)).toEqual('https://zouyaoji.top/vue-cesium/favicon.png')
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.BillboardGraphics
+    expect(graphics.scale?.getValue(Cesium.JulianDate.now())).toEqual(0.25)
+    expect(graphics.image?.getValue(Cesium.JulianDate.now())).toEqual('https://zouyaoji.top/vue-cesium/favicon.png')
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.BillboardGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.BillboardGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.BillboardGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -96,17 +96,20 @@ describe('VcGraphicsBox', () => {
   test('render test', async () => {
     const wrapper = mount(boxApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.BoxGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.BoxGraphics
     expect(graphics instanceof Cesium.BoxGraphics).toBe(true)
     expect(
-      (graphics.dimensions.getValue(void 0) as Cesium.Cartesian3).equalsEpsilon(new Cesium.Cartesian3(400000, 300000, 500000), Cesium.Math.EPSILON6)
+      (graphics.dimensions?.getValue(Cesium.JulianDate.now()) as Cesium.Cartesian3).equalsEpsilon(
+        new Cesium.Cartesian3(400000, 300000, 500000),
+        Cesium.Math.EPSILON6
+      )
     ).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.BoxGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.BoxGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.BoxGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.BoxGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -139,16 +142,16 @@ describe('VcGraphicsCorridor', () => {
   test('render test', async () => {
     const wrapper = mount(corridorApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.CorridorGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.CorridorGraphics
     expect(graphics instanceof Cesium.CorridorGraphics).toBe(true)
-    expect(graphics.positions.getValue(void 0) instanceof Array).toBe(true)
-    expect(graphics.outline.getValue(void 0)).toEqual(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.CorridorGraphics
+    expect(graphics.positions?.getValue(Cesium.JulianDate.now()) instanceof Array).toBe(true)
+    expect(graphics.outline?.getValue(Cesium.JulianDate.now())).toEqual(true)
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.CorridorGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.CorridorGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.CorridorGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -182,14 +185,14 @@ describe('VcGraphicsCylinder', () => {
   test('render test', async () => {
     const wrapper = mount(cylinderApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.CylinderGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.CylinderGraphics
     expect(graphics instanceof Cesium.CylinderGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.CylinderGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.CylinderGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.CylinderGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.CylinderGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -222,14 +225,14 @@ describe('VcGraphicsEllipse', () => {
   test('render test', async () => {
     const wrapper = mount(ellipseApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.EllipseGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.EllipseGraphics
     expect(graphics instanceof Cesium.EllipseGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.EllipseGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.EllipseGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.EllipseGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.EllipseGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -260,14 +263,14 @@ describe('VcGraphicsEllipsoid', () => {
   test('render test', async () => {
     const wrapper = mount(ellipsoidApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.EllipsoidGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.EllipsoidGraphics
     expect(graphics instanceof Cesium.EllipsoidGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.EllipsoidGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.EllipsoidGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.EllipsoidGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.EllipsoidGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -298,16 +301,16 @@ describe('VcGraphicsLabel', () => {
   test('render test', async () => {
     const wrapper = mount(labelApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.LabelGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.LabelGraphics
     expect(graphics instanceof Cesium.LabelGraphics).toBe(true)
-    expect(graphics.text.getValue(void 0)).toEqual('Hello Vue Cesium')
-    expect(graphics.pixelOffset.getValue(void 0)).toBeDefined()
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.LabelGraphics
+    expect(graphics.text?.getValue(Cesium.JulianDate.now())).toEqual('Hello Vue Cesium')
+    expect(graphics.pixelOffset?.getValue(Cesium.JulianDate.now())).toBeDefined()
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.LabelGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.LabelGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.LabelGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -336,15 +339,17 @@ describe('VcGraphicsModel', () => {
   test('render test', async () => {
     const wrapper = mount(modelApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.ModelGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.ModelGraphics
     expect(graphics instanceof Cesium.ModelGraphics).toBe(true)
-    expect(graphics.uri.getValue(void 0)).toEqual('https://zouyaoji.top/vue-cesium/SampleData/models/GroundVehicle/GroundVehicle.glb')
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.ModelGraphics
+    expect(graphics.uri?.getValue(Cesium.JulianDate.now())).toEqual(
+      'https://zouyaoji.top/vue-cesium/SampleData/models/GroundVehicle/GroundVehicle.glb'
+    )
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.ModelGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.ModelGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.ModelGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -428,14 +433,14 @@ describe('VcGraphicsPath', () => {
   test('render test', async () => {
     const wrapper = mount(pathApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PathGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PathGraphics
     expect(graphics instanceof Cesium.PathGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PathGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PathGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PathGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PathGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -468,14 +473,14 @@ describe('VcGraphicsPlane', () => {
   test('render test', async () => {
     const wrapper = mount(planeApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PlaneGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PlaneGraphics
     expect(graphics instanceof Cesium.PlaneGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PlaneGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PlaneGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PlaneGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PlaneGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -501,14 +506,14 @@ describe('VcGraphicsPoint', () => {
   test('render test', async () => {
     const wrapper = mount(pointApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PointGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PointGraphics
     expect(graphics instanceof Cesium.PointGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PointGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PointGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PointGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PointGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -539,14 +544,14 @@ describe('VcGraphicsPolyline', () => {
   test('render test', async () => {
     const wrapper = mount(polylineApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PolylineGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PolylineGraphics
     expect(graphics instanceof Cesium.PolylineGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PolylineGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolylineGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PolylineGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolylineGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -580,14 +585,14 @@ describe('VcGraphicsPolygon', () => {
   test('render test', async () => {
     const wrapper = mount(polygonApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PolygonGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PolygonGraphics
     expect(graphics instanceof Cesium.PolygonGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PolygonGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolygonGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PolygonGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolygonGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -621,14 +626,14 @@ describe('VcGraphicsPolylineVolume', () => {
   test('render test', async () => {
     const wrapper = mount(polylineVolumeApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.PolylineVolumeGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.PolylineVolumeGraphics
     expect(graphics instanceof Cesium.PolylineVolumeGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.PolylineVolumeGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolylineVolumeGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.PolylineVolumeGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.PolylineVolumeGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -663,14 +668,14 @@ describe('VcGraphicsRectangle', () => {
   test('render test', async () => {
     const wrapper = mount(rectangleApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.RectangleGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.RectangleGraphics
     expect(graphics instanceof Cesium.RectangleGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.RectangleGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.RectangleGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.RectangleGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.RectangleGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -704,14 +709,14 @@ describe('VcGraphicsWall', () => {
   test('render test', async () => {
     const wrapper = mount(wallApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.WallGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.WallGraphics
     expect(graphics instanceof Cesium.WallGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.WallGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.WallGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.WallGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.WallGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })
@@ -740,14 +745,14 @@ describe('VcGraphicsTileset', () => {
   test('render test', async () => {
     const wrapper = mount(tilesetApp)
     const testVm = wrapper.vm.$refs.graphics as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
-    let graphics = readyObj.cesiumObject as Cesium.Cesium3DTilesetGraphics
+    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    let graphics = readyObj?.cesiumObject as Cesium.Cesium3DTilesetGraphics
     expect(graphics instanceof Cesium.Cesium3DTilesetGraphics).toBe(true)
-    await testVm.unload()
-    graphics = testVm.getCesiumObject() as Cesium.Cesium3DTilesetGraphics
+    await testVm.unload?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.Cesium3DTilesetGraphics
     expect(graphics).toBeUndefined()
-    await testVm.load()
-    graphics = testVm.getCesiumObject() as Cesium.Cesium3DTilesetGraphics
+    await testVm.load?.()
+    graphics = testVm.getCesiumObject?.() as Cesium.Cesium3DTilesetGraphics
     expect(graphics).toBeDefined()
   }, 10000)
 })

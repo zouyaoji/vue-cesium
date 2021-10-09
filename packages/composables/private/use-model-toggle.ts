@@ -1,6 +1,7 @@
-import { watch, nextTick, onMounted, getCurrentInstance } from 'vue'
+import { watch, nextTick, onMounted, getCurrentInstance, Ref, ComputedRef } from 'vue'
 
 import { vmHasRouter, vmHasListener } from '@vue-cesium/utils/private/vm'
+import { AnyFunction } from '@vue-cesium/utils/types'
 
 export const useModelToggleProps = {
   modelValue: {
@@ -13,21 +14,28 @@ export const useModelToggleEmits = ['update:modelValue', 'before-show', 'show', 
 
 // handleShow/handleHide -> removeTick(), self (& emit show), prepareTick()
 
-export default function({
+export default function ({
   showing,
   canShow = undefined, // optional
   hideOnRouteChange = undefined, // optional
   handleShow = undefined, // optional
   handleHide = undefined, // optional
   processOnMount = undefined // optional
+}: {
+  showing?: Ref<boolean>
+  canShow?: AnyFunction<boolean>
+  hideOnRouteChange?: ComputedRef<boolean>
+  handleShow?: AnyFunction<void>
+  handleHide?: AnyFunction<void>
+  processOnMount?: boolean
 }) {
-  const vm = getCurrentInstance()
+  const vm = getCurrentInstance()!
   const { props, emit, proxy } = vm
 
   let payload
 
   function toggle(evt) {
-    if (showing.value === true) {
+    if (showing?.value === true) {
       hide(evt)
     } else {
       show(evt)
@@ -57,15 +65,15 @@ export default function({
   }
 
   function processShow(evt) {
-    if (showing.value === true) {
+    if (showing?.value === true) {
       return
     }
 
-    showing.value = true
+    showing && (showing.value = true)
 
     emit('before-show', evt)
 
-    if(evt && evt.cancel === true) {
+    if (evt && evt.cancel === true) {
       return
     }
 
@@ -99,11 +107,11 @@ export default function({
   }
 
   function processHide(evt) {
-    if (showing.value === false) {
+    if (showing?.value === false) {
       return
     }
 
-    showing.value = false
+    showing && (showing.value = false)
 
     emit('before-hide', evt)
 
@@ -119,7 +127,7 @@ export default function({
       if (vmHasListener(vm, 'onUpdate:modelValue') === true) {
         emit('update:modelValue', false)
       }
-    } else if ((val === true) !== showing.value) {
+    } else if ((val === true) !== showing?.value) {
       const fn = val === true ? processShow : processHide
       fn(payload)
     }
@@ -131,7 +139,7 @@ export default function({
     watch(
       () => (proxy as any).$route,
       () => {
-        if (hideOnRouteChange.value === true && showing.value === true) {
+        if (hideOnRouteChange.value === true && showing?.value === true) {
           hide()
         }
       }

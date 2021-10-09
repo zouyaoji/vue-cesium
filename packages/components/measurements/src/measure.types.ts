@@ -107,7 +107,7 @@ interface PolygonMeasurementDrawing extends PolylineDrawing {
 
 interface MeasurementInstanceOpts {
   name: string
-  actionRef: Ref<typeof VcFabAction>
+  actionRef: Ref<typeof VcFabAction | null>
   actionOpts:
     | typeof distanceActionDefault
     | typeof componentDistanceActionDefault
@@ -126,6 +126,7 @@ interface MeasurementInstanceOpts {
     | typeof VcMeasurementHeight
     | typeof VcMeasurementArea
     | typeof VcMeasurementPoint
+    | null
   >
   measurementOpts:
     | typeof distanceMeasurementDefault
@@ -147,6 +148,7 @@ interface MeasurementInstanceOpts {
     | typeof VcMeasurementHeight
     | typeof VcMeasurementArea
     | typeof VcMeasurementPoint
+    | null
   isActive: boolean
 }
 

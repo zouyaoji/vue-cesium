@@ -19,8 +19,12 @@ import { isArray } from '@vue-cesium/utils/util'
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   const commonState = useCommon(props, ctx, vcInstance)
+  if (commonState === void 0) {
+    return
+  }
+
   const childCount = ref(0)
-  const instances = ref([])
+  const instances = ref<any>([])
   // methods
   vcInstance.createCesiumObject = async () => {
     const options = commonState.transformProps(props)
@@ -42,11 +46,12 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   vcInstance.mount = async () => {
     const primitives = vcInstance.cesiumClass.includes('Ground') ? commonState.$services.groundPrimitives : commonState.$services.primitives
     const primitive = vcInstance.cesiumObject as Cesium.Primitive
-    primitive.readyPromise && primitive.readyPromise.then(e => {
-      const listener = getInstanceListener(vcInstance, 'readyPromise')
-      listener && ctx.emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy)
-    })
-    ; (primitive as any)._vcParent = primitives
+    primitive.readyPromise &&
+      primitive.readyPromise.then(e => {
+        const listener = getInstanceListener(vcInstance, 'readyPromise')
+        listener && ctx.emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy)
+      })
+    ;(primitive as any)._vcParent = primitives
     const object = primitives && primitives.add(primitive)
     if (vcInstance.cesiumClass === 'ParticleSystem') {
       const intervalId = setInterval(() => {
@@ -74,7 +79,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
         ctx.emit('update:geometryInstances', instances)
       } else {
         const primitive = vcInstance.cesiumObject as Cesium.Primitive
-        (primitive as any).geometryInstances = index === 0 ? instance : instances.value
+        ;(primitive as any).geometryInstances = index === 0 ? instance : instances.value
       }
     }
     return true
@@ -82,7 +87,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   const getServices = () => {
     return mergeDescriptors(commonState.getServices(), {
-      get primitive () {
+      get primitive() {
         return vcInstance.cesiumObject as Cesium.Primitive
       }
     })

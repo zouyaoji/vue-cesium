@@ -3,6 +3,7 @@ import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/type
 import CameraFlightPath from './CameraFlightPath'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import { VcTooltip } from '@vue-cesium/components/ui'
+import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   // state
@@ -11,12 +12,12 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const newTransformScratch: any = {}
   const centerScratch: any = {}
 
-  let unsubscribeFromPostRender: AnyFunction<void> = undefined
-  let unsubscribeFromClockTick: AnyFunction<void> = undefined
+  let unsubscribeFromPostRender: AnyFunction<void>
+  let unsubscribeFromClockTick: AnyFunction<void>
 
-  let orbitMouseMoveFunction: AnyFunction<void> = undefined
-  let orbitMouseUpFunction: AnyFunction<void> = undefined
-  let orbitTickFunction: AnyFunction<void> = undefined
+  let orbitMouseMoveFunction: EventListener
+  let orbitMouseUpFunction: EventListener
+  let orbitTickFunction: EventListener
 
   const heading = ref(0)
   const orbitCursorAngle = ref(0)
@@ -27,8 +28,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   let orbitFrame: any = {}
   let orbitIsLook = false
 
-  let rotateMouseUpFunction: AnyFunction<void> = undefined
-  let rotateMouseMoveFunction: AnyFunction<void> = undefined
+  let rotateMouseUpFunction: AnyFunction<void>
+  let rotateMouseMoveFunction: AnyFunction<void>
   let isRotating = false
   let rotateInitialCursorAngle = 0
   let rotateFrame: any = {}
@@ -36,8 +37,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   let rotateInitialCameraAngle = 0
   let rotateInitialCameraDistance: any = {}
 
-  const iconOuterTooltipRef = ref<typeof VcTooltip>(null)
-  const iconInnerTooltipRef = ref<typeof VcTooltip>(null)
+  const iconOuterTooltipRef = ref<typeof VcTooltip | null>(null)
+  const iconInnerTooltipRef = ref<typeof VcTooltip | null>(null)
 
   // methods
   const handleMouseDown = (e: MouseEvent | TouchEvent) => {
@@ -109,7 +110,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     const ray = camera.getPickRay(windowPosition, pickRayScratch)
 
     const center = scene.globe.pick(ray, scene, centerScratch)
-    if (!defined(center)) {
+    if (!isObject(center) || !defined(center)) {
       // Globe is barely visible, so reset to home view.
       viewer.camera.flyHome()
       return
@@ -161,7 +162,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (defined(vcInstance.viewer)) {
       if (unsubscribeFromPostRender) {
         unsubscribeFromPostRender()
-        unsubscribeFromPostRender = undefined
+        ;(unsubscribeFromPostRender as any) = undefined
       }
 
       unsubscribeFromPostRender = vcInstance.viewer.scene.postRender.addEventListener(function () {
@@ -172,7 +173,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     } else {
       if (unsubscribeFromPostRender) {
         unsubscribeFromPostRender()
-        unsubscribeFromPostRender = undefined
+        ;(unsubscribeFromPostRender as any) = undefined
       }
     }
   }
@@ -229,9 +230,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       vcInstance.viewer.clock.onTick.removeEventListener(orbitTickFunction)
     }
 
-    orbitMouseMoveFunction = undefined
-    orbitMouseUpFunction = undefined
-    orbitTickFunction = undefined
+    ;(orbitMouseMoveFunction as any) = undefined
+    ;(orbitMouseUpFunction as any) = undefined
+    ;(orbitTickFunction as any) = undefined
 
     isOrbiting = true
     orbitLastTimestamp = getTimestamp()
@@ -247,7 +248,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = true
     } else {
-      orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch)
+      orbitFrame = Transforms.eastNorthUpToFixedFrame(center || new Cesium.Cartesian3(), scene.globe.ellipsoid, newTransformScratch)
       orbitIsLook = false
     }
 
@@ -288,13 +289,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       orbitCursorOpacity.value = easedOpacity
     }
 
-    orbitMouseMoveFunction = function (e) {
+    orbitMouseMoveFunction = function (e: Event) {
       const compassRectangle = compassElement.getBoundingClientRect()
       const center = new Cartesian2((compassRectangle.right - compassRectangle.left) / 2.0, (compassRectangle.bottom - compassRectangle.top) / 2.0)
-      const clickLocation =
-        e.type === 'mousemove'
-          ? new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top)
-          : new Cartesian2(e.changedTouches[0].clientX - compassRectangle.left, e.changedTouches[0].clientY - compassRectangle.top)
+      let clickLocation
+      if (e instanceof MouseEvent) {
+        clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top)
+      } else if (e instanceof TouchEvent) {
+        clickLocation = new Cartesian2(e.changedTouches[0].clientX - compassRectangle.left, e.changedTouches[0].clientY - compassRectangle.top)
+      }
       const vector = Cartesian2.subtract(clickLocation, center, vectorScratch)
       updateAngleAndOpacity(vector, compassRectangle.width)
       listener &&
@@ -319,9 +322,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         vcInstance.viewer.clock.onTick.removeEventListener(orbitTickFunction)
       }
 
-      orbitMouseMoveFunction = undefined
-      orbitMouseUpFunction = undefined
-      orbitTickFunction = undefined
+      ;(orbitMouseMoveFunction as any) = undefined
+      ;(orbitMouseUpFunction as any) = undefined
+      ;(orbitTickFunction as any) = undefined
 
       resetRotater()
 
@@ -363,8 +366,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     document.removeEventListener('mouseup', rotateMouseUpFunction, false)
     document.removeEventListener('touchend', rotateMouseUpFunction, false)
     const { Cartesian2, Cartesian3, defined, Math: CesiumMath, Matrix4, Ray, Transforms } = Cesium
-    rotateMouseMoveFunction = undefined
-    rotateMouseUpFunction = undefined
+    ;(rotateMouseMoveFunction as any) = undefined
+    ;(rotateMouseUpFunction as any) = undefined
 
     const listener = getInstanceListener(vcInstance, 'compassEvt')
     listener &&
@@ -389,7 +392,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = true
     } else {
-      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch)
+      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter || new Cartesian3(), scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = false
     }
 
@@ -436,9 +439,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       document.removeEventListener('touchmove', rotateMouseMoveFunction, false)
       document.removeEventListener('mouseup', rotateMouseUpFunction, false)
       document.removeEventListener('touchend', rotateMouseUpFunction, false)
-
-      rotateMouseMoveFunction = undefined
-      rotateMouseUpFunction = undefined
+      ;(rotateMouseMoveFunction as any) = undefined
+      ;(rotateMouseUpFunction as any) = undefined
 
       listener &&
         emit('compassEvt', {

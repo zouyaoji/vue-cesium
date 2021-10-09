@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-07 23:36:43
+ * @LastEditTime: 2021-10-02 23:06:08
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collection-items\index.ts
+ */
 /**
  * for
  * Billboard
@@ -11,9 +19,12 @@ import useCommon from '../use-common'
 
 export type CollectionItem = Cesium.Billboard | Cesium.Label | Cesium.PointPrimitive | Cesium.Polyline
 
-export default function(props, ctx, vcInstance: VcComponentInternalInstance) {
+export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   const commonState = useCommon(props, ctx, vcInstance)
+  if (commonState === void 0) {
+    return
+  }
   // methods
   vcInstance.createCesiumObject = async () => {
     const options = commonState.transformProps(props)

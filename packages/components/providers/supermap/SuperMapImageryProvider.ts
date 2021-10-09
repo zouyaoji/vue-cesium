@@ -60,12 +60,13 @@ class SuperMapImageryProvider {
         throw new DeveloperError('The url type is not supported!')
       }
       this.isSci = true
+      this.layersID = undefined!
     }
     this._url = forwardSlashUrl
     this._resource = (Resource as any).createIfNeeded(forwardSlashUrl)
     this._transparent = defaultValue(options.transparent, true)
     this._name = options.name || ''
-    this._urlTemplate = undefined
+    this._urlTemplate = undefined!
     this._errorEvent = new Event()
     this._fileExtension = 'png'
     this._tileWidth = 256
@@ -255,7 +256,7 @@ const Scales = [
   0.0004430662393142064, 0.0008861324786284128, 0.001772264957256826, 0.003544529914513652
 ]
 
-function buildImageResource(x, y, level) {
+function buildImageResource(this, x, y, level) {
   let url
   if (this.isTileMap) {
     if (this._coordUnit === 'DEGREE') {
@@ -271,7 +272,7 @@ function buildImageResource(x, y, level) {
   return url
 }
 
-function init() {
+function init(this) {
   const { Resource, when } = Cesium
   if (this.isTileMap) {
     const promise = Resource.fetchJsonp({
@@ -300,7 +301,7 @@ function getMaximumLevelbyScale(scale) {
   }
 }
 
-function onFulfilledRest3D(xmlText) {
+function onFulfilledRest3D(this, xmlText) {
   const options = parseConfigFromXmlText.call(this, xmlText)
   const { defaultValue, defined, GeographicTilingScheme, Math, Rectangle } = Cesium
   this._fileExtension = defaultValue(options.fileExtentName, 'png')
@@ -340,15 +341,15 @@ function onFulfilledRest3D(xmlText) {
   this._readyPromise.resolve(true)
 }
 
-function parseConfigFromXmlText(xmlText) {
+function parseConfigFromXmlText(this, xmlText) {
   const domParser = new DOMParser()
   xmlText = domParser.parseFromString(xmlText, 'application/xml')
   const namespaceURI = 'http://www.supermap.com/SuperMapCache/sci3d'
   const rootNode = xmlText.childNodes[0]
   // let version = queryNumericAttribute(rootNode, 'Version', namespaceURI)
   const levelsNode = queryFirstNode(rootNode, 'Levels', namespaceURI)
-  const levelsNodes = queryNodes(levelsNode, 'Level', namespaceURI)
-  const levels = []
+  const levelsNodes = queryNodes(levelsNode, 'Level', namespaceURI) || ([] as any)
+  const levels: number[] = []
   for (let i = 0; i < levelsNodes.length; i++) {
     levels.push(parseInt(levelsNodes[i].textContent, 10))
   }
@@ -400,7 +401,7 @@ function queryFirstNode(xmlNode, attribute, namespaceURI) {
 
 function queryNodes(xmlNode, attribute, namespaceURI) {
   if (Cesium.defined(xmlNode)) {
-    const nodes = []
+    const nodes: Array<any> = []
     const nodeList = xmlNode.getElementsByTagNameNS('*', attribute)
     const length = nodeList.length
     for (let i = 0; i < length; i++) {
@@ -411,7 +412,7 @@ function queryNodes(xmlNode, attribute, namespaceURI) {
   }
 }
 
-function onFulfilledTileMap(response) {
+function onFulfilledTileMap(this, response) {
   const { Cartesian3, defaultValue, defined, GeographicTilingScheme, Math: CesiumMath, Rectangle, WebMercatorTilingScheme } = Cesium
   const coordUnit = response.prjCoordSys.coordUnit
   this._coordUnit = coordUnit
@@ -453,10 +454,10 @@ function onFulfilledTileMap(response) {
   this._readyPromise.resolve(true)
 }
 
-function onRejected() {
+function onRejected(this) {
   const { TileProviderError, RuntimeError } = Cesium
   const message = 'An error occurred while accessing ' + this._url + '.'
-  previousError = TileProviderError.handleError(previousError, this, this._errorEvent, message, undefined, undefined, undefined, init.bind(this))
+  previousError = TileProviderError.handleError(previousError, this, this._errorEvent, message, 0, 0, 0, init.bind(this))
   this._readyPromise.reject(new RuntimeError(message))
 }
 

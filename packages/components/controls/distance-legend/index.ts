@@ -23,10 +23,10 @@ export default defineComponent({
     }
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
-    const rootRef = ref<typeof VcBtn>(null)
-    const distanceLabel = ref(undefined)
+    const rootRef = ref<typeof VcBtn | null>(null)
+    const distanceLabel = ref<string>('')
     const positionState = usePosition(props, $services)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     let lastLegendUpdate = 0
@@ -81,7 +81,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)?.$el
@@ -98,7 +98,7 @@ export default defineComponent({
         viewerElement.contains($(rootRef)?.$el) && viewerElement.removeChild($(rootRef)?.$el)
       }
 
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)?.$el
@@ -154,7 +154,7 @@ export default defineComponent({
 
       if (!defined(leftPosition) || !defined(rightPosition)) {
         barWidth.value = 0
-        distanceLabel.value = undefined
+        distanceLabel.value = ''
         return
       }
 
@@ -195,7 +195,7 @@ export default defineComponent({
         distanceLabel.value = label
       } else {
         barWidth.value = 0
-        distanceLabel.value = undefined
+        distanceLabel.value = ''
       }
     }, 500)
 

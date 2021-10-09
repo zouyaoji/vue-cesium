@@ -1,4 +1,16 @@
-import { CSSProperties, defineComponent, getCurrentInstance, nextTick, ref, reactive, ExtractPropTypes, h, createCommentVNode, watch } from 'vue'
+import {
+  CSSProperties,
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  ref,
+  reactive,
+  ExtractPropTypes,
+  h,
+  createCommentVNode,
+  watch,
+  VNode
+} from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
@@ -25,8 +37,8 @@ export default defineComponent({
     }
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
-    const rootRef = ref<typeof VcBtn>(null)
-    const tooltipRef = ref<typeof VcTooltip>(null)
+    const rootRef = ref<typeof VcBtn | null>(null)
+    const tooltipRef = ref<typeof VcTooltip | null>(null)
 
     let lastMouseX = -1
     let lastMouseY = -1
@@ -41,9 +53,9 @@ export default defineComponent({
       fps: 'NaN',
       ms: 'NaN'
     })
-    const mouseCoordsInfo = ref(null)
+    const mouseCoordsInfo = ref<MouseCoords>()
     const positionState = usePosition(props, $services)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     // watch
@@ -108,7 +120,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)?.$el
@@ -141,7 +153,7 @@ export default defineComponent({
       if (!hasVcNavigation) {
         viewerElement.contains($(rootRef)?.$el) && viewerElement.removeChild($(rootRef)?.$el)
       }
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)?.$el
@@ -219,7 +231,7 @@ export default defineComponent({
         if (props.showMouseInfo) {
           const rect = viewerElement.getBoundingClientRect()
           const position = new Cartesian2(clientX - rect.left, clientY - rect.top)
-          mouseCoordsInfo.value.updateCoordinatesFromCesium(viewer, position)
+          mouseCoordsInfo.value?.updateCoordinatesFromCesium(viewer, position)
         }
         const listener = getInstanceListener(instance, 'statusBarEvt')
         listener &&
@@ -236,13 +248,13 @@ export default defineComponent({
     const toggleUseProjection = () => {
       $(tooltipRef)?.hide()
       if (props.showMouseInfo) {
-        mouseCoordsInfo.value.toggleUseProjection()
+        mouseCoordsInfo.value?.toggleUseProjection()
       }
     }
 
     return () => {
       if (canRender.value) {
-        const inner = []
+        const inner: Array<VNode> = []
         if (props.showMouseInfo) {
           if (!mouseCoordsInfo.value?.useProjection) {
             inner.push(

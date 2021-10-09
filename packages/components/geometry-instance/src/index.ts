@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-27 10:39:08
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
+ */
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
@@ -38,10 +46,13 @@ export default defineComponent({
     }
     instance.mount = async () => {
       const parentVM = getVcParentInstance(instance).proxy as VcComponentPublicInstance
-      vcIndex.value = parentVM.__childCount.value
-      parentVM.__childCount.value += 1
+      if (parentVM.__childCount !== undefined) {
+        vcIndex.value = parentVM.__childCount.value || 0
+        parentVM.__childCount.value += 1
+      }
+
       const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
-      parentVM.__updateGeometryInstances(geometryInstance, vcIndex.value)
+      parentVM.__updateGeometryInstances?.(geometryInstance, vcIndex.value)
       return true
     }
 
@@ -79,11 +90,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })

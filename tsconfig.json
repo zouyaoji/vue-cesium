@@ -15,7 +15,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "strict": false
+    "strict": true
   },
   "exclude": ["node_modules", "dist/**", "packages/*/es", "packages/*/lib"]
 }

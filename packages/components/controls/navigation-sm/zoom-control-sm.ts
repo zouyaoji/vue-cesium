@@ -1,4 +1,4 @@
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch } from 'vue'
+import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch, VNode } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
@@ -7,6 +7,7 @@ import { useCommon } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { t } from '@vue-cesium/locale'
 import { VcTooltip } from '@vue-cesium/components/ui'
+import { isObject } from '@vue-cesium/utils/util'
 
 export default defineComponent({
   name: 'VcZoomControlSm',
@@ -34,15 +35,19 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcZoomControlSm'
     instance.cesiumEvents = []
-    const rootRef = ref<HTMLElement>(null)
-    const zoomInRef = ref<HTMLElement>(null)
-    const zoomBarRef = ref<HTMLElement>(null)
-    const zoomOutRef = ref<HTMLElement>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const zoomInRef = ref<HTMLElement | null>(null)
+    const zoomBarRef = ref<HTMLElement | null>(null)
+    const zoomOutRef = ref<HTMLElement | null>(null)
     const parentInstance = getVcParentInstance(instance)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigationSm'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     const commonState = useCommon(props, ctx, instance)
+
+    if (commonState === void 0) {
+      return
+    }
 
     const { $services } = commonState
     const positionState = usePosition(props, $services)
@@ -70,13 +75,14 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         canRender.value = true
         nextTick(() => {
+          const rootEl = $(rootRef)
           const { viewer } = $services
           if (!hasVcNavigation) {
             const viewerElement = viewer._element
-            viewerElement.appendChild($(rootRef))
-            resolve($(rootRef))
+            isObject(rootEl) && viewerElement?.appendChild(rootEl)
+            resolve(rootEl)
           } else {
-            resolve($(rootRef))
+            resolve(rootEl)
           }
         })
       })
@@ -84,7 +90,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -95,10 +101,11 @@ export default defineComponent({
       const { viewer } = $services
       if (!hasVcNavigation) {
         const viewerElement = viewer._element
-        viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
+        const rootEl = $(rootRef)
+        isObject(rootEl) && viewerElement?.contains(rootEl) && viewerElement.removeChild(rootEl)
       }
 
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -131,7 +138,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        let children = []
+        let children: Array<VNode> = []
         children = hMergeSlot(ctx.slots.default, children)
         children.push(
           h(

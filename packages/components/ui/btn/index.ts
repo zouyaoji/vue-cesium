@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance, VNode } from 'vue'
 import VcIcon from '../icon'
 import { Spinner as VcSpinner } from '../spinner'
 import { Ripple } from '@vue-cesium/directives'
@@ -10,9 +10,7 @@ import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
 
 const { passiveCapture } = listenOpts
 
-let touchTarget = null,
-  keyboardTarget = null,
-  mouseTarget = null
+let touchTarget: HTMLElement | null, keyboardTarget: HTMLElement | null, mouseTarget: HTMLElement | null
 
 export default defineComponent({
   name: 'VcBtn',
@@ -20,21 +18,24 @@ export default defineComponent({
   props: {
     ...useBtnProps,
 
-    percentage: Number,
+    percentage: {
+      type: Number,
+      default: 0
+    },
     darkPercentage: Boolean
   },
 
   emits: ['click', 'keydown', 'touchstart', 'mousedown', 'keyup'],
 
   setup(props, { slots, emit }) {
-    const { proxy } = getCurrentInstance()
+    const proxy = getCurrentInstance()?.proxy
 
     const { classes, style, innerClasses, attributes, isActionable } = useBtn(props)
 
-    const rootRef = ref(null)
-    const blurTargetRef = ref(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const blurTargetRef = ref<HTMLElement | null>(null)
 
-    let localTouchTargetEl = null,
+    let localTouchTargetEl: HTMLElement | null = null,
       avoidMouseRipple,
       mouseTimer
 
@@ -101,9 +102,9 @@ export default defineComponent({
         if (
           props.type === 'submit' &&
           el !== document.body &&
-          rootRef.value.contains(el) === false &&
+          rootRef.value?.contains(el) === false &&
           // required for iOS and desktop Safari
-          el.contains(rootRef.value) === false
+          el?.contains(rootRef.value) === false
         ) {
           rootRef.value.focus()
 
@@ -136,12 +137,12 @@ export default defineComponent({
           keyboardTarget !== null && cleanup()
 
           // focus external button if the focus helper was focused before
-          rootRef.value.focus()
+          rootRef.value?.focus()
 
           keyboardTarget = rootRef.value
-          rootRef.value.classList.add('vc-btn--active')
+          rootRef.value?.classList.add('vc-btn--active')
           document.addEventListener('keyup', onPressEnd, true)
-          rootRef.value.addEventListener('blur', onPressEnd, passiveCapture)
+          rootRef.value?.addEventListener('blur', onPressEnd, passiveCapture)
         }
       }
 
@@ -154,8 +155,8 @@ export default defineComponent({
         touchTarget = rootRef.value
 
         localTouchTargetEl = getTouchTarget(e.target)
-        localTouchTargetEl.addEventListener('touchcancel', onPressEnd, passiveCapture)
-        localTouchTargetEl.addEventListener('touchend', onPressEnd, passiveCapture)
+        localTouchTargetEl?.addEventListener('touchcancel', onPressEnd, passiveCapture)
+        localTouchTargetEl?.addEventListener('touchend', onPressEnd, passiveCapture)
       }
 
       // avoid duplicated mousedown event
@@ -173,7 +174,7 @@ export default defineComponent({
       if (mouseTarget !== rootRef.value) {
         mouseTarget !== null && cleanup()
         mouseTarget = rootRef.value
-        rootRef.value.classList.add('vc-btn--active')
+        rootRef.value?.classList.add('vc-btn--active')
         document.addEventListener('mouseup', onPressEnd, passiveCapture)
       }
 
@@ -194,7 +195,7 @@ export default defineComponent({
           ;(evt as any).qKeyEvent = true
           e.defaultPrevented === true && prevent(evt)
           e.cancelBubble === true && stop(evt)
-          rootRef.value.dispatchEvent(evt)
+          rootRef.value?.dispatchEvent(evt)
 
           stopAndPrevent(e)
 
@@ -217,7 +218,7 @@ export default defineComponent({
         blurTarget !== null &&
         blurTarget !== document.activeElement
       ) {
-        blurTarget.setAttribute('tabindex', -1)
+        blurTarget.setAttribute('tabindex', '-1')
         blurTarget.focus()
       }
 
@@ -258,7 +259,7 @@ export default defineComponent({
     })
 
     return () => {
-      let inner = []
+      let inner: Array<VNode> = []
 
       props.icon !== void 0 &&
         inner.push(

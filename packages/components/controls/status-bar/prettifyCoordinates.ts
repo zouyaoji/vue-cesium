@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-23 11:15:41
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\prettifyCoordinates.ts
+ */
 /**
  * Turns the longitude / latitude in degrees into a human readable pretty strings.
  *
@@ -25,7 +33,7 @@ function prettifyCoordinates(longitude, latitude, options) {
     result.elevation =
       Math.round(optionsDefaulted.height) + (defined(optionsDefaulted.errorBar) ? '±' + Math.round(optionsDefaulted.errorBar) : '') + 'm'
   } else {
-    result.elevation = undefined
+    result.elevation = ''
   }
 
   return result

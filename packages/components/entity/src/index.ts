@@ -78,7 +78,7 @@ export default defineComponent({
 
     // methods
     instance.mount = async () => {
-      const entity = $services?.entities?.add(instance.cesiumObject)
+      const entity = $services?.entities?.add(instance.cesiumObject as Cesium.Entity)
       return $services?.entities.contains(entity)
     }
 
@@ -91,7 +91,7 @@ export default defineComponent({
       if (listener) {
         emit(emitType, graphics)
       } else {
-        instance.cesiumObject[emitType.substr(7)] = graphics
+        instance.cesiumObject && (instance.cesiumObject[emitType.substr(7)] = graphics)
       }
       graphics && (graphics._vcParent = instance.cesiumObject)
       return true
@@ -108,11 +108,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

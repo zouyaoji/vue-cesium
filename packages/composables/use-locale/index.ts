@@ -36,7 +36,7 @@ function translate(path, option, current) {
 
 export const useLocale = () => {
   const vm = getCurrentInstance()
-  const props = vm.props as {
+  const props = vm?.props as {
     locale: Language
   }
 
@@ -45,7 +45,7 @@ export const useLocale = () => {
 
   const _translator = (...args: any[]) => {
     const [path, option] = args
-    return translate(path, option, locale.value)
+    return translate(path, option, locale.value) || ''
   }
 
   const t = (...args: any[]) => {
@@ -86,7 +86,7 @@ export const localeProviderMaker = (locale = Chinese) => {
     locale: localeRef,
     t: (...args: any[]) => {
       const [path, option] = args
-      return translate(path, option, localeRef.value)
+      return translate(path, option, localeRef.value) || ''
     }
   }
 }

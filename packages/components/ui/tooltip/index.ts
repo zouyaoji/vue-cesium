@@ -268,7 +268,7 @@ export default defineComponent({
     onBeforeUnmount(anchorCleanup)
 
     // expose public methods
-    Object.assign(vm.proxy, { updatePosition })
+    Object.assign(vm?.proxy, { updatePosition })
 
     return renderPortal
   }

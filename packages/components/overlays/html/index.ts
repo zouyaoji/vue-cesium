@@ -9,7 +9,8 @@ import {
   watch,
   onUnmounted,
   TeleportProps,
-  PropType
+  PropType,
+  WatchStopHandle
 } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
@@ -43,19 +44,19 @@ export default defineComponent({
     }
     const { $services } = commonState
     const canRender = ref(false)
-    const rootRef = ref<HTMLElement>(null)
+    const rootRef = ref<HTMLElement>(null!)
     const rootStyle = reactive<CSSProperties>({})
-    const offset = ref(null)
-    const position = ref(null)
-    const lastCanvasPosition = ref(null)
+    const offset = ref<Cesium.Cartesian2>(null!)
+    const position = ref<Cesium.Cartesian3>(null!)
+    const lastCanvasPosition = ref<Cesium.Cartesian2>(null!)
 
     // watcch
-    let unwatchFns = []
+    let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
       watch(
         () => props.position,
         val => {
-          position.value = makeCartesian3(val, $services.viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
+          position.value = makeCartesian3(val as any, $services.viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
         }
       )
     )
@@ -64,7 +65,7 @@ export default defineComponent({
       watch(
         () => props.pixelOffset,
         val => {
-          offset.value = makeCartesian2(val) as Cesium.Cartesian3
+          offset.value = makeCartesian2(val) as Cesium.Cartesian2
         }
       )
     )
@@ -78,7 +79,7 @@ export default defineComponent({
       canRender.value = true
       showPortal()
       offset.value = makeCartesian2(props.pixelOffset) as Cesium.Cartesian2
-      position.value = makeCartesian3(props.position, viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
+      position.value = makeCartesian3(props.position!, viewer.scene.globe.ellipsoid) as Cesium.Cartesian3
       viewer.scene.preRender.addEventListener(onPreRender)
       return true
     }
@@ -91,29 +92,31 @@ export default defineComponent({
     }
     const onPreRender = () => {
       const { viewer } = $services
-      const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, {} as any)
-      if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
-        rootStyle.left = canvasPosition.x + offset.value?.x + 'px'
-        rootStyle.top = canvasPosition.y + offset.value?.y + 'px'
+      if (position.value) {
+        const canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position.value, {} as any)
+        if (Cesium.defined(canvasPosition) && !Cesium.Cartesian2.equals(lastCanvasPosition.value, canvasPosition)) {
+          rootStyle.left = canvasPosition.x + offset.value.x + 'px'
+          rootStyle.top = canvasPosition.y + offset.value.y + 'px'
 
-        if (props.autoHidden) {
-          const cameraPosition = viewer.camera.position
-          const cartographicPosition = viewer.scene.globe.ellipsoid.cartesianToCartographic(cameraPosition)
-          if (Cesium.defined(cartographicPosition)) {
-            let cameraHeight = cartographicPosition.height
-            cameraHeight += 1 * viewer.scene.globe.ellipsoid.maximumRadius
-            if (Cesium.Cartesian3.distance(cameraPosition, position.value) > cameraHeight) {
-              rootStyle.display = 'none'
-            } else {
-              rootStyle.display = 'block'
+          if (props.autoHidden) {
+            const cameraPosition = viewer.camera.position
+            const cartographicPosition = viewer.scene.globe.ellipsoid.cartesianToCartographic(cameraPosition)
+            if (Cesium.defined(cartographicPosition)) {
+              let cameraHeight = cartographicPosition.height
+              cameraHeight += 1 * viewer.scene.globe.ellipsoid.maximumRadius
+              if (Cesium.Cartesian3.distance(cameraPosition, position.value) > cameraHeight) {
+                rootStyle.display = 'none'
+              } else {
+                rootStyle.display = 'block'
+              }
             }
+          } else {
+            rootStyle.display = 'block'
           }
-        } else {
-          rootStyle.display = 'block'
         }
-      }
 
-      lastCanvasPosition.value = canvasPosition
+        lastCanvasPosition.value = canvasPosition
+      }
     }
 
     // life cycle

@@ -72,7 +72,7 @@ export default defineComponent({
 
       pickScreenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
       pickScreenSpaceEventHandler.destroy()
-      pickScreenSpaceEventHandler = undefined
+      ;(pickScreenSpaceEventHandler as any) = undefined
 
       return true
     }

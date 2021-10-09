@@ -12,6 +12,8 @@ import {
 import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
+import VcDrawingRegularPolygon from './regular-polygon'
+import VcDrawingRectangle from './rectangle'
 
 interface PointDrawing {
   show: boolean
@@ -30,14 +32,20 @@ interface PolygonDrawing {
 
 interface DrawingInstanceOpts {
   name: string
-  actionRef: Ref<typeof VcFabAction>
+  actionRef: Ref<typeof VcFabAction | null>
   actionOpts: typeof pointActionDefault | typeof polylineActionDefault | typeof polygonActionDefault | typeof clearActionDefault
-  drawingRef: Ref<typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon>
+  drawingRef: Ref<typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon | null>
   drawingOpts: typeof pointDrawingDefault | typeof polylineDrawingDefault | typeof polygonDrawingDefault
   actionStyle?: CSSProperties
   actionClass?: string
   tip?: string
-  cmp: typeof VcDrawingPoint | typeof VcDrawingPolyline | typeof VcDrawingPolygon
+  cmp:
+    | typeof VcDrawingPoint
+    | typeof VcDrawingPolyline
+    | typeof VcDrawingPolygon
+    | typeof VcDrawingRegularPolygon
+    | typeof VcDrawingRectangle
+    | undefined
   isActive: boolean
 }
 

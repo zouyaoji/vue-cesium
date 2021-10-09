@@ -15,7 +15,7 @@ describe('VcViewer', () => {
   test('render test default', async () => {
     const wrapper = mount(VcViewer)
     const vm = wrapper.vm as unknown as VcComponentPublicInstance
-    expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
+    expect(wrapper.find(`.${kebabCase(vm.$options.name || '')}`).exists()).toBe(true)
     await vm.createPromise
     const viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer instanceof Cesium.Viewer).toBe(true)
@@ -66,7 +66,7 @@ describe('VcViewer', () => {
       }
     })
     const vm = wrapper.vm as unknown as VcComponentPublicInstance
-    expect(wrapper.find(`.${kebabCase(vm.$options.name)}`).exists()).toBe(true)
+    expect(wrapper.find(`.${kebabCase(vm.$options.name || '')}`).exists()).toBe(true)
     await vm.createPromise
     let viewer = vm.getCesiumObject() as Cesium.Viewer
     expect(viewer instanceof Cesium.Viewer).toBe(true)

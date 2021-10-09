@@ -1,5 +1,5 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
-import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
+import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, VNode, watch } from 'vue'
 import {
   VcBtn,
   VcTooltip,
@@ -35,17 +35,17 @@ export default defineComponent({
       return
     }
     const { $services } = commonState
-    const rootRef = ref<HTMLElement>(null)
-    const tooltipRef = ref<typeof VcTooltip>(null)
-    const btnRef = ref<typeof VcBtn>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const tooltipRef = ref<typeof VcTooltip | null>(null)
+    const btnRef = ref<typeof VcBtn | null>(null)
     const positioning = ref(false)
     const positionState = usePosition(props, $services)
     const parentInstance = getVcParentInstance(instance)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
-    let datasource: Cesium.CustomDataSource = undefined
-    let amapGeolocation = undefined
+    let datasource: Cesium.CustomDataSource
+    let amapGeolocation: any = undefined
     // watch
     watch(
       () => props,
@@ -81,13 +81,13 @@ export default defineComponent({
         })
       }
 
-      let promiseLoadAmap = undefined
+      let promiseLoadAmap: Promise<unknown> | undefined = undefined
       if (props.amap && props.amap.key) {
         const options = props.amap.options
         promiseLoadAmap = new Promise((resolve, reject) => {
           AMapLoader.load({
-            key: props.amap.key,
-            version: props.amap.version,
+            key: props.amap?.key,
+            version: props.amap?.version,
             plugins: ['AMap.Geolocation']
           })
             .then(Amap => {
@@ -120,7 +120,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -132,7 +132,7 @@ export default defineComponent({
       const { viewer } = $services
       if (amapGeolocation) {
         const scripts = document.getElementsByTagName('script')
-        const removeScripts = []
+        const removeScripts: HTMLScriptElement[] = []
         for (const script of scripts) {
           if (script.src.indexOf('/webapi.amap.com/maps') > -1) {
             removeScripts.push(script)
@@ -148,7 +148,7 @@ export default defineComponent({
         viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
       }
 
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -195,7 +195,7 @@ export default defineComponent({
         amapGeolocation.getCurrentPosition((status, result) => {
           if (status === 'complete') {
             let position: number[] = [result.position.lng, result.position.lat]
-            if (props.amap.transformToWGS84) {
+            if (props.amap?.transformToWGS84) {
               position = gcj02towgs84(position[0], position[1])
             }
             zoomToMyLocation(
@@ -389,6 +389,8 @@ export default defineComponent({
           return VcSpinnerPuff
         case 'tail':
           return VcSpinnerTail
+        default:
+          return VcSpinnerBars
       }
     }
 
@@ -400,7 +402,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const inner = []
+        const inner: VNode[] = []
         inner.push(
           h(VcIcon, {
             name: props.icon,

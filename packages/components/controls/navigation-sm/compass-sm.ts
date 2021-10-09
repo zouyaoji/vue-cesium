@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h } from 'vue'
+import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h, VNode } from 'vue'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
@@ -47,9 +47,9 @@ export default defineComponent({
     const { $services } = commonState
     const compassState = useCompass(props, ctx, instance)
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement>(null)
-    const outerRingRef = ref<HTMLElement>(null)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigationSm'
+    const rootRef = ref<HTMLElement | null>(null)
+    const outerRingRef = ref<HTMLElement | null>(null)
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
     // watch
@@ -105,7 +105,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -118,7 +118,7 @@ export default defineComponent({
       if (!hasVcNavigation) {
         viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
       }
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -134,9 +134,9 @@ export default defineComponent({
       const side = positionState.attach.value
       const outerRingTarget = $(outerRingRef)
       if (outerRingTarget !== void 0) {
-        const clientRect = outerRingTarget.getBoundingClientRect()
-        css.width = `${clientRect.width}px`
-        css.height = `${clientRect.height}px`
+        const clientRect = outerRingTarget?.getBoundingClientRect()
+        css.width = `${clientRect?.width}px`
+        css.height = `${clientRect?.height}px`
 
         if ((side.bottom || side.top) && !side.left && !side.right) {
           css.left = '50%'
@@ -154,7 +154,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        let children = []
+        let children: Array<VNode> = []
         children = hMergeSlot(ctx.slots.default, children)
         children.push(
           h('div', {

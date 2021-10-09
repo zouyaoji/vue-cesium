@@ -1,4 +1,4 @@
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch } from 'vue'
+import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch, VNode } from 'vue'
 import { CameraOption, VcComponentInternalInstance, VcBtnOptions } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
@@ -21,15 +21,18 @@ export default defineComponent({
     instance.cesiumClass = 'VcZoomControl'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
+    if (commonState === undefined) {
+      return
+    }
     const { $services } = commonState
     const zoomControlState = useZoomControl(props, ctx, instance, $services)
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement>(null)
-    const zoomInRef = ref<typeof VcBtn>(null)
-    const zoomResetRef = ref<typeof VcBtn>(null)
-    const zoomOutRef = ref<typeof VcBtn>(null)
+    const rootRef = ref<HTMLElement | null>(null)
+    const zoomInRef = ref<typeof VcBtn | null>(null)
+    const zoomResetRef = ref<typeof VcBtn | null>(null)
+    const zoomOutRef = ref<typeof VcBtn | null>(null)
     const parentInstance = getVcParentInstance(instance)
-    const hasVcNavigation = parentInstance.proxy.$options.name === 'VcNavigation'
+    const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
 
@@ -76,7 +79,7 @@ export default defineComponent({
     instance.mount = async () => {
       updateRootStyle()
       const { viewer } = $services
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'mounted',
         target: $(rootRef)
@@ -90,7 +93,7 @@ export default defineComponent({
         viewerElement.contains($(rootRef)) && viewerElement.removeChild($(rootRef))
       }
 
-      viewer.viewerWidgetResized.raiseEvent({
+      viewer.viewerWidgetResized?.raiseEvent({
         type: instance.cesiumClass,
         status: 'unmounted',
         target: $(rootRef)
@@ -168,27 +171,27 @@ export default defineComponent({
     }
 
     const getContent = (options: VcBtnOptions, type) => {
-      let btnRef = void 0
-      let tooltipRef = void 0
-      let tip = void 0
-      let onClick = void 0
+      let btnRef
+      let tooltipRef
+      let tip
+      let onClick
       if (type === 'zoomIn') {
         btnRef = zoomInRef
         tooltipRef = zoomControlState.zoomInTooltipRef
-        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomInTip')
+        tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomInTip')
         onClick = zoomControlState.zoomIn
       } else if (type === 'zoomOut') {
         btnRef = zoomOutRef
         tooltipRef = zoomControlState.zoomOutTooltipRef
-        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomOutTip')
+        tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomOutTip')
         onClick = zoomControlState.zoomOut
       } else if (type === 'zoomReset') {
         btnRef = zoomResetRef
         tooltipRef = zoomControlState.resetTooltipRef
-        tip = options.tooltip.tip || t('vc.navigation.zoomCotrol.zoomResetTip')
+        tip = options.tooltip?.tip || t('vc.navigation.zoomCotrol.zoomResetTip')
         onClick = zoomControlState.zoomReset
       }
-      const inner = []
+      const inner: Array<VNode> = []
 
       inner.push(
         h(VcIcon, {
@@ -233,7 +236,7 @@ export default defineComponent({
 
     return () => {
       if (canRender.value) {
-        const children = []
+        const children: Array<VNode> = []
         children.push(h('li', null, getContent(zoomInOptions.value, 'zoomIn')))
         if (props.enableResetButton) {
           children.push(h('li', null, getContent(zoomResetOptions.value, 'zoomReset')))

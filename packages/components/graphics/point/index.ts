@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-27 10:47:40
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\point\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
@@ -36,6 +44,6 @@ export default defineComponent({
     instance.cesiumClass = 'PointGraphics'
     useGraphics(props, ctx, instance)
 
-    return () => createCommentVNode(kebabCase(instance.proxy.$options.name))
+    return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })

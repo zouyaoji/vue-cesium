@@ -3,6 +3,7 @@ import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/type
 import CameraFlightPath from '../compass/CameraFlightPath'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import { VcTooltip } from '@vue-cesium/components/ui'
+import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   // state
@@ -11,19 +12,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const newTransformScratch: any = {}
   const centerScratch: any = {}
 
-  let unsubscribeFromPostRender: AnyFunction<void> = undefined
-  let unsubscribeFromClockTick: AnyFunction<void> = undefined
+  let unsubscribeFromPostRender: AnyFunction<void>
+  let unsubscribeFromClockTick: AnyFunction<void>
 
-  let rotateEastMouseUpFunction: AnyFunction<void> = undefined
-  let rotateEastTickFunction: AnyFunction<void> = undefined
+  let rotateEastMouseUpFunction: AnyFunction<void>
+  let rotateEastTickFunction: AnyFunction<void>
 
   const heading = ref(0)
 
   let isrotateEasting = false
   let rotateEastLastTimestamp = 0
 
-  let rotateMouseUpFunction: AnyFunction<void> = undefined
-  let rotateMouseMoveFunction: AnyFunction<void> = undefined
+  let rotateMouseUpFunction: AnyFunction<void>
+  let rotateMouseMoveFunction: AnyFunction<void>
   let isRotating = false
   let rotateInitialCursorAngle = 0
   let rotateFrame: any = {}
@@ -33,19 +34,19 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   let screenSpaceEventHandler: Cesium.ScreenSpaceEventHandler
 
-  let tiltMouseMoveFunction: AnyFunction<void> = undefined
-  let tiltMouseUpFunction: AnyFunction<void> = undefined
+  let tiltMouseMoveFunction: AnyFunction<void>
+  let tiltMouseUpFunction: AnyFunction<void>
   let isTilting = false
   let tiltFrame: any = {}
   let tiltInitialCursorAngle = 0
   const tiltbarLeft = ref(56)
   const tiltbarTop = ref(3)
-  let clickStartPosition = undefined
+  let clickStartPosition
 
-  const tooltipRef = ref<typeof VcTooltip>(null)
+  const tooltipRef = ref<typeof VcTooltip | null>(null)
 
   // methods
-  const handleMouseDown = (e: MouseEvent | TouchEvent) => {
+  const handleMouseDown = (e: Event) => {
     if (e.stopPropagation) e.stopPropagation()
     if (e.preventDefault) e.preventDefault()
 
@@ -162,8 +163,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         camera: viewer.camera,
         status: 'start'
       })
-    const rotateFrame = Transforms.eastNorthUpToFixedFrame(center, viewer.scene.globe.ellipsoid)
-    const lookVector = Cartesian3.subtract(center, camera.position, new Cartesian3())
+    const rotateFrame = Transforms.eastNorthUpToFixedFrame(center || new Cartesian3(), viewer.scene.globe.ellipsoid)
+    const lookVector = Cartesian3.subtract(center || new Cartesian3(), camera.position, new Cartesian3())
     const flight = CameraFlightPath.createTween(scene, {
       destination: Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0.0, 0.0, Cartesian3.magnitude(lookVector)), new Cartesian3()),
       direction: Matrix4.multiplyByPointAsVector(rotateFrame, new Cartesian3(0.0, 0.0, -1.0), new Cartesian3()),
@@ -195,7 +196,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (defined(vcInstance.viewer)) {
       if (unsubscribeFromPostRender) {
         unsubscribeFromPostRender()
-        unsubscribeFromPostRender = undefined
+        ;(unsubscribeFromPostRender as any) = undefined
       }
 
       unsubscribeFromPostRender = vcInstance.viewer.scene.postRender.addEventListener(function () {
@@ -206,7 +207,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     } else {
       if (unsubscribeFromPostRender) {
         unsubscribeFromPostRender()
-        unsubscribeFromPostRender = undefined
+        ;(unsubscribeFromPostRender as any) = undefined
       }
     }
   }
@@ -249,8 +250,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       vcInstance.viewer.clock.onTick.removeEventListener(rotateEastTickFunction)
     }
 
-    rotateEastMouseUpFunction = undefined
-    rotateEastTickFunction = undefined
+    ;(rotateEastMouseUpFunction as any) = undefined
+    ;(rotateEastTickFunction as any) = undefined
 
     isrotateEasting = true
     rotateEastLastTimestamp = getTimestamp()
@@ -331,8 +332,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       isrotateEasting = false
       screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
       defined(rotateEastTickFunction) && vcInstance.viewer.clock.onTick.removeEventListener(rotateEastTickFunction)
-      rotateEastMouseUpFunction = undefined
-      rotateEastTickFunction = undefined
+      ;(rotateEastMouseUpFunction as any) = undefined
+      ;(rotateEastTickFunction as any) = undefined
 
       listener &&
         emit('compassEvt', {
@@ -368,8 +369,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     document.removeEventListener('mouseup', rotateMouseUpFunction, false)
     document.removeEventListener('touchend', rotateMouseUpFunction, false)
     const { Cartesian2, Cartesian3, defined, Math: CesiumMath, Matrix4, Ray, Transforms } = Cesium
-    rotateMouseMoveFunction = undefined
-    rotateMouseUpFunction = undefined
+    ;(rotateMouseMoveFunction as any) = undefined
+    ;(rotateMouseUpFunction as any) = undefined
 
     const listener = getInstanceListener(vcInstance, 'compassEvt')
     listener &&
@@ -394,7 +395,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = true
     } else {
-      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch)
+      rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter || new Cartesian3(), scene.globe.ellipsoid, newTransformScratch)
       rotateIsLook = false
     }
 
@@ -441,9 +442,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       document.removeEventListener('touchmove', rotateMouseMoveFunction, false)
       document.removeEventListener('mouseup', rotateMouseUpFunction, false)
       document.removeEventListener('touchend', rotateMouseUpFunction, false)
-
-      rotateMouseMoveFunction = undefined
-      rotateMouseUpFunction = undefined
+      ;(rotateMouseMoveFunction as any) = undefined
+      ;(rotateMouseUpFunction as any) = undefined
 
       listener &&
         emit('compassEvt', {
@@ -465,8 +465,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     // Remove existing event handlers, if any.
     screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE)
     screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
-    tiltMouseMoveFunction = undefined
-    tiltMouseUpFunction = undefined
+    ;(tiltMouseMoveFunction as any) = undefined
+    ;(tiltMouseUpFunction as any) = undefined
     tiltInitialCursorAngle = CesiumMath.PI_OVER_TWO - Math.atan2(-cursorVector.y, cursorVector.x)
     tiltInitialCursorAngle = tiltInitialCursorAngle < 0 ? 0 : tiltInitialCursorAngle
     tiltInitialCursorAngle = tiltInitialCursorAngle > CesiumMath.PI_OVER_TWO ? CesiumMath.PI_OVER_TWO : tiltInitialCursorAngle
@@ -493,7 +493,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         target: compassElement
       })
 
-    defined(pickPosition) && (tiltFrame = Transforms.eastNorthUpToFixedFrame(pickPosition, scene.globe.ellipsoid))
+    isObject(pickPosition) && defined(pickPosition) && (tiltFrame = Transforms.eastNorthUpToFixedFrame(pickPosition, scene.globe.ellipsoid))
     tiltMouseMoveFunction = e => {
       isTilting = true
       const compassRectangle = compassElement.getBoundingClientRect()
@@ -531,8 +531,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       isTilting = false
       screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE)
       screenSpaceEventHandler.removeInputAction(ScreenSpaceEventType.LEFT_UP)
-      tiltMouseMoveFunction = undefined
-      tiltMouseUpFunction = undefined
+      ;(tiltMouseMoveFunction as any) = undefined
+      ;(tiltMouseUpFunction as any) = undefined
       listener &&
         emit('compassEvt', {
           type: 'tilt',

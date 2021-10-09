@@ -14,14 +14,14 @@ export const useAnchorProps = {
   contextMenu: Boolean
 }
 
-export default function({
+export default function ({
   showing,
   avoidEmit, // required for VcPopupProxy (true)
   configureAnchorEl // optional
 }) {
-  const { props, proxy, emit } = getCurrentInstance()
+  const { props, proxy, emit } = getCurrentInstance()!
 
-  const anchorEl = ref(null)
+  const anchorEl = ref<HTMLElement>(null!)
 
   let touchTimer
 
@@ -37,11 +37,11 @@ export default function({
 
     Object.assign(anchorEvents, {
       hide(evt) {
-        (proxy as any).hide(evt)
+        ;(proxy as any).hide(evt)
       },
 
       toggle(evt) {
-        (proxy as any).toggle(evt)
+        ;(proxy as any).toggle(evt)
       },
 
       toggleKey(evt) {
@@ -49,9 +49,9 @@ export default function({
       },
 
       contextClick(evt) {
-        (proxy as any).hide(evt)
+        ;(proxy as any).hide(evt)
         nextTick(() => {
-          (proxy as any).show(evt)
+          ;(proxy as any).show(evt)
         })
         prevent(evt)
       },
@@ -65,8 +65,8 @@ export default function({
           return
         }
 
-        (proxy as any).hide(evt)
-        anchorEl.value.classList.add('non-selectable')
+        ;(proxy as any).hide(evt)
+        anchorEl.value?.classList.add('non-selectable')
 
         const target = getTouchTarget(evt.target)
         addEvt(anchorEvents, 'anchor', [
@@ -77,7 +77,7 @@ export default function({
         ])
 
         touchTimer = setTimeout(() => {
-          (proxy as any).show(evt)
+          ;(proxy as any).show(evt)
         }, 300)
       },
 
@@ -91,7 +91,7 @@ export default function({
       }
     })
 
-    configureAnchorEl = function(context = props.contextMenu) {
+    configureAnchorEl = function (context = props.contextMenu) {
       if (props.noParentEvent === true || anchorEl.value === null) {
         return
       }
@@ -125,16 +125,16 @@ export default function({
   function setAnchorEl(el) {
     anchorEl.value = el
     while (anchorEl.value.classList.contains('vc-anchor--skip')) {
-      anchorEl.value = anchorEl.value.parentNode
+      ;(anchorEl.value as any) = anchorEl.value.parentNode
     }
     configureAnchorEl()
   }
 
   function pickAnchorEl() {
     if (props.target === false || props.target === '') {
-      anchorEl.value = null
+      anchorEl.value = null!
     } else if (props.target === true) {
-      setAnchorEl(proxy.$el.parentNode)
+      setAnchorEl(proxy?.$el.parentNode)
     } else {
       let el = props.target as any
 
@@ -150,7 +150,7 @@ export default function({
         anchorEl.value = el.$el || el
         configureAnchorEl()
       } else {
-        anchorEl.value = null
+        anchorEl.value = null!
         console.error(`Anchor: target "${props.target}" not found`)
       }
     }

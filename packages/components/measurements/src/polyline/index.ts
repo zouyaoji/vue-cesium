@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, toRef } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, toRef, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive } from '@vue-cesium/components/primitives'
@@ -32,11 +32,11 @@ export default defineComponent({
     const { $services } = commonState
     const { emit } = ctx
     const drawTip = toRef(props, 'drawtip')
-    drawTip.value.drawTip1 = drawTip.value.drawingTip1 || t('vc.measurement.polyline.drawTip1')
-    drawTip.value.drawTip2 = drawTip.value.drawingTip2 || t('vc.measurement.polyline.drawTip2')
-    drawTip.value.drawTip3 = drawTip.value.drawingTip3 || t('vc.measurement.polyline.drawTip3')
+    ;(drawTip.value as any).drawTip1 = drawTip.value?.drawingTip1 || t('vc.measurement.polyline.drawTip1')
+    ;(drawTip.value as any).drawTip2 = drawTip.value?.drawingTip2 || t('vc.measurement.polyline.drawTip2')
+    ;(drawTip.value as any).drawTip3 = drawTip.value?.drawingTip3 || t('vc.measurement.polyline.drawTip3')
     const polylineDrawingState = usePolylineDrawing(props, $services, drawTip.value, ctx)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
     const { onVcCollectionPointReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
@@ -44,14 +44,18 @@ export default defineComponent({
       const { Cartesian3, createGuid } = Cesium
       const polylines: Array<PolylineMeasurementDrawing> = []
       polylineDrawingState.polylines.value.forEach((polyline, index) => {
-        const labels = []
-        const distances = []
-        const angles = []
+        const labels: Array<{
+          text: string | undefined
+          position: Cesium.Cartesian3
+          id: string
+        }> = []
+        const distances: number[] = []
+        const angles: number[] = []
         let distance = 0
         const positions = polyline.positions
         for (let i = 0; i < positions.length - 1; i++) {
           let s = 0
-          if (props.polylineOpts.arcType === 0) {
+          if (props.polylineOpts?.arcType === 0) {
             s = getGeodesicDistance(positions[i], positions[i + 1], $services.viewer.scene.globe.ellipsoid)
           } else {
             s = Cartesian3.distance(positions[i], positions[i + 1])
@@ -60,7 +64,7 @@ export default defineComponent({
           distance = distance + s
           if (s > 0 && positions.length > 2) {
             labels.push({
-              text: MeasureUnits.distanceToString(s, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+              text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
               ...props.labelsOpts
@@ -78,7 +82,7 @@ export default defineComponent({
             }
             angles.push(angle)
             labels.push({
-              text: MeasureUnits.angleToString(angle, props.measureUnits.angleUnits, props.locale, props.decimals.angle),
+              text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
               position: point1,
               id: createGuid(),
               ...props.labelsOpts
@@ -86,7 +90,7 @@ export default defineComponent({
           }
         }
         labels.push({
-          text: MeasureUnits.distanceToString(distance, props.measureUnits.distanceUnits, props.locale, props.decimals.distance),
+          text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
           position: positions[positions.length - 1],
           id: createGuid(),
           ...props.labelOpts
@@ -123,9 +127,9 @@ export default defineComponent({
 
       if (defined(result)) {
         const { measurementVm, selectedMeasurementOption, viewer } = $services
-        if (defined(result.position)) {
-          if (result.type !== 'new') {
-            ;(measurementVm.proxy as any).editingMeasurementName = undefined
+        if (defined(result?.position)) {
+          if (result?.type !== 'new') {
+            ;(measurementVm?.proxy as any).editingMeasurementName = undefined
             polylineDrawingState.canShowDrawTip.value = defined(selectedMeasurementOption)
           }
           nextTick(() => {
@@ -136,14 +140,14 @@ export default defineComponent({
                 {
                   name: 'polyline'
                 },
-                polylinesRender.value[result.index]
+                polylinesRender.value[result?.index]
               ),
               viewer
             )
           })
         } else {
-          const measurementsOption = (measurementVm.proxy as any).measurementsOptions.find(v => v.name === 'polyline')
-          ;(measurementVm.proxy as any).toggleAction(measurementsOption)
+          const measurementsOption = (measurementVm?.proxy as any).measurementsOptions.find(v => v.name === 'polyline')
+          ;(measurementVm?.proxy as any).toggleAction(measurementsOption)
         }
       }
     }
@@ -153,7 +157,7 @@ export default defineComponent({
       const { defined } = Cesium
       if (defined(result)) {
         const { viewer } = $services
-        if (defined(result.position)) {
+        if (defined(result?.position)) {
           nextTick(() => {
             emit(
               'measureEvt',
@@ -162,7 +166,7 @@ export default defineComponent({
                 {
                   name: 'polyline'
                 },
-                polylinesRender.value[result.index]
+                polylinesRender.value[result?.index]
               ),
               viewer
             )
@@ -176,7 +180,7 @@ export default defineComponent({
       const result = polylineDrawingState.handleDoubleClick(movement)
       const { defined } = Cesium
       if (defined(result)) {
-        if (defined(result.position)) {
+        if (defined(result?.position)) {
           nextTick(() => {
             emit(
               'measureEvt',
@@ -185,13 +189,13 @@ export default defineComponent({
                 {
                   name: 'polyline'
                 },
-                polylinesRender.value[result.index]
+                polylinesRender.value[result?.index]
               ),
               viewer
             )
 
             if (props.mode === 1) {
-              ;(measurementVm.proxy as any).toggleAction(selectedMeasurementOption)
+              ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
             }
           })
         }
@@ -215,11 +219,11 @@ export default defineComponent({
       cesiumObject._vcId = 'VcMeasurementPolyline'
     }
 
-    const onEditorClick = function (e) {
+    const onEditorClick = function (this, e) {
       polylineDrawingState.onEditorClick.bind(this)(e)
       if (e === 'move' || e === 'insert') {
         const { measurementVm } = $services
-        ;(measurementVm.proxy as any).editingMeasurementName = 'polyline'
+        ;(measurementVm?.proxy as any).editingMeasurementName = 'polyline'
       }
     }
 
@@ -238,7 +242,7 @@ export default defineComponent({
             ? Cartesian2.clone(positionWindow, {} as any)
             : Cartesian2.fromElements(Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, {} as any)
           let startY = startPositionWindow.y
-          const primitiveCollection = primitiveCollectionRef.value.cesiumObject as Cesium.PrimitiveCollection
+          const primitiveCollection = primitiveCollectionRef.value?.cesiumObject as Cesium.PrimitiveCollection
           const labelCollection: Array<Cesium.LabelCollection> = (primitiveCollection as any)._primitives.filter(
             v => v instanceof Cesium.LabelCollection
           )
@@ -282,12 +286,12 @@ export default defineComponent({
       const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
 
       const polylineOpts = {
-        width: props.polylineOpts.width,
+        width: props.polylineOpts?.width,
         vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-        ellipsoid: defaultValue(props.polylineOpts.ellipsoid, Ellipsoid.WGS84),
-        arcType: props.polylineOpts.arcType
+        ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84),
+        arcType: props.polylineOpts?.arcType
       }
-      const children = []
+      const children: Array<VNode> = []
       polylinesRender.value.forEach((polyline, index) => {
         if (polyline.positions.length > 1) {
           // polyline
@@ -298,10 +302,10 @@ export default defineComponent({
                 show: polyline.show,
                 enableMouseEvent: props.enableMouseEvent,
                 appearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.material) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
                 }),
                 depthFailAppearance: new PolylineMaterialAppearance({
-                  material: makeMaterial.call(instance, props.polylineOpts.depthFailMaterial) as Cesium.Material
+                  material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
                 }),
                 asynchronous: false
               },
@@ -348,14 +352,14 @@ export default defineComponent({
         )
       })
 
-      if (props.drawtip.show && polylineDrawingState.canShowDrawTip.value) {
+      if (props.drawtip?.show && polylineDrawingState.canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
             VcOverlayHtml,
             {
               position: polylineDrawingState.drawTipPosition.value,
-              pixelOffset: props.drawtip.pixelOffset,
+              pixelOffset: props.drawtip?.pixelOffset,
               teleport: {
                 to: viewer.container
               }
@@ -373,7 +377,7 @@ export default defineComponent({
       }
 
       if (polylineDrawingState.showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (polylineDrawingState.mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

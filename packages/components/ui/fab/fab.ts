@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, provide, getCurrentInstance, ExtractPropTypes } from 'vue'
+import { h, defineComponent, ref, computed, provide, getCurrentInstance, ExtractPropTypes, VNode } from 'vue'
 import useModelToggle, { useModelToggleEmits } from '@vue-cesium/composables/private/use-model-toggle'
 import { hSlot, hMergeSlot } from '@vue-cesium/utils/private/render'
 import { fabKey } from '@vue-cesium/utils/config'
@@ -15,7 +15,7 @@ export default defineComponent({
   emits: useModelToggleEmits,
 
   setup(props: ExtractPropTypes<typeof defaultProps>, { slots }) {
-    const triggerRef = ref(null)
+    const triggerRef = ref<typeof VcBtn>(null!)
 
     const showing = ref(props.modelValue === true)
     const { formClass, labelProps } = useFab(props, showing)
@@ -37,7 +37,7 @@ export default defineComponent({
     const actionClass = computed(() => 'vc-fab__actions flex no-wrap inline' + ` vc-fab__actions--${props.direction}`)
 
     function getTriggerContent() {
-      const child = []
+      const child: Array<VNode> = []
 
       props.hideIcon !== true &&
         child.push(

@@ -1,6 +1,14 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:02
+ * @LastEditTime: 2021-10-02 10:54:02
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\private\portal.ts
+ */
 import { getParentVm } from './vm'
 
-export const portalList = []
+export const portalList: Array<any> = []
 
 export function getPortalVm(el) {
   return portalList.find(vm => vm.__vcPortalInnerRef.value !== null && vm.__vcPortalInnerRef.value.contains(el))

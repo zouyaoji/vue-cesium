@@ -1,5 +1,5 @@
-import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted } from 'vue'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { defineComponent, getCurrentInstance, ref, h, nextTick, watch, onUnmounted, WatchStopHandle, VNode } from 'vue'
+import { AnyObject, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { DrawStatus } from '@vue-cesium/shared'
@@ -34,11 +34,11 @@ export default defineComponent({
     const drawTip = ref('')
     const showEditor = ref(false)
     const editorPosition = ref<Array<number> | Cesium.Cartesian3>([0, 0, 0])
-    const mouseoverPoint = ref(null)
-    const editingPoint = ref(null)
-    const primitiveCollectionRef = ref<VcComponentPublicInstance>(null)
-    let restorePoint = undefined
-    let unwatchFns = []
+    const mouseoverPoint = ref<any>(null)
+    const editingPoint = ref<any>(null)
+    const primitiveCollectionRef = ref<VcComponentPublicInstance | null>(null)
+    let restorePoint
+    let unwatchFns: Array<WatchStopHandle> = []
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
     const { onVcCollectionPointReady } = useCustomUpdate()
@@ -50,7 +50,7 @@ export default defineComponent({
         val => {
           const { drawingVm, selectedDrawingOption } = $services
           if (val && selectedDrawingOption?.name === 'point') {
-            ;(drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+            ;(drawingVm?.proxy as any).toggleAction(selectedDrawingOption)
           }
         }
       )
@@ -72,7 +72,7 @@ export default defineComponent({
       points.value.push(point)
       drawStatus.value = DrawStatus.Drawing
       canShowDrawTip.value = true
-      drawTip.value = props.drawtip.drawingTip1 || t('vc.drawing.point.drawTip1')
+      drawTip.value = props.drawtip?.drawingTip1 || t('vc.drawing.point.drawTip1')
     }
 
     const stop = () => {
@@ -88,8 +88,8 @@ export default defineComponent({
       const { viewer, drawingVm, getWorldPosition, selectedDrawingOption } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const drawingsOption = (drawingVm.proxy as any).drawingsOptions.find(v => v.name === 'point')
-        ;(drawingVm.proxy as any).toggleAction(drawingsOption)
+        const drawingsOption = (drawingVm?.proxy as any).drawingsOptions.find(v => v.name === 'point')
+        ;(drawingVm?.proxy as any).toggleAction(drawingsOption)
         return
       }
 
@@ -101,12 +101,12 @@ export default defineComponent({
       const point: PointDrawing = points.value[index]
 
       if (options.button === 2 && editingPoint.value) {
-        ;(drawingVm.proxy as any).editingDrawingName = undefined
+        ;(drawingVm?.proxy as any).editingDrawingName = undefined
         points.value[index] = restorePoint
         drawStatus.value = DrawStatus.AfterDraw
         points.value[index].drawStatus = DrawStatus.AfterDraw
         editingPoint.value = undefined
-        drawTip.value = props.drawtip.drawTip1 || t('vc.drawing.point.drawTip1')
+        drawTip.value = props.drawtip?.drawTip1 || t('vc.drawing.point.drawTip1')
         return
       }
 
@@ -128,7 +128,7 @@ export default defineComponent({
         point.show = true
         point.drawStatus = DrawStatus.AfterDraw
         drawStatus.value = DrawStatus.AfterDraw
-        drawTip.value = props.drawtip.drawingTip1 || t('vc.drawing.point.drawTip1')
+        drawTip.value = props.drawtip?.drawingTip1 || t('vc.drawing.point.drawTip1')
 
         nextTick(() => {
           emit(
@@ -151,12 +151,12 @@ export default defineComponent({
 
         if (editingPoint.value) {
           editingPoint.value = undefined
-          ;(drawingVm.proxy as any).editingDrawingName = undefined
+          ;(drawingVm?.proxy as any).editingDrawingName = undefined
           canShowDrawTip.value = false
           type = editorType
         } else {
           if (props.mode === 1) {
-            ;(drawingVm.proxy as any).toggleAction(selectedDrawingOption)
+            ;(drawingVm?.proxy as any).toggleAction(selectedDrawingOption)
           }
         }
 
@@ -237,7 +237,7 @@ export default defineComponent({
     const onMouseoverPoints = e => {
       const { drawingHandlerActive, viewer } = $services
       if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.5
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
         removeTimeout()
         registerTimeout(() => {
           mouseoverPoint.value = e.pickedFeature.primitive
@@ -245,7 +245,7 @@ export default defineComponent({
           showEditor.value = true
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
-        }, props.editorOpts.delay)
+        }, props.editorOpts?.delay)
       }
 
       emit(
@@ -262,13 +262,13 @@ export default defineComponent({
     const onMouseoutPoints = e => {
       const { viewer, selectedDrawingOption } = $services
       if (props.editable) {
-        e.pickedFeature.primitive.pixelSize = props.pointOpts.pixelSize * 1.0
+        e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
         removeTimeout()
         registerTimeout(() => {
           editorPosition.value = [0, 0, 0]
           mouseoverPoint.value = undefined
           showEditor.value = false
-        }, props.editorOpts.hideDelay)
+        }, props.editorOpts?.hideDelay)
         selectedDrawingOption && (canShowDrawTip.value = true)
       }
 
@@ -291,10 +291,10 @@ export default defineComponent({
       removeTimeout()
       registerTimeout(() => {
         editorPosition.value = [0, 0, 0]
-        mouseoverPoint.value.pixelSize = props.pointOpts.pixelSize * 1.0
+        mouseoverPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
         mouseoverPoint.value = undefined
         showEditor.value = false
-      }, props.editorOpts.hideDelay)
+      }, props.editorOpts?.hideDelay)
     }
 
     const onEditorClick = e => {
@@ -312,7 +312,7 @@ export default defineComponent({
         editingPoint.value = mouseoverPoint.value
         canShowDrawTip.value = true
         restorePoint = Object.assign({}, points.value[editingPoint.value._vcPolylineIndx])
-        ;(drawingVm.proxy as any).editingDrawingName = 'point'
+        ;(drawingVm?.proxy as any).editingDrawingName = 'point'
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         points.value.splice(index, 1)
@@ -352,8 +352,8 @@ export default defineComponent({
     return () => {
       const { createGuid } = Cesium
 
-      const children = []
-      const pointsRender = []
+      const children: Array<VNode> = []
+      const pointsRender: Array<AnyObject> = []
       points.value.forEach((point, index) => {
         pointsRender.push({
           show: point.show,
@@ -373,14 +373,14 @@ export default defineComponent({
         })
       )
 
-      if (props.drawtip.show && canShowDrawTip.value) {
+      if (props.drawtip?.show && canShowDrawTip.value) {
         const { viewer } = $services
         children.push(
           h(
             VcOverlayHtml,
             {
               position: drawTipPosition.value,
-              pixelOffset: props.drawtip.pixelOffset,
+              pixelOffset: props.drawtip?.pixelOffset,
               teleport: {
                 to: viewer.container
               }
@@ -398,7 +398,7 @@ export default defineComponent({
       }
 
       if (showEditor.value) {
-        const buttons = []
+        const buttons: Array<VNode> = []
         if (mouseoverPoint.value) {
           const editorOpts = props.editorOpts
           for (const key in editorOpts) {

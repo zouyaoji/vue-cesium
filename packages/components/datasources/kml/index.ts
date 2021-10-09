@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-09-16 09:28:13
+ * @LastEditTime: 2021-09-26 16:20:44
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\datasources\kml\index.ts
+ */
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources, useVueCesium } from '@vue-cesium/composables'
@@ -48,12 +56,12 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       const options: any = datasourcesState.transformProps(props)
       if (!options.camera) {
-        options.camera = vc.viewer.camera
+        options.camera = vc?.viewer.camera
       }
       if (!options.canvas) {
-        options.canvas = vc.viewer.canvas
+        options.canvas = vc?.viewer.canvas
       }
-      return Cesium.KmlDataSource.load(props.data, options)
+      return Cesium.KmlDataSource.load(props.data || '', options)
     }
 
     return () =>
@@ -61,11 +69,11 @@ export default defineComponent({
         ? h(
             'i',
             {
-              class: kebabCase(instance.proxy.$options.name),
+              class: kebabCase(instance.proxy?.$options.name || ''),
               style: { display: 'none !important' }
             },
             hSlot(ctx.slots.default)
           )
-        : createCommentVNode(kebabCase(instance.proxy.$options.name))
+        : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
