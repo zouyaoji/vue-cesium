@@ -13,6 +13,7 @@ import { setConfig } from '@vue-cesium/utils/config'
 import { LocaleInjectionKey, localeProviderMaker } from '@vue-cesium/composables'
 import Viewer from './src'
 import useLog from '@vue-cesium/composables/private/use-log'
+import { version } from '../../vue-cesium/version'
 const logger = useLog(undefined!)
 
 Viewer.install = (app: App, opts: InstallOptions): void => {
@@ -35,7 +36,7 @@ Viewer.install = (app: App, opts: InstallOptions): void => {
   app.component(Viewer.name, Viewer)
 
   if (process.env.NODE_ENV === 'development') {
-    logger.capsule('VueCesium', `v${option.version}`)
+    logger.capsule('VueCesium', `v${version}`)
     logger.success('VueCesium  https://github.com/zouyaoji/vue-cesium')
     logger.success('Document  https://zouyaoji.top/vue-cesium')
     logger.success(`If you like it, give it a star reward, ^_^`)

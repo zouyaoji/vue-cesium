@@ -4,11 +4,9 @@ const hasSymbol = typeof Symbol === 'function' && typeof Symbol.toStringTag === 
 export interface InstallOptions {
   cesiumPath?: string
   accessToken?: string
-  lang?: any
   i18n?: (...args: any[]) => string
   scriptPromise?: Promise<unknown>
   viewerUnloadingPromise?: Promise<boolean>
-  version?: string
   cfg?: AnyObject
   locale?: any
 }
