@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-06-13 16:48:20
+ * @LastEditTime: 2021-10-08 13:50:32
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\post-processes\vc-post-process-stage-scan.md
+-->
+
 ## VcPostProcessStageScan
 
 通过后期处理封装的扫描特效，雷达扫描和圆形扫描。
@@ -10,7 +19,7 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="onViewerReady" :sceneMode="2">
+  <vc-viewer @ready="onViewerReady">
     <vc-post-process-stage-scan ref="radar" type="radar" :options="options1"></vc-post-process-stage-scan>
     <vc-post-process-stage-scan ref="circle" type="circle" :options="options2"></vc-post-process-stage-scan>
     <!-- 底图 -->
@@ -48,6 +57,7 @@
     },
     methods: {
       onViewerReady({ viewer }) {
+        window.viewer = viewer
         viewer.scene.globe.depthTestAgainstTerrain = true
         viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(117.237124, 31.809777, 10000.0),

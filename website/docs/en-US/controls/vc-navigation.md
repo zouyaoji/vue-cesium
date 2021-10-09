@@ -36,6 +36,9 @@ Basic usage of VcNavigation component.
       @distanceLegendEvt="onNavigationEvt"
     >
     </vc-navigation>
+    <vc-layer-imagery>
+      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+    </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="load">Load</el-button>

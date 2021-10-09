@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-31 16:26:50
- * @LastEditTime: 2021-09-09 17:44:02
+ * @LastEditTime: 2021-10-08 11:24:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\entry.js
@@ -43,8 +43,8 @@ const router = createRouter({
 })
 app.use(ElementPlus)
 app.use(VueCesium, {
-  // cesiumPath: process.env.NODE_ENV === 'development' ? './CesiumUnminified/Cesium.js' : './Cesium/Cesium.js',
-  // cesiumPath: 'https://unpkg.com/cesium@latest/Build/CesiumUnminified/Cesium.js',
+  cesiumPath:
+    process.env.NODE_ENV === 'development' ? './CesiumUnminified/Cesium.js' : 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
   accessToken:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })
