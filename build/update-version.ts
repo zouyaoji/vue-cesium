@@ -3,8 +3,8 @@ import path from 'path'
 import fs from 'fs'
 import { vcRoot } from './paths'
 
-const tagVersion = process.env.TAG_VERSION || 'v3.0.1-beta15'
-const gitHead = process.env.GIT_HEAD || 'asd'
+const tagVersion = process.env.TAG_VERSION
+const gitHead = process.env.GIT_HEAD
 if (!tagVersion || !gitHead) {
   console.log(chalk.red('No tag version or git head were found, make sure that you set the environment variable $TAG_VERSION \n'))
   process.exit(1)

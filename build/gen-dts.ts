@@ -12,8 +12,6 @@ console.log('TSCONFIG_PATH', TSCONFIG_PATH)
  * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
  */
 const genVueTypes = async (root: string, outDir = path.resolve(__dirname, '../dist/types')) => {
-  console.log('outDir', outDir)
-  console.log('baseUrl', path.resolve(__dirname, '../'))
   const project = new Project({
     compilerOptions: {
       allowJs: true,
