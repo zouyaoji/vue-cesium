@@ -22,7 +22,9 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
 
   const viewerRef = ref<HTMLElement>(null!)
   const isReady = ref(false)
-  const $vc = vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions
+  const $vc = (vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions) || {
+    cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+  }
   const vcMitt: Emitter<VcMittEvents> = mitt()
   const { emit } = ctx
 
