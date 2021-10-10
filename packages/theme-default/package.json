@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/theme-default",
-  "version": "3.0.1-beta.7",
+  "version": "3.0.2-beta.1",
   "description": "VueCesium default theme.",
   "main": "index.js",
   "module": "index.js",

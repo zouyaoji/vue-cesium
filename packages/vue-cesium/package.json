@@ -1,6 +1,6 @@
 {
   "name": "vue-cesium",
-  "version": "v3.0.1-beta15",
+  "version": "3.0.2-beta.1",
   "description": "Vue 3.x components for CesiumJS.",
   "author": "zouyaoji <370681295@qq.com>",
   "homepage": "https://github.com/zouyaoji/vue-cesium#readme",

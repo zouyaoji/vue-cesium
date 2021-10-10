@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/utils",
-  "version": "3.0.1-beta.13",
+  "version": "3.0.2-beta.1",
   "description": "VueCesium utils.",
   "main": "index.js",
   "module": "index.js",
