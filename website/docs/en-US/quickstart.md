@@ -1,142 +1,119 @@
 ## Quick start
 
-This part walks you through the process of using VueCesium in a webpack project.
+This section describes how to use VueCesium in your project.
 
-### Use Starter Kit
+### Using components
 
-We provide a general [project template](https://github.com/zouyaoji/vue-cesium-starter) for you, and also a [Vite template](https://github.com/zouyaoji/vue-cesium-vite-starter), and a [Vite electron template](https://github.com/zouyaoji/vue-cesium-electron-vite-starter).
+### Full import
 
-If you prefer not to use them, please read the following.
+> main.ts
 
-### Import VueCesium
-
-You can import VueCesium entirely, or just import what you need. Let's start with fully import.
-
-#### Fully import
-
-In main.js:
-
-```javascript
+```typescript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
-import 'vue-cesium/lib/theme-default/index.css'
+import 'vue-cesium/dist/index.css'
 import App from './App.vue'
 
 const app = createApp(App)
+
 app.use(VueCesium)
 app.mount('#app')
 ```
 
-The above imports VueCesium entirely. Note that CSS file needs to be imported separately.
+### Import on demand
 
-#### On demand
+`VueCesium` provides out of box [Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
+functionalities based on ES Module.
 
-With the help of [babel-plugin-import](https://github.com/ant-design/babel-plugin-import), we can import components we actually need, making the project smaller than otherwise.
+> App.vue
 
-Firstly，install babel-plugin-import:
+```html
+<template>
+  <vc-viewer></vc-viewer>
+</template>
+<script>
+  import { defineComponent } from 'vue'
+  import { VcViewer } from 'vue-cesium'
 
-```bash
-$ npm install babel-plugin-import -D
+  export default defineComponent({
+    name: 'app'
+    components: {
+      VcViewer
+    }
+  })
+</script>
 ```
 
-or if you use Yarn as package manager
+### Import stylesheets
 
-```bash
-$ yarn add babel-plugin-import -D
+It is **strongly recommended** that you import the **bundled stylesheet file**, even
+though this could increase the final output bundle size, but it requires no
+packaging plugins for bundling, you can use
+[CDN](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/) to load your stylesheet
+which would be much more faster than hosting the file on your own server.
+
+Import via JavaScript
+
+```typescript
+import 'vue-cesium/dist/index.css'
 ```
 
-Then edit babel.config.js:
+Import via HTML `head` tag.
 
-```js
-module.exports = {
-  plugins: [
-    [
-      'import',
-      {
-        libraryName: 'vue-cesium'
-      }
-    ]
-  ]
-}
+```html
+<!-- index.html -->
+<head>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+</head>
 ```
 
-Next, if you need Viewer, edit main.js:
+### Using Starter Kit
 
-```javascript
-import { createApp } from 'vue'
-import { VcViewer } from 'vue-cesium'
-import App from './App.vue'
+We provide a general [Project Template](https://github.com/zouyaoji/vue-cesium-starter),
+also a [Vite Template](https://github.com/zouyaoji/vue-cesium-vite-starter).
+For Electron users we have a [Electron Template](https://github.com/zouyaoji/vue-cesium-electron-vite-starter).
 
-const app = createApp(App)
-app.component(VcViewer.name, VcViewer)
+### Global configuration
 
-/* or
- * app.use(VcViewer)
- */
+When registering VueCesium, you can pass a global config object with `cesiumPath`, `accessToken` and `locale`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, support loading the official version of Cesium or a third-party version developed based on Cesium, **Note:** Please use the files in the Build directory. And `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. `locale` is used for internationalized languages. For details, see the next section of the document.
 
-app.mount('#app')
-```
-
-Full example (Component list [reference](https://github.com/zouyaoji/vue-cesium/tree/dev/packages))
-
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import { VcViewer } from 'vue-cesium'
-
-const components = [VcViewer]
-
-const app = createApp(App)
-
-components.forEach((component) => {
-  app.component(component.name, component)
-})
-```
-
-### Global config
-
-When importing VueCesium, you can define a global config object. For now this object has two properties: `cesiumPath` and `accessToken`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, support loading the official version of Cesium or a third-party version developed based on Cesium, **Note:** Please use the files in the Build directory. And `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. According to the method of introducing VueCesium, the specific operations are as follows:
-
-Fully import VueCesium:
+### Full import
 
 ```js
 import { createApp } from 'vue'
-import VueCesium from 'vue-cesium';
-import App from './App.vue';
+import VueCesium from 'vue-cesium'
+import 'vue-cesium/dist/index.css'
+import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueCesium, {
-  // cesiumPath is the path of Cesium.js, such as
+  // cesiumPath is the web service address that guides the use of Cesium.js, which can be a local or CDN address such as
   // cesiumPath: /static/Cesium/Cesium.js
   // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-  cesiumPath: 'Your CesiumJS Path',
-  // To use the data source of Cesium ion, you need to apply for an account at https://cesium.com/ion/ to obtain Access Token.
-  // If not specified, it may cause CesiumIon's online image and terrain loading failure
+  // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+  // If you need to use Cesium ion resources, you need to specify it. Go to https://cesium.com/ion/ to apply for an account and get Access Token. If it is not specified, it may cause the loading of CesiumIon's online images and terrain to fail.
   accessToken: 'Your Cesium Ion defaultAccessToken'
 })
-
+app.mount('#app')
 ```
 
-Partial import VueCesium
+### On demand
 
 ```js
 import { createApp } from 'vue'
-import { VcViewer } from 'vue-cesium'
+import { VcViewer } from 'vue-viewer'
 import App from './App.vue'
 
-const option = {
-  // cesiumPath is the path of Cesium.js, such as
-  // cesiumPath: /static/Cesium/Cesium.js
-  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-  cesiumPath: 'Your CesiumJS Path',
-  // To use the data source of Cesium ion, you need to apply for an account at https://cesium.com/ion/ to obtain Access Token.
-  // If not specified, it may cause CesiumIon's online image and terrain loading failure
-  accessToken: 'Your Cesium Ion defaultAccessToken'
-}
 const app = createApp(App)
-app.config.globalProperties.$VueCesium = option
+app.config.globalProperties.$VueCesium = {
+  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+}
 app.use(VcViewer)
+app.mount('#app')
 ```
+
+(The complete component list is subject to [reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/vue-cesium/component.ts))
 
 ### Start coding
 

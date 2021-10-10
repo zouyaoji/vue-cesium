@@ -2,138 +2,118 @@
 
 本节将介绍如何在项目中使用 VueCesium。
 
+### 使用组件
+
+### 完整引入所有组件
+
+> main.ts
+
+```typescript
+import { createApp } from 'vue'
+import VueCesium from 'vue-cesium'
+import 'vue-cesium/dist/index.css'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(VueCesium)
+app.mount('#app')
+```
+
+### 按需引入组件
+
+`VueCesium`的 JS 代码默认支持基于 ES modules 的 [摇树 tree shaking](https://webpack.js.org/guides/tree-shaking/)。
+
+> App.vue
+
+```html
+<template>
+  <vc-viewer></vc-viewer>
+</template>
+<script>
+  import { defineComponent } from 'vue'
+  import { VcViewer } from 'vue-cesium'
+
+  export default defineComponent({
+    name: 'app'
+    components: {
+      VcViewer
+    }
+  })
+</script>
+```
+
+### 样式的引入
+
+我们**强烈建议直接引入全部的样式文件**，虽然这看起来会增大整个应用的体积，但这样做可以避免引入额外的打包工具插件（减少负担），你还可以通过 [CDN](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)
+的方式来加载样式文件，从而使得你的应用加载更快。
+
+通过 JS 的方式引入
+
+```typescript
+import 'vue-cesium/dist/index.css'
+```
+
+通过 HTML 的头文件引入
+
+```html
+<!-- index.html -->
+<head>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css" />
+</head>
+```
+
 ### 使用 Starter Kit
 
 我们提供了通用的[项目模板](https://github.com/zouyaoji/vue-cesium-starter)，你可以直接使用，另外我们还提供了 [Vite 模板](https://github.com/zouyaoji/vue-cesium-vite-starter) 以及 [Vite + Electron 模板](https://github.com/zouyaoji/vue-cesium-electron-vite-starter)。
 
 如果不希望使用我们提供的模板，请继续阅读。
 
-### 引入 VueCesium
+### 全局配置
 
-你可以引入整个 VueCesium，或是根据需要仅引入部分组件。我们先介绍如何引入完整的 VueCesium
+在引入 `VueCesium` 时，可以传入一个全局的配置对象。改对象目前支持 `cesiumPath` 、 `accessToken` 以及 `locale` 字段。`cesiumPath` 用于改变组件默认加载的 `Cesium` 库，`accessToken` 设置 `Cesium.Ion.defaultAccessToken` 的值。而 `locale` 用于国际化语言，具体使用方式见下一节文档。
 
-#### 完整引入
+### 完整引入 VueCesium
 
 在 main.js 中写入以下内容：
 
-```javascript
+```js
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
-import 'vue-cesium/lib/theme-default/index.css'
+import 'vue-cesium/dist/index.css'
 import App from './App.vue'
 
 const app = createApp(App)
-app.use(VueCesium)
+app.use(VueCesium, {
+  // cesiumPath 是指引用 Cesium.js 的Web服务地址，可以是本地或者 CDN 地址如
+  // cesiumPath: /static/Cesium/Cesium.js
+  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
+  // cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+  // 如果需要使用 Cesium ion 的资源时需要指定。到 https://cesium.com/ion/ 申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载失败。
+  accessToken: 'Your Cesium Ion defaultAccessToken'
+})
 app.mount('#app')
 ```
 
-以上代码便完成了 VueCesium 的引入。需要注意的是，样式文件需要单独引入。
+### 按需引入 VueCesium
 
-#### 按需引入
-
-借助 [babel-plugin-import](https://github.com/ant-design/babel-plugin-import)，我们可以只引入需要的组件，以达到减小项目体积的目的。
-
-首先，安装 babel-plugin-import:
-
-```bash
-$ npm install babel-plugin-import -D
-```
-
-或者
-
-```bash
-$ yarn add babel-plugin-import -D
-```
-
-然后，将 babel.config.js 修改为：
+如果你只希望引入部分组件，比如 VcViewer，那么需要在 main.js 中写入以下内容：
 
 ```js
-module.exports = {
-  plugins: [
-    [
-      'import',
-      {
-        libraryName: 'vue-cesium'
-      }
-    ]
-  ]
-}
-```
-
-接下来，如果你只希望引入部分组件，比如 Viewer，那么需要在 main.js 中写入以下内容：
-
-```javascript
 import { createApp } from 'vue'
 import { VcViewer } from 'vue-viewer'
 import App from './App.vue'
 
 const app = createApp(App)
-app.component(VcViewer.name, VcViewer)
-
-/* or
- * app.use(VcViewer)
- */
-
+app.config.globalProperties.$VueCesium = {
+  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+}
+app.use(VcViewer)
 app.mount('#app')
 ```
 
-完整组件列表和引入方式（完整组件列表以 [reference](https://github.com/zouyaoji/vue-cesium/tree/dev/packages) 为准）
-
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import { VcViewer } from 'vue-cesium'
-
-const components = [VcViewer]
-
-const app = createApp(App)
-
-components.forEach(component => {
-  app.component(component.name, component)
-})
-```
-
-### 全局配置
-
-在引入 VueCesium 时，可以传入一个全局配置对象。该对象目前支持 `cesiumPath` 与 `accessToken` 字段。`cesiumPath` 用于指定 VueCesium 加载的 `CesiumJS` 库的地址，支持加载官方版本Cesium或者第三方基于Cesium开发的版本，**注意：** 要求引入 Build 目录的文件。 `accessToken` 用于设置 `Cesium.Ion.defaultAccessToken` 。按照引入 VueCesium 的方式，具体操作如下：
-
-完整引入 VueCesium：
-
-```js
-import { createApp } from 'vue'
-import VueCesium from 'vue-cesium';
-import App from './App.vue';
-
-const app = createApp(App)
-app.use(VueCesium, {
-  // cesiumPath 是指引用的Cesium.js 路径，如
-  // cesiumPath: /static/Cesium/Cesium.js
-  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-  cesiumPath: 'Your CesiumJS Path',
-  // 使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载失败
-  accessToken: 'Your Cesium Ion defaultAccessToken'
-})
-
-```
-
-按需引入 VueCesium
-
-```js
-import { createApp } from 'vue'
-import { VcViewer } from 'vue-cesium'
-import App from './App.vue'
-
-const option = {
-  // cesiumPath 是指引用的 Cesium.js 路径，如
-  // cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js'
-  cesiumPath: 'Your CesiumJS Path',
-  // 使用Cesium ion的数据源需要到https://cesium.com/ion/申请一个账户，获取Access Token。不指定的话可能导致 CesiumIon 的在线影像、地形加载失败
-  accessToken: 'Your Cesium Ion defaultAccessToken'
-}
-const app = createApp(App)
-app.config.globalProperties.$VueCesium = option
-app.use(VcViewer)
-```
+（完整组件列表以 [reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/vue-cesium/component.ts) 为准）
 
 ### 开始使用
 

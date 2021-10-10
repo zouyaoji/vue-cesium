@@ -6,6 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
 -->
+
 # VUE CESIUM
 
 <p align="center">
@@ -35,23 +36,16 @@
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
-- 🎸 IntelliSense for vetur
 
 ## 状态: Beta
 
 该项目仍在大力开发中。欢迎加入我们，提出您的第一个 Pull Request。
 
-## 语言
-
-- [中文](https://github.com/zouyaoji/vue-cesium/blob/dev/README.zh.md)
-- [English](https://github.com/zouyaoji/vue-cesium/blob/dev/README.md)
-
-- [中文 for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.zh.md)
-- [English for vue 2.x](https://github.com/zouyaoji/vue-cesium-v2/blob/master/README.md)
-
 ## 文档
 
 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
+
+国内[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
 
 ## 开始
 
@@ -98,6 +92,19 @@ yarn cz
 # example feat(viewer):add type 'viewer' for form usage #1234
 ```
 
-## 捐赠者&贡献者
+## Licence
+
+VueCesium is open source software licensed as
+[MIT](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE).
+
+## 捐赠者
 
 [链接](https://zouyaoji.top/vue-cesium/#/zh-CN/donations)
+
+## 贡献者
+
+如果没有以下出色的贡献者，这个项目就不会存在
+
+<a href="https://github.com/zouyaoji/vue-cesium/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zouyaoji/vue-cesium" />
+</a>

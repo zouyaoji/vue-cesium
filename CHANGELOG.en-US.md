@@ -1,7 +1,26 @@
 ## Changelog
 
+### 3.0.2-beta.1
+
+_2021-10-10_
+
+#### Breaking changes:
+
+- Making the project more clear via reorganizing the code. Better organizable code. Make the publish bundle more legit and clear. Because that this breaking change mainly impact publish bundle, if you were using the full bundled style file, you will going to change the resource path in your project:
+
+```js
+--- import 'vue-cesium/lib/theme-default/index.css'
++++ import 'vue-cesium/dist/index.css'
+```
+
+#### Bug fixes
+
+- Fix the problem of registering errors for each component on demand.
+- Fix the problem of picking up errors in the `vc-selection-indicator` component.
+
 ### 3.0.1-beta.15
-*2021-09-09*
+
+_2021-09-09_
 
 #### Bug fixes
 
@@ -13,7 +32,8 @@
 - The CDN address of the Cesium library is changed to `https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js`.
 
 ### 3.0.1-beta.14
-*2021-09-03*
+
+_2021-09-03_
 
 #### Bug fixes
 
@@ -24,7 +44,8 @@
 - The point of `VcDrawings` and `VcMeasurements` component is rendered to the top to avoid the point being covered by the polygon and cannot be picked up and make it can not be edited.
 
 ### 3.0.1-beta.13
-*2021-08-31*
+
+_2021-08-31_
 
 #### New feature
 
@@ -35,14 +56,16 @@
 - The abnormal problems after removing nodes of `VcDrawings` and `VcMeasurements`.
 
 ### 3.0.1-beta.12
-*2021-08-23*
+
+_2021-08-23_
 
 #### Bug fixes
 
 - `vc-drawings` Fix the crash when drawing circles and rectangles.
 
 ### 3.0.1-beta.11
-*2021-08-20*
+
+_2021-08-20_
 
 #### New feature
 
@@ -59,13 +82,16 @@
 - Adding `editorEvt` and `mouseEvt` events to measuring and drawing components, remove the default and modify the mouse cursor style during drawing.
 
 ### 3.0.1-beta.10
-*2021-07-13*
+
+_2021-07-13_
+
 #### New feature
 
 - Draw a rectangle to add a rectangle that is true south and true north.
 
 ### 3.0.1-beta.9
-*2021-07-07*
+
+_2021-07-07_
 
 #### Bug fixes
 
@@ -75,7 +101,8 @@
 - Fixed the issue when picking up outside earth viewer the `VcSelectionIndicator` throws an error.
 
 ### 3.0.1-beta.8
-*2021-06-28*
+
+_2021-06-28_
 
 #### New feature
 
@@ -88,7 +115,8 @@
 - The distance measurement and area measurement cancel the drawing of the previous point occasionally crash.
 
 ### 3.0.1-beta.7
-*2021-06-13*
+
+_2021-06-13_
 
 #### New feature
 
@@ -102,7 +130,8 @@
 - Fix the problem that the first point of the area object editing in the measuring component and drawing component is abnormal.
 
 ### 3.0.1-beta.6
-*2021-06-03*
+
+_2021-06-03_
 
 #### New feature
 
@@ -117,7 +146,8 @@
 - Added compatible third-party [dc-sdk](https://zouyaoji.top/vue-cesium/#/en-US/component/platforms/vc-demo-dc-sdk) library.
 
 ### 3.0.1-beta.5.2
-*2021-04-29*
+
+_2021-04-29_
 
 #### New feature
 
@@ -129,15 +159,17 @@
 - The language of Vetur's smart prompt is changed to English by default.
 
 ### 3.0.1-beta.4
-*2021-04-26*
+
+_2021-04-26_
 
 #### Bug fixes
 
 - Document search function.
-- The intellisense  of Vetur is invalid.
+- The intellisense of Vetur is invalid.
 
 ### 3.0.1-beta.3
-*2021-04-23*
+
+_2021-04-23_
 
 #### New feature
 
@@ -186,7 +218,8 @@
 - `vc-geometry-wall-outline`
 
 ### 3.0.1-beta.2
-*2021-04-18*
+
+_2021-04-18_
 
 #### New feature
 
@@ -202,7 +235,8 @@
 - `vc-zoom-control-sm`
 
 ### 3.0.1-beta.1
-*2021-04-07*
+
+_2021-04-07_
 
 #### New feature
 
@@ -243,7 +277,8 @@
 - `vc-graphics-wall`
 
 ### 3.0.1-beta.0
-*2021-03-30*
+
+_2021-03-30_
 
 #### New feature
 
