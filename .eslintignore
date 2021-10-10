@@ -2,7 +2,8 @@ build/*
 dist/*
 lib/*
 /index.js
-website/public/*
+website/*
 node_modules
 packages/*/es
 packages/*/lib
+.github
