@@ -8,7 +8,7 @@ import { nextTick, onBeforeUnmount } from 'vue'
  *    prepareTick()
  */
 
-export default function() {
+export default function () {
   let tickFn
 
   onBeforeUnmount(() => {

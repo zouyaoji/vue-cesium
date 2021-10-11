@@ -27,7 +27,8 @@
     height: 100%;
   }
 
-  .vc-icon, .vc-spinner {
+  .vc-icon,
+  .vc-spinner {
     font-size: $button-line-height;
   }
 
@@ -36,7 +37,7 @@
   }
 
   &:before {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     left: 0;
@@ -120,7 +121,9 @@
     min-height: 2em;
   }
 
-  &--flat, &--outline, &--unelevated {
+  &--flat,
+  &--outline,
+  &--unelevated {
     &:before {
       box-shadow: none;
     }
@@ -145,7 +148,8 @@
     }
   }
 
-  &--fab, &--fab-mini {
+  &--fab,
+  &--fab-mini {
     .vc-icon {
       font-size: 24px;
     }
@@ -195,7 +199,8 @@
     }
   }
 
-  &--flat, &--outline {
+  &--flat,
+  &--outline {
     .vc-btn__progress-indicator {
       opacity: 0.2;
       background: currentColor;

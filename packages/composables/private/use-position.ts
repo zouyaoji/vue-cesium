@@ -14,7 +14,7 @@ export const positionProps = {
   }
 }
 
-export default function(props, $services: VcViewerProvider) {
+export default function (props, $services: VcViewerProvider) {
   const attach = computed(() => {
     const pos = props.position
 

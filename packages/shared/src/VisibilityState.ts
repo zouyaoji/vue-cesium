@@ -1,12 +1,12 @@
 class VisibilityState {
   states: any
   count: number
-  constructor () {
+  constructor() {
     this.states = new Cesium.ManagedArray()
     this.count = 0
   }
 
-  hidePrimitiveCollection (primitiveCollection: Cesium.PrimitiveCollection) {
+  hidePrimitiveCollection(primitiveCollection: Cesium.PrimitiveCollection) {
     const { PrimitiveCollection, Cesium3DTileset, Model } = Cesium
     const length = primitiveCollection.length
     for (let i = 0; i < length; i++) {
@@ -20,7 +20,7 @@ class VisibilityState {
     }
   }
 
-  restorePrimitiveCollection (primitiveCollection: Cesium.PrimitiveCollection) {
+  restorePrimitiveCollection(primitiveCollection: Cesium.PrimitiveCollection) {
     const { PrimitiveCollection } = Cesium
     const length = primitiveCollection.length
     for (let i = 0; i < length; i++) {
@@ -33,13 +33,13 @@ class VisibilityState {
     }
   }
 
-  hide (scene: Cesium.Scene) {
+  hide(scene: Cesium.Scene) {
     this.states.length = 0
     this.hidePrimitiveCollection(scene.primitives)
     this.hidePrimitiveCollection(scene.groundPrimitives)
   }
 
-  restore (scene: Cesium.Scene) {
+  restore(scene: Cesium.Scene) {
     this.count = 0
     this.restorePrimitiveCollection(scene.primitives)
     this.restorePrimitiveCollection(scene.groundPrimitives)

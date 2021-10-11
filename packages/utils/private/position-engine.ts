@@ -199,22 +199,14 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
     } else if (anchorProps[anchorOrigin.vertical] > innerHeight / 2) {
       const anchorY = Math.min(
         innerHeight,
-        anchorOrigin.vertical === 'center'
-          ? anchorProps.center
-          : anchorOrigin.vertical === selfOrigin.vertical
-            ? anchorProps.bottom
-            : anchorProps.top
+        anchorOrigin.vertical === 'center' ? anchorProps.center : anchorOrigin.vertical === selfOrigin.vertical ? anchorProps.bottom : anchorProps.top
       )
       props.maxHeight = Math.min(currentHeight, anchorY)
       props.top = Math.max(0, anchorY - currentHeight)
     } else {
       props.top = Math.max(
         0,
-        anchorOrigin.vertical === 'center'
-          ? anchorProps.center
-          : anchorOrigin.vertical === selfOrigin.vertical
-            ? anchorProps.top
-            : anchorProps.bottom
+        anchorOrigin.vertical === 'center' ? anchorProps.center : anchorOrigin.vertical === selfOrigin.vertical ? anchorProps.top : anchorProps.bottom
       )
       props.maxHeight = Math.min(currentHeight, innerHeight - props.top)
     }
@@ -230,8 +222,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
         anchorOrigin.horizontal === 'middle'
           ? anchorProps.middle
           : anchorOrigin.horizontal === selfOrigin.horizontal
-            ? anchorProps.right
-            : anchorProps.left
+          ? anchorProps.right
+          : anchorProps.left
       )
       props.maxWidth = Math.min(currentWidth, anchorX)
       props.left = Math.max(0, anchorX - props.maxWidth)
@@ -241,8 +233,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
         anchorOrigin.horizontal === 'middle'
           ? anchorProps.middle
           : anchorOrigin.horizontal === selfOrigin.horizontal
-            ? anchorProps.left
-            : anchorProps.right
+          ? anchorProps.left
+          : anchorProps.right
       )
       props.maxWidth = Math.min(currentWidth, innerWidth - props.left)
     }

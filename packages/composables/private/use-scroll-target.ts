@@ -2,7 +2,7 @@ import { ref, watch, onBeforeUnmount } from 'vue'
 
 import { listenOpts } from '@vue-cesium/utils/private/event'
 
-export default function(props, configureScrollTarget) {
+export default function (props, configureScrollTarget) {
   const localScrollTarget = ref(null)
   let scrollFn
 

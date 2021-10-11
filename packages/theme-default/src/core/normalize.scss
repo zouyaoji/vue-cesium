@@ -1,24 +1,30 @@
 /* Normalizing -- forked from Normalize.css v8
  */
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
 }
 
-html, body, #q-app {
+html,
+body,
+#q-app {
   width: 100%;
   direction: ltr;
 }
 
 // https://stackoverflow.com/a/23083463
-body.platform-ios.within-iframe, body.platform-ios.within-iframe #q-app {
+body.platform-ios.within-iframe,
+body.platform-ios.within-iframe #q-app {
   width: 100px;
   min-width: 100%;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   box-sizing: border-box;
 }
@@ -67,7 +73,10 @@ svg:not(:root) {
  * line 2: Correct the odd `em` font sizing in all browsers.
  */
 
-code, kbd, pre, samp {
+code,
+kbd,
+pre,
+samp {
   font-family: monospace, monospace;
   font-size: 1em;
 }
@@ -119,7 +128,8 @@ select {
 /* Remove the inner border and padding in Firefox.
  */
 
-button::-moz-focus-inner, input::-moz-focus-inner {
+button::-moz-focus-inner,
+input::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
@@ -127,7 +137,8 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 /* Restore the focus styles unset by the previous rule.
  */
 
-button:-moz-focusring, input:-moz-focusring {
+button:-moz-focusring,
+input:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 

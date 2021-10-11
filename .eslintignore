@@ -1,9 +1,8 @@
-build/*
-dist/*
-lib/*
-/index.js
-website/*
+build
+dist
+website
 node_modules
 packages/*/es
 packages/*/lib
 .github
+coverage

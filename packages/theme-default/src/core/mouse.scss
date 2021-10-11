@@ -6,7 +6,9 @@
   overflow: auto;
 }
 
-.scroll, .scroll-x, .scroll-y {
+.scroll,
+.scroll-x,
+.scroll-y {
   -webkit-overflow-scrolling: touch;
   will-change: scroll-position;
 }

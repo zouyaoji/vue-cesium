@@ -17,7 +17,7 @@ export const useTransitionProps = {
   }
 }
 
-export default function(props, showing) {
+export default function (props, showing) {
   const transitionState = ref(showing.value)
 
   watch(showing, val => {

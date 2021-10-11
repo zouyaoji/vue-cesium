@@ -1,6 +1,6 @@
 import { onBeforeUnmount } from 'vue'
 
-export default function() {
+export default function () {
   let timer
 
   onBeforeUnmount(() => {

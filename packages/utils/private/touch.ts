@@ -2,8 +2,6 @@ import { platform } from '../platform'
 
 const directions = ['left', 'right', 'up', 'down', 'horizontal', 'vertical']
 
-
-
 const modifiersAll = {
   left: true,
   right: true,
@@ -46,11 +44,7 @@ export function getModifierDirections(mod) {
   return dir
 }
 
-export const getTouchTarget =
-  (platform().isIOS|| navigator.vendor.toLowerCase().indexOf('apple') > -1)
-    ? () => document
-    : target => target
-
+export const getTouchTarget = platform().isIOS || navigator.vendor.toLowerCase().indexOf('apple') > -1 ? () => document : target => target
 
 export function shouldStart(evt, ctx) {
   return (

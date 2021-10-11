@@ -6,15 +6,15 @@
   background: $red;
 
   &--top {
-    left: 0 #{"/* rtl:ignore */"};
-    right: 0 #{"/* rtl:ignore */"};
+    left: 0 #{'/* rtl:ignore */'};
+    right: 0 #{'/* rtl:ignore */'};
     top: 0;
     width: 100%;
   }
 
   &--bottom {
-    left: 0 #{"/* rtl:ignore */"};
-    right: 0 #{"/* rtl:ignore */"};
+    left: 0 #{'/* rtl:ignore */'};
+    right: 0 #{'/* rtl:ignore */'};
     bottom: 0;
     width: 100%;
   }
