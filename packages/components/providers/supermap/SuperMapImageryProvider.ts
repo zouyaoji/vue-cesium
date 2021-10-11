@@ -2,7 +2,10 @@ import IndexedDBScheduler from './IndexedDBScheduler'
 class SuperMapImageryProvider {
   tablename: string
   _indexedDBScheduler: any
-  _indexedDBSetting: { isOpen: boolean; clear: () => void }
+  _indexedDBSetting: {
+    isOpen: boolean
+    clear: () => void
+  }
   isSci: boolean
   isTileMap: boolean
   layersID: string

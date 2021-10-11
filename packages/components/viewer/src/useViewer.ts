@@ -1029,7 +1029,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     })
   }
 
-  const onViewerWidgetResized = (e?: { type: string; status: string; target: HTMLElement }) => {
+  const onViewerWidgetResized = e => {
     const { viewer } = vcInstance
     const toolbarElement = viewer._toolbar as HTMLElement
     if (
