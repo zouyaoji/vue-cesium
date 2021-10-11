@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:22
+ * @LastEditTime: 2021-10-11 15:42:09
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\drawings\src\drawing.types.ts
+ */
 import { VcFabAction } from '@vue-cesium/components/ui'
 import { CSSProperties, Ref } from 'vue'
 import {
@@ -28,6 +36,8 @@ interface PolygonDrawing {
   drawStatus: number
   height?: number
   radius?: number
+  area?: number
+  labels?: Array<any>
 }
 
 interface DrawingInstanceOpts {

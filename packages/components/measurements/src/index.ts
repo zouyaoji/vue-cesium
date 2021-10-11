@@ -31,7 +31,9 @@ import {
   areaActionDefault,
   areaMeasurementDefault,
   pointActionDefault,
-  pointMeasurementDefault
+  pointMeasurementDefault,
+  rectangleActionDefault,
+  rectangleMeasurementDefault
 } from './defaultProps'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { camelize } from '@vue-cesium/utils/util'
@@ -52,6 +54,7 @@ import VcMeasurementVertical from './vertical'
 import VcMeasurementHeight from './height'
 import VcMeasurementPoint from './point'
 import VcMeasurementArea from './area'
+import VcMeasurementRectangle from './rectangle'
 
 export default defineComponent({
   name: 'VcMeasurements',
@@ -120,6 +123,12 @@ export default defineComponent({
     const pointMeasurementOpts = reactive<typeof pointMeasurementDefault>(
       Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts)
     )
+    const rectangleActionOpts = reactive<typeof rectangleActionDefault>(
+      Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts)
+    )
+    const rectangleMeasurementOpts = reactive<typeof rectangleMeasurementDefault>(
+      Object.assign({}, defaultOptions.rectangleMeasurementOpts, props.rectangleMeasurementOpts)
+    )
 
     const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
 
@@ -139,6 +148,8 @@ export default defineComponent({
     options.areaMeasurementOpts = areaMeasurementOpts
     options.pointActionOpts = pointActionOpts
     options.pointMeasurementOpts = pointMeasurementOpts
+    options.rectangleActionOpts = rectangleActionOpts
+    options.rectangleMeasurementOpts = rectangleMeasurementOpts
     options.clearActionOpts = clearActionOpts
 
     const measurementsOptions: Array<MeasurementInstanceOpts> = props.measurements.map(measurement => ({
@@ -153,6 +164,7 @@ export default defineComponent({
         | typeof VcMeasurementHeight
         | typeof VcMeasurementArea
         | typeof VcMeasurementPoint
+        | typeof VcMeasurementRectangle
         | null
       >(null),
       measurementOpts: options[`${camelize(measurement)}MeasurementOpts`],
@@ -274,6 +286,8 @@ export default defineComponent({
           return VcMeasurementPoint
         case 'area':
           return VcMeasurementArea
+        case 'rectangle':
+          return VcMeasurementRectangle
         default:
           return null
       }

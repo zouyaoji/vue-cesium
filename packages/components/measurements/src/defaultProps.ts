@@ -184,6 +184,10 @@ const pointActionDefault = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-point-coordinates'
 })
 
+const rectangleActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-rectangle'
+})
+
 const polylineMeasurementDefault = {
   show: true,
   measureUnits: new MeasureUnits(),
@@ -448,6 +452,27 @@ const pointMeasurementDefault = {
   heightReference: 1
 }
 
+const rectangleMeasurementDefault = Object.assign({}, areaMeasurementDefault, {
+  pointOpts: Object.assign({}, pointOptsDefault, {
+    show: false
+  }),
+  drawtip: {
+    show: true,
+    pixelOffset: [32, 32]
+  },
+  editorOpts: {
+    pixelOffset: [16, -8],
+    delay: 1000,
+    hideDelay: 1000,
+    move: Object.assign({}, editorOptsDefault),
+    removeAll: Object.assign({}, editorOptsDefault, {
+      icon: 'vc-icons-delete'
+    })
+  },
+  edge: 4,
+  regular: false // regular
+})
+
 const clearActionDefault = Object.assign({}, actionOptions, {
   icon: 'vc-icons-clear',
   color: 'red'
@@ -462,7 +487,7 @@ const defaultProps = {
   },
   measurements: {
     type: Array as PropType<Array<string>>,
-    default: () => ['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point']
+    default: () => ['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle']
   },
   activeColor: {
     type: String,
@@ -540,6 +565,14 @@ const defaultProps = {
     type: Object as PropType<typeof pointMeasurementDefault>,
     default: () => pointMeasurementDefault
   },
+  rectangleActionOpts: {
+    type: Object as PropType<typeof rectangleActionDefault>,
+    default: () => rectangleActionDefault
+  },
+  rectangleMeasurementOpts: {
+    type: Object as PropType<typeof rectangleMeasurementDefault>,
+    default: () => rectangleMeasurementDefault
+  },
   clearActionOpts: {
     type: Object as PropType<typeof clearActionDefault>,
     default: () => clearActionDefault
@@ -567,5 +600,7 @@ export {
   areaMeasurementDefault,
   pointActionDefault,
   pointMeasurementDefault,
+  rectangleActionDefault,
+  rectangleMeasurementDefault,
   clearActionDefault
 }

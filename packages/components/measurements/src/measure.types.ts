@@ -18,7 +18,9 @@ import {
   polylineActionDefault,
   polylineMeasurementDefault,
   verticalActionDefault,
-  verticalMeasurementDefault
+  verticalMeasurementDefault,
+  rectangleActionDefault,
+  rectangleMeasurementDefault
 } from './defaultProps'
 import VcMeasurementDistance from './distance'
 import VcMeasurementPolyline from './polyline'
@@ -27,6 +29,7 @@ import VcMeasurementVertical from './vertical'
 import VcMeasurementHeight from './height'
 import VcMeasurementPoint from './point'
 import VcMeasurementArea from './area'
+import VcMeasurementRectangle from './rectangle'
 
 interface PointMeasurement {
   position: Cesium.Cartesian3
@@ -117,6 +120,7 @@ interface MeasurementInstanceOpts {
     | typeof heightActionDefault
     | typeof areaActionDefault
     | typeof pointActionDefault
+    | typeof rectangleActionDefault
     | typeof clearActionDefault
   measurementRef: Ref<
     | typeof VcMeasurementDistance
@@ -126,6 +130,7 @@ interface MeasurementInstanceOpts {
     | typeof VcMeasurementHeight
     | typeof VcMeasurementArea
     | typeof VcMeasurementPoint
+    | typeof VcMeasurementRectangle
     | null
   >
   measurementOpts:
@@ -137,6 +142,7 @@ interface MeasurementInstanceOpts {
     | typeof heightMeasurementDefault
     | typeof areaMeasurementDefault
     | typeof pointMeasurementDefault
+    | typeof rectangleMeasurementDefault
   actionStyle?: CSSProperties
   actionClass?: string
   tip?: string
@@ -148,6 +154,7 @@ interface MeasurementInstanceOpts {
     | typeof VcMeasurementHeight
     | typeof VcMeasurementArea
     | typeof VcMeasurementPoint
+    | typeof VcMeasurementRectangle
     | null
   isActive: boolean
 }

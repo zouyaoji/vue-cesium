@@ -1,36 +1,37 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-11 15:04:12
+ * @LastEditTime: 2021-10-11 15:48:45
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\drawings\src\rectangle\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\measurements\src\rectangle\index.ts
  */
 import { defineComponent, getCurrentInstance, ref, h, computed, nextTick, VNode } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { VcPrimitive, VcPrimitiveGround, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
-import { VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
+import { VcCollectionPoint, VcCollectionLabel, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { makeMaterial } from '@vue-cesium/utils/cesium-helpers'
-import { DrawStatus } from '@vue-cesium/shared'
+import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import VcInstanceGeometry from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolygon, VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/components/geometries'
 import defaultProps from './defaultProps'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { t } from '@vue-cesium/locale'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
-import { PolygonDrawing } from '../drawing.types'
+import { PolygonDrawing } from '@vue-cesium/components/drawings/src/drawing.types'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import useCustomUpdate from '@vue-cesium/composables/private/use-custom-update'
+import { isUndefined } from '@vue-cesium/utils/util'
 
 export default defineComponent({
-  name: 'VcDrawingRectangle',
+  name: 'VcMeasurementRectangle',
   props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
+  emits: ['beforeLoad', 'ready', 'destroyed', 'measureEvt', 'editorEvt', 'mouseEvt'],
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcDrawingRectangle'
+    instance.cesiumClass = 'VcMeasurementRectangle'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
@@ -53,7 +54,7 @@ export default defineComponent({
     const drawName = 'rectangle'
     let editorType = ''
     const { registerTimeout, removeTimeout } = useTimeout()
-    const { onVcCollectionPointReady, onVcPrimitiveReady } = useCustomUpdate()
+    const { onVcCollectionPointReady, onVcPrimitiveReady, onVcCollectionLabelReady } = useCustomUpdate()
 
     // computed
     const polylinesRender = computed<Array<PolygonDrawing>>(() => {
@@ -61,6 +62,12 @@ export default defineComponent({
       const { Cartographic, Rectangle, Cartesian3 } = Cesium
       const { viewer } = $services
       polylines.value.forEach(polylineSegment => {
+        const labels: Array<{
+          text: string
+          position: Cesium.Cartesian3
+          id: string
+        }> = []
+
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
         if (Cartesian3.equals(startPosition, endPosition)) {
@@ -91,10 +98,21 @@ export default defineComponent({
         ]
         const positions = Cartesian3.fromRadiansArrayHeights(arr, viewer.scene.globe.ellipsoid)
 
+        const area = updateArea(positions)
+
+        labels.push({
+          text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+          position: positions[positions.length - 1],
+          id: Cesium.createGuid(),
+          ...props.labelOpts
+        })
+
         const polyline: PolygonDrawing = {
           ...polylineSegment,
           polygonPositions: positions,
-          height: height
+          height: height,
+          area: area,
+          labels
         }
 
         results.push(polyline)
@@ -130,11 +148,11 @@ export default defineComponent({
     }
 
     const handleMouseClick = (movement: Cesium.Cartesian2, options?) => {
-      const { viewer, drawingVm: drawingVm, selectedDrawingOption, getWorldPosition } = $services
+      const { viewer, measurementVm: measurementVm, selectedMeasurementOption, getWorldPosition } = $services
 
       if (options.button === 2 && options.ctrl) {
-        const drawingsOption = (drawingVm?.proxy as any).drawingsOptions.find(v => v.name === drawName)
-        ;(drawingVm?.proxy as any).toggleAction(drawingsOption)
+        const drawingsOption = (measurementVm?.proxy as any).drawingsOptions.find(v => v.name === drawName)
+        ;(measurementVm?.proxy as any).toggleAction(drawingsOption)
         return
       }
 
@@ -147,7 +165,7 @@ export default defineComponent({
       const positions = polyline.positions
 
       if (options.button === 2 && editingPoint.value) {
-        ;(drawingVm?.proxy as any).editingDrawingName = undefined
+        ;(measurementVm?.proxy as any).editingMeasurementName = undefined
         polyline.positions[editingPoint.value._index] = restorePosition
         drawStatus.value = DrawStatus.AfterDraw
         polyline.drawStatus = DrawStatus.AfterDraw
@@ -177,7 +195,7 @@ export default defineComponent({
         drawTip.value = props.drawtip?.drawTip2 || t(`vc.drawing.${drawName}.drawTip2`)
         nextTick(() => {
           emit(
-            'drawEvt',
+            'measureEvt',
             Object.assign(
               {
                 index: index,
@@ -198,24 +216,24 @@ export default defineComponent({
         drawStatus.value = DrawStatus.AfterDraw
         if (editingPoint.value) {
           editingPoint.value = undefined
-          ;(drawingVm?.proxy as any).editingDrawingName = undefined
+          ;(measurementVm?.proxy as any).editingMeasurementName = undefined
           canShowDrawTip.value = false
           drawTipPosition.value = [0, 0, 0]
           type = editorType
         } else {
           if (props.mode === 1) {
-            ;(drawingVm?.proxy as any).toggleAction(selectedDrawingOption)
+            ;(measurementVm?.proxy as any).toggleAction(selectedMeasurementOption)
           }
         }
 
-        if (selectedDrawingOption) {
+        if (selectedMeasurementOption) {
           drawTip.value = props.drawtip?.drawTip1 || t(`vc.drawing.${drawName}.drawTip1`)
           canShowDrawTip.value = true
         }
 
         nextTick(() => {
           emit(
-            'drawEvt',
+            'measureEvt',
             Object.assign(
               {
                 index: index,
@@ -232,6 +250,43 @@ export default defineComponent({
           )
         })
       }
+    }
+
+    const updateArea = (positions: Array<Cesium.Cartesian3>) => {
+      let area = 0
+      const { CoplanarPolygonGeometry, VertexFormat, defined, Cartesian3 } = Cesium
+      const geometry = CoplanarPolygonGeometry.createGeometry(
+        CoplanarPolygonGeometry.fromPositions({
+          positions: positions,
+          vertexFormat: VertexFormat.POSITION_ONLY
+        })
+      )
+
+      if (!isUndefined(geometry) && defined(geometry)) {
+        const indices = geometry.indices
+        const positionValues = geometry.attributes.position.values as number[]
+        for (let i = 0; i < indices.length; i += 3) {
+          const indice0 = indices[i]
+          const indice1 = indices[i + 1]
+          const indice2 = indices[i + 2]
+
+          area += triangleArea(
+            Cartesian3.unpack(positionValues, 3 * indice0, {} as any),
+            Cartesian3.unpack(positionValues, 3 * indice1, {} as any),
+            Cartesian3.unpack(positionValues, 3 * indice2, {} as any)
+          )
+        }
+      }
+
+      return area
+    }
+
+    const triangleArea = (vertexA, vertexB, vertexC) => {
+      const { Cartesian3 } = Cesium
+      const vectorBA = Cartesian3.subtract(vertexA, vertexB, {} as any)
+      const vectorBC = Cartesian3.subtract(vertexC, vertexB, {} as any)
+      const crossProduct = Cartesian3.cross(vectorBA, vectorBC, vectorBA)
+      return 0.5 * Cartesian3.magnitude(crossProduct)
     }
 
     const handleMouseMove = movement => {
@@ -266,7 +321,7 @@ export default defineComponent({
 
         nextTick(() => {
           emit(
-            'drawEvt',
+            'measureEvt',
             Object.assign(
               {
                 index: index,
@@ -311,7 +366,7 @@ export default defineComponent({
     }
 
     const onMouseoutPoints = e => {
-      const { viewer, selectedDrawingOption } = $services
+      const { viewer, selectedMeasurementOption } = $services
 
       if (props.editable) {
         if (!editingPoint.value && drawStatus.value !== DrawStatus.Drawing) {
@@ -323,7 +378,7 @@ export default defineComponent({
             showEditor.value = false
           }, props.editorOpts?.hideDelay)
         }
-        selectedDrawingOption && (canShowDrawTip.value = true)
+        selectedMeasurementOption && (canShowDrawTip.value = true)
       }
 
       emit(
@@ -361,14 +416,14 @@ export default defineComponent({
 
       editorType = e
 
-      const { viewer, drawingVm } = $services
+      const { viewer, measurementVm } = $services
       if (e === 'move') {
         drawTip.value = props.drawtip?.drawTip3 || t(`vc.drawing.${drawName}.drawTip3`)
         drawStatus.value = DrawStatus.Drawing
         editingPoint.value = mouseoverPoint.value
         restorePosition = polylines.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
         canShowDrawTip.value = true
-        ;(drawingVm?.proxy as any).editingDrawingName = drawName
+        ;(measurementVm?.proxy as any).editingMeasurementName = drawName
       } else if (e === 'remove') {
         const index = mouseoverPoint.value._vcPolylineIndx
         const polyline = polylines.value[index]
@@ -396,7 +451,7 @@ export default defineComponent({
     }
 
     const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-      cesiumObject._vcId = 'VcDrawingRectangle'
+      cesiumObject._vcId = 'VcMeasurementRectangle'
     }
 
     // expose public methods
@@ -428,6 +483,15 @@ export default defineComponent({
             onMouseover: onMouseoverPoints,
             onMouseout: onMouseoutPoints,
             onReady: onVcCollectionPointReady
+          })
+        )
+        // labels
+        children.push(
+          h(VcCollectionLabel, {
+            enableMouseEvent: props.enableMouseEvent,
+            show: polyline.show,
+            labels: polyline.labels,
+            onReady: onVcCollectionLabelReady
           })
         )
         if (polyline.polygonPositions.length > 1) {
