@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-23 16:15:57
+ * @LastEditTime: 2021-10-11 13:33:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\babel.config.js
@@ -15,7 +15,7 @@ module.exports = {
     [
       '@babel/env',
       {
-        loose: true,
+        loose: false,
         modules: false
       }
     ],
@@ -24,7 +24,7 @@ module.exports = {
   plugins: [
     '@vue/babel-plugin-jsx',
     '@babel/plugin-proposal-nullish-coalescing-operator',
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-methods', { loose: false }],
     '@babel/transform-runtime',
     'lodash'
   ],
