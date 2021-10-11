@@ -5,7 +5,7 @@ When vue-cesium uses dc-sdk to develop, you only need to specify the dc-sdk libr
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
-import 'vue-cesium/lib/theme-default/index.css'
+import 'vue-cesium/dist/index.css'
 import App from './App.vue'
 
 const app = createApp(App)

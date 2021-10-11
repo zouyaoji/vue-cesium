@@ -2,7 +2,7 @@
 
 加载量算工具组件，包含距离量算、三角量算、折线距离量算、水平距离量算、垂直距离量算、高度量算、面积量算、坐标量算。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
 
 :::tip
 

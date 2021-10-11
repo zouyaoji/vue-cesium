@@ -2,7 +2,7 @@
 
 The navigation component that mimics the supermap. It is composed of `vc-compass-sm` and `vc-zoom-control-sm`.
 
-**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
+**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
 
 ### Basic usage
 

@@ -2,7 +2,7 @@
 
 Load the drawing tool components, which currently include point, polyline, and polygon drawing tools, and others will be added later.
 
-**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
+**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 

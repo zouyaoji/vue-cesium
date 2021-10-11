@@ -5,7 +5,7 @@ vue-cesium 使用数字视觉的 dc-sdk 开发时只需要在引入 VueCesium �
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
-import 'vue-cesium/lib/theme-default/index.css'
+import 'vue-cesium/dist/index.css'
 import App from './App.vue'
 
 const app = createApp(App)

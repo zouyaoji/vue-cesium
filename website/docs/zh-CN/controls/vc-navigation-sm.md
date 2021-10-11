@@ -2,7 +2,7 @@
 
 导航组件 —— 高仿超图样式。由 `vc-compass-sm`、`vc-zoom-control-sm` 组合而成。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
 
 ### 基础用法
 

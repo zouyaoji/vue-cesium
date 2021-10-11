@@ -208,5 +208,5 @@ describe('VcDatasourceKml', () => {
     await testVm.load?.()
     datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
     expect(datasource).toBeDefined()
-  }, 10000)
+  }, 15000)
 })

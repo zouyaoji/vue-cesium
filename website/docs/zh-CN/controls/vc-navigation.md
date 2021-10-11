@@ -2,7 +2,7 @@
 
 导航组件，包括罗盘、缩放、其他悬浮按钮，位置和距离比例尺工具栏控件。由 `vc-compass`、`vc-zoom-control`、`vc-print`、`vc-mylocation`、`vc-status-bar`、`vc-distance-legend` 组合而成。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
 
 :::tip
 

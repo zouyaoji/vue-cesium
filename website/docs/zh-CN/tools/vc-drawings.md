@@ -2,7 +2,7 @@
 
 加载绘制工具组件，目前包含点、线、面绘制工具，其他的后续再增加。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/lib/theme-default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
 
 :::tip
 

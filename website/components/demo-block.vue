@@ -203,16 +203,16 @@ ${this.codepen.style}
       const { script, html, style } = this.codepen
       const resourcesTpl =
         '<scr' +
-        'ipt src="//unpkg.com/vue@next"></scr' +
+        'ipt src="//cdn.jsdelivr.net/npm/vue@next"></scr' +
         'ipt>' +
         '\n<scr' +
-        `ipt src="//unpkg.com/element-plus"></scr` +
+        `ipt src="//cdn.jsdelivr.net/npm/element-plus"></scr` +
         'ipt>' +
         '\n<scr' +
-        `ipt src="//unpkg.com/vue-cesium@next/lib/index.full.js"></scr` +
+        `ipt src="//cdn.jsdelivr.net/npm/vue-cesium@next"></scr` +
         'ipt>'
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
-      let cssTpl = `@import url("//unpkg.com/element-plus/dist/index.css");\n${(style || '').trim()}\n@import url("//unpkg.com/vue-cesium@next/lib/theme-default/index.css");\n${(style || '').trim()}\n`
+      let cssTpl = `@import url("//cdn.jsdelivr.net/npm/element-plus/dist/index.css");\n${(style || '').trim()}\n@import url("//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css");\n${(style || '').trim()}\n`
       cssTpl += `
         .demo-viewer .el-row:last-child {
             margin-bottom: 0;

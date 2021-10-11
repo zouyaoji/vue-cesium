@@ -2,7 +2,7 @@
 
 Navigation components, including compass, zoom, other floating buttons, position and distance scale toolbar controls. It is composed of `vc-compass`, `vc-zoom-control`, `vc-print`, `vc-mylocation`, `vc-status-bar`, and `vc-distance-legend`.
 
-**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
+**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 

@@ -5,7 +5,7 @@ vue-cesium 使用火星科技的 [Mars3D](http://mars3d.cn/) 开发时只需要�
 ```javascript
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
-import 'vue-cesium/lib/theme-default/index.css'
+import 'vue-cesium/dist/index.css'
 import App from './App.vue'
 
 const app = createApp(App)

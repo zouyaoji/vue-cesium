@@ -2,7 +2,7 @@
 
 Load measurement tool components, including distance measurement, component distance measurement, polyline distance measurement, horizontal distance measurement, vertical distance measurement, height measurement, area measurement, and point coordinate measurement.
 
-**Note:** Style files need to be imported: `import'vue-cesium/lib/theme-default/index.css';`
+**Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 
