@@ -697,14 +697,15 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     }
 
     let viewer: Cesium.Viewer
-    if (global.mars3d) {
+
+    if (globalThis.mars3d) {
       vcInstance.map = new mars3d.Map($(viewerRef).id, options)
       viewer = vcInstance.map?._viewer
-    } else if (global.DC) {
+    } else if (globalThis.DC) {
       vcInstance.dcViewer = new DC.Viewer($(viewerRef).id, options)
       viewer = vcInstance.dcViewer?.delegate
-    } else if (global.XE) {
-      vcInstance.earth = new global.XE.Earth($(viewerRef), options)
+    } else if (globalThis.XE) {
+      vcInstance.earth = new globalThis.XE.Earth($(viewerRef), options)
       viewer = vcInstance.earth?.czm.viewer
     } else {
       viewer = new Viewer($(viewerRef), options)
@@ -786,15 +787,15 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       viewer,
       vm: vcInstance.proxy as VcComponentPublicInstance
     }
-    if (global.XE) {
+    if (globalThis.XE) {
       Object.assign(readyObj, {
         earth: vcInstance.earth
       })
-    } else if (global.mars3d) {
+    } else if (globalThis.mars3d) {
       Object.assign(readyObj, {
         map: vcInstance.map
       })
-    } else if (global.DC) {
+    } else if (globalThis.DC) {
       Object.assign(readyObj, {
         dcViewer: vcInstance.dcViewer
       })
@@ -844,7 +845,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     vcInstance.children.length = 0
 
     const { viewer, earth, map, dcViewer } = vcInstance
-    if (global.Cesium) {
+    if (globalThis.Cesium) {
       viewer.imageryLayers.layerAdded.removeEventListener(onImageryLayerAdded)
       eventsState.registerEvents(false)
     }
@@ -854,11 +855,11 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     viewer._vcPickScreenSpaceEventHandler = undefined!
     viewer._vcViewerScreenSpaceEventHandler = undefined!
 
-    if (global.XE) {
+    if (globalThis.XE) {
       earth && earth.destroy()
-    } else if (global.mars3d) {
+    } else if (globalThis.mars3d) {
       map && map.destroy()
-    } else if (global.DC) {
+    } else if (globalThis.DC) {
       dcViewer && dcViewer.destroy()
     } else {
       viewer && viewer.destroy()
@@ -867,13 +868,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     vcInstance.viewer = undefined!
     vcInstance.mounted = false
     const { removeCesiumScript } = props
-    if (removeCesiumScript && global.Cesium) {
+    if (removeCesiumScript && globalThis.Cesium) {
       const scripts = document.getElementsByTagName('script')
       const removeScripts: Array<HTMLScriptElement | HTMLLinkElement> = []
       for (const script of scripts) {
         script.src.indexOf('/Cesium.js') > -1 && removeScripts.push(script)
         script.src.indexOf('/Workers/zlib.min.js') > -1 && removeScripts.push(script)
-        if (global.XE) {
+        if (globalThis.XE) {
           script.src.indexOf('/rxjs.umd.min.js') > -1 && removeScripts.push(script)
           script.src.indexOf('/XbsjCesium.js') > -1 && removeScripts.push(script)
           script.src.indexOf('/viewerCesiumNavigationMixin.js') > -1 && removeScripts.push(script)
@@ -891,13 +892,13 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       removeScripts.forEach(script => {
         script.parentNode && script.parentNode.removeChild(script)
       })
-      global.Cesium && (global.Cesium = undefined!)
-      global.XbsjCesium && (global.XbsjCesium = undefined)
-      global.XbsjEarth && (global.XbsjEarth = undefined)
-      global.XE && (global.XE = undefined)
-      global.mars3d && (global.mars3d = undefined)
-      global.DC && (global.DC = undefined)
-      global.DcCore && (global.DcCore = undefined)
+      globalThis.Cesium && (globalThis.Cesium = undefined!)
+      globalThis.XbsjCesium && (globalThis.XbsjCesium = undefined)
+      globalThis.XbsjEarth && (globalThis.XbsjEarth = undefined)
+      globalThis.XE && (globalThis.XE = undefined)
+      globalThis.mars3d && (globalThis.mars3d = undefined)
+      globalThis.DC && (globalThis.DC = undefined)
+      globalThis.DcCore && (globalThis.DcCore = undefined)
       $vc.scriptPromise = undefined
       loadLibs = []
     }
@@ -921,7 +922,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    */
   const getCesiumScript = async function (): Promise<typeof Cesium> {
     logger.debug('getCesiumScript')
-    if (!global.Cesium) {
+    if (!globalThis.Cesium) {
       let cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
       const dirName = dirname(cesiumPath!)
       if (!cesiumPath?.includes('.js')) {
@@ -972,36 +973,36 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       })
 
       return Promise.all(scriptLoadPromises).then(() => {
-        if (global.Cesium) {
+        if (globalThis.Cesium) {
           const listener = getInstanceListener(vcInstance, 'cesiumReady')
-          listener && emit('cesiumReady', global.Cesium)
-          return global.Cesium
-        } else if (global.XE) {
+          listener && emit('cesiumReady', globalThis.Cesium)
+          return globalThis.Cesium
+        } else if (globalThis.XE) {
           // 兼容 cesiumlab earthsdk
-          return global.XE.ready().then(() => {
-            // resolve(global.Cesium)
+          return globalThis.XE.ready().then(() => {
+            // resolve(globalThis.Cesium)
             const listener = getInstanceListener(vcInstance, 'cesiumReady')
-            listener && emit('cesiumReady', global.Cesium)
-            return global.Cesium
+            listener && emit('cesiumReady', globalThis.Cesium)
+            return globalThis.Cesium
           })
-        } else if (global.DC) {
+        } else if (globalThis.DC) {
           // 兼容  dc-sdk
-          global.DC.use(global.DcCore.default)
-          global.DC.baseUrl = `${dirName}/resources/`
-          global.DC.ready(() => {
-            global.Cesium = DC.Namespace.Cesium
+          globalThis.DC.use(globalThis.DcCore.default)
+          globalThis.DC.baseUrl = `${dirName}/resources/`
+          globalThis.DC.ready(() => {
+            globalThis.Cesium = DC.Namespace.Cesium
 
             const listener = getInstanceListener(vcInstance, 'cesiumReady')
-            listener && emit('cesiumReady', global.DC)
-            return global.Cesium
+            listener && emit('cesiumReady', globalThis.DC)
+            return globalThis.Cesium
           })
-          return global.Cesium
+          return globalThis.Cesium
         } else {
           reject(new Error('VueCesium ERROR: ' + 'Error loading CesiumJS!'))
         }
       })
     } else {
-      return Promise.resolve(global.Cesium)
+      return Promise.resolve(globalThis.Cesium)
     }
   }
 
