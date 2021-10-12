@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-31 16:26:50
- * @LastEditTime: 2021-10-08 11:24:34
+ * @LastEditTime: 2021-10-12 10:58:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\entry.js
@@ -25,7 +25,7 @@ import App from './app.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-import VueCesium from 'vue-cesium'
+import VueCesium, { VcOverlayEchart } from 'vue-cesium'
 import '../packages/theme-default/src/index.scss'
 
 const app = createApp(App)
@@ -48,6 +48,7 @@ app.use(VueCesium, {
   accessToken:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
 })
+app.use(VcOverlayEchart)
 app.use(router)
 router.isReady().then(() => {
   router.afterEach(async route => {
