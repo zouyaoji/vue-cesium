@@ -1,5 +1,19 @@
 ## Changelog
 
+### 3.0.2-beta.2
+
+_2021-10-12_
+
+#### New feature
+
+- The `vc-measurements` component added rectangle measurement.
+- Added `vc-overlay-echart` component.
+
+#### Bug fixes
+
+- Change global to globalThis to avoid the error that global is undefined.
+- Fixed the problem that the pictures of style files are lost after packaging.
+
 ### 3.0.2-beta.1
 
 _2021-10-10_
