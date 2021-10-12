@@ -54,7 +54,7 @@ export default defineComponent({
     const vc = useVueCesium()
 
     instance.createCesiumObject = async () => {
-      const options: any = datasourcesState.transformProps(props)
+      const options: any = datasourcesState?.transformProps(props)
       if (!options.camera) {
         options.camera = vc?.viewer.camera
       }
