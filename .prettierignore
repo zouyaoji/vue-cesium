@@ -1,9 +1,5 @@
-build
 dist
-website
 node_modules
 packages/*/es
 packages/*/lib
-.github
 coverage
-.vscode
