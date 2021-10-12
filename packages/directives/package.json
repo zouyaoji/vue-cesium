@@ -1,6 +1,6 @@
 {
   "name": "@vue-cesium/directives",
-  "version": "3.0.2-beta.1",
+  "version": "3.0.2-beta.2",
   "description": "VueCesium directives",
   "main": "index.js",
   "module": "index.js",
