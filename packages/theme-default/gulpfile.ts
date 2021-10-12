@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-11 09:17:23
+ * @LastEditTime: 2021-10-12 15:51:21
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\theme-default\gulpfile.ts
+ */
 /* eslint-disable no-console */
 
 import chalk from 'chalk'
@@ -7,6 +15,8 @@ import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
 import rename from 'gulp-rename'
+import postcss from 'gulp-postcss'
+
 import { buildOutput } from '../../build/paths'
 
 import path from 'path'
@@ -25,6 +35,7 @@ function compile() {
   return gulp
     .src('./src/*.scss')
     .pipe(sass.sync())
+    .pipe(postcss())
     .pipe(autoprefixer({ cascade: false }))
     .pipe(
       cleanCSS({}, details => {
