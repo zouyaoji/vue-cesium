@@ -23,8 +23,8 @@ _2021-10-10_
 - Making the project more clear via reorganizing the code. Better organizable code. Make the publish bundle more legit and clear. Because that this breaking change mainly impact publish bundle, if you were using the full bundled style file, you will going to change the resource path in your project:
 
 ```js
---- import 'vue-cesium/dist/index.css'
-+++ import 'vue-cesium/dist/index.css'
+  --- import 'vue-cesium/lib/theme-default/index.css'
+  +++ import 'vue-cesium/dist/index.css'
 ```
 
 #### Bug fixes

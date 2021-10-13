@@ -23,8 +23,8 @@ _2021-10-10_
 - 通过重新组织代码使项目更加清晰，更好地组织代码，让打包产物更加清晰，由于本次改动最大的影响是对打包产物的重新组织，所以如果你以前是全量引入样式文件的话，你需要更改样式文件所在的地址:
 
 ```js
---- import 'vue-cesium/dist/index.css'
-+++ import 'vue-cesium/dist/index.css'
+  --- import 'vue-cesium/lib/theme-default/index.css'
+  +++ import 'vue-cesium/dist/index.css'
 ```
 
 #### Bug 修复
