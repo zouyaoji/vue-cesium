@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2021-09-03 16:55:00
+ * @LastEditTime: 2021-10-27 15:38:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -26,9 +26,9 @@
   <a href="https://github.com/zouyaoji/vue-cesium/blob/dev/LICENSE" target="_blank">
     <img src="https://img.shields.io/github/license/zouyaoji/vue-cesium?style=plastic">
   </a>
-  <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev" target="_blank">
+  <!-- <a href="https://coveralls.io/github/zouyaoji/vue-cesium?branch=dev" target="_blank">
     <img src="https://img.shields.io/coveralls/github/zouyaoji/vue-cesium?style=plastic">
-  </a>
+  </a> -->
   <br>
 </p>
 
