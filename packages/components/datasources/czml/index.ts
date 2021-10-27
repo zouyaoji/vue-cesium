@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-23 23:22:13
+ * @LastEditTime: 2021-10-27 15:14:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\datasources\czml\index.ts
@@ -38,6 +38,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'CzmlDataSource'
     const datasourcesState = useDatasources(props, ctx, instance)
+
+    if (undefined === datasourcesState) {
+      return
+    }
 
     instance.createCesiumObject = async () => {
       const options = datasourcesState.transformProps(props)

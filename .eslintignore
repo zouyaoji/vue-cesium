@@ -6,3 +6,4 @@ packages/*/es
 packages/*/lib
 .github
 coverage
+packages/theme-default/src/fonts

@@ -63,6 +63,9 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'UrlTemplateImageryProvider'
     const providersState = useProviders(props, ctx, instance)
+    if (undefined === providersState) {
+      return
+    }
     // methods
     instance.createCesiumObject = async () => {
       const options = providersState.transformProps(props)

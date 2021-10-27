@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:55:15
+ * @LastEditTime: 2021-10-27 15:16:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
@@ -36,6 +36,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'CesiumTerrainProvider'
     const providersState = useProviders(props, ctx, instance)
+
+    if (undefined === providersState) {
+      return
+    }
     // methods
     instance.createCesiumObject = async () => {
       if (providersState.unwatchFns.length === 0) {

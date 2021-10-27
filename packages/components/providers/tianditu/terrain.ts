@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-01 23:14:21
+ * @LastEditTime: 2021-10-27 15:16:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
@@ -45,6 +45,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'GeoTerrainProvider'
     const providersState = useProviders(props, ctx, instance)
+
+    if (undefined === providersState) {
+      return
+    }
     const vc = useVueCesium()
     let $script
     // methods
