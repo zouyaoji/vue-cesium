@@ -20,7 +20,11 @@ Basic usage of the VcGraphicsPath component.
         :material="{fabric: {type: 'PolylineGlow', uniforms: {glowPower: 0.1, color: 'yellow'}}}"
         :width="10"
       ></vc-graphics-path>
-      <vc-graphics-model ref="model" uri="./SampleData/models/CesiumAir/Cesium_Air.glb" :minimumPixelSize="128"></vc-graphics-model>
+      <vc-graphics-model
+        ref="model"
+        uri="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
+        :minimumPixelSize="128"
+      ></vc-graphics-model>
     </vc-entity>
     <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
       <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>

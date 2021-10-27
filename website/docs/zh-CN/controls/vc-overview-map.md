@@ -25,7 +25,7 @@
           url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
         ></vc-provider-imagery-urltemplate>
       </vc-layer-imagery>
-      <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
+      <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
       </vc-entity>
@@ -48,7 +48,7 @@
         </vc-entity>
       </vc-overview-map>
     </vc-overview-map>
-    <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
+    <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
     <vc-layer-imagery :sortOrder="10">
       <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>

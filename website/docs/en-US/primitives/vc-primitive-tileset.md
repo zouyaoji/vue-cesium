@@ -13,7 +13,7 @@ Basic usage of VcPrimitiveTileset component.
   <vc-viewer>
     <vc-primitive-tileset
       ref="primitive"
-      url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
+      url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
       @readyPromise="onReadyPromise"
       @click="onClicked"
     >

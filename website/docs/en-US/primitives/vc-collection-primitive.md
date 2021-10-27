@@ -24,7 +24,7 @@ Basic usage of VcCollectionPrimitive component.
     <vc-collection-primitive>
       <vc-primitive-model
         @click="onClicked"
-        url="./SampleData/models/CesiumAir/Cesium_Air.glb"
+        url="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
         :modelMatrix="modelMatrix"
         :scale="10000"
         :minimumPixelSize="128"

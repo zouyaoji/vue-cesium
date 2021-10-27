@@ -14,7 +14,10 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <vc-provider-imagery-singletile ref="provider" url="./SampleData/images/worldimage.jpg"></vc-provider-imagery-singletile>
+      <vc-provider-imagery-singletile
+        ref="provider"
+        url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"
+      ></vc-provider-imagery-singletile>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">

@@ -13,13 +13,21 @@ GeoJson 数据源组件的基础用法。
   <vc-viewer>
     <vc-datasource-geojson
       ref="datasourceRef"
-      data="./SampleData/geojson/china.json"
+      data="https://zouyaoji.top/vue-cesium/SampleData/geojson/china.json"
       @ready="onDatasourceReady"
       :show="show"
       stroke="red"
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
+    <vc-layer-imagery :sortOrder="10">
+      <vc-provider-imagery-tianditu
+        mapStyle="img_c"
+        :maximumLevel="17"
+        token="436ce7e50d27eede2f2929307e6b33c0"
+        ref="provider"
+      ></vc-provider-imagery-tianditu>
+    </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -120,7 +128,7 @@ GeoJson 数据源组件的基础用法。
 | mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
 | mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
 | click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触发。   |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触发。 |
 | dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
 | mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
 | mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |

@@ -13,7 +13,7 @@ Basic usage of VcDatasourceKml component.
   <vc-viewer>
     <vc-datasource-kml
       ref="datasourceRef"
-      data="./SampleData/kml/gdpPerCapita2008.kmz"
+      data="https://zouyaoji.top/vue-cesium/SampleData/kml/gdpPerCapita2008.kmz"
       :show="show"
       @click="onClicked"
       @ready="onDatasourceReady"

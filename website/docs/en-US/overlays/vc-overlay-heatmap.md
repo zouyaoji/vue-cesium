@@ -30,7 +30,7 @@ Basic usage of VcOverlayHeatmap component.
     <vc-layer-imagery>
       <vc-provider-imagery-osm></vc-provider-imagery-osm>
     </vc-layer-imagery>
-    <vc-datasource-geojson data="./SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
+    <vc-datasource-geojson data="https://zouyaoji.top/vue-cesium/SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
@@ -82,7 +82,7 @@ Basic usage of VcOverlayHeatmap component.
     },
     methods: {
       ready({ Cesium, viewer }) {
-        Cesium.Resource.fetchJson({ url: './SampleData/heatmap/pop.json' }).then(res => {
+        Cesium.Resource.fetchJson({ url: 'https://zouyaoji.top/vue-cesium/SampleData/heatmap/pop.json' }).then(res => {
           this.rectangle = res.bounds
           this.min = res.min
           this.max = res.max

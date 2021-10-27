@@ -74,12 +74,12 @@
           "groupName": "工具",
           "list": [
             {
-              "path": "/tools/vc-measurements",
-              "title": "VcMeasurements 量算"
-            },
-            {
               "path": "/tools/vc-drawings",
               "title": "VcDrawings 绘制"
+            },
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements 量算"
             }
           ]
         },
@@ -533,12 +533,12 @@
           "groupName": "Tools",
           "list": [
             {
-              "path": "/tools/vc-measurements",
-              "title": "VcMeasurements"
-            },
-            {
               "path": "/tools/vc-drawings",
               "title": "VcDrawings"
+            },
+            {
+              "path": "/tools/vc-measurements",
+              "title": "VcMeasurements"
             }
           ]
         },

@@ -13,13 +13,16 @@ Basic usage of VcDatasourceGeojson component.
   <vc-viewer>
     <vc-datasource-geojson
       ref="datasourceRef"
-      data="./SampleData/geojson/china.json"
+      data="https://zouyaoji.top/vue-cesium/SampleData/geojson/china.json"
       @ready="onDatasourceReady"
       :show="show"
       stroke="red"
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
+    <vc-layer-imagery :sortOrder="10">
+      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+    </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>

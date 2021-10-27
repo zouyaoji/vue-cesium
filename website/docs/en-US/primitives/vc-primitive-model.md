@@ -59,11 +59,11 @@ Basic usage of VcPrimitiveGround component.
     [-0.042260855700641, -0.046394335094707, -0.057562936365585],
     [-0.004953478914091, -0.000479681664876, 0.008508150106928]
   ]
-  const environmentMapURL = './SampleData/EnvironmentMap/kiara_6_afternoon_2k_ibl.ktx'
+  const environmentMapURL = 'https://zouyaoji.top/vue-cesium/SampleData/EnvironmentMap/kiara_6_afternoon_2k_ibl.ktx'
   export default {
     data() {
       return {
-        url: './SampleData/models/Pawns/Pawns.glb',
+        url: 'https://zouyaoji.top/vue-cesium/SampleData/models/Pawns/Pawns.glb',
         modelMatrix: {},
         proceduralEnvironmentLighting: false,
         luminanceAtZenith: 0.2,

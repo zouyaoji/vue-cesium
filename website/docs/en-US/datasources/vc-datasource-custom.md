@@ -152,9 +152,9 @@ Basic usage of VcDatasourceCustom component.
           id: '1001',
           code: '1001',
           name: 'test',
-          iconOn: './SampleData/points/pic.png',
+          iconOn: 'https://zouyaoji.top/vue-cesium/SampleData/points/pic.png',
           giscolor: '#fb7228',
-          datauri: './SampleData/points/custom-data.json'
+          datauri: 'https://zouyaoji.top/vue-cesium/SampleData/points/custom-data.json'
         }
         addPoints(options, true)
       }
@@ -172,16 +172,16 @@ Basic usage of VcDatasourceCustom component.
           cluster.billboard.id = cluster.label.id
           cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM
           clusteredEntities.length >= 300
-            ? (cluster.billboard.image = './SampleData/images/cluser/300+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/300+.png')
             : clusteredEntities.length >= 150
-            ? (cluster.billboard.image = './SampleData/images/cluser/150+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/150+.png')
             : clusteredEntities.length >= 90
-            ? (cluster.billboard.image = './SampleData/images/cluser/90+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/90+.png')
             : clusteredEntities.length >= 30
-            ? (cluster.billboard.image = './SampleData/images/cluser/30+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/30+.png')
             : clusteredEntities.length > 10
-            ? (cluster.billboard.image = './SampleData/images/cluser/10+.png')
-            : (cluster.billboard.image = './SampleData/images/cluser/' + clusteredEntities.length + '.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/10+.png')
+            : (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/' + clusteredEntities.length + '.png')
         } else {
           cluster.label.show = true
           cluster.label.scale = 0.5

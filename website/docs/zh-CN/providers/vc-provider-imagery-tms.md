@@ -16,7 +16,7 @@
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-provider-imagery-tms
         ref="provider"
-        url="./SampleData/images/cesium_maptiler/Cesium_Logo_Color"
+        url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
         :rectangle="[-120, 20, -60, 40]"
         :maximumLevel="4"
         @readyPromise="onImageryProviderReady"

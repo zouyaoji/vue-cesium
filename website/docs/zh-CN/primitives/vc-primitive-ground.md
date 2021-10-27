@@ -55,27 +55,27 @@
             fabric: {
               type: 'Image',
               uniforms: {
-                image: './SampleData/images/radar/1.png'
+                image: 'https://zouyaoji.top/vue-cesium/SampleData/images/radar/1.png'
               }
             }
           })
         })
 
         const urls = [
-          './SampleData/images/radar/1.png',
-          './SampleData/images/radar/2.png',
-          './SampleData/images/radar/3.png',
-          './SampleData/images/radar/4.png',
-          './SampleData/images/radar/5.png',
-          './SampleData/images/radar/6.png',
-          './SampleData/images/radar/7.png',
-          './SampleData/images/radar/8.png',
-          './SampleData/images/radar/9.png',
-          './SampleData/images/radar/10.png'
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/1.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/2.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/3.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/4.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/5.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/6.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/7.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/8.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/9.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/10.png'
         ]
         let i = 0
         let that = this
-        setInterval(function() {
+        setInterval(function () {
           that.appearance.material.uniforms.image = urls[i]
           i++
           if (i === 10) i = 0
@@ -129,7 +129,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |

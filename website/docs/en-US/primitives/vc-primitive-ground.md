@@ -63,27 +63,27 @@ Basic usage of VcPrimitiveGround component.
             fabric: {
               type: 'Image',
               uniforms: {
-                image: './SampleData/images/radar/1.png'
+                image: 'https://zouyaoji.top/vue-cesium/SampleData/images/radar/1.png'
               }
             }
           })
         })
 
         const urls = [
-          './SampleData/images/radar/1.png',
-          './SampleData/images/radar/2.png',
-          './SampleData/images/radar/3.png',
-          './SampleData/images/radar/4.png',
-          './SampleData/images/radar/5.png',
-          './SampleData/images/radar/6.png',
-          './SampleData/images/radar/7.png',
-          './SampleData/images/radar/8.png',
-          './SampleData/images/radar/9.png',
-          './SampleData/images/radar/10.png'
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/1.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/2.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/3.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/4.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/5.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/6.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/7.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/8.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/9.png',
+          'https://zouyaoji.top/vue-cesium/SampleData/images/radar/10.png'
         ]
         let i = 0
         let that = this
-        setInterval(function() {
+        setInterval(function () {
           that.appearance.material.uniforms.image = urls[i]
           i++
           if (i === 10) i = 0

@@ -116,7 +116,7 @@
 | credit                | String          | `''`    | `optional` 指定服务的描述信息                                                                |
 | minimumLevel          | Number          | `0`     | `optional` 最小层级。                                                                        |
 | maximumLevel          | Number          |         | `optional` 最大层级。                                                                        |
-| rectangle\|Object     | Object          |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
+| rectangle             | Object\|Array   |         | `optional` 图层的矩形范围,此矩形限制了影像可见范围。                                         |
 | tilingScheme          | Object          |         | `optional` 指定服务的投影参数。                                                              |
 | ellipsoid             | Object          |         | `optional` 参考椭球体。                                                                      |
 | tileWidth             | Number          | `256`   | `optional` 像元宽度。                                                                        |
@@ -125,7 +125,7 @@
 | getFeatureInfoFormats | Array           |         | `optional` 格式化拾取对象属性时提示信息位置，该项要设置 pickFeaturesUrl 且起作用时才起作用。 |
 | enablePickFeatures    | Boolean         | `true`  | `optional` 是否开启图层拾取。                                                                |
 | customTags            | Object          |         | `optional` 替换 url 模板中的自定义关键字。                                                   |
-| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定纠偏参数。                                                                |
+| projectionTransforms  | Boolean\|Object | `false` | `optional` 指定纠偏参数。                                                                    |
 
 ### 事件
 

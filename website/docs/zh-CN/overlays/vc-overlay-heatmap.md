@@ -33,7 +33,7 @@
     <vc-layer-imagery :sortOrder="10">
       <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
     </vc-layer-imagery>
-    <vc-datasource-geojson data="./SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
+    <vc-datasource-geojson data="https://zouyaoji.top/vue-cesium/SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -85,7 +85,7 @@
     },
     methods: {
       ready({ Cesium, viewer }) {
-        Cesium.Resource.fetchJson({ url: './SampleData/heatmap/pop.json' }).then(res => {
+        Cesium.Resource.fetchJson({ url: 'https://zouyaoji.top/vue-cesium/SampleData/heatmap/pop.json' }).then(res => {
           this.rectangle = res.bounds
           this.min = res.min
           this.max = res.max

@@ -153,9 +153,9 @@
           id: '1001',
           code: '1001',
           name: 'test',
-          iconOn: './SampleData/points/pic.png',
+          iconOn: 'https://zouyaoji.top/vue-cesium/SampleData/points/pic.png',
           giscolor: '#fb7228',
-          datauri: './SampleData/points/custom-data.json'
+          datauri: 'https://zouyaoji.top/vue-cesium/SampleData/points/custom-data.json'
         }
         addPoints(options, true)
       }
@@ -173,16 +173,16 @@
           cluster.billboard.id = cluster.label.id
           cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM
           clusteredEntities.length >= 300
-            ? (cluster.billboard.image = './SampleData/images/cluser/300+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/300+.png')
             : clusteredEntities.length >= 150
-            ? (cluster.billboard.image = './SampleData/images/cluser/150+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/150+.png')
             : clusteredEntities.length >= 90
-            ? (cluster.billboard.image = './SampleData/images/cluser/90+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/90+.png')
             : clusteredEntities.length >= 30
-            ? (cluster.billboard.image = './SampleData/images/cluser/30+.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/30+.png')
             : clusteredEntities.length > 10
-            ? (cluster.billboard.image = './SampleData/images/cluser/10+.png')
-            : (cluster.billboard.image = './SampleData/images/cluser/' + clusteredEntities.length + '.png')
+            ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/10+.png')
+            : (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/' + clusteredEntities.length + '.png')
         } else {
           cluster.label.show = true
           cluster.label.scale = 0.5
@@ -270,7 +270,7 @@
 | mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上按下时触发。 |
 | mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上弹起时触发。 |
 | click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源时触发。     |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触发。   |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该数据源外部时触发。 |
 | dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该数据源时触发。 |
 | mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该数据源上移动时触发。 |
 | mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |

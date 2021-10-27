@@ -27,7 +27,7 @@ Basic usage of drawing components.
     <vc-drawings
       ref="drawingsRef"
       position="bottom-left"
-      :mainFabOpts="drawingFabOptions1"
+      :mainFabOpts="mainFabOpts"
       :offset="[20, 80]"
       :editable="editable"
       :clampToGround="clampToGround"
@@ -35,45 +35,52 @@ Basic usage of drawing components.
       @activeEvt="activeEvt"
       @editorEvt="editorEvt"
       @mouseEvt="mouseEvt"
+      @ready="drawingsReadyDefault"
     ></vc-drawings>
     <!-- Customize UI through slot -->
     <vc-drawings
-      ref="drawingsRef4"
+      ref="drawingsCustomRef"
       position="bottom-left"
-      :mainFabOpts="drawingFabOptions1"
-      :polylineDrawingOpts="polylineDrawingOpts2"
-      :rectangleDrawingOpts="rectangleDrawingOpts2"
-      :offset="[20, 20]"
+      :mainFabOpts="mainFabOpts"
+      :offset="[0, 20]"
       :editable="editable"
       :clampToGround="clampToGround"
       @ready="drawingsReady"
+      :polylineDrawingOpts="polylineDrawingOpts"
+      :rectangleDrawingOpts="rectangleDrawingOpts"
+      :pinDrawingOpts="pinDrawingOpts"
     >
       <template #body>
         <div class="custom-drawings">
           <el-row>
             <el-button
-              v-for="(drawingOpts, index) in drawingsOpts"
+              v-for="(drawingActionInstance, index) in drawingActionInstances"
               :key="index"
-              :type="drawingOpts.isActive ? 'success' : 'primary'"
+              :type="drawingActionInstance.isActive ? 'success' : 'primary'"
               round
-              @click="toggle(drawingOpts)"
-              >{{drawingOpts.tip}}</el-button
+              @click="toggle(drawingActionInstance)"
+              >{{drawingActionInstance.tip.replace('Drawing ', '')}}</el-button
             >
             <el-button type="danger" round @click="clear">Clear</el-button>
           </el-row>
         </div>
       </template>
     </vc-drawings>
-    <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json" @readyPromise="onTilesetReady"></vc-primitive-tileset>
+    <vc-primitive-tileset
+      url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
+      @readyPromise="onTilesetReady"
+    ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-provider-imagery-osm></vc-provider-imagery-osm>
     </vc-layer-imagery>
+    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
     <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
     <el-checkbox v-model="editable">editable</el-checkbox>
+    <el-checkbox v-model="addTerrain">地形</el-checkbox>
     <el-checkbox v-model="clampToGround">clampToGround</el-checkbox>
   </el-row>
 </el-row>
@@ -82,36 +89,49 @@ Basic usage of drawing components.
   export default {
     data() {
       return {
-        drawingsOpts: [],
+        addTerrain: false,
+        drawingActionInstances: [],
         editable: false,
         clampToGround: false,
-        drawingFabOptions1: {
+        mainFabOpts: {
           direction: 'right'
         },
-        polylineDrawingOpts2: {
+        polylineDrawingOpts: {
           loop: true
         },
-        rectangleDrawingOpts2: {
+        rectangleDrawingOpts: {
           regular: false
+        },
+        pinDrawingOpts: {
+          billboardOpts: {
+            image: 'https://zouyaoji.top/vue-cesium/images/grepin.png'
+          },
+          labelOpts: {
+            text: 'Pin',
+            pixelOffset: [0, -60]
+          }
         }
       }
     },
     methods: {
+      drawingsReadyDefault({ Cesium, viewer, cesiumObject }) {
+        console.log('Default Drawing Options', cesiumObject)
+      },
       clear() {
-        this.$refs.drawingsRef4.clearAll()
+        this.$refs.drawingsCustomRef.clearAll()
       },
       drawingsReady({ Cesium, viewer, cesiumObject }) {
-        this.drawingsOpts = cesiumObject
+        this.drawingActionInstances = cesiumObject
       },
-      toggle(drawingOpts) {
-        this.$refs.drawingsRef4.toggleAction(drawingOpts)
+      toggle(drawingActionInstance) {
+        this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
       onTilesetReady(tileset, viewer) {
-        const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
-        const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
-        const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
-        const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
-        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+        // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
+        // const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
+        // const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
+        // const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
+        // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },
@@ -185,17 +205,25 @@ Basic usage of drawing components.
 | offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | Boolean | `true` | `optional` Specify whether the drawn result is visible. |
 | mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| drawings | Array | `['point', 'polyline', 'polygon', 'rectangle', 'circle']` | `optional` Specify the drawing instance to be loaded. |
+| drawings | Array | `['pin', 'point', 'polyline', 'polygon', 'rectangle', 'circle', 'regular']` | `optional` Specify the drawing instance to be loaded. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
 | clampToGround | Boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
 | mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the drawing component. |
+| pinActionOpts | Object | `` | `optional` Specify the style options of the pin drawing action button.|
+| pinDrawingOpts | Object | | `optional` Specify pin drawing parameters.|
 | pointActionOpts | Object | `` | `optional` Specify the style options of the poingt drawing action button.|
 | pointDrawingOpts | Object | | `optional` Specify poingt drawing parameters.|
 | polylineActionOpts | Object | | `optional` Specify the style options of the polyline drawing action button.|
 | polylineDrawingOpts | Object | | `optional` Specify the polyline drawing parameters.|
 | polygonActionOpts | Object | | `optional` Specify the style options of the polygon drawing action button.|
 | polygonDrawingOpts | Object | | `optional` Specify the polygon drawing parameters.|
+| rectangleActionOpts | Object | | `optional` Specify the style options of the rectangle drawing action button.|
+| rectangleDrawingOpts | Object | | `optional` Specify the rectangle drawing parameters.|
+| circleActionOpts | Object | | `optional` Specify the style options of the circle drawing action button.|
+| circleDrawingOpts | Object | | `optional` Specify the circle drawing parameters.|
+| regularActionOpts | Object | | `optional` Specify the style options of the regular drawing action button.|
+| regularDrawingOpts | Object | | `optional` Specify the regular drawing parameters.|
 | clearActionOpts | Object | | `optional` Specify the style options of the clear action button.|
 
 :::tip
@@ -230,9 +258,12 @@ Tip: The drawing component is mainly composed of two parts: (1) the floating act
     ]
   },
   // The default icons are
-  // vc-icons-drawing-point,
-  // vc-icons-drawing-polyline,
-  // vc-icons-drawing-polygon,
+  // vc-icons-drawing-point
+  // vc-icons-drawing-polyline
+  // vc-icons-drawing-polygon
+  // vc-icons-drawing-rectangle
+  // vc-icons-drawing-circle
+  // vc-icons-drawing-regular
   // vc-icons-clear
   icon: 'vc-icons-drawing-point'
 }
@@ -259,344 +290,9 @@ Tip: The drawing component is mainly composed of two parts: (1) the floating act
 
 Tip: Each drawing button (FabAction) corresponds to the drawing parameters xxxDrawingOpts, used to customize drawing objects.
 
-See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/drawings/src/defaultProps.ts)
+See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/drawings/src/defaultProps.ts)
 
-:::
-
-::: tipflex
-
-```js
-// pointDrawingOpts
-{
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  }
-}
-```
-
-```js
-// polylineDrawingOpts
-{
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    insert: {
-      icon: 'vc-icons-insert',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  loop: false
-}
-```
-
-```js
-// polygonDrawingOpts
-{
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  polygonOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: [
-            255,
-            165,
-            0,
-            125
-          ]
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: [
-            255,
-            165,
-            0,
-            125
-          ]
-        }
-      }
-    },
-    perPositionHeight: true
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    insert: {
-      icon: 'vc-icons-insert',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  loop: true
-}
-
-```
+The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default parameters of drawing buttons` and `default parameters of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointDrawingOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
 
 :::
 

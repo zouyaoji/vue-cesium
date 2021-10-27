@@ -117,7 +117,7 @@ Basic usage of the `vc-provider-imagery-urltemplate` component.
 |credit|String\|Object|`''`|`optional` A credit for the data source, which is displayed on the canvas.|
 |minimumLevel|Number|`0`|`optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.|
 |maximumLevel|Number||`optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit.|
-|rectangle|Object||`optional` The rectangle, in radians, covered by the image. |
+|rectangle|Object\|Array||`optional` The rectangle, in radians, covered by the image. |
 |tilingScheme|Object||`optional` The tiling scheme specifying how the ellipsoidal surface is broken into tiles. If this parameter is not provided, a WebMercatorTilingScheme is used.|
 |ellipsoid|Object||`optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.|
 |tileWidth|Number|`256`|`optional` Pixel width of image tiles.|

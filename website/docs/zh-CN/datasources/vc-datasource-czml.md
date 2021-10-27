@@ -13,7 +13,7 @@ Czml 数据源组件的基础用法。
   <vc-viewer shouldAnimate>
     <vc-datasource-czml
       ref="datasourceRef"
-      czml="./SampleData/simple.czml"
+      czml="https://zouyaoji.top/vue-cesium/SampleData/simple.czml"
       @ready="onDatasourceReady"
       :show="show"
       @click="onClicked"

@@ -24,7 +24,19 @@ Basic usage of measurement components.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- Custom positioning and position offset -->
-    <vc-measurements ref="measurementsRef" position="bottom-left" :mainFabOpts="measurementFabOptions1" :offset="[20, 80]" :editable="editable">
+    <vc-measurements
+      @drawEvt="drawEvt"
+      @activeEvt="activeEvt"
+      @editorEvt="editorEvt"
+      @mouseEvt="mouseEvt"
+      ref="measurementsRef"
+      position="bottom-left"
+      :mainFabOpts="measurementFabOptions1"
+      :offset="[20, 80]"
+      :editable="editable"
+      :clampToGround="clampToGround"
+      @ready="drawingsReadyDefault"
+    >
     </vc-measurements>
     <!-- Custom measurement action -->
     <vc-measurements
@@ -53,7 +65,7 @@ Basic usage of measurement components.
       ref="measurementsRef4"
       position="bottom-left"
       :mainFabOpts="measurementFabOptions4"
-      :offset="[20, 20]"
+      :offset="[0, 20]"
       :editable="editable"
       @ready="measurementsReady"
     >
@@ -61,28 +73,35 @@ Basic usage of measurement components.
         <div class="custom-measurements">
           <el-row>
             <el-button
-              v-for="(measurementOpts, index) in measurementsOpts"
+              v-for="(drawingActionInstance, index) in drawingActionInstances"
               :key="index"
-              :type="measurementOpts.isActive ? 'success' : 'primary'"
+              :type="drawingActionInstance.isActive ? 'success' : 'primary'"
               round
               @click="toggle(measurementOpts)"
-              >{{measurementOpts.tip}}</el-button
+              size="mini"
+              >{{drawingActionInstance.tip}}</el-button
             >
             <el-button type="danger" round @click="clear">Clear</el-button>
           </el-row>
         </div>
       </template>
     </vc-measurements>
-    <vc-primitive-tileset url="./SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json" @readyPromise="onTilesetReady"></vc-primitive-tileset>
+    <vc-primitive-tileset
+      url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
+      @readyPromise="onTilesetReady"
+    ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-provider-imagery-osm></vc-provider-imagery-osm>
     </vc-layer-imagery>
+    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
     <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
     <el-checkbox v-model="editable">editable</el-checkbox>
+    <el-checkbox v-model="addTerrain">terrain</el-checkbox>
+    <el-checkbox v-model="clampToGround">clampToGround</el-checkbox>
   </el-row>
 </el-row>
 
@@ -91,7 +110,9 @@ Basic usage of measurement components.
   export default {
     data() {
       return {
+        addTerrain: false,
         editable: false,
+        clampToGround: false,
         measurementFabOptions1: {
           direction: 'right'
         },
@@ -141,27 +162,78 @@ Basic usage of measurement components.
         measurementFabOptions4: {
           direction: 'right'
         },
-        measurementsOpts: []
+        drawingActionInstances: []
       }
     },
     methods: {
+      drawingsReadyDefault({ Cesium, viewer, cesiumObject }) {
+        console.log('Default Drawing Options', cesiumObject)
+      },
       clear() {
         this.$refs.measurementsRef4.clearAll()
       },
       measurementsReady({ Cesium, viewer, cesiumObject }) {
-        this.measurementsOpts = cesiumObject
+        this.drawingActionInstances = cesiumObject
       },
       toggle(measurementOpts) {
         this.$refs.measurementsRef4.toggleAction(measurementOpts)
       },
       onTilesetReady(tileset, viewer) {
-        const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
-        const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
-        const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
-        const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
-        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+        // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
+        // const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
+        // const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
+        // const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
+        // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
+        this.restoreCursorMove = 'auto'
+        this.drawing = false
+      },
+      drawEvt(e, viewer) {
+        console.log(e)
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (e.finished) {
+          this.drawing = false
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove}`)
+          }
+        } else {
+          this.drawing = true
+          if (e.type === 'move') {
+            viewer.canvas.setAttribute('style', 'cursor: move')
+          }
+          if (e.type === 'new') {
+            viewer.canvas.setAttribute('style', 'cursor: crosshair')
+          }
+        }
+      },
+      activeEvt(e, viewer) {
+        console.log(e)
+        viewer.canvas.setAttribute('style', `cursor: ${e.isActive ? 'crosshair' : 'auto'}`)
+        if (!e.isActive) {
+          this.drawing = false
+          this.restoreCursorMove = 'auto'
+        }
+      },
+      editorEvt(e, viewer) {
+        console.log(e)
+        if (e.type === 'move') {
+          const restoreCursor = getComputedStyle(viewer.canvas).cursor
+          viewer.canvas.setAttribute('style', 'cursor: move')
+          this.drawing = true
+        }
+      },
+      mouseEvt(e, viewer) {
+        console.log(e)
+        const restoreCursor = getComputedStyle(viewer.canvas).cursor
+        if (!this.drawing) {
+          if (e.type === 'onmouseover') {
+            this.restoreCursorMove = restoreCursor
+            viewer.canvas.setAttribute('style', 'cursor: pointer')
+          } else {
+            viewer.canvas.setAttribute('style', `cursor: ${this.restoreCursorMove || 'auto'}`)
+          }
+        }
       },
       unload() {
         this.$refs.measurementsRef.unload()
@@ -188,7 +260,7 @@ Basic usage of measurement components.
 | offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | Boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
 | mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| measurements | Array | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point']` | `optional` Specify the measurement instance to be loaded. |
+| measurements | Array | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the measurement result can be edited. |
 | mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the measuring component. |
@@ -208,6 +280,12 @@ Basic usage of measurement components.
 | areaMeasurementOpts | Object | | `optional` Specify the area measurement parameters.|
 | pointActionOpts | Object | | `optional` Specify the style options of the point measurement action button.|
 | pointMeasurementOpts | Object | | `optional` Specify the point measurement parameters.|
+| rectangleActionOpts | Object | | `optional` Specify the style options of the rectangle measurement action button.|
+| rectangleMeasurementOpts | Object | | `optional` Specify the rectangle measurement parameters.|
+| circleActionOpts | Object | | `optional` Specify the style options of the circle measurement action button.|
+| circleMeasurementOpts | Object | | `optional` Specify the circle measurement parameters.|
+| regularActionOpts | Object | | `optional` Specify the style options of the regular measurement action button.|
+| regularMeasurementOpts | Object | | `optional` Specify the regular measurement parameters.|
 | clearActionOpts | Object | | `optional` Specify the style options of the clear action button.|
 
 :::tip
@@ -272,1291 +350,9 @@ Tip: The measurement component is mainly composed of two parts: (1) the floating
 
 Tip: Each measurement button (FabAction) corresponds to the measurement parameters xxxMeasurementOpts, used to customize drawing objects..
 
-:::
+See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/measurements/src/defaultProps.ts)
 
-::: tipflex
-
-```js
-// distanceMeasurementOpts
-{
-  show: true,
-  showComponentLines: false,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      10,
-      10
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2,
-    angle: 2
-  }
-}
-```
-
-```js
-// componentDistanceMeasurementOpts
-{
-  show: true,
-  showComponentLines: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: {
-            red: 0.3176470588235294,
-            green: 1,
-            blue: 0,
-            alpha: 1
-          }
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: {
-            red: 0.3176470588235294,
-            green: 1,
-            blue: 0,
-            alpha: 1
-          }
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      10,
-      10
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2,
-    angle: 2
-  },
-  xLabelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 0,
-    verticalOrigin: 1,
-    pixelOffset: [
-      0,
-      -9
-    ],
-    disableDepthTestDistance: null
-  },
-  xAngleLabelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: 0,
-    pixelOffset: [
-      9,
-      0
-    ],
-    disableDepthTestDistance: null
-  },
-  yLabelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: -1,
-    verticalOrigin: 1,
-    pixelOffset: [
-      -9,
-      0
-    ],
-    disableDepthTestDistance: null
-  },
-  yAngleLabelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 0,
-    verticalOrigin: -1,
-    pixelOffset: [
-      0,
-      9
-    ],
-    disableDepthTestDistance: null
-  }
-}
-```
-
-```js
-// polylineMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: {
-            red: 0.3176470588235294,
-            green: 1,
-            blue: 0,
-            alpha: 1
-          }
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: {
-            red: 0.3176470588235294,
-            green: 1,
-            blue: 0,
-            alpha: 1
-          }
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 0,
-    verticalOrigin: 1,
-    pixelOffset: [
-      0,
-      -9
-    ],
-    disableDepthTestDistance: null
-  },
-  labelsOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 0.8,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      5,
-      5
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    insert: {
-      icon: 'vc-icons-insert',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2,
-    angle: 2
-  },
-  showAngleLabel: true
-}
-
-```
-
-:::
-
-::: tipflex
-
-```js
-// horizontalMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  dashLineOpts: {
-    material: {
-      fabric: {
-        type: 'PolylineDash',
-        uniforms: {
-          color: [
-            255,
-            255,
-            0,
-            255
-          ]
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'PolylineDash',
-        uniforms: {
-          color: [
-            255,
-            255,
-            0,
-            255
-          ]
-        }
-      }
-    },
-    width: 2
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: 1,
-    pixelOffset: [
-      10,
-      -10
-    ],
-    disableDepthTestDistance: null
-  },
-  labelsOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 0.8,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      5,
-      5
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    insert: {
-      icon: 'vc-icons-insert',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2,
-    angle: 2
-  },
-  showAngleLabel: true,
-  showDashedLine: true
-}
-```
-
-```js
-// verticalMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      10,
-      10
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2
-  }
-}
-```
-
-```js
-// heightMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      10,
-      10
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    distance: 2
-  }
-}
-```
-
-:::
-
-:::tipflex
-
-```js
-// areaMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      32
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  polylineOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    },
-    width: 2,
-    arcType: 0
-  },
-  polygonOpts: {
-    material: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: [
-            255,
-            165,
-            0,
-            125
-          ]
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: [
-            255,
-            165,
-            0,
-            125
-          ]
-        }
-      }
-    },
-    perPositionHeight: true
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 0,
-    verticalOrigin: 1,
-    pixelOffset: [
-      0,
-      -9
-    ],
-    disableDepthTestDistance: null
-  },
-  labelsOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 0.8,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: -1,
-    pixelOffset: [
-      5,
-      5
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    insert: {
-      icon: 'vc-icons-insert',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    removeAll: {
-      icon: 'vc-icons-delete',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    area: 2,
-    distance: 2,
-    angle: 2
-  },
-  showDistanceLabel: true,
-  showAngleLabel: true,
-  loop: true
-}
-```
-
-```js
-// pointMeasurementOpts
-{
-  show: true,
-  measureUnits: {
-    distanceUnits: 'METERS',
-    areaUnits: 'SQUARE_METERS',
-    volumeUnits: 'CUBIC_METERS',
-    angleUnits: 'DEGREES',
-    slopeUnits: 'DEGREES'
-  },
-  drawtip: {
-    show: true,
-    pixelOffset: [
-      32,
-      48
-    ]
-  },
-  pointOpts: {
-    color: 'rgb(255,229,0)',
-    pixelSize: 8,
-    outlineColor: 'black',
-    outlineWidth: 1,
-    disableDepthTestDistance: null
-  },
-  labelOpts: {
-    font: '16px Arial Microsoft YaHei sans-serif',
-    scale: 1,
-    fillColor: 'white',
-    showBackground: true,
-    backgroundColor: {
-      x: 0.165,
-      y: 0.165,
-      z: 0.165,
-      w: 0.8
-    },
-    backgroundPadding: [
-      7,
-      5
-    ],
-    horizontalOrigin: 1,
-    verticalOrigin: 0,
-    pixelOffset: [
-      10,
-      0
-    ],
-    disableDepthTestDistance: null
-  },
-  editorOpts: {
-    pixelOffset: [
-      4,
-      -4
-    ],
-    move: {
-      icon: 'vc-icons-move',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    },
-    remove: {
-      icon: 'vc-icons-remove',
-      size: '24px',
-      color: '#1296db',
-      background: '#fff',
-      round: true,
-      flat: false,
-      stack: false,
-      dense: true,
-      tooltip: {
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [
-          0,
-          20
-        ]
-      }
-    }
-  },
-  decimals: {
-    lng: 6,
-    lat: 6,
-    height: 2,
-    slope: 3
-  },
-  heightReference: 1 // 0 absolute 1 relative ground
-}
-```
+The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default parameters of drawing buttons` and `default parameters of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointMeasurementOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
 
 :::
 
@@ -1567,7 +363,7 @@ Tip: Each measurement button (FabAction) corresponds to the measurement paramete
 | beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.                               |
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.                    |
 | destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.                              |
-| measureEvt | (measureParam, viewer)             | Triggered when measuring.                                                 |
+| drawEvt    | (measureParam, viewer)             | Triggered when measuring.                                                 |
 | activeEvt  | (activeParam, viewer)              | Triggered when the measurement action is switched.                        |
 | editorEvt  | (editParam, viewer)                | Triggered when the edit button is clicked.                                |
 | mouseEvt   | (mouseParam, viewer)               | Triggered when the mouse is mouse over or mouse out on the drawing point. |
