@@ -1,169 +1,179 @@
 @font-face {
-  font-family: 'vc-icons'; /* Project id 2419801 */
-  src: url('iconfont.woff2?t=1623555232582') format('woff2'), url('iconfont.woff?t=1623555232582') format('woff'),
-    url('iconfont.ttf?t=1623555232582') format('truetype');
+  font-family: "vc-icons"; /* Project id 2419801 */
+  src: url('iconfont.woff2?t=1635315962839') format('woff2'),
+       url('iconfont.woff?t=1635315962839') format('woff'),
+       url('iconfont.ttf?t=1635315962839') format('truetype');
 }
 
 .vc-icons {
-  font-family: 'vc-icons' !important;
+  font-family: "vc-icons" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.vc-icons-drawing-pin:before {
+  content: "\e612";
+}
+
+.vc-icons-drawing-regular:before {
+  content: "\ebb2";
+}
+
 .vc-icons-drawing-circle:before {
-  content: '\ebb1';
+  content: "\ebb1";
 }
 
 .vc-icons-drawing-rectangle:before {
-  content: '\ebb0';
+  content: "\ebb0";
 }
 
 .vc-icons-overview-toggle:before {
-  content: '\ebaf';
+  content: "\ebaf";
 }
 
 .vc-icons-drawing-polygon:before {
-  content: '\ebae';
+  content: "\ebae";
 }
 
 .vc-icons-drawing-point:before {
-  content: '\ebab';
+  content: "\ebab";
 }
 
 .vc-icons-drawing-button:before {
-  content: '\ebaa';
+  content: "\ebaa";
 }
 
 .vc-icons-clear:before {
-  content: '\eba8';
+  content: "\eba8";
 }
 
 .vc-icons-remove-all:before {
-  content: '\eba9';
+  content: "\eba9";
 }
 
 .vc-icons-remove:before {
-  content: '\eba7';
+  content: "\eba7";
 }
 
 .vc-icons-insert:before {
-  content: '\eba6';
+  content: "\eba6";
 }
 
 .vc-icons-delete:before {
-  content: '\eba5';
+  content: "\eba5";
 }
 
 .vc-icons-move:before {
-  content: '\eba4';
+  content: "\eba4";
 }
 
 .vc-icons-measure-distance:before {
-  content: '\e607';
+  content: "\e607";
 }
 
 .vc-icons-measure-horizontal-distance:before {
-  content: '\e609';
+  content: "\e609";
 }
 
 .vc-icons-measure-point-coordinates:before {
-  content: '\e60d';
+  content: "\e60d";
 }
 
 .vc-icons-drawing-polyline:before {
-  content: '\ebac';
+  content: "\ebac";
 }
 
 .vc-icons-measure-component-distance:before {
-  content: '\eba3';
+  content: "\eba3";
 }
 
 .vc-icons-measure-area:before {
-  content: '\e60b';
+  content: "\e60b";
 }
 
 .vc-icons-measure-height-from-terrain:before {
-  content: '\e60c';
+  content: "\e60c";
 }
 
-.vc-icons-measure-button:before {
-  content: '\e60e';
+.vc-icons-measurement-button:before {
+  content: "\e60e";
 }
 
 .vc-icons-measure-vertical-distance:before {
-  content: '\e60f';
+  content: "\e60f";
 }
 
 .vc-icons-measure-polyline-distance:before {
-  content: '\e611';
+  content: "\e611";
 }
 
 .vc-icons-capture:before {
-  content: '\e63c';
+  content: "\e63c";
 }
 
 .vc-icons-geolocation:before {
-  content: '\e604';
+  content: "\e604";
 }
 
 .vc-icons-photo:before {
-  content: '\e631';
+  content: "\e631";
 }
 
 .vc-icons-reset2:before {
-  content: '\e67f';
+  content: "\e67f";
 }
 
 .vc-icons-ic_add:before {
-  content: '\e606';
+  content: "\e606";
 }
 
 .vc-icons-ic_zoom_out_2:before {
-  content: '\e605';
+  content: "\e605";
 }
 
 .vc-icons-share:before {
-  content: '\e608';
+  content: "\e608";
 }
 
 .vc-icons-compass-rotation-marker:before {
-  content: '\e603';
+  content: "\e603";
 }
 
 .vc-icons-compass-outer:before {
-  content: '\e602';
+  content: "\e602";
 }
 
 .vc-icons-compass-inner:before {
-  content: '\e601';
+  content: "\e601";
 }
 
 .vc-icons-vue-cesium:before {
-  content: '\e600';
+  content: "\e600";
 }
 
 .vc-icons-weixin:before {
-  content: '\e660';
+  content: "\e660";
 }
 
 .vc-icons-github:before {
-  content: '\e620';
+  content: "\e620";
 }
 
 .vc-icons-gitter:before {
-  content: '\eba2';
+  content: "\eba2";
 }
 
 .vc-icons-qq:before {
-  content: '\e610';
+  content: "\e610";
 }
 
 .vc-icons-vue:before {
-  content: '\e6b9';
+  content: "\e6b9";
 }
 
 .vc-icons-cesium:before {
-  content: '\e734';
+  content: "\e734";
 }
+

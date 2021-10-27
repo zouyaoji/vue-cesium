@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "25215320",
+      "name": "pin",
+      "font_class": "drawing-pin",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "25177764",
+      "name": "正多边形",
+      "font_class": "drawing-regular",
+      "unicode": "ebb2",
+      "unicode_decimal": 60338
+    },
+    {
       "icon_id": "22174289",
       "name": "圆形线条",
       "font_class": "drawing-circle",
@@ -141,7 +155,7 @@
     {
       "icon_id": "21556930",
       "name": "measure-button",
-      "font_class": "measure-button",
+      "font_class": "measurement-button",
       "unicode": "e60e",
       "unicode_decimal": 58894
     },

@@ -17,7 +17,7 @@ import {
   CameraOption,
   HeadingPitchRollOption
 } from './types'
-import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName } from './util'
+import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 
 /**
  * 将对象或数组转换为 Cesium.Cartesian2
@@ -897,6 +897,43 @@ export function getPolylineSegmentEndpoint(start: Cesium.Cartesian3, heading: nu
   const positionCartographic = Cartographic.fromCartesian(position, ellipsoid)
   positionCartographic.height = startCartographic.height
   return Cartographic.toCartesian(positionCartographic, ellipsoid)
+}
+
+export function calculateAreaByPostions(positions: Array<Cesium.Cartesian3>) {
+  let area = 0
+  const { CoplanarPolygonGeometry, VertexFormat, defined, Cartesian3 } = Cesium
+  const geometry = CoplanarPolygonGeometry.createGeometry(
+    CoplanarPolygonGeometry.fromPositions({
+      positions: positions,
+      vertexFormat: VertexFormat.POSITION_ONLY
+    })
+  )
+
+  if (!isUndefined(geometry) && defined(geometry)) {
+    const indices = geometry.indices
+    const positionValues = geometry.attributes.position.values as number[]
+    for (let i = 0; i < indices.length; i += 3) {
+      const indice0 = indices[i]
+      const indice1 = indices[i + 1]
+      const indice2 = indices[i + 2]
+
+      area += triangleArea(
+        Cartesian3.unpack(positionValues, 3 * indice0, {} as any),
+        Cartesian3.unpack(positionValues, 3 * indice1, {} as any),
+        Cartesian3.unpack(positionValues, 3 * indice2, {} as any)
+      )
+    }
+  }
+
+  return area
+}
+
+const triangleArea = (vertexA, vertexB, vertexC) => {
+  const { Cartesian3 } = Cesium
+  const vectorBA = Cartesian3.subtract(vertexA, vertexB, {} as any)
+  const vectorBC = Cartesian3.subtract(vertexC, vertexB, {} as any)
+  const crossProduct = Cartesian3.cross(vectorBA, vectorBC, vectorBA)
+  return 0.5 * Cartesian3.magnitude(crossProduct)
 }
 
 const restoreCursors: Array<string> = []

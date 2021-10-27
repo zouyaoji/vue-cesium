@@ -1,8 +1,7 @@
 import { Emitter } from 'mitt'
-import type { App, Ref, Plugin, CSSProperties } from 'vue'
+import type { Ref, Plugin, CSSProperties } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
-import { DrawingInstanceOpts } from '@vue-cesium/components/drawings/src/drawing.types'
-import { MeasurementInstanceOpts } from '@vue-cesium/components/measurements/src/measure.types'
+import { VcDrawingActionInstance } from './drawing-types'
 
 export type CommonEmitType = 'beforeLoad' | 'ready' | 'destroyed'
 
@@ -136,18 +135,14 @@ interface VcViewerProvider {
   groundPrimitives: Cesium.PrimitiveCollection
   postProcessStages: Cesium.PostProcessStageCollection
   viewerMitt: Emitter<VcMittEvents>
-  entityViewModel?: VcComponentPublicInstance
-  imageryLayerViewModel?: VcComponentPublicInstance
   layout?: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
     animationContainerRC: Partial<DOMRect>
     bottomContainerRC: Partial<DOMRect>
   }
-  measurementVm?: VcComponentInternalInstance
-  selectedMeasurementOption?: MeasurementInstanceOpts
-  drawingVm?: VcComponentInternalInstance
-  selectedDrawingOption?: DrawingInstanceOpts
+  selectedDrawingActionInstance?: VcDrawingActionInstance
+  drawingFabInstance?: VcComponentInternalInstance
   drawingHandlerActive: boolean
   getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
 }
@@ -280,6 +275,12 @@ interface HeatmapConfiguration extends h337.HeatmapConfiguration {
   container: HTMLElement
 }
 
+interface DrawTipOpts {
+  drawingTipStart: string
+  drawingTipEnd: string
+  drawingTipEditing: string
+}
+
 export {
   AnyObject,
   CameraOption,
@@ -303,5 +304,6 @@ export {
   TranslationRotationScaleOption,
   NavigationOption,
   HeadingPitchRollOption,
-  HeatmapConfiguration
+  HeatmapConfiguration,
+  DrawTipOpts
 }

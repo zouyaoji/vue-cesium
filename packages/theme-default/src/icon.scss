@@ -140,7 +140,7 @@
   content: '\e60f';
 }
 
-.#{$namespace}-icons-measure-button:before {
+.#{$namespace}-icons-measurement-button:before {
   content: '\e60e';
 }
 
@@ -196,6 +196,10 @@
   content: '\ebaa';
 }
 
+.#{$namespace}-icons-drawing-pin:before {
+  content: '\e612';
+}
+
 .#{$namespace}-icons-drawing-point:before {
   content: '\ebab';
 }
@@ -214,6 +218,10 @@
 
 .#{$namespace}-icons-drawing-circle:before {
   content: '\ebb1';
+}
+
+.#{$namespace}-icons-drawing-regular:before {
+  content: '\ebb2';
 }
 
 .#{$namespace}-icons-overview-toggle:before {

@@ -1,33 +1,60 @@
-import { positionProps } from '@vue-cesium/composables/private/use-position'
-import { show } from '@vue-cesium/utils/cesium-props'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-18 10:40:15
+ * @LastEditTime: 2021-10-27 14:20:40
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
+ */
+
+import {
+  actionOptions,
+  billboardOptsDefault,
+  circleDrawingActionDefault,
+  circleDrawingDefault,
+  labelOptsDefault,
+  pointDrawingDefault,
+  pointOptsDefault,
+  polygonDrawingDefault,
+  polylineDrawingDefault,
+  rectangleDrawingDefault,
+  regularDrawingActionDefault,
+  regularDrawingDefault
+} from '@vue-cesium/composables/use-drawing/defaultOpts'
+import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 import { PropType } from 'vue'
 
-const actionOptions = {
-  externalLabel: false,
-  label: '',
-  labelPosition: 'right',
-  hideLabel: false,
-  tabindex: undefined,
-  disable: false,
-  outline: false,
-  push: false,
-  flat: false,
-  unelevated: false,
-  padding: undefined,
-  color: 'primary',
-  textColor: undefined,
-  glossy: false,
-  labelClass: undefined,
-  labelStyle: undefined,
-  square: false,
-  tooltip: {
-    delay: 500,
-    anchor: 'bottom middle',
-    offset: [0, 20],
-    tip: undefined
-  }
-}
+const pointDrawingActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-point'
+})
+
+const polylineDrawingActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-polyline'
+})
+
+const polygonDrawingActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-polygon'
+})
+
+const rectangleDrawingActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-rectangle'
+})
+
+const pinDrawingActionDefault = Object.assign({}, actionOptions, {
+  icon: 'vc-icons-drawing-pin'
+})
+
+const pinDrawingDefault = Object.assign({}, pointDrawingDefault, {
+  pointOpts: Object.assign({}, pointOptsDefault, {
+    show: false
+  }),
+  billboardOpts: billboardOptsDefault,
+  labelOpts: Object.assign({}, labelOptsDefault, {
+    pixelOffset: [0, -30],
+    verticalOrigin: 1
+  })
+})
 
 const mainFabDefault = Object.assign({}, actionOptions, {
   direction: 'left',
@@ -41,294 +68,85 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   color: 'info'
 })
 
-const pointOptsDefault = {
-  show: true,
-  color: 'rgb(255,229,0)',
-  pixelSize: 8,
-  outlineColor: 'black',
-  outlineWidth: 1,
-  disableDepthTestDistance: Number.POSITIVE_INFINITY
-}
-
-const polylineOptsDefault = {
-  material: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: '#51ff00'
-      }
-    }
-  },
-  depthFailMaterial: {
-    fabric: {
-      type: 'PolylineDash',
-      uniforms: {
-        color: [255, 0, 0, 127]
-      }
-    }
-  },
-  width: 2,
-  arcType: 0,
-  ellipsoid: undefined,
-  show: true
-}
-
-const polygonOptsDefault = {
-  material: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: [255, 165, 0, 125]
-      }
-    }
-  },
-  depthFailMaterial: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: [255, 165, 0, 125]
-      }
-    }
-  },
-  perPositionHeight: true,
-  arcType: undefined,
-  show: true
-}
-
-const editorOptsDefault = {
-  icon: 'vc-icons-move',
-  size: '24px',
-  color: '#1296db',
-  background: '#fff',
-  round: true,
-  flat: false,
-  label: undefined,
-  stack: false,
-  dense: true,
-  tooltip: {
-    delay: 1000, // 鼠标悬浮多久显示提示信息
-    anchor: 'bottom middle', // 提示信息锚点
-    offset: [0, 20] // 提示信息位置偏移
-  }
-}
-
-const pointActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-drawing-point'
-})
-
-const polylineActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-drawing-polyline'
-})
-
-const polygonActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-drawing-polygon'
-})
-
-const rectangleActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-drawing-rectangle'
-})
-
-const circleActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-drawing-circle'
-})
-
-const pointDrawingDefault = {
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [32, 32]
-  },
-  pointOpts: pointOptsDefault,
-  editorOpts: {
-    delay: 1000,
-    hideDelay: 1000,
-    pixelOffset: [16, -8],
-    move: Object.assign({}, editorOptsDefault),
-    remove: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-remove'
-    })
-  }
-}
-
-const polylineDrawingDefault = {
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [32, 32]
-  },
-  pointOpts: pointOptsDefault,
-  polylineOpts: polylineOptsDefault,
-  editorOpts: {
-    pixelOffset: [16, -8],
-    delay: 1000,
-    hideDelay: 1000,
-    move: Object.assign({}, editorOptsDefault),
-    insert: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-insert'
-    }),
-    remove: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-remove'
-    }),
-    removeAll: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-delete'
-    })
-  },
-  loop: false
-}
-
-const polygonDrawingDefault = {
-  show: true,
-  drawtip: {
-    show: true,
-    pixelOffset: [32, 32]
-  },
-  pointOpts: pointOptsDefault,
-  polylineOpts: Object.assign({}, polylineOptsDefault, {
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
-        }
-      }
-    }
-  }),
-  polygonOpts: polygonOptsDefault,
-  editorOpts: {
-    pixelOffset: [16, -8],
-    delay: 1000,
-    hideDelay: 1000,
-    move: Object.assign({}, editorOptsDefault),
-    insert: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-insert'
-    }),
-    remove: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-remove'
-    }),
-    removeAll: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-delete'
-    })
-  },
-  loop: true
-}
-
-const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
-  pointOpts: Object.assign({}, pointOptsDefault, {
-    show: false
-  }),
-  drawtip: {
-    show: true,
-    pixelOffset: [32, 32]
-  },
-  editorOpts: {
-    pixelOffset: [16, -8],
-    delay: 1000,
-    hideDelay: 1000,
-    move: Object.assign({}, editorOptsDefault),
-    removeAll: Object.assign({}, editorOptsDefault, {
-      icon: 'vc-icons-delete'
-    })
-  },
-  edge: 4,
-  regular: true // regular
-})
-
-const circleDrawingDefault = Object.assign({}, rectangleDrawingDefault, {
-  edge: 360
-})
-
-const clearActionDefault = Object.assign({}, actionOptions, {
-  icon: 'vc-icons-clear',
-  color: 'red'
-})
-
 const defaultProps = {
-  ...positionProps,
-  ...show,
-  mode: {
-    type: Number,
-    default: 1
-  },
+  ...useDrawingFabProps,
   drawings: {
     type: Array as PropType<Array<string>>,
-    default: () => ['point', 'polyline', 'polygon', 'rectangle', 'circle']
-  },
-  activeColor: {
-    type: String,
-    default: 'positive'
-  },
-  editable: {
-    type: Boolean,
-    default: false
-  },
-  clampToGround: {
-    type: Boolean,
-    default: false
+    default: () => ['pin', 'point', 'polyline', 'polygon', 'rectangle', 'regular', 'circle']
   },
   mainFabOpts: {
     type: Object as PropType<typeof mainFabDefault>,
     default: () => mainFabDefault
   },
+  pinActionOpts: {
+    type: Object as PropType<typeof pinDrawingActionDefault>,
+    default: () => pinDrawingActionDefault
+  },
+  pinDrawingOpts: {
+    type: Object as PropType<typeof pinDrawingDefault>,
+    default: () => pinDrawingDefault
+  },
   pointActionOpts: {
-    type: Object as PropType<typeof pointActionDefault>,
-    default: () => pointActionDefault
+    type: Object as PropType<typeof pointDrawingActionDefault>,
+    default: () => pointDrawingActionDefault
   },
   pointDrawingOpts: {
     type: Object as PropType<typeof pointDrawingDefault>,
     default: () => pointDrawingDefault
   },
   polylineActionOpts: {
-    type: Object as PropType<typeof polylineActionDefault>,
-    default: () => polylineActionDefault
+    type: Object as PropType<typeof polylineDrawingActionDefault>,
+    default: () => polylineDrawingActionDefault
   },
   polylineDrawingOpts: {
     type: Object as PropType<typeof polylineDrawingDefault>,
     default: () => polylineDrawingDefault
   },
   polygonActionOpts: {
-    type: Object as PropType<typeof polygonActionDefault>,
-    default: () => polygonActionDefault
+    type: Object as PropType<typeof polygonDrawingActionDefault>,
+    default: () => polygonDrawingActionDefault
   },
   polygonDrawingOpts: {
     type: Object as PropType<typeof polygonDrawingDefault>,
     default: () => polygonDrawingDefault
   },
   rectangleActionOpts: {
-    type: Object as PropType<typeof rectangleActionDefault>,
-    default: () => rectangleActionDefault
+    type: Object as PropType<typeof rectangleDrawingActionDefault>,
+    default: () => rectangleDrawingActionDefault
   },
   rectangleDrawingOpts: {
     type: Object as PropType<typeof rectangleDrawingDefault>,
     default: () => rectangleDrawingDefault
   },
   circleActionOpts: {
-    type: Object as PropType<typeof circleActionDefault>,
-    default: () => circleActionDefault
+    type: Object as PropType<typeof circleDrawingActionDefault>,
+    default: () => circleDrawingActionDefault
   },
   circleDrawingOpts: {
     type: Object as PropType<typeof circleDrawingDefault>,
     default: () => circleDrawingDefault
   },
-  clearActionOpts: {
-    type: Object as PropType<typeof clearActionDefault>,
-    default: () => clearActionDefault
+  regularActionOpts: {
+    type: Object as PropType<typeof regularDrawingActionDefault>,
+    default: () => regularDrawingActionDefault
+  },
+  regularDrawingOpts: {
+    type: Object as PropType<typeof regularDrawingDefault>,
+    default: () => regularDrawingDefault
   }
 }
 const defaultOptions = getDefaultOptionByProps(defaultProps)
 
+console.log(defaultOptions)
+
 export {
   defaultProps,
   defaultOptions,
-  mainFabDefault,
-  pointActionDefault,
-  pointDrawingDefault,
-  polylineActionDefault,
-  polylineDrawingDefault,
-  polygonActionDefault,
-  polygonDrawingDefault,
-  rectangleActionDefault,
-  rectangleDrawingDefault,
-  circleActionDefault,
-  circleDrawingDefault,
-  clearActionDefault
+  pointDrawingActionDefault,
+  polylineDrawingActionDefault,
+  polygonDrawingActionDefault,
+  rectangleDrawingActionDefault,
+  pinDrawingActionDefault,
+  pinDrawingDefault,
+  mainFabDefault
 }

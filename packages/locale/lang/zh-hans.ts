@@ -46,7 +46,7 @@ export default {
     },
     measurement: {
       expand: '展开',
-      collapse: '收起',
+      collapse: '收拢',
       editor: {
         move: '移动节点',
         insert: '插入节点',
@@ -55,55 +55,73 @@ export default {
       },
       distance: {
         tip: '距离量算',
-        drawTip1: '单击左键绘制距离量算起点。',
-        drawTip2: '单击左键绘制距离量算终点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制距离量算起点。',
+        drawingTipEnd: '单击左键绘制距离量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
-      componentDistance: {
+      'component-distance': {
         tip: '三角量算',
-        drawTip1: '单击左键绘制三角量算起点。',
-        drawTip2: '单击左键绘制三角量算终点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制三角量算起点。',
+        drawingTipEnd: '单击左键绘制三角量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       polyline: {
         tip: '折线距离量算',
-        drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '单击左键绘制下一个点，双击左键结束量算。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制第一个点。',
+        drawingTipEnd: '单击左键绘制下一个点，双击左键结束量算。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       horizontal: {
         tip: '水平距离量算',
-        drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '单击左键绘制下一个点，双击左键结束量算。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制第一个点。',
+        drawingTipEnd: '单击左键绘制下一个点，双击左键结束量算。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       vertical: {
         tip: '垂直距离量算',
-        drawTip1: '单击左键绘制垂直距离量算起点。',
-        drawTip2: '单击左键绘制垂直距离量算终点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制垂直距离量算起点。',
+        drawingTipEnd: '单击左键绘制垂直距离量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       height: {
         tip: '地表高度量算',
-        drawTip1: '单击左键绘制高度量算点。',
-        drawTip2: '单击左键绘制高度量算点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制高度量算点。',
+        drawingTipEnd: '单击左键绘制高度量算点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       area: {
         tip: '面积量算',
-        drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '点击左键绘制下一个点，双击左键结束量算。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制第一个点。',
+        drawingTipEnd: '点击左键绘制下一个点，双击左键结束量算。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       point: {
         tip: '坐标量算',
-        drawTip1: '点击左键绘制坐标量算点。',
-        drawTip2: '点击左键绘制坐标量算点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
+        drawingTipStart: '点击左键绘制坐标量算点。',
+        drawingTipEnd: '点击左键绘制坐标量算点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。',
         lng: '经度：',
         lat: '纬度：',
         height: '高度：',
         slope: '坡度：'
+      },
+      rectangle: {
+        tip: '矩形量算',
+        drawingTipStart: '单击左键绘制矩形量算起点。',
+        drawingTipEnd: '单击左键绘制矩形量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      regular: {
+        tip: '正多边形量算',
+        drawingTipStart: '单击左键绘制正多边形量算起点。',
+        drawingTipEnd: '单击左键绘制正多边形量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      circle: {
+        tip: '圆形量算',
+        drawingTipStart: '单击左键绘制圆形量算起点。',
+        drawingTipEnd: '单击左键绘制圆形量算终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       clear: {
         tip: '清除量算结果'
@@ -111,42 +129,57 @@ export default {
     },
     drawing: {
       expand: '展开',
-      collapse: '收起',
+      collapse: '收拢',
       editor: {
         move: '移动节点',
         insert: '插入节点',
         remove: '移除节点',
         removeAll: '移除所有节点'
       },
+      pin: {
+        tip: '绘制图标点',
+        drawingTipStart: '点击左键绘制图标点。',
+        drawingTipEnd: '点击左键绘制图标点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
       point: {
         tip: '绘制点',
-        drawTip1: '点击左键绘制点。',
-        drawTip2: '点击左键绘制点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '点击左键绘制点。',
+        drawingTipEnd: '点击左键绘制点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       polyline: {
         tip: '绘制线',
-        drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '单击左键绘制下一个点，双击左键结束绘制。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制第一个点。',
+        drawingTipEnd: '单击左键绘制下一个点，双击左键结束绘制。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       polygon: {
         tip: '绘制面',
-        drawTip1: '单击左键绘制第一个点。',
-        drawTip2: '单击左键绘制下一个点，双击左键结束绘制。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制第一个点。',
+        drawingTipEnd: '单击左键绘制下一个点，双击左键结束绘制。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       rectangle: {
         tip: '绘制矩形',
-        drawTip1: '单击左键绘制矩形起点。',
-        drawTip2: '单击左键绘制矩形终点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制矩形起点。',
+        drawingTipEnd: '单击左键绘制矩形终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
       },
       circle: {
         tip: '绘制圆',
-        drawTip1: '单击左键绘制圆形起点。',
-        drawTip2: '单击左键绘制圆形终点。',
-        drawTip3: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+        drawingTipStart: '单击左键绘制圆形起点。',
+        drawingTipEnd: '单击左键绘制圆形终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      regular: {
+        tip: '绘制正多边形',
+        drawingTipStart: '单击左键绘制正多边形起点。',
+        drawingTipEnd: '单击左键绘制正多边形终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      clear: {
+        tip: '清除绘制结果'
       }
     },
     overview: {

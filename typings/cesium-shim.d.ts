@@ -109,6 +109,60 @@ declare namespace Cesium {
   var GeoTerrainProvider: any
   // eslint-disable-next-line no-var
   var BaiduMapImageryProvider: any
+
+  namespace ScreenSpaceEventParamsType {
+    export interface LEFT_DOWN {
+      position: Cesium.Cartesian2
+    }
+    export interface LEFT_UP {
+      position: Cesium.Cartesian2
+    }
+    export interface LEFT_CLICK {
+      position: Cesium.Cartesian2
+    }
+    export interface LEFT_DOUBLE_CLICK {
+      position: Cesium.Cartesian2
+    }
+    export interface RIGHT_DOWN {
+      position: Cesium.Cartesian2
+    }
+    export interface RIGHT_UP {
+      position: Cesium.Cartesian2
+    }
+    export interface RIGHT_CLICK {
+      position: Cesium.Cartesian2
+    }
+    export interface MIDDLE_DOWN {
+      position: Cesium.Cartesian2
+    }
+    export interface MIDDLE_UP {
+      position: Cesium.Cartesian2
+    }
+    export interface MIDDLE_CLICK {
+      position: Cesium.Cartesian2
+    }
+    export interface MOUSE_MOVE {
+      startPosition: Cesium.Cartesian2
+      endPosition: Cesium.Cartesian2
+    }
+    export type WHEEL = number
+    export interface PINCH_START {
+      position1: Cesium.Cartesian2
+      position2: Cesium.Cartesian2
+    }
+    export type PINCH_END = undefined
+
+    export interface PINCH_MOVE {
+      distance: {
+        startPosition: Cesium.Cartesian2
+        endPosition: Cesium.Cartesian2
+      }
+      angleAndHeight: {
+        startPosition: Cesium.Cartesian2
+        endPosition: Cesium.Cartesian2
+      }
+    }
+  }
 }
 
 // eslint-disable-next-line no-var
