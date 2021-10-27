@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2021-10-27 09:33:29
+ * @LastEditTime: 2021-10-27 15:43:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -15,6 +15,7 @@ import {
   editorOptsDefault,
   labelOptsDefault,
   pointDrawingDefault,
+  pointOptsDefault,
   polygonDrawingDefault,
   polylineDrawingDefault,
   polylineOptsDefault,
@@ -223,6 +224,9 @@ const rectangleMeasurementActionDefault = Object.assign({}, actionOptions, {
 })
 
 const rectangleMeasurementDefault = Object.assign({}, areaMeasurementDefault, {
+  pointOpts: Object.assign({}, pointOptsDefault, {
+    show: false
+  }),
   drawtip: {
     show: true,
     pixelOffset: [32, 32]

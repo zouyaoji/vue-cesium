@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2021-10-27 15:04:09
+ * @LastEditTime: 2021-10-27 15:46:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -471,7 +471,7 @@ export default function (props, ctx, cmpName: string) {
         id: createGuid(),
         _vcPolylineIndx: index, // for editor
         ...props.pointOpts,
-        show: props.pointOpts?.show || props.editable || point.drawStatus === DrawStatus.Drawing
+        show: (point.show && props.pointOpts?.show) || props.editable || point.drawStatus === DrawStatus.Drawing
       })
 
       cmpName.includes('VcMeasurement') &&

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-10-27 11:21:12
+ * @LastEditTime: 2021-10-27 15:50:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -877,6 +877,7 @@ export default function (props, ctx, cmpName: string) {
           )
         )
       }
+
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
         // polygon
         children.push(
