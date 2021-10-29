@@ -95,6 +95,10 @@
               "title": "VcOverlayHeatmap 热力图"
             },
             {
+              "path": "/overlays/vc-overlay-windmap",
+              "title": "VcOverlayWindmap 风场图"
+            },
+            {
               "path": "/overlays/vc-overlay-echart",
               "title": "VcOverlayEchart"
             }
@@ -552,6 +556,10 @@
             {
               "path": "/overlays/vc-overlay-heatmap",
               "title": "VcOverlayHeatmap"
+            },
+            {
+              "path": "/overlays/vc-overlay-windmap",
+              "title": "VcOverlayWindmap"
             },
             {
               "path": "/overlays/vc-overlay-echart",

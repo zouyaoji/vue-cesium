@@ -10,6 +10,7 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 引入 阿里云 图标资源-->
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
   </head>
   <body>
     <div id="app"></div>

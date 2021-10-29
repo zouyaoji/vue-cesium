@@ -174,8 +174,8 @@ ctrl + 右键取消绘制。
       measurementsReady({ Cesium, viewer, cesiumObject }) {
         this.drawingActionInstances = cesiumObject
       },
-      toggle(measurementOpts) {
-        this.$refs.measurementsRef4.toggleAction(measurementOpts)
+      toggle(drawingActionInstance) {
+        this.$refs.measurementsRef4.toggleAction(drawingActionInstance.name)
       },
       onTilesetReady(tileset, viewer) {
         // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)

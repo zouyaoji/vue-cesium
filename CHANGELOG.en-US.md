@@ -2,16 +2,21 @@
 
 ### 3.0.2-beta.3
 
-_2021-10-30_
+_2021-10-29_
 
 #### New feature
 
 - The `vc-measurements` component adds regular polygon and circle measurement.
 - The `vc-drawings` component adds `pin` and `regular` drawing.
+- Added `vc-overlay-windmap` component.
 
 #### Optimization
 
-- Refactor `vc-measurements` and `vc-drawings`, streamline the code.
+- Refactor `vc-measurements` and `vc-drawings`, streamline the code. -`vc-selection-indicator` supports primitive picking.
+
+#### Bug fixes
+
+- fix: compile to esm package errors.
 
 ### 3.0.2-beta.2
 
