@@ -222,8 +222,8 @@ class SuperMapImageryProvider {
     return ImageryProvider.loadImage(this as any, resource)
   }
 
-  pickFeatures() {
-    //
+  pickFeatures(x, y, level, longitude, latitude) {
+    return undefined
   }
 }
 

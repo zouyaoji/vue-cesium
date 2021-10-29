@@ -137,8 +137,8 @@ class TiandituImageryProvider {
     return Cesium.ImageryProvider.loadImage(this as any, url)
   }
 
-  pickFeatures() {
-    //
+  pickFeatures(x, y, level, longitude, latitude) {
+    return undefined
   }
 
   get url() {

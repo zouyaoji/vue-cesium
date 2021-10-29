@@ -158,6 +158,10 @@ class BaiduMapImageryProvider {
     }
     return Cesium.ImageryProvider.loadImage(this as any, buildImageResource.call(this, x, y, level, request))
   }
+
+  pickFeatures(x, y, level, longitude, latitude) {
+    return undefined
+  }
 }
 
 function buildImageResource(this, x, y, level, request) {

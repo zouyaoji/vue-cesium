@@ -221,19 +221,23 @@ export default function (instance: VcComponentInternalInstance, props, $services
     const scene = viewer.scene
 
     const pickFeaturesHook = function (imageryProvider, oldPick, x, y, level, longitude, latitude) {
-      const featuresPromise = oldPick.call(imageryProvider, x, y, level, longitude, latitude)
+      if (oldPick) {
+        const featuresPromise = oldPick.call(imageryProvider, x, y, level, longitude, latitude)
 
-      // Use url to uniquely identify providers because what else can we do?
-      if (imageryProvider.url) {
-        providerCoords[imageryProvider.url] = {
-          x: x,
-          y: y,
-          level: level
+        // Use url to uniquely identify providers because what else can we do?
+        if (imageryProvider.url) {
+          providerCoords[imageryProvider.url] = {
+            x: x,
+            y: y,
+            level: level
+          }
         }
+
+        imageryProvider.pickFeatures = oldPick
+        return featuresPromise
       }
 
-      imageryProvider.pickFeatures = oldPick
-      return featuresPromise
+      return Promise.reject(false)
     }
 
     for (let j = 0; j < scene.imageryLayers.length; j++) {
