@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-16 16:25:47
+ * @LastEditTime: 2021-10-28 21:28:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\directives\gulpfile.ts
@@ -14,7 +14,9 @@ import rewriter from '../../build/gulp-rewriter'
 
 export const esm = './es'
 export const cjs = './lib'
-const tsProject = ts.createProject('../../tsconfig.json')
+const tsProject = ts.createProject('../../tsconfig.json', {
+  module: 'esnext'
+})
 
 const inputs = ['./**/*.ts', '!./node_modules', '!./__tests__/*.ts', '!./gulpfile.ts', '!./es/**', '../../typings/**/*.ts']
 

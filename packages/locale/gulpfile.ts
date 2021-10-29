@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2021-10-29 10:26:50
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\locale\gulpfile.ts
+ */
 import gulp from 'gulp'
 import ts from 'gulp-typescript'
 import path from 'path'
@@ -26,7 +34,14 @@ function compileLangCjs() {
 }
 
 function compileEntryEsm() {
-  return gulp.src('./index.ts').pipe(ts.createProject('tsconfig.json')()).pipe(gulp.dest(esm))
+  return gulp
+    .src('./index.ts')
+    .pipe(
+      ts.createProject('tsconfig.json', {
+        module: 'esnext'
+      })()
+    )
+    .pipe(gulp.dest(esm))
 }
 
 function compileEntryCjs() {

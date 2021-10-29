@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 10:53:42
- * @LastEditTime: 2021-10-08 16:25:01
+ * @LastEditTime: 2021-10-29 10:26:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\gulpfile.ts
@@ -30,7 +30,10 @@ function createProject(settings: Settings = {}) {
 
 function compileEsm() {
   // return gulp.src(inputs).pipe(debug()).pipe(createProject()()).pipe(gulp.dest(esm))
-  return gulp.src(inputs).pipe(createProject()()).pipe(gulp.dest(esm))
+  return gulp
+    .src(inputs)
+    .pipe(createProject({ module: 'esnext' })())
+    .pipe(gulp.dest(esm))
 }
 
 function compileCjs() {

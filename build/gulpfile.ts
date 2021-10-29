@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-18 09:56:59
+ * @LastEditTime: 2021-10-28 23:37:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\gulpfile.ts
@@ -17,7 +17,7 @@ const tsProject = ts.createProject('tsconfig.json', {
   declaration: true,
   target: 'ESNEXT',
   skipLibCheck: true,
-  module: 'commonjs'
+  module: 'ESNEXT'
 })
 
 const rewriter = () => {
@@ -38,7 +38,7 @@ function compileEsm() {
     .src(inputs)
     .pipe(rewriter())
     .pipe(tsProject())
-    .pipe(gulp.dest(path.resolve(output, 'lib')))
+    .pipe(gulp.dest(path.resolve(output, 'es')))
 }
 
 function compileCjs() {
@@ -50,10 +50,10 @@ function compileCjs() {
         declaration: true,
         target: 'ESNEXT',
         skipLibCheck: true,
-        module: 'ESNEXT'
+        module: 'commonjs'
       })()
     )
-    .pipe(gulp.dest(path.resolve(output, 'es')))
+    .pipe(gulp.dest(path.resolve(output, 'lib')))
 }
 
 export const build = gulp.series(compileEsm, compileCjs)
