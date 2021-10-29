@@ -3,6 +3,7 @@ import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch, WatchStopHa
 import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
 import { $ } from '@vue-cesium/utils/private/vm'
+import { isArray } from '@vue-cesium/utils/util'
 
 export default function (instance: VcComponentInternalInstance, props, $services: VcViewerProvider) {
   // state
@@ -177,7 +178,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
   const pickVectorFeatures = (screenPosition: Cesium.Cartesian2) => {
     // Pick vector features
     const vectorFeatures: Array<any> = []
-    const { defined, Entity } = Cesium
+    const { defined } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
     const pickedList = scene.drillPick(screenPosition)
@@ -193,21 +194,46 @@ export default function (instance: VcComponentInternalInstance, props, $services
       // ) {
       //   continue
       // }
-
       if (!defined(id) && defined(picked.primitive)) {
-        id = picked.primitive.id
+        id = picked.primitive
       }
-      if (id instanceof Entity && vectorFeatures.indexOf(id) === -1) {
-        const feature = Feature.fromEntityCollectionOrEntity(id)
-        vectorFeatures.push(feature)
-      } else if (picked.primitive && picked.primitive._catalogItem && picked.primitive._catalogItem.getFeaturesFromPickResult) {
-        const result = picked.primitive._catalogItem.getFeaturesFromPickResult(screenPosition, picked)
+
+      const catalogItem = picked?.primitive?._catalogItem ?? id?._catalogItem
+
+      if (typeof catalogItem?.getFeaturesFromPickResult === 'function') {
+        const result = catalogItem.getFeaturesFromPickResult.bind(catalogItem)(screenPosition, picked)
         if (result) {
           if (Array.isArray(result)) {
             vectorFeatures.push(...result)
           } else {
             vectorFeatures.push(result)
           }
+        }
+      } else {
+        const pickedFeature = picked
+        if (pickedFeature.id) {
+          if (isArray(pickedFeature.id) && pickedFeature.id[0] instanceof Cesium.Entity) {
+            // 数据源集合（集群）
+            pickedFeature.id.forEach(entity => {
+              const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer)
+              vectorFeatures.push(feature)
+            })
+          } else if (pickedFeature.id instanceof Cesium.Entity) {
+            // 实体 or 数据源
+            const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer)
+            vectorFeatures.push(feature)
+          }
+        }
+        // 图元
+        if (pickedFeature.primitive) {
+          const feature = Feature.fromPickedFeature(pickedFeature.primitive, pickedFeature, viewer)
+          vectorFeatures.push(feature)
+        }
+
+        // 图元集合
+        if (pickedFeature.collection) {
+          const feature = Feature.fromPickedFeature(pickedFeature.collection, pickedFeature, viewer)
+          vectorFeatures.push(feature)
         }
       }
     }

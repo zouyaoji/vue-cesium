@@ -1,9 +1,16 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2021-10-29 14:52:01
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
+ */
 import { useCommon } from '@vue-cesium/composables'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, h } from 'vue'
 import useSelectionIndicatior from './use-selection-indicatior'
-import Feature from './Feature'
 
 export default defineComponent({
   name: 'VcSelectionIndicator',
@@ -45,7 +52,6 @@ export default defineComponent({
       const { viewer } = $services
       const viewerElement = (viewer as any)._element
       viewerElement.appendChild($(useSelectionIndicatiorState.rootRef))
-      Feature.init()
       return $(useSelectionIndicatiorState.rootRef)
     }
 

@@ -1,12 +1,16 @@
-import { inherit } from '@vue-cesium/utils/util'
-let inherited = false
-// const customProperties = ['entityCollection', 'properties', 'data']
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2021-10-29 16:46:50
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
+ */
 
 class Feature {
-  currentProperties: any
-  currentDescription: any
-  updateCounters: any
-  cesiumEntity: any
+  id: string
+  cesiumObject: any
+  pickedFeature: any
   name: any
   description: any
   properties: any
@@ -15,65 +19,36 @@ class Feature {
   position: any
   coords: any
   constructor(options) {
-    const { Entity, knockout } = Cesium
-    const entity = new Entity()
-    const proto = Object.getPrototypeOf(entity)
-    Object.setPrototypeOf(this, proto)
-    // Entity.call(this as any, options)
-    Object.assign(this, entity)
-    // addCustomFeatureProperties(this)
-    this.currentProperties = undefined
-
-    /**
-     * Gets or sets the current description. This property is observable.
-     * @type {String}
-     */
-    this.currentDescription = undefined
-
-    /**
-     * Gets or sets counter objects used to trigger an update of the Feature Info Section,
-     * to allow custom components to self-update. The object keys are timeoutIds, and values are
-     * {reactComponent: ReactComponent, counter: Integer}.
-     * This property is observable.
-     * @type {Object}
-     */
-    this.updateCounters = undefined
-
-    knockout.track(this, ['currentProperties', 'currentDescription', 'updateCounters'])
+    this.id = options.id || Cesium.createGuid()
   }
 
-  static init() {
-    if (inherited) {
-      return
+  static getBoundingSphere(cesiumObject, viewer: Cesium.Viewer) {
+    if (cesiumObject._boundingSphereWC) {
+      return cesiumObject._boundingSphereWC || cesiumObject._boundingSphereWC[0]
+    } else if (cesiumObject._boundingVolumeWC) {
+      return cesiumObject._boundingVolumeWC
+    } else if (cesiumObject instanceof Cesium.Entity) {
+      const boundingSphere = new Cesium.BoundingSphere()
+      ;(viewer.dataSourceDisplay as any).getBoundingSphere(cesiumObject, true, boundingSphere)
+      return boundingSphere
     }
-    // inherit(Cesium.Entity, Feature)
-    inherited = true
+    return undefined
   }
+  static fromPickedFeature(cesiumObject, pickedFeature, viewer) {
+    const feature = new Feature({ id: cesiumObject.id })
 
-  static fromEntity(entity: Cesium.Entity) {
-    const feature = new Feature({ id: entity.id })
-    ;(feature as any).merge(entity)
-
-    // for (let i = 0; i < customProperties.length; i++) {
-    //   if (entity.propertyNames.indexOf(customProperties[i]) === -1) {
-    //     feature[customProperties[i]] = entity[customProperties[i]] // Assume no merging or cloning needed.
-    //   }
-    // }
-
-    feature.cesiumEntity = entity
-
-    return feature
-  }
-
-  static fromEntityCollectionOrEntity(entity) {
-    // If this entity is part of a collection, get the feature with this id from that collection.
-    let feature
-    if (entity.entityCollection) {
-      feature = entity.entityCollection.getById(entity.id)
+    if (cesiumObject.position) {
+      feature.position = cesiumObject.position
+    } else if (cesiumObject instanceof Cesium.Model) {
+      feature.position = Cesium.Matrix4.getTranslation(cesiumObject.modelMatrix, new Cesium.Cartesian3())
+    } else if (cesiumObject instanceof Cesium.Cesium3DTileset) {
+      feature.position = Cesium.Matrix4.getTranslation(pickedFeature.content._contentModelMatrix, new Cesium.Cartesian3())
+    } else {
+      feature.position = Feature.getBoundingSphere(cesiumObject, viewer)?.center
     }
-    if (!feature || !(feature instanceof Feature)) {
-      feature = Feature.fromEntity(entity)
-    }
+
+    feature.cesiumObject = cesiumObject
+    feature.pickedFeature = pickedFeature
     return feature
   }
 
