@@ -176,9 +176,6 @@ export default defineComponent({
           data.style.width = data.style.fontSize
           data.style.height = data.style.fontSize
         }
-        // console.log(h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })])))
-        const test = h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })]))
-        console.log(test)
         return h('svg', data, hMergeSlot(slots.default, [h('use', { 'xlink:href': type.value.src })]))
       }
 
