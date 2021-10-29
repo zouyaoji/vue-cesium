@@ -9,6 +9,18 @@ declare namespace Cesium {
   const GlobeSurfaceTile: any
   const ManagedArray: any
   const VERSION: string
+  const ClearCommand: any
+  const Pass: any
+  const VertexArray: any
+  const BufferUsage: any
+  const ShaderProgram: any
+  const RenderState: any
+  const DrawCommand: any
+  const ComputeCommand: any
+  const Sampler: any
+  const Texture: any
+  const Framebuffer: any
+  const ShaderSource: any
   interface Viewer {
     viewerWidgetResized: Event
     _selectionIndicator?: SelectionIndicator
