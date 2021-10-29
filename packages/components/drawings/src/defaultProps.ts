@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2021-10-27 14:20:40
+ * @LastEditTime: 2021-10-29 11:01:07
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -136,8 +136,6 @@ const defaultProps = {
   }
 }
 const defaultOptions = getDefaultOptionByProps(defaultProps)
-
-console.log(defaultOptions)
 
 export {
   defaultProps,
