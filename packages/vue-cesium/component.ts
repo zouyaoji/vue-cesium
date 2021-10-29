@@ -134,7 +134,7 @@ import {
 } from '@vue-cesium/components/geometries'
 
 // Overlay
-import { VcOverlayHtml, VcOverlayHeatmap } from '@vue-cesium/components/overlays'
+import { VcOverlayHtml, VcOverlayHeatmap, VcOverlayWind } from '@vue-cesium/components/overlays'
 
 import { VcPostProcessStage, VcPostProcessStageScan, VcPostProcessStageCollection } from '@vue-cesium/components/post-processes'
 
@@ -288,6 +288,7 @@ export default [
 
   VcOverlayHtml,
   VcOverlayHeatmap,
+  VcOverlayWind,
 
   VcPostProcessStage,
   VcPostProcessStageScan,

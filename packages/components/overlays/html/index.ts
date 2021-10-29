@@ -69,7 +69,6 @@ export default defineComponent({
         }
       )
     )
-
     // methods
     instance.createCesiumObject = async () => {
       return $(rootRef)
