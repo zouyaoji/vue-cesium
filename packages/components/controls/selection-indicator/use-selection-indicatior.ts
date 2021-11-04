@@ -394,7 +394,12 @@ export default function (instance: VcComponentInternalInstance, props, $services
   // expose public methods
   Object.assign(instance.proxy, {
     selectedFeature,
-    pickedFeatures
+    pickedFeatures,
+    position,
+    computeScreenSpacePosition,
+    update,
+    animateAppear,
+    animateDepart
   })
 
   return {
