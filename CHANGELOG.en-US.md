@@ -1,5 +1,17 @@
 ## Changelog
 
+### 3.0.2-beta.4
+
+_2021-11-04_
+
+#### New feature
+
+- `vc-measurements` and `vc-drawings` add a `preRenderDatas` prop to preload cesiumObject. See the [document](https://zouyaoji.top/vue-cesium/#/en-US/component/tools/vc-drawings) for details.
+
+#### Bug fixes
+
+- `vc-selection-indicator` expose animateAppear & animateDepart as public methods, otherwise, it cannot be called externally.
+
 ### 3.0.2-beta.3
 
 _2021-10-29_

@@ -1,5 +1,17 @@
 ## 更新日志
 
+### 3.0.2-beta.4
+
+_2021-11-04_
+
+#### 新特性
+
+- 量算绘制组件增加预加载对象参数 `preRenderDatas`，满足类似编辑服务的需求，详见[vc-drawings 文档](https://zouyaoji.top/vue-cesium/#/zh-CN/component/tools/vc-drawings)。
+
+#### Bug 修复
+
+- 修复 `vc-selection-indicator` 组件无法主动显隐的问题。
+
 ### 3.0.2-beta.3
 
 _2021-10-29_
