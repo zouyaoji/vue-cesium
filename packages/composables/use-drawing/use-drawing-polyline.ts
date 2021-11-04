@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2021-10-26 15:30:46
+ * @LastEditTime: 2021-11-04 10:01:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -24,7 +24,7 @@ import {
 } from '@vue-cesium/components'
 import { t } from '@vue-cesium/locale'
 import { MeasureUnits } from '@vue-cesium/shared'
-import { calculateAreaByPostions, getGeodesicDistance, makeMaterial } from '@vue-cesium/utils/cesium-helpers'
+import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array, makeMaterial } from '@vue-cesium/utils/cesium-helpers'
 import { PolylineDrawing } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { computed, getCurrentInstance, nextTick, ref, VNode, h } from 'vue'
@@ -71,6 +71,25 @@ export default function (props, ctx, cmpName: string) {
   const mouseDelta = 10
 
   const renderDatas = ref<Array<PolylineDrawing>>([])
+
+  if (props.preRenderDatas && props.preRenderDatas.length) {
+    props.preRenderDatas.forEach(preRenderData => {
+      const polylineDrawing: PolylineDrawing = {
+        show: true,
+        positions: makeCartesian3Array(preRenderData) as Array<Cesium.Cartesian3>,
+        tempPositions: [],
+        drawStatus: DrawStatus.AfterDraw,
+        loop: props.loop,
+        distance: 0,
+        area: 0,
+        distances: [],
+        labels: [],
+        angles: []
+      }
+
+      renderDatas.value.push(polylineDrawing)
+    })
+  }
   const computedRenderDatas = computed<Array<PolylineDrawing>>(() => {
     const { Cartesian3, createGuid } = Cesium
     const polylines: Array<PolylineDrawing> = []

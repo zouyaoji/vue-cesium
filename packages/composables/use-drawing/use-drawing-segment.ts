@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-10-27 15:50:45
+ * @LastEditTime: 2021-11-04 10:25:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -30,6 +30,7 @@ import {
   getHeadingPitchRoll,
   getPolylineSegmentEndpoint,
   makeCartesian2,
+  makeCartesian3Array,
   makeMaterial
 } from '@vue-cesium/utils/cesium-helpers'
 import { SegmentDrawing } from '@vue-cesium/utils/drawing-types'
@@ -75,6 +76,25 @@ export default function (props, ctx, cmpName: string) {
   } = useDrawingAction(props, ctx, instance, cmpName, $services)
 
   const renderDatas = ref<Array<SegmentDrawing>>([])
+  if (props.preRenderDatas && props.preRenderDatas.length) {
+    props.preRenderDatas.forEach(preRenderData => {
+      const segmentDrawing: SegmentDrawing = {
+        positions: makeCartesian3Array(preRenderData) as Array<Cesium.Cartesian3>,
+        show: true,
+        drawStatus: DrawStatus.AfterDraw,
+        distance: 0,
+        labels: []
+      }
+
+      cmpName === 'VcMeasurementVertical' &&
+        Object.assign(segmentDrawing, {
+          draggingPlane: new Cesium.Plane(Cesium.Cartesian3.UNIT_X, 0),
+          surfaceNormal: new Cesium.Cartesian3()
+        })
+
+      renderDatas.value.push(segmentDrawing)
+    })
+  }
   let restorePosition
   const computedRenderDatas = computed<Array<SegmentDrawing>>(() => {
     const polylines: Array<SegmentDrawing> = []

@@ -36,6 +36,9 @@ Basic usage of drawing components.
       @editorEvt="editorEvt"
       @mouseEvt="mouseEvt"
       @ready="drawingsReadyDefault"
+      :pointDrawingOpts="pointDrawingOpts"
+      :polygonDrawingOpts="polygonDrawingOpts"
+      :regularDrawingOpts="regularDrawingOpts"
     ></vc-drawings>
     <!-- Customize UI through slot -->
     <vc-drawings
@@ -71,7 +74,7 @@ Basic usage of drawing components.
       @readyPromise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
     </vc-layer-imagery>
     <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
   </vc-viewer>
@@ -110,6 +113,35 @@ Basic usage of drawing components.
             text: 'Pin',
             pixelOffset: [0, -60]
           }
+        },
+        pointDrawingOpts: {
+          preRenderDatas: [
+            [108.96018, 34.21948, 50],
+            [108.9602, 34.21895, 100]
+          ]
+        },
+        polygonDrawingOpts: {
+          preRenderDatas: [
+            [
+              [108.95808, 34.21955, 30],
+              [108.95948, 34.22039, 20],
+              [108.9595, 34.21914, 25]
+            ],
+            [
+              [108.955, 34.21857],
+              [108.95573, 34.21856],
+              [108.95573, 34.21761],
+              [108.95499, 34.21761]
+            ]
+          ]
+        },
+        regularDrawingOpts: {
+          preRenderDatas: [
+            [
+              [108.95474, 34.22204],
+              [108.95564, 34.22166]
+            ]
+          ]
         }
       }
     },
@@ -127,11 +159,11 @@ Basic usage of drawing components.
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
       onTilesetReady(tileset, viewer) {
-        // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
-        // const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
-        // const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
-        // const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
-        // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+        const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
+        const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
+        const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
+        const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
+        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
       },

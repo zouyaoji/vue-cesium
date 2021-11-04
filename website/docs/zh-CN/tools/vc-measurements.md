@@ -36,6 +36,8 @@ ctrl + 右键取消绘制。
       :offset="[20, 80]"
       :editable="editable"
       @ready="drawingsReadyDefault"
+      :pointMeasurementOpts="pointMeasurementOpts"
+      :areaMeasurementOpts="areaMeasurementOpts"
     >
     </vc-measurements>
     <!-- 修改加载的量算实例 -->
@@ -143,6 +145,24 @@ ctrl + 右键取消绘制。
             distance: 4,
             angle: 3
           }
+        },
+        pointMeasurementOpts: {
+          preRenderDatas: [[108.9602, 34.21895, 500]]
+        },
+        areaMeasurementOpts: {
+          preRenderDatas: [
+            [
+              [108.95808, 34.21955, 30],
+              [108.95948, 34.22039, 20],
+              [108.9595, 34.21914, 25]
+            ],
+            [
+              [108.955, 34.21857],
+              [108.95573, 34.21856],
+              [108.95573, 34.21761],
+              [108.95499, 34.21761]
+            ]
+          ]
         },
         pointMeasurementOpts3: {
           measureUnits: {

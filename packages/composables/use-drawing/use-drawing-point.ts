@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2021-10-27 15:46:11
+ * @LastEditTime: 2021-11-04 10:42:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -18,6 +18,7 @@ import {
 } from '@vue-cesium/components'
 import { t } from '@vue-cesium/locale'
 import { MeasureUnits } from '@vue-cesium/shared'
+import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { PointDrawing } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStopHandle, h } from 'vue'
@@ -233,7 +234,7 @@ export default function (props, ctx, cmpName: string) {
   const handleMouseMove = movement => {
     const { viewer, getWorldPosition } = $services
     const scene = viewer.scene
-    const { defined, SceneMode, defaultValue, Math: CesiumMath } = Cesium
+    const { defined, SceneMode } = Cesium
 
     if (scene.mode !== SceneMode.MORPHING) {
       const position = getWorldPosition(scene, movement, {} as any)
@@ -254,32 +255,15 @@ export default function (props, ctx, cmpName: string) {
 
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
       const point: PointDrawing = renderDatas.value[index]
-      const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
-      const positionCartographic = ellipsoid.cartesianToCartographic(position, {} as any)
-      const globe = scene.globe
-      let height = defined(globe) ? defaultValue(globe.getHeight(positionCartographic), 0) : 0
-      height = props.heightReference === 0 ? positionCartographic.height : positionCartographic.height - height
-      CesiumMath.equalsEpsilon(height, 0, CesiumMath.EPSILON3) && (height = 0)
-      let slope = 0
-
-      if (scene.mode !== SceneMode.SCENE2D) {
-        slope = getSlope(scene, movement)
-      }
-      const type = editingPoint.value ? editorType.value : 'new'
-
       point.position = position
-      point.show = true
-      point.lng = positionCartographic.longitude
-      point.lat = positionCartographic.latitude
-      point.height = height
-      point.slope = slope
-
+      getMeasurementResult(point, movement)
+      const type = editingPoint.value ? editorType.value : 'new'
       nextTick(() => {
         emit(
           'drawEvt',
           {
-            index: index,
-            renderDatas: renderDatas,
+            index,
+            renderDatas,
             name: drawingType,
             finished: false,
             position: position,
@@ -290,6 +274,32 @@ export default function (props, ctx, cmpName: string) {
         )
       })
     }
+  }
+
+  const getMeasurementResult = (point: PointDrawing, movement?) => {
+    const { viewer } = $services
+    const scene = viewer.scene
+    const { defined, defaultValue, Math: CesiumMath, SceneMode } = Cesium
+    const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
+    const positionCartographic = ellipsoid.cartesianToCartographic(point.position, {} as any)
+    const globe = scene.globe
+    let height = defined(globe) ? defaultValue(globe.getHeight(positionCartographic), 0) : 0
+    height = props.heightReference === 0 ? positionCartographic.height : positionCartographic.height - height
+    CesiumMath.equalsEpsilon(height, 0, CesiumMath.EPSILON3) && (height = 0)
+    let slope = 0
+
+    if (scene.mode !== SceneMode.SCENE2D) {
+      if (!movement) {
+        movement = scene.cartesianToCanvasCoordinates(point.position, {} as any)
+      }
+      slope = getSlope(scene, movement)
+    }
+
+    point.show = true
+    point.lng = positionCartographic.longitude
+    point.lat = positionCartographic.latitude
+    point.height = height
+    point.slope = slope
   }
 
   const getSlope = (scene: Cesium.Scene, movement: Cesium.Cartesian2) => {
@@ -401,7 +411,7 @@ export default function (props, ctx, cmpName: string) {
       {
         type: e,
         name: drawingType,
-        renderDatas: renderDatas,
+        renderDatas,
         index: mouseoverPoint.value._vcPolylineIndx
       },
       viewer
@@ -447,6 +457,24 @@ export default function (props, ctx, cmpName: string) {
         props.decimals?.slope
       )}`
     )
+  }
+
+  if (props.preRenderDatas && props.preRenderDatas.length) {
+    props.preRenderDatas.forEach(preRenderData => {
+      const pointDrawing: PointDrawing = {
+        drawStatus: DrawStatus.AfterDraw,
+        show: true,
+        position: makeCartesian3(preRenderData) as Cesium.Cartesian3,
+        lng: 0,
+        lat: 0,
+        height: 0,
+        slope: 0
+      }
+
+      getMeasurementResult(pointDrawing)
+
+      renderDatas.value.push(pointDrawing)
+    })
   }
 
   // life cycle
