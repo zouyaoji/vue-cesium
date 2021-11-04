@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 13:42:09
- * @LastEditTime: 2021-10-29 09:28:32
+ * @LastEditTime: 2021-11-01 14:55:44
  * @LastEditors: zouyaoji
  * @Description: from 3D-Wind-Field - https://github.com/RaymanNg/3D-Wind-Field
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\index.ts
@@ -117,7 +117,6 @@ export default defineComponent({
         pixelSize: 0.0
       }
       updateViewerParameters()
-      console.log(particleSystemOptions.value)
       return new ParticleSystem((viewer.scene as any).context, props.data, particleSystemOptions.value, viewerParameters)
     }
 
