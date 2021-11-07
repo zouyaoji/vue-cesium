@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2021-11-04 10:42:15
+ * @LastEditTime: 2021-11-06 16:17:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -16,7 +16,7 @@ import {
   VcOverlayHtml,
   VcTooltip
 } from '@vue-cesium/components'
-import { t } from '@vue-cesium/locale'
+import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { PointDrawing } from '@vue-cesium/utils/drawing-types'
@@ -33,6 +33,7 @@ export default function (props, ctx, cmpName: string) {
     return
   }
 
+  const { t } = useLocaleInject()
   const { $services } = commonState
   const { emit } = ctx
 

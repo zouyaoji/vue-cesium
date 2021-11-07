@@ -1,6 +1,6 @@
 import { ExtractPropTypes, watch, ref, onMounted, onUnmounted, nextTick, reactive } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import { t } from '@vue-cesium/locale'
+import { useLocaleInject } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj } from '@vue-cesium/utils/util'
@@ -46,6 +46,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   let loadLibs: Array<string> = []
 
   logger.debug('viewer creating')
+
+  const { t } = useLocaleInject()
 
   // watch
   watch(

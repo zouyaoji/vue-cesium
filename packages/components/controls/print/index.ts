@@ -4,11 +4,10 @@ import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/p
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
 import { VcBtn, VcTooltip, VcIcon } from '@vue-cesium/components/ui'
-import { useCommon } from '@vue-cesium/composables'
+import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
 import defaultProps from './defaultProps'
 import printWindow from './printWindow'
-import { t } from '@vue-cesium/locale'
 import { isPlainObject } from '@vue-cesium/utils/util'
 
 export default defineComponent({
@@ -24,6 +23,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
+    const { t } = useLocaleInject()
     const { $services } = commonState
     const rootRef = ref<HTMLElement | null>(null)
     const tooltipRef = ref<typeof VcTooltip | null>(null)

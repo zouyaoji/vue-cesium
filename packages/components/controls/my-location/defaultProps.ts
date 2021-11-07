@@ -1,5 +1,5 @@
 import { positionProps } from '@vue-cesium/composables/private/use-position'
-import { t } from '@vue-cesium/locale'
+import { t } from '@vue-cesium/composables/use-locale'
 import { PropType } from 'vue'
 
 export default {

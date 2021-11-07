@@ -1,6 +1,15 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-08-20 15:25:23
+ * @LastEditTime: 2021-11-06 15:41:07
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\app.vue
+-->
 <script>
 import { defineComponent, h, computed, watch, getCurrentInstance, onMounted } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
+import { VcConfigProvider } from 'vue-cesium'
 import { ElScrollbar } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import MainHeader from './components/header'
@@ -10,22 +19,15 @@ import zhLocale from '@vue-cesium/locale/lang/zh-hans'
 import enLocale from '@vue-cesium/locale/lang/en-us'
 import { Language } from './enums/language'
 
-const lang = location.hash.replace('#', '').split('/')[1] || Language.CN
-const localize = lang => {
-  switch (lang) {
-    case Language.CN:
-      use(zhLocale)
-      break
-    default:
-      use(enLocale)
-  }
+const localeMap = {
+  [Language.CN]: zhLocale,
+  [Language.EN]: enLocale
 }
-localize(lang)
 
 export default defineComponent({
   name: 'App',
 
-  setup(){
+  setup() {
     const route = useRoute()
 
     const lang = computed(() => route.path.split('/')[1] || Language.CN)
@@ -51,20 +53,20 @@ export default defineComponent({
       }, 1000)
     }
 
-    watch(() => lang.value, val => {
-      if (val === Language.CN) suggestJump()
-      localize(val)
-    })
+    watch(
+      () => lang.value,
+      val => {
+        if (val === Language.CN) suggestJump()
+      }
+    )
 
     onMounted(() => {
-      localize(lang.value)
-
       if (lang.value === Language.CN) suggestJump()
     })
 
     return {
       lang,
-      isComponent,
+      isComponent
     }
   },
 
@@ -73,24 +75,45 @@ export default defineComponent({
 
     const notComponent = !this.isComponent
 
-    const mainHeader = notPlay ? h(MainHeader, {
-      style: 'position: fixed;top: 0;width: 100%;z-index: 2000',
-    }) : null
+    const mainHeader = notPlay
+      ? h(MainHeader, {
+          style: 'position: fixed;top: 0;width: 100%;z-index: 2000'
+        })
+      : null
 
     const mainFooter = notPlay && notComponent ? h(MainFooter) : null
 
-    const content = [h('div', {
-      class: 'main-cnt',
-    }, [h(RouterView)]), mainFooter]
+    const content = [
+      h(
+        'div',
+        {
+          class: 'main-cnt'
+        },
+        [h(RouterView)]
+      ),
+      mainFooter
+    ]
 
-    const contentWrapper = notComponent
-      ? h(ElScrollbar, null, { default: () => content })
-      : content
+    const contentWrapper = notComponent ? h(ElScrollbar, null, { default: () => content }) : content
 
-    return h('div', {
-      id: 'app',
-      class: [this.isComponent ? 'is-component' : '', this.lang],
-    }, [mainHeader, contentWrapper])
-  },
+    return h(
+      VcConfigProvider,
+      {
+        locale: localeMap[this.lang]
+      },
+      {
+        default: () => {
+          return h(
+            'div',
+            {
+              id: 'app',
+              class: [this.isComponent ? 'is-component' : '', this.lang]
+            },
+            [mainHeader, contentWrapper]
+          )
+        }
+      }
+    )
+  }
 })
 </script>

@@ -16,10 +16,9 @@ import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import MouseCoords, { extendForMouseCoords } from './MouseCoords'
 import throttle from '@vue-cesium/utils/private/throttle'
-import { useCommon } from '@vue-cesium/composables'
+import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import defaultProps from './defaultProps'
-import { t } from '@vue-cesium/locale'
 import { isPlainObject } from '@vue-cesium/utils/util'
 
 export default defineComponent({
@@ -39,6 +38,7 @@ export default defineComponent({
     const { $services } = commonState
     const rootRef = ref<typeof VcBtn | null>(null)
     const tooltipRef = ref<typeof VcTooltip | null>(null)
+    const { t } = useLocaleInject()
 
     let lastMouseX = -1
     let lastMouseY = -1

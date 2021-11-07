@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-11-04 10:25:30
+ * @LastEditTime: 2021-11-06 16:18:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -22,7 +22,7 @@ import {
   VcPrimitiveGroundPolyline,
   VcTooltip
 } from '@vue-cesium/components'
-import { t } from '@vue-cesium/locale'
+import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
   calculateAreaByPostions,
@@ -49,6 +49,7 @@ export default function (props, ctx, cmpName: string) {
     return
   }
 
+  const { t } = useLocaleInject()
   const { $services } = commonState
   const { emit } = ctx
 

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2021-11-04 10:01:23
+ * @LastEditTime: 2021-11-06 16:17:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -22,7 +22,7 @@ import {
   VcPrimitiveGroundPolyline,
   VcTooltip
 } from '@vue-cesium/components'
-import { t } from '@vue-cesium/locale'
+import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array, makeMaterial } from '@vue-cesium/utils/cesium-helpers'
 import { PolylineDrawing } from '@vue-cesium/utils/drawing-types'
@@ -40,6 +40,7 @@ export default function (props, ctx, cmpName: string) {
     return
   }
 
+  const { t } = useLocaleInject()
   const { $services } = commonState
   const { emit } = ctx
 

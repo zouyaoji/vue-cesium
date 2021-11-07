@@ -104,3 +104,8 @@ export const useLocaleInject = () => {
     }
   )
 }
+
+export const t = (...args: any[]): string => {
+  const [path, option] = args
+  return localeObjCache?.t(path, option)
+}

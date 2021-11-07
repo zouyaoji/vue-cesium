@@ -13,7 +13,6 @@ import {
 import { camelize } from '@vue-cesium/utils/util'
 import { VcFabAction } from '@vue-cesium/components/ui'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { t } from '@vue-cesium/locale'
 import VcDrawingPin from './pin'
 import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
@@ -34,6 +33,7 @@ import {
 import { DrawingActionCmpOpts, DrawingActionCmpRef, DrawingActionOpts, VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { defaultsDeep } from 'lodash'
+import { useLocaleInject } from '@vue-cesium/composables'
 
 export default defineComponent({
   name: 'VcDrawings',
@@ -43,6 +43,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcDrawings'
+    const { t } = useLocaleInject()
 
     const options: any = {}
     // computed

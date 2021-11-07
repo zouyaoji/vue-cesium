@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2021-10-27 15:08:16
+ * @LastEditTime: 2021-11-06 16:16:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -11,13 +11,13 @@ import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { CSSProperties, nextTick, provide, reactive, ref, VNode, h, PropType, createCommentVNode } from 'vue'
+import { CSSProperties, nextTick, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { vcKey } from '@vue-cesium/utils/config'
-import { t } from '@vue-cesium/locale'
+import { useLocaleInject } from '../use-locale'
 import { clearActionDefault } from './defaultOpts'
 import { mainFabDefault } from '@vue-cesium/components/drawings/src/defaultProps'
 
@@ -42,6 +42,7 @@ export default function (
     return
   }
 
+  const { t } = useLocaleInject()
   const { $services } = commonState
   const { emit } = ctx
 

@@ -4,9 +4,8 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcTooltip } from '@vue-cesium/components/ui'
-import { useCommon } from '@vue-cesium/composables'
+import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import useCompass from './use-compass'
-import { t } from '@vue-cesium/locale'
 
 export default defineComponent({
   name: 'VcCompassSm',
@@ -43,6 +42,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
+    const { t } = useLocaleInject()
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
     const compassState = useCompass(props, ctx, instance)
