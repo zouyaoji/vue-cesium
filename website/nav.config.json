@@ -37,6 +37,15 @@
       "name": "组件",
       "groups": [
         {
+          "groupName": "配置",
+          "list": [
+            {
+              "path": "/vc-config-provider",
+              "title": "Config Provider 全局配置"
+            }
+          ]
+        },
+        {
           "groupName": "视图",
           "list": [
             {
@@ -499,6 +508,15 @@
     {
       "name": "Components",
       "groups": [
+        {
+          "groupName": "Configuration",
+          "list": [
+            {
+              "path": "/vc-config-provider",
+              "title": "Config Provider"
+            }
+          ]
+        },
         {
           "groupName": "Viewer",
           "list": [
