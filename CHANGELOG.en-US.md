@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.2-beta.5
+
+_2021-11-07_
+
+#### Bug fixes
+
+- Fix [#126](https://github.com/zouyaoji/vue-cesium/issues/126), i18n configuration does not work.
+
 ### 3.0.2-beta.4
 
 _2021-11-04_

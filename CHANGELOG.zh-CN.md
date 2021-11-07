@@ -1,5 +1,13 @@
 ## 更新日志
 
+### 3.0.2-beta.5
+
+_2021-11-07_
+
+#### Bug 修复
+
+- 修复 i18n 配置不起作用的问题。[#126](https://github.com/zouyaoji/vue-cesium/issues/126)
+
 ### 3.0.2-beta.4
 
 _2021-11-04_
