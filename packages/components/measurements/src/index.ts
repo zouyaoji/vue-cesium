@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, reactive, ExtractPropTypes } from 'vue'
+import { defineComponent, getCurrentInstance, ref, ExtractPropTypes } from 'vue'
 import {
   defaultProps,
   defaultOptions,
@@ -40,7 +40,6 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useLocaleInject } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { circleDrawingActionDefault, clearActionDefault, regularDrawingActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
-import { defaultsDeep } from 'lodash'
 
 export default defineComponent({
   name: 'VcMeasurements',
@@ -52,68 +51,108 @@ export default defineComponent({
     instance.cesiumClass = 'VcMeasurements'
     const { t } = useLocaleInject()
 
-    const clearActionOpts = reactive<typeof clearActionDefault>(defaultsDeep({}, props.clearActionOpts, defaultOptions.clearActionOpts))
-    const mainFabOpts = reactive<typeof mainFabDefault>(defaultsDeep({}, props.mainFabOpts, defaultOptions.mainFabOpts))
-    const distanceActionOpts = reactive<typeof distanceMeasurementActionDefault>(
-      defaultsDeep({}, props.distanceActionOpts, defaultOptions.distanceActionOpts)
-    )
-    const distanceMeasurementOpts = reactive<typeof distanceMeasurementDefault>(
-      defaultsDeep({}, props.distanceMeasurementOpts, defaultOptions.distanceMeasurementOpts)
-    )
-    const componentDistanceActionOpts = reactive<typeof componentDistanceMeasurementActionDefault>(
-      defaultsDeep({}, props.componentDistanceActionOpts, defaultOptions.componentDistanceActionOpts)
-    )
-    const componentDistanceMeasurementOpts = reactive<typeof componentDistanceMeasurementDefault>(
-      defaultsDeep({}, props.componentDistanceMeasurementOpts, defaultOptions.componentDistanceMeasurementOpts)
-    )
-    const polylineActionOpts = reactive<typeof polylineMeasurementActionDefault>(
-      defaultsDeep({}, props.polylineActionOpts, defaultOptions.polylineActionOpts)
-    )
-    const polylineMeasurementOpts = reactive<typeof polylineMeasurementDefault>(
-      defaultsDeep({}, props.polylineMeasurementOpts, defaultOptions.polylineMeasurementOpts)
-    )
-    const horizontalActionOpts = reactive<typeof horizontalMeasurementActionDefault>(
-      defaultsDeep({}, props.horizontalActionOpts, defaultOptions.horizontalActionOpts)
-    )
-    const horizontalMeasurementOpts = reactive<typeof horizontalMeasurementDefault>(
-      defaultsDeep({}, props.horizontalMeasurementOpts, defaultOptions.horizontalMeasurementOpts)
-    )
-    const verticalActionOpts = reactive<typeof verticalMeasurementActionDefault>(
-      defaultsDeep({}, props.verticalActionOpts, defaultOptions.verticalActionOpts)
-    )
-    const verticalMeasurementOpts = reactive<typeof verticalMeasurementDefault>(
-      defaultsDeep({}, props.verticalMeasurementOpts, defaultOptions.verticalMeasurementOpts)
-    )
-    const heightActionOpts = reactive<typeof heightMeasurementActionDefault>(
-      defaultsDeep({}, props.heightActionOpts, defaultOptions.heightActionOpts)
-    )
-    const heightMeasurementOpts = reactive<typeof heightMeasurementDefault>(
-      defaultsDeep({}, props.heightMeasurementOpts, defaultOptions.heightMeasurementOpts)
-    )
-    const areaActionOpts = reactive<typeof areaMeasurementActionDefault>(defaultsDeep({}, props.areaActionOpts, defaultOptions.areaActionOpts))
-    const areaMeasurementOpts = reactive<typeof areaMeasurementDefault>(
-      defaultsDeep({}, props.areaMeasurementOpts, defaultOptions.areaMeasurementOpts)
-    )
-    const pointActionOpts = reactive<typeof pointMeasurementActionDefault>(defaultsDeep({}, props.pointActionOpts, defaultOptions.pointActionOpts))
-    const pointMeasurementOpts = reactive<typeof pointMeasurementDefault>(
-      defaultsDeep({}, props.pointMeasurementOpts, defaultOptions.pointMeasurementOpts)
-    )
-    const rectangleActionOpts = reactive<typeof rectangleMeasurementActionDefault>(
-      defaultsDeep({}, props.rectangleActionOpts, defaultOptions.rectangleActionOpts)
-    )
-    const rectangleMeasurementOpts = reactive<typeof rectangleMeasurementDefault>(
-      defaultsDeep({}, props.rectangleMeasurementOpts, defaultOptions.rectangleMeasurementOpts)
-    )
-    const regularActionOpts = reactive<typeof regularDrawingActionDefault>(
-      defaultsDeep({}, props.regularActionOpts, defaultOptions.regularActionOpts)
-    )
-    const regularMeasurementOpts = reactive<typeof regularMeasurementDefault>(
-      defaultsDeep({}, props.regularMeasurementOpts, defaultOptions.regularMeasurementOpts)
-    )
-    const circleActionOpts = reactive<typeof circleDrawingActionDefault>(defaultsDeep({}, props.circleActionOpts, defaultOptions.circleActionOpts))
-    const circleMeasurementOpts = reactive<typeof circleMeasurementDefault>(
-      defaultsDeep({}, props.circleMeasurementOpts, defaultOptions.circleMeasurementOpts)
-    )
+    const clearActionOpts = Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts) as typeof clearActionDefault
+    const mainFabOpts = Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts) as typeof mainFabDefault
+    const distanceActionOpts = Object.assign(
+      {},
+      defaultOptions.distanceActionOpts,
+      props.distanceActionOpts
+    ) as typeof distanceMeasurementActionDefault
+
+    const distanceMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.distanceMeasurementOpts,
+      props.distanceMeasurementOpts
+    ) as typeof distanceMeasurementDefault
+
+    const componentDistanceActionOpts = Object.assign(
+      {},
+      defaultOptions.componentDistanceActionOpts,
+      props.componentDistanceActionOpts
+    ) as typeof componentDistanceMeasurementActionDefault
+
+    const componentDistanceMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.componentDistanceMeasurementOpts,
+      props.componentDistanceMeasurementOpts
+    ) as typeof componentDistanceMeasurementDefault
+
+    const polylineActionOpts = Object.assign(
+      {},
+      defaultOptions.polylineActionOpts,
+      props.polylineActionOpts
+    ) as typeof polylineMeasurementActionDefault
+
+    const polylineMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.polylineMeasurementOpts,
+      props.polylineMeasurementOpts
+    ) as typeof polylineMeasurementDefault
+
+    const horizontalActionOpts = Object.assign(
+      {},
+      defaultOptions.horizontalActionOpts,
+      props.horizontalActionOpts
+    ) as typeof horizontalMeasurementActionDefault
+
+    const horizontalMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.horizontalMeasurementOpts,
+      props.horizontalMeasurementOpts
+    ) as typeof horizontalMeasurementDefault
+
+    const verticalActionOpts = Object.assign(
+      {},
+      defaultOptions.verticalActionOpts,
+      props.verticalActionOpts
+    ) as typeof verticalMeasurementActionDefault
+
+    const verticalMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.verticalMeasurementOpts,
+      props.verticalMeasurementOpts
+    ) as typeof verticalMeasurementDefault
+
+    const heightActionOpts = Object.assign({}, defaultOptions.heightActionOpts, props.heightActionOpts) as typeof heightMeasurementActionDefault
+
+    const heightMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.heightMeasurementOpts,
+      props.heightMeasurementOpts
+    ) as typeof heightMeasurementDefault
+
+    const areaActionOpts = Object.assign({}, defaultOptions.areaActionOpts, props.areaActionOpts) as typeof areaMeasurementActionDefault
+    const areaMeasurementOpts = Object.assign({}, defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts) as typeof areaMeasurementDefault
+
+    const pointActionOpts = Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts) as typeof pointMeasurementActionDefault
+    const pointMeasurementOpts = Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts) as typeof pointMeasurementDefault
+
+    const rectangleActionOpts = Object.assign(
+      {},
+      defaultOptions.rectangleActionOpts,
+      props.rectangleActionOpts
+    ) as typeof rectangleMeasurementActionDefault
+
+    const rectangleMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.rectangleMeasurementOpts,
+      props.rectangleMeasurementOpts
+    ) as typeof rectangleMeasurementDefault
+
+    const regularActionOpts = Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts) as typeof regularDrawingActionDefault
+
+    const regularMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.regularMeasurementOpts,
+      props.regularMeasurementOpts
+    ) as typeof regularMeasurementDefault
+
+    const circleActionOpts = Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts) as typeof circleDrawingActionDefault
+    const circleMeasurementOpts = Object.assign(
+      {},
+      defaultOptions.circleMeasurementOpts,
+      props.circleMeasurementOpts
+    ) as typeof circleMeasurementDefault
 
     const options: any = {}
     options.distanceActionOpts = distanceActionOpts

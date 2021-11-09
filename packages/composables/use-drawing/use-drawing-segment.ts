@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-11-06 16:18:12
+ * @LastEditTime: 2021-11-09 11:18:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -825,6 +825,8 @@ export default function (props, ctx, cmpName: string) {
     } else if (e === 'removeAll') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
+    } else if (e === 'custom') {
+      props.editorOpts[e]?.callback?.()
     }
 
     emit(
