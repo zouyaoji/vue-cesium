@@ -177,36 +177,36 @@ describe('VcDatasourceGeojson', () => {
   }, 10000)
 })
 
-const kmlApp = {
-  components: {
-    VcViewer,
-    VcDatasourceKml
-  },
-  template: `
-    <div class="test-viewer">
-      <vc-viewer>
-        <vc-datasource-kml
-          ref="datasource"
-          data="https://zouyaoji.top/vue-cesium/SampleData/kml/gdpPerCapita2008.kmz"
-      ></vc-datasource-kml>
-      </vc-viewer>
-    </div>
- `
-}
+// const kmlApp = {
+//   components: {
+//     VcViewer,
+//     VcDatasourceKml
+//   },
+//   template: `
+//     <div class="test-viewer">
+//       <vc-viewer>
+//         <vc-datasource-kml
+//           ref="datasource"
+//           data="https://zouyaoji.top/vue-cesium/SampleData/kml/gdpPerCapita2008.kmz"
+//       ></vc-datasource-kml>
+//       </vc-viewer>
+//     </div>
+//  `
+// }
 
-describe('VcDatasourceKml', () => {
-  test('render test', async () => {
-    const wrapper = mount(kmlApp)
-    expect(wrapper.vm.$refs.datasource).toBeDefined()
-    const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
-    let datasource = readyObj?.cesiumObject as Cesium.KmlDataSource
-    expect(datasource instanceof Cesium.KmlDataSource).toBe(true)
-    await testVm.unload?.()
-    datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
-    expect(datasource).toBeUndefined()
-    await testVm.load?.()
-    datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
-    expect(datasource).toBeDefined()
-  }, 20000)
-})
+// describe('VcDatasourceKml', () => {
+//   test('render test', async () => {
+//     const wrapper = mount(kmlApp)
+//     expect(wrapper.vm.$refs.datasource).toBeDefined()
+//     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
+//     const readyObj: ReadyObj | undefined = await testVm.createPromise
+//     let datasource = readyObj?.cesiumObject as Cesium.KmlDataSource
+//     expect(datasource instanceof Cesium.KmlDataSource).toBe(true)
+//     await testVm.unload?.()
+//     datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
+//     expect(datasource).toBeUndefined()
+//     await testVm.load?.()
+//     datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
+//     expect(datasource).toBeDefined()
+//   }, 20000)
+// })
