@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.2-beta.6
+
+_2021-11-10_
+
+#### Bug fixes
+
+- `vc-measurements` and `vc-drawings` modify the assignment methods of default options.
+
 ### 3.0.2-beta.5
 
 _2021-11-07_
