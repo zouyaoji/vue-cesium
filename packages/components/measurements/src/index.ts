@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes } from 'vue'
+import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
 import {
   defaultProps,
   defaultOptions,
@@ -51,108 +51,86 @@ export default defineComponent({
     instance.cesiumClass = 'VcMeasurements'
     const { t } = useLocaleInject()
 
-    const clearActionOpts = Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts) as typeof clearActionDefault
-    const mainFabOpts = Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts) as typeof mainFabDefault
-    const distanceActionOpts = Object.assign(
-      {},
-      defaultOptions.distanceActionOpts,
-      props.distanceActionOpts
-    ) as typeof distanceMeasurementActionDefault
+    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
+    const mainFabOpts = reactive<typeof mainFabDefault>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
+    const distanceActionOpts = reactive<typeof distanceMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.distanceActionOpts, props.distanceActionOpts)
+    )
 
-    const distanceMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.distanceMeasurementOpts,
-      props.distanceMeasurementOpts
-    ) as typeof distanceMeasurementDefault
+    const distanceMeasurementOpts = reactive<typeof distanceMeasurementDefault>(
+      Object.assign({}, defaultOptions.distanceMeasurementOpts, props.distanceMeasurementOpts)
+    )
 
-    const componentDistanceActionOpts = Object.assign(
-      {},
-      defaultOptions.componentDistanceActionOpts,
-      props.componentDistanceActionOpts
-    ) as typeof componentDistanceMeasurementActionDefault
+    const componentDistanceActionOpts = reactive<typeof componentDistanceMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.componentDistanceActionOpts, props.componentDistanceActionOpts)
+    )
 
-    const componentDistanceMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.componentDistanceMeasurementOpts,
-      props.componentDistanceMeasurementOpts
-    ) as typeof componentDistanceMeasurementDefault
+    const componentDistanceMeasurementOpts = reactive<typeof componentDistanceMeasurementDefault>(
+      Object.assign({}, defaultOptions.componentDistanceMeasurementOpts, props.componentDistanceMeasurementOpts)
+    )
 
-    const polylineActionOpts = Object.assign(
-      {},
-      defaultOptions.polylineActionOpts,
-      props.polylineActionOpts
-    ) as typeof polylineMeasurementActionDefault
+    const polylineActionOpts = reactive<typeof polylineMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts)
+    )
 
-    const polylineMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.polylineMeasurementOpts,
-      props.polylineMeasurementOpts
-    ) as typeof polylineMeasurementDefault
+    const polylineMeasurementOpts = reactive<typeof polylineMeasurementDefault>(
+      Object.assign({}, defaultOptions.polylineMeasurementOpts, props.polylineMeasurementOpts)
+    )
 
-    const horizontalActionOpts = Object.assign(
-      {},
-      defaultOptions.horizontalActionOpts,
-      props.horizontalActionOpts
-    ) as typeof horizontalMeasurementActionDefault
+    const horizontalActionOpts = reactive<typeof horizontalMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.horizontalActionOpts, props.horizontalActionOpts)
+    )
 
-    const horizontalMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.horizontalMeasurementOpts,
-      props.horizontalMeasurementOpts
-    ) as typeof horizontalMeasurementDefault
+    const horizontalMeasurementOpts = reactive<typeof horizontalMeasurementDefault>(
+      Object.assign({}, defaultOptions.horizontalMeasurementOpts, props.horizontalMeasurementOpts)
+    )
 
-    const verticalActionOpts = Object.assign(
-      {},
-      defaultOptions.verticalActionOpts,
-      props.verticalActionOpts
-    ) as typeof verticalMeasurementActionDefault
+    const verticalActionOpts = reactive<typeof verticalMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.verticalActionOpts, props.verticalActionOpts)
+    )
 
-    const verticalMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.verticalMeasurementOpts,
-      props.verticalMeasurementOpts
-    ) as typeof verticalMeasurementDefault
+    const verticalMeasurementOpts = reactive<typeof verticalMeasurementDefault>(
+      Object.assign({}, defaultOptions.verticalMeasurementOpts, props.verticalMeasurementOpts)
+    )
 
-    const heightActionOpts = Object.assign({}, defaultOptions.heightActionOpts, props.heightActionOpts) as typeof heightMeasurementActionDefault
+    const heightActionOpts = reactive<typeof heightMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.heightActionOpts, props.heightActionOpts)
+    )
 
-    const heightMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.heightMeasurementOpts,
-      props.heightMeasurementOpts
-    ) as typeof heightMeasurementDefault
+    const heightMeasurementOpts = reactive<typeof heightMeasurementDefault>(
+      Object.assign({}, defaultOptions.heightMeasurementOpts, props.heightMeasurementOpts)
+    )
 
-    const areaActionOpts = Object.assign({}, defaultOptions.areaActionOpts, props.areaActionOpts) as typeof areaMeasurementActionDefault
-    const areaMeasurementOpts = Object.assign({}, defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts) as typeof areaMeasurementDefault
+    const areaActionOpts = reactive<typeof areaMeasurementActionDefault>(Object.assign({}, defaultOptions.areaActionOpts, props.areaActionOpts))
+    const areaMeasurementOpts = reactive<typeof areaMeasurementDefault>(
+      Object.assign({}, defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts)
+    )
 
-    const pointActionOpts = Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts) as typeof pointMeasurementActionDefault
-    const pointMeasurementOpts = Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts) as typeof pointMeasurementDefault
+    const pointActionOpts = reactive<typeof pointMeasurementActionDefault>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
+    const pointMeasurementOpts = reactive<typeof pointMeasurementDefault>(
+      Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts)
+    )
 
-    const rectangleActionOpts = Object.assign(
-      {},
-      defaultOptions.rectangleActionOpts,
-      props.rectangleActionOpts
-    ) as typeof rectangleMeasurementActionDefault
+    const rectangleActionOpts = reactive<typeof rectangleMeasurementActionDefault>(
+      Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts)
+    )
 
-    const rectangleMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.rectangleMeasurementOpts,
-      props.rectangleMeasurementOpts
-    ) as typeof rectangleMeasurementDefault
+    const rectangleMeasurementOpts = reactive<typeof rectangleMeasurementDefault>(
+      Object.assign({}, defaultOptions.rectangleMeasurementOpts, props.rectangleMeasurementOpts)
+    )
 
-    const regularActionOpts = Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts) as typeof regularDrawingActionDefault
+    const regularActionOpts = reactive<typeof regularDrawingActionDefault>(
+      Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts)
+    )
 
-    const regularMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.regularMeasurementOpts,
-      props.regularMeasurementOpts
-    ) as typeof regularMeasurementDefault
+    const regularMeasurementOpts = reactive<typeof regularMeasurementDefault>(
+      Object.assign({}, defaultOptions.regularMeasurementOpts, props.regularMeasurementOpts)
+    )
 
-    const circleActionOpts = Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts) as typeof circleDrawingActionDefault
-    const circleMeasurementOpts = Object.assign(
-      {},
-      defaultOptions.circleMeasurementOpts,
-      props.circleMeasurementOpts
-    ) as typeof circleMeasurementDefault
+    const circleActionOpts = reactive<typeof circleDrawingActionDefault>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleMeasurementOpts = reactive<typeof circleMeasurementDefault>(
+      Object.assign({}, defaultOptions.circleMeasurementOpts, props.circleMeasurementOpts)
+    )
 
     const options: any = {}
     options.distanceActionOpts = distanceActionOpts

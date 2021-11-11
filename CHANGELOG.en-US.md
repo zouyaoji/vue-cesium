@@ -1,4 +1,12 @@
 ## Changelog
+### 3.0.2-beta.7
+
+_2021-11-11_
+
+#### Bug fixes
+
+- The active state of `vc-drawngs` and `vc-measurement` does not work.
+
 
 ### 3.0.2-beta.6
 

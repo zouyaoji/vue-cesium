@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes } from 'vue'
+import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
 import {
   defaultProps,
   defaultOptions,
@@ -46,26 +46,34 @@ export default defineComponent({
 
     const options: any = {}
     // computed
-    const clearActionOpts = Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts) as typeof clearActionDefault
-    const mainFabOpts = Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts) as typeof mainFabDefault
-    const pointActionOpts = Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts) as typeof pointDrawingActionDefault
-    const pointDrawingOpts = Object.assign({}, defaultOptions.pointDrawingOpts, props.pointDrawingOpts) as typeof pointDrawingDefault
-    const polylineActionOpts = Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts) as typeof polylineDrawingActionDefault
-    const polylineDrawingOpts = Object.assign({}, defaultOptions.polylineDrawingOpts, props.polylineDrawingOpts) as typeof polylineDrawingDefault
-    const polygonActionOpts = Object.assign({}, defaultOptions.polygonActionOpts, props.polygonActionOpts) as typeof polygonDrawingActionDefault
-    const polygonDrawingOpts = Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts) as typeof polygonDrawingDefault
-    const rectangleActionOpts = Object.assign(
-      {},
-      defaultOptions.rectangleActionOpts,
-      props.rectangleActionOpts
-    ) as typeof rectangleDrawingActionDefault
-    const rectangleDrawingOpts = Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts) as typeof rectangleDrawingDefault
-    const circleActionOpts = Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts) as typeof circleDrawingActionDefault
-    const circleDrawingOpts = Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts) as typeof circleDrawingDefault
-    const regularActionOpts = Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts) as typeof regularDrawingActionDefault
-    const regularDrawingOpts = Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts) as typeof regularDrawingDefault
-    const pinActionOpts = Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts) as typeof pinDrawingActionDefault
-    const pinDrawingOpts = Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts) as typeof pinDrawingDefault
+    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
+    const mainFabOpts = reactive<typeof mainFabDefault>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
+    const pointActionOpts = reactive<typeof pointDrawingActionDefault>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
+    const pointDrawingOpts = reactive<typeof pointDrawingDefault>(Object.assign({}, defaultOptions.pointDrawingOpts, props.pointDrawingOpts))
+    const polylineActionOpts = reactive<typeof polylineDrawingActionDefault>(
+      Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts)
+    )
+    const polylineDrawingOpts = reactive<typeof polylineDrawingDefault>(
+      Object.assign({}, defaultOptions.polylineDrawingOpts, props.polylineDrawingOpts)
+    )
+    const polygonActionOpts = reactive<typeof polygonDrawingActionDefault>(
+      Object.assign({}, defaultOptions.polygonActionOpts, props.polygonActionOpts)
+    )
+    const polygonDrawingOpts = reactive<typeof polygonDrawingDefault>(Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts))
+    const rectangleActionOpts = reactive<typeof rectangleDrawingActionDefault>(
+      Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts)
+    )
+    const rectangleDrawingOpts = reactive<typeof rectangleDrawingDefault>(
+      Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts)
+    )
+    const circleActionOpts = reactive<typeof circleDrawingActionDefault>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleDrawingOpts = reactive<typeof circleDrawingDefault>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
+    const regularActionOpts = reactive<typeof regularDrawingActionDefault>(
+      Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts)
+    )
+    const regularDrawingOpts = reactive<typeof regularDrawingDefault>(Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts))
+    const pinActionOpts = reactive<typeof pinDrawingActionDefault>(Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts))
+    const pinDrawingOpts = reactive<typeof pinDrawingDefault>(Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts))
 
     options.pointActionOpts = pointActionOpts
     options.pointDrawingOpts = pointDrawingOpts
