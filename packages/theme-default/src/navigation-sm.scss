@@ -10,7 +10,7 @@
   box-sizing: content-box;
   height: 300px;
   width: 128px;
-  z-index: $z-top;
+  z-index: $z-side;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -92,7 +92,7 @@
     height: 16px;
     background-image: url('./images/vc-tiltbar-sm.png');
     background-repeat: no-repeat;
-    z-index: $z-top;
+    z-index: $z-side;
   }
 
   .vc-arrows-e-sm {

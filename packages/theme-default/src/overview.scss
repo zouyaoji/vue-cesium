@@ -2,7 +2,7 @@
 
 .vc-overview-map {
   text-align: center;
-  z-index: $z-top;
+  z-index: $z-side;
   background: #f8f8f9;
   pointer-events: auto;
   transition: all 0.6s;
@@ -12,7 +12,7 @@
   }
 
   .vc-btn {
-    z-index: $z-top;
+    z-index: $z-side;
     transition: all 0.6s;
   }
 
