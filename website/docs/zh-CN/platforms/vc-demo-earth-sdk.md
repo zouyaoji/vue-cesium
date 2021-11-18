@@ -1,6 +1,6 @@
 ## EarthSDK Demo
 
- vue-cesium 使用 CesiumLab 的 EarthSDK 开发时只需要在引入 VueCesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 库地址即可。
+vue-cesium 使用 CesiumLab 的 EarthSDK 开发时只需要在引入 VueCesium 时通过配置项 `cesiumPath` 指定为 EarthSDK 库地址即可。
 
 ```javascript
 import { createApp } from 'vue'
@@ -108,14 +108,14 @@ app.mount('#app')
                   [2.8083374819013205, 0.9842980731992482, -6.859619106471648e-9]
                 ]
               }
-            },
-            {
-              czmObject: {
-                name: '默认影像',
-                xbsjType: 'Imagery',
-                xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
-              }
             }
+            // {
+            //   czmObject: {
+            //     name: '默认影像',
+            //     xbsjType: 'Imagery',
+            //     xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
+            //   }
+            // }
           ]
         }
         var polyline1 = earth.sceneTree.$refs.polyline1.czmObject

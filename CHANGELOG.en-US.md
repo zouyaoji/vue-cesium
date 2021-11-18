@@ -1,4 +1,14 @@
 ## Changelog
+
+### 3.0.2-beta.8
+
+_2021-11-18_
+
+#### Bug fixes
+
+- Lower the z-index of each control component to prevent them from exceeding some modal dialog because the z-index is too high.
+- Fix the problem that the makeMaterial method judges the logic error.
+
 ### 3.0.2-beta.7
 
 _2021-11-11_
@@ -6,7 +16,6 @@ _2021-11-11_
 #### Bug fixes
 
 - The active state of `vc-drawngs` and `vc-measurement` does not work.
-
 
 ### 3.0.2-beta.6
 

@@ -1,6 +1,6 @@
 ## EarthSDK Demo
 
- When vue-cesium uses CesiumLab's EarthSDK to develop, you only need to specify the address of the EarthSDK library through the configuration item `cesiumPath` when VueCesium is introduced.
+When vue-cesium uses CesiumLab's EarthSDK to develop, you only need to specify the address of the EarthSDK library through the configuration item `cesiumPath` when VueCesium is introduced.
 
 ```javascript
 import { createApp } from 'vue'
@@ -103,14 +103,14 @@ Use VueCesium to load EarthSDK
                   [2.8083374819013205, 0.9842980731992482, -6.859619106471648e-9]
                 ]
               }
-            },
-            {
-              czmObject: {
-                name: '默认影像',
-                xbsjType: 'Imagery',
-                xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
-              }
             }
+            // {
+            //   czmObject: {
+            //     name: '默认影像',
+            //     xbsjType: 'Imagery',
+            //     xbsjImageryProvider: XE.Obj.Imagery.defaultImageryProviderConfig
+            //   }
+            // }
           ]
         }
         var polyline1 = earth.sceneTree.$refs.polyline1.czmObject
