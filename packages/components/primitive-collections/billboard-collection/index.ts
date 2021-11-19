@@ -4,7 +4,7 @@ import { usePrimitiveCollections } from '@vue-cesium/composables'
 import cloneDeep from 'lodash/cloneDeep'
 import differenceBy from 'lodash/differenceBy'
 import { scene, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 
 export default defineComponent({
@@ -79,7 +79,7 @@ export default defineComponent({
               billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
               const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
               const billboard = billboardCollection.add(billboardOptionsTransform)
-              primitiveCollectionsState?.addCustomProp(billboard, billboardOptionsTransform)
+              addCustomProperty(billboard, billboardOptionsTransform)
             }
           }
         },
@@ -99,7 +99,7 @@ export default defineComponent({
         billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
         const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
         const billboard = billboardCollection.add(billboardOptionsTransform)
-        primitiveCollectionsState?.addCustomProp(billboard, billboardOptionsTransform)
+        addCustomProperty(billboard, billboardOptionsTransform)
       }
       return billboardCollection
     }

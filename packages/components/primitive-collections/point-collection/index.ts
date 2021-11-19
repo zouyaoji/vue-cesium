@@ -4,7 +4,7 @@ import { usePrimitiveCollections } from '@vue-cesium/composables'
 import cloneDeep from 'lodash/cloneDeep'
 import differenceBy from 'lodash/differenceBy'
 import { modelMatrix, debugShowBoundingVolume, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 
 export default defineComponent({
@@ -87,7 +87,7 @@ export default defineComponent({
               const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
               const point = pointCollection.add(pointOptionsTransform)
 
-              primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
+              addCustomProperty(point, pointOptionsTransform)
             }
           }
         },
@@ -107,7 +107,7 @@ export default defineComponent({
         const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
         const point = pointCollection.add(pointOptionsTransform)
 
-        primitiveCollectionsState.addCustomProp(point, pointOptionsTransform)
+        addCustomProperty(point, pointOptionsTransform)
       }
       return pointCollection
     }

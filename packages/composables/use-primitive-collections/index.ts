@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-04 13:55:35
- * @LastEditTime: 2021-10-02 23:06:20
+ * @LastEditTime: 2021-11-19 21:07:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collections\index.ts
@@ -18,7 +18,7 @@
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
-import { provide, ref, reactive } from 'vue'
+import { provide } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
 
 export type Collection =
@@ -55,14 +55,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     })
   }
 
-  const addCustomProp = (obj, options) => {
-    for (const prop in options) {
-      if (!obj[prop]) {
-        obj[prop] = options[prop]
-      }
-    }
-  }
-
   // provide
   provide(vcKey, getServices())
 
@@ -70,7 +62,6 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     transformProps: commonState.transformProps,
     transformProp: commonState.transformProp,
     unwatchFns: commonState.unwatchFns,
-    setPropsWatcher: commonState.setPropsWatcher,
-    addCustomProp: addCustomProp
+    setPropsWatcher: commonState.setPropsWatcher
   }
 }

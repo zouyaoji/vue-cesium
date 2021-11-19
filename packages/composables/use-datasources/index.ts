@@ -5,6 +5,7 @@ import { onUnmounted, provide, watch, WatchStopHandle } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
 import cloneDeep from 'lodash/cloneDeep'
 import differenceBy from 'lodash/differenceBy'
+import { addCustomProperty } from '@vue-cesium/utils/util'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -76,6 +77,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
               const entityOptionsTransform = commonState.transformProps(entityOptions)
               const entityAdded = datasource.entities.add(entityOptionsTransform)
               entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
+              addCustomProperty(entityAdded, entityOptionsTransform)
             }
           })
         } else {
@@ -96,6 +98,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
             const entityOptionsTransform = commonState.transformProps(entityOptions)
             const entityAdded = datasource.entities.add(entityOptionsTransform)
             entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
+            addCustomProperty(entityAdded, entityOptionsTransform)
           }
         }
       },
@@ -114,6 +117,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
       const entityOptionsTransform = commonState.transformProps(entityOptions)
       const entity = datasource.entities.add(entityOptionsTransform)
       entityOptions.id !== entity.id && (entityOptions.id = entity.id)
+      addCustomProperty(entity, entityOptionsTransform)
     }
     return dataSources.add(datasource).then(() => {
       return true

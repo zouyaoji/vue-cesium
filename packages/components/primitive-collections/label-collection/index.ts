@@ -4,7 +4,7 @@ import { usePrimitiveCollections } from '@vue-cesium/composables'
 import cloneDeep from 'lodash/cloneDeep'
 import differenceBy from 'lodash/differenceBy'
 import { modelMatrix, debugShowBoundingVolume, scene, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 
 export default defineComponent({
@@ -87,7 +87,7 @@ export default defineComponent({
               labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
               const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
               const label = labelCollection.add(labelOptionsTransform)
-              primitiveCollectionsState.addCustomProp(label, labelOptionsTransform)
+              addCustomProperty(label, labelOptionsTransform)
             }
           }
         },
@@ -106,7 +106,7 @@ export default defineComponent({
         labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
         const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
         const label = labelCollection.add(labelOptionsTransform)
-        primitiveCollectionsState.addCustomProp(label, labelOptionsTransform)
+        addCustomProperty(label, labelOptionsTransform)
       }
       return labelCollection
     }

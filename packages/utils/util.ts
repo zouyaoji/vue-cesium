@@ -149,6 +149,14 @@ const getDefaultOptionByProps = (props: AnyObject, ignores: Array<string> = []) 
   return defaultOptions
 }
 
+const addCustomProperty = (obj, options) => {
+  for (const prop in options) {
+    if (!obj[prop]) {
+      obj[prop] = options[prop]
+    }
+  }
+}
+
 // reexport from lodash & vue shared
 export {
   hasOwn,
@@ -165,5 +173,6 @@ export {
   isUndefined,
   isFunction,
   camelCase,
-  getDefaultOptionByProps
+  getDefaultOptionByProps,
+  addCustomProperty
 }
