@@ -21,7 +21,7 @@
         <vc-collection-billboard :billboards="billboards2"></vc-collection-billboard>
       </vc-collection-primitive>
     </vc-collection-primitive>
-    <vc-collection-primitive>
+    <vc-collection-primitive :polygons="polygons">
       <vc-primitive-model
         @click="onClicked"
         url="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
@@ -31,6 +31,7 @@
         :maximumScale="200000"
       >
       </vc-primitive-model>
+      <vc-polygon @click="onClicked" :positions="positions" color="yellow"></vc-polygon>
     </vc-collection-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -52,6 +53,35 @@
       const modelMatrix = ref(null)
       const show = ref(true)
       const instance = getCurrentInstance()
+      const positions = ref([
+        [105, 32],
+        [106, 34],
+        [107, 30]
+      ])
+      const polygons = ref([
+        {
+          positions: [
+            [115, 37],
+            [115, 32],
+            [107, 33],
+            [102, 31],
+            [102, 35]
+          ],
+          color: 'green'
+        },
+        {
+          positions: [
+            { lng: 108.0, lat: 42.0 },
+            { lng: 100.0, lat: 42.0 },
+            { lng: 104.0, lat: 40.0 }
+          ],
+          color: 'red'
+        },
+        {
+          positions: [90.0, 41.0, 0.0, 85.0, 41.0, 500000.0, 80.0, 41.0, 0.0],
+          color: 'blue'
+        }
+      ])
       // methods
       const onClicked = e => {
         console.log(e)
@@ -93,7 +123,9 @@
         billboards1,
         billboards2,
         modelMatrix,
-        show
+        show,
+        positions,
+        polygons
       }
     }
   }
@@ -104,13 +136,48 @@
 
 ### 属性
 
-| 属性名            | 类型    | 默认值 | 描述                                                |
-| ----------------- | ------- | ------ | --------------------------------------------------- |
-| show              | Boolean | `true` | `optional` 指定图元集合中的图元是否显示。           |
-| destroyPrimitives | Boolean | `true` | `optional` 指定移除图元集合时是否销毁集合中的图元。 |
-| enableMouseEvent  | Boolean | `true` | `optional` 指定鼠标事件是否生效。                   |
+| 属性名            | 类型                      | 默认值 | 描述                                                                   |
+| ----------------- | ------------------------- | ------ | ---------------------------------------------------------------------- |
+| show              | Boolean                   | `true` | `optional` 指定图元集合中的图元是否显示。                              |
+| destroyPrimitives | Boolean                   | `true` | `optional` 指定移除图元集合时是否销毁集合中的图元。                    |
+| enableMouseEvent  | Boolean                   | `true` | `optional` 指定鼠标事件是否生效。                                      |
+| polygons          | Array\<PolygonPrimitive\> | `[]`   | `optional` 指定面图元集合。 数组对象结构与 `vc-polygon` 组件属性相同。 |
 
 ### 事件
+
+| 事件名     | 参数                                                       | 描述                       |
+| ---------- | ---------------------------------------------------------- | -------------------------- |
+| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
+| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+
+### VcPolygon
+
+加载面图元，相当于初始化一个 `PolygonPrimitive` 实例。
+
+**注意：** 需要作为 `vc-collection-primitive` 的子组件才能正常加载。
+
+### VcPolygon 属性
+
+| 属性名             | 类型                  | 默认值 | 描述                                                       |
+| ------------------ | --------------------- | ------ | ---------------------------------------------------------- |
+| show               | Boolean               | `true` | `optional` 指定 polygon 是否显示。                         |
+| positions          | Array                 |        | `optional` 指定 polygon 的位置属性。                       |
+| id                 | Object                |        | `optional` 指定与 polygon 关联的信息，拾取时返回该属性值。 |
+| classificationType | Number                |        | `optional` 指定 polygon 贴地/贴对象模式。                  |
+| color              | Object\|Array\|String |        | `optional` 指定 polygon 颜色。                             |
+| depthFailColor     | Object\|Array\|String |        | `optional` 指定 polygon 在深度检测无效时的颜色。           |
+| enableMouseEvent   | Boolean               | `true` | `optional` 指定鼠标事件是否生效。                          |
+
+### VcPolygon 事件
 
 | 事件名     | 参数                                                       | 描述                       |
 | ---------- | ---------------------------------------------------------- | -------------------------- |

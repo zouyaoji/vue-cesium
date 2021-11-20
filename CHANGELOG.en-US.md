@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.2-beta.9
+
+_2021-11-20_
+
+#### 新特性
+
+- DataSource component `vc-datasource-xxx` can use `entities` to pass in custom attributes.
+- Added `vc-polygon` component, and supports batch management of a group of polygon primitives with `vc-collection-primitive`.
+
 ### 3.0.2-beta.8
 
 _2021-11-18_

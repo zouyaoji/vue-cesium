@@ -21,7 +21,7 @@ Basic usage of VcCollectionPrimitive component.
         <vc-collection-billboard :billboards="billboards2"></vc-collection-billboard>
       </vc-collection-primitive>
     </vc-collection-primitive>
-    <vc-collection-primitive>
+    <vc-collection-primitive :polygons="polygons">
       <vc-primitive-model
         @click="onClicked"
         url="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
@@ -31,6 +31,7 @@ Basic usage of VcCollectionPrimitive component.
         :maximumScale="200000"
       >
       </vc-primitive-model>
+      <vc-polygon @click="onClicked" :positions="positions" color="yellow"></vc-polygon>
     </vc-collection-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -52,6 +53,35 @@ Basic usage of VcCollectionPrimitive component.
       const modelMatrix = ref(null)
       const show = ref(true)
       const instance = getCurrentInstance()
+      const positions = ref([
+        [105, 32],
+        [106, 34],
+        [107, 30]
+      ])
+      const polygons = ref([
+        {
+          positions: [
+            [115, 37],
+            [115, 32],
+            [107, 33],
+            [102, 31],
+            [102, 35]
+          ],
+          color: 'green'
+        },
+        {
+          positions: [
+            { lng: 108.0, lat: 42.0 },
+            { lng: 100.0, lat: 42.0 },
+            { lng: 104.0, lat: 40.0 }
+          ],
+          color: 'red'
+        },
+        {
+          positions: [90.0, 41.0, 0.0, 85.0, 41.0, 500000.0, 80.0, 41.0, 0.0],
+          color: 'blue'
+        }
+      ])
       // methods
       const onClicked = e => {
         console.log(e)
@@ -93,7 +123,9 @@ Basic usage of VcCollectionPrimitive component.
         billboards1,
         billboards2,
         modelMatrix,
-        show
+        show,
+        positions,
+        polygons
       }
     }
   }
@@ -111,6 +143,41 @@ Basic usage of VcCollectionPrimitive component.
 | enableMouseEvent  | Boolean | `true`  | `optional` Specify whether the mouse event takes effect.                                   |
 
 ### Events
+
+| Name       | Parameters                                                 | Description                                                      |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| beforeLoad | Vue Instance                                               | Triggers before the cesiumObject is loaded.                      |
+| ready      | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.           |
+| destroyed  | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                     |
+| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on this primitive.            |
+| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on this primitive.            |
+| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the primitive.                 |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the primitive.            |
+| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the primitive. |
+| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this primitive.                 |
+| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
+| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
+
+### VcPolygon
+
+Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimitive` instance.
+
+**Note:** It needs to be a subcomponent of `vc-collection-primitive` to load normally.
+
+### VcPolygon Props
+
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
+| ------------------ | --------------------- | ------- | ------------------------------------------------------------------------------ |
+| show | Boolean | `true` | `optional` true if this polygon will be shown; otherwise, false. |
+| positions | Array | | `optional` The positions. |
+| id | Object | | `optional` The user-defined object to be returned when this polygon is picked. |
+| classificationType | Number | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
+| color | Object\|Array\|String | | `optional` The color. |
+| depthFailColor | Object\|Array\|String | | `optional` The depthFailColor. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+
+### VcPolygon Events
 
 | Name       | Parameters                                                 | Description                                                      |
 | ---------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |

@@ -2,7 +2,7 @@
 
 加载多边形，相当于初始化一个 `Cesium.PolygonGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。 加载海量面图元时可以考虑用 `vc-collection-primitive` 组件和其 `polygons` 属性来渲染。
 
 ### 基础用法
 

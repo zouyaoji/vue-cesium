@@ -1,5 +1,14 @@
 ## 更新日志
 
+### 3.0.2-beta.9
+
+_2021-11-20_
+
+#### 新特性
+
+- 数据源组件 `vc-datasource-xxx` 可用 `entities` 传入自定义属性。
+- 增加 `vc-polygon` 面图元组件，并支持用 `vc-collection-primitive` 批量管理一组面图元。
+
 ### 3.0.2-beta.8
 
 _2021-11-18_

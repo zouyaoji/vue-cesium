@@ -2,7 +2,7 @@
 
 Loading a polygon geometry. It is equivalent to initializing a `Cesium.PolygonGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally. When loading massive polygon primitives, consider using the `vc-collection-primitive` component and its `polygons` property for rendering.
 
 ### Basic usage
 

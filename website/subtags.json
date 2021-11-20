@@ -30,7 +30,13 @@
     "vc-collection-label",
     "vc-collection-point",
     "vc-collection-polyline",
-    "vc-collection-primitive"
+    "vc-collection-primitive",
+    "vc-post-process-stage",
+    "vc-post-process-stage-scan",
+    "vc-post-process-stage-collection",
+    "vc-overlay-html,",
+    "vc-Overlay-heatmap",
+    "vc-Overlay-wind"
   ],
   "vc-navigation": ["vc-compass", "vc-zoom-control", "vc-print", "vc-my-location", "vc-location-bar", "vc-distance-legend"],
   "vc-navigation-sm": ["vc-compass-sm", "vc-zoom-control-sm"],
@@ -52,18 +58,10 @@
     "vc-provider-imagery-wms",
     "vc-provider-imagery-wmts"
   ],
-  "vc-datasource-custom": [
-    "vc-entity"
-  ],
-  "vc-datasource-geojson": [
-    "vc-entity"
-  ],
-  "vc-datasource-czml": [
-    "vc-entity"
-  ],
-  "vc-datasource-kml": [
-    "vc-entity"
-  ],
+  "vc-datasource-custom": ["vc-entity"],
+  "vc-datasource-geojson": ["vc-entity"],
+  "vc-datasource-czml": ["vc-entity"],
+  "vc-datasource-kml": ["vc-entity"],
   "vc-entity": [
     "vc-graphics-billboard",
     "vc-graphics-box",
@@ -102,7 +100,8 @@
     "vc-collection-label",
     "vc-collection-point",
     "vc-collection-polyline",
-    "vc-collection-primitive"
+    "vc-collection-primitive",
+    "vc-polygon"
   ],
   "vc-instance-geometry": [
     "vc-geometry-box",
@@ -135,5 +134,6 @@
     "vc-geometry-sphere-outline",
     "vc-geometry-wall",
     "vc-geometry-wall-outline"
-  ]
+  ],
+  "vc-post-process-stage-collection": ["vc-post-process-stage", "vc-post-process-stage-scan"]
 }
