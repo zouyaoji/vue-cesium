@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-20 20:43:02
+ * @LastEditTime: 2021-11-21 00:39:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -14,7 +14,7 @@ class PolygonPrimitive {
   _depthFailColor: Cesium.Color
   _positions: Array<Cesium.Cartesian3>
   _boundingSphere: Cesium.BoundingSphere
-  _primitive: Cesium.Primitive | Cesium.GroundPrimitive | void
+  _primitive: Cesium.Primitive | Cesium.GroundPrimitive | undefined
   _update: boolean
   _ellipsoid: Cesium.Ellipsoid
   _clampToGround: boolean
@@ -106,10 +106,12 @@ class PolygonPrimitive {
     if (this.show) {
       const positions = this._positions
       if (positions.length < 3) {
-        this._primitive = this._primitive && this._primitive.destroy()
+        this._primitive && this._primitive.destroy()
+        this._primitive = undefined
       } else {
         if (this._update) {
-          this._primitive = this._primitive && this._primitive.destroy()
+          this._primitive && this._primitive.destroy()
+          this._primitive = undefined
           this._primitive = this._clampToGround ? this._createGroundPolygon() : this._createPolygon()
           ;(this._primitive as any)._vcParent = this
           this._boundingSphere = Cesium.BoundingSphere.fromPoints(positions, this._boundingSphere)
@@ -171,7 +173,8 @@ class PolygonPrimitive {
   }
 
   destroy() {
-    this._primitive = this._primitive && this._primitive.destroy()
+    this._primitive && this._primitive.destroy()
+    this._primitive = undefined
     return Cesium.destroyObject(this)
   }
 }
