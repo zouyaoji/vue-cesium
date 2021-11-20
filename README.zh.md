@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2021-11-19 21:07:35
+ * @LastEditTime: 2021-11-21 00:49:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -43,9 +43,17 @@
 
 ## 文档
 
-[https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
+请访问 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-国内[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+国内码云[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+
+VueCesium 支持引入官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台:
+
+- [官方 CesiumJS](https://cesium.com/platform/cesiumjs/)
+- [超图 SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
+- [西部世界 Earth SDK](http://www.earthsdk.com/)
+- [火星科技 Mars3D](http://mars3d.cn/)
+- [数字视觉 DC-SDK](http://dc.dvgis.cn/#/index)
 
 ## 开始
 
@@ -92,7 +100,7 @@ yarn cz
 # example feat(viewer):add type 'viewer' for form usage #1234
 ```
 
-## Licence
+## 许可
 
 VueCesium is open source software licensed as
 [MIT](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE).

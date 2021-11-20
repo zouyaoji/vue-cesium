@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2021-11-19 21:07:42
+ * @LastEditTime: 2021-11-21 00:49:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -45,7 +45,15 @@ This project is still under heavy development. Feel free to join us and make you
 
 You can find for more details, API, and other docs on [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-国内[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+国内码云[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+
+VueCesium supports the introduction of official CesiumJS, or other third-party platforms based on CesiumJS:
+
+- [CesiumJS](https://cesium.com/platform/cesiumjs/)
+- [SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
+- [Earth SDK](http://www.earthsdk.com/)
+- [Mars3D](http://mars3d.cn/)
+- [DC-SDK](http://dc.dvgis.cn/#/index)
 
 ## Bootstrap project
 

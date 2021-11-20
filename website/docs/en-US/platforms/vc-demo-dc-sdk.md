@@ -147,4 +147,4 @@ Use VueCesium to load dc-sdk
 
 ### Reference
 
--Official website: **[dc-sdk](http://dc.dvgis.cn/#/index)**
+- Official website: **[dc-sdk](http://dc.dvgis.cn/#/index)**
