@@ -1,17 +1,20 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:48:23
+ * @LastEditTime: 2021-11-20 20:06:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { kebabCase } from '@vue-cesium/utils/util'
+import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import cloneDeep from 'lodash/cloneDeep'
+import differenceBy from 'lodash/differenceBy'
+import { PolygonPrimitive } from '@vue-cesium/shared'
 
 export default defineComponent({
   name: 'VcCollectionPrimitive',
@@ -21,14 +24,113 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    ...enableMouseEvent
+    ...enableMouseEvent,
+    polygons: {
+      type: Array,
+      default: () => []
+    }
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'PrimitiveCollection'
-    usePrimitiveCollections(props, ctx, instance)
+    const primitiveCollectionsState = usePrimitiveCollections(props, ctx, instance)
+
+    if (primitiveCollectionsState === void 0) {
+      return
+    }
+
+    // watcher
+    instance.alreadyListening.push('polygons')
+    let unwatchFns: Array<WatchStopHandle> = []
+
+    unwatchFns.push(
+      watch(
+        () => cloneDeep(props.polygons),
+        (newVal, oldVal) => {
+          if (!instance.mounted) {
+            return
+          }
+          const primitiveCollection = instance.cesiumObject as Cesium.PrimitiveCollection
+
+          if (newVal.length === oldVal.length) {
+            // 视为修改操作
+            // Treated as modified
+            const modifies: Array<any> = []
+            for (let i = 0; i < newVal.length; i++) {
+              const options = newVal[i]
+              const oldOptions = oldVal[i]
+
+              if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
+                modifies.push({
+                  newOptions: options,
+                  oldOptions: oldOptions
+                })
+              }
+            }
+
+            modifies.forEach(modify => {
+              const modifyPolygon = primitiveCollection._primitives.find(v => v._id === modify.oldOptions.id)
+              modifyPolygon &&
+                Object.keys(modify.newOptions).forEach(prop => {
+                  if (modify.oldOptions[prop] !== modify.newOptions[prop]) {
+                    modifyPolygon[prop] = primitiveCollectionsState.transformProp(prop, modify.newOptions[prop])
+                  }
+                })
+            })
+          } else {
+            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const deletes: any = differenceBy(oldVal, newVal, 'id')
+            const deletePolygons: Array<PolygonPrimitive> = []
+            for (let i = 0; i < deletes.length; i++) {
+              const deletePolygon = primitiveCollection._primitives.find((v: any) => v.id === deletes[i].id)
+              deletePolygon && deletePolygons.push(deletePolygon)
+            }
+
+            deletePolygons.forEach(v => {
+              primitiveCollection.remove(v)
+            })
+
+            for (let i = 0; i < adds.length; i++) {
+              const polygonOptions = newVal[i] as PolygonPrimitive
+              polygonOptions.id = Cesium.defined(polygonOptions.id) ? polygonOptions.id : Cesium.createGuid()
+              const polygonOptionsTransform = primitiveCollectionsState.transformProps(polygonOptions)
+              const polygonPrimitive = new PolygonPrimitive(polygonOptionsTransform)
+              ;(polygonPrimitive as any)._vcParent = primitiveCollection
+              addCustomProperty(polygonPrimitive, polygonOptionsTransform)
+              primitiveCollection.add(polygonPrimitive)
+            }
+          }
+        },
+        {
+          deep: true
+        }
+      )
+    )
+
+    // methods
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState.transformProps(props)
+      const primitiveCollection = new Cesium.PrimitiveCollection(options)
+
+      for (let i = 0; i < props.polygons.length; i++) {
+        const polygonOptions = props.polygons[i] as PolygonPrimitive
+        polygonOptions.id = Cesium.defined(polygonOptions.id) ? polygonOptions.id : Cesium.createGuid()
+        const polygonOptionsTransform = primitiveCollectionsState.transformProps(polygonOptions)
+        const polygonPrimitive = new PolygonPrimitive(polygonOptionsTransform)
+        ;(polygonPrimitive as any)._vcParent = primitiveCollection
+        addCustomProperty(polygonPrimitive, polygonOptionsTransform)
+        primitiveCollection.add(polygonPrimitive)
+      }
+      return primitiveCollection
+    }
+
+    // life cycle
+    onUnmounted(() => {
+      unwatchFns.forEach(item => item())
+      unwatchFns = []
+    })
 
     const name = instance.proxy?.$options.name || ''
     return () =>

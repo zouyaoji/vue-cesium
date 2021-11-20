@@ -113,6 +113,10 @@ declare namespace Cesium {
     _polylines: Polyline[]
   }
 
+  interface PrimitiveCollection {
+    _primitives: Array<Primitive | any>
+  }
+
   // eslint-disable-next-line no-var
   var SuperMapImageryProvider: any
   // eslint-disable-next-line no-var

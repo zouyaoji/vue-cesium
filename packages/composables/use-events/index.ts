@@ -168,15 +168,6 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           })
         }
       }
-      // 图元
-      if (pickedFeature.primitive) {
-        eventSourceList.push({
-          callbackName,
-          cesiumObject: pickedFeature.primitive,
-          pickedFeature
-        })
-      }
-
       const getParentCollection = e => {
         eventSourceList.push({
           callbackName,
@@ -187,16 +178,30 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
           getParentCollection(e._vcParent)
         }
       }
+      // 图元
+      // + 自定义图元 如 PolygonPrimitive
+      if (pickedFeature.primitive) {
+        if (pickedFeature.primitive._vcParent) {
+          getParentCollection(pickedFeature.primitive._vcParent)
+        }
+        eventSourceList.push({
+          callbackName,
+          cesiumObject: pickedFeature.primitive,
+          pickedFeature
+        })
+      }
+
       // 图元集合
       if (pickedFeature.collection) {
+        if (pickedFeature.collection._vcParent) {
+          getParentCollection(pickedFeature.collection._vcParent)
+        }
+
         eventSourceList.push({
           callbackName,
           cesiumObject: pickedFeature.collection,
           pickedFeature
         })
-        if (pickedFeature.collection._vcParent) {
-          getParentCollection(pickedFeature.collection._vcParent)
-        }
       }
     })
 

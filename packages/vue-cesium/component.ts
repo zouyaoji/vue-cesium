@@ -92,7 +92,8 @@ import {
   VcBillboard,
   VcLabel,
   VcPoint,
-  VcPolyline
+  VcPolyline,
+  VcPolygon
 } from '@vue-cesium/components/primitive-collections'
 
 // GeometryInstance
@@ -251,6 +252,7 @@ export default [
   VcLabel,
   VcPoint,
   VcPolyline,
+  VcPolygon,
 
   VcInstanceGeometry,
 

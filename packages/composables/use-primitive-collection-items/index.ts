@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-07 23:36:43
- * @LastEditTime: 2021-10-02 23:06:08
+ * @LastEditTime: 2021-11-20 16:06:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collection-items\index.ts
@@ -46,6 +46,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   return {
     transformProps: commonState.transformProps,
     unwatchFns: commonState.unwatchFns,
-    setPropsWatcher: commonState.setPropsWatcher
+    setPropsWatcher: commonState.setPropsWatcher,
+    $services: commonState.$services
   }
 }
