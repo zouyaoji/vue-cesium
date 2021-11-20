@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 10:10:09
- * @LastEditTime: 2021-10-28 17:02:54
+ * @LastEditTime: 2021-11-20 20:02:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\particleSystem.ts
@@ -68,7 +68,6 @@ class ParticleSystem {
   }
 
   refreshParticles(maxParticlesChanged) {
-    console.log('maxParticlesChanged', maxParticlesChanged)
     this.clearFramebuffers()
 
     this.particlesComputing.destroyParticlesTextures()
