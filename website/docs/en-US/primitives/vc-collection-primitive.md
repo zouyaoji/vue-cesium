@@ -80,6 +80,47 @@ Basic usage of VcCollectionPrimitive component.
         {
           positions: [90.0, 41.0, 0.0, 85.0, 41.0, 500000.0, 80.0, 41.0, 0.0],
           color: 'blue'
+        },
+        {
+          polygonHierarchy: {
+            positions: [
+              [99, 30],
+              [85, 30],
+              [85, 40],
+              [99, 40]
+            ],
+            holes: [
+              {
+                positions: [
+                  [97, 31],
+                  [97, 39],
+                  [87, 39],
+                  [87, 31]
+                ],
+                holes: [
+                  {
+                    positions: [
+                      [95, 33],
+                      [89, 33],
+                      [89, 37],
+                      [95, 37]
+                    ],
+                    holes: [
+                      {
+                        positions: [
+                          [93, 34],
+                          [91, 34],
+                          [91, 36],
+                          [93, 36]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          color: 'yellow'
         }
       ])
       // methods
@@ -136,11 +177,13 @@ Basic usage of VcCollectionPrimitive component.
 
 ### Props
 
-| Name              | Type    | Default | Description                                                                                |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
 | ----------------- | ------- | ------- | ------------------------------------------------------------------------------------------ |
-| show              | Boolean | `true`  | `optional` Determines if the primitives in the collection will be shown.                   |
-| destroyPrimitives | Boolean | `true`  | `optional` Determines if primitives in the collection are destroyed when they are removed. |
-| enableMouseEvent  | Boolean | `true`  | `optional` Specify whether the mouse event takes effect.                                   |
+| show | Boolean | `true` | `optional` Determines if the primitives in the collection will be shown. |
+| destroyPrimitives | Boolean | `true` | `optional` Determines if primitives in the collection are destroyed when they are removed. |
+| enableMouseEvent | Boolean | `true` | `optional` Specify whether the mouse event takes effect. |
+| polygons | Array\<PolygonPrimitive\> | `[]` | Specify an array of polygons collections. The structure of the array object is the same as the attribute of the `vc-polygon` component.|
 
 ### Events
 
@@ -171,6 +214,7 @@ Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimit
 | ------------------ | --------------------- | ------- | ------------------------------------------------------------------------------ |
 | show | Boolean | `true` | `optional` true if this polygon will be shown; otherwise, false. |
 | positions | Array | | `optional` The positions. |
+| polygonHierarchy | Object | | `optional` The polygonHierarchy. |
 | id | Object | | `optional` The user-defined object to be returned when this polygon is picked. |
 | classificationType | Number | | `optional` An enum Property specifying whether this polygon will classify terrain, 3D Tiles, or both when on the ground. |
 | color | Object\|Array\|String | | `optional` The color. |

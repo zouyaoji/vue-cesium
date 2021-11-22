@@ -1,5 +1,18 @@
 ## 更新日志
 
+### 3.0.2-beta.10
+
+_2021-11-22_
+
+#### 新特性
+
+- `vc-polygon` 面图元组件增加 `polygonHierarchy` 属性，以支持岛洞多边形。
+
+#### Bug 修复
+
+- `vc-collection-xxx` 图元集合组件侦听逻辑错误。
+- `vc-polygon` 组件对象拾取 bug & `depthFailColor` 属性变更 bug。
+
 ### 3.0.2-beta.9
 
 _2021-11-20_

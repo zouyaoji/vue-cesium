@@ -1,10 +1,23 @@
 ## Changelog
 
+### 3.0.2-beta.10
+
+_2021-11-22_
+
+#### New feature
+
+- Added the `polygonHierarchy` attribute to the `vc-polygon` component to support island hole polygons.
+
+#### Bug fixes
+
+- `vc-collection-xxx` primitive collection component listening logic error.
+- `vc-polygon` component object pick up bug & `depthFailColor` property change bug.
+
 ### 3.0.2-beta.9
 
 _2021-11-20_
 
-#### 新特性
+#### New feature
 
 - DataSource component `vc-datasource-xxx` can use `entities` to pass in custom attributes.
 - Added `vc-polygon` component, and supports batch management of a group of polygon primitives with `vc-collection-primitive`.

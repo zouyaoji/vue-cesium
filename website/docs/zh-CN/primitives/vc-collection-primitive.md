@@ -15,13 +15,14 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
+    <vc-selection-indicator ref="selectionIndicator" @pickEvt="pickEvt"></vc-selection-indicator>
     <vc-collection-primitive @click="onClicked" :show="show" ref="collectionRef">
       <vc-collection-billboard :billboards="billboards1"></vc-collection-billboard>
       <vc-collection-primitive>
         <vc-collection-billboard :billboards="billboards2"></vc-collection-billboard>
       </vc-collection-primitive>
     </vc-collection-primitive>
-    <vc-collection-primitive :polygons="polygons">
+    <vc-collection-primitive @click="onClicked" :polygons="polygons">
       <vc-primitive-model
         @click="onClicked"
         url="https://zouyaoji.top/vue-cesium/SampleData/models/CesiumAir/Cesium_Air.glb"
@@ -75,13 +76,56 @@
             { lng: 100.0, lat: 42.0 },
             { lng: 104.0, lat: 40.0 }
           ],
-          color: 'red'
+          color: 'red',
+          depthFailColor: 'red'
         },
         {
           positions: [90.0, 41.0, 0.0, 85.0, 41.0, 500000.0, 80.0, 41.0, 0.0],
           color: 'blue'
+        },
+        {
+          polygonHierarchy: {
+            positions: [
+              [99, 30],
+              [85, 30],
+              [85, 40],
+              [99, 40]
+            ],
+            holes: [
+              {
+                positions: [
+                  [97, 31],
+                  [97, 39],
+                  [87, 39],
+                  [87, 31]
+                ],
+                holes: [
+                  {
+                    positions: [
+                      [95, 33],
+                      [89, 33],
+                      [89, 37],
+                      [95, 37]
+                    ],
+                    holes: [
+                      {
+                        positions: [
+                          [93, 34],
+                          [91, 34],
+                          [91, 36],
+                          [93, 36]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          color: 'yellow'
         }
       ])
+      window.polygons = polygons
       // methods
       const onClicked = e => {
         console.log(e)
@@ -112,8 +156,11 @@
 
         modelMatrix.value = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(105, 38, 10000))
       }
-
+      const pickEvt = e => {
+        console.log(e)
+      }
       return {
+        pickEvt,
         unload,
         reload,
         load,
@@ -167,15 +214,16 @@
 
 ### VcPolygon 属性
 
-| 属性名             | 类型                  | 默认值 | 描述                                                       |
-| ------------------ | --------------------- | ------ | ---------------------------------------------------------- |
-| show               | Boolean               | `true` | `optional` 指定 polygon 是否显示。                         |
-| positions          | Array                 |        | `optional` 指定 polygon 的位置属性。                       |
-| id                 | Object                |        | `optional` 指定与 polygon 关联的信息，拾取时返回该属性值。 |
-| classificationType | Number                |        | `optional` 指定 polygon 贴地/贴对象模式。                  |
-| color              | Object\|Array\|String |        | `optional` 指定 polygon 颜色。                             |
-| depthFailColor     | Object\|Array\|String |        | `optional` 指定 polygon 在深度检测无效时的颜色。           |
-| enableMouseEvent   | Boolean               | `true` | `optional` 指定鼠标事件是否生效。                          |
+| 属性名             | 类型                  | 默认值 | 描述                                                         |
+| ------------------ | --------------------- | ------ | ------------------------------------------------------------ |
+| show               | Boolean               | `true` | `optional` 指定 polygon 是否显示。                           |
+| positions          | Array                 |        | `optional` 指定 polygon 的位置属性。                         |
+| polygonHierarchy   | Object                |        | `optional` 指定 polygon 的位置属性，岛洞多边形请用这个属性。 |
+| id                 | Object                |        | `optional` 指定与 polygon 关联的信息，拾取时返回该属性值。   |
+| classificationType | Number                |        | `optional` 指定 polygon 贴地/贴对象模式。                    |
+| color              | Object\|Array\|String |        | `optional` 指定 polygon 颜色。                               |
+| depthFailColor     | Object\|Array\|String |        | `optional` 指定 polygon 在深度检测无效时的颜色。             |
+| enableMouseEvent   | Boolean               | `true` | `optional` 指定鼠标事件是否生效。                            |
 
 ### VcPolygon 事件
 
