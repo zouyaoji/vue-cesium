@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-22 14:07:18
+ * @LastEditTime: 2021-11-22 17:36:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -112,7 +112,7 @@ class PolygonPrimitive {
     return this._allowPicking
   }
 
-  update(frameState) {
+  async update(frameState) {
     if (this.show) {
       const positions = this._polygonHierarchy ? this._polygonHierarchy.positions : this._positions
       if (positions.length < 3) {
@@ -123,7 +123,7 @@ class PolygonPrimitive {
           this._update = false
           this._primitive && this._primitive.destroy()
           this._primitive = undefined
-          this._primitive = this._clampToGround ? this._createGroundPolygon() : this._createPolygon()
+          this._primitive = this._clampToGround ? await this._createGroundPolygon() : this._createPolygon()
           ;(this._primitive as any)._vcParent = this
           this._boundingSphere = Cesium.BoundingSphere.fromPoints(positions, this._boundingSphere)
         }
@@ -158,12 +158,14 @@ class PolygonPrimitive {
       appearance: createAppearance(this._color),
       depthFailAppearance: createAppearance(this._color),
       allowPicking: this._allowPicking,
-      asynchronous: !1
+      asynchronous: false
     })
   }
 
-  _createGroundPolygon() {
+  async _createGroundPolygon() {
     const { GroundPrimitive, GeometryInstance, PolygonGeometry, Cartesian3, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+
+    await GroundPrimitive.initializeTerrainHeights()
     return new GroundPrimitive({
       geometryInstances: new GeometryInstance({
         geometry: this._polygonHierarchy
@@ -186,7 +188,7 @@ class PolygonPrimitive {
       }),
       appearance: createAppearance(this._color),
       allowPicking: this._allowPicking,
-      asynchronous: !1,
+      asynchronous: false,
       classificationType: this._classificationType
     })
   }

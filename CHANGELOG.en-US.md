@@ -6,7 +6,8 @@ _2021-11-27_
 
 #### Bug fixes
 
--The `vc-selection-indicator` component picks up some primitive objects without indicators.
+- The `vc-selection-indicator` component picks up some primitive objects without indicators.
+- Suppress synchronous GroundPrimitives DeveloperError of `PolygonPrimitive`.
 
 ### 3.0.2-beta.10
 

@@ -7,6 +7,7 @@ _2021-11-27_
 #### Bug 修复
 
 - `vc-selection-indicator` 组件拾取部分图元对象不出指示器的问题。
+- 修复 `PolygonPrimitive` 贴地报错问题。
 
 ### 3.0.2-beta.10
 
