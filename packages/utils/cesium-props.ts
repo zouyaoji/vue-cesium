@@ -86,6 +86,15 @@ const color = {
     }
   }
 }
+const depthFailColor = {
+  depthFailColor: {
+    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    default: 'white',
+    watcherOptions: {
+      cesiumObjectBuilder: makeColor
+    }
+  }
+}
 
 /**
  * @const {Number, Object, Function} disableDepthTestDistance mixin
@@ -1748,6 +1757,7 @@ export {
   horizontalOrigin,
   verticalOrigin,
   heightReference,
+  depthFailColor,
   color,
   rotation,
   alignedAxis,

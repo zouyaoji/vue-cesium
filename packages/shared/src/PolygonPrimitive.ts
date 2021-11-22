@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-22 12:23:09
+ * @LastEditTime: 2021-11-22 14:07:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -120,6 +120,7 @@ class PolygonPrimitive {
         this._primitive = undefined
       } else {
         if (this._update) {
+          this._update = false
           this._primitive && this._primitive.destroy()
           this._primitive = undefined
           this._primitive = this._clampToGround ? this._createGroundPolygon() : this._createPolygon()
@@ -151,8 +152,8 @@ class PolygonPrimitive {
         attributes: {
           color: ColorGeometryInstanceAttribute.fromColor(this._color),
           depthFailColor: ColorGeometryInstanceAttribute.fromColor(this._depthFailColor)
-        }
-        // id: this._id
+        },
+        id: this._id
       }),
       appearance: createAppearance(this._color),
       depthFailAppearance: createAppearance(this._color),
