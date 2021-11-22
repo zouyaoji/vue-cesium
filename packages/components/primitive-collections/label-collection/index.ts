@@ -83,7 +83,7 @@ export default defineComponent({
             })
 
             for (let i = 0; i < adds.length; i++) {
-              const labelOptions = newVal[i] as Cesium.Billboard
+              const labelOptions = adds[i] as Cesium.Billboard
               labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
               const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
               const label = labelCollection.add(labelOptionsTransform)

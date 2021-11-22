@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-11-20 20:06:31
+ * @LastEditTime: 2021-11-22 14:08:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
@@ -93,7 +93,7 @@ export default defineComponent({
             })
 
             for (let i = 0; i < adds.length; i++) {
-              const polygonOptions = newVal[i] as PolygonPrimitive
+              const polygonOptions = adds[i] as PolygonPrimitive
               polygonOptions.id = Cesium.defined(polygonOptions.id) ? polygonOptions.id : Cesium.createGuid()
               const polygonOptionsTransform = primitiveCollectionsState.transformProps(polygonOptions)
               const polygonPrimitive = new PolygonPrimitive(polygonOptionsTransform)

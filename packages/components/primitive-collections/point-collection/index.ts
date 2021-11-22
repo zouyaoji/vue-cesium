@@ -82,7 +82,7 @@ export default defineComponent({
             })
 
             for (let i = 0; i < adds.length; i++) {
-              const pointOptions = newVal[i] as Cesium.Billboard
+              const pointOptions = adds[i] as Cesium.Billboard
               pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
               const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
               const point = pointCollection.add(pointOptionsTransform)

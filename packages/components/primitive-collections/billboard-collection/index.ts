@@ -75,7 +75,7 @@ export default defineComponent({
             })
 
             for (let i = 0; i < adds.length; i++) {
-              const billboardOptions = newVal[i] as Cesium.Billboard
+              const billboardOptions = adds[i] as Cesium.Billboard
               billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
               const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
               const billboard = billboardCollection.add(billboardOptionsTransform)

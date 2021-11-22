@@ -80,7 +80,7 @@ export default defineComponent({
             })
 
             for (let i = 0; i < adds.length; i++) {
-              const polylineOptions = newVal[i] as Cesium.Billboard
+              const polylineOptions = adds[i] as Cesium.Billboard
               polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
               const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
               const polyline = polylineCollection.add(polylineOptionsTransform)
