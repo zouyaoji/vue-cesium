@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2021-11-20 20:43:27
+ * @LastEditTime: 2021-11-22 13:25:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -9,7 +9,7 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, PropType, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import { color, id, show, enableMouseEvent, positions, classificationType } from '@vue-cesium/utils/cesium-props'
+import { color, id, show, enableMouseEvent, positions, classificationType, polygonHierarchy } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { PolygonPrimitive } from '@vue-cesium/shared'
 import { makeCartesian3Array, makeColor } from '@vue-cesium/utils/cesium-helpers'
@@ -18,6 +18,7 @@ export default defineComponent({
   name: 'VcPolygon',
   props: {
     ...positions,
+    ...polygonHierarchy,
     ...color,
     ...show,
     ...id,

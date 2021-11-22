@@ -874,6 +874,7 @@ const hierarchy = {
     type: [Object, Array, Function] as PropType<Cesium.PolygonHierarchy>,
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
+      deep: true,
       exclude: '_callback'
     }
   }
@@ -1402,7 +1403,7 @@ const origin = {
  */
 const polygonHierarchy = {
   polygonHierarchy: {
-    type: [Object, Array] as PropType<Array<Cesium.Cartesian3>>,
+    type: [Object, Array] as PropType<Cesium.PolygonHierarchy>,
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
       deep: true

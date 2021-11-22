@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-21 00:39:48
+ * @LastEditTime: 2021-11-22 12:23:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -20,6 +20,7 @@ class PolygonPrimitive {
   _clampToGround: boolean
   _classificationType: number
   _allowPicking: boolean
+  _polygonHierarchy: Cesium.PolygonHierarchy
   constructor(options) {
     const { defined, defaultValue, Color, createGuid, BoundingSphere, Ellipsoid, ClassificationType } = Cesium
     options = defaultValue(options, {})
@@ -29,6 +30,7 @@ class PolygonPrimitive {
     this._color = Color.clone(defaultValue(options.color, Color.WHITE))
     this._depthFailColor = Color.clone(defaultValue(options.depthFailColor, this._color))
     this._positions = defaultValue(options.positions, [])
+    this._polygonHierarchy = options.polygonHierarchy
     this._clampToGround = defaultValue(options.clampToGround, false)
     this._classificationType = defaultValue(options.classificationType, ClassificationType.BOTH)
     this._allowPicking = defaultValue(options.allowPicking, true)
@@ -42,6 +44,14 @@ class PolygonPrimitive {
   }
   set positions(val) {
     this._positions = val
+    this._update = true
+  }
+
+  get polygonHierarchy() {
+    return this._polygonHierarchy
+  }
+  set polygonHierarchy(val) {
+    this._polygonHierarchy = val
     this._update = true
   }
 
@@ -104,7 +114,7 @@ class PolygonPrimitive {
 
   update(frameState) {
     if (this.show) {
-      const positions = this._positions
+      const positions = this._polygonHierarchy ? this._polygonHierarchy.positions : this._positions
       if (positions.length < 3) {
         this._primitive && this._primitive.destroy()
         this._primitive = undefined
@@ -125,18 +135,24 @@ class PolygonPrimitive {
     const { Primitive, GeometryInstance, CoplanarPolygonGeometry, Cartesian3, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
     return new Primitive({
       geometryInstances: new GeometryInstance({
-        geometry: CoplanarPolygonGeometry.fromPositions({
-          positions: this._positions.map(function (e) {
-            return Cartesian3.clone(e)
-          }),
-          vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
-          ellipsoid: this._ellipsoid
-        }),
+        geometry: this._polygonHierarchy
+          ? new CoplanarPolygonGeometry({
+              polygonHierarchy: this._polygonHierarchy,
+              vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
+              ellipsoid: this._ellipsoid
+            })
+          : CoplanarPolygonGeometry.fromPositions({
+              positions: this._positions.map(function (e) {
+                return Cartesian3.clone(e)
+              }),
+              vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
+              ellipsoid: this._ellipsoid
+            }),
         attributes: {
           color: ColorGeometryInstanceAttribute.fromColor(this._color),
           depthFailColor: ColorGeometryInstanceAttribute.fromColor(this._depthFailColor)
-        },
-        id: this._id
+        }
+        // id: this._id
       }),
       appearance: createAppearance(this._color),
       depthFailAppearance: createAppearance(this._color),
@@ -149,13 +165,19 @@ class PolygonPrimitive {
     const { GroundPrimitive, GeometryInstance, PolygonGeometry, Cartesian3, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
     return new GroundPrimitive({
       geometryInstances: new GeometryInstance({
-        geometry: PolygonGeometry.fromPositions({
-          positions: this._positions.map(function (e) {
-            return Cartesian3.clone(e)
-          }),
-          vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
-          ellipsoid: this._ellipsoid
-        }),
+        geometry: this._polygonHierarchy
+          ? new PolygonGeometry({
+              polygonHierarchy: this._polygonHierarchy,
+              vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
+              ellipsoid: this._ellipsoid
+            })
+          : PolygonGeometry.fromPositions({
+              positions: this._positions.map(function (e) {
+                return Cartesian3.clone(e)
+              }),
+              vertexFormat: PerInstanceColorAppearance.FLAT_VERTEX_FORMAT,
+              ellipsoid: this._ellipsoid
+            }),
         attributes: {
           color: ColorGeometryInstanceAttribute.fromColor(this._color)
         },

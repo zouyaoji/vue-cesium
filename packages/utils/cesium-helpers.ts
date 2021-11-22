@@ -281,7 +281,7 @@ export function makePolygonHierarchy(
   if (isPlainObject(val) && hasOwn(val, 'positions')) {
     const value = val as PolygonHierarchyOption
     value.positions = makeCartesian3Array(value.positions, ellipsoid) as Array<Cesium.Cartesian3>
-    parsePolygonHierarchyJson(value.holes!, ellipsoid)
+    value.holes?.length && parsePolygonHierarchyJson(value.holes, ellipsoid)
     return value
   }
 
