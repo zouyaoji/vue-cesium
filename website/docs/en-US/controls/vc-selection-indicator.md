@@ -1,6 +1,17 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-06-13 16:48:20
+ * @LastEditTime: 2021-11-22 16:49:45
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\en-US\controls\vc-selection-indicator.md
+-->
+
 ## VcSelectionIndicator
 
 Load a custom selector component to replace the selectionIndicator that comes with Cesium.
+
+**Note:** Picking up the `vc-primitive-particle` component object is not supported.
 
 ### Basic usage
 

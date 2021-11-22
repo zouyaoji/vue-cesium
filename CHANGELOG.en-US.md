@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.2-beta.11
+
+_2021-11-27_
+
+#### Bug fixes
+
+-The `vc-selection-indicator` component picks up some primitive objects without indicators.
+
 ### 3.0.2-beta.10
 
 _2021-11-22_

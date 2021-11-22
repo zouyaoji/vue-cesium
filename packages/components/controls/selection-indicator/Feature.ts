@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2021-10-29 16:46:50
+ * @LastEditTime: 2021-11-22 17:21:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
@@ -23,16 +23,22 @@ class Feature {
   }
 
   static getBoundingSphere(cesiumObject, viewer: Cesium.Viewer) {
-    if (cesiumObject._boundingSphereWC) {
-      return cesiumObject._boundingSphereWC || cesiumObject._boundingSphereWC[0]
-    } else if (cesiumObject._boundingVolumeWC) {
-      return cesiumObject._boundingVolumeWC
+    const { Primitive, ClassificationPrimitive, GroundPolylinePrimitive, GroundPrimitive, Polyline } = Cesium
+    let boundingSphere
+    if (cesiumObject instanceof ClassificationPrimitive || cesiumObject instanceof GroundPolylinePrimitive) {
+      boundingSphere = (cesiumObject as any)._primitive?._boundingSphereWC?.[0]
+    } else if (cesiumObject instanceof Primitive) {
+      boundingSphere = (cesiumObject as any)._boundingSphereWC?.[0]
+    } else if (cesiumObject instanceof GroundPrimitive) {
+      boundingSphere = (cesiumObject as any)._boundingVolumes?.[0]
+    } else if (cesiumObject instanceof Polyline) {
+      boundingSphere = (cesiumObject as any)._boundingVolumeWC
     } else if (cesiumObject instanceof Cesium.Entity) {
-      const boundingSphere = new Cesium.BoundingSphere()
+      boundingSphere = new Cesium.BoundingSphere()
       ;(viewer.dataSourceDisplay as any).getBoundingSphere(cesiumObject, true, boundingSphere)
-      return boundingSphere
     }
-    return undefined
+
+    return boundingSphere
   }
   static fromPickedFeature(cesiumObject, pickedFeature, viewer) {
     const feature = new Feature({ id: cesiumObject.id })

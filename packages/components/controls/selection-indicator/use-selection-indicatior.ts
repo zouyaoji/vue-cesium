@@ -228,10 +228,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
         if (pickedFeature.primitive) {
           const feature = Feature.fromPickedFeature(pickedFeature.primitive, pickedFeature, viewer)
           vectorFeatures.push(feature)
-        }
-
-        // 图元集合
-        if (pickedFeature.collection) {
+        } else if (pickedFeature.collection) {
+          // 图元集合
           const feature = Feature.fromPickedFeature(pickedFeature.collection, pickedFeature, viewer)
           vectorFeatures.push(feature)
         }

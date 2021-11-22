@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-11-04 10:37:42
+ * @LastEditTime: 2021-11-22 16:49:24
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
+-->
+
 ## VcSelectionIndicator
 
 加载自定义选择器组件，替换 Cesium 自带的 selectionIndicator。
@@ -5,6 +14,8 @@
 ### 基础用法
 
 选择器组件的基础用法。
+
+**注意：** 不支持拾取 `vc-primitive-particle` 组件对象。
 
 :::demo 使用 `vc-selection-indicator` 标签在三维球上添加选择器组件。
 
