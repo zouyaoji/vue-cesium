@@ -2,12 +2,16 @@
 
 ### 3.0.2-beta.11
 
-_2021-11-27_
+_2021-11-25_
 
 #### Bug fixes
 
 - The `vc-selection-indicator` component picks up some primitive objects without indicators.
 - Suppress synchronous GroundPrimitives DeveloperError of `PolygonPrimitive`.
+
+#### New feature
+
+- Add dynamic object component `vc-overlay-dynamic`, which is used to load and manage a group of dynamic entity objects.
 
 ### 3.0.2-beta.10
 
