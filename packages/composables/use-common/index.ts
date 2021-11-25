@@ -90,14 +90,14 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       return mount().then((): ReadyObj => {
         vcInstance.mounted = true
         parentVcInstance.children.push(vcInstance)
+        Object.assign(vcInstance.proxy, {
+          cesiumObject: vcInstance.cesiumObject
+        })
         // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
         const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
         emit('ready', readyObj)
         vcMitt.emit('ready', readyObj)
         logger.debug(`${vcInstance.cesiumClass}---loaded`)
-        Object.assign(vcInstance.proxy, {
-          cesiumObject: vcInstance.cesiumObject
-        })
         return readyObj
       })
     })
@@ -264,7 +264,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       className &&
       className.indexOf('Graphics') === -1 &&
       entityGraphics.indexOf(prop) !== -1 &&
-      (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0)
+      (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
     ) {
       return transformProps(value)
     } else {
