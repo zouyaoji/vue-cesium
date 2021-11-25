@@ -281,6 +281,31 @@ interface DrawTipOpts {
   drawingTipEditing: string
 }
 
+interface DynamicOverlayOpts extends Cesium.Entity {
+  /**
+   * Gets or sets the type of extrapolation to perform when a value is requested at a time after any available samples.
+   */
+  forwardExtrapolationType?: number
+  /**
+   * Gets or sets the type of extrapolation to perform when a value is requested at a time before any available samples.
+   */
+  backwardExtrapolationType?: number
+  /**
+   * Maximum number of buffers.
+   */
+  maxCacheSize?: number
+  /**
+   * A SampledProperty and a PositionProperty Array.
+   */
+  sampledPositions: Array<SampledPosition>
+}
+
+interface SampledPosition {
+  position: Cesium.Cartesian3 | Cartesian3Option | Array<number>
+  time?: Cesium.JulianDate | string
+  interval?: number
+}
+
 export {
   AnyObject,
   CameraOption,
@@ -305,5 +330,7 @@ export {
   NavigationOption,
   HeadingPitchRollOption,
   HeatmapConfiguration,
-  DrawTipOpts
+  DrawTipOpts,
+  DynamicOverlayOpts,
+  SampledPosition
 }

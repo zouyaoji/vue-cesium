@@ -108,6 +108,10 @@
               "title": "VcOverlayWindmap 风场图"
             },
             {
+              "path": "/overlays/vc-overlay-dynamic",
+              "title": "VcOverlayDynamic 动态对象"
+            },
+            {
               "path": "/overlays/vc-overlay-echart",
               "title": "VcOverlayEchart"
             }
@@ -578,6 +582,10 @@
             {
               "path": "/overlays/vc-overlay-windmap",
               "title": "VcOverlayWindmap"
+            },
+            {
+              "path": "/overlays/vc-overlay-dynamic",
+              "title": "VcOverlayDynamic"
             },
             {
               "path": "/overlays/vc-overlay-echart",

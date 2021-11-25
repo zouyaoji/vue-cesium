@@ -561,7 +561,7 @@ export function makeMaterialProperty(
 export function makeMaterial(this, val: string | Array<number> | MaterialOption) {
   const vcInstance = this as VcComponentInternalInstance
   const cmpName = vcInstance.proxy?.$options.name
-  if (cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName.indexOf('Datasource') !== -1)) {
+  if (cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName.indexOf('Datasource') !== -1 || vcInstance.cesiumClass === 'VcOverlayDynamic')) {
     return makeMaterialProperty(val)
   }
   const { Material, combine } = Cesium
@@ -948,4 +948,17 @@ export function restoreViewerCursor(viewer: Cesium.Viewer, count = 1) {
     const cursor = restoreCursors.pop()
     viewer.canvas.setAttribute('style', `cursor: ${cursor}`)
   }
+}
+
+export function makeJulianDate(val: string | Date | Cesium.JulianDate): Cesium.JulianDate {
+  const { JulianDate } = Cesium
+  if (val instanceof JulianDate) {
+    return val
+  } else if (isString(val)) {
+    return Cesium.JulianDate.fromIso8601(val)
+  } else if (val instanceof Date) {
+    return Cesium.JulianDate.fromDate(val)
+  }
+
+  return Cesium.JulianDate.now()
 }
