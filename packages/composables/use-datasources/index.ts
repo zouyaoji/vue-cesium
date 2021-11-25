@@ -74,14 +74,11 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
               // 改了 id
               datasource.entities.remove(modifyEntity!)
               const entityOptions = v.newOptions
-              const entityOptionsTransform = commonState.transformProps(entityOptions)
-              const entityAdded = datasource.entities.add(entityOptionsTransform)
-              entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
-              addCustomProperty(entityAdded, entityOptionsTransform)
+              addEntities(datasource, [entityOptions])
             }
           })
         } else {
-          const adds: any = differenceBy(newVal, oldVal, 'id')
+          const addeds: any = differenceBy(newVal, oldVal, 'id')
           const deletes: any = differenceBy(oldVal, newVal, 'id')
           const deletedEntities: Array<Cesium.Entity> = []
           for (let i = 0; i < deletes.length; i++) {
@@ -92,14 +89,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
           deletedEntities.forEach(v => {
             datasource.entities.remove(v)
           })
-
-          for (let i = 0; i < adds.length; i++) {
-            const entityOptions = adds[i]
-            const entityOptionsTransform = commonState.transformProps(entityOptions)
-            const entityAdded = datasource.entities.add(entityOptionsTransform)
-            entityAdded.id !== entityOptions.id && (entityOptions.id = entityAdded.id)
-            addCustomProperty(entityAdded, entityOptionsTransform)
-          }
+          addEntities(datasource, addeds)
         }
       },
       {
@@ -108,17 +98,21 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     )
   )
   // methods
-  vcInstance.mount = async () => {
-    const dataSources = commonState.$services.dataSources
-    const datasource = vcInstance.cesiumObject as Cesium.DataSource
-    datasource.show = props.show
-    for (let i = 0; i < props.entities.length; i++) {
-      const entityOptions = props.entities[i]
+  const addEntities = (datasource, entities) => {
+    for (let i = 0; i < entities.length; i++) {
+      const entityOptions = entities[i]
       const entityOptionsTransform = commonState.transformProps(entityOptions)
       const entity = datasource.entities.add(entityOptionsTransform)
       entityOptions.id !== entity.id && (entityOptions.id = entity.id)
       addCustomProperty(entity, entityOptionsTransform)
     }
+  }
+
+  vcInstance.mount = async () => {
+    const dataSources = commonState.$services.dataSources
+    const datasource = vcInstance.cesiumObject as Cesium.DataSource
+    datasource.show = props.show
+    addEntities(datasource, props.entities)
     return dataSources.add(datasource).then(() => {
       return true
     })

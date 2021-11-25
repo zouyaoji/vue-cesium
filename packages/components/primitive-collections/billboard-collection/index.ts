@@ -62,7 +62,7 @@ export default defineComponent({
                 })
             })
           } else {
-            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteBillboards: Array<Cesium.Billboard> = []
             for (let i = 0; i < deletes.length; i++) {
@@ -73,14 +73,7 @@ export default defineComponent({
             deleteBillboards.forEach(v => {
               billboardCollection.remove(v)
             })
-
-            for (let i = 0; i < adds.length; i++) {
-              const billboardOptions = adds[i] as Cesium.Billboard
-              billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
-              const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
-              const billboard = billboardCollection.add(billboardOptionsTransform)
-              addCustomProperty(billboard, billboardOptionsTransform)
-            }
+            addBillboards(billboardCollection, addeds)
           }
         },
         {
@@ -90,17 +83,19 @@ export default defineComponent({
     )
     instance.alreadyListening.push('billboards')
     // methods
-    instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState?.transformProps(props)
-      const billboardCollection = new Cesium.BillboardCollection(options)
-
-      for (let i = 0; i < props.billboards.length; i++) {
-        const billboardOptions = props.billboards[i] as Cesium.Billboard
+    const addBillboards = (billboardCollection: Cesium.BillboardCollection, billboards) => {
+      for (let i = 0; i < billboards.length; i++) {
+        const billboardOptions = billboards[i] as Cesium.Billboard
         billboardOptions.id = Cesium.defined(billboardOptions.id) ? billboardOptions.id : Cesium.createGuid()
         const billboardOptionsTransform = primitiveCollectionsState?.transformProps(billboardOptions)
         const billboard = billboardCollection.add(billboardOptionsTransform)
         addCustomProperty(billboard, billboardOptionsTransform)
       }
+    }
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState?.transformProps(props)
+      const billboardCollection = new Cesium.BillboardCollection(options)
+      addBillboards(billboardCollection, props.billboards)
       return billboardCollection
     }
 

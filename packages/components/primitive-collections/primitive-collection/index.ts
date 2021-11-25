@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-11-22 14:08:06
+ * @LastEditTime: 2021-11-25 22:01:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
@@ -80,7 +80,7 @@ export default defineComponent({
                 })
             })
           } else {
-            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePolygons: Array<PolygonPrimitive> = []
             for (let i = 0; i < deletes.length; i++) {
@@ -92,15 +92,7 @@ export default defineComponent({
               primitiveCollection.remove(v)
             })
 
-            for (let i = 0; i < adds.length; i++) {
-              const polygonOptions = adds[i] as PolygonPrimitive
-              polygonOptions.id = Cesium.defined(polygonOptions.id) ? polygonOptions.id : Cesium.createGuid()
-              const polygonOptionsTransform = primitiveCollectionsState.transformProps(polygonOptions)
-              const polygonPrimitive = new PolygonPrimitive(polygonOptionsTransform)
-              ;(polygonPrimitive as any)._vcParent = primitiveCollection
-              addCustomProperty(polygonPrimitive, polygonOptionsTransform)
-              primitiveCollection.add(polygonPrimitive)
-            }
+            addPolygons(primitiveCollection, addeds)
           }
         },
         {
@@ -110,12 +102,9 @@ export default defineComponent({
     )
 
     // methods
-    instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState.transformProps(props)
-      const primitiveCollection = new Cesium.PrimitiveCollection(options)
-
-      for (let i = 0; i < props.polygons.length; i++) {
-        const polygonOptions = props.polygons[i] as PolygonPrimitive
+    const addPolygons = (primitiveCollection: Cesium.PrimitiveCollection, polygons) => {
+      for (let i = 0; i < polygons.length; i++) {
+        const polygonOptions = polygons[i] as PolygonPrimitive
         polygonOptions.id = Cesium.defined(polygonOptions.id) ? polygonOptions.id : Cesium.createGuid()
         const polygonOptionsTransform = primitiveCollectionsState.transformProps(polygonOptions)
         const polygonPrimitive = new PolygonPrimitive(polygonOptionsTransform)
@@ -123,6 +112,12 @@ export default defineComponent({
         addCustomProperty(polygonPrimitive, polygonOptionsTransform)
         primitiveCollection.add(polygonPrimitive)
       }
+    }
+
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState.transformProps(props)
+      const primitiveCollection = new Cesium.PrimitiveCollection(options)
+      addPolygons(primitiveCollection, props.polygons)
       return primitiveCollection
     }
 

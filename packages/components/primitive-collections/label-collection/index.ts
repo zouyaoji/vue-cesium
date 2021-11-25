@@ -70,7 +70,7 @@ export default defineComponent({
                 })
             })
           } else {
-            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deleteLabels: Array<Cesium.Label> = []
             for (let i = 0; i < deletes.length; i++) {
@@ -82,13 +82,7 @@ export default defineComponent({
               labelCollection.remove(v)
             })
 
-            for (let i = 0; i < adds.length; i++) {
-              const labelOptions = adds[i] as Cesium.Billboard
-              labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
-              const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
-              const label = labelCollection.add(labelOptionsTransform)
-              addCustomProperty(label, labelOptionsTransform)
-            }
+            addLabels(labelCollection, addeds)
           }
         },
         {
@@ -97,17 +91,20 @@ export default defineComponent({
       )
     )
     // methods
-    instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState.transformProps(props)
-      const labelCollection = new Cesium.LabelCollection(options)
-
-      for (let i = 0; i < props.labels.length; i++) {
-        const labelOptions = props.labels[i] as Cesium.Label
+    const addLabels = (labelCollection: Cesium.LabelCollection, labels) => {
+      for (let i = 0; i < labels.length; i++) {
+        const labelOptions = labels[i] as Cesium.Label
         labelOptions.id = Cesium.defined(labelOptions.id) ? labelOptions.id : Cesium.createGuid()
         const labelOptionsTransform = primitiveCollectionsState.transformProps(labelOptions)
         const label = labelCollection.add(labelOptionsTransform)
         addCustomProperty(label, labelOptionsTransform)
       }
+    }
+
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState.transformProps(props)
+      const labelCollection = new Cesium.LabelCollection(options)
+      addLabels(labelCollection, props.labels)
       return labelCollection
     }
 

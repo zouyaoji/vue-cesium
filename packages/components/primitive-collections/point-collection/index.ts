@@ -69,7 +69,7 @@ export default defineComponent({
                 })
             })
           } else {
-            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePoints: Array<Cesium.PointPrimitive> = []
             for (let i = 0; i < deletes.length; i++) {
@@ -81,14 +81,7 @@ export default defineComponent({
               pointCollection.remove(v)
             })
 
-            for (let i = 0; i < adds.length; i++) {
-              const pointOptions = adds[i] as Cesium.Billboard
-              pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
-              const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
-              const point = pointCollection.add(pointOptionsTransform)
-
-              addCustomProperty(point, pointOptionsTransform)
-            }
+            addPoints(pointCollection, addeds)
           }
         },
         {
@@ -97,18 +90,21 @@ export default defineComponent({
       )
     )
     // methods
-    instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState.transformProps(props)
-      const pointCollection = new Cesium.PointPrimitiveCollection(options)
-
-      for (let i = 0; i < props.points.length; i++) {
-        const pointOptions = props.points[i] as Cesium.PointPrimitive
+    const addPoints = (pointCollection: Cesium.PointPrimitiveCollection, points) => {
+      for (let i = 0; i < points.length; i++) {
+        const pointOptions = points[i] as Cesium.PointPrimitive
         pointOptions.id = Cesium.defined(pointOptions.id) ? pointOptions.id : Cesium.createGuid()
         const pointOptionsTransform = primitiveCollectionsState.transformProps(pointOptions)
         const point = pointCollection.add(pointOptionsTransform)
 
         addCustomProperty(point, pointOptionsTransform)
       }
+    }
+
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState.transformProps(props)
+      const pointCollection = new Cesium.PointPrimitiveCollection(options)
+      addPoints(pointCollection, props.points)
       return pointCollection
     }
 

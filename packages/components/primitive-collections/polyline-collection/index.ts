@@ -67,7 +67,7 @@ export default defineComponent({
                 })
             })
           } else {
-            const adds: any = differenceBy(newVal, oldVal, 'id')
+            const addeds: any = differenceBy(newVal, oldVal, 'id')
             const deletes: any = differenceBy(oldVal, newVal, 'id')
             const deletePolylines: Array<Cesium.Polyline> = []
             for (let i = 0; i < deletes.length; i++) {
@@ -79,13 +79,7 @@ export default defineComponent({
               polylineCollection.remove(v)
             })
 
-            for (let i = 0; i < adds.length; i++) {
-              const polylineOptions = adds[i] as Cesium.Billboard
-              polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
-              const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
-              const polyline = polylineCollection.add(polylineOptionsTransform)
-              addCustomProperty(polyline, polylineOptionsTransform)
-            }
+            addPolylines(polylineCollection, addeds)
           }
         },
         {
@@ -94,17 +88,20 @@ export default defineComponent({
       )
     )
     // methods
-    instance.createCesiumObject = async () => {
-      const options = primitiveCollectionsState.transformProps(props)
-      const polylineCollection = new Cesium.PolylineCollection(options)
-
-      for (let i = 0; i < props.polylines.length; i++) {
-        const polylineOptions = props.polylines[i] as Cesium.Polyline
+    const addPolylines = (polylineCollection: Cesium.PolylineCollection, polylines) => {
+      for (let i = 0; i < polylines.length; i++) {
+        const polylineOptions = polylines[i] as Cesium.Polyline
         polylineOptions.id = Cesium.defined(polylineOptions.id) ? polylineOptions.id : Cesium.createGuid()
         const polylineOptionsTransform = primitiveCollectionsState.transformProps(polylineOptions)
         const polyline = polylineCollection.add(polylineOptionsTransform)
         addCustomProperty(polyline, polylineOptionsTransform)
       }
+    }
+    instance.createCesiumObject = async () => {
+      const options = primitiveCollectionsState.transformProps(props)
+      const polylineCollection = new Cesium.PolylineCollection(options)
+
+      addPolylines(polylineCollection, props.polylines)
       return polylineCollection
     }
 
