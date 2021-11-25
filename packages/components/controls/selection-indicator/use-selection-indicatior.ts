@@ -218,10 +218,12 @@ export default function (instance: VcComponentInternalInstance, props, $services
               const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer)
               vectorFeatures.push(feature)
             })
+            continue
           } else if (pickedFeature.id instanceof Cesium.Entity) {
             // 实体 or 数据源
             const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer)
             vectorFeatures.push(feature)
+            continue
           }
         }
         // 图元
@@ -278,9 +280,9 @@ export default function (instance: VcComponentInternalInstance, props, $services
   }
 
   const update = () => {
-    const { defined } = Cesium
+    const { defined, Cartesian2 } = Cesium
     if (props.show && defined(position.value)) {
-      const screenPosition = computeScreenSpacePosition(position.value, {})
+      const screenPosition = computeScreenSpacePosition(position.value, new Cartesian2())
       if (!defined(screenPosition)) {
         rootStyle.left = offScreen
         rootStyle.right = offScreen
@@ -289,8 +291,9 @@ export default function (instance: VcComponentInternalInstance, props, $services
         const container = viewer.container
         const containerWidth = container.clientWidth
         const containerHeight = container.clientHeight
-        const selectionIndicatorElement = $(rootRef)
-        const indicatorSize = selectionIndicatorElement?.clientWidth || 0
+        // const selectionIndicatorElement = $(rootRef)
+        // const indicatorSize = selectionIndicatorElement?.clientWidth || 0
+        const indicatorSize = props.width
         const halfSize = indicatorSize * 0.5
 
         screenPosition.x = Math.min(Math.max(screenPosition.x, -indicatorSize), containerWidth + indicatorSize) - halfSize
