@@ -142,8 +142,8 @@ Basic usage of `vc-viewer`.
 |removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS tag when `vc-viewer` is destroyed.|
 |enableMouseEvent|Boolean|`true`| `optional` Specify whether to trigger the event.|
 |skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` Specify whether to display the skeleton background during initialization. Animation optional values `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
-|TZcode|String|`UTM`| `optional` The custom Timeline formatted date is the time zone code used.|
-|UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` The time difference (minutes) between local time and UTC time. Customize Timeline to format the date to use.|
+|TZcode|String|| `optional` The custom Timeline formatted date is the time zone code used. vue-cesium formats `Timeline` as local time. If you want to display it as UTC world time, set `UTCoffset` to `new Date().getTimezoneOffset()`.|
+|UTCoffset|String|| `optional` The time difference (minutes) between local time and UTC time. Customize Timeline to format the date to use.|
 |accessToken|String||`optional`To specify the accessToken, use the data source of Cesium ion to apply for an account at [https://cesium.com/ion/](https://cesium.com/ion/) to obtain the Access Token. It is usually specified in Vue.use().|
 |cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`Specify an example of the cesium library used in the current scene. It is usually specified in Vue.use().|
 |------|-----|---|

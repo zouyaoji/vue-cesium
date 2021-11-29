@@ -97,7 +97,7 @@
       onViewerReady({ Cesium, viewer }) {
         this.loading = false
       },
-      onCesiumReady (e) {
+      onCesiumReady(e) {
         console.log(e)
       },
       onNavigationEvt(e) {
@@ -146,8 +146,8 @@
 |removeCesiumScript|Boolean|`true`| `optional` 指定`vc-viewer` 销毁时是否移除CesiumJS标签。|
 |enableMouseEvent|Boolean|`true`| `optional` 指定是否触发事件。|
 |skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` 指定初始化时是否显示骨架背景。动画可选值 `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
-|TZcode|String|`UTM`| `optional` 自定义 Timeline 格式化日期是所用时区代码。|
-|UTCoffset|String|`-(new Date().getTimezoneOffset())`| `optional` 本地时间与UTC时间的时差（分钟）。自定义 Timeline 格式化日期使用。|
+|TZcode|String|| `optional` 自定义 Timeline 格式化日期是所用时区代码。vue-cesium 将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
+|UTCoffset|String|| `optional` 本地时间与UTC时间的时差（分钟）。自定义 Timeline 格式化日期使用。|
 |accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。一般是Vue.use()的时候指定。|
 |cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`指定当前场景使用的 cesium 库的例子。一般是Vue.use()的时候指定。|
 |animation|Boolean|`false`|`optional`是否显示动画控件。|

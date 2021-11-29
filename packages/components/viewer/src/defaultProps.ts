@@ -164,12 +164,12 @@ export default {
     default: false
   },
   TZCode: {
-    type: String,
-    default: new Date().getTimezoneOffset() === 0 ? 'UTC' : 'UTC' + '+' + -(new Date().getTimezoneOffset() / 60)
+    type: String
+    // default: new Date().getTimezoneOffset() === 0 ? 'UTC' : 'UTC' + '+' + -(new Date().getTimezoneOffset() / 60)
   },
   UTCOffset: {
-    type: Number,
-    default: -new Date().getTimezoneOffset()
+    type: Number
+    // default: new Date().getTimezoneOffset()
   },
   removeCesiumScript: {
     type: Boolean,

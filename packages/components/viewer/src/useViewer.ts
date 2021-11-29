@@ -1109,8 +1109,14 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
    */
   const localeDateTimeFormatter = function (date: Cesium.JulianDate, viewModel?: Cesium.AnimationViewModel, ignoredate?: boolean): string {
     const { JulianDate } = Cesium
+    let TZCode
+
     if (props.UTCOffset) {
       date = JulianDate.addMinutes(date, props.UTCOffset, new JulianDate())
+      const offset = new Date().getTimezoneOffset() - props.UTCOffset
+      TZCode = offset === 0 ? 'UTC' : 'UTC' + '+' + -(offset / 60)
+    } else {
+      TZCode = new Date().getTimezoneOffset() === 0 ? 'UTC' : 'UTC' + '+' + -(new Date().getTimezoneOffset() / 60)
     }
     const jsDate = JulianDate.toDate(date)
     const timeString: string = jsDate
@@ -1133,7 +1139,8 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
       return dateString
     }
 
-    return ignoredate ? `${timeString} ${props.TZCode}` : `${dateString} ${timeString} ${props.TZCode}`
+    props.TZCode && (TZCode = props.TZCode)
+    return ignoredate ? `${timeString} ${TZCode}` : `${dateString} ${timeString} ${TZCode}`
   }
 
   /**
