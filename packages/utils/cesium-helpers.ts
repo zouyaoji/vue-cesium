@@ -738,7 +738,7 @@ export function makeTranslationRotationScale(
   if (isFunction(val)) {
     return new CallbackProperty(val, isConstant)
   }
-  return undefined
+  return val
 }
 
 export function makeOptions(this, val) {
