@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 14:20:28
- * @LastEditTime: 2021-11-25 23:20:26
+ * @LastEditTime: 2021-11-29 17:15:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\DynamicOverlay.ts
@@ -15,6 +15,7 @@ class DynamicOverlay {
   _cache: Cesium.JulianDate[]
   _maxCacheSize: number
   _lastTime: Cesium.JulianDate | undefined
+  _velocityVectorProperty: Cesium.VelocityVectorProperty
 
   constructor(options: DynamicOverlayOpts) {
     const { SampledPositionProperty, Entity, ExtrapolationType, VelocityOrientationProperty } = Cesium
@@ -29,6 +30,8 @@ class DynamicOverlay {
     entity.position = this._sampledPosition
     entity.orientation = new VelocityOrientationProperty(this._sampledPosition)
     this._entity = entity
+    // A velocity vector property will give us the entity's speed and direction at any given time.
+    this._velocityVectorProperty = new Cesium.VelocityVectorProperty(this._sampledPosition, false)
   }
 
   get id() {
