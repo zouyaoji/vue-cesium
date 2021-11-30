@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2021-11-22 14:03:05
+ * @LastEditTime: 2021-11-30 21:33:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -9,21 +9,38 @@
 import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch, WatchStopHandle } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
-import { color, id, show, enableMouseEvent, positions, classificationType, polygonHierarchy, depthFailColor } from '@vue-cesium/utils/cesium-props'
+import {
+  id,
+  show,
+  enableMouseEvent,
+  positions,
+  classificationType,
+  polygonHierarchy,
+  clampToGround,
+  appearance,
+  depthFailAppearance,
+  ellipsoid,
+  allowPicking,
+  asynchronous
+} from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { PolygonPrimitive } from '@vue-cesium/shared'
-import { makeCartesian3Array, makeColor } from '@vue-cesium/utils/cesium-helpers'
+import { makeCartesian3Array, makePolygonHierarchy } from '@vue-cesium/utils/cesium-helpers'
 
 export default defineComponent({
   name: 'VcPolygon',
   props: {
     ...positions,
     ...polygonHierarchy,
-    ...color,
-    ...depthFailColor,
+    ...appearance,
+    ...depthFailAppearance,
     ...show,
     ...id,
     ...classificationType,
+    ...clampToGround,
+    ...ellipsoid,
+    ...allowPicking,
+    ...asynchronous,
     ...enableMouseEvent
   },
   emits: ['beforeLoad', 'ready', 'destroyed'],
@@ -41,30 +58,49 @@ export default defineComponent({
     let unwatchFns: Array<WatchStopHandle> = []
     unwatchFns.push(
       watch(
+        () => props.clampToGround,
+        val => {
+          const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
+          polygonPrimitive && (polygonPrimitive.clampToGround = val as boolean)
+        }
+      )
+    )
+    unwatchFns.push(
+      watch(
         () => props.positions,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive.positions = makeCartesian3Array(val!) as Array<Cesium.Cartesian3>
+          polygonPrimitive && (polygonPrimitive.positions = makeCartesian3Array(val!) as Array<Cesium.Cartesian3>)
         }
       )
     )
 
     unwatchFns.push(
       watch(
-        () => props.color,
+        () => props.polygonHierarchy,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive.color = makeColor(val) as Cesium.Color
+          polygonPrimitive && (polygonPrimitive.polygonHierarchy = makePolygonHierarchy(val!) as Cesium.PolygonHierarchy)
         }
       )
     )
 
     unwatchFns.push(
       watch(
-        () => props.depthFailColor,
+        () => props.appearance,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive.depthFailColor = makeColor(val) as Cesium.Color
+          polygonPrimitive && (polygonPrimitive.appearance = val as Cesium.Appearance)
+        }
+      )
+    )
+
+    unwatchFns.push(
+      watch(
+        () => props.depthFailAppearance,
+        val => {
+          const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
+          polygonPrimitive && (polygonPrimitive.depthFailAppearance = val as Cesium.Appearance)
         }
       )
     )
@@ -74,7 +110,7 @@ export default defineComponent({
         () => props.show,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive.show = val
+          polygonPrimitive && (polygonPrimitive.show = val)
         }
       )
     )
@@ -84,7 +120,7 @@ export default defineComponent({
         () => props.classificationType,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive.classificationType = val as number
+          polygonPrimitive && (polygonPrimitive.classificationType = val as number)
         }
       )
     )
