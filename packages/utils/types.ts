@@ -306,6 +306,20 @@ interface SampledPosition {
   interval?: number
 }
 
+export type Appearances =
+  | Cesium.Appearance
+  | Cesium.MaterialAppearance
+  | Cesium.PolylineColorAppearance
+  | Cesium.PerInstanceColorAppearance
+  | Cesium.PolylineMaterialAppearance
+  | Cesium.EllipsoidSurfaceAppearance
+  | Cesium.DebugAppearance
+
+interface AppearanceOpts {
+  type?: string
+  options: Appearances
+}
+
 export {
   AnyObject,
   CameraOption,
@@ -332,5 +346,6 @@ export {
   HeatmapConfiguration,
   DrawTipOpts,
   DynamicOverlayOpts,
-  SampledPosition
+  SampledPosition,
+  AppearanceOpts
 }

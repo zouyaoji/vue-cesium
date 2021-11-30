@@ -15,7 +15,9 @@ import {
   PlaneOption,
   TranslationRotationScaleOption,
   CameraOption,
-  HeadingPitchRollOption
+  HeadingPitchRollOption,
+  Appearances,
+  AppearanceOpts
 } from './types'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 
@@ -593,6 +595,43 @@ export function makeMaterial(this, val: string | Array<number> | MaterialOption)
   }
 
   return undefined
+}
+
+export function makeAppearance(this, val: Appearances | AppearanceOpts) {
+  const {
+    Appearance,
+    DebugAppearance,
+    MaterialAppearance,
+    PolylineColorAppearance,
+    EllipsoidSurfaceAppearance,
+    PerInstanceColorAppearance,
+    PolylineMaterialAppearance
+  } = Cesium
+
+  if (
+    val instanceof Appearance ||
+    val instanceof DebugAppearance ||
+    val instanceof MaterialAppearance ||
+    val instanceof PolylineColorAppearance ||
+    val instanceof EllipsoidSurfaceAppearance ||
+    val instanceof PerInstanceColorAppearance ||
+    val instanceof PolylineMaterialAppearance ||
+    getObjClassName(val as any).indexOf('Appearance') !== -1
+  ) {
+    return val as Appearances
+  }
+
+  if (isPlainObject(val) && hasOwn(val, 'type')) {
+    const options = {
+      ...val.options,
+      material: makeMaterial.call(this, val.options.material as any)
+    }
+    return new Cesium[val.type!]({
+      ...options
+    })
+  }
+
+  return val
 }
 
 /**

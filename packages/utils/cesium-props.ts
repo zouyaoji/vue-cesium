@@ -16,7 +16,8 @@ import {
   makePolygonHierarchy,
   makeTranslationRotationScale,
   makeQuaternion,
-  makeOptions
+  makeOptions,
+  makeAppearance
 } from './cesium-helpers'
 import { PropType } from 'vue'
 import { CartographicInDegreeOption, Cartesian3Option } from './types'
@@ -1268,11 +1269,21 @@ const interleave = {
  * @const {Object} appearance mixin
  */
 const appearance = {
-  appearance: Object as PropType<Cesium.Appearance>
+  appearance: {
+    type: Object as PropType<Cesium.Appearance>,
+    watcherOptions: {
+      cesiumObjectBuilder: makeAppearance
+    }
+  }
 }
 
 const depthFailAppearance = {
-  depthFailAppearance: Object as PropType<Cesium.Appearance>
+  depthFailAppearance: {
+    type: Object as PropType<Cesium.Appearance>,
+    watcherOptions: {
+      cesiumObjectBuilder: makeAppearance
+    }
+  }
 }
 
 /**
