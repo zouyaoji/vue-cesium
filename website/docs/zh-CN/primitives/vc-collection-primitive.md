@@ -68,7 +68,12 @@
             [102, 31],
             [102, 35]
           ],
-          color: 'green'
+          appearance: {
+            type: 'MaterialAppearance',
+            options: {
+              material: 'green'
+            }
+          }
         },
         {
           positions: [
@@ -76,12 +81,27 @@
             { lng: 100.0, lat: 42.0 },
             { lng: 104.0, lat: 40.0 }
           ],
-          color: 'red',
-          depthFailColor: 'red'
+          appearance: {
+            type: 'MaterialAppearance',
+            options: {
+              material: 'red'
+            }
+          },
+          depthFailAppearance: {
+            type: 'MaterialAppearance',
+            options: {
+              material: 'red'
+            }
+          }
         },
         {
           positions: [90.0, 41.0, 0.0, 85.0, 41.0, 500000.0, 80.0, 41.0, 0.0],
-          color: 'blue'
+          appearance: {
+            type: 'MaterialAppearance',
+            options: {
+              material: 'blue'
+            }
+          }
         },
         {
           polygonHierarchy: {
@@ -122,10 +142,14 @@
               }
             ]
           },
-          color: 'yellow'
+          appearance: {
+            type: 'MaterialAppearance',
+            options: {
+              material: 'yellow'
+            }
+          }
         }
       ])
-      window.polygons = polygons
       // methods
       const onClicked = e => {
         console.log(e)

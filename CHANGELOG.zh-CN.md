@@ -1,5 +1,22 @@
 ## 更新日志
 
+### 3.0.2-beta.12
+
+_2021-11-30_
+
+#### Bug 修复
+
+- `vc-viewer` 组件时间轴日期格式化错误问题。
+- `vc-drawings` 和 `vc-measurements` 组件添加 PrerenderDatas，开启贴地模式抛出异常问题。
+
+#### 新特性
+
+- `vc-overlay-dynamic` 组件增加速度存储变量，并增加历史轨迹例子。
+
+#### 破坏性更新
+
+- `vc-polygon` 组件去掉 color 属性，改为支持 appearance 参数。
+
 ### 3.0.2-beta.11
 
 _2021-11-25_

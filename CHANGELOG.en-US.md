@@ -1,5 +1,22 @@
 ## Changelog
 
+### 3.0.2-beta.12
+
+_2021-11-30_
+
+#### Bug fixes
+
+- The `vc-viewer` component Timeline Date Format Error.
+- The `vc-drawings` and `vc-measurements` throws an an exception when clamptoGround is true and PrerenderDatas are assigned.
+
+#### New feature
+
+- The `vc-overlay-dynamic` component Add Speed Storage Variables and increases historical trajectory examples.
+
+#### Breaking changes:
+
+- The `vc-polygon` component removes the color attribute and supports the appearance parameter instead.
+
 ### 3.0.2-beta.11
 
 _2021-11-25_
