@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2021-10-27 13:42:53
+ * @LastEditTime: 2021-11-30 10:19:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
@@ -70,7 +70,7 @@ const polylineOptsDefault = {
   arcType: 0,
   ellipsoid: undefined,
   show: true,
-  classificationType: 1
+  classificationType: 2
 }
 
 const polygonOptsDefault = {
@@ -93,7 +93,7 @@ const polygonOptsDefault = {
   perPositionHeight: true,
   arcType: undefined,
   show: true,
-  classificationType: 1
+  classificationType: 2
 }
 
 const labelOptsDefault = {
