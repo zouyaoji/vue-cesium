@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-30 16:41:21
+ * @LastEditTime: 2021-11-30 22:06:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -29,7 +29,7 @@ class PolygonPrimitive {
     this.show = defaultValue(options.show, true)
     this._id = defined(options.id) ? options.id : createGuid()
     this._ellipsoid = defaultValue(options.ellipsoid, Ellipsoid.WGS84)
-    this._appearance = options.appearance
+    this._appearance = defaultValue(options.appearance, new Cesium.MaterialAppearance())
     this._depthFailAppearance = options.depthFailAppearance
     this._positions = defaultValue(options.positions, [])
     this._polygonHierarchy = options.polygonHierarchy
