@@ -1268,7 +1268,11 @@ const interleave = {
  * @const {Object} appearance mixin
  */
 const appearance = {
-  appearance: Object
+  appearance: Object as PropType<Cesium.Appearance>
+}
+
+const depthFailAppearance = {
+  depthFailAppearance: Object as PropType<Cesium.Appearance>
 }
 
 /**
@@ -1412,7 +1416,7 @@ const origin = {
  */
 const polygonHierarchy = {
   polygonHierarchy: {
-    type: [Object, Array] as PropType<Cesium.PolygonHierarchy>,
+    type: [Object, Array] as PropType<Cesium.PolygonHierarchy | Array<Cesium.Cartesian3>>,
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
       deep: true
@@ -1693,6 +1697,7 @@ export {
   position,
   loop,
   geometryInstances,
+  depthFailAppearance,
   appearance,
   interleave,
   releaseGeometryInstances,

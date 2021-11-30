@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:51:11
+ * @LastEditTime: 2021-11-30 14:41:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\primitive\index.ts
@@ -12,6 +12,7 @@ import { usePrimitives } from '@vue-cesium/composables'
 import {
   geometryInstances,
   appearance,
+  depthFailAppearance,
   show,
   modelMatrix,
   vertexCacheOptimize,
@@ -32,7 +33,7 @@ export default defineComponent({
   props: {
     ...geometryInstances,
     ...appearance,
-    depthFailAppearance: Object,
+    ...depthFailAppearance,
     ...show,
     ...modelMatrix,
     ...vertexCacheOptimize,
