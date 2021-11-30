@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-11-09 11:18:02
+ * @LastEditTime: 2021-11-30 21:34:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -12,13 +12,12 @@ import {
   VcCollectionLabel,
   VcCollectionPoint,
   VcCollectionPrimitive,
-  VcGeometryPolygon,
   VcGeometryPolyline,
   VcGeometryPolylineGround,
   VcInstanceGeometry,
   VcOverlayHtml,
+  VcPolygon,
   VcPrimitive,
-  VcPrimitiveGround,
   VcPrimitiveGroundPolyline,
   VcTooltip
 } from '@vue-cesium/components'
@@ -904,39 +903,28 @@ export default function (props, ctx, cmpName: string) {
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
         // polygon
         children.push(
-          h(
-            props.clampToGround ? VcPrimitiveGround : VcPrimitive,
-            {
-              show: polyline.show && props.polygonOpts?.show,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: new MaterialAppearance({
-                material: makeMaterial.call(instance, props.polygonOpts?.material) as Cesium.Material,
-                renderState: {
-                  cull: {
-                    enabled: false
-                  },
-                  depthTest: {
-                    enabled: false
-                  }
-                }
-              }),
-              asynchronous: false,
-              classificationType: props.polygonOpts?.classificationType,
-              onReady: onVcPrimitiveReady
-            },
-            () =>
-              h(
-                VcInstanceGeometry,
-                {
-                  id: createGuid()
+          h(VcPolygon, {
+            show: polyline.show && props.polygonOpts?.show,
+            enableMouseEvent: props.enableMouseEvent,
+            classificationType: props.polygonOpts?.classificationType,
+            clampToGround: props.clampToGround,
+            positions: positions,
+            appearance: new MaterialAppearance({
+              material: makeMaterial.call(instance, props.polygonOpts?.material) as Cesium.Material,
+              faceForward: true,
+              renderState: {
+                cull: {
+                  enabled: false
                 },
-                () =>
-                  h(VcGeometryPolygon, {
-                    polygonHierarchy: polyline.polygonPositions,
-                    ...props.polygonOpts
-                  })
-              )
-          )
+                depthTest: {
+                  enabled: false
+                }
+              }
+            }),
+            asynchronous: false,
+            onReady: onVcPrimitiveReady,
+            ...props.polygonOpts
+          })
         )
       }
       if (polyline.xyPolylinePositions && polyline.xyPolylinePositions.length > 1) {
