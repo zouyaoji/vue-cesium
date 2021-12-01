@@ -160,6 +160,38 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
+  const deepWatchHandler = (vueProp, watcherOptions) => {
+    let deep = watcherOptions?.deep
+    const {
+      SampledPositionProperty,
+      Appearance,
+      DebugAppearance,
+      MaterialAppearance,
+      PolylineColorAppearance,
+      EllipsoidSurfaceAppearance,
+      PerInstanceColorAppearance,
+      PolylineMaterialAppearance
+    } = Cesium
+
+    if (vueProp === 'position') {
+      // position 要排除 SampledPositionProperty 不然会卡死
+      deep = !((vcInstance.proxy as any)[vueProp] instanceof SampledPositionProperty)
+    } else if (vueProp === 'appearance' || vueProp === 'depthFailAppearance') {
+      const value = (vcInstance.proxy as any)[vueProp]
+      deep = !(
+        value instanceof Appearance ||
+        value instanceof DebugAppearance ||
+        value instanceof MaterialAppearance ||
+        value instanceof PolylineColorAppearance ||
+        value instanceof EllipsoidSurfaceAppearance ||
+        value instanceof PerInstanceColorAppearance ||
+        value instanceof PolylineMaterialAppearance
+      )
+    }
+
+    return deep
+  }
+
   const setPropsWatcher = register => {
     if (register) {
       if (!vcInstance.cesiumClass || !Cesium[vcInstance.cesiumClass]) {
@@ -216,8 +248,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               }
             },
             {
-              // position 要排除 SampledPositionProperty 不然会卡死
-              deep: vueProp === 'position' ? !((vcInstance.proxy as any).position instanceof Cesium.SampledPositionProperty) : watcherOptions?.deep
+              deep: deepWatchHandler(vueProp, watcherOptions)
             }
           )
           unwatchFns.push(unwatch!)

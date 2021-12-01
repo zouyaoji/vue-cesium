@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2021-11-30 17:09:54
+ * @LastEditTime: 2021-12-01 09:36:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -25,7 +25,7 @@ import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array, makeMaterial } from '@vue-cesium/utils/cesium-helpers'
 import { PolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { AppearanceOpts, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { computed, getCurrentInstance, nextTick, ref, VNode, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
@@ -651,7 +651,7 @@ export default function (props, ctx, cmpName: string) {
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
-    const { PolylineMaterialAppearance, MaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
+    const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
 
     const polylineOpts: any = {
       ...props.polylineOpts,
@@ -672,12 +672,18 @@ export default function (props, ctx, cmpName: string) {
             {
               show: (polyline.show && polylineOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
               enableMouseEvent: props.enableMouseEvent,
-              appearance: new PolylineMaterialAppearance({
-                material: makeMaterial.call(instance, props.polylineOpts?.material) as Cesium.Material
-              }),
-              depthFailAppearance: new PolylineMaterialAppearance({
-                material: makeMaterial.call(instance, props.polylineOpts?.depthFailMaterial) as Cesium.Material
-              }),
+              appearance: {
+                type: 'PolylineMaterialAppearance',
+                options: {
+                  material: props.polylineOpts?.material
+                }
+              } as AppearanceOpts,
+              depthFailAppearance: {
+                type: 'PolylineMaterialAppearance',
+                options: {
+                  material: props.polylineOpts?.depthFailMaterial
+                }
+              } as AppearanceOpts,
               asynchronous: false,
               classificationType: polylineOpts.classificationType
             },
@@ -704,12 +710,18 @@ export default function (props, ctx, cmpName: string) {
             {
               show: polyline.show,
               enableMouseEvent: props.enableMouseEvent,
-              appearance: new PolylineMaterialAppearance({
-                material: makeMaterial.call(instance, props.dashLineOpts?.material) as Cesium.Material
-              }),
-              depthFailAppearance: new PolylineMaterialAppearance({
-                material: makeMaterial.call(instance, props.dashLineOpts?.depthFailMaterial) as Cesium.Material
-              }),
+              appearance: {
+                type: 'PolylineMaterialAppearance',
+                options: {
+                  material: props.dashLineOpts?.material
+                }
+              } as AppearanceOpts,
+              depthFailAppearance: {
+                type: 'PolylineMaterialAppearance',
+                options: {
+                  material: props.dashLineOpts?.depthFailMaterial
+                }
+              } as AppearanceOpts,
               asynchronous: false
             },
             () =>
@@ -766,18 +778,21 @@ export default function (props, ctx, cmpName: string) {
             classificationType: props.polygonOpts?.classificationType,
             clampToGround: props.clampToGround,
             positions: positions,
-            appearance: new MaterialAppearance({
-              material: makeMaterial.call(instance, props.polygonOpts?.material) as Cesium.Material,
-              faceForward: true,
-              renderState: {
-                cull: {
-                  enabled: false
-                },
-                depthTest: {
-                  enabled: false
+            appearance: {
+              type: 'MaterialAppearance',
+              options: {
+                material: props.polygonOpts?.material,
+                faceForward: true,
+                renderState: {
+                  cull: {
+                    enabled: false
+                  },
+                  depthTest: {
+                    enabled: false
+                  }
                 }
               }
-            }),
+            } as AppearanceOpts,
             asynchronous: false,
             onReady: onVcPrimitiveReady,
             ...props.polygonOpts

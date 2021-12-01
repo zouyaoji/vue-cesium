@@ -562,8 +562,11 @@ export function makeMaterialProperty(
  */
 export function makeMaterial(this, val: string | Array<number> | MaterialOption) {
   const vcInstance = this as VcComponentInternalInstance
-  const cmpName = vcInstance.proxy?.$options.name
-  if (cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName.indexOf('Datasource') !== -1 || vcInstance.cesiumClass === 'VcOverlayDynamic')) {
+  const cmpName = vcInstance?.proxy?.$options.name
+  if (
+    cmpName &&
+    (cmpName.indexOf('Graphics') !== -1 || cmpName.indexOf('Datasource') !== -1 || cmpName === 'VcOverlayDynamic' || cmpName === 'VcEntity')
+  ) {
     return makeMaterialProperty(val)
   }
   const { Material, combine } = Cesium

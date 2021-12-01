@@ -20,7 +20,7 @@ import {
   makeAppearance
 } from './cesium-helpers'
 import { PropType } from 'vue'
-import { CartographicInDegreeOption, Cartesian3Option } from './types'
+import { CartographicInDegreeOption, Cartesian3Option, AppearanceOpts } from './types'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start
@@ -1270,18 +1270,20 @@ const interleave = {
  */
 const appearance = {
   appearance: {
-    type: Object as PropType<Cesium.Appearance>,
+    type: Object as PropType<Cesium.Appearance | AppearanceOpts>,
     watcherOptions: {
-      cesiumObjectBuilder: makeAppearance
+      cesiumObjectBuilder: makeAppearance,
+      deep: true
     }
   }
 }
 
 const depthFailAppearance = {
   depthFailAppearance: {
-    type: Object as PropType<Cesium.Appearance>,
+    type: Object as PropType<Cesium.Appearance | AppearanceOpts>,
     watcherOptions: {
-      cesiumObjectBuilder: makeAppearance
+      cesiumObjectBuilder: makeAppearance,
+      deep: true
     }
   }
 }

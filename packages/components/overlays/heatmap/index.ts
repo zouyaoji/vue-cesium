@@ -1,5 +1,12 @@
 import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed, PropType, WatchStopHandle, VNode } from 'vue'
-import { ColorSegments, HeatmapConfiguration, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import {
+  AppearanceOpts,
+  ColorSegments,
+  HeatmapConfiguration,
+  MaterialOption,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance
+} from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { show, rectangle } from '@vue-cesium/utils/cesium-props'
 import { makeColor, makeRectangle } from '@vue-cesium/utils/cesium-helpers'
@@ -71,10 +78,10 @@ export default defineComponent({
       container: undefined!
     }
     const coordinates = ref<any>(null)
-    const material = ref<any>(null)
+    const material = ref<MaterialOption>(null!)
     const image = ref<any>(null)
     const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround | null>(null)
-    const appearance = ref<any>(null)
+    const appearance = ref<AppearanceOpts>(null!)
     const canRender = ref(false)
     const config = ref<any>(null)
 
@@ -94,8 +101,8 @@ export default defineComponent({
       watch(
         () => image,
         val => {
-          material.value.image = val.value
-          appearance.value.material.uniforms.image = val.value
+          material.value.fabric.uniforms.image = val.value
+          ;(appearance.value.options.material as MaterialOption).fabric.uniforms.image = val.value
         },
         {
           deep: true
@@ -187,20 +194,28 @@ export default defineComponent({
       container.children[0].setAttribute('id', id + '-hm')
       if (Array.isArray(props.data)) {
         setData(props.data, heatmapInstance)
-        material.value = new Cesium.ImageMaterialProperty({
-          image: image.value,
-          transparent: true
-        })
-        appearance.value = new Cesium.MaterialAppearance({
-          material: new Cesium.Material({
-            fabric: {
-              type: 'Image',
-              uniforms: {
-                image: image.value
+        material.value = {
+          fabric: {
+            type: 'Image',
+            uniforms: {
+              image: image.value,
+              transparent: true
+            }
+          }
+        }
+        appearance.value = {
+          type: 'MaterialAppearance',
+          options: {
+            material: {
+              fabric: {
+                type: 'Image',
+                uniforms: {
+                  image: image.value
+                }
               }
             }
-          })
-        })
+          }
+        }
       }
 
       return heatmapInstance

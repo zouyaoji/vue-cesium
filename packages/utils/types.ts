@@ -316,8 +316,12 @@ export type Appearances =
   | Cesium.DebugAppearance
 
 interface AppearanceOpts {
-  type?: string
-  options: Appearances
+  type: string
+  options:
+    | Appearances
+    | {
+        material: MaterialOption
+      }
 }
 
 export {

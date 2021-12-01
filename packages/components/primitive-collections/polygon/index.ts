@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2021-11-30 21:33:16
+ * @LastEditTime: 2021-12-01 09:35:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -25,7 +25,7 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { PolygonPrimitive } from '@vue-cesium/shared'
-import { makeCartesian3Array, makePolygonHierarchy } from '@vue-cesium/utils/cesium-helpers'
+import { makeAppearance, makeCartesian3Array, makePolygonHierarchy } from '@vue-cesium/utils/cesium-helpers'
 
 export default defineComponent({
   name: 'VcPolygon',
@@ -90,7 +90,7 @@ export default defineComponent({
         () => props.appearance,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive && (polygonPrimitive.appearance = val as Cesium.Appearance)
+          polygonPrimitive && (polygonPrimitive.appearance = makeAppearance.call(instance, val!) as Cesium.Appearance)
         }
       )
     )
@@ -100,7 +100,7 @@ export default defineComponent({
         () => props.depthFailAppearance,
         val => {
           const polygonPrimitive = instance.cesiumObject as PolygonPrimitive
-          polygonPrimitive && (polygonPrimitive.depthFailAppearance = val as Cesium.Appearance)
+          polygonPrimitive && (polygonPrimitive.depthFailAppearance = makeAppearance.call(instance, val!) as Cesium.Appearance)
         }
       )
     )
