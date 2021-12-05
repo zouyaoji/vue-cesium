@@ -20,7 +20,7 @@
     "proj4": "^2.7.5"
   },
   "peerDependencies": {
-    "vue": "^3.2.13"
+    "vue": "^3.2.23"
   },
   "devDependencies": {
     "@vue/test-utils": "^2.0.0-rc.14"

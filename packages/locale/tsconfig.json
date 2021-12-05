@@ -2,7 +2,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "rootDir": ".",
-    "declaration": true,
+    "declaration": false,
     "target": "ES6",
     "moduleResolution": "node",
     "skipLibCheck": true

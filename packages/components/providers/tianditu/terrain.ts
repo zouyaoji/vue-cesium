@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-27 15:16:39
+ * @LastEditTime: 2021-12-03 17:11:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
@@ -55,7 +55,7 @@ export default defineComponent({
     instance.createCesiumObject = async () => {
       return new Promise((resolve, reject) => {
         $script = document.createElement('script')
-        global.document.body.appendChild($script)
+        document.body.appendChild($script)
         $script.src = props.pluginPath
         $script.onload = () => {
           if (providersState.unwatchFns.length === 0) {

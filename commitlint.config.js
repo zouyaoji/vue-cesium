@@ -1,31 +1,27 @@
-// eslint-disable-next-line
-const importFrom = require('import-from')
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:02
+ * @LastEditTime: 2021-12-05 09:45:39
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\commitlint.config.js
+ */
 
-function getPackages (context) {
-  return Promise.resolve()
-    .then(() => {
-      const ctx = context || {}
-      const cwd = ctx.cwd || process.cwd()
-      const Project = importFrom(cwd, '@lerna/project')
-      const project = new Project(cwd)
-      return project.getPackages()
-    })
-    .then(packages => {
-      return packages.map(pkg => pkg.name).map(name => (name.charAt(0) === '@' ? name.split('/')[1] : name))
-    })
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const { default: getWorkspacePackages } = require('@pnpm/find-workspace-packages')
+
+async function getPackages(context) {
+  const ctx = context || {}
+  const cwd = ctx.cwd || process.cwd()
+  const packages = await getWorkspacePackages(cwd)
+  return packages
+    .map(pkg => pkg.manifest.name)
+    .filter(name => !!name)
+    .map(name => (name.charAt(0) === '@' ? name.split('/')[1] : name))
 }
 
-const scopes = [
-  'project',
-  'core',
-  'style',
-  'docs',
-  'ci',
-  'dev',
-  'build',
-  'deploy',
-  'other',
-]
+const scopes = ['project', 'core', 'style', 'docs', 'ci', 'dev', 'build', 'deploy', 'other']
 
 module.exports = {
   rules: {
@@ -39,10 +35,6 @@ module.exports = {
     'subject-full-stop': [2, 'never', '.'],
     'type-case': [2, 'always', 'lower-case'],
     'type-empty': [2, 'never'],
-    'type-enum': [
-      2,
-      'always',
-      ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test', 'improvement'],
-    ],
-  },
+    'type-enum': [2, 'always', ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test', 'improvement']]
+  }
 }

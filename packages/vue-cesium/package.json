@@ -8,18 +8,33 @@
     "vue-cesium",
     "cesium",
     "webgl",
-    "gis"
+    "gis",
+    "vue",
+    "webgis"
   ],
   "license": "MIT",
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "import": "./es/index.mjs"
+    },
+    "./es": "./es/index.mjs",
+    "./lib": "./lib/index.js",
+    "./*": "./*"
+  },
   "main": "lib/index.js",
-  "module": "es/index.js",
+  "module": "es/index.mjs",
   "style": "dist/index.css",
   "unpkg": "dist/index.full.js",
   "jsdelivr": "dist/index.full.js",
   "sideEffects": [
     "dist/*",
     "theme-default/*.css",
-    "theme-default/src/*.scss"
+    "theme-default/src/*.scss",
+    "es/components/*/style/*",
+    "lib/components/*/style/*",
+    "lib/components/**/*",
+    "es/components/**/*"
   ],
   "repository": {
     "type": "git",
@@ -29,7 +44,7 @@
     "url": "https://github.com/zouyaoji/vue-cesium/issues"
   },
   "peerDependencies": {
-    "vue": "^3.2.13"
+    "vue": "^3.2.23"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
@@ -48,6 +63,5 @@
     "> 1%",
     "not ie 11",
     "not op_mini all"
-  ],
-  "gitHead": "asd"
+  ]
 }

@@ -165,8 +165,6 @@ import {
 // config
 import VcConfigProvider from '@vue-cesium/components/config-provider'
 
-import { SFCWithInstall } from '@vue-cesium/utils/types'
-
 export default [
   VcViewer,
 

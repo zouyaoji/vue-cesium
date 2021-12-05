@@ -21,7 +21,7 @@
     "url": "git://github.com:zouyaoji/vue-cesium.git"
   },
   "peerDependencies": {
-    "vue": "^3.2.13"
+    "vue": "^3.2.23"
   },
   "dependencies": {
     "lodash": "^4.17.21"
@@ -33,6 +33,6 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "sass": "^1.39.2",
     "ts-node": "^10.1.0",
-    "typescript": "^4.4.3"
+    "typescript": "^4.5.2"
   }
 }

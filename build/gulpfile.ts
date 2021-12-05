@@ -1,61 +1,70 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
- * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-28 23:37:09
+ * @Date: 2021-12-03 14:11:08
+ * @LastEditTime: 2021-12-05 22:45:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\gulpfile.ts
  */
-import gulp from 'gulp'
-import ts from 'gulp-typescript'
 import path from 'path'
-import through2 from 'through2'
+import { series, parallel } from 'gulp'
+import { run } from './utils/process'
+import { withTaskName } from './utils/gulp'
+import { buildOutput, vcOutput, vcPackage, projRoot } from './utils/paths'
+import { buildConfig } from './build-info'
+import type { TaskFunction } from 'gulp'
+import type { Module } from './build-info'
 
-const output = path.resolve(__dirname, '../dist/styles')
+const runTask = (name: string) => withTaskName(name, () => run(`pnpm run build ${name}`))
 
-const tsProject = ts.createProject('tsconfig.json', {
-  declaration: true,
-  target: 'ESNEXT',
-  skipLibCheck: true,
-  module: 'ESNEXT'
-})
+export const copyFiles = () => {
+  const copyTypings = async () => {
+    const globalDts = path.resolve(projRoot, 'typings', 'global.d.ts')
+    await run(`cp ${globalDts} ${vcOutput}`)
+    const cesiumDts = path.resolve(projRoot, 'typings', 'Cesium.d.ts')
+    await run(`cp ${cesiumDts} ${vcOutput}`)
+  }
 
-const rewriter = () => {
-  return through2.obj(function (file, _, cb) {
-    const compIdentifier = new RegExp('@vue-cesium/components', 'g')
-    const compReplacer = '../../../components'
-    const themeIdentifier = new RegExp('@vue-cesium/theme-default', 'g')
-    const themeReplacer = '../../../../theme-chalk'
-    file.contents = Buffer.from(file.contents.toString().replace(compIdentifier, compReplacer).replace(themeIdentifier, themeReplacer))
-    cb(null, file)
-  })
+  return Promise.all([run(`cp ${vcPackage} ${path.join(vcOutput, 'package.json')}`), run(`cp README.md ${vcOutput}`), copyTypings()])
 }
 
-const inputs = '../packages/components/**/style/*.ts'
+export const copyTypesDefinitions: TaskFunction = done => {
+  const src = `${buildOutput}/types/`
+  const copy = (module: Module) => {
+    // windows 平台下 rsync 识别不了盘符，所以要转存相对路径才能正常执行
+    const srcRelative = path.relative(projRoot, src).replaceAll('\\', '/')
+    const outRelative = path.relative(projRoot, `${buildConfig[module].output.path}/`)
+    return withTaskName(`copyTypes:${module}`, () => run(`rsync -a ${srcRelative}/ ${outRelative}`))
+  }
 
-function compileEsm() {
-  return gulp
-    .src(inputs)
-    .pipe(rewriter())
-    .pipe(tsProject())
-    .pipe(gulp.dest(path.resolve(output, 'es')))
+  return parallel(copy('esm'), copy('cjs'))(done)
 }
 
-function compileCjs() {
-  return gulp
-    .src(inputs)
-    .pipe(rewriter())
-    .pipe(
-      ts.createProject('tsconfig.json', {
-        declaration: true,
-        target: 'ESNEXT',
-        skipLibCheck: true,
-        module: 'commonjs'
-      })()
+export const copyFullStyle = async () => {
+  await run(`"mkdir" "-p" "${vcOutput}/dist/"`)
+  await run(`cp ${vcOutput}/theme-default/index.css ${vcOutput}/dist/index.css`)
+}
+
+export default series(
+  withTaskName('clean', () => run('pnpm run clean')),
+
+  parallel(
+    runTask('buildModules'),
+    runTask('buildFullBundle'),
+    runTask('generateTypesDefinitions'),
+    runTask('buildHelper'),
+    runTask('buildIndices'),
+    series(
+      withTaskName('buildThemeChalk', () => run('pnpm run -C packages/theme-default build')),
+      copyFullStyle
     )
-    .pipe(gulp.dest(path.resolve(output, 'lib')))
-}
+  ),
 
-export const build = gulp.series(compileEsm, compileCjs)
+  parallel(copyTypesDefinitions, copyFiles)
+)
 
-export default build
+export * from './types-definitions'
+export * from './modules'
+export * from './full-bundle'
+export * from './helper'
+export * from './indices'

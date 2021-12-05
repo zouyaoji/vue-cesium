@@ -1,19 +1,18 @@
-.vscode
+# Editor directories and files
 .idea
 .vscode
+
+# Package Manager
 node_modules
+.pnpm-debug.log*
+
+# System
 .DS_Store
+
+# Bundle
 dist
-*.local
-yarn-error.log
-lerna-debug.json
-lerna-debug.log
-yarn-error.log
-storybook-static
-coverage/
-website-dist
-lib
-website/play/index.vue
+coverage
 packages/vue-cesium/version.ts
-/es/
+website-dist
 es
+lib
