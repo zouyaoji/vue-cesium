@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2021-11-21 00:49:12
+ * @LastEditTime: 2021-12-01 15:16:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -47,7 +47,7 @@
 
 国内码云[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
 
-VueCesium 支持引入官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台:
+VueCesium 支持引入官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台，目前测试支持加载的有:
 
 - [官方 CesiumJS](https://cesium.com/platform/cesiumjs/)
 - [超图 SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
@@ -60,7 +60,7 @@ VueCesium 支持引入官方 CesiumJS，或者其他基于 CesiumJS 的第三方
 命令
 
 ```bash
-$ yarn bootstrap
+$ pnpm i
 ```
 
 将安装所有依赖，并且用 `lerna bootstrap` 初始化项目。
@@ -70,7 +70,7 @@ $ yarn bootstrap
 命令
 
 ```bash
-$ yarn website-dev
+$ pnpm website-dev
 ```
 
 将启动站点供您预览已开发的组件和相关文档。
@@ -80,7 +80,7 @@ $ yarn website-dev
 命令
 
 ```bash
-$ yarn gen component-name
+$ pnpm gen component-name
 ```
 
 注意组件名称 `component-name` 必须用短横线写法 `kebab-case`。
@@ -90,7 +90,7 @@ $ yarn gen component-name
 命令
 
 ```bash
-yarn cz
+pnpm cz
 ```
 
 例如

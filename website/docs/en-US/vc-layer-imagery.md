@@ -150,6 +150,13 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the object is loaded.    |
 | destroyed  | Vue Instance                       | Triggers when the object is destroyed. |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-layer-imagery sub tags content goes. | vc-provider-imagery-arcgis/vc-provider-imagery-baidumap/vc-provider-imagery-bingmaps/vc-provider-imagery-grid/vc-provider-imagery-ion/vc-provider-imagery-mapbox/vc-provider-imagery-osm/vc-provider-imagery-supermap/vc-provider-imagery-tianditu/vc-provider-imagery-tile-coordinates/vc-provider-imagery-tms/vc-provider-imagery-singletile/vc-provider-imagery-tiledcache/vc-provider-imagery-urltemplate/vc-provider-imagery-wms/vc-provider-imagery-wmts |
+
 ### Reference
 
 - Official documents: **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**

@@ -28,8 +28,8 @@ export default defineComponent({
   setup() {
     // ordered
     const map = new Map()
-    let anchors = ref([])
-    let scrollContainer = null
+    let anchors = ref<any>([])
+    let scrollContainer
     const active = ref('')
     const navScroll = ref(null)
 
@@ -44,9 +44,9 @@ export default defineComponent({
       // waiting for components render, e.g. table.
       await nextTick()
       scrollContainer = document.querySelector('.el-scrollbar.page-component__scroll>.el-scrollbar__wrap.el-scrollbar__wrap--hidden-default')
-      const content = document.querySelector('.content.element-doc.content')
+      const content = document.querySelector('.content.vue-cesium-doc.content')
       if (!content) return
-      const h3 = content.querySelectorAll('h3')
+      const h3 = content.querySelectorAll('h1,h2,h3')
       anchors.value = Array.from(h3).map(item => {
         const text = item.childNodes[1] && item.childNodes[1].textContent.trim()
         map.set(text, item.offsetTop)

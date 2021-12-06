@@ -150,6 +150,13 @@
 | ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载完成触发。 |
 | destroyed  | Vue Instance                       | 对象销毁时触发。   |
 
+### 插槽
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ---- | ----------- | ------- |
+| default | 用于挂载 vc-layer-imagery 子组件。 | vc-provider-imagery-arcgis/vc-provider-imagery-baidumap/vc-provider-imagery-bingmaps/vc-provider-imagery-grid/vc-provider-imagery-ion/vc-provider-imagery-mapbox/vc-provider-imagery-osm/vc-provider-imagery-supermap/vc-provider-imagery-tianditu/vc-provider-imagery-tile-coordinates/vc-provider-imagery-tms/vc-provider-imagery-singletile/vc-provider-imagery-tiledcache/vc-provider-imagery-urltemplate/vc-provider-imagery-wms/vc-provider-imagery-wmts |
+
 ### 参考
 
 - 官方文档： **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**

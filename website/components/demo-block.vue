@@ -18,26 +18,18 @@
       <transition name="text-slide">
         <span v-show="hovering">{{ controlText }}</span>
       </transition>
+      <div class="control-button-container control-button-container-left">
+        <el-button v-show="isExpanded && hasSetup" size="small" type="text" class="control-button" @click.stop="onSwitchSyntax">
+          {{ showSetup ? langConfig['switch-button-option-text'] : langConfig['switch-button-setup-text'] }}
+        </el-button>
+      </div>
       <div class="control-button-container">
-        <el-button
-          v-show="hovering || isExpanded"
-          ref="copyButton"
-          size="small"
-          type="text"
-          class="control-button copy-button"
-          @click.stop="copy"
-        >
+        <el-button v-show="isExpanded" ref="copyButton" size="small" type="text" class="control-button copy-button" @click.stop="copy">
           {{ langConfig['copy-button-text'] }}
         </el-button>
         <el-tooltip effect="dark" :content="langConfig['tooltip-text']" placement="right">
           <transition name="text-slide">
-            <el-button
-              v-show="hovering || isExpanded"
-              size="small"
-              type="text"
-              class="control-button  run-online-button"
-              @click.stop="goCodepen"
-            >
+            <el-button v-show="isExpanded" size="small" type="text" class="control-button run-online-button" @click.stop="goCodepen">
               {{ langConfig['run-online-button-text'] }}
             </el-button>
           </transition>
@@ -51,14 +43,23 @@ import { nextTick } from 'vue'
 import hljs from 'highlight.js'
 import clipboardCopy from 'clipboard-copy'
 import compoLang from '../i18n/component.json'
-import { stripScript, stripStyle, stripTemplate } from '../util'
+import { stripScript, stripStyle, stripTemplate, stripSetup, removeSetup } from '../util'
 const version = '1.0.0' // element version
 const stripTemplateAndRemoveTemplate = code => {
-  const result = stripTemplate(code)
+  const result = removeSetup(stripTemplate(code))
   if (result.indexOf('<template>') === 0) {
-    return result.replace(/^<template>/, '').replace(/<\/template>$/, '')
+    const html = result.replace(/^<template>/, '').replace(/<\/template>$/, '')
+    return html
+      .replace(/^[\r?\n|\r]/, '')
+      .replace(/[\r?\n|\r]$/, '')
+      .trim()
   }
   return result
+}
+const sanitizeHTML = str => {
+  const temp = document.createElement('div')
+  temp.textContent = str
+  return temp.innerHTML
 }
 export default {
   data() {
@@ -71,10 +72,11 @@ export default {
       hovering: false,
       isExpanded: false,
       fixedControl: false,
-      scrollParent: null
+      scrollParent: null,
+      showSetup: false,
+      hasSetup: false
     }
   },
-
   computed: {
     lang() {
       return this.$route.path.split('/')[1]
@@ -102,17 +104,20 @@ export default {
 
     codeAreaHeight() {
       if (this.$el.getElementsByClassName('description').length > 0) {
-        return (
-          this.$el.getElementsByClassName('description')[0].clientHeight + this.$el.getElementsByClassName('highlight')[0].clientHeight + 20
-        )
+        return this.$el.getElementsByClassName('description')[0].clientHeight + this.$el.getElementsByClassName('highlight')[0].clientHeight + 20
       }
       return this.$el.getElementsByClassName('highlight')[0].clientHeight
+    },
+
+    displayDemoCode() {
+      return this.showSetup ? this.codepen.setup : this.codepen.script
     }
   },
 
   watch: {
     isExpanded(val) {
-      this.codeArea.style.height = val ? `${this.codeAreaHeight + 1}px` : '0'
+      // this.codeArea.style.height = val ? `${this.codeAreaHeight + 1}px` : '0'
+      this.setCodeAreaHeight()
       if (!val) {
         this.fixedControl = false
         this.$refs.control.style.left = '0'
@@ -142,31 +147,70 @@ export default {
         this.codepen.html = stripTemplateAndRemoveTemplate(code)
         this.codepen.script = stripScript(code)
         this.codepen.style = stripStyle(code)
+        this.codepen.setup = stripSetup(code)
+        if (this.codepen.setup) {
+          this.hasSetup = true
+        }
       }
     }
   },
-
-  mounted() {
-    nextTick(() => {
-      let highlight = this.$el.getElementsByClassName('highlight')[0]
-      if (this.$el.getElementsByClassName('description').length === 0) {
-        highlight.style.width = '100%'
-        highlight.borderRight = 'none'
-      }
-
-      try {
-        hljs.highlightBlock(highlight.querySelector('code'))
-      } catch (error) {
-        console.log(error)
-      }
-    })
-  },
-
   beforeUnmount() {
     this.removeScrollHandler()
   },
 
+  mounted() {
+    this.prettyCode()
+  },
+
   methods: {
+    getCodeAreaHeight() {
+      if (this.$el.getElementsByClassName('description').length > 0) {
+        return this.$el.getElementsByClassName('description')[0].clientHeight + this.$el.getElementsByClassName('highlight')[0].clientHeight + 20
+      }
+      return this.$el.getElementsByClassName('highlight')[0].clientHeight
+    },
+    setCodeAreaHeight() {
+      this.codeArea.style.height = this.isExpanded ? `${this.getCodeAreaHeight() + 1}px` : '0'
+    },
+    prettyCode() {
+      nextTick(() => {
+        const highlight = this.$el.querySelector('.highlight')
+        const hlcode = highlight.querySelector('pre code')
+        const innerScript = `<script>
+  ${this.displayDemoCode}
+${'</sc' + 'ript>'}
+`
+        const innerStyle =
+          this.codepen.style && this.codepen.style.trim()
+            ? `<style>
+  ${this.codepen.style}
+</style>
+`
+            : ''
+        hlcode.innerHTML = sanitizeHTML(`<template>
+  ${this.codepen.html}
+</template>
+
+${this.displayDemoCode ? innerScript : ''}${innerStyle}`)
+
+        nextTick(() => {
+          if (this.$el.getElementsByClassName('description').length === 0) {
+            highlight.style.width = '100%'
+            highlight.borderRight = 'none'
+          }
+          try {
+            hljs.highlightBlock(hlcode)
+          } catch (error) {
+            console.log(error)
+          }
+        })
+      })
+    },
+    onSwitchSyntax() {
+      this.showSetup = !this.showSetup
+      this.prettyCode()
+      this.$nextTick(this.setCodeAreaHeight)
+    },
     copy() {
       const res = clipboardCopy(`
 <template>
@@ -174,7 +218,7 @@ ${this.codepen.html}
 </template>
 
 <script>
-${'  ' + this.codepen.script}
+${'  ' + this.displayDemoCode}
 \<\/script>
 
 <style>
@@ -212,7 +256,9 @@ ${this.codepen.style}
         `ipt src="//cdn.jsdelivr.net/npm/vue-cesium@next"></scr` +
         'ipt>'
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
-      let cssTpl = `@import url("//cdn.jsdelivr.net/npm/element-plus/dist/index.css");\n${(style || '').trim()}\n@import url("//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css");\n${(style || '').trim()}\n`
+      let cssTpl = `@import url("//cdn.jsdelivr.net/npm/element-plus/dist/index.css");\n${(
+        style || ''
+      ).trim()}\n@import url("//cdn.jsdelivr.net/npm/vue-cesium@next/dist/index.css");\n${(style || '').trim()}\n`
       cssTpl += `
         .demo-viewer .el-row:last-child {
             margin-bottom: 0;
@@ -286,11 +332,11 @@ ${this.codepen.style}
         `
       let jsTpl = script
         ? script
-          .replace(/export default/, 'var Main =')
-          .trim()
-          .replace(/import ({.*}) from 'vue'/g, (s, s1) => `const ${s1} = Vue`)
-          .replace(/import ({.*}) from 'element-plus'/g, (s, s1) => `const ${s1} = ElementPlus`)
-          .replace(/import ({.*}) from 'vue-cesium'/g, (s, s1) => `const ${s1} = VueCesium`)
+            .replace(/export default/, 'var Main =')
+            .trim()
+            .replace(/import ({.*}) from 'vue'/g, (s, s1) => `const ${s1} = Vue`)
+            .replace(/import ({.*}) from 'element-plus'/g, (s, s1) => `const ${s1} = ElementPlus`)
+            .replace(/import ({.*}) from 'vue-cesium'/g, (s, s1) => `const ${s1} = VueCesium`)
         : 'var Main = {}'
       jsTpl += '\n;const app = Vue.createApp(Main);\napp.use(ElementPlus);\napp.use(VueCesium);\napp.mount("#app")'
       const data = {
@@ -463,6 +509,11 @@ ${this.codepen.style}
       right: 0;
       padding-left: 5px;
       padding-right: 25px;
+    }
+    .control-button-container-left {
+      left: 0;
+      width: 100px;
+      padding-left: 14px; // 14 + 10 = 24px .hljs code padding left 24
     }
 
     .control-button {

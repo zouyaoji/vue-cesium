@@ -165,6 +165,13 @@ Tip: In addition to passing `Cesium.Cartesian3`, `position` property can also pa
 | mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this entity.                        |
 | mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the entity.                     |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-graphic-xxx content goes. | vc-graphic-billboard/vc-graphic-box/vc-graphic-corridor/vc-graphic-cylinder/vc-graphic-ellipse/vc-graphic-ellipsoid/vc-graphic-label/vc-graphic-model/vc-graphic-tileset/vc-graphic-path/vc-graphic-plane/vc-graphic-point/vc-graphic-polygon/vc-graphic-polyline/vc-graphic-polylineVolume/vc-graphic-rectangle/vc-graphic-wall |
+
 ### Reference
 
 - Refer to the official documentation: **[Entity](https://cesium.com/docs/cesiumjs-ref-doc/Entity.html)**

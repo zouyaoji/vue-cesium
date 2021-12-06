@@ -94,6 +94,13 @@ Default parameters of `compassOpts`, `zoomOpts`:
 
 :::
 
+### VcNavigationSm Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-navigation-sm sub tags content goes. | vc-compass-sm/vc-zoom-control-sm |
+
 ### VcNavigationSm Events
 
 | Name       | Parameters | Description                                    |

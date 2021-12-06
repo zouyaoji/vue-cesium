@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2021-11-21 00:49:14
+ * @LastEditTime: 2021-12-01 15:16:28
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -47,7 +47,7 @@ You can find for more details, API, and other docs on [https://zouyaoji.top/vue-
 
 国内码云[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
 
-VueCesium supports the introduction of official CesiumJS, or other third-party platforms based on CesiumJS:
+VueCesium supports the introduction of official CesiumJS, or other third-party platforms based on CesiumJS, Tested third-party libraries:
 
 - [CesiumJS](https://cesium.com/platform/cesiumjs/)
 - [SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
@@ -60,7 +60,7 @@ VueCesium supports the introduction of official CesiumJS, or other third-party p
 With command
 
 ```bash
-$ yarn bootstrap
+$ pnpm i
 ```
 
 the project will install all dependencies and run `lerna bootstrap` to initialize the project
@@ -70,27 +70,25 @@ the project will install all dependencies and run `lerna bootstrap` to initializ
 With command
 
 ```bash
-$ yarn website-dev
+$ pnpm website-dev
 ```
 
 the project will launch website for you to preview all existing component
 
-````
-
 ## Generate new component
 With command
 ```bash
-$ yarn gen component-name
+$ pnpm gen component-name
 ````
 
 Note the `component-name` must be in `kebab-case`, combining words by replacing each space with a dash.
 
-## Commit template
+# Commit template
 
 With command
 
 ```bash
-yarn cz
+pnpm cz
 ```
 
 Example

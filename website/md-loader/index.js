@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-06 09:21:03
+ * @LastEditTime: 2021-12-04 19:01:08
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\md-loader\index.js
+ */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const {
   stripScript,
@@ -61,7 +69,7 @@ module.exports = function(source) {
   output.push(content.slice(start))
   const result = `
   <template>
-    <section class="content element-doc">
+    <section class="content vue-cesium-doc">
       ${output.join('')}
       <right-nav />
     </section>

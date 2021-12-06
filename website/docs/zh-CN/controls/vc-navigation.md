@@ -252,6 +252,13 @@ otherOpts: {
 | ready             | {Cesium, viewer, cesiumObject, vm}                           | 对象加载成功时触发。         |
 | destroyed         | Vue Instance                                                 | 对象销毁时触发。             |
 
+### VcNavigation Slots
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ---- | ----------- | ------- |
+| default | 用于挂载 vc-navigation 子组件。 | vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend |
+
 ## VcCompass
 
 罗盘组件。

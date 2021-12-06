@@ -21,7 +21,7 @@ const isPlay = !!process.env.PLAY_ENV
 /** @type { import('webpack').Configuration } */
 const config = {
   mode: isProd ? 'production' : 'development',
-  devtool: !isProd && 'cheap-module-eval-source-map',
+  // devtool: !isProd && 'cheap-module-eval-source-map',
   entry: isPlay ? path.resolve(__dirname, './play.js') : path.resolve(__dirname, './entry.js'),
   output: {
     path: path.resolve(__dirname, '../website-dist'),
@@ -92,7 +92,7 @@ const config = {
         }
       ]
     }),
-    new ProgressBarPlugin()
+    // new ProgressBarPlugin()
   ],
   devServer: {
     inline: true,

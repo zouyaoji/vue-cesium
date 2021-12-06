@@ -105,6 +105,13 @@ Basic usage of VcDatasourceKml component.
 | mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
 | mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vue-datasource-kml sub tags content goes. | vc-entity |
+
 ### Reference
 
 - Refer to the official documentation: **[KmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html)**

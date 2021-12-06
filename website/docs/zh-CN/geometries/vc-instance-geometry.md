@@ -173,6 +173,13 @@
 | ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
 | destroyed  | Vue Instance                       | 对象销毁时触发。     |
 
+### 插槽
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ---- | ----------- | ------- |
+| default | 用于挂载 vc-geometry-xxx 子组件。 | vc-geometry-box/vc-geometry-box-outline/vc-geometry-circle/vc-geometry-circle-outline/vc-geometry-corridor/vc-geometry-corridor-outline/vc-geometry-cylinder/vc-geometry-cylinder-outline/vc-geometry-ellipse/vc-geometry-ellipse-outline/vc-geometry-ellipsoid/vc-geometry-ellipsoid-outline/vc-geometry-frustum/vc-geometry-frustum-outline/vc-geometry-plane/vc-geometry-plane-outline/vc-geometry-polygon/vc-geometry-polygon-outline/vc-geometry-polygon-coplanar/vc-geometry-polygon-coplanar-outline/vc-geometry-polyline/vc-geometry-polyline-ground/vc-geometry-polyline-simple/vc-geometry-polyline-volume/vc-geometry-rectangle/vc-geometry-rectangle-outline/vc-geometry-sphere/vc-geometry-sphere-outline/vc-geometry-wall/vc-geometry-wall-outline |
+
 ### 参考
 
 - 官方文档： **[GeometryInstance](https://cesium.com/docs/cesiumjs-ref-doc/GeometryInstance.html)**

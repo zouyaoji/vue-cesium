@@ -147,6 +147,12 @@
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
 
+### 插槽
+
+| 插槽名  | 描述                     | 子组件   |
+| ------- | ------------------------ | -------- |
+| default | 用于挂载 vc-label 组件。 | vc-label |
+
 ### VcLabel
 
 加载文本标签图元，相当于初始化一个 `Cesium.Label` 实例。

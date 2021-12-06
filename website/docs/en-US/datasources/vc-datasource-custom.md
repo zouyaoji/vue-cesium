@@ -274,6 +274,13 @@ Basic usage of VcDatasourceCustom component.
 | mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
 | mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vue-datasource-custom sub tags content goes. | vc-entity |
+
 ### Reference
 
 - Refer to the official documentation: **[CustomDataSource](https://cesium.com/docs/cesiumjs-ref-doc/CustomDataSource.html)**

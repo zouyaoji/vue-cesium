@@ -114,6 +114,13 @@ Basic usage of VcPostProcessStageCollection component.
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where post-process tags content goes. | vc-post-process-stage/vc-post-process-stage-scan |
+
 ### Reference
 
 - Refer to the official documentation: [PostProcessStageCollection](https://cesium.com/docs/cesiumjs-ref-doc/PostProcessStageCollection.html)

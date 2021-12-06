@@ -1,44 +1,47 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:03
- * @LastEditTime: 2021-09-03 16:09:58
+ * @LastEditTime: 2021-12-01 15:29:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\installation.md
 -->
 
-# 安装 VueCesium
+# 安装
 
 ### 环境支持
 
-- 现代浏览器
+VueCesium 可以在支持 [ES2018](https://caniuse.com/?feats=mdn-javascript_builtins_regexp_dotall,mdn-javascript_builtins_regexp_lookbehind_assertion,mdn-javascript_builtins_regexp_named_capture_groups,mdn-javascript_builtins_regexp_property_escapes,mdn-javascript_builtins_symbol_asynciterator,mdn-javascript_functions_method_definitions_async_generator_methods,mdn-javascript_grammar_template_literals_template_literal_revision,mdn-javascript_operators_destructuring_rest_in_objects,mdn-javascript_operators_spread_spread_in_destructuring,promise-finally) 和 [ResizeObserver](https://caniuse.com/resizeobserver) 的浏览器上运行。 如果您确实需要支持旧版本的浏览器，请自行添加 Babel 和相应的 Polyfill 。
+
+由于 Vue 3 及 Cesium1.85+ 不再支持 IE11，VueCesium 也不再支持 IE 浏览器。
 
 | ![IE](https://cdn.jsdelivr.net/npm/@browser-logos/edge/edge_32x32.png) | ![Firefox](https://cdn.jsdelivr.net/npm/@browser-logos/firefox/firefox_32x32.png) | ![Chrome](https://cdn.jsdelivr.net/npm/@browser-logos/chrome/chrome_32x32.png) | ![Safari](https://cdn.jsdelivr.net/npm/@browser-logos/safari/safari_32x32.png) |
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Edge                                                                   | last 2 versions                                                                   | last 2 versions                                                                | last 2 versions                                                                |
-
-> 由于 Vue3 及 Cesium1.85+ 不再支持 IE11，故而 VueCesium 也不支持 IE11 及之前版本。
-
-### 当前最新版本
+| Edge ≥ 79                                                              | Firefox ≥ 78                                                                      | Chrome ≥ 64                                                                    | Safari ≥ 12                                                                    |
+### 版本
 
 VueCesium 目前还处于快速开发迭代中：
 
 [![VueCesium version badge](https://img.shields.io/npm/v/vue-cesium/next?style=flat-square)](https://www.npmjs.org/package/vue-cesium)
 
-### 通过 npm 或者 yarn 安装
+### 使用包管理器
 
-**我们推荐使用包管理器的方式安装**，它能更好地和 [vite](https://vitejs.dev), [webpack](https://webpack.js.org/)
-打包工具配合使用。
+**我们建议您使用包管理器（NPM，[Yarn](https://classic.yarnpkg.com/lang/en/)，[pnpm](https://pnpm.io/)）安装 VueCesium**，然后您就可以使用打包工具，例如 [vite](https://vitejs.dev), [webpack](https://webpack.js.org/)
 
 ```shell
+# 选择一个你喜欢的包管理器
+
+# NPM
 $ npm install vue-cesium@next --save
-```
 
-```shell
+# Yarn
 $ yarn add vue-cesium@next
+
+# pnpm
+$ pnpm install vue-cesium@next
 ```
 
-如果你的网络环境不佳，推荐使用 [cnpm](https://github.com/cnpm/cnpm) 或使用 [阿里巴巴镜像](https://registry.npm.taobao.org)
+如果您的网络环境不好，建议使用香港镜像服务 [cnpm](https://github.com/cnpm/cnpm) 或使用 [淘宝 npm 镜像](https://registry.npm.taobao.org)
 
 ### 浏览器直接引入
 
@@ -54,7 +57,7 @@ $ yarn add vue-cesium@next
 <head>
   <!-- 引入样式 -->
   <link rel="stylesheet" href="//unpkg.com/vue-cesium@next/dist/index.css" />
-  <!-- 引入 Vue -->
+  <!-- 引入 Vue3 -->
   <script src="//unpkg.com/vue@next"></script>
   <!-- 引入组件库 -->
   <script src="//unpkg.com/vue-cesium@next"></script>
@@ -87,4 +90,4 @@ $ yarn add vue-cesium@next
   (<a href='https://codepen.io/zouyaoji'>@zouyaoji</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
-如果是通过 npm / yarn 安装，并希望配合打包工具使用，请阅读下一节：[快速上手](./#/zh-CN/component/quickstart)。
+如果是通过包管理器安装，并希望配合打包工具使用，请阅读下一节：[快速上手](./#/zh-CN/component/quickstart)。

@@ -125,6 +125,13 @@ Basic usage of VcCollectionPoint component.
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-point tag content goes. | vc-point |
+
 ### VcPoint
 
 Loading a graphical point positioned in the 3D scene. It is equivalent to initializing a `Cesium.PointPrimitive` instance.

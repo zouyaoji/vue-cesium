@@ -143,6 +143,13 @@ Basic usage of VcPrimitiveGround component.
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-instance-geometry tag content goes. | vc-instance-geometry |
+
 ### Reference
 
 - Refer to the official documentation: **[GroundPrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPrimitive.html)**

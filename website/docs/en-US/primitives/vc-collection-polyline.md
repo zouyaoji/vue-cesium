@@ -133,6 +133,13 @@ Basic usage of VcCollectionPolyline component.
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-point tag content goes. | vc-point |
+
 ### VcPolyline
 
 Loading a renderable polyline. It is equivalent to initializing a `Cesium.Polyline` instance.

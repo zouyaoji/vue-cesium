@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2021-11-06 15:41:07
+ * @LastEditTime: 2021-12-04 16:06:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\app.vue
@@ -14,7 +14,6 @@ import { ElScrollbar } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import MainHeader from './components/header'
 import MainFooter from './components/footer'
-import { use } from '@vue-cesium/locale'
 import zhLocale from '@vue-cesium/locale/lang/zh-hans'
 import enLocale from '@vue-cesium/locale/lang/en-us'
 import { Language } from './enums/language'

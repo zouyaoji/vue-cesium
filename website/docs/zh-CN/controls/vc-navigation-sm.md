@@ -101,7 +101,14 @@
 | zoomEvt    |      | 操作缩放控件时触发。 |
 | compassEvt |      | 操作罗盘控件时触发。 |
 
-### VcCompass
+### VcNavigationSm 插槽
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ---- | ----------- | ------- |
+| default | 用于挂载 vc-navigation-sm 子组件。 | vc-compass-sm/vc-zoom-control-sm |
+
+### VcCompassSm
 
 罗盘组件。
 

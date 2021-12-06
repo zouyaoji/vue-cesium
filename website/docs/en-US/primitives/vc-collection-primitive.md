@@ -227,6 +227,13 @@ Basic usage of VcCollectionPrimitive component.
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where primitive sub tags content goes. | vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-polyline-ground/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-polygon |
+
 ### VcPolygon
 
 Loading the polygon primitive. It is equivalent to initializing a `PolygonPrimitive` instance.

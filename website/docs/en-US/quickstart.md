@@ -1,14 +1,15 @@
-## Quick start
+# Quick start
 
 This section describes how to use VueCesium in your project.
 
-### Using components
+## Usage
 
 ### Full import
 
-> main.ts
+If you don’t care about the bundle size so much, it’s more convenient to use full import.
 
 ```typescript
+// main.ts
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
 import 'vue-cesium/dist/index.css'
@@ -20,7 +21,7 @@ app.use(VueCesium)
 app.mount('#app')
 ```
 
-### Import on demand
+### On-demand Import
 
 `VueCesium` provides out of box [Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
 functionalities based on ES Module.
@@ -67,19 +68,19 @@ Import via HTML `head` tag.
 </head>
 ```
 
-### Using Starter Kit
+## Starter Template
 
 We provide a general [Project Template](https://github.com/zouyaoji/vue-cesium-starter),
 also a [Vite Template](https://github.com/zouyaoji/vue-cesium-vite-starter).
 For Electron users we have a [Electron Template](https://github.com/zouyaoji/vue-cesium-electron-vite-starter).
 
-### Global configuration
+## Global configuration
 
 When registering VueCesium, you can pass a global config object with `cesiumPath`, `accessToken` and `locale`. `cesiumPath` is used to specify the `CesiumJS` library loaded by VueCesium, support loading the official version of Cesium or a third-party version developed based on Cesium, **Note:** Please use the files in the Build directory. And `accessToken` is used to set `Cesium.Ion.defaultAccessToken`. `locale` is used for internationalized languages. For details, see the next section of the document.
 
-### Full import
+Full import:
 
-```js
+```ts
 import { createApp } from 'vue'
 import VueCesium from 'vue-cesium'
 import 'vue-cesium/dist/index.css'
@@ -98,9 +99,9 @@ app.use(VueCesium, {
 app.mount('#app')
 ```
 
-### On demand
+On-demand:
 
-```js
+```ts
 import { createApp } from 'vue'
 import { VcViewer } from 'vue-viewer'
 import App from './App.vue'
@@ -115,6 +116,35 @@ app.mount('#app')
 
 (The complete component list is subject to [reference](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/vue-cesium/component.ts))
 
-### Start coding
+## Volar support
 
-Now you have implemented Vue and VueCesium to your project, and it's time to write your code. Please refer to each component's documentation to learn how to use them.
+If you use volar, please add the global component type definition to `compilerOptions.types` in `tsconfig.json` or `jsconfig.json`).
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "types": ["vue-cesium/global"]
+  }
+}
+```
+
+## Cesium.d.ts support
+
+If you want to get Cesium api syntax hints, please add the Cesium type definition to `compilerOptions.types` in `tsconfig.json` or `jsconfig.json`).
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "types": ["vue-cesium/Cesium"]
+  }
+}
+```
+
+## Let's Get Started
+
+You can bootstrap your project from now on, for each components usage, please
+refer to individual component documentation.

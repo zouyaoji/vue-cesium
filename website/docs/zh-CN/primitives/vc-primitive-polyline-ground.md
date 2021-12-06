@@ -120,6 +120,13 @@
 | ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
 | destroyed  | Vue Instance                       | 对象销毁时触发。     |
 
+### 插槽
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ---- | ----------- | ------- |
+| default | 用于挂载 vc-instance-geometry 组件。 | vc-instance-geometry |
+
 ### 参考
 
 - 官方文档： **[GroundPolylinePrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html)**

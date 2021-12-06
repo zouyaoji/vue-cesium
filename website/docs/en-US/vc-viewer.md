@@ -251,6 +251,13 @@ Basic usage of `vc-viewer`.
 | reload          | {Cesium, viewer, vm} \| `false` | Reload the component. It returns `ReadyObj` on success, and `false on failure.`  |
 | getCesiumObject | Object                          | Get the Cesium object loaded by this component.                                  |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vue-cesium sub tags content goes. | vc-navigation/vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend/vc-navigation-sm/vc-compass-sm/vc-zoom-control-sm/vc-layer-imagery/vc-entity/vc-provider-terrain-cesium/vc-provider-terrain-arcgis/vc-provider-terrain-tianditu/vc-datasource-custom/vc-datasource-czml/vc-datasource-geojson/vc-datasource-kml/vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-polyline-ground/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-overlay-html/vc-overlay-heatmap/vc-overlay-wind/vc-overlay-echart/vc-polygon |
+
 ### Reference
 
 - Refer to the official documentation: [Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)

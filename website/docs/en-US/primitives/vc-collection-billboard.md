@@ -128,6 +128,13 @@ Basic usage of VcCollectionBillboard component.
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this primitive.                 |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of this primitive.             |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-billboard tag content goes. | vc-billboard |
+
 ### VcBillboard
 
 Loading a viewport-aligned image positioned in the 3D scene. It is equivalent to initializing a `Cesium.Billboard` instance.

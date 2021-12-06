@@ -51,7 +51,7 @@
           image: 'https://zouyaoji.top/vue-cesium/favicon.png',
           scale: 0.5
         },
-        position: {lng: 108, lat: 32}
+        position: { lng: 108, lat: 32 }
       }
     },
     methods: {
@@ -162,11 +162,18 @@
 | mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上按下时触发。               |
 | mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上弹起时触发。               |
 | click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该实体时触发。                   |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该实体外部时触发。                 |
+| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该实体外部时触发。               |
 | dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该实体时触发。               |
 | mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上移动时触发。               |
 | mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该实体时触发。                 |
 | mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该实体时触发。                   |
+
+### 插槽
+
+<!-- prettier-ignore -->
+| 插槽名 | 描述 | 子组件 |
+| ----- | -----| ----- |
+| default | 可放 vc-graphic-xxx 子组件。 | vc-graphic-billboard/vc-graphic-box/vc-graphic-corridor/vc-graphic-cylinder/vc-graphic-ellipse/vc-graphic-ellipsoid/vc-graphic-label/vc-graphic-model/vc-graphic-tileset/vc-graphic-path/vc-graphic-plane/vc-graphic-point/vc-graphic-polygon/vc-graphic-polyline/vc-graphic-polylineVolume/vc-graphic-rectangle/vc-graphic-wall |
 
 ### 参考
 

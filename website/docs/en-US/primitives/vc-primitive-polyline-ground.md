@@ -120,6 +120,13 @@ Basic usage of VcPrimitiveGround component.
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
 
+### Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-instance-geometry tag content goes. | vc-instance-geometry |
+
 ### Reference
 
 - Refer to the official documentation: **[GroundPolylinePrimitive](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylinePrimitive.html)**

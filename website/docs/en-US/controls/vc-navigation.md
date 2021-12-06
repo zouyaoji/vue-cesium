@@ -211,6 +211,13 @@ otherOpts: {
 | ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
 | destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
 
+### VcNavigation Slots
+
+<!-- prettier-ignore -->
+| Name | Description | Subtags |
+| ---- | ----------- | ------- |
+| default | This is where vc-navigation sub tags content goes. | vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend |
+
 ### VcCompass
 
 Compass component.

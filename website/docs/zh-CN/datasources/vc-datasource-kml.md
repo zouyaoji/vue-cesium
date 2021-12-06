@@ -105,6 +105,12 @@ KML 数据源组件的基础用法。
 | mouseover            | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该数据源时触发。   |
 | mouseout             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该数据源时触发。     |
 
+### 插槽
+
+| 插槽名  | 描述                                 | 子组件    |
+| ------- | ------------------------------------ | --------- |
+| default | 用于 vue-datasource-kml 挂载子组件。 | vc-entity |
+
 ### 参考
 
 - 官方文档： **[KmlDataSource](https://cesium.com/docs/cesiumjs-ref-doc/KmlDataSource.html)**

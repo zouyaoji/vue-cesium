@@ -131,6 +131,12 @@
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
 | mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
 
+### 插槽
+
+| 插槽名  | 描述                        | 子组件      |
+| ------- | --------------------------- | ----------- |
+| default | 用于挂载 vc-polyline 组件。 | vc-polyline |
+
 ### VcPolyline
 
 加载线图元，相当于初始化一个 `Cesium.Polyline` 实例。
