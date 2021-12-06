@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-05 22:45:04
+ * @LastEditTime: 2021-12-06 14:24:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\gulpfile.ts
@@ -14,6 +14,7 @@ import { buildOutput, vcOutput, vcPackage, projRoot } from './utils/paths'
 import { buildConfig } from './build-info'
 import type { TaskFunction } from 'gulp'
 import type { Module } from './build-info'
+import fs from 'fs/promises'
 
 const runTask = (name: string) => withTaskName(name, () => run(`pnpm run build ${name}`))
 
@@ -41,7 +42,14 @@ export const copyTypesDefinitions: TaskFunction = done => {
 }
 
 export const copyFullStyle = async () => {
-  await run(`"mkdir" "-p" "${vcOutput}/dist/"`)
+  // for windows
+  // await run(`"mkdir" "-p" "${vcOutput}/dist/"`)
+  // for ubuntu
+  // await run(`mkdir -p ${vcOutput}/dist/`)
+  // for both
+  await fs.mkdir(`${vcOutput}/dist/`, {
+    recursive: true
+  })
   await run(`cp ${vcOutput}/theme-default/index.css ${vcOutput}/dist/index.css`)
 }
 
@@ -53,7 +61,7 @@ export default series(
     runTask('buildFullBundle'),
     runTask('generateTypesDefinitions'),
     runTask('buildHelper'),
-    runTask('buildIndices'),
+    // runTask('buildIndices'),
     series(
       withTaskName('buildThemeChalk', () => run('pnpm run -C packages/theme-default build')),
       copyFullStyle
@@ -67,4 +75,4 @@ export * from './types-definitions'
 export * from './modules'
 export * from './full-bundle'
 export * from './helper'
-export * from './indices'
+// export * from './indices'
