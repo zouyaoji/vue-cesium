@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-13 22:43:29
+ * @LastEditTime: 2021-12-06 10:42:57
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\typings\vue-shim.d.ts
+ */
 declare module '*.vue' {
   import { App, defineComponent } from 'vue'
   const component: ReturnType<typeof defineComponent> & {
@@ -5,15 +13,3 @@ declare module '*.vue' {
   }
   export default component
 }
-
-declare type Nullable<T> = T | null;
-
-declare type CustomizedHTMLElement<T> = HTMLElement & T
-
-declare type Indexable<T> = {
-  [key: string]: T
-}
-
-declare type Hash<T> = Indexable<T>
-
-declare type TimeoutHandle = ReturnType<typeof global.setTimeout>
