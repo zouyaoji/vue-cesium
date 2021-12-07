@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-05 22:38:11
- * @LastEditTime: 2021-12-05 23:00:09
+ * @LastEditTime: 2021-12-06 18:04:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\indices.ts
@@ -12,7 +12,7 @@ import fs from 'fs'
 import algoliasearch from 'algoliasearch'
 import { slugify } from 'transliteration'
 import fg from 'fast-glob'
-const algoliaKey = process.env.ALGOLIA_KEY!
+const algoliaKey = process.env.ALGOLIA_KEY
 
 interface Index {
   component: string
@@ -33,10 +33,10 @@ const langs = {
   const indexName = langs[lang]
   const index = client.initIndex(indexName)
   index.clearObjects().then(() => {
-    const files = fg.sync(`../website/docs/${lang}/**/*.md`)
+    const files = fg.sync(`website/docs/${lang}/**/*.md`)
     let indices = []
     files.forEach(file => {
-      const regExp = new RegExp(`../website\/docs\/${lang}\/(.*).md`)
+      const regExp = new RegExp(`website\/docs\/${lang}\/(.*).md`)
       const pathContent = file.match(regExp)!
       const path = pathContent[1]
       const index = path.lastIndexOf('/')
