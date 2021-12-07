@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
- * @LastEditTime: 2021-10-12 15:20:20
+ * @LastEditTime: 2021-12-07 11:31:01
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\overlays\echart\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\overlays\echarts\index.ts
  */
 import {
   CSSProperties,
@@ -27,7 +27,7 @@ import * as echarts from 'echarts'
 import { EChartsType } from 'echarts'
 
 export default defineComponent({
-  name: 'VcOverlayEchart',
+  name: 'VcOverlayEcharts',
   props: {
     options: {
       type: Object,
@@ -47,7 +47,7 @@ export default defineComponent({
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'VcOverlayEchart'
+    instance.cesiumClass = 'VcOverlayEcharts'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {

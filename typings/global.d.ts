@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2021-12-06 11:41:37
+ * @LastEditTime: 2021-12-07 11:31:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
@@ -130,7 +130,7 @@ declare module 'vue' {
     VcOverlayHeatmap: typeof import('vue-cesium')['VcOverlayHeatmap']
     VcOverlayWind: typeof import('vue-cesium')['VcOverlayWind']
     VcOverlayDynamic: typeof import('vue-cesium')['VcOverlayDynamic']
-    VcOverlayEchart: typeof import('vue-cesium')['VcOverlayEchart']
+    VcOverlayEcharts: typeof import('vue-cesium')['VcOverlayEcharts']
 
     VcPostProcessStage: typeof import('vue-cesium')['VcPostProcessStage']
     VcPostProcessStageScan: typeof import('vue-cesium')['VcPostProcessStageScan']
