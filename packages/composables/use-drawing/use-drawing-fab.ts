@@ -1,12 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2021-11-06 16:16:29
+ * @LastEditTime: 2021-12-06 22:24:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
  */
-import { VcCollectionPrimitive, VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components'
+import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
+import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'

@@ -1,26 +1,25 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2021-12-01 09:36:41
+ * @LastEditTime: 2021-12-07 11:40:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
  */
-
 import {
-  VcBtn,
-  VcCollectionLabel,
-  VcCollectionPoint,
-  VcCollectionPrimitive,
-  VcGeometryPolyline,
-  VcGeometryPolylineGround,
-  VcInstanceGeometry,
-  VcPolygon,
-  VcOverlayHtml,
   VcPrimitive,
-  VcPrimitiveGroundPolyline,
-  VcTooltip
-} from '@vue-cesium/components'
+  VcPrimitiveGroundPolyline
+} from '@vue-cesium/components/primitives'
+import {
+  VcInstanceGeometry
+} from '@vue-cesium/components/geometry-instance'
+import {
+  VcGeometryPolyline,
+  VcGeometryPolylineGround
+} from '@vue-cesium/components/geometries'
+import { VcOverlayHtml } from '@vue-cesium/components/overlays'
+import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array, makeMaterial } from '@vue-cesium/utils/cesium-helpers'

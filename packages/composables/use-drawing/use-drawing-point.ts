@@ -1,21 +1,15 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2021-11-06 16:17:12
+ * @LastEditTime: 2021-12-06 22:25:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
  */
 
-import {
-  VcBtn,
-  VcCollectionBillboard,
-  VcCollectionLabel,
-  VcCollectionPoint,
-  VcCollectionPrimitive,
-  VcOverlayHtml,
-  VcTooltip
-} from '@vue-cesium/components'
+import { VcOverlayHtml } from '@vue-cesium/components/overlays'
+import { VcCollectionBillboard, VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'

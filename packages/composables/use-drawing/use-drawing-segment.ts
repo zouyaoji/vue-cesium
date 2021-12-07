@@ -1,26 +1,17 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-12-01 09:42:18
+ * @LastEditTime: 2021-12-07 11:40:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
  */
-
-import {
-  VcBtn,
-  VcCollectionLabel,
-  VcCollectionPoint,
-  VcCollectionPrimitive,
-  VcGeometryPolyline,
-  VcGeometryPolylineGround,
-  VcInstanceGeometry,
-  VcOverlayHtml,
-  VcPolygon,
-  VcPrimitive,
-  VcPrimitiveGroundPolyline,
-  VcTooltip
-} from '@vue-cesium/components'
+import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
+import { VcOverlayHtml } from '@vue-cesium/components/overlays'
+import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
+import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
+import { VcInstanceGeometry } from '@vue-cesium/components/geometry-instance'
+import { VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/components/geometries'
 import { useLocaleInject } from '../use-locale'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
@@ -29,8 +20,7 @@ import {
   getHeadingPitchRoll,
   getPolylineSegmentEndpoint,
   makeCartesian2,
-  makeCartesian3Array,
-  makeMaterial
+  makeCartesian3Array
 } from '@vue-cesium/utils/cesium-helpers'
 import { SegmentDrawing } from '@vue-cesium/utils/drawing-types'
 import { AppearanceOpts, VcComponentInternalInstance } from '@vue-cesium/utils/types'
