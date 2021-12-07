@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-05 09:46:50
+ * @LastEditTime: 2021-12-07 10:14:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\utils\rollup.ts
@@ -13,7 +13,7 @@ import type { OutputOptions, RollupBuild } from 'rollup'
 
 export const generateExternal = async (options: { full: boolean }) => {
   return (id: string) => {
-    const packages: string[] = ['vue']
+    const packages: string[] = ['vue', 'echarts']
     if (!options.full) {
       packages.push('vue-cesium/theme-default')
       // dependencies

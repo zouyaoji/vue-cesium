@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-05 09:47:07
+ * @LastEditTime: 2021-12-07 10:15:05
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\full-bundle.ts
@@ -58,7 +58,8 @@ export const buildFull = (minify: boolean) => async () => {
       exports: 'named',
       name: 'VueCesium',
       globals: {
-        vue: 'Vue'
+        vue: 'Vue',
+        echarts: 'echarts'
       },
       sourcemap: minify,
       banner
