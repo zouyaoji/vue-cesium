@@ -47,6 +47,7 @@ class BaiduMapMercatorProjection {
     [
       8.277824516172526e-4, 1.113207020463578e5,
       // eslint-disable-next-line no-loss-of-precision
+      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       6.477955746671608e8, -4.082003173641316e9, 1.077490566351142e10, -1.517187553151559e10, 1.205306533862167e10, -5.124939663577472e9,
       9.133119359512032e8, 67.5
     ],
