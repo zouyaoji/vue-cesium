@@ -1,5 +1,22 @@
 ## 更新日志
 
+### 3.0.2-beta.13
+
+_2021-12-08_
+
+#### Bug 修复
+
+- 解决打包构建过程中提示循环引入的问题。
+
+#### 新特性
+
+- 支持最新的 [volar](https://github.com/johnsoncodehk/volar)
+
+#### 重构
+
+- 开发工具由 yarn 改为 pnpm。
+- `vc-overlay-echart` 组件重命名为 `vc-overlay-echarts`。打包将 echarts，视为外部引入（external），所以使用 `vc-overlay-echart` 要额外安装echarts。
+
 ### 3.0.2-beta.12
 
 _2021-11-30_
@@ -123,7 +140,7 @@ _2021-10-12_
 #### 新特性
 
 - 量算组件增加矩形量算。
-- 增加 `vc-overlay-echart` 组件。
+- 增加 `vc-overlay-echarts` 组件。
 
 #### Bug 修复
 

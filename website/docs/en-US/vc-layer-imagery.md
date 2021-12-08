@@ -4,7 +4,7 @@ Loading an image layer is equivalent to initializing a `Cesium.ImageryLayer` ins
 
 It needs to be a child component of `vc-viewer` to load normally. You can directly specify the `imageryProvider` property of `vc-layer-imagery`, and use the `vc-provider-xxx` series components provided by VueCesium as the `vc-layer-imagery` sub-components to mount each `imageryProvider`, but an image Only one `provider` can be attached to a layer.
 
-### Basic usage
+## Basic usage
 
 The basic usage of the image layer component.
 
@@ -80,7 +80,7 @@ The basic usage of the image layer component.
 
 :::
 
-### Props
+## Props
 
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
@@ -142,7 +142,7 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 
 :::
 
-### Events
+## Events
 
 | Name       | Parameters                         | Description                             |
 | ---------- | ---------------------------------- | --------------------------------------- |
@@ -150,13 +150,13 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the object is loaded.    |
 | destroyed  | Vue Instance                       | Triggers when the object is destroyed. |
 
-### Slots
+## Slots
 
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
 | ---- | ----------- | ------- |
 | default | This is where vc-layer-imagery sub tags content goes. | vc-provider-imagery-arcgis/vc-provider-imagery-baidumap/vc-provider-imagery-bingmaps/vc-provider-imagery-grid/vc-provider-imagery-ion/vc-provider-imagery-mapbox/vc-provider-imagery-osm/vc-provider-imagery-supermap/vc-provider-imagery-tianditu/vc-provider-imagery-tile-coordinates/vc-provider-imagery-tms/vc-provider-imagery-singletile/vc-provider-imagery-tiledcache/vc-provider-imagery-urltemplate/vc-provider-imagery-wms/vc-provider-imagery-wmts |
 
-### Reference
+## Reference
 
 - Official documents: **[ImageryLayer](https://cesium.com/docs/cesiumjs-ref-doc/ImageryLayer.html)**

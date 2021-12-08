@@ -16,7 +16,7 @@
     <vc-entity description="Hello Vue Cesium" @click="onEntityEvt" @mouseover="onEntityEvt" @mouseout="onEntityEvt">
       <vc-graphics-rectangle
         ref="rectangle1"
-        :coordinates="{ west: -110, south: 20, east: -80, north: 25 }"
+        :coordinates="{ west: -180, south: -90, east: 180, north: 90 }"
         :material="[255,0,0,125]"
       ></vc-graphics-rectangle>
     </vc-entity>
@@ -69,6 +69,7 @@
       onMounted(() => {
         Promise.all([rectangle1.value.createPromise, rectangle2.value.createPromise, rectangle3.value.createPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
+          window.viewer = instances[0].viewer
         })
       })
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-05 21:23:27
- * @LastEditTime: 2021-12-05 21:23:28
+ * @LastEditTime: 2021-12-06 21:46:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\link.vue
@@ -34,15 +34,13 @@ const ExternalLink = () =>
     ]
   )
 
-const skipped = ['https://www.npmjs.org/package/element-plus']
+const skipped = ['https://www.npmjs.org/package/vue-cesium']
 
 const internalLinks = [
   'http://localhost',
   'http://127.0.0.1',
-  'https://element-plus.org',
-  'http://element-plus.org',
-  'https://element-plus.gitee.io',
-  'http://element-plus.gitee.io',
+  'https://zouyaoji.top/vue-cesium',
+  'https://zouyaoji.gitee.io/vue-cesium'
 ]
 
 export default {
@@ -89,7 +87,7 @@ export default {
     const children = []
 
     children.push(
-      h('span', { class: 'element-plus__link-text' }, [this.$slots.default()])
+      h('span', { class: 'vue-cesium__link-text' }, [this.$slots.default()])
     )
     !this.isSkipped &&
       this.isExternal &&
@@ -109,7 +107,7 @@ export default {
         )
       )
     const props = {
-      class: 'element-plus__link',
+      class: 'vue-cesium__link',
       ...this.passThrough,
       onClick: this.onClick,
     }

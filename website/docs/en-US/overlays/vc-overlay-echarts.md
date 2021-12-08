@@ -1,34 +1,35 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-12 10:31:24
- * @LastEditTime: 2021-10-12 15:21:06
+ * @LastEditTime: 2021-12-07 13:12:58
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-echart.md
+ * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-echarts.md
 -->
 
-## VcOverlayEchart
+## VcOverlayEcharts
 
 Load the Echart overlay according to the Cesium coordinate system.
 
-**Note:** This component depends on echart, it is not loaded by default and needs to be registered separately:
+**Note:** This component depends on echarts, and echarts needs to be installed additionally before using this component on the project:
 
-```js
-import 'vue-cesium/default/index.css'
-import { VcOverlayEchart } from 'vue-cesium'
-app.use(VcOverlayEchart)
+```bash
+# npm can be replaced with your favorite tool
+npm install echarts --save
 ```
+
+If it is introduced by umd, please [reference](https://zouyaoji.top/vue-cesium/umd.html).
 
 ### Basic usage
 
-Basic usage of VcOverlayEchart component.
+Basic usage of VcOverlayEcharts component.
 
-:::demo Use the `vc-overlay-echart` tag to add a chart overlay to the viewer.
+:::demo Use the `vc-overlay-echarts` tag to add a chart overlay to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer :camera="camera">
-    <vc-overlay-echart ref="echartOverlay" :options="options"> </vc-overlay-echart>
+    <vc-overlay-echarts ref="echartOverlay" :options="options"> </vc-overlay-echarts>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
@@ -161,8 +162,8 @@ Basic usage of VcOverlayEchart component.
       ]
 
       const lineColors = ['#fff', '#f6fb05', '#00fcff']
-      const stationSymbols = ['image://./images/station-blue.png', 'image://./images/station-yellow.png']
-      const lineSymbols = ['image://./images/symbol-white.png', 'image://./images/symbol-yellow.png']
+      const stationSymbols = ['image://https://zouyaoji.top/vue-cesium/images/station-blue.png', 'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png']
+      const lineSymbols = ['image://https://zouyaoji.top/vue-cesium/images/symbol-white.png', 'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png']
       datas.forEach(data => {
         data.symbol = stationSymbols[data.level - 1]
       })

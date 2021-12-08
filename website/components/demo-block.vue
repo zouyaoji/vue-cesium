@@ -245,7 +245,7 @@ ${this.codepen.style}
     goCodepen() {
       // since 2.6.2 use code rather than jsfiddle https://blog.codepen.io/documentation/api/prefill/
       const { script, html, style } = this.codepen
-      const resourcesTpl =
+      let resourcesTpl =
         '<scr' +
         'ipt src="//cdn.jsdelivr.net/npm/vue@next"></scr' +
         'ipt>' +
@@ -255,6 +255,11 @@ ${this.codepen.style}
         '\n<scr' +
         `ipt src="//cdn.jsdelivr.net/npm/vue-cesium@next"></scr` +
         'ipt>'
+      if (this.blockClass.includes('demo-vc-overlay-echarts')) {
+        resourcesTpl += '\n<scr' +
+        `ipt src="//cdn.jsdelivr.net/npm/echarts"></scr` +
+        'ipt>'
+      }
       let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
       let cssTpl = `@import url("//cdn.jsdelivr.net/npm/element-plus/dist/index.css");\n${(
         style || ''

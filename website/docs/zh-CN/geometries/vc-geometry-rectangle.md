@@ -45,7 +45,7 @@
       const attributesOutline = ref(null)
       const outline = ref(true)
       const vertexFormat = ref(null)
-      const rectangle = { west: 110.5, south: 29.5, east: 115.5, north: 34.5 }
+      const rectangle = { west: -180, south: -90, east: 180, north: 90 }
       // methods
       const onClicked = e => {
         console.log(e)
@@ -63,6 +63,7 @@
         geometryOutlineRef.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
+        window.viewer = viewer
         console.log('onViewerReady')
         const { ColorGeometryInstanceAttribute, PerInstanceColorAppearance, Cartesian3, MaterialAppearance } = Cesium
         attributesOutline.value = {

@@ -1,5 +1,22 @@
 ## Changelog
 
+### 3.0.2-beta.13
+
+_2021-12-08_
+
+#### Bug fixes
+
+- suppress Circular dependency errors.
+
+#### New feature
+
+- Support latest [volar](https://github.com/johnsoncodehk/volar)
+
+#### Refactors
+
+- Replace yarn with pnpm
+- Renamed to `vc-overlay-echart` to `vc-overlay-echarts`, it requires additional installation of echart
+
 ### 3.0.2-beta.12
 
 _2021-11-30_
@@ -122,7 +139,7 @@ _2021-10-12_
 #### New feature
 
 - The `vc-measurements` component added rectangle measurement.
-- Added `vc-overlay-echart` component.
+- Added `vc-overlay-echarts` component.
 
 #### Bug fixes
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2021-11-29 22:17:31
+ * @LastEditTime: 2021-12-06 22:08:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-dynamic.md
@@ -19,7 +19,7 @@ Basic usage of VcOverlayDynamic component.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer timeline animation @ready="onViewerReady">
+  <vc-viewer timeline animation @ready="onViewerReady" fullscreenButton>
     <vc-overlay-dynamic
       ref="dynamicOverlayRef"
       v-model:currentTime="currentTime"

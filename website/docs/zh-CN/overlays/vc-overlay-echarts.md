@@ -1,34 +1,35 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-12 10:31:24
- * @LastEditTime: 2021-10-12 15:21:09
+ * @LastEditTime: 2021-12-07 13:12:06
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-echart.md
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-echarts.md
 -->
 
-## VcOverlayEchart
+## VcOverlayEcharts
 
-按 Cesium 坐标系统加载 Echart 覆盖物。
+按 Cesium 坐标系统加载 Echarts 覆盖物。
 
-**注意：** 该组件依赖于 echart，默认没有加载，需要单独引入：
+**注意：** 该组件依赖于 echarts，项目上使用该组件前需要额外安装 echarts：
 
-```js
-import 'vue-cesium/default/index.css'
-import { VcOverlayEchart } from 'vue-cesium'
-app.use(VcOverlayEchart)
+```bash
+# npm 可以换成你喜欢的工具
+npm install echarts --save
 ```
+
+如果是 umd 方式引入请 [参考](https://zouyaoji.top/vue-cesium/umd.html)。
 
 ### 基础用法
 
 Echart 覆盖物组件的基础用法。
 
-:::demo 使用 `vc-overlay-echart` 标签在三维球上添加 Echart 迁徙图效果。
+:::demo 使用 `vc-overlay-echarts` 标签在三维球上添加 Echart 迁徙图效果。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer :camera="camera">
-    <vc-overlay-echart ref="echartOverlay" :options="options"> </vc-overlay-echart>
+    <vc-overlay-echarts ref="echartOverlay" :options="options"> </vc-overlay-echarts>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -161,8 +162,8 @@ Echart 覆盖物组件的基础用法。
       ]
 
       const lineColors = ['#fff', '#f6fb05', '#00fcff']
-      const stationSymbols = ['image://./images/station-blue.png', 'image://./images/station-yellow.png']
-      const lineSymbols = ['image://./images/symbol-white.png', 'image://./images/symbol-yellow.png']
+      const stationSymbols = ['image://https://zouyaoji.top/vue-cesium/images/station-blue.png', 'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png']
+      const lineSymbols = ['image://https://zouyaoji.top/vue-cesium/images/symbol-white.png', 'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png']
       datas.forEach(data => {
         data.symbol = stationSymbols[data.level - 1]
       })

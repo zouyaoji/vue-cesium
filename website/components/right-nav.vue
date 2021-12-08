@@ -46,7 +46,7 @@ export default defineComponent({
       scrollContainer = document.querySelector('.el-scrollbar.page-component__scroll>.el-scrollbar__wrap.el-scrollbar__wrap--hidden-default')
       const content = document.querySelector('.content.vue-cesium-doc.content')
       if (!content) return
-      const h3 = content.querySelectorAll('h1,h2,h3')
+      const h3 = content.querySelectorAll('h2,h3')
       anchors.value = Array.from(h3).map(item => {
         const text = item.childNodes[1] && item.childNodes[1].textContent.trim()
         map.set(text, item.offsetTop)

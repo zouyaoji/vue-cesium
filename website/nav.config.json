@@ -112,8 +112,8 @@
               "title": "VcOverlayDynamic 动态对象"
             },
             {
-              "path": "/overlays/vc-overlay-echart",
-              "title": "VcOverlayEchart"
+              "path": "/overlays/vc-overlay-echarts",
+              "title": "VcOverlayEcharts"
             }
           ]
         },
@@ -588,8 +588,8 @@
               "title": "VcOverlayDynamic"
             },
             {
-              "path": "/overlays/vc-overlay-echart",
-              "title": "VcOverlayEchart"
+              "path": "/overlays/vc-overlay-echarts",
+              "title": "VcOverlayEcharts"
             }
           ]
         },
