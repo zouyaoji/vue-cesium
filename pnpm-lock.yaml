@@ -77,7 +77,7 @@ importers:
       file-loader: ^6.2.0
       gulp: ^4.0.2
       gulp-debug: ^4.0.0
-      heatmap.js: ^2.0.5
+      heatmap.js: https://github.com/zouyaoji/heatmap.js.git
       highlight.js: ^11.2.0
       html-webpack-plugin: 4.3.0
       husky: 7.0.4
@@ -132,7 +132,7 @@ importers:
       '@vue-cesium/shared': link:packages/shared
       '@vue-cesium/theme-default': link:packages/theme-default
       '@vue-cesium/utils': link:packages/utils
-      heatmap.js: 2.0.5
+      heatmap.js: github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b
       lodash: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
@@ -17301,3 +17301,9 @@ packages:
     resolution: {integrity: sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw==}
     dependencies:
       tslib: 2.3.0
+
+  github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b:
+    resolution: {tarball: https://codeload.github.com/zouyaoji/heatmap.js/tar.gz/1452fc74fb3442f5f74b43394fddd06057fc387b}
+    name: heatmap.js
+    version: 2.0.5
+    dev: false
