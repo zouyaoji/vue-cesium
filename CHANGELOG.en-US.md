@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.3
+
+_2021-12-18_
+
+#### Bug fixes
+
+- `vc-overlay-heatmap` throws `Cannot assign to read only property'data' of object'#<ImageData>'` error.
+- The measurement & drawing component does not work properly on the SuperMap platform.
+
 ### 3.0.2-beta.13
 
 _2021-12-08_

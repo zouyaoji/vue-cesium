@@ -1,12 +1,21 @@
 ## 更新日志
 
+### 3.0.3
+
+_2021-12-18_
+
+#### Bug 修复
+
+- `vc-overlay-heatmap` 组件报 `Cannot assign to read only property 'data' of object '#<ImageData>'` 错误的问题。
+- 量算绘制组件在超图平台下拾取不正常的问题。
+
 ### 3.0.2-beta.13
 
 _2021-12-08_
 
 #### Bug 修复
 
-- 解决打包构建过程中提示循环引入的问题。
+- 打包构建过程中提示循环引入的问题。
 
 #### 新特性
 
@@ -15,7 +24,7 @@ _2021-12-08_
 #### 重构
 
 - 开发工具由 yarn 改为 pnpm。
-- `vc-overlay-echart` 组件重命名为 `vc-overlay-echarts`。打包将 echarts，视为外部引入（external），所以使用 `vc-overlay-echart` 要额外安装echarts。
+- `vc-overlay-echart` 组件重命名为 `vc-overlay-echarts`。打包将 echarts，视为外部引入（external），所以使用 `vc-overlay-echart` 要额外安装 echarts。
 
 ### 3.0.2-beta.12
 
