@@ -24,6 +24,7 @@
     "vue": "^3.2.23"
   },
   "dependencies": {
+    "@vue/shared": "^3.2.26",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

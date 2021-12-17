@@ -11,7 +11,7 @@
   },
   "description": "Vue 3.x components for CesiumJS.",
   "scripts": {
-    "cz": "npx git-cz",
+    "cz": "git-cz",
     "test": "jest --coverage && coveralls < coverage/lcov.info",
     "gen": "bash ./scripts/gc.sh",
     "gen:version": "sucrase-node scripts/gen-version.ts",
@@ -38,11 +38,6 @@
     "url": "git+https://github.com/zouyaoji/vue-cesium.git"
   },
   "homepage": "https://zouyaoji.top/vue-cesium",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx}": "eslint --fix"
   },
@@ -78,10 +73,11 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.4",
     "@babel/preset-typescript": "^7.15.0",
+    "@babel/runtime": "^7.16.5",
     "@changesets/cli": "^2.18.1",
-    "@commitlint/cli": "^13.1.0",
-    "@commitlint/config-conventional": "^13.1.0",
-    "@commitlint/cz-commitlint": "^13.1.0",
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@commitlint/cz-commitlint": "^15.0.0",
     "@pnpm/find-workspace-packages": "^3.1.28",
     "@pnpm/logger": "^4.0.0",
     "@pnpm/types": "7.6.0",
@@ -104,6 +100,7 @@
     "@vue/babel-plugin-jsx": "1.1.1",
     "@vue/compiler-sfc": "3.2.23",
     "@vue/component-compiler-utils": "^3.3.0",
+    "@vue/shared": "^3.2.26",
     "@vue/test-utils": "2.0.0-rc.16",
     "algoliasearch": "^4.10.5",
     "babel-jest": "^26.6.3",
@@ -113,6 +110,7 @@
     "babel-preset-vue": "^2.0.2",
     "chalk": "^4.1.2",
     "clipboard-copy": "^4.0.1",
+    "commitizen": "^4.2.4",
     "components-helper": "^1.0.4",
     "copy-webpack-plugin": "6.4.1",
     "coveralls": "^3.1.0",
@@ -176,5 +174,10 @@
     "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
