@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2021-12-06 22:24:08
+ * @LastEditTime: 2021-12-17 11:01:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -151,6 +151,12 @@ export default function (
 
   const getWorldPosition = (scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3) => {
     const { Cesium3DTileFeature, Cesium3DTileset, Cartesian3, defined, Model, Ray } = Cesium
+    if (Cesium.SuperMapVersion) {
+      // 超图版本下 PointPrimitive 在隐藏了的状态下仍然能被拾取到
+      // 后续逻辑失效
+      // 因此直接返回拾取坐标
+      return scene.pickPosition(windowPosition)
+    }
     let position
     const cartesianScratch: any = {}
     const rayScratch = new Ray()
@@ -159,9 +165,14 @@ export default function (
       const pickObj = scene.pick(windowPosition, 1, 1)
       visibilityState.restore(scene)
       if (defined(pickObj)) {
-        if (pickObj instanceof Cesium3DTileFeature || pickObj.primitive instanceof Cesium3DTileset || pickObj.primitive instanceof Model) {
+        if (
+          pickObj instanceof Cesium3DTileFeature ||
+          pickObj.primitive instanceof Cesium3DTileset ||
+          pickObj.primitive instanceof Model ||
+          pickObj.primitive instanceof Cesium.S3MTilesLayer
+        ) {
           position = scene.pickPosition(windowPosition, cartesianScratch)
-          if (Cesium.defined(position)) {
+          if (defined(position)) {
             return Cartesian3.clone(position, result)
           }
         }

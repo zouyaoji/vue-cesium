@@ -24,6 +24,8 @@ declare namespace Cesium {
   const Texture: any
   const Framebuffer: any
   const ShaderSource: any
+  const S3MTilesLayer: any
+  const SuperMapVersion: string
   interface Viewer {
     viewerWidgetResized: Event
     _selectionIndicator?: SelectionIndicator
