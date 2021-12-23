@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2021-11-25 22:51:24
+ * @LastEditTime: 2021-12-22 15:24:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -224,7 +224,15 @@ export default defineComponent({
               const options = newVal[i]
               const oldOptions = oldVal[i]
 
-              if (JSON.stringify(options) !== JSON.stringify(oldOptions)) {
+              // 忽略 model 的 nodeTransformations
+              // 即该属性不支持动态响应
+              function testReplace(key, value) {
+                if (key !== 'nodeTransformations') {
+                  return value
+                }
+              }
+
+              if (JSON.stringify(options, testReplace) !== JSON.stringify(oldOptions, testReplace)) {
                 modifies.push({
                   newOptions: options,
                   oldOptions: oldOptions
