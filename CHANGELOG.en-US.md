@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.4
+
+_2021-12-23_
+
+#### Bug fixes
+
+- Change the heatmapjs source.
+- The `vc-overlay-dynamic` component ignores the `nodeTransformations` property when listening to `dynamicOverlays` to avoid the circular reference problem reported by `JSON.stringify`.
+
 ### 3.0.3
 
 _2021-12-18_

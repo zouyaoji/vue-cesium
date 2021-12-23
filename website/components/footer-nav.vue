@@ -56,7 +56,6 @@ export default {
   },
 
   created() {
-    console.log(this)
     this.setNav()
     this.updateNav()
   },

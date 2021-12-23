@@ -1,5 +1,14 @@
 ## 更新日志
 
+### 3.0.4
+
+_2021-12-23_
+
+#### Bug 修复
+
+- 更改 heatmap.js 源，避免国内部分用户安装不上。
+- `vc-overlay-dynamic` 组件侦听 `dynamicOverlays` 时忽略 `nodeTransformations`，避免 `JSON.stringify` 报循环引用问题。
+
 ### 3.0.3
 
 _2021-12-18_
