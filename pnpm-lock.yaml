@@ -20,13 +20,13 @@ importers:
       '@pnpm/find-workspace-packages': ^3.1.28
       '@pnpm/logger': ^4.0.0
       '@pnpm/types': 7.6.0
+      '@rengr/heatmap.js': ^2.0.10
       '@rollup/plugin-commonjs': ^21.0.1
       '@rollup/plugin-node-resolve': ^13.0.6
       '@rollup/plugin-replace': 3.0.0
       '@sucrase/jest-plugin': 2.2.0
       '@types/gulp': ^4.0.9
       '@types/gulp-debug': ^2.0.32
-      '@types/heatmap.js': ^2.0.36
       '@types/jest': ^26.0.20
       '@types/klaw-sync': ^6.0.1
       '@types/lodash': ^4.14.168
@@ -79,7 +79,6 @@ importers:
       file-loader: ^6.2.0
       gulp: ^4.0.2
       gulp-debug: ^4.0.0
-      heatmap.js: https://github.com/zouyaoji/heatmap.js.git
       highlight.js: ^11.2.0
       html-webpack-plugin: 4.3.0
       husky: 7.0.4
@@ -127,6 +126,7 @@ importers:
       webpack-dev-server: 3.11.0
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
+      '@rengr/heatmap.js': 2.0.10
       '@vue-cesium/components': link:packages/components
       '@vue-cesium/composables': link:packages/composables
       '@vue-cesium/directives': link:packages/directives
@@ -134,7 +134,6 @@ importers:
       '@vue-cesium/shared': link:packages/shared
       '@vue-cesium/theme-default': link:packages/theme-default
       '@vue-cesium/utils': link:packages/utils
-      heatmap.js: github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b
       lodash: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
@@ -162,7 +161,6 @@ importers:
       '@sucrase/jest-plugin': 2.2.0
       '@types/gulp': 4.0.9
       '@types/gulp-debug': 2.0.32
-      '@types/heatmap.js': 2.0.37
       '@types/jest': 26.0.24
       '@types/klaw-sync': 6.0.1
       '@types/lodash': 4.14.177
@@ -253,16 +251,16 @@ importers:
   packages/components:
     specifiers:
       '@amap/amap-jsapi-loader': ^1.0.1
+      '@rengr/heatmap.js': ^2.0.10
       '@vue/test-utils': ^2.0.0-rc.14
       echarts: ^5.2.1
-      heatmap.js: https://github.com/zouyaoji/heatmap.js.git
       lodash: ^4.17.21
       mitt: ^3.0.0
       proj4: ^2.7.5
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
+      '@rengr/heatmap.js': 2.0.10
       echarts: 5.2.2
-      heatmap.js: github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b
       lodash: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
@@ -414,17 +412,17 @@ importers:
   packages/vue-cesium:
     specifiers:
       '@amap/amap-jsapi-loader': ^1.0.1
+      '@rengr/heatmap.js': ^2.0.10
       '@vue/shared': ^3.2.26
       echarts: ^5.2.1
-      heatmap.js: https://github.com/zouyaoji/heatmap.js.git
       lodash: ^4.17.21
       mitt: ^3.0.0
       proj4: ^2.7.5
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
+      '@rengr/heatmap.js': 2.0.10
       '@vue/shared': 3.2.26
       echarts: 5.2.2
-      heatmap.js: github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b
       lodash: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
@@ -2794,6 +2792,10 @@ packages:
     resolution: { integrity: sha512-zrsUxjLOKAzdewIDRWy9nsV1GQsKBCWaGwsZQlCgr6/q+vjyZhFgqedLfFBuI9anTPEUT4APq9Mu0SZBTzIcGQ== }
     dev: true
 
+  /@rengr/heatmap.js/2.0.10:
+    resolution: { integrity: sha512-IT8892vQiPPiWNm7kAESTruJ7wk6/F0zVj642/1ilW6s6VYxB3lpoqQCSdTFd/6E2HHT/FUiAHU3Qnfq0M/6wQ== }
+    dev: false
+
   /@rollup/plugin-commonjs/21.0.1_rollup@2.60.2:
     resolution: { integrity: sha512-EA+g22lbNJ8p5kuZJUYyhhDK7WgJckW5g4pNN7n4mAFUM96VuwUnNT3xr2Db2iCZPI1pJPbGyfT5mS9T1dHfMg== }
     engines: { node: '>= 8.0.0' }
@@ -3020,10 +3022,6 @@ packages:
       '@types/serve-static': 1.13.10
     dev: true
 
-  /@types/geojson/7946.0.8:
-    resolution: { integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA== }
-    dev: true
-
   /@types/glob-stream/6.1.1:
     resolution: { integrity: sha512-AGOUTsTdbPkRS0qDeyeS+6KypmfVpbT5j23SN8UPG63qjKXNKjXn6V9wZUr8Fin0m9l8oGYaPK8b2WUMF8xI1A== }
     dependencies:
@@ -3092,12 +3090,6 @@ packages:
       chokidar: 3.5.2
     dev: true
 
-  /@types/heatmap.js/2.0.37:
-    resolution: { integrity: sha512-Zd1m6WaRSPnXcR1fETGnIvyRSE2rcQK21S0zIU/LWjwsrNyKBA3xdckrQhQpIdG+UTeu7WODv237s30Ky7IVXg== }
-    dependencies:
-      '@types/leaflet': 0.7.35
-    dev: true
-
   /@types/html-minifier-terser/5.1.2:
     resolution: { integrity: sha512-h4lTMgMJctJybDp8CQrxTUiiYmedihHWkjnF/8Pxseu2S6Nlfcy8kwboQ8yejh456rP2yWoEVm1sS/FVsfM48w== }
     dev: true
@@ -3150,12 +3142,6 @@ packages:
     resolution: { integrity: sha512-hqWJe0mMSxC5fiQjCJzziko2Xxh2HjDAPZNk7Zwv+Uo56XlViXR6p1RzjUCQvFvLd+IXEGeyVHTaAibrbyU1Rw== }
     dependencies:
       '@types/node': 16.11.11
-    dev: true
-
-  /@types/leaflet/0.7.35:
-    resolution: { integrity: sha512-BK+pa9a9dYC1qJyYQulqkRI9N+ZnV4ycAmNSOUmom7C6xaAdmrhOoiCiDMhSQklyjPpasy3KWRTkTRTJuDbBSw== }
-    dependencies:
-      '@types/geojson': 7946.0.8
     dev: true
 
   /@types/lodash/4.14.177:
@@ -17269,9 +17255,3 @@ packages:
     resolution: { integrity: sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw== }
     dependencies:
       tslib: 2.3.0
-
-  github.com/zouyaoji/heatmap.js/1452fc74fb3442f5f74b43394fddd06057fc387b:
-    resolution: { tarball: https://codeload.github.com/zouyaoji/heatmap.js/tar.gz/1452fc74fb3442f5f74b43394fddd06057fc387b }
-    name: heatmap.js
-    version: 2.0.5
-    dev: false

@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
+    "@rengr/heatmap.js": "^2.0.10",
     "echarts": "^5.2.1",
-    "heatmap.js": "https://github.com/zouyaoji/heatmap.js.git",
     "lodash": "^4.17.21",
     "mitt": "^3.0.0",
     "proj4": "^2.7.5"

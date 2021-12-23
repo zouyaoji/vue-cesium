@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
+    "@rengr/heatmap.js": "^2.0.10",
     "@vue-cesium/components": "workspace:*",
     "@vue-cesium/composables": "workspace:*",
     "@vue-cesium/directives": "workspace:*",
@@ -58,7 +59,6 @@
     "@vue-cesium/shared": "workspace:*",
     "@vue-cesium/theme-default": "workspace:*",
     "@vue-cesium/utils": "workspace:*",
-    "heatmap.js": "https://github.com/zouyaoji/heatmap.js.git",
     "lodash": "^4.17.21",
     "mitt": "^3.0.0",
     "proj4": "^2.7.5",
@@ -87,7 +87,6 @@
     "@sucrase/jest-plugin": "2.2.0",
     "@types/gulp": "^4.0.9",
     "@types/gulp-debug": "^2.0.32",
-    "@types/heatmap.js": "^2.0.36",
     "@types/jest": "^26.0.20",
     "@types/klaw-sync": "^6.0.1",
     "@types/lodash": "^4.14.168",

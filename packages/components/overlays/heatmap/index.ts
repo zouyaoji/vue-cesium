@@ -10,7 +10,7 @@ import {
 import { useCommon } from '@vue-cesium/composables'
 import { show, rectangle } from '@vue-cesium/utils/cesium-props'
 import { makeColor, makeRectangle } from '@vue-cesium/utils/cesium-helpers'
-import h337 from 'heatmap.js'
+import h337 from '@rengr/heatmap.js'
 import VcEntity from '@vue-cesium/components/entity'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import { VcPrimitiveGround } from '@vue-cesium/components/primitives'
