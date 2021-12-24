@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-02 10:54:09
+ * @LastEditTime: 2021-12-24 11:37:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\private\vm.ts
@@ -9,6 +9,7 @@
 import { Ref } from 'vue'
 import { AnyFunction, VcComponentInternalInstance } from '../types'
 import { camelCase, capitalize } from '../util'
+import findIndex from 'lodash/findIndex'
 
 // used directly by docs too
 export function getParentVm(vm) {
@@ -57,7 +58,11 @@ export function getInstanceListener(vcInstance: VcComponentInternalInstance, lis
   if (props === null) {
     return undefined
   }
-  const listener = props[`on${capitalize(listenerName)}`] || props[`on${capitalize(camelCase(listenerName))}`]
+  const propKeys = Object.keys(props)
+  const index = findIndex(propKeys, o => {
+    return o.includes(`on${capitalize(listenerName)}`) || o.includes(`on${capitalize(camelCase(listenerName))}`)
+  })
+  const listener = props[propKeys[index]]
   return listener as AnyFunction<any>
 }
 
