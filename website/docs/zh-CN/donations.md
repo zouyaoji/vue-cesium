@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2021-09-03 17:12:56
+ * @LastEditTime: 2021-12-28 21:40:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -14,6 +14,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
 -->
+
 ## 捐赠
 
 ### 土豪赞赏
@@ -22,8 +23,10 @@
 - 赞赏请备注，有捐赠过的同学，如果你希望将你的信息展示出来，请联系我。
 - 微信 / 支付宝
 
-  ![WeChat](https://zouyaoji.top/vue-cesium/images/wechat.png)
-  ![AliPay](https://zouyaoji.top/vue-cesium/images/alipay.png)
+  <div style="display: flex">
+    <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
+    <img alt="alipay" title="alipay" src="https://zouyaoji.top/vue-cesium/images/alipay.png">
+  </div>
 
 ### 捐赠者
 
@@ -38,7 +41,7 @@
 
 ### 贡献者
 
-- 特别感谢每一位贡献及帮助过vue-cesium开发的同学。
+- 特别感谢每一位贡献及帮助过 vue-cesium 开发的同学。
 
 - [`【z4none】`](https://github.com/z4none) 提出 vc-viewer 组件相机问题 [#27](https://github.com/zouyaoji/vue-cesium/issues/27)。
 - [`【alicjamusial】`](https://github.com/alicjamusial) 提出单页面初始化多个 vc-viewer 组件崩溃问题 [#58](https://github.com/zouyaoji/vue-cesium/issues/58)。

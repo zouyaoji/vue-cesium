@@ -1,13 +1,14 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2021-09-03 17:20:31
+ * @LastEditTime: 2021-12-29 11:36:05
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
 -->
 
 ## Donation
+
 ### Foreword
 
 - We accept donations through these channels:
@@ -17,8 +18,10 @@
 
   - WeChat / AliPay
 
-    ![WeChat](https://zouyaoji.top/vue-cesium/images/wechat.png)
-    ![AliPay](https://zouyaoji.top/vue-cesium/images/alipay.png)
+  <div style="display: flex">
+    <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
+    <img alt="alipay" title="alipay" src="https://zouyaoji.top/vue-cesium/images/alipay.png">
+  </div>
 
 ### Sponsors
 

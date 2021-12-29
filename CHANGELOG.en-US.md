@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.0.5
+
+_2021-12-29_
+
+#### Bug fixes
+
+- Events cannot be triggered after adding modifiers[#140](https://github.com/zouyaoji/vue-cesium/issues/140).
+- Building error of heatmapjs in the TS project.
+
 ### 3.0.4
 
 _2021-12-23_
