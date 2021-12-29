@@ -24,7 +24,7 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "vue": "^3.2.23"
+    "vue": "^3.2.26"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.9",

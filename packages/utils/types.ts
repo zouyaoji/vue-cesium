@@ -2,7 +2,7 @@ import { Emitter } from 'mitt'
 import type { Ref, Plugin, CSSProperties } from 'vue'
 import { ComponentInternalInstance, ComponentPublicInstance } from 'vue'
 import { VcDrawingActionInstance } from './drawing-types'
-import h337 from '@rengr/heatmap.js'
+import h337 from '@zouyaoji/heatmap.js'
 
 export type CommonEmitType = 'beforeLoad' | 'ready' | 'destroyed'
 
