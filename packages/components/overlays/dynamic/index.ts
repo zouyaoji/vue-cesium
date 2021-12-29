@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2021-12-22 15:24:10
+ * @LastEditTime: 2021-12-29 13:27:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -370,6 +370,8 @@ export default defineComponent({
         viewer.clock.shouldAnimate = props.shouldAnimate
 
         viewer.clock.onTick.addEventListener(onClockTick)
+        const listener = getInstanceListener(instance, 'onStop')
+        listener && viewer.clock.onStop.addEventListener(listener)
         return true
       })
     }
@@ -388,6 +390,8 @@ export default defineComponent({
       viewer.clock.shouldAnimate = restoreClockOpts.value.shouldAnimate
       overlays.value.length = 0
       viewer.clock.onTick.removeEventListener(onClockTick)
+      const listener = getInstanceListener(instance, 'onStop')
+      listener && viewer.clock.onStop.removeEventListener(listener)
       return true
     }
 

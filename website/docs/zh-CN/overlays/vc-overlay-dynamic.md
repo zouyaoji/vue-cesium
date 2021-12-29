@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2021-12-06 22:12:00
+ * @LastEditTime: 2021-12-29 13:34:01
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-dynamic.md
@@ -295,6 +295,7 @@
       })
 
       return {
+        onStop,
         dynamicOverlays,
         dynamicOverlayRef,
         currentTime,
@@ -342,11 +343,20 @@
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名                | 参数                               | 描述                       |
+| --------------------- | ---------------------------------- | -------------------------- |
+| beforeLoad            | Vue Instance                       | 对象加载前触发。           |
+| ready                 | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。       |
+| destroyed             | Vue Instance                       | 对象销毁时触发。           |
+| onStop                | Cesium.JulianDate                  | 时钟到达结束时间时触发。   |
+| @update:currentTime   | Cesium.JulianDate                  | currentTime 改变时触发。   |
+| @update:shouldAnimate |                                    | shouldAnimate 改变时触发。 |
+| @update:canAnimate    |                                    | canAnimate 改变时触发。    |
+| @update:clockRange    |                                    | clockRange 改变时触发。    |
+| @update:clockStep     |                                    | clockStep 改变时触发。     |
+| @update:multiplier    |                                    | multiplier 改变时触发。    |
+| @update:startTime     |                                    | startTime 改变时触发。     |
+| @update:stopTime      |                                    | stopTime 改变时触发。      |
 
 ### 参考
 
