@@ -63,6 +63,7 @@ HTML 覆盖物组件的基础用法。
 
 | 属性名      | 类型          | 默认值 | 描述                                            |
 | ----------- | ------------- | ------ | ----------------------------------------------- |
+| show        | Boolean       | `true` | `optional` 指定 HTML 是否显示。                 |
 | position    | Object\|Array |        | `optional` 指定 HTML 元素的地理位置。           |
 | pixelOffset | Object\|Array |        | `optional` 指定 HTML 的像素偏移。               |
 | autoHidden  | Boolean       | `true` | `optional` 指定 HTML 在地球背面时是否自动隐藏。 |

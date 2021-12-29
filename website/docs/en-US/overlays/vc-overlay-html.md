@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2021-12-29 13:24:10
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-html.md
+-->
+
 ## VcOverlayHtml
 
 Load HTML element overlays by geographic location.
@@ -60,6 +69,7 @@ Basic usage of VcOverlayHtml component.
 
 | Name        | Type          | Default | Description                                                                                    |
 | ----------- | ------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| show        | Boolean       | `true`  | `optional` Specify whether to display the HTML overlay.                                        |
 | position    | Object\|Array |         | `optional` Specify the geographic location of the HTML element.                                |
 | pixelOffset | Object\|Array |         | `optional` Specify the pixel offset of the HTML.                                               |
 | autoHidden  | Boolean       | `true`  | `optional` Specifies whether HTML is automatically hidden when it is on the back of the earth. |

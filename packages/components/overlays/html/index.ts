@@ -16,7 +16,7 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { position, pixelOffset } from '@vue-cesium/utils/cesium-props'
+import { position, pixelOffset, show } from '@vue-cesium/utils/cesium-props'
 import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import usePortal from '@vue-cesium/composables/private/use-portal'
 
@@ -25,6 +25,7 @@ export default defineComponent({
   props: {
     ...position,
     ...pixelOffset,
+    ...show,
     autoHidden: {
       type: Boolean,
       default: true
@@ -103,7 +104,7 @@ export default defineComponent({
             if (Cesium.defined(cartographicPosition)) {
               let cameraHeight = cartographicPosition.height
               cameraHeight += 1 * viewer.scene.globe.ellipsoid.maximumRadius
-              if (Cesium.Cartesian3.distance(cameraPosition, position.value) > cameraHeight) {
+              if (Cesium.Cartesian3.distance(cameraPosition, position.value) > cameraHeight || !props.show) {
                 rootStyle.display = 'none'
               } else {
                 rootStyle.display = 'block'
