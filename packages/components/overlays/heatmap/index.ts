@@ -52,7 +52,6 @@ export default defineComponent({
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
-      1
       return
     }
     const rootRef = ref<HTMLElement | null>(null)

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2021-12-29 13:34:01
+ * @LastEditTime: 2021-12-31 14:09:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-dynamic.md
@@ -295,7 +295,6 @@
       })
 
       return {
-        onStop,
         dynamicOverlays,
         dynamicOverlayRef,
         currentTime,

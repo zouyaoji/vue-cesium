@@ -80,7 +80,7 @@
           ]
         },
         {
-          "groupName": "工具",
+          "groupName": "分析",
           "list": [
             {
               "path": "/tools/vc-drawings",
@@ -89,6 +89,10 @@
             {
               "path": "/tools/vc-measurements",
               "title": "VcMeasurements 量算"
+            },
+            {
+              "path": "/analyses/vc-analysis-flood",
+              "title": "VcAnalysisFlood 淹没分析"
             }
           ]
         },
@@ -556,7 +560,7 @@
           ]
         },
         {
-          "groupName": "Tools",
+          "groupName": "Analyses",
           "list": [
             {
               "path": "/tools/vc-drawings",
@@ -565,6 +569,10 @@
             {
               "path": "/tools/vc-measurements",
               "title": "VcMeasurements"
+            },
+            {
+              "path": "/analyses/vc-analysis-flood",
+              "title": "VcAnalysisFlood"
             }
           ]
         },
