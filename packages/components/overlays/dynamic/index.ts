@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2021-12-29 13:27:55
+ * @LastEditTime: 2021-12-31 09:24:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -13,9 +13,7 @@ import { show } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, isPlainObject, kebabCase } from '@vue-cesium/utils/util'
 import DynamicOverlay from '@vue-cesium/shared/src/DynamicOverlay'
 import { makeJulianDate } from '@vue-cesium/utils/cesium-helpers'
-import cloneDeep from 'lodash/cloneDeep'
-import differenceBy from 'lodash/differenceBy'
-import remove from 'lodash/remove'
+import { cloneDeep, differenceBy, remove } from 'lodash-es'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
 export default defineComponent({

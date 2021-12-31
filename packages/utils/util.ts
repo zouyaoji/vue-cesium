@@ -1,8 +1,6 @@
 import { getCurrentInstance } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
-import isUndefined from 'lodash/isUndefined'
-import isNull from 'lodash/isNull'
-import camelCase from 'lodash/camelCase'
+import { isUndefined, isNull, camelCase } from 'lodash-es'
 import { AnyFunction, AnyObject } from './types'
 
 export function useGlobalConfig() {

@@ -21,7 +21,7 @@
     "url": "git://github.com:zouyaoji/vue-cesium.git"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
     "vue": "^3.2.26"

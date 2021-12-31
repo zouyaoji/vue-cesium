@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-12-24 11:37:15
+ * @LastEditTime: 2021-12-31 09:28:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\private\vm.ts
@@ -9,7 +9,7 @@
 import { Ref } from 'vue'
 import { AnyFunction, VcComponentInternalInstance } from '../types'
 import { camelCase, capitalize } from '../util'
-import findIndex from 'lodash/findIndex'
+import { findIndex } from 'lodash-es'
 
 // used directly by docs too
 export function getParentVm(vm) {

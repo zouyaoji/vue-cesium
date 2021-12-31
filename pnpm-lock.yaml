@@ -28,7 +28,7 @@ importers:
       '@types/gulp-debug': ^2.0.32
       '@types/jest': ^26.0.20
       '@types/klaw-sync': ^6.0.1
-      '@types/lodash': ^4.14.168
+      '@types/lodash-es': ^4.17.5
       '@types/markdown-it': ^12.2.3
       '@types/merge-descriptors': ^1.0.1
       '@types/node': ^16.11.11
@@ -52,7 +52,6 @@ importers:
       algoliasearch: ^4.10.5
       babel-jest: ^26.6.3
       babel-loader: ^8.2.3
-      babel-plugin-lodash: ^3.3.4
       babel-plugin-module-resolver: ^4.1.0
       babel-preset-vue: ^2.0.2
       chalk: ^4.1.2
@@ -86,7 +85,7 @@ importers:
       jest: ^26.6.3
       jest-electron: ^0.1.12
       lint-staged: 12.1.2
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       markdown-it: ^12.2.0
       markdown-it-anchor: ^8.4.1
       markdown-it-chain: ^1.3.0
@@ -135,7 +134,7 @@ importers:
       '@vue-cesium/theme-default': link:packages/theme-default
       '@vue-cesium/utils': link:packages/utils
       '@zouyaoji/heatmap.js': 2.0.8
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
       vue-cesium: link:packages/vue-cesium
@@ -164,7 +163,7 @@ importers:
       '@types/gulp-debug': 2.0.32
       '@types/jest': 26.0.24
       '@types/klaw-sync': 6.0.1
-      '@types/lodash': 4.14.177
+      '@types/lodash-es': 4.17.5
       '@types/markdown-it': 12.2.3
       '@types/merge-descriptors': 1.0.1
       '@types/node': 16.11.11
@@ -180,7 +179,6 @@ importers:
       algoliasearch: 4.11.0
       babel-jest: 26.6.3_@babel+core@7.16.0
       babel-loader: 8.2.3_bcd6ea64369259a9a094ff5ba7188bb6
-      babel-plugin-lodash: 3.3.4
       babel-plugin-module-resolver: 4.1.0
       babel-preset-vue: 2.0.2
       chalk: 4.1.2
@@ -256,14 +254,14 @@ importers:
       '@vue/test-utils': ^2.0.0-rc.14
       '@zouyaoji/heatmap.js': ^2.0.8
       echarts: ^5.2.1
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       mitt: ^3.0.0
       proj4: ^2.7.5
     dependencies:
       '@amap/amap-jsapi-loader': 1.0.1
       '@zouyaoji/heatmap.js': 2.0.8
       echarts: 5.2.2
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
     devDependencies:
@@ -276,12 +274,12 @@ importers:
       chalk: ^4.1.2
       gulp: ^4.0.2
       gulp-typescript: ^6.0.0-alpha.1
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       sass: ^1.39.2
       ts-node: ^10.1.0
       typescript: ^4.5.2
     dependencies:
-      lodash: 4.17.21
+      lodash-es: 4.17.21
     devDependencies:
       '@types/gulp': 4.0.9
       '@vue/test-utils': 2.0.0-rc.17_vue@3.2.26
@@ -395,13 +393,13 @@ importers:
       chalk: ^4.1.2
       gulp: ^4.0.2
       gulp-typescript: ^6.0.0-alpha.1
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       sass: ^1.39.2
       ts-node: ^10.1.0
       typescript: ^4.5.2
     dependencies:
       '@vue/shared': 3.2.26
-      lodash: 4.17.21
+      lodash-es: 4.17.21
     devDependencies:
       '@vue/test-utils': 2.0.0-rc.17_vue@3.2.26
       chalk: 4.1.2
@@ -417,7 +415,7 @@ importers:
       '@vue/shared': ^3.2.26
       '@zouyaoji/heatmap.js': ^2.0.8
       echarts: ^5.2.1
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       mitt: ^3.0.0
       proj4: ^2.7.5
     dependencies:
@@ -425,7 +423,7 @@ importers:
       '@vue/shared': 3.2.26
       '@zouyaoji/heatmap.js': 2.0.8
       echarts: 5.2.2
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       mitt: 3.0.0
       proj4: 2.7.5
 
@@ -3147,8 +3145,14 @@ packages:
     resolution: { integrity: sha512-HZQYqbiFVWufzCwexrvh694SOim8z2d+xJl5UNamcvQFejLY/2YUtzXHYi3cHdI7PMlS8ejH2slRAOJQ32aNbA== }
     dev: true
 
-  /@types/lodash/4.14.177:
-    resolution: { integrity: sha512-0fDwydE2clKe9MNfvXHBHF9WEahRuj+msTuQqOmAApNORFvhMYZKNGGJdCzuhheVjMps/ti0Ak/iJPACMaevvw== }
+  /@types/lodash-es/4.17.5:
+    resolution: { integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A== }
+    dependencies:
+      '@types/lodash': 4.14.178
+    dev: true
+
+  /@types/lodash/4.14.178:
+    resolution: { integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw== }
     dev: true
 
   /@types/markdown-it/12.2.3:
@@ -4672,16 +4676,6 @@ packages:
       babel-plugin-syntax-jsx: 6.18.0
       html-tags: 2.0.0
       svg-tags: 1.0.0
-    dev: true
-
-  /babel-plugin-lodash/3.3.4:
-    resolution: { integrity: sha512-yDZLjK7TCkWl1gpBeBGmuaDIFhZKmkoL+Cu2MUUjv5VxUZx/z7tBGBCBcQs5RI1Bkz5LLmNdjx7paOyQtMovyg== }
-    dependencies:
-      '@babel/helper-module-imports': 7.16.0
-      '@babel/types': 7.16.0
-      glob: 7.2.0
-      lodash: 4.17.21
-      require-package-name: 2.0.1
     dev: true
 
   /babel-plugin-module-resolver/4.1.0:
@@ -11209,6 +11203,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: { integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw== }
+    dev: false
+
   /lodash.debounce/4.0.8:
     resolution: { integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168= }
     dev: true
@@ -11243,6 +11241,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: { integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg== }
+    dev: true
 
   /log-driver/1.2.7:
     resolution: { integrity: sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg== }
@@ -14062,10 +14061,6 @@ packages:
 
   /require-main-filename/2.0.0:
     resolution: { integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg== }
-    dev: true
-
-  /require-package-name/2.0.1:
-    resolution: { integrity: sha1-wR6XJ2tluOKSP3Xav1+y7ww4Qbk= }
     dev: true
 
   /requires-port/1.0.0:

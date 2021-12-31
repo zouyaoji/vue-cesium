@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-11-25 22:01:04
+ * @LastEditTime: 2021-12-31 09:26:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
@@ -12,8 +12,7 @@ import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import cloneDeep from 'lodash/cloneDeep'
-import differenceBy from 'lodash/differenceBy'
+import { cloneDeep, differenceBy } from 'lodash-es'
 import { PolygonPrimitive } from '@vue-cesium/shared'
 
 export default defineComponent({
