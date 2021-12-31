@@ -1,11 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2021-11-06 15:43:34
+ * @LastEditTime: 2021-12-31 11:48:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\index.ts
  */
+export * from './analyses'
 export * from './config-provider'
 export * from './controls'
 export * from './datasources'

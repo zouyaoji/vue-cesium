@@ -165,6 +165,9 @@ import {
 // config
 import VcConfigProvider from '@vue-cesium/components/config-provider'
 
+// analyses
+import { VcAnalysisFlood } from '@vue-cesium/components/analyses'
+
 export default [
   VcViewer,
 
@@ -316,5 +319,6 @@ export default [
   VcFab,
   VcFabAction,
 
-  VcConfigProvider
+  VcConfigProvider,
+  VcAnalysisFlood
 ]
