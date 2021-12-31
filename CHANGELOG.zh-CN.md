@@ -1,5 +1,17 @@
 ## 更新日志
 
+### 3.0.6
+
+_2021-12-31_
+
+#### Bug 修复
+
+- webpack 5 的项目 loadsh 按需导入问题修复，[#144](https://github.com/zouyaoji/vue-cesium/issues/144)。
+
+#### 新特性
+
+- 添加 [`vc-analysis-flood`](https://zouyaoji.top/vue-cesium/#/zh-CN/component/analyses/vc-analysis-flood) 组件。
+
 ### 3.0.5
 
 _2021-12-29_
@@ -17,6 +29,10 @@ _2021-12-23_
 
 - 更改 heatmap.js 源，避免国内部分用户安装不上。
 - `vc-overlay-dynamic` 组件侦听 `dynamicOverlays` 时忽略 `nodeTransformations`，避免 `JSON.stringify` 报循环引用问题。
+
+#### 新特性
+
+- 支持最新的 [volar](https://github.com/johnsoncodehk/volar)
 
 ### 3.0.3
 

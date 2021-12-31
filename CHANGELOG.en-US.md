@@ -1,5 +1,17 @@
 ## Changelog
 
+### 3.0.6
+
+_2021-12-31_
+
+#### Bug fixes
+
+- webpack 5 project loadsh imports bugs on demand, [#144](https://github.com/zouyaoji/vue-cesium/issues/144).
+
+#### New feature
+
+- Added [`vc-analysis-flood`](https://zouyaoji.top/vue-cesium/#/en-US/component/analyses/vc-analysis-flood).
+
 ### 3.0.5
 
 _2021-12-29_

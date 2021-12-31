@@ -83,11 +83,11 @@
           "groupName": "分析",
           "list": [
             {
-              "path": "/tools/vc-drawings",
+              "path": "/analyses/vc-drawings",
               "title": "VcDrawings 绘制"
             },
             {
-              "path": "/tools/vc-measurements",
+              "path": "/analyses/vc-measurements",
               "title": "VcMeasurements 量算"
             },
             {
@@ -563,11 +563,11 @@
           "groupName": "Analyses",
           "list": [
             {
-              "path": "/tools/vc-drawings",
+              "path": "/analyses/vc-drawings",
               "title": "VcDrawings"
             },
             {
-              "path": "/tools/vc-measurements",
+              "path": "/analyses/vc-measurements",
               "title": "VcMeasurements"
             },
             {

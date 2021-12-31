@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2021-12-07 11:31:11
+ * @LastEditTime: 2021-12-31 21:38:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
@@ -157,6 +157,7 @@ declare module 'vue' {
     VcFabAction: typeof import('vue-cesium')['VcFabAction']
 
     VcConfigProvider: typeof import('vue-cesium')['VcConfigProvider']
+    VcAnalysisFlood: typeof import('vue-cesium')['VcAnalysisFlood']
   }
 }
 
