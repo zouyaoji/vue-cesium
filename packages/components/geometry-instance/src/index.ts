@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-27 10:39:08
+ * @LastEditTime: 2022-01-07 17:53:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
@@ -53,6 +53,12 @@ export default defineComponent({
 
       const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
       parentVM.__updateGeometryInstances?.(geometryInstance, vcIndex.value)
+      return true
+    }
+    instance.unmount = async () => {
+      const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
+      const parentVM = getVcParentInstance(instance).proxy as VcComponentPublicInstance
+      parentVM.__removeGeometryInstances?.(geometryInstance)
       return true
     }
 

@@ -72,6 +72,8 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   }
 
   const updateGeometryInstances = (instance, index) => {
+    // Todo 同时改 geometry 的多个属性导致 bug
+    // 如可视域分析创建 VcGeometryEllipsoidOutline 修改 radii 和 innerRadii 有问题
     instances.value.push(instance)
     if (index === childCount.value - 1) {
       const listener = getInstanceListener(vcInstance, 'update:geometryInstances')
@@ -82,6 +84,12 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
         ;(primitive as any).geometryInstances = index === 0 ? instance : instances.value
       }
     }
+    return true
+  }
+
+  const removeGeometryInstances = instance => {
+    const index = instances.value.indexOf(instance)
+    instances.value.splice(index, 1)
     return true
   }
 
@@ -100,6 +108,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   Object.assign(vcInstance.proxy, {
     // private but needed by VcInstanceGeometry
     __updateGeometryInstances: updateGeometryInstances,
+    __removeGeometryInstances: removeGeometryInstances,
     __childCount: childCount
   })
 
