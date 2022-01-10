@@ -203,7 +203,7 @@ export default defineComponent({
       }
     }
 
-    return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'VcMeasurements')?.renderContent
+    return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'measurement')?.renderContent
   }
 })
 

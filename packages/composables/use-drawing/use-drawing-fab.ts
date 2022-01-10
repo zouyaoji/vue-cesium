@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-01-06 09:48:38
+ * @LastEditTime: 2022-01-06 11:42:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -370,7 +370,7 @@ export default function (
                 {
                   ...clearActionOpts.tooltip
                 },
-                () => h('strong', null, clearActionOpts.tooltip.tip || t('vc.drawing.clear.tip'))
+                () => h('strong', null, clearActionOpts.tooltip.tip || t(`vc.${cmpName}.clear.tip`))
               )
           )
         )

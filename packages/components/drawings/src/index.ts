@@ -132,7 +132,7 @@ export default defineComponent({
       }
     }
 
-    return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'VcDrawings')?.renderContent
+    return useDrawingFab(props, ctx, instance, drawingActionInstances, mainFabOpts, clearActionOpts, 'drawing')?.renderContent
   }
 })
 
