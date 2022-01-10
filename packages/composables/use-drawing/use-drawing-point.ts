@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2021-12-06 22:25:11
+ * @LastEditTime: 2022-01-06 11:26:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -11,14 +11,13 @@ import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionBillboard, VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
-import { MeasureUnits } from '@vue-cesium/shared'
+import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { PointDrawing } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStopHandle, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
-import { DrawStatus } from './use-drawing-fab'
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
 

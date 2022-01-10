@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2021-12-17 11:01:45
+ * @LastEditTime: 2022-01-06 09:48:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -21,12 +21,6 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { useLocaleInject } from '../use-locale'
 import { clearActionDefault } from './defaultOpts'
 import { mainFabDefault } from '@vue-cesium/components/drawings/src/defaultProps'
-
-export const DrawStatus = {
-  BeforeDraw: 0,
-  Drawing: 1,
-  AfterDraw: 2
-}
 
 export default function (
   props,

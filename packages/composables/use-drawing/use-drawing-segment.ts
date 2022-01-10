@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2021-12-07 11:40:38
+ * @LastEditTime: 2022-01-06 11:26:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -13,7 +13,7 @@ import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/p
 import { VcInstanceGeometry } from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/components/geometries'
 import { useLocaleInject } from '../use-locale'
-import { MeasureUnits } from '@vue-cesium/shared'
+import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import {
   calculateAreaByPostions,
   getGeodesicDistance,
@@ -28,7 +28,6 @@ import { isUndefined } from '@vue-cesium/utils/util'
 import { computed, getCurrentInstance, h, nextTick, ref, VNode } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
-import { DrawStatus } from './use-drawing-fab'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
