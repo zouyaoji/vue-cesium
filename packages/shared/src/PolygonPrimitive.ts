@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 14:20:47
- * @LastEditTime: 2021-11-30 22:06:54
+ * @LastEditTime: 2022-01-07 11:40:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\PolygonPrimitive.ts
@@ -152,7 +152,7 @@ class PolygonPrimitive {
   }
 
   async _createPolygon() {
-    const { Primitive, GeometryInstance, CoplanarPolygonGeometry, Cartesian3, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+    const { Primitive, GeometryInstance, CoplanarPolygonGeometry, Cartesian3 } = Cesium
     return new Primitive({
       geometryInstances: new GeometryInstance({
         geometry: this._polygonHierarchy
@@ -176,7 +176,7 @@ class PolygonPrimitive {
   }
 
   async _createGroundPolygon() {
-    const { GroundPrimitive, GeometryInstance, PolygonGeometry, Cartesian3, PerInstanceColorAppearance, ColorGeometryInstanceAttribute } = Cesium
+    const { GroundPrimitive, GeometryInstance, PolygonGeometry, Cartesian3 } = Cesium
     await Cesium.GroundPrimitive.initializeTerrainHeights()
     return new GroundPrimitive({
       geometryInstances: new GeometryInstance({
