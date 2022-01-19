@@ -11,20 +11,6 @@
     "type": "git",
     "url": "git://github.com:zouyaoji/vue-cesium.git"
   },
-  "dependencies": {
-    "@amap/amap-jsapi-loader": "^1.0.1",
-    "@zouyaoji/heatmap.js": "^2.0.8",
-    "echarts": "^5.2.1",
-    "lodash-es": "^4.17.21",
-    "mitt": "^3.0.0",
-    "proj4": "^2.7.5"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.26"
-  },
-  "devDependencies": {
-    "@vue/test-utils": "^2.0.0-rc.14"
-  },
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-07 10:14:56
+ * @LastEditTime: 2022-01-18 11:32:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\utils\rollup.ts
@@ -26,4 +26,8 @@ export const generateExternal = async (options: { full: boolean }) => {
 
 export function writeBundles(bundle: RollupBuild, options: OutputOptions[]) {
   return Promise.all(options.map(option => bundle.write(option)))
+}
+
+export function formatBundleFilename(name: string, minify: boolean, ext: string) {
+  return `${name}${minify ? '.min' : ''}.${ext}`
 }

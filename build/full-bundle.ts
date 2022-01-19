@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-07 10:15:05
+ * @LastEditTime: 2022-01-18 10:46:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\full-bundle.ts
@@ -15,18 +15,24 @@ import esbuild from 'rollup-plugin-esbuild'
 import replace from '@rollup/plugin-replace'
 import filesize from 'rollup-plugin-filesize'
 import { parallel } from 'gulp'
+import glob from 'fast-glob'
+import { camelCase, capitalize } from 'lodash'
 import { version } from '../packages/vue-cesium/version'
+import { reporter } from './plugins/size-reporter'
 import { VueCesiumAlias } from './plugins/vue-cesium-alias'
-import { vcRoot, vcOutput } from './utils/paths'
-import { generateExternal, writeBundles } from './utils/rollup'
-
+import { vcRoot, vcOutput, localeRoot } from './utils/paths'
+import { formatBundleFilename, generateExternal, writeBundles } from './utils/rollup'
 import { withTaskName } from './utils/gulp'
+import { VC_BRAND_NAME } from './utils/constants'
+import { target } from './build-info'
 
-export const buildFull = (minify: boolean) => async () => {
+const banner = `/*! ${VC_BRAND_NAME} v${version} */\n`
+
+async function buildFullEntry(minify: boolean) {
   const bundle = await rollup({
     input: path.resolve(vcRoot, 'index.ts'),
     plugins: [
-      await VueCesiumAlias(),
+      VueCesiumAlias(),
       nodeResolve({
         extensions: ['.mjs', '.js', '.json', '.ts']
       }),
@@ -38,7 +44,7 @@ export const buildFull = (minify: boolean) => async () => {
       esbuild({
         minify,
         sourceMap: minify,
-        target: 'es2018'
+        target
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
@@ -50,11 +56,10 @@ export const buildFull = (minify: boolean) => async () => {
     ],
     external: await generateExternal({ full: true })
   })
-  const banner = `/*! Vue Cesium v${version} */\n`
   await writeBundles(bundle, [
     {
       format: 'umd',
-      file: path.resolve(vcOutput, `dist/index.full${minify ? '.min' : ''}.js`),
+      file: path.resolve(vcOutput, 'dist', formatBundleFilename('index.full', minify, 'js')),
       exports: 'named',
       name: 'VueCesium',
       globals: {
@@ -66,11 +71,53 @@ export const buildFull = (minify: boolean) => async () => {
     },
     {
       format: 'esm',
-      file: path.resolve(vcOutput, `dist/index.full${minify ? '.min' : ''}.mjs`),
+      file: path.resolve(vcOutput, 'dist', formatBundleFilename('index.full', minify, 'mjs')),
       sourcemap: minify,
       banner
     }
   ])
 }
+
+async function buildFullLocale(minify: boolean) {
+  const files = await glob(`${path.resolve(localeRoot, 'lang')}/*.ts`, {
+    absolute: true
+  })
+  return Promise.all(
+    files.map(async file => {
+      const filename = path.basename(file, '.ts')
+      const name = capitalize(camelCase(filename))
+
+      const bundle = await rollup({
+        input: file,
+        plugins: [
+          esbuild({
+            minify,
+            sourceMap: minify,
+            target
+          }),
+          filesize({ reporter })
+        ]
+      })
+      await writeBundles(bundle, [
+        {
+          format: 'umd',
+          file: path.resolve(vcOutput, 'dist/locale', formatBundleFilename(filename, minify, 'js')),
+          exports: 'named',
+          name: `VueCesiumLocale${name}`,
+          sourcemap: minify,
+          banner
+        },
+        {
+          format: 'esm',
+          file: path.resolve(vcOutput, 'dist/locale', formatBundleFilename(filename, minify, 'mjs')),
+          sourcemap: minify,
+          banner
+        }
+      ])
+    })
+  )
+}
+
+export const buildFull = (minify: boolean) => async () => Promise.all([buildFullEntry(minify), buildFullLocale(minify)])
 
 export const buildFullBundle = parallel(withTaskName('buildFullMinified', buildFull(true)), withTaskName('buildFull', buildFull(false)))

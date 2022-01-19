@@ -44,7 +44,7 @@
     "url": "https://github.com/zouyaoji/vue-cesium/issues"
   },
   "peerDependencies": {
-    "vue": "^3.2.26"
+    "vue": "^3.2.0"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",

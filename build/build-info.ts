@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-05 09:46:59
+ * @LastEditTime: 2022-01-17 23:27:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\build-info.ts
@@ -20,12 +20,12 @@ export interface BuildInfo {
   output: {
     /** e.g: `es` */
     name: string
-    /** e.g: `dist/element-plus/es` */
+    /** e.g: `dist/vue-cesium/es` */
     path: string
   }
 
   bundle: {
-    /** e.g: `element-plus/es` */
+    /** e.g: `vue-cesium/es` */
     path: string
   }
 }
@@ -60,3 +60,5 @@ export const buildConfigEntries = Object.entries(buildConfig) as BuildConfigEntr
 
 export type BuildConfig = typeof buildConfig
 export type BuildConfigEntries = [Module, BuildInfo][]
+
+export const target = 'es2018'

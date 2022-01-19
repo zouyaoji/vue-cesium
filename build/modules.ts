@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 14:11:08
- * @LastEditTime: 2021-12-05 09:47:29
+ * @LastEditTime: 2022-01-18 14:59:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\build\modules.ts
@@ -19,7 +19,7 @@ import { VueCesiumAlias } from './plugins/vue-cesium-alias'
 import { generateExternal, writeBundles } from './utils/rollup'
 import { excludeFiles } from './utils/pkg'
 import { reporter } from './plugins/size-reporter'
-import { buildConfigEntries } from './build-info'
+import { buildConfigEntries, target } from './build-info'
 import type { OutputOptions } from 'rollup'
 
 export const buildModules = async () => {
@@ -33,7 +33,7 @@ export const buildModules = async () => {
   const bundle = await rollup({
     input,
     plugins: [
-      await VueCesiumAlias(),
+      VueCesiumAlias(),
       css(),
       vue({ target: 'browser' }),
       nodeResolve({
@@ -42,7 +42,7 @@ export const buildModules = async () => {
       commonjs(),
       esbuild({
         sourceMap: true,
-        target: 'es2018'
+        target
       }),
       filesize({ reporter })
     ],
