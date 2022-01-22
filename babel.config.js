@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-12-31 09:45:46
+ * @LastEditTime: 2022-01-13 22:19:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\babel.config.js
@@ -24,6 +24,7 @@ module.exports = {
   plugins: [
     '@vue/babel-plugin-jsx',
     '@babel/plugin-proposal-nullish-coalescing-operator',
+    '@babel/plugin-proposal-logical-assignment-operators',
     ['@babel/plugin-proposal-private-methods', { loose: false }],
     '@babel/transform-runtime'
   ],

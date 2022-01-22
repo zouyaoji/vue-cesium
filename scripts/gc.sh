@@ -35,10 +35,11 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 export default defineComponent({
   name: 'Vc${NAME}',
   props: { },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -78,7 +79,7 @@ export default ${NAME}
 EOF
 
 cat > $DIRNAME/__tests__/$INPUT_NAME.spec.ts <<EOF
-import { VcComponentPublicInstance,  ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance,  VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/viewer'
 import Vc$NAME from '../src'
@@ -114,7 +115,7 @@ describe('Vc$NAME', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.\$refs.$INPUT_NAME).toBeDefined()
     const testVm = wrapper.vm.\$refs.$INPUT_NAME as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
   }, 10000)
 })
 EOF

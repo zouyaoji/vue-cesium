@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 21:57:01
+ * @LastEditTime: 2022-01-18 09:49:21
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\.eslintrc.js
@@ -20,8 +20,12 @@ module.exports = {
     browser: true,
     node: true
   },
-  plugins: ['@typescript-eslint', 'prettier'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended', 'prettier'],
+  globals: {
+    jest: 'readonly',
+    Cesium: 'readonly'
+  },
+  plugins: ['@typescript-eslint', 'prettier', 'import'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended', 'prettier'],
   overrides: [
     {
       files: ['*.ts'],
@@ -30,8 +34,7 @@ module.exports = {
       }
     },
     {
-      // not tested
-      files: ['**/__tests__/**'],
+      files: ['**/__tests__/**', '**/gulpfile.ts'],
       rules: {
         'no-console': 'off'
       }
