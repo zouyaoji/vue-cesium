@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2022-01-16 00:45:19
+ * @LastEditTime: 2022-01-23 01:48:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
@@ -120,7 +120,7 @@ declare module 'vue' {
     VcGeometryPolylineVolumeOutline: typeof import('vue-cesium')['VcGeometryPolylineVolumeOutline']
     VcGeometryRectangle: typeof import('vue-cesium')['VcGeometryRectangle']
     VcGeometryRectangleOutline: typeof import('vue-cesium')['VcGeometryRectangleOutline']
-    VcGeometryPolylineSimple: typeof import('vue-cesium')['VcGeometryPolylineSimple']
+    VcGeometrySimplePolyline: typeof import('vue-cesium')['VcGeometrySimplePolyline']
     VcGeometrySphere: typeof import('vue-cesium')['VcGeometrySphere']
     VcGeometrySphereOutline: typeof import('vue-cesium')['VcGeometrySphereOutline']
     VcGeometryWall: typeof import('vue-cesium')['VcGeometryWall']

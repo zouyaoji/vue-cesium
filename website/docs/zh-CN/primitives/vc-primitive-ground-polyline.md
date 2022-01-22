@@ -2,7 +2,7 @@
 
 加载贴地(3DTiles)线几何图形，相当于初始化一个 `Cesium.GroundPolylineGeometry` 实例。
 
-**注意:** 仅支持添加贴地线几何图形 `vc-geometry-polyline-ground`。
+**注意:** 仅支持添加贴地线几何图形 `vc-geometry-ground-polyline`。
 
 ### 基础用法
 
@@ -15,14 +15,14 @@
   <vc-viewer @ready="onViewerReady">
     <vc-primitive-ground-polyline :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
       <vc-geometry-instance>
-        <vc-geometry-polyline-ground
+        <vc-geometry-ground-polyline
           ref="geometryRef"
           :positions="[
             { lng: 100.1340164450331, lat: 31.05494287836128 },
             { lng: 108.08821010582645, lat: 31.05494287836128 }
           ]"
           :width="2"
-        ></vc-geometry-polyline-ground>
+        ></vc-geometry-ground-polyline>
       </vc-geometry-instance>
     </vc-primitive-ground-polyline>
     <vc-terrain-provider-cesium></vc-terrain-provider-cesium>

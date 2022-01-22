@@ -1,4 +1,4 @@
-## VcGeometryPolylineSimple
+## VcGeometrySimplePolyline
 
 加载线段几何图形，相当于初始化一个 `Cesium.SimplePolylineGeometry` 实例。
 
@@ -8,14 +8,14 @@
 
 线段几何图形组件的基础用法。
 
-:::demo 使用 `vc-geometry-polyline-simple` 标签在三维球上添加线段。
+:::demo 使用 `vc-geometry-simple-polyline` 标签在三维球上添加线段。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
       <vc-geometry-instance :attributes="attributes">
-        <vc-geometry-polyline-simple
+        <vc-geometry-simple-polyline
           ref="geometryRef"
           :positions="[
             { lng: 102.1, lat: 29.5 },
@@ -24,7 +24,7 @@
             { lng: 108.2, lat: 35.5 },
             { lng: 102.1, lat: 33.5 }
           ]"
-        ></vc-geometry-polyline-simple>
+        ></vc-geometry-simple-polyline>
       </vc-geometry-instance>
     </vc-primitive>
     <vc-layer-imagery>

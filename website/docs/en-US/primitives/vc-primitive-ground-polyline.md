@@ -2,27 +2,27 @@
 
 Loading a polyline draped over the terrain or 3D Tiles in the Scene. It is equivalent to initializing a `Cesium.GroundPolylinePrimitive` instance.
 
-**Note:** Only to be used with GeometryInstances containing GroundPolylineGeometry(`vc-geometry-polyline-ground`).
+**Note:** Only to be used with GeometryInstances containing GroundPolylineGeometry(`vc-geometry-ground-polyline`).
 
 ### Basic usage
 
 Basic usage of VcPrimitiveGround component.
 
-:::demo Use the `vc-primitive-ground-polyline`, `vc-geometry-instance` and `vc-geometry-polyline-ground` tag to add a ground line to the viewer.
+:::demo Use the `vc-primitive-ground-polyline`, `vc-geometry-instance` and `vc-geometry-ground-polyline` tag to add a ground line to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive-ground-polyline :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
       <vc-geometry-instance>
-        <vc-geometry-polyline-ground
+        <vc-geometry-ground-polyline
           ref="geometryRef"
           :positions="[
             { lng: 100.1340164450331, lat: 31.05494287836128 },
             { lng: 108.08821010582645, lat: 31.05494287836128 }
           ]"
           :width="2"
-        ></vc-geometry-polyline-ground>
+        ></vc-geometry-ground-polyline>
       </vc-geometry-instance>
     </vc-primitive-ground-polyline>
     <vc-terrain-provider-cesium></vc-terrain-provider-cesium>

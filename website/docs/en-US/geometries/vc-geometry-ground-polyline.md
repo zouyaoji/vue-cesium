@@ -1,32 +1,31 @@
-## VcGeometryPolylineSimple
+## VcGeometryGroundPolyline
 
-Loading a polyline geometry modeled as a line strip. It is equivalent to initializing a `Cesium.SimplePolylineGeometry` instance.
+Loading a polyline geometry on terrain or 3D Tiles. It is equivalent to initializing a `Cesium.GroundPolylineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance`, and put `vc-geometry-instance` in `vc-primitive-ground-polyline` to load normally.
 
 ### Basic usage
 
-Basic usage of VcGeometryPolylineSimple component.
+The basic usage of the VcGeometryGroundPolyline component.
 
-:::demo Use the `vc-geometry-polyline-simple` tag to add line strips on the viewer.
+:::demo Use the `vc-geometry-ground-polyline` tag to add a ground polyline to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-geometry-instance :attributes="attributes">
-        <vc-geometry-polyline-simple
+    <vc-primitive-ground-polyline :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
+      <vc-geometry-instance>
+        <vc-geometry-ground-polyline
           ref="geometryRef"
           :positions="[
-            { lng: 102.1, lat: 29.5 },
-            { lng: 106.2, lat: 29.5 },
-            { lng: 106.2, lat: 33.5 },
-            { lng: 108.2, lat: 35.5 },
-            { lng: 102.1, lat: 33.5 }
+            { lng: 100.1340164450331, lat: 31.05494287836128 },
+            { lng: 108.08821010582645, lat: 31.05494287836128 }
           ]"
-        ></vc-geometry-polyline-simple>
+          :width="2"
+        ></vc-geometry-ground-polyline>
       </vc-geometry-instance>
-    </vc-primitive>
+    </vc-primitive-ground-polyline>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
       <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
@@ -46,7 +45,7 @@ Basic usage of VcGeometryPolylineSimple component.
       const instance = getCurrentInstance()
       const geometryRef = ref(null)
       const appearance = ref(null)
-      const attributes = ref(null)
+      const geometryInstances = ref(null)
       // methods
       const onClicked = e => {
         console.log(e)
@@ -62,12 +61,14 @@ Basic usage of VcGeometryPolylineSimple component.
       }
       const onViewerReady = ({ Cesium, viewer }) => {
         console.log('onViewerReady')
-        appearance.value = new Cesium.PerInstanceColorAppearance({
-          flat: true
+        appearance.value = new Cesium.PolylineMaterialAppearance()
+        geometryInstances.value = new Cesium.GeometryInstance({
+          geometry: new Cesium.GroundPolylineGeometry({
+            positions: Cesium.Cartesian3.fromDegreesArray([100.1340164450331, 32.05494287836128, 108.08821010582645, 32.097804071380715]),
+            width: 4.0
+          }),
+          id: 'object returned when this instance is picked and to get/set per-instance attributes'
         })
-        attributes.value = {
-          color: new Cesium.ColorGeometryInstanceAttribute(Math.random(), Math.random(), Math.random())
-        }
       }
       // lifecycle
       onMounted(() => {
@@ -85,7 +86,7 @@ Basic usage of VcGeometryPolylineSimple component.
         onViewerReady,
         geometryRef,
         appearance,
-        attributes
+        geometryInstances
       }
     }
   }
@@ -99,12 +100,11 @@ Basic usage of VcGeometryPolylineSimple component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| positions | Array | | `required` An array of Cartesian3 defining the positions in the polyline as a line strip. |
-| colors | Array | | `optional` An Array of Color defining the per vertex or per segment colors. |
-| colorsPerVertex | Boolean | `false` | `optional` A boolean that determines whether the colors will be flat across each segment of the line or interpolated across the vertices. |
-| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2|
-| granularity | Number | | `optional` The distance, in radians, between each latitude and longitude if options.arcType is not ArcType.NONE. Determines the number of positions in the buffer. |
-| ellipsoid | Object | | `optional` The ellipsoid to be used as a reference. |
+| positions | Array | | `required` An array of Cartesian3 defining the polyline's points. Heights above the ellipsoid will be ignored. |
+| width | Number | `1.0` | `optional` The screen space width in pixels. |
+| granularity | Number | | `optional` The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation. |
+| loop | Boolean | false | `optional` Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop. |
+| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2/|
 
 ### Events
 
@@ -116,4 +116,4 @@ Basic usage of VcGeometryPolylineSimple component.
 
 ### Reference
 
-- Refer to the official documentation: **[SimplePolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/SimplePolylineGeometry.html)**
+- Refer to the official documentation: **[GroundPolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylineGeometry.html)**

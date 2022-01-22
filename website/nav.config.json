@@ -417,11 +417,11 @@
               "title": "PolylineGeometry 多段线"
             },
             {
-              "path": "/geometries/vc-geometry-polyline-ground",
+              "path": "/geometries/vc-geometry-ground-polyline",
               "title": "GroundPolylineGeometry 贴地线"
             },
             {
-              "path": "/geometries/vc-geometry-polyline-simple",
+              "path": "/geometries/vc-geometry-simple-polyline",
               "title": "SimplePolylineGeometry 线段"
             },
             {
@@ -901,11 +901,11 @@
               "title": "PolylineGeometry"
             },
             {
-              "path": "/geometries/vc-geometry-polyline-ground",
+              "path": "/geometries/vc-geometry-ground-polyline",
               "title": "GroundPolylineGeometry"
             },
             {
-              "path": "/geometries/vc-geometry-polyline-simple",
+              "path": "/geometries/vc-geometry-simple-polyline",
               "title": "SimplePolylineGeometry"
             },
             {

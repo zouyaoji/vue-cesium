@@ -1,14 +1,14 @@
 ## VcGeometryGroundPolyline
 
-Loading a polyline geometry on terrain or 3D Tiles. It is equivalent to initializing a `Cesium.GroundPolylineGeometry` instance.
+加载贴地(3DTiles)线几何图形，相当于初始化一个 `Cesium.GroundPolylineGeometry` 实例。
 
-**Note**: It needs to be a subcomponent of `vc-geometry-instance`, and put `vc-geometry-instance` in `vc-primitive-ground-polyline` to load normally.
+**注意**：需要作为 `vc-geometry-instance` 的子组件，并且将 `vc-geometry-instance` 放到 `vc-primitive-ground-polyline` 才能正常加载。
 
-### Basic usage
+### 基础用法
 
-The basic usage of the VcGeometryGroundPolyline component.
+贴地线几何图形组件的基础用法。
 
-:::demo Use the `vc-geometry-polyline-ground` tag to add a ground polyline to the viewer.
+:::demo 使用 `vc-geometry-ground-polyline` 标签在三维球上添加贴地线。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -31,9 +31,9 @@ The basic usage of the VcGeometryGroundPolyline component.
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
-    <el-button type="danger" round @click="unload">Unload</el-button>
-    <el-button type="danger" round @click="load">Load</el-button>
-    <el-button type="danger" round @click="reload">Reload</el-button>
+    <el-button type="danger" round @click="unload">销毁</el-button>
+    <el-button type="danger" round @click="load">加载</el-button>
+    <el-button type="danger" round @click="reload">重载</el-button>
   </el-row>
 </el-row>
 
@@ -95,25 +95,24 @@ The basic usage of the VcGeometryGroundPolyline component.
 
 :::
 
-### Props
+### 属性
 
-<!-- prettier-ignore -->
-| Name | Type | Default | Description | Accepted Values |
-| ---- | ---- | ------- | ----------- | --------------- |
-| positions | Array | | `required` An array of Cartesian3 defining the polyline's points. Heights above the ellipsoid will be ignored. |
-| width | Number | `1.0` | `optional` The screen space width in pixels. |
-| granularity | Number | | `optional` The distance interval in meters used for interpolating options.points. Defaults to 9999.0 meters. Zero indicates no interpolation. |
-| loop | Boolean | false | `optional` Whether during geometry creation a line segment will be added between the last and first line positions to make this Polyline a loop. |
-| arcType | Number | `1` | `optional` The type of line the polyline segments must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB. **NONE: 0, GEODESIC: 1, RHUMB: 2** |0/1/2/|
+| 属性名      | 类型    | 默认值 | 描述                                                                                | 可选值 |
+| ----------- | ------- | ------ | ----------------------------------------------------------------------------------- | ------ |
+| positions   | Array   |        | `required` 指定表示线条的位置数组。                                                 |
+| width       | Number  | `1.0`  | `optional` 指定线的宽度（像素）。                                                   |
+| granularity | Number  |        | `optional` 指定插值点的距离间隔（以米为单位）。 默认为 9999.0 米。 零表示没有插值。 |
+| loop        | Boolean | false  | `optional` 指定折线是否首尾相连。                                                   |
+| arcType     | Number  | `1`    | `optional` 指定线条类型。 **NONE: 0, GEODESIC: 1, RHUMB: 2**                        | 0/1/2  |
 
-### Events
+### 事件
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
+| 事件名     | 参数                               | 描述                 |
+| ---------- | ---------------------------------- | -------------------- |
+| beforeLoad | Vue Instance                       | 对象加载前触发。     |
+| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
+| destroyed  | Vue Instance                       | 对象销毁时触发。     |
 
-### Reference
+### 参考
 
-- Refer to the official documentation: **[GroundPolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylineGeometry.html)**
+- 官方文档： **[GroundPolylineGeometry](https://cesium.com/docs/cesiumjs-ref-doc/GroundPolylineGeometry.html)**
