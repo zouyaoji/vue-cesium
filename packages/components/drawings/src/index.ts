@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
 import {
-  defaultProps,
+  drawingsProps,
   defaultOptions,
   pointDrawingActionDefault,
   polylineDrawingActionDefault,
@@ -33,12 +33,17 @@ import {
 import { DrawingActionCmpOpts, DrawingActionCmpRef, DrawingActionOpts, VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { useLocaleInject } from '@vue-cesium/composables'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...drawingEmit,
+  fabUpdated: (value: boolean) => true
+}
 export default defineComponent({
   name: 'VcDrawings',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'editorEvt', 'drawEvt', 'mouseEvt', 'fabUpdated'],
-  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
+  props: drawingsProps,
+  emits: emits,
+  setup(props: ExtractPropTypes<typeof drawingsProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcDrawings'
@@ -136,4 +141,7 @@ export default defineComponent({
   }
 })
 
-export { VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular }
+export { VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular, drawingsProps }
+
+export type { VcDrawingsProps } from './defaultProps'
+export type VcDrawingsEmits = typeof emits

@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-07 17:53:18
+ * @LastEditTime: 2022-01-14 14:50:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
  */
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide } from 'vue'
+import type { ExtractPropTypes } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { modelMatrix, id } from '@vue-cesium/utils/cesium-props'
@@ -15,15 +16,21 @@ import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/priv
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { vcKey } from '@vue-cesium/utils/config'
+import { commonEmits } from '@vue-cesium/utils/emits'
+export const geometryInstanceProps = {
+  geometry: Object as PropType<Cesium.Geometry | Cesium.GeometryFactory>,
+  ...modelMatrix,
+  ...id,
+  attributes: Object
+}
+const emits = {
+  ...commonEmits,
+  'update:geometry': (payload: VcGeometry) => true
+}
 export default defineComponent({
-  name: 'VcInstanceGeometry',
-  props: {
-    geometry: Object as PropType<Cesium.Geometry | Cesium.GeometryFactory>,
-    ...modelMatrix,
-    ...id,
-    attributes: Object
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'update:geometry'],
+  name: 'VcGeometryInstance',
+  props: geometryInstanceProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -104,3 +111,6 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })
+
+export type VcGeometryInstanceProps = ExtractPropTypes<typeof geometryInstanceProps>
+export type VcGeometryInstanceEmits = typeof emits

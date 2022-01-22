@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 14:20:28
- * @LastEditTime: 2021-11-29 17:15:12
+ * @LastEditTime: 2022-01-23 00:50:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\DynamicOverlay.ts
  */
 import { makeCartesian3, makeJulianDate } from '@vue-cesium/utils/cesium-helpers'
-import { Cartesian3Option, CartographicInDegreeOption, DynamicOverlayOpts } from '@vue-cesium/utils/types'
+import type { DynamicOverlayOpts, VcPosition } from '@vue-cesium/utils/types'
 
 class DynamicOverlay {
   _sampledPosition: Cesium.SampledPositionProperty
@@ -71,10 +71,7 @@ class DynamicOverlay {
    * @param interval
    * @returns
    */
-  addPosition(
-    position: Cesium.Cartesian3 | Cartesian3Option | CartographicInDegreeOption | Array<number>,
-    timeOrInterval: string | number | Cesium.JulianDate
-  ) {
+  addPosition(position: VcPosition, timeOrInterval: string | number | Cesium.JulianDate) {
     this._removePosition()
     let time
     if (typeof timeOrInterval === 'number') {

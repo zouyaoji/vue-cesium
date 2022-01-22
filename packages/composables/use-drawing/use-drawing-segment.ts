@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-01-06 11:26:17
+ * @LastEditTime: 2022-01-22 12:09:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -10,26 +10,35 @@ import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
 import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
-import { VcInstanceGeometry } from '@vue-cesium/components/geometry-instance'
-import { VcGeometryPolyline, VcGeometryPolylineGround } from '@vue-cesium/components/geometries'
+import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
+import {
+  VcGeometryPolyline,
+  VcGeometryGroundPolyline,
+  VcGeometryEllipsoidOutline,
+  VcGeometryEllipsoidOutlineProps
+} from '@vue-cesium/components/geometries'
+import { VcPostProcessStage } from '@vue-cesium/components/post-processes'
 import { useLocaleInject } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import {
   calculateAreaByPostions,
   getGeodesicDistance,
+  getPolylineSegmentHeading,
   getHeadingPitchRoll,
   getPolylineSegmentEndpoint,
+  getPolylineSegmentPitch,
   makeCartesian2,
+  makeCartesian3,
   makeCartesian3Array
 } from '@vue-cesium/utils/cesium-helpers'
-import { SegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import { AppearanceOpts, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
+import { Cartesian3Option, VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
 import { computed, getCurrentInstance, h, nextTick, ref, VNode } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
 
-export default function (props, ctx, cmpName: string) {
+export default function (props, ctx, cmpName: string, fs?: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
 
   const commonState = useCommon(props, ctx, instance)
@@ -40,6 +49,29 @@ export default function (props, ctx, cmpName: string) {
   const { t } = useLocaleInject()
   const { $services } = commonState
   const { emit } = ctx
+
+  const innerRadii = ref<VcPosition>({ x: 0.01, y: 0.01, z: 0.01 })
+  let lightCamera: Cesium.Camera, shadowMap: Cesium.ShadowMap
+  if (cmpName === 'VcAnalysisViewshed') {
+    lightCamera = new Cesium.Camera($services.viewer.scene)
+    lightCamera.frustum.near = 1
+    lightCamera.frustum.far = 400
+    ;(lightCamera.frustum as any).fov = Cesium.Math.PI / 3
+    ;(lightCamera.frustum as any).aspectRatio = 3
+
+    shadowMap = new Cesium.ShadowMap({
+      context: ($services.viewer.scene as any).context,
+      lightCamera: lightCamera,
+      enabled: true,
+      isPointLight: true,
+      pointLightRadius: 400,
+      cascadesEnabled: false,
+      size: 2048,
+      softShadows: true,
+      normalOffset: false,
+      fromLightSource: false
+    })
+  }
 
   const {
     drawingType,
@@ -64,10 +96,10 @@ export default function (props, ctx, cmpName: string) {
     onVcPrimitiveReady
   } = useDrawingAction(props, ctx, instance, cmpName, $services)
 
-  const renderDatas = ref<Array<SegmentDrawing>>([])
+  const renderDatas = ref<Array<VcSegmentDrawing>>([])
   if (props.preRenderDatas && props.preRenderDatas.length) {
     props.preRenderDatas.forEach(preRenderData => {
-      const segmentDrawing: SegmentDrawing = {
+      const segmentDrawing: VcSegmentDrawing = {
         positions: makeCartesian3Array(preRenderData) as Array<Cesium.Cartesian3>,
         show: true,
         drawStatus: DrawStatus.AfterDraw,
@@ -85,9 +117,9 @@ export default function (props, ctx, cmpName: string) {
     })
   }
   let restorePosition
-  const computedRenderDatas = computed<Array<SegmentDrawing>>(() => {
-    const polylines: Array<SegmentDrawing> = []
-    const { Cartesian3, Cartographic, Rectangle, createGuid, defined } = Cesium
+  const computedRenderDatas = computed<Array<VcSegmentDrawing>>(() => {
+    const polylines: Array<VcSegmentDrawing> = []
+    const { Cartesian3, Cartographic, Rectangle, createGuid, defined, Math: CesiumMath, ShadowMap, Camera } = Cesium
     const { viewer } = $services
 
     renderDatas.value.forEach(polylineSegment => {
@@ -112,9 +144,14 @@ export default function (props, ctx, cmpName: string) {
           : getGeodesicDistance(startPosition, endPosition, $services.viewer.scene.globe.ellipsoid)
       const labelPosition = Cartesian3.midpoint(startPosition, endPosition, {} as any)
 
-      const polyline: SegmentDrawing = {
+      const heading = getPolylineSegmentHeading(startPosition, endPosition)
+      const pitch = getPolylineSegmentPitch(startPosition, endPosition)
+
+      const polyline: VcSegmentDrawing = {
         ...polylineSegment,
-        distance
+        distance,
+        heading,
+        pitch
       }
 
       if (cmpName === 'VcDrawingRectangle' || cmpName === 'VcMeasurementRectangle') {
@@ -150,7 +187,7 @@ export default function (props, ctx, cmpName: string) {
         const startPosition = polylineSegment.positions[0]
         const endPosition = polylineSegment.positions[1]
 
-        const hpr = getHeadingPitchRoll(startPosition, endPosition, $services.viewer.scene)
+        const hpr = getHeadingPitchRoll(startPosition, endPosition, viewer.scene)
         if (!isUndefined(hpr) && defined(hpr)) {
           const polygonPositions: Array<Cesium.Cartesian3> = []
           const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
@@ -173,6 +210,29 @@ export default function (props, ctx, cmpName: string) {
             height: startCartographic.height
           })
         }
+      } else if (cmpName === 'VcAnalysisViewshed') {
+        // lightCamera
+        const viewPosition = makeCartesian3(startPosition) as Cesium.Cartesian3
+        lightCamera.position = viewPosition
+        lightCamera.frustum.near = 0.001 * distance
+        lightCamera.frustum.far = distance
+        const hr = CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle)
+        const vr = CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle)
+        const aspectRatio = (polyline.distance * Math.tan(hr / 2) * 2) / (distance * Math.tan(vr / 2) * 2)
+        ;(lightCamera.frustum as any).fov = hr > vr ? hr : vr
+        ;(lightCamera.frustum as any).aspectRatio = aspectRatio
+        lightCamera.setView({
+          destination: viewPosition,
+          orientation: {
+            heading: CesiumMath.toRadians(heading || 0),
+            pitch: CesiumMath.toRadians(pitch || 0),
+            roll: 0
+          }
+        })
+
+        // shadowMap
+        shadowMap._pointLightRadius = distance
+        viewer.scene.shadowMap = shadowMap
       } else {
         labels.push({
           position: labelPosition,
@@ -302,7 +362,7 @@ export default function (props, ctx, cmpName: string) {
     return true
   }
 
-  const getHeightPosition = (polyline: SegmentDrawing, movement: Cesium.Cartesian2) => {
+  const getHeightPosition = (polyline: VcSegmentDrawing, movement: Cesium.Cartesian2) => {
     const { defined, SceneMode, Cartesian3, IntersectionTests, Plane, SceneTransforms, Ray } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
@@ -347,7 +407,7 @@ export default function (props, ctx, cmpName: string) {
     }
   }
 
-  const updateComponents = (polyline: SegmentDrawing) => {
+  const updateComponents = (polyline: VcSegmentDrawing) => {
     const { Cartesian3, Math: CesiumMath, defined } = Cesium
     const { viewer } = $services
     const ellipsoid = viewer.scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
@@ -524,7 +584,7 @@ export default function (props, ctx, cmpName: string) {
     })
   }
 
-  const makeHeightPositions = (polyline: SegmentDrawing, position: Cesium.Cartesian3) => {
+  const makeHeightPositions = (polyline: VcSegmentDrawing, position: Cesium.Cartesian3) => {
     const { defined, defaultValue, Cartesian3 } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
@@ -541,12 +601,15 @@ export default function (props, ctx, cmpName: string) {
 
   const startNew = () => {
     const { Cartesian3, Plane } = Cesium
-    const polyline: SegmentDrawing = {
+    const polyline: VcSegmentDrawing = {
       positions: [new Cartesian3(), new Cartesian3()],
       show: false,
       drawStatus: DrawStatus.BeforeDraw,
       distance: 0,
       labels: []
+    }
+    if (cmpName === 'VcAnalysisViewshed') {
+      clear()
     }
 
     cmpName === 'VcMeasurementVertical' &&
@@ -597,7 +660,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: SegmentDrawing = renderDatas.value[index]
+    const polyline: VcSegmentDrawing = renderDatas.value[index]
     const positions = polyline.positions
 
     if (options.button === 2 && editingPoint.value) {
@@ -708,10 +771,10 @@ export default function (props, ctx, cmpName: string) {
             index,
             renderDatas,
             name: drawingType,
-            finished: finished,
+            finished,
             position: emitPosition,
             windowPoistion: movement,
-            type: type
+            type
           },
           computedRenderDatas.value[index]
         ),
@@ -740,7 +803,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: SegmentDrawing = renderDatas.value[index]
+    const polyline: VcSegmentDrawing = renderDatas.value[index]
 
     if (cmpName === 'VcMeasurementVertical') {
       const heightPostion = getHeightPosition(polyline, movement)
@@ -813,8 +876,10 @@ export default function (props, ctx, cmpName: string) {
     } else if (e === 'removeAll') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
-    } else if (e === 'custom') {
-      props.editorOpts[e]?.callback?.()
+    } else {
+      const index = mouseoverPoint.value._vcPolylineIndx
+      const polyline = renderDatas.value[index]
+      props.editorOpts?.[e]?.callback?.(index, polyline)
     }
 
     emit(
@@ -839,7 +904,23 @@ export default function (props, ctx, cmpName: string) {
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
-    const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
+    const {
+      ColorGeometryInstanceAttribute,
+      PolylineMaterialAppearance,
+      Ellipsoid,
+      createGuid,
+      defaultValue,
+      Math: CesiumMath,
+      Matrix4,
+      Cartesian3,
+      Transforms,
+      HeadingPitchRoll,
+      PerInstanceColorAppearance,
+      Camera,
+      ShadowMap,
+      Cartesian4,
+      Cartesian2
+    } = Cesium
 
     const polylineOpts = {
       ...props.polylineOpts,
@@ -869,30 +950,158 @@ export default function (props, ctx, cmpName: string) {
                 options: {
                   material: props.polylineOpts?.material
                 }
-              } as AppearanceOpts,
+              },
               depthFailAppearance: {
                 type: 'PolylineMaterialAppearance',
                 options: {
                   material: props.polylineOpts?.depthFailMaterial
                 }
-              } as AppearanceOpts,
+              },
               asynchronous: false,
               classificationType: polylineOpts.classificationType
             },
             () =>
               h(
-                VcInstanceGeometry,
+                VcGeometryInstance,
                 {
                   id: createGuid()
                 },
                 () =>
-                  h(props.clampToGround ? VcGeometryPolylineGround : VcGeometryPolyline, {
+                  h(props.clampToGround ? VcGeometryGroundPolyline : VcGeometryPolyline, {
                     positions: positions,
                     ...polylineOpts
                   })
               )
           )
         )
+        // viewshed
+        if (cmpName === 'VcAnalysisViewshed') {
+          // ellipsoid
+          const { viewer } = $services
+
+          const modelMatrix = Matrix4.fromTranslationQuaternionRotationScale(
+            polyline.positions[0],
+            Transforms.headingPitchRollQuaternion(
+              polyline.positions[0],
+              HeadingPitchRoll.fromDegrees(polyline.heading! - props.ellipsoidOpts.horizontalViewAngle, polyline.pitch!, 0)
+            ),
+            new Cartesian3(1, 1, 1)
+          )
+          const color = ColorGeometryInstanceAttribute.fromColor(props.ellipsoidOpts.color)
+          children.push(
+            h(VcPostProcessStage, {
+              fragmentShader: fs,
+              uniforms: {
+                shadowMap_textureCube: function () {
+                  shadowMap.update(viewer.scene.frameState)
+                  return shadowMap._shadowMapTexture
+                },
+                shadowMap_matrix: function () {
+                  shadowMap.update(viewer.scene.frameState)
+                  return shadowMap._shadowMapMatrix
+                },
+                shadowMap_lightPositionEC: function () {
+                  shadowMap.update(viewer.scene.frameState)
+                  return shadowMap._lightPositionEC
+                },
+                shadowMap_normalOffsetScaleDistanceMaxDistanceAndDarkness: function () {
+                  shadowMap.update(viewer.scene.frameState)
+                  const bias = shadowMap._pointBias
+                  return Cartesian4.fromElements(bias.normalOffsetScale, shadowMap._distance, shadowMap.maximumDistance, 0, new Cartesian4())
+                },
+                shadowMap_texelSizeDepthBiasAndNormalShadingSmooth: function () {
+                  shadowMap.update(viewer.scene.frameState)
+                  const bias = shadowMap._pointBias
+                  const scratchTexelStepSize = new Cartesian2()
+                  const texelStepSize = scratchTexelStepSize
+                  texelStepSize.x = 1.0 / shadowMap._textureSize.x
+                  texelStepSize.y = 1.0 / shadowMap._textureSize.y
+                  return Cartesian4.fromElements(texelStepSize.x, texelStepSize.y, bias.depthBias, bias.normalShadingSmooth, new Cartesian4())
+                },
+                camera_projection_matrix: lightCamera.frustum.projectionMatrix,
+                camera_view_matrix: lightCamera.viewMatrix,
+                vc_viewDistance: function () {
+                  return polyline.distance
+                },
+                vc_visibleAreaColor: props.visibleAreaColor || Cesium.Color.LIME,
+                vc_invisibleAreaColor: props.invisibleAreaColor || Cesium.Color.RED
+              }
+            })
+          )
+          const radii: VcPosition = { x: polyline.distance, y: polyline.distance, z: polyline.distance }
+          children.push(
+            h(
+              VcPrimitive,
+              {
+                show: (polyline.show && props.ellipsoidOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+                enableMouseEvent: props.enableMouseEvent,
+                appearance: new PerInstanceColorAppearance({
+                  flat: true
+                }),
+                asynchronous: false
+              },
+              () => [
+                h(
+                  VcGeometryInstance,
+                  {
+                    id: createGuid(),
+                    modelMatrix,
+                    attributes: {
+                      color
+                    }
+                  },
+                  () =>
+                    h(VcGeometryEllipsoidOutline, {
+                      radii: radii,
+                      minimumClock: CesiumMath.toRadians(-props.ellipsoidOpts.horizontalViewAngle / 2),
+                      maximumClock: CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle / 2),
+                      minimumCone: CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle + 7.75),
+                      maximumCone: CesiumMath.toRadians(180 - props.ellipsoidOpts.verticalViewAngle - 7.75),
+                      subdivisions: 256,
+                      stackPartitions: 64,
+                      slicePartitions: 64
+                    } as VcGeometryEllipsoidOutlineProps)
+                )
+              ]
+            )
+          )
+          children.push(
+            h(
+              VcPrimitive,
+              {
+                show: (polyline.show && props.ellipsoidOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+                enableMouseEvent: props.enableMouseEvent,
+                appearance: new PerInstanceColorAppearance({
+                  flat: true
+                }),
+                asynchronous: false
+              },
+              () =>
+                h(
+                  VcGeometryInstance,
+                  {
+                    id: createGuid(),
+                    modelMatrix,
+                    attributes: {
+                      color
+                    }
+                  },
+                  () =>
+                    h(VcGeometryEllipsoidOutline, {
+                      radii: radii,
+                      innerRadii: innerRadii.value,
+                      minimumClock: CesiumMath.toRadians(-props.ellipsoidOpts.horizontalViewAngle / 2),
+                      maximumClock: CesiumMath.toRadians(props.ellipsoidOpts.horizontalViewAngle / 2),
+                      minimumCone: CesiumMath.toRadians(props.ellipsoidOpts.verticalViewAngle + 7.75),
+                      maximumCone: CesiumMath.toRadians(180 - props.ellipsoidOpts.verticalViewAngle - 7.75),
+                      subdivisions: 128,
+                      stackPartitions: 10,
+                      slicePartitions: 8
+                    } as VcGeometryEllipsoidOutlineProps)
+                )
+            )
+          )
+        }
       }
 
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
@@ -918,7 +1127,7 @@ export default function (props, ctx, cmpName: string) {
                   }
                 }
               }
-            } as AppearanceOpts,
+            },
             asynchronous: false,
             onReady: onVcPrimitiveReady,
             ...props.polygonOpts
@@ -938,18 +1147,18 @@ export default function (props, ctx, cmpName: string) {
                 options: {
                   material: props.polylineOpts?.material
                 }
-              } as AppearanceOpts,
+              },
               depthFailAppearance: {
                 type: 'PolylineMaterialAppearance',
                 options: {
                   material: props.polylineOpts?.depthFailMaterial
                 }
-              } as AppearanceOpts,
+              },
               asynchronous: false
             },
             () =>
               h(
-                VcInstanceGeometry,
+                VcGeometryInstance,
                 {
                   id: createGuid()
                 },
@@ -975,18 +1184,18 @@ export default function (props, ctx, cmpName: string) {
                 options: {
                   material: props.polylineOpts?.material
                 }
-              } as AppearanceOpts,
+              },
               depthFailAppearance: {
                 type: 'PolylineMaterialAppearance',
                 options: {
                   material: props.polylineOpts?.depthFailMaterial
                 }
-              } as AppearanceOpts,
+              },
               asynchronous: false
             },
             () =>
               h(
-                VcInstanceGeometry,
+                VcGeometryInstance,
                 {
                   id: createGuid()
                 },

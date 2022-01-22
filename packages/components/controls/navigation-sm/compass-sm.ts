@@ -1,39 +1,46 @@
-import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h, VNode } from 'vue'
+import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import { defineComponent, getCurrentInstance, ref, computed, nextTick, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import useCompass from './use-compass'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const compassSmProps = {
+  enableCompassOuterRing: {
+    type: Boolean,
+    default: true
+  },
+  duration: {
+    type: Number,
+    default: 1.5
+  },
+  tooltip: {
+    type: Object,
+    default: () => ({
+      delay: 1000,
+      anchor: 'bottom middle',
+      offset: [0, 20],
+      tip: void 0
+    })
+  },
+  autoHidden: {
+    type: Boolean,
+    default: true
+  },
+  ...positionProps
+}
+const emits = {
+  ...commonEmits,
+  compassEvt: (evt: VcCompassEvt) => true
+}
 export default defineComponent({
   name: 'VcCompassSm',
-  props: {
-    enableCompassOuterRing: {
-      type: Boolean,
-      default: true
-    },
-    duration: {
-      type: Number,
-      default: 1.5
-    },
-    tooltip: {
-      type: Object,
-      default: () => ({
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [0, 20],
-        tip: void 0
-      })
-    },
-    autoHidden: {
-      type: Boolean,
-      default: true
-    },
-    ...positionProps
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'compassEvt'],
+  props: compassSmProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -240,3 +247,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcCompassSmProps = ExtractPropTypes<typeof compassSmProps>
+export type VcCompassSmEmits = typeof emits

@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:50:48
+ * @LastEditTime: 2022-01-16 13:27:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\particle\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, PropType } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
   show,
@@ -23,54 +24,65 @@ import {
   enableMouseEvent
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { primitiveEmits } from '@vue-cesium/utils/emits'
 
+export const particlePrimitiveProps = {
+  ...show,
+  updateCallback: Function,
+  emitter: Object as PropType<Cesium.ParticleEmitter>,
+  ...modelMatrix,
+  emitterModelMatrix: Object as PropType<Cesium.Matrix4>,
+  emissionRate: {
+    type: Number,
+    default: 5
+  },
+  bursts: Array as PropType<Array<Cesium.ParticleBurst>>,
+  loop: {
+    type: Boolean,
+    default: true
+  },
+  scale: {
+    type: Number,
+    default: 1.0
+  },
+  startScale: Number,
+  endScale: Number,
+  ...color,
+  ...startColor,
+  ...endColor,
+  ...image,
+  ...imageSize,
+  ...minimumImageSize,
+  ...maximumImageSize,
+  ...sizeInMeters,
+  speed: {
+    type: Number,
+    default: 1.0
+  },
+  minimumSpeed: Number,
+  maximumSpeed: Number,
+  lifetime: {
+    type: Number,
+    default: Number.MAX_VALUE
+  },
+  particleLife: {
+    type: Number,
+    default: 5.0
+  },
+  minimumParticleLife: Number,
+  maximumParticleLife: Number,
+  mass: {
+    type: Number,
+    default: 1.0
+  },
+  minimumMass: Number,
+  maximumMass: Number,
+  ...enableMouseEvent
+}
 export default defineComponent({
   name: 'VcPrimitiveParticle',
-  props: {
-    ...show,
-    updateCallback: Function,
-    emitter: Object,
-    ...modelMatrix,
-    emitterModelMatrix: Object,
-    emissionRate: Number,
-    bursts: Array,
-    loop: {
-      type: Boolean,
-      default: true
-    },
-    scale: {
-      type: Number,
-      default: 1.0
-    },
-    startScale: Number,
-    endScale: Number,
-    ...color,
-    ...startColor,
-    ...endColor,
-    ...image,
-    ...imageSize,
-    ...minimumImageSize,
-    ...maximumImageSize,
-    ...sizeInMeters,
-    speed: Number,
-    minimumSpeed: Number,
-    maximumSpeed: Number,
-    lifetime: Number,
-    particleLife: {
-      type: Number,
-      default: 5.0
-    },
-    minimumParticleLife: Number,
-    maximumParticleLife: Number,
-    mass: {
-      type: Number,
-      default: 1.0
-    },
-    minimumMass: Number,
-    maximumMass: Number,
-    ...enableMouseEvent
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  props: particlePrimitiveProps,
+  emits: primitiveEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -80,3 +92,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcPrimitiveParticleProps = ExtractPropTypes<typeof particlePrimitiveProps>

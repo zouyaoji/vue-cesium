@@ -127,8 +127,8 @@ export function inherit(base, derived) {
   derived.prototype.constructor = derived
 }
 
-const getDefaultOptionByProps = (props: AnyObject, ignores: Array<string> = []) => {
-  const defaultOptions: AnyObject = {}
+export function getDefaultOptionByProps<T>(props, ignores: Array<string> = []) {
+  const defaultOptions: T = {} as T
   Object.keys(props).forEach(key => {
     if (ignores.indexOf(key) === -1) {
       const value: {
@@ -171,6 +171,5 @@ export {
   isUndefined,
   isFunction,
   camelCase,
-  getDefaultOptionByProps,
   addCustomProperty
 }

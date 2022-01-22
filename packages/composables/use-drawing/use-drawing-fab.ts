@@ -1,17 +1,17 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-01-06 11:42:23
+ * @LastEditTime: 2022-01-20 14:47:42
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
-import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
+import { VcFab, VcFabAction, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { CSSProperties, nextTick, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
@@ -45,7 +45,7 @@ export default function (
   const containerStyle = reactive<CSSProperties>({})
   const positionState = usePosition(props, $services)
   const containerRef = ref<HTMLElement | null>(null)
-  const fabRef = ref<typeof VcFab | null>(null)
+  const fabRef = ref<typeof VcFab>(null)
   const fabExtanded = ref(false)
   const mounted = ref(false)
   const primitiveCollection = ref(null)
@@ -125,7 +125,7 @@ export default function (
     updateRootStyle()
     mounted.value = true
     nextTick(() => {
-      mainFabOpts.autoExpand && fabRef.value?.toggle()
+      fabRef.value?.toggle()
     })
     activate()
     return true
@@ -293,14 +293,14 @@ export default function (
     })
   }
 
-  const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-    cesiumObject._vcId = cmpName
+  const onPrimitiveCollectionReady = ({ cesiumObject }: VcReadyObject) => {
+    ;(cesiumObject as any)._vcId = cmpName
   }
 
   provide(vcKey, getServices())
 
   // expose public methods
-  Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction })
+  Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction, fabRef })
 
   const renderContent = () => {
     if (canRender.value) {

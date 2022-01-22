@@ -219,7 +219,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
             emit('zoomEvt', {
               type: i === 1 ? 'zoomIn' : 'zoomOut',
               camera: viewer.camera,
-              status: 'complete'
+              status: 'end'
             })
         }
       }

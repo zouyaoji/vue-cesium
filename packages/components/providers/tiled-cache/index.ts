@@ -1,5 +1,6 @@
+import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
   url,
@@ -14,50 +15,52 @@ import {
   tileHeight
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { providerEmits } from '@vue-cesium/utils/emits'
 
-export default defineComponent({
-  name: 'VcProviderImageryTiledcache',
-  props: {
-    ...url,
-    ...format,
-    ...credit,
-    ...minimumLevel,
-    ...maximumLevel,
-    ...rectangle,
-    ...tilingScheme,
-    ...ellipsoid,
-    ...tileWidth,
-    ...tileHeight,
-    dir: {
-      type: String,
-      reqiured: true
-    },
-    scales: {
-      type: Array as PropType<Array<number>>,
-      default: () => {
-        return [
-          1 / 295829355,
-          1 / 147914678,
-          1 / 73957339,
-          1 / 36978669,
-          1 / 18489335,
-          1 / 9244667,
-          1 / 4622334,
-          1 / 2311167,
-          1 / 1155583,
-          1 / 577792,
-          1 / 288896,
-          1 / 144448,
-          1 / 72224,
-          1 / 36112,
-          1 / 18056,
-          1 / 9026,
-          1 / 4514
-        ]
-      }
-    }
+export const tiledcacheImageryProviderProps = {
+  ...url,
+  ...format,
+  ...credit,
+  ...minimumLevel,
+  ...maximumLevel,
+  ...rectangle,
+  ...tilingScheme,
+  ...ellipsoid,
+  ...tileWidth,
+  ...tileHeight,
+  dir: {
+    type: String,
+    reqiured: true
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  scales: {
+    type: Array as PropType<Array<number>>,
+    default: () => {
+      return [
+        1 / 295829355,
+        1 / 147914678,
+        1 / 73957339,
+        1 / 36978669,
+        1 / 18489335,
+        1 / 9244667,
+        1 / 4622334,
+        1 / 2311167,
+        1 / 1155583,
+        1 / 577792,
+        1 / 288896,
+        1 / 144448,
+        1 / 72224,
+        1 / 36112,
+        1 / 18056,
+        1 / 9026,
+        1 / 4514
+      ]
+    }
+  }
+}
+export default defineComponent({
+  name: 'VcImageryProviderTiledcache',
+  props: tiledcacheImageryProviderProps,
+  emits: providerEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -152,3 +155,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcImageryProviderTiledcacheProps = ExtractPropTypes<typeof tiledcacheImageryProviderProps>

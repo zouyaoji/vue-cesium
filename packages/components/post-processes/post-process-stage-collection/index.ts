@@ -1,30 +1,34 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:11:18
+ * @LastEditTime: 2022-01-19 23:52:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-collection\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, PropType, ref, watch, WatchStopHandle } from 'vue'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, WatchStopHandle, PropType } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import type { VcPostProcessStageProps } from '../post-process-stage'
 
+export const postProcessStageCollectionProps = {
+  postProcesses: {
+    type: Array as PropType<Array<VcPostProcessStageProps>>,
+    default: () => []
+  }
+}
 export default defineComponent({
   name: 'VcPostProcessStageCollection',
-  props: {
-    postProcesses: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: postProcessStageCollectionProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
-    instance.cesiumClass = 'PostProcessStage'
+    instance.cesiumClass = 'PostProcessStageCollection'
     instance.cesiumEvents = []
     const commonState = useCommon(props, ctx, instance)
     if (commonState === void 0) {
@@ -88,3 +92,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcPostProcessStageCollectionProps = ExtractPropTypes<typeof postProcessStageCollectionProps>

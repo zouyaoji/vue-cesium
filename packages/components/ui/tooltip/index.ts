@@ -1,3 +1,4 @@
+import type { ExtractPropTypes, PropType } from 'vue'
 import { h, defineComponent, ref, computed, watch, onBeforeUnmount, Transition, getCurrentInstance } from 'vue'
 
 import useAnchor, { useAnchorProps } from '@vue-cesium/composables/private/use-anchor'
@@ -16,66 +17,100 @@ import { hSlot } from '@vue-cesium/utils/private/render'
 import { validatePosition, validateOffset, setPosition, parsePosition } from '@vue-cesium/utils/private/position-engine'
 import { platform } from '@vue-cesium/utils/platform'
 
+export const tooltipProps = {
+  ...useAnchorProps,
+  ...useModelToggleProps,
+  ...useTransitionProps,
+
+  maxHeight: {
+    type: String,
+    default: null
+  },
+  maxWidth: {
+    type: String,
+    default: null
+  },
+
+  transitionShow: {
+    type: String,
+    default: 'jump-down'
+  },
+  transitionHide: {
+    type: String,
+    default: 'jump-up'
+  },
+
+  anchor: {
+    type: String as PropType<
+      | 'top left'
+      | 'top middle'
+      | 'top right'
+      | 'top start'
+      | 'top end'
+      | 'center left'
+      | 'center middle'
+      | 'center right'
+      | 'center start'
+      | 'center end'
+      | 'bottom left'
+      | 'bottom middle'
+      | 'bottom right'
+      | 'bottom start'
+      | 'bottom end'
+    >,
+    default: 'bottom middle',
+    validator: validatePosition
+  },
+  self: {
+    type: String as PropType<
+      | 'top left'
+      | 'top middle'
+      | 'top right'
+      | 'top start'
+      | 'top end'
+      | 'center left'
+      | 'center middle'
+      | 'center right'
+      | 'center start'
+      | 'center end'
+      | 'bottom left'
+      | 'bottom middle'
+      | 'bottom right'
+      | 'bottom start'
+      | 'bottom end'
+    >,
+    default: 'top middle',
+    validator: validatePosition
+  },
+  offset: {
+    type: Array,
+    default: () => [14, 14],
+    validator: validateOffset
+  },
+
+  scrollTarget: String,
+
+  delay: {
+    type: Number,
+    default: 0
+  },
+
+  hideDelay: {
+    type: Number,
+    default: 0
+  },
+
+  persistent: {
+    type: Boolean
+  }
+}
+
 export default defineComponent({
   name: 'VcTooltip',
 
   inheritAttrs: false,
 
-  props: {
-    ...useAnchorProps,
-    ...useModelToggleProps,
-    ...useTransitionProps,
-
-    maxHeight: {
-      type: String,
-      default: null
-    },
-    maxWidth: {
-      type: String,
-      default: null
-    },
-
-    transitionShow: {
-      type: String,
-      default: 'jump-down'
-    },
-    transitionHide: {
-      type: String,
-      default: 'jump-up'
-    },
-
-    anchor: {
-      type: String,
-      default: 'bottom middle',
-      validator: validatePosition
-    },
-    self: {
-      type: String,
-      default: 'top middle',
-      validator: validatePosition
-    },
-    offset: {
-      type: Array,
-      default: () => [14, 14],
-      validator: validateOffset
-    },
-
-    scrollTarget: Object,
-
-    delay: {
-      type: Number,
-      default: 0
-    },
-
-    hideDelay: {
-      type: Number,
-      default: 0
-    },
-
-    persistent: {
-      type: Boolean
-    }
-  },
+  props: tooltipProps,
 
   emits: [...useModelToggleEmits],
 
@@ -273,3 +308,131 @@ export default defineComponent({
     return renderPortal
   }
 })
+
+// export type VcTooltipProps = ExtractPropTypes<typeof tooltipProps>
+
+export interface VcTooltipProps {
+  /**
+   * One of VueCesium's embedded transitions.
+   * Default value: jump-down
+   */
+  transitionShow?: string | undefined
+  /**
+   * One of VueCesium's embedded transitions.
+   * Default value: jump-up
+   */
+  transitionHide?: string | undefined
+  /**
+   * Transition duration (in milliseconds, without unit).
+   * Default value: 300
+   */
+  transitionDuration?: string | number | undefined
+  /**
+   * Model of the component defining shown/hidden state; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive.
+   */
+  modelValue?: boolean
+  /**
+   * The maximum height of the Tooltip; Size in CSS units, including unit name.
+   */
+  maxHeight?: string | undefined
+  /**
+   * The maximum width of the Tooltip; Size in CSS units, including unit name.
+   */
+  maxWidth?: string | undefined
+  /**
+   * Two values setting the starting position or anchor point of the Tooltip relative to its target.
+   * Default value: bottom middle
+   */
+  anchor?:
+    | 'top left'
+    | 'top middle'
+    | 'top right'
+    | 'top start'
+    | 'top end'
+    | 'center left'
+    | 'center middle'
+    | 'center right'
+    | 'center start'
+    | 'center end'
+    | 'bottom left'
+    | 'bottom middle'
+    | 'bottom right'
+    | 'bottom start'
+    | 'bottom end'
+    | undefined
+  /**
+   * Two values setting the Tooltip's own position relative to its target.
+   * Default value: top middle
+   */
+  self?:
+    | 'top left'
+    | 'top middle'
+    | 'top right'
+    | 'top start'
+    | 'top end'
+    | 'center left'
+    | 'center middle'
+    | 'center right'
+    | 'center start'
+    | 'center end'
+    | 'bottom left'
+    | 'bottom middle'
+    | 'bottom right'
+    | 'bottom start'
+    | 'bottom end'
+    | undefined
+  /**
+   * An array of two numbers to offset the Tooltip horizontally and vertically in pixels.
+   * Default value: [14, 14]
+   */
+  offset?: any[] | undefined
+  /**
+   * CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one.
+   */
+  scrollTarget?: string | undefined
+  /**
+   * Configure a target element to trigger Tooltip toggle; 'true' means it enables the parent DOM element, 'false' means it disables attaching events to any DOM elements; By using a String (CSS selector) it attaches the events to the specified DOM element (if it exists).
+   * Default value: true
+   */
+  target?: boolean | string | undefined
+  /**
+   * Skips attaching events to the target DOM element (that trigger the element to get shown).
+   */
+  noParentEvent?: boolean | undefined
+  /**
+   * Configure Tooltip to appear with delay.
+   */
+  delay?: number | undefined
+  /**
+   * Configure Tooltip to disappear with delay.
+   */
+  hideDelay?: number | undefined
+  tip?: string | undefined
+  persistent?: boolean
+  contextMenu?: boolean
+  /**
+   * Emitted when showing/hidden state changes; Is also used by v-model.
+   * @param value New state (showing/hidden)
+   */
+  'onUpdate:modelValue'?: (value: boolean) => void
+  /**
+   * Emitted after component has triggered show().
+   * @param evt JS event object
+   */
+  onShow?: (evt: any) => void
+  /**
+   * Emitted when component triggers show() but before it finishes doing it.
+   * @param evt JS event object
+   */
+  onBeforeShow?: (evt: any) => void
+  /**
+   * Emitted after component has triggered hide().
+   * @param evt JS event object
+   */
+  onHide?: (evt: any) => void
+  /**
+   * Emitted when component triggers hide() but before it finishes doing it.
+   * @param evt JS event object
+   */
+  onBeforeHide?: (evt: any) => void
+}

@@ -1,60 +1,50 @@
+import type { ExtractPropTypes, VNode, WatchStopHandle, CSSProperties, PropType } from 'vue'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { $ } from '@vue-cesium/utils/private/vm'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import {
-  computed,
-  createCommentVNode,
-  CSSProperties,
-  defineComponent,
-  getCurrentInstance,
-  h,
-  onUnmounted,
-  PropType,
-  reactive,
-  ref,
-  VNode,
-  WatchStopHandle
-} from 'vue'
-import VcViewer from '@vue-cesium/components/viewer'
+import type { VcBtnTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref } from 'vue'
+import VcViewer, { VcViewerProps } from '@vue-cesium/components/viewer'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const overviewProps = {
+  position: {
+    type: String as PropType<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'>,
+    default: 'bottom-right',
+    validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left'].includes(v)
+  },
+  offset: {
+    type: Array,
+    validator: (v: Array<string>) => v.length === 2
+  },
+  width: {
+    type: String,
+    default: '150px'
+  },
+  height: {
+    type: String,
+    default: '150px'
+  },
+  border: {
+    type: String,
+    default: 'solid 4px rgb(255, 255, 255)'
+  },
+  borderRadius: {
+    type: String
+  },
+  toggleOpts: {
+    type: Object as PropType<VcBtnTooltipProps & { show: boolean }>
+  },
+  viewerOpts: {
+    type: Object as PropType<VcViewerProps>
+  }
+}
 export default defineComponent({
   name: 'VcOverviewMap',
-  props: {
-    position: {
-      type: String as PropType<string>,
-      default: 'bottom-right',
-      validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left'].includes(v)
-    },
-    offset: {
-      type: Array,
-      validator: (v: Array<string>) => v.length === 2
-    },
-    width: {
-      type: String,
-      default: '150px'
-    },
-    height: {
-      type: String,
-      default: '150px'
-    },
-    border: {
-      type: String,
-      default: 'solid 4px rgb(255, 255, 255)'
-    },
-    borderRadius: {
-      type: String
-    },
-    toggleOpts: {
-      type: Object
-    },
-    viewerOpts: {
-      type: Object
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: overviewProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -266,3 +256,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcOverviewMapProps = ExtractPropTypes<typeof overviewProps>
+// export type VcOverviewMapEmits = typeof emits

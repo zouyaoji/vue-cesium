@@ -136,7 +136,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('compassEvt', {
             type: 'reset',
             camera: viewer.camera,
-            status: 'complete',
+            status: 'end',
             target: e.currentTarget
           })
       },

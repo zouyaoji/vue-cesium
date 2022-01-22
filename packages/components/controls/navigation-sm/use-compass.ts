@@ -161,7 +161,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       emit('compassEvt', {
         type: 'reset',
         camera: viewer.camera,
-        status: 'start'
+        status: 'start',
+        target: e.currentTarget
       })
     const rotateFrame = Transforms.eastNorthUpToFixedFrame(center || new Cartesian3(), viewer.scene.globe.ellipsoid)
     const lookVector = Cartesian3.subtract(center || new Cartesian3(), camera.position, new Cartesian3())
@@ -175,7 +176,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('compassEvt', {
             type: 'reset',
             camera: viewer.camera,
-            status: 'complete'
+            status: 'end',
+            target: e.currentTarget
           })
       },
       cancel: () => {
@@ -183,7 +185,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('compassEvt', {
             type: 'reset',
             camera: viewer.camera,
-            status: 'cancel'
+            status: 'cancel',
+            target: e.currentTarget
           })
       }
     })

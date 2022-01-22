@@ -1,38 +1,46 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2021-10-29 14:52:01
+ * @LastEditTime: 2022-01-19 10:20:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
  */
+import type { ExtractPropTypes } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { $ } from '@vue-cesium/utils/private/vm'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, h } from 'vue'
 import useSelectionIndicatior from './use-selection-indicatior'
+import { commonEmits } from '@vue-cesium/utils/emits'
+import type Feature from './Feature'
 
+export const selectionIndicatorProps = {
+  show: {
+    type: Boolean,
+    default: true
+  },
+  width: {
+    type: Number,
+    default: 50
+  },
+  height: {
+    type: Number,
+    default: 50
+  },
+  allowFeatureInfoRequests: {
+    type: Boolean,
+    default: true
+  }
+}
+const emits = {
+  ...commonEmits,
+  pickEvt: (evt: Feature) => true
+}
 export default defineComponent({
   name: 'VcSelectionIndicator',
-  props: {
-    show: {
-      type: Boolean,
-      default: true
-    },
-    width: {
-      type: Number,
-      default: 50
-    },
-    height: {
-      type: Number,
-      default: 50
-    },
-    allowFeatureInfoRequests: {
-      type: Boolean,
-      default: true
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'pickEvt'],
+  props: selectionIndicatorProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -100,3 +108,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcSelectionIndicatorProps = ExtractPropTypes<typeof selectionIndicatorProps>
+export type VcSelectionIndicatorEmits = typeof emits

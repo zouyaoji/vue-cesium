@@ -57,11 +57,12 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
   }
 
   function pickedAction(this, movement) {
-    if (!props.enableMouseEvent) {
+    if (!props.enableMouseEvent || !movement) {
       return
     }
-    const { viewer, eventName } = this
-    const position = movement.position || movement.endPosition
+    const viewer: Cesium.Viewer = this.viewer
+    const { eventName } = this
+    const position: Cesium.Cartesian2 = movement.position || movement.endPosition
     if (!position) {
       return
     }
@@ -124,8 +125,8 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
       return
     }
 
-    let intersection
-    const scene = viewer.scene as Cesium.Scene
+    let intersection: Cesium.Cartesian3 | undefined
+    const scene = viewer.scene
     if (scene.mode === Cesium.SceneMode.SCENE3D) {
       const ray = scene.camera.getPickRay(position)
       intersection = scene.globe.pick(ray, scene)

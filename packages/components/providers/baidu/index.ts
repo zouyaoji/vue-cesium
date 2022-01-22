@@ -1,47 +1,51 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-27 15:16:49
+ * @LastEditTime: 2022-01-15 23:33:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, toRefs } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ProjectionTransforms, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import BaiduMapImageryProvider from './BaiduMapImageryProvider'
 import { useProviders } from '@vue-cesium/composables'
 import { url, rectangle, ellipsoid, tileDiscardPolicy, credit, minimumLevel, maximumLevel } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { providerEmits } from '@vue-cesium/utils/emits'
 
-export default defineComponent({
-  name: 'VcProviderImageryBaidumap',
-  props: {
-    ...url,
-    ...rectangle,
-    ...ellipsoid,
-    ...tileDiscardPolicy,
-    ...credit,
-    ...minimumLevel,
-    ...maximumLevel,
-    protocol: {
-      type: String,
-      default: 'http'
-    },
-    projectionTransforms: {
-      type: [Boolean, Object],
-      default: () => {
-        return {
-          from: 'BD09',
-          to: 'WGS84'
-        }
+export const baiduImageryProviderProps = {
+  ...url,
+  ...rectangle,
+  ...ellipsoid,
+  ...tileDiscardPolicy,
+  ...credit,
+  ...minimumLevel,
+  ...maximumLevel,
+  protocol: {
+    type: String,
+    default: 'http'
+  },
+  projectionTransforms: {
+    type: [Boolean, Object] as PropType<ProjectionTransforms>,
+    default: () => {
+      return {
+        from: 'BD09',
+        to: 'WGS84'
       }
-    },
-    bdStyle: {
-      type: String,
-      default: 'dark'
     }
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  bdStyle: {
+    type: String,
+    default: 'dark',
+    validator: (v: string) => ['dark'].includes(v)
+  }
+}
+export default defineComponent({
+  name: 'VcImageryProviderBaidu',
+  props: baiduImageryProviderProps,
+  emits: providerEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -64,3 +68,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcImageryProviderBaiduProps = ExtractPropTypes<typeof baiduImageryProviderProps>

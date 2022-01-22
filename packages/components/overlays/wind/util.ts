@@ -1,15 +1,16 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 10:11:59
- * @LastEditTime: 2021-10-28 15:48:57
+ * @LastEditTime: 2022-01-17 16:21:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\util.ts
  */
 
 export function getFullscreenQuad() {
+  const GeometryAttributes = Cesium.GeometryAttributes as any
   const fullscreenQuad = new Cesium.Geometry({
-    attributes: new Cesium.GeometryAttributes({
+    attributes: new GeometryAttributes({
       position: new Cesium.GeometryAttribute({
         componentDatatype: Cesium.ComponentDatatype.FLOAT,
         componentsPerAttribute: 3,

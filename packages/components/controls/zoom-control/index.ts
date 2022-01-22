@@ -1,5 +1,6 @@
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch, VNode } from 'vue'
-import { CameraOption, VcComponentInternalInstance, VcBtnOptions } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
+import type { VcCamera, VcComponentInternalInstance, VcZoomEvt, VcBtnTooltipProps, VcReadyObject } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
@@ -9,11 +10,17 @@ import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  zoomEvt: (evt: VcZoomEvt) => true
+}
+export const zoomControlProps = defaultProps
 export default defineComponent({
   name: 'VcZoomControl',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt'],
+  props: zoomControlProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -62,7 +69,7 @@ export default defineComponent({
         nextTick(() => {
           const { viewer } = $services
           if (props.overrideViewerCamera) {
-            const resetView: CameraOption = props.defaultResetView
+            const resetView: VcCamera = props.defaultResetView
             setViewerCamera(viewer, resetView)
           }
 
@@ -170,7 +177,7 @@ export default defineComponent({
       Object.assign(rootStyle, css)
     }
 
-    const getContent = (options: VcBtnOptions, type) => {
+    const getContent = (options: VcBtnTooltipProps, type) => {
       let btnRef
       let tooltipRef
       let tip
@@ -206,7 +213,7 @@ export default defineComponent({
             VcTooltip,
             {
               ref: tooltipRef,
-              ...options.tooltip
+              ...(options.tooltip as any)
             },
             () => h('strong', null, tip)
           )
@@ -266,3 +273,104 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcZoomControlProps = ExtractPropTypes<typeof zoomControlProps>
+export type VcZoomControlEmits = typeof emits
+
+export type VcZoomControlProps = {
+  /**
+   * Specify the position of the VcZoomControl.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcZoomControl horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether to enable the reset button.
+   * Default value: true
+   */
+  enableResetButton?: boolean
+  /**
+   * Specify the zoom amount of zoom in and zoom out.
+   * Default value: 2
+   */
+  zoomAmount?: number
+  /**
+   * Specify the time of the zoom-in and zoom-out process, in seconds.
+   * Default value: 0.5
+   */
+  duration?: number
+  /**
+   * Specify the time to reset to the default camera position, in seconds.
+   * Default value: 1.5
+   */
+  durationReset?: number
+  /**
+   * Specify the reset camera view.
+   * Default value:
+   * {
+   *    position: {
+   *      lng: 105,
+   *      lat: 30,
+   *      height: 19059568.5
+   *    }
+   * }
+   */
+  defaultResetView?: VcCamera
+  /**
+   * Specify whether to override the camera attribute on the vc-viewer during initialization.
+   * Default value: false
+   */
+  overrideViewerCamera?: boolean
+  /**
+   * Specifies the css background of the VcZoomControl.
+   * Default value: #3f4854
+   */
+  background?: string
+  /**
+   * Specifies the css border of the VcZoomControl.
+   * Default value: solid 1px rgba(255, 255, 255, 0.2)
+   */
+  border?: string
+  /**
+   * Specifies the css border radius of the VcZoomControl.
+   * Default value: 100px
+   */
+  borderRadius?: string
+  /**
+   * Specify the direction of the VcZoomControl.
+   * Default value: vertical
+   */
+  direction?: 'vertical' | 'horizontal'
+  /**
+   * Specify the zoom in parameters.
+   */
+  zoomInOptions?: VcBtnTooltipProps
+  /**
+   * Specify the zoom out parameters.
+   */
+  zoomOutOptions?: VcBtnTooltipProps
+  /**
+   * Specify the reset button parameters.
+   */
+  zoomResetOptions?: VcBtnTooltipProps
+  /**
+   * Triggers before the VcZoomControl is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcZoomControl is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcZoomControl is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * 	Triggers when the VcZoomControl is operated.
+   */
+  onZoomEvt?: (evt: VcZoomEvt) => void
+}

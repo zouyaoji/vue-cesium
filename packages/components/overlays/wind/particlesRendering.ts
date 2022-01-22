@@ -101,9 +101,9 @@ class ParticlesRendering {
 
       vertex += repeatVertex
     }
-
+    const GeometryAttributes = Cesium.GeometryAttributes as any
     const geometry = new Cesium.Geometry({
-      attributes: new Cesium.GeometryAttributes({
+      attributes: GeometryAttributes({
         st: new Cesium.GeometryAttribute({
           componentDatatype: Cesium.ComponentDatatype.FLOAT,
           componentsPerAttribute: 2,

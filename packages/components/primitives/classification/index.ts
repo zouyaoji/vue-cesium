@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:48:53
+ * @LastEditTime: 2022-01-16 09:43:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\classification\index.ts
  */
+import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
   geometryInstances,
@@ -26,25 +27,27 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { primitiveEmits } from '@vue-cesium/utils/emits'
 
+export const classificationPrimitiveProps = {
+  ...geometryInstances,
+  ...appearance,
+  ...show,
+  ...vertexCacheOptimize,
+  ...interleave,
+  ...compressVertices,
+  ...releaseGeometryInstances,
+  ...allowPicking,
+  ...asynchronous,
+  ...classificationType,
+  ...debugShowBoundingVolume,
+  ...debugShowShadowVolume,
+  ...enableMouseEvent
+}
 export default defineComponent({
   name: 'VcPrimitiveClassification',
-  props: {
-    ...geometryInstances,
-    ...appearance,
-    ...show,
-    ...vertexCacheOptimize,
-    ...interleave,
-    ...compressVertices,
-    ...releaseGeometryInstances,
-    ...allowPicking,
-    ...asynchronous,
-    ...classificationType,
-    ...debugShowBoundingVolume,
-    ...debugShowShadowVolume,
-    ...enableMouseEvent
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise', 'update:geometryInstances'],
+  props: classificationPrimitiveProps,
+  emits: primitiveEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -64,3 +67,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(name))
   }
 })
+
+export type VcPrimitiveClassificationProps = ExtractPropTypes<typeof classificationPrimitiveProps>

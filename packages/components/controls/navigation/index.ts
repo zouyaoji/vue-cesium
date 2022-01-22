@@ -1,18 +1,22 @@
-import {
-  defineComponent,
-  getCurrentInstance,
-  watch,
-  nextTick,
-  ref,
-  CSSProperties,
-  reactive,
-  h,
-  createCommentVNode,
-  ExtractPropTypes,
-  computed,
-  VNode
-} from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-01-22 09:04:55
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
+ */
+import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
+import type {
+  VcCompassEvt,
+  VcDistanceLegendEvt,
+  VcLocationEvt,
+  VcPrintEvt,
+  VcStatusBarEvt,
+  VcComponentInternalInstance,
+  VcZoomEvt
+} from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -20,17 +24,28 @@ import { defaultProps, defaultOptions } from './defaultProps'
 import { useCommon } from '@vue-cesium/composables'
 import VcDistanceLegend from '../distance-legend'
 import VcStatusBar from '../status-bar'
-import VcZoomControl from '../zoom-control'
-import VcMyLocation from '../my-location'
+import VcZoomControl, { VcZoomControlProps } from '../zoom-control'
+import VcMyLocation, { VcMyLocationProps } from '../my-location'
 import VcCompass from '../compass'
-import VcPrint from '../print'
+import VcPrint, { VcPrintProps } from '../print'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  zoomEvt: (evt: VcZoomEvt) => true,
+  compassEvt: (evt: VcCompassEvt) => true,
+  locationEvt: (evt: VcLocationEvt) => true,
+  printEvt: (evt: VcPrintEvt) => true,
+  statusBarEvt: (evt: VcStatusBarEvt) => true,
+  distanceLegendEvt: (evt: VcDistanceLegendEvt) => true
+}
+export const navigationProps = defaultProps
 export default defineComponent({
   name: 'VcNavigation',
   inheritAttrs: false,
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt', 'compassEvt', 'locationEvt', 'printEvt', 'statusBarEvt', 'distanceLegendEvt'],
-  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
+  props: navigationProps,
+  emits: emits,
+  setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcNavigation'
@@ -43,14 +58,14 @@ export default defineComponent({
     const { $services } = commonState
     const positionState = usePosition(props, $services)
     const positionStateOther = usePosition(props.otherOpts || { position: 'bottom-right' }, $services)
-    const rootRef = ref<HTMLElement | null>(null)
-    const secondRootRef = ref<HTMLElement | null>(null)
-    const compassRef = ref<typeof VcCompass | null>(null)
-    const zoomControlRef = ref<typeof VcZoomControl | null>(null)
-    const printRef = ref<typeof VcPrint | null>(null)
-    const myLocationRef = ref<typeof VcMyLocation | null>(null)
-    const statusBarRef = ref<typeof VcStatusBar | null>(null)
-    const distanceLegendRef = ref<typeof VcDistanceLegend | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const secondRootRef = ref<HTMLElement>(null)
+    const compassRef = ref<typeof VcCompass>(null)
+    const zoomControlRef = ref<typeof VcZoomControl>(null)
+    const printRef = ref<typeof VcPrint>(null)
+    const myLocationRef = ref<typeof VcMyLocation>(null)
+    const statusBarRef = ref<typeof VcStatusBar>(null)
+    const distanceLegendRef = ref<typeof VcDistanceLegend>(null)
     const rootStyle = reactive<CSSProperties>({})
     const secondRootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
@@ -74,35 +89,35 @@ export default defineComponent({
     )
 
     const compassOptions = computed(() => Object.assign({}, defaultOptions.compassOpts, props.compassOpts))
-    const zoomControlOptions = computed(() => Object.assign({}, defaultOptions.zoomOpts, props.zoomOpts))
-    const printViewOptions = computed(() => Object.assign({}, defaultOptions.printOpts, props.printOpts))
-    const myLocationOptions = computed(() => Object.assign({}, defaultOptions.locationOpts, props.locationOpts))
+    const zoomControlOptions = computed<VcZoomControlProps>(() => Object.assign({}, defaultOptions.zoomOpts, props.zoomOpts))
+    const printViewOptions = computed<VcPrintProps>(() => Object.assign({}, defaultOptions.printOpts, props.printOpts))
+    const myLocationOptions = computed<false | VcMyLocationProps>(() => Object.assign({}, defaultOptions.locationOpts, props.locationOpts))
     const otherControlOptions = computed(() => Object.assign({}, defaultOptions.otherOpts, props.otherOpts))
 
     // methods
-    const onCompassEvt = e => {
+    const onCompassEvt = (evt: VcCompassEvt) => {
       const listener = getInstanceListener(instance, 'compassEvt')
-      listener && emit('compassEvt', e)
+      listener && emit('compassEvt', evt)
     }
-    const onZoomEvt = e => {
+    const onZoomEvt = (evt: VcZoomEvt) => {
       const listener = getInstanceListener(instance, 'zoomEvt')
-      listener && emit('zoomEvt', e)
+      listener && emit('zoomEvt', evt)
     }
-    const onPrintEvt = e => {
+    const onPrintEvt = (evt: VcPrintEvt) => {
       const listener = getInstanceListener(instance, 'printEvt')
-      listener && emit('printEvt', e)
+      listener && emit('printEvt', evt)
     }
-    const onLocationEvt = e => {
+    const onLocationEvt = (evt: VcLocationEvt) => {
       const listener = getInstanceListener(instance, 'locationEvt')
-      listener && emit('locationEvt', e)
+      listener && emit('locationEvt', evt)
     }
-    const onStatusBarEvt = e => {
+    const onStatusBarEvt = (evt: VcStatusBarEvt) => {
       const listener = getInstanceListener(instance, 'statusBarEvt')
-      listener && emit('statusBarEvt', e)
+      listener && emit('statusBarEvt', evt)
     }
-    const onDistanceLegendEvt = e => {
+    const onDistanceLegendEvt = (evt: VcDistanceLegendEvt) => {
       const listener = getInstanceListener(instance, 'distanceLegendEvt')
-      listener && emit('distanceLegendEvt', e)
+      listener && emit('distanceLegendEvt', evt)
     }
 
     instance.createCesiumObject = async () => {
@@ -341,3 +356,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcNavigationEmits = typeof emits
+export type { VcNavigationOtherOpts, VcNavigationProps } from './defaultProps'

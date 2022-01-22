@@ -1,69 +1,73 @@
+import type { ExtractPropTypes, PropType, ExtractDefaultPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { position, plane, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { commonEmits, pickEventEmits } from '@vue-cesium/utils/emits'
+
+export const entityProps = {
+  ...position,
+  ...plane,
+  id: String,
+  name: String,
+  availability: Object as PropType<Cesium.TimeIntervalCollection>,
+  show: {
+    type: Boolean,
+    default: true
+  },
+  description: [String, Object],
+  orientation: Object,
+  viewFrom: Object,
+  parent: Object,
+  billboard: Object,
+  corridor: Object,
+  cylinder: Object,
+  ellipse: Object,
+  ellipsoid: Object,
+  box: Object,
+  label: Object,
+  model: Object,
+  tileset: Object,
+  path: Object,
+  point: Object,
+  polygon: Object,
+  polyline: Object,
+  properties: Object,
+  polylineVolume: Object,
+  rectangle: Object,
+  wall: Object,
+  ...enableMouseEvent
+}
+
+const emits = {
+  ...commonEmits,
+  ...pickEventEmits,
+  'update:billboard': (payload: Cesium.BillboardGraphics) => true,
+  'update:box': (payload: Cesium.BoxGraphics) => true,
+  'update:corridor': (payload: Cesium.CorridorGraphics) => true,
+  'update:cylinder': (payload: Cesium.CylinderGraphics) => true,
+  'update:ellipse': (payload: Cesium.EllipseGraphics) => true,
+  'update:ellipsoid': (payload: Cesium.EllipsoidGraphics) => true,
+  'update:label': (payload: Cesium.LabelGraphics) => true,
+  'update:model': (payload: Cesium.ModelGraphics) => true,
+  'update:path': (payload: Cesium.PathGraphics) => true,
+  'update:plane': (payload: Cesium.PlaneGraphics) => true,
+  'update:point': (payload: Cesium.PointGraphics) => true,
+  'update:polygon': (payload: Cesium.PolygonGraphics) => true,
+  'update:polyline': (payload: Cesium.PolylineGraphics) => true,
+  'update:polylineVolume': (payload: Cesium.PolylineVolumeGraphics) => true,
+  'update:rectangle': (payload: Cesium.RectangleGraphics) => true,
+  'update:tileset': (payload: any) => true,
+  'update:wall': (payload: Cesium.WallGraphics) => true
+}
 
 export default defineComponent({
   name: 'VcEntity',
-  props: {
-    ...position,
-    ...plane,
-    id: String,
-    name: String,
-    availability: Object,
-    show: {
-      type: Boolean,
-      default: true
-    },
-    description: [String, Object],
-    orientation: Object,
-    viewFrom: Object,
-    parent: Object,
-    billboard: Object,
-    corridor: Object,
-    cylinder: Object,
-    ellipse: Object,
-    ellipsoid: Object,
-    box: Object,
-    label: Object,
-    model: Object,
-    tileset: Object,
-    path: Object,
-    point: Object,
-    polygon: Object,
-    polyline: Object,
-    properties: Object,
-    polylineVolume: Object,
-    rectangle: Object,
-    wall: Object,
-    ...enableMouseEvent
-  },
-  emits: [
-    'beforeLoad',
-    'ready',
-    'destroyed',
-    'update:billboard',
-    'update:box',
-    'update:corridor',
-    'update:cylinder',
-    'update:ellipse',
-    'update:ellipsoid',
-    'update:ellipse',
-    'update:label',
-    'update:model',
-    'update:path',
-    'update:plane',
-    'update:point',
-    'update:polygon',
-    'update:polyline',
-    'update:polylineVolume',
-    'update:rectangle',
-    'update:tileset',
-    'update:wall'
-  ],
+  props: entityProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -86,12 +90,12 @@ export default defineComponent({
       return $services?.entities?.remove(instance.cesiumObject as Cesium.Entity)
     }
 
-    const updateGraphics = (graphics, emitType: EntityEmitType) => {
+    const updateGraphics = (graphics, emitType) => {
       const listener = getInstanceListener(instance, emitType)
       if (listener) {
         emit(emitType, graphics)
       } else {
-        instance.cesiumObject && (instance.cesiumObject[emitType.substr(7)] = graphics)
+        instance.cesiumObject && (instance.cesiumObject[emitType.substring(7)] = graphics)
       }
       graphics && (graphics._vcParent = instance.cesiumObject)
       return true
@@ -116,3 +120,6 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcEntityProps = ExtractPropTypes<typeof entityProps>
+export type VcEntityEmits = typeof emits

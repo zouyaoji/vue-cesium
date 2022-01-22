@@ -19,8 +19,25 @@ import {
   makeOptions,
   makeAppearance
 } from './cesium-helpers'
-import { PropType } from 'vue'
-import { CartographicInDegreeOption, Cartesian3Option, AppearanceOpts } from './types'
+import type { Component, PropType } from 'vue'
+import type {
+  CartographicInDegreeOption,
+  Cartesian3Option,
+  VcPosition,
+  VcRectangle,
+  VcAppearance,
+  VcColor,
+  ProjectionTransforms,
+  VcCallbackPropertyFunction,
+  VcDistanceDisplayCondition,
+  VcCartesian2,
+  VcCartesian3Array,
+  VcCartesian2Array,
+  VcNearFarScalar,
+  VcPolygonHierarchy,
+  VcMaterial,
+  VcBoundingRectangle
+} from './types'
 
 // 下面属性作为实体加载时 可以传 Function
 // Entity start
@@ -33,11 +50,14 @@ import { CartographicInDegreeOption, Cartesian3Option, AppearanceOpts } from './
  * :position = [number, number, number]
  */
 const position = {
+  /**
+   * A Property specifying the entity position.
+   */
   position: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3,
-      deep: true
+      deep: true // 在 use-common 中已将 SampledPositionProperty 类型的 deep 设为 false
     }
   }
 }
@@ -61,7 +81,7 @@ const orientation = {
  */
 const alignedAxis = {
   alignedAxis: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     default: () => {
       return {
         x: 0,
@@ -80,7 +100,7 @@ const alignedAxis = {
  */
 const color = {
   color: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     default: 'white',
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -89,7 +109,7 @@ const color = {
 }
 const depthFailColor = {
   depthFailColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     default: 'white',
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -109,7 +129,7 @@ const disableDepthTestDistance = {
  */
 const distanceDisplayCondition = {
   distanceDisplayCondition: {
-    type: [Object, Array, Function] as PropType<Cesium.DistanceDisplayCondition>,
+    type: [Object, Array, Function] as PropType<VcDistanceDisplayCondition>,
     watcherOptions: {
       cesiumObjectBuilder: makeDistanceDisplayCondition
     }
@@ -121,7 +141,7 @@ const distanceDisplayCondition = {
  */
 const eyeOffset = {
   eyeOffset: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     default: () => {
       return {
         x: 0,
@@ -147,7 +167,7 @@ const height = {
  */
 const heightReference = {
   heightReference: {
-    type: [Number, Object, Function]
+    type: [Number, Object, Function] as PropType<number | Cesium.HeightReference | VcCallbackPropertyFunction<number>>
     // default: 0
   }
 }
@@ -157,7 +177,7 @@ const heightReference = {
  */
 const horizontalOrigin = {
   horizontalOrigin: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.HorizontalOrigin | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -166,7 +186,9 @@ const horizontalOrigin = {
  * @const {String, Object, HTMLCanvasElement, Function} image mixin
  */
 const image = {
-  image: [String, Object, HTMLCanvasElement, Function]
+  image: [String, Object, HTMLCanvasElement, Function] as PropType<
+    string | HTMLCanvasElement | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>
+  >
 }
 
 /**
@@ -174,7 +196,7 @@ const image = {
  */
 const imageSubRegion = {
   imageSubRegion: {
-    type: [Object, Array, Function] as PropType<Cesium.BoundingRectangle>,
+    type: [Object, Array, Function] as PropType<VcBoundingRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeBoundingRectangle
     }
@@ -186,7 +208,7 @@ const imageSubRegion = {
  */
 const pixelOffset = {
   pixelOffset: {
-    type: [Object, Array, Function] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array, Function] as PropType<VcCartesian2>,
     default: () => {
       return {
         x: 0,
@@ -218,7 +240,7 @@ const pixelOffset = {
  */
 const pixelOffsetScaleByDistance = {
   pixelOffsetScaleByDistance: {
-    type: [Object, Array, Function] as PropType<Cesium.NearFarScalar>,
+    type: [Object, Array, Function] as PropType<VcNearFarScalar>,
     watcherOptions: {
       cesiumObjectBuilder: makeNearFarScalar
     }
@@ -250,7 +272,7 @@ const scale = {
  */
 const scaleByDistance = {
   scaleByDistance: {
-    type: [Object, Array, Function] as PropType<Cesium.NearFarScalar>,
+    type: [Object, Array, Function] as PropType<VcNearFarScalar>,
     watcherOptions: {
       cesiumObjectBuilder: makeNearFarScalar
     }
@@ -282,7 +304,7 @@ const sizeInMeters = {
  */
 const translucencyByDistance = {
   translucencyByDistance: {
-    type: [Object, Array, Function] as PropType<Cesium.NearFarScalar>,
+    type: [Object, Array, Function] as PropType<VcNearFarScalar>,
     watcherOptions: {
       cesiumObjectBuilder: makeNearFarScalar
     }
@@ -294,7 +316,7 @@ const translucencyByDistance = {
  */
 const verticalOrigin = {
   verticalOrigin: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.VerticalOrigin | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -314,7 +336,7 @@ const width = {
  */
 const dimensions = {
   dimensions: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -336,7 +358,7 @@ const fill = {
  */
 const material = {
   material: {
-    type: [Object, String, Array, Function],
+    type: [Object, String, Array, Function] as PropType<VcMaterial>,
     default: 'white',
     watcherOptions: {
       cesiumObjectBuilder: makeMaterial
@@ -359,7 +381,7 @@ const outline = {
  */
 const outlineColor = {
   outlineColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     default: 'black',
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -381,7 +403,7 @@ const outlineWidth = {
  * @const {Number, Object, Function} shadows mixin
  */
 const shadows = {
-  shadows: [Number, Object, Function]
+  shadows: [Number, Object, Function] as PropType<number | Cesium.ShadowMode | VcCallbackPropertyFunction<number>>
 }
 // BoxGraphics end
 
@@ -391,9 +413,7 @@ const shadows = {
  */
 const positions = {
   positions: {
-    type: [Array, Object, Function] as PropType<
-      Array<Cesium.Cartesian3> | Array<number> | Array<Array<number>> | Array<Cartesian3Option> | Array<CartographicInDegreeOption>
-    >,
+    type: [Array, Object, Function] as PropType<VcCartesian3Array>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array,
       exclude: '_callback',
@@ -438,7 +458,7 @@ const granularity = {
  */
 const classificationType = {
   classificationType: {
-    type: [Number, Object, Function]
+    type: [Number, Object, Function] as PropType<number | Cesium.ClassificationType | VcCallbackPropertyFunction<Cesium.ClassificationType>>
   }
 }
 
@@ -526,7 +546,7 @@ const stRotation = {
  */
 const radii = {
   radii: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -538,7 +558,7 @@ const radii = {
  */
 const innerRadii = {
   innerRadii: {
-    type: [Object, Array, Function] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array, Function] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -607,7 +627,7 @@ const slicePartitions = {
  */
 const subdivisions = {
   subdivisions: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number>,
     default: 128
   }
 }
@@ -636,7 +656,7 @@ const font = {
  */
 const labelStyle = {
   labelStyle: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.LabelStyle | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -656,7 +676,7 @@ const showBackground = {
  */
 const backgroundColor = {
   backgroundColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     default: () => {
       return { x: 0.165, y: 0.165, z: 0.165, w: 0.8 }
     },
@@ -671,7 +691,7 @@ const backgroundColor = {
  */
 const backgroundPadding = {
   backgroundPadding: {
-    type: [Object, Array, Function] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array, Function] as PropType<VcCartesian2>,
     default: () => {
       return { x: 7, y: 5 }
     },
@@ -686,7 +706,7 @@ const backgroundPadding = {
  */
 const fillColor = {
   fillColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     default: 'white',
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -755,7 +775,7 @@ const clampAnimations = {
  */
 const silhouetteColor = {
   silhouetteColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -777,7 +797,7 @@ const silhouetteSize = {
  */
 const colorBlendMode = {
   colorBlendMode: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.ColorBlendMode | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -797,7 +817,7 @@ const colorBlendAmount = {
  */
 const imageBasedLightingFactor = {
   imageBasedLightingFactor: {
-    type: [Object, Array, Function] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array, Function] as PropType<VcCartesian2>,
     default: () => [1.0, 1.0],
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
@@ -811,7 +831,7 @@ const imageBasedLightingFactor = {
  */
 const lightColor = {
   lightColor: {
-    type: [Object, String, Array, Function] as PropType<Cesium.Color>,
+    type: [Object, String, Array, Function] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -841,7 +861,7 @@ const articulations = {
  * @const {Object} clippingPlanes mixin
  */
 const clippingPlanes = {
-  clippingPlanes: Object
+  clippingPlanes: [Object, Function] as PropType<Cesium.ClippingPlaneCollection | VcCallbackPropertyFunction<Cesium.ClippingPlaneCollection>>
 }
 // ModelGraphics end
 
@@ -881,7 +901,7 @@ const pixelSize = {
  */
 const hierarchy = {
   hierarchy: {
-    type: [Object, Array, Function] as PropType<Cesium.PolygonHierarchy>,
+    type: [Object, Array, Function] as PropType<VcPolygonHierarchy>,
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
       deep: true,
@@ -937,7 +957,7 @@ const arcType = {
  */
 const depthFailMaterial = {
   depthFailMaterial: {
-    type: [Object, String, Array, Function],
+    type: [Object, String, Array, Function] as PropType<VcMaterial>,
     watcherOptions: {
       cesiumObjectBuilder: makeMaterial
     }
@@ -961,7 +981,7 @@ const clampToGround = {
  */
 const shape = {
   shape: {
-    type: [Array, Object, Function] as PropType<Array<Cesium.Cartesian2>>,
+    type: [Array, Object, Function] as PropType<VcCartesian2Array>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2Array
     }
@@ -1030,7 +1050,7 @@ const cutoutRectangle = {
  */
 const colorToAlpha = {
   colorToAlpha: {
-    type: [Object, String, Array] as PropType<Cesium.Color>,
+    type: [Object, String, Array] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -1057,7 +1077,7 @@ const token = {
  * @const {Object} tileDiscardPolicy mixin
  */
 const tileDiscardPolicy = {
-  tileDiscardPolicy: Object
+  tileDiscardPolicy: Object as PropType<Cesium.DiscardMissingTileImagePolicy | Cesium.NeverTileDiscardPolicy>
 }
 
 /**
@@ -1082,7 +1102,7 @@ const enablePickFeatures = {
  */
 const rectangle = {
   rectangle: {
-    type: [Object, Array] as PropType<Cesium.Rectangle>,
+    type: [Object, Array] as PropType<VcRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeRectangle
     }
@@ -1093,14 +1113,14 @@ const rectangle = {
  * @const {Object} tilingScheme mixin
  */
 const tilingScheme = {
-  tilingScheme: Object
+  tilingScheme: Object as PropType<Cesium.GeographicTilingScheme | Cesium.WebMercatorTilingScheme>
 }
 
 /**
  * @const {Object} ellipsoid mixin
  */
 const ellipsoid = {
-  ellipsoid: Object
+  ellipsoid: Object as PropType<Cesium.Ellipsoid>
 }
 
 /**
@@ -1181,33 +1201,33 @@ const format = {
  * @const {String, Array} subdomains mixin
  */
 const subdomains = {
-  subdomains: [String, Array]
+  subdomains: [String, Array] as PropType<string | Array<string>>
 }
 
 /**
  * @const {Array} getFeatureInfoFormats mixin
  */
 const getFeatureInfoFormats = {
-  getFeatureInfoFormats: Array
+  getFeatureInfoFormats: Array as PropType<Array<Cesium.GetFeatureInfoFormat>>
 }
 
 /**
  * @const {Object} clock mixin
  */
 const clock = {
-  clock: Object
+  clock: Object as PropType<Cesium.Clock>
 }
 
 /**
  * @const {Object} times mixin
  */
 const times = {
-  times: Object
+  times: Object as PropType<Cesium.TimeIntervalCollection>
 }
 
 const projectionTransforms = {
   projectionTransforms: {
-    type: [Boolean, Object],
+    type: [Boolean, Object] as PropType<ProjectionTransforms>,
     default: false
   }
 }
@@ -1270,17 +1290,17 @@ const interleave = {
  */
 const appearance = {
   appearance: {
-    type: Object as PropType<Cesium.Appearance | AppearanceOpts>,
+    type: Object as PropType<VcAppearance>,
     watcherOptions: {
       cesiumObjectBuilder: makeAppearance,
-      deep: true
+      deep: true // 在 use-common 中已将 CesiumAppearance 类型的 deep 设为 false
     }
   }
 }
 
 const depthFailAppearance = {
   depthFailAppearance: {
-    type: Object as PropType<Cesium.Appearance | AppearanceOpts>,
+    type: Object as PropType<VcAppearance>,
     watcherOptions: {
       cesiumObjectBuilder: makeAppearance,
       deep: true
@@ -1292,7 +1312,7 @@ const depthFailAppearance = {
  * @const {Array, Object} geometryInstances mixin
  */
 const geometryInstances = {
-  geometryInstances: [Array, Object]
+  geometryInstances: [Array, Object] as PropType<Cesium.GeometryInstance | Array<Cesium.GeometryInstance>>
 }
 
 /**
@@ -1345,7 +1365,7 @@ const scene = {
  */
 const blendOption = {
   blendOption: {
-    type: Number,
+    type: Number as PropType<number | Cesium.BlendOption>,
     default: 2
   }
 }
@@ -1383,15 +1403,18 @@ const debugWireframe = {
  * @const {Object} vertexFormat mixin
  */
 const vertexFormat = {
-  vertexFormat: Object
+  vertexFormat: Object as PropType<Cesium.VertexFormat>
 }
 
 /**
  * @const {Object, Array} center mixin
  */
 const center = {
+  /**
+   * center
+   */
   center: {
-    type: [Object, Array] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -1417,7 +1440,7 @@ const frustum = {
  */
 const origin = {
   origin: {
-    type: [Object, Array] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -1429,7 +1452,7 @@ const origin = {
  */
 const polygonHierarchy = {
   polygonHierarchy: {
-    type: [Object, Array] as PropType<Cesium.PolygonHierarchy | Array<Cesium.Cartesian3>>,
+    type: [Object, Array] as PropType<VcPolygonHierarchy>,
     watcherOptions: {
       cesiumObjectBuilder: makePolygonHierarchy,
       deep: true
@@ -1442,7 +1465,7 @@ const polygonHierarchy = {
  */
 const startColor = {
   startColor: {
-    type: [Object, String, Array] as PropType<Cesium.Color>,
+    type: [Object, String, Array] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -1454,7 +1477,7 @@ const startColor = {
  */
 const endColor = {
   endColor: {
-    type: [Object, String, Array] as PropType<Cesium.Color>,
+    type: [Object, String, Array] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -1466,7 +1489,7 @@ const endColor = {
  */
 const minimumImageSize = {
   minimumImageSize: {
-    type: [Object, Array] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array] as PropType<VcCartesian2>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
     }
@@ -1478,7 +1501,7 @@ const minimumImageSize = {
  */
 const maximumImageSize = {
   maximumImageSize: {
-    type: [Object, Array] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array] as PropType<VcCartesian2>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
     }
@@ -1490,7 +1513,7 @@ const maximumImageSize = {
  */
 const imageSize = {
   imageSize: {
-    type: [Object, Array] as PropType<Array<number> | Cesium.Cartesian2>,
+    type: [Object, Array] as PropType<VcCartesian2>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
     }
@@ -1502,7 +1525,7 @@ const imageSize = {
  */
 const shapePositions = {
   shapePositions: {
-    type: Array,
+    type: Array as PropType<VcCartesian2Array>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2Array
     }
@@ -1514,7 +1537,7 @@ const shapePositions = {
  */
 const polylinePositions = {
   polylinePositions: {
-    type: Array as PropType<Array<Cesium.Cartesian3>>,
+    type: Array as PropType<VcCartesian3Array>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array
     }
@@ -1527,7 +1550,7 @@ const polylinePositions = {
  */
 const lightColor2 = {
   lightColor: {
-    type: [Object, Array] as PropType<Cesium.Cartesian3 | Array<number>>,
+    type: [Object, Array] as PropType<VcPosition>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3
     }
@@ -1549,7 +1572,7 @@ const luminanceAtZenith = {
  */
 const sphericalHarmonicCoefficients = {
   sphericalHarmonicCoefficients: {
-    type: [Array, Object] as PropType<Array<Cesium.Cartesian3>>,
+    type: [Array, Object] as PropType<VcCartesian3Array>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3Array
     }
@@ -1575,7 +1598,7 @@ const backFaceCulling = {
 
 const colors = {
   colors: {
-    type: Array as PropType<Array<Cesium.Color>>,
+    type: Array as PropType<Array<VcColor>>,
     watcherOptions: {
       cesiumObjectBuilder: makeColors
     }
@@ -1618,7 +1641,7 @@ const options = {
  */
 const glowColor = {
   glowColor: {
-    type: [String, Array, Object] as PropType<Cesium.Color>,
+    type: [String, Array, Object] as PropType<VcColor>,
     default: () => [0.0, 1.0, 0.0, 0.05],
     watcherOptions: {
       cesiumObjectBuilder: makeColor
@@ -1631,7 +1654,7 @@ const glowColor = {
  */
 const clearColor = {
   clearColor: {
-    type: [String, Array, Object] as PropType<Cesium.Color>,
+    type: [String, Array, Object] as PropType<VcColor>,
     watcherOptions: {
       cesiumObjectBuilder: makeColor
     }
@@ -1643,7 +1666,7 @@ const clearColor = {
  */
 const scissorRectangle = {
   scissorRectangle: {
-    type: [Object, Array] as PropType<Cesium.BoundingRectangle>,
+    type: [Object, Array] as PropType<VcBoundingRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeBoundingRectangle
     }

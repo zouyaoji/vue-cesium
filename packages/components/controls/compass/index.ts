@@ -1,17 +1,24 @@
-import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h, VNode } from 'vue'
+import type { ExtractPropTypes, VNode } from 'vue'
+import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import useCompass from './use-compass'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  compassEvt: (evt: VcCompassEvt) => true
+}
+export const compassProps = defaultProps
 export default defineComponent({
   name: 'VcCompass',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'compassEvt'],
+  props: compassProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -25,8 +32,8 @@ export default defineComponent({
     const { $services } = commonState
     const compassState = useCompass(props, ctx, instance)
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement | null>(null)
-    const outerRingRef = ref<typeof VcBtn | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const outerRingRef = ref<typeof VcBtn>(null)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
@@ -254,3 +261,54 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcCompassProps = ExtractPropTypes<typeof compassProps>
+export type VcCompassEmits = typeof emits
+export type VcCompassProps = {
+  /**
+   * Specify the position of the VcCompass.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcCompass horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether the outer ring of the compass can be operated.
+   */
+  enableCompassOuterRing?: boolean
+  /**
+   * Specify the flight time to restore the camera, in seconds.
+   */
+  duration?: number
+  /**
+   * Specify the parameters of the compass outer ring.
+   */
+  outerOptions?: VcBtnTooltipProps
+  /**
+   * Specify the parameters of the inner ring.
+   */
+  innerOptions?: VcBtnTooltipProps
+  /**
+   * Specify the parameters of the maker when the compass rotates.
+   */
+  markerOptions?: VcBtnTooltipProps
+  /**
+   * Triggers before the VcCompass is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCompass is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcCompass is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCompass is operated.
+   */
+  onCompassEvt?: (evt: VcCompassEvt) => void
+}

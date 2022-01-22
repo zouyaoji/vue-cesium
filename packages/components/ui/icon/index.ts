@@ -1,22 +1,25 @@
-import { h, defineComponent, computed, CSSProperties } from 'vue'
+import { h, defineComponent, computed } from 'vue'
+import type { CSSProperties, ExtractPropTypes } from 'vue'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
 import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
+
+export const iconProps = {
+  ...useSizeProps,
+
+  tag: {
+    type: String,
+    default: 'i'
+  },
+
+  name: String,
+  color: String,
+  hoverColor: String,
+  left: Boolean,
+  right: Boolean
+}
 export default defineComponent({
   name: 'VcIcon',
-  props: {
-    ...useSizeProps,
-
-    tag: {
-      type: String,
-      default: 'i'
-    },
-
-    name: String,
-    color: String,
-    hoverColor: String,
-    left: Boolean,
-    right: Boolean
-  },
+  props: iconProps,
   setup(props, { slots }) {
     const sizeStyle = useSize(props)
     const style = computed(() => {
@@ -183,3 +186,32 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcIconProps = ExtractPropTypes<typeof iconProps>
+export interface VcIconProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl).
+   */
+  size?: string | undefined
+  /**
+   * HTML tag to render, unless no icon is supplied or it's an svg icon.
+   * Default value: i
+   */
+  tag?: string | undefined
+  /**
+   * Name of the icon, following VueCesium convention.
+   */
+  name?: string | undefined
+  /**
+   * Color name for component from the css color palette.
+   */
+  color?: string | undefined
+  /**
+   * Useful if icon is on the left side of something: applies a standard margin on the right side of Icon.
+   */
+  left?: boolean | undefined
+  /**
+   * Useful if icon is on the right side of something: applies a standard margin on the left side of Icon.
+   */
+  right?: boolean | undefined
+}

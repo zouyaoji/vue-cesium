@@ -1,6 +1,7 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
+import { defineComponent, getCurrentInstance, ref, reactive } from 'vue'
+import type { ExtractPropTypes } from 'vue'
 import {
-  defaultProps,
+  measurementsProps,
   defaultOptions,
   distanceMeasurementActionDefault,
   componentDistanceMeasurementActionDefault,
@@ -40,12 +41,17 @@ import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useLocaleInject } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { circleDrawingActionDefault, clearActionDefault, regularDrawingActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...drawingEmit,
+  fabUpdated: (value: boolean) => true
+}
 export default defineComponent({
   name: 'VcMeasurements',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'activeEvt', 'drawEvt', 'editorEvt', 'mouseEvt', 'fabUpdated'],
-  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
+  props: measurementsProps,
+  emits: emits,
+  setup(props: ExtractPropTypes<typeof measurementsProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMeasurements'
@@ -215,5 +221,10 @@ export {
   VcMeasurementHeight,
   VcMeasurementPoint,
   VcMeasurementArea,
-  VcMeasurementRectangle
+  VcMeasurementRectangle,
+  VcMeasurementRegular,
+  measurementsProps
 }
+
+export type { VcMeasurementsProps } from './defaultProps'
+export type VcMeasurementsEmits = typeof emits

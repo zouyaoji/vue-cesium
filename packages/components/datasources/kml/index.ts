@@ -1,51 +1,44 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-26 16:20:44
+ * @LastEditTime: 2022-01-19 21:22:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\datasources\kml\index.ts
  */
+import type { ExtractPropTypes, PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useDatasources, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { show, enableMouseEvent, data, sourceUri, clampToGround, ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
+import { datasourceEmits } from '@vue-cesium/utils/emits'
+import { VcEntityProps } from '../../entity/src'
+
+export const kmlDatasourceProps = {
+  ...show,
+  ...enableMouseEvent,
+  entities: {
+    type: Array as PropType<Array<VcEntityProps>>,
+    default: () => []
+  },
+  ...data,
+  camera: Object as PropType<Cesium.Camera>,
+  canvas: HTMLCanvasElement,
+  ...sourceUri,
+  ...clampToGround,
+  ...ellipsoid,
+  ...credit,
+  destroy: {
+    type: Boolean,
+    default: false
+  }
+}
 export default defineComponent({
   name: 'VcDatasourceKml',
-  props: {
-    ...show,
-    ...enableMouseEvent,
-    entities: {
-      type: Array,
-      default: () => []
-    },
-    ...data,
-    camera: Object,
-    canvas: HTMLCanvasElement,
-    ...sourceUri,
-    ...clampToGround,
-    ...ellipsoid,
-    ...credit,
-    destroy: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [
-    'beforeLoad',
-    'ready',
-    'destroyed',
-    'definitionChanged',
-    'clusterEvent',
-    'collectionChanged',
-    'changedEvent',
-    'errorEvent',
-    'loadingEvent',
-    'refreshEvent',
-    'unsupportedNodeEvent'
-  ],
+  props: kmlDatasourceProps,
+  emits: datasourceEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -77,3 +70,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcDatasourceKmlProps = ExtractPropTypes<typeof kmlDatasourceProps>

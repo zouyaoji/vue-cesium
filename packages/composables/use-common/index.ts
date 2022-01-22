@@ -1,9 +1,9 @@
+import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcMittEvents, VcViewerProvider } from '@vue-cesium/utils/types'
 import { inject, onUnmounted, WatchStopHandle } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { getObjClassName, isEmptyObj, isFunction, removeEmpty } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import { ReadyObj, VcComponentInternalInstance, VcComponentPublicInstance, VcMittEvents, VcViewerProvider } from '@vue-cesium/utils/types'
 import * as cesiumProps from '@vue-cesium/utils/cesium-props'
 import { vcKey } from '@vue-cesium/utils/config'
 import useLog from '../private/use-log'
@@ -87,14 +87,14 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     return createCesiumObject().then(async cesiumObject => {
       vcInstance.cesiumObject = cesiumObject
       // Load the created Cesium object. 加载创建的 Cesium 对象。
-      return mount().then((): ReadyObj => {
+      return mount().then((): VcReadyObject => {
         vcInstance.mounted = true
         parentVcInstance.children.push(vcInstance)
         Object.assign(vcInstance.proxy, {
           cesiumObject: vcInstance.cesiumObject
         })
         // Trigger the component's 'ready' event. 触发该组件的 'ready' 事件。
-        const readyObj: ReadyObj = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
+        const readyObj: VcReadyObject = { Cesium, viewer, cesiumObject, vm: vcInstance.proxy as VcComponentPublicInstance }
         emit('ready', readyObj)
         vcMitt.emit('ready', readyObj)
         logger.debug(`${vcInstance.cesiumClass}---loaded`)
@@ -177,6 +177,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       // position 要排除 SampledPositionProperty 不然会卡死
       deep = !((vcInstance.proxy as any)[vueProp] instanceof SampledPositionProperty)
     } else if (vueProp === 'appearance' || vueProp === 'depthFailAppearance') {
+      // appearance 要排除 Cesium 的类型 不然会卡死
       const value = (vcInstance.proxy as any)[vueProp]
       deep = !(
         value instanceof Appearance ||
@@ -185,7 +186,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
         value instanceof PolylineColorAppearance ||
         value instanceof EllipsoidSurfaceAppearance ||
         value instanceof PerInstanceColorAppearance ||
-        value instanceof PolylineMaterialAppearance
+        value instanceof PolylineMaterialAppearance ||
+        getObjClassName(value as any).indexOf('Appearance') !== -1
       )
     }
 
@@ -314,7 +316,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   // lifecycle
-  const createPromise = new Promise<ReadyObj | boolean>((resolve, reject) => {
+  const createPromise = new Promise<VcReadyObject | boolean>((resolve, reject) => {
     try {
       let isLoading = false
       if ($services.viewer) {

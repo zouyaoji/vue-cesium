@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-27 10:46:59
+ * @LastEditTime: 2022-01-14 15:12:42
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\cylinder\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
   show,
@@ -26,25 +27,27 @@ import {
   distanceDisplayCondition
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
+export const cylinderGraphicsProps = {
+  ...show,
+  ...length,
+  ...topRadius,
+  ...bottomRadius,
+  ...heightReference,
+  ...fill,
+  ...material,
+  ...outline,
+  ...outlineColor,
+  ...outlineWidth,
+  ...numberOfVerticalLines,
+  ...slices,
+  ...shadows,
+  ...distanceDisplayCondition
+}
 export default defineComponent({
   name: 'VcGraphicsCylinder',
-  props: {
-    ...show,
-    ...length,
-    ...topRadius,
-    ...bottomRadius,
-    ...heightReference,
-    ...fill,
-    ...material,
-    ...outline,
-    ...outlineColor,
-    ...outlineWidth,
-    ...numberOfVerticalLines,
-    ...slices,
-    ...shadows,
-    ...distanceDisplayCondition
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: cylinderGraphicsProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -53,3 +56,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })
+
+export type VcGraphicsCylinderProps = ExtractPropTypes<typeof cylinderGraphicsProps>

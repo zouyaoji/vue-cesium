@@ -1,17 +1,23 @@
-import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
+import type { CSSProperties, ExtractPropTypes } from 'vue'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcDistanceLegendEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import throttle from '@vue-cesium/utils/private/throttle'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { VcBtn } from '@vue-cesium/components/ui'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  distanceLegendEvt: (evt: VcDistanceLegendEvt) => true
+}
+export const distanceLegendProps = defaultProps
 export default defineComponent({
   name: 'VcDistanceLegend',
-  components: { VcBtn },
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'distanceLegendEvt'],
+  props: distanceLegendProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -23,7 +29,7 @@ export default defineComponent({
     }
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
-    const rootRef = ref<typeof VcBtn | null>(null)
+    const rootRef = ref<typeof VcBtn>(null)
     const distanceLabel = ref<string>('')
     const positionState = usePosition(props, $services)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
@@ -62,7 +68,7 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         nextTick(() => {
           const { viewer } = $services
-          const viewerElement = (viewer as any)._element as HTMLElement
+          // const viewerElement = (viewer as any)._element as HTMLElement
           // viewerElement.appendChild($(rootRef)?.$el)
           // resolve($(rootRef)?.$el)
           if (!hasVcNavigation) {
@@ -177,7 +183,7 @@ export default defineComponent({
               ctx.emit('distanceLegendEvt', {
                 type: 'distanceLegend',
                 distance,
-                statue: 'changed'
+                status: 'changed'
               })
           }
         }
@@ -229,3 +235,54 @@ const distances = [
   1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000, 10000, 20000, 30000, 50000, 100000, 200000, 300000, 500000, 1000000,
   2000000, 3000000, 5000000, 10000000, 20000000, 30000000, 50000000
 ]
+
+// export type VcDistanceLegendProps = ExtractPropTypes<typeof distanceLegendProps>
+export type VcDistanceLegendEmits = typeof emits
+export type VcDistanceLegendProps = {
+  /**
+   * Specify the position of the VcDistanceLegend.
+   * Default value: bottom-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcDistanceLegend horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the css color of the VcDistanceLegend.
+   * Default value: #fff
+   */
+  color?: string
+  /**
+   * Specify the css background of the VcDistanceLegend.
+   * Default value: #3f4854
+   */
+  background?: string
+  /**
+   * Specify the width of the VcDistanceLegend.
+   * Default value: 100
+   */
+  width?: number
+  /**
+   * Specify the css color of the horizontal line on the VcDistanceLegend.
+   * Default value: #fff
+   */
+  barBackground?: string
+  /**
+   * Triggers before the VcCompass is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCompass is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcCompass is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the distance scale changes.
+   */
+  onDistanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
+}

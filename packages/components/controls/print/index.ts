@@ -1,19 +1,26 @@
-import { createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive, VNode } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive } from 'vue'
+import type { VcPrintEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
-import { VcBtn, VcTooltip, VcIcon } from '@vue-cesium/components/ui'
+import { VcBtn, VcTooltip, VcIcon, VcTooltipProps } from '@vue-cesium/components/ui'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
 import defaultProps from './defaultProps'
 import printWindow from './printWindow'
 import { isPlainObject } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  printEvt: (evt: VcPrintEvt) => true
+}
+export const printProps = defaultProps
 export default defineComponent({
   name: 'VcPrint',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'printEvt'],
+  props: printProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -148,7 +155,7 @@ export default defineComponent({
           ctx.emit('printEvt', {
             type: 'capture',
             image: imgSrc,
-            status: 'complete'
+            status: 'end'
           })
       })
     }
@@ -277,3 +284,95 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcPrintProps = ExtractPropTypes<typeof printProps>
+export type VcPrintEmits = typeof emits
+export type VcPrintProps = {
+  /**
+   * Specify the position of the VcPrint.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcPrint horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether to display the copyright information of the loaded data when printing pictures.
+   * Default value: true
+   */
+  showCredit?: boolean
+  /**
+   * Specify whether to print automatically. Need to set showPrintView to false.
+   * Default value: false
+   */
+  printAutomatically?: boolean
+  /**
+   * Specify whether to display the print preview.
+   * Default value: true
+   */
+  showPrintView?: boolean
+  /**
+   * Specify whether to download the printed pictures.
+   * Default value: false
+   */
+  downloadAutomatically?: boolean
+  /**
+   * Specify the icon of the VcPrint.
+   * Default value: vc-icons-geolocation
+   */
+  icon?: string
+  /**
+   * Specify the size of the VcPrint.
+   * Default value: 24px
+   */
+  size?: string
+  /**
+   * Specify the css color of the VcPrint.
+   * Default value: #3f4854
+   */
+  color?: string
+  /**
+   * Specify the css background of the VcPrint.
+   * Default value: #fff
+   */
+  background?: string
+  /**
+   * Makes a circle shaped VcPrint.
+   */
+  round?: boolean
+  /**
+   * Use 'flat' design.
+   */
+  flat?: boolean
+  /**
+   * The text that will be shown on the VcPrint.
+   */
+  label?: string
+  /**
+   * Stack icon and label vertically instead of on same line.
+   */
+  stack?: boolean
+  /**
+   * The tooltip parameter.
+   */
+  tooltip?: false | VcTooltipProps
+  /**
+   * Triggers before the VcPrint is loaded.
+   * @param instance
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcPrint is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcPrint is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the print button is clicked.
+   */
+  onPrintEvt?: (evt: VcPrintEvt) => void
+}

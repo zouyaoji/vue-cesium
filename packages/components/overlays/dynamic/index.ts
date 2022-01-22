@@ -1,12 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2021-12-31 09:24:20
+ * @LastEditTime: 2022-01-19 23:12:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
  */
-import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, WatchStopHandle, ref, PropType, watch } from 'vue'
+import type { ExtractPropTypes, WatchStopHandle, PropType } from 'vue'
+import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, ref, watch } from 'vue'
 import { DynamicOverlayOpts, SampledPosition, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { show } from '@vue-cesium/utils/cesium-props'
@@ -15,66 +16,67 @@ import DynamicOverlay from '@vue-cesium/shared/src/DynamicOverlay'
 import { makeJulianDate } from '@vue-cesium/utils/cesium-helpers'
 import { cloneDeep, differenceBy, remove } from 'lodash-es'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const dynamicOverlayProps = {
+  ...show,
+  name: {
+    type: String,
+    default: '__vc__overlay__dynamic__'
+  },
+  startTime: {
+    type: [Object, String] as PropType<Cesium.JulianDate | string>
+  },
+  stopTime: {
+    type: [Object, String] as PropType<Cesium.JulianDate | string>
+  },
+  currentTime: {
+    type: [Object, String] as PropType<Cesium.JulianDate | string>
+  },
+  clockRange: {
+    type: Number as PropType<number | Cesium.ClockRange>,
+    default: 0
+  },
+  clockStep: {
+    type: Number as PropType<number | Cesium.ClockStep>,
+    default: 1
+  },
+  shouldAnimate: {
+    type: Boolean,
+    default: true
+  },
+  canAnimate: {
+    type: Boolean,
+    default: true
+  },
+  multiplier: {
+    type: Number,
+    default: 1.0
+  },
+  dynamicOverlays: {
+    type: Array as PropType<DynamicOverlayOpts[]>,
+    default: () => []
+  },
+  defaultInterval: {
+    type: Number,
+    default: 3
+  }
+}
+const emits = {
+  ...commonEmits,
+  'update:currentTime': (currentTime: Cesium.JulianDate) => true,
+  'update:shouldAnimate': (shouldAnimate: boolean) => true,
+  'update:canAnimate': (canAnimate: boolean) => true,
+  'update:clockRange': (clockRange: number | Cesium.ClockRange) => true,
+  'update:clockStep': (clockStep: number | Cesium.ClockStep) => true,
+  'update:multiplier': (multiplier: number) => true,
+  'update:startTime': (startTime: Cesium.JulianDate) => true,
+  'update:stopTime': (stopTime: Cesium.JulianDate) => true
+}
 export default defineComponent({
   name: 'VcOverlayDynamic',
-  props: {
-    ...show,
-    name: {
-      type: String,
-      default: '__vc__overlay__dynamic__'
-    },
-    startTime: {
-      type: [Object, String] as PropType<Cesium.JulianDate>
-    },
-    stopTime: {
-      type: [Object, String] as PropType<Cesium.JulianDate>
-    },
-    currentTime: {
-      type: [Object, String] as PropType<Cesium.JulianDate>
-    },
-    clockRange: {
-      type: Number,
-      default: 0
-    },
-    clockStep: {
-      type: Number,
-      default: 1
-    },
-    shouldAnimate: {
-      type: Boolean,
-      default: true
-    },
-    canAnimate: {
-      type: Boolean,
-      default: true
-    },
-    multiplier: {
-      type: Number,
-      default: 1.0
-    },
-    dynamicOverlays: {
-      type: Array as PropType<DynamicOverlayOpts[]>,
-      default: () => []
-    },
-    defaultInterval: {
-      type: Number,
-      default: 3
-    }
-  },
-  emits: [
-    'beforeLoad',
-    'ready',
-    'destroyed',
-    'update:currentTime',
-    'update:shouldAnimate',
-    'update:canAnimate',
-    'update:clockRange',
-    'update:clockStep',
-    'update:multiplier',
-    'update:startTime',
-    'update:stopTime'
-  ],
+  props: dynamicOverlayProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -224,7 +226,7 @@ export default defineComponent({
 
               // 忽略 model 的 nodeTransformations
               // 即该属性不支持动态响应
-              function testReplace(key, value) {
+              const testReplace = (key, value) => {
                 if (key !== 'nodeTransformations') {
                   return value
                 }
@@ -399,9 +401,12 @@ export default defineComponent({
       unwatchFns = []
     })
 
+    // expose public methods
     Object.assign(instance.proxy, { overlays })
 
-    // expose public methods
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcOverlayDynamicProps = ExtractPropTypes<typeof dynamicOverlayProps>
+export type VcOverlayDynamicEmits = typeof emits

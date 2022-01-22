@@ -1,11 +1,13 @@
-import { defineComponent, getCurrentInstance, watch, nextTick, ref, CSSProperties, reactive, h, createCommentVNode, computed, VNode } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, CSSProperties, VNode, PropType } from 'vue'
+import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
+import type { VcCompassEvt, VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
-import VcCompassSm from './compass-sm'
-import VcZoomControlSm from './zoom-control-sm'
+import VcCompassSm, { VcCompassSmProps } from './compass-sm'
+import VcZoomControlSm, { VcZoomControlSmProps } from './zoom-control-sm'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
 const compassOptsDefault = {
   enableCompassOuterRing: true,
@@ -29,21 +31,27 @@ const zoomOptsDefault = {
   }
 }
 
+export const navigationSmProps = {
+  ...positionProps,
+  compassOpts: {
+    type: [Boolean, Object] as PropType<false | VcCompassSmProps>,
+    default: () => compassOptsDefault
+  },
+  zoomOpts: {
+    type: [Boolean, Object] as PropType<false | VcZoomControlSmProps>,
+    default: () => zoomOptsDefault
+  }
+}
+const emits = {
+  ...commonEmits,
+  zoomEvt: (evt: VcZoomEvt) => true,
+  compassEvt: (evt: VcCompassEvt) => true
+}
 export default defineComponent({
   name: 'VcNavigationSm',
   inheritAttrs: false,
-  props: {
-    ...positionProps,
-    compassOpts: {
-      type: Object,
-      default: () => compassOptsDefault
-    },
-    zoomOpts: {
-      type: Object,
-      default: () => zoomOptsDefault
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt', 'compassEvt'],
+  props: navigationSmProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -156,7 +164,7 @@ export default defineComponent({
       if (canRender.value) {
         let children: Array<VNode> = []
         children = hMergeSlot(ctx.slots.default, children)
-        if (props.compassOpts) {
+        if (compassOptions.value && props.compassOpts !== false) {
           children.push(
             h(VcCompassSm, {
               ref: compassRef,
@@ -165,7 +173,7 @@ export default defineComponent({
             })
           )
         }
-        if (props.zoomOpts) {
+        if (zoomControlOptions.value && props.zoomOpts !== false) {
           children.push(
             h(VcZoomControlSm, {
               ref: zoomControlRef,
@@ -189,3 +197,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcNavigationSmProps = ExtractPropTypes<typeof navigationSmProps>
+export type VcNavigationSmEmits = typeof emits

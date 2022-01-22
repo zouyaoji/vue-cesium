@@ -1,14 +1,24 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2021-10-25 17:42:21
+ * @LastEditTime: 2022-01-22 17:18:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
  */
 
-import { VcFabAction } from '@vue-cesium/components'
 import { VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular } from '@vue-cesium/components/drawings/src'
+import type {
+  VcBtnProps,
+  VcFabAction,
+  VcFabActionProps,
+  VcGeometryPolylineProps,
+  VcLabelProps,
+  VcPointProps,
+  VcPolygonProps,
+  VcTooltipProps
+} from '@vue-cesium/components'
+
 import {
   pointDrawingActionDefault,
   polygonDrawingActionDefault,
@@ -23,8 +33,11 @@ import {
   VcMeasurementPoint,
   VcMeasurementPolyline,
   VcMeasurementRectangle,
-  VcMeasurementVertical
+  VcMeasurementVertical,
+  VcMeasurementRegular
 } from '@vue-cesium/components/measurements/src'
+
+import { VcAnalysisSightline } from '@vue-cesium/components/analyses/src'
 
 import {
   areaMeasurementActionDefault,
@@ -54,7 +67,11 @@ import {
   polylineDrawingDefault,
   rectangleDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
-import { CSSProperties, Ref } from 'vue'
+import { sightlineAnalysisActionDefault, sightlineAnalysisDefault } from '@vue-cesium/components/analyses/src/defaultProps'
+
+import type { CSSProperties, Ref } from 'vue'
+import type { VcPickEvent, VcBtnTooltipProps, VcCartesian3Array, VcMaterial, VcPosition, VcColor } from './types'
+import type { MeasureUnits } from '@vue-cesium/shared'
 
 export type DrawingActionOpts =
   | typeof pointDrawingActionDefault
@@ -101,6 +118,7 @@ export type MeasurementActionCmp =
   | typeof VcMeasurementArea
   | typeof VcMeasurementPoint
   | typeof VcMeasurementRectangle
+  | typeof VcMeasurementRegular
 
 export type MeasurementActionCmpRef = Ref<
   | typeof VcMeasurementDistance
@@ -111,6 +129,7 @@ export type MeasurementActionCmpRef = Ref<
   | typeof VcMeasurementArea
   | typeof VcMeasurementPoint
   | typeof VcMeasurementRectangle
+  | typeof VcMeasurementRegular
 >
 
 export type MeasurementActionCmpOpts =
@@ -124,21 +143,26 @@ export type MeasurementActionCmpOpts =
   | typeof pointMeasurementDefault
   | typeof rectangleMeasurementDefault
 
+export type AnalysisActionOpts = typeof sightlineAnalysisActionDefault | typeof clearActionDefault
+export type AnalysisActionCmp = typeof VcAnalysisSightline
+export type AnalysisActionCmpRef = Ref<typeof VcAnalysisSightline>
+export type AnalysisActionCmpOpts = typeof sightlineAnalysisDefault
+
 export interface VcDrawingActionInstance {
   name: string
-  type: 'measurement' | 'drawing'
+  type: 'measurement' | 'drawing' | 'analysis'
   actionStyle: CSSProperties
   actionClass: string
   actionRef: Ref<typeof VcFabAction>
-  actionOpts: MeasurementActionOpts | DrawingActionOpts
-  cmp: MeasurementActionCmp | DrawgingActionCmp | undefined
-  cmpRef: MeasurementActionCmpRef | DrawingActionCmpRef
-  cmpOpts: MeasurementActionCmpOpts | DrawingActionCmpOpts
+  actionOpts: MeasurementActionOpts | DrawingActionOpts | AnalysisActionOpts
+  cmp: MeasurementActionCmp | DrawgingActionCmp | AnalysisActionCmp | undefined
+  cmpRef: MeasurementActionCmpRef | DrawingActionCmpRef | AnalysisActionCmpRef
+  cmpOpts: MeasurementActionCmpOpts | DrawingActionCmpOpts | AnalysisActionCmpOpts
   tip: string
   isActive: boolean
 }
 
-export interface PointDrawing {
+export interface VcPointDrawing {
   show: boolean
   position: Cesium.Cartesian3
   drawStatus: number
@@ -148,7 +172,7 @@ export interface PointDrawing {
   slope: number
 }
 
-export interface PolylineDrawing {
+export interface VcPolylineDrawing {
   show: boolean
   positions: Array<Cesium.Cartesian3>
   tempPositions: Array<Cesium.Cartesian3>
@@ -157,11 +181,7 @@ export interface PolylineDrawing {
   area: number
   distance: number
   distances: Array<number>
-  labels: Array<{
-    text: string
-    position: Cesium.Cartesian3
-    id: string
-  }>
+  labels: Array<VcLabelProps>
   angles: Array<number>
 
   dashedLines?: Array<{
@@ -174,7 +194,7 @@ export interface PolylineDrawing {
   tempNextPos?: Cesium.Cartesian3
 }
 
-export interface SegmentDrawing {
+export interface VcSegmentDrawing {
   show: boolean
   positions: Array<Cesium.Cartesian3>
   drawStatus: number
@@ -190,14 +210,131 @@ export interface SegmentDrawing {
   xAnglePosition?: Cesium.Cartesian3
   yAngle?: number
   yAnglePosition?: Cesium.Cartesian3
-  labels: Array<{
-    text: string
-    position: Cesium.Cartesian3
-    id: string
-  }>
+  labels: Array<VcLabelProps>
 
   draggingPlane?: Cesium.Plane
   surfaceNormal?: Cesium.Cartesian3
 
   polygonPositions?: Array<Cesium.Cartesian3>
+
+  heading?: number
+  pitch?: number
+  shadowMap?: Cesium.ShadowMap
+  lightCamera?: Cesium.Camera
+  viewshedShadowMap?: Cesium.ShadowMap
+  spotLightCamera?: Cesium.Camera
+  frustum?: Cesium.PerspectiveFrustum
 }
+
+export interface VcDrawingMaterial {
+  show?: boolean
+  material: VcMaterial
+  depthFailMaterial: VcMaterial
+  classificationType?: number
+}
+
+export interface VcDrawTipOpts {
+  show?: boolean
+  pixelOffset?: [number, number]
+  drawingTipStart?: string
+  drawingTipEnd?: string
+  drawingTipEditing?: string
+}
+
+export interface VcEditorOpts {
+  pixelOffset?: [number, number]
+  delay?: number
+  hideDelay?: number
+  move?: VcBtnTooltipProps
+  insert?: VcBtnTooltipProps
+  remove?: VcBtnTooltipProps
+  removeAll?: VcBtnTooltipProps
+}
+
+export interface VcDrawingOpts {
+  show?: boolean
+  drawtip?: VcDrawTipOpts
+  pointOpts?: VcPointProps
+  labelOpts?: VcLabelProps
+  polylineOpts?: VcGeometryPolylineProps & VcDrawingMaterial
+  polygonOpts?: VcPolygonProps & VcDrawingMaterial
+  editorOpts?: VcEditorOpts
+  loop?: boolean
+  heightReference?: number
+  showComponentLines?: boolean
+  edge?: number
+  regular?: boolean
+}
+
+export interface VcDrawingDrawEvt {
+  index?: number
+  name: 'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle' | 'regular' | 'circle'
+  renderDatas: Array<VcPointDrawing | VcPolylineDrawing | VcSegmentDrawing>
+  finished: boolean
+  position?: Cesium.Cartesian3
+  windowPoistion: Cesium.Cartesian2
+  type: 'new' | 'move' | 'remove' | 'insert' | 'removeAll' | 'cancel'
+}
+
+export interface VcDrawingEditorEvt {
+  type: 'move' | 'insert' | 'remove' | 'removeAll'
+  renderDatas: Array<VcPointDrawing | VcPolylineDrawing | VcSegmentDrawing>
+  name: 'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle' | 'regular' | 'circle'
+  index: number
+}
+
+export interface VcDrawingMouseEvt {
+  type: 'onmouseout' | 'onmouseover'
+  name: 'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle' | 'regular' | 'circle'
+  target: VcPickEvent
+}
+
+export interface VcMeasurementOpts extends VcDrawingOpts {
+  measureUnits?: MeasureUnits
+  decimals?: {
+    distance?: number
+    angle?: number
+    area?: number
+    lng?: number
+    lat?: number
+    height?: number
+    slope?: number
+  }
+  locale?: string
+}
+
+export interface VcComponentDistanceMeasurementOpts extends VcMeasurementOpts {
+  showComponentLines?: boolean
+  xLabelOpts?: VcLabelProps
+  xAngleLabelOpts?: VcLabelProps
+  yLabelOpts?: VcLabelProps
+  yAngleLabelOpts?: VcLabelProps
+}
+
+export interface VcPolylineMeasurementOpts extends VcMeasurementOpts {
+  labelsOpts?: VcLabelProps
+  showAngleLabel?: boolean
+  showDistanceLabel?: boolean
+  loop?: boolean
+}
+
+export interface VcHorizontalMeasurementOpts extends VcPolylineMeasurementOpts {
+  showDashedLine?: boolean
+  dashLineOpts?: VcGeometryPolylineProps & VcDrawingMaterial
+}
+
+export interface VcRectangleMeasurementOpts extends VcPolylineMeasurementOpts {
+  edge?: number
+  loop?: boolean
+}
+
+export interface VcViewshedAnalysisOpts extends VcDrawingOpts {
+  ellipsoidOpts?: {
+    show?: boolean
+    horizontalViewAngle?: number
+    verticalViewAngle?: number
+    color?: VcColor
+  }
+}
+
+export type VcDrawingPreRenderDatas = Array<VcCartesian3Array | VcPosition>

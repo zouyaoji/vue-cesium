@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-01 23:15:43
+ * @LastEditTime: 2022-01-16 00:44:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\wmts\index.ts
  */
+import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
   url,
@@ -26,30 +27,41 @@ import {
   dimensions
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { providerEmits } from '@vue-cesium/utils/emits'
 
-export default defineComponent({
-  name: 'VcProviderImageryWmts',
-  props: {
-    ...url,
-    ...format,
-    layer: String,
-    wmtsStyle: String,
-    tileMatrixSetID: String,
-    tileMatrixLabels: Array,
-    ...clock,
-    ...times,
-    ...dimensions,
-    ...tileWidth,
-    ...tileHeight,
-    ...tilingScheme,
-    ...rectangle,
-    ...minimumLevel,
-    ...maximumLevel,
-    ...ellipsoid,
-    ...credit,
-    ...subdomains
+export const wmtsImageryProviderProps = {
+  ...url,
+  ...format,
+  layer: {
+    type: String,
+    required: true
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  wmtsStyle: {
+    type: String,
+    required: true
+  },
+  tileMatrixSetID: {
+    type: String,
+    required: true
+  },
+  tileMatrixLabels: Array,
+  ...clock,
+  ...times,
+  ...dimensions,
+  ...tileWidth,
+  ...tileHeight,
+  ...tilingScheme,
+  ...rectangle,
+  ...minimumLevel,
+  ...maximumLevel,
+  ...ellipsoid,
+  ...credit,
+  ...subdomains
+}
+export default defineComponent({
+  name: 'VcImageryProviderWmts',
+  props: wmtsImageryProviderProps,
+  emits: providerEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -58,3 +70,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcImageryProviderWmtsProps = ExtractPropTypes<typeof wmtsImageryProviderProps>

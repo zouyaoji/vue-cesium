@@ -21,27 +21,27 @@ import VcDrawings from '@vue-cesium/components/drawings'
 // ImagerLayer
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import {
-  VcProviderImageryArcgis,
-  VcProviderImageryBaidumap,
-  VcProviderImageryBingmaps,
-  VcProviderImageryGoogle,
-  VcProviderImageryGrid,
-  VcProviderImageryIon,
-  VcProviderImageryMapbox,
-  VcProviderImageryOsm,
-  VcProviderImagerySingletile,
-  VcProviderImagerySupermap,
-  VcProviderImageryTianditu,
-  VcProviderImageryTileCoordinates,
-  VcProviderImageryTms,
-  VcProviderImageryTiledcache,
-  VcProviderImageryUrltemplate,
-  VcProviderImageryWms,
-  VcProviderImageryWmts,
-  VcProviderTerrainCesium,
-  VcProviderTerrainArcgis,
-  VcProviderTerrainVrTheworld,
-  VcProviderTerrainTianditu
+  VcImageryProviderArcgis,
+  VcImageryProviderBaidu,
+  VcImageryProviderBing,
+  VcImageryProviderGoogle,
+  VcImageryProviderGrid,
+  VcImageryProviderIon,
+  VcImageryProviderMapbox,
+  VcImageryProviderOsm,
+  VcImageryProviderSingletile,
+  VcImageryProviderSupermap,
+  VcImageryProviderTianditu,
+  VcImageryProviderTileCoordinates,
+  VcImageryProviderTms,
+  VcImageryProviderTiledcache,
+  VcImageryProviderUrltemplate,
+  VcImageryProviderWms,
+  VcImageryProviderWmts,
+  VcTerrainProviderCesium,
+  VcTerrainProviderArcgis,
+  VcTerrainProviderVrTheworld,
+  VcTerrainProviderTianditu
 } from '@vue-cesium/components/providers'
 
 // Datasource
@@ -97,7 +97,7 @@ import {
 } from '@vue-cesium/components/primitive-collections'
 
 // GeometryInstance
-import VcInstanceGeometry from '@vue-cesium/components/geometry-instance'
+import VcGeometryInstance from '@vue-cesium/components/geometry-instance'
 
 // Geometries
 import {
@@ -117,7 +117,7 @@ import {
   VcGeometryEllipsoidOutline,
   VcGeometryFrustum,
   VcGeometryFrustumOutline,
-  VcGeometryPolylineGround,
+  VcGeometryGroundPolyline,
   VcGeometryPlane,
   VcGeometryPlaneOutline,
   VcGeometryPolygon,
@@ -166,7 +166,9 @@ import {
 import VcConfigProvider from '@vue-cesium/components/config-provider'
 
 // analyses
-import { VcAnalysisFlood } from '@vue-cesium/components/analyses'
+import { VcAnalysisFlood, VcAnalyses } from '@vue-cesium/components/analyses'
+
+import type { Plugin } from 'vue'
 
 export default [
   VcViewer,
@@ -188,28 +190,28 @@ export default [
   VcDrawings,
 
   VcLayerImagery,
-  VcProviderImageryArcgis,
-  VcProviderImageryBaidumap,
-  VcProviderImageryBingmaps,
-  VcProviderImageryGoogle,
-  VcProviderImageryGrid,
-  VcProviderImageryIon,
-  VcProviderImageryMapbox,
-  VcProviderImageryOsm,
-  VcProviderImagerySingletile,
-  VcProviderImagerySupermap,
-  VcProviderImageryTianditu,
-  VcProviderImageryTileCoordinates,
-  VcProviderImageryTms,
-  VcProviderImageryTiledcache,
-  VcProviderImageryUrltemplate,
-  VcProviderImageryWms,
-  VcProviderImageryWmts,
+  VcImageryProviderArcgis,
+  VcImageryProviderBaidu,
+  VcImageryProviderBing,
+  VcImageryProviderGoogle,
+  VcImageryProviderGrid,
+  VcImageryProviderIon,
+  VcImageryProviderMapbox,
+  VcImageryProviderOsm,
+  VcImageryProviderSingletile,
+  VcImageryProviderSupermap,
+  VcImageryProviderTianditu,
+  VcImageryProviderTileCoordinates,
+  VcImageryProviderTms,
+  VcImageryProviderTiledcache,
+  VcImageryProviderUrltemplate,
+  VcImageryProviderWms,
+  VcImageryProviderWmts,
 
-  VcProviderTerrainCesium,
-  VcProviderTerrainArcgis,
-  VcProviderTerrainVrTheworld,
-  VcProviderTerrainTianditu,
+  VcTerrainProviderCesium,
+  VcTerrainProviderArcgis,
+  VcTerrainProviderVrTheworld,
+  VcTerrainProviderTianditu,
 
   VcDatasourceCustom,
   VcDatasourceCzml,
@@ -255,7 +257,7 @@ export default [
   VcPolyline,
   VcPolygon,
 
-  VcInstanceGeometry,
+  VcGeometryInstance,
 
   VcGeometryBox,
   VcGeometryBoxOutline,
@@ -273,7 +275,7 @@ export default [
   VcGeometryEllipsoidOutline,
   VcGeometryFrustum,
   VcGeometryFrustumOutline,
-  VcGeometryPolylineGround,
+  VcGeometryGroundPolyline,
   VcGeometryPlane,
   VcGeometryPlaneOutline,
   VcGeometryPolygon,
@@ -320,5 +322,6 @@ export default [
   VcFabAction,
 
   VcConfigProvider,
-  VcAnalysisFlood
-]
+  VcAnalysisFlood,
+  VcAnalyses
+] as Plugin[]

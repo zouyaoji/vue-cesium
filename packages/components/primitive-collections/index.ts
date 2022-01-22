@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2021-11-20 20:44:43
+ * @LastEditTime: 2022-01-18 14:55:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\index.ts
@@ -58,3 +58,14 @@ export const VcLabel = Label as SFCWithInstall<typeof Label>
 export const VcPoint = Point as SFCWithInstall<typeof Point>
 export const VcPolyline = Polyline as SFCWithInstall<typeof Polyline>
 export const VcPolygon = Polygon as SFCWithInstall<typeof Polygon>
+
+export * from './billboard'
+export * from './billboard-collection'
+export * from './label'
+export * from './label-collection'
+export * from './point'
+export * from './point-collection'
+export * from './polygon'
+export * from './polyline'
+export * from './polyline-collection'
+export * from './primitive-collection'

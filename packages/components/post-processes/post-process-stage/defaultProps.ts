@@ -1,5 +1,4 @@
 import { clearColor, scissorRectangle } from '@vue-cesium/utils/cesium-props'
-import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
 import { PropType } from 'vue'
 
 const defaultProps = {

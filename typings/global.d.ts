@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2021-12-31 21:38:12
+ * @LastEditTime: 2022-01-16 00:45:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
@@ -26,28 +26,28 @@ declare module 'vue' {
     VcDrawings: typeof import('vue-cesium')['VcDrawings']
 
     VcLayerImagery: typeof import('vue-cesium')['VcLayerImagery']
-    VcProviderImageryArcgis: typeof import('vue-cesium')['VcProviderImageryArcgis']
-    VcProviderImageryBaidumap: typeof import('vue-cesium')['VcProviderImageryBaidumap']
-    VcProviderImageryBingmaps: typeof import('vue-cesium')['VcProviderImageryBingmaps']
-    VcProviderImageryGoogle: typeof import('vue-cesium')['VcProviderImageryGoogle']
-    VcProviderImageryGrid: typeof import('vue-cesium')['VcProviderImageryGrid']
-    VcProviderImageryIon: typeof import('vue-cesium')['VcProviderImageryIon']
-    VcProviderImageryMapbox: typeof import('vue-cesium')['VcProviderImageryMapbox']
-    VcProviderImageryOsm: typeof import('vue-cesium')['VcProviderImageryOsm']
-    VcProviderImagerySingletile: typeof import('vue-cesium')['VcProviderImagerySingletile']
-    VcProviderImagerySupermap: typeof import('vue-cesium')['VcProviderImagerySupermap']
-    VcProviderImageryTianditu: typeof import('vue-cesium')['VcProviderImageryTianditu']
-    VcProviderImageryTileCoordinates: typeof import('vue-cesium')['VcProviderImageryTileCoordinates']
-    VcProviderImageryTms: typeof import('vue-cesium')['VcProviderImageryTms']
-    VcProviderImageryTiledcache: typeof import('vue-cesium')['VcProviderImageryTiledcache']
-    VcProviderImageryUrltemplate: typeof import('vue-cesium')['VcProviderImageryUrltemplate']
-    VcProviderImageryWms: typeof import('vue-cesium')['VcProviderImageryWms']
-    VcProviderImageryWmts: typeof import('vue-cesium')['VcProviderImageryWmts']
+    VcImageryProviderArcgis: typeof import('vue-cesium')['VcImageryProviderArcgis']
+    VcImageryProviderBaidu: typeof import('vue-cesium')['VcImageryProviderBaidu']
+    VcImageryProviderBing: typeof import('vue-cesium')['VcImageryProviderBing']
+    VcImageryProviderGoogle: typeof import('vue-cesium')['VcImageryProviderGoogle']
+    VcImageryProviderGrid: typeof import('vue-cesium')['VcImageryProviderGrid']
+    VcImageryProviderIon: typeof import('vue-cesium')['VcImageryProviderIon']
+    VcImageryProviderMapbox: typeof import('vue-cesium')['VcImageryProviderMapbox']
+    VcImageryProviderOsm: typeof import('vue-cesium')['VcImageryProviderOsm']
+    VcImageryProviderSingletile: typeof import('vue-cesium')['VcImageryProviderSingletile']
+    VcImageryProviderSupermap: typeof import('vue-cesium')['VcImageryProviderSupermap']
+    VcImageryProviderTianditu: typeof import('vue-cesium')['VcImageryProviderTianditu']
+    VcImageryProviderTileCoordinates: typeof import('vue-cesium')['VcImageryProviderTileCoordinates']
+    VcImageryProviderTms: typeof import('vue-cesium')['VcImageryProviderTms']
+    VcImageryProviderTiledcache: typeof import('vue-cesium')['VcImageryProviderTiledcache']
+    VcImageryProviderUrltemplate: typeof import('vue-cesium')['VcImageryProviderUrltemplate']
+    VcImageryProviderWms: typeof import('vue-cesium')['VcImageryProviderWms']
+    VcImageryProviderWmts: typeof import('vue-cesium')['VcImageryProviderWmts']
 
-    VcProviderTerrainCesium: typeof import('vue-cesium')['VcProviderTerrainCesium']
-    VcProviderTerrainArcgis: typeof import('vue-cesium')['VcProviderTerrainArcgis']
-    VcProviderTerrainVrTheworld: typeof import('vue-cesium')['VcProviderTerrainVrTheworld']
-    VcProviderTerrainTianditu: typeof import('vue-cesium')['VcProviderTerrainTianditu']
+    VcTerrainProviderCesium: typeof import('vue-cesium')['VcTerrainProviderCesium']
+    VcTerrainProviderArcgis: typeof import('vue-cesium')['VcTerrainProviderArcgis']
+    VcTerrainProviderVrTheworld: typeof import('vue-cesium')['VcTerrainProviderVrTheworld']
+    VcTerrainProviderTianditu: typeof import('vue-cesium')['VcTerrainProviderTianditu']
 
     VcDatasourceCustom: typeof import('vue-cesium')['VcDatasourceCustom']
     VcDatasourceCzml: typeof import('vue-cesium')['VcDatasourceCzml']
@@ -92,7 +92,7 @@ declare module 'vue' {
     VcPolyline: typeof import('vue-cesium')['VcPolyline']
     VcPolygon: typeof import('vue-cesium')['VcPolygon']
 
-    VcInstanceGeometry: typeof import('vue-cesium')['VcInstanceGeometry']
+    VcGeometryInstance: typeof import('vue-cesium')['VcGeometryInstance']
 
     VcGeometryBox: typeof import('vue-cesium')['VcGeometryBox']
     VcGeometryBoxOutline: typeof import('vue-cesium')['VcGeometryBoxOutline']
@@ -110,7 +110,7 @@ declare module 'vue' {
     VcGeometryEllipsoidOutline: typeof import('vue-cesium')['VcGeometryEllipsoidOutline']
     VcGeometryFrustum: typeof import('vue-cesium')['VcGeometryFrustum']
     VcGeometryFrustumOutline: typeof import('vue-cesium')['VcGeometryFrustumOutline']
-    VcGeometryPolylineGround: typeof import('vue-cesium')['VcGeometryPolylineGround']
+    VcGeometryGroundPolyline: typeof import('vue-cesium')['VcGeometryGroundPolyline']
     VcGeometryPlane: typeof import('vue-cesium')['VcGeometryPlane']
     VcGeometryPlaneOutline: typeof import('vue-cesium')['VcGeometryPlaneOutline']
     VcGeometryPolygon: typeof import('vue-cesium')['VcGeometryPolygon']

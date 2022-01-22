@@ -1,4 +1,14 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-01-22 09:31:31
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\print\defaultProps.ts
+ */
 import { positionProps } from '@vue-cesium/composables/private/use-position'
+import type { PropType } from 'vue'
+import { VcTooltipProps } from '../../ui'
 
 export default {
   showCredit: {
@@ -48,12 +58,13 @@ export default {
     default: false
   },
   tooltip: {
-    type: [Boolean, Object],
-    default: () => ({
-      delay: 500,
-      anchor: 'bottom middle',
-      offset: [0, 20],
-      tip: void 0
-    })
+    type: [Boolean, Object] as PropType<false | VcTooltipProps>,
+    default: () =>
+      ({
+        delay: 500,
+        anchor: 'bottom middle',
+        offset: [0, 20],
+        tip: void 0
+      } as VcTooltipProps | false)
   }
 }

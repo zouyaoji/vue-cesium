@@ -1,25 +1,30 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2021-10-25 14:49:05
+ * @LastEditTime: 2022-01-22 15:50:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
  */
+import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
-
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import type { VcDrawingMaterial } from '@vue-cesium/utils/drawing-types'
+import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 
 export default defineComponent({
   name: 'VcMeasurementArea',
   props: {
     ...useDrawingActionProps,
-    measureUnits: Object,
-    polylineOpts: Object,
-    polygonOpts: Object,
-    labelOpts: Object,
-    labelsOpts: Object,
+    measureUnits: Object as PropType<MeasureUnits>,
+    polylineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
+    polygonOpts: Object as PropType<VcPolygonProps & VcDrawingMaterial>,
+    labelOpts: Object as PropType<VcLabelProps>,
+    labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object,
     showDistanceLabel: Boolean,
@@ -27,7 +32,7 @@ export default defineComponent({
     loop: Boolean,
     clampToGround: Boolean
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'mouseEvt', 'editorEvt'],
+  emits: drawingEmit,
   setup(props, ctx) {
     // state
     return useDrawingPolyline(props, ctx, 'VcMeasurementArea')

@@ -1,4 +1,4 @@
-import { CameraOption, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import { VcCamera, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import { flyToCamera } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
@@ -105,7 +105,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
                   emit('zoomEvt', {
                     type: type,
                     camera: viewer.camera,
-                    status: 'complete',
+                    status: 'end',
                     target: target
                   })
               },
@@ -156,7 +156,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           emit('zoomEvt', {
             type: 'zoomReset',
             camera: viewer.camera,
-            status: 'complete',
+            status: 'end',
             target: target
           })
       }
@@ -170,7 +170,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           })
       }
 
-      const resetView: CameraOption = props.defaultResetView
+      const resetView: VcCamera = props.defaultResetView
       const options = {
         duration: props.durationReset,
         complete: complete,

@@ -1,35 +1,39 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-12-31 09:26:48
+ * @LastEditTime: 2022-01-16 14:59:16
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch, WatchStopHandle } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { cloneDeep, differenceBy } from 'lodash-es'
 import { PolygonPrimitive } from '@vue-cesium/shared'
+import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { VcPolygonProps } from '../polygon'
 
+export const primitiveCollectionProps = {
+  ...show,
+  destroyPrimitives: {
+    type: Boolean,
+    default: true
+  },
+  ...enableMouseEvent,
+  polygons: {
+    type: Array as PropType<Array<VcPolygonProps>>,
+    default: () => []
+  }
+}
 export default defineComponent({
   name: 'VcCollectionPrimitive',
-  props: {
-    ...show,
-    destroyPrimitives: {
-      type: Boolean,
-      default: true
-    },
-    ...enableMouseEvent,
-    polygons: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: primitiveCollectionProps,
+  emits: primitiveCollectionEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -140,3 +144,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(name))
   }
 })
+
+export type VcCollectionPrimitiveProps = ExtractPropTypes<typeof primitiveCollectionProps>

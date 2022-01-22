@@ -1,4 +1,4 @@
-import { CameraOption, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcCamera, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '../src'
@@ -63,7 +63,7 @@ describe('VcViewer', () => {
         onDestroyed: onDestroyed,
         onLeftClick: onLeftClick,
         onClick: onLeftClick
-      }
+      } as any
     })
     const vm = wrapper.vm as unknown as VcComponentPublicInstance
     expect(wrapper.find(`.${kebabCase(vm.$options.name || '')}`).exists()).toBe(true)

@@ -1,45 +1,48 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-12-03 17:11:41
+ * @LastEditTime: 2022-01-15 23:50:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
  */
+import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useProviders, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
+import { providerEmits } from '@vue-cesium/utils/emits'
 
-export default defineComponent({
-  name: 'VcProviderTerrainTianditu',
-  props: {
-    url: {
-      type: String,
-      default: 'https://{s}.tianditu.gov.cn/'
-    },
-    subdomains: {
-      type: Array as PropType<Array<string>>,
-      default: () => ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
-    },
-    pluginPath: {
-      type: String,
-      default: 'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'
-    },
-    dataType: {
-      type: String,
-      default: 'int',
-      validator: (v: string) => ['int', 'float'].includes(v)
-    },
-    tileType: {
-      type: String,
-      default: 'heightmap',
-      validator: (v: string) => ['heightmap', 'quantized-mesh'].includes(v)
-    },
-    token: String
+export const tiandituTerrainProviderProps = {
+  url: {
+    type: String,
+    default: 'https://{s}.tianditu.gov.cn/'
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  subdomains: {
+    type: Array as PropType<Array<string>>,
+    default: () => ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
+  },
+  pluginPath: {
+    type: String,
+    default: 'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'
+  },
+  dataType: {
+    type: String,
+    default: 'int',
+    validator: (v: string) => ['int', 'float'].includes(v)
+  },
+  tileType: {
+    type: String,
+    default: 'heightmap',
+    validator: (v: string) => ['heightmap', 'quantized-mesh'].includes(v)
+  },
+  token: String
+}
+export default defineComponent({
+  name: 'VcTerrainProviderTianditu',
+  props: tiandituTerrainProviderProps,
+  emits: providerEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -49,6 +52,8 @@ export default defineComponent({
     if (undefined === providersState) {
       return
     }
+
+    const { emit } = ctx
     const vc = useVueCesium()
     let $script
     // methods
@@ -80,7 +85,7 @@ export default defineComponent({
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(instance, 'readyPromise')
-        listener && ctx.emit('readyPromise', terrainProvider, vc?.viewer, instance.proxy)
+        listener && emit('readyPromise', terrainProvider, vc?.viewer, instance.proxy as VcComponentPublicInstance)
       })
       vc && (vc.viewer.terrainProvider = terrainProvider)
       $script?.parentNode.removeChild($script)
@@ -89,3 +94,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcTerrainProviderTiandituProps = ExtractPropTypes<typeof tiandituTerrainProviderProps>

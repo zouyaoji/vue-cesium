@@ -1,25 +1,29 @@
-import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch, WatchStopHandle } from 'vue'
+import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { cloneDeep, differenceBy } from 'lodash-es'
 import { modelMatrix, debugShowBoundingVolume, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { VcPointProps } from '../point'
 
+export const pointCollectionProps = {
+  ...modelMatrix,
+  ...debugShowBoundingVolume,
+  ...blendOption,
+  ...show,
+  ...enableMouseEvent,
+  points: {
+    type: Array as PropType<Array<VcPointProps>>,
+    default: () => []
+  }
+}
 export default defineComponent({
   name: 'VcCollectionPoint',
-  props: {
-    ...modelMatrix,
-    ...debugShowBoundingVolume,
-    ...blendOption,
-    ...show,
-    ...enableMouseEvent,
-    points: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: pointCollectionProps,
+  emits: primitiveCollectionEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -126,3 +130,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcCollectionPointProps = ExtractPropTypes<typeof pointCollectionProps>

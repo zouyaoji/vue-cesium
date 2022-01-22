@@ -1,33 +1,26 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-01-06 11:25:39
+ * @LastEditTime: 2022-01-22 12:00:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
  */
-import {
-  VcPrimitive,
-  VcPrimitiveGroundPolyline
-} from '@vue-cesium/components/primitives'
-import {
-  VcInstanceGeometry
-} from '@vue-cesium/components/geometry-instance'
-import {
-  VcGeometryPolyline,
-  VcGeometryPolylineGround
-} from '@vue-cesium/components/geometries'
+import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
+import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
+import { VcGeometryPolyline, VcGeometryGroundPolyline } from '@vue-cesium/components/geometries'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
-import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcPolygon } from '@vue-cesium/components/primitive-collections'
+import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelProps, VcPolygon } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
-import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array, makeMaterial } from '@vue-cesium/utils/cesium-helpers'
-import { PolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import { AppearanceOpts, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
+import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
+import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { computed, getCurrentInstance, nextTick, ref, VNode, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
+import { VcGraphicsLabelProps } from 'vue-cesium'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -68,11 +61,11 @@ export default function (props, ctx, cmpName: string) {
   let restorePosition
   const mouseDelta = 10
 
-  const renderDatas = ref<Array<PolylineDrawing>>([])
+  const renderDatas = ref<Array<VcPolylineDrawing>>([])
 
   if (props.preRenderDatas && props.preRenderDatas.length) {
     props.preRenderDatas.forEach(preRenderData => {
-      const polylineDrawing: PolylineDrawing = {
+      const polylineDrawing: VcPolylineDrawing = {
         show: true,
         positions: makeCartesian3Array(preRenderData) as Array<Cesium.Cartesian3>,
         tempPositions: [],
@@ -89,15 +82,11 @@ export default function (props, ctx, cmpName: string) {
     })
   }
 
-  const computedRenderDatas = computed<Array<PolylineDrawing>>(() => {
-    const { Cartesian3, createGuid } = Cesium
-    const polylines: Array<PolylineDrawing> = []
+  const computedRenderDatas = computed<Array<VcPolylineDrawing>>(() => {
+    const { Cartesian3, Ray, createGuid } = Cesium
+    const polylines: Array<VcPolylineDrawing> = []
     renderDatas.value.forEach((polyline, index) => {
-      const labels: Array<{
-        text: string
-        position: Cesium.Cartesian3
-        id: string
-      }> = []
+      const labels: Array<VcLabelProps> = []
       const distances: number[] = []
       const angles: number[] = []
       let distance = 0
@@ -105,84 +94,109 @@ export default function (props, ctx, cmpName: string) {
         positions: Array<Cesium.Cartesian3>
       }> = []
       const positions = polyline.positions.slice()
-      props.loop && positions.length > 2 && positions.push(positions[0])
-      for (let i = 0; i < positions.length - 1; i++) {
-        let s = 0
-        if (props.polylineOpts?.arcType === 0) {
-          s = getGeodesicDistance(positions[i], positions[i + 1], $services.viewer.scene.globe.ellipsoid)
-        } else {
-          s = Cartesian3.distance(positions[i], positions[i + 1])
-        }
-        distances.push(s)
-        distance = distance + s
-        if (s > 0 && positions.length > 2 && props.showDistanceLabel) {
-          labels.push({
-            text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
-            position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
-            id: createGuid(),
-            ...props.labelsOpts
+      if (cmpName === 'VcAnalysisSightline') {
+        const observationPoint = positions.shift()
+        const destinationPoints = positions
+
+        observationPoint &&
+          destinationPoints.forEach(destinationPoint => {
+            const direction = Cartesian3.normalize(Cartesian3.subtract(destinationPoint, observationPoint, new Cartesian3()), new Cartesian3())
+            const ray = new Ray(observationPoint, direction)
+            const intersection = $services.viewer.scene.globe.pick(ray, $services.viewer.scene)
+            const positionsNew: Array<Cesium.Cartesian3> = []
+            positionsNew.push(observationPoint)
+            intersection && positionsNew.push(intersection)
+            positionsNew.push(destinationPoint)
+
+            polylines.push({
+              ...polyline,
+              positions: positionsNew,
+              distance,
+              distances,
+              angles,
+              dashedLines
+            })
           })
-        }
-        if (positions.length > 2 && props.showAngleLabel) {
-          if (i > 0 || props.loop) {
-            const point0 = positions[i === 0 ? positions.length - 2 : i - 1]
-            const point1 = positions[i]
-            const point2 = positions[i + 1]
-            const diffrence1 = Cartesian3.subtract(point0, point1, {} as any)
-            const diffrence2 = Cartesian3.subtract(point2, point1, {} as any)
-            let angle = 0
-            if (!(Cartesian3.ZERO.equals(diffrence1) || Cartesian3.ZERO.equals(diffrence2))) {
-              angle = Cartesian3.angleBetween(diffrence1, diffrence2)
-            }
-            angles.push(angle)
+      } else {
+        props.loop && positions.length > 2 && positions.push(positions[0])
+        for (let i = 0; i < positions.length - 1; i++) {
+          let s = 0
+          if (props.polylineOpts?.arcType === 0) {
+            s = getGeodesicDistance(positions[i], positions[i + 1], $services.viewer.scene.globe.ellipsoid)
+          } else {
+            s = Cartesian3.distance(positions[i], positions[i + 1])
+          }
+          distances.push(s)
+          distance = distance + s
+          if (s > 0 && positions.length > 2 && props.showDistanceLabel) {
             labels.push({
-              text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
-              position: point1,
+              text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+              position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
               ...props.labelsOpts
             })
           }
-        }
+          if (positions.length > 2 && props.showAngleLabel) {
+            if (i > 0 || props.loop) {
+              const point0 = positions[i === 0 ? positions.length - 2 : i - 1]
+              const point1 = positions[i]
+              const point2 = positions[i + 1]
+              const diffrence1 = Cartesian3.subtract(point0, point1, {} as any)
+              const diffrence2 = Cartesian3.subtract(point2, point1, {} as any)
+              let angle = 0
+              if (!(Cartesian3.ZERO.equals(diffrence1) || Cartesian3.ZERO.equals(diffrence2))) {
+                angle = Cartesian3.angleBetween(diffrence1, diffrence2)
+              }
+              angles.push(angle)
+              labels.push({
+                text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
+                position: point1,
+                id: createGuid(),
+                ...props.labelsOpts
+              })
+            }
+          }
 
-        if (props.showDashedLine) {
-          dashedLines.push({
-            positions: [positions[i], getEndPostion(positions[i])]
-          })
-
-          if (i === positions.length - 2) {
+          if (props.showDashedLine) {
             dashedLines.push({
-              positions: [positions[i + 1], getEndPostion(positions[i + 1])]
+              positions: [positions[i], getEndPostion(positions[i])]
             })
+
+            if (i === positions.length - 2) {
+              dashedLines.push({
+                positions: [positions[i + 1], getEndPostion(positions[i + 1])]
+              })
+            }
           }
         }
-      }
-      const area = calculateAreaByPostions(positions)
+        const area = calculateAreaByPostions(positions)
 
-      if (cmpName.includes('Area')) {
-        labels.push({
-          text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
-          position: positions[positions.length - 1],
-          id: createGuid(),
-          ...props.labelOpts
-        })
-      } else {
-        labels.push({
-          text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
-          position: positions[positions.length - 1],
-          id: createGuid(),
-          ...props.labelOpts
+        if (cmpName.includes('Area')) {
+          labels.push({
+            text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
+            position: positions[positions.length - 1],
+            id: createGuid(),
+            ...props.labelOpts
+          })
+        } else {
+          labels.push({
+            text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
+            position: positions[positions.length - 1],
+            id: createGuid(),
+            ...props.labelOpts
+          })
+        }
+
+        polylines.push({
+          ...polyline,
+          labels,
+          distance,
+          distances,
+          area,
+          angles,
+          dashedLines
         })
       }
-
-      polylines.push({
-        ...polyline,
-        labels,
-        distance,
-        distances,
-        area,
-        angles,
-        dashedLines
-      })
     })
     return polylines
   })
@@ -254,7 +268,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const startNew = () => {
-    const polyline: PolylineDrawing = {
+    const polyline: VcPolylineDrawing = {
       show: false,
       positions: [],
       tempPositions: [],
@@ -321,7 +335,7 @@ export default function (props, ctx, cmpName: string) {
     const { defined, Cartesian2, Plane, Cartesian3 } = Cesium
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: PolylineDrawing = renderDatas.value[index]
+    const polyline: VcPolylineDrawing = renderDatas.value[index]
     const tempPositions = polyline.tempPositions
 
     if (options.button === 2 && editingPoint.value) {
@@ -341,9 +355,9 @@ export default function (props, ctx, cmpName: string) {
           'drawEvt',
           Object.assign(
             {
+              index,
               name: drawingType,
-              index: index,
-              renderDatas: renderDatas,
+              renderDatas,
               finished: true,
               windowPoistion: movement,
               type: 'cancel'
@@ -432,8 +446,8 @@ export default function (props, ctx, cmpName: string) {
         'drawEvt',
         Object.assign(
           {
+            index,
             name: drawingType,
-            index: index,
             renderDatas: renderDatas,
             finished: finished,
             position: cmpName === 'VcMeasurementHorizontal' ? polyline.positions[polyline.positions.length - 1] : position,
@@ -464,7 +478,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const polyline: PolylineDrawing = renderDatas.value[index]
+    const polyline: VcPolylineDrawing = renderDatas.value[index]
     let type = 'new'
     if (cmpName === 'VcMeasurementHorizontal') {
       const { SceneMode, IntersectionTests, Cartesian3 } = Cesium
@@ -532,13 +546,13 @@ export default function (props, ctx, cmpName: string) {
         'drawEvt',
         Object.assign(
           {
+            index,
             name: drawingType,
-            index: index,
-            renderDatas: renderDatas,
+            renderDatas,
             finished: false,
             position: cmpName === 'VcMeasurementHorizontal' ? polyline.positions[polyline.positions.length - 1] : position,
             windowPoistion: movement,
-            type: type
+            type
           },
           computedRenderDatas.value[index]
         ),
@@ -551,7 +565,7 @@ export default function (props, ctx, cmpName: string) {
     const { drawingFabInstance, selectedDrawingActionInstance, viewer } = $services
     if (drawStatus.value === DrawStatus.Drawing) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-      const polyline: PolylineDrawing = renderDatas.value[index]
+      const polyline: VcPolylineDrawing = renderDatas.value[index]
       polyline.positions = polyline.tempPositions
       polyline.drawStatus = DrawStatus.AfterDraw
       drawStatus.value = DrawStatus.AfterDraw
@@ -562,9 +576,9 @@ export default function (props, ctx, cmpName: string) {
           'drawEvt',
           Object.assign(
             {
+              index,
               name: drawingType,
-              index: index,
-              renderDatas: renderDatas,
+              renderDatas,
               finished: true,
               position: polyline.positions[polyline.positions.length - 1],
               windowPoistion: movement,
@@ -615,8 +629,10 @@ export default function (props, ctx, cmpName: string) {
     } else if (e === 'removeAll') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
-    } else if (e === 'custom') {
-      props.editorOpts[e]?.callback?.()
+    } else {
+      const index = mouseoverPoint.value._vcPolylineIndx
+      const polyline = renderDatas.value[index]
+      props.editorOpts?.[e]?.callback?.(index, polyline)
     }
 
     emit(
@@ -675,24 +691,24 @@ export default function (props, ctx, cmpName: string) {
                 options: {
                   material: props.polylineOpts?.material
                 }
-              } as AppearanceOpts,
+              },
               depthFailAppearance: {
                 type: 'PolylineMaterialAppearance',
                 options: {
                   material: props.polylineOpts?.depthFailMaterial
                 }
-              } as AppearanceOpts,
+              },
               asynchronous: false,
               classificationType: polylineOpts.classificationType
             },
             () =>
               h(
-                VcInstanceGeometry,
+                VcGeometryInstance,
                 {
                   id: createGuid()
                 },
                 () =>
-                  h(props.clampToGround ? VcGeometryPolylineGround : VcGeometryPolyline, {
+                  h(props.clampToGround ? VcGeometryGroundPolyline : VcGeometryPolyline, {
                     positions: positions,
                     ...polylineOpts
                   })
@@ -713,18 +729,18 @@ export default function (props, ctx, cmpName: string) {
                 options: {
                   material: props.dashLineOpts?.material
                 }
-              } as AppearanceOpts,
+              },
               depthFailAppearance: {
                 type: 'PolylineMaterialAppearance',
                 options: {
                   material: props.dashLineOpts?.depthFailMaterial
                 }
-              } as AppearanceOpts,
+              },
               asynchronous: false
             },
             () =>
               h(
-                VcInstanceGeometry,
+                VcGeometryInstance,
                 {
                   id: createGuid()
                 },
@@ -790,7 +806,7 @@ export default function (props, ctx, cmpName: string) {
                   }
                 }
               }
-            } as AppearanceOpts,
+            },
             asynchronous: false,
             onReady: onVcPrimitiveReady,
             ...props.polygonOpts

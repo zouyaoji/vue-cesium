@@ -1,27 +1,27 @@
-import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import {
-  VcProviderImageryArcgis,
-  VcProviderImageryBaidumap,
-  VcProviderImageryBingmaps,
-  VcProviderImageryGrid,
-  VcProviderImageryIon,
-  VcProviderImageryMapbox,
-  VcProviderImageryOsm,
-  VcProviderImagerySingletile,
-  VcProviderImagerySupermap,
-  VcProviderImageryTianditu,
-  VcProviderImageryTileCoordinates,
-  VcProviderImageryTms,
-  VcProviderImageryTiledcache,
-  VcProviderImageryUrltemplate,
-  VcProviderImageryWms,
-  VcProviderImageryWmts,
-  VcProviderTerrainCesium,
-  VcProviderTerrainArcgis,
-  VcProviderTerrainTianditu
+  VcImageryProviderArcgis,
+  VcImageryProviderBaidu,
+  VcImageryProviderBing,
+  VcImageryProviderGrid,
+  VcImageryProviderIon,
+  VcImageryProviderMapbox,
+  VcImageryProviderOsm,
+  VcImageryProviderSingletile,
+  VcImageryProviderSupermap,
+  VcImageryProviderTianditu,
+  VcImageryProviderTileCoordinates,
+  VcImageryProviderTms,
+  VcImageryProviderTiledcache,
+  VcImageryProviderUrltemplate,
+  VcImageryProviderWms,
+  VcImageryProviderWmts,
+  VcTerrainProviderCesium,
+  VcTerrainProviderArcgis
+  // VcTerrainProviderTianditu
 } from '../index'
 
 const option = {
@@ -37,24 +37,24 @@ const arcgisApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryArcgis
+    VcImageryProviderArcgis
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-arcgis ref="provider"></vc-provider-imagery-arcgis>
+          <vc-imagery-provider-arcgis ref="provider"></vc-imagery-provider-arcgis>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryArcgis', () => {
+describe('VcImageryProviderArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.ArcGisMapServerImageryProvider
     expect(provider instanceof Cesium.ArcGisMapServerImageryProvider).toBe(true)
     expect(provider.url).toEqual('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/')
@@ -73,29 +73,29 @@ const baiduApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryBaidumap
+    VcImageryProviderBaidu
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-baidumap
+          <vc-imagery-provider-baidu
           ref="provider"
           url="https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png"
           :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
           >
-          </vc-provider-imagery-baidumap>
+          </vc-imagery-provider-baidu>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryBaidumap', () => {
+describe('VcImageryProviderBaidu', () => {
   test('render test', async () => {
     const wrapper = mount(baiduApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png/')
@@ -114,28 +114,28 @@ const bingmapsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryBingmaps
+    VcImageryProviderBing
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-bingmaps
+          <vc-imagery-provider-bing
           ref="provider"
           bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
           mapStyle="Aerial"
-        ></vc-provider-imagery-bingmaps>
+        ></vc-imagery-provider-bing>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryBingmaps', () => {
+describe('VcImageryProviderBing', () => {
   test('render test', async () => {
     const wrapper = mount(bingmapsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.BingMapsImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://dev.virtualearth.net/')
@@ -154,24 +154,24 @@ const gridApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryGrid
+    VcImageryProviderGrid
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-grid ref="provider"></vc-provider-imagery-grid>
+          <vc-imagery-provider-grid ref="provider"></vc-imagery-provider-grid>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryGrid', () => {
+describe('VcImageryProviderGrid', () => {
   test('render test', async () => {
     const wrapper = mount(gridApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.GridImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -189,28 +189,28 @@ const cesiumIonApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryIon
+    VcImageryProviderIon
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-ion
+          <vc-imagery-provider-ion
           ref="provider"
           :assetId="4"
           accessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo"
-        ></vc-provider-imagery-ion>
+        ></vc-imagery-provider-ion>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryIon', () => {
+describe('VcImageryProviderIon', () => {
   test('render test', async () => {
     const wrapper = mount(cesiumIonApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.IonImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -228,30 +228,30 @@ const mapboxApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryMapbox
+    VcImageryProviderMapbox
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-mapbox
+          <vc-imagery-provider-mapbox
             ref="provider"
             url="https://api.mapbox.com/styles/v1"
             username="zouyaoji"
             styleId="ckd49hwdn0u641irz36komsmt"
             accessToken="pk.eyJ1Ijoiem91eWFvamkiLCJhIjoiY2tjdjlha3pzMDIxeDJ1bWxhaWNnaGNkdSJ9.WaGuuQT8YcWTPx3KNQfF7A"
-          ></vc-provider-imagery-mapbox>
+          ></vc-imagery-provider-mapbox>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryMapbox', () => {
+describe('VcImageryProviderMapbox', () => {
   test('render test', async () => {
     const wrapper = mount(mapboxApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.MapboxStyleImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual(
@@ -272,24 +272,24 @@ const osmApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryOsm
+    VcImageryProviderOsm
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-osm ref="provider"></vc-provider-imagery-osm>
+          <vc-imagery-provider-osm ref="provider"></vc-imagery-provider-osm>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryOsm', () => {
+describe('VcImageryProviderOsm', () => {
   test('render test', async () => {
     const wrapper = mount(osmApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.OpenStreetMapImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png')
@@ -308,24 +308,24 @@ const singletileApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImagerySingletile
+    VcImageryProviderSingletile
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-singletile ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-provider-imagery-singletile>
+          <vc-imagery-provider-singletile ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-imagery-provider-singletile>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImagerySingletile', () => {
+describe('VcImageryProviderSingletile', () => {
   test('render test', async () => {
     const wrapper = mount(singletileApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.SingleTileImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg')
@@ -344,27 +344,27 @@ const supermapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImagerySupermap
+    VcImageryProviderSupermap
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-supermap
+          <vc-imagery-provider-supermap
             ref="provider"
             url="https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult"
-          ></vc-provider-imagery-supermap>
+          ></vc-imagery-provider-supermap>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImagerySupermap', () => {
+describe('VcImageryProviderSupermap', () => {
   test('render test', async () => {
     const wrapper = mount(supermapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult/')
@@ -383,24 +383,24 @@ const tiandituApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTianditu
+    VcImageryProviderTianditu
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tianditu ref="provider" mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+          <vc-imagery-provider-tianditu ref="provider" mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTianditu', () => {
+describe('VcImageryProviderTianditu', () => {
   test('render test', async () => {
     const wrapper = mount(tiandituApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://{s}.tianditu.gov.cn/cva_c/wmts')
@@ -419,24 +419,24 @@ const tileCoordinatesApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTileCoordinates
+    VcImageryProviderTileCoordinates
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tile-coordinates ref="provider"></vc-provider-imagery-tile-coordinates>
+          <vc-imagery-provider-tile-coordinates ref="provider"></vc-imagery-provider-tile-coordinates>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTileCoordinates', () => {
+describe('VcImageryProviderTileCoordinates', () => {
   test('render test', async () => {
     const wrapper = mount(tileCoordinatesApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.TileCoordinatesImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -454,29 +454,29 @@ const tileMapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTms
+    VcImageryProviderTms
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tms
+          <vc-imagery-provider-tms
             ref="provider"
             url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
             :rectangle="[-120, 20, -60, 40]"
             :maximumLevel="4"
-          ></vc-provider-imagery-tms>
+          ></vc-imagery-provider-tms>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTms', () => {
+describe('VcImageryProviderTms', () => {
   test('render test', async () => {
     const wrapper = mount(tileMapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.TileMapServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -495,28 +495,28 @@ const tiledCacheApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryTiledcache
+    VcImageryProviderTiledcache
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-tiledcache
+          <vc-imagery-provider-tiledcache
             ref="provider"
             url="https://songluck.com/gis/TiledCacheService/TiledCacheServlet"
             dir="WhiteMap"
-          ></vc-provider-imagery-tiledcache>
+          ></vc-imagery-provider-tiledcache>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryTiledcache', () => {
+describe('VcImageryProviderTiledcache', () => {
   test('render test', async () => {
     const wrapper = mount(tiledCacheApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -535,27 +535,27 @@ const urlTemplateApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryUrltemplate
+    VcImageryProviderUrltemplate
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-urltemplate ref="provider"
+          <vc-imagery-provider-urltemplate ref="provider"
             :projectionTransforms="{from: 'GCJ02', to: 'WGS84'}"
             url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
-          ></vc-provider-imagery-urltemplate>
+          ></vc-imagery-provider-urltemplate>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryUrltemplate', () => {
+describe('VcImageryProviderUrltemplate', () => {
   test('render test', async () => {
     const wrapper = mount(urlTemplateApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.UrlTemplateImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -574,29 +574,29 @@ const wmsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryWms
+    VcImageryProviderWms
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-wms
+          <vc-imagery-provider-wms
             ref="provider"
             url="http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
             layers="Hydrography:bores"
             :parameters="{transparent: true, format: 'image/png'}"
-          ></vc-provider-imagery-wms>
+          ></vc-imagery-provider-wms>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryWms', () => {
+describe('VcImageryProviderWms', () => {
   test('render test', async () => {
     const wrapper = mount(wmsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.WebMapServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -615,31 +615,31 @@ const wmtsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcProviderImageryWmts
+    VcImageryProviderWmts
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
         <vc-layer-imagery>
-          <vc-provider-imagery-wmts
+          <vc-imagery-provider-wmts
             ref="provider"
             url="https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/WMTS/tile/1.0.0/World_Street_Map/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"
             layer="World_Street_Map"
             format="image/jpeg"
             wmtsStyle="default"
             tileMatrixSetID="default028mm"
-          ></vc-provider-imagery-wmts>
+          ></vc-imagery-provider-wmts>
         </vc-layer-imagery>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderImageryWmts', () => {
+describe('VcImageryProviderWmts', () => {
   test('render test', async () => {
     const wrapper = mount(wmtsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.WebMapTileServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -659,22 +659,22 @@ describe('VcProviderImageryWmts', () => {
 const cesiumTerrainApp = {
   components: {
     VcViewer,
-    VcProviderTerrainCesium
+    VcTerrainProviderCesium
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
-        <vc-provider-terrain-cesium ref="provider"></vc-provider-terrain-cesium>
+        <vc-terrain-provider-cesium ref="provider"></vc-terrain-provider-cesium>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderTerrainCesium', () => {
+describe('VcTerrainProviderCesium', () => {
   test('render test', async () => {
     const wrapper = mount(cesiumTerrainApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.CesiumTerrainProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -691,22 +691,22 @@ describe('VcProviderTerrainCesium', () => {
 const arcgisTiledElevationApp = {
   components: {
     VcViewer,
-    VcProviderTerrainArcgis
+    VcTerrainProviderArcgis
   },
   template: `
     <div class="test-viewer">
       <vc-viewer>
-        <vc-provider-terrain-arcgis ref="provider"></vc-provider-terrain-arcgis>
+        <vc-terrain-provider-arcgis ref="provider"></vc-terrain-provider-arcgis>
       </vc-viewer>
     </div>
   `
 }
 
-describe('VcProviderTerrainArcgis', () => {
+describe('VcTerrainProviderArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisTiledElevationApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: ReadyObj = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.createPromise
     let provider = readyObj.cesiumObject as Cesium.ArcGISTiledElevationTerrainProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -723,22 +723,22 @@ describe('VcProviderTerrainArcgis', () => {
 // const tiandituTerrainApp = {
 //   components: {
 //     VcViewer,
-//     VcProviderTerrainTianditu
+//     VcTerrainProviderTianditu
 //   },
 //   template: `
 //     <div class="test-viewer">
 //       <vc-viewer>
-//         <vc-provider-terrain-tianditu ref="provider" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-terrain-tianditu>
+//         <vc-terrain-provider-tianditu ref="provider" token="436ce7e50d27eede2f2929307e6b33c0"></vc-terrain-provider-tianditu>
 //       </vc-viewer>
 //     </div>
 //   `
 // }
 
-// describe('VcProviderTerrainTianditu', () => {
+// describe('VcTerrainProviderTianditu', () => {
 //   test('render test', async () => {
 //     const wrapper = mount(tiandituTerrainApp)
 //     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-//     const readyObj: ReadyObj = await testVm.createPromise
+//     const readyObj: VcReadyObject = await testVm.createPromise
 //     let provider = readyObj.cesiumObject
 //     expect(provider).toBeDefined()
 //     await provider.readyPromise

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2021-12-07 11:32:35
+ * @LastEditTime: 2022-01-19 23:41:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\index.ts
@@ -37,3 +37,9 @@ export const VcOverlayHeatmap = OverlayHeatmap as SFCWithInstall<typeof OverlayH
 export const VcOverlayEcharts = OverlayEcharts as SFCWithInstall<typeof OverlayEcharts>
 export const VcOverlayWind = OverlayWind as SFCWithInstall<typeof OverlayWind>
 export const VcOverlayDynamic = OverlayDynamic as SFCWithInstall<typeof OverlayDynamic>
+
+export * from './dynamic'
+export * from './echarts'
+export * from './heatmap'
+export * from './html'
+export * from './wind'

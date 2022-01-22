@@ -1,18 +1,19 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-15 09:47:36
- * @LastEditTime: 2021-11-06 16:16:03
+ * @LastEditTime: 2022-01-22 14:37:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-action.ts
  */
 // import { enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import { DrawTipOpts, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, VcPickEvent } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
 import { useLocaleInject } from '../use-locale'
 import { DrawStatus } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { VcDrawTipOpts } from '@vue-cesium/utils/drawing-types'
 
 export default function (props, ctx, instance: VcComponentInternalInstance, cmpName: string, $services: VcViewerProvider) {
   instance.cesiumClass = cmpName
@@ -36,7 +37,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   tips[3] && (drawingType = `${tips[2]}-${tips[3]}`)
 
   const drawTip = ref('')
-  const drawTipOpts = ref<DrawTipOpts>({
+  const drawTipOpts = ref<VcDrawTipOpts>({
     drawingTipStart: props.drawtip.drawingTipStart || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipStart`),
     drawingTipEnd: props.drawtip.drawingTipEnd || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEnd`),
     drawingTipEditing: props.drawtip.drawingTipEditing || t(`${tips[0]}.${tips[1]}.${tips[2]}.drawingTipEditing`)
@@ -59,7 +60,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     return primitiveCollectionRef
   }
 
-  const onMouseoverPoints = e => {
+  const onMouseoverPoints = (e: VcPickEvent) => {
     const { drawingHandlerActive, viewer } = $services
     if (props.editable && drawStatus.value !== DrawStatus.Drawing && drawingHandlerActive) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.5
@@ -84,7 +85,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     )
   }
 
-  const onMouseoutPoints = e => {
+  const onMouseoutPoints = (e: VcPickEvent) => {
     const { viewer, selectedDrawingActionInstance } = $services
     if (props.editable) {
       e.pickedFeature.primitive.pixelSize = props.pointOpts?.pixelSize * 1.0
@@ -122,12 +123,12 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     }, props.editorOpts?.hideDelay)
   }
 
-  const onPrimitiveCollectionReady = ({ cesiumObject }) => {
-    cesiumObject._vcId = cmpName
+  const onPrimitiveCollectionReady = (readyObj: VcReadyObject) => {
+    ;(readyObj.cesiumObject as any)._vcId = cmpName
   }
 
-  const onVcCollectionPointReady = function (e) {
-    const { cesiumObject: pointPrimitiveCollection } = e
+  const onVcCollectionPointReady = function (e: VcReadyObject) {
+    const { cesiumObject: pointPrimitiveCollection } = e as any
     const originalUpdate = pointPrimitiveCollection.update
 
     pointPrimitiveCollection.update = function (frameState) {
@@ -146,8 +147,8 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     }
   }
 
-  const onVcCollectionLabelReady = e => {
-    const { cesiumObject: labelCollection } = e
+  const onVcCollectionLabelReady = (e: VcReadyObject) => {
+    const labelCollection = e.cesiumObject as any
     const originalUpdate = labelCollection.update
 
     labelCollection.update = function (frameState) {
@@ -167,8 +168,8 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
     }
   }
 
-  const onVcPrimitiveReady = e => {
-    const { cesiumObject: primitive } = e
+  const onVcPrimitiveReady = (e: VcReadyObject) => {
+    const primitive = e.cesiumObject as any
     const originalPrimitiveUpdate = primitive.update
 
     primitive.update = function (frameState) {

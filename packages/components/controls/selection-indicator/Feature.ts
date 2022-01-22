@@ -1,23 +1,26 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2021-11-22 17:21:53
+ * @LastEditTime: 2022-01-19 10:03:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\Feature.ts
  */
 
+import type { VcCesiumObject } from '@vue-cesium/utils/types'
+
 class Feature {
   id: string
-  cesiumObject: any
+  cesiumObject: VcCesiumObject
   pickedFeature: any
   name: any
   description: any
   properties: any
   data: any
-  imageryLayer: any
-  position: any
+  imageryLayer: Cesium.ImageryLayer
+  position: Cesium.Cartesian3
   coords: any
+  windowPosition: Cesium.Cartesian2
   constructor(options) {
     this.id = options.id || Cesium.createGuid()
   }
@@ -40,7 +43,7 @@ class Feature {
 
     return boundingSphere
   }
-  static fromPickedFeature(cesiumObject, pickedFeature, viewer) {
+  static fromPickedFeature(cesiumObject, pickedFeature, viewer, screenPosition) {
     const feature = new Feature({ id: cesiumObject.id })
 
     if (cesiumObject.position) {
@@ -55,6 +58,7 @@ class Feature {
 
     feature.cesiumObject = cesiumObject
     feature.pickedFeature = pickedFeature
+    feature.windowPosition = screenPosition
     return feature
   }
 

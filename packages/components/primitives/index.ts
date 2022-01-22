@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2022-01-18 14:55:25
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\primitives\index.ts
+ */
 import { App } from 'vue'
 import PrimitiveClassification from './classification'
 import PrimitiveGround from './ground'
@@ -33,3 +41,11 @@ export const VcPrimitiveModel = PrimitiveModel as SFCWithInstall<typeof Primitiv
 export const VcPrimitive = Primitive as SFCWithInstall<typeof Primitive>
 export const VcPrimitiveTileset = PrimitiveTileset as SFCWithInstall<typeof PrimitiveTileset>
 export const VcPrimitiveParticle = PrimitiveParticle as SFCWithInstall<typeof PrimitiveParticle>
+
+export * from './classification'
+export * from './ground'
+export * from './ground-polyline'
+export * from './model'
+export * from './particle'
+export * from './primitive'
+export * from './tileset'

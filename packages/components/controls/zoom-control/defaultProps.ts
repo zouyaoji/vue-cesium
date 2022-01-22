@@ -1,7 +1,7 @@
 import { positionProps } from '@vue-cesium/composables/private/use-position'
-import { VcBtnOptions } from '@vue-cesium/utils/types'
+import type { VcBtnTooltipProps, VcCamera } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import { PropType } from 'vue'
+import type { PropType } from 'vue'
 
 const defaultProps = {
   enableResetButton: {
@@ -20,7 +20,7 @@ const defaultProps = {
     type: Number
   },
   defaultResetView: {
-    type: Object,
+    type: Object as PropType<VcCamera>,
     default: () => {
       return {
         position: {
@@ -28,7 +28,7 @@ const defaultProps = {
           lat: 30,
           height: 19059568.5
         }
-      }
+      } as VcCamera
     }
   },
   overrideViewerCamera: {
@@ -54,64 +54,67 @@ const defaultProps = {
     validator: (v: string) => ['vertical', 'horizontal'].includes(v)
   },
   zoomInOptions: {
-    type: Object as PropType<VcBtnOptions>,
-    default: () => ({
-      icon: 'vc-icons-zoom-in',
-      size: '24px',
-      color: '#fff',
-      background: 'transparent',
-      round: true,
-      flat: true,
-      label: undefined,
-      stack: false,
-      tooltip: {
-        delay: 500,
-        anchor: 'bottom middle',
-        offset: [0, 20],
-        tip: void 0
-      }
-    })
+    type: Object as PropType<VcBtnTooltipProps>,
+    default: () =>
+      ({
+        icon: 'vc-icons-zoom-in',
+        size: '24px',
+        color: '#fff',
+        background: 'transparent',
+        round: true,
+        flat: true,
+        label: undefined,
+        stack: false,
+        tooltip: {
+          delay: 500,
+          anchor: 'bottom middle',
+          offset: [0, 20],
+          tip: void 0
+        }
+      } as VcBtnTooltipProps)
   },
   zoomOutOptions: {
-    type: Object as PropType<VcBtnOptions>,
-    default: () => ({
-      icon: 'vc-icons-zoom-out',
-      size: '24px',
-      color: '#fff',
-      background: 'transparent',
-      round: true,
-      flat: true,
-      label: undefined,
-      stack: false,
-      tooltip: {
-        delay: 500,
-        anchor: 'bottom middle',
-        offset: [0, 20],
-        tip: void 0
-      }
-    })
+    type: Object as PropType<VcBtnTooltipProps>,
+    default: () =>
+      ({
+        icon: 'vc-icons-zoom-out',
+        size: '24px',
+        color: '#fff',
+        background: 'transparent',
+        round: true,
+        flat: true,
+        label: undefined,
+        stack: false,
+        tooltip: {
+          delay: 500,
+          anchor: 'bottom middle',
+          offset: [0, 20],
+          tip: void 0
+        }
+      } as VcBtnTooltipProps)
   },
   zoomResetOptions: {
-    type: Object as PropType<VcBtnOptions>,
-    default: () => ({
-      icon: 'vc-icons-reset',
-      size: '24px',
-      color: '#fff',
-      background: 'transparent',
-      round: true,
-      flat: true,
-      label: undefined,
-      stack: false,
-      tooltip: {
-        delay: 500,
-        anchor: 'bottom middle',
-        offset: [0, 20],
-        tip: void 0
-      }
-    })
+    type: Object as PropType<VcBtnTooltipProps>,
+    default: () =>
+      ({
+        icon: 'vc-icons-reset',
+        size: '24px',
+        color: '#fff',
+        background: 'transparent',
+        round: true,
+        flat: true,
+        label: undefined,
+        stack: false,
+        tooltip: {
+          delay: 500,
+          anchor: 'bottom middle',
+          offset: [0, 20],
+          tip: void 0
+        }
+      } as VcBtnTooltipProps)
   }
 }
 
-const defaultOptions = getDefaultOptionByProps(defaultProps)
+const defaultOptions = getDefaultOptionByProps<typeof defaultProps>(defaultProps)
 
 export { defaultProps, defaultOptions }

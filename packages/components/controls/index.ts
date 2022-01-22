@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2022-01-23 00:54:00
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\index.ts
+ */
 import { App } from 'vue'
 import Compass from './compass'
 import ZoomControl from './zoom-control'
@@ -9,10 +17,8 @@ import Navigation from './navigation'
 import CompassSm from './navigation-sm/compass-sm'
 import ZoomControlSm from './navigation-sm/zoom-control-sm'
 import NavigationSm from './navigation-sm'
-
 import OverviewMap from './vc-overview-map'
 import SelectionIndicator from './selection-indicator'
-
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
@@ -58,3 +64,14 @@ export const VcZoomControlSm = ZoomControlSm as SFCWithInstall<typeof ZoomContro
 export const VcNavigationSm = NavigationSm as SFCWithInstall<typeof NavigationSm>
 export const VcOverviewMap = OverviewMap as SFCWithInstall<typeof OverviewMap>
 export const VcSelectionIndicator = SelectionIndicator as SFCWithInstall<typeof SelectionIndicator>
+
+export * from './compass'
+export * from './distance-legend'
+export * from './my-location'
+export * from './navigation'
+export * from './navigation-sm'
+export * from './print'
+export * from './selection-indicator'
+export * from './status-bar'
+export * from './vc-overview-map'
+export * from './zoom-control'

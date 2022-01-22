@@ -1,31 +1,41 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-25 14:46:48
- * @LastEditTime: 2021-11-04 09:47:22
+ * @LastEditTime: 2022-01-22 10:53:13
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\props.ts
  */
 
+import type { VcPointProps } from '@vue-cesium/components/primitive-collections'
 import { enableMouseEvent, show } from '@vue-cesium/utils/cesium-props'
-import { PropType } from 'vue'
-import { positionProps } from '../private/use-position'
+import type { VcDrawTipOpts, VcEditorOpts, VcDrawingPreRenderDatas } from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 import { clearActionDefault } from './defaultOpts'
 
 export const useDrawingActionProps = {
   ...enableMouseEvent,
   show: Boolean,
   editable: Boolean,
-  drawtip: Object,
-  pointOpts: Object,
-  editorOpts: Object,
+  drawtip: Object as PropType<VcDrawTipOpts>,
+  pointOpts: Object as PropType<VcPointProps>,
+  editorOpts: Object as PropType<VcEditorOpts>,
   mode: Number,
-  preRenderDatas: Array
+  preRenderDatas: Array as PropType<VcDrawingPreRenderDatas>
 }
 
 export const useDrawingFabProps = {
-  ...positionProps,
   ...show,
+  position: {
+    type: String as PropType<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'>,
+    default: 'bottom-left',
+    validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
+  },
+  offset: {
+    type: Array,
+    validator: v => v.length === 2
+  },
   mode: {
     type: Number,
     default: 1
@@ -35,15 +45,13 @@ export const useDrawingFabProps = {
     default: 'positive'
   },
   editable: {
-    type: Boolean,
-    default: false
+    type: Boolean
   },
   clampToGround: {
-    type: Boolean,
-    default: false
+    type: Boolean
   },
   clearActionOpts: {
-    type: Object as PropType<typeof clearActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => clearActionDefault
   }
 }

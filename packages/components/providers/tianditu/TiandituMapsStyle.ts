@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-01-15 23:32:46
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\TiandituMapsStyle.ts
+ */
 const TiandituMapsStyle = {
   IMG_W: 'img_w',
   IMG_C: 'img_c',

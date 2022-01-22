@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-30 22:52:26
+ * @LastEditTime: 2022-01-15 10:55:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\arcgis\imagery.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
   token,
@@ -23,30 +24,32 @@ import {
   maximumLevel
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
-export default defineComponent({
-  name: 'VcProviderImageryArcgis',
-  props: {
-    url: {
-      type: String,
-      default: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
-    },
-    ...token,
-    ...tileDiscardPolicy,
-    usePreCachedTilesIfAvailable: {
-      type: Boolean,
-      default: true
-    },
-    ...layers,
-    ...enablePickFeatures,
-    ...rectangle,
-    ...tilingScheme,
-    ...ellipsoid,
-    ...credit,
-    ...tileWidth,
-    ...tileHeight,
-    ...maximumLevel
+import { providerEmits } from '@vue-cesium/utils/emits'
+export const arcgisImageryProviderProps = {
+  url: {
+    type: [String, Object] as PropType<string | Cesium.Resource>,
+    default: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise'],
+  ...token,
+  ...tileDiscardPolicy,
+  usePreCachedTilesIfAvailable: {
+    type: Boolean,
+    default: true
+  },
+  ...layers,
+  ...enablePickFeatures,
+  ...rectangle,
+  ...tilingScheme,
+  ...ellipsoid,
+  ...credit,
+  ...tileWidth,
+  ...tileHeight,
+  ...maximumLevel
+}
+export default defineComponent({
+  name: 'VcImageryProviderArcgis',
+  props: arcgisImageryProviderProps,
+  emits: providerEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -55,3 +58,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcImageryProviderArcgisProps = ExtractPropTypes<typeof arcgisImageryProviderProps>

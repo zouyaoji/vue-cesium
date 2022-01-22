@@ -1,48 +1,45 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
- * @LastEditTime: 2021-12-07 11:31:01
+ * @LastEditTime: 2022-01-19 21:54:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\echarts\index.ts
  */
-import {
-  CSSProperties,
-  defineComponent,
-  getCurrentInstance,
-  ref,
-  h,
-  reactive,
-  createCommentVNode,
-  watch,
-  onUnmounted,
-  WatchStopHandle,
-  nextTick
-} from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, CSSProperties, WatchStopHandle } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, nextTick } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import * as echarts from 'echarts'
-import { EChartsType } from 'echarts'
+import type { EChartsType } from 'echarts'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const echartsOverlayProps = {
+  options: {
+    type: Object,
+    required: true
+  },
+  autoHidden: {
+    type: Boolean,
+    default: true
+  },
+  customClass: String,
+  coordinateSystem: {
+    type: String,
+    default: 'cesium'
+  }
+}
+const emits = {
+  ...commonEmits,
+  mouseenter: (evt: MouseEvent) => true,
+  mouseleave: (evt: MouseEvent) => true,
+  click: (evt: MouseEvent) => true
+}
 export default defineComponent({
   name: 'VcOverlayEcharts',
-  props: {
-    options: {
-      type: Object,
-      required: true
-    },
-    autoHidden: {
-      type: Boolean,
-      default: true
-    },
-    customClass: String,
-    coordinateSystem: {
-      type: String,
-      default: 'cesium'
-    }
-  },
+  props: echartsOverlayProps,
   emits: ['beforeLoad', 'ready', 'destroyed', 'mouseenter', 'mouseleave', 'click'],
   setup(props, ctx) {
     // state
@@ -218,3 +215,6 @@ export default defineComponent({
     return () => renderContent()
   }
 })
+
+export type VcOverlayEchartsProps = ExtractPropTypes<typeof echartsOverlayProps>
+export type VcOverlayEchartsEmits = typeof emits

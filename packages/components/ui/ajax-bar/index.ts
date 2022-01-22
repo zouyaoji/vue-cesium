@@ -1,4 +1,5 @@
-import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, CSSProperties, PropType } from 'vue'
+import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import type { CSSProperties, ExtractPropTypes } from 'vue'
 
 import { between } from '@vue-cesium/utils/private/format'
 import { AnyFunction } from '@vue-cesium/utils/types'
@@ -86,28 +87,30 @@ function restoreAjax(start, stop) {
   }
 }
 
+export const ajaxBarProps = {
+  position: {
+    type: String,
+    default: 'top',
+    validator: (val: string) => ['top', 'right', 'bottom', 'left'].includes(val)
+  },
+  size: {
+    type: String,
+    default: '2px'
+  },
+  color: String,
+  skipHijack: Boolean,
+  reverse: Boolean,
+  positioning: {
+    type: String,
+    default: 'absolute',
+    validator: (val: string) => ['absolute', 'fixed'].includes(val)
+  }
+}
+
 export default defineComponent({
   name: 'VcAjaxBar',
 
-  props: {
-    position: {
-      type: String,
-      default: 'top',
-      validator: (val: string) => ['top', 'right', 'bottom', 'left'].includes(val)
-    },
-    size: {
-      type: String,
-      default: '2px'
-    },
-    color: String,
-    skipHijack: Boolean,
-    reverse: Boolean,
-    positioning: {
-      type: String,
-      default: 'absolute',
-      validator: (val: string) => ['absolute', 'fixed'].includes(val)
-    }
-  },
+  props: ajaxBarProps,
 
   emits: ['start', 'stop'],
 
@@ -259,3 +262,43 @@ export default defineComponent({
       })
   }
 })
+
+// export type VcAjaxBarProps = ExtractPropTypes<typeof ajaxBarProps>
+export interface VcAjaxBarProps {
+  /**
+   * Position within window of where QAjaxBar should be displayed.
+   * Default value: top
+   */
+  position?: 'top' | 'right' | 'bottom' | 'left' | undefined
+  /**
+   * Size in CSS units, including unit name.
+   * Default value: 2px
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the css color.
+   */
+  color?: string | undefined
+  /**
+   * Reverse direction of progress.
+   */
+  reverse?: boolean | undefined
+  /**
+   * Skip Ajax hijacking (not a reactive prop).
+   */
+  skipHijack?: boolean | undefined
+  /**
+   * Filter which URL should trigger start() + stop().
+   * @param url The URL being triggered
+   * @returns Should the URL received as param trigger start() + stop()?
+   */
+  hijackFilter?: ((url: string) => boolean) | undefined
+  /**
+   * Emitted when bar is triggered to appear.
+   */
+  onStart?: () => void
+  /**
+   * Emitted when bar has finished its job.
+   */
+  onStop?: () => void
+}

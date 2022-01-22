@@ -6,7 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\__tests__\imagery-layer.spec.ts
  */
-import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcLayerImagery from '../src'
 import VcViewer from '@vue-cesium/components/viewer'
@@ -53,7 +53,7 @@ describe('VcLayerImagery', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.layer).toBeDefined()
     const testVm = wrapper.vm.$refs.layer as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
     let layer = readyObj?.cesiumObject as Cesium.ImageryLayer
     expect(layer instanceof Cesium.ImageryLayer).toBe(true)
     expect(layer.imageryProvider instanceof Cesium.OpenStreetMapImageryProvider).toBe(true)

@@ -16,7 +16,7 @@ import GeometryEllipsoid from './ellipsoid'
 import GeometryEllipsoidOutline from './ellipsoid-outline'
 import GeometryFrustum from './frustum'
 import GeometryFrustumOutline from './frustum-outline'
-import GeometryPolylineGround from './ground-polyline'
+import GeometryGroundPolyline from './ground-polyline'
 import GeometryPlane from './plane'
 import GeometryPlaneOutline from './plane-outline'
 import GeometryPolygon from './polygon'
@@ -49,7 +49,7 @@ const components = [
   GeometryEllipsoidOutline,
   GeometryFrustum,
   GeometryFrustumOutline,
-  GeometryPolylineGround,
+  GeometryGroundPolyline,
   GeometryPlane,
   GeometryPlaneOutline,
   GeometryPolygon,
@@ -98,7 +98,7 @@ export const VcGeometryEllipsoid = GeometryEllipsoid as SFCWithInstall<typeof Ge
 export const VcGeometryEllipsoidOutline = GeometryEllipsoidOutline as SFCWithInstall<typeof GeometryEllipsoidOutline>
 export const VcGeometryFrustum = GeometryFrustum as SFCWithInstall<typeof GeometryFrustum>
 export const VcGeometryFrustumOutline = GeometryFrustumOutline as SFCWithInstall<typeof GeometryFrustumOutline>
-export const VcGeometryPolylineGround = GeometryPolylineGround as SFCWithInstall<typeof GeometryPolylineGround>
+export const VcGeometryGroundPolyline = GeometryGroundPolyline as SFCWithInstall<typeof GeometryGroundPolyline>
 export const VcGeometryPlane = GeometryPlane as SFCWithInstall<typeof GeometryPlane>
 export const VcGeometryPlaneOutline = GeometryPlaneOutline as SFCWithInstall<typeof GeometryPlaneOutline>
 export const VcGeometryPolygon = GeometryPolygon as SFCWithInstall<typeof GeometryPolygon>
@@ -113,3 +113,35 @@ export const VcGeometrySphere = GeometrySphere as SFCWithInstall<typeof Geometry
 export const VcGeometrySphereOutline = GeometrySphereOutline as SFCWithInstall<typeof GeometrySphereOutline>
 export const VcGeometryWall = GeometryWall as SFCWithInstall<typeof GeometryWall>
 export const VcGeometryWallOutline = GeometryWallOutline as SFCWithInstall<typeof GeometryWallOutline>
+
+export * from './box'
+export * from './box-outline'
+export * from './circle'
+export * from './circle-outline'
+export * from './coplanar-polygon'
+export * from './coplanar-polygon-outline'
+export * from './corridor'
+export * from './corridor-outline'
+export * from './cylinder'
+export * from './cylinder-outline'
+export * from './ellipse'
+export * from './ellipse-outline'
+export * from './ellipsoid'
+export * from './ellipsoid-outline'
+export * from './frustum'
+export * from './frustum-outline'
+export * from './ground-polyline'
+export * from './plane'
+export * from './plane-outline'
+export * from './polygon'
+export * from './polygon-outline'
+export * from './polyline'
+export * from './polyline-volume'
+export * from './polyline-volume-outline'
+export * from './rectangle'
+export * from './rectangle-outline'
+export * from './simple-polyline'
+export * from './sphere'
+export * from './sphere-outline'
+export * from './wall'
+export * from './wall-outline'

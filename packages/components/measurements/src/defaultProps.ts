@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2021-10-27 15:43:48
+ * @LastEditTime: 2022-01-22 15:44:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
  */
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import { PropType } from 'vue'
+import type { PropType, ExtractPropTypes } from 'vue'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
   actionOptions,
@@ -23,17 +23,27 @@ import {
   segmentDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
+import type { VcFabProps } from '../../ui'
+import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
+import type { VcLabelProps } from '../../primitive-collections'
+import type {
+  VcComponentDistanceMeasurementOpts,
+  VcHorizontalMeasurementOpts,
+  VcMeasurementOpts,
+  VcPolylineMeasurementOpts,
+  VcRectangleMeasurementOpts
+} from '@vue-cesium/utils/drawing-types'
 
-const distanceMeasurementActionDefault = Object.assign({}, actionOptions, {
+const distanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-distance'
 })
 
-const distanceMeasurementDefault = Object.assign({}, segmentDrawingDefault, {
+const distanceMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentDrawingDefault, {
   labelOpts: Object.assign({}, labelOptsDefault, {
     horizontalOrigin: 1, // left
     verticalOrigin: -1, // top
     pixelOffset: [10, 10]
-  }),
+  }) as VcLabelProps,
   measureUnits: new MeasureUnits(),
   decimals: {
     distance: 2,
@@ -42,11 +52,11 @@ const distanceMeasurementDefault = Object.assign({}, segmentDrawingDefault, {
   locale: undefined
 })
 
-const componentDistanceMeasurementActionDefault = Object.assign({}, actionOptions, {
+const componentDistanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-component-distance'
 })
 
-const componentDistanceMeasurementDefault = Object.assign({}, distanceMeasurementDefault, {
+const componentDistanceMeasurementDefault: VcComponentDistanceMeasurementOpts = Object.assign({}, distanceMeasurementDefault, {
   showComponentLines: true,
   xLabelOpts: labelOptsDefault,
   xAngleLabelOpts: Object.assign({}, labelOptsDefault, {
@@ -64,11 +74,11 @@ const componentDistanceMeasurementDefault = Object.assign({}, distanceMeasuremen
   })
 })
 
-const polylineMeasurementActionDefault = Object.assign({}, actionOptions, {
+const polylineMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-polyline-distance'
 })
 
-const polylineMeasurementDefault = Object.assign({}, polylineDrawingDefault, {
+const polylineMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, polylineDrawingDefault, {
   measureUnits: new MeasureUnits(),
   labelOpts: labelOptsDefault,
   labelsOpts: Object.assign({}, labelOptsDefault, {
@@ -87,11 +97,11 @@ const polylineMeasurementDefault = Object.assign({}, polylineDrawingDefault, {
   loop: false
 })
 
-const horizontalMeasurementActionDefault = Object.assign({}, actionOptions, {
+const horizontalMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-horizontal-distance'
 })
 
-const horizontalMeasurementDefault = Object.assign({}, polylineMeasurementDefault, {
+const horizontalMeasurementDefault: VcHorizontalMeasurementOpts = Object.assign({}, polylineMeasurementDefault, {
   dashLineOpts: {
     material: {
       fabric: {
@@ -125,11 +135,11 @@ const horizontalMeasurementDefault = Object.assign({}, polylineMeasurementDefaul
   showDashedLine: true
 })
 
-const verticalMeasurementActionDefault = Object.assign({}, actionOptions, {
+const verticalMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-vertical-distance'
 })
 
-const verticalMeasurementDefault = Object.assign({}, segmentDrawingDefault, {
+const verticalMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentDrawingDefault, {
   labelOpts: Object.assign({}, labelOptsDefault, {
     horizontalOrigin: 1, // left
     verticalOrigin: -1, // top
@@ -143,11 +153,11 @@ const verticalMeasurementDefault = Object.assign({}, segmentDrawingDefault, {
   locale: undefined
 })
 
-const heightMeasurementActionDefault = Object.assign({}, actionOptions, {
+const heightMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-height-from-terrain'
 })
 
-const heightMeasurementDefault = Object.assign({}, pointDrawingDefault, {
+const heightMeasurementDefault: VcMeasurementOpts = Object.assign({}, pointDrawingDefault, {
   polylineOpts: polylineOptsDefault,
   labelOpts: Object.assign({}, labelOptsDefault, {
     horizontalOrigin: 1, // left
@@ -170,11 +180,11 @@ const heightMeasurementDefault = Object.assign({}, pointDrawingDefault, {
   locale: undefined
 })
 
-const areaMeasurementActionDefault = Object.assign({}, actionOptions, {
+const areaMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-area'
 })
 
-const areaMeasurementDefault = Object.assign({}, polygonDrawingDefault, {
+const areaMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, polygonDrawingDefault, {
   labelOpts: labelOptsDefault,
   labelsOpts: Object.assign({}, labelOptsDefault, {
     scale: 0.8,
@@ -194,11 +204,11 @@ const areaMeasurementDefault = Object.assign({}, polygonDrawingDefault, {
   locale: undefined
 })
 
-const pointMeasurementActionDefault = Object.assign({}, actionOptions, {
+const pointMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-measure-point-coordinates'
 })
 
-const pointMeasurementDefault = Object.assign({}, pointDrawingDefault, {
+const pointMeasurementDefault: VcMeasurementOpts = Object.assign({}, pointDrawingDefault, {
   heightReference: 1, // 0: NONE, 1: CLAMP_TO_GROUND
   measureUnits: new MeasureUnits(),
   drawtip: {
@@ -219,11 +229,11 @@ const pointMeasurementDefault = Object.assign({}, pointDrawingDefault, {
   locale: undefined
 })
 
-const rectangleMeasurementActionDefault = Object.assign({}, actionOptions, {
+const rectangleMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-rectangle'
 })
 
-const rectangleMeasurementDefault = Object.assign({}, areaMeasurementDefault, {
+const rectangleMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, areaMeasurementDefault, {
   pointOpts: Object.assign({}, pointOptsDefault, {
     show: false
   }),
@@ -246,12 +256,12 @@ const rectangleMeasurementDefault = Object.assign({}, areaMeasurementDefault, {
   regular: false // regular
 })
 
-const regularMeasurementDefault = Object.assign({}, rectangleMeasurementDefault, {
+const regularMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
   edge: 6,
   loop: true
 })
 
-const circleMeasurementDefault = Object.assign({}, rectangleMeasurementDefault, {
+const circleMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
   edge: 360,
   loop: true,
   showDistanceLabel: false,
@@ -265,91 +275,108 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  autoExpand: true,
+  // modelValue: true,
   hideActionOnClick: false,
   color: 'info'
-})
+} as VcFabProps)
 
-const defaultProps = {
+export const measurementType = [
+  'distance',
+  'component-distance',
+  'polyline',
+  'horizontal',
+  'vertical',
+  'height',
+  'area',
+  'point',
+  'rectangle',
+  'regular',
+  'circle'
+]
+const isValidMeasurementType = (measurements: string[]) => {
+  let flag = true
+  measurements.forEach(measurement => {
+    if (!measurementType.includes(measurement)) {
+      console.error(`VueCesium: unknown measurement type: ${measurement}`)
+      flag = false
+    }
+  })
+  return flag
+}
+
+const measurementsProps = {
   ...useDrawingFabProps,
   measurements: {
-    type: Array as PropType<Array<string>>,
-    default: () => [
-      'distance',
-      'component-distance',
-      'polyline',
-      'horizontal',
-      'vertical',
-      'height',
-      'area',
-      'point',
-      'rectangle',
-      'regular',
-      'circle'
-    ]
+    type: Array as PropType<
+      Array<
+        'distance' | 'component-distance' | 'polyline' | 'horizontal' | 'vertical' | 'height' | 'area' | 'point' | 'rectangle' | 'regular' | 'circle'
+      >
+    >,
+    default: () => measurementType,
+    validator: isValidMeasurementType
   },
   mainFabOpts: {
-    type: Object as PropType<typeof mainFabDefault>,
+    type: Object as PropType<VcActionTooltipProps & VcFabProps>,
     default: () => mainFabDefault
   },
   distanceActionOpts: {
-    type: Object as PropType<typeof distanceMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => distanceMeasurementActionDefault
   },
   distanceMeasurementOpts: {
-    type: Object as PropType<typeof distanceMeasurementDefault>,
+    type: Object as PropType<VcMeasurementOpts>,
     default: () => distanceMeasurementDefault
   },
   componentDistanceActionOpts: {
-    type: Object as PropType<typeof componentDistanceMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => componentDistanceMeasurementActionDefault
   },
   componentDistanceMeasurementOpts: {
-    type: Object as PropType<typeof componentDistanceMeasurementDefault>,
+    type: Object as PropType<VcComponentDistanceMeasurementOpts>,
     default: () => componentDistanceMeasurementDefault
   },
   polylineActionOpts: {
-    type: Object as PropType<typeof polylineMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => polylineMeasurementActionDefault
   },
   polylineMeasurementOpts: {
-    type: Object as PropType<typeof polylineMeasurementDefault>,
+    type: Object as PropType<VcPolylineMeasurementOpts>,
     default: () => polylineMeasurementDefault
   },
   horizontalActionOpts: {
-    type: Object as PropType<typeof horizontalMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => horizontalMeasurementActionDefault
   },
   horizontalMeasurementOpts: {
-    type: Object as PropType<typeof horizontalMeasurementDefault>,
+    type: Object as PropType<VcHorizontalMeasurementOpts>,
     default: () => horizontalMeasurementDefault
   },
   verticalActionOpts: {
-    type: Object as PropType<typeof verticalMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => verticalMeasurementActionDefault
   },
   verticalMeasurementOpts: {
-    type: Object as PropType<typeof verticalMeasurementDefault>,
+    type: Object as PropType<VcMeasurementOpts>,
     default: () => verticalMeasurementDefault
   },
   heightActionOpts: {
-    type: Object as PropType<typeof heightMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => heightMeasurementActionDefault
   },
   heightMeasurementOpts: {
-    type: Object as PropType<typeof heightMeasurementDefault>,
+    type: Object as PropType<VcMeasurementOpts>,
     default: () => heightMeasurementDefault
   },
   areaActionOpts: {
-    type: Object as PropType<typeof areaMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => areaMeasurementActionDefault
   },
   areaMeasurementOpts: {
-    type: Object as PropType<typeof areaMeasurementDefault>,
+    type: Object as PropType<VcPolylineMeasurementOpts>,
     default: () => areaMeasurementDefault
   },
   pointActionOpts: {
-    type: Object as PropType<typeof pointMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => pointMeasurementActionDefault
   },
   pointMeasurementOpts: {
@@ -357,7 +384,7 @@ const defaultProps = {
     default: () => pointMeasurementDefault
   },
   rectangleActionOpts: {
-    type: Object as PropType<typeof rectangleMeasurementActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => rectangleMeasurementActionDefault
   },
   rectangleMeasurementOpts: {
@@ -365,7 +392,7 @@ const defaultProps = {
     default: () => rectangleMeasurementDefault
   },
   regularActionOpts: {
-    type: Object as PropType<typeof regularDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => regularDrawingActionDefault
   },
   regularMeasurementOpts: {
@@ -373,18 +400,19 @@ const defaultProps = {
     default: () => regularMeasurementDefault
   },
   circleActionOpts: {
-    type: Object as PropType<typeof circleDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => circleDrawingActionDefault
   },
   circleMeasurementOpts: {
-    type: Object as PropType<typeof circleMeasurementDefault>,
+    type: Object as PropType<VcRectangleMeasurementOpts>,
     default: () => circleMeasurementDefault
   }
 }
-const defaultOptions = getDefaultOptionByProps(defaultProps)
+export type VcMeasurementsProps = ExtractPropTypes<typeof measurementsProps>
+const defaultOptions = getDefaultOptionByProps<VcMeasurementsProps>(measurementsProps)
 
 export {
-  defaultProps,
+  measurementsProps,
   defaultOptions,
   distanceMeasurementActionDefault,
   distanceMeasurementDefault,

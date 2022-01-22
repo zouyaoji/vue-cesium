@@ -1,5 +1,5 @@
-import { CameraOption } from '@vue-cesium/utils/types'
-import { PropType } from 'vue'
+import type { VcCamera } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
 
 export default {
   cesiumPath: String,
@@ -146,7 +146,7 @@ export default {
   },
   accessToken: String,
   camera: {
-    type: Object,
+    type: Object as PropType<VcCamera>,
     default: () => ({
       position: {
         lng: 105,

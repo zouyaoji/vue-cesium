@@ -1,5 +1,6 @@
-import { computed, defineComponent, getCurrentInstance, nextTick, ref, CSSProperties, createCommentVNode, h, reactive, watch, VNode } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
+import type { VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -7,28 +8,34 @@ import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { VcTooltip } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const zoomControlSmProps = {
+  ...positionProps,
+  autoHidden: {
+    type: Boolean,
+    default: false
+  },
+  tooltip: {
+    type: Object,
+    default: () => ({
+      delay: 1000,
+      anchor: 'bottom middle',
+      offset: [0, 20],
+      zoomInTip: void 0,
+      zoomOutTip: void 0,
+      zoomBarTip: void 0
+    })
+  }
+}
+const emits = {
+  ...commonEmits,
+  zoomEvt: (evt: VcZoomEvt) => true
+}
 export default defineComponent({
   name: 'VcZoomControlSm',
-  props: {
-    ...positionProps,
-    autoHidden: {
-      type: Boolean,
-      default: false
-    },
-    tooltip: {
-      type: Object,
-      default: () => ({
-        delay: 1000,
-        anchor: 'bottom middle',
-        offset: [0, 20],
-        zoomInTip: void 0,
-        zoomOutTip: void 0,
-        zoomBarTip: void 0
-      })
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'zoomEvt'],
+  props: zoomControlSmProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -224,3 +231,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcZoomControlSmProps = ExtractPropTypes<typeof zoomControlSmProps>
+export type VcZoomControlSmEmits = typeof emits

@@ -6,7 +6,7 @@
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\entity\__tests__\entity.spec.ts
  */
-import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcEntity from '../src'
 import VcViewer from '@vue-cesium/components/viewer'
@@ -70,7 +70,7 @@ describe('VcEntity', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.entity).toBeDefined()
     const testVm = wrapper.vm.$refs.entity as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
     let entity = readyObj?.cesiumObject as Cesium.Entity
     expect(entity instanceof Cesium.Entity).toBe(true)
     expect(entity.position?.getValue(Cesium.JulianDate.now()).equalsEpsilon(Cesium.Cartesian3.fromDegrees(108, 32), Cesium.Math.EPSILON6)).toBe(true)

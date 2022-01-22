@@ -1,33 +1,43 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 13:42:09
- * @LastEditTime: 2021-11-01 14:55:44
+ * @LastEditTime: 2022-01-19 23:40:00
  * @LastEditors: zouyaoji
  * @Description: from 3D-Wind-Field - https://github.com/RaymanNg/3D-Wind-Field
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\index.ts
  */
-
+import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, onUnmounted, ref, watch, WatchStopHandle } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
 import ParticleSystem from './particleSystem'
 import { viewRectangleToLonLatRange } from './util'
 import { kebabCase } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
-export default defineComponent({
-  name: 'VcOverlayWindmap',
-  props: {
-    show: {
-      type: Boolean,
-      default: true
-    },
-    data: {
-      type: Object,
-      required: true
-    },
-    options: {
-      type: Object,
-      default: () => ({
+export type ParticleSystemOptions = {
+  maxParticles?: number
+  particleHeight?: number
+  fadeOpacity?: number
+  dropRate?: number
+  dropRateBump?: number
+  speedFactor?: number
+  lineWidth?: number
+}
+
+export const windmapOverlayProps = {
+  show: {
+    type: Boolean,
+    default: true
+  },
+  data: {
+    type: Object,
+    required: true
+  },
+  options: {
+    type: Object as PropType<ParticleSystemOptions>,
+    default: () =>
+      ({
         maxParticles: 64 * 64,
         particleHeight: 100.0,
         fadeOpacity: 0.996,
@@ -35,10 +45,13 @@ export default defineComponent({
         dropRateBump: 0.01,
         speedFactor: 1.0,
         lineWidth: 4.0
-      })
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+      } as ParticleSystemOptions)
+  }
+}
+export default defineComponent({
+  name: 'VcOverlayWindmap',
+  props: windmapOverlayProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -55,7 +68,7 @@ export default defineComponent({
     let primitiveCollection: Cesium.PrimitiveCollection
 
     // computed
-    const particleSystemOptions = computed(() => {
+    const particleSystemOptions = computed<ParticleSystemOptions>(() => {
       // make sure maxParticles is exactly the square of particlesTextureSize
       const particlesTextureSize = Math.ceil(Math.sqrt(props.options.maxParticles))
       const maxParticles = particlesTextureSize * particlesTextureSize
@@ -228,3 +241,5 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })
+
+export type VcOverlayWindmapProps = ExtractPropTypes<typeof windmapOverlayProps>

@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2022-01-18 14:55:36
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\ui\index.ts
+ */
 import { App } from 'vue'
 import Btn from './btn'
 import Icon from './icon'
@@ -79,3 +87,11 @@ export const VcAjaxBar = AjaxBar as SFCWithInstall<typeof AjaxBar>
 export const VcSkeleton = Skeleton as SFCWithInstall<typeof Skeleton>
 export const VcFab = Fab as SFCWithInstall<typeof Fab>
 export const VcFabAction = FabAction as SFCWithInstall<typeof FabAction>
+
+export * from './ajax-bar'
+export * from './btn'
+export * from './fab/fab'
+export * from './fab/fab-action'
+export * from './icon'
+export * from './skeleton'
+export * from './tooltip'

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2021-10-29 11:01:07
+ * @LastEditTime: 2022-01-22 17:20:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -22,30 +22,33 @@ import {
   regularDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
+import { VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import { PropType } from 'vue'
+import type { PropType, ExtractPropTypes } from 'vue'
+import { VcFabProps } from '../../ui'
 
-const pointDrawingActionDefault = Object.assign({}, actionOptions, {
+const pointDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-point'
 })
 
-const polylineDrawingActionDefault = Object.assign({}, actionOptions, {
+const polylineDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-polyline'
 })
 
-const polygonDrawingActionDefault = Object.assign({}, actionOptions, {
+const polygonDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-polygon'
 })
 
-const rectangleDrawingActionDefault = Object.assign({}, actionOptions, {
+const rectangleDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-rectangle'
 })
 
-const pinDrawingActionDefault = Object.assign({}, actionOptions, {
+const pinDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-pin'
 })
 
-const pinDrawingDefault = Object.assign({}, pointDrawingDefault, {
+const pinDrawingDefault: VcDrawingOpts = Object.assign({}, pointDrawingDefault, {
   pointOpts: Object.assign({}, pointOptsDefault, {
     show: false
   }),
@@ -63,82 +66,98 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  autoExpand: true,
+  // modelValue: true,
   hideActionOnClick: false,
   color: 'info'
-})
+} as VcFabProps)
 
-const defaultProps = {
+export const drawingType = ['pin', 'point', 'polyline', 'polygon', 'rectangle', 'regular', 'circle']
+
+const isValidDrawingType = (drawings: string[]) => {
+  let flag = true
+  drawings.forEach(drawing => {
+    if (!drawingType.includes(drawing)) {
+      console.error(`VueCesium: unknown drawing type: ${drawing}`)
+      flag = false
+    }
+  })
+  return flag
+}
+
+const drawingsProps = {
   ...useDrawingFabProps,
   drawings: {
-    type: Array as PropType<Array<string>>,
-    default: () => ['pin', 'point', 'polyline', 'polygon', 'rectangle', 'regular', 'circle']
+    type: Array as PropType<Array<'pin' | 'point' | 'polyline' | 'polygon' | 'rectangle' | 'regular' | 'circle'>>,
+    default: () => drawingType,
+    validator: isValidDrawingType
   },
   mainFabOpts: {
-    type: Object as PropType<typeof mainFabDefault>,
+    type: Object as PropType<VcActionTooltipProps & VcFabProps>,
     default: () => mainFabDefault
   },
   pinActionOpts: {
-    type: Object as PropType<typeof pinDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => pinDrawingActionDefault
   },
   pinDrawingOpts: {
-    type: Object as PropType<typeof pinDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => pinDrawingDefault
   },
   pointActionOpts: {
-    type: Object as PropType<typeof pointDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => pointDrawingActionDefault
   },
   pointDrawingOpts: {
-    type: Object as PropType<typeof pointDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => pointDrawingDefault
   },
   polylineActionOpts: {
-    type: Object as PropType<typeof polylineDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => polylineDrawingActionDefault
   },
   polylineDrawingOpts: {
-    type: Object as PropType<typeof polylineDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => polylineDrawingDefault
   },
   polygonActionOpts: {
-    type: Object as PropType<typeof polygonDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => polygonDrawingActionDefault
   },
   polygonDrawingOpts: {
-    type: Object as PropType<typeof polygonDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => polygonDrawingDefault
   },
   rectangleActionOpts: {
-    type: Object as PropType<typeof rectangleDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => rectangleDrawingActionDefault
   },
   rectangleDrawingOpts: {
-    type: Object as PropType<typeof rectangleDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => rectangleDrawingDefault
   },
   circleActionOpts: {
-    type: Object as PropType<typeof circleDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => circleDrawingActionDefault
   },
   circleDrawingOpts: {
-    type: Object as PropType<typeof circleDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => circleDrawingDefault
   },
   regularActionOpts: {
-    type: Object as PropType<typeof regularDrawingActionDefault>,
+    type: Object as PropType<VcActionTooltipProps>,
     default: () => regularDrawingActionDefault
   },
   regularDrawingOpts: {
-    type: Object as PropType<typeof regularDrawingDefault>,
+    type: Object as PropType<VcDrawingOpts>,
     default: () => regularDrawingDefault
   }
 }
-const defaultOptions = getDefaultOptionByProps(defaultProps)
+
+export type VcDrawingsProps = ExtractPropTypes<typeof drawingsProps>
+const defaultOptions = getDefaultOptionByProps<VcDrawingsProps>(drawingsProps)
 
 export {
-  defaultProps,
+  drawingsProps,
   defaultOptions,
   pointDrawingActionDefault,
   polylineDrawingActionDefault,

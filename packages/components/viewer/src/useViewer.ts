@@ -5,17 +5,20 @@ import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
-import { VcComponentInternalInstance, CameraOption, ReadyObj, VcComponentPublicInstance, AnyObject, VcMittEvents } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcCamera, VcReadyObject, VcComponentPublicInstance, AnyObject, VcMittEvents } from '@vue-cesium/utils/types'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
 import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
 import { getMars3dConfig } from './loadUtil'
 
-export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcInstance: VcComponentInternalInstance) {
+export const viewerProps = defaultProps
+export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
+
+export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   let createResolve, reject
-  const createPromise = new Promise<ReadyObj>((_resolve, _reject) => {
+  const createPromise = new Promise<VcReadyObject>((_resolve, _reject) => {
     createResolve = _resolve
     reject = _reject
   })
@@ -320,7 +323,9 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
               window.localStorage.setItem('cesium-hasSeenNavHelp', 'true')
             }
           }
-        } catch (e) {}
+        } catch (e) {
+          //
+        }
         const navigationHelpButton = new NavigationHelpButton({
           container: toolbar!,
           instructionsInitiallyVisible: defaultValue(props.navigationInstructionsInitiallyVisible, showNavHelp)
@@ -572,9 +577,9 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
   }
   /**
    * 初始化 Viewer，成功返回 {Cesium, viewer, instance}， 失败返回false。
-   * @returns ReadyObj
+   * @returns VcReadyObject
    */
-  const load = async function (): Promise<boolean | ReadyObj> {
+  const load = async function (): Promise<boolean | VcReadyObject> {
     logger.debug('loading-viewer')
     if (vcInstance.mounted) {
       return false
@@ -730,7 +735,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     listener &&
       viewer.camera.changed.addEventListener(() => {
         const cartographic = viewer.camera.positionCartographic
-        let cameraNew: CameraOption
+        let cameraNew: VcCamera
         if (camera.position.lng) {
           cameraNew = {
             position: {
@@ -784,7 +789,7 @@ export default function (props: ExtractPropTypes<typeof defaultProps>, ctx, vcIn
     viewer.viewerWidgetResized.addEventListener(onViewerWidgetResized)
     viewer.imageryLayers.layerAdded.addEventListener(onImageryLayerAdded)
     eventsState.registerEvents(true)
-    const readyObj: ReadyObj = {
+    const readyObj: VcReadyObject = {
       Cesium,
       viewer,
       vm: vcInstance.proxy as VcComponentPublicInstance

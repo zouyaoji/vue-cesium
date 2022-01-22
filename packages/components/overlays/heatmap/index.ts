@@ -1,7 +1,8 @@
-import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed, PropType, WatchStopHandle, VNode } from 'vue'
-import {
-  AppearanceOpts,
-  ColorSegments,
+import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed } from 'vue'
+import type {
+  AppearanceOption,
+  VcColorSegments,
   HeatmapConfiguration,
   MaterialOption,
   VcComponentInternalInstance,
@@ -15,36 +16,44 @@ import VcEntity from '@vue-cesium/components/entity'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import { VcPrimitiveGround } from '@vue-cesium/components/primitives'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export type VcHeatMapData = {
+  x: number
+  y: number
+  value: number
+}
+
+export const heatmapOverlayProps = {
+  ...show,
+  ...rectangle,
+  min: {
+    type: Number,
+    default: 0
+  },
+  max: {
+    type: Number,
+    default: 100
+  },
+  data: Array as PropType<Array<VcHeatMapData>>,
+  options: Object,
+  type: {
+    type: String,
+    default: 'primitive'
+  },
+  segments: {
+    type: Array as PropType<Array<VcColorSegments>>,
+    default: () => []
+  },
+  projection: {
+    type: String,
+    default: '3857' // 4326
+  }
+}
 export default defineComponent({
   name: 'VcOverlayHeatmap',
-  props: {
-    ...show,
-    ...rectangle,
-    min: {
-      type: Number,
-      default: 0
-    },
-    max: {
-      type: Number,
-      default: 100
-    },
-    data: [Array, String] as PropType<Array<any> | string>,
-    options: Object,
-    type: {
-      type: String,
-      default: 'primitive'
-    },
-    segments: {
-      type: Array as PropType<Array<ColorSegments>>,
-      default: () => []
-    },
-    projection: {
-      type: String,
-      default: '3857' // 4326
-    }
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: heatmapOverlayProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -80,7 +89,7 @@ export default defineComponent({
     const material = ref<MaterialOption>(null!)
     const image = ref<any>(null)
     const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround | null>(null)
-    const appearance = ref<AppearanceOpts>(null!)
+    const appearance = ref<AppearanceOption>(null!)
     const canRender = ref(false)
     const config = ref<any>(null)
 
@@ -313,19 +322,17 @@ export default defineComponent({
         const xField = options.value.xField || 'x'
         const yField = options.value.yField || 'y'
         const valueField = options.value.valueField || 'value'
-        const datas: Array<{
-          x: number
-          y: number
-        }> = []
+        const datas: Array<VcHeatMapData> = []
         for (let i = 0; i < data.length; i++) {
           const gp = data[i]
           if (!Cesium.defined(gp.id)) {
             gp.id = i
           }
           const mp = project.value.project(Cesium.Cartographic.fromDegrees(gp[xField], gp[yField]))
-          const hp = {
+          const hp: VcHeatMapData = {
             x: Math.round((mp.x - xoffset) / factor + spacing),
-            y: Math.round((mp.y - yoffset) / factor + spacing)
+            y: Math.round((mp.y - yoffset) / factor + spacing),
+            value: undefined
           }
           hp.y = height - hp.y
           if (gp[valueField] || gp[valueField] === 0) {
@@ -415,3 +422,5 @@ export default defineComponent({
     }
   }
 })
+
+export type VcOverlayHeatmapProps = ExtractPropTypes<typeof heatmapOverlayProps>

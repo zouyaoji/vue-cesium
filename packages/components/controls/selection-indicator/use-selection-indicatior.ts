@@ -2,7 +2,6 @@ import { VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils
 import { CSSProperties, nextTick, onUnmounted, reactive, ref, watch, WatchStopHandle } from 'vue'
 import Feature from './Feature'
 import PickedFeatures from './PickedFeatures'
-import { $ } from '@vue-cesium/utils/private/vm'
 import { isArray } from '@vue-cesium/utils/util'
 
 export default function (instance: VcComponentInternalInstance, props, $services: VcViewerProvider) {
@@ -215,24 +214,24 @@ export default function (instance: VcComponentInternalInstance, props, $services
           if (isArray(pickedFeature.id) && pickedFeature.id[0] instanceof Cesium.Entity) {
             // 数据源集合（集群）
             pickedFeature.id.forEach(entity => {
-              const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer)
+              const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer, screenPosition)
               vectorFeatures.push(feature)
             })
             continue
           } else if (pickedFeature.id instanceof Cesium.Entity) {
             // 实体 or 数据源
-            const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer)
+            const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer, screenPosition)
             vectorFeatures.push(feature)
             continue
           }
         }
         // 图元
         if (pickedFeature.primitive) {
-          const feature = Feature.fromPickedFeature(pickedFeature.primitive, pickedFeature, viewer)
+          const feature = Feature.fromPickedFeature(pickedFeature.primitive, pickedFeature, viewer, screenPosition)
           vectorFeatures.push(feature)
         } else if (pickedFeature.collection) {
           // 图元集合
-          const feature = Feature.fromPickedFeature(pickedFeature.collection, pickedFeature, viewer)
+          const feature = Feature.fromPickedFeature(pickedFeature.collection, pickedFeature, viewer, screenPosition)
           vectorFeatures.push(feature)
         }
       }

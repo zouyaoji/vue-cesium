@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2021-10-22 09:59:17
+ * @LastEditTime: 2022-01-22 15:56:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\polyline\index.ts
@@ -9,23 +9,29 @@
 import { defineComponent } from 'vue'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import type { PropType } from 'vue'
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type { VcDrawingMaterial } from '@vue-cesium/utils/drawing-types'
+import type { VcLabelProps } from '../../../primitive-collections'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 
 export default defineComponent({
   name: 'VcMeasurementPolyline',
   props: {
     ...useDrawingActionProps,
-    polylineOpts: Object,
+    polylineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
     loop: Boolean,
     clampToGround: Boolean,
-    measureUnits: Object,
-    labelOpts: Object,
-    labelsOpts: Object,
+    measureUnits: Object as PropType<MeasureUnits>,
+    labelOpts: Object as PropType<VcLabelProps>,
+    labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object,
     showAngleLabel: Boolean,
     showDistanceLabel: Boolean
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'mouseEvt', 'editorEvt'],
+  emits: drawingEmit,
   setup(props, ctx) {
     // state
     return useDrawingPolyline(props, ctx, 'VcMeasurementPolyline')

@@ -1,33 +1,45 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-08 14:00:27
+ * @LastEditTime: 2022-01-19 23:58:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\index.ts
  */
+import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { computed, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch, WatchStopHandle } from 'vue'
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition } from '@vue-cesium/utils/types'
+import { computed, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch } from 'vue'
 import VcPostProcessStage from '../post-process-stage'
 import useRadar from './use-radar-scan'
 import useCircle from './use-circle-scan'
+import { commonEmits } from '@vue-cesium/utils/emits'
 const defaultOptions = {
   position: [0, 0],
   radius: 1500,
   interval: 3500,
   color: [0, 0, 0, 255]
 }
+
+export type VcPostProcessStageScanOpts = {
+  position?: VcPosition
+  radius: number
+  interval: number
+  color: VcColor
+}
+
+export const postProcessStageScanProps = {
+  type: {
+    type: String,
+    default: 'radar' // radar, circle
+  },
+  options: Object as PropType<VcPostProcessStageScanOpts>
+}
+
 export default defineComponent({
   name: 'VcPostProcessStageScan',
-  props: {
-    type: {
-      type: String,
-      default: 'radar' // radar, circle
-    },
-    options: Object
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed'],
+  props: postProcessStageScanProps,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -88,3 +100,5 @@ export default defineComponent({
     }
   }
 })
+
+export type VcPostProcessStageScanProps = ExtractPropTypes<typeof postProcessStageScanProps>

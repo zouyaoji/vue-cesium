@@ -1,13 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-11-30 14:41:47
+ * @LastEditTime: 2022-01-17 00:02:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\primitive\index.ts
  */
+import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
   geometryInstances,
@@ -27,30 +28,32 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
+import { primitiveEmits } from '@vue-cesium/utils/emits'
 
+export const primitiveProps = {
+  ...geometryInstances,
+  ...appearance,
+  ...depthFailAppearance,
+  ...show,
+  ...modelMatrix,
+  ...vertexCacheOptimize,
+  ...interleave,
+  ...compressVertices,
+  ...releaseGeometryInstances,
+  ...allowPicking,
+  cull: {
+    type: Boolean,
+    default: true
+  },
+  ...asynchronous,
+  ...debugShowBoundingVolume,
+  ...shadows,
+  ...enableMouseEvent
+}
 export default defineComponent({
   name: 'VcPrimitive',
-  props: {
-    ...geometryInstances,
-    ...appearance,
-    ...depthFailAppearance,
-    ...show,
-    ...modelMatrix,
-    ...vertexCacheOptimize,
-    ...interleave,
-    ...compressVertices,
-    ...releaseGeometryInstances,
-    ...allowPicking,
-    cull: {
-      type: Boolean,
-      default: true
-    },
-    ...asynchronous,
-    ...debugShowBoundingVolume,
-    ...shadows,
-    ...enableMouseEvent
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'readyPromise', 'update:geometryInstances'],
+  props: primitiveProps,
+  emits: primitiveEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -71,3 +74,5 @@ export default defineComponent({
         : createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })
+
+export type VcPrimitiveProps = ExtractPropTypes<typeof primitiveProps>

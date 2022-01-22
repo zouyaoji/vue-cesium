@@ -8,7 +8,9 @@
  * Primitive
  * ParticleSystem
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { SetupContext } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { PrimitiveEmits } from '@vue-cesium/utils/emits'
 import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { provide, ref } from 'vue'
@@ -16,15 +18,16 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isArray } from '@vue-cesium/utils/util'
 
-export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
+export default function (props, ctx: SetupContext<PrimitiveEmits>, vcInstance: VcComponentInternalInstance) {
   // state
   const commonState = useCommon(props, ctx, vcInstance)
   if (commonState === void 0) {
     return
   }
 
+  const { emit } = ctx
   const childCount = ref(0)
-  const instances = ref<any>([])
+  const instances = ref<Array<Cesium.GeometryInstance>>([])
   // methods
   vcInstance.createCesiumObject = async () => {
     const options = commonState.transformProps(props)
@@ -49,7 +52,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     primitive.readyPromise &&
       primitive.readyPromise.then(e => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && ctx.emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy)
+        listener && emit('readyPromise', e, commonState.$services.viewer, vcInstance.proxy as VcComponentPublicInstance)
       })
     ;(primitive as any)._vcParent = primitives
     const object = primitives && primitives.add(primitive)
@@ -78,7 +81,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
     if (index === childCount.value - 1) {
       const listener = getInstanceListener(vcInstance, 'update:geometryInstances')
       if (listener) {
-        ctx.emit('update:geometryInstances', instances)
+        ctx.emit('update:geometryInstances', instances.value)
       } else {
         const primitive = vcInstance.cesiumObject as Cesium.Primitive
         ;(primitive as any).geometryInstances = index === 0 ? instance : instances.value
@@ -106,7 +109,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // expose public methods
   Object.assign(vcInstance.proxy, {
-    // private but needed by VcInstanceGeometry
+    // private but needed by VcGeometryInstance
     __updateGeometryInstances: updateGeometryInstances,
     __removeGeometryInstances: removeGeometryInstances,
     __childCount: childCount

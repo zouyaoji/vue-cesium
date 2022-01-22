@@ -1,5 +1,6 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
-import { computed, createCommentVNode, CSSProperties, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, VNode, watch } from 'vue'
+import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import {
   VcBtn,
   VcTooltip,
@@ -9,9 +10,10 @@ import {
   VcSpinnerTail,
   VcSpinnerIos,
   VcSpinnerOrbit,
-  VcSpinnerBars
+  VcSpinnerBars,
+  VcTooltipProps
 } from '@vue-cesium/components/ui'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcLocationEvt, VcColor, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
@@ -19,11 +21,17 @@ import { makeColor, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { isArray, isFunction, isPlainObject } from '@vue-cesium/utils/util'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  locationEvt: (evt: VcLocationEvt) => true
+}
+export const myLocationProps = defaultProps
 export default defineComponent({
   name: 'VcMyLocation',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'locationEvt'],
+  props: myLocationProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -284,7 +292,7 @@ export default defineComponent({
             ctx.emit('locationEvt', {
               type: 'zoomIn',
               camera: viewer.camera,
-              status: 'complete'
+              status: 'end'
             })
         })
       }
@@ -325,7 +333,7 @@ export default defineComponent({
               ctx.emit('locationEvt', {
                 type: 'zoomIn',
                 camera: viewer.camera,
-                status: 'complete'
+                status: 'end'
               })
           },
           cancel: () => {
@@ -462,3 +470,148 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcMyLocationProps = ExtractPropTypes<typeof myLocationProps>
+export type VcMyLocationEmits = typeof emits
+export type VcMyLocationProps = {
+  /**
+   * Specify the position of the VcDistanceLegend.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcDistanceLegend horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the browser geolocation positioning parameters.
+   * Default value:
+   * {
+   *    enableHighAccuracy: true,
+   *    timeout: 5000,
+   *    maximumAge: 0
+   * }
+   */
+  geolocation?: PositionOptions
+  /**
+   * Specify the AMap positioning parameters. If set, use AMap api positioning first.
+   */
+  amap?: {
+    key: string
+    version: string
+    options: {
+      timeout?: number
+      convert?: false
+      noGeoLocation?: 0 | 1 | 2 | 3
+      needAddress?: boolean
+      extensions?: 'all' | 'base'
+    }
+    transformToWGS84?: boolean
+  }
+  /**
+   * Specify the id of the location point after the positioning is successful.
+   */
+  id?: string
+  /**
+   * Specify the color of the location point after the positioning is successful.
+   * Default value: #08ABD5
+   */
+  pointColor?: VcColor
+  /**
+   * Specify the pixel size of the location point after the positioning is successful.
+   * Default value: 12
+   */
+  pixelSize?: number
+  /**
+   * Specify the outline width of the location point after the positioning is successful.
+   * Default value: 3
+   */
+  outlineWidth?: number
+  /**
+   * Specify the outline color of the location point after the positioning is successful.
+   * Default value: #fff
+   */
+  outlineColor?: VcColor
+  /**
+   * Specify the sampling level when the altitude is automatically recognized based on the terrain after the positioning is successful.
+   * Default value: 6
+   */
+  level?: number
+  /**
+   * Specify the time to fly to the location point.
+   * Default value: 3
+   */
+  duration?: number
+  /**
+   *
+   */
+  factor?: number
+  maximumHeight?: number
+  hpr?: [number, number, number]
+  /**
+   * Specify a custom API for positioning.
+   */
+  customAPI?: (errorCallback) => { lng: number; lat: number }
+  /**
+   * Specify the description of the location point
+   */
+  description?: (position, detail) => string
+  /**
+   * Specify the icon of the VcMyLocation.
+   * Default value: vc-icons-geolocation
+   */
+  icon?: string
+  /**
+   * Specify the size of the VcMyLocation.
+   * Default value: 24px
+   */
+  size?: string
+  /**
+   * Specify the css color of the VcMyLocation.
+   * Default value: #3f4854
+   */
+  color?: string
+  /**
+   * Specify the css background of the VcMyLocation.
+   * Default value: #fff
+   */
+  background?: string
+  /**
+   * Makes a circle shaped VcMyLocation.
+   */
+  round?: boolean
+  /**
+   * Use 'flat' design.
+   */
+  flat?: boolean
+  /**
+   * The text that will be shown on the VcMyLocation.
+   */
+  label?: string
+  /**
+   * Stack icon and label vertically instead of on same line.
+   */
+  stack?: boolean
+  /**
+   * The tooltip parameter.
+   */
+  tooltip?: false | VcTooltipProps
+  loadingType?: string
+  /**
+   * Triggers before the VcCompass is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCompass is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcCompass is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the positioning button is clicked.
+   */
+  onLocationEvt?: (evt: VcLocationEvt) => void
+}

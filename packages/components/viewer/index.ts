@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-10-07 19:27:00
+ * @LastEditTime: 2022-01-18 14:55:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\viewer\index.ts
@@ -48,3 +48,5 @@ const _Viewer = Viewer as SFCWithInstall<typeof Viewer>
 
 export default _Viewer
 export const VcViewer = _Viewer
+
+export * from './src'

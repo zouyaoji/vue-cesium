@@ -1,15 +1,18 @@
 import { positionProps } from '@vue-cesium/composables/private/use-position'
 import { t } from '@vue-cesium/composables/use-locale'
-import { PropType } from 'vue'
+import type { VcColor } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import { VcTooltipProps } from '../../ui/tooltip'
 
 export default {
   geolocation: {
-    type: Object,
-    default: () => ({
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    })
+    type: Object as PropType<PositionOptions>,
+    default: () =>
+      ({
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      } as PositionOptions)
   },
   /**
    *  refer https://developer.amap.com/api/jsapi-v2/documentation#geolocation
@@ -26,13 +29,24 @@ export default {
    *    transformToWGS84: true
    *  }
    */
-  amap: Object,
+  amap: Object as PropType<{
+    key: string
+    version: string
+    options: {
+      timeout?: number
+      convert?: false
+      noGeoLocation?: 0 | 1 | 2 | 3
+      needAddress?: boolean
+      extensions?: 'all' | 'base'
+    }
+    transformToWGS84?: boolean
+  }>,
   id: {
     type: String,
     default: t('vc.navigation.myLocation.centreMap')
   },
   pointColor: {
-    type: [Array, Object, String] as PropType<Cesium.Color>,
+    type: [Array, Object, String] as PropType<VcColor>,
     default: '#08ABD5'
   },
   pixelSize: {
@@ -44,7 +58,7 @@ export default {
     default: 3
   },
   outlineColor: {
-    type: [Array, Object, String] as PropType<Cesium.Color>,
+    type: [Array, Object, String] as PropType<VcColor>,
     default: '#ffffff'
   },
   level: {
@@ -61,7 +75,7 @@ export default {
   },
   maximumHeight: Number,
   hpr: {
-    type: Array,
+    type: Array as PropType<Array<number>>,
     default: () => [0, 0, 3000]
   },
   customAPI: Function,
@@ -97,13 +111,14 @@ export default {
     default: false
   },
   tooltip: {
-    type: [Boolean, Object],
-    default: () => ({
-      delay: 500,
-      anchor: 'bottom middle',
-      offset: [0, 20],
-      tip: void 0
-    })
+    type: [Boolean, Object] as PropType<false | VcTooltipProps>,
+    default: () =>
+      ({
+        delay: 500,
+        anchor: 'bottom middle',
+        offset: [0, 20],
+        tip: void 0
+      } as VcTooltipProps | false)
   },
   loadingType: {
     type: String,

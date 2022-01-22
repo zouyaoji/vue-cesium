@@ -1,31 +1,37 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2021-10-22 13:42:47
+ * @LastEditTime: 2022-01-22 15:54:44
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\horizontal\index.ts
  */
 import { defineComponent } from 'vue'
-
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
+import type { PropType } from 'vue'
+import type { MeasureUnits } from '@vue-cesium/shared'
+import type { VcDrawingMaterial } from '@vue-cesium/utils/drawing-types'
+import type { VcLabelProps } from '../../../primitive-collections'
+import type { VcGeometryPolylineProps } from '../../../geometries'
+import { drawingEmit } from '@vue-cesium/utils/emits'
+
 export default defineComponent({
   name: 'VcMeasurementHorizontal',
   props: {
     ...useDrawingActionProps,
-    measureUnits: Object,
-    polylineOpts: Object,
-    dashLineOpts: Object,
-    labelOpts: Object,
-    labelsOpts: Object,
+    measureUnits: Object as PropType<MeasureUnits>,
+    polylineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
+    dashLineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
+    labelOpts: Object as PropType<VcLabelProps>,
+    labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object,
     showAngleLabel: Boolean,
     showDashedLine: Boolean,
     showDistanceLabel: Boolean
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'mouseEvt', 'editorEvt'],
+  emits: drawingEmit,
   setup(props, ctx) {
     // state
     return useDrawingPolyline(props, ctx, 'VcMeasurementHorizontal')

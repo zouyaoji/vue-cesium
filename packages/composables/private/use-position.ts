@@ -4,12 +4,12 @@ import { VcViewerProvider, AnyObject } from '@vue-cesium/utils/types'
 
 export const positionProps = {
   position: {
-    type: String as PropType<string>,
+    type: String as PropType<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'>,
     default: 'top-right',
     validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
   },
   offset: {
-    type: Array,
+    type: Array as PropType<number[]>,
     validator: v => v.length === 2
   }
 }

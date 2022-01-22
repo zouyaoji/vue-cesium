@@ -1,39 +1,35 @@
-import {
-  CSSProperties,
-  defineComponent,
-  getCurrentInstance,
-  ref,
-  h,
-  reactive,
-  createCommentVNode,
-  watch,
-  onUnmounted,
-  TeleportProps,
-  PropType,
-  WatchStopHandle
-} from 'vue'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { ExtractPropTypes, CSSProperties, TeleportProps, PropType, WatchStopHandle } from 'vue'
+import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { position, pixelOffset, show } from '@vue-cesium/utils/cesium-props'
 import { makeCartesian2, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import usePortal from '@vue-cesium/composables/private/use-portal'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+export const htmlOverlayProps = {
+  ...position,
+  ...pixelOffset,
+  ...show,
+  autoHidden: {
+    type: Boolean,
+    default: true
+  },
+  customClass: String,
+  teleport: Object as PropType<TeleportProps>
+}
+const emits = {
+  ...commonEmits,
+  mouseenter: (evt: MouseEvent) => true,
+  mouseleave: (evt: MouseEvent) => true,
+  click: (evt: MouseEvent) => true
+}
 export default defineComponent({
   name: 'VcOverlayHtml',
-  props: {
-    ...position,
-    ...pixelOffset,
-    ...show,
-    autoHidden: {
-      type: Boolean,
-      default: true
-    },
-    customClass: String,
-    teleport: Object as PropType<TeleportProps>
-  },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'mouseenter', 'mouseleave', 'click'],
+  props: htmlOverlayProps,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -168,3 +164,6 @@ export default defineComponent({
     }
   }
 })
+
+export type VcOverlayHtmlProps = ExtractPropTypes<typeof htmlOverlayProps>
+export type VcOverlayHtmlEmits = typeof emits

@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2022-01-18 14:54:33
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\graphics\index.ts
+ */
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 import { App } from 'vue'
 import GraphicsBillboard from './billboard'
@@ -71,3 +79,21 @@ export const VcGraphicsPolylineVolume = GraphicsPolylineVolume as SFCWithInstall
 export const VcGraphicsRectangle = GraphicsRectangle as SFCWithInstall<typeof GraphicsRectangle>
 export const VcGraphicsTileset = GraphicsTileset as SFCWithInstall<typeof GraphicsTileset>
 export const VcGraphicsWall = GraphicsWall as SFCWithInstall<typeof GraphicsWall>
+
+export * from './billboard'
+export * from './box'
+export * from './corridor'
+export * from './cylinder'
+export * from './ellipse'
+export * from './ellipsoid'
+export * from './label'
+export * from './model'
+export * from './path'
+export * from './plane'
+export * from './point'
+export * from './polygon'
+export * from './polyline'
+export * from './polylineVolume'
+export * from './rectangle'
+export * from './tileset'
+export * from './wall'

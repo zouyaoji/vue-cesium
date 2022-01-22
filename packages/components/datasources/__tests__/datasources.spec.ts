@@ -1,4 +1,4 @@
-import { VcComponentPublicInstance, ReadyObj } from '@vue-cesium/utils/types'
+import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcEntity from '@vue-cesium/components/entity'
@@ -83,7 +83,7 @@ describe('VcDatasourceCustom', () => {
     const wrapper = mount(customApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
     let datasource = readyObj?.cesiumObject as Cesium.CustomDataSource
     expect(datasource instanceof Cesium.CustomDataSource).toBe(true)
     expect(datasource.entities.values.length).toEqual(3)
@@ -121,7 +121,7 @@ describe('VcDatasourceCzml', () => {
     const wrapper = mount(czmlApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
     let datasource = readyObj?.cesiumObject as Cesium.CzmlDataSource
     expect(datasource instanceof Cesium.CzmlDataSource).toBe(true)
     await testVm.unload?.()
@@ -165,7 +165,7 @@ describe('VcDatasourceGeojson', () => {
     const wrapper = mount(geojsonApp)
     expect(wrapper.vm.$refs.datasource).toBeDefined()
     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-    const readyObj: ReadyObj | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
     let datasource = readyObj?.cesiumObject as Cesium.GeoJsonDataSource
     expect(datasource instanceof Cesium.GeoJsonDataSource).toBe(true)
     await testVm.unload?.()
@@ -199,7 +199,7 @@ describe('VcDatasourceGeojson', () => {
 //     const wrapper = mount(kmlApp)
 //     expect(wrapper.vm.$refs.datasource).toBeDefined()
 //     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-//     const readyObj: ReadyObj | undefined = await testVm.createPromise
+//     const readyObj: VcReadyObject | undefined = await testVm.createPromise
 //     let datasource = readyObj?.cesiumObject as Cesium.KmlDataSource
 //     expect(datasource instanceof Cesium.KmlDataSource).toBe(true)
 //     await testVm.unload?.()

@@ -1,13 +1,19 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2021-11-30 10:19:56
+ * @LastEditTime: 2022-01-21 09:26:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
  */
 
-const actionOptions = {
+import { VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
+import { VcBillboardProps, VcLabelProps, VcPointProps, VcPolygonProps } from '@vue-cesium/components/primitive-collections'
+import { VcPrimitiveProps } from '@vue-cesium/components/primitives'
+import { VcDrawingMaterial, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcBtnTooltipProps } from '@vue-cesium/utils/types'
+
+const actionOptions: VcActionTooltipProps = {
   externalLabel: false,
   label: '',
   labelPosition: 'right',
@@ -18,7 +24,6 @@ const actionOptions = {
   push: false,
   flat: false,
   unelevated: false,
-  padding: undefined,
   color: 'primary',
   textColor: undefined,
   glossy: false,
@@ -33,7 +38,7 @@ const actionOptions = {
   }
 }
 
-const pointOptsDefault = {
+const pointOptsDefault: VcPointProps = {
   show: true,
   color: 'rgb(255,229,0)',
   pixelSize: 8,
@@ -42,14 +47,14 @@ const pointOptsDefault = {
   disableDepthTestDistance: Number.POSITIVE_INFINITY
 }
 
-const billboardOptsDefault = {
+const billboardOptsDefault: VcBillboardProps = {
   show: true,
   disableDepthTestDistance: Number.POSITIVE_INFINITY,
   verticalOrigin: 1,
   image: ''
 }
 
-const polylineOptsDefault = {
+const polylineOptsDefault: VcGeometryPolylineProps & VcDrawingMaterial = {
   material: {
     fabric: {
       type: 'Color',
@@ -73,7 +78,7 @@ const polylineOptsDefault = {
   classificationType: 2
 }
 
-const polygonOptsDefault = {
+const polygonOptsDefault: VcPolygonProps & VcDrawingMaterial = {
   material: {
     fabric: {
       type: 'Color',
@@ -90,13 +95,11 @@ const polygonOptsDefault = {
       }
     }
   },
-  perPositionHeight: true,
-  arcType: undefined,
   show: true,
   classificationType: 2
 }
 
-const labelOptsDefault = {
+const labelOptsDefault: VcLabelProps = {
   show: true,
   font: '16px Arial Microsoft YaHei sans-serif',
   scale: 1,
@@ -110,7 +113,7 @@ const labelOptsDefault = {
   disableDepthTestDistance: Number.POSITIVE_INFINITY
 }
 
-const editorOptsDefault = {
+const editorOptsDefault: VcBtnTooltipProps = {
   icon: 'vc-icons-move',
   size: '24px',
   color: '#1296db',
@@ -127,7 +130,7 @@ const editorOptsDefault = {
   }
 }
 
-const pointDrawingDefault = {
+const pointDrawingDefault: VcDrawingOpts = {
   show: true,
   drawtip: {
     show: true,
@@ -146,7 +149,7 @@ const pointDrawingDefault = {
   heightReference: 1
 }
 
-const segmentDrawingDefault = {
+const segmentDrawingDefault: VcDrawingOpts = {
   show: true,
   showComponentLines: false,
   drawtip: {
@@ -166,7 +169,7 @@ const segmentDrawingDefault = {
   }
 }
 
-const polylineDrawingDefault = {
+const polylineDrawingDefault: VcDrawingOpts = {
   show: true,
   drawtip: {
     show: true,
@@ -192,7 +195,7 @@ const polylineDrawingDefault = {
   loop: false
 }
 
-const polygonDrawingDefault = {
+const polygonDrawingDefault: VcDrawingOpts = {
   show: true,
   drawtip: {
     show: true,
@@ -228,7 +231,7 @@ const polygonDrawingDefault = {
   loop: true
 }
 
-const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
+const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingDefault, {
   pointOpts: Object.assign({}, pointOptsDefault, {
     show: false
   }),
@@ -245,26 +248,26 @@ const rectangleDrawingDefault = Object.assign({}, polygonDrawingDefault, {
   regular: false // regular
 })
 
-const circleDrawingDefault = Object.assign({}, rectangleDrawingDefault, {
+const circleDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
   edge: 360,
   regular: true
 })
 
-const regularDrawingDefault = Object.assign({}, rectangleDrawingDefault, {
+const regularDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
   edge: 6,
   regular: true
 })
 
-const clearActionDefault = Object.assign({}, actionOptions, {
+const clearActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-clear',
   color: 'red'
 })
 
-const regularDrawingActionDefault = Object.assign({}, actionOptions, {
+const regularDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-regular'
 })
 
-const circleDrawingActionDefault = Object.assign({}, actionOptions, {
+const circleDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
   icon: 'vc-icons-drawing-circle'
 })
 

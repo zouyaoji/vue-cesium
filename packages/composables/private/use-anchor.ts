@@ -8,6 +8,7 @@ import { platform } from '@vue-cesium/utils/platform'
 
 export const useAnchorProps = {
   target: {
+    type: [Boolean, String],
     default: true
   },
   noParentEvent: Boolean,

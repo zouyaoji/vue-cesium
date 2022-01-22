@@ -26,6 +26,9 @@ declare namespace Cesium {
   const ShaderSource: any
   const S3MTilesLayer: any
   const SuperMapVersion: string
+  // class GeometryAttributes {
+  //   constructor(opts)
+  // }
   interface Viewer {
     viewerWidgetResized: Event
     _selectionIndicator?: SelectionIndicator
@@ -120,6 +123,36 @@ declare namespace Cesium {
 
   interface PrimitiveCollection {
     _primitives: Array<Primitive | any>
+  }
+
+  class ShadowMap {
+    constructor(options: {
+      lightCamera?: Camera
+      enabled?: boolean
+      isPointLight?: boolean
+      pointLightRadius?: number | boolean
+      cascadesEnabled?: boolean
+      numberOfCascades?: number
+      maximumDistance?: number
+      size?: number
+      softShadows?: boolean
+      darkness?: number
+      normalOffset?: boolean
+      fadingEnabled?: boolean
+      context?: any
+      fromLightSource?: boolean
+    })
+    update(e): void
+    destroy(): boolean
+    _shadowMapTexture: any
+    _shadowMapMatrix: any
+    _lightPositionEC: any
+    _pointBias: any
+    _distance: number
+    maximumDistance: number
+    _textureSize: any
+    _pointLightRadius: number | boolean
+    enabled?: boolean
   }
 
   // eslint-disable-next-line no-var
@@ -1061,7 +1094,7 @@ new Cesium.Cartesian3( 0.0, 1.0, 1.0));
 * @param p1 - The second point of the triangle, corresponding to the barycentric y-axis.
 * @param p2 - The third point of the triangle, corresponding to the barycentric z-axis.
 * @param [result] - The object onto which to store the result.
-* @returns The modified result parameter or a new Cartesian3 instance if one was not provided.
+* @returns The modified result parameter or a new Cartesian3 instance if one was not provided. If the triangle is degenerate the function will return undefined.
 */
   export function barycentricCoordinates(
     point: Cartesian2 | Cartesian3,
@@ -1069,7 +1102,7 @@ new Cesium.Cartesian3( 0.0, 1.0, 1.0));
     p1: Cartesian2 | Cartesian3,
     p2: Cartesian2 | Cartesian3,
     result?: Cartesian3
-  ): Cartesian3
+  ): Cartesian3 | undefined
 
   /**
 * Finds an item in a sorted array.
@@ -1106,9 +1139,10 @@ var index = Cesium.binarySearch(numbers, 6, comparator); // 3
    * Provides geocoding through Bing Maps.
    * @param options - Object with the following properties:
    * @param options.key - A key to use with the Bing Maps geocoding service
+   * @param [options.culture] - A Bing Maps {@link https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes|Culture Code} to return results in a specific culture and language.
    */
   export class BingMapsGeocoderService {
-    constructor(options: { key: string })
+    constructor(options: { key: string; culture?: string })
     /**
      * The URL endpoint for the Bing geocoder service
      */
@@ -2007,6 +2041,10 @@ baseLayerPicker: false,
      */
     static readonly ZERO: Cartesian2
     /**
+     * An immutable Cartesian2 instance initialized to (1.0, 1.0).
+     */
+    static readonly ONE: Cartesian2
+    /**
      * An immutable Cartesian2 instance initialized to (1.0, 0.0).
      */
     static readonly UNIT_X: Cartesian2
@@ -2417,6 +2455,10 @@ baseLayerPicker: false,
      */
     static readonly ZERO: Cartesian3
     /**
+     * An immutable Cartesian3 instance initialized to (1.0, 1.0, 1.0).
+     */
+    static readonly ONE: Cartesian3
+    /**
      * An immutable Cartesian3 instance initialized to (1.0, 0.0, 0.0).
      */
     static readonly UNIT_X: Cartesian3
@@ -2738,6 +2780,10 @@ baseLayerPicker: false,
      * An immutable Cartesian4 instance initialized to (0.0, 0.0, 0.0, 0.0).
      */
     static readonly ZERO: Cartesian4
+    /**
+     * An immutable Cartesian4 instance initialized to (1.0, 1.0, 1.0, 1.0).
+     */
+    static readonly ONE: Cartesian4
     /**
      * An immutable Cartesian4 instance initialized to (1.0, 0.0, 0.0, 0.0).
      */
@@ -6567,6 +6613,23 @@ helper.removeAll();
   }
 
   /**
+* Flags to enable experimental features in CesiumJS. Stability and performance
+may not be optimal when these are enabled. Experimental features are subject
+to change without Cesium's standard deprecation policy.
+<p>
+Experimental features must still uphold Cesium's quality standards. Here
+are some guidelines:
+</p>
+<ul>
+<li>Experimental features must have high unit test coverage like any other feature.</li>
+<li>Experimental features are intended for large features where there is benefit of merging some of the code sooner (e.g. to avoid long-running staging branches)</li>
+<li>Experimental flags should be short-lived. Make it clear in the PR what it would take to promote the feature to a regular feature.</li>
+<li>To avoid cluttering the code, check the flag in as few places as possible. Ideally this would be a single place.</li>
+</ul>
+*/
+  export var ExperimentalFeatures: any
+
+  /**
 * Constants to determine how an interpolated value is extrapolated
 when querying outside the bounds of available data.
 */
@@ -7137,7 +7200,7 @@ Attributes are always stored non-interleaved in a Geometry.
 </p>
 */
   export class GeometryAttributes {
-    constructor(options?)
+    constructor()
     /**
    * The 3D position attribute.
   <p>
@@ -19185,7 +19248,7 @@ Clients do not normally create this class directly, but instead rely on {@link D
      */
     type ConstructorOptions = {
       show?: Property | boolean
-      positions?: Property | Cartesian3
+      positions?: Property | Cartesian3[]
       width?: Property | number
       height?: Property | number
       heightReference?: Property | HeightReference
@@ -21386,6 +21449,7 @@ markerSymbol: '?'
      * @property [clampToGround = false] - true if we want the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground.
      * @property [ellipsoid = Ellipsoid.WGS84] - The global ellipsoid used for geographical calculations.
      * @property [credit] - A credit for the data source, which is displayed on the canvas.
+     * @property [screenOverlayContainer] - A container for ScreenOverlay images.
      */
     type LoadOptions = {
       camera: Camera
@@ -21394,6 +21458,7 @@ markerSymbol: '?'
       clampToGround?: boolean
       ellipsoid?: Ellipsoid
       credit?: Credit | string
+      screenOverlayContainer?: Element | string
     }
   }
 
@@ -21403,7 +21468,7 @@ markerSymbol: '?'
 KML support in Cesium is incomplete, but a large amount of the standard,
 as well as Google's <code>gx</code> extension namespace, is supported. See Github issue
 {@link https://github.com/CesiumGS/cesium/issues/873|#873} for a
-detailed list of what is and isn't support. Cesium will also write information to the
+detailed list of what is and isn't supported. Cesium will also write information to the
 console when it encounters most unsupported features.
 </p>
 <p>
@@ -21496,6 +21561,7 @@ viewer.dataSources.add(Cesium.KmlDataSource.load('../../SampleData/facilities.km
      * @param [options.sourceUri] - Overrides the url to use for resolving relative links and other KML network features.
      * @param [options.clampToGround = false] - true if we want the geometry features (Polygons, LineStrings and LinearRings) clamped to the ground. If true, lines will use corridors so use Entity.corridor instead of Entity.polyline.
      * @param [options.ellipsoid = Ellipsoid.WGS84] - The global ellipsoid used for geographical calculations.
+     * @param [options.screenOverlayContainer] - A container for ScreenOverlay images.
      * @returns A promise that will resolve to this instances once the KML is loaded.
      */
     load(
@@ -21504,8 +21570,13 @@ viewer.dataSources.add(Cesium.KmlDataSource.load('../../SampleData/facilities.km
         sourceUri?: Resource | string
         clampToGround?: boolean
         ellipsoid?: Ellipsoid
+        screenOverlayContainer?: Element | string
       }
     ): Promise<KmlDataSource>
+    /**
+     * Cleans up any non-entity elements created by the data source. Currently this only affects ScreenOverlay elements.
+     */
+    destroy(): void
     /**
      * Updates any NetworkLink that require updating.
      * @param time - The simulation time.
@@ -26984,7 +27055,7 @@ modifications. Also listen to the {@link Cesium3DTileset#tileVisible} event to r
 </p>
 <p>
 Do not construct this directly.  Access it through {@link Cesium3DTileContent#getFeature}
-or picking using {@link Scene#pick} and {@link Scene#pickPosition}.
+or picking using {@link Scene#pick}.
 </p>
 * @example
 * // On mouse over, display all the properties for a feature in the console log.
@@ -27057,6 +27128,35 @@ handler.setInputAction(function(movement) {
    * @returns The value of the property or <code>undefined</code> if the feature does not have this property.
    */
     getProperty(name: string): any
+    /**
+   * Returns a copy of the feature's property with the given name, examining all
+  the metadata from 3D Tiles 1.0 formats, the EXT_mesh_features and legacy
+  EXT_feature_metadata glTF extensions, and the 3DTILES_metadata 3D Tiles
+  extension. Metadata is checked against name from most specific to most
+  general and the first match is returned. Metadata is checked in this order:
+
+  <ol>
+    <li>Batch table (feature metadata) property by semantic</li>
+    <li>Batch table (feature metadata) property by property ID</li>
+    <li>Tile metadata property by semantic</li>
+    <li>Tile metadata property by property ID</li>
+    <li>Group metadata property by semantic</li>
+    <li>Group metadata property by property ID</li>
+    <li>Tileset metadata property by semantic</li>
+    <li>Tileset metadata property by property ID</li>
+    <li>Otherwise, return undefined</li>
+  </ol>
+  <p>
+  For 3D Tiles Next details, see the {@link https://github.com/CesiumGS/3d-tiles/tree/main/extensions/3DTILES_metadata|3DTILES_metadata Extension}
+  for 3D Tiles, as well as the {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features|EXT_mesh_features Extension}
+  for glTF. For the legacy glTF extension, see {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_feature_metadata|EXT_feature_metadata Extension}
+  </p>
+   * @param content - The content for accessing the metadata
+   * @param batchId - The batch ID (or feature ID) of the feature to get a property for
+   * @param name - The semantic or property ID of the feature. Semantics are checked before property IDs in each granularity of metadata.
+   * @returns The value of the property or <code>undefined</code> if the feature does not have this property.
+   */
+    static getPropertyInherited(content: Cesium3DTileContent, batchId: number, name: string): any
     /**
    * Sets the value of the feature's property with the given name.
   <p>
@@ -27563,10 +27663,6 @@ var tileset = scene.primitives.add(new Cesium.Cesium3DTileset({
    */
     colorBlendAmount: number
     /**
-     * Options for controlling point size based on geometric error and eye dome lighting.
-     */
-    pointCloudShading: PointCloudShading
-    /**
    * The event fired to indicate progress of loading new tiles.  This event is fired when a new tile
   is requested, when a requested tile is finished downloading, and when a downloaded tile has been
   processed and is ready to render.
@@ -27869,6 +27965,14 @@ var tileset = scene.primitives.add(new Cesium.Cesium3DTileset({
      */
     examineVectorLinesFunction: (...params: any[]) => any
     /**
+   * If true, {@link ModelExperimental} will be used instead of {@link Model}
+  for each tile with a glTF or 3D Tiles 1.0 content (where applicable).
+  <p>
+  The value defaults to {@link ExperimentalFeatures.enableModelExperimental}.
+  </p>
+   */
+    enableModelExperimental: boolean
+    /**
    * Gets the tileset's asset object property, which contains metadata about the tileset.
   <p>
   See the {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification#reference-asset|asset schema reference}
@@ -27968,6 +28072,15 @@ var tileset = scene.primitives.add(new Cesium.Cesium3DTileset({
    */
     style: Cesium3DTileStyle | undefined
     /**
+   * A custom shader to apply to all tiles in the tileset. Only used for
+  contents that use {@link ModelExperimental}. Using custom shaders with a
+  {@link Cesium3DTileStyle} may lead to undefined behavior.
+  <p>
+  To enable {@link ModelExperimental}, set {@link ExperimentalFeatures.enableModelExperimental} or tileset.enableModelExperimental to <code>true</code>.
+  </p>
+   */
+    customShader: CustomShader | undefined
+    /**
    * The maximum screen space error used to drive level of detail refinement.  This value helps determine when a tile
   refines to its descendants, and therefore plays a major role in balancing performance with visual quality.
   <p>
@@ -28001,6 +28114,10 @@ var tileset = scene.primitives.add(new Cesium.Cesium3DTileset({
   </p>
    */
     maximumMemoryUsage: number
+    /**
+     * Options for controlling point size based on geometric error and eye dome lighting.
+     */
+    pointCloudShading: PointCloudShading
     /**
      * The root tile.
      */
@@ -29239,6 +29356,194 @@ viewer.zoomTo(entity);
   }
 
   /**
+* A renderable collection of clouds in the 3D scene.
+<br /><br />
+<div align='center'>
+<img src='Images/CumulusCloud.png' width='400' height='300' /><br />
+Example cumulus clouds
+</div>
+<br /><br />
+Clouds are added and removed from the collection using {@link CloudCollection#add}
+and {@link CloudCollection#remove}.
+* @example
+* // Create a cloud collection with two cumulus clouds
+var clouds = scene.primitives.add(new Cesium.CloudCollection());
+clouds.add({
+position : new Cesium.Cartesian3(1.0, 2.0, 3.0),
+maximumSize: new Cesium.Cartesian3(20.0, 12.0, 8.0)
+});
+clouds.add({
+position : new Cesium.Cartesian3(4.0, 5.0, 6.0),
+maximumSize: new Cesium.Cartesian3(15.0, 9.0, 9.0),
+slice: 0.5
+});
+* @param [options] - Object with the following properties:
+* @param [options.show = true] - Whether to display the clouds.
+* @param [options.noiseDetail = 16.0] - Desired amount of detail in the noise texture.
+* @param [options.noiseOffset = Cartesian3.ZERO] - Desired translation of data in noise texture.
+* @param [options.debugBillboards = false] - For debugging only. Determines if the billboards are rendered with an opaque color.
+* @param [options.debugEllipsoids = false] - For debugging only. Determines if the clouds will be rendered as opaque ellipsoids.
+*/
+  export class CloudCollection {
+    constructor(options?: { show?: boolean; noiseDetail?: number; noiseOffset?: number; debugBillboards?: boolean; debugEllipsoids?: boolean })
+    /**
+   * <p>
+  Controls the amount of detail captured in the precomputed noise texture
+  used to render the cumulus clouds. In order for the texture to be tileable,
+  this must be a power of two. For best results, set this to be a power of two
+  between <code>8.0</code> and <code>32.0</code> (inclusive).
+  </p>
+
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'>
+    <code>clouds.noiseDetail = 8.0;</code><br/>
+    <img src='Images/CloudCollection.noiseDetail8.png' width='250' height='158' />
+  </td>
+  <td align='center'>
+    <code>clouds.noiseDetail = 32.0;</code><br/>
+    <img src='Images/CloudCollection.noiseDetail32.png' width='250' height='158' />
+  </td>
+  </tr></table>
+  </div>
+   */
+    noiseDetail: number
+    /**
+   * <p>
+  Applies a translation to noise texture coordinates to generate different data.
+  This can be modified if the default noise does not generate good-looking clouds.
+  </p>
+
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'>
+    <code>default</code><br/>
+    <img src='Images/CloudCollection.noiseOffsetdefault.png' width='250' height='158' />
+  </td>
+  <td align='center'>
+    <code>clouds.noiseOffset = new Cesium.Cartesian3(10, 20, 10);</code><br/>
+    <img src='Images/CloudCollection.noiseOffsetx10y20z10.png' width='250' height='158' />
+  </td>
+  </tr></table>
+  </div>
+   */
+    noiseOffset: Cartesian3
+    /**
+     * Determines if billboards in this collection will be shown.
+     */
+    show: boolean
+    /**
+   * This property is for debugging only; it is not for production use nor is it optimized.
+  <p>
+  Renders the billboards with one opaque color for the sake of debugging.
+  </p>
+   */
+    debugBillboards: boolean
+    /**
+   * This property is for debugging only; it is not for production use nor is it optimized.
+  <p>
+  Draws the clouds as opaque, monochrome ellipsoids for the sake of debugging.
+  If <code>debugBillboards</code> is also true, then the ellipsoids will draw on top of the billboards.
+  </p>
+   */
+    debugEllipsoids: boolean
+    /**
+     * Returns the number of clouds in this collection.
+     */
+    length: number
+    /**
+   * Creates and adds a cloud with the specified initial properties to the collection.
+  The added cloud is returned so it can be modified or removed from the collection later.
+   * @example
+   * // Example 1:  Add a cumulus cloud, specifying all the default values.
+  var c = clouds.add({
+    show : true,
+    position : Cesium.Cartesian3.ZERO,
+    scale : new Cesium.Cartesian2(20.0, 12.0),
+    maximumSize: new Cesium.Cartesian3(20.0, 12.0, 12.0),
+    slice: -1.0,
+    cloudType : CloudType.CUMULUS
+  });
+   * @example
+   * // Example 2:  Specify only the cloud's cartographic position.
+  var c = clouds.add({
+    position : Cesium.Cartesian3.fromDegrees(longitude, latitude, height)
+  });
+   * @param [options] - A template describing the cloud's properties as shown in Example 1.
+   * @returns The cloud that was added to the collection.
+   */
+    add(options?: any): CumulusCloud
+    /**
+   * Removes a cloud from the collection.
+   * @example
+   * var c = clouds.add(...);
+  clouds.remove(c);  // Returns true
+   * @param cloud - The cloud to remove.
+   * @returns <code>true</code> if the cloud was removed; <code>false</code> if the cloud was not found in the collection.
+   */
+    remove(cloud: CumulusCloud): boolean
+    /**
+   * Removes all clouds from the collection.
+   * @example
+   * clouds.add(...);
+  clouds.add(...);
+  clouds.removeAll();
+   */
+    removeAll(): void
+    /**
+     * Check whether this collection contains a given cloud.
+     * @param [cloud] - The cloud to check for.
+     * @returns true if this collection contains the cloud, false otherwise.
+     */
+    contains(cloud?: CumulusCloud): boolean
+    /**
+   * Returns the cloud in the collection at the specified index. Indices are zero-based
+  and increase as clouds are added. Removing a cloud shifts all clouds after
+  it to the left, changing their indices. This function is commonly used with
+  {@link CloudCollection#length} to iterate over all the clouds in the collection.
+   * @example
+   * // Toggle the show property of every cloud in the collection
+  var len = clouds.length;
+  for (var i = 0; i < len; ++i) {
+    var c = clouds.get(i);
+    c.show = !c.show;
+  }
+   * @param index - The zero-based index of the cloud.
+   * @returns The cloud at the specified index.
+   */
+    get(index: number): CumulusCloud
+    /**
+   * Returns true if this object was destroyed; otherwise, false.
+  <br /><br />
+  If this object was destroyed, it should not be used; calling any function other than
+  <code>isDestroyed</code> will result in a {@link DeveloperError} exception.
+   * @returns <code>true</code> if this object was destroyed; otherwise, <code>false</code>.
+   */
+    isDestroyed(): boolean
+    /**
+   * Destroys the WebGL resources held by this object.  Destroying an object allows for deterministic
+  release of WebGL resources, instead of relying on the garbage collector to destroy this object.
+  <br /><br />
+  Once an object is destroyed, it should not be used; calling any function other than
+  <code>isDestroyed</code> will result in a {@link DeveloperError} exception.  Therefore,
+  assign the return value (<code>undefined</code>) to the object as done in the example.
+   * @example
+   * clouds = clouds && clouds.destroy();
+   */
+    destroy(): void
+  }
+
+  /**
+   * Specifies the type of the cloud that is added to a {@link CloudCollection} in {@link CloudCollection#add}.
+   */
+  export enum CloudType {
+    /**
+     * Cumulus cloud.
+     */
+    CUMULUS = 0
+  }
+
+  /**
 * Defines different modes for blending between a target color and a primitive's source color.
 
 HIGHLIGHT multiplies the source color by the target color
@@ -29519,6 +29824,148 @@ var viewer = new Cesium.Viewer('cesiumContainer', {
      * Both front-facing and back-facing triangles are culled.
      */
     FRONT_AND_BACK = WebGLConstants.FRONT_AND_BACK
+  }
+
+  /**
+* A cumulus cloud billboard positioned in the 3D scene, that is created and rendered using a {@link CloudCollection}.
+A cloud is created and its initial properties are set by calling {@link CloudCollection#add}.
+and {@link CloudCollection#remove}.
+<br /><br />
+<div align='center'>
+<img src='Images/CumulusCloud.png' width='400' height='300' /><br />
+Example cumulus clouds
+</div>
+*/
+  export class CumulusCloud {
+    constructor()
+    /**
+   * Determines if this cumulus cloud will be shown.  Use this to hide or show a cloud, instead
+  of removing it and re-adding it to the collection.
+   */
+    show: boolean
+    /**
+     * Gets or sets the Cartesian position of this cumulus cloud.
+     */
+    position: Cartesian3
+    /**
+   * <p>Gets or sets the scale of the cumulus cloud billboard in meters.
+  The <code>scale</code> property will affect the size of the billboard,
+  but not the cloud's actual appearance.</p>
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'>
+    <code>cloud.scale = new Cesium.Cartesian2(12, 8);</code><br/>
+    <img src='Images/CumulusCloud.scalex12y8.png' width='250' height='158' />
+  </td>
+  <td align='center'>
+    <code>cloud.scale = new Cesium.Cartesian2(24, 10);</code><br/>
+    <img src='Images/CumulusCloud.scalex24y10.png' width='250' height='158' />
+  </td>
+  </tr></table>
+  </div>
+
+  <p>To modify the cloud's appearance, modify its <code>maximumSize</code>
+  and <code>slice</code> properties.</p>
+   */
+    scale: Cartesian2
+    /**
+   * <p>Gets or sets the maximum size of the cumulus cloud rendered on the billboard.
+  This defines a maximum ellipsoid volume that the cloud can appear in.
+  Rather than guaranteeing a specific size, this specifies a boundary for the
+  cloud to appear in, and changing it can affect the shape of the cloud.</p>
+  <p>Changing the z-value of <code>maximumSize</code> has the most dramatic effect
+  on the cloud's appearance because it changes the depth of the cloud, and thus the
+  positions at which the cloud-shaping texture is sampled.</p>
+  <div align='center'>
+  <table border='0' cellpadding='5'>
+  <tr>
+    <td align='center'>
+      <code>cloud.maximumSize = new Cesium.Cartesian3(14, 9, 10);</code><br/>
+      <img src='Images/CumulusCloud.maximumSizex14y9z10.png' width='250' height='158' />
+    </td>
+    <td align='center'>
+      <code>cloud.maximumSize.x = 25;</code><br/>
+      <img src='Images/CumulusCloud.maximumSizex25.png' width='250' height='158' />
+    </td>
+  </tr>
+  <tr>
+    <td align='center'>
+      <code>cloud.maximumSize.y = 5;</code><br/>
+      <img src='Images/CumulusCloud.maximumSizey5.png' width='250' height='158' />
+    </td>
+    <td align='center'>
+      <code>cloud.maximumSize.z = 17;</code><br/>
+      <img src='Images/CumulusCloud.maximumSizez17.png' width='250' height='158' />
+    </td>
+  </tr>
+  </table>
+  </div>
+
+  <p>To modify the billboard's actual size, modify the cloud's <code>scale</code> property.</p>
+   */
+    maximumSize: Cartesian3
+    /**
+     * Sets the color of the cloud
+     */
+    color: Color
+    /**
+   * <p>Gets or sets the "slice" of the cloud that is rendered on the billboard, i.e.
+  the specific cross-section of the cloud chosen for the billboard's appearance.
+  Given a value between 0 and 1, the slice specifies how deeply into the cloud
+  to intersect based on its maximum size in the z-direction.</p>
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'><code>cloud.slice = 0.32;</code><br/><img src='Images/CumulusCloud.slice0.32.png' width='250' height='158' /></td>
+  <td align='center'><code>cloud.slice = 0.5;</code><br/><img src='Images/CumulusCloud.slice0.5.png' width='250' height='158' /></td>
+  <td align='center'><code>cloud.slice = 0.6;</code><br/><img src='Images/CumulusCloud.slice0.6.png' width='250' height='158' /></td>
+  </tr></table>
+  </div>
+
+  <br />
+  <p>Due to the nature in which this slice is calculated,
+  values below <code>0.2</code> may result in cross-sections that are too small,
+  and the edge of the ellipsoid will be visible. Similarly, values above <code>0.7</code>
+  will cause the cloud to appear smaller. Values outside the range <code>[0.1, 0.9]</code>
+  should be avoided entirely because they do not produce desirable results.</p>
+
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'><code>cloud.slice = 0.08;</code><br/><img src='Images/CumulusCloud.slice0.08.png' width='250' height='158' /></td>
+  <td align='center'><code>cloud.slice = 0.8;</code><br/><img src='Images/CumulusCloud.slice0.8.png' width='250' height='158' /></td>
+  </tr></table>
+  </div>
+
+  <p>If <code>slice</code> is set to a negative number, the cloud will not render a cross-section.
+  Instead, it will render the outside of the ellipsoid that is visible. For clouds with
+  small values of `maximumSize.z`, this can produce good-looking results, but for larger
+  clouds, this can result in a cloud that is undesirably warped to the ellipsoid volume.</p>
+
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'>
+   <code>cloud.slice = -1.0;<br/>cloud.maximumSize.z = 18;</code><br/>
+   <img src='Images/CumulusCloud.slice-1z18.png' width='250' height='158' />
+  </td>
+  <td align='center'>
+    <code>cloud.slice = -1.0;<br/>cloud.maximumSize.z = 30;</code><br/>
+    <img src='Images/CumulusCloud.slice-1z30.png' width='250' height='158' /></td>
+  </tr></table>
+  </div>
+   */
+    slice: number
+    /**
+   * Gets or sets the brightness of the cloud. This can be used to give clouds
+  a darker, grayer appearance.
+  <br /><br />
+  <div align='center'>
+  <table border='0' cellpadding='5'><tr>
+  <td align='center'><code>cloud.brightness = 1.0;</code><br/><img src='Images/CumulusCloud.brightness1.png' width='250' height='158' /></td>
+  <td align='center'><code>cloud.brightness = 0.6;</code><br/><img src='Images/CumulusCloud.brightness0.6.png' width='250' height='158' /></td>
+  <td align='center'><code>cloud.brightness = 0.0;</code><br/><img src='Images/CumulusCloud.brightness0.png' width='250' height='158' /></td>
+  </tr></table>
+  </div>
+   */
+    brightness: number
   }
 
   /**
@@ -30230,6 +30677,12 @@ globe.
      * Enable lighting the globe with the scene's light source.
      */
     enableLighting: boolean
+    /**
+   * A multiplier to adjust terrain lambert lighting.
+  This number is multiplied by the result of <code>czm_getLambertDiffuse</code> in GlobeFS.glsl.
+  This only takes effect when <code>enableLighting</code> is <code>true</code>.
+   */
+    lambertDiffuseMultiplier: number
     /**
    * Enable dynamic lighting effects on atmosphere and fog. This only takes effect
   when <code>enableLighting</code> is <code>true</code>.
@@ -32954,7 +33407,7 @@ setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can impro
   }
 
   /**
-   * A light source. This type describes an interface and is not intended to be instantiated directly.
+   * A light source. This type describes an interface and is not intended to be instantiated directly. Together, <code>color</code> and <code>intensity</code> produce a high-dynamic-range light color. <code>intensity</code> can also be used individually to dim or brighten the light without changing the hue.
    */
   export class Light {
     constructor()
@@ -32963,7 +33416,7 @@ setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can impro
      */
     color: Color
     /**
-     * The intensity of the light.
+     * The intensity controls the strength of the light. <code>intensity</code> has a minimum value of 0.0 and no maximum value.
      */
     intensity: number
   }
@@ -34733,6 +35186,640 @@ Create this by calling {@link ModelAnimationCollection#add}.
      * Loop the animation.  First, playing it forward, then in reverse, then forward, and so on.
      */
     MIRRORED_REPEAT = 2
+  }
+
+  /**
+   * An object describing a uniform, its type, and an initial value
+   * @property type - The Glsl type of the uniform.
+   * @property value - The initial value of the uniform
+   */
+  export type UniformSpecifier = {
+    type: UniformType
+    value: boolean | number | Cartesian2 | Cartesian3 | Cartesian4 | Matrix2 | Matrix3 | Matrix4 | TextureUniform
+  }
+
+  /**
+* A user defined GLSL shader used with {@link ModelExperimental} as well
+as {@link Cesium3DTileset}.
+<p>
+If texture uniforms are used, additional resource management must be done:
+</p>
+<ul>
+<li>
+   The <code>update</code> function must be called each frame. When a
+   custom shader is passed to a {@link ModelExperimental} or a
+   {@link Cesium3DTileset}, this step is handled automaticaly
+</li>
+<li>
+   {@link CustomShader#destroy} must be called when the custom shader is
+   no longer needed to clean up GPU resources properly. The application
+   is responsible for calling this method.
+</li>
+</ul>
+<p>
+To enable the use of {@link ModelExperimental} in {@link Cesium3DTileset}, set {@link ExperimentalFeatures.enableModelExperimental} to <code>true</code> or tileset.enableModelExperimental to <code>true</code>.
+</p>
+* @example
+* var customShader = new CustomShader({
+uniforms: {
+  u_colorIndex: {
+    type: Cesium.UniformType.FLOAT,
+    value: 1.0
+  },
+  u_normalMap: {
+    type: Cesium.UniformType.SAMPLER_2D,
+    value: new Cesium.TextureUniform({
+      url: "http://example.com/normal.png"
+    })
+  }
+},
+varyings: {
+  v_selectedColor: Cesium.VaryingType.VEC3
+},
+vertexShaderText: `
+void vertexMain(VertexInput vsInput, inout czm_modelVertexOutput vsOutput) {
+  v_selectedColor = mix(vsInput.attributes.color_0, vsInput.attributes.color_1, u_colorIndex);
+  vsOutput.positionMC += 0.1 * vsInput.attributes.normal;
+}
+`,
+fragmentShaderText: `
+void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material) {
+  material.normal = texture2D(u_normalMap, fsInput.attributes.texCoord_0);
+  material.diffuse = v_selectedColor;
+}
+`
+});
+* @param options - An object with the following options
+* @param [options.mode = CustomShaderMode.MODIFY_MATERIAL] - The custom shader mode, which determines how the custom shader code is inserted into the fragment shader.
+* @param [options.lightingModel] - The lighting model (e.g. PBR or unlit). If present, this overrides the default lighting for the model.
+* @param [options.isTranslucent = false] - If set, the model will be rendered as translucent. This overrides the default settings for the model.
+* @param [options.uniforms] - A dictionary for user-defined uniforms. The key is the uniform name that will appear in the GLSL code. The value is an object that describes the uniform type and initial value
+* @param [options.varyings] - A dictionary for declaring additional GLSL varyings used in the shader. The key is the varying name that will appear in the GLSL code. The value is the data type of the varying. For each varying, the declaration will be added to the top of the shader automatically. The caller is responsible for assigning a value in the vertex shader and using the value in the fragment shader.
+* @param [options.vertexShaderText] - The custom vertex shader as a string of GLSL code. It must include a GLSL function called vertexMain. See the example for the expected signature. If not specified, the custom vertex shader step will be skipped in the computed vertex shader.
+* @param [options.fragmentShaderText] - The custom fragment shader as a string of GLSL code. It must include a GLSL function called fragmentMain. See the example for the expected signature. If not specified, the custom fragment shader step will be skipped in the computed fragment shader.
+*/
+  export class CustomShader {
+    constructor(options: {
+      mode?: CustomShaderMode
+      lightingModel?: LightingModel
+      isTranslucent?: boolean
+      uniforms?: {
+        [key: string]: UniformSpecifier
+      }
+      varyings?: {
+        [key: string]: VaryingType
+      }
+      vertexShaderText?: string
+      fragmentShaderText?: string
+    })
+    /**
+     * Update the value of a uniform declared in the shader
+     * @param uniformName - The GLSL name of the uniform. This must match one of the uniforms declared in the constructor
+     * @param value - The new value of the uniform.
+     */
+    setUniform(
+      uniformName: string,
+      value: boolean | number | Cartesian2 | Cartesian3 | Cartesian4 | Matrix2 | Matrix3 | Matrix4 | string | Resource
+    ): void
+  }
+
+  /**
+* A value determining how the custom shader interacts with the overall
+fragment shader. This is used by {@link CustomShaderPipelineStage}
+*/
+  export const mode: CustomShaderMode
+
+  /**
+* The lighting model to use when using the custom shader.
+This is used by {@link CustomShaderPipelineStage}
+*/
+  export const lightingModel: LightingModel
+
+  /**
+   * Additional uniforms as declared by the user.
+   */
+  export const uniforms: {
+    [key: string]: UniformSpecifier
+  }
+
+  /**
+* Additional varyings as declared by the user.
+This is used by {@link CustomShaderPipelineStage}
+*/
+  export const varyings: {
+    [key: string]: VaryingType
+  }
+
+  /**
+   * The user-defined GLSL code for the vertex shader
+   */
+  export const vertexShaderText: string
+
+  /**
+   * The user-defined GLSL code for the fragment shader
+   */
+  export const fragmentShaderText: string
+
+  /**
+   * Whether the shader should be rendered as translucent
+   */
+  export const isTranslucent: boolean
+
+  /**
+* An enum describing how the {@link CustomShader} will be added to the
+fragment shader. This determines how the shader interacts with the material.
+*/
+  export enum CustomShaderMode {
+    /**
+   * The custom shader will be used to modify the results of the material stage
+  before lighting is applied.
+   */
+    MODIFY_MATERIAL = 'MODIFY_MATERIAL',
+    /**
+   * The custom shader will be used instead of the material stage. This is a hint
+  to optimize out the material processing code.
+   */
+    REPLACE_MATERIAL = 'REPLACE_MATERIAL'
+  }
+
+  /**
+   * The lighting model to use for lighting a {@link ModelExperimental}.
+   */
+  export enum LightingModel {
+    /**
+   * Use unlit shading, i.e. skip lighting calculations. The model's
+  diffuse color (assumed to be linear RGB, not sRGB) is used directly
+  when computing <code>gl_FragColor</code>. The alpha mode is still
+  applied.
+   */
+    UNLIT = 0,
+    /**
+   * Use physically-based rendering lighting calculations. This includes
+  both PBR metallic roughness and PBR specular glossiness. Image-based
+  lighting is also applied when possible.
+   */
+    PBR = 1
+  }
+
+  /**
+* A 3D model. This is a new architecture that is more decoupled than the older {@link Model}. This class is still experimental.
+<p>
+Do not call this function directly, instead use the `from` functions to create
+the Model from your source data type.
+</p>
+* @param options - Object with the following properties:
+* @param options.resource - The Resource to the 3D model.
+* @param [options.modelMatrix = Matrix4.IDENTITY] - The 4x4 transformation matrix that transforms the model from model to world coordinates.
+* @param [options.debugShowBoundingVolume = false] - For debugging only. Draws the bounding sphere for each draw command in the model.
+* @param [options.cull = true] - Whether or not to cull the model using frustum/horizon culling. If the model is part of a 3D Tiles tileset, this property will always be false, since the 3D Tiles culling system is used.
+* @param [options.opaquePass = Pass.OPAQUE] - The pass to use in the {@link DrawCommand} for the opaque portions of the model.
+* @param [options.allowPicking = true] - When <code>true</code>, each primitive is pickable with {@link Scene#pick}.
+* @param [options.customShader] - A custom shader. This will add user-defined GLSL code to the vertex and fragment shaders. Using custom shaders with a {@link Cesium3DTileStyle} may lead to undefined behavior.
+* @param [options.content] - The tile content this model belongs to. This property will be undefined if model is not loaded as part of a tileset.
+* @param [options.show = true] - Whether or not to render the model.
+* @param [options.color] - A color that blends with the model's rendered color.
+* @param [options.colorBlendMode = ColorBlendMode.HIGHLIGHT] - Defines how the color blends with the model.
+* @param [options.colorBlendAmount = 0.5] - Value used to determine the color strength when the <code>colorBlendMode</code> is <code>MIX</code>. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
+* @param [options.featureIdAttributeIndex = 0] - The index of the feature ID attribute to use for picking features per-instance or per-primitive.
+* @param [options.featureIdTextureIndex = 0] - The index of the feature ID texture to use for picking features per-primitive.
+* @param [options.pointCloudShading] - Options for constructing a {@link PointCloudShading} object to control point attenuation based on geometric error and lighting.
+*/
+  export class ModelExperimental {
+    constructor(options: {
+      resource: Resource
+      modelMatrix?: Matrix4
+      debugShowBoundingVolume?: boolean
+      cull?: boolean
+      opaquePass?: boolean
+      allowPicking?: boolean
+      customShader?: CustomShader
+      content?: Cesium3DTileContent
+      show?: boolean
+      color?: Color
+      colorBlendMode?: ColorBlendMode
+      colorBlendAmount?: number
+      featureIdAttributeIndex?: number
+      featureIdTextureIndex?: number
+      pointCloudShading?: any
+    })
+    /**
+   * When <code>true</code>, this model is ready to render, i.e., the external binary, image,
+  and shader files were downloaded and the WebGL resources were created.  This is set to
+  <code>true</code> right before {@link ModelExperimental#readyPromise} is resolved.
+   */
+    readonly ready: boolean
+    /**
+   * Gets the promise that will be resolved when this model is ready to render, i.e. when the external resources
+  have been downloaded and the WebGL resources are created.
+  <p>
+  This promise is resolved at the end of the frame before the first frame the model is rendered in.
+  </p>
+   */
+    readonly readyPromise: Promise<ModelExperimental>
+    /**
+   * Point cloud shading settings for controlling point cloud attenuation
+  and lighting. For 3D Tiles, this is inherited from the
+  {@link Cesium3DTileset}.
+   */
+    pointCloudShading: PointCloudShading
+    /**
+   * The model's custom shader, if it exists. Using custom shaders with a {@link Cesium3DTileStyle}
+  may lead to undefined behavior.
+   */
+    customShader: CustomShader
+    /**
+     * The color to blend with the model's rendered color.
+     */
+    color: Color
+    /**
+     * Defines how the color blends with the model.
+     */
+    colorBlendMode: Cesium3DTileColorBlendMode | ColorBlendMode
+    /**
+     * Value used to determine the color strength when the <code>colorBlendMode</code> is <code>MIX</code>. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
+     */
+    colorBlendAmount: number
+    /**
+     * Gets the model's bounding sphere.
+     */
+    readonly boundingSphere: BoundingSphere
+    /**
+   * This property is for debugging only; it is not for production use nor is it optimized.
+  <p>
+  Draws the bounding sphere for each draw command in the model.
+  </p>
+   */
+    debugShowBoundingVolume: boolean
+    /**
+     * Whether or not to render the model.
+     */
+    show: boolean
+    /**
+     * The index of the feature ID attribute to use for picking features per-instance or per-primitive.
+     */
+    featureIdAttributeIndex: number
+    /**
+     * The index of the feature ID texture to use for picking features per-primitive.
+     */
+    featureIdTextureIndex: number
+    /**
+   * Called when {@link Viewer} or {@link CesiumWidget} render the scene to
+  get the draw commands needed to render this primitive.
+  <p>
+  Do not call this function directly.  This is documented just to
+  list the exceptions that may be propagated when the scene is rendered:
+  </p>
+   */
+    update(): void
+    /**
+   * Returns true if this object was destroyed; otherwise, false.
+  <br /><br />
+  If this object was destroyed, it should not be used; calling any function other than
+  <code>isDestroyed</code> will result in a {@link DeveloperError} exception.
+   * @returns <code>true</code> if this object was destroyed; otherwise, <code>false</code>.
+   */
+    isDestroyed(): boolean
+    /**
+   * Destroys the WebGL resources held by this object.  Destroying an object allows for deterministic
+  release of WebGL resources, instead of relying on the garbage collector to destroy this object.
+  <br /><br />
+  Once an object is destroyed, it should not be used; calling any function other than
+  <code>isDestroyed</code> will result in a {@link DeveloperError} exception.  Therefore,
+  assign the return value (<code>undefined</code>) to the object as done in the example.
+   * @example
+   * model = model && model.destroy();
+   */
+    destroy(): void
+    /**
+   * <p>
+  Creates a model from a glTF asset.  When the model is ready to render, i.e., when the external binary, image,
+  and shader files are downloaded and the WebGL resources are created, the {@link Model#readyPromise} is resolved.
+  </p>
+  <p>
+  The model can be a traditional glTF asset with a .gltf extension or a Binary glTF using the .glb extension.
+   * @param options - Object with the following properties:
+   * @param options.gltf - A Resource/URL to a glTF/glb file, a binary glTF buffer, or a JSON object containing the glTF contents
+   * @param [options.basePath = ''] - The base path that paths in the glTF JSON are relative to.
+   * @param [options.modelMatrix = Matrix4.IDENTITY] - The 4x4 transformation matrix that transforms the model from model to world coordinates.
+   * @param [options.incrementallyLoadTextures = true] - Determine if textures may continue to stream in after the model is loaded.
+   * @param [options.releaseGltfJson = false] - When true, the glTF JSON is released once the glTF is loaded. This is is especially useful for cases like 3D Tiles, where each .gltf model is unique and caching the glTF JSON is not effective.
+   * @param [options.debugShowBoundingVolume = false] - For debugging only. Draws the bounding sphere for each draw command in the model.
+   * @param [options.cull = true] - Whether or not to cull the model using frustum/horizon culling. If the model is part of a 3D Tiles tileset, this property will always be false, since the 3D Tiles culling system is used.
+   * @param [options.opaquePass = Pass.OPAQUE] - The pass to use in the {@link DrawCommand} for the opaque portions of the model.
+   * @param [options.upAxis = Axis.Y] - The up-axis of the glTF model.
+   * @param [options.forwardAxis = Axis.Z] - The forward-axis of the glTF model.
+   * @param [options.allowPicking = true] - When <code>true</code>, each primitive is pickable with {@link Scene#pick}.
+   * @param [options.customShader] - A custom shader. This will add user-defined GLSL code to the vertex and fragment shaders. Using custom shaders with a {@link Cesium3DTileStyle} may lead to undefined behavior.
+   * @param [options.content] - The tile content this model belongs to. This property will be undefined if model is not loaded as part of a tileset.
+   * @param [options.show = true] - Whether or not to render the model.
+   * @param [options.color] - A color that blends with the model's rendered color.
+   * @param [options.colorBlendMode = ColorBlendMode.HIGHLIGHT] - Defines how the color blends with the model.
+   * @param [options.colorBlendAmount = 0.5] - Value used to determine the color strength when the <code>colorBlendMode</code> is <code>MIX</code>. A value of 0.0 results in the model's rendered color while a value of 1.0 results in a solid color, with any value in-between resulting in a mix of the two.
+   * @param [options.featureIdAttributeIndex = 0] - The index of the feature ID attribute to use for picking features per-instance or per-primitive.
+   * @param [options.featureIdTextureIndex = 0] - The index of the feature ID texture to use for picking features per-primitive.
+   * @param [options.pointCloudShading] - Options for constructing a {@link PointCloudShading} object to control point attenuation and lighting.
+   * @returns The newly created model.
+   */
+    static fromGltf(options: {
+      gltf: string | Resource | Uint8Array | any
+      basePath?: string | Resource
+      modelMatrix?: Matrix4
+      incrementallyLoadTextures?: boolean
+      releaseGltfJson?: boolean
+      debugShowBoundingVolume?: boolean
+      cull?: boolean
+      opaquePass?: boolean
+      upAxis?: Axis
+      forwardAxis?: Axis
+      allowPicking?: boolean
+      customShader?: CustomShader
+      content?: Cesium3DTileContent
+      show?: boolean
+      color?: Color
+      colorBlendMode?: ColorBlendMode
+      colorBlendAmount?: number
+      featureIdAttributeIndex?: number
+      featureIdTextureIndex?: number
+      pointCloudShading?: any
+    }): ModelExperimental
+  }
+
+  /**
+* The 4x4 transformation matrix that transforms the model from model to world coordinates.
+When this is the identity matrix, the model is drawn in world coordinates, i.e., Earth's Cartesian WGS84 coordinates.
+Local reference frames can be used by providing a different transformation matrix, like that returned
+by {@link Transforms.eastNorthUpToFixedFrame}.
+* @example
+* var origin = Cesium.Cartesian3.fromDegrees(-95.0, 40.0, 200000.0);
+m.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(origin);
+*/
+  export var modelMatrix: Matrix4
+
+  /**
+   * The style to apply the to the features in the model. Cannot be applied if a {@link CustomShader} is also applied.
+   */
+  export var style: Cesium3DTileStyle
+
+  /**
+   * Update stages to apply to this primitive.
+   */
+  export var updateStages: any
+
+  /**
+   * The indices of the children of this node in the scene graph.
+   */
+  export const children: number[]
+
+  /**
+   * Update stages to apply to this primitive.
+   */
+  export var updateStages: any
+
+  /**
+   * Update stages to across the model.
+   */
+  export var _updateStages: any
+
+  /**
+* A feature of a {@link ModelExperimental}.
+<p>
+Provides access to a feature's properties stored in the model's feature table.
+</p>
+<p>
+Modifications to a <code>ModelFeature</code> object have the lifetime of the model.
+</p>
+<p>
+Do not construct this directly. Access it through picking using {@link Scene#pick}.
+</p>
+* @example
+* // On mouse over, display all the properties for a feature in the console log.
+handler.setInputAction(function(movement) {
+  var feature = scene.pick(movement.endPosition);
+  if (feature instanceof Cesium.ModelFeature) {
+      console.log(feature);
+  }
+}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+* @param options - Object with the following properties:
+* @param options.model - The model the feature belongs to.
+* @param options.featureId - The unique integral identifier for this feature.
+*/
+  export class ModelFeature {
+    constructor(options: { model: ModelExperimental; featureId: number })
+    /**
+   * Gets or sets if the feature will be shown. This is set for all features
+  when a style's show is evaluated.
+   */
+    show: boolean
+    /**
+   * Gets or sets the highlight color multiplied with the feature's color.  When
+  this is white, the feature's color is not changed. This is set for all features
+  when a style's color is evaluated.
+   */
+    color: Color
+    /**
+     * Returns whether the feature contains this property.
+     * @param name - The case-sensitive name of the property.
+     * @returns Whether the feature contains this property.
+     */
+    hasProperty(name: string): boolean
+    /**
+   * Returns a copy of the value of the feature's property with the given name.
+   * @example
+   * // Display all the properties for a feature in the console log.
+  var propertyNames = feature.getPropertyNames();
+  var length = propertyNames.length;
+  for (var i = 0; i < length; ++i) {
+      var propertyName = propertyNames[i];
+      console.log(propertyName + ': ' + feature.getProperty(propertyName));
+  }
+   * @param name - The case-sensitive name of the property.
+   * @returns The value of the property or <code>undefined</code> if the feature does not have this property.
+   */
+    getProperty(name: string): any
+    /**
+   * Returns a copy of the feature's property with the given name, examining all
+  the metadata from the EXT_mesh_features and legacy EXT_feature_metadata glTF
+  extensions. Metadata is checked against name from most specific to most
+  general and the first match is returned. Metadata is checked in this order:
+  <ol>
+    <li>Feature metadata property by semantic</li>
+    <li>Feature metadata property by property ID</li>
+  </ol>
+  <p>
+  See the {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features|EXT_mesh_features Extension} as well as the
+  previous {@link https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_feature_metadata|EXT_feature_metadata Extension} for glTF.
+  </p>
+   * @param name - The semantic or property ID of the feature. Semantics are checked before property IDs in each granularity of metadata.
+   * @returns The value of the property or <code>undefined</code> if the feature does not have this property.
+   */
+    getPropertyInherited(name: string): any
+    /**
+     * Returns an array of property names for the feature.
+     * @param [results] - An array into which to store the results.
+     * @returns The names of the feature's properties.
+     */
+    getPropertyNames(results?: string[]): string[]
+    /**
+   * Sets the value of the feature's property with the given name.
+   * @example
+   * var height = feature.getProperty('Height'); // e.g., the height of a building
+   * @example
+   * var name = 'clicked';
+  if (feature.getProperty(name)) {
+      console.log('already clicked');
+  } else {
+      feature.setProperty(name, true);
+      console.log('first click');
+  }
+   * @param name - The case-sensitive name of the property.
+   * @param value - The value of the property that will be copied.
+   * @returns <code>true</code> if the property was set, <code>false</code> otherwise.
+   */
+    setProperty(name: string, value: any): boolean
+  }
+
+  /**
+   * The bounding sphere that contains all the vertices in this primitive.
+   */
+  export var boundingSphere: BoundingSphere
+
+  /**
+* A simple struct that serves as a value of a <code>sampler2D</code>-valued
+uniform. This is used with {@link CustomShader} and {@link TextureManager}
+* @param options - An object with the following properties:
+* @param [options.typedArray] - A typed array storing the contents of a texture. Values are stored in row-major order. Since WebGL uses a y-up convention for textures, rows are listed from bottom to top.
+* @param [options.width] - The width of the image. Required when options.typedArray is present
+* @param [options.height] - The height of the image. Required when options.typedArray is present.
+* @param [options.url] - A URL string or resource pointing to a texture image.
+* @param [options.repeat = true] - When defined, the texture sampler will be set to wrap in both directions
+* @param [options.pixelFormat = PixelFormat.RGBA] - When options.typedArray is defined, this is used to determine the pixel format of the texture
+* @param [options.pixelDatatype = PixelDatatype.UNSIGNED_BYTE] - When options.typedArray is defined, this is the data type of pixel values in the typed array.
+* @param [textureMinificationFilter = TextureMinificationFilter.LINEAR] - The minification filter of the texture sampler.
+* @param [textureMagnificationFilter = TextureMagnificationFilter.LINEAR] - The magnification filter of the texture sampler.
+* @param [options.maximumAnisotropy = 1.0] - The maximum anisotropy of the texture sampler
+*/
+  export class TextureUniform {
+    constructor(
+      options: {
+        typedArray?: Uint8Array
+        width?: number
+        height?: number
+        url?: string | Resource
+        repeat?: boolean
+        pixelFormat?: PixelFormat
+        pixelDatatype?: PixelDatatype
+        maximumAnisotropy?: number
+      },
+      textureMinificationFilter?: TextureMinificationFilter,
+      textureMagnificationFilter?: TextureMagnificationFilter
+    )
+  }
+
+  /**
+* An enum of the basic GLSL uniform types. These can be used with
+{@link CustomShader} to declare user-defined uniforms.
+*/
+  export enum UniformType {
+    /**
+     * A single floating point value.
+     */
+    FLOAT = 'float',
+    /**
+     * A vector of 2 floating point values.
+     */
+    VEC2 = 'vec2',
+    /**
+     * A vector of 3 floating point values.
+     */
+    VEC3 = 'vec3',
+    /**
+     * A vector of 4 floating point values.
+     */
+    VEC4 = 'vec4',
+    /**
+     * A single integer value
+     */
+    INT = 'int',
+    /**
+     * A vector of 2 integer values.
+     */
+    INT_VEC2 = 'ivec2',
+    /**
+     * A vector of 3 integer values.
+     */
+    INT_VEC3 = 'ivec3',
+    /**
+     * A vector of 4 integer values.
+     */
+    INT_VEC4 = 'ivec4',
+    /**
+     * A single boolean value.
+     */
+    BOOL = 'bool',
+    /**
+     * A vector of 2 boolean values.
+     */
+    BOOL_VEC2 = 'bvec2',
+    /**
+     * A vector of 3 boolean values.
+     */
+    BOOL_VEC3 = 'bvec3',
+    /**
+     * A vector of 4 boolean values.
+     */
+    BOOL_VEC4 = 'bvec4',
+    /**
+     * A 2x2 matrix of floating point values.
+     */
+    MAT2 = 'mat2',
+    /**
+     * A 3x3 matrix of floating point values.
+     */
+    MAT3 = 'mat2',
+    /**
+     * A 3x3 matrix of floating point values.
+     */
+    MAT4 = 'mat4',
+    /**
+     * A 2D sampled texture.
+     */
+    SAMPLER_2D = 'sampler2D',
+    SAMPLER_CUBE = 'samplerCube'
+  }
+
+  /**
+* An enum for the GLSL varying types. These can be used for declaring varyings
+in {@link CustomShader}
+*/
+  export enum VaryingType {
+    /**
+     * A single floating point value.
+     */
+    FLOAT = 'float',
+    /**
+     * A vector of 2 floating point values.
+     */
+    VEC2 = 'vec2',
+    /**
+     * A vector of 3 floating point values.
+     */
+    VEC3 = 'vec3',
+    /**
+     * A vector of 4 floating point values.
+     */
+    VEC4 = 'vec4',
+    /**
+     * A 2x2 matrix of floating point values.
+     */
+    MAT2 = 'mat2',
+    /**
+     * A 3x3 matrix of floating point values.
+     */
+    MAT3 = 'mat2',
+    /**
+     * A 3x3 matrix of floating point values.
+     */
+    MAT4 = 'mat4'
   }
 
   /**
@@ -37224,7 +38311,7 @@ contextOptions : {
   allowTextureFilterAnisotropic : false
 }
 });
-* @param [options] - Object with the following properties:
+* @param options - Object with the following properties:
 * @param options.canvas - The HTML canvas element to create the scene for.
 * @param [options.contextOptions] - Context and WebGL creation properties.  See details above.
 * @param [options.creditContainer] - The HTML element in which the credits will be displayed.
@@ -37238,7 +38325,7 @@ contextOptions : {
 * @param [options.maximumRenderTimeChange = 0.0] - If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See {@link https://cesium.com/blog/2018/01/24/cesium-scene-rendering-performance/|Improving Performance with Explicit Rendering}.
 */
   export class Scene {
-    constructor(options?: {
+    constructor(options: {
       canvas: HTMLCanvasElement
       contextOptions?: any
       creditContainer?: Element
@@ -37378,13 +38465,6 @@ contextOptions : {
     /**
    * This property is for debugging only; it is not for production use.
   <p>
-  Displays depth information for the indicated frustum.
-  </p>
-   */
-    debugShowGlobeDepth: boolean
-    /**
-   * This property is for debugging only; it is not for production use.
-  <p>
   Indicates which frustum will have depth information displayed.
   </p>
    */
@@ -37404,8 +38484,7 @@ contextOptions : {
    * When <code>true</code>, enables picking translucent geometry using the depth buffer. Note that {@link Scene#useDepthPicking} must also be true for enabling this to work.
 
   <p>
-  Render must be called between picks.
-  <br>There is a decrease in performance when enabled. There are extra draw calls to write depth for
+  There is a decrease in performance when enabled. There are extra draw calls to write depth for
   translucent geometry.
   </p>
    * @example
@@ -37416,7 +38495,6 @@ contextOptions : {
            // nothing picked
            return;
        }
-       viewer.scene.render();
        var worldPosition = viewer.scene.pickPosition(movement.position);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
    */
@@ -37621,10 +38699,6 @@ contextOptions : {
      * Gets or sets the current mode of the scene.
      */
     mode: SceneMode
-    /**
-     * Gets or sets the scalar used to exaggerate the terrain.
-     */
-    terrainExaggeration: number
     /**
    * When <code>true</code>, splits the scene into two viewports with steroscopic views for the left and right eyes.
   Used for cardboard and WebVR.
@@ -39593,6 +40667,16 @@ viewportQuad.material.uniforms.color = new Cesium.Color(1.0, 0.0, 0.0, 1.0);
     destroy(): void
   }
 
+  /**
+   * EPSG codes known to include reverse axis orders, but are not within 4000-5000.
+   */
+  export var includesReverseAxis: number[]
+
+  /**
+   * EPSG codes known to not include reverse axis orders, and are within 4000-5000.
+   */
+  export var excludesReverseAxis: number[]
+
   export namespace WebMapServiceImageryProvider {
     /**
    * Initialization options for the WebMapServiceImageryProvider constructor
@@ -39628,6 +40712,7 @@ viewportQuad.material.uniforms.color = new Cesium.Color(1.0, 0.0, 0.0, 1.0);
                            an array, each element in the array is a subdomain.
    * @property [clock] - A Clock instance that is used when determining the value for the time dimension. Required when `times` is specified.
    * @property [times] - TimeIntervalCollection with its data property being an object containing time dynamic dimension and their values.
+   * @property [getFeatureInfoUrl] - The getFeatureInfo URL of the WMS service. If the property is not defined then we use the property value of url.
    */
     type ConstructorOptions = {
       url: Resource | string
@@ -39649,6 +40734,7 @@ viewportQuad.material.uniforms.color = new Cesium.Color(1.0, 0.0, 0.0, 1.0);
       subdomains?: string | string[]
       clock?: Clock
       times?: TimeIntervalCollection
+      getFeatureInfoUrl?: Resource | string
     }
   }
 
@@ -39806,6 +40892,10 @@ viewer.imageryLayers.addImageryProvider(provider);
   tile requests.
    */
     times: TimeIntervalCollection
+    /**
+     * Gets the getFeatureInfo URL of the WMS server.
+     */
+    readonly getFeatureInfoUrl: Resource | string
     /**
      * Gets the credits to be displayed when a given tile is displayed.
      * @param x - The tile X coordinate.
@@ -40912,14 +42002,6 @@ var baseLayerPicker = new Cesium.BaseLayerPicker('baseLayerPickerContainer', {
      * Gets or sets the show wireframe state.  This property is observable.
      */
     wireframe: boolean
-    /**
-     * Gets or sets the show globe depth state.  This property is observable.
-     */
-    globeDepth: boolean
-    /**
-     * Gets or sets the show pick depth state.  This property is observable.
-     */
-    pickDepth: boolean
     /**
      * Gets or sets the index of the depth frustum to display.  This property is observable.
      */

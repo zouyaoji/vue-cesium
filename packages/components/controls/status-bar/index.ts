@@ -1,30 +1,25 @@
-import {
-  CSSProperties,
-  defineComponent,
-  getCurrentInstance,
-  nextTick,
-  ref,
-  reactive,
-  ExtractPropTypes,
-  h,
-  createCommentVNode,
-  watch,
-  VNode
-} from 'vue'
+import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import { defineComponent, getCurrentInstance, nextTick, ref, reactive, h, createCommentVNode, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcStatusBarEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import MouseCoords, { extendForMouseCoords } from './MouseCoords'
 import throttle from '@vue-cesium/utils/private/throttle'
 import { useCommon, useLocaleInject } from '@vue-cesium/composables'
-import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
+import { VcBtn, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import defaultProps from './defaultProps'
 import { isPlainObject } from '@vue-cesium/utils/util'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  statusBarEvt: (evt: VcStatusBarEvt) => true
+}
+export const statusBarProps = defaultProps
 export default defineComponent({
   name: 'VcStatusBar',
-  props: defaultProps,
-  emits: ['beforeLoad', 'ready', 'destroyed', 'statusBarEvt'],
+  props: statusBarProps,
+  emits: emits,
   setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -239,8 +234,7 @@ export default defineComponent({
             type: 'statusBar',
             mouseCoordsInfo: mouseCoordsInfo.value,
             cameraInfo: cameraInfo,
-            performanceInfo: performanceInfo,
-            statue: 'complete'
+            performanceInfo: performanceInfo
           })
       }
     }
@@ -251,6 +245,9 @@ export default defineComponent({
         mouseCoordsInfo.value?.toggleUseProjection()
       }
     }
+
+    // expose public methods
+    Object.assign(instance.proxy, { mouseCoordsInfo, cameraInfo, performanceInfo })
 
     return () => {
       if (canRender.value) {
@@ -501,3 +498,84 @@ export default defineComponent({
     }
   }
 })
+
+// export type VcStatusBarProps = ExtractPropTypes<typeof statusBarProps>
+export type VcStatusBarEmits = typeof emits
+
+export type VcStatusBarProps = {
+  /**
+   * Specify the position of the VcStatusBar.
+   * Default value: bottom-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcStatusBar horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the mouse to pick up the height model, use this to improve the accuracy of the height obtained.
+   * Default value: https://zouyaoji.top/vue-cesium/statics/SampleData/WW15MGH.DAC
+   */
+  gridFileUrl?: string
+  /**
+   * Specify the proj4 projection.
+   * Default value: +proj=utm +ellps=GRS80 +units=m +no_defs
+   */
+  proj4Projection?: string
+  /**
+   * Specify the projection units.
+   * Default value: m
+   */
+  projectionUnits?: string
+  /**
+   * Specify the proj4 longlat.
+   * Default value: +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs
+   */
+  proj4longlat?: string
+  /**
+   * Specify the css color of the information bar.
+   * Default value: #fff
+   */
+  color?: string
+  /**
+   * Specify the background of the information bar.
+   * Default value: #3f4854
+   */
+  background?: string
+  /**
+   * Specify whether to display camera information in the information bar.
+   * Default value: true
+   */
+  showCameraInfo?: boolean
+  /**
+   * Specify whether to display mouse coords information in the information bar.
+   * Default value: true
+   */
+  showMouseInfo?: boolean
+  /**
+   * Specify whether to display frame rate information in the information bar.
+   * Default value: true
+   */
+  showPerformanceInfo?: boolean
+  /**
+   * The tooltip parameter.
+   */
+  tooltip?: VcTooltipProps
+  /**
+   * Triggers before the VcStatusBar is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcStatusBar is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcStatusBar is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the information changes.
+   */
+  onStatusBarEvt?: (evt: VcStatusBarEvt) => void
+}

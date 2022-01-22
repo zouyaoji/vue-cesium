@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-01-06 11:26:32
+ * @LastEditTime: 2022-01-22 12:05:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -13,7 +13,7 @@ import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
-import { PointDrawing } from '@vue-cesium/utils/drawing-types'
+import { VcPointDrawing } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStopHandle, h } from 'vue'
 import useCommon from '../use-common'
@@ -52,7 +52,7 @@ export default function (props, ctx, cmpName: string) {
     onVcCollectionLabelReady
   } = useDrawingAction(props, ctx, instance, cmpName, $services)
 
-  const renderDatas = ref<Array<PointDrawing>>([])
+  const renderDatas = ref<Array<VcPointDrawing>>([])
   let restorePosition
   let unwatchFns: Array<WatchStopHandle> = []
 
@@ -75,7 +75,7 @@ export default function (props, ctx, cmpName: string) {
 
   const startNew = () => {
     const { Cartesian3 } = Cesium
-    const point: PointDrawing = {
+    const point: VcPointDrawing = {
       drawStatus: DrawStatus.Drawing,
       show: false,
       position: new Cartesian3(),
@@ -126,7 +126,7 @@ export default function (props, ctx, cmpName: string) {
     // }
 
     const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-    const point: PointDrawing = renderDatas.value[index]
+    const point: VcPointDrawing = renderDatas.value[index]
 
     if (options.button === 2 && editingPoint.value) {
       ;(drawingFabInstance?.proxy as any).editingActionName = undefined
@@ -140,8 +140,8 @@ export default function (props, ctx, cmpName: string) {
           'drawEvt',
           {
             name: drawingType,
-            index: index,
-            renderDatas: renderDatas,
+            index,
+            renderDatas,
             finished: true,
             windowPoistion: movement,
             type: 'cancel'
@@ -211,13 +211,13 @@ export default function (props, ctx, cmpName: string) {
         emit(
           'drawEvt',
           {
-            index: index,
-            points: renderDatas,
+            index,
+            renderDatas,
             name: drawingType,
             finished: true,
             position: renderDatas.value[index].position,
             windowPoistion: movement,
-            type: type
+            type
           },
           viewer
         )
@@ -248,7 +248,7 @@ export default function (props, ctx, cmpName: string) {
       }
 
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
-      const point: PointDrawing = renderDatas.value[index]
+      const point: VcPointDrawing = renderDatas.value[index]
       point.position = position
       getMeasurementResult(point, movement)
       const type = editingPoint.value ? editorType.value : 'new'
@@ -260,9 +260,9 @@ export default function (props, ctx, cmpName: string) {
             renderDatas,
             name: drawingType,
             finished: false,
-            position: position,
+            position,
             windowPoistion: movement,
-            type: type
+            type
           },
           viewer
         )
@@ -270,7 +270,7 @@ export default function (props, ctx, cmpName: string) {
     }
   }
 
-  const getMeasurementResult = (point: PointDrawing, movement?) => {
+  const getMeasurementResult = (point: VcPointDrawing, movement?) => {
     const { viewer } = $services
     const scene = viewer.scene
     const { defined, defaultValue, Math: CesiumMath, SceneMode } = Cesium
@@ -398,6 +398,10 @@ export default function (props, ctx, cmpName: string) {
     } else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
+    } else {
+      const index = mouseoverPoint.value._vcPolylineIndx
+      const polyline = renderDatas.value[index]
+      props.editorOpts?.[e]?.callback?.(index, polyline)
     }
 
     emit(
@@ -417,7 +421,7 @@ export default function (props, ctx, cmpName: string) {
     stop()
   }
 
-  const getLabelText = (point: PointDrawing) => {
+  const getLabelText = (point: VcPointDrawing) => {
     const { viewer } = $services
     const scene = viewer.scene
     const positionCartographic = (scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid).cartesianToCartographic(point.position, {} as any)
@@ -455,7 +459,7 @@ export default function (props, ctx, cmpName: string) {
 
   if (props.preRenderDatas && props.preRenderDatas.length) {
     props.preRenderDatas.forEach(preRenderData => {
-      const pointDrawing: PointDrawing = {
+      const pointDrawing: VcPointDrawing = {
         drawStatus: DrawStatus.AfterDraw,
         show: true,
         position: makeCartesian3(preRenderData) as Cesium.Cartesian3,
