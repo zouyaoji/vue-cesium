@@ -16,19 +16,19 @@ Valid geometries are CircleGeometry, CorridorGeometry, EllipseGeometry, PolygonG
 
 Basic usage of VcPrimitiveGround component.
 
-:::demo Use the `vc-primitive-classification`, `vc-instance-geometry` and `vc-geometry-rectangle` tag to add a rectangle to the viewer.
+:::demo Use the `vc-primitive-classification`, `vc-geometry-instance` and `vc-geometry-rectangle` tag to add a rectangle to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady" v-model:camera="camera">
     <vc-primitive-ground ref="primitive" @click="onClicked" :appearance="appearance" :asynchronous="false" interleave>
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-rectangle :rectangle="[102.5, 29.5, 106.5, 33.5]"></vc-geometry-rectangle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive-ground>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -148,7 +148,7 @@ Basic usage of VcPrimitiveGround component.
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
 | ---- | ----------- | ------- |
-| default | This is where vc-instance-geometry tag content goes. | vc-instance-geometry |
+| default | This is where vc-geometry-instance tag content goes. | vc-geometry-instance |
 
 ### Reference
 

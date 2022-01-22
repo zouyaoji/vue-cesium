@@ -2,7 +2,7 @@
 
 Loading a rectangle geometry. It is equivalent to initializing a `Cesium.RectangleGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryRectangle component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-rectangle ref="geometryRef" :rectangle="rectangle" :vertexFormat="vertexFormat"></vc-geometry-rectangle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearanceOutline" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-rectangle-outline ref="geometryOutlineRef" :rectangle="rectangle"></vc-geometry-rectangle-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -137,7 +137,7 @@ Basic usage of VcGeometryRectangle component.
 
 Loading a rectangle geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryRectangleOutline Props
 

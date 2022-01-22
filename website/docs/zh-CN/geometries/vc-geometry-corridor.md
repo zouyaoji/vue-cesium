@@ -2,7 +2,7 @@
 
 加载廊道几何图形，相当于初始化一个 `Cesium.CorridorGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,14 +14,14 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-corridor ref="geometryRef" :positions="positions" :width="250000"></vc-geometry-corridor>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-corridor-outline ref="geometryOutlineRef" :positions="positions" :width="250000"></vc-geometry-corridor-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -140,7 +140,7 @@
 
 加载廊道边框，相当于初始化一个 `Cesium.CorridorOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryCorridorOutline 属性
 

@@ -2,7 +2,7 @@
 
 Loading a plane geometry. It is equivalent to initializing a `Cesium.PlaneGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryPlane component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-plane ref="geometryRef" :vertexFormat="vertexFormat"></vc-geometry-plane>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearanceOutline" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-plane-outline ref="geometryOutlineRef"></vc-geometry-plane-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -144,13 +144,12 @@ Basic usage of VcGeometryPlane component.
 
 Loading a plane geometry outline. It is equivalent to initializing a `Cesium.PlaneOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryPlaneOutline Props
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-
 
 ### VcGeometryPlaneOutline Events
 

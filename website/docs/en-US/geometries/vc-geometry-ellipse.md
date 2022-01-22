@@ -2,7 +2,7 @@
 
 Loading an ellipse geometry. It is equivalent to initializing a `Cesium.EllipseGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of VcGeometryEllipse component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-ellipse
           ref="geometryRef"
           :center="{ lng: 102, lat: 38 }"
@@ -22,10 +22,10 @@ Basic usage of VcGeometryEllipse component.
           :semiMajorAxis="300000.0"
           :height="50000"
         ></vc-geometry-ellipse>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-ellipse-outline
           ref="geometryOutlineRef"
           :center="{ lng: 102, lat: 38 }"
@@ -33,7 +33,7 @@ Basic usage of VcGeometryEllipse component.
           :semiMajorAxis="300000.0"
           :height="50000"
         ></vc-geometry-ellipse-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -148,7 +148,7 @@ Basic usage of VcGeometryEllipse component.
 
 Loading an ellipse geometry outline. It is equivalent to initializing a `Cesium.EllipseOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryEllipseOutline Props
 

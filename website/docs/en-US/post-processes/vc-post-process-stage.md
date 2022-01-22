@@ -13,7 +13,7 @@ Basic usage of VcPostProcessStage component.
   <vc-viewer>
     <vc-post-process-stage ref="stage" :fragmentShader="fragmentShader"></vc-post-process-stage>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

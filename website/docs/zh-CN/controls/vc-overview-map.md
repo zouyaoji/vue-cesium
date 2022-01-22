@@ -20,10 +20,10 @@
     <!-- 鹰眼图示例 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sortOrder="10">
-        <vc-provider-imagery-urltemplate
+        <vc-imagery-provider-urltemplate
           :projectionTransforms="projectionTransforms"
           url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
-        ></vc-provider-imagery-urltemplate>
+        ></vc-imagery-provider-urltemplate>
       </vc-layer-imagery>
       <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
       <vc-entity>
@@ -33,7 +33,7 @@
     <!-- 鹰眼图示例 2 -->
     <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewerOpts="{ showCredit: true, sceneMode: 3 }">
       <vc-layer-imagery>
-        <vc-provider-imagery-osm></vc-provider-imagery-osm>
+        <vc-imagery-provider-osm></vc-imagery-provider-osm>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -41,7 +41,7 @@
       <!-- 鹰眼图示例 3 -->
       <vc-overview-map position="top-left" :offset="[5, 5]">
         <vc-layer-imagery>
-          <vc-provider-imagery-osm></vc-provider-imagery-osm>
+          <vc-imagery-provider-osm></vc-imagery-provider-osm>
         </vc-layer-imagery>
         <vc-entity>
           <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -50,7 +50,7 @@
     </vc-overview-map>
     <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-entity
       :billboard="billboard"

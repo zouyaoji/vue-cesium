@@ -2,7 +2,7 @@
 
 加载多边形，相当于初始化一个 `Cesium.PolygonGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。 加载海量面图元时可以考虑用 `vc-collection-primitive` 组件和其 `polygons` 属性来渲染。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。 加载海量面图元时可以考虑用 `vc-collection-primitive` 组件和其 `polygons` 属性来渲染。
 
 ### 基础用法
 
@@ -14,7 +14,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-polygon
           ref="geometryRef"
           :polygonHierarchy="polygonHierarchy"
@@ -22,17 +22,17 @@
           :height="100000"
           :extrudedHeight="30"
         ></vc-geometry-polygon>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearanceOutline" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-polygon-outline
           ref="geometryOutlineRef"
           :polygonHierarchy="polygonHierarchy"
           :height="100000"
           :extrudedHeight="30"
         ></vc-geometry-polygon-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -170,7 +170,7 @@
 
 加载多边形几何图形边框，相当于初始化一个 `Cesium.PolygonOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryPolygonOutline 属性
 

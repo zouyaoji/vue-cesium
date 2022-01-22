@@ -2,7 +2,7 @@
 
 Loading a coplanar polygon geometry. It is equivalent to initializing a `Cesium.CoplanarPolygonGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryPolygonCoplanar component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polygon-coplanar ref="geometryRef" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon-coplanar>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-polygon-coplanar-outline ref="geometryOutlineRef" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon-coplanar-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -137,7 +137,7 @@ Basic usage of VcGeometryPolygonCoplanar component.
 
 Loading a coplanar polygon geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryPolygonCoplanarOutline Props
 

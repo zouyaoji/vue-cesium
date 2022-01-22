@@ -2,7 +2,7 @@
 
 加载圆柱(锥)体，相当于初始化一个 `Cesium.CylinderGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,7 +14,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-cylinder
           ref="geometryRef"
           :length="400000.0"
@@ -23,10 +23,10 @@
           :slices="128"
           :vertexFormat="vertexFormat"
         ></vc-geometry-cylinder>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-cylinder-outline
           ref="geometryOutlineRef"
           :length="400000.0"
@@ -35,7 +35,7 @@
           :slices="128"
           :numberOfVerticalLines="16"
         ></vc-geometry-cylinder-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -155,7 +155,7 @@
 
 加载圆柱(锥)体边框，相当于初始化一个 `Cesium.CylinderOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryCylinderOutline 属性
 

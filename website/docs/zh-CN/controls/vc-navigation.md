@@ -37,10 +37,10 @@
     >
     </vc-navigation>
     <vc-layer-imagery :sortOrder="20">
-      <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -473,7 +473,7 @@ otherOpts: {
 | level | Number | `6` | `optional` 指定定位成功后基于地形自动识别高度时的采样层级。 ||
 | duration | Number | `3` | `optional` 指定定位成功后飞行时间，单位秒。 ||
 | customAPI | Function | | `optional` 指定自定义定位 API。 ||
-| description | Function | `0.01` | `optional` 指定自定义定位成功后该点的描述文字。 ||
+| description | Function | | `optional` 指定自定义定位成功后该点的描述文字。 ||
 | icon | String | `vc-icons-geolocation` | `optional` 指定定位按钮图标。 ||
 | size | String | `'24px'` | `optional` 指定定位按钮尺寸。 ||
 | color | String | `'#3f4854'` | `optional` 指定定位按钮颜色。 ||

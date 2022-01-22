@@ -1,33 +1,33 @@
-## VcGeometryPolylineGround
+## VcGeometryGroundPolyline
 
 Loading a polyline geometry on terrain or 3D Tiles. It is equivalent to initializing a `Cesium.GroundPolylineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry`, and put `vc-instance-geometry` in `vc-primitive-polyline-ground` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance`, and put `vc-geometry-instance` in `vc-primitive-ground-polyline` to load normally.
 
 ### Basic usage
 
-The basic usage of the VcGeometryPolylineGround component.
+The basic usage of the VcGeometryGroundPolyline component.
 
 :::demo Use the `vc-geometry-polyline-ground` tag to add a ground polyline to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-primitive-polyline-ground :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
-      <vc-instance-geometry>
-        <vc-geometry-polyline-ground
+    <vc-primitive-ground-polyline :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
+      <vc-geometry-instance>
+        <vc-geometry-ground-polyline
           ref="geometryRef"
           :positions="[
             { lng: 100.1340164450331, lat: 31.05494287836128 },
             { lng: 108.08821010582645, lat: 31.05494287836128 }
           ]"
           :width="2"
-        ></vc-geometry-polyline-ground>
-      </vc-instance-geometry>
-    </vc-primitive-polyline-ground>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+        ></vc-geometry-ground-polyline>
+      </vc-geometry-instance>
+    </vc-primitive-ground-polyline>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

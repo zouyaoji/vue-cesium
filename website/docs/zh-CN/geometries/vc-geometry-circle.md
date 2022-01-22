@@ -2,7 +2,7 @@
 
 加载圆几何图形，相当于初始化一个 `Cesium.CircleGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,14 +14,14 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-circle ref="geometryRef" :center="[110, 38]" :radius="250000"></vc-geometry-circle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-circle-outline ref="geometryOutlineRef" :center="[110, 38]" :radius="250000"></vc-geometry-circle-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -136,7 +136,7 @@
 
 加载圆几何图形边框，相当于初始化一个 `Cesium.CircleOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryCicleOutline 属性
 

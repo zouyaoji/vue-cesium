@@ -2,7 +2,7 @@
 
 Loading a wall geometry. It is equivalent to initializing a `Cesium.WallGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryWall component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-wall ref="geometryRef" :positions="positions" :vertexFormat="vertexFormat"></vc-geometry-wall>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-wall-outline ref="geometryOutlineRef" :positions="positions"></vc-geometry-wall-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -143,7 +143,7 @@ Basic usage of VcGeometryWall component.
 
 Loading a wall geometry outline. It is equivalent to initializing a `Cesium.WallOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryWallOutline Props
 

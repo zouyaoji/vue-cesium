@@ -2,7 +2,7 @@
 
 Loading a circle geometry. It is equivalent to initializing a `Cesium.CircleGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryCircle component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-circle ref="geometryRef" :center="[110, 38]" :radius="250000"></vc-geometry-circle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-circle-outline ref="geometryOutlineRef" :center="[110, 38]" :radius="250000"></vc-geometry-circle-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -136,7 +136,7 @@ Basic usage of VcGeometryCircle component.
 
 Loading the circle geometry outline. It is equivalent to initializing a `Cesium.CircleOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryCicleOutline Props
 

@@ -32,9 +32,9 @@ Basic usage of VcAnalysisFlood component.
     >
     </vc-analysis-flood>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>

@@ -12,17 +12,17 @@
 
 - `logo` -> `showCredit`
 
-### vc-provider-imagery-arcgis-mapserver
+### vc-imagery-provider-arcgis-mapserver
 
-- Renamed to `vc-provider-imagery-arcgis`
+- Renamed to `vc-imagery-provider-arcgis`
 
-### vc-provider-terrain-arcgis-tiled-elevation
+### vc-terrain-provider-arcgis-tiled-elevation
 
-- Renamed to `vc-provider-terrain-arcgis`
+- Renamed to `vc-terrain-provider-arcgis`
 
 ### vc-provider-imagery-style-mapbox
 
-- Renamed to `vc-provider-imagery-mapbox`
+- Renamed to `vc-imagery-provider-mapbox`
 
 ### vc-provider-imagery-tile-mapservice
 
@@ -30,7 +30,7 @@
 
 ### vc-provider-imagery-openstreetmap
 
-- Renamed to `vc-provider-imagery-osm`
+- Renamed to `vc-imagery-provider-osm`
 
 ### vc-provider-imagery-googleearth-enterprise
 
@@ -38,9 +38,9 @@
 
 ### vc-provider-imagery-tile-single
 
-- Renamed to `vc-provider-imagery-singletile`
+- Renamed to `vc-imagery-provider-singletile`
 
-### vc-primitive-polyline-ground
+### vc-primitive-ground-polyline
 
 - Renamed to `vc-primitive-ground-polyline`
 

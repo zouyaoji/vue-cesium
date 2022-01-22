@@ -21,12 +21,12 @@ GeoJson 数据源组件的基础用法。
       :entities="entities"
     ></vc-datasource-geojson>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu
+      <vc-imagery-provider-tianditu
         mapStyle="img_c"
         :maximumLevel="17"
         token="436ce7e50d27eede2f2929307e6b33c0"
         ref="provider"
-      ></vc-provider-imagery-tianditu>
+      ></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -136,8 +136,8 @@ GeoJson 数据源组件的基础用法。
 
 ### 插槽
 
-| 插槽名  | 描述                                    | 子组件    |
-| ------- | --------------------------------------- | --------- |
+| 插槽名  | 描述                                     | 子组件    |
+| ------- | ---------------------------------------- | --------- |
 | default | 用于 vue-datasource-geojson 挂载子组件。 | vc-entity |
 
 ### 参考

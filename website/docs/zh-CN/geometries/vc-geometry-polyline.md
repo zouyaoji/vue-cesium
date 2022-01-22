@@ -2,7 +2,7 @@
 
 加载多段线几何图形，相当于初始化一个 `Cesium.PolylineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,7 +14,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-polyline
           ref="geometryRef"
           :positions="positions1"
@@ -22,8 +22,8 @@
           :width="4"
           :vertexFormat="vertexFormat"
         ></vc-geometry-polyline>
-      </vc-instance-geometry>
-      <vc-instance-geometry>
+      </vc-geometry-instance>
+      <vc-geometry-instance>
         <vc-geometry-polyline
           ref="geometryRef"
           :positions="positions2"
@@ -32,12 +32,12 @@
           :vertexFormat="vertexFormat"
           colorsPerVertex
         ></vc-geometry-polyline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>

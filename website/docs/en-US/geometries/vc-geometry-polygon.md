@@ -2,7 +2,7 @@
 
 Loading a polygon geometry. It is equivalent to initializing a `Cesium.PolygonGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally. When loading massive polygon primitives, consider using the `vc-collection-primitive` component and its `polygons` property for rendering.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally. When loading massive polygon primitives, consider using the `vc-collection-primitive` component and its `polygons` property for rendering.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of VcGeometryPolygon component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-polygon
           ref="geometryRef"
           :polygonHierarchy="polygonHierarchy"
@@ -22,17 +22,17 @@ Basic usage of VcGeometryPolygon component.
           :height="100000"
           :extrudedHeight="30"
         ></vc-geometry-polygon>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearanceOutline" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-polygon-outline
           ref="geometryOutlineRef"
           :polygonHierarchy="polygonHierarchy"
           :height="100000"
           :extrudedHeight="30"
         ></vc-geometry-polygon-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -171,7 +171,7 @@ Basic usage of VcGeometryPolygon component.
 
 Loading a polygon geometry outline. It is equivalent to initializing a `Cesium.PolygonOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryPolygonOutline Props
 

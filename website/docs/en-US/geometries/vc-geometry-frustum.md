@@ -2,7 +2,7 @@
 
 Loading a frustum geometry. It is equivalent to initializing a `Cesium.FrustumGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of the VcGeometryFrustum component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-frustum
           ref="geometryRef"
           :frustum="frustum"
@@ -22,17 +22,17 @@ Basic usage of the VcGeometryFrustum component.
           :orientation="{ x: 0, y: 0, z: 0, w: 1}"
           :vertexFormat="vertexFormat"
         ></vc-geometry-frustum>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-frustum-outline
           ref="geometryOutlineRef"
           :frustum="frustum"
           :origin="{ lng: 105, lat: 35 }"
           :orientation="{ x: 0, y: 0, z: 0, w: 1}"
         ></vc-geometry-frustum-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -151,7 +151,7 @@ Basic usage of the VcGeometryFrustum component.
 
 Loading a frustum geometry outline. It is equivalent to initializing a `Cesium.FrustumOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryFrustumOutline Props
 

@@ -2,7 +2,7 @@
 
 加载立方盒几何体，相当于初始化一个 `Cesium.BoxGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,14 +14,14 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-box ref="geometryRef" :dimensions="dimensions"></vc-geometry-box>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-box-outline ref="geometryOutlineRef" :dimensions="dimensions"></vc-geometry-box-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -134,7 +134,7 @@
 
 加载立方盒几何体边框，相当于初始化一个 `Cesium.BoxOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryBoxOutline 属性
 

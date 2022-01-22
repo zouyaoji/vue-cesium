@@ -1,6 +1,6 @@
 ## VcDrawings
 
-Load the drawing tool components, which currently include point, polyline, and polygon drawing tools, and others will be added later.
+Load the drawing tool components. Supports drawing points, polylines, polygons, rectangles, regular polygons, and circles.
 
 **Note:** Style files need to be imported: `import 'vue-cesium/dist/index.css';`
 
@@ -74,16 +74,16 @@ Basic usage of drawing components.
       @readyPromise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
     <el-button type="danger" round @click="load">Load</el-button>
     <el-button type="danger" round @click="reload">Reload</el-button>
     <el-checkbox v-model="editable">editable</el-checkbox>
-    <el-checkbox v-model="addTerrain">地形</el-checkbox>
+    <el-checkbox v-model="addTerrain">terrain</el-checkbox>
     <el-checkbox v-model="clampToGround">clampToGround</el-checkbox>
   </el-row>
 </el-row>
@@ -242,10 +242,10 @@ Basic usage of drawing components.
 | editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
 | clampToGround | Boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
 | mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the drawing component. |
-| pinActionOpts | Object | `` | `optional` Specify the style options of the pin drawing action button.|
+| pinActionOpts | Object | | `optional` Specify the style options of the pin drawing action button.|
 | pinDrawingOpts | Object | | `optional` Specify pin drawing parameters.|
-| pointActionOpts | Object | `` | `optional` Specify the style options of the poingt drawing action button.|
-| pointDrawingOpts | Object | | `optional` Specify poingt drawing parameters.|
+| pointActionOpts | Object | | `optional` Specify the style options of the poingt drawing action button.|
+| pointDrawingOpts | Object | | `optional` Specify point drawing parameters.|
 | polylineActionOpts | Object | | `optional` Specify the style options of the polyline drawing action button.|
 | polylineDrawingOpts | Object | | `optional` Specify the polyline drawing parameters.|
 | polygonActionOpts | Object | | `optional` Specify the style options of the polygon drawing action button.|

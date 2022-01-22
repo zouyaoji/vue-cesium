@@ -36,7 +36,7 @@ Basic usage of VcOverlayHtml component.
       </div>
     </vc-overlay-html>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

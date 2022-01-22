@@ -1,8 +1,8 @@
-## VcGeometryPolylineGround
+## VcGeometryGroundPolyline
 
 加载贴地(3DTiles)线几何图形，相当于初始化一个 `Cesium.GroundPolylineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件，并且将 `vc-instance-geometry` 放到 `vc-primitive-polyline-ground` 才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件，并且将 `vc-geometry-instance` 放到 `vc-primitive-ground-polyline` 才能正常加载。
 
 ### 基础用法
 
@@ -13,21 +13,21 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-primitive-polyline-ground :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
-      <vc-instance-geometry>
-        <vc-geometry-polyline-ground
+    <vc-primitive-ground-polyline :appearance="appearance" :geometryInstances="geometryInstances" @click="onClicked">
+      <vc-geometry-instance>
+        <vc-geometry-ground-polyline
           ref="geometryRef"
           :positions="[
             { lng: 100.1340164450331, lat: 31.05494287836128 },
             { lng: 108.08821010582645, lat: 31.05494287836128 }
           ]"
           :width="2"
-        ></vc-geometry-polyline-ground>
-      </vc-instance-geometry>
-    </vc-primitive-polyline-ground>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+        ></vc-geometry-ground-polyline>
+      </vc-geometry-instance>
+    </vc-primitive-ground-polyline>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

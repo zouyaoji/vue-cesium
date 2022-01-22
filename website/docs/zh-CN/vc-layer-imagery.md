@@ -2,7 +2,7 @@
 
 加载影像图层，相当于初始化一个 `Cesium.ImageryLayer` 实例。
 
-需要作为 `vc-viewer` 的子组件才能正常加载。可以直接指定 `vc-layer-imagery` 的 `imageryProvider` 属性，也用 VueCesium 提供的 `vc-provider-xxx` 系列组件作为 `vc-layer-imagery` 子组件挂载各个 `imageryProvider`，但一个影像图层只能挂载一个 `provider`。
+需要作为 `vc-viewer` 的子组件才能正常加载。可以直接指定 `vc-layer-imagery` 的 `imageryProvider` 属性，也用 VueCesium 提供的 `vc-imagery-provider-xxx` 系列组件作为 `vc-layer-imagery` 子组件挂载各个 `imageryProvider`，但一个影像图层只能挂载一个 `provider`。
 
 ## 基础用法
 
@@ -155,7 +155,7 @@
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ---- | ----------- | ------- |
-| default | 用于挂载 vc-layer-imagery 子组件。 | vc-provider-imagery-arcgis/vc-provider-imagery-baidumap/vc-provider-imagery-bingmaps/vc-provider-imagery-grid/vc-provider-imagery-ion/vc-provider-imagery-mapbox/vc-provider-imagery-osm/vc-provider-imagery-supermap/vc-provider-imagery-tianditu/vc-provider-imagery-tile-coordinates/vc-provider-imagery-tms/vc-provider-imagery-singletile/vc-provider-imagery-tiledcache/vc-provider-imagery-urltemplate/vc-provider-imagery-wms/vc-provider-imagery-wmts |
+| default | 用于挂载 vc-layer-imagery 子组件。 | vc-imagery-provider-arcgis/vc-imagery-provider-baidu/vc-imagery-provider-bing/vc-imagery-provider-grid/vc-imagery-provider-ion/vc-imagery-provider-mapbox/vc-imagery-provider-osm/vc-imagery-provider-supermap/vc-imagery-provider-tianditu/vc-imagery-provider-tile-coordinates/vc-imagery-provider-tms/vc-imagery-provider-singletile/vc-imagery-provider-tiledcache/vc-imagery-provider-urltemplate/vc-imagery-provider-wms/vc-imagery-provider-wmts |
 
 ## 参考
 

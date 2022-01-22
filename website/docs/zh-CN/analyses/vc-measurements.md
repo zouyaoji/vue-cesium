@@ -92,9 +92,9 @@ ctrl + 右键取消绘制。
       @readyPromise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>

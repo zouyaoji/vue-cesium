@@ -27,7 +27,7 @@
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

@@ -27,7 +27,7 @@ Basic usage of the selector component.
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

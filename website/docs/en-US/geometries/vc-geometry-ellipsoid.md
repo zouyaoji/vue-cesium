@@ -2,7 +2,7 @@
 
 Loading a ellipsoid geometry. It is equivalent to initializing a `Cesium.EllipsoidGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,22 +14,22 @@ The basic usage of VcGeometryEllipsoid component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-ellipsoid
           ref="geometryRef"
           :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }"
           :vertexFormat="vertexFormat"
         ></vc-geometry-ellipsoid>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-ellipsoid-outline
           ref="geometryOutlineRef"
           :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }"
           :vertexFormat="vertexFormat"
         ></vc-geometry-ellipsoid-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -153,7 +153,7 @@ The basic usage of VcGeometryEllipsoid component.
 
 Loading a ellipsoid geometry outline. It is equivalent to initializing a `Cesium.EllipsoidOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryEllipsoidOutline Props
 

@@ -2,7 +2,7 @@
 
 Loading a polyline geometry modeled as a line strip. It is equivalent to initializing a `Cesium.PolylineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of VcGeometryPolyline component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-polyline
           ref="geometryRef"
           :positions="positions1"
@@ -22,8 +22,8 @@ Basic usage of VcGeometryPolyline component.
           :width="4"
           :vertexFormat="vertexFormat"
         ></vc-geometry-polyline>
-      </vc-instance-geometry>
-      <vc-instance-geometry>
+      </vc-geometry-instance>
+      <vc-geometry-instance>
         <vc-geometry-polyline
           ref="geometryRef"
           :positions="positions2"
@@ -32,12 +32,12 @@ Basic usage of VcGeometryPolyline component.
           :vertexFormat="vertexFormat"
           colorsPerVertex
         ></vc-geometry-polyline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>

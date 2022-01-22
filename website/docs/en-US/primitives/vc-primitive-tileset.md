@@ -99,6 +99,8 @@ Basic usage of VcPrimitiveTileset component.
 | sphericalHarmonicCoefficients | Array || `optional` The third order spherical harmonic coefficients used for the diffuse color of image-based lighting. |
 | specularEnvironmentMaps | String | | `optional` A URL to a KTX file that contains a cube map of the specular lighting and the convoluted specular mipmaps. |
 | backFaceCulling | Boolean |`false`| `optional`Whether to cull back-facing geometry. When true, back face culling is determined by the glTF material's doubleSided property; when false, back face culling is disabled.|
+| showOutline | Boolean |`true`| `optional`Whether to display the outline for models using the CESIUM_primitive_outline extension. When true, outlines are displayed. When false, outlines are not displayed.|
+| vectorKeepDecodedPositions | Boolean |`false`| `optional`Whether vector tiles should keep decoded positions in memory. This is used with Cesium3DTileFeature.getPolylinePositions.|
 | vectorClassificationOnly | Boolean |`false`| `optional` Indicates that only the tileset's vector tiles should be used for classification. |
 | debugHeatmapTilePropertyName | String || `optional` The tile variable to colorize as a heatmap. All rendered tiles will be colorized relative to each other's specified variable value.|
 | debugFreezeFrame | Boolean | false | `optional` For debugging only. Determines if only the tiles from last frame should be used for rendering. |

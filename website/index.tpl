@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <link rel='mask-icon' href="https://raw.githubusercontent.com/ElemeFE/element/dev/examples/assets/images/vue-cesium-logo-small.svg" color="#409EFF">
+    <link rel='mask-icon' href="https://raw.githubusercontent.com/zouyaoji/vue-cesium/dev/website/assets/images/vue-cesium-logo-small.svg" color="#409EFF">
     <title>VueCesium - Vue 2.x & Vue 3.x components for CesiumJS.</title>
     <meta name="description" content="VueCesium, a Vue 2.x & Vue 3.x based component library of CesiumJS for GISer" />
     <!-- 引入 fontawesome 图标资源-->

@@ -21,7 +21,7 @@ Basic usage of VcDatasourceGeojson component.
       :entities="entities"
     ></vc-datasource-geojson>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

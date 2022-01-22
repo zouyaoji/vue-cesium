@@ -16,7 +16,7 @@
     <!-- custom -->
     <vc-ajax-bar position="bottom" color="#21BA45" size="5px" positioning="fixed"></vc-ajax-bar>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis ref="provider"></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis ref="provider"></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
 </el-row>

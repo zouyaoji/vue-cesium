@@ -2,7 +2,7 @@
 
 加载共面多边形，相当于初始化一个 `Cesium.CoplanarPolygonGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### 基础用法
 
@@ -14,14 +14,14 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polygon-coplanar ref="geometryRef" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon-coplanar>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-polygon-coplanar-outline ref="geometryOutlineRef" :polygonHierarchy="polygonHierarchy"></vc-geometry-polygon-coplanar-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -137,7 +137,7 @@
 
 加载共面多边形几何图形边框，相当于初始化一个 `Cesium.CoplanarPolygonOutlineGeometry` 实例。
 
-**注意**：需要作为 `vc-instance-geometry` 的子组件才能正常加载。
+**注意**：需要作为 `vc-geometry-instance` 的子组件才能正常加载。
 
 ### VcGeometryPolygonCoplanarOutline 属性
 

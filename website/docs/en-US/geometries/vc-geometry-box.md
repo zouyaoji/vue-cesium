@@ -2,7 +2,7 @@
 
 Loading a box geometry. It is equivalent to initializing a `Cesium.BoxGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,14 +14,14 @@ Basic usage of VcGeometryBox component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-box ref="geometryRef" :dimensions="dimensions"></vc-geometry-box>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-box-outline ref="geometryOutlineRef" :dimensions="dimensions"></vc-geometry-box-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -134,7 +134,7 @@ Basic usage of VcGeometryBox component.
 
 Loading a box geometry outline. It is equivalent to initializing a `Cesium.BoxOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryBoxOutline Props
 

@@ -2,7 +2,7 @@
 
 Loading an image layer is equivalent to initializing a `Cesium.ImageryLayer` instance.
 
-It needs to be a child component of `vc-viewer` to load normally. You can directly specify the `imageryProvider` property of `vc-layer-imagery`, and use the `vc-provider-xxx` series components provided by VueCesium as the `vc-layer-imagery` sub-components to mount each `imageryProvider`, but an image Only one `provider` can be attached to a layer.
+It needs to be a child component of `vc-viewer` to load normally. You can directly specify the `imageryProvider` property of `vc-layer-imagery`, and use the `vc-imagery-provider-xxx` series components provided by VueCesium as the `vc-layer-imagery` sub-components to mount each `imageryProvider`, but an image Only one `provider` can be attached to a layer.
 
 ## Basic usage
 
@@ -144,8 +144,8 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 
 ## Events
 
-| Name       | Parameters                         | Description                             |
-| ---------- | ---------------------------------- | --------------------------------------- |
+| Name       | Parameters                         | Description                            |
+| ---------- | ---------------------------------- | -------------------------------------- |
 | beforeLoad | Vue Instance                       | Triggers before the object is loaded.  |
 | ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the object is loaded.    |
 | destroyed  | Vue Instance                       | Triggers when the object is destroyed. |
@@ -155,7 +155,7 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
 | ---- | ----------- | ------- |
-| default | This is where vc-layer-imagery sub tags content goes. | vc-provider-imagery-arcgis/vc-provider-imagery-baidumap/vc-provider-imagery-bingmaps/vc-provider-imagery-grid/vc-provider-imagery-ion/vc-provider-imagery-mapbox/vc-provider-imagery-osm/vc-provider-imagery-supermap/vc-provider-imagery-tianditu/vc-provider-imagery-tile-coordinates/vc-provider-imagery-tms/vc-provider-imagery-singletile/vc-provider-imagery-tiledcache/vc-provider-imagery-urltemplate/vc-provider-imagery-wms/vc-provider-imagery-wmts |
+| default | This is where vc-layer-imagery sub tags content goes. | vc-imagery-provider-arcgis/vc-imagery-provider-baidu/vc-imagery-provider-bing/vc-imagery-provider-grid/vc-imagery-provider-ion/vc-imagery-provider-mapbox/vc-imagery-provider-osm/vc-imagery-provider-supermap/vc-imagery-provider-tianditu/vc-imagery-provider-tile-coordinates/vc-imagery-provider-tms/vc-imagery-provider-singletile/vc-imagery-provider-tiledcache/vc-imagery-provider-urltemplate/vc-imagery-provider-wms/vc-imagery-provider-wmts |
 
 ## Reference
 

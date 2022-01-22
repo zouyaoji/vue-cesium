@@ -247,19 +247,19 @@
 
 ### ref 方法
 
-| 方法名          | 返回                            | 描述                                                   |
-| --------------- | ------------------------------- | ------------------------------------------------------ |
-| load            | {Cesium, viewer, vm} \| `false` | 执行加载操作。成功返回 `ReadyObj`, 失败返回 `false。`  |
-| unload          | Boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。      |
-| reload          | {Cesium, viewer, vm} \| `false` | 执行重载操作。 成功返回 `ReadyObj`, 失败返回 `false。` |
-| getCesiumObject | Object                          | 获取该组件加载的 Cesium 对象。                         |
+| 方法名          | 返回                            | 描述                                                        |
+| --------------- | ------------------------------- | ----------------------------------------------------------- |
+| load            | {Cesium, viewer, vm} \| `false` | 执行加载操作。成功返回 `VcReadyObject`, 失败返回 `false。`  |
+| unload          | Boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。           |
+| reload          | {Cesium, viewer, vm} \| `false` | 执行重载操作。 成功返回 `VcReadyObject`, 失败返回 `false。` |
+| getCesiumObject | Object                          | 获取该组件加载的 Cesium 对象。                              |
 
 ### 插槽
 
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ----- | -----| ----- |
-| default | vue-cesium 子组件均要放在vc-viewer下。 | vc-navigation/vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend/vc-navigation-sm/vc-compass-sm/vc-zoom-control-sm/vc-layer-imagery/vc-entity/vc-provider-terrain-cesium/vc-provider-terrain-arcgis/vc-provider-terrain-tianditu/vc-datasource-custom/vc-datasource-czml/vc-datasource-geojson/vc-datasource-kml/vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-polyline-ground/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-overlay-html/vc-overlay-heatmap/vc-overlay-wind/vc-overlay-echarts/vc-polygon |
+| default | vue-cesium 子组件均要放在vc-viewer下。 | vc-navigation/vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend/vc-navigation-sm/vc-compass-sm/vc-zoom-control-sm/vc-layer-imagery/vc-entity/vc-terrain-provider-cesium/vc-terrain-provider-arcgis/vc-terrain-provider-tianditu/vc-datasource-custom/vc-datasource-czml/vc-datasource-geojson/vc-datasource-kml/vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-ground-polyline/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-overlay-html/vc-overlay-heatmap/vc-overlay-wind/vc-overlay-echarts/vc-polygon |
 
 ### 参考
 

@@ -14,13 +14,13 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady" v-model:camera="camera">
     <vc-primitive-ground ref="primitive" @click="onClicked" :appearance="appearance" :asynchronous="false" interleave>
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-rectangle :rectangle="[102.5, 29.5, 106.5, 33.5]"></vc-geometry-rectangle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive-ground>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -140,7 +140,7 @@
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ---- | ----------- | ------- |
-| default | 用于挂载 vc-instance-geometry 组件。 | vc-instance-geometry |
+| default | 用于挂载 vc-geometry-instance 组件。 | vc-geometry-instance |
 
 ### 参考
 

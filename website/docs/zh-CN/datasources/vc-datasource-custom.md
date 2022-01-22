@@ -10,8 +10,12 @@
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer @ready="onViewerReady">
-    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :show="show">
+  <vc-viewer sceneModePicker @ready="onViewerReady">
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
+    <vc-layer-imagery :sortOrder="10">
+      <vc-imagery-provider-urltemplate url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"></vc-imagery-provider-urltemplate>
+    </vc-layer-imagery>
+    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :loadingEvent="morphComplete" :show="show">
       <vc-entity
         ref="entity1"
         @click="onClicked"
@@ -224,7 +228,9 @@
       }
       // life cycle
       onMounted(() => {})
-
+      const morphComplete = (a, b, c, d) => {
+        console.log(a, b, c, d)
+      }
       return {
         unload,
         reload,
@@ -237,7 +243,8 @@
         datasourceRef,
         datasources,
         entities,
-        clusterSch
+        clusterSch,
+        morphComplete
       }
     }
   }

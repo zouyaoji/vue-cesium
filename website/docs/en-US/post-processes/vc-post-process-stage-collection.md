@@ -18,7 +18,7 @@ Basic usage of VcPostProcessStageCollection component.
       <vc-post-process-stage-scan type="circle" :options="options2"></vc-post-process-stage-scan>
     </vc-post-process-stage-collection>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

@@ -14,7 +14,7 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady" v-model:camera="camera">
     <vc-primitive-classification ref="primitive" @click="onClicked" :asynchronous="false">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polygon
           :polygonHierarchy="[
             { lng: 102.1, lat: 29.5 },
@@ -24,11 +24,11 @@
           ]"
           :extrudedHeight="6000"
         ></vc-geometry-polygon>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive-classification>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -110,7 +110,7 @@
 | mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
 | mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
 | click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。   |
+| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
 | dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
 | mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
 | mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
@@ -121,7 +121,7 @@
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ---- | ----------- | ------- |
-| default | 用于挂载 vc-instance-geometry 组件。 | vc-instance-geometry |
+| default | 用于挂载 vc-geometry-instance 组件。 | vc-geometry-instance |
 
 ### 参考
 

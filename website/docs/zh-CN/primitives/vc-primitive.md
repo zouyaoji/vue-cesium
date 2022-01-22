@@ -12,9 +12,9 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive ref="primitive" @click="onClicked" :appearance="appearance" :geometryInstances="geometryInstances">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-circle ref="geometryRef" :center="[103, 32]" :radius="250000"></vc-geometry-circle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -108,7 +108,7 @@
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ---- | ----------- | ------- |
-| default | 用于挂载 vc-instance-geometry 组件。 | vc-instance-geometry |
+| default | 用于挂载 vc-geometry-instance 组件。 | vc-geometry-instance |
 
 ### 参考
 

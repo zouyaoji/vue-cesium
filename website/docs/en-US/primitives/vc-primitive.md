@@ -6,15 +6,15 @@ Loading a geometry of primitive, the geometry can be from a single `GeometryInst
 
 Basic usage of VcPrimitive component.
 
-:::demo Use the `vc-primitive`, `vc-instance-geometry` and `vc-geometry-circle` tag to add a rectangle and circle to the viewer.
+:::demo Use the `vc-primitive`, `vc-geometry-instance` and `vc-geometry-circle` tag to add a rectangle and circle to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive ref="primitive" @click="onClicked" :appearance="appearance" :geometryInstances="geometryInstances">
-      <vc-instance-geometry>
+      <vc-geometry-instance>
         <vc-geometry-circle ref="geometryRef" :center="[103, 32]" :radius="250000"></vc-geometry-circle>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -108,7 +108,7 @@ Basic usage of VcPrimitive component.
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
 | ---- | ----------- | ------- |
-| default | This is where vc-instance-geometry tag content goes. | vc-instance-geometry |
+| default | This is where vc-geometry-instance tag content goes. | vc-geometry-instance |
 
 ### Reference
 

@@ -21,7 +21,7 @@ app.mount('#app')
 
 或者在 `vc-viewer` 组件上将 `cesiumPath` 地址指定为 mars3d 库的**目录**。
 
-`vc-viewer` 加载成功会返回 { Cesium, viewer, map }, 通过该 `map` 使用 [mars3d教程](http://mars3d.cn/doc)  和  [mars3d API](http://mars3d.cn/api/) 进行相关开发即可， 如下面的例子：
+`vc-viewer` 加载成功会返回 { Cesium, viewer, map }, 通过该 `map` 使用 [mars3d 教程](http://mars3d.cn/doc) 和 [mars3d API](http://mars3d.cn/api/) 进行相关开发即可， 如下面的例子：
 
 ### 基础用法
 
@@ -48,11 +48,11 @@ app.mount('#app')
     </vc-entity>
     <!-- 天地图注记 -->
     <vc-layer-imagery :sortOrder="20">
-      <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <!-- 天地图影像 -->
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -131,4 +131,4 @@ app.mount('#app')
 
 ### 参考
 
-- Mars3D平台官网： **[http://mars3d.cn](http://mars3d.cn/example)**
+- Mars3D 平台官网： **[http://mars3d.cn](http://mars3d.cn/example)**

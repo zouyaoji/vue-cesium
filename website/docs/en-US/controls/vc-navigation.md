@@ -37,7 +37,7 @@ Basic usage of VcNavigation component.
     >
     </vc-navigation>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -453,7 +453,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | level | Number | `6` | `optional` Specify the sampling level when the altitude is automatically recognized based on the terrain after the positioning is successful. |
 | duration | Number | `3` | `optional` Specify the flight time after successful positioning, in seconds. |
 | customAPI | Function | | `optional` Specify a custom API for positioning. |
-| description | Function | `0.01` | `optional` Specify the method of customizing the description text of the point after successful positioning. |
+| description | Function |  | `optional` Specify the method of customizing the description text of the point after successful positioning. |
 | icon | String | `vc-icons-geolocation` | `optional` Specify the positioning button icon. |
 | size | String | `'24px'` | `optional` Specify the positioning button size. |
 | color | String | `'#3f4854'` | `optional` Specify the positioning button color. |
@@ -488,7 +488,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | showPerformanceInfo | Boolean | `true` | `optional` Specify whether to display frame rate information in the information bar. |
 | tooltip | Object | | `optional` Specify the prompt information parameters of the information bar. |
 
-### VcMyLocation Events
+### VcStatusBar Events
 
 | Name         | Parameters                                                   | Description                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------------ |

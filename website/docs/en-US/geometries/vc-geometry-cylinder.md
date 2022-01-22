@@ -2,7 +2,7 @@
 
 Loading a cylinder geometry. It is equivalent to initializing a `Cesium.CylinderGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of VcGeometryCylinder component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributes" :modelMatrix="modelMatrix">
         <vc-geometry-cylinder
           ref="geometryRef"
           :length="400000.0"
@@ -23,10 +23,10 @@ Basic usage of VcGeometryCylinder component.
           :slices="128"
           :vertexFormat="vertexFormat"
         ></vc-geometry-cylinder>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline" :modelMatrix="modelMatrix">
+      <vc-geometry-instance :attributes="attributesOutline" :modelMatrix="modelMatrix">
         <vc-geometry-cylinder-outline
           ref="geometryOutlineRef"
           :length="400000.0"
@@ -35,7 +35,7 @@ Basic usage of VcGeometryCylinder component.
           :slices="128"
           :numberOfVerticalLines="16"
         ></vc-geometry-cylinder-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -155,7 +155,7 @@ Basic usage of VcGeometryCylinder component.
 
 Loading a cylinder geometry outline. It is equivalent to initializing a `Cesium.CylinderOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryCylinderOutline Props
 

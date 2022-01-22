@@ -28,7 +28,7 @@ Basic usage of VcOverlayHeatmap component.
     >
     </vc-overlay-heatmap>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
     <vc-datasource-geojson data="https://zouyaoji.top/vue-cesium/SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
@@ -130,7 +130,7 @@ Basic usage of VcOverlayHeatmap component.
 | data | Array<{x: number, y: number, value: number}> | `[]` | `optional` Specify the heat map data. If it is not x, y, value, you need to specify the fields in the options attribute.|
 | options | Object\|HeatmapConfiguration | | `optional` Specify the heatmap configs. |
 | type | String | `'primitive'` | `optional` Specify the type of heat map object. **Primitive: primitive, entity: entity, image layer: imagery-layer**| primitive/entity/imagery-layer |
-| segments | Array\<ColorSegments\> | | `optional` Specify the color segment of the heatmap. |
+| segments | Array\<VcColorSegments\> | | `optional` Specify the color segment of the heatmap. |
 
 :::tip
 

@@ -14,13 +14,13 @@ Geometries that follow the surface of the ellipsoid, such as CircleGeometry, Cor
 
 Basic usage of VcPrimitiveClassification component.
 
-:::demo Use the `vc-primitive-classification`, `vc-instance-geometry` and `vc-geometry-polygon` tag to add a highlighted closed and extruded polygon to the viewer.
+:::demo Use the `vc-primitive-classification`, `vc-geometry-instance` and `vc-geometry-polygon` tag to add a highlighted closed and extruded polygon to the viewer.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady" v-model:camera="camera">
     <vc-primitive-classification ref="primitive" @click="onClicked" :asynchronous="false">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polygon
           :polygonHierarchy="[
             { lng: 102.1, lat: 29.5 },
@@ -30,11 +30,11 @@ Basic usage of VcPrimitiveClassification component.
           ]"
           :extrudedHeight="6000"
         ></vc-geometry-polygon>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive-classification>
-    <vc-provider-terrain-cesium></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -127,7 +127,7 @@ Basic usage of VcPrimitiveClassification component.
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
 | ---- | ----------- | ------- |
-| default | This is where vc-instance-geometry tag content goes. | vc-instance-geometry |
+| default | This is where vc-geometry-instance tag content goes. | vc-geometry-instance |
 
 ### Reference
 

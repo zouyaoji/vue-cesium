@@ -99,6 +99,8 @@
 | sphericalHarmonicCoefficients | Array || `optional` 用于基于图像的照明的漫反射颜色的三阶球面谐波系数。 |
 | specularEnvironmentMaps | String | | `optional` KTX 文件的 URL，其中包含镜面照明的立方体贴图和卷积的镜面 mipmap。 |
 | backFaceCulling | Boolean |`false`| `optional` 是否剔除背面几何。 如果为 true，则背面剔除取决于 glTF 材料的 doubleSided 属性； 如果为假，则禁用背面剔除。|
+| showOutline | Boolean |`true`| `optional` 是否使用cesium_primity_outline扩展显示模型的轮廓。|
+| vectorKeepDecodedPositions | Boolean |`false`| `optional` 是否应在内存中保持解码位置。这与Cesium3DTileFeature.getPolylinePositions一起使用。|
 | vectorClassificationOnly | Boolean |`false`| `optional` 是否仅应使用图块集的矢量图块进行分类。|
 | debugHeatmapTilePropertyName | String || `optional` tile 变量以着色为热图。 所有渲染的图块将相对于彼此的指定变量值进行着色。|
 | debugFreezeFrame | Boolean | false | `optional` 仅调试可用，确定是否只使用最后一帧的切片进行渲染。 |

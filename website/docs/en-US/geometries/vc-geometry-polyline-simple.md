@@ -2,7 +2,7 @@
 
 Loading a polyline geometry modeled as a line strip. It is equivalent to initializing a `Cesium.SimplePolylineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,7 +14,7 @@ Basic usage of VcGeometryPolylineSimple component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polyline-simple
           ref="geometryRef"
           :positions="[
@@ -25,10 +25,10 @@ Basic usage of VcGeometryPolylineSimple component.
             { lng: 102.1, lat: 33.5 }
           ]"
         ></vc-geometry-polyline-simple>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-layer-imagery>
-      <vc-provider-imagery-arcgis></vc-provider-imagery-arcgis>
+      <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">

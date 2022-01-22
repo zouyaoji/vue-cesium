@@ -93,9 +93,9 @@ Basic usage of measurement components.
       @readyPromise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-provider-imagery-osm></vc-provider-imagery-osm>
+      <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
-    <vc-provider-terrain-cesium v-if="addTerrain"></vc-provider-terrain-cesium>
+    <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>

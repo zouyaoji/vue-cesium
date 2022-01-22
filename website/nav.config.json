@@ -91,6 +91,10 @@
               "title": "VcMeasurements 量算"
             },
             {
+              "path": "/analyses/vc-analyses",
+              "title": "VcAnalyses 分析工具"
+            },
+            {
               "path": "/analyses/vc-analysis-flood",
               "title": "VcAnalysisFlood 淹没分析"
             }
@@ -134,55 +138,55 @@
           "groupName": "影像提供者",
           "list": [
             {
-              "path": "/providers/vc-provider-imagery-arcgis",
+              "path": "/providers/vc-imagery-provider-arcgis",
               "title": "ArcGisMapServerImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-baidumap",
+              "path": "/providers/vc-imagery-provider-baidu",
               "title": "BaidumapImageryProvider 百度地图"
             },
             {
-              "path": "/providers/vc-provider-imagery-bingmaps",
+              "path": "/providers/vc-imagery-provider-bing",
               "title": "BingMapsImageryProvider 必应地图"
             },
             {
-              "path": "/providers/vc-provider-imagery-ion",
+              "path": "/providers/vc-imagery-provider-ion",
               "title": "IonImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-mapbox",
+              "path": "/providers/vc-imagery-provider-mapbox",
               "title": "MapboxStyleImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-osm",
+              "path": "/providers/vc-imagery-provider-osm",
               "title": "OpenStreetMapImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-supermap",
+              "path": "/providers/vc-imagery-provider-supermap",
               "title": "SupermapImageryProvider 超图"
             },
             {
-              "path": "/providers/vc-provider-imagery-tianditu",
+              "path": "/providers/vc-imagery-provider-tianditu",
               "title": "TiandituImageryProvider 天地图"
             },
             {
-              "path": "/providers/vc-provider-imagery-tms",
+              "path": "/providers/vc-imagery-provider-tms",
               "title": "TileMapServiceImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-singletile",
+              "path": "/providers/vc-imagery-provider-singletile",
               "title": "SingleTileImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-urltemplate",
+              "path": "/providers/vc-imagery-provider-urltemplate",
               "title": "UrlTemplateImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-wms",
+              "path": "/providers/vc-imagery-provider-wms",
               "title": "WebMapServiceImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-wmts",
+              "path": "/providers/vc-imagery-provider-wmts",
               "title": "WebMapTileServiceImageryProvider"
             }
           ]
@@ -191,15 +195,15 @@
           "groupName": "地形提供者",
           "list": [
             {
-              "path": "/providers/vc-provider-terrain-cesium",
+              "path": "/providers/vc-terrain-provider-cesium",
               "title": "CesiumTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-arcgis",
+              "path": "/providers/vc-terrain-provider-arcgis",
               "title": "ArcGISTiledElevationTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-tianditu",
+              "path": "/providers/vc-terrain-provider-tianditu",
               "title": "TiandituTerrainProvider 天地图"
             }
           ]
@@ -319,7 +323,7 @@
               "title": "GroundPrimitive 贴地图元"
             },
             {
-              "path": "/primitives/vc-primitive-polyline-ground",
+              "path": "/primitives/vc-primitive-ground-polyline",
               "title": "GroundPolylinePrimitive 贴地线图元"
             },
             {
@@ -365,7 +369,7 @@
           "groupName": "几何图形",
           "list": [
             {
-              "path": "/geometries/vc-instance-geometry",
+              "path": "/geometries/vc-geometry-instance",
               "title": "GeometryInstance 几何实例"
             },
             {
@@ -571,6 +575,10 @@
               "title": "VcMeasurements"
             },
             {
+              "path": "/analyses/vc-analyses",
+              "title": "VcAnalyses"
+            },
+            {
               "path": "/analyses/vc-analysis-flood",
               "title": "VcAnalysisFlood"
             }
@@ -614,55 +622,55 @@
           "groupName": "ImageryProvider",
           "list": [
             {
-              "path": "/providers/vc-provider-imagery-arcgis",
+              "path": "/providers/vc-imagery-provider-arcgis",
               "title": "ArcGisMapServerImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-baidumap",
+              "path": "/providers/vc-imagery-provider-baidu",
               "title": "BaidumapImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-bingmaps",
+              "path": "/providers/vc-imagery-provider-bing",
               "title": "BingMapsImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-ion",
+              "path": "/providers/vc-imagery-provider-ion",
               "title": "IonImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-mapbox",
+              "path": "/providers/vc-imagery-provider-mapbox",
               "title": "MapboxStyleImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-osm",
+              "path": "/providers/vc-imagery-provider-osm",
               "title": "OpenStreetMapImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-supermap",
+              "path": "/providers/vc-imagery-provider-supermap",
               "title": "SupermapImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-tianditu",
+              "path": "/providers/vc-imagery-provider-tianditu",
               "title": "TiandituImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-tms",
+              "path": "/providers/vc-imagery-provider-tms",
               "title": "TileMapServiceImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-singletile",
+              "path": "/providers/vc-imagery-provider-singletile",
               "title": "SingleTileImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-urltemplate",
+              "path": "/providers/vc-imagery-provider-urltemplate",
               "title": "UrlTemplateImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-wms",
+              "path": "/providers/vc-imagery-provider-wms",
               "title": "WebMapServiceImageryProvider"
             },
             {
-              "path": "/providers/vc-provider-imagery-wmts",
+              "path": "/providers/vc-imagery-provider-wmts",
               "title": "WebMapTileServiceImageryProvider"
             }
           ]
@@ -671,15 +679,15 @@
           "groupName": "TerrainProvider",
           "list": [
             {
-              "path": "/providers/vc-provider-terrain-cesium",
+              "path": "/providers/vc-terrain-provider-cesium",
               "title": "CesiumTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-arcgis",
+              "path": "/providers/vc-terrain-provider-arcgis",
               "title": "ArcGISTiledElevationTerrainProvider"
             },
             {
-              "path": "/providers/vc-provider-terrain-tianditu",
+              "path": "/providers/vc-terrain-provider-tianditu",
               "title": "TiandituTerrainProvider"
             }
           ]
@@ -799,7 +807,7 @@
               "title": "GroundPrimitive"
             },
             {
-              "path": "/primitives/vc-primitive-polyline-ground",
+              "path": "/primitives/vc-primitive-ground-polyline",
               "title": "GroundPolylinePrimitive"
             },
             {
@@ -845,7 +853,7 @@
           "groupName": "Geometry",
           "list": [
             {
-              "path": "/geometries/vc-instance-geometry",
+              "path": "/geometries/vc-geometry-instance",
               "title": "GeometryInstance"
             },
             {

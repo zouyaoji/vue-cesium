@@ -20,10 +20,7 @@ The basic usage of the VcOverviewMap component.
     <!-- example 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sortOrder="10">
-        <vc-provider-imagery-bingmaps
-          bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
-          mapStyle="Road"
-        ></vc-provider-imagery-bingmaps>
+        <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-" mapStyle="Road"></vc-imagery-provider-bing>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -32,7 +29,7 @@ The basic usage of the VcOverviewMap component.
     <!-- example 2 -->
     <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewerOpts="{ showCredit: true, sceneMode: 3 }">
       <vc-layer-imagery>
-        <vc-provider-imagery-osm></vc-provider-imagery-osm>
+        <vc-imagery-provider-osm></vc-imagery-provider-osm>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -40,7 +37,7 @@ The basic usage of the VcOverviewMap component.
       <!-- example 3 -->
       <vc-overview-map position="top-left" :offset="[5, 5]">
         <vc-layer-imagery>
-          <vc-provider-imagery-osm></vc-provider-imagery-osm>
+          <vc-imagery-provider-osm></vc-imagery-provider-osm>
         </vc-layer-imagery>
         <vc-entity>
           <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -48,7 +45,7 @@ The basic usage of the VcOverviewMap component.
       </vc-overview-map>
     </vc-overview-map>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-bingmaps bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"></vc-provider-imagery-bingmaps>
+      <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"></vc-imagery-provider-bing>
     </vc-layer-imagery>
     <vc-entity
       :billboard="billboard"

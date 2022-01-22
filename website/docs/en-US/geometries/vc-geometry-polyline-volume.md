@@ -2,7 +2,7 @@
 
 Loading a polyline with a volume(a 2D shape extruded along a polyline). It is equivalent to initializing a `Cesium.PolylineVolumeGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### Basic usage
 
@@ -14,23 +14,23 @@ The basic usage of the VcGeometryPolylineVolume component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-primitive :appearance="appearance" @click="onClicked">
-      <vc-instance-geometry :attributes="attributes">
+      <vc-geometry-instance :attributes="attributes">
         <vc-geometry-polyline-volume
           ref="geometryRef"
           :polylinePositions="polylinePositions"
           :shapePositions="shape"
           :vertexFormat="vertexFormat"
         ></vc-geometry-polyline-volume>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
     <vc-primitive :appearance="appearance" @click="onClicked" v-if="outline">
-      <vc-instance-geometry :attributes="attributesOutline">
+      <vc-geometry-instance :attributes="attributesOutline">
         <vc-geometry-polyline-volume-outline
           ref="geometryOutlineRef"
           :polylinePositions="polylinePositions"
           :shapePositions="shape"
         ></vc-geometry-polyline-volume-outline>
-      </vc-instance-geometry>
+      </vc-geometry-instance>
     </vc-primitive>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -161,7 +161,7 @@ The basic usage of the VcGeometryPolylineVolume component.
 
 Loading a polyline with a volume outline. It is equivalent to initializing a `Cesium.PolylineVolumeOutlineGeometry` instance.
 
-**Note**: It needs to be a subcomponent of `vc-instance-geometry` to load normally.
+**Note**: It needs to be a subcomponent of `vc-geometry-instance` to load normally.
 
 ### VcGeometryPolylineVolumeOutline Props
 

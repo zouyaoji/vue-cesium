@@ -28,10 +28,10 @@
     >
     </vc-overlay-heatmap>
     <vc-layer-imagery :sortOrder="20">
-      <vc-provider-imagery-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-layer-imagery :sortOrder="10">
-      <vc-provider-imagery-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-provider-imagery-tianditu>
+      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-datasource-geojson data="https://zouyaoji.top/vue-cesium/SampleData/geojson/wuhou.json" stroke="red"></vc-datasource-geojson>
   </vc-viewer>
@@ -133,7 +133,7 @@
 | data | Array<{x: number, y: number, value: number}> | `[]` | `optional` 指定热力图数据。如果不是 x, y, value 需要在 options 属性指明字段。|
 | options | Object\|HeatmapConfiguration | | `optional` 指定热力图参数。 |
 | type | String | `'primitive'` | `optional` 指定热力图对象的类型。**图元: primitive, 实体: entity, 影像图层: imagery-layer** | primitive/entity/imagery-layer |
-| segments | Array\<ColorSegments\> | | `optional` 指定热力图颜色分段。 |
+| segments | Array\<VcColorSegments\> | | `optional` 指定热力图颜色分段。 |
 
 :::tip
 
