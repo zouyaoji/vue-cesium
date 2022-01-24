@@ -18,12 +18,35 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './ComponentDatatype-cc8f5f00', './when-208fe5b0', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './Math-56f06cd5', './RuntimeError-7f634f5d', './WebGLConstants-5e2a49ab'], function (GeometryOffsetAttribute, Transforms, Cartesian2, Check, ComponentDatatype, when, GeometryAttribute, GeometryAttributes, _Math, RuntimeError, WebGLConstants) { 'use strict';
+define([
+  './GeometryOffsetAttribute-6a692b56',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-f194c48b',
+  './when-4bbc8319',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc'
+], function (
+  GeometryOffsetAttribute,
+  Transforms,
+  Matrix2,
+  RuntimeError,
+  ComponentDatatype,
+  when,
+  GeometryAttribute,
+  GeometryAttributes,
+  combine,
+  WebGLConstants
+) {
+  'use strict'
 
-  var diffScratch = new Cartesian2.Cartesian3();
+  var diffScratch = new Matrix2.Cartesian3()
 
   /**
    * A description of the outline of a cube centered at the origin.
@@ -47,28 +70,23 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    * var geometry = Cesium.BoxOutlineGeometry.createGeometry(box);
    */
   function BoxOutlineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
 
-    var min = options.minimum;
-    var max = options.maximum;
+    var min = options.minimum
+    var max = options.maximum
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("min", min);
-    Check.Check.typeOf.object("max", max);
-    if (
-      when.defined(options.offsetAttribute) &&
-      options.offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP
-    ) {
-      throw new Check.DeveloperError(
-        "GeometryOffsetAttribute.TOP is not a supported options.offsetAttribute for this geometry."
-      );
+    RuntimeError.Check.typeOf.object('min', min)
+    RuntimeError.Check.typeOf.object('max', max)
+    if (when.defined(options.offsetAttribute) && options.offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP) {
+      throw new RuntimeError.DeveloperError('GeometryOffsetAttribute.TOP is not a supported options.offsetAttribute for this geometry.')
     }
     //>>includeEnd('debug');
 
-    this._min = Cartesian2.Cartesian3.clone(min);
-    this._max = Cartesian2.Cartesian3.clone(max);
-    this._offsetAttribute = options.offsetAttribute;
-    this._workerName = "createBoxOutlineGeometry";
+    this._min = Matrix2.Cartesian3.clone(min)
+    this._max = Matrix2.Cartesian3.clone(max)
+    this._offsetAttribute = options.offsetAttribute
+    this._workerName = 'createBoxOutlineGeometry'
   }
 
   /**
@@ -90,24 +108,24 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    * @see BoxOutlineGeometry.createGeometry
    */
   BoxOutlineGeometry.fromDimensions = function (options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
-    var dimensions = options.dimensions;
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    var dimensions = options.dimensions
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("dimensions", dimensions);
-    Check.Check.typeOf.number.greaterThanOrEquals("dimensions.x", dimensions.x, 0);
-    Check.Check.typeOf.number.greaterThanOrEquals("dimensions.y", dimensions.y, 0);
-    Check.Check.typeOf.number.greaterThanOrEquals("dimensions.z", dimensions.z, 0);
+    RuntimeError.Check.typeOf.object('dimensions', dimensions)
+    RuntimeError.Check.typeOf.number.greaterThanOrEquals('dimensions.x', dimensions.x, 0)
+    RuntimeError.Check.typeOf.number.greaterThanOrEquals('dimensions.y', dimensions.y, 0)
+    RuntimeError.Check.typeOf.number.greaterThanOrEquals('dimensions.z', dimensions.z, 0)
     //>>includeEnd('debug');
 
-    var corner = Cartesian2.Cartesian3.multiplyByScalar(dimensions, 0.5, new Cartesian2.Cartesian3());
+    var corner = Matrix2.Cartesian3.multiplyByScalar(dimensions, 0.5, new Matrix2.Cartesian3())
 
     return new BoxOutlineGeometry({
-      minimum: Cartesian2.Cartesian3.negate(corner, new Cartesian2.Cartesian3()),
+      minimum: Matrix2.Cartesian3.negate(corner, new Matrix2.Cartesian3()),
       maximum: corner,
-      offsetAttribute: options.offsetAttribute,
-    });
-  };
+      offsetAttribute: options.offsetAttribute
+    })
+  }
 
   /**
    * Creates an outline of a cube from the dimensions of an AxisAlignedBoundingBox.
@@ -131,20 +149,20 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    */
   BoxOutlineGeometry.fromAxisAlignedBoundingBox = function (boundingBox) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("boundindBox", boundingBox);
+    RuntimeError.Check.typeOf.object('boundindBox', boundingBox)
     //>>includeEnd('debug');
 
     return new BoxOutlineGeometry({
       minimum: boundingBox.minimum,
-      maximum: boundingBox.maximum,
-    });
-  };
+      maximum: boundingBox.maximum
+    })
+  }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {Number}
    */
-  BoxOutlineGeometry.packedLength = 2 * Cartesian2.Cartesian3.packedLength + 1;
+  BoxOutlineGeometry.packedLength = 2 * Matrix2.Cartesian3.packedLength + 1
 
   /**
    * Stores the provided instance into the provided array.
@@ -157,29 +175,26 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    */
   BoxOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
-    Check.Check.defined("array", array);
+    RuntimeError.Check.typeOf.object('value', value)
+    RuntimeError.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    Cartesian2.Cartesian3.pack(value._min, array, startingIndex);
-    Cartesian2.Cartesian3.pack(value._max, array, startingIndex + Cartesian2.Cartesian3.packedLength);
-    array[startingIndex + Cartesian2.Cartesian3.packedLength * 2] = when.defaultValue(
-      value._offsetAttribute,
-      -1
-    );
+    Matrix2.Cartesian3.pack(value._min, array, startingIndex)
+    Matrix2.Cartesian3.pack(value._max, array, startingIndex + Matrix2.Cartesian3.packedLength)
+    array[startingIndex + Matrix2.Cartesian3.packedLength * 2] = when.defaultValue(value._offsetAttribute, -1)
 
-    return array;
-  };
+    return array
+  }
 
-  var scratchMin = new Cartesian2.Cartesian3();
-  var scratchMax = new Cartesian2.Cartesian3();
+  var scratchMin = new Matrix2.Cartesian3()
+  var scratchMax = new Matrix2.Cartesian3()
   var scratchOptions = {
     minimum: scratchMin,
     maximum: scratchMax,
-    offsetAttribute: undefined,
-  };
+    offsetAttribute: undefined
+  }
 
   /**
    * Retrieves an instance from a packed array.
@@ -191,32 +206,26 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    */
   BoxOutlineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined("array", array);
+    RuntimeError.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var min = Cartesian2.Cartesian3.unpack(array, startingIndex, scratchMin);
-    var max = Cartesian2.Cartesian3.unpack(
-      array,
-      startingIndex + Cartesian2.Cartesian3.packedLength,
-      scratchMax
-    );
-    var offsetAttribute = array[startingIndex + Cartesian2.Cartesian3.packedLength * 2];
+    var min = Matrix2.Cartesian3.unpack(array, startingIndex, scratchMin)
+    var max = Matrix2.Cartesian3.unpack(array, startingIndex + Matrix2.Cartesian3.packedLength, scratchMax)
+    var offsetAttribute = array[startingIndex + Matrix2.Cartesian3.packedLength * 2]
 
     if (!when.defined(result)) {
-      scratchOptions.offsetAttribute =
-        offsetAttribute === -1 ? undefined : offsetAttribute;
-      return new BoxOutlineGeometry(scratchOptions);
+      scratchOptions.offsetAttribute = offsetAttribute === -1 ? undefined : offsetAttribute
+      return new BoxOutlineGeometry(scratchOptions)
     }
 
-    result._min = Cartesian2.Cartesian3.clone(min, result._min);
-    result._max = Cartesian2.Cartesian3.clone(max, result._max);
-    result._offsetAttribute =
-      offsetAttribute === -1 ? undefined : offsetAttribute;
+    result._min = Matrix2.Cartesian3.clone(min, result._min)
+    result._max = Matrix2.Cartesian3.clone(max, result._max)
+    result._offsetAttribute = offsetAttribute === -1 ? undefined : offsetAttribute
 
-    return result;
-  };
+    return result
+  }
 
   /**
    * Computes the geometric representation of an outline of a box, including its vertices, indices, and a bounding sphere.
@@ -225,114 +234,112 @@ define(['./GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './Cartes
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   BoxOutlineGeometry.createGeometry = function (boxGeometry) {
-    var min = boxGeometry._min;
-    var max = boxGeometry._max;
+    var min = boxGeometry._min
+    var max = boxGeometry._max
 
-    if (Cartesian2.Cartesian3.equals(min, max)) {
-      return;
+    if (Matrix2.Cartesian3.equals(min, max)) {
+      return
     }
 
-    var attributes = new GeometryAttributes.GeometryAttributes();
-    var indices = new Uint16Array(12 * 2);
-    var positions = new Float64Array(8 * 3);
+    var attributes = new GeometryAttributes.GeometryAttributes()
+    var indices = new Uint16Array(12 * 2)
+    var positions = new Float64Array(8 * 3)
 
-    positions[0] = min.x;
-    positions[1] = min.y;
-    positions[2] = min.z;
-    positions[3] = max.x;
-    positions[4] = min.y;
-    positions[5] = min.z;
-    positions[6] = max.x;
-    positions[7] = max.y;
-    positions[8] = min.z;
-    positions[9] = min.x;
-    positions[10] = max.y;
-    positions[11] = min.z;
+    positions[0] = min.x
+    positions[1] = min.y
+    positions[2] = min.z
+    positions[3] = max.x
+    positions[4] = min.y
+    positions[5] = min.z
+    positions[6] = max.x
+    positions[7] = max.y
+    positions[8] = min.z
+    positions[9] = min.x
+    positions[10] = max.y
+    positions[11] = min.z
 
-    positions[12] = min.x;
-    positions[13] = min.y;
-    positions[14] = max.z;
-    positions[15] = max.x;
-    positions[16] = min.y;
-    positions[17] = max.z;
-    positions[18] = max.x;
-    positions[19] = max.y;
-    positions[20] = max.z;
-    positions[21] = min.x;
-    positions[22] = max.y;
-    positions[23] = max.z;
+    positions[12] = min.x
+    positions[13] = min.y
+    positions[14] = max.z
+    positions[15] = max.x
+    positions[16] = min.y
+    positions[17] = max.z
+    positions[18] = max.x
+    positions[19] = max.y
+    positions[20] = max.z
+    positions[21] = min.x
+    positions[22] = max.y
+    positions[23] = max.z
 
     attributes.position = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: positions,
-    });
+      values: positions
+    })
 
     // top
-    indices[0] = 4;
-    indices[1] = 5;
-    indices[2] = 5;
-    indices[3] = 6;
-    indices[4] = 6;
-    indices[5] = 7;
-    indices[6] = 7;
-    indices[7] = 4;
+    indices[0] = 4
+    indices[1] = 5
+    indices[2] = 5
+    indices[3] = 6
+    indices[4] = 6
+    indices[5] = 7
+    indices[6] = 7
+    indices[7] = 4
 
     // bottom
-    indices[8] = 0;
-    indices[9] = 1;
-    indices[10] = 1;
-    indices[11] = 2;
-    indices[12] = 2;
-    indices[13] = 3;
-    indices[14] = 3;
-    indices[15] = 0;
+    indices[8] = 0
+    indices[9] = 1
+    indices[10] = 1
+    indices[11] = 2
+    indices[12] = 2
+    indices[13] = 3
+    indices[14] = 3
+    indices[15] = 0
 
     // left
-    indices[16] = 0;
-    indices[17] = 4;
-    indices[18] = 1;
-    indices[19] = 5;
+    indices[16] = 0
+    indices[17] = 4
+    indices[18] = 1
+    indices[19] = 5
 
     //right
-    indices[20] = 2;
-    indices[21] = 6;
-    indices[22] = 3;
-    indices[23] = 7;
+    indices[20] = 2
+    indices[21] = 6
+    indices[22] = 3
+    indices[23] = 7
 
-    var diff = Cartesian2.Cartesian3.subtract(max, min, diffScratch);
-    var radius = Cartesian2.Cartesian3.magnitude(diff) * 0.5;
+    var diff = Matrix2.Cartesian3.subtract(max, min, diffScratch)
+    var radius = Matrix2.Cartesian3.magnitude(diff) * 0.5
 
     if (when.defined(boxGeometry._offsetAttribute)) {
-      var length = positions.length;
-      var applyOffset = new Uint8Array(length / 3);
-      var offsetValue =
-        boxGeometry._offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1;
-      GeometryOffsetAttribute.arrayFill(applyOffset, offsetValue);
+      var length = positions.length
+      var applyOffset = new Uint8Array(length / 3)
+      var offsetValue = boxGeometry._offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
+      GeometryOffsetAttribute.arrayFill(applyOffset, offsetValue)
       attributes.applyOffset = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
         componentsPerAttribute: 1,
-        values: applyOffset,
-      });
+        values: applyOffset
+      })
     }
 
     return new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: indices,
       primitiveType: GeometryAttribute.PrimitiveType.LINES,
-      boundingSphere: new Transforms.BoundingSphere(Cartesian2.Cartesian3.ZERO, radius),
-      offsetAttribute: boxGeometry._offsetAttribute,
-    });
-  };
+      boundingSphere: new Transforms.BoundingSphere(Matrix2.Cartesian3.ZERO, radius),
+      offsetAttribute: boxGeometry._offsetAttribute
+    })
+  }
 
   function createBoxOutlineGeometry(boxGeometry, offset) {
     if (when.defined(offset)) {
-      boxGeometry = BoxOutlineGeometry.unpack(boxGeometry, offset);
+      boxGeometry = BoxOutlineGeometry.unpack(boxGeometry, offset)
     }
-    return BoxOutlineGeometry.createGeometry(boxGeometry);
+    return BoxOutlineGeometry.createGeometry(boxGeometry)
   }
 
-  return createBoxOutlineGeometry;
-
-});
+  return createBoxOutlineGeometry
+})
 //# sourceMappingURL=createBoxOutlineGeometry.js.map

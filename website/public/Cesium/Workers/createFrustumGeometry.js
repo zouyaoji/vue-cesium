@@ -1,1 +1,19 @@
-define(["./when-208fe5b0","./FrustumGeometry-65f50f2b","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./Math-8386669c","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./Plane-b91bfb59","./VertexFormat-7e57a3bd"],function(r,b,e,t,a,n,u,o,m,f,s,i,c){"use strict";return function(e,t){return r.defined(t)&&(e=b.FrustumGeometry.unpack(e,t)),b.FrustumGeometry.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './FrustumGeometry-eb154eb0',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './Plane-318d6937',
+  './VertexFormat-71718faa'
+], function (e, t, r, n, a, o, u, c, m, i, s, b) {
+  'use strict'
+  return function (r, n) {
+    return e.defined(n) && (r = t.FrustumGeometry.unpack(r, n)), t.FrustumGeometry.createGeometry(r)
+  }
+})

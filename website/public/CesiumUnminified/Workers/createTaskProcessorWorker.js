@@ -18,10 +18,11 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./when-208fe5b0'], function (when) { 'use strict';
+define(['./when-4bbc8319'], function (when) {
+  'use strict'
 
   /**
    * Formats an error object into a String.  If available, uses name, message, and stack
@@ -33,22 +34,22 @@ define(['./when-208fe5b0'], function (when) { 'use strict';
    * @returns {String} A string containing the formatted error.
    */
   function formatError(object) {
-    var result;
+    var result
 
-    var name = object.name;
-    var message = object.message;
+    var name = object.name
+    var message = object.message
     if (when.defined(name) && when.defined(message)) {
-      result = name + ": " + message;
+      result = name + ': ' + message
     } else {
-      result = object.toString();
+      result = object.toString()
     }
 
-    var stack = object.stack;
+    var stack = object.stack
     if (when.defined(stack)) {
-      result += "\n" + stack;
+      result += '\n' + stack
     }
 
-    return result;
+    return result
   }
 
   // createXXXGeometry functions may return Geometry or a Promise that resolves to Geometry
@@ -56,12 +57,12 @@ define(['./when-208fe5b0'], function (when) { 'use strict';
   // For fully synchronous functions, just wrapping the function call in a `when` Promise doesn't
   // handle errors correctly, hence try-catch
   function callAndWrap(workerFunction, parameters, transferableObjects) {
-    var resultOrPromise;
+    var resultOrPromise
     try {
-      resultOrPromise = workerFunction(parameters, transferableObjects);
-      return resultOrPromise; // errors handled by Promise
+      resultOrPromise = workerFunction(parameters, transferableObjects)
+      return resultOrPromise // errors handled by Promise
     } catch (e) {
-      return when.when.reject(e);
+      return when.when.reject(e)
     }
   }
 
@@ -91,23 +92,22 @@ define(['./when-208fe5b0'], function (when) { 'use strict';
    * @see {@link http://www.w3.org/TR/html5/common-dom-interfaces.html#transferable-objects|Transferable objects}
    */
   function createTaskProcessorWorker(workerFunction) {
-    var postMessage;
+    var postMessage
 
     return function (event) {
-      var data = event.data;
+      var data = event.data
 
-      var transferableObjects = [];
+      var transferableObjects = []
       var responseMessage = {
         id: data.id,
         result: undefined,
-        error: undefined,
-      };
+        error: undefined
+      }
 
-      return when.when(
-        callAndWrap(workerFunction, data.parameters, transferableObjects)
-      )
+      return when
+        .when(callAndWrap(workerFunction, data.parameters, transferableObjects))
         .then(function (result) {
-          responseMessage.result = result;
+          responseMessage.result = result
         })
         .otherwise(function (e) {
           if (e instanceof Error) {
@@ -115,39 +115,35 @@ define(['./when-208fe5b0'], function (when) { 'use strict';
             responseMessage.error = {
               name: e.name,
               message: e.message,
-              stack: e.stack,
-            };
+              stack: e.stack
+            }
           } else {
-            responseMessage.error = e;
+            responseMessage.error = e
           }
         })
         .always(function () {
           if (!when.defined(postMessage)) {
-            postMessage = when.defaultValue(self.webkitPostMessage, self.postMessage);
+            postMessage = when.defaultValue(self.webkitPostMessage, self.postMessage)
           }
 
           if (!data.canTransferArrayBuffer) {
-            transferableObjects.length = 0;
+            transferableObjects.length = 0
           }
 
           try {
-            postMessage(responseMessage, transferableObjects);
+            postMessage(responseMessage, transferableObjects)
           } catch (e) {
             // something went wrong trying to post the message, post a simpler
             // error that we can be sure will be cloneable
-            responseMessage.result = undefined;
+            responseMessage.result = undefined
             responseMessage.error =
-              "postMessage failed with error: " +
-              formatError(e) +
-              "\n  with responseMessage: " +
-              JSON.stringify(responseMessage);
-            postMessage(responseMessage);
+              'postMessage failed with error: ' + formatError(e) + '\n  with responseMessage: ' + JSON.stringify(responseMessage)
+            postMessage(responseMessage)
           }
-        });
-    };
+        })
+    }
   }
 
-  return createTaskProcessorWorker;
-
-});
+  return createTaskProcessorWorker
+})
 //# sourceMappingURL=createTaskProcessorWorker.js.map

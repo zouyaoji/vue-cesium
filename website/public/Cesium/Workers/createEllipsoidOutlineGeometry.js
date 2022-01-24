@@ -1,1 +1,19 @@
-define(["./when-208fe5b0","./EllipsoidOutlineGeometry-fcfecde6","./GeometryOffsetAttribute-3497d4dd","./Check-5e798bbf","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Math-8386669c","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./IndexDatatype-3bc916b1"],function(r,n,e,t,b,i,a,o,f,d,u,s,c){"use strict";return function(e,t){return r.defined(e.buffer)&&(e=n.EllipsoidOutlineGeometry.unpack(e,t)),n.EllipsoidOutlineGeometry.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './EllipsoidOutlineGeometry-44f0c12f',
+  './GeometryOffsetAttribute-1772960d',
+  './RuntimeError-346a3079',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-b7d979a6'
+], function (e, t, r, n, i, o, a, c, u, d, f, m) {
+  'use strict'
+  return function (r, n) {
+    return e.defined(r.buffer) && (r = t.EllipsoidOutlineGeometry.unpack(r, n)), t.EllipsoidOutlineGeometry.createGeometry(r)
+  }
+})

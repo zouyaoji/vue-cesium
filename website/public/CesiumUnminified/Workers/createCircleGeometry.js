@@ -18,10 +18,53 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './EllipseGeometry-b9cabe78', './VertexFormat-9eeda9f8', './Math-56f06cd5', './GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './EllipseGeometryLibrary-e0c0bfc2', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './GeometryInstance-44e07c7e', './GeometryPipeline-a6a68cab', './AttributeCompression-d1cd1d9c', './EncodedCartesian3-099fd63d', './IndexDatatype-3a89c589', './IntersectionTests-4352af03', './Plane-9825d2dd'], function (Cartesian2, Check, when, EllipseGeometry, VertexFormat, _Math, GeometryOffsetAttribute, Transforms, RuntimeError, ComponentDatatype, WebGLConstants, EllipseGeometryLibrary, GeometryAttribute, GeometryAttributes, GeometryInstance, GeometryPipeline, AttributeCompression, EncodedCartesian3, IndexDatatype, IntersectionTests, Plane) { 'use strict';
+define([
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './when-4bbc8319',
+  './EllipseGeometry-0ca521d0',
+  './VertexFormat-f9c1a155',
+  './ComponentDatatype-f194c48b',
+  './WebGLConstants-1c8239cc',
+  './GeometryOffsetAttribute-6a692b56',
+  './Transforms-86b6fa28',
+  './combine-83860057',
+  './EllipseGeometryLibrary-c30b4a37',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './GeometryInstance-a3cff41c',
+  './GeometryPipeline-4bea2645',
+  './AttributeCompression-1f6679e1',
+  './EncodedCartesian3-882fbcbd',
+  './IndexDatatype-ee69f1fd',
+  './IntersectionTests-26599c5e',
+  './Plane-4f333bc4'
+], function (
+  Matrix2,
+  RuntimeError,
+  when,
+  EllipseGeometry,
+  VertexFormat,
+  ComponentDatatype,
+  WebGLConstants,
+  GeometryOffsetAttribute,
+  Transforms,
+  combine,
+  EllipseGeometryLibrary,
+  GeometryAttribute,
+  GeometryAttributes,
+  GeometryInstance,
+  GeometryPipeline,
+  AttributeCompression,
+  EncodedCartesian3,
+  IndexDatatype,
+  IntersectionTests,
+  Plane
+) {
+  'use strict'
 
   /**
    * A description of a circle on the ellipsoid. Circle geometry can be rendered with both {@link Primitive} and {@link GroundPrimitive}.
@@ -54,11 +97,11 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
    * var geometry = Cesium.CircleGeometry.createGeometry(circle);
    */
   function CircleGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
-    var radius = options.radius;
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    var radius = options.radius
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.number("radius", radius);
+    RuntimeError.Check.typeOf.number('radius', radius)
     //>>includeEnd('debug');
 
     var ellipseGeometryOptions = {
@@ -71,17 +114,17 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
       granularity: options.granularity,
       vertexFormat: options.vertexFormat,
       stRotation: options.stRotation,
-      shadowVolume: options.shadowVolume,
-    };
-    this._ellipseGeometry = new EllipseGeometry.EllipseGeometry(ellipseGeometryOptions);
-    this._workerName = "createCircleGeometry";
+      shadowVolume: options.shadowVolume
+    }
+    this._ellipseGeometry = new EllipseGeometry.EllipseGeometry(ellipseGeometryOptions)
+    this._workerName = 'createCircleGeometry'
   }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {Number}
    */
-  CircleGeometry.packedLength = EllipseGeometry.EllipseGeometry.packedLength;
+  CircleGeometry.packedLength = EllipseGeometry.EllipseGeometry.packedLength
 
   /**
    * Stores the provided instance into the provided array.
@@ -94,20 +137,20 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
    */
   CircleGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
+    RuntimeError.Check.typeOf.object('value', value)
     //>>includeEnd('debug');
-    return EllipseGeometry.EllipseGeometry.pack(value._ellipseGeometry, array, startingIndex);
-  };
+    return EllipseGeometry.EllipseGeometry.pack(value._ellipseGeometry, array, startingIndex)
+  }
 
   var scratchEllipseGeometry = new EllipseGeometry.EllipseGeometry({
-    center: new Cartesian2.Cartesian3(),
+    center: new Matrix2.Cartesian3(),
     semiMajorAxis: 1.0,
-    semiMinorAxis: 1.0,
-  });
+    semiMinorAxis: 1.0
+  })
   var scratchOptions = {
-    center: new Cartesian2.Cartesian3(),
+    center: new Matrix2.Cartesian3(),
     radius: undefined,
-    ellipsoid: Cartesian2.Ellipsoid.clone(Cartesian2.Ellipsoid.UNIT_SPHERE),
+    ellipsoid: Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE),
     height: undefined,
     extrudedHeight: undefined,
     granularity: undefined,
@@ -115,8 +158,8 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
     stRotation: undefined,
     semiMajorAxis: undefined,
     semiMinorAxis: undefined,
-    shadowVolume: undefined,
-  };
+    shadowVolume: undefined
+  }
 
   /**
    * Retrieves an instance from a packed array.
@@ -127,39 +170,26 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
    * @returns {CircleGeometry} The modified result parameter or a new CircleGeometry instance if one was not provided.
    */
   CircleGeometry.unpack = function (array, startingIndex, result) {
-    var ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(
-      array,
-      startingIndex,
-      scratchEllipseGeometry
-    );
-    scratchOptions.center = Cartesian2.Cartesian3.clone(
-      ellipseGeometry._center,
-      scratchOptions.center
-    );
-    scratchOptions.ellipsoid = Cartesian2.Ellipsoid.clone(
-      ellipseGeometry._ellipsoid,
-      scratchOptions.ellipsoid
-    );
-    scratchOptions.height = ellipseGeometry._height;
-    scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight;
-    scratchOptions.granularity = ellipseGeometry._granularity;
-    scratchOptions.vertexFormat = VertexFormat.VertexFormat.clone(
-      ellipseGeometry._vertexFormat,
-      scratchOptions.vertexFormat
-    );
-    scratchOptions.stRotation = ellipseGeometry._stRotation;
-    scratchOptions.shadowVolume = ellipseGeometry._shadowVolume;
+    var ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(array, startingIndex, scratchEllipseGeometry)
+    scratchOptions.center = Matrix2.Cartesian3.clone(ellipseGeometry._center, scratchOptions.center)
+    scratchOptions.ellipsoid = Matrix2.Ellipsoid.clone(ellipseGeometry._ellipsoid, scratchOptions.ellipsoid)
+    scratchOptions.height = ellipseGeometry._height
+    scratchOptions.extrudedHeight = ellipseGeometry._extrudedHeight
+    scratchOptions.granularity = ellipseGeometry._granularity
+    scratchOptions.vertexFormat = VertexFormat.VertexFormat.clone(ellipseGeometry._vertexFormat, scratchOptions.vertexFormat)
+    scratchOptions.stRotation = ellipseGeometry._stRotation
+    scratchOptions.shadowVolume = ellipseGeometry._shadowVolume
 
     if (!when.defined(result)) {
-      scratchOptions.radius = ellipseGeometry._semiMajorAxis;
-      return new CircleGeometry(scratchOptions);
+      scratchOptions.radius = ellipseGeometry._semiMajorAxis
+      return new CircleGeometry(scratchOptions)
     }
 
-    scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis;
-    scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis;
-    result._ellipseGeometry = new EllipseGeometry.EllipseGeometry(scratchOptions);
-    return result;
-  };
+    scratchOptions.semiMajorAxis = ellipseGeometry._semiMajorAxis
+    scratchOptions.semiMinorAxis = ellipseGeometry._semiMinorAxis
+    result._ellipseGeometry = new EllipseGeometry.EllipseGeometry(scratchOptions)
+    return result
+  }
 
   /**
    * Computes the geometric representation of a circle on an ellipsoid, including its vertices, indices, and a bounding sphere.
@@ -168,22 +198,18 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   CircleGeometry.createGeometry = function (circleGeometry) {
-    return EllipseGeometry.EllipseGeometry.createGeometry(circleGeometry._ellipseGeometry);
-  };
+    return EllipseGeometry.EllipseGeometry.createGeometry(circleGeometry._ellipseGeometry)
+  }
 
   /**
    * @private
    */
-  CircleGeometry.createShadowVolume = function (
-    circleGeometry,
-    minHeightFunc,
-    maxHeightFunc
-  ) {
-    var granularity = circleGeometry._ellipseGeometry._granularity;
-    var ellipsoid = circleGeometry._ellipseGeometry._ellipsoid;
+  CircleGeometry.createShadowVolume = function (circleGeometry, minHeightFunc, maxHeightFunc) {
+    var granularity = circleGeometry._ellipseGeometry._granularity
+    var ellipsoid = circleGeometry._ellipseGeometry._ellipsoid
 
-    var minHeight = minHeightFunc(granularity, ellipsoid);
-    var maxHeight = maxHeightFunc(granularity, ellipsoid);
+    var minHeight = minHeightFunc(granularity, ellipsoid)
+    var maxHeight = maxHeightFunc(granularity, ellipsoid)
 
     return new CircleGeometry({
       center: circleGeometry._ellipseGeometry._center,
@@ -194,9 +220,9 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
       extrudedHeight: minHeight,
       height: maxHeight,
       vertexFormat: VertexFormat.VertexFormat.POSITION_ONLY,
-      shadowVolume: true,
-    });
-  };
+      shadowVolume: true
+    })
+  }
 
   Object.defineProperties(CircleGeometry.prototype, {
     /**
@@ -204,8 +230,8 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
      */
     rectangle: {
       get: function () {
-        return this._ellipseGeometry.rectangle;
-      },
+        return this._ellipseGeometry.rectangle
+      }
     },
     /**
      * For remapping texture coordinates when rendering CircleGeometries as GroundPrimitives.
@@ -213,25 +239,20 @@ define(['./Cartesian2-e9bb1bb3', './Check-5e798bbf', './when-208fe5b0', './Ellip
      */
     textureCoordinateRotationPoints: {
       get: function () {
-        return this._ellipseGeometry.textureCoordinateRotationPoints;
-      },
-    },
-  });
+        return this._ellipseGeometry.textureCoordinateRotationPoints
+      }
+    }
+  })
 
   function createCircleGeometry(circleGeometry, offset) {
     if (when.defined(offset)) {
-      circleGeometry = CircleGeometry.unpack(circleGeometry, offset);
+      circleGeometry = CircleGeometry.unpack(circleGeometry, offset)
     }
-    circleGeometry._ellipseGeometry._center = Cartesian2.Cartesian3.clone(
-      circleGeometry._ellipseGeometry._center
-    );
-    circleGeometry._ellipseGeometry._ellipsoid = Cartesian2.Ellipsoid.clone(
-      circleGeometry._ellipseGeometry._ellipsoid
-    );
-    return CircleGeometry.createGeometry(circleGeometry);
+    circleGeometry._ellipseGeometry._center = Matrix2.Cartesian3.clone(circleGeometry._ellipseGeometry._center)
+    circleGeometry._ellipseGeometry._ellipsoid = Matrix2.Ellipsoid.clone(circleGeometry._ellipseGeometry._ellipsoid)
+    return CircleGeometry.createGeometry(circleGeometry)
   }
 
-  return createCircleGeometry;
-
-});
+  return createCircleGeometry
+})
 //# sourceMappingURL=createCircleGeometry.js.map

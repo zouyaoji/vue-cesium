@@ -1,1 +1,106 @@
-define(["./when-208fe5b0","./Cartesian2-b4b7b0b3","./arrayRemoveDuplicates-3a9a9480","./BoundingRectangle-67be6fe0","./Transforms-73e77b72","./ComponentDatatype-2da3a966","./PolylineVolumeGeometryLibrary-2b7ba2ef","./Check-5e798bbf","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./IndexDatatype-3bc916b1","./Math-8386669c","./PolygonPipeline-b445e3f3","./RuntimeError-7f634f5d","./WebGLConstants-5e2a49ab","./EllipsoidTangentPlane-69cc10ff","./AxisAlignedBoundingBox-122de82b","./IntersectionTests-40db2afa","./Plane-b91bfb59","./PolylinePipeline-b7eedbaf","./EllipsoidGeodesic-92f0d3cc","./EllipsoidRhumbLine-73a4e3eb"],function(d,u,a,o,c,y,r,e,h,f,g,t,l,i,n,s,p,b,m,E,v,P){"use strict";function _(e){var i=(e=d.defaultValue(e,d.defaultValue.EMPTY_OBJECT)).polylinePositions,n=e.shapePositions;this._positions=i,this._shape=n,this._ellipsoid=u.Ellipsoid.clone(d.defaultValue(e.ellipsoid,u.Ellipsoid.WGS84)),this._cornerType=d.defaultValue(e.cornerType,r.CornerType.ROUNDED),this._granularity=d.defaultValue(e.granularity,t.CesiumMath.RADIANS_PER_DEGREE),this._workerName="createPolylineVolumeOutlineGeometry";i=1+i.length*u.Cartesian3.packedLength;i+=1+n.length*u.Cartesian2.packedLength,this.packedLength=i+u.Ellipsoid.packedLength+2}_.pack=function(e,i,n){var t;n=d.defaultValue(n,0);var a=e._positions,o=a.length;for(i[n++]=o,t=0;t<o;++t,n+=u.Cartesian3.packedLength)u.Cartesian3.pack(a[t],i,n);var r=e._shape,o=r.length;for(i[n++]=o,t=0;t<o;++t,n+=u.Cartesian2.packedLength)u.Cartesian2.pack(r[t],i,n);return u.Ellipsoid.pack(e._ellipsoid,i,n),n+=u.Ellipsoid.packedLength,i[n++]=e._cornerType,i[n]=e._granularity,i};var k=u.Ellipsoid.clone(u.Ellipsoid.UNIT_SPHERE),C={polylinePositions:void 0,shapePositions:void 0,ellipsoid:k,height:void 0,cornerType:void 0,granularity:void 0};_.unpack=function(e,i,n){i=d.defaultValue(i,0);for(var t=e[i++],a=new Array(t),o=0;o<t;++o,i+=u.Cartesian3.packedLength)a[o]=u.Cartesian3.unpack(e,i);var t=e[i++],r=new Array(t);for(o=0;o<t;++o,i+=u.Cartesian2.packedLength)r[o]=u.Cartesian2.unpack(e,i);var l=u.Ellipsoid.unpack(e,i,k);i+=u.Ellipsoid.packedLength;var s=e[i++],p=e[i];return d.defined(n)?(n._positions=a,n._shape=r,n._ellipsoid=u.Ellipsoid.clone(l,n._ellipsoid),n._cornerType=s,n._granularity=p,n):(C.polylinePositions=a,C.shapePositions=r,C.cornerType=s,C.granularity=p,new _(C))};var L=new o.BoundingRectangle;return _.createGeometry=function(e){var i=e._positions,n=a.arrayRemoveDuplicates(i,u.Cartesian3.equalsEpsilon),t=e._shape,t=r.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(t);if(!(n.length<2||t.length<3)){l.PolygonPipeline.computeWindingOrder2D(t)===l.WindingOrder.CLOCKWISE&&t.reverse();i=o.BoundingRectangle.fromPoints(t,L);return function(e,i){var n=new f.GeometryAttributes;n.position=new h.GeometryAttribute({componentDatatype:y.ComponentDatatype.DOUBLE,componentsPerAttribute:3,values:e});var t=i.length,i=n.position.values.length/3,a=e.length/3/t,o=g.IndexDatatype.createTypedArray(i,2*t*(1+a)),r=0,l=0,s=l*t;for(u=0;u<t-1;u++)o[r++]=u+s,o[r++]=u+s+1;for(o[r++]=t-1+s,o[r++]=s,s=(l=a-1)*t,u=0;u<t-1;u++)o[r++]=u+s,o[r++]=u+s+1;for(o[r++]=t-1+s,o[r++]=s,l=0;l<a-1;l++)for(var p=t*l,d=p+t,u=0;u<t;u++)o[r++]=u+p,o[r++]=u+d;return new h.Geometry({attributes:n,indices:g.IndexDatatype.createTypedArray(i,o),boundingSphere:c.BoundingSphere.fromVertices(e),primitiveType:h.PrimitiveType.LINES})}(r.PolylineVolumeGeometryLibrary.computePositions(n,t,i,e,!1),t)}},function(e,i){return(e=d.defined(i)?_.unpack(e,i):e)._ellipsoid=u.Ellipsoid.clone(e._ellipsoid),_.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './Matrix2-9aa31791',
+  './arrayRemoveDuplicates-18786327',
+  './BoundingRectangle-218a9c7b',
+  './Transforms-d13cc04e',
+  './ComponentDatatype-93750d1a',
+  './PolylineVolumeGeometryLibrary-06826ae8',
+  './RuntimeError-346a3079',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-b7d979a6',
+  './PolygonPipeline-da7fc5ca',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './EllipsoidTangentPlane-eecce7e8',
+  './AxisAlignedBoundingBox-07c6b7f2',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937',
+  './PolylinePipeline-64021a2e',
+  './EllipsoidGeodesic-dd8f2afb',
+  './EllipsoidRhumbLine-30c47ff4'
+], function (e, i, n, a, t, r, o, l, s, p, d, c, u, y, g, h, f, m, v, E, P) {
+  'use strict'
+  function _(n) {
+    var a = (n = e.defaultValue(n, e.defaultValue.EMPTY_OBJECT)).polylinePositions,
+      t = n.shapePositions
+    ;(this._positions = a),
+      (this._shape = t),
+      (this._ellipsoid = i.Ellipsoid.clone(e.defaultValue(n.ellipsoid, i.Ellipsoid.WGS84))),
+      (this._cornerType = e.defaultValue(n.cornerType, o.CornerType.ROUNDED)),
+      (this._granularity = e.defaultValue(n.granularity, r.CesiumMath.RADIANS_PER_DEGREE)),
+      (this._workerName = 'createPolylineVolumeOutlineGeometry')
+    var l = 1 + a.length * i.Cartesian3.packedLength
+    ;(l += 1 + t.length * i.Cartesian2.packedLength), (this.packedLength = l + i.Ellipsoid.packedLength + 2)
+  }
+  _.pack = function (n, a, t) {
+    var r
+    t = e.defaultValue(t, 0)
+    var o = n._positions,
+      l = o.length
+    for (a[t++] = l, r = 0; r < l; ++r, t += i.Cartesian3.packedLength) i.Cartesian3.pack(o[r], a, t)
+    var s = n._shape
+    for (l = s.length, a[t++] = l, r = 0; r < l; ++r, t += i.Cartesian2.packedLength) i.Cartesian2.pack(s[r], a, t)
+    return i.Ellipsoid.pack(n._ellipsoid, a, t), (t += i.Ellipsoid.packedLength), (a[t++] = n._cornerType), (a[t] = n._granularity), a
+  }
+  var k = i.Ellipsoid.clone(i.Ellipsoid.UNIT_SPHERE),
+    b = { polylinePositions: void 0, shapePositions: void 0, ellipsoid: k, height: void 0, cornerType: void 0, granularity: void 0 }
+  _.unpack = function (n, a, t) {
+    var r
+    a = e.defaultValue(a, 0)
+    var o = n[a++],
+      l = new Array(o)
+    for (r = 0; r < o; ++r, a += i.Cartesian3.packedLength) l[r] = i.Cartesian3.unpack(n, a)
+    o = n[a++]
+    var s = new Array(o)
+    for (r = 0; r < o; ++r, a += i.Cartesian2.packedLength) s[r] = i.Cartesian2.unpack(n, a)
+    var p = i.Ellipsoid.unpack(n, a, k)
+    a += i.Ellipsoid.packedLength
+    var d = n[a++],
+      c = n[a]
+    return e.defined(t)
+      ? ((t._positions = l), (t._shape = s), (t._ellipsoid = i.Ellipsoid.clone(p, t._ellipsoid)), (t._cornerType = d), (t._granularity = c), t)
+      : ((b.polylinePositions = l), (b.shapePositions = s), (b.cornerType = d), (b.granularity = c), new _(b))
+  }
+  var C = new a.BoundingRectangle()
+  return (
+    (_.createGeometry = function (e) {
+      var l = e._positions,
+        u = n.arrayRemoveDuplicates(l, i.Cartesian3.equalsEpsilon),
+        y = e._shape
+      if (((y = o.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(y)), !(u.length < 2 || y.length < 3))) {
+        c.PolygonPipeline.computeWindingOrder2D(y) === c.WindingOrder.CLOCKWISE && y.reverse()
+        var g = a.BoundingRectangle.fromPoints(y, C)
+        return (function (e, i) {
+          var n = new p.GeometryAttributes()
+          n.position = new s.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: e })
+          var a,
+            o,
+            l = i.length,
+            c = n.position.values.length / 3,
+            u = e.length / 3 / l,
+            y = d.IndexDatatype.createTypedArray(c, 2 * l * (u + 1)),
+            g = 0,
+            h = (a = 0) * l
+          for (o = 0; o < l - 1; o++) (y[g++] = o + h), (y[g++] = o + h + 1)
+          for (y[g++] = l - 1 + h, y[g++] = h, h = (a = u - 1) * l, o = 0; o < l - 1; o++) (y[g++] = o + h), (y[g++] = o + h + 1)
+          for (y[g++] = l - 1 + h, y[g++] = h, a = 0; a < u - 1; a++) {
+            var f = l * a,
+              m = f + l
+            for (o = 0; o < l; o++) (y[g++] = o + f), (y[g++] = o + m)
+          }
+          return new s.Geometry({
+            attributes: n,
+            indices: d.IndexDatatype.createTypedArray(c, y),
+            boundingSphere: t.BoundingSphere.fromVertices(e),
+            primitiveType: s.PrimitiveType.LINES
+          })
+        })(o.PolylineVolumeGeometryLibrary.computePositions(u, y, g, e, !1), y)
+      }
+    }),
+    function (n, a) {
+      return e.defined(a) && (n = _.unpack(n, a)), (n._ellipsoid = i.Ellipsoid.clone(n._ellipsoid)), _.createGeometry(n)
+    }
+  )
+})

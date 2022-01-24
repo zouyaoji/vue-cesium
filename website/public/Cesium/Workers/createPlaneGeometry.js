@@ -1,1 +1,127 @@
-define(["./when-208fe5b0","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./ComponentDatatype-2da3a966","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./VertexFormat-7e57a3bd","./Math-8386669c","./RuntimeError-7f634f5d","./WebGLConstants-5e2a49ab"],function(n,o,m,e,i,u,p,a,t,r,y){"use strict";function c(e){e=n.defaultValue(e,n.defaultValue.EMPTY_OBJECT);e=n.defaultValue(e.vertexFormat,a.VertexFormat.DEFAULT);this._vertexFormat=e,this._workerName="createPlaneGeometry"}c.packedLength=a.VertexFormat.packedLength,c.pack=function(e,t,r){return r=n.defaultValue(r,0),a.VertexFormat.pack(e._vertexFormat,t,r),t};var b=new a.VertexFormat,s={vertexFormat:b};c.unpack=function(e,t,r){t=n.defaultValue(t,0);t=a.VertexFormat.unpack(e,t,b);return n.defined(r)?(r._vertexFormat=a.VertexFormat.clone(t,r._vertexFormat),r):new c(s)};var A=new m.Cartesian3(-.5,-.5,0),l=new m.Cartesian3(.5,.5,0);return c.createGeometry=function(e){var t,r,n=e._vertexFormat,a=new p.GeometryAttributes;return n.position&&((e=new Float64Array(12))[0]=A.x,e[1]=A.y,e[2]=0,e[3]=l.x,e[4]=A.y,e[5]=0,e[6]=l.x,e[7]=l.y,e[8]=0,e[9]=A.x,e[10]=l.y,e[11]=0,a.position=new u.GeometryAttribute({componentDatatype:i.ComponentDatatype.DOUBLE,componentsPerAttribute:3,values:e}),n.normal&&((e=new Float32Array(12))[0]=0,e[1]=0,e[2]=1,e[3]=0,e[4]=0,e[5]=1,e[6]=0,e[7]=0,e[8]=1,e[9]=0,e[10]=0,e[11]=1,a.normal=new u.GeometryAttribute({componentDatatype:i.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:e})),n.st&&((t=new Float32Array(8))[0]=0,t[1]=0,t[2]=1,t[3]=0,t[4]=1,t[5]=1,t[6]=0,t[7]=1,a.st=new u.GeometryAttribute({componentDatatype:i.ComponentDatatype.FLOAT,componentsPerAttribute:2,values:t})),n.tangent&&((t=new Float32Array(12))[0]=1,t[1]=0,t[2]=0,t[3]=1,t[4]=0,t[5]=0,t[6]=1,t[7]=0,t[8]=0,t[9]=1,t[10]=0,t[11]=0,a.tangent=new u.GeometryAttribute({componentDatatype:i.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:t})),n.bitangent&&((r=new Float32Array(12))[0]=0,r[1]=1,r[2]=0,r[3]=0,r[4]=1,r[5]=0,r[6]=0,r[7]=1,r[8]=0,r[9]=0,r[10]=1,r[11]=0,a.bitangent=new u.GeometryAttribute({componentDatatype:i.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:r})),(r=new Uint16Array(6))[0]=0,r[1]=1,r[2]=2,r[3]=0,r[4]=2,r[5]=3),new u.Geometry({attributes:a,indices:r,primitiveType:u.PrimitiveType.TRIANGLES,boundingSphere:new o.BoundingSphere(m.Cartesian3.ZERO,Math.sqrt(2))})},function(e,t){return n.defined(t)&&(e=c.unpack(e,t)),c.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './VertexFormat-71718faa',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc'
+], function (e, t, r, a, n, o, i, m, u, p) {
+  'use strict'
+  function c(t) {
+    t = e.defaultValue(t, e.defaultValue.EMPTY_OBJECT)
+    var r = e.defaultValue(t.vertexFormat, m.VertexFormat.DEFAULT)
+    ;(this._vertexFormat = r), (this._workerName = 'createPlaneGeometry')
+  }
+  ;(c.packedLength = m.VertexFormat.packedLength),
+    (c.pack = function (t, r, a) {
+      return (a = e.defaultValue(a, 0)), m.VertexFormat.pack(t._vertexFormat, r, a), r
+    })
+  var y = new m.VertexFormat(),
+    s = { vertexFormat: y }
+  c.unpack = function (t, r, a) {
+    r = e.defaultValue(r, 0)
+    var n = m.VertexFormat.unpack(t, r, y)
+    return e.defined(a) ? ((a._vertexFormat = m.VertexFormat.clone(n, a._vertexFormat)), a) : new c(s)
+  }
+  var A = new r.Cartesian3(-0.5, -0.5, 0),
+    l = new r.Cartesian3(0.5, 0.5, 0)
+  return (
+    (c.createGeometry = function (e) {
+      var a,
+        m,
+        u = e._vertexFormat,
+        p = new i.GeometryAttributes()
+      if (u.position) {
+        if (
+          (((m = new Float64Array(12))[0] = A.x),
+          (m[1] = A.y),
+          (m[2] = 0),
+          (m[3] = l.x),
+          (m[4] = A.y),
+          (m[5] = 0),
+          (m[6] = l.x),
+          (m[7] = l.y),
+          (m[8] = 0),
+          (m[9] = A.x),
+          (m[10] = l.y),
+          (m[11] = 0),
+          (p.position = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: m })),
+          u.normal)
+        ) {
+          var c = new Float32Array(12)
+          ;(c[0] = 0),
+            (c[1] = 0),
+            (c[2] = 1),
+            (c[3] = 0),
+            (c[4] = 0),
+            (c[5] = 1),
+            (c[6] = 0),
+            (c[7] = 0),
+            (c[8] = 1),
+            (c[9] = 0),
+            (c[10] = 0),
+            (c[11] = 1),
+            (p.normal = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: c }))
+        }
+        if (u.st) {
+          var y = new Float32Array(8)
+          ;(y[0] = 0),
+            (y[1] = 0),
+            (y[2] = 1),
+            (y[3] = 0),
+            (y[4] = 1),
+            (y[5] = 1),
+            (y[6] = 0),
+            (y[7] = 1),
+            (p.st = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: y }))
+        }
+        if (u.tangent) {
+          var s = new Float32Array(12)
+          ;(s[0] = 1),
+            (s[1] = 0),
+            (s[2] = 0),
+            (s[3] = 1),
+            (s[4] = 0),
+            (s[5] = 0),
+            (s[6] = 1),
+            (s[7] = 0),
+            (s[8] = 0),
+            (s[9] = 1),
+            (s[10] = 0),
+            (s[11] = 0),
+            (p.tangent = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: s }))
+        }
+        if (u.bitangent) {
+          var F = new Float32Array(12)
+          ;(F[0] = 0),
+            (F[1] = 1),
+            (F[2] = 0),
+            (F[3] = 0),
+            (F[4] = 1),
+            (F[5] = 0),
+            (F[6] = 0),
+            (F[7] = 1),
+            (F[8] = 0),
+            (F[9] = 0),
+            (F[10] = 1),
+            (F[11] = 0),
+            (p.bitangent = new o.GeometryAttribute({ componentDatatype: n.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: F }))
+        }
+        ;((a = new Uint16Array(6))[0] = 0), (a[1] = 1), (a[2] = 2), (a[3] = 0), (a[4] = 2), (a[5] = 3)
+      }
+      return new o.Geometry({
+        attributes: p,
+        indices: a,
+        primitiveType: o.PrimitiveType.TRIANGLES,
+        boundingSphere: new t.BoundingSphere(r.Cartesian3.ZERO, Math.sqrt(2))
+      })
+    }),
+    function (t, r) {
+      return e.defined(r) && (t = c.unpack(t, r)), c.createGeometry(t)
+    }
+  )
+})

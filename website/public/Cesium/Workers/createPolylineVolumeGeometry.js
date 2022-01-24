@@ -1,1 +1,180 @@
-define(["./when-208fe5b0","./Cartesian2-b4b7b0b3","./arrayRemoveDuplicates-3a9a9480","./BoundingRectangle-67be6fe0","./Transforms-73e77b72","./ComponentDatatype-2da3a966","./PolylineVolumeGeometryLibrary-2b7ba2ef","./Check-5e798bbf","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./GeometryPipeline-86615bad","./IndexDatatype-3bc916b1","./Math-8386669c","./PolygonPipeline-b445e3f3","./VertexFormat-7e57a3bd","./RuntimeError-7f634f5d","./WebGLConstants-5e2a49ab","./EllipsoidTangentPlane-69cc10ff","./AxisAlignedBoundingBox-122de82b","./IntersectionTests-40db2afa","./Plane-b91bfb59","./PolylinePipeline-b7eedbaf","./EllipsoidGeodesic-92f0d3cc","./EllipsoidRhumbLine-73a4e3eb","./AttributeCompression-9711314b","./EncodedCartesian3-21af0f3b"],function(u,c,r,a,A,T,o,e,G,R,D,I,i,B,g,t,n,l,s,p,d,y,m,h,b,f){"use strict";var v={};function O(e,t){u.defined(v[e])||(v[e]=!0,console.warn(u.defaultValue(t,e)))}function E(e){var t=(e=u.defaultValue(e,u.defaultValue.EMPTY_OBJECT)).polylinePositions,n=e.shapePositions;this._positions=t,this._shape=n,this._ellipsoid=c.Ellipsoid.clone(u.defaultValue(e.ellipsoid,c.Ellipsoid.WGS84)),this._cornerType=u.defaultValue(e.cornerType,o.CornerType.ROUNDED),this._vertexFormat=g.VertexFormat.clone(u.defaultValue(e.vertexFormat,g.VertexFormat.DEFAULT)),this._granularity=u.defaultValue(e.granularity,i.CesiumMath.RADIANS_PER_DEGREE),this._workerName="createPolylineVolumeGeometry";t=1+t.length*c.Cartesian3.packedLength;t+=1+n.length*c.Cartesian2.packedLength,this.packedLength=t+c.Ellipsoid.packedLength+g.VertexFormat.packedLength+2}O.geometryOutlines="Entity geometry outlines are unsupported on terrain. Outlines will be disabled. To enable outlines, disable geometry terrain clamping by explicitly setting height to 0.",O.geometryZIndex="Entity geometry with zIndex are unsupported when height or extrudedHeight are defined.  zIndex will be ignored",O.geometryHeightReference="Entity corridor, ellipse, polygon or rectangle with heightReference must also have a defined height.  heightReference will be ignored",O.geometryExtrudedHeightReference="Entity corridor, ellipse, polygon or rectangle with extrudedHeightReference must also have a defined extrudedHeight.  extrudedHeightReference will be ignored",E.pack=function(e,t,n){var i;n=u.defaultValue(n,0);var r=e._positions,a=r.length;for(t[n++]=a,i=0;i<a;++i,n+=c.Cartesian3.packedLength)c.Cartesian3.pack(r[i],t,n);var o=e._shape,a=o.length;for(t[n++]=a,i=0;i<a;++i,n+=c.Cartesian2.packedLength)c.Cartesian2.pack(o[i],t,n);return c.Ellipsoid.pack(e._ellipsoid,t,n),n+=c.Ellipsoid.packedLength,g.VertexFormat.pack(e._vertexFormat,t,n),n+=g.VertexFormat.packedLength,t[n++]=e._cornerType,t[n]=e._granularity,t};var P=c.Ellipsoid.clone(c.Ellipsoid.UNIT_SPHERE),x=new g.VertexFormat,_={polylinePositions:void 0,shapePositions:void 0,ellipsoid:P,vertexFormat:x,cornerType:void 0,granularity:void 0};E.unpack=function(e,t,n){t=u.defaultValue(t,0);for(var i=e[t++],r=new Array(i),a=0;a<i;++a,t+=c.Cartesian3.packedLength)r[a]=c.Cartesian3.unpack(e,t);var i=e[t++],o=new Array(i);for(a=0;a<i;++a,t+=c.Cartesian2.packedLength)o[a]=c.Cartesian2.unpack(e,t);var l=c.Ellipsoid.unpack(e,t,P);t+=c.Ellipsoid.packedLength;var s=g.VertexFormat.unpack(e,t,x);t+=g.VertexFormat.packedLength;var p=e[t++],d=e[t];return u.defined(n)?(n._positions=r,n._shape=o,n._ellipsoid=c.Ellipsoid.clone(l,n._ellipsoid),n._vertexFormat=g.VertexFormat.clone(s,n._vertexFormat),n._cornerType=p,n._granularity=d,n):(_.polylinePositions=r,_.shapePositions=o,_.cornerType=p,_.granularity=d,new E(_))};var k=new a.BoundingRectangle;return E.createGeometry=function(e){var t=e._positions,n=r.arrayRemoveDuplicates(t,c.Cartesian3.equalsEpsilon),i=e._shape,i=o.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(i);if(!(n.length<2||i.length<3)){B.PolygonPipeline.computeWindingOrder2D(i)===B.WindingOrder.CLOCKWISE&&i.reverse();t=a.BoundingRectangle.fromPoints(i,k);return function(e,t,n,i){var r=new R.GeometryAttributes;i.position&&(r.position=new G.GeometryAttribute({componentDatatype:T.ComponentDatatype.DOUBLE,componentsPerAttribute:3,values:e}));var a,o,l,s,p,d=t.length,u=e.length/3,c=(u-2*d)/(2*d),g=B.PolygonPipeline.triangulate(t),y=(c-1)*d*6+2*g.length,m=I.IndexDatatype.createTypedArray(u,y),h=2*d,b=0;for(C=0;C<c-1;C++){for(a=0;a<d-1;a++)p=(o=2*a+C*d*2)+h,s=(l=o+1)+h,m[b++]=l,m[b++]=o,m[b++]=s,m[b++]=s,m[b++]=o,m[b++]=p;s=(l=(o=2*d-2+C*d*2)+1)+h,p=o+h,m[b++]=l,m[b++]=o,m[b++]=s,m[b++]=s,m[b++]=o,m[b++]=p}if(i.st||i.tangent||i.bitangent){for(var f,v,E=new Float32Array(2*u),P=1/(c-1),x=1/n.height,_=n.height/2,k=0,C=0;C<c;C++){for(v=x*(t[0].y+_),E[k++]=f=C*P,E[k++]=v,a=1;a<d;a++)v=x*(t[a].y+_),E[k++]=f,E[k++]=v,E[k++]=f,E[k++]=v;v=x*(t[0].y+_),E[k++]=f,E[k++]=v}for(a=0;a<d;a++)v=x*(t[a].y+_),E[k++]=f=0,E[k++]=v;for(a=0;a<d;a++)v=x*(t[a].y+_),E[k++]=f=(c-1)*P,E[k++]=v;r.st=new G.GeometryAttribute({componentDatatype:T.ComponentDatatype.FLOAT,componentsPerAttribute:2,values:new Float32Array(E)})}var V=u-2*d;for(C=0;C<g.length;C+=3){var L=g[C]+V,w=g[C+1]+V,F=g[C+2]+V;m[b++]=L,m[b++]=w,m[b++]=F,m[b++]=F+d,m[b++]=w+d,m[b++]=L+d}if(e=new G.Geometry({attributes:r,indices:m,boundingSphere:A.BoundingSphere.fromVertices(e),primitiveType:G.PrimitiveType.TRIANGLES}),i.normal&&(e=D.GeometryPipeline.computeNormal(e)),i.tangent||i.bitangent){try{e=D.GeometryPipeline.computeTangentAndBitangent(e)}catch(e){O("polyline-volume-tangent-bitangent","Unable to compute tangents and bitangents for polyline volume geometry")}i.tangent||(e.attributes.tangent=void 0),i.bitangent||(e.attributes.bitangent=void 0),i.st||(e.attributes.st=void 0)}return e}(o.PolylineVolumeGeometryLibrary.computePositions(n,i,t,e,!0),i,t,e._vertexFormat)}},function(e,t){return(e=u.defined(t)?E.unpack(e,t):e)._ellipsoid=c.Ellipsoid.clone(e._ellipsoid),E.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './Matrix2-9aa31791',
+  './arrayRemoveDuplicates-18786327',
+  './BoundingRectangle-218a9c7b',
+  './Transforms-d13cc04e',
+  './ComponentDatatype-93750d1a',
+  './PolylineVolumeGeometryLibrary-06826ae8',
+  './RuntimeError-346a3079',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './GeometryPipeline-2356afec',
+  './IndexDatatype-b7d979a6',
+  './PolygonPipeline-da7fc5ca',
+  './VertexFormat-71718faa',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './EllipsoidTangentPlane-eecce7e8',
+  './AxisAlignedBoundingBox-07c6b7f2',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937',
+  './PolylinePipeline-64021a2e',
+  './EllipsoidGeodesic-dd8f2afb',
+  './EllipsoidRhumbLine-30c47ff4',
+  './AttributeCompression-af389d04',
+  './EncodedCartesian3-f286cedc'
+], function (e, t, n, a, i, r, o, l, s, p, c, d, u, m, y, g, h, f, v, b, P, E, _, k, L) {
+  'use strict'
+  function V(n) {
+    var a = (n = e.defaultValue(n, e.defaultValue.EMPTY_OBJECT)).polylinePositions,
+      i = n.shapePositions
+    ;(this._positions = a),
+      (this._shape = i),
+      (this._ellipsoid = t.Ellipsoid.clone(e.defaultValue(n.ellipsoid, t.Ellipsoid.WGS84))),
+      (this._cornerType = e.defaultValue(n.cornerType, o.CornerType.ROUNDED)),
+      (this._vertexFormat = m.VertexFormat.clone(e.defaultValue(n.vertexFormat, m.VertexFormat.DEFAULT))),
+      (this._granularity = e.defaultValue(n.granularity, r.CesiumMath.RADIANS_PER_DEGREE)),
+      (this._workerName = 'createPolylineVolumeGeometry')
+    var l = 1 + a.length * t.Cartesian3.packedLength
+    ;(l += 1 + i.length * t.Cartesian2.packedLength), (this.packedLength = l + t.Ellipsoid.packedLength + m.VertexFormat.packedLength + 2)
+  }
+  V.pack = function (n, a, i) {
+    var r
+    i = e.defaultValue(i, 0)
+    var o = n._positions,
+      l = o.length
+    for (a[i++] = l, r = 0; r < l; ++r, i += t.Cartesian3.packedLength) t.Cartesian3.pack(o[r], a, i)
+    var s = n._shape
+    for (l = s.length, a[i++] = l, r = 0; r < l; ++r, i += t.Cartesian2.packedLength) t.Cartesian2.pack(s[r], a, i)
+    return (
+      t.Ellipsoid.pack(n._ellipsoid, a, i),
+      (i += t.Ellipsoid.packedLength),
+      m.VertexFormat.pack(n._vertexFormat, a, i),
+      (i += m.VertexFormat.packedLength),
+      (a[i++] = n._cornerType),
+      (a[i] = n._granularity),
+      a
+    )
+  }
+  var x = t.Ellipsoid.clone(t.Ellipsoid.UNIT_SPHERE),
+    C = new m.VertexFormat(),
+    F = { polylinePositions: void 0, shapePositions: void 0, ellipsoid: x, vertexFormat: C, cornerType: void 0, granularity: void 0 }
+  V.unpack = function (n, a, i) {
+    var r
+    a = e.defaultValue(a, 0)
+    var o = n[a++],
+      l = new Array(o)
+    for (r = 0; r < o; ++r, a += t.Cartesian3.packedLength) l[r] = t.Cartesian3.unpack(n, a)
+    o = n[a++]
+    var s = new Array(o)
+    for (r = 0; r < o; ++r, a += t.Cartesian2.packedLength) s[r] = t.Cartesian2.unpack(n, a)
+    var p = t.Ellipsoid.unpack(n, a, x)
+    a += t.Ellipsoid.packedLength
+    var c = m.VertexFormat.unpack(n, a, C)
+    a += m.VertexFormat.packedLength
+    var d = n[a++],
+      u = n[a]
+    return e.defined(i)
+      ? ((i._positions = l),
+        (i._shape = s),
+        (i._ellipsoid = t.Ellipsoid.clone(p, i._ellipsoid)),
+        (i._vertexFormat = m.VertexFormat.clone(c, i._vertexFormat)),
+        (i._cornerType = d),
+        (i._granularity = u),
+        i)
+      : ((F.polylinePositions = l), (F.shapePositions = s), (F.cornerType = d), (F.granularity = u), new V(F))
+  }
+  var A = new a.BoundingRectangle()
+  return (
+    (V.createGeometry = function (e) {
+      var l = e._positions,
+        m = n.arrayRemoveDuplicates(l, t.Cartesian3.equalsEpsilon),
+        y = e._shape
+      if (((y = o.PolylineVolumeGeometryLibrary.removeDuplicatesFromShape(y)), !(m.length < 2 || y.length < 3))) {
+        u.PolygonPipeline.computeWindingOrder2D(y) === u.WindingOrder.CLOCKWISE && y.reverse()
+        var g = a.BoundingRectangle.fromPoints(y, A)
+        return (function (e, t, n, a) {
+          var l = new p.GeometryAttributes()
+          a.position &&
+            (l.position = new s.GeometryAttribute({ componentDatatype: r.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: e }))
+          var m,
+            y,
+            g,
+            h,
+            f,
+            v,
+            b = t.length,
+            P = e.length / 3,
+            E = (P - 2 * b) / (2 * b),
+            _ = u.PolygonPipeline.triangulate(t),
+            k = (E - 1) * b * 6 + 2 * _.length,
+            L = d.IndexDatatype.createTypedArray(P, k),
+            V = 2 * b,
+            x = 0
+          for (m = 0; m < E - 1; m++) {
+            for (y = 0; y < b - 1; y++)
+              (v = (g = 2 * y + m * b * 2) + V),
+                (f = (h = g + 1) + V),
+                (L[x++] = h),
+                (L[x++] = g),
+                (L[x++] = f),
+                (L[x++] = f),
+                (L[x++] = g),
+                (L[x++] = v)
+            ;(f = (h = 1 + (g = 2 * b - 2 + m * b * 2)) + V),
+              (v = g + V),
+              (L[x++] = h),
+              (L[x++] = g),
+              (L[x++] = f),
+              (L[x++] = f),
+              (L[x++] = g),
+              (L[x++] = v)
+          }
+          if (a.st || a.tangent || a.bitangent) {
+            var C,
+              F,
+              A = new Float32Array(2 * P),
+              T = 1 / (E - 1),
+              G = 1 / n.height,
+              D = n.height / 2,
+              w = 0
+            for (m = 0; m < E; m++) {
+              for (C = m * T, F = G * (t[0].y + D), A[w++] = C, A[w++] = F, y = 1; y < b; y++)
+                (F = G * (t[y].y + D)), (A[w++] = C), (A[w++] = F), (A[w++] = C), (A[w++] = F)
+              ;(F = G * (t[0].y + D)), (A[w++] = C), (A[w++] = F)
+            }
+            for (y = 0; y < b; y++) (C = 0), (F = G * (t[y].y + D)), (A[w++] = C), (A[w++] = F)
+            for (y = 0; y < b; y++) (C = (E - 1) * T), (F = G * (t[y].y + D)), (A[w++] = C), (A[w++] = F)
+            l.st = new s.GeometryAttribute({ componentDatatype: r.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: new Float32Array(A) })
+          }
+          var R = P - 2 * b
+          for (m = 0; m < _.length; m += 3) {
+            var B = _[m] + R,
+              S = _[m + 1] + R,
+              I = _[m + 2] + R
+            ;(L[x++] = B), (L[x++] = S), (L[x++] = I), (L[x++] = I + b), (L[x++] = S + b), (L[x++] = B + b)
+          }
+          var O = new s.Geometry({
+            attributes: l,
+            indices: L,
+            boundingSphere: i.BoundingSphere.fromVertices(e),
+            primitiveType: s.PrimitiveType.TRIANGLES
+          })
+          if ((a.normal && (O = c.GeometryPipeline.computeNormal(O)), a.tangent || a.bitangent)) {
+            try {
+              O = c.GeometryPipeline.computeTangentAndBitangent(O)
+            } catch (e) {
+              o.oneTimeWarning('polyline-volume-tangent-bitangent', 'Unable to compute tangents and bitangents for polyline volume geometry')
+            }
+            a.tangent || (O.attributes.tangent = void 0), a.bitangent || (O.attributes.bitangent = void 0), a.st || (O.attributes.st = void 0)
+          }
+          return O
+        })(o.PolylineVolumeGeometryLibrary.computePositions(m, y, g, e, !0), y, g, e._vertexFormat)
+      }
+    }),
+    function (n, a) {
+      return e.defined(a) && (n = V.unpack(n, a)), (n._ellipsoid = t.Ellipsoid.clone(n._ellipsoid)), V.createGeometry(n)
+    }
+  )
+})

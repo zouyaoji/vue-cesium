@@ -1,1 +1,132 @@
-define(["./GeometryOffsetAttribute-3497d4dd","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./ComponentDatatype-2da3a966","./when-208fe5b0","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./Math-8386669c","./RuntimeError-7f634f5d","./WebGLConstants-5e2a49ab"],function(u,m,o,e,s,f,c,b,t,a,n){"use strict";var d=new o.Cartesian3;function r(e){var t=(e=f.defaultValue(e,f.defaultValue.EMPTY_OBJECT)).minimum,a=e.maximum;this._min=o.Cartesian3.clone(t),this._max=o.Cartesian3.clone(a),this._offsetAttribute=e.offsetAttribute,this._workerName="createBoxOutlineGeometry"}r.fromDimensions=function(e){var t=(e=f.defaultValue(e,f.defaultValue.EMPTY_OBJECT)).dimensions,t=o.Cartesian3.multiplyByScalar(t,.5,new o.Cartesian3);return new r({minimum:o.Cartesian3.negate(t,new o.Cartesian3),maximum:t,offsetAttribute:e.offsetAttribute})},r.fromAxisAlignedBoundingBox=function(e){return new r({minimum:e.minimum,maximum:e.maximum})},r.packedLength=2*o.Cartesian3.packedLength+1,r.pack=function(e,t,a){return a=f.defaultValue(a,0),o.Cartesian3.pack(e._min,t,a),o.Cartesian3.pack(e._max,t,a+o.Cartesian3.packedLength),t[a+2*o.Cartesian3.packedLength]=f.defaultValue(e._offsetAttribute,-1),t};var p=new o.Cartesian3,y=new o.Cartesian3,C={minimum:p,maximum:y,offsetAttribute:void 0};return r.unpack=function(e,t,a){t=f.defaultValue(t,0);var n=o.Cartesian3.unpack(e,t,p),i=o.Cartesian3.unpack(e,t+o.Cartesian3.packedLength,y),t=e[t+2*o.Cartesian3.packedLength];return f.defined(a)?(a._min=o.Cartesian3.clone(n,a._min),a._max=o.Cartesian3.clone(i,a._max),a._offsetAttribute=-1===t?void 0:t,a):(C.offsetAttribute=-1===t?void 0:t,new r(C))},r.createGeometry=function(e){var t=e._min,a=e._max;if(!o.Cartesian3.equals(t,a)){var n=new b.GeometryAttributes,i=new Uint16Array(24),r=new Float64Array(24);r[0]=t.x,r[1]=t.y,r[2]=t.z,r[3]=a.x,r[4]=t.y,r[5]=t.z,r[6]=a.x,r[7]=a.y,r[8]=t.z,r[9]=t.x,r[10]=a.y,r[11]=t.z,r[12]=t.x,r[13]=t.y,r[14]=a.z,r[15]=a.x,r[16]=t.y,r[17]=a.z,r[18]=a.x,r[19]=a.y,r[20]=a.z,r[21]=t.x,r[22]=a.y,r[23]=a.z,n.position=new c.GeometryAttribute({componentDatatype:s.ComponentDatatype.DOUBLE,componentsPerAttribute:3,values:r}),i[0]=4,i[1]=5,i[2]=5,i[3]=6,i[4]=6,i[5]=7,i[6]=7,i[7]=4,i[8]=0,i[9]=1,i[10]=1,i[11]=2,i[12]=2,i[13]=3,i[14]=3,i[15]=0,i[16]=0,i[17]=4,i[18]=1,i[19]=5,i[20]=2,i[21]=6,i[22]=3,i[23]=7;a=o.Cartesian3.subtract(a,t,d),t=.5*o.Cartesian3.magnitude(a);return f.defined(e._offsetAttribute)&&(a=r.length,r=new Uint8Array(a/3),a=e._offsetAttribute===u.GeometryOffsetAttribute.NONE?0:1,u.arrayFill(r,a),n.applyOffset=new c.GeometryAttribute({componentDatatype:s.ComponentDatatype.UNSIGNED_BYTE,componentsPerAttribute:1,values:r})),new c.Geometry({attributes:n,indices:i,primitiveType:c.PrimitiveType.LINES,boundingSphere:new m.BoundingSphere(o.Cartesian3.ZERO,t),offsetAttribute:e._offsetAttribute})}},function(e,t){return f.defined(t)&&(e=r.unpack(e,t)),r.createGeometry(e)}});
+define([
+  './GeometryOffsetAttribute-1772960d',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './when-4bbc8319',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc'
+], function (e, t, a, n, i, r, u, m, o, s) {
+  'use strict'
+  var f = new a.Cartesian3()
+  function c(e) {
+    var t = (e = r.defaultValue(e, r.defaultValue.EMPTY_OBJECT)).minimum,
+      n = e.maximum
+    ;(this._min = a.Cartesian3.clone(t)),
+      (this._max = a.Cartesian3.clone(n)),
+      (this._offsetAttribute = e.offsetAttribute),
+      (this._workerName = 'createBoxOutlineGeometry')
+  }
+  ;(c.fromDimensions = function (e) {
+    var t = (e = r.defaultValue(e, r.defaultValue.EMPTY_OBJECT)).dimensions,
+      n = a.Cartesian3.multiplyByScalar(t, 0.5, new a.Cartesian3())
+    return new c({ minimum: a.Cartesian3.negate(n, new a.Cartesian3()), maximum: n, offsetAttribute: e.offsetAttribute })
+  }),
+    (c.fromAxisAlignedBoundingBox = function (e) {
+      return new c({ minimum: e.minimum, maximum: e.maximum })
+    }),
+    (c.packedLength = 2 * a.Cartesian3.packedLength + 1),
+    (c.pack = function (e, t, n) {
+      return (
+        (n = r.defaultValue(n, 0)),
+        a.Cartesian3.pack(e._min, t, n),
+        a.Cartesian3.pack(e._max, t, n + a.Cartesian3.packedLength),
+        (t[n + 2 * a.Cartesian3.packedLength] = r.defaultValue(e._offsetAttribute, -1)),
+        t
+      )
+    })
+  var d = new a.Cartesian3(),
+    p = new a.Cartesian3(),
+    y = { minimum: d, maximum: p, offsetAttribute: void 0 }
+  return (
+    (c.unpack = function (e, t, n) {
+      t = r.defaultValue(t, 0)
+      var i = a.Cartesian3.unpack(e, t, d),
+        u = a.Cartesian3.unpack(e, t + a.Cartesian3.packedLength, p),
+        m = e[t + 2 * a.Cartesian3.packedLength]
+      return r.defined(n)
+        ? ((n._min = a.Cartesian3.clone(i, n._min)), (n._max = a.Cartesian3.clone(u, n._max)), (n._offsetAttribute = -1 === m ? void 0 : m), n)
+        : ((y.offsetAttribute = -1 === m ? void 0 : m), new c(y))
+    }),
+    (c.createGeometry = function (n) {
+      var o = n._min,
+        s = n._max
+      if (!a.Cartesian3.equals(o, s)) {
+        var c = new m.GeometryAttributes(),
+          d = new Uint16Array(24),
+          p = new Float64Array(24)
+        ;(p[0] = o.x),
+          (p[1] = o.y),
+          (p[2] = o.z),
+          (p[3] = s.x),
+          (p[4] = o.y),
+          (p[5] = o.z),
+          (p[6] = s.x),
+          (p[7] = s.y),
+          (p[8] = o.z),
+          (p[9] = o.x),
+          (p[10] = s.y),
+          (p[11] = o.z),
+          (p[12] = o.x),
+          (p[13] = o.y),
+          (p[14] = s.z),
+          (p[15] = s.x),
+          (p[16] = o.y),
+          (p[17] = s.z),
+          (p[18] = s.x),
+          (p[19] = s.y),
+          (p[20] = s.z),
+          (p[21] = o.x),
+          (p[22] = s.y),
+          (p[23] = s.z),
+          (c.position = new u.GeometryAttribute({ componentDatatype: i.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: p })),
+          (d[0] = 4),
+          (d[1] = 5),
+          (d[2] = 5),
+          (d[3] = 6),
+          (d[4] = 6),
+          (d[5] = 7),
+          (d[6] = 7),
+          (d[7] = 4),
+          (d[8] = 0),
+          (d[9] = 1),
+          (d[10] = 1),
+          (d[11] = 2),
+          (d[12] = 2),
+          (d[13] = 3),
+          (d[14] = 3),
+          (d[15] = 0),
+          (d[16] = 0),
+          (d[17] = 4),
+          (d[18] = 1),
+          (d[19] = 5),
+          (d[20] = 2),
+          (d[21] = 6),
+          (d[22] = 3),
+          (d[23] = 7)
+        var y = a.Cartesian3.subtract(s, o, f),
+          l = 0.5 * a.Cartesian3.magnitude(y)
+        if (r.defined(n._offsetAttribute)) {
+          var C = p.length,
+            b = new Uint8Array(C / 3),
+            A = n._offsetAttribute === e.GeometryOffsetAttribute.NONE ? 0 : 1
+          e.arrayFill(b, A),
+            (c.applyOffset = new u.GeometryAttribute({ componentDatatype: i.ComponentDatatype.UNSIGNED_BYTE, componentsPerAttribute: 1, values: b }))
+        }
+        return new u.Geometry({
+          attributes: c,
+          indices: d,
+          primitiveType: u.PrimitiveType.LINES,
+          boundingSphere: new t.BoundingSphere(a.Cartesian3.ZERO, l),
+          offsetAttribute: n._offsetAttribute
+        })
+      }
+    }),
+    function (e, t) {
+      return r.defined(t) && (e = c.unpack(e, t)), c.createGeometry(e)
+    }
+  )
+})
