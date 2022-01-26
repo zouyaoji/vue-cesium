@@ -175,7 +175,14 @@ export const tilesetPrimitiveProps = {
     type: Boolean,
     default: false
   },
-  ...enableMouseEvent
+  ...enableMouseEvent,
+  enableModelExperimental: {
+    type: Boolean,
+    default: false
+  },
+  customShader: {
+    type: Object as PropType<Cesium.CustomShader>
+  }
 }
 export default defineComponent({
   name: 'VcPrimitiveTileset',

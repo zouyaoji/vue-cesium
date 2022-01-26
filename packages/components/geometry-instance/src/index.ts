@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:50:14
+ * @LastEditTime: 2022-01-25 11:18:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
@@ -112,5 +112,23 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryInstanceProps = ExtractPropTypes<typeof geometryInstanceProps>
+// export type VcGeometryInstanceProps = ExtractPropTypes<typeof geometryInstanceProps>
 export type VcGeometryInstanceEmits = typeof emits
+export type VcGeometryInstanceProps = {
+  /**
+   * The geometry to instance.
+   */
+  geometry?: Cesium.Geometry | Cesium.GeometryFactory
+  /**
+   * The model matrix that transforms to transform the geometry from model to world coordinates.
+   */
+  modelMatrix?: Cesium.Matrix4
+  /**
+   * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes.
+   */
+  id?: any
+  /**
+   * Per-instance attributes like a show or color attribute shown in the example below.
+   */
+  attributes: any
+}

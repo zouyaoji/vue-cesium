@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2022-01-20 23:04:32
+ * @LastEditTime: 2022-01-25 11:13:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
@@ -167,90 +167,91 @@ export default defineComponent({
 // export type VcPolygonProps = ExtractPropTypes<typeof polygonProps>
 export type VcPolygonProps = {
   /**
-   * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes
+   * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes.
    */
   id?: any
   /**
-   * Determines if this primitive will be shown
+   * Determines if this primitive will be shown.
    * Default value: true
    */
   show?: boolean
   positions?: VcCartesian3Array
   classificationType?: number
   /**
-   * 	A polygon hierarchy that can include holes
+   * 	A polygon hierarchy that can include holes.
    */
   polygonHierarchy?: VcPolygonHierarchy
   /**
-   * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work
+   * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work.
    */
   clampToGround?: boolean
   /**
-   * The appearance used to render the primitive
+   * The appearance used to render the primitive.
    */
   appearance?: VcAppearance
   /***
-   * The appearance used to shade this primitive when it fails the depth test
+   * The appearance used to shade this primitive when it fails the depth test.
    */
   depthFailAppearance?: VcAppearance
   /**
-   * The ellipsoid to be used as a reference
+   * The ellipsoid to be used as a reference.
    */
   ellipsoid?: Cesium.Ellipsoid
   /**
-   * When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved
+   * When true, each geometry instance will only be pickable with Scene#pick. When false, GPU memory is saved.
    */
   allowPicking?: boolean
   /**
-   * Determines if the primitive will be created asynchronously or block until ready
+   * Determines if the primitive will be created asynchronously or block until ready.
    */
   asynchronous?: boolean
   /**
-   * Specifies whether to respond to mouse pick events
+   * Specifies whether to respond to mouse pick events.
+   * Default Value: true
    */
   enableMouseEvent?: boolean
   /**
-   * Triggers before the VcPoint is loaded
+   * Triggers before the VcPoint is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcPoint is successfully loaded
+   * Triggers when the VcPoint is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcPoint is destroyed
+   * Triggers when the VcPoint is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the mouse is pressed on this polygon
+   * Triggers when the mouse is pressed on this polygon.
    */
   mousedown?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse bounces up on this polygon
+   * Triggers when the mouse bounces up on this polygon.
    */
   mouseup?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse clicks on this polygon
+   * Triggers when the mouse clicks on this polygon.
    */
   click?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse clicks outside this polygon
+   * Triggers when the mouse clicks outside this polygon.
    */
   clickout?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the left mouse button double-clicks this polygon
+   * Triggers when the left mouse button double-clicks this polygon.
    */
   dblclick?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse moves on this polygon
+   * Triggers when the mouse moves on this polygon.
    */
   mousemove?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse moves over to this polygon
+   * Triggers when the mouse moves over to this polygon.
    */
   mouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this polygon
+   * 	Triggers when the mouse moves out of this polygon.
    */
   mouseout?: (evt: VcPickEvent) => void
 }

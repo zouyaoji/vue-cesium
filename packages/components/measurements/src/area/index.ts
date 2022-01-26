@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-22 15:50:36
+ * @LastEditTime: 2022-01-25 14:53:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
@@ -12,17 +12,18 @@ import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { MeasureUnits } from '@vue-cesium/shared'
 import type { VcGeometryPolylineProps } from '../../../geometries'
-import type { VcDrawingMaterial } from '@vue-cesium/utils/drawing-types'
 import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
 import { drawingEmit } from '@vue-cesium/utils/emits'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 
 export default defineComponent({
   name: 'VcMeasurementArea',
   props: {
     ...useDrawingActionProps,
     measureUnits: Object as PropType<MeasureUnits>,
-    polylineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
-    polygonOpts: Object as PropType<VcPolygonProps & VcDrawingMaterial>,
+    polylineOpts: Object as PropType<VcGeometryPolylineProps>,
+    primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
+    polygonOpts: Object as PropType<VcPolygonProps>,
     labelOpts: Object as PropType<VcLabelProps>,
     labelsOpts: Object as PropType<VcLabelProps>,
     locale: String,

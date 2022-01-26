@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-01-22 14:43:54
+ * @LastEditTime: 2022-01-23 15:31:58
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
  */
-import { VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt } from './drawing-types'
+import { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt } from './drawing-types'
 import type {
   VcPickEvent,
   VcReadyObject,
@@ -78,6 +78,7 @@ export const datasourceEmits = {
 
 export const drawingEmit = {
   ...commonEmits,
+  activeEvt: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => true,
   drawEvt: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => true,
   editorEvt: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => true,
   mouseEvt: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => true

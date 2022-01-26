@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-22 15:53:09
+ * @LastEditTime: 2022-01-25 14:54:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\distance\index.ts
@@ -11,10 +11,10 @@ import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-s
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { PropType } from 'vue'
 import type { MeasureUnits } from '@vue-cesium/shared'
-import type { VcDrawingMaterial } from '@vue-cesium/utils/drawing-types'
 import type { VcLabelProps } from '../../../primitive-collections'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import { drawingEmit } from '@vue-cesium/utils/emits'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 
 export default defineComponent({
   name: 'VcMeasurementDistance',
@@ -25,7 +25,8 @@ export default defineComponent({
       default: false
     },
     measureUnits: Object as PropType<MeasureUnits>,
-    polylineOpts: Object as PropType<VcGeometryPolylineProps & VcDrawingMaterial>,
+    polylineOpts: Object as PropType<VcGeometryPolylineProps>,
+    primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     labelOpts: Object as PropType<VcLabelProps>,
     xLabelOpts: Object as PropType<VcLabelProps>,
     xAngleLabelOpts: Object as PropType<VcLabelProps>,

@@ -83,7 +83,7 @@ interface MaterialOption {
 
 interface AppearanceOption {
   type: string
-  options: CesiumAppearance | { material: MaterialOption }
+  options?: CesiumAppearance | { material: MaterialOption }
 }
 
 interface RectangleInDegreeOption {

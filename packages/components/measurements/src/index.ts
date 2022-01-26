@@ -26,7 +26,7 @@ import {
   mainFabDefault
 } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabAction } from '@vue-cesium/components/ui'
+import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
 import VcMeasurementDistance from './distance'
 import VcMeasurementPolyline from './polyline'
 import VcMeasurementHorizontal from './horizontal'
@@ -36,8 +36,18 @@ import VcMeasurementPoint from './point'
 import VcMeasurementArea from './area'
 import VcMeasurementRectangle from './rectangle'
 import VcMeasurementRegular from './regular'
-import { MeasurementActionCmpOpts, MeasurementActionCmpRef, MeasurementActionOpts, VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type {
+  MeasurementActionCmpOpts,
+  MeasurementActionCmpRef,
+  MeasurementActionOpts,
+  VcComponentDistanceMeasurementOpts,
+  VcDrawingActionInstance,
+  VcHorizontalMeasurementOpts,
+  VcMeasurementOpts,
+  VcPolylineMeasurementOpts,
+  VcRegularMeasurementOpts
+} from '@vue-cesium/utils/drawing-types'
+import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useLocaleInject } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { circleDrawingActionDefault, clearActionDefault, regularDrawingActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
@@ -57,84 +67,57 @@ export default defineComponent({
     instance.cesiumClass = 'VcMeasurements'
     const { t } = useLocaleInject()
 
-    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
-    const mainFabOpts = reactive<typeof mainFabDefault>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
-    const distanceActionOpts = reactive<typeof distanceMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.distanceActionOpts, props.distanceActionOpts)
-    )
+    const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
+    const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
 
-    const distanceMeasurementOpts = reactive<typeof distanceMeasurementDefault>(
+    const distanceActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.distanceActionOpts, props.distanceActionOpts))
+    const distanceMeasurementOpts = reactive<VcMeasurementOpts>(
       Object.assign({}, defaultOptions.distanceMeasurementOpts, props.distanceMeasurementOpts)
     )
 
-    const componentDistanceActionOpts = reactive<typeof componentDistanceMeasurementActionDefault>(
+    const componentDistanceActionOpts = reactive<VcActionTooltipProps>(
       Object.assign({}, defaultOptions.componentDistanceActionOpts, props.componentDistanceActionOpts)
     )
-
-    const componentDistanceMeasurementOpts = reactive<typeof componentDistanceMeasurementDefault>(
+    const componentDistanceMeasurementOpts = reactive<VcComponentDistanceMeasurementOpts>(
       Object.assign({}, defaultOptions.componentDistanceMeasurementOpts, props.componentDistanceMeasurementOpts)
     )
 
-    const polylineActionOpts = reactive<typeof polylineMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts)
-    )
-
-    const polylineMeasurementOpts = reactive<typeof polylineMeasurementDefault>(
+    const polylineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts))
+    const polylineMeasurementOpts = reactive<VcPolylineMeasurementOpts>(
       Object.assign({}, defaultOptions.polylineMeasurementOpts, props.polylineMeasurementOpts)
     )
 
-    const horizontalActionOpts = reactive<typeof horizontalMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.horizontalActionOpts, props.horizontalActionOpts)
-    )
-
-    const horizontalMeasurementOpts = reactive<typeof horizontalMeasurementDefault>(
+    const horizontalActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.horizontalActionOpts, props.horizontalActionOpts))
+    const horizontalMeasurementOpts = reactive<VcHorizontalMeasurementOpts>(
       Object.assign({}, defaultOptions.horizontalMeasurementOpts, props.horizontalMeasurementOpts)
     )
 
-    const verticalActionOpts = reactive<typeof verticalMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.verticalActionOpts, props.verticalActionOpts)
-    )
-
-    const verticalMeasurementOpts = reactive<typeof verticalMeasurementDefault>(
+    const verticalActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.verticalActionOpts, props.verticalActionOpts))
+    const verticalMeasurementOpts = reactive<VcMeasurementOpts>(
       Object.assign({}, defaultOptions.verticalMeasurementOpts, props.verticalMeasurementOpts)
     )
 
-    const heightActionOpts = reactive<typeof heightMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.heightActionOpts, props.heightActionOpts)
-    )
+    const heightActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.heightActionOpts, props.heightActionOpts))
+    const heightMeasurementOpts = reactive<VcMeasurementOpts>(Object.assign({}, defaultOptions.heightMeasurementOpts, props.heightMeasurementOpts))
 
-    const heightMeasurementOpts = reactive<typeof heightMeasurementDefault>(
-      Object.assign({}, defaultOptions.heightMeasurementOpts, props.heightMeasurementOpts)
-    )
+    const areaActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.areaActionOpts, props.areaActionOpts))
+    const areaMeasurementOpts = reactive<VcPolylineMeasurementOpts>(Object.assign({}, defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts))
 
-    const areaActionOpts = reactive<typeof areaMeasurementActionDefault>(Object.assign({}, defaultOptions.areaActionOpts, props.areaActionOpts))
-    const areaMeasurementOpts = reactive<typeof areaMeasurementDefault>(
-      Object.assign({}, defaultOptions.areaMeasurementOpts, props.areaMeasurementOpts)
-    )
+    const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
+    const pointMeasurementOpts = reactive<VcMeasurementOpts>(Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts))
 
-    const pointActionOpts = reactive<typeof pointMeasurementActionDefault>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
-    const pointMeasurementOpts = reactive<typeof pointMeasurementDefault>(
-      Object.assign({}, defaultOptions.pointMeasurementOpts, props.pointMeasurementOpts)
-    )
-
-    const rectangleActionOpts = reactive<typeof rectangleMeasurementActionDefault>(
-      Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts)
-    )
-
-    const rectangleMeasurementOpts = reactive<typeof rectangleMeasurementDefault>(
+    const rectangleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts))
+    const rectangleMeasurementOpts = reactive<VcRegularMeasurementOpts>(
       Object.assign({}, defaultOptions.rectangleMeasurementOpts, props.rectangleMeasurementOpts)
     )
 
-    const regularActionOpts = reactive<typeof regularDrawingActionDefault>(
-      Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts)
-    )
-
-    const regularMeasurementOpts = reactive<typeof regularMeasurementDefault>(
+    const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts))
+    const regularMeasurementOpts = reactive<VcRegularMeasurementOpts>(
       Object.assign({}, defaultOptions.regularMeasurementOpts, props.regularMeasurementOpts)
     )
 
-    const circleActionOpts = reactive<typeof circleDrawingActionDefault>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
-    const circleMeasurementOpts = reactive<typeof circleMeasurementDefault>(
+    const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleMeasurementOpts = reactive<VcRegularMeasurementOpts>(
       Object.assign({}, defaultOptions.circleMeasurementOpts, props.circleMeasurementOpts)
     )
 

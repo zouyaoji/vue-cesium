@@ -26,7 +26,7 @@ import GeometryPolylineVolume from './polyline-volume'
 import GeometryPolylineVolumeOutline from './polyline-volume-outline'
 import GeometryRectangle from './rectangle'
 import GeometryRectangleOutline from './rectangle-outline'
-import GeometryPolylineSimple from './simple-polyline'
+import GeometrySimplePolyline from './simple-polyline'
 import GeometrySphere from './sphere'
 import GeometrySphereOutline from './sphere-outline'
 import GeometryWall from './wall'
@@ -59,7 +59,7 @@ const components = [
   GeometryPolylineVolumeOutline,
   GeometryRectangle,
   GeometryRectangleOutline,
-  GeometryPolylineSimple,
+  GeometrySimplePolyline,
   GeometrySphere,
   GeometrySphereOutline,
   GeometryWall,
@@ -108,7 +108,7 @@ export const VcGeometryPolylineVolume = GeometryPolylineVolume as SFCWithInstall
 export const VcGeometryPolylineVolumeOutline = GeometryPolylineVolumeOutline as SFCWithInstall<typeof GeometryPolylineVolumeOutline>
 export const VcGeometryRectangle = GeometryRectangle as SFCWithInstall<typeof GeometryRectangle>
 export const VcGeometryRectangleOutline = GeometryRectangleOutline as SFCWithInstall<typeof GeometryRectangleOutline>
-export const VcGeometryPolylineSimple = GeometryPolylineSimple as SFCWithInstall<typeof GeometryPolylineSimple>
+export const VcGeometrySimplePolyline = GeometrySimplePolyline as SFCWithInstall<typeof GeometrySimplePolyline>
 export const VcGeometrySphere = GeometrySphere as SFCWithInstall<typeof GeometrySphere>
 export const VcGeometrySphereOutline = GeometrySphereOutline as SFCWithInstall<typeof GeometrySphereOutline>
 export const VcGeometryWall = GeometryWall as SFCWithInstall<typeof GeometryWall>

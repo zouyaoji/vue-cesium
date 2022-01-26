@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-20 21:22:44
+ * @LastEditTime: 2022-01-25 11:12:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\point\index.ts
@@ -66,99 +66,100 @@ export default defineComponent({
 // export type VcPointProps = ExtractPropTypes<typeof pointProps>
 export type VcPointProps = {
   /**
-   * Specify the inner color of the point
+   * Specify the inner color of the point.
    * Default value: white
    */
   color?: VcColor
   /**
-   * Specify the distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied
+   * Specify the distance from the camera at which to disable the depth test to, for example, prevent clipping against terrain. When set to zero, the depth test is always applied. When set to Number.POSITIVE_INFINITY, the depth test is never applied.
    */
   disableDepthTestDistance?: number
   /**
-   * Specify the condition specifying at what distance from the camera that this point will be displayed
+   * Specify the condition specifying at what distance from the camera that this point will be displayed.
    */
   distanceDisplayCondition?: VcDistanceDisplayCondition
   /**
-   * Specify the user-defined value returned when the point is picked
+   * Specify the user-defined value returned when the point is picked.
    */
   id?: any
   /**
-   * Specify the outline color of the point
+   * Specify the outline color of the point.
    * Default value: black
    */
   outlineColor?: VcColor
   /**
-   * Specify the outline width in pixels. This width adds to pixelSize, increasing the total size of the point
+   * Specify the outline width in pixels. This width adds to pixelSize, increasing the total size of the point.
    * Default value: 1.0
    */
   outlineWidth?: number
   /**
-   * Specify the inner size of the point in pixels
+   * Specify the inner size of the point in pixels.
    * Default value: 0.0
    */
   pixelSize?: number
   /**
-   * Specify the position of this point
+   * Specify the position of this point.
    */
   position?: VcPosition
   /**
-   * Specify the near and far scaling properties of a point based on the point's distance from the camera. A point's scale will interpolate between the NearFarScalar#nearValue and NearFarScalar#farValue while the camera distance falls within the lower and upper bounds of the specified NearFarScalar#near and NearFarScalar#far. Outside of these ranges the point's scale remains clamped to the nearest bound. This scale multiplies the pixelSize and outlineWidth to affect the total size of the point. If undefined, scaleByDistance will be disabled
+   * Specify the near and far scaling properties of a point based on the point's distance from the camera. A point's scale will interpolate between the NearFarScalar#nearValue and NearFarScalar#farValue while the camera distance falls within the lower and upper bounds of the specified NearFarScalar#near and NearFarScalar#far. Outside of these ranges the point's scale remains clamped to the nearest bound. This scale multiplies the pixelSize and outlineWidth to affect the total size of the point. If undefined, scaleByDistance will be disabled.
    */
   scaleByDistance?: VcNearFarScalar
   /**
-   * Determines if this point will be shown. Use this to hide or show a point, instead of removing it and re-adding it to the collection
+   * Determines if this point will be shown. Use this to hide or show a point, instead of removing it and re-adding it to the collection.
    */
   show?: boolean
   /**
-   * Specify the near and far translucency properties of a point based on the point's distance from the camera. A point's translucency will interpolate between the NearFarScalar#nearValue and NearFarScalar#farValue while the camera distance falls within the lower and upper bounds of the specified NearFarScalar#near and NearFarScalar#far. Outside of these ranges the point's translucency remains clamped to the nearest bound. If undefined, translucencyByDistance will be disabled
+   * Specify the near and far translucency properties of a point based on the point's distance from the camera. A point's translucency will interpolate between the NearFarScalar#nearValue and NearFarScalar#farValue while the camera distance falls within the lower and upper bounds of the specified NearFarScalar#near and NearFarScalar#far. Outside of these ranges the point's translucency remains clamped to the nearest bound. If undefined, translucencyByDistance will be disabled.
    */
   translucencyByDistance?: VcNearFarScalar
   /**
-   * Specifies whether to respond to mouse pick events
+   * Specifies whether to respond to mouse pick events.
+   * Default Value: true
    */
   enableMouseEvent?: boolean
   /**
-   * Triggers before the VcPoint is loaded
+   * Triggers before the VcPoint is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcPoint is successfully loaded
+   * Triggers when the VcPoint is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcPoint is destroyed
+   * Triggers when the VcPoint is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the mouse is pressed on this point
+   * Triggers when the mouse is pressed on this point.
    */
   mousedown?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse bounces up on this point
+   * Triggers when the mouse bounces up on this point.
    */
   mouseup?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse clicks on this point
+   * Triggers when the mouse clicks on this point.
    */
   click?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse clicks outside this point
+   * Triggers when the mouse clicks outside this point.
    */
   clickout?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the left mouse button double-clicks this point
+   * Triggers when the left mouse button double-clicks this point.
    */
   dblclick?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse moves on this point
+   * Triggers when the mouse moves on this point.
    */
   mousemove?: (evt: VcPickEvent) => void
   /**
-   * Triggers when the mouse moves over to this point
+   * Triggers when the mouse moves over to this point.
    */
   mouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this point
+   * 	Triggers when the mouse moves out of this point.
    */
   mouseout?: (evt: VcPickEvent) => void
 }

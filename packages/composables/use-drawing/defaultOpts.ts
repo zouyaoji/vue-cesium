@@ -1,16 +1,16 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2022-01-21 09:26:38
+ * @LastEditTime: 2022-01-26 17:09:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
  */
 
-import { VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
-import { VcBillboardProps, VcLabelProps, VcPointProps, VcPolygonProps } from '@vue-cesium/components/primitive-collections'
-import { VcPrimitiveProps } from '@vue-cesium/components/primitives'
-import { VcDrawingMaterial, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
+import type { VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
+import type { VcBillboardProps, VcLabelProps, VcPointProps, VcPolygonProps } from '@vue-cesium/components/primitive-collections'
+import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '@vue-cesium/components/primitives'
+import type { VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcBtnTooltipProps } from '@vue-cesium/utils/types'
 
 const actionOptions: VcActionTooltipProps = {
@@ -38,6 +38,39 @@ const actionOptions: VcActionTooltipProps = {
   }
 }
 
+const polylinePrimitiveOptsDefault: VcPrimitiveProps & VcPrimitiveGroundPolylineProps = {
+  show: true,
+  enableMouseEvent: true,
+  asynchronous: false,
+  classificationType: 2,
+  appearance: {
+    type: 'PolylineMaterialAppearance',
+    options: {
+      material: {
+        fabric: {
+          type: 'Color',
+          uniforms: {
+            color: '#51ff00'
+          }
+        }
+      }
+    }
+  },
+  depthFailAppearance: {
+    type: 'PolylineMaterialAppearance',
+    options: {
+      material: {
+        fabric: {
+          type: 'PolylineDash',
+          uniforms: {
+            color: [255, 0, 0, 127]
+          }
+        }
+      }
+    }
+  }
+}
+
 const pointOptsDefault: VcPointProps = {
   show: true,
   color: 'rgb(255,229,0)',
@@ -54,49 +87,39 @@ const billboardOptsDefault: VcBillboardProps = {
   image: ''
 }
 
-const polylineOptsDefault: VcGeometryPolylineProps & VcDrawingMaterial = {
-  material: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: '#51ff00'
-      }
-    }
-  },
-  depthFailMaterial: {
-    fabric: {
-      type: 'PolylineDash',
-      uniforms: {
-        color: [255, 0, 0, 127]
-      }
-    }
-  },
+const polylineOptsDefault: VcGeometryPolylineProps = {
   width: 2,
   arcType: 0,
-  ellipsoid: undefined,
-  show: true,
-  classificationType: 2
+  ellipsoid: undefined
 }
 
-const polygonOptsDefault: VcPolygonProps & VcDrawingMaterial = {
-  material: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: [255, 165, 0, 125]
-      }
-    }
-  },
-  depthFailMaterial: {
-    fabric: {
-      type: 'Color',
-      uniforms: {
-        color: [255, 165, 0, 125]
-      }
-    }
-  },
+const polygonOptsDefault: VcPolygonProps = {
   show: true,
-  classificationType: 2
+  enableMouseEvent: true,
+  asynchronous: false,
+  classificationType: 2,
+  appearance: {
+    type: 'MaterialAppearance',
+    options: {
+      material: {
+        fabric: {
+          type: 'Color',
+          uniforms: {
+            color: [255, 165, 0, 125]
+          }
+        }
+      },
+      faceForward: true,
+      renderState: {
+        cull: {
+          enabled: false
+        },
+        depthTest: {
+          enabled: false
+        }
+      }
+    }
+  }
 }
 
 const labelOptsDefault: VcLabelProps = {
@@ -158,6 +181,7 @@ const segmentDrawingDefault: VcDrawingOpts = {
   },
   pointOpts: pointOptsDefault,
   polylineOpts: polylineOptsDefault,
+  primitiveOpts: polylinePrimitiveOptsDefault,
   editorOpts: {
     pixelOffset: [16, -8],
     delay: 1000,
@@ -177,6 +201,7 @@ const polylineDrawingDefault: VcDrawingOpts = {
   },
   pointOpts: pointOptsDefault,
   polylineOpts: polylineOptsDefault,
+  primitiveOpts: polylinePrimitiveOptsDefault,
   editorOpts: {
     pixelOffset: [16, -8],
     delay: 1000,
@@ -202,12 +227,18 @@ const polygonDrawingDefault: VcDrawingOpts = {
     pixelOffset: [32, 32]
   },
   pointOpts: pointOptsDefault,
-  polylineOpts: Object.assign({}, polylineOptsDefault, {
-    depthFailMaterial: {
-      fabric: {
-        type: 'Color',
-        uniforms: {
-          color: '#51ff00'
+  polylineOpts: polylineOptsDefault,
+  primitiveOpts: Object.assign({}, polylinePrimitiveOptsDefault, {
+    depthFailAppearance: {
+      type: 'PolylineMaterialAppearance',
+      options: {
+        material: {
+          fabric: {
+            type: 'Color',
+            uniforms: {
+              color: '#51ff00'
+            }
+          }
         }
       }
     }
@@ -245,17 +276,15 @@ const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingD
     })
   },
   edge: 4,
-  regular: false // regular
+  regular: true
 })
 
 const circleDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
-  edge: 360,
-  regular: true
+  edge: 360
 })
 
 const regularDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {
-  edge: 6,
-  regular: true
+  edge: 6
 })
 
 const clearActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -287,5 +316,6 @@ export {
   circleDrawingDefault,
   circleDrawingActionDefault,
   regularDrawingDefault,
-  regularDrawingActionDefault
+  regularDrawingActionDefault,
+  polylinePrimitiveOptsDefault
 }

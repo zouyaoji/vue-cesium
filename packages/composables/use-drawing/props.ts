@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-25 14:46:48
- * @LastEditTime: 2022-01-22 10:53:13
+ * @LastEditTime: 2022-01-26 10:17:24
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\props.ts
@@ -37,7 +37,7 @@ export const useDrawingFabProps = {
     validator: v => v.length === 2
   },
   mode: {
-    type: Number,
+    type: Number as PropType<0 | 1>,
     default: 1
   },
   activeColor: {

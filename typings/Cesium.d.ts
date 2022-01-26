@@ -66,6 +66,8 @@ declare namespace Cesium {
     pickPositionWorldCoordinates(pickPositionWorldCoordinates: Cesium.Cartesian2, result?: Cesium.Cartesian3): Cesium.Cartesian3
     _performanceDisplay: any
     tweens: any
+    pickFromRay(ray: Cesium.Ray, objectsToExclude?: Array<any>, width?: number): any
+    drillPickFromRay(ray: Cesium.Ray, limit?: number, objectsToExclude?: Array<any>, width?: number): any
   }
 
   interface Globe {
@@ -125,23 +127,23 @@ declare namespace Cesium {
     _primitives: Array<Primitive | any>
   }
 
-  class ShadowMap {
-    constructor(options: {
-      lightCamera?: Camera
-      enabled?: boolean
-      isPointLight?: boolean
-      pointLightRadius?: number | boolean
-      cascadesEnabled?: boolean
-      numberOfCascades?: number
-      maximumDistance?: number
-      size?: number
-      softShadows?: boolean
-      darkness?: number
-      normalOffset?: boolean
-      fadingEnabled?: boolean
-      context?: any
-      fromLightSource?: boolean
-    })
+  interface ShadowMap {
+    // constructor(options: {
+    //   lightCamera?: Camera
+    //   enabled?: boolean
+    //   isPointLight?: boolean
+    //   pointLightRadius?: number | boolean
+    //   cascadesEnabled?: boolean
+    //   numberOfCascades?: number
+    //   maximumDistance?: number
+    //   size?: number
+    //   softShadows?: boolean
+    //   darkness?: number
+    //   normalOffset?: boolean
+    //   fadingEnabled?: boolean
+    //   context?: any
+    //   fromLightSource?: boolean
+    // })
     update(e): void
     destroy(): boolean
     _shadowMapTexture: any
@@ -152,7 +154,7 @@ declare namespace Cesium {
     maximumDistance: number
     _textureSize: any
     _pointLightRadius: number | boolean
-    enabled?: boolean
+    enabled: boolean
   }
 
   // eslint-disable-next-line no-var

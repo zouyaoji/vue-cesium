@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-01-22 15:44:43
+ * @LastEditTime: 2022-01-25 17:51:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -19,6 +19,7 @@ import {
   polygonDrawingDefault,
   polylineDrawingDefault,
   polylineOptsDefault,
+  polylinePrimitiveOptsDefault,
   regularDrawingActionDefault,
   segmentDrawingDefault
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
@@ -31,7 +32,7 @@ import type {
   VcHorizontalMeasurementOpts,
   VcMeasurementOpts,
   VcPolylineMeasurementOpts,
-  VcRectangleMeasurementOpts
+  VcRegularMeasurementOpts
 } from '@vue-cesium/utils/drawing-types'
 
 const distanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -103,24 +104,36 @@ const horizontalMeasurementActionDefault: VcActionTooltipProps = Object.assign({
 
 const horizontalMeasurementDefault: VcHorizontalMeasurementOpts = Object.assign({}, polylineMeasurementDefault, {
   dashLineOpts: {
-    material: {
-      fabric: {
-        type: 'PolylineDash',
-        uniforms: {
-          color: [255, 255, 0, 255]
-        }
-      }
-    },
-    depthFailMaterial: {
-      fabric: {
-        type: 'PolylineDash',
-        uniforms: {
-          color: [255, 255, 0, 255]
-        }
-      }
-    },
     width: 2
   },
+  dashLinePrimitiveOpts: Object.assign({}, polylinePrimitiveOptsDefault, {
+    appearance: {
+      type: 'PolylineMaterialAppearance',
+      options: {
+        material: {
+          fabric: {
+            type: 'PolylineDash',
+            uniforms: {
+              color: [255, 255, 0, 255]
+            }
+          }
+        }
+      }
+    },
+    depthFailAppearance: {
+      type: 'PolylineMaterialAppearance',
+      options: {
+        material: {
+          fabric: {
+            type: 'PolylineDash',
+            uniforms: {
+              color: [255, 255, 0, 255]
+            }
+          }
+        }
+      }
+    }
+  }),
   labelOpts: Object.assign({}, labelOptsDefault, {
     horizontalOrigin: 1,
     verticalOrigin: 1,
@@ -233,7 +246,7 @@ const rectangleMeasurementActionDefault: VcActionTooltipProps = Object.assign({}
   icon: 'vc-icons-drawing-rectangle'
 })
 
-const rectangleMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, areaMeasurementDefault, {
+const rectangleMeasurementDefault: VcRegularMeasurementOpts = Object.assign({}, areaMeasurementDefault, {
   pointOpts: Object.assign({}, pointOptsDefault, {
     show: false
   }),
@@ -252,16 +265,15 @@ const rectangleMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}
   },
   edge: 4,
   loop: false,
-  showAngleLabel: false,
-  regular: false // regular
+  showAngleLabel: false
 })
 
-const regularMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
+const regularMeasurementDefault: VcRegularMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
   edge: 6,
   loop: true
 })
 
-const circleMeasurementDefault: VcRectangleMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
+const circleMeasurementDefault: VcRegularMeasurementOpts = Object.assign({}, rectangleMeasurementDefault, {
   edge: 360,
   loop: true,
   showDistanceLabel: false,
@@ -380,7 +392,7 @@ const measurementsProps = {
     default: () => pointMeasurementActionDefault
   },
   pointMeasurementOpts: {
-    type: Object as PropType<typeof pointMeasurementDefault>,
+    type: Object as PropType<VcMeasurementOpts>,
     default: () => pointMeasurementDefault
   },
   rectangleActionOpts: {
@@ -388,7 +400,7 @@ const measurementsProps = {
     default: () => rectangleMeasurementActionDefault
   },
   rectangleMeasurementOpts: {
-    type: Object as PropType<typeof rectangleMeasurementDefault>,
+    type: Object as PropType<VcRegularMeasurementOpts>,
     default: () => rectangleMeasurementDefault
   },
   regularActionOpts: {
@@ -396,7 +408,7 @@ const measurementsProps = {
     default: () => regularDrawingActionDefault
   },
   regularMeasurementOpts: {
-    type: Object as PropType<typeof regularMeasurementDefault>,
+    type: Object as PropType<VcRegularMeasurementOpts>,
     default: () => regularMeasurementDefault
   },
   circleActionOpts: {
@@ -404,7 +416,7 @@ const measurementsProps = {
     default: () => circleDrawingActionDefault
   },
   circleMeasurementOpts: {
-    type: Object as PropType<VcRectangleMeasurementOpts>,
+    type: Object as PropType<VcRegularMeasurementOpts>,
     default: () => circleMeasurementDefault
   }
 }

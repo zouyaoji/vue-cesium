@@ -1,36 +1,21 @@
 import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
-import {
-  drawingsProps,
-  defaultOptions,
-  pointDrawingActionDefault,
-  polylineDrawingActionDefault,
-  polygonDrawingActionDefault,
-  rectangleDrawingActionDefault,
-  mainFabDefault,
-  pinDrawingActionDefault,
-  pinDrawingDefault
-} from './defaultProps'
+import { drawingsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabAction } from '@vue-cesium/components/ui'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
+import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import VcDrawingPin from './pin'
 import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
 import VcDrawingRegular from './regular'
 import VcDrawingRectangle from './rectangle'
-import {
-  clearActionDefault,
-  pointDrawingDefault,
-  polygonDrawingDefault,
-  polylineDrawingDefault,
-  rectangleDrawingDefault,
-  circleDrawingDefault,
-  regularDrawingActionDefault,
-  regularDrawingDefault,
-  circleDrawingActionDefault
-} from '@vue-cesium/composables/use-drawing/defaultOpts'
-import { DrawingActionCmpOpts, DrawingActionCmpRef, DrawingActionOpts, VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
+import type {
+  DrawingActionCmpOpts,
+  DrawingActionCmpRef,
+  DrawingActionOpts,
+  VcDrawingActionInstance,
+  VcDrawingOpts
+} from '@vue-cesium/utils/drawing-types'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { useLocaleInject } from '@vue-cesium/composables'
 import { drawingEmit } from '@vue-cesium/utils/emits'
@@ -51,34 +36,22 @@ export default defineComponent({
 
     const options: any = {}
     // computed
-    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
-    const mainFabOpts = reactive<typeof mainFabDefault>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
-    const pointActionOpts = reactive<typeof pointDrawingActionDefault>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
-    const pointDrawingOpts = reactive<typeof pointDrawingDefault>(Object.assign({}, defaultOptions.pointDrawingOpts, props.pointDrawingOpts))
-    const polylineActionOpts = reactive<typeof polylineDrawingActionDefault>(
-      Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts)
-    )
-    const polylineDrawingOpts = reactive<typeof polylineDrawingDefault>(
-      Object.assign({}, defaultOptions.polylineDrawingOpts, props.polylineDrawingOpts)
-    )
-    const polygonActionOpts = reactive<typeof polygonDrawingActionDefault>(
-      Object.assign({}, defaultOptions.polygonActionOpts, props.polygonActionOpts)
-    )
-    const polygonDrawingOpts = reactive<typeof polygonDrawingDefault>(Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts))
-    const rectangleActionOpts = reactive<typeof rectangleDrawingActionDefault>(
-      Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts)
-    )
-    const rectangleDrawingOpts = reactive<typeof rectangleDrawingDefault>(
-      Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts)
-    )
-    const circleActionOpts = reactive<typeof circleDrawingActionDefault>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
-    const circleDrawingOpts = reactive<typeof circleDrawingDefault>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
-    const regularActionOpts = reactive<typeof regularDrawingActionDefault>(
-      Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts)
-    )
-    const regularDrawingOpts = reactive<typeof regularDrawingDefault>(Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts))
-    const pinActionOpts = reactive<typeof pinDrawingActionDefault>(Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts))
-    const pinDrawingOpts = reactive<typeof pinDrawingDefault>(Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts))
+    const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
+    const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
+    const pointActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pointActionOpts, props.pointActionOpts))
+    const pointDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.pointDrawingOpts, props.pointDrawingOpts))
+    const polylineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polylineActionOpts, props.polylineActionOpts))
+    const polylineDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.polylineDrawingOpts, props.polylineDrawingOpts))
+    const polygonActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.polygonActionOpts, props.polygonActionOpts))
+    const polygonDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.polygonDrawingOpts, props.polygonDrawingOpts))
+    const rectangleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.rectangleActionOpts, props.rectangleActionOpts))
+    const rectangleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.rectangleDrawingOpts, props.rectangleDrawingOpts))
+    const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
+    const circleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
+    const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts))
+    const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts))
+    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts))
+    const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts))
 
     options.pointActionOpts = pointActionOpts
     options.pointDrawingOpts = pointDrawingOpts
