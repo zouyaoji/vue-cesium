@@ -182,6 +182,31 @@ export default {
         tip: '清除绘制结果'
       }
     },
+    analysis: {
+      expand: '展开',
+      collapse: '收拢',
+      editor: {
+        move: '移动节点',
+        insert: '插入节点',
+        remove: '移除节点',
+        removeAll: '移除所有节点'
+      },
+      sightline: {
+        tip: '通视分析',
+        drawingTipStart: '单击左键绘制观测点。',
+        drawingTipEnd: '单击左键绘制目标点，双击左键结束绘制。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      viewshed: {
+        tip: '可视域分析',
+        drawingTipStart: '单击左键绘制可视域分析起点。',
+        drawingTipEnd: '单击左键绘制可视域分析终点。',
+        drawingTipEditing: '移动鼠标修改节点，单击左键确定修改，单击右键放弃修改。'
+      },
+      clear: {
+        tip: '清除分析结果'
+      }
+    },
     overview: {
       show: '显示鹰眼',
       hidden: '隐藏鹰眼'

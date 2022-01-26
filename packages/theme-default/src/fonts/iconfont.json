@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27024016",
+      "name": "可视域分析",
+      "font_class": "analysis-viewshed",
+      "unicode": "ec82",
+      "unicode_decimal": 60546
+    },
+    {
+      "icon_id": "27023861",
+      "name": "通视分析6",
+      "font_class": "analysis-sightline",
+      "unicode": "ec81",
+      "unicode_decimal": 60545
+    },
+    {
+      "icon_id": "27023682",
+      "name": "GIS分析",
+      "font_class": "analysis-button",
+      "unicode": "ebb3",
+      "unicode_decimal": 60339
+    },
+    {
       "icon_id": "25215320",
       "name": "pin",
       "font_class": "drawing-pin",

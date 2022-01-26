@@ -1,17 +1,18 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 11:46:30
- * @LastEditTime: 2021-12-31 11:47:41
+ * @LastEditTime: 2022-01-06 11:21:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\index.ts
  */
 import { App } from 'vue'
 import AnalysisFlood from './flood'
+import Analyses from './src'
 
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 
-const components = [AnalysisFlood]
+const components = [AnalysisFlood, Analyses]
 
 const install = (app: App): void => {
   components.forEach(cmp => {
@@ -30,3 +31,4 @@ components.forEach(cmp => {
 })
 
 export const VcAnalysisFlood = AnalysisFlood as SFCWithInstall<typeof AnalysisFlood>
+export const VcAnalyses = Analyses as SFCWithInstall<typeof Analyses>

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2021-12-31 14:58:08
+ * @LastEditTime: 2022-01-14 14:52:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
@@ -11,7 +11,7 @@ import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
 import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
 import { VcPrimitiveClassification } from '@vue-cesium/components/primitives'
-import { VcInstanceGeometry } from '@vue-cesium/components/geometry-instance'
+import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolygon } from '@vue-cesium/components/geometries'
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
@@ -164,7 +164,7 @@ export default defineComponent({
           },
           () =>
             h(
-              VcInstanceGeometry,
+              VcGeometryInstance,
               {
                 id: createGuid(),
                 attributes: attributes.value

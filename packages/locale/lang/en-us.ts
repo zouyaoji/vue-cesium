@@ -178,26 +178,53 @@ export default {
       rectangle: {
         tip: 'Drawing rectangle',
         drawingTipStart: 'Click the left button to draw the starting point of the rectangle.',
-        drawingTipEnd: 'Click the left button to draw the end of the rectangle.',
+        drawingTipEnd: 'Click the left button to draw the end point of the rectangle.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
       circle: {
         tip: 'Drawing circle',
         drawingTipStart: 'Click the left button to draw the starting point of the circle.',
-        drawingTipEnd: 'Click the left button to draw the end of the circle.',
+        drawingTipEnd: 'Click the left button to draw the end point of the circle.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
       regular: {
         tip: 'Drawing regular',
         drawingTipStart: 'Click the left button to draw the starting point of the regular.',
-        drawingTipEnd: 'Click the left button to draw the end of the circle.',
+        drawingTipEnd: 'Click the left button to draw the end point of the circle.',
         drawingTipEditing:
           'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
       },
       clear: {
         tip: 'Clear drawing results'
+      }
+    },
+    analysis: {
+      expand: 'Expand',
+      collapse: 'Collapse',
+      editor: {
+        move: 'Move the point',
+        insert: 'Insert a point',
+        remove: 'Remove the point',
+        removeAll: 'Remove all the points'
+      },
+      sightline: {
+        tip: 'Sightline',
+        drawingTipStart: 'Click the left button to draw the view point of the sightline analysis.',
+        drawingTipEnd: 'Click the left button to draw the next point, and double-click the left button to end the sightline analysis.',
+        drawingTipEditing:
+          'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
+      },
+      viewshed: {
+        tip: 'Viewshed',
+        drawingTipStart: 'Click the left button to draw the view point of the viewshed analysis.',
+        drawingTipEnd: 'Click the left button to draw the end point of the viewshed analysis.',
+        drawingTipEditing:
+          'Move the mouse to modify the node, click the left button to confirm the modification,\nand click the right button to discard the modification.'
+      },
+      clear: {
+        tip: 'Clear analysis results'
       }
     },
     overview: {

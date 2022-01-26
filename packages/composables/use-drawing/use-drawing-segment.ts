@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-01-22 12:09:15
+ * @LastEditTime: 2022-01-26 17:05:58
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -29,12 +29,14 @@ import {
   getPolylineSegmentPitch,
   makeCartesian2,
   makeCartesian3,
-  makeCartesian3Array
+  makeCartesian3Array,
+  getFirstIntersection
 } from '@vue-cesium/utils/cesium-helpers'
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import { Cartesian3Option, VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
-import { computed, getCurrentInstance, h, nextTick, ref, VNode } from 'vue'
+import type { VNode } from 'vue'
+import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
 
@@ -61,7 +63,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
     shadowMap = new Cesium.ShadowMap({
       context: ($services.viewer.scene as any).context,
-      lightCamera: lightCamera,
+      lightCamera,
       enabled: true,
       isPointLight: true,
       pointLightRadius: 400,
@@ -70,7 +72,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       softShadows: true,
       normalOffset: false,
       fromLightSource: false
-    })
+    } as any)
   }
 
   const {
@@ -119,7 +121,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   let restorePosition
   const computedRenderDatas = computed<Array<VcSegmentDrawing>>(() => {
     const polylines: Array<VcSegmentDrawing> = []
-    const { Cartesian3, Cartographic, Rectangle, createGuid, defined, Math: CesiumMath, ShadowMap, Camera } = Cesium
+    const { Cartesian3, Cartographic, Rectangle, createGuid, defined, Math: CesiumMath, Ray } = Cesium
     const { viewer } = $services
 
     renderDatas.value.forEach(polylineSegment => {
@@ -233,6 +235,39 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         // shadowMap
         shadowMap._pointLightRadius = distance
         viewer.scene.shadowMap = shadowMap
+      } else if (cmpName === 'VcAnalysisSightline') {
+        if (props.sightlineType === 'segment') {
+          const positionsNew: Array<Cesium.Cartesian3> = []
+          positionsNew.push(startPosition)
+          const objectsToExclude = []
+          const primitiveCollection: Array<Cesium.PrimitiveCollection> = (primitiveCollectionRef.value.cesiumObject as any)._primitives
+          primitiveCollection.forEach(primitive => {
+            if (primitive instanceof Cesium.PointPrimitiveCollection) {
+              objectsToExclude.push(...primitive._pointPrimitives)
+            }
+            if (primitive instanceof Cesium.Primitive) {
+              objectsToExclude.push(primitive)
+            }
+          })
+          const intersection = getFirstIntersection(startPosition, endPosition, $services.viewer, objectsToExclude)
+          if (defined(intersection)) {
+            positionsNew.push(intersection)
+          }
+          positionsNew.push(endPosition)
+          let distance = 0
+          const distances = []
+          for (let i = 0; i < positionsNew.length - 1; i++) {
+            const s = Cartesian3.distance(positionsNew[i], positionsNew[i + 1])
+            distances.push(s)
+            distance = distance + s
+          }
+          Object.assign(polyline, {
+            positions: positionsNew,
+            distance
+          })
+        } else if (props.sightlineType === 'circle') {
+          // Todo
+        }
       } else {
         labels.push({
           position: labelPosition,
@@ -748,15 +783,15 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         canShowDrawTip.value = false
         drawTipPosition.value = [0, 0, 0]
         type = editorType.value
+
+        if (selectedDrawingActionInstance) {
+          drawTip.value = drawTipOpts.value.drawingTipStart
+          canShowDrawTip.value = true
+        }
       } else {
         if (props.mode === 1) {
           ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
         }
-      }
-
-      if (selectedDrawingActionInstance) {
-        drawTip.value = drawTipOpts.value.drawingTipStart
-        canShowDrawTip.value = true
       }
 
       finished = true
@@ -826,6 +861,17 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       const endCartographic = Cartographic.fromCartesian(position, viewer.scene.globe.ellipsoid)
       !props.clampToGround && (endCartographic.height = startCartographic.height)
       positions[editingPoint.value ? editingPoint.value._index : 1] = Cartographic.toCartesian(endCartographic, viewer.scene.globe.ellipsoid)
+    } else if (cmpName === 'VcAnalysisSightline') {
+      // if (props.sightlineType === 'segment') {
+
+      // }
+      const positions = polyline.positions
+      if (editingPoint.value) {
+        const index = editingPoint.value._index > 0 ? 1 : 0
+        positions[index] = position
+      } else {
+        positions[1] = position
+      }
     } else {
       const positions = polyline.positions
       positions[editingPoint.value ? editingPoint.value._index : 1] = position
@@ -916,8 +962,6 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       Transforms,
       HeadingPitchRoll,
       PerInstanceColorAppearance,
-      Camera,
-      ShadowMap,
       Cartesian4,
       Cartesian2
     } = Cesium
@@ -943,22 +987,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              show: (polyline.show && polylineOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.material
-                }
-              },
-              depthFailAppearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.depthFailMaterial
-                }
-              },
-              asynchronous: false,
-              classificationType: polylineOpts.classificationType
+              ...props.primitiveOpts,
+              show: (polyline.show && props.primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
             },
             () =>
               h(
@@ -983,7 +1013,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
             polyline.positions[0],
             Transforms.headingPitchRollQuaternion(
               polyline.positions[0],
-              HeadingPitchRoll.fromDegrees(polyline.heading! - props.ellipsoidOpts.horizontalViewAngle, polyline.pitch!, 0)
+              HeadingPitchRoll.fromDegrees(polyline.heading! - props.ellipsoidOpts.horizontalViewAngle, polyline.pitch!, 0),
+              viewer.scene.globe.ellipsoid
             ),
             new Cartesian3(1, 1, 1)
           )
@@ -1108,29 +1139,10 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         // polygon
         children.push(
           h(VcPolygon, {
-            show: polyline.show && props.polygonOpts?.show,
-            enableMouseEvent: props.enableMouseEvent,
-            classificationType: props.polygonOpts?.classificationType,
-            clampToGround: props.clampToGround,
             positions: positions,
-            appearance: {
-              type: 'MaterialAppearance',
-              options: {
-                material: props.polygonOpts?.material,
-                faceForward: true,
-                renderState: {
-                  cull: {
-                    enabled: false
-                  },
-                  depthTest: {
-                    enabled: false
-                  }
-                }
-              }
-            },
-            asynchronous: false,
             onReady: onVcPrimitiveReady,
-            ...props.polygonOpts
+            ...props.polygonOpts,
+            show: polyline.show && props.polygonOpts?.show
           })
         )
       }
@@ -1140,21 +1152,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              show: (polyline.show && polylineOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.material
-                }
-              },
-              depthFailAppearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.depthFailMaterial
-                }
-              },
-              asynchronous: false
+              ...props.primitiveOpts,
+              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
             },
             () =>
               h(
@@ -1177,21 +1176,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              show: polyline.show,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.material
-                }
-              },
-              depthFailAppearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.depthFailMaterial
-                }
-              },
-              asynchronous: false
+              ...props.primitiveOpts,
+              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
             },
             () =>
               h(
@@ -1213,12 +1199,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          points: polyline.positions.map(position => ({
+          points: polyline.positions.map((position, subIndex) => ({
             position: position,
             id: createGuid(),
             _vcPolylineIndx: index, // for editor
             ...props.pointOpts,
-            show: props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
+            show:
+              (props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
+              (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
           })),
           onMouseover: onMouseoverPoints,
           onMouseout: onMouseoutPoints,

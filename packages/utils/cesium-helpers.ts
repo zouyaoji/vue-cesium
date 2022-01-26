@@ -976,3 +976,24 @@ export function getPolylineSegmentPitch(start: Cesium.Cartesian3, end: Cesium.Ca
   Cartesian3.normalize(cartesian3Scratch, cartesian3Scratch)
   return CesiumMath.toDegrees(Math.asin(cartesian3Scratch.z))
 }
+
+export function getFirstIntersection(
+  start: Cesium.Cartesian3,
+  end: Cesium.Cartesian3,
+  viewer: Cesium.Viewer,
+  objectsToExclude = []
+): Cesium.Cartesian3 {
+  const { Cartesian3, Ray, defined } = Cesium
+  const direction = Cartesian3.normalize(Cartesian3.subtract(end, start, new Cartesian3()), new Cartesian3())
+  const ray = new Ray(start, direction)
+  console.log(objectsToExclude)
+  const result = viewer.scene.pickFromRay(ray, objectsToExclude)
+  if (defined(result)) {
+    if (defined(result.position)) {
+      const intersection = result.position
+      return intersection
+    }
+  }
+
+  return undefined
+}

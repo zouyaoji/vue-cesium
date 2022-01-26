@@ -224,6 +224,18 @@
   content: '\ebb2';
 }
 
+.#{$namespace}-icons-analysis-button:before {
+  content: '\ebb3';
+}
+
+.#{$namespace}-icons-analysis-sightline:before {
+  content: '\ec81';
+}
+
+.#{$namespace}-icons-analysis-viewshed:before {
+  content: '\ec82';
+}
+
 .#{$namespace}-icons-overview-toggle:before {
   content: '\ebaf';
 }

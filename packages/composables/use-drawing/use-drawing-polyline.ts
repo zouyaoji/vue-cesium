@@ -1,26 +1,26 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-01-22 12:00:02
+ * @LastEditTime: 2022-01-26 16:45:13
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
  */
 import { VcPrimitive, VcPrimitiveGroundPolyline } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
-import { VcGeometryPolyline, VcGeometryGroundPolyline } from '@vue-cesium/components/geometries'
+import { VcGeometryPolyline, VcGeometryGroundPolyline, VcGeometryPolylineProps } from '@vue-cesium/components/geometries'
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelProps, VcPolygon } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { useLocaleInject } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
-import { calculateAreaByPostions, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
+import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { computed, getCurrentInstance, nextTick, ref, VNode, h } from 'vue'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VNode } from 'vue'
+import { computed, getCurrentInstance, nextTick, ref, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
-import { VcGraphicsLabelProps } from 'vue-cesium'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -83,7 +83,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const computedRenderDatas = computed<Array<VcPolylineDrawing>>(() => {
-    const { Cartesian3, Ray, createGuid } = Cesium
+    const { Cartesian3, createGuid, defined } = Cesium
     const polylines: Array<VcPolylineDrawing> = []
     renderDatas.value.forEach((polyline, index) => {
       const labels: Array<VcLabelProps> = []
@@ -97,24 +97,39 @@ export default function (props, ctx, cmpName: string) {
       if (cmpName === 'VcAnalysisSightline') {
         const observationPoint = positions.shift()
         const destinationPoints = positions
-
         observationPoint &&
           destinationPoints.forEach(destinationPoint => {
-            const direction = Cartesian3.normalize(Cartesian3.subtract(destinationPoint, observationPoint, new Cartesian3()), new Cartesian3())
-            const ray = new Ray(observationPoint, direction)
-            const intersection = $services.viewer.scene.globe.pick(ray, $services.viewer.scene)
             const positionsNew: Array<Cesium.Cartesian3> = []
             positionsNew.push(observationPoint)
-            intersection && positionsNew.push(intersection)
-            positionsNew.push(destinationPoint)
 
+            const objectsToExclude = []
+            const primitiveCollection: Array<Cesium.PrimitiveCollection> = (primitiveCollectionRef.value.cesiumObject as any)._primitives
+            primitiveCollection.forEach(primitive => {
+              if (primitive instanceof Cesium.PointPrimitiveCollection) {
+                objectsToExclude.push(...primitive._pointPrimitives)
+              }
+              if (primitive instanceof Cesium.Primitive) {
+                objectsToExclude.push(primitive)
+              }
+            })
+            const intersection = getFirstIntersection(observationPoint, destinationPoint, $services.viewer, objectsToExclude)
+            console.log(intersection)
+            if (defined(intersection)) {
+              positionsNew.push(intersection)
+            }
+            positionsNew.push(destinationPoint)
+            let distance = 0
+            const distances = []
+            for (let i = 0; i < positionsNew.length - 1; i++) {
+              const s = Cartesian3.distance(positionsNew[i], positionsNew[i + 1])
+              distances.push(s)
+              distance = distance + s
+            }
             polylines.push({
               ...polyline,
               positions: positionsNew,
               distance,
-              distances,
-              angles,
-              dashedLines
+              distances
             })
           })
       } else {
@@ -200,7 +215,6 @@ export default function (props, ctx, cmpName: string) {
     })
     return polylines
   })
-
   // methods
   instance.mount = async () => {
     const { viewer } = $services
@@ -333,8 +347,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const { defined, Cartesian2, Plane, Cartesian3 } = Cesium
-
-    const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
+    const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
     const polyline: VcPolylineDrawing = renderDatas.value[index]
     const tempPositions = polyline.tempPositions
 
@@ -395,7 +408,13 @@ export default function (props, ctx, cmpName: string) {
     let finished = false
     let type = 'new'
     if (cmpName === 'VcMeasurementHorizontal') {
-      if (tempPositions.length === 0) {
+      if (editingPoint.value) {
+        drawStatus.value = DrawStatus.AfterDraw
+        editingPoint.value = undefined
+        finished = true
+        type = editorType.value
+        drawTip.value = drawTipOpts.value.drawingTipStart
+      } else if (tempPositions.length === 0) {
         const ellipsoid = scene.frameState.mapProjection.ellipsoid as Cesium.Ellipsoid
         tempPositions.push(position)
         polyline.positions = tempPositions
@@ -477,7 +496,7 @@ export default function (props, ctx, cmpName: string) {
       return
     }
 
-    const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
+    const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
     const polyline: VcPolylineDrawing = renderDatas.value[index]
     let type = 'new'
     if (cmpName === 'VcMeasurementHorizontal') {
@@ -519,7 +538,7 @@ export default function (props, ctx, cmpName: string) {
         const positions = polyline.positions
         positions.splice(editingPoint.value._index, 1, intersectionPosition)
         type = editorType.value
-        drawTip.value = drawTipOpts.value.drawingTipStart
+        // drawTip.value = drawTipOpts.value.drawingTipStart
       } else {
         const tempPositions = polyline.tempPositions.slice()
         tempPositions.push(intersectionPosition)
@@ -564,7 +583,7 @@ export default function (props, ctx, cmpName: string) {
   const handleDoubleClick = movement => {
     const { drawingFabInstance, selectedDrawingActionInstance, viewer } = $services
     if (drawStatus.value === DrawStatus.Drawing) {
-      const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
+      const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
       const polyline: VcPolylineDrawing = renderDatas.value[index]
       polyline.positions = polyline.tempPositions
       polyline.drawStatus = DrawStatus.AfterDraw
@@ -596,6 +615,26 @@ export default function (props, ctx, cmpName: string) {
     }
   }
 
+  const getPointIndexes = () => {
+    let polylineIndex = editingPoint.value._vcPolylineIndex
+    let pointIndex = editingPoint.value._index
+
+    if (cmpName === 'VcAnalysisSightline') {
+      for (let i = 0; i < renderDatas.value.length; i++) {
+        const polyline = renderDatas.value[i]
+        for (let j = 0; j < polyline.positions.length; j++) {
+          const position = polyline.positions[j]
+          if (editingPoint.value.position.equals(position)) {
+            polylineIndex = i
+            pointIndex = j
+          }
+        }
+      }
+    }
+
+    return [polylineIndex, pointIndex]
+  }
+
   const onEditorClick = e => {
     editorPosition.value = [0, 0, 0]
     showEditor.value = false
@@ -611,10 +650,13 @@ export default function (props, ctx, cmpName: string) {
       drawStatus.value = DrawStatus.Drawing
       editingPoint.value = mouseoverPoint.value
       canShowDrawTip.value = true
-      restorePosition = renderDatas.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
+      const indexes = getPointIndexes()
+      editingPoint.value._vcPolylineIndex = indexes[0]
+      editingPoint.value._index = indexes[1]
+      restorePosition = renderDatas.value[indexes[0]].positions[indexes[1]]
       ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
     } else if (e === 'insert') {
-      const index = mouseoverPoint.value._vcPolylineIndx
+      const index = mouseoverPoint.value._vcPolylineIndex
       const polyline = renderDatas.value[index]
       polyline.positions.splice(mouseoverPoint.value._index, 0, mouseoverPoint.value.position)
       editingPoint.value = mouseoverPoint.value
@@ -623,14 +665,14 @@ export default function (props, ctx, cmpName: string) {
       drawTip.value = drawTipOpts.value.drawingTipEditing
       ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
     } else if (e === 'remove') {
-      const index = mouseoverPoint.value._vcPolylineIndx
+      const index = mouseoverPoint.value._vcPolylineIndex
       const polyline = renderDatas.value[index]
       polyline.positions.length > 2 && polyline.positions.splice(mouseoverPoint.value._index, 1)
     } else if (e === 'removeAll') {
-      const index = mouseoverPoint.value._vcPolylineIndx
+      const index = mouseoverPoint.value._vcPolylineIndex
       renderDatas.value.splice(index, 1)
     } else {
-      const index = mouseoverPoint.value._vcPolylineIndx
+      const index = mouseoverPoint.value._vcPolylineIndex
       const polyline = renderDatas.value[index]
       props.editorOpts?.[e]?.callback?.(index, polyline)
     }
@@ -641,7 +683,7 @@ export default function (props, ctx, cmpName: string) {
         type: e,
         renderDatas: renderDatas,
         name: drawingType,
-        index: mouseoverPoint.value._vcPolylineIndx
+        index: mouseoverPoint.value._vcPolylineIndex
       },
       viewer
     )
@@ -665,9 +707,9 @@ export default function (props, ctx, cmpName: string) {
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
-    const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue } = Cesium
+    const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue, Cartesian3 } = Cesium
 
-    const polylineOpts: any = {
+    const polylineOpts: VcGeometryPolylineProps = {
       ...props.polylineOpts,
       ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84),
       vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
@@ -675,6 +717,7 @@ export default function (props, ctx, cmpName: string) {
     props.clampToGround && delete polylineOpts.arcType
     const children: Array<VNode> = []
 
+    const points = []
     computedRenderDatas.value.forEach((polyline, index) => {
       const positions = polyline.positions.slice()
       if (positions.length > 1) {
@@ -684,22 +727,8 @@ export default function (props, ctx, cmpName: string) {
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              show: (polyline.show && polylineOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.material
-                }
-              },
-              depthFailAppearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.polylineOpts?.depthFailMaterial
-                }
-              },
-              asynchronous: false,
-              classificationType: polylineOpts.classificationType
+              ...props.primitiveOpts,
+              show: (polyline.show && props.primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
             },
             () =>
               h(
@@ -717,26 +746,18 @@ export default function (props, ctx, cmpName: string) {
         )
       }
       // for VcMeasurementHorizontal
+      const dashLineOpts: VcGeometryPolylineProps = {
+        ...props.dashLineOpts,
+        ellipsoid: defaultValue(props.dashLineOpts?.ellipsoid, Ellipsoid.WGS84),
+        vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
+      }
       polyline.dashedLines?.forEach(dashedLine => {
         children.push(
           h(
             VcPrimitive,
             {
-              show: polyline.show,
-              enableMouseEvent: props.enableMouseEvent,
-              appearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.dashLineOpts?.material
-                }
-              },
-              depthFailAppearance: {
-                type: 'PolylineMaterialAppearance',
-                options: {
-                  material: props.dashLineOpts?.depthFailMaterial
-                }
-              },
-              asynchronous: false
+              ...props.dashLinePrimitiveOpts,
+              show: (polyline.show && props.dashLinePrimitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
             },
             () =>
               h(
@@ -747,10 +768,7 @@ export default function (props, ctx, cmpName: string) {
                 () =>
                   h(VcGeometryPolyline, {
                     positions: dashedLine.positions,
-                    width: props.dashLineOpts?.width,
-                    vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-                    ellipsoid: defaultValue(props.dashLineOpts?.ellipsoid, Ellipsoid.WGS84),
-                    arcType: props.dashLineOpts?.arcType
+                    ...dashLineOpts
                   })
               )
           )
@@ -761,13 +779,28 @@ export default function (props, ctx, cmpName: string) {
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          points: polyline.positions.map(position => ({
-            position: position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts,
-            show: props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing
-          })),
+          points: polyline.positions.map((position, subIndex) => {
+            let includes = false
+            for (let i = 0; i < points.length; i++) {
+              // 通视分析 的观察点会加载很多个 在这儿过滤下只显示一个
+              Cartesian3.equals(position, points[i]) && (includes = true)
+            }
+            const show =
+              (props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
+              (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true) &&
+              !includes
+
+            if (cmpName === 'VcAnalysisSightline') {
+              points.push(position)
+            }
+            return {
+              position,
+              id: createGuid(),
+              _vcPolylineIndex: index, // for editor
+              ...props.pointOpts,
+              show
+            }
+          }),
           onMouseover: onMouseoverPoints,
           onMouseout: onMouseoutPoints,
           onReady: onVcCollectionPointReady
@@ -787,29 +820,10 @@ export default function (props, ctx, cmpName: string) {
       if (positions.length > 2 && (cmpName.includes('Polygon') || cmpName.includes('Area'))) {
         children.push(
           h(VcPolygon, {
-            show: polyline.show && props.polygonOpts?.show,
-            enableMouseEvent: props.enableMouseEvent,
-            classificationType: props.polygonOpts?.classificationType,
-            clampToGround: props.clampToGround,
             positions: positions,
-            appearance: {
-              type: 'MaterialAppearance',
-              options: {
-                material: props.polygonOpts?.material,
-                faceForward: true,
-                renderState: {
-                  cull: {
-                    enabled: false
-                  },
-                  depthTest: {
-                    enabled: false
-                  }
-                }
-              }
-            },
-            asynchronous: false,
             onReady: onVcPrimitiveReady,
-            ...props.polygonOpts
+            ...props.polygonOpts,
+            show: polyline.show && props.polygonOpts?.show
           })
         )
       }
