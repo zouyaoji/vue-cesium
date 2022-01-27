@@ -12,7 +12,7 @@ _2022-01-30_
 #### 新特性
 
 - 增加分析工具组件（[vc-analyses](https://zouyaoji.top/vue-cesium/#/zh-CN/component/controls/vc-analyses)），目前包含通视分析、可视域分析。
-<!-- - 云组件。 -->
+- `vc-imagery-provider-baidu` 百度地图部分风格地图支持 https 协议，增加 `customid` 属性，方便切换地图服务。
 
 #### 破坏性更新
 
