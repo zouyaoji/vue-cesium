@@ -9,6 +9,7 @@
           <router-view class="content" />
         </div>
         <footer-nav />
+        <!-- <ad-sense /> -->
       </div>
       <el-backtop v-if="showBackToTop" target=".page-component__scroll .el-scrollbar__wrap" :right="100" :bottom="50" />
     </div>
@@ -18,6 +19,7 @@
 import bus from '../bus'
 import navsData from '../nav.config.json'
 import { throttle } from 'throttle-debounce'
+import AdSense from '../components/ad-sense'
 
 export default {
   data() {
@@ -29,6 +31,9 @@ export default {
       componentScrollBar: null,
       componentScrollBoxElement: null
     }
+  },
+  components: {
+    AdSense
   },
   computed: {
     showBackToTop() {

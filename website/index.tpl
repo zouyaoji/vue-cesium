@@ -11,6 +11,7 @@
     <!-- 引入 阿里云 图标资源-->
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
+    <script data-ad-client="ca-pub-3445228872340333" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   </head>
   <body>
     <div id="app"></div>
