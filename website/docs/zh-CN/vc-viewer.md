@@ -140,7 +140,7 @@
 <!-- prettier-ignore -->
 |属性名|类型|默认值|描述|可选值|
 |------|------|-----|---|---|
-|camera|Object|| `optional` 指定初始化场景相机位置，默认定位到全球范围内的中国。  |
+|camera|Object: VcCamera|| `optional` 指定初始化场景相机位置，默认定位到全球范围内的中国。  |
 |showCredit|Boolean|`true`| `optional` 是否显示默认 Logo 和 加载数据版权信息。|
 |autoSortImageryLayers|Boolean|`true`| `optional` 添加影像图层时是否根据图层 `sortOrder` 属性自动排序。|
 |removeCesiumScript|Boolean|`true`| `optional` 指定`vc-viewer` 销毁时是否移除CesiumJS标签。|
@@ -148,8 +148,8 @@
 |skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` 指定初始化时是否显示骨架背景。动画可选值 `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
 |TZcode|String|| `optional` 自定义 Timeline 格式化日期是所用时区代码。vue-cesium 将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
 |UTCoffset|String|| `optional` 本地时间与UTC时间的时差（分钟）。自定义 Timeline 格式化日期使用。|
-|accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。一般是Vue.use()的时候指定。|
-|cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`指定当前场景使用的 cesium 库的例子。一般是Vue.use()的时候指定。|
+|accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
+|cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`指定当前场景使用的 cesium 库的例子。|
 |animation|Boolean|`false`|`optional`是否显示动画控件。|
 |baseLayerPicker| Boolean|`false`|`optional`是否显示基础图层切换按钮。|
 |fullscreenButton|Boolean| `false`| `optional`是否显示全屏切换按钮。|
@@ -194,56 +194,55 @@
 <!-- prettier-ignore -->
 | 事件名|参数|描述|来源|
 |------|----|----|---|
-|cesiumReady|Cesium|CesiumJS加载成功时触发。| - |
-|beforeLoad|Vue Instance|对象加载前触发。| - |
-|ready|{Cesium, viewer, vm}|对象加载完成时触发。| - |
-|destroyed| Vue Instance |对象销毁时触发。| - |
-|viewerWidgetResized| |vc-viewer 上有部件发生变化时触发。| - |
+|cesiumReady|(e: typeof Cesium)|CesiumJS加载成功时触发。| - |
+|beforeLoad|(instance: VcComponentInternalInstance)|对象加载前触发。| - |
+|ready|(readyObj: VcReadyObject)|对象加载完成时触发。| - |
+|destroyed| (instance: VcComponentInternalInstance) |对象销毁时触发。| - |
+|viewerWidgetResized| (e: ViewerWidgetResizedEvent) |vc-viewer 上有部件发生变化时触发。| - |
 |------|----|----|---|
-|selectedEntityChanged|entity|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（未选中）|Viewer|
-|trackedEntityChanged|entity|场景跟踪实体发生改变时触发此事件。事件参数表示跟踪的实体。|Viewer|
-|layerAdded|imageryLayer, index|场景添加某影像图层后触发该事件。事件参数表示改图层和它的索引。|Viewer.imageryLayers|
-|layerMoved|imageryLayer, newIndex, oldIndex|场景某影像图层发生移动后触发该事件。事件参数表示该图层和它以前的索引以及新索引。|Viewer.imageryLayers|
-|layerRemoved|imageryLayer, index|场景移除某影像图层后触发该事件。事件参数表示该图层和它的索引。|Viewer.imageryLayers|
-|layerShownOrHidden|imageryLayer, index, flag|场景中某图层可见性设置ImageryLayer#show发生改变时触发该事件。事件参数表示发生改变的图层，图层索引，以及图层是否可见。|iewer.imageryLayers|
-|dataSourceAdded|dataSource|场景添加某数据源后触发该事件。事件参数表示该数据源。|Viewer.dataSources|
-|dataSourceMoved|dataSource|场景移动某数据源后发生后触发该事件。事件参数表示该数据源和它以前的索引以及新索引。|Viewer.dataSources|
-|dataSourceRemoved|dataSource|场景移除某数据源后触发该事件。事件参数表示该数据源。|Viewer.entities|
-|collectionChanged|collection, added, removed, changed|场景实体集合添加、移除或者改变实体后触发该事件。事件参数表示该实体集合，以及添加的实体数组、移除的实体数组、改变的实体数组。|Viewer.entities|
-|morphComplete|object|场景投影转换完成后触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
-|morphStart|object|场景投影转换开始时触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
-|postRender|scene, currentTime|场景每帧渲染结束后触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
-|preRender|scene, currentTime|场景刷新后但在每帧渲染开始时触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
-|postUpdate|scene, currentTime|场景刷新后但在每帧渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
-|preUpdate|scene, currentTime|场景刷新或者渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
-|renderError|scene, error|场景抛出渲染异常时触发该事件。事件参数是scene实例和异常。|Viewer.scene|
-|terrainProviderChanged||场景地形提供者发生改变时触发该事件。|Viewer.scene|
-|changed|number|场景相机按percentageChanged设定比例改变后触发该事件。|Viewer.camera|
-|moveEnd||场景相机停止移动后触发该事件。|Viewer.camera|
-|moveStart||场景相机开始移动时触发该事件。|Viewer.camera|
-|onStop||场景时钟每当到达停止时间时触发该事件。|Viewer.clock|
-|onTick||场景时钟每当调用Clock#tick触发该事件。|Viewer.clock|
-|errorEvent||场景地形提供者遇到异步错误时触发该事件。|Viewer.terrainProvider|
-|cameraClicked||infoBox弹窗上点击相机事件。|Viewer.infoBox.viewModel|
-|closeClicked||infoBox弹窗关闭事件。|Viewer.infoBox.viewModel|
-|leftClick|{position: point}|鼠标左键单击事件。|Viewer.screenSpaceEventHandler|
-|leftDoubleClick|{position: point}|鼠标左键双击事件。|Viewer.screenSpaceEventHandler|
-|leftDown|{position: point}|鼠标左键按下事件。|Viewer.screenSpaceEventHandler|
-|leftUp|{position: point}|鼠标左键弹起事件|Viewer.screenSpaceEventHandler|
-|middleClick|{position: point}|鼠标中键单击事件。|Viewer.screenSpaceEventHandler|
-|middleDown|{position: point}|鼠标中键按下事件。|Viewer.screenSpaceEventHandler|
-|middleUp|{position: point}|鼠标中键弹起事件。|Viewer.screenSpaceEventHandler|
+|selectedEntityChanged|(entity: Cesium.Entity)|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（未选中）|Viewer|
+|trackedEntityChanged|(entity: Cesium.Entity)|场景跟踪实体发生改变时触发此事件。事件参数表示跟踪的实体。|Viewer|
+|layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|场景添加某影像图层后触发该事件。事件参数表示改图层和它的索引。|Viewer.imageryLayers|
+|layerMoved|(imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number)|场景某影像图层发生移动后触发该事件。事件参数表示该图层和它以前的索引以及新索引。|Viewer.imageryLayers|
+|layerRemoved|(imageryLayer: Cesium.ImageryLayer, index: number)|场景移除某影像图层后触发该事件。事件参数表示该图层和它的索引。|Viewer.imageryLayers|
+|layerShownOrHidden|(imageryLayer: Cesium.ImageryLayer, index: number, show: boolean)|场景中某图层可见性设置ImageryLayer#show发生改变时触发该事件。事件参数表示发生改变的图层，图层索引，以及图层是否可见。|iewer.imageryLayers|
+|dataSourceAdded|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|场景添加某数据源后触发该事件。事件参数表示该数据源。|Viewer.dataSources|
+|dataSourceMoved|(dataSource: VcDatasource, newIndex: number, oldIndex: number)|场景移动某数据源后发生后触发该事件。事件参数表示该数据源和它以前的索引以及新索引。|Viewer.dataSources|
+|dataSourceRemoved|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|场景移除某数据源后触发该事件。事件参数表示该数据源。|Viewer.entities|
+|collectionChanged|(collection: Cesium.EntityCollection, addedArray: Array<Cesium.Entity>, removedArray: Array<Cesium.Entity>, changedArray: Array<Cesium.Entity>)|场景实体集合添加、移除或者改变实体后触发该事件。事件参数表示该实体集合，以及添加的实体数组、移除的实体数组、改变的实体数组。|Viewer.entities|
+|morphComplete|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|场景投影转换完成后触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
+|morphStart|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|场景投影转换开始时触发该事件。事件参数是一个包含scene的对象。|Viewer.scene|
+|postRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|场景每帧渲染结束后触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|preRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|场景刷新后但在每帧渲染开始时触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|postUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|场景刷新后但在每帧渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|preUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|场景刷新或者渲染前触发该事件。事件参数是scene实例和当前时间。|Viewer.scene|
+|renderError|(scene: Cesium.Scene, error: any)|场景抛出渲染异常时触发该事件。事件参数是scene实例和异常。|Viewer.scene|
+|terrainProviderChanged|(provider: VcTerrainProvider)|场景地形提供者发生改变时触发该事件。|Viewer.scene|
+|changed|(percent: number)|场景相机按percentageChanged设定比例改变后触发该事件。|Viewer.camera|
+|moveEnd|()|场景相机停止移动后触发该事件。|Viewer.camera|
+|moveStart|()|场景相机开始移动时触发该事件。|Viewer.camera|
+|onStop|(clock: Cesium.Clock)|场景时钟每当到达停止时间时触发该事件。|Viewer.clock|
+|onTick|(clock: Cesium.Clock)|场景时钟每当调用Clock#tick触发该事件。|Viewer.clock|
+|errorEvent|(tileProviderError: any)|场景地形提供者遇到异步错误时触发该事件。|Viewer.terrainProvider|
+|cameraClicked|(viewModel: Cesium.InfoBoxViewModel)|infoBox弹窗上点击相机事件。|Viewer.infoBox.viewModel|
+|closeClicked|(viewModel: Cesium.InfoBoxViewModel)|infoBox弹窗关闭事件。|Viewer.infoBox.viewModel|
+|leftClick|(evt: { position: Cesium.Cartesian2; })|鼠标左键单击事件。|Viewer.screenSpaceEventHandler|
+|leftDoubleClick|(evt: { position: Cesium.Cartesian2; })|鼠标左键双击事件。|Viewer.screenSpaceEventHandler|
+|leftDown|(evt: { position: Cesium.Cartesian2; })|鼠标左键按下事件。|Viewer.screenSpaceEventHandler|
+|leftUp|(evt: { position: Cesium.Cartesian2; })|鼠标左键弹起事件|Viewer.screenSpaceEventHandler|
+|middleClick|(evt: { position: Cesium.Cartesian2; })|鼠标中键单击事件。|Viewer.screenSpaceEventHandler|
+|middleDown|(evt: { position: Cesium.Cartesian2; })|鼠标中键按下事件。|Viewer.screenSpaceEventHandler|
+|middleUp|(evt: { position: Cesium.Cartesian2; })|鼠标中键弹起事件。|Viewer.screenSpaceEventHandler|
 |mouseMove|{startPosition: point, endPosition: point}|鼠标移动事件。|Viewer.screenSpaceEventHandler|
-|pinchEnd||触摸设备双指操作结束事件。|Viewer.screenSpaceEventHandler|
-|pinchMove|{distance: {startPosition: point, endPosition: point}, angleAndHeight: {startPosition: point, endPosition: point}}|触摸设备双指操作移动事件。|Viewer.screenSpaceEventHandler|
-|pinchStart|{position1: point, position2: point}|触摸设备双指操作开始事件。|Viewer.screenSpaceEventHandler|
-|rightClick|{position: point}|鼠标右键单击事件。|Viewer.screenSpaceEventHandler|
-|rightDown|{position: point}|鼠标右键按下事件。|Viewer.screenSpaceEventHandler|
-|rightUp|{position: point}|鼠标弹起事件。|Viewer.screenSpaceEventHandler|
-|wheel|delta|鼠标中轮滚动事件。|Viewer.screenSpaceEventHandler|
-|imageryLayersUpdatedEvent||在添加，显示，隐藏，移动或删除图像图层时触发。|Viewer.scene.globe|
-|terrainProviderChanged||地形改变事件。这个应该和 scene 触发的一样。|Viewer.scene.globe|
-|tileLoadProgressEvent||获取自上一个渲染帧以来切片加载队列的长度发生更改时引发的事件。 当加载队列为空时，当前视图的所有地形和图像均已加载。 该事件将传递图块加载队列的新长度。|Viewer.scene.globe|
+|pinchEnd|()|触摸设备双指操作结束事件。|Viewer.screenSpaceEventHandler|
+|pinchMove|(evt: { distance: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 } angleAndHeight: { startPosition: Cesium.Cartesian2 ;endPosition: Cesium.Cartesian2 }})|触摸设备双指操作移动事件。|Viewer.screenSpaceEventHandler|
+|pinchStart|(evt: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2; })|触摸设备双指操作开始事件。|Viewer.screenSpaceEventHandler|
+|rightClick|(evt: { position: Cesium.Cartesian2; })|鼠标右键单击事件。|Viewer.screenSpaceEventHandler|
+|rightDown|(evt: { position: Cesium.Cartesian2; })|鼠标右键按下事件。|Viewer.screenSpaceEventHandler|
+|rightUp|(evt: { position: Cesium.Cartesian2; })|鼠标弹起事件。|Viewer.screenSpaceEventHandler|
+|wheel|(delta: number)|鼠标中轮滚动事件。|Viewer.screenSpaceEventHandler|
+|imageryLayersUpdatedEvent|()|在添加，显示，隐藏，移动或删除图像图层时触发。|Viewer.scene.globe|
+|tileLoadProgressEvent|(length: number)|获取自上一个渲染帧以来切片加载队列的长度发生更改时引发的事件。 当加载队列为空时，当前视图的所有地形和图像均已加载。 该事件将传递图块加载队列的新长度。|Viewer.scene.globe|
 
 ### ref 方法
 

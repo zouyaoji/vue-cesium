@@ -332,15 +332,15 @@ ctrl + 右键取消绘制。
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                         |
-| ---------- | ---------------------------------- | ---------------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。             |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。         |
-| destroyed  | Vue Instance                       | 对象销毁时触发。             |
-| drawEvt    | (drawParam, viewer)                | 绘制时触发。                 |
-| activeEvt  | (activeParam, viewer)              | 切换绘制 Action 时触发。     |
-| editorEvt  | (editParam, viewer)                | 点击编辑按钮时触发。         |
-| mouseEvt   | (mouseParam, viewer)               | 鼠标移进、移除绘制点时触发。 |
+| 事件名     | 参数                                    | 描述                         |
+| ---------- | --------------------------------------- | ---------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。             |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。         |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。             |
+| drawEvt    | (drawParam, viewer)                     | 绘制时触发。                 |
+| activeEvt  | (activeParam, viewer)                   | 切换绘制 Action 时触发。     |
+| editorEvt  | (editParam, viewer)                     | 点击编辑按钮时触发。         |
+| mouseEvt   | (mouseParam, viewer)                    | 鼠标移进、移除绘制点时触发。 |
 
 ### 插槽
 

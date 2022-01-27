@@ -88,13 +88,13 @@
 
 ### 事件
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                    | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| 事件名       | 参数                                    | 描述                                                              |
+| ------------ | --------------------------------------- | ----------------------------------------------------------------- |
+| beforeLoad   | (instance: VcComponentInternalInstance) | 对象加载前触发。                                                  |
+| ready        | (readyObj: VcReadyObject)               | 对象加载成功时触发。                                              |
+| destroyed    | (instance: VcComponentInternalInstance) | 对象销毁时触发。                                                  |
+| errorEvent   | TileProviderError                       | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider                         | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
 
 ### 参考
 

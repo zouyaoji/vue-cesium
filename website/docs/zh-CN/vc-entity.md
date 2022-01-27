@@ -153,20 +153,20 @@
 
 ### 事件
 
-| 事件名            | 参数                                                       | 描述                                     |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------- |
-| beforeLoad        | Vue Instance                                               | 对象加载前触发。                         |
-| ready             | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。                     |
-| destroyed         | Vue Instance                                               | 对象销毁时触发。                         |
-| definitionChanged |                                                            | 每当更改或修改属性或子属性时触发该事件。 |
-| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上按下时触发。               |
-| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上弹起时触发。               |
-| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该实体时触发。                   |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该实体外部时触发。               |
-| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该实体时触发。               |
-| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该实体上移动时触发。               |
-| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该实体时触发。                 |
-| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该实体时触发。                   |
+| 事件名            | 参数                                    | 描述                                     |
+| ----------------- | --------------------------------------- | ---------------------------------------- |
+| beforeLoad        | (instance: VcComponentInternalInstance) | 对象加载前触发。                         |
+| ready             | (readyObj: VcReadyObject)               | 对象加载成功时触发。                     |
+| destroyed         | (instance: VcComponentInternalInstance) | 对象销毁时触发。                         |
+| definitionChanged | (property: Cesium.Property)             | 每当更改或修改属性或子属性时触发该事件。 |
+| mousedown         | (evt: VcPickEvent)                      | 鼠标在该实体上按下时触发。               |
+| mouseup           | (evt: VcPickEvent)                      | 鼠标在该实体上弹起时触发。               |
+| click             | (evt: VcPickEvent)                      | 鼠标单击该实体时触发。                   |
+| clickout          | (evt: VcPickEvent)                      | 鼠标单击该实体外部时触发。               |
+| dblclick          | (evt: VcPickEvent)                      | 鼠标左键双击该实体时触发。               |
+| mousemove         | (evt: VcPickEvent)                      | 鼠标在该实体上移动时触发。               |
+| mouseover         | (evt: VcPickEvent)                      | 鼠标移动到该实体时触发。                 |
+| mouseout          | (evt: VcPickEvent)                      | 鼠标移出该实体时触发。                   |
 
 ### 插槽
 

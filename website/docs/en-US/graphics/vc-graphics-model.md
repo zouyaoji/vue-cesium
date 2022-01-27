@@ -82,12 +82,12 @@ Basic usage of the VcGraphicsModel component.
 
 ### Events
 
-| Name              | Parameters                         | Description                                                          |
-| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad        | Vue Instance                       | Triggers before the cesiumObject is loaded.                          |
-| ready             | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.               |
-| destroyed         | Vue Instance                       | Triggers when the cesiumObject is destroyed.                         |
-| definitionChanged |                                    | Triggers whenever a property or sub-property is changed or modified. |
+| Name              | Parameters                              | Description                                                          |
+| ----------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                          |
+| ready             | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged |                                         | Triggers whenever a property or sub-property is changed or modified. |
 
 ### Reference
 

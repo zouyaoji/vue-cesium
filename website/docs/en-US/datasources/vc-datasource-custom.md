@@ -257,22 +257,22 @@ Basic usage of VcDatasourceCustom component.
 <!-- prettier-ignore -->
 | Name | Parameters | Description |
 | ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------------- |
-| beforeLoad | Vue Instance | Triggers before the cesiumObject is loaded. |
-| ready | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed | Vue Instance | Triggers when the cesiumObject is destroyed. |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded. |
+| ready | (readyObj: VcReadyObject)    | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed. |
 | changedEvent | | Gets an event that will be raised when the underlying data changes. |
 | errorEvent | | Gets an event that will be raised if an error is encountered during processing. |
 | loadingEvent | | Gets an event that will be raised when the data source either starts or stops loading. |
 | clusterEvent | (clusteredEntities, cluster) | Gets the event that will be raised when a new cluster will be displayed |
 | collectionChanged | (collection, added, removed, changed) | Gets the event that is fired when entities are added or removed from the collection. |
-| mousedown | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the data source. |
-| mouseup | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces up on the data source. |
-| click | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the data source. |
-| clickout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the data source. |
-| dblclick | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the data source. |
-| mousemove | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on the data source. |
-| mouseover | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to the data source. |
-| mouseout | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the data source. |
+| mousedown | (evt: VcPickEvent) | Triggers when the mouse is pressed on the data source. |
+| mouseup | (evt: VcPickEvent) | Triggers when the mouse bounces up on the data source. |
+| click | (evt: VcPickEvent) | Triggers when the mouse clicks on the data source. |
+| clickout | (evt: VcPickEvent) | Triggers when the mouse clicks outside the data source. |
+| dblclick | (evt: VcPickEvent) | Triggers when the left mouse button double-clicks the data source. |
+| mousemove | (evt: VcPickEvent) | Triggers when the mouse moves on the data source. |
+| mouseover | (evt: VcPickEvent) | Triggers when the mouse moves to the data source. |
+| mouseout | (evt: VcPickEvent) | Triggers when the mouse moves out of the data source. |
 
 ### Slots
 

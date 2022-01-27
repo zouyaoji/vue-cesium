@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2021-12-29 11:36:05
+ * @LastEditTime: 2022-01-27 11:44:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\donations.md
@@ -9,15 +9,12 @@
 
 ## Donation
 
-### Foreword
+### Sponsor vue-cesium
 
-- We accept donations through these channels:
-- Please provide remarks for donation. Friends who have donated, if you want to show your information, please contact me.
+- `vue-cesium` adopts the MIT open source agreement, and promises that the framework itself and the official website documents will be permanently free and open, but the daily update of the framework and community operations require a lot of effort, and it is difficult to generate electricity by love. If `vue-cesium` helps you , you can support `vue-cesium`.
 
-  - <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
-
-  - WeChat / AliPay
-
+- <a href="https://www.paypal.me/zouyaoji" target="_blank"><img src="https://zouyaoji.top/vue-cesium/images/paypal.png" style="height:25px;" /></a>
+- WeChat / AliPay
   <div style="display: flex">
     <img alt="wechat" title="wechat" src="https://zouyaoji.top/vue-cesium/images/wechat.png">
     <img alt="alipay" title="alipay" src="https://zouyaoji.top/vue-cesium/images/alipay.png">
@@ -25,20 +22,15 @@
 
 ### Sponsors
 
-- Special thanks to the following donors. Thank you again for your support! Email me if you do not want your name displayed here.
+- Special thanks to the following sponsors:
 
-  - `【-。向日葵】`
-  - [`【boriskogan81】`](https://github.com/boriskogan81)
-  - [`【并非善类】`](https://www.cnblogs.com/JinXinYuan)
-  - [`【Zephyr丶Tan】`](https://github.com/ZephyrTan)
-  - [`【木遥】`](https://github.com/muyao1987)
-  - ...
+  | amount  | channel | sponsor                                         | message                           | date       |
+  | ------- | ------- | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 66.66 | QQ      | Levi                                            | 多谢大佬开源                      | 2022-01-11 |
+  | ¥ 88.0  | WeChat  | \*丫                                            | 有学习群吗？                      | 2021-10-28 |
+  | ¥ 200.0 | WeChat  | [木遥](https://github.com/muyao1987)            | mars3d 谢谢                       | 2021-07-05 |
+  | ¥ 150.0 | WeChat  | [\*飞](https://github.com/ZephyrTan)            | 持续迭代，更牛的模块              | 2021-06-09 |
+  | $ 50.0  | Paypal  | [boriskogan81](https://github.com/boriskogan81) | Thank you for your great library! | 2020-05-27 |
+  | ¥ 100.0 | AliPay  | -。向日葵                                       | 咨询费                            | 2020-05-21 |
 
-### Contributors
-
-- Special thanks to everyone who contributed and helped the development of vue-cesium.
-
-- [`【z4none】`](https://github.com/z4none) Feedback vc-viewer component camera problem [#27](https://github.com/zouyaoji/vue-cesium/issues/27).
-- [`【alicjamusial】`](https://github.com/alicjamusial) Feedback single page initialization multiple vc-viewer component crashes [#58](https://github.com/zouyaoji/vue-cesium/issues/58).
-- [`【IKangXu】`](https://github.com/IKangXu) Solved the problem that the points of the `VcDrawings` and `VcMeasurements` components are covered by the polygon and cannot be picked up during editing.
-- ...
+  If you don't want your name to be displayed here, you can send me an email.

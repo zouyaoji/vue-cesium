@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-01-16 00:47:15
+ * @LastEditTime: 2022-01-26 17:14:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-vr-theworld.md
@@ -84,13 +84,13 @@
 
 ### 事件
 
-| 事件名       | 参数                               | 描述                                                              |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | Vue Instance                       | 对象加载前触发。                                                  |
-| ready        | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。                                              |
-| destroyed    | Vue Instance                       | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                  | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | TerrainProvider                    | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
+| 事件名       | 参数                                    | 描述                                                              |
+| ------------ | --------------------------------------- | ----------------------------------------------------------------- |
+| beforeLoad   | (instance: VcComponentInternalInstance) | 对象加载前触发。                                                  |
+| ready        | (readyObj: VcReadyObject)               | 对象加载成功时触发。                                              |
+| destroyed    | (instance: VcComponentInternalInstance) | 对象销毁时触发。                                                  |
+| errorEvent   | TileProviderError                       | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | TerrainProvider                         | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
 
 ### 参考
 

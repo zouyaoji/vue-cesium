@@ -150,11 +150,11 @@
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
 
 ### VcGeometryPolylineVolumeOutline
 
@@ -174,11 +174,11 @@
 
 ### VcGeometryPolylineVolumeOutline 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
 
 ### 参考
 

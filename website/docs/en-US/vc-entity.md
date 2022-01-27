@@ -150,20 +150,20 @@ Tip: In addition to passing `Cesium.Cartesian3`, `position` property can also pa
 
 ### Events
 
-| Name              | Parameters                                                 | Description                                                          |
-| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad        | Vue Instance                                               | Triggers before the cesiumObject is loaded.                          |
-| ready             | {Cesium, viewer, cesiumObject, vm}                         | Triggers when the cesiumObject is successfully loaded.               |
-| destroyed         | Vue Instance                                               | Triggers when the cesiumObject is destroyed.                         |
-| definitionChanged |                                                            | Triggers whenever a property or sub-property is changed or modified. |
-| mousedown         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse is pressed on the entity.                    |
-| mouseup           | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse bounces on the entity.                       |
-| click             | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks on the entity.                        |
-| clickout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse clicks outside the entity.                   |
-| dblclick          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the left mouse button double-clicks the entity.        |
-| mousemove         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves on this entity.                        |
-| mouseover         | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves to this entity.                        |
-| mouseout          | {button,surfacePosition,pickedFeature,type,windowPosition} | Triggers when the mouse moves out of the entity.                     |
+| Name              | Parameters                              | Description                                                          |
+| ----------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| beforeLoad        | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                          |
+| ready             | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed         | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                         |
+| definitionChanged | (property: Cesium.Property)             | Triggers whenever a property or sub-property is changed or modified. |
+| mousedown         | (evt: VcPickEvent)                      | Triggers when the mouse is pressed on the entity.                    |
+| mouseup           | (evt: VcPickEvent)                      | Triggers when the mouse bounces on the entity.                       |
+| click             | (evt: VcPickEvent)                      | Triggers when the mouse clicks on the entity.                        |
+| clickout          | (evt: VcPickEvent)                      | Triggers when the mouse clicks outside the entity.                   |
+| dblclick          | (evt: VcPickEvent)                      | Triggers when the left mouse button double-clicks the entity.        |
+| mousemove         | (evt: VcPickEvent)                      | Triggers when the mouse moves on this entity.                        |
+| mouseover         | (evt: VcPickEvent)                      | Triggers when the mouse moves to this entity.                        |
+| mouseout          | (evt: VcPickEvent)                      | Triggers when the mouse moves out of the entity.                     |
 
 ### Slots
 

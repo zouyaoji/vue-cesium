@@ -339,20 +339,20 @@ Basic usage of VcOverlayDynamic component.
 
 ### Events
 
-| Name                  | Parameters                         | Description                                                |
-| --------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| beforeLoad            | Vue Instance                       | Triggers before the cesiumObject is loaded.                |
-| ready                 | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.     |
-| destroyed             | Vue Instance                       | Triggers when the cesiumObject is destroyed.               |
-| onStop                | Cesium.JulianDate                  | An Event that is fired whenever Clock#stopTime is reached. |
-| @update:currentTime   | Cesium.JulianDate                  | Triggered when currentTime changed.                        |
-| @update:shouldAnimate |                                    | Triggered when shouldAnimate changed.                      |
-| @update:canAnimate    |                                    | Triggered when canAnimate changed.                         |
-| @update:clockRange    |                                    | Triggered when clockRange changed.                         |
-| @update:clockStep     |                                    | Triggered when clockStep changed.                          |
-| @update:multiplier    |                                    | Triggered when multiplier changed.                         |
-| @update:startTime     |                                    | Triggered when startTime changed.                          |
-| @update:stopTime      |                                    | Triggered when stopTime changed.                           |
+| Name                  | Parameters                              | Description                                                |
+| --------------------- | --------------------------------------- | ---------------------------------------------------------- |
+| beforeLoad            | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                |
+| ready                 | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.     |
+| destroyed             | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.               |
+| onStop                | Cesium.JulianDate                       | An Event that is fired whenever Clock#stopTime is reached. |
+| @update:currentTime   | Cesium.JulianDate                       | Triggered when currentTime changed.                        |
+| @update:shouldAnimate |                                         | Triggered when shouldAnimate changed.                      |
+| @update:canAnimate    |                                         | Triggered when canAnimate changed.                         |
+| @update:clockRange    |                                         | Triggered when clockRange changed.                         |
+| @update:clockStep     |                                         | Triggered when clockStep changed.                          |
+| @update:multiplier    |                                         | Triggered when multiplier changed.                         |
+| @update:startTime     |                                         | Triggered when startTime changed.                          |
+| @update:stopTime      |                                         | Triggered when stopTime changed.                           |
 
 ### Reference
 

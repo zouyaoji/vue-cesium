@@ -143,6 +143,7 @@ export default {
   box-sizing: border-box;
   padding-right: 30px;
   transition: opacity 0.3s;
+  // border-right: 1px solid #dcdfe6;
   &.is-fade {
     transition: opacity 3s;
   }

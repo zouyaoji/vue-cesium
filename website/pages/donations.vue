@@ -1,8 +1,8 @@
 <template>
   <div class="page-donations">
-    <div class="heading">
+    <!-- <div class="heading">
       {{ langConfig[1] }}
-    </div>
+    </div> -->
     <ul ref="timeline" class="timeline"></ul>
     <donations-cn v-if="lang === 'zh-CN'" ref="donations" />
     <donations-en v-if="lang === 'en-US'" ref="donations" />
@@ -33,7 +33,6 @@ export default {
     let a = donationsNodes[1].querySelector('a')
     a && a.remove()
     let release = donationsNodes[1].textContent.trim()
-    // let fragments = `<li><h3><a href="https://github.com/zouyaoji/vue-cesium/releases/tag/v${release}" target="_blank">${release}</a></h3>`
     let fragments = `<li><h3>${release}</h3>`
 
     for (let len = donationsNodes.length, i = 2; i < len; i++) {
@@ -57,6 +56,46 @@ export default {
 .page-donations {
   padding-left: 5%;
   padding-bottom: 100px;
+  max-width: 960px;
+  margin: auto;
+  table {
+    // margin: 30px 30px 15px;
+    margin: auto;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fff;
+    font-size: 14px;
+    margin-bottom: 45px;
+    line-height: 1.5em;
+
+    strong {
+      font-weight: normal;
+    }
+
+    td,
+    th {
+      border: 1px solid #dcdfe6;
+      padding: 0.6em 1em;
+      // max-width: 250px;
+    }
+
+    th {
+      text-align: center;
+      white-space: nowrap;
+      color: #909399;
+      font-weight: bold;
+    }
+
+    td {
+      color: #606266;
+      word-break: break-word;
+    }
+
+    th:first-child,
+    td:first-child {
+      padding-left: 10px;
+    }
+  }
   .fr {
     float: right;
     padding: 0;
@@ -84,9 +123,9 @@ export default {
     color: #5e6d82;
     > li {
       position: relative;
-      padding-bottom: 15px;
+      // padding-bottom: 15px;
       list-style: none;
-      line-height: 1.8;
+      line-height: 1.5;
       border: 1px solid #ddd;
       border-radius: 4px;
       &:not(:last-child) {
@@ -94,10 +133,10 @@ export default {
       }
     }
     ul {
-      padding: 30px 30px 15px;
+      padding: 15px 15px 15px;
       ul {
         padding: 0;
-        padding-top: 5px;
+        // padding-top: 5px;
         padding-left: 27px;
         li {
           padding-left: 0;
@@ -117,7 +156,7 @@ export default {
     li li {
       font-size: 16px;
       list-style: none;
-      padding-left: 20px;
+      // padding-left: 20px;
       padding-bottom: 5px;
       color: #333;
       word-break: break-all;
@@ -154,11 +193,12 @@ export default {
       margin-bottom: -10px;
       font-size: 18px;
       padding-left: 54px;
-      padding-top: 30px;
+      // padding-top: 30px;
       font-weight: bold;
     }
     p {
       margin: 0;
+      color: #5e6d82;
     }
     em {
       position: absolute;

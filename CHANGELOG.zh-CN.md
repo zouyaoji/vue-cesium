@@ -1,5 +1,51 @@
 ## 更新日志
 
+### 3.0.7
+
+_2022-01-30_
+
+#### Bug 修复
+
+- 修复 windows 平台打包不正常的问题。
+- 修复水平测量编辑错误问题。
+
+#### 新特性
+
+- 增加分析工具组件（[vc-analyses](https://zouyaoji.top/vue-cesium/#/zh-CN/component/controls/vc-analyses)），目前包含通视分析、可视域分析。
+<!-- - 云组件。 -->
+
+#### 破坏性更新
+
+- 下列组件已经重命名，由此带来的不便敬请谅解。
+
+  - `VcProviderImageryArcgis` -> `VcImageryProviderArcgis`
+  - `VcProviderImageryBaidumap` -> `VcImageryProviderBaidu`
+  - `VcProviderImageryBingmaps` -> `VcImageryProviderBing`
+  - `VcProviderImageryGoogle` -> `VcImageryProviderGoogle`
+  - `VcProviderImageryGrid` -> `VcImageryProviderGrid`
+  - `VcProviderImageryIon` -> `VcImageryProviderIon`
+  - `VcProviderImageryMapbox` -> `VcImageryProviderMapbox`
+  - `VcProviderImageryOsm` -> `VcImageryProviderOsm`
+  - `VcProviderImagerySingletile` -> `VcImageryProviderSingletile`
+  - `VcProviderImagerySupermap` -> `VcImageryProviderSupermap`
+  - `VcProviderImageryTianditu` -> `VcImageryProviderTianditu`
+  - `VcProviderImageryTileCoordinates` -> `VcImageryProviderTileCoordinates`
+  - `VcProviderImageryTms` -> `VcImageryProviderTms`
+  - `VcProviderImageryTiledcache` -> `VcImageryProviderTiledcache`
+  - `VcProviderImageryUrltemplate` -> `VcImageryProviderUrltemplate`
+  - `VcProviderImageryWms` -> `VcImageryProviderWms`
+  - `VcProviderImageryWmts` -> `VcImageryProviderWmts`
+  - `VcProviderTerrainCesium` -> `VcTerrainProviderCesium`
+  - `VcProviderTerrainArcgis` -> `VcTerrainProviderArcgis`
+  - `VcProviderTerrainVrTheworld` -> `VcTerrainProviderVrTheworld`
+  - `VcProviderTerrainTianditu` -> `VcTerrainProviderTianditu`
+  - `VcInstanceGeometry` -> `VcGeometryInstance`
+  - `VcGeometryPolylineGround` -> `VcGeometryGroundPolyline`
+  - `VcGeometryPolylineSimple` -> `VcGeometrySimplePolyline`
+  - `VcPrimitivePolylineGround` -> `VcPrimitiveGroundPolyline`
+
+- 量算、绘制组件去掉 `material`、`depthFailMaterial` 参数，改为 `appearance` 和 `depthFailAppearance`。
+
 ### 3.0.6
 
 _2021-12-31_

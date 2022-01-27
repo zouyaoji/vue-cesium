@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-01-10 21:14:34
+ * @LastEditTime: 2022-01-27 12:01:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analyses.md
@@ -164,12 +164,12 @@ Basic usage of drawing components.
 | analyses | Array | `['sightline', 'viewshed']` | `optional` Specifies the analysis instance to load. |
 | activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
 | editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
-| mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the drawing component. |
-| sightlineActionOpts | Object | | `optional` Specify the style options of the sightline analysis action button.|
-| sightlineAnalysisOpts | Object | | `optional` Specify sightline analysis parameters.|
-| viewshedActionOpts | Object | | `optional` Specify the style options of the viewshed analysis action button.|
-| viewshedAnalysisOpts | Object | | `optional` Specify viewshed analysis parameters.|
-| clearActionOpts | Object | | `optional` Specify the style options of the clear action button.|
+| mainFabOpts | Object: VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the drawing component. |
+| sightlineActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the sightline analysis action button.|
+| sightlineAnalysisOpts | Object: VcDrawingOpts | | `optional` Specify sightline analysis parameters.|
+| viewshedActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the viewshed analysis action button.|
+| viewshedAnalysisOpts | Object: VcViewshedAnalysisOpts | | `optional` Specify viewshed analysis parameters.|
+| clearActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the clear action button.|
 
 :::tip
 
@@ -189,15 +189,16 @@ The parameter configuration of each drawing result is too long to list here. If 
 
 ### Events
 
-| Name       | Parameters                         | Description                                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------------------------------- |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.                               |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded.                    |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.                              |
-| drawEvt    | (drawParam, viewer)                | Triggered when drawing.                                                   |
-| activeEvt  | (activeParam, viewer)              | Triggered when the drawing action is switched.                            |
-| editorEvt  | (editParam, viewer)                | Triggered when the edit button is clicked.                                |
-| mouseEvt   | (mouseParam, viewer)               | Triggered when the mouse is mouse over or mouse out on the drawing point. |
+| Name       | Parameters                                       | Description                                                               |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                               |
+| ready      | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                    |
+| destroyed  | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                              |
+| drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggered when drawing.                                                   |
+| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggered when the drawing action is switched.                            |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggered when the edit button is clicked.                                |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggered when the mouse is mouse over or mouse out on the drawing point. |
+| fabUpdated | (value: boolean)                                 | when the floating button is expanded or collapsed.                        |
 
 ### Slots
 

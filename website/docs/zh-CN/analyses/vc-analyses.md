@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-01-10 21:11:38
+ * @LastEditTime: 2022-01-27 12:01:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
@@ -27,7 +27,7 @@
       ref="analyses"
       position="bottom-left"
       :mainFabOpts="mainFabOpts"
-      :offset="[20, 80]"
+      :offset="[20, 50]"
       :editable="editable"
       @drawEvt="drawEvt"
       @activeEvt="activeEvt"
@@ -69,6 +69,7 @@
     methods: {
       analysesReadyDefault({ Cesium, viewer, cesiumObject }) {
         console.log('分析选项参数：', cesiumObject)
+        window.viewer = viewer
       },
       clear() {
         this.$refs.drawingsCustomRef.clearAll()
@@ -80,11 +81,6 @@
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
       },
       onTilesetReady(tileset, viewer) {
-        // const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center)
-        // const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
-        // const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 5)
-        // const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3())
-        // tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
         viewer.zoomTo(tileset)
         viewer.scene.globe.depthTestAgainstTerrain = true
         this.restoreCursorMove = 'auto'
@@ -164,12 +160,12 @@
 | analyses | Array | `['sightline', 'viewshed']` | `optional` 指定要加载的分析实例。 |
 | activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
 | editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
-| mainFabOpts | Object | | `optional` 指定分析组件浮动按钮的样式选项。 |
-| sightlineActionOpts | Object | `` | `optional` 指定通视分析绘制按钮的样式选项。|
-| sightlineAnalysisOpts | Object | | `optional` 指定通视分析绘制参数。|
-| viewshedActionOpts | Object | `` | `optional` 指定可视域分析按钮的样式选项。|
-| viewshedAnalysisOpts | Object | | `optional` 指定可视域分析参数。|
-| clearActionOpts | Object | | `optional` 指定清除按钮的样式选项。|
+| mainFabOpts | Object: VcActionTooltipProps & VcFabProps | | `optional` 指定分析组件浮动按钮的样式选项。 |
+| sightlineActionOpts | Object: VcActionTooltipProps |  | `optional` 指定通视分析绘制按钮的样式选项。|
+| sightlineAnalysisOpts | Object: VcDrawingOpts | | `optional` 指定通视分析绘制参数。|
+| viewshedActionOpts | Object: VcActionTooltipProps |  | `optional` 指定可视域分析按钮的样式选项。|
+| viewshedAnalysisOpts | Object: VcViewshedAnalysisOpts | | `optional` 指定可视域分析参数。|
+| clearActionOpts | Object: VcActionTooltipProps | | `optional` 指定清除按钮的样式选项。|
 
 :::tip
 
@@ -188,15 +184,16 @@
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                         |
-| ---------- | ---------------------------------- | ---------------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。             |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。         |
-| destroyed  | Vue Instance                       | 对象销毁时触发。             |
-| drawEvt    | (drawParam, viewer)                | 绘制时触发。                 |
-| activeEvt  | (activeParam, viewer)              | 切换绘制 Action 时触发。     |
-| editorEvt  | (editParam, viewer)                | 点击编辑按钮时触发。         |
-| mouseEvt   | (mouseParam, viewer)               | 鼠标移进、移除绘制点时触发。 |
+| 事件名     | 参数                                             | 描述                         |
+| ---------- | ------------------------------------------------ | ---------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance)          | 对象加载前触发。             |
+| ready      | (readyObj: VcReadyObject)                        | 对象加载成功时触发。         |
+| destroyed  | (instance: VcComponentInternalInstance)          | 对象销毁时触发。             |
+| drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | 绘制时触发。                 |
+| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 切换绘制 Action 时触发。     |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
+| fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
 
 ### 插槽
 

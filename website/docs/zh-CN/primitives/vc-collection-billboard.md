@@ -113,19 +113,19 @@
 
 ### 事件
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| 事件名     | 参数                                    | 描述                       |
+| ---------- | --------------------------------------- | -------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。           |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。       |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。           |
+| mousedown  | (evt: VcPickEvent)                      | 鼠标在该图元上按下时触发。 |
+| mouseup    | (evt: VcPickEvent)                      | 鼠标在该图元上弹起时触发。 |
+| click      | (evt: VcPickEvent)                      | 鼠标单击该图元时触发。     |
+| clickout   | (evt: VcPickEvent)                      | 鼠标单击该图元外部时触发。 |
+| dblclick   | (evt: VcPickEvent)                      | 鼠标左键双击该图元时触发。 |
+| mousemove  | (evt: VcPickEvent)                      | 鼠标在该图元上移动时触发。 |
+| mouseover  | (evt: VcPickEvent)                      | 鼠标移动到该图元时触发。   |
+| mouseout   | (evt: VcPickEvent)                      | 鼠标移出该图元时触发。     |
 
 ### 插槽
 
@@ -169,19 +169,19 @@
 
 ### VcBillboard 事件
 
-| 事件名     | 参数                                                       | 描述                       |
-| ---------- | ---------------------------------------------------------- | -------------------------- |
-| beforeLoad | Vue Instance                                               | 对象加载前触发。           |
-| ready      | {Cesium, viewer, cesiumObject, vm}                         | 对象加载成功时触发。       |
-| destroyed  | Vue Instance                                               | 对象销毁时触发。           |
-| mousedown  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上按下时触发。 |
-| mouseup    | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上弹起时触发。 |
-| click      | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元时触发。     |
-| clickout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标单击该图元外部时触发。 |
-| dblclick   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标左键双击该图元时触发。 |
-| mousemove  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标在该图元上移动时触发。 |
-| mouseover  | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移动到该图元时触发。   |
-| mouseout   | {button,surfacePosition,pickedFeature,type,windowPosition} | 鼠标移出该图元时触发。     |
+| 事件名     | 参数                                    | 描述                       |
+| ---------- | --------------------------------------- | -------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。           |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。       |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。           |
+| mousedown  | (evt: VcPickEvent)                      | 鼠标在该图元上按下时触发。 |
+| mouseup    | (evt: VcPickEvent)                      | 鼠标在该图元上弹起时触发。 |
+| click      | (evt: VcPickEvent)                      | 鼠标单击该图元时触发。     |
+| clickout   | (evt: VcPickEvent)                      | 鼠标单击该图元外部时触发。 |
+| dblclick   | (evt: VcPickEvent)                      | 鼠标左键双击该图元时触发。 |
+| mousemove  | (evt: VcPickEvent)                      | 鼠标在该图元上移动时触发。 |
+| mouseover  | (evt: VcPickEvent)                      | 鼠标移动到该图元时触发。   |
+| mouseout   | (evt: VcPickEvent)                      | 鼠标移出该图元时触发。     |
 
 ### 参考
 

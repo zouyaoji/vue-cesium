@@ -162,8 +162,14 @@ Basic usage of VcOverlayEcharts component.
       ]
 
       const lineColors = ['#fff', '#f6fb05', '#00fcff']
-      const stationSymbols = ['image://https://zouyaoji.top/vue-cesium/images/station-blue.png', 'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png']
-      const lineSymbols = ['image://https://zouyaoji.top/vue-cesium/images/symbol-white.png', 'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png']
+      const stationSymbols = [
+        'image://https://zouyaoji.top/vue-cesium/images/station-blue.png',
+        'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png'
+      ]
+      const lineSymbols = [
+        'image://https://zouyaoji.top/vue-cesium/images/symbol-white.png',
+        'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png'
+      ]
       datas.forEach(data => {
         data.symbol = stationSymbols[data.level - 1]
       })
@@ -272,8 +278,8 @@ Basic usage of VcOverlayEcharts component.
 
 ### Events
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
+| Name       | Parameters                              | Description                                            |
+| ---------- | --------------------------------------- | ------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |

@@ -248,9 +248,9 @@ otherOpts: {
 | printEvt          | {image, status, type}                                        | 操作打印控件时触发。         |
 | statusBarEvt      | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | 状态控件相关参数改变时触发。 |
 | distanceLegendEvt | {distance,status,type}                                       | 距离比例尺改变时触发。       |
-| beforeLoad        | Vue Instance                                                 | 对象加载前触发。             |
-| ready             | {Cesium, viewer, cesiumObject, vm}                           | 对象加载成功时触发。         |
-| destroyed         | Vue Instance                                                 | 对象销毁时触发。             |
+| beforeLoad        | (instance: VcComponentInternalInstance)                      | 对象加载前触发。             |
+| ready             | (readyObj: VcReadyObject)                                    | 对象加载成功时触发。         |
+| destroyed         | (instance: VcComponentInternalInstance)                      | 对象销毁时触发。             |
 
 ### VcNavigation Slots
 
@@ -324,12 +324,12 @@ otherOpts: {
 
 ### VcCompass 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| compassEvt | {camera, status, target, type}     | 操作罗盘控件时触发。 |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| compassEvt | {camera, status, target, type}          | 操作罗盘控件时触发。 |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
 
 ### VcZoomControl
 
@@ -445,12 +445,12 @@ otherOpts: {
 
 ### VcZoomControl 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| zoomEvt    | {camera, status, target, type}     | 操作缩放控件时触发。 |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| zoomEvt    | {camera, status, target, type}          | 操作缩放控件时触发。 |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
 
 ### VcMyLocation
 
@@ -486,12 +486,12 @@ otherOpts: {
 
 ### VcMyLocation 事件
 
-| 事件名      | 参数                               | 描述                 |
-| ----------- | ---------------------------------- | -------------------- |
-| beforeLoad  | Vue Instance                       | 对象加载前触发。     |
-| ready       | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed   | Vue Instance                       | 对象销毁时触发。     |
-| locationEvt | {detail,entity,position, type}     | 操作定位按钮时触发。 |
+| 事件名      | 参数                                    | 描述                 |
+| ----------- | --------------------------------------- | -------------------- |
+| beforeLoad  | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready       | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed   | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| locationEvt | {detail,entity,position, type}          | 操作定位按钮时触发。 |
 
 ### VcPrint
 
@@ -520,12 +520,12 @@ otherOpts: {
 
 ### VcPrint 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
-| printEvt   | {image, status,type}               | 操作打印控件时触发。 |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| printEvt   | {image, status,type}                    | 操作打印控件时触发。 |
 
 ### VcStatusBar
 
@@ -550,9 +550,9 @@ otherOpts: {
 
 | 事件名       | 参数                                                         | 描述                   |
 | ------------ | ------------------------------------------------------------ | ---------------------- |
-| beforeLoad   | Vue Instance                                                 | 对象加载前触发。       |
-| ready        | {Cesium, viewer, cesiumObject, vm}                           | 对象加载成功时触发。   |
-| destroyed    | Vue Instance                                                 | 对象销毁时触发。       |
+| beforeLoad   | (instance: VcComponentInternalInstance)                      | 对象加载前触发。       |
+| ready        | (readyObj: VcReadyObject)                                    | 对象加载成功时触发。   |
+| destroyed    | (instance: VcComponentInternalInstance)                      | 对象销毁时触发。       |
 | statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | 状态栏参数改变时触发。 |
 
 ### VcDistanceLegend
@@ -573,9 +573,9 @@ otherOpts: {
 
 ### VcDistanceLegend 事件
 
-| 事件名            | 参数                               | 描述                   |
-| ----------------- | ---------------------------------- | ---------------------- |
-| beforeLoad        | Vue Instance                       | 对象加载前触发。       |
-| ready             | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。   |
-| destroyed         | Vue Instance                       | 对象销毁时触发。       |
-| distanceLegendEvt | {distance,status,type}             | 距离比例尺改变时触发。 |
+| 事件名            | 参数                                    | 描述                   |
+| ----------------- | --------------------------------------- | ---------------------- |
+| beforeLoad        | (instance: VcComponentInternalInstance) | 对象加载前触发。       |
+| ready             | (readyObj: VcReadyObject)               | 对象加载成功时触发。   |
+| destroyed         | (instance: VcComponentInternalInstance) | 对象销毁时触发。       |
+| distanceLegendEvt | {distance,status,type}                  | 距离比例尺改变时触发。 |

@@ -26,7 +26,7 @@ Here is the list of breaking changes.
 
 ### vc-provider-imagery-tile-mapservice
 
-- Renamed to `vc-provider-imagery-tileamp`
+- Renamed to `vc-imagery-provider-tilemap`
 
 ### vc-provider-imagery-openstreetmap
 

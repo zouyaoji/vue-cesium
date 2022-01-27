@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-25 13:20:33
+ * @LastEditTime: 2022-01-26 17:15:58
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\migration-from-2.x.md
+-->
+
 ## 从 VueCesium 2.x 升级
 
 本文档将帮助你从 VueCesium 2.x 升级至 VueCesium.
@@ -26,7 +35,7 @@
 
 ### vc-provider-imagery-tile-mapservice
 
-- Renamed to `vc-provider-imagery-tileamp`
+- Renamed to `vc-imagery-provider-tilemap`
 
 ### vc-provider-imagery-openstreetmap
 

@@ -144,11 +144,11 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 
 ## Events
 
-| Name       | Parameters                         | Description                            |
-| ---------- | ---------------------------------- | -------------------------------------- |
-| beforeLoad | Vue Instance                       | Triggers before the object is loaded.  |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the object is loaded.    |
-| destroyed  | Vue Instance                       | Triggers when the object is destroyed. |
+| Name       | Parameters                              | Description                            |
+| ---------- | --------------------------------------- | -------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the object is loaded.  |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the object is loaded.    |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the object is destroyed. |
 
 ## Slots
 

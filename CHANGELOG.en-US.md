@@ -1,5 +1,50 @@
 ## Changelog
 
+### 3.0.7
+
+_2022-01-30_
+
+#### Bug fixes
+
+- simplify build & compatible to build on windows.
+- horizontal measurement editing error.
+
+#### New feature
+
+- Added [vc-analyses](https://zouyaoji.top/vue-cesium/#/en-US/component/controls/vc-analyses), includes line of sight analysis and field of view analysis.
+
+#### Breaking changes:
+
+- The following components have been renamed, sorry for the inconvenience.
+
+  - `VcProviderImageryArcgis` -> `VcImageryProviderArcgis`
+  - `VcProviderImageryBaidumap` -> `VcImageryProviderBaidu`
+  - `VcProviderImageryBingmaps` -> `VcImageryProviderBing`
+  - `VcProviderImageryGoogle` -> `VcImageryProviderGoogle`
+  - `VcProviderImageryGrid` -> `VcImageryProviderGrid`
+  - `VcProviderImageryIon` -> `VcImageryProviderIon`
+  - `VcProviderImageryMapbox` -> `VcImageryProviderMapbox`
+  - `VcProviderImageryOsm` -> `VcImageryProviderOsm`
+  - `VcProviderImagerySingletile` -> `VcImageryProviderSingletile`
+  - `VcProviderImagerySupermap` -> `VcImageryProviderSupermap`
+  - `VcProviderImageryTianditu` -> `VcImageryProviderTianditu`
+  - `VcProviderImageryTileCoordinates` -> `VcImageryProviderTileCoordinates`
+  - `VcProviderImageryTms` -> `VcImageryProviderTms`
+  - `VcProviderImageryTiledcache` -> `VcImageryProviderTiledcache`
+  - `VcProviderImageryUrltemplate` -> `VcImageryProviderUrltemplate`
+  - `VcProviderImageryWms` -> `VcImageryProviderWms`
+  - `VcProviderImageryWmts` -> `VcImageryProviderWmts`
+  - `VcProviderTerrainCesium` -> `VcTerrainProviderCesium`
+  - `VcProviderTerrainArcgis` -> `VcTerrainProviderArcgis`
+  - `VcProviderTerrainVrTheworld` -> `VcTerrainProviderVrTheworld`
+  - `VcProviderTerrainTianditu` -> `VcTerrainProviderTianditu`
+  - `VcInstanceGeometry` -> `VcGeometryInstance`
+  - `VcGeometryPolylineGround` -> `VcGeometryGroundPolyline`
+  - `VcGeometryPolylineSimple` -> `VcGeometrySimplePolyline`
+  - `VcPrimitivePolylineGround` -> `VcPrimitiveGroundPolyline`
+
+- The `material`, `depthFailMaterial` parameters in the `vc-mearements`, `vc-drawings` component related properties are changed to `appearance` and `depthFailAppearance`.
+
 ### 3.0.6
 
 _2021-12-31_

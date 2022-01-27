@@ -90,8 +90,8 @@ Basic usage of the selector component.
 
 ### Events
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| pickEvt    | selectedFeature                    | Triggered when picked up.                              |
+| Name       | Parameters                              | Description                                            |
+| ---------- | --------------------------------------- | ------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
+| pickEvt    | selectedFeature                         | Triggered when picked up.                              |

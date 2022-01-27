@@ -119,12 +119,12 @@ Basic usage of VcAnalysisFlood component.
 
 ### Event
 
-| Name       | Parameters                         | Description                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| beforeLoad | Vue Instance                       | Triggers before the cesiumObject is loaded.            |
-| ready      | {Cesium, viewer, cesiumObject, vm} | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | Vue Instance                       | Triggers when the cesiumObject is destroyed.           |
-| stop       |                                    | Triggers when the maxHeight is reached.                |
+| Name       | Parameters                              | Description                                            |
+| ---------- | --------------------------------------- | ------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+| stop       |                                         | Triggers when the maxHeight is reached.                |
 
 ### Methods
 

@@ -162,8 +162,14 @@ Echart 覆盖物组件的基础用法。
       ]
 
       const lineColors = ['#fff', '#f6fb05', '#00fcff']
-      const stationSymbols = ['image://https://zouyaoji.top/vue-cesium/images/station-blue.png', 'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png']
-      const lineSymbols = ['image://https://zouyaoji.top/vue-cesium/images/symbol-white.png', 'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png']
+      const stationSymbols = [
+        'image://https://zouyaoji.top/vue-cesium/images/station-blue.png',
+        'image://https://zouyaoji.top/vue-cesium/images/station-yellow.png'
+      ]
+      const lineSymbols = [
+        'image://https://zouyaoji.top/vue-cesium/images/symbol-white.png',
+        'image://https://zouyaoji.top/vue-cesium/images/symbol-yellow.png'
+      ]
       datas.forEach(data => {
         data.symbol = stationSymbols[data.level - 1]
       })
@@ -271,8 +277,8 @@ Echart 覆盖物组件的基础用法。
 
 ### 事件
 
-| 事件名     | 参数                               | 描述                 |
-| ---------- | ---------------------------------- | -------------------- |
-| beforeLoad | Vue Instance                       | 对象加载前触发。     |
-| ready      | {Cesium, viewer, cesiumObject, vm} | 对象加载成功时触发。 |
-| destroyed  | Vue Instance                       | 对象销毁时触发。     |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
