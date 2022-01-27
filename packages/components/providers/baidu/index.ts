@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-27 23:20:07
+ * @LastEditTime: 2022-01-27 23:37:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
@@ -46,7 +46,23 @@ export const baiduImageryProviderProps = {
   },
   // https://lbsyun.baidu.com/custom/list.htm
   customid: {
-    type: String,
+    type: String as PropType<
+      | 'img'
+      | 'vec'
+      | 'traffic'
+      | 'normal'
+      | 'light'
+      | 'dark'
+      | 'redalert'
+      | 'googlelite'
+      | 'grassgreen'
+      | 'midnight'
+      | 'pink'
+      | 'darkgreen'
+      | 'bluish'
+      | 'grayscale'
+      | 'hardedge'
+    >,
     default: 'normal' // img vec traffic normal light dark redalert googlelite grassgreen midnight pink darkgreen bluish grayscale hardedge
   }
 }
