@@ -1,1 +1,116 @@
-define(["./Cartesian2-b4b7b0b3","./Check-5e798bbf","./when-208fe5b0","./EllipseGeometry-be322b26","./VertexFormat-7e57a3bd","./Math-8386669c","./GeometryOffsetAttribute-3497d4dd","./Transforms-73e77b72","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./EllipseGeometryLibrary-c8749cb9","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./GeometryInstance-411ead1b","./GeometryPipeline-86615bad","./AttributeCompression-9711314b","./EncodedCartesian3-21af0f3b","./IndexDatatype-3bc916b1","./IntersectionTests-40db2afa","./Plane-b91bfb59"],function(r,e,o,a,n,t,i,s,l,d,m,u,p,c,y,_,h,G,b,x,f){"use strict";function g(e){var t=(e=o.defaultValue(e,o.defaultValue.EMPTY_OBJECT)).radius,e={center:e.center,semiMajorAxis:t,semiMinorAxis:t,ellipsoid:e.ellipsoid,height:e.height,extrudedHeight:e.extrudedHeight,granularity:e.granularity,vertexFormat:e.vertexFormat,stRotation:e.stRotation,shadowVolume:e.shadowVolume};this._ellipseGeometry=new a.EllipseGeometry(e),this._workerName="createCircleGeometry"}g.packedLength=a.EllipseGeometry.packedLength,g.pack=function(e,t,i){return a.EllipseGeometry.pack(e._ellipseGeometry,t,i)};var E=new a.EllipseGeometry({center:new r.Cartesian3,semiMajorAxis:1,semiMinorAxis:1}),v={center:new r.Cartesian3,radius:void 0,ellipsoid:r.Ellipsoid.clone(r.Ellipsoid.UNIT_SPHERE),height:void 0,extrudedHeight:void 0,granularity:void 0,vertexFormat:new n.VertexFormat,stRotation:void 0,semiMajorAxis:void 0,semiMinorAxis:void 0,shadowVolume:void 0};return g.unpack=function(e,t,i){t=a.EllipseGeometry.unpack(e,t,E);return v.center=r.Cartesian3.clone(t._center,v.center),v.ellipsoid=r.Ellipsoid.clone(t._ellipsoid,v.ellipsoid),v.height=t._height,v.extrudedHeight=t._extrudedHeight,v.granularity=t._granularity,v.vertexFormat=n.VertexFormat.clone(t._vertexFormat,v.vertexFormat),v.stRotation=t._stRotation,v.shadowVolume=t._shadowVolume,o.defined(i)?(v.semiMajorAxis=t._semiMajorAxis,v.semiMinorAxis=t._semiMinorAxis,i._ellipseGeometry=new a.EllipseGeometry(v),i):(v.radius=t._semiMajorAxis,new g(v))},g.createGeometry=function(e){return a.EllipseGeometry.createGeometry(e._ellipseGeometry)},g.createShadowVolume=function(e,t,i){var r=e._ellipseGeometry._granularity,o=e._ellipseGeometry._ellipsoid,t=t(r,o),i=i(r,o);return new g({center:e._ellipseGeometry._center,radius:e._ellipseGeometry._semiMajorAxis,ellipsoid:o,stRotation:e._ellipseGeometry._stRotation,granularity:r,extrudedHeight:t,height:i,vertexFormat:n.VertexFormat.POSITION_ONLY,shadowVolume:!0})},Object.defineProperties(g.prototype,{rectangle:{get:function(){return this._ellipseGeometry.rectangle}},textureCoordinateRotationPoints:{get:function(){return this._ellipseGeometry.textureCoordinateRotationPoints}}}),function(e,t){return(e=o.defined(t)?g.unpack(e,t):e)._ellipseGeometry._center=r.Cartesian3.clone(e._ellipseGeometry._center),e._ellipseGeometry._ellipsoid=r.Ellipsoid.clone(e._ellipseGeometry._ellipsoid),g.createGeometry(e)}});
+define([
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './when-4bbc8319',
+  './EllipseGeometry-47331b4e',
+  './VertexFormat-71718faa',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './GeometryOffsetAttribute-1772960d',
+  './Transforms-d13cc04e',
+  './combine-83860057',
+  './EllipseGeometryLibrary-962723df',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './GeometryInstance-47b34185',
+  './GeometryPipeline-2356afec',
+  './AttributeCompression-af389d04',
+  './EncodedCartesian3-f286cedc',
+  './IndexDatatype-b7d979a6',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937'
+], function (e, t, i, r, o, n, a, l, s, d, m, c, u, p, y, _, G, x, h, g) {
+  'use strict'
+  function f(e) {
+    var t = (e = i.defaultValue(e, i.defaultValue.EMPTY_OBJECT)).radius,
+      o = {
+        center: e.center,
+        semiMajorAxis: t,
+        semiMinorAxis: t,
+        ellipsoid: e.ellipsoid,
+        height: e.height,
+        extrudedHeight: e.extrudedHeight,
+        granularity: e.granularity,
+        vertexFormat: e.vertexFormat,
+        stRotation: e.stRotation,
+        shadowVolume: e.shadowVolume
+      }
+    ;(this._ellipseGeometry = new r.EllipseGeometry(o)), (this._workerName = 'createCircleGeometry')
+  }
+  ;(f.packedLength = r.EllipseGeometry.packedLength),
+    (f.pack = function (e, t, i) {
+      return r.EllipseGeometry.pack(e._ellipseGeometry, t, i)
+    })
+  var v = new r.EllipseGeometry({ center: new e.Cartesian3(), semiMajorAxis: 1, semiMinorAxis: 1 }),
+    E = {
+      center: new e.Cartesian3(),
+      radius: void 0,
+      ellipsoid: e.Ellipsoid.clone(e.Ellipsoid.UNIT_SPHERE),
+      height: void 0,
+      extrudedHeight: void 0,
+      granularity: void 0,
+      vertexFormat: new o.VertexFormat(),
+      stRotation: void 0,
+      semiMajorAxis: void 0,
+      semiMinorAxis: void 0,
+      shadowVolume: void 0
+    }
+  return (
+    (f.unpack = function (t, n, a) {
+      var l = r.EllipseGeometry.unpack(t, n, v)
+      return (
+        (E.center = e.Cartesian3.clone(l._center, E.center)),
+        (E.ellipsoid = e.Ellipsoid.clone(l._ellipsoid, E.ellipsoid)),
+        (E.height = l._height),
+        (E.extrudedHeight = l._extrudedHeight),
+        (E.granularity = l._granularity),
+        (E.vertexFormat = o.VertexFormat.clone(l._vertexFormat, E.vertexFormat)),
+        (E.stRotation = l._stRotation),
+        (E.shadowVolume = l._shadowVolume),
+        i.defined(a)
+          ? ((E.semiMajorAxis = l._semiMajorAxis), (E.semiMinorAxis = l._semiMinorAxis), (a._ellipseGeometry = new r.EllipseGeometry(E)), a)
+          : ((E.radius = l._semiMajorAxis), new f(E))
+      )
+    }),
+    (f.createGeometry = function (e) {
+      return r.EllipseGeometry.createGeometry(e._ellipseGeometry)
+    }),
+    (f.createShadowVolume = function (e, t, i) {
+      var r = e._ellipseGeometry._granularity,
+        n = e._ellipseGeometry._ellipsoid,
+        a = t(r, n),
+        l = i(r, n)
+      return new f({
+        center: e._ellipseGeometry._center,
+        radius: e._ellipseGeometry._semiMajorAxis,
+        ellipsoid: n,
+        stRotation: e._ellipseGeometry._stRotation,
+        granularity: r,
+        extrudedHeight: a,
+        height: l,
+        vertexFormat: o.VertexFormat.POSITION_ONLY,
+        shadowVolume: !0
+      })
+    }),
+    Object.defineProperties(f.prototype, {
+      rectangle: {
+        get: function () {
+          return this._ellipseGeometry.rectangle
+        }
+      },
+      textureCoordinateRotationPoints: {
+        get: function () {
+          return this._ellipseGeometry.textureCoordinateRotationPoints
+        }
+      }
+    }),
+    function (t, r) {
+      return (
+        i.defined(r) && (t = f.unpack(t, r)),
+        (t._ellipseGeometry._center = e.Cartesian3.clone(t._ellipseGeometry._center)),
+        (t._ellipseGeometry._ellipsoid = e.Ellipsoid.clone(t._ellipseGeometry._ellipsoid)),
+        f.createGeometry(t)
+      )
+    }
+  )
+})

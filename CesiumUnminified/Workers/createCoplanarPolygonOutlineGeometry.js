@@ -18,42 +18,95 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './ComponentDatatype-cc8f5f00', './CoplanarPolygonGeometryLibrary-500b36bf', './when-208fe5b0', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './GeometryInstance-44e07c7e', './GeometryPipeline-a6a68cab', './IndexDatatype-3a89c589', './PolygonGeometryLibrary-bc078588', './Math-56f06cd5', './RuntimeError-7f634f5d', './WebGLConstants-5e2a49ab', './OrientedBoundingBox-dfa225d1', './EllipsoidTangentPlane-e79f0327', './AxisAlignedBoundingBox-574d1269', './IntersectionTests-4352af03', './Plane-9825d2dd', './AttributeCompression-d1cd1d9c', './EncodedCartesian3-099fd63d', './ArcType-dc1c5aee', './EllipsoidRhumbLine-938626ba', './PolygonPipeline-c48540af'], function (arrayRemoveDuplicates, Transforms, Cartesian2, Check, ComponentDatatype, CoplanarPolygonGeometryLibrary, when, GeometryAttribute, GeometryAttributes, GeometryInstance, GeometryPipeline, IndexDatatype, PolygonGeometryLibrary, _Math, RuntimeError, WebGLConstants, OrientedBoundingBox, EllipsoidTangentPlane, AxisAlignedBoundingBox, IntersectionTests, Plane, AttributeCompression, EncodedCartesian3, ArcType, EllipsoidRhumbLine, PolygonPipeline) { 'use strict';
+define([
+  './arrayRemoveDuplicates-cf5c3227',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-f194c48b',
+  './CoplanarPolygonGeometryLibrary-bddbb12e',
+  './when-4bbc8319',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './GeometryInstance-a3cff41c',
+  './GeometryPipeline-4bea2645',
+  './IndexDatatype-ee69f1fd',
+  './PolygonGeometryLibrary-a9863df3',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './OrientedBoundingBox-79e3c3fe',
+  './EllipsoidTangentPlane-164dcfc9',
+  './AxisAlignedBoundingBox-4171efdd',
+  './IntersectionTests-26599c5e',
+  './Plane-4f333bc4',
+  './AttributeCompression-1f6679e1',
+  './EncodedCartesian3-882fbcbd',
+  './ArcType-98ec98bf',
+  './EllipsoidRhumbLine-447d6334',
+  './PolygonPipeline-d65e2b8f'
+], function (
+  arrayRemoveDuplicates,
+  Transforms,
+  Matrix2,
+  RuntimeError,
+  ComponentDatatype,
+  CoplanarPolygonGeometryLibrary,
+  when,
+  GeometryAttribute,
+  GeometryAttributes,
+  GeometryInstance,
+  GeometryPipeline,
+  IndexDatatype,
+  PolygonGeometryLibrary,
+  combine,
+  WebGLConstants,
+  OrientedBoundingBox,
+  EllipsoidTangentPlane,
+  AxisAlignedBoundingBox,
+  IntersectionTests,
+  Plane,
+  AttributeCompression,
+  EncodedCartesian3,
+  ArcType,
+  EllipsoidRhumbLine,
+  PolygonPipeline
+) {
+  'use strict'
 
   function createGeometryFromPositions(positions) {
-    var length = positions.length;
-    var flatPositions = new Float64Array(length * 3);
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(length, length * 2);
+    var length = positions.length
+    var flatPositions = new Float64Array(length * 3)
+    var indices = IndexDatatype.IndexDatatype.createTypedArray(length, length * 2)
 
-    var positionIndex = 0;
-    var index = 0;
+    var positionIndex = 0
+    var index = 0
 
     for (var i = 0; i < length; i++) {
-      var position = positions[i];
-      flatPositions[positionIndex++] = position.x;
-      flatPositions[positionIndex++] = position.y;
-      flatPositions[positionIndex++] = position.z;
+      var position = positions[i]
+      flatPositions[positionIndex++] = position.x
+      flatPositions[positionIndex++] = position.y
+      flatPositions[positionIndex++] = position.z
 
-      indices[index++] = i;
-      indices[index++] = (i + 1) % length;
+      indices[index++] = i
+      indices[index++] = (i + 1) % length
     }
 
     var attributes = new GeometryAttributes.GeometryAttributes({
       position: new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
         componentsPerAttribute: 3,
-        values: flatPositions,
-      }),
-    });
+        values: flatPositions
+      })
+    })
 
     return new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: indices,
-      primitiveType: GeometryAttribute.PrimitiveType.LINES,
-    });
+      primitiveType: GeometryAttribute.PrimitiveType.LINES
+    })
   }
 
   /**
@@ -79,21 +132,20 @@ define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesia
    * var geometry = Cesium.CoplanarPolygonOutlineGeometry.createGeometry(polygonOutline);
    */
   function CoplanarPolygonOutlineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
-    var polygonHierarchy = options.polygonHierarchy;
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    var polygonHierarchy = options.polygonHierarchy
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined("options.polygonHierarchy", polygonHierarchy);
+    RuntimeError.Check.defined('options.polygonHierarchy', polygonHierarchy)
     //>>includeEnd('debug');
 
-    this._polygonHierarchy = polygonHierarchy;
-    this._workerName = "createCoplanarPolygonOutlineGeometry";
+    this._polygonHierarchy = polygonHierarchy
+    this._workerName = 'createCoplanarPolygonOutlineGeometry'
 
     /**
      * The number of elements used to pack the object into an array.
      * @type {Number}
      */
-    this.packedLength =
-      PolygonGeometryLibrary.PolygonGeometryLibrary.computeHierarchyPackedLength(polygonHierarchy) + 1;
+    this.packedLength = PolygonGeometryLibrary.PolygonGeometryLibrary.computeHierarchyPackedLength(polygonHierarchy) + 1
   }
 
   /**
@@ -104,19 +156,19 @@ define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesia
    * @returns {CoplanarPolygonOutlineGeometry}
    */
   CoplanarPolygonOutlineGeometry.fromPositions = function (options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined("options.positions", options.positions);
+    RuntimeError.Check.defined('options.positions', options.positions)
     //>>includeEnd('debug');
 
     var newOptions = {
       polygonHierarchy: {
-        positions: options.positions,
-      },
-    };
-    return new CoplanarPolygonOutlineGeometry(newOptions);
-  };
+        positions: options.positions
+      }
+    }
+    return new CoplanarPolygonOutlineGeometry(newOptions)
+  }
 
   /**
    * Stores the provided instance into the provided array.
@@ -129,26 +181,22 @@ define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesia
    */
   CoplanarPolygonOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
-    Check.Check.defined("array", array);
+    RuntimeError.Check.typeOf.object('value', value)
+    RuntimeError.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    startingIndex = PolygonGeometryLibrary.PolygonGeometryLibrary.packPolygonHierarchy(
-      value._polygonHierarchy,
-      array,
-      startingIndex
-    );
+    startingIndex = PolygonGeometryLibrary.PolygonGeometryLibrary.packPolygonHierarchy(value._polygonHierarchy, array, startingIndex)
 
-    array[startingIndex] = value.packedLength;
+    array[startingIndex] = value.packedLength
 
-    return array;
-  };
+    return array
+  }
 
   var scratchOptions = {
-    polygonHierarchy: {},
-  };
+    polygonHierarchy: {}
+  }
   /**
    * Retrieves an instance from a packed array.
    *
@@ -157,34 +205,27 @@ define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesia
    * @param {CoplanarPolygonOutlineGeometry} [result] The object into which to store the result.
    * @returns {CoplanarPolygonOutlineGeometry} The modified result parameter or a new CoplanarPolygonOutlineGeometry instance if one was not provided.
    */
-  CoplanarPolygonOutlineGeometry.unpack = function (
-    array,
-    startingIndex,
-    result
-  ) {
+  CoplanarPolygonOutlineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.defined("array", array);
+    RuntimeError.Check.defined('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var polygonHierarchy = PolygonGeometryLibrary.PolygonGeometryLibrary.unpackPolygonHierarchy(
-      array,
-      startingIndex
-    );
-    startingIndex = polygonHierarchy.startingIndex;
-    delete polygonHierarchy.startingIndex;
-    var packedLength = array[startingIndex];
+    var polygonHierarchy = PolygonGeometryLibrary.PolygonGeometryLibrary.unpackPolygonHierarchy(array, startingIndex)
+    startingIndex = polygonHierarchy.startingIndex
+    delete polygonHierarchy.startingIndex
+    var packedLength = array[startingIndex]
 
     if (!when.defined(result)) {
-      result = new CoplanarPolygonOutlineGeometry(scratchOptions);
+      result = new CoplanarPolygonOutlineGeometry(scratchOptions)
     }
 
-    result._polygonHierarchy = polygonHierarchy;
-    result.packedLength = packedLength;
+    result._polygonHierarchy = polygonHierarchy
+    result.packedLength = packedLength
 
-    return result;
-  };
+    return result
+  }
 
   /**
    * Computes the geometric representation of an arbitrary coplanar polygon, including its vertices, indices, and a bounding sphere.
@@ -193,63 +234,52 @@ define(['./arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesia
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   CoplanarPolygonOutlineGeometry.createGeometry = function (polygonGeometry) {
-    var polygonHierarchy = polygonGeometry._polygonHierarchy;
+    var polygonHierarchy = polygonGeometry._polygonHierarchy
 
-    var outerPositions = polygonHierarchy.positions;
-    outerPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(
-      outerPositions,
-      Cartesian2.Cartesian3.equalsEpsilon,
-      true
-    );
+    var outerPositions = polygonHierarchy.positions
+    outerPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(outerPositions, Matrix2.Cartesian3.equalsEpsilon, true)
     if (outerPositions.length < 3) {
-      return;
+      return
     }
-    var isValid = CoplanarPolygonGeometryLibrary.CoplanarPolygonGeometryLibrary.validOutline(outerPositions);
+    var isValid = CoplanarPolygonGeometryLibrary.CoplanarPolygonGeometryLibrary.validOutline(outerPositions)
     if (!isValid) {
-      return undefined;
+      return undefined
     }
 
-    var polygons = PolygonGeometryLibrary.PolygonGeometryLibrary.polygonOutlinesFromHierarchy(
-      polygonHierarchy,
-      false
-    );
+    var polygons = PolygonGeometryLibrary.PolygonGeometryLibrary.polygonOutlinesFromHierarchy(polygonHierarchy, false)
 
     if (polygons.length === 0) {
-      return undefined;
+      return undefined
     }
 
-    var geometries = [];
+    var geometries = []
 
     for (var i = 0; i < polygons.length; i++) {
       var geometryInstance = new GeometryInstance.GeometryInstance({
-        geometry: createGeometryFromPositions(polygons[i]),
-      });
-      geometries.push(geometryInstance);
+        geometry: createGeometryFromPositions(polygons[i])
+      })
+      geometries.push(geometryInstance)
     }
 
-    var geometry = GeometryPipeline.GeometryPipeline.combineInstances(geometries)[0];
-    var boundingSphere = Transforms.BoundingSphere.fromPoints(polygonHierarchy.positions);
+    var geometry = GeometryPipeline.GeometryPipeline.combineInstances(geometries)[0]
+    var boundingSphere = Transforms.BoundingSphere.fromPoints(polygonHierarchy.positions)
 
     return new GeometryAttribute.Geometry({
       attributes: geometry.attributes,
       indices: geometry.indices,
       primitiveType: geometry.primitiveType,
-      boundingSphere: boundingSphere,
-    });
-  };
+      boundingSphere: boundingSphere
+    })
+  }
 
   function createCoplanarPolygonOutlineGeometry(polygonGeometry, offset) {
     if (when.defined(offset)) {
-      polygonGeometry = CoplanarPolygonOutlineGeometry.unpack(
-        polygonGeometry,
-        offset
-      );
+      polygonGeometry = CoplanarPolygonOutlineGeometry.unpack(polygonGeometry, offset)
     }
-    polygonGeometry._ellipsoid = Cartesian2.Ellipsoid.clone(polygonGeometry._ellipsoid);
-    return CoplanarPolygonOutlineGeometry.createGeometry(polygonGeometry);
+    polygonGeometry._ellipsoid = Matrix2.Ellipsoid.clone(polygonGeometry._ellipsoid)
+    return CoplanarPolygonOutlineGeometry.createGeometry(polygonGeometry)
   }
 
-  return createCoplanarPolygonOutlineGeometry;
-
-});
+  return createCoplanarPolygonOutlineGeometry
+})
 //# sourceMappingURL=createCoplanarPolygonOutlineGeometry.js.map

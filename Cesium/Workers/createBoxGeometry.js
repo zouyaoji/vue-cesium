@@ -1,1 +1,19 @@
-define(["./BoxGeometry-45a906ef","./when-208fe5b0","./GeometryOffsetAttribute-3497d4dd","./Check-5e798bbf","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Math-8386669c","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./VertexFormat-7e57a3bd"],function(r,a,e,t,o,b,n,f,m,d,i,u,s){"use strict";return function(e,t){return a.defined(t)&&(e=r.BoxGeometry.unpack(e,t)),r.BoxGeometry.createGeometry(e)}});
+define([
+  './BoxGeometry-bdb0d59d',
+  './when-4bbc8319',
+  './GeometryOffsetAttribute-1772960d',
+  './RuntimeError-346a3079',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './VertexFormat-71718faa'
+], function (e, t, r, o, n, a, c, m, i, d, u, b) {
+  'use strict'
+  return function (r, o) {
+    return t.defined(o) && (r = e.BoxGeometry.unpack(r, o)), e.BoxGeometry.createGeometry(r)
+  }
+})

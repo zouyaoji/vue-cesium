@@ -18,19 +18,45 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./when-208fe5b0', './FrustumGeometry-5186252d', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './Math-56f06cd5', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './Plane-9825d2dd', './VertexFormat-9eeda9f8'], function (when, FrustumGeometry, Transforms, Cartesian2, Check, _Math, RuntimeError, ComponentDatatype, WebGLConstants, GeometryAttribute, GeometryAttributes, Plane, VertexFormat) { 'use strict';
+define([
+  './when-4bbc8319',
+  './FrustumGeometry-8664d8ec',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-f194c48b',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './Plane-4f333bc4',
+  './VertexFormat-f9c1a155'
+], function (
+  when,
+  FrustumGeometry,
+  Transforms,
+  Matrix2,
+  RuntimeError,
+  ComponentDatatype,
+  WebGLConstants,
+  combine,
+  GeometryAttribute,
+  GeometryAttributes,
+  Plane,
+  VertexFormat
+) {
+  'use strict'
 
   function createFrustumGeometry(frustumGeometry, offset) {
     if (when.defined(offset)) {
-      frustumGeometry = FrustumGeometry.FrustumGeometry.unpack(frustumGeometry, offset);
+      frustumGeometry = FrustumGeometry.FrustumGeometry.unpack(frustumGeometry, offset)
     }
-    return FrustumGeometry.FrustumGeometry.createGeometry(frustumGeometry);
+    return FrustumGeometry.FrustumGeometry.createGeometry(frustumGeometry)
   }
 
-  return createFrustumGeometry;
-
-});
+  return createFrustumGeometry
+})
 //# sourceMappingURL=createFrustumGeometry.js.map

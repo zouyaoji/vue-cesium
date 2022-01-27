@@ -18,50 +18,86 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Color-63d46c5a', './ComponentDatatype-cc8f5f00', './Check-5e798bbf', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './IndexDatatype-3a89c589', './Math-56f06cd5', './PolylinePipeline-9fd4ed2e', './VertexFormat-9eeda9f8', './RuntimeError-7f634f5d', './WebGLConstants-5e2a49ab', './EllipsoidGeodesic-1c2b601e', './EllipsoidRhumbLine-938626ba', './IntersectionTests-4352af03', './Plane-9825d2dd'], function (when, Cartesian2, ArcType, arrayRemoveDuplicates, Transforms, Color, ComponentDatatype, Check, GeometryAttribute, GeometryAttributes, IndexDatatype, _Math, PolylinePipeline, VertexFormat, RuntimeError, WebGLConstants, EllipsoidGeodesic, EllipsoidRhumbLine, IntersectionTests, Plane) { 'use strict';
+define([
+  './when-4bbc8319',
+  './Matrix2-91d5b6af',
+  './ArcType-98ec98bf',
+  './arrayRemoveDuplicates-cf5c3227',
+  './Transforms-86b6fa28',
+  './Color-0cb15512',
+  './ComponentDatatype-f194c48b',
+  './RuntimeError-346a3079',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-ee69f1fd',
+  './PolylinePipeline-3cab578f',
+  './VertexFormat-f9c1a155',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './EllipsoidGeodesic-6a52e412',
+  './EllipsoidRhumbLine-447d6334',
+  './IntersectionTests-26599c5e',
+  './Plane-4f333bc4'
+], function (
+  when,
+  Matrix2,
+  ArcType,
+  arrayRemoveDuplicates,
+  Transforms,
+  Color,
+  ComponentDatatype,
+  RuntimeError,
+  GeometryAttribute,
+  GeometryAttributes,
+  IndexDatatype,
+  PolylinePipeline,
+  VertexFormat,
+  combine,
+  WebGLConstants,
+  EllipsoidGeodesic,
+  EllipsoidRhumbLine,
+  IntersectionTests,
+  Plane
+) {
+  'use strict'
 
-  var scratchInterpolateColorsArray = [];
+  var scratchInterpolateColorsArray = []
 
   function interpolateColors(p0, p1, color0, color1, numPoints) {
-    var colors = scratchInterpolateColorsArray;
-    colors.length = numPoints;
-    var i;
+    var colors = scratchInterpolateColorsArray
+    colors.length = numPoints
+    var i
 
-    var r0 = color0.red;
-    var g0 = color0.green;
-    var b0 = color0.blue;
-    var a0 = color0.alpha;
+    var r0 = color0.red
+    var g0 = color0.green
+    var b0 = color0.blue
+    var a0 = color0.alpha
 
-    var r1 = color1.red;
-    var g1 = color1.green;
-    var b1 = color1.blue;
-    var a1 = color1.alpha;
+    var r1 = color1.red
+    var g1 = color1.green
+    var b1 = color1.blue
+    var a1 = color1.alpha
 
     if (Color.Color.equals(color0, color1)) {
       for (i = 0; i < numPoints; i++) {
-        colors[i] = Color.Color.clone(color0);
+        colors[i] = Color.Color.clone(color0)
       }
-      return colors;
+      return colors
     }
 
-    var redPerVertex = (r1 - r0) / numPoints;
-    var greenPerVertex = (g1 - g0) / numPoints;
-    var bluePerVertex = (b1 - b0) / numPoints;
-    var alphaPerVertex = (a1 - a0) / numPoints;
+    var redPerVertex = (r1 - r0) / numPoints
+    var greenPerVertex = (g1 - g0) / numPoints
+    var bluePerVertex = (b1 - b0) / numPoints
+    var alphaPerVertex = (a1 - a0) / numPoints
 
     for (i = 0; i < numPoints; i++) {
-      colors[i] = new Color.Color(
-        r0 + i * redPerVertex,
-        g0 + i * greenPerVertex,
-        b0 + i * bluePerVertex,
-        a0 + i * alphaPerVertex
-      );
+      colors[i] = new Color.Color(r0 + i * redPerVertex, g0 + i * greenPerVertex, b0 + i * bluePerVertex, a0 + i * alphaPerVertex)
     }
 
-    return colors;
+    return colors
   }
 
   /**
@@ -103,55 +139,46 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
    * var geometry = Cesium.PolylineGeometry.createGeometry(polyline);
    */
   function PolylineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
-    var positions = options.positions;
-    var colors = options.colors;
-    var width = when.defaultValue(options.width, 1.0);
-    var colorsPerVertex = when.defaultValue(options.colorsPerVertex, false);
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    var positions = options.positions
+    var colors = options.colors
+    var width = when.defaultValue(options.width, 1.0)
+    var colorsPerVertex = when.defaultValue(options.colorsPerVertex, false)
 
     //>>includeStart('debug', pragmas.debug);
     if (!when.defined(positions) || positions.length < 2) {
-      throw new Check.DeveloperError("At least two positions are required.");
+      throw new RuntimeError.DeveloperError('At least two positions are required.')
     }
-    if (typeof width !== "number") {
-      throw new Check.DeveloperError("width must be a number");
+    if (typeof width !== 'number') {
+      throw new RuntimeError.DeveloperError('width must be a number')
     }
     if (
       when.defined(colors) &&
-      ((colorsPerVertex && colors.length < positions.length) ||
-        (!colorsPerVertex && colors.length < positions.length - 1))
+      ((colorsPerVertex && colors.length < positions.length) || (!colorsPerVertex && colors.length < positions.length - 1))
     ) {
-      throw new Check.DeveloperError("colors has an invalid length.");
+      throw new RuntimeError.DeveloperError('colors has an invalid length.')
     }
     //>>includeEnd('debug');
 
-    this._positions = positions;
-    this._colors = colors;
-    this._width = width;
-    this._colorsPerVertex = colorsPerVertex;
-    this._vertexFormat = VertexFormat.VertexFormat.clone(
-      when.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT)
-    );
+    this._positions = positions
+    this._colors = colors
+    this._width = width
+    this._colorsPerVertex = colorsPerVertex
+    this._vertexFormat = VertexFormat.VertexFormat.clone(when.defaultValue(options.vertexFormat, VertexFormat.VertexFormat.DEFAULT))
 
-    this._arcType = when.defaultValue(options.arcType, ArcType.ArcType.GEODESIC);
-    this._granularity = when.defaultValue(
-      options.granularity,
-      _Math.CesiumMath.RADIANS_PER_DEGREE
-    );
-    this._ellipsoid = Cartesian2.Ellipsoid.clone(
-      when.defaultValue(options.ellipsoid, Cartesian2.Ellipsoid.WGS84)
-    );
-    this._workerName = "createPolylineGeometry";
+    this._arcType = when.defaultValue(options.arcType, ArcType.ArcType.GEODESIC)
+    this._granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
+    this._ellipsoid = Matrix2.Ellipsoid.clone(when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84))
+    this._workerName = 'createPolylineGeometry'
 
-    var numComponents = 1 + positions.length * Cartesian2.Cartesian3.packedLength;
-    numComponents += when.defined(colors) ? 1 + colors.length * Color.Color.packedLength : 1;
+    var numComponents = 1 + positions.length * Matrix2.Cartesian3.packedLength
+    numComponents += when.defined(colors) ? 1 + colors.length * Color.Color.packedLength : 1
 
     /**
      * The number of elements used to pack the object into an array.
      * @type {Number}
      */
-    this.packedLength =
-      numComponents + Cartesian2.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 4;
+    this.packedLength = numComponents + Matrix2.Ellipsoid.packedLength + VertexFormat.VertexFormat.packedLength + 4
   }
 
   /**
@@ -166,49 +193,49 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
   PolylineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
     if (!when.defined(value)) {
-      throw new Check.DeveloperError("value is required");
+      throw new RuntimeError.DeveloperError('value is required')
     }
     if (!when.defined(array)) {
-      throw new Check.DeveloperError("array is required");
+      throw new RuntimeError.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var i;
+    var i
 
-    var positions = value._positions;
-    var length = positions.length;
-    array[startingIndex++] = length;
+    var positions = value._positions
+    var length = positions.length
+    array[startingIndex++] = length
 
-    for (i = 0; i < length; ++i, startingIndex += Cartesian2.Cartesian3.packedLength) {
-      Cartesian2.Cartesian3.pack(positions[i], array, startingIndex);
+    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
+      Matrix2.Cartesian3.pack(positions[i], array, startingIndex)
     }
 
-    var colors = value._colors;
-    length = when.defined(colors) ? colors.length : 0.0;
-    array[startingIndex++] = length;
+    var colors = value._colors
+    length = when.defined(colors) ? colors.length : 0.0
+    array[startingIndex++] = length
 
     for (i = 0; i < length; ++i, startingIndex += Color.Color.packedLength) {
-      Color.Color.pack(colors[i], array, startingIndex);
+      Color.Color.pack(colors[i], array, startingIndex)
     }
 
-    Cartesian2.Ellipsoid.pack(value._ellipsoid, array, startingIndex);
-    startingIndex += Cartesian2.Ellipsoid.packedLength;
+    Matrix2.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
+    startingIndex += Matrix2.Ellipsoid.packedLength
 
-    VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex);
-    startingIndex += VertexFormat.VertexFormat.packedLength;
+    VertexFormat.VertexFormat.pack(value._vertexFormat, array, startingIndex)
+    startingIndex += VertexFormat.VertexFormat.packedLength
 
-    array[startingIndex++] = value._width;
-    array[startingIndex++] = value._colorsPerVertex ? 1.0 : 0.0;
-    array[startingIndex++] = value._arcType;
-    array[startingIndex] = value._granularity;
+    array[startingIndex++] = value._width
+    array[startingIndex++] = value._colorsPerVertex ? 1.0 : 0.0
+    array[startingIndex++] = value._arcType
+    array[startingIndex] = value._granularity
 
-    return array;
-  };
+    return array
+  }
 
-  var scratchEllipsoid = Cartesian2.Ellipsoid.clone(Cartesian2.Ellipsoid.UNIT_SPHERE);
-  var scratchVertexFormat = new VertexFormat.VertexFormat();
+  var scratchEllipsoid = Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE)
+  var scratchVertexFormat = new VertexFormat.VertexFormat()
   var scratchOptions = {
     positions: undefined,
     colors: undefined,
@@ -217,8 +244,8 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
     width: undefined,
     colorsPerVertex: undefined,
     arcType: undefined,
-    granularity: undefined,
-  };
+    granularity: undefined
+  }
 
   /**
    * Retrieves an instance from a packed array.
@@ -231,69 +258,65 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
   PolylineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
     if (!when.defined(array)) {
-      throw new Check.DeveloperError("array is required");
+      throw new RuntimeError.DeveloperError('array is required')
     }
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var i;
+    var i
 
-    var length = array[startingIndex++];
-    var positions = new Array(length);
+    var length = array[startingIndex++]
+    var positions = new Array(length)
 
-    for (i = 0; i < length; ++i, startingIndex += Cartesian2.Cartesian3.packedLength) {
-      positions[i] = Cartesian2.Cartesian3.unpack(array, startingIndex);
+    for (i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
+      positions[i] = Matrix2.Cartesian3.unpack(array, startingIndex)
     }
 
-    length = array[startingIndex++];
-    var colors = length > 0 ? new Array(length) : undefined;
+    length = array[startingIndex++]
+    var colors = length > 0 ? new Array(length) : undefined
 
     for (i = 0; i < length; ++i, startingIndex += Color.Color.packedLength) {
-      colors[i] = Color.Color.unpack(array, startingIndex);
+      colors[i] = Color.Color.unpack(array, startingIndex)
     }
 
-    var ellipsoid = Cartesian2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid);
-    startingIndex += Cartesian2.Ellipsoid.packedLength;
+    var ellipsoid = Matrix2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
+    startingIndex += Matrix2.Ellipsoid.packedLength
 
-    var vertexFormat = VertexFormat.VertexFormat.unpack(
-      array,
-      startingIndex,
-      scratchVertexFormat
-    );
-    startingIndex += VertexFormat.VertexFormat.packedLength;
+    var vertexFormat = VertexFormat.VertexFormat.unpack(array, startingIndex, scratchVertexFormat)
+    startingIndex += VertexFormat.VertexFormat.packedLength
 
-    var width = array[startingIndex++];
-    var colorsPerVertex = array[startingIndex++] === 1.0;
-    var arcType = array[startingIndex++];
-    var granularity = array[startingIndex];
+    var width = array[startingIndex++]
+    var colorsPerVertex = array[startingIndex++] === 1.0
+    var arcType = array[startingIndex++]
+    var granularity = array[startingIndex]
 
     if (!when.defined(result)) {
-      scratchOptions.positions = positions;
-      scratchOptions.colors = colors;
-      scratchOptions.width = width;
-      scratchOptions.colorsPerVertex = colorsPerVertex;
-      scratchOptions.arcType = arcType;
-      scratchOptions.granularity = granularity;
-      return new PolylineGeometry(scratchOptions);
+      scratchOptions.positions = positions
+      scratchOptions.colors = colors
+      scratchOptions.width = width
+      scratchOptions.colorsPerVertex = colorsPerVertex
+      scratchOptions.arcType = arcType
+      scratchOptions.granularity = granularity
+      return new PolylineGeometry(scratchOptions)
     }
 
-    result._positions = positions;
-    result._colors = colors;
-    result._ellipsoid = Cartesian2.Ellipsoid.clone(ellipsoid, result._ellipsoid);
-    result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat);
-    result._width = width;
-    result._colorsPerVertex = colorsPerVertex;
-    result._arcType = arcType;
-    result._granularity = granularity;
+    result._positions = positions
+    result._colors = colors
+    result._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid, result._ellipsoid)
+    result._vertexFormat = VertexFormat.VertexFormat.clone(vertexFormat, result._vertexFormat)
+    result._width = width
+    result._colorsPerVertex = colorsPerVertex
+    result._arcType = arcType
+    result._granularity = granularity
 
-    return result;
-  };
+    return result
+  }
 
-  var scratchCartesian3 = new Cartesian2.Cartesian3();
-  var scratchPosition = new Cartesian2.Cartesian3();
-  var scratchPrevPosition = new Cartesian2.Cartesian3();
-  var scratchNextPosition = new Cartesian2.Cartesian3();
+  var scratchCartesian3 = new Matrix2.Cartesian3()
+  var scratchPosition = new Matrix2.Cartesian3()
+  var scratchPrevPosition = new Matrix2.Cartesian3()
+  var scratchNextPosition = new Matrix2.Cartesian3()
 
   /**
    * Computes the geometric representation of a polyline, including its vertices, indices, and a bounding sphere.
@@ -302,83 +325,95 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   PolylineGeometry.createGeometry = function (polylineGeometry) {
-    var width = polylineGeometry._width;
-    var vertexFormat = polylineGeometry._vertexFormat;
-    var colors = polylineGeometry._colors;
-    var colorsPerVertex = polylineGeometry._colorsPerVertex;
-    var arcType = polylineGeometry._arcType;
-    var granularity = polylineGeometry._granularity;
-    var ellipsoid = polylineGeometry._ellipsoid;
+    var width = polylineGeometry._width
+    var vertexFormat = polylineGeometry._vertexFormat
+    var colors = polylineGeometry._colors
+    var colorsPerVertex = polylineGeometry._colorsPerVertex
+    var arcType = polylineGeometry._arcType
+    var granularity = polylineGeometry._granularity
+    var ellipsoid = polylineGeometry._ellipsoid
 
-    var i;
-    var j;
-    var k;
+    var i
+    var j
+    var k
 
-    var positions = arrayRemoveDuplicates.arrayRemoveDuplicates(
-      polylineGeometry._positions,
-      Cartesian2.Cartesian3.equalsEpsilon
-    );
-    var positionsLength = positions.length;
+    var removedIndices = []
+    var positions = arrayRemoveDuplicates.arrayRemoveDuplicates(polylineGeometry._positions, Matrix2.Cartesian3.equalsEpsilon, false, removedIndices)
+
+    if (when.defined(colors) && removedIndices.length > 0) {
+      var removedArrayIndex = 0
+      var nextRemovedIndex = removedIndices[0]
+      colors = colors.filter(function (color, index) {
+        var remove = false
+        if (colorsPerVertex) {
+          remove = index === nextRemovedIndex || (index === 0 && nextRemovedIndex === 1)
+        } else {
+          remove = index + 1 === nextRemovedIndex
+        }
+
+        if (remove) {
+          removedArrayIndex++
+          nextRemovedIndex = removedIndices[removedArrayIndex]
+          return false
+        }
+        return true
+      })
+    }
+
+    var positionsLength = positions.length
 
     // A width of a pixel or less is not a valid geometry, but in order to support external data
     // that may have errors we treat this as an empty geometry.
     if (positionsLength < 2 || width <= 0.0) {
-      return undefined;
+      return undefined
     }
 
     if (arcType === ArcType.ArcType.GEODESIC || arcType === ArcType.ArcType.RHUMB) {
-      var subdivisionSize;
-      var numberOfPointsFunction;
+      var subdivisionSize
+      var numberOfPointsFunction
       if (arcType === ArcType.ArcType.GEODESIC) {
-        subdivisionSize = _Math.CesiumMath.chordLength(
-          granularity,
-          ellipsoid.maximumRadius
-        );
-        numberOfPointsFunction = PolylinePipeline.PolylinePipeline.numberOfPoints;
+        subdivisionSize = ComponentDatatype.CesiumMath.chordLength(granularity, ellipsoid.maximumRadius)
+        numberOfPointsFunction = PolylinePipeline.PolylinePipeline.numberOfPoints
       } else {
-        subdivisionSize = granularity;
-        numberOfPointsFunction = PolylinePipeline.PolylinePipeline.numberOfPointsRhumbLine;
+        subdivisionSize = granularity
+        numberOfPointsFunction = PolylinePipeline.PolylinePipeline.numberOfPointsRhumbLine
       }
 
-      var heights = PolylinePipeline.PolylinePipeline.extractHeights(positions, ellipsoid);
+      var heights = PolylinePipeline.PolylinePipeline.extractHeights(positions, ellipsoid)
 
       if (when.defined(colors)) {
-        var colorLength = 1;
+        var colorLength = 1
         for (i = 0; i < positionsLength - 1; ++i) {
-          colorLength += numberOfPointsFunction(
-            positions[i],
-            positions[i + 1],
-            subdivisionSize
-          );
+          colorLength += numberOfPointsFunction(positions[i], positions[i + 1], subdivisionSize)
         }
 
-        var newColors = new Array(colorLength);
-        var newColorIndex = 0;
+        var newColors = new Array(colorLength)
+        var newColorIndex = 0
 
         for (i = 0; i < positionsLength - 1; ++i) {
-          var p0 = positions[i];
-          var p1 = positions[i + 1];
-          var c0 = colors[i];
+          var p0 = positions[i]
+          var p1 = positions[i + 1]
+          var c0 = colors[i]
 
-          var numColors = numberOfPointsFunction(p0, p1, subdivisionSize);
+          var numColors = numberOfPointsFunction(p0, p1, subdivisionSize)
           if (colorsPerVertex && i < colorLength) {
-            var c1 = colors[i + 1];
-            var interpolatedColors = interpolateColors(p0, p1, c0, c1, numColors);
-            var interpolatedColorsLength = interpolatedColors.length;
+            var c1 = colors[i + 1]
+            var interpolatedColors = interpolateColors(p0, p1, c0, c1, numColors)
+            var interpolatedColorsLength = interpolatedColors.length
             for (j = 0; j < interpolatedColorsLength; ++j) {
-              newColors[newColorIndex++] = interpolatedColors[j];
+              newColors[newColorIndex++] = interpolatedColors[j]
             }
           } else {
             for (j = 0; j < numColors; ++j) {
-              newColors[newColorIndex++] = Color.Color.clone(c0);
+              newColors[newColorIndex++] = Color.Color.clone(c0)
             }
           }
         }
 
-        newColors[newColorIndex] = Color.Color.clone(colors[colors.length - 1]);
-        colors = newColors;
+        newColors[newColorIndex] = Color.Color.clone(colors[colors.length - 1])
+        colors = newColors
 
-        scratchInterpolateColorsArray.length = 0;
+        scratchInterpolateColorsArray.length = 0
       }
 
       if (arcType === ArcType.ArcType.GEODESIC) {
@@ -386,134 +421,130 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
           positions: positions,
           minDistance: subdivisionSize,
           ellipsoid: ellipsoid,
-          height: heights,
-        });
+          height: heights
+        })
       } else {
         positions = PolylinePipeline.PolylinePipeline.generateCartesianRhumbArc({
           positions: positions,
           granularity: subdivisionSize,
           ellipsoid: ellipsoid,
-          height: heights,
-        });
+          height: heights
+        })
       }
     }
 
-    positionsLength = positions.length;
-    var size = positionsLength * 4.0 - 4.0;
+    positionsLength = positions.length
+    var size = positionsLength * 4.0 - 4.0
 
-    var finalPositions = new Float64Array(size * 3);
-    var prevPositions = new Float64Array(size * 3);
-    var nextPositions = new Float64Array(size * 3);
-    var expandAndWidth = new Float32Array(size * 2);
-    var st = vertexFormat.st ? new Float32Array(size * 2) : undefined;
-    var finalColors = when.defined(colors) ? new Uint8Array(size * 4) : undefined;
+    var finalPositions = new Float64Array(size * 3)
+    var prevPositions = new Float64Array(size * 3)
+    var nextPositions = new Float64Array(size * 3)
+    var expandAndWidth = new Float32Array(size * 2)
+    var st = vertexFormat.st ? new Float32Array(size * 2) : undefined
+    var finalColors = when.defined(colors) ? new Uint8Array(size * 4) : undefined
 
-    var positionIndex = 0;
-    var expandAndWidthIndex = 0;
-    var stIndex = 0;
-    var colorIndex = 0;
-    var position;
+    var positionIndex = 0
+    var expandAndWidthIndex = 0
+    var stIndex = 0
+    var colorIndex = 0
+    var position
 
     for (j = 0; j < positionsLength; ++j) {
       if (j === 0) {
-        position = scratchCartesian3;
-        Cartesian2.Cartesian3.subtract(positions[0], positions[1], position);
-        Cartesian2.Cartesian3.add(positions[0], position, position);
+        position = scratchCartesian3
+        Matrix2.Cartesian3.subtract(positions[0], positions[1], position)
+        Matrix2.Cartesian3.add(positions[0], position, position)
       } else {
-        position = positions[j - 1];
+        position = positions[j - 1]
       }
 
-      Cartesian2.Cartesian3.clone(position, scratchPrevPosition);
-      Cartesian2.Cartesian3.clone(positions[j], scratchPosition);
+      Matrix2.Cartesian3.clone(position, scratchPrevPosition)
+      Matrix2.Cartesian3.clone(positions[j], scratchPosition)
 
       if (j === positionsLength - 1) {
-        position = scratchCartesian3;
-        Cartesian2.Cartesian3.subtract(
-          positions[positionsLength - 1],
-          positions[positionsLength - 2],
-          position
-        );
-        Cartesian2.Cartesian3.add(positions[positionsLength - 1], position, position);
+        position = scratchCartesian3
+        Matrix2.Cartesian3.subtract(positions[positionsLength - 1], positions[positionsLength - 2], position)
+        Matrix2.Cartesian3.add(positions[positionsLength - 1], position, position)
       } else {
-        position = positions[j + 1];
+        position = positions[j + 1]
       }
 
-      Cartesian2.Cartesian3.clone(position, scratchNextPosition);
+      Matrix2.Cartesian3.clone(position, scratchNextPosition)
 
-      var color0, color1;
+      var color0, color1
       if (when.defined(finalColors)) {
         if (j !== 0 && !colorsPerVertex) {
-          color0 = colors[j - 1];
+          color0 = colors[j - 1]
         } else {
-          color0 = colors[j];
+          color0 = colors[j]
         }
 
         if (j !== positionsLength - 1) {
-          color1 = colors[j];
+          color1 = colors[j]
         }
       }
 
-      var startK = j === 0 ? 2 : 0;
-      var endK = j === positionsLength - 1 ? 2 : 4;
+      var startK = j === 0 ? 2 : 0
+      var endK = j === positionsLength - 1 ? 2 : 4
 
       for (k = startK; k < endK; ++k) {
-        Cartesian2.Cartesian3.pack(scratchPosition, finalPositions, positionIndex);
-        Cartesian2.Cartesian3.pack(scratchPrevPosition, prevPositions, positionIndex);
-        Cartesian2.Cartesian3.pack(scratchNextPosition, nextPositions, positionIndex);
-        positionIndex += 3;
+        Matrix2.Cartesian3.pack(scratchPosition, finalPositions, positionIndex)
+        Matrix2.Cartesian3.pack(scratchPrevPosition, prevPositions, positionIndex)
+        Matrix2.Cartesian3.pack(scratchNextPosition, nextPositions, positionIndex)
+        positionIndex += 3
 
-        var direction = k - 2 < 0 ? -1.0 : 1.0;
-        expandAndWidth[expandAndWidthIndex++] = 2 * (k % 2) - 1; // expand direction
-        expandAndWidth[expandAndWidthIndex++] = direction * width;
+        var direction = k - 2 < 0 ? -1.0 : 1.0
+        expandAndWidth[expandAndWidthIndex++] = 2 * (k % 2) - 1 // expand direction
+        expandAndWidth[expandAndWidthIndex++] = direction * width
 
         if (vertexFormat.st) {
-          st[stIndex++] = j / (positionsLength - 1);
-          st[stIndex++] = Math.max(expandAndWidth[expandAndWidthIndex - 2], 0.0);
+          st[stIndex++] = j / (positionsLength - 1)
+          st[stIndex++] = Math.max(expandAndWidth[expandAndWidthIndex - 2], 0.0)
         }
 
         if (when.defined(finalColors)) {
-          var color = k < 2 ? color0 : color1;
+          var color = k < 2 ? color0 : color1
 
-          finalColors[colorIndex++] = Color.Color.floatToByte(color.red);
-          finalColors[colorIndex++] = Color.Color.floatToByte(color.green);
-          finalColors[colorIndex++] = Color.Color.floatToByte(color.blue);
-          finalColors[colorIndex++] = Color.Color.floatToByte(color.alpha);
+          finalColors[colorIndex++] = Color.Color.floatToByte(color.red)
+          finalColors[colorIndex++] = Color.Color.floatToByte(color.green)
+          finalColors[colorIndex++] = Color.Color.floatToByte(color.blue)
+          finalColors[colorIndex++] = Color.Color.floatToByte(color.alpha)
         }
       }
     }
 
-    var attributes = new GeometryAttributes.GeometryAttributes();
+    var attributes = new GeometryAttributes.GeometryAttributes()
 
     attributes.position = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: finalPositions,
-    });
+      values: finalPositions
+    })
 
     attributes.prevPosition = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: prevPositions,
-    });
+      values: prevPositions
+    })
 
     attributes.nextPosition = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: nextPositions,
-    });
+      values: nextPositions
+    })
 
     attributes.expandAndWidth = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
       componentsPerAttribute: 2,
-      values: expandAndWidth,
-    });
+      values: expandAndWidth
+    })
 
     if (vertexFormat.st) {
       attributes.st = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.FLOAT,
         componentsPerAttribute: 2,
-        values: st,
-      });
+        values: st
+      })
     }
 
     if (when.defined(finalColors)) {
@@ -521,24 +552,24 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
         componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
         componentsPerAttribute: 4,
         values: finalColors,
-        normalize: true,
-      });
+        normalize: true
+      })
     }
 
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(size, positionsLength * 6 - 6);
-    var index = 0;
-    var indicesIndex = 0;
-    var length = positionsLength - 1.0;
+    var indices = IndexDatatype.IndexDatatype.createTypedArray(size, positionsLength * 6 - 6)
+    var index = 0
+    var indicesIndex = 0
+    var length = positionsLength - 1.0
     for (j = 0; j < length; ++j) {
-      indices[indicesIndex++] = index;
-      indices[indicesIndex++] = index + 2;
-      indices[indicesIndex++] = index + 1;
+      indices[indicesIndex++] = index
+      indices[indicesIndex++] = index + 2
+      indices[indicesIndex++] = index + 1
 
-      indices[indicesIndex++] = index + 1;
-      indices[indicesIndex++] = index + 2;
-      indices[indicesIndex++] = index + 3;
+      indices[indicesIndex++] = index + 1
+      indices[indicesIndex++] = index + 2
+      indices[indicesIndex++] = index + 3
 
-      index += 4;
+      index += 4
     }
 
     return new GeometryAttribute.Geometry({
@@ -546,19 +577,18 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './ArcType-dc1c5aee', './arr
       indices: indices,
       primitiveType: GeometryAttribute.PrimitiveType.TRIANGLES,
       boundingSphere: Transforms.BoundingSphere.fromPoints(positions),
-      geometryType: GeometryAttribute.GeometryType.POLYLINES,
-    });
-  };
+      geometryType: GeometryAttribute.GeometryType.POLYLINES
+    })
+  }
 
   function createPolylineGeometry(polylineGeometry, offset) {
     if (when.defined(offset)) {
-      polylineGeometry = PolylineGeometry.unpack(polylineGeometry, offset);
+      polylineGeometry = PolylineGeometry.unpack(polylineGeometry, offset)
     }
-    polylineGeometry._ellipsoid = Cartesian2.Ellipsoid.clone(polylineGeometry._ellipsoid);
-    return PolylineGeometry.createGeometry(polylineGeometry);
+    polylineGeometry._ellipsoid = Matrix2.Ellipsoid.clone(polylineGeometry._ellipsoid)
+    return PolylineGeometry.createGeometry(polylineGeometry)
   }
 
-  return createPolylineGeometry;
-
-});
+  return createPolylineGeometry
+})
 //# sourceMappingURL=createPolylineGeometry.js.map

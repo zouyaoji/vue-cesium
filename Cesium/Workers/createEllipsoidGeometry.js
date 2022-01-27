@@ -1,1 +1,20 @@
-define(["./when-208fe5b0","./EllipsoidGeometry-fc6173aa","./GeometryOffsetAttribute-3497d4dd","./Check-5e798bbf","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Math-8386669c","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./IndexDatatype-3bc916b1","./VertexFormat-7e57a3bd"],function(r,a,e,t,b,n,o,i,d,f,s,m,c,u){"use strict";return function(e,t){return r.defined(t)&&(e=a.EllipsoidGeometry.unpack(e,t)),a.EllipsoidGeometry.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './EllipsoidGeometry-9a4ae869',
+  './GeometryOffsetAttribute-1772960d',
+  './RuntimeError-346a3079',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-b7d979a6',
+  './VertexFormat-71718faa'
+], function (e, t, r, a, o, n, i, c, d, m, s, u, y) {
+  'use strict'
+  return function (r, a) {
+    return e.defined(a) && (r = t.EllipsoidGeometry.unpack(r, a)), t.EllipsoidGeometry.createGeometry(r)
+  }
+})

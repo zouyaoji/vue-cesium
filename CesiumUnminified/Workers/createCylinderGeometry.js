@@ -18,19 +18,49 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./CylinderGeometry-666c8d97', './when-208fe5b0', './GeometryOffsetAttribute-6fce6185', './Check-5e798bbf', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './Math-56f06cd5', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './CylinderGeometryLibrary-2189d3bf', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './IndexDatatype-3a89c589', './VertexFormat-9eeda9f8'], function (CylinderGeometry, when, GeometryOffsetAttribute, Check, Transforms, Cartesian2, _Math, RuntimeError, ComponentDatatype, WebGLConstants, CylinderGeometryLibrary, GeometryAttribute, GeometryAttributes, IndexDatatype, VertexFormat) { 'use strict';
+define([
+  './CylinderGeometry-921f1ae9',
+  './when-4bbc8319',
+  './GeometryOffsetAttribute-6a692b56',
+  './RuntimeError-346a3079',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './ComponentDatatype-f194c48b',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './CylinderGeometryLibrary-c09ae083',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-ee69f1fd',
+  './VertexFormat-f9c1a155'
+], function (
+  CylinderGeometry,
+  when,
+  GeometryOffsetAttribute,
+  RuntimeError,
+  Transforms,
+  Matrix2,
+  ComponentDatatype,
+  WebGLConstants,
+  combine,
+  CylinderGeometryLibrary,
+  GeometryAttribute,
+  GeometryAttributes,
+  IndexDatatype,
+  VertexFormat
+) {
+  'use strict'
 
   function createCylinderGeometry(cylinderGeometry, offset) {
     if (when.defined(offset)) {
-      cylinderGeometry = CylinderGeometry.CylinderGeometry.unpack(cylinderGeometry, offset);
+      cylinderGeometry = CylinderGeometry.CylinderGeometry.unpack(cylinderGeometry, offset)
     }
-    return CylinderGeometry.CylinderGeometry.createGeometry(cylinderGeometry);
+    return CylinderGeometry.CylinderGeometry.createGeometry(cylinderGeometry)
   }
 
-  return createCylinderGeometry;
-
-});
+  return createCylinderGeometry
+})
 //# sourceMappingURL=createCylinderGeometry.js.map

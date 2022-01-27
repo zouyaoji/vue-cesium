@@ -1,1 +1,209 @@
-define(["./arrayRemoveDuplicates-3a9a9480","./BoundingRectangle-67be6fe0","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./ComponentDatatype-2da3a966","./CoplanarPolygonGeometryLibrary-6d76da75","./when-208fe5b0","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./GeometryInstance-411ead1b","./GeometryPipeline-86615bad","./IndexDatatype-3bc916b1","./Math-8386669c","./PolygonGeometryLibrary-9fe00cbc","./PolygonPipeline-b445e3f3","./VertexFormat-7e57a3bd","./RuntimeError-7f634f5d","./WebGLConstants-5e2a49ab","./OrientedBoundingBox-2e9d8f93","./EllipsoidTangentPlane-69cc10ff","./AxisAlignedBoundingBox-122de82b","./IntersectionTests-40db2afa","./Plane-b91bfb59","./AttributeCompression-9711314b","./EncodedCartesian3-21af0f3b","./ArcType-dc1c5aee","./EllipsoidRhumbLine-73a4e3eb"],function(h,e,L,E,t,T,f,l,D,_,C,v,k,V,x,R,s,a,n,r,o,i,p,y,c,u,m,d){"use strict";var I=new E.Cartesian3,P=new e.BoundingRectangle,M=new E.Cartesian2,B=new E.Cartesian2,A=new E.Cartesian3,w=new E.Cartesian3,F=new E.Cartesian3,G=new E.Cartesian3,H=new E.Cartesian3,O=new E.Cartesian3,z=new L.Quaternion,S=new L.Matrix3,N=new L.Matrix3,Q=new E.Cartesian3;function g(e){var t=(e=l.defaultValue(e,l.defaultValue.EMPTY_OBJECT)).polygonHierarchy,a=l.defaultValue(e.vertexFormat,s.VertexFormat.DEFAULT);this._vertexFormat=s.VertexFormat.clone(a),this._polygonHierarchy=t,this._stRotation=l.defaultValue(e.stRotation,0),this._ellipsoid=E.Ellipsoid.clone(l.defaultValue(e.ellipsoid,E.Ellipsoid.WGS84)),this._workerName="createCoplanarPolygonGeometry",this.packedLength=x.PolygonGeometryLibrary.computeHierarchyPackedLength(t)+s.VertexFormat.packedLength+E.Ellipsoid.packedLength+2}g.fromPositions=function(e){return new g({polygonHierarchy:{positions:(e=l.defaultValue(e,l.defaultValue.EMPTY_OBJECT)).positions},vertexFormat:e.vertexFormat,stRotation:e.stRotation,ellipsoid:e.ellipsoid})},g.pack=function(e,t,a){return a=l.defaultValue(a,0),a=x.PolygonGeometryLibrary.packPolygonHierarchy(e._polygonHierarchy,t,a),E.Ellipsoid.pack(e._ellipsoid,t,a),a+=E.Ellipsoid.packedLength,s.VertexFormat.pack(e._vertexFormat,t,a),a+=s.VertexFormat.packedLength,t[a++]=e._stRotation,t[a]=e.packedLength,t};var b=E.Ellipsoid.clone(E.Ellipsoid.UNIT_SPHERE),j=new s.VertexFormat,U={polygonHierarchy:{}};return g.unpack=function(e,t,a){t=l.defaultValue(t,0);var n=x.PolygonGeometryLibrary.unpackPolygonHierarchy(e,t);t=n.startingIndex,delete n.startingIndex;var r=E.Ellipsoid.unpack(e,t,b);t+=E.Ellipsoid.packedLength;var o=s.VertexFormat.unpack(e,t,j);t+=s.VertexFormat.packedLength;var i=e[t++],t=e[t];return(a=!l.defined(a)?new g(U):a)._polygonHierarchy=n,a._ellipsoid=E.Ellipsoid.clone(r,a._ellipsoid),a._vertexFormat=s.VertexFormat.clone(o,a._vertexFormat),a._stRotation=i,a.packedLength=t,a},g.createGeometry=function(e){var t=e._vertexFormat,a=e._polygonHierarchy,n=e._stRotation,r=a.positions;if(!((r=h.arrayRemoveDuplicates(r,E.Cartesian3.equalsEpsilon,!0)).length<3)){var o=A,i=w,l=F,s=H,p=O;if(f.CoplanarPolygonGeometryLibrary.computeProjectTo2DArguments(r,G,s,p)){o=E.Cartesian3.cross(s,p,o);o=E.Cartesian3.normalize(o,o),E.Cartesian3.equalsEpsilon(G,E.Cartesian3.ZERO,V.CesiumMath.EPSILON6)||(y=e._ellipsoid.geodeticSurfaceNormal(G,Q),E.Cartesian3.dot(o,y)<0&&(o=E.Cartesian3.negate(o,o),s=E.Cartesian3.negate(s,s)));var y=f.CoplanarPolygonGeometryLibrary.createProjectPointsTo2DFunction(G,s,p),c=f.CoplanarPolygonGeometryLibrary.createProjectPointTo2DFunction(G,s,p);t.tangent&&(i=E.Cartesian3.clone(s,i)),t.bitangent&&(l=E.Cartesian3.clone(p,l));var a=x.PolygonGeometryLibrary.polygonsFromHierarchy(a,y,!1),y=a.hierarchy,u=a.polygons;if(0!==y.length){for(var r=y[0].outerRing,a=L.BoundingSphere.fromPoints(r),m=x.PolygonGeometryLibrary.computeBoundingRectangle(o,c,r,n,P),d=[],g=0;g<u.length;g++){var b=new C.GeometryInstance({geometry:function(e,t,a,n,r,o,i,l){var s=e.positions,p=R.PolygonPipeline.triangulate(e.positions2D,e.holes);p.length<3&&(p=[0,1,2]),(e=k.IndexDatatype.createTypedArray(s.length,p.length)).set(p);var y=S;0!==n?(p=L.Quaternion.fromAxisAngle(o,n,z),y=L.Matrix3.fromQuaternion(p,y),(t.tangent||t.bitangent)&&(p=L.Quaternion.fromAxisAngle(o,-n,z),m=L.Matrix3.fromQuaternion(p,N),i=E.Cartesian3.normalize(L.Matrix3.multiplyByVector(m,i,i),i),t.bitangent&&(l=E.Cartesian3.normalize(E.Cartesian3.cross(o,i,l),l)))):y=L.Matrix3.clone(L.Matrix3.IDENTITY,y);var c=B;t.st&&(c.x=a.x,c.y=a.y);for(var u=s.length,m=3*u,d=new Float64Array(m),g=t.normal?new Float32Array(m):void 0,b=t.tangent?new Float32Array(m):void 0,h=t.bitangent?new Float32Array(m):void 0,f=t.st?new Float32Array(2*u):void 0,C=0,v=0,x=0,P=0,A=0,w=0;w<u;w++){var F,G=s[w];d[C++]=G.x,d[C++]=G.y,d[C++]=G.z,t.st&&(F=r(L.Matrix3.multiplyByVector(y,G,I),M),E.Cartesian2.subtract(F,c,F),G=V.CesiumMath.clamp(F.x/a.width,0,1),F=V.CesiumMath.clamp(F.y/a.height,0,1),f[A++]=G,f[A++]=F),t.normal&&(g[v++]=o.x,g[v++]=o.y,g[v++]=o.z),t.tangent&&(b[P++]=i.x,b[P++]=i.y,b[P++]=i.z),t.bitangent&&(h[x++]=l.x,h[x++]=l.y,h[x++]=l.z)}return m=new _.GeometryAttributes,t.position&&(m.position=new D.GeometryAttribute({componentDatatype:T.ComponentDatatype.DOUBLE,componentsPerAttribute:3,values:d})),t.normal&&(m.normal=new D.GeometryAttribute({componentDatatype:T.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:g})),t.tangent&&(m.tangent=new D.GeometryAttribute({componentDatatype:T.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:b})),t.bitangent&&(m.bitangent=new D.GeometryAttribute({componentDatatype:T.ComponentDatatype.FLOAT,componentsPerAttribute:3,values:h})),t.st&&(m.st=new D.GeometryAttribute({componentDatatype:T.ComponentDatatype.FLOAT,componentsPerAttribute:2,values:f})),new D.Geometry({attributes:m,indices:e,primitiveType:D.PrimitiveType.TRIANGLES})}(u[g],t,m,n,c,o,i,l)});d.push(b)}y=v.GeometryPipeline.combineInstances(d)[0];y.attributes.position.values=new Float64Array(y.attributes.position.values),y.indices=k.IndexDatatype.createTypedArray(y.attributes.position.values.length/3,y.indices);r=y.attributes;return t.position||delete r.position,new D.Geometry({attributes:r,indices:y.indices,primitiveType:y.primitiveType,boundingSphere:a})}}}},function(e,t){return l.defined(t)&&(e=g.unpack(e,t)),g.createGeometry(e)}});
+define([
+  './arrayRemoveDuplicates-18786327',
+  './BoundingRectangle-218a9c7b',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './CoplanarPolygonGeometryLibrary-551fa870',
+  './when-4bbc8319',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './GeometryInstance-47b34185',
+  './GeometryPipeline-2356afec',
+  './IndexDatatype-b7d979a6',
+  './PolygonGeometryLibrary-dec9574a',
+  './PolygonPipeline-da7fc5ca',
+  './VertexFormat-71718faa',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './OrientedBoundingBox-4b932f63',
+  './EllipsoidTangentPlane-eecce7e8',
+  './AxisAlignedBoundingBox-07c6b7f2',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937',
+  './AttributeCompression-af389d04',
+  './EncodedCartesian3-f286cedc',
+  './ArcType-98ec98bf',
+  './EllipsoidRhumbLine-30c47ff4'
+], function (e, t, a, n, r, o, i, l, s, p, c, y, m, u, d, g, v, b, h, f, x, C, P, A, w, F, G) {
+  'use strict'
+  var L = new n.Cartesian3(),
+    E = new t.BoundingRectangle(),
+    T = new n.Cartesian2(),
+    D = new n.Cartesian2(),
+    _ = new n.Cartesian3(),
+    V = new n.Cartesian3(),
+    k = new n.Cartesian3(),
+    R = new n.Cartesian3(),
+    I = new n.Cartesian3(),
+    M = new n.Cartesian3(),
+    B = new a.Quaternion(),
+    H = new n.Matrix3(),
+    O = new n.Matrix3(),
+    z = new n.Cartesian3()
+  function S(e, t, r, i, l, c, y, u) {
+    var g = e.positions,
+      v = d.PolygonPipeline.triangulate(e.positions2D, e.holes)
+    v.length < 3 && (v = [0, 1, 2])
+    var b = m.IndexDatatype.createTypedArray(g.length, v.length)
+    b.set(v)
+    var h = H
+    if (0 !== i) {
+      var f = a.Quaternion.fromAxisAngle(c, i, B)
+      if (((h = n.Matrix3.fromQuaternion(f, h)), t.tangent || t.bitangent)) {
+        f = a.Quaternion.fromAxisAngle(c, -i, B)
+        var x = n.Matrix3.fromQuaternion(f, O)
+        ;(y = n.Cartesian3.normalize(n.Matrix3.multiplyByVector(x, y, y), y)),
+          t.bitangent && (u = n.Cartesian3.normalize(n.Cartesian3.cross(c, y, u), u))
+      }
+    } else h = n.Matrix3.clone(n.Matrix3.IDENTITY, h)
+    var C = D
+    t.st && ((C.x = r.x), (C.y = r.y))
+    for (
+      var P = g.length,
+        A = 3 * P,
+        w = new Float64Array(A),
+        F = t.normal ? new Float32Array(A) : void 0,
+        G = t.tangent ? new Float32Array(A) : void 0,
+        E = t.bitangent ? new Float32Array(A) : void 0,
+        _ = t.st ? new Float32Array(2 * P) : void 0,
+        V = 0,
+        k = 0,
+        R = 0,
+        I = 0,
+        M = 0,
+        z = 0;
+      z < P;
+      z++
+    ) {
+      var S = g[z]
+      if (((w[V++] = S.x), (w[V++] = S.y), (w[V++] = S.z), t.st)) {
+        var N = l(n.Matrix3.multiplyByVector(h, S, L), T)
+        n.Cartesian2.subtract(N, C, N)
+        var Q = o.CesiumMath.clamp(N.x / r.width, 0, 1),
+          j = o.CesiumMath.clamp(N.y / r.height, 0, 1)
+        ;(_[M++] = Q), (_[M++] = j)
+      }
+      t.normal && ((F[k++] = c.x), (F[k++] = c.y), (F[k++] = c.z)),
+        t.tangent && ((G[I++] = y.x), (G[I++] = y.y), (G[I++] = y.z)),
+        t.bitangent && ((E[R++] = u.x), (E[R++] = u.y), (E[R++] = u.z))
+    }
+    var U = new p.GeometryAttributes()
+    return (
+      t.position && (U.position = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.DOUBLE, componentsPerAttribute: 3, values: w })),
+      t.normal && (U.normal = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: F })),
+      t.tangent && (U.tangent = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: G })),
+      t.bitangent && (U.bitangent = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 3, values: E })),
+      t.st && (U.st = new s.GeometryAttribute({ componentDatatype: o.ComponentDatatype.FLOAT, componentsPerAttribute: 2, values: _ })),
+      new s.Geometry({ attributes: U, indices: b, primitiveType: s.PrimitiveType.TRIANGLES })
+    )
+  }
+  function N(e) {
+    var t = (e = l.defaultValue(e, l.defaultValue.EMPTY_OBJECT)).polygonHierarchy,
+      a = l.defaultValue(e.vertexFormat, g.VertexFormat.DEFAULT)
+    ;(this._vertexFormat = g.VertexFormat.clone(a)),
+      (this._polygonHierarchy = t),
+      (this._stRotation = l.defaultValue(e.stRotation, 0)),
+      (this._ellipsoid = n.Ellipsoid.clone(l.defaultValue(e.ellipsoid, n.Ellipsoid.WGS84))),
+      (this._workerName = 'createCoplanarPolygonGeometry'),
+      (this.packedLength = u.PolygonGeometryLibrary.computeHierarchyPackedLength(t) + g.VertexFormat.packedLength + n.Ellipsoid.packedLength + 2)
+  }
+  ;(N.fromPositions = function (e) {
+    return new N({
+      polygonHierarchy: { positions: (e = l.defaultValue(e, l.defaultValue.EMPTY_OBJECT)).positions },
+      vertexFormat: e.vertexFormat,
+      stRotation: e.stRotation,
+      ellipsoid: e.ellipsoid
+    })
+  }),
+    (N.pack = function (e, t, a) {
+      return (
+        (a = l.defaultValue(a, 0)),
+        (a = u.PolygonGeometryLibrary.packPolygonHierarchy(e._polygonHierarchy, t, a)),
+        n.Ellipsoid.pack(e._ellipsoid, t, a),
+        (a += n.Ellipsoid.packedLength),
+        g.VertexFormat.pack(e._vertexFormat, t, a),
+        (a += g.VertexFormat.packedLength),
+        (t[a++] = e._stRotation),
+        (t[a] = e.packedLength),
+        t
+      )
+    })
+  var Q = n.Ellipsoid.clone(n.Ellipsoid.UNIT_SPHERE),
+    j = new g.VertexFormat(),
+    U = { polygonHierarchy: {} }
+  return (
+    (N.unpack = function (e, t, a) {
+      t = l.defaultValue(t, 0)
+      var r = u.PolygonGeometryLibrary.unpackPolygonHierarchy(e, t)
+      ;(t = r.startingIndex), delete r.startingIndex
+      var o = n.Ellipsoid.unpack(e, t, Q)
+      t += n.Ellipsoid.packedLength
+      var i = g.VertexFormat.unpack(e, t, j)
+      t += g.VertexFormat.packedLength
+      var s = e[t++],
+        p = e[t]
+      return (
+        l.defined(a) || (a = new N(U)),
+        (a._polygonHierarchy = r),
+        (a._ellipsoid = n.Ellipsoid.clone(o, a._ellipsoid)),
+        (a._vertexFormat = g.VertexFormat.clone(i, a._vertexFormat)),
+        (a._stRotation = s),
+        (a.packedLength = p),
+        a
+      )
+    }),
+    (N.createGeometry = function (t) {
+      var r = t._vertexFormat,
+        l = t._polygonHierarchy,
+        p = t._stRotation,
+        d = l.positions
+      if (!((d = e.arrayRemoveDuplicates(d, n.Cartesian3.equalsEpsilon, !0)).length < 3)) {
+        var g = _,
+          v = V,
+          b = k,
+          h = I,
+          f = M
+        if (i.CoplanarPolygonGeometryLibrary.computeProjectTo2DArguments(d, R, h, f)) {
+          if (
+            ((g = n.Cartesian3.cross(h, f, g)),
+            (g = n.Cartesian3.normalize(g, g)),
+            !n.Cartesian3.equalsEpsilon(R, n.Cartesian3.ZERO, o.CesiumMath.EPSILON6))
+          ) {
+            var x = t._ellipsoid.geodeticSurfaceNormal(R, z)
+            n.Cartesian3.dot(g, x) < 0 && ((g = n.Cartesian3.negate(g, g)), (h = n.Cartesian3.negate(h, h)))
+          }
+          var C = i.CoplanarPolygonGeometryLibrary.createProjectPointsTo2DFunction(R, h, f),
+            P = i.CoplanarPolygonGeometryLibrary.createProjectPointTo2DFunction(R, h, f)
+          r.tangent && (v = n.Cartesian3.clone(h, v)), r.bitangent && (b = n.Cartesian3.clone(f, b))
+          var A = u.PolygonGeometryLibrary.polygonsFromHierarchy(l, C, !1),
+            w = A.hierarchy,
+            F = A.polygons
+          if (0 !== w.length) {
+            d = w[0].outerRing
+            for (
+              var G = a.BoundingSphere.fromPoints(d), L = u.PolygonGeometryLibrary.computeBoundingRectangle(g, P, d, p, E), T = [], D = 0;
+              D < F.length;
+              D++
+            ) {
+              var B = new c.GeometryInstance({ geometry: S(F[D], r, L, p, P, g, v, b) })
+              T.push(B)
+            }
+            var H = y.GeometryPipeline.combineInstances(T)[0]
+            ;(H.attributes.position.values = new Float64Array(H.attributes.position.values)),
+              (H.indices = m.IndexDatatype.createTypedArray(H.attributes.position.values.length / 3, H.indices))
+            var O = H.attributes
+            return (
+              r.position || delete O.position,
+              new s.Geometry({ attributes: O, indices: H.indices, primitiveType: H.primitiveType, boundingSphere: G })
+            )
+          }
+        }
+      }
+    }),
+    function (e, t) {
+      return l.defined(t) && (e = N.unpack(e, t)), N.createGeometry(e)
+    }
+  )
+})

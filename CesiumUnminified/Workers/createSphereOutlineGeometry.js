@@ -18,10 +18,37 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './EllipsoidOutlineGeometry-980a81f8', './Math-56f06cd5', './GeometryOffsetAttribute-6fce6185', './Transforms-9651fa9c', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './IndexDatatype-3a89c589'], function (when, Cartesian2, Check, EllipsoidOutlineGeometry, _Math, GeometryOffsetAttribute, Transforms, RuntimeError, ComponentDatatype, WebGLConstants, GeometryAttribute, GeometryAttributes, IndexDatatype) { 'use strict';
+define([
+  './when-4bbc8319',
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './EllipsoidOutlineGeometry-ee987302',
+  './ComponentDatatype-f194c48b',
+  './WebGLConstants-1c8239cc',
+  './GeometryOffsetAttribute-6a692b56',
+  './Transforms-86b6fa28',
+  './combine-83860057',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-ee69f1fd'
+], function (
+  when,
+  Matrix2,
+  RuntimeError,
+  EllipsoidOutlineGeometry,
+  ComponentDatatype,
+  WebGLConstants,
+  GeometryOffsetAttribute,
+  Transforms,
+  combine,
+  GeometryAttribute,
+  GeometryAttributes,
+  IndexDatatype
+) {
+  'use strict'
 
   /**
    * A description of the outline of a sphere.
@@ -48,24 +75,24 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './Ellip
    * var geometry = Cesium.SphereOutlineGeometry.createGeometry(sphere);
    */
   function SphereOutlineGeometry(options) {
-    var radius = when.defaultValue(options.radius, 1.0);
-    var radii = new Cartesian2.Cartesian3(radius, radius, radius);
+    var radius = when.defaultValue(options.radius, 1.0)
+    var radii = new Matrix2.Cartesian3(radius, radius, radius)
     var ellipsoidOptions = {
       radii: radii,
       stackPartitions: options.stackPartitions,
       slicePartitions: options.slicePartitions,
-      subdivisions: options.subdivisions,
-    };
+      subdivisions: options.subdivisions
+    }
 
-    this._ellipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry(ellipsoidOptions);
-    this._workerName = "createSphereOutlineGeometry";
+    this._ellipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry(ellipsoidOptions)
+    this._workerName = 'createSphereOutlineGeometry'
   }
 
   /**
    * The number of elements used to pack the object into an array.
    * @type {Number}
    */
-  SphereOutlineGeometry.packedLength = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.packedLength;
+  SphereOutlineGeometry.packedLength = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.packedLength
 
   /**
    * Stores the provided instance into the provided array.
@@ -78,24 +105,20 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './Ellip
    */
   SphereOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
+    RuntimeError.Check.typeOf.object('value', value)
     //>>includeEnd('debug');
 
-    return EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.pack(
-      value._ellipsoidGeometry,
-      array,
-      startingIndex
-    );
-  };
+    return EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.pack(value._ellipsoidGeometry, array, startingIndex)
+  }
 
-  var scratchEllipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry();
+  var scratchEllipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry()
   var scratchOptions = {
     radius: undefined,
-    radii: new Cartesian2.Cartesian3(),
+    radii: new Matrix2.Cartesian3(),
     stackPartitions: undefined,
     slicePartitions: undefined,
-    subdivisions: undefined,
-  };
+    subdivisions: undefined
+  }
 
   /**
    * Retrieves an instance from a packed array.
@@ -106,24 +129,20 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './Ellip
    * @returns {SphereOutlineGeometry} The modified result parameter or a new SphereOutlineGeometry instance if one was not provided.
    */
   SphereOutlineGeometry.unpack = function (array, startingIndex, result) {
-    var ellipsoidGeometry = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.unpack(
-      array,
-      startingIndex,
-      scratchEllipsoidGeometry
-    );
-    scratchOptions.stackPartitions = ellipsoidGeometry._stackPartitions;
-    scratchOptions.slicePartitions = ellipsoidGeometry._slicePartitions;
-    scratchOptions.subdivisions = ellipsoidGeometry._subdivisions;
+    var ellipsoidGeometry = EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.unpack(array, startingIndex, scratchEllipsoidGeometry)
+    scratchOptions.stackPartitions = ellipsoidGeometry._stackPartitions
+    scratchOptions.slicePartitions = ellipsoidGeometry._slicePartitions
+    scratchOptions.subdivisions = ellipsoidGeometry._subdivisions
 
     if (!when.defined(result)) {
-      scratchOptions.radius = ellipsoidGeometry._radii.x;
-      return new SphereOutlineGeometry(scratchOptions);
+      scratchOptions.radius = ellipsoidGeometry._radii.x
+      return new SphereOutlineGeometry(scratchOptions)
     }
 
-    Cartesian2.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii);
-    result._ellipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry(scratchOptions);
-    return result;
-  };
+    Matrix2.Cartesian3.clone(ellipsoidGeometry._radii, scratchOptions.radii)
+    result._ellipsoidGeometry = new EllipsoidOutlineGeometry.EllipsoidOutlineGeometry(scratchOptions)
+    return result
+  }
 
   /**
    * Computes the geometric representation of an outline of a sphere, including its vertices, indices, and a bounding sphere.
@@ -132,19 +151,16 @@ define(['./when-208fe5b0', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './Ellip
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   SphereOutlineGeometry.createGeometry = function (sphereGeometry) {
-    return EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.createGeometry(
-      sphereGeometry._ellipsoidGeometry
-    );
-  };
+    return EllipsoidOutlineGeometry.EllipsoidOutlineGeometry.createGeometry(sphereGeometry._ellipsoidGeometry)
+  }
 
   function createSphereOutlineGeometry(sphereGeometry, offset) {
     if (when.defined(offset)) {
-      sphereGeometry = SphereOutlineGeometry.unpack(sphereGeometry, offset);
+      sphereGeometry = SphereOutlineGeometry.unpack(sphereGeometry, offset)
     }
-    return SphereOutlineGeometry.createGeometry(sphereGeometry);
+    return SphereOutlineGeometry.createGeometry(sphereGeometry)
   }
 
-  return createSphereOutlineGeometry;
-
-});
+  return createSphereOutlineGeometry
+})
 //# sourceMappingURL=createSphereOutlineGeometry.js.map

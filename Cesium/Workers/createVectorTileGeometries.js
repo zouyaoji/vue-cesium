@@ -1,1 +1,216 @@
-define(["./Transforms-73e77b72","./BoxGeometry-45a906ef","./Cartesian2-b4b7b0b3","./Color-a612ab18","./CylinderGeometry-106e0ac5","./when-208fe5b0","./EllipsoidGeometry-fc6173aa","./IndexDatatype-3bc916b1","./createTaskProcessorWorker","./Check-5e798bbf","./Math-8386669c","./RuntimeError-7f634f5d","./GeometryOffsetAttribute-3497d4dd","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./VertexFormat-7e57a3bd","./CylinderGeometryLibrary-6ad5dbcf"],function(S,k,T,V,M,F,B,w,e,t,n,a,r,i,o,d,s,c,f){"use strict";function R(e){this.offset=e.offset,this.count=e.count,this.color=e.color,this.batchIds=e.batchIds}var l=new T.Cartesian3,u=S.Matrix4.packedLength+T.Cartesian3.packedLength,h=S.Matrix4.packedLength+2,b=S.Matrix4.packedLength+T.Cartesian3.packedLength,p=T.Cartesian3.packedLength+1,y={modelMatrix:new S.Matrix4,boundingVolume:new S.BoundingSphere};function A(e,t){var n=t*u,t=T.Cartesian3.unpack(e,n,l);n+=T.Cartesian3.packedLength;n=S.Matrix4.unpack(e,n,y.modelMatrix);S.Matrix4.multiplyByScale(n,t,n);n=y.boundingVolume;return T.Cartesian3.clone(T.Cartesian3.ZERO,n.center),n.radius=Math.sqrt(3),y}function O(e,t){var n=t*h,a=e[n++],t=e[n++],t=T.Cartesian3.fromElements(a,a,t,l),n=S.Matrix4.unpack(e,n,y.modelMatrix);S.Matrix4.multiplyByScale(n,t,n);n=y.boundingVolume;return T.Cartesian3.clone(T.Cartesian3.ZERO,n.center),n.radius=Math.sqrt(2),y}function L(e,t){var n=t*b,t=T.Cartesian3.unpack(e,n,l);n+=T.Cartesian3.packedLength;n=S.Matrix4.unpack(e,n,y.modelMatrix);S.Matrix4.multiplyByScale(n,t,n);n=y.boundingVolume;return T.Cartesian3.clone(T.Cartesian3.ZERO,n.center),n.radius=1,y}function E(e,t){var n=t*p,t=e[n++],n=T.Cartesian3.unpack(e,n,l),n=S.Matrix4.fromTranslation(n,y.modelMatrix);S.Matrix4.multiplyByUniformScale(n,t,n);n=y.boundingVolume;return T.Cartesian3.clone(T.Cartesian3.ZERO,n.center),n.radius=1,y}var Z=new T.Cartesian3;function U(e,t,n,a,r){if(F.defined(t)){for(var i=n.length,o=a.attributes.position.values,d=a.indices,s=e.positions,c=e.vertexBatchIds,f=e.indices,l=e.batchIds,u=e.batchTableColors,h=e.batchedIndices,b=e.indexOffsets,p=e.indexCounts,y=e.boundingVolumes,x=e.modelMatrix,g=e.center,C=e.positionOffset,m=e.batchIdIndex,v=e.indexOffset,I=e.batchedIndicesOffset,k=0;k<i;++k){var M=r(t,k),B=M.modelMatrix;S.Matrix4.multiply(x,B,B);for(var w=n[k],A=o.length,O=0;O<A;O+=3){var L=T.Cartesian3.unpack(o,O,Z);S.Matrix4.multiplyByPoint(B,L,L),T.Cartesian3.subtract(L,g,L),T.Cartesian3.pack(L,s,3*C+O),c[m++]=w}for(var E=d.length,U=0;U<E;++U)f[v+U]=d[U]+C;var G=k+I;h[G]=new R({offset:v,count:E,color:V.Color.fromRgba(u[w]),batchIds:[w]}),l[G]=w,b[G]=v,p[G]=E,y[G]=S.BoundingSphere.transform(M.boundingVolume,B),C+=A/3,v+=E}e.positionOffset=C,e.batchIdIndex=m,e.indexOffset=v,e.batchedIndicesOffset+=i}}var G=new T.Cartesian3,D=new S.Matrix4;function P(e,t,n){var a=n.length,r=2+a*S.BoundingSphere.packedLength+1+function(e){for(var t=e.length,n=0,a=0;a<t;++a)n+=V.Color.packedLength+3+e[a].batchIds.length;return n}(t),i=new Float64Array(r),o=0;i[o++]=e,i[o++]=a;for(var d=0;d<a;++d)S.BoundingSphere.pack(n[d],i,o),o+=S.BoundingSphere.packedLength;var s=t.length;i[o++]=s;for(var c=0;c<s;++c){var f=t[c];V.Color.pack(f.color,i,o),o+=V.Color.packedLength,i[o++]=f.offset,i[o++]=f.count;var l=f.batchIds,u=l.length;i[o++]=u;for(var h=0;h<u;++h)i[o++]=l[h]}return i}return e(function(e,t){var n=F.defined(e.boxes)?new Float32Array(e.boxes):void 0,a=F.defined(e.boxBatchIds)?new Uint16Array(e.boxBatchIds):void 0,r=F.defined(e.cylinders)?new Float32Array(e.cylinders):void 0,i=F.defined(e.cylinderBatchIds)?new Uint16Array(e.cylinderBatchIds):void 0,o=F.defined(e.ellipsoids)?new Float32Array(e.ellipsoids):void 0,d=F.defined(e.ellipsoidBatchIds)?new Uint16Array(e.ellipsoidBatchIds):void 0,s=F.defined(e.spheres)?new Float32Array(e.spheres):void 0,c=F.defined(e.sphereBatchIds)?new Uint16Array(e.sphereBatchIds):void 0,f=F.defined(n)?a.length:0,l=F.defined(r)?i.length:0,u=F.defined(o)?d.length:0,h=F.defined(s)?c.length:0,b=k.BoxGeometry.getUnitBox(),p=M.CylinderGeometry.getUnitCylinder(),y=B.EllipsoidGeometry.getUnitEllipsoid(),x=b.attributes.position.values,g=p.attributes.position.values,C=y.attributes.position.values,m=x.length*f;m+=g.length*l,m+=C.length*(u+h);var v=b.indices,I=p.indices,x=y.indices,g=v.length*f;return g+=I.length*l,g+=x.length*(u+h),C=new Float32Array(m),v=new Uint16Array(m/3),I=w.IndexDatatype.createTypedArray(m/3,g),x=f+l+u+h,m=new Uint16Array(x),g=new Array(x),f=new Uint32Array(x),l=new Uint32Array(x),u=new Array(x),h=e.packedBuffer,x=new Float64Array(h),h=0,T.Cartesian3.unpack(x,0,G),h+=T.Cartesian3.packedLength,S.Matrix4.unpack(x,h,D),U(e={batchTableColors:new Uint32Array(e.batchTableColors),positions:C,vertexBatchIds:v,indices:I,batchIds:m,batchedIndices:g,indexOffsets:f,indexCounts:l,boundingVolumes:u,positionOffset:0,batchIdIndex:0,indexOffset:0,batchedIndicesOffset:0,modelMatrix:D,center:G},n,a,b,A),U(e,r,i,p,O),U(e,o,d,y,L),U(e,s,c,y,E),u=P(I.BYTES_PER_ELEMENT,g,u),t.push(C.buffer,v.buffer,I.buffer),t.push(m.buffer,f.buffer,l.buffer),t.push(u.buffer),{positions:C.buffer,vertexBatchIds:v.buffer,indices:I.buffer,indexOffsets:f.buffer,indexCounts:l.buffer,batchIds:m.buffer,packedBuffer:u.buffer}})});
+define([
+  './Transforms-d13cc04e',
+  './BoxGeometry-bdb0d59d',
+  './Matrix2-9aa31791',
+  './Color-1ab5c5c7',
+  './CylinderGeometry-34e307a4',
+  './when-4bbc8319',
+  './EllipsoidGeometry-9a4ae869',
+  './IndexDatatype-b7d979a6',
+  './createTaskProcessorWorker',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryOffsetAttribute-1772960d',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './VertexFormat-71718faa',
+  './CylinderGeometryLibrary-dc0b434b'
+], function (e, t, n, r, a, i, o, d, s, c, f, l, u, h, b, p, y, x) {
+  'use strict'
+  function g(e) {
+    ;(this.offset = e.offset), (this.count = e.count), (this.color = e.color), (this.batchIds = e.batchIds)
+  }
+  var v = new n.Cartesian3(),
+    m = n.Matrix4.packedLength + n.Cartesian3.packedLength,
+    C = n.Matrix4.packedLength + 2,
+    I = n.Matrix4.packedLength + n.Cartesian3.packedLength,
+    k = n.Cartesian3.packedLength + 1,
+    M = { modelMatrix: new n.Matrix4(), boundingVolume: new e.BoundingSphere() }
+  function B(e, t) {
+    var r = t * m,
+      a = n.Cartesian3.unpack(e, r, v)
+    r += n.Cartesian3.packedLength
+    var i = n.Matrix4.unpack(e, r, M.modelMatrix)
+    n.Matrix4.multiplyByScale(i, a, i)
+    var o = M.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = Math.sqrt(3)), M
+  }
+  function w(e, t) {
+    var r = t * C,
+      a = e[r++],
+      i = e[r++],
+      o = n.Cartesian3.fromElements(a, a, i, v),
+      d = n.Matrix4.unpack(e, r, M.modelMatrix)
+    n.Matrix4.multiplyByScale(d, o, d)
+    var s = M.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, s.center), (s.radius = Math.sqrt(2)), M
+  }
+  function A(e, t) {
+    var r = t * I,
+      a = n.Cartesian3.unpack(e, r, v)
+    r += n.Cartesian3.packedLength
+    var i = n.Matrix4.unpack(e, r, M.modelMatrix)
+    n.Matrix4.multiplyByScale(i, a, i)
+    var o = M.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, o.center), (o.radius = 1), M
+  }
+  function O(e, t) {
+    var r = t * k,
+      a = e[r++],
+      i = n.Cartesian3.unpack(e, r, v),
+      o = n.Matrix4.fromTranslation(i, M.modelMatrix)
+    n.Matrix4.multiplyByUniformScale(o, a, o)
+    var d = M.boundingVolume
+    return n.Cartesian3.clone(n.Cartesian3.ZERO, d.center), (d.radius = 1), M
+  }
+  var L = new n.Cartesian3()
+  function E(t, a, o, d, s) {
+    if (i.defined(a)) {
+      for (
+        var c = o.length,
+          f = d.attributes.position.values,
+          l = d.indices,
+          u = t.positions,
+          h = t.vertexBatchIds,
+          b = t.indices,
+          p = t.batchIds,
+          y = t.batchTableColors,
+          x = t.batchedIndices,
+          v = t.indexOffsets,
+          m = t.indexCounts,
+          C = t.boundingVolumes,
+          I = t.modelMatrix,
+          k = t.center,
+          M = t.positionOffset,
+          B = t.batchIdIndex,
+          w = t.indexOffset,
+          A = t.batchedIndicesOffset,
+          O = 0;
+        O < c;
+        ++O
+      ) {
+        var E = s(a, O),
+          U = E.modelMatrix
+        n.Matrix4.multiply(I, U, U)
+        for (var G = o[O], S = f.length, T = 0; T < S; T += 3) {
+          var V = n.Cartesian3.unpack(f, T, L)
+          n.Matrix4.multiplyByPoint(U, V, V), n.Cartesian3.subtract(V, k, V), n.Cartesian3.pack(V, u, 3 * M + T), (h[B++] = G)
+        }
+        for (var F = l.length, R = 0; R < F; ++R) b[w + R] = l[R] + M
+        var Z = O + A
+        ;(x[Z] = new g({ offset: w, count: F, color: r.Color.fromRgba(y[G]), batchIds: [G] })),
+          (p[Z] = G),
+          (v[Z] = w),
+          (m[Z] = F),
+          (C[Z] = e.BoundingSphere.transform(E.boundingVolume, U)),
+          (M += S / 3),
+          (w += F)
+      }
+      ;(t.positionOffset = M), (t.batchIdIndex = B), (t.indexOffset = w), (t.batchedIndicesOffset += c)
+    }
+  }
+  var U = new n.Cartesian3(),
+    G = new n.Matrix4()
+  function S(t, n, a) {
+    var i = a.length,
+      o =
+        2 +
+        i * e.BoundingSphere.packedLength +
+        1 +
+        (function (e) {
+          for (var t = e.length, n = 0, a = 0; a < t; ++a) n += r.Color.packedLength + 3 + e[a].batchIds.length
+          return n
+        })(n),
+      d = new Float64Array(o),
+      s = 0
+    ;(d[s++] = t), (d[s++] = i)
+    for (var c = 0; c < i; ++c) e.BoundingSphere.pack(a[c], d, s), (s += e.BoundingSphere.packedLength)
+    var f = n.length
+    d[s++] = f
+    for (var l = 0; l < f; ++l) {
+      var u = n[l]
+      r.Color.pack(u.color, d, s), (s += r.Color.packedLength), (d[s++] = u.offset), (d[s++] = u.count)
+      var h = u.batchIds,
+        b = h.length
+      d[s++] = b
+      for (var p = 0; p < b; ++p) d[s++] = h[p]
+    }
+    return d
+  }
+  return s(function (e, r) {
+    var s = i.defined(e.boxes) ? new Float32Array(e.boxes) : void 0,
+      c = i.defined(e.boxBatchIds) ? new Uint16Array(e.boxBatchIds) : void 0,
+      f = i.defined(e.cylinders) ? new Float32Array(e.cylinders) : void 0,
+      l = i.defined(e.cylinderBatchIds) ? new Uint16Array(e.cylinderBatchIds) : void 0,
+      u = i.defined(e.ellipsoids) ? new Float32Array(e.ellipsoids) : void 0,
+      h = i.defined(e.ellipsoidBatchIds) ? new Uint16Array(e.ellipsoidBatchIds) : void 0,
+      b = i.defined(e.spheres) ? new Float32Array(e.spheres) : void 0,
+      p = i.defined(e.sphereBatchIds) ? new Uint16Array(e.sphereBatchIds) : void 0,
+      y = i.defined(s) ? c.length : 0,
+      x = i.defined(f) ? l.length : 0,
+      g = i.defined(u) ? h.length : 0,
+      v = i.defined(b) ? p.length : 0,
+      m = t.BoxGeometry.getUnitBox(),
+      C = a.CylinderGeometry.getUnitCylinder(),
+      I = o.EllipsoidGeometry.getUnitEllipsoid(),
+      k = m.attributes.position.values,
+      M = C.attributes.position.values,
+      L = I.attributes.position.values,
+      T = k.length * y
+    ;(T += M.length * x), (T += L.length * (g + v))
+    var V = m.indices,
+      F = C.indices,
+      R = I.indices,
+      Z = V.length * y
+    ;(Z += F.length * x), (Z += R.length * (g + v))
+    var D = new Float32Array(T),
+      P = new Uint16Array(T / 3),
+      q = d.IndexDatatype.createTypedArray(T / 3, Z),
+      W = y + x + g + v,
+      _ = new Uint16Array(W),
+      N = new Array(W),
+      Y = new Uint32Array(W),
+      j = new Uint32Array(W),
+      z = new Array(W)
+    !(function (e) {
+      var t = new Float64Array(e),
+        r = 0
+      n.Cartesian3.unpack(t, r, U), (r += n.Cartesian3.packedLength), n.Matrix4.unpack(t, r, G)
+    })(e.packedBuffer)
+    var H = {
+      batchTableColors: new Uint32Array(e.batchTableColors),
+      positions: D,
+      vertexBatchIds: P,
+      indices: q,
+      batchIds: _,
+      batchedIndices: N,
+      indexOffsets: Y,
+      indexCounts: j,
+      boundingVolumes: z,
+      positionOffset: 0,
+      batchIdIndex: 0,
+      indexOffset: 0,
+      batchedIndicesOffset: 0,
+      modelMatrix: G,
+      center: U
+    }
+    E(H, s, c, m, B), E(H, f, l, C, w), E(H, u, h, I, A), E(H, b, p, I, O)
+    var J = S(q.BYTES_PER_ELEMENT, N, z)
+    return (
+      r.push(D.buffer, P.buffer, q.buffer),
+      r.push(_.buffer, Y.buffer, j.buffer),
+      r.push(J.buffer),
+      {
+        positions: D.buffer,
+        vertexBatchIds: P.buffer,
+        indices: q.buffer,
+        indexOffsets: Y.buffer,
+        indexCounts: j.buffer,
+        batchIds: _.buffer,
+        packedBuffer: J.buffer
+      }
+    )
+  })
+})

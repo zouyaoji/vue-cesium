@@ -1,1 +1,331 @@
-define(["./AxisAlignedBoundingBox-122de82b","./Cartesian2-b4b7b0b3","./when-208fe5b0","./TerrainEncoding-e1b1da20","./IndexDatatype-3bc916b1","./Math-8386669c","./Transforms-73e77b72","./Check-5e798bbf","./WebMercatorProjection-1b058022","./createTaskProcessorWorker","./AttributeCompression-9711314b","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./RuntimeError-7f634f5d"],function(te,re,ne,ie,oe,ae,se,e,de,t,r,n,i,o){"use strict";function he(){e.DeveloperError.throwInstantiationError()}Object.defineProperties(he.prototype,{errorEvent:{get:e.DeveloperError.throwInstantiationError},credit:{get:e.DeveloperError.throwInstantiationError},tilingScheme:{get:e.DeveloperError.throwInstantiationError},ready:{get:e.DeveloperError.throwInstantiationError},readyPromise:{get:e.DeveloperError.throwInstantiationError},hasWaterMask:{get:e.DeveloperError.throwInstantiationError},hasVertexNormals:{get:e.DeveloperError.throwInstantiationError},availability:{get:e.DeveloperError.throwInstantiationError}});var a=[];he.getRegularGridIndices=function(e,t){var r=a[e];ne.defined(r)||(a[e]=r=[]);var n=r[t];return ne.defined(n)||g(e,t,n=e*t<ae.CesiumMath.SIXTY_FOUR_KILOBYTES?r[t]=new Uint16Array((e-1)*(t-1)*6):r[t]=new Uint32Array((e-1)*(t-1)*6),0),n};var d=[];he.getRegularGridIndicesAndEdgeIndices=function(e,t){var r=d[e];ne.defined(r)||(d[e]=r=[]);var n,i,o,a,s=r[t];return ne.defined(s)||(n=he.getRegularGridIndices(e,t),i=(a=l(e,t)).westIndicesSouthToNorth,o=a.southIndicesEastToWest,e=a.eastIndicesNorthToSouth,a=a.northIndicesWestToEast,s=r[t]={indices:n,westIndicesSouthToNorth:i,southIndicesEastToWest:o,eastIndicesNorthToSouth:e,northIndicesWestToEast:a}),s};var I=[];function l(e,t){for(var r=new Array(t),n=new Array(e),i=new Array(t),o=new Array(e),a=0;a<e;++a)n[o[a]=a]=e*t-1-a;for(a=0;a<t;++a)i[a]=(a+1)*e-1,r[a]=(t-a-1)*e;return{westIndicesSouthToNorth:r,southIndicesEastToWest:n,eastIndicesNorthToSouth:i,northIndicesWestToEast:o}}function g(e,t,r,n){for(var i=0,o=0;o<t-1;++o){for(var a=0;a<e-1;++a){var s=i,d=s+e,h=d+1,c=s+1;r[n++]=s,r[n++]=d,r[n++]=c,r[n++]=c,r[n++]=d,r[n++]=h,++i}++i}}function s(e,t,r,n){for(var i=e[0],o=e.length,a=1;a<o;++a){var s=e[a];r[n++]=i,r[n++]=s,r[n++]=t,r[n++]=t,r[n++]=s,r[n++]=t+1,i=s,++t}return n}he.getRegularGridAndSkirtIndicesAndEdgeIndices=function(e,t){var r=I[e];ne.defined(r)||(I[e]=r=[]);var n,i,o,a,s,d,h,c,u=r[t];return ne.defined(u)||(o=(n=e*t)+(d=2*e+2*t),c=(i=(e-1)*(t-1)*6)+6*Math.max(0,d-4),a=(h=l(e,t)).westIndicesSouthToNorth,s=h.southIndicesEastToWest,d=h.eastIndicesNorthToSouth,h=h.northIndicesWestToEast,g(e,t,c=oe.IndexDatatype.createTypedArray(o,c),0),he.addSkirtIndices(a,s,d,h,n,c,i),u=r[t]={indices:c,westIndicesSouthToNorth:a,southIndicesEastToWest:s,eastIndicesNorthToSouth:d,northIndicesWestToEast:h,indexCountWithoutSkirts:i}),u},he.addSkirtIndices=function(e,t,r,n,i,o,a){a=s(e,i,o,a),a=s(t,i+=e.length,o,a),a=s(r,i+=t.length,o,a),s(n,i+=r.length,o,a)},he.heightmapTerrainQuality=.25,he.getEstimatedLevelZeroGeometricErrorForAHeightmap=function(e,t,r){return 2*e.maximumRadius*Math.PI*he.heightmapTerrainQuality/(t*r)},he.prototype.requestTileGeometry=e.DeveloperError.throwInstantiationError,he.prototype.getLevelMaximumGeometricError=e.DeveloperError.throwInstantiationError,he.prototype.getTileDataAvailable=e.DeveloperError.throwInstantiationError,he.prototype.loadTileDataAvailability=e.DeveloperError.throwInstantiationError;var ce=32767,ue=new re.Cartesian3,Ie=new re.Cartesian3,le=new re.Cartesian3,ge=new re.Cartographic,me=new re.Cartesian2;function Te(e,t,r,n,i,o,a,s,d){var h=Number.POSITIVE_INFINITY,c=i.north,u=i.south,I=i.east,l=i.west;I<l&&(I+=ae.CesiumMath.TWO_PI);for(var g=e.length,m=0;m<g;++m){var T=e[m],E=r[T],T=n[T];ge.longitude=ae.CesiumMath.lerp(l,I,T.x),ge.latitude=ae.CesiumMath.lerp(u,c,T.y),ge.height=E-t;E=o.cartographicToCartesian(ge,ue);se.Matrix4.multiplyByPoint(a,E,E),re.Cartesian3.minimumByComponent(E,s,s),re.Cartesian3.maximumByComponent(E,d,d),h=Math.min(h,ge.height)}return h}function Ee(e,t,r,n,i,o,a,s,d,h,c,u,I,l){var g=ne.defined(a),m=d.north,T=d.south,E=d.east,p=d.west;E<p&&(E+=ae.CesiumMath.TWO_PI);for(var f=r.length,y=0;y<f;++y){var v=r[y],N=i[v],w=o[v];ge.longitude=ae.CesiumMath.lerp(p,E,w.x)+I,ge.latitude=ae.CesiumMath.lerp(T,m,w.y)+l,ge.height=N-h;var b,S,N=s.cartographicToCartesian(ge,ue);g&&(me.x=a[v=2*v],me.y=a[1+v]),n.hasWebMercatorT&&(b=(de.WebMercatorProjection.geodeticLatitudeToMercatorAngle(ge.latitude)-c)*u),n.hasGeodeticSurfaceNormals&&(S=s.geodeticSurfaceNormal(N)),t=n.encode(e,t,N,w,ge.height,me,b,S)}}function pe(e,t){var r;return"function"==typeof e.slice&&"function"!=typeof(r=e.slice()).sort&&(r=void 0),(r=!ne.defined(r)?Array.prototype.slice.call(e):r).sort(t),r}return t(function(e,t){var r,n,i=(Z=e.quantizedVertices).length/3,o=e.octEncodedNormals,a=e.westIndices.length+e.eastIndices.length+e.southIndices.length+e.northIndices.length,s=e.includeWebMercatorT,d=e.exaggeration,h=e.exaggerationRelativeHeight,c=1!==d,u=re.Rectangle.clone(e.rectangle),I=u.west,l=u.south,g=u.east,m=u.north,T=re.Ellipsoid.clone(e.ellipsoid),E=e.minimumHeight,p=e.maximumHeight,f=e.relativeToCenter,y=se.Transforms.eastNorthUpToFixedFrame(f,T),v=se.Matrix4.inverseTransformation(y,new se.Matrix4);s&&(r=de.WebMercatorProjection.geodeticLatitudeToMercatorAngle(l),n=1/(de.WebMercatorProjection.geodeticLatitudeToMercatorAngle(m)-r));var N=Z.subarray(0,i),w=Z.subarray(i,2*i),b=Z.subarray(2*i,3*i),S=ne.defined(o),M=new Array(i),x=new Array(i),C=new Array(i),A=s?new Array(i):[],W=c?new Array(i):[],P=Ie;P.x=Number.POSITIVE_INFINITY,P.y=Number.POSITIVE_INFINITY,P.z=Number.POSITIVE_INFINITY;var D=le;D.x=Number.NEGATIVE_INFINITY,D.y=Number.NEGATIVE_INFINITY,D.z=Number.NEGATIVE_INFINITY;for(var k=Number.POSITIVE_INFINITY,F=Number.NEGATIVE_INFINITY,H=Number.POSITIVE_INFINITY,_=Number.NEGATIVE_INFINITY,G=0;G<i;++G){var V=N[G],Y=w[G],O=V/ce,B=Y/ce,V=ae.CesiumMath.lerp(E,p,b[G]/ce);ge.longitude=ae.CesiumMath.lerp(I,g,O),ge.latitude=ae.CesiumMath.lerp(l,m,B),ge.height=V;k=Math.min(ge.longitude,k),F=Math.max(ge.longitude,F),H=Math.min(ge.latitude,H),_=Math.max(ge.latitude,_),Y=T.cartographicToCartesian(ge);M[G]=new re.Cartesian2(O,B),x[G]=V,C[G]=Y,s&&(A[G]=(de.WebMercatorProjection.geodeticLatitudeToMercatorAngle(ge.latitude)-r)*n),c&&(W[G]=T.geodeticSurfaceNormal(Y)),se.Matrix4.multiplyByPoint(v,Y,ue),re.Cartesian3.minimumByComponent(ue,P,P),re.Cartesian3.maximumByComponent(ue,D,D)}var R,L=pe(e.westIndices,function(e,t){return M[e].y-M[t].y}),j=pe(e.eastIndices,function(e,t){return M[t].y-M[e].y}),U=pe(e.southIndices,function(e,t){return M[t].x-M[e].x}),z=pe(e.northIndices,function(e,t){return M[e].x-M[t].x});E<0&&(R=new ie.EllipsoidalOccluder(T).computeHorizonCullingPointPossiblyUnderEllipsoid(f,C,E));var q=Math.min(E,Te(e.westIndices,e.westSkirtHeight,x,M,u,T,v,P,D));q=Math.min(q,Te(e.southIndices,e.southSkirtHeight,x,M,u,T,v,P,D)),q=Math.min(q,Te(e.eastIndices,e.eastSkirtHeight,x,M,u,T,v,P,D)),q=Math.min(q,Te(e.northIndices,e.northSkirtHeight,x,M,u,T,v,P,D));for(var Q,K=new te.AxisAlignedBoundingBox(P,D,f),X=new ie.TerrainEncoding(f,K,q,p,y,S,s,c,d,h),Z=X.stride,J=new Float32Array(i*Z+a*Z),$=0,ee=0;ee<i;++ee)S&&(me.x=o[Q=2*ee],me.y=o[1+Q]),$=X.encode(J,$,C[ee],M[ee],x[ee],me,A[ee],W[ee]);return K=Math.max(0,2*(a-4)),q=e.indices.length+3*K,(y=oe.IndexDatatype.createTypedArray(i+a,q)).set(e.indices,0),K=d=1e-4*(F-k),q=-(a=h=1e-4*(_-H)),Ee(J,h=i*Z,L,X,x,M,o,T,u,e.westSkirtHeight,r,n,-d,0),Ee(J,h+=e.westIndices.length*Z,U,X,x,M,o,T,u,e.southSkirtHeight,r,n,0,q),Ee(J,h+=e.southIndices.length*Z,j,X,x,M,o,T,u,e.eastSkirtHeight,r,n,K,0),Ee(J,h+=e.eastIndices.length*Z,z,X,x,M,o,T,u,e.northSkirtHeight,r,n,0,a),he.addSkirtIndices(L,U,j,z,i,y,e.indices.length),t.push(J.buffer,y.buffer),{vertices:J.buffer,indices:y.buffer,westIndicesSouthToNorth:L,southIndicesEastToWest:U,eastIndicesNorthToSouth:j,northIndicesWestToEast:z,vertexStride:Z,center:f,minimumHeight:E,maximumHeight:p,occludeePointInScaledSpace:R,encoding:X,indexCountWithoutSkirts:e.indices.length}})});
+define([
+  './AxisAlignedBoundingBox-07c6b7f2',
+  './Matrix2-9aa31791',
+  './when-4bbc8319',
+  './TerrainEncoding-ba779f11',
+  './IndexDatatype-b7d979a6',
+  './ComponentDatatype-93750d1a',
+  './RuntimeError-346a3079',
+  './Transforms-d13cc04e',
+  './WebMercatorProjection-58801a11',
+  './createTaskProcessorWorker',
+  './AttributeCompression-af389d04',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057'
+], function (e, t, r, i, n, o, a, s, d, c, h, u, I) {
+  'use strict'
+  function l() {
+    a.DeveloperError.throwInstantiationError()
+  }
+  Object.defineProperties(l.prototype, {
+    errorEvent: { get: a.DeveloperError.throwInstantiationError },
+    credit: { get: a.DeveloperError.throwInstantiationError },
+    tilingScheme: { get: a.DeveloperError.throwInstantiationError },
+    ready: { get: a.DeveloperError.throwInstantiationError },
+    readyPromise: { get: a.DeveloperError.throwInstantiationError },
+    hasWaterMask: { get: a.DeveloperError.throwInstantiationError },
+    hasVertexNormals: { get: a.DeveloperError.throwInstantiationError },
+    availability: { get: a.DeveloperError.throwInstantiationError }
+  })
+  var g = []
+  l.getRegularGridIndices = function (e, t) {
+    var i = g[e]
+    r.defined(i) || (g[e] = i = [])
+    var n = i[t]
+    return (
+      r.defined(n) ||
+        v(
+          e,
+          t,
+          (n =
+            e * t < o.CesiumMath.SIXTY_FOUR_KILOBYTES
+              ? (i[t] = new Uint16Array((e - 1) * (t - 1) * 6))
+              : (i[t] = new Uint32Array((e - 1) * (t - 1) * 6))),
+          0
+        ),
+      n
+    )
+  }
+  var m = []
+  l.getRegularGridIndicesAndEdgeIndices = function (e, t) {
+    var i = m[e]
+    r.defined(i) || (m[e] = i = [])
+    var n = i[t]
+    if (!r.defined(n)) {
+      var o = l.getRegularGridIndices(e, t),
+        a = E(e, t),
+        s = a.westIndicesSouthToNorth,
+        d = a.southIndicesEastToWest,
+        c = a.eastIndicesNorthToSouth,
+        h = a.northIndicesWestToEast
+      n = i[t] = { indices: o, westIndicesSouthToNorth: s, southIndicesEastToWest: d, eastIndicesNorthToSouth: c, northIndicesWestToEast: h }
+    }
+    return n
+  }
+  var T = []
+  function E(e, t) {
+    var r,
+      i = new Array(t),
+      n = new Array(e),
+      o = new Array(t),
+      a = new Array(e)
+    for (r = 0; r < e; ++r) (a[r] = r), (n[r] = e * t - 1 - r)
+    for (r = 0; r < t; ++r) (o[r] = (r + 1) * e - 1), (i[r] = (t - r - 1) * e)
+    return { westIndicesSouthToNorth: i, southIndicesEastToWest: n, eastIndicesNorthToSouth: o, northIndicesWestToEast: a }
+  }
+  function v(e, t, r, i) {
+    for (var n = 0, o = 0; o < t - 1; ++o) {
+      for (var a = 0; a < e - 1; ++a) {
+        var s = n,
+          d = s + e,
+          c = d + 1,
+          h = s + 1
+        ;(r[i++] = s), (r[i++] = d), (r[i++] = h), (r[i++] = h), (r[i++] = d), (r[i++] = c), ++n
+      }
+      ++n
+    }
+  }
+  function p(e, t, r, i) {
+    for (var n = e[0], o = e.length, a = 1; a < o; ++a) {
+      var s = e[a]
+      ;(r[i++] = n), (r[i++] = s), (r[i++] = t), (r[i++] = t), (r[i++] = s), (r[i++] = t + 1), (n = s), ++t
+    }
+    return i
+  }
+  ;(l.getRegularGridAndSkirtIndicesAndEdgeIndices = function (e, t) {
+    var i = T[e]
+    r.defined(i) || (T[e] = i = [])
+    var o = i[t]
+    if (!r.defined(o)) {
+      var a = e * t,
+        s = (e - 1) * (t - 1) * 6,
+        d = 2 * e + 2 * t,
+        c = a + d,
+        h = s + 6 * Math.max(0, d - 4),
+        u = E(e, t),
+        I = u.westIndicesSouthToNorth,
+        g = u.southIndicesEastToWest,
+        m = u.eastIndicesNorthToSouth,
+        p = u.northIndicesWestToEast,
+        f = n.IndexDatatype.createTypedArray(c, h)
+      v(e, t, f, 0),
+        l.addSkirtIndices(I, g, m, p, a, f, s),
+        (o = i[t] =
+          {
+            indices: f,
+            westIndicesSouthToNorth: I,
+            southIndicesEastToWest: g,
+            eastIndicesNorthToSouth: m,
+            northIndicesWestToEast: p,
+            indexCountWithoutSkirts: s
+          })
+    }
+    return o
+  }),
+    (l.addSkirtIndices = function (e, t, r, i, n, o, a) {
+      var s = n
+      ;(a = p(e, s, o, a)), (a = p(t, (s += e.length), o, a)), (a = p(r, (s += t.length), o, a)), p(i, (s += r.length), o, a)
+    }),
+    (l.heightmapTerrainQuality = 0.25),
+    (l.getEstimatedLevelZeroGeometricErrorForAHeightmap = function (e, t, r) {
+      return (2 * e.maximumRadius * Math.PI * l.heightmapTerrainQuality) / (t * r)
+    }),
+    (l.prototype.requestTileGeometry = a.DeveloperError.throwInstantiationError),
+    (l.prototype.getLevelMaximumGeometricError = a.DeveloperError.throwInstantiationError),
+    (l.prototype.getTileDataAvailable = a.DeveloperError.throwInstantiationError),
+    (l.prototype.loadTileDataAvailability = a.DeveloperError.throwInstantiationError)
+  var f = 32767,
+    y = new t.Cartesian3(),
+    N = new t.Cartesian3(),
+    w = new t.Cartesian3(),
+    S = new t.Cartographic(),
+    M = new t.Cartesian2()
+  function x(e, r, i, n, a, s, d, c, h) {
+    var u = Number.POSITIVE_INFINITY,
+      I = a.north,
+      l = a.south,
+      g = a.east,
+      m = a.west
+    g < m && (g += o.CesiumMath.TWO_PI)
+    for (var T = e.length, E = 0; E < T; ++E) {
+      var v = e[E],
+        p = i[v],
+        f = n[v]
+      ;(S.longitude = o.CesiumMath.lerp(m, g, f.x)), (S.latitude = o.CesiumMath.lerp(l, I, f.y)), (S.height = p - r)
+      var N = s.cartographicToCartesian(S, y)
+      t.Matrix4.multiplyByPoint(d, N, N),
+        t.Cartesian3.minimumByComponent(N, c, c),
+        t.Cartesian3.maximumByComponent(N, h, h),
+        (u = Math.min(u, S.height))
+    }
+    return u
+  }
+  function b(e, t, i, n, a, s, c, h, u, I, l, g, m, T) {
+    var E = r.defined(c),
+      v = u.north,
+      p = u.south,
+      f = u.east,
+      N = u.west
+    f < N && (f += o.CesiumMath.TWO_PI)
+    for (var w = i.length, x = 0; x < w; ++x) {
+      var b = i[x],
+        A = a[b],
+        C = s[b]
+      ;(S.longitude = o.CesiumMath.lerp(N, f, C.x) + m), (S.latitude = o.CesiumMath.lerp(p, v, C.y) + T), (S.height = A - I)
+      var W,
+        P,
+        D = h.cartographicToCartesian(S, y)
+      if (E) {
+        var k = 2 * b
+        ;(M.x = c[k]), (M.y = c[k + 1])
+      }
+      n.hasWebMercatorT && (W = (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(S.latitude) - l) * g),
+        n.hasGeodeticSurfaceNormals && (P = h.geodeticSurfaceNormal(D)),
+        (t = n.encode(e, t, D, C, S.height, M, W, P))
+    }
+  }
+  function A(e, t) {
+    var i
+    return (
+      'function' == typeof e.slice && 'function' != typeof (i = e.slice()).sort && (i = void 0),
+      r.defined(i) || (i = Array.prototype.slice.call(e)),
+      i.sort(t),
+      i
+    )
+  }
+  return c(function (a, c) {
+    var h,
+      u,
+      I = a.quantizedVertices,
+      g = I.length / 3,
+      m = a.octEncodedNormals,
+      T = a.westIndices.length + a.eastIndices.length + a.southIndices.length + a.northIndices.length,
+      E = a.includeWebMercatorT,
+      v = a.exaggeration,
+      p = a.exaggerationRelativeHeight,
+      C = 1 !== v,
+      W = t.Rectangle.clone(a.rectangle),
+      P = W.west,
+      D = W.south,
+      k = W.east,
+      F = W.north,
+      H = t.Ellipsoid.clone(a.ellipsoid),
+      _ = a.minimumHeight,
+      G = a.maximumHeight,
+      V = a.relativeToCenter,
+      Y = s.Transforms.eastNorthUpToFixedFrame(V, H),
+      O = t.Matrix4.inverseTransformation(Y, new t.Matrix4())
+    E &&
+      ((h = d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(D)), (u = 1 / (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(F) - h)))
+    var B = I.subarray(0, g),
+      R = I.subarray(g, 2 * g),
+      L = I.subarray(2 * g, 3 * g),
+      j = r.defined(m),
+      U = new Array(g),
+      z = new Array(g),
+      q = new Array(g),
+      Q = E ? new Array(g) : [],
+      K = C ? new Array(g) : [],
+      X = N
+    ;(X.x = Number.POSITIVE_INFINITY), (X.y = Number.POSITIVE_INFINITY), (X.z = Number.POSITIVE_INFINITY)
+    var Z = w
+    ;(Z.x = Number.NEGATIVE_INFINITY), (Z.y = Number.NEGATIVE_INFINITY), (Z.z = Number.NEGATIVE_INFINITY)
+    for (
+      var J = Number.POSITIVE_INFINITY, $ = Number.NEGATIVE_INFINITY, ee = Number.POSITIVE_INFINITY, te = Number.NEGATIVE_INFINITY, re = 0;
+      re < g;
+      ++re
+    ) {
+      var ie = B[re],
+        ne = R[re],
+        oe = ie / f,
+        ae = ne / f,
+        se = o.CesiumMath.lerp(_, G, L[re] / f)
+      ;(S.longitude = o.CesiumMath.lerp(P, k, oe)),
+        (S.latitude = o.CesiumMath.lerp(D, F, ae)),
+        (S.height = se),
+        (J = Math.min(S.longitude, J)),
+        ($ = Math.max(S.longitude, $)),
+        (ee = Math.min(S.latitude, ee)),
+        (te = Math.max(S.latitude, te))
+      var de = H.cartographicToCartesian(S)
+      ;(U[re] = new t.Cartesian2(oe, ae)),
+        (z[re] = se),
+        (q[re] = de),
+        E && (Q[re] = (d.WebMercatorProjection.geodeticLatitudeToMercatorAngle(S.latitude) - h) * u),
+        C && (K[re] = H.geodeticSurfaceNormal(de)),
+        t.Matrix4.multiplyByPoint(O, de, y),
+        t.Cartesian3.minimumByComponent(y, X, X),
+        t.Cartesian3.maximumByComponent(y, Z, Z)
+    }
+    var ce,
+      he = A(a.westIndices, function (e, t) {
+        return U[e].y - U[t].y
+      }),
+      ue = A(a.eastIndices, function (e, t) {
+        return U[t].y - U[e].y
+      }),
+      Ie = A(a.southIndices, function (e, t) {
+        return U[t].x - U[e].x
+      }),
+      le = A(a.northIndices, function (e, t) {
+        return U[e].x - U[t].x
+      })
+    _ < 0 && (ce = new i.EllipsoidalOccluder(H).computeHorizonCullingPointPossiblyUnderEllipsoid(V, q, _))
+    var ge = _
+    ;(ge = Math.min(ge, x(a.westIndices, a.westSkirtHeight, z, U, W, H, O, X, Z))),
+      (ge = Math.min(ge, x(a.southIndices, a.southSkirtHeight, z, U, W, H, O, X, Z))),
+      (ge = Math.min(ge, x(a.eastIndices, a.eastSkirtHeight, z, U, W, H, O, X, Z))),
+      (ge = Math.min(ge, x(a.northIndices, a.northSkirtHeight, z, U, W, H, O, X, Z)))
+    for (
+      var me = new e.AxisAlignedBoundingBox(X, Z, V),
+        Te = new i.TerrainEncoding(V, me, ge, G, Y, j, E, C, v, p),
+        Ee = Te.stride,
+        ve = new Float32Array(g * Ee + T * Ee),
+        pe = 0,
+        fe = 0;
+      fe < g;
+      ++fe
+    ) {
+      if (j) {
+        var ye = 2 * fe
+        ;(M.x = m[ye]), (M.y = m[ye + 1])
+      }
+      pe = Te.encode(ve, pe, q[fe], U[fe], z[fe], M, Q[fe], K[fe])
+    }
+    var Ne = Math.max(0, 2 * (T - 4)),
+      we = a.indices.length + 3 * Ne,
+      Se = n.IndexDatatype.createTypedArray(g + T, we)
+    Se.set(a.indices, 0)
+    var Me = 1e-4,
+      xe = ($ - J) * Me,
+      be = (te - ee) * Me,
+      Ae = -xe,
+      Ce = xe,
+      We = be,
+      Pe = -be,
+      De = g * Ee
+    return (
+      b(ve, De, he, Te, z, U, m, H, W, a.westSkirtHeight, h, u, Ae, 0),
+      b(ve, (De += a.westIndices.length * Ee), Ie, Te, z, U, m, H, W, a.southSkirtHeight, h, u, 0, Pe),
+      b(ve, (De += a.southIndices.length * Ee), ue, Te, z, U, m, H, W, a.eastSkirtHeight, h, u, Ce, 0),
+      b(ve, (De += a.eastIndices.length * Ee), le, Te, z, U, m, H, W, a.northSkirtHeight, h, u, 0, We),
+      l.addSkirtIndices(he, Ie, ue, le, g, Se, a.indices.length),
+      c.push(ve.buffer, Se.buffer),
+      {
+        vertices: ve.buffer,
+        indices: Se.buffer,
+        westIndicesSouthToNorth: he,
+        southIndicesEastToWest: Ie,
+        eastIndicesNorthToSouth: ue,
+        northIndicesWestToEast: le,
+        vertexStride: Ee,
+        center: V,
+        minimumHeight: _,
+        maximumHeight: G,
+        occludeePointInScaledSpace: ce,
+        encoding: Te,
+        indexCountWithoutSkirts: a.indices.length
+      }
+    )
+  })
+})

@@ -1,1 +1,32 @@
-define(["./Cartesian2-b4b7b0b3","./when-208fe5b0","./EllipseGeometry-be322b26","./Check-5e798bbf","./Math-8386669c","./GeometryOffsetAttribute-3497d4dd","./Transforms-73e77b72","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./EllipseGeometryLibrary-c8749cb9","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./GeometryInstance-411ead1b","./GeometryPipeline-86615bad","./AttributeCompression-9711314b","./EncodedCartesian3-21af0f3b","./IndexDatatype-3bc916b1","./IntersectionTests-40db2afa","./Plane-b91bfb59","./VertexFormat-7e57a3bd"],function(r,b,n,e,t,a,i,o,s,d,c,l,f,m,p,y,u,G,C,E,A){"use strict";return function(e,t){return(e=b.defined(t)?n.EllipseGeometry.unpack(e,t):e)._center=r.Cartesian3.clone(e._center),e._ellipsoid=r.Ellipsoid.clone(e._ellipsoid),n.EllipseGeometry.createGeometry(e)}});
+define([
+  './Matrix2-9aa31791',
+  './when-4bbc8319',
+  './EllipseGeometry-47331b4e',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './GeometryOffsetAttribute-1772960d',
+  './Transforms-d13cc04e',
+  './combine-83860057',
+  './EllipseGeometryLibrary-962723df',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './GeometryInstance-47b34185',
+  './GeometryPipeline-2356afec',
+  './AttributeCompression-af389d04',
+  './EncodedCartesian3-f286cedc',
+  './IndexDatatype-b7d979a6',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937',
+  './VertexFormat-71718faa'
+], function (e, t, r, n, i, a, o, c, s, d, l, m, p, y, b, f, u, G, E, C) {
+  'use strict'
+  return function (n, i) {
+    return (
+      t.defined(i) && (n = r.EllipseGeometry.unpack(n, i)),
+      (n._center = e.Cartesian3.clone(n._center)),
+      (n._ellipsoid = e.Ellipsoid.clone(n._ellipsoid)),
+      r.EllipseGeometry.createGeometry(n)
+    )
+  }
+})

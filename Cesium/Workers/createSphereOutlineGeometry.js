@@ -1,1 +1,46 @@
-define(["./when-208fe5b0","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./EllipsoidOutlineGeometry-fcfecde6","./Math-8386669c","./GeometryOffsetAttribute-3497d4dd","./Transforms-73e77b72","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./IndexDatatype-3bc916b1"],function(r,n,e,s,i,t,o,a,d,l,u,c,b){"use strict";function m(e){var i=r.defaultValue(e.radius,1),e={radii:new n.Cartesian3(i,i,i),stackPartitions:e.stackPartitions,slicePartitions:e.slicePartitions,subdivisions:e.subdivisions};this._ellipsoidGeometry=new s.EllipsoidOutlineGeometry(e),this._workerName="createSphereOutlineGeometry"}m.packedLength=s.EllipsoidOutlineGeometry.packedLength,m.pack=function(e,i,t){return s.EllipsoidOutlineGeometry.pack(e._ellipsoidGeometry,i,t)};var p=new s.EllipsoidOutlineGeometry,y={radius:void 0,radii:new n.Cartesian3,stackPartitions:void 0,slicePartitions:void 0,subdivisions:void 0};return m.unpack=function(e,i,t){i=s.EllipsoidOutlineGeometry.unpack(e,i,p);return y.stackPartitions=i._stackPartitions,y.slicePartitions=i._slicePartitions,y.subdivisions=i._subdivisions,r.defined(t)?(n.Cartesian3.clone(i._radii,y.radii),t._ellipsoidGeometry=new s.EllipsoidOutlineGeometry(y),t):(y.radius=i._radii.x,new m(y))},m.createGeometry=function(e){return s.EllipsoidOutlineGeometry.createGeometry(e._ellipsoidGeometry)},function(e,i){return r.defined(i)&&(e=m.unpack(e,i)),m.createGeometry(e)}});
+define([
+  './when-4bbc8319',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './EllipsoidOutlineGeometry-44f0c12f',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './GeometryOffsetAttribute-1772960d',
+  './Transforms-d13cc04e',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-b7d979a6'
+], function (i, e, t, r, n, o, s, a, d, l, c, u) {
+  'use strict'
+  function m(t) {
+    var n = i.defaultValue(t.radius, 1),
+      o = { radii: new e.Cartesian3(n, n, n), stackPartitions: t.stackPartitions, slicePartitions: t.slicePartitions, subdivisions: t.subdivisions }
+    ;(this._ellipsoidGeometry = new r.EllipsoidOutlineGeometry(o)), (this._workerName = 'createSphereOutlineGeometry')
+  }
+  ;(m.packedLength = r.EllipsoidOutlineGeometry.packedLength),
+    (m.pack = function (i, e, t) {
+      return r.EllipsoidOutlineGeometry.pack(i._ellipsoidGeometry, e, t)
+    })
+  var p = new r.EllipsoidOutlineGeometry(),
+    y = { radius: void 0, radii: new e.Cartesian3(), stackPartitions: void 0, slicePartitions: void 0, subdivisions: void 0 }
+  return (
+    (m.unpack = function (t, n, o) {
+      var s = r.EllipsoidOutlineGeometry.unpack(t, n, p)
+      return (
+        (y.stackPartitions = s._stackPartitions),
+        (y.slicePartitions = s._slicePartitions),
+        (y.subdivisions = s._subdivisions),
+        i.defined(o)
+          ? (e.Cartesian3.clone(s._radii, y.radii), (o._ellipsoidGeometry = new r.EllipsoidOutlineGeometry(y)), o)
+          : ((y.radius = s._radii.x), new m(y))
+      )
+    }),
+    (m.createGeometry = function (i) {
+      return r.EllipsoidOutlineGeometry.createGeometry(i._ellipsoidGeometry)
+    }),
+    function (e, t) {
+      return i.defined(t) && (e = m.unpack(e, t)), m.createGeometry(e)
+    }
+  )
+})

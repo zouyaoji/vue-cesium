@@ -18,344 +18,348 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './Check-5e798bbf', './ComponentDatatype-cc8f5f00', './PolylineVolumeGeometryLibrary-357590d7', './CorridorGeometryLibrary-11e30d02', './when-208fe5b0', './GeometryAttribute-fbe4b0b6', './GeometryAttributes-b0b294d8', './IndexDatatype-3a89c589', './Math-56f06cd5', './PolygonPipeline-c48540af', './RuntimeError-7f634f5d', './WebGLConstants-5e2a49ab', './EllipsoidTangentPlane-e79f0327', './AxisAlignedBoundingBox-574d1269', './IntersectionTests-4352af03', './Plane-9825d2dd', './PolylinePipeline-9fd4ed2e', './EllipsoidGeodesic-1c2b601e', './EllipsoidRhumbLine-938626ba'], function (GeometryOffsetAttribute, arrayRemoveDuplicates, Transforms, Cartesian2, Check, ComponentDatatype, PolylineVolumeGeometryLibrary, CorridorGeometryLibrary, when, GeometryAttribute, GeometryAttributes, IndexDatatype, _Math, PolygonPipeline, RuntimeError, WebGLConstants, EllipsoidTangentPlane, AxisAlignedBoundingBox, IntersectionTests, Plane, PolylinePipeline, EllipsoidGeodesic, EllipsoidRhumbLine) { 'use strict';
+define([
+  './GeometryOffsetAttribute-6a692b56',
+  './arrayRemoveDuplicates-cf5c3227',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-f194c48b',
+  './PolylineVolumeGeometryLibrary-7c5a0257',
+  './CorridorGeometryLibrary-da07850e',
+  './when-4bbc8319',
+  './GeometryAttribute-e0d0d297',
+  './GeometryAttributes-7827a6c2',
+  './IndexDatatype-ee69f1fd',
+  './PolygonPipeline-d65e2b8f',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './EllipsoidTangentPlane-164dcfc9',
+  './AxisAlignedBoundingBox-4171efdd',
+  './IntersectionTests-26599c5e',
+  './Plane-4f333bc4',
+  './PolylinePipeline-3cab578f',
+  './EllipsoidGeodesic-6a52e412',
+  './EllipsoidRhumbLine-447d6334'
+], function (
+  GeometryOffsetAttribute,
+  arrayRemoveDuplicates,
+  Transforms,
+  Matrix2,
+  RuntimeError,
+  ComponentDatatype,
+  PolylineVolumeGeometryLibrary,
+  CorridorGeometryLibrary,
+  when,
+  GeometryAttribute,
+  GeometryAttributes,
+  IndexDatatype,
+  PolygonPipeline,
+  combine$1,
+  WebGLConstants,
+  EllipsoidTangentPlane,
+  AxisAlignedBoundingBox,
+  IntersectionTests,
+  Plane,
+  PolylinePipeline,
+  EllipsoidGeodesic,
+  EllipsoidRhumbLine
+) {
+  'use strict'
 
-  var cartesian1 = new Cartesian2.Cartesian3();
-  var cartesian2 = new Cartesian2.Cartesian3();
-  var cartesian3 = new Cartesian2.Cartesian3();
+  var cartesian1 = new Matrix2.Cartesian3()
+  var cartesian2 = new Matrix2.Cartesian3()
+  var cartesian3 = new Matrix2.Cartesian3()
 
   function scaleToSurface(positions, ellipsoid) {
     for (var i = 0; i < positions.length; i++) {
-      positions[i] = ellipsoid.scaleToGeodeticSurface(positions[i], positions[i]);
+      positions[i] = ellipsoid.scaleToGeodeticSurface(positions[i], positions[i])
     }
-    return positions;
+    return positions
   }
 
   function combine(computedPositions, cornerType) {
-    var wallIndices = [];
-    var positions = computedPositions.positions;
-    var corners = computedPositions.corners;
-    var endPositions = computedPositions.endPositions;
-    var attributes = new GeometryAttributes.GeometryAttributes();
-    var corner;
-    var leftCount = 0;
-    var rightCount = 0;
-    var i;
-    var indicesLength = 0;
-    var length;
+    var wallIndices = []
+    var positions = computedPositions.positions
+    var corners = computedPositions.corners
+    var endPositions = computedPositions.endPositions
+    var attributes = new GeometryAttributes.GeometryAttributes()
+    var corner
+    var leftCount = 0
+    var rightCount = 0
+    var i
+    var indicesLength = 0
+    var length
     for (i = 0; i < positions.length; i += 2) {
-      length = positions[i].length - 3;
-      leftCount += length; //subtracting 3 to account for duplicate points at corners
-      indicesLength += (length / 3) * 4;
-      rightCount += positions[i + 1].length - 3;
+      length = positions[i].length - 3
+      leftCount += length //subtracting 3 to account for duplicate points at corners
+      indicesLength += (length / 3) * 4
+      rightCount += positions[i + 1].length - 3
     }
-    leftCount += 3; //add back count for end positions
-    rightCount += 3;
+    leftCount += 3 //add back count for end positions
+    rightCount += 3
     for (i = 0; i < corners.length; i++) {
-      corner = corners[i];
-      var leftSide = corners[i].leftPositions;
+      corner = corners[i]
+      var leftSide = corners[i].leftPositions
       if (when.defined(leftSide)) {
-        length = leftSide.length;
-        leftCount += length;
-        indicesLength += (length / 3) * 2;
+        length = leftSide.length
+        leftCount += length
+        indicesLength += (length / 3) * 2
       } else {
-        length = corners[i].rightPositions.length;
-        rightCount += length;
-        indicesLength += (length / 3) * 2;
+        length = corners[i].rightPositions.length
+        rightCount += length
+        indicesLength += (length / 3) * 2
       }
     }
 
-    var addEndPositions = when.defined(endPositions);
-    var endPositionLength;
+    var addEndPositions = when.defined(endPositions)
+    var endPositionLength
     if (addEndPositions) {
-      endPositionLength = endPositions[0].length - 3;
-      leftCount += endPositionLength;
-      rightCount += endPositionLength;
-      endPositionLength /= 3;
-      indicesLength += endPositionLength * 4;
+      endPositionLength = endPositions[0].length - 3
+      leftCount += endPositionLength
+      rightCount += endPositionLength
+      endPositionLength /= 3
+      indicesLength += endPositionLength * 4
     }
-    var size = leftCount + rightCount;
-    var finalPositions = new Float64Array(size);
-    var front = 0;
-    var back = size - 1;
-    var UL, LL, UR, LR;
-    var rightPos, leftPos;
-    var halfLength = endPositionLength / 2;
+    var size = leftCount + rightCount
+    var finalPositions = new Float64Array(size)
+    var front = 0
+    var back = size - 1
+    var UL, LL, UR, LR
+    var rightPos, leftPos
+    var halfLength = endPositionLength / 2
 
-    var indices = IndexDatatype.IndexDatatype.createTypedArray(size / 3, indicesLength + 4);
-    var index = 0;
+    var indices = IndexDatatype.IndexDatatype.createTypedArray(size / 3, indicesLength + 4)
+    var index = 0
 
-    indices[index++] = front / 3;
-    indices[index++] = (back - 2) / 3;
+    indices[index++] = front / 3
+    indices[index++] = (back - 2) / 3
     if (addEndPositions) {
       // add rounded end
-      wallIndices.push(front / 3);
-      leftPos = cartesian1;
-      rightPos = cartesian2;
-      var firstEndPositions = endPositions[0];
+      wallIndices.push(front / 3)
+      leftPos = cartesian1
+      rightPos = cartesian2
+      var firstEndPositions = endPositions[0]
       for (i = 0; i < halfLength; i++) {
-        leftPos = Cartesian2.Cartesian3.fromArray(
-          firstEndPositions,
-          (halfLength - 1 - i) * 3,
-          leftPos
-        );
-        rightPos = Cartesian2.Cartesian3.fromArray(
-          firstEndPositions,
-          (halfLength + i) * 3,
-          rightPos
-        );
-        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, rightPos, front);
-        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(
-          finalPositions,
-          leftPos,
-          undefined,
-          back
-        );
+        leftPos = Matrix2.Cartesian3.fromArray(firstEndPositions, (halfLength - 1 - i) * 3, leftPos)
+        rightPos = Matrix2.Cartesian3.fromArray(firstEndPositions, (halfLength + i) * 3, rightPos)
+        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, rightPos, front)
+        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, leftPos, undefined, back)
 
-        LL = front / 3;
-        LR = LL + 1;
-        UL = (back - 2) / 3;
-        UR = UL - 1;
-        indices[index++] = UL;
-        indices[index++] = UR;
-        indices[index++] = LL;
-        indices[index++] = LR;
+        LL = front / 3
+        LR = LL + 1
+        UL = (back - 2) / 3
+        UR = UL - 1
+        indices[index++] = UL
+        indices[index++] = UR
+        indices[index++] = LL
+        indices[index++] = LR
 
-        front += 3;
-        back -= 3;
+        front += 3
+        back -= 3
       }
     }
 
-    var posIndex = 0;
-    var rightEdge = positions[posIndex++]; //add first two edges
-    var leftEdge = positions[posIndex++];
-    finalPositions.set(rightEdge, front);
-    finalPositions.set(leftEdge, back - leftEdge.length + 1);
+    var posIndex = 0
+    var rightEdge = positions[posIndex++] //add first two edges
+    var leftEdge = positions[posIndex++]
+    finalPositions.set(rightEdge, front)
+    finalPositions.set(leftEdge, back - leftEdge.length + 1)
 
-    length = leftEdge.length - 3;
-    wallIndices.push(front / 3, (back - 2) / 3);
+    length = leftEdge.length - 3
+    wallIndices.push(front / 3, (back - 2) / 3)
     for (i = 0; i < length; i += 3) {
-      LL = front / 3;
-      LR = LL + 1;
-      UL = (back - 2) / 3;
-      UR = UL - 1;
-      indices[index++] = UL;
-      indices[index++] = UR;
-      indices[index++] = LL;
-      indices[index++] = LR;
+      LL = front / 3
+      LR = LL + 1
+      UL = (back - 2) / 3
+      UR = UL - 1
+      indices[index++] = UL
+      indices[index++] = UR
+      indices[index++] = LL
+      indices[index++] = LR
 
-      front += 3;
-      back -= 3;
+      front += 3
+      back -= 3
     }
 
     for (i = 0; i < corners.length; i++) {
-      var j;
-      corner = corners[i];
-      var l = corner.leftPositions;
-      var r = corner.rightPositions;
-      var start;
-      var outsidePoint = cartesian3;
+      var j
+      corner = corners[i]
+      var l = corner.leftPositions
+      var r = corner.rightPositions
+      var start
+      var outsidePoint = cartesian3
       if (when.defined(l)) {
-        back -= 3;
-        start = UR;
-        wallIndices.push(LR);
+        back -= 3
+        start = UR
+        wallIndices.push(LR)
         for (j = 0; j < l.length / 3; j++) {
-          outsidePoint = Cartesian2.Cartesian3.fromArray(l, j * 3, outsidePoint);
-          indices[index++] = start - j - 1;
-          indices[index++] = start - j;
-          CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(
-            finalPositions,
-            outsidePoint,
-            undefined,
-            back
-          );
-          back -= 3;
+          outsidePoint = Matrix2.Cartesian3.fromArray(l, j * 3, outsidePoint)
+          indices[index++] = start - j - 1
+          indices[index++] = start - j
+          CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, outsidePoint, undefined, back)
+          back -= 3
         }
-        wallIndices.push(start - Math.floor(l.length / 6));
+        wallIndices.push(start - Math.floor(l.length / 6))
         if (cornerType === PolylineVolumeGeometryLibrary.CornerType.BEVELED) {
-          wallIndices.push((back - 2) / 3 + 1);
+          wallIndices.push((back - 2) / 3 + 1)
         }
-        front += 3;
+        front += 3
       } else {
-        front += 3;
-        start = LR;
-        wallIndices.push(UR);
+        front += 3
+        start = LR
+        wallIndices.push(UR)
         for (j = 0; j < r.length / 3; j++) {
-          outsidePoint = Cartesian2.Cartesian3.fromArray(r, j * 3, outsidePoint);
-          indices[index++] = start + j;
-          indices[index++] = start + j + 1;
-          CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(
-            finalPositions,
-            outsidePoint,
-            front
-          );
-          front += 3;
+          outsidePoint = Matrix2.Cartesian3.fromArray(r, j * 3, outsidePoint)
+          indices[index++] = start + j
+          indices[index++] = start + j + 1
+          CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, outsidePoint, front)
+          front += 3
         }
-        wallIndices.push(start + Math.floor(r.length / 6));
+        wallIndices.push(start + Math.floor(r.length / 6))
         if (cornerType === PolylineVolumeGeometryLibrary.CornerType.BEVELED) {
-          wallIndices.push(front / 3 - 1);
+          wallIndices.push(front / 3 - 1)
         }
-        back -= 3;
+        back -= 3
       }
-      rightEdge = positions[posIndex++];
-      leftEdge = positions[posIndex++];
-      rightEdge.splice(0, 3); //remove duplicate points added by corner
-      leftEdge.splice(leftEdge.length - 3, 3);
-      finalPositions.set(rightEdge, front);
-      finalPositions.set(leftEdge, back - leftEdge.length + 1);
-      length = leftEdge.length - 3;
+      rightEdge = positions[posIndex++]
+      leftEdge = positions[posIndex++]
+      rightEdge.splice(0, 3) //remove duplicate points added by corner
+      leftEdge.splice(leftEdge.length - 3, 3)
+      finalPositions.set(rightEdge, front)
+      finalPositions.set(leftEdge, back - leftEdge.length + 1)
+      length = leftEdge.length - 3
 
       for (j = 0; j < leftEdge.length; j += 3) {
-        LR = front / 3;
-        LL = LR - 1;
-        UR = (back - 2) / 3;
-        UL = UR + 1;
-        indices[index++] = UL;
-        indices[index++] = UR;
-        indices[index++] = LL;
-        indices[index++] = LR;
-        front += 3;
-        back -= 3;
+        LR = front / 3
+        LL = LR - 1
+        UR = (back - 2) / 3
+        UL = UR + 1
+        indices[index++] = UL
+        indices[index++] = UR
+        indices[index++] = LL
+        indices[index++] = LR
+        front += 3
+        back -= 3
       }
-      front -= 3;
-      back += 3;
-      wallIndices.push(front / 3, (back - 2) / 3);
+      front -= 3
+      back += 3
+      wallIndices.push(front / 3, (back - 2) / 3)
     }
 
     if (addEndPositions) {
       // add rounded end
-      front += 3;
-      back -= 3;
-      leftPos = cartesian1;
-      rightPos = cartesian2;
-      var lastEndPositions = endPositions[1];
+      front += 3
+      back -= 3
+      leftPos = cartesian1
+      rightPos = cartesian2
+      var lastEndPositions = endPositions[1]
       for (i = 0; i < halfLength; i++) {
-        leftPos = Cartesian2.Cartesian3.fromArray(
-          lastEndPositions,
-          (endPositionLength - i - 1) * 3,
-          leftPos
-        );
-        rightPos = Cartesian2.Cartesian3.fromArray(lastEndPositions, i * 3, rightPos);
-        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(
-          finalPositions,
-          leftPos,
-          undefined,
-          back
-        );
-        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, rightPos, front);
+        leftPos = Matrix2.Cartesian3.fromArray(lastEndPositions, (endPositionLength - i - 1) * 3, leftPos)
+        rightPos = Matrix2.Cartesian3.fromArray(lastEndPositions, i * 3, rightPos)
+        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, leftPos, undefined, back)
+        CorridorGeometryLibrary.CorridorGeometryLibrary.addAttribute(finalPositions, rightPos, front)
 
-        LR = front / 3;
-        LL = LR - 1;
-        UR = (back - 2) / 3;
-        UL = UR + 1;
-        indices[index++] = UL;
-        indices[index++] = UR;
-        indices[index++] = LL;
-        indices[index++] = LR;
+        LR = front / 3
+        LL = LR - 1
+        UR = (back - 2) / 3
+        UL = UR + 1
+        indices[index++] = UL
+        indices[index++] = UR
+        indices[index++] = LL
+        indices[index++] = LR
 
-        front += 3;
-        back -= 3;
+        front += 3
+        back -= 3
       }
 
-      wallIndices.push(front / 3);
+      wallIndices.push(front / 3)
     } else {
-      wallIndices.push(front / 3, (back - 2) / 3);
+      wallIndices.push(front / 3, (back - 2) / 3)
     }
-    indices[index++] = front / 3;
-    indices[index++] = (back - 2) / 3;
+    indices[index++] = front / 3
+    indices[index++] = (back - 2) / 3
 
     attributes.position = new GeometryAttribute.GeometryAttribute({
       componentDatatype: ComponentDatatype.ComponentDatatype.DOUBLE,
       componentsPerAttribute: 3,
-      values: finalPositions,
-    });
+      values: finalPositions
+    })
 
     return {
       attributes: attributes,
       indices: indices,
-      wallIndices: wallIndices,
-    };
+      wallIndices: wallIndices
+    }
   }
 
   function computePositionsExtruded(params) {
-    var ellipsoid = params.ellipsoid;
-    var computedPositions = CorridorGeometryLibrary.CorridorGeometryLibrary.computePositions(params);
-    var attr = combine(computedPositions, params.cornerType);
-    var wallIndices = attr.wallIndices;
-    var height = params.height;
-    var extrudedHeight = params.extrudedHeight;
-    var attributes = attr.attributes;
-    var indices = attr.indices;
-    var positions = attributes.position.values;
-    var length = positions.length;
-    var extrudedPositions = new Float64Array(length);
-    extrudedPositions.set(positions);
-    var newPositions = new Float64Array(length * 2);
+    var ellipsoid = params.ellipsoid
+    var computedPositions = CorridorGeometryLibrary.CorridorGeometryLibrary.computePositions(params)
+    var attr = combine(computedPositions, params.cornerType)
+    var wallIndices = attr.wallIndices
+    var height = params.height
+    var extrudedHeight = params.extrudedHeight
+    var attributes = attr.attributes
+    var indices = attr.indices
+    var positions = attributes.position.values
+    var length = positions.length
+    var extrudedPositions = new Float64Array(length)
+    extrudedPositions.set(positions)
+    var newPositions = new Float64Array(length * 2)
 
-    positions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(
-      positions,
-      height,
-      ellipsoid
-    );
-    extrudedPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(
-      extrudedPositions,
-      extrudedHeight,
-      ellipsoid
-    );
-    newPositions.set(positions);
-    newPositions.set(extrudedPositions, length);
-    attributes.position.values = newPositions;
+    positions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(positions, height, ellipsoid)
+    extrudedPositions = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(extrudedPositions, extrudedHeight, ellipsoid)
+    newPositions.set(positions)
+    newPositions.set(extrudedPositions, length)
+    attributes.position.values = newPositions
 
-    length /= 3;
+    length /= 3
     if (when.defined(params.offsetAttribute)) {
-      var applyOffset = new Uint8Array(length * 2);
+      var applyOffset = new Uint8Array(length * 2)
       if (params.offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.TOP) {
-        applyOffset = GeometryOffsetAttribute.arrayFill(applyOffset, 1, 0, length);
+        applyOffset = GeometryOffsetAttribute.arrayFill(applyOffset, 1, 0, length)
       } else {
-        var applyOffsetValue =
-          params.offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1;
-        applyOffset = GeometryOffsetAttribute.arrayFill(applyOffset, applyOffsetValue);
+        var applyOffsetValue = params.offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
+        applyOffset = GeometryOffsetAttribute.arrayFill(applyOffset, applyOffsetValue)
       }
 
       attributes.applyOffset = new GeometryAttribute.GeometryAttribute({
         componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
         componentsPerAttribute: 1,
-        values: applyOffset,
-      });
+        values: applyOffset
+      })
     }
 
-    var i;
-    var iLength = indices.length;
-    var newIndices = IndexDatatype.IndexDatatype.createTypedArray(
-      newPositions.length / 3,
-      (iLength + wallIndices.length) * 2
-    );
-    newIndices.set(indices);
-    var index = iLength;
+    var i
+    var iLength = indices.length
+    var newIndices = IndexDatatype.IndexDatatype.createTypedArray(newPositions.length / 3, (iLength + wallIndices.length) * 2)
+    newIndices.set(indices)
+    var index = iLength
     for (i = 0; i < iLength; i += 2) {
       // bottom indices
-      var v0 = indices[i];
-      var v1 = indices[i + 1];
-      newIndices[index++] = v0 + length;
-      newIndices[index++] = v1 + length;
+      var v0 = indices[i]
+      var v1 = indices[i + 1]
+      newIndices[index++] = v0 + length
+      newIndices[index++] = v1 + length
     }
 
-    var UL, LL;
+    var UL, LL
     for (i = 0; i < wallIndices.length; i++) {
       //wall indices
-      UL = wallIndices[i];
-      LL = UL + length;
-      newIndices[index++] = UL;
-      newIndices[index++] = LL;
+      UL = wallIndices[i]
+      LL = UL + length
+      newIndices[index++] = UL
+      newIndices[index++] = LL
     }
 
     return {
       attributes: attributes,
-      indices: newIndices,
-    };
+      indices: newIndices
+    }
   }
 
   /**
@@ -382,39 +386,33 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
    * });
    */
   function CorridorOutlineGeometry(options) {
-    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT);
-    var positions = options.positions;
-    var width = options.width;
+    options = when.defaultValue(options, when.defaultValue.EMPTY_OBJECT)
+    var positions = options.positions
+    var width = options.width
 
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("options.positions", positions);
-    Check.Check.typeOf.number("options.width", width);
+    RuntimeError.Check.typeOf.object('options.positions', positions)
+    RuntimeError.Check.typeOf.number('options.width', width)
     //>>includeEnd('debug');
 
-    var height = when.defaultValue(options.height, 0.0);
-    var extrudedHeight = when.defaultValue(options.extrudedHeight, height);
+    var height = when.defaultValue(options.height, 0.0)
+    var extrudedHeight = when.defaultValue(options.extrudedHeight, height)
 
-    this._positions = positions;
-    this._ellipsoid = Cartesian2.Ellipsoid.clone(
-      when.defaultValue(options.ellipsoid, Cartesian2.Ellipsoid.WGS84)
-    );
-    this._width = width;
-    this._height = Math.max(height, extrudedHeight);
-    this._extrudedHeight = Math.min(height, extrudedHeight);
-    this._cornerType = when.defaultValue(options.cornerType, PolylineVolumeGeometryLibrary.CornerType.ROUNDED);
-    this._granularity = when.defaultValue(
-      options.granularity,
-      _Math.CesiumMath.RADIANS_PER_DEGREE
-    );
-    this._offsetAttribute = options.offsetAttribute;
-    this._workerName = "createCorridorOutlineGeometry";
+    this._positions = positions
+    this._ellipsoid = Matrix2.Ellipsoid.clone(when.defaultValue(options.ellipsoid, Matrix2.Ellipsoid.WGS84))
+    this._width = width
+    this._height = Math.max(height, extrudedHeight)
+    this._extrudedHeight = Math.min(height, extrudedHeight)
+    this._cornerType = when.defaultValue(options.cornerType, PolylineVolumeGeometryLibrary.CornerType.ROUNDED)
+    this._granularity = when.defaultValue(options.granularity, ComponentDatatype.CesiumMath.RADIANS_PER_DEGREE)
+    this._offsetAttribute = options.offsetAttribute
+    this._workerName = 'createCorridorOutlineGeometry'
 
     /**
      * The number of elements used to pack the object into an array.
      * @type {Number}
      */
-    this.packedLength =
-      1 + positions.length * Cartesian2.Cartesian3.packedLength + Cartesian2.Ellipsoid.packedLength + 6;
+    this.packedLength = 1 + positions.length * Matrix2.Cartesian3.packedLength + Matrix2.Ellipsoid.packedLength + 6
   }
 
   /**
@@ -428,34 +426,34 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
    */
   CorridorOutlineGeometry.pack = function (value, array, startingIndex) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("value", value);
-    Check.Check.typeOf.object("array", array);
+    RuntimeError.Check.typeOf.object('value', value)
+    RuntimeError.Check.typeOf.object('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var positions = value._positions;
-    var length = positions.length;
-    array[startingIndex++] = length;
+    var positions = value._positions
+    var length = positions.length
+    array[startingIndex++] = length
 
-    for (var i = 0; i < length; ++i, startingIndex += Cartesian2.Cartesian3.packedLength) {
-      Cartesian2.Cartesian3.pack(positions[i], array, startingIndex);
+    for (var i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
+      Matrix2.Cartesian3.pack(positions[i], array, startingIndex)
     }
 
-    Cartesian2.Ellipsoid.pack(value._ellipsoid, array, startingIndex);
-    startingIndex += Cartesian2.Ellipsoid.packedLength;
+    Matrix2.Ellipsoid.pack(value._ellipsoid, array, startingIndex)
+    startingIndex += Matrix2.Ellipsoid.packedLength
 
-    array[startingIndex++] = value._width;
-    array[startingIndex++] = value._height;
-    array[startingIndex++] = value._extrudedHeight;
-    array[startingIndex++] = value._cornerType;
-    array[startingIndex++] = value._granularity;
-    array[startingIndex] = when.defaultValue(value._offsetAttribute, -1);
+    array[startingIndex++] = value._width
+    array[startingIndex++] = value._height
+    array[startingIndex++] = value._extrudedHeight
+    array[startingIndex++] = value._cornerType
+    array[startingIndex++] = value._granularity
+    array[startingIndex] = when.defaultValue(value._offsetAttribute, -1)
 
-    return array;
-  };
+    return array
+  }
 
-  var scratchEllipsoid = Cartesian2.Ellipsoid.clone(Cartesian2.Ellipsoid.UNIT_SPHERE);
+  var scratchEllipsoid = Matrix2.Ellipsoid.clone(Matrix2.Ellipsoid.UNIT_SPHERE)
   var scratchOptions = {
     positions: undefined,
     ellipsoid: scratchEllipsoid,
@@ -464,8 +462,8 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
     extrudedHeight: undefined,
     cornerType: undefined,
     granularity: undefined,
-    offsetAttribute: undefined,
-  };
+    offsetAttribute: undefined
+  }
 
   /**
    * Retrieves an instance from a packed array.
@@ -477,52 +475,50 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
    */
   CorridorOutlineGeometry.unpack = function (array, startingIndex, result) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("array", array);
+    RuntimeError.Check.typeOf.object('array', array)
     //>>includeEnd('debug');
 
-    startingIndex = when.defaultValue(startingIndex, 0);
+    startingIndex = when.defaultValue(startingIndex, 0)
 
-    var length = array[startingIndex++];
-    var positions = new Array(length);
+    var length = array[startingIndex++]
+    var positions = new Array(length)
 
-    for (var i = 0; i < length; ++i, startingIndex += Cartesian2.Cartesian3.packedLength) {
-      positions[i] = Cartesian2.Cartesian3.unpack(array, startingIndex);
+    for (var i = 0; i < length; ++i, startingIndex += Matrix2.Cartesian3.packedLength) {
+      positions[i] = Matrix2.Cartesian3.unpack(array, startingIndex)
     }
 
-    var ellipsoid = Cartesian2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid);
-    startingIndex += Cartesian2.Ellipsoid.packedLength;
+    var ellipsoid = Matrix2.Ellipsoid.unpack(array, startingIndex, scratchEllipsoid)
+    startingIndex += Matrix2.Ellipsoid.packedLength
 
-    var width = array[startingIndex++];
-    var height = array[startingIndex++];
-    var extrudedHeight = array[startingIndex++];
-    var cornerType = array[startingIndex++];
-    var granularity = array[startingIndex++];
-    var offsetAttribute = array[startingIndex];
+    var width = array[startingIndex++]
+    var height = array[startingIndex++]
+    var extrudedHeight = array[startingIndex++]
+    var cornerType = array[startingIndex++]
+    var granularity = array[startingIndex++]
+    var offsetAttribute = array[startingIndex]
 
     if (!when.defined(result)) {
-      scratchOptions.positions = positions;
-      scratchOptions.width = width;
-      scratchOptions.height = height;
-      scratchOptions.extrudedHeight = extrudedHeight;
-      scratchOptions.cornerType = cornerType;
-      scratchOptions.granularity = granularity;
-      scratchOptions.offsetAttribute =
-        offsetAttribute === -1 ? undefined : offsetAttribute;
-      return new CorridorOutlineGeometry(scratchOptions);
+      scratchOptions.positions = positions
+      scratchOptions.width = width
+      scratchOptions.height = height
+      scratchOptions.extrudedHeight = extrudedHeight
+      scratchOptions.cornerType = cornerType
+      scratchOptions.granularity = granularity
+      scratchOptions.offsetAttribute = offsetAttribute === -1 ? undefined : offsetAttribute
+      return new CorridorOutlineGeometry(scratchOptions)
     }
 
-    result._positions = positions;
-    result._ellipsoid = Cartesian2.Ellipsoid.clone(ellipsoid, result._ellipsoid);
-    result._width = width;
-    result._height = height;
-    result._extrudedHeight = extrudedHeight;
-    result._cornerType = cornerType;
-    result._granularity = granularity;
-    result._offsetAttribute =
-      offsetAttribute === -1 ? undefined : offsetAttribute;
+    result._positions = positions
+    result._ellipsoid = Matrix2.Ellipsoid.clone(ellipsoid, result._ellipsoid)
+    result._width = width
+    result._height = height
+    result._extrudedHeight = extrudedHeight
+    result._cornerType = cornerType
+    result._granularity = granularity
+    result._offsetAttribute = offsetAttribute === -1 ? undefined : offsetAttribute
 
-    return result;
-  };
+    return result
+  }
 
   /**
    * Computes the geometric representation of a corridor, including its vertices, indices, and a bounding sphere.
@@ -531,28 +527,20 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
    * @returns {Geometry|undefined} The computed vertices and indices.
    */
   CorridorOutlineGeometry.createGeometry = function (corridorOutlineGeometry) {
-    var positions = corridorOutlineGeometry._positions;
-    var width = corridorOutlineGeometry._width;
-    var ellipsoid = corridorOutlineGeometry._ellipsoid;
+    var positions = corridorOutlineGeometry._positions
+    var width = corridorOutlineGeometry._width
+    var ellipsoid = corridorOutlineGeometry._ellipsoid
 
-    positions = scaleToSurface(positions, ellipsoid);
-    var cleanPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(
-      positions,
-      Cartesian2.Cartesian3.equalsEpsilon
-    );
+    positions = scaleToSurface(positions, ellipsoid)
+    var cleanPositions = arrayRemoveDuplicates.arrayRemoveDuplicates(positions, Matrix2.Cartesian3.equalsEpsilon)
 
     if (cleanPositions.length < 2 || width <= 0) {
-      return;
+      return
     }
 
-    var height = corridorOutlineGeometry._height;
-    var extrudedHeight = corridorOutlineGeometry._extrudedHeight;
-    var extrude = !_Math.CesiumMath.equalsEpsilon(
-      height,
-      extrudedHeight,
-      0,
-      _Math.CesiumMath.EPSILON2
-    );
+    var height = corridorOutlineGeometry._height
+    var extrudedHeight = corridorOutlineGeometry._extrudedHeight
+    var extrude = !ComponentDatatype.CesiumMath.equalsEpsilon(height, extrudedHeight, 0, ComponentDatatype.CesiumMath.EPSILON2)
 
     var params = {
       ellipsoid: ellipsoid,
@@ -560,69 +548,51 @@ define(['./GeometryOffsetAttribute-6fce6185', './arrayRemoveDuplicates-89f704e4'
       width: width,
       cornerType: corridorOutlineGeometry._cornerType,
       granularity: corridorOutlineGeometry._granularity,
-      saveAttributes: false,
-    };
-    var attr;
+      saveAttributes: false
+    }
+    var attr
     if (extrude) {
-      params.height = height;
-      params.extrudedHeight = extrudedHeight;
-      params.offsetAttribute = corridorOutlineGeometry._offsetAttribute;
-      attr = computePositionsExtruded(params);
+      params.height = height
+      params.extrudedHeight = extrudedHeight
+      params.offsetAttribute = corridorOutlineGeometry._offsetAttribute
+      attr = computePositionsExtruded(params)
     } else {
-      var computedPositions = CorridorGeometryLibrary.CorridorGeometryLibrary.computePositions(params);
-      attr = combine(computedPositions, params.cornerType);
-      attr.attributes.position.values = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(
-        attr.attributes.position.values,
-        height,
-        ellipsoid
-      );
+      var computedPositions = CorridorGeometryLibrary.CorridorGeometryLibrary.computePositions(params)
+      attr = combine(computedPositions, params.cornerType)
+      attr.attributes.position.values = PolygonPipeline.PolygonPipeline.scaleToGeodeticHeight(attr.attributes.position.values, height, ellipsoid)
 
       if (when.defined(corridorOutlineGeometry._offsetAttribute)) {
-        var length = attr.attributes.position.values.length;
-        var applyOffset = new Uint8Array(length / 3);
-        var offsetValue =
-          corridorOutlineGeometry._offsetAttribute ===
-          GeometryOffsetAttribute.GeometryOffsetAttribute.NONE
-            ? 0
-            : 1;
-        GeometryOffsetAttribute.arrayFill(applyOffset, offsetValue);
+        var length = attr.attributes.position.values.length
+        var applyOffset = new Uint8Array(length / 3)
+        var offsetValue = corridorOutlineGeometry._offsetAttribute === GeometryOffsetAttribute.GeometryOffsetAttribute.NONE ? 0 : 1
+        GeometryOffsetAttribute.arrayFill(applyOffset, offsetValue)
         attr.attributes.applyOffset = new GeometryAttribute.GeometryAttribute({
           componentDatatype: ComponentDatatype.ComponentDatatype.UNSIGNED_BYTE,
           componentsPerAttribute: 1,
-          values: applyOffset,
-        });
+          values: applyOffset
+        })
       }
     }
-    var attributes = attr.attributes;
-    var boundingSphere = Transforms.BoundingSphere.fromVertices(
-      attributes.position.values,
-      undefined,
-      3
-    );
+    var attributes = attr.attributes
+    var boundingSphere = Transforms.BoundingSphere.fromVertices(attributes.position.values, undefined, 3)
 
     return new GeometryAttribute.Geometry({
       attributes: attributes,
       indices: attr.indices,
       primitiveType: GeometryAttribute.PrimitiveType.LINES,
       boundingSphere: boundingSphere,
-      offsetAttribute: corridorOutlineGeometry._offsetAttribute,
-    });
-  };
+      offsetAttribute: corridorOutlineGeometry._offsetAttribute
+    })
+  }
 
   function createCorridorOutlineGeometry(corridorOutlineGeometry, offset) {
     if (when.defined(offset)) {
-      corridorOutlineGeometry = CorridorOutlineGeometry.unpack(
-        corridorOutlineGeometry,
-        offset
-      );
+      corridorOutlineGeometry = CorridorOutlineGeometry.unpack(corridorOutlineGeometry, offset)
     }
-    corridorOutlineGeometry._ellipsoid = Cartesian2.Ellipsoid.clone(
-      corridorOutlineGeometry._ellipsoid
-    );
-    return CorridorOutlineGeometry.createGeometry(corridorOutlineGeometry);
+    corridorOutlineGeometry._ellipsoid = Matrix2.Ellipsoid.clone(corridorOutlineGeometry._ellipsoid)
+    return CorridorOutlineGeometry.createGeometry(corridorOutlineGeometry)
   }
 
-  return createCorridorOutlineGeometry;
-
-});
+  return createCorridorOutlineGeometry
+})
 //# sourceMappingURL=createCorridorOutlineGeometry.js.map

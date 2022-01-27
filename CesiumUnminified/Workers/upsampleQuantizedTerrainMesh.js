@@ -18,17 +18,52 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian2-e9bb1bb3', './when-208fe5b0', './TerrainEncoding-8d274519', './IndexDatatype-3a89c589', './Check-5e798bbf', './Math-56f06cd5', './OrientedBoundingBox-dfa225d1', './createTaskProcessorWorker', './RuntimeError-7f634f5d', './ComponentDatatype-cc8f5f00', './WebGLConstants-5e2a49ab', './EllipsoidTangentPlane-e79f0327', './AxisAlignedBoundingBox-574d1269', './IntersectionTests-4352af03', './Plane-9825d2dd'], function (AttributeCompression, Transforms, Cartesian2, when, TerrainEncoding, IndexDatatype, Check, _Math, OrientedBoundingBox, createTaskProcessorWorker, RuntimeError, ComponentDatatype, WebGLConstants, EllipsoidTangentPlane, AxisAlignedBoundingBox, IntersectionTests, Plane) { 'use strict';
+define([
+  './AttributeCompression-1f6679e1',
+  './Transforms-86b6fa28',
+  './Matrix2-91d5b6af',
+  './when-4bbc8319',
+  './TerrainEncoding-304a796a',
+  './IndexDatatype-ee69f1fd',
+  './RuntimeError-346a3079',
+  './ComponentDatatype-f194c48b',
+  './OrientedBoundingBox-79e3c3fe',
+  './createTaskProcessorWorker',
+  './combine-83860057',
+  './WebGLConstants-1c8239cc',
+  './EllipsoidTangentPlane-164dcfc9',
+  './AxisAlignedBoundingBox-4171efdd',
+  './IntersectionTests-26599c5e',
+  './Plane-4f333bc4'
+], function (
+  AttributeCompression,
+  Transforms,
+  Matrix2,
+  when,
+  TerrainEncoding,
+  IndexDatatype,
+  RuntimeError,
+  ComponentDatatype,
+  OrientedBoundingBox,
+  createTaskProcessorWorker,
+  combine,
+  WebGLConstants,
+  EllipsoidTangentPlane,
+  AxisAlignedBoundingBox,
+  IntersectionTests,
+  Plane
+) {
+  'use strict'
 
   /**
    * Contains functions for operating on 2D triangles.
    *
    * @namespace Intersections2D
    */
-  var Intersections2D = {};
+  var Intersections2D = {}
 
   /**
    * Splits a 2D triangle at given axis-aligned threshold value and returns the resulting
@@ -56,182 +91,175 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
    * var result = Cesium.Intersections2D.clipTriangleAtAxisAlignedThreshold(0.5, false, 0.2, 0.6, 0.4);
    * // result === [2, 0, -1, 1, 0, 0.25, -1, 1, 2, 0.5]
    */
-  Intersections2D.clipTriangleAtAxisAlignedThreshold = function (
-    threshold,
-    keepAbove,
-    u0,
-    u1,
-    u2,
-    result
-  ) {
+  Intersections2D.clipTriangleAtAxisAlignedThreshold = function (threshold, keepAbove, u0, u1, u2, result) {
     //>>includeStart('debug', pragmas.debug);
     if (!when.defined(threshold)) {
-      throw new Check.DeveloperError("threshold is required.");
+      throw new RuntimeError.DeveloperError('threshold is required.')
     }
     if (!when.defined(keepAbove)) {
-      throw new Check.DeveloperError("keepAbove is required.");
+      throw new RuntimeError.DeveloperError('keepAbove is required.')
     }
     if (!when.defined(u0)) {
-      throw new Check.DeveloperError("u0 is required.");
+      throw new RuntimeError.DeveloperError('u0 is required.')
     }
     if (!when.defined(u1)) {
-      throw new Check.DeveloperError("u1 is required.");
+      throw new RuntimeError.DeveloperError('u1 is required.')
     }
     if (!when.defined(u2)) {
-      throw new Check.DeveloperError("u2 is required.");
+      throw new RuntimeError.DeveloperError('u2 is required.')
     }
     //>>includeEnd('debug');
 
     if (!when.defined(result)) {
-      result = [];
+      result = []
     } else {
-      result.length = 0;
+      result.length = 0
     }
 
-    var u0Behind;
-    var u1Behind;
-    var u2Behind;
+    var u0Behind
+    var u1Behind
+    var u2Behind
     if (keepAbove) {
-      u0Behind = u0 < threshold;
-      u1Behind = u1 < threshold;
-      u2Behind = u2 < threshold;
+      u0Behind = u0 < threshold
+      u1Behind = u1 < threshold
+      u2Behind = u2 < threshold
     } else {
-      u0Behind = u0 > threshold;
-      u1Behind = u1 > threshold;
-      u2Behind = u2 > threshold;
+      u0Behind = u0 > threshold
+      u1Behind = u1 > threshold
+      u2Behind = u2 > threshold
     }
 
-    var numBehind = u0Behind + u1Behind + u2Behind;
+    var numBehind = u0Behind + u1Behind + u2Behind
 
-    var u01Ratio;
-    var u02Ratio;
-    var u12Ratio;
-    var u10Ratio;
-    var u20Ratio;
-    var u21Ratio;
+    var u01Ratio
+    var u02Ratio
+    var u12Ratio
+    var u10Ratio
+    var u20Ratio
+    var u21Ratio
 
     if (numBehind === 1) {
       if (u0Behind) {
-        u01Ratio = (threshold - u0) / (u1 - u0);
-        u02Ratio = (threshold - u0) / (u2 - u0);
+        u01Ratio = (threshold - u0) / (u1 - u0)
+        u02Ratio = (threshold - u0) / (u2 - u0)
 
-        result.push(1);
+        result.push(1)
 
-        result.push(2);
+        result.push(2)
 
         if (u02Ratio !== 1.0) {
-          result.push(-1);
-          result.push(0);
-          result.push(2);
-          result.push(u02Ratio);
+          result.push(-1)
+          result.push(0)
+          result.push(2)
+          result.push(u02Ratio)
         }
 
         if (u01Ratio !== 1.0) {
-          result.push(-1);
-          result.push(0);
-          result.push(1);
-          result.push(u01Ratio);
+          result.push(-1)
+          result.push(0)
+          result.push(1)
+          result.push(u01Ratio)
         }
       } else if (u1Behind) {
-        u12Ratio = (threshold - u1) / (u2 - u1);
-        u10Ratio = (threshold - u1) / (u0 - u1);
+        u12Ratio = (threshold - u1) / (u2 - u1)
+        u10Ratio = (threshold - u1) / (u0 - u1)
 
-        result.push(2);
+        result.push(2)
 
-        result.push(0);
+        result.push(0)
 
         if (u10Ratio !== 1.0) {
-          result.push(-1);
-          result.push(1);
-          result.push(0);
-          result.push(u10Ratio);
+          result.push(-1)
+          result.push(1)
+          result.push(0)
+          result.push(u10Ratio)
         }
 
         if (u12Ratio !== 1.0) {
-          result.push(-1);
-          result.push(1);
-          result.push(2);
-          result.push(u12Ratio);
+          result.push(-1)
+          result.push(1)
+          result.push(2)
+          result.push(u12Ratio)
         }
       } else if (u2Behind) {
-        u20Ratio = (threshold - u2) / (u0 - u2);
-        u21Ratio = (threshold - u2) / (u1 - u2);
+        u20Ratio = (threshold - u2) / (u0 - u2)
+        u21Ratio = (threshold - u2) / (u1 - u2)
 
-        result.push(0);
+        result.push(0)
 
-        result.push(1);
+        result.push(1)
 
         if (u21Ratio !== 1.0) {
-          result.push(-1);
-          result.push(2);
-          result.push(1);
-          result.push(u21Ratio);
+          result.push(-1)
+          result.push(2)
+          result.push(1)
+          result.push(u21Ratio)
         }
 
         if (u20Ratio !== 1.0) {
-          result.push(-1);
-          result.push(2);
-          result.push(0);
-          result.push(u20Ratio);
+          result.push(-1)
+          result.push(2)
+          result.push(0)
+          result.push(u20Ratio)
         }
       }
     } else if (numBehind === 2) {
       if (!u0Behind && u0 !== threshold) {
-        u10Ratio = (threshold - u1) / (u0 - u1);
-        u20Ratio = (threshold - u2) / (u0 - u2);
+        u10Ratio = (threshold - u1) / (u0 - u1)
+        u20Ratio = (threshold - u2) / (u0 - u2)
 
-        result.push(0);
+        result.push(0)
 
-        result.push(-1);
-        result.push(1);
-        result.push(0);
-        result.push(u10Ratio);
+        result.push(-1)
+        result.push(1)
+        result.push(0)
+        result.push(u10Ratio)
 
-        result.push(-1);
-        result.push(2);
-        result.push(0);
-        result.push(u20Ratio);
+        result.push(-1)
+        result.push(2)
+        result.push(0)
+        result.push(u20Ratio)
       } else if (!u1Behind && u1 !== threshold) {
-        u21Ratio = (threshold - u2) / (u1 - u2);
-        u01Ratio = (threshold - u0) / (u1 - u0);
+        u21Ratio = (threshold - u2) / (u1 - u2)
+        u01Ratio = (threshold - u0) / (u1 - u0)
 
-        result.push(1);
+        result.push(1)
 
-        result.push(-1);
-        result.push(2);
-        result.push(1);
-        result.push(u21Ratio);
+        result.push(-1)
+        result.push(2)
+        result.push(1)
+        result.push(u21Ratio)
 
-        result.push(-1);
-        result.push(0);
-        result.push(1);
-        result.push(u01Ratio);
+        result.push(-1)
+        result.push(0)
+        result.push(1)
+        result.push(u01Ratio)
       } else if (!u2Behind && u2 !== threshold) {
-        u02Ratio = (threshold - u0) / (u2 - u0);
-        u12Ratio = (threshold - u1) / (u2 - u1);
+        u02Ratio = (threshold - u0) / (u2 - u0)
+        u12Ratio = (threshold - u1) / (u2 - u1)
 
-        result.push(2);
+        result.push(2)
 
-        result.push(-1);
-        result.push(0);
-        result.push(2);
-        result.push(u02Ratio);
+        result.push(-1)
+        result.push(0)
+        result.push(2)
+        result.push(u02Ratio)
 
-        result.push(-1);
-        result.push(1);
-        result.push(2);
-        result.push(u12Ratio);
+        result.push(-1)
+        result.push(1)
+        result.push(2)
+        result.push(u12Ratio)
       }
     } else if (numBehind !== 3) {
       // Completely in front of threshold
-      result.push(0);
-      result.push(1);
-      result.push(2);
+      result.push(0)
+      result.push(1)
+      result.push(2)
     }
     // else Completely behind threshold
 
-    return result;
-  };
+    return result
+  }
 
   /**
    * Compute the barycentric coordinates of a 2D position within a 2D triangle.
@@ -252,63 +280,53 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
    * var result = Cesium.Intersections2D.computeBarycentricCoordinates(0.0, 0.0, 0.0, 1.0, -1, -0.5, 1, -0.5);
    * // result === new Cesium.Cartesian3(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0);
    */
-  Intersections2D.computeBarycentricCoordinates = function (
-    x,
-    y,
-    x1,
-    y1,
-    x2,
-    y2,
-    x3,
-    y3,
-    result
-  ) {
+  Intersections2D.computeBarycentricCoordinates = function (x, y, x1, y1, x2, y2, x3, y3, result) {
     //>>includeStart('debug', pragmas.debug);
     if (!when.defined(x)) {
-      throw new Check.DeveloperError("x is required.");
+      throw new RuntimeError.DeveloperError('x is required.')
     }
     if (!when.defined(y)) {
-      throw new Check.DeveloperError("y is required.");
+      throw new RuntimeError.DeveloperError('y is required.')
     }
     if (!when.defined(x1)) {
-      throw new Check.DeveloperError("x1 is required.");
+      throw new RuntimeError.DeveloperError('x1 is required.')
     }
     if (!when.defined(y1)) {
-      throw new Check.DeveloperError("y1 is required.");
+      throw new RuntimeError.DeveloperError('y1 is required.')
     }
     if (!when.defined(x2)) {
-      throw new Check.DeveloperError("x2 is required.");
+      throw new RuntimeError.DeveloperError('x2 is required.')
     }
     if (!when.defined(y2)) {
-      throw new Check.DeveloperError("y2 is required.");
+      throw new RuntimeError.DeveloperError('y2 is required.')
     }
     if (!when.defined(x3)) {
-      throw new Check.DeveloperError("x3 is required.");
+      throw new RuntimeError.DeveloperError('x3 is required.')
     }
     if (!when.defined(y3)) {
-      throw new Check.DeveloperError("y3 is required.");
+      throw new RuntimeError.DeveloperError('y3 is required.')
     }
     //>>includeEnd('debug');
 
-    var x1mx3 = x1 - x3;
-    var x3mx2 = x3 - x2;
-    var y2my3 = y2 - y3;
-    var y1my3 = y1 - y3;
-    var inverseDeterminant = 1.0 / (y2my3 * x1mx3 + x3mx2 * y1my3);
-    var ymy3 = y - y3;
-    var xmx3 = x - x3;
-    var l1 = (y2my3 * xmx3 + x3mx2 * ymy3) * inverseDeterminant;
-    var l2 = (-y1my3 * xmx3 + x1mx3 * ymy3) * inverseDeterminant;
-    var l3 = 1.0 - l1 - l2;
+    var x1mx3 = x1 - x3
+    var x3mx2 = x3 - x2
+    var y2my3 = y2 - y3
+    var y1my3 = y1 - y3
+    var inverseDeterminant = 1.0 / (y2my3 * x1mx3 + x3mx2 * y1my3)
+    var ymy3 = y - y3
+    var xmx3 = x - x3
+    var l1 = (y2my3 * xmx3 + x3mx2 * ymy3) * inverseDeterminant
+    var l2 = (-y1my3 * xmx3 + x1mx3 * ymy3) * inverseDeterminant
+    var l3 = 1.0 - l1 - l2
 
     if (when.defined(result)) {
-      result.x = l1;
-      result.y = l2;
-      result.z = l3;
-      return result;
+      result.x = l1
+      result.y = l2
+      result.z = l3
+      return result
     }
-    return new Cartesian2.Cartesian3(l1, l2, l3);
-  };
+    return new Matrix2.Cartesian3(l1, l2, l3)
+  }
 
   /**
    * Compute the intersection between 2 line segments
@@ -329,270 +347,208 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
    * var result = Cesium.Intersections2D.computeLineSegmentLineSegmentIntersection(0.0, 0.0, 0.0, 2.0, -1, 1, 1, 1);
    * // result === new Cesium.Cartesian2(0.0, 1.0);
    */
-  Intersections2D.computeLineSegmentLineSegmentIntersection = function (
-    x00,
-    y00,
-    x01,
-    y01,
-    x10,
-    y10,
-    x11,
-    y11,
-    result
-  ) {
+  Intersections2D.computeLineSegmentLineSegmentIntersection = function (x00, y00, x01, y01, x10, y10, x11, y11, result) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.number("x00", x00);
-    Check.Check.typeOf.number("y00", y00);
-    Check.Check.typeOf.number("x01", x01);
-    Check.Check.typeOf.number("y01", y01);
-    Check.Check.typeOf.number("x10", x10);
-    Check.Check.typeOf.number("y10", y10);
-    Check.Check.typeOf.number("x11", x11);
-    Check.Check.typeOf.number("y11", y11);
+    RuntimeError.Check.typeOf.number('x00', x00)
+    RuntimeError.Check.typeOf.number('y00', y00)
+    RuntimeError.Check.typeOf.number('x01', x01)
+    RuntimeError.Check.typeOf.number('y01', y01)
+    RuntimeError.Check.typeOf.number('x10', x10)
+    RuntimeError.Check.typeOf.number('y10', y10)
+    RuntimeError.Check.typeOf.number('x11', x11)
+    RuntimeError.Check.typeOf.number('y11', y11)
     //>>includeEnd('debug');
 
-    var numerator1A = (x11 - x10) * (y00 - y10) - (y11 - y10) * (x00 - x10);
-    var numerator1B = (x01 - x00) * (y00 - y10) - (y01 - y00) * (x00 - x10);
-    var denominator1 = (y11 - y10) * (x01 - x00) - (x11 - x10) * (y01 - y00);
+    var numerator1A = (x11 - x10) * (y00 - y10) - (y11 - y10) * (x00 - x10)
+    var numerator1B = (x01 - x00) * (y00 - y10) - (y01 - y00) * (x00 - x10)
+    var denominator1 = (y11 - y10) * (x01 - x00) - (x11 - x10) * (y01 - y00)
 
     // If denominator = 0, then lines are parallel. If denominator = 0 and both numerators are 0, then coincident
     if (denominator1 === 0) {
-      return;
+      return
     }
 
-    var ua1 = numerator1A / denominator1;
-    var ub1 = numerator1B / denominator1;
+    var ua1 = numerator1A / denominator1
+    var ub1 = numerator1B / denominator1
 
     if (ua1 >= 0 && ua1 <= 1 && ub1 >= 0 && ub1 <= 1) {
       if (!when.defined(result)) {
-        result = new Cartesian2.Cartesian2();
+        result = new Matrix2.Cartesian2()
       }
 
-      result.x = x00 + ua1 * (x01 - x00);
-      result.y = y00 + ua1 * (y01 - y00);
+      result.x = x00 + ua1 * (x01 - x00)
+      result.y = y00 + ua1 * (y01 - y00)
 
-      return result;
+      return result
     }
-  };
+  }
 
-  var maxShort = 32767;
-  var halfMaxShort = (maxShort / 2) | 0;
+  var maxShort = 32767
+  var halfMaxShort = (maxShort / 2) | 0
 
-  var clipScratch = [];
-  var clipScratch2 = [];
-  var verticesScratch = [];
-  var cartographicScratch = new Cartesian2.Cartographic();
-  var cartesian3Scratch = new Cartesian2.Cartesian3();
-  var uScratch = [];
-  var vScratch = [];
-  var heightScratch = [];
-  var indicesScratch = [];
-  var normalsScratch = [];
-  var horizonOcclusionPointScratch = new Cartesian2.Cartesian3();
-  var boundingSphereScratch = new Transforms.BoundingSphere();
-  var orientedBoundingBoxScratch = new OrientedBoundingBox.OrientedBoundingBox();
-  var decodeTexCoordsScratch = new Cartesian2.Cartesian2();
-  var octEncodedNormalScratch = new Cartesian2.Cartesian3();
+  var clipScratch = []
+  var clipScratch2 = []
+  var verticesScratch = []
+  var cartographicScratch = new Matrix2.Cartographic()
+  var cartesian3Scratch = new Matrix2.Cartesian3()
+  var uScratch = []
+  var vScratch = []
+  var heightScratch = []
+  var indicesScratch = []
+  var normalsScratch = []
+  var horizonOcclusionPointScratch = new Matrix2.Cartesian3()
+  var boundingSphereScratch = new Transforms.BoundingSphere()
+  var orientedBoundingBoxScratch = new OrientedBoundingBox.OrientedBoundingBox()
+  var decodeTexCoordsScratch = new Matrix2.Cartesian2()
+  var octEncodedNormalScratch = new Matrix2.Cartesian3()
 
   function upsampleQuantizedTerrainMesh(parameters, transferableObjects) {
-    var isEastChild = parameters.isEastChild;
-    var isNorthChild = parameters.isNorthChild;
+    var isEastChild = parameters.isEastChild
+    var isNorthChild = parameters.isNorthChild
 
-    var minU = isEastChild ? halfMaxShort : 0;
-    var maxU = isEastChild ? maxShort : halfMaxShort;
-    var minV = isNorthChild ? halfMaxShort : 0;
-    var maxV = isNorthChild ? maxShort : halfMaxShort;
+    var minU = isEastChild ? halfMaxShort : 0
+    var maxU = isEastChild ? maxShort : halfMaxShort
+    var minV = isNorthChild ? halfMaxShort : 0
+    var maxV = isNorthChild ? maxShort : halfMaxShort
 
-    var uBuffer = uScratch;
-    var vBuffer = vScratch;
-    var heightBuffer = heightScratch;
-    var normalBuffer = normalsScratch;
+    var uBuffer = uScratch
+    var vBuffer = vScratch
+    var heightBuffer = heightScratch
+    var normalBuffer = normalsScratch
 
-    uBuffer.length = 0;
-    vBuffer.length = 0;
-    heightBuffer.length = 0;
-    normalBuffer.length = 0;
+    uBuffer.length = 0
+    vBuffer.length = 0
+    heightBuffer.length = 0
+    normalBuffer.length = 0
 
-    var indices = indicesScratch;
-    indices.length = 0;
+    var indices = indicesScratch
+    indices.length = 0
 
-    var vertexMap = {};
+    var vertexMap = {}
 
-    var parentVertices = parameters.vertices;
-    var parentIndices = parameters.indices;
-    parentIndices = parentIndices.subarray(0, parameters.indexCountWithoutSkirts);
+    var parentVertices = parameters.vertices
+    var parentIndices = parameters.indices
+    parentIndices = parentIndices.subarray(0, parameters.indexCountWithoutSkirts)
 
-    var encoding = TerrainEncoding.TerrainEncoding.clone(parameters.encoding);
-    var hasVertexNormals = encoding.hasVertexNormals;
+    var encoding = TerrainEncoding.TerrainEncoding.clone(parameters.encoding)
+    var hasVertexNormals = encoding.hasVertexNormals
 
-    var vertexCount = 0;
-    var quantizedVertexCount = parameters.vertexCountWithoutSkirts;
+    var vertexCount = 0
+    var quantizedVertexCount = parameters.vertexCountWithoutSkirts
 
-    var parentMinimumHeight = parameters.minimumHeight;
-    var parentMaximumHeight = parameters.maximumHeight;
+    var parentMinimumHeight = parameters.minimumHeight
+    var parentMaximumHeight = parameters.maximumHeight
 
-    var parentUBuffer = new Array(quantizedVertexCount);
-    var parentVBuffer = new Array(quantizedVertexCount);
-    var parentHeightBuffer = new Array(quantizedVertexCount);
-    var parentNormalBuffer = hasVertexNormals
-      ? new Array(quantizedVertexCount * 2)
-      : undefined;
+    var parentUBuffer = new Array(quantizedVertexCount)
+    var parentVBuffer = new Array(quantizedVertexCount)
+    var parentHeightBuffer = new Array(quantizedVertexCount)
+    var parentNormalBuffer = hasVertexNormals ? new Array(quantizedVertexCount * 2) : undefined
 
-    var threshold = 20;
-    var height;
+    var threshold = 20
+    var height
 
-    var i, n;
-    var u, v;
+    var i, n
+    var u, v
     for (i = 0, n = 0; i < quantizedVertexCount; ++i, n += 2) {
-      var texCoords = encoding.decodeTextureCoordinates(
-        parentVertices,
-        i,
-        decodeTexCoordsScratch
-      );
-      height = encoding.decodeHeight(parentVertices, i);
+      var texCoords = encoding.decodeTextureCoordinates(parentVertices, i, decodeTexCoordsScratch)
+      height = encoding.decodeHeight(parentVertices, i)
 
-      u = _Math.CesiumMath.clamp((texCoords.x * maxShort) | 0, 0, maxShort);
-      v = _Math.CesiumMath.clamp((texCoords.y * maxShort) | 0, 0, maxShort);
-      parentHeightBuffer[i] = _Math.CesiumMath.clamp(
-        (((height - parentMinimumHeight) /
-          (parentMaximumHeight - parentMinimumHeight)) *
-          maxShort) |
-          0,
+      u = ComponentDatatype.CesiumMath.clamp((texCoords.x * maxShort) | 0, 0, maxShort)
+      v = ComponentDatatype.CesiumMath.clamp((texCoords.y * maxShort) | 0, 0, maxShort)
+      parentHeightBuffer[i] = ComponentDatatype.CesiumMath.clamp(
+        (((height - parentMinimumHeight) / (parentMaximumHeight - parentMinimumHeight)) * maxShort) | 0,
         0,
         maxShort
-      );
+      )
 
       if (u < threshold) {
-        u = 0;
+        u = 0
       }
 
       if (v < threshold) {
-        v = 0;
+        v = 0
       }
 
       if (maxShort - u < threshold) {
-        u = maxShort;
+        u = maxShort
       }
 
       if (maxShort - v < threshold) {
-        v = maxShort;
+        v = maxShort
       }
 
-      parentUBuffer[i] = u;
-      parentVBuffer[i] = v;
+      parentUBuffer[i] = u
+      parentVBuffer[i] = v
 
       if (hasVertexNormals) {
-        var encodedNormal = encoding.getOctEncodedNormal(
-          parentVertices,
-          i,
-          octEncodedNormalScratch
-        );
-        parentNormalBuffer[n] = encodedNormal.x;
-        parentNormalBuffer[n + 1] = encodedNormal.y;
+        var encodedNormal = encoding.getOctEncodedNormal(parentVertices, i, octEncodedNormalScratch)
+        parentNormalBuffer[n] = encodedNormal.x
+        parentNormalBuffer[n + 1] = encodedNormal.y
       }
 
       if (
-        ((isEastChild && u >= halfMaxShort) ||
-          (!isEastChild && u <= halfMaxShort)) &&
-        ((isNorthChild && v >= halfMaxShort) ||
-          (!isNorthChild && v <= halfMaxShort))
+        ((isEastChild && u >= halfMaxShort) || (!isEastChild && u <= halfMaxShort)) &&
+        ((isNorthChild && v >= halfMaxShort) || (!isNorthChild && v <= halfMaxShort))
       ) {
-        vertexMap[i] = vertexCount;
-        uBuffer.push(u);
-        vBuffer.push(v);
-        heightBuffer.push(parentHeightBuffer[i]);
+        vertexMap[i] = vertexCount
+        uBuffer.push(u)
+        vBuffer.push(v)
+        heightBuffer.push(parentHeightBuffer[i])
         if (hasVertexNormals) {
-          normalBuffer.push(parentNormalBuffer[n]);
-          normalBuffer.push(parentNormalBuffer[n + 1]);
+          normalBuffer.push(parentNormalBuffer[n])
+          normalBuffer.push(parentNormalBuffer[n + 1])
         }
 
-        ++vertexCount;
+        ++vertexCount
       }
     }
 
-    var triangleVertices = [];
-    triangleVertices.push(new Vertex());
-    triangleVertices.push(new Vertex());
-    triangleVertices.push(new Vertex());
+    var triangleVertices = []
+    triangleVertices.push(new Vertex())
+    triangleVertices.push(new Vertex())
+    triangleVertices.push(new Vertex())
 
-    var clippedTriangleVertices = [];
-    clippedTriangleVertices.push(new Vertex());
-    clippedTriangleVertices.push(new Vertex());
-    clippedTriangleVertices.push(new Vertex());
+    var clippedTriangleVertices = []
+    clippedTriangleVertices.push(new Vertex())
+    clippedTriangleVertices.push(new Vertex())
+    clippedTriangleVertices.push(new Vertex())
 
-    var clippedIndex;
-    var clipped2;
+    var clippedIndex
+    var clipped2
 
     for (i = 0; i < parentIndices.length; i += 3) {
-      var i0 = parentIndices[i];
-      var i1 = parentIndices[i + 1];
-      var i2 = parentIndices[i + 2];
+      var i0 = parentIndices[i]
+      var i1 = parentIndices[i + 1]
+      var i2 = parentIndices[i + 2]
 
-      var u0 = parentUBuffer[i0];
-      var u1 = parentUBuffer[i1];
-      var u2 = parentUBuffer[i2];
+      var u0 = parentUBuffer[i0]
+      var u1 = parentUBuffer[i1]
+      var u2 = parentUBuffer[i2]
 
-      triangleVertices[0].initializeIndexed(
-        parentUBuffer,
-        parentVBuffer,
-        parentHeightBuffer,
-        parentNormalBuffer,
-        i0
-      );
-      triangleVertices[1].initializeIndexed(
-        parentUBuffer,
-        parentVBuffer,
-        parentHeightBuffer,
-        parentNormalBuffer,
-        i1
-      );
-      triangleVertices[2].initializeIndexed(
-        parentUBuffer,
-        parentVBuffer,
-        parentHeightBuffer,
-        parentNormalBuffer,
-        i2
-      );
+      triangleVertices[0].initializeIndexed(parentUBuffer, parentVBuffer, parentHeightBuffer, parentNormalBuffer, i0)
+      triangleVertices[1].initializeIndexed(parentUBuffer, parentVBuffer, parentHeightBuffer, parentNormalBuffer, i1)
+      triangleVertices[2].initializeIndexed(parentUBuffer, parentVBuffer, parentHeightBuffer, parentNormalBuffer, i2)
 
       // Clip triangle on the east-west boundary.
-      var clipped = Intersections2D.clipTriangleAtAxisAlignedThreshold(
-        halfMaxShort,
-        isEastChild,
-        u0,
-        u1,
-        u2,
-        clipScratch
-      );
+      var clipped = Intersections2D.clipTriangleAtAxisAlignedThreshold(halfMaxShort, isEastChild, u0, u1, u2, clipScratch)
 
       // Get the first clipped triangle, if any.
-      clippedIndex = 0;
+      clippedIndex = 0
 
       if (clippedIndex >= clipped.length) {
-        continue;
+        continue
       }
-      clippedIndex = clippedTriangleVertices[0].initializeFromClipResult(
-        clipped,
-        clippedIndex,
-        triangleVertices
-      );
+      clippedIndex = clippedTriangleVertices[0].initializeFromClipResult(clipped, clippedIndex, triangleVertices)
 
       if (clippedIndex >= clipped.length) {
-        continue;
+        continue
       }
-      clippedIndex = clippedTriangleVertices[1].initializeFromClipResult(
-        clipped,
-        clippedIndex,
-        triangleVertices
-      );
+      clippedIndex = clippedTriangleVertices[1].initializeFromClipResult(clipped, clippedIndex, triangleVertices)
 
       if (clippedIndex >= clipped.length) {
-        continue;
+        continue
       }
-      clippedIndex = clippedTriangleVertices[2].initializeFromClipResult(
-        clipped,
-        clippedIndex,
-        triangleVertices
-      );
+      clippedIndex = clippedTriangleVertices[2].initializeFromClipResult(clipped, clippedIndex, triangleVertices)
 
       // Clip the triangle against the North-south boundary.
       clipped2 = Intersections2D.clipTriangleAtAxisAlignedThreshold(
@@ -602,28 +558,14 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
         clippedTriangleVertices[1].getV(),
         clippedTriangleVertices[2].getV(),
         clipScratch2
-      );
-      addClippedPolygon(
-        uBuffer,
-        vBuffer,
-        heightBuffer,
-        normalBuffer,
-        indices,
-        vertexMap,
-        clipped2,
-        clippedTriangleVertices,
-        hasVertexNormals
-      );
+      )
+      addClippedPolygon(uBuffer, vBuffer, heightBuffer, normalBuffer, indices, vertexMap, clipped2, clippedTriangleVertices, hasVertexNormals)
 
       // If there's another vertex in the original clipped result,
       // it forms a second triangle.  Clip it as well.
       if (clippedIndex < clipped.length) {
-        clippedTriangleVertices[2].clone(clippedTriangleVertices[1]);
-        clippedTriangleVertices[2].initializeFromClipResult(
-          clipped,
-          clippedIndex,
-          triangleVertices
-        );
+        clippedTriangleVertices[2].clone(clippedTriangleVertices[1])
+        clippedTriangleVertices[2].initializeFromClipResult(clipped, clippedIndex, triangleVertices)
 
         clipped2 = Intersections2D.clipTriangleAtAxisAlignedThreshold(
           halfMaxShort,
@@ -632,114 +574,95 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
           clippedTriangleVertices[1].getV(),
           clippedTriangleVertices[2].getV(),
           clipScratch2
-        );
-        addClippedPolygon(
-          uBuffer,
-          vBuffer,
-          heightBuffer,
-          normalBuffer,
-          indices,
-          vertexMap,
-          clipped2,
-          clippedTriangleVertices,
-          hasVertexNormals
-        );
+        )
+        addClippedPolygon(uBuffer, vBuffer, heightBuffer, normalBuffer, indices, vertexMap, clipped2, clippedTriangleVertices, hasVertexNormals)
       }
     }
 
-    var uOffset = isEastChild ? -maxShort : 0;
-    var vOffset = isNorthChild ? -maxShort : 0;
+    var uOffset = isEastChild ? -maxShort : 0
+    var vOffset = isNorthChild ? -maxShort : 0
 
-    var westIndices = [];
-    var southIndices = [];
-    var eastIndices = [];
-    var northIndices = [];
+    var westIndices = []
+    var southIndices = []
+    var eastIndices = []
+    var northIndices = []
 
-    var minimumHeight = Number.MAX_VALUE;
-    var maximumHeight = -minimumHeight;
+    var minimumHeight = Number.MAX_VALUE
+    var maximumHeight = -minimumHeight
 
-    var cartesianVertices = verticesScratch;
-    cartesianVertices.length = 0;
+    var cartesianVertices = verticesScratch
+    cartesianVertices.length = 0
 
-    var ellipsoid = Cartesian2.Ellipsoid.clone(parameters.ellipsoid);
-    var rectangle = Cartesian2.Rectangle.clone(parameters.childRectangle);
+    var ellipsoid = Matrix2.Ellipsoid.clone(parameters.ellipsoid)
+    var rectangle = Matrix2.Rectangle.clone(parameters.childRectangle)
 
-    var north = rectangle.north;
-    var south = rectangle.south;
-    var east = rectangle.east;
-    var west = rectangle.west;
+    var north = rectangle.north
+    var south = rectangle.south
+    var east = rectangle.east
+    var west = rectangle.west
 
     if (east < west) {
-      east += _Math.CesiumMath.TWO_PI;
+      east += ComponentDatatype.CesiumMath.TWO_PI
     }
 
     for (i = 0; i < uBuffer.length; ++i) {
-      u = Math.round(uBuffer[i]);
+      u = Math.round(uBuffer[i])
       if (u <= minU) {
-        westIndices.push(i);
-        u = 0;
+        westIndices.push(i)
+        u = 0
       } else if (u >= maxU) {
-        eastIndices.push(i);
-        u = maxShort;
+        eastIndices.push(i)
+        u = maxShort
       } else {
-        u = u * 2 + uOffset;
+        u = u * 2 + uOffset
       }
 
-      uBuffer[i] = u;
+      uBuffer[i] = u
 
-      v = Math.round(vBuffer[i]);
+      v = Math.round(vBuffer[i])
       if (v <= minV) {
-        southIndices.push(i);
-        v = 0;
+        southIndices.push(i)
+        v = 0
       } else if (v >= maxV) {
-        northIndices.push(i);
-        v = maxShort;
+        northIndices.push(i)
+        v = maxShort
       } else {
-        v = v * 2 + vOffset;
+        v = v * 2 + vOffset
       }
 
-      vBuffer[i] = v;
+      vBuffer[i] = v
 
-      height = _Math.CesiumMath.lerp(
-        parentMinimumHeight,
-        parentMaximumHeight,
-        heightBuffer[i] / maxShort
-      );
+      height = ComponentDatatype.CesiumMath.lerp(parentMinimumHeight, parentMaximumHeight, heightBuffer[i] / maxShort)
       if (height < minimumHeight) {
-        minimumHeight = height;
+        minimumHeight = height
       }
       if (height > maximumHeight) {
-        maximumHeight = height;
+        maximumHeight = height
       }
 
-      heightBuffer[i] = height;
+      heightBuffer[i] = height
 
-      cartographicScratch.longitude = _Math.CesiumMath.lerp(west, east, u / maxShort);
-      cartographicScratch.latitude = _Math.CesiumMath.lerp(south, north, v / maxShort);
-      cartographicScratch.height = height;
+      cartographicScratch.longitude = ComponentDatatype.CesiumMath.lerp(west, east, u / maxShort)
+      cartographicScratch.latitude = ComponentDatatype.CesiumMath.lerp(south, north, v / maxShort)
+      cartographicScratch.height = height
 
-      ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch);
+      ellipsoid.cartographicToCartesian(cartographicScratch, cartesian3Scratch)
 
-      cartesianVertices.push(cartesian3Scratch.x);
-      cartesianVertices.push(cartesian3Scratch.y);
-      cartesianVertices.push(cartesian3Scratch.z);
+      cartesianVertices.push(cartesian3Scratch.x)
+      cartesianVertices.push(cartesian3Scratch.y)
+      cartesianVertices.push(cartesian3Scratch.z)
     }
 
-    var boundingSphere = Transforms.BoundingSphere.fromVertices(
-      cartesianVertices,
-      Cartesian2.Cartesian3.ZERO,
-      3,
-      boundingSphereScratch
-    );
+    var boundingSphere = Transforms.BoundingSphere.fromVertices(cartesianVertices, Matrix2.Cartesian3.ZERO, 3, boundingSphereScratch)
     var orientedBoundingBox = OrientedBoundingBox.OrientedBoundingBox.fromRectangle(
       rectangle,
       minimumHeight,
       maximumHeight,
       ellipsoid,
       orientedBoundingBoxScratch
-    );
+    )
 
-    var occluder = new TerrainEncoding.EllipsoidalOccluder(ellipsoid);
+    var occluder = new TerrainEncoding.EllipsoidalOccluder(ellipsoid)
     var horizonOcclusionPoint = occluder.computeHorizonCullingPointFromVerticesPossiblyUnderEllipsoid(
       boundingSphere.center,
       cartesianVertices,
@@ -747,47 +670,37 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
       boundingSphere.center,
       minimumHeight,
       horizonOcclusionPointScratch
-    );
+    )
 
-    var heightRange = maximumHeight - minimumHeight;
+    var heightRange = maximumHeight - minimumHeight
 
-    var vertices = new Uint16Array(
-      uBuffer.length + vBuffer.length + heightBuffer.length
-    );
+    var vertices = new Uint16Array(uBuffer.length + vBuffer.length + heightBuffer.length)
 
     for (i = 0; i < uBuffer.length; ++i) {
-      vertices[i] = uBuffer[i];
+      vertices[i] = uBuffer[i]
     }
 
-    var start = uBuffer.length;
+    var start = uBuffer.length
 
     for (i = 0; i < vBuffer.length; ++i) {
-      vertices[start + i] = vBuffer[i];
+      vertices[start + i] = vBuffer[i]
     }
 
-    start += vBuffer.length;
+    start += vBuffer.length
 
     for (i = 0; i < heightBuffer.length; ++i) {
-      vertices[start + i] =
-        (maxShort * (heightBuffer[i] - minimumHeight)) / heightRange;
+      vertices[start + i] = (maxShort * (heightBuffer[i] - minimumHeight)) / heightRange
     }
 
-    var indicesTypedArray = IndexDatatype.IndexDatatype.createTypedArray(
-      uBuffer.length,
-      indices
-    );
+    var indicesTypedArray = IndexDatatype.IndexDatatype.createTypedArray(uBuffer.length, indices)
 
-    var encodedNormals;
+    var encodedNormals
     if (hasVertexNormals) {
-      var normalArray = new Uint8Array(normalBuffer);
-      transferableObjects.push(
-        vertices.buffer,
-        indicesTypedArray.buffer,
-        normalArray.buffer
-      );
-      encodedNormals = normalArray.buffer;
+      var normalArray = new Uint8Array(normalBuffer)
+      transferableObjects.push(vertices.buffer, indicesTypedArray.buffer, normalArray.buffer)
+      encodedNormals = normalArray.buffer
     } else {
-      transferableObjects.push(vertices.buffer, indicesTypedArray.buffer);
+      transferableObjects.push(vertices.buffer, indicesTypedArray.buffer)
     }
 
     return {
@@ -802,245 +715,207 @@ define(['./AttributeCompression-d1cd1d9c', './Transforms-9651fa9c', './Cartesian
       northIndices: northIndices,
       boundingSphere: boundingSphere,
       orientedBoundingBox: orientedBoundingBox,
-      horizonOcclusionPoint: horizonOcclusionPoint,
-    };
+      horizonOcclusionPoint: horizonOcclusionPoint
+    }
   }
 
   function Vertex() {
-    this.vertexBuffer = undefined;
-    this.index = undefined;
-    this.first = undefined;
-    this.second = undefined;
-    this.ratio = undefined;
+    this.vertexBuffer = undefined
+    this.index = undefined
+    this.first = undefined
+    this.second = undefined
+    this.ratio = undefined
   }
 
   Vertex.prototype.clone = function (result) {
     if (!when.defined(result)) {
-      result = new Vertex();
+      result = new Vertex()
     }
 
-    result.uBuffer = this.uBuffer;
-    result.vBuffer = this.vBuffer;
-    result.heightBuffer = this.heightBuffer;
-    result.normalBuffer = this.normalBuffer;
-    result.index = this.index;
-    result.first = this.first;
-    result.second = this.second;
-    result.ratio = this.ratio;
+    result.uBuffer = this.uBuffer
+    result.vBuffer = this.vBuffer
+    result.heightBuffer = this.heightBuffer
+    result.normalBuffer = this.normalBuffer
+    result.index = this.index
+    result.first = this.first
+    result.second = this.second
+    result.ratio = this.ratio
 
-    return result;
-  };
+    return result
+  }
 
-  Vertex.prototype.initializeIndexed = function (
-    uBuffer,
-    vBuffer,
-    heightBuffer,
-    normalBuffer,
-    index
-  ) {
-    this.uBuffer = uBuffer;
-    this.vBuffer = vBuffer;
-    this.heightBuffer = heightBuffer;
-    this.normalBuffer = normalBuffer;
-    this.index = index;
-    this.first = undefined;
-    this.second = undefined;
-    this.ratio = undefined;
-  };
+  Vertex.prototype.initializeIndexed = function (uBuffer, vBuffer, heightBuffer, normalBuffer, index) {
+    this.uBuffer = uBuffer
+    this.vBuffer = vBuffer
+    this.heightBuffer = heightBuffer
+    this.normalBuffer = normalBuffer
+    this.index = index
+    this.first = undefined
+    this.second = undefined
+    this.ratio = undefined
+  }
 
-  Vertex.prototype.initializeFromClipResult = function (
-    clipResult,
-    index,
-    vertices
-  ) {
-    var nextIndex = index + 1;
+  Vertex.prototype.initializeFromClipResult = function (clipResult, index, vertices) {
+    var nextIndex = index + 1
 
     if (clipResult[index] !== -1) {
-      vertices[clipResult[index]].clone(this);
+      vertices[clipResult[index]].clone(this)
     } else {
-      this.vertexBuffer = undefined;
-      this.index = undefined;
-      this.first = vertices[clipResult[nextIndex]];
-      ++nextIndex;
-      this.second = vertices[clipResult[nextIndex]];
-      ++nextIndex;
-      this.ratio = clipResult[nextIndex];
-      ++nextIndex;
+      this.vertexBuffer = undefined
+      this.index = undefined
+      this.first = vertices[clipResult[nextIndex]]
+      ++nextIndex
+      this.second = vertices[clipResult[nextIndex]]
+      ++nextIndex
+      this.ratio = clipResult[nextIndex]
+      ++nextIndex
     }
 
-    return nextIndex;
-  };
+    return nextIndex
+  }
 
   Vertex.prototype.getKey = function () {
     if (this.isIndexed()) {
-      return this.index;
+      return this.index
     }
     return JSON.stringify({
       first: this.first.getKey(),
       second: this.second.getKey(),
-      ratio: this.ratio,
-    });
-  };
+      ratio: this.ratio
+    })
+  }
 
   Vertex.prototype.isIndexed = function () {
-    return when.defined(this.index);
-  };
+    return when.defined(this.index)
+  }
 
   Vertex.prototype.getH = function () {
     if (when.defined(this.index)) {
-      return this.heightBuffer[this.index];
+      return this.heightBuffer[this.index]
     }
-    return _Math.CesiumMath.lerp(this.first.getH(), this.second.getH(), this.ratio);
-  };
+    return ComponentDatatype.CesiumMath.lerp(this.first.getH(), this.second.getH(), this.ratio)
+  }
 
   Vertex.prototype.getU = function () {
     if (when.defined(this.index)) {
-      return this.uBuffer[this.index];
+      return this.uBuffer[this.index]
     }
-    return _Math.CesiumMath.lerp(this.first.getU(), this.second.getU(), this.ratio);
-  };
+    return ComponentDatatype.CesiumMath.lerp(this.first.getU(), this.second.getU(), this.ratio)
+  }
 
   Vertex.prototype.getV = function () {
     if (when.defined(this.index)) {
-      return this.vBuffer[this.index];
+      return this.vBuffer[this.index]
     }
-    return _Math.CesiumMath.lerp(this.first.getV(), this.second.getV(), this.ratio);
-  };
+    return ComponentDatatype.CesiumMath.lerp(this.first.getV(), this.second.getV(), this.ratio)
+  }
 
-  var encodedScratch = new Cartesian2.Cartesian2();
+  var encodedScratch = new Matrix2.Cartesian2()
   // An upsampled triangle may be clipped twice before it is assigned an index
   // In this case, we need a buffer to handle the recursion of getNormalX() and getNormalY().
-  var depth = -1;
-  var cartesianScratch1 = [new Cartesian2.Cartesian3(), new Cartesian2.Cartesian3()];
-  var cartesianScratch2 = [new Cartesian2.Cartesian3(), new Cartesian2.Cartesian3()];
+  var depth = -1
+  var cartesianScratch1 = [new Matrix2.Cartesian3(), new Matrix2.Cartesian3()]
+  var cartesianScratch2 = [new Matrix2.Cartesian3(), new Matrix2.Cartesian3()]
   function lerpOctEncodedNormal(vertex, result) {
-    ++depth;
+    ++depth
 
-    var first = cartesianScratch1[depth];
-    var second = cartesianScratch2[depth];
+    var first = cartesianScratch1[depth]
+    var second = cartesianScratch2[depth]
 
-    first = AttributeCompression.AttributeCompression.octDecode(
-      vertex.first.getNormalX(),
-      vertex.first.getNormalY(),
-      first
-    );
-    second = AttributeCompression.AttributeCompression.octDecode(
-      vertex.second.getNormalX(),
-      vertex.second.getNormalY(),
-      second
-    );
-    cartesian3Scratch = Cartesian2.Cartesian3.lerp(
-      first,
-      second,
-      vertex.ratio,
-      cartesian3Scratch
-    );
-    Cartesian2.Cartesian3.normalize(cartesian3Scratch, cartesian3Scratch);
+    first = AttributeCompression.AttributeCompression.octDecode(vertex.first.getNormalX(), vertex.first.getNormalY(), first)
+    second = AttributeCompression.AttributeCompression.octDecode(vertex.second.getNormalX(), vertex.second.getNormalY(), second)
+    cartesian3Scratch = Matrix2.Cartesian3.lerp(first, second, vertex.ratio, cartesian3Scratch)
+    Matrix2.Cartesian3.normalize(cartesian3Scratch, cartesian3Scratch)
 
-    AttributeCompression.AttributeCompression.octEncode(cartesian3Scratch, result);
+    AttributeCompression.AttributeCompression.octEncode(cartesian3Scratch, result)
 
-    --depth;
+    --depth
 
-    return result;
+    return result
   }
 
   Vertex.prototype.getNormalX = function () {
     if (when.defined(this.index)) {
-      return this.normalBuffer[this.index * 2];
+      return this.normalBuffer[this.index * 2]
     }
 
-    encodedScratch = lerpOctEncodedNormal(this, encodedScratch);
-    return encodedScratch.x;
-  };
+    encodedScratch = lerpOctEncodedNormal(this, encodedScratch)
+    return encodedScratch.x
+  }
 
   Vertex.prototype.getNormalY = function () {
     if (when.defined(this.index)) {
-      return this.normalBuffer[this.index * 2 + 1];
+      return this.normalBuffer[this.index * 2 + 1]
     }
 
-    encodedScratch = lerpOctEncodedNormal(this, encodedScratch);
-    return encodedScratch.y;
-  };
+    encodedScratch = lerpOctEncodedNormal(this, encodedScratch)
+    return encodedScratch.y
+  }
 
-  var polygonVertices = [];
-  polygonVertices.push(new Vertex());
-  polygonVertices.push(new Vertex());
-  polygonVertices.push(new Vertex());
-  polygonVertices.push(new Vertex());
+  var polygonVertices = []
+  polygonVertices.push(new Vertex())
+  polygonVertices.push(new Vertex())
+  polygonVertices.push(new Vertex())
+  polygonVertices.push(new Vertex())
 
-  function addClippedPolygon(
-    uBuffer,
-    vBuffer,
-    heightBuffer,
-    normalBuffer,
-    indices,
-    vertexMap,
-    clipped,
-    triangleVertices,
-    hasVertexNormals
-  ) {
+  function addClippedPolygon(uBuffer, vBuffer, heightBuffer, normalBuffer, indices, vertexMap, clipped, triangleVertices, hasVertexNormals) {
     if (clipped.length === 0) {
-      return;
+      return
     }
 
-    var numVertices = 0;
-    var clippedIndex = 0;
+    var numVertices = 0
+    var clippedIndex = 0
     while (clippedIndex < clipped.length) {
-      clippedIndex = polygonVertices[numVertices++].initializeFromClipResult(
-        clipped,
-        clippedIndex,
-        triangleVertices
-      );
+      clippedIndex = polygonVertices[numVertices++].initializeFromClipResult(clipped, clippedIndex, triangleVertices)
     }
 
     for (var i = 0; i < numVertices; ++i) {
-      var polygonVertex = polygonVertices[i];
+      var polygonVertex = polygonVertices[i]
       if (!polygonVertex.isIndexed()) {
-        var key = polygonVertex.getKey();
+        var key = polygonVertex.getKey()
         if (when.defined(vertexMap[key])) {
-          polygonVertex.newIndex = vertexMap[key];
+          polygonVertex.newIndex = vertexMap[key]
         } else {
-          var newIndex = uBuffer.length;
-          uBuffer.push(polygonVertex.getU());
-          vBuffer.push(polygonVertex.getV());
-          heightBuffer.push(polygonVertex.getH());
+          var newIndex = uBuffer.length
+          uBuffer.push(polygonVertex.getU())
+          vBuffer.push(polygonVertex.getV())
+          heightBuffer.push(polygonVertex.getH())
           if (hasVertexNormals) {
-            normalBuffer.push(polygonVertex.getNormalX());
-            normalBuffer.push(polygonVertex.getNormalY());
+            normalBuffer.push(polygonVertex.getNormalX())
+            normalBuffer.push(polygonVertex.getNormalY())
           }
-          polygonVertex.newIndex = newIndex;
-          vertexMap[key] = newIndex;
+          polygonVertex.newIndex = newIndex
+          vertexMap[key] = newIndex
         }
       } else {
-        polygonVertex.newIndex = vertexMap[polygonVertex.index];
-        polygonVertex.uBuffer = uBuffer;
-        polygonVertex.vBuffer = vBuffer;
-        polygonVertex.heightBuffer = heightBuffer;
+        polygonVertex.newIndex = vertexMap[polygonVertex.index]
+        polygonVertex.uBuffer = uBuffer
+        polygonVertex.vBuffer = vBuffer
+        polygonVertex.heightBuffer = heightBuffer
         if (hasVertexNormals) {
-          polygonVertex.normalBuffer = normalBuffer;
+          polygonVertex.normalBuffer = normalBuffer
         }
       }
     }
 
     if (numVertices === 3) {
       // A triangle.
-      indices.push(polygonVertices[0].newIndex);
-      indices.push(polygonVertices[1].newIndex);
-      indices.push(polygonVertices[2].newIndex);
+      indices.push(polygonVertices[0].newIndex)
+      indices.push(polygonVertices[1].newIndex)
+      indices.push(polygonVertices[2].newIndex)
     } else if (numVertices === 4) {
       // A quad - two triangles.
-      indices.push(polygonVertices[0].newIndex);
-      indices.push(polygonVertices[1].newIndex);
-      indices.push(polygonVertices[2].newIndex);
+      indices.push(polygonVertices[0].newIndex)
+      indices.push(polygonVertices[1].newIndex)
+      indices.push(polygonVertices[2].newIndex)
 
-      indices.push(polygonVertices[0].newIndex);
-      indices.push(polygonVertices[2].newIndex);
-      indices.push(polygonVertices[3].newIndex);
+      indices.push(polygonVertices[0].newIndex)
+      indices.push(polygonVertices[2].newIndex)
+      indices.push(polygonVertices[3].newIndex)
     }
   }
-  var upsampleQuantizedTerrainMesh$1 = createTaskProcessorWorker(upsampleQuantizedTerrainMesh);
+  var upsampleQuantizedTerrainMesh$1 = createTaskProcessorWorker(upsampleQuantizedTerrainMesh)
 
-  return upsampleQuantizedTerrainMesh$1;
-
-});
+  return upsampleQuantizedTerrainMesh$1
+})
 //# sourceMappingURL=upsampleQuantizedTerrainMesh.js.map

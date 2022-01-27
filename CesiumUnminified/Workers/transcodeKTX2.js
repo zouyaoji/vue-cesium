@@ -18,10 +18,16 @@
  * Columbus View (Pat. Pend.)
  *
  * Portions licensed separately.
- * See https://github.com/CesiumGS/cesium/blob/master/LICENSE.md for full licensing details.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
  */
 
-define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './RuntimeError-7f634f5d', './createTaskProcessorWorker'], function (when, Check, WebGLConstants, RuntimeError, createTaskProcessorWorker) { 'use strict';
+define(['./when-4bbc8319', './RuntimeError-346a3079', './WebGLConstants-1c8239cc', './createTaskProcessorWorker'], function (
+  when,
+  RuntimeError,
+  WebGLConstants,
+  createTaskProcessorWorker
+) {
+  'use strict'
 
   /**
    * The data type of a pixel.
@@ -38,8 +44,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
     UNSIGNED_INT_24_8: WebGLConstants.WebGLConstants.UNSIGNED_INT_24_8,
     UNSIGNED_SHORT_4_4_4_4: WebGLConstants.WebGLConstants.UNSIGNED_SHORT_4_4_4_4,
     UNSIGNED_SHORT_5_5_5_1: WebGLConstants.WebGLConstants.UNSIGNED_SHORT_5_5_5_1,
-    UNSIGNED_SHORT_5_6_5: WebGLConstants.WebGLConstants.UNSIGNED_SHORT_5_6_5,
-  };
+    UNSIGNED_SHORT_5_6_5: WebGLConstants.WebGLConstants.UNSIGNED_SHORT_5_6_5
+  }
 
   /**
     @private
@@ -47,27 +53,25 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
   PixelDatatype.toWebGLConstant = function (pixelDatatype, context) {
     switch (pixelDatatype) {
       case PixelDatatype.UNSIGNED_BYTE:
-        return WebGLConstants.WebGLConstants.UNSIGNED_BYTE;
+        return WebGLConstants.WebGLConstants.UNSIGNED_BYTE
       case PixelDatatype.UNSIGNED_SHORT:
-        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT;
+        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT
       case PixelDatatype.UNSIGNED_INT:
-        return WebGLConstants.WebGLConstants.UNSIGNED_INT;
+        return WebGLConstants.WebGLConstants.UNSIGNED_INT
       case PixelDatatype.FLOAT:
-        return WebGLConstants.WebGLConstants.FLOAT;
+        return WebGLConstants.WebGLConstants.FLOAT
       case PixelDatatype.HALF_FLOAT:
-        return context.webgl2
-          ? WebGLConstants.WebGLConstants.HALF_FLOAT
-          : WebGLConstants.WebGLConstants.HALF_FLOAT_OES;
+        return context.webgl2 ? WebGLConstants.WebGLConstants.HALF_FLOAT : WebGLConstants.WebGLConstants.HALF_FLOAT_OES
       case PixelDatatype.UNSIGNED_INT_24_8:
-        return WebGLConstants.WebGLConstants.UNSIGNED_INT_24_8;
+        return WebGLConstants.WebGLConstants.UNSIGNED_INT_24_8
       case PixelDatatype.UNSIGNED_SHORT_4_4_4_4:
-        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT_4_4_4_4;
+        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT_4_4_4_4
       case PixelDatatype.UNSIGNED_SHORT_5_5_5_1:
-        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT_5_5_5_1;
+        return WebGLConstants.WebGLConstants.UNSIGNED_SHORT_5_5_5_1
       case PixelDatatype.UNSIGNED_SHORT_5_6_5:
-        return PixelDatatype.UNSIGNED_SHORT_5_6_5;
+        return PixelDatatype.UNSIGNED_SHORT_5_6_5
     }
-  };
+  }
 
   /**
     @private
@@ -78,8 +82,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_4_4_4_4 ||
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_5_5_1 ||
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_6_5
-    );
-  };
+    )
+  }
 
   /**
     @private
@@ -87,19 +91,19 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
   PixelDatatype.sizeInBytes = function (pixelDatatype) {
     switch (pixelDatatype) {
       case PixelDatatype.UNSIGNED_BYTE:
-        return 1;
+        return 1
       case PixelDatatype.UNSIGNED_SHORT:
       case PixelDatatype.UNSIGNED_SHORT_4_4_4_4:
       case PixelDatatype.UNSIGNED_SHORT_5_5_5_1:
       case PixelDatatype.UNSIGNED_SHORT_5_6_5:
       case PixelDatatype.HALF_FLOAT:
-        return 2;
+        return 2
       case PixelDatatype.UNSIGNED_INT:
       case PixelDatatype.FLOAT:
       case PixelDatatype.UNSIGNED_INT_24_8:
-        return 4;
+        return 4
     }
-  };
+  }
 
   /**
     @private
@@ -115,10 +119,10 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_4_4_4_4 ||
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_5_5_1 ||
       pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_6_5
-    );
-  };
+    )
+  }
 
-  var PixelDatatype$1 = Object.freeze(PixelDatatype);
+  var PixelDatatype$1 = Object.freeze(PixelDatatype)
 
   /**
    * The format of a pixel, i.e., the number of components it has and what they represent.
@@ -284,8 +288,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
      * @type {Number}
      * @constant
      */
-    RGBA_BC7: WebGLConstants.WebGLConstants.COMPRESSED_RGBA_BPTC_UNORM,
-  };
+    RGBA_BC7: WebGLConstants.WebGLConstants.COMPRESSED_RGBA_BPTC_UNORM
+  }
 
   /**
    * @private
@@ -293,18 +297,18 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
   PixelFormat.componentsLength = function (pixelFormat) {
     switch (pixelFormat) {
       case PixelFormat.RGB:
-        return 3;
+        return 3
       case PixelFormat.RGBA:
-        return 4;
+        return 4
       case PixelFormat.LUMINANCE_ALPHA:
-        return 2;
+        return 2
       case PixelFormat.ALPHA:
       case PixelFormat.LUMINANCE:
-        return 1;
+        return 1
       default:
-        return 1;
+        return 1
     }
-  };
+  }
 
   /**
    * @private
@@ -331,8 +335,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelFormat === PixelFormat.RGB8_ETC2 ||
       pixelFormat === PixelFormat.RGBA8_ETC2_EAC ||
       pixelFormat === PixelFormat.RGBA_BC7
-    );
-  };
+    )
+  }
 
   /**
    * @private
@@ -344,18 +348,15 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelFormat === PixelFormat.RGBA ||
       pixelFormat === PixelFormat.LUMINANCE ||
       pixelFormat === PixelFormat.LUMINANCE_ALPHA
-    );
-  };
+    )
+  }
 
   /**
    * @private
    */
   PixelFormat.isDepthFormat = function (pixelFormat) {
-    return (
-      pixelFormat === PixelFormat.DEPTH_COMPONENT ||
-      pixelFormat === PixelFormat.DEPTH_STENCIL
-    );
-  };
+    return pixelFormat === PixelFormat.DEPTH_COMPONENT || pixelFormat === PixelFormat.DEPTH_STENCIL
+  }
 
   /**
    * @private
@@ -375,8 +376,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelFormat === PixelFormat.RGB8_ETC2 ||
       pixelFormat === PixelFormat.RGBA8_ETC2_EAC ||
       pixelFormat === PixelFormat.RGBA_BC7
-    );
-  };
+    )
+  }
 
   /**
    * @private
@@ -387,8 +388,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelFormat === PixelFormat.RGBA_DXT1 ||
       pixelFormat === PixelFormat.RGBA_DXT3 ||
       pixelFormat === PixelFormat.RGBA_DXT5
-    );
-  };
+    )
+  }
 
   /**
    * @private
@@ -399,164 +400,128 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
       pixelFormat === PixelFormat.RGB_PVRTC_2BPPV1 ||
       pixelFormat === PixelFormat.RGBA_PVRTC_4BPPV1 ||
       pixelFormat === PixelFormat.RGBA_PVRTC_2BPPV1
-    );
-  };
+    )
+  }
 
   /**
    * @private
    */
   PixelFormat.isASTCFormat = function (pixelFormat) {
-    return pixelFormat === PixelFormat.RGBA_ASTC;
-  };
+    return pixelFormat === PixelFormat.RGBA_ASTC
+  }
 
   /**
    * @private
    */
   PixelFormat.isETC1Format = function (pixelFormat) {
-    return pixelFormat === PixelFormat.RGB_ETC1;
-  };
+    return pixelFormat === PixelFormat.RGB_ETC1
+  }
 
   /**
    * @private
    */
   PixelFormat.isETC2Format = function (pixelFormat) {
-    return (
-      pixelFormat === PixelFormat.RGB8_ETC2 ||
-      pixelFormat === PixelFormat.RGBA8_ETC2_EAC
-    );
-  };
+    return pixelFormat === PixelFormat.RGB8_ETC2 || pixelFormat === PixelFormat.RGBA8_ETC2_EAC
+  }
 
   /**
    * @private
    */
   PixelFormat.isBC7Format = function (pixelFormat) {
-    return pixelFormat === PixelFormat.RGBA_BC7;
-  };
+    return pixelFormat === PixelFormat.RGBA_BC7
+  }
 
   /**
    * @private
    */
-  PixelFormat.compressedTextureSizeInBytes = function (
-    pixelFormat,
-    width,
-    height
-  ) {
+  PixelFormat.compressedTextureSizeInBytes = function (pixelFormat, width, height) {
     switch (pixelFormat) {
       case PixelFormat.RGB_DXT1:
       case PixelFormat.RGBA_DXT1:
       case PixelFormat.RGB_ETC1:
       case PixelFormat.RGB8_ETC2:
-        return Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * 8;
+        return Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * 8
 
       case PixelFormat.RGBA_DXT3:
       case PixelFormat.RGBA_DXT5:
       case PixelFormat.RGBA_ASTC:
       case PixelFormat.RGBA8_ETC2_EAC:
-        return Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * 16;
+        return Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * 16
 
       case PixelFormat.RGB_PVRTC_4BPPV1:
       case PixelFormat.RGBA_PVRTC_4BPPV1:
-        return Math.floor((Math.max(width, 8) * Math.max(height, 8) * 4 + 7) / 8);
+        return Math.floor((Math.max(width, 8) * Math.max(height, 8) * 4 + 7) / 8)
 
       case PixelFormat.RGB_PVRTC_2BPPV1:
       case PixelFormat.RGBA_PVRTC_2BPPV1:
-        return Math.floor(
-          (Math.max(width, 16) * Math.max(height, 8) * 2 + 7) / 8
-        );
+        return Math.floor((Math.max(width, 16) * Math.max(height, 8) * 2 + 7) / 8)
 
       case PixelFormat.RGBA_BC7:
-        return Math.ceil(width / 4) * Math.ceil(height / 4) * 16;
+        return Math.ceil(width / 4) * Math.ceil(height / 4) * 16
 
       default:
-        return 0;
+        return 0
     }
-  };
+  }
 
   /**
    * @private
    */
-  PixelFormat.textureSizeInBytes = function (
-    pixelFormat,
-    pixelDatatype,
-    width,
-    height
-  ) {
-    var componentsLength = PixelFormat.componentsLength(pixelFormat);
+  PixelFormat.textureSizeInBytes = function (pixelFormat, pixelDatatype, width, height) {
+    var componentsLength = PixelFormat.componentsLength(pixelFormat)
     if (PixelDatatype$1.isPacked(pixelDatatype)) {
-      componentsLength = 1;
+      componentsLength = 1
     }
-    return (
-      componentsLength * PixelDatatype$1.sizeInBytes(pixelDatatype) * width * height
-    );
-  };
+    return componentsLength * PixelDatatype$1.sizeInBytes(pixelDatatype) * width * height
+  }
 
   /**
    * @private
    */
   PixelFormat.alignmentInBytes = function (pixelFormat, pixelDatatype, width) {
-    var mod =
-      PixelFormat.textureSizeInBytes(pixelFormat, pixelDatatype, width, 1) % 4;
-    return mod === 0 ? 4 : mod === 2 ? 2 : 1;
-  };
+    var mod = PixelFormat.textureSizeInBytes(pixelFormat, pixelDatatype, width, 1) % 4
+    return mod === 0 ? 4 : mod === 2 ? 2 : 1
+  }
 
   /**
    * @private
    */
-  PixelFormat.createTypedArray = function (
-    pixelFormat,
-    pixelDatatype,
-    width,
-    height
-  ) {
-    var constructor;
-    var sizeInBytes = PixelDatatype$1.sizeInBytes(pixelDatatype);
+  PixelFormat.createTypedArray = function (pixelFormat, pixelDatatype, width, height) {
+    var constructor
+    var sizeInBytes = PixelDatatype$1.sizeInBytes(pixelDatatype)
     if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
-      constructor = Uint8Array;
+      constructor = Uint8Array
     } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
-      constructor = Uint16Array;
-    } else if (
-      sizeInBytes === Float32Array.BYTES_PER_ELEMENT &&
-      pixelDatatype === PixelDatatype$1.FLOAT
-    ) {
-      constructor = Float32Array;
+      constructor = Uint16Array
+    } else if (sizeInBytes === Float32Array.BYTES_PER_ELEMENT && pixelDatatype === PixelDatatype$1.FLOAT) {
+      constructor = Float32Array
     } else {
-      constructor = Uint32Array;
+      constructor = Uint32Array
     }
 
-    var size = PixelFormat.componentsLength(pixelFormat) * width * height;
-    return new constructor(size);
-  };
+    var size = PixelFormat.componentsLength(pixelFormat) * width * height
+    return new constructor(size)
+  }
 
   /**
    * @private
    */
-  PixelFormat.flipY = function (
-    bufferView,
-    pixelFormat,
-    pixelDatatype,
-    width,
-    height
-  ) {
+  PixelFormat.flipY = function (bufferView, pixelFormat, pixelDatatype, width, height) {
     if (height === 1) {
-      return bufferView;
+      return bufferView
     }
-    var flipped = PixelFormat.createTypedArray(
-      pixelFormat,
-      pixelDatatype,
-      width,
-      height
-    );
-    var numberOfComponents = PixelFormat.componentsLength(pixelFormat);
-    var textureWidth = width * numberOfComponents;
+    var flipped = PixelFormat.createTypedArray(pixelFormat, pixelDatatype, width, height)
+    var numberOfComponents = PixelFormat.componentsLength(pixelFormat)
+    var textureWidth = width * numberOfComponents
     for (var i = 0; i < height; ++i) {
-      var row = i * width * numberOfComponents;
-      var flippedRow = (height - i - 1) * width * numberOfComponents;
+      var row = i * width * numberOfComponents
+      var flippedRow = (height - i - 1) * width * numberOfComponents
       for (var j = 0; j < textureWidth; ++j) {
-        flipped[flippedRow + j] = bufferView[row + j];
+        flipped[flippedRow + j] = bufferView[row + j]
       }
     }
-    return flipped;
-  };
+    return flipped
+  }
 
   /**
    * @private
@@ -564,52 +529,52 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
   PixelFormat.toInternalFormat = function (pixelFormat, pixelDatatype, context) {
     // WebGL 1 require internalFormat to be the same as PixelFormat
     if (!context.webgl2) {
-      return pixelFormat;
+      return pixelFormat
     }
 
     // Convert pixelFormat to correct internalFormat for WebGL 2
     if (pixelFormat === PixelFormat.DEPTH_STENCIL) {
-      return WebGLConstants.WebGLConstants.DEPTH24_STENCIL8;
+      return WebGLConstants.WebGLConstants.DEPTH24_STENCIL8
     }
 
     if (pixelFormat === PixelFormat.DEPTH_COMPONENT) {
       if (pixelDatatype === PixelDatatype$1.UNSIGNED_SHORT) {
-        return WebGLConstants.WebGLConstants.DEPTH_COMPONENT16;
+        return WebGLConstants.WebGLConstants.DEPTH_COMPONENT16
       } else if (pixelDatatype === PixelDatatype$1.UNSIGNED_INT) {
-        return WebGLConstants.WebGLConstants.DEPTH_COMPONENT24;
+        return WebGLConstants.WebGLConstants.DEPTH_COMPONENT24
       }
     }
 
     if (pixelDatatype === PixelDatatype$1.FLOAT) {
       switch (pixelFormat) {
         case PixelFormat.RGBA:
-          return WebGLConstants.WebGLConstants.RGBA32F;
+          return WebGLConstants.WebGLConstants.RGBA32F
         case PixelFormat.RGB:
-          return WebGLConstants.WebGLConstants.RGB32F;
+          return WebGLConstants.WebGLConstants.RGB32F
         case PixelFormat.RG:
-          return WebGLConstants.WebGLConstants.RG32F;
+          return WebGLConstants.WebGLConstants.RG32F
         case PixelFormat.R:
-          return WebGLConstants.WebGLConstants.R32F;
+          return WebGLConstants.WebGLConstants.R32F
       }
     }
 
     if (pixelDatatype === PixelDatatype$1.HALF_FLOAT) {
       switch (pixelFormat) {
         case PixelFormat.RGBA:
-          return WebGLConstants.WebGLConstants.RGBA16F;
+          return WebGLConstants.WebGLConstants.RGBA16F
         case PixelFormat.RGB:
-          return WebGLConstants.WebGLConstants.RGB16F;
+          return WebGLConstants.WebGLConstants.RGB16F
         case PixelFormat.RG:
-          return WebGLConstants.WebGLConstants.RG16F;
+          return WebGLConstants.WebGLConstants.RG16F
         case PixelFormat.R:
-          return WebGLConstants.WebGLConstants.R16F;
+          return WebGLConstants.WebGLConstants.R16F
       }
     }
 
-    return pixelFormat;
-  };
+    return pixelFormat
+  }
 
-  var PixelFormat$1 = Object.freeze(PixelFormat);
+  var PixelFormat$1 = Object.freeze(PixelFormat)
 
   /**
    * Enum containing Vulkan Constant values by name.
@@ -894,126 +859,283 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
     VK_FORMAT_G16_B16R16_2PLANE_420_UNORM_KHR: 1000156030,
     VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR: 1000156031,
     VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR: 1000156032,
-    VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR: 1000156033,
-  };
-  var VulkanConstants$1 = Object.freeze(VulkanConstants);
+    VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR: 1000156033
+  }
+  var VulkanConstants$1 = Object.freeze(VulkanConstants)
 
-  const e=[171,75,84,88,32,50,48,187,13,10,26,10];var n,i,s,a,r,o,l,f;!function(t){t[t.NONE=0]="NONE",t[t.BASISLZ=1]="BASISLZ",t[t.ZSTD=2]="ZSTD",t[t.ZLIB=3]="ZLIB";}(n||(n={})),function(t){t[t.BASICFORMAT=0]="BASICFORMAT";}(i||(i={})),function(t){t[t.UNSPECIFIED=0]="UNSPECIFIED",t[t.ETC1S=163]="ETC1S",t[t.UASTC=166]="UASTC";}(s||(s={})),function(t){t[t.UNSPECIFIED=0]="UNSPECIFIED",t[t.SRGB=1]="SRGB";}(a||(a={})),function(t){t[t.UNSPECIFIED=0]="UNSPECIFIED",t[t.LINEAR=1]="LINEAR",t[t.SRGB=2]="SRGB",t[t.ITU=3]="ITU",t[t.NTSC=4]="NTSC",t[t.SLOG=5]="SLOG",t[t.SLOG2=6]="SLOG2";}(r||(r={})),function(t){t[t.ALPHA_STRAIGHT=0]="ALPHA_STRAIGHT",t[t.ALPHA_PREMULTIPLIED=1]="ALPHA_PREMULTIPLIED";}(o||(o={})),function(t){t[t.RGB=0]="RGB",t[t.RRR=3]="RRR",t[t.GGG=4]="GGG",t[t.AAA=15]="AAA";}(l||(l={})),function(t){t[t.RGB=0]="RGB",t[t.RGBA=3]="RGBA",t[t.RRR=4]="RRR",t[t.RRRG=5]="RRRG";}(f||(f={}));class U{constructor(){this.vkFormat=0,this.typeSize=1,this.pixelWidth=0,this.pixelHeight=0,this.pixelDepth=0,this.layerCount=0,this.faceCount=1,this.supercompressionScheme=n.NONE,this.levels=[],this.dataFormatDescriptor=[{vendorId:0,descriptorType:i.BASICFORMAT,versionNumber:2,descriptorBlockSize:40,colorModel:s.UNSPECIFIED,colorPrimaries:a.SRGB,transferFunction:a.SRGB,flags:o.ALPHA_STRAIGHT,texelBlockDimension:{x:4,y:4,z:1,w:1},bytesPlane:[],samples:[]}],this.keyValue={},this.globalData=null;}}class c{constructor(t,e,n,i){this._dataView=new DataView(t.buffer,t.byteOffset+e,n),this._littleEndian=i,this._offset=0;}_nextUint8(){const t=this._dataView.getUint8(this._offset);return this._offset+=1,t}_nextUint16(){const t=this._dataView.getUint16(this._offset,this._littleEndian);return this._offset+=2,t}_nextUint32(){const t=this._dataView.getUint32(this._offset,this._littleEndian);return this._offset+=4,t}_nextUint64(){const t=this._dataView.getUint32(this._offset,this._littleEndian)+2**32*this._dataView.getUint32(this._offset+4,this._littleEndian);return this._offset+=8,t}_skip(t){return this._offset+=t,this}_scan(t,e=0){const n=this._offset;let i=0;for(;this._dataView.getUint8(this._offset)!==e&&i<t;)i++,this._offset++;return i<t&&this._offset++,new Uint8Array(this._dataView.buffer,this._dataView.byteOffset+n,i)}}function _(t){return "undefined"!=typeof TextDecoder?(new TextDecoder).decode(t):Buffer.from(t).toString("utf8")}function p(t){const n=new Uint8Array(t.buffer,t.byteOffset,e.length);if(n[0]!==e[0]||n[1]!==e[1]||n[2]!==e[2]||n[3]!==e[3]||n[4]!==e[4]||n[5]!==e[5]||n[6]!==e[6]||n[7]!==e[7]||n[8]!==e[8]||n[9]!==e[9]||n[10]!==e[10]||n[11]!==e[11])throw new Error("Missing KTX 2.0 identifier.");const i=new U,s=17*Uint32Array.BYTES_PER_ELEMENT,a=new c(t,e.length,s,!0);i.vkFormat=a._nextUint32(),i.typeSize=a._nextUint32(),i.pixelWidth=a._nextUint32(),i.pixelHeight=a._nextUint32(),i.pixelDepth=a._nextUint32(),i.layerCount=a._nextUint32(),i.faceCount=a._nextUint32();const r=a._nextUint32();i.supercompressionScheme=a._nextUint32();const o=a._nextUint32(),l=a._nextUint32(),f=a._nextUint32(),h=a._nextUint32(),g=a._nextUint64(),p=a._nextUint64(),x=new c(t,e.length+s,3*r*8,!0);for(let e=0;e<r;e++)i.levels.push({levelData:new Uint8Array(t.buffer,t.byteOffset+x._nextUint64(),x._nextUint64()),uncompressedByteLength:x._nextUint64()});const u=new c(t,o,l,!0),y={vendorId:u._skip(4)._nextUint16(),descriptorType:u._nextUint16(),versionNumber:u._nextUint16(),descriptorBlockSize:u._nextUint16(),colorModel:u._nextUint8(),colorPrimaries:u._nextUint8(),transferFunction:u._nextUint8(),flags:u._nextUint8(),texelBlockDimension:{x:u._nextUint8()+1,y:u._nextUint8()+1,z:u._nextUint8()+1,w:u._nextUint8()+1},bytesPlane:[u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8()],samples:[]},D=(y.descriptorBlockSize/4-6)/4;for(let t=0;t<D;t++)y.samples[t]={bitOffset:u._nextUint16(),bitLength:u._nextUint8(),channelID:u._nextUint8(),samplePosition:[u._nextUint8(),u._nextUint8(),u._nextUint8(),u._nextUint8()],sampleLower:u._nextUint32(),sampleUpper:u._nextUint32()};i.dataFormatDescriptor.length=0,i.dataFormatDescriptor.push(y);const b=new c(t,f,h,!0);for(;b._offset<h;){const t=b._nextUint32(),e=b._scan(t),n=_(e),s=b._scan(t-e.byteLength);i.keyValue[n]=n.match(/^ktx/i)?_(s):s,b._offset%4&&b._skip(4-b._offset%4);}if(p<=0)return i;const d=new c(t,g,p,!0),B=d._nextUint16(),w=d._nextUint16(),A=d._nextUint32(),S=d._nextUint32(),m=d._nextUint32(),L=d._nextUint32(),I=[];for(let t=0;t<r;t++)I.push({imageFlags:d._nextUint32(),rgbSliceByteOffset:d._nextUint32(),rgbSliceByteLength:d._nextUint32(),alphaSliceByteOffset:d._nextUint32(),alphaSliceByteLength:d._nextUint32()});const R=g+d._offset,E=R+A,T=E+S,O=T+m,P=new Uint8Array(t.buffer,t.byteOffset+R,A),C=new Uint8Array(t.buffer,t.byteOffset+E,S),F=new Uint8Array(t.buffer,t.byteOffset+T,m),G=new Uint8Array(t.buffer,t.byteOffset+O,L);return i.globalData={endpointCount:B,selectorCount:w,imageDescs:I,endpointsData:P,selectorsData:C,tablesData:F,extendedData:G},i}
+  /* This file is automatically rebuilt by the Cesium build process. */
+  const e = [171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]
+  var n, i, s, a, r, o, l, f
+  !(function (t) {
+    ;(t[(t.NONE = 0)] = 'NONE'), (t[(t.BASISLZ = 1)] = 'BASISLZ'), (t[(t.ZSTD = 2)] = 'ZSTD'), (t[(t.ZLIB = 3)] = 'ZLIB')
+  })(n || (n = {})),
+    (function (t) {
+      t[(t.BASICFORMAT = 0)] = 'BASICFORMAT'
+    })(i || (i = {})),
+    (function (t) {
+      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'), (t[(t.ETC1S = 163)] = 'ETC1S'), (t[(t.UASTC = 166)] = 'UASTC')
+    })(s || (s = {})),
+    (function (t) {
+      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'), (t[(t.SRGB = 1)] = 'SRGB')
+    })(a || (a = {})),
+    (function (t) {
+      ;(t[(t.UNSPECIFIED = 0)] = 'UNSPECIFIED'),
+        (t[(t.LINEAR = 1)] = 'LINEAR'),
+        (t[(t.SRGB = 2)] = 'SRGB'),
+        (t[(t.ITU = 3)] = 'ITU'),
+        (t[(t.NTSC = 4)] = 'NTSC'),
+        (t[(t.SLOG = 5)] = 'SLOG'),
+        (t[(t.SLOG2 = 6)] = 'SLOG2')
+    })(r || (r = {})),
+    (function (t) {
+      ;(t[(t.ALPHA_STRAIGHT = 0)] = 'ALPHA_STRAIGHT'), (t[(t.ALPHA_PREMULTIPLIED = 1)] = 'ALPHA_PREMULTIPLIED')
+    })(o || (o = {})),
+    (function (t) {
+      ;(t[(t.RGB = 0)] = 'RGB'), (t[(t.RRR = 3)] = 'RRR'), (t[(t.GGG = 4)] = 'GGG'), (t[(t.AAA = 15)] = 'AAA')
+    })(l || (l = {})),
+    (function (t) {
+      ;(t[(t.RGB = 0)] = 'RGB'), (t[(t.RGBA = 3)] = 'RGBA'), (t[(t.RRR = 4)] = 'RRR'), (t[(t.RRRG = 5)] = 'RRRG')
+    })(f || (f = {}))
+  class U {
+    constructor() {
+      ;(this.vkFormat = 0),
+        (this.typeSize = 1),
+        (this.pixelWidth = 0),
+        (this.pixelHeight = 0),
+        (this.pixelDepth = 0),
+        (this.layerCount = 0),
+        (this.faceCount = 1),
+        (this.supercompressionScheme = n.NONE),
+        (this.levels = []),
+        (this.dataFormatDescriptor = [
+          {
+            vendorId: 0,
+            descriptorType: i.BASICFORMAT,
+            versionNumber: 2,
+            descriptorBlockSize: 40,
+            colorModel: s.UNSPECIFIED,
+            colorPrimaries: a.SRGB,
+            transferFunction: a.SRGB,
+            flags: o.ALPHA_STRAIGHT,
+            texelBlockDimension: { x: 4, y: 4, z: 1, w: 1 },
+            bytesPlane: [],
+            samples: []
+          }
+        ]),
+        (this.keyValue = {}),
+        (this.globalData = null)
+    }
+  }
+  class c {
+    constructor(t, e, n, i) {
+      ;(this._dataView = new DataView(t.buffer, t.byteOffset + e, n)), (this._littleEndian = i), (this._offset = 0)
+    }
+    _nextUint8() {
+      const t = this._dataView.getUint8(this._offset)
+      return (this._offset += 1), t
+    }
+    _nextUint16() {
+      const t = this._dataView.getUint16(this._offset, this._littleEndian)
+      return (this._offset += 2), t
+    }
+    _nextUint32() {
+      const t = this._dataView.getUint32(this._offset, this._littleEndian)
+      return (this._offset += 4), t
+    }
+    _nextUint64() {
+      const t = this._dataView.getUint32(this._offset, this._littleEndian) + 2 ** 32 * this._dataView.getUint32(this._offset + 4, this._littleEndian)
+      return (this._offset += 8), t
+    }
+    _skip(t) {
+      return (this._offset += t), this
+    }
+    _scan(t, e = 0) {
+      const n = this._offset
+      let i = 0
+      for (; this._dataView.getUint8(this._offset) !== e && i < t; ) i++, this._offset++
+      return i < t && this._offset++, new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + n, i)
+    }
+  }
+  function _(t) {
+    return 'undefined' != typeof TextDecoder ? new TextDecoder().decode(t) : Buffer.from(t).toString('utf8')
+  }
+  function p(t) {
+    const n = new Uint8Array(t.buffer, t.byteOffset, e.length)
+    if (
+      n[0] !== e[0] ||
+      n[1] !== e[1] ||
+      n[2] !== e[2] ||
+      n[3] !== e[3] ||
+      n[4] !== e[4] ||
+      n[5] !== e[5] ||
+      n[6] !== e[6] ||
+      n[7] !== e[7] ||
+      n[8] !== e[8] ||
+      n[9] !== e[9] ||
+      n[10] !== e[10] ||
+      n[11] !== e[11]
+    )
+      throw new Error('Missing KTX 2.0 identifier.')
+    const i = new U(),
+      s = 17 * Uint32Array.BYTES_PER_ELEMENT,
+      a = new c(t, e.length, s, !0)
+    ;(i.vkFormat = a._nextUint32()),
+      (i.typeSize = a._nextUint32()),
+      (i.pixelWidth = a._nextUint32()),
+      (i.pixelHeight = a._nextUint32()),
+      (i.pixelDepth = a._nextUint32()),
+      (i.layerCount = a._nextUint32()),
+      (i.faceCount = a._nextUint32())
+    const r = a._nextUint32()
+    i.supercompressionScheme = a._nextUint32()
+    const o = a._nextUint32(),
+      l = a._nextUint32(),
+      f = a._nextUint32(),
+      h = a._nextUint32(),
+      g = a._nextUint64(),
+      p = a._nextUint64(),
+      x = new c(t, e.length + s, 3 * r * 8, !0)
+    for (let e = 0; e < r; e++)
+      i.levels.push({ levelData: new Uint8Array(t.buffer, t.byteOffset + x._nextUint64(), x._nextUint64()), uncompressedByteLength: x._nextUint64() })
+    const u = new c(t, o, l, !0),
+      y = {
+        vendorId: u._skip(4)._nextUint16(),
+        descriptorType: u._nextUint16(),
+        versionNumber: u._nextUint16(),
+        descriptorBlockSize: u._nextUint16(),
+        colorModel: u._nextUint8(),
+        colorPrimaries: u._nextUint8(),
+        transferFunction: u._nextUint8(),
+        flags: u._nextUint8(),
+        texelBlockDimension: { x: u._nextUint8() + 1, y: u._nextUint8() + 1, z: u._nextUint8() + 1, w: u._nextUint8() + 1 },
+        bytesPlane: [u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8()],
+        samples: []
+      },
+      D = (y.descriptorBlockSize / 4 - 6) / 4
+    for (let t = 0; t < D; t++)
+      y.samples[t] = {
+        bitOffset: u._nextUint16(),
+        bitLength: u._nextUint8(),
+        channelID: u._nextUint8(),
+        samplePosition: [u._nextUint8(), u._nextUint8(), u._nextUint8(), u._nextUint8()],
+        sampleLower: u._nextUint32(),
+        sampleUpper: u._nextUint32()
+      }
+    ;(i.dataFormatDescriptor.length = 0), i.dataFormatDescriptor.push(y)
+    const b = new c(t, f, h, !0)
+    for (; b._offset < h; ) {
+      const t = b._nextUint32(),
+        e = b._scan(t),
+        n = _(e),
+        s = b._scan(t - e.byteLength)
+      ;(i.keyValue[n] = n.match(/^ktx/i) ? _(s) : s), b._offset % 4 && b._skip(4 - (b._offset % 4))
+    }
+    if (p <= 0) return i
+    const d = new c(t, g, p, !0),
+      B = d._nextUint16(),
+      w = d._nextUint16(),
+      A = d._nextUint32(),
+      S = d._nextUint32(),
+      m = d._nextUint32(),
+      L = d._nextUint32(),
+      I = []
+    for (let t = 0; t < r; t++)
+      I.push({
+        imageFlags: d._nextUint32(),
+        rgbSliceByteOffset: d._nextUint32(),
+        rgbSliceByteLength: d._nextUint32(),
+        alphaSliceByteOffset: d._nextUint32(),
+        alphaSliceByteLength: d._nextUint32()
+      })
+    const R = g + d._offset,
+      E = R + A,
+      T = E + S,
+      O = T + m,
+      P = new Uint8Array(t.buffer, t.byteOffset + R, A),
+      C = new Uint8Array(t.buffer, t.byteOffset + E, S),
+      F = new Uint8Array(t.buffer, t.byteOffset + T, m),
+      G = new Uint8Array(t.buffer, t.byteOffset + O, L)
+    return (
+      (i.globalData = { endpointCount: B, selectorCount: w, imageDescs: I, endpointsData: P, selectorsData: C, tablesData: F, extendedData: G }), i
+    )
+  }
 
   /* global require */
 
-  var faceOrder = [
-    "positiveX",
-    "negativeX",
-    "positiveY",
-    "negativeY",
-    "positiveZ",
-    "negativeZ",
-  ];
+  var faceOrder = ['positiveX', 'negativeX', 'positiveY', 'negativeY', 'positiveZ', 'negativeZ']
 
   // Flags
-  var colorModelETC1S = 163;
-  var colorModelUASTC = 166;
+  var colorModelETC1S = 163
+  var colorModelUASTC = 166
 
-  var transcoderModule;
+  var transcoderModule
   function transcode(parameters, transferableObjects) {
     //>>includeStart('debug', pragmas.debug);
-    Check.Check.typeOf.object("transcoderModule", transcoderModule);
+    RuntimeError.Check.typeOf.object('transcoderModule', transcoderModule)
     //>>includeEnd('debug');
 
-    var data = parameters.ktx2Buffer;
-    var supportedTargetFormats = parameters.supportedTargetFormats;
-    var header;
+    var data = parameters.ktx2Buffer
+    var supportedTargetFormats = parameters.supportedTargetFormats
+    var header
     try {
-      header = p(data);
+      header = p(data)
     } catch (e) {
-      throw new RuntimeError.RuntimeError("Invalid KTX2 file.");
+      throw new RuntimeError.RuntimeError('Invalid KTX2 file.')
     }
 
     if (header.layerCount !== 0) {
-      throw new RuntimeError.RuntimeError("KTX2 texture arrays are not supported.");
+      throw new RuntimeError.RuntimeError('KTX2 texture arrays are not supported.')
     }
 
     if (header.pixelDepth !== 0) {
-      throw new RuntimeError.RuntimeError("KTX2 3D textures are unsupported.");
+      throw new RuntimeError.RuntimeError('KTX2 3D textures are unsupported.')
     }
 
-    var dfd = header.dataFormatDescriptor[0];
-    var result = new Array(header.levelCount);
+    var dfd = header.dataFormatDescriptor[0]
+    var result = new Array(header.levelCount)
 
-    if (
-      header.vkFormat === 0x0 &&
-      (dfd.colorModel === colorModelETC1S || dfd.colorModel === colorModelUASTC)
-    ) {
+    if (header.vkFormat === 0x0 && (dfd.colorModel === colorModelETC1S || dfd.colorModel === colorModelUASTC)) {
       // Compressed, initialize transcoder module
-      transcodeCompressed(
-        data,
-        header,
-        supportedTargetFormats,
-        transcoderModule,
-        transferableObjects,
-        result
-      );
+      transcodeCompressed(data, header, supportedTargetFormats, transcoderModule, transferableObjects, result)
     } else {
-      transferableObjects.push(data.buffer);
-      parseUncompressed(header, result);
+      transferableObjects.push(data.buffer)
+      parseUncompressed(header, result)
     }
 
-    return result;
+    return result
   }
 
   // Parser for uncompressed
   function parseUncompressed(header, result) {
-    var internalFormat =
-      header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8_SRGB
-        ? PixelFormat$1.RGB
-        : PixelFormat$1.RGBA;
-    var datatype;
+    var internalFormat = header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8_SRGB ? PixelFormat$1.RGB : PixelFormat$1.RGBA
+    var datatype
     if (header.vkFormat === VulkanConstants$1.VK_FORMAT_R8G8B8A8_UNORM) {
-      datatype = PixelDatatype$1.UNSIGNED_BYTE;
-    } else if (
-      header.vkFormat === VulkanConstants$1.VK_FORMAT_R16G16B16A16_SFLOAT
-    ) {
-      datatype = PixelDatatype$1.HALF_FLOAT;
-    } else if (
-      header.vkFormat === VulkanConstants$1.VK_FORMAT_R32G32B32A32_SFLOAT
-    ) {
-      datatype = PixelDatatype$1.FLOAT;
+      datatype = PixelDatatype$1.UNSIGNED_BYTE
+    } else if (header.vkFormat === VulkanConstants$1.VK_FORMAT_R16G16B16A16_SFLOAT) {
+      datatype = PixelDatatype$1.HALF_FLOAT
+    } else if (header.vkFormat === VulkanConstants$1.VK_FORMAT_R32G32B32A32_SFLOAT) {
+      datatype = PixelDatatype$1.FLOAT
     }
 
     for (var i = 0; i < header.levels.length; ++i) {
-      var level = {};
-      result[i] = level;
-      var levelBuffer = header.levels[i].levelData;
+      var level = {}
+      result[i] = level
+      var levelBuffer = header.levels[i].levelData
 
-      var width = header.pixelWidth >> i;
-      var height = header.pixelHeight >> i;
-      var faceLength =
-        width * height * PixelFormat$1.componentsLength(internalFormat);
+      var width = header.pixelWidth >> i
+      var height = header.pixelHeight >> i
+      var faceLength = width * height * PixelFormat$1.componentsLength(internalFormat)
 
       for (var j = 0; j < header.faceCount; ++j) {
         // multiply levelBuffer.byteOffset by the size in bytes of the pixel data type
-        var faceByteOffset =
-          levelBuffer.byteOffset + faceLength * header.typeSize * j;
-        var faceView;
+        var faceByteOffset = levelBuffer.byteOffset + faceLength * header.typeSize * j
+        var faceView
         if (!when.defined(datatype) || PixelDatatype$1.sizeInBytes(datatype) === 1) {
-          faceView = new Uint8Array(
-            levelBuffer.buffer,
-            faceByteOffset,
-            faceLength
-          );
+          faceView = new Uint8Array(levelBuffer.buffer, faceByteOffset, faceLength)
         } else if (PixelDatatype$1.sizeInBytes(datatype) === 2) {
-          faceView = new Uint16Array(
-            levelBuffer.buffer,
-            faceByteOffset,
-            faceLength
-          );
+          faceView = new Uint16Array(levelBuffer.buffer, faceByteOffset, faceLength)
         } else {
-          faceView = new Float32Array(
-            levelBuffer.buffer,
-            faceByteOffset,
-            faceLength
-          );
+          faceView = new Float32Array(levelBuffer.buffer, faceByteOffset, faceLength)
         }
 
         level[faceOrder[j]] = {
@@ -1021,118 +1143,87 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
           datatype: datatype,
           width: width,
           height: height,
-          levelBuffer: faceView,
-        };
+          levelBuffer: faceView
+        }
       }
     }
   }
 
-  function transcodeCompressed(
-    data,
-    header,
-    supportedTargetFormats,
-    transcoderModule,
-    transferableObjects,
-    result
-  ) {
-    var ktx2File = new transcoderModule.KTX2File(data);
-    var width = ktx2File.getWidth();
-    var height = ktx2File.getHeight();
-    var levels = ktx2File.getLevels();
-    var hasAlpha = ktx2File.getHasAlpha();
+  function transcodeCompressed(data, header, supportedTargetFormats, transcoderModule, transferableObjects, result) {
+    var ktx2File = new transcoderModule.KTX2File(data)
+    var width = ktx2File.getWidth()
+    var height = ktx2File.getHeight()
+    var levels = ktx2File.getLevels()
+    var hasAlpha = ktx2File.getHasAlpha()
 
     if (!(width > 0) || !(height > 0) || !(levels > 0)) {
-      ktx2File.close();
-      ktx2File.delete();
-      throw new RuntimeError.RuntimeError("Invalid KTX2 file");
+      ktx2File.close()
+      ktx2File.delete()
+      throw new RuntimeError.RuntimeError('Invalid KTX2 file')
     }
 
-    var internalFormat, transcoderFormat;
-    var dfd = header.dataFormatDescriptor[0];
-    var BasisFormat = transcoderModule.transcoder_texture_format;
+    var internalFormat, transcoderFormat
+    var dfd = header.dataFormatDescriptor[0]
+    var BasisFormat = transcoderModule.transcoder_texture_format
 
     // Determine target format based on platform support
     if (dfd.colorModel === colorModelETC1S) {
       if (supportedTargetFormats.etc) {
-        internalFormat = hasAlpha
-          ? PixelFormat$1.RGBA8_ETC2_EAC
-          : PixelFormat$1.RGB8_ETC2;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFETC2_RGBA
-          : BasisFormat.cTFETC1_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA8_ETC2_EAC : PixelFormat$1.RGB8_ETC2
+        transcoderFormat = hasAlpha ? BasisFormat.cTFETC2_RGBA : BasisFormat.cTFETC1_RGB
       } else if (supportedTargetFormats.etc1 && !hasAlpha) {
-        internalFormat = PixelFormat$1.RGB_ETC1;
-        transcoderFormat = BasisFormat.cTFETC1_RGB;
+        internalFormat = PixelFormat$1.RGB_ETC1
+        transcoderFormat = BasisFormat.cTFETC1_RGB
       } else if (supportedTargetFormats.s3tc) {
-        internalFormat = hasAlpha ? PixelFormat$1.RGBA_DXT5 : PixelFormat$1.RGB_DXT1;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFBC3_RGBA
-          : BasisFormat.cTFBC1_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA_DXT5 : PixelFormat$1.RGB_DXT1
+        transcoderFormat = hasAlpha ? BasisFormat.cTFBC3_RGBA : BasisFormat.cTFBC1_RGB
       } else if (supportedTargetFormats.pvrtc) {
-        internalFormat = hasAlpha
-          ? PixelFormat$1.RGBA_PVRTC_4BPPV1
-          : PixelFormat$1.RGB_PVRTC_4BPPV1;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFPVRTC1_4_RGBA
-          : BasisFormat.cTFPVRTC1_4_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA_PVRTC_4BPPV1 : PixelFormat$1.RGB_PVRTC_4BPPV1
+        transcoderFormat = hasAlpha ? BasisFormat.cTFPVRTC1_4_RGBA : BasisFormat.cTFPVRTC1_4_RGB
       } else if (supportedTargetFormats.astc) {
-        internalFormat = PixelFormat$1.RGBA_ASTC;
-        transcoderFormat = BasisFormat.cTFASTC_4x4_RGBA;
+        internalFormat = PixelFormat$1.RGBA_ASTC
+        transcoderFormat = BasisFormat.cTFASTC_4x4_RGBA
       } else if (supportedTargetFormats.bc7) {
-        internalFormat = PixelFormat$1.RGBA_BC7;
-        transcoderFormat = BasisFormat.cTFBC7_RGBA;
+        internalFormat = PixelFormat$1.RGBA_BC7
+        transcoderFormat = BasisFormat.cTFBC7_RGBA
       } else {
-        throw new RuntimeError.RuntimeError(
-          "No transcoding format target available for ETC1S compressed ktx2."
-        );
+        throw new RuntimeError.RuntimeError('No transcoding format target available for ETC1S compressed ktx2.')
       }
     } else if (dfd.colorModel === colorModelUASTC) {
       if (supportedTargetFormats.astc) {
-        internalFormat = PixelFormat$1.RGBA_ASTC;
-        transcoderFormat = BasisFormat.cTFASTC_4x4_RGBA;
+        internalFormat = PixelFormat$1.RGBA_ASTC
+        transcoderFormat = BasisFormat.cTFASTC_4x4_RGBA
       } else if (supportedTargetFormats.bc7) {
-        internalFormat = PixelFormat$1.RGBA_BC7;
-        transcoderFormat = BasisFormat.cTFBC7_RGBA;
+        internalFormat = PixelFormat$1.RGBA_BC7
+        transcoderFormat = BasisFormat.cTFBC7_RGBA
       } else if (supportedTargetFormats.s3tc) {
-        internalFormat = hasAlpha ? PixelFormat$1.RGBA_DXT5 : PixelFormat$1.RGB_DXT1;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFBC3_RGBA
-          : BasisFormat.cTFBC1_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA_DXT5 : PixelFormat$1.RGB_DXT1
+        transcoderFormat = hasAlpha ? BasisFormat.cTFBC3_RGBA : BasisFormat.cTFBC1_RGB
       } else if (supportedTargetFormats.etc) {
-        internalFormat = hasAlpha
-          ? PixelFormat$1.RGBA8_ETC2_EAC
-          : PixelFormat$1.RGB8_ETC2;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFETC2_RGBA
-          : BasisFormat.cTFETC1_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA8_ETC2_EAC : PixelFormat$1.RGB8_ETC2
+        transcoderFormat = hasAlpha ? BasisFormat.cTFETC2_RGBA : BasisFormat.cTFETC1_RGB
       } else if (supportedTargetFormats.etc1 && !hasAlpha) {
-        internalFormat = PixelFormat$1.RGB_ETC1;
-        transcoderFormat = BasisFormat.cTFETC1_RGB;
+        internalFormat = PixelFormat$1.RGB_ETC1
+        transcoderFormat = BasisFormat.cTFETC1_RGB
       } else if (supportedTargetFormats.pvrtc) {
-        internalFormat = hasAlpha
-          ? PixelFormat$1.RGBA_PVRTC_4BPPV1
-          : PixelFormat$1.RGB_PVRTC_4BPPV1;
-        transcoderFormat = hasAlpha
-          ? BasisFormat.cTFPVRTC1_4_RGBA
-          : BasisFormat.cTFPVRTC1_4_RGB;
+        internalFormat = hasAlpha ? PixelFormat$1.RGBA_PVRTC_4BPPV1 : PixelFormat$1.RGB_PVRTC_4BPPV1
+        transcoderFormat = hasAlpha ? BasisFormat.cTFPVRTC1_4_RGBA : BasisFormat.cTFPVRTC1_4_RGB
       } else {
-        throw new RuntimeError.RuntimeError(
-          "No transcoding format target available for UASTC compressed ktx2."
-        );
+        throw new RuntimeError.RuntimeError('No transcoding format target available for UASTC compressed ktx2.')
       }
     }
 
     if (!ktx2File.startTranscoding()) {
-      ktx2File.close();
-      ktx2File.delete();
-      throw new RuntimeError.RuntimeError("startTranscoding() failed");
+      ktx2File.close()
+      ktx2File.delete()
+      throw new RuntimeError.RuntimeError('startTranscoding() failed')
     }
 
     for (var i = 0; i < header.levels.length; ++i) {
-      var level = {};
-      result[i] = level;
-      width = header.pixelWidth >> i;
-      height = header.pixelHeight >> i;
+      var level = {}
+      result[i] = level
+      width = header.pixelWidth >> i
+      height = header.pixelHeight >> i
 
       // Since supercompressed cubemaps are unsupported, this function
       // does not iterate over KTX2 faces and assumes faceCount = 1.
@@ -1142,8 +1233,8 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
         0, // layer index
         0, // face index
         transcoderFormat.value
-      );
-      var dst = new Uint8Array(dstSize);
+      )
+      var dst = new Uint8Array(dstSize)
 
       var transcoded = ktx2File.transcodeImage(
         dst,
@@ -1154,61 +1245,60 @@ define(['./when-208fe5b0', './Check-5e798bbf', './WebGLConstants-5e2a49ab', './R
         0, // get_alpha_for_opaque_formats
         -1, // channel0
         -1 // channel1
-      );
+      )
 
       if (!when.defined(transcoded)) {
-        throw new RuntimeError.RuntimeError("transcodeImage() failed.");
+        throw new RuntimeError.RuntimeError('transcodeImage() failed.')
       }
 
-      transferableObjects.push(dst.buffer);
+      transferableObjects.push(dst.buffer)
 
       level[faceOrder[0]] = {
         internalFormat: internalFormat,
         width: width,
         height: height,
-        levelBuffer: dst,
-      };
+        levelBuffer: dst
+      }
     }
 
-    ktx2File.close();
-    ktx2File.delete();
-    return result;
+    ktx2File.close()
+    ktx2File.delete()
+    return result
   }
 
   function initWorker(compiledModule) {
-    transcoderModule = compiledModule;
-    transcoderModule.initializeBasis();
+    transcoderModule = compiledModule
+    transcoderModule.initializeBasis()
 
-    self.onmessage = createTaskProcessorWorker(transcode);
-    self.postMessage(true);
+    self.onmessage = createTaskProcessorWorker(transcode)
+    self.postMessage(true)
   }
 
   function transcodeKTX2(event) {
-    var data = event.data;
+    var data = event.data
 
     // Expect the first message to be to load a web assembly module
-    var wasmConfig = data.webAssemblyConfig;
+    var wasmConfig = data.webAssemblyConfig
     if (when.defined(wasmConfig)) {
       // Require and compile WebAssembly module, or use fallback if not supported
       return require([wasmConfig.modulePath], function (mscBasisTranscoder) {
         if (when.defined(wasmConfig.wasmBinaryFile)) {
           if (!when.defined(mscBasisTranscoder)) {
-            mscBasisTranscoder = self.MSC_TRANSCODER;
+            mscBasisTranscoder = self.MSC_TRANSCODER
           }
 
           mscBasisTranscoder(wasmConfig).then(function (compiledModule) {
-            initWorker(compiledModule);
-          });
+            initWorker(compiledModule)
+          })
         } else {
           return mscBasisTranscoder().then(function (transcoder) {
-            initWorker(transcoder);
-          });
+            initWorker(transcoder)
+          })
         }
-      });
+      })
     }
   }
 
-  return transcodeKTX2;
-
-});
+  return transcodeKTX2
+})
 //# sourceMappingURL=transcodeKTX2.js.map

@@ -1,1 +1,46 @@
-define(["./AttributeCompression-9711314b","./Cartesian2-b4b7b0b3","./Math-8386669c","./createTaskProcessorWorker","./Check-5e798bbf","./when-208fe5b0"],function(C,g,d,a,e,r){"use strict";var w=32767,k=new g.Cartographic,v=new g.Cartesian3,y=new g.Rectangle,A=new g.Ellipsoid,M={min:void 0,max:void 0};return a(function(a,e){var r=new Uint16Array(a.positions);!function(a){a=new Float64Array(a);var e=0;M.min=a[e++],M.max=a[e++],g.Rectangle.unpack(a,2,y),e+=g.Rectangle.packedLength,g.Ellipsoid.unpack(a,e,A)}(a.packedBuffer);var t=y,n=A,i=M.min,s=M.max,o=r.length/3,c=r.subarray(0,o),u=r.subarray(o,2*o),p=r.subarray(2*o,3*o);C.AttributeCompression.zigZagDeltaDecode(c,u,p);for(var b=new Float64Array(r.length),h=0;h<o;++h){var l=c[h],f=u[h],m=p[h],l=d.CesiumMath.lerp(t.west,t.east,l/w),f=d.CesiumMath.lerp(t.south,t.north,f/w),m=d.CesiumMath.lerp(i,s,m/w),m=g.Cartographic.fromRadians(l,f,m,k),m=n.cartographicToCartesian(m,v);g.Cartesian3.pack(m,b,3*h)}return e.push(b.buffer),{positions:b.buffer}})});
+define([
+  './AttributeCompression-af389d04',
+  './Matrix2-9aa31791',
+  './ComponentDatatype-93750d1a',
+  './createTaskProcessorWorker',
+  './RuntimeError-346a3079',
+  './when-4bbc8319',
+  './WebGLConstants-1c8239cc'
+], function (a, r, e, t, n, i, o) {
+  'use strict'
+  var s = 32767,
+    c = new r.Cartographic(),
+    u = new r.Cartesian3(),
+    p = new r.Rectangle(),
+    l = new r.Ellipsoid(),
+    m = { min: void 0, max: void 0 }
+  return t(function (t, n) {
+    var i = new Uint16Array(t.positions)
+    !(function (a) {
+      a = new Float64Array(a)
+      var e = 0
+      ;(m.min = a[e++]), (m.max = a[e++]), r.Rectangle.unpack(a, e, p), (e += r.Rectangle.packedLength), r.Ellipsoid.unpack(a, e, l)
+    })(t.packedBuffer)
+    var o = p,
+      f = l,
+      h = m.min,
+      C = m.max,
+      d = i.length / 3,
+      g = i.subarray(0, d),
+      b = i.subarray(d, 2 * d),
+      w = i.subarray(2 * d, 3 * d)
+    a.AttributeCompression.zigZagDeltaDecode(g, b, w)
+    for (var v = new Float64Array(i.length), k = 0; k < d; ++k) {
+      var y = g[k],
+        A = b[k],
+        R = w[k],
+        x = e.CesiumMath.lerp(o.west, o.east, y / s),
+        M = e.CesiumMath.lerp(o.south, o.north, A / s),
+        D = e.CesiumMath.lerp(h, C, R / s),
+        E = r.Cartographic.fromRadians(x, M, D, c),
+        F = f.cartographicToCartesian(E, u)
+      r.Cartesian3.pack(F, v, 3 * k)
+    }
+    return n.push(v.buffer), { positions: v.buffer }
+  })
+})

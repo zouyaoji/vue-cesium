@@ -1,1 +1,27 @@
-define(["./PrimitivePipeline-b2f161a2","./createTaskProcessorWorker","./Transforms-73e77b72","./Cartesian2-b4b7b0b3","./Check-5e798bbf","./when-208fe5b0","./Math-8386669c","./RuntimeError-7f634f5d","./ComponentDatatype-2da3a966","./WebGLConstants-5e2a49ab","./GeometryAttribute-b541caa6","./GeometryAttributes-b0b294d8","./GeometryPipeline-86615bad","./AttributeCompression-9711314b","./EncodedCartesian3-21af0f3b","./IndexDatatype-3bc916b1","./IntersectionTests-40db2afa","./Plane-b91bfb59","./WebMercatorProjection-1b058022"],function(i,e,t,r,n,b,a,o,s,m,c,f,P,p,u,d,y,C,l){"use strict";return e(function(e,t){return e=i.PrimitivePipeline.unpackCombineGeometryParameters(e),e=i.PrimitivePipeline.combineGeometry(e),i.PrimitivePipeline.packCombineGeometryResults(e,t)})});
+define([
+  './PrimitivePipeline-fc555140',
+  './createTaskProcessorWorker',
+  './Transforms-d13cc04e',
+  './Matrix2-9aa31791',
+  './RuntimeError-346a3079',
+  './when-4bbc8319',
+  './ComponentDatatype-93750d1a',
+  './WebGLConstants-1c8239cc',
+  './combine-83860057',
+  './GeometryAttribute-43536dc0',
+  './GeometryAttributes-7827a6c2',
+  './GeometryPipeline-2356afec',
+  './AttributeCompression-af389d04',
+  './EncodedCartesian3-f286cedc',
+  './IndexDatatype-b7d979a6',
+  './IntersectionTests-96a04219',
+  './Plane-318d6937',
+  './WebMercatorProjection-58801a11'
+], function (e, t, i, r, n, a, o, c, m, s, P, b, d, p, u, f, y, l) {
+  'use strict'
+  return t(function (t, i) {
+    var r = e.PrimitivePipeline.unpackCombineGeometryParameters(t),
+      n = e.PrimitivePipeline.combineGeometry(r)
+    return e.PrimitivePipeline.packCombineGeometryResults(n, i)
+  })
+})
