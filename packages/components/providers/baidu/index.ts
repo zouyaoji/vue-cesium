@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 23:33:29
+ * @LastEditTime: 2022-01-27 23:20:07
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
@@ -25,7 +25,7 @@ export const baiduImageryProviderProps = {
   ...maximumLevel,
   protocol: {
     type: String,
-    default: 'http'
+    default: 'https'
   },
   projectionTransforms: {
     type: [Boolean, Object] as PropType<ProjectionTransforms>,
@@ -36,10 +36,18 @@ export const baiduImageryProviderProps = {
       }
     }
   },
-  bdStyle: {
+  scale: {
+    type: Number,
+    default: 1
+  },
+  ak: {
     type: String,
-    default: 'dark',
-    validator: (v: string) => ['dark'].includes(v)
+    default: 'E4805d16520de693a3fe707cdc962045'
+  },
+  // https://lbsyun.baidu.com/custom/list.htm
+  customid: {
+    type: String,
+    default: 'normal' // img vec traffic normal light dark redalert googlelite grassgreen midnight pink darkgreen bluish grayscale hardedge
   }
 }
 export default defineComponent({

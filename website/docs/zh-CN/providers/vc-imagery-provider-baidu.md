@@ -14,7 +14,11 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <vc-imagery-provider-baidu ref="provider" :url="url" :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"></vc-imagery-provider-baidu>
+      <vc-imagery-provider-baidu
+        ref="provider"
+        :customid="customid"
+        :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
+      ></vc-imagery-provider-baidu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
@@ -33,7 +37,7 @@
           <span class="demonstration">对比度</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">切换服务</span>
-          <el-select v-model="url" placeholder="请选择">
+          <el-select v-model="customid" placeholder="请选择">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -54,23 +58,27 @@
       const contrast = ref(1)
       const options = [
         {
-          value: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
-          label: '百度矢量瓦片地图'
+          value: 'normal',
+          label: '默认样式'
         },
         {
-          value: 'http://shangetu1.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46',
-          label: '百度影像瓦片地图'
+          value: 'img',
+          label: '百度影像' // 不支持https
         },
         {
-          value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
-          label: '百度矢量瓦片地图-暗色'
+          value: 'dark',
+          label: '黑夜风格'
         },
         {
-          value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
-          label: '百度矢量瓦片地图-Custom'
+          value: 'midnight',
+          label: '午夜蓝'
+        },
+        {
+          value: 'traffic',
+          label: '百度路况'
         }
       ]
-      const url = ref('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png')
+      const customid = ref('normal')
       // methods
       const unload = () => {
         provider.value.unload()
@@ -90,7 +98,7 @@
         brightness,
         contrast,
         options,
-        url
+        customid
       }
     }
   }
@@ -103,12 +111,15 @@
 
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
-| ---------------------------- | ------- | -------------------- |--|
-| url | String | `'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}'` | `optional` 指定服务地址。 |
+| ----- | ---- | ----- | ---- |
+| url | String |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `customid` 属性。 |
 | rectangle | Object\|Object | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
 | credit | String\|Object | `''` | `optional` 服务版权描述信息。 |
 | minimumLevel | Number | `0` | `optional` 最小层级。 |
 | maximumLevel | Number | `18` | `optional` 最大层级。 |
+| scale | Number | `1` | `optional` 指定缩放。 |
+| ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
+| customid | String | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | Boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 
 :::tip
@@ -148,13 +159,14 @@
 
 ### 事件
 
-| 事件名       | 参数                                    | 描述                                                              |
+<!-- prettier-ignore -->
+| 事件名 | 参数 | 描述 |
 | ------------ | --------------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad   | (instance: VcComponentInternalInstance) | 对象加载前触发。                                                  |
-| ready        | (readyObj: VcReadyObject)               | 对象加载成功时触发。                                              |
-| destroyed    | (instance: VcComponentInternalInstance) | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                       | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | ImageryProvider                         | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
+| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。 |
+| ready | (readyObj: VcReadyObject) | 对象加载成功时触发。 |
+| destroyed | (instance: VcComponentInternalInstance) | 对象销毁时触发。 |
+| errorEvent | (evt: Cesium.TileProviderError) | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | 当图层提供者可用时触发, 返回 ImageryProvider 实例。 |
 
 ### 参考
 

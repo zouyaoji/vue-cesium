@@ -18,20 +18,24 @@ class BaiduMapImageryProvider {
   _errorEvent: any
   _readyPromise: any
   _style: string
+  _labelStyle: any
   constructor(options) {
     const { Resource, defaultValue, Credit, when, Event } = Cesium
+    this._subdomains = defaultValue(options.subdomains, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
     if (options.url) {
       this._url = options.url
-      this._subdomains = defaultValue(options.subdomains, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
     } else {
-      if (options.bdStyle === 'img') {
+      if (options.customid === 'img') {
         this._url = `${options.protocol}://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46`
         this._subdomains = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-      } else if (options.bdStyle === 'vec') {
+      } else if (options.customid === 'vec') {
         this._url = `${options.protocol}://online{s}.map.bdimg.com/tile/?qt=tile&x={x}&y={y}&z={z}&styles=sl&v=020`
         this._subdomains = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      } else if (options.customid === 'traffic') {
+        this._subdomains = ['0', '1', '2']
+        this._url = `${options.protocol}://its.map.baidu.com/traffic/TrafficTileService?time={time}&label={labelStyle}&v=016&level={z}&x={x}&y={y}&scaler=2`
       } else {
-        this._url = `${options.protocol}://api{s}.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&scale=1&customid={style}`
+        this._url = `${options.protocol}://api.map.baidu.com/customimage/tile?&x={x}&y={y}&z={z}&udt={udt}&scale=${options.scale}&ak=${options.ak}&customid=${options.customid}`
         this._subdomains = ['0', '1', '2']
       }
     }
@@ -60,6 +64,7 @@ class BaiduMapImageryProvider {
     this._ready = true
     this._readyPromise.resolve(true)
     this._style = options.bdStyle
+    this._labelStyle = options.labelStyle || 'web2D'
   }
 
   get url() {
@@ -173,6 +178,9 @@ function buildImageResource(this, x, y, level, request) {
     .replace('{x}', x)
     .replace('{y}', -y)
     .replace('{z}', level)
+    .replace('{labelStyle}', this._labelStyle)
+    .replace('{time}', String(new Date().getTime()))
+    .replace('{udt}', String(new Date().getTime()))
   const resource = this._resource.getDerivedResource({
     url: url,
     request: request

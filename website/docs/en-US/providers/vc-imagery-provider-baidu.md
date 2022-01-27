@@ -14,7 +14,11 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
-      <vc-imagery-provider-baidu ref="provider" :url="url" :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"></vc-imagery-provider-baidu>
+      <vc-imagery-provider-baidu
+        ref="provider"
+        :customid="customid"
+        :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
+      ></vc-imagery-provider-baidu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
@@ -33,7 +37,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
           <span class="demonstration">Contrast</span>
           <el-slider v-model="contrast" :min="0" :max="5" :step="0.01"></el-slider>
           <span class="demonstration">Swich</span>
-          <el-select v-model="url" placeholder="Select">
+          <el-select v-model="customid" placeholder="Select">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </div>
@@ -54,23 +58,27 @@ Basic usage of the `vc-imagery-provider-baidu` component.
       const contrast = ref(1)
       const options = [
         {
-          value: 'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
-          label: 'vector'
+          value: 'normal',
+          label: 'Normal'
         },
         {
-          value: 'http://shangetu1.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46',
-          label: 'image'
+          value: 'img',
+          label: 'Image' // not https
         },
         {
-          value: 'http://api0.map.bdimg.com/customimage/tile?=&x={x}&y={y}&z={z}&scale=1&customid=midnight',
-          label: 'vector-dark'
+          value: 'dark',
+          label: 'Dark'
         },
         {
-          value: 'https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png',
-          label: 'vector-custom'
+          value: 'midnight',
+          label: 'Midnight'
+        },
+        {
+          value: 'traffic',
+          label: 'Traffic'
         }
       ]
-      const url = ref('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png')
+      const customid = ref('normal')
       // methods
       const unload = () => {
         provider.value.unload()
@@ -104,11 +112,14 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String | `'http://{s}.map.bdimg.com/onlinelabel/?qt=tile&styles=pl&x={x}&y={y}&z={z}'` | `optional` Specify the service address. |
+| url | String | | `optional` Specify the service address. |
 | rectangle | Object\|Object | | `optional` The rectangle of the layer. This parameter is ignored when accessing a tiled layer. |
 | credit | String\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
 | minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
 | maximumLevel | Number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| scale | Number | `1` | `optional` Specify the scale. |
+| ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
+| customid | String | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | Boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
 
 :::tip
@@ -148,13 +159,14 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 
 ### Events
 
-| Name         | Parameters                              | Description                                                          |
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
 | ------------ | --------------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad   | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                          |
-| ready        | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.               |
-| destroyed    | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                         |
-| errorEvent   | TileProviderError                       | Triggers when the imagery provider encounters an asynchronous error. |
-| readyPromise | ImageryProvider                         | Triggers when the provider is ready for use.                         |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded. |
+| ready | (readyObj: VcReadyObject) | Triggers when the cesiumObject is successfully loaded. |
+| destroyed | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed. |
+| errorEvent | (evt: Cesium.TileProviderError) | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | Triggers when the provider is ready for use. |
 
 ### Reference
 
