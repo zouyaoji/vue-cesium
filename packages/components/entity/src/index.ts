@@ -45,6 +45,7 @@ export const entityProps = {
 const emits = {
   ...commonEmits,
   ...pickEventEmits,
+  definitionChanged: (property: Cesium.Property) => true,
   'update:billboard': (payload: Cesium.BillboardGraphics) => true,
   'update:box': (payload: Cesium.BoxGraphics) => true,
   'update:corridor': (payload: Cesium.CorridorGraphics) => true,
