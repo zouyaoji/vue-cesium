@@ -12,6 +12,7 @@ _2022-01-30_
 #### New feature
 
 - Added [vc-analyses](https://zouyaoji.top/vue-cesium/#/en-US/component/controls/vc-analyses), includes line of sight analysis and field of view analysis.
+- Added [`vc-collection-cloud`](https://zouyaoji.top/vue-cesium/#/zh-CN/component/primitives/vc-collection-cloud).
 - `vc-imagery-provider-baidu` supports https protocol, Added customid attribute.
 
 #### Breaking changes:

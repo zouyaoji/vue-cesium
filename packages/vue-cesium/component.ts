@@ -85,11 +85,13 @@ import {
 // PrimitiveCollections
 import {
   VcCollectionBillboard,
+  VcCollectionCloud,
   VcCollectionLabel,
   VcCollectionPoint,
   VcCollectionPolyline,
   VcCollectionPrimitive,
   VcBillboard,
+  VcCumulusCloud,
   VcLabel,
   VcPoint,
   VcPolyline,
@@ -246,12 +248,14 @@ export default [
   VcPrimitiveParticle,
 
   VcCollectionBillboard,
+  VcCollectionCloud,
   VcCollectionLabel,
   VcCollectionPoint,
   VcCollectionPolyline,
   VcCollectionPrimitive,
 
   VcBillboard,
+  VcCumulusCloud,
   VcLabel,
   VcPoint,
   VcPolyline,
