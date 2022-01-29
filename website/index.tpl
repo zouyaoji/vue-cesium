@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-29 22:55:37
- * @LastEditTime: 2022-01-29 22:57:02
+ * @LastEditTime: 2022-01-30 00:10:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\index.tpl
@@ -19,10 +19,13 @@
     <!-- 引入 阿里云 图标资源-->
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
+    <!-- 谷歌广告 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
      crossorigin="anonymous"></script>
+    <!-- 万维广告 -->
     <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
-    <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264"></script>
+    <!-- 友盟统计 -->
+    <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264" async></script>
   </head>
   <body>
     <div id="app"></div>
@@ -32,7 +35,7 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
+    // 谷歌统计
     ga('create', 'UA-113302031-1', 'auto');
     ga('send', 'pageview');
 
