@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-01-28 00:38:06
+ * @LastEditTime: 2022-01-30 01:33:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -25,15 +25,15 @@
 <script>
 export default {
   mounted() {
-    ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+    // (window.adsbygoogle = window.adsbygoogle || []).push({})
   }
 }
 </script>
 
 <style scoped>
 .adsense-content {
-  /* max-width: 910px; */
-  /* margin: 0 auto; */
+  max-width: 910px;
+  margin: 0 auto;
 }
 .adsense-title {
   color: #999;

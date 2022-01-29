@@ -35,6 +35,11 @@ const config = {
         use: 'vue-loader'
       },
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto'
+      },
+      {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
@@ -91,7 +96,7 @@ const config = {
           to: '.'
         }
       ]
-    }),
+    })
     // new ProgressBarPlugin()
   ],
   devServer: {

@@ -63,7 +63,7 @@ importers:
       css-minimizer-webpack-plugin: 1.1.5
       cz-conventional-changelog: ^3.3.0
       echarts: ^5.2.1
-      element-plus: ^1.1.0-beta.24
+      element-plus: ^1.3.0-beta.9
       element-theme-chalk: ^2.15.6
       esbuild: 0.14.11
       eslint: 8.7.0
@@ -189,7 +189,7 @@ importers:
       css-minimizer-webpack-plugin: 1.1.5_webpack@4.44.1
       cz-conventional-changelog: 3.3.0_@types+node@16.11.11
       echarts: 5.2.2
-      element-plus: 1.1.0-beta.24_vue@3.2.26
+      element-plus: 1.3.0-beta.9_vue@3.2.26
       element-theme-chalk: 2.15.6
       esbuild: 0.14.11
       eslint: 8.7.0
@@ -2045,6 +2045,11 @@ packages:
       '@cspotcode/source-map-consumer': 0.8.0
     dev: true
 
+  /@ctrl/tinycolor/3.4.0:
+    resolution: { integrity: sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ== }
+    engines: { node: '>=10' }
+    dev: true
+
   /@electron/get/1.13.1:
     resolution: { integrity: sha512-U5vkXDZ9DwXtkPqlB45tfYnnYBN8PePp1z/XDCupnSpdrxT8/ThCv9WCwPLf9oqiSGZTkH6dx2jDUPuoXpjkcA== }
     engines: { node: '>=8.6' }
@@ -2063,9 +2068,12 @@ packages:
       - supports-color
     dev: true
 
-  /@element-plus/icons/0.0.11:
-    resolution: { integrity: sha512-iKQXSxXu131Ai+I9Ymtcof9WId7kaXvB1+WRfAfpQCW7UiAMYgdNDqb/u0hgTo2Yq3MwC4MWJnNuTBEpG8r7+A== }
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+  /@element-plus/icons-vue/0.2.6_vue@3.2.26:
+    resolution: { integrity: sha512-2gg7VCq4d2firgl7/aVym4Cx/wqKFwKybEQGJiiWJN4urW36+QdAEG1knqSD9qidbjhVp0Jnc9XdSTR1/4Whzw== }
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.2.26
     dev: true
 
   /@emmetio/abbreviation/2.2.2:
@@ -2758,8 +2766,8 @@ packages:
       write-yaml-file: 4.2.0
     dev: true
 
-  /@popperjs/core/2.11.0:
-    resolution: { integrity: sha512-zrsUxjLOKAzdewIDRWy9nsV1GQsKBCWaGwsZQlCgr6/q+vjyZhFgqedLfFBuI9anTPEUT4APq9Mu0SZBTzIcGQ== }
+  /@popperjs/core/2.11.2:
+    resolution: { integrity: sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA== }
     dev: true
 
   /@rollup/plugin-commonjs/21.0.1_rollup@2.64.0:
@@ -3664,8 +3672,8 @@ packages:
       vue: 3.2.26
     dev: true
 
-  /@vueuse/core/6.1.0_vue@3.2.26:
-    resolution: { integrity: sha512-6KienU5QOWKuDqvHytep14274IGKyLlACzXjifOrgDQMkqvWZIUnDhpckT/1+O8n8DN59d5wzzICZI/2sfGCyg== }
+  /@vueuse/core/7.5.5_vue@3.2.26:
+    resolution: { integrity: sha512-RBDqmIoGfak4h3xdXa/Av+ibkb8NY044wEy6+PG2FAWNaID8/FkqmSFjbxogrbmpSX1yZ1PBHrM8DUp/FrIpbg== }
     peerDependencies:
       '@vue/composition-api': ^1.1.0
       vue: ^2.6.0 || ^3.2.0
@@ -3675,13 +3683,13 @@ packages:
       vue:
         optional: true
     dependencies:
-      '@vueuse/shared': 6.1.0_vue@3.2.26
+      '@vueuse/shared': 7.5.5_vue@3.2.26
       vue: 3.2.26
       vue-demi: 0.12.1_vue@3.2.26
     dev: true
 
-  /@vueuse/shared/6.1.0_vue@3.2.26:
-    resolution: { integrity: sha512-teW0TUQryGnEprHeOI6oH8NPVJBirknxksEiNCtdEjIi8W7JSTg8JPO+e1XlGI6ly24NDlDXUDYaHJayiaXjuw== }
+  /@vueuse/shared/7.5.5_vue@3.2.26:
+    resolution: { integrity: sha512-mzzTsotHQRPnPAChy8iCv6ek/90CKYhAFyMRgNsMxpT0afZJkbMO/X0OaOu/1NuGbgb8UVjlsWKmCUgKTOF5hA== }
     peerDependencies:
       '@vue/composition-api': ^1.1.0
       vue: ^2.6.0 || ^3.2.0
@@ -6870,20 +6878,20 @@ packages:
       - supports-color
     dev: true
 
-  /element-plus/1.1.0-beta.24_vue@3.2.26:
-    resolution: { integrity: sha512-dmo61e/D6mwJVacMhxOMSPb5sZPt/FPsuQQfsOs1kJWkhGDmTlny/sZvgIQr1z0zh3pjlJadGAlNS+0nySPMmw== }
+  /element-plus/1.3.0-beta.9_vue@3.2.26:
+    resolution: { integrity: sha512-h+I6VVtJNwjVkNhfhXp2oCYjgBN7kWQ2Y6nWzwc0wiphAlQDhGuBXAGj9eYpf1uOrMgIpFFwbRhvK7C6sOJsWg== }
     peerDependencies:
       vue: ^3.2.0
     dependencies:
-      '@element-plus/icons': 0.0.11
-      '@popperjs/core': 2.11.0
-      '@vueuse/core': 6.1.0_vue@3.2.26
+      '@ctrl/tinycolor': 3.4.0
+      '@element-plus/icons-vue': 0.2.6_vue@3.2.26
+      '@popperjs/core': 2.11.2
+      '@vueuse/core': 7.5.5_vue@3.2.26
       async-validator: 4.0.7
       dayjs: 1.10.7
       lodash: 4.17.21
-      memoize-one: 5.2.1
+      memoize-one: 6.0.0
       normalize-wheel-es: 1.1.1
-      resize-observer-polyfill: 1.5.1
       vue: 3.2.26
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -11510,8 +11518,8 @@ packages:
       mimic-fn: 3.1.0
     dev: true
 
-  /memoize-one/5.2.1:
-    resolution: { integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q== }
+  /memoize-one/6.0.0:
+    resolution: { integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw== }
     dev: true
 
   /memory-fs/0.4.1:
