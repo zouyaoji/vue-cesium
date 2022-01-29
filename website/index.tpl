@@ -12,6 +12,8 @@
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
     <script data-ad-client="ca-pub-3445228872340333" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
+    <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264"></script>
   </head>
   <body>
     <div id="app"></div>

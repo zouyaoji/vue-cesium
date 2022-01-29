@@ -166,7 +166,7 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 | ready | (readyObj: VcReadyObject) | Triggers when the cesiumObject is successfully loaded. |
 | destroyed | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed. |
 | errorEvent | (evt: Cesium.TileProviderError) | Triggers when the imagery provider encounters an asynchronous error. |
-| readyPromise | (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | Triggers when the provider is ready for use. |
+| readyPromise | (provider: VcTerrainProvider) | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | Triggers when the provider is ready for use. |
 
 ### Reference
 
