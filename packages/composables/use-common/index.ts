@@ -15,6 +15,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // state
   vcInstance.alreadyListening = []
+  vcInstance.removeCallbacks = []
   let unwatchFns: Array<WatchStopHandle> = []
   vcInstance.mounted = false
   const vcMitt: Emitter<VcMittEvents> = mitt()
@@ -124,6 +125,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           setPropsWatcher(false)
           vcInstance.cesiumObject = undefined
           vcInstance.mounted = false
+          vcInstance.removeCallbacks.forEach(removeCallback => {
+            removeCallback()
+          })
           emit('destroyed', vcInstance)
           logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
@@ -261,7 +265,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     }
   }
 
-  const transformProps = <T>(props: T) => {
+  const transformProps = <T>(props: T, childProps?: any) => {
     let options: any = {}
     props &&
       Object.keys(props).forEach(vueProp => {
@@ -281,9 +285,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           entityGraphics.indexOf(cesiumProp) !== -1 &&
           (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0)
         ) {
-          options[cesiumProp] = transformProps(props[vueProp])
+          options[cesiumProp] = transformProps(props[vueProp], childProps)
         } else {
-          options[cesiumProp] = transformProp(vueProp, props[vueProp])
+          options[cesiumProp] = transformProp(vueProp, props[vueProp], childProps)
         }
       })
 
@@ -291,7 +295,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     return options as T
   }
 
-  const transformProp = (prop, value) => {
+  const transformProp = (prop, value, childProps?) => {
     const className = getObjClassName(value)
     if (
       className &&
@@ -299,10 +303,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       entityGraphics.indexOf(prop) !== -1 &&
       (vcInstance.cesiumClass === 'Entity' || vcInstance.cesiumClass.indexOf('DataSource') > 0 || vcInstance.cesiumClass === 'VcOverlayDynamic')
     ) {
-      return transformProps(value)
+      return transformProps(value, childProps)
     } else {
       const cmpName = vcInstance.proxy?.$options.name
-      const propOption = vcInstance.proxy?.$options.props[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
+      const propOption = vcInstance.proxy?.$options.props[prop] || childProps?.[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
       return propOption?.watcherOptions && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
         : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity')

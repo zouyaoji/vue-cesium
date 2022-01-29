@@ -1,3 +1,11 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2022-01-29 22:55:37
+ * @LastEditTime: 2022-01-29 22:57:02
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\index.tpl
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
      crossorigin="anonymous"></script>
+    <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
+    <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264"></script>
   </head>
   <body>
     <div id="app"></div>

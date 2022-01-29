@@ -29,6 +29,9 @@ declare namespace Cesium {
   // class GeometryAttributes {
   //   constructor(opts)
   // }
+  interface CumulusCloud {
+    id?: string
+  }
   interface Viewer {
     viewerWidgetResized: Event
     _selectionIndicator?: SelectionIndicator
@@ -125,6 +128,10 @@ declare namespace Cesium {
 
   interface PrimitiveCollection {
     _primitives: Array<Primitive | any>
+  }
+
+  interface CloudCollection {
+    _clouds: CumulusCloud[]
   }
 
   interface ShadowMap {

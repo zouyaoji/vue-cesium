@@ -96,7 +96,7 @@ export default defineComponent({
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 135px;
+    max-width: 200px;
   }
 }
 

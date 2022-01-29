@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-01-18 14:55:00
+ * @LastEditTime: 2022-01-28 16:20:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\index.ts
@@ -9,6 +9,8 @@
 import { App } from 'vue'
 import CollectionBillboard from './billboard-collection'
 import Billboard from './billboard'
+import CollectionCloud from './cloud-collection'
+import CumulusCloud from './cloud'
 import CollectionLabel from './label-collection'
 import Label from './label'
 import CollectionPoint from './point-collection'
@@ -21,10 +23,12 @@ import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
   CollectionBillboard,
+  CollectionCloud,
   CollectionLabel,
   CollectionPoint,
   CollectionPolyline,
   CollectionPrimitive,
+  CumulusCloud,
   Billboard,
   Label,
   Point,
@@ -49,11 +53,13 @@ components.forEach(cmp => {
 })
 
 export const VcCollectionBillboard = CollectionBillboard as SFCWithInstall<typeof CollectionBillboard>
+export const VcCollectionCloud = CollectionCloud as SFCWithInstall<typeof CollectionCloud>
 export const VcCollectionLabel = CollectionLabel as SFCWithInstall<typeof CollectionLabel>
 export const VcCollectionPoint = CollectionPoint as SFCWithInstall<typeof CollectionPoint>
 export const VcCollectionPolyline = CollectionPolyline as SFCWithInstall<typeof CollectionPolyline>
 export const VcCollectionPrimitive = CollectionPrimitive as SFCWithInstall<typeof CollectionPrimitive>
 export const VcBillboard = Billboard as SFCWithInstall<typeof Billboard>
+export const VcCumulusCloud = CumulusCloud as SFCWithInstall<typeof CumulusCloud>
 export const VcLabel = Label as SFCWithInstall<typeof Label>
 export const VcPoint = Point as SFCWithInstall<typeof Point>
 export const VcPolyline = Polyline as SFCWithInstall<typeof Polyline>
@@ -61,6 +67,8 @@ export const VcPolygon = Polygon as SFCWithInstall<typeof Polygon>
 
 export * from './billboard'
 export * from './billboard-collection'
+export * from './cloud'
+export * from './cloud-collection'
 export * from './label'
 export * from './label-collection'
 export * from './point'

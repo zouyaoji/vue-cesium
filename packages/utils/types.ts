@@ -245,6 +245,7 @@ interface VcComponentInternalInstance extends ComponentInternalInstance {
   unmount?(): Promise<boolean | undefined>
   children: Array<VcComponentInternalInstance>
   alreadyListening: string[]
+  removeCallbacks: Array<AnyFunction<any>>
   // third
   earth?: AnyObject
   map?: AnyObject
@@ -534,6 +535,7 @@ export type VcPrimitive =
   | Cesium.PointPrimitive
   | Cesium.Primitive
   | Cesium.Model
+  | Cesium.Cesium3DTileset
 
 export type VcPrimitiveCollection =
   | Cesium.BillboardCollection

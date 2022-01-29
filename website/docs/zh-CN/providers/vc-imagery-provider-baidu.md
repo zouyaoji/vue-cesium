@@ -166,7 +166,7 @@
 | ready | (readyObj: VcReadyObject) | 对象加载成功时触发。 |
 | destroyed | (instance: VcComponentInternalInstance) | 对象销毁时触发。 |
 | errorEvent | (evt: Cesium.TileProviderError) | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | 当图层提供者可用时触发, 返回 ImageryProvider 实例。 |
+| readyPromise | (provider: VcTerrainProvider) | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | 当图层提供者可用时触发, 返回 ImageryProvider 实例。 |
 
 ### 参考
 

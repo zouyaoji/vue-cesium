@@ -348,6 +348,10 @@
               "title": "BillboardCollection 布告板集合"
             },
             {
+              "path": "/primitives/vc-collection-cloud",
+              "title": "CloudCollection 云集合"
+            },
+            {
               "path": "/primitives/vc-collection-label",
               "title": "LabelCollection 标签集合"
             },
@@ -830,6 +834,10 @@
             {
               "path": "/primitives/vc-collection-billboard",
               "title": "BillboardCollection"
+            },
+            {
+              "path": "/primitives/vc-collection-cloud",
+              "title": "CloudCollection"
             },
             {
               "path": "/primitives/vc-collection-label",
