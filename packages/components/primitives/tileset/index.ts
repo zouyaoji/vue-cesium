@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
   show,
@@ -182,7 +182,19 @@ export const tilesetPrimitiveProps = {
   },
   customShader: {
     type: Object as PropType<Cesium.CustomShader>
-  }
+  },
+  properties: {
+    type: Array as PropType<
+      Array<{
+        key: string
+        keyValue: any
+        propertyName: string
+        propertyValue: any
+      }>
+    >
+  },
+  fragmentShader: String,
+  replaceFS: Boolean
 }
 export default defineComponent({
   name: 'VcPrimitiveTileset',
@@ -193,6 +205,46 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'Cesium3DTileset'
     usePrimitives(props, ctx, instance)
+    ;(instance.proxy as VcComponentPublicInstance).createPromise.then(obj => {
+      const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
+      instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
+      console.log(tileset)
+    })
+
+    const updateTile = (tile: Cesium.Cesium3DTile) => {
+      const content = tile.content
+      const model = (content as any)._model
+      // sets properties
+      for (let i = 0; i < content.featuresLength; i++) {
+        const feature = content.getFeature(i)
+        if (props.properties && props.properties.length) {
+          props.properties.forEach(property => {
+            if (feature.hasProperty(property['key']) && feature.getProperty(property['key']) === property['keyValue']) {
+              feature.setProperty(property['propertyName'], property['propertyValue'])
+            }
+          })
+        }
+      }
+      // sets fragmentShader
+      if (props.fragmentShader && model && model._sourcePrograms && model._rendererResources) {
+        Object.keys(model._sourcePrograms).forEach(key => {
+          const program = model._sourcePrograms[key]
+          const sourceShaders = model._rendererResources.sourceShaders
+          if (props.replaceFS) {
+            sourceShaders[program.fragmentShader] = props.fragmentShader
+          } else {
+            const oldFS = sourceShaders[program.fragmentShader]
+            sourceShaders[program.fragmentShader] = oldFS.replace(
+              'gl_FragColor = vec4(color, 1.0);\n}',
+              `gl_FragColor = vec4(color, 1.0);
+             ${props.fragmentShader}\n}
+            `
+            )
+          }
+        })
+        model._shouldRegenerateShaders = true
+      }
+    }
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || ''))
   }
 })

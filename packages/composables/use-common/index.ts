@@ -15,6 +15,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // state
   vcInstance.alreadyListening = []
+  vcInstance.removeCallbacks = []
   let unwatchFns: Array<WatchStopHandle> = []
   vcInstance.mounted = false
   const vcMitt: Emitter<VcMittEvents> = mitt()
@@ -124,6 +125,9 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           setPropsWatcher(false)
           vcInstance.cesiumObject = undefined
           vcInstance.mounted = false
+          vcInstance.removeCallbacks.forEach(removeCallback => {
+            removeCallback()
+          })
           emit('destroyed', vcInstance)
           logger.debug(`${vcInstance.cesiumClass}---unmounted`)
 
