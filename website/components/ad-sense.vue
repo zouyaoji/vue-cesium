@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-02-05 23:37:31
+ * @LastEditTime: 2022-02-06 00:04:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -14,7 +14,7 @@
         class="adsbygoogle"
         style="display: block"
         data-ad-client="ca-pub-3445228872340333"
-        data-ad-slot="6763307871"
+        data-ad-slot="1703529564"
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
@@ -25,7 +25,7 @@
 <script>
 export default {
   mounted() {
-    // (window.adsbygoogle = window.adsbygoogle || []).push({})
+    ;(window.adsbygoogle = window.adsbygoogle || []).push({})
   }
 }
 </script>

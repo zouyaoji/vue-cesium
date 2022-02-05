@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-29 22:55:37
- * @LastEditTime: 2022-02-05 22:57:29
+ * @LastEditTime: 2022-02-05 22:55:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\index.tpl
@@ -31,9 +31,17 @@
     <div id="app"></div>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
      crossorigin="anonymous"></script>
+    <!-- vue-cesium文档底部 -->
+    <!-- <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-3445228872340333"
+      data-ad-slot="1703529564"
+      data-ad-format="auto"
+      data-full-width-responsive="true">
+    </ins>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    </script> -->
   </body>
   <% if (process.env.NODE_ENV === 'production') { %><script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
