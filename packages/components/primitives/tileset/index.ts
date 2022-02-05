@@ -208,7 +208,6 @@ export default defineComponent({
     ;(instance.proxy as VcComponentPublicInstance).createPromise.then(obj => {
       const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
       instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
-      console.log(tileset)
     })
 
     const updateTile = (tile: Cesium.Cesium3DTile) => {

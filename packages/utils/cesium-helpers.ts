@@ -986,7 +986,6 @@ export function getFirstIntersection(
   const { Cartesian3, Ray, defined } = Cesium
   const direction = Cartesian3.normalize(Cartesian3.subtract(end, start, new Cartesian3()), new Cartesian3())
   const ray = new Ray(start, direction)
-  console.log(objectsToExclude)
   const result = viewer.scene.pickFromRay(ray, objectsToExclude)
   if (defined(result)) {
     if (defined(result.position)) {

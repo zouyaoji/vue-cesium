@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-01-26 16:45:13
+ * @LastEditTime: 2022-02-05 23:40:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -113,7 +113,6 @@ export default function (props, ctx, cmpName: string) {
               }
             })
             const intersection = getFirstIntersection(observationPoint, destinationPoint, $services.viewer, objectsToExclude)
-            console.log(intersection)
             if (defined(intersection)) {
               positionsNew.push(intersection)
             }
