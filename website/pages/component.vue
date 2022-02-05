@@ -9,7 +9,7 @@
           <router-view class="content" />
         </div>
         <footer-nav />
-        <ad-sense />
+        <ad-sense v-if="adSenseShow" />
       </div>
       <el-backtop v-if="showBackToTop" target=".page-component__scroll .el-scrollbar__wrap" :right="100" :bottom="50" />
     </div>
@@ -29,7 +29,8 @@ export default {
       scrollTop: 0,
       showHeader: true,
       componentScrollBar: null,
-      componentScrollBoxElement: null
+      componentScrollBoxElement: null,
+      adSenseShow: false
     }
   },
   components: {
@@ -44,8 +45,10 @@ export default {
     '$route.path'() {
       // 触发伪滚动条更新
       this.componentScrollBox.scrollTop = 0
+      this.adSenseShow = false
       this.$nextTick(() => {
         this.componentScrollBar.update()
+        this.adSenseShow = true
       })
     }
   },
@@ -61,6 +64,7 @@ export default {
     this.componentScrollBox.addEventListener('scroll', this.throttledScrollHandler)
     document.body.classList.add('is-component')
     this.addContentObserver()
+    this.adSenseShow = true
   },
   unmounted() {
     document.body.classList.remove('is-component')
