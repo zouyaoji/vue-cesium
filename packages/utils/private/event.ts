@@ -19,7 +19,9 @@ try {
   })
   window.addEventListener('qtest', null as any, opts)
   window.removeEventListener('qtest', null as any, opts)
-} catch (e) {}
+} catch (e) {
+  //
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}

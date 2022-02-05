@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-18 09:49:21
+ * @LastEditTime: 2022-02-06 02:07:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\.eslintrc.js
@@ -62,7 +62,7 @@ module.exports = {
         },
         singleline: {
           delimiter: 'semi',
-          requireLast: true
+          requireLast: false
         }
       }
     ],
