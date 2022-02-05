@@ -8,12 +8,18 @@
     </div>
     <div class="next-and-prev-link" style="padding-top: 1rem">
       <span v-if="leftNav" class="footer-nav-link footer-nav-left" @click="handleNavClick('prev')">
-        <i class="el-icon-arrow-left"></i>
+        <!-- <i class="el-icon-arrow-left"></i> -->
+        <el-icon class="no-inherit" style="vertical-align: middle; color: #409eff">
+          <arrow-left-bold />
+        </el-icon>
         {{ leftNav.title || leftNav.name }}
       </span>
       <span v-if="rightNav" class="footer-nav-link footer-nav-right" @click="handleNavClick('next')">
         {{ rightNav.title || rightNav.name }}
-        <i class="el-icon-arrow-right"></i>
+        <!-- <i class="el-icon-arrow-right"></i> -->
+        <el-icon class="no-inherit" style="vertical-align: middle; color: #409eff">
+          <arrow-right-bold />
+        </el-icon>
       </span>
     </div>
   </div>
@@ -111,6 +117,7 @@ export default {
 .footer-nav-link {
   cursor: pointer;
   transition: 0.3s;
+  color: #409eff;
 
   &:hover {
     color: #409eff;

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-29 22:55:37
- * @LastEditTime: 2022-01-30 00:10:48
+ * @LastEditTime: 2022-02-05 22:57:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\index.tpl
@@ -20,8 +20,8 @@
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
     <!-- 谷歌广告 -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
-     crossorigin="anonymous"></script>
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
+     crossorigin="anonymous"></script> -->
     <!-- 万维广告 -->
     <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
     <!-- 友盟统计 -->
@@ -29,6 +29,11 @@
   </head>
   <body>
     <div id="app"></div>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
+     crossorigin="anonymous"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </body>
   <% if (process.env.NODE_ENV === 'production') { %><script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

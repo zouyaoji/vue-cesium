@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-01-30 01:33:53
+ * @LastEditTime: 2022-02-05 23:37:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .adsense-content {
-  max-width: 910px;
+  max-width: 1180px;
   margin: 0 auto;
 }
 .adsense-title {

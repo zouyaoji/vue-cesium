@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-31 16:26:50
- * @LastEditTime: 2021-12-07 11:31:28
+ * @LastEditTime: 2022-02-05 23:14:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\entry.js
@@ -18,7 +18,7 @@ import FooterNav from './components/footer-nav'
 import AppHeading from './components/heading'
 import AppLink from './components/link'
 import AppImg from './components/img'
-
+import icon from './icon.json'
 import title from './i18n/title'
 import 'highlight.js/styles/color-brewer.css'
 import './demo-styles/index.scss'
@@ -27,12 +27,23 @@ import './assets/styles/fonts/style.css'
 
 import App from './app.vue'
 import ElementPlus from 'element-plus'
+import * as ElementPlusSvgIcons from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 
 import VueCesium from 'vue-cesium'
 import '../packages/theme-default/src/index.scss'
 
 const app = createApp(App)
+
+const svgIcons = []
+for (let i in ElementPlusSvgIcons) {
+  const component = ElementPlusSvgIcons[i]
+  app.component(component.name, component)
+  svgIcons.push(component.name)
+}
+
+app.config.globalProperties.$svgIcons = svgIcons
+app.config.globalProperties.$icon = icon
 
 app.component('DemoBlock', demoBlock)
 app.component('RightNav', RightNav)
