@@ -88,7 +88,9 @@
             <el-dropdown trigger="click" class="nav-dropdown nav-lang" :class="{ 'is-active': langDropdownVisible }">
               <span>
                 {{ displayedLang }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
+                <el-icon class="el-icon--right">
+                  <arrow-down />
+                </el-icon>
               </span>
               <template #dropdown>
                 <el-dropdown-menu class="nav-dropdown-list" @input="handleLangDropdownToggle">
@@ -345,6 +347,7 @@ export default {
   margin-bottom: 6px;
   padding-left: 18px;
   width: 100%;
+  vertical-align: inherit;
 
   span {
     display: block;

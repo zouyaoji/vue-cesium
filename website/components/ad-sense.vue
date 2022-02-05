@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-02-06 00:04:59
+ * @LastEditTime: 2022-02-06 01:34:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -12,11 +12,11 @@
     <div style="padding: 0 1.5rem">
       <ins
         class="adsbygoogle"
-        style="display: block"
+        style="display: block; text-align: center"
+        data-ad-layout="in-article"
+        data-ad-format="fluid"
         data-ad-client="ca-pub-3445228872340333"
-        data-ad-slot="1703529564"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        data-ad-slot="8270352624"
       ></ins>
     </div>
   </div>
@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .adsense-content {
   max-width: 1180px;
   margin: 0 auto;

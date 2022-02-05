@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:03
- * @LastEditTime: 2022-01-30 01:22:34
+ * @LastEditTime: 2022-02-06 00:42:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\installation.md
@@ -16,14 +16,8 @@ VueCesium 可以在支持 [ES2018](https://caniuse.com/?feats=mdn-javascript_bui
 由于 Vue 3 及 Cesium1.85+ 不再支持 IE11，VueCesium 也不再支持 IE 浏览器。
 
 | ![IE](https://cdn.jsdelivr.net/npm/@browser-logos/edge/edge_32x32.png) | ![Firefox](https://cdn.jsdelivr.net/npm/@browser-logos/firefox/firefox_32x32.png) | ![Chrome](https://cdn.jsdelivr.net/npm/@browser-logos/chrome/chrome_32x32.png) | ![Safari](https://cdn.jsdelivr.net/npm/@browser-logos/safari/safari_32x32.png) |
-| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ----------- |
-| <!--                                                                   | Edge ≥ 79                                                                         | Firefox ≥ 78                                                                   | Chrome ≥ 64                                                                    | Safari ≥ 12 |
-
-### 版本
-
-VueCesium 目前还处于快速开发迭代中：
-
-[![VueCesium version badge](https://img.shields.io/npm/v/vue-cesium/next?style=flat-square)](https://www.npmjs.org/package/vue-cesium) -->
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Edge ≥ 79                                                              | Firefox ≥ 78                                                                      | Chrome ≥ 64                                                                    | Safari ≥ 12                                                                    |
 
 ### 使用包管理器
 

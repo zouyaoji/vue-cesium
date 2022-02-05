@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-31 16:26:50
- * @LastEditTime: 2022-02-05 23:14:59
+ * @LastEditTime: 2022-02-06 01:32:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\entry.js
@@ -78,7 +78,7 @@ router.isReady().then(() => {
         return
       }
     }
-    document.title = 'Element'
+    document.title = 'Vue Cesium'
     ga('send', 'event', 'PageView', route.name)
   })
 })
