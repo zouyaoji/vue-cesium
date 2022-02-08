@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-22 09:04:55
+ * @LastEditTime: 2022-02-08 09:43:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
@@ -20,13 +20,13 @@ import type {
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { defaultProps, defaultOptions } from './defaultProps'
+import { defaultProps, defaultOptions, VcNavigationOtherOpts } from './defaultProps'
 import { useCommon } from '@vue-cesium/composables'
 import VcDistanceLegend from '../distance-legend'
 import VcStatusBar from '../status-bar'
 import VcZoomControl, { VcZoomControlProps } from '../zoom-control'
 import VcMyLocation, { VcMyLocationProps } from '../my-location'
-import VcCompass from '../compass'
+import VcCompass, { VcCompassProps } from '../compass'
 import VcPrint, { VcPrintProps } from '../print'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
@@ -358,4 +358,36 @@ export default defineComponent({
 })
 
 export type VcNavigationEmits = typeof emits
-export type { VcNavigationOtherOpts, VcNavigationProps } from './defaultProps'
+// export type { VcNavigationOtherOpts, VcNavigationProps } from './defaultProps'
+export type VcNavigationProps = {
+  /**
+   * Specify the position of the VcNavigation.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcNavigation horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the compass options of the component. false means no display.
+   */
+  compassOpts?: false | VcCompassProps
+  /**
+   * Specify the zoom control options of the component. false means no display.
+   */
+  zoomOpts?: false | VcZoomControlProps
+  /**
+   * Specify the print button options of the component. false means no display.
+   */
+  printOpts?: false | VcPrintProps
+  /**
+   * Specify the location button options of the component. false means no display.
+   */
+  locationOpts?: false | VcMyLocationProps
+  /**
+   * Specify the other controls(status bar & distance legend) options of the component. false means no display.
+   */
+  otherOpts?: false | VcNavigationOtherOpts
+}

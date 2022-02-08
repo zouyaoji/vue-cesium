@@ -198,5 +198,25 @@ export default defineComponent({
   }
 })
 
-export type VcNavigationSmProps = ExtractPropTypes<typeof navigationSmProps>
+// export type VcNavigationSmProps = ExtractPropTypes<typeof navigationSmProps>
 export type VcNavigationSmEmits = typeof emits
+export type VcNavigationSmProps = {
+  /**
+   * Specify the position of the VcNavigationSm.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcNavigationSm horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the compass options of the component. false means no display.
+   */
+  compassOpts?: false | VcCompassSmProps
+  /**
+   * Specify the zoom control options of the component. false means no display.
+   */
+  zoomOpts?: false | VcZoomControlSmProps
+}
