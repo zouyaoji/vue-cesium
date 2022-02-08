@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.8
+
+_2022-02-08_
+
+#### Bug fixes
+
+- umd package demo is broken. [#149](https://github.com/zouyaoji/vue-cesium/issues/149)
+
 ### 3.0.7
 
 _2022-01-30_
