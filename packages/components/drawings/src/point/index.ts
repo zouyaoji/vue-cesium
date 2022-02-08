@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-01-22 14:45:10
+ * @LastEditTime: 2022-02-08 11:01:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
@@ -15,7 +15,8 @@ export default defineComponent({
   name: 'VcDrawingPoint',
   props: {
     ...useDrawingActionProps,
-    heightReference: Number
+    heightReference: Number,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

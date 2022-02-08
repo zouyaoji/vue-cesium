@@ -1,30 +1,6 @@
 import { defineComponent, getCurrentInstance, ref, reactive } from 'vue'
 import type { ExtractPropTypes } from 'vue'
-import {
-  measurementsProps,
-  defaultOptions,
-  distanceMeasurementActionDefault,
-  componentDistanceMeasurementActionDefault,
-  distanceMeasurementDefault,
-  componentDistanceMeasurementDefault,
-  polylineMeasurementActionDefault,
-  polylineMeasurementDefault,
-  horizontalMeasurementActionDefault,
-  horizontalMeasurementDefault,
-  verticalMeasurementActionDefault,
-  verticalMeasurementDefault,
-  heightMeasurementActionDefault,
-  heightMeasurementDefault,
-  areaMeasurementActionDefault,
-  areaMeasurementDefault,
-  pointMeasurementActionDefault,
-  pointMeasurementDefault,
-  rectangleMeasurementActionDefault,
-  rectangleMeasurementDefault,
-  regularMeasurementDefault,
-  circleMeasurementDefault,
-  mainFabDefault
-} from './defaultProps'
+import { measurementsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
 import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
 import VcMeasurementDistance from './distance'
@@ -50,7 +26,6 @@ import type {
 import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useLocaleInject } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
-import { circleDrawingActionDefault, clearActionDefault, regularDrawingActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 
 const emits = {

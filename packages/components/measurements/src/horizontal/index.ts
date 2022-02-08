@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-25 15:09:38
+ * @LastEditTime: 2022-02-08 10:54:07
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\horizontal\index.ts
@@ -31,7 +31,8 @@ export default defineComponent({
     decimals: Object,
     showAngleLabel: Boolean,
     showDashedLine: Boolean,
-    showDistanceLabel: Boolean
+    showDistanceLabel: Boolean,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 14:56:10
+ * @LastEditTime: 2022-02-08 10:54:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\rectangle\index.ts
@@ -32,7 +32,8 @@ export default defineComponent({
     decimals: Object,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
-    loop: Boolean
+    loop: Boolean,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

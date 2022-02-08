@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-25 14:55:43
+ * @LastEditTime: 2022-02-08 10:54:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\polyline\index.ts
@@ -30,7 +30,8 @@ export default defineComponent({
     locale: String,
     decimals: Object,
     showAngleLabel: Boolean,
-    showDistanceLabel: Boolean
+    showDistanceLabel: Boolean,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

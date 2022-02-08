@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-25 14:54:41
+ * @LastEditTime: 2022-02-08 10:54:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\height\index.ts
@@ -25,7 +25,8 @@ export default defineComponent({
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     labelOpts: Object as PropType<VcLabelProps>,
     locale: String,
-    decimals: Object
+    decimals: Object,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

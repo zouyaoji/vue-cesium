@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-25 14:53:47
+ * @LastEditTime: 2022-02-08 10:53:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
@@ -31,7 +31,8 @@ export default defineComponent({
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
-    clampToGround: Boolean
+    clampToGround: Boolean,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

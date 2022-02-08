@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-01-25 14:54:09
+ * @LastEditTime: 2022-02-08 10:53:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\distance\index.ts
@@ -33,7 +33,8 @@ export default defineComponent({
     yLabelOpts: Object as PropType<VcLabelProps>,
     yAngleLabelOpts: Object as PropType<VcLabelProps>,
     locale: String,
-    decimals: Object
+    decimals: Object,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

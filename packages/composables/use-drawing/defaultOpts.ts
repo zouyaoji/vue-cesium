@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 13:48:30
- * @LastEditTime: 2022-01-26 17:09:53
+ * @LastEditTime: 2022-02-08 11:00:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\defaultOpts.ts
@@ -169,7 +169,8 @@ const pointDrawingDefault: VcDrawingOpts = {
       icon: 'vc-icons-remove'
     })
   },
-  heightReference: 1
+  heightReference: 1,
+  disableDepthTest: true
 }
 
 const segmentDrawingDefault: VcDrawingOpts = {
@@ -190,7 +191,8 @@ const segmentDrawingDefault: VcDrawingOpts = {
     removeAll: Object.assign({}, editorOptsDefault, {
       icon: 'vc-icons-delete'
     })
-  }
+  },
+  disableDepthTest: true
 }
 
 const polylineDrawingDefault: VcDrawingOpts = {
@@ -217,7 +219,8 @@ const polylineDrawingDefault: VcDrawingOpts = {
       icon: 'vc-icons-delete'
     })
   },
-  loop: false
+  loop: false,
+  disableDepthTest: true
 }
 
 const polygonDrawingDefault: VcDrawingOpts = {
@@ -259,7 +262,8 @@ const polygonDrawingDefault: VcDrawingOpts = {
       icon: 'vc-icons-delete'
     })
   },
-  loop: true
+  loop: true,
+  disableDepthTest: true
 }
 
 const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingDefault, {
@@ -276,7 +280,8 @@ const rectangleDrawingDefault: VcDrawingOpts = Object.assign({}, polygonDrawingD
     })
   },
   edge: 4,
-  regular: true
+  regular: true,
+  disableDepthTest: true
 })
 
 const circleDrawingDefault: VcDrawingOpts = Object.assign({}, rectangleDrawingDefault, {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-01-26 17:09:43
+ * @LastEditTime: 2022-02-08 10:58:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -266,6 +266,7 @@ export interface VcDrawingOpts {
   edge?: number
   sightlineType?: string
   regular?: boolean
+  disableDepthTest?: boolean
 }
 
 export type MeasurementType =

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-01-25 21:34:17
+ * @LastEditTime: 2022-02-08 10:54:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
@@ -29,7 +29,8 @@ export default defineComponent({
     decimals: Object,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
-    loop: Boolean
+    loop: Boolean,
+    disableDepthTest: Boolean
   },
   emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
   setup(props, ctx) {

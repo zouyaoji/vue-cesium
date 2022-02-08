@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 14:02:20
+ * @LastEditTime: 2022-02-08 11:01:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\rectangle\index.ts
@@ -21,7 +21,8 @@ export default defineComponent({
     polylineOpts: Object as PropType<VcGeometryPolylineProps>,
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     polygonOpts: Object as PropType<VcPolygonProps>,
-    clampToGround: Boolean
+    clampToGround: Boolean,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {

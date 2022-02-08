@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-15 09:47:36
- * @LastEditTime: 2022-01-22 14:37:29
+ * @LastEditTime: 2022-02-08 11:02:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-action.ts
@@ -148,6 +148,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcCollectionLabelReady = (e: VcReadyObject) => {
+    if (!props.disableDepthTest) return
     const labelCollection = e.cesiumObject as any
     const originalUpdate = labelCollection.update
 
@@ -169,6 +170,8 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcPrimitiveReady = (e: VcReadyObject) => {
+    if (!props.disableDepthTest) return
+
     const primitive = e.cesiumObject as any
     const originalPrimitiveUpdate = primitive.update
 

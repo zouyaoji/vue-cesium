@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-01-25 21:33:55
+ * @LastEditTime: 2022-02-08 11:01:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\regular\index.ts
@@ -22,7 +22,8 @@ export default defineComponent({
     polygonOpts: Object as PropType<VcPolygonProps>,
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     clampToGround: Boolean,
-    edge: Number
+    edge: Number,
+    disableDepthTest: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
