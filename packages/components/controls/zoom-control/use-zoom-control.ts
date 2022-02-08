@@ -1,5 +1,5 @@
 import { VcCamera, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
-import { flyToCamera } from '@vue-cesium/utils/cesium-helpers'
+import { flyToCamera, heightToLevel } from '@vue-cesium/utils/cesium-helpers'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
 import { VcTooltip } from '@vue-cesium/components/ui'
@@ -82,13 +82,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           const endPosition = Cartesian3.add(focus, movementVector, focus)
           const type = relativeAmount < 1 ? 'zoomIn' : 'zoomOut'
           const target = e.currentTarget
+          const level = heightToLevel(camera.positionCartographic.height).toFixed(0)
           const listener = getInstanceListener(vcInstance, 'zoomEvt')
           listener &&
             emit('zoomEvt', {
               type: type,
               camera: viewer.camera,
               status: 'start',
-              target: target
+              target: target,
+              level
             })
           if (Cesium.defined(viewer.trackedEntity) || scene.mode === SceneMode.COLUMBUS_VIEW) {
             // sometimes flyTo does not work (jumps to wrong position) so just set the position without any animation
@@ -106,7 +108,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
                     type: type,
                     camera: viewer.camera,
                     status: 'end',
-                    target: target
+                    target,
+                    level
                   })
               },
               cancel: () => {
@@ -115,7 +118,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
                     type: type,
                     camera: viewer.camera,
                     status: 'cancel',
-                    target: target
+                    target,
+                    level
                   })
               }
             })
@@ -142,13 +146,15 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     } else {
       const listener = getInstanceListener(vcInstance, 'zoomEvt')
       const target = e.currentTarget
+      const level = heightToLevel(viewer.camera.positionCartographic.height).toFixed(0)
       // reset to a default position or view defined in the options
       listener &&
         emit('zoomEvt', {
           type: 'zoomReset',
           camera: viewer.camera,
           status: 'start',
-          target: target
+          target,
+          level
         })
 
       const complete = () => {
@@ -157,7 +163,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
             type: 'zoomReset',
             camera: viewer.camera,
             status: 'end',
-            target: target
+            target,
+            level
           })
       }
       const cancel = () => {
@@ -166,7 +173,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
             type: 'zoomReset',
             camera: viewer.camera,
             status: 'cancel',
-            target: target
+            target,
+            level
           })
       }
 

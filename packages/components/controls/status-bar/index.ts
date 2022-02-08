@@ -10,6 +10,7 @@ import { VcBtn, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import defaultProps from './defaultProps'
 import { isPlainObject } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { heightToLevel } from '@vue-cesium/utils/cesium-helpers'
 
 const emits = {
   ...commonEmits,
@@ -186,16 +187,6 @@ export default defineComponent({
       scene._performanceDisplay._container.style.display = 'none'
     }, 500)
 
-    // 粗略计算
-    const heightToLevel = altitude => {
-      const A = 40487.57
-      const B = 0.00007096758
-      const C = 91610.74
-      const D = -40467.74
-
-      return Math.round(D + (A - D) / (1 + Math.pow(altitude / C, B)))
-    }
-
     const onCameraChanged = () => {
       const { viewer } = $services
       const { Math: CesiumMath } = Cesium
@@ -203,7 +194,7 @@ export default defineComponent({
       cameraInfo.pitch = CesiumMath.toDegrees(viewer.camera.pitch).toFixed(1)
       cameraInfo.roll = CesiumMath.toDegrees(viewer.camera.roll).toFixed(1)
       cameraInfo.height = viewer.camera.positionCartographic.height.toFixed(2)
-      cameraInfo.level = heightToLevel(cameraInfo.height).toFixed(0)
+      cameraInfo.level = heightToLevel(Number(cameraInfo.height)).toFixed(0)
     }
 
     const onMouseMove = e => {

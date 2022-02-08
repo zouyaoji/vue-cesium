@@ -614,6 +614,7 @@ export type VcZoomEvt = {
   camera: Cesium.Camera
   status: 'start' | 'end' | 'cancel'
   target: HTMLElement
+  level: number
 }
 
 export {
