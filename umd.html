@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-07 10:31:42
- * @LastEditTime: 2021-12-17 11:44:48
+ * @LastEditTime: 2022-02-08 09:20:22
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\public\umd.html
@@ -20,7 +20,7 @@
         <vc-viewer :camera="camera">
           <vc-overlay-echarts ref="echartOverlay" :options="options"> </vc-overlay-echarts>
         </vc-viewer>
-        <el-row class="demo-toolbar">
+        <el-row class="demo-toolbar" style="position: absolute; left: 1%; top: 1%; background-color: rgba(0, 0, 0, 0.2); min-width: 185px">
           <el-button type="danger" round @click="unload">销毁</el-button>
           <el-button type="danger" round @click="load">加载</el-button>
           <el-button type="danger" round @click="reload">重载</el-button>
