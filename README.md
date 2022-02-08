@@ -1,14 +1,11 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2021-12-01 15:16:28
+ * @LastEditTime: 2022-02-08 13:53:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
 -->
-
-# VUE CESIUM
-
 <p align="center">
   <img width="300px" src="https://zouyaoji.top/vue-cesium/favicon.png">
 </p>
@@ -37,17 +34,13 @@
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
 
-## Status: Beta
-
-This project is still under heavy development. Feel free to join us and make your first pull request.
-
-## Documentation
+## Getting Started
 
 You can find for more details, API, and other docs on [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-国内码云[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+- 中国大陆[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
 
-VueCesium supports the introduction of official CesiumJS, or other third-party platforms based on CesiumJS, Tested third-party libraries:
+VueCesium supports loading the official CesiumJS, or other third-party platforms based on CesiumJS. The tested third-party libraries:
 
 - [CesiumJS](https://cesium.com/platform/cesiumjs/)
 - [SuperMap iClient3D for WebGL](http://support.supermap.com.cn:8090/webgl/web/index.html)
@@ -65,7 +58,7 @@ $ pnpm i
 
 the project will install all dependencies and run `lerna bootstrap` to initialize the project
 
-## Website preview
+## Document preview
 
 With command
 
@@ -75,33 +68,12 @@ $ pnpm website-dev
 
 the project will launch website for you to preview all existing component
 
-## Generate new component
-With command
-```bash
-$ pnpm gen component-name
-````
-
-Note the `component-name` must be in `kebab-case`, combining words by replacing each space with a dash.
-
-# Commit template
-
-With command
-
-```bash
-pnpm cz
-```
-
-Example
-
-```
-[TYPE](SCOPE):DESCRIPTION#[ISSUE]
-# example feat(viewer):add type 'viewer' for form usage #1234
-```
-
-## Licence
+## License
 
 VueCesium is open source software licensed as
 [MIT](https://github.com/zouyaoji/vue-cesium/blob/master/LICENSE).
+
+Copyright (c) 2018-present, zouyaoji 370681295@qq.com
 
 ## Sponsors
 
@@ -114,3 +86,7 @@ This project wouldn't exist without our amazing contributors
 <a href="https://github.com/zouyaoji/vue-cesium/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=zouyaoji/vue-cesium" />
 </a>
+
+## References
+
+VueJS UI libraries: [quasar](https://github.com/quasarframework/quasar) and [element-plus](https://github.com/element-plus/element-plus).

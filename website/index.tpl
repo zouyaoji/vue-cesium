@@ -20,8 +20,8 @@
     <script src="//at.alicdn.com/t/font_2419801_f2x68rg10b.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/netcdfjs@0.7.0/dist/netcdfjs.min.js"></script>
     <!-- 谷歌广告 -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
-     crossorigin="anonymous"></script> -->
+    {# <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
+     crossorigin="anonymous"></script> --> #}
     <!-- 万维广告 -->
     <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
     <!-- 友盟统计 -->
@@ -29,19 +29,6 @@
   </head>
   <body>
     <div id="app"></div>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3445228872340333"
-     crossorigin="anonymous"></script>
-    <!-- vue-cesium文档底部 -->
-    <!-- <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-3445228872340333"
-      data-ad-slot="1703529564"
-      data-ad-format="auto"
-      data-full-width-responsive="true">
-    </ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script> -->
   </body>
   <% if (process.env.NODE_ENV === 'production') { %><script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
