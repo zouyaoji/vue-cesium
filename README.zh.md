@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-02-08 13:55:12
+ * @LastEditTime: 2022-02-08 13:58:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -56,7 +56,7 @@ VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方
 $ pnpm i
 ```
 
-将安装所有依赖，并且用 `lerna bootstrap` 初始化项目。
+将安装所有依赖。
 
 ## 预览文档
 

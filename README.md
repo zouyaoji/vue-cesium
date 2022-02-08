@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-02-08 13:53:41
+ * @LastEditTime: 2022-02-08 13:58:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -56,7 +56,7 @@ With command
 $ pnpm i
 ```
 
-the project will install all dependencies and run `lerna bootstrap` to initialize the project
+the project will install all dependencies.
 
 ## Document preview
 
