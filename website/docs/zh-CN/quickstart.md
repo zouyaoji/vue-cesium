@@ -72,7 +72,7 @@ import 'vue-cesium/dist/index.css'
 
 ## 全局配置
 
-在引入 `VueCesium` 时，可以传入一个全局的配置对象。改对象目前支持 `cesiumPath` 、 `accessToken` 以及 `locale` 字段。`cesiumPath` 用于改变组件默认加载的 `Cesium` 库，`accessToken` 设置 `Cesium.Ion.defaultAccessToken` 的值。而 `locale` 用于国际化语言，具体使用方式见下一节文档。
+在引入 `VueCesium` 时，可以传入一个全局的配置对象。该对象目前支持 `cesiumPath` 、 `accessToken` 以及 `locale` 字段。`cesiumPath` 用于改变组件默认加载的 `Cesium` 库，`accessToken` 设置 `Cesium.Ion.defaultAccessToken` 的值。而 `locale` 用于国际化语言，具体使用方式见下一节文档。
 
 完整引入：
 
