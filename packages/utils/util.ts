@@ -1,15 +1,7 @@
 import { getCurrentInstance } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
-import { isUndefined, isNull, camelCase } from 'lodash-es'
+import { isUndefined, isNull, camelCase } from 'lodash-unified'
 import { AnyFunction, AnyObject } from './types'
-
-export function useGlobalConfig() {
-  const vm: any = getCurrentInstance()
-  if ('$VueCesium' in vm.proxy) {
-    return vm.proxy.$VueCesium
-  }
-  return {}
-}
 
 export function getFileNameByPath(path: string): string {
   const posStart = path.lastIndexOf('/')
@@ -153,6 +145,15 @@ const addCustomProperty = (obj, options) => {
       obj[prop] = options[prop]
     }
   }
+}
+
+export const merge = <T extends Record<string, any>>(a: T, b: T) => {
+  const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])] as (keyof T)[]
+  const obj = {} as T
+  for (const key of keys) {
+    obj[key] = b[key] ?? a[key]
+  }
+  return obj
 }
 
 // reexport from lodash & vue shared

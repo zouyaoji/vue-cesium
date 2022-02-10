@@ -617,6 +617,8 @@ export type VcZoomEvt = {
   level: number
 }
 
+export type MaybeRef<T> = T | Ref<T>
+
 export {
   AnyObject,
   VcCamera,
