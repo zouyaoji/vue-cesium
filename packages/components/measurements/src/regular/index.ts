@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-02-08 10:54:23
+ * @LastEditTime: 2022-02-08 16:19:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
@@ -13,6 +13,7 @@ import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 export default defineComponent({
   name: 'VcMeasurementRegular',
   props: {
@@ -32,7 +33,7 @@ export default defineComponent({
     loop: Boolean,
     disableDepthTest: Boolean
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
+  emits: drawingEmit,
   setup(props, ctx) {
     // state
     return useDrawingSegment(props, ctx, 'VcMeasurementRegular')

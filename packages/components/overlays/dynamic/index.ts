@@ -14,7 +14,7 @@ import { show } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, isPlainObject, kebabCase } from '@vue-cesium/utils/util'
 import DynamicOverlay from '@vue-cesium/shared/src/DynamicOverlay'
 import { makeJulianDate } from '@vue-cesium/utils/cesium-helpers'
-import { cloneDeep, differenceBy, remove } from 'lodash-es'
+import { cloneDeep, differenceBy, remove } from 'lodash-unified'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { commonEmits } from '@vue-cesium/utils/emits'
 

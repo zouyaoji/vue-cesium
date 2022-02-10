@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-04 21:42:14
- * @LastEditTime: 2022-01-26 09:29:34
+ * @LastEditTime: 2022-02-08 16:21:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\sightline\index.ts
@@ -14,6 +14,7 @@ import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { VcPolygonProps } from '../../../primitive-collections'
+import { drawingEmit } from '@vue-cesium/utils/emits'
 
 export default defineComponent({
   name: 'VcAnalysisSightline',
@@ -28,7 +29,7 @@ export default defineComponent({
     },
     edge: Number
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'drawEvt', 'editorEvt', 'mouseEvt'],
+  emits: drawingEmit,
   setup(props, ctx) {
     // state
     if (props.sightlineType === 'segment' || props.sightlineType === 'circle') {

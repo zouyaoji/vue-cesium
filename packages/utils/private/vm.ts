@@ -9,7 +9,7 @@
 import { Ref } from 'vue'
 import { AnyFunction, VcComponentInternalInstance } from '../types'
 import { camelCase, capitalize } from '../util'
-import { findIndex } from 'lodash-es'
+import { findIndex } from 'lodash-unified'
 
 // used directly by docs too
 export function getParentVm(vm) {

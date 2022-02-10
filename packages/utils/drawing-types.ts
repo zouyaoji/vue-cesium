@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-02-08 10:58:53
+ * @LastEditTime: 2022-02-08 16:23:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -154,7 +154,7 @@ export interface VcDrawingActionInstance {
   actionClass: string
   actionRef: Ref<typeof VcFabAction>
   actionOpts: MeasurementActionOpts | DrawingActionOpts | AnalysisActionOpts
-  cmp: MeasurementActionCmp | DrawgingActionCmp | AnalysisActionCmp | undefined
+  cmp: MeasurementActionCmp | DrawgingActionCmp | AnalysisActionCmp
   cmpRef: MeasurementActionCmpRef | DrawingActionCmpRef | AnalysisActionCmpRef
   cmpOpts: MeasurementActionCmpOpts | DrawingActionCmpOpts | AnalysisActionCmpOpts
   tip: string

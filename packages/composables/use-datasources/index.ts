@@ -3,7 +3,7 @@ import useCommon from '../use-common'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { onUnmounted, provide, watch, WatchStopHandle } from 'vue'
 import { vcKey } from '@vue-cesium/utils/config'
-import { cloneDeep, differenceBy } from 'lodash-es'
+import { cloneDeep, differenceBy } from 'lodash-unified'
 import { addCustomProperty } from '@vue-cesium/utils/util'
 
 export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
