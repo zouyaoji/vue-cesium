@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2021-11-06 16:07:17
+ * @LastEditTime: 2022-02-09 16:40:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\print\createPrintView.ts
  */
 import { createApp } from 'vue'
 import VcPrintView from './print-view'
-import { t } from '@vue-cesium/composables/use-locale'
 
 const styles = `
   .background {
@@ -38,7 +37,7 @@ const styles = `
 `
 
 const createPrintView = options => {
-  const { printWindow = window.open(), closeCallback } = options
+  const { printWindow = window.open(), closeCallback, title } = options
   if (closeCallback) {
     printWindow.addEventListener('unload', () => {
       closeCallback(printWindow)
@@ -58,7 +57,7 @@ const createPrintView = options => {
   printWindow.document.close()
   printWindow.document.head.innerHTML = `
     <meta charset="UTF-8">
-    <title>${t('vc.navigation.print.printViewTitle')}</title>
+    <title>${options.title}</title>
     <style>${styles}</style>
     `
   printWindow.document.body.innerHTML = '<div id="print"></div>'

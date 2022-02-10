@@ -24,7 +24,7 @@ import type {
   VcRegularMeasurementOpts
 } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { useLocaleInject } from '@vue-cesium/composables'
+import { useLocale } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 
@@ -40,7 +40,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMeasurements'
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
 
     const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
     const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))

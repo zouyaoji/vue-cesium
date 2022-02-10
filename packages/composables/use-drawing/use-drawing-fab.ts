@@ -18,7 +18,7 @@ import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { vcKey } from '@vue-cesium/utils/config'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import { clearActionDefault } from './defaultOpts'
 import { mainFabDefault } from '@vue-cesium/components/drawings/src/defaultProps'
 
@@ -37,7 +37,7 @@ export default function (
     return
   }
 
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
   const { $services } = commonState
   const { emit } = ctx
 

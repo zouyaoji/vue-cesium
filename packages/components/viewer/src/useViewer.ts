@@ -1,6 +1,6 @@
 import { ExtractPropTypes, watch, ref, onMounted, onUnmounted, nextTick, reactive } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import { useLocaleInject } from '@vue-cesium/composables'
+import { useLocale } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj } from '@vue-cesium/utils/util'
@@ -8,9 +8,9 @@ import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
 import { VcComponentInternalInstance, VcCamera, VcReadyObject, VcComponentPublicInstance, AnyObject, VcMittEvents } from '@vue-cesium/utils/types'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
-import { InstallOptions } from '@vue-cesium/utils/config'
 import { useEvents } from '@vue-cesium/composables'
 import { getMars3dConfig } from './loadUtil'
+import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 
 export const viewerProps = defaultProps
 export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
@@ -25,11 +25,10 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   const viewerRef = ref<HTMLElement>(null!)
   const isReady = ref(false)
-  const $vc = (vcInstance.appContext.config.globalProperties.$VueCesium as InstallOptions) || {
-    cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-  }
   const vcMitt: Emitter<VcMittEvents> = mitt()
   const { emit } = ctx
+
+  const globalConfig = useGlobalConfig()
 
   const logger = useLog(vcInstance)
 
@@ -50,7 +49,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
   logger.debug('viewer creating')
 
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
 
   // watch
   watch(
@@ -572,8 +571,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     logger.debug('beforeLoad - viewer')
     const listener = getInstanceListener(vcInstance, 'beforeLoad')
     listener && emit('beforeLoad', vcInstance)
-    $vc.scriptPromise = $vc.scriptPromise || getCesiumScript()
-    await $vc.scriptPromise
+    globalConfig.value.__scriptPromise = globalConfig.value.__scriptPromise || getCesiumScript()
+    await globalConfig.value.__scriptPromise
   }
   /**
    * 初始化 Viewer，成功返回 {Cesium, viewer, instance}， 失败返回false。
@@ -592,7 +591,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
 
     const { Ion, buildModuleUrl, TileMapServiceImageryProvider, Viewer, defined, Math: CesiumMath, Event } = Cesium
-    const accessToken = props.accessToken ? props.accessToken : $vc.accessToken
+    const accessToken = props.accessToken ? props.accessToken : globalConfig.value.accessToken
     Ion.defaultAccessToken = accessToken!
 
     const {
@@ -839,7 +838,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
 
     logger.debug('viewer---unloading')
     let unloadingResolve
-    $vc.viewerUnloadingPromise = new Promise((resolve, reject) => {
+    globalConfig.value.__viewerUnloadingPromise = new Promise((resolve, reject) => {
       unloadingResolve = resolve
     })
 
@@ -906,14 +905,14 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       globalThis.mars3d && (globalThis.mars3d = undefined)
       globalThis.DC && (globalThis.DC = undefined)
       globalThis.DcCore && (globalThis.DcCore = undefined)
-      $vc.scriptPromise = undefined
+      globalConfig.value.__scriptPromise = undefined
       loadLibs = []
     }
     const listener = getInstanceListener(vcInstance, 'destroyed')
     listener && emit('destroyed', vcInstance)
     logger.debug('viewer---unloaded')
     unloadingResolve(true)
-    $vc.viewerUnloadingPromise = undefined
+    globalConfig.value.__viewerUnloadingPromise = undefined
     isReady.value = false
     return true
   }
@@ -930,15 +929,15 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   const getCesiumScript = async function (): Promise<typeof Cesium> {
     logger.debug('getCesiumScript')
     if (!globalThis.Cesium) {
-      let cesiumPath = props.cesiumPath ? props.cesiumPath : $vc.cesiumPath
+      let cesiumPath = props.cesiumPath ? props.cesiumPath : globalConfig.value.cesiumPath
       const dirName = dirname(cesiumPath!)
       if (!cesiumPath?.includes('.js')) {
         // 认为是mars3d
-        if (cesiumPath?.lastIndexOf('/') !== cesiumPath!.length - 1) {
+        if (cesiumPath?.lastIndexOf('/') !== cesiumPath?.length - 1) {
           cesiumPath += '/'
         }
         const libsConfig = getMars3dConfig(cesiumPath!)
-        const include = $vc.cfg?.include || 'mars3d'
+        const include = globalConfig.value.cfg?.include || 'mars3d'
         const arrInclude = include.split(',')
         const keys = {}
         for (let i = 0, len = arrInclude.length; i < len; i++) {
@@ -1298,7 +1297,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   onMounted(async () => {
     try {
       logger.debug('viewer - onMounted')
-      await $vc?.viewerUnloadingPromise
+      await globalConfig.value?.__viewerUnloadingPromise
       createResolve(load())
     } catch (e) {
       reject(e)

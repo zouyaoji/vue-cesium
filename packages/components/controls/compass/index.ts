@@ -6,7 +6,7 @@ import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import useCompass from './use-compass'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
@@ -27,7 +27,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
     const compassState = useCompass(props, ctx, instance)

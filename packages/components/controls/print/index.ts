@@ -5,7 +5,7 @@ import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/p
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
 import { VcBtn, VcTooltip, VcIcon, VcTooltipProps } from '@vue-cesium/components/ui'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
 import defaultProps from './defaultProps'
 import printWindow from './printWindow'
@@ -30,7 +30,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const { $services } = commonState
     const rootRef = ref<HTMLElement | null>(null)
     const tooltipRef = ref<typeof VcTooltip | null>(null)
@@ -183,6 +183,7 @@ export default defineComponent({
         showCredit: props.showCredit,
         credits: getCredits(viewer),
         printWindow: iframe ? iframe.contentWindow : undefined,
+        title: t('vc.navigation.print.printViewTitle'),
         readyCallback: windowToPrint => {
           if (printAutomatically) {
             printWindow(windowToPrint)

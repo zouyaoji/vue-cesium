@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, onMounted, onUnmounted, ref, h, createCommentVNode, VNode } from 'vue'
 import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { useLocaleInject } from '@vue-cesium/composables'
+import { useLocale } from '@vue-cesium/composables'
 
 const VcPrintView = defineComponent({
   name: 'VcPrintView',
@@ -13,7 +13,7 @@ const VcPrintView = defineComponent({
     const printingStarted = ref(false)
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcPrintView'
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     // methods
     const checkForImagesReady = () => {
       if (ready.value) {

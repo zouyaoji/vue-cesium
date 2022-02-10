@@ -12,7 +12,7 @@ import { VcGeometryPolyline, VcGeometryGroundPolyline, VcGeometryPolylineProps }
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive, VcLabelProps, VcPolygon } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
@@ -30,7 +30,7 @@ export default function (props, ctx, cmpName: string) {
     return
   }
 
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
   const { $services } = commonState
   const { emit } = ctx
 

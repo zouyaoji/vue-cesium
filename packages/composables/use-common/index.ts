@@ -7,7 +7,7 @@ import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import * as cesiumProps from '@vue-cesium/utils/cesium-props'
 import { vcKey } from '@vue-cesium/utils/config'
 import useLog from '../private/use-log'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import useEvents from '../use-events'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
@@ -21,7 +21,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const vcMitt: Emitter<VcMittEvents> = mitt()
   vcInstance.vcMitt = vcMitt
   const $services = inject<VcViewerProvider>(vcKey)
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
 
   if ($services === void 0) {
     console.error(`${vcInstance.cesiumClass} ${t('vc.loadError')}`)

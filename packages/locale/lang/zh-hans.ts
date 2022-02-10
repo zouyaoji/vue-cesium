@@ -1,3 +1,5 @@
+import { Language } from '..'
+
 export default {
   name: 'zh-hans',
   nativeName: '中文(简体)',
@@ -212,4 +214,4 @@ export default {
       hidden: '隐藏鹰眼'
     }
   }
-}
+} as Language

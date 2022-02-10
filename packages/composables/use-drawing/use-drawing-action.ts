@@ -9,7 +9,7 @@
 // import { enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, VcPickEvent } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import { DrawStatus } from '@vue-cesium/shared'
 import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -18,7 +18,7 @@ import { VcDrawTipOpts } from '@vue-cesium/utils/drawing-types'
 export default function (props, ctx, instance: VcComponentInternalInstance, cmpName: string, $services: VcViewerProvider) {
   instance.cesiumClass = cmpName
   instance.cesiumEvents = []
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
   const { emit } = ctx
   const tips = kebabCase(cmpName).split('-')
   if (cmpName === 'VcMeasurementDistance' && props.showComponentLines) {

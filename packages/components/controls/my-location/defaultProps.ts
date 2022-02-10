@@ -1,5 +1,4 @@
 import { positionProps } from '@vue-cesium/composables/private/use-position'
-import { t } from '@vue-cesium/composables/use-locale'
 import type { VcColor } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
 import { VcTooltipProps } from '../../ui/tooltip'
@@ -43,7 +42,7 @@ export default {
   }>,
   id: {
     type: String,
-    default: t('vc.navigation.myLocation.centreMap')
+    default: 'My Location'
   },
   pointColor: {
     type: [Array, Object, String] as PropType<VcColor>,

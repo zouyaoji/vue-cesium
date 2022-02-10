@@ -17,7 +17,7 @@ import type {
   VcDrawingOpts
 } from '@vue-cesium/utils/drawing-types'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
-import { useLocaleInject } from '@vue-cesium/composables'
+import { useLocale } from '@vue-cesium/composables'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 
 const emits = {
@@ -32,7 +32,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcDrawings'
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
 
     const options: any = {}
     // computed
@@ -114,7 +114,7 @@ export default defineComponent({
   }
 })
 
-export { VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular, drawingsProps }
+export { VcDrawingPin, VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular, drawingsProps }
 
 export type { VcDrawingsProps } from './defaultProps'
 export type VcDrawingsEmits = typeof emits

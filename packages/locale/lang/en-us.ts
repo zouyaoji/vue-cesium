@@ -1,3 +1,5 @@
+import { Language } from '..'
+
 export default {
   name: 'en-us',
   nativeName: 'English (US)',
@@ -232,4 +234,4 @@ export default {
       hidden: 'Hidden'
     }
   }
-}
+} as Language

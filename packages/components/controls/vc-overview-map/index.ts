@@ -1,5 +1,5 @@
 import type { ExtractPropTypes, VNode, WatchStopHandle, CSSProperties, PropType } from 'vue'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { $ } from '@vue-cesium/utils/private/vm'
@@ -54,7 +54,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const { $services } = commonState
     const rootRef = ref<HTMLElement | null>(null)
     const rootStyle = reactive<CSSProperties>({})

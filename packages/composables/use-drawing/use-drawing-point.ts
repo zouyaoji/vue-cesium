@@ -10,7 +10,7 @@
 import { VcOverlayHtml } from '@vue-cesium/components/overlays'
 import { VcCollectionBillboard, VcCollectionLabel, VcCollectionPoint, VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { VcPointDrawing } from '@vue-cesium/utils/drawing-types'
@@ -26,7 +26,7 @@ export default function (props, ctx, cmpName: string) {
     return
   }
 
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
   const { $services } = commonState
   const { emit } = ctx
 

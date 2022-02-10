@@ -4,7 +4,7 @@ import type { VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/t
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { VcTooltip } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
@@ -54,7 +54,7 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const { $services } = commonState
     const positionState = usePosition(props, $services)
     const zoomControlState = useZoomControl(props, ctx, instance, $services)

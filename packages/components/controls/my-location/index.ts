@@ -19,7 +19,7 @@ import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
 import { makeColor, makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { isArray, isFunction, isPlainObject } from '@vue-cesium/utils/util'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
@@ -42,7 +42,7 @@ export default defineComponent({
       return
     }
     const { $services } = commonState
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const rootRef = ref<HTMLElement | null>(null)
     const tooltipRef = ref<typeof VcTooltip | null>(null)
     const btnRef = ref<typeof VcBtn | null>(null)

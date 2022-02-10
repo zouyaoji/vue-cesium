@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:11
+ * @LastEditTime: 2022-02-09 15:34:59
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\locale\index.ts
+ */
 import defaultLang from './lang/zh-hans'
 
 export type TranslatePair = {
@@ -11,14 +19,6 @@ export type Language = {
 }
 
 let lang: Language = defaultLang as Language
-
-let i18nHandler: null | ((...args: any[]) => string) = null
-
-export const i18n = (fn: (...args: any[]) => string) => {
-  i18nHandler = fn
-}
-
-export const restoreHandler = () => (i18nHandler = defaultTranslator)
 
 function template(str: string, option) {
   if (!str || !option) return str
@@ -44,10 +44,6 @@ const defaultTranslator = (...args: any[]) => {
 }
 
 export const t = (...args: any[]): string => {
-  if (i18nHandler) {
-    const translation = i18nHandler(...args)
-    return translation || defaultTranslator(...args)
-  }
   return defaultTranslator(...args)
 }
 

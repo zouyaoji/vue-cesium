@@ -18,7 +18,7 @@ import {
   VcGeometryEllipsoidOutlineProps
 } from '@vue-cesium/components/geometries'
 import { VcPostProcessStage } from '@vue-cesium/components/post-processes'
-import { useLocaleInject } from '../use-locale'
+import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import {
   calculateAreaByPostions,
@@ -48,7 +48,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
     return
   }
 
-  const { t } = useLocaleInject()
+  const { t } = useLocale()
   const { $services } = commonState
   const { emit } = ctx
 

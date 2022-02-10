@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-01-25 17:36:40
+ * @LastEditTime: 2022-02-09 17:04:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
@@ -9,7 +9,7 @@
 
 import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { defineComponent, ExtractPropTypes, getCurrentInstance, reactive, ref } from 'vue'
-import { useLocaleInject } from '@vue-cesium/composables'
+import { useLocale } from '@vue-cesium/composables'
 import { clearActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import {
   defaultOptions,
@@ -39,7 +39,7 @@ export default defineComponent({
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalyses'
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
 
     const options: any = {}
     // computed

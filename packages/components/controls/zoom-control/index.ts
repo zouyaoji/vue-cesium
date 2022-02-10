@@ -7,7 +7,7 @@ import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
-import { useCommon, useLocaleInject } from '@vue-cesium/composables'
+import { useCommon, useLocale } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
@@ -30,7 +30,7 @@ export default defineComponent({
     if (commonState === undefined) {
       return
     }
-    const { t } = useLocaleInject()
+    const { t } = useLocale()
     const { $services } = commonState
     const zoomControlState = useZoomControl(props, ctx, instance, $services)
     const positionState = usePosition(props, $services)
