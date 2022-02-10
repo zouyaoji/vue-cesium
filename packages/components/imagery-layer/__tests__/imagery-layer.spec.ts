@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-27 10:50:42
+ * @LastEditTime: 2022-02-10 11:03:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\__tests__\imagery-layer.spec.ts
@@ -10,24 +10,21 @@ import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/type
 import { mount, config } from '@vue/test-utils'
 import VcLayerImagery from '../src'
 import VcViewer from '@vue-cesium/components/viewer'
-
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
+import { VcConfigProvider } from '../../config-provider'
 
 const App = {
   components: {
     VcViewer,
-    VcLayerImagery
+    VcLayerImagery,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer @ready="onViewerReady">
-        <vc-layer-imagery ref="layer" :imageryProvider="imageryProvider" :alpha="alpha" :brightness="brightness" :contrast="contrast"></vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer @ready="onViewerReady">
+          <vc-layer-imagery ref="layer" :imageryProvider="imageryProvider" :alpha="alpha" :brightness="brightness" :contrast="contrast"></vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `,
   data() {

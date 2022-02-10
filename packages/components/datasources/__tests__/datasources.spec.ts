@@ -3,44 +3,41 @@ import { mount, config } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcEntity from '@vue-cesium/components/entity'
 import { VcDatasourceCustom, VcDatasourceCzml, VcDatasourceGeojson, VcDatasourceKml } from '../index'
-
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
+import { VcConfigProvider } from '../../config-provider'
 
 const customApp = {
   components: {
     VcViewer,
     VcDatasourceCustom,
-    VcEntity
+    VcEntity,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="onClicked" :show="show">
-          <vc-entity
-            ref="entity1"
-            @click="onClicked"
-            :position="[108, 35, 100]"
-            :billboard="{
-              image: 'https://zouyaoji.top/vue-cesium/favicon.png',
-              show: true,
-              pixelOffset: [0, -20],
-              eyeOffset: {x: 0, y: 0, z: 0},
-              horizontalOrigin: 0,
-              verticalOrigin: 1,
-              scale: 0.25,
-              color: 'lime'
-            }"
-            description="Hello Vue Cesium"
-            id="This is a billboard"
-          >
-          </vc-entity>
-        </vc-datasource-custom>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-datasource-custom ref="datasource" name="custom" :entities="entities" @click="onClicked" :show="show">
+            <vc-entity
+              ref="entity1"
+              @click="onClicked"
+              :position="[108, 35, 100]"
+              :billboard="{
+                image: 'https://zouyaoji.top/vue-cesium/favicon.png',
+                show: true,
+                pixelOffset: [0, -20],
+                eyeOffset: {x: 0, y: 0, z: 0},
+                horizontalOrigin: 0,
+                verticalOrigin: 1,
+                scale: 0.25,
+                color: 'lime'
+              }"
+              description="Hello Vue Cesium"
+              id="This is a billboard"
+            >
+            </vc-entity>
+          </vc-datasource-custom>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
  `,
   data() {
@@ -102,16 +99,19 @@ describe('VcDatasourceCustom', () => {
 const czmlApp = {
   components: {
     VcViewer,
-    VcDatasourceCzml
+    VcDatasourceCzml,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-datasource-czml
-          ref="datasource"
-          czml="https://zouyaoji.top/vue-cesium/SampleData/simple.czml"
-        ></vc-datasource-czml>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-datasource-czml
+            ref="datasource"
+            czml="https://zouyaoji.top/vue-cesium/SampleData/simple.czml"
+          ></vc-datasource-czml>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
  `
 }
@@ -136,18 +136,21 @@ describe('VcDatasourceCzml', () => {
 const geojsonApp = {
   components: {
     VcViewer,
-    VcDatasourceGeojson
+    VcDatasourceGeojson,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-datasource-geojson
-          ref="datasource"
-          data="https://zouyaoji.top/vue-cesium/SampleData/geojson/china.json"
-          :show="show"
-          :options="options"
-        ></vc-datasource-geojson>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-datasource-geojson
+            ref="datasource"
+            data="https://zouyaoji.top/vue-cesium/SampleData/geojson/china.json"
+            :show="show"
+            :options="options"
+          ></vc-datasource-geojson>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
  `,
   data() {
@@ -177,36 +180,39 @@ describe('VcDatasourceGeojson', () => {
   }, 10000)
 })
 
-// const kmlApp = {
-//   components: {
-//     VcViewer,
-//     VcDatasourceKml
-//   },
-//   template: `
-//     <div class="test-viewer">
-//       <vc-viewer>
-//         <vc-datasource-kml
-//           ref="datasource"
-//           data="https://zouyaoji.top/vue-cesium/SampleData/kml/gdpPerCapita2008.kmz"
-//       ></vc-datasource-kml>
-//       </vc-viewer>
-//     </div>
-//  `
-// }
+const kmlApp = {
+  components: {
+    VcViewer,
+    VcDatasourceKml,
+    VcConfigProvider
+  },
+  template: `
+    <div class="test-viewer">
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-datasource-kml
+            ref="datasource"
+            data="https://zouyaoji.top/vue-cesium/SampleData/kml/gdpPerCapita2008.kmz"
+          ></vc-datasource-kml>
+        </vc-viewer>
+      </vc-config-provider>
+    </div>
+ `
+}
 
-// describe('VcDatasourceKml', () => {
-//   test('render test', async () => {
-//     const wrapper = mount(kmlApp)
-//     expect(wrapper.vm.$refs.datasource).toBeDefined()
-//     const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
-//     const readyObj: VcReadyObject | undefined = await testVm.createPromise
-//     let datasource = readyObj?.cesiumObject as Cesium.KmlDataSource
-//     expect(datasource instanceof Cesium.KmlDataSource).toBe(true)
-//     await testVm.unload?.()
-//     datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
-//     expect(datasource).toBeUndefined()
-//     await testVm.load?.()
-//     datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
-//     expect(datasource).toBeDefined()
-//   }, 20000)
-// })
+describe('VcDatasourceKml', () => {
+  test('render test', async () => {
+    const wrapper = mount(kmlApp)
+    expect(wrapper.vm.$refs.datasource).toBeDefined()
+    const testVm = wrapper.vm.$refs.datasource as VcComponentPublicInstance
+    const readyObj: VcReadyObject | undefined = await testVm.createPromise
+    let datasource = readyObj?.cesiumObject as Cesium.KmlDataSource
+    expect(datasource instanceof Cesium.KmlDataSource).toBe(true)
+    await testVm.unload?.()
+    datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
+    expect(datasource).toBeUndefined()
+    await testVm.load?.()
+    datasource = testVm.getCesiumObject?.() as Cesium.KmlDataSource
+    expect(datasource).toBeDefined()
+  }, 20000)
+})

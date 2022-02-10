@@ -13,30 +13,27 @@ import {
   VcNavigation,
   VcNavigationSm
 } from '../index'
-
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
+import { VcConfigProvider } from '../../config-provider'
 
 const compassApp = {
   components: {
     VcViewer,
-    VcCompass
+    VcCompass,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-compass
-          ref="compass"
-          :position="compassOptions.position"
-          :outerOptions="compassOptions.outerOptions"
-          :innerOptions="compassOptions.innerOptions"
-          :markerOptions="compassOptions.markerOptions"
-        ></vc-compass>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-compass
+            ref="compass"
+            :position="compassOptions.position"
+            :outerOptions="compassOptions.outerOptions"
+            :innerOptions="compassOptions.innerOptions"
+            :markerOptions="compassOptions.markerOptions"
+          ></vc-compass>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `,
   data() {
@@ -80,13 +77,16 @@ describe('VcCompass', () => {
 const compassSmApp = {
   components: {
     VcViewer,
-    VcCompassSm
+    VcCompassSm,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-compass-sm ref="compass" position="bottom" :offset="[-200, 20]"></vc-compass-sm>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-compass-sm ref="compass" position="bottom" :offset="[-200, 20]"></vc-compass-sm>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -112,20 +112,23 @@ describe('VcCompassSm', () => {
 const zoomControlApp = {
   components: {
     VcViewer,
-    VcZoomControl
+    VcZoomControl,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-zoom-control
-          ref="zoomControl"
-          :position="position"
-          :offset="offset"
-          :enableResetButton="enableResetButton"
-          :zoomInOptions="zoomInOptions"
-          :zoomOutOptions="zoomOutOptions"
-        ></vc-zoom-control>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-zoom-control
+            ref="zoomControl"
+            :position="position"
+            :offset="offset"
+            :enableResetButton="enableResetButton"
+            :zoomInOptions="zoomInOptions"
+            :zoomOutOptions="zoomOutOptions"
+          ></vc-zoom-control>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `,
   data() {
@@ -185,13 +188,16 @@ describe('VcZoomControl', () => {
 const zoomControlSmApp = {
   components: {
     VcViewer,
-    VcZoomControlSm
+    VcZoomControlSm,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-zoom-control-sm ref="zoomControl" position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-zoom-control-sm ref="zoomControl" position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -217,24 +223,27 @@ describe('VcZoomControlSm', () => {
 const printApp = {
   components: {
     VcViewer,
-    VcPrint
+    VcPrint,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-print
-          ref="print"
-          position="bottom-right"
-          :offset="[40, 20]"
-          :showPrintView="false"
-          printAutomatically
-          size="28px"
-          :round="false"
-          label="打印分享"
-          background="#31CCEC"
-          name="fa fa-print"
-        ></vc-print>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-print
+            ref="print"
+            position="bottom-right"
+            :offset="[40, 20]"
+            :showPrintView="false"
+            printAutomatically
+            size="28px"
+            :round="false"
+            label="打印分享"
+            background="#31CCEC"
+            name="fa fa-print"
+          ></vc-print>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -263,23 +272,26 @@ describe('VcPrint', () => {
 const myLocationApp = {
   components: {
     VcViewer,
-    VcMyLocation
+    VcMyLocation,
+    VcConfigProvider
   },
   template: `
-    <vc-viewer>
-      <vc-my-location
-        ref="myLocation"
-        color="#9C27B0"
-        :amap="{key: '42d22e6ed83f077bc28b7864718726de',version: '2.0',options: {timeout: 5000,noGeoLocation: 3,needAddress: true,extensions: 'all'},transformToWGS84: true}"
-        position="top-left"
-        :offset="[0, 60]"
-        label="定位"
-        stack
-        :round="false"
-        background="#F2C037"
-        size="28px"
-      ></vc-my-location>
-    </vc-viewer>
+    <vc-config-provider>
+      <vc-viewer>
+        <vc-my-location
+          ref="myLocation"
+          color="#9C27B0"
+          :amap="{key: '42d22e6ed83f077bc28b7864718726de',version: '2.0',options: {timeout: 5000,noGeoLocation: 3,needAddress: true,extensions: 'all'},transformToWGS84: true}"
+          position="top-left"
+          :offset="[0, 60]"
+          label="定位"
+          stack
+          :round="false"
+          background="#F2C037"
+          size="28px"
+        ></vc-my-location>
+      </vc-viewer>
+    </vc-config-provider>
   `
 }
 
@@ -307,12 +319,15 @@ describe('VcMyLocation', () => {
 const statusBarApp = {
   components: {
     VcViewer,
-    VcStatusBar
+    VcStatusBar,
+    VcConfigProvider
   },
   template: `
-    <vc-viewer>
-      <vc-status-bar ref="statusBar" position="bottom"></vc-status-bar>
-    </vc-viewer>
+    <vc-config-provider>
+      <vc-viewer>
+        <vc-status-bar ref="statusBar" position="bottom"></vc-status-bar>
+      </vc-viewer>
+    </vc-config-provider>
   `
 }
 
@@ -337,12 +352,15 @@ describe('VcStatusBar', () => {
 const distanceLegendApp = {
   components: {
     VcViewer,
-    VcDistanceLegend
+    VcDistanceLegend,
+    VcConfigProvider
   },
   template: `
-    <vc-viewer>
-      <vc-distance-legend ref="distanceLegend" position="bottom-left" :offset="[5, 35]"></vc-distance-legend>
-    </vc-viewer>
+    <vc-config-provider>
+      <vc-viewer>
+        <vc-distance-legend ref="distanceLegend" position="bottom-left" :offset="[5, 35]"></vc-distance-legend>
+      </vc-viewer>
+    </vc-config-provider>
   `
 }
 
@@ -367,12 +385,15 @@ describe('VcDistanceLegend', () => {
 const navigationApp = {
   components: {
     VcViewer,
-    VcNavigation
+    VcNavigation,
+    VcConfigProvider
   },
   template: `
-    <vc-viewer>
-      <vc-navigation ref="navigation"></vc-navigation>
-    </vc-viewer>
+    <vc-config-provider>
+      <vc-viewer>
+        <vc-navigation ref="navigation"></vc-navigation>
+      </vc-viewer>
+    </vc-config-provider>
   `
 }
 
@@ -401,13 +422,16 @@ describe('VcNavigation', () => {
 const navigationSmApp = {
   components: {
     VcViewer,
-    VcNavigationSm
+    VcNavigationSm,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-navigation-sm ref="navigation"></vc-navigation-sm>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-navigation-sm ref="navigation"></vc-navigation-sm>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }

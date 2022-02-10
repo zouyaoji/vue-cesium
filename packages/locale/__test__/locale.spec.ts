@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-13 22:43:29
+ * @LastEditTime: 2022-02-10 10:52:32
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\locale\__test__\locale.spec.ts
+ */
 import { t, use } from '../index'
 import zhCn from '../lang/zh-hans'
 import en from '../lang/en-us'

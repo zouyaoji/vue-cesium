@@ -24,28 +24,24 @@ import {
   // VcTerrainProviderTianditu
 } from '../index'
 
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
-  accessToken:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
+import { VcConfigProvider } from '../../config-provider'
 
 const arcgisApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderArcgis
+    VcImageryProviderArcgis,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-arcgis ref="provider"></vc-imagery-provider-arcgis>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-arcgis ref="provider"></vc-imagery-provider-arcgis>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -73,20 +69,23 @@ const baiduApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderBaidu
+    VcImageryProviderBaidu,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-baidu
-          ref="provider"
-          url="https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png"
-          :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
-          >
-          </vc-imagery-provider-baidu>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-baidu
+            ref="provider"
+            url="https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png"
+            :projectionTransforms="{ form: 'BD09', to: 'WGS84' }"
+            >
+            </vc-imagery-provider-baidu>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -114,19 +113,22 @@ const bingmapsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderBing
+    VcImageryProviderBing,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-bing
-          ref="provider"
-          bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
-          mapStyle="Aerial"
-        ></vc-imagery-provider-bing>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-bing
+            ref="provider"
+            bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+            mapStyle="Aerial"
+          ></vc-imagery-provider-bing>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -154,15 +156,18 @@ const gridApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderGrid
+    VcImageryProviderGrid,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-grid ref="provider"></vc-imagery-provider-grid>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-grid ref="provider"></vc-imagery-provider-grid>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -189,19 +194,22 @@ const cesiumIonApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderIon
+    VcImageryProviderIon,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-ion
-          ref="provider"
-          :assetId="4"
-          accessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo"
-        ></vc-imagery-provider-ion>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-ion
+            ref="provider"
+            :assetId="4"
+            accessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo"
+          ></vc-imagery-provider-ion>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -228,21 +236,24 @@ const mapboxApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderMapbox
+    VcImageryProviderMapbox,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-mapbox
-            ref="provider"
-            url="https://api.mapbox.com/styles/v1"
-            username="zouyaoji"
-            styleId="ckd49hwdn0u641irz36komsmt"
-            accessToken="pk.eyJ1Ijoiem91eWFvamkiLCJhIjoiY2tjdjlha3pzMDIxeDJ1bWxhaWNnaGNkdSJ9.WaGuuQT8YcWTPx3KNQfF7A"
-          ></vc-imagery-provider-mapbox>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-mapbox
+              ref="provider"
+              url="https://api.mapbox.com/styles/v1"
+              username="zouyaoji"
+              styleId="ckd49hwdn0u641irz36komsmt"
+              accessToken="pk.eyJ1Ijoiem91eWFvamkiLCJhIjoiY2tjdjlha3pzMDIxeDJ1bWxhaWNnaGNkdSJ9.WaGuuQT8YcWTPx3KNQfF7A"
+            ></vc-imagery-provider-mapbox>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -272,15 +283,18 @@ const osmApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderOsm
+    VcImageryProviderOsm,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-osm ref="provider"></vc-imagery-provider-osm>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-osm ref="provider"></vc-imagery-provider-osm>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -308,15 +322,18 @@ const singletileApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderSingletile
+    VcImageryProviderSingletile,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-singletile ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-imagery-provider-singletile>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-singletile ref="provider" url="https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg"></vc-imagery-provider-singletile>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -344,18 +361,21 @@ const supermapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderSupermap
+    VcImageryProviderSupermap,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-supermap
-            ref="provider"
-            url="https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult"
-          ></vc-imagery-provider-supermap>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-supermap
+              ref="provider"
+              url="https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult"
+            ></vc-imagery-provider-supermap>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -383,15 +403,18 @@ const tiandituApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderTianditu
+    VcImageryProviderTianditu,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-tianditu ref="provider" mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-tianditu ref="provider" mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -419,15 +442,18 @@ const tileCoordinatesApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderTileCoordinates
+    VcImageryProviderTileCoordinates,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-tile-coordinates ref="provider"></vc-imagery-provider-tile-coordinates>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-tile-coordinates ref="provider"></vc-imagery-provider-tile-coordinates>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -454,20 +480,23 @@ const tileMapApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderTms
+    VcImageryProviderTms,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-tms
-            ref="provider"
-            url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
-            :rectangle="[-120, 20, -60, 40]"
-            :maximumLevel="4"
-          ></vc-imagery-provider-tms>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-tms
+              ref="provider"
+              url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
+              :rectangle="[-120, 20, -60, 40]"
+              :maximumLevel="4"
+            ></vc-imagery-provider-tms>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -495,19 +524,22 @@ const tiledCacheApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderTiledcache
+    VcImageryProviderTiledcache,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-tiledcache
-            ref="provider"
-            url="https://songluck.com/gis/TiledCacheService/TiledCacheServlet"
-            dir="WhiteMap"
-          ></vc-imagery-provider-tiledcache>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-tiledcache
+              ref="provider"
+              url="https://songluck.com/gis/TiledCacheService/TiledCacheServlet"
+              dir="WhiteMap"
+            ></vc-imagery-provider-tiledcache>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -535,18 +567,21 @@ const urlTemplateApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderUrltemplate
+    VcImageryProviderUrltemplate,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-urltemplate ref="provider"
-            :projectionTransforms="{from: 'GCJ02', to: 'WGS84'}"
-            url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
-          ></vc-imagery-provider-urltemplate>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-urltemplate ref="provider"
+              :projectionTransforms="{from: 'GCJ02', to: 'WGS84'}"
+              url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
+            ></vc-imagery-provider-urltemplate>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -574,20 +609,23 @@ const wmsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderWms
+    VcImageryProviderWms,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-wms
-            ref="provider"
-            url="http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
-            layers="Hydrography:bores"
-            :parameters="{transparent: true, format: 'image/png'}"
-          ></vc-imagery-provider-wms>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-wms
+              ref="provider"
+              url="http://geoserver.nationalmap.nicta.com.au/geotopo_250k/ows"
+              layers="Hydrography:bores"
+              :parameters="{transparent: true, format: 'image/png'}"
+            ></vc-imagery-provider-wms>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -615,22 +653,25 @@ const wmtsApp = {
   components: {
     VcViewer,
     VcLayerImagery,
-    VcImageryProviderWmts
+    VcImageryProviderWmts,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-layer-imagery>
-          <vc-imagery-provider-wmts
-            ref="provider"
-            url="https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/WMTS/tile/1.0.0/World_Street_Map/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"
-            layer="World_Street_Map"
-            format="image/jpeg"
-            wmtsStyle="default"
-            tileMatrixSetID="default028mm"
-          ></vc-imagery-provider-wmts>
-        </vc-layer-imagery>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-layer-imagery>
+            <vc-imagery-provider-wmts
+              ref="provider"
+              url="https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/WMTS/tile/1.0.0/World_Street_Map/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"
+              layer="World_Street_Map"
+              format="image/jpeg"
+              wmtsStyle="default"
+              tileMatrixSetID="default028mm"
+            ></vc-imagery-provider-wmts>
+          </vc-layer-imagery>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -659,13 +700,16 @@ describe('VcImageryProviderWmts', () => {
 const cesiumTerrainApp = {
   components: {
     VcViewer,
-    VcTerrainProviderCesium
+    VcTerrainProviderCesium,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-terrain-provider-cesium ref="provider"></vc-terrain-provider-cesium>
-      </vc-viewer>
+      <vc-config-provider access-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo">
+        <vc-viewer>
+          <vc-terrain-provider-cesium ref="provider"></vc-terrain-provider-cesium>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -691,13 +735,16 @@ describe('VcTerrainProviderCesium', () => {
 const arcgisTiledElevationApp = {
   components: {
     VcViewer,
-    VcTerrainProviderArcgis
+    VcTerrainProviderArcgis,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-terrain-provider-arcgis ref="provider"></vc-terrain-provider-arcgis>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-terrain-provider-arcgis ref="provider"></vc-terrain-provider-arcgis>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-23 17:19:18
- * @LastEditTime: 2022-01-03 10:56:19
+ * @LastEditTime: 2022-02-09 17:00:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\jest.config.js
@@ -22,9 +22,9 @@ module.exports = {
     '\\.(j|t)s$': '@sucrase/jest-plugin',
     '^.+\\.vue$': 'vue-jest'
   },
-  moduleNameMapper: {
-    '^lodash-es$': 'lodash'
-  },
+  // moduleNameMapper: {
+  //   '^lodash-es$': 'lodash'
+  // },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   // u can change this option to a more specific folder for test single component or util when dev
   // for example, ['<rootDir>/packages/input']

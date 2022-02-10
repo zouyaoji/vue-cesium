@@ -22,33 +22,31 @@ import {
   VcGraphicsWall
 } from '../index'
 
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
+import { VcConfigProvider } from '../../config-provider'
 
 const billboardApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsBillboard
+    VcGraphicsBillboard,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity" :position="[90, 40, 10000]">
-          <vc-graphics-billboard
-            ref="graphics"
-            image="https://zouyaoji.top/vue-cesium/favicon.png"
-            :scale="0.25"
-            :show="true"
-            :distanceDisplayCondition="{ near: 0, far: 20000000 }"
-            :horizontalOrigin="0"
-          ></vc-graphics-billboard>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity" :position="[90, 40, 10000]">
+            <vc-graphics-billboard
+              ref="graphics"
+              image="https://zouyaoji.top/vue-cesium/favicon.png"
+              :scale="0.25"
+              :show="true"
+              :distanceDisplayCondition="{ near: 0, far: 20000000 }"
+              :horizontalOrigin="0"
+            ></vc-graphics-billboard>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -75,19 +73,22 @@ const boxApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsBox
+    VcGraphicsBox,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity" :position="[90, 40, 10000]">
-          <vc-graphics-box
-            ref="graphics"
-            :dimensions="{ x: 400000.0, y: 300000.0, z: 500000.0 }"
-            material="blue"
-          ></vc-graphics-box>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity" :position="[90, 40, 10000]">
+            <vc-graphics-box
+              ref="graphics"
+              :dimensions="{ x: 400000.0, y: 300000.0, z: 500000.0 }"
+              material="blue"
+            ></vc-graphics-box>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -118,22 +119,25 @@ const corridorApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsCorridor
+    VcGraphicsCorridor,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity">
-          <vc-graphics-corridor
-            ref="graphics"
-            :positions="[[100,40],[105,40],[105,35]]"
-            :outline="true"
-            material="red"
-            :width="200000.0"
-            outlineColor="white"
-          ></vc-graphics-corridor>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity">
+            <vc-graphics-corridor
+              ref="graphics"
+              :positions="[[100,40],[105,40],[105,35]]"
+              :outline="true"
+              material="red"
+              :width="200000.0"
+              outlineColor="white"
+            ></vc-graphics-corridor>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -160,23 +164,26 @@ const cylinderApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsCylinder
+    VcGraphicsCylinder,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity" :position="[105, 40, 200000]">
-          <vc-graphics-cylinder
-            ref="graphics"
-            :length="400000.0"
-            :topRadius="200000.0"
-            :bottomRadius="200000.0"
-            :material="[0,128,0,125]"
-            :outline="true"
-            outlineColor="#006400"
-          ></vc-graphics-cylinder>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity" :position="[105, 40, 200000]">
+            <vc-graphics-cylinder
+              ref="graphics"
+              :length="400000.0"
+              :topRadius="200000.0"
+              :bottomRadius="200000.0"
+              :material="[0,128,0,125]"
+              :outline="true"
+              outlineColor="#006400"
+            ></vc-graphics-cylinder>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -201,22 +208,25 @@ const ellipseApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsEllipse
+    VcGraphicsEllipse,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity">
-          <vc-graphics-ellipse
-            ref="graphics"
-            :semiMinorAxis="300000.0"
-            :semiMajorAxis="300000.0"
-            :height="200000.0"
-            material="green"
-            :outline="true"
-          ></vc-graphics-ellipse>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity">
+            <vc-graphics-ellipse
+              ref="graphics"
+              :semiMinorAxis="300000.0"
+              :semiMajorAxis="300000.0"
+              :height="200000.0"
+              material="green"
+              :outline="true"
+            ></vc-graphics-ellipse>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -241,20 +251,23 @@ const ellipsoidApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsEllipsoid
+    VcGraphicsEllipsoid,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity ref="entity">
-          <vc-graphics-ellipsoid
-            ref="graphics"
-            :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }"
-            material="blue"
-            :outline="true"
-          ></vc-graphics-ellipsoid>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity ref="entity">
+            <vc-graphics-ellipsoid
+              ref="graphics"
+              :radii="{ x: 200000.0, y: 200000.0, z: 300000.0 }"
+              material="blue"
+              :outline="true"
+            ></vc-graphics-ellipsoid>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -279,20 +292,23 @@ const labelApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsLabel
+    VcGraphicsLabel,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity :position="[114, 40, 300000]" ref="entity">
-          <vc-graphics-label
-            ref="graphics"
-            text="Hello Vue Cesium"
-            font="20px sans-serif"
-            :pixelOffset="[0, 20]"
-          ></vc-graphics-label>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity :position="[114, 40, 300000]" ref="entity">
+            <vc-graphics-label
+              ref="graphics"
+              text="Hello Vue Cesium"
+              font="20px sans-serif"
+              :pixelOffset="[0, 20]"
+            ></vc-graphics-label>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -319,18 +335,21 @@ const modelApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsModel
+    VcGraphicsModel,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity :position="[114, 40, 1.0]" ref="entity">
-          <vc-graphics-model
-            ref="graphics"
-            uri="https://zouyaoji.top/vue-cesium/SampleData/models/GroundVehicle/GroundVehicle.glb"
-          ></vc-graphics-model>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity :position="[114, 40, 1.0]" ref="entity">
+            <vc-graphics-model
+              ref="graphics"
+              uri="https://zouyaoji.top/vue-cesium/SampleData/models/GroundVehicle/GroundVehicle.glb"
+            ></vc-graphics-model>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -359,23 +378,26 @@ const pathApp = {
     VcViewer,
     VcEntity,
     VcGraphicsPath,
-    VcGraphicsPoint
+    VcGraphicsPoint,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer shouldAnimate @ready="onViewerReady">
-        <vc-entity :availability="availability" :position="position" :orientation="orientation" ref="entity">
-          <vc-graphics-path
-            ref="graphics"
-            :resolution="1"
-            :material="{fabric: {type: 'PolylineGlow', uniforms: {glowPower: 0.1, color: 'yellow'}}}"
-            :width="10"
-          ></vc-graphics-path>
-        </vc-entity>
-        <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
-          <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer shouldAnimate @ready="onViewerReady">
+          <vc-entity :availability="availability" :position="position" :orientation="orientation" ref="entity">
+            <vc-graphics-path
+              ref="graphics"
+              :resolution="1"
+              :material="{fabric: {type: 'PolylineGlow', uniforms: {glowPower: 0.1, color: 'yellow'}}}"
+              :width="10"
+            ></vc-graphics-path>
+          </vc-entity>
+          <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
+            <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `,
   data() {
@@ -449,22 +471,25 @@ const planeApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPlane
+    VcGraphicsPlane,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity :position="[114, 40, 300000.0]" ref="entity">
-          <vc-graphics-plane
-            ref="graphics"
-            :plane="[{ x: 0, y: 1, z: 0 }, 0]"
-            :dimensions="[400000, 300000]"
-            :material="[255, 0, 0, 125]"
-            :outline="true"
-            outlineColor="black"
-          ></vc-graphics-plane>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity :position="[114, 40, 300000.0]" ref="entity">
+            <vc-graphics-plane
+              ref="graphics"
+              :plane="[{ x: 0, y: 1, z: 0 }, 0]"
+              :dimensions="[400000, 300000]"
+              :material="[255, 0, 0, 125]"
+              :outline="true"
+              outlineColor="black"
+            ></vc-graphics-plane>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -489,15 +514,18 @@ const pointApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPoint
+    VcGraphicsPoint,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity :position="[-80.12, 25.46]" description="Hello Vue Cesium">
-          <vc-graphics-point ref="graphics" color="lime" :pixelSize="32"></vc-graphics-point>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity :position="[-80.12, 25.46]" description="Hello Vue Cesium">
+            <vc-graphics-point ref="graphics" color="lime" :pixelSize="32"></vc-graphics-point>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -522,20 +550,23 @@ const polylineApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPolyline
+    VcGraphicsPolyline,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-polyline
-            ref="graphics"
-            :positions="[[90, 40, 1000], [120, 40, 1000]]"
-            :material="{fabric: { type: 'PolylineArrow', uniforms: { color: 'purple' }}}"
-            :width="10"
-          ></vc-graphics-polyline>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-polyline
+              ref="graphics"
+              :positions="[[90, 40, 1000], [120, 40, 1000]]"
+              :material="{fabric: { type: 'PolylineArrow', uniforms: { color: 'purple' }}}"
+              :width="10"
+            ></vc-graphics-polyline>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -560,23 +591,26 @@ const polygonApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPolygon
+    VcGraphicsPolygon,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-polygon
-            :hierarchy="[[-108,25,100000],[-100,25,100000],[-100,30,100000],[-108,30,100000]]"
-            :material="[255,165,0,125]"
-            :extrudedHeight="0"
-            :perPositionHeight="true"
-            :outline="true"
-            outlineColor="black"
-            ref="graphics"
-          ></vc-graphics-polygon>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-polygon
+              :hierarchy="[[-108,25,100000],[-100,25,100000],[-100,30,100000],[-108,30,100000]]"
+              :material="[255,165,0,125]"
+              :extrudedHeight="0"
+              :perPositionHeight="true"
+              :outline="true"
+              outlineColor="black"
+              ref="graphics"
+            ></vc-graphics-polygon>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -601,23 +635,26 @@ const polylineVolumeApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsPolylineVolume
+    VcGraphicsPolylineVolume,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-polyline-volume
-            :positions="[-90,32,0,-90,36,100000,-94,36,0]"
-            :shape="[{ x: -50000, y: -50000 }, { x: 50000, y: -50000 }, { x: -50000, y: 50000 }, { x: -50000, y: 50000 }]"
-            :material="[0,255,0,125]"
-            :outline="true"
-            outlineColor="black"
-            :cornerType="2"
-            ref="graphics"
-          ></vc-graphics-polyline-volume>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-polyline-volume
+              :positions="[-90,32,0,-90,36,100000,-94,36,0]"
+              :shape="[{ x: -50000, y: -50000 }, { x: 50000, y: -50000 }, { x: -50000, y: 50000 }, { x: -50000, y: 50000 }]"
+              :material="[0,255,0,125]"
+              :outline="true"
+              outlineColor="black"
+              :cornerType="2"
+              ref="graphics"
+            ></vc-graphics-polyline-volume>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -642,24 +679,27 @@ const rectangleApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsRectangle
+    VcGraphicsRectangle,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-rectangle
-            :coordinates="[-110, 30, -100, 40]"
-            :material="[0, 255, 0, 125]"
-            :rotation="45/180"
-            :extrudedHeight="300000.0"
-            :height="100000.0"
-            :outline="true"
-            outlineColor="black"
-            ref="graphics"
-          ></vc-graphics-rectangle>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-rectangle
+              :coordinates="[-110, 30, -100, 40]"
+              :material="[0, 255, 0, 125]"
+              :rotation="45/180"
+              :extrudedHeight="300000.0"
+              :height="100000.0"
+              :outline="true"
+              outlineColor="black"
+              ref="graphics"
+            ></vc-graphics-rectangle>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -684,23 +724,26 @@ const wallApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsWall
+    VcGraphicsWall,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-wall
-            :positions="[[-115,50],[-112,50],[-107.5,50],[-105,50],[-102.5,50],[-100,50],[-97.5,50],[-95,50],[-92.5,50],[-90,50]]"
-            :material="[0,0,125,125]"
-            :outline="true"
-            outlineColor="black"
-            :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000]"
-            :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000]"
-            ref="graphics"
-          ></vc-graphics-wall>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-wall
+              :positions="[[-115,50],[-112,50],[-107.5,50],[-105,50],[-102.5,50],[-100,50],[-97.5,50],[-95,50],[-92.5,50],[-90,50]]"
+              :material="[0,0,125,125]"
+              :outline="true"
+              outlineColor="black"
+              :maximumHeights="[100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000, 100000, 200000]"
+              :minimumHeights="[0, 100000,  0, 100000, 0, 100000, 0, 100000, 0, 100000]"
+              ref="graphics"
+            ></vc-graphics-wall>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }
@@ -725,18 +768,21 @@ const tilesetApp = {
   components: {
     VcViewer,
     VcEntity,
-    VcGraphicsTileset
+    VcGraphicsTileset,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity>
-          <vc-graphics-tileset
-            uri="https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json"
-            ref="graphics"
-          ></vc-graphics-tileset>
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity>
+            <vc-graphics-tileset
+              uri="https://zouyaoji.top/vue-cesium/statics/SampleData/Cesium3DTiles/Tilesets/Tileset/tileset.json"
+              ref="graphics"
+            ></vc-graphics-tileset>
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2021-09-27 10:20:16
+ * @LastEditTime: 2022-02-10 11:01:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\entity\__tests__\entity.spec.ts
@@ -10,34 +10,31 @@ import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/type
 import { mount, config } from '@vue/test-utils'
 import VcEntity from '../src'
 import VcViewer from '@vue-cesium/components/viewer'
+import { VcConfigProvider } from '../../config-provider'
 // import { createPointerEvent } from '@vue-cesium/utils/private/test-util'
-
-const option = {
-  cesiumPath: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
-}
-
-config.global.config.globalProperties = {}
-config.global.config.globalProperties.$VueCesium = option
 
 const App = {
   components: {
     VcViewer,
-    VcEntity
+    VcEntity,
+    VcConfigProvider
   },
   template: `
     <div class="test-viewer">
-      <vc-viewer>
-        <vc-entity
-        ref="entity"
-        :billboard="billboard"
-        :position="[108, 32]"
-        :point="point"
-        :label="label"
-        :show="show"
-        @click="click"
-        >
-        </vc-entity>
-      </vc-viewer>
+      <vc-config-provider>
+        <vc-viewer>
+          <vc-entity
+          ref="entity"
+          :billboard="billboard"
+          :position="[108, 32]"
+          :point="point"
+          :label="label"
+          :show="show"
+          @click="click"
+          >
+          </vc-entity>
+        </vc-viewer>
+      </vc-config-provider>
     </div>
   `,
   data() {
