@@ -22,11 +22,13 @@ class BaiduMapMercatorTilingScheme {
     this._projection.project = function (cartographic, result) {
       result = result || {}
 
-      if (options.toWGS84) {
-        result = coordtransform.wgs84togcj02(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
-        result = coordtransform.gcj02tobd09(result[0], result[1])
-      } else {
-        result = coordtransform.gcj02tobd09(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
+      if (options.projectionTransforms && options.projectionTransforms.from !== options.projectionTransforms.to) {
+        if (options.projectionTransforms.to.toUpperCase() === 'WGS84') {
+          result = coordtransform.wgs84togcj02(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
+          result = coordtransform.gcj02tobd09(result[0], result[1])
+        } else {
+          result = coordtransform.gcj02tobd09(CesiumMath.toDegrees(cartographic.longitude), CesiumMath.toDegrees(cartographic.latitude))
+        }
       }
       result[0] = Math.min(result[0], 180)
       result[0] = Math.max(result[0], -180)
@@ -40,11 +42,13 @@ class BaiduMapMercatorTilingScheme {
       result = result || {}
       result = projection.mercatorToLngLat(new Point(cartographic.x, cartographic.y))
       result[0] = ((result[0] + 180) % 360) - 180
-      if (options.toWGS84) {
-        result = coordtransform.bd09togcj02(result.lng, result.lat)
-        result = coordtransform.gcj02towgs84(result[0], result[1])
-      } else {
-        result = coordtransform.bd09togcj02(result.lng, result.lat)
+      if (options.projectionTransforms && options.projectionTransforms.from !== options.projectionTransforms.to) {
+        if (options.projectionTransforms.to.toUpperCase() === 'WGS84') {
+          result = coordtransform.bd09togcj02(result.lng, result.lat)
+          result = coordtransform.gcj02towgs84(result[0], result[1])
+        } else {
+          result = coordtransform.bd09togcj02(result.lng, result.lat)
+        }
       }
       return new Cartographic(Cesium.Math.toRadians(result[0]), Cesium.Math.toRadians(result[1]))
     }
