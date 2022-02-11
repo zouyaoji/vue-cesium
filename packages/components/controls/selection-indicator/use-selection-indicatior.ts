@@ -180,7 +180,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     const { defined } = Cesium
     const { viewer } = $services
     const scene = viewer.scene
-    const pickedList = scene.drillPick(screenPosition)
+    const pickedList = scene.drillPick(screenPosition, props.limit)
     for (let i = 0; i < pickedList.length; ++i) {
       const picked = pickedList[i]
       let id = picked.id

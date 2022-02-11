@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-01-19 10:20:46
+ * @LastEditTime: 2022-02-11 15:55:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
@@ -31,6 +31,10 @@ export const selectionIndicatorProps = {
   allowFeatureInfoRequests: {
     type: Boolean,
     default: true
+  },
+  limit: {
+    type: Number,
+    default: 25
   }
 }
 const emits = {
