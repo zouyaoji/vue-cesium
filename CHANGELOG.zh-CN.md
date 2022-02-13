@@ -2,12 +2,14 @@
 
 ### 3.0.9
 
+_2022-02-14_
+
 #### Bug 修复
 
 - `vc-imagery-provider-baidu` 组件 `projectionTransforms` 属性失效问题。
 - `vc-selection-indicator` 组件拾取到粒子对象上卡死的问题；仰视拾取不了对象的问题。
 - `vc-viewer` 组件 `baseLayerPicker` 属性失效问题。
-- 部分组件 types 定义不正确的问的。
+- 部分组件 types 定义不正确的问题。
 
 ### 3.0.8
 
