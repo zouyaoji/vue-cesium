@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-02-08 13:58:23
+ * @LastEditTime: 2022-02-10 15:38:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -38,7 +38,7 @@
 
 请访问 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-- 中国大陆[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+- 中国大陆[加速镜像站点](https://vue-cesium.songluck.com)
 
 VueCesium 支持加载官方 CesiumJS，或者其他基于 CesiumJS 的第三方平台，目前通过测试平台有:
 

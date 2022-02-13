@@ -121,6 +121,7 @@
 | ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
 | customid | String | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | Boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| protocol | String | `'https'` | `optional` 指定服务协议。 |
 
 :::tip
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:03
- * @LastEditTime: 2022-02-06 00:42:12
+ * @LastEditTime: 2022-02-10 10:22:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\installation.md
@@ -36,7 +36,7 @@ $ yarn add vue-cesium@next
 $ pnpm install vue-cesium@next
 ```
 
-如果您的网络环境不好，建议使用香港镜像服务 [cnpm](https://github.com/cnpm/cnpm) 或使用 [淘宝 npm 镜像](https://registry.npm.taobao.org)
+如果您的网络环境不好，建议使用相关镜像服务 [cnpm](https://github.com/cnpm/cnpm) 或使用 [中国 npm 镜像](https://registry.npmmirror.com/)
 
 ### 浏览器直接引入
 

@@ -174,9 +174,9 @@ export default {
   }
 
   .page-component__content {
-    padding-left: 300px;
+    padding-left: 325px;
     padding-bottom: 100px;
-    margin-right: 300px;
+    margin-right: 225px;
     box-sizing: border-box;
   }
   .content-wrap {

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-07 10:54:09
- * @LastEditTime: 2021-11-07 15:29:14
+ * @LastEditTime: 2022-02-10 10:17:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\vc-config-provider.md
@@ -9,7 +9,7 @@
 
 # VcConfigProvider
 
-Config Provider 被用来提供全局的配置选项，让你的配置能够在全局都能够被访问到，Config Provider 使用了 [Vue 的 provide/inject 特性](https://v3.vuejs.org/guide/composition-api-provide-inject.html#reactivity)
+Config Provider 被用来提供全局的配置选项，让你的配置能够在全局都能够被访问到。
 
 ## 基础用法
 
@@ -156,6 +156,9 @@ VcConfigProvider 组件基础用法
 
 ### 属性
 
-| 属性名 | 类型               | 默认值                                                                            | 描述         |
-| ------ | ------------------ | --------------------------------------------------------------------------------- | ------------ |
-| locale | Object\<Language\> | [languages](https://github.com/zouyaoji/vue-cesium/tree/dev/packages/locale/lang) | 翻译文本对象 |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
+| ----------- | ------------------ | --------------------------------------------------------------------------------- | ----------------------------- |
+| locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` 翻译文本对象。 |
+| cesiumPath | String | `'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS 地址。 |
+| accessToken | String | | `optional` 指定 accessToken。 |

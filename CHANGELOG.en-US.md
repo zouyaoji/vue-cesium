@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.0.9
+
+#### Bug fixes
+
+- The `projectionTransforms` property of the `vc-imagery-provider-baidu` component is invalid.
+- `vc-selection-indicator` component crashes when picking up ParticleSystem; Picking up objects failed when looking up.
+- The `baseLayerPicker` property of the `vc-viewer` component is invalid.
+
 ### 3.0.8
 
 _2022-02-08_

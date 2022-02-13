@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:03
- * @LastEditTime: 2022-02-06 00:42:29
+ * @LastEditTime: 2022-02-10 10:23:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\installation.md
@@ -39,7 +39,7 @@ $ yarn add vue-cesium@next
 $ pnpm install vue-cesium@next
 ```
 
-If your network environment is not good, it is recommended to use a mirror registry [cnpm](https://github.com/cnpm/cnpm) or [Alibaba](https://registry.npm.taobao.org).
+If your network environment is not good, it is recommended to use a mirror registry [cnpm](https://github.com/cnpm/cnpm) or [Alibaba](https://registry.npmmirror.com/).
 
 ### Import in Browser
 

@@ -121,6 +121,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 | ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
 | customid | String | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | Boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
+| protocol | String | `'https'` | `optional` Specify protocol of service. |
 
 :::tip
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2021-12-04 16:06:50
+ * @LastEditTime: 2022-02-10 15:13:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\app.vue
@@ -14,6 +14,7 @@ import { ElScrollbar } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import MainHeader from './components/header'
 import MainFooter from './components/footer'
+import ThirdScript from './components/third-script'
 import zhLocale from '@vue-cesium/locale/lang/zh-hans'
 import enLocale from '@vue-cesium/locale/lang/en-us'
 import { Language } from './enums/language'
@@ -38,13 +39,15 @@ export default defineComponent({
 
       const href = location.href
       const preferGithub = localStorage.getItem('PREFER_GITHUB')
-      const cnHref = href.indexOf('zouyaoji.gitee.io') > -1
+      // const cnHref = href.indexOf('zouyaoji.gitee.io') > -1
+      const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
       if (cnHref || preferGithub) return
       setTimeout(() => {
         if (lang.value !== Language.CN) return
         ElMessageBox.confirm('建议大陆用户访问部署在国内的站点，是否跳转？', '提示')
           .then(() => {
-            location.replace('https://zouyaoji.gitee.io/vue-cesium')
+            // location.replace('https://zouyaoji.gitee.io/vue-cesium')
+            location.replace('https://vue-cesium.songluck.com')
           })
           .catch(() => {
             localStorage.setItem('PREFER_GITHUB', 'true')
@@ -88,7 +91,7 @@ export default defineComponent({
         {
           class: 'main-cnt'
         },
-        [h(RouterView)]
+        [h(RouterView), h(ThirdScript)]
       ),
       mainFooter
     ]

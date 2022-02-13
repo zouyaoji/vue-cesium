@@ -30,7 +30,8 @@ importers:
       '@types/gulp': ^4.0.9
       '@types/gulp-debug': 2.0.32
       '@types/jest': 27.0.2
-      '@types/lodash-es': 4.17.5
+      '@types/lodash': 4.14.178
+      '@types/lodash-es': 4.17.6
       '@types/markdown-it': 12.2.3
       '@types/merge-descriptors': 1.0.1
       '@types/node': 16.11.11
@@ -87,6 +88,8 @@ importers:
       jest: 26.6.3
       jest-electron: 0.1.12
       lint-staged: 12.3.3
+      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       lodash-unified: ^1.0.1
       markdown-it: ^12.2.0
       markdown-it-anchor: ^8.4.1
@@ -137,7 +140,9 @@ importers:
       '@vue-cesium/theme-default': link:packages/theme-default
       '@vue-cesium/utils': link:packages/utils
       '@zouyaoji/heatmap.js': 2.0.8
-      lodash-unified: 1.0.1_@types+lodash-es@4.17.5
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      lodash-unified: 1.0.1_da03a4540fbd16bbaafbb96724306afd
       mitt: 3.0.0
       proj4: 2.7.5
       vue-cesium: link:packages/vue-cesium
@@ -168,7 +173,8 @@ importers:
       '@types/gulp': 4.0.9
       '@types/gulp-debug': 2.0.32
       '@types/jest': 27.0.2
-      '@types/lodash-es': 4.17.5
+      '@types/lodash': 4.14.178
+      '@types/lodash-es': 4.17.6
       '@types/markdown-it': 12.2.3
       '@types/merge-descriptors': 1.0.1
       '@types/node': 16.11.11
@@ -308,7 +314,9 @@ importers:
       '@vue/shared': ^3.2.26
       '@zouyaoji/heatmap.js': ^2.0.8
       echarts: ^5.2.1
+      lodash: ^4.17.21
       lodash-es: ^4.17.21
+      lodash-unified: ^1.0.1
       mitt: ^3.0.0
       proj4: ^2.7.5
     dependencies:
@@ -316,7 +324,9 @@ importers:
       '@vue/shared': 3.2.26
       '@zouyaoji/heatmap.js': 2.0.8
       echarts: 5.2.2
+      lodash: 4.17.21
       lodash-es: 4.17.21
+      lodash-unified: 1.0.1_da03a4540fbd16bbaafbb96724306afd
       mitt: 3.0.0
       proj4: 2.7.5
 
@@ -3130,8 +3140,8 @@ packages:
     resolution: { integrity: sha512-HZQYqbiFVWufzCwexrvh694SOim8z2d+xJl5UNamcvQFejLY/2YUtzXHYi3cHdI7PMlS8ejH2slRAOJQ32aNbA== }
     dev: true
 
-  /@types/lodash-es/4.17.5:
-    resolution: { integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A== }
+  /@types/lodash-es/4.17.6:
+    resolution: { integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg== }
     dependencies:
       '@types/lodash': 4.14.178
     dev: true
@@ -11263,14 +11273,16 @@ packages:
     resolution: { integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw== }
     dev: false
 
-  /lodash-unified/1.0.1_@types+lodash-es@4.17.5:
+  /lodash-unified/1.0.1_da03a4540fbd16bbaafbb96724306afd:
     resolution: { integrity: sha512-Py+twfpWn+2dFQWCuGcp21WiQRwZwnm1cyE3piSt/VtBVKVyxlR58WgOVRzXtmdmDRGJKH8F8GPaA29WK/yK8g== }
     peerDependencies:
       '@types/lodash-es': '*'
       lodash: '*'
       lodash-es: '*'
     dependencies:
-      '@types/lodash-es': 4.17.5
+      '@types/lodash-es': 4.17.6
+      lodash: 4.17.21
+      lodash-es: 4.17.21
     dev: false
 
   /lodash.clonedeep/4.5.0:
@@ -11311,7 +11323,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: { integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg== }
-    dev: true
 
   /log-driver/1.2.7:
     resolution: { integrity: sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg== }

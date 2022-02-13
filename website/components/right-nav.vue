@@ -3,7 +3,7 @@
     ref="navScroll"
     class="right-nav"
     wrap-style="max-height: 300px"
-    style="position: fixed; right: 10px; top: 100px; width: 280px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+    style="position: fixed; right: 10px; top: 100px; width: 220px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
   >
     <div v-for="item in anchors" :key="item" style="margin: 3px 0 3px 10px">
       <el-link

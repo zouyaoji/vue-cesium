@@ -1,8 +1,8 @@
 ## VcViewer
 
-The basic component used to build the `Cesium` application is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or components.
+The basic component for building a `Cesium` application, which is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or subcomponents.The `Cesium` and `Viewer` instances returned from the `ready` event of `vc-viewer` are used for Cesium API development. You can also get the `createPromise` object of the component through the `ref` template reference to get the Viewer instance.
 
-**Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under this component to load normally. After the initialization is complete, you can obtain the returned `Cesium` and `Viewer` instances in the `ready` event for Cesium API development, or use `ref` to obtain the component's `createPromise` object to get the Viewer instance.
+**Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under the `vc-viewer` component to load properly.
 
 ### Basic usage
 
@@ -15,16 +15,16 @@ Basic usage of `vc-viewer`.
   <vc-viewer
     ref="vcViewer"
     :animation="animation"
-    :baseLayerPicker="baseLayerPicker"
+    :base-layer-picker="baseLayerPicker"
     :timeline="timeline"
-    :fullscreenButton="fullscreenButton"
-    :fullscreenElement="fullscreenElement"
-    :infoBox="infoBox"
-    :showCredit="showCredit"
+    :fullscreen-button="fullscreenButton"
+    :fullscreen-element="fullscreenElement"
+    :info-box="infoBox"
+    :show-credit="showCredit"
     @ready="onViewerReady"
-    @leftClick="onLeftClick"
+    @left-click="onLeftClick"
   >
-    <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :otherOpts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
+    <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :other-opts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -137,16 +137,15 @@ Basic usage of `vc-viewer`.
 <!-- prettier-ignore -->
 |Name|Type|Default|Description|Accepted Values|
 |------|------|-----|---|---|
-|showCredit|Boolean|`true`| `optional` Whether to display the default Logo and loading data copyright information.|
-|autoSortImageryLayers|Boolean|`true`| `optional`Whether to automatically sort image layers according to the layer `sortOrder` property when adding image layers.|
-|removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS tag when `vc-viewer` is destroyed.|
-|enableMouseEvent|Boolean|`true`| `optional` Specify whether to trigger the event.|
-|skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` Specify whether to display the skeleton background during initialization. Animation optional values `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
-|TZcode|String|| `optional` The custom Timeline formatted date is the time zone code used. vue-cesium formats `Timeline` as local time. If you want to display it as UTC world time, set `UTCoffset` to `new Date().getTimezoneOffset()`.|
-|UTCoffset|String|| `optional` The time difference (minutes) between local time and UTC time. Customize Timeline to format the date to use.|
-|accessToken|String||`optional`To specify the accessToken, use the data source of Cesium ion to apply for an account at [https://cesium.com/ion/](https://cesium.com/ion/) to obtain the Access Token.|
-|cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`Specify an example of the cesium library used in the current scene.|
-|------|-----|---|
+|showCredit|Boolean|`true`| `optional` Specify whether to display the default Logo and loading data copyright information.|
+|autoSortImageryLayers|Boolean|`true`| `optional` Specify whether to automatically sort imageLayers according to the layer's `sortOrder` property when adding imagelayer.|
+|removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS script tag when `vc-viewer` is destroyed.|
+|enableMouseEvent|Boolean|`true`| `optional` Specifiy whether to trigger mouse events.|
+|skeleton|Boolean\|Object|| `optional` Specify whether to show the skeleton background during `vc-viewer` initialization.|
+|TZcode|String|| `optional` The time zone code used for timeline date formatting. By default, it is formatted as local time. If you want to display it as UTC universal time, set `UTCoffset` to `new Date().getTimezoneOffset()`|
+|UTCoffset|Number|| `optional` The time difference (minutes) between local time and UTC time.|
+|accessToken|String||`optional` Specify the default [Cesium ion](https://cesium.com/ion/) access token.|
+|cesiumPath|String||`optional` Specify the web service address of the CesiumJS library used to initialize the `vc-viewer` component.|
 |animation|Boolean|`false`|`optional`If set to false, the Animation widget will not be created.|
 |baseLayerPicker| Boolean|`false`|`optional`If set to false, the BaseLayerPicker widget will not be created.|
 |fullscreenButton|Boolean| `false`| `optional`If set to false, the FullscreenButton widget will not be created.|
@@ -196,50 +195,49 @@ Basic usage of `vc-viewer`.
 |ready|(readyObj: VcReadyObject)|Triggers when vc-viewer is successfully loaded.| - |
 |destroyed| (instance: VcComponentInternalInstance) |Triggers when vc-viewer is destroyed.| - |
 |viewerWidgetResized|(e: ViewerWidgetResizedEvent)|Triggers when a component changes on vc-viewer.| - |
-|------|----|----|---|
-|selectedEntityChanged|(entity: Cesium.Entity)| Gets the event that is raised when the selected entity changes. |Viewer|
-|trackedEntityChanged|(entity: Cesium.Entity)| Gets the event that is raised when the tracked entity changes. |Viewer|
-|layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|An event that is raised when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.|Viewer.imageryLayers|
-|layerMoved|(imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number)|An event that is raised when a layer changes position in the collection. Event handlers are passed the layer that was moved, its new index after the move, and its old index prior to the move.|Viewer.imageryLayers|
-|layerRemoved|(imageryLayer: Cesium.ImageryLayer, index: number)|An event that is raised when a layer is removed from the collection. Event handlers are passed the layer that was removed and the index from which it was removed.|Viewer.imageryLayers|
-|layerShownOrHidden|(imageryLayer: Cesium.ImageryLayer, index: number, show: boolean)|An event that is raised when a layer is shown or hidden by setting the ImageryLayer#show property. Event handlers are passed a reference to this layer, the index of the layer in the collection, and a flag that is true if the layer is now shown or false if it is now hidden.|iewer.imageryLayers|
-|dataSourceAdded|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|An event that is raised when a data source is added to the collection. Event handlers are passed the data source that was added.|Viewer.dataSources|
-|dataSourceMoved|(dataSource: VcDatasource, newIndex: number, oldIndex: number)|An event that is raised when a data source changes position in the collection. Event handlers are passed the data source that was moved, its new index after the move, and its old index prior to the move.|Viewer.dataSources|
-|dataSourceRemoved|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|An event that is raised when a data source is removed from the collection. Event handlers are passed the data source that was removed.|Viewer.entities|
-|collectionChanged|(collection: Cesium.EntityCollection, addedArray: Array<Cesium.Entity>, removedArray: Array<Cesium.Entity>, changedArray: Array<Cesium.Entity>)|Gets the event that is fired when entities are added or removed from the collection. The generated event is a EntityCollection.collectionChangedEventCallback.|Viewer.entities|
-|morphComplete|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|The event fired at the completion of a scene transition.|Viewer.scene|
-|morphStart|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|The event fired at the beginning of a scene transition.|Viewer.scene|
-|postRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|Gets the event that will be raised immediately after the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
-|preRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|Gets the event that will be raised after the scene is updated and immediately before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
-|postUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|Gets the event that will be raised immediately after the scene is updated and before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
-|preUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|Gets the event that will be raised before the scene is updated or rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
-|renderError|(scene: Cesium.Scene, error: any)|Gets the event that will be raised when an error is thrown inside the render function. The Scene instance and the thrown error are the only two parameters passed to the event handler. By default, errors are not rethrown after this event is raised, but that can be changed by setting the rethrowRenderErrors property.|Viewer.scene|
-|terrainProviderChanged|(provider: VcTerrainProvider)|Gets an event that's raised when the terrain provider is changed.|Viewer.scene|
-|changed|(percent: number)|Gets the event that will be raised when the camera has changed by percentageChanged.|Viewer.camera|
-|moveEnd|()|Gets the event that will be raised when the camera has stopped moving.|Viewer.camera|
-|moveStart|()|Gets the event that will be raised at when the camera starts to move.|Viewer.camera|
-|onStop|(clock: Cesium.Clock)|An Event that is fired whenever Clock#stopTime is reached.|Viewer.clock|
-|onTick|(clock: Cesium.Clock)|An Event that is fired whenever Clock#tick is called.|Viewer.clock|
-|errorEvent|(tileProviderError: any)|Gets an event that is raised when the terrain provider encounters an asynchronous error.. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|Viewer.terrainProvider|
-|cameraClicked|(viewModel: Cesium.InfoBoxViewModel)|Gets an Event that is fired when the user clicks the camera icon.|Viewer.infoBox.viewModel|
-|closeClicked|(viewModel: Cesium.InfoBoxViewModel)|Gets an Event that is fired when the user closes the info box.|Viewer.infoBox.viewModel|
-|leftClick|(evt: { position: Cesium.Cartesian2; })|Represents a mouse left click event.|ScreenSpaceEventType|
-|leftDoubleClick|(evt: { position: Cesium.Cartesian2; })|Represents a mouse left double click event.|ScreenSpaceEventType|
-|leftDown|(evt: { position: Cesium.Cartesian2; })|Represents a mouse left button down event.|ScreenSpaceEventType|
-|leftUp|(evt: { position: Cesium.Cartesian2; })|Represents a mouse left button up event.|ScreenSpaceEventType|
-|middleClick|(evt: { position: Cesium.Cartesian2; })|Represents a mouse middle click event.|ScreenSpaceEventType|
-|middleDown|(evt: { position: Cesium.Cartesian2; })|Represents a mouse middle button down event.|ScreenSpaceEventType|
-|middleUp|(evt: { position: Cesium.Cartesian2; })|Represents a mouse middle button up event.|ScreenSpaceEventType|
-|mouseMove|{startPosition: point, endPosition: point}|Represents a mouse move event.|ScreenSpaceEventType|
-|pinchEnd|()|Represents the end of a two-finger event on a touch surface.|ScreenSpaceEventType|
-|pinchMove|(evt: { distance: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 } angleAndHeight: { startPosition: Cesium.Cartesian2 ;endPosition: Cesium.Cartesian2 }})|Represents a change of a two-finger event on a touch surface.|ScreenSpaceEventType|
-|pinchStart|(evt: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2; })|Represents the start of a two-finger event on a touch surface.|ScreenSpaceEventType|
-|rightClick|(evt: { position: Cesium.Cartesian2; })|Represents a mouse right click event.|ScreenSpaceEventType|
-|rightDown|(evt: { position: Cesium.Cartesian2; })|Represents a mouse left button down event.|ScreenSpaceEventType|
-|rightUp|(evt: { position: Cesium.Cartesian2; })|Represents a mouse right button up event.|ScreenSpaceEventType|
-|wheel|(delta: number)|Represents a mouse wheel event.|ScreenSpaceEventType|
-|imageryLayersUpdatedEvent|()|Gets an event that's raised when an imagery layer is added, shown, hidden, moved, or removed.|Viewer.scene.globe|
-|tileLoadProgressEvent|(length: number)|Gets an event that's raised when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.|Viewer.scene.globe|
+|selectedEntityChanged|(entity: Cesium.Entity)| Triggers when the selected entity changes. |Viewer|
+|trackedEntityChanged|(entity: Cesium.Entity)| Triggers when the tracked entity changes. |Viewer|
+|layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|Triggers when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.|Viewer.imageryLayers|
+|layerMoved|(imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number)|Triggers when a layer changes position in the collection. Event handlers are passed the layer that was moved, its new index after the move, and its old index prior to the move.|Viewer.imageryLayers|
+|layerRemoved|(imageryLayer: Cesium.ImageryLayer, index: number)|Triggers when a layer is removed from the collection. Event handlers are passed the layer that was removed and the index from which it was removed.|Viewer.imageryLayers|
+|layerShownOrHidden|(imageryLayer: Cesium.ImageryLayer, index: number, show: boolean)|Triggers when a layer is shown or hidden by setting the ImageryLayer#show property. Event handlers are passed a reference to this layer, the index of the layer in the collection, and a flag that is true if the layer is now shown or false if it is now hidden.|iewer.imageryLayers|
+|dataSourceAdded|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|Triggers when a data source is added to the collection. Event handlers are passed the data source that was added.|Viewer.dataSources|
+|dataSourceMoved|(dataSource: VcDatasource, newIndex: number, oldIndex: number)|Triggers when a data source changes position in the collection. Event handlers are passed the data source that was moved, its new index after the move, and its old index prior to the move.|Viewer.dataSources|
+|dataSourceRemoved|(collection: Cesium.DataSourceCollection, dataSource: VcDatasource)|Triggers when a data source is removed from the collection. Event handlers are passed the data source that was removed.|Viewer.entities|
+|collectionChanged|(collection: Cesium.EntityCollection, addedArray: Array<Cesium.Entity>, removedArray: Array<Cesium.Entity>, changedArray: Array<Cesium.Entity>)|Triggers when when entities are added or removed from the collection. The generated event is a EntityCollection.collectionChangedEventCallback.|Viewer.entities|
+|morphComplete|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|Triggers at the completion of a scene transition.|Viewer.scene|
+|morphStart|(transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean)|Triggers at the beginning of a scene transition.|Viewer.scene|
+|postRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|Triggers immediately after the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|preRender|(scene: Cesium.Scene, time: Cesium.JulianDate)|Triggers after the scene is updated and immediately before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|postUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|Triggers immediately after the scene is updated and before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|preUpdate|(scene: Cesium.Scene, time: Cesium.JulianDate)|Triggers before the scene is updated or rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.|Viewer.scene|
+|renderError|(scene: Cesium.Scene, error: any)|Triggers when an error is thrown inside the render function. The Scene instance and the thrown error are the only two parameters passed to the event handler. By default, errors are not rethrown after this event is raised, but that can be changed by setting the rethrowRenderErrors property.|Viewer.scene|
+|terrainProviderChanged|(provider: VcTerrainProvider)|Triggers when the terrain provider is changed.|Viewer.scene|
+|changed|(percent: number)|Triggers when the camera has changed by percentageChanged.|Viewer.camera|
+|moveEnd|()|Triggers when the camera has stopped moving.|Viewer.camera|
+|moveStart|()|Triggers when the camera starts to move.|Viewer.camera|
+|onStop|(clock: Cesium.Clock)|Triggers when Clock#stopTime is reached.|Viewer.clock|
+|onTick|(clock: Cesium.Clock)|Triggers when Clock#tick is called.|Viewer.clock|
+|errorEvent|(tileProviderError: any)|Triggers when the terrain provider encounters an asynchronous error. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.|Viewer.terrainProvider|
+|cameraClicked|(viewModel: Cesium.InfoBoxViewModel)|Triggers when the user clicks the camera icon.|Viewer.infoBox.viewModel|
+|closeClicked|(viewModel: Cesium.InfoBoxViewModel)|Triggers when the user closes the info box.|Viewer.infoBox.viewModel|
+|leftClick|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse left button clicked.|ScreenSpaceEventType|
+|leftDoubleClick|(evt: { position: Cesium.Cartesian2; })|Triggered when the mouse left button double clicked.|ScreenSpaceEventType|
+|leftDown|(evt: { position: Cesium.Cartesian2; })|Triggered when the mouse left button down.|ScreenSpaceEventType|
+|leftUp|(evt: { position: Cesium.Cartesian2; })|Triggered when the mouse left button up.|ScreenSpaceEventType|
+|middleClick|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse middle button clicked.|ScreenSpaceEventType|
+|middleDown|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse middle button down.|ScreenSpaceEventType|
+|middleUp|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse middle button up.|ScreenSpaceEventType|
+|mouseMove|{startPosition: point, endPosition: point}|Triggers when the mouse move.|ScreenSpaceEventType|
+|pinchEnd|()|Triggers when end of a two-finger on a touch surface.|ScreenSpaceEventType|
+|pinchMove|(evt: { distance: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 } angleAndHeight: { startPosition: Cesium.Cartesian2 ;endPosition: Cesium.Cartesian2 }})|Triggers when a change of a two-finger on a touch surface.|ScreenSpaceEventType|
+|pinchStart|(evt: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2; })|Triggers when the start of a two-finger on a touch surface.|ScreenSpaceEventType|
+|rightClick|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse right click.|ScreenSpaceEventType|
+|rightDown|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse right button down.|ScreenSpaceEventType|
+|rightUp|(evt: { position: Cesium.Cartesian2; })|Triggers when the mouse right button up.|ScreenSpaceEventType|
+|wheel|(delta: number)|Triggers when the mouse wheel.|ScreenSpaceEventType|
+|imageryLayersUpdatedEvent|()|Triggers when an imagery layer is added, shown, hidden, moved, or removed.|Viewer.scene.globe|
+|tileLoadProgressEvent|(length: number)|Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.|Viewer.scene.globe|
 
 ### Ref methods
 

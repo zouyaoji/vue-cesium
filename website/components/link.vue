@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-05 21:23:27
- * @LastEditTime: 2021-12-06 21:46:04
+ * @LastEditTime: 2022-02-10 15:39:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\link.vue
@@ -19,18 +19,18 @@ const ExternalLink = () =>
       viewBox: '0 0 1024 1024',
       xmlns: 'http://www.w3.org/2000/svg',
       width: 16,
-      height: 16,
+      height: 16
     },
     [
       h('path', {
         d: 'M853.333333 469.333333a42.666667 42.666667 0 0 0-42.666666 42.666667v256a42.666667 42.666667 0 0 1-42.666667 42.666667H256a42.666667 42.666667 0 0 1-42.666667-42.666667V256a42.666667 42.666667 0 0 1 42.666667-42.666667h256a42.666667 42.666667 0 0 0 0-85.333333H256a128 128 0 0 0-128 128v512a128 128 0 0 0 128 128h512a128 128 0 0 0 128-128v-256a42.666667 42.666667 0 0 0-42.666667-42.666667z',
-        fill: 'currentColor',
+        fill: 'currentColor'
       }),
 
       h('path', {
         d: 'M682.666667 213.333333h67.413333l-268.373333 267.946667a42.666667 42.666667 0 0 0 0 60.586667 42.666667 42.666667 0 0 0 60.586666 0L810.666667 273.92V341.333333a42.666667 42.666667 0 0 0 42.666666 42.666667 42.666667 42.666667 0 0 0 42.666667-42.666667V170.666667a42.666667 42.666667 0 0 0-42.666667-42.666667h-170.666666a42.666667 42.666667 0 0 0 0 85.333333z',
-        fill: 'currentColor',
-      }),
+        fill: 'currentColor'
+      })
     ]
   )
 
@@ -40,7 +40,8 @@ const internalLinks = [
   'http://localhost',
   'http://127.0.0.1',
   'https://zouyaoji.top/vue-cesium',
-  'https://zouyaoji.gitee.io/vue-cesium'
+  'https://zouyaoji.gitee.io/vue-cesium',
+  'https://vue-cesium.songluck.com/'
 ]
 
 export default {
@@ -49,22 +50,19 @@ export default {
   props: {
     href: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   computed: {
     passThrough() {
       return {
         href: this.href,
         target: this.isInternal ? null : '_blank',
-        rel: 'noopener noreferrer',
+        rel: 'noopener noreferrer'
       }
     },
     isInternal() {
-      return (
-        this.href.startsWith('/#') ||
-        internalLinks.some((link) => this.href.includes(link))
-      )
+      return this.href.startsWith('/#') || internalLinks.some(link => this.href.includes(link))
     },
     isExternal() {
       return !this.isInternal
@@ -74,21 +72,19 @@ export default {
     },
     isSkipped() {
       return skipped.indexOf(this.href) > -1
-    },
+    }
   },
   methods: {
     onClick(e: MouseEvent) {
       if (!this.isSamePage) return
       e.preventDefault()
       this.$router.go(this.href)
-    },
+    }
   },
   render() {
     const children = []
 
-    children.push(
-      h('span', { class: 'vue-cesium__link-text' }, [this.$slots.default()])
-    )
+    children.push(h('span', { class: 'vue-cesium__link-text' }, [this.$slots.default()]))
     !this.isSkipped &&
       this.isExternal &&
       children.push(
@@ -97,19 +93,19 @@ export default {
           {
             style: {
               fontSize: '14px',
-              marginLeft: '4px',
+              marginLeft: '4px'
             },
-            color: 'inherit',
+            color: 'inherit'
           },
           {
-            default: () => [h(ExternalLink)],
+            default: () => [h(ExternalLink)]
           }
         )
       )
     const props = {
       class: 'vue-cesium__link',
       ...this.passThrough,
-      onClick: this.onClick,
+      onClick: this.onClick
     }
 
     return h('a', props, children)
@@ -117,6 +113,6 @@ export default {
     // : h(resolveComponent('router-link'), props, {
     //   default: () => children,
     // })
-  },
+  }
 }
 </script>

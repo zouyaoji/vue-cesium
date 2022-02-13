@@ -1,8 +1,8 @@
 ## VcViewer
 
-构建 `Cesium` 应用程序的基础组件，其实质是通过 `Cesium.Viewer` 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者子组件。
+构建 `Cesium` 应用程序的基础组件，其实质是通过 `Cesium.Viewer` 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者子组件。 `vc-viewer` 的 `ready` 事件中获取返回的 `Cesium` 和 `Viewer` 实例用于 Cesium API 开发，也可以通过 `ref` 模板引用来获取组件的 `createPromise` 对象来得到 Viewer 实例。
 
-**注意:** `vue-cesium` 的其他组件或由它们构成的自定义组件都需要放在该组件下面才能正常加载。初始化完成后，可以在 `ready` 事件中获取返回的 `Cesium` 和 `Viewer` 实例用于 Cesium API 开发，也可以通过 `ref` 来获取组件的 `createPromise` 对象来得到 Viewer 实例。
+**注意：** `vue-cesium` 的其他组件或由它们构成的自定义组件都需要放在 `vc-viewer` 组件下面才能正常加载。
 
 ### 基础用法
 
@@ -15,17 +15,17 @@
   <vc-viewer
     ref="vcViewer"
     :animation="animation"
-    :baseLayerPicker="baseLayerPicker"
+    :base-layer-picker="baseLayerPicker"
     :timeline="timeline"
-    :fullscreenButton="fullscreenButton"
-    :fullscreenElement="fullscreenElement"
-    :infoBox="infoBox"
-    :showCredit="showCredit"
-    @cesiumReady="onCesiumReady"
+    :fullscreen-button="fullscreenButton"
+    :fullscreen-element="fullscreenElement"
+    :info-box="infoBox"
+    :show-credit="showCredit"
+    @cesium-ready="onCesiumReady"
     @ready="onViewerReady"
-    @leftClick="onLeftClick"
+    @left-click="onLeftClick"
   >
-    <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :otherOpts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
+    <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :other-opts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
@@ -140,16 +140,16 @@
 <!-- prettier-ignore -->
 |属性名|类型|默认值|描述|可选值|
 |------|------|-----|---|---|
-|camera|Object: VcCamera|| `optional` 指定初始化场景相机位置，默认定位到全球范围内的中国。  |
-|showCredit|Boolean|`true`| `optional` 是否显示默认 Logo 和 加载数据版权信息。|
-|autoSortImageryLayers|Boolean|`true`| `optional` 添加影像图层时是否根据图层 `sortOrder` 属性自动排序。|
-|removeCesiumScript|Boolean|`true`| `optional` 指定`vc-viewer` 销毁时是否移除CesiumJS标签。|
-|enableMouseEvent|Boolean|`true`| `optional` 指定是否触发事件。|
-|skeleton|Boolean\|Object|`{ dark: false, animation: 'wave', square: true, bordered: true, color: undefined }`| `optional` 指定初始化时是否显示骨架背景。动画可选值 `wave`, `pulse`, `pulse-x`, `pulse-y`, `fade`, `blink`, `none`|
-|TZcode|String|| `optional` 自定义 Timeline 格式化日期是所用时区代码。vue-cesium 将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
-|UTCoffset|String|| `optional` 本地时间与UTC时间的时差（分钟）。自定义 Timeline 格式化日期使用。|
-|accessToken|String||`optional`指定accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
-|cesiumPath|String|`'https://unpkg.com/cesium/Build/Cesium/Cesium.js'`|`optional`指定当前场景使用的 cesium 库的例子。|
+|camera|Object: VcCamera|| `optional` 指定初始化场景相机位置，默认在中国。  |
+|showCredit|Boolean|`true`| `optional` 指定是否显示默认 Logo 和 加载数据版权信息。|
+|autoSortImageryLayers|Boolean|`true`| `optional` 指定添加影像图层时是否根据图层的 `sortOrder` 属性自动排序。|
+|removeCesiumScript|Boolean|`true`| `optional` 指定 `vc-viewer` 组件销毁时是否移除CesiumJS标签。|
+|enableMouseEvent|Boolean|`true`| `optional` 指定是否触发鼠标事件。|
+|skeleton|Boolean\|Object: VcSkeletonProps|| `optional` 指定 `vc-viewer` 初始化时是否显示骨架背景。|
+|TZcode|String|| `optional` Timeline 日期格式化所用时区代码。默认将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
+|UTCoffset|Number|| `optional` 本地时间与UTC时间的时差（分钟）。|
+|accessToken|String||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
+|cesiumPath|String||`optional` 指定用于初始化 `vc-viewer` 组件的 CesiumJS 库的 Web 服务地址。|
 |animation|Boolean|`false`|`optional`是否显示动画控件。|
 |baseLayerPicker| Boolean|`false`|`optional`是否显示基础图层切换按钮。|
 |fullscreenButton|Boolean| `false`| `optional`是否显示全屏切换按钮。|
@@ -199,7 +199,6 @@
 |ready|(readyObj: VcReadyObject)|对象加载完成时触发。| - |
 |destroyed| (instance: VcComponentInternalInstance) |对象销毁时触发。| - |
 |viewerWidgetResized| (e: ViewerWidgetResizedEvent) |vc-viewer 上有部件发生变化时触发。| - |
-|------|----|----|---|
 |selectedEntityChanged|(entity: Cesium.Entity)|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（未选中）|Viewer|
 |trackedEntityChanged|(entity: Cesium.Entity)|场景跟踪实体发生改变时触发此事件。事件参数表示跟踪的实体。|Viewer|
 |layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|场景添加某影像图层后触发该事件。事件参数表示改图层和它的索引。|Viewer.imageryLayers|

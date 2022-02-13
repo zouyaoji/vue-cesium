@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-29 22:55:37
- * @LastEditTime: 2022-02-08 14:03:11
+ * @LastEditTime: 2022-02-10 15:06:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\index.tpl
@@ -24,8 +24,10 @@
      crossorigin="anonymous"></script>
     <!-- 万维广告 -->
     <meta name="wwads-cn-verify" content="a4a042cf4fd6bfb47701cbc8a1653ada" />
-    <!-- 友盟统计 -->
-    <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264" async></script>
+    <!-- 友盟统计 for zouyaoji.top/vue-cesium -->
+    <!-- <script src="https://s4.cnzz.com/z_stat.php?id=1280816264&web_id=1280816264" async></script> -->
+    <!-- 友盟统计 for vue-cesium/songluck.com -->
+    <!-- <script src="https://s9.cnzz.com/z_stat.php?id=1280840125&web_id=1280840125" async></script> -->
   </head>
   <body>
     <div id="app"></div>

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-07 10:54:09
- * @LastEditTime: 2021-11-07 15:30:37
+ * @LastEditTime: 2022-02-10 10:19:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\vc-config-provider.md
@@ -9,7 +9,7 @@
 
 # VcConfigProvider
 
-Config Provider is used for providing global configurations, which enables your entire application to access these configurations everywhere
+Config Provider is used for providing global configurations, which enables your entire application to access these configurations everywhere.
 
 ### Basic usage
 
@@ -156,6 +156,9 @@ Basic usage of `vc-config-provider`.
 
 ### Props
 
+<!-- prettier-ignore -->
 | Name   | Type               | Default                                                                           | Description   |
 | ------ | ------------------ | --------------------------------------------------------------------------------- | ------------- |
-| locale | Object\<Language\> | [languages](https://github.com/zouyaoji/vue-cesium/tree/dev/packages/locale/lang) | Locale Object |
+| locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` Locale Object. |
+| cesiumPath | String | `'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS url. |
+| accessToken | String | | `optional` accessToken. |

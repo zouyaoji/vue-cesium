@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-02-08 13:58:31
+ * @LastEditTime: 2022-02-10 15:38:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -38,7 +38,7 @@
 
 You can find for more details, API, and other docs on [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
-- 中国大陆[加速镜像站点](https://zouyaoji.gitee.io/vue-cesium/)
+- 中国大陆[加速镜像站点](https://vue-cesium.songluck.com)
 
 VueCesium supports loading the official CesiumJS, or other third-party platforms based on CesiumJS. The tested third-party libraries:
 

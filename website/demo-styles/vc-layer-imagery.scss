@@ -6,3 +6,19 @@
     border-bottom: none;
   }
 }
+
+.demo-block.demo-vc-layer-imagery {
+  .slider {
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    background-color: #d3d3d3;
+    width: 5px;
+    height: 100%;
+    z-index: 9999;
+  }
+
+  .slider:hover {
+    cursor: ew-resize;
+  }
+}

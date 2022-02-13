@@ -3,7 +3,8 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+  // font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+  font-family: Inter, Roboto, Oxygen, 'Fira Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -21,9 +22,10 @@ body {
 #app {
   height: 100%;
 
-  &.en-US {
-    font-family: Consolas, 'Liberation Mono', Menlo, 'Courier New', Courier, Monaco, monospace;
-  }
+  // &.en-US {
+  //   // font-family: Consolas, 'Liberation Mono', Menlo, 'Courier New', Courier, Monaco, monospace;
+  //   // Inter, Roboto, Oxygen, "Fira Sans", "Helvetica Neue", sans-serif;
+  // }
 
   &.is-component {
     overflow-y: hidden;
@@ -102,7 +104,7 @@ textarea {
     margin-top: 8px;
     margin-bottom: 20px;
     color: rgba(0, 0, 0, 0.85);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 30px;
   }
   h2,
@@ -111,7 +113,7 @@ textarea {
   h5,
   h6 {
     // margin: 1.6em 0 0.6em;
-    font-weight: 500;
+    font-weight: 600;
     color: rgba(0, 0, 0, 0.85);
   }
   h2 {
@@ -145,9 +147,10 @@ textarea {
   }
 
   p {
-    font-size: 14px;
-    color: #5e6d82;
-    line-height: 1.5em;
+    font-size: 16px;
+    color: #303133;
+    line-height: 1.7;
+    margin: 1rem 0;
   }
 
   .tip {
