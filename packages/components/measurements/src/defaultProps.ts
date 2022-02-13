@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-01-25 17:51:49
+ * @LastEditTime: 2022-02-13 00:14:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -281,7 +281,7 @@ const circleMeasurementDefault: VcRegularMeasurementOpts = Object.assign({}, rec
 })
 
 const mainFabDefault = Object.assign({}, actionOptions, {
-  direction: 'left',
+  direction: 'right',
   icon: 'vc-icons-measurement-button',
   activeIcon: 'vc-icons-measurement-button',
   verticalActionsAlign: 'center',

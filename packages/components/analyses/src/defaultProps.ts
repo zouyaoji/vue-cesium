@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-01-26 14:54:25
+ * @LastEditTime: 2022-02-13 22:24:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
@@ -100,7 +100,7 @@ const viewshedAnalysisDefault: VcViewshedAnalysisOpts = Object.assign({}, polygo
 })
 
 const mainFabDefault = Object.assign({}, actionOptions, {
-  direction: 'left',
+  direction: 'right',
   icon: 'vc-icons-analysis-button',
   activeIcon: 'vc-icons-analysis-button',
   verticalActionsAlign: 'center',

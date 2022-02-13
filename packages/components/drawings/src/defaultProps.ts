@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-01-22 17:20:30
+ * @LastEditTime: 2022-02-13 22:24:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -60,7 +60,7 @@ const pinDrawingDefault: VcDrawingOpts = Object.assign({}, pointDrawingDefault, 
 })
 
 const mainFabDefault = Object.assign({}, actionOptions, {
-  direction: 'left',
+  direction: 'right',
   icon: 'vc-icons-drawing-button',
   activeIcon: 'vc-icons-drawing-button',
   verticalActionsAlign: 'center',
