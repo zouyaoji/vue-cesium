@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, CSSProperties, VNode, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
-import type { VcCompassEvt, VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcComponentInternalInstance, VcReadyObject, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -219,4 +219,24 @@ export type VcNavigationSmProps = {
    * Specify the zoom control options of the component. false means no display.
    */
   zoomOpts?: false | VcZoomControlSmProps
+  /**
+   * Triggers before the VcNavigationSm is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcNavigationSm is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcNavigationSm is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the zoom control is operated.
+   */
+  zoomEvt?: (evt: VcZoomEvt) => void
+  /**
+   * Triggers when the compass control is operated.
+   */
+  compassEvt?: (evt: VcCompassEvt) => void
 }

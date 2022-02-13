@@ -1,4 +1,4 @@
-import type { VcCamera } from '@vue-cesium/utils/types'
+import type { VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
 
 export default {
@@ -67,11 +67,11 @@ export default {
   imageryProvider: Object as PropType<Cesium.ImageryProvider>,
   terrainProvider: Object as PropType<Cesium.TerrainProvider>,
   skyBox: {
-    type: [Object, Boolean] as PropType<Cesium.SkyBox>,
+    type: [Object, Boolean] as PropType<Cesium.SkyBox | false>,
     default: () => undefined
   },
   skyAtmosphere: {
-    type: [Object, Boolean] as PropType<Cesium.SkyAtmosphere>,
+    type: [Object, Boolean] as PropType<Cesium.SkyAtmosphere | false>,
     default: () => undefined
   },
   fullscreenElement: {
@@ -94,13 +94,16 @@ export default {
     type: Boolean,
     default: true
   },
-  contextOptions: Object,
+  contextOptions: Object as PropType<VcContextOptions>,
   sceneMode: {
     type: Number,
     default: 3
   },
   mapProjection: Object as PropType<Cesium.MapProjection>,
-  globe: Object as PropType<Cesium.Globe>,
+  globe: {
+    type: [Object, Boolean] as PropType<Cesium.Globe | false>,
+    default: () => undefined
+  },
   orderIndependentTranslucency: {
     type: Boolean,
     default: true

@@ -619,6 +619,12 @@ export type VcZoomEvt = {
 
 export type MaybeRef<T> = T | Ref<T>
 
+export type VcContextOptions = {
+  webgl?: WebGLContextAttributes
+  allowTextureFilterAnisotropic?: boolean
+  requestWebgl2?: boolean
+  getWebGLStub?: (canvas: HTMLCanvasElement, webglOptions: WebGLContextAttributes) => Cesium.WebGLConstants
+}
 export {
   AnyObject,
   VcCamera,

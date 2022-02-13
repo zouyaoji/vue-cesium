@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-08 09:43:11
+ * @LastEditTime: 2022-02-11 10:34:07
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
@@ -15,7 +15,8 @@ import type {
   VcPrintEvt,
   VcStatusBarEvt,
   VcComponentInternalInstance,
-  VcZoomEvt
+  VcZoomEvt,
+  VcReadyObject
 } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -390,4 +391,40 @@ export type VcNavigationProps = {
    * Specify the other controls(status bar & distance legend) options of the component. false means no display.
    */
   otherOpts?: false | VcNavigationOtherOpts
+  /**
+   * Triggers before the VcNavigation is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcNavigation is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcNavigation is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the zoom control is operated.
+   */
+  zoomEvt?: (evt: VcZoomEvt) => void
+  /**
+   * Triggers when the compass control is operated.
+   */
+  compassEvt?: (evt: VcCompassEvt) => void
+  /**
+   * Triggers when the positioning button is clicked.
+   */
+  locationEvt?: (evt: VcLocationEvt) => void
+  /**
+   * Triggers when the print button is clicked.
+   */
+  printEvt?: (evt: VcPrintEvt) => void
+  /**
+   * Triggers when the information changed.
+   */
+  statusBarEvt?: (evt: VcStatusBarEvt) => void
+  /**
+   * Triggers when the distance scale changed.
+   */
+  distanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
 }

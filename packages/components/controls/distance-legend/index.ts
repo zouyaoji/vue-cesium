@@ -282,7 +282,7 @@ export type VcDistanceLegendProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the distance scale changes.
+   * Triggers when the distance scale changed.
    */
   onDistanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
 }

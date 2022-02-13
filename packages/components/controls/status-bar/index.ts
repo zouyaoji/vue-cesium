@@ -566,7 +566,7 @@ export type VcStatusBarProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the information changes.
+   * Triggers when the information changed.
    */
   onStatusBarEvt?: (evt: VcStatusBarEvt) => void
 }

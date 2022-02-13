@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-02-08 10:53:54
+ * @LastEditTime: 2022-02-13 00:36:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
@@ -10,7 +10,7 @@ import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
-import type { MeasureUnits } from '@vue-cesium/shared'
+import { MeasureUnits } from '@vue-cesium/shared'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
 import { drawingEmit } from '@vue-cesium/utils/emits'

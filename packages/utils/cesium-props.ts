@@ -19,10 +19,8 @@ import {
   makeOptions,
   makeAppearance
 } from './cesium-helpers'
-import type { Component, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type {
-  CartographicInDegreeOption,
-  Cartesian3Option,
   VcPosition,
   VcRectangle,
   VcAppearance,
@@ -58,6 +56,19 @@ const position = {
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3,
       deep: true // 在 use-common 中已将 SampledPositionProperty 类型的 deep 设为 false
+    }
+  }
+}
+
+const viewFrom = {
+  /**
+   * A suggested initial offset for viewing this object.
+   */
+  viewFrom: {
+    type: [Object, Array, Function] as PropType<VcPosition>,
+    watcherOptions: {
+      cesiumObjectBuilder: makeCartesian3,
+      deep: true
     }
   }
 }
@@ -121,7 +132,7 @@ const depthFailColor = {
  * @const {Number, Object, Function} disableDepthTestDistance mixin
  */
 const disableDepthTestDistance = {
-  disableDepthTestDistance: [Number, Object, Function]
+  disableDepthTestDistance: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -159,7 +170,7 @@ const eyeOffset = {
  * @const {Number, Object, Function} height mixin
  */
 const height = {
-  height: [Number, Object, Function]
+  height: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -167,7 +178,7 @@ const height = {
  */
 const heightReference = {
   heightReference: {
-    type: [Number, Object, Function] as PropType<number | Cesium.HeightReference | VcCallbackPropertyFunction<number>>
+    type: [Number, Object, Function] as PropType<number | Cesium.HeightReference | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
     // default: 0
   }
 }
@@ -177,7 +188,7 @@ const heightReference = {
  */
 const horizontalOrigin = {
   horizontalOrigin: {
-    type: [Number, Object, Function] as PropType<number | Cesium.HorizontalOrigin | VcCallbackPropertyFunction<number>>,
+    type: [Number, Object, Function] as PropType<number | Cesium.HorizontalOrigin | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -252,7 +263,7 @@ const pixelOffsetScaleByDistance = {
  */
 const rotation = {
   rotation: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -262,7 +273,7 @@ const rotation = {
  */
 const scale = {
   scale: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 1.0
   }
 }
@@ -294,7 +305,7 @@ const show = {
  */
 const sizeInMeters = {
   sizeInMeters: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: false
   }
 }
@@ -316,7 +327,7 @@ const translucencyByDistance = {
  */
 const verticalOrigin = {
   verticalOrigin: {
-    type: [Number, Object, Function] as PropType<number | Cesium.VerticalOrigin | VcCallbackPropertyFunction<number>>,
+    type: [Number, Object, Function] as PropType<number | Cesium.VerticalOrigin | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -325,7 +336,7 @@ const verticalOrigin = {
  * @const {Number, Object, Function} width mixin
  */
 const width = {
-  width: [Number, Object, Function] as PropType<number>
+  width: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 // BillboardGraphics end
 
@@ -995,7 +1006,7 @@ const shape = {
  */
 const coordinates = {
   coordinates: {
-    type: [Object, Array, Function] as PropType<Cesium.Rectangle>,
+    type: [Object, Array, Function] as PropType<VcRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeRectangle
     }
@@ -1038,7 +1049,7 @@ const maximumHeights = {
  */
 const cutoutRectangle = {
   cutoutRectangle: {
-    type: [Object, Array] as PropType<Cesium.Rectangle>,
+    type: [Object, Array] as PropType<VcRectangle>,
     watcherOptions: {
       cesiumObjectBuilder: makeRectangle
     }
@@ -1683,6 +1694,7 @@ const enableMouseEvent = {
   }
 }
 export {
+  viewFrom,
   projectionTransforms,
   sourceUri,
   colors,

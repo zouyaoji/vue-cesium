@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-22 09:41:19
+ * @LastEditTime: 2022-02-11 09:36:28
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\skeleton\index.ts
@@ -47,7 +47,7 @@ export const skeletonProps = {
   },
 
   animation: {
-    type: String,
+    type: String as PropType<'wave' | 'pulse' | 'pulse-x' | 'pulse-y' | 'fade' | 'blink' | 'none'>,
     validator: (v: string) => skeletonAnimations.includes(v),
     default: 'wave'
   },
@@ -150,4 +150,5 @@ export interface VcSkeletonProps {
    * Default value: div
    */
   tag?: string | undefined
+  color?: string
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-08 10:54:19
+ * @LastEditTime: 2022-02-13 00:37:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\rectangle\index.ts
@@ -10,7 +10,7 @@ import { defineComponent } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { PropType } from 'vue'
-import type { MeasureUnits } from '@vue-cesium/shared'
+import { MeasureUnits } from '@vue-cesium/shared'
 import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import { drawingEmit } from '@vue-cesium/utils/emits'

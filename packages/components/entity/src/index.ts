@@ -2,27 +2,24 @@ import type { ExtractPropTypes, PropType, ExtractDefaultPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import type { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
-import { position, plane, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
+import { position, plane, enableMouseEvent, show, viewFrom } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits, pickEventEmits } from '@vue-cesium/utils/emits'
+import { VcGraphicsBillboardProps } from '../../graphics'
 
 export const entityProps = {
-  ...position,
-  ...plane,
   id: String,
   name: String,
   availability: Object as PropType<Cesium.TimeIntervalCollection>,
-  show: {
-    type: Boolean,
-    default: true
-  },
+  ...show,
   description: [String, Object],
+  ...position,
   orientation: Object,
-  viewFrom: Object,
+  ...viewFrom,
   parent: Object,
-  billboard: Object,
+  billboard: Object as PropType<VcGraphicsBillboardProps>,
   corridor: Object,
   cylinder: Object,
   ellipse: Object,
@@ -32,6 +29,7 @@ export const entityProps = {
   model: Object,
   tileset: Object,
   path: Object,
+  ...plane,
   point: Object,
   polygon: Object,
   polyline: Object,

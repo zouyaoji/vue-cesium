@@ -1,13 +1,20 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-02-08 16:23:17
+ * @LastEditTime: 2022-02-13 00:37:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
  */
 
-import { VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDrawingRectangle, VcDrawingRegular } from '@vue-cesium/components/drawings/src'
+import {
+  VcDrawingPin,
+  VcDrawingPoint,
+  VcDrawingPolygon,
+  VcDrawingPolyline,
+  VcDrawingRectangle,
+  VcDrawingRegular
+} from '@vue-cesium/components/drawings/src'
 import type {
   VcFabAction,
   VcGeometryInstanceProps,
@@ -70,7 +77,7 @@ import { sightlineAnalysisActionDefault, sightlineAnalysisDefault } from '@vue-c
 
 import type { CSSProperties, Ref } from 'vue'
 import type { VcPickEvent, VcBtnTooltipProps, VcCartesian3Array, VcPosition, VcColor, AppearanceOption } from './types'
-import type { MeasureUnits } from '@vue-cesium/shared'
+import { MeasureUnits } from '@vue-cesium/shared'
 
 export type DrawingActionOpts =
   | typeof pointDrawingActionDefault
@@ -80,9 +87,10 @@ export type DrawingActionOpts =
   | typeof clearActionDefault
 
 export type DrawgingActionCmp =
+  | typeof VcDrawingPin
   | typeof VcDrawingPoint
-  | typeof VcDrawingPolyline
   | typeof VcDrawingPolygon
+  | typeof VcDrawingPolyline
   | typeof VcDrawingRegular
   | typeof VcDrawingRectangle
 
@@ -109,15 +117,15 @@ export type MeasurementActionOpts =
   | typeof clearActionDefault
 
 export type MeasurementActionCmp =
-  | typeof VcMeasurementDistance
-  | typeof VcMeasurementPolyline
-  | typeof VcMeasurementHorizontal
-  | typeof VcMeasurementVertical
-  | typeof VcMeasurementHeight
   | typeof VcMeasurementArea
+  | typeof VcMeasurementDistance
+  | typeof VcMeasurementHeight
+  | typeof VcMeasurementHorizontal
   | typeof VcMeasurementPoint
+  | typeof VcMeasurementPolyline
   | typeof VcMeasurementRectangle
   | typeof VcMeasurementRegular
+  | typeof VcMeasurementVertical
 
 export type MeasurementActionCmpRef = Ref<
   | typeof VcMeasurementDistance

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-02-06 02:00:54
+ * @LastEditTime: 2022-02-13 23:22:22
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
@@ -32,6 +32,11 @@ export const pickEventEmits = {
   mousemove: (evt: VcPickEvent) => true,
   mouseover: (evt: VcPickEvent) => true,
   mouseout: (evt: VcPickEvent) => true
+}
+
+export const graphicsEmits = {
+  ...commonEmits,
+  definitionChanged: (property: Cesium.Property) => true
 }
 
 export const providerEmits = {
@@ -92,3 +97,4 @@ export type PrimitiveEmits = typeof primitiveEmits
 export type PrimitiveCollectionEmits = typeof primitiveCollectionEmits
 export type DatasourceEmits = typeof primitiveCollectionEmits
 export type DrawingEmit = typeof drawingEmit
+export type GraphicsEmits = typeof graphicsEmits
