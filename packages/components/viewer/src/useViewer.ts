@@ -1296,6 +1296,9 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         },
         get postProcessStages() {
           return vcInstance.viewer?.postProcessStages
+        },
+        get viewerCreatePromise() {
+          return createPromise
         }
       }
     )

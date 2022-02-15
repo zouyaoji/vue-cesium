@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-06 02:00:09
+ * @LastEditTime: 2022-02-15 09:09:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\viewer\src\index.ts
@@ -92,6 +92,7 @@ export default defineComponent({
 
     // provide
     provide(vcKey, viewerStates.getServices())
+    instance.appContext.config.globalProperties.$VueCesium = viewerStates.getServices()
     // expose public methods
     Object.assign(instance.proxy, {
       createPromise: viewerStates.createPromise,

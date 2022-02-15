@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 11:18:36
+ * @LastEditTime: 2022-02-15 09:14:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
@@ -91,6 +91,7 @@ export default defineComponent({
 
     // provide
     provide(vcKey, getServices())
+    instance.appContext.config.globalProperties.$VueCesium = getServices()
 
     // expose public methods
     Object.assign(instance.proxy, {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-01-20 14:47:42
+ * @LastEditTime: 2022-02-15 09:15:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -298,6 +298,7 @@ export default function (
   }
 
   provide(vcKey, getServices())
+  instance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
   Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction, fabRef })
