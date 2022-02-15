@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-01-26 17:05:58
+ * @LastEditTime: 2022-02-15 16:32:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -1142,7 +1142,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
             positions: positions,
             onReady: onVcPrimitiveReady,
             ...props.polygonOpts,
-            show: polyline.show && props.polygonOpts?.show
+            show: polyline.show && props?.polygonOpts?.show
           })
         )
       }

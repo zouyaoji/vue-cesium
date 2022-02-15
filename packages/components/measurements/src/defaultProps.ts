@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-02-13 00:14:25
+ * @LastEditTime: 2022-02-15 16:39:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -190,7 +190,8 @@ const heightMeasurementDefault: VcMeasurementOpts = Object.assign({}, pointDrawi
   decimals: {
     distance: 2
   },
-  locale: undefined
+  locale: undefined,
+  primitiveOpts: polylinePrimitiveOptsDefault
 })
 
 const areaMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
