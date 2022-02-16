@@ -359,7 +359,7 @@ const dimensions = {
  */
 const fill = {
   fill: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -382,7 +382,7 @@ const material = {
  */
 const outline = {
   outline: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: false
   }
 }
@@ -405,7 +405,7 @@ const outlineColor = {
  */
 const outlineWidth = {
   outlineWidth: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 1.0
   }
 }
