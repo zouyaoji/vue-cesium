@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-02-15 16:39:00
+ * @LastEditTime: 2022-02-17 09:43:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
@@ -288,7 +288,7 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  // modelValue: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
 } as VcFabProps)
