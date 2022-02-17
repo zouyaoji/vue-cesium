@@ -35,11 +35,11 @@ export const navigationSmProps = {
   ...positionProps,
   compassOpts: {
     type: [Boolean, Object] as PropType<false | VcCompassSmProps>,
-    default: () => compassOptsDefault
+    default: () => compassOptsDefault as VcCompassSmProps
   },
   zoomOpts: {
     type: [Boolean, Object] as PropType<false | VcZoomControlSmProps>,
-    default: () => zoomOptsDefault
+    default: () => zoomOptsDefault as VcZoomControlSmProps
   }
 }
 const emits = {

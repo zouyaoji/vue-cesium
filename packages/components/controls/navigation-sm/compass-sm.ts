@@ -1,10 +1,10 @@
-import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import type { ExtractPropTypes, VNode, CSSProperties, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, ref, computed, nextTick, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
-import type { VcCompassEvt, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import useCompass from './use-compass'
 import { commonEmits } from '@vue-cesium/utils/emits'
@@ -19,13 +19,14 @@ export const compassSmProps = {
     default: 1.5
   },
   tooltip: {
-    type: Object,
-    default: () => ({
-      delay: 1000,
-      anchor: 'bottom middle',
-      offset: [0, 20],
-      tip: void 0
-    })
+    type: [Boolean, Object] as PropType<false | VcTooltipProps>,
+    default: () =>
+      ({
+        delay: 500,
+        anchor: 'bottom middle',
+        offset: [0, 20],
+        tip: void 0
+      } as VcTooltipProps | false)
   },
   autoHidden: {
     type: Boolean,
@@ -197,7 +198,7 @@ export default defineComponent({
                     ...props.tooltip,
                     onBeforeShow: compassState.onTooltipBeforeShow
                   },
-                  () => h('strong', {}, props.tooltip.tip || t('vc.navigationSm.compass.outerTip'))
+                  () => h('strong', {}, (props.tooltip as any).tip || t('vc.navigationSm.compass.outerTip'))
                 )
               : createCommentVNode('v-if')
           )
@@ -248,5 +249,52 @@ export default defineComponent({
   }
 })
 
-export type VcCompassSmProps = ExtractPropTypes<typeof compassSmProps>
+// export type VcCompassSmProps = ExtractPropTypes<typeof compassSmProps>
 export type VcCompassSmEmits = typeof emits
+export type VcCompassSmProps = {
+  /**
+   * Specify the position of the VcCompassSm.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcCompassSm horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether the outer ring of the compass can be operated.
+   * Default value: true
+   */
+  enableCompassOuterRing?: boolean
+  /**
+   * Specify the flight time of double-clicking the compass to restore the pitch angle, in seconds.
+   * Default value: 1.5
+   */
+  duration?: number
+  /**
+   * Specify the compass prompt information.
+   */
+  tooltip?: false | VcTooltipProps
+  /**
+   * Specify whether to automatically hide parts of the compass controls.
+   * Default value: true
+   */
+  autoHidden?: boolean
+  /**
+   * Triggers before the VcNavigationSm is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcNavigationSm is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcNavigationSm is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the compass control is operated.
+   */
+  compassEvt?: (evt: VcCompassEvt) => void
+}

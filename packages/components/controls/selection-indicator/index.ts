@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-02-13 00:48:25
+ * @LastEditTime: 2022-02-17 16:15:27
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
@@ -9,7 +9,7 @@
 import type { ExtractPropTypes } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, h } from 'vue'
 import useSelectionIndicatior from './use-selection-indicatior'
 import { commonEmits } from '@vue-cesium/utils/emits'
@@ -113,5 +113,45 @@ export default defineComponent({
   }
 })
 
-export type VcSelectionIndicatorProps = ExtractPropTypes<typeof selectionIndicatorProps>
+// export type VcSelectionIndicatorProps = ExtractPropTypes<typeof selectionIndicatorProps>
 export type VcSelectionIndicatorEmits = typeof emits
+export type VcSelectionIndicatorProps = {
+  /**
+   * Specify whether the selection indicator is visible.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Specify the width of the selection indicator.
+   * Default value: 50
+   */
+  width?: number
+  /**
+   * Specify the height of the selection indicator.
+   * Default value: 50
+   */
+  height?: number
+  /**
+   * Asynchronously determines the imagery layer features that are intersected by a pick ray.
+   * Default value: true
+   */
+  allowFeatureInfoRequests?: boolean
+  /**
+   * Specify the maximum number of picked objects.
+   * Default value: 25
+   */
+  limit?: number
+  /**
+   * Triggers before the VcSelectionIndicator is loaded.
+   * @param instance
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcSelectionIndicator is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcSelectionIndicator is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}

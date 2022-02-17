@@ -1,4 +1,13 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-02-17 14:47:06
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\defaultProps.ts
+ */
 import { PropType } from 'vue'
+import { VcTooltipProps } from '../../ui'
 
 export default {
   gridFileUrl: {
@@ -46,13 +55,18 @@ export default {
     type: Boolean as PropType<boolean>,
     default: true
   },
+  useProjection: {
+    type: Boolean as PropType<boolean>,
+    default: true
+  },
   tooltip: {
-    type: [Boolean, Object],
-    default: () => ({
-      delay: 1000,
-      anchor: 'bottom middle',
-      offset: [0, 20],
-      tip: void 0
-    })
+    type: [Boolean, Object] as PropType<false | VcTooltipProps>,
+    default: () =>
+      ({
+        delay: 500,
+        anchor: 'bottom middle',
+        offset: [0, 20],
+        tip: void 0
+      } as VcTooltipProps | false)
   }
 }
