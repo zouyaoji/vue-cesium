@@ -311,3 +311,10 @@ export type VcOverviewMapProps = {
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
 }
+
+export interface VcOverviewMapSlots {
+  /**
+   * Default slot content of the component
+   */
+  default: () => VNode[]
+}

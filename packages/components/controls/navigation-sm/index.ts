@@ -234,9 +234,16 @@ export type VcNavigationSmProps = {
   /**
    * Triggers when the zoom control is operated.
    */
-  zoomEvt?: (evt: VcZoomEvt) => void
+  onZoomEvt?: (evt: VcZoomEvt) => void
   /**
    * Triggers when the compass control is operated.
    */
-  compassEvt?: (evt: VcCompassEvt) => void
+  onCompassEvt?: (evt: VcCompassEvt) => void
+}
+
+export interface VcNavigationSmSlots {
+  /**
+   * Suggestion: VcCompassSm, VcZoomControlSm
+   */
+  default: () => VNode[]
 }
