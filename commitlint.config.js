@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:02
- * @LastEditTime: 2021-12-05 09:45:39
+ * @LastEditTime: 2022-02-17 11:19:24
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\commitlint.config.js
@@ -10,6 +10,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { default: getWorkspacePackages } = require('@pnpm/find-workspace-packages')
+const fs = require('fs')
 
 async function getPackages(context) {
   const ctx = context || {}
@@ -22,10 +23,18 @@ async function getPackages(context) {
 }
 
 const scopes = ['project', 'core', 'style', 'docs', 'ci', 'dev', 'build', 'deploy', 'other']
+const components = []
+const files = fs.readdirSync('./packages/components')
+files.forEach(function (item, index) {
+  let stat = fs.lstatSync('./packages/components/' + item)
+  if (stat.isDirectory() === true) {
+    components.push(item)
+  }
+})
 
 module.exports = {
   rules: {
-    'scope-enum': ctx => getPackages(ctx).then(packages => [2, 'always', [...packages, ...scopes]]),
+    'scope-enum': ctx => getPackages(ctx).then(packages => [2, 'always', [...packages, ...scopes, ...components]]),
     'body-leading-blank': [1, 'always'],
     'footer-leading-blank': [1, 'always'],
     'header-max-length': [2, 'always', 72],

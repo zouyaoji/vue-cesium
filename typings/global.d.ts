@@ -1,29 +1,114 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2022-01-23 01:48:45
+ * @LastEditTime: 2022-02-19 00:04:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
  */
+import { VcCompassSmProps } from '@vue-cesium/components/controls/navigation-sm/compass-sm'
+import { VcZoomControlSmProps } from '@vue-cesium/components/controls/navigation-sm/zoom-control-sm'
+import {
+  ComponentOptions,
+  ComponentPublicInstance,
+  ComputedOptions,
+  MethodOptions,
+  VNodeProps,
+  AllowedComponentProps,
+  ComponentCustomProps
+} from 'vue'
+import {
+  VcAnalysesProps,
+  VcAnalysesSlots,
+  VcAnalysisFloodProps,
+  VcCompassProps,
+  VcDistanceLegendProps,
+  VcDrawingsProps,
+  VcDrawingsSlots,
+  VcGraphicsBillboardProps,
+  VcMeasurementsProps,
+  VcMeasurementsSlots,
+  VcMyLocationProps,
+  VcNavigationProps,
+  VcNavigationSlots,
+  VcNavigationSmProps,
+  VcNavigationSmSlots,
+  VcOverviewMapProps,
+  VcOverviewMapSlots,
+  VcSelectionIndicatorProps,
+  VcViewerProps,
+  VcViewerSlots,
+  VcZoomControlProps
+} from 'vue-cesium'
+
+export type StringDictionary<T extends string> = Required<{ [index in T]: string }>
+
+// Needed to prevent TS to collapse `'value1' | 'value2' | string` to `string`, which breaks first parameter autocomplete
+// See: https://github.com/microsoft/TypeScript/issues/29729#issuecomment-832522611
+export type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>)
+
+// See: https://stackoverflow.com/a/49936686/7931540
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : DeepPartial<T[P]>
+}
+
+// Create a fake constructor signature for a Vue component, needed to correctly extract/infer Component type in many situation,
+// especially into VTU to automatically infer Quasar components type when using `findComponent`
+// This type is compatible with the Vue private `ComponentPublicInstanceConstructor` type
+// https://github.com/vuejs/vue-next/blob/011dee8644bb52f5bdc6365c6e8404936d57e2cd/packages/runtime-core/src/componentPublicInstance.ts#L111
+export type ComponentConstructor<
+  Component extends ComponentPublicInstance<Props, RawBindings, D, C, M> = ComponentPublicInstance<any>,
+  Props = any,
+  RawBindings = any,
+  D = any,
+  C extends ComputedOptions = ComputedOptions,
+  M extends MethodOptions = MethodOptions
+> = { new (): Component } & ComponentOptions<Props, RawBindings, D, C, M>
+
+// https://github.com/vuejs/vue-next/blob/d84d5ecdbdf709570122175d6565bb61fae877f2/packages/runtime-core/src/apiDefineComponent.ts#L29-L31
+// TODO: This can be imported from vue directly once this PR gets merged: https://github.com/vuejs/vue-next/pull/2403
+export type PublicProps = VNodeProps & AllowedComponentProps & ComponentCustomProps
+
+type EmptyObject = {
+  [K in never]: never
+}
+
+// Can't use `DefineComponent` because of the false prop inferring behavior, it doesn't pick up the required types when an interface is passed
+// This PR will probably solve the problem as it moves the prop inferring behavior to `defineComponent` function: https://github.com/vuejs/vue-next/pull/4465
+// GlobalComponentConstructor helper is kind of like the ComponentConstructor type helper, but simpler and keeps the Volar errors simpler,
+// and also similar to the usage in official Vue packages: https://github.com/vuejs/vue-next/blob/d84d5ecdbdf709570122175d6565bb61fae877f2/packages/runtime-core/src/components/BaseTransition.ts#L258-L264 or https://github.com/vuejs/vue-router-next/blob/5dd5f47515186ce34efb9118dda5aad0bb773439/src/RouterView.ts#L160-L172 etc.
+// TODO: This can be replaced with `DefineComponent` once this PR gets merged: https://github.com/vuejs/vue-next/pull/4465
+export type GlobalComponentConstructor<Props = EmptyObject, Slots = EmptyObject> = {
+  new (): {
+    $props: PublicProps & Props
+    $slots: Slots
+  }
+}
+
 // GlobalComponents for Volar
 declare module 'vue' {
   export interface GlobalComponents {
-    VcViewer: typeof import('vue-cesium')['VcViewer']
+    VcViewer: GlobalComponentConstructor<VcViewerProps, VcViewerSlots>
 
-    VcNavigation: typeof import('vue-cesium')['VcNavigation']
-    VcCompass: typeof import('vue-cesium')['VcCompass']
-    VcZoomControl: typeof import('vue-cesium')['VcZoomControl']
-    VcMyLocation: typeof import('vue-cesium')['VcStatusBar']
-    VcDistanceLegend: typeof import('vue-cesium')['VcDistanceLegend']
-    VcNavigationSm: typeof import('vue-cesium')['VcNavigationSm']
-    VcCompassSm: typeof import('vue-cesium')['VcCompassSm']
-    VcZoomControlSm: typeof import('vue-cesium')['VcZoomControlSm']
-    VcOverviewMap: typeof import('vue-cesium')['VcOverviewMap']
-    VcSelectionIndicator: typeof import('vue-cesium')['VcSelectionIndicator']
+    VcNavigation: GlobalComponentConstructor<VcNavigationProps, VcNavigationSlots>
+    VcCompass: GlobalComponentConstructor<VcCompassProps>
+    VcZoomControl: GlobalComponentConstructor<VcZoomControlProps>
+    VcMyLocation: GlobalComponentConstructor<VcMyLocationProps>
+    VcDistanceLegend: GlobalComponentConstructor<VcDistanceLegendProps>
+    VcNavigationSm: GlobalComponentConstructor<VcNavigationSmProps, VcNavigationSmSlots>
+    VcCompassSm: GlobalComponentConstructor<VcCompassSmProps>
+    VcZoomControlSm: GlobalComponentConstructor<VcZoomControlSmProps>
+    VcOverviewMap: GlobalComponentConstructor<VcOverviewMapProps, VcOverviewMapSlots>
+    VcSelectionIndicator: GlobalComponentConstructor<VcSelectionIndicatorProps>
 
-    VcMeasurements: typeof import('vue-cesium')['VcMeasurements']
-    VcDrawings: typeof import('vue-cesium')['VcDrawings']
+    VcMeasurements: GlobalComponentConstructor<VcMeasurementsProps, VcMeasurementsSlots>
+    VcDrawings: GlobalComponentConstructor<VcDrawingsProps, VcDrawingsSlots>
+    VcAnalyses: GlobalComponentConstructor<VcAnalysesProps, VcAnalysesSlots>
+    VcAnalysisFlood: GlobalComponentConstructor<VcAnalysisFloodProps>
 
     VcLayerImagery: typeof import('vue-cesium')['VcLayerImagery']
     VcImageryProviderArcgis: typeof import('vue-cesium')['VcImageryProviderArcgis']
@@ -55,7 +140,7 @@ declare module 'vue' {
     VcDatasourceKml: typeof import('vue-cesium')['VcDatasourceKml']
 
     VcEntity: typeof import('vue-cesium')['VcEntity']
-    VcGraphicsBillboard: typeof import('vue-cesium')['VcGraphicsBillboard']
+    VcGraphicsBillboard: GlobalComponentConstructor<VcGraphicsBillboardProps>
     VcGraphicsBox: typeof import('vue-cesium')['VcGraphicsBox']
     VcGraphicsCorridor: typeof import('vue-cesium')['VcGraphicsCorridor']
     VcGraphicsCylinder: typeof import('vue-cesium')['VcGraphicsCylinder']
@@ -157,7 +242,6 @@ declare module 'vue' {
     VcFabAction: typeof import('vue-cesium')['VcFabAction']
 
     VcConfigProvider: typeof import('vue-cesium')['VcConfigProvider']
-    VcAnalysisFlood: typeof import('vue-cesium')['VcAnalysisFlood']
   }
 }
 
