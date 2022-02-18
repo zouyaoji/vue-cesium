@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2022-02-10 15:13:12
+ * @LastEditTime: 2022-02-15 10:48:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\app.vue
@@ -101,7 +101,11 @@ export default defineComponent({
     return h(
       VcConfigProvider,
       {
-        locale: localeMap[this.lang]
+        locale: localeMap[this.lang],
+        cesiumPath:
+          process.env.NODE_ENV === 'development'
+            ? './CesiumUnminified/Cesium.js'
+            : 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
       },
       {
         default: () => {

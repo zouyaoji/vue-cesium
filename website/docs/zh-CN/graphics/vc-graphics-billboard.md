@@ -20,8 +20,8 @@
         :image="image"
         :scale="scale"
         :show="show"
-        :distanceDisplayCondition="distanceDisplayCondition"
-        :horizontalOrigin="horizontalOrigin"
+        :distance-display-condition="distanceDisplayCondition"
+        :horizontal-origin="horizontalOrigin"
       ></vc-graphics-billboard>
     </vc-entity>
   </vc-viewer>
@@ -97,26 +97,26 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ------ |---- | ------ | ----- | ---- |
-| show | Boolean | `true` | `optional` 指定 billboard 是否显示。 |
-| image | String\|Object | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
-| scale | Number | `1.0` | `optional` 指定 billboard 图片的缩放比例。 |
+| show | boolean | `true` | `optional` 指定 billboard 是否显示。 |
+| image | string \| HTMLCanvasElement \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\> | | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
+| scale | number | `1.0` | `optional` 指定 billboard 图片的缩放比例。 |
 | pixelOffset | VcCartesian2 | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移。 |
 | eyeOffset | VcPosition | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移。 |
-| horizontalOrigin | Number | `0` | `optional` 指定 billboard 水平对齐方式。 **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
-| verticalOrigin | Number | `0` | `optional` 指定 billboard 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
-| heightReference | Number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| horizontalOrigin | number | `0` | `optional` 指定 billboard 水平对齐方式。 **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
+| verticalOrigin | number | `0` | `optional` 指定 billboard 垂直对齐方式。**CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| heightReference | number | `0` | `optional` 指定 billboard 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | color | VcColor | `'white'` | `optional` 指定 billboard 图片的颜色。 |
-| rotation | Number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
+| rotation | number | `0` | `optional` 指定 billboard 沿 x 轴方向旋转的角度。 |
 | alignedAxis | VcPosition | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 按单位矢量轴旋转参数。 |
-| sizeInMeters | Boolean | | `optional` 指定 billboard 的单位是否是米。 |
-| width | Number | | `optional` 指定 billboard 的宽度（像素）。 |
-| height | Number | | `optional` 指定 billboard 的高度（像素）。 |
+| sizeInMeters | boolean | | `optional` 指定 billboard 的单位是否是米。 |
+| width | number | | `optional` 指定 billboard 的宽度（像素）。 |
+| height | number | | `optional` 指定 billboard 的高度（像素）。 |
 | scaleByDistance | VcNearFarScalar | | `optional` 指定 billboard 随相机距离缩放的参数。 |
 | translucencyByDistance | VcNearFarScalar | | `optional` 指定 billboard 随相机距离透明度改变的参数。 |
 | pixelOffsetScaleByDistance | VcNearFarScalar | | `optional` 指定 billboard 随相机距离像素偏移改变的参数。 |
 | imageSubRegion | VcBoundingRectangle | | `optional` 指定 billboard 的子区域，相对于左下角。 |
 | distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` 指定 billboard 随相机距离改变是否显示参数。 |
-| disableDepthTestDistance | Number | | `optional` 指定 billboard 深度检测距离。 |
+| disableDepthTestDistance | number | | `optional` 指定 billboard 深度检测距离。 |
 
 ### 事件
 

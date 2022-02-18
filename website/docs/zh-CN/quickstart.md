@@ -84,33 +84,22 @@ import 'vue-cesium/dist/index.css'
 </head>
 ```
 
-### Volar 支持
+### TypeScript 支持
 
-如果你使用 volar 插件，请在 `tsconfig.json` 或者 `jsconfig.json` 文件中 `compilerOptions.types` 添加如下配置：
-
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    // ...
-    "types": ["vue-cesium/global"]
-  }
-}
-```
-
-### Cesium.d.ts 支持
-
-如果你想用得到 Cesium API 语法提示，请在 `tsconfig.json` 或者 `jsconfig.json` 文件中 `compilerOptions.types` 添加如下配置：
+请在 `tsconfig.json` 或者 `jsconfig.json` 文件中添加如下配置：
 
 ```json
 // tsconfig.json
 {
   "compilerOptions": {
     // ...
-    "types": ["vue-cesium/Cesium"]
-  }
+    "types": ["vue-cesium/global", "vue-cesium/Cesium"]
+  },
+  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts"]
 }
 ```
+
+以上配置将适配 volar 插件，并得到 Cesium API 提示。
 
 ### 使用模板
 

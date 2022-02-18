@@ -19,7 +19,7 @@
         url="https://zouyaoji.top/vue-cesium/SampleData/images/cesium_maptiler/Cesium_Logo_Color"
         :rectangle="[-120, 20, -60, 40]"
         :maximumLevel="4"
-        @readyPromise="onImageryProviderReady"
+        @ready-promise="onImageryProviderReady"
       ></vc-imagery-provider-tms>
     </vc-layer-imagery>
   </vc-viewer>

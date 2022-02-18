@@ -25,31 +25,31 @@ ctrl + 右键取消绘制。
     <vc-drawings
       ref="drawingsRef"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
+      :main-fab-opts="mainFabOpts"
       :offset="[20, 80]"
       :editable="editable"
-      :clampToGround="clampToGround"
-      @drawEvt="drawEvt"
-      @activeEvt="activeEvt"
-      @editorEvt="editorEvt"
-      @mouseEvt="mouseEvt"
+      :clamp-to-ground="clampToGround"
+      @draw-evt="drawEvt"
+      @active-evt="activeEvt"
+      @editor-evt="editorEvt"
+      @mouse-evt="mouseEvt"
       @ready="drawingsReadyDefault"
-      :pointDrawingOpts="pointDrawingOpts"
-      :polygonDrawingOpts="polygonDrawingOpts"
-      :regularDrawingOpts="regularDrawingOpts"
+      :point-drawing-opts="pointDrawingOpts"
+      :polygon-drawing-opts="polygonDrawingOpts"
+      :regular-drawing-opts="regularDrawingOpts"
     ></vc-drawings>
     <!-- 结合 slot 改变默认 UI，自定义绘制方法 -->
     <vc-drawings
       ref="drawingsCustomRef"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
+      :main-fab-opts="mainFabOpts"
       :offset="[0, 20]"
       :editable="editable"
-      :clampToGround="clampToGround"
+      :clamp-to-ground="clampToGround"
       @ready="drawingsReady"
-      :polylineDrawingOpts="polylineDrawingOpts"
-      :pinDrawingOpts="pinDrawingOpts"
-      :rectangleDrawingOpts="rectangleDrawingOpts"
+      :polyline-drawing-opts="polylineDrawingOpts"
+      :pin-drawing-opts="pinDrawingOpts"
+      :rectangle-drawing-opts="rectangleDrawingOpts"
     >
       <template #body>
         <div class="custom-drawings">
@@ -69,10 +69,10 @@ ctrl + 右键取消绘制。
     </vc-drawings>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onTilesetReady"
+      @ready-promise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-imagery-provider-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
@@ -234,30 +234,30 @@ ctrl + 右键取消绘制。
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定绘制组件基于位置的偏移量。 |
-| show | Boolean | `true` | `optional` 指定绘制的结果是否可见。 |
-| mode | Number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
-| drawings | Array | `['pin', 'point', 'polyline', 'polygon', 'rectangle', 'circle', 'regular']` | `optional` 指定要加载的绘制实例。 |
-| activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
-| editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
-| clampToGround | Boolean | `false` | `optional` 指定绘制结果对象是否贴地或模型。仅线、面对象生效。 |
-| mainFabOpts | Object | | `optional` 指定绘制组件浮动按钮的样式选项。 |
-| pinActionOpts | Object | `` | `optional` 指定图标点绘制按钮的样式选项。|
-| pinDrawingOpts | Object | | `optional` 指定图标点绘制参数。|
-| pointActionOpts | Object | `` | `optional` 指定点绘制按钮的样式选项。|
-| pointDrawingOpts | Object | | `optional` 指定点绘制参数。|
-| polylineActionOpts | Object | | `optional` 指定先绘制按钮的样式选项。|
-| polylineDrawingOpts | Object | | `optional` 指定线绘制参数。|
-| polygonActionOpts | Object | | `optional` 指定面绘制按钮的样式选项。|
-| polygonDrawingOpts | Object | | `optional` 指定面绘制参数。|
-| rectangleActionOpts | Object | | `optional` 指定矩形绘制按钮的样式选项。|
-| rectangleDrawingOpts | Object | | `optional` 指定矩形绘制参数。|
-| circleActionOpts | Object | | `optional` 指定圆绘制按钮的样式选项。|
-| circleDrawingOpts | Object | | `optional` 指定圆绘制参数。|
-| regularActionOpts | Object | | `optional` 指定正多边形绘制按钮的样式选项。|
-| regularDrawingOpts | Object | | `optional` 指定正多边形绘制参数。|
-| clearActionOpts | Object | | `optional` 指定清除按钮的样式选项。|
+| position | string | `'top-right'` | `optional` 指定绘制组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定绘制组件基于位置的偏移量。 |
+| show | boolean | `true` | `optional` 指定绘制的结果是否可见。 |
+| mode | number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
+| drawings | Array\<'pin' \| 'point' \| 'polyline' \| 'polygon' \| 'rectangle' \| 'regular' \| 'circle'\> | `['pin', 'point', 'polyline', 'polygon', 'rectangle', 'circle', 'regular']` | `optional` 指定要加载的绘制实例。 |
+| activeColor | string | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
+| editable | boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
+| clampToGround | boolean | `false` | `optional` 指定绘制结果对象是否贴地或模型。仅线、面对象生效。 |
+| mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定绘制组件浮动按钮的样式选项。 |
+| pinActionOpts | VcActionTooltipProps | `` | `optional` 指定图标点绘制按钮的样式选项。|
+| pinDrawingOpts | VcDrawingOpts | | `optional` 指定图标点绘制参数。|
+| pointActionOpts | VcActionTooltipProps | `` | `optional` 指定点绘制按钮的样式选项。|
+| pointDrawingOpts | VcDrawingOpts | | `optional` 指定点绘制参数。|
+| polylineActionOpts | VcActionTooltipProps | | `optional` 指定先绘制按钮的样式选项。|
+| polylineDrawingOpts | VcDrawingOpts | | `optional` 指定线绘制参数。|
+| polygonActionOpts | VcActionTooltipProps | | `optional` 指定面绘制按钮的样式选项。|
+| polygonDrawingOpts | VcDrawingOpts | | `optional` 指定面绘制参数。|
+| rectangleActionOpts | VcActionTooltipProps | | `optional` 指定矩形绘制按钮的样式选项。|
+| rectangleDrawingOpts | VcDrawingOpts | | `optional` 指定矩形绘制参数。|
+| circleActionOpts | VcActionTooltipProps | | `optional` 指定圆绘制按钮的样式选项。|
+| circleDrawingOpts | VcDrawingOpts | | `optional` 指定圆绘制参数。|
+| regularActionOpts | VcActionTooltipProps | | `optional` 指定正多边形绘制按钮的样式选项。|
+| regularDrawingOpts | VcDrawingOpts | | `optional` 指定正多边形绘制参数。|
+| clearActionOpts | VcActionTooltipProps | | `optional` 指定清除按钮的样式选项。|
 
 :::tip
 
@@ -332,15 +332,16 @@ ctrl + 右键取消绘制。
 
 ### 事件
 
-| 事件名     | 参数                                    | 描述                         |
-| ---------- | --------------------------------------- | ---------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。             |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。         |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。             |
-| drawEvt    | (drawParam, viewer)                     | 绘制时触发。                 |
-| activeEvt  | (activeParam, viewer)                   | 切换绘制 Action 时触发。     |
-| editorEvt  | (editParam, viewer)                     | 点击编辑按钮时触发。         |
-| mouseEvt   | (mouseParam, viewer)                    | 鼠标移进、移除绘制点时触发。 |
+| 事件名     | 参数                                             | 描述                         |
+| ---------- | ------------------------------------------------ | ---------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance)          | 对象加载前触发。             |
+| ready      | (readyObj: VcReadyObject)                        | 对象加载成功时触发。         |
+| destroyed  | (instance: VcComponentInternalInstance)          | 对象销毁时触发。             |
+| drawEvt    | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 绘制时触发。                 |
+| activeEvt  | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | 切换绘制 Action 时触发。     |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
+| fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
 
 ### 插槽
 

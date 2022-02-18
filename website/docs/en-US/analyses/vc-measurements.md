@@ -25,39 +25,39 @@ Basic usage of measurement components.
   <vc-viewer>
     <!-- Custom positioning and position offset -->
     <vc-measurements
-      @drawEvt="drawEvt"
-      @activeEvt="activeEvt"
-      @editorEvt="editorEvt"
-      @mouseEvt="mouseEvt"
+      @draw-evt="drawEvt"
+      @active-evt="activeEvt"
+      @editor-evt="editorEvt"
+      @mouse-evt="mouseEvt"
       ref="measurementsRef"
       position="bottom-left"
-      :mainFabOpts="measurementFabOptions1"
-      :offset="[20, 80]"
+      :main-fab-opts="measurementFabOptions1"
+      :offset="[20, 120]"
       :editable="editable"
-      :clampToGround="clampToGround"
+      :clamp-to-ground="clampToGround"
       @ready="drawingsReadyDefault"
-      :pointMeasurementOpts="pointMeasurementOpts"
-      :areaMeasurementOpts="areaMeasurementOpts"
+      :point-measurement-opts="pointMeasurementOpts"
+      :area-measurement-opts="areaMeasurementOpts"
     >
     </vc-measurements>
     <!-- Custom measurement action -->
     <vc-measurements
       ref="measurementsRef2"
       position="top-right"
-      :mainFabOpts="measurementFabOptions2"
+      :main-fab-opts="measurementFabOptions2"
       :editable="editable"
       :measurements="measurements"
-      activeColor="yellow"
+      active-color="yellow"
     >
     </vc-measurements>
     <!-- Custom measurement options and decimals -->
     <vc-measurements
       ref="measurementsRef3"
       position="top-left"
-      :mainFabOpts="measurementFabOptions3"
-      :distanceMeasurementOpts="distanceMeasurementOpts3"
-      :componentDistanceMeasurementOpts="componentDistanceMeasurementOpts3"
-      :pointMeasurementOpts="pointMeasurementOpts3"
+      :main-fab-opts="measurementFabOptions3"
+      :distance-measurement-opts="distanceMeasurementOpts3"
+      :component-distanceMeasurement-opts="componentDistanceMeasurementOpts3"
+      :point-measurement-opts="pointMeasurementOpts3"
       :editable="editable"
       :offset="[20, 80]"
     >
@@ -66,7 +66,7 @@ Basic usage of measurement components.
     <vc-measurements
       ref="measurementsRef4"
       position="bottom-left"
-      :mainFabOpts="measurementFabOptions4"
+      :main-fab-opts="measurementFabOptions4"
       :offset="[0, 20]"
       :editable="editable"
       @ready="measurementsReady"
@@ -79,7 +79,7 @@ Basic usage of measurement components.
               :key="index"
               :type="drawingActionInstance.isActive ? 'success' : 'primary'"
               round
-              @click="toggle(measurementOpts)"
+              @click="toggle(drawingActionInstance)"
               size="mini"
               >{{drawingActionInstance.tip}}</el-button
             >
@@ -90,7 +90,7 @@ Basic usage of measurement components.
     </vc-measurements>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onTilesetReady"
+      @ready-promise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
@@ -276,37 +276,39 @@ Basic usage of measurement components.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | String | `'top-right'` | `optional` Specify the location of the measurement component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
-| show | Boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
-| mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| measurements | Array | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
-| activeColor | String | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
-| editable | Boolean | `false` | `optional` Specify whether the measurement result can be edited. |
-| mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the measuring component. |
-| distanceActionOpts | Object | `` | `optional` Specify the style options of the distance measurement action button.|
-| distanceMeasurementOpts | Object | | `optional` Specify distance measurement parameters.|
-| componentDistanceActionOpts | Object | | `optional` Specify the style options of the component distance measurement action button.|
-| componentDistanceMeasurementOpts | Object | | `optional` Specify the component distance measurement parameters.|
-| polylineActionOpts | Object | | `optional` Specify the style options of the polyline distance measurement action button.|
-| polylineMeasurementOpts | Object | | `optional` Specify the polyline distance measurement parameters.|
-| horizontalActionOpts | Object | | `optional` Specify the style options of the horizontal distance measurement action button.|
-| horizontalMeasurementOpts | Object | | `optional` Specify the horizontal distance measurement parameters.|
-| verticalActionOpts | Object | | `optional` Specify the style options of the vertical distance measurement action button.|
-| verticalMeasurementOpts | Object | | `optional` Specify the vertical distance measurement parameters.|
-| heightActionOpts | Object | | `optional` Specify the style options of the height measurement action button.|
-| heightMeasurementOpts | Object | | `optional` Specify the height measurement parameters.|
-| areaActionOpts | Object | | `optional` Specify the style options of the area measurement action button.|
-| areaMeasurementOpts | Object | | `optional` Specify the area measurement parameters.|
-| pointActionOpts | Object | | `optional` Specify the style options of the point measurement action button.|
-| pointMeasurementOpts | Object | | `optional` Specify the point measurement parameters.|
-| rectangleActionOpts | Object | | `optional` Specify the style options of the rectangle measurement action button.|
-| rectangleMeasurementOpts | Object | | `optional` Specify the rectangle measurement parameters.|
-| circleActionOpts | Object | | `optional` Specify the style options of the circle measurement action button.|
-| circleMeasurementOpts | Object | | `optional` Specify the circle measurement parameters.|
-| regularActionOpts | Object | | `optional` Specify the style options of the regular measurement action button.|
-| regularMeasurementOpts | Object | | `optional` Specify the regular measurement parameters.|
-| clearActionOpts | Object | | `optional` Specify the style options of the clear action button.|
+| position | string | `'top-right'` | `optional` Specify the location of the measurement component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` Specify the offset based on the position. |
+| show | boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
+| mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
+| measurements | Array\<
+    'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle'
+  \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
+| activeColor | string | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
+| editable | boolean | `false` | `optional` Specify whether the measurement result can be edited. |
+| mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the measuring component. |
+| distanceActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the distance measurement action button.|
+| distanceMeasurementOpts | VcMeasurementOpts | | `optional` Specify distance measurement options.|
+| componentDistanceActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the component distance measurement action button.|
+| componentDistanceMeasurementOpts | VcMeasurementOpts | | `optional` Specify the component distance measurement options.|
+| polylineActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the polyline distance measurement action button.|
+| polylineMeasurementOpts | VcMeasurementOpts | | `optional` Specify the polyline distance measurement options.|
+| horizontalActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the horizontal distance measurement action button.|
+| horizontalMeasurementOpts | VcMeasurementOpts | | `optional` Specify the horizontal distance measurement options.|
+| verticalActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the vertical distance measurement action button.|
+| verticalMeasurementOpts | VcMeasurementOpts | | `optional` Specify the vertical distance measurement options.|
+| heightActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the height measurement action button.|
+| heightMeasurementOpts | VcMeasurementOpts | | `optional` Specify the height measurement options.|
+| areaActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the area measurement action button.|
+| areaMeasurementOpts | VcMeasurementOpts | | `optional` Specify the area measurement options.|
+| pointActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the point measurement action button.|
+| pointMeasurementOpts | VcMeasurementOpts | | `optional` Specify the point measurement options.|
+| rectangleActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the rectangle measurement action button.|
+| rectangleMeasurementOpts | VcMeasurementOpts | | `optional` Specify the rectangle measurement options.|
+| circleActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the circle measurement action button.|
+| circleMeasurementOpts | VcMeasurementOpts | | `optional` Specify the circle measurement options.|
+| regularActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the regular measurement action button.|
+| regularMeasurementOpts | VcMeasurementOpts | | `optional` Specify the regular measurement options.|
+| clearActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the clear action button.|
 
 :::tip
 
@@ -368,25 +370,26 @@ Tip: The measurement component is mainly composed of two parts: (1) the floating
 
 :::tip
 
-Tip: Each measurement button (FabAction) corresponds to the measurement parameters xxxMeasurementOpts, used to customize drawing objects..
+Tip: Each measurement button (FabAction) corresponds to the measurement options xxxMeasurementOpts, used to customize drawing objects..
 
 See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/measurements/src/defaultProps.ts)
 
-The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default parameters of drawing buttons` and `default parameters of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointMeasurementOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
+The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default options of drawing buttons` and `default options of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointMeasurementOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
 
 :::
 
 ### Events
 
-| Name       | Parameters                              | Description                                                               |
-| ---------- | --------------------------------------- | ------------------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                               |
-| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.                    |
-| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                              |
-| drawEvt    | (measureParam, viewer)                  | Triggered when measuring.                                                 |
-| activeEvt  | (activeParam, viewer)                   | Triggered when the measurement action is switched.                        |
-| editorEvt  | (editParam, viewer)                     | Triggered when the edit button is clicked.                                |
-| mouseEvt   | (mouseParam, viewer)                    | Triggered when the mouse is mouse over or mouse out on the drawing point. |
+| Name         | Parameters                                       | Description                                                              |
+| ------------ | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| beforeLoad   | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                              |
+| ready        | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                   |
+| destroyed    | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                             |
+| drawEvt      | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggers when measuring.                                                 |
+| activeEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggers when the measurement action is switched.                        |
+| editorEvt    | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
+| mouseEvt     | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
+| onFabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
 
 ### Slots
 

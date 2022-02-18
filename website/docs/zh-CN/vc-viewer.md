@@ -140,54 +140,58 @@
 <!-- prettier-ignore -->
 |属性名|类型|默认值|描述|可选值|
 |------|------|-----|---|---|
-|camera|Object: VcCamera|| `optional` 指定初始化场景相机位置，默认在中国。  |
-|showCredit|Boolean|`true`| `optional` 指定是否显示默认 Logo 和 加载数据版权信息。|
-|autoSortImageryLayers|Boolean|`true`| `optional` 指定添加影像图层时是否根据图层的 `sortOrder` 属性自动排序。|
-|removeCesiumScript|Boolean|`true`| `optional` 指定 `vc-viewer` 组件销毁时是否移除CesiumJS标签。|
-|enableMouseEvent|Boolean|`true`| `optional` 指定是否触发鼠标事件。|
-|skeleton|Boolean\|Object: VcSkeletonProps|| `optional` 指定 `vc-viewer` 初始化时是否显示骨架背景。|
-|TZcode|String|| `optional` Timeline 日期格式化所用时区代码。默认将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
-|UTCoffset|Number|| `optional` 本地时间与UTC时间的时差（分钟）。|
-|accessToken|String||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
-|cesiumPath|String||`optional` 指定用于初始化 `vc-viewer` 组件的 CesiumJS 库的 Web 服务地址。|
-|animation|Boolean|`false`|`optional`是否显示动画控件。|
-|baseLayerPicker| Boolean|`false`|`optional`是否显示基础图层切换按钮。|
-|fullscreenButton|Boolean| `false`| `optional`是否显示全屏切换按钮。|
-|vrButton|Boolean|`false`|`optional`是否显示 VR 功能按钮。|
-|geocoder|Boolean|`false`|`optional`是否显示地理编码器搜索框。|
-|homeButton|Boolean|`false`|`optional`是否显示主页按钮。|
-|infoBox|Boolean|`true`|`optional`是否显示信息框。|
-|sceneModePicker|Boolean|`false`|`optional`是否显示场景模式切换按钮。|
-|selectionIndicator|Boolean|`true`|`optional`是否显示选择指示符。|
-|timeline|Boolean|`false`|`optional`是否显示时间轴控件。|
-|navigationHelpButton|Boolean|`false`|`optional`是否显示导航帮助按钮。|
-|navigationInstructionsInitiallyVisible|Boolean|`false`|`optional`是展开导航帮助面板，否点击navigationHelpButton才能展开面板。|
-|scene3DOnly|Boolean|`false`|`optional`如果为true，则每个几何实例仅以3D形式呈现以节省GPU内存。|
-|clockViewModel|Object||`optional`用于控制当前时间的时钟视图模型。|
-|shouldAnimate|Boolean|`false`|`optional`true 是否开始时间模拟。 |
-|imageryProvider|Object||`optional` 指定初始化时加载的影像。`vue-cesium` 已经将默认的替换成引用 Cesium 资源自带的`NaturalEarthII` 了。|
-|terrainProvider|Object||`optional` 指定初始化时加载的地形。|
-|skyBox|Object\|false||`optional` 指定初始化时加载的天空盒。 `undefined` 是默认的星空背景，`false`则天空盒、太阳、月亮等都不会添加。|
-|skyAtmosphere|Object\|false||`optional` 蓝天，以及围绕地球四肢的辉光。 设置为false可将其关闭。|
-|fullscreenElement|Element \| String|`document.body`|`optional`按下全屏按钮时要放入全屏模式的元素或ID。|
-|useDefaultRenderLoop|Boolean|`true`|`optional` 是否开启默认的循环渲染控制。|
-|targetFrameRate|Number| - |`optional`使用默认渲染循环时的目标帧速率。|
-|showRenderLoopErrors|Boolean|`true`|`optional`如果设置为true，发生渲染循环错误时，将自动给用户显示一个包含错误信息的 HTML 面板。|
-|useBrowserRecommendedResolution|Boolean|`true`|`optional`如果为true，则以浏览器建议的分辨率进行渲染，并忽略window.devicePixelRatio。|
-|automaticallyTrackDataSourceClocks|Boolean|`true`|`optional`如果设置为true，将自动跟踪新添加数据源的时钟设置，如果数据源的时钟变更，则更新。如需单独设置时钟，请将此项设置为false。|
-|contextOptions|Object||`optional`Context and WebGL 创建属性与传递给Scene匹配的选项。|
-|sceneMode|Number|`3`|`optional` 指定场景模式。**COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
-|orderIndependentTranslucency|Boolean|`true`|`optional`如果此项设置为true，并且使用设备支持，将使用与顺序无关的半透明。|
-|creditContainer|Element \| String||`optional`指定包含CreditDisplay信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
-|creditViewport|Element \| String||`optional`指定包含CreditDisplay弹出框信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
-|dataSources|Object||`optional` 指定初始化时加载的数据源集合。如果指定了数据源集合，`Viewer` 销毁时不会销毁它。|
-|terrainExaggeration|Number|`1.0`|`optional`用于夸大地形的标量。请注意，设置地形夸张不会修改其它任何数据。|
-|shadows|Boolean|`false`|`optional`确定阴影是否由太阳投射形成。|
-|terrainShadows|Number|`3`|`optional`确定地形是否反射或接受来自太阳的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-|mapMode2D|Number|`1`|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
-|projectionPicker|Boolean|`false`|`optional`是否显示投影切换按钮。|
-|requestRenderMode|Boolean|`false`|`optional`如果为true，则仅根据场景中的更改确定是否需要渲染帧。 启用可减少应用程序的CPU / GPU使用率，并减少移动设备上的电池消耗，但需要使用Scene＃requestRender在此模式下显式渲染新帧。 在API的其他部分对场景进行更改后，在许多情况下这是必要的。|
-|maximumRenderTimeChange|Number|`0.0`|`optional`如果requestRenderMode为true，则此值定义在请求渲染之前允许的最大模拟时间更改。|
+|camera|VcCamera|| `optional` 指定初始化场景相机位置，默认在中国。  |
+|showCredit|boolean|`true`| `optional` 指定是否显示默认 Logo 和 加载数据版权信息。|
+|autoSortImageryLayers|boolean|`true`| `optional` 指定添加影像图层时是否根据图层的 `sortOrder` 属性自动排序。|
+|removeCesiumScript|boolean|`true`| `optional` 指定 `vc-viewer` 组件销毁时是否移除CesiumJS标签。|
+|enableMouseEvent|boolean|`true`| `optional` 指定是否触发鼠标事件。|
+|skeleton|boolean\|VcSkeletonProps|| `optional` 指定 `vc-viewer` 初始化时是否显示骨架背景。|
+|TZcode|string|| `optional` Timeline 日期格式化所用时区代码。默认将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
+|UTCoffset|number|| `optional` 本地时间与UTC时间的时差（分钟）。|
+|accessToken|string||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
+|cesiumPath|string||`optional` 指定用于初始化 `vc-viewer` 组件的 CesiumJS 库的 Web 服务地址。|
+|animation|boolean|`false`|`optional` 是否显示动画控件。|
+|baseLayerPicker| boolean|`false`|`optional` 是否显示基础图层切换按钮。|
+|fullscreenButton|boolean| `false`| `optional` 是否显示全屏切换按钮。|
+|vrButton|boolean|`false`|`optional` 是否显示 VR 功能按钮。|
+|geocoder|boolean\|Array<Cesium.GeocoderService>|`false`|`optional` 是否显示地理编码器搜索框。|
+|homeButton|boolean|`false`|`optional` 是否显示主页按钮。|
+|infoBox|boolean|`true`|`optional` 是否显示信息框。|
+|sceneModePicker|boolean|`false`|`optional` 是否显示场景模式切换按钮。|
+|selectionIndicator|boolean|`true`|`optional` 是否显示选择指示符。|
+|timeline|boolean|`false`|`optional` 是否显示时间轴控件。|
+|navigationHelpButton|boolean|`false`|`optional` 是否显示导航帮助按钮。|
+|navigationInstructionsInitiallyVisible|boolean|`false`|`optional` 是展开导航帮助面板，否点击navigationHelpButton才能展开面板。|
+|scene3DOnly|boolean|`false`|`optional` 如果为true，则每个几何实例仅以3D形式呈现以节省GPU内存。|
+|shouldAnimate|boolean|`false`|`optional`true 是否开始时间模拟。 |
+|clockViewModel|Cesium.ClockViewModel||`optional`用于控制当前时间的时钟视图模型。|
+|selectedImageryProviderViewModel|Cesium.ProviderViewModel||`optional` 使用当前基础图像层的视图模型，如果没有提供第一个可用基础层。仅当`baseelayerpicker`设置为true时有效。|
+|terrainProviderViewModels|Array<Cesium.ProviderViewModel>||`optional` 为BaseAlayerPicker中提供可选择的ProviderViewModel数组。仅当`baseelayerpicker`设置为true时有效。|
+|imageryProvider|Cesium.ImageryProvider||`optional` 指定初始化时加载的影像。`vue-cesium` 已经将默认的替换成引用 Cesium 资源自带的`NaturalEarthII` 了。|
+|terrainProvider|Cesium.TerrainProvider||`optional` 指定初始化时加载的地形。|
+|skyBox|Cesium.SkyBox\|false||`optional` 指定初始化时加载的天空盒。 `undefined` 是默认的星空背景，`false`则天空盒、太阳、月亮等都不会添加。|
+|skyAtmosphere|Cesium.skyAtmosphere\|false||`optional` 蓝天，地球周围的光芒。设置为false以关闭它。|
+|fullscreenElement|Element \| string|`document.body`|`optional` 按下全屏按钮时要放入全屏模式的元素或ID。|
+|useDefaultRenderLoop|boolean|`true`|`optional` 是否开启默认的循环渲染控制。|
+|targetFrameRate|number| - |`optional` 使用默认渲染循环时的目标帧速率。|
+|showRenderLoopErrors|boolean|`true`|`optional` 如果设置为true，发生渲染循环错误时，将自动给用户显示一个包含错误信息的 HTML 面板。|
+|useBrowserRecommendedResolution|boolean|`true`|`optional` 如果为true，则以浏览器建议的分辨率进行渲染，并忽略window.devicePixelRatio。|
+|automaticallyTrackDataSourceClocks|boolean|`true`|`optional` 如果设置为true，将自动跟踪新添加数据源的时钟设置，如果数据源的时钟变更，则更新。如需单独设置时钟，请将此项设置为false。|
+|contextOptions|VcContextOptions||`optional`Context and WebGL 创建属性与传递给Scene匹配的选项。|
+|sceneMode|number\|Cesium.SceneMode|`3`|`optional` 指定场景模式。**COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
+|mapProjection|Cesium.MapProjection||`optional` 使用2D和哥伦布视图模式使用的地图投影。||
+|globe|Cesium.Globe\|false||`optional` 场景使用的地球。如果设置为false，则不会添加地球。||
+|orderIndependentTranslucency|boolean|`true`|`optional` 如果此项设置为true，并且使用设备支持，将使用与顺序无关的半透明。|
+|creditContainer|Element \| string||`optional` 指定包含CreditDisplay信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
+|creditViewport|Element \| string||`optional` 指定包含CreditDisplay弹出框信息的DOM元素或ID。如若未指定，credit信息将添加到部件底部。|
+|dataSources|Cesium.DataSourceCollection||`optional` 指定初始化时加载的数据源集合。如果指定了数据源集合，`Viewer` 销毁时不会销毁它。|
+|terrainExaggeration|number|`1.0`|`optional`用于夸大地形的标量。请注意，设置地形夸张不会修改其它任何数据。|
+|shadows|boolean|`false`|`optional`确定阴影是否由太阳投射形成。|
+|terrainShadows|number\|Cesium.ShadowMode|`3`|`optional`确定地形是否反射或接受来自太阳的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+|mapMode2D|number\|Cesium.MapMode2D|`1`|`optional`确定二维地图是可旋转的或是可以在在水平方向上无限滚动。**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
+|projectionPicker|boolean|`false`|`optional`是否显示投影切换按钮。|
+|requestRenderMode|boolean|`false`|`optional`如果为true，则仅根据场景中的更改确定是否需要渲染帧。 启用可减少应用程序的CPU / GPU使用率，并减少移动设备上的电池消耗，但需要使用Scene＃requestRender在此模式下显式渲染新帧。 在API的其他部分对场景进行更改后，在许多情况下这是必要的。|
+|maximumRenderTimeChange|number|`0.0`|`optional`如果requestRenderMode为true，则此值定义在请求渲染之前允许的最大模拟时间更改。|
 
 ### 事件
 
@@ -248,7 +252,7 @@
 | 方法名          | 返回                            | 描述                                                        |
 | --------------- | ------------------------------- | ----------------------------------------------------------- |
 | load            | {Cesium, viewer, vm} \| `false` | 执行加载操作。成功返回 `VcReadyObject`, 失败返回 `false。`  |
-| unload          | Boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。           |
+| unload          | boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。           |
 | reload          | {Cesium, viewer, vm} \| `false` | 执行重载操作。 成功返回 `VcReadyObject`, 失败返回 `false。` |
 | getCesiumObject | Object                          | 获取该组件加载的 Cesium 对象。                              |
 

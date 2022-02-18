@@ -18,7 +18,7 @@ Basic usage of VcCollectionLabel component.
         :key="'label'+index"
         :text="'Area'+(polyline.area > 1000000 ? (polyline.area / 1000000).toFixed(2) + 'km²' : polyline.area.toFixed(2) + '㎡')"
         showBackground
-        :horizontalOrigin="1"
+        :horizontal-origin="1"
       ></vc-label>
     </vc-collection-label>
   </vc-viewer>

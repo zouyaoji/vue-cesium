@@ -20,7 +20,7 @@ Basic usage of VcDatasourceGeojson component.
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>

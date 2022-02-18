@@ -13,9 +13,9 @@ Basic usage of VcNavigationSm component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <vc-navigation-sm @zoomEvt="onNavigationEvt" @compassEvt="onNavigationEvt" ref="navigation"></vc-navigation-sm>
-    <vc-navigation-sm position="left" :compassOpts="{ autoHidden: false }" :zoomOpts="{ autoHidden: false }"></vc-navigation-sm>
-    <vc-compass-sm :autoHidden="false" position="bottom" :offset="[200, 20]"></vc-compass-sm>
+    <vc-navigation-sm @zoom-evt="onNavigationEvt" @compass-evt="onNavigationEvt" ref="navigation"></vc-navigation-sm>
+    <vc-navigation-sm position="left" :compass-opts="{ autoHidden: false }" :zoom-opts="{ autoHidden: false }"></vc-navigation-sm>
+    <vc-compass-sm :auto-hidden="false" position="bottom" :offset="[200, 20]"></vc-compass-sm>
     <vc-compass-sm position="bottom" :offset="[-200, 20]"></vc-compass-sm>
     <vc-zoom-control-sm position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
   </vc-viewer>
@@ -52,10 +52,10 @@ Basic usage of VcNavigationSm component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | String | `top-right` | `optional` Specify the location of the navigation component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the navigation component. ||
-| compassOpts | Object\|false | Same as `VcCompassSm` | `optional` Specify the compass control parameters, false means not to display. ||
-| zoomOpts | Object\|false | Same as `VcZoomControlSm` | `optional` Specify the zoom control parameters, false means not display. ||
+| position | string | `top-right` | `optional` Specify the location of the navigation component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` Specifies the position-based offset of the navigation component. ||
+| compassOpts | false \| VcCompassSmProps| Same as `VcCompassSm` | `optional` Specify the compass control parameters, false means not to display. ||
+| zoomOpts | false \| VcZoomControlSmProps | Same as `VcZoomControlSm` | `optional` Specify the zoom control parameters, false means not display. ||
 
 :::tip
 Default parameters of `compassOpts`, `zoomOpts`:
@@ -103,12 +103,15 @@ Default parameters of `compassOpts`, `zoomOpts`:
 
 ### VcNavigationSm Events
 
-| Name       | Parameters | Description                                    |
-| ---------- | ---------- | ---------------------------------------------- |
-| zoomEvt    |            | Triggers when the zoom control is operated.    |
-| compassEvt |            | Triggers when the compass control is operated. |
+| Name       | Parameters                              | Description                                              |
+| ---------- | --------------------------------------- | -------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcNavigationSm is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the VcNavigationSm is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcNavigationSm is destroyed.           |
+| zoomEvt    | (evt: VcZoomEvt)                        | Triggers when the zoom control is operated.              |
+| compassEvt | (evt: VcCompassEvt)                     | Triggers when the compass control is operated.           |
 
-### VcCompass
+### VcCompassSm
 
 Compass components.
 
@@ -117,18 +120,21 @@ Compass components.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` Specify the compass position. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the compass. ||
-| enableCompassOuterRing | String | `true` | `optional` Specify whether the outer ring of the compass can be operated. ||
-| duration | Number | `1.5` | `optional` Specify the flight time of double-clicking the compass to restore the pitch angle, in seconds. ||
-| tooltip | Object | | `optional` Specify the compass prompt information. |
-| autoHidden | Boolean | `true` | `optional` Specify whether to automatically hide parts of the compass controls. ||
+| position | string | `top-right` | `optional` Specify the compass position. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | [number, number] | `[0, 0]` | `optional` Specify the position-based offset of the compass. ||
+| enableCompassOuterRing | boolean | `true` | `optional` Specify whether the outer ring of the compass can be operated. ||
+| duration | number | `1.5` | `optional` Specify the flight time of double-clicking the compass to restore the pitch angle, in seconds. ||
+| tooltip | false | VcTooltipProps | | `optional` Specify the compass prompt information. |
+| autoHidden | boolean | `true` | `optional` Specify whether to automatically hide parts of the compass controls. ||
 
 ### VcCompassSm Events
 
-| Name       | Parameters | Description                                    |
-| ---------- | ---------- | ---------------------------------------------- |
-| compassEvt |            | Triggers when the compass control is operated. |
+| Name       | Parameters                              | Description                                              |
+| ---------- | --------------------------------------- | -------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcNavigationSm is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the VcNavigationSm is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcNavigationSm is destroyed.           |
+| compassEvt | (evt: VcCompassEvt)                     | Triggers when the compass control is operated.           |
 
 ### VcZoomControlSm
 
@@ -139,13 +145,16 @@ Zoom component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` Specify the position of the zoom component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` Specifies the position-based offset of the zoom control. ||
-| tooltip | Object | | `optional` Specify the compass prompt information. ||
-| autoHidden | Boolean | `true` | `optional` Specify whether to automatically hide the zoom control. ||
+| position | string | `top-right` | `optional` Specify the position of the zoom component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | [number, number] | `[0, 0]` | `optional` Specifies the position-based offset of the zoom control. ||
+| tooltip | false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string }) | | `optional` Specify the compass prompt information. ||
+| autoHidden | boolean | `true` | `optional` Specify whether to automatically hide the zoom control. ||
 
 ### VcZoomControlSm Events
 
-| Name    | Parameters | Description                                 |
-| ------- | ---------- | ------------------------------------------- |
-| zoomEvt |            | Triggers when the zoom control is operated. |
+| Name       | Parameters                              | Description                                              |
+| ---------- | --------------------------------------- | -------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcNavigationSm is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the VcNavigationSm is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcNavigationSm is destroyed.           |
+| zoomEvt    | (evt: VcZoomEvt)                        | Triggers when the zoom control is operated.              |

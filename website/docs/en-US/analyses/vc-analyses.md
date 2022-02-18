@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-01-27 12:01:37
+ * @LastEditTime: 2022-02-17 17:58:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analyses.md
@@ -26,21 +26,21 @@ Basic usage of drawing components.
     <vc-analyses
       ref="analyses"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
+      :main-fab-opts="mainFabOpts"
       :offset="[20, 80]"
       :editable="editable"
-      @drawEvt="drawEvt"
-      @activeEvt="activeEvt"
-      @editorEvt="editorEvt"
-      @mouseEvt="mouseEvt"
+      @draw-evt="drawEvt"
+      @active-evt="activeEvt"
+      @editor-evt="editorEvt"
+      @mouse-evt="mouseEvt"
       @ready="analysesReadyDefault"
     ></vc-analyses>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onTilesetReady"
+      @ready-promise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-imagery-provider-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
@@ -157,19 +157,19 @@ Basic usage of drawing components.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | String | `'top-right'` | `optional` Specify the location of the component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
-| show | Boolean | `true` | `optional` Specify whether the analysis result is visible. |
-| mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| analyses | Array | `['sightline', 'viewshed']` | `optional` Specifies the analysis instance to load. |
-| activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
-| editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
-| mainFabOpts | Object: VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the drawing component. |
-| sightlineActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the sightline analysis action button.|
-| sightlineAnalysisOpts | Object: VcDrawingOpts | | `optional` Specify sightline analysis parameters.|
-| viewshedActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the viewshed analysis action button.|
-| viewshedAnalysisOpts | Object: VcViewshedAnalysisOpts | | `optional` Specify viewshed analysis parameters.|
-| clearActionOpts | Object: VcActionTooltipProps | | `optional` Specify the style options of the clear action button.|
+| position | string | `'top-right'` | `optional` Specify the position of the VcAnalyses. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` Specify an array of two numbers to offset the VcAnalyses horizontally and vertically in pixels. |
+| show | boolean | `true` | `optional` Specify whether the analysis result is visible. |
+| mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
+| analyses | Array\<'sightline' \| 'viewshed'\>  | `['sightline', 'viewshed']` | `optional` Specify which analysis instances to load. |
+| activeColor | string | `'positive'` | `optional` Specify the color when the analysis instance is activated. |
+| editable | boolean | `false` | `optional` Specify whether the analysis result can be edited. |
+| mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the VcAnalyses component. |
+| sightlineActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the sightline analysis action button.|
+| sightlineAnalysisOpts | VcDrawingOpts | | `optional` Specify sightline analysis options.|
+| viewshedActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the viewshed analysis action button.|
+| viewshedAnalysisOpts | VcViewshedAnalysisOpts | | `optional` Specify viewshed analysis options.|
+| clearActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the clear action button.|
 
 :::tip
 
@@ -189,16 +189,16 @@ The parameter configuration of each drawing result is too long to list here. If 
 
 ### Events
 
-| Name       | Parameters                                       | Description                                                               |
-| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                               |
-| ready      | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                    |
-| destroyed  | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                              |
-| drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggered when drawing.                                                   |
-| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggered when the drawing action is switched.                            |
-| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggered when the edit button is clicked.                                |
-| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggered when the mouse is mouse over or mouse out on the drawing point. |
-| fabUpdated | (value: boolean)                                 | when the floating button is expanded or collapsed.                        |
+| Name       | Parameters                                       | Description                                                              |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                              |
+| ready      | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                   |
+| destroyed  | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                             |
+| drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggered when drawing.                                                  |
+| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | Triggered when the analysis action is actived.                           |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the editor button is clicked.                              |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
+| fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
 
 ### Slots
 

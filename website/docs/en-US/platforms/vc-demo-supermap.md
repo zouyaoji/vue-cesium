@@ -40,7 +40,7 @@ Use VueCesium to load SuperMap iClient3D for WebGL
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity> -->
-    <vc-layer-imagery :sortOrder="20">
+    <vc-layer-imagery :sort-order="20">
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>

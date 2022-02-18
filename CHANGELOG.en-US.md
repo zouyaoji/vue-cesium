@@ -1,5 +1,15 @@
 ## Changelog
 
+### 3.0.10
+
+#### Bug fixes
+
+- `useVueCesium` method is not available outside `vc-viewer`.
+- When the `vc-selection-indicator` indicator is displayed, calling the `viewer.flyto` method causes the indicator position to be wrong.
+- `vc-measurements` height measurement error.
+- `vc-measurements`, `vc-drawings`, `vc-analyses` floating buttons cannot be displayed or hidden when they are initialized to be hidden.
+- The clampToGround property of `vc-measurements` and `vc-drawings` is invalid.
+
 ### 3.0.9
 
 _2022-02-14_

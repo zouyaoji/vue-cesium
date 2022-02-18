@@ -59,14 +59,15 @@
 
 ### 属性
 
-| 属性名      | 类型    | 默认值       | 描述                                     | 可选值                |
-| ----------- | ------- | ------------ | ---------------------------------------- | --------------------- |
-| position    | String  | `'top'`      | `optional` 指定进度条位置。              | top/right/bottom/left |
-| size        | String  | `'2px'`      | `optional` 指定进度条尺寸。              |
-| color       | String  |              | `optional` 指定进度条颜色。              |
-| skipHijack  | Boolean |              | `optional` 指定是否忽略 ajax hijacking。 |
-| reverse     | Boolean |              | `optional` 指定进度条是否反向。          |
-| positioning | String  | `'absolute'` | `optional` 指定进度条定位。              | absolute/fixed        |
+| 属性名       | 类型                       | 默认值       | 描述                                                 | 可选值                |
+| ------------ | -------------------------- | ------------ | ---------------------------------------------------- | --------------------- |
+| position     | string                     | `'top'`      | `optional` 指定进度条位置。                          | top/right/bottom/left |
+| size         | string                     | `'2px'`      | `optional` 指定进度条尺寸。                          |
+| color        | string                     |              | `optional` 指定进度条颜色。                          |
+| skipHijack   | boolean                    |              | `optional` 指定是否忽略 ajax hijacking。             |
+| reverse      | boolean                    |              | `optional` 指定进度条是否反向。                      |
+| positioning  | string                     | `'absolute'` | `optional` 指定进度条定位。                          | absolute/fixed        |
+| hijackFilter | ((url: string) => boolean) |              | `optional` 指定哪些 url 可以触发 start 和 end 方法。 |                       |
 
 ### 事件
 

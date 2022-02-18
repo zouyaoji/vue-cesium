@@ -15,7 +15,7 @@
   <vc-viewer @ready="onViewerReady">
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast">
       <vc-imagery-provider-supermap
-        @readyPromise="onImageryProviderReady"
+        @ready-promise="onImageryProviderReady"
         ref="provider"
         url="https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult"
       ></vc-imagery-provider-supermap>

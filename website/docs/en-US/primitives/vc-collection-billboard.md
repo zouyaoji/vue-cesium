@@ -14,7 +14,7 @@ Basic usage of VcCollectionBillboard component.
     <vc-collection-billboard ref="billboardCollectionRef" @mouseout="onMouseout" @mouseover="onMouseover" :billboards="billboards">
       <vc-billboard
         :position="[108, 35, 10000]"
-        :distanceDisplayCondition="[0, 20000000]"
+        :distance-display-condition="[0, 20000000]"
         :scale="0.25"
         image="https://zouyaoji.top/vue-cesium/favicon.png"
       ></vc-billboard>

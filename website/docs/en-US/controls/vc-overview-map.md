@@ -19,7 +19,7 @@ The basic usage of the VcOverviewMap component.
   <vc-viewer>
     <!-- example 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
-      <vc-layer-imagery :sortOrder="10">
+      <vc-layer-imagery :sort-order="10">
         <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-" mapStyle="Road"></vc-imagery-provider-bing>
       </vc-layer-imagery>
       <vc-entity>
@@ -44,7 +44,7 @@ The basic usage of the VcOverviewMap component.
         </vc-entity>
       </vc-overview-map>
     </vc-overview-map>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"></vc-imagery-provider-bing>
     </vc-layer-imagery>
     <vc-entity
@@ -127,21 +127,21 @@ The basic usage of the VcOverviewMap component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | String | `'bottom-right'` | `optional` Specify the location of the overviewmap component. | top-right/top-left/bottom-right/bottom-left |
-| offset | Array | `[0, 0]` | `optional` Specify the position-based offset of the overviewmap component. | |
-| width | String | `'150px'` | `optional` Specify the width of the overviewmap component. |
-| height | String | `'150px'` | `optional` Specify the height of the overviewmap component. |
-| border | String | `'solid 4px rgb(255, 255, 255)'` | `optional` Specify the border of the overviewmap component. |
-| borderRadius | String | | `optional` Specify the border radius of the overviewmap component. |
-| toggleOpts | Object | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` Specify the toggle button options of the overviewmap component. |
-| viewerOpts | Object |`{ removeCesiumScript: false, showCredit: false, sceneMode: 2 }` | `optional` Specify the vc-viewer component options in the overviewmap component.|
+| position | string | `'bottom-right'` | `optional` Specify the location of the overviewmap component. | top-right/top-left/bottom-right/bottom-left |
+| offset | [number, number] | `[0, 0]` | `optional` Specify the position-based offset of the overviewmap component. | |
+| width | string | `'150px'` | `optional` Specify the width of the overviewmap component. |
+| height | string | `'150px'` | `optional` Specify the height of the overviewmap component. |
+| border | string | `'solid 4px rgb(255, 255, 255)'` | `optional` Specify the border of the overviewmap component. |
+| borderRadius | string | | `optional` Specify the border radius of the overviewmap component. |
+| toggleOpts | VcBtnTooltipProps & { show: boolean } | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` Specify the toggle button options of the overviewmap component. |
+| viewerOpts | VcViewerProps |`{ removeCesiumScript: false, showCredit: false, sceneMode: 2 }` | `optional` Specify the vc-viewer component options in the overviewmap component.|
 
 :::
 
 ### Events
 
-| Name       | Parameters                              | Description                                            |
-| ---------- | --------------------------------------- | ------------------------------------------------------ |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
-| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
-| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+| Name       | Parameters                              | Description                                             |
+| ---------- | --------------------------------------- | ------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcOverviewMap is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the VcOverviewMap is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcOverviewMap is destroyed.           |

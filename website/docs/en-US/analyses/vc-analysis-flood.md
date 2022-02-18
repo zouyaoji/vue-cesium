@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2021-12-31 15:10:56
+ * @LastEditTime: 2022-02-17 17:42:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analysis-flood.md
@@ -110,12 +110,12 @@ Basic usage of VcAnalysisFlood component.
 //---
 | Name | Type | Default | Description |
 | ---------------- | --------------------- | ------------------------ | ---------------------------------------------- |
-| polygonHierarchy | Object\|Array | | `require` Specifies the latitude and longitude array for constructing the submerged analysis polygon. |
-| minHeight | Number | `-1 ` | `optional` Specify the minimum elevation. |
-| maxHeight | Number | `8888` | `optional` Specify the maximum elevation. |
-| speed | Number | `10` | `optional` Specify the height to increase each frame. |
-| color | Object\|String\|Array | `'rgba(40,150,200,0.6)'` | `optional` Specify the color of the polygon geometry. |
-| loop | Boolean | `false` | `optional` Specify whether to restart after reaching the maximum height. |
+| polygonHierarchy |VcPolygonHierarchy | | `required` Specify ths VcPolygonHierarchy of polygon. |
+| minHeight | number | `-1 ` | `optional` Specify the minimum elevation. |
+| maxHeight | number | `8888` | `optional` Specify the maximum elevation. |
+| speed | number | `10` | `optional` Specify the height to increase each frame. |
+| color | VcColor | `'rgba(40,150,200,0.6)'` | `optional` Specify the VcColor of water. |
+| loop | boolean | `false` | `optional` Specify whether to restart after reaching the maximum height. |
 
 ### Event
 
@@ -124,7 +124,7 @@ Basic usage of VcAnalysisFlood component.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
-| stop       |                                         | Triggers when the maxHeight is reached.                |
+| stop       | (evt: Cesium.ClassificationPrimitive)   | Triggers when the maxHeight is reached.                |
 
 ### Methods
 
