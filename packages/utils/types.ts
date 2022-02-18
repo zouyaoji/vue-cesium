@@ -199,7 +199,7 @@ export interface VcActionTooltipProps extends VcFabActionProps {
   tooltip?: VcTooltipProps
 }
 
-export type PickEventType = 'onmousedown' | 'onmouseup' | 'onclick' | 'onclickout' | 'ondblclick' | 'onmousemove' | 'mouseover' | 'mouseout'
+export type PickEventType = 'onmousedown' | 'onmouseup' | 'onclick' | 'onclickout' | 'ondblclick' | 'onmousemove' | 'onmouseover' | 'onmouseout'
 
 interface VcPickEvent {
   /**
@@ -262,7 +262,7 @@ interface VcViewerProvider {
   primitives: Cesium.PrimitiveCollection
   groundPrimitives: Cesium.PrimitiveCollection
   postProcessStages: Cesium.PostProcessStageCollection
-  viewerMitt: Emitter<VcMittEvents>
+  // viewerMitt: Emitter<VcMittEvents>
   layout?: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
@@ -273,6 +273,7 @@ interface VcViewerProvider {
   drawingFabInstance?: VcComponentInternalInstance
   drawingHandlerActive: boolean
   getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
+  viewerCreatePromise: Promise<VcReadyObject>
 }
 
 interface ViewerWidgetResizedEvent {
