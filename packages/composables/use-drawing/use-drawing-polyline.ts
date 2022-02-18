@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-02-05 23:40:49
+ * @LastEditTime: 2022-02-18 20:39:09
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -821,6 +821,7 @@ export default function (props, ctx, cmpName: string) {
           h(VcPolygon, {
             positions: positions,
             onReady: onVcPrimitiveReady,
+            clampToGround: props.clampToGround,
             ...props.polygonOpts,
             show: polyline.show && props.polygonOpts?.show
           })
