@@ -1,4 +1,3 @@
-import { getCurrentInstance } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
 import { isUndefined, isNull, camelCase } from 'lodash-unified'
 import { AnyFunction, AnyObject } from './types'
