@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, reactive } from 'vue'
+import { defineComponent, getCurrentInstance, ref, reactive, VNode } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import { measurementsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
@@ -186,3 +186,9 @@ export {
 
 export type { VcMeasurementsProps } from './defaultProps'
 export type VcMeasurementsEmits = typeof emits
+export type VcMeasurementsSlots = {
+  /**
+   * body slot content of the component
+   */
+  body: () => VNode[]
+}
