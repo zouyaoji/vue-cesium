@@ -1008,7 +1008,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           })
         } else if (globalThis.DC) {
           // 兼容  dc-sdk
-          globalThis.DC.use(globalThis.DcCore.default)
+          globalThis.DC.use(globalThis.DcCore.default || globalThis.DcCore)
           globalThis.DC.baseUrl = `${dirName}/resources/`
           globalThis.DC.ready(() => {
             globalThis.Cesium = DC.Namespace.Cesium
