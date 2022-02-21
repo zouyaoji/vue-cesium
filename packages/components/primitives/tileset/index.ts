@@ -22,6 +22,16 @@ import {
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
+const emits = {
+  ...primitiveEmits,
+  allTilesLoaded: () => true,
+  initialTilesLoaded: () => true,
+  loadProgress: (numberOfPendingRequests: number, numberOfTilesProcessing: number) => true,
+  tileFailed: (url: string, errorMsg: string) => true,
+  tileLoad: (tile: Cesium.Cesium3DTile) => true,
+  tileUnload: (tile: Cesium.Cesium3DTile) => true,
+  tileVisible: (tile: Cesium.Cesium3DTile) => true
+}
 
 export const tilesetPrimitiveProps = {
   url: [String, Object] as PropType<string | Promise<string> | Promise<Cesium.Resource> | Cesium.Resource>,
@@ -199,11 +209,12 @@ export const tilesetPrimitiveProps = {
 export default defineComponent({
   name: 'VcPrimitiveTileset',
   props: tilesetPrimitiveProps,
-  emits: primitiveEmits,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'Cesium3DTileset'
+    instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
     usePrimitives(props, ctx, instance)
     ;(instance.proxy as VcComponentPublicInstance).createPromise.then(obj => {
       const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
@@ -249,3 +260,4 @@ export default defineComponent({
 })
 
 export type VcPrimitiveTilesetProps = ExtractPropTypes<typeof tilesetPrimitiveProps>
+export type VcPrimitiveTilesetEmits = typeof emits
