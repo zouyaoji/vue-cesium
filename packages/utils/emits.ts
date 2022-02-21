@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-02-13 23:22:22
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-02-18 17:54:09
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\utils\emits.ts
+ * @FilePath: \vue-cesium\packages\utils\emits.ts
  */
 import { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt } from './drawing-types'
 import type {
@@ -42,7 +42,7 @@ export const graphicsEmits = {
 export const providerEmits = {
   ...commonEmits,
   errorEvent: (evt: Cesium.TileProviderError) => true,
-  readyPromise: (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true
+  readyPromise: (evt: boolean | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true
 }
 
 export const primitiveEmits = {
