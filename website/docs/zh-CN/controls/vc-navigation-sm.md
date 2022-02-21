@@ -13,9 +13,9 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <vc-navigation-sm @zoomEvt="onNavigationEvt" @compassEvt="onNavigationEvt" ref="navigation"></vc-navigation-sm>
-    <vc-navigation-sm position="left" :compassOpts="{ autoHidden: false }" :zoomOpts="{ autoHidden: false }"></vc-navigation-sm>
-    <vc-compass-sm :autoHidden="false" position="bottom" :offset="[200, 20]"></vc-compass-sm>
+    <vc-navigation-sm @zoom-evt="onNavigationEvt" @compass-evt="onNavigationEvt" ref="navigation"></vc-navigation-sm>
+    <vc-navigation-sm position="left" :compass-opts="{ autoHidden: false }" :zoom-opts="{ autoHidden: false }"></vc-navigation-sm>
+    <vc-compass-sm :auto-hidden="false" position="bottom" :offset="[200, 20]"></vc-compass-sm>
     <vc-compass-sm position="bottom" :offset="[-200, 20]"></vc-compass-sm>
     <vc-zoom-control-sm position="bottom" :offset="[0, 50]"></vc-zoom-control-sm>
   </vc-viewer>
@@ -52,10 +52,10 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 ||
-| compassOpts | Object\|false | 与 `VcCompassSm` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 ||
-| zoomOpts | Object\|false | 与 `VcZoomControlSm` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 ||
+| position | string | `top-right` | `optional` 指定导航组件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | [number, number] | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 ||
+| compassOpts | false \| VcCompassSmProps | 与 `VcCompassSm` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 ||
+| zoomOpts | false \| VcZoomControlSmProps | 与 `VcZoomControlSm` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 ||
 
 :::tip
 提示 `compassOpts`、`zoomOpts` 默认参数：
@@ -96,10 +96,13 @@
 
 ### VcNavigationSm 事件
 
-| 事件名     | 参数 | 描述                 |
-| ---------- | ---- | -------------------- |
-| zoomEvt    |      | 操作缩放控件时触发。 |
-| compassEvt |      | 操作罗盘控件时触发。 |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |
+| compassEvt | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。 |
 
 ### VcNavigationSm 插槽
 
@@ -117,18 +120,21 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定罗盘位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
-| enableCompassOuterRing | String | `true` | `optional` 指定罗盘外环是否可以操作。 ||
-| duration | Number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
-| tooltip | Object | | `optional` 指定罗盘提示信息参数。 |
-| autoHidden | Boolean | `true` | `optional` 指定是否自动隐藏罗盘部分控件。 ||
+| position | string | `top-right` | `optional` 指定罗盘位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | [number, number] | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
+| enableCompassOuterRing | boolean | `true` | `optional` 指定罗盘外环是否可以操作。 ||
+| duration | number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
+| tooltip | false | VcTooltipProps | | `optional` 指定罗盘提示信息参数。 |
+| autoHidden | boolean | `true` | `optional` 指定是否自动隐藏罗盘部分控件。 ||
 
 ### VcCompassSm 事件
 
-| 事件名     | 参数 | 描述                 |
-| ---------- | ---- | -------------------- |
-| compassEvt |      | 操作罗盘控件时触发。 |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| compassEvt | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。 |
 
 ### VcZoomControlSm
 
@@ -139,13 +145,16 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |可选值|
 | ----- | ---- | ----- | ---- | ---- |
-| position | String | `top-right` | `optional` 指定缩放控件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
-| offset | Array | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 ||
-| tooltip | Object | | `optional` 指定罗盘提示信息参数。 ||
-| autoHidden | Boolean | `true` | `optional` 指定是否自动隐藏放大控件。 ||
+| position | string | `top-right` | `optional` 指定缩放控件位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left|
+| offset | [number, number] | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 ||
+| tooltip | false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string }) | | `optional` 指定罗盘提示信息参数。 ||
+| autoHidden | boolean | `true` | `optional` 指定是否自动隐藏放大控件。 ||
 
 ### VcZoomControlSm 事件
 
-| 事件名  | 参数 | 描述                 |
-| ------- | ---- | -------------------- |
-| zoomEvt |      | 操作缩放控件时触发。 |
+| 事件名     | 参数                                    | 描述                 |
+| ---------- | --------------------------------------- | -------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |

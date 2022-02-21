@@ -544,10 +544,17 @@ export type VcMyLocationProps = {
    */
   duration?: number
   /**
-   *
+   * Specify the factor by which the anchor point is converted to a rectangle.
+   * Default: 0.01
    */
   factor?: number
+  /**
+   * The maximum height at the peak of the flight.
+   */
   maximumHeight?: number
+  /**
+   * The offset from the target in the local east-north-up reference frame centered at the target. 2D or Columbus view works.
+   */
   hpr?: [number, number, number]
   /**
    * Specify a custom API for positioning.

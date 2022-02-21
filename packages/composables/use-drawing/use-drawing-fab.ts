@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-01-20 14:47:42
+ * @LastEditTime: 2022-02-17 09:48:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -46,7 +46,6 @@ export default function (
   const positionState = usePosition(props, $services)
   const containerRef = ref<HTMLElement | null>(null)
   const fabRef = ref<typeof VcFab>(null)
-  const fabExtanded = ref(false)
   const mounted = ref(false)
   const primitiveCollection = ref(null)
   let visibilityState: VisibilityState
@@ -124,9 +123,6 @@ export default function (
   instance.mount = async () => {
     updateRootStyle()
     mounted.value = true
-    nextTick(() => {
-      fabRef.value?.toggle()
-    })
     activate()
     return true
   }
@@ -256,7 +252,6 @@ export default function (
   }
 
   const onUpdateFab = value => {
-    fabExtanded.value = value
     if (value) {
       activate()
     } else {
@@ -265,6 +260,7 @@ export default function (
       }
       deactivate()
     }
+    mainFabOpts.modelValue = value
     emit('fabUpdated', value)
   }
 
@@ -298,6 +294,7 @@ export default function (
   }
 
   provide(vcKey, getServices())
+  instance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
   Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction, fabRef })
@@ -396,8 +393,8 @@ export default function (
                       background: mainFabOpts.color,
                       color: mainFabOpts.textColor
                     },
-                    'onUpdate:modelValue': onUpdateFab,
-                    ...mainFabOpts
+                    ...mainFabOpts,
+                    'onUpdate:modelValue': onUpdateFab
                   },
                   {
                     default: () => fabActionChildren,
@@ -407,7 +404,8 @@ export default function (
                         {
                           ...mainFabOpts.tooltip
                         },
-                        () => h('strong', null, mainFabOpts.tooltip.tip || (fabExtanded.value ? t('vc.drawing.collapse') : t('vc.drawing.expand')))
+                        () =>
+                          h('strong', null, mainFabOpts.tooltip.tip || (mainFabOpts.modelValue ? t('vc.drawing.collapse') : t('vc.drawing.expand')))
                       )
                   }
                 )

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-04 10:37:42
- * @LastEditTime: 2021-11-22 16:49:24
+ * @LastEditTime: 2022-02-17 16:15:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
@@ -15,19 +15,17 @@
 
 选择器组件的基础用法。
 
-**注意：** 不支持拾取 `vc-primitive-particle` 组件对象。
-
 :::demo 使用 `vc-selection-indicator` 标签在三维球上添加选择器组件。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer :selectionIndicator="false" :infoBox="false">
-    <vc-selection-indicator ref="selectionIndicator" @pickEvt="pickEvt"></vc-selection-indicator>
+  <vc-viewer :selection-indicator="false" :info-box="false">
+    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
     <vc-entity ref="entity" :billboard="billboard" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
-    <vc-layer-imagery :sortOrder="10">
-      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :sort-order="10">
+      <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -83,16 +81,17 @@
 
 | 属性名                   | 类型    | 默认值 | 描述                                                  |
 | ------------------------ | ------- | ------ | ----------------------------------------------------- |
-| show                     | Boolean | `true` | `optional` 指定选择指示器是否可见。                   |
-| width                    | Number  | `50`   | `optional` 指定选择指示器宽度。                       |
-| height                   | Number  | `50`   | `optional` 指定选择指示器高度。                       |
-| allowFeatureInfoRequests | Boolean | `true` | `optional` 指定是否异步请求该点射线相交影像图层属性。 |
+| show                     | boolean | `true` | `optional` 指定选择指示器是否可见。                   |
+| width                    | number  | `50`   | `optional` 指定选择指示器宽度。                       |
+| height                   | number  | `50`   | `optional` 指定选择指示器高度。                       |
+| allowFeatureInfoRequests | boolean | `true` | `optional` 指定是否异步请求该点射线相交影像图层属性。 |
+| limit                    | number  | `50`   | `optional` 指定最大拾取对象数量。                     |
 
 ### 事件
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | pickEvt    | selectedFeature                         | 拾取时触发。         |

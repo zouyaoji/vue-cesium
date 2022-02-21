@@ -31,7 +31,7 @@ Basic usage of VcOverlayDynamic component.
       @ready="ready"
     >
     </vc-overlay-dynamic>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>

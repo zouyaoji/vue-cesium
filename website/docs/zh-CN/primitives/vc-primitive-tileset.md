@@ -14,7 +14,7 @@
     <vc-primitive-tileset
       ref="primitive"
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onReadyPromise"
+      @ready-promise="onReadyPromise"
       @click="onClicked"
     >
     </vc-primitive-tileset>

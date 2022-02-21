@@ -286,8 +286,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
     if (props.show && defined(position.value)) {
       const screenPosition = computeScreenSpacePosition(position.value, new Cartesian2())
       if (!defined(screenPosition)) {
-        rootStyle.left = offScreen
-        rootStyle.right = offScreen
+        // rootStyle.left = offScreen
+        // rootStyle.right = offScreen
       } else {
         const { viewer } = $services
         const container = viewer.container

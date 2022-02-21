@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-11 10:34:07
+ * @LastEditTime: 2022-02-18 17:30:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
@@ -406,25 +406,32 @@ export type VcNavigationProps = {
   /**
    * Triggers when the zoom control is operated.
    */
-  zoomEvt?: (evt: VcZoomEvt) => void
+  onZoomEvt?: (evt: VcZoomEvt) => void
   /**
    * Triggers when the compass control is operated.
    */
-  compassEvt?: (evt: VcCompassEvt) => void
+  onCompassEvt?: (evt: VcCompassEvt) => void
   /**
    * Triggers when the positioning button is clicked.
    */
-  locationEvt?: (evt: VcLocationEvt) => void
+  onLocationEvt?: (evt: VcLocationEvt) => void
   /**
    * Triggers when the print button is clicked.
    */
-  printEvt?: (evt: VcPrintEvt) => void
+  onPrintEvt?: (evt: VcPrintEvt) => void
   /**
    * Triggers when the information changed.
    */
-  statusBarEvt?: (evt: VcStatusBarEvt) => void
+  onStatusBarEvt?: (evt: VcStatusBarEvt) => void
   /**
    * Triggers when the distance scale changed.
    */
-  distanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
+  onDistanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
+}
+
+export interface VcNavigationSlots {
+  /**
+   * Suggestion: VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcStatusBar, VcDistanceLegend
+   */
+  default: () => VNode[]
 }

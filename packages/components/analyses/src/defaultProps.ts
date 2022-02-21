@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-02-13 22:24:38
+ * @LastEditTime: 2022-02-17 16:52:10
  * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\analyses\src\defaultProps.ts
+ * @FilePath: \vue-cesium-panda-parkd:\00_work\30_前端\Cesium\vue-cesium@next\packages\components\analyses\src\defaultProps.ts
  */
 
 import {
@@ -106,10 +106,10 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  // modelValue: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
-} as VcFabProps)
+} as VcActionTooltipProps & VcFabProps)
 
 export const analysisType = ['sightline', 'viewshed']
 

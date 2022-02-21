@@ -6,7 +6,7 @@ import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
@@ -232,5 +232,30 @@ export default defineComponent({
   }
 })
 
-export type VcZoomControlSmProps = ExtractPropTypes<typeof zoomControlSmProps>
+// export type VcZoomControlSmProps = ExtractPropTypes<typeof zoomControlSmProps>
 export type VcZoomControlSmEmits = typeof emits
+export type VcZoomControlSmProps = {
+  /**
+   * Specify the position of the VcZoomControlSm.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcZoomControlSm horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether the outer ring of the compass can be operated.
+   * Default value: true
+   */
+  /**
+   * Specify whether to automatically hide the zoom control.
+   * Default value: true
+   */
+  autoHidden?: boolean
+  /**
+   * Specify the compass prompt information.
+   */
+  tooltip?: false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string })
+}

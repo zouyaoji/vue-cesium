@@ -28,12 +28,12 @@
       <vc-graphics-box
         :dimensions="options.dimensions2"
         :material="options.material2"
-        :outlineColor="options.outlineColor2"
+        :outline-color="options.outlineColor2"
         :outline="true"
       ></vc-graphics-box>
     </vc-entity>
     <vc-entity ref="entity3" :position="options.position3" :description="options.description">
-      <vc-graphics-box :dimensions="options.dimensions3" :outlineColor="options.outlineColor3" :fill="false" :outline="true"></vc-graphics-box>
+      <vc-graphics-box :dimensions="options.dimensions3" :outline-color="options.outlineColor3" :fill="false" :outline="true"></vc-graphics-box>
     </vc-entity>
   </vc-viewer>
 </el-row>
@@ -93,15 +93,15 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ---- | ------ | ------ | --- |
 | show | Boolean | `true` | `optional` 指定 box 是否可见。 |
-| dimensions | Object\|Array\|Function | | `optional` 指定 box 的长宽高。 |
-| heightReference | Number | | `optional` 指定 box 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| fill | Boolean | `true` | `optional` 指定 box 是否按提供的材质填充。 |
-| material | String\|Object\|Array\|Function | `'WHITE'` | `optional` 指定 box 材质。 |
-| outline | Boolean | `false` | `optional` 指定是否绘制 box 轮廓线。 |
-| outlineColor | Object\|Array\|Function | `'BLACK'` | `optional` 指定是否绘制 box 轮廓线的颜色。 |
-| outlineWidth | Number | `1.0` | `optional` 指定绘制 box 轮廓线的宽度。 |
-| shadows | Number | `0` | `optional` 指定这些是否投射或接收来自每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-| distanceDisplayCondition | DistanceDisplayCondition | | `optional` 指定 box 显示条件。 |
+| dimensions | VcPosition | | `optional` 指定 box 的长宽高。 |
+| heightReference | Number \| Cesium.HeightReference \| VcCallbackPropertyFunction\<number\> | | `optional` 指定 box 高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | Boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `true` | `optional` 指定 box 是否按提供的材质填充。 |
+| material | VcMaterial | `'WHITE'` | `optional` 指定 box 材质。 |
+| outline | Boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `false` | `optional` 指定是否绘制 box 轮廓线。 |
+| outlineColor | VcColor | `'BLACK'` | `optional` 指定是否绘制 box 轮廓线的颜色。 |
+| outlineWidth | Number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` 指定绘制 box 轮廓线的宽度。 |
+| shadows | Number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` 指定这些是否投射或接收来自每个光源的阴影。**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` 指定 box 显示条件。 |
 
 ### 事件
 

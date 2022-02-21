@@ -20,8 +20,8 @@ Basic usage of VcGraphicsBillboard component.
         :image="image"
         :scale="scale"
         :show="show"
-        :distanceDisplayCondition="distanceDisplayCondition"
-        :horizontalOrigin="horizontalOrigin"
+        :distance-display-condition="distanceDisplayCondition"
+        :horizontal-origin="horizontalOrigin"
       ></vc-graphics-billboard>
     </vc-entity>
   </vc-viewer>
@@ -97,26 +97,26 @@ Basic usage of VcGraphicsBillboard component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the billboard. |
-| image | String\|Object | | `optional` A Property specifying the Image, URI, or Canvas to use for the billboard. |
-| scale | Number | `1.0` | `optional` A numeric Property specifying the scale to apply to the image size. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the billboard. |
+| image | string \| HTMLCanvasElement \|Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\>| | `optional` A Property specifying the Image, URI, or Canvas to use for the billboard. |
+| scale | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` A numeric Property specifying the scale to apply to the image size. |
 | pixelOffset | VcCartesian2 | `{x: 0, y: 0}` | `optional` A VcCartesian2 Property specifying the pixel offset. |
 | eyeOffset | VcPosition | `{x: 0, y: 0, z: 0}` | `optional` A VcPosition Property specifying the eye offset. |
-| horizontalOrigin | Number | `0` | `optional` A Property specifying the HorizontalOrigin. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
-| verticalOrigin | Number | `0` | `optional` A Property specifying the VerticalOrigin. **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
-| heightReference | Number | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| horizontalOrigin | number \| Cesium.HorizontalOrigin \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A Property specifying the HorizontalOrigin. **CENTER: 0, LEFT: 1, RIGHT: -1** |0/1/-1|
+| verticalOrigin | number \| Cesium.VerticalOrigin \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A Property specifying the VerticalOrigin. **CENTER: 0, BOTTOM: 1, BASELINE: 2, TOP: -1** |0/1/2/-1|
+| heightReference | number \| Cesium.HeightReference \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
 | color | VcColor | `'white'` | `optional` A Property specifying the tint Color of the image. |
-| rotation | Number | `0` | `optional` A numeric Property specifying the rotation about the alignedAxis. |
+| rotation  | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A numeric Property specifying the rotation about the alignedAxis. |
 | alignedAxis | VcPosition | `{x: 0, y: 0, z: 0}` | `optional` A VcPosition Property specifying the unit vector axis of rotation. |
-| sizeInMeters | Boolean | | `optional` A boolean Property specifying whether this billboard's size should be measured in meters. |
-| width | Number | | `optional` A numeric Property specifying the width of the billboard in pixels, overriding the native size. |
-| height | Number | | `optional` A numeric Property specifying the height of the billboard in pixels, overriding the native size. |
+| sizeInMeters  | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | | `optional` A boolean Property specifying whether this billboard's size should be measured in meters. |
+| width  | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A numeric Property specifying the width of the billboard in pixels, overriding the native size. |
+| height  | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A numeric Property specifying the height of the billboard in pixels, overriding the native size. |
 | scaleByDistance | VcNearFarScalar | | `optional` A VcNearFarScalar Property used to scale the point based on distance from the camera. |
 | translucencyByDistance | VcNearFarScalar | | `optional` A VcNearFarScalar Property used to set translucency based on distance from the camera. |
 | pixelOffsetScaleByDistance | VcNearFarScalar| | `optional` A VcNearFarScalar Property used to set pixelOffset based on distance from the camera. |
 | imageSubRegion | VcBoundingRectangle | | `optional` A Property specifying a BoundingRectangle that defines a sub-region of the image to use for the billboard, rather than the entire image, measured in pixels from the bottom-left. |
 | distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` A Property specifying at what distance from the camera that this billboard will be displayed. |
-| disableDepthTestDistance | Number | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
+| disableDepthTestDistance | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A Property specifying the distance from the camera at which to disable the depth test to. |
 
 ### Events
 

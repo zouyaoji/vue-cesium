@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-02-06 01:46:21
+ * @LastEditTime: 2022-02-15 21:15:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
@@ -16,14 +16,21 @@
         data-ad-layout="in-article"
         data-ad-format="fluid"
         data-ad-client="ca-pub-3445228872340333"
-        data-ad-slot="8270352624"
+        :data-ad-slot="adSlot"
       ></ins>
     </div>
   </div>
 </template>
 
 <script>
+const href = location.href
 export default {
+  computed: {
+    adSlot() {
+      const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
+      return cnHref ? '7202599371' : '8270352624'
+    }
+  },
   mounted() {
     ;(window.adsbygoogle = window.adsbygoogle || []).push({})
   }

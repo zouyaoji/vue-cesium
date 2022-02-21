@@ -1,5 +1,6 @@
 import type { VcCamera, VcContextOptions } from '@vue-cesium/utils/types'
 import type { PropType } from 'vue'
+import { VcSkeletonProps } from '../../ui'
 
 export default {
   cesiumPath: String,
@@ -150,16 +151,17 @@ export default {
   accessToken: String,
   camera: {
     type: Object as PropType<VcCamera>,
-    default: () => ({
-      position: {
-        lng: 105,
-        lat: 29.999999999999993,
-        height: 19059568.497290563
-      },
-      heading: 360,
-      pitch: -90,
-      roll: 0
-    })
+    default: () =>
+      ({
+        position: {
+          lng: 105,
+          lat: 29.999999999999993,
+          height: 19059568.497290563
+        },
+        heading: 360,
+        pitch: -90,
+        roll: 0
+      } as VcCamera)
   },
   navigation: {
     // for supermap
@@ -187,13 +189,14 @@ export default {
     default: true
   },
   skeleton: {
-    type: [Boolean, Object],
-    default: () => ({
-      dark: false,
-      animation: 'wave',
-      square: true,
-      bordered: true,
-      color: undefined
-    })
+    type: [Boolean, Object] as PropType<boolean | VcSkeletonProps>,
+    default: () =>
+      ({
+        dark: false,
+        animation: 'wave',
+        square: true,
+        bordered: true,
+        color: undefined
+      } as VcSkeletonProps)
   }
 }

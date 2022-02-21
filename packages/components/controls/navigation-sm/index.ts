@@ -35,11 +35,11 @@ export const navigationSmProps = {
   ...positionProps,
   compassOpts: {
     type: [Boolean, Object] as PropType<false | VcCompassSmProps>,
-    default: () => compassOptsDefault
+    default: () => compassOptsDefault as VcCompassSmProps
   },
   zoomOpts: {
     type: [Boolean, Object] as PropType<false | VcZoomControlSmProps>,
-    default: () => zoomOptsDefault
+    default: () => zoomOptsDefault as VcZoomControlSmProps
   }
 }
 const emits = {
@@ -234,9 +234,16 @@ export type VcNavigationSmProps = {
   /**
    * Triggers when the zoom control is operated.
    */
-  zoomEvt?: (evt: VcZoomEvt) => void
+  onZoomEvt?: (evt: VcZoomEvt) => void
   /**
    * Triggers when the compass control is operated.
    */
-  compassEvt?: (evt: VcCompassEvt) => void
+  onCompassEvt?: (evt: VcCompassEvt) => void
+}
+
+export interface VcNavigationSmSlots {
+  /**
+   * Suggestion: VcCompassSm, VcZoomControlSm
+   */
+  default: () => VNode[]
 }

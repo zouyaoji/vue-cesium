@@ -1,5 +1,15 @@
 ## 更新日志
 
+### 3.0.10
+
+#### Bug 修复
+
+- `useVueCesium` 方法在 `vc-viewer` 外获取不了的问题。
+- `vc-selection-indicator` 指示器显示的情况下，调用 `viewer.flyto` 方法导致指示器位置错误的问题。
+- `vc-measurements` 高度量算报错问题。
+- `vc-measurements`、`vc-drawings`、`vc-analyses` 浮动按钮初始化为不显示时，无法显隐的问题。
+- `vc-measurements`、`vc-drawings` 贴地模式下面对象未贴地问题。
+
 ### 3.0.9
 
 _2022-02-14_

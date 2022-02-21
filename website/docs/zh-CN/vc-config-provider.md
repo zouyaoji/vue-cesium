@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-07 10:54:09
- * @LastEditTime: 2022-02-10 10:17:34
+ * @LastEditTime: 2022-02-17 13:35:27
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\vc-config-provider.md
@@ -22,11 +22,11 @@ VcConfigProvider 组件基础用法
   <vc-config-provider :locale="locale">
     <vc-viewer>
       <vc-navigation ref="navigation" :offset="[35, 35]"></vc-navigation>
-      <vc-layer-imagery :sortOrder="20">
-        <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-layer-imagery :sort-order="20">
+        <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
       </vc-layer-imagery>
-      <vc-layer-imagery :sortOrder="10">
-        <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
+      <vc-layer-imagery :sort-order="10">
+        <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
       </vc-layer-imagery>
     </vc-viewer>
   </vc-config-provider>
@@ -161,4 +161,4 @@ VcConfigProvider 组件基础用法
 | ----------- | ------------------ | --------------------------------------------------------------------------------- | ----------------------------- |
 | locale | Object\<Language\> | [Chinese](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/locale/lang/zh-hans.ts) | `optional` 翻译文本对象。 |
 | cesiumPath | String | `'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'` | `optional` CesiumJS 地址。 |
-| accessToken | String | | `optional` 指定 accessToken。 |
+| accessToken | String | `'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'` | `optional` 指定 accessToken。 |

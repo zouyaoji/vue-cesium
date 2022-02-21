@@ -88,33 +88,22 @@ Import via HTML `head` tag.
 </head>
 ```
 
-### Volar support
+### TypeScript support
 
-If you use volar, please add the global component type definition to `compilerOptions.types` in `tsconfig.json` or `jsconfig.json`).
-
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    // ...
-    "types": ["vue-cesium/global"]
-  }
-}
-```
-
-### Cesium.d.ts support
-
-If you want to get Cesium api syntax hints, please add the Cesium type definition to `compilerOptions.types` in `tsconfig.json` or `jsconfig.json`).
+Please add the following configuration to the `tsconfig.json` or `jsconfig.json` file:
 
 ```json
 // tsconfig.json
 {
   "compilerOptions": {
     // ...
-    "types": ["vue-cesium/Cesium"]
-  }
+    "types": ["vue-cesium/global", "vue-cesium/Cesium"]
+  },
+  "include": ["src/**/*", "node_modules/vue-cesium/Cesium.d.ts"]
 }
 ```
+
+The above configuration will be adapted to the volar plugin and will be prompted by the Cesium API.
 
 ### Starter Template
 

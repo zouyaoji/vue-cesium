@@ -141,6 +141,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // provide
   provide(vcKey, getServices())
+  vcInstance.appContext.config.globalProperties.$VueCesium = getServices()
   return {
     transformProps: commonState.transformProps,
     unwatchFns: commonState.unwatchFns,

@@ -31,7 +31,7 @@
       @ready="ready"
     >
     </vc-overlay-dynamic>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu mapStyle="vec_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>

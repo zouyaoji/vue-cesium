@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive } from 'vue'
+import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive, VNode } from 'vue'
 import { drawingsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
 import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
@@ -118,3 +118,9 @@ export { VcDrawingPin, VcDrawingPoint, VcDrawingPolygon, VcDrawingPolyline, VcDr
 
 export type { VcDrawingsProps } from './defaultProps'
 export type VcDrawingsEmits = typeof emits
+export type VcDrawingsSlots = {
+  /**
+   * body slot content of the component
+   */
+  body: () => VNode[]
+}

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-02-10 10:16:38
+ * @LastEditTime: 2022-02-17 11:49:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\config-provider\src\index.ts
@@ -22,7 +22,11 @@ export default defineComponent({
       type: String,
       default: 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
     },
-    accessToken: String
+    accessToken: {
+      type: String,
+      default:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ'
+    }
   },
 
   setup(props, { slots }) {
@@ -30,3 +34,20 @@ export default defineComponent({
     return () => renderSlot(slots, 'default', { config: config?.value })
   }
 })
+
+export type VcConfigProviderProps = {
+  /**
+   * Locale Object.
+   */
+  locale?: Language
+  /**
+   * CesiumJS path for vue-cesium.
+   * Default value: https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js
+   */
+  cesiumPath?: string
+  /**
+   * Cesium Ion defaultAccessToken
+   * Default value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ
+   */
+  accessToken?: string
+}

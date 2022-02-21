@@ -3,7 +3,7 @@ import { useCommon, useLocale } from '@vue-cesium/composables'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { VcBtn, VcTooltip } from '@vue-cesium/components/ui'
 import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcBtnTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, reactive, ref } from 'vue'
 import VcViewer, { VcViewerProps } from '@vue-cesium/components/viewer'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -257,5 +257,64 @@ export default defineComponent({
   }
 })
 
-export type VcOverviewMapProps = ExtractPropTypes<typeof overviewProps>
+// export type VcOverviewMapProps = ExtractPropTypes<typeof overviewProps>
 // export type VcOverviewMapEmits = typeof emits
+export type VcOverviewMapProps = {
+  /**
+   * Specify the position of the VcOverviewMap.
+   * Default value: bottom-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcOverviewMap horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify the width of the overviewmap component.
+   * Default value: 150px
+   */
+  width?: string
+  /**
+   * Specify the height of the overviewmap component.
+   * Default value: 150px
+   */
+  height?: string
+  /**
+   * Specify the border of the overviewmap component.
+   * Default value: solid 4px rgb(255, 255, 255)
+   */
+  border?: string
+  /**
+   * Specify the border radius of the overviewmap component.
+   */
+  borderRadius?: string
+  /**
+   * Specify the toggle button options of the overviewmap component.
+   */
+  toggleOpts?: VcBtnTooltipProps & { show: boolean }
+  /**
+   * Specify the vc-viewer component options in the overviewmap component.
+   */
+  viewerOpts?: VcViewerProps
+  /**
+   * Triggers before the VcOverviewMap is loaded.
+   * @param instance
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcOverviewMap is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcOverviewMap is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export interface VcOverviewMapSlots {
+  /**
+   * Default slot content of the component
+   */
+  default: () => VNode[]
+}

@@ -27,31 +27,31 @@ Basic usage of drawing components.
     <vc-drawings
       ref="drawingsRef"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
+      :main-fab-opts="mainFabOpts"
       :offset="[20, 80]"
       :editable="editable"
-      :clampToGround="clampToGround"
-      @drawEvt="drawEvt"
-      @activeEvt="activeEvt"
-      @editorEvt="editorEvt"
-      @mouseEvt="mouseEvt"
+      :clamp-to-ground="clampToGround"
+      @draw-evt="drawEvt"
+      @active-evt="activeEvt"
+      @editor-evt="editorEvt"
+      @mouse-evt="mouseEvt"
       @ready="drawingsReadyDefault"
-      :pointDrawingOpts="pointDrawingOpts"
-      :polygonDrawingOpts="polygonDrawingOpts"
-      :regularDrawingOpts="regularDrawingOpts"
+      :point-drawing-opts="pointDrawingOpts"
+      :polygon-drawing-opts="polygonDrawingOpts"
+      :regular-drawing-opts="regularDrawingOpts"
     ></vc-drawings>
     <!-- Customize UI through slot -->
     <vc-drawings
       ref="drawingsCustomRef"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
+      :main-fab-opts="mainFabOpts"
       :offset="[0, 20]"
       :editable="editable"
-      :clampToGround="clampToGround"
+      :clamp-to-ground="clampToGround"
       @ready="drawingsReady"
-      :polylineDrawingOpts="polylineDrawingOpts"
-      :rectangleDrawingOpts="rectangleDrawingOpts"
-      :pinDrawingOpts="pinDrawingOpts"
+      :polyline-drawing-opts="polylineDrawingOpts"
+      :rectangle-drawing-opts="rectangleDrawingOpts"
+      :pin-drawing-opts="pinDrawingOpts"
     >
       <template #body>
         <div class="custom-drawings">
@@ -71,7 +71,7 @@ Basic usage of drawing components.
     </vc-drawings>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onTilesetReady"
+      @ready-promise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
       <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
@@ -233,30 +233,30 @@ Basic usage of drawing components.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| position | String | `'top-right'` | `optional` Specify the location of the drawing component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` Specify the offset based on the position. |
-| show | Boolean | `true` | `optional` Specify whether the drawn result is visible. |
-| mode | Number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| drawings | Array | `['pin', 'point', 'polyline', 'polygon', 'rectangle', 'circle', 'regular']` | `optional` Specify the drawing instance to be loaded. |
-| activeColor | String | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
-| editable | Boolean | `false` | `optional` Specify whether the drawing result can be edited. |
-| clampToGround | Boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
-| mainFabOpts | Object | | `optional` Specify the style options of the floating action button of the drawing component. |
-| pinActionOpts | Object | | `optional` Specify the style options of the pin drawing action button.|
-| pinDrawingOpts | Object | | `optional` Specify pin drawing parameters.|
-| pointActionOpts | Object | | `optional` Specify the style options of the poingt drawing action button.|
-| pointDrawingOpts | Object | | `optional` Specify point drawing parameters.|
-| polylineActionOpts | Object | | `optional` Specify the style options of the polyline drawing action button.|
-| polylineDrawingOpts | Object | | `optional` Specify the polyline drawing parameters.|
-| polygonActionOpts | Object | | `optional` Specify the style options of the polygon drawing action button.|
-| polygonDrawingOpts | Object | | `optional` Specify the polygon drawing parameters.|
-| rectangleActionOpts | Object | | `optional` Specify the style options of the rectangle drawing action button.|
-| rectangleDrawingOpts | Object | | `optional` Specify the rectangle drawing parameters.|
-| circleActionOpts | Object | | `optional` Specify the style options of the circle drawing action button.|
-| circleDrawingOpts | Object | | `optional` Specify the circle drawing parameters.|
-| regularActionOpts | Object | | `optional` Specify the style options of the regular drawing action button.|
-| regularDrawingOpts | Object | | `optional` Specify the regular drawing parameters.|
-| clearActionOpts | Object | | `optional` Specify the style options of the clear action button.|
+| position | string | `'top-right'` | `optional` Specify the location of the drawing component. |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` Specify the offset based on the position. |
+| show | boolean | `true` | `optional` Specify whether the drawn result is visible. |
+| mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
+| drawings | Array\<'pin' \| 'point' \| 'polyline' \| 'polygon' \| 'rectangle' \| 'regular' \| 'circle'\> | `['pin', 'point', 'polyline', 'polygon', 'rectangle', 'circle', 'regular']` | `optional` Specify the drawing instance to be loaded. |
+| activeColor | string | `'positive'` | `optional` Specify the color when the drawing instance is activated. |
+| editable | boolean | `false` | `optional` Specify whether the drawing result can be edited. |
+| clampToGround | boolean | `false` | `optional` Specify whether the drawing result object is attached to the ground or 3dtiles. Only line and area objects work. |
+| mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the drawing component. |
+| pinActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the pin drawing action button.|
+| pinDrawingOpts | VcDrawingOpts | | `optional` Specify pin drawing options.|
+| pointActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the poingt drawing action button.|
+| pointDrawingOpts | VcDrawingOpts | | `optional` Specify point drawing options.|
+| polylineActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the polyline drawing action button.|
+| polylineDrawingOpts | VcDrawingOpts | | `optional` Specify the polyline drawing options.|
+| polygonActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the polygon drawing action button.|
+| polygonDrawingOpts | VcDrawingOpts | | `optional` Specify the polygon drawing options.|
+| rectangleActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the rectangle drawing action button.|
+| rectangleDrawingOpts | VcDrawingOpts | | `optional` Specify the rectangle drawing options.|
+| circleActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the circle drawing action button.|
+| circleDrawingOpts | VcDrawingOpts | | `optional` Specify the circle drawing options.|
+| regularActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the regular drawing action button.|
+| regularDrawingOpts | VcDrawingOpts | | `optional` Specify the regular drawing options.|
+| clearActionOpts | VcActionTooltipProps | | `optional` Specify the style options of the clear action button.|
 
 :::tip
 
@@ -320,25 +320,26 @@ Tip: The drawing component is mainly composed of two parts: (1) the floating act
 
 :::tip
 
-Tip: Each drawing button (FabAction) corresponds to the drawing parameters xxxDrawingOpts, used to customize drawing objects.
+Tip: Each drawing button (FabAction) corresponds to the drawing options xxxDrawingOpts, used to customize drawing objects.
 
 See: [defaultProps](https://github.com/zouyaoji/vue-cesium/blob/dev/packages/components/drawings/src/defaultProps.ts)
 
-The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default parameters of drawing buttons` and `default parameters of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointDrawingOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
+The parameter configuration of each drawing result is too long to list here. If you need to customize it, please open the console output on the current document page to view `default options of drawing buttons` and `default options of drawing results` . These are the `actionOpts` and `cmpOpts` attributes. For example, the structure of the parameter object of `pointDrawingOpts` is the same as the structure of `cmpOpts` in which the `name` is the item of `point` in the console output of `Default Drawing Options:`. The `pointActionOpts` parameter object is the same as the `actionOpts` structure where the `name` is the `point` item in the console output `Default Drawing Options:`. Of course, you can also refer to this output in your own code to view.
 
 :::
 
 ### Events
 
-| Name       | Parameters                              | Description                                                               |
-| ---------- | --------------------------------------- | ------------------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                               |
-| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.                    |
-| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                              |
-| drawEvt    | (drawParam, viewer)                     | Triggered when drawing.                                                   |
-| activeEvt  | (activeParam, viewer)                   | Triggered when the drawing action is switched.                            |
-| editorEvt  | (editParam, viewer)                     | Triggered when the edit button is clicked.                                |
-| mouseEvt   | (mouseParam, viewer)                    | Triggered when the mouse is mouse over or mouse out on the drawing point. |
+| Name       | Parameters                                       | Description                                                              |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------ |
+| beforeLoad | (instance: VcComponentInternalInstance)          | Triggers before the cesiumObject is loaded.                              |
+| ready      | (readyObj: VcReadyObject)                        | Triggers when the cesiumObject is successfully loaded.                   |
+| destroyed  | (instance: VcComponentInternalInstance)          | Triggers when the cesiumObject is destroyed.                             |
+| drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggers when drawing.                                                   |
+| activeEvt  | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | Triggers when the drawing action is switched.                            |
+| editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
+| fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
 
 ### Slots
 

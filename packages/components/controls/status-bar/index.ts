@@ -231,6 +231,9 @@ export default defineComponent({
     }
 
     const toggleUseProjection = () => {
+      if (!props.useProjection) {
+        return
+      }
       $(tooltipRef)?.hide()
       if (props.showMouseInfo) {
         mouseCoordsInfo.value?.toggleUseProjection()
@@ -457,7 +460,7 @@ export default defineComponent({
           inner.push(createCommentVNode('v-if'))
         }
 
-        if (isPlainObject(props.tooltip) && props.showMouseInfo) {
+        if (isPlainObject(props.tooltip) && props.showMouseInfo && props.useProjection) {
           inner.push(
             h(
               VcTooltip,
@@ -550,9 +553,14 @@ export type VcStatusBarProps = {
    */
   showPerformanceInfo?: boolean
   /**
+   * Specify whether the latitude and longitude coordinates on the information bar can be switched to UTM projected coordinates.
+   * Default value: true
+   */
+  useProjection?: boolean
+  /**
    * The tooltip parameter.
    */
-  tooltip?: VcTooltipProps
+  tooltip?: false | VcTooltipProps
   /**
    * Triggers before the VcStatusBar is loaded.
    */

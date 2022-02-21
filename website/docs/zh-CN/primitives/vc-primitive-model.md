@@ -14,7 +14,7 @@
     <vc-primitive-model
       ref="primitive"
       :url="url"
-      @readyPromise="onReadyPromise"
+      @ready-promise="onReadyPromise"
       :modelMatrix="modelMatrix"
       :scale="10000"
       :minimumPixelSize="128"

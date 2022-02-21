@@ -10,3 +10,5 @@ const _ConfigProvider = ConfigProvider as SFCWithInstall<typeof ConfigProvider>
 
 export default _ConfigProvider
 export const VcConfigProvider = _ConfigProvider
+
+export * from './src'

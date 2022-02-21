@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-13 23:22:35
+ * @LastEditTime: 2022-02-17 21:15:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\billboard\index.ts
@@ -186,5 +186,5 @@ export type VcGraphicsBillboardProps = {
   /**
    * Triggers when a property or sub-property is changed or modified.
    */
-  definitionChanged?: (property: Cesium.Property) => void
+  onDefinitionChanged?: (property: Cesium.Property) => void
 }
