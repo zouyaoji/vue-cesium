@@ -11,7 +11,7 @@
 
 加载分析工具组件。包含通视分析、可视域分析（3DTiles)。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 此组件需要额外引入样式文件: `import 'vue-cesium/theme-default/index.css';`
 
 ### 基础用法
 
