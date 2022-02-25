@@ -34,7 +34,7 @@
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
 
-## Getting Started
+## Getting Started | [简体中文](./README.zh.md)
 
 You can find for more details, API, and other docs on [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 
