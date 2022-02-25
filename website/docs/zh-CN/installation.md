@@ -21,15 +21,15 @@ VueCesium 可以在支持 [ES2018](https://caniuse.com/?feats=mdn-javascript_bui
 
 ## 使用包管理器安装
 
-**我们建议您使用包管理器（NPM，[Yarn](https://classic.yarnpkg.com/lang/en/)，[pnpm](https://pnpm.io/)）安装 VueCesium**，然后您就可以使用打包工具，例如 [vite](https://vitejs.dev), [webpack](https://webpack.js.org/)
+我们建议您<span style="color: rgb(66 184 131);"><b>使用包管理器</b></span>（npm，[yarn](https://classic.yarnpkg.com/lang/en/)，[pnpm](https://pnpm.io/zh/)）安装 `VueCesium`，然后您就可以使用打包工具，例如 [vite](https://vitejs.dev), [webpack](https://webpack.js.org/)
 
 ```shell
 # 选择一个你喜欢的包管理器
 
-# NPM
+# npm
 $ npm install vue-cesium@next --save
 
-# Yarn
+# yarn
 $ yarn add vue-cesium@next
 
 # pnpm

@@ -1,6 +1,6 @@
 # 快速开始
 
-VueCesium 完成了 CesiumJS 的 Vue 组件化，你可以在你的 Vue 项目中使用这个库提供的各个组件。本库本身不含 CesiumJS，所以在引入时通常需要配置 CesiumJS 本身，见 [配置 VueCesium](#配置 VueCesium)。
+VueCesium 完成了 CesiumJS 的 Vue 组件化，你可以在你的 Vue 项目中使用这个库提供的各个组件。本库本身不含 CesiumJS，所以在引入时通常需要配置 CesiumJS 本身，见 [配置 VueCesium（本篇下文）](./#/zh-CN/component/quickstart#pei-zhi-vuecesium)。
 
 接下来将介绍如何在使用 typescript 的 Vue3 项目中引入 VueCesium。
 
@@ -151,13 +151,23 @@ VueCesium 可能并不完全能提供你所需的功能，但是保留了访问�
 
 # 使用模板
 
-我们提供了通用的 [VueCLI 4.x + Vue3Js + Vuex4 + VueRouter4 项目模板](https://github.com/zouyaoji/vue-cesium-starter)，你可以直接下载使用。
+## 更喜欢 VueCLI
+
+我们提供了通用的 [VueCLI4 + Vue3Js + Vuex4 + VueRouter4 项目模板](https://github.com/zouyaoji/vue-cesium-starter)，你可以直接下载使用。
+
+## 试试 Vite
 
 另外我们还提供了 [Vite2 + Vue3Ts 模板](https://github.com/zouyaoji/vue-cesium-vite-starter)。
 
+这里还有一个 [Vite2 + Vue3Ts + Vuex4 + VueRouter4 综合案例](https://github.com/zouyaoji/vue-cesium-demo)，同样可下载使用。
+
+## 桌面开发
+
 如果你对桌面应用感兴趣，你可以参考 [Vite2 + Vue3Ts + Electron13 模板](https://github.com/zouyaoji/vue-cesium-electron-vite-starter)。
 
-这里还有一个 [Vue3Ts + VueRouter4 + Vuex4 + Vite2 综合性案例](https://github.com/zouyaoji/vue-cesium-demo)，同样可下载使用。
+## 关于 Vue2
+
+由于 Vue2 将逐渐进入维护期，所以劳请自行创建项目使用 `VueCesium`.
 
 # 开始使用
 
