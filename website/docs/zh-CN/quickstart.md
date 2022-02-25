@@ -70,16 +70,21 @@ app.use(VueCesium, {
 
 ## 导入样式
 
-我们**强烈建议直接引入全部的样式文件**，虽然这看起来会增大整个应用的体积，但这样做可以避免引入额外的打包工具插件（减少负担），你还可以通过 [CDN](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)
-的方式来加载样式文件，从而使得你的应用加载更快。
+我们强烈建议<span style="color: rgb(66 184 131);"><b>直接引入全部的样式文件</b></span>，虽然这看起来会增大整个应用的体积，但这样做可以避免引入额外的打包工具插件（减少负担）。
 
-通过 JS 的方式引入
+样式的导入可确保各个有自己 UI 的功能组件显示正常。
+
+你还可以通过 [CDN](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)
+的方式来加载样式文件，从而使得你的应用加载更快。下面列举两个引入方式。
+
+- 通过 ESModule 的方式引入
 
 ```typescript
+// main.ts
 import 'vue-cesium/dist/index.css'
 ```
 
-通过 HTML 的头文件引入
+- 通过 CDN 引入
 
 ```html
 <!-- index.html -->
