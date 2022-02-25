@@ -21,7 +21,7 @@ app.mount('#app')
 
 或者在 `vc-viewer` 组件上将 `cesiumPath` 地址指定为 mars3d 库的**目录**。
 
-`vc-viewer` 加载成功会返回 { Cesium, viewer, map }, 通过该 `map` 使用 [mars3d 教程](http://mars3d.cn/doc) 和 [mars3d API](http://mars3d.cn/api/) 进行相关开发即可， 如下面的例子：
+`vc-viewer` 加载成功会返回 { Cesium, viewer, map }, 通过该 `map` 使用 [mars3d 教程](http://mars3d.cn/doc.html) 和 [mars3d API](http://mars3d.cn/api/) 进行相关开发即可， 如下面的例子：
 
 ### 基础用法
 
@@ -131,4 +131,4 @@ app.mount('#app')
 
 ### 参考
 
-- Mars3D 平台官网： **[http://mars3d.cn](http://mars3d.cn/example)**
+- Mars3D 平台官网： **[http://mars3d.cn](http://mars3d.cn/example.html)**
