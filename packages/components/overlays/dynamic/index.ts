@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-01-19 23:12:03
+ * @LastEditTime: 2022-02-20 00:53:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
@@ -71,7 +71,8 @@ const emits = {
   'update:clockStep': (clockStep: number | Cesium.ClockStep) => true,
   'update:multiplier': (multiplier: number) => true,
   'update:startTime': (startTime: Cesium.JulianDate) => true,
-  'update:stopTime': (stopTime: Cesium.JulianDate) => true
+  'update:stopTime': (stopTime: Cesium.JulianDate) => true,
+  onStop: (clock: Cesium.Clock) => true
 }
 export default defineComponent({
   name: 'VcOverlayDynamic',
