@@ -2,6 +2,8 @@
 
 ### 3.0.10
 
+_2022-02-26_
+
 #### Bug fixes
 
 - `useVueCesium` method is not available outside `vc-viewer`.
@@ -9,6 +11,8 @@
 - `vc-measurements` height measurement error.
 - `vc-measurements`, `vc-drawings`, `vc-analyses` floating buttons cannot be displayed or hidden when they are initialized to be hidden.
 - The clampToGround property of `vc-measurements` and `vc-drawings` is invalid.
+- Failed to load latest dc-sdk.
+- When the object property in the `entities` array of the data source component is Function, it cannot be converted to the Cesium.CallbackProperty property.
 
 ### 3.0.9
 

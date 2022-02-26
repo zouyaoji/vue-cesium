@@ -280,9 +280,7 @@ Basic usage of measurement components.
 | offset | [number, number] | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
 | mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| measurements | Array\<
-    'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle'
-  \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
+| measurements | Array\<'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle' \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
 | activeColor | string | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
 | editable | boolean | `false` | `optional` Specify whether the measurement result can be edited. |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the measuring component. |

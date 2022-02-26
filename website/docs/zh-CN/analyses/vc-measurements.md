@@ -279,9 +279,7 @@ ctrl + 右键取消绘制。
 | offset | [number, number] | `[0, 0]` | `optional` 指定量算组件基于位置的偏移量。 |
 | show | boolean | `true` | `optional` 指定绘制的量算结果是否可见。 |
 | mode | number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
-| measurements | Array\<
-    'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle'
-  \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` 指定要加载的量算实例。 |
+| measurements | Array\<'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle'\> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` 指定要加载的量算实例。 |
 | activeColor | string | `'positive'` | `optional` 指定量算实例激活时的颜色。 |
 | editable | boolean | `false` | `optional` 指定量算结果对象是否可编辑。 |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定量算组件浮动按钮的样式风格选项。 |

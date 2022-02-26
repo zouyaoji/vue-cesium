@@ -2,6 +2,8 @@
 
 ### 3.0.10
 
+_2022-02-26_
+
 #### Bug 修复
 
 - `useVueCesium` 方法在 `vc-viewer` 外获取不了的问题。
@@ -9,6 +11,8 @@
 - `vc-measurements` 高度量算报错问题。
 - `vc-measurements`、`vc-drawings`、`vc-analyses` 浮动按钮初始化为不显示时，无法显隐的问题。
 - `vc-measurements`、`vc-drawings` 贴地模式下面对象未贴地问题。
+- 加载 dc-sdk(2.10.0 版本) 报错问题。
+- 数据源组件 `entities` 数组中有对象属性为 Function 类型时无法转换为 Cesium.CallbackProperty 属性问题。
 
 ### 3.0.9
 

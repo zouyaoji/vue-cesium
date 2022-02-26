@@ -18,7 +18,7 @@ GeoJson 数据源组件的基础用法。
       :show="show"
       stroke="red"
       @click="onClicked"
-      clampToGround
+      :entities="entities"
     ></vc-datasource-geojson>
     <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu
@@ -76,7 +76,6 @@ GeoJson 数据源组件的基础用法。
       }
       const onDatasourceReady = ({ Cesium, viewer, cesiumObject }) => {
         viewer.zoomTo(cesiumObject)
-        viewer.scene.globe.depthTestAgainstTerrain = true
       }
 
       return {

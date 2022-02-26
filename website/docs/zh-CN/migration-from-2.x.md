@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-25 13:20:33
- * @LastEditTime: 2022-01-26 17:15:58
+ * @LastEditTime: 2022-02-26 10:59:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\migration-from-2.x.md
@@ -17,15 +17,15 @@
 
 ### vc-viewer
 
-#### Attributes
+#### Props
 
 - `logo` -> `showCredit`
 
-### vc-imagery-provider-arcgis-mapserver
+### vc-provider-imagery-arcgis-mapserver
 
 - Renamed to `vc-imagery-provider-arcgis`
 
-### vc-terrain-provider-arcgis-tiled-elevation
+### vc-provider-terrain-arcgis-tiled-elevation
 
 - Renamed to `vc-terrain-provider-arcgis`
 
@@ -49,7 +49,7 @@
 
 - Renamed to `vc-imagery-provider-singletile`
 
-### vc-primitive-ground-polyline
+### vc-primitive-polyline-ground
 
 - Renamed to `vc-primitive-ground-polyline`
 

@@ -1,14 +1,14 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 00:24:46
- * @LastEditTime: 2022-02-15 21:15:32
+ * @LastEditTime: 2022-02-21 13:58:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\ad-sense.vue
 -->
 <template>
   <div class="adsense-content">
-    <div class="adsense-title">赞助商</div>
+    <div class="adsense-title">{{ sponsor }}</div>
     <div style="padding: 0 1.5rem">
       <ins
         class="adsbygoogle"
@@ -29,6 +29,9 @@ export default {
     adSlot() {
       const cnHref = href.indexOf('vue-cesium.songluck.com') > -1
       return cnHref ? '7202599371' : '8270352624'
+    },
+    sponsor() {
+      return this.$route.path.indexOf('/zh-CN/') !== -1 ? '赞助商' : 'Sponsor'
     }
   },
   mounted() {
