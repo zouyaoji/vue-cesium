@@ -49,9 +49,9 @@ export default defineComponent({
     const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
     const circleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
     const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts))
-    const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts))
-    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts))
-    const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts))
+    const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.regularDrawingOpts, props.regularDrawingOpts))
+    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pinActionOpts, props.pinActionOpts))
+    const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.pinDrawingOpts, props.pinDrawingOpts))
 
     options.pointActionOpts = pointActionOpts
     options.pointDrawingOpts = pointDrawingOpts
