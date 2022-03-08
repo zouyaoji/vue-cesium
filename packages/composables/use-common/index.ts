@@ -59,7 +59,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (parentVcInstance.nowaiting) {
       return true
     } else {
-      await (parentVcInstance.proxy as VcComponentPublicInstance).createPromise
+      await (parentVcInstance.proxy as VcComponentPublicInstance).creatingPromise
     }
   }
 
@@ -225,7 +225,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
             async val => {
               // Wait for child components to be created.
               // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
-              await (vcInstance.proxy as VcComponentPublicInstance).createPromise
+              await (vcInstance.proxy as VcComponentPublicInstance).creatingPromise
               const { cesiumObject } = vcInstance
               // Get the writability of the current cesiumobject or the props on its prototype chain to
               // detect whether the component property responds dynamically or reloads the component when the property changes.
@@ -320,7 +320,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   // lifecycle
-  const createPromise = new Promise<VcReadyObject | boolean>((resolve, reject) => {
+  const creatingPromise = new Promise<VcReadyObject | boolean>((resolve, reject) => {
     try {
       let isLoading = false
       if ($services.viewer) {
@@ -355,10 +355,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // expose public methods
   Object.assign(vcInstance.proxy, {
-    createPromise: createPromise,
-    load: load,
-    unload: unload,
-    reload: reload,
+    creatingPromise,
+    load,
+    unload,
+    reload,
+    getCreatingPromise: () => creatingPromise,
     getCesiumObject: () => vcInstance.cesiumObject
   })
 
@@ -367,7 +368,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     load,
     unload,
     reload,
-    createPromise,
+    creatingPromise,
     transformProp,
     transformProps,
     unwatchFns,

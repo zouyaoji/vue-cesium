@@ -30,7 +30,7 @@ export const viewerProps = defaultProps
 export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   let createResolve, reject
-  const createPromise = new Promise<VcReadyObject>((_resolve, _reject) => {
+  const creatingPromise = new Promise<VcReadyObject>((_resolve, _reject) => {
     createResolve = _resolve
     reject = _reject
   })
@@ -1297,8 +1297,8 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         get postProcessStages() {
           return vcInstance.viewer?.postProcessStages
         },
-        get viewerCreatePromise() {
-          return createPromise
+        get creatingPromise() {
+          return creatingPromise
         }
       }
     )
@@ -1336,7 +1336,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     reload,
     getServices,
     viewerRef,
-    createPromise
+    creatingPromise
   }
 }
 

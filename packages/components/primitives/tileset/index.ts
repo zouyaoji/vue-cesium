@@ -216,7 +216,7 @@ export default defineComponent({
     instance.cesiumClass = 'Cesium3DTileset'
     instance.cesiumEvents = ['allTilesLoaded', 'initialTilesLoaded', 'loadProgress', 'tileFailed', 'tileLoad', 'tileUnload', 'tileVisible']
     usePrimitives(props, ctx, instance)
-    ;(instance.proxy as VcComponentPublicInstance).createPromise.then(obj => {
+    ;(instance.proxy as VcComponentPublicInstance).creatingPromise.then(obj => {
       const tileset = obj.cesiumObject as Cesium.Cesium3DTileset
       instance.removeCallbacks.push(tileset.tileVisible.addEventListener(updateTile))
     })

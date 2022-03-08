@@ -62,7 +62,7 @@ export default defineComponent({
     const canRender = ref(false)
 
     const vcParent = getVcParentInstance(instance)
-    ;(vcParent.proxy as VcComponentPublicInstance).createPromise?.then(() => {
+    ;(vcParent.proxy as VcComponentPublicInstance).creatingPromise?.then(() => {
       canRender.value = true
     })
 
