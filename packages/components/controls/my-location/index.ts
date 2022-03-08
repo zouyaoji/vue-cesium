@@ -1,5 +1,5 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
-import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import type { CSSProperties, VNode } from 'vue'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import {
   VcBtn,
@@ -13,7 +13,8 @@ import {
   VcSpinnerBars,
   VcTooltipProps
 } from '@vue-cesium/components/ui'
-import type { VcLocationEvt, VcColor, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcTooltipRef, VcBtnRef } from '@vue-cesium/components/ui'
+import type { VcLocationEvt, VcColor, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { gcj02towgs84 } from '@vue-cesium/utils/coordtransform'
@@ -32,7 +33,7 @@ export default defineComponent({
   name: 'VcMyLocation',
   props: myLocationProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcMyLocationProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMyLocation'
@@ -43,9 +44,9 @@ export default defineComponent({
     }
     const { $services } = commonState
     const { t } = useLocale()
-    const rootRef = ref<HTMLElement | null>(null)
-    const tooltipRef = ref<typeof VcTooltip | null>(null)
-    const btnRef = ref<typeof VcBtn | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const tooltipRef = ref<VcTooltipRef>(null)
+    const btnRef = ref<VcBtnRef>(null)
     const positioning = ref(false)
     const positionState = usePosition(props, $services)
     const parentInstance = getVcParentInstance(instance)
@@ -261,7 +262,7 @@ export default defineComponent({
           ...detail
         },
         description:
-          props.description?.call(position, detail) ||
+          props.description?.call(this, position, detail) ||
           describeWithoutUnderscores({
             [t('vc.navigation.myLocation.lng')]: longitude,
             [t('vc.navigation.myLocation.lat')]: latitude,
@@ -471,7 +472,6 @@ export default defineComponent({
   }
 })
 
-// export type VcMyLocationProps = ExtractPropTypes<typeof myLocationProps>
 export type VcMyLocationEmits = typeof emits
 export type VcMyLocationProps = {
   /**
@@ -622,3 +622,5 @@ export type VcMyLocationProps = {
    */
   onLocationEvt?: (evt: VcLocationEvt) => void
 }
+
+export type VcMyLocationRef = VcComponentPublicInstance<VcMyLocationProps>

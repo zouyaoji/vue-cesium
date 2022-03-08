@@ -1,9 +1,10 @@
-import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
+import type { CSSProperties, VNode } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, nextTick, ref, h, watch, reactive } from 'vue'
-import type { VcPrintEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcPrintEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { captureScreenshot } from '@vue-cesium/utils/cesium-helpers'
+import type { VcTooltipRef, VcBtnRef } from '@vue-cesium/components/ui'
 import { VcBtn, VcTooltip, VcIcon, VcTooltipProps } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import createPrintView from './createPrintView'
@@ -16,12 +17,13 @@ const emits = {
   ...commonEmits,
   printEvt: (evt: VcPrintEvt) => true
 }
+
 export const printProps = defaultProps
 export default defineComponent({
   name: 'VcPrint',
   props: printProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcPrintProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcPrint'
@@ -32,9 +34,9 @@ export default defineComponent({
     }
     const { t } = useLocale()
     const { $services } = commonState
-    const rootRef = ref<HTMLElement | null>(null)
-    const tooltipRef = ref<typeof VcTooltip | null>(null)
-    const btnRef = ref<typeof VcBtn | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const tooltipRef = ref<VcTooltipRef>(null)
+    const btnRef = ref<VcBtnRef>(null)
     const positionState = usePosition(props, $services)
     const creatingPrintView = ref(false)
     const parentInstance = getVcParentInstance(instance)
@@ -286,7 +288,6 @@ export default defineComponent({
   }
 })
 
-// export type VcPrintProps = ExtractPropTypes<typeof printProps>
 export type VcPrintEmits = typeof emits
 export type VcPrintProps = {
   /**
@@ -377,3 +378,5 @@ export type VcPrintProps = {
    */
   onPrintEvt?: (evt: VcPrintEvt) => void
 }
+
+export type VcPrintRef = VcComponentPublicInstance<VcPrintProps>

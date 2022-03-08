@@ -1,7 +1,7 @@
-import type { ExtractPropTypes, VNode, CSSProperties, PropType } from 'vue'
+import type { VNode, CSSProperties, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, ref, computed, nextTick, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
-import type { VcCompassEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
@@ -42,7 +42,7 @@ export default defineComponent({
   name: 'VcCompassSm',
   props: compassSmProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcCompassSmProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcCompassSm'
@@ -55,8 +55,8 @@ export default defineComponent({
     const { $services } = commonState
     const compassState = useCompass(props, ctx, instance)
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement | null>(null)
-    const outerRingRef = ref<HTMLElement | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const outerRingRef = ref<HTMLElement>(null)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
@@ -298,3 +298,5 @@ export type VcCompassSmProps = {
    */
   compassEvt?: (evt: VcCompassEvt) => void
 }
+
+export type VcCompassSmRef = VcComponentPublicInstance<VcCompassSmProps>

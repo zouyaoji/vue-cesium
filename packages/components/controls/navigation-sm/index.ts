@@ -1,12 +1,14 @@
-import type { ExtractPropTypes, CSSProperties, VNode, PropType } from 'vue'
+import type { CSSProperties, VNode, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
-import type { VcCompassEvt, VcComponentInternalInstance, VcReadyObject, VcZoomEvt } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
-import VcCompassSm, { VcCompassSmProps } from './compass-sm'
-import VcZoomControlSm, { VcZoomControlSmProps } from './zoom-control-sm'
+import VcCompassSm from './compass-sm'
+import VcZoomControlSm from './zoom-control-sm'
+import type { VcZoomControlSmProps, VcZoomControlSmRef } from './zoom-control-sm'
+import type { VcCompassSmProps, VcCompassSmRef } from './compass-sm'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 const compassOptsDefault = {
@@ -52,7 +54,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: navigationSmProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcNavigationSmProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcNavigationSm'
@@ -64,9 +66,9 @@ export default defineComponent({
     const canRender = ref(false)
     const { $services } = commonState
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement | null>(null)
-    const compassRef = ref<typeof VcCompassSm | null>(null)
-    const zoomControlRef = ref<typeof VcZoomControlSm | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const compassRef = ref<VcCompassSmRef>(null)
+    const zoomControlRef = ref<VcZoomControlSmRef>(null)
     const rootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
     // watch
@@ -198,7 +200,6 @@ export default defineComponent({
   }
 })
 
-// export type VcNavigationSmProps = ExtractPropTypes<typeof navigationSmProps>
 export type VcNavigationSmEmits = typeof emits
 export type VcNavigationSmProps = {
   /**
@@ -247,3 +248,5 @@ export interface VcNavigationSmSlots {
    */
   default: () => VNode[]
 }
+
+export type VcNavigationSmRef = VcComponentPublicInstance<VcNavigationSmProps>

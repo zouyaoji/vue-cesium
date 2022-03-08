@@ -74,11 +74,11 @@ export default {
   },
   maximumHeight: Number,
   hpr: {
-    type: Array as PropType<Array<number>>,
+    type: Array as PropType<unknown> as PropType<[number, number, number]>,
     default: () => [0, 0, 3000]
   },
-  customAPI: Function,
-  description: Function,
+  customAPI: Function as PropType<(errorCallback) => { lng: number; lat: number }>,
+  description: Function as PropType<(position, detail) => string>,
   ...positionProps,
   icon: {
     type: String,

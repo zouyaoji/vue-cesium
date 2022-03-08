@@ -1,8 +1,8 @@
 import { ref } from 'vue'
-import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import CameraFlightPath from './CameraFlightPath'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
@@ -37,8 +37,8 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   let rotateInitialCameraAngle = 0
   let rotateInitialCameraDistance: any = {}
 
-  const iconOuterTooltipRef = ref<typeof VcTooltip | null>(null)
-  const iconInnerTooltipRef = ref<typeof VcTooltip | null>(null)
+  const iconOuterTooltipRef = ref<VcTooltipRef>(null)
+  const iconInnerTooltipRef = ref<VcTooltipRef>(null)
 
   // methods
   const handleMouseDown = (e: MouseEvent | TouchEvent) => {

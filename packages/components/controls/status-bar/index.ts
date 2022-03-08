@@ -1,11 +1,12 @@
-import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import type { VNode, CSSProperties } from 'vue'
 import { defineComponent, getCurrentInstance, nextTick, ref, reactive, h, createCommentVNode, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcStatusBarEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcStatusBarEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import MouseCoords, { extendForMouseCoords } from './MouseCoords'
 import throttle from '@vue-cesium/utils/private/throttle'
 import { useCommon, useLocale } from '@vue-cesium/composables'
+import type { VcBtnRef, VcTooltipRef } from '@vue-cesium/components/ui'
 import { VcBtn, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import defaultProps from './defaultProps'
 import { isPlainObject } from '@vue-cesium/utils/util'
@@ -21,7 +22,7 @@ export default defineComponent({
   name: 'VcStatusBar',
   props: statusBarProps,
   emits: emits,
-  setup(props: ExtractPropTypes<typeof defaultProps>, ctx) {
+  setup(props: VcStatusBarProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcStatusBar'
@@ -32,8 +33,8 @@ export default defineComponent({
     }
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
-    const rootRef = ref<typeof VcBtn | null>(null)
-    const tooltipRef = ref<typeof VcTooltip | null>(null)
+    const rootRef = ref<VcBtnRef>(null)
+    const tooltipRef = ref<VcTooltipRef>(null)
     const { t } = useLocale()
 
     let lastMouseX = -1
@@ -198,8 +199,10 @@ export default defineComponent({
     }
 
     const onMouseMove = e => {
-      const { Cartesian2 } = Cesium
+      const { Cartesian2, SceneMode } = Cesium
       const { viewer } = $services
+
+      if (viewer.scene.mode === SceneMode.MORPHING) return
 
       const clientX = e.type === 'mousemove' || e.type === 'wheel' ? e.clientX : e.changedTouches[0].clientX
       const clientY = e.type === 'mousemove' || e.type === 'wheel' ? e.clientY : e.changedTouches[0].clientY
@@ -241,7 +244,11 @@ export default defineComponent({
     }
 
     // expose public methods
-    Object.assign(instance.proxy, { mouseCoordsInfo, cameraInfo, performanceInfo })
+    Object.assign(instance.proxy, {
+      getMouseCoordsInfo: () => mouseCoordsInfo.value,
+      getCameraInfo: () => cameraInfo,
+      getPerformanceInfo: () => performanceInfo
+    })
 
     return () => {
       if (canRender.value) {
@@ -493,10 +500,9 @@ export default defineComponent({
   }
 })
 
-// export type VcStatusBarProps = ExtractPropTypes<typeof statusBarProps>
 export type VcStatusBarEmits = typeof emits
 
-export type VcStatusBarProps = {
+export interface VcStatusBarProps {
   /**
    * Specify the position of the VcStatusBar.
    * Default value: bottom-right
@@ -577,4 +583,25 @@ export type VcStatusBarProps = {
    * Triggers when the information changed.
    */
   onStatusBarEvt?: (evt: VcStatusBarEvt) => void
+}
+
+export interface VcStatusBarRef extends VcComponentPublicInstance<VcStatusBarProps> {
+  /**
+   * Get the mouseCoords info.
+   */
+  getMouseCoordsInfo: () => MouseCoords
+  /**
+   * Get the camera info.
+   */
+  getCameraInfo: () => {
+    heading: string
+    pitch: string
+    roll: string
+    height: string
+    level: string
+  }
+  /**
+   * Get the performance info.
+   */
+  getPerformanceInfo: () => { fps: string; ms: string }
 }

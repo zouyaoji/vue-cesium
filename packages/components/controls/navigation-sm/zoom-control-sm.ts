@@ -1,6 +1,6 @@
-import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import type { VNode, CSSProperties } from 'vue'
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
-import type { VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -41,10 +41,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcZoomControlSm'
     instance.cesiumEvents = []
-    const rootRef = ref<HTMLElement | null>(null)
-    const zoomInRef = ref<HTMLElement | null>(null)
-    const zoomBarRef = ref<HTMLElement | null>(null)
-    const zoomOutRef = ref<HTMLElement | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const zoomInRef = ref<HTMLElement>(null)
+    const zoomBarRef = ref<HTMLElement>(null)
+    const zoomOutRef = ref<HTMLElement>(null)
     const parentInstance = getVcParentInstance(instance)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)
@@ -232,7 +232,6 @@ export default defineComponent({
   }
 })
 
-// export type VcZoomControlSmProps = ExtractPropTypes<typeof zoomControlSmProps>
 export type VcZoomControlSmEmits = typeof emits
 export type VcZoomControlSmProps = {
   /**
@@ -259,3 +258,5 @@ export type VcZoomControlSmProps = {
    */
   tooltip?: false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string })
 }
+
+export type VcZoomControlSmRef = VcComponentPublicInstance<VcZoomControlSmProps>

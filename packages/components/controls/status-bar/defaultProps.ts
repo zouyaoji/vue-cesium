@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-17 14:47:06
+ * @LastEditTime: 2022-03-05 10:33:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\status-bar\defaultProps.ts
@@ -27,12 +27,12 @@ export default {
     default: '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs'
   },
   position: {
-    type: String,
+    type: String as PropType<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'>,
     default: 'bottom-right',
     validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
   },
   offset: {
-    type: Array,
+    type: Array as PropType<unknown> as PropType<[number, number]>,
     validator: v => v.length === 2
   },
   color: {

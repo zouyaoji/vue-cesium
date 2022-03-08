@@ -1,24 +1,26 @@
-import type { CSSProperties, ExtractPropTypes } from 'vue'
+import type { CSSProperties } from 'vue'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, h, nextTick, reactive, ref, watch } from 'vue'
 import { $, getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcDistanceLegendEvt, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcDistanceLegendEvt, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import throttle from '@vue-cesium/utils/private/throttle'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { VcBtn } from '@vue-cesium/components/ui'
+import type { VcBtnRef } from '@vue-cesium/components/ui'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 const emits = {
   ...commonEmits,
   distanceLegendEvt: (evt: VcDistanceLegendEvt) => true
 }
+
 export const distanceLegendProps = defaultProps
 export default defineComponent({
   name: 'VcDistanceLegend',
   props: distanceLegendProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcDistanceLegendProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcDistanceLegend'
@@ -29,7 +31,7 @@ export default defineComponent({
     }
     const parentInstance = getVcParentInstance(instance)
     const { $services } = commonState
-    const rootRef = ref<typeof VcBtn>(null)
+    const rootRef = ref<VcBtnRef>(null)
     const distanceLabel = ref<string>('')
     const positionState = usePosition(props, $services)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
@@ -236,7 +238,6 @@ const distances = [
   2000000, 3000000, 5000000, 10000000, 20000000, 30000000, 50000000
 ]
 
-// export type VcDistanceLegendProps = ExtractPropTypes<typeof distanceLegendProps>
 export type VcDistanceLegendEmits = typeof emits
 export type VcDistanceLegendProps = {
   /**
@@ -286,3 +287,5 @@ export type VcDistanceLegendProps = {
    */
   onDistanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
 }
+
+export type VcDistanceLegendRef = VcComponentPublicInstance<VcDistanceLegendProps>

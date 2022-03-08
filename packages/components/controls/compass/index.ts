@@ -1,11 +1,12 @@
-import type { ExtractPropTypes, VNode } from 'vue'
+import type { VNode } from 'vue'
 import { defineComponent, getCurrentInstance, ref, computed, nextTick, CSSProperties, watch, reactive, createCommentVNode, h } from 'vue'
 import usePosition from '@vue-cesium/composables/private/use-position'
-import type { VcCompassEvt, VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcCompassEvt, VcBtnTooltipProps, VcComponentInternalInstance, VcReadyObject, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { defaultProps, defaultOptions } from './defaultProps'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
+import type { VcBtnRef } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import useCompass from './use-compass'
 import { commonEmits } from '@vue-cesium/utils/emits'
@@ -19,7 +20,7 @@ export default defineComponent({
   name: 'VcCompass',
   props: compassProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcCompassProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcCompass'
@@ -33,7 +34,7 @@ export default defineComponent({
     const compassState = useCompass(props, ctx, instance)
     const positionState = usePosition(props, $services)
     const rootRef = ref<HTMLElement>(null)
-    const outerRingRef = ref<typeof VcBtn>(null)
+    const outerRingRef = ref<VcBtnRef>(null)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
     const rootStyle = reactive<CSSProperties>({})
@@ -262,7 +263,6 @@ export default defineComponent({
   }
 })
 
-// export type VcCompassProps = ExtractPropTypes<typeof compassProps>
 export type VcCompassEmits = typeof emits
 export type VcCompassProps = {
   /**
@@ -312,3 +312,5 @@ export type VcCompassProps = {
    */
   onCompassEvt?: (evt: VcCompassEvt) => void
 }
+
+export type VcCompassRef = VcComponentPublicInstance<VcCompassProps>

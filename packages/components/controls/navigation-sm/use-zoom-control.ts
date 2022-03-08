@@ -1,15 +1,15 @@
-import { AnyFunction, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
+import type { AnyFunction, VcComponentInternalInstance, VcViewerProvider } from '@vue-cesium/utils/types'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { ref } from 'vue'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance, $services: VcViewerProvider) {
   // state
   const zoombarTop = ref(65)
-  const zoomInTooltipRef = ref<typeof VcTooltip | null>(null)
-  const zoomOutTooltipRef = ref<typeof VcTooltip | null>(null)
-  const zoomBarTooltipRef = ref<typeof VcTooltip | null>(null)
+  const zoomInTooltipRef = ref<VcTooltipRef>(null)
+  const zoomOutTooltipRef = ref<VcTooltipRef>(null)
+  const zoomBarTooltipRef = ref<VcTooltipRef>(null)
   let screenSpaceEventHandler: Cesium.ScreenSpaceEventHandler
 
   let zoominTickFunction: AnyFunction<void>
