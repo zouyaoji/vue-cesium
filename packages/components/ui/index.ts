@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-01-18 14:55:36
+ * @LastEditTime: 2022-03-05 11:08:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\index.ts
@@ -94,4 +94,5 @@ export * from './fab/fab'
 export * from './fab/fab-action'
 export * from './icon'
 export * from './skeleton'
+export * from './spinner'
 export * from './tooltip'

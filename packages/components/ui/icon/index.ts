@@ -1,4 +1,4 @@
-import { h, defineComponent, computed } from 'vue'
+import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
 import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
@@ -215,3 +215,12 @@ export interface VcIconProps {
    */
   right?: boolean | undefined
 }
+
+export interface VcIconSlots {
+  /**
+   * Suggestions: VcTooltip
+   */
+  default: () => VNode[]
+}
+
+export type VcIconRef = ComponentPublicInstance<VcIconProps>

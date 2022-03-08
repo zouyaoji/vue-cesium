@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, provide } from 'vue'
+import { h, defineComponent, ref, computed, provide, ComponentPublicInstance } from 'vue'
 import type { VNode, ExtractPropTypes } from 'vue'
 import useModelToggle, { useModelToggleEmits } from '@vue-cesium/composables/private/use-model-toggle'
 import { hSlot, hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -7,6 +7,7 @@ import useFab from './use-fab'
 import VcBtn from '../btn'
 import VcIcon from '../icon'
 import defaultProps from './defaultProps'
+import { LooseDictionary } from '@vue-cesium/utils/types'
 
 export const fabProps = defaultProps
 export default defineComponent({
@@ -220,23 +221,82 @@ export interface VcFabProps {
    */
   'onUpdate:modelValue'?: (value: boolean) => void
   /**
-   * Emitted after component has triggered show().
+   * Emitted after component has triggered show()
    * @param evt JS event object
    */
-  onShow?: (evt: any) => void
+  onShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers show() but before it finishes doing it.
+   * Emitted when component triggers show() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeShow?: (evt: any) => void
+  onBeforeShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted after component has triggered hide().
+   * Emitted after component has triggered hide()
    * @param evt JS event object
    */
-  onHide?: (evt: any) => void
+  onHide?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers hide() but before it finishes doing it.
+   * Emitted when component triggers hide() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeHide?: (evt: any) => void
+  onBeforeHide?: (evt: LooseDictionary) => void
+}
+
+export interface VcFabSlots {
+  /**
+   * This is where VcFabActions may go into
+   */
+  default: () => VNode[]
+  /**
+   * Slot specifically designed for a VcTooltip
+   */
+  tooltip: () => VNode[]
+  /**
+   * Slot for icon shown when FAB is closed; Suggestion: VcIcon
+   * @param scope
+   */
+  icon: (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+  /**
+   * Slot for icon shown when FAB is opened; Suggestion: VcIcon
+   * @param scope
+   */
+  'active-icon': (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+  /**
+   * Slot for label
+   * @param scope
+   */
+  label: (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+}
+
+export interface VcFabRef extends ComponentPublicInstance<VcFabProps> {
+  /**
+   * Expands fab actions list
+   * @param evt JS event object
+   */
+  show: (evt?: LooseDictionary) => void
+  /**
+   * Collapses fab actions list
+   * @param evt JS event object
+   */
+  hide: (evt?: LooseDictionary) => void
+  /**
+   * Triggers component to toggle between show/hide
+   * @param evt JS event object
+   */
+  toggle: (evt?: LooseDictionary) => void
 }

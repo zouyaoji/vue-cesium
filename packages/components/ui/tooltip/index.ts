@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { ComponentPublicInstance, ExtractPropTypes, PropType, VNode } from 'vue'
 import { h, defineComponent, ref, computed, watch, onBeforeUnmount, Transition, getCurrentInstance } from 'vue'
 
 import useAnchor, { useAnchorProps } from '@vue-cesium/composables/private/use-anchor'
@@ -16,6 +16,7 @@ import { clearSelection } from '@vue-cesium/utils/private/selection'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { validatePosition, validateOffset, setPosition, parsePosition } from '@vue-cesium/utils/private/position-engine'
 import { platform } from '@vue-cesium/utils/platform'
+import { LooseDictionary } from '@vue-cesium/utils/types'
 
 export const tooltipProps = {
   ...useAnchorProps,
@@ -416,23 +417,52 @@ export interface VcTooltipProps {
    */
   'onUpdate:modelValue'?: (value: boolean) => void
   /**
-   * Emitted after component has triggered show().
+   * Emitted after component has triggered show()
    * @param evt JS event object
    */
-  onShow?: (evt: any) => void
+  onShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers show() but before it finishes doing it.
+   * Emitted when component triggers show() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeShow?: (evt: any) => void
+  onBeforeShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted after component has triggered hide().
+   * Emitted after component has triggered hide()
    * @param evt JS event object
    */
-  onHide?: (evt: any) => void
+  onHide?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers hide() but before it finishes doing it.
+   * Emitted when component triggers hide() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeHide?: (evt: any) => void
+  onBeforeHide?: (evt: LooseDictionary) => void
+}
+
+export interface VcTooltipSlots {
+  /**
+   * Default slot in the devland unslotted content of the component
+   */
+  default: () => VNode[]
+}
+
+export interface VcTooltipRef extends ComponentPublicInstance<VcTooltipProps> {
+  /**
+   * Triggers component to show
+   * @param evt JS event object
+   */
+  show: (evt?: LooseDictionary) => void
+  /**
+   * Triggers component to hide
+   * @param evt JS event object
+   */
+  hide: (evt?: LooseDictionary) => void
+  /**
+   * Triggers component to toggle between show/hide
+   * @param evt JS event object
+   */
+  toggle: (evt?: LooseDictionary) => void
+  /**
+   * There are some custom scenarios for which cannot automatically reposition the tooltip without significant performance drawbacks so the optimal solution is for you to call this method when you need it
+   */
+  updatePosition: () => void
 }

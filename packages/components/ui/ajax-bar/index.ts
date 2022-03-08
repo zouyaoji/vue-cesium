@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, ComponentPublicInstance } from 'vue'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 
 import { between } from '@vue-cesium/utils/private/format'
@@ -325,4 +325,21 @@ export interface VcAjaxBarProps {
    * Emitted when bar has finished its job.
    */
   onStop?: () => void
+}
+
+export interface VcAjaxBarRef extends ComponentPublicInstance<VcAjaxBarProps> {
+  /**
+   * Notify bar you are waiting for a new process to finish
+   * @param speed Delay (in milliseconds) between progress auto-increments; If delay is 0 then it disables auto-incrementing
+   */
+  start: (speed?: number) => void
+  /**
+   * Manually trigger a bar progress increment
+   * @param amount Amount (0 < x <= 100) to increment with
+   */
+  increment: (amount?: number) => void
+  /**
+   * Notify bar that one process you were waiting has finished
+   */
+  stop: () => void
 }

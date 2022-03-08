@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-11 09:36:28
+ * @LastEditTime: 2022-03-05 11:05:59
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\skeleton\index.ts
  */
-import { h, defineComponent, computed } from 'vue'
+import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 
 import useDark, { useDarkProps } from '@vue-cesium/composables/private/use-dark'
 
@@ -152,3 +152,12 @@ export interface VcSkeletonProps {
   tag?: string | undefined
   color?: string
 }
+
+export interface VcSkeletonSlots {
+  /**
+   * Default slot in the devland unslotted content of the component
+   */
+  default: () => VNode[]
+}
+
+export type VcSkeletonRef = ComponentPublicInstance<VcSkeletonProps>
