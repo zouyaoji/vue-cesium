@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-02-17 17:40:47
+ * @LastEditTime: 2022-03-05 15:38:26
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
@@ -47,7 +47,7 @@ export default defineComponent({
     ...polygonHierarchy
   },
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcAnalysisFloodProps, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalysisFlood'
     instance.cesiumEvents = []
@@ -151,7 +151,6 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      childRef,
       start,
       pause,
       stop
@@ -188,7 +187,7 @@ export default defineComponent({
   }
 })
 
-export type VcAnalysisFloodProps = {
+export interface VcAnalysisFloodProps {
   /**
    * Specify the minimum elevation.
    * Default value: -1
@@ -234,4 +233,19 @@ export type VcAnalysisFloodProps = {
    * Triggers when the maxHeight is reached.
    */
   onStop?: (evt: Cesium.ClassificationPrimitive) => void
+}
+
+export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysisFloodProps> {
+  /**
+   * Start flood analysis
+   */
+  start: () => void
+  /**
+   * Pause flood analysis
+   */
+  pause: () => void
+  /**
+   * Stop flood analysis
+   */
+  stop: () => void
 }

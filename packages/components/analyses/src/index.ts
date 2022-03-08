@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-02-18 23:45:13
+ * @LastEditTime: 2022-03-06 22:17:24
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
@@ -20,9 +20,7 @@ import {
   viewshedAnalysisActionDefault
 } from './defaultProps'
 import {
-  AnalysisActionCmpOpts,
   AnalysisActionCmpRef,
-  AnalysisActionOpts,
   VcDrawingActionInstance,
   VcDrawingActiveEvt,
   VcDrawingDrawEvt,
@@ -32,7 +30,7 @@ import {
   VcViewshedAnalysisOpts
 } from '@vue-cesium/utils/drawing-types'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
+import { VcFabActionRef, VcFabProps } from '@vue-cesium/components/ui'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
@@ -87,11 +85,11 @@ export default defineComponent({
       actionClass: `vc-analysis-${analysisName} vc-analysis-button${
         analysisName === (instance.proxy as any).selectedDrawingActionInstance?.name ? ' active' : ''
       }`,
-      actionRef: ref<typeof VcFabAction>(null!),
-      actionOpts: options[`${camelize(analysisName)}ActionOpts`] as AnalysisActionOpts,
+      actionRef: ref<VcFabActionRef>(null),
+      actionOpts: options[`${camelize(analysisName)}ActionOpts`] as VcActionTooltipProps,
       cmp: getDrawingCmp(analysisName),
       cmpRef: ref<AnalysisActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(analysisName)}AnalysisOpts`] as AnalysisActionCmpOpts,
+      cmpOpts: options[`${camelize(analysisName)}AnalysisOpts`] as VcDrawingOpts,
       tip: options[`${camelize(analysisName)}ActionOpts`].tooltip.tip || t(`vc.analysis.${camelize(analysisName)}.tip`),
       isActive: false
     }))
