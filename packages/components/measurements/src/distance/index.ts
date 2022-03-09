@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 21:46:13
+ * @LastEditTime: 2022-03-10 01:02:32
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\distance\index.ts
@@ -45,7 +45,7 @@ export default defineComponent({
     yAngleLabelOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -113,8 +113,14 @@ export type VcMeasurementDistanceProps = {
   decimals?: MeasurementDecimals
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   xLabelOpts?: VcLabelProps
   xAngleLabelOpts?: VcLabelProps
   yLabelOpts?: VcLabelProps

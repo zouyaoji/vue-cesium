@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-01-22 12:05:06
+ * @LastEditTime: 2022-03-09 10:00:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -14,10 +14,11 @@ import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { makeCartesian3 } from '@vue-cesium/utils/cesium-helpers'
 import { VcPointDrawing } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcDrawingProvider } from '@vue-cesium/utils/types'
 import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStopHandle, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
+import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
 
@@ -27,7 +28,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const { t } = useLocale()
-  const { $services } = commonState
+  const $services = commonState.$services as VcDrawingProvider
   const { emit } = ctx
 
   const {
@@ -67,7 +68,8 @@ export default function (props, ctx, cmpName: string) {
       val => {
         const { drawingFabInstance, selectedDrawingActionInstance } = $services
         if (val && selectedDrawingActionInstance?.name === drawingType) {
-          ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
+          const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
       }
     )
@@ -102,10 +104,10 @@ export default function (props, ctx, cmpName: string) {
 
   const handleMouseClick = (movement, options?) => {
     const { viewer, drawingFabInstance, getWorldPosition, selectedDrawingActionInstance } = $services
-
+    const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (options.button === 2 && options.ctrl) {
-      const drawingsOption = (drawingFabInstance?.proxy as any).drawingActionInstances.find(v => v.name === drawingType)
-      ;(drawingFabInstance?.proxy as any).toggleAction(drawingsOption)
+      const drawingsOption = drawingFabInstanceVm?.getDrawingActionInstance(drawingType)
+      drawingFabInstanceVm?.toggleAction(drawingsOption)
       nextTick(() => {
         emit(
           'drawEvt',
@@ -129,7 +131,7 @@ export default function (props, ctx, cmpName: string) {
     const point: VcPointDrawing = renderDatas.value[index]
 
     if (options.button === 2 && editingPoint.value) {
-      ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+      drawingFabInstanceVm.editingActionName = undefined
       renderDatas.value[index] = restorePosition
       drawStatus.value = DrawStatus.AfterDraw
       renderDatas.value[index].drawStatus = DrawStatus.AfterDraw
@@ -193,12 +195,12 @@ export default function (props, ctx, cmpName: string) {
 
       if (editingPoint.value) {
         editingPoint.value = undefined
-        ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+        drawingFabInstanceVm.editingActionName = undefined
         canShowDrawTip.value = false
         type = editorType.value
       } else {
         if (props.mode === 1) {
-          ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
+          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
       }
 
@@ -216,6 +218,7 @@ export default function (props, ctx, cmpName: string) {
             name: drawingType,
             finished: true,
             position: renderDatas.value[index].position,
+            positionDegrees: renderDatas.value[index].positionDegrees,
             windowPoistion: movement,
             type
           },
@@ -250,6 +253,9 @@ export default function (props, ctx, cmpName: string) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
       const point: VcPointDrawing = renderDatas.value[index]
       point.position = position
+      const cart = Cesium.Cartographic.fromCartesian(position, scene.globe.ellipsoid)
+      const positionDegrees = [Cesium.Math.toDegrees(cart.longitude), Cesium.Math.toDegrees(cart.latitude), cart.height] as [number, number, number]
+      point.positionDegrees = positionDegrees
       getMeasurementResult(point, movement)
       const type = editingPoint.value ? editorType.value : 'new'
       nextTick(() => {
@@ -261,6 +267,7 @@ export default function (props, ctx, cmpName: string) {
             name: drawingType,
             finished: false,
             position,
+            positionDegrees,
             windowPoistion: movement,
             type
           },
@@ -388,13 +395,14 @@ export default function (props, ctx, cmpName: string) {
     }
     editorType.value = e
     const { viewer, drawingFabInstance } = $services
+    const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (e === 'move') {
       drawTip.value = drawTipOpts.value.drawingTipEditing
       drawStatus.value = DrawStatus.Drawing
       editingPoint.value = mouseoverPoint.value
       canShowDrawTip.value = true
       restorePosition = Object.assign({}, renderDatas.value[editingPoint.value._vcPolylineIndx])
-      ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
+      drawingFabInstanceVm.editingActionName = drawingType
     } else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       renderDatas.value.splice(index, 1)
@@ -458,6 +466,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   if (props.preRenderDatas && props.preRenderDatas.length) {
+    const { viewer } = $services
     props.preRenderDatas.forEach(preRenderData => {
       const pointDrawing: VcPointDrawing = {
         drawStatus: DrawStatus.AfterDraw,
@@ -468,6 +477,12 @@ export default function (props, ctx, cmpName: string) {
         height: 0,
         slope: 0
       }
+      const cart = Cesium.Cartographic.fromCartesian(pointDrawing.position, viewer.scene.globe.ellipsoid)
+      pointDrawing.positionDegrees = [Cesium.Math.toDegrees(cart.longitude), Cesium.Math.toDegrees(cart.latitude), cart.height] as [
+        number,
+        number,
+        number
+      ]
 
       getMeasurementResult(pointDrawing)
 

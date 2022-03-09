@@ -1,34 +1,34 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-02-17 09:48:10
+ * @LastEditTime: 2022-03-09 10:16:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
-import { VcFab, VcFabAction, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
+import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { CSSProperties, nextTick, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
+import { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
+import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { vcKey } from '@vue-cesium/utils/config'
 import { useLocale } from '../use-locale'
-import { clearActionDefault } from './defaultOpts'
-import { mainFabDefault } from '@vue-cesium/components/drawings/src/defaultProps'
+import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 
 export default function (
   props,
   ctx,
   instance: VcComponentInternalInstance,
   drawingActionInstances: Array<VcDrawingActionInstance>,
-  mainFabOpts: typeof mainFabDefault,
-  clearActionOpts: typeof clearActionDefault,
+  mainFabOpts: VcFabProps & VcActionTooltipProps,
+  clearActionOpts: VcActionTooltipProps,
   cmpName: string
 ) {
   instance.cesiumEvents = []
@@ -44,13 +44,13 @@ export default function (
   const canRender = ref(false)
   const containerStyle = reactive<CSSProperties>({})
   const positionState = usePosition(props, $services)
-  const containerRef = ref<HTMLElement | null>(null)
-  const fabRef = ref<typeof VcFab>(null)
+  const containerRef = ref<HTMLElement>(null)
+  const fabRef = ref<VcFabRef>(null)
   const mounted = ref(false)
   const primitiveCollection = ref(null)
   let visibilityState: VisibilityState
 
-  let selectedDrawingActionInstance: VcDrawingActionInstance = undefined!
+  let selectedDrawingActionInstance: VcDrawingActionInstance = undefined
 
   /**
    *
@@ -63,8 +63,9 @@ export default function (
     cmp?.handleMouseClick?.(movement.position, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -78,8 +79,9 @@ export default function (
     cmp?.handleMouseMove?.(movement.endPosition, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -93,8 +95,9 @@ export default function (
     cmp?.handleDoubleClick?.(movement.position, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -130,7 +133,7 @@ export default function (
   instance.unmount = async () => {
     if (selectedDrawingActionInstance) {
       toggleAction(selectedDrawingActionInstance)
-      ;(selectedDrawingActionInstance as any) = undefined
+      selectedDrawingActionInstance = undefined
     }
 
     deactivate()
@@ -204,11 +207,11 @@ export default function (
     Object.assign(containerStyle, css)
   }
 
-  const restoreColor = ref<string | null | undefined>(null)
-  const toggleAction = (drawingOption: VcDrawingActionInstance | string | undefined) => {
+  const restoreColor = ref<string>(null)
+  const toggleAction = (drawingOption: VcDrawingActionInstance | string) => {
     const { viewer } = $services
     if (isString(drawingOption)) {
-      drawingOption = drawingActionInstances.find(v => v.name === drawingOption)
+      drawingOption = getDrawingActionInstance(drawingOption)
     }
     if (!drawingOption) {
       commonState.logger.error('Invalid drawingActionOption or drawingActionOption name')
@@ -230,7 +233,7 @@ export default function (
       )
     }
     if (selectedDrawingActionInstance?.name === drawingOption?.name) {
-      ;(selectedDrawingActionInstance as any) = undefined
+      selectedDrawingActionInstance = undefined
       drawingOption.actionOpts.color = restoreColor.value || 'red'
     } else {
       selectedDrawingActionInstance = drawingOption
@@ -249,6 +252,10 @@ export default function (
         viewer
       )
     }
+  }
+
+  const getDrawingActionInstance = (drawingName: string) => {
+    return drawingActionInstances.find(v => v.name === drawingName)
   }
 
   const onUpdateFab = value => {
@@ -272,7 +279,7 @@ export default function (
     selectedDrawingActionInstance && toggleAction(selectedDrawingActionInstance)
   }
 
-  const getServices = () => {
+  const getServices = (): VcDrawingProvider => {
     return mergeDescriptors(commonState.getServices(), {
       get drawingFabInstance() {
         return instance
@@ -293,11 +300,22 @@ export default function (
     ;(cesiumObject as any)._vcId = cmpName
   }
 
-  provide(vcKey, getServices())
+  provide<VcDrawingProvider>(vcKey, getServices())
   instance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
-  Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction, fabRef })
+  Object.assign(instance.proxy, {
+    // drawingActionInstances,
+    // selectedDrawingActionInstance,
+    clearAll,
+    deactivate,
+    activate,
+    toggleAction,
+    getFabRef: () => fabRef.value,
+    getDrawingActionInstance,
+    getDrawingActionInstances: () => drawingActionInstances,
+    getSelectedDrawingActionInstance: () => selectedDrawingActionInstance
+  })
 
   const renderContent = () => {
     if (canRender.value) {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-08 22:06:14
+ * @LastEditTime: 2022-03-10 01:07:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\rectangle\index.ts
@@ -44,7 +44,7 @@ export default defineComponent({
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -140,8 +140,14 @@ export type VcMeasurementRectangleProps = {
   decimals?: MeasurementDecimals
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Triggers before the VcMeasurementRectangle is loaded.
    */

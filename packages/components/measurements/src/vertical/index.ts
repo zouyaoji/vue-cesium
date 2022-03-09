@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 22:40:43
+ * @LastEditTime: 2022-03-10 01:07:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\vertical\index.ts
@@ -37,7 +37,7 @@ export default defineComponent({
     labelOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -105,8 +105,14 @@ export type VcMeasurementVerticalProps = {
   decimals?: MeasurementDecimals
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Triggers before the VcMeasurementVertical is loaded.
    */

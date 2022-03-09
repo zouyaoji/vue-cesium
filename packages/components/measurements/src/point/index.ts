@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 21:50:55
+ * @LastEditTime: 2022-03-10 00:58:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
@@ -33,8 +33,7 @@ export default defineComponent({
     labelOpts: Object as PropType<VcLabelProps>,
     locale: String,
     decimals: Object as PropType<MeasurementDecimals>,
-    heightReference: Number,
-    disableDepthTest: Boolean
+    heightReference: Number
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -98,6 +97,7 @@ export type VcMeasurementPointProps = {
   heightReference?: number
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
   /**

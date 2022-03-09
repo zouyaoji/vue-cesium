@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 21:53:04
+ * @LastEditTime: 2022-03-10 01:06:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\polyline\index.ts
@@ -42,7 +42,7 @@ export default defineComponent({
     decimals: Object as PropType<MeasurementDecimals>,
     showAngleLabel: Boolean,
     showDistanceLabel: Boolean,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -130,8 +130,14 @@ export type VcMeasurementPolylineProps = {
   showDistanceLabel?: boolean
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Triggers before the VcMeasurementPolyline is loaded.
    */

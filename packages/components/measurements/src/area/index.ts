@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 21:45:59
+ * @LastEditTime: 2022-03-10 01:02:00
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
@@ -43,7 +43,7 @@ export default defineComponent({
     showAngleLabel: Boolean,
     loop: Boolean,
     clampToGround: Boolean,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -135,8 +135,14 @@ export type VcMeasurementAreaProps = {
   clampToGround?: boolean
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Triggers before the VcMeasurementArea is loaded.
    */

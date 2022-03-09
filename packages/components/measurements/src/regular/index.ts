@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-03-08 22:36:28
+ * @LastEditTime: 2022-03-10 01:07:28
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
  */
-import type { Prop, PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
@@ -21,10 +21,11 @@ import {
   VcDrawingMouseEvt,
   VcDrawingPreRenderDatas,
   VcDrawTipOpts,
-  VcEditorOpts
+  VcEditorOpts,
+  VcSegmentDrawing
 } from '@vue-cesium/utils/drawing-types'
 import { MeasureUnits } from '@vue-cesium/shared'
-import { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 
 export default defineComponent({
   name: 'VcMeasurementRegular',
@@ -43,7 +44,7 @@ export default defineComponent({
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -139,10 +140,16 @@ export type VcMeasurementRegularProps = {
   decimals?: MeasurementDecimals
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
-  /**VcMeasurementRegular
-   * Triggers before the VcMeasurementRectangle is loaded.
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
+  /**
+   * Triggers before the VcMeasurementRegular is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**

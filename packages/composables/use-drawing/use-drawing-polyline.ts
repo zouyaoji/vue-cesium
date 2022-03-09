@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-02-18 20:39:09
+ * @LastEditTime: 2022-03-10 01:08:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -16,11 +16,12 @@ import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcDrawingProvider } from '@vue-cesium/utils/types'
 import type { VNode } from 'vue'
 import { computed, getCurrentInstance, nextTick, ref, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
+import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -31,7 +32,7 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const { t } = useLocale()
-  const { $services } = commonState
+  const $services = commonState.$services as VcDrawingProvider
   const { emit } = ctx
 
   const {
@@ -83,8 +84,9 @@ export default function (props, ctx, cmpName: string) {
   }
 
   const computedRenderDatas = computed<Array<VcPolylineDrawing>>(() => {
-    const { Cartesian3, createGuid, defined } = Cesium
+    const { Cartesian3, createGuid, defined, Math: CesiumMath } = Cesium
     const polylines: Array<VcPolylineDrawing> = []
+    const { viewer } = $services
     renderDatas.value.forEach((polyline, index) => {
       const labels: Array<VcLabelProps> = []
       const distances: number[] = []
@@ -201,6 +203,11 @@ export default function (props, ctx, cmpName: string) {
           })
         }
 
+        polyline.positionsDegreesArray = polyline.positions.map(v => {
+          const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
+          return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
+        })
+
         polylines.push({
           ...polyline,
           labels,
@@ -217,12 +224,12 @@ export default function (props, ctx, cmpName: string) {
   // methods
   instance.mount = async () => {
     const { viewer } = $services
-    cmpName.includes('VcMeasurement') && viewer.scene.preRender.addEventListener(updateLabelPosition)
+    props.autoUpdateLabelPosition && cmpName.includes('VcMeasurement') && viewer.scene.preRender.addEventListener(updateLabelPosition)
     return true
   }
   instance.unmount = async () => {
     const { viewer } = $services
-    cmpName.includes('VcMeasurement') && viewer.scene.preRender.removeEventListener(updateLabelPosition)
+    props.autoUpdateLabelPosition && cmpName.includes('VcMeasurement') && viewer.scene.preRender.removeEventListener(updateLabelPosition)
     return true
   }
 
@@ -323,9 +330,10 @@ export default function (props, ctx, cmpName: string) {
 
   const handleMouseClick = (movement: Cesium.Cartesian2, options?) => {
     const { viewer, drawingFabInstance, getWorldPosition, selectedDrawingActionInstance } = $services
+    const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (options.button === 2 && options.ctrl) {
-      const drawingsOption = (drawingFabInstance?.proxy as any).drawingActionInstances.find(v => v.name === drawingType)
-      ;(drawingFabInstance?.proxy as any).toggleAction(drawingsOption)
+      const drawingsOption = drawingFabInstanceVm.getDrawingActionInstance(drawingType)
+      drawingFabInstanceVm.toggleAction(drawingsOption)
       nextTick(() => {
         emit(
           'drawEvt',
@@ -360,7 +368,7 @@ export default function (props, ctx, cmpName: string) {
       polyline.drawStatus = DrawStatus.AfterDraw
       editingPoint.value = undefined
       drawTip.value = drawTipOpts.value.drawingTipStart
-      ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+      drawingFabInstanceVm.editingActionName = undefined
       canShowDrawTip.value = defined(selectedDrawingActionInstance)
       nextTick(() => {
         emit(
@@ -452,7 +460,7 @@ export default function (props, ctx, cmpName: string) {
       }
 
       if (type !== 'new') {
-        ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+        drawingFabInstanceVm.editingActionName = undefined
         canShowDrawTip.value = defined(selectedDrawingActionInstance)
       }
     }
@@ -608,7 +616,8 @@ export default function (props, ctx, cmpName: string) {
         )
 
         if (props.mode === 1) {
-          ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
+          const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
       })
     }
@@ -643,6 +652,7 @@ export default function (props, ctx, cmpName: string) {
     }
 
     const { viewer, drawingFabInstance } = $services
+    const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     editorType.value = e
     if (e === 'move') {
       drawTip.value = drawTipOpts.value.drawingTipEditing
@@ -653,7 +663,7 @@ export default function (props, ctx, cmpName: string) {
       editingPoint.value._vcPolylineIndex = indexes[0]
       editingPoint.value._index = indexes[1]
       restorePosition = renderDatas.value[indexes[0]].positions[indexes[1]]
-      ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
+      drawingFabInstanceVm.editingActionName = drawingType
     } else if (e === 'insert') {
       const index = mouseoverPoint.value._vcPolylineIndex
       const polyline = renderDatas.value[index]
@@ -662,7 +672,7 @@ export default function (props, ctx, cmpName: string) {
       canShowDrawTip.value = true
       drawStatus.value = DrawStatus.Drawing
       drawTip.value = drawTipOpts.value.drawingTipEditing
-      ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
+      drawingFabInstanceVm.editingActionName = drawingType
     } else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndex
       const polyline = renderDatas.value[index]

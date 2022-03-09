@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-08 21:49:59
+ * @LastEditTime: 2022-03-10 01:05:45
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\horizontal\index.ts
@@ -23,8 +23,7 @@ import {
   VcDrawingPreRenderDatas,
   VcDrawTipOpts,
   VcEditorOpts,
-  VcPolylineDrawing,
-  VcSegmentDrawing
+  VcPolylineDrawing
 } from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 
@@ -44,7 +43,7 @@ export default defineComponent({
     showAngleLabel: Boolean,
     showDashedLine: Boolean,
     showDistanceLabel: Boolean,
-    disableDepthTest: Boolean
+    autoUpdateLabelPosition: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -136,8 +135,14 @@ export type VcMeasurementHorizontalProps = {
   showDistanceLabel?: boolean
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
+  /**
+   * Specify whether to update label position.
+   * Default value: true
+   */
+  autoUpdateLabelPosition?: boolean
   /**
    * Triggers before the VcMeasurementHorizontal is loaded.
    */

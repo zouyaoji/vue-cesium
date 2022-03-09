@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-08 21:44:58
+ * @LastEditTime: 2022-03-10 00:58:21
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polygon\index.ts
@@ -33,8 +33,7 @@ export default defineComponent({
     primitiveOpts: Object as PropType<VcPrimitiveProps & VcPrimitiveGroundPolylineProps>,
     polygonOpts: Object as PropType<VcPolygonProps>,
     loop: Boolean,
-    clampToGround: Boolean,
-    disableDepthTest: Boolean
+    clampToGround: Boolean
   },
   emits: drawingEmit,
   setup(props, ctx) {
@@ -86,6 +85,7 @@ export type VcDrawingPolygonProps = {
   clampToGround?: boolean
   /**
    * Specify whether the depthTest is disabled.
+   * Default value: false
    */
   disableDepthTest?: boolean
   /**
