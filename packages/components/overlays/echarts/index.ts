@@ -1,24 +1,24 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
- * @LastEditTime: 2022-01-19 21:54:55
+ * @LastEditTime: 2022-03-09 23:24:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\echarts\index.ts
  */
-import type { ExtractPropTypes, CSSProperties, WatchStopHandle } from 'vue'
+import type { ExtractPropTypes, CSSProperties, WatchStopHandle, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, nextTick } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import * as echarts from 'echarts'
-import type { EChartsType } from 'echarts'
+import type { EChartsType, EChartsOption } from 'echarts'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 export const echartsOverlayProps = {
   options: {
-    type: Object,
+    type: Object as PropType<EChartsOption>,
     required: true
   },
   autoHidden: {
@@ -216,5 +216,50 @@ export default defineComponent({
   }
 })
 
-export type VcOverlayEchartsProps = ExtractPropTypes<typeof echartsOverlayProps>
 export type VcOverlayEchartsEmits = typeof emits
+export interface VcOverlayEchartsProps {
+  /**
+   * Specify the configuration items of the Echarts.
+   */
+  options: EChartsOption
+  /**
+   * Specify whether Echart elements are automatically hidden when they are on the back of the viewer.
+   * Default value: true
+   */
+  autoHidden?: boolean
+  /**
+   * Specify div class of echart.
+   */
+  customClass?: string
+  /**
+   * Specify the name of the custom coordinate system when Echart is initialized.
+   * Default value: cesium
+   */
+  coordinateSystem?: string
+  /**
+   * Triggers before the VcOverlayEcharts is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcOverlayEcharts is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcOverlayEcharts is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  // /**
+  //  *
+  //  */
+  // onMouseenter?: (evt: MouseEvent) => void
+  // /**
+  //  *
+  //  */
+  // onMouseleave?: (evt: MouseEvent) => void
+  // /**
+  //  *
+  //  */
+  // onClick?: (evt: MouseEvent) => void
+}
+
+export type VcOverlayEchartsRef = VcComponentPublicInstance<VcOverlayEchartsProps>

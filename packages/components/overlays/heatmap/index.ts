@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
+import type { PropType, VNode, WatchStopHandle } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, createCommentVNode, watch, onUnmounted, computed } from 'vue'
 import type {
   AppearanceOption,
@@ -6,7 +6,10 @@ import type {
   HeatmapConfiguration,
   MaterialOption,
   VcComponentInternalInstance,
-  VcComponentPublicInstance
+  VcComponentPublicInstance,
+  VcHeatMapData,
+  VcRectangle,
+  VcReadyObject
 } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables'
 import { show, rectangle } from '@vue-cesium/utils/cesium-props'
@@ -17,12 +20,6 @@ import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import { VcPrimitiveGround } from '@vue-cesium/components/primitives'
 import { getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { commonEmits } from '@vue-cesium/utils/emits'
-
-export type VcHeatMapData = {
-  x: number
-  y: number
-  value: number
-}
 
 export const heatmapOverlayProps = {
   ...show,
@@ -36,9 +33,9 @@ export const heatmapOverlayProps = {
     default: 100
   },
   data: Array as PropType<Array<VcHeatMapData>>,
-  options: Object,
+  options: Object as PropType<HeatmapConfiguration>,
   type: {
-    type: String,
+    type: String as PropType<'primitive' | 'entity' | 'imagery-layer'>,
     default: 'primitive'
   },
   segments: {
@@ -46,7 +43,7 @@ export const heatmapOverlayProps = {
     default: () => []
   },
   projection: {
-    type: String,
+    type: String as PropType<'3857' | '4326'>,
     default: '3857' // 4326
   }
 }
@@ -54,7 +51,7 @@ export default defineComponent({
   name: 'VcOverlayHeatmap',
   props: heatmapOverlayProps,
   emits: commonEmits,
-  setup(props, ctx) {
+  setup(props: VcOverlayHeatmapProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcOverlayHeatmap'
@@ -63,8 +60,8 @@ export default defineComponent({
     if (commonState === void 0) {
       return
     }
-    const rootRef = ref<HTMLElement | null>(null)
-    const project = ref<Cesium.WebMercatorProjection | Cesium.GeographicProjection>(null!)
+    const rootRef = ref<HTMLElement>(null)
+    const project = ref<Cesium.WebMercatorProjection | Cesium.GeographicProjection>(null)
     const defaultOptions: HeatmapConfiguration = {
       minCanvasSize: 700, // minimum size (in pixels) for the heatmap canvas
       maxCanvasSize: 2000, // maximum size (in pixels) for the heatmap canvas
@@ -88,7 +85,7 @@ export default defineComponent({
     const coordinates = ref<any>(null)
     const material = ref<MaterialOption>(null!)
     const image = ref<any>(null)
-    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround | null>(null)
+    const childRef = ref<typeof VcLayerImagery | typeof VcEntity | typeof VcPrimitiveGround>(null)
     const appearance = ref<AppearanceOption>(null!)
     const canRender = ref(false)
     const config = ref<any>(null)
@@ -423,4 +420,57 @@ export default defineComponent({
   }
 })
 
-export type VcOverlayHeatmapProps = ExtractPropTypes<typeof heatmapOverlayProps>
+export interface VcOverlayHeatmapProps {
+  /**
+   * Specify whether to display the heatmap overlay.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Specify a rectangle with north, south, east and west properties.
+   */
+  rectangle?: VcRectangle
+  /**
+   * Specify the minimum value of the heat map data.
+   * Default value: 0
+   */
+  min?: number
+  /**
+   * Specify the maximum value of the heat map data.
+   * Default value: 100
+   */
+  max?: number
+  data?: Array<VcHeatMapData>
+  /**
+   * Specify the heatmap configs.
+   */
+  options?: HeatmapConfiguration
+  /**
+   * Specify the render type of heat map object.
+   * Default value: primitive
+   */
+  type?: 'primitive' | 'entity' | 'imagery-layer'
+  /**
+   * Specify the color segment of the heatmap.
+   */
+  segments?: Array<VcColorSegments>
+  /**
+   * Specify the projection.
+   * Default value: 3857
+   */
+  projection?: '3857' | '4326'
+  /**
+   * Triggers before the VcOverlayHeatmap is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcOverlayHeatmap is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcOverlayHeatmap is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcOverlayHeatmapRef = VcComponentPublicInstance<VcOverlayHeatmapProps>
