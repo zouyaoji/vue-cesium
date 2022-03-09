@@ -1,36 +1,19 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-03-06 22:17:24
+ * @LastEditTime: 2022-03-09 10:26:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
  */
 
-import { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, ExtractPropTypes, getCurrentInstance, reactive, ref, VNode } from 'vue'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { defineComponent, getCurrentInstance, reactive, ref } from 'vue'
 import { useLocale } from '@vue-cesium/composables'
-import { clearActionDefault } from '@vue-cesium/composables/use-drawing/defaultOpts'
-import {
-  defaultOptions,
-  analysesProps,
-  mainFabDefault,
-  sightlineAnalysisActionDefault,
-  sightlineAnalysisDefault,
-  viewshedAnalysisActionDefault
-} from './defaultProps'
-import {
-  AnalysisActionCmpRef,
-  VcDrawingActionInstance,
-  VcDrawingActiveEvt,
-  VcDrawingDrawEvt,
-  VcDrawingEditorEvt,
-  VcDrawingMouseEvt,
-  VcDrawingOpts,
-  VcViewshedAnalysisOpts
-} from '@vue-cesium/utils/drawing-types'
+import { defaultOptions, analysesProps, VcAnalysesProps } from './defaultProps'
+import type { AnalysisActionCmpRef, VcDrawingActionInstance, VcDrawingOpts, VcViewshedAnalysisOpts } from '@vue-cesium/utils/drawing-types'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabActionRef, VcFabProps } from '@vue-cesium/components/ui'
+import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import VcAnalysisSightline from './sightline'
 import VcAnalysisViewshed from './viewshed'
@@ -44,7 +27,7 @@ export default defineComponent({
   name: 'VcAnalyses',
   props: analysesProps,
   emits: emits,
-  setup(props: ExtractPropTypes<typeof analysesProps>, ctx) {
+  setup(props: VcAnalysesProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalyses'
@@ -52,22 +35,14 @@ export default defineComponent({
 
     const options: any = {}
     // computed
-    const clearActionOpts = reactive<typeof clearActionDefault>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
-    const mainFabOpts = reactive<typeof mainFabDefault>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
+    const clearActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.clearActionOpts, props.clearActionOpts))
+    const mainFabOpts = reactive<VcActionTooltipProps & VcFabProps>(Object.assign({}, defaultOptions.mainFabOpts, props.mainFabOpts))
 
-    const sightlineActionOpts = reactive<typeof sightlineAnalysisActionDefault>(
-      Object.assign({}, defaultOptions.sightlineActionOpts, props.sightlineActionOpts)
-    )
-    const sightlineAnalysisOpts = reactive<typeof sightlineAnalysisDefault>(
-      Object.assign({}, defaultOptions.sightlineAnalysisOpts, props.sightlineAnalysisOpts)
-    )
+    const sightlineActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.sightlineActionOpts, props.sightlineActionOpts))
+    const sightlineAnalysisOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.sightlineAnalysisOpts, props.sightlineAnalysisOpts))
 
-    const viewshedActionOpts = reactive<typeof viewshedAnalysisActionDefault>(
-      Object.assign({}, defaultOptions.viewshedActionOpts, props.viewshedActionOpts)
-    )
-    const viewshedAnalysisOpts = reactive<typeof sightlineAnalysisDefault>(
-      Object.assign({}, defaultOptions.viewshedAnalysisOpts, props.viewshedAnalysisOpts)
-    )
+    const viewshedActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.viewshedActionOpts, props.viewshedActionOpts))
+    const viewshedAnalysisOpts = reactive<VcViewshedAnalysisOpts>(Object.assign({}, defaultOptions.viewshedAnalysisOpts, props.viewshedAnalysisOpts))
 
     options.sightlineActionOpts = sightlineActionOpts
     options.sightlineAnalysisOpts = sightlineAnalysisOpts
@@ -82,9 +57,7 @@ export default defineComponent({
         background: options[`${camelize(analysisName)}ActionOpts`].color,
         color: options[`${camelize(analysisName)}ActionOpts`].textColor
       },
-      actionClass: `vc-analysis-${analysisName} vc-analysis-button${
-        analysisName === (instance.proxy as any).selectedDrawingActionInstance?.name ? ' active' : ''
-      }`,
+      actionClass: `vc-analysis-${analysisName} vc-analysis-button`,
       actionRef: ref<VcFabActionRef>(null),
       actionOpts: options[`${camelize(analysisName)}ActionOpts`] as VcActionTooltipProps,
       cmp: getDrawingCmp(analysisName),
@@ -111,106 +84,44 @@ export default defineComponent({
 
 export { VcAnalysisSightline, VcAnalysisViewshed, analysesProps }
 
-// export type { VcAnalysesProps } from './defaultProps'
+export type { VcAnalysesProps } from './defaultProps'
 export type VcAnalysesEmits = typeof emits
-
-export type VcAnalysesProps = {
+export interface VcAnalysesRef extends VcComponentPublicInstance<VcAnalysesProps> {
   /**
-   * Specify the position of the VcAnalyses.
-   * Default value: bottom-left
+   * Get or set the editingActionName.
    */
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  editingActionName?: string
   /**
-   * An array of two numbers to offset the VcAnalyses horizontally and vertically in pixels.
-   * Default value: [0, 0]
+   * Clear all drawing results.
    */
-  offset?: [number, number]
+  clearAll: () => void
   /**
-   * Specify whether the analysis result is visible.
-   * Default value: true
+   * End listening for the ScreenSpaceEventHandler events.
    */
-  show?: boolean
+  deactivate: () => void
   /**
-   * Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.
-   * Default value: 1
+   * Start listening for ScreenSpaceEventHandler events.
    */
-  mode?: number
+  activate: () => void
   /**
-   * Specify which analysis instances to load.
-   * Default value: ['sightline', 'viewshed']
+   * Toggle drawing instance.
+   * @param drawingOption drawing instance or drawing instance name.
    */
-  analyses?: Array<'sightline' | 'viewshed'>
+  toggleAction: (drawingOption: VcDrawingActionInstance | string) => void
   /**
-   * Specify the color when the analysis instance is activated.
-   * Default value: positive
+   * Get the float action button template reference.
    */
-  activeColor?: string
+  getFabRef: () => VcFabRef
   /**
-   * Specify whether the analysis result can be edited.
-   * Default value: false
+   * Get the drawingActionInstance by action name.
    */
-  editable?: boolean
+  getDrawingActionInstance: (actionName: string) => VcDrawingActionInstance
   /**
-   * Specify the style options of the floating action button of the VcAnalyses component.
+   * Get the drawing action instances.
    */
-  mainFabOpts?: VcActionTooltipProps & VcFabProps
+  getDrawingActionInstances: () => Array<VcDrawingActionInstance>
   /**
-   * Specify the style options of the sightline analysis action button.
+   * Get the selected drawing action instance.
    */
-  sightlineActionOpts?: VcActionTooltipProps
-  /**
-   * Specify sightline analysis options.
-   */
-  sightlineAnalysisOpts?: VcDrawingOpts
-  /**
-   * Specify the style options of the viewshed analysis action button.
-   */
-  viewshedActionOpts?: VcActionTooltipProps
-  /**
-   * Specify viewshed analysis options.
-   */
-  viewshedAnalysisOpts?: VcViewshedAnalysisOpts
-  /**
-   * Specify the style options of the clear action button.
-   */
-  clearActionOpts?: VcActionTooltipProps
-  /**
-   * Triggers before the VcCompass is loaded.
-   */
-  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
-  /**
-   * Triggers when the VcCompass is successfully loaded.
-   */
-  onReady?: (readyObject: VcReadyObject) => void
-  /**
-   * Triggers when the VcCompass is destroyed.
-   */
-  onDestroyed?: (instance: VcComponentInternalInstance) => void
-  /**
-   * Triggers when the analysis action is actived.
-   */
-  onActiveEvt?: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => void
-  /**
-   * 	Triggers when drawing.
-   */
-  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
-  /**
-   * Triggers when the editor button is clicked.
-   */
-  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
-  /**
-   * Triggers when the mouse is over or out on the drawing point.
-   */
-  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
-  /**
-   * Triggers when the floating button is expanded or collapsed.
-   */
-  onFabUpdated: (value: boolean) => void
-}
-
-export type VcAnalysesSlots = {
-  /**
-   * body slot content of the component
-   */
-  body: () => VNode[]
+  getSelectedDrawingActionInstance: () => VcDrawingActionInstance
 }
