@@ -1,8 +1,7 @@
 import { defineComponent, getCurrentInstance, ref, reactive, VNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
-import { measurementsProps, defaultOptions } from './defaultProps'
+import { measurementsProps, defaultOptions, VcMeasurementsProps } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
+import { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
 import VcMeasurementDistance from './distance'
 import VcMeasurementPolyline from './polyline'
 import VcMeasurementHorizontal from './horizontal'
@@ -13,9 +12,7 @@ import VcMeasurementArea from './area'
 import VcMeasurementRectangle from './rectangle'
 import VcMeasurementRegular from './regular'
 import type {
-  MeasurementActionCmpOpts,
   MeasurementActionCmpRef,
-  MeasurementActionOpts,
   VcComponentDistanceMeasurementOpts,
   VcDrawingActionInstance,
   VcHorizontalMeasurementOpts,
@@ -23,7 +20,7 @@ import type {
   VcPolylineMeasurementOpts,
   VcRegularMeasurementOpts
 } from '@vue-cesium/utils/drawing-types'
-import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { useLocale } from '@vue-cesium/composables'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { drawingEmit } from '@vue-cesium/utils/emits'
@@ -36,7 +33,7 @@ export default defineComponent({
   name: 'VcMeasurements',
   props: measurementsProps,
   emits: emits,
-  setup(props: ExtractPropTypes<typeof measurementsProps>, ctx) {
+  setup(props: VcMeasurementsProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcMeasurements'
@@ -128,14 +125,12 @@ export default defineComponent({
         background: options[`${camelize(measurement)}ActionOpts`].color,
         color: options[`${camelize(measurement)}ActionOpts`].textColor
       },
-      actionClass: `vc-measure-${measurement} vc-measure-button${
-        measurement === (instance.proxy as any).selectedDrawingActionInstance?.name ? ' active' : ''
-      }`,
-      actionRef: ref<typeof VcFabAction>(null!),
-      actionOpts: options[`${camelize(measurement)}ActionOpts`] as MeasurementActionOpts,
+      actionClass: `vc-measure-${measurement} vc-measure-button`,
+      actionRef: ref<VcFabActionRef>(null),
+      actionOpts: options[`${camelize(measurement)}ActionOpts`] as VcActionTooltipProps,
       cmp: getMeasurementCmp(measurement),
       cmpRef: ref<MeasurementActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(measurement)}MeasurementOpts`] as MeasurementActionCmpOpts,
+      cmpOpts: options[`${camelize(measurement)}MeasurementOpts`] as VcMeasurementOpts,
       tip: options[`${camelize(measurement)}ActionOpts`].tooltip.tip || t(`vc.measurement.${measurement}.tip`),
       isActive: false
     }))
@@ -191,4 +186,52 @@ export type VcMeasurementsSlots = {
    * body slot content of the component
    */
   body: () => VNode[]
+}
+
+export interface VcMeasurementsRef extends VcComponentPublicInstance<VcMeasurementsProps> {
+  /**
+   * Get or set the editingActionName.
+   */
+  editingActionName?: string
+  /**
+   * Get the drawing action instances.
+   */
+  drawingActionInstances: Array<VcDrawingActionInstance>
+  /**
+   * Get the selected drawing action instance.
+   */
+  selectedDrawingActionInstance: VcDrawingActionInstance
+  /**
+   * Clear all drawing results.
+   */
+  clearAll: () => void
+  /**
+   * End listening for the ScreenSpaceEventHandler event.
+   */
+  deactivate: () => void
+  /**
+   * Start listening for ScreenSpaceEventHandler events.
+   */
+  activate: () => void
+  /**
+   * Toggle drawing instance.
+   * @param drawingOption drawing instance or drawing instance name.
+   */
+  toggleAction: (drawingOption: VcDrawingActionInstance | string) => void
+  /**
+   * Get the float action button template reference.
+   */
+  getFabRef: () => VcFabRef
+  /**
+   * Get the drawingActionInstance.
+   */
+  getDrawingActionInstance: (actionName: string) => VcDrawingActionInstance
+  /**
+   * Get the drawing action instances.
+   */
+  getDrawingActionInstances: () => Array<VcDrawingActionInstance>
+  /**
+   * Get the selected drawing action instance.
+   */
+  getSelectedDrawingActionInstance: () => VcDrawingActionInstance
 }

@@ -1,19 +1,31 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-02-08 16:19:57
+ * @LastEditTime: 2022-03-08 22:36:28
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
  */
-import type { PropType } from 'vue'
+import type { Prop, PropType } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
 import type { VcGeometryPolylineProps } from '../../../geometries'
-import type { VcLabelProps, VcPolygonProps } from '../../../primitive-collections'
+import type { VcLabelProps, VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import { drawingEmit } from '@vue-cesium/utils/emits'
+import {
+  MeasurementDecimals,
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts
+} from '@vue-cesium/utils/drawing-types'
+import { MeasureUnits } from '@vue-cesium/shared'
+import { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+
 export default defineComponent({
   name: 'VcMeasurementRegular',
   props: {
@@ -25,9 +37,9 @@ export default defineComponent({
     labelsOpts: Object as PropType<VcLabelProps>,
     clampToGround: Boolean,
     edge: Number,
-    measureUnits: Object,
+    measureUnits: Object as PropType<MeasureUnits>,
     locale: String,
-    decimals: Object,
+    decimals: Object as PropType<MeasurementDecimals>,
     showDistanceLabel: Boolean,
     showAngleLabel: Boolean,
     loop: Boolean,
@@ -39,3 +51,137 @@ export default defineComponent({
     return useDrawingSegment(props, ctx, 'VcMeasurementRegular')
   }
 })
+
+export type VcMeasurementRegularProps = {
+  /**
+   * Specify whether to respond to mouse pick events.
+   */
+  enableMouseEvent?: boolean
+  /**
+   * Specify Whether the drawing object is visible.
+   */
+  show?: boolean
+  /**
+   * Specify whether the drawing result can be edited.
+   */
+  editable?: boolean
+  /**
+   * Specify drawing hints.
+   */
+  drawtip?: VcDrawTipOpts
+  /**
+   * Specify parameters for drawing points.
+   */
+  pointOpts?: VcPointProps
+  /**
+   * Specify editor options.
+   */
+  editorOpts?: VcEditorOpts
+  /**
+   * Specify editor mode.
+   */
+  mode?: number
+  /**
+   * Specify prerender datas.
+   */
+  preRenderDatas?: VcDrawingPreRenderDatas
+  /**
+   * Specify the unit of measurement
+   */
+  measureUnits?: MeasureUnits
+  /**
+   * Specify parameters for drawing polylines.
+   */
+  polylineOpts?: VcGeometryPolylineProps
+  /**
+   * Specify parameters for drawing primitives.
+   */
+  primitiveOpts?: VcPrimitiveProps & VcPrimitiveGroundPolylineProps
+  /**
+   * Specify parameters for drawing polygons.
+   */
+  polygonOpts?: VcPolygonProps
+  /**
+   * Specify parameters for measurement labels.
+   */
+  labelOpts?: VcLabelProps
+  /**
+   * Specify parameters for measurement labels.
+   */
+  labelsOpts?: VcLabelProps
+  /**
+   * Specify whether a line segment will be added between the last and first line positions to make this line a loop.
+   */
+  loop?: boolean
+  /**
+   * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work.
+   */
+  clampToGround?: boolean
+  /**
+   * Specify the number of edges of a regular polygon.
+   */
+  edge?: number
+  /**
+   * Specify whether to display distance labels.
+   */
+  showDistanceLabel?: boolean
+  /**
+   * Specify whether to display angle labels.
+   */
+  showAngleLabel?: boolean
+  /**
+   * Specify parameters for measurement locale.
+   */
+  locale?: string
+  /**
+   * Specify parameters for measurement decimals.
+   */
+  decimals?: MeasurementDecimals
+  /**
+   * Specify whether the depthTest is disabled.
+   */
+  disableDepthTest?: boolean
+  /**VcMeasurementRegular
+   * Triggers before the VcMeasurementRectangle is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcMeasurementRegular is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcMeasurementRegular is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * 	Triggers when drawing.
+   */
+  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the editor button is clicked.
+   */
+  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the mouse is over or out on the drawing point.
+   */
+  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
+}
+
+export interface VcMeasurementRegularRef extends VcComponentPublicInstance<VcMeasurementRegularProps> {
+  /**
+   * Get or set the renderDatas.
+   */
+  renderDatas: Ref<Array<VcSegmentDrawing>>
+  /**
+   * start a new draw.
+   */
+  startNew: () => void
+  /**
+   * stop drawing.
+   */
+  stop: () => void
+  /**
+   * clear and stop drawing.
+   */
+  clear: () => void
+}

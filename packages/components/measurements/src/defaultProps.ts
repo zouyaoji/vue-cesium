@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-02-18 23:01:57
+ * @LastEditTime: 2022-03-06 22:57:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
  */
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
   actionOptions,
@@ -425,7 +425,7 @@ const measurementsProps = {
     default: () => circleMeasurementDefault
   }
 }
-// export type VcMeasurementsProps = ExtractPropTypes<typeof measurementsProps>
+
 const defaultOptions = getDefaultOptionByProps<VcMeasurementsProps>(measurementsProps)
 
 export {
