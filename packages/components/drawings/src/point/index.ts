@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-06 22:44:32
+ * @LastEditTime: 2022-03-08 21:44:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
@@ -11,7 +11,15 @@ import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props
 import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-point'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcPointDrawing } from '@vue-cesium/utils/drawing-types'
+import {
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts,
+  VcPointDrawing
+} from '@vue-cesium/utils/drawing-types'
 import { VcPointProps } from '../../../primitive-collections'
 
 export default defineComponent({
@@ -32,43 +40,43 @@ export type VcDrawingPointProps = {
   /**
    * Specify whether to respond to mouse pick events.
    */
-  enableMouseEvent: boolean
+  enableMouseEvent?: boolean
   /**
    * Specify Whether the drawing object is visible.
    */
-  show: boolean
+  show?: boolean
   /**
    * Specify whether the drawing result can be edited.
    */
-  editable: boolean
+  editable?: boolean
   /**
    * Specify drawing hints.
    */
-  drawtip: VcDrawTipOpts
+  drawtip?: VcDrawTipOpts
   /**
    * Specify parameters for drawing points.
    */
-  pointOpts: VcPointProps
+  pointOpts?: VcPointProps
   /**
    * Specify the heightReference.
    */
-  heightReference: number
+  heightReference?: number
   /**
    * Specify whether the depthTest is disabled.
    */
-  disableDepthTest: number
+  disableDepthTest?: number
   /**
    * Specify editor options.
    */
-  editorOpts: VcEditorOpts
+  editorOpts?: VcEditorOpts
   /**
    * Specify editor mode.
    */
-  mode: number
+  mode?: number
   /**
    * Specify prerender datas.
    */
-  preRenderDatas: VcDrawingPreRenderDatas
+  preRenderDatas?: VcDrawingPreRenderDatas
   /**
    * Triggers before the VcDrawingPoint is loaded.
    */
@@ -81,6 +89,18 @@ export type VcDrawingPointProps = {
    * Triggers when the VcDrawingPoint is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * 	Triggers when drawing.
+   */
+  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the editor button is clicked.
+   */
+  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the mouse is over or out on the drawing point.
+   */
+  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
 }
 
 export interface VcDrawingPointRef extends VcComponentPublicInstance<VcDrawingPointProps> {

@@ -71,7 +71,7 @@ export default defineComponent({
         background: options[`${camelize(drawing)}ActionOpts`].color,
         color: options[`${camelize(drawing)}ActionOpts`].textColor
       },
-      actionClass: `vc-draw-${drawing} vc-draw-button${drawing === (instance.proxy as any).selectedDrawingActionInstance?.name ? ' active' : ''}`,
+      actionClass: `vc-draw-${drawing} vc-draw-button`,
       actionRef: ref<VcFabActionRef>(null!),
       actionOpts: options[`${camelize(drawing)}ActionOpts`] as VcActionTooltipProps,
       cmp: getDrawingCmp(drawing),
@@ -121,19 +121,15 @@ export type VcDrawingsSlots = {
 }
 export interface VcDrawingsRef extends VcComponentPublicInstance<VcDrawingsProps> {
   /**
-   * Get the drawing action instances.
+   * Get or set the editingActionName.
    */
-  drawingActionInstances: Array<VcDrawingActionInstance>
-  /**
-   * Get the selected drawing action instance.
-   */
-  selectedDrawingActionInstance: VcDrawingActionInstance
+  editingActionName?: string
   /**
    * Clear all drawing results.
    */
   clearAll: () => void
   /**
-   * End listening for the ScreenSpaceEventHandler event.
+   * End listening for the ScreenSpaceEventHandler events.
    */
   deactivate: () => void
   /**
@@ -150,7 +146,15 @@ export interface VcDrawingsRef extends VcComponentPublicInstance<VcDrawingsProps
    */
   getFabRef: () => VcFabRef
   /**
-   * Get the drawingActionInstance.
+   * Get the drawingActionInstance by action name.
    */
   getDrawingActionInstance: (actionName: string) => VcDrawingActionInstance
+  /**
+   * Get the drawing action instances.
+   */
+  getDrawingActionInstances: () => Array<VcDrawingActionInstance>
+  /**
+   * Get the selected drawing action instance.
+   */
+  getSelectedDrawingActionInstance: () => VcDrawingActionInstance
 }

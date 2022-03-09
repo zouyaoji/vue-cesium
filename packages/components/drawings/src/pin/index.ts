@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-06 22:44:26
+ * @LastEditTime: 2022-03-08 21:44:21
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\pin\index.ts
@@ -13,7 +13,15 @@ import useDrawingPoint from '@vue-cesium/composables/use-drawing/use-drawing-poi
 import type { VcBillboardProps, VcLabelProps, VcPointProps } from '../../../primitive-collections'
 import { drawingEmit } from '@vue-cesium/utils/emits'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcPointDrawing } from '@vue-cesium/utils/drawing-types'
+import {
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts,
+  VcPointDrawing
+} from '@vue-cesium/utils/drawing-types'
 
 export default defineComponent({
   name: 'VcDrawingPin',
@@ -35,51 +43,51 @@ export type VcDrawingPinProps = {
   /**
    * Specify whether to respond to mouse pick events.
    */
-  enableMouseEvent: boolean
+  enableMouseEvent?: boolean
   /**
    * Specify Whether the drawing object is visible.
    */
-  show: boolean
+  show?: boolean
   /**
    * Specify whether the drawing result can be edited.
    */
-  editable: boolean
+  editable?: boolean
   /**
    * Specify drawing hints.
    */
-  drawtip: VcDrawTipOpts
+  drawtip?: VcDrawTipOpts
   /**
    * Specify parameters for drawing points.
    */
-  pointOpts: VcPointProps
+  pointOpts?: VcPointProps
   /**
    * Specify parameters for drawing billbords.
    */
-  billboardOpts: VcBillboardProps
+  billboardOpts?: VcBillboardProps
   /**
    * Specify parameters for drawing labels.
    */
-  labelOpts: VcLabelProps
+  labelOpts?: VcLabelProps
   /**
    * Specify the heightReference.
    */
-  heightReference: number
+  heightReference?: number
   /**
    * Specify whether the depthTest is disabled.
    */
-  disableDepthTest: number
+  disableDepthTest?: number
   /**
    * Specify editor options.
    */
-  editorOpts: VcEditorOpts
+  editorOpts?: VcEditorOpts
   /**
    * Specify editor mode.
    */
-  mode: number
+  mode?: number
   /**
    * Specify prerender datas.
    */
-  preRenderDatas: VcDrawingPreRenderDatas
+  preRenderDatas?: VcDrawingPreRenderDatas
   /**
    * Triggers before the VcDrawingPin is loaded.
    */
@@ -92,6 +100,18 @@ export type VcDrawingPinProps = {
    * Triggers when the VcDrawingPin is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * 	Triggers when drawing.
+   */
+  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the editor button is clicked.
+   */
+  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the mouse is over or out on the drawing point.
+   */
+  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
 }
 
 export interface VcDrawingPinRef extends VcComponentPublicInstance<VcDrawingPinProps> {

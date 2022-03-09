@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-06 22:43:20
+ * @LastEditTime: 2022-03-08 21:44:58
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polygon\index.ts
@@ -14,7 +14,15 @@ import { drawingEmit } from '@vue-cesium/utils/emits'
 import type { VcGeometryPolylineProps } from '../../../geometries'
 import type { VcPointProps, VcPolygonProps } from '../../../primitive-collections'
 import type { VcPrimitiveGroundPolylineProps, VcPrimitiveProps } from '../../../primitives'
-import { VcDrawingPreRenderDatas, VcDrawTipOpts, VcEditorOpts, VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
+import {
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
+  VcDrawingPreRenderDatas,
+  VcDrawTipOpts,
+  VcEditorOpts,
+  VcPolylineDrawing
+} from '@vue-cesium/utils/drawing-types'
 import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 
 export default defineComponent({
@@ -39,59 +47,59 @@ export type VcDrawingPolygonProps = {
   /**
    * Specify whether to respond to mouse pick events.
    */
-  enableMouseEvent: boolean
+  enableMouseEvent?: boolean
   /**
    * Specify Whether the drawing object is visible.
    */
-  show: boolean
+  show?: boolean
   /**
    * Specify whether the drawing result can be edited.
    */
-  editable: boolean
+  editable?: boolean
   /**
    * Specify drawing hints.
    */
-  drawtip: VcDrawTipOpts
+  drawtip?: VcDrawTipOpts
   /**
    * Specify parameters for drawing points.
    */
-  pointOpts: VcPointProps
+  pointOpts?: VcPointProps
   /**
    * Specify parameters for drawing polylines.
    */
-  polylineOpts: VcGeometryPolylineProps
+  polylineOpts?: VcGeometryPolylineProps
   /**
    * Specify parameters for drawing primitives.
    */
-  primitiveOpts: VcPrimitiveProps & VcPrimitiveGroundPolylineProps
+  primitiveOpts?: VcPrimitiveProps & VcPrimitiveGroundPolylineProps
   /**
    * Specify parameters for drawing polygons.
    */
-  polygonOpts: VcPolygonProps
+  polygonOpts?: VcPolygonProps
   /**
    * Specify whether a line segment will be added between the last and first line positions to make this line a loop.
    */
-  loop: boolean
+  loop?: boolean
   /**
    * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work.
    */
-  clampToGround: boolean
+  clampToGround?: boolean
   /**
    * Specify whether the depthTest is disabled.
    */
-  disableDepthTest: boolean
+  disableDepthTest?: boolean
   /**
    * Specify editor options.
    */
-  editorOpts: VcEditorOpts
+  editorOpts?: VcEditorOpts
   /**
    * Specify editor mode.
    */
-  mode: number
+  mode?: number
   /**
    * Specify prerender datas.
    */
-  preRenderDatas: VcDrawingPreRenderDatas
+  preRenderDatas?: VcDrawingPreRenderDatas
   /**
    * Triggers before the VcDrawingPolygon is loaded.
    */
@@ -104,6 +112,18 @@ export type VcDrawingPolygonProps = {
    * Triggers when the VcDrawingPolygon is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * 	Triggers when drawing.
+   */
+  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the editor button is clicked.
+   */
+  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the mouse is over or out on the drawing point.
+   */
+  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
 }
 
 export interface VcDrawingPolygonRef extends VcComponentPublicInstance<VcDrawingPolygonProps> {
