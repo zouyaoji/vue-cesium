@@ -41,7 +41,9 @@ import type {
   CesiumMaterialProperty,
   CesiumMaterial,
   VcBoundingRectangle,
-  CesiumBoundingRectangle
+  CesiumBoundingRectangle,
+  VcHeadingPitchRoll,
+  VcHeadingPitchRange
 } from './types'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 
@@ -949,12 +951,39 @@ export function makeJulianDate(val: string | Date | Cesium.JulianDate): Cesium.J
   if (val instanceof JulianDate) {
     return val
   } else if (isString(val)) {
-    return Cesium.JulianDate.fromIso8601(val)
+    return Cesium.JulianDate.fromDate(new Date(val))
   } else if (val instanceof Date) {
     return Cesium.JulianDate.fromDate(val)
   }
 
   return Cesium.JulianDate.now()
+}
+
+export function makeHeadingPitchRoll(val: VcHeadingPitchRoll): Cesium.HeadingPitchRoll {
+  const { HeadingPitchRoll, Math: CesiumMath } = Cesium
+  if (val instanceof Cesium.HeadingPitchRoll) {
+    return val
+  } else if (Array.isArray(val)) {
+    // 认为是经纬度数组
+    return new HeadingPitchRoll(CesiumMath.toRadians(val[0]) || 0, CesiumMath.toRadians(val[1]) || 0, CesiumMath.toRadians(val[2]) || 0)
+  } else if (isPlainObject(val)) {
+    return new HeadingPitchRoll(val.heading || 0, val.pitch || 0, val.roll || 0)
+  }
+
+  return new HeadingPitchRoll()
+}
+
+export function makeHeadingPitchRang(val: VcHeadingPitchRange): Cesium.HeadingPitchRange {
+  const { HeadingPitchRange, Math: CesiumMath } = Cesium
+  if (val instanceof Cesium.HeadingPitchRange) {
+    return val
+  } else if (Array.isArray(val)) {
+    return new HeadingPitchRange(CesiumMath.toRadians(val[0]) || 0, CesiumMath.toRadians(val[1]) || 0, val[2] || 0)
+  } else if (isPlainObject(val)) {
+    return new HeadingPitchRange(val.heading || 0, val.pitch || 0, val.range || 0)
+  }
+
+  return new HeadingPitchRange()
 }
 
 export function getPolylineSegmentHeading(start: Cesium.Cartesian3, end: Cesium.Cartesian3) {
@@ -997,8 +1026,8 @@ export function getFirstIntersection(
   return undefined
 }
 
-// 粗略计算
 export function heightToLevel(altitude: number) {
+  // 粗略计算
   const A = 40487.57
   const B = 0.00007096758
   const C = 91610.74
