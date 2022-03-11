@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-06 09:21:02
- * @LastEditTime: 2022-02-17 11:19:24
+ * @LastEditTime: 2022-03-10 01:19:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\commitlint.config.js
@@ -37,7 +37,7 @@ module.exports = {
     'scope-enum': ctx => getPackages(ctx).then(packages => [2, 'always', [...packages, ...scopes, ...components]]),
     'body-leading-blank': [1, 'always'],
     'footer-leading-blank': [1, 'always'],
-    'header-max-length': [2, 'always', 72],
+    'header-max-length': [2, 'always', 90],
     'scope-case': [2, 'always', 'lower-case'],
     'subject-case': [1, 'never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']],
     'subject-empty': [2, 'never'],
