@@ -1,5 +1,5 @@
 import { VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { mount, config } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import VcViewer from '@vue-cesium/components/viewer'
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import {
@@ -50,7 +50,7 @@ describe('VcImageryProviderArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.ArcGisMapServerImageryProvider
     expect(provider instanceof Cesium.ArcGisMapServerImageryProvider).toBe(true)
     expect(provider.url).toEqual('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/')
@@ -94,7 +94,7 @@ describe('VcImageryProviderBaidu', () => {
   test('render test', async () => {
     const wrapper = mount(baiduApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.songluck.com/map/data/maptile-baidu-chengdu/{z}/{x}/{y}.png/')
@@ -123,7 +123,7 @@ const bingmapsApp = {
           <vc-layer-imagery>
             <vc-imagery-provider-bing
             ref="provider"
-            bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+            bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
             mapStyle="Aerial"
           ></vc-imagery-provider-bing>
           </vc-layer-imagery>
@@ -137,7 +137,7 @@ describe('VcImageryProviderBing', () => {
   test('render test', async () => {
     const wrapper = mount(bingmapsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.BingMapsImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://dev.virtualearth.net/')
@@ -176,7 +176,7 @@ describe('VcImageryProviderGrid', () => {
   test('render test', async () => {
     const wrapper = mount(gridApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.GridImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -218,7 +218,7 @@ describe('VcImageryProviderIon', () => {
   test('render test', async () => {
     const wrapper = mount(cesiumIonApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.IonImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -262,7 +262,7 @@ describe('VcImageryProviderMapbox', () => {
   test('render test', async () => {
     const wrapper = mount(mapboxApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.MapboxStyleImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual(
@@ -303,7 +303,7 @@ describe('VcImageryProviderOsm', () => {
   test('render test', async () => {
     const wrapper = mount(osmApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.OpenStreetMapImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png')
@@ -342,7 +342,7 @@ describe('VcImageryProviderSingletile', () => {
   test('render test', async () => {
     const wrapper = mount(singletileApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.SingleTileImageryProvider
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://zouyaoji.top/vue-cesium/SampleData/images/worldimage.jpg')
@@ -384,7 +384,7 @@ describe('VcImageryProviderSupermap', () => {
   test('render test', async () => {
     const wrapper = mount(supermapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult/')
@@ -423,7 +423,7 @@ describe('VcImageryProviderTianditu', () => {
   test('render test', async () => {
     const wrapper = mount(tiandituApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     expect(provider.url).toEqual('https://{s}.tianditu.gov.cn/cva_c/wmts')
@@ -462,7 +462,7 @@ describe('VcImageryProviderTileCoordinates', () => {
   test('render test', async () => {
     const wrapper = mount(tileCoordinatesApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.TileCoordinatesImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -505,7 +505,7 @@ describe('VcImageryProviderTms', () => {
   test('render test', async () => {
     const wrapper = mount(tileMapApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.TileMapServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -548,7 +548,7 @@ describe('VcImageryProviderTiledcache', () => {
   test('render test', async () => {
     const wrapper = mount(tiledCacheApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as any
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -590,7 +590,7 @@ describe('VcImageryProviderUrltemplate', () => {
   test('render test', async () => {
     const wrapper = mount(urlTemplateApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.UrlTemplateImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -634,7 +634,7 @@ describe('VcImageryProviderWms', () => {
   test('render test', async () => {
     const wrapper = mount(wmsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.WebMapServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -680,7 +680,7 @@ describe('VcImageryProviderWmts', () => {
   test('render test', async () => {
     const wrapper = mount(wmtsApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.WebMapTileServiceImageryProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -718,7 +718,7 @@ describe('VcTerrainProviderCesium', () => {
   test('render test', async () => {
     const wrapper = mount(cesiumTerrainApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.CesiumTerrainProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -753,7 +753,7 @@ describe('VcTerrainProviderArcgis', () => {
   test('render test', async () => {
     const wrapper = mount(arcgisTiledElevationApp)
     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
     let provider = readyObj.cesiumObject as Cesium.ArcGISTiledElevationTerrainProvider
     expect(provider).toBeDefined()
     await provider.readyPromise
@@ -785,7 +785,7 @@ describe('VcTerrainProviderArcgis', () => {
 //   test('render test', async () => {
 //     const wrapper = mount(tiandituTerrainApp)
 //     const testVm = wrapper.vm.$refs.provider as VcComponentPublicInstance
-//     const readyObj: VcReadyObject = await testVm.createPromise
+//     const readyObj: VcReadyObject = await testVm.creatingPromise
 //     let provider = readyObj.cesiumObject
 //     expect(provider).toBeDefined()
 //     await provider.readyPromise
