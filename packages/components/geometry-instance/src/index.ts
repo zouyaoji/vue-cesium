@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-15 09:14:41
+ * @LastEditTime: 2022-03-11 10:02:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
  */
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide } from 'vue'
-import type { ExtractPropTypes } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry, VcReadyObject } from '@vue-cesium/utils/types'
+import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide, Ref } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { modelMatrix, id } from '@vue-cesium/utils/cesium-props'
@@ -52,7 +51,7 @@ export default defineComponent({
       return new Cesium.GeometryInstance(options)
     }
     instance.mount = async () => {
-      const parentVM = getVcParentInstance(instance).proxy as VcComponentPublicInstance
+      const parentVM = getVcParentInstance(instance).proxy as VcGeometryInstanceRef
       if (parentVM.__childCount !== undefined) {
         vcIndex.value = parentVM.__childCount.value || 0
         parentVM.__childCount.value += 1
@@ -64,7 +63,7 @@ export default defineComponent({
     }
     instance.unmount = async () => {
       const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
-      const parentVM = getVcParentInstance(instance).proxy as VcComponentPublicInstance
+      const parentVM = getVcParentInstance(instance).proxy as VcGeometryInstanceRef
       parentVM.__removeGeometryInstances?.(geometryInstance)
       return true
     }
@@ -113,7 +112,6 @@ export default defineComponent({
   }
 })
 
-// export type VcGeometryInstanceProps = ExtractPropTypes<typeof geometryInstanceProps>
 export type VcGeometryInstanceEmits = typeof emits
 export type VcGeometryInstanceProps = {
   /**
@@ -132,4 +130,43 @@ export type VcGeometryInstanceProps = {
    * Per-instance attributes like a show or color attribute shown in the example below.
    */
   attributes: any
+  /**
+   * Triggers before the VcGeometryInstance is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryInstance is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryInstance is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the geometry mounted.
+   */
+  'onUpdate:geometry': (payload: VcGeometry) => void
+}
+
+export interface VcGeometryInstanceRef extends VcComponentPublicInstance<VcGeometryInstanceProps> {
+  /**
+   * private but needed by VcGeometryInstance
+   * @param geometryInstance
+   * @param index
+   */
+  __updateGeometryInstances?(geometryInstance: Cesium.GeometryInstance, index: number): boolean
+  /**
+   * private but needed by VcGeometryInstance
+   * @param geometryInstance
+   */
+  __removeGeometryInstances?(geometryInstance: Cesium.GeometryInstance): boolean
+  /**
+   * private but needed by VcGeometryXXX.
+   * @param geometry
+   */
+  __updateGeometry?(geometry: Cesium.Geometry): boolean
+  /**
+   * private but needed by VcGeometryInstance
+   */
+  __childCount?: Ref<number>
 }

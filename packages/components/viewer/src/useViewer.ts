@@ -1,11 +1,11 @@
-import { ExtractPropTypes, watch, ref, onMounted, onUnmounted, nextTick, reactive, VNode } from 'vue'
+import { watch, ref, onMounted, onUnmounted, nextTick, reactive, VNode } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { useLocale } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj, hasOwn } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
-import {
+import type {
   VcComponentInternalInstance,
   VcCamera,
   VcReadyObject,
@@ -15,7 +15,8 @@ import {
   VcTerrainProvider,
   VcDatasource,
   ViewerWidgetResizedEvent,
-  VcContextOptions
+  VcContextOptions,
+  VcViewerProvider
 } from '@vue-cesium/utils/types'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
@@ -25,7 +26,6 @@ import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { VcSkeletonProps } from '../../ui/skeleton'
 
 export const viewerProps = defaultProps
-// export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
 
 export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInternalInstance) {
   // state
@@ -806,7 +806,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     const readyObj: VcReadyObject = {
       Cesium,
       viewer,
-      vm: vcInstance.proxy as VcComponentPublicInstance
+      vm: vcInstance.proxy as VcViewerRef
     }
     if (globalThis.XE) {
       Object.assign(readyObj, {
@@ -1059,7 +1059,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(toolbarElement).visibility !== 'hidden' &&
       getComputedStyle(toolbarElement).display !== 'none'
     ) {
-      ;(layout.toolbarContainerRC as any) = toolbarElement.getBoundingClientRect()!
+      layout.toolbarContainerRC = toolbarElement.getBoundingClientRect()
     } else {
       layout.toolbarContainerRC = undefined
     }
@@ -1070,7 +1070,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(bottomContainer).visibility !== 'hidden' &&
       getComputedStyle(bottomContainer).display !== 'none'
     ) {
-      ;(layout.bottomContainerRC as any) = bottomContainer.getBoundingClientRect()
+      layout.bottomContainerRC = bottomContainer.getBoundingClientRect()
     } else {
       layout.bottomContainerRC = undefined
     }
@@ -1081,7 +1081,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(timelineContainer).visibility !== 'hidden' &&
       getComputedStyle(timelineContainer).display !== 'none'
     ) {
-      ;(layout.timelineContainerRC as any) = timelineContainer.getBoundingClientRect()
+      layout.timelineContainerRC = timelineContainer.getBoundingClientRect()
     } else {
       layout.timelineContainerRC = undefined
     }
@@ -1092,7 +1092,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(animationContainer).visibility !== 'hidden' &&
       getComputedStyle(animationContainer).display !== 'none'
     ) {
-      ;(layout.animationContainerRC as any) = animationContainer.getBoundingClientRect()
+      layout.animationContainerRC = animationContainer.getBoundingClientRect()
     } else {
       layout.animationContainerRC = undefined
     }
@@ -1263,7 +1263,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
   }
 
-  const getServices = function () {
+  const getServices = function (): VcViewerProvider {
     return mergeDescriptors(
       {},
       {
@@ -1340,8 +1340,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   }
 }
 
-// export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
-export type VcViewerProps = {
+export interface VcViewerProps {
   /**
    * If set to false, the Animation widget will not be created.
    * Default value: false
@@ -1815,3 +1814,5 @@ export interface VcViewerSlots {
    */
   default: () => VNode[]
 }
+
+export type VcViewerRef = VcComponentPublicInstance<VcViewerProps>

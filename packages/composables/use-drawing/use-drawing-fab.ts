@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-03-09 10:16:06
+ * @LastEditTime: 2022-03-11 09:41:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -13,7 +13,7 @@ import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
 import { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
+import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode, ComputedRef } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
@@ -26,7 +26,7 @@ export default function (
   props,
   ctx,
   instance: VcComponentInternalInstance,
-  drawingActionInstances: Array<VcDrawingActionInstance>,
+  drawingActionInstances: ComputedRef<Array<VcDrawingActionInstance>>,
   mainFabOpts: VcFabProps & VcActionTooltipProps,
   clearActionOpts: VcActionTooltipProps,
   cmpName: string
@@ -65,7 +65,7 @@ export default function (
     let drawingActionOpts
     const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (instanceVm.editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -81,7 +81,7 @@ export default function (
     let drawingActionOpts
     const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (instanceVm.editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -97,7 +97,7 @@ export default function (
     let drawingActionOpts
     const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (instanceVm.editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === instanceVm.editingActionName)
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -255,7 +255,7 @@ export default function (
   }
 
   const getDrawingActionInstance = (drawingName: string) => {
-    return drawingActionInstances.find(v => v.name === drawingName)
+    return drawingActionInstances.value.find(v => v.name === drawingName)
   }
 
   const onUpdateFab = value => {
@@ -272,7 +272,7 @@ export default function (
   }
 
   const clearAll = () => {
-    drawingActionInstances.forEach(drawingActionOpts => {
+    drawingActionInstances.value.forEach(drawingActionOpts => {
       drawingActionOpts.cmpRef.value?.clear()
     })
 
@@ -313,7 +313,7 @@ export default function (
     toggleAction,
     getFabRef: () => fabRef.value,
     getDrawingActionInstance,
-    getDrawingActionInstances: () => drawingActionInstances,
+    getDrawingActionInstances: () => drawingActionInstances.value,
     getSelectedDrawingActionInstance: () => selectedDrawingActionInstance
   })
 
@@ -321,7 +321,7 @@ export default function (
     if (canRender.value) {
       const fabActionChildren: Array<VNode> = []
       const drawingChildren: Array<VNode> = []
-      drawingActionInstances.forEach(drawingActionInstance => {
+      drawingActionInstances.value.forEach(drawingActionInstance => {
         fabActionChildren.push(
           h(
             VcFabAction,
@@ -366,7 +366,7 @@ export default function (
           )
       })
 
-      drawingActionInstances.length &&
+      drawingActionInstances.value.length &&
         fabActionChildren.push(
           h(
             VcFabAction,
@@ -401,7 +401,7 @@ export default function (
               style: containerStyle
             },
             ctx.slots.body !== void 0
-              ? ctx.slots.body()
+              ? ctx.slots.body(drawingActionInstances.value)
               : h(
                   VcFab,
                   {

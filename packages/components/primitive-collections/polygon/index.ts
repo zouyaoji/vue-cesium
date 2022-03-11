@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-19 22:09:27
- * @LastEditTime: 2022-01-25 11:13:43
+ * @LastEditTime: 2022-03-11 10:52:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\polygon\index.ts
  */
-import type { ExtractPropTypes, WatchStopHandle } from 'vue'
+import type { WatchStopHandle } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
 import type {
   VcPickEvent,
@@ -14,7 +14,8 @@ import type {
   VcCartesian3Array,
   VcComponentInternalInstance,
   VcPolygonHierarchy,
-  VcReadyObject
+  VcReadyObject,
+  VcComponentPublicInstance
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -164,7 +165,6 @@ export default defineComponent({
   }
 })
 
-// export type VcPolygonProps = ExtractPropTypes<typeof polygonProps>
 export type VcPolygonProps = {
   /**
    * A user-defined object to return when the instance is picked with Scene#pick or get/set per-instance attributes with Primitive#getGeometryInstanceAttributes.
@@ -211,15 +211,15 @@ export type VcPolygonProps = {
    */
   enableMouseEvent?: boolean
   /**
-   * Triggers before the VcPoint is loaded.
+   * Triggers before the VcPolygon is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcPoint is successfully loaded.
+   * Triggers when the VcPolygon is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcPoint is destroyed.
+   * Triggers when the VcPolygon is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
@@ -255,3 +255,5 @@ export type VcPolygonProps = {
    */
   mouseout?: (evt: VcPickEvent) => void
 }
+
+export type VcPolygonRef = VcComponentPublicInstance<VcPolygonProps>

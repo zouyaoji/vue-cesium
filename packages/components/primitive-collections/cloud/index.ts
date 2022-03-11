@@ -1,14 +1,21 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 11:13:56
- * @LastEditTime: 2022-01-29 10:15:27
+ * @LastEditTime: 2022-03-11 10:46:42
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\cloud\index.ts
  */
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcPickEvent, VcCartesian2, VcColor, VcComponentInternalInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
+import type {
+  VcCartesian2,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcPosition,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import { color, position, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -39,7 +46,6 @@ export const cumulusCloudProps = {
     type: Number,
     default: -1.0
   }
-  // ...enableMouseEvent
 }
 export default defineComponent({
   name: 'VcCumulusCloud',
@@ -88,11 +94,6 @@ export type VcCumulusCloudProps = {
    * Default Value: -1.0
    */
   slice?: number
-  // /**
-  //  * Specify whether to respond to mouse pick events.
-  //  * Default Value: true
-  //  */
-  // enableMouseEvent?: boolean
   /**
    * Triggers before the VcCumulusCloud is loaded.
    */
@@ -105,36 +106,6 @@ export type VcCumulusCloudProps = {
    * Triggers when the VcCumulusCloud is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
-  // /**
-  //  * Triggers when the mouse is pressed on this cumulusCloud.
-  //  */
-  // mousedown?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the mouse bounces up on this cumulusCloud.
-  //  */
-  // mouseup?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the mouse clicks on this cumulusCloud.
-  //  */
-  // click?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the mouse clicks outside this cumulusCloud.
-  //  */
-  // clickout?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the left mouse button double-clicks this cumulusCloud.
-  //  */
-  // dblclick?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the mouse moves on this cumulusCloud.
-  //  */
-  // mousemove?: (evt: VcPickEvent) => void
-  // /**
-  //  * Triggers when the mouse moves over to this cumulusCloud.
-  //  */
-  // mouseover?: (evt: VcPickEvent) => void
-  // /**
-  //  * 	Triggers when the mouse moves out of this cumulusCloud.
-  //  */
-  // mouseout?: (evt: VcPickEvent) => void
 }
+
+export type VcCumulusCloudRef = VcComponentPublicInstance<VcCumulusCloudProps>

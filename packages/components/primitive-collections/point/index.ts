@@ -1,12 +1,11 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 11:12:39
+ * @LastEditTime: 2022-03-11 10:50:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\point\index.ts
  */
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcPickEvent,
@@ -15,7 +14,8 @@ import type {
   VcDistanceDisplayCondition,
   VcNearFarScalar,
   VcPosition,
-  VcReadyObject
+  VcReadyObject,
+  VcComponentPublicInstance
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -63,7 +63,6 @@ export default defineComponent({
   }
 })
 
-// export type VcPointProps = ExtractPropTypes<typeof pointProps>
 export type VcPointProps = {
   /**
    * Specify the inner color of the point.
@@ -133,33 +132,35 @@ export type VcPointProps = {
   /**
    * Triggers when the mouse is pressed on this point.
    */
-  mousedown?: (evt: VcPickEvent) => void
+  onMousedown?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse bounces up on this point.
    */
-  mouseup?: (evt: VcPickEvent) => void
+  onMouseup?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks on this point.
    */
-  click?: (evt: VcPickEvent) => void
+  onClick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks outside this point.
    */
-  clickout?: (evt: VcPickEvent) => void
+  onClickout?: (evt: VcPickEvent) => void
   /**
    * Triggers when the left mouse button double-clicks this point.
    */
-  dblclick?: (evt: VcPickEvent) => void
+  onDblclick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves on this point.
    */
-  mousemove?: (evt: VcPickEvent) => void
+  onMousemove?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves over to this point.
    */
-  mouseover?: (evt: VcPickEvent) => void
+  onMouseover?: (evt: VcPickEvent) => void
   /**
    * 	Triggers when the mouse moves out of this point.
    */
-  mouseout?: (evt: VcPickEvent) => void
+  onMouseout?: (evt: VcPickEvent) => void
 }
+
+export type VcPointRef = VcComponentPublicInstance<VcPointProps>

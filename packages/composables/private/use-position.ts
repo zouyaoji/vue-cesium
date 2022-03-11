@@ -1,6 +1,5 @@
 import { computed, CSSProperties, PropType, ref } from 'vue'
-import { hasOwn, isArray, isPlainObject } from '@vue-cesium/utils/util'
-import { VcViewerProvider, AnyObject } from '@vue-cesium/utils/types'
+import { VcViewerProvider } from '@vue-cesium/utils/types'
 
 export const positionProps = {
   position: {
@@ -9,7 +8,7 @@ export const positionProps = {
     validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
   },
   offset: {
-    type: Array as PropType<number[]>,
+    type: Array as PropType<unknown> as PropType<[number, number]>,
     validator: v => v.length === 2
   }
 }

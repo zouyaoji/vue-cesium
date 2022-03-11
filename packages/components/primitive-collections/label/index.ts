@@ -1,12 +1,11 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 11:11:45
+ * @LastEditTime: 2022-03-11 10:47:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\label\index.ts
  */
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import {
   VcPickEvent,
@@ -16,7 +15,8 @@ import {
   VcDistanceDisplayCondition,
   VcNearFarScalar,
   VcPosition,
-  VcReadyObject
+  VcReadyObject,
+  VcComponentPublicInstance
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -92,7 +92,6 @@ export default defineComponent({
   }
 })
 
-// export type VcLabelProps = ExtractPropTypes<typeof labelProps>
 export type VcLabelProps = {
   /**
    * Specify the background color of this label.
@@ -214,33 +213,35 @@ export type VcLabelProps = {
   /**
    * Triggers when the mouse is pressed on this label.
    */
-  mousedown?: (evt: VcPickEvent) => void
+  onMousedown?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse bounces up on this label.
    */
-  mouseup?: (evt: VcPickEvent) => void
+  onMouseup?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks on this label.
    */
-  click?: (evt: VcPickEvent) => void
+  onClick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks outside this label.
    */
-  clickout?: (evt: VcPickEvent) => void
+  onClickout?: (evt: VcPickEvent) => void
   /**
    * Triggers when the left mouse button double-clicks this label.
    */
-  dblclick?: (evt: VcPickEvent) => void
+  onDblclick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves on this label.
    */
-  mousemove?: (evt: VcPickEvent) => void
+  onMousemove?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves over to this label.
    */
-  mouseover?: (evt: VcPickEvent) => void
+  onMouseover?: (evt: VcPickEvent) => void
   /**
    * 	Triggers when the mouse moves out of this label.
    */
-  mouseout?: (evt: VcPickEvent) => void
+  onMouseout?: (evt: VcPickEvent) => void
 }
+
+export type VcLabelRef = VcComponentPublicInstance<VcLabelProps>

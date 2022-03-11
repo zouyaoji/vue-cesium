@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-03-05 15:38:26
+ * @LastEditTime: 2022-03-09 22:55:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
@@ -218,15 +218,15 @@ export interface VcAnalysisFloodProps {
    */
   polygonHierarchy: VcPolygonHierarchy
   /**
-   * Triggers before the VcCompass is loaded.
+   * Triggers before the VcAnalysisFlood is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcCompass is successfully loaded.
+   * Triggers when the VcAnalysisFlood is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcCompass is destroyed.
+   * Triggers when the VcAnalysisFlood is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-15 09:09:35
+ * @LastEditTime: 2022-03-04 09:11:24
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\viewer\src\index.ts
@@ -10,7 +10,13 @@ import { defineComponent, provide, getCurrentInstance, h, createCommentVNode } f
 import type { VNode } from 'vue'
 import useViewer, { viewerProps } from './useViewer'
 import type { VcViewerProps } from './useViewer'
-import type { VcComponentInternalInstance, VcDatasource, VcTerrainProvider, ViewerWidgetResizedEvent } from '@vue-cesium/utils/types'
+import type {
+  VcComponentInternalInstance,
+  VcDatasource,
+  VcTerrainProvider,
+  VcViewerProvider,
+  ViewerWidgetResizedEvent
+} from '@vue-cesium/utils/types'
 import { vcKey } from '@vue-cesium/utils/config'
 import { viewerEvents } from './events'
 import { VcSkeleton } from '@vue-cesium/components/ui'
@@ -91,11 +97,11 @@ export default defineComponent({
     const viewerStates = useViewer(props, ctx, instance)
 
     // provide
-    provide(vcKey, viewerStates.getServices())
+    provide<VcViewerProvider>(vcKey, viewerStates.getServices())
     instance.appContext.config.globalProperties.$VueCesium = viewerStates.getServices()
     // expose public methods
     Object.assign(instance.proxy, {
-      createPromise: viewerStates.createPromise,
+      creatingPromise: viewerStates.creatingPromise,
       load: viewerStates.load,
       unload: viewerStates.unload,
       reload: viewerStates.reload,
