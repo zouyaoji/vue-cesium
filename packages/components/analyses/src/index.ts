@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 10:23:09
- * @LastEditTime: 2022-03-09 10:26:33
+ * @LastEditTime: 2022-03-11 09:40:29
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\index.ts
  */
 
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import { defineComponent, getCurrentInstance, reactive, ref, computed, VNode } from 'vue'
 import { useLocale } from '@vue-cesium/composables'
 import { defaultOptions, analysesProps, VcAnalysesProps } from './defaultProps'
 import type { AnalysisActionCmpRef, VcDrawingActionInstance, VcDrawingOpts, VcViewshedAnalysisOpts } from '@vue-cesium/utils/drawing-types'
@@ -50,22 +50,24 @@ export default defineComponent({
     options.viewshedAnalysisOpts = viewshedAnalysisOpts
     options.clearActionOpts = clearActionOpts
 
-    const drawingActionInstances: Array<VcDrawingActionInstance> = props.analyses.map(analysisName => ({
-      name: analysisName,
-      type: 'analysis',
-      actionStyle: {
-        background: options[`${camelize(analysisName)}ActionOpts`].color,
-        color: options[`${camelize(analysisName)}ActionOpts`].textColor
-      },
-      actionClass: `vc-analysis-${analysisName} vc-analysis-button`,
-      actionRef: ref<VcFabActionRef>(null),
-      actionOpts: options[`${camelize(analysisName)}ActionOpts`] as VcActionTooltipProps,
-      cmp: getDrawingCmp(analysisName),
-      cmpRef: ref<AnalysisActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(analysisName)}AnalysisOpts`] as VcDrawingOpts,
-      tip: options[`${camelize(analysisName)}ActionOpts`].tooltip.tip || t(`vc.analysis.${camelize(analysisName)}.tip`),
-      isActive: false
-    }))
+    const drawingActionInstances = computed<Array<VcDrawingActionInstance>>(() => {
+      return props.analyses.map(analysisName => ({
+        name: analysisName,
+        type: 'analysis',
+        actionStyle: {
+          background: options[`${camelize(analysisName)}ActionOpts`].color,
+          color: options[`${camelize(analysisName)}ActionOpts`].textColor
+        },
+        actionClass: `vc-analysis-${analysisName} vc-analysis-button`,
+        actionRef: ref<VcFabActionRef>(null),
+        actionOpts: options[`${camelize(analysisName)}ActionOpts`] as VcActionTooltipProps,
+        cmp: getDrawingCmp(analysisName),
+        cmpRef: ref<AnalysisActionCmpRef>(null!),
+        cmpOpts: options[`${camelize(analysisName)}AnalysisOpts`] as VcDrawingOpts,
+        tip: options[`${camelize(analysisName)}ActionOpts`].tooltip.tip || t(`vc.analysis.${camelize(analysisName)}.tip`),
+        isActive: false
+      }))
+    })
 
     function getDrawingCmp(name) {
       switch (name) {
@@ -124,4 +126,16 @@ export interface VcAnalysesRef extends VcComponentPublicInstance<VcAnalysesProps
    * Get the selected drawing action instance.
    */
   getSelectedDrawingActionInstance: () => VcDrawingActionInstance
+}
+
+export type VcAnalysesSlots = {
+  /**
+   * body slot content of the component
+   */
+  body: (scope: {
+    /**
+     * Action instances.
+     */
+    drawingActionInstances: Array<VcDrawingActionInstance>
+  }) => VNode[]
 }

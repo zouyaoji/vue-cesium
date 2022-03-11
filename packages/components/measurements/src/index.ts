@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, reactive, VNode } from 'vue'
+import { defineComponent, getCurrentInstance, ref, reactive, computed, VNode } from 'vue'
 import { measurementsProps, defaultOptions, VcMeasurementsProps } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
 import { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
@@ -118,22 +118,24 @@ export default defineComponent({
     options.circleMeasurementOpts = circleMeasurementOpts
     options.clearActionOpts = clearActionOpts
 
-    const drawingActionInstances: Array<VcDrawingActionInstance> = props.measurements.map(measurement => ({
-      name: measurement,
-      type: 'measurement',
-      actionStyle: {
-        background: options[`${camelize(measurement)}ActionOpts`].color,
-        color: options[`${camelize(measurement)}ActionOpts`].textColor
-      },
-      actionClass: `vc-measure-${measurement} vc-measure-button`,
-      actionRef: ref<VcFabActionRef>(null),
-      actionOpts: options[`${camelize(measurement)}ActionOpts`] as VcActionTooltipProps,
-      cmp: getMeasurementCmp(measurement),
-      cmpRef: ref<MeasurementActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(measurement)}MeasurementOpts`] as VcMeasurementOpts,
-      tip: options[`${camelize(measurement)}ActionOpts`].tooltip.tip || t(`vc.measurement.${measurement}.tip`),
-      isActive: false
-    }))
+    const drawingActionInstances = computed<Array<VcDrawingActionInstance>>(() => {
+      return props.measurements.map(measurement => ({
+        name: measurement,
+        type: 'measurement',
+        actionStyle: {
+          background: options[`${camelize(measurement)}ActionOpts`].color,
+          color: options[`${camelize(measurement)}ActionOpts`].textColor
+        },
+        actionClass: `vc-measure-${measurement} vc-measure-button`,
+        actionRef: ref<VcFabActionRef>(null),
+        actionOpts: options[`${camelize(measurement)}ActionOpts`] as VcActionTooltipProps,
+        cmp: getMeasurementCmp(measurement),
+        cmpRef: ref<MeasurementActionCmpRef>(null!),
+        cmpOpts: options[`${camelize(measurement)}MeasurementOpts`] as VcMeasurementOpts,
+        tip: options[`${camelize(measurement)}ActionOpts`].tooltip.tip || t(`vc.measurement.${measurement}.tip`),
+        isActive: false
+      }))
+    })
 
     function getMeasurementCmp(name) {
       switch (name) {
@@ -185,7 +187,12 @@ export type VcMeasurementsSlots = {
   /**
    * body slot content of the component
    */
-  body: () => VNode[]
+  body: (scope: {
+    /**
+     * Action instances.
+     */
+    drawingActionInstances: Array<VcDrawingActionInstance>
+  }) => VNode[]
 }
 
 export interface VcMeasurementsRef extends VcComponentPublicInstance<VcMeasurementsProps> {

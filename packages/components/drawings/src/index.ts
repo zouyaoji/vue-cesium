@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive, VNode, Ref } from 'vue'
+import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive, VNode, Ref, computed } from 'vue'
 import { drawingsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
 import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
@@ -64,22 +64,24 @@ export default defineComponent({
     options.pinDrawingOpts = pinDrawingOpts
     options.clearActionOpts = clearActionOpts
 
-    const drawingActionInstances: Array<VcDrawingActionInstance> = props.drawings.map(drawing => ({
-      name: drawing,
-      type: 'drawing',
-      actionStyle: {
-        background: options[`${camelize(drawing)}ActionOpts`].color,
-        color: options[`${camelize(drawing)}ActionOpts`].textColor
-      },
-      actionClass: `vc-draw-${drawing} vc-draw-button`,
-      actionRef: ref<VcFabActionRef>(null!),
-      actionOpts: options[`${camelize(drawing)}ActionOpts`] as VcActionTooltipProps,
-      cmp: getDrawingCmp(drawing),
-      cmpRef: ref<DrawingActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(drawing)}DrawingOpts`] as VcDrawingOpts,
-      tip: options[`${camelize(drawing)}ActionOpts`].tooltip.tip || t(`vc.drawing.${camelize(drawing)}.tip`),
-      isActive: false
-    }))
+    const drawingActionInstances = computed<Array<VcDrawingActionInstance>>(() => {
+      return props.drawings.map(drawing => ({
+        name: drawing,
+        type: 'drawing',
+        actionStyle: {
+          background: options[`${camelize(drawing)}ActionOpts`].color,
+          color: options[`${camelize(drawing)}ActionOpts`].textColor
+        },
+        actionClass: `vc-draw-${drawing} vc-draw-button`,
+        actionRef: ref<VcFabActionRef>(null!),
+        actionOpts: options[`${camelize(drawing)}ActionOpts`] as VcActionTooltipProps,
+        cmp: getDrawingCmp(drawing),
+        cmpRef: ref<DrawingActionCmpRef>(null!),
+        cmpOpts: options[`${camelize(drawing)}DrawingOpts`] as VcDrawingOpts,
+        tip: options[`${camelize(drawing)}ActionOpts`].tooltip.tip || t(`vc.drawing.${camelize(drawing)}.tip`),
+        isActive: false
+      }))
+    })
 
     function getDrawingCmp(name) {
       switch (name) {
@@ -117,7 +119,12 @@ export type VcDrawingsSlots = {
   /**
    * body slot content of the component
    */
-  body: () => VNode[]
+  body: (scope: {
+    /**
+     * Action instances.
+     */
+    drawingActionInstances: Array<VcDrawingActionInstance>
+  }) => VNode[]
 }
 export interface VcDrawingsRef extends VcComponentPublicInstance<VcDrawingsProps> {
   /**
