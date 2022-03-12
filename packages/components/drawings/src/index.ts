@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive, VNode, Ref, computed } from 'vue'
+import { defineComponent, getCurrentInstance, ref, reactive, VNode, computed } from 'vue'
 import { drawingsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
 import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'

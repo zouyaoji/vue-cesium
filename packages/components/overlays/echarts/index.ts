@@ -1,19 +1,19 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 15:52:55
- * @LastEditTime: 2022-03-09 23:24:51
+ * @LastEditTime: 2022-03-11 13:27:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\echarts\index.ts
  */
-import type { ExtractPropTypes, CSSProperties, WatchStopHandle, PropType } from 'vue'
+import type { CSSProperties, WatchStopHandle, PropType } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted, nextTick } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import * as echarts from 'echarts'
-import type { EChartsType, EChartsOption } from 'echarts'
+import { EChartsType, EChartsOption } from 'echarts'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 export const echartsOverlayProps = {
@@ -248,18 +248,6 @@ export interface VcOverlayEchartsProps {
    * Triggers when the VcOverlayEcharts is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
-  // /**
-  //  *
-  //  */
-  // onMouseenter?: (evt: MouseEvent) => void
-  // /**
-  //  *
-  //  */
-  // onMouseleave?: (evt: MouseEvent) => void
-  // /**
-  //  *
-  //  */
-  // onClick?: (evt: MouseEvent) => void
 }
 
 export type VcOverlayEchartsRef = VcComponentPublicInstance<VcOverlayEchartsProps>

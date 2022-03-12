@@ -212,7 +212,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           } else if (vueProp === 'bmKey') {
             cesiumProp = 'key'
           }
-          // 如果在vue文件中已经监听了改 props 这儿不再监听了
+          // 如果在vue文件中已经监听了该 prop 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
           if (vcInstance.proxy?.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
             return
