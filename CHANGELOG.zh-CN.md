@@ -1,5 +1,24 @@
 ## 更新日志
 
+### 3.0.11
+
+_2022-03-12_
+
+#### 破坏性更新
+
+- 各组件的 `createPromise` 重命名为 `creatingPromise`。
+
+#### 新特性
+
+- `vc-overlay-dynamic` 组件增加站点到达 `stopArrived` 事件，缩放方法 `zoomToOverlay` 和 跟踪方法 `trackOverlay`。
+- `vc-overlay-windmap` 组件增加通过经纬度获取 U V 值。
+
+#### Bug 修复
+
+- `vc-selection-indicator` 组件拾取到聚合图标上指示器位置不准的问题。
+- `vc-overlay-windmap` 组件初始化异常问题。
+- 量算绘制组件 `measurements` 和 `drawings` 参数不能响应式更新的问题。
+
 ### 3.0.10
 
 _2022-02-26_

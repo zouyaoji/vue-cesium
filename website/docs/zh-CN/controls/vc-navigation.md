@@ -2,7 +2,7 @@
 
 导航组件，包括罗盘、缩放、其他悬浮按钮，位置和距离比例尺工具栏控件。由 `vc-compass`、`vc-zoom-control`、`vc-print`、`vc-mylocation`、`vc-status-bar`、`vc-distance-legend` 组合而成。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 
@@ -241,7 +241,17 @@
 | statusBarEvt      | (evt: VcStatusBarEvt)                   | 状态控件相关参数改变时触发。 |
 | distanceLegendEvt | (evt: VcDistanceLegendEvt)              | 距离比例尺改变时触发。       |
 
-### VcNavigation Slots
+### VcNavigation 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
+### VcNavigation 插槽
 
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
@@ -319,6 +329,16 @@
 | beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+
+### VcCompass 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### VcZoomControl
 
@@ -441,6 +461,16 @@
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |
 
+### VcZoomControl 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
 ### VcPrint
 
 打印组件。
@@ -474,6 +504,16 @@
 | ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | printEvt   | (evt: VcPrintEvt)                       | 操作打印控件时触发。 |
+
+### VcPrint 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### VcMyLocation
 
@@ -517,6 +557,16 @@
 | destroyed   | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | locationEvt | (evt: VcLocationEvt)                    | 操作定位按钮时触发。 |
 
+### VcMyLocation 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
 ### VcStatusBar
 
 状态组件。
@@ -546,6 +596,19 @@
 | destroyed    | (instance: VcComponentInternalInstance) | 组件销毁时触发。       |
 | statusBarEvt | (evt: VcStatusBarEvt)                   | 状态栏参数改变时触发。 |
 
+### VcStatusBar 方法
+
+| 方法名             | 参数                                                                                  | 描述                                        |
+| ------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>                                               | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>                                               | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                                                              | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject>                                               | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                                                                  | 获取该组件加载的 Cesium 对象。              |
+| getMouseCoordsInfo | () => MouseCoords                                                                     | 获取鼠标坐标信息。                          |
+| getCameraInfo      | () => { heading: string; pitch: string; roll: string; height: string; level: string } | 获取相机信息。                              |
+| getPerformanceInfo | () => { fps: string; ms: string }                                                     | 获取性能参数信息。                          |
+
 ### VcDistanceLegend
 
 距离比例尺组件。
@@ -570,3 +633,13 @@
 | ready             | (readyObj: VcReadyObject)               | 组件加载成功时触发。   |
 | destroyed         | (instance: VcComponentInternalInstance) | 组件销毁时触发。       |
 | distanceLegendEvt | (evt: VcDistanceLegendEvt)              | 距离比例尺改变时触发。 |
+
+### VcDistanceLegend 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |

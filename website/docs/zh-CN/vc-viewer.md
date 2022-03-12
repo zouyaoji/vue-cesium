@@ -103,7 +103,7 @@
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },
@@ -261,16 +261,17 @@
 |imageryLayersUpdatedEvent|()|在添加，显示，隐藏，移动或删除图像图层时触发。|Viewer.scene.globe|
 |tileLoadProgressEvent|(length: number)|获取自上一个渲染帧以来切片加载队列的长度发生更改时引发的事件。 当加载队列为空时，当前视图的所有地形和图像均已加载。 该事件将传递图块加载队列的新长度。|Viewer.scene.globe|
 
-## 组件 ref 方法
+## 方法
 
-| 方法名          | 返回                            | 描述                                                        |
-| --------------- | ------------------------------- | ----------------------------------------------------------- |
-| load            | {Cesium, viewer, vm} \| `false` | 执行加载操作。成功返回 `VcReadyObject`, 失败返回 `false。`  |
-| unload          | boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。           |
-| reload          | {Cesium, viewer, vm} \| `false` | 执行重载操作。 成功返回 `VcReadyObject`, 失败返回 `false。` |
-| getCesiumObject | Object                          | 获取该组件加载的 Cesium 对象。                              |
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
-## 组件插槽
+## 插槽
 
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |

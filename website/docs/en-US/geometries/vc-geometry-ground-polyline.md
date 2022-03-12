@@ -72,7 +72,7 @@ The basic usage of the VcGeometryGroundPolyline component.
       }
       // lifecycle
       onMounted(() => {
-        geometryRef.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        geometryRef.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           const boundingSphere = Cesium.BoundingSphere.fromPoints(cesiumObject._positions)
           viewer.scene.camera.flyToBoundingSphere(boundingSphere)
           console.log('All geometries are loaded.')

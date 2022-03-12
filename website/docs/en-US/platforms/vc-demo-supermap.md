@@ -79,7 +79,7 @@ Use VueCesium to load SuperMap iClient3D for WebGL
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },

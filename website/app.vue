@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2022-02-15 10:48:57
+ * @LastEditTime: 2022-03-09 11:13:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\app.vue
@@ -58,12 +58,12 @@ export default defineComponent({
     watch(
       () => lang.value,
       val => {
-        if (val === Language.CN) suggestJump()
+        // if (val === Language.CN) suggestJump()
       }
     )
 
     onMounted(() => {
-      if (lang.value === Language.CN) suggestJump()
+      // if (lang.value === Language.CN) suggestJump()
     })
 
     return {

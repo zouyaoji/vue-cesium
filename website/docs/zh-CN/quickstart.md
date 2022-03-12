@@ -128,7 +128,7 @@ VueCesium 可能并不完全能提供你所需的功能，但是保留了访问�
 
 通常，`VcViewer` 组件是创建 Cesium 观察者窗口的根组件，它的 `ready` 事件回调函数的参数可以解构成 `Cesium` 和 `viewer` 两个变量，用于原生 Cesium API 开发。
 
-你也可以使用 ref 模板引用在组件生命周期内随时可获取这两个变量。
+你也可以使用 ref 模板引用在组件生命周期内随时获取这两个变量。
 
 ```ts
 <template>
@@ -143,7 +143,7 @@ VueCesium 可能并不完全能提供你所需的功能，但是保留了访问�
   const viewerRef = ref<HTMLElement>(null)
 
   onMounted(() => {
-    viewerRef.value.createPromise.then((readyObj: VcReadyObject) => {
+    viewerRef.value.creatingPromise.then((readyObj: VcReadyObject) => {
       console.log(readyObj.Cesium) // Cesium namespace object
       console.log(readyObj.viewer) // instanceof Cesium.Viewer
     })
@@ -192,7 +192,7 @@ Vue3 中在组合式 API 的加持下可以通过 `useVueCesium` 很方便的获
     // 注1：business-component 为 vc-viewer 的子组件
     console.log($vc.viewer) // instanceof Cesium.Viewer
     // 注2： business-component 不是 vc-viewer 的子组件
-    $vc.viewerCreatePromise.then((readyObj: VcReadyObject) => {
+    $vc.creatingPromise.then((readyObj: VcReadyObject) => {
       console.log(readyObj.viewer) // instanceof Cesium.Viewer
     })
   }
@@ -202,7 +202,7 @@ Vue3 中在组合式 API 的加持下可以通过 `useVueCesium` 很方便的获
 :::tip
 注 1：推荐将 business-component 组件作为 vc-viewer 的子组件挂载，正如 [vue-cesium-demo](https://github.com/zouyaoji/vue-cesium-demo) 中的写法。
 
-注 2：如果 business-component 组件不是 vc-viewer 的子组件，vc-viewer 可能就还没初始化完成，就需要等待 $vc.viewerCreatePromise 状态为 fulfilled 后才能获取到 viewer 。
+注 2：如果 business-component 组件不是 vc-viewer 的子组件，vc-viewer 可能就还没初始化完成，就需要等待 $vc.creatingPromise 状态为 fulfilled 后才能获取到 viewer 。
 :::
 
 ## 使用模板

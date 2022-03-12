@@ -11,16 +11,17 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-collection-cloud ref="cloudCollectionRef" @mouseout="onMouseout" @mouseover="onMouseover" :clouds="clouds">
+    <vc-collection-cloud ref="cloudCollectionRef" :clouds="clouds">
       <vc-cumulus-Cloud :position="[-122.6908, 45.496, 300]" :maximumSize="{x: 50, y: 15, z: 13}" :slice="0.3" :scale="[1500,250]"></vc-cumulus-Cloud>
     </vc-collection-cloud>
     <vc-layer-imagery>
       <vc-imagery-provider-bing
         ref="provider"
-        bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
-        mapStyle="Aerial"
+        bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+        map-style="Aerial"
       ></vc-imagery-provider-bing>
     </vc-layer-imagery>
+    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -38,9 +39,6 @@
       const clouds = ref([])
       const instance = getCurrentInstance()
       // methods
-      const onClicked = e => {
-        console.log(e)
-      }
       const unload = () => {
         cloudCollectionRef.value.unload()
       }
@@ -107,32 +105,10 @@
         })
       }
 
-      const onMouseover = e => {
-        console.log(e)
-        if (e.cesiumObject instanceof Cesium.Billboard) {
-          this.scale = 0.5 // or e.cesiumObject.scale = 0.5
-          e.pickedFeature.primitive.scale = 0.5
-        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
-          e.pickedFeature.primitive.scale = 0.5
-        }
-      }
-
-      const onMouseout = e => {
-        console.log(e)
-        if (e.cesiumObject instanceof Cesium.Billboard) {
-          this.scale = 0.25 // or e.cesiumObject.scale = 0.25
-        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
-          e.pickedFeature.primitive.scale = 0.25
-        }
-      }
-
       return {
         unload,
         reload,
         load,
-        onClicked,
-        onMouseout,
-        onMouseover,
         onViewerReady,
         cloudCollectionRef,
         clouds
@@ -144,7 +120,7 @@
 
 :::
 
-### 属性
+### VcCollectionCloud 属性
 
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
@@ -156,7 +132,7 @@
 | debugEllipsoids | Boolean |`16.0`|`optional` 仅用于调试。确定云是否将作为不透明椭圆体呈现。 |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` 指定积云集合数组。 数组对象结构与 `vc-cumulus-cloud` 组件属性相同。 |
 
-### 事件
+### VcCollectionCloud 事件
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
@@ -164,7 +140,17 @@
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
 
-### 插槽
+### VcCollectionCloud 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
+### VcCollectionCloud 插槽
 
 | 插槽名  | 描述                             | 子组件           |
 | ------- | -------------------------------- | ---------------- |
@@ -196,6 +182,16 @@
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+
+### VcCumulusCloud 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### 参考
 

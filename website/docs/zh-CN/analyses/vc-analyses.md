@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-02-17 17:59:15
+ * @LastEditTime: 2022-03-09 09:46:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
@@ -10,6 +10,8 @@
 ## VcAnalyses
 
 加载分析工具组件。包含通视分析、可视域分析（3DTiles)。
+
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 ### 基础用法
 
@@ -25,14 +27,13 @@
       ref="analyses"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[20, 50]"
+      :offset="[10, 30]"
       :editable="editable"
       @draw-evt="drawEvt"
       @active-evt="activeEvt"
       @editor-evt="editorEvt"
       @mouse-evt="mouseEvt"
       @ready="analysesReadyDefault"
-      :show="false"
     ></vc-analyses>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
@@ -193,6 +194,25 @@
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移出绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+
+### 方法
+
+<!-- prettier-ignore -->
+| 方法名 | 参数 | 描述 |
+| ----- | ---- | ---- |
+| load | () => Promise\<false \| VcReadyObject\> | 手动加载组件。 |
+| reload | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。 |
+| unload | () => Promise\<boolean\> | 手动卸载组件。 |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject | () => VcCesiumObject | 获取通过该组件加载的 Cesium 对象。 |
+| clearAll | () => void | 清除所有的绘制对象。 |
+| activate | () => void | 激活绘制事件。 |
+| deactivate | () => void | 取消激活绘制事件。 |
+| toggleAction | (drawingOption: VcDrawingActionInstance \| string) => void | 切换绘制实例。 |
+| getFabRef | () => VcFabRef | 获取浮动按钮模板引用。 |
+| getDrawingActionInstance | (actionName: string) => VcDrawingActionInstance|根据action名称获取绘制实例。|
+| getDrawingActionInstances | () => Array\<VcDrawingActionInstance\> | 获取所有绘制实例。 |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance | 获取选中的绘制实例。 |
 
 ### 插槽
 

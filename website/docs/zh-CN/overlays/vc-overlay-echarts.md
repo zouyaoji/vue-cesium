@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-12 10:31:24
- * @LastEditTime: 2021-12-07 13:12:06
+ * @LastEditTime: 2022-03-09 23:24:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-echarts.md
@@ -241,7 +241,8 @@ Echart 覆盖物组件的基础用法。
         })
       })
 
-      const options = { animation: !1, series: [...seriesEffectScatter, ...seriesLines] }
+      const options = { animation: !0, series: [...seriesEffectScatter, ...seriesLines] }
+      console.log(options)
       const unload = () => {
         echartOverlay.value.unload()
       }
@@ -268,12 +269,12 @@ Echart 覆盖物组件的基础用法。
 
 ### 属性
 
-| 属性名           | 类型    | 默认值     | 描述                                                      |
-| ---------------- | ------- | ---------- | --------------------------------------------------------- |
-| options          | Object  |            | `required` 指定 Echart 图表的配置项。                     |
-| autoHidden       | Boolean | `true`     | `optional` 指定 Echart 图表元素在地球背面时是否自动隐藏。 |
-| coordinateSystem | String  | `'cesium'` | `optional` 指定 Echart 初始化时自定义的坐标系统名称。     |
-| customClass      | String  |            | `optional` 指定 Echart 自定义 class 。                    |
+| 属性名           | 类型          | 默认值     | 描述                                                       |
+| ---------------- | ------------- | ---------- | ---------------------------------------------------------- |
+| options          | EChartsOption |            | `required` 指定 Echarts 图表的配置项。                     |
+| autoHidden       | boolean       | `true`     | `optional` 指定 Echarts 图表元素在地球背面时是否自动隐藏。 |
+| coordinateSystem | string        | `'cesium'` | `optional` 指定 Echarts 初始化时自定义的坐标系统名称。     |
+| customClass      | string        |            | `optional` 指定 Echarts 自定义 class 。                    |
 
 ### 事件
 
@@ -282,3 +283,13 @@ Echart 覆盖物组件的基础用法。
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+
+### 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |

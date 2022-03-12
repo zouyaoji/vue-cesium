@@ -2,7 +2,7 @@
 
 加载绘制工具组件。支持绘制点、线、面、矩形、正多边形、圆形。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 
@@ -26,7 +26,7 @@ ctrl + 右键取消绘制。
       ref="drawingsRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[20, 80]"
+      :offset="[10, 65]"
       :editable="editable"
       :clamp-to-ground="clampToGround"
       @draw-evt="drawEvt"
@@ -43,26 +43,25 @@ ctrl + 右键取消绘制。
       ref="drawingsCustomRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[0, 20]"
+      :offset="[10, 30]"
       :editable="editable"
       :clamp-to-ground="clampToGround"
-      @ready="drawingsReady"
       :polyline-drawing-opts="polylineDrawingOpts"
       :pin-drawing-opts="pinDrawingOpts"
       :rectangle-drawing-opts="rectangleDrawingOpts"
     >
-      <template #body>
+      <template #body="drawingActionInstances">
         <div class="custom-drawings">
           <el-row>
-            <el-button
+            <vc-btn
               v-for="(drawingActionInstance, index) in drawingActionInstances"
               :key="index"
-              :type="drawingActionInstance.isActive ? 'success' : 'primary'"
-              round
+              :color="drawingActionInstance.isActive ? 'positive' : 'primary'"
+              rounded
               @click="toggle(drawingActionInstance)"
-              >{{drawingActionInstance.tip.replace('绘制', '')}}</el-button
+              >{{drawingActionInstance.tip.replace('绘制', '')}}</vc-btn
             >
-            <el-button type="danger" round @click="clear">清除</el-button>
+            <vc-btn color="red" rounded @click="clear">清除</vc-btn>
           </el-row>
         </div>
       </template>
@@ -92,7 +91,6 @@ ctrl + 右键取消绘制。
     data() {
       return {
         addTerrain: false,
-        drawingActionInstances: [],
         editable: false,
         clampToGround: false,
         mainFabOpts: {
@@ -147,12 +145,11 @@ ctrl + 右键取消绘制。
     methods: {
       drawingsReadyDefault({ Cesium, viewer, cesiumObject }) {
         console.log('绘制选项参数：', cesiumObject)
+        window.vm = this
+        window.viewer = viewer
       },
       clear() {
         this.$refs.drawingsCustomRef.clearAll()
-      },
-      drawingsReady({ Cesium, viewer, cesiumObject }) {
-        this.drawingActionInstances = cesiumObject
       },
       toggle(drawingActionInstance) {
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
@@ -313,7 +310,7 @@ ctrl + 右键取消绘制。
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  autoExpand: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
 }
@@ -342,6 +339,25 @@ ctrl + 右键取消绘制。
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+
+### 方法
+
+<!-- prettier-ignore -->
+| 方法名 | 参数 | 描述 |
+| ----- | ---- | ---- |
+| load | () => Promise\<false \| VcReadyObject\> | 手动加载组件。 |
+| reload | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。 |
+| unload | () => Promise\<boolean\> | 手动卸载组件。 |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject | () => VcCesiumObject | 获取通过该组件加载的 Cesium 对象。 |
+| clearAll | () => void | 清除所有的绘制对象。 |
+| activate | () => void | 激活绘制事件。 |
+| deactivate | () => void | 取消激活绘制事件。 |
+| toggleAction | (drawingOption: VcDrawingActionInstance \| string) => void | 切换绘制实例。 |
+| getFabRef | () => VcFabRef | 获取浮动按钮模板引用。 |
+| getDrawingActionInstance | (actionName: string) => VcDrawingActionInstance|根据action名称获取绘制实例。|
+| getDrawingActionInstances | () => Array\<VcDrawingActionInstance\> | 获取所有绘制实例。 |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance | 获取选中的绘制实例。 |
 
 ### 插槽
 

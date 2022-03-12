@@ -1,5 +1,24 @@
 ## Changelog
 
+### 3.0.11
+
+_2022-03-12_
+
+#### Breaking changes:
+
+- `createPromise` for each component has been renamed to `creatingPromise`.
+
+#### New feature
+
+- The `vc-overlay-dynamic` component adds a site arrival `stopArrived` event, a zoom method `zoomToOverlay` and a tracking method `trackOverlay`.
+- The `vc-overlay-windmap` component is added to obtain UV values by latitude and longitude.
+
+#### Bug fixes
+
+- The `vc-selection-indicator` component picks up the inaccurate position of the indicator on the aggregation icon.
+- `vc-overlay-windmap` component initialization abnormal problem.
+- The measurement drawing components `measurements` and `drawings` cannot be updated responsively.
+
 ### 3.0.10
 
 _2022-02-26_

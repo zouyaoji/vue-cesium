@@ -82,7 +82,7 @@ Basic usage of VcGeometryBox component.
       }
       // lifecycle
       onMounted(() => {
-        Promise.all([geometryRef.value.createPromise, geometryOutlineRef.value.createPromise]).then(geometries => {
+        Promise.all([geometryRef.value.creatingPromise, geometryOutlineRef.value.creatingPromise]).then(geometries => {
           const { BoundingSphere } = Cesium
           const boundingSphereUnion = geometries.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)

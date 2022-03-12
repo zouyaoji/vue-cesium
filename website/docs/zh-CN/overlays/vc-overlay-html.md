@@ -1,8 +1,17 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2022-02-19 00:16:21
+ * @LastEditTime: 2022-03-09 21:20:54
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\overlays\vc-overlay-html.md
+-->
+
 ## VcOverlayHtml
 
 按地理位置加载 HTML 元素覆盖物。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 ### 基础用法
 
@@ -17,7 +26,7 @@ HTML 覆盖物组件的基础用法。
       <div class="vc-box">aa</div>
     </vc-overlay-html>
     <vc-entity :position="[117.186419, 45.66446, 20]">
-      <vc-graphics-point color="red" :pixelSize="8"></vc-graphics-point>
+      <vc-graphics-point color="red" :pixel-size="8"></vc-graphics-point>
     </vc-entity>
     <vc-overlay-html :position="{ lng: 104.04, lat: 30.40 }">
       <div class="label-container label-container-var">
@@ -63,11 +72,12 @@ HTML 覆盖物组件的基础用法。
 
 | 属性名      | 类型          | 默认值 | 描述                                            |
 | ----------- | ------------- | ------ | ----------------------------------------------- |
-| show        | Boolean       | `true` | `optional` 指定 HTML 是否显示。                 |
-| position    | Object\|Array |        | `optional` 指定 HTML 元素的地理位置。           |
-| pixelOffset | Object\|Array |        | `optional` 指定 HTML 的像素偏移。               |
-| autoHidden  | Boolean       | `true` | `optional` 指定 HTML 在地球背面时是否自动隐藏。 |
-| customClass | String        |        | `optional` 指定 HTML 自定义 class 。            |
+| show        | boolean       | `true` | `optional` 指定 HTML 是否显示。                 |
+| position    | VcPosition    |        | `optional` 指定 HTML 元素的地理位置。           |
+| pixelOffset | VcCartesian2  |        | `optional` 指定 HTML 的像素偏移。               |
+| autoHidden  | boolean       | `true` | `optional` 指定 HTML 在地球背面时是否自动隐藏。 |
+| customClass | string        |        | `optional` 指定 HTML 自定义 class 。            |
+| teleport    | TeleportProps |        | `optional` 指定 teleport 参数。                 |
 
 ### 事件
 
@@ -76,6 +86,16 @@ HTML 覆盖物组件的基础用法。
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+
+### 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### 参考
 

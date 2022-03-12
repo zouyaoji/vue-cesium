@@ -67,7 +67,7 @@ Basic usage of VcGraphicsRectangle component.
       }
       // life cycle
       onMounted(() => {
-        Promise.all([rectangle1.value.createPromise, rectangle2.value.createPromise, rectangle3.value.createPromise]).then(instances => {
+        Promise.all([rectangle1.value.creatingPromise, rectangle2.value.creatingPromise, rectangle3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

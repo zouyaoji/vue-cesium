@@ -21,7 +21,7 @@
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sort-order="10">
         <vc-imagery-provider-urltemplate
-          :projectionTransforms="projectionTransforms"
+          :projection-transforms="projectionTransforms"
           url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
         ></vc-imagery-provider-urltemplate>
       </vc-layer-imagery>
@@ -31,7 +31,7 @@
       </vc-entity>
     </vc-overview-map>
     <!-- 鹰眼图示例 2 -->
-    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewerOpts="{ showCredit: true, sceneMode: 3 }">
+    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewer-opts="{ showCredit: true, sceneMode: 3 }">
       <vc-layer-imagery>
         <vc-imagery-provider-osm></vc-imagery-provider-osm>
       </vc-layer-imagery>
@@ -150,3 +150,13 @@
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+
+### 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |

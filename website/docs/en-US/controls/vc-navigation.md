@@ -212,6 +212,16 @@ Tip: For other controls (position bar and distance scale bar, regarded as a whol
 | statusBarEvt      | (evt: VcStatusBarEvt)                   | Triggers when the related parameters of the position control change. |
 | distanceLegendEvt | {distance,status,type}                  | Triggers when the distance scale changes.                            |
 
+### VcNavigation Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+
 ### VcNavigation Slots
 
 <!-- prettier-ignore -->
@@ -290,6 +300,16 @@ Tips `outerOptions`, `innerOptions`, `markerOptions` default parameters:
 | ready      | (readyObj: VcReadyObject)               | Triggers when the VcCompass is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcCompass is destroyed.           |
 | compassEvt | (evt: VcCompassEvt)                     | Triggers when the compass control is operated.      |
+
+### VcCompass Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### VcZoomControl Props
 
@@ -408,6 +428,16 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcZoomControl is destroyed.           |
 | zoomEvt    | (evt: VcZoomEvt)                        | Triggers when the zoom control is operated.             |
 
+### VcZoomControl Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+
 ### VcPrint Props
 
 <!-- prettier-ignore -->
@@ -437,6 +467,16 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | ready      | (readyObj: VcReadyObject)               | Triggers when the VcPrint is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcPrint is destroyed.           |
 | printEvt   | (evt: VcPrintEvt)                       | Triggers when the print control is operated.      |
+
+### VcPrint Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### VcMyLocation Props
 
@@ -475,6 +515,16 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | destroyed   | (instance: VcComponentInternalInstance) | Triggers when the VcMyLocation is destroyed.           |
 | locationEvt | (evt: VcLocationEvt)                    | Triggers when the positioning button is operated.      |
 
+### VcMyLocation Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+
 ### VcStatusBar Props
 
 <!-- prettier-ignore -->
@@ -500,6 +550,20 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | destroyed    | (instance: VcComponentInternalInstance) | Triggers when the VcStatusBar is destroyed.           |
 | statusBarEvt | (evt: VcStatusBarEvt)                   | Triggers when the status bar parameter changes.       |
 
+### VcStatusBar Methods
+
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
+| reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
+| unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
+| getMouseCoordsInfo | () => MouseCoords | Get the mouseCoords info. |
+| getCameraInfo | () =>{ heading: string; pitch: string; roll: string; height: string; level: string } | Get the camera info. |
+| getPerformanceInfo | () => { fps: string; ms: string } | Get the performance info. |
+
 ### VcDistanceLegend Props
 
 <!-- prettier-ignore -->
@@ -520,3 +584,13 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | ready             | (readyObj: VcReadyObject)               | Triggers when the VcDistanceLegend is successfully loaded. |
 | destroyed         | (instance: VcComponentInternalInstance) | Triggers when the VcDistanceLegend is destroyed.           |
 | distanceLegendEvt | (evt: VcDistanceLegendEvt)              | Triggers when the distance scale changes.                  |
+
+### VcDistanceLegend Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |

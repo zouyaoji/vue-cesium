@@ -2,7 +2,7 @@
 
 导航组件 —— 高仿超图样式。由 `vc-compass-sm`、`vc-zoom-control-sm` 组合而成。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 ### 基础用法
 
@@ -104,6 +104,16 @@
 | zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |
 | compassEvt | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。 |
 
+### VcNavigationSm 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
 ### VcNavigationSm 插槽
 
 <!-- prettier-ignore -->
@@ -136,6 +146,16 @@
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | compassEvt | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。 |
 
+### VcCompassSm 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
 ### VcZoomControlSm
 
 缩放组件。
@@ -158,3 +178,13 @@
 | ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |
+
+### VcZoomControlSm 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |

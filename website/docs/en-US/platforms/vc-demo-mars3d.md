@@ -85,7 +85,7 @@ Use VueCesium to load Mars Technology Mars3D
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },

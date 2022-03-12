@@ -52,7 +52,7 @@ Basic usage of the VcGraphicsCylinder component.
       }
       // life cycle
       onMounted(() => {
-        Promise.all([entity1.value.createPromise, entity2.value.createPromise]).then(instances => {
+        Promise.all([entity1.value.creatingPromise, entity2.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

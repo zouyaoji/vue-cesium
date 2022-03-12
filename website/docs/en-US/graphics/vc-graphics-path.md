@@ -27,7 +27,7 @@ Basic usage of the VcGraphicsPath component.
       ></vc-graphics-model>
     </vc-entity>
     <vc-entity :key="'entity' + index" :position="position" v-for="(position, index) of positions">
-      <vc-graphics-point :pixelSize="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
+      <vc-graphics-point :pixel-size="8" color="TRANSPARENT" outlineColor="YELLOW" :outlineWidth="3"></vc-graphics-point>
     </vc-entity>
     <vc-layer-imagery>
       <vc-imagery-provider-arcgis></vc-imagery-provider-arcgis>
@@ -114,7 +114,7 @@ Basic usage of the VcGraphicsPath component.
 
       // life cycle
       onMounted(() => {
-        model.value.createPromise.then(({ Cesium, viewer }) => {
+        model.value.creatingPromise.then(({ Cesium, viewer }) => {
           viewer.zoomTo(viewer.entities)
         })
       })

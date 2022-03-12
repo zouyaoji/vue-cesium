@@ -132,7 +132,7 @@ You can also use ref template references to access these two variables at any ti
   const viewerRef = ref<HTMLElement>(null)
 
   onMounted(() => {
-    viewerRef.value.createPromise.then((readyObj: VcReadyObject) => {
+    viewerRef.value.creatingPromise.then((readyObj: VcReadyObject) => {
       console.log(readyObj.Cesium) // Cesium namespace object
       console.log(readyObj.viewer) // instanceof Cesium.Viewer
     })
@@ -181,7 +181,7 @@ In Vue3, with the blessing of Composition API, it can be easily obtained through
     // Note 1: business-component is a sub-component of vc-viewer
     console.log($vc.viewer) // instanceof Cesium.Viewer
     // Note 2: business-component is not a subcomponent of vc-viewer
-    $vc.viewerCreatePromise.then((readyObj: VcReadyObject) => {
+    $vc.creatingPromise.then((readyObj: VcReadyObject) => {
       console.log(readyObj.viewer) // instanceof Cesium.Viewer
     })
   }
@@ -191,7 +191,7 @@ In Vue3, with the blessing of Composition API, it can be easily obtained through
 :::tip
 Note 1: It is recommended to mount the business-component component as a subcomponent of vc-viewer, as written in [vue-cesium-demo](https://github.com/zouyaoji/vue-cesium-demo).
 
-Note 2: If the business-component component is not a sub-component of vc-viewer, vc-viewer may not be initialized yet, and you need to wait for the $vc.viewerCreatePromise state to be fulfilled before you can get the viewer.
+Note 2: If the business-component component is not a sub-component of vc-viewer, vc-viewer may not be initialized yet, and you need to wait for the $vc.creatingPromise state to be fulfilled before you can get the viewer.
 :::
 
 ## use template

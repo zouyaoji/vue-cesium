@@ -122,12 +122,12 @@
       // life cycle
       onMounted(() => {
         Promise.all([
-          polygon1.value.createPromise,
-          polygon1.value.createPromise,
-          polygon1.value.createPromise,
-          polygon4.value.createPromise,
-          polygon5.value.createPromise,
-          polygon6.value.createPromise
+          polygon1.value.creatingPromise,
+          polygon1.value.creatingPromise,
+          polygon1.value.creatingPromise,
+          polygon4.value.creatingPromise,
+          polygon5.value.creatingPromise,
+          polygon6.value.creatingPromise
         ]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
