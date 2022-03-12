@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-03-11 09:41:37
+ * @LastEditTime: 2022-03-12 16:45:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
@@ -13,7 +13,7 @@ import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
 import { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
-import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode, ComputedRef } from 'vue'
+import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode, ComputedRef, nextTick } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
@@ -120,7 +120,7 @@ export default function (
   instance.createCesiumObject = async () => {
     canRender.value = true
     visibilityState = new VisibilityState()
-    return drawingActionInstances
+    return drawingActionInstances.value
   }
 
   instance.mount = async () => {
@@ -217,6 +217,11 @@ export default function (
       commonState.logger.error('Invalid drawingActionOption or drawingActionOption name')
       return
     }
+
+    const index = getDrawingActionInstanceIndex(drawingOption.name)
+    if (index === -1) {
+      return
+    }
     if (selectedDrawingActionInstance !== void 0) {
       selectedDrawingActionInstance.actionOpts.color = restoreColor.value || ''
       const cmp = selectedDrawingActionInstance.cmpRef.value
@@ -234,28 +239,34 @@ export default function (
     }
     if (selectedDrawingActionInstance?.name === drawingOption?.name) {
       selectedDrawingActionInstance = undefined
-      drawingOption.actionOpts.color = restoreColor.value || 'red'
+      drawingActionInstances.value[index].actionOpts.color = restoreColor.value || 'red'
     } else {
-      selectedDrawingActionInstance = drawingOption
-      const cmp = selectedDrawingActionInstance.cmpRef.value
-      cmp.startNew()
-      restoreColor.value = selectedDrawingActionInstance.actionOpts.color
-      selectedDrawingActionInstance.actionOpts.color = props.activeColor
-      selectedDrawingActionInstance.isActive = true
-      emit(
-        'activeEvt',
-        {
-          type: selectedDrawingActionInstance.name,
-          option: selectedDrawingActionInstance,
-          isActive: true
-        },
-        viewer
-      )
+      nextTick(() => {
+        const cmp = drawingActionInstances.value[index].cmpRef.value
+        cmp.startNew()
+        restoreColor.value = drawingActionInstances.value[index].actionOpts.color
+        drawingActionInstances.value[index].actionOpts.color = props.activeColor
+        drawingActionInstances.value[index].isActive = true
+        selectedDrawingActionInstance = drawingActionInstances.value[index]
+        emit(
+          'activeEvt',
+          {
+            type: selectedDrawingActionInstance.name,
+            option: selectedDrawingActionInstance,
+            isActive: true
+          },
+          viewer
+        )
+      })
     }
   }
 
   const getDrawingActionInstance = (drawingName: string) => {
     return drawingActionInstances.value.find(v => v.name === drawingName)
+  }
+
+  const getDrawingActionInstanceIndex = (drawingName: string) => {
+    return drawingActionInstances.value.findIndex(v => v.name === drawingName)
   }
 
   const onUpdateFab = value => {
@@ -305,8 +316,6 @@ export default function (
 
   // expose public methods
   Object.assign(instance.proxy, {
-    // drawingActionInstances,
-    // selectedDrawingActionInstance,
     clearAll,
     deactivate,
     activate,
