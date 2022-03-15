@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 09:06:45
- * @LastEditTime: 2022-01-28 12:15:35
+ * @LastEditTime: 2022-03-15 14:33:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\donations.md
@@ -28,6 +28,7 @@
 
   | 金额    | 来源   | 赞助人                                          | 留言                              | 时间       |
   | ------- | ------ | ----------------------------------------------- | --------------------------------- | ---------- |
+  | ¥ 100.0 | WeChat | \*易                                            | -                                 | 2022-03-15 |
   | ¥ 66.66 | QQ     | Levi                                            | 恭喜发财                          | 2022-01-28 |
   | ¥ 66.66 | QQ     | Levi                                            | 多谢大佬开源                      | 2022-01-11 |
   | ¥ 88.0  | WeChat | \*丫                                            | 有学习群吗？                      | 2021-10-28 |

@@ -2,7 +2,7 @@
 
 ### 3.0.11
 
-_2022-03-12_
+_2022-03-15_
 
 #### 破坏性更新
 
@@ -12,12 +12,13 @@ _2022-03-12_
 
 - `vc-overlay-dynamic` 组件增加站点到达 `stopArrived` 事件，缩放方法 `zoomToOverlay` 和 跟踪方法 `trackOverlay`。
 - `vc-overlay-windmap` 组件增加通过经纬度获取 U V 值。
+- 测量、绘制组件增加对单个对象属性响应式编辑支持。 [#167](https://github.com/zouyaoji/vue-cesium/issues/167)
 
 #### Bug 修复
 
 - `vc-selection-indicator` 组件拾取到聚合图标上指示器位置不准的问题。
 - `vc-overlay-windmap` 组件初始化异常问题。
-- 量算绘制组件 `measurements` 和 `drawings` 参数不能响应式更新的问题。
+- 量算、绘制组件 `measurements` 和 `drawings` 参数不能响应式更新的问题。
 
 ### 3.0.10
 

@@ -2,7 +2,7 @@
 
 ### 3.0.11
 
-_2022-03-12_
+_2022-03-15_
 
 #### Breaking changes:
 
@@ -12,6 +12,7 @@ _2022-03-12_
 
 - The `vc-overlay-dynamic` component adds a site arrival `stopArrived` event, a zoom method `zoomToOverlay` and a tracking method `trackOverlay`.
 - The `vc-overlay-windmap` component is added to obtain UV values by latitude and longitude.
+- Measure and draw components add support for responsive editing of individual object properties.[#167](https://github.com/zouyaoji/vue-cesium/issues/167)
 
 #### Bug fixes
 
