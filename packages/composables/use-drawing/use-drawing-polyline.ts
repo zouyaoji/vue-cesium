@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-03-10 01:08:30
+ * @LastEditTime: 2022-03-15 10:56:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -76,7 +76,14 @@ export default function (props, ctx, cmpName: string) {
         area: 0,
         distances: [],
         labels: [],
-        angles: []
+        angles: [],
+
+        polylineOpts: {},
+        pointOpts: {},
+        labelOpts: {},
+        labelsOpts: {},
+        primitiveOpts: {},
+        polygonOpts: {}
       }
 
       renderDatas.value.push(polylineDrawing)
@@ -144,12 +151,13 @@ export default function (props, ctx, cmpName: string) {
           }
           distances.push(s)
           distance = distance + s
+          const polylineLabelsOpts = Object.assign({}, props.labelsOpts, polyline.labelsOpts)
           if (s > 0 && positions.length > 2 && props.showDistanceLabel) {
             labels.push({
               text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
-              ...props.labelsOpts
+              ...polylineLabelsOpts
             })
           }
           if (positions.length > 2 && props.showAngleLabel) {
@@ -168,7 +176,7 @@ export default function (props, ctx, cmpName: string) {
                 text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
                 position: point1,
                 id: createGuid(),
-                ...props.labelsOpts
+                ...polylineLabelsOpts
               })
             }
           }
@@ -187,19 +195,21 @@ export default function (props, ctx, cmpName: string) {
         }
         const area = calculateAreaByPostions(positions)
 
+        const polylineLabelOpts = Object.assign({}, props.labelOpts, polyline.labelOpts)
+
         if (cmpName.includes('Area')) {
           labels.push({
             text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
             position: positions[positions.length - 1],
             id: createGuid(),
-            ...props.labelOpts
+            ...polylineLabelOpts
           })
         } else {
           labels.push({
             text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
             position: positions[positions.length - 1],
             id: createGuid(),
-            ...props.labelOpts
+            ...polylineLabelOpts
           })
         }
 
@@ -298,7 +308,14 @@ export default function (props, ctx, cmpName: string) {
       area: 0,
       distances: [],
       labels: [],
-      angles: []
+      angles: [],
+
+      polylineOpts: {},
+      pointOpts: {},
+      labelOpts: {},
+      labelsOpts: {},
+      primitiveOpts: {},
+      polygonOpts: {}
     }
 
     if (cmpName === 'VcMeasurementHorizontal') {
@@ -705,6 +722,7 @@ export default function (props, ctx, cmpName: string) {
 
   // expose public methods
   const publicMethods = {
+    computedRenderDatas,
     renderDatas,
     startNew,
     stop,
@@ -716,14 +734,7 @@ export default function (props, ctx, cmpName: string) {
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
-    const { PolylineMaterialAppearance, Ellipsoid, createGuid, defaultValue, Cartesian3 } = Cesium
-
-    const polylineOpts: VcGeometryPolylineProps = {
-      ...props.polylineOpts,
-      ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84),
-      vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
-    }
-    props.clampToGround && delete polylineOpts.arcType
+    const { createGuid, Cartesian3 } = Cesium
     const children: Array<VNode> = []
 
     const points = []
@@ -732,12 +743,15 @@ export default function (props, ctx, cmpName: string) {
       if (positions.length > 1) {
         // polyline
         polyline.loop && positions.push(positions[0])
+        const polylineOpts = Object.assign({}, props.polylineOpts, polyline.polylineOpts)
+        props.clampToGround && delete polylineOpts.arcType
+        const primitiveOpts = Object.assign({}, props.primitiveOpts, polyline.primitiveOpts)
         children.push(
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -755,18 +769,15 @@ export default function (props, ctx, cmpName: string) {
         )
       }
       // for VcMeasurementHorizontal
-      const dashLineOpts: VcGeometryPolylineProps = {
-        ...props.dashLineOpts,
-        ellipsoid: defaultValue(props.dashLineOpts?.ellipsoid, Ellipsoid.WGS84),
-        vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT
-      }
+      const dashLineOpts = Object.assign({}, props.dashLineOpts, polyline.dashLineOpts)
+      const dashLinePrimitiveOpts = Object.assign({}, props.dashLinePrimitiveOpts, polyline.dashLinePrimitiveOpts)
       polyline.dashedLines?.forEach(dashedLine => {
         children.push(
           h(
             VcPrimitive,
             {
-              ...props.dashLinePrimitiveOpts,
-              show: (polyline.show && props.dashLinePrimitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && props.dashLinePrimitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...dashLinePrimitiveOpts
             },
             () =>
               h(
@@ -784,6 +795,7 @@ export default function (props, ctx, cmpName: string) {
         )
       })
       // points
+      const polylinePointOpts = Object.assign({}, props.pointOpts, polyline.pointOpts)
       children.push(
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
@@ -802,12 +814,14 @@ export default function (props, ctx, cmpName: string) {
             if (cmpName === 'VcAnalysisSightline') {
               points.push(position)
             }
+            // Todo 配置每一个点的颜色
+            // const pointOpts = Object.assign({}, polylinePointOpts)
             return {
               position,
               id: createGuid(),
               _vcPolylineIndex: index, // for editor
-              ...props.pointOpts,
-              show
+              show,
+              ...polylinePointOpts
             }
           }),
           onMouseover: onMouseoverPoints,
@@ -827,13 +841,14 @@ export default function (props, ctx, cmpName: string) {
         )
       // polygon
       if (positions.length > 2 && (cmpName.includes('Polygon') || cmpName.includes('Area'))) {
+        const polygonOpts = Object.assign({}, props.polygonOpts, polyline.polygonOpts)
         children.push(
           h(VcPolygon, {
             positions: positions,
             onReady: onVcPrimitiveReady,
             clampToGround: props.clampToGround,
-            ...props.polygonOpts,
-            show: polyline.show && props.polygonOpts?.show
+            show: polyline.show && props.polygonOpts?.show,
+            ...polygonOpts
           })
         )
       }

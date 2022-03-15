@@ -9,6 +9,7 @@ import { vcKey } from '@vue-cesium/utils/config'
 import useLog from '../private/use-log'
 import { useLocale } from '../use-locale'
 import useEvents from '../use-events'
+import { isEqual } from 'lodash-unified'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   const logger = useLog(vcInstance)
@@ -222,7 +223,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           // returns an unwatch function that stops firing the callback
           const unwatch = vcInstance.proxy?.$watch(
             vueProp,
-            async val => {
+            async (val, oldVal) => {
               // Wait for child components to be created.
               // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
               await (vcInstance.proxy as VcComponentPublicInstance).creatingPromise
@@ -250,7 +251,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               } else {
                 // The attribute is not writable, and the property is changed indirectly through reloading the component.
                 // 属性不可写，通过重加载组件间接实现改变属性
-                return (vcInstance.proxy as VcComponentPublicInstance).reload()
+
+                if (!isEqual(val, oldVal)) {
+                  ;(vcInstance.proxy as VcComponentPublicInstance).reload()
+                }
               }
             },
             {

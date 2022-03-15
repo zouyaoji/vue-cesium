@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-03-10 01:08:57
+ * @LastEditTime: 2022-03-15 12:34:27
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -107,7 +107,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         show: true,
         drawStatus: DrawStatus.AfterDraw,
         distance: 0,
-        labels: []
+        labels: [],
+
+        pointOpts: {},
+        labelOpts: {},
+        labelsOpts: {},
+        polylineOpts: {},
+        primitiveOpts: {},
+        polygonOpts: {}
       }
 
       cmpName === 'VcMeasurementVertical' &&
@@ -156,6 +163,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         heading,
         pitch
       }
+
+      const labelOpts = Object.assign({}, props.labelOpts, polyline.labelOpts)
 
       if (cmpName === 'VcDrawingRectangle' || cmpName === 'VcMeasurementRectangle') {
         const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
@@ -274,11 +283,12 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           position: labelPosition,
           id: createGuid(),
           text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
-          ...props.labelOpts
+          ...labelOpts
         })
       }
 
       if (polyline.polygonPositions && polyline.polygonPositions.length) {
+        const labelsOpts = Object.assign({}, props.labelsOpts, polyline.labelsOpts)
         const positions = polyline.polygonPositions.slice()
         props.loop && positions.length > 2 && positions.push(positions[0])
         for (let i = 0; i < positions.length - 1; i++) {
@@ -294,7 +304,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
               text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
-              ...props.labelsOpts
+              ...labelsOpts
             })
           }
           if (positions.length > 2 && props.showAngleLabel) {
@@ -313,7 +323,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
                 text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
                 position: point1,
                 id: createGuid(),
-                ...props.labelsOpts
+                ...labelsOpts
               })
             }
           }
@@ -324,7 +334,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
           position: polylineSegment.positions[0],
           id: createGuid(),
-          ...props.labelOpts
+          ...labelOpts
         })
       }
 
@@ -658,7 +668,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       show: false,
       drawStatus: DrawStatus.BeforeDraw,
       distance: 0,
-      labels: []
+      labels: [],
+
+      pointOpts: {},
+      labelOpts: {},
+      labelsOpts: {},
+      polylineOpts: {},
+      primitiveOpts: {},
+      polygonOpts: {}
     }
     if (cmpName === 'VcAnalysisViewshed') {
       clear()
@@ -890,8 +907,9 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         positions[1] = position
       }
     } else {
-      const positions = polyline.positions
+      const positions = polyline.positions.slice()
       positions[editingPoint.value ? editingPoint.value._index : 1] = position
+      polyline.positions = positions
     }
 
     nextTick(() => {
@@ -964,16 +982,13 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   }
 
   // expose public methods
-  const publicMethods = { renderDatas, startNew, stop, clear, handleMouseClick, handleMouseMove }
+  const publicMethods = { computedRenderDatas, renderDatas, startNew, stop, clear, handleMouseClick, handleMouseMove }
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
     const {
       ColorGeometryInstanceAttribute,
-      PolylineMaterialAppearance,
-      Ellipsoid,
       createGuid,
-      defaultValue,
       Math: CesiumMath,
       Matrix4,
       Cartesian3,
@@ -984,12 +999,6 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       Cartesian2
     } = Cesium
 
-    const polylineOpts = {
-      ...props.polylineOpts,
-      vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-      ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84)
-    }
-    props.clampToGround && delete polylineOpts.arcType
     const children: Array<VNode> = []
     computedRenderDatas.value.forEach((polyline, index) => {
       const isRegular =
@@ -999,14 +1008,17 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         cmpName === 'VcMeasurementRectangle'
       const positions = isRegular ? polyline.polygonPositions?.slice() : polyline.positions
       isRegular && positions?.push(positions[0])
+      const polylineOpts = Object.assign({}, props.polylineOpts, polyline.polylineOpts)
+      props.clampToGround && delete polylineOpts.arcType
+      const primitiveOpts = Object.assign({}, props.primitiveOpts, polyline.primitiveOpts)
       if (positions?.length && positions?.length > 1) {
         // polyline
         children.push(
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -1154,13 +1166,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       }
 
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
+        const polygonOpts = Object.assign({}, props?.polygonOpts, polyline?.polygonOpts)
         // polygon
         children.push(
           h(VcPolygon, {
             positions: positions,
             onReady: onVcPrimitiveReady,
-            ...props.polygonOpts,
-            show: polyline.show && props?.polygonOpts?.show
+            show: polyline.show && polygonOpts?.show,
+            ...polygonOpts
           })
         )
       }
@@ -1170,8 +1183,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -1194,8 +1207,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(

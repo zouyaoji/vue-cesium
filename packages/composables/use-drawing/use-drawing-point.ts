@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-03-09 10:00:12
+ * @LastEditTime: 2022-03-13 23:33:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -84,7 +84,10 @@ export default function (props, ctx, cmpName: string) {
       lng: 0,
       lat: 0,
       height: 0,
-      slope: 0
+      slope: 0,
+      pointOpts: {},
+      labelOpts: {},
+      billboardOpts: {}
     }
 
     renderDatas.value.push(point)
@@ -475,7 +478,11 @@ export default function (props, ctx, cmpName: string) {
         lng: 0,
         lat: 0,
         height: 0,
-        slope: 0
+        slope: 0,
+
+        pointOpts: {},
+        labelOpts: {},
+        billboardOpts: {}
       }
       const cart = Cesium.Cartographic.fromCartesian(pointDrawing.position, viewer.scene.globe.ellipsoid)
       pointDrawing.positionDegrees = [Cesium.Math.toDegrees(cart.longitude), Cesium.Math.toDegrees(cart.latitude), cart.height] as [
@@ -507,34 +514,37 @@ export default function (props, ctx, cmpName: string) {
     const labelsRender: Array<any> = []
     const billboardsRender: Array<any> = []
     renderDatas.value.forEach((point, index) => {
+      const pointOpts = Object.assign({}, props.pointOpts, point.pointOpts)
       pointsRender.push({
         position: point.position,
         id: createGuid(),
         _vcPolylineIndx: index, // for editor
-        ...props.pointOpts,
+        ...pointOpts,
         show: (point.show && props.pointOpts?.show) || props.editable || point.drawStatus === DrawStatus.Drawing
       })
 
+      const labelsOpts = Object.assign({}, props.labelOpts, point.labelOpts)
       cmpName.includes('VcMeasurement') &&
         labelsRender.push({
           position: point.position,
           id: createGuid(),
           text: getLabelText(point),
-          ...props.labelOpts
+          ...labelsOpts
         })
 
       if (cmpName === 'VcDrawingPin') {
+        const billboardOpts = Object.assign({}, props.billboardOpts, point.billboardOpts)
         billboardsRender.push({
           position: point.position,
           id: createGuid(),
-          ...props.billboardOpts
+          ...billboardOpts
         })
 
         props.labelOpts.text &&
           labelsRender.push({
             position: point.position,
             id: createGuid(),
-            ...props.labelOpts
+            ...labelsOpts
           })
       }
     })

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 10:48:26
- * @LastEditTime: 2022-03-10 01:14:45
+ * @LastEditTime: 2022-03-15 10:58:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\drawing-types.ts
@@ -16,6 +16,7 @@ import {
   VcDrawingRegular
 } from '@vue-cesium/components/drawings/src'
 import type {
+  VcBillboardProps,
   VcFabActionRef,
   VcGeometryInstanceProps,
   VcGeometryPolylineProps,
@@ -106,6 +107,9 @@ export interface VcPointDrawing {
   slope: number
 
   positionDegrees?: [number, number, number]
+  labelOpts?: VcLabelProps
+  pointOpts?: VcPointProps
+  billboardOpts?: VcBillboardProps
 }
 
 export interface VcPolylineDrawing {
@@ -130,6 +134,19 @@ export interface VcPolylineDrawing {
   tempNextPos?: Cesium.Cartesian3
 
   positionsDegreesArray?: Array<[number, number, number]>
+
+  labelOpts?: VcLabelProps
+  labelsOpts?: VcLabelProps
+  pointOpts?: VcPointProps
+  polylineOpts?: VcGeometryPolylineProps
+  primitiveOpts?: VcPrimitiveProps
+  polygonOpts?: VcPolygonProps
+
+  // for VcMeasurementHorizontal
+  dashLineOpts?: VcGeometryPolylineProps
+  dashLinePrimitiveOpts?: VcPrimitiveProps
+
+  points?: Array<VcPointProps>
 }
 
 export interface VcSegmentDrawing {
@@ -165,6 +182,15 @@ export interface VcSegmentDrawing {
 
   positionsDegreesArray?: Array<[number, number, number]>
   polygonPositionsDegreesArray?: Array<[number, number, number]>
+
+  labelOpts?: VcLabelProps
+  labelsOpts?: VcLabelProps
+  pointOpts?: VcPointProps
+  primitiveOpts?: VcPrimitiveProps
+  polylineOpts?: VcGeometryPolylineProps
+  polygonOpts?: VcPolygonProps
+
+  points?: Array<VcPointProps>
 }
 
 export interface VcDrawingPrimitive {
