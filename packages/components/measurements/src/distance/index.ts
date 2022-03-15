@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-10 01:02:32
+ * @LastEditTime: 2022-03-15 14:59:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\distance\index.ts
  */
-import { defineComponent, Ref } from 'vue'
+import { ComputedRef, defineComponent, Ref } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { PropType } from 'vue'
@@ -153,9 +153,13 @@ export type VcMeasurementDistanceProps = {
 
 export interface VcMeasurementDistanceRef extends VcComponentPublicInstance<VcMeasurementDistanceProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcSegmentDrawing>>
+  renderDatas?: Ref<VcSegmentDrawing[]>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<VcSegmentDrawing[]>
   /**
    * start a new draw.
    */

@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-04 21:42:14
- * @LastEditTime: 2022-03-08 22:48:54
+ * @LastEditTime: 2022-03-15 15:01:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\sightline\index.ts
  */
-import type { PropType, Ref } from 'vue'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
@@ -127,9 +127,13 @@ export type VcAnalysisSightlineProps = {
 
 export interface VcAnalysisSightlineRef extends VcComponentPublicInstance<VcAnalysisSightlineProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcSegmentDrawing | VcPolylineDrawing>>
+  renderDatas?: Ref<Array<VcSegmentDrawing | VcPolylineDrawing>>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<Array<VcSegmentDrawing | VcPolylineDrawing>>
   /**
    * start a new draw.
    */

@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-10 01:02:00
+ * @LastEditTime: 2022-03-15 14:58:44
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\area\index.ts
  */
-import type { PropType, Ref } from 'vue'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
@@ -171,9 +171,13 @@ export type VcMeasurementAreaProps = {
 
 export interface VcMeasurementAreaRef extends VcComponentPublicInstance<VcMeasurementAreaProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcPolylineDrawing>>
+  renderDatas?: Ref<VcPolylineDrawing[]>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<VcPolylineDrawing[]>
   /**
    * start a new draw.
    */

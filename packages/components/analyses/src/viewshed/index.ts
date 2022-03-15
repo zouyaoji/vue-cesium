@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 16:26:03
- * @LastEditTime: 2022-03-08 22:55:33
+ * @LastEditTime: 2022-03-15 15:04:36
  * @LastEditors: zouyaoji
  * @Description: refer to https://blog.csdn.net/fywindmoon/article/details/108415116
  * @FilePath: \vue-cesium@next\packages\components\analyses\src\viewshed\index.ts
  */
-import { defineComponent, PropType, Ref } from 'vue'
+import { ComputedRef, defineComponent, PropType, Ref } from 'vue'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import fragmentShader from './fragmentShader'
@@ -116,7 +116,11 @@ export interface VcAnalysisViewshedRef extends VcComponentPublicInstance<VcAnaly
   /**
    * Get or set the renderDatas.
    */
-  renderDatas: Ref<Array<VcSegmentDrawing | VcPolylineDrawing>>
+  renderDatas?: Ref<Array<VcSegmentDrawing | VcPolylineDrawing>>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<Array<VcSegmentDrawing | VcPolylineDrawing>>
   /**
    * start a new draw.
    */

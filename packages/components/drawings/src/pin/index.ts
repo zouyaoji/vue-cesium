@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-10 00:58:10
+ * @LastEditTime: 2022-03-15 15:01:07
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\pin\index.ts
@@ -118,7 +118,7 @@ export interface VcDrawingPinRef extends VcComponentPublicInstance<VcDrawingPinP
   /**
    * Get or set the renderDatas.
    */
-  renderDatas: Ref<Array<VcPointDrawing>>
+  renderDatas?: Ref<Array<VcPointDrawing>>
   /**
    * start a new draw.
    */

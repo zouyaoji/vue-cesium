@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-10 01:05:45
+ * @LastEditTime: 2022-03-15 14:59:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\horizontal\index.ts
  */
-import { defineComponent, Ref } from 'vue'
+import { ComputedRef, defineComponent, Ref } from 'vue'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
 import type { PropType } from 'vue'
@@ -171,9 +171,13 @@ export type VcMeasurementHorizontalProps = {
 
 export interface VcMeasurementHorizontalRef extends VcComponentPublicInstance<VcMeasurementHorizontalProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcPolylineDrawing>>
+  renderDatas?: Ref<VcPolylineDrawing[]>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<VcPolylineDrawing[]>
   /**
    * start a new draw.
    */

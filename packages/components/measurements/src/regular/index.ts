@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-26 11:14:41
- * @LastEditTime: 2022-03-10 01:07:28
+ * @LastEditTime: 2022-03-15 15:00:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\regular\index.ts
  */
-import type { PropType, Ref } from 'vue'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingSegment from '@vue-cesium/composables/use-drawing/use-drawing-segment'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
@@ -176,9 +176,13 @@ export type VcMeasurementRegularProps = {
 
 export interface VcMeasurementRegularRef extends VcComponentPublicInstance<VcMeasurementRegularProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcSegmentDrawing>>
+  renderDatas?: Ref<VcSegmentDrawing[]>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<VcSegmentDrawing[]>
   /**
    * start a new draw.
    */

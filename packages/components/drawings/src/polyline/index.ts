@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-10 00:58:24
+ * @LastEditTime: 2022-03-15 14:56:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\polyline\index.ts
  */
-import type { PropType, Ref } from 'vue'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
 import useDrawingPolyline from '@vue-cesium/composables/use-drawing/use-drawing-polyline'
 import { useDrawingActionProps } from '@vue-cesium/composables/use-drawing/props'
@@ -107,9 +107,13 @@ export type VcDrawingPolylineProps = {
 
 export interface VcDrawingPolylineRef extends VcComponentPublicInstance<VcDrawingPolylineProps> {
   /**
-   * Get or set the renderDatas.
+   * Get the array of rendering models.
    */
-  renderDatas: Ref<Array<VcPolylineDrawing>>
+  renderDatas?: Ref<VcPolylineDrawing[]>
+  /**
+   * Get the computedRenderDatas.
+   */
+  computedRenderDatas?: ComputedRef<VcPolylineDrawing[]>
   /**
    * start a new draw.
    */

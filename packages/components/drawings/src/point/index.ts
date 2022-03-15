@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:22
- * @LastEditTime: 2022-03-10 00:58:17
+ * @LastEditTime: 2022-03-15 15:01:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\point\index.ts
@@ -107,7 +107,7 @@ export interface VcDrawingPointRef extends VcComponentPublicInstance<VcDrawingPo
   /**
    * Get or set the renderDatas.
    */
-  renderDatas: Ref<Array<VcPointDrawing>>
+  renderDatas?: Ref<Array<VcPointDrawing>>
   /**
    * start a new draw.
    */

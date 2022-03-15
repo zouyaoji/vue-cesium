@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-03-15 12:34:27
+ * @LastEditTime: 2022-03-15 14:30:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -156,6 +156,12 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
       const heading = getPolylineSegmentHeading(startPosition, endPosition)
       const pitch = getPolylineSegmentPitch(startPosition, endPosition)
+
+      polylineSegment.points = polylineSegment.positions.map(v => {
+        return {
+          position: v
+        }
+      })
 
       const polyline: VcSegmentDrawing = {
         ...polylineSegment,
@@ -1225,20 +1231,25 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           )
         )
       }
-      // point
+      // points
+      const polylinePointOpts = Object.assign({}, props.pointOpts, polyline.pointOpts)
       children.push(
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          points: polyline.positions.map((position, subIndex) => ({
-            position: position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts,
-            show:
-              (props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
-              (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
-          })),
+          points: polyline.points.map((point, subIndex) => {
+            const position = point.position as Cesium.Cartesian3
+            const pointOpts = Object.assign({}, polylinePointOpts, point)
+            return {
+              position,
+              id: createGuid(),
+              _vcPolylineIndx: index, // for editor
+              ...pointOpts,
+              show:
+                (pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
+                (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
+            }
+          }),
           onMouseover: onMouseoverPoints,
           onMouseout: onMouseoutPoints,
           onReady: onVcCollectionPointReady

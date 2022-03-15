@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-03-15 10:56:11
+ * @LastEditTime: 2022-03-15 14:04:54
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -102,6 +102,11 @@ export default function (props, ctx, cmpName: string) {
       const dashedLines: Array<{
         positions: Array<Cesium.Cartesian3>
       }> = []
+      polyline.points = polyline.positions.map(v => {
+        return {
+          position: v
+        }
+      })
       const positions = polyline.positions.slice()
       if (cmpName === 'VcAnalysisSightline') {
         const observationPoint = positions.shift()
@@ -800,7 +805,8 @@ export default function (props, ctx, cmpName: string) {
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          points: polyline.positions.map((position, subIndex) => {
+          points: polyline.points.map((point, subIndex) => {
+            const position = point.position as Cesium.Cartesian3
             let includes = false
             for (let i = 0; i < points.length; i++) {
               // 通视分析 的观察点会加载很多个 在这儿过滤下只显示一个
@@ -814,14 +820,14 @@ export default function (props, ctx, cmpName: string) {
             if (cmpName === 'VcAnalysisSightline') {
               points.push(position)
             }
-            // Todo 配置每一个点的颜色
-            // const pointOpts = Object.assign({}, polylinePointOpts)
+
+            const pointOpts = Object.assign({}, polylinePointOpts, point)
             return {
               position,
               id: createGuid(),
               _vcPolylineIndex: index, // for editor
               show,
-              ...polylinePointOpts
+              ...pointOpts
             }
           }),
           onMouseover: onMouseoverPoints,

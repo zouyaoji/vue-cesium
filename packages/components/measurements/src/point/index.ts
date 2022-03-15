@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-11 09:17:23
- * @LastEditTime: 2022-03-10 00:58:43
+ * @LastEditTime: 2022-03-15 14:59:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\point\index.ts
@@ -130,7 +130,7 @@ export interface VcMeasurementPointRef extends VcComponentPublicInstance<VcMeasu
   /**
    * Get or set the renderDatas.
    */
-  renderDatas: Ref<Array<VcPointDrawing>>
+  renderDatas?: Ref<Array<VcPointDrawing>>
   /**
    * start a new draw.
    */
