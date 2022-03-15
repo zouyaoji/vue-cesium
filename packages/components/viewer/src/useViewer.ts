@@ -245,7 +245,6 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   watch(
     () => props.baseLayerPicker,
     val => {
-      console.log(val)
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const {
