@@ -437,14 +437,16 @@ const positions = {
  * @const {Number, Object, Function} extrudedHeight mixin
  */
 const extrudedHeight = {
-  extrudedHeight: [Number, Object, Function]
+  extrudedHeight: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
  * @const {Number, Object, Function} extrudedHeightReference mixin
  */
 const extrudedHeightReference = {
-  extrudedHeightReference: [Number, Object, Function]
+  extrudedHeightReference: [Number, Object, Function] as PropType<
+    number | Cesium.HeightReference | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  >
 }
 
 /**
@@ -452,7 +454,7 @@ const extrudedHeightReference = {
  */
 const cornerType = {
   cornerType: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CornerType | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -487,7 +489,7 @@ const zIndex = {
  * @const {Number, Object, Function} length mixin
  */
 const length = {
-  length: [Number, Object, Function]
+  length: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**

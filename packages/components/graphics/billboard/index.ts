@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-13 23:22:35
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-02-18 09:14:27
+ * @LastEditors: ayiyiyo
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\billboard\index.ts
+ * @FilePath: \vue-cesium\packages\components\graphics\billboard\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { ExtractPropTypes } from 'vue'
@@ -186,5 +186,5 @@ export type VcGraphicsBillboardProps = {
   /**
    * Triggers when a property or sub-property is changed or modified.
    */
-  definitionChanged?: (property: Cesium.Property) => void
+  onDefinitionChanged?: (property: Cesium.Property) => void
 }

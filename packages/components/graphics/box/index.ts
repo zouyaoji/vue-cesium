@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-16 09:20:32
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-02-18 09:14:36
+ * @LastEditors: ayiyiyo
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\graphics\box\index.ts
+ * @FilePath: \vue-cesium\packages\components\graphics\box\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { ExtractPropTypes } from 'vue'
@@ -22,9 +22,9 @@ import {
   shadows,
   distanceDisplayCondition
 } from '@vue-cesium/utils/cesium-props'
-import { VcPosition, VcCallbackPropertyFunction, VcMaterial, VcColor, VcDistanceDisplayCondition } from '@vue-cesium/utils/types'
+import { VcPosition, VcCallbackPropertyFunction, VcMaterial, VcColor, VcDistanceDisplayCondition, VcReadyObject } from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { graphicsEmits } from '@vue-cesium/utils/emits'
 export const boxGraphicsProps = {
   ...show,
   ...dimensions,
@@ -40,7 +40,7 @@ export const boxGraphicsProps = {
 export default defineComponent({
   name: 'VcGraphicsBox',
   props: boxGraphicsProps,
-  emits: commonEmits,
+  emits: graphicsEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -53,7 +53,7 @@ export default defineComponent({
 // export type VcGraphicsBoxProps = ExtractPropTypes<typeof boxGraphicsProps>
 export type VcGraphicsBoxProps = {
   /**
-   * A boolean Property specifying the visibility of the billboard.
+   * A boolean Property specifying the visibility of the box.
    * Default value: true
    */
   show?: boolean
@@ -101,4 +101,20 @@ export type VcGraphicsBoxProps = {
    * Gets or sets the DistanceDisplayCondition Property specifying at what distance from the camera that this box will be displayed.
    */
   distanceDisplayCondition?: VcDistanceDisplayCondition
+  /**
+   * Triggers before the VcGraphicsBillboard is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGraphicsBillboard is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGraphicsBillboard is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when a property or sub-property is changed or modified.
+   */
+  onDefinitionChanged?: (property: Cesium.Property) => void
 }
