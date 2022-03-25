@@ -90,7 +90,7 @@ Basic usage of VcOverlayHeatmap component.
         })
       },
       onHeatmapReady({ Cesium, viewer, cesiumObject }) {
-        this.$refs.heatmap.childRef.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        this.$refs.heatmap.childRef.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           console.log(cesiumObject)
           if (cesiumObject instanceof Cesium.GroundPrimitive) {
             const geometry = cesiumObject.geometryInstances.geometry.constructor.createGeometry(cesiumObject.geometryInstances.geometry)
@@ -123,14 +123,15 @@ Basic usage of VcOverlayHeatmap component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` Specify whether to display the heatmap overlay. |
-| rectangle | Object\|Array | | `optional`  Specify a rectangle with north, south, east and west properties.  |
-| min | Number | `true` | `optional` Specify the minimum value of the heat map data. |
-| max | Number | | `optional` Specify the maximum value of the heat map data. |
-| data | Array<{x: number, y: number, value: number}> | `[]` | `optional` Specify the heat map data. If it is not x, y, value, you need to specify the fields in the options attribute.|
-| options | Object\|HeatmapConfiguration | | `optional` Specify the heatmap configs. |
-| type | String | `'primitive'` | `optional` Specify the type of heat map object. **Primitive: primitive, entity: entity, image layer: imagery-layer**| primitive/entity/imagery-layer |
+| show | boolean | `true` | `optional` Specify whether to display the heatmap overlay. |
+| rectangle | VcRectangle | | `optional`  Specify a rectangle with north, south, east and west properties.  |
+| min | number | `0` | `optional` Specify the minimum value of the heat map data. |
+| max | number | `100` | `optional` Specify the maximum value of the heat map data. |
+| data | Array\<VcHeatMapData\> | `[]` | `optional` Specify the heat map data. If it is not x, y, value, you need to specify the fields in the options attribute.|
+| options | HeatmapConfiguration | | `optional` Specify the heatmap configs. |
+| type | 'primitive' \| 'entity' \| 'imagery-layer' | `'primitive'` | `optional` Specify the type of heat map object.| primitive/entity/imagery-layer |
 | segments | Array\<VcColorSegments\> | | `optional` Specify the color segment of the heatmap. |
+| projection | '3857' \| '4326' | | `optional` 指定投影。 |
 
 :::tip
 
@@ -170,6 +171,16 @@ Array<[number, [number, number, number]] | [number, string | ColorInByteOption |
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+
+### Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Reference
 

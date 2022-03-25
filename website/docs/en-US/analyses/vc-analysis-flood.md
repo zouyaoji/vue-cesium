@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2021-12-31 15:10:56
+ * @LastEditTime: 2022-03-09 09:49:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analysis-flood.md
@@ -107,15 +107,15 @@ Basic usage of VcAnalysisFlood component.
 
 ### Props
 
-//---
+<!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---------------- | --------------------- | ------------------------ | ---------------------------------------------- |
-| polygonHierarchy | Object\|Array | | `require` Specifies the latitude and longitude array for constructing the submerged analysis polygon. |
-| minHeight | Number | `-1 ` | `optional` Specify the minimum elevation. |
-| maxHeight | Number | `8888` | `optional` Specify the maximum elevation. |
-| speed | Number | `10` | `optional` Specify the height to increase each frame. |
-| color | Object\|String\|Array | `'rgba(40,150,200,0.6)'` | `optional` Specify the color of the polygon geometry. |
-| loop | Boolean | `false` | `optional` Specify whether to restart after reaching the maximum height. |
+| polygonHierarchy |VcPolygonHierarchy | | `required` Specify ths VcPolygonHierarchy of polygon. |
+| minHeight | number | `-1 ` | `optional` Specify the minimum elevation. |
+| maxHeight | number | `8888` | `optional` Specify the maximum elevation. |
+| speed | number | `10` | `optional` Specify the height to increase each frame. |
+| color | VcColor | `'rgba(40,150,200,0.6)'` | `optional` Specify the VcColor of water. |
+| loop | boolean | `false` | `optional` Specify whether to restart after reaching the maximum height. |
 
 ### Event
 
@@ -124,12 +124,17 @@ Basic usage of VcAnalysisFlood component.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
-| stop       |                                         | Triggers when the maxHeight is reached.                |
+| stop       | (evt: Cesium.ClassificationPrimitive)   | Triggers when the maxHeight is reached.                |
 
 ### Methods
 
-| Name  | Parameters | Description |
-| ----- | ---------- | ----------- |
-| start |            | Start       |
-| pause |            | Pause       |
-| stop  |            | Stop        |
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| start              | () => void                              | Start flood analysis.                           |
+| pause              | () => void                              | Pause/resume flood analysis.                    |
+| stop               | () => void                              | Stop flood analysis.                            |

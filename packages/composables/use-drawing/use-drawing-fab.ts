@@ -1,34 +1,34 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:45:59
- * @LastEditTime: 2022-01-20 14:47:42
+ * @LastEditTime: 2022-03-12 16:45:53
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-fab.ts
  */
 import { VcCollectionPrimitive } from '@vue-cesium/components/primitive-collections'
-import { VcFab, VcFabAction, VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
+import type { VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import { VcFab, VcFabAction, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useHandler } from '@vue-cesium/composables'
 import { VisibilityState } from '@vue-cesium/shared'
 import { VcDrawingActionInstance } from '@vue-cesium/utils/drawing-types'
-import { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
-import { CSSProperties, nextTick, provide, reactive, ref, VNode, h, createCommentVNode } from 'vue'
+import { VcActionTooltipProps, VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
+import { CSSProperties, provide, reactive, ref, VNode, h, createCommentVNode, ComputedRef, nextTick } from 'vue'
 import usePosition from '../private/use-position'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { isString } from '@vue-cesium/utils/util'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { vcKey } from '@vue-cesium/utils/config'
 import { useLocale } from '../use-locale'
-import { clearActionDefault } from './defaultOpts'
-import { mainFabDefault } from '@vue-cesium/components/drawings/src/defaultProps'
+import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 
 export default function (
   props,
   ctx,
   instance: VcComponentInternalInstance,
-  drawingActionInstances: Array<VcDrawingActionInstance>,
-  mainFabOpts: typeof mainFabDefault,
-  clearActionOpts: typeof clearActionDefault,
+  drawingActionInstances: ComputedRef<Array<VcDrawingActionInstance>>,
+  mainFabOpts: VcFabProps & VcActionTooltipProps,
+  clearActionOpts: VcActionTooltipProps,
   cmpName: string
 ) {
   instance.cesiumEvents = []
@@ -44,14 +44,13 @@ export default function (
   const canRender = ref(false)
   const containerStyle = reactive<CSSProperties>({})
   const positionState = usePosition(props, $services)
-  const containerRef = ref<HTMLElement | null>(null)
-  const fabRef = ref<typeof VcFab>(null)
-  const fabExtanded = ref(false)
+  const containerRef = ref<HTMLElement>(null)
+  const fabRef = ref<VcFabRef>(null)
   const mounted = ref(false)
   const primitiveCollection = ref(null)
   let visibilityState: VisibilityState
 
-  let selectedDrawingActionInstance: VcDrawingActionInstance = undefined!
+  let selectedDrawingActionInstance: VcDrawingActionInstance = undefined
 
   /**
    *
@@ -64,8 +63,9 @@ export default function (
     cmp?.handleMouseClick?.(movement.position, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -79,8 +79,9 @@ export default function (
     cmp?.handleMouseMove?.(movement.endPosition, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -94,8 +95,9 @@ export default function (
     cmp?.handleDoubleClick?.(movement.position, options)
 
     let drawingActionOpts
-    if ((instance.proxy as any).editingActionName) {
-      drawingActionOpts = drawingActionInstances.find(v => v.name === (instance.proxy as any).editingActionName)
+    const instanceVm = instance.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+    if (instanceVm.editingActionName) {
+      drawingActionOpts = getDrawingActionInstance(instanceVm.editingActionName)
     }
 
     if (drawingActionOpts && drawingActionOpts !== selectedDrawingActionInstance) {
@@ -118,15 +120,12 @@ export default function (
   instance.createCesiumObject = async () => {
     canRender.value = true
     visibilityState = new VisibilityState()
-    return drawingActionInstances
+    return drawingActionInstances.value
   }
 
   instance.mount = async () => {
     updateRootStyle()
     mounted.value = true
-    nextTick(() => {
-      fabRef.value?.toggle()
-    })
     activate()
     return true
   }
@@ -134,7 +133,7 @@ export default function (
   instance.unmount = async () => {
     if (selectedDrawingActionInstance) {
       toggleAction(selectedDrawingActionInstance)
-      ;(selectedDrawingActionInstance as any) = undefined
+      selectedDrawingActionInstance = undefined
     }
 
     deactivate()
@@ -208,14 +207,19 @@ export default function (
     Object.assign(containerStyle, css)
   }
 
-  const restoreColor = ref<string | null | undefined>(null)
-  const toggleAction = (drawingOption: VcDrawingActionInstance | string | undefined) => {
+  const restoreColor = ref<string>(null)
+  const toggleAction = (drawingOption: VcDrawingActionInstance | string) => {
     const { viewer } = $services
     if (isString(drawingOption)) {
-      drawingOption = drawingActionInstances.find(v => v.name === drawingOption)
+      drawingOption = getDrawingActionInstance(drawingOption)
     }
     if (!drawingOption) {
       commonState.logger.error('Invalid drawingActionOption or drawingActionOption name')
+      return
+    }
+
+    const index = getDrawingActionInstanceIndex(drawingOption.name)
+    if (index === -1) {
       return
     }
     if (selectedDrawingActionInstance !== void 0) {
@@ -234,29 +238,38 @@ export default function (
       )
     }
     if (selectedDrawingActionInstance?.name === drawingOption?.name) {
-      ;(selectedDrawingActionInstance as any) = undefined
-      drawingOption.actionOpts.color = restoreColor.value || 'red'
+      selectedDrawingActionInstance = undefined
+      drawingActionInstances.value[index].actionOpts.color = restoreColor.value || 'red'
     } else {
-      selectedDrawingActionInstance = drawingOption
-      const cmp = selectedDrawingActionInstance.cmpRef.value
-      cmp.startNew()
-      restoreColor.value = selectedDrawingActionInstance.actionOpts.color
-      selectedDrawingActionInstance.actionOpts.color = props.activeColor
-      selectedDrawingActionInstance.isActive = true
-      emit(
-        'activeEvt',
-        {
-          type: selectedDrawingActionInstance.name,
-          option: selectedDrawingActionInstance,
-          isActive: true
-        },
-        viewer
-      )
+      nextTick(() => {
+        const cmp = drawingActionInstances.value[index].cmpRef.value
+        cmp.startNew()
+        restoreColor.value = drawingActionInstances.value[index].actionOpts.color
+        drawingActionInstances.value[index].actionOpts.color = props.activeColor
+        drawingActionInstances.value[index].isActive = true
+        selectedDrawingActionInstance = drawingActionInstances.value[index]
+        emit(
+          'activeEvt',
+          {
+            type: selectedDrawingActionInstance.name,
+            option: selectedDrawingActionInstance,
+            isActive: true
+          },
+          viewer
+        )
+      })
     }
   }
 
+  const getDrawingActionInstance = (drawingName: string) => {
+    return drawingActionInstances.value.find(v => v.name === drawingName)
+  }
+
+  const getDrawingActionInstanceIndex = (drawingName: string) => {
+    return drawingActionInstances.value.findIndex(v => v.name === drawingName)
+  }
+
   const onUpdateFab = value => {
-    fabExtanded.value = value
     if (value) {
       activate()
     } else {
@@ -265,18 +278,19 @@ export default function (
       }
       deactivate()
     }
+    mainFabOpts.modelValue = value
     emit('fabUpdated', value)
   }
 
   const clearAll = () => {
-    drawingActionInstances.forEach(drawingActionOpts => {
+    drawingActionInstances.value.forEach(drawingActionOpts => {
       drawingActionOpts.cmpRef.value?.clear()
     })
 
     selectedDrawingActionInstance && toggleAction(selectedDrawingActionInstance)
   }
 
-  const getServices = () => {
+  const getServices = (): VcDrawingProvider => {
     return mergeDescriptors(commonState.getServices(), {
       get drawingFabInstance() {
         return instance
@@ -297,16 +311,26 @@ export default function (
     ;(cesiumObject as any)._vcId = cmpName
   }
 
-  provide(vcKey, getServices())
+  provide<VcDrawingProvider>(vcKey, getServices())
+  instance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
-  Object.assign(instance.proxy, { drawingActionInstances, selectedDrawingActionInstance, clearAll, deactivate, activate, toggleAction, fabRef })
+  Object.assign(instance.proxy, {
+    clearAll,
+    deactivate,
+    activate,
+    toggleAction,
+    getFabRef: () => fabRef.value,
+    getDrawingActionInstance,
+    getDrawingActionInstances: () => drawingActionInstances.value,
+    getSelectedDrawingActionInstance: () => selectedDrawingActionInstance
+  })
 
   const renderContent = () => {
     if (canRender.value) {
       const fabActionChildren: Array<VNode> = []
       const drawingChildren: Array<VNode> = []
-      drawingActionInstances.forEach(drawingActionInstance => {
+      drawingActionInstances.value.forEach(drawingActionInstance => {
         fabActionChildren.push(
           h(
             VcFabAction,
@@ -351,7 +375,7 @@ export default function (
           )
       })
 
-      drawingActionInstances.length &&
+      drawingActionInstances.value.length &&
         fabActionChildren.push(
           h(
             VcFabAction,
@@ -386,7 +410,7 @@ export default function (
               style: containerStyle
             },
             ctx.slots.body !== void 0
-              ? ctx.slots.body()
+              ? ctx.slots.body(drawingActionInstances.value)
               : h(
                   VcFab,
                   {
@@ -396,8 +420,8 @@ export default function (
                       background: mainFabOpts.color,
                       color: mainFabOpts.textColor
                     },
-                    'onUpdate:modelValue': onUpdateFab,
-                    ...mainFabOpts
+                    ...mainFabOpts,
+                    'onUpdate:modelValue': onUpdateFab
                   },
                   {
                     default: () => fabActionChildren,
@@ -407,7 +431,8 @@ export default function (
                         {
                           ...mainFabOpts.tooltip
                         },
-                        () => h('strong', null, mainFabOpts.tooltip.tip || (fabExtanded.value ? t('vc.drawing.collapse') : t('vc.drawing.expand')))
+                        () =>
+                          h('strong', null, mainFabOpts.tooltip.tip || (mainFabOpts.modelValue ? t('vc.drawing.collapse') : t('vc.drawing.expand')))
                       )
                   }
                 )

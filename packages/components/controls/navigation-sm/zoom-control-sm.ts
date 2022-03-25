@@ -1,12 +1,12 @@
-import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import type { VNode, CSSProperties } from 'vue'
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
-import type { VcComponentInternalInstance, VcZoomEvt } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcZoomEvt } from '@vue-cesium/utils/types'
 import usePosition, { positionProps } from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import { VcTooltip, VcTooltipProps } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
@@ -41,10 +41,10 @@ export default defineComponent({
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcZoomControlSm'
     instance.cesiumEvents = []
-    const rootRef = ref<HTMLElement | null>(null)
-    const zoomInRef = ref<HTMLElement | null>(null)
-    const zoomBarRef = ref<HTMLElement | null>(null)
-    const zoomOutRef = ref<HTMLElement | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const zoomInRef = ref<HTMLElement>(null)
+    const zoomBarRef = ref<HTMLElement>(null)
+    const zoomOutRef = ref<HTMLElement>(null)
     const parentInstance = getVcParentInstance(instance)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigationSm'
     const canRender = ref(hasVcNavigation)
@@ -232,5 +232,31 @@ export default defineComponent({
   }
 })
 
-export type VcZoomControlSmProps = ExtractPropTypes<typeof zoomControlSmProps>
 export type VcZoomControlSmEmits = typeof emits
+export type VcZoomControlSmProps = {
+  /**
+   * Specify the position of the VcZoomControlSm.
+   * Default value: top-right
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcZoomControlSm horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether the outer ring of the compass can be operated.
+   * Default value: true
+   */
+  /**
+   * Specify whether to automatically hide the zoom control.
+   * Default value: true
+   */
+  autoHidden?: boolean
+  /**
+   * Specify the compass prompt information.
+   */
+  tooltip?: false | (VcTooltipProps & { zoomInTip: string; zoomOutTip: string; zoomBarTip: string })
+}
+
+export type VcZoomControlSmRef = VcComponentPublicInstance<VcZoomControlSmProps>

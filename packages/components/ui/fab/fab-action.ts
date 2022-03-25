@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-22 09:39:46
+ * @LastEditTime: 2022-03-05 22:43:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\fab\fab-action.ts
  */
-import { h, defineComponent, computed, inject, getCurrentInstance } from 'vue'
+import { h, defineComponent, computed, inject, getCurrentInstance, ComponentPublicInstance } from 'vue'
 import type { VNode, ExtractPropTypes } from 'vue'
 import { fabKey } from '@vue-cesium/utils/config'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -15,6 +15,7 @@ import VcBtn from '../btn'
 import VcIcon from '../icon'
 import useFab from './use-fab'
 import defaultPropsAction, { anchorMap } from './defaultPropsAction'
+import { LooseDictionary } from '@vue-cesium/utils/types'
 
 interface FabData {
   showing?: {
@@ -183,4 +184,27 @@ export interface VcFabActionProps {
    * @param evt JS event object
    */
   onClick?: (evt: any) => void
+}
+
+export interface VcFabActionSlots {
+  /**
+   * Suggestion for this slot: VcTooltip
+   */
+  default: () => VNode[]
+  /**
+   * Slot for icon; Suggestion: VcIcon
+   */
+  icon: () => VNode[]
+  /**
+   * Slot for label
+   */
+  label: () => VNode[]
+}
+
+export interface VcFabActionRef extends ComponentPublicInstance<VcFabActionProps> {
+  /**
+   * Emulate click on VcFabAction
+   * @param evt JS event object
+   */
+  click: (evt?: LooseDictionary) => void
 }

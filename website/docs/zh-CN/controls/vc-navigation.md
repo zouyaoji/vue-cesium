@@ -2,7 +2,7 @@
 
 导航组件，包括罗盘、缩放、其他悬浮按钮，位置和距离比例尺工具栏控件。由 `vc-compass`、`vc-zoom-control`、`vc-print`、`vc-mylocation`、`vc-status-bar`、`vc-distance-legend` 组合而成。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 :::tip
 
@@ -24,23 +24,23 @@
     <vc-navigation
       :position="position"
       :offset="offset"
-      :compassOpts="compassOpts"
-      :zoomOpts="zoomOpts"
-      :locationOpts="locationOpts"
-      :otherOpts="otherOpts"
-      @compassEvt="onNavigationEvt"
-      @zoomEvt="onNavigationEvt"
-      @printEvt="onNavigationEvt"
-      @locationEvt="onNavigationEvt"
-      @statusBarEvt="onNavigationEvt"
-      @distanceLegendEvt="onNavigationEvt"
+      :compass-opts="compassOpts"
+      :zoom-opts="zoomOpts"
+      :location-opts="locationOpts"
+      :other-opts="otherOpts"
+      @compass-evt="onNavigationEvt"
+      @zoom-evt="onNavigationEvt"
+      @print-evt="onNavigationEvt"
+      @location-evt="onNavigationEvt"
+      @status-bar-evt="onNavigationEvt"
+      @distance-legend-evt="onNavigationEvt"
     >
     </vc-navigation>
-    <vc-layer-imagery :sortOrder="20">
-      <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :sort-order="20">
+      <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
-    <vc-layer-imagery :sortOrder="10">
-      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :sort-order="10">
+      <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -141,29 +141,29 @@
   <vc-viewer>
     <vc-compass
       position="left"
-      :outerOptions="{icon: 'svguse:#vc-icons-compass-outer', size: '250px'}"
-      :innerOptions="{icon: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
+      :outer-options="{icon: 'svguse:#vc-icons-compass-outer', size: '250px'}"
+      :inner-options="{icon: 'fa fa-compass', size: '60px', background: 'transparent', color: '#009688'}"
     ></vc-compass>
-    <vc-compass position="top" :outerOptions="{icon: 'svguse:#vc-icons-qq'}"></vc-compass>
+    <vc-compass position="top" :outer-options="{icon: 'svguse:#vc-icons-qq'}"></vc-compass>
     <vc-compass
       position="top-right"
-      :outerOptions="{icon: 'fa fa-circle-o-notch'}"
-      :innerOptions="{icon: 'fa fa-circle', background: 'transparent'}"
+      :outer-options="{icon: 'fa fa-circle-o-notch'}"
+      :inner-options="{icon: 'fa fa-circle', background: 'transparent'}"
     ></vc-compass>
-    <vc-compass position="right" :enableCompassOuterRing="false"></vc-compass>
+    <vc-compass position="right" :enable-compass-outer-ring="false"></vc-compass>
     <vc-zoom-control
       position="bottom"
       direction="horizontal"
       :offset="[0, 30]"
-      :zoomResetOptions="{size: '48px', color: '#21BA45'}"
+      :zoom-reset-options="{size: '48px', color: '#21BA45'}"
     ></vc-zoom-control>
-    <vc-zoom-control position="bottom" :enableResetButton="false" borderRadius="0" :offset="[0, 120]"></vc-zoom-control>
-    <vc-print position="bottom-right" downloadAutomatically :color="color" :background="background"></vc-print>
+    <vc-zoom-control position="bottom" :enable-reset-button="false" border-radius="0" :offset="[0, 120]"></vc-zoom-control>
+    <vc-print position="bottom-right" download-automatically :color="color" :background="background"></vc-print>
     <vc-print
       position="bottom-right"
       :offset="[40, 20]"
-      :showPrintView="false"
-      printAutomatically
+      :show-printView="false"
+      print-automatically
       size="28px"
       :round="false"
       label="打印分享"
@@ -184,12 +184,10 @@
       background="#F2C037"
     ></vc-my-location>
     <!-- 自定义 API 定位 -->
-    <vc-my-location position="top-left" :offset="[60, 0]" :customAPI="() => ({lng: 108, lat: 32})"></vc-my-location>
+    <vc-my-location position="top-left" :offset="[60, 0]" :custom-a-p-i="() => ({lng: 108, lat: 32})"></vc-my-location>
     <vc-status-bar position="bottom"></vc-status-bar>
-    <vc-status-bar position="bottom" :offset="[300, 35]" :showCameraInfo="false" :showPerformanceInfo="false"></vc-status-bar>
-    <vc-status-bar position="bottom" :offset="[-300, 35]" :showCameraInfo="false" :showMouseInfo="false"></vc-status-bar>
-    <vc-status-bar position="top-left" :offset="[120, 3]" :showMouseInfo="false" :showPerformanceInfo="false"></vc-status-bar>
-    <vc-distance-legend position="bottom-left" :offset="[5, 70]" background="#26A69A" barBackground="#F2C037" :width="80"></vc-distance-legend>
+    <vc-status-bar position="top-left" :offset="[120, 3]" :show-mouse-info="false" :show-performance-info="false"></vc-status-bar>
+    <vc-distance-legend position="bottom-left" :offset="[5, 70]" background="#26A69A" bar-background="#F2C037" :width="80"></vc-distance-legend>
     <vc-distance-legend position="bottom-left" :offset="[5, 35]"></vc-distance-legend>
   </vc-viewer>
 </el-row>
@@ -215,44 +213,45 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定导航组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 | |
-| compassOpts | Object\|false | 与 `VcCompass` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 | |
-| zoomOpts | Object\|false | 与 `VcZoomControl` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 | |
-| printOpts | Object\|false | 与 `VcPrint` 保持一致 | `optional` 指定打印控件参数，false 即不显示。 | |
-| locationOpts | Object\|false | 与 `VcMyLocation` 保持一致 | `optional` 指定定位控件参数，false 即不显示。 | |
-| otherOpts | Object\|false | | `optional` 指定其他控件（位置栏和距离比例尺栏，视为一个整体）参数，false 即不显示。 | |
+| position | string | `'top-right'` | `optional` 指定导航组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定导航组件基于位置的偏移量。 | |
+| compassOpts | VcCompassProps\|false | 与 `VcCompass` 保持一致 | `optional` 指定罗盘控件参数，false 即不显示。 | |
+| zoomOpts | VcZoomControlProps\|false | 与 `VcZoomControl` 保持一致 | `optional` 指定缩放控件参数，false 即不显示。 | |
+| printOpts | VcPrintProps\|false | 与 `VcPrint` 保持一致 | `optional` 指定打印控件参数，false 即不显示。 | |
+| locationOpts | VcMyLocationProps\|false | 与 `VcMyLocation` 保持一致 | `optional` 指定定位控件参数，false 即不显示。 | |
+| otherOpts | VcNavigationOtherOpts\|false | | `optional` 指定其他控件（位置栏和距离比例尺栏，视为一个整体）参数，false 即不显示。 | |
 
 :::tip
 
-提示：其他控件（位置栏和距离比例尺栏，视为一个整体），位置没受 VcNavigation 控制。默认参数：
-
-```
-otherOpts: {
-  position: 'botttom-right',
-  offset:[2, 3],
-  statusBarOpts: {}, // 与 VcStatusBar 保持一致
-  distancelegendOpts: {} // 与 VcDistanceLegend 保持一致
-}
-```
+提示：其他控件（位置栏和距离比例尺栏，视为一个整体），位置没受 VcNavigation 控制。
 
 :::
 
 ### VcNavigation 事件
 
-| 事件名            | 参数                                                         | 描述                         |
-| ----------------- | ------------------------------------------------------------ | ---------------------------- |
-| compassEvt        | {camera, status, target, type}                               | 操作罗盘控件时触发。         |
-| zoomEvt           | {camera, status, target, type}                               | 操作缩放控件时触发。         |
-| locationEvt       | {detail,entity, position, type}                              | 操作定位控件时触发。         |
-| printEvt          | {image, status, type}                                        | 操作打印控件时触发。         |
-| statusBarEvt      | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | 状态控件相关参数改变时触发。 |
-| distanceLegendEvt | {distance,status,type}                                       | 距离比例尺改变时触发。       |
-| beforeLoad        | (instance: VcComponentInternalInstance)                      | 对象加载前触发。             |
-| ready             | (readyObj: VcReadyObject)                                    | 对象加载成功时触发。         |
-| destroyed         | (instance: VcComponentInternalInstance)                      | 对象销毁时触发。             |
+| 事件名            | 参数                                    | 描述                         |
+| ----------------- | --------------------------------------- | ---------------------------- |
+| beforeLoad        | (instance: VcComponentInternalInstance) | 组件加载前触发。             |
+| ready             | (readyObj: VcReadyObject)               | 组件加载成功时触发。         |
+| destroyed         | (instance: VcComponentInternalInstance) | 组件销毁时触发。             |
+| compassEvt        | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。         |
+| zoomEvt           | (evt: VcZoomEvt)                        | 操作缩放控件时触发。         |
+| locationEvt       | (evt: VcLocationEvt)                    | 操作定位控件时触发。         |
+| printEvt          | (evt: VcPrintEvt)                       | 操作打印控件时触发。         |
+| statusBarEvt      | (evt: VcStatusBarEvt)                   | 状态控件相关参数改变时触发。 |
+| distanceLegendEvt | (evt: VcDistanceLegendEvt)              | 距离比例尺改变时触发。       |
 
-### VcNavigation Slots
+### VcNavigation 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
+### VcNavigation 插槽
 
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
@@ -267,14 +266,14 @@ otherOpts: {
 
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
-| ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定罗盘组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
-| enableCompassOuterRing | String | `true` | `optional` 指定罗盘外环是否可以操作。 ||
-| duration | Number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
-| outerOptions | Object | | `optional` 指定罗盘外环参数。 ||
-| innerOptions | Object | | `optional` 指定罗盘内环参数。 ||
-| markerOptions | Object | | `optional` 指定罗盘旋转时圆块参数。 ||
+| ----- | ---- | ------ | ---- | ----- |
+| position | string | `'top-right'` | `optional` 指定罗盘组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定罗盘基于位置的偏移量。 ||
+| enableCompassOuterRing | boolean | `true` | `optional` 指定罗盘外环是否可以操作。 ||
+| duration | number | `1.5` | `optional` 指定双击罗盘恢复俯仰角飞行时间，单位秒。 ||
+| outerOptions | VcBtnTooltipProps | | `optional` 指定罗盘外环参数。 ||
+| innerOptions | VcBtnTooltipProps | | `optional` 指定罗盘内环参数。 ||
+| markerOptions | VcBtnTooltipProps | | `optional` 指定罗盘旋转时圆块参数。 ||
 
 :::tip
 提示 `outerOptions`、`innerOptions`、`markerOptions` 默认参数：
@@ -326,10 +325,20 @@ otherOpts: {
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
-| compassEvt | {camera, status, target, type}          | 操作罗盘控件时触发。 |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| compassEvt | (evt: VcCompassEvt)                     | 操作罗盘控件时触发。 |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+
+### VcCompass 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### VcZoomControl
 
@@ -340,21 +349,21 @@ otherOpts: {
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定缩放组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 | |
-| enableResetButton | Boolean | `true` | `optional` 指定是否启用重置按钮。 | |
-| zoomAmount | Number | `2` | `optional` 指定放大缩小的数量级。 | |
-| duration | String | `0.5` | `optional` 指定放大缩小过程时间，单位秒。 | |
-| durationReset | Number | `1.5` | `optional` 指定重置到默认相机位置的时间，单位秒。 | |
-| defaultResetView | Object | | `optional` 指定重置相机的位置。 | |
-| overrideViewerCamera | Boolean | `false` | `optional` 指定初始化时是否覆盖`vc-viewer`上的`camera`属性。 | |
-| background | String | `'#3f4854'` | `optional` 指定缩放控件背景。 | |
-| border | String | `'solid 1px rgba(255, 255, 255, 0.2)'` | `optional` 指定缩放控件边框。 | |
-| borderRadius | String | `'100px'` | `optional` 指定缩放控件边框圆角。 | |
-| direction | String | `'vertical'` | `optional` 指定缩放控件方向。 | vertical /horizontal |
-| zoomInOptions | Object | | `optional` 指定放大按钮参数。 | |
-| zoomOutOptions | Object | | `optional` 指定缩小按钮参数。 | |
-| zoomResetOptions | Object | | `optional` 指定重置按钮参数。 | |
+| position | string | `'top-right'` | `optional` 指定缩放组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定缩放控件基于位置的偏移量。 | |
+| enableResetButton | boolean | `true` | `optional` 指定是否启用重置按钮。 | |
+| zoomAmount | number | `2` | `optional` 指定放大缩小的数量级。 | |
+| duration | string | `0.5` | `optional` 指定放大缩小过程时间，单位秒。 | |
+| durationReset | number | `1.5` | `optional` 指定重置到默认相机位置的时间，单位秒。 | |
+| defaultResetView | VcCamera | | `optional` 指定重置相机的位置。 | |
+| overrideViewerCamera | boolean | `false` | `optional` 指定初始化时是否覆盖`vc-viewer`上的`camera`属性。 | |
+| background | string | `'#3f4854'` | `optional` 指定缩放控件背景。 | |
+| border | string | `'solid 1px rgba(255, 255, 255, 0.2)'` | `optional` 指定缩放控件边框。 | |
+| borderRadius | string | `'100px'` | `optional` 指定缩放控件边框圆角。 | |
+| direction | string | `'vertical'` | `optional` 指定缩放控件方向。 | vertical /horizontal |
+| zoomInOptions | VcBtnTooltipProps | | `optional` 指定放大按钮参数。 | |
+| zoomOutOptions | VcBtnTooltipProps | | `optional` 指定缩小按钮参数。 | |
+| zoomResetOptions | VcBtnTooltipProps | | `optional` 指定重置按钮参数。 | |
 
 :::tip
 提示：`durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` 默认参数：
@@ -447,51 +456,20 @@ otherOpts: {
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
-| zoomEvt    | {camera, status, target, type}          | 操作缩放控件时触发。 |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| zoomEvt    | (evt: VcZoomEvt)                        | 操作缩放控件时触发。 |
 
-### VcMyLocation
+### VcZoomControl 方法
 
-定位组件。
-
-### VcMyLocation 属性
-
-<!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
-| ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定定位组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定定位按钮基于位置的偏移量。 ||
-| geolocation | Object | | `optional` 指定浏览器定位参数。 ||
-| amap | Object | | `optional` 指定高德定位参数。如果设置则优先使用高德定位。 ||
-| id | String | | `optional` 指定定位成功后加载点的 id。 ||
-| pointColor | Array\|Object\|String | | `optional` 指定定位成功后加载点的颜色。 ||
-| pixelSize | Number | `12.5` | `optional` 指定定位成功后加载点的大小。 ||
-| outlineWidth | Number | `3` | `optional` 指定定位成功后加载点的外边框宽度。 |
-| outlineColor | Array\|Object\|String | `'#ffffff'` | `optional` 指定定位成功后加载点的外边框颜色。 ||
-| level | Number | `6` | `optional` 指定定位成功后基于地形自动识别高度时的采样层级。 ||
-| duration | Number | `3` | `optional` 指定定位成功后飞行时间，单位秒。 ||
-| customAPI | Function | | `optional` 指定自定义定位 API。 ||
-| description | Function | | `optional` 指定自定义定位成功后该点的描述文字。 ||
-| icon | String | `vc-icons-geolocation` | `optional` 指定定位按钮图标。 ||
-| size | String | `'24px'` | `optional` 指定定位按钮尺寸。 ||
-| color | String | `'#3f4854'` | `optional` 指定定位按钮颜色。 ||
-| background | String | `'#fff'` | `optional` 指定定位按钮背景。 ||
-| round | Boolean | `true` | `optional` 指定定位按钮是否圆形展示。 ||
-| flat | Boolean | `false` | `optional` 指定定位按钮是否是普通风格，不带背景、点击效果。 ||
-| label | String | | `optional` 指定定位按钮文字。 ||
-| stack | Boolean | | `optional` 指定定位按钮是否堆叠显示。 ||
-| tooltip | Object | | `optional` 指定定位按钮提示信息参数。 ||
-
-### VcMyLocation 事件
-
-| 事件名      | 参数                                    | 描述                 |
-| ----------- | --------------------------------------- | -------------------- |
-| beforeLoad  | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready       | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed   | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
-| locationEvt | {detail,entity,position, type}          | 操作定位按钮时触发。 |
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### VcPrint
 
@@ -502,30 +480,92 @@ otherOpts: {
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定打印组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定打印控件基于位置的偏移量。 ||
-| showCredit | Boolean | `true` | `optional` 指定打印图片时是否显示加载数据版权信息。 ||
-| showPrintView | Boolean | `true` | `optional` 指定是否显示打印预览。 ||
-| printAutomatically | Boolean | `false` | `optional` 指定是否自动打印。需要 showPrintView 设置为 false。 ||
-| downloadAutomatically | Boolean | `false` | `optional` 指定是否下载打印的图片。 ||
-| icon | String | `'vc-icons-capture'` | `optional` 指定打印按钮图标。 ||
-| size | String | `'24px'` | `optional` 指定打印按钮尺寸。 ||
-| color | String | `'#3f4854'` | `optional` 指定打印按钮颜色。 ||
-| background | String | `'#fff'` | `optional` 指定打印按钮背景。 ||
-| round | Boolean | `true` | `optional` 指定打印按钮是否圆形展示。 ||
-| flat | Boolean | `false` | `optional` 指定打印按钮是否是普通风格，不带背景、点击效果。 ||
-| label | String | | `optional` 指定打印按钮文字。 ||
-| stack | Boolean | `false` | `optional` 指定打印按钮是否堆叠显示。 ||
-| tooltip | Object | | `optional` 指定打印按钮提示信息参数。 ||
+| position | string | `'top-right'` | `optional` 指定打印组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定打印控件基于位置的偏移量。 ||
+| showCredit | boolean | `true` | `optional` 指定打印图片时是否显示加载数据版权信息。 ||
+| showPrintView | boolean | `true` | `optional` 指定是否显示打印预览。 ||
+| printAutomatically | boolean | `false` | `optional` 指定是否自动打印。需要 showPrintView 设置为 false。 ||
+| downloadAutomatically | boolean | `false` | `optional` 指定是否下载打印的图片。 ||
+| icon | string | `'vc-icons-capture'` | `optional` 指定打印按钮图标。 ||
+| size | string | `'24px'` | `optional` 指定打印按钮尺寸。 ||
+| color | string | `'#3f4854'` | `optional` 指定打印按钮颜色。 ||
+| background | string | `'#fff'` | `optional` 指定打印按钮背景。 ||
+| round | boolean | `true` | `optional` 指定打印按钮是否圆形展示。 ||
+| flat | boolean | `false` | `optional` 指定打印按钮是否是普通风格，不带背景、点击效果。 ||
+| label | string | | `optional` 指定打印按钮文字。 ||
+| stack | boolean | `false` | `optional` 指定打印按钮是否堆叠显示。 ||
+| tooltip | VcTooltipProps | | `optional` 指定打印按钮提示信息参数。 ||
 
 ### VcPrint 事件
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
-| printEvt   | {image, status,type}                    | 操作打印控件时触发。 |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| printEvt   | (evt: VcPrintEvt)                       | 操作打印控件时触发。 |
+
+### VcPrint 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+
+### VcMyLocation
+
+定位组件。
+
+### VcMyLocation 属性
+
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
+| ----- | --- | ------ | ---- | ----- |
+| position | string | `'top-right'` | `optional` 指定定位组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定定位按钮基于位置的偏移量。 ||
+| geolocation | PositionOptions | | `optional` 指定浏览器定位参数。 ||
+| amap | Object | | `optional` 指定高德定位参数。如果设置则优先使用高德定位。 ||
+| id | string | | `optional` 指定定位成功后加载点的 id。 ||
+| pointColor | VcColor | | `optional` 指定定位成功后加载点的颜色。 ||
+| pixelSize | number | `12.5` | `optional` 指定定位成功后加载点的大小。 ||
+| outlineWidth | number | `3` | `optional` 指定定位成功后加载点的外边框宽度。 |
+| outlineColor | VcColor | `'#ffffff'` | `optional` 指定定位成功后加载点的外边框颜色。 ||
+| level | number | `6` | `optional` 指定定位成功后基于地形自动识别高度时的采样层级。 ||
+| duration | number | `3` | `optional` 指定定位成功后飞行时间，单位秒。 ||
+| factor | number | `0.01` | `optional` 将定位点转换成 rectangle 的偏差值。 ||
+| customAPI | (errorCallback) => ({ lng: number; lat: number }) | | `optional` 指定自定义定位 API。 ||
+| description | (position, detail) => string | | `optional` 指定自定义定位成功后该点的描述文字。 ||
+| icon | string | `vc-icons-geolocation` | `optional` 指定定位按钮图标。 ||
+| size | string | `'24px'` | `optional` 指定定位按钮尺寸。 ||
+| color | string | `'#3f4854'` | `optional` 指定定位按钮颜色。 ||
+| background | string | `'#fff'` | `optional` 指定定位按钮背景。 ||
+| round | boolean | `true` | `optional` 指定定位按钮是否圆形展示。 ||
+| flat | boolean | `false` | `optional` 指定定位按钮是否是普通风格，不带背景、点击效果。 ||
+| label | string | | `optional` 指定定位按钮文字。 ||
+| stack | boolean | | `optional` 指定定位按钮是否堆叠显示。 ||
+| tooltip | VcTooltipProps\|false | | `optional` 指定定位按钮提示信息参数。 ||
+
+### VcMyLocation 事件
+
+| 事件名      | 参数                                    | 描述                 |
+| ----------- | --------------------------------------- | -------------------- |
+| beforeLoad  | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready       | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed   | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
+| locationEvt | (evt: VcLocationEvt)                    | 操作定位按钮时触发。 |
+
+### VcMyLocation 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### VcStatusBar
 
@@ -536,24 +576,38 @@ otherOpts: {
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定状态组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定信息栏控件基于位置的偏移量。 （单独使用时有效） |
-| gridFileUrl | String | `https://zouyaoji.top/vue-cesium/SampleData/WW15MGH.DAC`| `optional` 指定鼠标拾取高度模型，用这个能提高获取的高度精度。 |
-| color | String | `'#fff'` | `optional` 指定信息栏颜色。 |
-| background | String | `'#3f4854'` | `optional` 指定信息栏背景。 |
-| showCameraInfo | Boolean | `true` | `optional` 指定信息栏是否显示相机信息。 |
-| showMouseInfo | Boolean | `true` | `optional` 指定信息栏是否显示鼠标所指位置信息。 |
-| showPerformanceInfo | Boolean | `true` | `optional` 指定信息栏是否显示帧率信息。 |
-| tooltip | Object | | `optional` 指定信息栏提示信息参数。 |
+| position | string | `'top-right'` | `optional` 指定状态组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定信息栏控件基于位置的偏移量。 （单独使用时有效） |
+| gridFileUrl | string | `https://zouyaoji.top/vue-cesium/SampleData/WW15MGH.DAC`| `optional` 指定鼠标拾取高度模型，用这个能提高获取的高度精度。 |
+| color | string | `'#fff'` | `optional` 指定信息栏颜色。 |
+| background | string | `'#3f4854'` | `optional` 指定信息栏背景。 |
+| showCameraInfo | boolean | `true` | `optional` 指定信息栏是否显示相机信息。 |
+| showMouseInfo | boolean | `true` | `optional` 指定信息栏是否显示鼠标所指位置信息。 |
+| showPerformanceInfo | boolean | `true` | `optional` 指定信息栏是否显示帧率信息。 |
+| useProjection | boolean | `true` | `optional` 指定信息栏上的经纬度坐标是否可以切换成 UTM 投影坐标。 |
+| tooltip | false \| VcTooltipProps | | `optional` 指定信息栏提示信息参数。 |
 
 ### VcStatusBar 事件
 
-| 事件名       | 参数                                                         | 描述                   |
-| ------------ | ------------------------------------------------------------ | ---------------------- |
-| beforeLoad   | (instance: VcComponentInternalInstance)                      | 对象加载前触发。       |
-| ready        | (readyObj: VcReadyObject)                                    | 对象加载成功时触发。   |
-| destroyed    | (instance: VcComponentInternalInstance)                      | 对象销毁时触发。       |
-| statusBarEvt | {cameraInfo, mouseCoordsInfo, performanceInfo, status, type} | 状态栏参数改变时触发。 |
+| 事件名       | 参数                                    | 描述                   |
+| ------------ | --------------------------------------- | ---------------------- |
+| beforeLoad   | (instance: VcComponentInternalInstance) | 组件加载前触发。       |
+| ready        | (readyObj: VcReadyObject)               | 组件加载成功时触发。   |
+| destroyed    | (instance: VcComponentInternalInstance) | 组件销毁时触发。       |
+| statusBarEvt | (evt: VcStatusBarEvt)                   | 状态栏参数改变时触发。 |
+
+### VcStatusBar 方法
+
+| 方法名             | 参数                                                                                  | 描述                                        |
+| ------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\>                                               | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\>                                               | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                                                              | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject>                                               | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                                                                  | 获取该组件加载的 Cesium 对象。              |
+| getMouseCoordsInfo | () => MouseCoords                                                                     | 获取鼠标坐标信息。                          |
+| getCameraInfo      | () => { heading: string; pitch: string; roll: string; height: string; level: string } | 获取相机信息。                              |
+| getPerformanceInfo | () => { fps: string; ms: string }                                                     | 获取性能参数信息。                          |
 
 ### VcDistanceLegend
 
@@ -564,18 +618,28 @@ otherOpts: {
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定距离比例尺组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定距离比例尺控件基于位置的偏移量。 |
-| color | String | `'#fff'` | `optional` 指定距离比例尺控件颜色。 |
-| background | String | `'#3f4854'` | `optional` 指定距离比例尺背景。 |
-| width | Number | `100` | `optional` 指定距离比例尺宽度。 |
-| barBackground | String | `'#ffffff'` | `optional` 指定距离比例尺上横线颜色。 |
+| position | string | `'top-right'` | `optional` 指定距离比例尺组件位置。 | top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定距离比例尺控件基于位置的偏移量。 |
+| color | string | `'#fff'` | `optional` 指定距离比例尺控件颜色。 |
+| background | string | `'#3f4854'` | `optional` 指定距离比例尺背景。 |
+| width | number | `100` | `optional` 指定距离比例尺宽度。 |
+| barBackground | string | `'#ffffff'` | `optional` 指定距离比例尺上横线颜色。 |
 
 ### VcDistanceLegend 事件
 
 | 事件名            | 参数                                    | 描述                   |
 | ----------------- | --------------------------------------- | ---------------------- |
-| beforeLoad        | (instance: VcComponentInternalInstance) | 对象加载前触发。       |
-| ready             | (readyObj: VcReadyObject)               | 对象加载成功时触发。   |
-| destroyed         | (instance: VcComponentInternalInstance) | 对象销毁时触发。       |
-| distanceLegendEvt | {distance,status,type}                  | 距离比例尺改变时触发。 |
+| beforeLoad        | (instance: VcComponentInternalInstance) | 组件加载前触发。       |
+| ready             | (readyObj: VcReadyObject)               | 组件加载成功时触发。   |
+| destroyed         | (instance: VcComponentInternalInstance) | 组件销毁时触发。       |
+| distanceLegendEvt | (evt: VcDistanceLegendEvt)              | 距离比例尺改变时触发。 |
+
+### VcDistanceLegend 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-01-27 12:01:48
+ * @LastEditTime: 2022-03-09 09:46:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analyses.md
@@ -11,7 +11,7 @@
 
 加载分析工具组件。包含通视分析、可视域分析（3DTiles)。
 
-**注意：** 需要引入样式文件: `import 'vue-cesium/default/index.css';`
+**注意：** 需要引入样式文件: `import 'vue-cesium/dist/index.css';`
 
 ### 基础用法
 
@@ -26,21 +26,21 @@
     <vc-analyses
       ref="analyses"
       position="bottom-left"
-      :mainFabOpts="mainFabOpts"
-      :offset="[20, 50]"
+      :main-fab-opts="mainFabOpts"
+      :offset="[10, 30]"
       :editable="editable"
-      @drawEvt="drawEvt"
-      @activeEvt="activeEvt"
-      @editorEvt="editorEvt"
-      @mouseEvt="mouseEvt"
+      @draw-evt="drawEvt"
+      @active-evt="activeEvt"
+      @editor-evt="editorEvt"
+      @mouse-evt="mouseEvt"
       @ready="analysesReadyDefault"
     ></vc-analyses>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onTilesetReady"
+      @ready-promise="onTilesetReady"
     ></vc-primitive-tileset>
     <vc-layer-imagery>
-      <vc-imagery-provider-tianditu mapStyle="img_c" :maximumLevel="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
   </vc-viewer>
@@ -153,19 +153,19 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | --- | ------ | ---- | ----- |
-| position | String | `'top-right'` | `optional` 指定分析组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
-| offset | Array | `[0, 0]` | `optional` 指定分析组件基于位置的偏移量。 |
-| show | Boolean | `true` | `optional` 指定分析的结果是否可见。 |
-| mode | Number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
-| analyses | Array | `['sightline', 'viewshed']` | `optional` 指定要加载的分析实例。 |
-| activeColor | String | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
-| editable | Boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
-| mainFabOpts | Object: VcActionTooltipProps & VcFabProps | | `optional` 指定分析组件浮动按钮的样式选项。 |
-| sightlineActionOpts | Object: VcActionTooltipProps |  | `optional` 指定通视分析绘制按钮的样式选项。|
-| sightlineAnalysisOpts | Object: VcDrawingOpts | | `optional` 指定通视分析绘制参数。|
-| viewshedActionOpts | Object: VcActionTooltipProps |  | `optional` 指定可视域分析按钮的样式选项。|
-| viewshedAnalysisOpts | Object: VcViewshedAnalysisOpts | | `optional` 指定可视域分析参数。|
-| clearActionOpts | Object: VcActionTooltipProps | | `optional` 指定清除按钮的样式选项。|
+| position | string | `'top-right'` | `optional` 指定分析组件的位置。 |top-right/top-left/bottom-right/bottom-left/top/right/bottom/left |
+| offset | [number, number] | `[0, 0]` | `optional` 指定分析组件基于位置的偏移量。 |
+| show | boolean | `true` | `optional` 指定分析的结果是否可见。 |
+| mode | number | `1` | `optional` 指定绘制交互模式，0 代表连续绘制，1 代表绘制一次就结束。|
+| analyses | Array\<'sightline' \| 'viewshed'\> | `['sightline', 'viewshed']` | `optional` 指定要加载的分析实例。 |
+| activeColor | string | `'positive'` | `optional` 指定绘制实例激活时的颜色。 |
+| editable | boolean | `false` | `optional` 指定绘制结果对象是否可编辑。 |
+| mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` 指定分析组件浮动按钮的样式选项。 |
+| sightlineActionOpts | VcActionTooltipProps |  | `optional` 指定通视分析绘制按钮的样式选项。|
+| sightlineAnalysisOpts | VcDrawingOpts | | `optional` 指定通视分析绘制参数。|
+| viewshedActionOpts | VcActionTooltipProps |  | `optional` 指定可视域分析按钮的样式选项。|
+| viewshedAnalysisOpts | VcViewshedAnalysisOpts | | `optional` 指定可视域分析参数。|
+| clearActionOpts | VcActionTooltipProps | | `optional` 指定清除按钮的样式选项。|
 
 :::tip
 
@@ -190,10 +190,29 @@
 | ready      | (readyObj: VcReadyObject)                        | 对象加载成功时触发。         |
 | destroyed  | (instance: VcComponentInternalInstance)          | 对象销毁时触发。             |
 | drawEvt    | (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) | 绘制时触发。                 |
-| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 切换绘制 Action 时触发。     |
+| activeEvt  | (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer)   | 切换分析 Action 时触发。     |
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | 点击编辑按钮时触发。         |
-| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移除绘制点时触发。 |
+| mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | 鼠标移进、移出绘制点时触发。 |
 | fabUpdated | (value: boolean)                                 | 浮动按钮展开、收拢时触发。   |
+
+### 方法
+
+<!-- prettier-ignore -->
+| 方法名 | 参数 | 描述 |
+| ----- | ---- | ---- |
+| load | () => Promise\<false \| VcReadyObject\> | 手动加载组件。 |
+| reload | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。 |
+| unload | () => Promise\<boolean\> | 手动卸载组件。 |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject | () => VcCesiumObject | 获取通过该组件加载的 Cesium 对象。 |
+| clearAll | () => void | 清除所有的绘制对象。 |
+| activate | () => void | 激活绘制事件。 |
+| deactivate | () => void | 取消激活绘制事件。 |
+| toggleAction | (drawingOption: VcDrawingActionInstance \| string) => void | 切换绘制实例。 |
+| getFabRef | () => VcFabRef | 获取浮动按钮模板引用。 |
+| getDrawingActionInstance | (actionName: string) => VcDrawingActionInstance|根据action名称获取绘制实例。|
+| getDrawingActionInstances | () => Array\<VcDrawingActionInstance\> | 获取所有绘制实例。 |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance | 获取选中的绘制实例。 |
 
 ### 插槽
 

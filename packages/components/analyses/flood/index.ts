@@ -1,21 +1,26 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-01-14 14:52:57
+ * @LastEditTime: 2022-03-09 22:55:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
  */
 import { defineComponent, getCurrentInstance, PropType, ref, h, createCommentVNode, WatchStopHandle, onUnmounted, watch } from 'vue'
 import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
-import { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { makeColor } from '@vue-cesium/utils/cesium-helpers'
 import { VcPrimitiveClassification } from '@vue-cesium/components/primitives'
 import { VcGeometryInstance } from '@vue-cesium/components/geometry-instance'
 import { VcGeometryPolygon } from '@vue-cesium/components/geometries'
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
+import { commonEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...commonEmits,
+  stop: (evt: Cesium.ClassificationPrimitive) => true
+}
 export default defineComponent({
   name: 'VcAnalysisFlood',
   props: {
@@ -36,13 +41,13 @@ export default defineComponent({
       default: false
     },
     color: {
-      type: [Object, Array, String] as PropType<Cesium.Color>,
+      type: [Object, Array, String] as PropType<VcColor>,
       default: 'rgba(40,150,200,0.6)'
     },
     ...polygonHierarchy
   },
-  emits: ['beforeLoad', 'ready', 'destroyed', 'stop'],
-  setup(props, ctx) {
+  emits: emits,
+  setup(props: VcAnalysisFloodProps, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalysisFlood'
     instance.cesiumEvents = []
@@ -57,14 +62,14 @@ export default defineComponent({
     const canRender = ref(false)
 
     const vcParent = getVcParentInstance(instance)
-    ;(vcParent.proxy as VcComponentPublicInstance).createPromise?.then(() => {
+    ;(vcParent.proxy as VcComponentPublicInstance).creatingPromise?.then(() => {
       canRender.value = true
     })
 
     const flooding = ref(false)
     const attributes = ref<any>(null)
     const extrudedHeight = ref(-1)
-    const childRef = ref<Cesium.ClassificationPrimitive | null>(null)
+    const childRef = ref<Cesium.ClassificationPrimitive>(null)
     let stoped = false
 
     // watcch
@@ -146,7 +151,6 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      childRef,
       start,
       pause,
       stop
@@ -182,3 +186,66 @@ export default defineComponent({
     }
   }
 })
+
+export interface VcAnalysisFloodProps {
+  /**
+   * Specify the minimum elevation.
+   * Default value: -1
+   */
+  minHeight?: number
+  /**
+   * Specify the maximum elevation.
+   * Default value: 8888
+   */
+  maxHeight?: number
+  /**
+   * Specify the height to increase each frame.
+   * Default value: 10
+   */
+  speed?: number
+  /**
+   * Specify whether to restart after reaching the maximum height.
+   * Default value: false
+   */
+  loop?: boolean
+  /**
+   * Specify the VcColor of water.
+   * Default value: rgba(40,150,200,0.6)
+   */
+  color?: VcColor
+  /**
+   * Specify ths VcPolygonHierarchy of polygon.
+   */
+  polygonHierarchy: VcPolygonHierarchy
+  /**
+   * Triggers before the VcAnalysisFlood is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcAnalysisFlood is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcAnalysisFlood is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the maxHeight is reached.
+   */
+  onStop?: (evt: Cesium.ClassificationPrimitive) => void
+}
+
+export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysisFloodProps> {
+  /**
+   * Start flood analysis
+   */
+  start: () => void
+  /**
+   * Pause flood analysis
+   */
+  pause: () => void
+  /**
+   * Stop flood analysis
+   */
+  stop: () => void
+}

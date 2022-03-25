@@ -1,5 +1,39 @@
 ## 更新日志
 
+### 3.0.11
+
+_2022-03-15_
+
+#### 破坏性更新
+
+- 各组件的 `createPromise` 重命名为 `creatingPromise`。
+
+#### 新特性
+
+- `vc-overlay-dynamic` 组件增加站点到达 `stopArrived` 事件，缩放方法 `zoomToOverlay` 和 跟踪方法 `trackOverlay`。
+- `vc-overlay-windmap` 组件增加通过经纬度获取 U V 值。
+- 测量、绘制组件增加对单个对象属性响应式编辑支持。 [#167](https://github.com/zouyaoji/vue-cesium/issues/167)
+
+#### Bug 修复
+
+- `vc-selection-indicator` 组件拾取到聚合图标上指示器位置不准的问题。
+- `vc-overlay-windmap` 组件初始化异常问题。
+- 量算、绘制组件 `measurements` 和 `drawings` 参数不能响应式更新的问题。
+
+### 3.0.10
+
+_2022-02-26_
+
+#### Bug 修复
+
+- `useVueCesium` 方法在 `vc-viewer` 外获取不了的问题。
+- `vc-selection-indicator` 指示器显示的情况下，调用 `viewer.flyto` 方法导致指示器位置错误的问题。
+- `vc-measurements` 高度量算报错问题。
+- `vc-measurements`、`vc-drawings`、`vc-analyses` 浮动按钮初始化为不显示时，无法显隐的问题。
+- `vc-measurements`、`vc-drawings` 贴地模式下面对象未贴地问题。
+- 加载 dc-sdk(2.10.0 版本) 报错问题。
+- 数据源组件 `entities` 数组中有对象属性为 Function 类型时无法转换为 Cesium.CallbackProperty 属性问题。
+
 ### 3.0.9
 
 _2022-02-14_

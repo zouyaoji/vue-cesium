@@ -46,6 +46,16 @@ export default {
         tip: 'Click to switch the mouse display coordinates to UTM projection coordinates'
       }
     },
+    navigationSm: {
+      compass: {
+        outerTip: 'Drag outer ring: rotate view. Double-click: reset view.'
+      },
+      zoomCotrol: {
+        zoomInTip: 'Zoom in',
+        zoomBarTip: 'Drag the bar up to zoom in, and down to zoom out.',
+        zoomOutTip: 'Zoom out'
+      }
+    },
     measurement: {
       expand: 'Expand',
       collapse: 'Collapse',

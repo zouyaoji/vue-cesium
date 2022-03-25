@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-05 21:23:27
- * @LastEditTime: 2022-02-10 15:39:09
+ * @LastEditTime: 2022-02-26 14:11:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\components\link.vue
@@ -62,7 +62,7 @@ export default {
       }
     },
     isInternal() {
-      return this.href.startsWith('/#') || internalLinks.some(link => this.href.includes(link))
+      return this.href.startsWith('/#') || this.href.startsWith('./#') || internalLinks.some(link => this.href.includes(link))
     },
     isExternal() {
       return !this.isInternal

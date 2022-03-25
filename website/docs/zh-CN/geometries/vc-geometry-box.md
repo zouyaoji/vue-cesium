@@ -82,7 +82,7 @@
       }
       // lifecycle
       onMounted(() => {
-        Promise.all([geometryRef.value.createPromise, geometryOutlineRef.value.createPromise]).then(geometries => {
+        Promise.all([geometryRef.value.creatingPromise, geometryOutlineRef.value.creatingPromise]).then(geometries => {
           const { BoundingSphere } = Cesium
           const boundingSphereUnion = geometries.reduce((prev, cur) => {
             const geometry = cur.cesiumObject.constructor.createGeometry(cur.cesiumObject)
@@ -117,10 +117,10 @@
 
 ### 属性
 
-| 属性名       | 类型   | 默认值 | 描述                              |
-| ------------ | ------ | ------ | --------------------------------- |
-| dimensions   | Object |        | `required` 指定 box 的长宽高。    |
-| vertexFormat | Object |        | `optional` 指定要计算的顶点属性。 |
+| 属性名       | 类型                | 默认值 | 描述                              |
+| ------------ | ------------------- | ------ | --------------------------------- |
+| dimensions   | VcPosition          |        | `required` 指定 box 的长宽高。    |
+| vertexFormat | Cesium.VertexFormat |        | `optional` 指定要计算的顶点属性。 |
 
 ### 事件
 
@@ -138,9 +138,9 @@
 
 ### VcGeometryBoxOutline 属性
 
-| 属性名     | 类型   | 默认值 | 描述                           |
-| ---------- | ------ | ------ | ------------------------------ |
-| dimensions | Object |        | `required` 指定 box 的长宽高。 |
+| 属性名     | 类型       | 默认值 | 描述                           |
+| ---------- | ---------- | ------ | ------------------------------ |
+| dimensions | VcPosition |        | `required` 指定 box 的长宽高。 |
 
 ### VcGeometryBoxOutline 事件
 

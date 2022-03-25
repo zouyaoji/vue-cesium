@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-18 09:14:27
+ * @LastEditTime: 2022-03-25 10:46:51
  * @LastEditors: ayiyiyo
  * @Description:
  * @FilePath: \vue-cesium\packages\components\graphics\billboard\index.ts

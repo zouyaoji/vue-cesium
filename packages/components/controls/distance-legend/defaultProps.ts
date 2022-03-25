@@ -1,11 +1,21 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-03-05 11:15:34
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\distance-legend\defaultProps.ts
+ */
+import type { PropType } from 'vue'
+
 export default {
   position: {
-    type: String,
+    type: String as PropType<'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'>,
     default: 'bottom-right',
     validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
   },
   offset: {
-    type: Array,
+    type: Array as PropType<unknown> as PropType<[number, number]>,
     validator: v => v.length === 2
   },
   color: {

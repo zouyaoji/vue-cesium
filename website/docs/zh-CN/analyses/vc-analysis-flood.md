@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2021-12-31 15:11:05
+ * @LastEditTime: 2022-03-09 09:48:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\analyses\vc-analysis-flood.md
@@ -107,14 +107,14 @@
 
 ### 属性
 
-| 属性名           | 类型                  | 默认值                   | 描述                                           |
-| ---------------- | --------------------- | ------------------------ | ---------------------------------------------- |
-| polygonHierarchy | Object\|Array         |                          | `require` 指定构建淹没分析多边形的经纬度数组。 |
-| minHeight        | Number                | `-1 `                    | `optional` 指定最小高程。                      |
-| maxHeight        | Number                | `8888`                   | `optional` 指定最大高程。                      |
-| speed            | Number                | `10`                     | `optional` 指定每帧增加的高度。                |
-| color            | Object\|String\|Array | `'rgba(40,150,200,0.6)'` | `optional` 指定淹没分析对象颜色。              |
-| loop             | Boolean               | `false`                  | `optional` 指定到达最大高度后是否重新开始。    |
+| 属性名           | 类型               | 默认值                   | 描述                                            |
+| ---------------- | ------------------ | ------------------------ | ----------------------------------------------- |
+| polygonHierarchy | VcPolygonHierarchy |                          | `required` 指定构建淹没分析多边形的经纬度数组。 |
+| minHeight        | number             | `-1 `                    | `optional` 指定最小高程。                       |
+| maxHeight        | number             | `8888`                   | `optional` 指定最大高程。                       |
+| speed            | number             | `10`                     | `optional` 指定每帧增加的高度。                 |
+| color            | VcColor            | `'rgba(40,150,200,0.6)'` | `optional` 指定淹没分析对象颜色。               |
+| loop             | boolean            | `false`                  | `optional` 指定到达最大高度后是否重新开始。     |
 
 ### 事件
 
@@ -123,12 +123,17 @@
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
-| stop       |                                         | 到达最大高度时触发。 |
+| stop       | (evt: Cesium.ClassificationPrimitive)   | 到达最大高度时触发。 |
 
 ### 方法
 
-| 方法  | 参数 | 描述      |
-| ----- | ---- | --------- |
-| start |      | 开始      |
-| pause |      | 暂停/继续 |
-| stop  |      | 结束      |
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取通过该组件加载的 Cesium 对象。          |
+| start              | () => void                              | 开始淹没分析。                              |
+| pause              | () => void                              | 暂停/继续淹没分析。                         |
+| stop               | () => void                              | 结束淹没分析。                              |

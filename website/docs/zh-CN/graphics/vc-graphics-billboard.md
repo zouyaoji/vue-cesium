@@ -66,7 +66,7 @@
       }
       // life cycle
       onMounted(() => {
-        entity.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        entity.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           viewer.zoomTo(cesiumObject)
         })
       })
@@ -98,7 +98,7 @@
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ------ |---- | ------ | ----- | ---- |
 | show | boolean | `true` | `optional` 指定 billboard 是否显示。 |
-| image | sting \| HTMLCanvasElement \|Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\>| | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
+| image | string \| HTMLCanvasElement \|Cesium.CallbackProperty \| VcCallbackPropertyFunction\<string\>| | `optional` 指定 billboard 加载的的 Image、 URI 或者 Canvas。 |
 | scale | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` 指定 billboard 图片的缩放比例。 |
 | pixelOffset | VcCartesian2 | `{x: 0, y: 0}` | `optional` 指定 billboard 像素偏移。 |
 | eyeOffset | VcPosition | `{x: 0, y: 0, z: 0}` | `optional` 指定 billboard 视角偏移。 |

@@ -66,7 +66,7 @@ Basic usage of VcGraphicsBillboard component.
       }
       // life cycle
       onMounted(() => {
-        entity.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        entity.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           viewer.zoomTo(cesiumObject)
         })
       })

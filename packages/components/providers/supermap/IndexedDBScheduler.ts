@@ -26,30 +26,32 @@ class IndexedDBScheduler {
     if (!Cesium.defined(options.name)) {
       throw new Cesium.DeveloperError('options.name is required.')
     }
-    const deferred = Cesium.when.defer()
-    this.dbname = options.name
+
     const dbRequest = window.indexedDB.open(this.dbname)
-    const that = this
-    dbRequest.onsuccess = event => {
-      that.db = (event.target as any).result
-      that.version = that.db.version
-      that.cachestatus = that.cachestatus || {}
-      deferred.resolve(that)
-    }
-    dbRequest.onupgradeneeded = event => {
-      that.db = (event.target as any).result
-      that.version = that.db.version
-      deferred.resolve(that)
-    }
-    dbRequest.onerror = event => {
-      that.db = null
-      deferred.reject('create database fail, error code : ' + (event.target as any).errorcode)
-    }
     this.layer = options.layer || null
     this.storageType = options.storageType || 'arrayBuffer'
     this.creatingTable = !1
     this.cachestatus = {}
-    return deferred.promise
+    this.dbname = options.name
+    const that = this as IndexedDBScheduler
+
+    return new Promise((resolve, reject) => {
+      dbRequest.onsuccess = event => {
+        that.db = (event.target as IDBOpenDBRequest).result
+        that.version = that.db.version
+        that.cachestatus = that.cachestatus || {}
+        resolve(that)
+      }
+      dbRequest.onupgradeneeded = event => {
+        that.db = (event.target as any).result
+        that.version = that.db.version
+        resolve(that)
+      }
+      dbRequest.onerror = event => {
+        that.db = null
+        reject('create database fail, error code : ' + (event.target as any).errorcode)
+      }
+    }) as any
   }
 
   /**
@@ -66,56 +68,56 @@ class IndexedDBScheduler {
    * @returns {Promise}
    */
   createObjectStore(storeName) {
-    const deferred = Cesium.when.defer()
-    if (this.creatingTable) {
-      deferred.reject(false)
-    } else {
-      if (this.db.objectStoreNames.contains(storeName)) {
-        deferred.reject(false)
-        return deferred.promise
-      }
-      this.creatingTable = true
-      const version = parseInt(this.db.version)
-      this.db.close()
-      const that = this
-      // 打开或新建 IndexedDB 数据库
-      const dbRequest = window.indexedDB.open(this.dbname, version + 1)
-      dbRequest.onupgradeneeded = event => {
-        const db = (event.target as any).result
-        that.db = db
-        // 创建对象仓库（表）
-        const objectStore = db.createObjectStore(storeName, {
-          keyPath: 'id'
-        })
-        if (Cesium.defined(objectStore)) {
-          // 创建索引
-          objectStore.createIndex('value', 'value', {
-            unique: false
+    return new Promise((resolve, reject) => {
+      if (this.creatingTable) {
+        reject(false)
+      } else {
+        if (this.db.objectStoreNames.contains(storeName)) {
+          reject(false)
+          return
+        }
+        this.creatingTable = true
+        const version = parseInt(this.db.version)
+        this.db.close()
+        const that = this
+        // 打开或新建 IndexedDB 数据库
+        const dbRequest = window.indexedDB.open(this.dbname, version + 1)
+        dbRequest.onupgradeneeded = event => {
+          const db = (event.target as any).result
+          that.db = db
+          // 创建对象仓库（表）
+          const objectStore = db.createObjectStore(storeName, {
+            keyPath: 'id'
           })
-          that.creatingTable = false
-          that.cachestatus = that.cachestatus || {}
-          that.cachestatus[storeName] = {}
-          that.db.close()
-          const dbRequest = window.indexedDB.open(that.dbname)
-          dbRequest.onsuccess = event => {
-            that.db = (event.target as any).result
-            deferred.resolve(true)
+          if (Cesium.defined(objectStore)) {
+            // 创建索引
+            objectStore.createIndex('value', 'value', {
+              unique: false
+            })
+            that.creatingTable = false
+            that.cachestatus = that.cachestatus || {}
+            that.cachestatus[storeName] = {}
+            that.db.close()
+            const dbRequest = window.indexedDB.open(that.dbname)
+            dbRequest.onsuccess = event => {
+              that.db = (event.target as any).result
+              resolve(true)
+            }
+          } else {
+            that.creatingTable = false
+            resolve(false)
           }
-        } else {
+        }
+        dbRequest.onsuccess = event => {
+          ;(event.target as any).result.close()
+          resolve(true)
+        }
+        dbRequest.onerror = event => {
           that.creatingTable = false
-          deferred.resolve(false)
+          reject(false)
         }
       }
-      dbRequest.onsuccess = event => {
-        ;(event.target as any).result.close()
-        deferred.resolve(true)
-      }
-      dbRequest.onerror = event => {
-        that.creatingTable = false
-        deferred.reject(false)
-      }
-    }
-    return deferred.promise
+    })
   }
 
   /**
@@ -126,59 +128,59 @@ class IndexedDBScheduler {
    * @returns {Promise}
    */
   putElementInDB(storeName, id, value) {
-    const deferred = Cesium.when.defer()
-    if (!Cesium.defined(this.db)) {
-      deferred.reject(false)
-      return deferred.promise
-    }
-    const { cachestatus, db } = this
-    if (
-      Cesium.defined(cachestatus[storeName]) &&
-      Cesium.defined(cachestatus[storeName][id] && (cachestatus[storeName][id] === Status.STORING || cachestatus[storeName][id] === Status.STORED))
-    ) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-    if (db.objectStoreNames.contains(storeName)) {
-      cachestatus[storeName] = cachestatus[storeName] || {}
-      try {
-        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
-          id: id,
-          value: value
-        })
-        cachestatus[storeName][id] = Status.STORING
-        request.onsuccess = event => {
-          cachestatus[storeName][id] = Status.STORED
-          deferred.resolve(true)
-        }
-        request.onerror = event => {
-          cachestatus[storeName][id] = Status.FAILED
-          deferred.resolve(false)
-        }
-      } catch (error) {
-        deferred.reject(null)
-        return deferred.promise
+    return new Promise((resolve, reject) => {
+      if (!Cesium.defined(this.db)) {
+        reject(false)
+        return
       }
-    } else {
-      this.createObjectStore(storeName).then(
-        () => {
+      const { cachestatus, db } = this
+      if (
+        Cesium.defined(cachestatus[storeName]) &&
+        Cesium.defined(cachestatus[storeName][id] && (cachestatus[storeName][id] === Status.STORING || cachestatus[storeName][id] === Status.STORED))
+      ) {
+        resolve(false)
+        return
+      }
+      if (db.objectStoreNames.contains(storeName)) {
+        cachestatus[storeName] = cachestatus[storeName] || {}
+        try {
           const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
             id: id,
             value: value
           })
-          request.onsuccess = function (e) {
-            deferred.resolve(true)
+          cachestatus[storeName][id] = Status.STORING
+          request.onsuccess = event => {
+            cachestatus[storeName][id] = Status.STORED
+            resolve(true)
           }
-          request.onerror = function (e) {
-            deferred.reject(false)
+          request.onerror = event => {
+            cachestatus[storeName][id] = Status.FAILED
+            resolve(false)
           }
-        },
-        () => {
-          deferred.reject(false)
+        } catch (error) {
+          reject(null)
+          return
         }
-      )
-    }
-    return deferred.promise
+      } else {
+        this.createObjectStore(storeName).then(
+          () => {
+            const request = db.transaction([storeName], 'readwrite').objectStore(storeName).add({
+              id: id,
+              value: value
+            })
+            request.onsuccess = function (e) {
+              resolve(true)
+            }
+            request.onerror = function (e) {
+              reject(false)
+            }
+          },
+          () => {
+            reject(false)
+          }
+        )
+      }
+    })
   }
 
   /**
@@ -188,28 +190,28 @@ class IndexedDBScheduler {
    * @returns {Promise}
    */
   getElementFromDB(storeName, id) {
-    const deferred = Cesium.when.defer()
-    const { db } = this
-    if (!Cesium.defined(db)) {
-      return null
-    }
-    if (!db.objectStoreNames.contains(storeName)) {
-      return null
-    }
-    try {
-      const transaction = db.transaction([storeName])
-      const objectStore = transaction.objectStore(storeName)
-      const request = objectStore.get(id)
-      request.onsuccess = e => {
-        return Cesium.defined(e.target.result) ? deferred.resolve(e.target.result.value) : deferred.reject(null)
+    return new Promise((resolve, reject) => {
+      const { db } = this
+      if (!Cesium.defined(db)) {
+        return null
       }
-      request.onerror = e => {
-        deferred.reject(null)
+      if (!db.objectStoreNames.contains(storeName)) {
+        return null
       }
-    } catch (error) {
-      deferred.reject(null)
-    }
-    return deferred.promise
+      try {
+        const transaction = db.transaction([storeName])
+        const objectStore = transaction.objectStore(storeName)
+        const request = objectStore.get(id)
+        request.onsuccess = e => {
+          return Cesium.defined(e.target.result) ? resolve(e.target.result.value) : reject(null)
+        }
+        request.onerror = e => {
+          reject(null)
+        }
+      } catch (error) {
+        reject(null)
+      }
+    })
   }
 
   /**
@@ -220,28 +222,28 @@ class IndexedDBScheduler {
    * @returns {Promise}
    */
   updateElementInDB(storeName, id, value) {
-    const deferred = Cesium.when.defer()
-    const { db } = this
-    if (!Cesium.defined(db)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-    if (!db.objectStoreNames.contains(storeName)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-    try {
-      const request = db.transaction([storeName], 'readwrite').objectStore(storeName).put({ id: id, value: value })
-      request.onsuccess = () => {
-        deferred.resolve(true)
+    return new Promise((resolve, reject) => {
+      const { db } = this
+      if (!Cesium.defined(db)) {
+        resolve(false)
+        return
       }
-      request.onerror = () => {
-        deferred.resolve(false)
+      if (!db.objectStoreNames.contains(storeName)) {
+        resolve(false)
+        return
       }
-    } catch (e) {
-      deferred.resolve(false)
-    }
-    return deferred.promise
+      try {
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).put({ id: id, value: value })
+        request.onsuccess = () => {
+          resolve(true)
+        }
+        request.onerror = () => {
+          resolve(false)
+        }
+      } catch (e) {
+        resolve(false)
+      }
+    })
   }
 
   /**
@@ -251,29 +253,29 @@ class IndexedDBScheduler {
    * @returns {Promise}
    */
   removeElementFromDB(storeName, id) {
-    const deferred = Cesium.when.defer()
-    const { db } = this
-    if (!Cesium.defined(db)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
+    return new Promise((resolve, reject) => {
+      const { db } = this
+      if (!Cesium.defined(db)) {
+        resolve(false)
+        return
+      }
 
-    if (!db.objectStoreNames.contains(storeName)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-    try {
-      const request = db.transaction([storeName], 'readwrite').objectStore(storeName).delete(id)
-      request.onsuccess = () => {
-        deferred.resolve(true)
+      if (!db.objectStoreNames.contains(storeName)) {
+        resolve(false)
+        return
       }
-      request.onerror = () => {
-        deferred.resolve(false)
+      try {
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).delete(id)
+        request.onsuccess = () => {
+          resolve(true)
+        }
+        request.onerror = () => {
+          resolve(false)
+        }
+      } catch (e) {
+        resolve(false)
       }
-    } catch (e) {
-      deferred.resolve(false)
-    }
-    return deferred.promise
+    })
   }
 
   /**
@@ -281,30 +283,30 @@ class IndexedDBScheduler {
    * @param {String} storeName
    */
   clear(storeName) {
-    const deferred = Cesium.when.defer()
-    const { db } = this
-    if (!Cesium.defined(db)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-
-    if (!db.objectStoreNames.contains(storeName)) {
-      deferred.resolve(false)
-      return deferred.promise
-    }
-
-    try {
-      const request = db.transaction([storeName], 'readwrite').objectStore(storeName).clear()
-      request.onsuccess = () => {
-        deferred.resolve(true)
+    return new Promise((resolve, reject) => {
+      const { db } = this
+      if (!Cesium.defined(db)) {
+        resolve(false)
+        return
       }
-      request.onerror = () => {
-        deferred.resolve(false)
+
+      if (!db.objectStoreNames.contains(storeName)) {
+        resolve(false)
+        return
       }
-    } catch (e) {
-      deferred.resolve(false)
-    }
-    return deferred.promise
+
+      try {
+        const request = db.transaction([storeName], 'readwrite').objectStore(storeName).clear()
+        request.onsuccess = () => {
+          resolve(true)
+        }
+        request.onerror = () => {
+          resolve(false)
+        }
+      } catch (e) {
+        resolve(false)
+      }
+    })
   }
 }
 

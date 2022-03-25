@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-02-11 10:34:07
+ * @LastEditTime: 2022-03-05 11:37:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\navigation\index.ts
  */
-import type { ExtractPropTypes, VNode, CSSProperties } from 'vue'
+import type { VNode, CSSProperties } from 'vue'
 import { defineComponent, getCurrentInstance, watch, nextTick, ref, reactive, h, createCommentVNode, computed } from 'vue'
 import type {
   VcCompassEvt,
@@ -16,7 +16,8 @@ import type {
   VcStatusBarEvt,
   VcComponentInternalInstance,
   VcZoomEvt,
-  VcReadyObject
+  VcReadyObject,
+  VcComponentPublicInstance
 } from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -25,10 +26,16 @@ import { defaultProps, defaultOptions, VcNavigationOtherOpts } from './defaultPr
 import { useCommon } from '@vue-cesium/composables'
 import VcDistanceLegend from '../distance-legend'
 import VcStatusBar from '../status-bar'
-import VcZoomControl, { VcZoomControlProps } from '../zoom-control'
-import VcMyLocation, { VcMyLocationProps } from '../my-location'
-import VcCompass, { VcCompassProps } from '../compass'
-import VcPrint, { VcPrintProps } from '../print'
+import VcZoomControl from '../zoom-control'
+import VcMyLocation from '../my-location'
+import VcCompass from '../compass'
+import VcPrint from '../print'
+import type { VcPrintProps, VcPrintRef } from '../print'
+import type { VcCompassProps, VcCompassRef } from '../compass'
+import type { VcMyLocationProps, VcMyLocationRef } from '../my-location'
+import type { VcZoomControlProps, VcZoomControlRef } from '../zoom-control'
+import type { VcStatusBarRef } from '../status-bar'
+import type { VcDistanceLegendRef } from '../distance-legend'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 const emits = {
@@ -46,7 +53,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: navigationProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcNavigationProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcNavigation'
@@ -61,12 +68,12 @@ export default defineComponent({
     const positionStateOther = usePosition(props.otherOpts || { position: 'bottom-right' }, $services)
     const rootRef = ref<HTMLElement>(null)
     const secondRootRef = ref<HTMLElement>(null)
-    const compassRef = ref<typeof VcCompass>(null)
-    const zoomControlRef = ref<typeof VcZoomControl>(null)
-    const printRef = ref<typeof VcPrint>(null)
-    const myLocationRef = ref<typeof VcMyLocation>(null)
-    const statusBarRef = ref<typeof VcStatusBar>(null)
-    const distanceLegendRef = ref<typeof VcDistanceLegend>(null)
+    const compassRef = ref<VcCompassRef>(null)
+    const zoomControlRef = ref<VcZoomControlRef>(null)
+    const printRef = ref<VcPrintRef>(null)
+    const myLocationRef = ref<VcMyLocationRef>(null)
+    const statusBarRef = ref<VcStatusBarRef>(null)
+    const distanceLegendRef = ref<VcDistanceLegendRef>(null)
     const rootStyle = reactive<CSSProperties>({})
     const secondRootStyle = reactive<CSSProperties>({})
     const { emit } = ctx
@@ -359,8 +366,7 @@ export default defineComponent({
 })
 
 export type VcNavigationEmits = typeof emits
-// export type { VcNavigationOtherOpts, VcNavigationProps } from './defaultProps'
-export type VcNavigationProps = {
+export interface VcNavigationProps {
   /**
    * Specify the position of the VcNavigation.
    * Default value: top-right
@@ -406,25 +412,34 @@ export type VcNavigationProps = {
   /**
    * Triggers when the zoom control is operated.
    */
-  zoomEvt?: (evt: VcZoomEvt) => void
+  onZoomEvt?: (evt: VcZoomEvt) => void
   /**
    * Triggers when the compass control is operated.
    */
-  compassEvt?: (evt: VcCompassEvt) => void
+  onCompassEvt?: (evt: VcCompassEvt) => void
   /**
    * Triggers when the positioning button is clicked.
    */
-  locationEvt?: (evt: VcLocationEvt) => void
+  onLocationEvt?: (evt: VcLocationEvt) => void
   /**
    * Triggers when the print button is clicked.
    */
-  printEvt?: (evt: VcPrintEvt) => void
+  onPrintEvt?: (evt: VcPrintEvt) => void
   /**
    * Triggers when the information changed.
    */
-  statusBarEvt?: (evt: VcStatusBarEvt) => void
+  onStatusBarEvt?: (evt: VcStatusBarEvt) => void
   /**
    * Triggers when the distance scale changed.
    */
-  distanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
+  onDistanceLegendEvt?: (evt: VcDistanceLegendEvt) => void
 }
+
+export interface VcNavigationSlots {
+  /**
+   * Suggestion: VcCompass, VcZoomControl, VcPrint, VcMyLocation, VcStatusBar, VcDistanceLegend
+   */
+  default: () => VNode[]
+}
+
+export type VcNavigationRef = VcComponentPublicInstance<VcNavigationProps>

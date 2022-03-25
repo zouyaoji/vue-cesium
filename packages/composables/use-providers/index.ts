@@ -1,17 +1,18 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-01 18:06:23
- * @LastEditTime: 2022-01-15 23:58:19
+ * @LastEditTime: 2022-03-11 11:36:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-providers\index.ts
  */
 import { getInstanceListener, getVcParentInstance } from '@vue-cesium/utils/private/vm'
-import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import * as coordtransform from '@vue-cesium/utils/coordtransform'
 import useCommon from '../use-common'
 import type { SetupContext } from 'vue'
 import type { ProviderEmits } from '@vue-cesium/utils/emits'
+import { VcLayerImageryRef } from '@vue-cesium/components'
 
 export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: VcComponentInternalInstance) {
   // state
@@ -31,7 +32,7 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
       const imageryProvider = vcInstance.cesiumObject as Cesium.ImageryProvider
       imageryProvider?.readyPromise?.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && emit('readyPromise', imageryProvider, viewer, vcInstance.proxy as VcComponentPublicInstance)
+        listener && emit('readyPromise', imageryProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
 
       if (props.projectionTransforms && props.projectionTransforms.from !== props.projectionTransforms.to) {
@@ -70,13 +71,13 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
           }
         }
       }
-      const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
+      const parentVM = getVcParentInstance(vcInstance).proxy as VcLayerImageryRef
       return parentVM && parentVM.__updateProvider?.(imageryProvider)
     } else {
       const terrainProvider = vcInstance.cesiumObject as Cesium.TerrainProvider
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcComponentPublicInstance)
+        listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
       viewer.terrainProvider = terrainProvider
       return true
@@ -85,13 +86,13 @@ export default function (props, ctx: SetupContext<ProviderEmits>, vcInstance: Vc
   vcInstance.unmount = async () => {
     const { viewer } = commonState.$services
     if (vcInstance.cesiumClass.indexOf('ImageryProvider') !== -1) {
-      const parentVM = getVcParentInstance(vcInstance).proxy as VcComponentPublicInstance
+      const parentVM = getVcParentInstance(vcInstance).proxy as VcLayerImageryRef
       return parentVM && parentVM.__updateProvider?.(undefined)
     } else {
       const terrainProvider = new Cesium.EllipsoidTerrainProvider()
       terrainProvider.readyPromise.then(() => {
         const listener = getInstanceListener(vcInstance, 'readyPromise')
-        listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcComponentPublicInstance)
+        listener && emit('readyPromise', terrainProvider, viewer, vcInstance.proxy as VcLayerImageryRef)
       })
       viewer.terrainProvider = terrainProvider
       return true

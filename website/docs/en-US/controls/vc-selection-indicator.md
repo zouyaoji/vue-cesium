@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-13 16:48:20
- * @LastEditTime: 2021-11-22 16:49:45
+ * @LastEditTime: 2022-03-08 23:29:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\controls\vc-selection-indicator.md
@@ -11,8 +11,6 @@
 
 Load a custom selector component to replace the selectionIndicator that comes with Cesium.
 
-**Note:** Picking up the `vc-primitive-particle` component object is not supported.
-
 ### Basic usage
 
 Basic usage of the selector component.
@@ -21,8 +19,8 @@ Basic usage of the selector component.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer :selectionIndicator="false" :infoBox="false">
-    <vc-selection-indicator ref="selectionIndicator" @pickEvt="pickEvt"></vc-selection-indicator>
+  <vc-viewer :selection-indicator="false" :info-box="false">
+    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
     <vc-entity ref="entity" :billboard="billboard" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
@@ -83,15 +81,40 @@ Basic usage of the selector component.
 
 | Name                     | Type    | Default | Description                                                                                         |
 | ------------------------ | ------- | ------- | --------------------------------------------------------------------------------------------------- |
-| show                     | Boolean | `true`  | `optional` Specifies whether the selection indicator is visible.                                    |
-| width                    | Number  | `50`    | `optional` Specify the width of the selection indicator.                                            |
-| height                   | Number  | `50`    | `optional` Specify the height of the selection indicator.                                           |
-| allowFeatureInfoRequests | Boolean | `true`  | `optional` Asynchronously determines the imagery layer features that are intersected by a pick ray. |
+| show                     | boolean | `true`  | `optional` Specifies whether the selection indicator is visible.                                    |
+| width                    | number  | `50`    | `optional` Specify the width of the selection indicator.                                            |
+| height                   | number  | `50`    | `optional` Specify the height of the selection indicator.                                           |
+| allowFeatureInfoRequests | boolean | `true`  | `optional` Asynchronously determines the imagery layer features that are intersected by a pick ray. |
+| height                   | number  | `25`    | `optional` Specify the maximum number of picked objects.                                            |
 
 ### Events
 
-| Name       | Parameters                              | Description                                            |
-| ---------- | --------------------------------------- | ------------------------------------------------------ |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
-| ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
-| pickEvt    | selectedFeature                         | Triggered when picked up.                              |
+| Name       | Parameters                              | Description                                                    |
+| ---------- | --------------------------------------- | -------------------------------------------------------------- |
+| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcSelectionIndicator is loaded.            |
+| ready      | (readyObj: VcReadyObject)               | Triggers when the VcSelectionIndicator is successfully loaded. |
+| destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcSelectionIndicator is destroyed.           |
+| pickEvt    | selectedFeature                         | Triggers when picked up.                                       |
+
+### Methods
+
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
+| reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
+| unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
+| computeScreenSpacePosition | () => Cesium.Cartesian2 | A function that converts the world position of an object to a screen space position. |
+| update | () => void | Updates the view of the selection indicator to match the position and content properties of the view model |
+| animateAppear | () => void | Animate the indicator to draw attention to the selection. |
+| animateDepart | () => void | Animate the indicator to release the selection. |
+| getPickedFeatures | () => PickedFeatures| Get the picked features. |
+
+### Members
+
+| Name                                     | Description                                                                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------- |
+| position: Cesium.Cartesian3              | Gets or sets the world position of the object for which to display the selection indicator. |
+| selectedFeature:Feature \| Cesium.Entity | Get or set the selected feature.                                                            |

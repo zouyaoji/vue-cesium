@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-25 14:46:48
- * @LastEditTime: 2022-01-26 10:17:24
+ * @LastEditTime: 2022-03-10 00:50:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\props.ts
@@ -22,7 +22,8 @@ export const useDrawingActionProps = {
   pointOpts: Object as PropType<VcPointProps>,
   editorOpts: Object as PropType<VcEditorOpts>,
   mode: Number,
-  preRenderDatas: Array as PropType<VcDrawingPreRenderDatas>
+  preRenderDatas: Array as PropType<VcDrawingPreRenderDatas>,
+  disableDepthTest: Boolean
 }
 
 export const useDrawingFabProps = {
@@ -33,7 +34,7 @@ export const useDrawingFabProps = {
     validator: (v: string) => ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top', 'right', 'bottom', 'left'].includes(v)
   },
   offset: {
-    type: Array,
+    type: Array as PropType<unknown> as PropType<[number, number]>,
     validator: v => v.length === 2
   },
   mode: {

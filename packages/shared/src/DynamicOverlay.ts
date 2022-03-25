@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 14:20:28
- * @LastEditTime: 2022-01-23 00:50:50
+ * @LastEditTime: 2022-03-01 18:03:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\shared\src\DynamicOverlay.ts
@@ -71,12 +71,13 @@ class DynamicOverlay {
    * @param interval
    * @returns
    */
-  addPosition(position: VcPosition, timeOrInterval: string | number | Cesium.JulianDate) {
+  addPosition(position: VcPosition, timeOrInterval: string | number | Cesium.JulianDate | Date) {
     this._removePosition()
-    let time
+    let time: Cesium.JulianDate
     if (typeof timeOrInterval === 'number') {
       const now = Cesium.JulianDate.now()
       time = Cesium.JulianDate.addSeconds(now, timeOrInterval, new Cesium.JulianDate())
+      Cesium.destroyObject(now)
     } else {
       time = makeJulianDate(timeOrInterval)
     }
@@ -85,7 +86,7 @@ class DynamicOverlay {
     this._lastTime = time!
     this._cache.push(this._lastTime!)
 
-    return this
+    return time
   }
 }
 

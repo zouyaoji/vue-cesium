@@ -60,7 +60,7 @@
       }
       // life cycle
       onMounted(() => {
-        Promise.all([wall1.value.createPromise, wall2.value.createPromise, wall3.value.createPromise]).then(instances => {
+        Promise.all([wall1.value.creatingPromise, wall2.value.creatingPromise, wall3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

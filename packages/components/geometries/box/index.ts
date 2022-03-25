@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:02:18
+ * @LastEditTime: 2022-02-15 22:40:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\box\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
@@ -37,4 +37,14 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryBoxProps = ExtractPropTypes<typeof boxGeometryProps>
+// export type VcGeometryBoxProps = ExtractPropTypes<typeof boxGeometryProps>
+export type VcGeometryBoxProps = {
+  /**
+   * The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3, respectively.
+   */
+  dimensions: VcPosition
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+}

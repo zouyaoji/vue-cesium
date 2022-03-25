@@ -14,8 +14,9 @@
     <vc-primitive-tileset
       ref="primitive"
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
-      @readyPromise="onReadyPromise"
+      @ready-promise="onReadyPromise"
       @click="onClicked"
+      @all-tiles-loaded="allTilesLoaded"
     >
     </vc-primitive-tileset>
   </vc-viewer>
@@ -39,6 +40,9 @@
       },
       onClicked(e) {
         console.log(e)
+      },
+      allTilesLoaded(e) {
+        console.log('allTilesLoaded')
       },
       unload() {
         this.$refs.primitive.unload()

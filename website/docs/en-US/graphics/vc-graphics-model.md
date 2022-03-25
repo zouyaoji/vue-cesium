@@ -35,7 +35,7 @@ Basic usage of the VcGraphicsModel component.
 
       // life cycle
       onMounted(() => {
-        model.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        model.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           // viewer.zoomTo(viewer.entities)
           viewer.zoomTo(cesiumObject._vcParent)
         })

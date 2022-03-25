@@ -20,14 +20,15 @@ GeoJson 数据源组件的基础用法。
       @click="onClicked"
       :entities="entities"
     ></vc-datasource-geojson>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu
-        mapStyle="img_c"
-        :maximumLevel="17"
+        map-style="img_c"
+        :maximum-level="17"
         token="436ce7e50d27eede2f2929307e6b33c0"
         ref="provider"
       ></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
+    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>

@@ -28,7 +28,9 @@
       "components": "组件",
       "theme": "主题",
       "resource": "资源",
-      "donations": "赞助"
+      "donations": "赞助",
+      "discussions": "讨论",
+      "issues": "反馈"
     },
     "nav": {
       "dropdown": "版本："
@@ -63,7 +65,9 @@
       "components": "Component",
       "theme": "Theme",
       "resource": "Resource",
-      "donations": "Donation"
+      "donations": "Donation",
+      "discussions": "Discussion",
+      "issues": "Issue"
     },
     "nav": {
       "dropdown": "Version: "

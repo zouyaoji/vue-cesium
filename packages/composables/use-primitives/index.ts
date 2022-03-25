@@ -18,7 +18,7 @@ import { vcKey } from '@vue-cesium/utils/config'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { isArray } from '@vue-cesium/utils/util'
 
-export default function (props, ctx: SetupContext<PrimitiveEmits>, vcInstance: VcComponentInternalInstance) {
+export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   const commonState = useCommon(props, ctx, vcInstance)
   if (commonState === void 0) {
@@ -106,6 +106,7 @@ export default function (props, ctx: SetupContext<PrimitiveEmits>, vcInstance: V
 
   // provide
   provide(vcKey, getServices())
+  vcInstance.appContext.config.globalProperties.$VueCesium = getServices()
 
   // expose public methods
   Object.assign(vcInstance.proxy, {

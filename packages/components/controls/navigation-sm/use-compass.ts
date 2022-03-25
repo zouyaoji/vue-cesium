@@ -1,8 +1,8 @@
 import { ref } from 'vue'
-import { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { AnyFunction, VcComponentInternalInstance } from '@vue-cesium/utils/types'
 import CameraFlightPath from '../compass/CameraFlightPath'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
-import { VcTooltip } from '@vue-cesium/components/ui'
+import type { VcTooltipRef } from '@vue-cesium/components/ui'
 import { isObject } from '@vue-cesium/utils/util'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
@@ -43,7 +43,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   const tiltbarTop = ref(3)
   let clickStartPosition
 
-  const tooltipRef = ref<typeof VcTooltip | null>(null)
+  const tooltipRef = ref<VcTooltipRef>(null)
 
   // methods
   const handleMouseDown = (e: Event) => {

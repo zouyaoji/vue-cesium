@@ -1,11 +1,11 @@
-import { ExtractPropTypes, watch, ref, onMounted, onUnmounted, nextTick, reactive } from 'vue'
+import { watch, ref, onMounted, onUnmounted, nextTick, reactive, VNode } from 'vue'
 import mitt, { Emitter } from 'mitt'
 import { useLocale } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
 import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { dirname, removeEmpty, isEmptyObj, hasOwn } from '@vue-cesium/utils/util'
 import { getInstanceListener, $ } from '@vue-cesium/utils/private/vm'
-import {
+import type {
   VcComponentInternalInstance,
   VcCamera,
   VcReadyObject,
@@ -15,7 +15,8 @@ import {
   VcTerrainProvider,
   VcDatasource,
   ViewerWidgetResizedEvent,
-  VcContextOptions
+  VcContextOptions,
+  VcViewerProvider
 } from '@vue-cesium/utils/types'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import useLog from '@vue-cesium/composables/private/use-log'
@@ -25,12 +26,11 @@ import { useGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { VcSkeletonProps } from '../../ui/skeleton'
 
 export const viewerProps = defaultProps
-// export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
 
 export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInternalInstance) {
   // state
   let createResolve, reject
-  const createPromise = new Promise<VcReadyObject>((_resolve, _reject) => {
+  const creatingPromise = new Promise<VcReadyObject>((_resolve, _reject) => {
     createResolve = _resolve
     reject = _reject
   })
@@ -245,7 +245,6 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
   watch(
     () => props.baseLayerPicker,
     val => {
-      console.log(val)
       const { viewer } = vcInstance
       const toolbar = viewer._toolbar
       const {
@@ -806,7 +805,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     const readyObj: VcReadyObject = {
       Cesium,
       viewer,
-      vm: vcInstance.proxy as VcComponentPublicInstance
+      vm: vcInstance.proxy as VcViewerRef
     }
     if (globalThis.XE) {
       Object.assign(readyObj, {
@@ -1008,7 +1007,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
           })
         } else if (globalThis.DC) {
           // 兼容  dc-sdk
-          globalThis.DC.use(globalThis.DcCore.default)
+          globalThis.DC.use(globalThis.DcCore.default || globalThis.DcCore)
           globalThis.DC.baseUrl = `${dirName}/resources/`
           globalThis.DC.ready(() => {
             globalThis.Cesium = DC.Namespace.Cesium
@@ -1059,7 +1058,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(toolbarElement).visibility !== 'hidden' &&
       getComputedStyle(toolbarElement).display !== 'none'
     ) {
-      ;(layout.toolbarContainerRC as any) = toolbarElement.getBoundingClientRect()!
+      layout.toolbarContainerRC = toolbarElement.getBoundingClientRect()
     } else {
       layout.toolbarContainerRC = undefined
     }
@@ -1070,7 +1069,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(bottomContainer).visibility !== 'hidden' &&
       getComputedStyle(bottomContainer).display !== 'none'
     ) {
-      ;(layout.bottomContainerRC as any) = bottomContainer.getBoundingClientRect()
+      layout.bottomContainerRC = bottomContainer.getBoundingClientRect()
     } else {
       layout.bottomContainerRC = undefined
     }
@@ -1081,7 +1080,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(timelineContainer).visibility !== 'hidden' &&
       getComputedStyle(timelineContainer).display !== 'none'
     ) {
-      ;(layout.timelineContainerRC as any) = timelineContainer.getBoundingClientRect()
+      layout.timelineContainerRC = timelineContainer.getBoundingClientRect()
     } else {
       layout.timelineContainerRC = undefined
     }
@@ -1092,7 +1091,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
       getComputedStyle(animationContainer).visibility !== 'hidden' &&
       getComputedStyle(animationContainer).display !== 'none'
     ) {
-      ;(layout.animationContainerRC as any) = animationContainer.getBoundingClientRect()
+      layout.animationContainerRC = animationContainer.getBoundingClientRect()
     } else {
       layout.animationContainerRC = undefined
     }
@@ -1263,7 +1262,7 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     }
   }
 
-  const getServices = function () {
+  const getServices = function (): VcViewerProvider {
     return mergeDescriptors(
       {},
       {
@@ -1296,6 +1295,9 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
         },
         get postProcessStages() {
           return vcInstance.viewer?.postProcessStages
+        },
+        get creatingPromise() {
+          return creatingPromise
         }
       }
     )
@@ -1333,12 +1335,11 @@ export default function (props: VcViewerProps, ctx, vcInstance: VcComponentInter
     reload,
     getServices,
     viewerRef,
-    createPromise
+    creatingPromise
   }
 }
 
-// export type VcViewerProps = ExtractPropTypes<typeof viewerProps>
-export type VcViewerProps = {
+export interface VcViewerProps {
   /**
    * If set to false, the Animation widget will not be created.
    * Default value: false
@@ -1613,51 +1614,51 @@ export type VcViewerProps = {
   /**
    * Triggers when CesiumJS is successfully loaded.
    */
-  cesiumReady?: (payload: typeof Cesium) => void
+  onCesiumReady?: (payload: typeof Cesium) => void
   /**
    * Triggers when a component changes on vc-viewer.
    */
-  viewerWidgetResized?: (payload: ViewerWidgetResizedEvent) => void
+  onViewerWidgetResized?: (payload: ViewerWidgetResizedEvent) => void
   /**
    * Triggers when the selected entity changes.
    */
-  selectedEntityChanged?: (entity: Cesium.Entity) => void
+  onSelectedEntityChanged?: (entity: Cesium.Entity) => void
   /**
    * Triggers when the tracked entity changes.
    */
-  trackedEntityChanged?: (entity: Cesium.Entity) => void
+  onTrackedEntityChanged?: (entity: Cesium.Entity) => void
   /**
    * Triggers when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.
    */
-  layerAdded?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
+  onLayerAdded?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
   /**
    * Triggers when a layer changes position in the collection. Event handlers are passed the layer that was moved, its new index after the move, and its old index prior to the move.
    */
-  layerMoved?: (imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number) => void
+  onLayerMoved?: (imageryLayer: Cesium.ImageryLayer, newIndex: number, oldIndex: number) => void
   /**
    * Triggers when a layer is removed from the collection. Event handlers are passed the layer that was removed and the index from which it was removed.
    */
-  layerRemoved?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
+  onLayerRemoved?: (imageryLayer: Cesium.ImageryLayer, index: number) => void
   /**
    * Triggers when a layer is shown or hidden by setting the ImageryLayer#show property. Event handlers are passed a reference to this layer, the index of the layer in the collection, and a flag that is true if the layer is now shown or false if it is now hidden.
    */
-  layerShownOrHidden?: (imageryLayer: Cesium.ImageryLayer, index: number, show: boolean) => void
+  onLayerShownOrHidden?: (imageryLayer: Cesium.ImageryLayer, index: number, show: boolean) => void
   /**
    * Triggers when a data source is added to the collection. Event handlers are passed the data source that was added.
    */
-  dataSourceAdded?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
+  onDataSourceAdded?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
   /**
    * Triggers when a data source changes position in the collection. Event handlers are passed the data source that was moved, its new index after the move, and its old index prior to the move.
    */
-  dataSourceMoved?: (dataSource: VcDatasource, newIndex: number, oldIndex: number) => void
+  onDataSourceMoved?: (dataSource: VcDatasource, newIndex: number, oldIndex: number) => void
   /**
    * Triggers when a data source is removed from the collection. Event handlers are passed the data source that was removed.
    */
-  dataSourceRemoved?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
+  onDataSourceRemoved?: (collection: Cesium.DataSourceCollection, dataSource: VcDatasource) => void
   /**
    * Triggers when when entities are added or removed from the collection. The generated event is a EntityCollection.collectionChangedEventCallback.
    */
-  collectionChanged?: (
+  onCollectionChanged?: (
     collection: Cesium.EntityCollection,
     addedArray: Array<Cesium.Entity>,
     removedArray: Array<Cesium.Entity>,
@@ -1666,107 +1667,107 @@ export type VcViewerProps = {
   /**
    * Triggers at the completion of a scene transition.
    */
-  morphComplete?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
+  onMorphComplete?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
   /**
    * Triggers at the beginning of a scene transition.
    */
-  morphStart?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
+  onMorphStart?: (transitioner: any, preceneModeMode: Cesium.SceneMode, sceneMode: Cesium.SceneMode, wasMorphing: boolean) => void
   /**
    * Triggers immediately after the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  postRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  onPostRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers after the scene is updated and immediately before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  preRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  onPreRender?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers immediately after the scene is updated and before the scene is rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  postUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  onPostUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers before the scene is updated or rendered. Subscribers to the event receive the Scene instance as the first parameter and the current time as the second parameter.
    */
-  preUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
+  onPreUpdate?: (scene: Cesium.Scene, time: Cesium.JulianDate) => void
   /**
    * Triggers when an error is thrown inside the render function. The Scene instance and the thrown error are the only two parameters passed to the event handler. By default, errors are not rethrown after this event is raised, but that can be changed by setting the rethrowRenderErrors property.
    */
-  renderError?: (scene: Cesium.Scene, error: any) => void
+  onRenderError?: (scene: Cesium.Scene, error: any) => void
   /**
    * Triggers when the terrain provider is changed.
    */
-  terrainProviderChanged?: (provider: VcTerrainProvider) => void
+  onTerrainProviderChanged?: (provider: VcTerrainProvider) => void
   /**
    * Triggers when the camera has changed by percentageChanged.
    */
-  changed?: (percent: number) => void
+  onChanged?: (percent: number) => void
   /**
    * Triggers when the camera has stopped moving.
    */
-  moveEnd?: () => void
+  onMoveEnd?: () => void
   /**
    * Triggers when the camera starts to move.
    */
-  moveStart?: () => void
+  onMoveStart?: () => void
   /**
    * Triggers when Clock#stopTime is reached.
    */
-  onStop?: (clock: Cesium.Clock) => void
+  onOnStop?: (clock: Cesium.Clock) => void
   /**
    * Triggers when Clock#tick is called.
    */
-  onTick?: (clock: Cesium.Clock) => void
+  onOnTick?: (clock: Cesium.Clock) => void
   /**
    * Triggers when the terrain provider encounters an asynchronous error. By subscribing to the event, you will be notified of the error and can potentially recover from it. Event listeners are passed an instance of TileProviderError.
    */
-  errorEvent?: (tileProviderError: any) => void
+  onErrorEvent?: (tileProviderError: any) => void
   /**
    * Triggers when the user clicks the camera icon.
    */
-  cameraClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
+  onCameraClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
   /**
    * Triggers when the user closes the info box.
    */
-  closeClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
+  onCloseClicked?: (viewModel: Cesium.InfoBoxViewModel) => void
   /**
    * Triggers when the mouse left button clicked.
    */
-  leftClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onLeftClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button double clicked.
    */
-  leftDoubleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onLeftDoubleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button down.
    */
-  leftDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onLeftDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggered when the mouse left button up.
    */
-  leftUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onLeftUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button clicked.
    */
-  middleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onMiddleClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button down.
    */
-  middleDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onMiddleDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse middle button up.
    */
-  middleUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onMiddleUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse move.
    */
-  mouseMove?: (mouseClickEvent: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 }) => void
+  onMouseMove?: (mouseClickEvent: { startPosition: Cesium.Cartesian2; endPosition: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the start of a two-finger on a touch surface.
    */
-  pinchStart?: (touch2StartEvent: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2 }) => void
+  onPinchStart?: (touch2StartEvent: { position1: Cesium.Cartesian2; position2: Cesium.Cartesian2 }) => void
   /**
    * Triggers when a change of a two-finger on a touch surface.
    */
-  pinchMove?: (touchPinchMovementEvent: {
+  onPinchMove?: (touchPinchMovementEvent: {
     distance: {
       startPosition: Cesium.Cartesian2
       endPosition: Cesium.Cartesian2
@@ -1779,29 +1780,38 @@ export type VcViewerProps = {
   /**
    * Triggers when end of a two-finger on a touch surface.
    */
-  pinchEnd?: () => void
+  onPinchEnd?: () => void
   /**
    * Triggers when the mouse right click.
    */
-  rightClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onRightClick?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse right button down.
    */
-  rightDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onRightDown?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse right button up.
    */
-  rightUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
+  onRightUp?: (mouseClickEvent: { position: Cesium.Cartesian2 }) => void
   /**
    * Triggers when the mouse wheel.
    */
-  wheel?: (delta: number) => void
+  onWheel?: (delta: number) => void
   /**
    * Triggers when an imagery layer is added, shown, hidden, moved, or removed.
    */
-  imageryLayersUpdatedEvent?: () => void
+  onImageryLayersUpdatedEvent?: () => void
   /**
    * 	Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.
    */
-  tileLoadProgressEvent?: (length: number) => void
+  onTileLoadProgressEvent?: (length: number) => void
 }
+
+export interface VcViewerSlots {
+  /**
+   * Default slot content of the component
+   */
+  default: () => VNode[]
+}
+
+export type VcViewerRef = VcComponentPublicInstance<VcViewerProps>

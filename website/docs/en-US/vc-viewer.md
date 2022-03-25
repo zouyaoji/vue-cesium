@@ -1,6 +1,6 @@
 ## VcViewer
 
-The basic component for building a `Cesium` application, which is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or subcomponents.The `Cesium` and `Viewer` instances returned from the `ready` event of `vc-viewer` are used for Cesium API development. You can also get the `createPromise` object of the component through the `ref` template reference to get the Viewer instance.
+The basic component for building a `Cesium` application, which is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or subcomponents.The `Cesium` and `Viewer` instances returned from the `ready` event of `vc-viewer` are used for Cesium API development. You can also get the `creatingPromise` object of the component through the `ref` template reference to get the Viewer instance.
 
 **Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under the `vc-viewer` component to load properly.
 
@@ -88,7 +88,7 @@ Basic usage of `vc-viewer`.
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },
@@ -137,53 +137,58 @@ Basic usage of `vc-viewer`.
 <!-- prettier-ignore -->
 |Name|Type|Default|Description|Accepted Values|
 |------|------|-----|---|---|
-|showCredit|Boolean|`true`| `optional` Specify whether to display the default Logo and loading data copyright information.|
-|autoSortImageryLayers|Boolean|`true`| `optional` Specify whether to automatically sort imageLayers according to the layer's `sortOrder` property when adding imagelayer.|
-|removeCesiumScript|Boolean|`true`| `optional` Specify whether to remove the CesiumJS script tag when `vc-viewer` is destroyed.|
-|enableMouseEvent|Boolean|`true`| `optional` Specifiy whether to trigger mouse events.|
-|skeleton|Boolean\|Object|| `optional` Specify whether to show the skeleton background during `vc-viewer` initialization.|
-|TZcode|String|| `optional` The time zone code used for timeline date formatting. By default, it is formatted as local time. If you want to display it as UTC universal time, set `UTCoffset` to `new Date().getTimezoneOffset()`|
-|UTCoffset|Number|| `optional` The time difference (minutes) between local time and UTC time.|
-|accessToken|String||`optional` Specify the default [Cesium ion](https://cesium.com/ion/) access token.|
-|cesiumPath|String||`optional` Specify the web service address of the CesiumJS library used to initialize the `vc-viewer` component.|
-|animation|Boolean|`false`|`optional`If set to false, the Animation widget will not be created.|
-|baseLayerPicker| Boolean|`false`|`optional`If set to false, the BaseLayerPicker widget will not be created.|
-|fullscreenButton|Boolean| `false`| `optional`If set to false, the FullscreenButton widget will not be created.|
-|vrButton|Boolean|`false`|`optional`If set to true, the VRButton widget will be created.|
-|geocoder|Boolean|`false`|`optional`If set to false, the Geocoder widget will not be created.|
-|homeButton|Boolean|`false`|`optional`If set to false, the HomeButton widget will not be created.|
-|infoBox|Boolean|`true`|`optional`If set to false, the InfoBox widget will not be created.|
-|sceneModePicker|Boolean|`false`|`optional`If set to false, the SceneModePicker widget will not be created.|
-|selectionIndicator|Boolean|`true`|`optional`If set to false, the SelectionIndicator widget will not be created.|
-|timeline|Boolean|`false`|`optional`If set to false, the Timeline widget will not be created.|
-|navigationHelpButton|Boolean|`false`|`optional`If set to false, the navigation help button will not be created.|
-|navigationInstructionsInitiallyVisible|Boolean|`false`|`optional`True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.|
-|scene3DOnly|Boolean|`false`|`optional`When true, each geometry instance will only be rendered in 3D to save GPU memory.|
-|shouldAnimate|Boolean|`false`|`optional`true if the clock should attempt to advance simulation time by default, false otherwise. |
-|clockViewModel|Object||`optional`The clock view model to use to control current time.|
-|imageryProvider|Object||`optional` The imagery provider to use. This value is only valid if `baseLayerPicker` is set to false.`vue-cesium` has replaced the default one with `NaturalEarthII` that comes with Cesium resources.|
-|terrainProvider|Object||`optional` The terrain provider to use|
-|skyBox|Object\|false||`optional` The skybox used to render the stars. When undefined, the default stars are used. If set to false, no skyBox, Sun, or Moon will be added.|
-|skyAtmosphere|Object||`optional` Blue sky, and the glow around the Earth's limb. Set to false to turn it off.|
-|fullscreenElement|Element|`document.body`|`optional`The element or id to be placed into fullscreen mode when the full screen button is pressed.|
-|useDefaultRenderLoop|Boolean|`true`|`optional`True if this widget should control the render loop, false otherwise.|
-|targetFrameRate|Number||`optional`The target frame rate when using the default render loop.|
-|showRenderLoopErrors|Boolean|`true`|`optional`If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.|
-|automaticallyTrackDataSourceClocks|Boolean|`true`|`optional`If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.|
-|contextOptions|Object||`optional`Context and WebGL creation properties corresponding to options passed to Scene.|
-|sceneMode|Number|`3`|`optional` The initial scene mode. **COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
-|orderIndependentTranslucency|Boolean|`true`|`optional`If true and the configuration supports it, use order independent translucency.|
-|creditContainer|Element \| String||`optional`The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.|
-|creditViewport|Element \| String||`optional`The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.|
-|dataSources|Object||`optional` The collection of data sources visualized by the widget. If this parameter is provided, the instance is assumed to be owned by the caller and will not be destroyed when the viewer is destroyed.|
-|terrainExaggeration|Number|`1.0`|`optional`A scalar used to exaggerate the terrain. Note that terrain exaggeration will not modify any other primitive as they are positioned relative to the ellipsoid.|
-|shadows|Boolean|`false`|`optional`Determines if shadows are cast by the sun.|
-|terrainShadows|Number|`3`|`optional`Determines if the terrain casts or receives shadows from the sun.**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
-|mapMode2D|Number|`1`|`optional`Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
-|projectionPicker|Boolean|`false`|`optional`If set to true, the ProjectionPicker widget will be created.|
-|requestRenderMode|Boolean|`false`|`optional`If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling reduces the CPU/GPU usage of your application and uses less battery on mobile, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering.|
-|maximumRenderTimeChange|Number|`0.0`|`optional`	If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.|
-|camera|Object: VcCamera|| `optional` Scene camera position. Default positioning to China worldwide. **structure: { position: { lng: number, lat: number, height: number }, heading: number, pitch: number, roll: number }** |
+|camera|VcCamera|| `optional` Scene camera position. Default positioning to China worldwide. |
+|showCredit|boolean|`true`| `optional` Specify whether to display the default Logo and loading data copyright information.|
+|autoSortImageryLayers|boolean|`true`| `optional` Specify whether to automatically sort imageLayers according to the layer's `sortOrder` property when adding imagelayer.|
+|removeCesiumScript|boolean|`true`| `optional` Specify whether to remove the CesiumJS script tag when `vc-viewer` is destroyed.|
+|enableMouseEvent|boolean|`true`| `optional` Specifiy whether to trigger mouse events.|
+|skeleton|boolean\|VcSkeletonProps|| `optional` Specify whether to show the skeleton background during `vc-viewer` initialization.|
+|TZcode|string|| `optional` The time zone code used for timeline date formatting. By default, it is formatted as local time. If you want to display it as UTC universal time, set `UTCoffset` to `new Date().getTimezoneOffset()`|
+|UTCoffset|number|| `optional` The time difference (minutes) between local time and UTC time.|
+|accessToken|string||`optional` Specify the default [Cesium ion](https://cesium.com/ion/) access token.|
+|cesiumPath|string||`optional` Specify the web service address of the CesiumJS library used to initialize the `vc-viewer` component.|
+|animation|boolean|`false`|`optional` If set to false, the Animation widget will not be created.|
+|baseLayerPicker| boolean|`false`|`optional` If set to false, the BaseLayerPicker widget will not be created.|
+|fullscreenButton|boolean| `false`| `optional` If set to false, the FullscreenButton widget will not be created.|
+|vrButton|boolean|`false`|`optional` If set to true, the VRButton widget will be created.|
+|geocoder|boolean\|Array<Cesium.GeocoderService>|`false`|`optional` If set to false, the Geocoder widget will not be created.|
+|homeButton|boolean|`false`|`optional` If set to false, the HomeButton widget will not be created.|
+|infoBox|boolean|`true`|`optional` If set to false, the InfoBox widget will not be created.|
+|sceneModePicker|boolean|`false`|`optional` If set to false, the SceneModePicker widget will not be created.|
+|selectionIndicator|boolean|`true`|`optional` If set to false, the SelectionIndicator widget will not be created.|
+|timeline|boolean|`false`|`optional` If set to false, the Timeline widget will not be created.|
+|navigationHelpButton|boolean|`false`|`optional` If set to false, the navigation help button will not be created.|
+|navigationInstructionsInitiallyVisible|boolean|`false`|`optional` True if the navigation instructions should initially be visible, or false if the should not be shown until the user explicitly clicks the button.|
+|scene3DOnly|boolean|`false`|`optional` When true, each geometry instance will only be rendered in 3D to save GPU memory.|
+|shouldAnimate|boolean|`false`|`optional` true if the clock should attempt to advance simulation time by default, false otherwise. |
+|clockViewModel|Object||`optional` The clock view model to use to control current time.|
+|selectedImageryProviderViewModel|Cesium.ProviderViewModel||`optional` The view model for the current base imagery layer, if not supplied the first available base layer is used. This value is only valid if `baseLayerPicker` is set to true.|
+|terrainProviderViewModels|Array<Cesium.ProviderViewModel>||`optional` The array of ProviderViewModels to be selectable from the BaseLayerPicker. This value is only valid if `baseLayerPicker` is set to true.|
+|imageryProvider|Cesium.ImageryProvider||`optional` The imagery provider to use. This value is only valid if `baseLayerPicker` is set to false.`vue-cesium` has replaced the default one with `NaturalEarthII` that comes with Cesium resources.|
+|terrainProvider|Cesium.TerrainProvider||`optional` The terrain provider to use|
+|skyBox|Cesium.SkyBox\|false||`optional` The skybox used to render the stars. When undefined, the default stars are used. If set to false, no skyBox, Sun, or Moon will be added.|
+|skyAtmosphere|Cesium.skyAtmosphere\|false||`optional` Blue sky, and the glow around the Earth's limb. Set to false to turn it off.|
+|fullscreenElement|Element|`document.body`|`optional` The element or id to be placed into fullscreen mode when the full screen button is pressed.|
+|useDefaultRenderLoop|boolean|`true`|`optional` True if this widget should control the render loop, false otherwise.|
+|targetFrameRate|number||`optional` The target frame rate when using the default render loop.|
+|showRenderLoopErrors|boolean|`true`|`optional` If true, this widget will automatically display an HTML panel to the user containing the error, if a render loop error occurs.|
+|useBrowserRecommendedResolution|boolean|`true`|`optional` If true, render at the browser's recommended resolution and ignore window.devicePixelRatio.|
+|automaticallyTrackDataSourceClocks|boolean|`true`|`optional` If true, this widget will automatically track the clock settings of newly added DataSources, updating if the DataSource's clock changes. Set this to false if you want to configure the clock independently.|
+|contextOptions|VcContextOptions||`optional` Context and WebGL creation properties corresponding to options passed to Scene.|
+|sceneMode|number\|Cesium.SceneMode|`3`|`optional` The initial scene mode. **COLUMBUS_VIEW: 1, SCENE2D: 2, SCENE3D: 3** |1/2/3|
+|mapProjection|Cesium.MapProjection||`optional` The map projection to use in 2D and Columbus View modes.||
+|globe|Cesium.Globe\|false||`optional` The globe to use in the scene. If set to false, no globe will be added.||
+|orderIndependentTranslucency|boolean|`true`|`optional` If true and the configuration supports it, use order independent translucency.|
+|creditContainer|Element \| string||`optional` The DOM element or ID that will contain the CreditDisplay. If not specified, the credits are added to the bottom of the widget itself.|
+|creditViewport|Element \| string||`optional` The DOM element or ID that will contain the credit pop up created by the CreditDisplay. If not specified, it will appear over the widget itself.|
+|dataSources|Cesium.DataSourceCollection||`optional`  The collection of data sources visualized by the widget. If this parameter is provided, the instance is assumed to be owned by the caller and will not be destroyed when the viewer is destroyed.|
+|terrainExaggeration|number|`1.0`|`optional` A scalar used to exaggerate the terrain. Note that terrain exaggeration will not modify any other primitive as they are positioned relative to the ellipsoid.|
+|shadows|boolean|`false`|`optional` Determines if shadows are cast by the sun.|
+|terrainShadows|number\|Cesium.ShadowMode|`3`|`optional` Determines if the terrain casts or receives shadows from the sun.**DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+|mapMode2D|number\|Cesium.MapMode2D|`1`|`optional` Determines if the 2D map is rotatable or can be scrolled infinitely in the horizontal direction.**ROTATE: 0, INFINITE_SCROLL: 1**|0/1|
+|projectionPicker|boolean|`false`|`optional` If set to true, the ProjectionPicker widget will be created.|
+|requestRenderMode|boolean|`false`|`optional` If true, rendering a frame will only occur when needed as determined by changes within the scene. Enabling reduces the CPU/GPU usage of your application and uses less battery on mobile, but requires using Scene#requestRender to render a new frame explicitly in this mode. This will be necessary in many cases after making changes to the scene in other parts of the API. See Improving Performance with Explicit Rendering.|
+|maximumRenderTimeChange|number|`0.0`|`optional` If requestRenderMode is true, this value defines the maximum change in simulation time allowed before a render is requested. See Improving Performance with Explicit Rendering.|
 
 ### Events
 
@@ -239,14 +244,15 @@ Basic usage of `vc-viewer`.
 |imageryLayersUpdatedEvent|()|Triggers when an imagery layer is added, shown, hidden, moved, or removed.|Viewer.scene.globe|
 |tileLoadProgressEvent|(length: number)|Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.|Viewer.scene.globe|
 
-### Ref methods
+### Methods
 
-| method          | returns                         | Description                                                                           |
-| --------------- | ------------------------------- | ------------------------------------------------------------------------------------- |
-| load            | {Cesium, viewer, vm} \| `false` | Load the component. It returns `VcReadyObject` on success, and `false on failure.`    |
-| unload          | Boolean                         | Destroy the component. It returns `VcReadyObject` on success, and `false on failure.` |
-| reload          | {Cesium, viewer, vm} \| `false` | Reload the component. It returns `VcReadyObject` on success, and `false on failure.`  |
-| getCesiumObject | Object                          | Get the Cesium object loaded by this component.                                       |
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Slots
 

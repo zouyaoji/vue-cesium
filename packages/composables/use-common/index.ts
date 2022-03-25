@@ -9,6 +9,7 @@ import { vcKey } from '@vue-cesium/utils/config'
 import useLog from '../private/use-log'
 import { useLocale } from '../use-locale'
 import useEvents from '../use-events'
+import { isEqual } from 'lodash-unified'
 
 export default function (props, { emit }, vcInstance: VcComponentInternalInstance) {
   const logger = useLog(vcInstance)
@@ -59,7 +60,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     if (parentVcInstance.nowaiting) {
       return true
     } else {
-      await (parentVcInstance.proxy as VcComponentPublicInstance).createPromise
+      await (parentVcInstance.proxy as VcComponentPublicInstance).creatingPromise
     }
   }
 
@@ -212,7 +213,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           } else if (vueProp === 'bmKey') {
             cesiumProp = 'key'
           }
-          // 如果在vue文件中已经监听了改 props 这儿不再监听了
+          // 如果在vue文件中已经监听了该 prop 这儿不再监听了
           // If you have listened to the props in the vue file, you will not add any more listeners here.
           if (vcInstance.proxy?.$options.watch?.[vueProp] || vcInstance.alreadyListening.indexOf(vueProp) !== -1) {
             return
@@ -222,10 +223,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
           // returns an unwatch function that stops firing the callback
           const unwatch = vcInstance.proxy?.$watch(
             vueProp,
-            async val => {
+            async (val, oldVal) => {
               // Wait for child components to be created.
               // 等待子组件创建完成。否则在父组件的 `ready` 事件中就改变的属性将不起作用。
-              await (vcInstance.proxy as VcComponentPublicInstance).createPromise
+              await (vcInstance.proxy as VcComponentPublicInstance).creatingPromise
               const { cesiumObject } = vcInstance
               // Get the writability of the current cesiumobject or the props on its prototype chain to
               // detect whether the component property responds dynamically or reloads the component when the property changes.
@@ -250,7 +251,10 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
               } else {
                 // The attribute is not writable, and the property is changed indirectly through reloading the component.
                 // 属性不可写，通过重加载组件间接实现改变属性
-                return (vcInstance.proxy as VcComponentPublicInstance).reload()
+
+                if (!isEqual(val, oldVal)) {
+                  ;(vcInstance.proxy as VcComponentPublicInstance).reload()
+                }
               }
             },
             {
@@ -309,7 +313,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
       const propOption = vcInstance.proxy?.$options.props[prop] || childProps?.[prop] || (cesiumProps[prop] && cesiumProps[prop][prop])
       return propOption?.watcherOptions && !isEmptyObj(value)
         ? propOption.watcherOptions.cesiumObjectBuilder.call(vcInstance, value, vcInstance.viewer.scene.globe.ellipsoid)
-        : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity')
+        : isFunction(value) && cmpName && (cmpName.indexOf('Graphics') !== -1 || cmpName === 'VcEntity' || cmpName.indexOf('Datasource') !== -1)
         ? new Cesium.CallbackProperty(value, false)
         : value
     }
@@ -320,7 +324,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
   }
 
   // lifecycle
-  const createPromise = new Promise<VcReadyObject | boolean>((resolve, reject) => {
+  const creatingPromise = new Promise<VcReadyObject | boolean>((resolve, reject) => {
     try {
       let isLoading = false
       if ($services.viewer) {
@@ -355,10 +359,11 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
 
   // expose public methods
   Object.assign(vcInstance.proxy, {
-    createPromise: createPromise,
-    load: load,
-    unload: unload,
-    reload: reload,
+    creatingPromise,
+    load,
+    unload,
+    reload,
+    getCreatingPromise: () => creatingPromise,
     getCesiumObject: () => vcInstance.cesiumObject
   })
 
@@ -367,7 +372,7 @@ export default function (props, { emit }, vcInstance: VcComponentInternalInstanc
     load,
     unload,
     reload,
-    createPromise,
+    creatingPromise,
     transformProp,
     transformProps,
     unwatchFns,

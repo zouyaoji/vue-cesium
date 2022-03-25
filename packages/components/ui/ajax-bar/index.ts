@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { h, defineComponent, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, ComponentPublicInstance } from 'vue'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 
 import { between } from '@vue-cesium/utils/private/format'
@@ -6,17 +6,18 @@ import { AnyFunction } from '@vue-cesium/utils/types'
 
 const xhr = XMLHttpRequest,
   send = xhr.prototype.send,
-  stackStart: Array<AnyFunction<void>> = [],
-  stackStop: Array<AnyFunction<void>> = []
+  open = xhr.prototype.open,
+  positionValues = ['top', 'right', 'bottom', 'left']
 
+let stack = []
 let highjackCount = 0
 
 function translate({ p, pos, active, horiz, reverse, dir }) {
   let x = 1,
     y = 1
 
-  if (horiz) {
-    if (reverse) {
+  if (horiz === true) {
+    if (reverse === true) {
       x = -1
     }
     if (pos === 'bottom') {
@@ -25,13 +26,13 @@ function translate({ p, pos, active, horiz, reverse, dir }) {
     return { transform: `translate3d(${x * (p - 100)}%,${active ? 0 : y * -200}%,0)` }
   }
 
-  if (reverse) {
+  if (reverse === true) {
     y = -1
   }
   if (pos === 'right') {
     x = -1
   }
-  return { transform: `translate3d(${active ? 0 : dir * x * -200}%,${y * (p - 100)}%,0)`, opacity: 0 }
+  return { transform: `translate3d(${active ? 0 : dir * x * -200}%,${y * (p - 100)}%,0)` }
 }
 
 function inc(p, amount) {
@@ -51,39 +52,47 @@ function inc(p, amount) {
   return between(p + amount, 0, 100)
 }
 
-function highjackAjax(start, stop) {
-  stackStart.push(start)
-  stackStop.push(stop)
-
+function highjackAjax(stackEntry) {
   highjackCount++
+
+  stack.push(stackEntry)
 
   if (highjackCount > 1) {
     return
   }
 
-  function endHandler() {
-    stackStop.forEach(fn => {
-      fn()
-    })
-  }
+  xhr.prototype.open = function (_, url) {
+    const stopStack = []
 
-  xhr.prototype.send = function (/* ...args */) {
-    stackStart.forEach(fn => {
-      fn()
-    })
-    this.addEventListener('loadend', endHandler, false)
+    const loadStart = () => {
+      stack.forEach(entry => {
+        if (entry.hijackFilter.value === null || entry.hijackFilter.value(url) === true) {
+          entry.start()
+          stopStack.push(entry.stop)
+        }
+      })
+    }
+
+    const loadEnd = () => {
+      stopStack.forEach(stop => {
+        stop()
+      })
+    }
+
+    this.addEventListener('loadstart', loadStart, { once: true })
+    this.addEventListener('loadend', loadEnd, { once: true })
+
     // eslint-disable-next-line prefer-rest-params
-    send.apply(this, arguments as any)
+    open.apply(this, arguments as any)
   }
 }
 
-function restoreAjax(start, stop) {
-  stackStart.splice(stackStart.indexOf(start), 1)
-  stackStop.splice(stackStop.indexOf(stop), 1)
+function restoreAjax(start) {
+  stack = stack.filter(entry => entry.start !== start)
 
   highjackCount = Math.max(0, highjackCount - 1)
   if (highjackCount === 0) {
-    xhr.prototype.send = send
+    xhr.prototype.open = open
   }
 }
 
@@ -91,7 +100,7 @@ export const ajaxBarProps = {
   position: {
     type: String,
     default: 'top',
-    validator: (val: string) => ['top', 'right', 'bottom', 'left'].includes(val)
+    validator: val => positionValues.includes(val)
   },
   size: {
     type: String,
@@ -104,7 +113,8 @@ export const ajaxBarProps = {
     type: String,
     default: 'absolute',
     validator: (val: string) => ['absolute', 'fixed'].includes(val)
-  }
+  },
+  hijackFilter: Function
 }
 
 export default defineComponent({
@@ -121,7 +131,7 @@ export default defineComponent({
     const onScreen = ref(false)
     const animate = ref(true)
 
-    let calls = 0,
+    let sessions = 0,
       timer,
       speed
 
@@ -170,15 +180,15 @@ export default defineComponent({
       const oldSpeed = speed
       speed = Math.max(0, newSpeed) || 0
 
-      calls++
+      sessions++
 
-      if (calls > 1) {
+      if (sessions > 1) {
         if (oldSpeed === 0 && newSpeed > 0) {
           planNextStep()
         } else if (oldSpeed > 0 && newSpeed <= 0) {
           clearTimeout(timer)
         }
-        return
+        return sessions
       }
 
       clearTimeout(timer)
@@ -186,28 +196,34 @@ export default defineComponent({
 
       progress.value = 0
 
-      if (onScreen.value === true) {
-        return
+      timer = setTimeout(
+        () => {
+          animate.value = true
+          newSpeed > 0 && planNextStep()
+        },
+        onScreen.value === true ? 500 : 1
+      )
+
+      if (onScreen.value !== true) {
+        onScreen.value = true
+        animate.value = false
       }
 
-      onScreen.value = true
-      animate.value = false
-      timer = setTimeout(() => {
-        animate.value = true
-        newSpeed > 0 && planNextStep()
-      }, 100)
+      return sessions
     }
 
     function increment(amount?) {
-      if (calls > 0) {
+      if (sessions > 0) {
         progress.value = inc(progress.value, amount)
       }
+
+      return sessions
     }
 
     function stop() {
-      calls = Math.max(0, calls - 1)
-      if (calls > 0) {
-        return
+      sessions = Math.max(0, sessions - 1)
+      if (sessions > 0) {
+        return sessions
       }
 
       clearTimeout(timer)
@@ -242,13 +258,17 @@ export default defineComponent({
     onMounted(() => {
       if (props.skipHijack !== true) {
         hijacked = true
-        highjackAjax(start, stop)
+        highjackAjax({
+          start,
+          stop,
+          hijackFilter: computed(() => props.hijackFilter || null)
+        })
       }
     })
 
     onBeforeUnmount(() => {
       clearTimeout(timer)
-      hijacked === true && restoreAjax(start, stop)
+      hijacked === true && restoreAjax(start)
     })
 
     // expose public methods
@@ -269,24 +289,28 @@ export interface VcAjaxBarProps {
    * Position within window of where QAjaxBar should be displayed.
    * Default value: top
    */
-  position?: 'top' | 'right' | 'bottom' | 'left' | undefined
+  position?: 'top' | 'right' | 'bottom' | 'left'
   /**
    * Size in CSS units, including unit name.
    * Default value: 2px
    */
-  size?: string | undefined
+  size?: string
   /**
    * Color name for component from the css color.
    */
-  color?: string | undefined
+  color?: string
   /**
    * Reverse direction of progress.
    */
-  reverse?: boolean | undefined
+  reverse?: boolean
   /**
    * Skip Ajax hijacking (not a reactive prop).
    */
-  skipHijack?: boolean | undefined
+  skipHijack?: boolean
+  /**
+   * Specify the positioning of the progress bar.
+   */
+  positioning?: 'absolute' | 'fixed'
   /**
    * Filter which URL should trigger start() + stop().
    * @param url The URL being triggered
@@ -301,4 +325,21 @@ export interface VcAjaxBarProps {
    * Emitted when bar has finished its job.
    */
   onStop?: () => void
+}
+
+export interface VcAjaxBarRef extends ComponentPublicInstance<VcAjaxBarProps> {
+  /**
+   * Notify bar you are waiting for a new process to finish
+   * @param speed Delay (in milliseconds) between progress auto-increments; If delay is 0 then it disables auto-incrementing
+   */
+  start: (speed?: number) => void
+  /**
+   * Manually trigger a bar progress increment
+   * @param amount Amount (0 < x <= 100) to increment with
+   */
+  increment: (amount?: number) => void
+  /**
+   * Notify bar that one process you were waiting has finished
+   */
+  stop: () => void
 }

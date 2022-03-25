@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 15:37:18
- * @LastEditTime: 2021-12-29 13:35:10
+ * @LastEditTime: 2022-03-09 22:41:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-dynamic.md
@@ -22,18 +22,22 @@ Basic usage of VcOverlayDynamic component.
   <vc-viewer timeline animation @ready="onViewerReady" fullscreenButton>
     <vc-overlay-dynamic
       ref="dynamicOverlayRef"
-      v-model:currentTime="currentTime"
-      v-model:startTime="startTime"
-      v-model:stopTime="stopTime"
-      :dynamicOverlays="dynamicOverlays"
-      :clockRange="clockRange"
+      v-model:current-time="currentTime"
+      v-model:start-time="startTime"
+      v-model:stop-time="stopTime"
+      :dynamic-overlays="dynamicOverlays"
+      :clock-range="clockRange"
       :multiplier="multiplier"
+      :should-animate="shouldAnimate"
+      @update:should-animate="shouldAnimate=$event"
+      @stop-arrived="stopArrived"
       @ready="ready"
     >
     </vc-overlay-dynamic>
-    <vc-layer-imagery :sortOrder="10">
+    <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
+    <vc-collection-point v-if="showStop" :points="stops"></vc-collection-point>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">Unload</el-button>
@@ -43,16 +47,20 @@ Basic usage of VcOverlayDynamic component.
       <el-radio :label="0">Real Time</el-radio>
       <el-radio :label="1">History</el-radio>
     </el-radio-group>
-    <el-row v-if="radio === 1">
-      <el-button type="danger" round @click="viewTopDown">ViewTopDown</el-button>
-      <el-button type="danger" round @click="viewSide">ViewSide</el-button>
-      <el-button type="danger" round @click="viewAircraft">ViewAircraft</el-button>
-    </el-row>
+    <el-checkbox v-if="radio === 1" v-model="showStop" style="padding-left: 15px;">Show Stops</el-checkbox>
+  </el-row>
+  <el-row class="demo-toolbar" style="top: 65px">
+    <el-button type="danger" round @click="viewTopDown">ViewTopDown</el-button>
+    <el-button type="danger" round @click="viewSide">ViewSide</el-button>
+    <el-button type="danger" round @click="trackOverlay('TRACKED')">Default Tracking</el-button>
+    <el-button type="danger" round @click="trackOverlay('TP')">Tracking(TP)</el-button>
+    <el-button type="danger" round @click="trackOverlay('FP')">Tracking(FP)</el-button>
+    <el-button type="danger" round @click="trackOverlay('FREE')">No Tracking</el-button>
   </el-row>
 </el-row>
 
 <script>
-  import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+  import { ref, nextTick, onMounted, onUnmounted, computed } from 'vue'
   export default {
     setup() {
       const dynamicOverlays = ref([])
@@ -64,6 +72,13 @@ Basic usage of VcOverlayDynamic component.
       const radio = ref(0)
       const multiplier = ref(1.0)
       const text = ref('yeah')
+      const showStop = ref(false)
+      const shouldAnimate = ref(false)
+      const stops = computed(() => {
+        return dynamicOverlays.value.map(v => {
+          return v.sampledPositions.map(v => ({ position: v.position, color: 'rgb(255,229,0)' }))
+        })?.[0]
+      })
 
       const makeRealTimeTrajectory = () => {
         multiplier.value = 1
@@ -80,7 +95,7 @@ Basic usage of VcOverlayDynamic component.
             maxCacheSize: 10, //The maximum number of buffer points, the real-time track should not be set too large; the historical track should be set to be greater than the total number of points, otherwise the data will be lost.
             model: {
               uri: 'https://zouyaoji.top/vue-cesium/SampleData/models/Car/Car.gltf',
-              scale: 1
+              scale: 0.5
             },
             // wake
             path: {
@@ -94,7 +109,8 @@ Basic usage of VcOverlayDynamic component.
             sampledPositions: [
               {
                 position: generatePosition(1, 0.05)[0], // Given an initial position
-                interval: 3
+                interval: 3,
+                id: Cesium.createGuid()
               }
             ]
           })
@@ -107,13 +123,12 @@ Basic usage of VcOverlayDynamic component.
         const overlays = []
         const sampledPositions = []
         const positions = []
-        // The time string must be in Iso8601 format
-        startTime.value = datas[0].time.replace(' ', 'T')
-        currentTime.value = datas[0].time.replace(' ', 'T')
-        stopTime.value = datas[datas.length - 1].time.replace(' ', 'T')
+        startTime.value = new Date(datas[0].time)
+        currentTime.value = new Date(datas[0].time)
+        stopTime.value = new Date(datas[datas.length - 1].time)
         multiplier.value = 10
         clockRange.value = Cesium.ClockRange.LOOP_STOP
-        const totalSeconds = Cesium.JulianDate.fromIso8601(stopTime.value).secondsOfDay - Cesium.JulianDate.fromIso8601(startTime.value).secondsOfDay
+        const totalSeconds = Cesium.JulianDate.fromDate(stopTime.value).secondsOfDay - Cesium.JulianDate.fromDate(startTime.value).secondsOfDay
         // Store the wheel's rotation over time in a SampledProperty.
         const wheelAngleProperty = new Cesium.SampledProperty(Number)
         let wheelAngle = 0
@@ -122,7 +137,8 @@ Basic usage of VcOverlayDynamic component.
           const data = datas[i]
           sampledPositions.push({
             position: [data.lon, data.lat],
-            time: data.time.replace(' ', 'T')
+            time: data.time,
+            id: data.id
           })
           positions.push([data.lon, data.lat])
 
@@ -137,7 +153,8 @@ Basic usage of VcOverlayDynamic component.
         }
 
         const rotationProperty = new Cesium.CallbackProperty(function (time, result) {
-          return Cesium.Quaternion.fromAxisAngle(Cesium.Cartesian3.UNIT_X, wheelAngleProperty.getValue(time), result)
+          const wheelAngle = wheelAngleProperty.getValue(time)
+          return Cesium.defined(wheelAngle) ? Cesium.Quaternion.fromAxisAngle(Cesium.Cartesian3.UNIT_X, wheelAngle, result) : new Cesium.Quaternion()
         }, false)
 
         const wheelTransformation = new Cesium.NodeTransformationProperty({
@@ -169,8 +186,8 @@ Basic usage of VcOverlayDynamic component.
           // label
           label: {
             text: new Cesium.CallbackProperty(time => {
-              if (dynamicOverlayRef.value.overlays.value.length) {
-                const velocityVector = dynamicOverlayRef.value.overlays.value[0]._velocityVectorProperty.getValue(time, {})
+              if (dynamicOverlayRef.value.getOverlays().length) {
+                const velocityVector = dynamicOverlayRef.value.getOverlays()[0]._velocityVectorProperty.getValue(time, {})
                 var metersPerSecond = Cesium.Cartesian3.magnitude(velocityVector)
                 var kmPerHour = Math.round(metersPerSecond * 3.6)
 
@@ -219,6 +236,9 @@ Basic usage of VcOverlayDynamic component.
       let timer, _viewer
 
       const ready = ({ viewer, cesiumObject }) => {
+        var scene = viewer.scene
+        scene.debugShowFramesPerSecond = true
+        shouldAnimate.value = true
         viewer.flyTo(cesiumObject, {
           duration: 3
         })
@@ -229,7 +249,15 @@ Basic usage of VcOverlayDynamic component.
         if (e === 0) {
           dynamicOverlays.value = makeRealTimeTrajectory()
           timer = setInterval(() => {
-            dynamicOverlayRef.value.overlays.value.forEach(v => v.addPosition(generatePosition(1, 0.05)[0], 3))
+            // dynamicOverlayRef.value.getOverlays().forEach(v => v.addPosition(generatePosition(1, 0.05)[0], 3))
+            dynamicOverlays.value.forEach(v => {
+              v.sampledPositions.push({
+                position: generatePosition(1, 0.05)[0],
+                time: Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), 3, new Cesium.JulianDate()),
+                id: Cesium.createGuid()
+              })
+              v.sampledPositions.length > 10 && v.sampledPositions.splice(0, 1)
+            })
           }, 3000)
           nextTick(() => {
             dynamicOverlayRef.value.cesiumObject && _viewer?.flyTo(dynamicOverlayRef.value.cesiumObject, { duration: 3 })
@@ -255,39 +283,30 @@ Basic usage of VcOverlayDynamic component.
       }
 
       const viewTopDown = () => {
-        _viewer.trackedEntity = undefined
-        const sampledPositions = dynamicOverlayRef.value.cesiumObject.entities.values[0].sampledPositions
-        const positions = sampledPositions.map(v => {
-          return Cesium.Cartesian3.fromDegrees(v.position[0], v.position[1])
-        })
-        const boundingSphere = Cesium.BoundingSphere.fromPoints(positions)
-        _viewer.camera.flyToBoundingSphere(boundingSphere, {
-          duration: 1.5,
-          offset: new Cesium.HeadingPitchRange(Cesium.Math.toRadians(360), Cesium.Math.toRadians(-90), boundingSphere.radius * 5)
-        })
+        if (radio.value === 0) {
+          dynamicOverlayRef.value.zoomToOverlay()
+        } else {
+          dynamicOverlayRef.value.zoomToOverlay([0, -90, 1500])
+        }
       }
 
       const viewSide = () => {
-        _viewer.trackedEntity = undefined
-        const sampledPositions = dynamicOverlayRef.value.cesiumObject.entities.values[0].sampledPositions
-        const positions = sampledPositions.map(v => {
-          return Cesium.Cartesian3.fromDegrees(v.position[0], v.position[1])
-        })
-        const boundingSphere = Cesium.BoundingSphere.fromPoints(positions)
-        _viewer.camera.flyToBoundingSphere(boundingSphere, {
-          duration: 1.5,
-          offset: new Cesium.HeadingPitchRange(Cesium.Math.toRadians(-90), Cesium.Math.toRadians(-15), boundingSphere.radius * 2)
+        if (radio.value === 0) {
+          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 8000])
+        } else {
+          dynamicOverlayRef.value.zoomToOverlay([-50, -20, 1800])
+        }
+      }
+
+      const trackOverlay = mode => {
+        dynamicOverlayRef.value.trackOverlay({
+          mode,
+          viewFrom: [0, 0, 1800]
         })
       }
 
-      const viewAircraft = () => {
-        _viewer.trackedEntity = dynamicOverlayRef.value.cesiumObject.entities.values[0]
-        const sampledPositions = dynamicOverlayRef.value.cesiumObject.entities.values[0].sampledPositions
-        const positions = sampledPositions.map(v => {
-          return Cesium.Cartesian3.fromDegrees(v.position[0], v.position[1])
-        })
-        const boundingSphere = Cesium.BoundingSphere.fromPoints(positions)
-        dynamicOverlayRef.value.cesiumObject.entities.values[0].viewFrom = new Cesium.Cartesian3(boundingSphere.radius, 0, boundingSphere.radius)
+      const stopArrived = (overlay, stop) => {
+        console.log('arrived stop:', overlay, stop)
       }
 
       onUnmounted(() => {
@@ -311,7 +330,11 @@ Basic usage of VcOverlayDynamic component.
         multiplier,
         viewTopDown,
         viewSide,
-        viewAircraft
+        trackOverlay,
+        stops,
+        showStop,
+        stopArrived,
+        shouldAnimate
       }
     }
   }
@@ -325,34 +348,50 @@ Basic usage of VcOverlayDynamic component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` Specifies whether to display the CustomDataSource that hosts the dynamic overlays. |
-| name | String | `'__vc__overlay__dynamic__'` | `optional` Specifies the name of the CustomDataSource. |
-| startTime | String\| Date \| JulianDate | | `optional` The start time of the clock. |
-| stopTime | String\| Date \| JulianDate | | `optional` The stop time of the clock. |
-| currentTime | String\| Date \| JulianDate | | `optional` The current time. |
+| show | Boolean | `true` | `optional` Specify whether to display the CustomDataSource that hosts the dynamic overlays. |
+| name | String | `'__vc__overlay__dynamic__'` | `optional` Specify the name of the CustomDataSource. |
+| startTime | String\| Date \| JulianDate | | `optional` Specify the start time of the clock. |
+| stopTime | String\| Date \| JulianDate | | `optional` Specify the stop time of the clock. |
+| currentTime | String\| Date \| JulianDate | | `optional` Specify the current time. |
 | clockRange | Number\| Cesium.ClockRange | `0` | `optional` Determines how the clock should behave when Clock#startTime or Clock#stopTime is reached. |
 | clockStep | Number\| Cesium.ClockStep | `1` | `optional` Determines if calls to Clock#tick are frame dependent or system clock dependent. |
 | shouldAnimate | Boolean | `true` | `optional` Indicates whether Clock#tick should attempt to advance time. The clock will only tick when both Clock#canAnimate and Clock#shouldAnimate are true. |
+| canAnimate | Boolean | `true` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
 | multiplier | Number | `1.0` | `optional` Determines how much time advances when Clock#tick is called, negative values allow for advancing backwards. |
-| dynamicOverlays | Array\<DynamicOverlayOpts\> | `[]` | `optional` A SampledProperty and a PositionProperty array. |
+| dynamicOverlays | Array\<DynamicOverlayOpts\> | `[]` | `optional` Specify the dynamicOverlays array. |
 | defaultInterval | Number | `3.0` | `optional` Specify the default refresh interval of the default position information, and it is available to change the position of the dynamic overlays in real time. |
 
 ### Events
 
-| Name                  | Parameters                              | Description                                                |
-| --------------------- | --------------------------------------- | ---------------------------------------------------------- |
-| beforeLoad            | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                |
-| ready                 | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.     |
-| destroyed             | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.               |
-| onStop                | Cesium.JulianDate                       | An Event that is fired whenever Clock#stopTime is reached. |
-| @update:currentTime   | Cesium.JulianDate                       | Triggered when currentTime changed.                        |
-| @update:shouldAnimate |                                         | Triggered when shouldAnimate changed.                      |
-| @update:canAnimate    |                                         | Triggered when canAnimate changed.                         |
-| @update:clockRange    |                                         | Triggered when clockRange changed.                         |
-| @update:clockStep     |                                         | Triggered when clockStep changed.                          |
-| @update:multiplier    |                                         | Triggered when multiplier changed.                         |
-| @update:startTime     |                                         | Triggered when startTime changed.                          |
-| @update:stopTime      |                                         | Triggered when stopTime changed.                           |
+| Name                  | Parameters                                           | Description                                            |
+| --------------------- | ---------------------------------------------------- | ------------------------------------------------------ |
+| beforeLoad            | (instance: VcComponentInternalInstance)              | Triggers before the cesiumObject is loaded.            |
+| ready                 | (readyObj: VcReadyObject)                            | Triggers when the cesiumObject is successfully loaded. |
+| destroyed             | (instance: VcComponentInternalInstance)              | Triggers when the cesiumObject is destroyed.           |
+| onStop                | (clock: Cesium.Clock)                                | Triggers when Clock#stopTime is reached.               |
+| stopArrived           | (overlay: DynamicOverlay, position: SampledPosition) | Triggers when a stop is reached.                       |
+| @update:currentTime   | (currentTime: Cesium.JulianDate)                     | Triggers when currentTime changed.                     |
+| @update:shouldAnimate | (shouldAnimate: boolean)                             | Triggers when shouldAnimate changed.                   |
+| @update:canAnimate    | (canAnimate: boolean)                                | Triggers when canAnimate changed.                      |
+| @update:clockRange    | (clockRange: number )                                | Triggers when clockRange changed.                      |
+| @update:clockStep     | (clockStep: number )                                 | Triggers when clockStep changed.                       |
+| @update:multiplier    | (multiplier: number)                                 | Triggers when multiplier changed.                      |
+| @update:startTime     | (startTime: Cesium.JulianDate)                       | Triggers when startTime changed.                       |
+| @update:stopTime      | (stopTime: Cesium.JulianDate)                        | Triggers when stopTime changed.                        |
+
+### Methods
+
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
+| reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
+| unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
+| getOverlays | () => Array\<DynamicOverlay\> | Get dynamic overlays. |
+| zoomToOverlay | (offset?: VcHeadingPitchRange, viewOverlays?: Array\<DynamicOverlay\> \| Array\<number \| string\>) => Promise\<boolean\> | Zoom to dynamic objects (collections). offset: The camera offset to zoom to the object. viewOverlays: Dynamic object collection or dynamic object ID collection, if not passed, zoom to all objects. |
+| trackOverlay | (trackViewOpts?: TrackViewOpts, trackOverlay?: DynamicOverlay \| string \| number) => void | Track a dynamic objects. trackOverlay: Tracking object or tracking object ID. If not passed, the first object is tracked by default. |
 
 ### Reference
 

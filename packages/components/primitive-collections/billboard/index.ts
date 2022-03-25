@@ -1,12 +1,11 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 11:10:21
+ * @LastEditTime: 2022-03-11 10:04:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\billboard\index.ts
  */
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type {
   VcPickEvent,
@@ -16,7 +15,8 @@ import type {
   VcDistanceDisplayCondition,
   VcNearFarScalar,
   VcPosition,
-  VcReadyObject
+  VcReadyObject,
+  VcComponentPublicInstance
 } from '@vue-cesium/utils/types'
 import { usePrimitiveCollectionItems } from '@vue-cesium/composables'
 import {
@@ -84,7 +84,6 @@ export default defineComponent({
   }
 })
 
-// export type VcBillboardProps = ExtractPropTypes<typeof billboardProps>
 export type VcBillboardProps = {
   /**
    * Specify the aligned axis in world space. The aligned axis is the unit vector that the billboard up vector points towards. The default is the zero vector, which means the billboard is aligned to the screen up vector.
@@ -179,47 +178,49 @@ export type VcBillboardProps = {
    */
   enableMouseEvent?: boolean
   /**
-   * Triggers before the VcPoint is loaded.
+   * Triggers before the VcBillboard is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcPoint is successfully loaded.
+   * Triggers when the VcBillboard is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcPoint is destroyed.
+   * Triggers when the VcBillboard is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the mouse is pressed on this billboard.
    */
-  mousedown?: (evt: VcPickEvent) => void
+  onMousedown?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse bounces up on this billboard.
    */
-  mouseup?: (evt: VcPickEvent) => void
+  onMouseup?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks on this billboard.
    */
-  click?: (evt: VcPickEvent) => void
+  onClick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks outside this billboard.
    */
-  clickout?: (evt: VcPickEvent) => void
+  onClickout?: (evt: VcPickEvent) => void
   /**
    * Triggers when the left mouse button double-clicks this billboard.
    */
-  dblclick?: (evt: VcPickEvent) => void
+  onDblclick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves on this billboard.
    */
-  mousemove?: (evt: VcPickEvent) => void
+  onMousemove?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves over to this billboard.
    */
-  mouseover?: (evt: VcPickEvent) => void
+  onMouseover?: (evt: VcPickEvent) => void
   /**
    * 	Triggers when the mouse moves out of this billboard.
    */
-  mouseout?: (evt: VcPickEvent) => void
+  onMouseout?: (evt: VcPickEvent) => void
 }
+
+export type VcBillboardRef = VcComponentPublicInstance<VcBillboardProps>

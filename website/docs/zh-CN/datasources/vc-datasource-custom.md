@@ -11,10 +11,10 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer sceneModePicker @ready="onViewerReady">
-    <vc-terrain-provider-cesium></vc-terrain-provider-cesium>
-    <vc-layer-imagery :sortOrder="10">
+    <!-- <vc-terrain-provider-cesium></vc-terrain-provider-cesium> -->
+    <!-- <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-urltemplate url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"></vc-imagery-provider-urltemplate>
-    </vc-layer-imagery>
+    </vc-layer-imagery> -->
     <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :loadingEvent="morphComplete" :show="show">
       <vc-entity
         ref="entity1"
@@ -58,6 +58,7 @@
       @ready="onDatasourceReady"
     >
     </vc-datasource-custom>
+    <vc-selection-indicator ref="indicatorRef" @pickEvt="pickEvt"></vc-selection-indicator>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -69,10 +70,11 @@
 </el-row>
 
 <script>
-  import { ref, reactive, getCurrentInstance, onMounted, watch } from 'vue'
+  import { ref, reactive, getCurrentInstance, onMounted, watch, toRaw } from 'vue'
   export default {
     setup() {
       // state
+      window.toRaw = toRaw
       const show = ref(true)
       const datasourceRef = ref(null)
       const datasources = reactive([])
@@ -153,6 +155,7 @@
       }
       const onViewerReady = ({ Cesium, viewer }) => {
         _viewer = viewer
+        window.viewer = viewer
         const options = {
           id: '1001',
           code: '1001',
@@ -164,6 +167,7 @@
         addPoints(options, true)
       }
       const onDatasourceReady = ({ Cesium, viewer, cesiumObject }) => {
+        window.cesiumObject = cesiumObject
         viewer.zoomTo(cesiumObject)
         //开启聚合功能
         cesiumObject.clustering.enabled = true
@@ -175,7 +179,7 @@
           cluster.billboard.show = !0
           cluster.label.show = !1
           cluster.billboard.id = cluster.label.id
-          cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM
+          cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.CENTER
           clusteredEntities.length >= 300
             ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/300+.png')
             : clusteredEntities.length >= 150
@@ -231,6 +235,12 @@
       const morphComplete = (a, b, c, d) => {
         console.log(a, b, c, d)
       }
+      const pickEvt = e => {
+        window.picked = e
+        console.log(e)
+      }
+      const indicatorRef = ref(null)
+      window.indicatorRef = indicatorRef
       return {
         unload,
         reload,
@@ -244,7 +254,9 @@
         datasources,
         entities,
         clusterSch,
-        morphComplete
+        morphComplete,
+        pickEvt,
+        indicatorRef
       }
     }
   }

@@ -15,9 +15,10 @@ export default function (instance: VcComponentInternalInstance, props, $services
   const rootRef = ref<HTMLElement | null>()
   let selectionIndicatorTween
   let selectionIndicatorIsAppearing
-  const pickedFeatures = ref<any>(null)
-  const selectedFeature = ref<any>(null)
+  const pickedFeatures = ref<PickedFeatures>(null)
+  const selectedFeature = ref<Feature | Cesium.Entity>(null)
   let unwatchFns: Array<WatchStopHandle> = []
+  let isCluster = false
   // computed
   const rootStyle = reactive<CSSProperties>({
     top: screenPositionY.value,
@@ -72,6 +73,11 @@ export default function (instance: VcComponentInternalInstance, props, $services
             if (!defined(selectedFeature.value) && featuresShownAtAll.length > 0) {
               // Handles the case when no features have info - still want something to be open.
               selectedFeature.value = featuresShownAtAll[0]
+              if (isCluster) {
+                if (selectedFeature.value instanceof Feature && selectedFeature.value?.pickedFeature?.primitive?.position) {
+                  selectedFeature.value.position = selectedFeature.value.pickedFeature.primitive.position
+                }
+              }
             }
           })
         }
@@ -216,6 +222,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
         if (pickedFeature.id) {
           if (isArray(pickedFeature.id) && pickedFeature.id[0] instanceof Cesium.Entity) {
             // 数据源集合（集群）
+            isCluster = true
             pickedFeature.id.forEach(entity => {
               const feature = Feature.fromPickedFeature(entity, pickedFeature, viewer, screenPosition)
               vectorFeatures.push(feature)
@@ -225,7 +232,10 @@ export default function (instance: VcComponentInternalInstance, props, $services
             // 实体 or 数据源
             const feature = Feature.fromPickedFeature(pickedFeature.id, pickedFeature, viewer, screenPosition)
             vectorFeatures.push(feature)
+            isCluster = false
             continue
+          } else {
+            isCluster = false
           }
         }
         // 图元
@@ -276,7 +286,7 @@ export default function (instance: VcComponentInternalInstance, props, $services
     return providerCoords
   }
 
-  const computeScreenSpacePosition = (position, result) => {
+  const computeScreenSpacePosition = (position: Cesium.Cartesian3, result: Cesium.Cartesian2) => {
     const { viewer } = $services
     return Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, position, result)
   }
@@ -286,8 +296,8 @@ export default function (instance: VcComponentInternalInstance, props, $services
     if (props.show && defined(position.value)) {
       const screenPosition = computeScreenSpacePosition(position.value, new Cartesian2())
       if (!defined(screenPosition)) {
-        rootStyle.left = offScreen
-        rootStyle.right = offScreen
+        // rootStyle.left = offScreen
+        // rootStyle.right = offScreen
       } else {
         const { viewer } = $services
         const container = viewer.container
@@ -397,12 +407,12 @@ export default function (instance: VcComponentInternalInstance, props, $services
   // expose public methods
   Object.assign(instance.proxy, {
     selectedFeature,
-    pickedFeatures,
     position,
     computeScreenSpacePosition,
     update,
     animateAppear,
-    animateDepart
+    animateDepart,
+    getPickedFeatures: () => pickedFeatures
   })
 
   return {

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-12 10:31:24
- * @LastEditTime: 2021-12-07 13:12:58
+ * @LastEditTime: 2022-03-09 23:23:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-echarts.md
@@ -271,10 +271,10 @@ Basic usage of VcOverlayEcharts component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| options | Object | | `required` Specify the configuration items of the Echart. |
-| autoHidden | Boolean | `true` | `optional` Specify whether Echart elements are automatically hidden when they are on the back of the viewer. |
-| coordinateSystem | String | `'cesium'` | `optional` Specify the name of the custom coordinate system when Echart is initialized. |
-| customClass | String | | `optional` Specify div class of echart. |
+| options | EChartsOption | | `required` Specify the configuration items of the echarts. |
+| autoHidden | boolean | `true` | `optional` Specify whether Echart elements are automatically hidden when they are on the back of the viewer. |
+| coordinateSystem | string | `'cesium'` | `optional` Specify the name of the custom coordinate system when Echart is initialized. |
+| customClass | string | | `optional` Specify div class of echarts. |
 
 ### Events
 
@@ -283,3 +283,13 @@ Basic usage of VcOverlayEcharts component.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+
+### Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |

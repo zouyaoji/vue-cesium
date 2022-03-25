@@ -52,17 +52,24 @@
               {{ langConfig.components }}
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link active-class="active" :to="`/${lang}/resource`" exact>
               {{ langConfig.resource }}
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link active-class="active" :to="`/${lang}/donations`" exact>
               {{ langConfig.donations }}
             </router-link>
           </li>
 
+          <li class="nav-item">
+            <a href="https://github.com/zouyaoji/vue-cesium/discussions" target="_blank"> {{ langConfig.discussions }} </a>
+          </li>
+
+          <!-- <li class="nav-item">
+            <a href="https://zouyaoji.top/issue-generator" target="_blank"> {{ langConfig.issues }} </a>
+          </li> -->
           <!-- gap -->
           <li v-show="isComponentPage" class="nav-item">
             <div class="nav-gap"></div>

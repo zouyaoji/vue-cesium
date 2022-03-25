@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-04 10:37:42
- * @LastEditTime: 2021-11-22 16:49:24
+ * @LastEditTime: 2022-03-08 23:19:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
@@ -15,19 +15,17 @@
 
 选择器组件的基础用法。
 
-**注意：** 不支持拾取 `vc-primitive-particle` 组件对象。
-
 :::demo 使用 `vc-selection-indicator` 标签在三维球上添加选择器组件。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
-  <vc-viewer :selectionIndicator="false" :infoBox="false">
-    <vc-selection-indicator ref="selectionIndicator" @pickEvt="pickEvt"></vc-selection-indicator>
+  <vc-viewer :selection-indicator="false" :info-box="false">
+    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
     <vc-entity ref="entity" :billboard="billboard" :position="{lng: 108, lat: 32}" :point="point" :label="label">
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
-    <vc-layer-imagery :sortOrder="10">
-      <vc-imagery-provider-tianditu mapStyle="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :sort-order="10">
+      <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -65,6 +63,7 @@
       },
       unload() {
         this.$refs.selectionIndicator.unload()
+        window.aa = this.$refs.selectionIndicator
       },
       load() {
         this.$refs.selectionIndicator.load()
@@ -83,16 +82,39 @@
 
 | 属性名                   | 类型    | 默认值 | 描述                                                  |
 | ------------------------ | ------- | ------ | ----------------------------------------------------- |
-| show                     | Boolean | `true` | `optional` 指定选择指示器是否可见。                   |
-| width                    | Number  | `50`   | `optional` 指定选择指示器宽度。                       |
-| height                   | Number  | `50`   | `optional` 指定选择指示器高度。                       |
-| allowFeatureInfoRequests | Boolean | `true` | `optional` 指定是否异步请求该点射线相交影像图层属性。 |
+| show                     | boolean | `true` | `optional` 指定选择指示器是否可见。                   |
+| width                    | number  | `50`   | `optional` 指定选择指示器宽度。                       |
+| height                   | number  | `50`   | `optional` 指定选择指示器高度。                       |
+| allowFeatureInfoRequests | boolean | `true` | `optional` 指定是否异步请求该点射线相交影像图层属性。 |
+| limit                    | number  | `50`   | `optional` 指定最大拾取对象数量。                     |
 
 ### 事件
 
 | 事件名     | 参数                                    | 描述                 |
 | ---------- | --------------------------------------- | -------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
-| ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
-| destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+| beforeLoad | (instance: VcComponentInternalInstance) | 组件加载前触发。     |
+| ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
+| destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | pickEvt    | selectedFeature                         | 拾取时触发。         |
+
+### 方法
+
+| 方法名                     | 参数                                    | 描述                                        |
+| -------------------------- | --------------------------------------- | ------------------------------------------- |
+| load                       | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload                     | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload                     | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise         | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject            | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| computeScreenSpacePosition | () => Cesium.Cartesian2                 | 计算屏幕位置。                              |
+| update                     | () => void                              | 更新指示器位置。                            |
+| animateAppear              | () => void                              | 显示指示器。                                |
+| animateDepart              | () => void                              | 隐藏指示器。                                |
+| getPickedFeatures          | () => PickedFeatures                    | 获取拾取对象集合。                          |
+
+### 成员
+
+| 名称                                     | 描述                           |
+| ---------------------------------------- | ------------------------------ |
+| position: Cesium.Cartesian3              | 获取或者设置选择指示器的位置。 |
+| selectedFeature:Feature \| Cesium.Entity | 获取或者设置选中对象。         |

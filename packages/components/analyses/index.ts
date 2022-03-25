@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 11:46:30
- * @LastEditTime: 2022-01-06 11:21:50
+ * @LastEditTime: 2022-02-18 23:48:49
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\index.ts
@@ -32,3 +32,6 @@ components.forEach(cmp => {
 
 export const VcAnalysisFlood = AnalysisFlood as SFCWithInstall<typeof AnalysisFlood>
 export const VcAnalyses = Analyses as SFCWithInstall<typeof Analyses>
+
+export * from './src'
+export * from './flood'

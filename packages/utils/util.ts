@@ -1,4 +1,3 @@
-import { getCurrentInstance } from 'vue'
 import { camelize, capitalize, extend, hasOwn, hyphenate, isArray, isObject, isString, looseEqual, isFunction, isPlainObject } from '@vue/shared'
 import { isUndefined, isNull, camelCase } from 'lodash-unified'
 import { AnyFunction, AnyObject } from './types'
@@ -139,9 +138,9 @@ export function getDefaultOptionByProps<T>(props, ignores: Array<string> = []) {
   return defaultOptions
 }
 
-const addCustomProperty = (obj, options) => {
+const addCustomProperty = (obj, options, ignores: Array<string> = []) => {
   for (const prop in options) {
-    if (!obj[prop]) {
+    if (!obj[prop] && ignores.indexOf(prop) === -1) {
       obj[prop] = options[prop]
     }
   }
@@ -154,6 +153,13 @@ export const merge = <T extends Record<string, any>>(a: T, b: T) => {
     obj[key] = b[key] ?? a[key]
   }
   return obj
+}
+
+export function isArrayLike(obj) {
+  if (Array.isArray(obj)) return true
+  if (typeof obj !== 'object' || !obj) return false
+  const length = obj.length
+  return typeof length === 'number' && length >= 0
 }
 
 // reexport from lodash & vue shared

@@ -14,11 +14,11 @@ Basic usage of the `vc-imagery-provider-tianditu` component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
     <!-- Annotation layer -->
-    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="20">
-      <vc-imagery-provider-tianditu mapStyle="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sort-order="20">
+      <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
-    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
-      <vc-imagery-provider-tianditu :mapStyle="mapStyle" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
+    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sort-order="10">
+      <vc-imagery-provider-tianditu :map-style="mapStyle" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">

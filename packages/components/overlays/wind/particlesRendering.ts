@@ -103,7 +103,7 @@ class ParticlesRendering {
     }
     const GeometryAttributes = Cesium.GeometryAttributes as any
     const geometry = new Cesium.Geometry({
-      attributes: GeometryAttributes({
+      attributes: new GeometryAttributes({
         st: new Cesium.GeometryAttribute({
           componentDatatype: Cesium.ComponentDatatype.FLOAT,
           componentsPerAttribute: 2,

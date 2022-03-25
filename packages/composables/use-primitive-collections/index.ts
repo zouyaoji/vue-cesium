@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-04 13:55:35
- * @LastEditTime: 2021-11-19 21:07:00
+ * @LastEditTime: 2022-02-15 09:15:08
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-primitive-collections\index.ts
@@ -57,6 +57,7 @@ export default function (props, ctx, vcInstance: VcComponentInternalInstance) {
 
   // provide
   provide(vcKey, getServices())
+  vcInstance.appContext.config.globalProperties.$VueCesium = getServices()
 
   return {
     transformProps: commonState.transformProps,

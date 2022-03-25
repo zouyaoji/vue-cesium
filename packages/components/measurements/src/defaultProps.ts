@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-02-13 00:14:25
+ * @LastEditTime: 2022-03-10 01:12:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
  */
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
   actionOptions,
@@ -25,10 +25,14 @@ import {
 } from '@vue-cesium/composables/use-drawing/defaultOpts'
 import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
 import type { VcFabProps } from '../../ui'
-import type { VcActionTooltipProps } from '@vue-cesium/utils/types'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import type { VcLabelProps } from '../../primitive-collections'
 import type {
   VcComponentDistanceMeasurementOpts,
+  VcDrawingActiveEvt,
+  VcDrawingDrawEvt,
+  VcDrawingEditorEvt,
+  VcDrawingMouseEvt,
   VcHorizontalMeasurementOpts,
   VcMeasurementOpts,
   VcPolylineMeasurementOpts,
@@ -50,7 +54,8 @@ const distanceMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentD
     distance: 2,
     angle: 2
   },
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const componentDistanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -95,7 +100,8 @@ const polylineMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, 
   showAngleLabel: true,
   showDistanceLabel: true,
   locale: undefined,
-  loop: false
+  loop: false,
+  autoUpdateLabelPosition: true
 })
 
 const horizontalMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -163,7 +169,8 @@ const verticalMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentD
     distance: 2,
     angle: 2
   },
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const heightMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -190,7 +197,8 @@ const heightMeasurementDefault: VcMeasurementOpts = Object.assign({}, pointDrawi
   decimals: {
     distance: 2
   },
-  locale: undefined
+  locale: undefined,
+  primitiveOpts: polylinePrimitiveOptsDefault
 })
 
 const areaMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -214,7 +222,8 @@ const areaMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, poly
     angle: 2
   },
   loop: true,
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const pointMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -287,7 +296,7 @@ const mainFabDefault = Object.assign({}, actionOptions, {
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  // modelValue: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
 } as VcFabProps)
@@ -420,7 +429,7 @@ const measurementsProps = {
     default: () => circleMeasurementDefault
   }
 }
-export type VcMeasurementsProps = ExtractPropTypes<typeof measurementsProps>
+
 const defaultOptions = getDefaultOptionByProps<VcMeasurementsProps>(measurementsProps)
 
 export {
@@ -447,4 +456,177 @@ export {
   regularMeasurementDefault,
   circleMeasurementDefault,
   mainFabDefault
+}
+
+export type VcMeasurementsProps = {
+  /**
+   * Specify the position of the VcMeasurements.
+   * Default value: bottom-left
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top' | 'right' | 'bottom' | 'left'
+  /**
+   * An array of two numbers to offset the VcMeasurements horizontally and vertically in pixels.
+   * Default value: [0, 0]
+   */
+  offset?: [number, number]
+  /**
+   * Specify whether the measurement result is visible.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.
+   * Default value: 1
+   */
+  mode?: number
+  /**
+   * Specify which measurement instances to load.
+   * Default value: ['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'regular', 'circle']
+   */
+  measurements?: Array<
+    'distance' | 'component-distance' | 'polyline' | 'horizontal' | 'vertical' | 'height' | 'area' | 'point' | 'rectangle' | 'regular' | 'circle'
+  >
+  /**
+   * Specify the color when the measurement instance is activated.
+   * Default value: positive
+   */
+  activeColor?: string
+  /**
+   * Specify whether the measurement result can be edited.
+   * Default value: false
+   */
+  editable?: boolean
+  /**
+   * Specify whether the drawing result object is attached to the ground or 3dtiles. Only polyline and polygon objects work.
+   * Default value: false
+   */
+  clampToGround?: boolean
+  /**
+   * Specify the style options of the floating action button of the VcMeasurements component.
+   */
+  mainFabOpts?: VcActionTooltipProps & VcFabProps
+  /**
+   * Specify the style options of the distance measurement action button.
+   */
+  distanceActionOpts?: VcActionTooltipProps
+  /**
+   * Specify distance measurement options.
+   */
+  distanceMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the component distance measurement action button.
+   */
+  componentDistanceActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the component distance measurement options.
+   */
+  componentDistanceMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the polyline distance measurement action button.
+   */
+  polylineActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the polyline distance measurement options.
+   */
+  polylineMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the horizontal distance measurement action button.
+   */
+  horizontalActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the horizontal distance measurement options.
+   */
+  horizontalMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the vertical distance measurement action button.
+   */
+  verticalActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the vertical distance measurement options.
+   */
+  verticalMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the height measurement action button.
+   */
+  heightActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the height measurement options.
+   */
+  heightMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the area measurement action button.
+   */
+  areaActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the area measurement options.
+   */
+  areaMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the point measurement action button.
+   */
+  pointActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the point measurement options.
+   */
+  pointMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the rectangle measurement action button.
+   */
+  rectangleActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the rectangle measurement options.
+   */
+  rectangleMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the circle measurement action button.
+   */
+  circleActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the circle measurement options.
+   */
+  circleMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the regular measurement action button.
+   */
+  regularActionOpts?: VcActionTooltipProps
+  /**
+   * Specify the regular measurement options.
+   */
+  regularMeasurementOpts?: VcMeasurementOpts
+  /**
+   * Specify the style options of the clear action button.
+   */
+  clearActionOpts?: VcActionTooltipProps
+  /**
+   * Triggers before the VcMeasurements is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcMeasurements is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcMeasurements is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the measurement action is actived.
+   */
+  onActiveEvt?: (evt: VcDrawingActiveEvt, viewer: Cesium.Viewer) => void
+  /**
+   * 	Triggers when drawing.
+   */
+  onDrawEvt?: (evt: VcDrawingDrawEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the editor button is clicked.
+   */
+  onEditorEvt?: (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the mouse is over or out on the drawing point.
+   */
+  onMouseEvt?: (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer) => void
+  /**
+   * Triggers when the floating button is expanded or collapsed.
+   */
+  onFabUpdated: (value: boolean) => void
 }

@@ -13,7 +13,7 @@ app.use(VueCesium, {
   cesiumPath: 'https://mars3d.cn/lib/',
   // The resource library to be imported, optional. If not specified, only the necessary resources of mars3d will be loaded
   cfg: {
-    include: 'jquery,font-awesome,bootstrap,layer,haoutil,turf,mars3d'
+    include: 'turf,mars3d'
   }
 })
 app.mount('#app')
@@ -21,7 +21,7 @@ app.mount('#app')
 
 Or specify the address of `cesiumPath` as the **directory** of the mars3d library on the `vc-viewer` component.
 
-If `vc-viewer` is loaded successfully, it will return {Cesium, viewer, map }, and you can use mars3d API for related development through this `map`, as shown in the following example:
+If `vc-viewer` is loaded successfully, it will return { Cesium, viewer, map }, through this `map` use [mars3d tutorial](http://mars3d.cn/doc.html) and [mars3d API](http:// mars3d.cn/api/) for related development, such as the following example:
 
 ### Basic usage
 
@@ -46,7 +46,7 @@ Use VueCesium to load Mars Technology Mars3D
       <vc-graphics-billboard ref="billboard" image="https://zouyaoji.top/vue-cesium/favicon.png"></vc-graphics-billboard>
       <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
     </vc-entity>
-    <vc-layer-imagery :sortOrder="20">
+    <vc-layer-imagery :sort-order="20">
       <vc-imagery-provider-osm></vc-imagery-provider-osm>
     </vc-layer-imagery>
   </vc-viewer>
@@ -85,7 +85,7 @@ Use VueCesium to load Mars Technology Mars3D
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },

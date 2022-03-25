@@ -1,29 +1,22 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 13:42:09
- * @LastEditTime: 2022-01-19 23:40:00
+ * @LastEditTime: 2022-03-09 23:31:53
  * @LastEditors: zouyaoji
  * @Description: from 3D-Wind-Field - https://github.com/RaymanNg/3D-Wind-Field
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\index.ts
  */
-import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import type { PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { computed, createCommentVNode, defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue'
 import ParticleSystem from './particleSystem'
 import { viewRectangleToLonLatRange } from './util'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
-
-export type ParticleSystemOptions = {
-  maxParticles?: number
-  particleHeight?: number
-  fadeOpacity?: number
-  dropRate?: number
-  dropRateBump?: number
-  speedFactor?: number
-  lineWidth?: number
-}
+import { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
+import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
+import { regularGrid } from './grid/regular'
 
 export const windmapOverlayProps = {
   show: {
@@ -31,7 +24,7 @@ export const windmapOverlayProps = {
     default: true
   },
   data: {
-    type: Object,
+    type: Object as PropType<VcWindData>,
     required: true
   },
   options: {
@@ -46,7 +39,8 @@ export const windmapOverlayProps = {
         speedFactor: 1.0,
         lineWidth: 4.0
       } as ParticleSystemOptions)
-  }
+  },
+  viewerParameters: Object as PropType<ViewerParameters>
 }
 export default defineComponent({
   name: 'VcOverlayWindmap',
@@ -63,9 +57,10 @@ export default defineComponent({
     }
 
     const { $services } = commonState
-    let viewerParameters
+    let viewerParameters: ViewerParameters
     let globeBoundingSphere: Cesium.BoundingSphere
     let primitiveCollection: Cesium.PrimitiveCollection
+    let grid
 
     // computed
     const particleSystemOptions = computed<ParticleSystemOptions>(() => {
@@ -118,6 +113,20 @@ export default defineComponent({
       )
     )
 
+    unwatchFns.push(
+      watch(
+        () => props.viewerParameters,
+        val => {
+          updateViewerParameters()
+          const particleSystem = instance.cesiumObject as ParticleSystem
+          particleSystem.applyViewerParameters(viewerParameters)
+        },
+        {
+          deep: true
+        }
+      )
+    )
+
     // methods
     instance.createCesiumObject = async () => {
       const { viewer } = $services
@@ -129,6 +138,9 @@ export default defineComponent({
         latRange: new Cesium.Cartesian2(),
         pixelSize: 0.0
       }
+      const sequenceLon = { start: props.data.lon.array[0], delta: props.data.lon.delta, size: props.data.lon.array.length }
+      const sequenceLat = { start: props.data.lat.array[0], delta: props.data.lat.delta, size: props.data.lat.array.length }
+      grid = regularGrid(sequenceLon, sequenceLat)
       updateViewerParameters()
       return new ParticleSystem((viewer.scene as any).context, props.data, particleSystemOptions.value, viewerParameters)
     }
@@ -218,18 +230,39 @@ export default defineComponent({
       const { viewer } = $services
       const scene = viewer.scene
       const camera = scene.camera
-      const viewRectangle = camera.computeViewRectangle(scene.globe.ellipsoid)
-      const lonLatRange = viewRectangleToLonLatRange(viewRectangle)
-      viewerParameters.lonRange.x = lonLatRange.lon.min
-      viewerParameters.lonRange.y = lonLatRange.lon.max
-      viewerParameters.latRange.x = lonLatRange.lat.min
-      viewerParameters.latRange.y = lonLatRange.lat.max
 
-      const pixelSize = camera.getPixelSize(globeBoundingSphere, scene.drawingBufferWidth, scene.drawingBufferHeight)
+      if (
+        Cesium.defined(props.viewerParameters) &&
+        Cesium.defined(props.viewerParameters.latRange) &&
+        Cesium.defined(props.viewerParameters.lonRange)
+      ) {
+        viewerParameters.lonRange = makeCartesian2(props.viewerParameters.lonRange)
+        viewerParameters.latRange = makeCartesian2(props.viewerParameters.latRange)
+      } else {
+        const viewRectangle = camera.computeViewRectangle(scene.globe.ellipsoid)
+        const lonLatRange = viewRectangleToLonLatRange(viewRectangle)
+        ;(viewerParameters.lonRange as Cesium.Cartesian2).x = lonLatRange.lon.min
+        ;(viewerParameters.lonRange as Cesium.Cartesian2).y = lonLatRange.lon.max
+        ;(viewerParameters.latRange as Cesium.Cartesian2).x = lonLatRange.lat.min
+        ;(viewerParameters.latRange as Cesium.Cartesian2).y = lonLatRange.lat.max
+      }
+
+      const pixelSize =
+        Cesium.defined(props.viewerParameters) && Cesium.defined(props.viewerParameters.pixelSize)
+          ? props.viewerParameters.pixelSize
+          : camera.getPixelSize(globeBoundingSphere, scene.drawingBufferWidth, scene.drawingBufferHeight)
 
       if (pixelSize > 0) {
         viewerParameters.pixelSize = pixelSize
       }
+    }
+
+    const getNearestUV = (longitude: number, latitude: number) => {
+      const index = grid.closest(longitude, latitude)
+      if (Cesium.defined(index)) {
+        return [props.data.U.array[index], props.data.V.array[index]]
+      }
+      return undefined
     }
 
     // life cycle
@@ -238,8 +271,52 @@ export default defineComponent({
       unwatchFns = []
     })
 
+    // expose public methods
+    Object.assign(instance.proxy, {
+      getNearestUV
+    })
+
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })
 
-export type VcOverlayWindmapProps = ExtractPropTypes<typeof windmapOverlayProps>
+export interface VcOverlayWindmapProps {
+  /**
+   * Specify wind map data.
+   */
+  data: VcWindData
+  /**
+   * Specify whether to display the wind map.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Specify the rendering parameters of the wind map.
+   */
+  options?: ParticleSystemOptions
+  /**
+   * Specify the wind field display range.
+   */
+  viewerParameters?: ViewerParameters
+  /**
+   * Triggers before the VcOverlayWindmap is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcOverlayWindmap is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcOverlayWindmap is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export interface VcOverlayWindmapRef extends VcComponentPublicInstance<VcOverlayWindmapProps> {
+  /**
+   * Get near UV values.
+   * @param longitude longitude (degrees)
+   * @param latitude latitude (degrees)
+   */
+  getNearestUV: (longitude: number, latitude: number) => [number, number]
+}

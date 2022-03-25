@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, CSSProperties, TeleportProps, PropType, WatchStopHandle } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcCartesian2, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
 import { useCommon } from '@vue-cesium/composables'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -30,7 +30,7 @@ export default defineComponent({
   name: 'VcOverlayHtml',
   props: htmlOverlayProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcOverlayHtmlProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcOverlayHtml'
@@ -165,5 +165,46 @@ export default defineComponent({
   }
 })
 
-export type VcOverlayHtmlProps = ExtractPropTypes<typeof htmlOverlayProps>
 export type VcOverlayHtmlEmits = typeof emits
+export interface VcOverlayHtmlProps {
+  /**
+   * Specify the geographic location of the HTML element.
+   */
+  position?: VcPosition
+  /**
+   * Specify the pixel offset of the HTML.
+   */
+  pixelOffset?: VcCartesian2
+  /**
+   * Specify whether to display the HTML overlay.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Specifies whether HTML is automatically hidden when it is on the back of the earth.
+   * Default value: true
+   */
+  autoHidden?: boolean
+  /**
+   * Specify an HTML custom class.
+   */
+  customClass?: string
+  /**
+   * Specify the teleport props.
+   */
+  teleport?: TeleportProps
+  /**
+   * Triggers before the VcOverlayHtml is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcOverlayHtml is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcOverlayHtml is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcOverlayHtmlRef = VcComponentPublicInstance<VcOverlayHtmlProps>

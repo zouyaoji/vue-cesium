@@ -13,12 +13,12 @@
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer>
-    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sortOrder="10">
+    <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sort-order="10">
       <vc-imagery-provider-urltemplate ref="provider" :projectionTransforms="projectionTransforms" :url="url"></vc-imagery-provider-urltemplate>
     </vc-layer-imagery>
     <!-- 用于测试 projectionTransforms  -->
     <vc-layer-imagery :sortOrder="5">
-      <vc-imagery-provider-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu map-style="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
