@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-03-30 22:33:55
+ * @LastEditTime: 2022-03-31 15:12:05
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\index.ts
@@ -18,6 +18,7 @@ import ImageryProviderMapbox from './mapbox-style'
 import ImageryProviderOsm from './osm'
 import ImageryProviderSingletile from './single-tile'
 import ImageryProviderSupermap from './supermap'
+import ImageryProviderTencent from './tencent'
 import ImageryProviderTianditu from './tianditu/imagery'
 import ImageryProviderTileCoordinates from './tile-coordinates'
 import ImageryProviderTms from './tile-map-service'
@@ -44,6 +45,7 @@ const components = [
   ImageryProviderOsm,
   ImageryProviderSingletile,
   ImageryProviderSupermap,
+  ImageryProviderTencent,
   ImageryProviderTianditu,
   ImageryProviderTileCoordinates,
   ImageryProviderTms,
@@ -85,6 +87,7 @@ export const VcImageryProviderMapbox = ImageryProviderMapbox as SFCWithInstall<t
 export const VcImageryProviderOsm = ImageryProviderOsm as SFCWithInstall<typeof ImageryProviderOsm>
 export const VcImageryProviderSingletile = ImageryProviderSingletile as SFCWithInstall<typeof ImageryProviderSingletile>
 export const VcImageryProviderSupermap = ImageryProviderSupermap as SFCWithInstall<typeof ImageryProviderSupermap>
+export const VcImageryProviderTencent = ImageryProviderTencent as SFCWithInstall<typeof ImageryProviderTencent>
 export const VcImageryProviderTianditu = ImageryProviderTianditu as SFCWithInstall<typeof ImageryProviderTianditu>
 export const VcImageryProviderTileCoordinates = ImageryProviderTileCoordinates as SFCWithInstall<typeof ImageryProviderTileCoordinates>
 export const VcImageryProviderTms = ImageryProviderTms as SFCWithInstall<typeof ImageryProviderTms>
@@ -111,6 +114,7 @@ export * from './mapbox-style'
 export * from './osm'
 export * from './single-tile'
 export * from './supermap'
+export * from './tencent'
 export * from './tianditu/imagery'
 export * from './tianditu/terrain'
 export * from './tile-coordinates'
