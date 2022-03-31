@@ -21,6 +21,7 @@ import VcDrawings from '@vue-cesium/components/drawings'
 // ImagerLayer
 import VcLayerImagery from '@vue-cesium/components/imagery-layer'
 import {
+  VcImageryProviderAmap,
   VcImageryProviderArcgis,
   VcImageryProviderBaidu,
   VcImageryProviderBing,
@@ -192,6 +193,7 @@ export default [
   VcDrawings,
 
   VcLayerImagery,
+  VcImageryProviderAmap,
   VcImageryProviderArcgis,
   VcImageryProviderBaidu,
   VcImageryProviderBing,

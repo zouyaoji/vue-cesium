@@ -138,6 +138,10 @@
           "groupName": "影像提供者",
           "list": [
             {
+              "path": "/providers/vc-imagery-provider-amap",
+              "title": "AMapImageryProvider 高德地图"
+            },
+            {
               "path": "/providers/vc-imagery-provider-arcgis",
               "title": "ArcGisMapServerImageryProvider"
             },
@@ -625,6 +629,10 @@
         {
           "groupName": "ImageryProvider",
           "list": [
+            {
+              "path": "/providers/vc-imagery-provider-amap",
+              "title": "AMapImageryProvider"
+            },
             {
               "path": "/providers/vc-imagery-provider-arcgis",
               "title": "ArcGisMapServerImageryProvider"

@@ -1,12 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-01-18 14:55:32
+ * @LastEditTime: 2022-03-30 22:33:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\index.ts
  */
 import { App } from 'vue'
+import ImageryProviderAmap from './amap'
 import ImageryProviderArcgis from './arcgis/imagery'
 import ImageryProviderBaidu from './baidu'
 import ImageryProviderBing from './bingmaps'
@@ -32,6 +33,7 @@ import TerrainProviderTianditu from './tianditu/terrain'
 import { SFCWithInstall } from '@vue-cesium/utils/types'
 
 const components = [
+  ImageryProviderAmap,
   ImageryProviderArcgis,
   ImageryProviderBaidu,
   ImageryProviderBing,
@@ -72,6 +74,7 @@ components.forEach(cmp => {
   }
 })
 
+export const VcImageryProviderAmap = ImageryProviderAmap as SFCWithInstall<typeof ImageryProviderAmap>
 export const VcImageryProviderArcgis = ImageryProviderArcgis as SFCWithInstall<typeof ImageryProviderArcgis>
 export const VcImageryProviderBaidu = ImageryProviderBaidu as SFCWithInstall<typeof ImageryProviderBaidu>
 export const VcImageryProviderBing = ImageryProviderBing as SFCWithInstall<typeof ImageryProviderBing>
@@ -95,6 +98,7 @@ export const VcTerrainProviderArcgis = TerrainProviderArcgis as SFCWithInstall<t
 export const VcTerrainProviderVrTheworld = TerrainProviderVrTheworld as SFCWithInstall<typeof TerrainProviderVrTheworld>
 export const VcTerrainProviderTianditu = TerrainProviderTianditu as SFCWithInstall<typeof TerrainProviderTianditu>
 
+export * from './amap'
 export * from './arcgis/imagery'
 export * from './arcgis/terrain'
 export * from './baidu'
