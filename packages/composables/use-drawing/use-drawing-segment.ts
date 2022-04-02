@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-03-15 14:30:34
+ * @LastEditTime: 2022-04-02 15:39:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -33,7 +33,7 @@ import {
   getFirstIntersection
 } from '@vue-cesium/utils/cesium-helpers'
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance, VcDrawingProvider, VcPosition } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcDrawingProvider, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
 import type { VNode } from 'vue'
 import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
@@ -1024,7 +1024,11 @@ export default function (props, ctx, cmpName: string, fs?: string) {
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
               show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              ...primitiveOpts
+              ...primitiveOpts,
+              onReady: (readyObject: VcReadyObject) => {
+                primitiveOpts?.onReady?.(readyObject)
+                ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
+              }
             },
             () =>
               h(
@@ -1177,9 +1181,13 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         children.push(
           h(VcPolygon, {
             positions: positions,
-            onReady: onVcPrimitiveReady,
             show: polyline.show && polygonOpts?.show,
-            ...polygonOpts
+            ...polygonOpts,
+            onReady: (readyObject: VcReadyObject) => {
+              onVcPrimitiveReady(readyObject)
+              polygonOpts?.onReady?.(readyObject)
+              ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
+            }
           })
         )
       }
@@ -1190,7 +1198,11 @@ export default function (props, ctx, cmpName: string, fs?: string) {
             VcPrimitive,
             {
               show: (polyline.show && primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              ...primitiveOpts
+              ...primitiveOpts,
+              onReady: (readyObject: VcReadyObject) => {
+                primitiveOpts?.onReady?.(readyObject)
+                ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
+              }
             },
             () =>
               h(

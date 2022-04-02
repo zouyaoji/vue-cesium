@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-03-15 15:44:48
+ * @LastEditTime: 2022-04-02 15:54:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -16,7 +16,7 @@ import { useLocale } from '../use-locale'
 import { DrawStatus, MeasureUnits } from '@vue-cesium/shared'
 import { calculateAreaByPostions, getFirstIntersection, getGeodesicDistance, makeCartesian3Array } from '@vue-cesium/utils/cesium-helpers'
 import type { VcPolylineDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance, VcDrawingProvider } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcDrawingProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import type { VNode } from 'vue'
 import { computed, getCurrentInstance, nextTick, ref, h } from 'vue'
 import useCommon from '../use-common'
@@ -341,8 +341,8 @@ export default function (props, ctx, cmpName: string) {
     drawTip.value = drawTipOpts.value.drawingTipStart
   }
 
-  const stop = () => {
-    if (drawStatus.value === DrawStatus.Drawing) {
+  const stop = (removeLatest = true) => {
+    if (removeLatest && drawStatus.value === DrawStatus.Drawing) {
       renderDatas.value.pop()
     }
     drawStatus.value = DrawStatus.BeforeDraw
@@ -756,7 +756,11 @@ export default function (props, ctx, cmpName: string) {
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
               show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
-              ...primitiveOpts
+              ...primitiveOpts,
+              onReady: (readyObject: VcReadyObject) => {
+                primitiveOpts?.onReady?.(readyObject)
+                ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
+              }
             },
             () =>
               h(
@@ -851,10 +855,14 @@ export default function (props, ctx, cmpName: string) {
         children.push(
           h(VcPolygon, {
             positions: positions,
-            onReady: onVcPrimitiveReady,
             clampToGround: props.clampToGround,
             show: polyline.show && props.polygonOpts?.show,
-            ...polygonOpts
+            ...polygonOpts,
+            onReady: (readyObject: VcReadyObject) => {
+              onVcPrimitiveReady(readyObject)
+              polygonOpts?.onReady?.(readyObject)
+              ;(readyObject.cesiumObject as any)._vcPolylineIndex = index // for editor
+            }
           })
         )
       }
