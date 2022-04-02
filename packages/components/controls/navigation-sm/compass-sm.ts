@@ -249,7 +249,6 @@ export default defineComponent({
   }
 })
 
-// export type VcCompassSmProps = ExtractPropTypes<typeof compassSmProps>
 export type VcCompassSmEmits = typeof emits
 export type VcCompassSmProps = {
   /**

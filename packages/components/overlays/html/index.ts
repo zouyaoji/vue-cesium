@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, CSSProperties, TeleportProps, PropType, WatchStopHandle } from 'vue'
+import type { CSSProperties, TeleportProps, PropType, WatchStopHandle, VNode } from 'vue'
 import { defineComponent, getCurrentInstance, ref, h, reactive, createCommentVNode, watch, onUnmounted } from 'vue'
 import type { VcCartesian2, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { $ } from '@vue-cesium/utils/private/vm'
@@ -208,3 +208,9 @@ export interface VcOverlayHtmlProps {
 }
 
 export type VcOverlayHtmlRef = VcComponentPublicInstance<VcOverlayHtmlProps>
+export type VcOverlayHtmlSlots = {
+  /**
+   * Slot for html element tag.
+   */
+  default: () => VNode[]
+}

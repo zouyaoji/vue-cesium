@@ -250,3 +250,5 @@ export interface VcNavigationSmSlots {
 }
 
 export type VcNavigationSmRef = VcComponentPublicInstance<VcNavigationSmProps>
+
+export { VcZoomControlSmProps, VcCompassSmProps }

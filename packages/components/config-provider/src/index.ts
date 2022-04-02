@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-02-17 11:49:32
+ * @LastEditTime: 2022-03-30 15:36:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\config-provider\src\index.ts
  */
-import { defineComponent, PropType, renderSlot } from 'vue'
+import { defineComponent, PropType, renderSlot, VNode } from 'vue'
 import { provideGlobalConfig } from '@vue-cesium/composables/use-global-config'
 import { Language } from '@vue-cesium/locale'
 import Chinese from '@vue-cesium/locale/lang/zh-hans'
@@ -50,4 +50,11 @@ export type VcConfigProviderProps = {
    * Default value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2OGE2MjZlOC1mMzhiLTRkZjQtOWEwZi1jZTE0MWY0YzhlMTAiLCJpZCI6MjU5LCJpYXQiOjE2NDM3MjU1NzZ9.ptZ5tVXvMmuWRC0WhjtYTg-17nQh14fgxBsx0HJiVXQ
    */
   accessToken?: string
+}
+
+export interface VcConfigProviderSlots {
+  /**
+   * This is where vc-viewer may go into
+   */
+  default: () => VNode[]
 }

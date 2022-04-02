@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-11 10:02:30
+ * @LastEditTime: 2022-04-02 09:44:20
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometry-instance\src\index.ts
  */
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcGeometry, VcReadyObject } from '@vue-cesium/utils/types'
-import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide, Ref } from 'vue'
+import { defineComponent, getCurrentInstance, createCommentVNode, PropType, ref, h, provide, VNode } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { modelMatrix, id } from '@vue-cesium/utils/cesium-props'
@@ -16,6 +16,7 @@ import { mergeDescriptors } from '@vue-cesium/utils/merge-descriptors'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { vcKey } from '@vue-cesium/utils/config'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { VcPrimitiveRef } from '../../primitives'
 export const geometryInstanceProps = {
   geometry: Object as PropType<Cesium.Geometry | Cesium.GeometryFactory>,
   ...modelMatrix,
@@ -51,7 +52,7 @@ export default defineComponent({
       return new Cesium.GeometryInstance(options)
     }
     instance.mount = async () => {
-      const parentVM = getVcParentInstance(instance).proxy as VcGeometryInstanceRef
+      const parentVM = getVcParentInstance(instance).proxy as VcPrimitiveRef
       if (parentVM.__childCount !== undefined) {
         vcIndex.value = parentVM.__childCount.value || 0
         parentVM.__childCount.value += 1
@@ -63,7 +64,7 @@ export default defineComponent({
     }
     instance.unmount = async () => {
       const geometryInstance = instance.cesiumObject as Cesium.GeometryInstance
-      const parentVM = getVcParentInstance(instance).proxy as VcGeometryInstanceRef
+      const parentVM = getVcParentInstance(instance).proxy as VcPrimitiveRef
       parentVM.__removeGeometryInstances?.(geometryInstance)
       return true
     }
@@ -150,23 +151,15 @@ export type VcGeometryInstanceProps = {
 
 export interface VcGeometryInstanceRef extends VcComponentPublicInstance<VcGeometryInstanceProps> {
   /**
-   * private but needed by VcGeometryInstance
-   * @param geometryInstance
-   * @param index
-   */
-  __updateGeometryInstances?(geometryInstance: Cesium.GeometryInstance, index: number): boolean
-  /**
-   * private but needed by VcGeometryInstance
-   * @param geometryInstance
-   */
-  __removeGeometryInstances?(geometryInstance: Cesium.GeometryInstance): boolean
-  /**
    * private but needed by VcGeometryXXX.
    * @param geometry
    */
   __updateGeometry?(geometry: Cesium.Geometry): boolean
+}
+
+export interface VcGeometryInstanceSlots {
   /**
-   * private but needed by VcGeometryInstance
+   * Slot for vc-geometry-xxx.
    */
-  __childCount?: Ref<number>
+  default: () => VNode[]
 }
