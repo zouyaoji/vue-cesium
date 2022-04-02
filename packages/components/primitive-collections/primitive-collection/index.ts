@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-16 14:59:16
+ * @LastEditTime: 2022-03-28 10:04:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\primitive-collection\index.ts
  */
-import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
@@ -145,4 +145,33 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionPrimitiveProps = ExtractPropTypes<typeof primitiveCollectionProps>
+export type VcCollectionPrimitiveProps = {
+  /**
+   * Determines if the primitives in the collection will be shown.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Determines if primitives in the collection are destroyed when they are removed.
+   * Default value: true
+   */
+  destroyPrimitives?: boolean
+  /**
+   * Specifies whether to respond to mouse pick events.
+   * Default Value: true
+   */
+  enableMouseEvent?: boolean
+  /**
+   * Specify an array of polygons collections. The structure of the array object is the same as the attribute of the [`vc-polygon`](https://zouyaoji.top/vue-cesium/#/en-US/component/primitives/vc-collection-primitive#vcpolygon-props) component.
+   */
+  polygons?: Array<VcPolygonProps>
+}
+
+export type VcCollectionPrimitiveRef = VcComponentPublicInstance<VcCollectionPrimitiveProps>
+
+export interface VcCollectionPrimitiveSlots {
+  /**
+   * This is where Primitive content goes.
+   */
+  default: () => VNode[]
+}

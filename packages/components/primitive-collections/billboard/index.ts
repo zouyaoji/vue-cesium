@@ -218,7 +218,7 @@ export type VcBillboardProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this billboard.
+   *  Triggers when the mouse moves out of this billboard.
    */
   onMouseout?: (evt: VcPickEvent) => void
 }

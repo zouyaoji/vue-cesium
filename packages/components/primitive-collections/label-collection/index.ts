@@ -1,6 +1,6 @@
-import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import type { ExtractPropTypes, PropType, VNode, WatchStopHandle } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { cloneDeep, differenceBy } from 'lodash-unified'
 import { modelMatrix, debugShowBoundingVolume, scene, blendOption, show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
@@ -132,4 +132,89 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionLabelProps = ExtractPropTypes<typeof labelCollectionProps>
+export type VcCollectionLabelProps = {
+  /**
+   * Must be passed in for labels that use the height reference property or will be depth tested against the globe.
+   */
+  scene?: Cesium.Scene
+  /**
+   * The label blending option. The default is used for rendering both opaque and translucent labels. However, if either all of the labels are completely opaque or all are completely translucent, setting the technique to BlendOption.OPAQUE or BlendOption.TRANSLUCENT can improve performance by up to 2x.
+   */
+  blendOption?: number | Cesium.BlendOption
+  /**
+   * Determines if the labels in the collection will be shown.
+   * Default Value: true
+   */
+  show?: boolean
+  /**
+   * The 4x4 transformation matrix that transforms each label from model to world coordinates.
+   */
+  modelMatrix?: Cesium.Matrix4
+  /**
+   * For debugging only. Determines if this primitive's commands' bounding spheres are shown.
+   * Default Value: false
+   */
+  debugShowBoundingVolume?: boolean
+  /**
+   * Specifies whether to respond to mouse pick events.
+   * Default Value: true
+   */
+  enableMouseEvent?: boolean
+  /**
+   * Specify an array of label collections. The structure of the array object is the same as the attribute of the [vc-label](https://zouyaoji.top/vue-cesium/#/en-US/component/primitives/vc-collection-label#vclabel-props) component.
+   */
+  labels?: Array<VcLabelProps>
+  /**
+   * Triggers before the VcCollectionLabel is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCollectionLabel is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcCollectionLabel is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the mouse is pressed on this collection.
+   */
+  onMousedown?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse bounces up on this collection.
+   */
+  onMouseup?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks on this collection.
+   */
+  onClick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks outside this collection.
+   */
+  onClickout?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the left mouse button double-clicks this collection.
+   */
+  onDblclick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves on this collection.
+   */
+  onMousemove?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves over to this collection.
+   */
+  onMouseover?: (evt: VcPickEvent) => void
+  /**
+   *  Triggers when the mouse moves out of this collection.
+   */
+  onMouseout?: (evt: VcPickEvent) => void
+}
+
+export type VcCollectionLabelRef = VcComponentPublicInstance<VcCollectionLabelProps>
+
+export interface VcCollectionLabelSlots {
+  /**
+   * Slot for vc-label.
+   */
+  default: () => VNode[]
+}

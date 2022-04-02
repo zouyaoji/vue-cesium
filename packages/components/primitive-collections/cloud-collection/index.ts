@@ -1,26 +1,25 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-28 10:49:53
- * @LastEditTime: 2022-01-29 10:15:23
+ * @LastEditTime: 2022-03-20 00:06:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitive-collections\cloud-collection\index.ts
  */
-import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
+import type { PropType, WatchStopHandle } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h, onUnmounted, watch } from 'vue'
-import type { VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { usePrimitiveCollections } from '@vue-cesium/composables'
 import { cloneDeep, differenceBy } from 'lodash-unified'
-import { show, enableMouseEvent } from '@vue-cesium/utils/cesium-props'
+import { show } from '@vue-cesium/utils/cesium-props'
 import { addCustomProperty, kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
-import { primitiveCollectionEmits } from '@vue-cesium/utils/emits'
+import { commonEmits } from '@vue-cesium/utils/emits'
 import type { VcCumulusCloudProps } from '../cloud'
 import VcCumulusCloud from '../cloud'
 
 export const cloudCollectionProps = {
   ...show,
-  // ...enableMouseEvent,
   noiseDetail: {
     type: Number,
     default: 16.0
@@ -44,7 +43,7 @@ export const cloudCollectionProps = {
 export default defineComponent({
   name: 'VcCollectionCloud',
   props: cloudCollectionProps,
-  emits: primitiveCollectionEmits,
+  emits: commonEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -153,4 +152,48 @@ export default defineComponent({
   }
 })
 
-export type VcCollectionCloudProps = ExtractPropTypes<typeof cloudCollectionProps>
+export type VcCollectionCloudProps = {
+  /**
+   * Whether to display the clouds.
+   * Default value: true
+   */
+  show?: boolean
+  /**
+   * Desired amount of detail in the noise texture.
+   * Default value: 16.0
+   */
+  noiseDetail?: number
+  /**
+   * Desired translation of data in noise texture.
+   * Default value: {x: 0, y: 0, z: 0}
+   */
+  noiseOffset?: VcPosition
+  /**
+   * For debugging only. Determines if the billboards are rendered with an opaque color.
+   * Default value: false
+   */
+  debugBillboards?: boolean
+  /**
+   * For debugging only. Determines if the clouds will be rendered as opaque ellipsoids.
+   * Default value: false
+   */
+  debugEllipsoids?: boolean
+  /**
+   * Specifies an array of cumulus collections. The array object structure is the same as the [vc-cumulus-cloud](https://zouyaoji.top/vue-cesium/#/en-US/component/primitives/vc-collection-cloud#vccumuluscloud-props) component properties.
+   */
+  clouds?: Array<VcCumulusCloudProps>
+  /**
+   * Triggers before the VcCollectionCloud is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcCollectionCloud is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcCollectionCloud is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcCollectionCloudRef = VcComponentPublicInstance<VcCollectionCloudProps>

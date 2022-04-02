@@ -225,35 +225,35 @@ export type VcPolygonProps = {
   /**
    * Triggers when the mouse is pressed on this polygon.
    */
-  mousedown?: (evt: VcPickEvent) => void
+  onMousedown?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse bounces up on this polygon.
    */
-  mouseup?: (evt: VcPickEvent) => void
+  onMouseup?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks on this polygon.
    */
-  click?: (evt: VcPickEvent) => void
+  onClick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks outside this polygon.
    */
-  clickout?: (evt: VcPickEvent) => void
+  onClickout?: (evt: VcPickEvent) => void
   /**
    * Triggers when the left mouse button double-clicks this polygon.
    */
-  dblclick?: (evt: VcPickEvent) => void
+  onDblclick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves on this polygon.
    */
-  mousemove?: (evt: VcPickEvent) => void
+  onMousemove?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves over to this polygon.
    */
-  mouseover?: (evt: VcPickEvent) => void
+  onMouseover?: (evt: VcPickEvent) => void
   /**
    * 	Triggers when the mouse moves out of this polygon.
    */
-  mouseout?: (evt: VcPickEvent) => void
+  onMouseout?: (evt: VcPickEvent) => void
 }
 
 export type VcPolygonRef = VcComponentPublicInstance<VcPolygonProps>
