@@ -14,7 +14,7 @@ Basic usage of VcCollectionPoint component.
     <vc-collection-point @click="onClicked" ref="collectionRef" :points="points">
       <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
-          <vc-point :position="position" :color="[255, 229, 0]" :pixelSize="32"></vc-point>
+          <vc-point :position="position" :color="[255, 229, 0]" :pixel-size="32"></vc-point>
         </template>
       </template>
     </vc-collection-point>

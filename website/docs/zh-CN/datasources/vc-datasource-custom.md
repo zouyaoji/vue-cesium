@@ -58,7 +58,7 @@
       @ready="onDatasourceReady"
     >
     </vc-datasource-custom>
-    <vc-selection-indicator @pickEvt="pickEvt"></vc-selection-indicator>
+    <vc-selection-indicator ref="indicatorRef" @pickEvt="pickEvt"></vc-selection-indicator>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -179,7 +179,7 @@
           cluster.billboard.show = !0
           cluster.label.show = !1
           cluster.billboard.id = cluster.label.id
-          cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.BOTTOM
+          cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.CENTER
           clusteredEntities.length >= 300
             ? (cluster.billboard.image = 'https://zouyaoji.top/vue-cesium/SampleData/images/cluser/300+.png')
             : clusteredEntities.length >= 150
@@ -239,6 +239,8 @@
         window.picked = e
         console.log(e)
       }
+      const indicatorRef = ref(null)
+      window.indicatorRef = indicatorRef
       return {
         unload,
         reload,
@@ -253,7 +255,8 @@
         entities,
         clusterSch,
         morphComplete,
-        pickEvt
+        pickEvt,
+        indicatorRef
       }
     }
   }

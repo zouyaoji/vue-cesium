@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-06 11:30:01
- * @LastEditTime: 2022-02-17 17:58:55
+ * @LastEditTime: 2022-03-09 09:46:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analyses.md
@@ -27,7 +27,7 @@ Basic usage of drawing components.
       ref="analyses"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[20, 80]"
+      :offset="[10, 30]"
       :editable="editable"
       @draw-evt="drawEvt"
       @active-evt="activeEvt"
@@ -199,6 +199,24 @@ The parameter configuration of each drawing result is too long to list here. If 
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the editor button is clicked.                              |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
 | fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+
+### Methods
+
+| Name                             | Parameters                                                 | Description                                           |
+| -------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| load                             | () => Promise\<false \| VcReadyObject\>                    | Load components manually.                             |
+| reload                           | () => Promise\<false \| VcReadyObject\>                    | Reload components manually.                           |
+| unload                           | () => Promise\<boolean\>                                   | Destroy the loaded component manually.                |
+| getCreatingPromise               | () => Promise<boolean \| VcReadyObject>                    | Get the creatingPromise.                              |
+| getCesiumObject                  | () => VcCesiumObject                                       | Get the Cesium object loaded by this component.       |
+| clearAll                         | () => void                                                 | Clear all drawing results.                            |
+| activate                         | () => void                                                 | End listening for the ScreenSpaceEventHandler events. |
+| deactivate                       | () => void                                                 | Start listening for ScreenSpaceEventHandler events.   |
+| toggleAction                     | (drawingOption: VcDrawingActionInstance \| string) => void | Toggle drawing instance.                              |
+| getFabRef                        | () => VcFabRef                                             | Get the float action button template reference.       |
+| getDrawingActionInstance         | (actionName: string) => VcDrawingActionInstance            | Get the drawingActionInstance by action name.         |
+| getDrawingActionInstances        | () => Array\<VcDrawingActionInstance\>                     | Get the drawing action instances.                     |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance                              | Get the selected drawing action instance.             |
 
 ### Slots
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 12:16:42
- * @LastEditTime: 2022-02-17 17:42:19
+ * @LastEditTime: 2022-03-09 09:49:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\analyses\vc-analysis-flood.md
@@ -107,7 +107,7 @@ Basic usage of VcAnalysisFlood component.
 
 ### Props
 
-//---
+<!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---------------- | --------------------- | ------------------------ | ---------------------------------------------- |
 | polygonHierarchy |VcPolygonHierarchy | | `required` Specify ths VcPolygonHierarchy of polygon. |
@@ -128,8 +128,13 @@ Basic usage of VcAnalysisFlood component.
 
 ### Methods
 
-| Name  | Parameters | Description |
-| ----- | ---------- | ----------- |
-| start |            | Start       |
-| pause |            | Pause       |
-| stop  |            | Stop        |
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+| start              | () => void                              | Start flood analysis.                           |
+| pause              | () => void                              | Pause/resume flood analysis.                    |
+| stop               | () => void                              | Stop flood analysis.                            |

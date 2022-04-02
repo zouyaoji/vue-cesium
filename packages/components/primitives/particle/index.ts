@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-16 13:27:19
+ * @LastEditTime: 2022-02-22 00:17:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\particle\index.ts
@@ -26,6 +26,10 @@ import {
 import { kebabCase } from '@vue-cesium/utils/util'
 import { primitiveEmits } from '@vue-cesium/utils/emits'
 
+const emits = {
+  ...primitiveEmits,
+  complete: (evt: Cesium.ParticleSystem) => true
+}
 export const particlePrimitiveProps = {
   ...show,
   updateCallback: Function,
@@ -82,7 +86,7 @@ export const particlePrimitiveProps = {
 export default defineComponent({
   name: 'VcPrimitiveParticle',
   props: particlePrimitiveProps,
-  emits: primitiveEmits,
+  emits: emits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -94,3 +98,4 @@ export default defineComponent({
 })
 
 export type VcPrimitiveParticleProps = ExtractPropTypes<typeof particlePrimitiveProps>
+export type VcPrimitiveParticleEmits = typeof emits

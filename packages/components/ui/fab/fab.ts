@@ -1,4 +1,4 @@
-import { h, defineComponent, ref, computed, provide } from 'vue'
+import { h, defineComponent, ref, computed, provide, ComponentPublicInstance } from 'vue'
 import type { VNode, ExtractPropTypes } from 'vue'
 import useModelToggle, { useModelToggleEmits } from '@vue-cesium/composables/private/use-model-toggle'
 import { hSlot, hMergeSlot } from '@vue-cesium/utils/private/render'
@@ -7,6 +7,7 @@ import useFab from './use-fab'
 import VcBtn from '../btn'
 import VcIcon from '../icon'
 import defaultProps from './defaultProps'
+import { LooseDictionary } from '@vue-cesium/utils/types'
 
 export const fabProps = defaultProps
 export default defineComponent({
@@ -29,34 +30,40 @@ export default defineComponent({
       hideOnRouteChange
     })
 
+    const slotScope = computed(() => ({ opened: showing.value }))
+
     const classes = computed(
       () =>
         'vc-fab z-fab row inline justify-center' +
         ` vc-fab--align-${props.verticalActionsAlign} ${formClass.value}` +
-        (showing.value === true ? ' vc-fab--opened' : '')
+        (showing.value === true ? ' vc-fab--opened' : ' vc-fab--closed')
     )
 
-    const actionClass = computed(() => 'vc-fab__actions flex no-wrap inline' + ` vc-fab__actions--${props.direction}`)
+    const actionClass = computed(
+      () =>
+        'vc-fab__actions flex no-wrap inline' +
+        ` vc-fab__actions--${props.direction}` +
+        ` vc-fab__actions--${showing.value === true ? 'opened' : 'closed'}`
+    )
+
+    const iconHolderClass = computed(() => 'vc-fab__icon-holder ' + ` vc-fab__icon-holder--${showing.value === true ? 'opened' : 'closed'}`)
+
+    function getIcon(kebab, camel) {
+      const slotFn = slots[kebab]
+      const classes = `q-fab__${kebab} absolute-full`
+
+      return slotFn === void 0 ? h(VcIcon, { class: classes, name: props[kebab] as any }) : h('div', { class: classes }, slotFn(slotScope.value))
+    }
 
     function getTriggerContent() {
       const child: Array<VNode> = []
 
       props.hideIcon !== true &&
-        child.push(
-          h('div', { class: 'vc-fab__icon-holder' }, [
-            h(VcIcon, {
-              class: 'vc-fab__icon absolute-full',
-              name: props.icon
-            }),
+        child.push(h('div', { class: iconHolderClass.value }, [getIcon('icon', 'icon'), getIcon('active-icon', 'activeIcon')]))
 
-            h(VcIcon, {
-              class: 'vc-fab__active-icon absolute-full',
-              name: props.activeIcon
-            })
-          ])
-        )
-
-      props.label !== '' && child[labelProps.value.action](h('div', labelProps.value.data, [props.label]))
+      if (props.label !== '' || slots.label !== void 0) {
+        child[labelProps.value.action](h('div', labelProps.value.data, slots.label !== void 0 ? slots.label(slotScope.value) : [props.label]))
+      }
 
       return hMergeSlot(slots.tooltip, child)
     }
@@ -220,23 +227,82 @@ export interface VcFabProps {
    */
   'onUpdate:modelValue'?: (value: boolean) => void
   /**
-   * Emitted after component has triggered show().
+   * Emitted after component has triggered show()
    * @param evt JS event object
    */
-  onShow?: (evt: any) => void
+  onShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers show() but before it finishes doing it.
+   * Emitted when component triggers show() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeShow?: (evt: any) => void
+  onBeforeShow?: (evt: LooseDictionary) => void
   /**
-   * Emitted after component has triggered hide().
+   * Emitted after component has triggered hide()
    * @param evt JS event object
    */
-  onHide?: (evt: any) => void
+  onHide?: (evt: LooseDictionary) => void
   /**
-   * Emitted when component triggers hide() but before it finishes doing it.
+   * Emitted when component triggers hide() but before it finishes doing it
    * @param evt JS event object
    */
-  onBeforeHide?: (evt: any) => void
+  onBeforeHide?: (evt: LooseDictionary) => void
+}
+
+export interface VcFabSlots {
+  /**
+   * This is where VcFabActions may go into
+   */
+  default: () => VNode[]
+  /**
+   * Slot specifically designed for a VcTooltip
+   */
+  tooltip: () => VNode[]
+  /**
+   * Slot for icon shown when FAB is closed; Suggestion: VcIcon
+   * @param scope
+   */
+  icon: (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+  /**
+   * Slot for icon shown when FAB is opened; Suggestion: VcIcon
+   * @param scope
+   */
+  'active-icon': (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+  /**
+   * Slot for label
+   * @param scope
+   */
+  label: (scope: {
+    /**
+     * FAB is opened
+     */
+    opened: boolean
+  }) => VNode[]
+}
+
+export interface VcFabRef extends ComponentPublicInstance<VcFabProps> {
+  /**
+   * Expands fab actions list
+   * @param evt JS event object
+   */
+  show: (evt?: LooseDictionary) => void
+  /**
+   * Collapses fab actions list
+   * @param evt JS event object
+   */
+  hide: (evt?: LooseDictionary) => void
+  /**
+   * Triggers component to toggle between show/hide
+   * @param evt JS event object
+   */
+  toggle: (evt?: LooseDictionary) => void
 }

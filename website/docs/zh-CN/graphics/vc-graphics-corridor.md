@@ -28,7 +28,7 @@
         :positions="options.positions2"
         :height="100000.0"
         :width="200000.0"
-        :cornerType="0"
+        :corner-type="0"
         material="GREEN"
         :outline="true"
       ></vc-graphics-corridor>
@@ -37,12 +37,12 @@
       <vc-graphics-corridor
         :positions="options.positions3"
         :material="options.material3"
-        outlineColor="WHITE"
+        outline-color="WHITE"
         :outline="true"
         :height="200000.0"
-        :extrudedHeight="100000.0"
+        :extruded-height="100000.0"
         :width="200000.0"
-        :cornerType="options.cornerType3"
+        :corner-type="options.cornerType3"
       ></vc-graphics-corridor>
     </vc-entity>
   </vc-viewer>
@@ -102,7 +102,7 @@
       }
       // life cycle
       onMounted(() => {
-        Promise.all([entity1.value.createPromise, entity2.value.createPromise, entity3.value.createPromise]).then(instances => {
+        Promise.all([entity1.value.creatingPromise, entity2.value.creatingPromise, entity3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })
@@ -127,24 +127,24 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ------ | ----| ----- | ---- | ------ |
-| show | Boolean | `true` | `optional` 指定 corridor 是否显示。 |
-| positions | Array | | `optional` 指定描述 corridor 位置的经纬度(高度)数组。 |
-| width | Number | | `optional` 指定 corridor 边之间的距离。 |
-| height | Number | | `optional` 指定 corridor 高度。 |
-| heightReference | Number | | `optional` 指定 corridor 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` 指定 corridor 拉伸高度。 |
-| extrudedHeightReference | Number | | `optional` 指定 corridor 拉伸高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
-| cornerType | Number | `0` | `optional` 指定 corridor 转角样式。 |
-| granularity | Number | | `optional` 指定每个经纬度之间的采样粒度。 |
-| fill | Boolean | `true` | `optional` 指定 corridor 是否填充材质。 |
-| material | Object\|String\|Array | `'white'` | `optional` 指定 corridor 的材质。 |
-| outline | Boolean | `false` | `optional` 指定 corridor 是否绘制轮廓线。 |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` 指定 corridor 轮廓线颜色。 |
-| outlineWidth | Number | `1.0` | `optional` 指定 corridor 轮廓线宽度。 |
-| shadows | Number | `0` | `optional` 指定 corridor 是否接收或者发射每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
-| distanceDisplayCondition | Object\|Array\|Function | | `optional` 指定 corridor 随相机距离改变是否显示参数。 |
-| classificationType | Number | `2` | `optional` 指定 corridor 的贴对象模式。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
-| zIndex | Number | | `optional` 指定 corridor 顺序，没有高度和拉伸高度才有效。 |
+| show | boolean | `true` | `optional` 指定 corridor 是否显示。 |
+| positions | VcCartesian3Array | | `optional` 指定描述 corridor 位置的经纬度(高度)数组。 |
+| width | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` 指定 corridor 边之间的距离。 |
+| height | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` 指定 corridor 高度。 |
+| heightReference | number \| Cesium.HeightReference \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\>  | | `optional` 指定 corridor 高度模式。**NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number | | `optional` 指定 corridor 拉伸高度。 |
+| extrudedHeightReference | number | | `optional` 指定 corridor 拉伸高度模式。 **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2**|0/1/2|
+| cornerType | number \| Cesium.CornerType \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` 指定 corridor 转角样式。 |
+| granularity | number | | `optional` 指定每个经纬度之间的采样粒度。 |
+| fill | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `true` | `optional` 指定 corridor 是否填充材质。 |
+| material | VcMaterial | `'white'` | `optional` 指定 corridor 的材质。 |
+| outline | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `false` | `optional` 指定 corridor 是否绘制轮廓线。 |
+| outlineColor | VcColor | `'black'` | `optional` 指定 corridor 轮廓线颜色。 |
+| outlineWidth |  number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` 指定 corridor 轮廓线宽度。 |
+| shadows | number \| Cesium.ShadowMode \| VcCallbackPropertyFunction\<number\> | `0` | `optional` 指定 corridor 是否接收或者发射每个点光源的阴影。 **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` 指定 corridor 随相机距离改变是否显示参数。 |
+| classificationType |  number \| Cesium.ClassificationType \| VcCallbackPropertyFunction\<Cesium.ClassificationType\> | `2` | `optional` 指定 corridor 的贴对象模式。 **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2**|0/1/2|
+| zIndex | number | | `optional` 指定 corridor 顺序，没有高度和拉伸高度才有效。 |
 
 ### 事件
 

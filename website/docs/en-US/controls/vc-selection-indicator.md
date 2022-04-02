@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-06-13 16:48:20
- * @LastEditTime: 2022-02-17 16:15:48
+ * @LastEditTime: 2022-03-08 23:29:23
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\controls\vc-selection-indicator.md
@@ -95,3 +95,26 @@ Basic usage of the selector component.
 | ready      | (readyObj: VcReadyObject)               | Triggers when the VcSelectionIndicator is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcSelectionIndicator is destroyed.           |
 | pickEvt    | selectedFeature                         | Triggers when picked up.                                       |
+
+### Methods
+
+<!-- prettier-ignore -->
+| Name | Parameters | Description |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load | () => Promise\<false \| VcReadyObject\> | Load components manually. |
+| reload | () => Promise\<false \| VcReadyObject\> | Reload components manually. |
+| unload | () => Promise\<boolean\> | Destroy the loaded component manually. |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise. |
+| getCesiumObject | () => VcCesiumObject | Get the Cesium object loaded by this component. |
+| computeScreenSpacePosition | () => Cesium.Cartesian2 | A function that converts the world position of an object to a screen space position. |
+| update | () => void | Updates the view of the selection indicator to match the position and content properties of the view model |
+| animateAppear | () => void | Animate the indicator to draw attention to the selection. |
+| animateDepart | () => void | Animate the indicator to release the selection. |
+| getPickedFeatures | () => PickedFeatures| Get the picked features. |
+
+### Members
+
+| Name                                     | Description                                                                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------- |
+| position: Cesium.Cartesian3              | Gets or sets the world position of the object for which to display the selection indicator. |
+| selectedFeature:Feature \| Cesium.Entity | Get or set the selected feature.                                                            |

@@ -1,11 +1,19 @@
 import type { ExtractPropTypes, CSSProperties, VNode } from 'vue'
 import { computed, defineComponent, getCurrentInstance, nextTick, ref, createCommentVNode, h, reactive, watch } from 'vue'
-import type { VcCamera, VcComponentInternalInstance, VcZoomEvt, VcBtnTooltipProps, VcReadyObject } from '@vue-cesium/utils/types'
+import type {
+  VcCamera,
+  VcComponentInternalInstance,
+  VcZoomEvt,
+  VcBtnTooltipProps,
+  VcReadyObject,
+  VcComponentPublicInstance
+} from '@vue-cesium/utils/types'
 import usePosition from '@vue-cesium/composables/private/use-position'
 import { $, getVcParentInstance } from '@vue-cesium/utils/private/vm'
 import { setViewerCamera } from '@vue-cesium/utils/cesium-helpers'
 import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { defaultProps, defaultOptions } from './defaultProps'
+import type { VcBtnRef } from '@vue-cesium/components/ui'
 import { VcBtn, VcIcon, VcTooltip } from '@vue-cesium/components/ui'
 import { useCommon, useLocale } from '@vue-cesium/composables'
 import useZoomControl from './use-zoom-control'
@@ -21,7 +29,7 @@ export default defineComponent({
   name: 'VcZoomControl',
   props: zoomControlProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcZoomControlProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcZoomControl'
@@ -34,10 +42,10 @@ export default defineComponent({
     const { $services } = commonState
     const zoomControlState = useZoomControl(props, ctx, instance, $services)
     const positionState = usePosition(props, $services)
-    const rootRef = ref<HTMLElement | null>(null)
-    const zoomInRef = ref<typeof VcBtn | null>(null)
-    const zoomResetRef = ref<typeof VcBtn | null>(null)
-    const zoomOutRef = ref<typeof VcBtn | null>(null)
+    const rootRef = ref<HTMLElement>(null)
+    const zoomInRef = ref<VcBtnRef>(null)
+    const zoomResetRef = ref<VcBtnRef>(null)
+    const zoomOutRef = ref<VcBtnRef>(null)
     const parentInstance = getVcParentInstance(instance)
     const hasVcNavigation = parentInstance.proxy?.$options.name === 'VcNavigation'
     const canRender = ref(hasVcNavigation)
@@ -374,3 +382,5 @@ export type VcZoomControlProps = {
    */
   onZoomEvt?: (evt: VcZoomEvt) => void
 }
+
+export type VcZoomControlRef = VcComponentPublicInstance<VcZoomControlProps>

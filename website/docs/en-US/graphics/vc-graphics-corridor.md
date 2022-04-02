@@ -28,7 +28,7 @@ Basic usage of the VcGraphicsCorridor component.
         :positions="options.positions2"
         :height="100000.0"
         :width="200000.0"
-        :cornerType="0"
+        :corner-type="0"
         material="GREEN"
         :outline="true"
       ></vc-graphics-corridor>
@@ -37,12 +37,12 @@ Basic usage of the VcGraphicsCorridor component.
       <vc-graphics-corridor
         :positions="options.positions3"
         :material="options.material3"
-        outlineColor="WHITE"
+        outline-color="WHITE"
         :outline="true"
         :height="200000.0"
-        :extrudedHeight="100000.0"
+        :extruded-height="100000.0"
         :width="200000.0"
-        :cornerType="options.cornerType3"
+        :corner-type="options.cornerType3"
       ></vc-graphics-corridor>
     </vc-entity>
   </vc-viewer>
@@ -102,7 +102,7 @@ Basic usage of the VcGraphicsCorridor component.
       }
       // life cycle
       onMounted(() => {
-        Promise.all([entity1.value.createPromise, entity2.value.createPromise, entity3.value.createPromise]).then(instances => {
+        Promise.all([entity1.value.creatingPromise, entity2.value.creatingPromise, entity3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })
@@ -127,24 +127,24 @@ Basic usage of the VcGraphicsCorridor component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | -----| ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the corridor. |
-| positions | Array | | `optional` A Property specifying the array of Cartesian3 positions that define the centerline of the corridor. |
-| width | Number | | `optional` A numeric Property specifying the distance between the edges of the corridor. |
-| height | Number | | `optional` A numeric Property specifying the altitude of the corridor relative to the ellipsoid surface. |
-| heightReference | Number | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| extrudedHeight | Number | | `optional` A numeric Property specifying the altitude of the corridor's extruded face relative to the ellipsoid surface. |
-| extrudedHeightReference | Number | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| cornerType | Number | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
-| granularity | Number | | `optional` A numeric Property specifying the distance between each latitude and longitude. |
-| fill | Boolean | `true` | `optional` A boolean Property specifying whether the corridor is filled with the provided material. |
-| material | Object\|String\|Array | `'white'` | `optional` A Property specifying the material used to fill the corridor. |
-| outline | Boolean | `false` | `optional` A boolean Property specifying whether the corridor is outlined. |
-| outlineColor | Object\|String\|Array | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| shadows | Number | `0` | `optional` An enum Property specifying whether the corridor casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
-| distanceDisplayCondition | Object\|Array | | `optional` A Property specifying at what distance from the camera that this corridor will be displayed.|
-| classificationType | Number | `2` | `optional` An enum Property specifying whether this corridor will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
-| zIndex | Number | | `optional` A Property specifying the zIndex of the corridor, used for ordering. Only has an effect if height and extrudedHeight are undefined, and if the corridor is static. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the corridor. |
+| positions | VcCartesian3Array | | `optional` A Property specifying the array of Cartesian3 positions that define the centerline of the corridor. |
+| width | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A numeric Property specifying the distance between the edges of the corridor. |
+| height | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A numeric Property specifying the altitude of the corridor relative to the ellipsoid surface. |
+| heightReference | number \| Cesium.HeightReference \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A Property specifying what the height is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| extrudedHeight | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A numeric Property specifying the altitude of the corridor's extruded face relative to the ellipsoid surface. |
+| extrudedHeightReference | number \| Cesium.HeightReference \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | | `optional` A Property specifying what the extrudedHeight is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| cornerType | number \| Cesium.CornerType \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A CornerType Property specifying the style of the corners. **ROUNDED: 0, MITERED: 1, BEVELED: 2** |0/1/2|
+| granularity | number | | `optional` A numeric Property specifying the distance between each latitude and longitude. |
+| fill | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `true` | `optional` A boolean Property specifying whether the corridor is filled with the provided material. |
+| material | VcMaterial | `'white'` | `optional` A Property specifying the material used to fill the corridor. |
+| outline | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `false` | `optional` A boolean Property specifying whether the corridor is outlined. |
+| outlineColor | VcColor | `'black'` | `optional` A Property specifying the Color of the outline. |
+| outlineWidth | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | number \| Cesium.ShadowMode \| VcCallbackPropertyFunction\<number\> | `0` | `optional` An enum Property specifying whether the corridor casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3**|0/1/2/3|
+| distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` A Property specifying at what distance from the camera that this corridor will be displayed.|
+| classificationType | number \| Cesium.ClassificationType \| VcCallbackPropertyFunction\<Cesium.ClassificationType\> | `2` | `optional` An enum Property specifying whether this corridor will classify terrain, 3D Tiles, or both when on the ground. **TERRAIN: 0, CESIUM_3D_TILE: 1, BOTH: 2** |0/1/2|
+| zIndex | number | | `optional` A Property specifying the zIndex of the corridor, used for ordering. Only has an effect if height and extrudedHeight are undefined, and if the corridor is static. |
 
 ### Events
 

@@ -1,14 +1,28 @@
-## VcViewer
+# VcViewer
 
-构建 `Cesium` 应用程序的基础组件，其实质是通过 `Cesium.Viewer` 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者子组件。 `vc-viewer` 的 `ready` 事件中获取返回的 `Cesium` 和 `Viewer` 实例用于 Cesium API 开发，也可以通过 `ref` 模板引用来获取组件的 `createPromise` 对象来得到 Viewer 实例。
+构建 `Cesium` 应用程序的基础组件，其实质是通过 `Cesium.Viewer` 初始化的一个 DOM 节点，用于挂载其他 DOM 节点或者子组件。
 
-**注意：** `vue-cesium` 的其他组件或由它们构成的自定义组件都需要放在 `vc-viewer` 组件下面才能正常加载。
+## 注意
 
-### 基础用法
+`VueCesium` 的其他功能性组件，或由这些功能性组件构成的自定义组件，必须是 `VcViewer` 组件的子组件。
 
-三维场景容器组件的基础用法。
+例如下面的代码是错误的：
 
-:::demo 使用 `vc-viewer` 标签和它的一些响应属性来初始化三维球，并挂载 `vc-navigation` 导航和 `vc-entity` 实体组件，详细 API 请查阅它们的文档。
+```html
+<template>
+  <div>
+    <vc-viewer @ready="onViewerReady"></vc-viewer>
+    <vc-entity></vc-entity>
+    <!-- 错误用法！ -->
+  </div>
+</template>
+```
+
+## 例子
+
+使用 `vc-viewer` 标签和它的一些响应属性来初始化三维场景，并挂载 `vc-navigation` 导航和 `vc-entity` 实体组件，详细 API 请查阅它们的文档。
+
+:::demo 此例使用 Vue2.
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
@@ -89,7 +103,7 @@
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },
@@ -135,7 +149,7 @@
 
 :::
 
-### 属性
+## 组件属性
 
 <!-- prettier-ignore -->
 |属性名|类型|默认值|描述|可选值|
@@ -193,7 +207,7 @@
 |requestRenderMode|boolean|`false`|`optional`如果为true，则仅根据场景中的更改确定是否需要渲染帧。 启用可减少应用程序的CPU / GPU使用率，并减少移动设备上的电池消耗，但需要使用Scene＃requestRender在此模式下显式渲染新帧。 在API的其他部分对场景进行更改后，在许多情况下这是必要的。|
 |maximumRenderTimeChange|number|`0.0`|`optional`如果requestRenderMode为true，则此值定义在请求渲染之前允许的最大模拟时间更改。|
 
-### 事件
+## 事件
 
 <!-- prettier-ignore -->
 | 事件名|参数|描述|来源|
@@ -247,22 +261,23 @@
 |imageryLayersUpdatedEvent|()|在添加，显示，隐藏，移动或删除图像图层时触发。|Viewer.scene.globe|
 |tileLoadProgressEvent|(length: number)|获取自上一个渲染帧以来切片加载队列的长度发生更改时引发的事件。 当加载队列为空时，当前视图的所有地形和图像均已加载。 该事件将传递图块加载队列的新长度。|Viewer.scene.globe|
 
-### ref 方法
+## 方法
 
-| 方法名          | 返回                            | 描述                                                        |
-| --------------- | ------------------------------- | ----------------------------------------------------------- |
-| load            | {Cesium, viewer, vm} \| `false` | 执行加载操作。成功返回 `VcReadyObject`, 失败返回 `false。`  |
-| unload          | boolean                         | 执行销毁操作。成功返回 `true`, 失败返回 `false`。           |
-| reload          | {Cesium, viewer, vm} \| `false` | 执行重载操作。 成功返回 `VcReadyObject`, 失败返回 `false。` |
-| getCesiumObject | Object                          | 获取该组件加载的 Cesium 对象。                              |
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
-### 插槽
+## 插槽
 
 <!-- prettier-ignore -->
 | 插槽名 | 描述 | 子组件 |
 | ----- | -----| ----- |
 | default | vue-cesium 子组件均要放在vc-viewer下。 | vc-navigation/vc-compass/vc-zoom-control/vc-print/vc-my-location/vc-location-bar/vc-distance-legend/vc-navigation-sm/vc-compass-sm/vc-zoom-control-sm/vc-layer-imagery/vc-entity/vc-terrain-provider-cesium/vc-terrain-provider-arcgis/vc-terrain-provider-tianditu/vc-datasource-custom/vc-datasource-czml/vc-datasource-geojson/vc-datasource-kml/vc-primitive/vc-primitive-classfication/vc-primitive-ground/vc-primitive-ground-polyline/vc-primitive-model/vc-primitive-tileset/vc-primitive-particle/vc-collection-billboard/vc-collection-label/vc-collection-point/vc-collection-polyline/vc-collection-primitive/vc-post-process-stage/vc-post-process-stage-scan/vc-post-process-stage-collection/vc-overlay-html/vc-overlay-heatmap/vc-overlay-wind/vc-overlay-echarts/vc-polygon |
 
-### 参考
+# 参考
 
 - 官方文档： **[Viewer](https://cesium.com/docs/cesiumjs-ref-doc/Viewer.html)**

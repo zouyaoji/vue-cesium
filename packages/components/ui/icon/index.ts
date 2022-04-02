@@ -1,4 +1,4 @@
-import { h, defineComponent, computed } from 'vue'
+import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
 import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
@@ -20,7 +20,7 @@ export const iconProps = {
 export default defineComponent({
   name: 'VcIcon',
   props: iconProps,
-  setup(props, { slots }) {
+  setup(props: VcIconProps, { slots }) {
     const sizeStyle = useSize(props)
     const style = computed(() => {
       const css: CSSProperties | null = sizeStyle.value
@@ -187,31 +187,40 @@ export default defineComponent({
   }
 })
 
-// export type VcIconProps = ExtractPropTypes<typeof iconProps>
 export interface VcIconProps {
   /**
    * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl).
    */
-  size?: string | undefined
+  size?: string
   /**
    * HTML tag to render, unless no icon is supplied or it's an svg icon.
    * Default value: i
    */
-  tag?: string | undefined
+  tag?: string
   /**
    * Name of the icon, following VueCesium convention.
    */
-  name?: string | undefined
+  name?: string
   /**
    * Color name for component from the css color palette.
    */
-  color?: string | undefined
+  color?: string
+  hoverColor?: string
   /**
    * Useful if icon is on the left side of something: applies a standard margin on the right side of Icon.
    */
-  left?: boolean | undefined
+  left?: boolean
   /**
    * Useful if icon is on the right side of something: applies a standard margin on the left side of Icon.
    */
-  right?: boolean | undefined
+  right?: boolean
 }
+
+export interface VcIconSlots {
+  /**
+   * Suggestions: VcTooltip
+   */
+  default: () => VNode[]
+}
+
+export type VcIconRef = ComponentPublicInstance<VcIconProps>

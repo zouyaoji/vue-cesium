@@ -115,7 +115,7 @@ describe('Vc$NAME', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.\$refs.$INPUT_NAME).toBeDefined()
     const testVm = wrapper.vm.\$refs.$INPUT_NAME as VcComponentPublicInstance
-    const readyObj: VcReadyObject = await testVm.createPromise
+    const readyObj: VcReadyObject = await testVm.creatingPromise
   }, 10000)
 })
 EOF

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-02-15 16:32:09
+ * @LastEditTime: 2022-03-15 14:30:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -33,12 +33,13 @@ import {
   getFirstIntersection
 } from '@vue-cesium/utils/cesium-helpers'
 import { VcSegmentDrawing } from '@vue-cesium/utils/drawing-types'
-import type { VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcDrawingProvider, VcPosition } from '@vue-cesium/utils/types'
 import { isUndefined } from '@vue-cesium/utils/util'
 import type { VNode } from 'vue'
 import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
+import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
 
 export default function (props, ctx, cmpName: string, fs?: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -49,7 +50,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   }
 
   const { t } = useLocale()
-  const { $services } = commonState
+  const $services = commonState.$services as VcDrawingProvider
   const { emit } = ctx
 
   const innerRadii = ref<VcPosition>({ x: 0.01, y: 0.01, z: 0.01 })
@@ -106,7 +107,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         show: true,
         drawStatus: DrawStatus.AfterDraw,
         distance: 0,
-        labels: []
+        labels: [],
+
+        pointOpts: {},
+        labelOpts: {},
+        labelsOpts: {},
+        polylineOpts: {},
+        primitiveOpts: {},
+        polygonOpts: {}
       }
 
       cmpName === 'VcMeasurementVertical' &&
@@ -149,12 +157,20 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       const heading = getPolylineSegmentHeading(startPosition, endPosition)
       const pitch = getPolylineSegmentPitch(startPosition, endPosition)
 
+      polylineSegment.points = polylineSegment.positions.map(v => {
+        return {
+          position: v
+        }
+      })
+
       const polyline: VcSegmentDrawing = {
         ...polylineSegment,
         distance,
         heading,
         pitch
       }
+
+      const labelOpts = Object.assign({}, props.labelOpts, polyline.labelOpts)
 
       if (cmpName === 'VcDrawingRectangle' || cmpName === 'VcMeasurementRectangle') {
         const startCartographic = Cartographic.fromCartesian(startPosition, viewer.scene.globe.ellipsoid)
@@ -273,11 +289,12 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           position: labelPosition,
           id: createGuid(),
           text: MeasureUnits.distanceToString(distance, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
-          ...props.labelOpts
+          ...labelOpts
         })
       }
 
       if (polyline.polygonPositions && polyline.polygonPositions.length) {
+        const labelsOpts = Object.assign({}, props.labelsOpts, polyline.labelsOpts)
         const positions = polyline.polygonPositions.slice()
         props.loop && positions.length > 2 && positions.push(positions[0])
         for (let i = 0; i < positions.length - 1; i++) {
@@ -293,7 +310,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
               text: MeasureUnits.distanceToString(s, props.measureUnits?.distanceUnits, props.locale, props.decimals?.distance),
               position: Cartesian3.midpoint(positions[i], positions[i + 1], {} as any),
               id: createGuid(),
-              ...props.labelsOpts
+              ...labelsOpts
             })
           }
           if (positions.length > 2 && props.showAngleLabel) {
@@ -312,7 +329,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
                 text: MeasureUnits.angleToString(angle, props.measureUnits?.angleUnits, props.locale, props.decimals?.angle),
                 position: point1,
                 id: createGuid(),
-                ...props.labelsOpts
+                ...labelsOpts
               })
             }
           }
@@ -323,7 +340,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           text: MeasureUnits.areaToString(area, props.measureUnits?.areaUnits, props.locale, props.decimals?.area),
           position: polylineSegment.positions[0],
           id: createGuid(),
-          ...props.labelOpts
+          ...labelOpts
         })
       }
 
@@ -371,6 +388,16 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         labels
       })
 
+      polyline.positionsDegreesArray = polyline.positions.map(v => {
+        const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
+        return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
+      })
+      polyline?.polygonPositions?.length &&
+        (polyline.polygonPositionsDegreesArray = polyline.polygonPositions.map(v => {
+          const cart = Cesium.Cartographic.fromCartesian(v, viewer.scene.globe.ellipsoid)
+          return [CesiumMath.toDegrees(cart.longitude), CesiumMath.toDegrees(cart.latitude), cart.height]
+        }))
+
       polylines.push(polyline)
     })
     return polylines
@@ -383,17 +410,23 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
   instance.mount = async () => {
     const { viewer } = $services
-    cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.addEventListener(updateLabelPosition)
-    ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
-      viewer.scene.preRender.addEventListener(updateLabelPositionPolygon)
+    if (props.autoUpdateLabelPosition) {
+      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.addEventListener(updateLabelPosition)
+      ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
+        viewer.scene.preRender.addEventListener(updateLabelPositionPolygon)
+    }
+
     return true
   }
 
   instance.unmount = async () => {
     const { viewer } = $services
-    cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.removeEventListener(updateLabelPosition)
-    ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
-      viewer.scene.preRender.removeEventListener(updateLabelPositionPolygon)
+    if (props.autoUpdateLabelPosition) {
+      cmpName === 'VcMeasurementDistance' && viewer.scene.preRender.removeEventListener(updateLabelPosition)
+      ;(cmpName === 'VcMeasurementRegular' || cmpName === 'VcMeasurementRectangle') &&
+        viewer.scene.preRender.removeEventListener(updateLabelPositionPolygon)
+    }
+
     return true
   }
 
@@ -641,7 +674,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       show: false,
       drawStatus: DrawStatus.BeforeDraw,
       distance: 0,
-      labels: []
+      labels: [],
+
+      pointOpts: {},
+      labelOpts: {},
+      labelsOpts: {},
+      polylineOpts: {},
+      primitiveOpts: {},
+      polygonOpts: {}
     }
     if (cmpName === 'VcAnalysisViewshed') {
       clear()
@@ -670,11 +710,11 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
   const handleMouseClick = (movement: Cesium.Cartesian2, options?) => {
     const { viewer, drawingFabInstance, selectedDrawingActionInstance, getWorldPosition } = $services
-
+    const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
     if (options.button === 2 && options.ctrl) {
       // 取消绘制
-      const drawingsOption = (drawingFabInstance?.proxy as any).drawingActionInstances.find(v => v.name === drawingType)
-      ;(drawingFabInstance?.proxy as any).toggleAction(drawingsOption)
+      const drawingsOption = drawingFabInstanceVm.getDrawingActionInstance(drawingType)
+      drawingFabInstanceVm.toggleAction(drawingsOption)
       nextTick(() => {
         emit(
           'drawEvt',
@@ -700,7 +740,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
     if (options.button === 2 && editingPoint.value) {
       // 放弃编辑
-      ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+      drawingFabInstanceVm.editingActionName = undefined
       polyline.positions[editingPoint.value._index] = restorePosition
       drawStatus.value = DrawStatus.AfterDraw
       polyline.drawStatus = DrawStatus.AfterDraw
@@ -767,7 +807,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         drawTip.value = drawTipOpts.value.drawingTipStart
 
         if (props.mode === 1) {
-          ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
+          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
       }
     } else {
@@ -779,7 +819,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
 
       if (editingPoint.value) {
         editingPoint.value = undefined
-        ;(drawingFabInstance?.proxy as any).editingActionName = undefined
+        drawingFabInstanceVm.editingActionName = undefined
         canShowDrawTip.value = false
         drawTipPosition.value = [0, 0, 0]
         type = editorType.value
@@ -790,7 +830,7 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         }
       } else {
         if (props.mode === 1) {
-          ;(drawingFabInstance?.proxy as any).toggleAction(selectedDrawingActionInstance)
+          drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }
       }
 
@@ -873,8 +913,9 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         positions[1] = position
       }
     } else {
-      const positions = polyline.positions
+      const positions = polyline.positions.slice()
       positions[editingPoint.value ? editingPoint.value._index : 1] = position
+      polyline.positions = positions
     }
 
     nextTick(() => {
@@ -914,7 +955,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       editingPoint.value = mouseoverPoint.value
       restorePosition = renderDatas.value[editingPoint.value._vcPolylineIndx].positions[editingPoint.value._index]
       canShowDrawTip.value = true
-      ;(drawingFabInstance?.proxy as any).editingActionName = drawingType
+      const drawingFabInstanceVm = drawingFabInstance?.proxy as VcDrawingsRef | VcMeasurementsRef | VcAnalysesRef
+      drawingFabInstanceVm.editingActionName = drawingType
     } else if (e === 'remove') {
       const index = mouseoverPoint.value._vcPolylineIndx
       const polyline = renderDatas.value[index]
@@ -946,16 +988,13 @@ export default function (props, ctx, cmpName: string, fs?: string) {
   }
 
   // expose public methods
-  const publicMethods = { renderDatas, startNew, stop, clear, handleMouseClick, handleMouseMove }
+  const publicMethods = { computedRenderDatas, renderDatas, startNew, stop, clear, handleMouseClick, handleMouseMove }
   Object.assign(instance.proxy, publicMethods)
 
   return () => {
     const {
       ColorGeometryInstanceAttribute,
-      PolylineMaterialAppearance,
-      Ellipsoid,
       createGuid,
-      defaultValue,
       Math: CesiumMath,
       Matrix4,
       Cartesian3,
@@ -966,12 +1005,6 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       Cartesian2
     } = Cesium
 
-    const polylineOpts = {
-      ...props.polylineOpts,
-      vertexFormat: PolylineMaterialAppearance.VERTEX_FORMAT,
-      ellipsoid: defaultValue(props.polylineOpts?.ellipsoid, Ellipsoid.WGS84)
-    }
-    props.clampToGround && delete polylineOpts.arcType
     const children: Array<VNode> = []
     computedRenderDatas.value.forEach((polyline, index) => {
       const isRegular =
@@ -981,14 +1014,17 @@ export default function (props, ctx, cmpName: string, fs?: string) {
         cmpName === 'VcMeasurementRectangle'
       const positions = isRegular ? polyline.polygonPositions?.slice() : polyline.positions
       isRegular && positions?.push(positions[0])
+      const polylineOpts = Object.assign({}, props.polylineOpts, polyline.polylineOpts)
+      props.clampToGround && delete polylineOpts.arcType
+      const primitiveOpts = Object.assign({}, props.primitiveOpts, polyline.primitiveOpts)
       if (positions?.length && positions?.length > 1) {
         // polyline
         children.push(
           h(
             props.clampToGround ? VcPrimitiveGroundPolyline : VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts.show) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -1136,13 +1172,14 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       }
 
       if (polyline.polygonPositions && polyline.polygonPositions.length > 2) {
+        const polygonOpts = Object.assign({}, props?.polygonOpts, polyline?.polygonOpts)
         // polygon
         children.push(
           h(VcPolygon, {
             positions: positions,
             onReady: onVcPrimitiveReady,
-            ...props.polygonOpts,
-            show: polyline.show && props?.polygonOpts?.show
+            show: polyline.show && polygonOpts?.show,
+            ...polygonOpts
           })
         )
       }
@@ -1152,8 +1189,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -1176,8 +1213,8 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           h(
             VcPrimitive,
             {
-              ...props.primitiveOpts,
-              show: (polyline.show && props.primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing
+              show: (polyline.show && primitiveOpts) || props.editable || polyline.drawStatus === DrawStatus.Drawing,
+              ...primitiveOpts
             },
             () =>
               h(
@@ -1194,20 +1231,25 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           )
         )
       }
-      // point
+      // points
+      const polylinePointOpts = Object.assign({}, props.pointOpts, polyline.pointOpts)
       children.push(
         h(VcCollectionPoint, {
           enableMouseEvent: props.enableMouseEvent,
           show: polyline.show,
-          points: polyline.positions.map((position, subIndex) => ({
-            position: position,
-            id: createGuid(),
-            _vcPolylineIndx: index, // for editor
-            ...props.pointOpts,
-            show:
-              (props.pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
-              (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
-          })),
+          points: polyline.points.map((point, subIndex) => {
+            const position = point.position as Cesium.Cartesian3
+            const pointOpts = Object.assign({}, polylinePointOpts, point)
+            return {
+              position,
+              id: createGuid(),
+              _vcPolylineIndx: index, // for editor
+              ...pointOpts,
+              show:
+                (pointOpts?.show || props.editable || polyline.drawStatus === DrawStatus.Drawing) &&
+                (cmpName === 'VcAnalysisSightline' && polyline.positions.length === 3 ? subIndex !== 1 : true)
+            }
+          }),
           onMouseover: onMouseoverPoints,
           onMouseout: onMouseoutPoints,
           onReady: onVcCollectionPointReady

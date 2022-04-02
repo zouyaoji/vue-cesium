@@ -28,7 +28,7 @@ Basic usage of drawing components.
       ref="drawingsRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[20, 80]"
+      :offset="[10, 65]"
       :editable="editable"
       :clamp-to-ground="clampToGround"
       @draw-evt="drawEvt"
@@ -45,26 +45,25 @@ Basic usage of drawing components.
       ref="drawingsCustomRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
-      :offset="[0, 20]"
+      :offset="[10, 30]"
       :editable="editable"
       :clamp-to-ground="clampToGround"
-      @ready="drawingsReady"
       :polyline-drawing-opts="polylineDrawingOpts"
       :rectangle-drawing-opts="rectangleDrawingOpts"
       :pin-drawing-opts="pinDrawingOpts"
     >
-      <template #body>
+      <template #body="drawingActionInstances">
         <div class="custom-drawings">
           <el-row>
-            <el-button
+            <vc-btn
               v-for="(drawingActionInstance, index) in drawingActionInstances"
               :key="index"
-              :type="drawingActionInstance.isActive ? 'success' : 'primary'"
-              round
+              :color="drawingActionInstance.isActive ? 'positive' : 'primary'"
+              rounded
               @click="toggle(drawingActionInstance)"
-              >{{drawingActionInstance.tip.replace('Drawing ', '')}}</el-button
+              >{{drawingActionInstance.tip.replace('Drawing ', '')}}</vc-btn
             >
-            <el-button type="danger" round @click="clear">Clear</el-button>
+            <vc-btn color="red" rounded @click="clear">Clear</vc-btn>
           </el-row>
         </div>
       </template>
@@ -93,7 +92,6 @@ Basic usage of drawing components.
     data() {
       return {
         addTerrain: false,
-        drawingActionInstances: [],
         editable: false,
         clampToGround: false,
         mainFabOpts: {
@@ -151,9 +149,6 @@ Basic usage of drawing components.
       },
       clear() {
         this.$refs.drawingsCustomRef.clearAll()
-      },
-      drawingsReady({ Cesium, viewer, cesiumObject }) {
-        this.drawingActionInstances = cesiumObject
       },
       toggle(drawingActionInstance) {
         this.$refs.drawingsCustomRef.toggleAction(drawingActionInstance.name)
@@ -310,7 +305,7 @@ Tip: The drawing component is mainly composed of two parts: (1) the floating act
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  autoExpand: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
 }
@@ -340,6 +335,24 @@ The parameter configuration of each drawing result is too long to list here. If 
 | editorEvt  | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
 | mouseEvt   | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
 | fabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+
+### Methods
+
+| Name                             | Parameters                                                 | Description                                           |
+| -------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| load                             | () => Promise\<false \| VcReadyObject\>                    | Load components manually.                             |
+| reload                           | () => Promise\<false \| VcReadyObject\>                    | Reload components manually.                           |
+| unload                           | () => Promise\<boolean\>                                   | Destroy the loaded component manually.                |
+| getCreatingPromise               | () => Promise<boolean \| VcReadyObject>                    | Get the creatingPromise.                              |
+| getCesiumObject                  | () => VcCesiumObject                                       | Get the Cesium object loaded by this component.       |
+| clearAll                         | () => void                                                 | Clear all drawing results.                            |
+| activate                         | () => void                                                 | End listening for the ScreenSpaceEventHandler events. |
+| deactivate                       | () => void                                                 | Start listening for ScreenSpaceEventHandler events.   |
+| toggleAction                     | (drawingOption: VcDrawingActionInstance \| string) => void | Toggle drawing instance.                              |
+| getFabRef                        | () => VcFabRef                                             | Get the float action button template reference.       |
+| getDrawingActionInstance         | (actionName: string) => VcDrawingActionInstance            | Get the drawingActionInstance by action name.         |
+| getDrawingActionInstances        | () => Array\<VcDrawingActionInstance\>                     | Get the drawing action instances.                     |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance                              | Get the selected drawing action instance.             |
 
 ### Slots
 

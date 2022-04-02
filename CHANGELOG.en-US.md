@@ -1,6 +1,28 @@
 ## Changelog
 
+### 3.0.11
+
+_2022-03-15_
+
+#### Breaking changes:
+
+- `createPromise` for each component has been renamed to `creatingPromise`.
+
+#### New feature
+
+- The `vc-overlay-dynamic` component adds a site arrival `stopArrived` event, a zoom method `zoomToOverlay` and a tracking method `trackOverlay`.
+- The `vc-overlay-windmap` component is added to obtain UV values by latitude and longitude.
+- Measure and draw components add support for responsive editing of individual object properties.[#167](https://github.com/zouyaoji/vue-cesium/issues/167)
+
+#### Bug fixes
+
+- The `vc-selection-indicator` component picks up the inaccurate position of the indicator on the aggregation icon.
+- `vc-overlay-windmap` component initialization abnormal problem.
+- The measurement drawing components `measurements` and `drawings` cannot be updated responsively.
+
 ### 3.0.10
+
+_2022-02-26_
 
 #### Bug fixes
 
@@ -9,6 +31,8 @@
 - `vc-measurements` height measurement error.
 - `vc-measurements`, `vc-drawings`, `vc-analyses` floating buttons cannot be displayed or hidden when they are initialized to be hidden.
 - The clampToGround property of `vc-measurements` and `vc-drawings` is invalid.
+- Failed to load latest dc-sdk.
+- When the object property in the `entities` array of the data source component is Function, it cannot be converted to the Cesium.CallbackProperty property.
 
 ### 3.0.9
 

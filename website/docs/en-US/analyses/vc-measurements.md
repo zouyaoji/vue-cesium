@@ -32,7 +32,7 @@ Basic usage of measurement components.
       ref="measurementsRef"
       position="bottom-left"
       :main-fab-opts="measurementFabOptions1"
-      :offset="[20, 120]"
+      :offset="[10, 100]"
       :editable="editable"
       :clamp-to-ground="clampToGround"
       @ready="drawingsReadyDefault"
@@ -63,27 +63,20 @@ Basic usage of measurement components.
     >
     </vc-measurements>
     <!-- Customize UI through slot -->
-    <vc-measurements
-      ref="measurementsRef4"
-      position="bottom-left"
-      :main-fab-opts="measurementFabOptions4"
-      :offset="[0, 20]"
-      :editable="editable"
-      @ready="measurementsReady"
-    >
-      <template #body>
+    <vc-measurements ref="measurementsRef4" position="bottom-left" :main-fab-opts="measurementFabOptions4" :offset="[10, 30]" :editable="editable">
+      <template #body="drawingActionInstances">
         <div class="custom-measurements">
           <el-row>
-            <el-button
+            <vc-btn
               v-for="(drawingActionInstance, index) in drawingActionInstances"
               :key="index"
-              :type="drawingActionInstance.isActive ? 'success' : 'primary'"
-              round
+              :color="drawingActionInstance.isActive ? 'amber' : 'primary'"
+              rounded
               @click="toggle(drawingActionInstance)"
               size="mini"
-              >{{drawingActionInstance.tip}}</el-button
+              >{{drawingActionInstance.tip}}</vc-btn
             >
-            <el-button type="danger" round @click="clear">Clear</el-button>
+            <vc-btn color="red" rounded @click="clear">Clear</vc-btn>
           </el-row>
         </div>
       </template>
@@ -124,7 +117,7 @@ Basic usage of measurement components.
         },
         measurementFabOptions3: {
           direction: 'right',
-          autoExpand: false,
+          modelValue: false,
           color: 'primary'
         },
         distanceMeasurementOpts3: {
@@ -181,8 +174,7 @@ Basic usage of measurement components.
         measurements: ['component-distance', 'polyline', 'vertical', 'area', 'point'],
         measurementFabOptions4: {
           direction: 'right'
-        },
-        drawingActionInstances: []
+        }
       }
     },
     methods: {
@@ -191,9 +183,6 @@ Basic usage of measurement components.
       },
       clear() {
         this.$refs.measurementsRef4.clearAll()
-      },
-      measurementsReady({ Cesium, viewer, cesiumObject }) {
-        this.drawingActionInstances = cesiumObject
       },
       toggle(drawingActionInstance) {
         this.$refs.measurementsRef4.toggleAction(drawingActionInstance.name)
@@ -280,9 +269,7 @@ Basic usage of measurement components.
 | offset | [number, number] | `[0, 0]` | `optional` Specify the offset based on the position. |
 | show | boolean | `true` | `optional` Specify whether the drawn measurement result is visible. |
 | mode | number | `1` | `optional` Specify the interactive drawing mode, 0 means continuous drawing, and 1 means drawing ends once.|
-| measurements | Array\<
-    'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle'
-  \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
+| measurements | Array\<'distance' \| 'component-distance' \| 'polyline' \| 'horizontal' \| 'vertical' \| 'height' \| 'area' \| 'point' \| 'rectangle' \| 'regular' \| 'circle' \> | `['distance', 'component-distance', 'polyline', 'horizontal', 'vertical', 'height', 'area', 'point', 'rectangle', 'circle', 'regular']` | `optional` Specify the measurement instance to be loaded. |
 | activeColor | string | `'positive'` | `optional` Specify the color when the measurement instance is activated. |
 | editable | boolean | `false` | `optional` Specify whether the measurement result can be edited. |
 | mainFabOpts | VcActionTooltipProps & VcFabProps | | `optional` Specify the style options of the floating action button of the measuring component. |
@@ -360,7 +347,7 @@ Tip: The measurement component is mainly composed of two parts: (1) the floating
   verticalActionsAlign: 'center',
   hideIcon: false,
   persistent: false,
-  autoExpand: true,
+  modelValue: true,
   hideActionOnClick: false,
   color: 'info'
 }
@@ -390,6 +377,24 @@ The parameter configuration of each drawing result is too long to list here. If 
 | editorEvt    | (evt: VcDrawingEditorEvt, viewer: Cesium.Viewer) | Triggers when the edit button is clicked.                                |
 | mouseEvt     | (evt: VcDrawingMouseEvt, viewer: Cesium.Viewer)  | Triggers when the mouse is mouse over or mouse out on the drawing point. |
 | onFabUpdated | (value: boolean)                                 | Triggers when the floating button is expanded or collapsed.              |
+
+### Methods
+
+| Name                             | Parameters                                                 | Description                                           |
+| -------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| load                             | () => Promise\<false \| VcReadyObject\>                    | Load components manually.                             |
+| reload                           | () => Promise\<false \| VcReadyObject\>                    | Reload components manually.                           |
+| unload                           | () => Promise\<boolean\>                                   | Destroy the loaded component manually.                |
+| getCreatingPromise               | () => Promise<boolean \| VcReadyObject>                    | Get the creatingPromise.                              |
+| getCesiumObject                  | () => VcCesiumObject                                       | Get the Cesium object loaded by this component.       |
+| clearAll                         | () => void                                                 | Clear all drawing results.                            |
+| activate                         | () => void                                                 | End listening for the ScreenSpaceEventHandler events. |
+| deactivate                       | () => void                                                 | Start listening for ScreenSpaceEventHandler events.   |
+| toggleAction                     | (drawingOption: VcDrawingActionInstance \| string) => void | Toggle drawing instance.                              |
+| getFabRef                        | () => VcFabRef                                             | Get the float action button template reference.       |
+| getDrawingActionInstance         | (actionName: string) => VcDrawingActionInstance            | Get the drawingActionInstance by action name.         |
+| getDrawingActionInstances        | () => Array\<VcDrawingActionInstance\>                     | Get the drawing action instances.                     |
+| getSelectedDrawingActionInstance | () => VcDrawingActionInstance                              | Get the selected drawing action instance.             |
 
 ### Slots
 

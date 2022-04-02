@@ -67,7 +67,7 @@ describe('VcEntity', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.entity).toBeDefined()
     const testVm = wrapper.vm.$refs.entity as VcComponentPublicInstance
-    const readyObj: VcReadyObject | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
     let entity = readyObj?.cesiumObject as Cesium.Entity
     expect(entity instanceof Cesium.Entity).toBe(true)
     expect(entity.position?.getValue(Cesium.JulianDate.now()).equalsEpsilon(Cesium.Cartesian3.fromDegrees(108, 32), Cesium.Math.EPSILON6)).toBe(true)

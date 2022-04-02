@@ -83,7 +83,7 @@ Basic usage of the VcGraphicsPolylineVolume component.
       }
       // life cycle
       onMounted(() => {
-        Promise.all([polylineVolume1.value.createPromise, polylineVolume2.value.createPromise, polylineVolume3.value.createPromise]).then(
+        Promise.all([polylineVolume1.value.creatingPromise, polylineVolume2.value.creatingPromise, polylineVolume3.value.creatingPromise]).then(
           instances => {
             instances[0].viewer.zoomTo(instances[0].viewer.entities)
           }

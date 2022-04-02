@@ -49,7 +49,7 @@ const defaultProps = {
     default: '100px'
   },
   direction: {
-    type: String,
+    type: String as PropType<'vertical' | 'horizontal'>,
     default: 'vertical',
     validator: (v: string) => ['vertical', 'horizontal'].includes(v)
   },

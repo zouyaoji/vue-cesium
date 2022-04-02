@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-04 10:37:42
- * @LastEditTime: 2022-02-17 16:15:54
+ * @LastEditTime: 2022-03-08 23:19:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-selection-indicator.md
@@ -63,6 +63,7 @@
       },
       unload() {
         this.$refs.selectionIndicator.unload()
+        window.aa = this.$refs.selectionIndicator
       },
       load() {
         this.$refs.selectionIndicator.load()
@@ -95,3 +96,25 @@
 | ready      | (readyObj: VcReadyObject)               | 组件加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 组件销毁时触发。     |
 | pickEvt    | selectedFeature                         | 拾取时触发。         |
+
+### 方法
+
+| 方法名                     | 参数                                    | 描述                                        |
+| -------------------------- | --------------------------------------- | ------------------------------------------- |
+| load                       | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload                     | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload                     | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise         | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject            | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
+| computeScreenSpacePosition | () => Cesium.Cartesian2                 | 计算屏幕位置。                              |
+| update                     | () => void                              | 更新指示器位置。                            |
+| animateAppear              | () => void                              | 显示指示器。                                |
+| animateDepart              | () => void                              | 隐藏指示器。                                |
+| getPickedFeatures          | () => PickedFeatures                    | 获取拾取对象集合。                          |
+
+### 成员
+
+| 名称                                     | 描述                           |
+| ---------------------------------------- | ------------------------------ |
+| position: Cesium.Cartesian3              | 获取或者设置选择指示器的位置。 |
+| selectedFeature:Feature \| Cesium.Entity | 获取或者设置选中对象。         |

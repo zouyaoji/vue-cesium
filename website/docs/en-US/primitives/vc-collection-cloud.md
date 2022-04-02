@@ -11,14 +11,14 @@ Basic usage of VcCollectionCloud component.
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
-    <vc-collection-cloud ref="cloudCollectionRef" @mouseout="onMouseout" @mouseover="onMouseover" :clouds="clouds">
+    <vc-collection-cloud ref="cloudCollectionRef" :clouds="clouds">
       <vc-cumulus-Cloud :position="[-122.6908, 45.496, 300]" :maximumSize="{x: 50, y: 15, z: 13}" :slice="0.3" :scale="[1500,250]"></vc-cumulus-Cloud>
     </vc-collection-cloud>
     <vc-layer-imagery>
       <vc-imagery-provider-bing
         ref="provider"
-        bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
-        mapStyle="Aerial"
+        bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+        map-style="Aerial"
       ></vc-imagery-provider-bing>
     </vc-layer-imagery>
   </vc-viewer>
@@ -38,9 +38,6 @@ Basic usage of VcCollectionCloud component.
       const clouds = ref([])
       const instance = getCurrentInstance()
       // methods
-      const onClicked = e => {
-        console.log(e)
-      }
       const unload = () => {
         cloudCollectionRef.value.unload()
       }
@@ -106,32 +103,10 @@ Basic usage of VcCollectionCloud component.
         })
       }
 
-      const onMouseover = e => {
-        console.log(e)
-        if (e.cesiumObject instanceof Cesium.Billboard) {
-          this.scale = 0.5 // or e.cesiumObject.scale = 0.5
-          e.pickedFeature.primitive.scale = 0.5
-        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
-          e.pickedFeature.primitive.scale = 0.5
-        }
-      }
-
-      const onMouseout = e => {
-        console.log(e)
-        if (e.cesiumObject instanceof Cesium.Billboard) {
-          this.scale = 0.25 // or e.cesiumObject.scale = 0.25
-        } else if (e.cesiumObject instanceof Cesium.BillboardCollection) {
-          e.pickedFeature.primitive.scale = 0.25
-        }
-      }
-
       return {
         unload,
         reload,
         load,
-        onClicked,
-        onMouseout,
-        onMouseover,
         onViewerReady,
         cloudCollectionRef,
         clouds
@@ -143,7 +118,7 @@ Basic usage of VcCollectionCloud component.
 
 :::
 
-### Props
+### VcCollectionCloud Props
 
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
@@ -155,7 +130,7 @@ Basic usage of VcCollectionCloud component.
 | debugEllipsoids | Boolean |`16.0`| `optional` For debugging only. Determines if the clouds will be rendered as opaque ellipsoids. |
 | clouds | Array\<VcCumulusCloudProps\> | `[]` | `optional` Specifies an array of cumulus collections. The array object structure is the same as the `vc-cumulus-cloud` component properties. |
 
-### Events
+### VcCollectionCloud Events
 
 | Name       | Parameters                              | Description                                            |
 | ---------- | --------------------------------------- | ------------------------------------------------------ |
@@ -163,7 +138,17 @@ Basic usage of VcCollectionCloud component.
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
 
-### Slots
+### VcCollectionCloud Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
+
+### VcCollectionCloud Slots
 
 <!-- prettier-ignore -->
 | Name | Description | Subtags |
@@ -196,6 +181,16 @@ Loading cumulus cloud. It is equivalent to initializing a `Cesium.CumulusCloud` 
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+
+### VcCumulusCloud Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Reference
 

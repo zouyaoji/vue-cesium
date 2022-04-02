@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2022-01-27 16:43:45
+ * @LastEditTime: 2022-02-26 11:00:05
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\en-US\migration-from-2.x.md
+-->
+
 ## Migration from VueCesium 2.x
 
 This document will help you upgrade from VueCesium 2.x to VueCesium 3.x.
@@ -8,15 +17,15 @@ Here is the list of breaking changes.
 
 ### vc-viewer
 
-#### Attributes
+#### Props
 
 - `logo` -> `showCredit`
 
-### vc-imagery-provider-arcgis-mapserver
+### vc-provider-imagery-arcgis-mapserver
 
 - Renamed to `vc-imagery-provider-arcgis`
 
-### vc-terrain-provider-arcgis-tiled-elevation
+### vc-provider-terrain-arcgis-tiled-elevation
 
 - Renamed to `vc-terrain-provider-arcgis`
 
@@ -40,7 +49,7 @@ Here is the list of breaking changes.
 
 - Renamed to `vc-imagery-provider-singletile`
 
-### vc-primitive-ground-polyline
+### vc-primitive-polyline-ground
 
 - Renamed to `vc-primitive-ground-polyline`
 

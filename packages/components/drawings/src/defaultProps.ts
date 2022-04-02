@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-18 10:40:15
- * @LastEditTime: 2022-02-18 23:30:28
+ * @LastEditTime: 2022-03-06 22:51:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\drawings\src\defaultProps.ts
@@ -25,7 +25,7 @@ import { useDrawingFabProps } from '@vue-cesium/composables/use-drawing/props'
 import { VcDrawingActiveEvt, VcDrawingDrawEvt, VcDrawingEditorEvt, VcDrawingMouseEvt, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
 import type { VcActionTooltipProps, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 import { VcFabProps } from '../../ui'
 
 const pointDrawingActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -153,7 +153,6 @@ const drawingsProps = {
   }
 }
 
-// export type VcDrawingsProps = ExtractPropTypes<typeof drawingsProps>
 const defaultOptions = getDefaultOptionByProps<VcDrawingsProps>(drawingsProps)
 
 export {
@@ -304,5 +303,5 @@ export type VcDrawingsProps = {
   /**
    * Triggers when the floating button is expanded or collapsed.
    */
-  onFabUpdated: (value: boolean) => void
+  onFabUpdated?: (value: boolean) => void
 }

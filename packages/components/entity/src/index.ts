@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, PropType, ExtractDefaultPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import type { EntityEmitType, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { EntityEmitType, VcComponentInternalInstance, VcComponentPublicInstance, VcGraphics } from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
 import { position, plane, enableMouseEvent, show, viewFrom } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -122,3 +122,12 @@ export default defineComponent({
 
 export type VcEntityProps = ExtractPropTypes<typeof entityProps>
 export type VcEntityEmits = typeof emits
+
+export interface VcEntityRef extends VcComponentPublicInstance<VcEntityProps> {
+  /**
+   * private method, update graphic.
+   * @param graphics
+   * @param type
+   */
+  __updateGraphics: (graphics: VcGraphics | undefined, type: EntityEmitType) => boolean
+}

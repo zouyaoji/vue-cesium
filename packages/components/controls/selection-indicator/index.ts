@@ -1,19 +1,20 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-02-17 16:15:27
+ * @LastEditTime: 2022-03-05 11:22:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\selection-indicator\index.ts
  */
-import type { ExtractPropTypes } from 'vue'
+import type { Ref } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
 import { $ } from '@vue-cesium/utils/private/vm'
-import type { VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, h } from 'vue'
 import useSelectionIndicatior from './use-selection-indicatior'
 import { commonEmits } from '@vue-cesium/utils/emits'
 import type Feature from './Feature'
+import type PickedFeatures from './PickedFeatures'
 
 export const selectionIndicatorProps = {
   show: {
@@ -39,13 +40,13 @@ export const selectionIndicatorProps = {
 }
 const emits = {
   ...commonEmits,
-  pickEvt: (evt: Feature) => true
+  pickEvt: (evt: Feature | Cesium.Entity) => true
 }
 export default defineComponent({
   name: 'VcSelectionIndicator',
   props: selectionIndicatorProps,
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcSelectionIndicatorProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcSelectionIndicator'
@@ -113,9 +114,8 @@ export default defineComponent({
   }
 })
 
-// export type VcSelectionIndicatorProps = ExtractPropTypes<typeof selectionIndicatorProps>
 export type VcSelectionIndicatorEmits = typeof emits
-export type VcSelectionIndicatorProps = {
+export interface VcSelectionIndicatorProps {
   /**
    * Specify whether the selection indicator is visible.
    * Default value: true
@@ -154,4 +154,35 @@ export type VcSelectionIndicatorProps = {
    * Triggers when the VcSelectionIndicator is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export interface VcSelectionIndicatorRef extends VcComponentPublicInstance<VcSelectionIndicatorProps> {
+  /**
+   * A function that converts the world position of an object to a screen space position.
+   */
+  computeScreenSpacePosition: (position: Cesium.Cartesian3, result: Cesium.Cartesian2) => Cesium.Cartesian2
+  /**
+   * Updates the view of the selection indicator to match the position and content properties of the view model. This function should be called as part of the render loop.
+   */
+  update: () => void
+  /**
+   * Animate the indicator to draw attention to the selection.
+   */
+  animateAppear: () => void
+  /**
+   * Animate the indicator to release the selection.
+   */
+  animateDepart: () => void
+  /**
+   * Get the picked features.
+   */
+  getPickedFeatures: () => PickedFeatures
+  /**
+   * Get or set the selected feature.
+   */
+  selectedFeature: Feature | Cesium.Entity
+  /**
+   * Gets or sets the world position of the object for which to display the selection indicator.
+   */
+  position: Ref<Cesium.Cartesian3>
 }

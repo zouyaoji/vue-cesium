@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 10:10:09
- * @LastEditTime: 2021-11-20 20:02:06
+ * @LastEditTime: 2022-03-09 14:20:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\particleSystem.ts
@@ -9,14 +9,15 @@
 
 import ParticlesComputing from './particlesComputing'
 import ParticlesRendering from './particlesRendering'
+import { ParticleSystemOptions, VcWindData, ViewerParameters } from './types'
 class ParticleSystem {
   context: any
-  data: any
-  particleSystemOptions: any
-  viewerParameters: any
-  particlesComputing: any
-  particlesRendering: any
-  constructor(context, data, particleSystemOptions, viewerParameters) {
+  data: VcWindData
+  particleSystemOptions: ParticleSystemOptions
+  viewerParameters: ViewerParameters
+  particlesComputing: ParticlesComputing
+  particlesRendering: ParticlesRendering
+  constructor(context, data: VcWindData, particleSystemOptions: ParticleSystemOptions, viewerParameters: ViewerParameters) {
     this.context = context
     this.data = data
     this.particleSystemOptions = particleSystemOptions

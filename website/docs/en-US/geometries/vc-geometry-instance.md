@@ -113,10 +113,10 @@ Basic usage of geometry instance components.
       // lifecycle
       onMounted(() => {
         Promise.all([
-          instanceBoxTop.value.createPromise,
-          instanceBoxBottom.value.createPromise,
-          instanceRectangle.value.createPromise,
-          instancePolygon.value.createPromise
+          instanceBoxTop.value.creatingPromise,
+          instanceBoxBottom.value.creatingPromise,
+          instanceRectangle.value.creatingPromise,
+          instancePolygon.value.creatingPromise
         ]).then(instances => {
           const { BoundingSphere } = Cesium
           const boundingSphereUnion = instances.reduce((prev, cur) => {
@@ -172,6 +172,16 @@ Basic usage of geometry instance components.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+
+### Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Slots
 

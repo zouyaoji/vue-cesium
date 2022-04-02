@@ -1,5 +1,5 @@
-import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance } from 'vue'
-import type { VNode, ExtractPropTypes } from 'vue'
+import { h, defineComponent, ref, computed, Transition, onBeforeUnmount, getCurrentInstance, ComponentPublicInstance } from 'vue'
+import type { VNode } from 'vue'
 import VcIcon from '../icon'
 import { Spinner as VcSpinner } from '../spinner'
 import { Ripple } from '@vue-cesium/directives'
@@ -8,6 +8,7 @@ import { hMergeSlot, hDir } from '@vue-cesium/utils/private/render'
 import { stop, prevent, stopAndPrevent, listenOpts } from '@vue-cesium/utils/private/event'
 import { getTouchTarget } from '@vue-cesium/utils/private/touch'
 import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
+import { LooseDictionary } from '@vue-cesium/utils/types'
 
 const { passiveCapture } = listenOpts
 
@@ -349,8 +350,6 @@ export default defineComponent({
   }
 })
 
-// export type VcBtnProps = ExtractPropTypes<typeof btnProps>
-
 export interface VcBtnProps {
   /**
    * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl).
@@ -489,9 +488,28 @@ export interface VcBtnProps {
   darkPercentage?: boolean | undefined
   background?: string | undefined
   /**
-   * Emitted when component is clicked (activated).
+   * Emitted when component is clicked (activated)
    * @param evt JS event object; If you want to cancel navigation set synchronously 'evt.navigate' to false
    * @param navigateFn When you need to control the time at which the button should trigger the route navigation then set 'evt.navigate' to false and call this function; Useful if you have async work to be done before the actual route navigation
    */
-  onClick?: (evt: any, navigateFn: () => void) => void
+  onClick?: (evt: LooseDictionary, navigateFn: () => void) => void
+}
+
+export interface VcBtnSlots {
+  /**
+   * Use for custom content, instead of relying on 'icon' and 'label' props
+   */
+  default: () => VNode[]
+  /**
+   * Override the default VcSpinner when in 'loading' state
+   */
+  loading: () => VNode[]
+}
+
+export interface VcBtnRef extends ComponentPublicInstance<VcBtnProps> {
+  /**
+   * Emulate click on VcBtn
+   * @param evt JS event object
+   */
+  click: (evt?: LooseDictionary) => void
 }

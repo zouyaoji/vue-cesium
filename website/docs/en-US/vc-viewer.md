@@ -1,6 +1,6 @@
 ## VcViewer
 
-The basic component for building a `Cesium` application, which is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or subcomponents.The `Cesium` and `Viewer` instances returned from the `ready` event of `vc-viewer` are used for Cesium API development. You can also get the `createPromise` object of the component through the `ref` template reference to get the Viewer instance.
+The basic component for building a `Cesium` application, which is essentially a DOM node initialized by `Cesium.Viewer`, which is used to mount other DOM nodes or subcomponents.The `Cesium` and `Viewer` instances returned from the `ready` event of `vc-viewer` are used for Cesium API development. You can also get the `creatingPromise` object of the component through the `ref` template reference to get the Viewer instance.
 
 **Note:** Other components of `vue-cesium` or custom components composed of them need to be placed under the `vc-viewer` component to load properly.
 
@@ -88,7 +88,7 @@ Basic usage of `vc-viewer`.
       }
     },
     mounted() {
-      this.$refs.vcViewer.createPromise.then(({ Cesium, viewer }) => {
+      this.$refs.vcViewer.creatingPromise.then(({ Cesium, viewer }) => {
         console.log('viewer is loaded.')
       })
     },
@@ -244,14 +244,15 @@ Basic usage of `vc-viewer`.
 |imageryLayersUpdatedEvent|()|Triggers when an imagery layer is added, shown, hidden, moved, or removed.|Viewer.scene.globe|
 |tileLoadProgressEvent|(length: number)|Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.|Viewer.scene.globe|
 
-### Ref methods
+### Methods
 
-| method          | returns                         | Description                                                                           |
-| --------------- | ------------------------------- | ------------------------------------------------------------------------------------- |
-| load            | {Cesium, viewer, vm} \| `false` | Load the component. It returns `VcReadyObject` on success, and `false on failure.`    |
-| unload          | boolean                         | Destroy the component. It returns `VcReadyObject` on success, and `false on failure.` |
-| reload          | {Cesium, viewer, vm} \| `false` | Reload the component. It returns `VcReadyObject` on success, and `false on failure.`  |
-| getCesiumObject | Object                          | Get the Cesium object loaded by this component.                                       |
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Slots
 

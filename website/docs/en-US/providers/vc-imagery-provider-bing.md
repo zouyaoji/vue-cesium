@@ -17,8 +17,8 @@ Basic usage of the `vc-imagery-provider-bing` component.
       <!-- (https://www.bingmapsportal.com/) Apply for Key. -->
       <vc-imagery-provider-bing
         ref="provider"
-        bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
-        :mapStyle="mapStyle"
+        bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+        :map-style="mapStyle"
       ></vc-imagery-provider-bing>
     </vc-layer-imagery>
   </vc-viewer>

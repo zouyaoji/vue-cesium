@@ -50,7 +50,7 @@ describe('VcLayerImagery', () => {
     const wrapper = mount(App)
     expect(wrapper.vm.$refs.layer).toBeDefined()
     const testVm = wrapper.vm.$refs.layer as VcComponentPublicInstance
-    const readyObj: VcReadyObject | undefined = await testVm.createPromise
+    const readyObj: VcReadyObject | undefined = await testVm.creatingPromise
     let layer = readyObj?.cesiumObject as Cesium.ImageryLayer
     expect(layer instanceof Cesium.ImageryLayer).toBe(true)
     expect(layer.imageryProvider instanceof Cesium.OpenStreetMapImageryProvider).toBe(true)

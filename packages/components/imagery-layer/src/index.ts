@@ -1,14 +1,21 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-18 11:28:17
+ * @LastEditTime: 2022-03-11 11:36:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h, provide } from 'vue'
-import type { ExtractPropTypes } from 'vue'
-import type { AnyFunction, VcColor, VcComponentInternalInstance, VcImageryProvider, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
+import type {
+  AnyFunction,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcImageryProvider,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
 import defaultProps from './defaultProps'
@@ -88,7 +95,6 @@ export default defineComponent({
   }
 })
 
-// export type VcLayerImageryProps = ExtractPropTypes<typeof imageryLayerProps>
 export type VcLayerImageryEmits = typeof emits
 export type VcLayerImageryProps = {
   /**
@@ -201,4 +207,12 @@ export type VcLayerImageryProps = {
    * Triggers when imageryProvider is updated.
    */
   'onUpdate:imageryProvider'?: (payload: VcImageryProvider) => void
+}
+
+export interface VcLayerImageryRef extends VcComponentPublicInstance<VcLayerImageryProps> {
+  /**
+   * private but needed by VcProviderXXX
+   * @param provider
+   */
+  __updateProvider?(provider: VcImageryProvider | undefined): boolean
 }

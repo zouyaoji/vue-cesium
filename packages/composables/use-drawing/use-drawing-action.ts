@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-15 09:47:36
- * @LastEditTime: 2022-02-08 11:02:50
+ * @LastEditTime: 2022-03-10 00:57:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-action.ts
  */
 // import { enableMouseEvent } from '@vue-cesium/utils/cesium-props'
-import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcViewerProvider, VcPickEvent } from '@vue-cesium/utils/types'
+import type { VcReadyObject, VcComponentInternalInstance, VcComponentPublicInstance, VcDrawingProvider, VcPickEvent } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
 import { useLocale } from '../use-locale'
 import { DrawStatus } from '@vue-cesium/shared'
@@ -15,7 +15,7 @@ import useTimeout from '@vue-cesium/composables/private/use-timeout'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { VcDrawTipOpts } from '@vue-cesium/utils/drawing-types'
 
-export default function (props, ctx, instance: VcComponentInternalInstance, cmpName: string, $services: VcViewerProvider) {
+export default function (props, ctx, instance: VcComponentInternalInstance, cmpName: string, $services: VcDrawingProvider) {
   instance.cesiumClass = cmpName
   instance.cesiumEvents = []
   const { t } = useLocale()
@@ -148,7 +148,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcCollectionLabelReady = (e: VcReadyObject) => {
-    if (!props.disableDepthTest) return
+    if (props.disableDepthTest) return
     const labelCollection = e.cesiumObject as any
     const originalUpdate = labelCollection.update
 
@@ -170,7 +170,7 @@ export default function (props, ctx, instance: VcComponentInternalInstance, cmpN
   }
 
   const onVcPrimitiveReady = (e: VcReadyObject) => {
-    if (!props.disableDepthTest) return
+    if (props.disableDepthTest) return
 
     const primitive = e.cesiumObject as any
     const originalPrimitiveUpdate = primitive.update

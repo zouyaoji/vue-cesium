@@ -1,3 +1,12 @@
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2022-02-19 00:16:21
+ * @LastEditTime: 2022-03-08 23:08:19
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\controls\vc-ajax-bar.md
+-->
+
 ## VcAjaxBar
 
 加载请求进度条控件。
@@ -75,3 +84,11 @@
 | ------ | ---- | -------------------- |
 | start  |      | 当进度条出现时触发。 |
 | end    |      | 当进度条完成时触发。 |
+
+### 方法
+
+| 方法名    | 参数                      | 描述                       |
+| --------- | ------------------------- | -------------------------- |
+| start     | (speed?: number) => void  | 开始等待新的请求进程完成。 |
+| increment | (amount?: number) => void | 手动触发进度条增量。       |
+| stop      | () => void                | 完成等待。                 |

@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-13 09:21:13
- * @LastEditTime: 2022-02-18 23:01:57
+ * @LastEditTime: 2022-03-10 01:12:55
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\measurements\src\defaultProps.ts
  */
 import { getDefaultOptionByProps } from '@vue-cesium/utils/util'
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 import { MeasureUnits } from '@vue-cesium/shared'
 import {
   actionOptions,
@@ -54,7 +54,8 @@ const distanceMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentD
     distance: 2,
     angle: 2
   },
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const componentDistanceMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -99,7 +100,8 @@ const polylineMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, 
   showAngleLabel: true,
   showDistanceLabel: true,
   locale: undefined,
-  loop: false
+  loop: false,
+  autoUpdateLabelPosition: true
 })
 
 const horizontalMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -167,7 +169,8 @@ const verticalMeasurementDefault: VcMeasurementOpts = Object.assign({}, segmentD
     distance: 2,
     angle: 2
   },
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const heightMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -219,7 +222,8 @@ const areaMeasurementDefault: VcPolylineMeasurementOpts = Object.assign({}, poly
     angle: 2
   },
   loop: true,
-  locale: undefined
+  locale: undefined,
+  autoUpdateLabelPosition: true
 })
 
 const pointMeasurementActionDefault: VcActionTooltipProps = Object.assign({}, actionOptions, {
@@ -425,7 +429,7 @@ const measurementsProps = {
     default: () => circleMeasurementDefault
   }
 }
-// export type VcMeasurementsProps = ExtractPropTypes<typeof measurementsProps>
+
 const defaultOptions = getDefaultOptionByProps<VcMeasurementsProps>(measurementsProps)
 
 export {

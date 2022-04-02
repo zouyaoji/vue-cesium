@@ -61,7 +61,7 @@
       }
       // life cycle
       onMounted(() => {
-        Promise.all([plane1.value.createPromise, plane2.value.createPromise, plane3.value.createPromise]).then(instances => {
+        Promise.all([plane1.value.creatingPromise, plane2.value.creatingPromise, plane3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

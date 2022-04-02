@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2021-12-29 13:24:10
+ * @LastEditTime: 2022-03-09 10:42:40
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\en-US\overlays\vc-overlay-html.md
@@ -26,7 +26,7 @@ Basic usage of VcOverlayHtml component.
       <div class="vc-box">aa</div>
     </vc-overlay-html>
     <vc-entity :position="[117.186419, 45.66446, 20]">
-      <vc-graphics-point color="red" :pixelSize="8"></vc-graphics-point>
+      <vc-graphics-point color="red" :pixel-size="8"></vc-graphics-point>
     </vc-entity>
     <vc-overlay-html :position="{ lng: 104.04, lat: 30.40 }">
       <div class="label-container label-container-var">
@@ -69,11 +69,12 @@ Basic usage of VcOverlayHtml component.
 
 | Name        | Type          | Default | Description                                                                                    |
 | ----------- | ------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| show        | Boolean       | `true`  | `optional` Specify whether to display the HTML overlay.                                        |
-| position    | Object\|Array |         | `optional` Specify the geographic location of the HTML element.                                |
-| pixelOffset | Object\|Array |         | `optional` Specify the pixel offset of the HTML.                                               |
-| autoHidden  | Boolean       | `true`  | `optional` Specifies whether HTML is automatically hidden when it is on the back of the earth. |
-| customClass | String        |         | `optional` Specify an HTML custom class.                                                       |
+| show        | boolean       | `true`  | `optional` Specify whether to display the HTML overlay.                                        |
+| position    | VcPosition    |         | `optional` Specify the geographic location of the HTML element.                                |
+| pixelOffset | VcCartesian2  |         | `optional` Specify the pixel offset of the HTML.                                               |
+| autoHidden  | boolean       | `true`  | `optional` Specifies whether HTML is automatically hidden when it is on the back of the earth. |
+| customClass | string        |         | `optional` Specify an HTML custom class.                                                       |
+| teleport    | TeleportProps |         | `optional` Specify the teleport props.                                                         |
 
 ### Events
 
@@ -82,6 +83,16 @@ Basic usage of VcOverlayHtml component.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.           |
+
+### Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
 
 ### Reference
 

@@ -93,7 +93,7 @@
         })
       },
       onHeatmapReady({ Cesium, viewer, cesiumObject }) {
-        this.$refs.heatmap.childRef.value.createPromise.then(({ Cesium, viewer, cesiumObject }) => {
+        this.$refs.heatmap.childRef.value.creatingPromise.then(({ Cesium, viewer, cesiumObject }) => {
           console.log(cesiumObject)
           if (cesiumObject instanceof Cesium.GroundPrimitive) {
             const geometry = cesiumObject.geometryInstances.geometry.constructor.createGeometry(cesiumObject.geometryInstances.geometry)
@@ -123,17 +123,17 @@
 
 ### 属性
 
-<!-- prettier-ignore -->
-| 属性名 | 类型 | 默认值 | 描述 | 可选值 |
-| ----- | ---- | ------ | --- | ------ |
-| show | Boolean | `true` | `optional` 指定热力图是否显示。 |
-| rectangle | Object\|Array | | `optional` 指定热力图四至参数。 |
-| min | Number | `true` | `optional` 指定热力图数据最小值。 |
-| max | Number | | `optional` 指定热力图数据最大值。 |
-| data | Array<{x: number, y: number, value: number}> | `[]` | `optional` 指定热力图数据。如果不是 x, y, value 需要在 options 属性指明字段。|
-| options | Object\|HeatmapConfiguration | | `optional` 指定热力图参数。 |
-| type | String | `'primitive'` | `optional` 指定热力图对象的类型。**图元: primitive, 实体: entity, 影像图层: imagery-layer** | primitive/entity/imagery-layer |
-| segments | Array\<VcColorSegments\> | | `optional` 指定热力图颜色分段。 |
+| 属性名     | 类型                                       | 默认值        | 描述                                                                          | 可选值                         |
+| ---------- | ------------------------------------------ | ------------- | ----------------------------------------------------------------------------- | ------------------------------ |
+| show       | boolean                                    | `true`        | `optional` 指定热力图是否显示。                                               |
+| rectangle  | VcRectangle                                |               | `optional` 指定热力图四至参数。                                               |
+| min        | number                                     | `0`           | `optional` 指定热力图数据最小值。                                             |
+| max        | number                                     | `100`         | `optional` 指定热力图数据最大值。                                             |
+| data       | Array\<VcHeatMapData\>                     | `[]`          | `optional` 指定热力图数据。如果不是 x, y, value 需要在 options 属性指明字段。 |
+| options    | HeatmapConfiguration                       |               | `optional` 指定热力图参数。                                                   |
+| type       | 'primitive' \| 'entity' \| 'imagery-layer' | `'primitive'` | `optional` 指定热力图对象的类型。                                             | primitive/entity/imagery-layer |
+| segments   | Array\<VcColorSegments\>                   |               | `optional` 指定热力图颜色分段。                                               |
+| projection | '3857' \| '4326'                           |               | `optional` 指定投影。                                                         |
 
 :::tip
 
@@ -173,6 +173,16 @@ Array<[number, [number, number, number]] | [number, string | ColorInByteOption |
 | beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。     |
 | ready      | (readyObj: VcReadyObject)               | 对象加载成功时触发。 |
 | destroyed  | (instance: VcComponentInternalInstance) | 对象销毁时触发。     |
+
+### 方法
+
+| 方法名             | 参数                                    | 描述                                        |
+| ------------------ | --------------------------------------- | ------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | 手动加载组件。                              |
+| reload             | () => Promise\<false \| VcReadyObject\> | 手动重新加载组件。                          |
+| unload             | () => Promise\<boolean\>                | 手动卸载组件。                              |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | 获取标志该组件是否创建成功的 Promise 对象。 |
+| getCesiumObject    | () => VcCesiumObject                    | 获取该组件加载的 Cesium 对象。              |
 
 ### 参考
 

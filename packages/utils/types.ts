@@ -11,6 +11,8 @@ interface AnyObject {
   [propName: string]: any
 }
 
+export type LooseDictionary = { [index in string]: any }
+
 interface VcReadyObject {
   Cesium: typeof Cesium
   viewer: Cesium.Viewer
@@ -160,6 +162,7 @@ interface SampledPosition {
   position: VcPosition
   time?: Cesium.JulianDate | string
   interval?: number
+  [key: string]: any
 }
 
 interface Cartesian2Option {
@@ -262,18 +265,20 @@ interface VcViewerProvider {
   primitives: Cesium.PrimitiveCollection
   groundPrimitives: Cesium.PrimitiveCollection
   postProcessStages: Cesium.PostProcessStageCollection
-  // viewerMitt: Emitter<VcMittEvents>
   layout?: {
     toolbarContainerRC: Partial<DOMRect>
     timelineContainerRC: Partial<DOMRect>
     animationContainerRC: Partial<DOMRect>
     bottomContainerRC: Partial<DOMRect>
   }
+  creatingPromise: Promise<VcReadyObject>
+}
+
+interface VcDrawingProvider extends VcViewerProvider {
   selectedDrawingActionInstance?: VcDrawingActionInstance
   drawingFabInstance?: VcComponentInternalInstance
   drawingHandlerActive: boolean
   getWorldPosition(scene: Cesium.Scene, windowPosition: Cesium.Cartesian2, result: Cesium.Cartesian3): Cesium.Cartesian3
-  viewerCreatePromise: Promise<VcReadyObject>
 }
 
 interface ViewerWidgetResizedEvent {
@@ -325,20 +330,36 @@ export type StyleValue = string | CSSProperties | Array<StyleValue>
 
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 
-export type VcComponentPublicInstance = ComponentPublicInstance<{
-  load(): Promise<VcReadyObject | boolean>
-  unload(): Promise<boolean>
-  reload(): Promise<boolean>
-  createPromise: Promise<VcReadyObject>
-  cesiumObject: VcCesiumObject
-  getCesiumObject(): any
-  __updateGraphics?(graphics: VcGraphics | undefined, type: EntityEmitType): boolean
-  __updateProvider?(provider: VcImageryProvider | undefined): boolean
-  __updateGeometryInstances?(geometryInstance: Cesium.GeometryInstance, index: number): boolean
-  __removeGeometryInstances?(geometryInstance: Cesium.GeometryInstance): boolean
-  __updateGeometry?(geometry: Cesium.Geometry): boolean
-  __childCount?: Ref<number>
-}>
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type VcComponentPublicInstance<T = {}> = ComponentPublicInstance<
+  T & {
+    /**
+     * Load components manually.
+     */
+    load(): Promise<VcReadyObject | boolean>
+    /**
+     * Destroy the loaded component manually.
+     */
+    unload(): Promise<boolean>
+    /**
+     * Reload components manually.
+     */
+    reload(): Promise<boolean>
+    /**
+     * Determine whether the component is created by this.
+     */
+    creatingPromise: Promise<VcReadyObject>
+    /**
+     * The cesiumobject created by component.
+     */
+    cesiumObject: VcCesiumObject
+    /**
+     * Get the cesiumobject created by component.
+     */
+    getCesiumObject(): VcCesiumObject
+  }
+>
+
 // 属性类型
 export type VcCallbackPropertyFunction<T> = (time?: Cesium.JulianDate, result?: T) => T
 
@@ -445,6 +466,26 @@ export type VcDistanceDisplayCondition =
 
 export type CesiumNearFarScalar = Cesium.NearFarScalar | Cesium.CallbackProperty
 export type VcNearFarScalar = NearFarScalarOption | Array<number> | VcCallbackPropertyFunction<Cesium.NearFarScalar> | CesiumNearFarScalar
+
+export interface HeadingPitchRangeOpts {
+  heading?: number
+  pitch?: number
+  range?: number
+}
+export type VcHeadingPitchRange = HeadingPitchRangeOpts | Array<number> | Cesium.HeadingPitchRange
+
+export interface HeadingPitchRollOpts {
+  heading?: number
+  pitch?: number
+  roll?: number
+}
+export type VcHeadingPitchRoll = HeadingPitchRollOpts | Array<number> | Cesium.HeadingPitchRoll
+
+export type TrackViewOpts = {
+  mode: 'FP' | 'TP' | 'TRACKED' | 'FREE' | 'CUSTOM'
+  offset?: HeadingPitchRangeOpts
+  viewFrom?: [number, number, number]
+}
 
 // 对象类型
 export type VcGraphics =
@@ -626,12 +667,20 @@ export type VcContextOptions = {
   requestWebgl2?: boolean
   getWebGLStub?: (canvas: HTMLCanvasElement, webglOptions: WebGLContextAttributes) => Cesium.WebGLConstants
 }
+
+export type VcHeatMapData = {
+  x: number
+  y: number
+  value: number
+}
+
 export {
   AnyObject,
   VcCamera,
   VcReadyObject,
   VcComponentInternalInstance,
   VcViewerProvider,
+  VcDrawingProvider,
   CesiumMembersEvent,
   Cartesian2Option,
   Cartesian3Option,

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-31 10:30:21
- * @LastEditTime: 2022-02-17 17:40:47
+ * @LastEditTime: 2022-03-09 22:55:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\analyses\flood\index.ts
@@ -47,7 +47,7 @@ export default defineComponent({
     ...polygonHierarchy
   },
   emits: emits,
-  setup(props, ctx) {
+  setup(props: VcAnalysisFloodProps, ctx) {
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcAnalysisFlood'
     instance.cesiumEvents = []
@@ -62,7 +62,7 @@ export default defineComponent({
     const canRender = ref(false)
 
     const vcParent = getVcParentInstance(instance)
-    ;(vcParent.proxy as VcComponentPublicInstance).createPromise?.then(() => {
+    ;(vcParent.proxy as VcComponentPublicInstance).creatingPromise?.then(() => {
       canRender.value = true
     })
 
@@ -151,7 +151,6 @@ export default defineComponent({
 
     // expose public methods
     Object.assign(instance.proxy, {
-      childRef,
       start,
       pause,
       stop
@@ -188,7 +187,7 @@ export default defineComponent({
   }
 })
 
-export type VcAnalysisFloodProps = {
+export interface VcAnalysisFloodProps {
   /**
    * Specify the minimum elevation.
    * Default value: -1
@@ -219,19 +218,34 @@ export type VcAnalysisFloodProps = {
    */
   polygonHierarchy: VcPolygonHierarchy
   /**
-   * Triggers before the VcCompass is loaded.
+   * Triggers before the VcAnalysisFlood is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcCompass is successfully loaded.
+   * Triggers when the VcAnalysisFlood is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcCompass is destroyed.
+   * Triggers when the VcAnalysisFlood is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
    * Triggers when the maxHeight is reached.
    */
   onStop?: (evt: Cesium.ClassificationPrimitive) => void
+}
+
+export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysisFloodProps> {
+  /**
+   * Start flood analysis
+   */
+  start: () => void
+  /**
+   * Pause flood analysis
+   */
+  pause: () => void
+  /**
+   * Stop flood analysis
+   */
+  stop: () => void
 }

@@ -34,7 +34,7 @@
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript
 
-## 开始
+## 开始 | [English](./README.md)
 
 请访问 [https://zouyaoji.top/vue-cesium/#/](https://zouyaoji.top/vue-cesium/#/)
 

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-28 10:11:59
- * @LastEditTime: 2022-01-17 16:21:12
+ * @LastEditTime: 2022-03-09 13:44:48
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\wind\util.ts
@@ -72,8 +72,17 @@ export function createRawRenderState(options) {
   return rawRenderState
 }
 
-export function viewRectangleToLonLatRange(viewRectangle) {
-  const range: any = {}
+export function viewRectangleToLonLatRange(viewRectangle: Cesium.Rectangle) {
+  const range: {
+    lon?: {
+      min: number
+      max: number
+    }
+    lat?: {
+      min: number
+      max: number
+    }
+  } = {}
 
   const postiveWest = Cesium.Math.mod(viewRectangle.west, Cesium.Math.TWO_PI)
   const postiveEast = Cesium.Math.mod(viewRectangle.east, Cesium.Math.TWO_PI)

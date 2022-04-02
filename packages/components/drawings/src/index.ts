@@ -1,24 +1,19 @@
-import { defineComponent, getCurrentInstance, ref, ExtractPropTypes, reactive, VNode } from 'vue'
+import { defineComponent, getCurrentInstance, ref, reactive, VNode, computed } from 'vue'
 import { drawingsProps, defaultOptions } from './defaultProps'
 import { camelize } from '@vue-cesium/utils/util'
-import { VcFabAction, VcFabProps } from '@vue-cesium/components/ui'
-import type { VcActionTooltipProps, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcFabActionRef, VcFabProps, VcFabRef } from '@vue-cesium/components/ui'
+import type { VcActionTooltipProps, VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
 import VcDrawingPin from './pin'
 import VcDrawingPoint from './point'
 import VcDrawingPolyline from './polyline'
 import VcDrawingPolygon from './polygon'
 import VcDrawingRegular from './regular'
 import VcDrawingRectangle from './rectangle'
-import type {
-  DrawingActionCmpOpts,
-  DrawingActionCmpRef,
-  DrawingActionOpts,
-  VcDrawingActionInstance,
-  VcDrawingOpts
-} from '@vue-cesium/utils/drawing-types'
+import type { DrawingActionCmpRef, VcDrawingActionInstance, VcDrawingOpts } from '@vue-cesium/utils/drawing-types'
 import useDrawingFab from '@vue-cesium/composables/use-drawing/use-drawing-fab'
 import { useLocale } from '@vue-cesium/composables'
 import { drawingEmit } from '@vue-cesium/utils/emits'
+import { VcDrawingsProps } from '..'
 
 const emits = {
   ...drawingEmit,
@@ -28,7 +23,7 @@ export default defineComponent({
   name: 'VcDrawings',
   props: drawingsProps,
   emits: emits,
-  setup(props: ExtractPropTypes<typeof drawingsProps>, ctx) {
+  setup(props: VcDrawingsProps, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance
     instance.cesiumClass = 'VcDrawings'
@@ -49,9 +44,9 @@ export default defineComponent({
     const circleActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.circleActionOpts, props.circleActionOpts))
     const circleDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.circleDrawingOpts, props.circleDrawingOpts))
     const regularActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.regularActionOpts, props.regularActionOpts))
-    const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.regularDrawingOpts, defaultOptions.regularDrawingOpts))
-    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, props.pinActionOpts, defaultOptions.pinActionOpts))
-    const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, props.pinDrawingOpts, defaultOptions.pinDrawingOpts))
+    const regularDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.regularDrawingOpts, props.regularDrawingOpts))
+    const pinActionOpts = reactive<VcActionTooltipProps>(Object.assign({}, defaultOptions.pinActionOpts, props.pinActionOpts))
+    const pinDrawingOpts = reactive<VcDrawingOpts>(Object.assign({}, defaultOptions.pinDrawingOpts, props.pinDrawingOpts))
 
     options.pointActionOpts = pointActionOpts
     options.pointDrawingOpts = pointDrawingOpts
@@ -69,22 +64,24 @@ export default defineComponent({
     options.pinDrawingOpts = pinDrawingOpts
     options.clearActionOpts = clearActionOpts
 
-    const drawingActionInstances: Array<VcDrawingActionInstance> = props.drawings.map(drawing => ({
-      name: drawing,
-      type: 'drawing',
-      actionStyle: {
-        background: options[`${camelize(drawing)}ActionOpts`].color,
-        color: options[`${camelize(drawing)}ActionOpts`].textColor
-      },
-      actionClass: `vc-draw-${drawing} vc-draw-button${drawing === (instance.proxy as any).selectedDrawingActionInstance?.name ? ' active' : ''}`,
-      actionRef: ref<typeof VcFabAction>(null!),
-      actionOpts: options[`${camelize(drawing)}ActionOpts`] as DrawingActionOpts,
-      cmp: getDrawingCmp(drawing),
-      cmpRef: ref<DrawingActionCmpRef>(null!),
-      cmpOpts: options[`${camelize(drawing)}DrawingOpts`] as DrawingActionCmpOpts,
-      tip: options[`${camelize(drawing)}ActionOpts`].tooltip.tip || t(`vc.drawing.${camelize(drawing)}.tip`),
-      isActive: false
-    }))
+    const drawingActionInstances = computed<Array<VcDrawingActionInstance>>(() => {
+      return props.drawings.map(drawing => ({
+        name: drawing,
+        type: 'drawing',
+        actionStyle: {
+          background: options[`${camelize(drawing)}ActionOpts`].color,
+          color: options[`${camelize(drawing)}ActionOpts`].textColor
+        },
+        actionClass: `vc-draw-${drawing} vc-draw-button`,
+        actionRef: ref<VcFabActionRef>(null!),
+        actionOpts: options[`${camelize(drawing)}ActionOpts`] as VcActionTooltipProps,
+        cmp: getDrawingCmp(drawing),
+        cmpRef: ref<DrawingActionCmpRef>(null!),
+        cmpOpts: options[`${camelize(drawing)}DrawingOpts`] as VcDrawingOpts,
+        tip: options[`${camelize(drawing)}ActionOpts`].tooltip.tip || t(`vc.drawing.${camelize(drawing)}.tip`),
+        isActive: false
+      }))
+    })
 
     function getDrawingCmp(name) {
       switch (name) {
@@ -122,5 +119,49 @@ export type VcDrawingsSlots = {
   /**
    * body slot content of the component
    */
-  body: () => VNode[]
+  body: (scope: {
+    /**
+     * Action instances.
+     */
+    drawingActionInstances: Array<VcDrawingActionInstance>
+  }) => VNode[]
+}
+export interface VcDrawingsRef extends VcComponentPublicInstance<VcDrawingsProps> {
+  /**
+   * Get or set the editingActionName.
+   */
+  editingActionName?: string
+  /**
+   * Clear all drawing results.
+   */
+  clearAll: () => void
+  /**
+   * End listening for the ScreenSpaceEventHandler events.
+   */
+  deactivate: () => void
+  /**
+   * Start listening for ScreenSpaceEventHandler events.
+   */
+  activate: () => void
+  /**
+   * Toggle drawing instance.
+   * @param drawingOption drawing instance or drawing instance name.
+   */
+  toggleAction: (drawingOption: VcDrawingActionInstance | string) => void
+  /**
+   * Get the float action button template reference.
+   */
+  getFabRef: () => VcFabRef
+  /**
+   * Get the drawingActionInstance by action name.
+   */
+  getDrawingActionInstance: (actionName: string) => VcDrawingActionInstance
+  /**
+   * Get the drawing action instances.
+   */
+  getDrawingActionInstances: () => Array<VcDrawingActionInstance>
+  /**
+   * Get the selected drawing action instance.
+   */
+  getSelectedDrawingActionInstance: () => VcDrawingActionInstance
 }

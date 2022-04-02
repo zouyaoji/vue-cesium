@@ -18,7 +18,7 @@
     </vc-layer-imagery>
     <!-- 用于测试 projectionTransforms  -->
     <vc-layer-imagery :sortOrder="5">
-      <vc-imagery-provider-tianditu mapStyle="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu map-style="img_w" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">

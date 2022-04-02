@@ -14,13 +14,13 @@ Basic usage of the VcGraphicsPoint component.
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-entity :position="[-75.59777, 40.03883]" description="Hello Vue Cesium">
-      <vc-graphics-point ref="point1" color="red" :pixelSize="8"></vc-graphics-point>
+      <vc-graphics-point ref="point1" color="red" :pixel-size="8"></vc-graphics-point>
     </vc-entity>
     <vc-entity :position="[-80.5, 35.14]" description="Hello Vue Cesium">
-      <vc-graphics-point ref="point2" color="blue" :pixelSize="16"></vc-graphics-point>
+      <vc-graphics-point ref="point2" color="blue" :pixel-size="16"></vc-graphics-point>
     </vc-entity>
     <vc-entity :position="[-80.12, 25.46]" description="Hello Vue Cesium">
-      <vc-graphics-point ref="point3" color="lime" :pixelSize="32"></vc-graphics-point>
+      <vc-graphics-point ref="point3" color="lime" :pixel-size="32"></vc-graphics-point>
     </vc-entity>
   </vc-viewer>
 </el-row>
@@ -42,7 +42,7 @@ Basic usage of the VcGraphicsPoint component.
       }
       // life cycle
       onMounted(() => {
-        Promise.all([point1.value.createPromise, point2.value.createPromise, point3.value.createPromise]).then(instances => {
+        Promise.all([point1.value.creatingPromise, point2.value.creatingPromise, point3.value.creatingPromise]).then(instances => {
           instances[0].viewer.zoomTo(instances[0].viewer.entities)
         })
       })

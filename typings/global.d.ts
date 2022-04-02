@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2022-02-19 00:04:43
+ * @LastEditTime: 2022-03-10 13:34:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
@@ -21,6 +21,8 @@ import {
   VcAnalysesProps,
   VcAnalysesSlots,
   VcAnalysisFloodProps,
+  VcBtnProps,
+  VcBtnSlots,
   VcCompassProps,
   VcDistanceLegendProps,
   VcDrawingsProps,
@@ -221,7 +223,7 @@ declare module 'vue' {
     VcPostProcessStageScan: typeof import('vue-cesium')['VcPostProcessStageScan']
     VcPostProcessStageCollection: typeof import('vue-cesium')['VcPostProcessStageCollection']
 
-    VcBtn: typeof import('vue-cesium')['VcBtn']
+    VcBtn: GlobalComponentConstructor<VcBtnProps, VcBtnSlots>
     VcIcon: typeof import('vue-cesium')['VcIcon']
     VcTooltip: typeof import('vue-cesium')['VcTooltip']
     VcAjaxBar: typeof import('vue-cesium')['VcAjaxBar']

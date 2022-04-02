@@ -20,14 +20,17 @@ The basic usage of the VcOverviewMap component.
     <!-- example 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sort-order="10">
-        <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-" mapStyle="Road"></vc-imagery-provider-bing>
+        <vc-imagery-provider-bing
+          bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"
+          map-style="Road"
+        ></vc-imagery-provider-bing>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
       </vc-entity>
     </vc-overview-map>
     <!-- example 2 -->
-    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewerOpts="{ showCredit: true, sceneMode: 3 }">
+    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewer-opts="{ showCredit: true, sceneMode: 3 }">
       <vc-layer-imagery>
         <vc-imagery-provider-osm></vc-imagery-provider-osm>
       </vc-layer-imagery>
@@ -45,7 +48,7 @@ The basic usage of the VcOverviewMap component.
       </vc-overview-map>
     </vc-overview-map>
     <vc-layer-imagery :sort-order="10">
-      <vc-imagery-provider-bing bmKey="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"></vc-imagery-provider-bing>
+      <vc-imagery-provider-bing bm-key="AgcbDCAOb9zMfquaT4Z-MdHX4AsHUNvs7xgdHefEA5myMHxZk87NTNgdLbG90IE-"></vc-imagery-provider-bing>
     </vc-layer-imagery>
     <vc-entity
       :billboard="billboard"
@@ -145,3 +148,13 @@ The basic usage of the VcOverviewMap component.
 | beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the VcOverviewMap is loaded.            |
 | ready      | (readyObj: VcReadyObject)               | Triggers when the VcOverviewMap is successfully loaded. |
 | destroyed  | (instance: VcComponentInternalInstance) | Triggers when the VcOverviewMap is destroyed.           |
+
+### Methods
+
+| Name               | Parameters                              | Description                                     |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| load               | () => Promise\<false \| VcReadyObject\> | Load components manually.                       |
+| reload             | () => Promise\<false \| VcReadyObject\> | Reload components manually.                     |
+| unload             | () => Promise\<boolean\>                | Destroy the loaded component manually.          |
+| getCreatingPromise | () => Promise<boolean \| VcReadyObject> | Get the creatingPromise.                        |
+| getCesiumObject    | () => VcCesiumObject                    | Get the Cesium object loaded by this component. |
