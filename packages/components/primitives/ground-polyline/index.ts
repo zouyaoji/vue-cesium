@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-25 11:38:38
+ * @LastEditTime: 2022-03-22 13:20:52
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\ground-polyline\index.ts
  */
 // import type { ExtractPropTypes } from 'vue'
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import type { VcAppearance, VcComponentInternalInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, Ref } from 'vue'
+import type { VcAppearance, VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
 import {
   geometryInstances,
@@ -67,7 +67,6 @@ export default defineComponent({
   }
 })
 
-// export type VcPrimitiveGroundPolylineProps = ExtractPropTypes<typeof groundPolylinePrimitiveProps>
 export type VcPrimitiveGroundPolylineProps = {
   /**
    * GeometryInstances containing GroundPolylineGeometry
@@ -137,33 +136,56 @@ export type VcPrimitiveGroundPolylineProps = {
   /**
    * Triggers when the mouse is pressed on this primitive.
    */
-  mousedown?: (evt: VcPickEvent) => void
+  onMousedown?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse bounces up on this primitive.
    */
-  mouseup?: (evt: VcPickEvent) => void
+  onMouseup?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks on this primitive.
    */
-  click?: (evt: VcPickEvent) => void
+  onClick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse clicks outside this primitive.
    */
-  clickout?: (evt: VcPickEvent) => void
+  onClickout?: (evt: VcPickEvent) => void
   /**
    * Triggers when the left mouse button double-clicks this primitive.
    */
-  dblclick?: (evt: VcPickEvent) => void
+  onDblclick?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves on this primitive.
    */
-  mousemove?: (evt: VcPickEvent) => void
+  onMousemove?: (evt: VcPickEvent) => void
   /**
    * Triggers when the mouse moves over to this primitive.
    */
-  mouseover?: (evt: VcPickEvent) => void
+  onMouseover?: (evt: VcPickEvent) => void
   /**
    * 	Triggers when the mouse moves out of this primitive.
    */
-  mouseout?: (evt: VcPickEvent) => void
+  onMouseout?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the primitive is ready to render.
+   */
+  onReadyPromise?: (primitive: Cesium.ClassificationPrimitive, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+  'onUpdate:geometryInstances'?: (instances: Array<Cesium.GeometryInstance>) => void
+}
+
+export interface VcPrimitiveGroundPolylineRef extends VcComponentPublicInstance<VcPrimitiveGroundPolylineProps> {
+  /**
+   * private but needed by VcGeometryInstance
+   * @param geometryInstance
+   * @param index
+   */
+  __updateGeometryInstances?(geometryInstance: Cesium.GeometryInstance, index: number): boolean
+  /**
+   * private but needed by VcGeometryInstance
+   * @param geometryInstance
+   */
+  __removeGeometryInstances?(geometryInstance: Cesium.GeometryInstance): boolean
+  /**
+   * private but needed by VcGeometryInstance
+   */
+  __childCount?: Ref<number>
 }
