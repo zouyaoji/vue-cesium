@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-19 23:58:04
+ * @LastEditTime: 2022-03-24 22:38:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\post-processes\post-process-stage-scan\index.ts
  */
 import type { ExtractPropTypes, PropType, WatchStopHandle } from 'vue'
 import { useCommon } from '@vue-cesium/composables'
-import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition } from '@vue-cesium/utils/types'
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { computed, defineComponent, getCurrentInstance, h, onUnmounted, ref, watch } from 'vue'
 import VcPostProcessStage from '../post-process-stage'
 import useRadar from './use-radar-scan'
@@ -101,4 +101,27 @@ export default defineComponent({
   }
 })
 
-export type VcPostProcessStageScanProps = ExtractPropTypes<typeof postProcessStageScanProps>
+export type VcPostProcessStageScanProps = {
+  /**
+   * Specify the scan type, optional values are'radar','circle'.
+   */
+  type?: 'radar' | 'circle'
+  /**
+   * Specify optional parameters.
+   */
+  options?: VcPostProcessStageScanOpts
+  /**
+   * Triggers before the component is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the component is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the component is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcPostProcessStageScanRef = VcComponentPublicInstance<VcPostProcessStageScanProps>
