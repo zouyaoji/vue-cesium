@@ -89,14 +89,16 @@ Basic usage of the `vc-imagery-provider-supermap` component.
 
 ### Props
 
-| Name         | Type    | Default                                | Description                                                                        |
+<!-- prettier-ignore -->
+| Name | Type | Default | Description |
 | ------------ | ------- | -------------------------------------- | ---------------------------------------------------------------------------------- |
-| url          | String  |                                        | `required` The URL of the SuperMap iServer service.                                |
-| name         | String  |                                        | `optional` The name of the layer.                                                  |
-| minimumLevel | Number  | `0`                                    | `optional` The minimum tile level to request, or undefined if there is no minimum. |
-| maximumLevel | Number  | `20`                                   | `optional` The maximum tile level to request, or undefined if there is no maximum. |
-| transparent  | Boolean | `true`                                 | `optional` Whether the parameter of the requested map service is transparent.      |
-| credit       | Boolean | `'MapQuest, SuperMap iServer Imagery'` | `optional` A credit for the data source, which is displayed on the canvas.         |
+| url | string | | `required` The URL of the SuperMap iServer service. |
+| name | string | | `optional` The name of the layer. |
+| minimumLevel | number | `0` | `optional` The minimum tile level to request, or undefined if there is no minimum. |
+| maximumLevel | number | `20` | `optional` The maximum tile level to request, or undefined if there is no maximum. |
+| transparent | boolean | `true` | `optional` Whether the parameter of the requested map service is transparent. |
+| credit | string\|Cesium.Credit | `'MapQuest, SuperMap iServer Imagery'` | `optional` A credit for the data source, which is displayed on the canvas. |
+| projectionTransforms | ProjectionTransforms | `false` | Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' } |
 
 ### Events
 

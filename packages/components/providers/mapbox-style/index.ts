@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 22:07:06
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 16:14:50
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\mapbox-style\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\mapbox-style\index.ts
  */
 import type { ExtractPropTypes, PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { accessToken, ellipsoid, minimumLevel, maximumLevel, rectangle, credit } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -49,4 +49,74 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderMapboxProps = ExtractPropTypes<typeof mapboxImageryProviderProps>
+// export type VcImageryProviderMapboxProps = ExtractPropTypes<typeof mapboxImageryProviderProps>
+export type VcImageryProviderMapboxProps = {
+  /**
+   * The Mapbox server url.
+   * Default value: 'https://api.mapbox.com/v4/'
+   */
+  url?: string | Cesium.Resource
+  /**
+   * The username of the map account.
+   * Default value: 'mapbox'
+   */
+  username?: string
+  /**
+   * The Mapbox Style ID.
+   */
+  styleId?: string
+  /**
+   * The public access token for the imagery.
+   */
+  accessToken?: string
+  /**
+   * The size of the image tiles.
+   * Default value: 512
+   */
+  tilesize?: number
+  /**
+   * Determines if tiles are rendered at a @2x scale factor.
+   */
+  scaleFactor?: boolean
+  /**
+   * The ellipsoid. If not specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems.
+   * Default value: 0
+   */
+  minimumLevel?: number
+  /**
+   * The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit.
+   */
+  maximumLevel?: number
+  /**
+   * The rectangle, in radians, covered by the image.
+   */
+  rectangle?: VcRectangle
+  /**
+   * A credit for the data source, which is displayed on the canvas.
+   */
+  credit?: string
+  /**
+   * Triggers before the VcImageryProviderMapbox is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcImageryProviderMapbox is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcImageryProviderMapbox is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the imagery provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}

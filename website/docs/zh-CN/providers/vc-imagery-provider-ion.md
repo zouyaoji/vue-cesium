@@ -80,11 +80,11 @@
 
 ### 属性
 
-| 属性名      | 类型           | 默认值 | 描述                                           |
-| ----------- | -------------- | ------ | ---------------------------------------------- |
-| assetId     | Number         |        | `required` 指定 Cesium Ion 在线影像 asset ID。 |
-| accessToken | String         |        | `optional` 指定密钥。                          |
-| server      | String\|Object |        | `optional` 指定 Cesium 在线服务器地址。        |
+| 属性名      | 类型                    | 默认值 | 描述                                           |
+| ----------- | ----------------------- | ------ | ---------------------------------------------- |
+| assetId     | number                  |        | `required` 指定 Cesium Ion 在线影像 asset ID。 |
+| accessToken | string                  |        | `optional` 指定密钥。                          |
+| server      | string\|Cesium.Resource |        | `optional` 指定 Cesium 在线服务器地址。        |
 
 ### 事件
 

@@ -76,15 +76,16 @@
 
 ### 属性
 
-| 属性名        | 类型           | 默认值                                                   | 描述                                                 |
+<!-- prettier-ignore -->
+| 属性名 | 类型 | 默认值 | 描述 |
 | ------------- | -------------- | -------------------------------------------------------- | ---------------------------------------------------- |
-| url           | String         | `'https://a.tile.openstreetmap.org'`                     | `optional`指定 OpenStreetMap 服务地址。              |
-| fileExtension | String         | `'png'`                                                  | `required`指定图片格式。                             |
-| rectangle     | Object\|Object |                                                          | `optional`图层的矩形范围，此矩形限制了影像可见范围。 |
-| minimumLevel  | Number         | `0`                                                      | `optional`最小层级。                                 |
-| maximumLevel  | Number         |                                                          | `optional`最大层级。                                 |
-| ellipsoid     | Object         |                                                          | `optional`参考椭球体，没指定的话默认 WGS84。         |
-| credit        | String         | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`服务描述信息。                             |
+| url | string | `'https://a.tile.openstreetmap.org'` | `optional`指定 OpenStreetMap 服务地址。 |
+| fileExtension | string | `'png'` | `required`指定图片格式。 |
+| rectangle | VcRectangle | | `optional`图层的矩形范围，此矩形限制了影像可见范围。 |
+| minimumLevel | number | `0` | `optional`最小层级。 |
+| maximumLevel | number | | `optional`最大层级。 |
+| ellipsoid | Cesium.Ellipsoid | | `optional`参考椭球体，没指定的话默认 WGS84。 |
+| credit | string\|Cesium.Credit | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`服务描述信息。 |
 
 :::tip
 

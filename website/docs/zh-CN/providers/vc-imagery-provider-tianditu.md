@@ -18,7 +18,7 @@
       <vc-imagery-provider-tianditu map-style="cva_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-layer-imagery :alpha="alpha" :brightness="brightness" :contrast="contrast" :sort-order="10">
-      <vc-imagery-provider-tianditu :mapStyle="mapStyle" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
+      <vc-imagery-provider-tianditu :map-style="mapStyle" token="436ce7e50d27eede2f2929307e6b33c0" ref="provider"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
   </vc-viewer>
   <div class="demo-toolbar">
@@ -124,14 +124,14 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 | 可选值 |
 | ----- | ---- | ------ | --- | ------ |
-| mapStyle | String | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
-| credit | String\|Object | `'天地图全球影像服务'` | `optional` 服务版权描述信息。 |
-| token | String | | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
-| protocol | String | `https` | `optional` 指定请求协议类型。可以是`https`或者`http`。 |
-| rectangle | Object | | `optional` 图层的矩形范围，此矩形限制了影像可见范围。 |
-| minimumLevel | Number | `0` | `optional` 最小层级。 |
-| maximumLevel | Number | `20` | `optional` 最大层级。 |
-| projectionTransforms | Boolean\|Object | `false` | `optional` 指定投影变换参数。**结构： { from: 'GCJ02', to: 'WGS84' }** |
+| mapStyle | string | `'img_w'` | `optional` 天地图服务地图类型。 |cia_c/cia_w/cta_c/cta_w/cva_c/cva_w/ela_c/ela_w/eva_c/eva_w/img_c/img_w/ter_c/ter_w/vec_c/vec_w/ibo_c/ibo_w|
+| credit | string\| Cesium.Credit | `'天地图全球影像服务'` | `optional` 服务版权描述信息。 |
+| token | string | | `optional` 天地图应用 key。 [申请地址](http://lbs.tianditu.gov.cn/home.html) |
+| protocol | string | `https` | `optional` 指定请求协议类型。可以是`https`或者`http`。 |
+| rectangle | VcRectangle | | `optional` 图层的矩形范围，此矩形限制了影像可见范围。 |
+| minimumLevel | number | `0` | `optional` 最小层级。 |
+| maximumLevel | number | `20` | `optional` 最大层级。 |
+| projectionTransforms | ProjectionTransforms | `false` | `optional` 指定投影变换参数。**结构： { from: 'GCJ02', to: 'WGS84' }** |
 
 :::tip
 

@@ -85,17 +85,17 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------------- | ------- | -------------------- |--|
-| url | String | `'https://api.mapbox.com/style/v1/'` | `optional`指定 Mapbox 服务地址。 |
-| username | String | `'mapbox'` | `optional` 指定加载的 mapbox 服务用户名。 |
-| styleId | String | | `optional` 指定加载的 mapbox 服务的 StyleID。 |
-| accessToken | String | | `optional` 指定加载的 mapbox 服务秘钥。 |
-| tilesize | Number | `512` | `optional` 指定加载的 mapbox 服务的瓦片大小。 |
-| scaleFactor | Boolean |  | `optional` 指定是否以 @2x 比例渲染。 |
-| ellipsoid | Object | | `optional`参考椭球体，没指定的话默认 WGS84。 |
-| minimumLevel | Number | `0` | `optional`最小层级。 |
-| maximumLevel | Number | | `optional`最大层级。 |
-| rectangle | Object\|Object | | `optional`图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
-| credit | String | | `optional`服务描述信息。 |
+| url | string\|Cesium.Resource | `'https://api.mapbox.com/style/v1/'` | `optional`指定 Mapbox 服务地址。 |
+| username | string | `'mapbox'` | `optional` 指定加载的 mapbox 服务用户名。 |
+| styleId | string | | `optional` 指定加载的 mapbox 服务的 StyleID。 |
+| accessToken | string | | `optional` 指定加载的 mapbox 服务秘钥。 |
+| tilesize | number | `512` | `optional` 指定加载的 mapbox 服务的瓦片大小。 |
+| scaleFactor | boolean |  | `optional` 指定是否以 @2x 比例渲染。 |
+| ellipsoid | Cesium.Ellipsoid | | `optional`参考椭球体，没指定的话默认 WGS84。 |
+| minimumLevel | number | `0` | `optional`最小层级。 |
+| maximumLevel | number | | `optional`最大层级。 |
+| rectangle | VcRectangle | | `optional`图层的矩形范围,此矩形限制了影像可见范围。 **结构：{ west: number, south: number, east: number, north: number }** |
+| credit | string | | `optional`服务描述信息。 |
 
 :::tip
 

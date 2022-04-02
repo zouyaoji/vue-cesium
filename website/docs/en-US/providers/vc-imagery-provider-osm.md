@@ -79,13 +79,13 @@ Basic usage of the `vc-imagery-provider-osm` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String | `'https://a.tile.openstreetmap.org'` | `optional`The OpenStreetMap server url. |
-| fileExtension | String | `'png'` | `required`The file extension for images on the server. |
-| rectangle | Object\|Array | | `optional` The rectangle of the layer. |
-| minimumLevel | Number | `0` | `optional`The minimum level-of-detail supported by the imagery provider. |
-| maximumLevel | Number | | `optional`The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
-| ellipsoid | Object | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
-| credit | String\| Object | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`A credit for the data source, which is displayed on the canvas. |
+| url | string | `'https://a.tile.openstreetmap.org'` | `optional`The OpenStreetMap server url. |
+| fileExtension | string | `'png'` | `required`The file extension for images on the server. |
+| rectangle | VcRectangle | | `optional` The rectangle of the layer. |
+| minimumLevel | number | `0` | `optional`The minimum level-of-detail supported by the imagery provider. |
+| maximumLevel | number | | `optional`The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| ellipsoid | Cesium.Ellipsoid | | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| credit | string\| Cesium.Credit | `'MapQuest, Open Street Map and contributors, CC-BY-SA'` | `optional`A credit for the data source, which is displayed on the canvas. |
 
 :::tip
 

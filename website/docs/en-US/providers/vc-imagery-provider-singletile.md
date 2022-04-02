@@ -79,12 +79,12 @@ Basic usage of the `vc-imagery-provider-singletile` component.
 
 ### Props
 
-| Name      | Type           | Default | Description                                                               |
-| --------- | -------------- | ------- | ------------------------------------------------------------------------- |
-| url       | String         |         | `required`The url for the tile.                                           |
-| rectangle | Object\|Object |         | `optional`The rectangle, in radians, covered by the image.                |
-| credit    | String\|Object |         | `optional`A credit for the data source, which is displayed on the canvas. |
-| ellipsoid | Object         |         | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used.   |
+| Name      | Type                    | Default | Description                                                               |
+| --------- | ----------------------- | ------- | ------------------------------------------------------------------------- |
+| url       | string\|Cesium.Resource |         | `required`The url for the tile.                                           |
+| rectangle | VcRectangle             |         | `optional`The rectangle, in radians, covered by the image.                |
+| credit    | string\|Cesium.Credit   |         | `optional`A credit for the data source, which is displayed on the canvas. |
+| ellipsoid | Ceisum.Ellipsoid        |         | `optional`The ellipsoid. If not specified, the WGS84 ellipsoid is used.   |
 
 ### Events
 

@@ -112,16 +112,16 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ----- | ---- | ----- | ---- |
-| url | String |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `customid` 属性。 |
-| rectangle | Object\|Object | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
-| credit | String\|Object | `''` | `optional` 服务版权描述信息。 |
-| minimumLevel | Number | `0` | `optional` 最小层级。 |
-| maximumLevel | Number | `18` | `optional` 最大层级。 |
-| scale | Number | `1` | `optional` 指定缩放。 |
-| ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
-| customid | String | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
-| projectionTransforms | Boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
-| protocol | String | `'https'` | `optional` 指定服务协议。 |
+| url | string |  | `optional` 指定服务地址。 指定了 `url` 将忽略 `customid` 属性。 |
+| rectangle | VcRectangle | | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
+| credit | string\|Object | `''` | `optional` 服务版权描述信息。 |
+| minimumLevel | number | `0` | `optional` 最小层级。 |
+| maximumLevel | number | `18` | `optional` 最大层级。 |
+| scale | number | `1` | `optional` 指定缩放。 |
+| ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
+| customid | string | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+| projectionTransforms | boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
+| protocol | string | `'https'` | `optional` 指定服务协议。 |
 
 :::tip
 
@@ -160,14 +160,13 @@
 
 ### 事件
 
-<!-- prettier-ignore -->
-| 事件名 | 参数 | 描述 |
+| 事件名       | 参数                                    | 描述                                                              |
 | ------------ | --------------------------------------- | ----------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | 对象加载前触发。 |
-| ready | (readyObj: VcReadyObject) | 对象加载成功时触发。 |
-| destroyed | (instance: VcComponentInternalInstance) | 对象销毁时触发。 |
-| errorEvent | (evt: Cesium.TileProviderError) | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | (provider: VcTerrainProvider) | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | 当图层提供者可用时触发, 返回 ImageryProvider 实例。 |
+| beforeLoad   | (instance: VcComponentInternalInstance) | 对象加载前触发。                                                  |
+| ready        | (readyObj: VcReadyObject)               | 对象加载成功时触发。                                              |
+| destroyed    | (instance: VcComponentInternalInstance) | 对象销毁时触发。                                                  |
+| errorEvent   | TileProviderError                       | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | ImageryProvider                         | 当图层提供者可用时触发, 返回 ImageryProvider 实例。               |
 
 ### 参考
 

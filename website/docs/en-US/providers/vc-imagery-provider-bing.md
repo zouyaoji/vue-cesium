@@ -109,13 +109,13 @@ Basic usage of the `vc-imagery-provider-bing` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description | Accepted Values |
 | ---- | ---- | ------- | ----------- | --------------- |
-| url | String \| Object | `'https://dev.virtualearth.net'` | `required` The url of the Bing Maps server hosting the imagery. |
-| **bmKey** | String | | `optional` The Bing Maps key for your application, which can be created at [https://www.bingmapsportal.com/](https://www.bingmapsportal.com/). **Note that it is bmKey** |
-| tileProtocol | String | | `optional` The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page. |
-| mapStyle | String | `'Aerial'` | `optional` The type of Bing Maps imagery to load. |Aerial/AerialWithLabels/AerialWithLabelsOnDemand/CanvasDark/CanvasGray/CanvasLight/
-| culture | String | `''` | `optional` The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See http://msdn.microsoft.com/en-us/library/hh441729.aspx for information on the supported cultures. |
-| ellipsoid | Object | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
-| tileDiscardPolicy | Object | | `optional` The policy that determines if a tile is invalid and should be discarded. By default, a DiscardEmptyTileImagePolicy will be used, with the expectation that the Bing Maps server will send a zero-length response for missing tiles. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter. |
+| url | string \| Cesium.Resource | `'https://dev.virtualearth.net'` | `required` The url of the Bing Maps server hosting the imagery. |
+| **bmKey** | string | | `optional` The Bing Maps key for your application, which can be created at [https://www.bingmapsportal.com/](https://www.bingmapsportal.com/). **Note that it is bmKey** |
+| tileProtocol | string | | `optional` The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page. |
+| mapStyle | string | `'Aerial'` | `optional` The type of Bing Maps imagery to load. |Aerial/AerialWithLabels/AerialWithLabelsOnDemand/CanvasDark/CanvasGray/CanvasLight/
+| culture | string | `''` | `optional` The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See http://msdn.microsoft.com/en-us/library/hh441729.aspx for information on the supported cultures. |
+| ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used. |
+| tileDiscardPolicy | Cesium.DiscardMissingTileImagePolicy | Cesium.NeverTileDiscardPolicy | `optional` The policy that determines if a tile is invalid and should be discarded. By default, a DiscardEmptyTileImagePolicy will be used, with the expectation that the Bing Maps server will send a zero-length response for missing tiles. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter. |
 
 :::tip
 

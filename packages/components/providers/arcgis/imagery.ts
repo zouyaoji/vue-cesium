@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-18 17:34:41
+ * @LastEditTime: 2022-03-04 16:02:28
  * @LastEditors: Weibo Cao
  * @Description:
  * @FilePath: \vue-cesium\packages\components\providers\arcgis\imagery.ts
@@ -136,5 +136,5 @@ export type VcImageryProviderArcgisProps = {
   /**
    * Triggers when the provider is ready for use.
    */
-  onReadyPromise?: (provider: VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }

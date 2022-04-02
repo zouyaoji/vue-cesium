@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 11:00:14
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 15:58:24
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\bingmaps\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\bingmaps\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { ExtractPropTypes, PropType } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, tileDiscardPolicy } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -45,4 +45,55 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderBingProps = ExtractPropTypes<typeof bingImageryProviderProps>
+// export type VcImageryProviderBingProps = ExtractPropTypes<typeof bingImageryProviderProps>
+export type VcImageryProviderBingProps = {
+  /**
+   * The url of the Bing Maps server hosting the imagery.
+   */
+  url: string
+  /**
+   * The Bing Maps key for your application, which can be created at https://www.bingmapsportal.com/. Note that it is bmKey
+   */
+  bmKey?: string
+  /**
+   * The protocol to use when loading tiles, e.g. 'http:' or 'https:'. By default, tiles are loaded using the same protocol as the page.
+   */
+  tileProtocol?: string
+  /**
+   * The type of Bing Maps imagery to load.
+   * Default value: 'Aerial'
+   */
+  mapStyle?: 'Aerial' | 'AerialWithLabels' | 'AerialWithLabelsOnDemand' | 'CanvasDark' | 'CanvasGray' | 'CanvasLight'
+  /**
+   * The culture to use when requesting Bing Maps imagery. Not all cultures are supported. See http://msdn.microsoft.com/en-us/library/hh441729.aspx for information on the supported cultures.
+   */
+  culture?: string
+  /**
+   * The ellipsoid. If not specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The policy that determines if a tile is invalid and should be discarded. By default, a DiscardEmptyTileImagePolicy will be used, with the expectation that the Bing Maps server will send a zero-length response for missing tiles. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter.
+   */
+  tileDiscardPolicy?: Cesium.DiscardMissingTileImagePolicy | Cesium.NeverTileDiscardPolicy
+  /**
+   * Triggers before the VcImageryProviderBing is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcImageryProviderBing is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcImageryProviderBing is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the imagery provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}

@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 10:32:57
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 15:38:47
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\cesium-terrain\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { ExtractPropTypes, PropType } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -59,4 +59,53 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderCesiumProps = ExtractPropTypes<typeof cesiumTerrainProviderProps>
+// export type VcTerrainProviderCesiumProps = ExtractPropTypes<typeof cesiumTerrainProviderProps>
+export type VcTerrainProviderCesiumProps = {
+  /**
+   * The URL of the Cesium terrain server.
+   */
+  url?: string
+  /**
+   * Flag that indicates if the client should request additional lighting information from the server, in the form of per vertex normals if available.
+   * Default value: false
+   */
+  requestVertexNormals?: boolean
+  /**
+   * Flag that indicates if the client should request per tile water masks from the server, if available.
+   * Default value: false
+   */
+  requestWaterMask?: boolean
+  /**
+   * Flag that indicates if the client should request per tile metadata from the server, if available.
+   * Default value: true
+   */
+  requestMetadata?: boolean
+  /**
+   * The ellipsoid. If not specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * A credit for the data source, which is displayed on the canvas.
+   */
+  credit?: string
+  /**
+   * Triggers before the VcTerrainProviderCesium is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcTerrainProviderCesium is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcTerrainProviderCesium is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the terrain provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}
