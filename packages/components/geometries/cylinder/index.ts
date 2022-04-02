@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:42:29
+ * @LastEditTime: 2022-03-30 10:36:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\cylinder\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
@@ -34,4 +34,40 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCylinderProps = ExtractPropTypes<typeof cylinderGeometryProps>
+export type VcGeometryCylinderProps = {
+  /**
+   * The length of the cylinder.
+   */
+  length: number
+  /**
+   * The radius of the top of the cylinder.
+   */
+  topRadius: number
+  /**
+   * 	The radius of the bottom of the cylinder.
+   */
+  bottomRadius: number
+  /**
+   * The number of edges around the perimeter of the cylinder.
+   * Default value: 128
+   */
+  slices?: number
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * Triggers before the VcGeometryCylinder is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryCylinder is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryCylinder is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryCylinderRef = VcComponentPublicInstance<VcGeometryCylinderProps>

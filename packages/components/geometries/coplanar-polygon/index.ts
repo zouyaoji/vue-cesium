@@ -1,18 +1,17 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:20:02
+ * @LastEditTime: 2022-03-30 10:34:56
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\coplanar-polygon\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { polygonHierarchy, stRotation, vertexFormat, ellipsoid } from '@vue-cesium/utils/cesium-props'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { polygonHierarchy, stRotation, vertexFormat, ellipsoid } from '@vue-cesium/utils/cesium-props'
 export const polygonCoplanarProps = {
   ...polygonHierarchy,
   ...ellipsoid,
@@ -33,4 +32,36 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonCoplanarProps = ExtractPropTypes<typeof polygonCoplanarProps>
+export type VcGeometryPolygonCoplanarProps = {
+  /**
+   * A polygon hierarchy that can include holes.
+   */
+  polygonHierarchy: VcPolygonHierarchy
+  /**
+   * The ellipsoid to be used as a reference.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
+   * Default value: 0.0
+   */
+  stRotation?: number
+  /**
+   * Triggers before the VcGeometryPolygonCoplanar is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPolygonCoplanar is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPolygonCoplanar is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPolygonCoplanarRef = VcComponentPublicInstance<VcGeometryPolygonCoplanarProps>

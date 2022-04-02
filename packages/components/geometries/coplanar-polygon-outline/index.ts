@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:22:47
+ * @LastEditTime: 2022-03-30 10:35:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\coplanar-polygon-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { polygonHierarchy } from '@vue-cesium/utils/cesium-props'
@@ -30,4 +29,23 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonCoplanarOutlineProps = ExtractPropTypes<typeof polygonCoplanarOutlineProps>
+export type VcGeometryPolygonCoplanarOutlineProps = {
+  /**
+   * A polygon hierarchy that can include holes.
+   */
+  polygonHierarchy: VcPolygonHierarchy
+  /**
+   * Triggers before the VcGeometryPolygonCoplanarOutline is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPolygonCoplanarOutline is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPolygonCoplanarOutline is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPolygonCoplanarOutlineRef = VcComponentPublicInstance<VcGeometryPolygonCoplanarOutlineProps>

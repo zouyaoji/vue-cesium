@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-15 22:40:43
+ * @LastEditTime: 2022-03-30 10:18:51
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\box\index.ts
  */
-import { VcComponentInternalInstance, VcPosition } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { dimensions, vertexFormat } from '@vue-cesium/utils/cesium-props'
@@ -37,7 +36,6 @@ export default defineComponent({
   }
 })
 
-// export type VcGeometryBoxProps = ExtractPropTypes<typeof boxGeometryProps>
 export type VcGeometryBoxProps = {
   /**
    * The width, depth, and height of the box stored in the x, y, and z coordinates of the Cartesian3, respectively.
@@ -47,4 +45,18 @@ export type VcGeometryBoxProps = {
    * The vertex attributes to be computed.
    */
   vertexFormat?: Cesium.VertexFormat
+  /**
+   * Triggers before the VcGeometryBox is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryBox is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryBox is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
 }
+
+export type VcGeometryBoxRef = VcComponentPublicInstance<VcGeometryBoxProps>

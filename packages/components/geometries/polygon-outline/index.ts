@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:08:31
+ * @LastEditTime: 2022-03-30 11:36:10
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polygon-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
@@ -46,4 +46,52 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonOutlineProps = ExtractPropTypes<typeof polygonOutlineGeometryProps>
+export type VcGeometryPolygonOutlineProps = {
+  /**
+   * A polygon hierarchy that can include holes.
+   */
+  polygonHierarchy: VcPolygonHierarchy
+  /**
+   * The distance in meters between the polygon and the ellipsoid surface.
+   */
+  height?: number
+  /**
+   * The distance in meters between the polygon's extruded face and the ellipsoid surface.
+   */
+  extrudedHeight?: number
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * The ellipsoid to be used as a reference.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   */
+  granularity?: number
+  /**
+   * Use the height of options.positions for each position instead of using options.height to determine the height.
+   * Default value: false
+   */
+  perPositionHeight?: boolean
+  /**
+   * The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB.
+   */
+  arcType?: number | Cesium.ArcType
+  /**
+   * Triggers before the VcGeometryPolygonOutline is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPolygonOutline is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPolygonOutline is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPolygonOutlineRef = VcComponentPublicInstance<VcGeometryPolygonOutlineProps>

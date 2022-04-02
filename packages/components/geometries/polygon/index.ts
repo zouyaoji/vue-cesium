@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:07:15
+ * @LastEditTime: 2022-03-30 11:34:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polygon\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPolygonHierarchy, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import {
@@ -52,4 +51,67 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPolygonProps = ExtractPropTypes<typeof polygonGeometryProps>
+export type VcGeometryPolygonProps = {
+  /**
+   * A polygon hierarchy that can include holes.
+   */
+  polygonHierarchy: VcPolygonHierarchy
+  /**
+   * The distance in meters between the polygon and the ellipsoid surface.
+   */
+  height?: number
+  /**
+   * The distance in meters between the polygon's extruded face and the ellipsoid surface.
+   */
+  extrudedHeight?: number
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * The rotation of the texture coordinates, in radians. A positive rotation is counter-clockwise.
+   * Default value: 0.0
+   */
+  stRotation?: number
+  /**
+   * The ellipsoid to be used as a reference.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   */
+  granularity?: number
+  /**
+   * Use the height of options.positions for each position instead of using options.height to determine the height.
+   * Default value: false
+   */
+  perPositionHeight?: boolean
+  /**
+   * When false, leaves off the top of an extruded polygon open.
+   * Default value: true
+   */
+  closeTop?: boolean
+  /**
+   * When false, leaves off the bottom of an extruded polygon open.
+   * Default value: true
+   */
+  closeBottom?: boolean
+  /**
+   * The type of line the polygon edges must follow. Valid options are ArcType.GEODESIC and ArcType.RHUMB.
+   */
+  arcType?: number | Cesium.ArcType
+  /**
+   * Triggers before the VcGeometryPolygon is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPolygon is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPolygon is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPolygonRef = VcComponentPublicInstance<VcGeometryPolygonProps>

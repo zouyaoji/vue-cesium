@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:14:31
+ * @LastEditTime: 2022-03-30 10:32:22
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\circle-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcPosition, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { center, radius, ellipsoid, height, granularity, extrudedHeight, numberOfVerticalLines } from '@vue-cesium/utils/cesium-props'
@@ -36,4 +35,48 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCircleOutlineProps = ExtractPropTypes<typeof circleOutlineGeometryProps>
+export type VcGeometryCircleOutlineProps = {
+  /**
+   * The circle's center point in the fixed frame.
+   */
+  center: VcPosition
+  /**
+   * The radius in meters.
+   */
+  radius?: number
+  /**
+   * The ellipsoid the circle will be on.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The distance in meters between the circle and the ellipsoid surface.
+   */
+  height?: number
+  /**
+   * The angular distance between points on the circle in radians.
+   */
+  granularity?: number
+  /**
+   * The distance in meters between the circle's extruded face and the ellipsoid surface.
+   */
+  extrudedHeight?: number
+  /**
+   * Number of lines to draw between the top and bottom of an extruded circle.
+   * Default value: 16
+   */
+  numberOfVerticalLines?: number
+  /**
+   * Triggers before the VcGeometryCircleOutline is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryCircleOutline is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryCircleOutline is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryCircleOutlineRef = VcComponentPublicInstance<VcGeometryCircleOutlineProps>

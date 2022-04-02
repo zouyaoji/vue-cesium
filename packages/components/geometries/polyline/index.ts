@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-20 22:48:35
+ * @LastEditTime: 2022-03-30 11:40:46
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\polyline\index.ts
  */
-import { VcCartesian3Array, VcColor, VcComponentInternalInstance, VcReadyObject } from '@vue-cesium/utils/types'
+import { VcCartesian3Array, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { positions, width, colors, arcType, granularity, vertexFormat, ellipsoid } from '@vue-cesium/utils/cesium-props'
@@ -40,7 +39,6 @@ export default defineComponent({
   }
 })
 
-// export type VcGeometryPolylineProps = ExtractPropTypes<typeof polylineGeometryProps>
 export type VcGeometryPolylineProps = {
   /**
    * An array of VcCartesian3Array defining the positions in the polyline as a line strip
@@ -78,15 +76,17 @@ export type VcGeometryPolylineProps = {
    */
   ellipsoid?: Cesium.Ellipsoid
   /**
-   * Triggers before the VcPoint is loaded
+   * Triggers before the VcGeometryPolyline is loaded
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcPoint is successfully loaded
+   * Triggers when the VcGeometryPolyline is successfully loaded
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcPoint is destroyed
+   * Triggers when the VcGeometryPolyline is destroyed
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
 }
+
+export type VcGeometryPolylineRef = VcComponentPublicInstance<VcGeometryPolylineProps>

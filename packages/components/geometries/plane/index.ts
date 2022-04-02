@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:03:14
+ * @LastEditTime: 2022-03-30 11:02:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\plane\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { vertexFormat } from '@vue-cesium/utils/cesium-props'
@@ -30,4 +29,23 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryPlaneProps = ExtractPropTypes<typeof planeGeometryProps>
+export type VcGeometryPlaneProps = {
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * Triggers before the VcGeometryPlane is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPlane is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPlane is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPlaneRef = VcComponentPublicInstance<VcGeometryPlaneProps>

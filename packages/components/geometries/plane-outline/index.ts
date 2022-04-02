@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:05:59
+ * @LastEditTime: 2022-03-30 11:03:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\plane-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -23,3 +23,20 @@ export default defineComponent({
     return () => createCommentVNode(kebabCase(instance.proxy?.$options.name || 'v-if'))
   }
 })
+
+export type VcGeometryPlaneOutlineProps = {
+  /**
+   * Triggers before the VcGeometryPlaneOutline is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryPlaneOutline is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryPlaneOutline is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryPlaneOutlineRef = VcComponentPublicInstance<VcGeometryPlaneOutlineProps>

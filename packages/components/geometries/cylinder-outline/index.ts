@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 11:45:29
+ * @LastEditTime: 2022-03-30 10:36:33
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\cylinder-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { length, topRadius, bottomRadius, slices, numberOfVerticalLines } from '@vue-cesium/utils/cesium-props'
@@ -34,4 +33,41 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryCylinderOutlineProps = ExtractPropTypes<typeof cylinderOutlineGeometryProps>
+export type VcGeometryCylinderOutlineProps = {
+  /**
+   * The length of the cylinder.
+   */
+  length: number
+  /**
+   * The radius of the top of the cylinder.
+   */
+  topRadius: number
+  /**
+   * 	The radius of the bottom of the cylinder.
+   */
+  bottomRadius: number
+  /**
+   * The number of edges around the perimeter of the cylinder.
+   * Default value: 128
+   */
+  slices?: number
+  /**
+   * Number of lines to draw between the top and bottom surfaces of the cylinder.
+   *  Default value: 16
+   */
+  numberOfVerticalLines?: number
+  /**
+   * Triggers before the VcGeometryCylinderOutline is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryCylinderOutline is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryCylinderOutline is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryCylinderOutlineRef = VcComponentPublicInstance<VcGeometryCylinderOutlineProps>

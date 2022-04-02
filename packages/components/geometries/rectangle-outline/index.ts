@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:15:04
+ * @LastEditTime: 2022-03-30 11:46:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\rectangle-outline\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'babel-preset-vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { rectangle, ellipsoid, granularity, height, rotation, extrudedHeight } from '@vue-cesium/utils/cesium-props'
@@ -35,4 +34,44 @@ export default defineComponent({
   }
 })
 
-export type VcGeometryRectangleOutlineProps = ExtractPropTypes<typeof rectangleOutlineGeometryProps>
+export type VcGeometryRectangleOutlineProps = {
+  /**
+   * A cartographic rectangle with north, south, east and west properties in radians.
+   */
+  rectangle: VcRectangle
+  /**
+   * The ellipsoid on which the rectangle lies.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The distance, in radians, between each latitude and longitude. Determines the number of positions in the buffer.
+   */
+  granularity?: number
+  /**
+   * The distance in meters between the rectangle and the ellipsoid surface.
+   */
+  height?: number
+  /**
+   * The rotation of the rectangle, in radians. A positive rotation is counter-clockwise.
+   * Default value: 0.0
+   */
+  rotation?: number
+  /**
+   * The distance in meters between the rectangle's extruded face and the ellipsoid surface.
+   */
+  extrudedHeight: number
+  /**
+   * Triggers before the VcGeometryRectangleOutline is loaded
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometryRectangleOutline is successfully loaded
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometryRectangleOutline is destroyed
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometryRectangleOutlineRef = VcComponentPublicInstance<VcGeometryRectangleOutlineProps>

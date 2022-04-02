@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 14:18:02
+ * @LastEditTime: 2022-03-30 13:20:19
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\geometries\sphere\index.ts
  */
-import { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { defineComponent, getCurrentInstance, createCommentVNode } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import { useGeometries } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { radius, stackPartitions, slicePartitions, vertexFormat } from '@vue-cesium/utils/cesium-props'
@@ -33,4 +32,37 @@ export default defineComponent({
   }
 })
 
-export type VcGeometrySphereProps = ExtractPropTypes<typeof sphereGeometryProps>
+export type VcGeometrySphereProps = {
+  /**
+   * The radius of the sphere.
+   */
+  radius?: number
+  /**
+   * The number of times to partition the ellipsoid into stacks.
+   * Default value: 64
+   */
+  stackPartitions?: number
+  /**
+   * The number of times to partition the ellipsoid into radial slices.
+   * Default value: 64
+   */
+  slicePartitions?: number
+  /**
+   * The vertex attributes to be computed.
+   */
+  vertexFormat?: Cesium.VertexFormat
+  /**
+   * Triggers before the VcGeometrySphere is loaded
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGeometrySphere is successfully loaded
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGeometrySphere is destroyed
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+}
+
+export type VcGeometrySphereRef = VcComponentPublicInstance<VcGeometrySphereProps>
