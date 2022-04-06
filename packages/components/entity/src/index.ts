@@ -1,42 +1,70 @@
-import type { ExtractPropTypes, PropType, ExtractDefaultPropTypes } from 'vue'
+import type { PropType, VNode } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import type { EntityEmitType, VcComponentInternalInstance, VcComponentPublicInstance, VcGraphics } from '@vue-cesium/utils/types'
+import type {
+  AnyObject,
+  EntityEmitType,
+  VcCallbackPropertyFunction,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcGraphics,
+  VcPickEvent,
+  VcPosition,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 import { useCommon } from '@vue-cesium/composables/index'
-import { position, plane, enableMouseEvent, show, viewFrom } from '@vue-cesium/utils/cesium-props'
+import { position, enableMouseEvent, show, viewFrom } from '@vue-cesium/utils/cesium-props'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits, pickEventEmits } from '@vue-cesium/utils/emits'
-import { VcGraphicsBillboardProps } from '../../graphics'
+import {
+  VcGraphicsBillboardProps,
+  VcGraphicsBoxProps,
+  VcGraphicsCorridorProps,
+  VcGraphicsCylinderProps,
+  VcGraphicsEllipseProps,
+  VcGraphicsEllipsoidRef,
+  VcGraphicsLabelProps,
+  VcGraphicsModelProps,
+  VcGraphicsPathProps,
+  VcGraphicsPlaneProps,
+  VcGraphicsPointProps,
+  VcGraphicsPolygonProps,
+  VcGraphicsPolylineProps,
+  VcGraphicsPolylineVolumeProps,
+  VcGraphicsRectangleProps,
+  VcGraphicsTilesetProps,
+  VcGraphicsWallProps
+} from '../../graphics'
 
 export const entityProps = {
   id: String,
   name: String,
   availability: Object as PropType<Cesium.TimeIntervalCollection>,
   ...show,
-  description: [String, Object],
+  description: [String, Object] as PropType<string | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>>,
   ...position,
-  orientation: Object,
+  orientation: Object as PropType<Cesium.Quaternion | Cesium.VelocityOrientationProperty | Cesium.CallbackProperty>,
   ...viewFrom,
-  parent: Object,
-  billboard: Object as PropType<VcGraphicsBillboardProps>,
-  corridor: Object,
-  cylinder: Object,
-  ellipse: Object,
-  ellipsoid: Object,
-  box: Object,
-  label: Object,
-  model: Object,
-  tileset: Object,
-  path: Object,
-  ...plane,
-  point: Object,
-  polygon: Object,
-  polyline: Object,
+  parent: Object as PropType<Cesium.Entity>,
+  billboard: Object as PropType<Cesium.BillboardGraphics | VcGraphicsBillboardProps>,
+  box: Object as PropType<Cesium.BoxGraphics | VcGraphicsBoxProps>,
+  corridor: Object as PropType<Cesium.CorridorGraphics | VcGraphicsCorridorProps>,
+  cylinder: Object as PropType<Cesium.CylinderGraphics | VcGraphicsCylinderProps>,
+  ellipse: Object as PropType<Cesium.EllipseGraphics | VcGraphicsEllipseProps>,
+  ellipsoid: Object as PropType<Cesium.EllipsoidGraphics | VcGraphicsEllipsoidRef>,
+  label: Object as PropType<Cesium.LabelGraphics | VcGraphicsLabelProps>,
+  model: Object as PropType<Cesium.ModelGraphics | VcGraphicsModelProps>,
+  tileset: Object as PropType<Cesium.Cesium3DTilesetGraphics | VcGraphicsTilesetProps>,
+  path: Object as PropType<Cesium.PathGraphics | VcGraphicsPathProps>,
+  plane: Object as PropType<Cesium.PlaneGraphics | VcGraphicsPlaneProps>,
+  point: Object as PropType<Cesium.PointGraphics | VcGraphicsPointProps>,
+  polygon: Object as PropType<Cesium.PolygonGraphics | VcGraphicsPolygonProps>,
+  polyline: Object as PropType<Cesium.PolylineGraphics | VcGraphicsPolylineProps>,
   properties: Object,
-  polylineVolume: Object,
-  rectangle: Object,
-  wall: Object,
+  polylineVolume: Object as PropType<Cesium.PolylineVolumeGraphics | VcGraphicsPolylineVolumeProps>,
+  rectangle: Object as PropType<Cesium.RectangleGraphics | VcGraphicsRectangleProps>,
+  wall: Object as PropType<Cesium.WallGraphics | VcGraphicsWallProps>,
   ...enableMouseEvent
 }
 
@@ -120,9 +148,166 @@ export default defineComponent({
   }
 })
 
-export type VcEntityProps = ExtractPropTypes<typeof entityProps>
 export type VcEntityEmits = typeof emits
 
+export type VcEntityProps = {
+  /**
+   * A unique identifier for this object. If none is provided, a GUID is generated.
+   */
+  id?: string
+  /**
+   * A human readable name to display to users. It does not have to be unique.
+   */
+  name?: string
+  /**
+   * The availability, if any, associated with this object.
+   */
+  availability?: Cesium.TimeIntervalCollection
+  /**
+   * A boolean value indicating if the entity and its children are displayed.
+   */
+  show?: boolean
+  /**
+   * A string Property specifying an HTML description for this entity.
+   */
+  description?: string | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>
+  /**
+   * A Property specifying the entity position.
+   */
+  position?: VcPosition
+  /**
+   * A Property specifying the entity orientation.
+   */
+  orientation?: Cesium.Quaternion | Cesium.VelocityOrientationProperty | Cesium.CallbackProperty
+  /**
+   * A suggested initial offset for viewing this object.
+   */
+  viewFrom?: VcPosition | Cesium.CallbackProperty
+  /**
+   * A parent entity to associate with this entity.
+   */
+  parent?: Cesium.Entity
+  /**
+   * A billboard to associate with this entity.
+   */
+  billboard?: Cesium.BillboardGraphics | VcGraphicsBillboardProps
+  /**
+   * A box to associate with this entity.
+   */
+  box?: Cesium.BoxGraphics | VcGraphicsBoxProps
+  /**
+   * A corridor to associate with this entity.
+   */
+  corridor?: Cesium.CorridorGraphics | VcGraphicsCorridorProps
+  /**
+   * A cylinder to associate with this entity.
+   */
+  cylinder?: Cesium.CylinderGraphics | VcGraphicsCylinderProps
+  /**
+   * A ellipse to associate with this entity.
+   */
+  ellipse?: Cesium.BillboardGraphics | VcGraphicsBillboardProps
+  /**
+   * A ellipsoid to associate with this entity.
+   */
+  ellipsoid?: Cesium.EllipseGraphics | VcGraphicsEllipseProps
+  /**
+   * A options.label to associate with this entity.
+   */
+  label?: Cesium.LabelGraphics | VcGraphicsLabelProps
+  /**
+   * A model to associate with this entity.
+   */
+  model?: Cesium.ModelGraphics | VcGraphicsModelProps
+  /**
+   * A 3D Tiles tileset to associate with this entity.
+   */
+  tileset?: Cesium.Cesium3DTilesetGraphics | VcGraphicsTilesetProps
+  /**
+   * A path to associate with this entity.
+   */
+  path?: Cesium.PathGraphics | VcGraphicsPathProps
+  /**
+   * A plane to associate with this entity.
+   */
+  plane?: Cesium.PlaneGraphics | VcGraphicsPlaneProps
+  /**
+   * A point to associate with this entity.
+   */
+  point?: Cesium.PointGraphics | VcGraphicsPointProps
+  /**
+   * A polygon to associate with this entity.
+   */
+  polygon?: Cesium.PolygonGraphics | VcGraphicsPolygonProps
+  /**
+   * A polyline to associate with this entity.
+   */
+  polyline?: Cesium.PolylineGraphics | VcGraphicsPolylineProps
+  /**
+   * Arbitrary properties to associate with this entity.
+   */
+  properties?: AnyObject
+  /**
+   * A polylineVolume to associate with this entity.
+   */
+  polylineVolume?: Cesium.PolylineVolumeGraphics | VcGraphicsPolylineVolumeProps
+  /**
+   * A rectangle to associate with this entity.
+   */
+  rectangle?: Cesium.RectangleGraphics | VcGraphicsRectangleProps
+  /**
+   * A wall to associate with this entity.
+   */
+  wall?: Cesium.WallGraphics | VcGraphicsWallProps
+  /**
+   * Triggers before the VcEntity is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcEntity is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcEntity is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when a property or sub-property is changed or modified.
+   */
+  onDefinitionChanged?: (property: Cesium.Property) => void
+  /**
+   * Triggers when the mouse is pressed on this entity.
+   */
+  onMousedown?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse bounces up on this entity.
+   */
+  onMouseup?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks on this entity.
+   */
+  onClick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks outside this entity.
+   */
+  onClickout?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the left mouse button double-clicks this entity.
+   */
+  onDblclick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves on this entity.
+   */
+  onMousemove?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves over to this entity.
+   */
+  onMouseover?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves out of this entity.
+   */
+  onMouseout?: (evt: VcPickEvent) => void
+}
 export interface VcEntityRef extends VcComponentPublicInstance<VcEntityProps> {
   /**
    * private method, update graphic.
@@ -130,4 +315,11 @@ export interface VcEntityRef extends VcComponentPublicInstance<VcEntityProps> {
    * @param type
    */
   __updateGraphics: (graphics: VcGraphics | undefined, type: EntityEmitType) => boolean
+}
+
+export interface VcEntitySlots {
+  /**
+   * Slot for vc-graphics-xxx.
+   */
+  default: () => VNode[]
 }
