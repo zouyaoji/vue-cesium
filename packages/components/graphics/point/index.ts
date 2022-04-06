@@ -1,14 +1,21 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 15:36:29
+ * @LastEditTime: 2022-04-06 11:38:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\point\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type {
+  VcCallbackPropertyFunction,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDistanceDisplayCondition,
+  VcNearFarScalar,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
   show,
@@ -50,4 +57,69 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsPointProps = ExtractPropTypes<typeof pointGraphicsProps>
+export type VcGraphicsPointProps = {
+  /**
+   * A boolean Property specifying the visibility of the point.
+   * Default value: true
+   */
+  show?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
+  /**
+   * A numeric Property specifying the size in pixels.
+   * Default value: 1
+   */
+  pixelSize?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * A Property specifying what the height is relative to.
+   * Default value: Cesium.HeightReference.NONE
+   */
+  heightReference?: number | Cesium.HeightReference | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * A Property specifying the VcColor of the point.
+   * Default value: white
+   */
+  color?: VcColor
+  /**
+   * A Property specifying the VcColor of the outline.
+   * Default value: black
+   */
+  outlineColor?: VcColor
+  /**
+   * A numeric Property specifying the the outline width in pixels.
+   * Default value: 1.0
+   */
+  outlineWidth?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * A VcNearFarScalar Property used to scale the point based on distance.
+   */
+  scaleByDistance?: VcNearFarScalar
+  /**
+   * A VcNearFarScalar Property used to set translucency based on distance from the camera.
+   */
+  translucencyByDistance?: VcNearFarScalar
+  /**
+   * A Property specifying at what distance from the camera that this point will be displayed.
+   */
+  distanceDisplayCondition?: VcDistanceDisplayCondition
+  /**
+   * A Property specifying the distance from the camera at which to disable the depth test to.
+   */
+  disableDepthTestDistance?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * Triggers before the VcGraphicsPoint is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGraphicsPoint is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGraphicsPoint is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when a property or sub-property is changed or modified.
+   */
+  onDefinitionChanged?: (property: Cesium.Property) => void
+}
+
+export type VcGraphicsPointRef = VcComponentPublicInstance<VcGraphicsPointProps>

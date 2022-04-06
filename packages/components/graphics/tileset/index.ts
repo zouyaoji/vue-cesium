@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 15:44:51
+ * @LastEditTime: 2022-04-06 13:53:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\tileset\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcCallbackPropertyFunction, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import { show, uri, maximumScreenSpaceError } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -33,4 +32,32 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsTilesetProps = ExtractPropTypes<typeof tilesetGraphicsProps>
+export type VcGraphicsTilesetProps = {
+  /**
+   * A boolean Property specifying the visibility of the tileset.
+   * Default value: true
+   */
+  show?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
+  /**
+   * A string or Resource Property specifying the URI of the tileset.
+   */
+  uri?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * Triggers before the VcGraphicsTileset is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGraphicsTileset is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGraphicsTileset is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when a property or sub-property is changed or modified.
+   */
+  onDefinitionChanged?: (property: Cesium.Property) => void
+}
+
+export type VcGraphicsTilesetRef = VcComponentPublicInstance<VcGraphicsTilesetProps>

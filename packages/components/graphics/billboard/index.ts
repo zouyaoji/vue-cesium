@@ -1,19 +1,19 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-17 21:15:54
+ * @LastEditTime: 2022-04-02 21:42:38
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\billboard\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes } from 'vue'
 import type {
   VcBoundingRectangle,
   VcCallbackPropertyFunction,
   VcCartesian2,
   VcColor,
   VcComponentInternalInstance,
+  VcComponentPublicInstance,
   VcDistanceDisplayCondition,
   VcNearFarScalar,
   VcPosition,
@@ -79,13 +79,12 @@ export default defineComponent({
   }
 })
 
-// export type VcGraphicsBillboardProps = ExtractPropTypes<typeof billboarGraphicsProps>
 export type VcGraphicsBillboardProps = {
   /**
    * A boolean Property specifying the visibility of the billboard.
    * Default value: true
    */
-  show?: boolean
+  show?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
   /**
    * A Property specifying the Image, URI, or Canvas to use for the billboard.
    */
@@ -188,3 +187,5 @@ export type VcGraphicsBillboardProps = {
    */
   onDefinitionChanged?: (property: Cesium.Property) => void
 }
+
+export type VcGraphicsBillboardRef = VcComponentPublicInstance<VcGraphicsBillboardProps>

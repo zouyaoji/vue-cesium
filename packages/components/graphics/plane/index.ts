@@ -1,14 +1,23 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-14 15:34:32
+ * @LastEditTime: 2022-04-06 11:35:50
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\plane\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
+import type {
+  VcCallbackPropertyFunction,
+  VcCartesian2,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDistanceDisplayCondition,
+  VcMaterial,
+  VcPlane,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 import { makeCartesian2 } from '@vue-cesium/utils/cesium-helpers'
 import { useGraphics } from '@vue-cesium/composables'
 import { show, fill, material, outline, outlineColor, outlineWidth, shadows, distanceDisplayCondition, plane } from '@vue-cesium/utils/cesium-props'
@@ -19,7 +28,7 @@ export const planeGraphicsProps = {
   ...plane,
   // 和 BoxGraphics.dimensions 区分
   dimensions: {
-    type: [Object, Array, Function],
+    type: [Object, Array, Function] as PropType<VcCartesian2>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian2
     }
@@ -46,4 +55,71 @@ export default defineComponent({
   }
 })
 
-export type VcGraphicsPlaneProps = ExtractPropTypes<typeof planeGraphicsProps>
+export type VcGraphicsPlaneProps = {
+  /**
+   * A boolean Property specifying the visibility of the plane.
+   * Default value: true
+   */
+  show?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
+  /**
+   * A VcPlane Property specifying the normal and distance for the plane.
+   */
+  plane?: VcPlane
+  /**
+   * A VcCartesian2 Property specifying the width and height of the plane.
+   */
+  dimensions?: VcCartesian2
+  /**
+   * A boolean Property specifying whether the plane is filled with the provided material.
+   * Default Value: true
+   */
+  fill?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
+  /**
+   * A Property specifying the material used to fill the plane.
+   * Default value: white
+   */
+  material?: VcMaterial
+  /**
+   * A boolean Property specifying whether the plane is outlined.
+   * Default value: false
+   */
+  outline?: boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>
+  /**
+   * A Property specifying the Color of the outline.
+   * Default value: black
+   */
+  outlineColor?: VcColor
+  /**
+   * A numeric Property specifying the width of the outline.
+   * Note: This property will be ignored on all major browsers on Windows platforms. For details, see (@link https://github.com/CesiumGS/cesium/issues/40}.
+   * Default value: 1.0
+   */
+  outlineWidth?: number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  /**
+   * An enum Property specifying whether the plane casts or receives shadows from light sources.
+   * Default value: ShadowMode.DISABLED
+   */
+  shadows?: number | Cesium.ShadowMode | VcCallbackPropertyFunction<number>
+  /**
+   * A Property specifying at what distance from the camera that this plane will be displayed.
+   */
+  distanceDisplayCondition?: VcDistanceDisplayCondition
+  /**
+   * Triggers before the VcGraphicsPlane is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcGraphicsPlane is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcGraphicsPlane is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when a property or sub-property is changed or modified.
+   */
+  onDefinitionChanged?: (property: Cesium.Property) => void
+}
+
+export type VcGraphicsPlaneRef = VcComponentPublicInstance<VcGraphicsPlaneProps>
