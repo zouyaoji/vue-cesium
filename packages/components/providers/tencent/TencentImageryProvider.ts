@@ -1,7 +1,9 @@
+import defer from '@vue-cesium/utils/defer'
+
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 16:10:02
- * @LastEditTime: 2022-03-31 13:58:35
+ * @LastEditTime: 2022-04-06 16:40:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tencent\TencentImageryProvider.ts
@@ -31,7 +33,7 @@ class TencentImageryProvider {
   _readyPromise: any
   _style: string
   constructor(options) {
-    const { Resource, defaultValue, Credit, when, Event } = Cesium
+    const { Resource, defaultValue, Credit, Event } = Cesium
     this._subdomains = options.subdomains || ['1', '2', '3']
     this._url = options.url || [options.protocol || '', TILE_URL[options.mapStyle] || TILE_URL['vector']].join('')
 
@@ -55,7 +57,7 @@ class TencentImageryProvider {
     this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
     this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
     this._errorEvent = new Event()
-    this._readyPromise = when.defer()
+    this._readyPromise = defer()
     this._ready = true
     this._readyPromise.resolve(true)
     this._style = options.styleId

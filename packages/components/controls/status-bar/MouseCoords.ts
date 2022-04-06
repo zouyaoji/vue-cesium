@@ -152,9 +152,8 @@ class MouseCoords {
 
     const geoidHeightPromise = this.geoidModel ? this.geoidModel.getHeight(position.longitude, position.latitude) : undefined
     const terrainPromise = sampleTerrainMostDetailed(terrainProvider, [positionWithHeight])
-    this.tileRequestInFlight = when.all(
-      [geoidHeightPromise, terrainPromise],
-      result => {
+    this.tileRequestInFlight = Promise.all([geoidHeightPromise, terrainPromise])
+      .then(result => {
         const geoidHeight = result[0] || 0.0
         this.tileRequestInFlight = undefined
         if (Cartographic.equals(position, this.lastHeightSamplePosition)) {
@@ -163,11 +162,10 @@ class MouseCoords {
         } else {
           // Mouse moved since we started this request, so the result isn't useful.  Try again next time.
         }
-      },
-      () => {
+      })
+      .catch(() => {
         this.tileRequestInFlight = undefined
-      }
-    )
+      })
   }
 }
 

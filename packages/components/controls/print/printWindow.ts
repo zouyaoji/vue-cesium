@@ -1,3 +1,13 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-10-27 15:54:13
+ * @LastEditTime: 2022-04-06 16:01:23
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\components\controls\print\printWindow.ts
+ */
+import defer from '@vue-cesium/utils/defer'
+
 /**
  * Tells the web browser to print a given window, which my be an iframe window, and
  * returns a promise that resolves when printing is safely over so that, for example
@@ -7,8 +17,7 @@
  *                    there is no indication that the browser's print
  */
 function printWindow(windowToPrint) {
-  const { when } = Cesium
-  const deferred = when.defer()
+  const deferred = defer()
   let printInProgressCount = 0
 
   const timeout = setTimeout(function () {

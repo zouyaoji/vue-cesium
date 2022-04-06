@@ -1,11 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 16:10:02
- * @LastEditTime: 2022-03-31 13:57:04
+ * @LastEditTime: 2022-04-06 16:40:30
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\amap\AMapImageryProvider.ts
  */
+
+import defer from '@vue-cesium/utils/defer'
 
 class AMapImageryProvider {
   _url: string
@@ -30,7 +32,7 @@ class AMapImageryProvider {
   _scl: any
   _ltype: any
   constructor(options) {
-    const { Resource, defaultValue, Credit, when, Event } = Cesium
+    const { Resource, defaultValue, Credit, Event } = Cesium
     this._url = options.url
     const resource = (Resource as any).createIfNeeded(this._url)
     resource.appendForwardSlash()
@@ -52,7 +54,7 @@ class AMapImageryProvider {
     this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
     this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
     this._errorEvent = new Event()
-    this._readyPromise = when.defer()
+    this._readyPromise = defer()
     this._ready = true
     this._readyPromise.resolve(true)
     this._subdomains = options.subdomains || ['01', '02', '03', '04']

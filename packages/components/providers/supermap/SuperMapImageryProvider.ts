@@ -1,3 +1,4 @@
+import defer from '@vue-cesium/utils/defer'
 import IndexedDBScheduler from './IndexedDBScheduler'
 class SuperMapImageryProvider {
   tablename: string
@@ -31,7 +32,7 @@ class SuperMapImageryProvider {
   _readyPromise: any
   _options: any
   constructor(options) {
-    const { appendForwardSlash, Credit, defaultValue, defined, DeveloperError, Event, Resource, when, Math } = Cesium
+    const { appendForwardSlash, Credit, defaultValue, defined, DeveloperError, Event, Resource, Math } = Cesium
     options = defaultValue(options, {})
     const { url } = options
     if (!defined(url)) {
@@ -88,7 +89,7 @@ class SuperMapImageryProvider {
     }
     this._credit = credit
     this._ready = false
-    this._readyPromise = when.defer()
+    this._readyPromise = defer()
     this._options = options
     init.call(this)
   }

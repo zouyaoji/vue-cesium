@@ -124,7 +124,7 @@ class TiandituImageryProvider {
     this._minimumLevel = defaultValue(options.minimumLevel, 0)
     this._maximumLevel = defaultValue(options.maximumLevel, TiandituMapsStyleLabels[this._mapStyle].length)
     this._rectangle = defaultValue(options.rectangle, this.tilingScheme.rectangle)
-    this._readyPromise = when.resolve(true)
+    this._readyPromise = Promise.resolve(true)
     this._errorEvent = new Event()
     const credit = defaultValue(options.credit, '天地图全球影像服务')
     this._credit = typeof credit === 'string' ? new Credit(credit) : credit

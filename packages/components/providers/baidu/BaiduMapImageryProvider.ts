@@ -1,3 +1,4 @@
+import defer from '@vue-cesium/utils/defer'
 import BaiduMapMercatorTilingScheme from './BaiduMapTilingScheme'
 
 class BaiduMapImageryProvider {
@@ -20,7 +21,7 @@ class BaiduMapImageryProvider {
   _style: string
   _labelStyle: any
   constructor(options) {
-    const { Resource, defaultValue, Credit, when, Event } = Cesium
+    const { Resource, defaultValue, Credit, Event } = Cesium
     this._subdomains = defaultValue(options.subdomains, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
     if (options.url) {
       this._url = options.url
@@ -60,7 +61,7 @@ class BaiduMapImageryProvider {
     this.enablePickFeatures = defaultValue(options.enablePickFeatures, false)
     this._hasAlphaChannel = defaultValue(options.hasAlphaChannel, true)
     this._errorEvent = new Event()
-    this._readyPromise = when.defer()
+    this._readyPromise = defer()
     this._ready = true
     this._readyPromise.resolve(true)
     this._style = options.bdStyle
