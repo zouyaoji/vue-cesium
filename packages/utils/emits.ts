@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-02-13 23:22:22
+ * @LastEditTime: 2022-04-06 14:59:13
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
@@ -59,6 +59,7 @@ export const primitiveCollectionEmits = {
 
 export const datasourceEmits = {
   ...commonEmits,
+  ...pickEventEmits,
   definitionChanged: (property: Cesium.Property) => true,
   clusterEvent: (entities: Array<Cesium.Entity>, cluster: { billboard: Cesium.Billboard; label: Cesium.Label; point: Cesium.PointPrimitive }) => true,
   collectionChanged: (

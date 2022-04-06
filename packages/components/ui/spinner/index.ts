@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-03-05 11:07:06
+ * @LastEditTime: 2022-03-30 15:32:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\ui\spinner\index.ts
@@ -52,3 +52,146 @@ export interface VcSpinnerProps {
 }
 
 export type VcSpinnerRef = ComponentPublicInstance<VcSpinnerProps>
+
+export interface VcSpinnerBallProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerBallRef = ComponentPublicInstance<VcSpinnerBallProps>
+
+export interface VcSpinnerBarsProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerBarsRef = ComponentPublicInstance<VcSpinnerBarsProps>
+
+export interface VcSpinnerDotsProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerDotsRef = ComponentPublicInstance<VcSpinnerDotsProps>
+
+export interface VcSpinnerGearsProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerGearsRef = ComponentPublicInstance<VcSpinnerGearsProps>
+
+export interface VcSpinnerHourglassProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerHourglassRef = ComponentPublicInstance<VcSpinnerHourglassProps>
+
+export interface VcSpinnerIosProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerIosRef = ComponentPublicInstance<VcSpinnerIosProps>
+
+export interface VcSpinnerOrbitProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerOrbitRef = ComponentPublicInstance<VcSpinnerOrbitProps>
+
+export interface VcSpinnerOvalProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerOvalRef = ComponentPublicInstance<VcSpinnerOvalProps>
+
+export interface VcSpinnerPuffProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerPuffRef = ComponentPublicInstance<VcSpinnerPuffProps>
+
+export interface VcSpinnerRingsProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerRingsRef = ComponentPublicInstance<VcSpinnerRingsProps>
+
+export interface VcSpinnerTailProps {
+  /**
+   * Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)
+   */
+  size?: string | undefined
+  /**
+   * Color name for component from the Quasar Color Palette
+   */
+  color?: string | undefined
+}
+
+export type VcSpinnerTailRef = ComponentPublicInstance<VcSpinnerTailProps>

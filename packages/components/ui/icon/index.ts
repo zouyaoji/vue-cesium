@@ -1,5 +1,5 @@
 import { h, defineComponent, computed, VNode, ComponentPublicInstance } from 'vue'
-import type { CSSProperties, ExtractPropTypes } from 'vue'
+import type { CSSProperties } from 'vue'
 import useSize, { useSizeProps } from '@vue-cesium/composables/private/use-size'
 import { hMergeSlot, hSlot } from '@vue-cesium/utils/private/render'
 

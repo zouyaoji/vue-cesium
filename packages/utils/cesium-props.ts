@@ -34,7 +34,8 @@ import type {
   VcNearFarScalar,
   VcPolygonHierarchy,
   VcMaterial,
-  VcBoundingRectangle
+  VcBoundingRectangle,
+  VcPlane
 } from './types'
 
 // 下面属性作为实体加载时 可以传 Function
@@ -65,7 +66,7 @@ const viewFrom = {
    * A suggested initial offset for viewing this object.
    */
   viewFrom: {
-    type: [Object, Array, Function] as PropType<VcPosition>,
+    type: [Object, Array, Function] as PropType<VcPosition | Cesium.CallbackProperty>,
     watcherOptions: {
       cesiumObjectBuilder: makeCartesian3,
       deep: true
@@ -198,7 +199,7 @@ const horizontalOrigin = {
  */
 const image = {
   image: [String, Object, HTMLCanvasElement, Function] as PropType<
-    string | HTMLCanvasElement | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>
+    string | HTMLImageElement | HTMLCanvasElement | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>
   >
 }
 
@@ -414,7 +415,7 @@ const outlineWidth = {
  * @const {Number, Object, Function} shadows mixin
  */
 const shadows = {
-  shadows: [Number, Object, Function] as PropType<number | Cesium.ShadowMode | VcCallbackPropertyFunction<number>>
+  shadows: [Number, Object, Function] as PropType<number | Cesium.ShadowMode | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 // BoxGraphics end
 
@@ -437,14 +438,16 @@ const positions = {
  * @const {Number, Object, Function} extrudedHeight mixin
  */
 const extrudedHeight = {
-  extrudedHeight: [Number, Object, Function]
+  extrudedHeight: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
  * @const {Number, Object, Function} extrudedHeightReference mixin
  */
 const extrudedHeightReference = {
-  extrudedHeightReference: [Number, Object, Function]
+  extrudedHeightReference: [Number, Object, Function] as PropType<
+    number | Cesium.HeightReference | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>
+  >
 }
 
 /**
@@ -452,7 +455,7 @@ const extrudedHeightReference = {
  */
 const cornerType = {
   cornerType: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CornerType | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -461,7 +464,7 @@ const cornerType = {
  * @const {Number, Object, Function} granularity mixin
  */
 const granularity = {
-  granularity: [Number, Object, Function]
+  granularity: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -469,7 +472,9 @@ const granularity = {
  */
 const classificationType = {
   classificationType: {
-    type: [Number, Object, Function] as PropType<number | Cesium.ClassificationType | VcCallbackPropertyFunction<Cesium.ClassificationType>>
+    type: [Number, Object, Function] as PropType<
+      number | Cesium.ClassificationType | Cesium.CallbackProperty | VcCallbackPropertyFunction<Cesium.ClassificationType>
+    >
   }
 }
 
@@ -477,7 +482,7 @@ const classificationType = {
  * @const {Number, Object, Function} zIndex mixin
  */
 const zIndex = {
-  zIndex: [Number, Object, Function]
+  zIndex: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 // CorridorGraphics end
 
@@ -487,21 +492,21 @@ const zIndex = {
  * @const {Number, Object, Function} length mixin
  */
 const length = {
-  length: [Number, Object, Function]
+  length: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
  * @const {Number, Object, Function} topRadius mixin
  */
 const topRadius = {
-  topRadius: [Number, Object, Function]
+  topRadius: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
  * @const {Number, Object, Function} bottomRadius mixin
  */
 const bottomRadius = {
-  bottomRadius: [Number, Object, Function]
+  bottomRadius: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -509,7 +514,7 @@ const bottomRadius = {
  */
 const numberOfVerticalLines = {
   numberOfVerticalLines: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 16
   }
 }
@@ -519,7 +524,7 @@ const numberOfVerticalLines = {
  */
 const slices = {
   slices: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 128
   }
 }
@@ -530,14 +535,14 @@ const slices = {
  * @const {Number, Object, Function} semiMajorAxis mixin
  */
 const semiMajorAxis = {
-  semiMajorAxis: [Number, Object, Function]
+  semiMajorAxis: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
  * @const {Number, Object, Function} semiMinorAxis mixin
  */
 const semiMinorAxis = {
-  semiMinorAxis: [Number, Object, Function]
+  semiMinorAxis: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -545,7 +550,7 @@ const semiMinorAxis = {
  */
 const stRotation = {
   stRotation: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.0
   }
 }
@@ -581,7 +586,7 @@ const innerRadii = {
  */
 const minimumClock = {
   minimumClock: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.0
   }
 }
@@ -590,7 +595,7 @@ const minimumClock = {
  */
 const maximumClock = {
   maximumClock: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 2 * Math.PI
   }
 }
@@ -599,7 +604,7 @@ const maximumClock = {
  */
 const minimumCone = {
   minimumCone: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.0
   }
 }
@@ -608,7 +613,7 @@ const minimumCone = {
  */
 const maximumCone = {
   maximumCone: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: Math.PI
   }
 }
@@ -618,7 +623,7 @@ const maximumCone = {
  */
 const stackPartitions = {
   stackPartitions: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 64
   }
 }
@@ -628,7 +633,7 @@ const stackPartitions = {
  */
 const slicePartitions = {
   slicePartitions: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 64
   }
 }
@@ -638,7 +643,7 @@ const slicePartitions = {
  */
 const subdivisions = {
   subdivisions: {
-    type: [Number, Object, Function] as PropType<number>,
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 128
   }
 }
@@ -649,7 +654,7 @@ const subdivisions = {
  * @const {String, Object, Function} text mixin
  */
 const text = {
-  text: [String, Object, Function]
+  text: [String, Object, Function] as PropType<string | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>
 }
 
 /**
@@ -657,7 +662,7 @@ const text = {
  */
 const font = {
   font: {
-    type: [String, Object, Function],
+    type: [String, Object, Function] as PropType<string | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: '30px sans-serif'
   }
 }
@@ -667,7 +672,7 @@ const font = {
  */
 const labelStyle = {
   labelStyle: {
-    type: [Number, Object, Function] as PropType<number | Cesium.LabelStyle | VcCallbackPropertyFunction<number>>,
+    type: [Number, Object, Function] as PropType<number | Cesium.LabelStyle | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -731,7 +736,7 @@ const fillColor = {
  * @const {String, Object, Function} uri mixin
  */
 const uri = {
-  uri: [String, Object, Function]
+  uri: [String, Object, Function] as PropType<string | Cesium.Resource | Cesium.CallbackProperty | VcCallbackPropertyFunction<string>>
 }
 
 /**
@@ -739,7 +744,7 @@ const uri = {
  */
 const minimumPixelSize = {
   minimumPixelSize: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.0
   }
 }
@@ -756,7 +761,7 @@ const maximumScale = {
  */
 const incrementallyLoadTextures = {
   incrementallyLoadTextures: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -766,7 +771,7 @@ const incrementallyLoadTextures = {
  */
 const runAnimations = {
   clampAnimations: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -776,7 +781,7 @@ const runAnimations = {
  */
 const clampAnimations = {
   clampAnimations: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -798,7 +803,7 @@ const silhouetteColor = {
  */
 const silhouetteSize = {
   silhouetteSize: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.0
   }
 }
@@ -808,7 +813,7 @@ const silhouetteSize = {
  */
 const colorBlendMode = {
   colorBlendMode: {
-    type: [Number, Object, Function] as PropType<number | Cesium.ColorBlendMode | VcCallbackPropertyFunction<number>>,
+    type: [Number, Object, Function] as PropType<number | Cesium.ColorBlendMode | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0
   }
 }
@@ -818,7 +823,7 @@ const colorBlendMode = {
  */
 const colorBlendAmount = {
   colorBlendAmount: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 0.5
   }
 }
@@ -885,7 +890,7 @@ const clippingPlanes = {
  */
 const plane = {
   plane: {
-    type: [Object, Array, Function] as PropType<Cesium.Plane>,
+    type: [Object, Array, Function] as PropType<VcPlane>,
     watcherOptions: {
       cesiumObjectBuilder: makePlane
     }
@@ -899,7 +904,7 @@ const plane = {
  */
 const pixelSize = {
   pixelSize: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 1
   }
 }
@@ -926,7 +931,7 @@ const hierarchy = {
  */
 const perPositionHeight = {
   perPositionHeight: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: false
   }
 }
@@ -936,7 +941,7 @@ const perPositionHeight = {
  */
 const closeTop = {
   closeTop: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -946,7 +951,7 @@ const closeTop = {
  */
 const closeBottom = {
   closeBottom: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: true
   }
 }
@@ -956,7 +961,7 @@ const closeBottom = {
  */
 const arcType = {
   arcType: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.ArcType | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 1
   }
 }
@@ -980,7 +985,7 @@ const depthFailMaterial = {
  */
 const clampToGround = {
   clampToGround: {
-    type: [Boolean, Object, Function],
+    type: [Boolean, Object, Function] as PropType<boolean | Cesium.CallbackProperty | VcCallbackPropertyFunction<boolean>>,
     default: false
   }
 }
@@ -1020,7 +1025,7 @@ const coordinates = {
  */
 const maximumScreenSpaceError = {
   maximumScreenSpaceError: {
-    type: [Number, Object, Function],
+    type: [Number, Object, Function] as PropType<number | Cesium.CallbackProperty | VcCallbackPropertyFunction<number>>,
     default: 16
   }
 }
@@ -1031,14 +1036,14 @@ const maximumScreenSpaceError = {
  * @const {Array, Object, Function} minimumHeights mixin
  */
 const minimumHeights = {
-  minimumHeights: [Array, Object, Function]
+  minimumHeights: [Array, Object, Function] as PropType<number[] | Cesium.CallbackProperty | VcCallbackPropertyFunction<number[]>>
 }
 
 /**
  * @const {Array, Object, Function} maximumHeights mixin
  */
 const maximumHeights = {
-  maximumHeights: [Array, Object, Function]
+  maximumHeights: [Array, Object, Function] as PropType<number[] | Cesium.CallbackProperty | VcCallbackPropertyFunction<number[]>>
 }
 // WallGraphics end
 // Entity end
@@ -1238,7 +1243,7 @@ const times = {
 
 const projectionTransforms = {
   projectionTransforms: {
-    type: [Boolean, Object] as PropType<ProjectionTransforms>,
+    type: [Boolean, Object] as PropType<false | ProjectionTransforms>,
     default: false
   }
 }
@@ -1443,7 +1448,7 @@ const radius = {
  * @const {Object} frustum mixin
  */
 const frustum = {
-  frustum: Object
+  frustum: Object as PropType<Cesium.PerspectiveFrustum | Cesium.OrthographicFrustum>
 }
 
 /**

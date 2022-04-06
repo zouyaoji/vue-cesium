@@ -43,7 +43,9 @@ import type {
   VcBoundingRectangle,
   CesiumBoundingRectangle,
   VcHeadingPitchRoll,
-  VcHeadingPitchRange
+  VcHeadingPitchRange,
+  VcPlane,
+  CesiumPlane
 } from './types'
 import { hasOwn, isFunction, isArray, isString, isPlainObject, isEmptyObj, getObjClassName, isUndefined } from './util'
 
@@ -668,10 +670,7 @@ export function makeBoundingRectangle(val: VcBoundingRectangle, isConstant = fal
  * @param {Object} val
  * @returns {Plane}
  */
-export function makePlane(
-  val: Cesium.CallbackProperty | Cesium.Plane | PlaneOption | Array<any> | AnyFunction<any>,
-  isConstant = false
-): Cesium.CallbackProperty | Cesium.Plane | Cesium.PlaneGraphics | undefined {
+export function makePlane(val: VcPlane, isConstant = false): CesiumPlane {
   const { Cartesian3, Plane, PlaneGraphics, CallbackProperty } = Cesium
 
   // Entiy 和 PlaneGraphics 都有个 plane 属性 要区别一下

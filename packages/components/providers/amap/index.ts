@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 15:40:44
- * @LastEditTime: 2022-03-31 10:35:34
+ * @LastEditTime: 2022-03-31 11:49:14
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\amap\index.ts
@@ -22,7 +22,7 @@ import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
 import AMapImageryProvider from './AMapImageryProvider'
 
-export const urltemplateImageryProviderProps = {
+export const amapImageryProviderProps = {
   url: {
     type: String,
     default: 'https://{domain}{s}.is.autonavi.com/appmaptile?lang={lang}&size=1&style={style}&scl={scl}&ltype={ltype}&x={x}&y={y}&z={z}'
@@ -66,7 +66,7 @@ export const urltemplateImageryProviderProps = {
 }
 export default defineComponent({
   name: 'VcImageryProviderAmap',
-  props: urltemplateImageryProviderProps,
+  props: amapImageryProviderProps,
   emits: providerEmits,
   setup(props, ctx) {
     // state

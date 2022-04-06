@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-03-30 16:10:02
- * @LastEditTime: 2022-03-31 09:29:27
+ * @LastEditTime: 2022-03-31 13:57:04
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\amap\AMapImageryProvider.ts
@@ -16,7 +16,7 @@ class AMapImageryProvider {
   _tileHeight: number
   _minimumLevel: any
   _maximumLevel: any
-  _tilingScheme: Cesium.TilingScheme
+  _tilingScheme: Cesium.GeographicTilingScheme | Cesium.WebMercatorTilingScheme
   _rectangle: any
   _credit: any
   enablePickFeatures: any
@@ -25,7 +25,6 @@ class AMapImageryProvider {
   _errorEvent: any
   _readyPromise: any
   _style: string
-  _labelStyle: any
   _domain: any
   _lang: any
   _scl: any

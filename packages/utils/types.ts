@@ -467,6 +467,9 @@ export type VcDistanceDisplayCondition =
 export type CesiumNearFarScalar = Cesium.NearFarScalar | Cesium.CallbackProperty
 export type VcNearFarScalar = NearFarScalarOption | Array<number> | VcCallbackPropertyFunction<Cesium.NearFarScalar> | CesiumNearFarScalar
 
+export type CesiumPlane = Cesium.Plane | Cesium.CallbackProperty | Cesium.PlaneGraphics
+export type VcPlane = PlaneOption | VcCallbackPropertyFunction<Cesium.Plane> | CesiumPlane
+
 export interface HeadingPitchRangeOpts {
   heading?: number
   pitch?: number

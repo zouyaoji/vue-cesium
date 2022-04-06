@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-11-24 11:38:18
- * @LastEditTime: 2022-03-09 23:05:06
+ * @LastEditTime: 2022-04-06 14:33:01
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\overlays\dynamic\index.ts
  */
-import { ExtractPropTypes, WatchStopHandle, PropType, toRaw, ComponentPublicInstance } from 'vue'
+import { WatchStopHandle, PropType, toRaw, ComponentPublicInstance } from 'vue'
 import { defineComponent, getCurrentInstance, createCommentVNode, onUnmounted, ref, watch } from 'vue'
 import {
   DynamicOverlayOpts,
