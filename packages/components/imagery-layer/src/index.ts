@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-11 11:36:34
+ * @LastEditTime: 2022-04-06 15:56:44
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\imagery-layer\src\index.ts
  */
-import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
+import { createCommentVNode, defineComponent, getCurrentInstance, h, VNode } from 'vue'
 import type {
   AnyFunction,
   VcColor,
@@ -95,6 +95,7 @@ export default defineComponent({
   }
 })
 
+export type LayerPropCallback = (frameState: any, layer: Cesium.ImageryLayer, x: number, y: number, level: number) => number
 export type VcLayerImageryEmits = typeof emits
 export type VcLayerImageryProps = {
   /**
@@ -109,42 +110,42 @@ export type VcLayerImageryProps = {
    * The alpha blending value of this layer, from 0.0 to 1.0. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the alpha is required, and it is expected to return the alpha value to use for the tile.
    * Default value: 1.0
    */
-  alpha?: number | AnyFunction<number>
+  alpha?: number | LayerPropCallback
   /**
    * The alpha blending value of this layer on the night side of the globe, from 0.0 to 1.0. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the alpha is required, and it is expected to return the alpha value to use for the tile. This only takes effect when enableLighting is true.
    * Default value: 1.0
    */
-  nightAlpha?: number | AnyFunction<number>
+  nightAlpha?: number | LayerPropCallback
   /**
    * The alpha blending value of this layer on the day side of the globe, from 0.0 to 1.0. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the alpha is required, and it is expected to return the alpha value to use for the tile. This only takes effect when enableLighting is true.
    * Default value: 1.0
    */
-  dayAlpha?: number | AnyFunction<number>
+  dayAlpha?: number | LayerPropCallback
   /**
    * The brightness of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 makes the imagery darker while greater than 1.0 makes it brighter. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the brightness is required, and it is expected to return the brightness value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.
    * Default value: 1.0
    */
-  brightness?: number | AnyFunction<number>
+  brightness?: number | LayerPropCallback
   /**
    * The contrast of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the contrast while greater than 1.0 increases it. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the contrast is required, and it is expected to return the contrast value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.
    * Default value: 1.0
    */
-  contrast?: number | AnyFunction<number>
+  contrast?: number | LayerPropCallback
   /**
    * The hue of this layer. 0.0 uses the unmodified imagery color. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the hue is required, and it is expected to return the contrast value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.
    * Default value: 0.0
    */
-  hue?: number | AnyFunction<number>
+  hue?: number | LayerPropCallback
   /**
    * The saturation of this layer. 1.0 uses the unmodified imagery color. Less than 1.0 reduces the saturation while greater than 1.0 increases it. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the saturation is required, and it is expected to return the contrast value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.
    * Default value: 1.0
    */
-  saturation?: number | AnyFunction<number>
+  saturation?: number | LayerPropCallback
   /**
    * The gamma correction to apply to this layer. 1.0 uses the unmodified imagery color. This can either be a simple number or a function with the signature function(frameState, layer, x, y, level). The function is passed the current frame state, this layer, and the x, y, and level coordinates of the imagery tile for which the gamma is required, and it is expected to return the gamma value to use for the tile. The function is executed for every frame and for every tile, so it must be fast.
    * Default value: 1.0
    */
-  gamma?: number | AnyFunction<number>
+  gamma?: number | LayerPropCallback
   /**
    * The ImagerySplitDirection split to apply to this layer.
    */
@@ -215,4 +216,11 @@ export interface VcLayerImageryRef extends VcComponentPublicInstance<VcLayerImag
    * @param provider
    */
   __updateProvider?(provider: VcImageryProvider | undefined): boolean
+}
+
+export interface VcLayerImagerySlots {
+  /**
+   * Slot for vc-imagery-provider-xxx.
+   */
+  default: () => VNode[]
 }
