@@ -239,7 +239,7 @@ export type VcLabelProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this label.
+   * Triggers when the mouse moves out of this label.
    */
   onMouseout?: (evt: VcPickEvent) => void
 }

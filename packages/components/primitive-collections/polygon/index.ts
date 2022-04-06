@@ -251,7 +251,7 @@ export type VcPolygonProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this polygon.
+   * Triggers when the mouse moves out of this polygon.
    */
   onMouseout?: (evt: VcPickEvent) => void
 }

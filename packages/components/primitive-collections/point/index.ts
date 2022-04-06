@@ -158,7 +158,7 @@ export type VcPointProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this point.
+   * Triggers when the mouse moves out of this point.
    */
   onMouseout?: (evt: VcPickEvent) => void
 }
