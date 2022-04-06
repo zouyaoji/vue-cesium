@@ -1,14 +1,22 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-30 10:18:27
+ * @LastEditTime: 2022-04-06 15:00:36
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\datasources\geojson\index.ts
  */
 import type { PropType, VNode } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
-import type { AnyObject, VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcDatasource, VcReadyObject } from '@vue-cesium/utils/types'
+import type {
+  AnyObject,
+  VcColor,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcDatasource,
+  VcPickEvent,
+  VcReadyObject
+} from '@vue-cesium/utils/types'
 import { useDatasources } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { hSlot } from '@vue-cesium/utils/private/render'
@@ -178,6 +186,38 @@ export type VcDatasourceGeojsonProps = {
    * Triggers when the VcDatasourceGeojson is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the mouse is pressed on this datasource.
+   */
+  onMousedown?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse bounces up on this datasource.
+   */
+  onMouseup?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks on this datasource.
+   */
+  onClick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse clicks outside this datasource.
+   */
+  onClickout?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the left mouse button double-clicks this datasource.
+   */
+  onDblclick?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves on this datasource.
+   */
+  onMousemove?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves over to this datasource.
+   */
+  onMouseover?: (evt: VcPickEvent) => void
+  /**
+   * Triggers when the mouse moves out of this datasource.
+   */
+  onMouseout?: (evt: VcPickEvent) => void
   /**
    * Triggers whenever a new property is assigned. datasource.clock.
    */
