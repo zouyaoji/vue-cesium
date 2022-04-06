@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-28 09:13:18
+ * @LastEditTime: 2022-04-06 14:59:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\primitives\ground\index.ts
  */
-import type { ExtractPropTypes, Ref, VNode } from 'vue'
+import type { Ref, VNode } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, h } from 'vue'
 import type { VcAppearance, VcComponentInternalInstance, VcComponentPublicInstance, VcPickEvent, VcReadyObject } from '@vue-cesium/utils/types'
 import { usePrimitives } from '@vue-cesium/composables'
@@ -172,7 +172,7 @@ export type VcPrimitiveGroundProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this primitive.
+   * Triggers when the mouse moves out of this primitive.
    */
   onMouseout?: (evt: VcPickEvent) => void
   /**

@@ -162,7 +162,7 @@ export type VcPrimitiveGroundPolylineProps = {
    */
   onMouseover?: (evt: VcPickEvent) => void
   /**
-   * 	Triggers when the mouse moves out of this primitive.
+   * Triggers when the mouse moves out of this primitive.
    */
   onMouseout?: (evt: VcPickEvent) => void
   /**
