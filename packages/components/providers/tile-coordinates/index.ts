@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 17:59:34
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:54:36
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\tile-coordinates\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\tile-coordinates\index.ts
  */
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -37,7 +37,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderTileCoordinatesProps = ExtractPropTypes<typeof tileCoordinatesImageryProviderProps>
 export type VcImageryProviderTileCoordinatesProps = {
   /**
    * The tiling scheme to use to divide the world into tiles. This parameter is ignored when accessing a tiled server.
@@ -83,3 +82,5 @@ export type VcImageryProviderTileCoordinatesProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderTileCoordinatesRef = VcComponentPublicInstance<VcImageryProviderTileCoordinatesProps>

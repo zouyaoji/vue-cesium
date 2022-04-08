@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 15:58:44
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:42:06
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\grid\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\grid\index.ts
  */
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { PropType } from 'vue'
 import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
@@ -61,7 +61,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderGridProps = ExtractPropTypes<typeof gridImageryProviderProps>
 export type VcImageryProviderGridProps = {
   /**
    * The tiling scheme for which to draw tiles.
@@ -132,3 +131,5 @@ export type VcImageryProviderGridProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderGridRef = VcComponentPublicInstance<VcImageryProviderGridProps>

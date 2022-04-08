@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 17:31:15
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 11:49:20
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\baidu\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { PropType } from 'vue'
@@ -100,7 +100,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderBaiduProps = ExtractPropTypes<typeof baiduImageryProviderProps>
 export type VcImageryProviderBaiduProps = {
   /**
    * The URL of the Baidu Imagery service.
@@ -146,7 +145,22 @@ export type VcImageryProviderBaiduProps = {
   /**
    * Specify the customid
    */
-  customid?: string
+  customid?:
+    | 'img'
+    | 'vec'
+    | 'traffic'
+    | 'normal'
+    | 'light'
+    | 'dark'
+    | 'redalert'
+    | 'googlelite'
+    | 'grassgreen'
+    | 'midnight'
+    | 'pink'
+    | 'darkgreen'
+    | 'bluish'
+    | 'grayscale'
+    | 'hardedge'
   /**
    * Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }
    */
@@ -172,3 +186,5 @@ export type VcImageryProviderBaiduProps = {
    */
   onReadyPromise?: (evt: boolean | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderBaiduRef = VcComponentPublicInstance<VcImageryProviderBaiduProps>

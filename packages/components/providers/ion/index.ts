@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 16:02:35
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:43:11
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\ion\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\ion\index.ts
  */
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -32,7 +32,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderIonProps = ExtractPropTypes<typeof ionImageryProviderProps>
 export type VcImageryProviderIonProps = {
   /**
    * An ion imagery asset ID.
@@ -67,3 +66,5 @@ export type VcImageryProviderIonProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderIonRef = VcComponentPublicInstance<VcImageryProviderIonProps>

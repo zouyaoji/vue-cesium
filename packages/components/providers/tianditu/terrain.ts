@@ -1,14 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 23:50:41
+ * @LastEditTime: 2022-04-08 13:54:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\terrain.ts
  */
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders, useVueCesium } from '@vue-cesium/composables'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
@@ -95,4 +94,56 @@ export default defineComponent({
   }
 })
 
-export type VcTerrainProviderTiandituProps = ExtractPropTypes<typeof tiandituTerrainProviderProps>
+export type VcTerrainProviderTiandituProps = {
+  /**
+   * Specify the service address.
+   * Default value: https://{s}.tianditu.gov.cn
+   */
+  url?: string
+  /**
+   * Specify the polling subdomain name.
+   * Default value: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
+   */
+  subdomains?: Array<string>
+  /**
+   * Specify the address of the Tiantu terrain plugin library.
+   * Default value: https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js
+   */
+  pluginPath?: string
+  /**
+   * Specify the data type.
+   * Default value: init
+   */
+  dataType?: 'int' | 'float'
+  /**
+   * Specify the tile type.
+   * Default value: heightmap
+   */
+  tileType?: 'heightmap' | 'quantized-mesh'
+  /**
+   * Specify the Tiantu service secret key.
+   */
+  token?: string
+  /**
+   * Triggers before the VcTerrainProviderTianditu is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcTerrainProviderTianditu is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcTerrainProviderTianditu is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the terrain provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}
+
+export type VcTerrainProviderTiandituRef = VcComponentPublicInstance<VcTerrainProviderTiandituProps>

@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 15:38:47
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:38:10
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\cesium-terrain\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\cesium-terrain\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, credit } from '@vue-cesium/utils/cesium-props'
@@ -59,7 +59,6 @@ export default defineComponent({
   }
 })
 
-// export type VcTerrainProviderCesiumProps = ExtractPropTypes<typeof cesiumTerrainProviderProps>
 export type VcTerrainProviderCesiumProps = {
   /**
    * The URL of the Cesium terrain server.
@@ -109,3 +108,5 @@ export type VcTerrainProviderCesiumProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcTerrainProviderCesiumRef = VcComponentPublicInstance<VcTerrainProviderCesiumProps>

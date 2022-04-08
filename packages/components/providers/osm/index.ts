@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 16:22:57
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:43:58
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\osm\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\osm\index.ts
  */
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -42,7 +42,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderOsmProps = ExtractPropTypes<typeof osmImageryProviderProps>
 export type VcImageryProviderOsmProps = {
   /**
    * The OpenStreetMap server url.
@@ -97,3 +96,5 @@ export type VcImageryProviderOsmProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderOsmRef = VcComponentPublicInstance<VcImageryProviderOsmProps>

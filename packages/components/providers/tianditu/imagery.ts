@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 11:35:31
+ * @LastEditTime: 2022-04-08 13:45:44
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\imagery.ts
@@ -106,7 +106,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderTiandituProps = ExtractPropTypes<typeof tiandituImageryProviderProps>
 export type VcImageryProviderTiandituProps = {
   /**
    * The minimum tile level to request, or undefined if there is no minimum.
@@ -184,3 +183,5 @@ export type VcImageryProviderTiandituProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderTiandituRef = VcComponentPublicInstance<VcImageryProviderTiandituProps>

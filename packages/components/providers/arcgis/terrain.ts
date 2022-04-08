@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-02-18 18:04:55
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 11:40:59
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\arcgis\terrain.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\arcgis\terrain.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
@@ -33,7 +33,6 @@ export default defineComponent({
   }
 })
 
-// export type VcTerrainProviderArcgisProps = ExtractPropTypes<typeof arcgisTerrainProviderProps>
 export type VcTerrainProviderArcgisProps = {
   /**
    * The URL of the ArcGIS ImageServer service.
@@ -68,3 +67,5 @@ export type VcTerrainProviderArcgisProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcTerrainProviderArcgisRef = VcComponentPublicInstance<VcTerrainProviderArcgisProps>

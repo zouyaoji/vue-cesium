@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 18:08:14
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:55:08
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\tile-map-service\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\tile-map-service\index.ts
  */
 import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
@@ -58,7 +58,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderTmsProps = ExtractPropTypes<typeof tmsImageryProviderProps>
 export type VcImageryProviderTmsProps = {
   /**
    * Path to image tiles on server.
@@ -115,15 +114,15 @@ export type VcImageryProviderTmsProps = {
    */
   projectionTransforms?: ProjectionTransforms
   /**
-   * Triggers before the VcImageryProviderArcgis is loaded.
+   * Triggers before the VcImageryProviderTms is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcImageryProviderArcgis is successfully loaded.
+   * Triggers when the VcImageryProviderTms is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcImageryProviderArcgis is destroyed.
+   * Triggers when the VcImageryProviderTms is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
@@ -135,3 +134,5 @@ export type VcImageryProviderTmsProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderTmsRef = VcComponentPublicInstance<VcImageryProviderTmsProps>

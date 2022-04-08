@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 15:58:24
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 11:49:52
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\bingmaps\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\bingmaps\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes, PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { ellipsoid, tileDiscardPolicy } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -45,7 +45,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderBingProps = ExtractPropTypes<typeof bingImageryProviderProps>
 export type VcImageryProviderBingProps = {
   /**
    * The url of the Bing Maps server hosting the imagery.
@@ -97,3 +96,5 @@ export type VcImageryProviderBingProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderBingRef = VcComponentPublicInstance<VcImageryProviderBingProps>

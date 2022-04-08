@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 16:58:36
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:44:46
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\supermap\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\supermap\index.ts
  */
 import type { PropType } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
@@ -56,7 +56,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderSupermapProps = ExtractPropTypes<typeof supermapImageryProviderProps>
 export type VcImageryProviderSupermapProps = {
   /**
    * The URL of the SuperMap iServer service.
@@ -111,3 +110,5 @@ export type VcImageryProviderSupermapProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderSupermapRef = VcComponentPublicInstance<VcImageryProviderSupermapProps>

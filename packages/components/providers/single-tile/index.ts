@@ -1,12 +1,11 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 16:31:48
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 13:44:24
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\single-tile\index.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\single-tile\index.ts
  */
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -33,7 +32,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderSingletileProps = ExtractPropTypes<typeof singletileImageryProviderProps>
 export type VcImageryProviderSingletileProps = {
   /**
    * The url for the tile
@@ -72,3 +70,5 @@ export type VcImageryProviderSingletileProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderSingletileRef = VcComponentPublicInstance<VcImageryProviderSingletileProps>

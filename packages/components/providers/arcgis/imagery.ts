@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 16:02:28
- * @LastEditors: Weibo Cao
+ * @LastEditTime: 2022-04-08 11:39:20
+ * @LastEditors: zouyaoji
  * @Description:
- * @FilePath: \vue-cesium\packages\components\providers\arcgis\imagery.ts
+ * @FilePath: \vue-cesium@next\packages\components\providers\arcgis\imagery.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import type { PropType } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import {
   token,
@@ -59,7 +59,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderArcgisProps = ExtractPropTypes<typeof arcgisImageryProviderProps>
 export type VcImageryProviderArcgisProps = {
   /**
    * The URL of the ArcGIS MapServer service.
@@ -138,3 +137,5 @@ export type VcImageryProviderArcgisProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderArcgisRef = VcComponentPublicInstance<VcImageryProviderArcgisProps>

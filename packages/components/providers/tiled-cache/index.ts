@@ -1,4 +1,3 @@
-import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance, PropType } from 'vue'
 import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
@@ -156,7 +155,6 @@ export default defineComponent({
   }
 })
 
-// export type VcImageryProviderTiledcacheProps = ExtractPropTypes<typeof tiledcacheImageryProviderProps>
 export type VcImageryProviderTiledcacheProps = {
   /**
    * Path to image tiles on server.
@@ -204,15 +202,15 @@ export type VcImageryProviderTiledcacheProps = {
    */
   tileHeight?: number
   /**
-   * Triggers before the VcImageryProviderTiledcacheProps is loaded.
+   * Triggers before the VcImageryProviderTiledcache is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
   /**
-   * Triggers when the VcImageryProviderTiledcacheProps is successfully loaded.
+   * Triggers when the VcImageryProviderTiledcache is successfully loaded.
    */
   onReady?: (readyObject: VcReadyObject) => void
   /**
-   * Triggers when the VcImageryProviderTiledcacheProps is destroyed.
+   * Triggers when the VcImageryProviderTiledcache is destroyed.
    */
   onDestroyed?: (instance: VcComponentInternalInstance) => void
   /**
@@ -224,3 +222,5 @@ export type VcImageryProviderTiledcacheProps = {
    */
   onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
 }
+
+export type VcImageryProviderTiledcacheRef = VcComponentPublicInstance<VcImageryProviderTiledcacheProps>
