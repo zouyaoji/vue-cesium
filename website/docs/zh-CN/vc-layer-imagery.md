@@ -149,16 +149,16 @@
 | -------------- | ----------------------- | ------ | --------------------------------------- |---|
 | sortOrder | number | |`optional` 指定图层相对顺序。|
 | imageryProvider | VcImageryProvider | | `optional` 指定影像图层的瓦片提供方式。 |
-| rectangle | Rectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
-| alpha | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| nightAlpha | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| dayAlpha | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
-| brightness | number \| AnyFunction\<number\> | `1.0`| `optional` 指定影像图层亮度值。值为 1.0 表示使用原图；值大于 1.0 时图像将变亮；值小于 1.0 时图像将变暗。 |
-| contrast | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层对比度。值为 1.0 表示使用原图；值大于 1.0 表示增加对比度；值小于 1.0 表示降低对比度。 |
-| hue | number \| AnyFunction\<number\> | `0.0` | `optional` 指定影像图层色调。值为 0.0 表示使用原图。 |
-| saturation | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层饱和度。值为 1.0 表示使用原图；值大于 1.0 表示增加饱和度；值小于 1.0 表示降低饱和度。 |
-| gamma | number \| AnyFunction\<number\> | `1.0` | `optional` 指定影像图层伽马校正。值为 1.0 表示使用原图。 |
-| splitDirection | number \| Cesium.ImagerySplitDirection \| AnyFunction\<number \| Cesium.ImagerySplitDirection\> | `0` | `optional` 指定影像图层分割方向。 **LEFT: -1, NONE: 0, RIGHT: 1**|-1/0/1|
+| rectangle | VcRectangle | `imageryProvider.rectangle` | `optional` 指定影像图层的矩形范围，此矩形限制了影像可见范围。 |
+| alpha | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
+| nightAlpha | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
+| dayAlpha | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层透明度值，取值范围为 0.0~1.0。 |
+| brightness | number \| LayerPropCallback | `1.0`| `optional` 指定影像图层亮度值。值为 1.0 表示使用原图；值大于 1.0 时图像将变亮；值小于 1.0 时图像将变暗。 |
+| contrast | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层对比度。值为 1.0 表示使用原图；值大于 1.0 表示增加对比度；值小于 1.0 表示降低对比度。 |
+| hue | number \| LayerPropCallback | `0.0` | `optional` 指定影像图层色调。值为 0.0 表示使用原图。 |
+| saturation | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层饱和度。值为 1.0 表示使用原图；值大于 1.0 表示增加饱和度；值小于 1.0 表示降低饱和度。 |
+| gamma | number \| LayerPropCallback | `1.0` | `optional` 指定影像图层伽马校正。值为 1.0 表示使用原图。 |
+| splitDirection | number \| Cesium.ImagerySplitDirection \| LayerPropCallback| `0` | `optional` 指定影像图层分割方向。 **LEFT: -1, NONE: 0, RIGHT: 1**|-1/0/1|
 | minificationFilter | number \| Cesium.TextureMinificationFilter | `9729` | `optional` 指定影像图层纹理缩小过滤器。 **NEAREST: 9728, LINEAR: 9729, NEAREST_MIPMAP_NEAREST: 9984, LINEAR_MIPMAP_NEAREST: 9985, NEAREST_MIPMAP_LINEAR: 9986**|9728/9729/9984/9985/9986|
 | magnificationFilter | number \| Cesium.TextureMagnificationFilter | `9729` | `optional` 指定影像图层纹理缩小过滤器。**NEAREST: 9728, LINEAR: 9729** |9728/9729|
 | show | boolean | `true` | `optional` 指定图层是否显示，如果显示图层，则为 true; 否则，false |

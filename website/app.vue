@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-08-20 15:25:23
- * @LastEditTime: 2022-03-09 11:13:53
+ * @LastEditTime: 2022-04-06 16:18:25
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\app.vue
@@ -105,7 +105,9 @@ export default defineComponent({
         cesiumPath:
           process.env.NODE_ENV === 'development'
             ? './CesiumUnminified/Cesium.js'
-            : 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js'
+            : 'https://cdn.jsdelivr.net/npm/cesium@latest/Build/Cesium/Cesium.js',
+        accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNzkyNWNlYi0xMzgxLTQwOTYtOTRhYS02ZTM4YjYwYWVjMzYiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODAzNDEyMn0.0MtHA4jjYQAtYyKjnKnzNziwkSmtLq8qiQqqPtiAfnA'
       },
       {
         default: () => {

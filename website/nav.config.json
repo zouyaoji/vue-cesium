@@ -174,6 +174,10 @@
               "title": "TiandituImageryProvider 天地图"
             },
             {
+              "path": "/providers/vc-imagery-provider-tencent",
+              "title": "TencentImageryProvider 腾讯地图"
+            },
+            {
               "path": "/providers/vc-imagery-provider-tms",
               "title": "TileMapServiceImageryProvider"
             },
@@ -660,6 +664,10 @@
             {
               "path": "/providers/vc-imagery-provider-supermap",
               "title": "SupermapImageryProvider"
+            },
+            {
+              "path": "/providers/vc-imagery-provider-tencent",
+              "title": "TencentImageryProvider"
             },
             {
               "path": "/providers/vc-imagery-provider-tianditu",

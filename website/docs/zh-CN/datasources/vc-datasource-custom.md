@@ -15,7 +15,7 @@
     <!-- <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-urltemplate url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"></vc-imagery-provider-urltemplate>
     </vc-layer-imagery> -->
-    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :loadingEvent="morphComplete" :show="show">
+    <vc-datasource-custom name="custom" :entities="entities" @click="onClicked" :loading-event="morphComplete" :show="show">
       <vc-entity
         ref="entity1"
         @click="onClicked"
@@ -38,11 +38,11 @@
         <vc-graphics-cylinder
           ref="cylinder1"
           :length="400000.0"
-          :topRadius="200000.0"
-          :bottomRadius="200000.0"
+          :top-radius="200000.0"
+          :bottom-radius="200000.0"
           :material="[0,255,0,125]"
           :outline="true"
-          outlineColor="#006400"
+          outline-rolor="#006400"
         ></vc-graphics-cylinder>
       </vc-entity>
     </vc-datasource-custom>
@@ -54,7 +54,7 @@
       :name="datasource.name"
       v-for="(datasource, index) of datasources"
       :entities="datasource.entities"
-      @clusterEvent="onDatasourceClusterEvent"
+      @cluster-event="onDatasourceClusterEvent"
       @ready="onDatasourceReady"
     >
     </vc-datasource-custom>
@@ -267,12 +267,13 @@
 
 ### 属性
 
-| 属性名           | 类型    | 默认值 | 描述                                        |
-| ---------------- | ------- | ------ | ------------------------------------------- |
-| name             | String  |        | `optional` 指定数据源名称。                 |
-| enableMouseEvent | Boolean | `true` | `optional` 指定鼠标事件是否生效。           |
-| show             | Boolean | `true` | `optional` 指定数据源是否显示。             |
-| entities         | Array   | `[]`   | `optional` 指定要添加到该数据源的实体集合。 |
+| 属性名           | 类型    | 默认值  | 描述                                        |
+| ---------------- | ------- | ------- | ------------------------------------------- |
+| name             | string  |         | `optional` 指定数据源名称。                 |
+| enableMouseEvent | boolean | `true`  | `optional` 指定鼠标事件是否生效。           |
+| show             | boolean | `true`  | `optional` 指定数据源是否显示。             |
+| entities         | Array   | `[]`    | `optional` 指定要添加到该数据源的实体集合。 |
+| destroy          | boolean | `false` | `optional` 指定数据源在移除时是否销毁。     |
 
 ### 事件
 

@@ -1,6 +1,6 @@
 ## VcImageryProviderTianditu
 
-加载天地图影像瓦片服务。
+加载天地图瓦片服务。
 
 **注意**：需要作为 `vc-layer-imagery` 的子组件才能正常加载。
 
@@ -8,7 +8,7 @@
 
 `vc-imagery-provider-tianditu` 组件的基础用法。
 
-:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由天地图提供的影像瓦片服务图层。
+:::demo 使用 `vc-layer-imagery` 标签在三维球上添加由天地图提供的瓦片服务图层。
 
 ```html
 <el-row ref="viewerContainer" class="demo-viewer">

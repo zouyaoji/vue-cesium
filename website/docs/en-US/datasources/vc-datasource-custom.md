@@ -34,11 +34,11 @@ Basic usage of VcDatasourceCustom component.
         <vc-graphics-cylinder
           ref="cylinder1"
           :length="400000.0"
-          :topRadius="200000.0"
-          :bottomRadius="200000.0"
+          :top-radius="200000.0"
+          :bottom-radius="200000.0"
           :material="[0,255,0,125]"
           :outline="true"
-          outlineColor="#006400"
+          outline-color="#006400"
         ></vc-graphics-cylinder>
       </vc-entity>
     </vc-datasource-custom>
@@ -50,7 +50,7 @@ Basic usage of VcDatasourceCustom component.
       :name="datasource.name"
       v-for="(datasource, index) of datasources"
       :entities="datasource.entities"
-      @clusterEvent="onDatasourceClusterEvent"
+      @cluster-event="onDatasourceClusterEvent"
       @ready="onDatasourceReady"
     >
     </vc-datasource-custom>
@@ -246,11 +246,13 @@ Basic usage of VcDatasourceCustom component.
 
 ### Props
 
-| Name     | Type    | Default | Description                                                                    |
-| -------- | ------- | ------- | ------------------------------------------------------------------------------ |
-| name     | String  |         | `optional` A human-readable name for this instance.                            |
-| show     | Boolean | `true`  | `optional` Specify whether the data source is displayed.                       |
-| entities | Array   | `[]`    | `optional` Specify the collection of entities to be added to this data source. |
+| Name             | Type    | Default | Description                                                                    |
+| ---------------- | ------- | ------- | ------------------------------------------------------------------------------ |
+| name             | String  |         | `optional` A human-readable name for this instance.                            |
+| show             | Boolean | `true`  | `optional` Specify whether the data source is displayed.                       |
+| entities         | Array   | `[]`    | `optional` Specify the collection of entities to be added to this data source. |
+| destroy          | boolean | `false` | `optional` Whether to destroy the data source in addition to removing it.      |
+| enableMouseEvent | boolean | `true`  | `optional` Specify whether to respond to mouse pick events.                    |
 
 ### Events
 

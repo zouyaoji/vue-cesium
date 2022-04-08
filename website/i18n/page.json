@@ -3,8 +3,8 @@
     "lang": "zh-CN",
     "pages": {
       "index": {
-        "1": "三维网站快速成型工具",
-        "2": "VueCesium，一套为 GISer 准备的基于 Vue 2.x & Vue 3.x 的 CesiumJS 组件库",
+        "1": "Vue Cesium",
+        "2": "基于 Vue 3，面向开发者的 CesiumJS 组件库。",
         "3": "指南",
         "4": "了解设计指南，帮助开发人员搭建逻辑清晰、结构合理且高效易用的应用。",
         "5": "查看详情",
@@ -69,8 +69,8 @@
     "lang": "en-US",
     "pages": {
       "index": {
-        "1": "A component library of CesiumJS",
-        "2": "VueCesium, a Vue 2.x & Vue 3.x based component library of CesiumJS for GISer",
+        "1": "Vue Cesium",
+        "2": "a Vue 3 based component library of CesiumJS for developers",
         "3": "Guide",
         "4": "Understand the design guidelines, helping designers build product that's logically sound, reasonably structured and easy to use.",
         "5": "View Detail",

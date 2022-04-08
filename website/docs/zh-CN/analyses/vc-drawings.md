@@ -36,6 +36,7 @@ ctrl + 右键取消绘制。
       @ready="drawingsReadyDefault"
       :point-drawing-opts="pointDrawingOpts"
       :polygon-drawing-opts="polygonDrawingOpts"
+      :polyline-drawing-opts="polylineDrawingOpts"
       :regular-drawing-opts="regularDrawingOpts"
     ></vc-drawings>
     <!-- 结合 slot 改变默认 UI，自定义绘制方法 -->
@@ -74,6 +75,7 @@ ctrl + 右键取消绘制。
       <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
+    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -97,7 +99,10 @@ ctrl + 右键取消绘制。
           direction: 'right'
         },
         polylineDrawingOpts: {
-          loop: true
+          loop: true,
+          onClick(e) {
+            console.log(e)
+          }
         },
         rectangleDrawingOpts: {
           regular: false
@@ -130,7 +135,10 @@ ctrl + 右键取消绘制。
               [108.95573, 34.21761],
               [108.95499, 34.21761]
             ]
-          ]
+          ],
+          onClick(e) {
+            console.log(e)
+          }
         },
         regularDrawingOpts: {
           preRenderDatas: [
@@ -138,7 +146,10 @@ ctrl + 右键取消绘制。
               [108.95474, 34.22204],
               [108.95564, 34.22166]
             ]
-          ]
+          ],
+          onClick(e) {
+            console.log(e)
+          }
         }
       }
     },
@@ -218,6 +229,9 @@ ctrl + 右键取消绘制。
       },
       reload() {
         this.$refs.drawingsRef.reload()
+      },
+      pickEvt(e) {
+        console.log(e)
       }
     }
   }
