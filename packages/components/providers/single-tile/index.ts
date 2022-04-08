@@ -1,14 +1,14 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 23:24:28
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 16:31:48
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\single-tile\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\single-tile\index.ts
  */
 import type { ExtractPropTypes } from 'vue'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject, VcRectangle } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
 import { url, rectangle, credit, ellipsoid } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
@@ -33,4 +33,42 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderSingletileProps = ExtractPropTypes<typeof singletileImageryProviderProps>
+// export type VcImageryProviderSingletileProps = ExtractPropTypes<typeof singletileImageryProviderProps>
+export type VcImageryProviderSingletileProps = {
+  /**
+   * The url for the tile
+   */
+  url: string | Cesium.Resource
+  /**
+   * The rectangle, in radians, covered by the image.
+   */
+  rectangle?: VcRectangle
+  /**
+   * A credit for the data source, which is displayed on the canvas.
+   */
+  credit?: string | Cesium.Credit
+  /**
+   * The ellipsoid. If not specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * Triggers before the VcImageryProviderSingletile is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcImageryProviderSingletile is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcImageryProviderSingletile is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the imagery provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}

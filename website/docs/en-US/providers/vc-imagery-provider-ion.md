@@ -80,11 +80,11 @@ Basic usage of the `vc-imagery-provider-ion` component.
 
 ### Props
 
-| Name        | Type           | Default | Description                                           |
-| ----------- | -------------- | ------- | ----------------------------------------------------- |
-| assetId     | Number         |         | `required` An ion imagery asset ID.                   |
-| accessToken | String         |         | `optional` The access token to use.                   |
-| server      | String\|Object |         | `optional` The resource to the Cesium ion API server. |
+| Name        | Type                    | Default | Description                                           |
+| ----------- | ----------------------- | ------- | ----------------------------------------------------- |
+| assetId     | number                  |         | `required` An ion imagery asset ID.                   |
+| accessToken | string                  |         | `optional` The access token to use.                   |
+| server      | string\|Cesium.Resource |         | `optional` The resource to the Cesium ion API server. |
 
 ### Events
 

@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-06 11:29:45
- * @LastEditTime: 2022-01-15 10:24:45
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-02-18 18:02:34
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-arcgis.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-arcgis.md
 -->
 
 ## VcTerrainProviderArcgis
@@ -79,9 +79,9 @@
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String\|Object | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` 指定服务地址。 |
-| token | String | | `optional` 指定服务授权令牌。 |
-| ellipsoid | Object | | `optional` 指定参考椭球体。 |
+| url | string \| Cesium.Resource | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` 指定服务地址。 |
+| token | string | | `optional` 指定服务授权令牌。 |
+| ellipsoid | Cesium.Ellipsoid | | `optional` 指定参考椭球体。 |
 
 ### 事件
 
@@ -90,8 +90,8 @@
 | beforeLoad   | (instance: VcComponentInternalInstance) | 对象加载前触发。                                                  |
 | ready        | (readyObj: VcReadyObject)               | 对象加载成功时触发。                                              |
 | destroyed    | (instance: VcComponentInternalInstance) | 对象销毁时触发。                                                  |
-| errorEvent   | TileProviderError                       | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
-| readyPromise | TerrainProvider                         | 当图层提供者可用时触发, 返回 TerrainProvider 实例。               |
+| errorEvent   | (evt: Cesium.TileProviderError)         | 当图层提供者发生异步错误时触发, 返回一个 TileProviderError 实例。 |
+| readyPromise | (evt: boolean )                         | 当 provider 准备好使用时触发。                                    |
 
 ### 参考
 

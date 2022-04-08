@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-03 16:24:26
+ * @LastEditTime: 2022-04-08 11:35:06
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\cylinder\index.ts
@@ -34,7 +34,7 @@ import {
   distanceDisplayCondition
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { graphicsEmits } from '@vue-cesium/utils/emits'
 export const cylinderGraphicsProps = {
   ...show,
   ...length,
@@ -54,7 +54,7 @@ export const cylinderGraphicsProps = {
 export default defineComponent({
   name: 'VcGraphicsCylinder',
   props: cylinderGraphicsProps,
-  emits: commonEmits,
+  emits: graphicsEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

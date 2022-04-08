@@ -1,13 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-06 15:07:21
+ * @LastEditTime: 2022-04-08 11:34:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\box\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { VcComponentInternalInstance, VcComponentPublicInstance, VcReadyObject } from '@vue-cesium/utils/types'
 import { useGraphics } from '@vue-cesium/composables'
 import {
   show,
@@ -21,9 +20,18 @@ import {
   shadows,
   distanceDisplayCondition
 } from '@vue-cesium/utils/cesium-props'
-import { VcPosition, VcCallbackPropertyFunction, VcMaterial, VcColor, VcDistanceDisplayCondition } from '@vue-cesium/utils/types'
+import {
+  VcPosition,
+  VcCallbackPropertyFunction,
+  VcMaterial,
+  VcColor,
+  VcDistanceDisplayCondition,
+  VcReadyObject,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance
+} from '@vue-cesium/utils/types'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { graphicsEmits } from '@vue-cesium/utils/emits'
 export const boxGraphicsProps = {
   ...show,
   ...dimensions,
@@ -39,7 +47,7 @@ export const boxGraphicsProps = {
 export default defineComponent({
   name: 'VcGraphicsBox',
   props: boxGraphicsProps,
-  emits: commonEmits,
+  emits: graphicsEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

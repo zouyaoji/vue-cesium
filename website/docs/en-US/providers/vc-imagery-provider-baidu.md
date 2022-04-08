@@ -97,8 +97,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
         alpha,
         brightness,
         contrast,
-        options,
-        url
+        options
       }
     }
   }
@@ -112,16 +111,16 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String | | `optional` Specify the service address. |
-| rectangle | Object\|Object | | `optional` The rectangle of the layer. This parameter is ignored when accessing a tiled layer. |
-| credit | String\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
-| minimumLevel | Number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
-| maximumLevel | Number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
-| scale | Number | `1` | `optional` Specify the scale. |
-| ak | String | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
-| customid | String | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
-| projectionTransforms | Boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
-| protocol | String | `'https'` | `optional` Specify protocol of service. |
+| url | string | | `optional` Specify the service address. |
+| rectangle | VcRectangle | | `optional` The rectangle of the layer. This parameter is ignored when accessing a tiled layer. |
+| credit | string\|Object | `''` | `optional` A credit for the data source, which is displayed on the canvas. |
+| minimumLevel | number | `0` | `optional` The minimum level-of-detail supported by the imagery provider. Take care when specifying this that the number of tiles at the minimum level is small, such as four or less. A larger number is likely to result in rendering problems. |
+| maximumLevel | number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
+| scale | number | `1` | `optional` Specify the scale. |
+| ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
+| customid | string | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+| projectionTransforms | boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
+| protocol | string | `'https'` | `optional` Specify protocol of service. |
 
 :::tip
 
@@ -160,14 +159,13 @@ Tip: In addition to passing `Cesium.Rectangle`, the `rectangle` property can als
 
 ### Events
 
-<!-- prettier-ignore -->
-| Name | Parameters | Description |
+| Name         | Parameters                              | Description                                                          |
 | ------------ | --------------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded. |
-| ready | (readyObj: VcReadyObject) | Triggers when the cesiumObject is successfully loaded. |
-| destroyed | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed. |
-| errorEvent | (evt: Cesium.TileProviderError) | Triggers when the imagery provider encounters an asynchronous error. |
-| readyPromise | (provider: VcTerrainProvider) | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) | Triggers when the provider is ready for use. |
+| beforeLoad   | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                          |
+| ready        | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.               |
+| destroyed    | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                         |
+| errorEvent   | TileProviderError                       | Triggers when the imagery provider encounters an asynchronous error. |
+| readyPromise | ImageryProvider                         | Triggers when the provider is ready for use.                         |
 
 ### Reference
 

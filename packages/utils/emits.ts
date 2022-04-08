@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-01-12 14:34:05
- * @LastEditTime: 2022-04-06 14:59:13
+ * @LastEditTime: 2022-04-08 11:37:01
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\utils\emits.ts
@@ -42,7 +42,7 @@ export const graphicsEmits = {
 export const providerEmits = {
   ...commonEmits,
   errorEvent: (evt: Cesium.TileProviderError) => true,
-  readyPromise: (provider: VcTerrainProvider | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true
+  readyPromise: (evt: boolean | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => true
 }
 
 export const primitiveEmits = {

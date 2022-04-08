@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-02 23:43:55
+ * @LastEditTime: 2022-04-08 11:33:34
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\graphics\corridor\index.ts
@@ -39,7 +39,7 @@ import {
   zIndex
 } from '@vue-cesium/utils/cesium-props'
 import { kebabCase } from '@vue-cesium/utils/util'
-import { commonEmits } from '@vue-cesium/utils/emits'
+import { graphicsEmits } from '@vue-cesium/utils/emits'
 const corridorGraphicsProps = {
   ...show,
   ...positions,
@@ -63,7 +63,7 @@ const corridorGraphicsProps = {
 export default defineComponent({
   name: 'VcGraphicsCorridor',
   props: corridorGraphicsProps,
-  emits: commonEmits,
+  emits: graphicsEmits,
   setup(props, ctx) {
     // state
     const instance = getCurrentInstance() as VcComponentInternalInstance

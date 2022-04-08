@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-01-15 10:41:45
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 15:39:32
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\providers\vc-terrain-provider-cesium.md
+ * @FilePath: \vue-cesium\website\docs\en-US\providers\vc-terrain-provider-cesium.md
 -->
 
 ## VcTerrainProviderCesium
@@ -79,12 +79,12 @@ Basic usage of the `vc-terrain-provider-cesium` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String | | `required` The URL of the Cesium terrain server. |
-| requestVertexNormals | Boolean | `false` | `optional` Flag that indicates if the client should request additional lighting information from the server, in the form of per vertex normals if available.|
-| requestWaterMask | Boolean | `false` | `optional` Flag that indicates if the client should request per tile water masks from the server, if available.|
-| requestMetadata | Boolean | `true` | `optional` Flag that indicates if the client should request per tile metadata from the server, if available.|
-| ellipsoid | Object | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used.|
-| credit | String | | `optional` A credit for the data source, which is displayed on the canvas.|
+| url | string | | `required` The URL of the Cesium terrain server. |
+| requestVertexNormals | boolean | `false` | `optional` Flag that indicates if the client should request additional lighting information from the server, in the form of per vertex normals if available.|
+| requestWaterMask | boolean | `false` | `optional` Flag that indicates if the client should request per tile water masks from the server, if available.|
+| requestMetadata | boolean | `true` | `optional` Flag that indicates if the client should request per tile metadata from the server, if available.|
+| ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid. If not specified, the WGS84 ellipsoid is used.|
+| credit | string | | `optional` A credit for the data source, which is displayed on the canvas.|
 
 ### Events
 

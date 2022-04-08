@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-01-15 09:51:44
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-02-21 16:38:10
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\en-US\providers\vc-terrain-provider-arcgis.md
+ * @FilePath: \vue-cesium\website\docs\en-US\providers\vc-terrain-provider-arcgis.md
 -->
 
 ## VcTerrainProviderArcgis
@@ -79,19 +79,19 @@ Basic usage of the `vc-terrain-provider-arcgis` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String\|Object | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` The URL of the ArcGIS ImageServer service. |
-| token | String | | `optional` The authorization token to use to connect to the service. |
-| ellipsoid | Object | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.|
+| url | string \| Cesium.Resource | `'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'` | `required` The URL of the ArcGIS ImageServer service. |
+| token | string | | `optional` The authorization token to use to connect to the service. |
+| ellipsoid | Cesium.Ellipsoid | | `optional` The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.|
 
 ### Events
 
-| Name         | Parameters                              | Description                                                          |
-| ------------ | --------------------------------------- | -------------------------------------------------------------------- |
-| beforeLoad   | (instance: VcComponentInternalInstance) | Triggers before the cesiumObject is loaded.                          |
-| ready        | (readyObj: VcReadyObject)               | Triggers when the cesiumObject is successfully loaded.               |
-| destroyed    | (instance: VcComponentInternalInstance) | Triggers when the cesiumObject is destroyed.                         |
-| errorEvent   | TileProviderError                       | Triggers when the imagery provider encounters an asynchronous error. |
-| readyPromise | TerrainProvider                         | Triggers when the provider is ready for use.                         |
+| Name         | Parameters                              | Description                                                           |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------- |
+| beforeLoad   | (instance: VcComponentInternalInstance) | Triggers before the VcTerrainProviderArcgis is loaded.                |
+| ready        | (readyObj: VcReadyObject)               | Triggers when the VcTerrainProviderArcgis is successfully loaded.     |
+| destroyed    | (instance: VcComponentInternalInstance) | Triggers when the VcTerrainProviderArcgis is destroyed.               |
+| errorEvent   | (evt: Cesium.TileProviderError)         | Triggers when the terrrain provider encounters an asynchronous error. |
+| readyPromise | (evt: boolean)                          | Triggers when the provider is ready for use.                          |
 
 ### Reference
 

@@ -92,15 +92,15 @@ Basic usage of the VcGraphicsBox component.
 <!-- prettier-ignore -->
 | Name  | Type | Default | Description | Accepted Values |
 | ----- | ---- | ------- | ----------- | --------------- |
-| show | Boolean | `true` | `optional` A boolean Property specifying the visibility of the box. |
+| show | boolean | `true` | `optional` A boolean Property specifying the visibility of the box. |
 | dimensions | VcPosition | | `optional` A Cartesian3 Property specifying the length, width, and height of the box. |
-| heightReference | Number \| Cesium.HeightReference \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
-| fill | Boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | true | `optional` A boolean Property specifying whether the box is filled with the provided material. |
+| heightReference | number \| Cesium.HeightReference \| VcCallbackPropertyFunction\<number\> | `0` | `optional` A Property specifying what the height from the entity position is relative to. **NONE: 0, CLAMP_TO_GROUND: 1, RELATIVE_TO_GROUND: 2** |0/1/2|
+| fill | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | true | `optional` A boolean Property specifying whether the box is filled with the provided material. |
 | material | VcMaterial | `'white'` | `optional` A Property specifying the material used to fill the box. |
-| outline | Boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `false` | `optional` A boolean Property specifying whether the box is outlined. |
+| outline | boolean \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<boolean\> | `false` | `optional` A boolean Property specifying whether the box is outlined. |
 | outlineColor | VcColor | `'black'` | `optional` A Property specifying the Color of the outline. |
-| outlineWidth | Number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` A numeric Property specifying the width of the outline. |
-| shadows | Number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
+| outlineWidth | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `1.0` | `optional` A numeric Property specifying the width of the outline. |
+| shadows | number \| Cesium.CallbackProperty \| VcCallbackPropertyFunction\<number\> | `0` | `optional` An enum Property specifying whether the box casts or receives shadows from each light source. **DISABLED: 0, ENABLED: 1, CAST_ONLY: 2, RECEIVE_ONLY: 3** |0/1/2/3|
 | distanceDisplayCondition | VcDistanceDisplayCondition | | `optional` A Property specifying at what distance from the camera that this box will be displayed. |
 
 ### Events

@@ -1,13 +1,13 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-15 21:59:25
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 15:58:44
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\grid\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\grid\index.ts
  */
 import type { PropType, ExtractPropTypes } from 'vue'
-import type { VcColor, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { VcColor, VcComponentInternalInstance, VcComponentPublicInstance, VcImageryProvider, VcReadyObject } from '@vue-cesium/utils/types'
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
 import { useProviders } from '@vue-cesium/composables'
 import { tilingScheme, ellipsoid, tileWidth, tileHeight, glowColor } from '@vue-cesium/utils/cesium-props'
@@ -61,4 +61,74 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderGridProps = ExtractPropTypes<typeof gridImageryProviderProps>
+// export type VcImageryProviderGridProps = ExtractPropTypes<typeof gridImageryProviderProps>
+export type VcImageryProviderGridProps = {
+  /**
+   * The tiling scheme for which to draw tiles.
+   */
+  tileScheme?: Cesium.GeographicTilingScheme | Cesium.WebMercatorTilingScheme
+  /**
+   * The ellipsoid. If the tilingScheme is specified, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The number of grids cells.
+   * Default value: 8
+   */
+  cells?: number
+  /**
+   * The color to draw grid lines.
+   * Default value: [1.0, 1.0, 1.0, 0.4]
+   */
+  color?: VcColor
+  /**
+   * The color to draw glow for grid lines.
+   * Default value: [0.0, 1.0, 0.0, 0.05]
+   */
+  glowColor?: VcColor
+  /**
+   * The width of lines used for rendering the line glow effect.
+   * Default value: 6
+   */
+  glowWidth?: number
+  /**
+   * Background fill color.
+   * Default value: [0.0, 0.5, 0.0, 0.2]
+   */
+  backgroundColor?: VcColor
+  /**
+   * The width of the tile for level-of-detail selection purposes.
+   * Default value: 256
+   */
+  tileWidth?: number
+  /**
+   * The height of the tile for level-of-detail selection purposes.
+   * Default value: 256
+   */
+  tileHeight?: number
+  /**
+   * The size of the canvas used for rendering.
+   * Default value: 256
+   */
+  canvasSize?: number
+  /**
+   * Triggers before the VcImageryProviderGrid is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcImageryProviderGrid is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcImageryProviderGrid is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the imagery provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}

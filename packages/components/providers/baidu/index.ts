@@ -1,14 +1,21 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-01-27 23:37:45
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 17:31:15
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\packages\components\providers\baidu\index.ts
+ * @FilePath: \vue-cesium\packages\components\providers\baidu\index.ts
  */
 import { createCommentVNode, defineComponent, getCurrentInstance } from 'vue'
-import type { ExtractPropTypes, PropType } from 'vue'
-import type { ProjectionTransforms, VcComponentInternalInstance } from '@vue-cesium/utils/types'
+import type { PropType } from 'vue'
+import type {
+  ProjectionTransforms,
+  VcComponentInternalInstance,
+  VcComponentPublicInstance,
+  VcImageryProvider,
+  VcReadyObject,
+  VcRectangle
+} from '@vue-cesium/utils/types'
 import BaiduMapImageryProvider from './BaiduMapImageryProvider'
 import { useProviders } from '@vue-cesium/composables'
 import { url, rectangle, ellipsoid, tileDiscardPolicy, credit, minimumLevel, maximumLevel } from '@vue-cesium/utils/cesium-props'
@@ -93,4 +100,75 @@ export default defineComponent({
   }
 })
 
-export type VcImageryProviderBaiduProps = ExtractPropTypes<typeof baiduImageryProviderProps>
+// export type VcImageryProviderBaiduProps = ExtractPropTypes<typeof baiduImageryProviderProps>
+export type VcImageryProviderBaiduProps = {
+  /**
+   * The URL of the Baidu Imagery service.
+   */
+  url?: string | Cesium.Resource
+  /**
+   * The rectangle of the layer. This parameter is ignored when accessing a tiled layer.
+   */
+  rectangle?: VcRectangle
+  /**
+   * The ellipsoid. If the tilingScheme is specified and used, this parameter is ignored and the tiling scheme's ellipsoid is used instead. If neither parameter is specified, the WGS84 ellipsoid is used.
+   */
+  ellipsoid?: Cesium.Ellipsoid
+  /**
+   * The policy that determines if a tile is invalid and should be discarded. If this value is not specified, a default DiscardMissingTileImagePolicy is used for tiled map servers, and a NeverTileDiscardPolicy is used for non-tiled map servers. In the former case, we request tile 0,0 at the maximum tile level and check pixels (0,0), (200,20), (20,200), (80,110), and (160, 130). If all of these pixels are transparent, the discard check is disabled and no tiles are discarded. If any of them have a non-transparent color, any tile that has the same values in these pixel locations is discarded. The end result of these defaults should be correct tile discarding for a standard ArcGIS Server. To ensure that no tiles are discarded, construct and pass a NeverTileDiscardPolicy for this parameter.
+   */
+  tileDiscardPolicy?: Cesium.DiscardMissingTileImagePolicy | Cesium.NeverTileDiscardPolicy
+  /**
+   * A credit for the data source, which is displayed on the canvas. This parameter is ignored when accessing a tiled server.
+   */
+  credit?: string | Cesium.Credit
+  /**
+   * The minimumLevel tile level to request, or undefined if there is no minimumLevel. This parameter is ignored when accessing a tiled server.
+   */
+  minimumLevel?: number
+  /**
+   * The maximum tile level to request, or undefined if there is no maximum. This parameter is ignored when accessing a tiled server.
+   */
+  maximumLevel?: number
+  /**
+   * Specify protocol of service.
+   * Default value: https
+   */
+  protocol?: string
+  /**
+   * Specify the scale
+   */
+  scale?: number
+  /**
+   * Specify the baidumap key
+   */
+  ak?: string
+  /**
+   * Specify the customid
+   */
+  customid?: string
+  /**
+   * Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }
+   */
+  projectionTransforms?: ProjectionTransforms
+  /**
+   * Triggers before the VcImageryProviderArcgis is loaded.
+   */
+  onBeforeLoad?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the VcImageryProviderArcgis is successfully loaded.
+   */
+  onReady?: (readyObject: VcReadyObject) => void
+  /**
+   * Triggers when the VcImageryProviderArcgis is destroyed.
+   */
+  onDestroyed?: (instance: VcComponentInternalInstance) => void
+  /**
+   * Triggers when the imagery provider encounters an asynchronous error.
+   */
+  onErrorEvent?: (evt: Cesium.TileProviderError) => void
+  /**
+   * Triggers when the provider is ready for use.
+   */
+  onReadyPromise?: (evt: boolean | VcImageryProvider, viewer: Cesium.Viewer, instance: VcComponentPublicInstance) => void
+}

@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-18 15:43:38
- * @LastEditTime: 2022-01-16 00:46:55
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2022-03-04 15:41:40
+ * @LastEditors: Weibo Cao
  * @Description:
- * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
+ * @FilePath: \vue-cesium\website\docs\zh-CN\providers\vc-terrain-provider-cesium.md
 -->
 
 ## VcTerrainProviderCesium
@@ -76,14 +76,14 @@
 
 ### 属性
 
-| 属性名               | 类型    | 默认值  | 描述                                                        |
-| -------------------- | ------- | ------- | ----------------------------------------------------------- |
-| url                  | String  |         | `required` 指定服务地址。                                   |
-| requestVertexNormals | Boolean | `false` | `optional` 指定是否请求其他光照信息，否则使用每个顶点法线。 |
-| requestWaterMask     | Boolean | `false` | `optional` 指定是否请求水面数据。                           |
-| requestMetadata      | Boolean | `true`  | `optional` 指定是否请求每个切片元数据。                     |
-| ellipsoid            | Object  |         | `optional` 指定参考椭球体。                                 |
-| credit               | String  |         | `optional` 指定服务的描述信息                               |
+| 属性名               | 类型             | 默认值  | 描述                                                        |
+| -------------------- | ---------------- | ------- | ----------------------------------------------------------- |
+| url                  | string           |         | `required` 指定服务地址。                                   |
+| requestVertexNormals | boolean          | `false` | `optional` 指定是否请求其他光照信息，否则使用每个顶点法线。 |
+| requestWaterMask     | boolean          | `false` | `optional` 指定是否请求水面数据。                           |
+| requestMetadata      | boolean          | `true`  | `optional` 指定是否请求每个切片元数据。                     |
+| ellipsoid            | Cesium.Ellipsoid |         | `optional` 指定参考椭球体。                                 |
+| credit               | string           |         | `optional` 指定服务的描述信息                               |
 
 ### 事件
 

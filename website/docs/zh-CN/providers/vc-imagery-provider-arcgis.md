@@ -82,53 +82,19 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | ---------------------------- | ------- | -------------------- |--|
-| url | String | `'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'` | `optional` 指定服务地址。 |
-| token | String | | `optional` 指定 ArcGIS MapServer 影像服务认证 Token。 |
-| tileDiscardPolicy | Object | | `optional` 指定无效瓦片丢弃策略。 |
-| usePreCachedTilesIfAvailable | Boolean | `true` | `optional` 如果为 true，则使用服务器的预缓存切片（如果可用）。 |
-| layers | String | | `optional` 指定要显示的层，用逗号分开，如果为 undefined 则显示全部。 |
-| enablePickFeatures | Boolean | `true` | `optional` 指定是否拾取对象，在 infobox 弹出信息。 |
-| rectangle | Object\|Object | | `optional` 指定图层的矩形范围，此矩形限制了影像可见范围。 |
-| tilingScheme | Object | | `optional` 指定将影像瓦片展开到地球的投影方案。 |
-| ellipsoid | Object | | `optional` 指定参考椭球体。 |
-| tileWidth | Number | `256` | `optional` 指定每一张瓦片的像素宽度。 |
-| tileHeight | Number | `256` | `optional`指定每一张瓦片的像素高度。 |
-| maximumLevel | Number | | `optional` 指定瓦片加载的最大层级。 |
-
-:::tip
-
-提示：`rectangle` 属性除了可传 `Cesium.Rectangle` 还可以传 `PlainObject(RectangleInDegreeOption|Cartesian4Option`) 和 `Array<number>` (度)
-
-:::
-
-:::tipflex
-
-```js
-// RectangleInDegreeOption
-{
-  west: number,
-  south: number,
-  east: number,
-  north: number
-}
-```
-
-```js
-// Cartesian4Option
-{
-  x: number,
-  y: number,
-  z: number,
-  w: number
-}
-```
-
-```js
-// Array<number> in degrees
-;[number, number, number, number]
-```
-
-:::
+| url | string \| Cesium.Resource | `'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'` | `optional` 指定服务地址。 |
+| token | string | | `optional` 指定 ArcGIS MapServer 影像服务认证 Token。 |
+| tileDiscardPolicy | Cesium.DiscardMissingTileImagePolicy \| Cesium.NeverTileDiscardPolicy | | `optional` 指定无效瓦片丢弃策略。 |
+| usePreCachedTilesIfAvailable | boolean | `true` | `optional` 如果为 true，则使用服务器的预缓存切片（如果可用）。 |
+| layers | string | | `optional` 指定要显示的层，用逗号分开，如果为 undefined 则显示全部。 |
+| enablePickFeatures | boolean | `true` | `optional` 指定是否拾取对象，在 infobox 弹出信息。 |
+| rectangle | VcRectangle | | `optional` 指定图层的矩形范围，此矩形限制了影像可见范围。 |
+| tilingScheme | Cesium.GeographicTilingScheme \| Cesium.WebMercatorTilingScheme | | `optional` 指定将影像瓦片展开到地球的投影方案。 |
+| ellipsoid | Cesium.Ellipsoid | | `optional` 指定参考椭球体。 |
+| credit | string \| Cesium.Credit | | `optional` 显示在 canvas 上的数据源 credit 信息。访问瓦片服务器时忽略此参数。 |
+| tileWidth | number | `256` | `optional` 指定每一张瓦片的像素宽度。 |
+| tileHeight | number | `256` | `optional`指定每一张瓦片的像素高度。 |
+| maximumLevel | number | | `optional` 指定瓦片加载的最大层级。 |
 
 ### 事件
 
