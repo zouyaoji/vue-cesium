@@ -1,5 +1,5 @@
 import { AnyObject, VcComponentInternalInstance } from '@vue-cesium/utils/types'
-import { isArray } from '@vue-cesium/utils/util'
+import { kebabCase, capitalize, isArray } from '@vue-cesium/utils/util'
 import { getInstanceListener } from '@vue-cesium/utils/private/vm'
 
 export default function (props, vcInstance: VcComponentInternalInstance, logger) {
@@ -207,15 +207,21 @@ export default function (props, vcInstance: VcComponentInternalInstance, logger)
     })
 
     eventSourceList.forEach(event => {
-      event.cesiumObject[event.callbackName] &&
-        event.cesiumObject[event.callbackName]({
-          type: `on${event.callbackName}`,
-          windowPosition: position,
-          surfacePosition: intersection,
-          pickedFeature: event.pickedFeature,
-          button,
-          cesiumObject: event.cesiumObject
-        })
+      if (event.callbackName) {
+        const fn =
+          event.cesiumObject[event.callbackName] ||
+          event.cesiumObject[`on${capitalize(event.callbackName)}`] ||
+          event.cesiumObject[kebabCase(`on${capitalize(event.callbackName)}`)]
+        fn &&
+          fn({
+            type: `on${event.callbackName}`,
+            windowPosition: position,
+            surfacePosition: intersection,
+            pickedFeature: event.pickedFeature,
+            button,
+            cesiumObject: event.cesiumObject
+          })
+      }
     })
 
     this.pickedFeature = pickedFeature

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-03-13 23:33:03
+ * @LastEditTime: 2022-04-11 17:38:39
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -537,6 +537,7 @@ export default function (props, ctx, cmpName: string) {
         billboardsRender.push({
           position: point.position,
           id: createGuid(),
+          _vcPolylineIndx: index, // for editor
           ...billboardOpts
         })
 
@@ -570,8 +571,7 @@ export default function (props, ctx, cmpName: string) {
       children.push(
         h(VcCollectionBillboard, {
           enableMouseEvent: props.enableMouseEvent,
-          billboards: billboardsRender,
-          onReady: onVcCollectionLabelReady
+          billboards: billboardsRender
         })
       )
 
