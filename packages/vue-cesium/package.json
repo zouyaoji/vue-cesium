@@ -50,7 +50,6 @@
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@zouyaoji/heatmap.js": "^2.0.8",
     "@vue/shared": "^3.2.26",
-    "echarts": "^5.2.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.1",
