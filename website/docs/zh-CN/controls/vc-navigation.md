@@ -495,6 +495,7 @@
 | label | string | | `optional` 指定打印按钮文字。 ||
 | stack | boolean | `false` | `optional` 指定打印按钮是否堆叠显示。 ||
 | tooltip | VcTooltipProps | | `optional` 指定打印按钮提示信息参数。 ||
+| screenshotName | string | | `optional` 指定截屏时图片文件名称。 ||
 
 ### VcPrint 事件
 

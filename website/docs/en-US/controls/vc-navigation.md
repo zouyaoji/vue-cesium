@@ -458,6 +458,7 @@ Tips: `durationReset`, `zoomInOptions`, `zoomOutOptions`, `zoomResetOptions` def
 | label | string | | `optional` Specify the text of the print button. |
 | stack | boolean | `false` | `optional` Specify whether the print buttons are displayed stacked. |
 | tooltip | VcTooltipProps | | `optional` Specify the tooltip parameters of the print button. |
+| screenshotName | string | | `optional` Specify the screenshot name. ||
 
 ### VcPrint Events
 

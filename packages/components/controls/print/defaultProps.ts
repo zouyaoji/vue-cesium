@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:13
- * @LastEditTime: 2022-01-22 09:31:31
+ * @LastEditTime: 2022-04-12 16:43:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\print\defaultProps.ts
@@ -66,5 +66,6 @@ export default {
         offset: [0, 20],
         tip: void 0
       } as VcTooltipProps | false)
-  }
+  },
+  screenshotName: String
 }

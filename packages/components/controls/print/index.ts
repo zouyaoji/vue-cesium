@@ -136,7 +136,7 @@ export default defineComponent({
       captureScreenshot(viewer).then(imgSrc => {
         if (props.downloadAutomatically) {
           const link = document.createElement('a')
-          link.download = t('vc.navigation.screenshot') || '场景截图'
+          link.download = props.screenshotName || t('vc.navigation.print.screenshot')
           link.style.display = 'none'
           link.href = imgSrc
           document.body.appendChild(link)
@@ -189,10 +189,10 @@ export default defineComponent({
         readyCallback: windowToPrint => {
           if (printAutomatically) {
             printWindow(windowToPrint)
-              .otherwise(e => {
+              .catch(e => {
                 commonState.logger.warn(e)
               })
-              .always(() => {
+              .then(() => {
                 if (iframe) {
                   document.body.removeChild(iframe)
                 }
@@ -360,6 +360,10 @@ export type VcPrintProps = {
    * The tooltip parameter.
    */
   tooltip?: false | VcTooltipProps
+  /**
+   * The screenshot name.
+   */
+  screenshotName?: string
   /**
    * Triggers before the VcPrint is loaded.
    * @param instance
