@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-03 16:57:27
- * @LastEditTime: 2022-02-10 15:38:09
+ * @LastEditTime: 2022-04-06 15:50:12
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.md
@@ -29,7 +29,7 @@
   <br>
 </p>
 
-<p align="center">VueCesium - A Vue 2.x & Vue 3.x based component library of CesiumJS for GISer.</p>
+<p align="center">VueCesium - A Vue 3.x based component library of CesiumJS for developers.</p>
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript

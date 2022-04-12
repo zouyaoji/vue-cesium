@@ -1,5 +1,19 @@
 ## Changelog
 
+### 3.0.12
+
+_2022-04-12_
+
+#### New feature
+
+- Add the component `vc-imagery-provider-amap` to load amap, and the component `vc-imagery-provider-tencent` to Tencent map.
+- Complete the types definitions for all components.
+
+#### Bug fixes
+
+- Compatible with the latest version of Cesium, replace logic using Cesium.when with native Promise.
+- Fixed the problem that the mobile terminal cannot be terminated when drawing polygon and polyline, [#169](https://github.com/zouyaoji/vue-cesium/issues/169).
+
 ### 3.0.11
 
 _2022-03-15_

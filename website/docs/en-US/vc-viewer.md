@@ -143,6 +143,7 @@ Basic usage of `vc-viewer`.
 |removeCesiumScript|boolean|`true`| `optional` Specify whether to remove the CesiumJS script tag when `vc-viewer` is destroyed.|
 |enableMouseEvent|boolean|`true`| `optional` Specifiy whether to trigger mouse events.|
 |skeleton|boolean\|VcSkeletonProps|| `optional` Specify whether to show the skeleton background during `vc-viewer` initialization.|
+|touchHoldArg|string|'1000'|`optional` Specify the time delay for `vc-viewer` to respond to press events on touchscreens.|
 |TZcode|string|| `optional` The time zone code used for timeline date formatting. By default, it is formatted as local time. If you want to display it as UTC universal time, set `UTCoffset` to `new Date().getTimezoneOffset()`|
 |UTCoffset|number|| `optional` The time difference (minutes) between local time and UTC time.|
 |accessToken|string||`optional` Specify the default [Cesium ion](https://cesium.com/ion/) access token.|
@@ -200,6 +201,7 @@ Basic usage of `vc-viewer`.
 |ready|(readyObj: VcReadyObject)|Triggers when vc-viewer is successfully loaded.| - |
 |destroyed| (instance: VcComponentInternalInstance) |Triggers when vc-viewer is destroyed.| - |
 |viewerWidgetResized|(e: ViewerWidgetResizedEvent)|Triggers when a component changes on vc-viewer.| - |
+|touchEnd| (e: any) |Triggers when the vc-viewer touch ends..| - |
 |selectedEntityChanged|(entity: Cesium.Entity)| Triggers when the selected entity changes. |Viewer|
 |trackedEntityChanged|(entity: Cesium.Entity)| Triggers when the tracked entity changes. |Viewer|
 |layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|Triggers when a layer is added to the collection. Event handlers are passed the layer that was added and the index at which it was added.|Viewer.imageryLayers|

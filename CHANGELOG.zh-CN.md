@@ -1,5 +1,19 @@
 ## 更新日志
 
+### 3.0.12
+
+_2022-04-12_
+
+#### 新特性
+
+- 增加高德地图的组件 `vc-imagery-provider-amap`、加载腾讯地图组件`vc-imagery-provider-tencent`。
+- 完善所有组件的 types 定义。
+
+#### Bug 修复
+
+- 兼容 Cesium 最新版本，将使用 Cesium.when 的逻辑替换为原生 Promise。
+- 修复移动端标绘线面时无法终止的问题，[#169](https://github.com/zouyaoji/vue-cesium/issues/169)。
+
 ### 3.0.11
 
 _2022-03-15_

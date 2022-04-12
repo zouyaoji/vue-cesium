@@ -66,12 +66,12 @@ Basic usage of the `vc-terrain-provider-tianditu` component.
 <!-- prettier-ignore -->
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| url | String | `'https://{s}.tianditu.gov.cn/'` | `required` Specify the service address. |
-| subdomains | Array | `false` | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` Specify the polling subdomain name. |
-| pluginPath | String | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` Specify the address of the Tiantu terrain plugin library. |
-| dataType | String | `int` | `optional` Specify the data type. |
-| tileType | String | `heightmap` | `optional` Specify the tile type. |
-| token | String | | `optional` Specify the Tiantu service secret key. |
+| url | string | `'https://{s}.tianditu.gov.cn/'` | `required` Specify the service address. |
+| subdomains | Array | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` | Specify the polling subdomain name. |
+| pluginPath | string | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` Specify the address of the Tiantu terrain plugin library. |
+| dataType | string | `int` | `optional` Specify the data type. |
+| tileType | string | `heightmap` | `optional` Specify the tile type. |
+| token | string | | `optional` Specify the Tiantu service secret key. |
 
 ### Events
 

@@ -118,7 +118,7 @@ Basic usage of the `vc-imagery-provider-baidu` component.
 | maximumLevel | number | `18` | `optional` The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit. |
 | scale | number | `1` | `optional` Specify the scale. |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` Specify the baidumap key. |
-| customid | string | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+| customid | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` Specify the customid. |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | boolean\|Object |  | `optional` Specify the projection transformation parameters. such as { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` Specify protocol of service. |
 

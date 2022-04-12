@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-04-29 16:12:05
- * @LastEditTime: 2022-02-10 15:38:17
+ * @LastEditTime: 2022-04-06 15:50:02
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\README.zh.md
@@ -29,7 +29,7 @@
   <br>
 </p>
 
-<p align="center">VueCesium - 一套为 GISer 准备的基于 Vue 2.x & Vue 3.x 的 Cesium 组件库。</p>
+<p align="center">VueCesium - 基于 Vue 3，面向开发者的 CesiumJS 组件库。</p>
 
 - 💪 Vue 3.0 Composition API
 - 🔥 Written in TypeScript

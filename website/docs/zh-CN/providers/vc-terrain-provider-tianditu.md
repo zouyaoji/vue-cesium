@@ -1,7 +1,15 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2022-02-19 00:16:21
+ * @LastEditTime: 2022-04-08 13:50:22
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-tianditu.md
+-->
+<!--
+ * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-07-13 18:01:38
- * @LastEditTime: 2022-01-16 00:47:05
+ * @LastEditTime: 2022-04-08 13:50:11
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\website\docs\zh-CN\providers\vc-terrain-provider-tianditu.md
@@ -75,12 +83,12 @@
 <!-- prettier-ignore -->
 | 属性名 | 类型 | 默认值 | 描述 |
 | --------------- | ------- | -------------------------------- | ------------------------------------------------------------------- |
-| url | String | `'https://{s}.tianditu.gov.cn/'` | `required` 指定服务地址。 |
-| subdomains | Array | `false` | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` 指定轮询子域名。 |
-| pluginPath | String | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` 指定天地图地形插件库地址。 |
-| dataType | String | `int` | `optional` 指定数据类型。 |
-| tileType | String | `heightmap` | `optional` 指定瓦片类型。 |
-| token | String | | `optional` 指定天地图服务秘钥。 |
+| url | string | `'https://{s}.tianditu.gov.cn/'` | `required` 指定服务地址。 |
+| subdomains | Array  | `['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']` | 指定轮询子域名。 |
+| pluginPath | string | `'https://api.tianditu.gov.cn/cdn/plugins/cesium/cesiumTdt.js'` | `optional` 指定天地图地形插件库地址。 |
+| dataType | string | `int` | `optional` 指定数据类型。 |
+| tileType | string | `heightmap` | `optional` 指定瓦片类型。 |
+| token | string | | `optional` 指定天地图服务秘钥。 |
 
 ### 事件
 

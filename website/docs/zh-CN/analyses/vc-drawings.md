@@ -34,13 +34,14 @@ ctrl + 右键取消绘制。
       @editor-evt="editorEvt"
       @mouse-evt="mouseEvt"
       @ready="drawingsReadyDefault"
+      :pin-drawing-opts="pinDrawingOpts"
       :point-drawing-opts="pointDrawingOpts"
       :polygon-drawing-opts="polygonDrawingOpts"
       :polyline-drawing-opts="polylineDrawingOpts"
       :regular-drawing-opts="regularDrawingOpts"
     ></vc-drawings>
     <!-- 结合 slot 改变默认 UI，自定义绘制方法 -->
-    <vc-drawings
+    <!-- <vc-drawings
       ref="drawingsCustomRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
@@ -66,7 +67,7 @@ ctrl + 右键取消绘制。
           </el-row>
         </div>
       </template>
-    </vc-drawings>
+    </vc-drawings> -->
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
       @ready-promise="onTilesetReady"
@@ -75,7 +76,7 @@ ctrl + 右键取消绘制。
       <vc-imagery-provider-tianditu map-style="img_c" :maximum-level="17" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
     </vc-layer-imagery>
     <vc-terrain-provider-cesium v-if="addTerrain"></vc-terrain-provider-cesium>
-    <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator>
+    <!-- <vc-selection-indicator ref="selectionIndicator" @pick-evt="pickEvt"></vc-selection-indicator> -->
   </vc-viewer>
   <el-row class="demo-toolbar">
     <el-button type="danger" round @click="unload">销毁</el-button>
@@ -109,18 +110,32 @@ ctrl + 右键取消绘制。
         },
         pinDrawingOpts: {
           billboardOpts: {
-            image: 'https://zouyaoji.top/vue-cesium/images/grepin.png'
+            image: 'https://zouyaoji.top/vue-cesium/images/grepin.png',
+            onClick(e) {
+              console.log(e)
+            }
           },
           labelOpts: {
             text: '图标点',
-            pixelOffset: [0, -60]
+            pixelOffset: [0, -60],
+            onClick(e) {
+              console.log(e)
+            }
           }
         },
         pointDrawingOpts: {
           preRenderDatas: [
             [108.96018, 34.21948, 50],
             [108.9602, 34.21895, 100]
-          ]
+          ],
+          pointOpts: {
+            show: true,
+            color: 'red',
+            enableMouseEvent: true,
+            onClick(e) {
+              console.log(e)
+            }
+          }
         },
         polygonDrawingOpts: {
           preRenderDatas: [
@@ -135,10 +150,7 @@ ctrl + 右键取消绘制。
               [108.95573, 34.21761],
               [108.95499, 34.21761]
             ]
-          ],
-          onClick(e) {
-            console.log(e)
-          }
+          ]
         },
         regularDrawingOpts: {
           preRenderDatas: [

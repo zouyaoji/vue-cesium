@@ -12,11 +12,11 @@
 <el-row ref="viewerContainer" class="demo-viewer">
   <vc-viewer @ready="onViewerReady">
     <vc-collection-point @click="onClicked" ref="collectionRef" :points="points">
-      <template v-for="(polyline, index) of polylines">
+      <!-- <template v-for="(polyline, index) of polylines">
         <template v-for="(position, subIndex) of polyline.positions">
           <vc-point :position="position" :color="[255, 229, 0]" :pixel-size="32"></vc-point>
         </template>
-      </template>
+      </template> -->
     </vc-collection-point>
   </vc-viewer>
   <el-row class="demo-toolbar">
@@ -71,13 +71,14 @@
         collectionRef.value.load()
       }
       const onViewerReady = ({ Cesium, viewer }) => {
-        for (var i = 0; i < 10000; i++) {
+        for (var i = 0; i < 5; i++) {
           let point = {}
           point.position = { lng: Math.random() * 40 + 85, lat: Math.random() * 30 + 21 }
           point.color = 'rgb(255,229,0)'
           point.pixelSize = 8
           points.value.push(point)
         }
+        window.points = points
       }
 
       return {

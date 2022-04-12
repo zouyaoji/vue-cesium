@@ -119,7 +119,7 @@
 | maximumLevel | number | `18` | `optional` 最大层级。 |
 | scale | number | `1` | `optional` 指定缩放。 |
 | ak | string | `E4805d16520de693a3fe707cdc962045` | `optional` 指定百度地图key。 |
-| customid | string | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
+| customid | 'img' \| 'vec' \| 'traffic' \| 'normal' \| 'light' \| 'dark' \| 'redalert' \| 'googlelite' \| 'grassgreen' \| 'midnight' \| 'pink' \| 'darkgreen' \| 'bluish' \| 'grayscale' \| 'hardedge' | `normal` | `optional` 指定自定义风格id。 |img/vec/traffic/normal/light/dark/redalert/googlelite/grassgreen/midnight/pink/darkgreen/bluish/grayscale/hardedge|
 | projectionTransforms | boolean\|Object |  | `optional` 指定投影变换参数。**结构： { from: 'BD09', to: 'WGS84' }** |
 | protocol | string | `'https'` | `optional` 指定服务协议。 |
 

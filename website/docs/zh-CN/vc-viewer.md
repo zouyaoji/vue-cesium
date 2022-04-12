@@ -38,6 +38,7 @@
     @cesium-ready="onCesiumReady"
     @ready="onViewerReady"
     @left-click="onLeftClick"
+    @touchEnd="onTouchEnd"
   >
     <vc-navigation :offset="offset" @compass-evt="onNavigationEvt" :other-opts="otherOpts" @zoom-evt="onNavigationEvt"></vc-navigation>
     <vc-entity v-model:billboard="billboard" ref="entity" @click="onEntityClick" :position="{lng: 108, lat: 32}" :point="point" :label="label">
@@ -123,6 +124,9 @@
       onLeftClick(e) {
         console.log(e)
       },
+      onTouchEnd(e) {
+        console.log(e)
+      },
       load() {
         this.$refs.vcViewer.load().then(e => {
           console.log(e)
@@ -160,6 +164,7 @@
 |removeCesiumScript|boolean|`true`| `optional` 指定 `vc-viewer` 组件销毁时是否移除CesiumJS标签。|
 |enableMouseEvent|boolean|`true`| `optional` 指定是否触发鼠标事件。|
 |skeleton|boolean\|VcSkeletonProps|| `optional` 指定 `vc-viewer` 初始化时是否显示骨架背景。|
+|touchHoldArg|string|'1000'|`optional` 指定在触摸屏上 `vc-viewer` 响应按下事件的时间延迟。|
 |TZcode|string|| `optional` Timeline 日期格式化所用时区代码。默认将 `Timeline` 格式化为本地时间，如果要显示成 UTC 世界时，将 `UTCoffset` 设为 `new Date().getTimezoneOffset()` 即可。|
 |UTCoffset|number|| `optional` 本地时间与UTC时间的时差（分钟）。|
 |accessToken|string||`optional` 指定 accessToken，使用Cesium ion的数据源需要到[https://cesium.com/ion/](https://cesium.com/ion/)申请一个账户，获取Access Token。|
@@ -217,6 +222,7 @@
 |ready|(readyObj: VcReadyObject)|对象加载完成时触发。| - |
 |destroyed| (instance: VcComponentInternalInstance) |对象销毁时触发。| - |
 |viewerWidgetResized| (e: ViewerWidgetResizedEvent) |vc-viewer 上有部件发生变化时触发。| - |
+|touchEnd| (e: any) |vc-viewer 上触摸长按结束时触发。| - |
 |selectedEntityChanged|(entity: Cesium.Entity)|场景选中实体发生改变时触发此事件。事件参数表示选中的实体，或者undefined（未选中）|Viewer|
 |trackedEntityChanged|(entity: Cesium.Entity)|场景跟踪实体发生改变时触发此事件。事件参数表示跟踪的实体。|Viewer|
 |layerAdded|(imageryLayer: Cesium.ImageryLayer, index: number)|场景添加某影像图层后触发该事件。事件参数表示改图层和它的索引。|Viewer.imageryLayers|
