@@ -128,7 +128,7 @@ export interface VcAnalysisViewshedRef extends VcComponentPublicInstance<VcAnaly
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

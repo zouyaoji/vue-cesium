@@ -115,7 +115,7 @@ export interface VcDrawingPointRef extends VcComponentPublicInstance<VcDrawingPo
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

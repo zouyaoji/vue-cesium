@@ -155,7 +155,7 @@ export interface VcMeasurementHeightRef extends VcComponentPublicInstance<VcMeas
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

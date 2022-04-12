@@ -126,7 +126,7 @@ export interface VcDrawingPinRef extends VcComponentPublicInstance<VcDrawingPinP
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

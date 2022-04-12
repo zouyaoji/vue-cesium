@@ -172,6 +172,10 @@ declare namespace Cesium {
   var GeoTerrainProvider: any
   // eslint-disable-next-line no-var
   var BaiduMapImageryProvider: any
+  // eslint-disable-next-line no-var
+  var AMapImageryProvider: any
+  // eslint-disable-next-line no-var
+  var TencentImageryProvider: any
 
   namespace ScreenSpaceEventParamsType {
     export interface LEFT_DOWN {

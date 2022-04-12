@@ -247,5 +247,5 @@ export interface VcAnalysisFloodRef extends VcComponentPublicInstance<VcAnalysis
   /**
    * Stop flood analysis
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
 }

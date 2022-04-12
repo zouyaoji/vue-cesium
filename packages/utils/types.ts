@@ -6,6 +6,8 @@ import type BaiduMapImageryProvider from '@vue-cesium/components/providers/baidu
 import type SuperMapImageryProvider from '@vue-cesium/components/providers/supermap/SuperMapImageryProvider'
 import type { VcBtnProps, VcFabActionProps, VcTooltipProps } from '@vue-cesium/components/ui'
 import type MouseCoords from '@vue-cesium/components/controls/status-bar/MouseCoords'
+import AMapImageryProvider from '@vue-cesium/components/providers/amap/AMapImageryProvider'
+import TencentImageryProvider from '@vue-cesium/components/providers/tencent/TencentImageryProvider'
 
 interface AnyObject {
   [propName: string]: any
@@ -564,6 +566,8 @@ export type VcImageryProvider =
   | Cesium.WebMapTileServiceImageryProvider
   | BaiduMapImageryProvider
   | SuperMapImageryProvider
+  | AMapImageryProvider
+  | TencentImageryProvider
 
 export type VcTerrainProvider =
   | Cesium.EllipsoidTerrainProvider

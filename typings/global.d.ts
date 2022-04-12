@@ -1,13 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-12-03 15:12:31
- * @LastEditTime: 2022-03-10 13:34:02
+ * @LastEditTime: 2022-04-08 14:58:03
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\typings\global.d.ts
  */
-import { VcCompassSmProps } from '@vue-cesium/components/controls/navigation-sm/compass-sm'
-import { VcZoomControlSmProps } from '@vue-cesium/components/controls/navigation-sm/zoom-control-sm'
+
 import {
   ComponentOptions,
   ComponentPublicInstance,
@@ -18,16 +17,118 @@ import {
   ComponentCustomProps
 } from 'vue'
 import {
+  VcAjaxBarProps,
   VcAnalysesProps,
   VcAnalysesSlots,
   VcAnalysisFloodProps,
+  VcBillboardProps,
   VcBtnProps,
   VcBtnSlots,
+  VcCollectionBillboardProps,
+  VcCollectionBillboardSlots,
+  VcCollectionLabelProps,
+  VcCollectionLabelSlots,
+  VcCollectionPointProps,
+  VcCollectionPointSlots,
+  VcCollectionPolylineProps,
+  VcCollectionPolylineSlots,
+  VcCollectionPrimitiveProps,
+  VcCollectionPrimitiveSlots,
   VcCompassProps,
+  VcCompassSmProps,
+  VcConfigProviderProps,
+  VcConfigProviderSlots,
+  VcDatasourceCustomProps,
+  VcDatasourceCustomSlots,
+  VcDatasourceCzmlProps,
+  VcDatasourceCzmlSlots,
+  VcDatasourceGeojsonProps,
+  VcDatasourceGeojsonSlots,
+  VcDatasourceKmlProps,
+  VcDatasourceKmlSlots,
   VcDistanceLegendProps,
   VcDrawingsProps,
   VcDrawingsSlots,
+  VcEntityProps,
+  VcEntitySlots,
+  VcFabActionProps,
+  VcFabActionSlots,
+  VcFabProps,
+  VcFabSlots,
+  VcGeometryBoxOutlineProps,
+  VcGeometryBoxProps,
+  VcGeometryCircleOutlineProps,
+  VcGeometryCircleProps,
+  VcGeometryCorridorOutlineProps,
+  VcGeometryCorridorProps,
+  VcGeometryCylinderOutlineProps,
+  VcGeometryCylinderProps,
+  VcGeometryEllipseOutlineProps,
+  VcGeometryEllipseOutlineRef,
+  VcGeometryEllipseProps,
+  VcGeometryEllipsoidProps,
+  VcGeometryFrustumOutlineProps,
+  VcGeometryFrustumProps,
+  VcGeometryGroundPolylineProps,
+  VcGeometryInstanceProps,
+  VcGeometryInstanceSlots,
+  VcGeometryPlaneOutlineProps,
+  VcGeometryPlaneProps,
+  VcGeometryPolygonCoplanarOutlineProps,
+  VcGeometryPolygonCoplanarProps,
+  VcGeometryPolygonOutlineProps,
+  VcGeometryPolygonProps,
+  VcGeometryPolylineProps,
+  VcGeometryPolylineVolumeOutlineProps,
+  VcGeometryPolylineVolumeProps,
+  VcGeometryRectangleOutlineProps,
+  VcGeometryRectangleProps,
+  VcGeometrySimplePolylineProps,
+  VcGeometrySphereOutlineProps,
+  VcGeometrySphereProps,
+  VcGeometryWallOutlineProps,
+  VcGeometryWallProps,
   VcGraphicsBillboardProps,
+  VcGraphicsBoxProps,
+  VcGraphicsCorridorProps,
+  VcGraphicsCylinderProps,
+  VcGraphicsEllipseProps,
+  VcGraphicsEllipsoidProps,
+  VcGraphicsLabelProps,
+  VcGraphicsModelProps,
+  VcGraphicsPathProps,
+  VcGraphicsPlaneProps,
+  VcGraphicsPointProps,
+  VcGraphicsPolygonProps,
+  VcGraphicsPolylineProps,
+  VcGraphicsPolylineVolumeProps,
+  VcGraphicsRectangleProps,
+  VcGraphicsTilesetProps,
+  VcGraphicsWallProps,
+  VcIconProps,
+  VcIconRef,
+  VcImageryProviderAmapProps,
+  VcImageryProviderArcgisProps,
+  VcImageryProviderBaiduProps,
+  VcImageryProviderBingProps,
+  VcImageryProviderGoogleProps,
+  VcImageryProviderGridProps,
+  VcImageryProviderIonProps,
+  VcImageryProviderMapboxProps,
+  VcImageryProviderOsmProps,
+  VcImageryProviderSingletileProps,
+  VcImageryProviderSupermapProps,
+  VcImageryProviderTencentProps,
+  VcImageryProviderTiandituProps,
+  VcImageryProviderTileCoordinatesProps,
+  VcImageryProviderTiledcacheProps,
+  VcImageryProviderTmsProps,
+  VcImageryProviderUrltemplateProps,
+  VcImageryProviderWmsProps,
+  VcImageryProviderWmtsProps,
+  VcLabelProps,
+  VcLayerImageryProps,
+  VcLayerImagerySlots,
   VcMeasurementsProps,
   VcMeasurementsSlots,
   VcMyLocationProps,
@@ -35,12 +136,54 @@ import {
   VcNavigationSlots,
   VcNavigationSmProps,
   VcNavigationSmSlots,
+  VcOverlayDynamicProps,
+  VcOverlayEchartsProps,
+  VcOverlayHeatmapProps,
+  VcOverlayHtmlProps,
+  VcOverlayHtmlSlots,
+  VcOverlayWindmapProps,
   VcOverviewMapProps,
   VcOverviewMapSlots,
+  VcPointProps,
+  VcPolygonProps,
+  VcPolylineProps,
+  VcPostProcessStageCollectionProps,
+  VcPostProcessStageCollectionSlots,
+  VcPostProcessStageProps,
+  VcPostProcessStageScanProps,
+  VcPrimitiveClassificationProps,
+  VcPrimitiveClassificationSlots,
+  VcPrimitiveGroundProps,
+  VcPrimitiveGroundSlots,
+  VcPrimitiveModelProps,
+  VcPrimitiveModelSlots,
+  VcPrimitiveParticleProps,
+  VcPrimitiveProps,
+  VcPrimitiveSlots,
+  VcPrimitiveTilesetProps,
   VcSelectionIndicatorProps,
+  VcSpinnerBallProps,
+  VcSpinnerBarsProps,
+  VcSpinnerDotsProps,
+  VcSpinnerGearsProps,
+  VcSpinnerHourglassProps,
+  VcSpinnerIosProps,
+  VcSpinnerOrbitProps,
+  VcSpinnerOvalProps,
+  VcSpinnerProps,
+  VcSpinnerPuffProps,
+  VcSpinnerRingsProps,
+  VcSpinnerTailProps,
+  VcTerrainProviderArcgisProps,
+  VcTerrainProviderCesiumProps,
+  VcTerrainProviderTiandituProps,
+  VcTerrainProviderVrTheworldProps,
+  VcTooltipProps,
+  VcTooltipSlots,
   VcViewerProps,
   VcViewerSlots,
-  VcZoomControlProps
+  VcZoomControlProps,
+  VcZoomControlSmProps
 } from 'vue-cesium'
 
 export type StringDictionary<T extends string> = Required<{ [index in T]: string }>
@@ -112,138 +255,140 @@ declare module 'vue' {
     VcAnalyses: GlobalComponentConstructor<VcAnalysesProps, VcAnalysesSlots>
     VcAnalysisFlood: GlobalComponentConstructor<VcAnalysisFloodProps>
 
-    VcLayerImagery: typeof import('vue-cesium')['VcLayerImagery']
-    VcImageryProviderArcgis: typeof import('vue-cesium')['VcImageryProviderArcgis']
-    VcImageryProviderBaidu: typeof import('vue-cesium')['VcImageryProviderBaidu']
-    VcImageryProviderBing: typeof import('vue-cesium')['VcImageryProviderBing']
-    VcImageryProviderGoogle: typeof import('vue-cesium')['VcImageryProviderGoogle']
-    VcImageryProviderGrid: typeof import('vue-cesium')['VcImageryProviderGrid']
-    VcImageryProviderIon: typeof import('vue-cesium')['VcImageryProviderIon']
-    VcImageryProviderMapbox: typeof import('vue-cesium')['VcImageryProviderMapbox']
-    VcImageryProviderOsm: typeof import('vue-cesium')['VcImageryProviderOsm']
-    VcImageryProviderSingletile: typeof import('vue-cesium')['VcImageryProviderSingletile']
-    VcImageryProviderSupermap: typeof import('vue-cesium')['VcImageryProviderSupermap']
-    VcImageryProviderTianditu: typeof import('vue-cesium')['VcImageryProviderTianditu']
-    VcImageryProviderTileCoordinates: typeof import('vue-cesium')['VcImageryProviderTileCoordinates']
-    VcImageryProviderTms: typeof import('vue-cesium')['VcImageryProviderTms']
-    VcImageryProviderTiledcache: typeof import('vue-cesium')['VcImageryProviderTiledcache']
-    VcImageryProviderUrltemplate: typeof import('vue-cesium')['VcImageryProviderUrltemplate']
-    VcImageryProviderWms: typeof import('vue-cesium')['VcImageryProviderWms']
-    VcImageryProviderWmts: typeof import('vue-cesium')['VcImageryProviderWmts']
+    VcLayerImagery: GlobalComponentConstructor<VcLayerImageryProps, VcLayerImagerySlots>
+    VcImageryProviderAmap: GlobalComponentConstructor<VcImageryProviderAmapProps>
+    VcImageryProviderArcgis: GlobalComponentConstructor<VcImageryProviderArcgisProps>
+    VcImageryProviderBaidu: GlobalComponentConstructor<VcImageryProviderBaiduProps>
+    VcImageryProviderBing: GlobalComponentConstructor<VcImageryProviderBingProps>
+    VcImageryProviderGoogle: GlobalComponentConstructor<VcImageryProviderGoogleProps>
+    VcImageryProviderGrid: GlobalComponentConstructor<VcImageryProviderGridProps>
+    VcImageryProviderIon: GlobalComponentConstructor<VcImageryProviderIonProps>
+    VcImageryProviderMapbox: GlobalComponentConstructor<VcImageryProviderMapboxProps>
+    VcImageryProviderOsm: GlobalComponentConstructor<VcImageryProviderOsmProps>
+    VcImageryProviderSingletile: GlobalComponentConstructor<VcImageryProviderSingletileProps>
+    VcImageryProviderSupermap: GlobalComponentConstructor<VcImageryProviderSupermapProps>
+    VcImageryProviderTencent: GlobalComponentConstructor<VcImageryProviderTencentProps>
+    VcImageryProviderTianditu: GlobalComponentConstructor<VcImageryProviderTiandituProps>
+    VcImageryProviderTileCoordinates: GlobalComponentConstructor<VcImageryProviderTileCoordinatesProps>
+    VcImageryProviderTms: GlobalComponentConstructor<VcImageryProviderTmsProps>
+    VcImageryProviderTiledcache: GlobalComponentConstructor<VcImageryProviderTiledcacheProps>
+    VcImageryProviderUrltemplate: GlobalComponentConstructor<VcImageryProviderUrltemplateProps>
+    VcImageryProviderWms: GlobalComponentConstructor<VcImageryProviderWmsProps>
+    VcImageryProviderWmts: GlobalComponentConstructor<VcImageryProviderWmtsProps>
 
-    VcTerrainProviderCesium: typeof import('vue-cesium')['VcTerrainProviderCesium']
-    VcTerrainProviderArcgis: typeof import('vue-cesium')['VcTerrainProviderArcgis']
-    VcTerrainProviderVrTheworld: typeof import('vue-cesium')['VcTerrainProviderVrTheworld']
-    VcTerrainProviderTianditu: typeof import('vue-cesium')['VcTerrainProviderTianditu']
+    VcTerrainProviderCesium: GlobalComponentConstructor<VcTerrainProviderCesiumProps>
+    VcTerrainProviderArcgis: GlobalComponentConstructor<VcTerrainProviderArcgisProps>
+    VcTerrainProviderVrTheworld: GlobalComponentConstructor<VcTerrainProviderVrTheworldProps>
+    VcTerrainProviderTianditu: GlobalComponentConstructor<VcTerrainProviderTiandituProps>
 
-    VcDatasourceCustom: typeof import('vue-cesium')['VcDatasourceCustom']
-    VcDatasourceCzml: typeof import('vue-cesium')['VcDatasourceCzml']
-    VcDatasourceGeojson: typeof import('vue-cesium')['VcDatasourceGeojson']
-    VcDatasourceKml: typeof import('vue-cesium')['VcDatasourceKml']
+    VcDatasourceCustom: GlobalComponentConstructor<VcDatasourceCustomProps, VcDatasourceCustomSlots>
+    VcDatasourceCzml: GlobalComponentConstructor<VcDatasourceCzmlProps, VcDatasourceCzmlSlots>
+    VcDatasourceGeojson: GlobalComponentConstructor<VcDatasourceGeojsonProps, VcDatasourceGeojsonSlots>
+    VcDatasourceKml: GlobalComponentConstructor<VcDatasourceKmlProps, VcDatasourceKmlSlots>
 
-    VcEntity: typeof import('vue-cesium')['VcEntity']
+    VcEntity: GlobalComponentConstructor<VcEntityProps, VcEntitySlots>
     VcGraphicsBillboard: GlobalComponentConstructor<VcGraphicsBillboardProps>
-    VcGraphicsBox: typeof import('vue-cesium')['VcGraphicsBox']
-    VcGraphicsCorridor: typeof import('vue-cesium')['VcGraphicsCorridor']
-    VcGraphicsCylinder: typeof import('vue-cesium')['VcGraphicsCylinder']
-    VcGraphicsEllipse: typeof import('vue-cesium')['VcGraphicsEllipse']
-    VcGraphicsEllipsoid: typeof import('vue-cesium')['VcGraphicsEllipsoid']
-    VcGraphicsLabel: typeof import('vue-cesium')['VcGraphicsLabel']
-    VcGraphicsModel: typeof import('vue-cesium')['VcGraphicsModel']
-    VcGraphicsPath: typeof import('vue-cesium')['VcGraphicsPath']
-    VcGraphicsPlane: typeof import('vue-cesium')['VcGraphicsPlane']
-    VcGraphicsPoint: typeof import('vue-cesium')['VcGraphicsPoint']
-    VcGraphicsPolygon: typeof import('vue-cesium')['VcGraphicsPolygon']
-    VcGraphicsPolyline: typeof import('vue-cesium')['VcGraphicsPolyline']
-    VcGraphicsPolylineVolume: typeof import('vue-cesium')['VcGraphicsPolylineVolume']
-    VcGraphicsRectangle: typeof import('vue-cesium')['VcGraphicsRectangle']
-    VcGraphicsTileset: typeof import('vue-cesium')['VcGraphicsTileset']
-    VcGraphicsWall: typeof import('vue-cesium')['VcGraphicsWall']
+    VcGraphicsBox: GlobalComponentConstructor<VcGraphicsBoxProps>
+    VcGraphicsCorridor: GlobalComponentConstructor<VcGraphicsCorridorProps>
+    VcGraphicsCylinder: GlobalComponentConstructor<VcGraphicsCylinderProps>
+    VcGraphicsEllipse: GlobalComponentConstructor<VcGraphicsEllipseProps>
+    VcGraphicsEllipsoid: GlobalComponentConstructor<VcGraphicsEllipsoidProps>
+    VcGraphicsLabel: GlobalComponentConstructor<VcGraphicsLabelProps>
+    VcGraphicsModel: GlobalComponentConstructor<VcGraphicsModelProps>
+    VcGraphicsPath: GlobalComponentConstructor<VcGraphicsPathProps>
+    VcGraphicsPlane: GlobalComponentConstructor<VcGraphicsPlaneProps>
+    VcGraphicsPoint: GlobalComponentConstructor<VcGraphicsPointProps>
+    VcGraphicsPolygon: GlobalComponentConstructor<VcGraphicsPolygonProps>
+    VcGraphicsPolyline: GlobalComponentConstructor<VcGraphicsPolylineProps>
+    VcGraphicsPolylineVolume: GlobalComponentConstructor<VcGraphicsPolylineVolumeProps>
+    VcGraphicsRectangle: GlobalComponentConstructor<VcGraphicsRectangleProps>
+    VcGraphicsTileset: GlobalComponentConstructor<VcGraphicsTilesetProps>
+    VcGraphicsWall: GlobalComponentConstructor<VcGraphicsWallProps>
 
-    VcPrimitiveClassification: typeof import('vue-cesium')['VcPrimitiveClassification']
-    VcPrimitiveGround: typeof import('vue-cesium')['VcPrimitiveGround']
-    VcPrimitiveGroundPolyline: typeof import('vue-cesium')['VcPrimitiveGroundPolyline']
-    VcPrimitiveModel: typeof import('vue-cesium')['VcPrimitiveModel']
-    VcPrimitive: typeof import('vue-cesium')['VcPrimitive']
-    VcPrimitiveTileset: typeof import('vue-cesium')['VcPrimitiveTileset']
-    VcPrimitiveParticle: typeof import('vue-cesium')['VcPrimitiveParticle']
+    VcPrimitiveClassification: GlobalComponentConstructor<VcPrimitiveClassificationProps, VcPrimitiveClassificationSlots>
+    VcPrimitiveGround: GlobalComponentConstructor<VcPrimitiveGroundProps, VcPrimitiveGroundSlots>
+    VcPrimitiveGroundPolyline: GlobalComponentConstructor<VcPrimitiveGroundProps, VcPrimitiveGroundSlots>
+    VcPrimitiveModel: GlobalComponentConstructor<VcPrimitiveModelProps, VcPrimitiveModelSlots>
+    VcPrimitive: GlobalComponentConstructor<VcPrimitiveProps, VcPrimitiveSlots>
+    VcPrimitiveTileset: GlobalComponentConstructor<VcPrimitiveTilesetProps>
+    VcPrimitiveParticle: GlobalComponentConstructor<VcPrimitiveParticleProps>
 
-    VcCollectionBillboard: typeof import('vue-cesium')['VcCollectionBillboard']
-    VcCollectionLabel: typeof import('vue-cesium')['VcCollectionLabel']
-    VcCollectionPoint: typeof import('vue-cesium')['VcCollectionPoint']
-    VcCollectionPolyline: typeof import('vue-cesium')['VcCollectionPolyline']
-    VcCollectionPrimitive: typeof import('vue-cesium')['VcCollectionPrimitive']
-    VcBillboard: typeof import('vue-cesium')['VcBillboard']
-    VcLabel: typeof import('vue-cesium')['VcLabel']
-    VcPoint: typeof import('vue-cesium')['VcPoint']
-    VcPolyline: typeof import('vue-cesium')['VcPolyline']
-    VcPolygon: typeof import('vue-cesium')['VcPolygon']
+    VcCollectionBillboard: GlobalComponentConstructor<VcCollectionBillboardProps, VcCollectionBillboardSlots>
+    VcCollectionLabel: GlobalComponentConstructor<VcCollectionLabelProps, VcCollectionLabelSlots>
+    VcCollectionPoint: GlobalComponentConstructor<VcCollectionPointProps, VcCollectionPointSlots>
+    VcCollectionPolyline: GlobalComponentConstructor<VcCollectionPolylineProps, VcCollectionPolylineSlots>
+    VcCollectionPrimitive: GlobalComponentConstructor<VcCollectionPrimitiveProps, VcCollectionPrimitiveSlots>
+    VcBillboard: GlobalComponentConstructor<VcBillboardProps>
+    VcLabel: GlobalComponentConstructor<VcLabelProps>
+    VcPoint: GlobalComponentConstructor<VcPointProps>
+    VcPolyline: GlobalComponentConstructor<VcPolylineProps>
+    VcPolygon: GlobalComponentConstructor<VcPolygonProps>
 
-    VcGeometryInstance: typeof import('vue-cesium')['VcGeometryInstance']
+    VcGeometryInstance: GlobalComponentConstructor<VcGeometryInstanceProps, VcGeometryInstanceSlots>
 
-    VcGeometryBox: typeof import('vue-cesium')['VcGeometryBox']
-    VcGeometryBoxOutline: typeof import('vue-cesium')['VcGeometryBoxOutline']
-    VcGeometryCircle: typeof import('vue-cesium')['VcGeometryCircle']
-    VcGeometryCircleOutline: typeof import('vue-cesium')['VcGeometryCircleOutline']
-    VcGeometryPolygonCoplanar: typeof import('vue-cesium')['VcGeometryPolygonCoplanar']
-    VcGeometryPolygonCoplanarOutline: typeof import('vue-cesium')['VcGeometryPolygonCoplanarOutline']
-    VcGeometryCorridor: typeof import('vue-cesium')['VcGeometryCorridor']
-    VcGeometryCorridorOutline: typeof import('vue-cesium')['VcGeometryCorridorOutline']
-    VcGeometryCylinder: typeof import('vue-cesium')['VcGeometryCylinder']
-    VcGeometryCylinderOutline: typeof import('vue-cesium')['VcGeometryCylinderOutline']
-    VcGeometryEllipse: typeof import('vue-cesium')['VcGeometryEllipse']
-    VcGeometryEllipseOutline: typeof import('vue-cesium')['VcGeometryEllipseOutline']
-    VcGeometryEllipsoid: typeof import('vue-cesium')['VcGeometryEllipsoid']
-    VcGeometryEllipsoidOutline: typeof import('vue-cesium')['VcGeometryEllipsoidOutline']
-    VcGeometryFrustum: typeof import('vue-cesium')['VcGeometryFrustum']
-    VcGeometryFrustumOutline: typeof import('vue-cesium')['VcGeometryFrustumOutline']
-    VcGeometryGroundPolyline: typeof import('vue-cesium')['VcGeometryGroundPolyline']
-    VcGeometryPlane: typeof import('vue-cesium')['VcGeometryPlane']
-    VcGeometryPlaneOutline: typeof import('vue-cesium')['VcGeometryPlaneOutline']
-    VcGeometryPolygon: typeof import('vue-cesium')['VcGeometryPolygon']
-    VcGeometryPolygonOutline: typeof import('vue-cesium')['VcGeometryPolygonOutline']
-    VcGeometryPolyline: typeof import('vue-cesium')['VcGeometryPolyline']
-    VcGeometryPolylineVolume: typeof import('vue-cesium')['VcGeometryPolylineVolume']
-    VcGeometryPolylineVolumeOutline: typeof import('vue-cesium')['VcGeometryPolylineVolumeOutline']
-    VcGeometryRectangle: typeof import('vue-cesium')['VcGeometryRectangle']
-    VcGeometryRectangleOutline: typeof import('vue-cesium')['VcGeometryRectangleOutline']
-    VcGeometrySimplePolyline: typeof import('vue-cesium')['VcGeometrySimplePolyline']
-    VcGeometrySphere: typeof import('vue-cesium')['VcGeometrySphere']
-    VcGeometrySphereOutline: typeof import('vue-cesium')['VcGeometrySphereOutline']
-    VcGeometryWall: typeof import('vue-cesium')['VcGeometryWall']
-    VcGeometryWallOutline: typeof import('vue-cesium')['VcGeometryWallOutline']
+    VcGeometryBox: GlobalComponentConstructor<VcGeometryBoxProps>
+    VcGeometryBoxOutline: GlobalComponentConstructor<VcGeometryBoxOutlineProps>
+    VcGeometryCircle: GlobalComponentConstructor<VcGeometryCircleProps>
+    VcGeometryCircleOutline: GlobalComponentConstructor<VcGeometryCircleOutlineProps>
+    VcGeometryPolygonCoplanar: GlobalComponentConstructor<VcGeometryPolygonCoplanarProps>
+    VcGeometryPolygonCoplanarOutline: GlobalComponentConstructor<VcGeometryPolygonCoplanarOutlineProps>
+    VcGeometryCorridor: GlobalComponentConstructor<VcGeometryCorridorProps>
+    VcGeometryCorridorOutline: GlobalComponentConstructor<VcGeometryCorridorOutlineProps>
+    VcGeometryCylinder: GlobalComponentConstructor<VcGeometryCylinderProps>
+    VcGeometryCylinderOutline: GlobalComponentConstructor<VcGeometryCylinderOutlineProps>
+    VcGeometryEllipse: GlobalComponentConstructor<VcGeometryEllipseProps>
+    VcGeometryEllipseOutline: GlobalComponentConstructor<VcGeometryEllipseOutlineProps>
+    VcGeometryEllipsoid: GlobalComponentConstructor<VcGeometryEllipsoidProps>
+    VcGeometryEllipsoidOutline: GlobalComponentConstructor<VcGeometryEllipseOutlineRef>
+    VcGeometryFrustum: GlobalComponentConstructor<VcGeometryFrustumProps>
+    VcGeometryFrustumOutline: GlobalComponentConstructor<VcGeometryFrustumOutlineProps>
+    VcGeometryGroundPolyline: GlobalComponentConstructor<VcGeometryGroundPolylineProps>
+    VcGeometryPlane: GlobalComponentConstructor<VcGeometryPlaneProps>
+    VcGeometryPlaneOutline: GlobalComponentConstructor<VcGeometryPlaneOutlineProps>
+    VcGeometryPolygon: GlobalComponentConstructor<VcGeometryPolygonProps>
+    VcGeometryPolygonOutline: GlobalComponentConstructor<VcGeometryPolygonOutlineProps>
+    VcGeometryPolyline: GlobalComponentConstructor<VcGeometryPolylineProps>
+    VcGeometryPolylineVolume: GlobalComponentConstructor<VcGeometryPolylineVolumeProps>
+    VcGeometryPolylineVolumeOutline: GlobalComponentConstructor<VcGeometryPolylineVolumeOutlineProps>
+    VcGeometryRectangle: GlobalComponentConstructor<VcGeometryRectangleProps>
+    VcGeometryRectangleOutline: GlobalComponentConstructor<VcGeometryRectangleOutlineProps>
+    VcGeometrySimplePolyline: GlobalComponentConstructor<VcGeometrySimplePolylineProps>
+    VcGeometrySphere: GlobalComponentConstructor<VcGeometrySphereProps>
+    VcGeometrySphereOutline: GlobalComponentConstructor<VcGeometrySphereOutlineProps>
+    VcGeometryWall: GlobalComponentConstructor<VcGeometryWallProps>
+    VcGeometryWallOutline: GlobalComponentConstructor<VcGeometryWallOutlineProps>
 
-    VcOverlayHtml: typeof import('vue-cesium')['VcOverlayHtml']
-    VcOverlayHeatmap: typeof import('vue-cesium')['VcOverlayHeatmap']
-    VcOverlayWind: typeof import('vue-cesium')['VcOverlayWind']
-    VcOverlayDynamic: typeof import('vue-cesium')['VcOverlayDynamic']
-    VcOverlayEcharts: typeof import('vue-cesium')['VcOverlayEcharts']
+    VcOverlayHtml: GlobalComponentConstructor<VcOverlayHtmlProps, VcOverlayHtmlSlots>
+    VcOverlayHeatmap: GlobalComponentConstructor<VcOverlayHeatmapProps>
+    VcOverlayWind: GlobalComponentConstructor<VcOverlayWindmapProps>
+    VcOverlayDynamic: GlobalComponentConstructor<VcOverlayDynamicProps>
+    VcOverlayEcharts: GlobalComponentConstructor<VcOverlayEchartsProps>
 
-    VcPostProcessStage: typeof import('vue-cesium')['VcPostProcessStage']
-    VcPostProcessStageScan: typeof import('vue-cesium')['VcPostProcessStageScan']
-    VcPostProcessStageCollection: typeof import('vue-cesium')['VcPostProcessStageCollection']
+    VcPostProcessStage: GlobalComponentConstructor<VcPostProcessStageProps>
+    VcPostProcessStageScan: GlobalComponentConstructor<VcPostProcessStageScanProps>
+    VcPostProcessStageCollection: GlobalComponentConstructor<VcPostProcessStageCollectionProps, VcPostProcessStageCollectionSlots>
 
     VcBtn: GlobalComponentConstructor<VcBtnProps, VcBtnSlots>
-    VcIcon: typeof import('vue-cesium')['VcIcon']
-    VcTooltip: typeof import('vue-cesium')['VcTooltip']
-    VcAjaxBar: typeof import('vue-cesium')['VcAjaxBar']
-    VcSkeleton: typeof import('vue-cesium')['VcSkeleton']
-    VcSpinnerBall: typeof import('vue-cesium')['VcSpinnerBall']
-    VcSpinnerBars: typeof import('vue-cesium')['VcSpinnerBars']
-    VcSpinnerDots: typeof import('vue-cesium')['VcSpinnerDots']
-    VcSpinnerGears: typeof import('vue-cesium')['VcSpinnerGears']
-    VcSpinnerHourglass: typeof import('vue-cesium')['VcSpinnerHourglass']
-    VcSpinnerIos: typeof import('vue-cesium')['VcSpinnerIos']
-    VcSpinnerOrbit: typeof import('vue-cesium')['VcSpinnerOrbit']
-    VcSpinnerOval: typeof import('vue-cesium')['VcSpinnerOval']
-    VcSpinnerPuff: typeof import('vue-cesium')['VcSpinnerPuff']
-    VcSpinnerRings: typeof import('vue-cesium')['VcSpinnerRings']
-    VcSpinnerTail: typeof import('vue-cesium')['VcSpinnerTail']
-    VcSpinner: typeof import('vue-cesium')['VcSpinner']
-    VcFab: typeof import('vue-cesium')['VcFab']
-    VcFabAction: typeof import('vue-cesium')['VcFabAction']
+    VcIcon: GlobalComponentConstructor<VcIconProps, VcIconRef>
+    VcTooltip: GlobalComponentConstructor<VcTooltipProps, VcTooltipSlots>
+    VcAjaxBar: GlobalComponentConstructor<VcIconProps, VcIconRef>
+    VcSkeleton: GlobalComponentConstructor<VcAjaxBarProps>
+    VcSpinnerBall: GlobalComponentConstructor<VcSpinnerBallProps>
+    VcSpinnerBars: GlobalComponentConstructor<VcSpinnerBarsProps>
+    VcSpinnerDots: GlobalComponentConstructor<VcSpinnerDotsProps>
+    VcSpinnerGears: GlobalComponentConstructor<VcSpinnerGearsProps>
+    VcSpinnerHourglass: GlobalComponentConstructor<VcSpinnerHourglassProps>
+    VcSpinnerIos: GlobalComponentConstructor<VcSpinnerIosProps>
+    VcSpinnerOrbit: GlobalComponentConstructor<VcSpinnerOrbitProps>
+    VcSpinnerOval: GlobalComponentConstructor<VcSpinnerOvalProps>
+    VcSpinnerPuff: GlobalComponentConstructor<VcSpinnerPuffProps>
+    VcSpinnerRings: GlobalComponentConstructor<VcSpinnerRingsProps>
+    VcSpinnerTail: GlobalComponentConstructor<VcSpinnerTailProps>
+    VcSpinner: GlobalComponentConstructor<VcSpinnerProps>
+    VcFab: GlobalComponentConstructor<VcFabProps, VcFabSlots>
+    VcFabAction: GlobalComponentConstructor<VcFabActionProps, VcFabActionSlots>
 
-    VcConfigProvider: typeof import('vue-cesium')['VcConfigProvider']
+    VcConfigProvider: GlobalComponentConstructor<VcConfigProviderProps, VcConfigProviderSlots>
   }
 }
 

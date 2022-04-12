@@ -185,7 +185,7 @@ export interface VcMeasurementHorizontalRef extends VcComponentPublicInstance<Vc
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

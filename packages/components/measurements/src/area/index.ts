@@ -185,7 +185,7 @@ export interface VcMeasurementAreaRef extends VcComponentPublicInstance<VcMeasur
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

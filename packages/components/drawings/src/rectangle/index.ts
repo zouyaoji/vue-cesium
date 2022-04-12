@@ -136,7 +136,7 @@ export interface VcDrawingRectangleRef extends VcComponentPublicInstance<VcDrawi
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

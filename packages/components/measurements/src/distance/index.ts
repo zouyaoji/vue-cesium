@@ -167,7 +167,7 @@ export interface VcMeasurementDistanceRef extends VcComponentPublicInstance<VcMe
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

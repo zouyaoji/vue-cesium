@@ -190,7 +190,7 @@ export interface VcMeasurementRectangleRef extends VcComponentPublicInstance<VcM
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

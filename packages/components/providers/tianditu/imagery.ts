@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-04-08 13:45:44
+ * @LastEditTime: 2022-04-11 18:05:37
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\providers\tianditu\imagery.ts
@@ -16,12 +16,13 @@ import type {
   VcRectangle
 } from '@vue-cesium/utils/types'
 import { useProviders } from '@vue-cesium/composables'
-import { minimumLevel, maximumLevel, rectangle, projectionTransforms } from '@vue-cesium/utils/cesium-props'
+import { url, minimumLevel, maximumLevel, rectangle, projectionTransforms } from '@vue-cesium/utils/cesium-props'
 import TiandituImageryProvider from './TiandituImageryProvider'
 import { kebabCase } from '@vue-cesium/utils/util'
 import { providerEmits } from '@vue-cesium/utils/emits'
 
 export const tiandituImageryProviderProps = {
+  ...url,
   ...minimumLevel,
   ...maximumLevel,
   ...rectangle,

@@ -142,7 +142,7 @@ export interface VcDrawingPolygonRef extends VcComponentPublicInstance<VcDrawing
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

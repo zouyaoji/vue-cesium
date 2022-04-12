@@ -190,7 +190,7 @@ export interface VcMeasurementRegularRef extends VcComponentPublicInstance<VcMea
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */

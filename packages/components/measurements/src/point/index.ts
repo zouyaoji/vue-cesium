@@ -138,7 +138,7 @@ export interface VcMeasurementPointRef extends VcComponentPublicInstance<VcMeasu
   /**
    * stop drawing.
    */
-  stop: () => void
+  stop: (removeLatest?: boolean) => void
   /**
    * clear and stop drawing.
    */
