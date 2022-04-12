@@ -7,8 +7,8 @@ import { hMergeSlot } from '@vue-cesium/utils/private/render'
 import { useCommon } from '@vue-cesium/composables'
 import VcCompassSm from './compass-sm'
 import VcZoomControlSm from './zoom-control-sm'
-import type { VcZoomControlSmProps, VcZoomControlSmRef } from './zoom-control-sm'
-import type { VcCompassSmProps, VcCompassSmRef } from './compass-sm'
+import { VcZoomControlSmProps, VcZoomControlSmRef } from './zoom-control-sm'
+import { VcCompassSmProps, VcCompassSmRef } from './compass-sm'
 import { commonEmits } from '@vue-cesium/utils/emits'
 
 const compassOptsDefault = {

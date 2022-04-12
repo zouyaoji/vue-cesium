@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-11 22:57:24
- * @LastEditTime: 2022-04-12 13:47:50
+ * @LastEditTime: 2022-04-12 17:02:57
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\directives\touch-hold\index.ts
@@ -15,7 +15,6 @@ export default createDirective({
   name: 'touch-hold',
 
   beforeMount(el, binding) {
-    console.log('beforeMount', el, binding)
     const { modifiers } = binding
 
     // early return, we don't need to do anything
