@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-21 10:43:32
- * @LastEditTime: 2022-04-02 15:54:51
+ * @LastEditTime: 2022-04-12 15:33:15
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-polyline.ts
@@ -22,6 +22,7 @@ import { computed, getCurrentInstance, nextTick, ref, h } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
 import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
+import { platform } from '@vue-cesium/utils/platform'
 
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -345,7 +346,14 @@ export default function (props, ctx, cmpName: string) {
     if (removeLatest && drawStatus.value === DrawStatus.Drawing) {
       renderDatas.value.pop()
     }
-    drawStatus.value = DrawStatus.BeforeDraw
+    const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
+    const polyline: VcPolylineDrawing = renderDatas.value[index]
+    if (polyline) {
+      polyline.positions = polyline.tempPositions
+      polyline.drawStatus = DrawStatus.AfterDraw
+    }
+
+    drawStatus.value = DrawStatus.AfterDraw
     canShowDrawTip.value = false
     drawTipPosition.value = [0, 0, 0]
   }
@@ -465,6 +473,15 @@ export default function (props, ctx, cmpName: string) {
       drawTip.value = drawTipOpts.value.drawingTipEnd
     } else {
       if (editingPoint.value) {
+        if (platform().hasTouch === true) {
+          const position = getWorldPosition(scene, movement, {} as any)
+          if (defined(position)) {
+            const positions = polyline.positions
+            positions.splice(editingPoint.value._index, 1, position)
+            editingPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
+          }
+        }
+
         drawStatus.value = DrawStatus.AfterDraw
         editingPoint.value = undefined
         finished = true
@@ -614,9 +631,8 @@ export default function (props, ctx, cmpName: string) {
     if (drawStatus.value === DrawStatus.Drawing) {
       const index = editingPoint.value ? editingPoint.value._vcPolylineIndex : renderDatas.value.length - 1
       const polyline: VcPolylineDrawing = renderDatas.value[index]
-      polyline.positions = polyline.tempPositions
-      polyline.drawStatus = DrawStatus.AfterDraw
-      drawStatus.value = DrawStatus.AfterDraw
+
+      stop(false)
       drawTip.value = drawTipOpts.value.drawingTipStart
 
       nextTick(() => {

@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-22 14:09:42
- * @LastEditTime: 2022-04-02 15:39:57
+ * @LastEditTime: 2022-04-12 15:46:47
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-segment.ts
@@ -40,6 +40,7 @@ import { computed, getCurrentInstance, h, nextTick, ref } from 'vue'
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
 import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
+import { platform } from '@vue-cesium/utils/platform'
 
 export default function (props, ctx, cmpName: string, fs?: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
@@ -699,11 +700,18 @@ export default function (props, ctx, cmpName: string, fs?: string) {
     drawTip.value = drawTipOpts.value.drawingTipStart
   }
 
-  const stop = () => {
-    if (drawStatus.value === DrawStatus.Drawing) {
+  const stop = (removeLatest = true) => {
+    if (removeLatest && drawStatus.value === DrawStatus.Drawing) {
       renderDatas.value.pop()
     }
-    drawStatus.value = DrawStatus.BeforeDraw
+
+    const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
+    const polyline: VcSegmentDrawing = renderDatas.value[index]
+    if (polyline) {
+      polyline.drawStatus = DrawStatus.AfterDraw
+    }
+
+    drawStatus.value = DrawStatus.AfterDraw
     canShowDrawTip.value = false
     drawTipPosition.value = [0, 0, 0]
   }
@@ -777,8 +785,9 @@ export default function (props, ctx, cmpName: string, fs?: string) {
     let type = 'new'
     let emitPosition
     let finished = false
+    const scene = viewer.scene
+
     if (drawStatus.value === DrawStatus.BeforeDraw) {
-      const scene = viewer.scene
       const position = getWorldPosition(scene, movement, {} as any)
 
       if (!defined(position)) {
@@ -818,6 +827,15 @@ export default function (props, ctx, cmpName: string, fs?: string) {
       drawStatus.value = DrawStatus.AfterDraw
 
       if (editingPoint.value) {
+        if (platform().hasTouch === true) {
+          const position = getWorldPosition(scene, movement, {} as any)
+          if (defined(position)) {
+            const positions = polyline.positions
+            positions.splice(editingPoint.value._index, 1, position)
+            editingPoint.value.pixelSize = props.pointOpts?.pixelSize * 1.0
+          }
+        }
+
         editingPoint.value = undefined
         drawingFabInstanceVm.editingActionName = undefined
         canShowDrawTip.value = false
@@ -829,6 +847,13 @@ export default function (props, ctx, cmpName: string, fs?: string) {
           canShowDrawTip.value = true
         }
       } else {
+        if (platform().hasTouch === true) {
+          const position = getWorldPosition(scene, movement, {} as any)
+          if (defined(position)) {
+            const positions = polyline.positions
+            positions[1] = position
+          }
+        }
         if (props.mode === 1) {
           drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
         }

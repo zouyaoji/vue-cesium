@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-19 11:34:26
- * @LastEditTime: 2022-04-11 17:38:39
+ * @LastEditTime: 2022-04-12 15:49:17
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\composables\use-drawing\use-drawing-point.ts
@@ -19,6 +19,8 @@ import { getCurrentInstance, nextTick, onUnmounted, ref, VNode, watch, WatchStop
 import useCommon from '../use-common'
 import useDrawingAction from './use-drawing-action'
 import { VcAnalysesRef, VcDrawingsRef, VcMeasurementsRef } from '@vue-cesium/components'
+import { platform } from '@vue-cesium/utils/platform'
+
 export default function (props, ctx, cmpName: string) {
   const instance = getCurrentInstance() as VcComponentInternalInstance
 
@@ -96,11 +98,18 @@ export default function (props, ctx, cmpName: string) {
     drawTip.value = drawTipOpts.value.drawingTipStart
   }
 
-  const stop = () => {
-    if (drawStatus.value === DrawStatus.Drawing) {
+  const stop = (removeLatest = true) => {
+    if (removeLatest && drawStatus.value === DrawStatus.Drawing) {
       renderDatas.value.pop()
     }
-    drawStatus.value = DrawStatus.BeforeDraw
+
+    const index = editingPoint.value ? editingPoint.value._vcPolylineIndx : renderDatas.value.length - 1
+    const point: VcPointDrawing = renderDatas.value[index]
+    if (point) {
+      point.drawStatus = DrawStatus.AfterDraw
+    }
+
+    drawStatus.value = DrawStatus.AfterDraw
     canShowDrawTip.value = false
     drawTipPosition.value = [0, 0, 0]
   }
@@ -204,6 +213,16 @@ export default function (props, ctx, cmpName: string) {
       } else {
         if (props.mode === 1) {
           drawingFabInstanceVm.toggleAction(selectedDrawingActionInstance)
+        }
+      }
+
+      const scene = viewer.scene
+
+      if (platform().hasTouch === true) {
+        const position = getWorldPosition(scene, movement, {} as any)
+        if (defined(position)) {
+          point.position = position
+          point.show = true
         }
       }
 

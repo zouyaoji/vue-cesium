@@ -1,5 +1,7 @@
 import { VcViewerProvider, AnyFunction } from '@vue-cesium/utils/types'
 import { ref } from 'vue'
+import { TouchHold } from '@vue-cesium/directives'
+import defer from '@vue-cesium/utils/defer'
 
 interface HandlerActions {
   handleMouseClick?: AnyFunction<void>
@@ -37,6 +39,13 @@ export default function (
     if (!handler.value) {
       const { viewer } = $services
       handler.value = new ScreenSpaceEventHandler(viewer.canvas)
+      TouchHold.beforeMount(viewer.canvas, {
+        arg: '2000',
+        value: onTouchHold,
+        touchStart: onTouchStart,
+        touchEnd: onTouchEnd,
+        modifiers: {}
+      })
     }
 
     const sseh = handler.value
@@ -112,6 +121,7 @@ export default function (
     if (!sseh) {
       return
     }
+
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK)
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.SHIFT)
     sseh.removeInputAction(ScreenSpaceEventType.LEFT_CLICK, KeyboardEventModifier.CTRL)
@@ -171,6 +181,9 @@ export default function (
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE)
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.SHIFT)
     sseh.removeInputAction(ScreenSpaceEventType.PINCH_MOVE, KeyboardEventModifier.CTRL)
+
+    const { viewer } = $services
+    TouchHold.beforeUnmount(viewer.canvas)
     isActive.value = false
   }
 
@@ -219,10 +232,20 @@ export default function (
     })
   }
 
+  let touchPromise = undefined
   const onRightClick = movement => {
-    handleMouseClick?.(movement, {
-      button: 2
-    })
+    if (touchPromise) {
+      touchPromise?.promise?.then(flag => {
+        flag &&
+          handleMouseClick?.(movement, {
+            button: 2
+          })
+      })
+    } else {
+      handleMouseClick?.(movement, {
+        button: 2
+      })
+    }
   }
 
   const onRightClickShift = movement => {
@@ -470,6 +493,30 @@ export default function (
       move: true,
       ctrl: true
     })
+  }
+
+  const onTouchHold = e => {
+    if (e.touch) {
+      const movement = {
+        position: {
+          x: e.position.left,
+          y: e.position.top
+        }
+      }
+      handleDoubleClick?.(movement, {
+        button: 0
+      })
+    }
+
+    touchPromise.resolve(false)
+  }
+
+  const onTouchEnd = (e: TouchEvent) => {
+    touchPromise.resolve(true)
+  }
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchPromise = defer()
   }
 
   return {
