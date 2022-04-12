@@ -313,7 +313,6 @@ importers:
       '@amap/amap-jsapi-loader': ^1.0.1
       '@vue/shared': ^3.2.26
       '@zouyaoji/heatmap.js': ^2.0.8
-      echarts: ^5.2.1
       lodash: ^4.17.21
       lodash-es: ^4.17.21
       lodash-unified: ^1.0.1
@@ -323,7 +322,6 @@ importers:
       '@amap/amap-jsapi-loader': 1.0.1
       '@vue/shared': 3.2.26
       '@zouyaoji/heatmap.js': 2.0.8
-      echarts: 5.2.2
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.1_da03a4540fbd16bbaafbb96724306afd
@@ -6875,6 +6873,7 @@ packages:
     dependencies:
       tslib: 2.3.0
       zrender: 5.2.1
+    dev: true
 
   /ee-first/1.1.1:
     resolution: { integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0= }
@@ -15890,6 +15889,7 @@ packages:
 
   /tslib/2.3.0:
     resolution: { integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg== }
+    dev: true
 
   /tslib/2.3.1:
     resolution: { integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw== }
@@ -17312,6 +17312,7 @@ packages:
     resolution: { integrity: sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw== }
     dependencies:
       tslib: 2.3.0
+    dev: true
 
   /zrender/5.3.0:
     resolution: { integrity: sha512-Ln2QB5uqI1ftNYMtCRxd+XDq6MOttLgam2tmhKAVA+j0ko47UT+VNlDvKTkqe4K2sJhBvB0EhYNLebqlCTjatQ== }
