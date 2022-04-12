@@ -165,7 +165,7 @@ class SuperMapImageryProvider {
   }
 
   get readyPromise() {
-    return this._readyPromise
+    return this._readyPromise.promise
   }
 
   get ratio() {
