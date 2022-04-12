@@ -1,12 +1,12 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-09-16 09:28:13
- * @LastEditTime: 2022-03-04 09:11:24
+ * @LastEditTime: 2022-04-12 14:56:24
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\viewer\src\index.ts
  */
-import { defineComponent, provide, getCurrentInstance, h, createCommentVNode } from 'vue'
+import { defineComponent, provide, getCurrentInstance, h, createCommentVNode, withDirectives } from 'vue'
 import type { VNode } from 'vue'
 import useViewer, { viewerProps } from './useViewer'
 import type { VcViewerProps } from './useViewer'
@@ -23,6 +23,7 @@ import { VcSkeleton } from '@vue-cesium/components/ui'
 import { hSlot } from '@vue-cesium/utils/private/render'
 import { isPlainObject, kebabCase } from '@vue-cesium/utils/util'
 import { commonEmits } from '@vue-cesium/utils/emits'
+import { TouchHold } from '@vue-cesium/directives'
 
 const emits = {
   ...commonEmits,
@@ -84,7 +85,8 @@ const emits = {
   rightUp: (mouseClickEvent: { position: Cesium.Cartesian2 }) => true,
   wheel: (delta: number) => true,
   imageryLayersUpdatedEvent: () => true,
-  tileLoadProgressEvent: (length: number) => true
+  tileLoadProgressEvent: (length: number) => true,
+  touchEnd: evt => true
 }
 export default defineComponent({
   name: 'VcViewer',
@@ -109,6 +111,10 @@ export default defineComponent({
       getCesiumObject: () => instance.cesiumObject
     })
 
+    const onTouchHold = e => {
+      ctx.emit('touchEnd', e)
+    }
+
     return () => {
       const children: Array<VNode> = []
       if (isPlainObject(props.skeleton) && !viewerStates.isReady.value) {
@@ -123,15 +129,18 @@ export default defineComponent({
       }
       children.push(
         createCommentVNode('vc-viewer'),
-        h(
-          'div',
-          {
-            ref: viewerStates.viewerRef,
-            class: kebabCase(instance.proxy?.$options.name || ''),
-            id: ctx.attrs.id || 'cesiumContainer',
-            style: ctx.attrs.style || { width: '100%', height: '100%' }
-          },
-          hSlot(ctx.slots.default)
+        withDirectives(
+          h(
+            'div',
+            {
+              ref: viewerStates.viewerRef,
+              class: kebabCase(instance.proxy?.$options.name || ''),
+              id: ctx.attrs.id || 'cesiumContainer',
+              style: ctx.attrs.style || { width: '100%', height: '100%' }
+            },
+            hSlot(ctx.slots.default)
+          ),
+          [[TouchHold, onTouchHold, props.touchHoldArg]]
         )
       )
       return children

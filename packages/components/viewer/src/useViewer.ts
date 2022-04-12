@@ -1600,6 +1600,11 @@ export interface VcViewerProps {
    */
   skeleton?: boolean | VcSkeletonProps
   /**
+   * x:y:z, where x is the amount of time to wait (in milliseconds), y is the touch event sensitivity (in pixels) and z is the mouse event sensitivity (in pixels).
+   * Default value: 1000
+   */
+  touchHoldArg?: string
+  /**
    * Triggers before the VcViewer is loaded.
    */
   onBeforeLoad?: (instance: VcComponentInternalInstance) => void
@@ -1805,6 +1810,7 @@ export interface VcViewerProps {
    * 	Triggers when the length of the tile load queue has changed since the last render frame. When the load queue is empty, all terrain and imagery for the current view have been loaded. The event passes the new length of the tile load queue.
    */
   onTileLoadProgressEvent?: (length: number) => void
+  onTouchEnd?: (evt: any) => void
 }
 
 export interface VcViewerSlots {

@@ -1,3 +1,11 @@
+/*
+ * @Author: zouyaoji@https://github.com/zouyaoji
+ * @Date: 2021-04-08 18:37:31
+ * @LastEditTime: 2022-04-11 23:02:05
+ * @LastEditors: zouyaoji
+ * @Description:
+ * @FilePath: \vue-cesium@next\packages\utils\platform.ts
+ */
 export function platform() {
   const ua = navigator.userAgent
   const isWindowsPhone = /(?:Windows Phone)/.test(ua)
@@ -15,6 +23,7 @@ export function platform() {
     isAndroid: isAndroid,
     isPc: isPc,
     isChrome: isChrome,
-    isIOS
+    isIOS,
+    hasTouch: 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
   }
 }

@@ -1,3 +1,4 @@
+import { createDirective } from '@vue-cesium/utils/private/create'
 import { css } from '@vue-cesium/utils/private/dom'
 import { position, stop, addEvt, cleanEvt } from '@vue-cesium/utils/private/event'
 import { isKeyCode } from '@vue-cesium/utils/private/key-composition'
@@ -58,8 +59,8 @@ function showRipple(evt, el, ctx, forceCenter) {
   }, 50)
 }
 
-function updateModifiers(ctx, { modifiers, value, arg }) {
-  // const cfg = Object.assign({}, $q.config.ripple, modifiers, value)
+function updateModifiers(ctx, { modifiers, value, arg, instance }) {
+  // const cfg = Object.assign({}, instance.$q.config.ripple, modifiers, value)
   const cfg = Object.assign({}, modifiers, value)
   ctx.modifiers = {
     early: cfg.early === true,
@@ -70,7 +71,7 @@ function updateModifiers(ctx, { modifiers, value, arg }) {
   }
 }
 
-export default {
+export default createDirective({
   name: 'ripple',
 
   beforeMount(el, binding) {
@@ -131,6 +132,6 @@ export default {
       fn()
     })
     cleanEvt(ctx, 'main')
-    delete el._qripple
+    delete el._vcripple
   }
-}
+})

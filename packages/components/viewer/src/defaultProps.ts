@@ -198,5 +198,9 @@ export default {
         bordered: true,
         color: undefined
       } as VcSkeletonProps)
+  },
+  touchHoldArg: {
+    type: String,
+    default: '1000'
   }
 }
