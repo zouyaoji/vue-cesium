@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2021-10-27 15:54:11
- * @LastEditTime: 2022-01-23 00:54:00
+ * @LastEditTime: 2022-04-12 17:37:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \vue-cesium@next\packages\components\controls\index.ts
@@ -70,6 +70,8 @@ export * from './distance-legend'
 export * from './my-location'
 export * from './navigation'
 export * from './navigation-sm'
+export * from './navigation-sm/zoom-control-sm'
+export * from './navigation-sm/compass-sm'
 export * from './print'
 export * from './selection-indicator'
 export * from './status-bar'
