@@ -20,34 +20,22 @@
     <!-- 鹰眼图示例 1 -->
     <vc-overview-map @ready="onOverviewReady" ref="overview" :offset="[5, 5]">
       <vc-layer-imagery :sort-order="10">
-        <vc-imagery-provider-urltemplate
-          :projection-transforms="projectionTransforms"
-          url="https://webst01.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
-        ></vc-imagery-provider-urltemplate>
+        <vc-imagery-provider-amap map-style="7" :projectionTransforms="{ from: 'GCJ02', to: 'WGS84' }"></vc-imagery-provider-amap>
       </vc-layer-imagery>
-      <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
       </vc-entity>
     </vc-overview-map>
     <!-- 鹰眼图示例 2 -->
-    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]" :viewer-opts="{ showCredit: true, sceneMode: 3 }">
+    <vc-overview-map position="bottom-left" width="300px" height="300px" :offset="[5, 5]">
       <vc-layer-imagery>
         <vc-imagery-provider-osm></vc-imagery-provider-osm>
       </vc-layer-imagery>
       <vc-entity>
         <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
       </vc-entity>
-      <!-- 鹰眼图示例 3 -->
-      <vc-overview-map position="top-left" :offset="[5, 5]">
-        <vc-layer-imagery>
-          <vc-imagery-provider-osm></vc-imagery-provider-osm>
-        </vc-layer-imagery>
-        <vc-entity>
-          <vc-graphics-rectangle :coordinates="[130, 20, 80, 25]" material="green"></vc-graphics-rectangle>
-        </vc-entity>
-      </vc-overview-map>
     </vc-overview-map>
+
     <vc-primitive-tileset url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"></vc-primitive-tileset>
     <vc-layer-imagery :sort-order="10">
       <vc-imagery-provider-tianditu map-style="img_c" token="436ce7e50d27eede2f2929307e6b33c0"></vc-imagery-provider-tianditu>
@@ -90,7 +78,8 @@
         projectionTransforms: {
           from: 'GCJ02',
           to: 'WGS84'
-        }
+        },
+        centerRectColor: 'red'
       }
     },
     methods: {
@@ -140,6 +129,9 @@
 | borderRadius | string | | `optional` 指定鹰眼组件圆角。 |
 | toggleOpts | VcBtnTooltipProps & { show: boolean } | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` 指定鹰眼组件切换按钮参数。 |
 | viewerOpts | VcViewerProps |`{ removeCesiumScript: false, showCredit: false, sceneMode: 2 }` | `optional` 指定鹰眼组件中 vc-viewer 组件参数。|
+| centerRectColor | VcColor | `'#ff000080'` | `optional` 指定矩形颜色。 |
+| widthFactor | number | `2` | `optional` 指定矩形宽度因子。 |
+| heightFactor | number | `2` | `optional` 指定矩形高度因子。 |
 
 :::
 

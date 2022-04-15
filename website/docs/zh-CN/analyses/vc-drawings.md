@@ -41,7 +41,7 @@ ctrl + 右键取消绘制。
       :regular-drawing-opts="regularDrawingOpts"
     ></vc-drawings>
     <!-- 结合 slot 改变默认 UI，自定义绘制方法 -->
-    <!-- <vc-drawings
+    <vc-drawings
       ref="drawingsCustomRef"
       position="bottom-left"
       :main-fab-opts="mainFabOpts"
@@ -67,7 +67,7 @@ ctrl + 右键取消绘制。
           </el-row>
         </div>
       </template>
-    </vc-drawings> -->
+    </vc-drawings>
     <vc-primitive-tileset
       url="https://zouyaoji.top/vue-cesium/SampleData/Cesium3DTiles/Tilesets/dayanta/tileset.json"
       @ready-promise="onTilesetReady"

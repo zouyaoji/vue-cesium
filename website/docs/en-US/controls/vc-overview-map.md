@@ -138,6 +138,9 @@ The basic usage of the VcOverviewMap component.
 | borderRadius | string | | `optional` Specify the border radius of the overviewmap component. |
 | toggleOpts | VcBtnTooltipProps & { show: boolean } | `show: true, color: '#fff', background: '#3f4854', icon: 'vc-icons-overview-toggle', size: '15px', tooltip: { delay: 500, anchor: 'bottom middle', offset: [0, 20], tip: void 0 } }` | `optional` Specify the toggle button options of the overviewmap component. |
 | viewerOpts | VcViewerProps |`{ removeCesiumScript: false, showCredit: false, sceneMode: 2 }` | `optional` Specify the vc-viewer component options in the overviewmap component.|
+| centerRectColor | VcColor | `'#ff000080'` | `optional` Specify the center rectangle color. |
+| widthFactor | number | `2` | `optional` Specify the width factor of center rectangle. |
+| heightFactor | number | `2` | `optional` Specify the height factor of center rectangle. |
 
 :::
 

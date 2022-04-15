@@ -1,5 +1,14 @@
 ## 更新日志
 
+### 3.0.13
+
+#### 优化
+
+- 鹰眼组件 `vc-overview-map` 增加指示视图范围的矩形。
+- `vc-overview-map`: Add a rectangle indicating the view extent.
+
+- 修复部分组件 ts 声明错误的问题。
+
 ### 3.0.12
 
 _2022-04-12_
